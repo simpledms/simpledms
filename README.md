@@ -1,2 +1,4 @@
-# simpledms
-Document management for small businesses.
+# SimpleDMS
+Future home of SimpleDMS source code.
+
+SimpleDMS is a document management system for small businesses.
