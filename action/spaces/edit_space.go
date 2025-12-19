@@ -6,8 +6,8 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
