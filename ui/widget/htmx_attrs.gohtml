@@ -1,0 +1,32 @@
+{{- /*gotype: github.com/simpledms/simpledms/ui/widget.HTMXAttrs */ -}}
+{{- define "HTMXAttrs" }}
+    {{ if ne .GetHxPushURL "" }}hx-push-url="{{ .GetHxPushURL }}"{{ end }}
+    {{ if ne .GetHxReplaceURL "" }}hx-replace-url="{{ .GetHxReplaceURL }}"{{ end }}
+    {{ if ne .GetHxTrigger "" }}hx-trigger="{{ .GetHxTrigger }}"{{ end }}
+    {{ if ne .GetHxGet "" }}hx-get="{{ .GetHxGet }}"{{ end }}
+    {{ if ne .GetHxPost "" }}hx-post="{{ .GetHxPost }}"{{ end }}
+    {{ if ne .GetHxVals "" }}hx-vals="{{ .GetHxVals }}"{{ end }}
+    {{ if ne .GetHxTarget "" }}hx-target="{{ .GetHxTarget }}"{{ end }}
+    {{ if ne .GetHxSelect "" }}hx-select="{{ .GetHxSelect }}"{{ end }}
+    {{ if ne .GetHxSwap "" }}hx-swap="{{ .GetHxSwap }}"{{ end }}
+    {{ if ne .HxConfirm "" }}hx-confirm="{{ .HxConfirm }}"{{ end }}
+    {{ if ne .HxInclude "" }}hx-include="{{ .HxInclude }}"{{ end }}
+    {{ if ne .GetHxBoost "" }}hx-boost="{{ .GetHxBoost }}"{{ end }}
+    {{ with .GetHxIndicator }}hx-indicator="{{ . }}"{{ end }}
+    {{ with .HxHeaders }}hx-headers="{{ . }}"{{ end }}
+    {{ with .HxOn }}
+        hx-on:{{ .Event }}="{{ .Handler }}"
+    {{ end }}
+    {{ if .IsLink }}role="link"{{ end }}
+    {{/* with .PopoverTargetID }}popovertarget="{{ . }}"{{ end */}}
+    {{ with .DialogID }}onclick="document.getElementById('{{ . }}').toggleCustom()"{{ end }}
+{{ end }}
+
+{{/*
+    {{ with .DialogID }}onclick="document.getElementById('{{ . }}').showModal()"{{ end }}
+{{- define "HTMXLink" }}
+{{ end }}
+
+{{- define "withHTMXAttrs" }}
+{{ end }}
+*/}}

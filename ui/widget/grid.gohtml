@@ -1,0 +1,17 @@
+{{- /* gotype: github.com/simpledms/simpledms/ui/widget.Grid */ -}}
+{{- define "Grid" }}
+	<div id="{{ .GetID }}" class="flex flex-col gap-y-2"
+            {{ template "HTMXAttrs" .HTMXAttrs }}>
+		{{ if .Heading }}
+			<div class="px-4">{{ render .GetContext .Heading }}</div>
+		{{ end }}
+		{{ if .Children }}
+			<div class="grid {{ .GetColumnsClass }} gap-4 px-2 md:px-0 py-0 md:py-2">
+				{{ render .GetContext .Children }}
+			</div>
+		{{ end }}
+        {{ if .Footer }}
+			<div>{{ render .GetContext .Footer }}</div>
+        {{ end }}
+	</div>
+{{ end }}

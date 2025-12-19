@@ -1,0 +1,348 @@
+{
+	"language": "en",
+	"messages": [
+		{
+			"id": "Maintenance mode",
+			"message": "Maintenance mode",
+			"translation": "Maintenance mode",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Maintenance mode is enabled. Please wait until the app ready again.",
+			"message": "Maintenance mode is enabled. Please wait until the app ready again.",
+			"translation": "Maintenance mode is enabled. Please wait until the app ready again.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Something went wrong. Please try again.",
+			"message": "Something went wrong. Please try again.",
+			"translation": "Something went wrong. Please try again.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "You are not signed in. Please sign in to continue.",
+			"message": "You are not signed in. Please sign in to continue.",
+			"translation": "You are not signed in. Please sign in to continue.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Could not parse url.",
+			"message": "Could not parse url.",
+			"translation": "Could not parse url.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "You are not allowed to access this tenant.",
+			"message": "You are not allowed to access this tenant.",
+			"translation": "You are not allowed to access this tenant.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Sign in [subject]",
+			"message": "Sign in [subject]",
+			"translation": "Sign in",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "You are not allowed to access this space.",
+			"message": "You are not allowed to access this space.",
+			"translation": "You are not allowed to access this space.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Could not read cookie.",
+			"message": "Could not read cookie.",
+			"translation": "Could not read cookie.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Cookie set but not valid.",
+			"message": "Cookie set but not valid.",
+			"translation": "Cookie set but not valid.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Cookie set but empty.",
+			"message": "Cookie set but empty.",
+			"translation": "Cookie set but empty.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Change passphrase",
+			"message": "Change passphrase",
+			"translation": "Change passphrase",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "You must be logged in to unlock the app.",
+			"message": "You must be logged in to unlock the app.",
+			"translation": "You must be logged in to unlock the app.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "You must be an admin to unlock the app.",
+			"message": "You must be an admin to unlock the app.",
+			"translation": "You must be an admin to unlock the app.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Passphrase changed.",
+			"message": "Passphrase changed.",
+			"translation": "Passphrase changed.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Init app",
+			"message": "Init app",
+			"translation": "Init app",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Passphrases do not match.",
+			"message": "Passphrases do not match.",
+			"translation": "Passphrases do not match.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "App initialized.",
+			"message": "App initialized.",
+			"translation": "App initialized.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Remove passphrase",
+			"message": "Remove passphrase",
+			"translation": "Remove passphrase",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Passphrase removed.",
+			"message": "Passphrase removed.",
+			"translation": "Passphrase removed.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Unlock app",
+			"message": "Unlock app",
+			"translation": "Unlock app",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "App unlocked.",
+			"message": "App unlocked.",
+			"translation": "App unlocked.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Change password",
+			"message": "Change password",
+			"translation": "Change password",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Change",
+			"message": "Change",
+			"translation": "Change",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "You must be logged in to change your password.",
+			"message": "You must be logged in to change your password.",
+			"translation": "You must be logged in to change your password.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Password changed successfully.",
+			"message": "Password changed successfully.",
+			"translation": "Password changed successfully.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Clear temporary password",
+			"message": "Clear temporary password",
+			"translation": "Clear temporary password",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Temporary password cleared successfully.",
+			"message": "Temporary password cleared successfully.",
+			"translation": "Temporary password cleared successfully.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Reset password",
+			"message": "Reset password",
+			"translation": "Reset password",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Reset",
+			"message": "Reset",
+			"translation": "Reset",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Account not found.",
+			"message": "Account not found.",
+			"translation": "Account not found.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "A new temporary password was sent to your email address.",
+			"message": "A new temporary password was sent to your email address.",
+			"translation": "A new temporary password was sent to your email address.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Set password",
+			"message": "Set password",
+			"translation": "Set password",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Initial password set successfully.",
+			"message": "Initial password set successfully.",
+			"translation": "Initial password set successfully.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Sign in",
+			"message": "Sign in",
+			"translation": "Sign in",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Found no account for this email address.",
+			"message": "Found no account for this email address.",
+			"translation": "Found no account for this email address.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Sign up now.",
+			"message": "Sign up now.",
+			"translation": "Sign up now.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Invalid credentials. Please try again.",
+			"message": "Invalid credentials. Please try again.",
+			"translation": "Invalid credentials. Please try again.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Logged in successfully.",
+			"message": "Logged in successfully.",
+			"translation": "Logged in successfully.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Forget password?",
+			"message": "Forget password?",
+			"translation": "Forget password?",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Don't have an account? Sign up.",
+			"message": "Don't have an account? Sign up.",
+			"translation": "Don't have an account? Sign up.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Invalid session cookie.",
+			"message": "Invalid session cookie.",
+			"translation": "Invalid session cookie.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Sign up [subject]",
+			"message": "Sign up [subject]",
+			"translation": "Sign up",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Sign up",
+			"message": "Sign up",
+			"translation": "Sign up",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Registration successful, please check your email for your password.",
+			"message": "Registration successful, please check your email for your password.",
+			"translation": "Registration successful, please check your email for your password.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Document type | Filter",
+			"message": "Document type | Filter",
+			"translation": "Document type | Filter",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Fields",
+			"message": "Fields",
+			"translation": "Fields",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Tag groups",
+			"message": "Tag groups",
+			"translation": "Tag groups",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "No tag groups available.",
+			"message": "No tag groups available.",
+			"translation": "No tag groups available.",
+			"translatorComment": "",
+			"fuzzy": true
+		}
+	]
+}

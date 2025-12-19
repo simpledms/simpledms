@@ -1,0 +1,116 @@
+{{- /* gotype: github.com/simpledms/simpledms/ui/widget.FilePreview */ -}}
+{{- define "FileUpload" }}
+	<div id="{{ .GetID }}" class="h-full">
+		<div id="{{ .GetID }}Upload" class="w-full h-full"></div>
+
+		<link rel="preload" href="/assets/vendor/@uppy/core/dist/style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+		<link rel="preload" href="/assets/vendor/@uppy/dashboard/dist/style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+		<link rel="preload" href="/assets/vendor/@uppy/webcam/dist/style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+		<link rel="preload" href="/assets/vendor/@uppy/audio/dist/style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+		<link rel="preload" href="/assets/vendor/@uppy/screen-capture/dist/style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+		<style>
+			.uppy-Root, .uppy-Dashboard {
+				height: 100%;
+			}
+			.uppy-Dashboard-Item-preview {
+				display: none;
+			}
+			[data-uppy-theme=dark] .uppy-Dashboard-inner, .uppy-Dashboard-inner {
+				background-color: var(--md-sys-color-surface-variant);
+				border: 0;
+			}
+			[data-uppy-drag-drop-supported=true] .uppy-Dashboard-AddFiles {
+				border: 0;
+				margin: 0;
+			}
+		</style>
+		<script type="module" defer>
+			// TODO use Golden Retriever and Tus
+
+			import Uppy from '/assets/vendor/@uppy/core.js';
+			import Dashboard from '/assets/vendor/@uppy/dashboard.js';
+			import Webcam from '/assets/vendor/@uppy/webcam.js';
+			import Audio from '/assets/vendor/@uppy/audio.js';
+			import ScreenCapture from '/assets/vendor/@uppy/screen-capture.js';
+			// import Url from '/assets/vendor/@uppy/url.js'; // needs companion server
+			// TODO write replacement with HTMX or use callbacks?? replacement might be useless with Tus
+			import XHR from '/assets/vendor/@uppy/xhr-upload.js';
+
+			import German from '/assets/vendor/@uppy/locales/lib/de_DE.js';
+			import Italian from '/assets/vendor/@uppy/locales/lib/it_IT.js';
+			import French from '/assets/vendor/@uppy/locales/lib/fr_FR.js';
+
+			import htmx from '/assets/vendor/htmx.js';
+
+			// import '/assets/vendor/@uppy/core/dist/style.min.css';
+			// import '/assets/vendor/@uppy/dashboard/dist/style.min.css';
+			let locale = undefined;
+			switch ('{{ .GetContext.LanguageBCP47 }}') {
+				case 'de':
+					locale = German;
+					break;
+				case 'it':
+					locale = Italian;
+					break;
+				case 'fr':
+					locale = French;
+					break;
+			}
+
+			// TODO external buttons
+			// TODO progress bar on top?
+			let uppy = new Uppy({
+				locale: locale,
+				autoProceed: true, // automatically start upload on selection
+				// TODO restrictions
+			})
+			uppy.use(Dashboard, {
+				inline: true,
+				showProgressDetails: true, // remaining time and size instead of percentage
+				target: '#{{ .GetID }}Upload',
+				width: '100%',
+				height: '100%',
+				proudlyDisplayPoweredByUppy: false,
+				disableThumbnailGenerator: true, // placeholder is shown anyway, must be hidden via CSS
+				singleFileFullScreen: false,
+				hideUploadButton: true,
+				theme: 'auto'
+			}).use(Webcam).use(ScreenCapture).use(Audio).use(XHR, {
+				endpoint: '/-/cmd/browse/upload-file',
+				fieldName: 'File',
+				headers: { // TODO use htmx.ajax() instead?
+					// necessary for creating context
+					'HX-Current-URL': location.href, // FIXME is this okay?
+					'HX-Request': 'true',
+				},
+				getResponseData: (xhr) => {
+					// must set correct URL if showLinkToFileUploadResult gets enabled
+					return {
+						url: ''
+					};
+				},
+				onAfterResponse: (xhr, retryCount) => {
+					// TODO process snackbar
+					//console.log(xhr)
+					//htmx.process(xhr)
+					if (xhr.status === 200) {
+						// refresh list
+						htmx.trigger('#{{ .GetID }}', 'fileUploaded', {})
+					}
+				},
+				shouldRetry: (xhr) => {
+					// TODO what is best retry policy? Should not retry on 4xx errors, for example
+					//		filename already exists, but on 5xx errors? could lead to server overload
+
+					// uppy limits to max 3 retries, also if we always return true
+					return false;
+				}
+			}).on('file-added', (file) => {
+				uppy.setFileMeta(file.id, {
+					ParentDirID: {{ .ParentDirID }},
+					AddToInbox: {{ .AddToInbox }},
+				});
+			});
+		</script>
+	</div>
+{{- end }}

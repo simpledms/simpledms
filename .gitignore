@@ -1,0 +1,13 @@
+*.sqlite3**
+*.sqlite
+monorepo
+README.md
+.tmp
+.secrets
+*notes*
+.simpledms/inbox/**
+**/.testdata/**
+node_modules
+app/simpledms/simpledms
+.env
+.idea/**

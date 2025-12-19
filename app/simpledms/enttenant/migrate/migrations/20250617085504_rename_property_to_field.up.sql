@@ -1,0 +1,1 @@
+update `attributes` set `type` = 'Field' where `type` = 'Property';

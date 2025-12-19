@@ -1,0 +1,18 @@
+{{- /*gotype: github.com/simpledms/simpledms/ui/widget.Form */ -}}
+{{- define "Form" }}
+	<form
+			id="{{ .GetID }}"
+			{{ if .IsMultipartFormData }}hx-encoding="multipart/form-data"{{ end }}
+			hx-trigger="submit"
+			{{ template "HTMXAttrs" .HTMXAttrs }}
+			class="flex flex-col gap-y-4 max-h-full"
+	>
+		{{- if .HiddenSubmit }}
+			<input type="submit" hidden />
+		{{ end }}
+
+		{{ render .GetContext .Children }}
+
+        {{ render .GetContext .GetSubmitButton }}
+	</form>
+{{ end }}

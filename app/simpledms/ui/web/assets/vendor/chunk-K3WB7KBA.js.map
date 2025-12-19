@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../node_modules/@uppy/utils/lib/toArray.js"],
+  "sourcesContent": ["/**\n * Converts list into array\n */\nexport default Array.from;"],
+  "mappings": "AAGA,IAAOA,EAAQ,MAAM",
+  "names": ["toArray_default"]
+}

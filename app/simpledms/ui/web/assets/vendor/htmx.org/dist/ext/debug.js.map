@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../../../node_modules/htmx.org/dist/ext/debug.js"],
+  "sourcesContent": ["if (htmx.version && !htmx.version.startsWith(\"1.\")) {\n    console.warn(\"WARNING: You are using an htmx 1 extension with htmx \" + htmx.version +\n        \".  It is recommended that you move to the version of this extension found on https://htmx.org/extensions\")\n}\nhtmx.defineExtension('debug', {\n    onEvent: function (name, evt) {\n        if (console.debug) {\n            console.debug(name, evt);\n        } else if (console) {\n            console.log(\"DEBUG:\", name, evt);\n        } else {\n            throw \"NO CONSOLE SUPPORTED\"\n        }\n    }\n});\n"],
+  "mappings": "MAAI,KAAK,SAAW,CAAC,KAAK,QAAQ,WAAW,IAAI,GAC7C,QAAQ,KAAK,wDAA0D,KAAK,QACxE,0GAA0G,EAElH,KAAK,gBAAgB,QAAS,CAC1B,QAAS,SAAUA,EAAMC,EAAK,CAC1B,GAAI,QAAQ,MACR,QAAQ,MAAMD,EAAMC,CAAG,UAChB,QACP,QAAQ,IAAI,SAAUD,EAAMC,CAAG,MAE/B,MAAM,sBAEd,CACJ,CAAC",
+  "names": ["name", "evt"]
+}

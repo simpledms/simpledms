@@ -1,0 +1,43 @@
+{{- /* gotype: github.com/simpledms/simpledms/ui/widget.Card */ -}}
+{{- define "Card" }}
+	{{ $ctx := .GetContext }}
+	<div
+			id="{{ .GetID }}"
+            {{ template "HTMXAttrs" .HTMXAttrs }}
+			class="h-full rounded-md text-on-surface
+				{{- /* outline or border? */}}
+				{{ if .IsStyleOutlined }}bg-surface outline-outline-variant outline outline-1 -outline-offset-1{{ end }}
+				{{ if .IsStyleFilled }}bg-surface-container{{ end }}{{/* spec is -highest */}}
+				{{ if .ContextMenu }}cursor-context-menu{{ end }}
+			"
+	>
+		<div class="state-layer-on-surface p-4 flex flex-col gap-y-4">
+			<div class="flex-grow flex flex-col gap-y-2">
+				<div>
+                    {{ with .Subhead }}
+                        {{/* not sure if above or below headline, maybe as option? */}}
+						<div class="title-md text-on-surface-variant">{{ render $ctx . }}</div>
+                    {{ end }}
+					<div>{{ render .GetContext .Headline }}</div>
+				</div>
+                {{ with .SupportingText }}
+					<div class="body-lg text-on-surface-variant">{{ render $ctx . }}</div>
+                {{ end }}
+				{{ with .Content }}
+					<div>{{ render $ctx . }}</div>
+                {{ end }}
+			</div>
+
+            {{ with .Actions }}
+				<div class="flex flex-wrap gap-1">{{ render $ctx . }}</div>
+            {{ end }}
+		</div>
+
+        {{ render .GetContext .ContextMenu }}
+
+        {{ if .ContextMenu }}
+            {{ template "contextMenuScript" . }}
+        {{ end }}
+	</div>
+
+{{ end }}

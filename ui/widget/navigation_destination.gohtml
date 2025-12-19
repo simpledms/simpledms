@@ -1,0 +1,27 @@
+{{- /*gotype: github.com/simpledms/simpledms/ui/widget.NavigationDestination */ -}}
+{{- define "NavigationDestination" }}
+	<a
+            {{ template "HTMXAttrs" .HTMXAttrs }}
+			class="navigationDestination group/navdest flex flex-col gap-y-1 text-center h-14"
+			href="{{ .Href }}"
+	>
+		{{/* active indicator */}}
+		<div class="rounded-xl w-14 h-8
+			{{ if .IsActive }}bg-secondary-container{{ else }}{{ end }}"
+		>
+			<div class="state-layer-on-surface flex">
+                {{/* TODO or .GetIcon? and use icon widget? */}}
+				<i class="
+					material-symbols-outlined
+					m-auto
+					{{- if .IsActive }}
+						fill text-on-secondary-container
+					{{- else }}
+						text-on-surface-variant hfa:text-on-surface
+					{{- end }}
+				">{{ .Icon }}</i>
+			</div>
+		</div>
+		<span class="label-md {{ if .IsActive }}label-prominent text-on-surface{{ else }}text-on-surface-variant group-hover/navdest:text-on-surface group-focus/navdest:text-on-surface group-active/navdest:text-on-surface{{ end }}">{{ .Label }}</span>
+	</a>
+{{ end }}

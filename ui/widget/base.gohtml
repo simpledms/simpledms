@@ -1,0 +1,422 @@
+{{- define "Base" }}
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, shrink-to-fit=no" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+		{{/*
+		transitions make app feel slower
+		<meta name="htmx-config" content='{"globalViewTransitions":true}'>
+		fine tuning of transitions in tailwind.css
+		<meta name="htmx-config" content='{"disableInheritance":true, "globalViewTransitions":false, "historyCacheSize": 0}'>
+		*/}}
+		<meta name="htmx-config" content='{"disableInheritance":true, "globalViewTransitions":true}'>
+
+		{{- if .ShouldRefreshEvery60Seconds }}
+			<meta http-equiv="refresh" content="60" />
+		{{ end }}
+
+        {{/* also set in tailwind.css via color-schema on :root; must be before other css */}}
+		<meta
+				name="color-scheme"
+				content="light dark"
+		/>
+		<style>
+			:root {
+				{{/*
+					necessary to render UI elements (icon in date input or select elements correctly in dark mode
+					also set via meta element in base
+					should be inline before tailwind.css
+				*/}}
+				color-scheme: light dark;
+			}
+		</style>
+
+		{{/*
+		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" /></noscript>
+
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" /></noscript>
+
+		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" /></noscript>
+
+		<link rel="preload" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1" /></noscript>
+		*/}}
+
+		<link rel="preload" href="/assets/tailwind.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+
+
+		<title>{{ render .GetContext .Title }}</title>
+		<!-- use-credentials is necessary because we use basic auth -->
+		<link rel="manifest" crossorigin="use-credentials" href="/assets/manifest.json" />
+		<meta
+				name="theme-color"
+				content="rgb(252, 248, 248)"
+				media="(prefers-color-scheme: light)" />
+		<meta
+				name="theme-color"
+				content="rgb(20, 19, 19)"
+				media="(prefers-color-scheme: dark)" />
+
+		<script type="text/javascript">
+			let _wakeLock = null;
+			let _wakeLockOnChange = null;
+
+			const requestWakeLock = async () => {
+				try {
+					_wakeLock = await navigator.wakeLock.request('screen');
+
+					_wakeLock.addEventListener('release', () => {
+						_wakeLock = null;
+
+						// just for safety, for example on visibilitychange event
+						document.querySelector('#wakeLockSwitch').checked = false;
+
+						//console.log('wakeLock released');
+
+						//let snackbar = document.querySelector('#snackbar');
+						//snackbar.innerHTML = 'Wake lock disabled.';
+						//snackbar.open = true;
+					});
+
+					//console.log('wakeLock enabled');
+
+					let snackbar = document.querySelector('#snackbar');
+					snackbar.innerHTML = 'Wake lock enabled, prevents device from locking the screen.';
+					snackbar.open = true;
+
+					// release wake lock when leaving page or re-entering app
+					document.addEventListener("visibilitychange", async () => {
+						if (_wakeLock !== null) {
+							_wakeLock.release();
+						}
+
+						let snackbar = document.querySelector('#snackbar');
+						snackbar.innerHTML = '';
+						snackbar.open = false;
+
+						// document.visibilityState can be visible or hidden
+						console.log('visibility changed to ' + document.visibilityState);
+					});
+				}
+				catch(err) {
+					console.error('${err.name}, ${err.message}');
+				}
+			};
+
+			const releaseWakeLock = async () => {
+				await _wakeLock.release();
+				_wakeLock = null;
+
+				//console.log('wakeLock released');
+			};
+
+		</script>
+	</head>
+    {{- /* was bg-surface-bright before 22.01.2025 */}}
+	<body style="display: none;"
+		  class="font-sans bg-surface text-on-surface"
+		  hx-boost="true"
+		  hx-target="#content"
+		  hx-ext="morph"
+		  hx-indicator=".js-progress-indicator"
+		  hx-inherit="hx-boost hx-ext hx-target hx-indicator"
+	>
+    	{{ render .GetContext .GetProgressIndicator }}
+
+    	{{/*
+			without hx-history-elt back button could brake with boosted links, for example
+			if a space is selected on dashboard, the user goes back, then another space is selected,
+			then the space button no longer works...;
+
+			cause might be related to reexecution of JS below on history navigation; at least the
+			htmx.js and idiomorph-ext.js get reloaded on history navigation
+		*/}}
+		<div id="content" hx-history-elt>
+			{{ render .GetContext .Content }}
+		</div>
+        {{ render .GetContext .Children }}
+
+		<!-- TODO snackbar, use mdui? -->
+		<script type="text/javascript">
+			//document.querySelector('#snackbar').addEventListener('closed', (e) => {
+			// workaround for bug, because open is set to false after delay,
+			// but not on click when close-on-outside-click is enabled
+			// TODO submit bugfix to mdui
+			//e.target.open = false;
+			//})
+		</script>
+
+		<!--
+		<script defer src="/assets/htmx.min.js"></script>
+		-->
+		<script defer src="/assets/vendor/htmx.js" type="module"></script>
+		<script defer src="/assets/vendor/idiomorph/dist/idiomorph-ext.esm.js" type="module"></script>
+
+		<!--
+		script defer src="/assets/vendor/pdfjs-dist.js" type="module"></script>
+		-->
+
+		<script defer>
+			// this is safe to use as long as param value is not rendered in frontend; via Go template it
+			// is safe
+			function _setQueryParam(event, paramName, paramValue = undefined) {
+				if (paramValue === undefined) {
+					return _setQueryParamValue(paramName, event.target.value);
+				}
+				return _setQueryParamValue(paramName, paramValue);
+			}
+			function _setQueryParamValue(paramName, paramValue) {
+				// there is also url.searchParams, but readonly... see also:
+				// https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams#interaction_with_url.searchparams
+				const searchParams = new URLSearchParams(window.location.search);
+				if (paramValue === '') {
+					searchParams.delete(paramName);
+				} else {
+					searchParams.set(paramName, paramValue);
+				}
+				_updateURL(searchParams);
+			}
+
+			function _appendQueryParamSliceValue(paramName, paramValue) {
+				const searchParams = new URLSearchParams(window.location.search);
+				searchParams.append(paramName, paramValue);
+				_updateURL(searchParams);
+			}
+			function _deleteQueryParamSliceValue(paramName, paramValue) {
+				const searchParams = new URLSearchParams(window.location.search);
+				searchParams.delete(paramName, paramValue);
+				_updateURL(searchParams);
+			}
+
+			function _updateURL(searchParams) {
+				if (searchParams.toString() === '') {
+					// setting empty string instead does nothing
+					window.history.replaceState(null, null, '?');
+				} else {
+					window.history.replaceState(null, null, '?' + searchParams.toString());
+				}
+			}
+		</script>
+
+		<script type="module" defer>
+			import htmx from '/assets/vendor/htmx.js';
+			//import {} from '/assets/vendor/htmx.org/dist/ext/debug.js'; // not working
+			// htmx.logAll();
+
+			document.addEventListener('htmx:beforeRequest', function(e) {
+				// does close side sheet on navigation to another page;
+				// page nav is always boosted;
+				// must be verified if this has any side effects and if boosted is used for non-page navigation
+				// somewhere
+				if (e.detail.requestConfig.boosted) {
+					this.dispatchEvent(new CustomEvent('closeSideSheet', { bubbles: true }))
+				}
+			})
+
+			document.addEventListener('htmx:afterProcessNode', function(e) {
+				// class `js-semantic-link` is used to mark links that are duplicates, thus have a htmx wrapper;
+				// if propagation is not stopped, the request is executed twice
+				e.detail.elt.querySelectorAll('.js-semantic-link').forEach((link) => {
+					link.addEventListener('click', (e) => {
+						e.stopPropagation();
+					})
+				})
+
+			})
+
+			document.addEventListener('htmx:afterSwap', function(e) {
+				// necessary to auto open dialogs for example on switch via list when dialog script
+				// doesn't get reexecuted because KeepInDOMOnClose is used; for example for FileDetails
+
+				// short timeout to make sure Dialog got opened by other mechanisms, otherwise it could get
+				// closed immediately
+				setTimeout(() => {
+					const searchParams = new URLSearchParams(window.location.search);
+					let sideSheetIDs = searchParams.getAll('side_sheet')
+
+					for (let i = 0; i < sideSheetIDs.length; i++) {
+						let sideSheetID = sideSheetIDs[i]
+						e.detail.elt.querySelectorAll('#'+sideSheetID + '.js-side-sheet-dialog:not([open])').forEach((dialog) => {
+							dialog.openOnLoad();
+						})
+					}
+				}, 100)
+			});
+
+			document.addEventListener('htmx:configRequest', function(e) {
+				e.detail.headers['X-Client-Timezone'] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+				
+				if (e.detail.boosted || e.detail.verb == 'get') {
+					// workaround to remove params from URL that were added by hx-vals inheritance;
+					// hx-vals is always inherited for boosted links but seems no issue for unboosted links;
+					// see also https://github.com/bigskysoftware/htmx/issues/1119#issuecomment-2425183358
+					//
+					// verb check was added in order to prevent issues when clicking on list_item wrapper,
+					// in these cases, hx-push-url was defined and thus the user didn't see the hx-vals params
+					// in the url most of the time, but the request send to the backend contained them;
+					// then sometimes the params were added to the url in the browser by setting HX-Push-URL
+					// header in backend
+					//
+					// TODO verify that this has no side-effects
+					e.detail.formData = new FormData();
+					e.detail.parameters = new FormData();
+				}
+			})
+			document.addEventListener('htmx:beforeSwap', function(e) {
+				// show snackbar on errors, by default htmx doesn't swap for non 2xx status codes
+				// https://htmx.org/docs/#modifying_swapping_behavior_with_events
+				if (e.detail.xhr.status >= 300) {
+					// other strategies described on the page linked above did not work because
+					// the original target couldn't be overwritten;
+					//
+					// also if isError is set to false, mechanism for auto closing forms on success
+					// no longer worked
+					//
+					// errorSwapDummy element is necessary because no content (except oob snackbar)
+					// is returned and this "content" must be swapped somewhere
+					htmx.swap('#errorSwapDummy', e.detail.xhr.responseText, {
+						swapStyle: 'innerHTML',
+					})
+				}
+			})
+
+			//document.addEventListener('htmx:beforeCleanupElement', function(e) {
+				//console.log('beforeCleanupElement', e.detail.elt)
+			//})
+		</script>
+		<div id="errorSwapDummy" style="display: none;"></div>
+
+	{{/* workaround because encoding cannot set directly when using htmx.ajax */}}
+	<div id="fileHandlingAPI"
+			hx-post="/-/cmd/open-file/upload-files"
+			hx-encoding="multipart/form-data"
+			hx-trigger="none"
+	></div>
+	<script type="module" defer>
+		import htmx from '/assets/vendor/htmx.js';
+
+		// must be in main thread, not service worker
+		// https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/file_handlers#handling_the_files
+		if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
+			launchQueue.setConsumer(async (launchParams) => {
+				console.log(launchParams.targetURL)
+				// Nothing to do when the queue is empty.
+				if (!launchParams.files.length) {
+					console.info("file queue is empty")
+					return;
+				}
+
+				// TODO verify targetURL?
+				console.log(launchParams.targetURL);
+
+				let formData = new FormData()
+
+				// TODO processing indicator
+				for (const fileHandle of launchParams.files) {
+					console.log(fileHandle)
+
+					const file = await fileHandle.getFile().catch((reason) => {
+						// stops Promise chain, see comment below why this is necessary to prevent
+						// reprocessing
+						return Promise.reject(reason)
+					});
+					formData.append("file", file, file.name); // can be multiple // TODO or "file"?
+				}
+
+				// https://flaviocopes.com/htmx-send-files-using-htmxajax-call/
+				// workaround to set multipart encoding
+				let fileHandlingElem = document.getElementById("fileHandlingAPI");
+				htmx.ajax(
+					'POST',
+					fileHandlingElem.getAttribute("hx-post"),
+					{
+						values: formData,
+						source: fileHandlingElem
+					}
+				).then(() => {
+					// has no response object
+
+					{{/*
+					// necessary to prevent reprocessing on page reload; when the file gets removed,
+					// there is a way to detect if it was already processed;
+					// otherwise file in queue is processed again
+					// on page reload; that's the expected behavior when opening a file
+					// in a web app (without uploading it) to not loose handler;
+					// the handler is reused on page reload, thus this works
+					//
+					// There is also fileHandle.isSameEntry, but it is not simple to serialize
+					// and store the handle for comparison after page reload...
+					//
+					// TODO only on success
+					// TODO is this safe if new files got added in the meantime?
+					//		thus is launchParams still the same? probably yes
+					for (const fileHandle of launchParams.files) {
+						if ('remove' in fileHandle) {
+							// remove is non-standard and experimental
+							// supported in Chrome and Edge
+							// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemHandle/remove#browser_compatibility
+							//
+							// IMPORTANT
+							// not a good idea, removes file on underlying file system and if file browser
+							// doesn't work with a copy of the file when opening in PWA, it removes the file
+							// on the users file system... happens for example with thunar "open with"
+							// IMPORTANT
+							//
+							// fileHandle.remove()
+						}
+					}
+					*/}}
+				})
+			});
+		}
+	</script>
+
+	<script type="module" defer>
+		document.querySelector("body").style.display = 'block';
+
+		/*
+		import ui from "/assets/beer.min.js";
+
+		// breaks dark mode without await, probably because it is loaded after
+		// settings dark mode and overwrites it
+		await ui("theme", "#1abc9c");
+
+		// !! IMPORTANT !!
+		// be aware that ui methods override style on body, thus
+		// display.block must not be set, but also other values get lost
+
+		// inspired by https://ultimatecourses.com/blog/detecting-dark-mode-in-javascript
+		(() => {
+			if (!window.matchMedia) {
+				//document.querySelector("body").style.display = 'block';
+				return;
+			}
+
+			// TODO mode also accepts auto as value instead of dark/light
+			let changeColorMode = async (isDarkMode) => {
+				if (isDarkMode) {
+					await ui("mode", "dark");
+				} else {
+					await ui("mode", "light");
+				}
+				//document.querySelector("body").style.display = 'block';
+			}
+
+			let query = window.matchMedia('(prefers-color-scheme: dark)');
+			changeColorMode(query.matches);
+			query.addEventListener('change', (e) => changeColorMode(e.matches));
+		})()
+		*/
+	</script>
+	</body>
+	</html>
+{{ end }}

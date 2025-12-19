@@ -1,0 +1,22 @@
+{{- /*gotype: github.com/simpledms/simpledms/ui/widget.MainLayout */ -}}
+{{- define "MainLayout" }}
+	{{ $ctx := .GetContext }}
+
+	{{- /* Deprecated: bg-surface-container is for extension of nav bar color around edge into content area
+	 must match background color of nav rail*/}}
+	{{- /* was bg-surface-bright before 22.01.2025 */}}
+	<div class="flex flex-col-reverse md:flex-row h-dvh">
+        {{ render .GetContext .Navigation }}
+		<div id="innerContent" class="flex-grow overflow-hidden">
+            {{ render .GetContext .Content }}
+		</div>
+		{{ with .Sheet }}
+			<div class="lg:flex-grow hidden lg:block">
+				{{ render $ctx . }}
+			</div>
+		{{ end }}
+	</div>
+	{{ with .SideSheet }}
+		{{ render $ctx . }}
+	{{ end }}
+{{ end }}

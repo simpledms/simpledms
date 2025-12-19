@@ -1,0 +1,44 @@
+{{- /* gotype: github.com/simpledms/simpledms/ui/widget.Checkbox */ -}}
+{{- define "Checkbox" }}
+	{{/* wrapper is necessary for use with label only */}}
+	<div class="flex flex-row gap-x-3 items-center h-12">
+		<div id="{{ .GetID }}" class="size-12 -m-3 rounded-full flex center-aligned"
+                {{ template "HTMXAttrs" .HTMXAttrs }}
+		>
+			<div class="{{ if not .IsStateInherited }}state-layer-on-surface has-[:checked]:state-layer-primary has-[:invalid]:state-layer-error{{ end }}
+			!size-10 flex center-aligned">
+				<input
+						id="{{ .GetID }}-checkbox" {{/* used for label */}}
+                        {{/* appearance-none gets rid of white background */}}
+						{{/* FIXME use user-invalid instead of invalid; supported in TailwindCSS 4.1 */}}
+						class="appearance-none border-2 border-on-surface-variant size-[1.125rem]
+					checked:appearance-auto checked:accent-primary
+					invalid:border-error checked:invalid:accent-error
+					rounded-[0.125rem]
+							text-on-primary invalid:text-on-surface
+							hover:cursor-pointer
+"
+						type="checkbox"
+						name="{{ .Name }}"
+						value="{{ .GetValue }}"
+                        {{ if .IsRequired }}required{{ end }}
+                        {{ if .IsChecked }}checked{{ end }}
+				/>
+			</div>
+		</div>
+		<div class="text-on-surface">
+            {{ render .GetContext .GetLabel }}
+		</div>
+		<script defer>
+			(function () {
+				let elem = document.querySelector('#{{ .GetID }} input[type="checkbox"]')
+				elem.addEventListener('click', function (e) {
+                    {{/* necessary for stacked links, like in search or on list items, to prevent
+                 executing click handler multiple times */}}
+					e.stopPropagation();
+				})
+			})()
+		</script>
+	</div>
+{{ end }}
+

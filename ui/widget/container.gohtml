@@ -1,0 +1,12 @@
+{{- define "Container" }}
+	<div
+			{{ if ne .GetID "" }}id="{{ .GetID }}"{{ end }}
+			class="{{ if .MaxHeight }}h-full{{ end }} {{/* commented on 18.11.24 overflow-y-scroll */}} {{ .GetClass }}
+				{{ if .GapY }}gap-y-4 flex flex-col{{ end }}
+				{{ if .Gap }}gap-1.5 flex flex-wrap{{ end }}
+			"
+			{{ template "HTMXAttrs" .HTMXAttrs }}
+	>
+        {{ render .GetContext .Child }}
+	</div>
+{{ end }}

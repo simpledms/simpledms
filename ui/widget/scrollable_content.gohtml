@@ -1,0 +1,15 @@
+{{/* gotype:github.com/simpledms/simpledms/ui/widget.ScrollableContent */}}
+{{- define "ScrollableContent" }}
+	{{ $ctx := .GetContext }}
+	<div id="{{ .GetID }}" class="flex flex-col exp:flex-col-reverse flex-grow max-h-full overflow-y-hidden">
+		<div class="flex-grow max-h-full overflow-y-scroll
+			{{ if .PaddingX }}px-3 md:px-4{{ end }}
+			{{ if .GapY | or .FlexCol }}flex flex-col{{ end }} {{ if .GapY }}gap-y-4{{ end }}
+			{{ if .MarginY }}my-4{{ end }}">
+            {{ render .GetContext .Children }}
+		</div>
+        {{ with .BottomAppBar }}
+            {{ render $ctx . }}
+        {{ end }}
+	</div>
+{{ end }}

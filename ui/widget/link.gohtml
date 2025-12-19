@@ -1,0 +1,18 @@
+{{- define "Link" }}
+	<a
+			href="{{ .Href }}"
+			class="inline-flex items-center {{ if not .IsNoColor }}text-tertiary{{ end }}
+				leading-none {{ if .IsText }}hover:underline{{ end }} {{ .GetClass }}"
+			{{- if .SubmitForm | or (ne .PopoverTarget "" ) | or (ne .Href "") }}
+				onclick="{{ if .SubmitForm }}this.closest('form').submit(); return false;{{ end }} {{ if ne .PopoverTarget "" }}document.getElementById('{{ .PopoverTarget }}').showPopover();{{ end }} {{ if ne .Href "" | and (not .IsDownload) }}document.querySelectorAll('[popover]').forEach((popover)=> popover.hidePopover()){{ end }}"
+			{{ end }}
+			{{- if .IsDownload }}
+				hx-boost="false"
+				download="{{ .Filename }}"
+			{{ end }}
+
+			{{ template "HTMXAttrs" .HTMXAttrs }}
+	>
+		{{ render .GetContext .Child }}
+	</a>
+{{ end }}

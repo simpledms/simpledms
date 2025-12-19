@@ -1,0 +1,3 @@
+{{- define "Label" }}
+	<label {{ if .For }}for="{{ .For }}"{{ end }} class="{{ .Type }} block text-on-surface">{{ render .GetContext .Text }}</label>
+{{ end }}

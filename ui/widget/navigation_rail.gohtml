@@ -1,0 +1,33 @@
+{{- define "NavigationRail" }}
+	<nav id="navigationRailAndBar"
+		 class="
+		 flex
+		 mt-4 md:mt-0
+		 w-full h-20 md:w-20 md:min-w-20 md:h-full
+		 pt-3 pb-4
+		 {{/* gap-y was gap-y-12 before added menu icon on top */}}
+		 md:justify-normal md:items-center md:flex-col md:gap-y-6 md:px-3
+		 bg-surface-tint bg-opacity-8
+		 outline-outline-variant outline-1 outline
+		 "
+		 {{/* TODO use surface variant instead of tint? */}}
+		 {{/* style="background: #f0fdf9; outline: 2px solid rgb(0, 128, 146)" */}}
+	>
+		<div class="hidden md:flex md:items-center md:mt-4">
+            {{ render .GetContext .MenuBtn }}
+		</div>
+		<div class="
+			flex items-center
+			fixed bottom-24 right-4 flex-col-reverse gap-y-4
+			md:relative md:flex-col md:bottom-0 md:right-0 md:gap-y-3">
+        	{{ render .GetContext .FABs }}
+		</div>
+		<div class="
+			flex gap-x-2 justify-evenly flex-grow
+			md:flex-col md:gap-y-3 md:justify-normal md:items-center
+			{{/* pt-1 to make it work without custom value for mt */}}
+			{{ if gt (len .FABs) 1 }}md:mt-2{{ else }}md:mt-14 md:pt-1{{ end }}">
+            {{ render .GetContext .Destinations }}
+		</div>
+	</nav>
+{{ end }}

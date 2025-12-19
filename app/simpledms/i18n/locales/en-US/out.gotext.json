@@ -1,0 +1,3147 @@
+{
+    "language": "en-US",
+    "messages": [
+        {
+            "id": "Maintenance mode",
+            "message": "Maintenance mode",
+            "translation": "Maintenance mode",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Maintenance mode is enabled. Please wait until the app ready again.",
+            "message": "Maintenance mode is enabled. Please wait until the app ready again.",
+            "translation": "Maintenance mode is enabled. Please wait until the app ready again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "A similar entity already exists.",
+            "message": "A similar entity already exists.",
+            "translation": "A similar entity already exists.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Cannot delete an entity still in use.",
+            "message": "Cannot delete an entity still in use.",
+            "translation": "Cannot delete an entity still in use.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "A database constraint violation happened. Please contact the support.",
+            "message": "A database constraint violation happened. Please contact the support.",
+            "translation": "A database constraint violation happened. Please contact the support.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Data validation failed.",
+            "message": "Data validation failed.",
+            "translation": "Data validation failed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Something went wrong. Please try again.",
+            "message": "Something went wrong. Please try again.",
+            "translation": "Something went wrong. Please try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not signed in. Please sign in to continue.",
+            "message": "You are not signed in. Please sign in to continue.",
+            "translation": "You are not signed in. Please sign in to continue.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not parse url.",
+            "message": "Could not parse url.",
+            "translation": "Could not parse url.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to access this tenant.",
+            "message": "You are not allowed to access this tenant.",
+            "translation": "You are not allowed to access this tenant.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to access this space.",
+            "message": "You are not allowed to access this space.",
+            "translation": "You are not allowed to access this space.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not read cookie.",
+            "message": "Could not read cookie.",
+            "translation": "Could not read cookie.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Cookie set but not valid.",
+            "message": "Cookie set but not valid.",
+            "translation": "Cookie set but not valid.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Cookie set but empty.",
+            "message": "Cookie set but empty.",
+            "translation": "Cookie set but empty.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Change passphrase",
+            "message": "Change passphrase",
+            "translation": "Change passphrase",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to unlock the app.",
+            "message": "You must be logged in to unlock the app.",
+            "translation": "You must be logged in to unlock the app.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be an admin to unlock the app.",
+            "message": "You must be an admin to unlock the app.",
+            "translation": "You must be an admin to unlock the app.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passphrase changed.",
+            "message": "Passphrase changed.",
+            "translation": "Passphrase changed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Init app",
+            "message": "Init app",
+            "translation": "Init app",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passphrases do not match.",
+            "message": "Passphrases do not match.",
+            "translation": "Passphrases do not match.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "App initialized.",
+            "message": "App initialized.",
+            "translation": "App initialized.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Remove passphrase",
+            "message": "Remove passphrase",
+            "translation": "Remove passphrase",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passphrase removed.",
+            "message": "Passphrase removed.",
+            "translation": "Passphrase removed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Unlock app",
+            "message": "Unlock app",
+            "translation": "Unlock app",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "App unlocked.",
+            "message": "App unlocked.",
+            "translation": "App unlocked.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Change password",
+            "message": "Change password",
+            "translation": "Change password",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Change",
+            "message": "Change",
+            "translation": "Change",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to change your password.",
+            "message": "You must be logged in to change your password.",
+            "translation": "You must be logged in to change your password.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Password changed successfully.",
+            "message": "Password changed successfully.",
+            "translation": "Password changed successfully.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Clear temporary password",
+            "message": "Clear temporary password",
+            "translation": "Clear temporary password",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Temporary password cleared successfully.",
+            "message": "Temporary password cleared successfully.",
+            "translation": "Temporary password cleared successfully.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to delete this account.",
+            "message": "You are not allowed to delete this account.",
+            "translation": "You are not allowed to delete this account.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Account deleted.",
+            "message": "Account deleted.",
+            "translation": "Account deleted.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit account",
+            "message": "Edit account",
+            "translation": "Edit account",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot edit another account.",
+            "message": "You cannot edit another account.",
+            "translation": "You cannot edit another account.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Account updated.",
+            "message": "Account updated.",
+            "translation": "Account updated.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Reset password",
+            "message": "Reset password",
+            "translation": "Reset password",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Reset",
+            "message": "Reset",
+            "translation": "Reset",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Account not found.",
+            "message": "Account not found.",
+            "translation": "Account not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "A new temporary password was sent to your email address.",
+            "message": "A new temporary password was sent to your email address.",
+            "translation": "A new temporary password was sent to your email address.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Set password",
+            "message": "Set password",
+            "translation": "Set password",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Initial password set successfully.",
+            "message": "Initial password set successfully.",
+            "translation": "Initial password set successfully.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign in",
+            "message": "Sign in",
+            "translation": "Sign in",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Found no account for this email address.",
+            "message": "Found no account for this email address.",
+            "translation": "Found no account for this email address.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign up now.",
+            "message": "Sign up now.",
+            "translation": "Sign up now.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid credentials. Please try again.",
+            "message": "Invalid credentials. Please try again.",
+            "translation": "Invalid credentials. Please try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Logged in successfully.",
+            "message": "Logged in successfully.",
+            "translation": "Logged in successfully.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign in [subject]",
+            "message": "Sign in [subject]",
+            "translation": "Sign in [subject]",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Forget password?",
+            "message": "Forget password?",
+            "translation": "Forget password?",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Don't have an account? Sign up.",
+            "message": "Don't have an account? Sign up.",
+            "translation": "Don't have an account? Sign up.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid session cookie.",
+            "message": "Invalid session cookie.",
+            "translation": "Invalid session cookie.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign up [subject]",
+            "message": "Sign up [subject]",
+            "translation": "Sign up [subject]",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign up",
+            "message": "Sign up",
+            "translation": "Sign up",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Registration successful, please check your email for your password.",
+            "message": "Registration successful, please check your email for your password.",
+            "translation": "Registration successful, please check your email for your password.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document type | Filter",
+            "message": "Document type | Filter",
+            "translation": "Document type | Filter",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No document types available yet.",
+            "message": "No document types available yet.",
+            "translation": "No document types available yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage document types",
+            "message": "Manage document types",
+            "translation": "Manage document types",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Fields",
+            "message": "Fields",
+            "translation": "Fields",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tag groups",
+            "message": "Tag groups",
+            "translation": "Tag groups",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No tag groups available.",
+            "message": "No tag groups available.",
+            "translation": "No tag groups available.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document type",
+            "message": "Document type",
+            "translation": "Document type",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Rename",
+            "message": "Rename",
+            "translation": "Rename",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Move",
+            "message": "Move",
+            "translation": "Move",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete",
+            "message": "Delete",
+            "translation": "Delete",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure?",
+            "message": "Are you sure?",
+            "translation": "Are you sure?",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Unzip archive",
+            "message": "Unzip archive",
+            "translation": "Unzip archive",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Details",
+            "message": "Details",
+            "translation": "Details",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File size",
+            "message": "File size",
+            "translation": "File size",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "MIME type",
+            "message": "MIME type",
+            "translation": "MIME type",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "SHA-256 hash",
+            "message": "SHA-256 hash",
+            "translation": "SHA-256 hash",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Original filename",
+            "message": "Original filename",
+            "translation": "Original filename",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Uploaded at",
+            "message": "Uploaded at",
+            "translation": "Uploaded at",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "OCR succeeded at",
+            "message": "OCR succeeded at",
+            "translation": "OCR succeeded at",
+            "comment": "TODO naming",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Deleted at",
+            "message": "Deleted at",
+            "translation": "Deleted at",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "rendering failed",
+            "message": "rendering failed",
+            "translation": "rendering failed",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Preview",
+            "message": "Preview",
+            "translation": "Preview",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Coming soon.",
+            "message": "Coming soon.",
+            "translation": "Coming soon.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File upload",
+            "message": "File upload",
+            "translation": "File upload",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No files available yet.",
+            "message": "No files available yet.",
+            "translation": "No files available yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No files or directories available yet.",
+            "message": "No files or directories available yet.",
+            "translation": "No files or directories available yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Create directory",
+            "message": "Create directory",
+            "translation": "Create directory",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Upload file",
+            "message": "Upload file",
+            "translation": "Upload file",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Loading more...",
+            "message": "Loading more...",
+            "translation": "Loading more...",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Search",
+            "message": "Search",
+            "translation": "Search",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Search in «{Name}»",
+            "message": "Search in «{Name}»",
+            "translation": "Search in «{Name}»",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "dir.Data.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Tags",
+            "message": "Tags",
+            "translation": "Tags",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No fields available yet.",
+            "message": "No fields available yet.",
+            "translation": "No fields available yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage fields",
+            "message": "Manage fields",
+            "translation": "Manage fields",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No fields available.",
+            "message": "No fields available.",
+            "translation": "No fields available.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Contains",
+            "message": "Contains",
+            "translation": "Contains",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Starts with",
+            "message": "Starts with",
+            "translation": "Starts with",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Equals",
+            "message": "Equals",
+            "translation": "Equals",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Greater than",
+            "message": "Greater than",
+            "translation": "Greater than",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Less than",
+            "message": "Less than",
+            "translation": "Less than",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "«{Name}» is checked",
+            "message": "«{Name}» is checked",
+            "translation": "«{Name}» is checked",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "«{Name}» is not checked",
+            "message": "«{Name}» is not checked",
+            "translation": "«{Name}» is not checked",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Tags | Filter",
+            "message": "Tags | Filter",
+            "translation": "Tags | Filter",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No tags available yet.",
+            "message": "No tags available yet.",
+            "translation": "No tags available yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage tags",
+            "message": "Manage tags",
+            "translation": "Manage tags",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "«{Name}» created.",
+            "message": "«{Name}» created.",
+            "translation": "«{Name}» created.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "filex.Data.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Open directory",
+            "message": "Open directory",
+            "translation": "Open directory",
+            "comment": "TODO Go to, open, show?",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Only allowed in folder mode.",
+            "message": "Only allowed in folder mode.",
+            "translation": "Only allowed in folder mode.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Open file",
+            "message": "Open file",
+            "translation": "Open file",
+            "comment": "TODO Go to, or Open?",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Moved to «{Name}».",
+            "message": "Moved to «{Name}».",
+            "translation": "Moved to «{Name}».",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "destDir.Data.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Fields | Filter",
+            "message": "Fields | Filter",
+            "translation": "Fields | Filter",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Folder isn't empty.",
+            "message": "Folder isn't empty.",
+            "translation": "Folder isn't empty.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Folder deleted.",
+            "message": "Folder deleted.",
+            "translation": "Folder deleted.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File deleted.",
+            "message": "File deleted.",
+            "translation": "File deleted.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Rename file",
+            "message": "Rename file",
+            "translation": "Rename file",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Save",
+            "message": "Save",
+            "translation": "Save",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Renamed to «{Name}»",
+            "message": "Renamed to «{Name}»",
+            "translation": "Renamed to «{Name}»",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "filex.Data.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Document type deselected.",
+            "message": "Document type deselected.",
+            "translation": "Document type deselected.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document type selected.",
+            "message": "Document type selected.",
+            "translation": "Document type selected.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Unsupported field type.",
+            "message": "Unsupported field type.",
+            "translation": "Unsupported field type.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "«{Name}» saved.",
+            "message": "«{Name}» saved.",
+            "translation": "«{Name}» saved.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "File Name",
+            "message": "File Name",
+            "translation": "File Name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Size",
+            "message": "Size",
+            "translation": "Size",
+            "comment": "Text{\"Name:\"},\n\t\t\t\tText{\"Size:\"},\n\t\t\t\tText{\"Created At:\"},\n\t\t\t\tText{\"Modified At:\"},\n\t\t\t\tText{\"Permissions:\"},\n\t\t\t\tText{\"Owner:\"},\n\t\t\t\tText{\"Group:\"},\n\t\t\t\tText{\"Links:\"},\n\t\t\t\tText{\"SHA256:\"},\n\t\t\t\tText{Label: \"Content:\"},",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Metadata",
+            "message": "Metadata",
+            "translation": "Metadata",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Info",
+            "message": "Info",
+            "translation": "Info",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Versions",
+            "message": "Versions",
+            "translation": "Versions",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Not a ZIP archive.",
+            "message": "Not a ZIP archive.",
+            "translation": "Not a ZIP archive.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not open ZIP archive.",
+            "message": "Could not open ZIP archive.",
+            "translation": "Could not open ZIP archive.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not unzip the archive.",
+            "message": "Could not unzip the archive.",
+            "translation": "Could not unzip the archive.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not read ZIP archive.",
+            "message": "Could not read ZIP archive.",
+            "translation": "Could not read ZIP archive.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not create directory structure.",
+            "message": "Could not create directory structure.",
+            "translation": "Could not create directory structure.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not extract all files from archive.",
+            "message": "Could not extract all files from archive.",
+            "translation": "Could not extract all files from archive.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Archive unzipped.",
+            "message": "Archive unzipped.",
+            "translation": "Archive unzipped.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not open file in archive.",
+            "message": "Could not open file in archive.",
+            "translation": "Could not open file in archive.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not extract file from archive.",
+            "message": "Could not extract file from archive.",
+            "translation": "Could not extract file from archive.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "«{Name}» filter updated.",
+            "message": "«{Name}» filter updated.",
+            "translation": "«{Name}» filter updated.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "No parent dir provided.",
+            "message": "No parent dir provided.",
+            "translation": "No parent dir provided.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "could not read file",
+            "message": "could not read file",
+            "translation": "could not read file",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "«{Name}» uploaded.",
+            "message": "«{Name}» uploaded.",
+            "translation": "«{Name}» uploaded.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "filex.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Move file",
+            "message": "Move file",
+            "translation": "Move file",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Move file to «{Name}»",
+            "message": "Move file to «{Name}»",
+            "translation": "Move file to «{Name}»",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "currentDir.Data.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Directory up",
+            "message": "Directory up",
+            "translation": "Directory up",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Home",
+            "message": "Home",
+            "translation": "Home",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Free plan",
+            "message": "Free plan",
+            "translation": "Free plan",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The organization is not initialized yet, please wait until the initialization is complete.",
+            "message": "The organization is not initialized yet, please wait until the initialization is complete.",
+            "translation": "The organization is not initialized yet, please wait until the initialization is complete.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Refresh",
+            "message": "Refresh",
+            "translation": "Refresh",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Organization",
+            "message": "Organization",
+            "translation": "Organization",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Space",
+            "message": "Space",
+            "translation": "Space",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Organization: {Name}",
+            "message": "Organization: {Name}",
+            "translation": "Organization: {Name}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tenant.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Select",
+            "message": "Select",
+            "translation": "Select",
+            "comment": "TODO Browse, Open, Switch or activate? or Select?",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Account",
+            "message": "Account",
+            "translation": "Account",
+            "comment": "TODO or Account settings / Security / Account security?",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete account",
+            "message": "Delete account",
+            "translation": "Delete account",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No password set",
+            "message": "No password set",
+            "translation": "No password set",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You've logged in with a temporary password. Please set a password to secure your account and use the app.",
+            "message": "You've logged in with a temporary password. Please set a password to secure your account and use the app.",
+            "translation": "You've logged in with a temporary password. Please set a password to secure your account and use the app.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Set password now",
+            "message": "Set password now",
+            "translation": "Set password now",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Active temporary password",
+            "message": "Active temporary password",
+            "translation": "Active temporary password",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Your account has an active temporary password. Please change your password or clear the temporary password as soon as possible to secure your account.",
+            "message": "Your account has an active temporary password. Please change your password or clear the temporary password as soon as possible to secure your account.",
+            "translation": "Your account has an active temporary password. Please change your password or clear the temporary password as soon as possible to secure your account.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage spaces",
+            "message": "Manage spaces",
+            "translation": "Manage spaces",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The organization «{Name}» has {SpacesCount} spaces.",
+            "message": "The organization «{Name}» has {SpacesCount} spaces.",
+            "translation": "The organization «{Name}» has {SpacesCount} spaces.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tenantx.Name"
+                },
+                {
+                    "id": "SpacesCount",
+                    "string": "%[2]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 2,
+                    "expr": "spacesCount"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "No spaces yet",
+            "message": "No spaces yet",
+            "translation": "No spaces yet",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The organization «{Name}» has no space yet. Please create one to get started.",
+            "message": "The organization «{Name}» has no space yet. Please create one to get started.",
+            "translation": "The organization «{Name}» has no space yet. Please create one to get started.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tenantx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "The organization «{Name}» has one space.",
+            "message": "The organization «{Name}» has one space.",
+            "translation": "The organization «{Name}» has one space.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tenantx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "The app is unlocked and not protected by a passphrase.",
+            "message": "The app is unlocked and not protected by a passphrase.",
+            "translation": "The app is unlocked and not protected by a passphrase.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The app is locked.",
+            "message": "The app is locked.",
+            "translation": "The app is locked.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Set passphrase",
+            "message": "Set passphrase",
+            "translation": "Set passphrase",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The app is unlocked and protected by a passphrase.",
+            "message": "The app is unlocked and protected by a passphrase.",
+            "translation": "The app is unlocked and protected by a passphrase.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "App status",
+            "message": "App status",
+            "translation": "App status",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Admin",
+            "message": "Admin",
+            "translation": "Admin",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Dashboard",
+            "message": "Dashboard",
+            "translation": "Dashboard",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit in «Spaces» view",
+            "message": "Edit in «Spaces» view",
+            "translation": "Edit in «Spaces» view",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Add field",
+            "message": "Add field",
+            "translation": "Add field",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Attribute «{Name}» added.",
+            "message": "Attribute «{Name}» added.",
+            "translation": "Attribute «{Name}» added.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Add field attribute",
+            "message": "Add field attribute",
+            "translation": "Add field attribute",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Please create a field first.",
+            "message": "Please create a field first.",
+            "translation": "Please create a field first.",
+            "comment": "TODO link",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit",
+            "message": "Edit",
+            "translation": "Edit",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Add list attribute (tag group)",
+            "message": "Add list attribute (tag group)",
+            "translation": "Add list attribute (tag group)",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "name-giving",
+            "message": "name-giving",
+            "translation": "name-giving",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Add document type",
+            "message": "Add document type",
+            "translation": "Add document type",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document type created.",
+            "message": "Document type created.",
+            "translation": "Document type created.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Add attribute",
+            "message": "Add attribute",
+            "translation": "Add attribute",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Attribute «{Name}» created.",
+            "message": "Attribute «{Name}» created.",
+            "translation": "Attribute «{Name}» created.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "attributex.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "No tag groups available yet.",
+            "message": "No tag groups available yet.",
+            "translation": "No tag groups available yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Please create a tag group first.",
+            "message": "Please create a tag group first.",
+            "translation": "Please create a tag group first.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document type deleted.",
+            "message": "Document type deleted.",
+            "translation": "Document type deleted.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Attribute deleted.",
+            "message": "Attribute deleted.",
+            "translation": "Attribute deleted.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit field attribute",
+            "message": "Edit field attribute",
+            "translation": "Edit field attribute",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Attribute updated.",
+            "message": "Attribute updated.",
+            "translation": "Attribute updated.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit tag attribute",
+            "message": "Edit tag attribute",
+            "translation": "Edit tag attribute",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Attribute «{NewName}» updated.",
+            "message": "Attribute «{NewName}» updated.",
+            "translation": "Attribute «{NewName}» updated.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "NewName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "data.NewName"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Document types",
+            "message": "Document types",
+            "translation": "Document types",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Rename document type",
+            "message": "Rename document type",
+            "translation": "Rename document type",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document type renamed to «{NewName}».",
+            "message": "Document type renamed to «{NewName}».",
+            "translation": "Document type renamed to «{NewName}».",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "NewName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "data.NewName"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Assign file",
+            "message": "Assign file",
+            "translation": "Assign file",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Mark as done",
+            "message": "Mark as done",
+            "translation": "Mark as done",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Inbox",
+            "message": "Inbox",
+            "translation": "Inbox",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Search in «Inbox»",
+            "message": "Search in «Inbox»",
+            "translation": "Search in «Inbox»",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File must be in inbox.",
+            "message": "File must be in inbox.",
+            "translation": "File must be in inbox.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Marked file «{Name}» as done.",
+            "message": "Marked file «{Name}» as done.",
+            "translation": "Marked file «{Name}» as done.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "filex.Data.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "No new files found.",
+            "message": "No new files found.",
+            "translation": "No new files found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Files uploaded successfully.",
+            "message": "Files uploaded successfully.",
+            "translation": "Files uploaded successfully.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Select destination manually",
+            "message": "Select destination manually",
+            "translation": "Select destination manually",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Suggestions based on filename",
+            "message": "Suggestions based on filename",
+            "translation": "Suggestions based on filename",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Newest first",
+            "message": "Newest first",
+            "translation": "Newest first",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Oldest first",
+            "message": "Oldest first",
+            "translation": "Oldest first",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sort by name",
+            "message": "Sort by name",
+            "translation": "Sort by name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Create new tag or group",
+            "message": "Create new tag or group",
+            "translation": "Create new tag or group",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This action will delete the tag and unassign it from all files!",
+            "message": "Are you sure? This action will delete the tag and unassign it from all files!",
+            "translation": "Are you sure? This action will delete the tag and unassign it from all files!",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Assign tags",
+            "message": "Assign tags",
+            "translation": "Assign tags",
+            "comment": "TODO or Sub-tags? sounds bad in german",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Move to group",
+            "message": "Move to group",
+            "translation": "Move to group",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Group, {ChildCount} tag",
+            "message": "Group, {ChildCount} tag",
+            "translation": "Group, {ChildCount} tag",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ChildCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "childCount"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Group, {ChildCount} tags",
+            "message": "Group, {ChildCount} tags",
+            "translation": "Group, {ChildCount} tags",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ChildCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "childCount"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Create new tag",
+            "message": "Create new tag",
+            "translation": "Create new tag",
+            "comment": "group not possible",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Super tag",
+            "message": "Super tag",
+            "translation": "Super tag",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tag group ID is required.",
+            "message": "Tag group ID is required.",
+            "translation": "Tag group ID is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tag is not a group.",
+            "message": "Tag is not a group.",
+            "translation": "Tag is not a group.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage users",
+            "message": "Manage users",
+            "translation": "Manage users",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Users",
+            "message": "Users",
+            "translation": "Users",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Upload",
+            "message": "Upload",
+            "translation": "Upload",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Uploading files, please wait a moment.",
+            "message": "Uploading files, please wait a moment.",
+            "translation": "Uploading files, please wait a moment.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The page will be refreshed automatically once the upload is finished.",
+            "message": "The page will be refreshed automatically once the upload is finished.",
+            "translation": "The page will be refreshed automatically once the upload is finished.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No spaces yet.",
+            "message": "No spaces yet.",
+            "translation": "No spaces yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Please try again once you created a space or were invited to join one.",
+            "message": "Please try again once you created a space or were invited to join one.",
+            "translation": "Please try again once you created a space or were invited to join one.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Select space",
+            "message": "Select space",
+            "translation": "Select space",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Processing of shared files failed.",
+            "message": "Processing of shared files failed.",
+            "translation": "Processing of shared files failed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Files uploaded, please select a space.",
+            "message": "Files uploaded, please select a space.",
+            "translation": "Files uploaded, please select a space.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Field «{Name}» created.",
+            "message": "Field «{Name}» created.",
+            "translation": "Field «{Name}» created.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "data.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Field deleted.",
+            "message": "Field deleted.",
+            "translation": "Field deleted.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit field",
+            "message": "Edit field",
+            "translation": "Edit field",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Field updated.",
+            "message": "Field updated.",
+            "translation": "Field updated.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Create space",
+            "message": "Create space",
+            "translation": "Create space",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Space «{Name}» created.",
+            "message": "Space «{Name}» created.",
+            "translation": "Space «{Name}» created.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "data.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Space deleted.",
+            "message": "Space deleted.",
+            "translation": "Space deleted.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit space",
+            "message": "Edit space",
+            "translation": "Edit space",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Changes saved.",
+            "message": "Changes saved.",
+            "translation": "Changes saved.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No spaces available yet.",
+            "message": "No spaces available yet.",
+            "translation": "No spaces available yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Browse",
+            "message": "Browse",
+            "translation": "Browse",
+            "comment": "TODO or Selected or Active?",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "{Name} ({Stringctx})",
+            "message": "{Name} ({Stringctx})",
+            "translation": "{Name} ({Stringctx})",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "spacex.Name"
+                },
+                {
+                    "id": "Stringctx",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "wx.T(\"active\").String(ctx)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "active",
+            "message": "active",
+            "translation": "active",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Spaces",
+            "message": "Spaces",
+            "translation": "Spaces",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "«{Name}» assigned.",
+            "message": "«{Name}» assigned.",
+            "translation": "«{Name}» assigned.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "subTag.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Create and assign tag",
+            "message": "Create and assign tag",
+            "translation": "Create and assign tag",
+            "comment": "\"#tagAssignmentList\",",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "«{Name}» created and assigned.",
+            "message": "«{Name}» created and assigned.",
+            "translation": "«{Name}» created and assigned.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Create tag",
+            "message": "Create tag",
+            "translation": "Create tag",
+            "comment": "\"TODO\", // TODO",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tag «{Name}» created.",
+            "message": "Tag «{Name}» created.",
+            "translation": "Tag «{Name}» created.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Cannot add a tag group as child.",
+            "message": "Cannot add a tag group as child.",
+            "translation": "Cannot add a tag group as child.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "«{TagName}» deleted.",
+            "message": "«{TagName}» deleted.",
+            "translation": "«{TagName}» deleted.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "TagName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagName"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Create new group",
+            "message": "Create new group",
+            "translation": "Create new group",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tags of «{Name}»",
+            "message": "Tags of «{Name}»",
+            "translation": "Tags of «{Name}»",
+            "comment": "of or for?",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "superTag.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Edit tag",
+            "message": "Edit tag",
+            "translation": "Edit tag",
+            "comment": "\"\",",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "«{Name}» updated.",
+            "message": "«{Name}» updated.",
+            "translation": "«{Name}» updated.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "layout not supported",
+            "message": "layout not supported",
+            "translation": "layout not supported",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Group «{Name}»",
+            "message": "Group «{Name}»",
+            "translation": "Group «{Name}»",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Edges.Group.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Composed of {JointagNames__}",
+            "message": "Composed of {JointagNames__}",
+            "translation": "Composed of {JointagNames__}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "JointagNames__",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "strings.Join(tagNames, \", \")"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Move tag to group",
+            "message": "Move tag to group",
+            "translation": "Move tag to group",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Deselected group.",
+            "message": "Deselected group.",
+            "translation": "Deselected group.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Moved to group «{Name}».",
+            "message": "Moved to group «{Name}».",
+            "translation": "Moved to group «{Name}».",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "groupTag.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Deselect group",
+            "message": "Deselect group",
+            "translation": "Deselect group",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This action will delete the tag entirely and not just unassign it from the current file!",
+            "message": "Are you sure? This action will delete the tag entirely and not just unassign it from the current file!",
+            "translation": "Are you sure? This action will delete the tag entirely and not just unassign it from the current file!",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "«{Name}» unassigned.",
+            "message": "«{Name}» unassigned.",
+            "translation": "«{Name}» unassigned.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "cannot parse file",
+            "message": "cannot parse file",
+            "translation": "cannot parse file",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "cannot parse form",
+            "message": "cannot parse form",
+            "translation": "cannot parse form",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "cannot decode form",
+            "message": "cannot decode form",
+            "translation": "cannot decode form",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Cannot validate form.",
+            "message": "Cannot validate form.",
+            "translation": "Cannot validate form.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Form validation failed.",
+            "message": "Form validation failed.",
+            "translation": "Form validation failed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Filters successfully reset.",
+            "message": "Filters successfully reset.",
+            "translation": "Filters successfully reset.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "cannot parse current url",
+            "message": "cannot parse current url",
+            "translation": "cannot parse current url",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Cannot decode url query.",
+            "message": "Cannot decode url query.",
+            "translation": "Cannot decode url query.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Active tab",
+            "message": "Active tab",
+            "translation": "Active tab",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Add to inbox",
+            "message": "Add to inbox",
+            "translation": "Add to inbox",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Austria",
+            "message": "Austria",
+            "translation": "Austria",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Checkbox",
+            "message": "Checkbox",
+            "translation": "Checkbox",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Checkbox value",
+            "message": "Checkbox value",
+            "translation": "Checkbox value",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Confirm new passphrase",
+            "message": "Confirm new passphrase",
+            "translation": "Confirm new passphrase",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Confirm passphrase",
+            "message": "Confirm passphrase",
+            "translation": "Confirm passphrase",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Confirm password",
+            "message": "Confirm password",
+            "translation": "Confirm password",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Country",
+            "message": "Country",
+            "translation": "Country",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Current or temporary password",
+            "message": "Current or temporary password",
+            "translation": "Current or temporary password",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Current passphrase",
+            "message": "Current passphrase",
+            "translation": "Current passphrase",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Current path",
+            "message": "Current path",
+            "translation": "Current path",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Date",
+            "message": "Date",
+            "translation": "Date",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Date value",
+            "message": "Date value",
+            "translation": "Date value",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete on success",
+            "message": "Delete on success",
+            "translation": "Delete on success",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Description",
+            "message": "Description",
+            "translation": "Description",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Dir name",
+            "message": "Dir name",
+            "translation": "Dir name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Editor",
+            "message": "Editor",
+            "translation": "Editor",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Email",
+            "message": "Email",
+            "translation": "Email",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "English",
+            "message": "English",
+            "translation": "English",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Field",
+            "message": "Field",
+            "translation": "Field",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File",
+            "message": "File",
+            "translation": "File",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Filename",
+            "message": "Filename",
+            "translation": "Filename",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "First name",
+            "message": "First name",
+            "translation": "First name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "French",
+            "message": "French",
+            "translation": "French",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "German",
+            "message": "German",
+            "translation": "German",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Germany",
+            "message": "Germany",
+            "translation": "Germany",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Group",
+            "message": "Group",
+            "translation": "Group",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Is name giving",
+            "message": "Is name giving",
+            "translation": "Is name giving",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Italian",
+            "message": "Italian",
+            "translation": "Italian",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Language",
+            "message": "Language",
+            "translation": "Language",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Last name",
+            "message": "Last name",
+            "translation": "Last name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Layout",
+            "message": "Layout",
+            "translation": "Layout",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Local",
+            "message": "Local",
+            "translation": "Local",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Money",
+            "message": "Money",
+            "translation": "Money",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Money value",
+            "message": "Money value",
+            "translation": "Money value",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Name",
+            "message": "Name",
+            "translation": "Name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "New dir name",
+            "message": "New dir name",
+            "translation": "New dir name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "New filename",
+            "message": "New filename",
+            "translation": "New filename",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "New name",
+            "message": "New name",
+            "translation": "New name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "New passphrase",
+            "message": "New passphrase",
+            "translation": "New passphrase",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "New password",
+            "message": "New password",
+            "translation": "New password",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Number",
+            "message": "Number",
+            "translation": "Number",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Number value",
+            "message": "Number value",
+            "translation": "Number value",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Only assigned",
+            "message": "Only assigned",
+            "translation": "Only assigned",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Operator",
+            "message": "Operator",
+            "translation": "Operator",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Organization name",
+            "message": "Organization name",
+            "translation": "Organization name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Owner",
+            "message": "Owner",
+            "translation": "Owner",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passphrase",
+            "message": "Passphrase",
+            "translation": "Passphrase",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Password",
+            "message": "Password",
+            "translation": "Password",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "S 3",
+            "message": "S 3",
+            "translation": "S 3",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Simple",
+            "message": "Simple",
+            "translation": "Simple",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Subscribe to newsletter",
+            "message": "Subscribe to newsletter",
+            "translation": "Subscribe to newsletter",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Super",
+            "message": "Super",
+            "translation": "Super",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Supporter",
+            "message": "Supporter",
+            "translation": "Supporter",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Switzerland",
+            "message": "Switzerland",
+            "translation": "Switzerland",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tag",
+            "message": "Tag",
+            "translation": "Tag",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Temporary session",
+            "message": "Temporary session",
+            "translation": "Temporary session",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Text",
+            "message": "Text",
+            "translation": "Text",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Text value",
+            "message": "Text value",
+            "translation": "Text value",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Type",
+            "message": "Type",
+            "translation": "Type",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Unit",
+            "message": "Unit",
+            "translation": "Unit",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "User",
+            "message": "User",
+            "translation": "User",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Value",
+            "message": "Value",
+            "translation": "Value",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Viewer",
+            "message": "Viewer",
+            "translation": "Viewer",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "file has no parent",
+            "message": "file has no parent",
+            "translation": "file has no parent",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Folder mode is not enabled.",
+            "message": "Folder mode is not enabled.",
+            "translation": "Folder mode is not enabled.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Path element is file, not a directory.",
+            "message": "Path element is file, not a directory.",
+            "translation": "Path element is file, not a directory.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The provided filename is not allowed.",
+            "message": "The provided filename is not allowed.",
+            "translation": "The provided filename is not allowed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "A folder with this name already exists.",
+            "message": "A folder with this name already exists.",
+            "translation": "A folder with this name already exists.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Destination is not a directory.",
+            "message": "Destination is not a directory.",
+            "translation": "Destination is not a directory.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Cannot move directory to itself.",
+            "message": "Cannot move directory to itself.",
+            "translation": "Cannot move directory to itself.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Destination is current location.",
+            "message": "Destination is current location.",
+            "translation": "Destination is current location.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "destination is not a directory",
+            "message": "destination is not a directory",
+            "translation": "destination is not a directory",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "cannot move file into child directory",
+            "message": "cannot move file into child directory",
+            "translation": "cannot move file into child directory",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "New filename is empty.",
+            "message": "New filename is empty.",
+            "translation": "New filename is empty.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "New filename is the same as old.",
+            "message": "New filename is the same as old.",
+            "translation": "New filename is the same as old.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not get object name.",
+            "message": "Could not get object name.",
+            "translation": "Could not get object name.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not open file.",
+            "message": "Could not open file.",
+            "translation": "Could not open file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File already exists.",
+            "message": "File already exists.",
+            "translation": "File already exists.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Storage path is empty.",
+            "message": "Storage path is empty.",
+            "translation": "Storage path is empty.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid filename.",
+            "message": "Invalid filename.",
+            "translation": "Invalid filename.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Bucket name is empty.",
+            "message": "Bucket name is empty.",
+            "translation": "Bucket name is empty.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Filename already exists.",
+            "message": "Filename already exists.",
+            "translation": "Filename already exists.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not save file.",
+            "message": "Could not save file.",
+            "translation": "Could not save file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not get x25519 identity.",
+            "message": "Could not get x25519 identity.",
+            "translation": "Could not get x25519 identity.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "App not unlocked yet.",
+            "message": "App not unlocked yet.",
+            "translation": "App not unlocked yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not copy temporary file.",
+            "message": "Could not copy temporary file.",
+            "translation": "Could not copy temporary file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Your temporary password is",
+            "message": "Your temporary password is",
+            "translation": "Your temporary password is",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "It expires at",
+            "message": "It expires at",
+            "translation": "It expires at",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Note",
+            "message": "Note",
+            "translation": "Note",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Welcome to SimpleDMS",
+            "message": "Welcome to SimpleDMS",
+            "translation": "Welcome to SimpleDMS",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "02-01-2006 at 15:04 o'clock",
+            "message": "02-01-2006 at 15:04 o'clock",
+            "translation": "02-01-2006 at 15:04 o'clock",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "SimpleDMS password reset",
+            "message": "SimpleDMS password reset",
+            "translation": "SimpleDMS password reset",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "This is an automated message, please do not reply.",
+            "message": "This is an automated message, please do not reply.",
+            "translation": "This is an automated message, please do not reply.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Your account has been created successfully.",
+            "message": "Your account has been created successfully.",
+            "translation": "Your account has been created successfully.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Please log in and change your password as soon as possible.",
+            "message": "Please log in and change your password as soon as possible.",
+            "translation": "Please log in and change your password as soon as possible.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "SimpleDMS Password Reset",
+            "message": "SimpleDMS Password Reset",
+            "translation": "SimpleDMS Password Reset",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "A password reset has been requested for your account.",
+            "message": "A password reset has been requested for your account.",
+            "translation": "A password reset has been requested for your account.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Your old password will still work until you change it.",
+            "message": "Your old password will still work until you change it.",
+            "translation": "Your old password will still work until you change it.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Too many login attempts. Please try again in 10 seconds.",
+            "message": "Too many login attempts. Please try again in 10 seconds.",
+            "translation": "Too many login attempts. Please try again in 10 seconds.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "2FA code was provided, but 2FA is not enabled for this account.",
+            "message": "2FA code was provided, but 2FA is not enabled for this account.",
+            "translation": "2FA code was provided, but 2FA is not enabled for this account.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Temporary password expired.",
+            "message": "Temporary password expired.",
+            "translation": "Temporary password expired.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "could not generate temporary password",
+            "message": "could not generate temporary password",
+            "translation": "could not generate temporary password",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "could not generate salt",
+            "message": "could not generate salt",
+            "translation": "could not generate salt",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Current password is invalid.",
+            "message": "Current password is invalid.",
+            "translation": "Current password is invalid.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "New password must be different from current password.",
+            "message": "New password must be different from current password.",
+            "translation": "New password must be different from current password.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Password must be at least eight characters long.",
+            "message": "Password must be at least eight characters long.",
+            "translation": "Password must be at least eight characters long.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passwords do not match.",
+            "message": "Passwords do not match.",
+            "translation": "Passwords do not match.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "App already initialized.",
+            "message": "App already initialized.",
+            "translation": "App already initialized.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passphrase is required.",
+            "message": "Passphrase is required.",
+            "translation": "Passphrase is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "App is already unlocked.",
+            "message": "App is already unlocked.",
+            "translation": "App is already unlocked.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid passphrase.",
+            "message": "Invalid passphrase.",
+            "translation": "Invalid passphrase.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "App is not encrypted with passphrase.",
+            "message": "App is not encrypted with passphrase.",
+            "translation": "App is not encrypted with passphrase.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No passphrase set.",
+            "message": "No passphrase set.",
+            "translation": "No passphrase set.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "New passphrase is required.",
+            "message": "New passphrase is required.",
+            "translation": "New passphrase is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "New passphrase does not match confirmation.",
+            "message": "New passphrase does not match confirmation.",
+            "translation": "New passphrase does not match confirmation.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Old passphrase is required.",
+            "message": "Old passphrase is required.",
+            "translation": "Old passphrase is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "App not unlocked yet. Please try again later.",
+            "message": "App not unlocked yet. Please try again later.",
+            "translation": "App not unlocked yet. Please try again later.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant not initialized yet. Please try again later.",
+            "message": "Tenant not initialized yet. Please try again later.",
+            "translation": "Tenant not initialized yet. Please try again later.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Error opening tenant database. Please try again later.",
+            "message": "Error opening tenant database. Please try again later.",
+            "translation": "Error opening tenant database. Please try again later.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "file is not a directory",
+            "message": "file is not a directory",
+            "translation": "file is not a directory",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "could not render widget",
+            "message": "could not render widget",
+            "translation": "could not render widget",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No dir id provided.",
+            "message": "No dir id provided.",
+            "translation": "No dir id provided.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No file id provided.",
+            "message": "No file id provided.",
+            "translation": "No file id provided.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "cannot download directories",
+            "message": "cannot download directories",
+            "translation": "cannot download directories",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File is not in inbox.",
+            "message": "File is not in inbox.",
+            "translation": "File is not in inbox.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not convert id to integer.",
+            "message": "Could not convert id to integer.",
+            "translation": "Could not convert id to integer.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign out",
+            "message": "Sign out",
+            "translation": "Sign out",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Close",
+            "message": "Close",
+            "translation": "Close",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "optional",
+            "message": "optional",
+            "translation": "optional",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "required",
+            "message": "required",
+            "translation": "required",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Auth cookie already set.",
+            "message": "Auth cookie already set.",
+            "translation": "Auth cookie already set.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not generate session id.",
+            "message": "Could not generate session id.",
+            "translation": "Could not generate session id.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to access the requested resource.",
+            "message": "You are not allowed to access the requested resource.",
+            "translation": "You are not allowed to access the requested resource.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        }
+    ]
+}

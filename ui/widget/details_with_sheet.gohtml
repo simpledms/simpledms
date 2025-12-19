@@ -1,0 +1,30 @@
+{{- define "DetailsWithSheet" }}
+	{{ $ctx := .GetContext }}
+	<div id="details"
+		{{/* `has-[div]:flex` to hide on mobile if no content because of background/height combination */}}
+		 class="js-detail @container/detail w-full h-dvh hidden
+		 	has-[.js-detail-content>*]:flex flex-col gap-x-4
+			absolute top-0 left-0 right-0 overflow-y-hidden
+			md:p-2 exp:p-0
+			bg-surface
+			exp:relative exp:top-auto exp:left-auto exp:right-auto exp:bg-transparent exp:h-auto lg:max-w-screen-exp
+		"
+	>
+        {{ render .GetContext .AppBar }}
+
+		{{/* flex-grow added on 19 April 2025, not sure if it has side effects */}}
+		<div class="js-detail-content overflow-y-scroll pl-2 pr-1 md:pl-4 md:pr-3 flex-grow">
+            {{ render .GetContext .Child }}
+		</div>
+
+		{{ with .Sheet }}
+			<div class="hidden has-[div]:block w-full md:max-w-md max-h-14 md:max-h-none">
+				{{ render $ctx .}}
+			</div>
+		{{ end }}
+
+		{{ with .SideSheet }}
+			{{ render $ctx . }}
+		{{ end }}
+	</div>
+{{ end }}

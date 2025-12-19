@@ -1,0 +1,86 @@
+{{- define "Snackbar" }}
+	{{/*
+		wrapper div is necessary to bundle child div with script, without wrapper
+	 	script and snackbar var have invalid values when morphing is used.
+
+	 	hx-swap-oob selector selects deepest div with `popover` attribute set, thus the
+	 	one that has no child with `popover` element set;
+	 	if not found, then body is used if it has no child with popover
+
+	 	necessary because it is not possible to render snackbar above the active popover,
+	 	z-index or positiong has no effect
+
+	 	`snackbar` class is used as selector, for example in Popover
+
+	 	also used in BottomAppBar
+
+	 	beforeend is better than afterbegin because beercss for example adds margins if another element
+	 	is before an form element, thus corrupts layout when snackbar is shown
+
+	 	IMPORTANT duplicate in popover JS, also used as selector to move snackbar on popover close
+
+	 	TODO as of 04 Sept 24 it could match two popovers because showFilePopover is no child of
+	 	     div#popovers, it's a child of #content
+
+		<div hx-swap-oob="beforeend:div[popover].max:not(:has(div[popover].max)),body:not(:has(div[popover].max))">
+	*/}}
+
+	{{ $ctx := .GetContext }}
+	<div hx-swap-oob="beforeend:dialog[open].js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))">
+		{{/* snackbar class is used as selector */}}
+		<div id="{{ .GetID }}" popover="manual" class="js-snackbar bottom-24 flex top-auto group mx-auto left-4 right-4 max-w-md
+	bg-inverse-surface drop-shadow rounded-xs p-0 hover:cursor-pointer {{ .GetClass }}">
+			<div class="state-layer-inverse-primary flex min-h-12 max-h-[4.25rem] items-center justify-center gap-x-4 px-4">
+				<div class="text-inverse-on-surface body-md group-hover:text-inverse-primary">
+					{{ render .GetContext .SupportingText }}
+				</div>
+				{{ with .GetAction }}
+					<div class="text-inverse-primary label-lg">{{/* m3: Label */}}
+						{{ render $ctx . }}
+					</div>
+				{{ end }}
+			</div>
+		</div>
+		<script defer>
+			(function() {
+				Array.from(document.getElementsByClassName("js-snackbar")).forEach((item) => {
+					document.dispatchEvent(new CustomEvent('closeAllSnackbars', {}))
+				})
+
+				let snackbar = document.getElementById('{{ .GetID }}');
+
+				let closeSnackbarFn = function () {
+					document.removeEventListener('closeAllSnackbars', closeSnackbarFn);
+					clearTimeout(timeoutID);
+					observer.disconnect();
+					snackbar.remove();
+				}
+				document.addEventListener('closeAllSnackbars', closeSnackbarFn);
+
+				// ensure snackbar is always visible, for example relocate if rendered in
+				// dialog and dialog gets closed
+				const observer = new IntersectionObserver(entries => {
+					entries.forEach(entry => {
+						if (!entry.isIntersecting) { // no longer visible
+							// [open] is necessary because if KeepInDOMOnClose is set, closed dialogs are kept in DOM
+							// and one of them could get selected
+							document
+								//.querySelector('div[popover].max:not(:has(div[popover].max)),body:not(:has(div[popover].max))')
+								.querySelector('dialog[open].js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))')
+								.insertAdjacentElement('beforeend', snackbar); // was afterbegin, not sure why
+						}
+					})
+				})
+				observer.observe(snackbar);
+
+				let timeoutID = setTimeout(() => {
+					closeSnackbarFn();
+				}, {{ .GetAutoDismissTimeout }})
+
+				snackbar.addEventListener('click', () => {
+					closeSnackbarFn();
+				})
+			})()
+		</script>
+	</div>
+{{ end }}

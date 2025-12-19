@@ -1,0 +1,47 @@
+version: '3'
+
+volumes:
+    mailpit_data:
+    minio_data:
+
+services:
+    #docling:
+        #image: ghcr.io/docling-project/docling-serve-cpu
+        #container_name: docling-serve
+        #ports:
+            #- 5001:5001
+        #environment:
+            #- DOCLING_SERVE_ENABLE_UI=true
+    tika:
+        image: apache/tika:latest-full
+        #command: -c /tika-config.xml
+        ports:
+            - "9997:9998"
+        #volumes:
+            #- ./tika-config.xml:/tika-config.xml
+        restart: unless-stopped
+
+    # TODO not in production
+    mailpit:
+        image: axllent/mailpit
+        restart: unless-stopped
+        volumes:
+            - mailpit_data:/var/lib/mailpit/data
+        ports:
+            - "8025:8025" # web-client
+            - "1025:1025" # smtp
+        environment:
+            MP_MAX_MESSAGES: 500000
+            MP_DATABASE: /var/lib/mailpit/data/mailpit.db
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+    minio:
+        image: quay.io/minio/minio:latest
+        restart: unless-stopped
+        command: server /data --console-address ":9001"
+        volumes:
+            - minio_data:/data
+        ports:
+            - "9000:9000"
+            - "9001:9001"

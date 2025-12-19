@@ -1,0 +1,123 @@
+{{- /*gotype: github.com/simpledms/simpledms/ui/widget.ListItem */}}
+{{- define "listItem" }}
+    {{- if .IsTypeRadio }}
+		<label for="radio-{{ .GetID }}"
+			   class="@container/list-item group/list-item state-layer-on-surface min-h-14 flex gap-x-4 flex-row items-center
+					has-[:checked]:bg-secondary-container
+					{{/* group-has filter because supporting text is hidden if no item is selected and
+					 	height must only applied if no two lines... should be refactored to
+					 	make height unncessary
+					*/}}
+					{{ if ne .SupportingText nil }}group-has-[.js-detail-content>div]/list-detail:h-[4.5rem]{{ end }}
+					{{ if .HTMXAttrs.IsLink }}cursor-pointer{{ else if .ContextMenu }}cursor-context-menu{{ end }}"
+		>
+			<input
+					class="hidden"
+					type="radio"
+					name="{{ .RadioGroupName }}"
+					value="{{ .RadioValue }}"
+					id="radio-{{ .GetID }}"
+                    {{ if .IsSelected }}checked{{ end }} />
+			<div class="flex flex-grow gap-x-4 overflow-hidden items-center px-4 py-3
+				{{ if ne .ContextMenu nil }}select-none exp:select-auto{{ end }}"
+                    {{/* cannot be on <label> because request then fires twice, has something to do with radio input */}}
+                    {{ template "HTMXAttrs" .HTMXAttrs }}
+			>
+				<div class="flex group-has-[:checked]/list-item:text-on-secondary-container text-on-surface-variant">
+                    {{ render .GetContext .Leading }}
+				</div>
+				<div class="flex-grow flex items-start flex-col overflow-x-hidden
+					{{/*@3xl/list-item:grid @3xl/list-item:grid-cols-2 @3xl/list-item:gap-x-4 @3xl/list-item:items-center @3xl/list-item:justify-items-start*/}}
+				">
+					<h6 class="body-lg whitespace-nowrap overflow-hidden overflow-ellipsis max-w-full
+						group-has-[:checked]/list-item:text-on-secondary-container text-on-surface"
+					>
+                        {{ render .GetContext .Headline }}
+					</h6>
+					<div class="body-sm text-left
+						{{/*group-has-[.js-detail-content>div]/list-detail:hidden*/}}
+						group-has-[:checked]/list-item:text-on-secondary-container text-on-surface-variant">
+                        {{ render .GetContext .SupportingText }}
+					</div>
+				</div>
+				<div class="flex text-on-surface
+					group-has-[.js-detail-content>div]/list-detail:hidden group-has-[:checked]/list-item:text-primary">
+                    {{ render .GetContext .GetTrailing }}
+				</div>
+			</div>
+		</label>
+        {{ render .GetContext .ContextMenu }}
+    {{- else }}
+		<div
+				class="@container/list-item state-layer-on-surface
+					min-h-14 flex gap-x-4 flex-row items-center
+					{{ if ne .SupportingText nil }}h-[4.5rem]{{ end }}
+					{{ if .HTMXAttrs.IsLink }}cursor-pointer{{ else if .ContextMenu }}cursor-context-menu{{ end }}"
+                {{ template "HTMXAttrs" .HTMXAttrs }}
+                {{/* if .HTMXAttrs.IsLink }}role="link"{{ end */}}
+		>
+			<div class="flex flex-grow gap-x-4 overflow-hidden items-center px-4 py-3 {{ if ne .ContextMenu nil }}select-none exp:select-auto{{ end }}"
+			>
+				<div class="flex {{ if .IsSelected }}text-on-secondary-container{{ else if .IsTypeHelper }}text-secondary{{ else }}text-on-surface-variant{{ end }}">
+                    {{ render .GetContext .Leading }}
+				</div>
+				<div class="flex-grow flex items-start flex-col overflow-x-hidden
+					{{/*@3xl/list-item:grid @3xl/list-item:grid-cols-2 @3xl/list-item:gap-x-4 @3xl/list-item:items-center @3xl/list-item:justify-items-start*/}}
+				">
+                    {{ if .HTMXAttrs.IsPageLink }}
+					<a class="js-semantic-link max-w-full" href="{{ .HTMXAttrs.GetHxGet }}">
+                        {{ end }}
+						<h6 class="body-lg whitespace-nowrap overflow-hidden overflow-ellipsis max-w-full
+						{{ if .IsSelected }}text-on-secondary-container{{ else if .IsTypeHelper }}text-on-surface-variant{{ else }}text-on-surface{{ end }}">
+                            {{ render .GetContext .Headline }}
+						</h6>
+                        {{ if .HTMXAttrs.IsPageLink }}
+					</a>
+                    {{ end }}
+					<div class="body-sm text-left
+						{{ if .IsSelected }}text-on-surface{{ else }}text-on-surface-variant{{ end }}">
+                        {{ render .GetContext .SupportingText }}
+					</div>
+				</div>
+				<div class="flex {{ if .IsSelected }}text-primary{{ else }}text-on-surface{{ end }}">
+                    {{ render .GetContext .GetTrailing }}
+				</div>
+			</div>
+		</div>
+        {{ render .GetContext .ContextMenu }}
+    {{- end }}
+{{ end }}
+
+{{- define "ListItem" }}
+    {{- if .IsCollapsible }}
+		<div id="{{ .GetID }}" role="listitem"
+			 class="js-list-item"
+		>
+			<details {{ if .IsOpen }}open{{ end }}>
+				<summary class="list-none cursor-pointer rounded-lg">
+                    {{ template "listItem" . }}
+				</summary>
+				<div class="ml-10">
+                    {{ render .GetContext .Child }}
+				</div>
+			</details>
+
+            {{ if .ContextMenu }}
+                {{ template "contextMenuScript" . }}
+            {{ end }}
+		</div>
+    {{- else }}
+		<div id="{{ .GetID }}"
+			 class="js-list-item
+				{{ if .IsSelected | and (not .IsTypeRadio) }}bg-secondary-container{{ end }}
+				rounded-lg {{ .GetClass }}"
+			 role="listitem"
+		>
+            {{ template "listItem" . }}
+
+			{{ if .ContextMenu }}
+            	{{ template "contextMenuScript" . }}
+			{{ end }}
+		</div>
+    {{ end }}
+{{ end }}

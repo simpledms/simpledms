@@ -1,0 +1,9 @@
+{{- define "View" }}
+	{{ if ne .GetID "" }}
+		<div id="{{ .GetID }}">
+            {{ render .GetContext .Children }}
+		</div>
+	{{ else }}
+		{{ render .GetContext .Children }}
+	{{ end }}
+{{ end }}

@@ -1,0 +1,11 @@
+{{- /*gotype: github.com/simpledms/simpledms/ui/widget.Badge */ -}}
+{{- define "Badge" }}
+	<div
+			{{/* TODO bg-primary-container instead of bg-primary? */}}
+			class="{{ if .IsInverse }}bg-error{{ else }}bg-primary{{ end }}
+					rounded-full h-4 min-w-4 flex items-center justify-center {{ .GetClass }}"
+			id="{{ .GetID }}"
+			{{ template "HTMXAttrs" .HTMXAttrs }}
+	>
+		<span class="{{ if .IsInverse }}text-on-error{{ else }}text-on-primary{{ end }} label-sm">{{ .GetValue }}</span></div>
+{{ end }}

@@ -1,0 +1,58 @@
+{{- /* gotype: github.com/simpledms/simpledms/ui/widget.Combobox */ -}}
+{{- define "Combobox" }}
+	<div id="{{ .GetID }}">
+		<div>
+            {{ render .GetContext .Input.Label }}
+		</div>
+		<div class="bg-surface-container-highest rounded-xs px-4 py-2 min-h-14">
+            {{ render .GetContext .Input.LeadingIcon }}
+			<input
+					type="{{ .Input.GetType }}"
+					name="{{ .Input.Name }}"
+					placeholder="{{ .Input.Placeholder }}"
+                    {{ if .Input.HasAutofocus }}autofocus{{ end }}
+					class="js-input text-on-surface body-lg placeholder-on-surface-variant"
+					style="anchor-name: --{{ .GetPopoverTarget }}"
+					popovertarget="{{ .GetPopoverTarget }}"
+					aria-details="{{ .GetPopoverTarget }}" {{/* accessibility for anchor popover relationship */}}
+                    >
+            {{ render .GetContext .Input.TrailingIcon }}
+		</div>
+        {{ render .GetContext .GetMenu }}
+	</div>
+
+	<script defer>
+		(function() {
+			let elem = document.getElementById('{{ .GetID }}');
+			let input = elem.querySelector('.js-input');
+			let menu = elem.querySelector('menu');
+
+			input.addEventListener('click', function(e) {
+				{{/* necessary for stacked links, like in search or on list items */}}
+				//e.stopPropagation();
+
+				menu.togglePopover();
+			})
+
+			let closePopover = (e) => {
+				if (!menu.contains(e.target)) {
+					e.preventDefault();
+					e.stopImmediatePropagation() // necessary for left click
+				}
+				// TODO not sure why this workaround is necessary
+				setTimeout(function () {
+					menu.hidePopover();
+				}, 1)
+			}
+			menu.addEventListener('toggle', (e) => {
+				if (e.newState === 'open') {
+					document.addEventListener('click', closePopover, true);
+					document.addEventListener('contextmenu', closePopover, true); // right click
+				} else {
+					document.removeEventListener('click', closePopover, true);
+					document.removeEventListener('contextmenu', closePopover, true);
+				}
+			})
+		})()
+	</script>
+{{ end }}

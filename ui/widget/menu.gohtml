@@ -1,0 +1,28 @@
+{{- define "Menu" }}
+	{{/* hx-ext seems not inherited inside popover; needs verification
+	if really popover causes issue */}}
+	<menu
+			id="{{ .GetID }}"
+			class="border-outline-variant border inset-auto drop-shadow rounded-xs bg-surface-container"
+			role="menu"
+			style="
+					position-anchor: --{{ .GetID }};
+					inset-block-start: anchor(--{{ .GetID }} {{ .GetInsetBlockStart }});
+					{{- if ne .GetInsetBlockEnd "" }}
+						inset-block-end: anchor(--{{ .GetID }} {{ .GetInsetBlockEnd }});
+					{{- end }}
+					{{- if ne .GetInsetInlineEnd "" }}
+						inset-inline-end: anchor(--{{ .GetID }} {{ .GetInsetInlineEnd }});
+					{{- end }}
+					{{- if ne .GetInsetInlineStart "" }}
+						inset-inline-start: anchor(--{{ .GetID }} {{ .GetInsetInlineStart }});
+					{{- end }}
+					"
+			popover="manual"
+			hx-ext="morph">
+		{{/* if flex is set on <menu> it is rendered always independent of popover open or not */}}
+		<div class="flex flex-col">
+            {{ render .GetContext .Items }}
+		</div>
+	</menu>
+{{ end }}

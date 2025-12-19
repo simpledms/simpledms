@@ -1,0 +1,76 @@
+{{- define "contextMenuScript" }}
+	<script defer>
+		// TODO module?
+		(function () {
+			// FIXME close all others...
+
+			let elem = document.getElementById('{{ .GetID }}');
+
+			// necessary for nested list items, using wrapper div (GetID) directly
+			// would also trigger contextmenu for parent when clicking on child
+			let summaryElem = elem.querySelector('summary');
+			if (summaryElem != null) {
+				elem = summaryElem;
+			}
+
+			elem.addEventListener('contextmenu', (e) => {
+				// implemented by default in firefox
+				if (e.getModifierState('Shift')) {
+					return
+				}
+				//console.log(e)
+
+				e.preventDefault();
+
+				let contextMenu = elem.querySelector('menu');
+				contextMenu.showPopover();
+
+				// TODO not good if no space on right side, TODO autoposition
+				contextMenu.style.top = e.clientY + "px"; //0;
+				contextMenu.style.left = e.clientX + "px";
+
+                {{/* duplicate in icon_button.tw.gohtml */}}
+				let closePopover = (e) => {
+					//let contextMenu = elem.querySelector('menu');
+					if (!contextMenu.contains(e.target)) {
+						// in case of right click, just close and don't open
+						// native context menu or next popover;
+						// in case of left click, don't execute action
+						// TODO not sure if best solution for right click, might
+						//		be handy to open next popover menu? browser default
+						//		for native context menus is current behavior
+						e.preventDefault();
+						e.stopImmediatePropagation(); // necessary for left click
+					} else {
+						// added on 18 April 2025 to prevent closing a wrapping <details> element when
+						// selecting an item from the context menu; was necessary in manage tags for editing tag groups;
+						// not sure if it has side effects
+						e.preventDefault();
+					}
+
+					// also on click inside contextMenu, otherwise menu stays open in
+					// the background and first click in popover does nothing but
+					// closing the menu in the background
+					contextMenu.hidePopover();
+				}
+
+				// TODO or window?
+				contextMenu.addEventListener('toggle', (e) => {
+					//isOpen = contextMenu.matches(':popover-open')
+					if (e.newState === 'open') {
+						// true means that it is executed in early `capture` phase
+						// necessary for left click to prevent execution of target action,
+						// not sure for right click
+						document.addEventListener('click', closePopover, true)
+						document.addEventListener('contextmenu', closePopover, true)
+					} else {
+						document.removeEventListener('click', closePopover, true)
+						document.removeEventListener('contextmenu', closePopover, true)
+					}
+				})
+
+			})
+		})()
+	</script>
+{{- end }}
+

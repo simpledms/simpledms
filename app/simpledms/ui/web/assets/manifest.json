@@ -1,0 +1,75 @@
+{
+	"name": "SimpleDMS",
+	"short_name": "SimpleDMS",
+	"id": "/",
+	"start_url": "/",
+	"icons": [
+		{
+			"src": "simpledms-icon-192.svg",
+			"sizes": "192x192"
+		},
+		{
+			"src": "simpledms-icon-512.svg",
+			"sizes": "512x512"
+		}
+	],
+	"display": "standalone",
+	"screenshots": [],
+	"share_target": {
+		"action": "/-/cmd/open-file/upload-files",
+		"method": "POST",
+		"enctype": "multipart/form-data",
+		"params": {
+			"files": [
+				{
+					"name": "file",
+					"accept": [
+						"*/*"
+					]
+				}
+			]
+		}
+	},
+	"launch_handler": {
+		"client_mode": ["auto"]
+	},
+	"file_handlers": [
+		{
+			"icons": [
+
+			],
+			"launch_type": "single-client",
+			"action": "/open-file/select-space/",
+			"accept": {
+				"image/*": [
+					".gif",
+					".png",
+					".jpeg",
+					".jpg"
+				],
+				"application/*": [
+					".zip",
+					".pdf",
+					".7z",
+					".json",
+					".odt",
+					".odf",
+					".docx"
+				],
+				"text/*": [
+					".js",
+					".go"
+				],
+				"audio/*": [
+					".mp3"
+				],
+				"video/*": [
+					".mp4"
+				],
+				"font/*": [
+					".woff"
+				]
+			}
+		}
+	]
+}

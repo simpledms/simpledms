@@ -1,0 +1,36 @@
+{{/* gotype:github.com/simpledms/simpledms/ui/widget.Button */}}
+{{- define "Button" }}
+	<button
+			id="{{ .GetID }}"
+            {{ if ne .PopoverTarget "" }}
+				style="anchor-name: --{{ .PopoverTarget }}"
+				popovertarget="{{ .PopoverTarget }}"
+				aria-details="{{ .PopoverTarget }}" {{/* accessibility for anchor popover relationship */}}
+			{{ end }}
+            {{ if ne .PopoverTargetAction "" }}popovertargetaction="{{ .PopoverTargetAction }}"{{ end }}
+            {{ if ne .ReplaceURL "" }}onclick="history.replaceState({}, '', '{{ .ReplaceURL }}');"{{ end }}
+			type="{{ .GetType }}"
+            {{ with .FormID }}form="{{ . }}"{{ end }}
+			class="h-10 rounded-full {{ .GetClass }}
+				{{ if .IsTonal }}bg-secondary-container drop-shadow{{ end }}
+				{{ if .IsOutlined }}bg-surface outline-1 outline outline-outline -outline-offset-1{{ end }}
+				{{/*
+					removed drop-shadow for IsElevated on 03.09.2025 because it did not work on
+					dashboard in light mode (got cut off at bottom) and also looked incosistent
+				*/}}
+				{{ if .IsElevated }}bg-surface-container-low{{ end }}
+			"
+			{{ template "HTMXAttrs" .HTMXAttrs }}
+	>
+		<div class="{{ if .IsTonal }}state-layer-on-secondary-container{{ else }}state-layer-primary{{ end }}
+				flex gap-x-2 center-aligned
+				{{ if .Icon }}pl-4 pr-6{{ else }}px-6{{ end }}
+				{{ if .IsText }}text-primary{{ end }}{{/* for icon */}}
+		">
+            {{ render .GetContext .Icon }}
+            {{ render .GetContext .Badge }}
+			<span class="label-lg
+				{{ if .IsTonal }}text-on-secondary-container{{ else }}text-primary{{ end }}">{{ render .GetContext .Label }}</span>
+		</div>
+	</button>
+{{ end }}

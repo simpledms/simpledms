@@ -1,0 +1,75 @@
+{{- /* gotype: github.com/simpledms/simpledms/ui/widget.TextField */ -}}
+{{- define "TextField" }}
+	{{ if eq .Type "hidden" }}
+		<input
+                {{ template "HTMXAttrs" .HTMXAttrs }}
+				name="{{ .Name }}"
+				value="{{ .DefaultValue }}"
+				type="{{ .Type }}"
+                {{ if .IsRequired }}required{{ end }}
+		/>
+	{{ else }}
+		{{ template "textField" . }}
+	{{ end }}
+{{ end }}
+
+{{- define "textField" }}
+    {{ $ctx := .GetContext }}
+
+    {{/* offset is used to prevent that outline is cut off with overflow:scroll, for example in forms;
+			mt-1.5 is necessary to show label fully if moved up and overflow:scroll is used
+			*/}}
+    {{/* !!! IMPORTANT duplicated in FormFields !!! */}}
+	<div class="rounded-xs px-4 py-2 min-h-14 outline outline-1 outline-outline -outline-offset-1 flex items-center
+				focus-within:outline-primary focus-within:outline-2 focus-within:-outline-offset-2
+				hover:border-on-surface mt-1.5 w-full
+				">
+		<label class="relative w-full">
+            {{- if eq .Type "file" }}
+				<i>attach_file</i>
+            {{- end }}
+
+            {{- with .LeadingIcon }}
+				<div class="absolute left-0 h-full text-on-surface-variant">
+					<i class="material-symbols-outlined size-6">{{ render $ctx . }}</i>
+				</div>
+            {{- end }}
+
+			<input
+                    {{ template "HTMXAttrs" .HTMXAttrs }}
+					name="{{ .Name }}"
+					value="{{ .DefaultValue }}"
+					type="{{ .Type }}"
+					{{ if .IsRequired }}required{{ end }}
+					{{ if .HasAutofocus }}autofocus{{ end }}
+					class="peer text-on-surface placeholder-on-surface-variant body-lg w-full
+									{{ if .LeadingIcon }}pl-10{{ end }}
+								"
+					placeholder=" " {{/* necessary for label positioning */}}
+					{{ if .Step }}step="{{ .Step }}"{{ end }}
+			/>
+            {{- if eq .Type "file" }}
+				<input type="text" class="text-on-surface body-lg placeholder-on-surface-variant"/>
+            {{- end }}
+            {{/* must be after input for `peer` to work; placeholder trick/workaround is used to style when a
+					value is set */}}
+            {{/* !!! IMPORTANT duplicated in FormFields !!! */}}
+			<span class="absolute -left-1 px-1 -top-6 body-sm bg-surface
+					cursor-default transition-all text-primary
+					{{ if .LeadingIcon }}peer-placeholder-shown:left-10{{ end }}
+					peer-placeholder-shown:top-0 peer-placeholder-shown:px-0 peer-placeholder-shown:body-lg
+					peer-placeholder-shown:cursor-text peer-placeholder-shown:bg-transparent
+					peer-placeholder-shown:text-on-surface-variant
+
+					peer-focus:-top-6 peer-focus:px-1 peer-focus:-left-1 peer-focus:bg-surface
+					md:peer-focus:bg-surface-container-lowest peer-focus:cursor-default
+					peer-focus:body-sm peer-focus:text-primary
+
+					peer-autofill:-top-6 peer-autofill:px-1 peer-autofill:-left-1 peer-autofill:bg-surface
+					md:peer-autofill:bg-surface-container-lowest peer-autofill:cursor-default
+					peer-autofill:body-sm peer-autofill:text-primary
+					">{{ render $ctx .Label }}</span>
+            {{/* !!! IMPORTANT duplicated in FormFields !!! */}}
+		</label>
+	</div>
+{{ end }}

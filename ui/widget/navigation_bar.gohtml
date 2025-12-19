@@ -1,0 +1,5 @@
+{{- define "NavigationBar" }}
+	<mdui-navigation-bar placement="bottom" x-init value="{{ .SelectedValue }}">
+		{{ render .GetContext .Destinations }}
+	</mdui-navigation-bar>
+{{ end }}

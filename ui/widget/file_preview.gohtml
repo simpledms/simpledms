@@ -1,0 +1,108 @@
+{{- /* gotype: github.com/simpledms/simpledms/ui/widget.FilePreview */ -}}
+{{- define "downloadLink" }}
+	<a href="{{ .FileURL }}" hx-boost="false" download="{{ .GetFilename }}"><button>Download «{{ .GetFilename }}»</button></a>
+{{ end }}
+
+{{- define "FilePreview" }}
+	{{- if .IsImage }}
+		<img
+				class="w-fit"
+				src="{{ .FileURL }}"
+		/>
+	{{- else if .IsVideo }}
+		<video controls
+			   class="w-full"
+			   class="">
+			<source src="{{ .FileURL }}" type="{{ .MimeType }}">
+			<p>Your browser doesn't support previewing video files.</p>
+            {{ template "downloadLink" . }}
+		</video>
+	{{- else if .IsAudio }}
+		<audio controls
+			   class="w-full"
+		>
+			<source src="{{ .FileURL }}" type="{{ .MimeType }}">
+			<p>Your browser doesn't support previewing audio files.</p>
+            {{ template "downloadLink" . }}
+		</audio>
+    {{- else if .IsArchive }}
+		<p>Archives cannot be previewed at the moment, please download the file to inspect it.</p>
+		{{ template "downloadLink" . }}
+    {{- else if .IsBinary}}
+		<p>Binary files cannot be previewed, please download the file to execute it.</p>
+        {{ template "downloadLink" . }}
+	{{- else if .IsPreviewable }}
+		<object
+				class="w-full h-full"
+				type="{{ .MimeType }}"
+				data="{{ .FileURL }}"
+		>
+			{{- if .IsPDF }}
+				{{/* fallback for mobile where native pdf viewer cannot be loaded */}}
+				<div id="{{ .GetID }}pdfContainer" class="w-full h-full overflow-y-scroll flex flex-col gap-y-4"></div>
+				<script defer type="module">
+					import * as pdfjsLib from '/assets/vendor/pdfjs-dist.js';
+
+					// The workerSrc property shall be specified.
+					pdfjsLib.GlobalWorkerOptions.workerSrc = '/assets/vendor/pdfjs-dist/build/pdf.worker.js';
+
+					// URL of the PDF file (local or hosted)
+					const pdfUrl = '{{ .FileURL }}';
+
+					// Setup the container for PDF pages
+					const pdfContainer = document.getElementById('{{ .GetID }}pdfContainer');
+
+					// Fetch the PDF
+					pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
+						//console.log('PDF loaded');
+
+						// Get total number of pages
+						const numPages = pdf.numPages;
+
+						// Render each page
+						for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+							// Create a canvas for each page
+							const canvas = document.createElement('canvas');
+							canvas.className = 'w-full';
+							canvas.id = `{{ .GetID }}canvas-${pageNum}`;
+							pdfContainer.appendChild(canvas);
+
+							// Get the page
+							pdf.getPage(pageNum).then(function(page) {
+								//console.log(`Page ${pageNum} loaded`);
+
+								// Set up scale for rendering (zoom level)
+								const scale = 1.5;
+								const viewport = page.getViewport({ scale: scale });
+
+								// Set canvas size to match the viewport
+								canvas.height = viewport.height;
+								canvas.width = viewport.width;
+
+								// Render the page into the canvas context
+								const context = canvas.getContext('2d');
+								const renderContext = {
+									canvasContext: context,
+									viewport: viewport
+								};
+
+								page.render(renderContext).promise.then(function() {
+									//console.log(`Page ${pageNum} rendered`);
+								});
+							});
+						}
+					}).catch(function(error) {
+						console.error('Error loading PDF: ' + error);
+					});
+				</script>
+			{{- else }}
+				{{/* TODO fallback to <embed>? */}}
+				<p>Cannot preview the file, please download the file to view it.</p>
+            	{{ template "downloadLink" . }}
+			{{- end }}
+		</object>
+	{{- else }}
+		<p>File cannot be previewed, please download the file to view it.</p>
+        {{ template "downloadLink" . }}
+	{{- end }}
+{{ end }}

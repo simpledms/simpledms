@@ -1,0 +1,2355 @@
+{
+    "language": "en",
+    "messages": [
+        {
+            "id": "Maintenance mode",
+            "message": "Maintenance mode",
+            "translation": "Maintenance mode"
+        },
+        {
+            "id": "Maintenance mode is enabled. Please wait until the app ready again.",
+            "message": "Maintenance mode is enabled. Please wait until the app ready again.",
+            "translation": "Maintenance mode is enabled. Please wait until the app ready again."
+        },
+        {
+            "id": "A similar entity already exists.",
+            "message": "A similar entity already exists.",
+            "translation": ""
+        },
+        {
+            "id": "Cannot delete an entity still in use.",
+            "message": "Cannot delete an entity still in use.",
+            "translation": ""
+        },
+        {
+            "id": "A database constraint violation happened. Please contact the support.",
+            "message": "A database constraint violation happened. Please contact the support.",
+            "translation": ""
+        },
+        {
+            "id": "Data validation failed.",
+            "message": "Data validation failed.",
+            "translation": ""
+        },
+        {
+            "id": "Something went wrong. Please try again.",
+            "message": "Something went wrong. Please try again.",
+            "translation": "Something went wrong. Please try again."
+        },
+        {
+            "id": "You are not signed in. Please sign in to continue.",
+            "message": "You are not signed in. Please sign in to continue.",
+            "translation": "You are not signed in. Please sign in to continue."
+        },
+        {
+            "id": "Could not parse url.",
+            "message": "Could not parse url.",
+            "translation": "Could not parse url."
+        },
+        {
+            "id": "You are not allowed to access this tenant.",
+            "message": "You are not allowed to access this tenant.",
+            "translation": "You are not allowed to access this tenant."
+        },
+        {
+            "id": "You are not allowed to access this space.",
+            "message": "You are not allowed to access this space.",
+            "translation": "You are not allowed to access this space."
+        },
+        {
+            "id": "Could not read cookie.",
+            "message": "Could not read cookie.",
+            "translation": "Could not read cookie."
+        },
+        {
+            "id": "Cookie set but not valid.",
+            "message": "Cookie set but not valid.",
+            "translation": "Cookie set but not valid."
+        },
+        {
+            "id": "Cookie set but empty.",
+            "message": "Cookie set but empty.",
+            "translation": "Cookie set but empty."
+        },
+        {
+            "id": "Change passphrase",
+            "message": "Change passphrase",
+            "translation": "Change passphrase"
+        },
+        {
+            "id": "You must be logged in to unlock the app.",
+            "message": "You must be logged in to unlock the app.",
+            "translation": "You must be logged in to unlock the app."
+        },
+        {
+            "id": "You must be an admin to unlock the app.",
+            "message": "You must be an admin to unlock the app.",
+            "translation": "You must be an admin to unlock the app."
+        },
+        {
+            "id": "Passphrase changed.",
+            "message": "Passphrase changed.",
+            "translation": "Passphrase changed."
+        },
+        {
+            "id": "Init app",
+            "message": "Init app",
+            "translation": "Init app"
+        },
+        {
+            "id": "Passphrases do not match.",
+            "message": "Passphrases do not match.",
+            "translation": "Passphrases do not match."
+        },
+        {
+            "id": "App initialized.",
+            "message": "App initialized.",
+            "translation": "App initialized."
+        },
+        {
+            "id": "Remove passphrase",
+            "message": "Remove passphrase",
+            "translation": "Remove passphrase"
+        },
+        {
+            "id": "Passphrase removed.",
+            "message": "Passphrase removed.",
+            "translation": "Passphrase removed."
+        },
+        {
+            "id": "Unlock app",
+            "message": "Unlock app",
+            "translation": "Unlock app"
+        },
+        {
+            "id": "App unlocked.",
+            "message": "App unlocked.",
+            "translation": "App unlocked."
+        },
+        {
+            "id": "Change password",
+            "message": "Change password",
+            "translation": "Change password"
+        },
+        {
+            "id": "Change",
+            "message": "Change",
+            "translation": "Change"
+        },
+        {
+            "id": "You must be logged in to change your password.",
+            "message": "You must be logged in to change your password.",
+            "translation": "You must be logged in to change your password."
+        },
+        {
+            "id": "Password changed successfully.",
+            "message": "Password changed successfully.",
+            "translation": "Password changed successfully."
+        },
+        {
+            "id": "Clear temporary password",
+            "message": "Clear temporary password",
+            "translation": "Clear temporary password"
+        },
+        {
+            "id": "Temporary password cleared successfully.",
+            "message": "Temporary password cleared successfully.",
+            "translation": "Temporary password cleared successfully."
+        },
+        {
+            "id": "You are not allowed to delete this account.",
+            "message": "You are not allowed to delete this account.",
+            "translation": ""
+        },
+        {
+            "id": "Account deleted.",
+            "message": "Account deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Edit account",
+            "message": "Edit account",
+            "translation": ""
+        },
+        {
+            "id": "You cannot edit another account.",
+            "message": "You cannot edit another account.",
+            "translation": ""
+        },
+        {
+            "id": "Account updated.",
+            "message": "Account updated.",
+            "translation": ""
+        },
+        {
+            "id": "Reset password",
+            "message": "Reset password",
+            "translation": "Reset password"
+        },
+        {
+            "id": "Reset",
+            "message": "Reset",
+            "translation": "Reset"
+        },
+        {
+            "id": "Account not found.",
+            "message": "Account not found.",
+            "translation": "Account not found."
+        },
+        {
+            "id": "A new temporary password was sent to your email address.",
+            "message": "A new temporary password was sent to your email address.",
+            "translation": "A new temporary password was sent to your email address."
+        },
+        {
+            "id": "Set password",
+            "message": "Set password",
+            "translation": "Set password"
+        },
+        {
+            "id": "Initial password set successfully.",
+            "message": "Initial password set successfully.",
+            "translation": "Initial password set successfully."
+        },
+        {
+            "id": "Sign in",
+            "message": "Sign in",
+            "translation": "Sign in"
+        },
+        {
+            "id": "Found no account for this email address.",
+            "message": "Found no account for this email address.",
+            "translation": "Found no account for this email address."
+        },
+        {
+            "id": "Sign up now.",
+            "message": "Sign up now.",
+            "translation": "Sign up now."
+        },
+        {
+            "id": "Invalid credentials. Please try again.",
+            "message": "Invalid credentials. Please try again.",
+            "translation": "Invalid credentials. Please try again."
+        },
+        {
+            "id": "Logged in successfully.",
+            "message": "Logged in successfully.",
+            "translation": "Logged in successfully."
+        },
+        {
+            "id": "Sign in [subject]",
+            "message": "Sign in [subject]",
+            "translation": "Sign in"
+        },
+        {
+            "id": "Forget password?",
+            "message": "Forget password?",
+            "translation": "Forget password?"
+        },
+        {
+            "id": "Don't have an account? Sign up.",
+            "message": "Don't have an account? Sign up.",
+            "translation": "Don't have an account? Sign up."
+        },
+        {
+            "id": "Invalid session cookie.",
+            "message": "Invalid session cookie.",
+            "translation": "Invalid session cookie."
+        },
+        {
+            "id": "Sign up [subject]",
+            "message": "Sign up [subject]",
+            "translation": "Sign up"
+        },
+        {
+            "id": "Sign up",
+            "message": "Sign up",
+            "translation": "Sign up"
+        },
+        {
+            "id": "Registration successful, please check your email for your password.",
+            "message": "Registration successful, please check your email for your password.",
+            "translation": "Registration successful, please check your email for your password."
+        },
+        {
+            "id": "Document type | Filter",
+            "message": "Document type | Filter",
+            "translation": "Document type | Filter"
+        },
+        {
+            "id": "No document types available yet.",
+            "message": "No document types available yet.",
+            "translation": ""
+        },
+        {
+            "id": "Manage document types",
+            "message": "Manage document types",
+            "translation": ""
+        },
+        {
+            "id": "Fields",
+            "message": "Fields",
+            "translation": "Fields"
+        },
+        {
+            "id": "Tag groups",
+            "message": "Tag groups",
+            "translation": "Tag groups"
+        },
+        {
+            "id": "No tag groups available.",
+            "message": "No tag groups available.",
+            "translation": "No tag groups available."
+        },
+        {
+            "id": "Document type",
+            "message": "Document type",
+            "translation": ""
+        },
+        {
+            "id": "Rename",
+            "message": "Rename",
+            "translation": ""
+        },
+        {
+            "id": "Move",
+            "message": "Move",
+            "translation": ""
+        },
+        {
+            "id": "Delete",
+            "message": "Delete",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure?",
+            "message": "Are you sure?",
+            "translation": ""
+        },
+        {
+            "id": "Unzip archive",
+            "message": "Unzip archive",
+            "translation": ""
+        },
+        {
+            "id": "Details",
+            "message": "Details",
+            "translation": ""
+        },
+        {
+            "id": "File size",
+            "message": "File size",
+            "translation": ""
+        },
+        {
+            "id": "MIME type",
+            "message": "MIME type",
+            "translation": ""
+        },
+        {
+            "id": "SHA-256 hash",
+            "message": "SHA-256 hash",
+            "translation": ""
+        },
+        {
+            "id": "Original filename",
+            "message": "Original filename",
+            "translation": ""
+        },
+        {
+            "id": "Uploaded at",
+            "message": "Uploaded at",
+            "translation": ""
+        },
+        {
+            "id": "OCR succeeded at",
+            "message": "OCR succeeded at",
+            "translation": "",
+            "comment": "TODO naming"
+        },
+        {
+            "id": "Deleted at",
+            "message": "Deleted at",
+            "translation": ""
+        },
+        {
+            "id": "rendering failed",
+            "message": "rendering failed",
+            "translation": ""
+        },
+        {
+            "id": "Preview",
+            "message": "Preview",
+            "translation": ""
+        },
+        {
+            "id": "Coming soon.",
+            "message": "Coming soon.",
+            "translation": ""
+        },
+        {
+            "id": "File upload",
+            "message": "File upload",
+            "translation": ""
+        },
+        {
+            "id": "No files available yet.",
+            "message": "No files available yet.",
+            "translation": ""
+        },
+        {
+            "id": "No files or directories available yet.",
+            "message": "No files or directories available yet.",
+            "translation": ""
+        },
+        {
+            "id": "Create directory",
+            "message": "Create directory",
+            "translation": ""
+        },
+        {
+            "id": "Upload file",
+            "message": "Upload file",
+            "translation": ""
+        },
+        {
+            "id": "Loading more...",
+            "message": "Loading more...",
+            "translation": ""
+        },
+        {
+            "id": "Search",
+            "message": "Search",
+            "translation": ""
+        },
+        {
+            "id": "Search in «{Name}»",
+            "message": "Search in «{Name}»",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "dir.Data.Name"
+                }
+            ]
+        },
+        {
+            "id": "Tags",
+            "message": "Tags",
+            "translation": ""
+        },
+        {
+            "id": "No fields available yet.",
+            "message": "No fields available yet.",
+            "translation": ""
+        },
+        {
+            "id": "Manage fields",
+            "message": "Manage fields",
+            "translation": ""
+        },
+        {
+            "id": "No fields available.",
+            "message": "No fields available.",
+            "translation": ""
+        },
+        {
+            "id": "Contains",
+            "message": "Contains",
+            "translation": ""
+        },
+        {
+            "id": "Starts with",
+            "message": "Starts with",
+            "translation": ""
+        },
+        {
+            "id": "Equals",
+            "message": "Equals",
+            "translation": ""
+        },
+        {
+            "id": "Greater than",
+            "message": "Greater than",
+            "translation": ""
+        },
+        {
+            "id": "Less than",
+            "message": "Less than",
+            "translation": ""
+        },
+        {
+            "id": "«{Name}» is checked",
+            "message": "«{Name}» is checked",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ]
+        },
+        {
+            "id": "«{Name}» is not checked",
+            "message": "«{Name}» is not checked",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ]
+        },
+        {
+            "id": "Tags | Filter",
+            "message": "Tags | Filter",
+            "translation": ""
+        },
+        {
+            "id": "No tags available yet.",
+            "message": "No tags available yet.",
+            "translation": ""
+        },
+        {
+            "id": "Manage tags",
+            "message": "Manage tags",
+            "translation": ""
+        },
+        {
+            "id": "«{Name}» created.",
+            "message": "«{Name}» created.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "filex.Data.Name"
+                }
+            ]
+        },
+        {
+            "id": "Open directory",
+            "message": "Open directory",
+            "translation": "",
+            "comment": "TODO Go to, open, show?"
+        },
+        {
+            "id": "Only allowed in folder mode.",
+            "message": "Only allowed in folder mode.",
+            "translation": ""
+        },
+        {
+            "id": "Open file",
+            "message": "Open file",
+            "translation": "",
+            "comment": "TODO Go to, or Open?"
+        },
+        {
+            "id": "Moved to «{Name}».",
+            "message": "Moved to «{Name}».",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "destDir.Data.Name"
+                }
+            ]
+        },
+        {
+            "id": "Fields | Filter",
+            "message": "Fields | Filter",
+            "translation": ""
+        },
+        {
+            "id": "Folder isn't empty.",
+            "message": "Folder isn't empty.",
+            "translation": ""
+        },
+        {
+            "id": "Folder deleted.",
+            "message": "Folder deleted.",
+            "translation": ""
+        },
+        {
+            "id": "File deleted.",
+            "message": "File deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Rename file",
+            "message": "Rename file",
+            "translation": ""
+        },
+        {
+            "id": "Save",
+            "message": "Save",
+            "translation": ""
+        },
+        {
+            "id": "Renamed to «{Name}»",
+            "message": "Renamed to «{Name}»",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "filex.Data.Name"
+                }
+            ]
+        },
+        {
+            "id": "Document type deselected.",
+            "message": "Document type deselected.",
+            "translation": ""
+        },
+        {
+            "id": "Document type selected.",
+            "message": "Document type selected.",
+            "translation": ""
+        },
+        {
+            "id": "Unsupported field type.",
+            "message": "Unsupported field type.",
+            "translation": ""
+        },
+        {
+            "id": "«{Name}» saved.",
+            "message": "«{Name}» saved.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ]
+        },
+        {
+            "id": "File Name",
+            "message": "File Name",
+            "translation": ""
+        },
+        {
+            "id": "Size",
+            "message": "Size",
+            "translation": "",
+            "comment": "Text{\"Name:\"},\n\t\t\t\tText{\"Size:\"},\n\t\t\t\tText{\"Created At:\"},\n\t\t\t\tText{\"Modified At:\"},\n\t\t\t\tText{\"Permissions:\"},\n\t\t\t\tText{\"Owner:\"},\n\t\t\t\tText{\"Group:\"},\n\t\t\t\tText{\"Links:\"},\n\t\t\t\tText{\"SHA256:\"},\n\t\t\t\tText{Label: \"Content:\"},"
+        },
+        {
+            "id": "Metadata",
+            "message": "Metadata",
+            "translation": ""
+        },
+        {
+            "id": "Info",
+            "message": "Info",
+            "translation": ""
+        },
+        {
+            "id": "Versions",
+            "message": "Versions",
+            "translation": ""
+        },
+        {
+            "id": "Not a ZIP archive.",
+            "message": "Not a ZIP archive.",
+            "translation": ""
+        },
+        {
+            "id": "Could not open ZIP archive.",
+            "message": "Could not open ZIP archive.",
+            "translation": ""
+        },
+        {
+            "id": "Could not unzip the archive.",
+            "message": "Could not unzip the archive.",
+            "translation": ""
+        },
+        {
+            "id": "Could not read ZIP archive.",
+            "message": "Could not read ZIP archive.",
+            "translation": ""
+        },
+        {
+            "id": "Could not create directory structure.",
+            "message": "Could not create directory structure.",
+            "translation": ""
+        },
+        {
+            "id": "Could not extract all files from archive.",
+            "message": "Could not extract all files from archive.",
+            "translation": ""
+        },
+        {
+            "id": "Archive unzipped.",
+            "message": "Archive unzipped.",
+            "translation": ""
+        },
+        {
+            "id": "Could not open file in archive.",
+            "message": "Could not open file in archive.",
+            "translation": ""
+        },
+        {
+            "id": "Could not extract file from archive.",
+            "message": "Could not extract file from archive.",
+            "translation": ""
+        },
+        {
+            "id": "«{Name}» filter updated.",
+            "message": "«{Name}» filter updated.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ]
+        },
+        {
+            "id": "No parent dir provided.",
+            "message": "No parent dir provided.",
+            "translation": ""
+        },
+        {
+            "id": "could not read file",
+            "message": "could not read file",
+            "translation": ""
+        },
+        {
+            "id": "«{Name}» uploaded.",
+            "message": "«{Name}» uploaded.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "filex.Name"
+                }
+            ]
+        },
+        {
+            "id": "Move file",
+            "message": "Move file",
+            "translation": ""
+        },
+        {
+            "id": "Move file to «{Name}»",
+            "message": "Move file to «{Name}»",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "currentDir.Data.Name"
+                }
+            ]
+        },
+        {
+            "id": "Directory up",
+            "message": "Directory up",
+            "translation": ""
+        },
+        {
+            "id": "Home",
+            "message": "Home",
+            "translation": ""
+        },
+        {
+            "id": "Free plan",
+            "message": "Free plan",
+            "translation": ""
+        },
+        {
+            "id": "The organization is not initialized yet, please wait until the initialization is complete.",
+            "message": "The organization is not initialized yet, please wait until the initialization is complete.",
+            "translation": ""
+        },
+        {
+            "id": "Refresh",
+            "message": "Refresh",
+            "translation": ""
+        },
+        {
+            "id": "Organization",
+            "message": "Organization",
+            "translation": ""
+        },
+        {
+            "id": "Space",
+            "message": "Space",
+            "translation": ""
+        },
+        {
+            "id": "Organization: {Name}",
+            "message": "Organization: {Name}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tenant.Name"
+                }
+            ]
+        },
+        {
+            "id": "Select",
+            "message": "Select",
+            "translation": "",
+            "comment": "TODO Browse, Open, Switch or activate? or Select?"
+        },
+        {
+            "id": "Account",
+            "message": "Account",
+            "translation": "",
+            "comment": "TODO or Account settings / Security / Account security?"
+        },
+        {
+            "id": "Delete account",
+            "message": "Delete account",
+            "translation": ""
+        },
+        {
+            "id": "No password set",
+            "message": "No password set",
+            "translation": ""
+        },
+        {
+            "id": "You've logged in with a temporary password. Please set a password to secure your account and use the app.",
+            "message": "You've logged in with a temporary password. Please set a password to secure your account and use the app.",
+            "translation": ""
+        },
+        {
+            "id": "Set password now",
+            "message": "Set password now",
+            "translation": ""
+        },
+        {
+            "id": "Active temporary password",
+            "message": "Active temporary password",
+            "translation": ""
+        },
+        {
+            "id": "Your account has an active temporary password. Please change your password or clear the temporary password as soon as possible to secure your account.",
+            "message": "Your account has an active temporary password. Please change your password or clear the temporary password as soon as possible to secure your account.",
+            "translation": ""
+        },
+        {
+            "id": "Manage spaces",
+            "message": "Manage spaces",
+            "translation": ""
+        },
+        {
+            "id": "The organization «{Name}» has {SpacesCount} spaces.",
+            "message": "The organization «{Name}» has {SpacesCount} spaces.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tenantx.Name"
+                },
+                {
+                    "id": "SpacesCount",
+                    "string": "%[2]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 2,
+                    "expr": "spacesCount"
+                }
+            ]
+        },
+        {
+            "id": "No spaces yet",
+            "message": "No spaces yet",
+            "translation": ""
+        },
+        {
+            "id": "The organization «{Name}» has no space yet. Please create one to get started.",
+            "message": "The organization «{Name}» has no space yet. Please create one to get started.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tenantx.Name"
+                }
+            ]
+        },
+        {
+            "id": "The organization «{Name}» has one space.",
+            "message": "The organization «{Name}» has one space.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tenantx.Name"
+                }
+            ]
+        },
+        {
+            "id": "The app is unlocked and not protected by a passphrase.",
+            "message": "The app is unlocked and not protected by a passphrase.",
+            "translation": ""
+        },
+        {
+            "id": "The app is locked.",
+            "message": "The app is locked.",
+            "translation": ""
+        },
+        {
+            "id": "Set passphrase",
+            "message": "Set passphrase",
+            "translation": ""
+        },
+        {
+            "id": "The app is unlocked and protected by a passphrase.",
+            "message": "The app is unlocked and protected by a passphrase.",
+            "translation": ""
+        },
+        {
+            "id": "App status",
+            "message": "App status",
+            "translation": ""
+        },
+        {
+            "id": "Admin",
+            "message": "Admin",
+            "translation": ""
+        },
+        {
+            "id": "Dashboard",
+            "message": "Dashboard",
+            "translation": ""
+        },
+        {
+            "id": "Edit in «Spaces» view",
+            "message": "Edit in «Spaces» view",
+            "translation": ""
+        },
+        {
+            "id": "Add field",
+            "message": "Add field",
+            "translation": ""
+        },
+        {
+            "id": "Attribute «{Name}» added.",
+            "message": "Attribute «{Name}» added.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ]
+        },
+        {
+            "id": "Add field attribute",
+            "message": "Add field attribute",
+            "translation": ""
+        },
+        {
+            "id": "Please create a field first.",
+            "message": "Please create a field first.",
+            "translation": "",
+            "comment": "TODO link"
+        },
+        {
+            "id": "Edit",
+            "message": "Edit",
+            "translation": ""
+        },
+        {
+            "id": "Add list attribute (tag group)",
+            "message": "Add list attribute (tag group)",
+            "translation": ""
+        },
+        {
+            "id": "name-giving",
+            "message": "name-giving",
+            "translation": ""
+        },
+        {
+            "id": "Add document type",
+            "message": "Add document type",
+            "translation": ""
+        },
+        {
+            "id": "Document type created.",
+            "message": "Document type created.",
+            "translation": ""
+        },
+        {
+            "id": "Add attribute",
+            "message": "Add attribute",
+            "translation": ""
+        },
+        {
+            "id": "Attribute «{Name}» created.",
+            "message": "Attribute «{Name}» created.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "attributex.Name"
+                }
+            ]
+        },
+        {
+            "id": "No tag groups available yet.",
+            "message": "No tag groups available yet.",
+            "translation": ""
+        },
+        {
+            "id": "Please create a tag group first.",
+            "message": "Please create a tag group first.",
+            "translation": ""
+        },
+        {
+            "id": "Document type deleted.",
+            "message": "Document type deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Attribute deleted.",
+            "message": "Attribute deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Edit field attribute",
+            "message": "Edit field attribute",
+            "translation": ""
+        },
+        {
+            "id": "Attribute updated.",
+            "message": "Attribute updated.",
+            "translation": ""
+        },
+        {
+            "id": "Edit tag attribute",
+            "message": "Edit tag attribute",
+            "translation": ""
+        },
+        {
+            "id": "Attribute «{NewName}» updated.",
+            "message": "Attribute «{NewName}» updated.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "NewName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "data.NewName"
+                }
+            ]
+        },
+        {
+            "id": "Document types",
+            "message": "Document types",
+            "translation": ""
+        },
+        {
+            "id": "Rename document type",
+            "message": "Rename document type",
+            "translation": ""
+        },
+        {
+            "id": "Document type renamed to «{NewName}».",
+            "message": "Document type renamed to «{NewName}».",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "NewName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "data.NewName"
+                }
+            ]
+        },
+        {
+            "id": "Assign file",
+            "message": "Assign file",
+            "translation": ""
+        },
+        {
+            "id": "Mark as done",
+            "message": "Mark as done",
+            "translation": ""
+        },
+        {
+            "id": "Inbox",
+            "message": "Inbox",
+            "translation": ""
+        },
+        {
+            "id": "Search in «Inbox»",
+            "message": "Search in «Inbox»",
+            "translation": ""
+        },
+        {
+            "id": "File must be in inbox.",
+            "message": "File must be in inbox.",
+            "translation": ""
+        },
+        {
+            "id": "Marked file «{Name}» as done.",
+            "message": "Marked file «{Name}» as done.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "filex.Data.Name"
+                }
+            ]
+        },
+        {
+            "id": "No new files found.",
+            "message": "No new files found.",
+            "translation": ""
+        },
+        {
+            "id": "Files uploaded successfully.",
+            "message": "Files uploaded successfully.",
+            "translation": ""
+        },
+        {
+            "id": "Select destination manually",
+            "message": "Select destination manually",
+            "translation": ""
+        },
+        {
+            "id": "Suggestions based on filename",
+            "message": "Suggestions based on filename",
+            "translation": ""
+        },
+        {
+            "id": "Newest first",
+            "message": "Newest first",
+            "translation": ""
+        },
+        {
+            "id": "Oldest first",
+            "message": "Oldest first",
+            "translation": ""
+        },
+        {
+            "id": "Sort by name",
+            "message": "Sort by name",
+            "translation": ""
+        },
+        {
+            "id": "Create new tag or group",
+            "message": "Create new tag or group",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure? This action will delete the tag and unassign it from all files!",
+            "message": "Are you sure? This action will delete the tag and unassign it from all files!",
+            "translation": ""
+        },
+        {
+            "id": "Assign tags",
+            "message": "Assign tags",
+            "translation": "",
+            "comment": "TODO or Sub-tags? sounds bad in german"
+        },
+        {
+            "id": "Move to group",
+            "message": "Move to group",
+            "translation": ""
+        },
+        {
+            "id": "Group, {ChildCount} tag",
+            "message": "Group, {ChildCount} tag",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "ChildCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "childCount"
+                }
+            ]
+        },
+        {
+            "id": "Group, {ChildCount} tags",
+            "message": "Group, {ChildCount} tags",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "ChildCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "childCount"
+                }
+            ]
+        },
+        {
+            "id": "Create new tag",
+            "message": "Create new tag",
+            "translation": "",
+            "comment": "group not possible"
+        },
+        {
+            "id": "Super tag",
+            "message": "Super tag",
+            "translation": ""
+        },
+        {
+            "id": "Tag group ID is required.",
+            "message": "Tag group ID is required.",
+            "translation": ""
+        },
+        {
+            "id": "Tag is not a group.",
+            "message": "Tag is not a group.",
+            "translation": ""
+        },
+        {
+            "id": "Manage users",
+            "message": "Manage users",
+            "translation": ""
+        },
+        {
+            "id": "Users",
+            "message": "Users",
+            "translation": ""
+        },
+        {
+            "id": "Upload",
+            "message": "Upload",
+            "translation": ""
+        },
+        {
+            "id": "Uploading files, please wait a moment.",
+            "message": "Uploading files, please wait a moment.",
+            "translation": ""
+        },
+        {
+            "id": "The page will be refreshed automatically once the upload is finished.",
+            "message": "The page will be refreshed automatically once the upload is finished.",
+            "translation": ""
+        },
+        {
+            "id": "No spaces yet.",
+            "message": "No spaces yet.",
+            "translation": ""
+        },
+        {
+            "id": "Please try again once you created a space or were invited to join one.",
+            "message": "Please try again once you created a space or were invited to join one.",
+            "translation": ""
+        },
+        {
+            "id": "Select space",
+            "message": "Select space",
+            "translation": ""
+        },
+        {
+            "id": "Processing of shared files failed.",
+            "message": "Processing of shared files failed.",
+            "translation": ""
+        },
+        {
+            "id": "Files uploaded, please select a space.",
+            "message": "Files uploaded, please select a space.",
+            "translation": ""
+        },
+        {
+            "id": "Field «{Name}» created.",
+            "message": "Field «{Name}» created.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "data.Name"
+                }
+            ]
+        },
+        {
+            "id": "Field deleted.",
+            "message": "Field deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Edit field",
+            "message": "Edit field",
+            "translation": ""
+        },
+        {
+            "id": "Field updated.",
+            "message": "Field updated.",
+            "translation": ""
+        },
+        {
+            "id": "Create space",
+            "message": "Create space",
+            "translation": ""
+        },
+        {
+            "id": "Space «{Name}» created.",
+            "message": "Space «{Name}» created.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "data.Name"
+                }
+            ]
+        },
+        {
+            "id": "Space deleted.",
+            "message": "Space deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Edit space",
+            "message": "Edit space",
+            "translation": ""
+        },
+        {
+            "id": "Changes saved.",
+            "message": "Changes saved.",
+            "translation": ""
+        },
+        {
+            "id": "No spaces available yet.",
+            "message": "No spaces available yet.",
+            "translation": ""
+        },
+        {
+            "id": "Browse",
+            "message": "Browse",
+            "translation": "",
+            "comment": "TODO or Selected or Active?"
+        },
+        {
+            "id": "{Name} ({Stringctx})",
+            "message": "{Name} ({Stringctx})",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "spacex.Name"
+                },
+                {
+                    "id": "Stringctx",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "wx.T(\"active\").String(ctx)"
+                }
+            ]
+        },
+        {
+            "id": "active",
+            "message": "active",
+            "translation": ""
+        },
+        {
+            "id": "Spaces",
+            "message": "Spaces",
+            "translation": ""
+        },
+        {
+            "id": "«{Name}» assigned.",
+            "message": "«{Name}» assigned.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "subTag.Name"
+                }
+            ]
+        },
+        {
+            "id": "Create and assign tag",
+            "message": "Create and assign tag",
+            "translation": "",
+            "comment": "\"#tagAssignmentList\","
+        },
+        {
+            "id": "«{Name}» created and assigned.",
+            "message": "«{Name}» created and assigned.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Name"
+                }
+            ]
+        },
+        {
+            "id": "Create tag",
+            "message": "Create tag",
+            "translation": "",
+            "comment": "\"TODO\", // TODO"
+        },
+        {
+            "id": "Tag «{Name}» created.",
+            "message": "Tag «{Name}» created.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Name"
+                }
+            ]
+        },
+        {
+            "id": "Cannot add a tag group as child.",
+            "message": "Cannot add a tag group as child.",
+            "translation": ""
+        },
+        {
+            "id": "«{TagName}» deleted.",
+            "message": "«{TagName}» deleted.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "TagName",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagName"
+                }
+            ]
+        },
+        {
+            "id": "Create new group",
+            "message": "Create new group",
+            "translation": ""
+        },
+        {
+            "id": "Tags of «{Name}»",
+            "message": "Tags of «{Name}»",
+            "translation": "",
+            "comment": "of or for?",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "superTag.Name"
+                }
+            ]
+        },
+        {
+            "id": "Edit tag",
+            "message": "Edit tag",
+            "translation": "",
+            "comment": "\"\","
+        },
+        {
+            "id": "«{Name}» updated.",
+            "message": "«{Name}» updated.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Name"
+                }
+            ]
+        },
+        {
+            "id": "layout not supported",
+            "message": "layout not supported",
+            "translation": ""
+        },
+        {
+            "id": "Group «{Name}»",
+            "message": "Group «{Name}»",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Edges.Group.Name"
+                }
+            ]
+        },
+        {
+            "id": "Composed of {JointagNames__}",
+            "message": "Composed of {JointagNames__}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "JointagNames__",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "strings.Join(tagNames, \", \")"
+                }
+            ]
+        },
+        {
+            "id": "Move tag to group",
+            "message": "Move tag to group",
+            "translation": ""
+        },
+        {
+            "id": "Deselected group.",
+            "message": "Deselected group.",
+            "translation": ""
+        },
+        {
+            "id": "Moved to group «{Name}».",
+            "message": "Moved to group «{Name}».",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "groupTag.Name"
+                }
+            ]
+        },
+        {
+            "id": "Deselect group",
+            "message": "Deselect group",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure? This action will delete the tag entirely and not just unassign it from the current file!",
+            "message": "Are you sure? This action will delete the tag entirely and not just unassign it from the current file!",
+            "translation": ""
+        },
+        {
+            "id": "«{Name}» unassigned.",
+            "message": "«{Name}» unassigned.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Name"
+                }
+            ]
+        },
+        {
+            "id": "cannot parse file",
+            "message": "cannot parse file",
+            "translation": ""
+        },
+        {
+            "id": "cannot parse form",
+            "message": "cannot parse form",
+            "translation": ""
+        },
+        {
+            "id": "cannot decode form",
+            "message": "cannot decode form",
+            "translation": ""
+        },
+        {
+            "id": "Cannot validate form.",
+            "message": "Cannot validate form.",
+            "translation": ""
+        },
+        {
+            "id": "Form validation failed.",
+            "message": "Form validation failed.",
+            "translation": ""
+        },
+        {
+            "id": "Filters successfully reset.",
+            "message": "Filters successfully reset.",
+            "translation": ""
+        },
+        {
+            "id": "cannot parse current url",
+            "message": "cannot parse current url",
+            "translation": ""
+        },
+        {
+            "id": "Cannot decode url query.",
+            "message": "Cannot decode url query.",
+            "translation": ""
+        },
+        {
+            "id": "Active tab",
+            "message": "Active tab",
+            "translation": ""
+        },
+        {
+            "id": "Add to inbox",
+            "message": "Add to inbox",
+            "translation": ""
+        },
+        {
+            "id": "Austria",
+            "message": "Austria",
+            "translation": ""
+        },
+        {
+            "id": "Checkbox",
+            "message": "Checkbox",
+            "translation": ""
+        },
+        {
+            "id": "Checkbox value",
+            "message": "Checkbox value",
+            "translation": ""
+        },
+        {
+            "id": "Confirm new passphrase",
+            "message": "Confirm new passphrase",
+            "translation": ""
+        },
+        {
+            "id": "Confirm passphrase",
+            "message": "Confirm passphrase",
+            "translation": ""
+        },
+        {
+            "id": "Confirm password",
+            "message": "Confirm password",
+            "translation": ""
+        },
+        {
+            "id": "Country",
+            "message": "Country",
+            "translation": ""
+        },
+        {
+            "id": "Current or temporary password",
+            "message": "Current or temporary password",
+            "translation": ""
+        },
+        {
+            "id": "Current passphrase",
+            "message": "Current passphrase",
+            "translation": ""
+        },
+        {
+            "id": "Current path",
+            "message": "Current path",
+            "translation": ""
+        },
+        {
+            "id": "Date",
+            "message": "Date",
+            "translation": ""
+        },
+        {
+            "id": "Date value",
+            "message": "Date value",
+            "translation": ""
+        },
+        {
+            "id": "Delete on success",
+            "message": "Delete on success",
+            "translation": ""
+        },
+        {
+            "id": "Description",
+            "message": "Description",
+            "translation": ""
+        },
+        {
+            "id": "Dir name",
+            "message": "Dir name",
+            "translation": ""
+        },
+        {
+            "id": "Editor",
+            "message": "Editor",
+            "translation": ""
+        },
+        {
+            "id": "Email",
+            "message": "Email",
+            "translation": ""
+        },
+        {
+            "id": "English",
+            "message": "English",
+            "translation": ""
+        },
+        {
+            "id": "Field",
+            "message": "Field",
+            "translation": ""
+        },
+        {
+            "id": "File",
+            "message": "File",
+            "translation": ""
+        },
+        {
+            "id": "Filename",
+            "message": "Filename",
+            "translation": ""
+        },
+        {
+            "id": "First name",
+            "message": "First name",
+            "translation": ""
+        },
+        {
+            "id": "French",
+            "message": "French",
+            "translation": ""
+        },
+        {
+            "id": "German",
+            "message": "German",
+            "translation": ""
+        },
+        {
+            "id": "Germany",
+            "message": "Germany",
+            "translation": ""
+        },
+        {
+            "id": "Group",
+            "message": "Group",
+            "translation": ""
+        },
+        {
+            "id": "Is name giving",
+            "message": "Is name giving",
+            "translation": ""
+        },
+        {
+            "id": "Italian",
+            "message": "Italian",
+            "translation": ""
+        },
+        {
+            "id": "Language",
+            "message": "Language",
+            "translation": ""
+        },
+        {
+            "id": "Last name",
+            "message": "Last name",
+            "translation": ""
+        },
+        {
+            "id": "Layout",
+            "message": "Layout",
+            "translation": ""
+        },
+        {
+            "id": "Local",
+            "message": "Local",
+            "translation": ""
+        },
+        {
+            "id": "Money",
+            "message": "Money",
+            "translation": ""
+        },
+        {
+            "id": "Money value",
+            "message": "Money value",
+            "translation": ""
+        },
+        {
+            "id": "Name",
+            "message": "Name",
+            "translation": ""
+        },
+        {
+            "id": "New dir name",
+            "message": "New dir name",
+            "translation": ""
+        },
+        {
+            "id": "New filename",
+            "message": "New filename",
+            "translation": ""
+        },
+        {
+            "id": "New name",
+            "message": "New name",
+            "translation": ""
+        },
+        {
+            "id": "New passphrase",
+            "message": "New passphrase",
+            "translation": ""
+        },
+        {
+            "id": "New password",
+            "message": "New password",
+            "translation": ""
+        },
+        {
+            "id": "Number",
+            "message": "Number",
+            "translation": ""
+        },
+        {
+            "id": "Number value",
+            "message": "Number value",
+            "translation": ""
+        },
+        {
+            "id": "Only assigned",
+            "message": "Only assigned",
+            "translation": ""
+        },
+        {
+            "id": "Operator",
+            "message": "Operator",
+            "translation": ""
+        },
+        {
+            "id": "Organization name",
+            "message": "Organization name",
+            "translation": ""
+        },
+        {
+            "id": "Owner",
+            "message": "Owner",
+            "translation": ""
+        },
+        {
+            "id": "Passphrase",
+            "message": "Passphrase",
+            "translation": ""
+        },
+        {
+            "id": "Password",
+            "message": "Password",
+            "translation": ""
+        },
+        {
+            "id": "S 3",
+            "message": "S 3",
+            "translation": ""
+        },
+        {
+            "id": "Simple",
+            "message": "Simple",
+            "translation": ""
+        },
+        {
+            "id": "Subscribe to newsletter",
+            "message": "Subscribe to newsletter",
+            "translation": ""
+        },
+        {
+            "id": "Super",
+            "message": "Super",
+            "translation": ""
+        },
+        {
+            "id": "Supporter",
+            "message": "Supporter",
+            "translation": ""
+        },
+        {
+            "id": "Switzerland",
+            "message": "Switzerland",
+            "translation": ""
+        },
+        {
+            "id": "Tag",
+            "message": "Tag",
+            "translation": ""
+        },
+        {
+            "id": "Temporary session",
+            "message": "Temporary session",
+            "translation": ""
+        },
+        {
+            "id": "Text",
+            "message": "Text",
+            "translation": ""
+        },
+        {
+            "id": "Text value",
+            "message": "Text value",
+            "translation": ""
+        },
+        {
+            "id": "Type",
+            "message": "Type",
+            "translation": ""
+        },
+        {
+            "id": "Unit",
+            "message": "Unit",
+            "translation": ""
+        },
+        {
+            "id": "User",
+            "message": "User",
+            "translation": ""
+        },
+        {
+            "id": "Value",
+            "message": "Value",
+            "translation": ""
+        },
+        {
+            "id": "Viewer",
+            "message": "Viewer",
+            "translation": ""
+        },
+        {
+            "id": "file has no parent",
+            "message": "file has no parent",
+            "translation": ""
+        },
+        {
+            "id": "Folder mode is not enabled.",
+            "message": "Folder mode is not enabled.",
+            "translation": ""
+        },
+        {
+            "id": "Path element is file, not a directory.",
+            "message": "Path element is file, not a directory.",
+            "translation": ""
+        },
+        {
+            "id": "The provided filename is not allowed.",
+            "message": "The provided filename is not allowed.",
+            "translation": ""
+        },
+        {
+            "id": "A folder with this name already exists.",
+            "message": "A folder with this name already exists.",
+            "translation": ""
+        },
+        {
+            "id": "Destination is not a directory.",
+            "message": "Destination is not a directory.",
+            "translation": ""
+        },
+        {
+            "id": "Cannot move directory to itself.",
+            "message": "Cannot move directory to itself.",
+            "translation": ""
+        },
+        {
+            "id": "Destination is current location.",
+            "message": "Destination is current location.",
+            "translation": ""
+        },
+        {
+            "id": "destination is not a directory",
+            "message": "destination is not a directory",
+            "translation": ""
+        },
+        {
+            "id": "cannot move file into child directory",
+            "message": "cannot move file into child directory",
+            "translation": ""
+        },
+        {
+            "id": "New filename is empty.",
+            "message": "New filename is empty.",
+            "translation": ""
+        },
+        {
+            "id": "New filename is the same as old.",
+            "message": "New filename is the same as old.",
+            "translation": ""
+        },
+        {
+            "id": "Could not get object name.",
+            "message": "Could not get object name.",
+            "translation": ""
+        },
+        {
+            "id": "Could not open file.",
+            "message": "Could not open file.",
+            "translation": ""
+        },
+        {
+            "id": "File already exists.",
+            "message": "File already exists.",
+            "translation": ""
+        },
+        {
+            "id": "Storage path is empty.",
+            "message": "Storage path is empty.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid filename.",
+            "message": "Invalid filename.",
+            "translation": ""
+        },
+        {
+            "id": "Bucket name is empty.",
+            "message": "Bucket name is empty.",
+            "translation": ""
+        },
+        {
+            "id": "Filename already exists.",
+            "message": "Filename already exists.",
+            "translation": ""
+        },
+        {
+            "id": "Could not save file.",
+            "message": "Could not save file.",
+            "translation": ""
+        },
+        {
+            "id": "Could not get x25519 identity.",
+            "message": "Could not get x25519 identity.",
+            "translation": ""
+        },
+        {
+            "id": "App not unlocked yet.",
+            "message": "App not unlocked yet.",
+            "translation": ""
+        },
+        {
+            "id": "Could not copy temporary file.",
+            "message": "Could not copy temporary file.",
+            "translation": ""
+        },
+        {
+            "id": "Your temporary password is",
+            "message": "Your temporary password is",
+            "translation": ""
+        },
+        {
+            "id": "It expires at",
+            "message": "It expires at",
+            "translation": ""
+        },
+        {
+            "id": "Note",
+            "message": "Note",
+            "translation": ""
+        },
+        {
+            "id": "Welcome to SimpleDMS",
+            "message": "Welcome to SimpleDMS",
+            "translation": ""
+        },
+        {
+            "id": "02-01-2006 at 15:04 o'clock",
+            "message": "02-01-2006 at 15:04 o'clock",
+            "translation": ""
+        },
+        {
+            "id": "SimpleDMS password reset",
+            "message": "SimpleDMS password reset",
+            "translation": ""
+        },
+        {
+            "id": "This is an automated message, please do not reply.",
+            "message": "This is an automated message, please do not reply.",
+            "translation": ""
+        },
+        {
+            "id": "Your account has been created successfully.",
+            "message": "Your account has been created successfully.",
+            "translation": ""
+        },
+        {
+            "id": "Please log in and change your password as soon as possible.",
+            "message": "Please log in and change your password as soon as possible.",
+            "translation": ""
+        },
+        {
+            "id": "SimpleDMS Password Reset",
+            "message": "SimpleDMS Password Reset",
+            "translation": ""
+        },
+        {
+            "id": "A password reset has been requested for your account.",
+            "message": "A password reset has been requested for your account.",
+            "translation": ""
+        },
+        {
+            "id": "Your old password will still work until you change it.",
+            "message": "Your old password will still work until you change it.",
+            "translation": ""
+        },
+        {
+            "id": "Too many login attempts. Please try again in 10 seconds.",
+            "message": "Too many login attempts. Please try again in 10 seconds.",
+            "translation": ""
+        },
+        {
+            "id": "2FA code was provided, but 2FA is not enabled for this account.",
+            "message": "2FA code was provided, but 2FA is not enabled for this account.",
+            "translation": ""
+        },
+        {
+            "id": "Temporary password expired.",
+            "message": "Temporary password expired.",
+            "translation": ""
+        },
+        {
+            "id": "could not generate temporary password",
+            "message": "could not generate temporary password",
+            "translation": ""
+        },
+        {
+            "id": "could not generate salt",
+            "message": "could not generate salt",
+            "translation": ""
+        },
+        {
+            "id": "Current password is invalid.",
+            "message": "Current password is invalid.",
+            "translation": ""
+        },
+        {
+            "id": "New password must be different from current password.",
+            "message": "New password must be different from current password.",
+            "translation": ""
+        },
+        {
+            "id": "Password must be at least eight characters long.",
+            "message": "Password must be at least eight characters long.",
+            "translation": ""
+        },
+        {
+            "id": "Passwords do not match.",
+            "message": "Passwords do not match.",
+            "translation": ""
+        },
+        {
+            "id": "App already initialized.",
+            "message": "App already initialized.",
+            "translation": ""
+        },
+        {
+            "id": "Passphrase is required.",
+            "message": "Passphrase is required.",
+            "translation": ""
+        },
+        {
+            "id": "App is already unlocked.",
+            "message": "App is already unlocked.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid passphrase.",
+            "message": "Invalid passphrase.",
+            "translation": ""
+        },
+        {
+            "id": "App is not encrypted with passphrase.",
+            "message": "App is not encrypted with passphrase.",
+            "translation": ""
+        },
+        {
+            "id": "No passphrase set.",
+            "message": "No passphrase set.",
+            "translation": ""
+        },
+        {
+            "id": "New passphrase is required.",
+            "message": "New passphrase is required.",
+            "translation": ""
+        },
+        {
+            "id": "New passphrase does not match confirmation.",
+            "message": "New passphrase does not match confirmation.",
+            "translation": ""
+        },
+        {
+            "id": "Old passphrase is required.",
+            "message": "Old passphrase is required.",
+            "translation": ""
+        },
+        {
+            "id": "App not unlocked yet. Please try again later.",
+            "message": "App not unlocked yet. Please try again later.",
+            "translation": ""
+        },
+        {
+            "id": "Tenant not initialized yet. Please try again later.",
+            "message": "Tenant not initialized yet. Please try again later.",
+            "translation": ""
+        },
+        {
+            "id": "Error opening tenant database. Please try again later.",
+            "message": "Error opening tenant database. Please try again later.",
+            "translation": ""
+        },
+        {
+            "id": "file is not a directory",
+            "message": "file is not a directory",
+            "translation": ""
+        },
+        {
+            "id": "could not render widget",
+            "message": "could not render widget",
+            "translation": ""
+        },
+        {
+            "id": "No dir id provided.",
+            "message": "No dir id provided.",
+            "translation": ""
+        },
+        {
+            "id": "No file id provided.",
+            "message": "No file id provided.",
+            "translation": ""
+        },
+        {
+            "id": "cannot download directories",
+            "message": "cannot download directories",
+            "translation": ""
+        },
+        {
+            "id": "File is not in inbox.",
+            "message": "File is not in inbox.",
+            "translation": ""
+        },
+        {
+            "id": "Could not convert id to integer.",
+            "message": "Could not convert id to integer.",
+            "translation": ""
+        },
+        {
+            "id": "Sign out",
+            "message": "Sign out",
+            "translation": ""
+        },
+        {
+            "id": "Close",
+            "message": "Close",
+            "translation": ""
+        },
+        {
+            "id": "optional",
+            "message": "optional",
+            "translation": ""
+        },
+        {
+            "id": "required",
+            "message": "required",
+            "translation": ""
+        },
+        {
+            "id": "Auth cookie already set.",
+            "message": "Auth cookie already set.",
+            "translation": ""
+        },
+        {
+            "id": "Could not generate session id.",
+            "message": "Could not generate session id.",
+            "translation": ""
+        },
+        {
+            "id": "You are not allowed to access the requested resource.",
+            "message": "You are not allowed to access the requested resource.",
+            "translation": ""
+        }
+    ]
+}

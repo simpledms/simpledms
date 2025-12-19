@@ -1,0 +1,15 @@
+{{- define "EmptyState" }}
+	{{ $ctx := .GetContext }}
+	<div
+		class="flex flex-col gap-y-4 mx-4 exp:m-4 h-full exp:h-fit center-aligned"
+	>
+		{{ render .GetContext .GetIcon }}
+		<div class="text-center">
+			<h3 class="title-lg">{{ render .GetContext .Headline }}</h3>
+			{{ with .Description }}<p>{{ render $ctx . }}</p>{{ end }}
+		</div>
+		<div class="text-center">
+			{{ render .GetContext .Actions }}
+		</div>
+	</div>
+{{ end }}

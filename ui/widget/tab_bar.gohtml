@@ -1,0 +1,17 @@
+{{/* gotype:github.com/simpledms/simpledms/ui/widget.TabBar */}}
+{{- define "TabBar" }}
+	<div id="{{ .GetID }}" class="flex flex-col flex-grow max-h-full overflow-y-hidden">
+		<div
+				class="
+		flex flex-row flex-shrink-0
+		overflow-x-scroll
+		border-b border-outline-variant
+		hide-scrollbar
+		{{ if .IsFlowing }}{{ end }}
+		{{ .GetClass }}">
+            {{ render .GetContext .GetTabs }}
+		</div>
+
+        {{ render .GetContext .ActiveTabContent }}
+	</div>
+{{ end }}

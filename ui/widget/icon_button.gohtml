@@ -1,0 +1,62 @@
+{{- define "IconButton" }}
+	{{/* wrapper is necessary to make script execution relyable on morph, without
+	 the script isn't executed on some morphed IconButton (no clear pattern on first loop) */}}
+	<div id="{{ .GetID }}" class="-m-3">
+		{{ if .HTMXAttrs.IsPageLink }}<a{{ else }}<button{{ end }}
+				class="flex center-aligned size-12 rounded-full cursor-pointer"
+				{{ if .HTMXAttrs.IsPageLink }}
+					href="{{ .HTMXAttrs.GetHxGet }}"
+				{{ end }}
+				{{/* was moved outside of else on 11.12.2024 */}}
+                {{ template "HTMXAttrs" .HTMXAttrs }}
+				{{ if ne .GetPopoverTarget "" }}
+					style="anchor-name: --{{ .GetPopoverTarget }}"
+					popovertarget="{{ .GetPopoverTarget }}"
+					aria-details="{{ .GetPopoverTarget }}" {{/* accessibility for anchor popover relationship */}}
+				{{ end }}
+				{{ if ne .PopoverTargetAction "" }}popovertargetaction="{{ .PopoverTargetAction }}"{{ end }}
+		>
+			<div class="state-layer-on-surface-variant flex center-aligned !size-10">
+				<i class="size-6 material-symbols-outlined">{{ .Icon }}</i>
+			</div>
+
+			{{ render .GetContext .Children }}
+		{{ if .HTMXAttrs.IsPageLink }}</a>{{ else }}</button>{{ end }}
+		<script defer>
+			(function () {
+				let elem = document.getElementById('{{ .GetID }}')
+				elem.addEventListener('click', function(e) {
+					{{/* necessary for stacked links, like in search or on list items */}}
+					e.stopPropagation();
+				})
+				{{ if ne .ReplaceURL "" }}
+					history.replaceState({}, '', '{{ .ReplaceURL }}');
+				{{ end }}
+
+                {{/* duplicate with comments in list_item.tw.gohtml */}}
+				{{- if .HasMenu }}
+					let menu = elem.querySelector('menu');
+					let closePopover = (e) => {
+						if (!menu.contains(e.target)) {
+							e.preventDefault();
+							e.stopImmediatePropagation() // necessary for left click
+						}
+						// TODO not sure why this workaround is necessary
+						setTimeout(function () {
+							menu.hidePopover();
+						}, 1)
+					}
+					menu.addEventListener('toggle', (e) => {
+						if (e.newState === 'open') {
+							document.addEventListener('click', closePopover, true);
+							document.addEventListener('contextmenu', closePopover, true); // right click
+						} else {
+							document.removeEventListener('click', closePopover, true);
+							document.removeEventListener('contextmenu', closePopover, true);
+						}
+					})
+				{{ end }}
+			})()
+		</script>
+	</div>
+{{ end }}

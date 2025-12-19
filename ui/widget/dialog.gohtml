@@ -1,0 +1,279 @@
+{{- /* gotype: github.com/simpledms/simpledms/ui/widget.Dialog */ -}}
+{{- define "Dialog" }}
+	{{- /* TODO convert to dialog? will light dismis still work? */}}
+	{{- /* manual allows to close popovers one by one instead all at once;
+		otherwise the old one is automatically closed (and thus removed from dom)
+		if a new one is opened
+		TODO impl ESC support */}}
+    {{/* hx-ext seems not inherited inside popover; needs verification
+	if really popover causes issue;
+	 transition looks ugly for full screen dialog on mobile (flickering) */}}
+		{{/*
+			adding popover="manual" would make it controlable without JS with popoveraction attribute,
+			but the attribute works only on inputs and buttons, not on divs; when popover attribute is
+			added, current closing behavior no longer works and needs duplication;
+			also if popover="manual" gets added and dialog is opened via popoveraction attribute,
+			inert is not set to all other elements and they are clickable behind the dialog; also
+			hover effects work, so there is no easy preventDefault fix
+		*/}}
+		{{/* TODO use container queries for sidebar? */}}
+	{{/*
+		2025.03.17
+		padding was increased from spec, in spec it's 6, now we have 8; same is used in narrow layout
+	*/}}
+	<dialog id="{{ .GetID }}"
+		{{ template "HTMXAttrs" .HTMXAttrs }}
+		 class="
+		 	js-dialog {{ if .IsSideSheetLayout }}js-side-sheet-dialog{{ end }}
+		 	md:transition-all
+		 	overflow-hidden
+			 bg-surface text-on-surface w-full max-w-full h-dvh max-h-dvh
+			 {{/* backdrop:backdrop-blur-sm backdrop:backdrop-brightness-75 backdrop:backdrop-grayscale backdrop:backdrop-contrast-50 */}}
+			 md:drop-shadow md:border-2 md:border-outline-variant
+			 {{/* IMPORTANT if lg: is changed, media query in JS of this widget must be changed too */}}
+			 {{ if .IsSideSheetLayout }}lg:my-0 lg:mr-0 lg:border-0 lg:border-l lg:rounded-none lg:drop-shadow-none lg:fixed lg:top-0 lg:max-h-full{{ end }}
+			{{/* backdrop:bg-surface-variant */}}
+			 md:max-h-[calc(100dvh-3rem)] md:rounded-xl md:bg-surface-container-lowest
+			  md:min-w-[17.5rem] md:max-w-[35rem]
+			 {{ if .IsDefaultLayout }}
+			 	{{/* was md:w-fit before 28 Nov 24, not sure if w-full is good fit for everything, especially confirm dialog */}}
+			 	md:w-full md:h-fit
+			 {{ end }}
+		 {{ .GetClass }}"
+		 hx-ext="morph"
+	>
+			{{/* this wrapper is necessary to handle backdrop click correctly; if padding is applied on dialog,
+			  click on padding area closes dialog; h-full is also necessary to make sure that empty height click
+			   doesn't close modal, especially for StableLayout */}}
+			{{/* max-h-[inherit] is necessary for inner scrolling, for example in sign up form */}}
+			<div class="js-dialog-content w-full py-0 md:px-0
+					{{ if .IsDefaultLayout }}md:py-8{{ else }}md:py-4{{ end }}
+					{{ if .IsSideSheetLayout }}lg:py-3{{ end }}
+					h-full flex flex-col max-h-[inherit]
+					"
+			>
+				<div class="flex items-center mb-4 md:h-fit gap-x-4 px-6 md:px-8 min-h-14 {{ if .IsDefaultLayout }}md:min-h-0{{ end }}">
+					<div class="{{ if .IsDefaultLayout }}md:hidden{{ end }}">
+						{{ render .GetContext .GetCloseIconButton }}
+					</div>
+					<h2 class="flex-grow md:headline-sm title-lg truncate">
+						{{ render .GetContext .Headline }}
+					</h2>
+					<div class="{{ if .IsDefaultLayout }}md:hidden{{ end }}">
+						{{ render .GetContext .GetSubmitButton }}
+					</div>
+				</div>
+
+				{{/* added flex and flex-col on 04.12.2024 */}}
+				<div class="overflow-y-scroll h-full pl-6 pr-5 md:pr-7 md:pl-8 flex flex-col">
+                    {{ render .GetContext .Child }}
+				</div>
+
+				<div class="hidden pt-6 px-6 md:px-8 justify-end items-center {{ if .IsDefaultLayout }}md:flex{{ end }} flex-row gap-x-2">
+					{{ render .GetContext .GetCloseButton }}
+					{{ render .GetContext .GetSubmitButton }}
+				</div>
+		</div>
+		<script defer>
+			// necessary to have local variables
+			(function() {
+				let dialog = document.getElementById('{{ .GetID }}');
+
+				if (window.matchMedia('(min-width: 1200px)').matches) {
+					// necessary to prevent rendering of snackbar in side sheet...
+					dialog.classList.remove('js-dialog');
+				}
+
+				dialog.addEventListener("htmx:afterRequest", (e) => {
+					if (e.detail.successful && e.detail.requestConfig.triggeringEvent.type === 'submit') {
+						// if dialog is closed directly, response is sometimes not processed, timeout
+						// of 1ms helps, but is not enough on mobile and timeout > 1ms results in flickering
+						// on desktop
+						// TODO not sure if default swap is always executed; we are just waiting for oob swap;
+						//		oob is always rendered after default content, so probably should
+						//
+						// oobAfterSwap did not work reliably, for example when moving files the dialog was
+						// not closed; afterSettle seems to be stable...
+						document.addEventListener('htmx:afterSettle', (e) => {
+							dialog.close();
+						}, {
+							once: true,
+						})
+					}
+				})
+
+				let closeDialogEventListenerFn = (e) => {
+					dialog.close();
+				}
+				document.addEventListener('closeDialog', closeDialogEventListenerFn);
+
+				// close on backdrop click
+				dialog.addEventListener('click', (e) => {
+					if (e.target === dialog) {
+						closeSideSheet();
+						dialog.close();
+					}
+				})
+
+				function closeSideSheet() {
+    				{{ if .IsSideSheetLayout }}
+						_setQueryParamValue('side_sheet', '')
+						dialog.dispatchEvent(new CustomEvent('sideSheetToggled', { bubbles: true }))
+					{{ end }}
+				}
+
+				dialog.querySelector('#{{ .GetCloseIconButtonID }}').addEventListener('click', function() {
+					closeSideSheet();
+					dialog.close();
+				})
+				dialog.querySelector('#{{ .GetCloseButtonID }}').addEventListener('click', function() {
+					closeSideSheet();
+					dialog.close();
+				})
+
+				{{/* if .AsPopover }}
+					dialog.addEventListener("toggle", (e) => {
+						if (e.newState === "closed") {
+							let snackbars = dialog.querySelectorAll(".js-snackbar");
+
+							// move snackbars one layer up, for example when a form is submitted, the snackbar
+							// is added to the form, but the form is autoclosed on after-request event,
+							// and hx-swap-oob currently doesn't support modifiers like `settle:1s`
+							if (snackbars.length > 0) {
+								snackbars.forEach(snackbar => {
+									// selector has duplicate in snackbar HTML
+									document
+										//.querySelector('div[popover].max:not(:has(div[popover].max)),body:not(:has(div[popover].max))')
+										.querySelector('dialog:not(:has(dialog)),body:not(:has(dialog))')
+										.insertAdjacentElement('beforeend', snackbar); // was afterbegin, not sure why
+								})
+							}
+						}
+					})
+				{{- else */}}
+
+				let closeSideSheetEventListenerFn = (e) => {
+					closeSideSheet();
+					dialog.close();
+				}
+
+    			{{ if .IsSideSheetLayout }}
+					// TODO media query condition?
+					document.addEventListener('closeSideSheet', closeSideSheetEventListenerFn);
+				{{ end }}
+
+				{{/*
+				const observer = new MutationObserver(function(mutations) {
+					for (const mutation of mutations) {
+						if (mutation.type === 'childList') {
+							for (const node of mutation.removedNodes) {
+								if (node.id === '{{ .GetID }}') {
+								}
+							}
+						}
+					}
+				})
+				observer.observe(dialog, {
+					childList: true,
+					subtree: true,
+				})
+				*/}}
+
+				dialog.addEventListener("close", (e) => {
+					//let snackbars = dialog.querySelectorAll(".js-snackbar");
+
+					{{/* TODO correct position? are snackbars still there when processed? */}}
+					{{ if not .KeepInDOMOnClose }}
+						document.removeEventListener('closeSideSheet', closeSideSheetEventListenerFn);
+						document.removeEventListener('closeDialog', closeDialogEventListenerFn);
+						dialog.remove();
+					{{ end }}
+
+					{{/*
+					// move snackbars one layer up, for example when a form is submitted, the snackbar
+					// is added to the form, but the form is autoclosed on after-request event,
+					// and hx-swap-oob currently doesn't support modifiers like `settle:1s`
+					if (snackbars.length > 0) {
+						snackbars.forEach(snackbar => {
+							// selector has duplicate in snackbar HTML
+							//
+							// [open] is necessary because if KeepInDOMOnClose is set, closed dialogs are kept in DOM
+							// and one of them could get selected
+							document
+								//.querySelector('div[popover].max:not(:has(div[popover].max)),body:not(:has(div[popover].max))')
+								.querySelector('dialog[open].js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))')
+								.insertAdjacentElement('beforeend', snackbar); // was afterbegin, not sure why
+						})
+					}
+					*/}}
+				})
+
+				let openDialogFn = () => {
+                    {{ if .IsSideSheetLayout }}
+						{{/* must be outside of matchMedia to work properly;
+
+								 changed from .js-side-sheet-dialog to dialog[open].js-side-sheet-dialog on 13 April 2025,
+								 was not necessary, but seemed more robust... old version would probably not work with
+								  KeepInDOMOnClose; verified that show() and showModal() both set `open` attribute;
+								 */}}
+						// close all open sidebars
+						let openDialogs = document.querySelectorAll("dialog[open].js-side-sheet-dialog");
+						openDialogs.forEach(dialogx => dialogx.close())
+
+
+						{{/* sidebar is only shown on screens larger than lg, thus disable
+										backdrop click if screen is larger and sidebar layout is used only */}}
+						if (window.matchMedia('(min-width: 1200px)').matches) {
+							dialog.show(); {{/* doesn't set inert, thus everything can be blicked */}}
+							return;
+						}
+                    {{ end }}
+
+					dialog.showModal(); {{/* sets inert, thus background is not interactive */}}
+				}
+
+				let toggleDialogFn = () => {
+					if (dialog.open === true) {
+						{{ if .IsSideSheetLayout }}
+							closeSideSheet()
+						{{ end }}
+						dialog.close();
+						return;
+					}
+					openDialogFn();
+					{{ if .IsSideSheetLayout }}
+						{{/* TODO move to openDialogFn or would it have side effects? impl for toggle FileDetails button */}}
+						_setQueryParamValue('side_sheet', dialog.id)
+					{{ end }}
+				}
+
+				let openOnLoadFn = () => {
+                    {{- if (or .IsOpenOnLoad .IsOpenOnLoadOnExtraLargeScreens) }}
+						if (dialog) {
+							{{ if .IsOpenOnLoadOnExtraLargeScreens | and (not .IsOpenOnLoad) }}
+								if (window.matchMedia('(min-width: 1600px)').matches) {
+									openDialogFn();
+									setTimeout(() => {
+										// function not available directly...
+										_setQueryParamValue('side_sheet', dialog.id)
+									}, 100)
+								}
+							{{ else }}
+								openDialogFn();
+							{{ end }}
+						}
+                    {{ end }}
+				}
+
+				if (dialog) {
+					openOnLoadFn()
+
+					dialog.showCustom = openDialogFn;
+					dialog.toggleCustom = toggleDialogFn;
+					// called in base.gohtml
+					dialog.openOnLoad = openOnLoadFn;
+				}
+			})()
+		</script>
+	</dialog>
+{{ end }}

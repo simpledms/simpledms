@@ -1,0 +1,15 @@
+{{- /*gotype: github.com/simpledms/simpledms/ui/widget.NarrowLayout */ -}}
+{{- define "NarrowLayout" }}
+	{{/* this is a mix of Card and Dialog */}}
+	<div class="flex flex-col bg-surface md:bg-surface-variant
+		text-on-surface md:text-on-surface-variant h-dvh center-aligned">
+		<div id="innerContent" class="w-full max-w-md min-h-dvh md:min-h-fit px-6 md:px-8 py-6 md:py-8
+			md:rounded-xl bg-surface text-on-surface
+			md:border md:border-outline-variant md:drop-shadow
+			overflow-y-scroll
+			">
+            {{ render .GetContext .Content }}
+		</div>
+	</div>
+	<div class="py-1.5 px-3 fixed bottom-0 text-center text-primary text-small w-full"><a href="https://simpledms.eu/open-source"><small>Powered by SimpleDMS</small></a></div>
+{{ end }}

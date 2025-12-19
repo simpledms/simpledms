@@ -1,0 +1,45 @@
+{{- /*gotype: github.com/simpledms/simpledms/ui/widget.AssistChip */ -}}
+{{- define "AssistChip" }}
+	{{ $ctx := .GetContext }}
+	{{/* TODO button in all use cases? */}}
+	<button
+			id="{{ .GetID }}"
+			class="h-7 rounded-sm inline-flex
+				{{ if .IsHighlightedState }}
+					bg-secondary-container
+				{{ else }}
+					bg-surface-container-highest
+					{{/* following is spec implementation of AssistChip; was changed because style
+					of FilterChips (bg-surface-container-highest) looks better for Browse filters;
+					maybe use FilterChips for them or implement Style attribute for AssistChip
+
+					bg-surface-container-low
+					outline -outline-offset-1 outline-1 outline-outline-variant
+					*/}}
+				{{ end }}
+				{{ if .IsActive }}
+					outline -outline-offset-2 outline-2 outline-secondary
+				{{ end }}
+			"
+			{{ template "HTMXAttrs" .HTMXAttrs }}
+	>
+		<div class="state-layer-on-surface-variant center-aligned inline-flex">
+			<label class="h-full label-lg text-nowrap hover:cursor-pointer inline-flex center-aligned
+				{{ if .IsHighlightedState }}text-on-secondary-container{{ else }}text-on-surface-variant{{ end }}
+				{{ if not .LeadingIcon }}pl-4{{ end }} {{ if not .Badge | and (ne .Label nil) }}pr-4{{ end }}"
+			>
+				{{ if .LeadingIcon }}
+					<i class="material-symbols-outlined icon-sm {{ if eq .Label nil }}pl-2{{ else }}pl-3{{ end }} pr-2">
+						{{ .LeadingIcon }}
+					</i>
+				{{ end }}
+				{{ render .GetContext .Label }}
+				{{ with .GetBadge }}
+					<div class="pl-2 pr-3">
+						{{ render $ctx . }}
+					</div>
+				{{ end }}
+			</label>
+		</div>
+	</button>
+{{ end }}

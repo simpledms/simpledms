@@ -1,0 +1,137 @@
+package tagging
+
+// package action
+
+import (
+	autil "github.com/simpledms/simpledms/app/simpledms/action/util"
+	"github.com/simpledms/simpledms/app/simpledms/common"
+	"github.com/simpledms/simpledms/app/simpledms/ctxx"
+	"github.com/simpledms/simpledms/app/simpledms/enttenant/tag"
+	"github.com/simpledms/simpledms/app/simpledms/event"
+	"github.com/simpledms/simpledms/app/simpledms/model/tagging/tagtype"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
+)
+
+type MoveTagToGroupData struct {
+	TagID      int64 `form_attr_type:"hidden"`
+	GroupTagID int64 `form_attr_type:"hidden"`
+}
+
+type MoveTagToGroup struct {
+	infra   *common.Infra
+	actions *Actions
+	*actionx.Config
+	*autil.FormHelper[MoveTagToGroupData]
+}
+
+func NewMoveTagToGroup(infra *common.Infra, actions *Actions) *MoveTagToGroup {
+	config := actionx.NewConfig(
+		actions.Route("move-tag-to-group"),
+		false,
+	)
+	return &MoveTagToGroup{
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+		FormHelper: autil.NewFormHelper[MoveTagToGroupData](
+			infra,
+			config,
+			wx.T("Move tag to group"),
+		),
+	}
+}
+
+func (qq *MoveTagToGroup) Data(tagID int64, groupTagID int64) *MoveTagToGroupData {
+	return &MoveTagToGroupData{
+		TagID:      tagID,
+		GroupTagID: groupTagID,
+	}
+}
+
+func (qq *MoveTagToGroup) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	data, err := autil.FormData[MoveTagToGroupData](rw, req, ctx)
+	if err != nil {
+		return err
+	}
+
+	var snackbar *wx.Snackbar
+
+	if data.GroupTagID == 0 {
+		ctx.TenantCtx().TTx.Tag.UpdateOneID(data.TagID).ClearGroupID().SaveX(ctx)
+		snackbar = wx.NewSnackbarf("Deselected group.")
+	} else {
+		ctx.TenantCtx().TTx.Tag.UpdateOneID(data.TagID).SetGroupID(data.GroupTagID).SaveX(ctx)
+		groupTag := ctx.TenantCtx().TTx.Tag.GetX(ctx, data.GroupTagID)
+		snackbar = wx.NewSnackbarf("Moved to group «%s».", groupTag.Name)
+	}
+
+	// TODO group ID or tag ID?
+	// rw.Header().Set("HX-Trigger", event.TagMovedToGroup.String(data.TagID))
+
+	// not sure why necessary with HX-Reswap=none, but doesn't work without it
+	rw.Header().Set("HX-Trigger-After-Swap", event.TagUpdated.String())
+	rw.Header().Add("HX-Reswap", "none")
+	rw.AddRenderables(snackbar)
+
+	return nil
+}
+
+func (qq *MoveTagToGroup) FormHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	data, err := autil.FormData[MoveTagToGroupData](rw, req, ctx)
+	if err != nil {
+		return err
+	}
+
+	groupTags := ctx.TenantCtx().TTx.Tag.Query().Where(tag.TypeEQ(tagtype.Group)).AllX(ctx)
+	tag := ctx.TenantCtx().TTx.Tag.Query().Where(tag.ID(data.TagID)).OnlyX(ctx)
+
+	hxTarget := req.URL.Query().Get("hx-target")
+
+	var listItems []*wx.ListItem
+
+	if tag.GroupID > 0 {
+		listItems = append(listItems, &wx.ListItem{
+			Headline: wx.T("Deselect group"),
+			Type:     wx.ListItemTypeHelper,
+			HTMXAttrs: wx.HTMXAttrs{
+				HxPost:   qq.Endpoint(),
+				HxVals:   util.JSON(qq.Data(data.TagID, 0)),
+				HxOn:     event.CloseDialog.HxOn("click"),
+				HxTarget: hxTarget,
+			},
+		})
+	}
+
+	for _, groupTag := range groupTags {
+		if groupTag.ID == tag.GroupID {
+			continue
+		}
+		listItems = append(listItems, &wx.ListItem{
+			Headline: wx.Tu(groupTag.Name),
+
+			HTMXAttrs: wx.HTMXAttrs{
+				HxPost:   qq.Endpoint(),
+				HxVals:   util.JSON(qq.Data(data.TagID, groupTag.ID)),
+				HxOn:     event.CloseDialog.HxOn("click"),
+				HxTarget: hxTarget,
+			},
+		})
+	}
+
+	return qq.infra.Renderer().Render(
+		rw,
+		ctx,
+		autil.WrapWidget(
+			wx.T("Move tag to group"),
+			nil,
+			&wx.List{
+				Children: listItems,
+			},
+			actionx.ResponseWrapperDialog,
+			wx.DialogLayoutDefault,
+		),
+	)
+}

@@ -1,0 +1,5 @@
+go 1.24.6
+
+use .
+
+// replace github.com/marcobeierer/go-formutils/v2 => ./../../marcobeierer/go-formutils/v2

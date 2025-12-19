@@ -1,0 +1,11 @@
+{{ define "Column" }}
+    <div
+            id="{{ .GetID }}"
+            class="
+                flex flex-col {{ if not .NoOverflowHidden }}overflow-x-hidden{{ end }}
+                w-full {{ if not .AutoHeight }}h-full{{ end }} {{ .GetClass }}"
+            {{ template "HTMXAttrs" .HTMXAttrs }}
+    >
+        {{ render .GetContext .Children }}
+    </div>
+{{- end }}

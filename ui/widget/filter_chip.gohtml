@@ -1,0 +1,49 @@
+{{- define "FilterChip" }}
+	<div
+			id="{{ .GetID }}"
+			{{ template "HTMXAttrs" .HTMXAttrs }}
+			class="h-7 rounded-sm inline-flex
+			bg-surface-container-highest
+			{{/* has-[:checked]:outline-0
+			outline outline-outline-variant outline-1 -outline-offset-1
+			bg-surface-container-low
+			*/}}
+			has-[:checked]:bg-secondary-container">
+		<div class="state-layer-on-surface-variant center-aligned inline-flex
+				">
+			<label class="
+				h-full label-lg text-nowrap text-on-surface-variant inline-flex center-aligned
+				has-[:checked]:text-on-secondary-container hover:cursor-pointer
+				{{ if .LeadingIcon }}pl-1{{ else }}pl-4{{ end }}
+				{{ if .TrailingIcon }}pr-1{{ else }}pr-4{{ end }}
+				">
+				<input
+                        {{/* appearance-none gets rid of white background */}}
+						class="appearance-none peer
+"
+						type="{{ .GetInputType }}"
+						name="{{ .Name }}"
+						value="{{ .Value }}"
+                        {{ if .IsChecked }}checked{{ end }}
+				/>
+				{{ with .LeadingIcon }}
+					<i class="material-symbols-outlined icon-sm px-2">{{ . }}</i>
+				{{ end }}
+                {{ render .GetContext .Label }}
+                {{ with .TrailingIcon }}
+					<i class="material-symbols-outlined icon-sm px-2">{{ . }}</i>
+                {{ end }}
+			</label>
+		</div>
+	</div>
+	<script defer>
+		(function () {
+			let elem = document.querySelector('#{{ .GetID }} input[type={{ .GetInputType }}]');
+			elem.addEventListener('click', function(e) {
+                {{/* necessary for stacked links, like in search or on list items, to prevent
+                 executing click handler multiple times */}}
+				e.stopPropagation();
+			})
+		})()
+	</script>
+{{ end }}
