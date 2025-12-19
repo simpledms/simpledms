@@ -1,12 +1,12 @@
 # Contributing
 
-SimpleDMS is [selling exceptions to the AGPL](https://www.fsf.org/blogs/rms/selling-exceptions). Therefore it is necessary for contributors to sign a Contribution License Agreement (CLA).
+SimpleDMS is selling exceptions to the AGPL. To make this possible, it is necessary for contributors to sign a Contribution License Agreement (CLA).
 
 You can find more information on the business model of SimpleDMS in the README:
 https://github.com/simpledms/simpledms?tab=readme-ov-file#open-source-philosophy-and-business-model
 
-An article from Richard Stallman on the practice of selling exceptions to the GPL can be found on the Free Software Foundation blog:
-https://www.fsf.org/blogs/rms/selling-exceptions
+An article from Richard Stallman on the practice of selling exceptions to the GPL can be found on the GNU:
+https://www.gnu.org/philosophy/selling-exceptions.html.en
 
 The CLA is based on the Individual Contributor License Agreement v2.2 by the Apache Software Foundation. You can find the CLA in the repository:
 https://github.com/simpledms/simpledms/blob/main/.cla/v1/cla.md
