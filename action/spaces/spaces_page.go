@@ -7,8 +7,8 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/common/tenantrole"
 	"github.com/simpledms/simpledms/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/partial"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -61,7 +61,7 @@ func (qq *SpacesPage) Widget(ctx ctxx.Context, state *SpacesPageState) renderabl
 	}
 
 	return &wx.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, "spaces", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, "spaces", fabs),
 		Content: &wx.DefaultLayout{
 			AppBar: qq.appBar(ctx),
 			Content: qq.actions.SpaceCards.Widget(
@@ -76,7 +76,7 @@ func (qq *SpacesPage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "hub",
 		},
-		LeadingAltMobile: partial.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx),
 		Title: &wx.AppBarTitle{
 			Text: wx.Tuf("%s «%s»", wx.T("Spaces").String(ctx), ctx.TenantCtx().Tenant.Name),
 		},

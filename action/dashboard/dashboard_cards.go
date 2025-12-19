@@ -11,10 +11,10 @@ import (
 	"github.com/simpledms/simpledms/model/common/mainrole"
 	"github.com/simpledms/simpledms/model/modelmain"
 	"github.com/simpledms/simpledms/renderable"
+	"github.com/simpledms/simpledms/ui/uix/event"
+	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/event"
-	"github.com/simpledms/simpledms/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -210,7 +210,7 @@ func (qq *DashboardCards) tenantCard(ctx ctxx.Context, tenantx *entmain.Tenant) 
 			HTMXAttrs: wx.HTMXAttrs{
 				// TODO show snackbar that user knows something has happened
 				// 		maybe just add timestamp to description?
-				HxGet: route.Dashboard(),
+				HxGet: route2.Dashboard(),
 			},
 		})
 	}
@@ -243,7 +243,7 @@ func (qq *DashboardCards) spaceCard(ctx ctxx.Context, spacex *enttenant.Space, t
 				Label:     wx.T("Select"), // TODO Browse, Open, Switch or activate? or Select?
 				StyleType: wx.ButtonStyleTypeTonal,
 				HTMXAttrs: wx.HTMXAttrs{
-					HxGet: route.BrowseRoot(tenant.PublicID.String(), spacex.PublicID.String()),
+					HxGet: route2.BrowseRoot(tenant.PublicID.String(), spacex.PublicID.String()),
 				},
 			},
 		},
@@ -398,7 +398,7 @@ func (qq *DashboardCards) manageSpacesCard(ctx ctxx.Context, tenantx *entmain.Te
 			Label:     wx.T("Manage spaces"),
 			StyleType: wx.ButtonStyleTypeTonal,
 			HTMXAttrs: wx.HTMXAttrs{
-				HxGet: route.SpacesRoot(tenantx.PublicID.String()),
+				HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
 			},
 		}},
 	}, true
@@ -417,7 +417,7 @@ func (qq *DashboardCards) manageSpacesBtn(ctx ctxx.Context, tenantx *entmain.Ten
 		Label:     wx.T("Manage spaces"),
 		StyleType: wx.ButtonStyleTypeElevated,
 		HTMXAttrs: wx.HTMXAttrs{
-			HxGet: route.SpacesRoot(tenantx.PublicID.String()),
+			HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
 		},
 	}, true
 }
@@ -472,7 +472,7 @@ func (qq *DashboardCards) manageUsersBtn(ctx ctxx.Context, tenantx *entmain.Tena
 		Label:     wx.T("Manage users"),
 		StyleType: wx.ButtonStyleTypeElevated,
 		HTMXAttrs: wx.HTMXAttrs{
-			HxGet: route.ManageUsersOfTenant(tenantx.PublicID.String()),
+			HxGet: route2.ManageUsersOfTenant(tenantx.PublicID.String()),
 		},
 	}, true
 }

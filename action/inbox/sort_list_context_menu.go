@@ -2,8 +2,8 @@ package inbox
 
 import (
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/event"
 )
 
 type SortListContextMenu struct {

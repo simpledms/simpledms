@@ -4,7 +4,7 @@ import (
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/action/tagging"
 	"github.com/simpledms/simpledms/common"
-	"github.com/simpledms/simpledms/uix/route"
+	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
 type Actions struct {

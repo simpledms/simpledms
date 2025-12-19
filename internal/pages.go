@@ -3,21 +3,21 @@ package internal
 import (
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/common"
-	"github.com/simpledms/simpledms/uix/page"
+	page2 "github.com/simpledms/simpledms/ui/uix/page"
 )
 
 // Deprecated: implement directly as action
 type Pages struct {
-	Browse              *page.Browse
-	BrowseWithSelection *page.BrowseWithSelection
+	Browse              *page2.Browse
+	BrowseWithSelection *page2.BrowseWithSelection
 	// Find                *page.Find
 	// FindWithSelection *page.FindWithSelection
 	// TODO does this belong here?
-	Download           *page.Download
-	Inbox              *page.Inbox
-	InboxWithSelection *page.InboxWithSelection
+	Download           *page2.Download
+	Inbox              *page2.Inbox
+	InboxWithSelection *page2.InboxWithSelection
 
-	ManageDocumentTypes *page.ManageDocumentTypes
+	ManageDocumentTypes *page2.ManageDocumentTypes
 	// ManageTags          *page.ManageTags
 }
 
@@ -28,15 +28,15 @@ func NewPages(
 ) *Pages {
 	// TODO refactor
 	return &Pages{
-		Browse:              page.NewBrowse(infra, actions.Browse),
-		BrowseWithSelection: page.NewBrowseWithSelection(infra, actions.Browse),
+		Browse:              page2.NewBrowse(infra, actions.Browse),
+		BrowseWithSelection: page2.NewBrowseWithSelection(infra, actions.Browse),
 		// Find:                page.NewFind(infra, actions.Find),
 		// FindWithSelection:  page.NewFindWithSelection(infra, actions.Find),
-		Download:           page.NewDownload(infra, actions),
-		Inbox:              page.NewInbox(infra, actions.Inbox),
-		InboxWithSelection: page.NewInboxWithSelection(infra, actions.Inbox),
+		Download:           page2.NewDownload(infra, actions),
+		Inbox:              page2.NewInbox(infra, actions.Inbox),
+		InboxWithSelection: page2.NewInboxWithSelection(infra, actions.Inbox),
 
-		ManageDocumentTypes: page.NewManageDocumentTypes(infra, actions.DocumentType),
+		ManageDocumentTypes: page2.NewManageDocumentTypes(infra, actions.DocumentType),
 		// ManageTags:          page.NewManageTags(infra, actions.Tagging),
 	}
 }

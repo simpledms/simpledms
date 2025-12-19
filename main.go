@@ -15,7 +15,7 @@ import (
 	_ "github.com/simpledms/simpledms/db/entmain/runtime"
 	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
 	"github.com/simpledms/simpledms/server"
-	"github.com/simpledms/simpledms/uix"
+	"github.com/simpledms/simpledms/ui/uix"
 )
 
 /*//go:generate ent generate simpledms/db/entx/schema/ --feature intercept,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./enttmpl*/

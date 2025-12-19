@@ -12,8 +12,8 @@ import (
 	"github.com/simpledms/simpledms/model/common/attributetype"
 	"github.com/simpledms/simpledms/model/tagging/tagtype"
 	"github.com/simpledms/simpledms/renderable"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )

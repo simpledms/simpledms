@@ -10,9 +10,9 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/partial"
-	"github.com/simpledms/simpledms/uix/route"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -59,7 +59,7 @@ func (qq *SelectSpacePage) WaitWidget(ctx ctxx.Context, uploadToken string, stat
 
 	// TODO make clear if nothing happens, if there are no files...
 	return &wx.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, "upload", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, "upload", fabs),
 		Content: &wx.ListDetailLayout{ // TODO implement a FullPageLayout instead
 			AppBar: qq.appBar(ctx),
 			List: []wx.IWidget{
@@ -141,7 +141,7 @@ func (qq *SelectSpacePage) Widget(ctx ctxx.Context, uploadToken string, state *S
 	fabs := []*wx.FloatingActionButton{}
 
 	mainLayout := &wx.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, "upload", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, "upload", fabs),
 		Content: &wx.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List:   children,
@@ -156,7 +156,7 @@ func (qq *SelectSpacePage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "upload", // TODO hub or upload?
 		},
-		LeadingAltMobile: partial.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx),
 		Title: &wx.AppBarTitle{
 			Text: wx.T("Select space"),
 		},

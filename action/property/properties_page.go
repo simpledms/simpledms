@@ -5,8 +5,8 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/partial"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -55,7 +55,7 @@ func (qq *PropertiesPage) Widget(
 	)
 
 	mainLayout := &wx.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, "properties", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, "properties", fabs),
 		Content: &wx.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List:   children,
@@ -69,7 +69,7 @@ func (qq *PropertiesPage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "tune",
 		},
-		LeadingAltMobile: partial.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx),
 		Title: &wx.AppBarTitle{
 			Text: wx.T("Fields"),
 		},

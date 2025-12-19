@@ -5,8 +5,8 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/partial"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -31,7 +31,7 @@ func (qq *AboutPage) Widget(ctx ctxx.Context) renderable.Renderable {
 	var fabs []*wx.FloatingActionButton
 
 	mainLayout := &wx.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, "about", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, "about", fabs),
 		Content: &wx.DefaultLayout{
 			AppBar: qq.appBar(ctx),
 			Content: &wx.Column{
@@ -120,7 +120,7 @@ func (qq *AboutPage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "info",
 		},
-		LeadingAltMobile: partial.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx),
 		Title: &wx.AppBarTitle{
 			Text: wx.T("About SimpleDMS"),
 		},

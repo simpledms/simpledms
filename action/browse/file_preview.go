@@ -8,9 +8,9 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model"
+	"github.com/simpledms/simpledms/ui/uix/event"
+	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/event"
-	"github.com/simpledms/simpledms/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -102,7 +102,7 @@ func (qq *FilePreview) Widget(
 		Child: &wx.Column{
 			Children: []wx.IWidget{
 				&wx.FilePreview{
-					FileURL:  route.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
+					FileURL:  route2.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
 					Filename: filex.Filename(ctx),
 					MimeType: filex.CurrentVersion(ctx).Data.MimeType,
 				},
@@ -122,7 +122,7 @@ func (qq *FilePreview) appBar(ctx ctxx.Context, dirID string, title *wx.Text, fi
 			Icon: "close",
 			// TODO use link instead?
 			HTMXAttrs: wx.HTMXAttrs{
-				HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, dirID),
+				HxGet:     route2.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, dirID),
 				HxOn:      event.DetailsClosed.HxOn("click"),
 				HxHeaders: autil.CloseDetailsHeader(),
 			},
@@ -139,7 +139,7 @@ func (qq *FilePreview) appBar(ctx ctxx.Context, dirID string, title *wx.Text, fi
 				},
 			},
 			&wx.Link{
-				Href:      route.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
+				Href:      route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
 				IsNoColor: true,
 				Filename:  filex.Filename(ctx),
 				Child: &wx.IconButton{

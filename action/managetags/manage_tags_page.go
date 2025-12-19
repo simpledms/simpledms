@@ -5,8 +5,8 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/partial"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -62,7 +62,7 @@ func (qq *ManageTagsPage) Widget(
 	}
 
 	return &wx.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, "manage-tags", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, "manage-tags", fabs),
 		Content: &wx.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
 			Content: qq.actions.TagList.Widget(ctx, qq.actions.TagList.Data(0), &state.TagListState),
@@ -75,7 +75,7 @@ func (qq *ManageTagsPage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "label",
 		},
-		LeadingAltMobile: partial.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx),
 		Title: &wx.AppBarTitle{
 			Text: wx.T("Tags"),
 		},

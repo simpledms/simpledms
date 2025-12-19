@@ -6,8 +6,8 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/partial"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -55,7 +55,7 @@ func (qq *ManageUsersOfSpacePage) Widget(
 	*/
 
 	return &wx.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, "manage-users", nil),
+		Navigation: partial2.NewNavigationRail(ctx, "manage-users", nil),
 		Content: &wx.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
 			Content: qq.actions.UsersOfSpaceListPartial.Widget(ctx, &state.UsersOfSpaceListPartialState),
@@ -68,7 +68,7 @@ func (qq *ManageUsersOfSpacePage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "person",
 		},
-		LeadingAltMobile: partial.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx),
 		Title: &wx.AppBarTitle{
 			Text: wx.Tf("Users «%s»", ctx.SpaceCtx().Space.Name),
 		},

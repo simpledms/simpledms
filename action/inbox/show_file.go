@@ -5,9 +5,9 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model"
+	"github.com/simpledms/simpledms/ui/uix/partial"
+	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/partial"
-	"github.com/simpledms/simpledms/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -83,7 +83,7 @@ func (qq *ShowFile) Widget(
 	return &wx.DetailsWithSheet{
 		AppBar: partial.NewFullscreenDialogAppBar(
 			wx.Tuf("%s", filex.Data.Name),
-			route.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
+			route2.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
 			[]wx.IWidget{
 				&wx.IconButton{
 					// TODO other icon if already open or hide...
@@ -96,7 +96,7 @@ func (qq *ShowFile) Widget(
 		),
 		Child: &wx.Column{
 			Children: &wx.FilePreview{
-				FileURL:  route.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
+				FileURL:  route2.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
 				Filename: filex.Data.Name,
 				MimeType: filex.CurrentVersion(ctx).Data.MimeType,
 			},

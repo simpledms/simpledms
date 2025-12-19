@@ -2,7 +2,7 @@ package managetenantusers
 
 import (
 	"github.com/simpledms/simpledms/common"
-	"github.com/simpledms/simpledms/uix/route"
+	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
 type Actions struct {

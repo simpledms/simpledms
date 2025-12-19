@@ -29,8 +29,8 @@ import (
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/model/modelmain"
+	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/route"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -461,9 +461,9 @@ func (qq *Router) context(
 			Where(tenant.InitializedAtNotNil()).
 			Only(visitorCtx)
 		if err != nil {
-			http.Redirect(rw, req.Request, route.Dashboard(), http.StatusSeeOther) // 302 or 303?
+			http.Redirect(rw, req.Request, route2.Dashboard(), http.StatusSeeOther) // 302 or 303?
 		} else {
-			http.Redirect(rw, req.Request, route.SpacesRoot(tenantx.PublicID.String()), http.StatusSeeOther) // 302 or 303?
+			http.Redirect(rw, req.Request, route2.SpacesRoot(tenantx.PublicID.String()), http.StatusSeeOther) // 302 or 303?
 		}
 		return visitorCtx, nil, true, nil
 	}

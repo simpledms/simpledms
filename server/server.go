@@ -38,9 +38,9 @@ import (
 	"github.com/simpledms/simpledms/model/modelmain"
 	"github.com/simpledms/simpledms/scheduler"
 	"github.com/simpledms/simpledms/ui"
+	"github.com/simpledms/simpledms/ui/uix/partial"
+	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/partial"
-	"github.com/simpledms/simpledms/uix/route"
 	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/recoverx"
 )
@@ -451,38 +451,38 @@ func (qq *Server) Start() error {
 
 	// TODO find a better way to handle paths
 	// TODO in TTx or not necessary because read only?
-	router.RegisterPage(route.DashboardRoute(), actions.Dashboard.DashboardPage.Handler)
-	router.RegisterPage(route.AboutPageRoute(), actions.About.AboutPage.Handler)
+	router.RegisterPage(route2.DashboardRoute(), actions.Dashboard.DashboardPage.Handler)
+	router.RegisterPage(route2.AboutPageRoute(), actions.About.AboutPage.Handler)
 
-	router.RegisterPage(route.BrowseRoute(false), pages.Browse.Handler)
-	router.RegisterPage(route.BrowseRoute(true), pages.Browse.Handler)
-	router.RegisterPage(route.BrowseRouteWithSelection(), pages.BrowseWithSelection.Handler)
+	router.RegisterPage(route2.BrowseRoute(false), pages.Browse.Handler)
+	router.RegisterPage(route2.BrowseRoute(true), pages.Browse.Handler)
+	router.RegisterPage(route2.BrowseRouteWithSelection(), pages.BrowseWithSelection.Handler)
 	// router.RegisterPage(route.BrowseRouteWithSelection(false), pages.BrowseWithSelection.Handler)
 
-	router.RegisterPage(route.InboxRoute(false, false), pages.Inbox.Handler)
-	router.RegisterPage(route.InboxRoute(true, false), pages.InboxWithSelection.Handler)
+	router.RegisterPage(route2.InboxRoute(false, false), pages.Inbox.Handler)
+	router.RegisterPage(route2.InboxRoute(true, false), pages.InboxWithSelection.Handler)
 	// for use with PWA share target
 	// router.RegisterPage(route.InboxRoute(false, true), pages.Inbox.Handler)
 
-	router.RegisterPage(route.SpacesRoute(), actions.Spaces.SpacesPage.Handler)
+	router.RegisterPage(route2.SpacesRoute(), actions.Spaces.SpacesPage.Handler)
 
-	router.RegisterPage(route.ManageDocumentTypesRoute(), pages.ManageDocumentTypes.Handler)
-	router.RegisterPage(route.ManageDocumentTypesRouteWithSelection(), pages.ManageDocumentTypes.Handler)
+	router.RegisterPage(route2.ManageDocumentTypesRoute(), pages.ManageDocumentTypes.Handler)
+	router.RegisterPage(route2.ManageDocumentTypesRouteWithSelection(), pages.ManageDocumentTypes.Handler)
 
-	router.RegisterPage(route.ManageTagsRoute(), actions.ManageTags.ManageTagsPage.Handler)
+	router.RegisterPage(route2.ManageTagsRoute(), actions.ManageTags.ManageTagsPage.Handler)
 	// router.RegisterPage(route.ManageTagsRouteWithSelection(), actions.Tagging.ManageTagsPage.Handler)
 
-	router.RegisterPage(route.PropertiesRoute(), actions.Property.PropertiesPage.Handler)
-	router.RegisterPage(route.ManageUsersOfSpaceRoute(), actions.ManageSpaceUsers.ManageUsersOfSpacePage.Handler)
-	router.RegisterPage(route.ManageUsersOfTenantRoute(), actions.ManageTenantUsers.ManageUsersOfTenantPage.Handler)
+	router.RegisterPage(route2.PropertiesRoute(), actions.Property.PropertiesPage.Handler)
+	router.RegisterPage(route2.ManageUsersOfSpaceRoute(), actions.ManageSpaceUsers.ManageUsersOfSpacePage.Handler)
+	router.RegisterPage(route2.ManageUsersOfTenantRoute(), actions.ManageTenantUsers.ManageUsersOfTenantPage.Handler)
 
-	router.RegisterPage(route.SelectSpaceRoute(false), actions.OpenFile.SelectSpacePage.Handler)
-	router.RegisterPage(route.SelectSpaceRoute(true), actions.OpenFile.SelectSpacePage.Handler)
+	router.RegisterPage(route2.SelectSpaceRoute(false), actions.OpenFile.SelectSpacePage.Handler)
+	router.RegisterPage(route2.SelectSpaceRoute(true), actions.OpenFile.SelectSpacePage.Handler)
 
 	// router.RegisterPage(route.FindRoute(false), actions.Find.Page.Handler)
 	// router.RegisterPage(route.FindRoute(true), actions.Find.PageWithSelection.Handler)
 
-	router.RegisterPage(route.DownloadRoute(), pages.Download.Handler)
+	router.RegisterPage(route2.DownloadRoute(), pages.Download.Handler)
 
 	router.RegisterActions(actions)
 

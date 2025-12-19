@@ -3,9 +3,9 @@ package spaces
 import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model"
+	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/uix/route"
 )
 
 type SpaceContextMenu struct {
@@ -56,28 +56,28 @@ func (qq *SpaceContextMenu) Widget(ctx ctxx.Context, spacem *model.Space) *wx.Me
 			LeadingIcon: "category", // TODO category or description?
 			Label:       wx.T("Document types"),
 			HTMXAttrs: wx.HTMXAttrs{
-				HxGet: route.ManageDocumentTypes(ctx.TenantCtx().TenantID, spacem.Data.PublicID.String()),
+				HxGet: route2.ManageDocumentTypes(ctx.TenantCtx().TenantID, spacem.Data.PublicID.String()),
 			},
 		},
 		{
 			LeadingIcon: "label",
 			Label:       wx.T("Tags"),
 			HTMXAttrs: wx.HTMXAttrs{
-				HxGet: route.ManageTags(ctx.TenantCtx().TenantID, spacem.Data.PublicID.String()),
+				HxGet: route2.ManageTags(ctx.TenantCtx().TenantID, spacem.Data.PublicID.String()),
 			},
 		},
 		{
 			LeadingIcon: "tune", // tune or assignment
 			Label:       wx.T("Fields"),
 			HTMXAttrs: wx.HTMXAttrs{
-				HxGet: route.ManageProperties(ctx.TenantCtx().TenantID, spacem.Data.PublicID.String()),
+				HxGet: route2.ManageProperties(ctx.TenantCtx().TenantID, spacem.Data.PublicID.String()),
 			},
 		},
 		{
 			LeadingIcon: "person",
 			Label:       wx.T("Users"),
 			HTMXAttrs: wx.HTMXAttrs{
-				HxGet: route.ManageUsersOfSpace(ctx.TenantCtx().TenantID, spacem.Data.PublicID.String()),
+				HxGet: route2.ManageUsersOfSpace(ctx.TenantCtx().TenantID, spacem.Data.PublicID.String()),
 			},
 		},
 	}
