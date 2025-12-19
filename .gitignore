@@ -1,6 +1,5 @@
 *.sqlite3**
 *.sqlite
-monorepo
 README.md
 .tmp
 .secrets
@@ -8,6 +7,6 @@ README.md
 .simpledms/inbox/**
 **/.testdata/**
 node_modules
-app/simpledms/simpledms
+simpledms
 .env
 .idea/**

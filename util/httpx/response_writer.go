@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/simpledms/simpledms/app/simpledms/renderable"
+	"github.com/simpledms/simpledms/renderable"
 )
 
 type ResponseWriter interface {

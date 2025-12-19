@@ -6,7 +6,7 @@ import (
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 
-	"github.com/simpledms/simpledms/app/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
 )
 
 // TODO get rid of global var...

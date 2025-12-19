@@ -13,7 +13,7 @@ import (
 	"golang.org/x/text/collate"
 	"golang.org/x/text/language"
 
-	"github.com/simpledms/simpledms/app/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
 )
 
 // !!!!

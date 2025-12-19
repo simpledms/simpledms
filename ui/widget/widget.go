@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/simpledms/simpledms/app/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
 )
 
 type IWidget interface{}

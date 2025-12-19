@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/simpledms/simpledms/app/simpledms/ctxx"
-	"github.com/simpledms/simpledms/app/simpledms/renderable"
+	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/renderable"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 

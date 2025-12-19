@@ -26,7 +26,7 @@ RUN apt update
 RUN apt install -y libicu-dev
 
 COPY . .
-RUN CGO_ENABLED=1 go build -v -tags "sqlite_fts5 sqlite_json sqlite_foreign_keys sqlite_icu" -o /usr/local/bin/simpledms ./app/simpledms
+RUN CGO_ENABLED=1 go build -v -tags "sqlite_fts5 sqlite_json sqlite_foreign_keys sqlite_icu" -o /usr/local/bin/simpledms .
 #RUN go build -v -o /usr/local/bin/app ./...
 
 # having a separate build-env, for example to not include source files or testing databases

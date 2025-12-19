@@ -1,7 +1,7 @@
 package widget
 
 import (
-	"github.com/simpledms/simpledms/app/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
 )
 
 type FormFields struct {

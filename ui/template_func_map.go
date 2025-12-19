@@ -10,8 +10,8 @@ import (
 
 	sprig "github.com/go-task/slim-sprig/v3"
 
-	"github.com/simpledms/simpledms/app/simpledms/ctxx"
-	"github.com/simpledms/simpledms/app/simpledms/renderable"
+	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/renderable"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
