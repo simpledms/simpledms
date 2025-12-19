@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/entmain"
+	"github.com/simpledms/simpledms/db/entmain"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 

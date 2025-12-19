@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/simpledms/simpledms/entmain"
+	"github.com/simpledms/simpledms/db/entmain"
 )
 
 type MainDB struct {

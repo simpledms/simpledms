@@ -5,8 +5,8 @@ import (
 	"log"
 
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	"github.com/simpledms/simpledms/entmain"
-	"github.com/simpledms/simpledms/enttenant"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/i18n"
 )
 

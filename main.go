@@ -12,15 +12,15 @@ import (
 
 	// necessary to prevent circular dependencies when interceptors, hooks or privacy policies
 	// are used; not tested, just taken from ent docs
-	_ "github.com/simpledms/simpledms/entmain/runtime"
-	_ "github.com/simpledms/simpledms/enttenant/runtime"
+	_ "github.com/simpledms/simpledms/db/entmain/runtime"
+	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
 	"github.com/simpledms/simpledms/server"
 	"github.com/simpledms/simpledms/uix"
 )
 
-/*//go:generate ent generate ./ent/schema/ --feature intercept,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./enttmpl*/
-//go:generate ent generate ./enttenant/schema/ --target ./enttenant --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./enttmpl
-//go:generate ent generate ./entmain/schema/ --target ./entmain/ --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./enttmpl
+/*//go:generate ent generate simpledms/db/entx/schema/ --feature intercept,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./enttmpl*/
+//go:generate ent generate ./db/enttenant/schema/ --target ./db/enttenant --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./db/enttmpl
+//go:generate ent generate ./db/entmain/schema/ --target ./db/entmain/ --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./db/enttmpl
 func main() {
 	log.SetFlags(log.LstdFlags | log.Llongfile)
 

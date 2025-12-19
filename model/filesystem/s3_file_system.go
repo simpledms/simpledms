@@ -16,10 +16,10 @@ import (
 	"github.com/minio/minio-go/v7"
 
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/encryptor"
-	"github.com/simpledms/simpledms/entmain"
-	"github.com/simpledms/simpledms/enttenant"
-	"github.com/simpledms/simpledms/enttenant/file"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/model/common/storagetype"
 	"github.com/simpledms/simpledms/pathx"

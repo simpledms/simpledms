@@ -3,7 +3,7 @@ package model
 import (
 	securejoin "github.com/cyphar/filepath-securejoin"
 
-	"github.com/simpledms/simpledms/enttenant"
+	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/util/fileutil"
 )
 

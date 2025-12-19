@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/simpledms/simpledms/common"
-	"github.com/simpledms/simpledms/enttenant"
+	"github.com/simpledms/simpledms/db/enttenant"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 )

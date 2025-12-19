@@ -5,9 +5,9 @@ package ctxx
 import (
 	"context"
 
-	"github.com/simpledms/simpledms/enttenant"
-	"github.com/simpledms/simpledms/enttenant/file"
-	"github.com/simpledms/simpledms/enttenant/spaceuserassignment"
+	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/model/common/spacerole"
 	"github.com/simpledms/simpledms/model/common/tenantrole"
 )

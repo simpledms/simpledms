@@ -6,7 +6,7 @@ import (
 
 	securejoin "github.com/cyphar/filepath-securejoin"
 
-	"github.com/simpledms/simpledms/entmain"
+	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/fileutil"
 )

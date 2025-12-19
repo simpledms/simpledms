@@ -12,10 +12,10 @@ import (
 
 	"filippo.io/age"
 
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/encryptor"
-	"github.com/simpledms/simpledms/entmain"
-	"github.com/simpledms/simpledms/entmain/tenantaccountassignment"
-	"github.com/simpledms/simpledms/entx"
 	"github.com/simpledms/simpledms/model/common/tenantrole"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/sqlx"
@@ -26,8 +26,8 @@ import (
 	migratex "github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 
-	"github.com/simpledms/simpledms/enttenant/migrate"
-	"github.com/simpledms/simpledms/enttenant/schema"
+	"github.com/simpledms/simpledms/db/enttenant/migrate"
+	"github.com/simpledms/simpledms/db/enttenant/schema"
 )
 
 type Tenant struct {

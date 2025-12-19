@@ -7,7 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/entx"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/common/country"
 	"github.com/simpledms/simpledms/model/common/language"
 	"github.com/simpledms/simpledms/model/common/mainrole"

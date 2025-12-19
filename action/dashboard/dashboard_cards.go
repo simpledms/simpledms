@@ -5,8 +5,8 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/entmain"
-	"github.com/simpledms/simpledms/enttenant"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/event"
 	"github.com/simpledms/simpledms/model/common/mainrole"
 	"github.com/simpledms/simpledms/model/modelmain"

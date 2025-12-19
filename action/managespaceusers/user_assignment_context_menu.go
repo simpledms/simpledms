@@ -2,7 +2,7 @@ package managespaceusers
 
 import (
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/enttenant"
+	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/common/spacerole"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"

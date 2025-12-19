@@ -6,7 +6,7 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/entmain/session"
+	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"

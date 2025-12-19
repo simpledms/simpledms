@@ -10,9 +10,9 @@ import (
 	"entgo.io/ent/privacy"
 	"github.com/minio/minio-go/v7"
 
-	"github.com/simpledms/simpledms/entmain/temporaryfile"
-	"github.com/simpledms/simpledms/entmain/tenant"
-	"github.com/simpledms/simpledms/enttenant/storedfile"
+	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
+	"github.com/simpledms/simpledms/db/entmain/tenant"
+	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/model/modelmain"
 	"github.com/simpledms/simpledms/sqlx"

@@ -12,9 +12,9 @@ import (
 	"filippo.io/age"
 	"github.com/marcobeierer/go-tika"
 
-	"github.com/simpledms/simpledms/entmain/tenant"
-	"github.com/simpledms/simpledms/enttenant/file"
-	"github.com/simpledms/simpledms/enttenant/storedfile"
+	"github.com/simpledms/simpledms/db/entmain/tenant"
+	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/sqlx"
 )

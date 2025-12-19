@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/simpledms/simpledms/enttenant"
+	"github.com/simpledms/simpledms/db/enttenant"
 )
 
 type Space struct {

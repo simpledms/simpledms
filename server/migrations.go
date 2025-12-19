@@ -12,8 +12,8 @@ import (
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	migratemain "github.com/simpledms/simpledms/entmain/migrate"
-	"github.com/simpledms/simpledms/entmain/tenant"
+	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
+	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/model/modelmain"
 	"github.com/simpledms/simpledms/sqlx"
 )

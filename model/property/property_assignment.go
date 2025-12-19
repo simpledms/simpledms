@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/enttenant"
+	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/common/fieldtype"
 )
 

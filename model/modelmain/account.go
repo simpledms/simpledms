@@ -12,9 +12,9 @@ import (
 	"github.com/pquerna/otp/totp"
 
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/entmain"
-	"github.com/simpledms/simpledms/entmain/session"
-	"github.com/simpledms/simpledms/entmain/tenant"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/session"
+	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/util/accountutil"
 	"github.com/simpledms/simpledms/util/e"
 )

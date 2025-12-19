@@ -6,7 +6,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/enttenant/attribute"
+	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/event"
 	"github.com/simpledms/simpledms/model/common/attributetype"
 	"github.com/simpledms/simpledms/ui/util"

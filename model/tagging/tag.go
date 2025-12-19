@@ -3,7 +3,7 @@ package tagging
 import (
 	"fmt"
 
-	"github.com/simpledms/simpledms/enttenant"
+	"github.com/simpledms/simpledms/db/enttenant"
 )
 
 type Tag struct {

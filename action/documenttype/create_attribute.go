@@ -8,7 +8,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/enttenant/tag"
+	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/event"
 	"github.com/simpledms/simpledms/model/common/attributetype"
 	"github.com/simpledms/simpledms/model/tagging/tagtype"

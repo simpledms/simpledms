@@ -5,9 +5,9 @@ package ctxx
 import (
 	"context"
 
-	"github.com/simpledms/simpledms/entmain"
-	"github.com/simpledms/simpledms/enttenant"
-	"github.com/simpledms/simpledms/enttenant/user"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/db/enttenant/user"
 )
 
 type TenantContext struct {

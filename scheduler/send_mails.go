@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/privacy"
 	mailer "github.com/wneessen/go-mail"
 
-	"github.com/simpledms/simpledms/entmain/mail"
-	"github.com/simpledms/simpledms/entmain/systemconfig"
+	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/systemconfig"
 )
 
 func (qq *Scheduler) sendMails() {
