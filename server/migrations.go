@@ -14,8 +14,8 @@ import (
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
+	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/model/modelmain"
-	"github.com/simpledms/simpledms/sqlx"
 )
 
 // caller has to close db

@@ -3,7 +3,7 @@ package tenantdbs
 import (
 	"github.com/puzpuzpuz/xsync/v4"
 
-	"github.com/simpledms/simpledms/sqlx"
+	"github.com/simpledms/simpledms/db/sqlx"
 )
 
 type TenantDBs struct {

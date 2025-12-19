@@ -8,7 +8,7 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	"github.com/simpledms/simpledms/sqlx"
+	"github.com/simpledms/simpledms/db/sqlx"
 )
 
 // TODO rename to Runner?

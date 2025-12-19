@@ -15,10 +15,10 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/model/common/tenantrole"
 	"github.com/simpledms/simpledms/pathx"
-	"github.com/simpledms/simpledms/sqlx"
 	"github.com/simpledms/simpledms/util/e"
 
 	"entgo.io/ent/dialect"

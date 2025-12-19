@@ -13,7 +13,7 @@ import (
 
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
 	migratetenant "github.com/simpledms/simpledms/db/enttenant/migrate"
-	"github.com/simpledms/simpledms/sqlx"
+	"github.com/simpledms/simpledms/db/sqlx"
 )
 
 // run with:

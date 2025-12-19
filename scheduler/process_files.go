@@ -13,9 +13,9 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
+	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/model/modelmain"
-	"github.com/simpledms/simpledms/sqlx"
 )
 
 func (qq *Scheduler) processFiles() {
