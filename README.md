@@ -10,6 +10,14 @@ In addition to the SaaS offering, there is a business offering to obtain the cod
 
 On demand, paid access to a SimpleDMS version with long-term support (LTS) and support plans can be offered.
 
+## Tech stack
+SimpleDMS is built with:
+- [Go](https://go.dev/)
+- [ent](https://entgo.io/) Entity Framework
+- [SQLite](https://sqlite.org/)
+- [htmx](https://htmx.org/) with Go templates
+- [Tailwind CSS](https://tailwindcss.com/)
+
 ## Where is the git history?
 In the beginning SimpleDMS was developed in a monorepo together with other apps as a closed source project.
 
