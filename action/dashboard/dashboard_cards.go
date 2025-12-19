@@ -10,7 +10,7 @@ import (
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/model/common/mainrole"
 	"github.com/simpledms/simpledms/model/modelmain"
-	"github.com/simpledms/simpledms/renderable"
+	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"

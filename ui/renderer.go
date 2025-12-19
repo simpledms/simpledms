@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/renderable"
+	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 

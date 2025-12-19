@@ -11,7 +11,7 @@ import (
 	sprig "github.com/go-task/slim-sprig/v3"
 
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/renderable"
+	"github.com/simpledms/simpledms/ui/renderable"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
