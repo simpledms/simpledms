@@ -3,6 +3,8 @@ SimpleDMS is an easy-to-use document management system (DMS) for small businesse
 
 The app is also available as a SaaS offering at [simpledms.eu](https://simpledms.eu) and [simpledms.ch](https://simpledms.ch).
 
+![Screenshot of the SimpleDMS app](https://simpledms.ch/assets/simpledms/2025.01.22-simpledms-screenshot_metadaten.png)
+
 ## Open Source philosophy and business model
 The SimpleDMS app in this repository contains all features relevant for the use by a single company or family. The goal is to keep all these features, including future features, available for free.
 
