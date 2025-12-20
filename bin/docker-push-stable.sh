@@ -1,3 +1,3 @@
 #!/bin/sh
-docker tag ghcr.io/marcobeierer/simpledms:latest ghcr.io/marcobeierer/simpledms:stable
-docker push ghcr.io/marcobeierer/simpledms:stable
+docker tag ghcr.io/simpledms/simpledms:latest ghcr.io/simpledms/simpledms:stable
+docker push ghcr.io/simpledms/simpledms:stable

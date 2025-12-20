@@ -1,2 +1,2 @@
 #!/bin/sh
-docker push ghcr.io/marcobeierer/simpledms:latest
+docker push ghcr.io/simpledms/simpledms:latest
