@@ -1,8 +1,18 @@
-# SimpleDMS
+# SimpleDMS – Document management for small businesses
 SimpleDMS is an easy-to-use document management system (DMS) for small businesses that sorts documents almost by itself.
 
+## Simple and efficient
+The metadata-driven concept of SimpleDMS enables efficient filing and fast retrieval of documents after a short familiarization period.
+
+The core of the concept consists of:
+
+- a well thought-out tag system for categorizing documents, and
+- workspaces (spaces) for shared or private access to documents.
+
+## SaaS
 The app is also available as a SaaS offering at [simpledms.eu](https://simpledms.eu) and [simpledms.ch](https://simpledms.ch).
 
+## Screenshot
 ![Screenshot of the SimpleDMS app](https://simpledms.ch/assets/simpledms/2025.01.22-simpledms-screenshot_metadaten.png)
 
 ## Open Source philosophy and business model
