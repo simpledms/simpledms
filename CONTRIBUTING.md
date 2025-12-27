@@ -22,11 +22,11 @@ Please let me know if you have any questions about the CLA or have any concerns 
 		- `go install golang.org/dl/go1.25.5@latest; go1.25.5 download`
 		- you then have to setup an alias or use `go1.25.5` instead of `go` command.
 - direnv
-- TailwindCSS
-- Node.js
-- air
+- Node.js / npm
 - Docker
 	- Docker Compose (comes with newer Docker versions, separate installation for older versions)
+
+### Instructions
 
 ```
 git clone git@github.com:simpledms/simpledms.git
@@ -34,6 +34,7 @@ cd simpledms
 cp .env.sample .env # edit .env
 # edit .env file
 direnv allow
+npm install
 docker compose up -d # docker-compose up -d for older Docker versions
 # spins up minio, tika and mailpit
 go tool air
