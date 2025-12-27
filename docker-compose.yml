@@ -16,7 +16,7 @@ services:
         image: apache/tika:latest-full
         #command: -c /tika-config.xml
         ports:
-            - "9997:9998"
+            - "9998:9998"
         #volumes:
             #- ./tika-config.xml:/tika-config.xml
         restart: unless-stopped
