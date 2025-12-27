@@ -1,6 +1,5 @@
 *.sqlite3**
 *.sqlite
-README.md
 .tmp
 .secrets
 *notes*
