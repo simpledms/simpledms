@@ -409,7 +409,7 @@ func (qq *Server) Start() error {
 	// storagePath := common.StoragePath(metaPath)
 	fileRepo := common.NewFileRepository()
 	minioClient := qq.initNilableMinioClient(systemConfig.S3())
-	fileSystem := filesystem.NewFileSystem(qq.metaPath)
+	fileSystem := filesystem.NewFileSystemCommon(qq.metaPath)
 	infra := common.NewInfra(
 		renderer,
 		qq.metaPath,

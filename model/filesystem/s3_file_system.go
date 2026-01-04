@@ -30,14 +30,14 @@ import (
 )
 
 type S3FileSystem struct {
-	*FileSystem
+	common     *fileSystemCommon
 	client     *minio.Client
 	bucketName string
 }
 
-func NewS3FileSystem(client *minio.Client, bucketName string, fileSystem *FileSystem) *S3FileSystem {
+func NewS3FileSystem(client *minio.Client, bucketName string, fileSystemCommon *fileSystemCommon) *S3FileSystem {
 	return &S3FileSystem{
-		FileSystem: fileSystem,
+		common:     fileSystemCommon,
 		client:     client,
 		bucketName: bucketName,
 	}
@@ -431,16 +431,6 @@ func (qq *S3FileSystem) saveFile(
 	// TODO verify checksum?
 
 	return &fileInfo, storageFilename, fileSize, nil
-}
-
-type progressWriter struct {
-	total int64
-}
-
-func (pw *progressWriter) Read(p []byte) (n int, err error) {
-	pw.total += int64(len(p))
-	// log.Printf("Uploaded %d bytes so far\n", pw.total)
-	return len(p), nil
 }
 
 func (qq *S3FileSystem) x25519Identity(ctx ctxx.Context, objectNameOrStoragePrefix string) (*age.X25519Identity, error) {
