@@ -89,7 +89,10 @@ func (qq *DashboardCards) Widget(
 	for tenantx, spaces := range spacesByTenant {
 		var tenantCards []*wx.Card
 		var tenantHeaderBtns []*wx.Button
-		tenantCards = append(tenantCards, qq.tenantCard(ctx, tenantx))
+
+		if tenantCard := qq.nilableTenantCard(ctx, tenantx); tenantCard != nil {
+			tenantCards = append(tenantCards, tenantCard)
+		}
 
 		if btn, ok := qq.manageUsersBtn(ctx, tenantx); ok {
 			tenantHeaderBtns = append(tenantHeaderBtns, btn)
@@ -171,7 +174,7 @@ func (qq *DashboardCards) Widget(
 	}*/
 }
 
-func (qq *DashboardCards) tenantCard(ctx ctxx.Context, tenantx *entmain.Tenant) *wx.Card {
+func (qq *DashboardCards) nilableTenantCard(ctx ctxx.Context, tenantx *entmain.Tenant) *wx.Card {
 	var actions []*wx.Button
 
 	tenantm := tenant.NewTenant(tenantx)
@@ -181,6 +184,10 @@ func (qq *DashboardCards) tenantCard(ctx ctxx.Context, tenantx *entmain.Tenant) 
 	var supportingText *wx.Text
 
 	if tenantm.IsInitialized() {
+		if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
+			return nil
+		}
+
 		// TODO add role info
 		headline = wx.H(wx.HeadingTypeTitleLg, wx.T("Trial phase"))
 		subhead = wx.T("Subscription")
