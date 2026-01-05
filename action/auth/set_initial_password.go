@@ -7,7 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/modelmain"
+	"github.com/simpledms/simpledms/model/account"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -56,7 +56,7 @@ func (qq *SetInitialPassword) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 	}
 
 	accountx := ctx.MainCtx().Account
-	accountm := modelmain.NewAccount(accountx)
+	accountm := account.NewAccount(accountx)
 
 	// Set the new password
 	err = accountm.SetPassword(ctx, data.NewPassword, data.ConfirmPassword)

@@ -9,11 +9,11 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entx"
+	account2 "github.com/simpledms/simpledms/model/account"
 	"github.com/simpledms/simpledms/model/common/language"
 	"github.com/simpledms/simpledms/model/common/mainrole"
 	"github.com/simpledms/simpledms/model/common/tenantrole"
 	"github.com/simpledms/simpledms/model/mailer"
-	"github.com/simpledms/simpledms/model/modelmain"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -112,7 +112,7 @@ func (qq *CreateUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		SetLastName(accountx.LastName).
 		SaveX(ctx)
 
-	accountm := modelmain.NewAccount(accountx)
+	accountm := account2.NewAccount(accountx)
 	password, expiresAt, err := accountm.GenerateTemporaryPassword(ctx)
 	if err != nil {
 		log.Println(err)

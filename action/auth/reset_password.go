@@ -10,8 +10,8 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entx"
+	account2 "github.com/simpledms/simpledms/model/account"
 	"github.com/simpledms/simpledms/model/mailer"
-	"github.com/simpledms/simpledms/model/modelmain"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -70,7 +70,7 @@ func (qq *ResetPassword) Handler(
 		return err
 	}
 
-	accountm := modelmain.NewAccount(accountx)
+	accountm := account2.NewAccount(accountx)
 
 	newPassword, expiresAt, err := accountm.GenerateTemporaryPassword(ctx)
 	if err != nil {

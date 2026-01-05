@@ -49,6 +49,7 @@ type OCRConfig struct {
 	TikaURL string // optional, can also be used without OCR
 }
 
+// used for reconfiguration, thus no initial account email and tenant name
 func InitApp(
 	ctx ctxx.Context,
 	// isDevMode bool,
@@ -74,7 +75,6 @@ func InitApp(
 	)
 }
 
-// used for dev mode initialization
 func InitAppWithoutCustomContext(
 	ctx context.Context,
 	mainDB *entmain.Tx,
@@ -168,5 +168,4 @@ func InitAppWithoutCustomContext(
 		SaveX(ctx)
 
 	return nil
-
 }

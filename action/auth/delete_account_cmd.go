@@ -8,7 +8,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/modelmain"
+	account2 "github.com/simpledms/simpledms/model/account"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -52,7 +52,7 @@ func (qq *DeleteAccountCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 
 	// could also use ctx.MainCtx().Account for the moment, but this is more robust against future changes
 	accountx := ctx.MainCtx().MainTx.Account.Query().Where(account.PublicID(entx.NewCIText(data.AccountID))).OnlyX(ctx)
-	accountm := modelmain.NewAccount(accountx)
+	accountm := account2.NewAccount(accountx)
 	accountm.UnsafeDelete(ctx)
 
 	rw.AddRenderables(wx.NewSnackbarf("Account deleted."))

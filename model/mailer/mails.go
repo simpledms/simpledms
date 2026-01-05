@@ -2,7 +2,8 @@ package mailer
 
 import (
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/modelmain"
+	"github.com/simpledms/simpledms/model/account"
+	"github.com/simpledms/simpledms/model/tenant"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
@@ -54,7 +55,7 @@ func CreateUserTemplate(ctx ctxx.Context, tmpPassword string, expiresAt string) 
 	heading := title
 	footer := wx.T("This is an automated message, please do not reply.").String(ctx)
 
-	accountm := modelmain.NewAccount(ctx.MainCtx().Account)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 
 	content := []ContentBlock{}
 
@@ -63,7 +64,7 @@ func CreateUserTemplate(ctx ctxx.Context, tmpPassword string, expiresAt string) 
 			TextBlock{Text: wx.Tf(
 				"«%s» invited you to the tenant «%s».",
 				accountm.Name(),
-				modelmain.NewTenant(ctx.TenantCtx().Tenant).Name(),
+				tenant.NewTenant(ctx.TenantCtx().Tenant).Name(),
 			).String(ctx)},
 		)
 	} else {

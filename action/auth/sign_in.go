@@ -10,9 +10,9 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entx"
+	account2 "github.com/simpledms/simpledms/model/account"
 	"github.com/simpledms/simpledms/model/common/country"
 	"github.com/simpledms/simpledms/model/common/language"
-	"github.com/simpledms/simpledms/model/modelmain"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -81,7 +81,7 @@ func (qq *SignIn) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.
 		log.Println(err)
 		return err
 	}
-	accountm := modelmain.NewAccount(accountx)
+	accountm := account2.NewAccount(accountx)
 
 	isValid, err := accountm.Auth(ctx, data.Password, data.TwoFactorAuthenticationCode)
 	if !isValid {

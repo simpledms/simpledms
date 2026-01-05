@@ -1,7 +1,6 @@
-package modelmain
+package account
 
 import (
-	"context"
 	"log"
 	"net/http"
 	"strings"
@@ -14,7 +13,6 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/session"
-	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/util/accountutil"
 	"github.com/simpledms/simpledms/util/e"
 )
@@ -29,10 +27,12 @@ func NewAccount(data *entmain.Account) *Account {
 	}
 }
 
+/*
 // Tenant instead of ID is more type safe
-func (qq *Account) BelongsToTenant(ctx context.Context, tenantm *Tenant) bool {
+func (qq *Account) BelongsToTenant(ctx context.Context, tenantm *tenant2.Tenant) bool {
 	return qq.Data.QueryTenants().Where(tenant.ID(tenantm.Data.ID)).ExistX(ctx)
 }
+*/
 
 // TODO rename to Login?
 func (qq *Account) Auth(ctx ctxx.Context, password, twoFactorAuthCode string) (bool, error) {

@@ -8,8 +8,9 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
+	"github.com/simpledms/simpledms/model/account"
 	"github.com/simpledms/simpledms/model/common/mainrole"
-	"github.com/simpledms/simpledms/model/modelmain"
+	"github.com/simpledms/simpledms/model/tenant"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
@@ -64,7 +65,7 @@ func (qq *DashboardCards) Widget(
 	var accountCards []*wx.Card
 	var systemCards []*wx.Card
 
-	accountm := modelmain.NewAccount(ctx.MainCtx().Account)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if accountm.Data.Role == mainrole.Admin {
 		systemCards = append(systemCards, qq.appStatusCard(ctx))
 	}
@@ -173,7 +174,7 @@ func (qq *DashboardCards) Widget(
 func (qq *DashboardCards) tenantCard(ctx ctxx.Context, tenantx *entmain.Tenant) *wx.Card {
 	var actions []*wx.Button
 
-	tenantm := modelmain.NewTenant(tenantx)
+	tenantm := tenant.NewTenant(tenantx)
 
 	var headline *wx.Heading
 	var subhead *wx.Text
@@ -184,7 +185,7 @@ func (qq *DashboardCards) tenantCard(ctx ctxx.Context, tenantx *entmain.Tenant) 
 		headline = wx.H(wx.HeadingTypeTitleLg, wx.T("Trial phase"))
 		subhead = wx.T("Subscription")
 
-		accountm := modelmain.NewAccount(ctx.MainCtx().Account)
+		accountm := account.NewAccount(ctx.MainCtx().Account)
 		if tenantm.IsOwner(accountm) {
 			// TODO
 			/*actions = append(actions, &wx.Button{
@@ -374,12 +375,12 @@ func (qq *DashboardCards) manageSpacesCard(ctx ctxx.Context, tenantx *entmain.Te
 		return nil, false
 	}
 
-	tenantm := modelmain.NewTenant(tenantx)
+	tenantm := tenant.NewTenant(tenantx)
 	if !tenantm.IsInitialized() {
 		return nil, false
 	}
 
-	accountm := modelmain.NewAccount(ctx.MainCtx().Account)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if !tenantm.IsOwner(accountm) {
 		return &wx.Card{
 			Style:          wx.CardStyleFilled,
@@ -405,8 +406,8 @@ func (qq *DashboardCards) manageSpacesCard(ctx ctxx.Context, tenantx *entmain.Te
 }
 
 func (qq *DashboardCards) manageSpacesBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
-	tenantm := modelmain.NewTenant(tenantx)
-	accountm := modelmain.NewAccount(ctx.MainCtx().Account)
+	tenantm := tenant.NewTenant(tenantx)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if !tenantm.IsOwner(accountm) {
 		return nil, false
 	}
@@ -423,8 +424,8 @@ func (qq *DashboardCards) manageSpacesBtn(ctx ctxx.Context, tenantx *entmain.Ten
 }
 
 func (qq *DashboardCards) manageUsersCard(ctx ctxx.Context, tenantDB *sqlx.TenantDB, tenantx *entmain.Tenant) (*wx.Card, bool) {
-	tenantm := modelmain.NewTenant(tenantx)
-	accountm := modelmain.NewAccount(ctx.MainCtx().Account)
+	tenantm := tenant.NewTenant(tenantx)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if !tenantm.IsOwner(accountm) {
 		return nil, false
 	}
@@ -459,8 +460,8 @@ func (qq *DashboardCards) manageUsersCard(ctx ctxx.Context, tenantDB *sqlx.Tenan
 }
 
 func (qq *DashboardCards) manageUsersBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
-	tenantm := modelmain.NewTenant(tenantx)
-	accountm := modelmain.NewAccount(ctx.MainCtx().Account)
+	tenantm := tenant.NewTenant(tenantx)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if !tenantm.IsOwner(accountm) {
 		return nil, false
 	}

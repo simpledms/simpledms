@@ -15,7 +15,7 @@ import (
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/model/modelmain"
+	tenant2 "github.com/simpledms/simpledms/model/tenant"
 )
 
 // caller has to close db
@@ -62,7 +62,7 @@ func dbMigrationsTenantDBs(mainDB *sqlx.MainDB, isDevMode bool, metaPath string)
 	tenantDBs := tenantdbs.NewTenantDBs()
 
 	for _, tenant := range tenants {
-		tenantm := modelmain.NewTenant(tenant)
+		tenantm := tenant2.NewTenant(tenant)
 		tenantClient, err := tenantm.OpenDB(isDevMode, metaPath)
 		if err != nil {
 			log.Println(err)

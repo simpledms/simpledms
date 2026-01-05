@@ -28,7 +28,8 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
-	"github.com/simpledms/simpledms/model/modelmain"
+	"github.com/simpledms/simpledms/model/account"
+	tenant2 "github.com/simpledms/simpledms/model/tenant"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/cookiex"
@@ -508,7 +509,7 @@ func (qq *Router) context(
 	if !ok {
 		// IMPORTANT don't initialize here because this could trigger concurrency issues...
 
-		tenantm := modelmain.NewTenant(tenantx)
+		tenantm := tenant2.NewTenant(tenantx)
 
 		tenantClient, err = tenantm.OpenDB(qq.devMode, qq.metaPath)
 		if err != nil {
@@ -526,8 +527,9 @@ func (qq *Router) context(
 	}
 
 	// verify that account belangs to tenant
-	tenantm := modelmain.NewTenant(tenantx)
-	if !accountm.BelongsToTenant(mainCtx, tenantm) {
+	tenantm := tenant2.NewTenant(tenantx)
+	// if !accountm.BelongsToTenant(mainCtx, tenantm) {
+	if !tenantm.HasAccount(mainCtx, accountm) {
 		// TODO does this render?
 		// rwx.AddRenderables(wx.NewSnackbarf("You are not allowed to access this tenant."))
 		// rwx.WriteHeader(http.StatusForbidden)
@@ -569,7 +571,7 @@ func (qq *Router) context(
 
 var ErrSessionNotFound = errors.New("session not found")
 
-func (qq *Router) authenticateAccount(rw httpx.ResponseWriter, req *httpx.Request, mainTx *entmain.Tx) (*modelmain.Account, bool, error) {
+func (qq *Router) authenticateAccount(rw httpx.ResponseWriter, req *httpx.Request, mainTx *entmain.Tx) (*account.Account, bool, error) {
 	// reads only the value, all other fields have zero value
 	// this is the correct behavior, as only the name and value are send via HTTP
 	cookie, err := req.Cookie(cookiex.SessionCookieName())
@@ -611,7 +613,7 @@ func (qq *Router) authenticateAccount(rw httpx.ResponseWriter, req *httpx.Reques
 	}
 
 	accountx := sessionx.QueryAccount().OnlyX(req.Context())
-	accountm := modelmain.NewAccount(accountx)
+	accountm := account.NewAccount(accountx)
 
 	cookie, isRenewed := cookiex.RenewSessionCookie(rw, cookie.Value, sessionx.ExpiresAt)
 	if isRenewed {

@@ -1,4 +1,4 @@
-package modelmain
+package tenant
 
 import (
 	"context"
@@ -12,11 +12,13 @@ import (
 
 	"filippo.io/age"
 
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
+	accountm "github.com/simpledms/simpledms/model/account"
 	"github.com/simpledms/simpledms/model/common/tenantrole"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/util/e"
@@ -41,11 +43,11 @@ func NewTenant(data *entmain.Tenant) *Tenant {
 }
 
 // TODO should be other way around account.IsOwner()?
-func (qq *Tenant) IsOwner(account *Account) bool {
+func (qq *Tenant) IsOwner(account *accountm.Account) bool {
 	return qq.Data.QueryAccountAssignment().Where(
 		tenantaccountassignment.AccountID(account.Data.ID),
 		tenantaccountassignment.RoleEQ(tenantrole.Owner),
-	).ExistX(context.Background())
+	).ExistX(context.Background()) // TODO pass in ctx?
 }
 
 func (qq *Tenant) IsInitialized() bool {
@@ -307,4 +309,10 @@ func (qq *Tenant) initDB(
 
 func (qq *Tenant) Name() string {
 	return qq.Data.Name
+}
+
+func (qq *Tenant) HasAccount(ctx ctxx.Context, accountm *accountm.Account) bool {
+	return qq.Data.QueryAccountAssignment().Where(
+		tenantaccountassignment.AccountID(accountm.Data.ID),
+	).ExistX(ctx)
 }

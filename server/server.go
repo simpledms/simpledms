@@ -34,8 +34,12 @@ import (
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/internal"
+	"github.com/simpledms/simpledms/model/common/country"
+	"github.com/simpledms/simpledms/model/common/language"
+	"github.com/simpledms/simpledms/model/common/mainrole"
 	"github.com/simpledms/simpledms/model/filesystem"
 	"github.com/simpledms/simpledms/model/modelmain"
+	tenant2 "github.com/simpledms/simpledms/model/tenant"
 	"github.com/simpledms/simpledms/scheduler"
 	"github.com/simpledms/simpledms/ui"
 	"github.com/simpledms/simpledms/ui/uix/partial"
@@ -127,13 +131,13 @@ func (qq *Server) Start() error {
 				log.Fatalln(err)
 			}
 		}
-		mainTx, err := mainDB.Tx(ctx, false)
+		initAppTx, err := mainDB.Tx(ctx, false)
 		if err != nil {
 			log.Fatalln(err)
 		}
 		err = modelmain.InitAppWithoutCustomContext(
 			ctx,
-			mainTx,
+			initAppTx,
 			// true,
 			"",
 			true,
@@ -164,13 +168,13 @@ func (qq *Server) Start() error {
 			},
 		)
 		if err != nil {
-			erry := mainTx.Rollback()
+			erry := initAppTx.Rollback()
 			if erry != nil {
 				log.Println(erry)
 			}
 			log.Fatalln(err)
 		}
-		err = mainTx.Commit()
+		err = initAppTx.Commit()
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -181,6 +185,19 @@ func (qq *Server) Start() error {
 			//		 usually only used if startup is not possible; config in db should be preferred
 			//		 because of encryption of sensible values
 			log.Fatalln("OVERRIDE_DB_CONFIG is true, this is not implemented yet")
+		}
+	}
+
+	initialAccountEmail := os.Getenv("SIMPLEDMS_INITIAL_ACCOUNT_EMAIL")
+	initialTenantName := os.Getenv("SIMPLEDMS_INITIAL_TENANT_NAME")
+	if initialAccountEmail != "" && initialTenantName != "" {
+		if mainDB.ReadOnlyConn.Account.Query().CountX(ctx) > 0 {
+			log.Println("an account already exists, skipping creation of initial account")
+		} else {
+			err = qq.initInitialUser(ctx, mainDB, initialAccountEmail, initialTenantName)
+			if err != nil {
+				log.Fatalln(err)
+			}
 		}
 	}
 
@@ -512,7 +529,7 @@ func (qq *Server) Start() error {
 		Where(tenant.MaintenanceModeEnabledAtIsNil()).
 		ExecX(ctx)
 	for _, tenantx := range tenantsToMigrate {
-		tenantm := modelmain.NewTenant(tenantx)
+		tenantm := tenant2.NewTenant(tenantx)
 		tenantDB, found := tenantDBs.Load(tenantm.Data.ID)
 		if !found {
 			// could happen if initialization fails; retries initialization automatically,
@@ -624,4 +641,63 @@ func (qq *Server) initNilableMinioClient(config *modelmain.S3Config) *minio.Clie
 	}
 
 	return client
+}
+
+func (qq *Server) initInitialUser(
+	ctx context.Context,
+	mainDB *sqlx.MainDB,
+	initialAccountEmail string,
+	initialTenantName string,
+) error {
+	createInitialUserTx, err := mainDB.Tx(ctx, false)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	defer func() {
+		if err != nil {
+			log.Println(err)
+			erry := createInitialUserTx.Rollback()
+			if erry != nil {
+				log.Fatalln(erry)
+			}
+		}
+	}()
+	visitorCtx := ctxx.NewVisitorContext(
+		ctx,
+		createInitialUserTx,
+		i18n.NewI18n(),
+		// TODO are there better defaults? or provide config?
+		"en",
+		"UTC",
+		false,
+	)
+	initialAccount, err := modelmain.NewSignUpService().SignUp(
+		visitorCtx,
+		initialAccountEmail,
+		initialTenantName,
+		"",
+		"",
+		country.Unknown,
+		language.Unknown,
+		false,
+	)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	err = initialAccount.Data.Update().SetRole(mainrole.Admin).Exec(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	err = createInitialUserTx.Commit()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
 }

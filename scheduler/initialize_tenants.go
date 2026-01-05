@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/privacy"
 
 	"github.com/simpledms/simpledms/db/entmain/tenant"
-	"github.com/simpledms/simpledms/model/modelmain"
+	tenant2 "github.com/simpledms/simpledms/model/tenant"
 )
 
 func (qq *Scheduler) initializeTenants(devMode bool, metaPath string, migrationsTenantFS fs.FS) {
@@ -41,7 +41,7 @@ func (qq *Scheduler) initializeTenants(devMode bool, metaPath string, migrations
 			AllX(ctx)
 
 		for _, tenantx := range tenants {
-			tenantm := modelmain.NewTenant(tenantx)
+			tenantm := tenant2.NewTenant(tenantx)
 
 			// TODO implement more robust error handling with pause between retries
 			tenantDB, err := tenantm.Init(devMode, metaPath, migrationsTenantFS)

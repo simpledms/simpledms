@@ -2,22 +2,16 @@ package auth
 
 import (
 	"log"
-	"time"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/common/country"
 	"github.com/simpledms/simpledms/model/common/language"
-	"github.com/simpledms/simpledms/model/common/mainrole"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
-	"github.com/simpledms/simpledms/model/mailer"
 	"github.com/simpledms/simpledms/model/modelmain"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/timex"
 )
 
 type SignUpData struct {
@@ -88,55 +82,20 @@ func (qq *SignUp) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.
 		tenantName = data.FirstName + " " + data.LastName
 	}
 
-	tenantxQuery := ctx.VisitorCtx().MainTx.Tenant.
-		Create().
-		SetName(tenantName).
-		SetCountry(data.Country)
-	/* FIXME
-	if data.AcceptPrivacyPolicy {
-		tenantxQuery = tenantxQuery.SetPrivacyPolicyAccepted(time.Now())
-	}
-	if data.AcceptTermsOfService {
-		tenantxQuery = tenantxQuery.SetTermsOfServiceAccepted(time.Now())
-	}
-	*/
-	tenantxQuery = tenantxQuery.SetPrivacyPolicyAccepted(timex.NewDateTimeZero().Time)
-	tenantxQuery = tenantxQuery.SetTermsOfServiceAccepted(timex.NewDateTimeZero().Time)
-
-	tenantx := tenantxQuery.SaveX(ctx)
-
-	accountQuery := ctx.VisitorCtx().MainTx.Account.
-		Create().
-		SetFirstName(data.FirstName).
-		SetLastName(data.LastName).
-		SetLanguage(data.Language).
-		SetEmail(entx.NewCIText(data.Email)).
-		SetRole(mainrole.User)
-	if data.SubscribeToNewsletter {
-		accountQuery.SetSubscribedToNewsletterAt(time.Now())
-	}
-	accountx := accountQuery.SaveX(ctx)
-
-	// tenantx = tenantx.Update().AddUsers(userx).SaveX(ctx)
-	_ = ctx.VisitorCtx().MainTx.TenantAccountAssignment.
-		Create().
-		SetTenant(tenantx).
-		SetAccount(accountx).
-		SetIsContactPerson(true).
-		SetRole(tenantrole.Owner).
-		SetIsDefault(true).
-		SaveX(ctx)
-
-	// Tenant.User is created in tenant initialization
-
-	accountm := modelmain.NewAccount(accountx)
-	password, expiresAt, err := accountm.GenerateTemporaryPassword(ctx)
+	_, err = modelmain.NewSignUpService().SignUp(
+		ctx,
+		data.Email,
+		tenantName,
+		data.FirstName,
+		data.LastName,
+		data.Country,
+		data.Language,
+		data.SubscribeToNewsletter,
+	)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
-
-	mailer.NewMailer().SignUp(ctx, accountx, password, expiresAt)
 
 	rw.AddRenderables(wx.NewSnackbarf("Registration successful, please check your email for your password."))
 

@@ -7,7 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/modelmain"
+	"github.com/simpledms/simpledms/model/account"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -72,7 +72,7 @@ func (qq *ChangePassword) Handler(
 	}
 
 	accountx := ctx.MainCtx().Account
-	accountm := modelmain.NewAccount(accountx)
+	accountm := account.NewAccount(accountx)
 
 	err = accountm.ChangePassword(ctx, data.CurrentOrTemporaryPassword, data.NewPassword, data.ConfirmPassword)
 	if err != nil {
