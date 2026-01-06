@@ -9,3 +9,4 @@ node_modules
 simpledms
 .env
 .idea/**
+garage.toml

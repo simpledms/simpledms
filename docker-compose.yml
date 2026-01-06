@@ -1,8 +1,7 @@
-version: '3'
-
 volumes:
     mailpit_data:
-    minio_data:
+    garage_meta:
+    garage_data:
 
 services:
     #docling:
@@ -36,12 +35,15 @@ services:
             MP_SMTP_AUTH_ACCEPT_ANY: 1
             MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
-    minio:
-        image: quay.io/minio/minio:latest
-        restart: unless-stopped
-        command: server /data --console-address ":9001"
-        volumes:
-            - minio_data:/data
-        ports:
-            - "9000:9000"
-            - "9001:9001"
+    garage:
+      image: dxflrs/garage:v2.1.0
+      restart: unless-stopped
+      volumes:
+        - ./garage.toml:/etc/garage.toml
+        - garage_meta:/var/lib/garage/meta
+        - garage_data:/var/lib/garage/data
+      ports: # TODO all necessary?
+        - "3900:3900"
+        - "3901:3901"
+        - "3902:3902"
+        - "3903:3903"
