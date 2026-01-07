@@ -31,15 +31,17 @@ import (
 
 type S3FileSystem struct {
 	*FileSystem
-	client     *minio.Client
-	bucketName string
+	client                *minio.Client
+	bucketName            string
+	disableFileEncryption bool
 }
 
-func NewS3FileSystem(client *minio.Client, bucketName string, fileSystem *FileSystem) *S3FileSystem {
+func NewS3FileSystem(client *minio.Client, bucketName string, fileSystem *FileSystem, disableFileEncryption bool) *S3FileSystem {
 	return &S3FileSystem{
-		FileSystem: fileSystem,
-		client:     client,
-		bucketName: bucketName,
+		FileSystem:            fileSystem,
+		client:                client,
+		bucketName:            bucketName,
+		disableFileEncryption: disableFileEncryption,
 	}
 }
 
@@ -99,25 +101,32 @@ func (qq *S3FileSystem) UnsafeOpenFile(ctx context.Context, x25519Identity *age.
 			}
 		}()
 
-		decryptor, err := age.Decrypt(obj, x25519Identity)
-		if err != nil {
-			// if the file doesn't exist, an error like the following is returned, whereby `the specified key does not exist.` comes
-			// from the minio client and is just wrapped:
-			// `failed to read header: parsing age header: failed to read intro: The specified key does not exist.`
-			// minio errors cannot be checked easily because they are just strings, like `minio.NoSuchKey` and
-			// minio.ToErrorResponse(err) probably doesn't work with wrapped errors too...
+		var gzipReaderInput io.Reader
+		gzipReaderInput = obj
 
-			log.Println(err)
+		if !qq.disableFileEncryption {
+			decryptor, err := age.Decrypt(obj, x25519Identity)
+			if err != nil {
+				// if the file doesn't exist, an error like the following is returned, whereby `the specified key does not exist.` comes
+				// from the minio client and is just wrapped:
+				// `failed to read header: parsing age header: failed to read intro: The specified key does not exist.`
+				// minio errors cannot be checked easily because they are just strings, like `minio.NoSuchKey` and
+				// minio.ToErrorResponse(err) probably doesn't work with wrapped errors too...
 
-			erry := pipeWriter.CloseWithError(err)
-			if erry != nil {
-				log.Println(erry)
+				log.Println(err)
+
+				erry := pipeWriter.CloseWithError(err)
+				if erry != nil {
+					log.Println(erry)
+				}
+
+				return
 			}
 
-			return
+			gzipReaderInput = decryptor
 		}
 
-		gzipReader, err := gzip.NewReader(decryptor)
+		gzipReader, err := gzip.NewReader(gzipReaderInput)
 		if err != nil {
 			log.Println(err)
 
@@ -158,7 +167,7 @@ func (qq *S3FileSystem) UnsafeOpenFile(ctx context.Context, x25519Identity *age.
 // caller has to close fileToSave
 func (qq *S3FileSystem) SaveFile(
 	ctx ctxx.Context,
-	// fileToSave multipart.File,
+// fileToSave multipart.File,
 	fileToSave io.Reader,
 	filename string,
 	isInInbox bool,
@@ -225,7 +234,7 @@ func (qq *S3FileSystem) SaveFile(
 	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
 		// SetPublicID(entx.NewCIText(storedFilePublicID)).
 		SetFilename(filename).
-		SetSize(fileSize).               // fileInfo.Size is gzipped size
+		SetSize(fileSize). // fileInfo.Size is gzipped size
 		SetSizeInStorage(fileInfo.Size). // gzipped size
 		SetStorageType(storagetype.S3).
 		SetBucketName(qq.bucketName).
@@ -258,7 +267,7 @@ func (qq *S3FileSystem) SaveFile(
 
 func (qq *S3FileSystem) saveFile(
 	ctx context.Context,
-	// passed in because PersistTemporaryTenantFile has no TenantContext
+// passed in because PersistTemporaryTenantFile has no TenantContext
 	x25519Identity *age.X25519Identity,
 	fileToSave io.Reader,
 	originalFilename string,
@@ -320,25 +329,33 @@ func (qq *S3FileSystem) saveFile(
 	var fileSize int64
 	go func() {
 		defer recoverx.Recover("saveFile")
-		// gzip first, then encrypt because encryption randomizes data and is less efficient to
-		// compress than the file directly
-		encryptorx, err := age.Encrypt(pipeWriter, x25519Identity.Recipient())
-		if err != nil {
-			log.Println(err)
 
-			err = encryptorx.Close()
+		var gzipInputWriter io.Writer
+		gzipInputWriter = pipeWriter
+		var encryptorx io.WriteCloser // necessary outside condition to close in correct order
+
+		if !qq.disableFileEncryption {
+			// gzip first, then encrypt because encryption randomizes data and is less efficient to
+			// compress than the file directly
+			encryptorx, err = age.Encrypt(pipeWriter, x25519Identity.Recipient())
 			if err != nil {
 				log.Println(err)
-			}
-			erry := pipeWriter.CloseWithError(err)
-			if erry != nil {
-				log.Println(erry)
-			}
 
-			return
+				err = encryptorx.Close()
+				if err != nil {
+					log.Println(err)
+				}
+				erry := pipeWriter.CloseWithError(err)
+				if erry != nil {
+					log.Println(erry)
+				}
+
+				return
+			}
+			gzipInputWriter = encryptorx
 		}
 
-		gzipWriter := gzip.NewWriter(encryptorx)
+		gzipWriter := gzip.NewWriter(gzipInputWriter)
 
 		fileSize, err = io.Copy(gzipWriter, fileToSave)
 		if err != nil {
@@ -350,9 +367,11 @@ func (qq *S3FileSystem) saveFile(
 			if err != nil {
 				log.Println(err)
 			}
-			err = encryptorx.Close()
-			if err != nil {
-				log.Println(err)
+			if !qq.disableFileEncryption {
+				err = encryptorx.Close()
+				if err != nil {
+					log.Println(err)
+				}
 			}
 			erry := pipeWriter.CloseWithError(err)
 			if erry != nil {
@@ -368,9 +387,11 @@ func (qq *S3FileSystem) saveFile(
 		if err != nil {
 			log.Println(err)
 		}
-		err = encryptorx.Close()
-		if err != nil {
-			log.Println(err)
+		if !qq.disableFileEncryption {
+			err = encryptorx.Close()
+			if err != nil {
+				log.Println(err)
+			}
 		}
 		err = pipeWriter.Close()
 		if err != nil {
@@ -491,7 +512,7 @@ func (qq *S3FileSystem) SaveTemporaryFileToAccount(
 	temporaryFile := ctx.MainCtx().MainTx.TemporaryFile.Create().
 		SetOwner(ctx.MainCtx().Account).
 		SetFilename(originalFilename).
-		SetSize(fileSize).               // fileInfo.Size is gzipped size
+		SetSize(fileSize). // fileInfo.Size is gzipped size
 		SetSizeInStorage(fileInfo.Size). // gzipped size
 		SetStorageType(storagetype.S3).
 		SetBucketName(qq.bucketName).
@@ -539,7 +560,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
 		// SetPublicID(entx.NewCIText(storedFilePublicID)).
 		SetFilename(tmpFile.Filename).
-		SetSize(tmpFile.Size).                   // fileInfo.Size is gzipped size
+		SetSize(tmpFile.Size). // fileInfo.Size is gzipped size
 		SetSizeInStorage(tmpFile.SizeInStorage). // gzipped size
 		SetStorageType(storagetype.S3).
 		SetBucketName(qq.bucketName).

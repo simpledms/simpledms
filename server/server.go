@@ -427,10 +427,25 @@ func (qq *Server) Start() error {
 	fileRepo := common.NewFileRepository()
 	minioClient := qq.initNilableMinioClient(systemConfig.S3())
 	fileSystem := filesystem.NewFileSystem(qq.metaPath)
+
+	disableFileEncryptionStr := os.Getenv("SIMPLEDMS_DISABLE_FILE_ENCRYPTION")
+	disableFileEncryption := false
+	if disableFileEncryptionStr != "" {
+		disableFileEncryption, err = strconv.ParseBool(disableFileEncryptionStr)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
 	infra := common.NewInfra(
 		renderer,
 		qq.metaPath,
-		filesystem.NewS3FileSystem(minioClient, systemConfig.S3().S3BucketName, fileSystem),
+		filesystem.NewS3FileSystem(
+			minioClient,
+			systemConfig.S3().S3BucketName,
+			fileSystem,
+			disableFileEncryption,
+		),
 		factory,
 		fileRepo,
 		systemConfig,
