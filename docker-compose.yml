@@ -1,7 +1,8 @@
 volumes:
     mailpit_data:
-    garage_meta:
-    garage_data:
+    versitygw_data:
+    #garage_meta:
+    #garage_data:
 
 services:
     #docling:
@@ -35,15 +36,28 @@ services:
             MP_SMTP_AUTH_ACCEPT_ANY: 1
             MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
-    garage:
-      image: dxflrs/garage:v2.1.0
+    versitygw:
+      image: versity/versitygw:latest
       restart: unless-stopped
+      ports:
+        - "3900:7070" # 3900 is default port of garage
       volumes:
-        - ./garage.toml:/etc/garage.toml
-        - garage_meta:/var/lib/garage/meta
-        - garage_data:/var/lib/garage/data
-      ports: # TODO all necessary?
-        - "3900:3900"
-        - "3901:3901"
-        - "3902:3902"
-        - "3903:3903"
+        - versitygw_data:/data
+      environment:
+        ROOT_ACCESS_KEY_ID: unsafe-placeholder-access-key-id
+        ROOT_SECRET_ACCESS_KEY: unsafe-placeholder-secret-access-key
+        VGW_BACKEND: posix
+        VGW_BACKEND_ARG: /data
+
+    #garage:
+      #image: dxflrs/garage:v2.1.0
+      #restart: unless-stopped
+      #volumes:
+        #- ./garage.toml:/etc/garage.toml
+        #- garage_meta:/var/lib/garage/meta
+        #- garage_data:/var/lib/garage/data
+      #ports: # TODO all necessary?
+        #- "3900:3900"
+        #- "3901:3901"
+        #- "3902:3902"
+        #- "3903:3903"
