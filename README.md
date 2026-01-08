@@ -16,9 +16,11 @@ The app is also available as a SaaS offering at [simpledms.eu](https://simpledms
 ![Screenshot of the SimpleDMS app](https://simpledms.ch/assets/simpledms/2025.01.22-simpledms-screenshot_metadaten.png)
 
 ## Open Source philosophy and business model
-The SimpleDMS app in this repository contains all features relevant for the use by a single company or family. The goal is to keep all these features, including future features, available for free.
+The SimpleDMS app in this repository contains all features relevant for the use by a single company or family. 
 
-To prevent making competing the SimpleDMS SaaS offering (simpledms.eu / simpledms.ch) to easy, a control plane to manage multi-tenant setups (customer management, billing integration, per customer storage limits, maybe white-labeling in the future, etc.) is locked behind a paywall. The code in the paywalled repo is source-available and modification is allowed.
+The goal is to keep all features, including future features, available for free. However, it cannot be guaranteed that all future features are included in the free open source version, as the development of SimpleDMS has to be sustainable in the long term.
+
+To prevent making competing the SimpleDMS SaaS offering (simpledms.eu / simpledms.ch) too easy, a control plane to manage multi-tenant setups (customer management, billing integration, per customer storage limits, maybe white-labeling in the future, etc.) is locked behind a paywall. The code in the paywalled repo is source-available and modification is allowed.
 
 In addition to the SaaS offering, there are business offerings to obtain the source code under a non-copyleft license or a license that allows removing the attribution notices in the app.
 
