@@ -109,7 +109,7 @@ func (qq *DashboardCards) Widget(
 		}
 
 		grids = append(grids, &wx.Grid{
-			Heading: wx.Hf(wx.HeadingTypeTitleMd, "Organization: «%s»", tenantx.Name),
+			Heading: wx.Hf(wx.HeadingTypeTitleMd, "Organization «%s»", tenantx.Name),
 			Footer: &wx.Row{
 				Children: tenantHeaderBtns,
 			},
