@@ -1,7 +1,6 @@
 package inbox
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
@@ -155,12 +154,7 @@ func (qq *ListFiles) Widget(
 			HxTarget: "#innerContent",                    // not just fileList because of sortBy selection
 			HxSwap:   "innerHTML",
 			HxTrigger: strings.Join([]string{
-				fmt.Sprintf("input from:#search delay:100ms"),
-				event.SearchQueryUpdated.HandlerWithModifier("delay:100ms"),
-				event.FileUploaded.Handler(),
-				event.ZIPArchiveUnzipped.Handler(), // TODO necessary?
-				event.FileDeleted.Handler(),
-				event.FileUpdated.Handler(),
+				// see comment on HTMXAttrs on ScrollableContent (FileList)
 				event.SortByUpdated.HandlerWithModifier("delay:100ms"), // TODO delay necessary?
 			}, ", "),
 			HxInclude: "#search,#sortBy",
@@ -232,6 +226,26 @@ func (qq *ListFiles) filesList(
 			ID: qq.FileListID(),
 		},
 		Children: content,
+		// must be on ScrollableContent and not directly on wx.List because otherwise page breaks
+		// if a search has no results and empty state is rendered without HTMXAttrs
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost:   qq.EndpointWithParams(actionx.ResponseWrapperNone, "#"+qq.FileListID()),
+			HxVals:   util.JSON(data), // overrides form fields, must be added via HxInclude
+			HxTarget: "#" + qq.FileListID(),
+			HxSwap:   "outerHTML",
+			HxTrigger: strings.Join([]string{
+				// SortByUpdated is handled separately because it has to update sortby
+				// context menu and the files list; sortby context menu is part of appbar and thus
+				// updating the app bar while using the search input leads to flickering and
+				// loss of input while typing
+				event.SearchQueryUpdated.HandlerWithModifier("delay:100ms"),
+				event.FileUploaded.Handler(),
+				event.ZIPArchiveUnzipped.Handler(), // TODO necessary?
+				event.FileDeleted.Handler(),
+				event.FileUpdated.Handler(),
+			}, ", "),
+			HxInclude: "#search,#sortBy",
+		},
 	}
 }
 
@@ -308,6 +322,9 @@ func (qq *ListFiles) appBar(ctx ctxx.Context, state *PageState) *wx.AppBar {
 			Name:           "SearchQuery",
 			Value:          state.SearchQuery,
 			SupportingText: wx.Tf("Search in «Inbox»"),
+			HTMXAttrs: wx.HTMXAttrs{
+				HxOn: event.SearchQueryUpdated.HxOnWithQueryParam("input", "q"),
+			},
 		},
 	}
 }

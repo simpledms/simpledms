@@ -3,6 +3,8 @@ package widget
 // TODO rename to content?
 type ScrollableContent struct {
 	Widget[ScrollableContent]
+	HTMXAttrs
+
 	Children     IWidget
 	BottomAppBar *BottomAppBar
 
