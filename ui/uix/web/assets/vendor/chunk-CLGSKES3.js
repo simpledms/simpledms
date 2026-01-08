@@ -1,0 +1,2 @@
+import{e as a}from"./chunk-RMJY7HHF.js";var l=0;function _(o,e,i,p,s,u){e||(e={});var n,t,r=e;if("ref"in r)for(t in r={},e)t=="ref"?n=e[t]:r[t]=e[t];var f={type:o,props:r,key:i,ref:n,__k:null,__:null,__b:0,__e:null,__c:null,constructor:void 0,__v:--l,__i:-1,__u:0,__source:s,__self:u};if(typeof o=="function"&&(n=o.defaultProps))for(t in n)r[t]===void 0&&(r[t]=n[t]);return a.vnode&&a.vnode(f),f}export{_ as a};
+//# sourceMappingURL=chunk-CLGSKES3.js.map

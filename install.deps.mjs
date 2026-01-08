@@ -1,11 +1,14 @@
 import * as esbuild from "esbuild";
 
+const outdir = "ui/uix/web/assets/vendor";
+
 // run with `node ./install.deps.mjs`
 esbuild
 	.build({
 		bundle: true,
 		format: "esm",
-		outdir: "ui/web/assets/vendor",
+		// same path used below
+		outdir: outdir,
 		outbase: ".", // necessary to preserve path
 		platform: "browser",
 		splitting: true,
@@ -43,7 +46,7 @@ esbuild
 	.build({
 		bundle: true,
 		format: "iife",
-		outdir: "ui/web/assets/vendor",
+		outdir: outdir,
 		outbase: ".", // necessary to preserve path
 		platform: "browser",
 		minify: true,

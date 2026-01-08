@@ -1,2 +1,2 @@
-import{e as a,g as b,q as c,r as d}from "../chunk-7MEJP3IB.js";import"../chunk-FW4363Y4.js";export{c as BasePlugin,d as UIPlugin,b as Uppy,a as debugLogger,b as default};
+import{a,b,q as c,x as d}from"../chunk-RMJY7HHF.js";import"../chunk-FW4363Y4.js";export{a as BasePlugin,c as UIPlugin,d as Uppy,b as debugLogger,d as default};
 //# sourceMappingURL=core.js.map
