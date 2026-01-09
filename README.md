@@ -1,7 +1,9 @@
-# SimpleDMS – Document management for small businesses
+# SimpleDMS – Document Management for Small Businesses
+
 SimpleDMS is an easy-to-use document management system (DMS) for small businesses that sorts documents almost by itself.
 
 ## Simple and efficient
+
 The metadata-driven concept of SimpleDMS enables efficient filing and fast retrieval of documents after a short familiarization period.
 
 The core of the concept consists of:
@@ -10,12 +12,19 @@ The core of the concept consists of:
 - workspaces (spaces) for shared or private access to documents.
 
 ## SaaS
+
 The app is also available as a SaaS offering at [simpledms.eu](https://simpledms.eu) and [simpledms.ch](https://simpledms.ch).
 
 ## Screenshot
+
 ![Screenshot of the SimpleDMS app](https://simpledms.ch/assets/simpledms/2025.01.22-simpledms-screenshot_metadaten.png)
 
+## Technical documentation
+
+You can find the [technical documentation](https://simpledms.eu/en/resources/technical-documentation) and the [setup instructions](https://simpledms.eu/en/resources/technical-documentation/setup) on the SimpleDMS website.
+
 ## Open Source philosophy and business model
+
 The SimpleDMS app in this repository contains all features relevant for the use by a single company or family. 
 
 The goal is to keep all features, including future features, available for free. However, it cannot be guaranteed that all future features are included in the free open source version, as the development of SimpleDMS has to be sustainable in the long term.
@@ -29,6 +38,7 @@ On demand, paid access to a SimpleDMS version with long-term support (LTS) and s
 You can find the [prices on the SimpleDMS website](https://simpledms.eu/en/pricing).
 
 ## Tech stack
+
 SimpleDMS is built with:
 - [Go](https://go.dev/)
 - [ent](https://entgo.io/) Entity Framework
@@ -37,6 +47,7 @@ SimpleDMS is built with:
 - [Tailwind CSS](https://tailwindcss.com/)
 
 ## Where is the git history?
+
 In the beginning SimpleDMS was developed in a monorepo together with other apps as a closed source project.
 
 When open-sourcing SimpleDMS in December 2025, I decided to remove the git history, because preserving it while extracting the project from the monorepo was not worth the effort. In addition, I didn't want to risk exposing any personal notes or details of my other projects.
