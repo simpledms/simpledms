@@ -44,7 +44,7 @@ func (qq *Renderer) Render(rw httpx.ResponseWriter, ctx ctxx.Context, widgets ..
 	for _, widget := range widgets {
 		widget.SetContext(ctx)
 		if ctx == nil {
-			log.Printf("ctx is nil, widget was %T, %+v", widget, widget)
+			log.Printf("ctx is nil, widget type was %T", widget)
 		}
 
 		err := qq.templates.ExecuteTemplate(rw, widget.TemplateName(), widget)
