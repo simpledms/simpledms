@@ -6,6 +6,11 @@ services:
   simpledms:
     image: "ghcr.io/simpledms/simpledms:stable"
     env_file: ".env"
+    depends_on:
+      versitygw:
+        condition: service_started
+      tika:
+        condition: service_started
     restart: unless-stopped
     # if you run SimpleDMS locally, you probably want to use other ports
     ports:

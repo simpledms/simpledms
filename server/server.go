@@ -53,7 +53,7 @@ import (
 type Server struct {
 	metaPath           string
 	devMode            bool
-	port               int
+	unsafePort         int // unsafe because it can be 0, use qq.port()
 	assetsFS           fs.FS
 	migrationsMainFS   fs.FS
 	migrationsTenantFS fs.FS
@@ -63,7 +63,7 @@ type Server struct {
 func NewServer(
 	metaPath string,
 	devMode bool,
-	port int,
+	unsafePort int,
 	assetsFS fs.FS,
 	isSaaSModeEnabled bool,
 ) *Server {
@@ -98,7 +98,7 @@ func NewServer(
 	return &Server{
 		metaPath:           metaPath,
 		devMode:            devMode,
-		port:               port,
+		unsafePort:         unsafePort,
 		assetsFS:           assetsFS,
 		migrationsMainFS:   migrationsMainFS,
 		migrationsTenantFS: migrationsTenantFS,
@@ -256,7 +256,7 @@ func (qq *Server) Start() error {
 
 	if systemConfigx.IsIdentityEncryptedWithPassphrase {
 		maintenanceModeServer := http.Server{
-			Addr: fmt.Sprintf(":%d", qq.port),
+			Addr: fmt.Sprintf(":%d", qq.port(systemConfigx.TLSCertFilepath, systemConfigx.TLSPrivateKeyFilepath)),
 		}
 
 		mux := http.NewServeMux()
@@ -570,7 +570,14 @@ func (qq *Server) Start() error {
 		tikaClientNilable = tika.NewDefaultClient(systemConfigx.OcrTikaURL)
 	}
 
-	schedulerx := scheduler.NewScheduler(infra, mainDB, tenantDBs, minioClient, systemConfig.S3().S3BucketName, tikaClientNilable)
+	schedulerx := scheduler.NewScheduler(
+		infra,
+		mainDB,
+		tenantDBs,
+		minioClient,
+		systemConfig.S3().S3BucketName,
+		tikaClientNilable,
+	)
 	schedulerx.Run(qq.devMode, qq.metaPath, qq.migrationsTenantFS)
 
 	handlerChain := handlers.CompressHandler(
@@ -586,19 +593,28 @@ func (qq *Server) Start() error {
 	// only if reverse proxy is used
 	if useAutocert {
 		server := &http.Server{
-			Addr:      fmt.Sprintf(":%d", qq.port),
+			Addr: fmt.Sprintf(":%d", qq.port(
+				systemConfig.TLS().TLSCertFilepath,
+				systemConfig.TLS().TLSPrivateKeyFilepath,
+			)),
 			TLSConfig: &tls.Config{GetCertificate: manager.GetCertificate},
 			Handler:   handlerChain,
 		}
 		err = server.ListenAndServeTLS("", "")
 	} else if systemConfig.TLS().TLSCertFilepath == "" || systemConfig.TLS().TLSPrivateKeyFilepath == "" {
 		err = http.ListenAndServe(
-			fmt.Sprintf(":%d", qq.port),
+			fmt.Sprintf(":%d", qq.port(
+				systemConfig.TLS().TLSCertFilepath,
+				systemConfig.TLS().TLSPrivateKeyFilepath,
+			)),
 			handlerChain,
 		)
 	} else {
 		err = http.ListenAndServeTLS(
-			fmt.Sprintf(":%d", qq.port),
+			fmt.Sprintf(":%d", qq.port(
+				systemConfig.TLS().TLSCertFilepath,
+				systemConfig.TLS().TLSPrivateKeyFilepath,
+			)),
 			systemConfig.TLS().TLSCertFilepath,
 			systemConfig.TLS().TLSPrivateKeyFilepath,
 			handlerChain,
@@ -715,4 +731,14 @@ func (qq *Server) initInitialUser(
 	}
 
 	return nil
+}
+
+func (qq *Server) port(tlsCertFilepath, tlsPrivateKeyFilepath string) int {
+	if qq.unsafePort > 0 {
+		return qq.unsafePort
+	}
+	if tlsCertFilepath != "" && tlsPrivateKeyFilepath != "" {
+		return 443
+	}
+	return 80
 }

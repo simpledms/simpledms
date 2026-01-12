@@ -28,7 +28,7 @@ func main() {
 	// var dbPath string
 	var devMode bool
 	var metaPath string
-	flag.IntVar(&port, "port", 443, "Port to listen on")
+	flag.IntVar(&port, "port", -1, "Port to listen on")
 	flag.StringVar(&metaPath, "meta", "simpledms", "Path to the data directory for simpledms, for example the database is stored in there and all files if a local storage driver is used. Relative to the served directory.")
 	flag.BoolVar(&devMode, "dev", false, "Run in development mode")
 	flag.Parse()
