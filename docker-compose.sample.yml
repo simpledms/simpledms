@@ -4,7 +4,7 @@ volumes:
 
 services:
   simpledms:
-    image: "ghcr.io/marcobeierer/simpledms:stable"
+    image: "ghcr.io/simpledms/simpledms:stable"
     env_file: ".env"
     restart: unless-stopped
     # if you run SimpleDMS locally, you probably want to use other ports
