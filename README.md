@@ -21,7 +21,7 @@ The app is also available as a SaaS offering at [simpledms.eu](https://simpledms
 
 ## Technical documentation
 
-You can find the [technical documentation](https://simpledms.eu/en/resources/technical-documentation) and the [setup instructions](https://simpledms.eu/en/resources/technical-documentation/setup) on the SimpleDMS website.
+You can find the [technical documentation](https://simpledms.eu/en/resources/technical-documentation), the [setup reference](https://simpledms.eu/en/resources/technical-documentation/setup), and a [step-by-step setup guide](https://simpledms.eu/en/resources/technical-documentation/how-to-setup-simpledms-locally-with-docker-compose) on the SimpleDMS website.
 
 ## Open Source philosophy and business model
 
