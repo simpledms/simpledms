@@ -23,6 +23,9 @@ The app is also available as a SaaS offering at [simpledms.eu](https://simpledms
 
 You can find the [technical documentation](https://simpledms.eu/en/resources/technical-documentation), the [setup reference](https://simpledms.eu/en/resources/technical-documentation/setup), and a [step-by-step setup guide](https://simpledms.eu/en/resources/technical-documentation/how-to-setup-simpledms-locally-with-docker-compose) on the SimpleDMS website.
 
+## Feedback
+This app has no analytics or tracking integrated. Therefore, I have no way of knowing how it is used or if it is useful to you. If you have any feedback, please let me know. I would highly appreciate it. Open an issue or discussion on GitHub or email me at email@marcobeierer.ch.
+
 ## Open Source philosophy and business model
 
 The SimpleDMS app in this repository contains all features relevant for the use by a single company or family. 
