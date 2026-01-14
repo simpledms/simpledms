@@ -36,7 +36,7 @@ func (qq *DashboardPage) Widget(ctx ctxx.Context) renderable.Renderable {
 		Content: &wx.DefaultLayout{
 			AppBar:        qq.appBar(ctx),
 			Content:       qq.actions.DashboardCards.Widget(ctx),
-			WithPoweredBy: true,
+			WithPoweredBy: false,
 		},
 	}
 
