@@ -22,198 +22,198 @@ type MailCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (mc *MailCreate) SetCreatedAt(t time.Time) *MailCreate {
-	mc.mutation.SetCreatedAt(t)
-	return mc
+func (_c *MailCreate) SetCreatedAt(v time.Time) *MailCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (mc *MailCreate) SetNillableCreatedAt(t *time.Time) *MailCreate {
-	if t != nil {
-		mc.SetCreatedAt(*t)
+func (_c *MailCreate) SetNillableCreatedAt(v *time.Time) *MailCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return mc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (mc *MailCreate) SetCreatedBy(i int64) *MailCreate {
-	mc.mutation.SetCreatedBy(i)
-	return mc
+func (_c *MailCreate) SetCreatedBy(v int64) *MailCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (mc *MailCreate) SetNillableCreatedBy(i *int64) *MailCreate {
-	if i != nil {
-		mc.SetCreatedBy(*i)
+func (_c *MailCreate) SetNillableCreatedBy(v *int64) *MailCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return mc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (mc *MailCreate) SetUpdatedAt(t time.Time) *MailCreate {
-	mc.mutation.SetUpdatedAt(t)
-	return mc
+func (_c *MailCreate) SetUpdatedAt(v time.Time) *MailCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (mc *MailCreate) SetNillableUpdatedAt(t *time.Time) *MailCreate {
-	if t != nil {
-		mc.SetUpdatedAt(*t)
+func (_c *MailCreate) SetNillableUpdatedAt(v *time.Time) *MailCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return mc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (mc *MailCreate) SetUpdatedBy(i int64) *MailCreate {
-	mc.mutation.SetUpdatedBy(i)
-	return mc
+func (_c *MailCreate) SetUpdatedBy(v int64) *MailCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (mc *MailCreate) SetNillableUpdatedBy(i *int64) *MailCreate {
-	if i != nil {
-		mc.SetUpdatedBy(*i)
+func (_c *MailCreate) SetNillableUpdatedBy(v *int64) *MailCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return mc
+	return _c
 }
 
 // SetSubject sets the "subject" field.
-func (mc *MailCreate) SetSubject(s string) *MailCreate {
-	mc.mutation.SetSubject(s)
-	return mc
+func (_c *MailCreate) SetSubject(v string) *MailCreate {
+	_c.mutation.SetSubject(v)
+	return _c
 }
 
 // SetBody sets the "body" field.
-func (mc *MailCreate) SetBody(s string) *MailCreate {
-	mc.mutation.SetBody(s)
-	return mc
+func (_c *MailCreate) SetBody(v string) *MailCreate {
+	_c.mutation.SetBody(v)
+	return _c
 }
 
 // SetHTMLBody sets the "html_body" field.
-func (mc *MailCreate) SetHTMLBody(s string) *MailCreate {
-	mc.mutation.SetHTMLBody(s)
-	return mc
+func (_c *MailCreate) SetHTMLBody(v string) *MailCreate {
+	_c.mutation.SetHTMLBody(v)
+	return _c
 }
 
 // SetNillableHTMLBody sets the "html_body" field if the given value is not nil.
-func (mc *MailCreate) SetNillableHTMLBody(s *string) *MailCreate {
-	if s != nil {
-		mc.SetHTMLBody(*s)
+func (_c *MailCreate) SetNillableHTMLBody(v *string) *MailCreate {
+	if v != nil {
+		_c.SetHTMLBody(*v)
 	}
-	return mc
+	return _c
 }
 
 // SetSentAt sets the "sent_at" field.
-func (mc *MailCreate) SetSentAt(t time.Time) *MailCreate {
-	mc.mutation.SetSentAt(t)
-	return mc
+func (_c *MailCreate) SetSentAt(v time.Time) *MailCreate {
+	_c.mutation.SetSentAt(v)
+	return _c
 }
 
 // SetNillableSentAt sets the "sent_at" field if the given value is not nil.
-func (mc *MailCreate) SetNillableSentAt(t *time.Time) *MailCreate {
-	if t != nil {
-		mc.SetSentAt(*t)
+func (_c *MailCreate) SetNillableSentAt(v *time.Time) *MailCreate {
+	if v != nil {
+		_c.SetSentAt(*v)
 	}
-	return mc
+	return _c
 }
 
 // SetLastTriedAt sets the "last_tried_at" field.
-func (mc *MailCreate) SetLastTriedAt(t time.Time) *MailCreate {
-	mc.mutation.SetLastTriedAt(t)
-	return mc
+func (_c *MailCreate) SetLastTriedAt(v time.Time) *MailCreate {
+	_c.mutation.SetLastTriedAt(v)
+	return _c
 }
 
 // SetNillableLastTriedAt sets the "last_tried_at" field if the given value is not nil.
-func (mc *MailCreate) SetNillableLastTriedAt(t *time.Time) *MailCreate {
-	if t != nil {
-		mc.SetLastTriedAt(*t)
+func (_c *MailCreate) SetNillableLastTriedAt(v *time.Time) *MailCreate {
+	if v != nil {
+		_c.SetLastTriedAt(*v)
 	}
-	return mc
+	return _c
 }
 
 // SetRetryCount sets the "retry_count" field.
-func (mc *MailCreate) SetRetryCount(i int) *MailCreate {
-	mc.mutation.SetRetryCount(i)
-	return mc
+func (_c *MailCreate) SetRetryCount(v int) *MailCreate {
+	_c.mutation.SetRetryCount(v)
+	return _c
 }
 
 // SetNillableRetryCount sets the "retry_count" field if the given value is not nil.
-func (mc *MailCreate) SetNillableRetryCount(i *int) *MailCreate {
-	if i != nil {
-		mc.SetRetryCount(*i)
+func (_c *MailCreate) SetNillableRetryCount(v *int) *MailCreate {
+	if v != nil {
+		_c.SetRetryCount(*v)
 	}
-	return mc
+	return _c
 }
 
 // SetReceiverID sets the "receiver_id" field.
-func (mc *MailCreate) SetReceiverID(i int64) *MailCreate {
-	mc.mutation.SetReceiverID(i)
-	return mc
+func (_c *MailCreate) SetReceiverID(v int64) *MailCreate {
+	_c.mutation.SetReceiverID(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (mc *MailCreate) SetID(i int64) *MailCreate {
-	mc.mutation.SetID(i)
-	return mc
+func (_c *MailCreate) SetID(v int64) *MailCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetCreatorID sets the "creator" edge to the Account entity by ID.
-func (mc *MailCreate) SetCreatorID(id int64) *MailCreate {
-	mc.mutation.SetCreatorID(id)
-	return mc
+func (_c *MailCreate) SetCreatorID(id int64) *MailCreate {
+	_c.mutation.SetCreatorID(id)
+	return _c
 }
 
 // SetNillableCreatorID sets the "creator" edge to the Account entity by ID if the given value is not nil.
-func (mc *MailCreate) SetNillableCreatorID(id *int64) *MailCreate {
+func (_c *MailCreate) SetNillableCreatorID(id *int64) *MailCreate {
 	if id != nil {
-		mc = mc.SetCreatorID(*id)
+		_c = _c.SetCreatorID(*id)
 	}
-	return mc
+	return _c
 }
 
 // SetCreator sets the "creator" edge to the Account entity.
-func (mc *MailCreate) SetCreator(a *Account) *MailCreate {
-	return mc.SetCreatorID(a.ID)
+func (_c *MailCreate) SetCreator(v *Account) *MailCreate {
+	return _c.SetCreatorID(v.ID)
 }
 
 // SetUpdaterID sets the "updater" edge to the Account entity by ID.
-func (mc *MailCreate) SetUpdaterID(id int64) *MailCreate {
-	mc.mutation.SetUpdaterID(id)
-	return mc
+func (_c *MailCreate) SetUpdaterID(id int64) *MailCreate {
+	_c.mutation.SetUpdaterID(id)
+	return _c
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the Account entity by ID if the given value is not nil.
-func (mc *MailCreate) SetNillableUpdaterID(id *int64) *MailCreate {
+func (_c *MailCreate) SetNillableUpdaterID(id *int64) *MailCreate {
 	if id != nil {
-		mc = mc.SetUpdaterID(*id)
+		_c = _c.SetUpdaterID(*id)
 	}
-	return mc
+	return _c
 }
 
 // SetUpdater sets the "updater" edge to the Account entity.
-func (mc *MailCreate) SetUpdater(a *Account) *MailCreate {
-	return mc.SetUpdaterID(a.ID)
+func (_c *MailCreate) SetUpdater(v *Account) *MailCreate {
+	return _c.SetUpdaterID(v.ID)
 }
 
 // SetReceiver sets the "receiver" edge to the Account entity.
-func (mc *MailCreate) SetReceiver(a *Account) *MailCreate {
-	return mc.SetReceiverID(a.ID)
+func (_c *MailCreate) SetReceiver(v *Account) *MailCreate {
+	return _c.SetReceiverID(v.ID)
 }
 
 // Mutation returns the MailMutation object of the builder.
-func (mc *MailCreate) Mutation() *MailMutation {
-	return mc.mutation
+func (_c *MailCreate) Mutation() *MailMutation {
+	return _c.mutation
 }
 
 // Save creates the Mail in the database.
-func (mc *MailCreate) Save(ctx context.Context) (*Mail, error) {
-	mc.defaults()
-	return withHooks(ctx, mc.sqlSave, mc.mutation, mc.hooks)
+func (_c *MailCreate) Save(ctx context.Context) (*Mail, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (mc *MailCreate) SaveX(ctx context.Context) *Mail {
-	v, err := mc.Save(ctx)
+func (_c *MailCreate) SaveX(ctx context.Context) *Mail {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -221,73 +221,73 @@ func (mc *MailCreate) SaveX(ctx context.Context) *Mail {
 }
 
 // Exec executes the query.
-func (mc *MailCreate) Exec(ctx context.Context) error {
-	_, err := mc.Save(ctx)
+func (_c *MailCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mc *MailCreate) ExecX(ctx context.Context) {
-	if err := mc.Exec(ctx); err != nil {
+func (_c *MailCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mc *MailCreate) defaults() {
-	if _, ok := mc.mutation.CreatedAt(); !ok {
+func (_c *MailCreate) defaults() {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := mail.DefaultCreatedAt()
-		mc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := mc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := mail.DefaultUpdatedAt()
-		mc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := mc.mutation.LastTriedAt(); !ok {
+	if _, ok := _c.mutation.LastTriedAt(); !ok {
 		v := mail.DefaultLastTriedAt
-		mc.mutation.SetLastTriedAt(v)
+		_c.mutation.SetLastTriedAt(v)
 	}
-	if _, ok := mc.mutation.RetryCount(); !ok {
+	if _, ok := _c.mutation.RetryCount(); !ok {
 		v := mail.DefaultRetryCount
-		mc.mutation.SetRetryCount(v)
+		_c.mutation.SetRetryCount(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (mc *MailCreate) check() error {
-	if _, ok := mc.mutation.CreatedAt(); !ok {
+func (_c *MailCreate) check() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`entmain: missing required field "Mail.created_at"`)}
 	}
-	if _, ok := mc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`entmain: missing required field "Mail.updated_at"`)}
 	}
-	if _, ok := mc.mutation.Subject(); !ok {
+	if _, ok := _c.mutation.Subject(); !ok {
 		return &ValidationError{Name: "subject", err: errors.New(`entmain: missing required field "Mail.subject"`)}
 	}
-	if _, ok := mc.mutation.Body(); !ok {
+	if _, ok := _c.mutation.Body(); !ok {
 		return &ValidationError{Name: "body", err: errors.New(`entmain: missing required field "Mail.body"`)}
 	}
-	if _, ok := mc.mutation.LastTriedAt(); !ok {
+	if _, ok := _c.mutation.LastTriedAt(); !ok {
 		return &ValidationError{Name: "last_tried_at", err: errors.New(`entmain: missing required field "Mail.last_tried_at"`)}
 	}
-	if _, ok := mc.mutation.RetryCount(); !ok {
+	if _, ok := _c.mutation.RetryCount(); !ok {
 		return &ValidationError{Name: "retry_count", err: errors.New(`entmain: missing required field "Mail.retry_count"`)}
 	}
-	if _, ok := mc.mutation.ReceiverID(); !ok {
+	if _, ok := _c.mutation.ReceiverID(); !ok {
 		return &ValidationError{Name: "receiver_id", err: errors.New(`entmain: missing required field "Mail.receiver_id"`)}
 	}
-	if len(mc.mutation.ReceiverIDs()) == 0 {
+	if len(_c.mutation.ReceiverIDs()) == 0 {
 		return &ValidationError{Name: "receiver", err: errors.New(`entmain: missing required edge "Mail.receiver"`)}
 	}
 	return nil
 }
 
-func (mc *MailCreate) sqlSave(ctx context.Context) (*Mail, error) {
-	if err := mc.check(); err != nil {
+func (_c *MailCreate) sqlSave(ctx context.Context) (*Mail, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := mc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, mc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -297,53 +297,53 @@ func (mc *MailCreate) sqlSave(ctx context.Context) (*Mail, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	mc.mutation.id = &_node.ID
-	mc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (mc *MailCreate) createSpec() (*Mail, *sqlgraph.CreateSpec) {
+func (_c *MailCreate) createSpec() (*Mail, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Mail{config: mc.config}
+		_node = &Mail{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(mail.Table, sqlgraph.NewFieldSpec(mail.FieldID, field.TypeInt64))
 	)
-	if id, ok := mc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := mc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(mail.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := mc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(mail.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mc.mutation.Subject(); ok {
+	if value, ok := _c.mutation.Subject(); ok {
 		_spec.SetField(mail.FieldSubject, field.TypeString, value)
 		_node.Subject = value
 	}
-	if value, ok := mc.mutation.Body(); ok {
+	if value, ok := _c.mutation.Body(); ok {
 		_spec.SetField(mail.FieldBody, field.TypeString, value)
 		_node.Body = value
 	}
-	if value, ok := mc.mutation.HTMLBody(); ok {
+	if value, ok := _c.mutation.HTMLBody(); ok {
 		_spec.SetField(mail.FieldHTMLBody, field.TypeString, value)
 		_node.HTMLBody = value
 	}
-	if value, ok := mc.mutation.SentAt(); ok {
+	if value, ok := _c.mutation.SentAt(); ok {
 		_spec.SetField(mail.FieldSentAt, field.TypeTime, value)
 		_node.SentAt = &value
 	}
-	if value, ok := mc.mutation.LastTriedAt(); ok {
+	if value, ok := _c.mutation.LastTriedAt(); ok {
 		_spec.SetField(mail.FieldLastTriedAt, field.TypeTime, value)
 		_node.LastTriedAt = value
 	}
-	if value, ok := mc.mutation.RetryCount(); ok {
+	if value, ok := _c.mutation.RetryCount(); ok {
 		_spec.SetField(mail.FieldRetryCount, field.TypeInt, value)
 		_node.RetryCount = value
 	}
-	if nodes := mc.mutation.CreatorIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CreatorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -360,7 +360,7 @@ func (mc *MailCreate) createSpec() (*Mail, *sqlgraph.CreateSpec) {
 		_node.CreatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mc.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -377,7 +377,7 @@ func (mc *MailCreate) createSpec() (*Mail, *sqlgraph.CreateSpec) {
 		_node.UpdatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mc.mutation.ReceiverIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ReceiverIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -405,16 +405,16 @@ type MailCreateBulk struct {
 }
 
 // Save creates the Mail entities in the database.
-func (mcb *MailCreateBulk) Save(ctx context.Context) ([]*Mail, error) {
-	if mcb.err != nil {
-		return nil, mcb.err
+func (_c *MailCreateBulk) Save(ctx context.Context) ([]*Mail, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(mcb.builders))
-	nodes := make([]*Mail, len(mcb.builders))
-	mutators := make([]Mutator, len(mcb.builders))
-	for i := range mcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Mail, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := mcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*MailMutation)
@@ -428,11 +428,11 @@ func (mcb *MailCreateBulk) Save(ctx context.Context) ([]*Mail, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, mcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, mcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -456,7 +456,7 @@ func (mcb *MailCreateBulk) Save(ctx context.Context) ([]*Mail, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, mcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -464,8 +464,8 @@ func (mcb *MailCreateBulk) Save(ctx context.Context) ([]*Mail, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mcb *MailCreateBulk) SaveX(ctx context.Context) []*Mail {
-	v, err := mcb.Save(ctx)
+func (_c *MailCreateBulk) SaveX(ctx context.Context) []*Mail {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -473,14 +473,14 @@ func (mcb *MailCreateBulk) SaveX(ctx context.Context) []*Mail {
 }
 
 // Exec executes the query.
-func (mcb *MailCreateBulk) Exec(ctx context.Context) error {
-	_, err := mcb.Save(ctx)
+func (_c *MailCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mcb *MailCreateBulk) ExecX(ctx context.Context) {
-	if err := mcb.Exec(ctx); err != nil {
+func (_c *MailCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

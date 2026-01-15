@@ -24,113 +24,113 @@ type FilePropertyAssignmentCreate struct {
 }
 
 // SetSpaceID sets the "space_id" field.
-func (fpac *FilePropertyAssignmentCreate) SetSpaceID(i int64) *FilePropertyAssignmentCreate {
-	fpac.mutation.SetSpaceID(i)
-	return fpac
+func (_c *FilePropertyAssignmentCreate) SetSpaceID(v int64) *FilePropertyAssignmentCreate {
+	_c.mutation.SetSpaceID(v)
+	return _c
 }
 
 // SetFileID sets the "file_id" field.
-func (fpac *FilePropertyAssignmentCreate) SetFileID(i int64) *FilePropertyAssignmentCreate {
-	fpac.mutation.SetFileID(i)
-	return fpac
+func (_c *FilePropertyAssignmentCreate) SetFileID(v int64) *FilePropertyAssignmentCreate {
+	_c.mutation.SetFileID(v)
+	return _c
 }
 
 // SetPropertyID sets the "property_id" field.
-func (fpac *FilePropertyAssignmentCreate) SetPropertyID(i int64) *FilePropertyAssignmentCreate {
-	fpac.mutation.SetPropertyID(i)
-	return fpac
+func (_c *FilePropertyAssignmentCreate) SetPropertyID(v int64) *FilePropertyAssignmentCreate {
+	_c.mutation.SetPropertyID(v)
+	return _c
 }
 
 // SetTextValue sets the "text_value" field.
-func (fpac *FilePropertyAssignmentCreate) SetTextValue(s string) *FilePropertyAssignmentCreate {
-	fpac.mutation.SetTextValue(s)
-	return fpac
+func (_c *FilePropertyAssignmentCreate) SetTextValue(v string) *FilePropertyAssignmentCreate {
+	_c.mutation.SetTextValue(v)
+	return _c
 }
 
 // SetNillableTextValue sets the "text_value" field if the given value is not nil.
-func (fpac *FilePropertyAssignmentCreate) SetNillableTextValue(s *string) *FilePropertyAssignmentCreate {
-	if s != nil {
-		fpac.SetTextValue(*s)
+func (_c *FilePropertyAssignmentCreate) SetNillableTextValue(v *string) *FilePropertyAssignmentCreate {
+	if v != nil {
+		_c.SetTextValue(*v)
 	}
-	return fpac
+	return _c
 }
 
 // SetNumberValue sets the "number_value" field.
-func (fpac *FilePropertyAssignmentCreate) SetNumberValue(i int) *FilePropertyAssignmentCreate {
-	fpac.mutation.SetNumberValue(i)
-	return fpac
+func (_c *FilePropertyAssignmentCreate) SetNumberValue(v int) *FilePropertyAssignmentCreate {
+	_c.mutation.SetNumberValue(v)
+	return _c
 }
 
 // SetNillableNumberValue sets the "number_value" field if the given value is not nil.
-func (fpac *FilePropertyAssignmentCreate) SetNillableNumberValue(i *int) *FilePropertyAssignmentCreate {
-	if i != nil {
-		fpac.SetNumberValue(*i)
+func (_c *FilePropertyAssignmentCreate) SetNillableNumberValue(v *int) *FilePropertyAssignmentCreate {
+	if v != nil {
+		_c.SetNumberValue(*v)
 	}
-	return fpac
+	return _c
 }
 
 // SetDateValue sets the "date_value" field.
-func (fpac *FilePropertyAssignmentCreate) SetDateValue(t timex.Date) *FilePropertyAssignmentCreate {
-	fpac.mutation.SetDateValue(t)
-	return fpac
+func (_c *FilePropertyAssignmentCreate) SetDateValue(v timex.Date) *FilePropertyAssignmentCreate {
+	_c.mutation.SetDateValue(v)
+	return _c
 }
 
 // SetNillableDateValue sets the "date_value" field if the given value is not nil.
-func (fpac *FilePropertyAssignmentCreate) SetNillableDateValue(t *timex.Date) *FilePropertyAssignmentCreate {
-	if t != nil {
-		fpac.SetDateValue(*t)
+func (_c *FilePropertyAssignmentCreate) SetNillableDateValue(v *timex.Date) *FilePropertyAssignmentCreate {
+	if v != nil {
+		_c.SetDateValue(*v)
 	}
-	return fpac
+	return _c
 }
 
 // SetBoolValue sets the "bool_value" field.
-func (fpac *FilePropertyAssignmentCreate) SetBoolValue(b bool) *FilePropertyAssignmentCreate {
-	fpac.mutation.SetBoolValue(b)
-	return fpac
+func (_c *FilePropertyAssignmentCreate) SetBoolValue(v bool) *FilePropertyAssignmentCreate {
+	_c.mutation.SetBoolValue(v)
+	return _c
 }
 
 // SetNillableBoolValue sets the "bool_value" field if the given value is not nil.
-func (fpac *FilePropertyAssignmentCreate) SetNillableBoolValue(b *bool) *FilePropertyAssignmentCreate {
-	if b != nil {
-		fpac.SetBoolValue(*b)
+func (_c *FilePropertyAssignmentCreate) SetNillableBoolValue(v *bool) *FilePropertyAssignmentCreate {
+	if v != nil {
+		_c.SetBoolValue(*v)
 	}
-	return fpac
+	return _c
 }
 
 // SetID sets the "id" field.
-func (fpac *FilePropertyAssignmentCreate) SetID(i int64) *FilePropertyAssignmentCreate {
-	fpac.mutation.SetID(i)
-	return fpac
+func (_c *FilePropertyAssignmentCreate) SetID(v int64) *FilePropertyAssignmentCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetSpace sets the "space" edge to the Space entity.
-func (fpac *FilePropertyAssignmentCreate) SetSpace(s *Space) *FilePropertyAssignmentCreate {
-	return fpac.SetSpaceID(s.ID)
+func (_c *FilePropertyAssignmentCreate) SetSpace(v *Space) *FilePropertyAssignmentCreate {
+	return _c.SetSpaceID(v.ID)
 }
 
 // SetFile sets the "file" edge to the File entity.
-func (fpac *FilePropertyAssignmentCreate) SetFile(f *File) *FilePropertyAssignmentCreate {
-	return fpac.SetFileID(f.ID)
+func (_c *FilePropertyAssignmentCreate) SetFile(v *File) *FilePropertyAssignmentCreate {
+	return _c.SetFileID(v.ID)
 }
 
 // SetProperty sets the "property" edge to the Property entity.
-func (fpac *FilePropertyAssignmentCreate) SetProperty(p *Property) *FilePropertyAssignmentCreate {
-	return fpac.SetPropertyID(p.ID)
+func (_c *FilePropertyAssignmentCreate) SetProperty(v *Property) *FilePropertyAssignmentCreate {
+	return _c.SetPropertyID(v.ID)
 }
 
 // Mutation returns the FilePropertyAssignmentMutation object of the builder.
-func (fpac *FilePropertyAssignmentCreate) Mutation() *FilePropertyAssignmentMutation {
-	return fpac.mutation
+func (_c *FilePropertyAssignmentCreate) Mutation() *FilePropertyAssignmentMutation {
+	return _c.mutation
 }
 
 // Save creates the FilePropertyAssignment in the database.
-func (fpac *FilePropertyAssignmentCreate) Save(ctx context.Context) (*FilePropertyAssignment, error) {
-	return withHooks(ctx, fpac.sqlSave, fpac.mutation, fpac.hooks)
+func (_c *FilePropertyAssignmentCreate) Save(ctx context.Context) (*FilePropertyAssignment, error) {
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (fpac *FilePropertyAssignmentCreate) SaveX(ctx context.Context) *FilePropertyAssignment {
-	v, err := fpac.Save(ctx)
+func (_c *FilePropertyAssignmentCreate) SaveX(ctx context.Context) *FilePropertyAssignment {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,47 +138,47 @@ func (fpac *FilePropertyAssignmentCreate) SaveX(ctx context.Context) *FileProper
 }
 
 // Exec executes the query.
-func (fpac *FilePropertyAssignmentCreate) Exec(ctx context.Context) error {
-	_, err := fpac.Save(ctx)
+func (_c *FilePropertyAssignmentCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fpac *FilePropertyAssignmentCreate) ExecX(ctx context.Context) {
-	if err := fpac.Exec(ctx); err != nil {
+func (_c *FilePropertyAssignmentCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (fpac *FilePropertyAssignmentCreate) check() error {
-	if _, ok := fpac.mutation.SpaceID(); !ok {
+func (_c *FilePropertyAssignmentCreate) check() error {
+	if _, ok := _c.mutation.SpaceID(); !ok {
 		return &ValidationError{Name: "space_id", err: errors.New(`enttenant: missing required field "FilePropertyAssignment.space_id"`)}
 	}
-	if _, ok := fpac.mutation.FileID(); !ok {
+	if _, ok := _c.mutation.FileID(); !ok {
 		return &ValidationError{Name: "file_id", err: errors.New(`enttenant: missing required field "FilePropertyAssignment.file_id"`)}
 	}
-	if _, ok := fpac.mutation.PropertyID(); !ok {
+	if _, ok := _c.mutation.PropertyID(); !ok {
 		return &ValidationError{Name: "property_id", err: errors.New(`enttenant: missing required field "FilePropertyAssignment.property_id"`)}
 	}
-	if len(fpac.mutation.SpaceIDs()) == 0 {
+	if len(_c.mutation.SpaceIDs()) == 0 {
 		return &ValidationError{Name: "space", err: errors.New(`enttenant: missing required edge "FilePropertyAssignment.space"`)}
 	}
-	if len(fpac.mutation.FileIDs()) == 0 {
+	if len(_c.mutation.FileIDs()) == 0 {
 		return &ValidationError{Name: "file", err: errors.New(`enttenant: missing required edge "FilePropertyAssignment.file"`)}
 	}
-	if len(fpac.mutation.PropertyIDs()) == 0 {
+	if len(_c.mutation.PropertyIDs()) == 0 {
 		return &ValidationError{Name: "property", err: errors.New(`enttenant: missing required edge "FilePropertyAssignment.property"`)}
 	}
 	return nil
 }
 
-func (fpac *FilePropertyAssignmentCreate) sqlSave(ctx context.Context) (*FilePropertyAssignment, error) {
-	if err := fpac.check(); err != nil {
+func (_c *FilePropertyAssignmentCreate) sqlSave(ctx context.Context) (*FilePropertyAssignment, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := fpac.createSpec()
-	if err := sqlgraph.CreateNode(ctx, fpac.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -188,37 +188,37 @@ func (fpac *FilePropertyAssignmentCreate) sqlSave(ctx context.Context) (*FilePro
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	fpac.mutation.id = &_node.ID
-	fpac.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (fpac *FilePropertyAssignmentCreate) createSpec() (*FilePropertyAssignment, *sqlgraph.CreateSpec) {
+func (_c *FilePropertyAssignmentCreate) createSpec() (*FilePropertyAssignment, *sqlgraph.CreateSpec) {
 	var (
-		_node = &FilePropertyAssignment{config: fpac.config}
+		_node = &FilePropertyAssignment{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(filepropertyassignment.Table, sqlgraph.NewFieldSpec(filepropertyassignment.FieldID, field.TypeInt64))
 	)
-	if id, ok := fpac.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := fpac.mutation.TextValue(); ok {
+	if value, ok := _c.mutation.TextValue(); ok {
 		_spec.SetField(filepropertyassignment.FieldTextValue, field.TypeString, value)
 		_node.TextValue = value
 	}
-	if value, ok := fpac.mutation.NumberValue(); ok {
+	if value, ok := _c.mutation.NumberValue(); ok {
 		_spec.SetField(filepropertyassignment.FieldNumberValue, field.TypeInt, value)
 		_node.NumberValue = value
 	}
-	if value, ok := fpac.mutation.DateValue(); ok {
+	if value, ok := _c.mutation.DateValue(); ok {
 		_spec.SetField(filepropertyassignment.FieldDateValue, field.TypeTime, value)
 		_node.DateValue = value
 	}
-	if value, ok := fpac.mutation.BoolValue(); ok {
+	if value, ok := _c.mutation.BoolValue(); ok {
 		_spec.SetField(filepropertyassignment.FieldBoolValue, field.TypeBool, value)
 		_node.BoolValue = value
 	}
-	if nodes := fpac.mutation.SpaceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SpaceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -235,7 +235,7 @@ func (fpac *FilePropertyAssignmentCreate) createSpec() (*FilePropertyAssignment,
 		_node.SpaceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fpac.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -252,7 +252,7 @@ func (fpac *FilePropertyAssignmentCreate) createSpec() (*FilePropertyAssignment,
 		_node.FileID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fpac.mutation.PropertyIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.PropertyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -280,16 +280,16 @@ type FilePropertyAssignmentCreateBulk struct {
 }
 
 // Save creates the FilePropertyAssignment entities in the database.
-func (fpacb *FilePropertyAssignmentCreateBulk) Save(ctx context.Context) ([]*FilePropertyAssignment, error) {
-	if fpacb.err != nil {
-		return nil, fpacb.err
+func (_c *FilePropertyAssignmentCreateBulk) Save(ctx context.Context) ([]*FilePropertyAssignment, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(fpacb.builders))
-	nodes := make([]*FilePropertyAssignment, len(fpacb.builders))
-	mutators := make([]Mutator, len(fpacb.builders))
-	for i := range fpacb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*FilePropertyAssignment, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := fpacb.builders[i]
+			builder := _c.builders[i]
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*FilePropertyAssignmentMutation)
 				if !ok {
@@ -302,11 +302,11 @@ func (fpacb *FilePropertyAssignmentCreateBulk) Save(ctx context.Context) ([]*Fil
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, fpacb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, fpacb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -330,7 +330,7 @@ func (fpacb *FilePropertyAssignmentCreateBulk) Save(ctx context.Context) ([]*Fil
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, fpacb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -338,8 +338,8 @@ func (fpacb *FilePropertyAssignmentCreateBulk) Save(ctx context.Context) ([]*Fil
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fpacb *FilePropertyAssignmentCreateBulk) SaveX(ctx context.Context) []*FilePropertyAssignment {
-	v, err := fpacb.Save(ctx)
+func (_c *FilePropertyAssignmentCreateBulk) SaveX(ctx context.Context) []*FilePropertyAssignment {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -347,14 +347,14 @@ func (fpacb *FilePropertyAssignmentCreateBulk) SaveX(ctx context.Context) []*Fil
 }
 
 // Exec executes the query.
-func (fpacb *FilePropertyAssignmentCreateBulk) Exec(ctx context.Context) error {
-	_, err := fpacb.Save(ctx)
+func (_c *FilePropertyAssignmentCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fpacb *FilePropertyAssignmentCreateBulk) ExecX(ctx context.Context) {
-	if err := fpacb.Exec(ctx); err != nil {
+func (_c *FilePropertyAssignmentCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

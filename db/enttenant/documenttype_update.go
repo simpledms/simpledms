@@ -24,122 +24,122 @@ type DocumentTypeUpdate struct {
 }
 
 // Where appends a list predicates to the DocumentTypeUpdate builder.
-func (dtu *DocumentTypeUpdate) Where(ps ...predicate.DocumentType) *DocumentTypeUpdate {
-	dtu.mutation.Where(ps...)
-	return dtu
+func (_u *DocumentTypeUpdate) Where(ps ...predicate.DocumentType) *DocumentTypeUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (dtu *DocumentTypeUpdate) SetName(s string) *DocumentTypeUpdate {
-	dtu.mutation.SetName(s)
-	return dtu
+func (_u *DocumentTypeUpdate) SetName(v string) *DocumentTypeUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (dtu *DocumentTypeUpdate) SetNillableName(s *string) *DocumentTypeUpdate {
-	if s != nil {
-		dtu.SetName(*s)
+func (_u *DocumentTypeUpdate) SetNillableName(v *string) *DocumentTypeUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return dtu
+	return _u
 }
 
 // SetIcon sets the "icon" field.
-func (dtu *DocumentTypeUpdate) SetIcon(s string) *DocumentTypeUpdate {
-	dtu.mutation.SetIcon(s)
-	return dtu
+func (_u *DocumentTypeUpdate) SetIcon(v string) *DocumentTypeUpdate {
+	_u.mutation.SetIcon(v)
+	return _u
 }
 
 // SetNillableIcon sets the "icon" field if the given value is not nil.
-func (dtu *DocumentTypeUpdate) SetNillableIcon(s *string) *DocumentTypeUpdate {
-	if s != nil {
-		dtu.SetIcon(*s)
+func (_u *DocumentTypeUpdate) SetNillableIcon(v *string) *DocumentTypeUpdate {
+	if v != nil {
+		_u.SetIcon(*v)
 	}
-	return dtu
+	return _u
 }
 
 // ClearIcon clears the value of the "icon" field.
-func (dtu *DocumentTypeUpdate) ClearIcon() *DocumentTypeUpdate {
-	dtu.mutation.ClearIcon()
-	return dtu
+func (_u *DocumentTypeUpdate) ClearIcon() *DocumentTypeUpdate {
+	_u.mutation.ClearIcon()
+	return _u
 }
 
 // SetIsProtected sets the "is_protected" field.
-func (dtu *DocumentTypeUpdate) SetIsProtected(b bool) *DocumentTypeUpdate {
-	dtu.mutation.SetIsProtected(b)
-	return dtu
+func (_u *DocumentTypeUpdate) SetIsProtected(v bool) *DocumentTypeUpdate {
+	_u.mutation.SetIsProtected(v)
+	return _u
 }
 
 // SetNillableIsProtected sets the "is_protected" field if the given value is not nil.
-func (dtu *DocumentTypeUpdate) SetNillableIsProtected(b *bool) *DocumentTypeUpdate {
-	if b != nil {
-		dtu.SetIsProtected(*b)
+func (_u *DocumentTypeUpdate) SetNillableIsProtected(v *bool) *DocumentTypeUpdate {
+	if v != nil {
+		_u.SetIsProtected(*v)
 	}
-	return dtu
+	return _u
 }
 
 // SetIsDisabled sets the "is_disabled" field.
-func (dtu *DocumentTypeUpdate) SetIsDisabled(b bool) *DocumentTypeUpdate {
-	dtu.mutation.SetIsDisabled(b)
-	return dtu
+func (_u *DocumentTypeUpdate) SetIsDisabled(v bool) *DocumentTypeUpdate {
+	_u.mutation.SetIsDisabled(v)
+	return _u
 }
 
 // SetNillableIsDisabled sets the "is_disabled" field if the given value is not nil.
-func (dtu *DocumentTypeUpdate) SetNillableIsDisabled(b *bool) *DocumentTypeUpdate {
-	if b != nil {
-		dtu.SetIsDisabled(*b)
+func (_u *DocumentTypeUpdate) SetNillableIsDisabled(v *bool) *DocumentTypeUpdate {
+	if v != nil {
+		_u.SetIsDisabled(*v)
 	}
-	return dtu
+	return _u
 }
 
 // AddAttributeIDs adds the "attributes" edge to the Attribute entity by IDs.
-func (dtu *DocumentTypeUpdate) AddAttributeIDs(ids ...int64) *DocumentTypeUpdate {
-	dtu.mutation.AddAttributeIDs(ids...)
-	return dtu
+func (_u *DocumentTypeUpdate) AddAttributeIDs(ids ...int64) *DocumentTypeUpdate {
+	_u.mutation.AddAttributeIDs(ids...)
+	return _u
 }
 
 // AddAttributes adds the "attributes" edges to the Attribute entity.
-func (dtu *DocumentTypeUpdate) AddAttributes(a ...*Attribute) *DocumentTypeUpdate {
-	ids := make([]int64, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *DocumentTypeUpdate) AddAttributes(v ...*Attribute) *DocumentTypeUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return dtu.AddAttributeIDs(ids...)
+	return _u.AddAttributeIDs(ids...)
 }
 
 // Mutation returns the DocumentTypeMutation object of the builder.
-func (dtu *DocumentTypeUpdate) Mutation() *DocumentTypeMutation {
-	return dtu.mutation
+func (_u *DocumentTypeUpdate) Mutation() *DocumentTypeMutation {
+	return _u.mutation
 }
 
 // ClearAttributes clears all "attributes" edges to the Attribute entity.
-func (dtu *DocumentTypeUpdate) ClearAttributes() *DocumentTypeUpdate {
-	dtu.mutation.ClearAttributes()
-	return dtu
+func (_u *DocumentTypeUpdate) ClearAttributes() *DocumentTypeUpdate {
+	_u.mutation.ClearAttributes()
+	return _u
 }
 
 // RemoveAttributeIDs removes the "attributes" edge to Attribute entities by IDs.
-func (dtu *DocumentTypeUpdate) RemoveAttributeIDs(ids ...int64) *DocumentTypeUpdate {
-	dtu.mutation.RemoveAttributeIDs(ids...)
-	return dtu
+func (_u *DocumentTypeUpdate) RemoveAttributeIDs(ids ...int64) *DocumentTypeUpdate {
+	_u.mutation.RemoveAttributeIDs(ids...)
+	return _u
 }
 
 // RemoveAttributes removes "attributes" edges to Attribute entities.
-func (dtu *DocumentTypeUpdate) RemoveAttributes(a ...*Attribute) *DocumentTypeUpdate {
-	ids := make([]int64, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *DocumentTypeUpdate) RemoveAttributes(v ...*Attribute) *DocumentTypeUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return dtu.RemoveAttributeIDs(ids...)
+	return _u.RemoveAttributeIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (dtu *DocumentTypeUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, dtu.sqlSave, dtu.mutation, dtu.hooks)
+func (_u *DocumentTypeUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (dtu *DocumentTypeUpdate) SaveX(ctx context.Context) int {
-	affected, err := dtu.Save(ctx)
+func (_u *DocumentTypeUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -147,60 +147,60 @@ func (dtu *DocumentTypeUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (dtu *DocumentTypeUpdate) Exec(ctx context.Context) error {
-	_, err := dtu.Save(ctx)
+func (_u *DocumentTypeUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dtu *DocumentTypeUpdate) ExecX(ctx context.Context) {
-	if err := dtu.Exec(ctx); err != nil {
+func (_u *DocumentTypeUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (dtu *DocumentTypeUpdate) check() error {
-	if dtu.mutation.SpaceCleared() && len(dtu.mutation.SpaceIDs()) > 0 {
+func (_u *DocumentTypeUpdate) check() error {
+	if _u.mutation.SpaceCleared() && len(_u.mutation.SpaceIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "DocumentType.space"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (dtu *DocumentTypeUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentTypeUpdate {
-	dtu.modifiers = append(dtu.modifiers, modifiers...)
-	return dtu
+func (_u *DocumentTypeUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentTypeUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (dtu *DocumentTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := dtu.check(); err != nil {
-		return n, err
+func (_u *DocumentTypeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(documenttype.Table, documenttype.Columns, sqlgraph.NewFieldSpec(documenttype.FieldID, field.TypeInt64))
-	if ps := dtu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := dtu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(documenttype.FieldName, field.TypeString, value)
 	}
-	if value, ok := dtu.mutation.Icon(); ok {
+	if value, ok := _u.mutation.Icon(); ok {
 		_spec.SetField(documenttype.FieldIcon, field.TypeString, value)
 	}
-	if dtu.mutation.IconCleared() {
+	if _u.mutation.IconCleared() {
 		_spec.ClearField(documenttype.FieldIcon, field.TypeString)
 	}
-	if value, ok := dtu.mutation.IsProtected(); ok {
+	if value, ok := _u.mutation.IsProtected(); ok {
 		_spec.SetField(documenttype.FieldIsProtected, field.TypeBool, value)
 	}
-	if value, ok := dtu.mutation.IsDisabled(); ok {
+	if value, ok := _u.mutation.IsDisabled(); ok {
 		_spec.SetField(documenttype.FieldIsDisabled, field.TypeBool, value)
 	}
-	if dtu.mutation.AttributesCleared() {
+	if _u.mutation.AttributesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -213,7 +213,7 @@ func (dtu *DocumentTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := dtu.mutation.RemovedAttributesIDs(); len(nodes) > 0 && !dtu.mutation.AttributesCleared() {
+	if nodes := _u.mutation.RemovedAttributesIDs(); len(nodes) > 0 && !_u.mutation.AttributesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -229,7 +229,7 @@ func (dtu *DocumentTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := dtu.mutation.AttributesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AttributesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -245,8 +245,8 @@ func (dtu *DocumentTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(dtu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, dtu.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{documenttype.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -254,8 +254,8 @@ func (dtu *DocumentTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	dtu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // DocumentTypeUpdateOne is the builder for updating a single DocumentType entity.
@@ -268,129 +268,129 @@ type DocumentTypeUpdateOne struct {
 }
 
 // SetName sets the "name" field.
-func (dtuo *DocumentTypeUpdateOne) SetName(s string) *DocumentTypeUpdateOne {
-	dtuo.mutation.SetName(s)
-	return dtuo
+func (_u *DocumentTypeUpdateOne) SetName(v string) *DocumentTypeUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (dtuo *DocumentTypeUpdateOne) SetNillableName(s *string) *DocumentTypeUpdateOne {
-	if s != nil {
-		dtuo.SetName(*s)
+func (_u *DocumentTypeUpdateOne) SetNillableName(v *string) *DocumentTypeUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return dtuo
+	return _u
 }
 
 // SetIcon sets the "icon" field.
-func (dtuo *DocumentTypeUpdateOne) SetIcon(s string) *DocumentTypeUpdateOne {
-	dtuo.mutation.SetIcon(s)
-	return dtuo
+func (_u *DocumentTypeUpdateOne) SetIcon(v string) *DocumentTypeUpdateOne {
+	_u.mutation.SetIcon(v)
+	return _u
 }
 
 // SetNillableIcon sets the "icon" field if the given value is not nil.
-func (dtuo *DocumentTypeUpdateOne) SetNillableIcon(s *string) *DocumentTypeUpdateOne {
-	if s != nil {
-		dtuo.SetIcon(*s)
+func (_u *DocumentTypeUpdateOne) SetNillableIcon(v *string) *DocumentTypeUpdateOne {
+	if v != nil {
+		_u.SetIcon(*v)
 	}
-	return dtuo
+	return _u
 }
 
 // ClearIcon clears the value of the "icon" field.
-func (dtuo *DocumentTypeUpdateOne) ClearIcon() *DocumentTypeUpdateOne {
-	dtuo.mutation.ClearIcon()
-	return dtuo
+func (_u *DocumentTypeUpdateOne) ClearIcon() *DocumentTypeUpdateOne {
+	_u.mutation.ClearIcon()
+	return _u
 }
 
 // SetIsProtected sets the "is_protected" field.
-func (dtuo *DocumentTypeUpdateOne) SetIsProtected(b bool) *DocumentTypeUpdateOne {
-	dtuo.mutation.SetIsProtected(b)
-	return dtuo
+func (_u *DocumentTypeUpdateOne) SetIsProtected(v bool) *DocumentTypeUpdateOne {
+	_u.mutation.SetIsProtected(v)
+	return _u
 }
 
 // SetNillableIsProtected sets the "is_protected" field if the given value is not nil.
-func (dtuo *DocumentTypeUpdateOne) SetNillableIsProtected(b *bool) *DocumentTypeUpdateOne {
-	if b != nil {
-		dtuo.SetIsProtected(*b)
+func (_u *DocumentTypeUpdateOne) SetNillableIsProtected(v *bool) *DocumentTypeUpdateOne {
+	if v != nil {
+		_u.SetIsProtected(*v)
 	}
-	return dtuo
+	return _u
 }
 
 // SetIsDisabled sets the "is_disabled" field.
-func (dtuo *DocumentTypeUpdateOne) SetIsDisabled(b bool) *DocumentTypeUpdateOne {
-	dtuo.mutation.SetIsDisabled(b)
-	return dtuo
+func (_u *DocumentTypeUpdateOne) SetIsDisabled(v bool) *DocumentTypeUpdateOne {
+	_u.mutation.SetIsDisabled(v)
+	return _u
 }
 
 // SetNillableIsDisabled sets the "is_disabled" field if the given value is not nil.
-func (dtuo *DocumentTypeUpdateOne) SetNillableIsDisabled(b *bool) *DocumentTypeUpdateOne {
-	if b != nil {
-		dtuo.SetIsDisabled(*b)
+func (_u *DocumentTypeUpdateOne) SetNillableIsDisabled(v *bool) *DocumentTypeUpdateOne {
+	if v != nil {
+		_u.SetIsDisabled(*v)
 	}
-	return dtuo
+	return _u
 }
 
 // AddAttributeIDs adds the "attributes" edge to the Attribute entity by IDs.
-func (dtuo *DocumentTypeUpdateOne) AddAttributeIDs(ids ...int64) *DocumentTypeUpdateOne {
-	dtuo.mutation.AddAttributeIDs(ids...)
-	return dtuo
+func (_u *DocumentTypeUpdateOne) AddAttributeIDs(ids ...int64) *DocumentTypeUpdateOne {
+	_u.mutation.AddAttributeIDs(ids...)
+	return _u
 }
 
 // AddAttributes adds the "attributes" edges to the Attribute entity.
-func (dtuo *DocumentTypeUpdateOne) AddAttributes(a ...*Attribute) *DocumentTypeUpdateOne {
-	ids := make([]int64, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *DocumentTypeUpdateOne) AddAttributes(v ...*Attribute) *DocumentTypeUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return dtuo.AddAttributeIDs(ids...)
+	return _u.AddAttributeIDs(ids...)
 }
 
 // Mutation returns the DocumentTypeMutation object of the builder.
-func (dtuo *DocumentTypeUpdateOne) Mutation() *DocumentTypeMutation {
-	return dtuo.mutation
+func (_u *DocumentTypeUpdateOne) Mutation() *DocumentTypeMutation {
+	return _u.mutation
 }
 
 // ClearAttributes clears all "attributes" edges to the Attribute entity.
-func (dtuo *DocumentTypeUpdateOne) ClearAttributes() *DocumentTypeUpdateOne {
-	dtuo.mutation.ClearAttributes()
-	return dtuo
+func (_u *DocumentTypeUpdateOne) ClearAttributes() *DocumentTypeUpdateOne {
+	_u.mutation.ClearAttributes()
+	return _u
 }
 
 // RemoveAttributeIDs removes the "attributes" edge to Attribute entities by IDs.
-func (dtuo *DocumentTypeUpdateOne) RemoveAttributeIDs(ids ...int64) *DocumentTypeUpdateOne {
-	dtuo.mutation.RemoveAttributeIDs(ids...)
-	return dtuo
+func (_u *DocumentTypeUpdateOne) RemoveAttributeIDs(ids ...int64) *DocumentTypeUpdateOne {
+	_u.mutation.RemoveAttributeIDs(ids...)
+	return _u
 }
 
 // RemoveAttributes removes "attributes" edges to Attribute entities.
-func (dtuo *DocumentTypeUpdateOne) RemoveAttributes(a ...*Attribute) *DocumentTypeUpdateOne {
-	ids := make([]int64, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_u *DocumentTypeUpdateOne) RemoveAttributes(v ...*Attribute) *DocumentTypeUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return dtuo.RemoveAttributeIDs(ids...)
+	return _u.RemoveAttributeIDs(ids...)
 }
 
 // Where appends a list predicates to the DocumentTypeUpdate builder.
-func (dtuo *DocumentTypeUpdateOne) Where(ps ...predicate.DocumentType) *DocumentTypeUpdateOne {
-	dtuo.mutation.Where(ps...)
-	return dtuo
+func (_u *DocumentTypeUpdateOne) Where(ps ...predicate.DocumentType) *DocumentTypeUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (dtuo *DocumentTypeUpdateOne) Select(field string, fields ...string) *DocumentTypeUpdateOne {
-	dtuo.fields = append([]string{field}, fields...)
-	return dtuo
+func (_u *DocumentTypeUpdateOne) Select(field string, fields ...string) *DocumentTypeUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated DocumentType entity.
-func (dtuo *DocumentTypeUpdateOne) Save(ctx context.Context) (*DocumentType, error) {
-	return withHooks(ctx, dtuo.sqlSave, dtuo.mutation, dtuo.hooks)
+func (_u *DocumentTypeUpdateOne) Save(ctx context.Context) (*DocumentType, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (dtuo *DocumentTypeUpdateOne) SaveX(ctx context.Context) *DocumentType {
-	node, err := dtuo.Save(ctx)
+func (_u *DocumentTypeUpdateOne) SaveX(ctx context.Context) *DocumentType {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -398,43 +398,43 @@ func (dtuo *DocumentTypeUpdateOne) SaveX(ctx context.Context) *DocumentType {
 }
 
 // Exec executes the query on the entity.
-func (dtuo *DocumentTypeUpdateOne) Exec(ctx context.Context) error {
-	_, err := dtuo.Save(ctx)
+func (_u *DocumentTypeUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dtuo *DocumentTypeUpdateOne) ExecX(ctx context.Context) {
-	if err := dtuo.Exec(ctx); err != nil {
+func (_u *DocumentTypeUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (dtuo *DocumentTypeUpdateOne) check() error {
-	if dtuo.mutation.SpaceCleared() && len(dtuo.mutation.SpaceIDs()) > 0 {
+func (_u *DocumentTypeUpdateOne) check() error {
+	if _u.mutation.SpaceCleared() && len(_u.mutation.SpaceIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "DocumentType.space"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (dtuo *DocumentTypeUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentTypeUpdateOne {
-	dtuo.modifiers = append(dtuo.modifiers, modifiers...)
-	return dtuo
+func (_u *DocumentTypeUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentTypeUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (dtuo *DocumentTypeUpdateOne) sqlSave(ctx context.Context) (_node *DocumentType, err error) {
-	if err := dtuo.check(); err != nil {
+func (_u *DocumentTypeUpdateOne) sqlSave(ctx context.Context) (_node *DocumentType, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(documenttype.Table, documenttype.Columns, sqlgraph.NewFieldSpec(documenttype.FieldID, field.TypeInt64))
-	id, ok := dtuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`enttenant: missing "DocumentType.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := dtuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, documenttype.FieldID)
 		for _, f := range fields {
@@ -446,29 +446,29 @@ func (dtuo *DocumentTypeUpdateOne) sqlSave(ctx context.Context) (_node *Document
 			}
 		}
 	}
-	if ps := dtuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := dtuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(documenttype.FieldName, field.TypeString, value)
 	}
-	if value, ok := dtuo.mutation.Icon(); ok {
+	if value, ok := _u.mutation.Icon(); ok {
 		_spec.SetField(documenttype.FieldIcon, field.TypeString, value)
 	}
-	if dtuo.mutation.IconCleared() {
+	if _u.mutation.IconCleared() {
 		_spec.ClearField(documenttype.FieldIcon, field.TypeString)
 	}
-	if value, ok := dtuo.mutation.IsProtected(); ok {
+	if value, ok := _u.mutation.IsProtected(); ok {
 		_spec.SetField(documenttype.FieldIsProtected, field.TypeBool, value)
 	}
-	if value, ok := dtuo.mutation.IsDisabled(); ok {
+	if value, ok := _u.mutation.IsDisabled(); ok {
 		_spec.SetField(documenttype.FieldIsDisabled, field.TypeBool, value)
 	}
-	if dtuo.mutation.AttributesCleared() {
+	if _u.mutation.AttributesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -481,7 +481,7 @@ func (dtuo *DocumentTypeUpdateOne) sqlSave(ctx context.Context) (_node *Document
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := dtuo.mutation.RemovedAttributesIDs(); len(nodes) > 0 && !dtuo.mutation.AttributesCleared() {
+	if nodes := _u.mutation.RemovedAttributesIDs(); len(nodes) > 0 && !_u.mutation.AttributesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -497,7 +497,7 @@ func (dtuo *DocumentTypeUpdateOne) sqlSave(ctx context.Context) (_node *Document
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := dtuo.mutation.AttributesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AttributesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -513,11 +513,11 @@ func (dtuo *DocumentTypeUpdateOne) sqlSave(ctx context.Context) (_node *Document
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(dtuo.modifiers...)
-	_node = &DocumentType{config: dtuo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &DocumentType{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, dtuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{documenttype.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -525,6 +525,6 @@ func (dtuo *DocumentTypeUpdateOne) sqlSave(ctx context.Context) (_node *Document
 		}
 		return nil, err
 	}
-	dtuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

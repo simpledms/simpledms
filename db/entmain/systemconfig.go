@@ -64,6 +64,8 @@ type SystemConfig struct {
 	MailerFrom string `json:"mailer_from,omitempty"`
 	// MailerInsecureSkipVerify holds the value of the "mailer_insecure_skip_verify" field.
 	MailerInsecureSkipVerify bool `json:"mailer_insecure_skip_verify,omitempty"`
+	// MailerUseImplicitSslTLS holds the value of the "mailer_use_implicit_ssl_tls" field.
+	MailerUseImplicitSslTLS bool `json:"mailer_use_implicit_ssl_tls,omitempty"`
 	// OcrTikaURL holds the value of the "ocr_tika_url" field.
 	OcrTikaURL string `json:"ocr_tika_url,omitempty"`
 	// InitializedAt holds the value of the "initialized_at" field.
@@ -116,7 +118,7 @@ func (*SystemConfig) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case systemconfig.FieldS3SecretAccessKey, systemconfig.FieldMailerPassword:
 			values[i] = new(entx.EncryptedString)
-		case systemconfig.FieldIsIdentityEncryptedWithPassphrase, systemconfig.FieldS3UseSsl, systemconfig.FieldTLSEnableAutocert, systemconfig.FieldMailerInsecureSkipVerify:
+		case systemconfig.FieldIsIdentityEncryptedWithPassphrase, systemconfig.FieldS3UseSsl, systemconfig.FieldTLSEnableAutocert, systemconfig.FieldMailerInsecureSkipVerify, systemconfig.FieldMailerUseImplicitSslTLS:
 			values[i] = new(sql.NullBool)
 		case systemconfig.FieldID, systemconfig.FieldCreatedBy, systemconfig.FieldUpdatedBy, systemconfig.FieldMailerPort:
 			values[i] = new(sql.NullInt64)
@@ -133,7 +135,7 @@ func (*SystemConfig) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the SystemConfig fields.
-func (sc *SystemConfig) assignValues(columns []string, values []any) error {
+func (_m *SystemConfig) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -144,102 +146,102 @@ func (sc *SystemConfig) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			sc.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case systemconfig.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				sc.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case systemconfig.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				sc.CreatedBy = value.Int64
+				_m.CreatedBy = value.Int64
 			}
 		case systemconfig.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				sc.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case systemconfig.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				sc.UpdatedBy = value.Int64
+				_m.UpdatedBy = value.Int64
 			}
 		case systemconfig.FieldX25519Identity:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field x25519_identity", values[i])
 			} else if value != nil {
-				sc.X25519Identity = *value
+				_m.X25519Identity = *value
 			}
 		case systemconfig.FieldIsIdentityEncryptedWithPassphrase:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_identity_encrypted_with_passphrase", values[i])
 			} else if value.Valid {
-				sc.IsIdentityEncryptedWithPassphrase = value.Bool
+				_m.IsIdentityEncryptedWithPassphrase = value.Bool
 			}
 		case systemconfig.FieldS3Endpoint:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field s3_endpoint", values[i])
 			} else if value.Valid {
-				sc.S3Endpoint = value.String
+				_m.S3Endpoint = value.String
 			}
 		case systemconfig.FieldS3AccessKeyID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field s3_access_key_id", values[i])
 			} else if value.Valid {
-				sc.S3AccessKeyID = value.String
+				_m.S3AccessKeyID = value.String
 			}
 		case systemconfig.FieldS3SecretAccessKey:
 			if value, ok := values[i].(*entx.EncryptedString); !ok {
 				return fmt.Errorf("unexpected type %T for field s3_secret_access_key", values[i])
 			} else if value != nil {
-				sc.S3SecretAccessKey = *value
+				_m.S3SecretAccessKey = *value
 			}
 		case systemconfig.FieldS3BucketName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field s3_bucket_name", values[i])
 			} else if value.Valid {
-				sc.S3BucketName = value.String
+				_m.S3BucketName = value.String
 			}
 		case systemconfig.FieldS3UseSsl:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field s3_use_ssl", values[i])
 			} else if value.Valid {
-				sc.S3UseSsl = value.Bool
+				_m.S3UseSsl = value.Bool
 			}
 		case systemconfig.FieldTLSEnableAutocert:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field tls_enable_autocert", values[i])
 			} else if value.Valid {
-				sc.TLSEnableAutocert = value.Bool
+				_m.TLSEnableAutocert = value.Bool
 			}
 		case systemconfig.FieldTLSCertFilepath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field tls_cert_filepath", values[i])
 			} else if value.Valid {
-				sc.TLSCertFilepath = value.String
+				_m.TLSCertFilepath = value.String
 			}
 		case systemconfig.FieldTLSPrivateKeyFilepath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field tls_private_key_filepath", values[i])
 			} else if value.Valid {
-				sc.TLSPrivateKeyFilepath = value.String
+				_m.TLSPrivateKeyFilepath = value.String
 			}
 		case systemconfig.FieldTLSAutocertEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field tls_autocert_email", values[i])
 			} else if value.Valid {
-				sc.TLSAutocertEmail = value.String
+				_m.TLSAutocertEmail = value.String
 			}
 		case systemconfig.FieldTLSAutocertHosts:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tls_autocert_hosts", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sc.TLSAutocertHosts); err != nil {
+				if err := json.Unmarshal(*value, &_m.TLSAutocertHosts); err != nil {
 					return fmt.Errorf("unmarshal field tls_autocert_hosts: %w", err)
 				}
 			}
@@ -247,53 +249,59 @@ func (sc *SystemConfig) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mailer_host", values[i])
 			} else if value.Valid {
-				sc.MailerHost = value.String
+				_m.MailerHost = value.String
 			}
 		case systemconfig.FieldMailerPort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field mailer_port", values[i])
 			} else if value.Valid {
-				sc.MailerPort = int(value.Int64)
+				_m.MailerPort = int(value.Int64)
 			}
 		case systemconfig.FieldMailerUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mailer_username", values[i])
 			} else if value.Valid {
-				sc.MailerUsername = value.String
+				_m.MailerUsername = value.String
 			}
 		case systemconfig.FieldMailerPassword:
 			if value, ok := values[i].(*entx.EncryptedString); !ok {
 				return fmt.Errorf("unexpected type %T for field mailer_password", values[i])
 			} else if value != nil {
-				sc.MailerPassword = *value
+				_m.MailerPassword = *value
 			}
 		case systemconfig.FieldMailerFrom:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mailer_from", values[i])
 			} else if value.Valid {
-				sc.MailerFrom = value.String
+				_m.MailerFrom = value.String
 			}
 		case systemconfig.FieldMailerInsecureSkipVerify:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field mailer_insecure_skip_verify", values[i])
 			} else if value.Valid {
-				sc.MailerInsecureSkipVerify = value.Bool
+				_m.MailerInsecureSkipVerify = value.Bool
+			}
+		case systemconfig.FieldMailerUseImplicitSslTLS:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field mailer_use_implicit_ssl_tls", values[i])
+			} else if value.Valid {
+				_m.MailerUseImplicitSslTLS = value.Bool
 			}
 		case systemconfig.FieldOcrTikaURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ocr_tika_url", values[i])
 			} else if value.Valid {
-				sc.OcrTikaURL = value.String
+				_m.OcrTikaURL = value.String
 			}
 		case systemconfig.FieldInitializedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field initialized_at", values[i])
 			} else if value.Valid {
-				sc.InitializedAt = new(time.Time)
-				*sc.InitializedAt = value.Time
+				_m.InitializedAt = new(time.Time)
+				*_m.InitializedAt = value.Time
 			}
 		default:
-			sc.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -301,110 +309,113 @@ func (sc *SystemConfig) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the SystemConfig.
 // This includes values selected through modifiers, order, etc.
-func (sc *SystemConfig) Value(name string) (ent.Value, error) {
-	return sc.selectValues.Get(name)
+func (_m *SystemConfig) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryCreator queries the "creator" edge of the SystemConfig entity.
-func (sc *SystemConfig) QueryCreator() *AccountQuery {
-	return NewSystemConfigClient(sc.config).QueryCreator(sc)
+func (_m *SystemConfig) QueryCreator() *AccountQuery {
+	return NewSystemConfigClient(_m.config).QueryCreator(_m)
 }
 
 // QueryUpdater queries the "updater" edge of the SystemConfig entity.
-func (sc *SystemConfig) QueryUpdater() *AccountQuery {
-	return NewSystemConfigClient(sc.config).QueryUpdater(sc)
+func (_m *SystemConfig) QueryUpdater() *AccountQuery {
+	return NewSystemConfigClient(_m.config).QueryUpdater(_m)
 }
 
 // Update returns a builder for updating this SystemConfig.
 // Note that you need to call SystemConfig.Unwrap() before calling this method if this SystemConfig
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (sc *SystemConfig) Update() *SystemConfigUpdateOne {
-	return NewSystemConfigClient(sc.config).UpdateOne(sc)
+func (_m *SystemConfig) Update() *SystemConfigUpdateOne {
+	return NewSystemConfigClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the SystemConfig entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (sc *SystemConfig) Unwrap() *SystemConfig {
-	_tx, ok := sc.config.driver.(*txDriver)
+func (_m *SystemConfig) Unwrap() *SystemConfig {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("entmain: SystemConfig is not a transactional entity")
 	}
-	sc.config.driver = _tx.drv
-	return sc
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (sc *SystemConfig) String() string {
+func (_m *SystemConfig) String() string {
 	var builder strings.Builder
 	builder.WriteString("SystemConfig(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", sc.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(sc.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", sc.CreatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(sc.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", sc.UpdatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("x25519_identity=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("is_identity_encrypted_with_passphrase=")
-	builder.WriteString(fmt.Sprintf("%v", sc.IsIdentityEncryptedWithPassphrase))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsIdentityEncryptedWithPassphrase))
 	builder.WriteString(", ")
 	builder.WriteString("s3_endpoint=")
-	builder.WriteString(sc.S3Endpoint)
+	builder.WriteString(_m.S3Endpoint)
 	builder.WriteString(", ")
 	builder.WriteString("s3_access_key_id=")
-	builder.WriteString(sc.S3AccessKeyID)
+	builder.WriteString(_m.S3AccessKeyID)
 	builder.WriteString(", ")
 	builder.WriteString("s3_secret_access_key=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("s3_bucket_name=")
-	builder.WriteString(sc.S3BucketName)
+	builder.WriteString(_m.S3BucketName)
 	builder.WriteString(", ")
 	builder.WriteString("s3_use_ssl=")
-	builder.WriteString(fmt.Sprintf("%v", sc.S3UseSsl))
+	builder.WriteString(fmt.Sprintf("%v", _m.S3UseSsl))
 	builder.WriteString(", ")
 	builder.WriteString("tls_enable_autocert=")
-	builder.WriteString(fmt.Sprintf("%v", sc.TLSEnableAutocert))
+	builder.WriteString(fmt.Sprintf("%v", _m.TLSEnableAutocert))
 	builder.WriteString(", ")
 	builder.WriteString("tls_cert_filepath=")
-	builder.WriteString(sc.TLSCertFilepath)
+	builder.WriteString(_m.TLSCertFilepath)
 	builder.WriteString(", ")
 	builder.WriteString("tls_private_key_filepath=")
-	builder.WriteString(sc.TLSPrivateKeyFilepath)
+	builder.WriteString(_m.TLSPrivateKeyFilepath)
 	builder.WriteString(", ")
 	builder.WriteString("tls_autocert_email=")
-	builder.WriteString(sc.TLSAutocertEmail)
+	builder.WriteString(_m.TLSAutocertEmail)
 	builder.WriteString(", ")
 	builder.WriteString("tls_autocert_hosts=")
-	builder.WriteString(fmt.Sprintf("%v", sc.TLSAutocertHosts))
+	builder.WriteString(fmt.Sprintf("%v", _m.TLSAutocertHosts))
 	builder.WriteString(", ")
 	builder.WriteString("mailer_host=")
-	builder.WriteString(sc.MailerHost)
+	builder.WriteString(_m.MailerHost)
 	builder.WriteString(", ")
 	builder.WriteString("mailer_port=")
-	builder.WriteString(fmt.Sprintf("%v", sc.MailerPort))
+	builder.WriteString(fmt.Sprintf("%v", _m.MailerPort))
 	builder.WriteString(", ")
 	builder.WriteString("mailer_username=")
-	builder.WriteString(sc.MailerUsername)
+	builder.WriteString(_m.MailerUsername)
 	builder.WriteString(", ")
 	builder.WriteString("mailer_password=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("mailer_from=")
-	builder.WriteString(sc.MailerFrom)
+	builder.WriteString(_m.MailerFrom)
 	builder.WriteString(", ")
 	builder.WriteString("mailer_insecure_skip_verify=")
-	builder.WriteString(fmt.Sprintf("%v", sc.MailerInsecureSkipVerify))
+	builder.WriteString(fmt.Sprintf("%v", _m.MailerInsecureSkipVerify))
+	builder.WriteString(", ")
+	builder.WriteString("mailer_use_implicit_ssl_tls=")
+	builder.WriteString(fmt.Sprintf("%v", _m.MailerUseImplicitSslTLS))
 	builder.WriteString(", ")
 	builder.WriteString("ocr_tika_url=")
-	builder.WriteString(sc.OcrTikaURL)
+	builder.WriteString(_m.OcrTikaURL)
 	builder.WriteString(", ")
-	if v := sc.InitializedAt; v != nil {
+	if v := _m.InitializedAt; v != nil {
 		builder.WriteString("initialized_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}

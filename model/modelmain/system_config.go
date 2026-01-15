@@ -260,6 +260,7 @@ func (qq *SystemConfig) Mailer() *MailerConfig {
 		MailerPassword:           qq.data.MailerPassword.String(),
 		MailerFrom:               qq.data.MailerFrom,
 		MailerInsecureSkipVerify: qq.data.MailerInsecureSkipVerify,
+		MailerUseImplicitSSLTLS:  qq.data.MailerUseImplicitSslTLS,
 	}
 }
 

@@ -24,163 +24,163 @@ type SpaceUserAssignmentCreate struct {
 }
 
 // SetSpaceID sets the "space_id" field.
-func (suac *SpaceUserAssignmentCreate) SetSpaceID(i int64) *SpaceUserAssignmentCreate {
-	suac.mutation.SetSpaceID(i)
-	return suac
+func (_c *SpaceUserAssignmentCreate) SetSpaceID(v int64) *SpaceUserAssignmentCreate {
+	_c.mutation.SetSpaceID(v)
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (suac *SpaceUserAssignmentCreate) SetCreatedAt(t time.Time) *SpaceUserAssignmentCreate {
-	suac.mutation.SetCreatedAt(t)
-	return suac
+func (_c *SpaceUserAssignmentCreate) SetCreatedAt(v time.Time) *SpaceUserAssignmentCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (suac *SpaceUserAssignmentCreate) SetNillableCreatedAt(t *time.Time) *SpaceUserAssignmentCreate {
-	if t != nil {
-		suac.SetCreatedAt(*t)
+func (_c *SpaceUserAssignmentCreate) SetNillableCreatedAt(v *time.Time) *SpaceUserAssignmentCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return suac
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (suac *SpaceUserAssignmentCreate) SetCreatedBy(i int64) *SpaceUserAssignmentCreate {
-	suac.mutation.SetCreatedBy(i)
-	return suac
+func (_c *SpaceUserAssignmentCreate) SetCreatedBy(v int64) *SpaceUserAssignmentCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (suac *SpaceUserAssignmentCreate) SetNillableCreatedBy(i *int64) *SpaceUserAssignmentCreate {
-	if i != nil {
-		suac.SetCreatedBy(*i)
+func (_c *SpaceUserAssignmentCreate) SetNillableCreatedBy(v *int64) *SpaceUserAssignmentCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return suac
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (suac *SpaceUserAssignmentCreate) SetUpdatedAt(t time.Time) *SpaceUserAssignmentCreate {
-	suac.mutation.SetUpdatedAt(t)
-	return suac
+func (_c *SpaceUserAssignmentCreate) SetUpdatedAt(v time.Time) *SpaceUserAssignmentCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (suac *SpaceUserAssignmentCreate) SetNillableUpdatedAt(t *time.Time) *SpaceUserAssignmentCreate {
-	if t != nil {
-		suac.SetUpdatedAt(*t)
+func (_c *SpaceUserAssignmentCreate) SetNillableUpdatedAt(v *time.Time) *SpaceUserAssignmentCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return suac
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (suac *SpaceUserAssignmentCreate) SetUpdatedBy(i int64) *SpaceUserAssignmentCreate {
-	suac.mutation.SetUpdatedBy(i)
-	return suac
+func (_c *SpaceUserAssignmentCreate) SetUpdatedBy(v int64) *SpaceUserAssignmentCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (suac *SpaceUserAssignmentCreate) SetNillableUpdatedBy(i *int64) *SpaceUserAssignmentCreate {
-	if i != nil {
-		suac.SetUpdatedBy(*i)
+func (_c *SpaceUserAssignmentCreate) SetNillableUpdatedBy(v *int64) *SpaceUserAssignmentCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return suac
+	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (suac *SpaceUserAssignmentCreate) SetUserID(i int64) *SpaceUserAssignmentCreate {
-	suac.mutation.SetUserID(i)
-	return suac
+func (_c *SpaceUserAssignmentCreate) SetUserID(v int64) *SpaceUserAssignmentCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetRole sets the "role" field.
-func (suac *SpaceUserAssignmentCreate) SetRole(sr spacerole.SpaceRole) *SpaceUserAssignmentCreate {
-	suac.mutation.SetRole(sr)
-	return suac
+func (_c *SpaceUserAssignmentCreate) SetRole(v spacerole.SpaceRole) *SpaceUserAssignmentCreate {
+	_c.mutation.SetRole(v)
+	return _c
 }
 
 // SetIsDefault sets the "is_default" field.
-func (suac *SpaceUserAssignmentCreate) SetIsDefault(b bool) *SpaceUserAssignmentCreate {
-	suac.mutation.SetIsDefault(b)
-	return suac
+func (_c *SpaceUserAssignmentCreate) SetIsDefault(v bool) *SpaceUserAssignmentCreate {
+	_c.mutation.SetIsDefault(v)
+	return _c
 }
 
 // SetNillableIsDefault sets the "is_default" field if the given value is not nil.
-func (suac *SpaceUserAssignmentCreate) SetNillableIsDefault(b *bool) *SpaceUserAssignmentCreate {
-	if b != nil {
-		suac.SetIsDefault(*b)
+func (_c *SpaceUserAssignmentCreate) SetNillableIsDefault(v *bool) *SpaceUserAssignmentCreate {
+	if v != nil {
+		_c.SetIsDefault(*v)
 	}
-	return suac
+	return _c
 }
 
 // SetID sets the "id" field.
-func (suac *SpaceUserAssignmentCreate) SetID(i int64) *SpaceUserAssignmentCreate {
-	suac.mutation.SetID(i)
-	return suac
+func (_c *SpaceUserAssignmentCreate) SetID(v int64) *SpaceUserAssignmentCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetSpace sets the "space" edge to the Space entity.
-func (suac *SpaceUserAssignmentCreate) SetSpace(s *Space) *SpaceUserAssignmentCreate {
-	return suac.SetSpaceID(s.ID)
+func (_c *SpaceUserAssignmentCreate) SetSpace(v *Space) *SpaceUserAssignmentCreate {
+	return _c.SetSpaceID(v.ID)
 }
 
 // SetCreatorID sets the "creator" edge to the User entity by ID.
-func (suac *SpaceUserAssignmentCreate) SetCreatorID(id int64) *SpaceUserAssignmentCreate {
-	suac.mutation.SetCreatorID(id)
-	return suac
+func (_c *SpaceUserAssignmentCreate) SetCreatorID(id int64) *SpaceUserAssignmentCreate {
+	_c.mutation.SetCreatorID(id)
+	return _c
 }
 
 // SetNillableCreatorID sets the "creator" edge to the User entity by ID if the given value is not nil.
-func (suac *SpaceUserAssignmentCreate) SetNillableCreatorID(id *int64) *SpaceUserAssignmentCreate {
+func (_c *SpaceUserAssignmentCreate) SetNillableCreatorID(id *int64) *SpaceUserAssignmentCreate {
 	if id != nil {
-		suac = suac.SetCreatorID(*id)
+		_c = _c.SetCreatorID(*id)
 	}
-	return suac
+	return _c
 }
 
 // SetCreator sets the "creator" edge to the User entity.
-func (suac *SpaceUserAssignmentCreate) SetCreator(u *User) *SpaceUserAssignmentCreate {
-	return suac.SetCreatorID(u.ID)
+func (_c *SpaceUserAssignmentCreate) SetCreator(v *User) *SpaceUserAssignmentCreate {
+	return _c.SetCreatorID(v.ID)
 }
 
 // SetUpdaterID sets the "updater" edge to the User entity by ID.
-func (suac *SpaceUserAssignmentCreate) SetUpdaterID(id int64) *SpaceUserAssignmentCreate {
-	suac.mutation.SetUpdaterID(id)
-	return suac
+func (_c *SpaceUserAssignmentCreate) SetUpdaterID(id int64) *SpaceUserAssignmentCreate {
+	_c.mutation.SetUpdaterID(id)
+	return _c
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the User entity by ID if the given value is not nil.
-func (suac *SpaceUserAssignmentCreate) SetNillableUpdaterID(id *int64) *SpaceUserAssignmentCreate {
+func (_c *SpaceUserAssignmentCreate) SetNillableUpdaterID(id *int64) *SpaceUserAssignmentCreate {
 	if id != nil {
-		suac = suac.SetUpdaterID(*id)
+		_c = _c.SetUpdaterID(*id)
 	}
-	return suac
+	return _c
 }
 
 // SetUpdater sets the "updater" edge to the User entity.
-func (suac *SpaceUserAssignmentCreate) SetUpdater(u *User) *SpaceUserAssignmentCreate {
-	return suac.SetUpdaterID(u.ID)
+func (_c *SpaceUserAssignmentCreate) SetUpdater(v *User) *SpaceUserAssignmentCreate {
+	return _c.SetUpdaterID(v.ID)
 }
 
 // SetUser sets the "user" edge to the User entity.
-func (suac *SpaceUserAssignmentCreate) SetUser(u *User) *SpaceUserAssignmentCreate {
-	return suac.SetUserID(u.ID)
+func (_c *SpaceUserAssignmentCreate) SetUser(v *User) *SpaceUserAssignmentCreate {
+	return _c.SetUserID(v.ID)
 }
 
 // Mutation returns the SpaceUserAssignmentMutation object of the builder.
-func (suac *SpaceUserAssignmentCreate) Mutation() *SpaceUserAssignmentMutation {
-	return suac.mutation
+func (_c *SpaceUserAssignmentCreate) Mutation() *SpaceUserAssignmentMutation {
+	return _c.mutation
 }
 
 // Save creates the SpaceUserAssignment in the database.
-func (suac *SpaceUserAssignmentCreate) Save(ctx context.Context) (*SpaceUserAssignment, error) {
-	if err := suac.defaults(); err != nil {
+func (_c *SpaceUserAssignmentCreate) Save(ctx context.Context) (*SpaceUserAssignment, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, suac.sqlSave, suac.mutation, suac.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (suac *SpaceUserAssignmentCreate) SaveX(ctx context.Context) *SpaceUserAssignment {
-	v, err := suac.Save(ctx)
+func (_c *SpaceUserAssignmentCreate) SaveX(ctx context.Context) *SpaceUserAssignment {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -188,81 +188,81 @@ func (suac *SpaceUserAssignmentCreate) SaveX(ctx context.Context) *SpaceUserAssi
 }
 
 // Exec executes the query.
-func (suac *SpaceUserAssignmentCreate) Exec(ctx context.Context) error {
-	_, err := suac.Save(ctx)
+func (_c *SpaceUserAssignmentCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suac *SpaceUserAssignmentCreate) ExecX(ctx context.Context) {
-	if err := suac.Exec(ctx); err != nil {
+func (_c *SpaceUserAssignmentCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (suac *SpaceUserAssignmentCreate) defaults() error {
-	if _, ok := suac.mutation.CreatedAt(); !ok {
+func (_c *SpaceUserAssignmentCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if spaceuserassignment.DefaultCreatedAt == nil {
 			return fmt.Errorf("enttenant: uninitialized spaceuserassignment.DefaultCreatedAt (forgotten import enttenant/runtime?)")
 		}
 		v := spaceuserassignment.DefaultCreatedAt()
-		suac.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := suac.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if spaceuserassignment.DefaultUpdatedAt == nil {
 			return fmt.Errorf("enttenant: uninitialized spaceuserassignment.DefaultUpdatedAt (forgotten import enttenant/runtime?)")
 		}
 		v := spaceuserassignment.DefaultUpdatedAt()
-		suac.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := suac.mutation.IsDefault(); !ok {
+	if _, ok := _c.mutation.IsDefault(); !ok {
 		v := spaceuserassignment.DefaultIsDefault
-		suac.mutation.SetIsDefault(v)
+		_c.mutation.SetIsDefault(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (suac *SpaceUserAssignmentCreate) check() error {
-	if _, ok := suac.mutation.SpaceID(); !ok {
+func (_c *SpaceUserAssignmentCreate) check() error {
+	if _, ok := _c.mutation.SpaceID(); !ok {
 		return &ValidationError{Name: "space_id", err: errors.New(`enttenant: missing required field "SpaceUserAssignment.space_id"`)}
 	}
-	if _, ok := suac.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`enttenant: missing required field "SpaceUserAssignment.created_at"`)}
 	}
-	if _, ok := suac.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`enttenant: missing required field "SpaceUserAssignment.updated_at"`)}
 	}
-	if _, ok := suac.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`enttenant: missing required field "SpaceUserAssignment.user_id"`)}
 	}
-	if _, ok := suac.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`enttenant: missing required field "SpaceUserAssignment.role"`)}
 	}
-	if v, ok := suac.mutation.Role(); ok {
+	if v, ok := _c.mutation.Role(); ok {
 		if err := spaceuserassignment.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`enttenant: validator failed for field "SpaceUserAssignment.role": %w`, err)}
 		}
 	}
-	if _, ok := suac.mutation.IsDefault(); !ok {
+	if _, ok := _c.mutation.IsDefault(); !ok {
 		return &ValidationError{Name: "is_default", err: errors.New(`enttenant: missing required field "SpaceUserAssignment.is_default"`)}
 	}
-	if len(suac.mutation.SpaceIDs()) == 0 {
+	if len(_c.mutation.SpaceIDs()) == 0 {
 		return &ValidationError{Name: "space", err: errors.New(`enttenant: missing required edge "SpaceUserAssignment.space"`)}
 	}
-	if len(suac.mutation.UserIDs()) == 0 {
+	if len(_c.mutation.UserIDs()) == 0 {
 		return &ValidationError{Name: "user", err: errors.New(`enttenant: missing required edge "SpaceUserAssignment.user"`)}
 	}
 	return nil
 }
 
-func (suac *SpaceUserAssignmentCreate) sqlSave(ctx context.Context) (*SpaceUserAssignment, error) {
-	if err := suac.check(); err != nil {
+func (_c *SpaceUserAssignmentCreate) sqlSave(ctx context.Context) (*SpaceUserAssignment, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := suac.createSpec()
-	if err := sqlgraph.CreateNode(ctx, suac.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -272,37 +272,37 @@ func (suac *SpaceUserAssignmentCreate) sqlSave(ctx context.Context) (*SpaceUserA
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	suac.mutation.id = &_node.ID
-	suac.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (suac *SpaceUserAssignmentCreate) createSpec() (*SpaceUserAssignment, *sqlgraph.CreateSpec) {
+func (_c *SpaceUserAssignmentCreate) createSpec() (*SpaceUserAssignment, *sqlgraph.CreateSpec) {
 	var (
-		_node = &SpaceUserAssignment{config: suac.config}
+		_node = &SpaceUserAssignment{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(spaceuserassignment.Table, sqlgraph.NewFieldSpec(spaceuserassignment.FieldID, field.TypeInt64))
 	)
-	if id, ok := suac.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := suac.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(spaceuserassignment.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := suac.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(spaceuserassignment.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := suac.mutation.Role(); ok {
+	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(spaceuserassignment.FieldRole, field.TypeEnum, value)
 		_node.Role = value
 	}
-	if value, ok := suac.mutation.IsDefault(); ok {
+	if value, ok := _c.mutation.IsDefault(); ok {
 		_spec.SetField(spaceuserassignment.FieldIsDefault, field.TypeBool, value)
 		_node.IsDefault = value
 	}
-	if nodes := suac.mutation.SpaceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SpaceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -319,7 +319,7 @@ func (suac *SpaceUserAssignmentCreate) createSpec() (*SpaceUserAssignment, *sqlg
 		_node.SpaceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := suac.mutation.CreatorIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CreatorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -336,7 +336,7 @@ func (suac *SpaceUserAssignmentCreate) createSpec() (*SpaceUserAssignment, *sqlg
 		_node.CreatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := suac.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -353,7 +353,7 @@ func (suac *SpaceUserAssignmentCreate) createSpec() (*SpaceUserAssignment, *sqlg
 		_node.UpdatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := suac.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -381,16 +381,16 @@ type SpaceUserAssignmentCreateBulk struct {
 }
 
 // Save creates the SpaceUserAssignment entities in the database.
-func (suacb *SpaceUserAssignmentCreateBulk) Save(ctx context.Context) ([]*SpaceUserAssignment, error) {
-	if suacb.err != nil {
-		return nil, suacb.err
+func (_c *SpaceUserAssignmentCreateBulk) Save(ctx context.Context) ([]*SpaceUserAssignment, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(suacb.builders))
-	nodes := make([]*SpaceUserAssignment, len(suacb.builders))
-	mutators := make([]Mutator, len(suacb.builders))
-	for i := range suacb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*SpaceUserAssignment, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := suacb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*SpaceUserAssignmentMutation)
@@ -404,11 +404,11 @@ func (suacb *SpaceUserAssignmentCreateBulk) Save(ctx context.Context) ([]*SpaceU
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, suacb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, suacb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -432,7 +432,7 @@ func (suacb *SpaceUserAssignmentCreateBulk) Save(ctx context.Context) ([]*SpaceU
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, suacb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -440,8 +440,8 @@ func (suacb *SpaceUserAssignmentCreateBulk) Save(ctx context.Context) ([]*SpaceU
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (suacb *SpaceUserAssignmentCreateBulk) SaveX(ctx context.Context) []*SpaceUserAssignment {
-	v, err := suacb.Save(ctx)
+func (_c *SpaceUserAssignmentCreateBulk) SaveX(ctx context.Context) []*SpaceUserAssignment {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -449,14 +449,14 @@ func (suacb *SpaceUserAssignmentCreateBulk) SaveX(ctx context.Context) []*SpaceU
 }
 
 // Exec executes the query.
-func (suacb *SpaceUserAssignmentCreateBulk) Exec(ctx context.Context) error {
-	_, err := suacb.Save(ctx)
+func (_c *SpaceUserAssignmentCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suacb *SpaceUserAssignmentCreateBulk) ExecX(ctx context.Context) {
-	if err := suacb.Exec(ctx); err != nil {
+func (_c *SpaceUserAssignmentCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

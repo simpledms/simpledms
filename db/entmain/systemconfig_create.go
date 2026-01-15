@@ -23,303 +23,317 @@ type SystemConfigCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (scc *SystemConfigCreate) SetCreatedAt(t time.Time) *SystemConfigCreate {
-	scc.mutation.SetCreatedAt(t)
-	return scc
+func (_c *SystemConfigCreate) SetCreatedAt(v time.Time) *SystemConfigCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableCreatedAt(t *time.Time) *SystemConfigCreate {
-	if t != nil {
-		scc.SetCreatedAt(*t)
+func (_c *SystemConfigCreate) SetNillableCreatedAt(v *time.Time) *SystemConfigCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return scc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (scc *SystemConfigCreate) SetCreatedBy(i int64) *SystemConfigCreate {
-	scc.mutation.SetCreatedBy(i)
-	return scc
+func (_c *SystemConfigCreate) SetCreatedBy(v int64) *SystemConfigCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableCreatedBy(i *int64) *SystemConfigCreate {
-	if i != nil {
-		scc.SetCreatedBy(*i)
+func (_c *SystemConfigCreate) SetNillableCreatedBy(v *int64) *SystemConfigCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return scc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (scc *SystemConfigCreate) SetUpdatedAt(t time.Time) *SystemConfigCreate {
-	scc.mutation.SetUpdatedAt(t)
-	return scc
+func (_c *SystemConfigCreate) SetUpdatedAt(v time.Time) *SystemConfigCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableUpdatedAt(t *time.Time) *SystemConfigCreate {
-	if t != nil {
-		scc.SetUpdatedAt(*t)
+func (_c *SystemConfigCreate) SetNillableUpdatedAt(v *time.Time) *SystemConfigCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return scc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (scc *SystemConfigCreate) SetUpdatedBy(i int64) *SystemConfigCreate {
-	scc.mutation.SetUpdatedBy(i)
-	return scc
+func (_c *SystemConfigCreate) SetUpdatedBy(v int64) *SystemConfigCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableUpdatedBy(i *int64) *SystemConfigCreate {
-	if i != nil {
-		scc.SetUpdatedBy(*i)
+func (_c *SystemConfigCreate) SetNillableUpdatedBy(v *int64) *SystemConfigCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return scc
+	return _c
 }
 
 // SetX25519Identity sets the "x25519_identity" field.
-func (scc *SystemConfigCreate) SetX25519Identity(b []byte) *SystemConfigCreate {
-	scc.mutation.SetX25519Identity(b)
-	return scc
+func (_c *SystemConfigCreate) SetX25519Identity(v []byte) *SystemConfigCreate {
+	_c.mutation.SetX25519Identity(v)
+	return _c
 }
 
 // SetIsIdentityEncryptedWithPassphrase sets the "is_identity_encrypted_with_passphrase" field.
-func (scc *SystemConfigCreate) SetIsIdentityEncryptedWithPassphrase(b bool) *SystemConfigCreate {
-	scc.mutation.SetIsIdentityEncryptedWithPassphrase(b)
-	return scc
+func (_c *SystemConfigCreate) SetIsIdentityEncryptedWithPassphrase(v bool) *SystemConfigCreate {
+	_c.mutation.SetIsIdentityEncryptedWithPassphrase(v)
+	return _c
 }
 
 // SetS3Endpoint sets the "s3_endpoint" field.
-func (scc *SystemConfigCreate) SetS3Endpoint(s string) *SystemConfigCreate {
-	scc.mutation.SetS3Endpoint(s)
-	return scc
+func (_c *SystemConfigCreate) SetS3Endpoint(v string) *SystemConfigCreate {
+	_c.mutation.SetS3Endpoint(v)
+	return _c
 }
 
 // SetS3AccessKeyID sets the "s3_access_key_id" field.
-func (scc *SystemConfigCreate) SetS3AccessKeyID(s string) *SystemConfigCreate {
-	scc.mutation.SetS3AccessKeyID(s)
-	return scc
+func (_c *SystemConfigCreate) SetS3AccessKeyID(v string) *SystemConfigCreate {
+	_c.mutation.SetS3AccessKeyID(v)
+	return _c
 }
 
 // SetS3SecretAccessKey sets the "s3_secret_access_key" field.
-func (scc *SystemConfigCreate) SetS3SecretAccessKey(es entx.EncryptedString) *SystemConfigCreate {
-	scc.mutation.SetS3SecretAccessKey(es)
-	return scc
+func (_c *SystemConfigCreate) SetS3SecretAccessKey(v entx.EncryptedString) *SystemConfigCreate {
+	_c.mutation.SetS3SecretAccessKey(v)
+	return _c
 }
 
 // SetS3BucketName sets the "s3_bucket_name" field.
-func (scc *SystemConfigCreate) SetS3BucketName(s string) *SystemConfigCreate {
-	scc.mutation.SetS3BucketName(s)
-	return scc
+func (_c *SystemConfigCreate) SetS3BucketName(v string) *SystemConfigCreate {
+	_c.mutation.SetS3BucketName(v)
+	return _c
 }
 
 // SetS3UseSsl sets the "s3_use_ssl" field.
-func (scc *SystemConfigCreate) SetS3UseSsl(b bool) *SystemConfigCreate {
-	scc.mutation.SetS3UseSsl(b)
-	return scc
+func (_c *SystemConfigCreate) SetS3UseSsl(v bool) *SystemConfigCreate {
+	_c.mutation.SetS3UseSsl(v)
+	return _c
 }
 
 // SetNillableS3UseSsl sets the "s3_use_ssl" field if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableS3UseSsl(b *bool) *SystemConfigCreate {
-	if b != nil {
-		scc.SetS3UseSsl(*b)
+func (_c *SystemConfigCreate) SetNillableS3UseSsl(v *bool) *SystemConfigCreate {
+	if v != nil {
+		_c.SetS3UseSsl(*v)
 	}
-	return scc
+	return _c
 }
 
 // SetTLSEnableAutocert sets the "tls_enable_autocert" field.
-func (scc *SystemConfigCreate) SetTLSEnableAutocert(b bool) *SystemConfigCreate {
-	scc.mutation.SetTLSEnableAutocert(b)
-	return scc
+func (_c *SystemConfigCreate) SetTLSEnableAutocert(v bool) *SystemConfigCreate {
+	_c.mutation.SetTLSEnableAutocert(v)
+	return _c
 }
 
 // SetTLSCertFilepath sets the "tls_cert_filepath" field.
-func (scc *SystemConfigCreate) SetTLSCertFilepath(s string) *SystemConfigCreate {
-	scc.mutation.SetTLSCertFilepath(s)
-	return scc
+func (_c *SystemConfigCreate) SetTLSCertFilepath(v string) *SystemConfigCreate {
+	_c.mutation.SetTLSCertFilepath(v)
+	return _c
 }
 
 // SetTLSPrivateKeyFilepath sets the "tls_private_key_filepath" field.
-func (scc *SystemConfigCreate) SetTLSPrivateKeyFilepath(s string) *SystemConfigCreate {
-	scc.mutation.SetTLSPrivateKeyFilepath(s)
-	return scc
+func (_c *SystemConfigCreate) SetTLSPrivateKeyFilepath(v string) *SystemConfigCreate {
+	_c.mutation.SetTLSPrivateKeyFilepath(v)
+	return _c
 }
 
 // SetTLSAutocertEmail sets the "tls_autocert_email" field.
-func (scc *SystemConfigCreate) SetTLSAutocertEmail(s string) *SystemConfigCreate {
-	scc.mutation.SetTLSAutocertEmail(s)
-	return scc
+func (_c *SystemConfigCreate) SetTLSAutocertEmail(v string) *SystemConfigCreate {
+	_c.mutation.SetTLSAutocertEmail(v)
+	return _c
 }
 
 // SetTLSAutocertHosts sets the "tls_autocert_hosts" field.
-func (scc *SystemConfigCreate) SetTLSAutocertHosts(s []string) *SystemConfigCreate {
-	scc.mutation.SetTLSAutocertHosts(s)
-	return scc
+func (_c *SystemConfigCreate) SetTLSAutocertHosts(v []string) *SystemConfigCreate {
+	_c.mutation.SetTLSAutocertHosts(v)
+	return _c
 }
 
 // SetMailerHost sets the "mailer_host" field.
-func (scc *SystemConfigCreate) SetMailerHost(s string) *SystemConfigCreate {
-	scc.mutation.SetMailerHost(s)
-	return scc
+func (_c *SystemConfigCreate) SetMailerHost(v string) *SystemConfigCreate {
+	_c.mutation.SetMailerHost(v)
+	return _c
 }
 
 // SetNillableMailerHost sets the "mailer_host" field if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableMailerHost(s *string) *SystemConfigCreate {
-	if s != nil {
-		scc.SetMailerHost(*s)
+func (_c *SystemConfigCreate) SetNillableMailerHost(v *string) *SystemConfigCreate {
+	if v != nil {
+		_c.SetMailerHost(*v)
 	}
-	return scc
+	return _c
 }
 
 // SetMailerPort sets the "mailer_port" field.
-func (scc *SystemConfigCreate) SetMailerPort(i int) *SystemConfigCreate {
-	scc.mutation.SetMailerPort(i)
-	return scc
+func (_c *SystemConfigCreate) SetMailerPort(v int) *SystemConfigCreate {
+	_c.mutation.SetMailerPort(v)
+	return _c
 }
 
 // SetNillableMailerPort sets the "mailer_port" field if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableMailerPort(i *int) *SystemConfigCreate {
-	if i != nil {
-		scc.SetMailerPort(*i)
+func (_c *SystemConfigCreate) SetNillableMailerPort(v *int) *SystemConfigCreate {
+	if v != nil {
+		_c.SetMailerPort(*v)
 	}
-	return scc
+	return _c
 }
 
 // SetMailerUsername sets the "mailer_username" field.
-func (scc *SystemConfigCreate) SetMailerUsername(s string) *SystemConfigCreate {
-	scc.mutation.SetMailerUsername(s)
-	return scc
+func (_c *SystemConfigCreate) SetMailerUsername(v string) *SystemConfigCreate {
+	_c.mutation.SetMailerUsername(v)
+	return _c
 }
 
 // SetNillableMailerUsername sets the "mailer_username" field if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableMailerUsername(s *string) *SystemConfigCreate {
-	if s != nil {
-		scc.SetMailerUsername(*s)
+func (_c *SystemConfigCreate) SetNillableMailerUsername(v *string) *SystemConfigCreate {
+	if v != nil {
+		_c.SetMailerUsername(*v)
 	}
-	return scc
+	return _c
 }
 
 // SetMailerPassword sets the "mailer_password" field.
-func (scc *SystemConfigCreate) SetMailerPassword(es entx.EncryptedString) *SystemConfigCreate {
-	scc.mutation.SetMailerPassword(es)
-	return scc
+func (_c *SystemConfigCreate) SetMailerPassword(v entx.EncryptedString) *SystemConfigCreate {
+	_c.mutation.SetMailerPassword(v)
+	return _c
 }
 
 // SetMailerFrom sets the "mailer_from" field.
-func (scc *SystemConfigCreate) SetMailerFrom(s string) *SystemConfigCreate {
-	scc.mutation.SetMailerFrom(s)
-	return scc
+func (_c *SystemConfigCreate) SetMailerFrom(v string) *SystemConfigCreate {
+	_c.mutation.SetMailerFrom(v)
+	return _c
 }
 
 // SetNillableMailerFrom sets the "mailer_from" field if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableMailerFrom(s *string) *SystemConfigCreate {
-	if s != nil {
-		scc.SetMailerFrom(*s)
+func (_c *SystemConfigCreate) SetNillableMailerFrom(v *string) *SystemConfigCreate {
+	if v != nil {
+		_c.SetMailerFrom(*v)
 	}
-	return scc
+	return _c
 }
 
 // SetMailerInsecureSkipVerify sets the "mailer_insecure_skip_verify" field.
-func (scc *SystemConfigCreate) SetMailerInsecureSkipVerify(b bool) *SystemConfigCreate {
-	scc.mutation.SetMailerInsecureSkipVerify(b)
-	return scc
+func (_c *SystemConfigCreate) SetMailerInsecureSkipVerify(v bool) *SystemConfigCreate {
+	_c.mutation.SetMailerInsecureSkipVerify(v)
+	return _c
 }
 
 // SetNillableMailerInsecureSkipVerify sets the "mailer_insecure_skip_verify" field if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableMailerInsecureSkipVerify(b *bool) *SystemConfigCreate {
-	if b != nil {
-		scc.SetMailerInsecureSkipVerify(*b)
+func (_c *SystemConfigCreate) SetNillableMailerInsecureSkipVerify(v *bool) *SystemConfigCreate {
+	if v != nil {
+		_c.SetMailerInsecureSkipVerify(*v)
 	}
-	return scc
+	return _c
+}
+
+// SetMailerUseImplicitSslTLS sets the "mailer_use_implicit_ssl_tls" field.
+func (_c *SystemConfigCreate) SetMailerUseImplicitSslTLS(v bool) *SystemConfigCreate {
+	_c.mutation.SetMailerUseImplicitSslTLS(v)
+	return _c
+}
+
+// SetNillableMailerUseImplicitSslTLS sets the "mailer_use_implicit_ssl_tls" field if the given value is not nil.
+func (_c *SystemConfigCreate) SetNillableMailerUseImplicitSslTLS(v *bool) *SystemConfigCreate {
+	if v != nil {
+		_c.SetMailerUseImplicitSslTLS(*v)
+	}
+	return _c
 }
 
 // SetOcrTikaURL sets the "ocr_tika_url" field.
-func (scc *SystemConfigCreate) SetOcrTikaURL(s string) *SystemConfigCreate {
-	scc.mutation.SetOcrTikaURL(s)
-	return scc
+func (_c *SystemConfigCreate) SetOcrTikaURL(v string) *SystemConfigCreate {
+	_c.mutation.SetOcrTikaURL(v)
+	return _c
 }
 
 // SetNillableOcrTikaURL sets the "ocr_tika_url" field if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableOcrTikaURL(s *string) *SystemConfigCreate {
-	if s != nil {
-		scc.SetOcrTikaURL(*s)
+func (_c *SystemConfigCreate) SetNillableOcrTikaURL(v *string) *SystemConfigCreate {
+	if v != nil {
+		_c.SetOcrTikaURL(*v)
 	}
-	return scc
+	return _c
 }
 
 // SetInitializedAt sets the "initialized_at" field.
-func (scc *SystemConfigCreate) SetInitializedAt(t time.Time) *SystemConfigCreate {
-	scc.mutation.SetInitializedAt(t)
-	return scc
+func (_c *SystemConfigCreate) SetInitializedAt(v time.Time) *SystemConfigCreate {
+	_c.mutation.SetInitializedAt(v)
+	return _c
 }
 
 // SetNillableInitializedAt sets the "initialized_at" field if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableInitializedAt(t *time.Time) *SystemConfigCreate {
-	if t != nil {
-		scc.SetInitializedAt(*t)
+func (_c *SystemConfigCreate) SetNillableInitializedAt(v *time.Time) *SystemConfigCreate {
+	if v != nil {
+		_c.SetInitializedAt(*v)
 	}
-	return scc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (scc *SystemConfigCreate) SetID(i int64) *SystemConfigCreate {
-	scc.mutation.SetID(i)
-	return scc
+func (_c *SystemConfigCreate) SetID(v int64) *SystemConfigCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetCreatorID sets the "creator" edge to the Account entity by ID.
-func (scc *SystemConfigCreate) SetCreatorID(id int64) *SystemConfigCreate {
-	scc.mutation.SetCreatorID(id)
-	return scc
+func (_c *SystemConfigCreate) SetCreatorID(id int64) *SystemConfigCreate {
+	_c.mutation.SetCreatorID(id)
+	return _c
 }
 
 // SetNillableCreatorID sets the "creator" edge to the Account entity by ID if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableCreatorID(id *int64) *SystemConfigCreate {
+func (_c *SystemConfigCreate) SetNillableCreatorID(id *int64) *SystemConfigCreate {
 	if id != nil {
-		scc = scc.SetCreatorID(*id)
+		_c = _c.SetCreatorID(*id)
 	}
-	return scc
+	return _c
 }
 
 // SetCreator sets the "creator" edge to the Account entity.
-func (scc *SystemConfigCreate) SetCreator(a *Account) *SystemConfigCreate {
-	return scc.SetCreatorID(a.ID)
+func (_c *SystemConfigCreate) SetCreator(v *Account) *SystemConfigCreate {
+	return _c.SetCreatorID(v.ID)
 }
 
 // SetUpdaterID sets the "updater" edge to the Account entity by ID.
-func (scc *SystemConfigCreate) SetUpdaterID(id int64) *SystemConfigCreate {
-	scc.mutation.SetUpdaterID(id)
-	return scc
+func (_c *SystemConfigCreate) SetUpdaterID(id int64) *SystemConfigCreate {
+	_c.mutation.SetUpdaterID(id)
+	return _c
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the Account entity by ID if the given value is not nil.
-func (scc *SystemConfigCreate) SetNillableUpdaterID(id *int64) *SystemConfigCreate {
+func (_c *SystemConfigCreate) SetNillableUpdaterID(id *int64) *SystemConfigCreate {
 	if id != nil {
-		scc = scc.SetUpdaterID(*id)
+		_c = _c.SetUpdaterID(*id)
 	}
-	return scc
+	return _c
 }
 
 // SetUpdater sets the "updater" edge to the Account entity.
-func (scc *SystemConfigCreate) SetUpdater(a *Account) *SystemConfigCreate {
-	return scc.SetUpdaterID(a.ID)
+func (_c *SystemConfigCreate) SetUpdater(v *Account) *SystemConfigCreate {
+	return _c.SetUpdaterID(v.ID)
 }
 
 // Mutation returns the SystemConfigMutation object of the builder.
-func (scc *SystemConfigCreate) Mutation() *SystemConfigMutation {
-	return scc.mutation
+func (_c *SystemConfigCreate) Mutation() *SystemConfigMutation {
+	return _c.mutation
 }
 
 // Save creates the SystemConfig in the database.
-func (scc *SystemConfigCreate) Save(ctx context.Context) (*SystemConfig, error) {
-	scc.defaults()
-	return withHooks(ctx, scc.sqlSave, scc.mutation, scc.hooks)
+func (_c *SystemConfigCreate) Save(ctx context.Context) (*SystemConfig, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (scc *SystemConfigCreate) SaveX(ctx context.Context) *SystemConfig {
-	v, err := scc.Save(ctx)
+func (_c *SystemConfigCreate) SaveX(ctx context.Context) *SystemConfig {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -327,129 +341,136 @@ func (scc *SystemConfigCreate) SaveX(ctx context.Context) *SystemConfig {
 }
 
 // Exec executes the query.
-func (scc *SystemConfigCreate) Exec(ctx context.Context) error {
-	_, err := scc.Save(ctx)
+func (_c *SystemConfigCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scc *SystemConfigCreate) ExecX(ctx context.Context) {
-	if err := scc.Exec(ctx); err != nil {
+func (_c *SystemConfigCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (scc *SystemConfigCreate) defaults() {
-	if _, ok := scc.mutation.CreatedAt(); !ok {
+func (_c *SystemConfigCreate) defaults() {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := systemconfig.DefaultCreatedAt()
-		scc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := scc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := systemconfig.DefaultUpdatedAt()
-		scc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := scc.mutation.S3UseSsl(); !ok {
+	if _, ok := _c.mutation.S3UseSsl(); !ok {
 		v := systemconfig.DefaultS3UseSsl
-		scc.mutation.SetS3UseSsl(v)
+		_c.mutation.SetS3UseSsl(v)
 	}
-	if _, ok := scc.mutation.MailerHost(); !ok {
+	if _, ok := _c.mutation.MailerHost(); !ok {
 		v := systemconfig.DefaultMailerHost
-		scc.mutation.SetMailerHost(v)
+		_c.mutation.SetMailerHost(v)
 	}
-	if _, ok := scc.mutation.MailerPort(); !ok {
+	if _, ok := _c.mutation.MailerPort(); !ok {
 		v := systemconfig.DefaultMailerPort
-		scc.mutation.SetMailerPort(v)
+		_c.mutation.SetMailerPort(v)
 	}
-	if _, ok := scc.mutation.MailerUsername(); !ok {
+	if _, ok := _c.mutation.MailerUsername(); !ok {
 		v := systemconfig.DefaultMailerUsername
-		scc.mutation.SetMailerUsername(v)
+		_c.mutation.SetMailerUsername(v)
 	}
-	if _, ok := scc.mutation.MailerFrom(); !ok {
+	if _, ok := _c.mutation.MailerFrom(); !ok {
 		v := systemconfig.DefaultMailerFrom
-		scc.mutation.SetMailerFrom(v)
+		_c.mutation.SetMailerFrom(v)
 	}
-	if _, ok := scc.mutation.MailerInsecureSkipVerify(); !ok {
+	if _, ok := _c.mutation.MailerInsecureSkipVerify(); !ok {
 		v := systemconfig.DefaultMailerInsecureSkipVerify
-		scc.mutation.SetMailerInsecureSkipVerify(v)
+		_c.mutation.SetMailerInsecureSkipVerify(v)
 	}
-	if _, ok := scc.mutation.OcrTikaURL(); !ok {
+	if _, ok := _c.mutation.MailerUseImplicitSslTLS(); !ok {
+		v := systemconfig.DefaultMailerUseImplicitSslTLS
+		_c.mutation.SetMailerUseImplicitSslTLS(v)
+	}
+	if _, ok := _c.mutation.OcrTikaURL(); !ok {
 		v := systemconfig.DefaultOcrTikaURL
-		scc.mutation.SetOcrTikaURL(v)
+		_c.mutation.SetOcrTikaURL(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (scc *SystemConfigCreate) check() error {
-	if _, ok := scc.mutation.CreatedAt(); !ok {
+func (_c *SystemConfigCreate) check() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`entmain: missing required field "SystemConfig.created_at"`)}
 	}
-	if _, ok := scc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`entmain: missing required field "SystemConfig.updated_at"`)}
 	}
-	if _, ok := scc.mutation.X25519Identity(); !ok {
+	if _, ok := _c.mutation.X25519Identity(); !ok {
 		return &ValidationError{Name: "x25519_identity", err: errors.New(`entmain: missing required field "SystemConfig.x25519_identity"`)}
 	}
-	if _, ok := scc.mutation.IsIdentityEncryptedWithPassphrase(); !ok {
+	if _, ok := _c.mutation.IsIdentityEncryptedWithPassphrase(); !ok {
 		return &ValidationError{Name: "is_identity_encrypted_with_passphrase", err: errors.New(`entmain: missing required field "SystemConfig.is_identity_encrypted_with_passphrase"`)}
 	}
-	if _, ok := scc.mutation.S3Endpoint(); !ok {
+	if _, ok := _c.mutation.S3Endpoint(); !ok {
 		return &ValidationError{Name: "s3_endpoint", err: errors.New(`entmain: missing required field "SystemConfig.s3_endpoint"`)}
 	}
-	if _, ok := scc.mutation.S3AccessKeyID(); !ok {
+	if _, ok := _c.mutation.S3AccessKeyID(); !ok {
 		return &ValidationError{Name: "s3_access_key_id", err: errors.New(`entmain: missing required field "SystemConfig.s3_access_key_id"`)}
 	}
-	if _, ok := scc.mutation.S3SecretAccessKey(); !ok {
+	if _, ok := _c.mutation.S3SecretAccessKey(); !ok {
 		return &ValidationError{Name: "s3_secret_access_key", err: errors.New(`entmain: missing required field "SystemConfig.s3_secret_access_key"`)}
 	}
-	if _, ok := scc.mutation.S3BucketName(); !ok {
+	if _, ok := _c.mutation.S3BucketName(); !ok {
 		return &ValidationError{Name: "s3_bucket_name", err: errors.New(`entmain: missing required field "SystemConfig.s3_bucket_name"`)}
 	}
-	if _, ok := scc.mutation.S3UseSsl(); !ok {
+	if _, ok := _c.mutation.S3UseSsl(); !ok {
 		return &ValidationError{Name: "s3_use_ssl", err: errors.New(`entmain: missing required field "SystemConfig.s3_use_ssl"`)}
 	}
-	if _, ok := scc.mutation.TLSEnableAutocert(); !ok {
+	if _, ok := _c.mutation.TLSEnableAutocert(); !ok {
 		return &ValidationError{Name: "tls_enable_autocert", err: errors.New(`entmain: missing required field "SystemConfig.tls_enable_autocert"`)}
 	}
-	if _, ok := scc.mutation.TLSCertFilepath(); !ok {
+	if _, ok := _c.mutation.TLSCertFilepath(); !ok {
 		return &ValidationError{Name: "tls_cert_filepath", err: errors.New(`entmain: missing required field "SystemConfig.tls_cert_filepath"`)}
 	}
-	if _, ok := scc.mutation.TLSPrivateKeyFilepath(); !ok {
+	if _, ok := _c.mutation.TLSPrivateKeyFilepath(); !ok {
 		return &ValidationError{Name: "tls_private_key_filepath", err: errors.New(`entmain: missing required field "SystemConfig.tls_private_key_filepath"`)}
 	}
-	if _, ok := scc.mutation.TLSAutocertEmail(); !ok {
+	if _, ok := _c.mutation.TLSAutocertEmail(); !ok {
 		return &ValidationError{Name: "tls_autocert_email", err: errors.New(`entmain: missing required field "SystemConfig.tls_autocert_email"`)}
 	}
-	if _, ok := scc.mutation.TLSAutocertHosts(); !ok {
+	if _, ok := _c.mutation.TLSAutocertHosts(); !ok {
 		return &ValidationError{Name: "tls_autocert_hosts", err: errors.New(`entmain: missing required field "SystemConfig.tls_autocert_hosts"`)}
 	}
-	if _, ok := scc.mutation.MailerHost(); !ok {
+	if _, ok := _c.mutation.MailerHost(); !ok {
 		return &ValidationError{Name: "mailer_host", err: errors.New(`entmain: missing required field "SystemConfig.mailer_host"`)}
 	}
-	if _, ok := scc.mutation.MailerPort(); !ok {
+	if _, ok := _c.mutation.MailerPort(); !ok {
 		return &ValidationError{Name: "mailer_port", err: errors.New(`entmain: missing required field "SystemConfig.mailer_port"`)}
 	}
-	if _, ok := scc.mutation.MailerUsername(); !ok {
+	if _, ok := _c.mutation.MailerUsername(); !ok {
 		return &ValidationError{Name: "mailer_username", err: errors.New(`entmain: missing required field "SystemConfig.mailer_username"`)}
 	}
-	if _, ok := scc.mutation.MailerFrom(); !ok {
+	if _, ok := _c.mutation.MailerFrom(); !ok {
 		return &ValidationError{Name: "mailer_from", err: errors.New(`entmain: missing required field "SystemConfig.mailer_from"`)}
 	}
-	if _, ok := scc.mutation.MailerInsecureSkipVerify(); !ok {
+	if _, ok := _c.mutation.MailerInsecureSkipVerify(); !ok {
 		return &ValidationError{Name: "mailer_insecure_skip_verify", err: errors.New(`entmain: missing required field "SystemConfig.mailer_insecure_skip_verify"`)}
 	}
-	if _, ok := scc.mutation.OcrTikaURL(); !ok {
+	if _, ok := _c.mutation.MailerUseImplicitSslTLS(); !ok {
+		return &ValidationError{Name: "mailer_use_implicit_ssl_tls", err: errors.New(`entmain: missing required field "SystemConfig.mailer_use_implicit_ssl_tls"`)}
+	}
+	if _, ok := _c.mutation.OcrTikaURL(); !ok {
 		return &ValidationError{Name: "ocr_tika_url", err: errors.New(`entmain: missing required field "SystemConfig.ocr_tika_url"`)}
 	}
 	return nil
 }
 
-func (scc *SystemConfigCreate) sqlSave(ctx context.Context) (*SystemConfig, error) {
-	if err := scc.check(); err != nil {
+func (_c *SystemConfigCreate) sqlSave(ctx context.Context) (*SystemConfig, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := scc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, scc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -459,109 +480,113 @@ func (scc *SystemConfigCreate) sqlSave(ctx context.Context) (*SystemConfig, erro
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	scc.mutation.id = &_node.ID
-	scc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (scc *SystemConfigCreate) createSpec() (*SystemConfig, *sqlgraph.CreateSpec) {
+func (_c *SystemConfigCreate) createSpec() (*SystemConfig, *sqlgraph.CreateSpec) {
 	var (
-		_node = &SystemConfig{config: scc.config}
+		_node = &SystemConfig{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(systemconfig.Table, sqlgraph.NewFieldSpec(systemconfig.FieldID, field.TypeInt64))
 	)
-	if id, ok := scc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := scc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(systemconfig.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := scc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(systemconfig.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := scc.mutation.X25519Identity(); ok {
+	if value, ok := _c.mutation.X25519Identity(); ok {
 		_spec.SetField(systemconfig.FieldX25519Identity, field.TypeBytes, value)
 		_node.X25519Identity = value
 	}
-	if value, ok := scc.mutation.IsIdentityEncryptedWithPassphrase(); ok {
+	if value, ok := _c.mutation.IsIdentityEncryptedWithPassphrase(); ok {
 		_spec.SetField(systemconfig.FieldIsIdentityEncryptedWithPassphrase, field.TypeBool, value)
 		_node.IsIdentityEncryptedWithPassphrase = value
 	}
-	if value, ok := scc.mutation.S3Endpoint(); ok {
+	if value, ok := _c.mutation.S3Endpoint(); ok {
 		_spec.SetField(systemconfig.FieldS3Endpoint, field.TypeString, value)
 		_node.S3Endpoint = value
 	}
-	if value, ok := scc.mutation.S3AccessKeyID(); ok {
+	if value, ok := _c.mutation.S3AccessKeyID(); ok {
 		_spec.SetField(systemconfig.FieldS3AccessKeyID, field.TypeString, value)
 		_node.S3AccessKeyID = value
 	}
-	if value, ok := scc.mutation.S3SecretAccessKey(); ok {
+	if value, ok := _c.mutation.S3SecretAccessKey(); ok {
 		_spec.SetField(systemconfig.FieldS3SecretAccessKey, field.TypeBytes, value)
 		_node.S3SecretAccessKey = value
 	}
-	if value, ok := scc.mutation.S3BucketName(); ok {
+	if value, ok := _c.mutation.S3BucketName(); ok {
 		_spec.SetField(systemconfig.FieldS3BucketName, field.TypeString, value)
 		_node.S3BucketName = value
 	}
-	if value, ok := scc.mutation.S3UseSsl(); ok {
+	if value, ok := _c.mutation.S3UseSsl(); ok {
 		_spec.SetField(systemconfig.FieldS3UseSsl, field.TypeBool, value)
 		_node.S3UseSsl = value
 	}
-	if value, ok := scc.mutation.TLSEnableAutocert(); ok {
+	if value, ok := _c.mutation.TLSEnableAutocert(); ok {
 		_spec.SetField(systemconfig.FieldTLSEnableAutocert, field.TypeBool, value)
 		_node.TLSEnableAutocert = value
 	}
-	if value, ok := scc.mutation.TLSCertFilepath(); ok {
+	if value, ok := _c.mutation.TLSCertFilepath(); ok {
 		_spec.SetField(systemconfig.FieldTLSCertFilepath, field.TypeString, value)
 		_node.TLSCertFilepath = value
 	}
-	if value, ok := scc.mutation.TLSPrivateKeyFilepath(); ok {
+	if value, ok := _c.mutation.TLSPrivateKeyFilepath(); ok {
 		_spec.SetField(systemconfig.FieldTLSPrivateKeyFilepath, field.TypeString, value)
 		_node.TLSPrivateKeyFilepath = value
 	}
-	if value, ok := scc.mutation.TLSAutocertEmail(); ok {
+	if value, ok := _c.mutation.TLSAutocertEmail(); ok {
 		_spec.SetField(systemconfig.FieldTLSAutocertEmail, field.TypeString, value)
 		_node.TLSAutocertEmail = value
 	}
-	if value, ok := scc.mutation.TLSAutocertHosts(); ok {
+	if value, ok := _c.mutation.TLSAutocertHosts(); ok {
 		_spec.SetField(systemconfig.FieldTLSAutocertHosts, field.TypeJSON, value)
 		_node.TLSAutocertHosts = value
 	}
-	if value, ok := scc.mutation.MailerHost(); ok {
+	if value, ok := _c.mutation.MailerHost(); ok {
 		_spec.SetField(systemconfig.FieldMailerHost, field.TypeString, value)
 		_node.MailerHost = value
 	}
-	if value, ok := scc.mutation.MailerPort(); ok {
+	if value, ok := _c.mutation.MailerPort(); ok {
 		_spec.SetField(systemconfig.FieldMailerPort, field.TypeInt, value)
 		_node.MailerPort = value
 	}
-	if value, ok := scc.mutation.MailerUsername(); ok {
+	if value, ok := _c.mutation.MailerUsername(); ok {
 		_spec.SetField(systemconfig.FieldMailerUsername, field.TypeString, value)
 		_node.MailerUsername = value
 	}
-	if value, ok := scc.mutation.MailerPassword(); ok {
+	if value, ok := _c.mutation.MailerPassword(); ok {
 		_spec.SetField(systemconfig.FieldMailerPassword, field.TypeBytes, value)
 		_node.MailerPassword = value
 	}
-	if value, ok := scc.mutation.MailerFrom(); ok {
+	if value, ok := _c.mutation.MailerFrom(); ok {
 		_spec.SetField(systemconfig.FieldMailerFrom, field.TypeString, value)
 		_node.MailerFrom = value
 	}
-	if value, ok := scc.mutation.MailerInsecureSkipVerify(); ok {
+	if value, ok := _c.mutation.MailerInsecureSkipVerify(); ok {
 		_spec.SetField(systemconfig.FieldMailerInsecureSkipVerify, field.TypeBool, value)
 		_node.MailerInsecureSkipVerify = value
 	}
-	if value, ok := scc.mutation.OcrTikaURL(); ok {
+	if value, ok := _c.mutation.MailerUseImplicitSslTLS(); ok {
+		_spec.SetField(systemconfig.FieldMailerUseImplicitSslTLS, field.TypeBool, value)
+		_node.MailerUseImplicitSslTLS = value
+	}
+	if value, ok := _c.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)
 		_node.OcrTikaURL = value
 	}
-	if value, ok := scc.mutation.InitializedAt(); ok {
+	if value, ok := _c.mutation.InitializedAt(); ok {
 		_spec.SetField(systemconfig.FieldInitializedAt, field.TypeTime, value)
 		_node.InitializedAt = &value
 	}
-	if nodes := scc.mutation.CreatorIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CreatorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -578,7 +603,7 @@ func (scc *SystemConfigCreate) createSpec() (*SystemConfig, *sqlgraph.CreateSpec
 		_node.CreatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := scc.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -606,16 +631,16 @@ type SystemConfigCreateBulk struct {
 }
 
 // Save creates the SystemConfig entities in the database.
-func (sccb *SystemConfigCreateBulk) Save(ctx context.Context) ([]*SystemConfig, error) {
-	if sccb.err != nil {
-		return nil, sccb.err
+func (_c *SystemConfigCreateBulk) Save(ctx context.Context) ([]*SystemConfig, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(sccb.builders))
-	nodes := make([]*SystemConfig, len(sccb.builders))
-	mutators := make([]Mutator, len(sccb.builders))
-	for i := range sccb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*SystemConfig, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := sccb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*SystemConfigMutation)
@@ -629,11 +654,11 @@ func (sccb *SystemConfigCreateBulk) Save(ctx context.Context) ([]*SystemConfig, 
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, sccb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, sccb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -657,7 +682,7 @@ func (sccb *SystemConfigCreateBulk) Save(ctx context.Context) ([]*SystemConfig, 
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, sccb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -665,8 +690,8 @@ func (sccb *SystemConfigCreateBulk) Save(ctx context.Context) ([]*SystemConfig, 
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (sccb *SystemConfigCreateBulk) SaveX(ctx context.Context) []*SystemConfig {
-	v, err := sccb.Save(ctx)
+func (_c *SystemConfigCreateBulk) SaveX(ctx context.Context) []*SystemConfig {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -674,14 +699,14 @@ func (sccb *SystemConfigCreateBulk) SaveX(ctx context.Context) []*SystemConfig {
 }
 
 // Exec executes the query.
-func (sccb *SystemConfigCreateBulk) Exec(ctx context.Context) error {
-	_, err := sccb.Save(ctx)
+func (_c *SystemConfigCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sccb *SystemConfigCreateBulk) ExecX(ctx context.Context) {
-	if err := sccb.Exec(ctx); err != nil {
+func (_c *SystemConfigCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

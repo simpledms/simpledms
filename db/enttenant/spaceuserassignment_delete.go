@@ -20,56 +20,56 @@ type SpaceUserAssignmentDelete struct {
 }
 
 // Where appends a list predicates to the SpaceUserAssignmentDelete builder.
-func (suad *SpaceUserAssignmentDelete) Where(ps ...predicate.SpaceUserAssignment) *SpaceUserAssignmentDelete {
-	suad.mutation.Where(ps...)
-	return suad
+func (_d *SpaceUserAssignmentDelete) Where(ps ...predicate.SpaceUserAssignment) *SpaceUserAssignmentDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (suad *SpaceUserAssignmentDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, suad.sqlExec, suad.mutation, suad.hooks)
+func (_d *SpaceUserAssignmentDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suad *SpaceUserAssignmentDelete) ExecX(ctx context.Context) int {
-	n, err := suad.Exec(ctx)
+func (_d *SpaceUserAssignmentDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (suad *SpaceUserAssignmentDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *SpaceUserAssignmentDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(spaceuserassignment.Table, sqlgraph.NewFieldSpec(spaceuserassignment.FieldID, field.TypeInt64))
-	if ps := suad.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, suad.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	suad.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // SpaceUserAssignmentDeleteOne is the builder for deleting a single SpaceUserAssignment entity.
 type SpaceUserAssignmentDeleteOne struct {
-	suad *SpaceUserAssignmentDelete
+	_d *SpaceUserAssignmentDelete
 }
 
 // Where appends a list predicates to the SpaceUserAssignmentDelete builder.
-func (suado *SpaceUserAssignmentDeleteOne) Where(ps ...predicate.SpaceUserAssignment) *SpaceUserAssignmentDeleteOne {
-	suado.suad.mutation.Where(ps...)
-	return suado
+func (_d *SpaceUserAssignmentDeleteOne) Where(ps ...predicate.SpaceUserAssignment) *SpaceUserAssignmentDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (suado *SpaceUserAssignmentDeleteOne) Exec(ctx context.Context) error {
-	n, err := suado.suad.Exec(ctx)
+func (_d *SpaceUserAssignmentDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (suado *SpaceUserAssignmentDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suado *SpaceUserAssignmentDeleteOne) ExecX(ctx context.Context) {
-	if err := suado.Exec(ctx); err != nil {
+func (_d *SpaceUserAssignmentDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

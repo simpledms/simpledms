@@ -55,6 +55,7 @@ func (qq *Scheduler) sendMails() {
 			mailer.WithPort(systemConfigx.MailerPort),
 			mailer.WithUsername(systemConfigx.MailerUsername),
 			mailer.WithPassword(systemConfigx.MailerPassword.String()),
+			mailer.WithSMTPAuth(mailer.SMTPAuthAutoDiscover),
 			// TODO is there a default timeout?
 			// mailer.WithTimeout()
 		)
@@ -64,8 +65,11 @@ func (qq *Scheduler) sendMails() {
 			continue
 		}
 		if systemConfigx.MailerInsecureSkipVerify {
-			mailClient.SetTLSPolicy(mailer.NoTLS)
 			err = mailClient.SetTLSConfig(&tls.Config{
+				// ServerName and MinVersion are set in mailer.NewClient() too;
+				// could not find a way to modify default tlsConfig
+				ServerName:         systemConfigx.MailerHost,
+				MinVersion:         mailer.DefaultTLSMinVersion,
 				InsecureSkipVerify: true,
 			})
 			if err != nil {
@@ -73,8 +77,11 @@ func (qq *Scheduler) sendMails() {
 				time.Sleep(1 * time.Minute)
 				continue
 			}
-		} else {
-			mailClient.SetSMTPAuth(mailer.SMTPAuthAutoDiscover)
+		}
+		if systemConfigx.MailerUseImplicitSslTLS {
+			// cannot use WithSSL in initialization because it doesn't
+			// accept a value as input
+			mailClient.SetSSL(true)
 		}
 
 		ctx := context.Background()

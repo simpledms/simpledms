@@ -134,6 +134,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemconfig.FieldMailerPassword:                    {Type: field.TypeBytes, Column: systemconfig.FieldMailerPassword},
 			systemconfig.FieldMailerFrom:                        {Type: field.TypeString, Column: systemconfig.FieldMailerFrom},
 			systemconfig.FieldMailerInsecureSkipVerify:          {Type: field.TypeBool, Column: systemconfig.FieldMailerInsecureSkipVerify},
+			systemconfig.FieldMailerUseImplicitSslTLS:           {Type: field.TypeBool, Column: systemconfig.FieldMailerUseImplicitSslTLS},
 			systemconfig.FieldOcrTikaURL:                        {Type: field.TypeString, Column: systemconfig.FieldOcrTikaURL},
 			systemconfig.FieldInitializedAt:                     {Type: field.TypeTime, Column: systemconfig.FieldInitializedAt},
 		},
@@ -516,13 +517,13 @@ type predicateAdder interface {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (aq *AccountQuery) addPredicate(pred func(s *sql.Selector)) {
-	aq.predicates = append(aq.predicates, pred)
+func (_q *AccountQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the AccountQuery builder.
-func (aq *AccountQuery) Filter() *AccountFilter {
-	return &AccountFilter{config: aq.config, predicateAdder: aq}
+func (_q *AccountQuery) Filter() *AccountFilter {
+	return &AccountFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -727,13 +728,13 @@ func (f *AccountFilter) WhereHasTenantAssignmentWith(preds ...predicate.TenantAc
 }
 
 // addPredicate implements the predicateAdder interface.
-func (mq *MailQuery) addPredicate(pred func(s *sql.Selector)) {
-	mq.predicates = append(mq.predicates, pred)
+func (_q *MailQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the MailQuery builder.
-func (mq *MailQuery) Filter() *MailFilter {
-	return &MailFilter{config: mq.config, predicateAdder: mq}
+func (_q *MailQuery) Filter() *MailFilter {
+	return &MailFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -864,13 +865,13 @@ func (f *MailFilter) WhereHasReceiverWith(preds ...predicate.Account) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (sq *SessionQuery) addPredicate(pred func(s *sql.Selector)) {
-	sq.predicates = append(sq.predicates, pred)
+func (_q *SessionQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the SessionQuery builder.
-func (sq *SessionQuery) Filter() *SessionFilter {
-	return &SessionFilter{config: sq.config, predicateAdder: sq}
+func (_q *SessionQuery) Filter() *SessionFilter {
+	return &SessionFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -953,13 +954,13 @@ func (f *SessionFilter) WhereHasAccountWith(preds ...predicate.Account) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (scq *SystemConfigQuery) addPredicate(pred func(s *sql.Selector)) {
-	scq.predicates = append(scq.predicates, pred)
+func (_q *SystemConfigQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the SystemConfigQuery builder.
-func (scq *SystemConfigQuery) Filter() *SystemConfigFilter {
-	return &SystemConfigFilter{config: scq.config, predicateAdder: scq}
+func (_q *SystemConfigQuery) Filter() *SystemConfigFilter {
+	return &SystemConfigFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -1102,6 +1103,11 @@ func (f *SystemConfigFilter) WhereMailerInsecureSkipVerify(p entql.BoolP) {
 	f.Where(p.Field(systemconfig.FieldMailerInsecureSkipVerify))
 }
 
+// WhereMailerUseImplicitSslTLS applies the entql bool predicate on the mailer_use_implicit_ssl_tls field.
+func (f *SystemConfigFilter) WhereMailerUseImplicitSslTLS(p entql.BoolP) {
+	f.Where(p.Field(systemconfig.FieldMailerUseImplicitSslTLS))
+}
+
 // WhereOcrTikaURL applies the entql string predicate on the ocr_tika_url field.
 func (f *SystemConfigFilter) WhereOcrTikaURL(p entql.StringP) {
 	f.Where(p.Field(systemconfig.FieldOcrTikaURL))
@@ -1141,13 +1147,13 @@ func (f *SystemConfigFilter) WhereHasUpdaterWith(preds ...predicate.Account) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tfq *TemporaryFileQuery) addPredicate(pred func(s *sql.Selector)) {
-	tfq.predicates = append(tfq.predicates, pred)
+func (_q *TemporaryFileQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TemporaryFileQuery builder.
-func (tfq *TemporaryFileQuery) Filter() *TemporaryFileFilter {
-	return &TemporaryFileFilter{config: tfq.config, predicateAdder: tfq}
+func (_q *TemporaryFileQuery) Filter() *TemporaryFileFilter {
+	return &TemporaryFileFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -1337,13 +1343,13 @@ func (f *TemporaryFileFilter) WhereHasOwnerWith(preds ...predicate.Account) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tq *TenantQuery) addPredicate(pred func(s *sql.Selector)) {
-	tq.predicates = append(tq.predicates, pred)
+func (_q *TenantQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TenantQuery builder.
-func (tq *TenantQuery) Filter() *TenantFilter {
-	return &TenantFilter{config: tq.config, predicateAdder: tq}
+func (_q *TenantQuery) Filter() *TenantFilter {
+	return &TenantFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -1562,13 +1568,13 @@ func (f *TenantFilter) WhereHasAccountAssignmentWith(preds ...predicate.TenantAc
 }
 
 // addPredicate implements the predicateAdder interface.
-func (taaq *TenantAccountAssignmentQuery) addPredicate(pred func(s *sql.Selector)) {
-	taaq.predicates = append(taaq.predicates, pred)
+func (_q *TenantAccountAssignmentQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TenantAccountAssignmentQuery builder.
-func (taaq *TenantAccountAssignmentQuery) Filter() *TenantAccountAssignmentFilter {
-	return &TenantAccountAssignmentFilter{config: taaq.config, predicateAdder: taaq}
+func (_q *TenantAccountAssignmentQuery) Filter() *TenantAccountAssignmentFilter {
+	return &TenantAccountAssignmentFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.

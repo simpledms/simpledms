@@ -28,361 +28,361 @@ type AccountCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (ac *AccountCreate) SetCreatedAt(t time.Time) *AccountCreate {
-	ac.mutation.SetCreatedAt(t)
-	return ac
+func (_c *AccountCreate) SetCreatedAt(v time.Time) *AccountCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableCreatedAt(t *time.Time) *AccountCreate {
-	if t != nil {
-		ac.SetCreatedAt(*t)
+func (_c *AccountCreate) SetNillableCreatedAt(v *time.Time) *AccountCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (ac *AccountCreate) SetCreatedBy(i int64) *AccountCreate {
-	ac.mutation.SetCreatedBy(i)
-	return ac
+func (_c *AccountCreate) SetCreatedBy(v int64) *AccountCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableCreatedBy(i *int64) *AccountCreate {
-	if i != nil {
-		ac.SetCreatedBy(*i)
+func (_c *AccountCreate) SetNillableCreatedBy(v *int64) *AccountCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ac *AccountCreate) SetUpdatedAt(t time.Time) *AccountCreate {
-	ac.mutation.SetUpdatedAt(t)
-	return ac
+func (_c *AccountCreate) SetUpdatedAt(v time.Time) *AccountCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableUpdatedAt(t *time.Time) *AccountCreate {
-	if t != nil {
-		ac.SetUpdatedAt(*t)
+func (_c *AccountCreate) SetNillableUpdatedAt(v *time.Time) *AccountCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (ac *AccountCreate) SetUpdatedBy(i int64) *AccountCreate {
-	ac.mutation.SetUpdatedBy(i)
-	return ac
+func (_c *AccountCreate) SetUpdatedBy(v int64) *AccountCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableUpdatedBy(i *int64) *AccountCreate {
-	if i != nil {
-		ac.SetUpdatedBy(*i)
+func (_c *AccountCreate) SetNillableUpdatedBy(v *int64) *AccountCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (ac *AccountCreate) SetDeletedBy(i int64) *AccountCreate {
-	ac.mutation.SetDeletedBy(i)
-	return ac
+func (_c *AccountCreate) SetDeletedBy(v int64) *AccountCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableDeletedBy(i *int64) *AccountCreate {
-	if i != nil {
-		ac.SetDeletedBy(*i)
+func (_c *AccountCreate) SetNillableDeletedBy(v *int64) *AccountCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (ac *AccountCreate) SetDeletedAt(t time.Time) *AccountCreate {
-	ac.mutation.SetDeletedAt(t)
-	return ac
+func (_c *AccountCreate) SetDeletedAt(v time.Time) *AccountCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableDeletedAt(t *time.Time) *AccountCreate {
-	if t != nil {
-		ac.SetDeletedAt(*t)
+func (_c *AccountCreate) SetNillableDeletedAt(v *time.Time) *AccountCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetPublicID sets the "public_id" field.
-func (ac *AccountCreate) SetPublicID(et entx.CIText) *AccountCreate {
-	ac.mutation.SetPublicID(et)
-	return ac
+func (_c *AccountCreate) SetPublicID(v entx.CIText) *AccountCreate {
+	_c.mutation.SetPublicID(v)
+	return _c
 }
 
 // SetNillablePublicID sets the "public_id" field if the given value is not nil.
-func (ac *AccountCreate) SetNillablePublicID(et *entx.CIText) *AccountCreate {
-	if et != nil {
-		ac.SetPublicID(*et)
+func (_c *AccountCreate) SetNillablePublicID(v *entx.CIText) *AccountCreate {
+	if v != nil {
+		_c.SetPublicID(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetEmail sets the "email" field.
-func (ac *AccountCreate) SetEmail(et entx.CIText) *AccountCreate {
-	ac.mutation.SetEmail(et)
-	return ac
+func (_c *AccountCreate) SetEmail(v entx.CIText) *AccountCreate {
+	_c.mutation.SetEmail(v)
+	return _c
 }
 
 // SetFirstName sets the "first_name" field.
-func (ac *AccountCreate) SetFirstName(s string) *AccountCreate {
-	ac.mutation.SetFirstName(s)
-	return ac
+func (_c *AccountCreate) SetFirstName(v string) *AccountCreate {
+	_c.mutation.SetFirstName(v)
+	return _c
 }
 
 // SetLastName sets the "last_name" field.
-func (ac *AccountCreate) SetLastName(s string) *AccountCreate {
-	ac.mutation.SetLastName(s)
-	return ac
+func (_c *AccountCreate) SetLastName(v string) *AccountCreate {
+	_c.mutation.SetLastName(v)
+	return _c
 }
 
 // SetLanguage sets the "language" field.
-func (ac *AccountCreate) SetLanguage(l language.Language) *AccountCreate {
-	ac.mutation.SetLanguage(l)
-	return ac
+func (_c *AccountCreate) SetLanguage(v language.Language) *AccountCreate {
+	_c.mutation.SetLanguage(v)
+	return _c
 }
 
 // SetSubscribedToNewsletterAt sets the "subscribed_to_newsletter_at" field.
-func (ac *AccountCreate) SetSubscribedToNewsletterAt(t time.Time) *AccountCreate {
-	ac.mutation.SetSubscribedToNewsletterAt(t)
-	return ac
+func (_c *AccountCreate) SetSubscribedToNewsletterAt(v time.Time) *AccountCreate {
+	_c.mutation.SetSubscribedToNewsletterAt(v)
+	return _c
 }
 
 // SetNillableSubscribedToNewsletterAt sets the "subscribed_to_newsletter_at" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableSubscribedToNewsletterAt(t *time.Time) *AccountCreate {
-	if t != nil {
-		ac.SetSubscribedToNewsletterAt(*t)
+func (_c *AccountCreate) SetNillableSubscribedToNewsletterAt(v *time.Time) *AccountCreate {
+	if v != nil {
+		_c.SetSubscribedToNewsletterAt(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetPasswordSalt sets the "password_salt" field.
-func (ac *AccountCreate) SetPasswordSalt(s string) *AccountCreate {
-	ac.mutation.SetPasswordSalt(s)
-	return ac
+func (_c *AccountCreate) SetPasswordSalt(v string) *AccountCreate {
+	_c.mutation.SetPasswordSalt(v)
+	return _c
 }
 
 // SetNillablePasswordSalt sets the "password_salt" field if the given value is not nil.
-func (ac *AccountCreate) SetNillablePasswordSalt(s *string) *AccountCreate {
-	if s != nil {
-		ac.SetPasswordSalt(*s)
+func (_c *AccountCreate) SetNillablePasswordSalt(v *string) *AccountCreate {
+	if v != nil {
+		_c.SetPasswordSalt(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetPasswordHash sets the "password_hash" field.
-func (ac *AccountCreate) SetPasswordHash(s string) *AccountCreate {
-	ac.mutation.SetPasswordHash(s)
-	return ac
+func (_c *AccountCreate) SetPasswordHash(v string) *AccountCreate {
+	_c.mutation.SetPasswordHash(v)
+	return _c
 }
 
 // SetNillablePasswordHash sets the "password_hash" field if the given value is not nil.
-func (ac *AccountCreate) SetNillablePasswordHash(s *string) *AccountCreate {
-	if s != nil {
-		ac.SetPasswordHash(*s)
+func (_c *AccountCreate) SetNillablePasswordHash(v *string) *AccountCreate {
+	if v != nil {
+		_c.SetPasswordHash(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetTemporaryPasswordSalt sets the "temporary_password_salt" field.
-func (ac *AccountCreate) SetTemporaryPasswordSalt(s string) *AccountCreate {
-	ac.mutation.SetTemporaryPasswordSalt(s)
-	return ac
+func (_c *AccountCreate) SetTemporaryPasswordSalt(v string) *AccountCreate {
+	_c.mutation.SetTemporaryPasswordSalt(v)
+	return _c
 }
 
 // SetNillableTemporaryPasswordSalt sets the "temporary_password_salt" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableTemporaryPasswordSalt(s *string) *AccountCreate {
-	if s != nil {
-		ac.SetTemporaryPasswordSalt(*s)
+func (_c *AccountCreate) SetNillableTemporaryPasswordSalt(v *string) *AccountCreate {
+	if v != nil {
+		_c.SetTemporaryPasswordSalt(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetTemporaryPasswordHash sets the "temporary_password_hash" field.
-func (ac *AccountCreate) SetTemporaryPasswordHash(s string) *AccountCreate {
-	ac.mutation.SetTemporaryPasswordHash(s)
-	return ac
+func (_c *AccountCreate) SetTemporaryPasswordHash(v string) *AccountCreate {
+	_c.mutation.SetTemporaryPasswordHash(v)
+	return _c
 }
 
 // SetNillableTemporaryPasswordHash sets the "temporary_password_hash" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableTemporaryPasswordHash(s *string) *AccountCreate {
-	if s != nil {
-		ac.SetTemporaryPasswordHash(*s)
+func (_c *AccountCreate) SetNillableTemporaryPasswordHash(v *string) *AccountCreate {
+	if v != nil {
+		_c.SetTemporaryPasswordHash(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetTemporaryPasswordExpiresAt sets the "temporary_password_expires_at" field.
-func (ac *AccountCreate) SetTemporaryPasswordExpiresAt(t time.Time) *AccountCreate {
-	ac.mutation.SetTemporaryPasswordExpiresAt(t)
-	return ac
+func (_c *AccountCreate) SetTemporaryPasswordExpiresAt(v time.Time) *AccountCreate {
+	_c.mutation.SetTemporaryPasswordExpiresAt(v)
+	return _c
 }
 
 // SetNillableTemporaryPasswordExpiresAt sets the "temporary_password_expires_at" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableTemporaryPasswordExpiresAt(t *time.Time) *AccountCreate {
-	if t != nil {
-		ac.SetTemporaryPasswordExpiresAt(*t)
+func (_c *AccountCreate) SetNillableTemporaryPasswordExpiresAt(v *time.Time) *AccountCreate {
+	if v != nil {
+		_c.SetTemporaryPasswordExpiresAt(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetTemporaryTwoFactorAuthKeyEncrypted sets the "temporary_two_factor_auth_key_encrypted" field.
-func (ac *AccountCreate) SetTemporaryTwoFactorAuthKeyEncrypted(s string) *AccountCreate {
-	ac.mutation.SetTemporaryTwoFactorAuthKeyEncrypted(s)
-	return ac
+func (_c *AccountCreate) SetTemporaryTwoFactorAuthKeyEncrypted(v string) *AccountCreate {
+	_c.mutation.SetTemporaryTwoFactorAuthKeyEncrypted(v)
+	return _c
 }
 
 // SetNillableTemporaryTwoFactorAuthKeyEncrypted sets the "temporary_two_factor_auth_key_encrypted" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableTemporaryTwoFactorAuthKeyEncrypted(s *string) *AccountCreate {
-	if s != nil {
-		ac.SetTemporaryTwoFactorAuthKeyEncrypted(*s)
+func (_c *AccountCreate) SetNillableTemporaryTwoFactorAuthKeyEncrypted(v *string) *AccountCreate {
+	if v != nil {
+		_c.SetTemporaryTwoFactorAuthKeyEncrypted(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetTwoFactoryAuthKeyEncrypted sets the "two_factory_auth_key_encrypted" field.
-func (ac *AccountCreate) SetTwoFactoryAuthKeyEncrypted(s string) *AccountCreate {
-	ac.mutation.SetTwoFactoryAuthKeyEncrypted(s)
-	return ac
+func (_c *AccountCreate) SetTwoFactoryAuthKeyEncrypted(v string) *AccountCreate {
+	_c.mutation.SetTwoFactoryAuthKeyEncrypted(v)
+	return _c
 }
 
 // SetNillableTwoFactoryAuthKeyEncrypted sets the "two_factory_auth_key_encrypted" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableTwoFactoryAuthKeyEncrypted(s *string) *AccountCreate {
-	if s != nil {
-		ac.SetTwoFactoryAuthKeyEncrypted(*s)
+func (_c *AccountCreate) SetNillableTwoFactoryAuthKeyEncrypted(v *string) *AccountCreate {
+	if v != nil {
+		_c.SetTwoFactoryAuthKeyEncrypted(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetTwoFactorAuthRecoveryCodeSalt sets the "two_factor_auth_recovery_code_salt" field.
-func (ac *AccountCreate) SetTwoFactorAuthRecoveryCodeSalt(s string) *AccountCreate {
-	ac.mutation.SetTwoFactorAuthRecoveryCodeSalt(s)
-	return ac
+func (_c *AccountCreate) SetTwoFactorAuthRecoveryCodeSalt(v string) *AccountCreate {
+	_c.mutation.SetTwoFactorAuthRecoveryCodeSalt(v)
+	return _c
 }
 
 // SetNillableTwoFactorAuthRecoveryCodeSalt sets the "two_factor_auth_recovery_code_salt" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableTwoFactorAuthRecoveryCodeSalt(s *string) *AccountCreate {
-	if s != nil {
-		ac.SetTwoFactorAuthRecoveryCodeSalt(*s)
+func (_c *AccountCreate) SetNillableTwoFactorAuthRecoveryCodeSalt(v *string) *AccountCreate {
+	if v != nil {
+		_c.SetTwoFactorAuthRecoveryCodeSalt(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetTwoFactorAuthRecoveryCodeHashes sets the "two_factor_auth_recovery_code_hashes" field.
-func (ac *AccountCreate) SetTwoFactorAuthRecoveryCodeHashes(s []string) *AccountCreate {
-	ac.mutation.SetTwoFactorAuthRecoveryCodeHashes(s)
-	return ac
+func (_c *AccountCreate) SetTwoFactorAuthRecoveryCodeHashes(v []string) *AccountCreate {
+	_c.mutation.SetTwoFactorAuthRecoveryCodeHashes(v)
+	return _c
 }
 
 // SetLastLoginAttemptAt sets the "last_login_attempt_at" field.
-func (ac *AccountCreate) SetLastLoginAttemptAt(t time.Time) *AccountCreate {
-	ac.mutation.SetLastLoginAttemptAt(t)
-	return ac
+func (_c *AccountCreate) SetLastLoginAttemptAt(v time.Time) *AccountCreate {
+	_c.mutation.SetLastLoginAttemptAt(v)
+	return _c
 }
 
 // SetNillableLastLoginAttemptAt sets the "last_login_attempt_at" field if the given value is not nil.
-func (ac *AccountCreate) SetNillableLastLoginAttemptAt(t *time.Time) *AccountCreate {
-	if t != nil {
-		ac.SetLastLoginAttemptAt(*t)
+func (_c *AccountCreate) SetNillableLastLoginAttemptAt(v *time.Time) *AccountCreate {
+	if v != nil {
+		_c.SetLastLoginAttemptAt(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetRole sets the "role" field.
-func (ac *AccountCreate) SetRole(mr mainrole.MainRole) *AccountCreate {
-	ac.mutation.SetRole(mr)
-	return ac
+func (_c *AccountCreate) SetRole(v mainrole.MainRole) *AccountCreate {
+	_c.mutation.SetRole(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ac *AccountCreate) SetID(i int64) *AccountCreate {
-	ac.mutation.SetID(i)
-	return ac
+func (_c *AccountCreate) SetID(v int64) *AccountCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // AddTenantIDs adds the "tenants" edge to the Tenant entity by IDs.
-func (ac *AccountCreate) AddTenantIDs(ids ...int64) *AccountCreate {
-	ac.mutation.AddTenantIDs(ids...)
-	return ac
+func (_c *AccountCreate) AddTenantIDs(ids ...int64) *AccountCreate {
+	_c.mutation.AddTenantIDs(ids...)
+	return _c
 }
 
 // AddTenants adds the "tenants" edges to the Tenant entity.
-func (ac *AccountCreate) AddTenants(t ...*Tenant) *AccountCreate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *AccountCreate) AddTenants(v ...*Tenant) *AccountCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ac.AddTenantIDs(ids...)
+	return _c.AddTenantIDs(ids...)
 }
 
 // AddReceivedMailIDs adds the "received_mails" edge to the Mail entity by IDs.
-func (ac *AccountCreate) AddReceivedMailIDs(ids ...int64) *AccountCreate {
-	ac.mutation.AddReceivedMailIDs(ids...)
-	return ac
+func (_c *AccountCreate) AddReceivedMailIDs(ids ...int64) *AccountCreate {
+	_c.mutation.AddReceivedMailIDs(ids...)
+	return _c
 }
 
 // AddReceivedMails adds the "received_mails" edges to the Mail entity.
-func (ac *AccountCreate) AddReceivedMails(m ...*Mail) *AccountCreate {
-	ids := make([]int64, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_c *AccountCreate) AddReceivedMails(v ...*Mail) *AccountCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ac.AddReceivedMailIDs(ids...)
+	return _c.AddReceivedMailIDs(ids...)
 }
 
 // AddTemporaryFileIDs adds the "temporary_files" edge to the TemporaryFile entity by IDs.
-func (ac *AccountCreate) AddTemporaryFileIDs(ids ...int64) *AccountCreate {
-	ac.mutation.AddTemporaryFileIDs(ids...)
-	return ac
+func (_c *AccountCreate) AddTemporaryFileIDs(ids ...int64) *AccountCreate {
+	_c.mutation.AddTemporaryFileIDs(ids...)
+	return _c
 }
 
 // AddTemporaryFiles adds the "temporary_files" edges to the TemporaryFile entity.
-func (ac *AccountCreate) AddTemporaryFiles(t ...*TemporaryFile) *AccountCreate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *AccountCreate) AddTemporaryFiles(v ...*TemporaryFile) *AccountCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ac.AddTemporaryFileIDs(ids...)
+	return _c.AddTemporaryFileIDs(ids...)
 }
 
 // AddTenantAssignmentIDs adds the "tenant_assignment" edge to the TenantAccountAssignment entity by IDs.
-func (ac *AccountCreate) AddTenantAssignmentIDs(ids ...int64) *AccountCreate {
-	ac.mutation.AddTenantAssignmentIDs(ids...)
-	return ac
+func (_c *AccountCreate) AddTenantAssignmentIDs(ids ...int64) *AccountCreate {
+	_c.mutation.AddTenantAssignmentIDs(ids...)
+	return _c
 }
 
 // AddTenantAssignment adds the "tenant_assignment" edges to the TenantAccountAssignment entity.
-func (ac *AccountCreate) AddTenantAssignment(t ...*TenantAccountAssignment) *AccountCreate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *AccountCreate) AddTenantAssignment(v ...*TenantAccountAssignment) *AccountCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ac.AddTenantAssignmentIDs(ids...)
+	return _c.AddTenantAssignmentIDs(ids...)
 }
 
 // Mutation returns the AccountMutation object of the builder.
-func (ac *AccountCreate) Mutation() *AccountMutation {
-	return ac.mutation
+func (_c *AccountCreate) Mutation() *AccountMutation {
+	return _c.mutation
 }
 
 // Save creates the Account in the database.
-func (ac *AccountCreate) Save(ctx context.Context) (*Account, error) {
-	if err := ac.defaults(); err != nil {
+func (_c *AccountCreate) Save(ctx context.Context) (*Account, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ac.sqlSave, ac.mutation, ac.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ac *AccountCreate) SaveX(ctx context.Context) *Account {
-	v, err := ac.Save(ctx)
+func (_c *AccountCreate) SaveX(ctx context.Context) *Account {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -390,140 +390,140 @@ func (ac *AccountCreate) SaveX(ctx context.Context) *Account {
 }
 
 // Exec executes the query.
-func (ac *AccountCreate) Exec(ctx context.Context) error {
-	_, err := ac.Save(ctx)
+func (_c *AccountCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ac *AccountCreate) ExecX(ctx context.Context) {
-	if err := ac.Exec(ctx); err != nil {
+func (_c *AccountCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ac *AccountCreate) defaults() error {
-	if _, ok := ac.mutation.CreatedAt(); !ok {
+func (_c *AccountCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if account.DefaultCreatedAt == nil {
 			return fmt.Errorf("entmain: uninitialized account.DefaultCreatedAt (forgotten import entmain/runtime?)")
 		}
 		v := account.DefaultCreatedAt()
-		ac.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ac.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if account.DefaultUpdatedAt == nil {
 			return fmt.Errorf("entmain: uninitialized account.DefaultUpdatedAt (forgotten import entmain/runtime?)")
 		}
 		v := account.DefaultUpdatedAt()
-		ac.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ac.mutation.PublicID(); !ok {
+	if _, ok := _c.mutation.PublicID(); !ok {
 		if account.DefaultPublicID == nil {
 			return fmt.Errorf("entmain: uninitialized account.DefaultPublicID (forgotten import entmain/runtime?)")
 		}
 		v := account.DefaultPublicID()
-		ac.mutation.SetPublicID(v)
+		_c.mutation.SetPublicID(v)
 	}
-	if _, ok := ac.mutation.PasswordSalt(); !ok {
+	if _, ok := _c.mutation.PasswordSalt(); !ok {
 		v := account.DefaultPasswordSalt
-		ac.mutation.SetPasswordSalt(v)
+		_c.mutation.SetPasswordSalt(v)
 	}
-	if _, ok := ac.mutation.PasswordHash(); !ok {
+	if _, ok := _c.mutation.PasswordHash(); !ok {
 		v := account.DefaultPasswordHash
-		ac.mutation.SetPasswordHash(v)
+		_c.mutation.SetPasswordHash(v)
 	}
-	if _, ok := ac.mutation.TemporaryPasswordSalt(); !ok {
+	if _, ok := _c.mutation.TemporaryPasswordSalt(); !ok {
 		v := account.DefaultTemporaryPasswordSalt
-		ac.mutation.SetTemporaryPasswordSalt(v)
+		_c.mutation.SetTemporaryPasswordSalt(v)
 	}
-	if _, ok := ac.mutation.TemporaryPasswordHash(); !ok {
+	if _, ok := _c.mutation.TemporaryPasswordHash(); !ok {
 		v := account.DefaultTemporaryPasswordHash
-		ac.mutation.SetTemporaryPasswordHash(v)
+		_c.mutation.SetTemporaryPasswordHash(v)
 	}
-	if _, ok := ac.mutation.TemporaryPasswordExpiresAt(); !ok {
+	if _, ok := _c.mutation.TemporaryPasswordExpiresAt(); !ok {
 		v := account.DefaultTemporaryPasswordExpiresAt
-		ac.mutation.SetTemporaryPasswordExpiresAt(v)
+		_c.mutation.SetTemporaryPasswordExpiresAt(v)
 	}
-	if _, ok := ac.mutation.TemporaryTwoFactorAuthKeyEncrypted(); !ok {
+	if _, ok := _c.mutation.TemporaryTwoFactorAuthKeyEncrypted(); !ok {
 		v := account.DefaultTemporaryTwoFactorAuthKeyEncrypted
-		ac.mutation.SetTemporaryTwoFactorAuthKeyEncrypted(v)
+		_c.mutation.SetTemporaryTwoFactorAuthKeyEncrypted(v)
 	}
-	if _, ok := ac.mutation.TwoFactoryAuthKeyEncrypted(); !ok {
+	if _, ok := _c.mutation.TwoFactoryAuthKeyEncrypted(); !ok {
 		v := account.DefaultTwoFactoryAuthKeyEncrypted
-		ac.mutation.SetTwoFactoryAuthKeyEncrypted(v)
+		_c.mutation.SetTwoFactoryAuthKeyEncrypted(v)
 	}
-	if _, ok := ac.mutation.TwoFactorAuthRecoveryCodeSalt(); !ok {
+	if _, ok := _c.mutation.TwoFactorAuthRecoveryCodeSalt(); !ok {
 		v := account.DefaultTwoFactorAuthRecoveryCodeSalt
-		ac.mutation.SetTwoFactorAuthRecoveryCodeSalt(v)
+		_c.mutation.SetTwoFactorAuthRecoveryCodeSalt(v)
 	}
-	if _, ok := ac.mutation.TwoFactorAuthRecoveryCodeHashes(); !ok {
+	if _, ok := _c.mutation.TwoFactorAuthRecoveryCodeHashes(); !ok {
 		v := account.DefaultTwoFactorAuthRecoveryCodeHashes
-		ac.mutation.SetTwoFactorAuthRecoveryCodeHashes(v)
+		_c.mutation.SetTwoFactorAuthRecoveryCodeHashes(v)
 	}
-	if _, ok := ac.mutation.LastLoginAttemptAt(); !ok {
+	if _, ok := _c.mutation.LastLoginAttemptAt(); !ok {
 		v := account.DefaultLastLoginAttemptAt
-		ac.mutation.SetLastLoginAttemptAt(v)
+		_c.mutation.SetLastLoginAttemptAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ac *AccountCreate) check() error {
-	if _, ok := ac.mutation.CreatedAt(); !ok {
+func (_c *AccountCreate) check() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`entmain: missing required field "Account.created_at"`)}
 	}
-	if _, ok := ac.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`entmain: missing required field "Account.updated_at"`)}
 	}
-	if _, ok := ac.mutation.PublicID(); !ok {
+	if _, ok := _c.mutation.PublicID(); !ok {
 		return &ValidationError{Name: "public_id", err: errors.New(`entmain: missing required field "Account.public_id"`)}
 	}
-	if _, ok := ac.mutation.Email(); !ok {
+	if _, ok := _c.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`entmain: missing required field "Account.email"`)}
 	}
-	if _, ok := ac.mutation.FirstName(); !ok {
+	if _, ok := _c.mutation.FirstName(); !ok {
 		return &ValidationError{Name: "first_name", err: errors.New(`entmain: missing required field "Account.first_name"`)}
 	}
-	if _, ok := ac.mutation.LastName(); !ok {
+	if _, ok := _c.mutation.LastName(); !ok {
 		return &ValidationError{Name: "last_name", err: errors.New(`entmain: missing required field "Account.last_name"`)}
 	}
-	if _, ok := ac.mutation.Language(); !ok {
+	if _, ok := _c.mutation.Language(); !ok {
 		return &ValidationError{Name: "language", err: errors.New(`entmain: missing required field "Account.language"`)}
 	}
-	if v, ok := ac.mutation.Language(); ok {
+	if v, ok := _c.mutation.Language(); ok {
 		if err := account.LanguageValidator(v); err != nil {
 			return &ValidationError{Name: "language", err: fmt.Errorf(`entmain: validator failed for field "Account.language": %w`, err)}
 		}
 	}
-	if _, ok := ac.mutation.PasswordSalt(); !ok {
+	if _, ok := _c.mutation.PasswordSalt(); !ok {
 		return &ValidationError{Name: "password_salt", err: errors.New(`entmain: missing required field "Account.password_salt"`)}
 	}
-	if _, ok := ac.mutation.PasswordHash(); !ok {
+	if _, ok := _c.mutation.PasswordHash(); !ok {
 		return &ValidationError{Name: "password_hash", err: errors.New(`entmain: missing required field "Account.password_hash"`)}
 	}
-	if _, ok := ac.mutation.TemporaryPasswordSalt(); !ok {
+	if _, ok := _c.mutation.TemporaryPasswordSalt(); !ok {
 		return &ValidationError{Name: "temporary_password_salt", err: errors.New(`entmain: missing required field "Account.temporary_password_salt"`)}
 	}
-	if _, ok := ac.mutation.TemporaryPasswordHash(); !ok {
+	if _, ok := _c.mutation.TemporaryPasswordHash(); !ok {
 		return &ValidationError{Name: "temporary_password_hash", err: errors.New(`entmain: missing required field "Account.temporary_password_hash"`)}
 	}
-	if _, ok := ac.mutation.TemporaryTwoFactorAuthKeyEncrypted(); !ok {
+	if _, ok := _c.mutation.TemporaryTwoFactorAuthKeyEncrypted(); !ok {
 		return &ValidationError{Name: "temporary_two_factor_auth_key_encrypted", err: errors.New(`entmain: missing required field "Account.temporary_two_factor_auth_key_encrypted"`)}
 	}
-	if _, ok := ac.mutation.TwoFactoryAuthKeyEncrypted(); !ok {
+	if _, ok := _c.mutation.TwoFactoryAuthKeyEncrypted(); !ok {
 		return &ValidationError{Name: "two_factory_auth_key_encrypted", err: errors.New(`entmain: missing required field "Account.two_factory_auth_key_encrypted"`)}
 	}
-	if _, ok := ac.mutation.TwoFactorAuthRecoveryCodeSalt(); !ok {
+	if _, ok := _c.mutation.TwoFactorAuthRecoveryCodeSalt(); !ok {
 		return &ValidationError{Name: "two_factor_auth_recovery_code_salt", err: errors.New(`entmain: missing required field "Account.two_factor_auth_recovery_code_salt"`)}
 	}
-	if _, ok := ac.mutation.TwoFactorAuthRecoveryCodeHashes(); !ok {
+	if _, ok := _c.mutation.TwoFactorAuthRecoveryCodeHashes(); !ok {
 		return &ValidationError{Name: "two_factor_auth_recovery_code_hashes", err: errors.New(`entmain: missing required field "Account.two_factor_auth_recovery_code_hashes"`)}
 	}
-	if _, ok := ac.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`entmain: missing required field "Account.role"`)}
 	}
-	if v, ok := ac.mutation.Role(); ok {
+	if v, ok := _c.mutation.Role(); ok {
 		if err := account.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`entmain: validator failed for field "Account.role": %w`, err)}
 		}
@@ -531,12 +531,12 @@ func (ac *AccountCreate) check() error {
 	return nil
 }
 
-func (ac *AccountCreate) sqlSave(ctx context.Context) (*Account, error) {
-	if err := ac.check(); err != nil {
+func (_c *AccountCreate) sqlSave(ctx context.Context) (*Account, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ac.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ac.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -546,113 +546,113 @@ func (ac *AccountCreate) sqlSave(ctx context.Context) (*Account, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	ac.mutation.id = &_node.ID
-	ac.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
+func (_c *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Account{config: ac.config}
+		_node = &Account{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(account.Table, sqlgraph.NewFieldSpec(account.FieldID, field.TypeInt64))
 	)
-	if id, ok := ac.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ac.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(account.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := ac.mutation.CreatedBy(); ok {
+	if value, ok := _c.mutation.CreatedBy(); ok {
 		_spec.SetField(account.FieldCreatedBy, field.TypeInt64, value)
 		_node.CreatedBy = value
 	}
-	if value, ok := ac.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(account.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := ac.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(account.FieldUpdatedBy, field.TypeInt64, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := ac.mutation.DeletedBy(); ok {
+	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(account.FieldDeletedBy, field.TypeInt64, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := ac.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(account.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := ac.mutation.PublicID(); ok {
+	if value, ok := _c.mutation.PublicID(); ok {
 		_spec.SetField(account.FieldPublicID, field.TypeString, value)
 		_node.PublicID = value
 	}
-	if value, ok := ac.mutation.Email(); ok {
+	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(account.FieldEmail, field.TypeString, value)
 		_node.Email = value
 	}
-	if value, ok := ac.mutation.FirstName(); ok {
+	if value, ok := _c.mutation.FirstName(); ok {
 		_spec.SetField(account.FieldFirstName, field.TypeString, value)
 		_node.FirstName = value
 	}
-	if value, ok := ac.mutation.LastName(); ok {
+	if value, ok := _c.mutation.LastName(); ok {
 		_spec.SetField(account.FieldLastName, field.TypeString, value)
 		_node.LastName = value
 	}
-	if value, ok := ac.mutation.Language(); ok {
+	if value, ok := _c.mutation.Language(); ok {
 		_spec.SetField(account.FieldLanguage, field.TypeEnum, value)
 		_node.Language = value
 	}
-	if value, ok := ac.mutation.SubscribedToNewsletterAt(); ok {
+	if value, ok := _c.mutation.SubscribedToNewsletterAt(); ok {
 		_spec.SetField(account.FieldSubscribedToNewsletterAt, field.TypeTime, value)
 		_node.SubscribedToNewsletterAt = &value
 	}
-	if value, ok := ac.mutation.PasswordSalt(); ok {
+	if value, ok := _c.mutation.PasswordSalt(); ok {
 		_spec.SetField(account.FieldPasswordSalt, field.TypeString, value)
 		_node.PasswordSalt = value
 	}
-	if value, ok := ac.mutation.PasswordHash(); ok {
+	if value, ok := _c.mutation.PasswordHash(); ok {
 		_spec.SetField(account.FieldPasswordHash, field.TypeString, value)
 		_node.PasswordHash = value
 	}
-	if value, ok := ac.mutation.TemporaryPasswordSalt(); ok {
+	if value, ok := _c.mutation.TemporaryPasswordSalt(); ok {
 		_spec.SetField(account.FieldTemporaryPasswordSalt, field.TypeString, value)
 		_node.TemporaryPasswordSalt = value
 	}
-	if value, ok := ac.mutation.TemporaryPasswordHash(); ok {
+	if value, ok := _c.mutation.TemporaryPasswordHash(); ok {
 		_spec.SetField(account.FieldTemporaryPasswordHash, field.TypeString, value)
 		_node.TemporaryPasswordHash = value
 	}
-	if value, ok := ac.mutation.TemporaryPasswordExpiresAt(); ok {
+	if value, ok := _c.mutation.TemporaryPasswordExpiresAt(); ok {
 		_spec.SetField(account.FieldTemporaryPasswordExpiresAt, field.TypeTime, value)
 		_node.TemporaryPasswordExpiresAt = value
 	}
-	if value, ok := ac.mutation.TemporaryTwoFactorAuthKeyEncrypted(); ok {
+	if value, ok := _c.mutation.TemporaryTwoFactorAuthKeyEncrypted(); ok {
 		_spec.SetField(account.FieldTemporaryTwoFactorAuthKeyEncrypted, field.TypeString, value)
 		_node.TemporaryTwoFactorAuthKeyEncrypted = value
 	}
-	if value, ok := ac.mutation.TwoFactoryAuthKeyEncrypted(); ok {
+	if value, ok := _c.mutation.TwoFactoryAuthKeyEncrypted(); ok {
 		_spec.SetField(account.FieldTwoFactoryAuthKeyEncrypted, field.TypeString, value)
 		_node.TwoFactoryAuthKeyEncrypted = value
 	}
-	if value, ok := ac.mutation.TwoFactorAuthRecoveryCodeSalt(); ok {
+	if value, ok := _c.mutation.TwoFactorAuthRecoveryCodeSalt(); ok {
 		_spec.SetField(account.FieldTwoFactorAuthRecoveryCodeSalt, field.TypeString, value)
 		_node.TwoFactorAuthRecoveryCodeSalt = value
 	}
-	if value, ok := ac.mutation.TwoFactorAuthRecoveryCodeHashes(); ok {
+	if value, ok := _c.mutation.TwoFactorAuthRecoveryCodeHashes(); ok {
 		_spec.SetField(account.FieldTwoFactorAuthRecoveryCodeHashes, field.TypeJSON, value)
 		_node.TwoFactorAuthRecoveryCodeHashes = value
 	}
-	if value, ok := ac.mutation.LastLoginAttemptAt(); ok {
+	if value, ok := _c.mutation.LastLoginAttemptAt(); ok {
 		_spec.SetField(account.FieldLastLoginAttemptAt, field.TypeTime, value)
 		_node.LastLoginAttemptAt = value
 	}
-	if value, ok := ac.mutation.Role(); ok {
+	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(account.FieldRole, field.TypeEnum, value)
 		_node.Role = value
 	}
-	if nodes := ac.mutation.TenantsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TenantsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -666,13 +666,13 @@ func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &TenantAccountAssignmentCreate{config: ac.config, mutation: newTenantAccountAssignmentMutation(ac.config, OpCreate)}
+		createE := &TenantAccountAssignmentCreate{config: _c.config, mutation: newTenantAccountAssignmentMutation(_c.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.ReceivedMailsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ReceivedMailsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -688,7 +688,7 @@ func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.TemporaryFilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TemporaryFilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -704,7 +704,7 @@ func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.TenantAssignmentIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TenantAssignmentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -731,16 +731,16 @@ type AccountCreateBulk struct {
 }
 
 // Save creates the Account entities in the database.
-func (acb *AccountCreateBulk) Save(ctx context.Context) ([]*Account, error) {
-	if acb.err != nil {
-		return nil, acb.err
+func (_c *AccountCreateBulk) Save(ctx context.Context) ([]*Account, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(acb.builders))
-	nodes := make([]*Account, len(acb.builders))
-	mutators := make([]Mutator, len(acb.builders))
-	for i := range acb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Account, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := acb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*AccountMutation)
@@ -754,11 +754,11 @@ func (acb *AccountCreateBulk) Save(ctx context.Context) ([]*Account, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, acb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, acb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -782,7 +782,7 @@ func (acb *AccountCreateBulk) Save(ctx context.Context) ([]*Account, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, acb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -790,8 +790,8 @@ func (acb *AccountCreateBulk) Save(ctx context.Context) ([]*Account, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (acb *AccountCreateBulk) SaveX(ctx context.Context) []*Account {
-	v, err := acb.Save(ctx)
+func (_c *AccountCreateBulk) SaveX(ctx context.Context) []*Account {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -799,14 +799,14 @@ func (acb *AccountCreateBulk) SaveX(ctx context.Context) []*Account {
 }
 
 // Exec executes the query.
-func (acb *AccountCreateBulk) Exec(ctx context.Context) error {
-	_, err := acb.Save(ctx)
+func (_c *AccountCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (acb *AccountCreateBulk) ExecX(ctx context.Context) {
-	if err := acb.Exec(ctx); err != nil {
+func (_c *AccountCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

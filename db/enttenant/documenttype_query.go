@@ -35,44 +35,44 @@ type DocumentTypeQuery struct {
 }
 
 // Where adds a new predicate for the DocumentTypeQuery builder.
-func (dtq *DocumentTypeQuery) Where(ps ...predicate.DocumentType) *DocumentTypeQuery {
-	dtq.predicates = append(dtq.predicates, ps...)
-	return dtq
+func (_q *DocumentTypeQuery) Where(ps ...predicate.DocumentType) *DocumentTypeQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (dtq *DocumentTypeQuery) Limit(limit int) *DocumentTypeQuery {
-	dtq.ctx.Limit = &limit
-	return dtq
+func (_q *DocumentTypeQuery) Limit(limit int) *DocumentTypeQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (dtq *DocumentTypeQuery) Offset(offset int) *DocumentTypeQuery {
-	dtq.ctx.Offset = &offset
-	return dtq
+func (_q *DocumentTypeQuery) Offset(offset int) *DocumentTypeQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (dtq *DocumentTypeQuery) Unique(unique bool) *DocumentTypeQuery {
-	dtq.ctx.Unique = &unique
-	return dtq
+func (_q *DocumentTypeQuery) Unique(unique bool) *DocumentTypeQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (dtq *DocumentTypeQuery) Order(o ...documenttype.OrderOption) *DocumentTypeQuery {
-	dtq.order = append(dtq.order, o...)
-	return dtq
+func (_q *DocumentTypeQuery) Order(o ...documenttype.OrderOption) *DocumentTypeQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QuerySpace chains the current query on the "space" edge.
-func (dtq *DocumentTypeQuery) QuerySpace() *SpaceQuery {
-	query := (&SpaceClient{config: dtq.config}).Query()
+func (_q *DocumentTypeQuery) QuerySpace() *SpaceQuery {
+	query := (&SpaceClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := dtq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := dtq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -81,20 +81,20 @@ func (dtq *DocumentTypeQuery) QuerySpace() *SpaceQuery {
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, documenttype.SpaceTable, documenttype.SpaceColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(dtq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryAttributes chains the current query on the "attributes" edge.
-func (dtq *DocumentTypeQuery) QueryAttributes() *AttributeQuery {
-	query := (&AttributeClient{config: dtq.config}).Query()
+func (_q *DocumentTypeQuery) QueryAttributes() *AttributeQuery {
+	query := (&AttributeClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := dtq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := dtq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -103,7 +103,7 @@ func (dtq *DocumentTypeQuery) QueryAttributes() *AttributeQuery {
 			sqlgraph.To(attribute.Table, attribute.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, documenttype.AttributesTable, documenttype.AttributesColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(dtq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -111,8 +111,8 @@ func (dtq *DocumentTypeQuery) QueryAttributes() *AttributeQuery {
 
 // First returns the first DocumentType entity from the query.
 // Returns a *NotFoundError when no DocumentType was found.
-func (dtq *DocumentTypeQuery) First(ctx context.Context) (*DocumentType, error) {
-	nodes, err := dtq.Limit(1).All(setContextOp(ctx, dtq.ctx, ent.OpQueryFirst))
+func (_q *DocumentTypeQuery) First(ctx context.Context) (*DocumentType, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +123,8 @@ func (dtq *DocumentTypeQuery) First(ctx context.Context) (*DocumentType, error) 
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (dtq *DocumentTypeQuery) FirstX(ctx context.Context) *DocumentType {
-	node, err := dtq.First(ctx)
+func (_q *DocumentTypeQuery) FirstX(ctx context.Context) *DocumentType {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -133,9 +133,9 @@ func (dtq *DocumentTypeQuery) FirstX(ctx context.Context) *DocumentType {
 
 // FirstID returns the first DocumentType ID from the query.
 // Returns a *NotFoundError when no DocumentType ID was found.
-func (dtq *DocumentTypeQuery) FirstID(ctx context.Context) (id int64, err error) {
+func (_q *DocumentTypeQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = dtq.Limit(1).IDs(setContextOp(ctx, dtq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -146,8 +146,8 @@ func (dtq *DocumentTypeQuery) FirstID(ctx context.Context) (id int64, err error)
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (dtq *DocumentTypeQuery) FirstIDX(ctx context.Context) int64 {
-	id, err := dtq.FirstID(ctx)
+func (_q *DocumentTypeQuery) FirstIDX(ctx context.Context) int64 {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -157,8 +157,8 @@ func (dtq *DocumentTypeQuery) FirstIDX(ctx context.Context) int64 {
 // Only returns a single DocumentType entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one DocumentType entity is found.
 // Returns a *NotFoundError when no DocumentType entities are found.
-func (dtq *DocumentTypeQuery) Only(ctx context.Context) (*DocumentType, error) {
-	nodes, err := dtq.Limit(2).All(setContextOp(ctx, dtq.ctx, ent.OpQueryOnly))
+func (_q *DocumentTypeQuery) Only(ctx context.Context) (*DocumentType, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -173,8 +173,8 @@ func (dtq *DocumentTypeQuery) Only(ctx context.Context) (*DocumentType, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (dtq *DocumentTypeQuery) OnlyX(ctx context.Context) *DocumentType {
-	node, err := dtq.Only(ctx)
+func (_q *DocumentTypeQuery) OnlyX(ctx context.Context) *DocumentType {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -184,9 +184,9 @@ func (dtq *DocumentTypeQuery) OnlyX(ctx context.Context) *DocumentType {
 // OnlyID is like Only, but returns the only DocumentType ID in the query.
 // Returns a *NotSingularError when more than one DocumentType ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (dtq *DocumentTypeQuery) OnlyID(ctx context.Context) (id int64, err error) {
+func (_q *DocumentTypeQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = dtq.Limit(2).IDs(setContextOp(ctx, dtq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -201,8 +201,8 @@ func (dtq *DocumentTypeQuery) OnlyID(ctx context.Context) (id int64, err error) 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (dtq *DocumentTypeQuery) OnlyIDX(ctx context.Context) int64 {
-	id, err := dtq.OnlyID(ctx)
+func (_q *DocumentTypeQuery) OnlyIDX(ctx context.Context) int64 {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -210,18 +210,18 @@ func (dtq *DocumentTypeQuery) OnlyIDX(ctx context.Context) int64 {
 }
 
 // All executes the query and returns a list of DocumentTypes.
-func (dtq *DocumentTypeQuery) All(ctx context.Context) ([]*DocumentType, error) {
-	ctx = setContextOp(ctx, dtq.ctx, ent.OpQueryAll)
-	if err := dtq.prepareQuery(ctx); err != nil {
+func (_q *DocumentTypeQuery) All(ctx context.Context) ([]*DocumentType, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*DocumentType, *DocumentTypeQuery]()
-	return withInterceptors[[]*DocumentType](ctx, dtq, qr, dtq.inters)
+	return withInterceptors[[]*DocumentType](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (dtq *DocumentTypeQuery) AllX(ctx context.Context) []*DocumentType {
-	nodes, err := dtq.All(ctx)
+func (_q *DocumentTypeQuery) AllX(ctx context.Context) []*DocumentType {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -229,20 +229,20 @@ func (dtq *DocumentTypeQuery) AllX(ctx context.Context) []*DocumentType {
 }
 
 // IDs executes the query and returns a list of DocumentType IDs.
-func (dtq *DocumentTypeQuery) IDs(ctx context.Context) (ids []int64, err error) {
-	if dtq.ctx.Unique == nil && dtq.path != nil {
-		dtq.Unique(true)
+func (_q *DocumentTypeQuery) IDs(ctx context.Context) (ids []int64, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, dtq.ctx, ent.OpQueryIDs)
-	if err = dtq.Select(documenttype.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(documenttype.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (dtq *DocumentTypeQuery) IDsX(ctx context.Context) []int64 {
-	ids, err := dtq.IDs(ctx)
+func (_q *DocumentTypeQuery) IDsX(ctx context.Context) []int64 {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -250,17 +250,17 @@ func (dtq *DocumentTypeQuery) IDsX(ctx context.Context) []int64 {
 }
 
 // Count returns the count of the given query.
-func (dtq *DocumentTypeQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, dtq.ctx, ent.OpQueryCount)
-	if err := dtq.prepareQuery(ctx); err != nil {
+func (_q *DocumentTypeQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, dtq, querierCount[*DocumentTypeQuery](), dtq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*DocumentTypeQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (dtq *DocumentTypeQuery) CountX(ctx context.Context) int {
-	count, err := dtq.Count(ctx)
+func (_q *DocumentTypeQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -268,9 +268,9 @@ func (dtq *DocumentTypeQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (dtq *DocumentTypeQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, dtq.ctx, ent.OpQueryExist)
-	switch _, err := dtq.FirstID(ctx); {
+func (_q *DocumentTypeQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -281,8 +281,8 @@ func (dtq *DocumentTypeQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (dtq *DocumentTypeQuery) ExistX(ctx context.Context) bool {
-	exist, err := dtq.Exist(ctx)
+func (_q *DocumentTypeQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -291,45 +291,45 @@ func (dtq *DocumentTypeQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the DocumentTypeQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (dtq *DocumentTypeQuery) Clone() *DocumentTypeQuery {
-	if dtq == nil {
+func (_q *DocumentTypeQuery) Clone() *DocumentTypeQuery {
+	if _q == nil {
 		return nil
 	}
 	return &DocumentTypeQuery{
-		config:         dtq.config,
-		ctx:            dtq.ctx.Clone(),
-		order:          append([]documenttype.OrderOption{}, dtq.order...),
-		inters:         append([]Interceptor{}, dtq.inters...),
-		predicates:     append([]predicate.DocumentType{}, dtq.predicates...),
-		withSpace:      dtq.withSpace.Clone(),
-		withAttributes: dtq.withAttributes.Clone(),
+		config:         _q.config,
+		ctx:            _q.ctx.Clone(),
+		order:          append([]documenttype.OrderOption{}, _q.order...),
+		inters:         append([]Interceptor{}, _q.inters...),
+		predicates:     append([]predicate.DocumentType{}, _q.predicates...),
+		withSpace:      _q.withSpace.Clone(),
+		withAttributes: _q.withAttributes.Clone(),
 		// clone intermediate query.
-		sql:       dtq.sql.Clone(),
-		path:      dtq.path,
-		modifiers: append([]func(*sql.Selector){}, dtq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithSpace tells the query-builder to eager-load the nodes that are connected to
 // the "space" edge. The optional arguments are used to configure the query builder of the edge.
-func (dtq *DocumentTypeQuery) WithSpace(opts ...func(*SpaceQuery)) *DocumentTypeQuery {
-	query := (&SpaceClient{config: dtq.config}).Query()
+func (_q *DocumentTypeQuery) WithSpace(opts ...func(*SpaceQuery)) *DocumentTypeQuery {
+	query := (&SpaceClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	dtq.withSpace = query
-	return dtq
+	_q.withSpace = query
+	return _q
 }
 
 // WithAttributes tells the query-builder to eager-load the nodes that are connected to
 // the "attributes" edge. The optional arguments are used to configure the query builder of the edge.
-func (dtq *DocumentTypeQuery) WithAttributes(opts ...func(*AttributeQuery)) *DocumentTypeQuery {
-	query := (&AttributeClient{config: dtq.config}).Query()
+func (_q *DocumentTypeQuery) WithAttributes(opts ...func(*AttributeQuery)) *DocumentTypeQuery {
+	query := (&AttributeClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	dtq.withAttributes = query
-	return dtq
+	_q.withAttributes = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -346,10 +346,10 @@ func (dtq *DocumentTypeQuery) WithAttributes(opts ...func(*AttributeQuery)) *Doc
 //		GroupBy(documenttype.FieldSpaceID).
 //		Aggregate(enttenant.Count()).
 //		Scan(ctx, &v)
-func (dtq *DocumentTypeQuery) GroupBy(field string, fields ...string) *DocumentTypeGroupBy {
-	dtq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &DocumentTypeGroupBy{build: dtq}
-	grbuild.flds = &dtq.ctx.Fields
+func (_q *DocumentTypeQuery) GroupBy(field string, fields ...string) *DocumentTypeGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &DocumentTypeGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = documenttype.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -367,89 +367,89 @@ func (dtq *DocumentTypeQuery) GroupBy(field string, fields ...string) *DocumentT
 //	client.DocumentType.Query().
 //		Select(documenttype.FieldSpaceID).
 //		Scan(ctx, &v)
-func (dtq *DocumentTypeQuery) Select(fields ...string) *DocumentTypeSelect {
-	dtq.ctx.Fields = append(dtq.ctx.Fields, fields...)
-	sbuild := &DocumentTypeSelect{DocumentTypeQuery: dtq}
+func (_q *DocumentTypeQuery) Select(fields ...string) *DocumentTypeSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &DocumentTypeSelect{DocumentTypeQuery: _q}
 	sbuild.label = documenttype.Label
-	sbuild.flds, sbuild.scan = &dtq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a DocumentTypeSelect configured with the given aggregations.
-func (dtq *DocumentTypeQuery) Aggregate(fns ...AggregateFunc) *DocumentTypeSelect {
-	return dtq.Select().Aggregate(fns...)
+func (_q *DocumentTypeQuery) Aggregate(fns ...AggregateFunc) *DocumentTypeSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (dtq *DocumentTypeQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range dtq.inters {
+func (_q *DocumentTypeQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("enttenant: uninitialized interceptor (forgotten import enttenant/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, dtq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range dtq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !documenttype.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("enttenant: invalid field %q for query", f)}
 		}
 	}
-	if dtq.path != nil {
-		prev, err := dtq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		dtq.sql = prev
+		_q.sql = prev
 	}
 	if documenttype.Policy == nil {
 		return errors.New("enttenant: uninitialized documenttype.Policy (forgotten import enttenant/runtime?)")
 	}
-	if err := documenttype.Policy.EvalQuery(ctx, dtq); err != nil {
+	if err := documenttype.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (dtq *DocumentTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DocumentType, error) {
+func (_q *DocumentTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DocumentType, error) {
 	var (
 		nodes       = []*DocumentType{}
-		_spec       = dtq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [2]bool{
-			dtq.withSpace != nil,
-			dtq.withAttributes != nil,
+			_q.withSpace != nil,
+			_q.withAttributes != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*DocumentType).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &DocumentType{config: dtq.config}
+		node := &DocumentType{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(dtq.modifiers) > 0 {
-		_spec.Modifiers = dtq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, dtq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := dtq.withSpace; query != nil {
-		if err := dtq.loadSpace(ctx, query, nodes, nil,
+	if query := _q.withSpace; query != nil {
+		if err := _q.loadSpace(ctx, query, nodes, nil,
 			func(n *DocumentType, e *Space) { n.Edges.Space = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := dtq.withAttributes; query != nil {
-		if err := dtq.loadAttributes(ctx, query, nodes,
+	if query := _q.withAttributes; query != nil {
+		if err := _q.loadAttributes(ctx, query, nodes,
 			func(n *DocumentType) { n.Edges.Attributes = []*Attribute{} },
 			func(n *DocumentType, e *Attribute) { n.Edges.Attributes = append(n.Edges.Attributes, e) }); err != nil {
 			return nil, err
@@ -458,7 +458,7 @@ func (dtq *DocumentTypeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	return nodes, nil
 }
 
-func (dtq *DocumentTypeQuery) loadSpace(ctx context.Context, query *SpaceQuery, nodes []*DocumentType, init func(*DocumentType), assign func(*DocumentType, *Space)) error {
+func (_q *DocumentTypeQuery) loadSpace(ctx context.Context, query *SpaceQuery, nodes []*DocumentType, init func(*DocumentType), assign func(*DocumentType, *Space)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*DocumentType)
 	for i := range nodes {
@@ -487,7 +487,7 @@ func (dtq *DocumentTypeQuery) loadSpace(ctx context.Context, query *SpaceQuery, 
 	}
 	return nil
 }
-func (dtq *DocumentTypeQuery) loadAttributes(ctx context.Context, query *AttributeQuery, nodes []*DocumentType, init func(*DocumentType), assign func(*DocumentType, *Attribute)) error {
+func (_q *DocumentTypeQuery) loadAttributes(ctx context.Context, query *AttributeQuery, nodes []*DocumentType, init func(*DocumentType), assign func(*DocumentType, *Attribute)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int64]*DocumentType)
 	for i := range nodes {
@@ -518,27 +518,27 @@ func (dtq *DocumentTypeQuery) loadAttributes(ctx context.Context, query *Attribu
 	return nil
 }
 
-func (dtq *DocumentTypeQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := dtq.querySpec()
-	if len(dtq.modifiers) > 0 {
-		_spec.Modifiers = dtq.modifiers
+func (_q *DocumentTypeQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = dtq.ctx.Fields
-	if len(dtq.ctx.Fields) > 0 {
-		_spec.Unique = dtq.ctx.Unique != nil && *dtq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, dtq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (dtq *DocumentTypeQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *DocumentTypeQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(documenttype.Table, documenttype.Columns, sqlgraph.NewFieldSpec(documenttype.FieldID, field.TypeInt64))
-	_spec.From = dtq.sql
-	if unique := dtq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if dtq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := dtq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, documenttype.FieldID)
 		for i := range fields {
@@ -546,24 +546,24 @@ func (dtq *DocumentTypeQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if dtq.withSpace != nil {
+		if _q.withSpace != nil {
 			_spec.Node.AddColumnOnce(documenttype.FieldSpaceID)
 		}
 	}
-	if ps := dtq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := dtq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := dtq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := dtq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -573,45 +573,45 @@ func (dtq *DocumentTypeQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (dtq *DocumentTypeQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(dtq.driver.Dialect())
+func (_q *DocumentTypeQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(documenttype.Table)
-	columns := dtq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = documenttype.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if dtq.sql != nil {
-		selector = dtq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if dtq.ctx.Unique != nil && *dtq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range dtq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range dtq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range dtq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := dtq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := dtq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (dtq *DocumentTypeQuery) Modify(modifiers ...func(s *sql.Selector)) *DocumentTypeSelect {
-	dtq.modifiers = append(dtq.modifiers, modifiers...)
-	return dtq.Select()
+func (_q *DocumentTypeQuery) Modify(modifiers ...func(s *sql.Selector)) *DocumentTypeSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // DocumentTypeGroupBy is the group-by builder for DocumentType entities.
@@ -621,41 +621,41 @@ type DocumentTypeGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (dtgb *DocumentTypeGroupBy) Aggregate(fns ...AggregateFunc) *DocumentTypeGroupBy {
-	dtgb.fns = append(dtgb.fns, fns...)
-	return dtgb
+func (_g *DocumentTypeGroupBy) Aggregate(fns ...AggregateFunc) *DocumentTypeGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (dtgb *DocumentTypeGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, dtgb.build.ctx, ent.OpQueryGroupBy)
-	if err := dtgb.build.prepareQuery(ctx); err != nil {
+func (_g *DocumentTypeGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*DocumentTypeQuery, *DocumentTypeGroupBy](ctx, dtgb.build, dtgb, dtgb.build.inters, v)
+	return scanWithInterceptors[*DocumentTypeQuery, *DocumentTypeGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (dtgb *DocumentTypeGroupBy) sqlScan(ctx context.Context, root *DocumentTypeQuery, v any) error {
+func (_g *DocumentTypeGroupBy) sqlScan(ctx context.Context, root *DocumentTypeQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(dtgb.fns))
-	for _, fn := range dtgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*dtgb.flds)+len(dtgb.fns))
-		for _, f := range *dtgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*dtgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := dtgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -669,27 +669,27 @@ type DocumentTypeSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (dts *DocumentTypeSelect) Aggregate(fns ...AggregateFunc) *DocumentTypeSelect {
-	dts.fns = append(dts.fns, fns...)
-	return dts
+func (_s *DocumentTypeSelect) Aggregate(fns ...AggregateFunc) *DocumentTypeSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (dts *DocumentTypeSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, dts.ctx, ent.OpQuerySelect)
-	if err := dts.prepareQuery(ctx); err != nil {
+func (_s *DocumentTypeSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*DocumentTypeQuery, *DocumentTypeSelect](ctx, dts.DocumentTypeQuery, dts, dts.inters, v)
+	return scanWithInterceptors[*DocumentTypeQuery, *DocumentTypeSelect](ctx, _s.DocumentTypeQuery, _s, _s.inters, v)
 }
 
-func (dts *DocumentTypeSelect) sqlScan(ctx context.Context, root *DocumentTypeQuery, v any) error {
+func (_s *DocumentTypeSelect) sqlScan(ctx context.Context, root *DocumentTypeQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(dts.fns))
-	for _, fn := range dts.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*dts.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -697,7 +697,7 @@ func (dts *DocumentTypeSelect) sqlScan(ctx context.Context, root *DocumentTypeQu
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := dts.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -705,7 +705,7 @@ func (dts *DocumentTypeSelect) sqlScan(ctx context.Context, root *DocumentTypeQu
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (dts *DocumentTypeSelect) Modify(modifiers ...func(s *sql.Selector)) *DocumentTypeSelect {
-	dts.modifiers = append(dts.modifiers, modifiers...)
-	return dts
+func (_s *DocumentTypeSelect) Modify(modifiers ...func(s *sql.Selector)) *DocumentTypeSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

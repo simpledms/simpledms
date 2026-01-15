@@ -34,44 +34,44 @@ type TemporaryFileQuery struct {
 }
 
 // Where adds a new predicate for the TemporaryFileQuery builder.
-func (tfq *TemporaryFileQuery) Where(ps ...predicate.TemporaryFile) *TemporaryFileQuery {
-	tfq.predicates = append(tfq.predicates, ps...)
-	return tfq
+func (_q *TemporaryFileQuery) Where(ps ...predicate.TemporaryFile) *TemporaryFileQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (tfq *TemporaryFileQuery) Limit(limit int) *TemporaryFileQuery {
-	tfq.ctx.Limit = &limit
-	return tfq
+func (_q *TemporaryFileQuery) Limit(limit int) *TemporaryFileQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (tfq *TemporaryFileQuery) Offset(offset int) *TemporaryFileQuery {
-	tfq.ctx.Offset = &offset
-	return tfq
+func (_q *TemporaryFileQuery) Offset(offset int) *TemporaryFileQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (tfq *TemporaryFileQuery) Unique(unique bool) *TemporaryFileQuery {
-	tfq.ctx.Unique = &unique
-	return tfq
+func (_q *TemporaryFileQuery) Unique(unique bool) *TemporaryFileQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (tfq *TemporaryFileQuery) Order(o ...temporaryfile.OrderOption) *TemporaryFileQuery {
-	tfq.order = append(tfq.order, o...)
-	return tfq
+func (_q *TemporaryFileQuery) Order(o ...temporaryfile.OrderOption) *TemporaryFileQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryCreator chains the current query on the "creator" edge.
-func (tfq *TemporaryFileQuery) QueryCreator() *AccountQuery {
-	query := (&AccountClient{config: tfq.config}).Query()
+func (_q *TemporaryFileQuery) QueryCreator() *AccountQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tfq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tfq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -80,20 +80,20 @@ func (tfq *TemporaryFileQuery) QueryCreator() *AccountQuery {
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, temporaryfile.CreatorTable, temporaryfile.CreatorColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(tfq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryUpdater chains the current query on the "updater" edge.
-func (tfq *TemporaryFileQuery) QueryUpdater() *AccountQuery {
-	query := (&AccountClient{config: tfq.config}).Query()
+func (_q *TemporaryFileQuery) QueryUpdater() *AccountQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tfq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tfq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -102,20 +102,20 @@ func (tfq *TemporaryFileQuery) QueryUpdater() *AccountQuery {
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, temporaryfile.UpdaterTable, temporaryfile.UpdaterColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(tfq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryDeleter chains the current query on the "deleter" edge.
-func (tfq *TemporaryFileQuery) QueryDeleter() *AccountQuery {
-	query := (&AccountClient{config: tfq.config}).Query()
+func (_q *TemporaryFileQuery) QueryDeleter() *AccountQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tfq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tfq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -124,20 +124,20 @@ func (tfq *TemporaryFileQuery) QueryDeleter() *AccountQuery {
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, temporaryfile.DeleterTable, temporaryfile.DeleterColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(tfq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
-func (tfq *TemporaryFileQuery) QueryOwner() *AccountQuery {
-	query := (&AccountClient{config: tfq.config}).Query()
+func (_q *TemporaryFileQuery) QueryOwner() *AccountQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tfq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tfq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -146,7 +146,7 @@ func (tfq *TemporaryFileQuery) QueryOwner() *AccountQuery {
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, temporaryfile.OwnerTable, temporaryfile.OwnerColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(tfq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -154,8 +154,8 @@ func (tfq *TemporaryFileQuery) QueryOwner() *AccountQuery {
 
 // First returns the first TemporaryFile entity from the query.
 // Returns a *NotFoundError when no TemporaryFile was found.
-func (tfq *TemporaryFileQuery) First(ctx context.Context) (*TemporaryFile, error) {
-	nodes, err := tfq.Limit(1).All(setContextOp(ctx, tfq.ctx, ent.OpQueryFirst))
+func (_q *TemporaryFileQuery) First(ctx context.Context) (*TemporaryFile, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -166,8 +166,8 @@ func (tfq *TemporaryFileQuery) First(ctx context.Context) (*TemporaryFile, error
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (tfq *TemporaryFileQuery) FirstX(ctx context.Context) *TemporaryFile {
-	node, err := tfq.First(ctx)
+func (_q *TemporaryFileQuery) FirstX(ctx context.Context) *TemporaryFile {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -176,9 +176,9 @@ func (tfq *TemporaryFileQuery) FirstX(ctx context.Context) *TemporaryFile {
 
 // FirstID returns the first TemporaryFile ID from the query.
 // Returns a *NotFoundError when no TemporaryFile ID was found.
-func (tfq *TemporaryFileQuery) FirstID(ctx context.Context) (id int64, err error) {
+func (_q *TemporaryFileQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = tfq.Limit(1).IDs(setContextOp(ctx, tfq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -189,8 +189,8 @@ func (tfq *TemporaryFileQuery) FirstID(ctx context.Context) (id int64, err error
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tfq *TemporaryFileQuery) FirstIDX(ctx context.Context) int64 {
-	id, err := tfq.FirstID(ctx)
+func (_q *TemporaryFileQuery) FirstIDX(ctx context.Context) int64 {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -200,8 +200,8 @@ func (tfq *TemporaryFileQuery) FirstIDX(ctx context.Context) int64 {
 // Only returns a single TemporaryFile entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one TemporaryFile entity is found.
 // Returns a *NotFoundError when no TemporaryFile entities are found.
-func (tfq *TemporaryFileQuery) Only(ctx context.Context) (*TemporaryFile, error) {
-	nodes, err := tfq.Limit(2).All(setContextOp(ctx, tfq.ctx, ent.OpQueryOnly))
+func (_q *TemporaryFileQuery) Only(ctx context.Context) (*TemporaryFile, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -216,8 +216,8 @@ func (tfq *TemporaryFileQuery) Only(ctx context.Context) (*TemporaryFile, error)
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (tfq *TemporaryFileQuery) OnlyX(ctx context.Context) *TemporaryFile {
-	node, err := tfq.Only(ctx)
+func (_q *TemporaryFileQuery) OnlyX(ctx context.Context) *TemporaryFile {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -227,9 +227,9 @@ func (tfq *TemporaryFileQuery) OnlyX(ctx context.Context) *TemporaryFile {
 // OnlyID is like Only, but returns the only TemporaryFile ID in the query.
 // Returns a *NotSingularError when more than one TemporaryFile ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (tfq *TemporaryFileQuery) OnlyID(ctx context.Context) (id int64, err error) {
+func (_q *TemporaryFileQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = tfq.Limit(2).IDs(setContextOp(ctx, tfq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -244,8 +244,8 @@ func (tfq *TemporaryFileQuery) OnlyID(ctx context.Context) (id int64, err error)
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tfq *TemporaryFileQuery) OnlyIDX(ctx context.Context) int64 {
-	id, err := tfq.OnlyID(ctx)
+func (_q *TemporaryFileQuery) OnlyIDX(ctx context.Context) int64 {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -253,18 +253,18 @@ func (tfq *TemporaryFileQuery) OnlyIDX(ctx context.Context) int64 {
 }
 
 // All executes the query and returns a list of TemporaryFiles.
-func (tfq *TemporaryFileQuery) All(ctx context.Context) ([]*TemporaryFile, error) {
-	ctx = setContextOp(ctx, tfq.ctx, ent.OpQueryAll)
-	if err := tfq.prepareQuery(ctx); err != nil {
+func (_q *TemporaryFileQuery) All(ctx context.Context) ([]*TemporaryFile, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*TemporaryFile, *TemporaryFileQuery]()
-	return withInterceptors[[]*TemporaryFile](ctx, tfq, qr, tfq.inters)
+	return withInterceptors[[]*TemporaryFile](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (tfq *TemporaryFileQuery) AllX(ctx context.Context) []*TemporaryFile {
-	nodes, err := tfq.All(ctx)
+func (_q *TemporaryFileQuery) AllX(ctx context.Context) []*TemporaryFile {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -272,20 +272,20 @@ func (tfq *TemporaryFileQuery) AllX(ctx context.Context) []*TemporaryFile {
 }
 
 // IDs executes the query and returns a list of TemporaryFile IDs.
-func (tfq *TemporaryFileQuery) IDs(ctx context.Context) (ids []int64, err error) {
-	if tfq.ctx.Unique == nil && tfq.path != nil {
-		tfq.Unique(true)
+func (_q *TemporaryFileQuery) IDs(ctx context.Context) (ids []int64, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, tfq.ctx, ent.OpQueryIDs)
-	if err = tfq.Select(temporaryfile.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(temporaryfile.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tfq *TemporaryFileQuery) IDsX(ctx context.Context) []int64 {
-	ids, err := tfq.IDs(ctx)
+func (_q *TemporaryFileQuery) IDsX(ctx context.Context) []int64 {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -293,17 +293,17 @@ func (tfq *TemporaryFileQuery) IDsX(ctx context.Context) []int64 {
 }
 
 // Count returns the count of the given query.
-func (tfq *TemporaryFileQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tfq.ctx, ent.OpQueryCount)
-	if err := tfq.prepareQuery(ctx); err != nil {
+func (_q *TemporaryFileQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, tfq, querierCount[*TemporaryFileQuery](), tfq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TemporaryFileQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (tfq *TemporaryFileQuery) CountX(ctx context.Context) int {
-	count, err := tfq.Count(ctx)
+func (_q *TemporaryFileQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -311,9 +311,9 @@ func (tfq *TemporaryFileQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (tfq *TemporaryFileQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tfq.ctx, ent.OpQueryExist)
-	switch _, err := tfq.FirstID(ctx); {
+func (_q *TemporaryFileQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -324,8 +324,8 @@ func (tfq *TemporaryFileQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (tfq *TemporaryFileQuery) ExistX(ctx context.Context) bool {
-	exist, err := tfq.Exist(ctx)
+func (_q *TemporaryFileQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -334,69 +334,69 @@ func (tfq *TemporaryFileQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the TemporaryFileQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (tfq *TemporaryFileQuery) Clone() *TemporaryFileQuery {
-	if tfq == nil {
+func (_q *TemporaryFileQuery) Clone() *TemporaryFileQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TemporaryFileQuery{
-		config:      tfq.config,
-		ctx:         tfq.ctx.Clone(),
-		order:       append([]temporaryfile.OrderOption{}, tfq.order...),
-		inters:      append([]Interceptor{}, tfq.inters...),
-		predicates:  append([]predicate.TemporaryFile{}, tfq.predicates...),
-		withCreator: tfq.withCreator.Clone(),
-		withUpdater: tfq.withUpdater.Clone(),
-		withDeleter: tfq.withDeleter.Clone(),
-		withOwner:   tfq.withOwner.Clone(),
+		config:      _q.config,
+		ctx:         _q.ctx.Clone(),
+		order:       append([]temporaryfile.OrderOption{}, _q.order...),
+		inters:      append([]Interceptor{}, _q.inters...),
+		predicates:  append([]predicate.TemporaryFile{}, _q.predicates...),
+		withCreator: _q.withCreator.Clone(),
+		withUpdater: _q.withUpdater.Clone(),
+		withDeleter: _q.withDeleter.Clone(),
+		withOwner:   _q.withOwner.Clone(),
 		// clone intermediate query.
-		sql:       tfq.sql.Clone(),
-		path:      tfq.path,
-		modifiers: append([]func(*sql.Selector){}, tfq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithCreator tells the query-builder to eager-load the nodes that are connected to
 // the "creator" edge. The optional arguments are used to configure the query builder of the edge.
-func (tfq *TemporaryFileQuery) WithCreator(opts ...func(*AccountQuery)) *TemporaryFileQuery {
-	query := (&AccountClient{config: tfq.config}).Query()
+func (_q *TemporaryFileQuery) WithCreator(opts ...func(*AccountQuery)) *TemporaryFileQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tfq.withCreator = query
-	return tfq
+	_q.withCreator = query
+	return _q
 }
 
 // WithUpdater tells the query-builder to eager-load the nodes that are connected to
 // the "updater" edge. The optional arguments are used to configure the query builder of the edge.
-func (tfq *TemporaryFileQuery) WithUpdater(opts ...func(*AccountQuery)) *TemporaryFileQuery {
-	query := (&AccountClient{config: tfq.config}).Query()
+func (_q *TemporaryFileQuery) WithUpdater(opts ...func(*AccountQuery)) *TemporaryFileQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tfq.withUpdater = query
-	return tfq
+	_q.withUpdater = query
+	return _q
 }
 
 // WithDeleter tells the query-builder to eager-load the nodes that are connected to
 // the "deleter" edge. The optional arguments are used to configure the query builder of the edge.
-func (tfq *TemporaryFileQuery) WithDeleter(opts ...func(*AccountQuery)) *TemporaryFileQuery {
-	query := (&AccountClient{config: tfq.config}).Query()
+func (_q *TemporaryFileQuery) WithDeleter(opts ...func(*AccountQuery)) *TemporaryFileQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tfq.withDeleter = query
-	return tfq
+	_q.withDeleter = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
-func (tfq *TemporaryFileQuery) WithOwner(opts ...func(*AccountQuery)) *TemporaryFileQuery {
-	query := (&AccountClient{config: tfq.config}).Query()
+func (_q *TemporaryFileQuery) WithOwner(opts ...func(*AccountQuery)) *TemporaryFileQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tfq.withOwner = query
-	return tfq
+	_q.withOwner = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -413,10 +413,10 @@ func (tfq *TemporaryFileQuery) WithOwner(opts ...func(*AccountQuery)) *Temporary
 //		GroupBy(temporaryfile.FieldPublicID).
 //		Aggregate(entmain.Count()).
 //		Scan(ctx, &v)
-func (tfq *TemporaryFileQuery) GroupBy(field string, fields ...string) *TemporaryFileGroupBy {
-	tfq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TemporaryFileGroupBy{build: tfq}
-	grbuild.flds = &tfq.ctx.Fields
+func (_q *TemporaryFileQuery) GroupBy(field string, fields ...string) *TemporaryFileGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TemporaryFileGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = temporaryfile.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -434,97 +434,97 @@ func (tfq *TemporaryFileQuery) GroupBy(field string, fields ...string) *Temporar
 //	client.TemporaryFile.Query().
 //		Select(temporaryfile.FieldPublicID).
 //		Scan(ctx, &v)
-func (tfq *TemporaryFileQuery) Select(fields ...string) *TemporaryFileSelect {
-	tfq.ctx.Fields = append(tfq.ctx.Fields, fields...)
-	sbuild := &TemporaryFileSelect{TemporaryFileQuery: tfq}
+func (_q *TemporaryFileQuery) Select(fields ...string) *TemporaryFileSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TemporaryFileSelect{TemporaryFileQuery: _q}
 	sbuild.label = temporaryfile.Label
-	sbuild.flds, sbuild.scan = &tfq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TemporaryFileSelect configured with the given aggregations.
-func (tfq *TemporaryFileQuery) Aggregate(fns ...AggregateFunc) *TemporaryFileSelect {
-	return tfq.Select().Aggregate(fns...)
+func (_q *TemporaryFileQuery) Aggregate(fns ...AggregateFunc) *TemporaryFileSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (tfq *TemporaryFileQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range tfq.inters {
+func (_q *TemporaryFileQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("entmain: uninitialized interceptor (forgotten import entmain/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, tfq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range tfq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !temporaryfile.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("entmain: invalid field %q for query", f)}
 		}
 	}
-	if tfq.path != nil {
-		prev, err := tfq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		tfq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (tfq *TemporaryFileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TemporaryFile, error) {
+func (_q *TemporaryFileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TemporaryFile, error) {
 	var (
 		nodes       = []*TemporaryFile{}
-		_spec       = tfq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [4]bool{
-			tfq.withCreator != nil,
-			tfq.withUpdater != nil,
-			tfq.withDeleter != nil,
-			tfq.withOwner != nil,
+			_q.withCreator != nil,
+			_q.withUpdater != nil,
+			_q.withDeleter != nil,
+			_q.withOwner != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TemporaryFile).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TemporaryFile{config: tfq.config}
+		node := &TemporaryFile{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(tfq.modifiers) > 0 {
-		_spec.Modifiers = tfq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, tfq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := tfq.withCreator; query != nil {
-		if err := tfq.loadCreator(ctx, query, nodes, nil,
+	if query := _q.withCreator; query != nil {
+		if err := _q.loadCreator(ctx, query, nodes, nil,
 			func(n *TemporaryFile, e *Account) { n.Edges.Creator = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tfq.withUpdater; query != nil {
-		if err := tfq.loadUpdater(ctx, query, nodes, nil,
+	if query := _q.withUpdater; query != nil {
+		if err := _q.loadUpdater(ctx, query, nodes, nil,
 			func(n *TemporaryFile, e *Account) { n.Edges.Updater = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tfq.withDeleter; query != nil {
-		if err := tfq.loadDeleter(ctx, query, nodes, nil,
+	if query := _q.withDeleter; query != nil {
+		if err := _q.loadDeleter(ctx, query, nodes, nil,
 			func(n *TemporaryFile, e *Account) { n.Edges.Deleter = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tfq.withOwner; query != nil {
-		if err := tfq.loadOwner(ctx, query, nodes, nil,
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *TemporaryFile, e *Account) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
@@ -532,7 +532,7 @@ func (tfq *TemporaryFileQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	return nodes, nil
 }
 
-func (tfq *TemporaryFileQuery) loadCreator(ctx context.Context, query *AccountQuery, nodes []*TemporaryFile, init func(*TemporaryFile), assign func(*TemporaryFile, *Account)) error {
+func (_q *TemporaryFileQuery) loadCreator(ctx context.Context, query *AccountQuery, nodes []*TemporaryFile, init func(*TemporaryFile), assign func(*TemporaryFile, *Account)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*TemporaryFile)
 	for i := range nodes {
@@ -561,7 +561,7 @@ func (tfq *TemporaryFileQuery) loadCreator(ctx context.Context, query *AccountQu
 	}
 	return nil
 }
-func (tfq *TemporaryFileQuery) loadUpdater(ctx context.Context, query *AccountQuery, nodes []*TemporaryFile, init func(*TemporaryFile), assign func(*TemporaryFile, *Account)) error {
+func (_q *TemporaryFileQuery) loadUpdater(ctx context.Context, query *AccountQuery, nodes []*TemporaryFile, init func(*TemporaryFile), assign func(*TemporaryFile, *Account)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*TemporaryFile)
 	for i := range nodes {
@@ -590,7 +590,7 @@ func (tfq *TemporaryFileQuery) loadUpdater(ctx context.Context, query *AccountQu
 	}
 	return nil
 }
-func (tfq *TemporaryFileQuery) loadDeleter(ctx context.Context, query *AccountQuery, nodes []*TemporaryFile, init func(*TemporaryFile), assign func(*TemporaryFile, *Account)) error {
+func (_q *TemporaryFileQuery) loadDeleter(ctx context.Context, query *AccountQuery, nodes []*TemporaryFile, init func(*TemporaryFile), assign func(*TemporaryFile, *Account)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*TemporaryFile)
 	for i := range nodes {
@@ -619,7 +619,7 @@ func (tfq *TemporaryFileQuery) loadDeleter(ctx context.Context, query *AccountQu
 	}
 	return nil
 }
-func (tfq *TemporaryFileQuery) loadOwner(ctx context.Context, query *AccountQuery, nodes []*TemporaryFile, init func(*TemporaryFile), assign func(*TemporaryFile, *Account)) error {
+func (_q *TemporaryFileQuery) loadOwner(ctx context.Context, query *AccountQuery, nodes []*TemporaryFile, init func(*TemporaryFile), assign func(*TemporaryFile, *Account)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*TemporaryFile)
 	for i := range nodes {
@@ -649,27 +649,27 @@ func (tfq *TemporaryFileQuery) loadOwner(ctx context.Context, query *AccountQuer
 	return nil
 }
 
-func (tfq *TemporaryFileQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := tfq.querySpec()
-	if len(tfq.modifiers) > 0 {
-		_spec.Modifiers = tfq.modifiers
+func (_q *TemporaryFileQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = tfq.ctx.Fields
-	if len(tfq.ctx.Fields) > 0 {
-		_spec.Unique = tfq.ctx.Unique != nil && *tfq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, tfq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (tfq *TemporaryFileQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TemporaryFileQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(temporaryfile.Table, temporaryfile.Columns, sqlgraph.NewFieldSpec(temporaryfile.FieldID, field.TypeInt64))
-	_spec.From = tfq.sql
-	if unique := tfq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if tfq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := tfq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, temporaryfile.FieldID)
 		for i := range fields {
@@ -677,33 +677,33 @@ func (tfq *TemporaryFileQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if tfq.withCreator != nil {
+		if _q.withCreator != nil {
 			_spec.Node.AddColumnOnce(temporaryfile.FieldCreatedBy)
 		}
-		if tfq.withUpdater != nil {
+		if _q.withUpdater != nil {
 			_spec.Node.AddColumnOnce(temporaryfile.FieldUpdatedBy)
 		}
-		if tfq.withDeleter != nil {
+		if _q.withDeleter != nil {
 			_spec.Node.AddColumnOnce(temporaryfile.FieldDeletedBy)
 		}
-		if tfq.withOwner != nil {
+		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(temporaryfile.FieldOwnerID)
 		}
 	}
-	if ps := tfq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := tfq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := tfq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := tfq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -713,45 +713,45 @@ func (tfq *TemporaryFileQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (tfq *TemporaryFileQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(tfq.driver.Dialect())
+func (_q *TemporaryFileQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(temporaryfile.Table)
-	columns := tfq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = temporaryfile.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if tfq.sql != nil {
-		selector = tfq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if tfq.ctx.Unique != nil && *tfq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range tfq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range tfq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range tfq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := tfq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := tfq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (tfq *TemporaryFileQuery) Modify(modifiers ...func(s *sql.Selector)) *TemporaryFileSelect {
-	tfq.modifiers = append(tfq.modifiers, modifiers...)
-	return tfq.Select()
+func (_q *TemporaryFileQuery) Modify(modifiers ...func(s *sql.Selector)) *TemporaryFileSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // TemporaryFileGroupBy is the group-by builder for TemporaryFile entities.
@@ -761,41 +761,41 @@ type TemporaryFileGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (tfgb *TemporaryFileGroupBy) Aggregate(fns ...AggregateFunc) *TemporaryFileGroupBy {
-	tfgb.fns = append(tfgb.fns, fns...)
-	return tfgb
+func (_g *TemporaryFileGroupBy) Aggregate(fns ...AggregateFunc) *TemporaryFileGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tfgb *TemporaryFileGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tfgb.build.ctx, ent.OpQueryGroupBy)
-	if err := tfgb.build.prepareQuery(ctx); err != nil {
+func (_g *TemporaryFileGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TemporaryFileQuery, *TemporaryFileGroupBy](ctx, tfgb.build, tfgb, tfgb.build.inters, v)
+	return scanWithInterceptors[*TemporaryFileQuery, *TemporaryFileGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (tfgb *TemporaryFileGroupBy) sqlScan(ctx context.Context, root *TemporaryFileQuery, v any) error {
+func (_g *TemporaryFileGroupBy) sqlScan(ctx context.Context, root *TemporaryFileQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(tfgb.fns))
-	for _, fn := range tfgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*tfgb.flds)+len(tfgb.fns))
-		for _, f := range *tfgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*tfgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tfgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -809,27 +809,27 @@ type TemporaryFileSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (tfs *TemporaryFileSelect) Aggregate(fns ...AggregateFunc) *TemporaryFileSelect {
-	tfs.fns = append(tfs.fns, fns...)
-	return tfs
+func (_s *TemporaryFileSelect) Aggregate(fns ...AggregateFunc) *TemporaryFileSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tfs *TemporaryFileSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tfs.ctx, ent.OpQuerySelect)
-	if err := tfs.prepareQuery(ctx); err != nil {
+func (_s *TemporaryFileSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TemporaryFileQuery, *TemporaryFileSelect](ctx, tfs.TemporaryFileQuery, tfs, tfs.inters, v)
+	return scanWithInterceptors[*TemporaryFileQuery, *TemporaryFileSelect](ctx, _s.TemporaryFileQuery, _s, _s.inters, v)
 }
 
-func (tfs *TemporaryFileSelect) sqlScan(ctx context.Context, root *TemporaryFileQuery, v any) error {
+func (_s *TemporaryFileSelect) sqlScan(ctx context.Context, root *TemporaryFileQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(tfs.fns))
-	for _, fn := range tfs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*tfs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -837,7 +837,7 @@ func (tfs *TemporaryFileSelect) sqlScan(ctx context.Context, root *TemporaryFile
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tfs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -845,7 +845,7 @@ func (tfs *TemporaryFileSelect) sqlScan(ctx context.Context, root *TemporaryFile
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (tfs *TemporaryFileSelect) Modify(modifiers ...func(s *sql.Selector)) *TemporaryFileSelect {
-	tfs.modifiers = append(tfs.modifiers, modifiers...)
-	return tfs
+func (_s *TemporaryFileSelect) Modify(modifiers ...func(s *sql.Selector)) *TemporaryFileSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

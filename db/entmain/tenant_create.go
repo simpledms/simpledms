@@ -25,404 +25,404 @@ type TenantCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tc *TenantCreate) SetCreatedAt(t time.Time) *TenantCreate {
-	tc.mutation.SetCreatedAt(t)
-	return tc
+func (_c *TenantCreate) SetCreatedAt(v time.Time) *TenantCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableCreatedAt(t *time.Time) *TenantCreate {
-	if t != nil {
-		tc.SetCreatedAt(*t)
+func (_c *TenantCreate) SetNillableCreatedAt(v *time.Time) *TenantCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (tc *TenantCreate) SetCreatedBy(i int64) *TenantCreate {
-	tc.mutation.SetCreatedBy(i)
-	return tc
+func (_c *TenantCreate) SetCreatedBy(v int64) *TenantCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableCreatedBy(i *int64) *TenantCreate {
-	if i != nil {
-		tc.SetCreatedBy(*i)
+func (_c *TenantCreate) SetNillableCreatedBy(v *int64) *TenantCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tc *TenantCreate) SetUpdatedAt(t time.Time) *TenantCreate {
-	tc.mutation.SetUpdatedAt(t)
-	return tc
+func (_c *TenantCreate) SetUpdatedAt(v time.Time) *TenantCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableUpdatedAt(t *time.Time) *TenantCreate {
-	if t != nil {
-		tc.SetUpdatedAt(*t)
+func (_c *TenantCreate) SetNillableUpdatedAt(v *time.Time) *TenantCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tc *TenantCreate) SetUpdatedBy(i int64) *TenantCreate {
-	tc.mutation.SetUpdatedBy(i)
-	return tc
+func (_c *TenantCreate) SetUpdatedBy(v int64) *TenantCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableUpdatedBy(i *int64) *TenantCreate {
-	if i != nil {
-		tc.SetUpdatedBy(*i)
+func (_c *TenantCreate) SetNillableUpdatedBy(v *int64) *TenantCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tc *TenantCreate) SetDeletedBy(i int64) *TenantCreate {
-	tc.mutation.SetDeletedBy(i)
-	return tc
+func (_c *TenantCreate) SetDeletedBy(v int64) *TenantCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableDeletedBy(i *int64) *TenantCreate {
-	if i != nil {
-		tc.SetDeletedBy(*i)
+func (_c *TenantCreate) SetNillableDeletedBy(v *int64) *TenantCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tc *TenantCreate) SetDeletedAt(t time.Time) *TenantCreate {
-	tc.mutation.SetDeletedAt(t)
-	return tc
+func (_c *TenantCreate) SetDeletedAt(v time.Time) *TenantCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableDeletedAt(t *time.Time) *TenantCreate {
-	if t != nil {
-		tc.SetDeletedAt(*t)
+func (_c *TenantCreate) SetNillableDeletedAt(v *time.Time) *TenantCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetPublicID sets the "public_id" field.
-func (tc *TenantCreate) SetPublicID(et entx.CIText) *TenantCreate {
-	tc.mutation.SetPublicID(et)
-	return tc
+func (_c *TenantCreate) SetPublicID(v entx.CIText) *TenantCreate {
+	_c.mutation.SetPublicID(v)
+	return _c
 }
 
 // SetNillablePublicID sets the "public_id" field if the given value is not nil.
-func (tc *TenantCreate) SetNillablePublicID(et *entx.CIText) *TenantCreate {
-	if et != nil {
-		tc.SetPublicID(*et)
+func (_c *TenantCreate) SetNillablePublicID(v *entx.CIText) *TenantCreate {
+	if v != nil {
+		_c.SetPublicID(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (tc *TenantCreate) SetName(s string) *TenantCreate {
-	tc.mutation.SetName(s)
-	return tc
+func (_c *TenantCreate) SetName(v string) *TenantCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetFirstName sets the "first_name" field.
-func (tc *TenantCreate) SetFirstName(s string) *TenantCreate {
-	tc.mutation.SetFirstName(s)
-	return tc
+func (_c *TenantCreate) SetFirstName(v string) *TenantCreate {
+	_c.mutation.SetFirstName(v)
+	return _c
 }
 
 // SetNillableFirstName sets the "first_name" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableFirstName(s *string) *TenantCreate {
-	if s != nil {
-		tc.SetFirstName(*s)
+func (_c *TenantCreate) SetNillableFirstName(v *string) *TenantCreate {
+	if v != nil {
+		_c.SetFirstName(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetLastName sets the "last_name" field.
-func (tc *TenantCreate) SetLastName(s string) *TenantCreate {
-	tc.mutation.SetLastName(s)
-	return tc
+func (_c *TenantCreate) SetLastName(v string) *TenantCreate {
+	_c.mutation.SetLastName(v)
+	return _c
 }
 
 // SetNillableLastName sets the "last_name" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableLastName(s *string) *TenantCreate {
-	if s != nil {
-		tc.SetLastName(*s)
+func (_c *TenantCreate) SetNillableLastName(v *string) *TenantCreate {
+	if v != nil {
+		_c.SetLastName(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetStreet sets the "street" field.
-func (tc *TenantCreate) SetStreet(s string) *TenantCreate {
-	tc.mutation.SetStreet(s)
-	return tc
+func (_c *TenantCreate) SetStreet(v string) *TenantCreate {
+	_c.mutation.SetStreet(v)
+	return _c
 }
 
 // SetNillableStreet sets the "street" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableStreet(s *string) *TenantCreate {
-	if s != nil {
-		tc.SetStreet(*s)
+func (_c *TenantCreate) SetNillableStreet(v *string) *TenantCreate {
+	if v != nil {
+		_c.SetStreet(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetHouseNumber sets the "house_number" field.
-func (tc *TenantCreate) SetHouseNumber(s string) *TenantCreate {
-	tc.mutation.SetHouseNumber(s)
-	return tc
+func (_c *TenantCreate) SetHouseNumber(v string) *TenantCreate {
+	_c.mutation.SetHouseNumber(v)
+	return _c
 }
 
 // SetNillableHouseNumber sets the "house_number" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableHouseNumber(s *string) *TenantCreate {
-	if s != nil {
-		tc.SetHouseNumber(*s)
+func (_c *TenantCreate) SetNillableHouseNumber(v *string) *TenantCreate {
+	if v != nil {
+		_c.SetHouseNumber(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetAdditionalAddressInfo sets the "additional_address_info" field.
-func (tc *TenantCreate) SetAdditionalAddressInfo(s string) *TenantCreate {
-	tc.mutation.SetAdditionalAddressInfo(s)
-	return tc
+func (_c *TenantCreate) SetAdditionalAddressInfo(v string) *TenantCreate {
+	_c.mutation.SetAdditionalAddressInfo(v)
+	return _c
 }
 
 // SetNillableAdditionalAddressInfo sets the "additional_address_info" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableAdditionalAddressInfo(s *string) *TenantCreate {
-	if s != nil {
-		tc.SetAdditionalAddressInfo(*s)
+func (_c *TenantCreate) SetNillableAdditionalAddressInfo(v *string) *TenantCreate {
+	if v != nil {
+		_c.SetAdditionalAddressInfo(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetPostalCode sets the "postal_code" field.
-func (tc *TenantCreate) SetPostalCode(s string) *TenantCreate {
-	tc.mutation.SetPostalCode(s)
-	return tc
+func (_c *TenantCreate) SetPostalCode(v string) *TenantCreate {
+	_c.mutation.SetPostalCode(v)
+	return _c
 }
 
 // SetNillablePostalCode sets the "postal_code" field if the given value is not nil.
-func (tc *TenantCreate) SetNillablePostalCode(s *string) *TenantCreate {
-	if s != nil {
-		tc.SetPostalCode(*s)
+func (_c *TenantCreate) SetNillablePostalCode(v *string) *TenantCreate {
+	if v != nil {
+		_c.SetPostalCode(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetCity sets the "city" field.
-func (tc *TenantCreate) SetCity(s string) *TenantCreate {
-	tc.mutation.SetCity(s)
-	return tc
+func (_c *TenantCreate) SetCity(v string) *TenantCreate {
+	_c.mutation.SetCity(v)
+	return _c
 }
 
 // SetNillableCity sets the "city" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableCity(s *string) *TenantCreate {
-	if s != nil {
-		tc.SetCity(*s)
+func (_c *TenantCreate) SetNillableCity(v *string) *TenantCreate {
+	if v != nil {
+		_c.SetCity(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetCountry sets the "country" field.
-func (tc *TenantCreate) SetCountry(c country.Country) *TenantCreate {
-	tc.mutation.SetCountry(c)
-	return tc
+func (_c *TenantCreate) SetCountry(v country.Country) *TenantCreate {
+	_c.mutation.SetCountry(v)
+	return _c
 }
 
 // SetVatID sets the "vat_id" field.
-func (tc *TenantCreate) SetVatID(s string) *TenantCreate {
-	tc.mutation.SetVatID(s)
-	return tc
+func (_c *TenantCreate) SetVatID(v string) *TenantCreate {
+	_c.mutation.SetVatID(v)
+	return _c
 }
 
 // SetNillableVatID sets the "vat_id" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableVatID(s *string) *TenantCreate {
-	if s != nil {
-		tc.SetVatID(*s)
+func (_c *TenantCreate) SetNillableVatID(v *string) *TenantCreate {
+	if v != nil {
+		_c.SetVatID(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetTermsOfServiceAccepted sets the "terms_of_service_accepted" field.
-func (tc *TenantCreate) SetTermsOfServiceAccepted(t time.Time) *TenantCreate {
-	tc.mutation.SetTermsOfServiceAccepted(t)
-	return tc
+func (_c *TenantCreate) SetTermsOfServiceAccepted(v time.Time) *TenantCreate {
+	_c.mutation.SetTermsOfServiceAccepted(v)
+	return _c
 }
 
 // SetPrivacyPolicyAccepted sets the "privacy_policy_accepted" field.
-func (tc *TenantCreate) SetPrivacyPolicyAccepted(t time.Time) *TenantCreate {
-	tc.mutation.SetPrivacyPolicyAccepted(t)
-	return tc
+func (_c *TenantCreate) SetPrivacyPolicyAccepted(v time.Time) *TenantCreate {
+	_c.mutation.SetPrivacyPolicyAccepted(v)
+	return _c
 }
 
 // SetTwoFactorAuthEnforced sets the "two_factor_auth_enforced" field.
-func (tc *TenantCreate) SetTwoFactorAuthEnforced(b bool) *TenantCreate {
-	tc.mutation.SetTwoFactorAuthEnforced(b)
-	return tc
+func (_c *TenantCreate) SetTwoFactorAuthEnforced(v bool) *TenantCreate {
+	_c.mutation.SetTwoFactorAuthEnforced(v)
+	return _c
 }
 
 // SetNillableTwoFactorAuthEnforced sets the "two_factor_auth_enforced" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableTwoFactorAuthEnforced(b *bool) *TenantCreate {
-	if b != nil {
-		tc.SetTwoFactorAuthEnforced(*b)
+func (_c *TenantCreate) SetNillableTwoFactorAuthEnforced(v *bool) *TenantCreate {
+	if v != nil {
+		_c.SetTwoFactorAuthEnforced(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetX25519IdentityEncrypted sets the "x25519_identity_encrypted" field.
-func (tc *TenantCreate) SetX25519IdentityEncrypted(ex entx.EncryptedX25519Identity) *TenantCreate {
-	tc.mutation.SetX25519IdentityEncrypted(ex)
-	return tc
+func (_c *TenantCreate) SetX25519IdentityEncrypted(v entx.EncryptedX25519Identity) *TenantCreate {
+	_c.mutation.SetX25519IdentityEncrypted(v)
+	return _c
 }
 
 // SetNillableX25519IdentityEncrypted sets the "x25519_identity_encrypted" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableX25519IdentityEncrypted(ex *entx.EncryptedX25519Identity) *TenantCreate {
-	if ex != nil {
-		tc.SetX25519IdentityEncrypted(*ex)
+func (_c *TenantCreate) SetNillableX25519IdentityEncrypted(v *entx.EncryptedX25519Identity) *TenantCreate {
+	if v != nil {
+		_c.SetX25519IdentityEncrypted(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetMaintenanceModeEnabledAt sets the "maintenance_mode_enabled_at" field.
-func (tc *TenantCreate) SetMaintenanceModeEnabledAt(t time.Time) *TenantCreate {
-	tc.mutation.SetMaintenanceModeEnabledAt(t)
-	return tc
+func (_c *TenantCreate) SetMaintenanceModeEnabledAt(v time.Time) *TenantCreate {
+	_c.mutation.SetMaintenanceModeEnabledAt(v)
+	return _c
 }
 
 // SetNillableMaintenanceModeEnabledAt sets the "maintenance_mode_enabled_at" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableMaintenanceModeEnabledAt(t *time.Time) *TenantCreate {
-	if t != nil {
-		tc.SetMaintenanceModeEnabledAt(*t)
+func (_c *TenantCreate) SetNillableMaintenanceModeEnabledAt(v *time.Time) *TenantCreate {
+	if v != nil {
+		_c.SetMaintenanceModeEnabledAt(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetInitializedAt sets the "initialized_at" field.
-func (tc *TenantCreate) SetInitializedAt(t time.Time) *TenantCreate {
-	tc.mutation.SetInitializedAt(t)
-	return tc
+func (_c *TenantCreate) SetInitializedAt(v time.Time) *TenantCreate {
+	_c.mutation.SetInitializedAt(v)
+	return _c
 }
 
 // SetNillableInitializedAt sets the "initialized_at" field if the given value is not nil.
-func (tc *TenantCreate) SetNillableInitializedAt(t *time.Time) *TenantCreate {
-	if t != nil {
-		tc.SetInitializedAt(*t)
+func (_c *TenantCreate) SetNillableInitializedAt(v *time.Time) *TenantCreate {
+	if v != nil {
+		_c.SetInitializedAt(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tc *TenantCreate) SetID(i int64) *TenantCreate {
-	tc.mutation.SetID(i)
-	return tc
+func (_c *TenantCreate) SetID(v int64) *TenantCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetCreatorID sets the "creator" edge to the Account entity by ID.
-func (tc *TenantCreate) SetCreatorID(id int64) *TenantCreate {
-	tc.mutation.SetCreatorID(id)
-	return tc
+func (_c *TenantCreate) SetCreatorID(id int64) *TenantCreate {
+	_c.mutation.SetCreatorID(id)
+	return _c
 }
 
 // SetNillableCreatorID sets the "creator" edge to the Account entity by ID if the given value is not nil.
-func (tc *TenantCreate) SetNillableCreatorID(id *int64) *TenantCreate {
+func (_c *TenantCreate) SetNillableCreatorID(id *int64) *TenantCreate {
 	if id != nil {
-		tc = tc.SetCreatorID(*id)
+		_c = _c.SetCreatorID(*id)
 	}
-	return tc
+	return _c
 }
 
 // SetCreator sets the "creator" edge to the Account entity.
-func (tc *TenantCreate) SetCreator(a *Account) *TenantCreate {
-	return tc.SetCreatorID(a.ID)
+func (_c *TenantCreate) SetCreator(v *Account) *TenantCreate {
+	return _c.SetCreatorID(v.ID)
 }
 
 // SetUpdaterID sets the "updater" edge to the Account entity by ID.
-func (tc *TenantCreate) SetUpdaterID(id int64) *TenantCreate {
-	tc.mutation.SetUpdaterID(id)
-	return tc
+func (_c *TenantCreate) SetUpdaterID(id int64) *TenantCreate {
+	_c.mutation.SetUpdaterID(id)
+	return _c
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the Account entity by ID if the given value is not nil.
-func (tc *TenantCreate) SetNillableUpdaterID(id *int64) *TenantCreate {
+func (_c *TenantCreate) SetNillableUpdaterID(id *int64) *TenantCreate {
 	if id != nil {
-		tc = tc.SetUpdaterID(*id)
+		_c = _c.SetUpdaterID(*id)
 	}
-	return tc
+	return _c
 }
 
 // SetUpdater sets the "updater" edge to the Account entity.
-func (tc *TenantCreate) SetUpdater(a *Account) *TenantCreate {
-	return tc.SetUpdaterID(a.ID)
+func (_c *TenantCreate) SetUpdater(v *Account) *TenantCreate {
+	return _c.SetUpdaterID(v.ID)
 }
 
 // SetDeleterID sets the "deleter" edge to the Account entity by ID.
-func (tc *TenantCreate) SetDeleterID(id int64) *TenantCreate {
-	tc.mutation.SetDeleterID(id)
-	return tc
+func (_c *TenantCreate) SetDeleterID(id int64) *TenantCreate {
+	_c.mutation.SetDeleterID(id)
+	return _c
 }
 
 // SetNillableDeleterID sets the "deleter" edge to the Account entity by ID if the given value is not nil.
-func (tc *TenantCreate) SetNillableDeleterID(id *int64) *TenantCreate {
+func (_c *TenantCreate) SetNillableDeleterID(id *int64) *TenantCreate {
 	if id != nil {
-		tc = tc.SetDeleterID(*id)
+		_c = _c.SetDeleterID(*id)
 	}
-	return tc
+	return _c
 }
 
 // SetDeleter sets the "deleter" edge to the Account entity.
-func (tc *TenantCreate) SetDeleter(a *Account) *TenantCreate {
-	return tc.SetDeleterID(a.ID)
+func (_c *TenantCreate) SetDeleter(v *Account) *TenantCreate {
+	return _c.SetDeleterID(v.ID)
 }
 
 // AddAccountIDs adds the "accounts" edge to the Account entity by IDs.
-func (tc *TenantCreate) AddAccountIDs(ids ...int64) *TenantCreate {
-	tc.mutation.AddAccountIDs(ids...)
-	return tc
+func (_c *TenantCreate) AddAccountIDs(ids ...int64) *TenantCreate {
+	_c.mutation.AddAccountIDs(ids...)
+	return _c
 }
 
 // AddAccounts adds the "accounts" edges to the Account entity.
-func (tc *TenantCreate) AddAccounts(a ...*Account) *TenantCreate {
-	ids := make([]int64, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_c *TenantCreate) AddAccounts(v ...*Account) *TenantCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddAccountIDs(ids...)
+	return _c.AddAccountIDs(ids...)
 }
 
 // AddAccountAssignmentIDs adds the "account_assignment" edge to the TenantAccountAssignment entity by IDs.
-func (tc *TenantCreate) AddAccountAssignmentIDs(ids ...int64) *TenantCreate {
-	tc.mutation.AddAccountAssignmentIDs(ids...)
-	return tc
+func (_c *TenantCreate) AddAccountAssignmentIDs(ids ...int64) *TenantCreate {
+	_c.mutation.AddAccountAssignmentIDs(ids...)
+	return _c
 }
 
 // AddAccountAssignment adds the "account_assignment" edges to the TenantAccountAssignment entity.
-func (tc *TenantCreate) AddAccountAssignment(t ...*TenantAccountAssignment) *TenantCreate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *TenantCreate) AddAccountAssignment(v ...*TenantAccountAssignment) *TenantCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddAccountAssignmentIDs(ids...)
+	return _c.AddAccountAssignmentIDs(ids...)
 }
 
 // Mutation returns the TenantMutation object of the builder.
-func (tc *TenantCreate) Mutation() *TenantMutation {
-	return tc.mutation
+func (_c *TenantCreate) Mutation() *TenantMutation {
+	return _c.mutation
 }
 
 // Save creates the Tenant in the database.
-func (tc *TenantCreate) Save(ctx context.Context) (*Tenant, error) {
-	if err := tc.defaults(); err != nil {
+func (_c *TenantCreate) Save(ctx context.Context) (*Tenant, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, tc.sqlSave, tc.mutation, tc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tc *TenantCreate) SaveX(ctx context.Context) *Tenant {
-	v, err := tc.Save(ctx)
+func (_c *TenantCreate) SaveX(ctx context.Context) *Tenant {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -430,144 +430,144 @@ func (tc *TenantCreate) SaveX(ctx context.Context) *Tenant {
 }
 
 // Exec executes the query.
-func (tc *TenantCreate) Exec(ctx context.Context) error {
-	_, err := tc.Save(ctx)
+func (_c *TenantCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tc *TenantCreate) ExecX(ctx context.Context) {
-	if err := tc.Exec(ctx); err != nil {
+func (_c *TenantCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tc *TenantCreate) defaults() error {
-	if _, ok := tc.mutation.CreatedAt(); !ok {
+func (_c *TenantCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if tenant.DefaultCreatedAt == nil {
 			return fmt.Errorf("entmain: uninitialized tenant.DefaultCreatedAt (forgotten import entmain/runtime?)")
 		}
 		v := tenant.DefaultCreatedAt()
-		tc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := tc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if tenant.DefaultUpdatedAt == nil {
 			return fmt.Errorf("entmain: uninitialized tenant.DefaultUpdatedAt (forgotten import entmain/runtime?)")
 		}
 		v := tenant.DefaultUpdatedAt()
-		tc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := tc.mutation.PublicID(); !ok {
+	if _, ok := _c.mutation.PublicID(); !ok {
 		if tenant.DefaultPublicID == nil {
 			return fmt.Errorf("entmain: uninitialized tenant.DefaultPublicID (forgotten import entmain/runtime?)")
 		}
 		v := tenant.DefaultPublicID()
-		tc.mutation.SetPublicID(v)
+		_c.mutation.SetPublicID(v)
 	}
-	if _, ok := tc.mutation.FirstName(); !ok {
+	if _, ok := _c.mutation.FirstName(); !ok {
 		v := tenant.DefaultFirstName
-		tc.mutation.SetFirstName(v)
+		_c.mutation.SetFirstName(v)
 	}
-	if _, ok := tc.mutation.LastName(); !ok {
+	if _, ok := _c.mutation.LastName(); !ok {
 		v := tenant.DefaultLastName
-		tc.mutation.SetLastName(v)
+		_c.mutation.SetLastName(v)
 	}
-	if _, ok := tc.mutation.Street(); !ok {
+	if _, ok := _c.mutation.Street(); !ok {
 		v := tenant.DefaultStreet
-		tc.mutation.SetStreet(v)
+		_c.mutation.SetStreet(v)
 	}
-	if _, ok := tc.mutation.HouseNumber(); !ok {
+	if _, ok := _c.mutation.HouseNumber(); !ok {
 		v := tenant.DefaultHouseNumber
-		tc.mutation.SetHouseNumber(v)
+		_c.mutation.SetHouseNumber(v)
 	}
-	if _, ok := tc.mutation.AdditionalAddressInfo(); !ok {
+	if _, ok := _c.mutation.AdditionalAddressInfo(); !ok {
 		v := tenant.DefaultAdditionalAddressInfo
-		tc.mutation.SetAdditionalAddressInfo(v)
+		_c.mutation.SetAdditionalAddressInfo(v)
 	}
-	if _, ok := tc.mutation.PostalCode(); !ok {
+	if _, ok := _c.mutation.PostalCode(); !ok {
 		v := tenant.DefaultPostalCode
-		tc.mutation.SetPostalCode(v)
+		_c.mutation.SetPostalCode(v)
 	}
-	if _, ok := tc.mutation.City(); !ok {
+	if _, ok := _c.mutation.City(); !ok {
 		v := tenant.DefaultCity
-		tc.mutation.SetCity(v)
+		_c.mutation.SetCity(v)
 	}
-	if _, ok := tc.mutation.VatID(); !ok {
+	if _, ok := _c.mutation.VatID(); !ok {
 		v := tenant.DefaultVatID
-		tc.mutation.SetVatID(v)
+		_c.mutation.SetVatID(v)
 	}
-	if _, ok := tc.mutation.TwoFactorAuthEnforced(); !ok {
+	if _, ok := _c.mutation.TwoFactorAuthEnforced(); !ok {
 		v := tenant.DefaultTwoFactorAuthEnforced
-		tc.mutation.SetTwoFactorAuthEnforced(v)
+		_c.mutation.SetTwoFactorAuthEnforced(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tc *TenantCreate) check() error {
-	if _, ok := tc.mutation.CreatedAt(); !ok {
+func (_c *TenantCreate) check() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`entmain: missing required field "Tenant.created_at"`)}
 	}
-	if _, ok := tc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`entmain: missing required field "Tenant.updated_at"`)}
 	}
-	if _, ok := tc.mutation.PublicID(); !ok {
+	if _, ok := _c.mutation.PublicID(); !ok {
 		return &ValidationError{Name: "public_id", err: errors.New(`entmain: missing required field "Tenant.public_id"`)}
 	}
-	if _, ok := tc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`entmain: missing required field "Tenant.name"`)}
 	}
-	if _, ok := tc.mutation.FirstName(); !ok {
+	if _, ok := _c.mutation.FirstName(); !ok {
 		return &ValidationError{Name: "first_name", err: errors.New(`entmain: missing required field "Tenant.first_name"`)}
 	}
-	if _, ok := tc.mutation.LastName(); !ok {
+	if _, ok := _c.mutation.LastName(); !ok {
 		return &ValidationError{Name: "last_name", err: errors.New(`entmain: missing required field "Tenant.last_name"`)}
 	}
-	if _, ok := tc.mutation.Street(); !ok {
+	if _, ok := _c.mutation.Street(); !ok {
 		return &ValidationError{Name: "street", err: errors.New(`entmain: missing required field "Tenant.street"`)}
 	}
-	if _, ok := tc.mutation.HouseNumber(); !ok {
+	if _, ok := _c.mutation.HouseNumber(); !ok {
 		return &ValidationError{Name: "house_number", err: errors.New(`entmain: missing required field "Tenant.house_number"`)}
 	}
-	if _, ok := tc.mutation.AdditionalAddressInfo(); !ok {
+	if _, ok := _c.mutation.AdditionalAddressInfo(); !ok {
 		return &ValidationError{Name: "additional_address_info", err: errors.New(`entmain: missing required field "Tenant.additional_address_info"`)}
 	}
-	if _, ok := tc.mutation.PostalCode(); !ok {
+	if _, ok := _c.mutation.PostalCode(); !ok {
 		return &ValidationError{Name: "postal_code", err: errors.New(`entmain: missing required field "Tenant.postal_code"`)}
 	}
-	if _, ok := tc.mutation.City(); !ok {
+	if _, ok := _c.mutation.City(); !ok {
 		return &ValidationError{Name: "city", err: errors.New(`entmain: missing required field "Tenant.city"`)}
 	}
-	if _, ok := tc.mutation.Country(); !ok {
+	if _, ok := _c.mutation.Country(); !ok {
 		return &ValidationError{Name: "country", err: errors.New(`entmain: missing required field "Tenant.country"`)}
 	}
-	if v, ok := tc.mutation.Country(); ok {
+	if v, ok := _c.mutation.Country(); ok {
 		if err := tenant.CountryValidator(v); err != nil {
 			return &ValidationError{Name: "country", err: fmt.Errorf(`entmain: validator failed for field "Tenant.country": %w`, err)}
 		}
 	}
-	if _, ok := tc.mutation.VatID(); !ok {
+	if _, ok := _c.mutation.VatID(); !ok {
 		return &ValidationError{Name: "vat_id", err: errors.New(`entmain: missing required field "Tenant.vat_id"`)}
 	}
-	if _, ok := tc.mutation.TermsOfServiceAccepted(); !ok {
+	if _, ok := _c.mutation.TermsOfServiceAccepted(); !ok {
 		return &ValidationError{Name: "terms_of_service_accepted", err: errors.New(`entmain: missing required field "Tenant.terms_of_service_accepted"`)}
 	}
-	if _, ok := tc.mutation.PrivacyPolicyAccepted(); !ok {
+	if _, ok := _c.mutation.PrivacyPolicyAccepted(); !ok {
 		return &ValidationError{Name: "privacy_policy_accepted", err: errors.New(`entmain: missing required field "Tenant.privacy_policy_accepted"`)}
 	}
-	if _, ok := tc.mutation.TwoFactorAuthEnforced(); !ok {
+	if _, ok := _c.mutation.TwoFactorAuthEnforced(); !ok {
 		return &ValidationError{Name: "two_factor_auth_enforced", err: errors.New(`entmain: missing required field "Tenant.two_factor_auth_enforced"`)}
 	}
 	return nil
 }
 
-func (tc *TenantCreate) sqlSave(ctx context.Context) (*Tenant, error) {
-	if err := tc.check(); err != nil {
+func (_c *TenantCreate) sqlSave(ctx context.Context) (*Tenant, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -577,101 +577,101 @@ func (tc *TenantCreate) sqlSave(ctx context.Context) (*Tenant, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	tc.mutation.id = &_node.ID
-	tc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tc *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
+func (_c *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Tenant{config: tc.config}
+		_node = &Tenant{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(tenant.Table, sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt64))
 	)
-	if id, ok := tc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := tc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(tenant.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := tc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(tenant.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := tc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(tenant.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := tc.mutation.PublicID(); ok {
+	if value, ok := _c.mutation.PublicID(); ok {
 		_spec.SetField(tenant.FieldPublicID, field.TypeString, value)
 		_node.PublicID = value
 	}
-	if value, ok := tc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(tenant.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := tc.mutation.FirstName(); ok {
+	if value, ok := _c.mutation.FirstName(); ok {
 		_spec.SetField(tenant.FieldFirstName, field.TypeString, value)
 		_node.FirstName = value
 	}
-	if value, ok := tc.mutation.LastName(); ok {
+	if value, ok := _c.mutation.LastName(); ok {
 		_spec.SetField(tenant.FieldLastName, field.TypeString, value)
 		_node.LastName = value
 	}
-	if value, ok := tc.mutation.Street(); ok {
+	if value, ok := _c.mutation.Street(); ok {
 		_spec.SetField(tenant.FieldStreet, field.TypeString, value)
 		_node.Street = value
 	}
-	if value, ok := tc.mutation.HouseNumber(); ok {
+	if value, ok := _c.mutation.HouseNumber(); ok {
 		_spec.SetField(tenant.FieldHouseNumber, field.TypeString, value)
 		_node.HouseNumber = value
 	}
-	if value, ok := tc.mutation.AdditionalAddressInfo(); ok {
+	if value, ok := _c.mutation.AdditionalAddressInfo(); ok {
 		_spec.SetField(tenant.FieldAdditionalAddressInfo, field.TypeString, value)
 		_node.AdditionalAddressInfo = value
 	}
-	if value, ok := tc.mutation.PostalCode(); ok {
+	if value, ok := _c.mutation.PostalCode(); ok {
 		_spec.SetField(tenant.FieldPostalCode, field.TypeString, value)
 		_node.PostalCode = value
 	}
-	if value, ok := tc.mutation.City(); ok {
+	if value, ok := _c.mutation.City(); ok {
 		_spec.SetField(tenant.FieldCity, field.TypeString, value)
 		_node.City = value
 	}
-	if value, ok := tc.mutation.Country(); ok {
+	if value, ok := _c.mutation.Country(); ok {
 		_spec.SetField(tenant.FieldCountry, field.TypeEnum, value)
 		_node.Country = value
 	}
-	if value, ok := tc.mutation.VatID(); ok {
+	if value, ok := _c.mutation.VatID(); ok {
 		_spec.SetField(tenant.FieldVatID, field.TypeString, value)
 		_node.VatID = value
 	}
-	if value, ok := tc.mutation.TermsOfServiceAccepted(); ok {
+	if value, ok := _c.mutation.TermsOfServiceAccepted(); ok {
 		_spec.SetField(tenant.FieldTermsOfServiceAccepted, field.TypeTime, value)
 		_node.TermsOfServiceAccepted = value
 	}
-	if value, ok := tc.mutation.PrivacyPolicyAccepted(); ok {
+	if value, ok := _c.mutation.PrivacyPolicyAccepted(); ok {
 		_spec.SetField(tenant.FieldPrivacyPolicyAccepted, field.TypeTime, value)
 		_node.PrivacyPolicyAccepted = value
 	}
-	if value, ok := tc.mutation.TwoFactorAuthEnforced(); ok {
+	if value, ok := _c.mutation.TwoFactorAuthEnforced(); ok {
 		_spec.SetField(tenant.FieldTwoFactorAuthEnforced, field.TypeBool, value)
 		_node.TwoFactorAuthEnforced = value
 	}
-	if value, ok := tc.mutation.X25519IdentityEncrypted(); ok {
+	if value, ok := _c.mutation.X25519IdentityEncrypted(); ok {
 		_spec.SetField(tenant.FieldX25519IdentityEncrypted, field.TypeBytes, value)
 		_node.X25519IdentityEncrypted = value
 	}
-	if value, ok := tc.mutation.MaintenanceModeEnabledAt(); ok {
+	if value, ok := _c.mutation.MaintenanceModeEnabledAt(); ok {
 		_spec.SetField(tenant.FieldMaintenanceModeEnabledAt, field.TypeTime, value)
 		_node.MaintenanceModeEnabledAt = &value
 	}
-	if value, ok := tc.mutation.InitializedAt(); ok {
+	if value, ok := _c.mutation.InitializedAt(); ok {
 		_spec.SetField(tenant.FieldInitializedAt, field.TypeTime, value)
 		_node.InitializedAt = &value
 	}
-	if nodes := tc.mutation.CreatorIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CreatorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -688,7 +688,7 @@ func (tc *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 		_node.CreatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -705,7 +705,7 @@ func (tc *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 		_node.UpdatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.DeleterIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.DeleterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -722,7 +722,7 @@ func (tc *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 		_node.DeletedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.AccountsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.AccountsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -736,13 +736,13 @@ func (tc *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &TenantAccountAssignmentCreate{config: tc.config, mutation: newTenantAccountAssignmentMutation(tc.config, OpCreate)}
+		createE := &TenantAccountAssignmentCreate{config: _c.config, mutation: newTenantAccountAssignmentMutation(_c.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.AccountAssignmentIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.AccountAssignmentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -769,16 +769,16 @@ type TenantCreateBulk struct {
 }
 
 // Save creates the Tenant entities in the database.
-func (tcb *TenantCreateBulk) Save(ctx context.Context) ([]*Tenant, error) {
-	if tcb.err != nil {
-		return nil, tcb.err
+func (_c *TenantCreateBulk) Save(ctx context.Context) ([]*Tenant, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tcb.builders))
-	nodes := make([]*Tenant, len(tcb.builders))
-	mutators := make([]Mutator, len(tcb.builders))
-	for i := range tcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Tenant, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TenantMutation)
@@ -792,11 +792,11 @@ func (tcb *TenantCreateBulk) Save(ctx context.Context) ([]*Tenant, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -820,7 +820,7 @@ func (tcb *TenantCreateBulk) Save(ctx context.Context) ([]*Tenant, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -828,8 +828,8 @@ func (tcb *TenantCreateBulk) Save(ctx context.Context) ([]*Tenant, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcb *TenantCreateBulk) SaveX(ctx context.Context) []*Tenant {
-	v, err := tcb.Save(ctx)
+func (_c *TenantCreateBulk) SaveX(ctx context.Context) []*Tenant {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -837,14 +837,14 @@ func (tcb *TenantCreateBulk) SaveX(ctx context.Context) []*Tenant {
 }
 
 // Exec executes the query.
-func (tcb *TenantCreateBulk) Exec(ctx context.Context) error {
-	_, err := tcb.Save(ctx)
+func (_c *TenantCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcb *TenantCreateBulk) ExecX(ctx context.Context) {
-	if err := tcb.Exec(ctx); err != nil {
+func (_c *TenantCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

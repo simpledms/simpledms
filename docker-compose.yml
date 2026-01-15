@@ -27,6 +27,10 @@ services:
         restart: unless-stopped
         volumes:
             - mailpit_data:/var/lib/mailpit/data
+            - type: bind
+              source: ./.secrets
+              target: /srv/.secrets
+              read_only: true
         ports:
             - "8025:8025" # web-client
             - "1025:1025" # smtp
@@ -34,7 +38,10 @@ services:
             MP_MAX_MESSAGES: 500000
             MP_DATABASE: /var/lib/mailpit/data/mailpit.db
             MP_SMTP_AUTH_ACCEPT_ANY: 1
-            MP_SMTP_AUTH_ALLOW_INSECURE: 1
+            MP_SMTP_TLS_CERT: /srv/.secrets/tls_certificate.pem
+            MP_SMTP_TLS_KEY: /srv/.secrets/tls_private_key.pem
+            MP_SMTP_REQUIRE_TLS: true
+            MP_SMTP_AUTH_ALLOW_INSECURE: 0
 
     versitygw:
       image: versity/versitygw:latest

@@ -26,161 +26,161 @@ type FilePropertyAssignmentUpdate struct {
 }
 
 // Where appends a list predicates to the FilePropertyAssignmentUpdate builder.
-func (fpau *FilePropertyAssignmentUpdate) Where(ps ...predicate.FilePropertyAssignment) *FilePropertyAssignmentUpdate {
-	fpau.mutation.Where(ps...)
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) Where(ps ...predicate.FilePropertyAssignment) *FilePropertyAssignmentUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetFileID sets the "file_id" field.
-func (fpau *FilePropertyAssignmentUpdate) SetFileID(i int64) *FilePropertyAssignmentUpdate {
-	fpau.mutation.SetFileID(i)
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) SetFileID(v int64) *FilePropertyAssignmentUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
 }
 
 // SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (fpau *FilePropertyAssignmentUpdate) SetNillableFileID(i *int64) *FilePropertyAssignmentUpdate {
-	if i != nil {
-		fpau.SetFileID(*i)
+func (_u *FilePropertyAssignmentUpdate) SetNillableFileID(v *int64) *FilePropertyAssignmentUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
 	}
-	return fpau
+	return _u
 }
 
 // SetPropertyID sets the "property_id" field.
-func (fpau *FilePropertyAssignmentUpdate) SetPropertyID(i int64) *FilePropertyAssignmentUpdate {
-	fpau.mutation.SetPropertyID(i)
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) SetPropertyID(v int64) *FilePropertyAssignmentUpdate {
+	_u.mutation.SetPropertyID(v)
+	return _u
 }
 
 // SetNillablePropertyID sets the "property_id" field if the given value is not nil.
-func (fpau *FilePropertyAssignmentUpdate) SetNillablePropertyID(i *int64) *FilePropertyAssignmentUpdate {
-	if i != nil {
-		fpau.SetPropertyID(*i)
+func (_u *FilePropertyAssignmentUpdate) SetNillablePropertyID(v *int64) *FilePropertyAssignmentUpdate {
+	if v != nil {
+		_u.SetPropertyID(*v)
 	}
-	return fpau
+	return _u
 }
 
 // SetTextValue sets the "text_value" field.
-func (fpau *FilePropertyAssignmentUpdate) SetTextValue(s string) *FilePropertyAssignmentUpdate {
-	fpau.mutation.SetTextValue(s)
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) SetTextValue(v string) *FilePropertyAssignmentUpdate {
+	_u.mutation.SetTextValue(v)
+	return _u
 }
 
 // SetNillableTextValue sets the "text_value" field if the given value is not nil.
-func (fpau *FilePropertyAssignmentUpdate) SetNillableTextValue(s *string) *FilePropertyAssignmentUpdate {
-	if s != nil {
-		fpau.SetTextValue(*s)
+func (_u *FilePropertyAssignmentUpdate) SetNillableTextValue(v *string) *FilePropertyAssignmentUpdate {
+	if v != nil {
+		_u.SetTextValue(*v)
 	}
-	return fpau
+	return _u
 }
 
 // ClearTextValue clears the value of the "text_value" field.
-func (fpau *FilePropertyAssignmentUpdate) ClearTextValue() *FilePropertyAssignmentUpdate {
-	fpau.mutation.ClearTextValue()
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) ClearTextValue() *FilePropertyAssignmentUpdate {
+	_u.mutation.ClearTextValue()
+	return _u
 }
 
 // SetNumberValue sets the "number_value" field.
-func (fpau *FilePropertyAssignmentUpdate) SetNumberValue(i int) *FilePropertyAssignmentUpdate {
-	fpau.mutation.ResetNumberValue()
-	fpau.mutation.SetNumberValue(i)
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) SetNumberValue(v int) *FilePropertyAssignmentUpdate {
+	_u.mutation.ResetNumberValue()
+	_u.mutation.SetNumberValue(v)
+	return _u
 }
 
 // SetNillableNumberValue sets the "number_value" field if the given value is not nil.
-func (fpau *FilePropertyAssignmentUpdate) SetNillableNumberValue(i *int) *FilePropertyAssignmentUpdate {
-	if i != nil {
-		fpau.SetNumberValue(*i)
+func (_u *FilePropertyAssignmentUpdate) SetNillableNumberValue(v *int) *FilePropertyAssignmentUpdate {
+	if v != nil {
+		_u.SetNumberValue(*v)
 	}
-	return fpau
+	return _u
 }
 
-// AddNumberValue adds i to the "number_value" field.
-func (fpau *FilePropertyAssignmentUpdate) AddNumberValue(i int) *FilePropertyAssignmentUpdate {
-	fpau.mutation.AddNumberValue(i)
-	return fpau
+// AddNumberValue adds value to the "number_value" field.
+func (_u *FilePropertyAssignmentUpdate) AddNumberValue(v int) *FilePropertyAssignmentUpdate {
+	_u.mutation.AddNumberValue(v)
+	return _u
 }
 
 // ClearNumberValue clears the value of the "number_value" field.
-func (fpau *FilePropertyAssignmentUpdate) ClearNumberValue() *FilePropertyAssignmentUpdate {
-	fpau.mutation.ClearNumberValue()
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) ClearNumberValue() *FilePropertyAssignmentUpdate {
+	_u.mutation.ClearNumberValue()
+	return _u
 }
 
 // SetDateValue sets the "date_value" field.
-func (fpau *FilePropertyAssignmentUpdate) SetDateValue(t timex.Date) *FilePropertyAssignmentUpdate {
-	fpau.mutation.SetDateValue(t)
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) SetDateValue(v timex.Date) *FilePropertyAssignmentUpdate {
+	_u.mutation.SetDateValue(v)
+	return _u
 }
 
 // SetNillableDateValue sets the "date_value" field if the given value is not nil.
-func (fpau *FilePropertyAssignmentUpdate) SetNillableDateValue(t *timex.Date) *FilePropertyAssignmentUpdate {
-	if t != nil {
-		fpau.SetDateValue(*t)
+func (_u *FilePropertyAssignmentUpdate) SetNillableDateValue(v *timex.Date) *FilePropertyAssignmentUpdate {
+	if v != nil {
+		_u.SetDateValue(*v)
 	}
-	return fpau
+	return _u
 }
 
 // ClearDateValue clears the value of the "date_value" field.
-func (fpau *FilePropertyAssignmentUpdate) ClearDateValue() *FilePropertyAssignmentUpdate {
-	fpau.mutation.ClearDateValue()
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) ClearDateValue() *FilePropertyAssignmentUpdate {
+	_u.mutation.ClearDateValue()
+	return _u
 }
 
 // SetBoolValue sets the "bool_value" field.
-func (fpau *FilePropertyAssignmentUpdate) SetBoolValue(b bool) *FilePropertyAssignmentUpdate {
-	fpau.mutation.SetBoolValue(b)
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) SetBoolValue(v bool) *FilePropertyAssignmentUpdate {
+	_u.mutation.SetBoolValue(v)
+	return _u
 }
 
 // SetNillableBoolValue sets the "bool_value" field if the given value is not nil.
-func (fpau *FilePropertyAssignmentUpdate) SetNillableBoolValue(b *bool) *FilePropertyAssignmentUpdate {
-	if b != nil {
-		fpau.SetBoolValue(*b)
+func (_u *FilePropertyAssignmentUpdate) SetNillableBoolValue(v *bool) *FilePropertyAssignmentUpdate {
+	if v != nil {
+		_u.SetBoolValue(*v)
 	}
-	return fpau
+	return _u
 }
 
 // ClearBoolValue clears the value of the "bool_value" field.
-func (fpau *FilePropertyAssignmentUpdate) ClearBoolValue() *FilePropertyAssignmentUpdate {
-	fpau.mutation.ClearBoolValue()
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) ClearBoolValue() *FilePropertyAssignmentUpdate {
+	_u.mutation.ClearBoolValue()
+	return _u
 }
 
 // SetFile sets the "file" edge to the File entity.
-func (fpau *FilePropertyAssignmentUpdate) SetFile(f *File) *FilePropertyAssignmentUpdate {
-	return fpau.SetFileID(f.ID)
+func (_u *FilePropertyAssignmentUpdate) SetFile(v *File) *FilePropertyAssignmentUpdate {
+	return _u.SetFileID(v.ID)
 }
 
 // SetProperty sets the "property" edge to the Property entity.
-func (fpau *FilePropertyAssignmentUpdate) SetProperty(p *Property) *FilePropertyAssignmentUpdate {
-	return fpau.SetPropertyID(p.ID)
+func (_u *FilePropertyAssignmentUpdate) SetProperty(v *Property) *FilePropertyAssignmentUpdate {
+	return _u.SetPropertyID(v.ID)
 }
 
 // Mutation returns the FilePropertyAssignmentMutation object of the builder.
-func (fpau *FilePropertyAssignmentUpdate) Mutation() *FilePropertyAssignmentMutation {
-	return fpau.mutation
+func (_u *FilePropertyAssignmentUpdate) Mutation() *FilePropertyAssignmentMutation {
+	return _u.mutation
 }
 
 // ClearFile clears the "file" edge to the File entity.
-func (fpau *FilePropertyAssignmentUpdate) ClearFile() *FilePropertyAssignmentUpdate {
-	fpau.mutation.ClearFile()
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) ClearFile() *FilePropertyAssignmentUpdate {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // ClearProperty clears the "property" edge to the Property entity.
-func (fpau *FilePropertyAssignmentUpdate) ClearProperty() *FilePropertyAssignmentUpdate {
-	fpau.mutation.ClearProperty()
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) ClearProperty() *FilePropertyAssignmentUpdate {
+	_u.mutation.ClearProperty()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (fpau *FilePropertyAssignmentUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, fpau.sqlSave, fpau.mutation, fpau.hooks)
+func (_u *FilePropertyAssignmentUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fpau *FilePropertyAssignmentUpdate) SaveX(ctx context.Context) int {
-	affected, err := fpau.Save(ctx)
+func (_u *FilePropertyAssignmentUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -188,78 +188,78 @@ func (fpau *FilePropertyAssignmentUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (fpau *FilePropertyAssignmentUpdate) Exec(ctx context.Context) error {
-	_, err := fpau.Save(ctx)
+func (_u *FilePropertyAssignmentUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fpau *FilePropertyAssignmentUpdate) ExecX(ctx context.Context) {
-	if err := fpau.Exec(ctx); err != nil {
+func (_u *FilePropertyAssignmentUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (fpau *FilePropertyAssignmentUpdate) check() error {
-	if fpau.mutation.SpaceCleared() && len(fpau.mutation.SpaceIDs()) > 0 {
+func (_u *FilePropertyAssignmentUpdate) check() error {
+	if _u.mutation.SpaceCleared() && len(_u.mutation.SpaceIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "FilePropertyAssignment.space"`)
 	}
-	if fpau.mutation.FileCleared() && len(fpau.mutation.FileIDs()) > 0 {
+	if _u.mutation.FileCleared() && len(_u.mutation.FileIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "FilePropertyAssignment.file"`)
 	}
-	if fpau.mutation.PropertyCleared() && len(fpau.mutation.PropertyIDs()) > 0 {
+	if _u.mutation.PropertyCleared() && len(_u.mutation.PropertyIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "FilePropertyAssignment.property"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (fpau *FilePropertyAssignmentUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FilePropertyAssignmentUpdate {
-	fpau.modifiers = append(fpau.modifiers, modifiers...)
-	return fpau
+func (_u *FilePropertyAssignmentUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FilePropertyAssignmentUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (fpau *FilePropertyAssignmentUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := fpau.check(); err != nil {
-		return n, err
+func (_u *FilePropertyAssignmentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(filepropertyassignment.Table, filepropertyassignment.Columns, sqlgraph.NewFieldSpec(filepropertyassignment.FieldID, field.TypeInt64))
-	if ps := fpau.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := fpau.mutation.TextValue(); ok {
+	if value, ok := _u.mutation.TextValue(); ok {
 		_spec.SetField(filepropertyassignment.FieldTextValue, field.TypeString, value)
 	}
-	if fpau.mutation.TextValueCleared() {
+	if _u.mutation.TextValueCleared() {
 		_spec.ClearField(filepropertyassignment.FieldTextValue, field.TypeString)
 	}
-	if value, ok := fpau.mutation.NumberValue(); ok {
+	if value, ok := _u.mutation.NumberValue(); ok {
 		_spec.SetField(filepropertyassignment.FieldNumberValue, field.TypeInt, value)
 	}
-	if value, ok := fpau.mutation.AddedNumberValue(); ok {
+	if value, ok := _u.mutation.AddedNumberValue(); ok {
 		_spec.AddField(filepropertyassignment.FieldNumberValue, field.TypeInt, value)
 	}
-	if fpau.mutation.NumberValueCleared() {
+	if _u.mutation.NumberValueCleared() {
 		_spec.ClearField(filepropertyassignment.FieldNumberValue, field.TypeInt)
 	}
-	if value, ok := fpau.mutation.DateValue(); ok {
+	if value, ok := _u.mutation.DateValue(); ok {
 		_spec.SetField(filepropertyassignment.FieldDateValue, field.TypeTime, value)
 	}
-	if fpau.mutation.DateValueCleared() {
+	if _u.mutation.DateValueCleared() {
 		_spec.ClearField(filepropertyassignment.FieldDateValue, field.TypeTime)
 	}
-	if value, ok := fpau.mutation.BoolValue(); ok {
+	if value, ok := _u.mutation.BoolValue(); ok {
 		_spec.SetField(filepropertyassignment.FieldBoolValue, field.TypeBool, value)
 	}
-	if fpau.mutation.BoolValueCleared() {
+	if _u.mutation.BoolValueCleared() {
 		_spec.ClearField(filepropertyassignment.FieldBoolValue, field.TypeBool)
 	}
-	if fpau.mutation.FileCleared() {
+	if _u.mutation.FileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -272,7 +272,7 @@ func (fpau *FilePropertyAssignmentUpdate) sqlSave(ctx context.Context) (n int, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fpau.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -288,7 +288,7 @@ func (fpau *FilePropertyAssignmentUpdate) sqlSave(ctx context.Context) (n int, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fpau.mutation.PropertyCleared() {
+	if _u.mutation.PropertyCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -301,7 +301,7 @@ func (fpau *FilePropertyAssignmentUpdate) sqlSave(ctx context.Context) (n int, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fpau.mutation.PropertyIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.PropertyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -317,8 +317,8 @@ func (fpau *FilePropertyAssignmentUpdate) sqlSave(ctx context.Context) (n int, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(fpau.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, fpau.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{filepropertyassignment.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -326,8 +326,8 @@ func (fpau *FilePropertyAssignmentUpdate) sqlSave(ctx context.Context) (n int, e
 		}
 		return 0, err
 	}
-	fpau.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // FilePropertyAssignmentUpdateOne is the builder for updating a single FilePropertyAssignment entity.
@@ -340,168 +340,168 @@ type FilePropertyAssignmentUpdateOne struct {
 }
 
 // SetFileID sets the "file_id" field.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetFileID(i int64) *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.SetFileID(i)
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) SetFileID(v int64) *FilePropertyAssignmentUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
 }
 
 // SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetNillableFileID(i *int64) *FilePropertyAssignmentUpdateOne {
-	if i != nil {
-		fpauo.SetFileID(*i)
+func (_u *FilePropertyAssignmentUpdateOne) SetNillableFileID(v *int64) *FilePropertyAssignmentUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
 	}
-	return fpauo
+	return _u
 }
 
 // SetPropertyID sets the "property_id" field.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetPropertyID(i int64) *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.SetPropertyID(i)
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) SetPropertyID(v int64) *FilePropertyAssignmentUpdateOne {
+	_u.mutation.SetPropertyID(v)
+	return _u
 }
 
 // SetNillablePropertyID sets the "property_id" field if the given value is not nil.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetNillablePropertyID(i *int64) *FilePropertyAssignmentUpdateOne {
-	if i != nil {
-		fpauo.SetPropertyID(*i)
+func (_u *FilePropertyAssignmentUpdateOne) SetNillablePropertyID(v *int64) *FilePropertyAssignmentUpdateOne {
+	if v != nil {
+		_u.SetPropertyID(*v)
 	}
-	return fpauo
+	return _u
 }
 
 // SetTextValue sets the "text_value" field.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetTextValue(s string) *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.SetTextValue(s)
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) SetTextValue(v string) *FilePropertyAssignmentUpdateOne {
+	_u.mutation.SetTextValue(v)
+	return _u
 }
 
 // SetNillableTextValue sets the "text_value" field if the given value is not nil.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetNillableTextValue(s *string) *FilePropertyAssignmentUpdateOne {
-	if s != nil {
-		fpauo.SetTextValue(*s)
+func (_u *FilePropertyAssignmentUpdateOne) SetNillableTextValue(v *string) *FilePropertyAssignmentUpdateOne {
+	if v != nil {
+		_u.SetTextValue(*v)
 	}
-	return fpauo
+	return _u
 }
 
 // ClearTextValue clears the value of the "text_value" field.
-func (fpauo *FilePropertyAssignmentUpdateOne) ClearTextValue() *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.ClearTextValue()
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) ClearTextValue() *FilePropertyAssignmentUpdateOne {
+	_u.mutation.ClearTextValue()
+	return _u
 }
 
 // SetNumberValue sets the "number_value" field.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetNumberValue(i int) *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.ResetNumberValue()
-	fpauo.mutation.SetNumberValue(i)
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) SetNumberValue(v int) *FilePropertyAssignmentUpdateOne {
+	_u.mutation.ResetNumberValue()
+	_u.mutation.SetNumberValue(v)
+	return _u
 }
 
 // SetNillableNumberValue sets the "number_value" field if the given value is not nil.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetNillableNumberValue(i *int) *FilePropertyAssignmentUpdateOne {
-	if i != nil {
-		fpauo.SetNumberValue(*i)
+func (_u *FilePropertyAssignmentUpdateOne) SetNillableNumberValue(v *int) *FilePropertyAssignmentUpdateOne {
+	if v != nil {
+		_u.SetNumberValue(*v)
 	}
-	return fpauo
+	return _u
 }
 
-// AddNumberValue adds i to the "number_value" field.
-func (fpauo *FilePropertyAssignmentUpdateOne) AddNumberValue(i int) *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.AddNumberValue(i)
-	return fpauo
+// AddNumberValue adds value to the "number_value" field.
+func (_u *FilePropertyAssignmentUpdateOne) AddNumberValue(v int) *FilePropertyAssignmentUpdateOne {
+	_u.mutation.AddNumberValue(v)
+	return _u
 }
 
 // ClearNumberValue clears the value of the "number_value" field.
-func (fpauo *FilePropertyAssignmentUpdateOne) ClearNumberValue() *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.ClearNumberValue()
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) ClearNumberValue() *FilePropertyAssignmentUpdateOne {
+	_u.mutation.ClearNumberValue()
+	return _u
 }
 
 // SetDateValue sets the "date_value" field.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetDateValue(t timex.Date) *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.SetDateValue(t)
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) SetDateValue(v timex.Date) *FilePropertyAssignmentUpdateOne {
+	_u.mutation.SetDateValue(v)
+	return _u
 }
 
 // SetNillableDateValue sets the "date_value" field if the given value is not nil.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetNillableDateValue(t *timex.Date) *FilePropertyAssignmentUpdateOne {
-	if t != nil {
-		fpauo.SetDateValue(*t)
+func (_u *FilePropertyAssignmentUpdateOne) SetNillableDateValue(v *timex.Date) *FilePropertyAssignmentUpdateOne {
+	if v != nil {
+		_u.SetDateValue(*v)
 	}
-	return fpauo
+	return _u
 }
 
 // ClearDateValue clears the value of the "date_value" field.
-func (fpauo *FilePropertyAssignmentUpdateOne) ClearDateValue() *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.ClearDateValue()
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) ClearDateValue() *FilePropertyAssignmentUpdateOne {
+	_u.mutation.ClearDateValue()
+	return _u
 }
 
 // SetBoolValue sets the "bool_value" field.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetBoolValue(b bool) *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.SetBoolValue(b)
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) SetBoolValue(v bool) *FilePropertyAssignmentUpdateOne {
+	_u.mutation.SetBoolValue(v)
+	return _u
 }
 
 // SetNillableBoolValue sets the "bool_value" field if the given value is not nil.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetNillableBoolValue(b *bool) *FilePropertyAssignmentUpdateOne {
-	if b != nil {
-		fpauo.SetBoolValue(*b)
+func (_u *FilePropertyAssignmentUpdateOne) SetNillableBoolValue(v *bool) *FilePropertyAssignmentUpdateOne {
+	if v != nil {
+		_u.SetBoolValue(*v)
 	}
-	return fpauo
+	return _u
 }
 
 // ClearBoolValue clears the value of the "bool_value" field.
-func (fpauo *FilePropertyAssignmentUpdateOne) ClearBoolValue() *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.ClearBoolValue()
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) ClearBoolValue() *FilePropertyAssignmentUpdateOne {
+	_u.mutation.ClearBoolValue()
+	return _u
 }
 
 // SetFile sets the "file" edge to the File entity.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetFile(f *File) *FilePropertyAssignmentUpdateOne {
-	return fpauo.SetFileID(f.ID)
+func (_u *FilePropertyAssignmentUpdateOne) SetFile(v *File) *FilePropertyAssignmentUpdateOne {
+	return _u.SetFileID(v.ID)
 }
 
 // SetProperty sets the "property" edge to the Property entity.
-func (fpauo *FilePropertyAssignmentUpdateOne) SetProperty(p *Property) *FilePropertyAssignmentUpdateOne {
-	return fpauo.SetPropertyID(p.ID)
+func (_u *FilePropertyAssignmentUpdateOne) SetProperty(v *Property) *FilePropertyAssignmentUpdateOne {
+	return _u.SetPropertyID(v.ID)
 }
 
 // Mutation returns the FilePropertyAssignmentMutation object of the builder.
-func (fpauo *FilePropertyAssignmentUpdateOne) Mutation() *FilePropertyAssignmentMutation {
-	return fpauo.mutation
+func (_u *FilePropertyAssignmentUpdateOne) Mutation() *FilePropertyAssignmentMutation {
+	return _u.mutation
 }
 
 // ClearFile clears the "file" edge to the File entity.
-func (fpauo *FilePropertyAssignmentUpdateOne) ClearFile() *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.ClearFile()
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) ClearFile() *FilePropertyAssignmentUpdateOne {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // ClearProperty clears the "property" edge to the Property entity.
-func (fpauo *FilePropertyAssignmentUpdateOne) ClearProperty() *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.ClearProperty()
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) ClearProperty() *FilePropertyAssignmentUpdateOne {
+	_u.mutation.ClearProperty()
+	return _u
 }
 
 // Where appends a list predicates to the FilePropertyAssignmentUpdate builder.
-func (fpauo *FilePropertyAssignmentUpdateOne) Where(ps ...predicate.FilePropertyAssignment) *FilePropertyAssignmentUpdateOne {
-	fpauo.mutation.Where(ps...)
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) Where(ps ...predicate.FilePropertyAssignment) *FilePropertyAssignmentUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (fpauo *FilePropertyAssignmentUpdateOne) Select(field string, fields ...string) *FilePropertyAssignmentUpdateOne {
-	fpauo.fields = append([]string{field}, fields...)
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) Select(field string, fields ...string) *FilePropertyAssignmentUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated FilePropertyAssignment entity.
-func (fpauo *FilePropertyAssignmentUpdateOne) Save(ctx context.Context) (*FilePropertyAssignment, error) {
-	return withHooks(ctx, fpauo.sqlSave, fpauo.mutation, fpauo.hooks)
+func (_u *FilePropertyAssignmentUpdateOne) Save(ctx context.Context) (*FilePropertyAssignment, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fpauo *FilePropertyAssignmentUpdateOne) SaveX(ctx context.Context) *FilePropertyAssignment {
-	node, err := fpauo.Save(ctx)
+func (_u *FilePropertyAssignmentUpdateOne) SaveX(ctx context.Context) *FilePropertyAssignment {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -509,49 +509,49 @@ func (fpauo *FilePropertyAssignmentUpdateOne) SaveX(ctx context.Context) *FilePr
 }
 
 // Exec executes the query on the entity.
-func (fpauo *FilePropertyAssignmentUpdateOne) Exec(ctx context.Context) error {
-	_, err := fpauo.Save(ctx)
+func (_u *FilePropertyAssignmentUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fpauo *FilePropertyAssignmentUpdateOne) ExecX(ctx context.Context) {
-	if err := fpauo.Exec(ctx); err != nil {
+func (_u *FilePropertyAssignmentUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (fpauo *FilePropertyAssignmentUpdateOne) check() error {
-	if fpauo.mutation.SpaceCleared() && len(fpauo.mutation.SpaceIDs()) > 0 {
+func (_u *FilePropertyAssignmentUpdateOne) check() error {
+	if _u.mutation.SpaceCleared() && len(_u.mutation.SpaceIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "FilePropertyAssignment.space"`)
 	}
-	if fpauo.mutation.FileCleared() && len(fpauo.mutation.FileIDs()) > 0 {
+	if _u.mutation.FileCleared() && len(_u.mutation.FileIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "FilePropertyAssignment.file"`)
 	}
-	if fpauo.mutation.PropertyCleared() && len(fpauo.mutation.PropertyIDs()) > 0 {
+	if _u.mutation.PropertyCleared() && len(_u.mutation.PropertyIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "FilePropertyAssignment.property"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (fpauo *FilePropertyAssignmentUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FilePropertyAssignmentUpdateOne {
-	fpauo.modifiers = append(fpauo.modifiers, modifiers...)
-	return fpauo
+func (_u *FilePropertyAssignmentUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FilePropertyAssignmentUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (fpauo *FilePropertyAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *FilePropertyAssignment, err error) {
-	if err := fpauo.check(); err != nil {
+func (_u *FilePropertyAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *FilePropertyAssignment, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(filepropertyassignment.Table, filepropertyassignment.Columns, sqlgraph.NewFieldSpec(filepropertyassignment.FieldID, field.TypeInt64))
-	id, ok := fpauo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`enttenant: missing "FilePropertyAssignment.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := fpauo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, filepropertyassignment.FieldID)
 		for _, f := range fields {
@@ -563,41 +563,41 @@ func (fpauo *FilePropertyAssignmentUpdateOne) sqlSave(ctx context.Context) (_nod
 			}
 		}
 	}
-	if ps := fpauo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := fpauo.mutation.TextValue(); ok {
+	if value, ok := _u.mutation.TextValue(); ok {
 		_spec.SetField(filepropertyassignment.FieldTextValue, field.TypeString, value)
 	}
-	if fpauo.mutation.TextValueCleared() {
+	if _u.mutation.TextValueCleared() {
 		_spec.ClearField(filepropertyassignment.FieldTextValue, field.TypeString)
 	}
-	if value, ok := fpauo.mutation.NumberValue(); ok {
+	if value, ok := _u.mutation.NumberValue(); ok {
 		_spec.SetField(filepropertyassignment.FieldNumberValue, field.TypeInt, value)
 	}
-	if value, ok := fpauo.mutation.AddedNumberValue(); ok {
+	if value, ok := _u.mutation.AddedNumberValue(); ok {
 		_spec.AddField(filepropertyassignment.FieldNumberValue, field.TypeInt, value)
 	}
-	if fpauo.mutation.NumberValueCleared() {
+	if _u.mutation.NumberValueCleared() {
 		_spec.ClearField(filepropertyassignment.FieldNumberValue, field.TypeInt)
 	}
-	if value, ok := fpauo.mutation.DateValue(); ok {
+	if value, ok := _u.mutation.DateValue(); ok {
 		_spec.SetField(filepropertyassignment.FieldDateValue, field.TypeTime, value)
 	}
-	if fpauo.mutation.DateValueCleared() {
+	if _u.mutation.DateValueCleared() {
 		_spec.ClearField(filepropertyassignment.FieldDateValue, field.TypeTime)
 	}
-	if value, ok := fpauo.mutation.BoolValue(); ok {
+	if value, ok := _u.mutation.BoolValue(); ok {
 		_spec.SetField(filepropertyassignment.FieldBoolValue, field.TypeBool, value)
 	}
-	if fpauo.mutation.BoolValueCleared() {
+	if _u.mutation.BoolValueCleared() {
 		_spec.ClearField(filepropertyassignment.FieldBoolValue, field.TypeBool)
 	}
-	if fpauo.mutation.FileCleared() {
+	if _u.mutation.FileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -610,7 +610,7 @@ func (fpauo *FilePropertyAssignmentUpdateOne) sqlSave(ctx context.Context) (_nod
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fpauo.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -626,7 +626,7 @@ func (fpauo *FilePropertyAssignmentUpdateOne) sqlSave(ctx context.Context) (_nod
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fpauo.mutation.PropertyCleared() {
+	if _u.mutation.PropertyCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -639,7 +639,7 @@ func (fpauo *FilePropertyAssignmentUpdateOne) sqlSave(ctx context.Context) (_nod
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fpauo.mutation.PropertyIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.PropertyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -655,11 +655,11 @@ func (fpauo *FilePropertyAssignmentUpdateOne) sqlSave(ctx context.Context) (_nod
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(fpauo.modifiers...)
-	_node = &FilePropertyAssignment{config: fpauo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &FilePropertyAssignment{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, fpauo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{filepropertyassignment.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -667,6 +667,6 @@ func (fpauo *FilePropertyAssignmentUpdateOne) sqlSave(ctx context.Context) (_nod
 		}
 		return nil, err
 	}
-	fpauo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

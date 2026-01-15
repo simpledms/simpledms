@@ -112,7 +112,7 @@ func (*Mail) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Mail fields.
-func (m *Mail) assignValues(columns []string, values []any) error {
+func (_m *Mail) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -123,76 +123,76 @@ func (m *Mail) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			m.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case mail.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				m.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case mail.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				m.CreatedBy = value.Int64
+				_m.CreatedBy = value.Int64
 			}
 		case mail.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				m.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case mail.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				m.UpdatedBy = value.Int64
+				_m.UpdatedBy = value.Int64
 			}
 		case mail.FieldSubject:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subject", values[i])
 			} else if value.Valid {
-				m.Subject = value.String
+				_m.Subject = value.String
 			}
 		case mail.FieldBody:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field body", values[i])
 			} else if value.Valid {
-				m.Body = value.String
+				_m.Body = value.String
 			}
 		case mail.FieldHTMLBody:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field html_body", values[i])
 			} else if value.Valid {
-				m.HTMLBody = value.String
+				_m.HTMLBody = value.String
 			}
 		case mail.FieldSentAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field sent_at", values[i])
 			} else if value.Valid {
-				m.SentAt = new(time.Time)
-				*m.SentAt = value.Time
+				_m.SentAt = new(time.Time)
+				*_m.SentAt = value.Time
 			}
 		case mail.FieldLastTriedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_tried_at", values[i])
 			} else if value.Valid {
-				m.LastTriedAt = value.Time
+				_m.LastTriedAt = value.Time
 			}
 		case mail.FieldRetryCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field retry_count", values[i])
 			} else if value.Valid {
-				m.RetryCount = int(value.Int64)
+				_m.RetryCount = int(value.Int64)
 			}
 		case mail.FieldReceiverID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field receiver_id", values[i])
 			} else if value.Valid {
-				m.ReceiverID = value.Int64
+				_m.ReceiverID = value.Int64
 			}
 		default:
-			m.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -200,82 +200,82 @@ func (m *Mail) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Mail.
 // This includes values selected through modifiers, order, etc.
-func (m *Mail) Value(name string) (ent.Value, error) {
-	return m.selectValues.Get(name)
+func (_m *Mail) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryCreator queries the "creator" edge of the Mail entity.
-func (m *Mail) QueryCreator() *AccountQuery {
-	return NewMailClient(m.config).QueryCreator(m)
+func (_m *Mail) QueryCreator() *AccountQuery {
+	return NewMailClient(_m.config).QueryCreator(_m)
 }
 
 // QueryUpdater queries the "updater" edge of the Mail entity.
-func (m *Mail) QueryUpdater() *AccountQuery {
-	return NewMailClient(m.config).QueryUpdater(m)
+func (_m *Mail) QueryUpdater() *AccountQuery {
+	return NewMailClient(_m.config).QueryUpdater(_m)
 }
 
 // QueryReceiver queries the "receiver" edge of the Mail entity.
-func (m *Mail) QueryReceiver() *AccountQuery {
-	return NewMailClient(m.config).QueryReceiver(m)
+func (_m *Mail) QueryReceiver() *AccountQuery {
+	return NewMailClient(_m.config).QueryReceiver(_m)
 }
 
 // Update returns a builder for updating this Mail.
 // Note that you need to call Mail.Unwrap() before calling this method if this Mail
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (m *Mail) Update() *MailUpdateOne {
-	return NewMailClient(m.config).UpdateOne(m)
+func (_m *Mail) Update() *MailUpdateOne {
+	return NewMailClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Mail entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (m *Mail) Unwrap() *Mail {
-	_tx, ok := m.config.driver.(*txDriver)
+func (_m *Mail) Unwrap() *Mail {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("entmain: Mail is not a transactional entity")
 	}
-	m.config.driver = _tx.drv
-	return m
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (m *Mail) String() string {
+func (_m *Mail) String() string {
 	var builder strings.Builder
 	builder.WriteString("Mail(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(m.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", m.CreatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(m.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", m.UpdatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("subject=")
-	builder.WriteString(m.Subject)
+	builder.WriteString(_m.Subject)
 	builder.WriteString(", ")
 	builder.WriteString("body=")
-	builder.WriteString(m.Body)
+	builder.WriteString(_m.Body)
 	builder.WriteString(", ")
 	builder.WriteString("html_body=")
-	builder.WriteString(m.HTMLBody)
+	builder.WriteString(_m.HTMLBody)
 	builder.WriteString(", ")
-	if v := m.SentAt; v != nil {
+	if v := _m.SentAt; v != nil {
 		builder.WriteString("sent_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("last_tried_at=")
-	builder.WriteString(m.LastTriedAt.Format(time.ANSIC))
+	builder.WriteString(_m.LastTriedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("retry_count=")
-	builder.WriteString(fmt.Sprintf("%v", m.RetryCount))
+	builder.WriteString(fmt.Sprintf("%v", _m.RetryCount))
 	builder.WriteString(", ")
 	builder.WriteString("receiver_id=")
-	builder.WriteString(fmt.Sprintf("%v", m.ReceiverID))
+	builder.WriteString(fmt.Sprintf("%v", _m.ReceiverID))
 	builder.WriteByte(')')
 	return builder.String()
 }

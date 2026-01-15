@@ -28,226 +28,226 @@ type SpaceCreate struct {
 }
 
 // SetPublicID sets the "public_id" field.
-func (sc *SpaceCreate) SetPublicID(et entx.CIText) *SpaceCreate {
-	sc.mutation.SetPublicID(et)
-	return sc
+func (_c *SpaceCreate) SetPublicID(v entx.CIText) *SpaceCreate {
+	_c.mutation.SetPublicID(v)
+	return _c
 }
 
 // SetNillablePublicID sets the "public_id" field if the given value is not nil.
-func (sc *SpaceCreate) SetNillablePublicID(et *entx.CIText) *SpaceCreate {
-	if et != nil {
-		sc.SetPublicID(*et)
+func (_c *SpaceCreate) SetNillablePublicID(v *entx.CIText) *SpaceCreate {
+	if v != nil {
+		_c.SetPublicID(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (sc *SpaceCreate) SetDeletedBy(i int64) *SpaceCreate {
-	sc.mutation.SetDeletedBy(i)
-	return sc
+func (_c *SpaceCreate) SetDeletedBy(v int64) *SpaceCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (sc *SpaceCreate) SetNillableDeletedBy(i *int64) *SpaceCreate {
-	if i != nil {
-		sc.SetDeletedBy(*i)
+func (_c *SpaceCreate) SetNillableDeletedBy(v *int64) *SpaceCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (sc *SpaceCreate) SetDeletedAt(t time.Time) *SpaceCreate {
-	sc.mutation.SetDeletedAt(t)
-	return sc
+func (_c *SpaceCreate) SetDeletedAt(v time.Time) *SpaceCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (sc *SpaceCreate) SetNillableDeletedAt(t *time.Time) *SpaceCreate {
-	if t != nil {
-		sc.SetDeletedAt(*t)
+func (_c *SpaceCreate) SetNillableDeletedAt(v *time.Time) *SpaceCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (sc *SpaceCreate) SetName(s string) *SpaceCreate {
-	sc.mutation.SetName(s)
-	return sc
+func (_c *SpaceCreate) SetName(v string) *SpaceCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetIcon sets the "icon" field.
-func (sc *SpaceCreate) SetIcon(s string) *SpaceCreate {
-	sc.mutation.SetIcon(s)
-	return sc
+func (_c *SpaceCreate) SetIcon(v string) *SpaceCreate {
+	_c.mutation.SetIcon(v)
+	return _c
 }
 
 // SetNillableIcon sets the "icon" field if the given value is not nil.
-func (sc *SpaceCreate) SetNillableIcon(s *string) *SpaceCreate {
-	if s != nil {
-		sc.SetIcon(*s)
+func (_c *SpaceCreate) SetNillableIcon(v *string) *SpaceCreate {
+	if v != nil {
+		_c.SetIcon(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (sc *SpaceCreate) SetDescription(s string) *SpaceCreate {
-	sc.mutation.SetDescription(s)
-	return sc
+func (_c *SpaceCreate) SetDescription(v string) *SpaceCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (sc *SpaceCreate) SetNillableDescription(s *string) *SpaceCreate {
-	if s != nil {
-		sc.SetDescription(*s)
+func (_c *SpaceCreate) SetNillableDescription(v *string) *SpaceCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetIsFolderMode sets the "is_folder_mode" field.
-func (sc *SpaceCreate) SetIsFolderMode(b bool) *SpaceCreate {
-	sc.mutation.SetIsFolderMode(b)
-	return sc
+func (_c *SpaceCreate) SetIsFolderMode(v bool) *SpaceCreate {
+	_c.mutation.SetIsFolderMode(v)
+	return _c
 }
 
 // SetNillableIsFolderMode sets the "is_folder_mode" field if the given value is not nil.
-func (sc *SpaceCreate) SetNillableIsFolderMode(b *bool) *SpaceCreate {
-	if b != nil {
-		sc.SetIsFolderMode(*b)
+func (_c *SpaceCreate) SetNillableIsFolderMode(v *bool) *SpaceCreate {
+	if v != nil {
+		_c.SetIsFolderMode(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (sc *SpaceCreate) SetID(i int64) *SpaceCreate {
-	sc.mutation.SetID(i)
-	return sc
+func (_c *SpaceCreate) SetID(v int64) *SpaceCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetDeleterID sets the "deleter" edge to the User entity by ID.
-func (sc *SpaceCreate) SetDeleterID(id int64) *SpaceCreate {
-	sc.mutation.SetDeleterID(id)
-	return sc
+func (_c *SpaceCreate) SetDeleterID(id int64) *SpaceCreate {
+	_c.mutation.SetDeleterID(id)
+	return _c
 }
 
 // SetNillableDeleterID sets the "deleter" edge to the User entity by ID if the given value is not nil.
-func (sc *SpaceCreate) SetNillableDeleterID(id *int64) *SpaceCreate {
+func (_c *SpaceCreate) SetNillableDeleterID(id *int64) *SpaceCreate {
 	if id != nil {
-		sc = sc.SetDeleterID(*id)
+		_c = _c.SetDeleterID(*id)
 	}
-	return sc
+	return _c
 }
 
 // SetDeleter sets the "deleter" edge to the User entity.
-func (sc *SpaceCreate) SetDeleter(u *User) *SpaceCreate {
-	return sc.SetDeleterID(u.ID)
+func (_c *SpaceCreate) SetDeleter(v *User) *SpaceCreate {
+	return _c.SetDeleterID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (sc *SpaceCreate) AddFileIDs(ids ...int64) *SpaceCreate {
-	sc.mutation.AddFileIDs(ids...)
-	return sc
+func (_c *SpaceCreate) AddFileIDs(ids ...int64) *SpaceCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (sc *SpaceCreate) AddFiles(f ...*File) *SpaceCreate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *SpaceCreate) AddFiles(v ...*File) *SpaceCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (sc *SpaceCreate) AddUserIDs(ids ...int64) *SpaceCreate {
-	sc.mutation.AddUserIDs(ids...)
-	return sc
+func (_c *SpaceCreate) AddUserIDs(ids ...int64) *SpaceCreate {
+	_c.mutation.AddUserIDs(ids...)
+	return _c
 }
 
 // AddUsers adds the "users" edges to the User entity.
-func (sc *SpaceCreate) AddUsers(u ...*User) *SpaceCreate {
-	ids := make([]int64, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_c *SpaceCreate) AddUsers(v ...*User) *SpaceCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddUserIDs(ids...)
+	return _c.AddUserIDs(ids...)
 }
 
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
-func (sc *SpaceCreate) AddTagIDs(ids ...int64) *SpaceCreate {
-	sc.mutation.AddTagIDs(ids...)
-	return sc
+func (_c *SpaceCreate) AddTagIDs(ids ...int64) *SpaceCreate {
+	_c.mutation.AddTagIDs(ids...)
+	return _c
 }
 
 // AddTags adds the "tags" edges to the Tag entity.
-func (sc *SpaceCreate) AddTags(t ...*Tag) *SpaceCreate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *SpaceCreate) AddTags(v ...*Tag) *SpaceCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddTagIDs(ids...)
+	return _c.AddTagIDs(ids...)
 }
 
 // AddDocumentTypeIDs adds the "document_types" edge to the DocumentType entity by IDs.
-func (sc *SpaceCreate) AddDocumentTypeIDs(ids ...int64) *SpaceCreate {
-	sc.mutation.AddDocumentTypeIDs(ids...)
-	return sc
+func (_c *SpaceCreate) AddDocumentTypeIDs(ids ...int64) *SpaceCreate {
+	_c.mutation.AddDocumentTypeIDs(ids...)
+	return _c
 }
 
 // AddDocumentTypes adds the "document_types" edges to the DocumentType entity.
-func (sc *SpaceCreate) AddDocumentTypes(d ...*DocumentType) *SpaceCreate {
-	ids := make([]int64, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_c *SpaceCreate) AddDocumentTypes(v ...*DocumentType) *SpaceCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddDocumentTypeIDs(ids...)
+	return _c.AddDocumentTypeIDs(ids...)
 }
 
 // AddPropertyIDs adds the "properties" edge to the Property entity by IDs.
-func (sc *SpaceCreate) AddPropertyIDs(ids ...int64) *SpaceCreate {
-	sc.mutation.AddPropertyIDs(ids...)
-	return sc
+func (_c *SpaceCreate) AddPropertyIDs(ids ...int64) *SpaceCreate {
+	_c.mutation.AddPropertyIDs(ids...)
+	return _c
 }
 
 // AddProperties adds the "properties" edges to the Property entity.
-func (sc *SpaceCreate) AddProperties(p ...*Property) *SpaceCreate {
-	ids := make([]int64, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *SpaceCreate) AddProperties(v ...*Property) *SpaceCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddPropertyIDs(ids...)
+	return _c.AddPropertyIDs(ids...)
 }
 
 // AddUserAssignmentIDs adds the "user_assignment" edge to the SpaceUserAssignment entity by IDs.
-func (sc *SpaceCreate) AddUserAssignmentIDs(ids ...int64) *SpaceCreate {
-	sc.mutation.AddUserAssignmentIDs(ids...)
-	return sc
+func (_c *SpaceCreate) AddUserAssignmentIDs(ids ...int64) *SpaceCreate {
+	_c.mutation.AddUserAssignmentIDs(ids...)
+	return _c
 }
 
 // AddUserAssignment adds the "user_assignment" edges to the SpaceUserAssignment entity.
-func (sc *SpaceCreate) AddUserAssignment(s ...*SpaceUserAssignment) *SpaceCreate {
-	ids := make([]int64, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *SpaceCreate) AddUserAssignment(v ...*SpaceUserAssignment) *SpaceCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddUserAssignmentIDs(ids...)
+	return _c.AddUserAssignmentIDs(ids...)
 }
 
 // Mutation returns the SpaceMutation object of the builder.
-func (sc *SpaceCreate) Mutation() *SpaceMutation {
-	return sc.mutation
+func (_c *SpaceCreate) Mutation() *SpaceMutation {
+	return _c.mutation
 }
 
 // Save creates the Space in the database.
-func (sc *SpaceCreate) Save(ctx context.Context) (*Space, error) {
-	if err := sc.defaults(); err != nil {
+func (_c *SpaceCreate) Save(ctx context.Context) (*Space, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, sc.sqlSave, sc.mutation, sc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (sc *SpaceCreate) SaveX(ctx context.Context) *Space {
-	v, err := sc.Save(ctx)
+func (_c *SpaceCreate) SaveX(ctx context.Context) *Space {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -255,54 +255,54 @@ func (sc *SpaceCreate) SaveX(ctx context.Context) *Space {
 }
 
 // Exec executes the query.
-func (sc *SpaceCreate) Exec(ctx context.Context) error {
-	_, err := sc.Save(ctx)
+func (_c *SpaceCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sc *SpaceCreate) ExecX(ctx context.Context) {
-	if err := sc.Exec(ctx); err != nil {
+func (_c *SpaceCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sc *SpaceCreate) defaults() error {
-	if _, ok := sc.mutation.PublicID(); !ok {
+func (_c *SpaceCreate) defaults() error {
+	if _, ok := _c.mutation.PublicID(); !ok {
 		if space.DefaultPublicID == nil {
 			return fmt.Errorf("enttenant: uninitialized space.DefaultPublicID (forgotten import enttenant/runtime?)")
 		}
 		v := space.DefaultPublicID()
-		sc.mutation.SetPublicID(v)
+		_c.mutation.SetPublicID(v)
 	}
-	if _, ok := sc.mutation.IsFolderMode(); !ok {
+	if _, ok := _c.mutation.IsFolderMode(); !ok {
 		v := space.DefaultIsFolderMode
-		sc.mutation.SetIsFolderMode(v)
+		_c.mutation.SetIsFolderMode(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sc *SpaceCreate) check() error {
-	if _, ok := sc.mutation.PublicID(); !ok {
+func (_c *SpaceCreate) check() error {
+	if _, ok := _c.mutation.PublicID(); !ok {
 		return &ValidationError{Name: "public_id", err: errors.New(`enttenant: missing required field "Space.public_id"`)}
 	}
-	if _, ok := sc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`enttenant: missing required field "Space.name"`)}
 	}
-	if _, ok := sc.mutation.IsFolderMode(); !ok {
+	if _, ok := _c.mutation.IsFolderMode(); !ok {
 		return &ValidationError{Name: "is_folder_mode", err: errors.New(`enttenant: missing required field "Space.is_folder_mode"`)}
 	}
 	return nil
 }
 
-func (sc *SpaceCreate) sqlSave(ctx context.Context) (*Space, error) {
-	if err := sc.check(); err != nil {
+func (_c *SpaceCreate) sqlSave(ctx context.Context) (*Space, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := sc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, sc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -312,45 +312,45 @@ func (sc *SpaceCreate) sqlSave(ctx context.Context) (*Space, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	sc.mutation.id = &_node.ID
-	sc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (sc *SpaceCreate) createSpec() (*Space, *sqlgraph.CreateSpec) {
+func (_c *SpaceCreate) createSpec() (*Space, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Space{config: sc.config}
+		_node = &Space{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(space.Table, sqlgraph.NewFieldSpec(space.FieldID, field.TypeInt64))
 	)
-	if id, ok := sc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := sc.mutation.PublicID(); ok {
+	if value, ok := _c.mutation.PublicID(); ok {
 		_spec.SetField(space.FieldPublicID, field.TypeString, value)
 		_node.PublicID = value
 	}
-	if value, ok := sc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(space.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := sc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(space.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := sc.mutation.Icon(); ok {
+	if value, ok := _c.mutation.Icon(); ok {
 		_spec.SetField(space.FieldIcon, field.TypeString, value)
 		_node.Icon = value
 	}
-	if value, ok := sc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(space.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := sc.mutation.IsFolderMode(); ok {
+	if value, ok := _c.mutation.IsFolderMode(); ok {
 		_spec.SetField(space.FieldIsFolderMode, field.TypeBool, value)
 		_node.IsFolderMode = value
 	}
-	if nodes := sc.mutation.DeleterIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.DeleterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -367,7 +367,7 @@ func (sc *SpaceCreate) createSpec() (*Space, *sqlgraph.CreateSpec) {
 		_node.DeletedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -383,7 +383,7 @@ func (sc *SpaceCreate) createSpec() (*Space, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -397,13 +397,13 @@ func (sc *SpaceCreate) createSpec() (*Space, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &SpaceUserAssignmentCreate{config: sc.config, mutation: newSpaceUserAssignmentMutation(sc.config, OpCreate)}
+		createE := &SpaceUserAssignmentCreate{config: _c.config, mutation: newSpaceUserAssignmentMutation(_c.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.TagsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -419,7 +419,7 @@ func (sc *SpaceCreate) createSpec() (*Space, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.DocumentTypesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.DocumentTypesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -435,7 +435,7 @@ func (sc *SpaceCreate) createSpec() (*Space, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.PropertiesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.PropertiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -451,7 +451,7 @@ func (sc *SpaceCreate) createSpec() (*Space, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.UserAssignmentIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UserAssignmentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -478,16 +478,16 @@ type SpaceCreateBulk struct {
 }
 
 // Save creates the Space entities in the database.
-func (scb *SpaceCreateBulk) Save(ctx context.Context) ([]*Space, error) {
-	if scb.err != nil {
-		return nil, scb.err
+func (_c *SpaceCreateBulk) Save(ctx context.Context) ([]*Space, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(scb.builders))
-	nodes := make([]*Space, len(scb.builders))
-	mutators := make([]Mutator, len(scb.builders))
-	for i := range scb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Space, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := scb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*SpaceMutation)
@@ -501,11 +501,11 @@ func (scb *SpaceCreateBulk) Save(ctx context.Context) ([]*Space, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, scb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, scb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -529,7 +529,7 @@ func (scb *SpaceCreateBulk) Save(ctx context.Context) ([]*Space, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, scb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -537,8 +537,8 @@ func (scb *SpaceCreateBulk) Save(ctx context.Context) ([]*Space, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (scb *SpaceCreateBulk) SaveX(ctx context.Context) []*Space {
-	v, err := scb.Save(ctx)
+func (_c *SpaceCreateBulk) SaveX(ctx context.Context) []*Space {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -546,14 +546,14 @@ func (scb *SpaceCreateBulk) SaveX(ctx context.Context) []*Space {
 }
 
 // Exec executes the query.
-func (scb *SpaceCreateBulk) Exec(ctx context.Context) error {
-	_, err := scb.Save(ctx)
+func (_c *SpaceCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scb *SpaceCreateBulk) ExecX(ctx context.Context) {
-	if err := scb.Exec(ctx); err != nil {
+func (_c *SpaceCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

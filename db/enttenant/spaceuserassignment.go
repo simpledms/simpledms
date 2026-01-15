@@ -123,7 +123,7 @@ func (*SpaceUserAssignment) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the SpaceUserAssignment fields.
-func (sua *SpaceUserAssignment) assignValues(columns []string, values []any) error {
+func (_m *SpaceUserAssignment) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -134,57 +134,57 @@ func (sua *SpaceUserAssignment) assignValues(columns []string, values []any) err
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			sua.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case spaceuserassignment.FieldSpaceID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
-				sua.SpaceID = value.Int64
+				_m.SpaceID = value.Int64
 			}
 		case spaceuserassignment.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				sua.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case spaceuserassignment.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				sua.CreatedBy = value.Int64
+				_m.CreatedBy = value.Int64
 			}
 		case spaceuserassignment.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				sua.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case spaceuserassignment.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				sua.UpdatedBy = value.Int64
+				_m.UpdatedBy = value.Int64
 			}
 		case spaceuserassignment.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				sua.UserID = value.Int64
+				_m.UserID = value.Int64
 			}
 		case spaceuserassignment.FieldRole:
 			if value, ok := values[i].(*spacerole.SpaceRole); !ok {
 				return fmt.Errorf("unexpected type %T for field role", values[i])
 			} else if value != nil {
-				sua.Role = *value
+				_m.Role = *value
 			}
 		case spaceuserassignment.FieldIsDefault:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_default", values[i])
 			} else if value.Valid {
-				sua.IsDefault = value.Bool
+				_m.IsDefault = value.Bool
 			}
 		default:
-			sua.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -192,76 +192,76 @@ func (sua *SpaceUserAssignment) assignValues(columns []string, values []any) err
 
 // Value returns the ent.Value that was dynamically selected and assigned to the SpaceUserAssignment.
 // This includes values selected through modifiers, order, etc.
-func (sua *SpaceUserAssignment) Value(name string) (ent.Value, error) {
-	return sua.selectValues.Get(name)
+func (_m *SpaceUserAssignment) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QuerySpace queries the "space" edge of the SpaceUserAssignment entity.
-func (sua *SpaceUserAssignment) QuerySpace() *SpaceQuery {
-	return NewSpaceUserAssignmentClient(sua.config).QuerySpace(sua)
+func (_m *SpaceUserAssignment) QuerySpace() *SpaceQuery {
+	return NewSpaceUserAssignmentClient(_m.config).QuerySpace(_m)
 }
 
 // QueryCreator queries the "creator" edge of the SpaceUserAssignment entity.
-func (sua *SpaceUserAssignment) QueryCreator() *UserQuery {
-	return NewSpaceUserAssignmentClient(sua.config).QueryCreator(sua)
+func (_m *SpaceUserAssignment) QueryCreator() *UserQuery {
+	return NewSpaceUserAssignmentClient(_m.config).QueryCreator(_m)
 }
 
 // QueryUpdater queries the "updater" edge of the SpaceUserAssignment entity.
-func (sua *SpaceUserAssignment) QueryUpdater() *UserQuery {
-	return NewSpaceUserAssignmentClient(sua.config).QueryUpdater(sua)
+func (_m *SpaceUserAssignment) QueryUpdater() *UserQuery {
+	return NewSpaceUserAssignmentClient(_m.config).QueryUpdater(_m)
 }
 
 // QueryUser queries the "user" edge of the SpaceUserAssignment entity.
-func (sua *SpaceUserAssignment) QueryUser() *UserQuery {
-	return NewSpaceUserAssignmentClient(sua.config).QueryUser(sua)
+func (_m *SpaceUserAssignment) QueryUser() *UserQuery {
+	return NewSpaceUserAssignmentClient(_m.config).QueryUser(_m)
 }
 
 // Update returns a builder for updating this SpaceUserAssignment.
 // Note that you need to call SpaceUserAssignment.Unwrap() before calling this method if this SpaceUserAssignment
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (sua *SpaceUserAssignment) Update() *SpaceUserAssignmentUpdateOne {
-	return NewSpaceUserAssignmentClient(sua.config).UpdateOne(sua)
+func (_m *SpaceUserAssignment) Update() *SpaceUserAssignmentUpdateOne {
+	return NewSpaceUserAssignmentClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the SpaceUserAssignment entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (sua *SpaceUserAssignment) Unwrap() *SpaceUserAssignment {
-	_tx, ok := sua.config.driver.(*txDriver)
+func (_m *SpaceUserAssignment) Unwrap() *SpaceUserAssignment {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: SpaceUserAssignment is not a transactional entity")
 	}
-	sua.config.driver = _tx.drv
-	return sua
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (sua *SpaceUserAssignment) String() string {
+func (_m *SpaceUserAssignment) String() string {
 	var builder strings.Builder
 	builder.WriteString("SpaceUserAssignment(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", sua.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("space_id=")
-	builder.WriteString(fmt.Sprintf("%v", sua.SpaceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(sua.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", sua.CreatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(sua.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", sua.UpdatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", sua.UserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
 	builder.WriteString(", ")
 	builder.WriteString("role=")
-	builder.WriteString(fmt.Sprintf("%v", sua.Role))
+	builder.WriteString(fmt.Sprintf("%v", _m.Role))
 	builder.WriteString(", ")
 	builder.WriteString("is_default=")
-	builder.WriteString(fmt.Sprintf("%v", sua.IsDefault))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsDefault))
 	builder.WriteByte(')')
 	return builder.String()
 }

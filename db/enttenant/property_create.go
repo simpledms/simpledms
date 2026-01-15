@@ -24,94 +24,94 @@ type PropertyCreate struct {
 }
 
 // SetSpaceID sets the "space_id" field.
-func (pc *PropertyCreate) SetSpaceID(i int64) *PropertyCreate {
-	pc.mutation.SetSpaceID(i)
-	return pc
+func (_c *PropertyCreate) SetSpaceID(v int64) *PropertyCreate {
+	_c.mutation.SetSpaceID(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (pc *PropertyCreate) SetName(s string) *PropertyCreate {
-	pc.mutation.SetName(s)
-	return pc
+func (_c *PropertyCreate) SetName(v string) *PropertyCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetType sets the "type" field.
-func (pc *PropertyCreate) SetType(ft fieldtype.FieldType) *PropertyCreate {
-	pc.mutation.SetType(ft)
-	return pc
+func (_c *PropertyCreate) SetType(v fieldtype.FieldType) *PropertyCreate {
+	_c.mutation.SetType(v)
+	return _c
 }
 
 // SetUnit sets the "unit" field.
-func (pc *PropertyCreate) SetUnit(s string) *PropertyCreate {
-	pc.mutation.SetUnit(s)
-	return pc
+func (_c *PropertyCreate) SetUnit(v string) *PropertyCreate {
+	_c.mutation.SetUnit(v)
+	return _c
 }
 
 // SetNillableUnit sets the "unit" field if the given value is not nil.
-func (pc *PropertyCreate) SetNillableUnit(s *string) *PropertyCreate {
-	if s != nil {
-		pc.SetUnit(*s)
+func (_c *PropertyCreate) SetNillableUnit(v *string) *PropertyCreate {
+	if v != nil {
+		_c.SetUnit(*v)
 	}
-	return pc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (pc *PropertyCreate) SetID(i int64) *PropertyCreate {
-	pc.mutation.SetID(i)
-	return pc
+func (_c *PropertyCreate) SetID(v int64) *PropertyCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetSpace sets the "space" edge to the Space entity.
-func (pc *PropertyCreate) SetSpace(s *Space) *PropertyCreate {
-	return pc.SetSpaceID(s.ID)
+func (_c *PropertyCreate) SetSpace(v *Space) *PropertyCreate {
+	return _c.SetSpaceID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (pc *PropertyCreate) AddFileIDs(ids ...int64) *PropertyCreate {
-	pc.mutation.AddFileIDs(ids...)
-	return pc
+func (_c *PropertyCreate) AddFileIDs(ids ...int64) *PropertyCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (pc *PropertyCreate) AddFiles(f ...*File) *PropertyCreate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *PropertyCreate) AddFiles(v ...*File) *PropertyCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // AddFileAssignmentIDs adds the "file_assignments" edge to the FilePropertyAssignment entity by IDs.
-func (pc *PropertyCreate) AddFileAssignmentIDs(ids ...int64) *PropertyCreate {
-	pc.mutation.AddFileAssignmentIDs(ids...)
-	return pc
+func (_c *PropertyCreate) AddFileAssignmentIDs(ids ...int64) *PropertyCreate {
+	_c.mutation.AddFileAssignmentIDs(ids...)
+	return _c
 }
 
 // AddFileAssignments adds the "file_assignments" edges to the FilePropertyAssignment entity.
-func (pc *PropertyCreate) AddFileAssignments(f ...*FilePropertyAssignment) *PropertyCreate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *PropertyCreate) AddFileAssignments(v ...*FilePropertyAssignment) *PropertyCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pc.AddFileAssignmentIDs(ids...)
+	return _c.AddFileAssignmentIDs(ids...)
 }
 
 // Mutation returns the PropertyMutation object of the builder.
-func (pc *PropertyCreate) Mutation() *PropertyMutation {
-	return pc.mutation
+func (_c *PropertyCreate) Mutation() *PropertyMutation {
+	return _c.mutation
 }
 
 // Save creates the Property in the database.
-func (pc *PropertyCreate) Save(ctx context.Context) (*Property, error) {
-	if err := pc.defaults(); err != nil {
+func (_c *PropertyCreate) Save(ctx context.Context) (*Property, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, pc.sqlSave, pc.mutation, pc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (pc *PropertyCreate) SaveX(ctx context.Context) *Property {
-	v, err := pc.Save(ctx)
+func (_c *PropertyCreate) SaveX(ctx context.Context) *Property {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -119,58 +119,58 @@ func (pc *PropertyCreate) SaveX(ctx context.Context) *Property {
 }
 
 // Exec executes the query.
-func (pc *PropertyCreate) Exec(ctx context.Context) error {
-	_, err := pc.Save(ctx)
+func (_c *PropertyCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pc *PropertyCreate) ExecX(ctx context.Context) {
-	if err := pc.Exec(ctx); err != nil {
+func (_c *PropertyCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (pc *PropertyCreate) defaults() error {
-	if _, ok := pc.mutation.Unit(); !ok {
+func (_c *PropertyCreate) defaults() error {
+	if _, ok := _c.mutation.Unit(); !ok {
 		v := property.DefaultUnit
-		pc.mutation.SetUnit(v)
+		_c.mutation.SetUnit(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (pc *PropertyCreate) check() error {
-	if _, ok := pc.mutation.SpaceID(); !ok {
+func (_c *PropertyCreate) check() error {
+	if _, ok := _c.mutation.SpaceID(); !ok {
 		return &ValidationError{Name: "space_id", err: errors.New(`enttenant: missing required field "Property.space_id"`)}
 	}
-	if _, ok := pc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`enttenant: missing required field "Property.name"`)}
 	}
-	if _, ok := pc.mutation.GetType(); !ok {
+	if _, ok := _c.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`enttenant: missing required field "Property.type"`)}
 	}
-	if v, ok := pc.mutation.GetType(); ok {
+	if v, ok := _c.mutation.GetType(); ok {
 		if err := property.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`enttenant: validator failed for field "Property.type": %w`, err)}
 		}
 	}
-	if _, ok := pc.mutation.Unit(); !ok {
+	if _, ok := _c.mutation.Unit(); !ok {
 		return &ValidationError{Name: "unit", err: errors.New(`enttenant: missing required field "Property.unit"`)}
 	}
-	if len(pc.mutation.SpaceIDs()) == 0 {
+	if len(_c.mutation.SpaceIDs()) == 0 {
 		return &ValidationError{Name: "space", err: errors.New(`enttenant: missing required edge "Property.space"`)}
 	}
 	return nil
 }
 
-func (pc *PropertyCreate) sqlSave(ctx context.Context) (*Property, error) {
-	if err := pc.check(); err != nil {
+func (_c *PropertyCreate) sqlSave(ctx context.Context) (*Property, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := pc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, pc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -180,33 +180,33 @@ func (pc *PropertyCreate) sqlSave(ctx context.Context) (*Property, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	pc.mutation.id = &_node.ID
-	pc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (pc *PropertyCreate) createSpec() (*Property, *sqlgraph.CreateSpec) {
+func (_c *PropertyCreate) createSpec() (*Property, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Property{config: pc.config}
+		_node = &Property{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(property.Table, sqlgraph.NewFieldSpec(property.FieldID, field.TypeInt64))
 	)
-	if id, ok := pc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := pc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(property.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := pc.mutation.GetType(); ok {
+	if value, ok := _c.mutation.GetType(); ok {
 		_spec.SetField(property.FieldType, field.TypeEnum, value)
 		_node.Type = value
 	}
-	if value, ok := pc.mutation.Unit(); ok {
+	if value, ok := _c.mutation.Unit(); ok {
 		_spec.SetField(property.FieldUnit, field.TypeString, value)
 		_node.Unit = value
 	}
-	if nodes := pc.mutation.SpaceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SpaceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -223,7 +223,7 @@ func (pc *PropertyCreate) createSpec() (*Property, *sqlgraph.CreateSpec) {
 		_node.SpaceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -239,7 +239,7 @@ func (pc *PropertyCreate) createSpec() (*Property, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.FileAssignmentsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FileAssignmentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -266,16 +266,16 @@ type PropertyCreateBulk struct {
 }
 
 // Save creates the Property entities in the database.
-func (pcb *PropertyCreateBulk) Save(ctx context.Context) ([]*Property, error) {
-	if pcb.err != nil {
-		return nil, pcb.err
+func (_c *PropertyCreateBulk) Save(ctx context.Context) ([]*Property, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(pcb.builders))
-	nodes := make([]*Property, len(pcb.builders))
-	mutators := make([]Mutator, len(pcb.builders))
-	for i := range pcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Property, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := pcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*PropertyMutation)
@@ -289,11 +289,11 @@ func (pcb *PropertyCreateBulk) Save(ctx context.Context) ([]*Property, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, pcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, pcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -317,7 +317,7 @@ func (pcb *PropertyCreateBulk) Save(ctx context.Context) ([]*Property, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, pcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -325,8 +325,8 @@ func (pcb *PropertyCreateBulk) Save(ctx context.Context) ([]*Property, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (pcb *PropertyCreateBulk) SaveX(ctx context.Context) []*Property {
-	v, err := pcb.Save(ctx)
+func (_c *PropertyCreateBulk) SaveX(ctx context.Context) []*Property {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -334,14 +334,14 @@ func (pcb *PropertyCreateBulk) SaveX(ctx context.Context) []*Property {
 }
 
 // Exec executes the query.
-func (pcb *PropertyCreateBulk) Exec(ctx context.Context) error {
-	_, err := pcb.Save(ctx)
+func (_c *PropertyCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pcb *PropertyCreateBulk) ExecX(ctx context.Context) {
-	if err := pcb.Exec(ctx); err != nil {
+func (_c *PropertyCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

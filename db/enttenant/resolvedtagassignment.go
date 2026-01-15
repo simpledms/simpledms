@@ -39,7 +39,7 @@ func (*ResolvedTagAssignment) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ResolvedTagAssignment fields.
-func (rta *ResolvedTagAssignment) assignValues(columns []string, values []any) error {
+func (_m *ResolvedTagAssignment) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -49,22 +49,22 @@ func (rta *ResolvedTagAssignment) assignValues(columns []string, values []any) e
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field tag_id", values[i])
 			} else if value.Valid {
-				rta.TagID = value.Int64
+				_m.TagID = value.Int64
 			}
 		case resolvedtagassignment.FieldFileID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field file_id", values[i])
 			} else if value.Valid {
-				rta.FileID = value.Int64
+				_m.FileID = value.Int64
 			}
 		case resolvedtagassignment.FieldSpaceID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
-				rta.SpaceID = value.Int64
+				_m.SpaceID = value.Int64
 			}
 		default:
-			rta.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -72,33 +72,33 @@ func (rta *ResolvedTagAssignment) assignValues(columns []string, values []any) e
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ResolvedTagAssignment.
 // This includes values selected through modifiers, order, etc.
-func (rta *ResolvedTagAssignment) Value(name string) (ent.Value, error) {
-	return rta.selectValues.Get(name)
+func (_m *ResolvedTagAssignment) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Unwrap unwraps the ResolvedTagAssignment entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (rta *ResolvedTagAssignment) Unwrap() *ResolvedTagAssignment {
-	_tx, ok := rta.config.driver.(*txDriver)
+func (_m *ResolvedTagAssignment) Unwrap() *ResolvedTagAssignment {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: ResolvedTagAssignment is not a transactional entity")
 	}
-	rta.config.driver = _tx.drv
-	return rta
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (rta *ResolvedTagAssignment) String() string {
+func (_m *ResolvedTagAssignment) String() string {
 	var builder strings.Builder
 	builder.WriteString("ResolvedTagAssignment(")
 	builder.WriteString("tag_id=")
-	builder.WriteString(fmt.Sprintf("%v", rta.TagID))
+	builder.WriteString(fmt.Sprintf("%v", _m.TagID))
 	builder.WriteString(", ")
 	builder.WriteString("file_id=")
-	builder.WriteString(fmt.Sprintf("%v", rta.FileID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FileID))
 	builder.WriteString(", ")
 	builder.WriteString("space_id=")
-	builder.WriteString(fmt.Sprintf("%v", rta.SpaceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
 	builder.WriteByte(')')
 	return builder.String()
 }

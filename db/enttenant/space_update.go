@@ -31,387 +31,387 @@ type SpaceUpdate struct {
 }
 
 // Where appends a list predicates to the SpaceUpdate builder.
-func (su *SpaceUpdate) Where(ps ...predicate.Space) *SpaceUpdate {
-	su.mutation.Where(ps...)
-	return su
+func (_u *SpaceUpdate) Where(ps ...predicate.Space) *SpaceUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetPublicID sets the "public_id" field.
-func (su *SpaceUpdate) SetPublicID(et entx.CIText) *SpaceUpdate {
-	su.mutation.SetPublicID(et)
-	return su
+func (_u *SpaceUpdate) SetPublicID(v entx.CIText) *SpaceUpdate {
+	_u.mutation.SetPublicID(v)
+	return _u
 }
 
 // SetNillablePublicID sets the "public_id" field if the given value is not nil.
-func (su *SpaceUpdate) SetNillablePublicID(et *entx.CIText) *SpaceUpdate {
-	if et != nil {
-		su.SetPublicID(*et)
+func (_u *SpaceUpdate) SetNillablePublicID(v *entx.CIText) *SpaceUpdate {
+	if v != nil {
+		_u.SetPublicID(*v)
 	}
-	return su
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (su *SpaceUpdate) SetDeletedBy(i int64) *SpaceUpdate {
-	su.mutation.SetDeletedBy(i)
-	return su
+func (_u *SpaceUpdate) SetDeletedBy(v int64) *SpaceUpdate {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (su *SpaceUpdate) SetNillableDeletedBy(i *int64) *SpaceUpdate {
-	if i != nil {
-		su.SetDeletedBy(*i)
+func (_u *SpaceUpdate) SetNillableDeletedBy(v *int64) *SpaceUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (su *SpaceUpdate) ClearDeletedBy() *SpaceUpdate {
-	su.mutation.ClearDeletedBy()
-	return su
+func (_u *SpaceUpdate) ClearDeletedBy() *SpaceUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (su *SpaceUpdate) SetDeletedAt(t time.Time) *SpaceUpdate {
-	su.mutation.SetDeletedAt(t)
-	return su
+func (_u *SpaceUpdate) SetDeletedAt(v time.Time) *SpaceUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (su *SpaceUpdate) SetNillableDeletedAt(t *time.Time) *SpaceUpdate {
-	if t != nil {
-		su.SetDeletedAt(*t)
+func (_u *SpaceUpdate) SetNillableDeletedAt(v *time.Time) *SpaceUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (su *SpaceUpdate) ClearDeletedAt() *SpaceUpdate {
-	su.mutation.ClearDeletedAt()
-	return su
+func (_u *SpaceUpdate) ClearDeletedAt() *SpaceUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (su *SpaceUpdate) SetName(s string) *SpaceUpdate {
-	su.mutation.SetName(s)
-	return su
+func (_u *SpaceUpdate) SetName(v string) *SpaceUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (su *SpaceUpdate) SetNillableName(s *string) *SpaceUpdate {
-	if s != nil {
-		su.SetName(*s)
+func (_u *SpaceUpdate) SetNillableName(v *string) *SpaceUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return su
+	return _u
 }
 
 // SetIcon sets the "icon" field.
-func (su *SpaceUpdate) SetIcon(s string) *SpaceUpdate {
-	su.mutation.SetIcon(s)
-	return su
+func (_u *SpaceUpdate) SetIcon(v string) *SpaceUpdate {
+	_u.mutation.SetIcon(v)
+	return _u
 }
 
 // SetNillableIcon sets the "icon" field if the given value is not nil.
-func (su *SpaceUpdate) SetNillableIcon(s *string) *SpaceUpdate {
-	if s != nil {
-		su.SetIcon(*s)
+func (_u *SpaceUpdate) SetNillableIcon(v *string) *SpaceUpdate {
+	if v != nil {
+		_u.SetIcon(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearIcon clears the value of the "icon" field.
-func (su *SpaceUpdate) ClearIcon() *SpaceUpdate {
-	su.mutation.ClearIcon()
-	return su
+func (_u *SpaceUpdate) ClearIcon() *SpaceUpdate {
+	_u.mutation.ClearIcon()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (su *SpaceUpdate) SetDescription(s string) *SpaceUpdate {
-	su.mutation.SetDescription(s)
-	return su
+func (_u *SpaceUpdate) SetDescription(v string) *SpaceUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (su *SpaceUpdate) SetNillableDescription(s *string) *SpaceUpdate {
-	if s != nil {
-		su.SetDescription(*s)
+func (_u *SpaceUpdate) SetNillableDescription(v *string) *SpaceUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return su
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (su *SpaceUpdate) ClearDescription() *SpaceUpdate {
-	su.mutation.ClearDescription()
-	return su
+func (_u *SpaceUpdate) ClearDescription() *SpaceUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetIsFolderMode sets the "is_folder_mode" field.
-func (su *SpaceUpdate) SetIsFolderMode(b bool) *SpaceUpdate {
-	su.mutation.SetIsFolderMode(b)
-	return su
+func (_u *SpaceUpdate) SetIsFolderMode(v bool) *SpaceUpdate {
+	_u.mutation.SetIsFolderMode(v)
+	return _u
 }
 
 // SetNillableIsFolderMode sets the "is_folder_mode" field if the given value is not nil.
-func (su *SpaceUpdate) SetNillableIsFolderMode(b *bool) *SpaceUpdate {
-	if b != nil {
-		su.SetIsFolderMode(*b)
+func (_u *SpaceUpdate) SetNillableIsFolderMode(v *bool) *SpaceUpdate {
+	if v != nil {
+		_u.SetIsFolderMode(*v)
 	}
-	return su
+	return _u
 }
 
 // SetDeleterID sets the "deleter" edge to the User entity by ID.
-func (su *SpaceUpdate) SetDeleterID(id int64) *SpaceUpdate {
-	su.mutation.SetDeleterID(id)
-	return su
+func (_u *SpaceUpdate) SetDeleterID(id int64) *SpaceUpdate {
+	_u.mutation.SetDeleterID(id)
+	return _u
 }
 
 // SetNillableDeleterID sets the "deleter" edge to the User entity by ID if the given value is not nil.
-func (su *SpaceUpdate) SetNillableDeleterID(id *int64) *SpaceUpdate {
+func (_u *SpaceUpdate) SetNillableDeleterID(id *int64) *SpaceUpdate {
 	if id != nil {
-		su = su.SetDeleterID(*id)
+		_u = _u.SetDeleterID(*id)
 	}
-	return su
+	return _u
 }
 
 // SetDeleter sets the "deleter" edge to the User entity.
-func (su *SpaceUpdate) SetDeleter(u *User) *SpaceUpdate {
-	return su.SetDeleterID(u.ID)
+func (_u *SpaceUpdate) SetDeleter(v *User) *SpaceUpdate {
+	return _u.SetDeleterID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (su *SpaceUpdate) AddFileIDs(ids ...int64) *SpaceUpdate {
-	su.mutation.AddFileIDs(ids...)
-	return su
+func (_u *SpaceUpdate) AddFileIDs(ids ...int64) *SpaceUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (su *SpaceUpdate) AddFiles(f ...*File) *SpaceUpdate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *SpaceUpdate) AddFiles(v ...*File) *SpaceUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (su *SpaceUpdate) AddUserIDs(ids ...int64) *SpaceUpdate {
-	su.mutation.AddUserIDs(ids...)
-	return su
+func (_u *SpaceUpdate) AddUserIDs(ids ...int64) *SpaceUpdate {
+	_u.mutation.AddUserIDs(ids...)
+	return _u
 }
 
 // AddUsers adds the "users" edges to the User entity.
-func (su *SpaceUpdate) AddUsers(u ...*User) *SpaceUpdate {
-	ids := make([]int64, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_u *SpaceUpdate) AddUsers(v ...*User) *SpaceUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddUserIDs(ids...)
+	return _u.AddUserIDs(ids...)
 }
 
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
-func (su *SpaceUpdate) AddTagIDs(ids ...int64) *SpaceUpdate {
-	su.mutation.AddTagIDs(ids...)
-	return su
+func (_u *SpaceUpdate) AddTagIDs(ids ...int64) *SpaceUpdate {
+	_u.mutation.AddTagIDs(ids...)
+	return _u
 }
 
 // AddTags adds the "tags" edges to the Tag entity.
-func (su *SpaceUpdate) AddTags(t ...*Tag) *SpaceUpdate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *SpaceUpdate) AddTags(v ...*Tag) *SpaceUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddTagIDs(ids...)
+	return _u.AddTagIDs(ids...)
 }
 
 // AddDocumentTypeIDs adds the "document_types" edge to the DocumentType entity by IDs.
-func (su *SpaceUpdate) AddDocumentTypeIDs(ids ...int64) *SpaceUpdate {
-	su.mutation.AddDocumentTypeIDs(ids...)
-	return su
+func (_u *SpaceUpdate) AddDocumentTypeIDs(ids ...int64) *SpaceUpdate {
+	_u.mutation.AddDocumentTypeIDs(ids...)
+	return _u
 }
 
 // AddDocumentTypes adds the "document_types" edges to the DocumentType entity.
-func (su *SpaceUpdate) AddDocumentTypes(d ...*DocumentType) *SpaceUpdate {
-	ids := make([]int64, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *SpaceUpdate) AddDocumentTypes(v ...*DocumentType) *SpaceUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddDocumentTypeIDs(ids...)
+	return _u.AddDocumentTypeIDs(ids...)
 }
 
 // AddPropertyIDs adds the "properties" edge to the Property entity by IDs.
-func (su *SpaceUpdate) AddPropertyIDs(ids ...int64) *SpaceUpdate {
-	su.mutation.AddPropertyIDs(ids...)
-	return su
+func (_u *SpaceUpdate) AddPropertyIDs(ids ...int64) *SpaceUpdate {
+	_u.mutation.AddPropertyIDs(ids...)
+	return _u
 }
 
 // AddProperties adds the "properties" edges to the Property entity.
-func (su *SpaceUpdate) AddProperties(p ...*Property) *SpaceUpdate {
-	ids := make([]int64, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *SpaceUpdate) AddProperties(v ...*Property) *SpaceUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddPropertyIDs(ids...)
+	return _u.AddPropertyIDs(ids...)
 }
 
 // AddUserAssignmentIDs adds the "user_assignment" edge to the SpaceUserAssignment entity by IDs.
-func (su *SpaceUpdate) AddUserAssignmentIDs(ids ...int64) *SpaceUpdate {
-	su.mutation.AddUserAssignmentIDs(ids...)
-	return su
+func (_u *SpaceUpdate) AddUserAssignmentIDs(ids ...int64) *SpaceUpdate {
+	_u.mutation.AddUserAssignmentIDs(ids...)
+	return _u
 }
 
 // AddUserAssignment adds the "user_assignment" edges to the SpaceUserAssignment entity.
-func (su *SpaceUpdate) AddUserAssignment(s ...*SpaceUserAssignment) *SpaceUpdate {
-	ids := make([]int64, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *SpaceUpdate) AddUserAssignment(v ...*SpaceUserAssignment) *SpaceUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddUserAssignmentIDs(ids...)
+	return _u.AddUserAssignmentIDs(ids...)
 }
 
 // Mutation returns the SpaceMutation object of the builder.
-func (su *SpaceUpdate) Mutation() *SpaceMutation {
-	return su.mutation
+func (_u *SpaceUpdate) Mutation() *SpaceMutation {
+	return _u.mutation
 }
 
 // ClearDeleter clears the "deleter" edge to the User entity.
-func (su *SpaceUpdate) ClearDeleter() *SpaceUpdate {
-	su.mutation.ClearDeleter()
-	return su
+func (_u *SpaceUpdate) ClearDeleter() *SpaceUpdate {
+	_u.mutation.ClearDeleter()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (su *SpaceUpdate) ClearFiles() *SpaceUpdate {
-	su.mutation.ClearFiles()
-	return su
+func (_u *SpaceUpdate) ClearFiles() *SpaceUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (su *SpaceUpdate) RemoveFileIDs(ids ...int64) *SpaceUpdate {
-	su.mutation.RemoveFileIDs(ids...)
-	return su
+func (_u *SpaceUpdate) RemoveFileIDs(ids ...int64) *SpaceUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (su *SpaceUpdate) RemoveFiles(f ...*File) *SpaceUpdate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *SpaceUpdate) RemoveFiles(v ...*File) *SpaceUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearUsers clears all "users" edges to the User entity.
-func (su *SpaceUpdate) ClearUsers() *SpaceUpdate {
-	su.mutation.ClearUsers()
-	return su
+func (_u *SpaceUpdate) ClearUsers() *SpaceUpdate {
+	_u.mutation.ClearUsers()
+	return _u
 }
 
 // RemoveUserIDs removes the "users" edge to User entities by IDs.
-func (su *SpaceUpdate) RemoveUserIDs(ids ...int64) *SpaceUpdate {
-	su.mutation.RemoveUserIDs(ids...)
-	return su
+func (_u *SpaceUpdate) RemoveUserIDs(ids ...int64) *SpaceUpdate {
+	_u.mutation.RemoveUserIDs(ids...)
+	return _u
 }
 
 // RemoveUsers removes "users" edges to User entities.
-func (su *SpaceUpdate) RemoveUsers(u ...*User) *SpaceUpdate {
-	ids := make([]int64, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_u *SpaceUpdate) RemoveUsers(v ...*User) *SpaceUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveUserIDs(ids...)
+	return _u.RemoveUserIDs(ids...)
 }
 
 // ClearTags clears all "tags" edges to the Tag entity.
-func (su *SpaceUpdate) ClearTags() *SpaceUpdate {
-	su.mutation.ClearTags()
-	return su
+func (_u *SpaceUpdate) ClearTags() *SpaceUpdate {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // RemoveTagIDs removes the "tags" edge to Tag entities by IDs.
-func (su *SpaceUpdate) RemoveTagIDs(ids ...int64) *SpaceUpdate {
-	su.mutation.RemoveTagIDs(ids...)
-	return su
+func (_u *SpaceUpdate) RemoveTagIDs(ids ...int64) *SpaceUpdate {
+	_u.mutation.RemoveTagIDs(ids...)
+	return _u
 }
 
 // RemoveTags removes "tags" edges to Tag entities.
-func (su *SpaceUpdate) RemoveTags(t ...*Tag) *SpaceUpdate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *SpaceUpdate) RemoveTags(v ...*Tag) *SpaceUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveTagIDs(ids...)
+	return _u.RemoveTagIDs(ids...)
 }
 
 // ClearDocumentTypes clears all "document_types" edges to the DocumentType entity.
-func (su *SpaceUpdate) ClearDocumentTypes() *SpaceUpdate {
-	su.mutation.ClearDocumentTypes()
-	return su
+func (_u *SpaceUpdate) ClearDocumentTypes() *SpaceUpdate {
+	_u.mutation.ClearDocumentTypes()
+	return _u
 }
 
 // RemoveDocumentTypeIDs removes the "document_types" edge to DocumentType entities by IDs.
-func (su *SpaceUpdate) RemoveDocumentTypeIDs(ids ...int64) *SpaceUpdate {
-	su.mutation.RemoveDocumentTypeIDs(ids...)
-	return su
+func (_u *SpaceUpdate) RemoveDocumentTypeIDs(ids ...int64) *SpaceUpdate {
+	_u.mutation.RemoveDocumentTypeIDs(ids...)
+	return _u
 }
 
 // RemoveDocumentTypes removes "document_types" edges to DocumentType entities.
-func (su *SpaceUpdate) RemoveDocumentTypes(d ...*DocumentType) *SpaceUpdate {
-	ids := make([]int64, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *SpaceUpdate) RemoveDocumentTypes(v ...*DocumentType) *SpaceUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveDocumentTypeIDs(ids...)
+	return _u.RemoveDocumentTypeIDs(ids...)
 }
 
 // ClearProperties clears all "properties" edges to the Property entity.
-func (su *SpaceUpdate) ClearProperties() *SpaceUpdate {
-	su.mutation.ClearProperties()
-	return su
+func (_u *SpaceUpdate) ClearProperties() *SpaceUpdate {
+	_u.mutation.ClearProperties()
+	return _u
 }
 
 // RemovePropertyIDs removes the "properties" edge to Property entities by IDs.
-func (su *SpaceUpdate) RemovePropertyIDs(ids ...int64) *SpaceUpdate {
-	su.mutation.RemovePropertyIDs(ids...)
-	return su
+func (_u *SpaceUpdate) RemovePropertyIDs(ids ...int64) *SpaceUpdate {
+	_u.mutation.RemovePropertyIDs(ids...)
+	return _u
 }
 
 // RemoveProperties removes "properties" edges to Property entities.
-func (su *SpaceUpdate) RemoveProperties(p ...*Property) *SpaceUpdate {
-	ids := make([]int64, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *SpaceUpdate) RemoveProperties(v ...*Property) *SpaceUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemovePropertyIDs(ids...)
+	return _u.RemovePropertyIDs(ids...)
 }
 
 // ClearUserAssignment clears all "user_assignment" edges to the SpaceUserAssignment entity.
-func (su *SpaceUpdate) ClearUserAssignment() *SpaceUpdate {
-	su.mutation.ClearUserAssignment()
-	return su
+func (_u *SpaceUpdate) ClearUserAssignment() *SpaceUpdate {
+	_u.mutation.ClearUserAssignment()
+	return _u
 }
 
 // RemoveUserAssignmentIDs removes the "user_assignment" edge to SpaceUserAssignment entities by IDs.
-func (su *SpaceUpdate) RemoveUserAssignmentIDs(ids ...int64) *SpaceUpdate {
-	su.mutation.RemoveUserAssignmentIDs(ids...)
-	return su
+func (_u *SpaceUpdate) RemoveUserAssignmentIDs(ids ...int64) *SpaceUpdate {
+	_u.mutation.RemoveUserAssignmentIDs(ids...)
+	return _u
 }
 
 // RemoveUserAssignment removes "user_assignment" edges to SpaceUserAssignment entities.
-func (su *SpaceUpdate) RemoveUserAssignment(s ...*SpaceUserAssignment) *SpaceUpdate {
-	ids := make([]int64, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *SpaceUpdate) RemoveUserAssignment(v ...*SpaceUserAssignment) *SpaceUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveUserAssignmentIDs(ids...)
+	return _u.RemoveUserAssignmentIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (su *SpaceUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
+func (_u *SpaceUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (su *SpaceUpdate) SaveX(ctx context.Context) int {
-	affected, err := su.Save(ctx)
+func (_u *SpaceUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -419,61 +419,61 @@ func (su *SpaceUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (su *SpaceUpdate) Exec(ctx context.Context) error {
-	_, err := su.Save(ctx)
+func (_u *SpaceUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (su *SpaceUpdate) ExecX(ctx context.Context) {
-	if err := su.Exec(ctx); err != nil {
+func (_u *SpaceUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (su *SpaceUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SpaceUpdate {
-	su.modifiers = append(su.modifiers, modifiers...)
-	return su
+func (_u *SpaceUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SpaceUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *SpaceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(space.Table, space.Columns, sqlgraph.NewFieldSpec(space.FieldID, field.TypeInt64))
-	if ps := su.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := su.mutation.PublicID(); ok {
+	if value, ok := _u.mutation.PublicID(); ok {
 		_spec.SetField(space.FieldPublicID, field.TypeString, value)
 	}
-	if value, ok := su.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(space.FieldDeletedAt, field.TypeTime, value)
 	}
-	if su.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(space.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := su.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(space.FieldName, field.TypeString, value)
 	}
-	if value, ok := su.mutation.Icon(); ok {
+	if value, ok := _u.mutation.Icon(); ok {
 		_spec.SetField(space.FieldIcon, field.TypeString, value)
 	}
-	if su.mutation.IconCleared() {
+	if _u.mutation.IconCleared() {
 		_spec.ClearField(space.FieldIcon, field.TypeString)
 	}
-	if value, ok := su.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(space.FieldDescription, field.TypeString, value)
 	}
-	if su.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(space.FieldDescription, field.TypeString)
 	}
-	if value, ok := su.mutation.IsFolderMode(); ok {
+	if value, ok := _u.mutation.IsFolderMode(); ok {
 		_spec.SetField(space.FieldIsFolderMode, field.TypeBool, value)
 	}
-	if su.mutation.DeleterCleared() {
+	if _u.mutation.DeleterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -486,7 +486,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.DeleterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DeleterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -502,7 +502,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -515,23 +515,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedFilesIDs(); len(nodes) > 0 && !su.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   space.FilesTable,
-			Columns: []string{space.FilesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -545,9 +529,25 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   space.FilesTable,
+			Columns: []string{space.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.UsersCleared() {
+	if _u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -558,13 +558,13 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
-		createE := &SpaceUserAssignmentCreate{config: su.config, mutation: newSpaceUserAssignmentMutation(su.config, OpCreate)}
+		createE := &SpaceUserAssignmentCreate{config: _u.config, mutation: newSpaceUserAssignmentMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedUsersIDs(); len(nodes) > 0 && !su.mutation.UsersCleared() {
+	if nodes := _u.mutation.RemovedUsersIDs(); len(nodes) > 0 && !_u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -578,13 +578,13 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &SpaceUserAssignmentCreate{config: su.config, mutation: newSpaceUserAssignmentMutation(su.config, OpCreate)}
+		createE := &SpaceUserAssignmentCreate{config: _u.config, mutation: newSpaceUserAssignmentMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -598,13 +598,13 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &SpaceUserAssignmentCreate{config: su.config, mutation: newSpaceUserAssignmentMutation(su.config, OpCreate)}
+		createE := &SpaceUserAssignmentCreate{config: _u.config, mutation: newSpaceUserAssignmentMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -617,7 +617,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedTagsIDs(); len(nodes) > 0 && !su.mutation.TagsCleared() {
+	if nodes := _u.mutation.RemovedTagsIDs(); len(nodes) > 0 && !_u.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -633,7 +633,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.TagsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -649,7 +649,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.DocumentTypesCleared() {
+	if _u.mutation.DocumentTypesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -662,7 +662,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedDocumentTypesIDs(); len(nodes) > 0 && !su.mutation.DocumentTypesCleared() {
+	if nodes := _u.mutation.RemovedDocumentTypesIDs(); len(nodes) > 0 && !_u.mutation.DocumentTypesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -678,7 +678,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.DocumentTypesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DocumentTypesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -694,7 +694,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.PropertiesCleared() {
+	if _u.mutation.PropertiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -707,7 +707,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedPropertiesIDs(); len(nodes) > 0 && !su.mutation.PropertiesCleared() {
+	if nodes := _u.mutation.RemovedPropertiesIDs(); len(nodes) > 0 && !_u.mutation.PropertiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -723,7 +723,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.PropertiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.PropertiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -739,7 +739,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.UserAssignmentCleared() {
+	if _u.mutation.UserAssignmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -752,7 +752,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedUserAssignmentIDs(); len(nodes) > 0 && !su.mutation.UserAssignmentCleared() {
+	if nodes := _u.mutation.RemovedUserAssignmentIDs(); len(nodes) > 0 && !_u.mutation.UserAssignmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -768,7 +768,7 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.UserAssignmentIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UserAssignmentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -784,8 +784,8 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(su.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{space.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -793,8 +793,8 @@ func (su *SpaceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	su.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // SpaceUpdateOne is the builder for updating a single Space entity.
@@ -807,394 +807,394 @@ type SpaceUpdateOne struct {
 }
 
 // SetPublicID sets the "public_id" field.
-func (suo *SpaceUpdateOne) SetPublicID(et entx.CIText) *SpaceUpdateOne {
-	suo.mutation.SetPublicID(et)
-	return suo
+func (_u *SpaceUpdateOne) SetPublicID(v entx.CIText) *SpaceUpdateOne {
+	_u.mutation.SetPublicID(v)
+	return _u
 }
 
 // SetNillablePublicID sets the "public_id" field if the given value is not nil.
-func (suo *SpaceUpdateOne) SetNillablePublicID(et *entx.CIText) *SpaceUpdateOne {
-	if et != nil {
-		suo.SetPublicID(*et)
+func (_u *SpaceUpdateOne) SetNillablePublicID(v *entx.CIText) *SpaceUpdateOne {
+	if v != nil {
+		_u.SetPublicID(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (suo *SpaceUpdateOne) SetDeletedBy(i int64) *SpaceUpdateOne {
-	suo.mutation.SetDeletedBy(i)
-	return suo
+func (_u *SpaceUpdateOne) SetDeletedBy(v int64) *SpaceUpdateOne {
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (suo *SpaceUpdateOne) SetNillableDeletedBy(i *int64) *SpaceUpdateOne {
-	if i != nil {
-		suo.SetDeletedBy(*i)
+func (_u *SpaceUpdateOne) SetNillableDeletedBy(v *int64) *SpaceUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (suo *SpaceUpdateOne) ClearDeletedBy() *SpaceUpdateOne {
-	suo.mutation.ClearDeletedBy()
-	return suo
+func (_u *SpaceUpdateOne) ClearDeletedBy() *SpaceUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (suo *SpaceUpdateOne) SetDeletedAt(t time.Time) *SpaceUpdateOne {
-	suo.mutation.SetDeletedAt(t)
-	return suo
+func (_u *SpaceUpdateOne) SetDeletedAt(v time.Time) *SpaceUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (suo *SpaceUpdateOne) SetNillableDeletedAt(t *time.Time) *SpaceUpdateOne {
-	if t != nil {
-		suo.SetDeletedAt(*t)
+func (_u *SpaceUpdateOne) SetNillableDeletedAt(v *time.Time) *SpaceUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (suo *SpaceUpdateOne) ClearDeletedAt() *SpaceUpdateOne {
-	suo.mutation.ClearDeletedAt()
-	return suo
+func (_u *SpaceUpdateOne) ClearDeletedAt() *SpaceUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (suo *SpaceUpdateOne) SetName(s string) *SpaceUpdateOne {
-	suo.mutation.SetName(s)
-	return suo
+func (_u *SpaceUpdateOne) SetName(v string) *SpaceUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (suo *SpaceUpdateOne) SetNillableName(s *string) *SpaceUpdateOne {
-	if s != nil {
-		suo.SetName(*s)
+func (_u *SpaceUpdateOne) SetNillableName(v *string) *SpaceUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetIcon sets the "icon" field.
-func (suo *SpaceUpdateOne) SetIcon(s string) *SpaceUpdateOne {
-	suo.mutation.SetIcon(s)
-	return suo
+func (_u *SpaceUpdateOne) SetIcon(v string) *SpaceUpdateOne {
+	_u.mutation.SetIcon(v)
+	return _u
 }
 
 // SetNillableIcon sets the "icon" field if the given value is not nil.
-func (suo *SpaceUpdateOne) SetNillableIcon(s *string) *SpaceUpdateOne {
-	if s != nil {
-		suo.SetIcon(*s)
+func (_u *SpaceUpdateOne) SetNillableIcon(v *string) *SpaceUpdateOne {
+	if v != nil {
+		_u.SetIcon(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearIcon clears the value of the "icon" field.
-func (suo *SpaceUpdateOne) ClearIcon() *SpaceUpdateOne {
-	suo.mutation.ClearIcon()
-	return suo
+func (_u *SpaceUpdateOne) ClearIcon() *SpaceUpdateOne {
+	_u.mutation.ClearIcon()
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (suo *SpaceUpdateOne) SetDescription(s string) *SpaceUpdateOne {
-	suo.mutation.SetDescription(s)
-	return suo
+func (_u *SpaceUpdateOne) SetDescription(v string) *SpaceUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (suo *SpaceUpdateOne) SetNillableDescription(s *string) *SpaceUpdateOne {
-	if s != nil {
-		suo.SetDescription(*s)
+func (_u *SpaceUpdateOne) SetNillableDescription(v *string) *SpaceUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return suo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (suo *SpaceUpdateOne) ClearDescription() *SpaceUpdateOne {
-	suo.mutation.ClearDescription()
-	return suo
+func (_u *SpaceUpdateOne) ClearDescription() *SpaceUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // SetIsFolderMode sets the "is_folder_mode" field.
-func (suo *SpaceUpdateOne) SetIsFolderMode(b bool) *SpaceUpdateOne {
-	suo.mutation.SetIsFolderMode(b)
-	return suo
+func (_u *SpaceUpdateOne) SetIsFolderMode(v bool) *SpaceUpdateOne {
+	_u.mutation.SetIsFolderMode(v)
+	return _u
 }
 
 // SetNillableIsFolderMode sets the "is_folder_mode" field if the given value is not nil.
-func (suo *SpaceUpdateOne) SetNillableIsFolderMode(b *bool) *SpaceUpdateOne {
-	if b != nil {
-		suo.SetIsFolderMode(*b)
+func (_u *SpaceUpdateOne) SetNillableIsFolderMode(v *bool) *SpaceUpdateOne {
+	if v != nil {
+		_u.SetIsFolderMode(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetDeleterID sets the "deleter" edge to the User entity by ID.
-func (suo *SpaceUpdateOne) SetDeleterID(id int64) *SpaceUpdateOne {
-	suo.mutation.SetDeleterID(id)
-	return suo
+func (_u *SpaceUpdateOne) SetDeleterID(id int64) *SpaceUpdateOne {
+	_u.mutation.SetDeleterID(id)
+	return _u
 }
 
 // SetNillableDeleterID sets the "deleter" edge to the User entity by ID if the given value is not nil.
-func (suo *SpaceUpdateOne) SetNillableDeleterID(id *int64) *SpaceUpdateOne {
+func (_u *SpaceUpdateOne) SetNillableDeleterID(id *int64) *SpaceUpdateOne {
 	if id != nil {
-		suo = suo.SetDeleterID(*id)
+		_u = _u.SetDeleterID(*id)
 	}
-	return suo
+	return _u
 }
 
 // SetDeleter sets the "deleter" edge to the User entity.
-func (suo *SpaceUpdateOne) SetDeleter(u *User) *SpaceUpdateOne {
-	return suo.SetDeleterID(u.ID)
+func (_u *SpaceUpdateOne) SetDeleter(v *User) *SpaceUpdateOne {
+	return _u.SetDeleterID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (suo *SpaceUpdateOne) AddFileIDs(ids ...int64) *SpaceUpdateOne {
-	suo.mutation.AddFileIDs(ids...)
-	return suo
+func (_u *SpaceUpdateOne) AddFileIDs(ids ...int64) *SpaceUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (suo *SpaceUpdateOne) AddFiles(f ...*File) *SpaceUpdateOne {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *SpaceUpdateOne) AddFiles(v ...*File) *SpaceUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
-func (suo *SpaceUpdateOne) AddUserIDs(ids ...int64) *SpaceUpdateOne {
-	suo.mutation.AddUserIDs(ids...)
-	return suo
+func (_u *SpaceUpdateOne) AddUserIDs(ids ...int64) *SpaceUpdateOne {
+	_u.mutation.AddUserIDs(ids...)
+	return _u
 }
 
 // AddUsers adds the "users" edges to the User entity.
-func (suo *SpaceUpdateOne) AddUsers(u ...*User) *SpaceUpdateOne {
-	ids := make([]int64, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_u *SpaceUpdateOne) AddUsers(v ...*User) *SpaceUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddUserIDs(ids...)
+	return _u.AddUserIDs(ids...)
 }
 
 // AddTagIDs adds the "tags" edge to the Tag entity by IDs.
-func (suo *SpaceUpdateOne) AddTagIDs(ids ...int64) *SpaceUpdateOne {
-	suo.mutation.AddTagIDs(ids...)
-	return suo
+func (_u *SpaceUpdateOne) AddTagIDs(ids ...int64) *SpaceUpdateOne {
+	_u.mutation.AddTagIDs(ids...)
+	return _u
 }
 
 // AddTags adds the "tags" edges to the Tag entity.
-func (suo *SpaceUpdateOne) AddTags(t ...*Tag) *SpaceUpdateOne {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *SpaceUpdateOne) AddTags(v ...*Tag) *SpaceUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddTagIDs(ids...)
+	return _u.AddTagIDs(ids...)
 }
 
 // AddDocumentTypeIDs adds the "document_types" edge to the DocumentType entity by IDs.
-func (suo *SpaceUpdateOne) AddDocumentTypeIDs(ids ...int64) *SpaceUpdateOne {
-	suo.mutation.AddDocumentTypeIDs(ids...)
-	return suo
+func (_u *SpaceUpdateOne) AddDocumentTypeIDs(ids ...int64) *SpaceUpdateOne {
+	_u.mutation.AddDocumentTypeIDs(ids...)
+	return _u
 }
 
 // AddDocumentTypes adds the "document_types" edges to the DocumentType entity.
-func (suo *SpaceUpdateOne) AddDocumentTypes(d ...*DocumentType) *SpaceUpdateOne {
-	ids := make([]int64, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *SpaceUpdateOne) AddDocumentTypes(v ...*DocumentType) *SpaceUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddDocumentTypeIDs(ids...)
+	return _u.AddDocumentTypeIDs(ids...)
 }
 
 // AddPropertyIDs adds the "properties" edge to the Property entity by IDs.
-func (suo *SpaceUpdateOne) AddPropertyIDs(ids ...int64) *SpaceUpdateOne {
-	suo.mutation.AddPropertyIDs(ids...)
-	return suo
+func (_u *SpaceUpdateOne) AddPropertyIDs(ids ...int64) *SpaceUpdateOne {
+	_u.mutation.AddPropertyIDs(ids...)
+	return _u
 }
 
 // AddProperties adds the "properties" edges to the Property entity.
-func (suo *SpaceUpdateOne) AddProperties(p ...*Property) *SpaceUpdateOne {
-	ids := make([]int64, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *SpaceUpdateOne) AddProperties(v ...*Property) *SpaceUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddPropertyIDs(ids...)
+	return _u.AddPropertyIDs(ids...)
 }
 
 // AddUserAssignmentIDs adds the "user_assignment" edge to the SpaceUserAssignment entity by IDs.
-func (suo *SpaceUpdateOne) AddUserAssignmentIDs(ids ...int64) *SpaceUpdateOne {
-	suo.mutation.AddUserAssignmentIDs(ids...)
-	return suo
+func (_u *SpaceUpdateOne) AddUserAssignmentIDs(ids ...int64) *SpaceUpdateOne {
+	_u.mutation.AddUserAssignmentIDs(ids...)
+	return _u
 }
 
 // AddUserAssignment adds the "user_assignment" edges to the SpaceUserAssignment entity.
-func (suo *SpaceUpdateOne) AddUserAssignment(s ...*SpaceUserAssignment) *SpaceUpdateOne {
-	ids := make([]int64, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *SpaceUpdateOne) AddUserAssignment(v ...*SpaceUserAssignment) *SpaceUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddUserAssignmentIDs(ids...)
+	return _u.AddUserAssignmentIDs(ids...)
 }
 
 // Mutation returns the SpaceMutation object of the builder.
-func (suo *SpaceUpdateOne) Mutation() *SpaceMutation {
-	return suo.mutation
+func (_u *SpaceUpdateOne) Mutation() *SpaceMutation {
+	return _u.mutation
 }
 
 // ClearDeleter clears the "deleter" edge to the User entity.
-func (suo *SpaceUpdateOne) ClearDeleter() *SpaceUpdateOne {
-	suo.mutation.ClearDeleter()
-	return suo
+func (_u *SpaceUpdateOne) ClearDeleter() *SpaceUpdateOne {
+	_u.mutation.ClearDeleter()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (suo *SpaceUpdateOne) ClearFiles() *SpaceUpdateOne {
-	suo.mutation.ClearFiles()
-	return suo
+func (_u *SpaceUpdateOne) ClearFiles() *SpaceUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (suo *SpaceUpdateOne) RemoveFileIDs(ids ...int64) *SpaceUpdateOne {
-	suo.mutation.RemoveFileIDs(ids...)
-	return suo
+func (_u *SpaceUpdateOne) RemoveFileIDs(ids ...int64) *SpaceUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (suo *SpaceUpdateOne) RemoveFiles(f ...*File) *SpaceUpdateOne {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *SpaceUpdateOne) RemoveFiles(v ...*File) *SpaceUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearUsers clears all "users" edges to the User entity.
-func (suo *SpaceUpdateOne) ClearUsers() *SpaceUpdateOne {
-	suo.mutation.ClearUsers()
-	return suo
+func (_u *SpaceUpdateOne) ClearUsers() *SpaceUpdateOne {
+	_u.mutation.ClearUsers()
+	return _u
 }
 
 // RemoveUserIDs removes the "users" edge to User entities by IDs.
-func (suo *SpaceUpdateOne) RemoveUserIDs(ids ...int64) *SpaceUpdateOne {
-	suo.mutation.RemoveUserIDs(ids...)
-	return suo
+func (_u *SpaceUpdateOne) RemoveUserIDs(ids ...int64) *SpaceUpdateOne {
+	_u.mutation.RemoveUserIDs(ids...)
+	return _u
 }
 
 // RemoveUsers removes "users" edges to User entities.
-func (suo *SpaceUpdateOne) RemoveUsers(u ...*User) *SpaceUpdateOne {
-	ids := make([]int64, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
+func (_u *SpaceUpdateOne) RemoveUsers(v ...*User) *SpaceUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveUserIDs(ids...)
+	return _u.RemoveUserIDs(ids...)
 }
 
 // ClearTags clears all "tags" edges to the Tag entity.
-func (suo *SpaceUpdateOne) ClearTags() *SpaceUpdateOne {
-	suo.mutation.ClearTags()
-	return suo
+func (_u *SpaceUpdateOne) ClearTags() *SpaceUpdateOne {
+	_u.mutation.ClearTags()
+	return _u
 }
 
 // RemoveTagIDs removes the "tags" edge to Tag entities by IDs.
-func (suo *SpaceUpdateOne) RemoveTagIDs(ids ...int64) *SpaceUpdateOne {
-	suo.mutation.RemoveTagIDs(ids...)
-	return suo
+func (_u *SpaceUpdateOne) RemoveTagIDs(ids ...int64) *SpaceUpdateOne {
+	_u.mutation.RemoveTagIDs(ids...)
+	return _u
 }
 
 // RemoveTags removes "tags" edges to Tag entities.
-func (suo *SpaceUpdateOne) RemoveTags(t ...*Tag) *SpaceUpdateOne {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *SpaceUpdateOne) RemoveTags(v ...*Tag) *SpaceUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveTagIDs(ids...)
+	return _u.RemoveTagIDs(ids...)
 }
 
 // ClearDocumentTypes clears all "document_types" edges to the DocumentType entity.
-func (suo *SpaceUpdateOne) ClearDocumentTypes() *SpaceUpdateOne {
-	suo.mutation.ClearDocumentTypes()
-	return suo
+func (_u *SpaceUpdateOne) ClearDocumentTypes() *SpaceUpdateOne {
+	_u.mutation.ClearDocumentTypes()
+	return _u
 }
 
 // RemoveDocumentTypeIDs removes the "document_types" edge to DocumentType entities by IDs.
-func (suo *SpaceUpdateOne) RemoveDocumentTypeIDs(ids ...int64) *SpaceUpdateOne {
-	suo.mutation.RemoveDocumentTypeIDs(ids...)
-	return suo
+func (_u *SpaceUpdateOne) RemoveDocumentTypeIDs(ids ...int64) *SpaceUpdateOne {
+	_u.mutation.RemoveDocumentTypeIDs(ids...)
+	return _u
 }
 
 // RemoveDocumentTypes removes "document_types" edges to DocumentType entities.
-func (suo *SpaceUpdateOne) RemoveDocumentTypes(d ...*DocumentType) *SpaceUpdateOne {
-	ids := make([]int64, len(d))
-	for i := range d {
-		ids[i] = d[i].ID
+func (_u *SpaceUpdateOne) RemoveDocumentTypes(v ...*DocumentType) *SpaceUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveDocumentTypeIDs(ids...)
+	return _u.RemoveDocumentTypeIDs(ids...)
 }
 
 // ClearProperties clears all "properties" edges to the Property entity.
-func (suo *SpaceUpdateOne) ClearProperties() *SpaceUpdateOne {
-	suo.mutation.ClearProperties()
-	return suo
+func (_u *SpaceUpdateOne) ClearProperties() *SpaceUpdateOne {
+	_u.mutation.ClearProperties()
+	return _u
 }
 
 // RemovePropertyIDs removes the "properties" edge to Property entities by IDs.
-func (suo *SpaceUpdateOne) RemovePropertyIDs(ids ...int64) *SpaceUpdateOne {
-	suo.mutation.RemovePropertyIDs(ids...)
-	return suo
+func (_u *SpaceUpdateOne) RemovePropertyIDs(ids ...int64) *SpaceUpdateOne {
+	_u.mutation.RemovePropertyIDs(ids...)
+	return _u
 }
 
 // RemoveProperties removes "properties" edges to Property entities.
-func (suo *SpaceUpdateOne) RemoveProperties(p ...*Property) *SpaceUpdateOne {
-	ids := make([]int64, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_u *SpaceUpdateOne) RemoveProperties(v ...*Property) *SpaceUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemovePropertyIDs(ids...)
+	return _u.RemovePropertyIDs(ids...)
 }
 
 // ClearUserAssignment clears all "user_assignment" edges to the SpaceUserAssignment entity.
-func (suo *SpaceUpdateOne) ClearUserAssignment() *SpaceUpdateOne {
-	suo.mutation.ClearUserAssignment()
-	return suo
+func (_u *SpaceUpdateOne) ClearUserAssignment() *SpaceUpdateOne {
+	_u.mutation.ClearUserAssignment()
+	return _u
 }
 
 // RemoveUserAssignmentIDs removes the "user_assignment" edge to SpaceUserAssignment entities by IDs.
-func (suo *SpaceUpdateOne) RemoveUserAssignmentIDs(ids ...int64) *SpaceUpdateOne {
-	suo.mutation.RemoveUserAssignmentIDs(ids...)
-	return suo
+func (_u *SpaceUpdateOne) RemoveUserAssignmentIDs(ids ...int64) *SpaceUpdateOne {
+	_u.mutation.RemoveUserAssignmentIDs(ids...)
+	return _u
 }
 
 // RemoveUserAssignment removes "user_assignment" edges to SpaceUserAssignment entities.
-func (suo *SpaceUpdateOne) RemoveUserAssignment(s ...*SpaceUserAssignment) *SpaceUpdateOne {
-	ids := make([]int64, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *SpaceUpdateOne) RemoveUserAssignment(v ...*SpaceUserAssignment) *SpaceUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveUserAssignmentIDs(ids...)
+	return _u.RemoveUserAssignmentIDs(ids...)
 }
 
 // Where appends a list predicates to the SpaceUpdate builder.
-func (suo *SpaceUpdateOne) Where(ps ...predicate.Space) *SpaceUpdateOne {
-	suo.mutation.Where(ps...)
-	return suo
+func (_u *SpaceUpdateOne) Where(ps ...predicate.Space) *SpaceUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (suo *SpaceUpdateOne) Select(field string, fields ...string) *SpaceUpdateOne {
-	suo.fields = append([]string{field}, fields...)
-	return suo
+func (_u *SpaceUpdateOne) Select(field string, fields ...string) *SpaceUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Space entity.
-func (suo *SpaceUpdateOne) Save(ctx context.Context) (*Space, error) {
-	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
+func (_u *SpaceUpdateOne) Save(ctx context.Context) (*Space, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (suo *SpaceUpdateOne) SaveX(ctx context.Context) *Space {
-	node, err := suo.Save(ctx)
+func (_u *SpaceUpdateOne) SaveX(ctx context.Context) *Space {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1202,32 +1202,32 @@ func (suo *SpaceUpdateOne) SaveX(ctx context.Context) *Space {
 }
 
 // Exec executes the query on the entity.
-func (suo *SpaceUpdateOne) Exec(ctx context.Context) error {
-	_, err := suo.Save(ctx)
+func (_u *SpaceUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suo *SpaceUpdateOne) ExecX(ctx context.Context) {
-	if err := suo.Exec(ctx); err != nil {
+func (_u *SpaceUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (suo *SpaceUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SpaceUpdateOne {
-	suo.modifiers = append(suo.modifiers, modifiers...)
-	return suo
+func (_u *SpaceUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SpaceUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error) {
+func (_u *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error) {
 	_spec := sqlgraph.NewUpdateSpec(space.Table, space.Columns, sqlgraph.NewFieldSpec(space.FieldID, field.TypeInt64))
-	id, ok := suo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`enttenant: missing "Space.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := suo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, space.FieldID)
 		for _, f := range fields {
@@ -1239,41 +1239,41 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 			}
 		}
 	}
-	if ps := suo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := suo.mutation.PublicID(); ok {
+	if value, ok := _u.mutation.PublicID(); ok {
 		_spec.SetField(space.FieldPublicID, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(space.FieldDeletedAt, field.TypeTime, value)
 	}
-	if suo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(space.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := suo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(space.FieldName, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.Icon(); ok {
+	if value, ok := _u.mutation.Icon(); ok {
 		_spec.SetField(space.FieldIcon, field.TypeString, value)
 	}
-	if suo.mutation.IconCleared() {
+	if _u.mutation.IconCleared() {
 		_spec.ClearField(space.FieldIcon, field.TypeString)
 	}
-	if value, ok := suo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(space.FieldDescription, field.TypeString, value)
 	}
-	if suo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(space.FieldDescription, field.TypeString)
 	}
-	if value, ok := suo.mutation.IsFolderMode(); ok {
+	if value, ok := _u.mutation.IsFolderMode(); ok {
 		_spec.SetField(space.FieldIsFolderMode, field.TypeBool, value)
 	}
-	if suo.mutation.DeleterCleared() {
+	if _u.mutation.DeleterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1286,7 +1286,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.DeleterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DeleterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1302,7 +1302,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1315,23 +1315,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !suo.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   space.FilesTable,
-			Columns: []string{space.FilesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1345,9 +1329,25 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   space.FilesTable,
+			Columns: []string{space.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.UsersCleared() {
+	if _u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1358,13 +1358,13 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
 			},
 		}
-		createE := &SpaceUserAssignmentCreate{config: suo.config, mutation: newSpaceUserAssignmentMutation(suo.config, OpCreate)}
+		createE := &SpaceUserAssignmentCreate{config: _u.config, mutation: newSpaceUserAssignmentMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !suo.mutation.UsersCleared() {
+	if nodes := _u.mutation.RemovedUsersIDs(); len(nodes) > 0 && !_u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1378,13 +1378,13 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &SpaceUserAssignmentCreate{config: suo.config, mutation: newSpaceUserAssignmentMutation(suo.config, OpCreate)}
+		createE := &SpaceUserAssignmentCreate{config: _u.config, mutation: newSpaceUserAssignmentMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.UsersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1398,13 +1398,13 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &SpaceUserAssignmentCreate{config: suo.config, mutation: newSpaceUserAssignmentMutation(suo.config, OpCreate)}
+		createE := &SpaceUserAssignmentCreate{config: _u.config, mutation: newSpaceUserAssignmentMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.TagsCleared() {
+	if _u.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1417,7 +1417,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedTagsIDs(); len(nodes) > 0 && !suo.mutation.TagsCleared() {
+	if nodes := _u.mutation.RemovedTagsIDs(); len(nodes) > 0 && !_u.mutation.TagsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1433,7 +1433,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.TagsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1449,7 +1449,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.DocumentTypesCleared() {
+	if _u.mutation.DocumentTypesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1462,7 +1462,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedDocumentTypesIDs(); len(nodes) > 0 && !suo.mutation.DocumentTypesCleared() {
+	if nodes := _u.mutation.RemovedDocumentTypesIDs(); len(nodes) > 0 && !_u.mutation.DocumentTypesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1478,7 +1478,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.DocumentTypesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DocumentTypesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1494,7 +1494,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.PropertiesCleared() {
+	if _u.mutation.PropertiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1507,7 +1507,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedPropertiesIDs(); len(nodes) > 0 && !suo.mutation.PropertiesCleared() {
+	if nodes := _u.mutation.RemovedPropertiesIDs(); len(nodes) > 0 && !_u.mutation.PropertiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1523,7 +1523,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.PropertiesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.PropertiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1539,7 +1539,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.UserAssignmentCleared() {
+	if _u.mutation.UserAssignmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1552,7 +1552,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedUserAssignmentIDs(); len(nodes) > 0 && !suo.mutation.UserAssignmentCleared() {
+	if nodes := _u.mutation.RemovedUserAssignmentIDs(); len(nodes) > 0 && !_u.mutation.UserAssignmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1568,7 +1568,7 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.UserAssignmentIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UserAssignmentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1584,11 +1584,11 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(suo.modifiers...)
-	_node = &Space{config: suo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Space{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, suo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{space.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1596,6 +1596,6 @@ func (suo *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error
 		}
 		return nil, err
 	}
-	suo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

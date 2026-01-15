@@ -36,44 +36,44 @@ type TagAssignmentQuery struct {
 }
 
 // Where adds a new predicate for the TagAssignmentQuery builder.
-func (taq *TagAssignmentQuery) Where(ps ...predicate.TagAssignment) *TagAssignmentQuery {
-	taq.predicates = append(taq.predicates, ps...)
-	return taq
+func (_q *TagAssignmentQuery) Where(ps ...predicate.TagAssignment) *TagAssignmentQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (taq *TagAssignmentQuery) Limit(limit int) *TagAssignmentQuery {
-	taq.ctx.Limit = &limit
-	return taq
+func (_q *TagAssignmentQuery) Limit(limit int) *TagAssignmentQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (taq *TagAssignmentQuery) Offset(offset int) *TagAssignmentQuery {
-	taq.ctx.Offset = &offset
-	return taq
+func (_q *TagAssignmentQuery) Offset(offset int) *TagAssignmentQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (taq *TagAssignmentQuery) Unique(unique bool) *TagAssignmentQuery {
-	taq.ctx.Unique = &unique
-	return taq
+func (_q *TagAssignmentQuery) Unique(unique bool) *TagAssignmentQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (taq *TagAssignmentQuery) Order(o ...tagassignment.OrderOption) *TagAssignmentQuery {
-	taq.order = append(taq.order, o...)
-	return taq
+func (_q *TagAssignmentQuery) Order(o ...tagassignment.OrderOption) *TagAssignmentQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QuerySpace chains the current query on the "space" edge.
-func (taq *TagAssignmentQuery) QuerySpace() *SpaceQuery {
-	query := (&SpaceClient{config: taq.config}).Query()
+func (_q *TagAssignmentQuery) QuerySpace() *SpaceQuery {
+	query := (&SpaceClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := taq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := taq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -82,20 +82,20 @@ func (taq *TagAssignmentQuery) QuerySpace() *SpaceQuery {
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tagassignment.SpaceTable, tagassignment.SpaceColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(taq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryTag chains the current query on the "tag" edge.
-func (taq *TagAssignmentQuery) QueryTag() *TagQuery {
-	query := (&TagClient{config: taq.config}).Query()
+func (_q *TagAssignmentQuery) QueryTag() *TagQuery {
+	query := (&TagClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := taq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := taq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -104,20 +104,20 @@ func (taq *TagAssignmentQuery) QueryTag() *TagQuery {
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tagassignment.TagTable, tagassignment.TagColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(taq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFile chains the current query on the "file" edge.
-func (taq *TagAssignmentQuery) QueryFile() *FileQuery {
-	query := (&FileClient{config: taq.config}).Query()
+func (_q *TagAssignmentQuery) QueryFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := taq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := taq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -126,7 +126,7 @@ func (taq *TagAssignmentQuery) QueryFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tagassignment.FileTable, tagassignment.FileColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(taq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -134,8 +134,8 @@ func (taq *TagAssignmentQuery) QueryFile() *FileQuery {
 
 // First returns the first TagAssignment entity from the query.
 // Returns a *NotFoundError when no TagAssignment was found.
-func (taq *TagAssignmentQuery) First(ctx context.Context) (*TagAssignment, error) {
-	nodes, err := taq.Limit(1).All(setContextOp(ctx, taq.ctx, ent.OpQueryFirst))
+func (_q *TagAssignmentQuery) First(ctx context.Context) (*TagAssignment, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -146,8 +146,8 @@ func (taq *TagAssignmentQuery) First(ctx context.Context) (*TagAssignment, error
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (taq *TagAssignmentQuery) FirstX(ctx context.Context) *TagAssignment {
-	node, err := taq.First(ctx)
+func (_q *TagAssignmentQuery) FirstX(ctx context.Context) *TagAssignment {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -156,9 +156,9 @@ func (taq *TagAssignmentQuery) FirstX(ctx context.Context) *TagAssignment {
 
 // FirstID returns the first TagAssignment ID from the query.
 // Returns a *NotFoundError when no TagAssignment ID was found.
-func (taq *TagAssignmentQuery) FirstID(ctx context.Context) (id int64, err error) {
+func (_q *TagAssignmentQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = taq.Limit(1).IDs(setContextOp(ctx, taq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -169,8 +169,8 @@ func (taq *TagAssignmentQuery) FirstID(ctx context.Context) (id int64, err error
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (taq *TagAssignmentQuery) FirstIDX(ctx context.Context) int64 {
-	id, err := taq.FirstID(ctx)
+func (_q *TagAssignmentQuery) FirstIDX(ctx context.Context) int64 {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -180,8 +180,8 @@ func (taq *TagAssignmentQuery) FirstIDX(ctx context.Context) int64 {
 // Only returns a single TagAssignment entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one TagAssignment entity is found.
 // Returns a *NotFoundError when no TagAssignment entities are found.
-func (taq *TagAssignmentQuery) Only(ctx context.Context) (*TagAssignment, error) {
-	nodes, err := taq.Limit(2).All(setContextOp(ctx, taq.ctx, ent.OpQueryOnly))
+func (_q *TagAssignmentQuery) Only(ctx context.Context) (*TagAssignment, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -196,8 +196,8 @@ func (taq *TagAssignmentQuery) Only(ctx context.Context) (*TagAssignment, error)
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (taq *TagAssignmentQuery) OnlyX(ctx context.Context) *TagAssignment {
-	node, err := taq.Only(ctx)
+func (_q *TagAssignmentQuery) OnlyX(ctx context.Context) *TagAssignment {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -207,9 +207,9 @@ func (taq *TagAssignmentQuery) OnlyX(ctx context.Context) *TagAssignment {
 // OnlyID is like Only, but returns the only TagAssignment ID in the query.
 // Returns a *NotSingularError when more than one TagAssignment ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (taq *TagAssignmentQuery) OnlyID(ctx context.Context) (id int64, err error) {
+func (_q *TagAssignmentQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = taq.Limit(2).IDs(setContextOp(ctx, taq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -224,8 +224,8 @@ func (taq *TagAssignmentQuery) OnlyID(ctx context.Context) (id int64, err error)
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (taq *TagAssignmentQuery) OnlyIDX(ctx context.Context) int64 {
-	id, err := taq.OnlyID(ctx)
+func (_q *TagAssignmentQuery) OnlyIDX(ctx context.Context) int64 {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -233,18 +233,18 @@ func (taq *TagAssignmentQuery) OnlyIDX(ctx context.Context) int64 {
 }
 
 // All executes the query and returns a list of TagAssignments.
-func (taq *TagAssignmentQuery) All(ctx context.Context) ([]*TagAssignment, error) {
-	ctx = setContextOp(ctx, taq.ctx, ent.OpQueryAll)
-	if err := taq.prepareQuery(ctx); err != nil {
+func (_q *TagAssignmentQuery) All(ctx context.Context) ([]*TagAssignment, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*TagAssignment, *TagAssignmentQuery]()
-	return withInterceptors[[]*TagAssignment](ctx, taq, qr, taq.inters)
+	return withInterceptors[[]*TagAssignment](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (taq *TagAssignmentQuery) AllX(ctx context.Context) []*TagAssignment {
-	nodes, err := taq.All(ctx)
+func (_q *TagAssignmentQuery) AllX(ctx context.Context) []*TagAssignment {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -252,20 +252,20 @@ func (taq *TagAssignmentQuery) AllX(ctx context.Context) []*TagAssignment {
 }
 
 // IDs executes the query and returns a list of TagAssignment IDs.
-func (taq *TagAssignmentQuery) IDs(ctx context.Context) (ids []int64, err error) {
-	if taq.ctx.Unique == nil && taq.path != nil {
-		taq.Unique(true)
+func (_q *TagAssignmentQuery) IDs(ctx context.Context) (ids []int64, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, taq.ctx, ent.OpQueryIDs)
-	if err = taq.Select(tagassignment.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(tagassignment.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (taq *TagAssignmentQuery) IDsX(ctx context.Context) []int64 {
-	ids, err := taq.IDs(ctx)
+func (_q *TagAssignmentQuery) IDsX(ctx context.Context) []int64 {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -273,17 +273,17 @@ func (taq *TagAssignmentQuery) IDsX(ctx context.Context) []int64 {
 }
 
 // Count returns the count of the given query.
-func (taq *TagAssignmentQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, taq.ctx, ent.OpQueryCount)
-	if err := taq.prepareQuery(ctx); err != nil {
+func (_q *TagAssignmentQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, taq, querierCount[*TagAssignmentQuery](), taq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TagAssignmentQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (taq *TagAssignmentQuery) CountX(ctx context.Context) int {
-	count, err := taq.Count(ctx)
+func (_q *TagAssignmentQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -291,9 +291,9 @@ func (taq *TagAssignmentQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (taq *TagAssignmentQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, taq.ctx, ent.OpQueryExist)
-	switch _, err := taq.FirstID(ctx); {
+func (_q *TagAssignmentQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -304,8 +304,8 @@ func (taq *TagAssignmentQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (taq *TagAssignmentQuery) ExistX(ctx context.Context) bool {
-	exist, err := taq.Exist(ctx)
+func (_q *TagAssignmentQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -314,57 +314,57 @@ func (taq *TagAssignmentQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the TagAssignmentQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (taq *TagAssignmentQuery) Clone() *TagAssignmentQuery {
-	if taq == nil {
+func (_q *TagAssignmentQuery) Clone() *TagAssignmentQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TagAssignmentQuery{
-		config:     taq.config,
-		ctx:        taq.ctx.Clone(),
-		order:      append([]tagassignment.OrderOption{}, taq.order...),
-		inters:     append([]Interceptor{}, taq.inters...),
-		predicates: append([]predicate.TagAssignment{}, taq.predicates...),
-		withSpace:  taq.withSpace.Clone(),
-		withTag:    taq.withTag.Clone(),
-		withFile:   taq.withFile.Clone(),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]tagassignment.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.TagAssignment{}, _q.predicates...),
+		withSpace:  _q.withSpace.Clone(),
+		withTag:    _q.withTag.Clone(),
+		withFile:   _q.withFile.Clone(),
 		// clone intermediate query.
-		sql:       taq.sql.Clone(),
-		path:      taq.path,
-		modifiers: append([]func(*sql.Selector){}, taq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithSpace tells the query-builder to eager-load the nodes that are connected to
 // the "space" edge. The optional arguments are used to configure the query builder of the edge.
-func (taq *TagAssignmentQuery) WithSpace(opts ...func(*SpaceQuery)) *TagAssignmentQuery {
-	query := (&SpaceClient{config: taq.config}).Query()
+func (_q *TagAssignmentQuery) WithSpace(opts ...func(*SpaceQuery)) *TagAssignmentQuery {
+	query := (&SpaceClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	taq.withSpace = query
-	return taq
+	_q.withSpace = query
+	return _q
 }
 
 // WithTag tells the query-builder to eager-load the nodes that are connected to
 // the "tag" edge. The optional arguments are used to configure the query builder of the edge.
-func (taq *TagAssignmentQuery) WithTag(opts ...func(*TagQuery)) *TagAssignmentQuery {
-	query := (&TagClient{config: taq.config}).Query()
+func (_q *TagAssignmentQuery) WithTag(opts ...func(*TagQuery)) *TagAssignmentQuery {
+	query := (&TagClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	taq.withTag = query
-	return taq
+	_q.withTag = query
+	return _q
 }
 
 // WithFile tells the query-builder to eager-load the nodes that are connected to
 // the "file" edge. The optional arguments are used to configure the query builder of the edge.
-func (taq *TagAssignmentQuery) WithFile(opts ...func(*FileQuery)) *TagAssignmentQuery {
-	query := (&FileClient{config: taq.config}).Query()
+func (_q *TagAssignmentQuery) WithFile(opts ...func(*FileQuery)) *TagAssignmentQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	taq.withFile = query
-	return taq
+	_q.withFile = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -381,10 +381,10 @@ func (taq *TagAssignmentQuery) WithFile(opts ...func(*FileQuery)) *TagAssignment
 //		GroupBy(tagassignment.FieldSpaceID).
 //		Aggregate(enttenant.Count()).
 //		Scan(ctx, &v)
-func (taq *TagAssignmentQuery) GroupBy(field string, fields ...string) *TagAssignmentGroupBy {
-	taq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TagAssignmentGroupBy{build: taq}
-	grbuild.flds = &taq.ctx.Fields
+func (_q *TagAssignmentQuery) GroupBy(field string, fields ...string) *TagAssignmentGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TagAssignmentGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = tagassignment.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -402,96 +402,96 @@ func (taq *TagAssignmentQuery) GroupBy(field string, fields ...string) *TagAssig
 //	client.TagAssignment.Query().
 //		Select(tagassignment.FieldSpaceID).
 //		Scan(ctx, &v)
-func (taq *TagAssignmentQuery) Select(fields ...string) *TagAssignmentSelect {
-	taq.ctx.Fields = append(taq.ctx.Fields, fields...)
-	sbuild := &TagAssignmentSelect{TagAssignmentQuery: taq}
+func (_q *TagAssignmentQuery) Select(fields ...string) *TagAssignmentSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TagAssignmentSelect{TagAssignmentQuery: _q}
 	sbuild.label = tagassignment.Label
-	sbuild.flds, sbuild.scan = &taq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TagAssignmentSelect configured with the given aggregations.
-func (taq *TagAssignmentQuery) Aggregate(fns ...AggregateFunc) *TagAssignmentSelect {
-	return taq.Select().Aggregate(fns...)
+func (_q *TagAssignmentQuery) Aggregate(fns ...AggregateFunc) *TagAssignmentSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (taq *TagAssignmentQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range taq.inters {
+func (_q *TagAssignmentQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("enttenant: uninitialized interceptor (forgotten import enttenant/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, taq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range taq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !tagassignment.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("enttenant: invalid field %q for query", f)}
 		}
 	}
-	if taq.path != nil {
-		prev, err := taq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		taq.sql = prev
+		_q.sql = prev
 	}
 	if tagassignment.Policy == nil {
 		return errors.New("enttenant: uninitialized tagassignment.Policy (forgotten import enttenant/runtime?)")
 	}
-	if err := tagassignment.Policy.EvalQuery(ctx, taq); err != nil {
+	if err := tagassignment.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (taq *TagAssignmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TagAssignment, error) {
+func (_q *TagAssignmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TagAssignment, error) {
 	var (
 		nodes       = []*TagAssignment{}
-		_spec       = taq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			taq.withSpace != nil,
-			taq.withTag != nil,
-			taq.withFile != nil,
+			_q.withSpace != nil,
+			_q.withTag != nil,
+			_q.withFile != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TagAssignment).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TagAssignment{config: taq.config}
+		node := &TagAssignment{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(taq.modifiers) > 0 {
-		_spec.Modifiers = taq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, taq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := taq.withSpace; query != nil {
-		if err := taq.loadSpace(ctx, query, nodes, nil,
+	if query := _q.withSpace; query != nil {
+		if err := _q.loadSpace(ctx, query, nodes, nil,
 			func(n *TagAssignment, e *Space) { n.Edges.Space = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := taq.withTag; query != nil {
-		if err := taq.loadTag(ctx, query, nodes, nil,
+	if query := _q.withTag; query != nil {
+		if err := _q.loadTag(ctx, query, nodes, nil,
 			func(n *TagAssignment, e *Tag) { n.Edges.Tag = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := taq.withFile; query != nil {
-		if err := taq.loadFile(ctx, query, nodes, nil,
+	if query := _q.withFile; query != nil {
+		if err := _q.loadFile(ctx, query, nodes, nil,
 			func(n *TagAssignment, e *File) { n.Edges.File = e }); err != nil {
 			return nil, err
 		}
@@ -499,7 +499,7 @@ func (taq *TagAssignmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	return nodes, nil
 }
 
-func (taq *TagAssignmentQuery) loadSpace(ctx context.Context, query *SpaceQuery, nodes []*TagAssignment, init func(*TagAssignment), assign func(*TagAssignment, *Space)) error {
+func (_q *TagAssignmentQuery) loadSpace(ctx context.Context, query *SpaceQuery, nodes []*TagAssignment, init func(*TagAssignment), assign func(*TagAssignment, *Space)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*TagAssignment)
 	for i := range nodes {
@@ -528,7 +528,7 @@ func (taq *TagAssignmentQuery) loadSpace(ctx context.Context, query *SpaceQuery,
 	}
 	return nil
 }
-func (taq *TagAssignmentQuery) loadTag(ctx context.Context, query *TagQuery, nodes []*TagAssignment, init func(*TagAssignment), assign func(*TagAssignment, *Tag)) error {
+func (_q *TagAssignmentQuery) loadTag(ctx context.Context, query *TagQuery, nodes []*TagAssignment, init func(*TagAssignment), assign func(*TagAssignment, *Tag)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*TagAssignment)
 	for i := range nodes {
@@ -557,7 +557,7 @@ func (taq *TagAssignmentQuery) loadTag(ctx context.Context, query *TagQuery, nod
 	}
 	return nil
 }
-func (taq *TagAssignmentQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*TagAssignment, init func(*TagAssignment), assign func(*TagAssignment, *File)) error {
+func (_q *TagAssignmentQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*TagAssignment, init func(*TagAssignment), assign func(*TagAssignment, *File)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*TagAssignment)
 	for i := range nodes {
@@ -587,27 +587,27 @@ func (taq *TagAssignmentQuery) loadFile(ctx context.Context, query *FileQuery, n
 	return nil
 }
 
-func (taq *TagAssignmentQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := taq.querySpec()
-	if len(taq.modifiers) > 0 {
-		_spec.Modifiers = taq.modifiers
+func (_q *TagAssignmentQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = taq.ctx.Fields
-	if len(taq.ctx.Fields) > 0 {
-		_spec.Unique = taq.ctx.Unique != nil && *taq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, taq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (taq *TagAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TagAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(tagassignment.Table, tagassignment.Columns, sqlgraph.NewFieldSpec(tagassignment.FieldID, field.TypeInt64))
-	_spec.From = taq.sql
-	if unique := taq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if taq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := taq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, tagassignment.FieldID)
 		for i := range fields {
@@ -615,30 +615,30 @@ func (taq *TagAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if taq.withSpace != nil {
+		if _q.withSpace != nil {
 			_spec.Node.AddColumnOnce(tagassignment.FieldSpaceID)
 		}
-		if taq.withTag != nil {
+		if _q.withTag != nil {
 			_spec.Node.AddColumnOnce(tagassignment.FieldTagID)
 		}
-		if taq.withFile != nil {
+		if _q.withFile != nil {
 			_spec.Node.AddColumnOnce(tagassignment.FieldFileID)
 		}
 	}
-	if ps := taq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := taq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := taq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := taq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -648,45 +648,45 @@ func (taq *TagAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (taq *TagAssignmentQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(taq.driver.Dialect())
+func (_q *TagAssignmentQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(tagassignment.Table)
-	columns := taq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = tagassignment.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if taq.sql != nil {
-		selector = taq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if taq.ctx.Unique != nil && *taq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range taq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range taq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range taq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := taq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := taq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (taq *TagAssignmentQuery) Modify(modifiers ...func(s *sql.Selector)) *TagAssignmentSelect {
-	taq.modifiers = append(taq.modifiers, modifiers...)
-	return taq.Select()
+func (_q *TagAssignmentQuery) Modify(modifiers ...func(s *sql.Selector)) *TagAssignmentSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // TagAssignmentGroupBy is the group-by builder for TagAssignment entities.
@@ -696,41 +696,41 @@ type TagAssignmentGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (tagb *TagAssignmentGroupBy) Aggregate(fns ...AggregateFunc) *TagAssignmentGroupBy {
-	tagb.fns = append(tagb.fns, fns...)
-	return tagb
+func (_g *TagAssignmentGroupBy) Aggregate(fns ...AggregateFunc) *TagAssignmentGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tagb *TagAssignmentGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tagb.build.ctx, ent.OpQueryGroupBy)
-	if err := tagb.build.prepareQuery(ctx); err != nil {
+func (_g *TagAssignmentGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TagAssignmentQuery, *TagAssignmentGroupBy](ctx, tagb.build, tagb, tagb.build.inters, v)
+	return scanWithInterceptors[*TagAssignmentQuery, *TagAssignmentGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (tagb *TagAssignmentGroupBy) sqlScan(ctx context.Context, root *TagAssignmentQuery, v any) error {
+func (_g *TagAssignmentGroupBy) sqlScan(ctx context.Context, root *TagAssignmentQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(tagb.fns))
-	for _, fn := range tagb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*tagb.flds)+len(tagb.fns))
-		for _, f := range *tagb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*tagb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tagb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -744,27 +744,27 @@ type TagAssignmentSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (tas *TagAssignmentSelect) Aggregate(fns ...AggregateFunc) *TagAssignmentSelect {
-	tas.fns = append(tas.fns, fns...)
-	return tas
+func (_s *TagAssignmentSelect) Aggregate(fns ...AggregateFunc) *TagAssignmentSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tas *TagAssignmentSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tas.ctx, ent.OpQuerySelect)
-	if err := tas.prepareQuery(ctx); err != nil {
+func (_s *TagAssignmentSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TagAssignmentQuery, *TagAssignmentSelect](ctx, tas.TagAssignmentQuery, tas, tas.inters, v)
+	return scanWithInterceptors[*TagAssignmentQuery, *TagAssignmentSelect](ctx, _s.TagAssignmentQuery, _s, _s.inters, v)
 }
 
-func (tas *TagAssignmentSelect) sqlScan(ctx context.Context, root *TagAssignmentQuery, v any) error {
+func (_s *TagAssignmentSelect) sqlScan(ctx context.Context, root *TagAssignmentQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(tas.fns))
-	for _, fn := range tas.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*tas.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -772,7 +772,7 @@ func (tas *TagAssignmentSelect) sqlScan(ctx context.Context, root *TagAssignment
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tas.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -780,7 +780,7 @@ func (tas *TagAssignmentSelect) sqlScan(ctx context.Context, root *TagAssignment
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (tas *TagAssignmentSelect) Modify(modifiers ...func(s *sql.Selector)) *TagAssignmentSelect {
-	tas.modifiers = append(tas.modifiers, modifiers...)
-	return tas
+func (_s *TagAssignmentSelect) Modify(modifiers ...func(s *sql.Selector)) *TagAssignmentSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

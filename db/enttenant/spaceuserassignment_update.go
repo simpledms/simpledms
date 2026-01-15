@@ -26,131 +26,131 @@ type SpaceUserAssignmentUpdate struct {
 }
 
 // Where appends a list predicates to the SpaceUserAssignmentUpdate builder.
-func (suau *SpaceUserAssignmentUpdate) Where(ps ...predicate.SpaceUserAssignment) *SpaceUserAssignmentUpdate {
-	suau.mutation.Where(ps...)
-	return suau
+func (_u *SpaceUserAssignmentUpdate) Where(ps ...predicate.SpaceUserAssignment) *SpaceUserAssignmentUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (suau *SpaceUserAssignmentUpdate) SetUpdatedAt(t time.Time) *SpaceUserAssignmentUpdate {
-	suau.mutation.SetUpdatedAt(t)
-	return suau
+func (_u *SpaceUserAssignmentUpdate) SetUpdatedAt(v time.Time) *SpaceUserAssignmentUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (suau *SpaceUserAssignmentUpdate) SetUpdatedBy(i int64) *SpaceUserAssignmentUpdate {
-	suau.mutation.SetUpdatedBy(i)
-	return suau
+func (_u *SpaceUserAssignmentUpdate) SetUpdatedBy(v int64) *SpaceUserAssignmentUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (suau *SpaceUserAssignmentUpdate) SetNillableUpdatedBy(i *int64) *SpaceUserAssignmentUpdate {
-	if i != nil {
-		suau.SetUpdatedBy(*i)
+func (_u *SpaceUserAssignmentUpdate) SetNillableUpdatedBy(v *int64) *SpaceUserAssignmentUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return suau
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (suau *SpaceUserAssignmentUpdate) ClearUpdatedBy() *SpaceUserAssignmentUpdate {
-	suau.mutation.ClearUpdatedBy()
-	return suau
+func (_u *SpaceUserAssignmentUpdate) ClearUpdatedBy() *SpaceUserAssignmentUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (suau *SpaceUserAssignmentUpdate) SetUserID(i int64) *SpaceUserAssignmentUpdate {
-	suau.mutation.SetUserID(i)
-	return suau
+func (_u *SpaceUserAssignmentUpdate) SetUserID(v int64) *SpaceUserAssignmentUpdate {
+	_u.mutation.SetUserID(v)
+	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (suau *SpaceUserAssignmentUpdate) SetNillableUserID(i *int64) *SpaceUserAssignmentUpdate {
-	if i != nil {
-		suau.SetUserID(*i)
+func (_u *SpaceUserAssignmentUpdate) SetNillableUserID(v *int64) *SpaceUserAssignmentUpdate {
+	if v != nil {
+		_u.SetUserID(*v)
 	}
-	return suau
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (suau *SpaceUserAssignmentUpdate) SetRole(sr spacerole.SpaceRole) *SpaceUserAssignmentUpdate {
-	suau.mutation.SetRole(sr)
-	return suau
+func (_u *SpaceUserAssignmentUpdate) SetRole(v spacerole.SpaceRole) *SpaceUserAssignmentUpdate {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (suau *SpaceUserAssignmentUpdate) SetNillableRole(sr *spacerole.SpaceRole) *SpaceUserAssignmentUpdate {
-	if sr != nil {
-		suau.SetRole(*sr)
+func (_u *SpaceUserAssignmentUpdate) SetNillableRole(v *spacerole.SpaceRole) *SpaceUserAssignmentUpdate {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return suau
+	return _u
 }
 
 // SetIsDefault sets the "is_default" field.
-func (suau *SpaceUserAssignmentUpdate) SetIsDefault(b bool) *SpaceUserAssignmentUpdate {
-	suau.mutation.SetIsDefault(b)
-	return suau
+func (_u *SpaceUserAssignmentUpdate) SetIsDefault(v bool) *SpaceUserAssignmentUpdate {
+	_u.mutation.SetIsDefault(v)
+	return _u
 }
 
 // SetNillableIsDefault sets the "is_default" field if the given value is not nil.
-func (suau *SpaceUserAssignmentUpdate) SetNillableIsDefault(b *bool) *SpaceUserAssignmentUpdate {
-	if b != nil {
-		suau.SetIsDefault(*b)
+func (_u *SpaceUserAssignmentUpdate) SetNillableIsDefault(v *bool) *SpaceUserAssignmentUpdate {
+	if v != nil {
+		_u.SetIsDefault(*v)
 	}
-	return suau
+	return _u
 }
 
 // SetUpdaterID sets the "updater" edge to the User entity by ID.
-func (suau *SpaceUserAssignmentUpdate) SetUpdaterID(id int64) *SpaceUserAssignmentUpdate {
-	suau.mutation.SetUpdaterID(id)
-	return suau
+func (_u *SpaceUserAssignmentUpdate) SetUpdaterID(id int64) *SpaceUserAssignmentUpdate {
+	_u.mutation.SetUpdaterID(id)
+	return _u
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the User entity by ID if the given value is not nil.
-func (suau *SpaceUserAssignmentUpdate) SetNillableUpdaterID(id *int64) *SpaceUserAssignmentUpdate {
+func (_u *SpaceUserAssignmentUpdate) SetNillableUpdaterID(id *int64) *SpaceUserAssignmentUpdate {
 	if id != nil {
-		suau = suau.SetUpdaterID(*id)
+		_u = _u.SetUpdaterID(*id)
 	}
-	return suau
+	return _u
 }
 
 // SetUpdater sets the "updater" edge to the User entity.
-func (suau *SpaceUserAssignmentUpdate) SetUpdater(u *User) *SpaceUserAssignmentUpdate {
-	return suau.SetUpdaterID(u.ID)
+func (_u *SpaceUserAssignmentUpdate) SetUpdater(v *User) *SpaceUserAssignmentUpdate {
+	return _u.SetUpdaterID(v.ID)
 }
 
 // SetUser sets the "user" edge to the User entity.
-func (suau *SpaceUserAssignmentUpdate) SetUser(u *User) *SpaceUserAssignmentUpdate {
-	return suau.SetUserID(u.ID)
+func (_u *SpaceUserAssignmentUpdate) SetUser(v *User) *SpaceUserAssignmentUpdate {
+	return _u.SetUserID(v.ID)
 }
 
 // Mutation returns the SpaceUserAssignmentMutation object of the builder.
-func (suau *SpaceUserAssignmentUpdate) Mutation() *SpaceUserAssignmentMutation {
-	return suau.mutation
+func (_u *SpaceUserAssignmentUpdate) Mutation() *SpaceUserAssignmentMutation {
+	return _u.mutation
 }
 
 // ClearUpdater clears the "updater" edge to the User entity.
-func (suau *SpaceUserAssignmentUpdate) ClearUpdater() *SpaceUserAssignmentUpdate {
-	suau.mutation.ClearUpdater()
-	return suau
+func (_u *SpaceUserAssignmentUpdate) ClearUpdater() *SpaceUserAssignmentUpdate {
+	_u.mutation.ClearUpdater()
+	return _u
 }
 
 // ClearUser clears the "user" edge to the User entity.
-func (suau *SpaceUserAssignmentUpdate) ClearUser() *SpaceUserAssignmentUpdate {
-	suau.mutation.ClearUser()
-	return suau
+func (_u *SpaceUserAssignmentUpdate) ClearUser() *SpaceUserAssignmentUpdate {
+	_u.mutation.ClearUser()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (suau *SpaceUserAssignmentUpdate) Save(ctx context.Context) (int, error) {
-	if err := suau.defaults(); err != nil {
+func (_u *SpaceUserAssignmentUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, suau.sqlSave, suau.mutation, suau.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (suau *SpaceUserAssignmentUpdate) SaveX(ctx context.Context) int {
-	affected, err := suau.Save(ctx)
+func (_u *SpaceUserAssignmentUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -158,74 +158,74 @@ func (suau *SpaceUserAssignmentUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (suau *SpaceUserAssignmentUpdate) Exec(ctx context.Context) error {
-	_, err := suau.Save(ctx)
+func (_u *SpaceUserAssignmentUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suau *SpaceUserAssignmentUpdate) ExecX(ctx context.Context) {
-	if err := suau.Exec(ctx); err != nil {
+func (_u *SpaceUserAssignmentUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (suau *SpaceUserAssignmentUpdate) defaults() error {
-	if _, ok := suau.mutation.UpdatedAt(); !ok {
+func (_u *SpaceUserAssignmentUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		if spaceuserassignment.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("enttenant: uninitialized spaceuserassignment.UpdateDefaultUpdatedAt (forgotten import enttenant/runtime?)")
 		}
 		v := spaceuserassignment.UpdateDefaultUpdatedAt()
-		suau.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (suau *SpaceUserAssignmentUpdate) check() error {
-	if v, ok := suau.mutation.Role(); ok {
+func (_u *SpaceUserAssignmentUpdate) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := spaceuserassignment.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`enttenant: validator failed for field "SpaceUserAssignment.role": %w`, err)}
 		}
 	}
-	if suau.mutation.SpaceCleared() && len(suau.mutation.SpaceIDs()) > 0 {
+	if _u.mutation.SpaceCleared() && len(_u.mutation.SpaceIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "SpaceUserAssignment.space"`)
 	}
-	if suau.mutation.UserCleared() && len(suau.mutation.UserIDs()) > 0 {
+	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "SpaceUserAssignment.user"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (suau *SpaceUserAssignmentUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SpaceUserAssignmentUpdate {
-	suau.modifiers = append(suau.modifiers, modifiers...)
-	return suau
+func (_u *SpaceUserAssignmentUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SpaceUserAssignmentUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (suau *SpaceUserAssignmentUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := suau.check(); err != nil {
-		return n, err
+func (_u *SpaceUserAssignmentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(spaceuserassignment.Table, spaceuserassignment.Columns, sqlgraph.NewFieldSpec(spaceuserassignment.FieldID, field.TypeInt64))
-	if ps := suau.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := suau.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(spaceuserassignment.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := suau.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(spaceuserassignment.FieldRole, field.TypeEnum, value)
 	}
-	if value, ok := suau.mutation.IsDefault(); ok {
+	if value, ok := _u.mutation.IsDefault(); ok {
 		_spec.SetField(spaceuserassignment.FieldIsDefault, field.TypeBool, value)
 	}
-	if suau.mutation.UpdaterCleared() {
+	if _u.mutation.UpdaterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -238,7 +238,7 @@ func (suau *SpaceUserAssignmentUpdate) sqlSave(ctx context.Context) (n int, err 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suau.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -254,7 +254,7 @@ func (suau *SpaceUserAssignmentUpdate) sqlSave(ctx context.Context) (n int, err 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suau.mutation.UserCleared() {
+	if _u.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -267,7 +267,7 @@ func (suau *SpaceUserAssignmentUpdate) sqlSave(ctx context.Context) (n int, err 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suau.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -283,8 +283,8 @@ func (suau *SpaceUserAssignmentUpdate) sqlSave(ctx context.Context) (n int, err 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(suau.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, suau.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{spaceuserassignment.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -292,8 +292,8 @@ func (suau *SpaceUserAssignmentUpdate) sqlSave(ctx context.Context) (n int, err 
 		}
 		return 0, err
 	}
-	suau.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // SpaceUserAssignmentUpdateOne is the builder for updating a single SpaceUserAssignment entity.
@@ -306,138 +306,138 @@ type SpaceUserAssignmentUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (suauo *SpaceUserAssignmentUpdateOne) SetUpdatedAt(t time.Time) *SpaceUserAssignmentUpdateOne {
-	suauo.mutation.SetUpdatedAt(t)
-	return suauo
+func (_u *SpaceUserAssignmentUpdateOne) SetUpdatedAt(v time.Time) *SpaceUserAssignmentUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (suauo *SpaceUserAssignmentUpdateOne) SetUpdatedBy(i int64) *SpaceUserAssignmentUpdateOne {
-	suauo.mutation.SetUpdatedBy(i)
-	return suauo
+func (_u *SpaceUserAssignmentUpdateOne) SetUpdatedBy(v int64) *SpaceUserAssignmentUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (suauo *SpaceUserAssignmentUpdateOne) SetNillableUpdatedBy(i *int64) *SpaceUserAssignmentUpdateOne {
-	if i != nil {
-		suauo.SetUpdatedBy(*i)
+func (_u *SpaceUserAssignmentUpdateOne) SetNillableUpdatedBy(v *int64) *SpaceUserAssignmentUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return suauo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (suauo *SpaceUserAssignmentUpdateOne) ClearUpdatedBy() *SpaceUserAssignmentUpdateOne {
-	suauo.mutation.ClearUpdatedBy()
-	return suauo
+func (_u *SpaceUserAssignmentUpdateOne) ClearUpdatedBy() *SpaceUserAssignmentUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (suauo *SpaceUserAssignmentUpdateOne) SetUserID(i int64) *SpaceUserAssignmentUpdateOne {
-	suauo.mutation.SetUserID(i)
-	return suauo
+func (_u *SpaceUserAssignmentUpdateOne) SetUserID(v int64) *SpaceUserAssignmentUpdateOne {
+	_u.mutation.SetUserID(v)
+	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (suauo *SpaceUserAssignmentUpdateOne) SetNillableUserID(i *int64) *SpaceUserAssignmentUpdateOne {
-	if i != nil {
-		suauo.SetUserID(*i)
+func (_u *SpaceUserAssignmentUpdateOne) SetNillableUserID(v *int64) *SpaceUserAssignmentUpdateOne {
+	if v != nil {
+		_u.SetUserID(*v)
 	}
-	return suauo
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (suauo *SpaceUserAssignmentUpdateOne) SetRole(sr spacerole.SpaceRole) *SpaceUserAssignmentUpdateOne {
-	suauo.mutation.SetRole(sr)
-	return suauo
+func (_u *SpaceUserAssignmentUpdateOne) SetRole(v spacerole.SpaceRole) *SpaceUserAssignmentUpdateOne {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (suauo *SpaceUserAssignmentUpdateOne) SetNillableRole(sr *spacerole.SpaceRole) *SpaceUserAssignmentUpdateOne {
-	if sr != nil {
-		suauo.SetRole(*sr)
+func (_u *SpaceUserAssignmentUpdateOne) SetNillableRole(v *spacerole.SpaceRole) *SpaceUserAssignmentUpdateOne {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return suauo
+	return _u
 }
 
 // SetIsDefault sets the "is_default" field.
-func (suauo *SpaceUserAssignmentUpdateOne) SetIsDefault(b bool) *SpaceUserAssignmentUpdateOne {
-	suauo.mutation.SetIsDefault(b)
-	return suauo
+func (_u *SpaceUserAssignmentUpdateOne) SetIsDefault(v bool) *SpaceUserAssignmentUpdateOne {
+	_u.mutation.SetIsDefault(v)
+	return _u
 }
 
 // SetNillableIsDefault sets the "is_default" field if the given value is not nil.
-func (suauo *SpaceUserAssignmentUpdateOne) SetNillableIsDefault(b *bool) *SpaceUserAssignmentUpdateOne {
-	if b != nil {
-		suauo.SetIsDefault(*b)
+func (_u *SpaceUserAssignmentUpdateOne) SetNillableIsDefault(v *bool) *SpaceUserAssignmentUpdateOne {
+	if v != nil {
+		_u.SetIsDefault(*v)
 	}
-	return suauo
+	return _u
 }
 
 // SetUpdaterID sets the "updater" edge to the User entity by ID.
-func (suauo *SpaceUserAssignmentUpdateOne) SetUpdaterID(id int64) *SpaceUserAssignmentUpdateOne {
-	suauo.mutation.SetUpdaterID(id)
-	return suauo
+func (_u *SpaceUserAssignmentUpdateOne) SetUpdaterID(id int64) *SpaceUserAssignmentUpdateOne {
+	_u.mutation.SetUpdaterID(id)
+	return _u
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the User entity by ID if the given value is not nil.
-func (suauo *SpaceUserAssignmentUpdateOne) SetNillableUpdaterID(id *int64) *SpaceUserAssignmentUpdateOne {
+func (_u *SpaceUserAssignmentUpdateOne) SetNillableUpdaterID(id *int64) *SpaceUserAssignmentUpdateOne {
 	if id != nil {
-		suauo = suauo.SetUpdaterID(*id)
+		_u = _u.SetUpdaterID(*id)
 	}
-	return suauo
+	return _u
 }
 
 // SetUpdater sets the "updater" edge to the User entity.
-func (suauo *SpaceUserAssignmentUpdateOne) SetUpdater(u *User) *SpaceUserAssignmentUpdateOne {
-	return suauo.SetUpdaterID(u.ID)
+func (_u *SpaceUserAssignmentUpdateOne) SetUpdater(v *User) *SpaceUserAssignmentUpdateOne {
+	return _u.SetUpdaterID(v.ID)
 }
 
 // SetUser sets the "user" edge to the User entity.
-func (suauo *SpaceUserAssignmentUpdateOne) SetUser(u *User) *SpaceUserAssignmentUpdateOne {
-	return suauo.SetUserID(u.ID)
+func (_u *SpaceUserAssignmentUpdateOne) SetUser(v *User) *SpaceUserAssignmentUpdateOne {
+	return _u.SetUserID(v.ID)
 }
 
 // Mutation returns the SpaceUserAssignmentMutation object of the builder.
-func (suauo *SpaceUserAssignmentUpdateOne) Mutation() *SpaceUserAssignmentMutation {
-	return suauo.mutation
+func (_u *SpaceUserAssignmentUpdateOne) Mutation() *SpaceUserAssignmentMutation {
+	return _u.mutation
 }
 
 // ClearUpdater clears the "updater" edge to the User entity.
-func (suauo *SpaceUserAssignmentUpdateOne) ClearUpdater() *SpaceUserAssignmentUpdateOne {
-	suauo.mutation.ClearUpdater()
-	return suauo
+func (_u *SpaceUserAssignmentUpdateOne) ClearUpdater() *SpaceUserAssignmentUpdateOne {
+	_u.mutation.ClearUpdater()
+	return _u
 }
 
 // ClearUser clears the "user" edge to the User entity.
-func (suauo *SpaceUserAssignmentUpdateOne) ClearUser() *SpaceUserAssignmentUpdateOne {
-	suauo.mutation.ClearUser()
-	return suauo
+func (_u *SpaceUserAssignmentUpdateOne) ClearUser() *SpaceUserAssignmentUpdateOne {
+	_u.mutation.ClearUser()
+	return _u
 }
 
 // Where appends a list predicates to the SpaceUserAssignmentUpdate builder.
-func (suauo *SpaceUserAssignmentUpdateOne) Where(ps ...predicate.SpaceUserAssignment) *SpaceUserAssignmentUpdateOne {
-	suauo.mutation.Where(ps...)
-	return suauo
+func (_u *SpaceUserAssignmentUpdateOne) Where(ps ...predicate.SpaceUserAssignment) *SpaceUserAssignmentUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (suauo *SpaceUserAssignmentUpdateOne) Select(field string, fields ...string) *SpaceUserAssignmentUpdateOne {
-	suauo.fields = append([]string{field}, fields...)
-	return suauo
+func (_u *SpaceUserAssignmentUpdateOne) Select(field string, fields ...string) *SpaceUserAssignmentUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated SpaceUserAssignment entity.
-func (suauo *SpaceUserAssignmentUpdateOne) Save(ctx context.Context) (*SpaceUserAssignment, error) {
-	if err := suauo.defaults(); err != nil {
+func (_u *SpaceUserAssignmentUpdateOne) Save(ctx context.Context) (*SpaceUserAssignment, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, suauo.sqlSave, suauo.mutation, suauo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (suauo *SpaceUserAssignmentUpdateOne) SaveX(ctx context.Context) *SpaceUserAssignment {
-	node, err := suauo.Save(ctx)
+func (_u *SpaceUserAssignmentUpdateOne) SaveX(ctx context.Context) *SpaceUserAssignment {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -445,63 +445,63 @@ func (suauo *SpaceUserAssignmentUpdateOne) SaveX(ctx context.Context) *SpaceUser
 }
 
 // Exec executes the query on the entity.
-func (suauo *SpaceUserAssignmentUpdateOne) Exec(ctx context.Context) error {
-	_, err := suauo.Save(ctx)
+func (_u *SpaceUserAssignmentUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suauo *SpaceUserAssignmentUpdateOne) ExecX(ctx context.Context) {
-	if err := suauo.Exec(ctx); err != nil {
+func (_u *SpaceUserAssignmentUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (suauo *SpaceUserAssignmentUpdateOne) defaults() error {
-	if _, ok := suauo.mutation.UpdatedAt(); !ok {
+func (_u *SpaceUserAssignmentUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		if spaceuserassignment.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("enttenant: uninitialized spaceuserassignment.UpdateDefaultUpdatedAt (forgotten import enttenant/runtime?)")
 		}
 		v := spaceuserassignment.UpdateDefaultUpdatedAt()
-		suauo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (suauo *SpaceUserAssignmentUpdateOne) check() error {
-	if v, ok := suauo.mutation.Role(); ok {
+func (_u *SpaceUserAssignmentUpdateOne) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := spaceuserassignment.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`enttenant: validator failed for field "SpaceUserAssignment.role": %w`, err)}
 		}
 	}
-	if suauo.mutation.SpaceCleared() && len(suauo.mutation.SpaceIDs()) > 0 {
+	if _u.mutation.SpaceCleared() && len(_u.mutation.SpaceIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "SpaceUserAssignment.space"`)
 	}
-	if suauo.mutation.UserCleared() && len(suauo.mutation.UserIDs()) > 0 {
+	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "SpaceUserAssignment.user"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (suauo *SpaceUserAssignmentUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SpaceUserAssignmentUpdateOne {
-	suauo.modifiers = append(suauo.modifiers, modifiers...)
-	return suauo
+func (_u *SpaceUserAssignmentUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SpaceUserAssignmentUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (suauo *SpaceUserAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *SpaceUserAssignment, err error) {
-	if err := suauo.check(); err != nil {
+func (_u *SpaceUserAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *SpaceUserAssignment, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(spaceuserassignment.Table, spaceuserassignment.Columns, sqlgraph.NewFieldSpec(spaceuserassignment.FieldID, field.TypeInt64))
-	id, ok := suauo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`enttenant: missing "SpaceUserAssignment.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := suauo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, spaceuserassignment.FieldID)
 		for _, f := range fields {
@@ -513,23 +513,23 @@ func (suauo *SpaceUserAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *
 			}
 		}
 	}
-	if ps := suauo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := suauo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(spaceuserassignment.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := suauo.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(spaceuserassignment.FieldRole, field.TypeEnum, value)
 	}
-	if value, ok := suauo.mutation.IsDefault(); ok {
+	if value, ok := _u.mutation.IsDefault(); ok {
 		_spec.SetField(spaceuserassignment.FieldIsDefault, field.TypeBool, value)
 	}
-	if suauo.mutation.UpdaterCleared() {
+	if _u.mutation.UpdaterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -542,7 +542,7 @@ func (suauo *SpaceUserAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suauo.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -558,7 +558,7 @@ func (suauo *SpaceUserAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suauo.mutation.UserCleared() {
+	if _u.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -571,7 +571,7 @@ func (suauo *SpaceUserAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suauo.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -587,11 +587,11 @@ func (suauo *SpaceUserAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(suauo.modifiers...)
-	_node = &SpaceUserAssignment{config: suauo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &SpaceUserAssignment{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, suauo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{spaceuserassignment.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -599,6 +599,6 @@ func (suauo *SpaceUserAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *
 		}
 		return nil, err
 	}
-	suauo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

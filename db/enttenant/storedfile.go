@@ -125,7 +125,7 @@ func (*StoredFile) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the StoredFile fields.
-func (sf *StoredFile) assignValues(columns []string, values []any) error {
+func (_m *StoredFile) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -136,113 +136,113 @@ func (sf *StoredFile) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			sf.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case storedfile.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				sf.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case storedfile.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				sf.CreatedBy = value.Int64
+				_m.CreatedBy = value.Int64
 			}
 		case storedfile.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				sf.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case storedfile.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				sf.UpdatedBy = value.Int64
+				_m.UpdatedBy = value.Int64
 			}
 		case storedfile.FieldFilename:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field filename", values[i])
 			} else if value.Valid {
-				sf.Filename = value.String
+				_m.Filename = value.String
 			}
 		case storedfile.FieldSize:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field size", values[i])
 			} else if value.Valid {
-				sf.Size = value.Int64
+				_m.Size = value.Int64
 			}
 		case storedfile.FieldSizeInStorage:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field size_in_storage", values[i])
 			} else if value.Valid {
-				sf.SizeInStorage = value.Int64
+				_m.SizeInStorage = value.Int64
 			}
 		case storedfile.FieldSha256:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field sha256", values[i])
 			} else if value.Valid {
-				sf.Sha256 = value.String
+				_m.Sha256 = value.String
 			}
 		case storedfile.FieldMimeType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mime_type", values[i])
 			} else if value.Valid {
-				sf.MimeType = value.String
+				_m.MimeType = value.String
 			}
 		case storedfile.FieldStorageType:
 			if value, ok := values[i].(*storagetype.StorageType); !ok {
 				return fmt.Errorf("unexpected type %T for field storage_type", values[i])
 			} else if value != nil {
-				sf.StorageType = *value
+				_m.StorageType = *value
 			}
 		case storedfile.FieldBucketName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field bucket_name", values[i])
 			} else if value.Valid {
-				sf.BucketName = value.String
+				_m.BucketName = value.String
 			}
 		case storedfile.FieldStoragePath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field storage_path", values[i])
 			} else if value.Valid {
-				sf.StoragePath = value.String
+				_m.StoragePath = value.String
 			}
 		case storedfile.FieldStorageFilename:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field storage_filename", values[i])
 			} else if value.Valid {
-				sf.StorageFilename = value.String
+				_m.StorageFilename = value.String
 			}
 		case storedfile.FieldTemporaryStoragePath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field temporary_storage_path", values[i])
 			} else if value.Valid {
-				sf.TemporaryStoragePath = value.String
+				_m.TemporaryStoragePath = value.String
 			}
 		case storedfile.FieldTemporaryStorageFilename:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field temporary_storage_filename", values[i])
 			} else if value.Valid {
-				sf.TemporaryStorageFilename = value.String
+				_m.TemporaryStorageFilename = value.String
 			}
 		case storedfile.FieldCopiedToFinalDestinationAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field copied_to_final_destination_at", values[i])
 			} else if value.Valid {
-				sf.CopiedToFinalDestinationAt = new(time.Time)
-				*sf.CopiedToFinalDestinationAt = value.Time
+				_m.CopiedToFinalDestinationAt = new(time.Time)
+				*_m.CopiedToFinalDestinationAt = value.Time
 			}
 		case storedfile.FieldDeletedTemporaryFileAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_temporary_file_at", values[i])
 			} else if value.Valid {
-				sf.DeletedTemporaryFileAt = new(time.Time)
-				*sf.DeletedTemporaryFileAt = value.Time
+				_m.DeletedTemporaryFileAt = new(time.Time)
+				*_m.DeletedTemporaryFileAt = value.Time
 			}
 		default:
-			sf.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -250,99 +250,99 @@ func (sf *StoredFile) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the StoredFile.
 // This includes values selected through modifiers, order, etc.
-func (sf *StoredFile) Value(name string) (ent.Value, error) {
-	return sf.selectValues.Get(name)
+func (_m *StoredFile) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryCreator queries the "creator" edge of the StoredFile entity.
-func (sf *StoredFile) QueryCreator() *UserQuery {
-	return NewStoredFileClient(sf.config).QueryCreator(sf)
+func (_m *StoredFile) QueryCreator() *UserQuery {
+	return NewStoredFileClient(_m.config).QueryCreator(_m)
 }
 
 // QueryUpdater queries the "updater" edge of the StoredFile entity.
-func (sf *StoredFile) QueryUpdater() *UserQuery {
-	return NewStoredFileClient(sf.config).QueryUpdater(sf)
+func (_m *StoredFile) QueryUpdater() *UserQuery {
+	return NewStoredFileClient(_m.config).QueryUpdater(_m)
 }
 
 // QueryFiles queries the "files" edge of the StoredFile entity.
-func (sf *StoredFile) QueryFiles() *FileQuery {
-	return NewStoredFileClient(sf.config).QueryFiles(sf)
+func (_m *StoredFile) QueryFiles() *FileQuery {
+	return NewStoredFileClient(_m.config).QueryFiles(_m)
 }
 
 // Update returns a builder for updating this StoredFile.
 // Note that you need to call StoredFile.Unwrap() before calling this method if this StoredFile
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (sf *StoredFile) Update() *StoredFileUpdateOne {
-	return NewStoredFileClient(sf.config).UpdateOne(sf)
+func (_m *StoredFile) Update() *StoredFileUpdateOne {
+	return NewStoredFileClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the StoredFile entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (sf *StoredFile) Unwrap() *StoredFile {
-	_tx, ok := sf.config.driver.(*txDriver)
+func (_m *StoredFile) Unwrap() *StoredFile {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: StoredFile is not a transactional entity")
 	}
-	sf.config.driver = _tx.drv
-	return sf
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (sf *StoredFile) String() string {
+func (_m *StoredFile) String() string {
 	var builder strings.Builder
 	builder.WriteString("StoredFile(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", sf.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(sf.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", sf.CreatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(sf.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", sf.UpdatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("filename=")
-	builder.WriteString(sf.Filename)
+	builder.WriteString(_m.Filename)
 	builder.WriteString(", ")
 	builder.WriteString("size=")
-	builder.WriteString(fmt.Sprintf("%v", sf.Size))
+	builder.WriteString(fmt.Sprintf("%v", _m.Size))
 	builder.WriteString(", ")
 	builder.WriteString("size_in_storage=")
-	builder.WriteString(fmt.Sprintf("%v", sf.SizeInStorage))
+	builder.WriteString(fmt.Sprintf("%v", _m.SizeInStorage))
 	builder.WriteString(", ")
 	builder.WriteString("sha256=")
-	builder.WriteString(sf.Sha256)
+	builder.WriteString(_m.Sha256)
 	builder.WriteString(", ")
 	builder.WriteString("mime_type=")
-	builder.WriteString(sf.MimeType)
+	builder.WriteString(_m.MimeType)
 	builder.WriteString(", ")
 	builder.WriteString("storage_type=")
-	builder.WriteString(fmt.Sprintf("%v", sf.StorageType))
+	builder.WriteString(fmt.Sprintf("%v", _m.StorageType))
 	builder.WriteString(", ")
 	builder.WriteString("bucket_name=")
-	builder.WriteString(sf.BucketName)
+	builder.WriteString(_m.BucketName)
 	builder.WriteString(", ")
 	builder.WriteString("storage_path=")
-	builder.WriteString(sf.StoragePath)
+	builder.WriteString(_m.StoragePath)
 	builder.WriteString(", ")
 	builder.WriteString("storage_filename=")
-	builder.WriteString(sf.StorageFilename)
+	builder.WriteString(_m.StorageFilename)
 	builder.WriteString(", ")
 	builder.WriteString("temporary_storage_path=")
-	builder.WriteString(sf.TemporaryStoragePath)
+	builder.WriteString(_m.TemporaryStoragePath)
 	builder.WriteString(", ")
 	builder.WriteString("temporary_storage_filename=")
-	builder.WriteString(sf.TemporaryStorageFilename)
+	builder.WriteString(_m.TemporaryStorageFilename)
 	builder.WriteString(", ")
-	if v := sf.CopiedToFinalDestinationAt; v != nil {
+	if v := _m.CopiedToFinalDestinationAt; v != nil {
 		builder.WriteString("copied_to_final_destination_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := sf.DeletedTemporaryFileAt; v != nil {
+	if v := _m.DeletedTemporaryFileAt; v != nil {
 		builder.WriteString("deleted_temporary_file_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}

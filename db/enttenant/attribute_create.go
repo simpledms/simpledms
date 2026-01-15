@@ -25,163 +25,163 @@ type AttributeCreate struct {
 }
 
 // SetSpaceID sets the "space_id" field.
-func (ac *AttributeCreate) SetSpaceID(i int64) *AttributeCreate {
-	ac.mutation.SetSpaceID(i)
-	return ac
+func (_c *AttributeCreate) SetSpaceID(v int64) *AttributeCreate {
+	_c.mutation.SetSpaceID(v)
+	return _c
 }
 
 // SetDocumentTypeID sets the "document_type_id" field.
-func (ac *AttributeCreate) SetDocumentTypeID(i int64) *AttributeCreate {
-	ac.mutation.SetDocumentTypeID(i)
-	return ac
+func (_c *AttributeCreate) SetDocumentTypeID(v int64) *AttributeCreate {
+	_c.mutation.SetDocumentTypeID(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (ac *AttributeCreate) SetName(s string) *AttributeCreate {
-	ac.mutation.SetName(s)
-	return ac
+func (_c *AttributeCreate) SetName(v string) *AttributeCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ac *AttributeCreate) SetNillableName(s *string) *AttributeCreate {
-	if s != nil {
-		ac.SetName(*s)
+func (_c *AttributeCreate) SetNillableName(v *string) *AttributeCreate {
+	if v != nil {
+		_c.SetName(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetIsNameGiving sets the "is_name_giving" field.
-func (ac *AttributeCreate) SetIsNameGiving(b bool) *AttributeCreate {
-	ac.mutation.SetIsNameGiving(b)
-	return ac
+func (_c *AttributeCreate) SetIsNameGiving(v bool) *AttributeCreate {
+	_c.mutation.SetIsNameGiving(v)
+	return _c
 }
 
 // SetNillableIsNameGiving sets the "is_name_giving" field if the given value is not nil.
-func (ac *AttributeCreate) SetNillableIsNameGiving(b *bool) *AttributeCreate {
-	if b != nil {
-		ac.SetIsNameGiving(*b)
+func (_c *AttributeCreate) SetNillableIsNameGiving(v *bool) *AttributeCreate {
+	if v != nil {
+		_c.SetIsNameGiving(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetIsProtected sets the "is_protected" field.
-func (ac *AttributeCreate) SetIsProtected(b bool) *AttributeCreate {
-	ac.mutation.SetIsProtected(b)
-	return ac
+func (_c *AttributeCreate) SetIsProtected(v bool) *AttributeCreate {
+	_c.mutation.SetIsProtected(v)
+	return _c
 }
 
 // SetNillableIsProtected sets the "is_protected" field if the given value is not nil.
-func (ac *AttributeCreate) SetNillableIsProtected(b *bool) *AttributeCreate {
-	if b != nil {
-		ac.SetIsProtected(*b)
+func (_c *AttributeCreate) SetNillableIsProtected(v *bool) *AttributeCreate {
+	if v != nil {
+		_c.SetIsProtected(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetIsDisabled sets the "is_disabled" field.
-func (ac *AttributeCreate) SetIsDisabled(b bool) *AttributeCreate {
-	ac.mutation.SetIsDisabled(b)
-	return ac
+func (_c *AttributeCreate) SetIsDisabled(v bool) *AttributeCreate {
+	_c.mutation.SetIsDisabled(v)
+	return _c
 }
 
 // SetNillableIsDisabled sets the "is_disabled" field if the given value is not nil.
-func (ac *AttributeCreate) SetNillableIsDisabled(b *bool) *AttributeCreate {
-	if b != nil {
-		ac.SetIsDisabled(*b)
+func (_c *AttributeCreate) SetNillableIsDisabled(v *bool) *AttributeCreate {
+	if v != nil {
+		_c.SetIsDisabled(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetIsRequired sets the "is_required" field.
-func (ac *AttributeCreate) SetIsRequired(b bool) *AttributeCreate {
-	ac.mutation.SetIsRequired(b)
-	return ac
+func (_c *AttributeCreate) SetIsRequired(v bool) *AttributeCreate {
+	_c.mutation.SetIsRequired(v)
+	return _c
 }
 
 // SetNillableIsRequired sets the "is_required" field if the given value is not nil.
-func (ac *AttributeCreate) SetNillableIsRequired(b *bool) *AttributeCreate {
-	if b != nil {
-		ac.SetIsRequired(*b)
+func (_c *AttributeCreate) SetNillableIsRequired(v *bool) *AttributeCreate {
+	if v != nil {
+		_c.SetIsRequired(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetType sets the "type" field.
-func (ac *AttributeCreate) SetType(at attributetype.AttributeType) *AttributeCreate {
-	ac.mutation.SetType(at)
-	return ac
+func (_c *AttributeCreate) SetType(v attributetype.AttributeType) *AttributeCreate {
+	_c.mutation.SetType(v)
+	return _c
 }
 
 // SetTagID sets the "tag_id" field.
-func (ac *AttributeCreate) SetTagID(i int64) *AttributeCreate {
-	ac.mutation.SetTagID(i)
-	return ac
+func (_c *AttributeCreate) SetTagID(v int64) *AttributeCreate {
+	_c.mutation.SetTagID(v)
+	return _c
 }
 
 // SetNillableTagID sets the "tag_id" field if the given value is not nil.
-func (ac *AttributeCreate) SetNillableTagID(i *int64) *AttributeCreate {
-	if i != nil {
-		ac.SetTagID(*i)
+func (_c *AttributeCreate) SetNillableTagID(v *int64) *AttributeCreate {
+	if v != nil {
+		_c.SetTagID(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetPropertyID sets the "property_id" field.
-func (ac *AttributeCreate) SetPropertyID(i int64) *AttributeCreate {
-	ac.mutation.SetPropertyID(i)
-	return ac
+func (_c *AttributeCreate) SetPropertyID(v int64) *AttributeCreate {
+	_c.mutation.SetPropertyID(v)
+	return _c
 }
 
 // SetNillablePropertyID sets the "property_id" field if the given value is not nil.
-func (ac *AttributeCreate) SetNillablePropertyID(i *int64) *AttributeCreate {
-	if i != nil {
-		ac.SetPropertyID(*i)
+func (_c *AttributeCreate) SetNillablePropertyID(v *int64) *AttributeCreate {
+	if v != nil {
+		_c.SetPropertyID(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ac *AttributeCreate) SetID(i int64) *AttributeCreate {
-	ac.mutation.SetID(i)
-	return ac
+func (_c *AttributeCreate) SetID(v int64) *AttributeCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetSpace sets the "space" edge to the Space entity.
-func (ac *AttributeCreate) SetSpace(s *Space) *AttributeCreate {
-	return ac.SetSpaceID(s.ID)
+func (_c *AttributeCreate) SetSpace(v *Space) *AttributeCreate {
+	return _c.SetSpaceID(v.ID)
 }
 
 // SetDocumentType sets the "document_type" edge to the DocumentType entity.
-func (ac *AttributeCreate) SetDocumentType(d *DocumentType) *AttributeCreate {
-	return ac.SetDocumentTypeID(d.ID)
+func (_c *AttributeCreate) SetDocumentType(v *DocumentType) *AttributeCreate {
+	return _c.SetDocumentTypeID(v.ID)
 }
 
 // SetTag sets the "tag" edge to the Tag entity.
-func (ac *AttributeCreate) SetTag(t *Tag) *AttributeCreate {
-	return ac.SetTagID(t.ID)
+func (_c *AttributeCreate) SetTag(v *Tag) *AttributeCreate {
+	return _c.SetTagID(v.ID)
 }
 
 // SetProperty sets the "property" edge to the Property entity.
-func (ac *AttributeCreate) SetProperty(p *Property) *AttributeCreate {
-	return ac.SetPropertyID(p.ID)
+func (_c *AttributeCreate) SetProperty(v *Property) *AttributeCreate {
+	return _c.SetPropertyID(v.ID)
 }
 
 // Mutation returns the AttributeMutation object of the builder.
-func (ac *AttributeCreate) Mutation() *AttributeMutation {
-	return ac.mutation
+func (_c *AttributeCreate) Mutation() *AttributeMutation {
+	return _c.mutation
 }
 
 // Save creates the Attribute in the database.
-func (ac *AttributeCreate) Save(ctx context.Context) (*Attribute, error) {
-	if err := ac.defaults(); err != nil {
+func (_c *AttributeCreate) Save(ctx context.Context) (*Attribute, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, ac.sqlSave, ac.mutation, ac.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ac *AttributeCreate) SaveX(ctx context.Context) *Attribute {
-	v, err := ac.Save(ctx)
+func (_c *AttributeCreate) SaveX(ctx context.Context) *Attribute {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -189,89 +189,89 @@ func (ac *AttributeCreate) SaveX(ctx context.Context) *Attribute {
 }
 
 // Exec executes the query.
-func (ac *AttributeCreate) Exec(ctx context.Context) error {
-	_, err := ac.Save(ctx)
+func (_c *AttributeCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ac *AttributeCreate) ExecX(ctx context.Context) {
-	if err := ac.Exec(ctx); err != nil {
+func (_c *AttributeCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ac *AttributeCreate) defaults() error {
-	if _, ok := ac.mutation.Name(); !ok {
+func (_c *AttributeCreate) defaults() error {
+	if _, ok := _c.mutation.Name(); !ok {
 		v := attribute.DefaultName
-		ac.mutation.SetName(v)
+		_c.mutation.SetName(v)
 	}
-	if _, ok := ac.mutation.IsNameGiving(); !ok {
+	if _, ok := _c.mutation.IsNameGiving(); !ok {
 		v := attribute.DefaultIsNameGiving
-		ac.mutation.SetIsNameGiving(v)
+		_c.mutation.SetIsNameGiving(v)
 	}
-	if _, ok := ac.mutation.IsProtected(); !ok {
+	if _, ok := _c.mutation.IsProtected(); !ok {
 		v := attribute.DefaultIsProtected
-		ac.mutation.SetIsProtected(v)
+		_c.mutation.SetIsProtected(v)
 	}
-	if _, ok := ac.mutation.IsDisabled(); !ok {
+	if _, ok := _c.mutation.IsDisabled(); !ok {
 		v := attribute.DefaultIsDisabled
-		ac.mutation.SetIsDisabled(v)
+		_c.mutation.SetIsDisabled(v)
 	}
-	if _, ok := ac.mutation.IsRequired(); !ok {
+	if _, ok := _c.mutation.IsRequired(); !ok {
 		v := attribute.DefaultIsRequired
-		ac.mutation.SetIsRequired(v)
+		_c.mutation.SetIsRequired(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ac *AttributeCreate) check() error {
-	if _, ok := ac.mutation.SpaceID(); !ok {
+func (_c *AttributeCreate) check() error {
+	if _, ok := _c.mutation.SpaceID(); !ok {
 		return &ValidationError{Name: "space_id", err: errors.New(`enttenant: missing required field "Attribute.space_id"`)}
 	}
-	if _, ok := ac.mutation.DocumentTypeID(); !ok {
+	if _, ok := _c.mutation.DocumentTypeID(); !ok {
 		return &ValidationError{Name: "document_type_id", err: errors.New(`enttenant: missing required field "Attribute.document_type_id"`)}
 	}
-	if _, ok := ac.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`enttenant: missing required field "Attribute.name"`)}
 	}
-	if _, ok := ac.mutation.IsNameGiving(); !ok {
+	if _, ok := _c.mutation.IsNameGiving(); !ok {
 		return &ValidationError{Name: "is_name_giving", err: errors.New(`enttenant: missing required field "Attribute.is_name_giving"`)}
 	}
-	if _, ok := ac.mutation.IsProtected(); !ok {
+	if _, ok := _c.mutation.IsProtected(); !ok {
 		return &ValidationError{Name: "is_protected", err: errors.New(`enttenant: missing required field "Attribute.is_protected"`)}
 	}
-	if _, ok := ac.mutation.IsDisabled(); !ok {
+	if _, ok := _c.mutation.IsDisabled(); !ok {
 		return &ValidationError{Name: "is_disabled", err: errors.New(`enttenant: missing required field "Attribute.is_disabled"`)}
 	}
-	if _, ok := ac.mutation.IsRequired(); !ok {
+	if _, ok := _c.mutation.IsRequired(); !ok {
 		return &ValidationError{Name: "is_required", err: errors.New(`enttenant: missing required field "Attribute.is_required"`)}
 	}
-	if _, ok := ac.mutation.GetType(); !ok {
+	if _, ok := _c.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`enttenant: missing required field "Attribute.type"`)}
 	}
-	if v, ok := ac.mutation.GetType(); ok {
+	if v, ok := _c.mutation.GetType(); ok {
 		if err := attribute.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`enttenant: validator failed for field "Attribute.type": %w`, err)}
 		}
 	}
-	if len(ac.mutation.SpaceIDs()) == 0 {
+	if len(_c.mutation.SpaceIDs()) == 0 {
 		return &ValidationError{Name: "space", err: errors.New(`enttenant: missing required edge "Attribute.space"`)}
 	}
-	if len(ac.mutation.DocumentTypeIDs()) == 0 {
+	if len(_c.mutation.DocumentTypeIDs()) == 0 {
 		return &ValidationError{Name: "document_type", err: errors.New(`enttenant: missing required edge "Attribute.document_type"`)}
 	}
 	return nil
 }
 
-func (ac *AttributeCreate) sqlSave(ctx context.Context) (*Attribute, error) {
-	if err := ac.check(); err != nil {
+func (_c *AttributeCreate) sqlSave(ctx context.Context) (*Attribute, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ac.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ac.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -281,45 +281,45 @@ func (ac *AttributeCreate) sqlSave(ctx context.Context) (*Attribute, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	ac.mutation.id = &_node.ID
-	ac.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ac *AttributeCreate) createSpec() (*Attribute, *sqlgraph.CreateSpec) {
+func (_c *AttributeCreate) createSpec() (*Attribute, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Attribute{config: ac.config}
+		_node = &Attribute{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(attribute.Table, sqlgraph.NewFieldSpec(attribute.FieldID, field.TypeInt64))
 	)
-	if id, ok := ac.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := ac.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(attribute.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := ac.mutation.IsNameGiving(); ok {
+	if value, ok := _c.mutation.IsNameGiving(); ok {
 		_spec.SetField(attribute.FieldIsNameGiving, field.TypeBool, value)
 		_node.IsNameGiving = value
 	}
-	if value, ok := ac.mutation.IsProtected(); ok {
+	if value, ok := _c.mutation.IsProtected(); ok {
 		_spec.SetField(attribute.FieldIsProtected, field.TypeBool, value)
 		_node.IsProtected = value
 	}
-	if value, ok := ac.mutation.IsDisabled(); ok {
+	if value, ok := _c.mutation.IsDisabled(); ok {
 		_spec.SetField(attribute.FieldIsDisabled, field.TypeBool, value)
 		_node.IsDisabled = value
 	}
-	if value, ok := ac.mutation.IsRequired(); ok {
+	if value, ok := _c.mutation.IsRequired(); ok {
 		_spec.SetField(attribute.FieldIsRequired, field.TypeBool, value)
 		_node.IsRequired = value
 	}
-	if value, ok := ac.mutation.GetType(); ok {
+	if value, ok := _c.mutation.GetType(); ok {
 		_spec.SetField(attribute.FieldType, field.TypeEnum, value)
 		_node.Type = value
 	}
-	if nodes := ac.mutation.SpaceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SpaceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -336,7 +336,7 @@ func (ac *AttributeCreate) createSpec() (*Attribute, *sqlgraph.CreateSpec) {
 		_node.SpaceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.DocumentTypeIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.DocumentTypeIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -353,7 +353,7 @@ func (ac *AttributeCreate) createSpec() (*Attribute, *sqlgraph.CreateSpec) {
 		_node.DocumentTypeID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -370,7 +370,7 @@ func (ac *AttributeCreate) createSpec() (*Attribute, *sqlgraph.CreateSpec) {
 		_node.TagID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.PropertyIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.PropertyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -398,16 +398,16 @@ type AttributeCreateBulk struct {
 }
 
 // Save creates the Attribute entities in the database.
-func (acb *AttributeCreateBulk) Save(ctx context.Context) ([]*Attribute, error) {
-	if acb.err != nil {
-		return nil, acb.err
+func (_c *AttributeCreateBulk) Save(ctx context.Context) ([]*Attribute, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(acb.builders))
-	nodes := make([]*Attribute, len(acb.builders))
-	mutators := make([]Mutator, len(acb.builders))
-	for i := range acb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Attribute, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := acb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*AttributeMutation)
@@ -421,11 +421,11 @@ func (acb *AttributeCreateBulk) Save(ctx context.Context) ([]*Attribute, error) 
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, acb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, acb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -449,7 +449,7 @@ func (acb *AttributeCreateBulk) Save(ctx context.Context) ([]*Attribute, error) 
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, acb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -457,8 +457,8 @@ func (acb *AttributeCreateBulk) Save(ctx context.Context) ([]*Attribute, error) 
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (acb *AttributeCreateBulk) SaveX(ctx context.Context) []*Attribute {
-	v, err := acb.Save(ctx)
+func (_c *AttributeCreateBulk) SaveX(ctx context.Context) []*Attribute {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -466,14 +466,14 @@ func (acb *AttributeCreateBulk) SaveX(ctx context.Context) []*Attribute {
 }
 
 // Exec executes the query.
-func (acb *AttributeCreateBulk) Exec(ctx context.Context) error {
-	_, err := acb.Save(ctx)
+func (_c *AttributeCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (acb *AttributeCreateBulk) ExecX(ctx context.Context) {
-	if err := acb.Exec(ctx); err != nil {
+func (_c *AttributeCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

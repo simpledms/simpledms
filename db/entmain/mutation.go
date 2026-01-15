@@ -4064,6 +4064,7 @@ type SystemConfigMutation struct {
 	mailer_password                       *entx.EncryptedString
 	mailer_from                           *string
 	mailer_insecure_skip_verify           *bool
+	mailer_use_implicit_ssl_tls           *bool
 	ocr_tika_url                          *string
 	initialized_at                        *time.Time
 	clearedFields                         map[string]struct{}
@@ -5046,6 +5047,42 @@ func (m *SystemConfigMutation) ResetMailerInsecureSkipVerify() {
 	m.mailer_insecure_skip_verify = nil
 }
 
+// SetMailerUseImplicitSslTLS sets the "mailer_use_implicit_ssl_tls" field.
+func (m *SystemConfigMutation) SetMailerUseImplicitSslTLS(b bool) {
+	m.mailer_use_implicit_ssl_tls = &b
+}
+
+// MailerUseImplicitSslTLS returns the value of the "mailer_use_implicit_ssl_tls" field in the mutation.
+func (m *SystemConfigMutation) MailerUseImplicitSslTLS() (r bool, exists bool) {
+	v := m.mailer_use_implicit_ssl_tls
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMailerUseImplicitSslTLS returns the old "mailer_use_implicit_ssl_tls" field's value of the SystemConfig entity.
+// If the SystemConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemConfigMutation) OldMailerUseImplicitSslTLS(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMailerUseImplicitSslTLS is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMailerUseImplicitSslTLS requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMailerUseImplicitSslTLS: %w", err)
+	}
+	return oldValue.MailerUseImplicitSslTLS, nil
+}
+
+// ResetMailerUseImplicitSslTLS resets all changes to the "mailer_use_implicit_ssl_tls" field.
+func (m *SystemConfigMutation) ResetMailerUseImplicitSslTLS() {
+	m.mailer_use_implicit_ssl_tls = nil
+}
+
 // SetOcrTikaURL sets the "ocr_tika_url" field.
 func (m *SystemConfigMutation) SetOcrTikaURL(s string) {
 	m.ocr_tika_url = &s
@@ -5245,7 +5282,7 @@ func (m *SystemConfigMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SystemConfigMutation) Fields() []string {
-	fields := make([]string, 0, 24)
+	fields := make([]string, 0, 25)
 	if m.created_at != nil {
 		fields = append(fields, systemconfig.FieldCreatedAt)
 	}
@@ -5312,6 +5349,9 @@ func (m *SystemConfigMutation) Fields() []string {
 	if m.mailer_insecure_skip_verify != nil {
 		fields = append(fields, systemconfig.FieldMailerInsecureSkipVerify)
 	}
+	if m.mailer_use_implicit_ssl_tls != nil {
+		fields = append(fields, systemconfig.FieldMailerUseImplicitSslTLS)
+	}
 	if m.ocr_tika_url != nil {
 		fields = append(fields, systemconfig.FieldOcrTikaURL)
 	}
@@ -5370,6 +5410,8 @@ func (m *SystemConfigMutation) Field(name string) (ent.Value, bool) {
 		return m.MailerFrom()
 	case systemconfig.FieldMailerInsecureSkipVerify:
 		return m.MailerInsecureSkipVerify()
+	case systemconfig.FieldMailerUseImplicitSslTLS:
+		return m.MailerUseImplicitSslTLS()
 	case systemconfig.FieldOcrTikaURL:
 		return m.OcrTikaURL()
 	case systemconfig.FieldInitializedAt:
@@ -5427,6 +5469,8 @@ func (m *SystemConfigMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldMailerFrom(ctx)
 	case systemconfig.FieldMailerInsecureSkipVerify:
 		return m.OldMailerInsecureSkipVerify(ctx)
+	case systemconfig.FieldMailerUseImplicitSslTLS:
+		return m.OldMailerUseImplicitSslTLS(ctx)
 	case systemconfig.FieldOcrTikaURL:
 		return m.OldOcrTikaURL(ctx)
 	case systemconfig.FieldInitializedAt:
@@ -5593,6 +5637,13 @@ func (m *SystemConfigMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetMailerInsecureSkipVerify(v)
+		return nil
+	case systemconfig.FieldMailerUseImplicitSslTLS:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMailerUseImplicitSslTLS(v)
 		return nil
 	case systemconfig.FieldOcrTikaURL:
 		v, ok := value.(string)
@@ -5764,6 +5815,9 @@ func (m *SystemConfigMutation) ResetField(name string) error {
 		return nil
 	case systemconfig.FieldMailerInsecureSkipVerify:
 		m.ResetMailerInsecureSkipVerify()
+		return nil
+	case systemconfig.FieldMailerUseImplicitSslTLS:
+		m.ResetMailerUseImplicitSslTLS()
 		return nil
 	case systemconfig.FieldOcrTikaURL:
 		m.ResetOcrTikaURL()

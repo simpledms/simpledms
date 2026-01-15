@@ -84,7 +84,7 @@ func (*DocumentType) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the DocumentType fields.
-func (dt *DocumentType) assignValues(columns []string, values []any) error {
+func (_m *DocumentType) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -95,39 +95,39 @@ func (dt *DocumentType) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			dt.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case documenttype.FieldSpaceID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
-				dt.SpaceID = value.Int64
+				_m.SpaceID = value.Int64
 			}
 		case documenttype.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				dt.Name = value.String
+				_m.Name = value.String
 			}
 		case documenttype.FieldIcon:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field icon", values[i])
 			} else if value.Valid {
-				dt.Icon = value.String
+				_m.Icon = value.String
 			}
 		case documenttype.FieldIsProtected:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_protected", values[i])
 			} else if value.Valid {
-				dt.IsProtected = value.Bool
+				_m.IsProtected = value.Bool
 			}
 		case documenttype.FieldIsDisabled:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_disabled", values[i])
 			} else if value.Valid {
-				dt.IsDisabled = value.Bool
+				_m.IsDisabled = value.Bool
 			}
 		default:
-			dt.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -135,57 +135,57 @@ func (dt *DocumentType) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the DocumentType.
 // This includes values selected through modifiers, order, etc.
-func (dt *DocumentType) Value(name string) (ent.Value, error) {
-	return dt.selectValues.Get(name)
+func (_m *DocumentType) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QuerySpace queries the "space" edge of the DocumentType entity.
-func (dt *DocumentType) QuerySpace() *SpaceQuery {
-	return NewDocumentTypeClient(dt.config).QuerySpace(dt)
+func (_m *DocumentType) QuerySpace() *SpaceQuery {
+	return NewDocumentTypeClient(_m.config).QuerySpace(_m)
 }
 
 // QueryAttributes queries the "attributes" edge of the DocumentType entity.
-func (dt *DocumentType) QueryAttributes() *AttributeQuery {
-	return NewDocumentTypeClient(dt.config).QueryAttributes(dt)
+func (_m *DocumentType) QueryAttributes() *AttributeQuery {
+	return NewDocumentTypeClient(_m.config).QueryAttributes(_m)
 }
 
 // Update returns a builder for updating this DocumentType.
 // Note that you need to call DocumentType.Unwrap() before calling this method if this DocumentType
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (dt *DocumentType) Update() *DocumentTypeUpdateOne {
-	return NewDocumentTypeClient(dt.config).UpdateOne(dt)
+func (_m *DocumentType) Update() *DocumentTypeUpdateOne {
+	return NewDocumentTypeClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the DocumentType entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (dt *DocumentType) Unwrap() *DocumentType {
-	_tx, ok := dt.config.driver.(*txDriver)
+func (_m *DocumentType) Unwrap() *DocumentType {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: DocumentType is not a transactional entity")
 	}
-	dt.config.driver = _tx.drv
-	return dt
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (dt *DocumentType) String() string {
+func (_m *DocumentType) String() string {
 	var builder strings.Builder
 	builder.WriteString("DocumentType(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", dt.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("space_id=")
-	builder.WriteString(fmt.Sprintf("%v", dt.SpaceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(dt.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("icon=")
-	builder.WriteString(dt.Icon)
+	builder.WriteString(_m.Icon)
 	builder.WriteString(", ")
 	builder.WriteString("is_protected=")
-	builder.WriteString(fmt.Sprintf("%v", dt.IsProtected))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsProtected))
 	builder.WriteString(", ")
 	builder.WriteString("is_disabled=")
-	builder.WriteString(fmt.Sprintf("%v", dt.IsDisabled))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsDisabled))
 	builder.WriteByte(')')
 	return builder.String()
 }

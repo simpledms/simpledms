@@ -19,6 +19,7 @@ import (
 )
 
 /*//go:generate ent generate simpledms/db/entx/schema/ --feature intercept,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./enttmpl*/
+// TODO switch to `go tool ent` once it works; see comment in go.mod
 //go:generate ent generate ./db/enttenant/schema/ --target ./db/enttenant --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./db/enttmpl
 //go:generate ent generate ./db/entmain/schema/ --target ./db/entmain/ --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./db/enttmpl
 func main() {

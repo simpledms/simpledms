@@ -4,13 +4,16 @@ go 1.25
 
 // TODO add ent and maybe atlas
 tool (
+	// doesn't work at the moment, see
+	// https://github.com/ent/ent/issues/4464
+	// entgo.io/ent/cmd/ent
 	github.com/air-verse/air
 	github.com/marcobeierer/enumer
 	golang.org/x/text/cmd/gotext
 )
 
 require (
-	ariga.io/atlas v0.38.0
+	ariga.io/atlas v1.0.0
 	entgo.io/ent v0.14.5
 	filippo.io/age v1.2.1
 	github.com/cyphar/filepath-securejoin v0.6.1

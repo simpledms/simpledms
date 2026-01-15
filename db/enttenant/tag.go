@@ -144,7 +144,7 @@ func (*Tag) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Tag fields.
-func (t *Tag) assignValues(columns []string, values []any) error {
+func (_m *Tag) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -155,45 +155,45 @@ func (t *Tag) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			t.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case tag.FieldSpaceID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
-				t.SpaceID = value.Int64
+				_m.SpaceID = value.Int64
 			}
 		case tag.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				t.Name = value.String
+				_m.Name = value.String
 			}
 		case tag.FieldColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field color", values[i])
 			} else if value.Valid {
-				t.Color = value.String
+				_m.Color = value.String
 			}
 		case tag.FieldIcon:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field icon", values[i])
 			} else if value.Valid {
-				t.Icon = value.String
+				_m.Icon = value.String
 			}
 		case tag.FieldType:
 			if value, ok := values[i].(*tagtype.TagType); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value != nil {
-				t.Type = *value
+				_m.Type = *value
 			}
 		case tag.FieldGroupID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field group_id", values[i])
 			} else if value.Valid {
-				t.GroupID = value.Int64
+				_m.GroupID = value.Int64
 			}
 		default:
-			t.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -201,85 +201,85 @@ func (t *Tag) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Tag.
 // This includes values selected through modifiers, order, etc.
-func (t *Tag) Value(name string) (ent.Value, error) {
-	return t.selectValues.Get(name)
+func (_m *Tag) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QuerySpace queries the "space" edge of the Tag entity.
-func (t *Tag) QuerySpace() *SpaceQuery {
-	return NewTagClient(t.config).QuerySpace(t)
+func (_m *Tag) QuerySpace() *SpaceQuery {
+	return NewTagClient(_m.config).QuerySpace(_m)
 }
 
 // QueryChildren queries the "children" edge of the Tag entity.
-func (t *Tag) QueryChildren() *TagQuery {
-	return NewTagClient(t.config).QueryChildren(t)
+func (_m *Tag) QueryChildren() *TagQuery {
+	return NewTagClient(_m.config).QueryChildren(_m)
 }
 
 // QueryGroup queries the "group" edge of the Tag entity.
-func (t *Tag) QueryGroup() *TagQuery {
-	return NewTagClient(t.config).QueryGroup(t)
+func (_m *Tag) QueryGroup() *TagQuery {
+	return NewTagClient(_m.config).QueryGroup(_m)
 }
 
 // QuerySuperTags queries the "super_tags" edge of the Tag entity.
-func (t *Tag) QuerySuperTags() *TagQuery {
-	return NewTagClient(t.config).QuerySuperTags(t)
+func (_m *Tag) QuerySuperTags() *TagQuery {
+	return NewTagClient(_m.config).QuerySuperTags(_m)
 }
 
 // QuerySubTags queries the "sub_tags" edge of the Tag entity.
-func (t *Tag) QuerySubTags() *TagQuery {
-	return NewTagClient(t.config).QuerySubTags(t)
+func (_m *Tag) QuerySubTags() *TagQuery {
+	return NewTagClient(_m.config).QuerySubTags(_m)
 }
 
 // QueryFiles queries the "files" edge of the Tag entity.
-func (t *Tag) QueryFiles() *FileQuery {
-	return NewTagClient(t.config).QueryFiles(t)
+func (_m *Tag) QueryFiles() *FileQuery {
+	return NewTagClient(_m.config).QueryFiles(_m)
 }
 
 // QueryTagAssignment queries the "tag_assignment" edge of the Tag entity.
-func (t *Tag) QueryTagAssignment() *TagAssignmentQuery {
-	return NewTagClient(t.config).QueryTagAssignment(t)
+func (_m *Tag) QueryTagAssignment() *TagAssignmentQuery {
+	return NewTagClient(_m.config).QueryTagAssignment(_m)
 }
 
 // Update returns a builder for updating this Tag.
 // Note that you need to call Tag.Unwrap() before calling this method if this Tag
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (t *Tag) Update() *TagUpdateOne {
-	return NewTagClient(t.config).UpdateOne(t)
+func (_m *Tag) Update() *TagUpdateOne {
+	return NewTagClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Tag entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (t *Tag) Unwrap() *Tag {
-	_tx, ok := t.config.driver.(*txDriver)
+func (_m *Tag) Unwrap() *Tag {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: Tag is not a transactional entity")
 	}
-	t.config.driver = _tx.drv
-	return t
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (t *Tag) String() string {
+func (_m *Tag) String() string {
 	var builder strings.Builder
 	builder.WriteString("Tag(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("space_id=")
-	builder.WriteString(fmt.Sprintf("%v", t.SpaceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(t.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("color=")
-	builder.WriteString(t.Color)
+	builder.WriteString(_m.Color)
 	builder.WriteString(", ")
 	builder.WriteString("icon=")
-	builder.WriteString(t.Icon)
+	builder.WriteString(_m.Icon)
 	builder.WriteString(", ")
 	builder.WriteString("type=")
-	builder.WriteString(fmt.Sprintf("%v", t.Type))
+	builder.WriteString(fmt.Sprintf("%v", _m.Type))
 	builder.WriteString(", ")
 	builder.WriteString("group_id=")
-	builder.WriteString(fmt.Sprintf("%v", t.GroupID))
+	builder.WriteString(fmt.Sprintf("%v", _m.GroupID))
 	builder.WriteByte(')')
 	return builder.String()
 }

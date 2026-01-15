@@ -25,74 +25,74 @@ type TagAssignmentUpdate struct {
 }
 
 // Where appends a list predicates to the TagAssignmentUpdate builder.
-func (tau *TagAssignmentUpdate) Where(ps ...predicate.TagAssignment) *TagAssignmentUpdate {
-	tau.mutation.Where(ps...)
-	return tau
+func (_u *TagAssignmentUpdate) Where(ps ...predicate.TagAssignment) *TagAssignmentUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetFileID sets the "file_id" field.
-func (tau *TagAssignmentUpdate) SetFileID(i int64) *TagAssignmentUpdate {
-	tau.mutation.SetFileID(i)
-	return tau
+func (_u *TagAssignmentUpdate) SetFileID(v int64) *TagAssignmentUpdate {
+	_u.mutation.SetFileID(v)
+	return _u
 }
 
 // SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (tau *TagAssignmentUpdate) SetNillableFileID(i *int64) *TagAssignmentUpdate {
-	if i != nil {
-		tau.SetFileID(*i)
+func (_u *TagAssignmentUpdate) SetNillableFileID(v *int64) *TagAssignmentUpdate {
+	if v != nil {
+		_u.SetFileID(*v)
 	}
-	return tau
+	return _u
 }
 
 // SetTagID sets the "tag_id" field.
-func (tau *TagAssignmentUpdate) SetTagID(i int64) *TagAssignmentUpdate {
-	tau.mutation.SetTagID(i)
-	return tau
+func (_u *TagAssignmentUpdate) SetTagID(v int64) *TagAssignmentUpdate {
+	_u.mutation.SetTagID(v)
+	return _u
 }
 
 // SetNillableTagID sets the "tag_id" field if the given value is not nil.
-func (tau *TagAssignmentUpdate) SetNillableTagID(i *int64) *TagAssignmentUpdate {
-	if i != nil {
-		tau.SetTagID(*i)
+func (_u *TagAssignmentUpdate) SetNillableTagID(v *int64) *TagAssignmentUpdate {
+	if v != nil {
+		_u.SetTagID(*v)
 	}
-	return tau
+	return _u
 }
 
 // SetTag sets the "tag" edge to the Tag entity.
-func (tau *TagAssignmentUpdate) SetTag(t *Tag) *TagAssignmentUpdate {
-	return tau.SetTagID(t.ID)
+func (_u *TagAssignmentUpdate) SetTag(v *Tag) *TagAssignmentUpdate {
+	return _u.SetTagID(v.ID)
 }
 
 // SetFile sets the "file" edge to the File entity.
-func (tau *TagAssignmentUpdate) SetFile(f *File) *TagAssignmentUpdate {
-	return tau.SetFileID(f.ID)
+func (_u *TagAssignmentUpdate) SetFile(v *File) *TagAssignmentUpdate {
+	return _u.SetFileID(v.ID)
 }
 
 // Mutation returns the TagAssignmentMutation object of the builder.
-func (tau *TagAssignmentUpdate) Mutation() *TagAssignmentMutation {
-	return tau.mutation
+func (_u *TagAssignmentUpdate) Mutation() *TagAssignmentMutation {
+	return _u.mutation
 }
 
 // ClearTag clears the "tag" edge to the Tag entity.
-func (tau *TagAssignmentUpdate) ClearTag() *TagAssignmentUpdate {
-	tau.mutation.ClearTag()
-	return tau
+func (_u *TagAssignmentUpdate) ClearTag() *TagAssignmentUpdate {
+	_u.mutation.ClearTag()
+	return _u
 }
 
 // ClearFile clears the "file" edge to the File entity.
-func (tau *TagAssignmentUpdate) ClearFile() *TagAssignmentUpdate {
-	tau.mutation.ClearFile()
-	return tau
+func (_u *TagAssignmentUpdate) ClearFile() *TagAssignmentUpdate {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tau *TagAssignmentUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, tau.sqlSave, tau.mutation, tau.hooks)
+func (_u *TagAssignmentUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tau *TagAssignmentUpdate) SaveX(ctx context.Context) int {
-	affected, err := tau.Save(ctx)
+func (_u *TagAssignmentUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -100,51 +100,51 @@ func (tau *TagAssignmentUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (tau *TagAssignmentUpdate) Exec(ctx context.Context) error {
-	_, err := tau.Save(ctx)
+func (_u *TagAssignmentUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tau *TagAssignmentUpdate) ExecX(ctx context.Context) {
-	if err := tau.Exec(ctx); err != nil {
+func (_u *TagAssignmentUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tau *TagAssignmentUpdate) check() error {
-	if tau.mutation.SpaceCleared() && len(tau.mutation.SpaceIDs()) > 0 {
+func (_u *TagAssignmentUpdate) check() error {
+	if _u.mutation.SpaceCleared() && len(_u.mutation.SpaceIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "TagAssignment.space"`)
 	}
-	if tau.mutation.TagCleared() && len(tau.mutation.TagIDs()) > 0 {
+	if _u.mutation.TagCleared() && len(_u.mutation.TagIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "TagAssignment.tag"`)
 	}
-	if tau.mutation.FileCleared() && len(tau.mutation.FileIDs()) > 0 {
+	if _u.mutation.FileCleared() && len(_u.mutation.FileIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "TagAssignment.file"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tau *TagAssignmentUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TagAssignmentUpdate {
-	tau.modifiers = append(tau.modifiers, modifiers...)
-	return tau
+func (_u *TagAssignmentUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TagAssignmentUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tau *TagAssignmentUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := tau.check(); err != nil {
-		return n, err
+func (_u *TagAssignmentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(tagassignment.Table, tagassignment.Columns, sqlgraph.NewFieldSpec(tagassignment.FieldID, field.TypeInt64))
-	if ps := tau.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tau.mutation.TagCleared() {
+	if _u.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -157,7 +157,7 @@ func (tau *TagAssignmentUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tau.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -173,7 +173,7 @@ func (tau *TagAssignmentUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tau.mutation.FileCleared() {
+	if _u.mutation.FileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -186,7 +186,7 @@ func (tau *TagAssignmentUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tau.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -202,8 +202,8 @@ func (tau *TagAssignmentUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(tau.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, tau.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{tagassignment.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -211,8 +211,8 @@ func (tau *TagAssignmentUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		return 0, err
 	}
-	tau.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TagAssignmentUpdateOne is the builder for updating a single TagAssignment entity.
@@ -225,81 +225,81 @@ type TagAssignmentUpdateOne struct {
 }
 
 // SetFileID sets the "file_id" field.
-func (tauo *TagAssignmentUpdateOne) SetFileID(i int64) *TagAssignmentUpdateOne {
-	tauo.mutation.SetFileID(i)
-	return tauo
+func (_u *TagAssignmentUpdateOne) SetFileID(v int64) *TagAssignmentUpdateOne {
+	_u.mutation.SetFileID(v)
+	return _u
 }
 
 // SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (tauo *TagAssignmentUpdateOne) SetNillableFileID(i *int64) *TagAssignmentUpdateOne {
-	if i != nil {
-		tauo.SetFileID(*i)
+func (_u *TagAssignmentUpdateOne) SetNillableFileID(v *int64) *TagAssignmentUpdateOne {
+	if v != nil {
+		_u.SetFileID(*v)
 	}
-	return tauo
+	return _u
 }
 
 // SetTagID sets the "tag_id" field.
-func (tauo *TagAssignmentUpdateOne) SetTagID(i int64) *TagAssignmentUpdateOne {
-	tauo.mutation.SetTagID(i)
-	return tauo
+func (_u *TagAssignmentUpdateOne) SetTagID(v int64) *TagAssignmentUpdateOne {
+	_u.mutation.SetTagID(v)
+	return _u
 }
 
 // SetNillableTagID sets the "tag_id" field if the given value is not nil.
-func (tauo *TagAssignmentUpdateOne) SetNillableTagID(i *int64) *TagAssignmentUpdateOne {
-	if i != nil {
-		tauo.SetTagID(*i)
+func (_u *TagAssignmentUpdateOne) SetNillableTagID(v *int64) *TagAssignmentUpdateOne {
+	if v != nil {
+		_u.SetTagID(*v)
 	}
-	return tauo
+	return _u
 }
 
 // SetTag sets the "tag" edge to the Tag entity.
-func (tauo *TagAssignmentUpdateOne) SetTag(t *Tag) *TagAssignmentUpdateOne {
-	return tauo.SetTagID(t.ID)
+func (_u *TagAssignmentUpdateOne) SetTag(v *Tag) *TagAssignmentUpdateOne {
+	return _u.SetTagID(v.ID)
 }
 
 // SetFile sets the "file" edge to the File entity.
-func (tauo *TagAssignmentUpdateOne) SetFile(f *File) *TagAssignmentUpdateOne {
-	return tauo.SetFileID(f.ID)
+func (_u *TagAssignmentUpdateOne) SetFile(v *File) *TagAssignmentUpdateOne {
+	return _u.SetFileID(v.ID)
 }
 
 // Mutation returns the TagAssignmentMutation object of the builder.
-func (tauo *TagAssignmentUpdateOne) Mutation() *TagAssignmentMutation {
-	return tauo.mutation
+func (_u *TagAssignmentUpdateOne) Mutation() *TagAssignmentMutation {
+	return _u.mutation
 }
 
 // ClearTag clears the "tag" edge to the Tag entity.
-func (tauo *TagAssignmentUpdateOne) ClearTag() *TagAssignmentUpdateOne {
-	tauo.mutation.ClearTag()
-	return tauo
+func (_u *TagAssignmentUpdateOne) ClearTag() *TagAssignmentUpdateOne {
+	_u.mutation.ClearTag()
+	return _u
 }
 
 // ClearFile clears the "file" edge to the File entity.
-func (tauo *TagAssignmentUpdateOne) ClearFile() *TagAssignmentUpdateOne {
-	tauo.mutation.ClearFile()
-	return tauo
+func (_u *TagAssignmentUpdateOne) ClearFile() *TagAssignmentUpdateOne {
+	_u.mutation.ClearFile()
+	return _u
 }
 
 // Where appends a list predicates to the TagAssignmentUpdate builder.
-func (tauo *TagAssignmentUpdateOne) Where(ps ...predicate.TagAssignment) *TagAssignmentUpdateOne {
-	tauo.mutation.Where(ps...)
-	return tauo
+func (_u *TagAssignmentUpdateOne) Where(ps ...predicate.TagAssignment) *TagAssignmentUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tauo *TagAssignmentUpdateOne) Select(field string, fields ...string) *TagAssignmentUpdateOne {
-	tauo.fields = append([]string{field}, fields...)
-	return tauo
+func (_u *TagAssignmentUpdateOne) Select(field string, fields ...string) *TagAssignmentUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TagAssignment entity.
-func (tauo *TagAssignmentUpdateOne) Save(ctx context.Context) (*TagAssignment, error) {
-	return withHooks(ctx, tauo.sqlSave, tauo.mutation, tauo.hooks)
+func (_u *TagAssignmentUpdateOne) Save(ctx context.Context) (*TagAssignment, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tauo *TagAssignmentUpdateOne) SaveX(ctx context.Context) *TagAssignment {
-	node, err := tauo.Save(ctx)
+func (_u *TagAssignmentUpdateOne) SaveX(ctx context.Context) *TagAssignment {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -307,49 +307,49 @@ func (tauo *TagAssignmentUpdateOne) SaveX(ctx context.Context) *TagAssignment {
 }
 
 // Exec executes the query on the entity.
-func (tauo *TagAssignmentUpdateOne) Exec(ctx context.Context) error {
-	_, err := tauo.Save(ctx)
+func (_u *TagAssignmentUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tauo *TagAssignmentUpdateOne) ExecX(ctx context.Context) {
-	if err := tauo.Exec(ctx); err != nil {
+func (_u *TagAssignmentUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tauo *TagAssignmentUpdateOne) check() error {
-	if tauo.mutation.SpaceCleared() && len(tauo.mutation.SpaceIDs()) > 0 {
+func (_u *TagAssignmentUpdateOne) check() error {
+	if _u.mutation.SpaceCleared() && len(_u.mutation.SpaceIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "TagAssignment.space"`)
 	}
-	if tauo.mutation.TagCleared() && len(tauo.mutation.TagIDs()) > 0 {
+	if _u.mutation.TagCleared() && len(_u.mutation.TagIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "TagAssignment.tag"`)
 	}
-	if tauo.mutation.FileCleared() && len(tauo.mutation.FileIDs()) > 0 {
+	if _u.mutation.FileCleared() && len(_u.mutation.FileIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "TagAssignment.file"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tauo *TagAssignmentUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TagAssignmentUpdateOne {
-	tauo.modifiers = append(tauo.modifiers, modifiers...)
-	return tauo
+func (_u *TagAssignmentUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TagAssignmentUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tauo *TagAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *TagAssignment, err error) {
-	if err := tauo.check(); err != nil {
+func (_u *TagAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *TagAssignment, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(tagassignment.Table, tagassignment.Columns, sqlgraph.NewFieldSpec(tagassignment.FieldID, field.TypeInt64))
-	id, ok := tauo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`enttenant: missing "TagAssignment.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tauo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, tagassignment.FieldID)
 		for _, f := range fields {
@@ -361,14 +361,14 @@ func (tauo *TagAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *TagAssi
 			}
 		}
 	}
-	if ps := tauo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tauo.mutation.TagCleared() {
+	if _u.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -381,7 +381,7 @@ func (tauo *TagAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *TagAssi
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tauo.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -397,7 +397,7 @@ func (tauo *TagAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *TagAssi
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tauo.mutation.FileCleared() {
+	if _u.mutation.FileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -410,7 +410,7 @@ func (tauo *TagAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *TagAssi
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tauo.mutation.FileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -426,11 +426,11 @@ func (tauo *TagAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *TagAssi
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(tauo.modifiers...)
-	_node = &TagAssignment{config: tauo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &TagAssignment{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tauo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{tagassignment.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -438,6 +438,6 @@ func (tauo *TagAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *TagAssi
 		}
 		return nil, err
 	}
-	tauo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

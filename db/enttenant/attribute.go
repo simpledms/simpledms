@@ -128,7 +128,7 @@ func (*Attribute) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Attribute fields.
-func (a *Attribute) assignValues(columns []string, values []any) error {
+func (_m *Attribute) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -139,69 +139,69 @@ func (a *Attribute) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			a.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case attribute.FieldSpaceID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
-				a.SpaceID = value.Int64
+				_m.SpaceID = value.Int64
 			}
 		case attribute.FieldDocumentTypeID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field document_type_id", values[i])
 			} else if value.Valid {
-				a.DocumentTypeID = value.Int64
+				_m.DocumentTypeID = value.Int64
 			}
 		case attribute.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				a.Name = value.String
+				_m.Name = value.String
 			}
 		case attribute.FieldIsNameGiving:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_name_giving", values[i])
 			} else if value.Valid {
-				a.IsNameGiving = value.Bool
+				_m.IsNameGiving = value.Bool
 			}
 		case attribute.FieldIsProtected:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_protected", values[i])
 			} else if value.Valid {
-				a.IsProtected = value.Bool
+				_m.IsProtected = value.Bool
 			}
 		case attribute.FieldIsDisabled:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_disabled", values[i])
 			} else if value.Valid {
-				a.IsDisabled = value.Bool
+				_m.IsDisabled = value.Bool
 			}
 		case attribute.FieldIsRequired:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_required", values[i])
 			} else if value.Valid {
-				a.IsRequired = value.Bool
+				_m.IsRequired = value.Bool
 			}
 		case attribute.FieldType:
 			if value, ok := values[i].(*attributetype.AttributeType); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value != nil {
-				a.Type = *value
+				_m.Type = *value
 			}
 		case attribute.FieldTagID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field tag_id", values[i])
 			} else if value.Valid {
-				a.TagID = value.Int64
+				_m.TagID = value.Int64
 			}
 		case attribute.FieldPropertyID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field property_id", values[i])
 			} else if value.Valid {
-				a.PropertyID = value.Int64
+				_m.PropertyID = value.Int64
 			}
 		default:
-			a.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -209,82 +209,82 @@ func (a *Attribute) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Attribute.
 // This includes values selected through modifiers, order, etc.
-func (a *Attribute) Value(name string) (ent.Value, error) {
-	return a.selectValues.Get(name)
+func (_m *Attribute) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QuerySpace queries the "space" edge of the Attribute entity.
-func (a *Attribute) QuerySpace() *SpaceQuery {
-	return NewAttributeClient(a.config).QuerySpace(a)
+func (_m *Attribute) QuerySpace() *SpaceQuery {
+	return NewAttributeClient(_m.config).QuerySpace(_m)
 }
 
 // QueryDocumentType queries the "document_type" edge of the Attribute entity.
-func (a *Attribute) QueryDocumentType() *DocumentTypeQuery {
-	return NewAttributeClient(a.config).QueryDocumentType(a)
+func (_m *Attribute) QueryDocumentType() *DocumentTypeQuery {
+	return NewAttributeClient(_m.config).QueryDocumentType(_m)
 }
 
 // QueryTag queries the "tag" edge of the Attribute entity.
-func (a *Attribute) QueryTag() *TagQuery {
-	return NewAttributeClient(a.config).QueryTag(a)
+func (_m *Attribute) QueryTag() *TagQuery {
+	return NewAttributeClient(_m.config).QueryTag(_m)
 }
 
 // QueryProperty queries the "property" edge of the Attribute entity.
-func (a *Attribute) QueryProperty() *PropertyQuery {
-	return NewAttributeClient(a.config).QueryProperty(a)
+func (_m *Attribute) QueryProperty() *PropertyQuery {
+	return NewAttributeClient(_m.config).QueryProperty(_m)
 }
 
 // Update returns a builder for updating this Attribute.
 // Note that you need to call Attribute.Unwrap() before calling this method if this Attribute
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (a *Attribute) Update() *AttributeUpdateOne {
-	return NewAttributeClient(a.config).UpdateOne(a)
+func (_m *Attribute) Update() *AttributeUpdateOne {
+	return NewAttributeClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Attribute entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (a *Attribute) Unwrap() *Attribute {
-	_tx, ok := a.config.driver.(*txDriver)
+func (_m *Attribute) Unwrap() *Attribute {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: Attribute is not a transactional entity")
 	}
-	a.config.driver = _tx.drv
-	return a
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (a *Attribute) String() string {
+func (_m *Attribute) String() string {
 	var builder strings.Builder
 	builder.WriteString("Attribute(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", a.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("space_id=")
-	builder.WriteString(fmt.Sprintf("%v", a.SpaceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
 	builder.WriteString(", ")
 	builder.WriteString("document_type_id=")
-	builder.WriteString(fmt.Sprintf("%v", a.DocumentTypeID))
+	builder.WriteString(fmt.Sprintf("%v", _m.DocumentTypeID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(a.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("is_name_giving=")
-	builder.WriteString(fmt.Sprintf("%v", a.IsNameGiving))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsNameGiving))
 	builder.WriteString(", ")
 	builder.WriteString("is_protected=")
-	builder.WriteString(fmt.Sprintf("%v", a.IsProtected))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsProtected))
 	builder.WriteString(", ")
 	builder.WriteString("is_disabled=")
-	builder.WriteString(fmt.Sprintf("%v", a.IsDisabled))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsDisabled))
 	builder.WriteString(", ")
 	builder.WriteString("is_required=")
-	builder.WriteString(fmt.Sprintf("%v", a.IsRequired))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsRequired))
 	builder.WriteString(", ")
 	builder.WriteString("type=")
-	builder.WriteString(fmt.Sprintf("%v", a.Type))
+	builder.WriteString(fmt.Sprintf("%v", _m.Type))
 	builder.WriteString(", ")
 	builder.WriteString("tag_id=")
-	builder.WriteString(fmt.Sprintf("%v", a.TagID))
+	builder.WriteString(fmt.Sprintf("%v", _m.TagID))
 	builder.WriteString(", ")
 	builder.WriteString("property_id=")
-	builder.WriteString(fmt.Sprintf("%v", a.PropertyID))
+	builder.WriteString(fmt.Sprintf("%v", _m.PropertyID))
 	builder.WriteByte(')')
 	return builder.String()
 }

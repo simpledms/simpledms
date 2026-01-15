@@ -20,56 +20,56 @@ type FilePropertyAssignmentDelete struct {
 }
 
 // Where appends a list predicates to the FilePropertyAssignmentDelete builder.
-func (fpad *FilePropertyAssignmentDelete) Where(ps ...predicate.FilePropertyAssignment) *FilePropertyAssignmentDelete {
-	fpad.mutation.Where(ps...)
-	return fpad
+func (_d *FilePropertyAssignmentDelete) Where(ps ...predicate.FilePropertyAssignment) *FilePropertyAssignmentDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (fpad *FilePropertyAssignmentDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, fpad.sqlExec, fpad.mutation, fpad.hooks)
+func (_d *FilePropertyAssignmentDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fpad *FilePropertyAssignmentDelete) ExecX(ctx context.Context) int {
-	n, err := fpad.Exec(ctx)
+func (_d *FilePropertyAssignmentDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (fpad *FilePropertyAssignmentDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *FilePropertyAssignmentDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(filepropertyassignment.Table, sqlgraph.NewFieldSpec(filepropertyassignment.FieldID, field.TypeInt64))
-	if ps := fpad.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, fpad.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	fpad.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // FilePropertyAssignmentDeleteOne is the builder for deleting a single FilePropertyAssignment entity.
 type FilePropertyAssignmentDeleteOne struct {
-	fpad *FilePropertyAssignmentDelete
+	_d *FilePropertyAssignmentDelete
 }
 
 // Where appends a list predicates to the FilePropertyAssignmentDelete builder.
-func (fpado *FilePropertyAssignmentDeleteOne) Where(ps ...predicate.FilePropertyAssignment) *FilePropertyAssignmentDeleteOne {
-	fpado.fpad.mutation.Where(ps...)
-	return fpado
+func (_d *FilePropertyAssignmentDeleteOne) Where(ps ...predicate.FilePropertyAssignment) *FilePropertyAssignmentDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (fpado *FilePropertyAssignmentDeleteOne) Exec(ctx context.Context) error {
-	n, err := fpado.fpad.Exec(ctx)
+func (_d *FilePropertyAssignmentDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (fpado *FilePropertyAssignmentDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fpado *FilePropertyAssignmentDeleteOne) ExecX(ctx context.Context) {
-	if err := fpado.Exec(ctx); err != nil {
+func (_d *FilePropertyAssignmentDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

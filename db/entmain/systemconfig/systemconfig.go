@@ -58,6 +58,8 @@ const (
 	FieldMailerFrom = "mailer_from"
 	// FieldMailerInsecureSkipVerify holds the string denoting the mailer_insecure_skip_verify field in the database.
 	FieldMailerInsecureSkipVerify = "mailer_insecure_skip_verify"
+	// FieldMailerUseImplicitSslTLS holds the string denoting the mailer_use_implicit_ssl_tls field in the database.
+	FieldMailerUseImplicitSslTLS = "mailer_use_implicit_ssl_tls"
 	// FieldOcrTikaURL holds the string denoting the ocr_tika_url field in the database.
 	FieldOcrTikaURL = "ocr_tika_url"
 	// FieldInitializedAt holds the string denoting the initialized_at field in the database.
@@ -109,6 +111,7 @@ var Columns = []string{
 	FieldMailerPassword,
 	FieldMailerFrom,
 	FieldMailerInsecureSkipVerify,
+	FieldMailerUseImplicitSslTLS,
 	FieldOcrTikaURL,
 	FieldInitializedAt,
 }
@@ -142,6 +145,8 @@ var (
 	DefaultMailerFrom string
 	// DefaultMailerInsecureSkipVerify holds the default value on creation for the "mailer_insecure_skip_verify" field.
 	DefaultMailerInsecureSkipVerify bool
+	// DefaultMailerUseImplicitSslTLS holds the default value on creation for the "mailer_use_implicit_ssl_tls" field.
+	DefaultMailerUseImplicitSslTLS bool
 	// DefaultOcrTikaURL holds the default value on creation for the "ocr_tika_url" field.
 	DefaultOcrTikaURL string
 )
@@ -242,6 +247,11 @@ func ByMailerFrom(opts ...sql.OrderTermOption) OrderOption {
 // ByMailerInsecureSkipVerify orders the results by the mailer_insecure_skip_verify field.
 func ByMailerInsecureSkipVerify(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMailerInsecureSkipVerify, opts...).ToFunc()
+}
+
+// ByMailerUseImplicitSslTLS orders the results by the mailer_use_implicit_ssl_tls field.
+func ByMailerUseImplicitSslTLS(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMailerUseImplicitSslTLS, opts...).ToFunc()
 }
 
 // ByOcrTikaURL orders the results by the ocr_tika_url field.

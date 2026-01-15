@@ -20,56 +20,56 @@ type SystemConfigDelete struct {
 }
 
 // Where appends a list predicates to the SystemConfigDelete builder.
-func (scd *SystemConfigDelete) Where(ps ...predicate.SystemConfig) *SystemConfigDelete {
-	scd.mutation.Where(ps...)
-	return scd
+func (_d *SystemConfigDelete) Where(ps ...predicate.SystemConfig) *SystemConfigDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (scd *SystemConfigDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, scd.sqlExec, scd.mutation, scd.hooks)
+func (_d *SystemConfigDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scd *SystemConfigDelete) ExecX(ctx context.Context) int {
-	n, err := scd.Exec(ctx)
+func (_d *SystemConfigDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (scd *SystemConfigDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *SystemConfigDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(systemconfig.Table, sqlgraph.NewFieldSpec(systemconfig.FieldID, field.TypeInt64))
-	if ps := scd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, scd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	scd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // SystemConfigDeleteOne is the builder for deleting a single SystemConfig entity.
 type SystemConfigDeleteOne struct {
-	scd *SystemConfigDelete
+	_d *SystemConfigDelete
 }
 
 // Where appends a list predicates to the SystemConfigDelete builder.
-func (scdo *SystemConfigDeleteOne) Where(ps ...predicate.SystemConfig) *SystemConfigDeleteOne {
-	scdo.scd.mutation.Where(ps...)
-	return scdo
+func (_d *SystemConfigDeleteOne) Where(ps ...predicate.SystemConfig) *SystemConfigDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (scdo *SystemConfigDeleteOne) Exec(ctx context.Context) error {
-	n, err := scdo.scd.Exec(ctx)
+func (_d *SystemConfigDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (scdo *SystemConfigDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scdo *SystemConfigDeleteOne) ExecX(ctx context.Context) {
-	if err := scdo.Exec(ctx); err != nil {
+func (_d *SystemConfigDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

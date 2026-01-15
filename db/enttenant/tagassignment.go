@@ -93,7 +93,7 @@ func (*TagAssignment) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TagAssignment fields.
-func (ta *TagAssignment) assignValues(columns []string, values []any) error {
+func (_m *TagAssignment) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -104,27 +104,27 @@ func (ta *TagAssignment) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			ta.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case tagassignment.FieldSpaceID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
-				ta.SpaceID = value.Int64
+				_m.SpaceID = value.Int64
 			}
 		case tagassignment.FieldFileID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field file_id", values[i])
 			} else if value.Valid {
-				ta.FileID = value.Int64
+				_m.FileID = value.Int64
 			}
 		case tagassignment.FieldTagID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field tag_id", values[i])
 			} else if value.Valid {
-				ta.TagID = value.Int64
+				_m.TagID = value.Int64
 			}
 		default:
-			ta.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -132,56 +132,56 @@ func (ta *TagAssignment) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TagAssignment.
 // This includes values selected through modifiers, order, etc.
-func (ta *TagAssignment) Value(name string) (ent.Value, error) {
-	return ta.selectValues.Get(name)
+func (_m *TagAssignment) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QuerySpace queries the "space" edge of the TagAssignment entity.
-func (ta *TagAssignment) QuerySpace() *SpaceQuery {
-	return NewTagAssignmentClient(ta.config).QuerySpace(ta)
+func (_m *TagAssignment) QuerySpace() *SpaceQuery {
+	return NewTagAssignmentClient(_m.config).QuerySpace(_m)
 }
 
 // QueryTag queries the "tag" edge of the TagAssignment entity.
-func (ta *TagAssignment) QueryTag() *TagQuery {
-	return NewTagAssignmentClient(ta.config).QueryTag(ta)
+func (_m *TagAssignment) QueryTag() *TagQuery {
+	return NewTagAssignmentClient(_m.config).QueryTag(_m)
 }
 
 // QueryFile queries the "file" edge of the TagAssignment entity.
-func (ta *TagAssignment) QueryFile() *FileQuery {
-	return NewTagAssignmentClient(ta.config).QueryFile(ta)
+func (_m *TagAssignment) QueryFile() *FileQuery {
+	return NewTagAssignmentClient(_m.config).QueryFile(_m)
 }
 
 // Update returns a builder for updating this TagAssignment.
 // Note that you need to call TagAssignment.Unwrap() before calling this method if this TagAssignment
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ta *TagAssignment) Update() *TagAssignmentUpdateOne {
-	return NewTagAssignmentClient(ta.config).UpdateOne(ta)
+func (_m *TagAssignment) Update() *TagAssignmentUpdateOne {
+	return NewTagAssignmentClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TagAssignment entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ta *TagAssignment) Unwrap() *TagAssignment {
-	_tx, ok := ta.config.driver.(*txDriver)
+func (_m *TagAssignment) Unwrap() *TagAssignment {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: TagAssignment is not a transactional entity")
 	}
-	ta.config.driver = _tx.drv
-	return ta
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ta *TagAssignment) String() string {
+func (_m *TagAssignment) String() string {
 	var builder strings.Builder
 	builder.WriteString("TagAssignment(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ta.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("space_id=")
-	builder.WriteString(fmt.Sprintf("%v", ta.SpaceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
 	builder.WriteString(", ")
 	builder.WriteString("file_id=")
-	builder.WriteString(fmt.Sprintf("%v", ta.FileID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FileID))
 	builder.WriteString(", ")
 	builder.WriteString("tag_id=")
-	builder.WriteString(fmt.Sprintf("%v", ta.TagID))
+	builder.WriteString(fmt.Sprintf("%v", _m.TagID))
 	builder.WriteByte(')')
 	return builder.String()
 }

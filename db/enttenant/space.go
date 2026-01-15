@@ -149,7 +149,7 @@ func (*Space) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Space fields.
-func (s *Space) assignValues(columns []string, values []any) error {
+func (_m *Space) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -160,51 +160,51 @@ func (s *Space) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			s.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case space.FieldPublicID:
 			if value, ok := values[i].(*entx.CIText); !ok {
 				return fmt.Errorf("unexpected type %T for field public_id", values[i])
 			} else if value != nil {
-				s.PublicID = *value
+				_m.PublicID = *value
 			}
 		case space.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				s.DeletedBy = value.Int64
+				_m.DeletedBy = value.Int64
 			}
 		case space.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				s.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case space.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				s.Name = value.String
+				_m.Name = value.String
 			}
 		case space.FieldIcon:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field icon", values[i])
 			} else if value.Valid {
-				s.Icon = value.String
+				_m.Icon = value.String
 			}
 		case space.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				s.Description = value.String
+				_m.Description = value.String
 			}
 		case space.FieldIsFolderMode:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_folder_mode", values[i])
 			} else if value.Valid {
-				s.IsFolderMode = value.Bool
+				_m.IsFolderMode = value.Bool
 			}
 		default:
-			s.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -212,88 +212,88 @@ func (s *Space) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Space.
 // This includes values selected through modifiers, order, etc.
-func (s *Space) Value(name string) (ent.Value, error) {
-	return s.selectValues.Get(name)
+func (_m *Space) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryDeleter queries the "deleter" edge of the Space entity.
-func (s *Space) QueryDeleter() *UserQuery {
-	return NewSpaceClient(s.config).QueryDeleter(s)
+func (_m *Space) QueryDeleter() *UserQuery {
+	return NewSpaceClient(_m.config).QueryDeleter(_m)
 }
 
 // QueryFiles queries the "files" edge of the Space entity.
-func (s *Space) QueryFiles() *FileQuery {
-	return NewSpaceClient(s.config).QueryFiles(s)
+func (_m *Space) QueryFiles() *FileQuery {
+	return NewSpaceClient(_m.config).QueryFiles(_m)
 }
 
 // QueryUsers queries the "users" edge of the Space entity.
-func (s *Space) QueryUsers() *UserQuery {
-	return NewSpaceClient(s.config).QueryUsers(s)
+func (_m *Space) QueryUsers() *UserQuery {
+	return NewSpaceClient(_m.config).QueryUsers(_m)
 }
 
 // QueryTags queries the "tags" edge of the Space entity.
-func (s *Space) QueryTags() *TagQuery {
-	return NewSpaceClient(s.config).QueryTags(s)
+func (_m *Space) QueryTags() *TagQuery {
+	return NewSpaceClient(_m.config).QueryTags(_m)
 }
 
 // QueryDocumentTypes queries the "document_types" edge of the Space entity.
-func (s *Space) QueryDocumentTypes() *DocumentTypeQuery {
-	return NewSpaceClient(s.config).QueryDocumentTypes(s)
+func (_m *Space) QueryDocumentTypes() *DocumentTypeQuery {
+	return NewSpaceClient(_m.config).QueryDocumentTypes(_m)
 }
 
 // QueryProperties queries the "properties" edge of the Space entity.
-func (s *Space) QueryProperties() *PropertyQuery {
-	return NewSpaceClient(s.config).QueryProperties(s)
+func (_m *Space) QueryProperties() *PropertyQuery {
+	return NewSpaceClient(_m.config).QueryProperties(_m)
 }
 
 // QueryUserAssignment queries the "user_assignment" edge of the Space entity.
-func (s *Space) QueryUserAssignment() *SpaceUserAssignmentQuery {
-	return NewSpaceClient(s.config).QueryUserAssignment(s)
+func (_m *Space) QueryUserAssignment() *SpaceUserAssignmentQuery {
+	return NewSpaceClient(_m.config).QueryUserAssignment(_m)
 }
 
 // Update returns a builder for updating this Space.
 // Note that you need to call Space.Unwrap() before calling this method if this Space
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (s *Space) Update() *SpaceUpdateOne {
-	return NewSpaceClient(s.config).UpdateOne(s)
+func (_m *Space) Update() *SpaceUpdateOne {
+	return NewSpaceClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Space entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (s *Space) Unwrap() *Space {
-	_tx, ok := s.config.driver.(*txDriver)
+func (_m *Space) Unwrap() *Space {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: Space is not a transactional entity")
 	}
-	s.config.driver = _tx.drv
-	return s
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (s *Space) String() string {
+func (_m *Space) String() string {
 	var builder strings.Builder
 	builder.WriteString("Space(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("public_id=")
-	builder.WriteString(fmt.Sprintf("%v", s.PublicID))
+	builder.WriteString(fmt.Sprintf("%v", _m.PublicID))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(fmt.Sprintf("%v", s.DeletedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.DeletedBy))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(s.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(s.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("icon=")
-	builder.WriteString(s.Icon)
+	builder.WriteString(_m.Icon)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(s.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("is_folder_mode=")
-	builder.WriteString(fmt.Sprintf("%v", s.IsFolderMode))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsFolderMode))
 	builder.WriteByte(')')
 	return builder.String()
 }

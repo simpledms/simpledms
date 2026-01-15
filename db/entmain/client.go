@@ -312,8 +312,8 @@ func (c *AccountClient) Update() *AccountUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *AccountClient) UpdateOne(a *Account) *AccountUpdateOne {
-	mutation := newAccountMutation(c.config, OpUpdateOne, withAccount(a))
+func (c *AccountClient) UpdateOne(_m *Account) *AccountUpdateOne {
+	mutation := newAccountMutation(c.config, OpUpdateOne, withAccount(_m))
 	return &AccountUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -330,8 +330,8 @@ func (c *AccountClient) Delete() *AccountDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *AccountClient) DeleteOne(a *Account) *AccountDeleteOne {
-	return c.DeleteOneID(a.ID)
+func (c *AccountClient) DeleteOne(_m *Account) *AccountDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -366,64 +366,64 @@ func (c *AccountClient) GetX(ctx context.Context, id int64) *Account {
 }
 
 // QueryTenants queries the tenants edge of a Account.
-func (c *AccountClient) QueryTenants(a *Account) *TenantQuery {
+func (c *AccountClient) QueryTenants(_m *Account) *TenantQuery {
 	query := (&TenantClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := a.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(account.Table, account.FieldID, id),
 			sqlgraph.To(tenant.Table, tenant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, account.TenantsTable, account.TenantsPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryReceivedMails queries the received_mails edge of a Account.
-func (c *AccountClient) QueryReceivedMails(a *Account) *MailQuery {
+func (c *AccountClient) QueryReceivedMails(_m *Account) *MailQuery {
 	query := (&MailClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := a.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(account.Table, account.FieldID, id),
 			sqlgraph.To(mail.Table, mail.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, account.ReceivedMailsTable, account.ReceivedMailsColumn),
 		)
-		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryTemporaryFiles queries the temporary_files edge of a Account.
-func (c *AccountClient) QueryTemporaryFiles(a *Account) *TemporaryFileQuery {
+func (c *AccountClient) QueryTemporaryFiles(_m *Account) *TemporaryFileQuery {
 	query := (&TemporaryFileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := a.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(account.Table, account.FieldID, id),
 			sqlgraph.To(temporaryfile.Table, temporaryfile.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, account.TemporaryFilesTable, account.TemporaryFilesColumn),
 		)
-		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryTenantAssignment queries the tenant_assignment edge of a Account.
-func (c *AccountClient) QueryTenantAssignment(a *Account) *TenantAccountAssignmentQuery {
+func (c *AccountClient) QueryTenantAssignment(_m *Account) *TenantAccountAssignmentQuery {
 	query := (&TenantAccountAssignmentClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := a.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(account.Table, account.FieldID, id),
 			sqlgraph.To(tenantaccountassignment.Table, tenantaccountassignment.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, account.TenantAssignmentTable, account.TenantAssignmentColumn),
 		)
-		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -511,8 +511,8 @@ func (c *MailClient) Update() *MailUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *MailClient) UpdateOne(m *Mail) *MailUpdateOne {
-	mutation := newMailMutation(c.config, OpUpdateOne, withMail(m))
+func (c *MailClient) UpdateOne(_m *Mail) *MailUpdateOne {
+	mutation := newMailMutation(c.config, OpUpdateOne, withMail(_m))
 	return &MailUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -529,8 +529,8 @@ func (c *MailClient) Delete() *MailDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *MailClient) DeleteOne(m *Mail) *MailDeleteOne {
-	return c.DeleteOneID(m.ID)
+func (c *MailClient) DeleteOne(_m *Mail) *MailDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -565,48 +565,48 @@ func (c *MailClient) GetX(ctx context.Context, id int64) *Mail {
 }
 
 // QueryCreator queries the creator edge of a Mail.
-func (c *MailClient) QueryCreator(m *Mail) *AccountQuery {
+func (c *MailClient) QueryCreator(_m *Mail) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := m.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mail.Table, mail.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, mail.CreatorTable, mail.CreatorColumn),
 		)
-		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryUpdater queries the updater edge of a Mail.
-func (c *MailClient) QueryUpdater(m *Mail) *AccountQuery {
+func (c *MailClient) QueryUpdater(_m *Mail) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := m.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mail.Table, mail.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, mail.UpdaterTable, mail.UpdaterColumn),
 		)
-		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryReceiver queries the receiver edge of a Mail.
-func (c *MailClient) QueryReceiver(m *Mail) *AccountQuery {
+func (c *MailClient) QueryReceiver(_m *Mail) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := m.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mail.Table, mail.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, mail.ReceiverTable, mail.ReceiverColumn),
 		)
-		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -692,8 +692,8 @@ func (c *SessionClient) Update() *SessionUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *SessionClient) UpdateOne(s *Session) *SessionUpdateOne {
-	mutation := newSessionMutation(c.config, OpUpdateOne, withSession(s))
+func (c *SessionClient) UpdateOne(_m *Session) *SessionUpdateOne {
+	mutation := newSessionMutation(c.config, OpUpdateOne, withSession(_m))
 	return &SessionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -710,8 +710,8 @@ func (c *SessionClient) Delete() *SessionDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *SessionClient) DeleteOne(s *Session) *SessionDeleteOne {
-	return c.DeleteOneID(s.ID)
+func (c *SessionClient) DeleteOne(_m *Session) *SessionDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -746,16 +746,16 @@ func (c *SessionClient) GetX(ctx context.Context, id int64) *Session {
 }
 
 // QueryAccount queries the account edge of a Session.
-func (c *SessionClient) QueryAccount(s *Session) *AccountQuery {
+func (c *SessionClient) QueryAccount(_m *Session) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(session.Table, session.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, session.AccountTable, session.AccountColumn),
 		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -841,8 +841,8 @@ func (c *SystemConfigClient) Update() *SystemConfigUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *SystemConfigClient) UpdateOne(sc *SystemConfig) *SystemConfigUpdateOne {
-	mutation := newSystemConfigMutation(c.config, OpUpdateOne, withSystemConfig(sc))
+func (c *SystemConfigClient) UpdateOne(_m *SystemConfig) *SystemConfigUpdateOne {
+	mutation := newSystemConfigMutation(c.config, OpUpdateOne, withSystemConfig(_m))
 	return &SystemConfigUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -859,8 +859,8 @@ func (c *SystemConfigClient) Delete() *SystemConfigDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *SystemConfigClient) DeleteOne(sc *SystemConfig) *SystemConfigDeleteOne {
-	return c.DeleteOneID(sc.ID)
+func (c *SystemConfigClient) DeleteOne(_m *SystemConfig) *SystemConfigDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -895,32 +895,32 @@ func (c *SystemConfigClient) GetX(ctx context.Context, id int64) *SystemConfig {
 }
 
 // QueryCreator queries the creator edge of a SystemConfig.
-func (c *SystemConfigClient) QueryCreator(sc *SystemConfig) *AccountQuery {
+func (c *SystemConfigClient) QueryCreator(_m *SystemConfig) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := sc.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(systemconfig.Table, systemconfig.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, systemconfig.CreatorTable, systemconfig.CreatorColumn),
 		)
-		fromV = sqlgraph.Neighbors(sc.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryUpdater queries the updater edge of a SystemConfig.
-func (c *SystemConfigClient) QueryUpdater(sc *SystemConfig) *AccountQuery {
+func (c *SystemConfigClient) QueryUpdater(_m *SystemConfig) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := sc.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(systemconfig.Table, systemconfig.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, systemconfig.UpdaterTable, systemconfig.UpdaterColumn),
 		)
-		fromV = sqlgraph.Neighbors(sc.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -1006,8 +1006,8 @@ func (c *TemporaryFileClient) Update() *TemporaryFileUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TemporaryFileClient) UpdateOne(tf *TemporaryFile) *TemporaryFileUpdateOne {
-	mutation := newTemporaryFileMutation(c.config, OpUpdateOne, withTemporaryFile(tf))
+func (c *TemporaryFileClient) UpdateOne(_m *TemporaryFile) *TemporaryFileUpdateOne {
+	mutation := newTemporaryFileMutation(c.config, OpUpdateOne, withTemporaryFile(_m))
 	return &TemporaryFileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1024,8 +1024,8 @@ func (c *TemporaryFileClient) Delete() *TemporaryFileDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TemporaryFileClient) DeleteOne(tf *TemporaryFile) *TemporaryFileDeleteOne {
-	return c.DeleteOneID(tf.ID)
+func (c *TemporaryFileClient) DeleteOne(_m *TemporaryFile) *TemporaryFileDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1060,64 +1060,64 @@ func (c *TemporaryFileClient) GetX(ctx context.Context, id int64) *TemporaryFile
 }
 
 // QueryCreator queries the creator edge of a TemporaryFile.
-func (c *TemporaryFileClient) QueryCreator(tf *TemporaryFile) *AccountQuery {
+func (c *TemporaryFileClient) QueryCreator(_m *TemporaryFile) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := tf.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(temporaryfile.Table, temporaryfile.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, temporaryfile.CreatorTable, temporaryfile.CreatorColumn),
 		)
-		fromV = sqlgraph.Neighbors(tf.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryUpdater queries the updater edge of a TemporaryFile.
-func (c *TemporaryFileClient) QueryUpdater(tf *TemporaryFile) *AccountQuery {
+func (c *TemporaryFileClient) QueryUpdater(_m *TemporaryFile) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := tf.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(temporaryfile.Table, temporaryfile.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, temporaryfile.UpdaterTable, temporaryfile.UpdaterColumn),
 		)
-		fromV = sqlgraph.Neighbors(tf.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryDeleter queries the deleter edge of a TemporaryFile.
-func (c *TemporaryFileClient) QueryDeleter(tf *TemporaryFile) *AccountQuery {
+func (c *TemporaryFileClient) QueryDeleter(_m *TemporaryFile) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := tf.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(temporaryfile.Table, temporaryfile.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, temporaryfile.DeleterTable, temporaryfile.DeleterColumn),
 		)
-		fromV = sqlgraph.Neighbors(tf.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryOwner queries the owner edge of a TemporaryFile.
-func (c *TemporaryFileClient) QueryOwner(tf *TemporaryFile) *AccountQuery {
+func (c *TemporaryFileClient) QueryOwner(_m *TemporaryFile) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := tf.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(temporaryfile.Table, temporaryfile.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, temporaryfile.OwnerTable, temporaryfile.OwnerColumn),
 		)
-		fromV = sqlgraph.Neighbors(tf.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -1205,8 +1205,8 @@ func (c *TenantClient) Update() *TenantUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TenantClient) UpdateOne(t *Tenant) *TenantUpdateOne {
-	mutation := newTenantMutation(c.config, OpUpdateOne, withTenant(t))
+func (c *TenantClient) UpdateOne(_m *Tenant) *TenantUpdateOne {
+	mutation := newTenantMutation(c.config, OpUpdateOne, withTenant(_m))
 	return &TenantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1223,8 +1223,8 @@ func (c *TenantClient) Delete() *TenantDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TenantClient) DeleteOne(t *Tenant) *TenantDeleteOne {
-	return c.DeleteOneID(t.ID)
+func (c *TenantClient) DeleteOne(_m *Tenant) *TenantDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1259,80 +1259,80 @@ func (c *TenantClient) GetX(ctx context.Context, id int64) *Tenant {
 }
 
 // QueryCreator queries the creator edge of a Tenant.
-func (c *TenantClient) QueryCreator(t *Tenant) *AccountQuery {
+func (c *TenantClient) QueryCreator(_m *Tenant) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tenant.Table, tenant.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tenant.CreatorTable, tenant.CreatorColumn),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryUpdater queries the updater edge of a Tenant.
-func (c *TenantClient) QueryUpdater(t *Tenant) *AccountQuery {
+func (c *TenantClient) QueryUpdater(_m *Tenant) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tenant.Table, tenant.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tenant.UpdaterTable, tenant.UpdaterColumn),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryDeleter queries the deleter edge of a Tenant.
-func (c *TenantClient) QueryDeleter(t *Tenant) *AccountQuery {
+func (c *TenantClient) QueryDeleter(_m *Tenant) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tenant.Table, tenant.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tenant.DeleterTable, tenant.DeleterColumn),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryAccounts queries the accounts edge of a Tenant.
-func (c *TenantClient) QueryAccounts(t *Tenant) *AccountQuery {
+func (c *TenantClient) QueryAccounts(_m *Tenant) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tenant.Table, tenant.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, tenant.AccountsTable, tenant.AccountsPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryAccountAssignment queries the account_assignment edge of a Tenant.
-func (c *TenantClient) QueryAccountAssignment(t *Tenant) *TenantAccountAssignmentQuery {
+func (c *TenantClient) QueryAccountAssignment(_m *Tenant) *TenantAccountAssignmentQuery {
 	query := (&TenantAccountAssignmentClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tenant.Table, tenant.FieldID, id),
 			sqlgraph.To(tenantaccountassignment.Table, tenantaccountassignment.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, tenant.AccountAssignmentTable, tenant.AccountAssignmentColumn),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -1420,8 +1420,8 @@ func (c *TenantAccountAssignmentClient) Update() *TenantAccountAssignmentUpdate 
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TenantAccountAssignmentClient) UpdateOne(taa *TenantAccountAssignment) *TenantAccountAssignmentUpdateOne {
-	mutation := newTenantAccountAssignmentMutation(c.config, OpUpdateOne, withTenantAccountAssignment(taa))
+func (c *TenantAccountAssignmentClient) UpdateOne(_m *TenantAccountAssignment) *TenantAccountAssignmentUpdateOne {
+	mutation := newTenantAccountAssignmentMutation(c.config, OpUpdateOne, withTenantAccountAssignment(_m))
 	return &TenantAccountAssignmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1438,8 +1438,8 @@ func (c *TenantAccountAssignmentClient) Delete() *TenantAccountAssignmentDelete 
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TenantAccountAssignmentClient) DeleteOne(taa *TenantAccountAssignment) *TenantAccountAssignmentDeleteOne {
-	return c.DeleteOneID(taa.ID)
+func (c *TenantAccountAssignmentClient) DeleteOne(_m *TenantAccountAssignment) *TenantAccountAssignmentDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1474,64 +1474,64 @@ func (c *TenantAccountAssignmentClient) GetX(ctx context.Context, id int64) *Ten
 }
 
 // QueryCreator queries the creator edge of a TenantAccountAssignment.
-func (c *TenantAccountAssignmentClient) QueryCreator(taa *TenantAccountAssignment) *AccountQuery {
+func (c *TenantAccountAssignmentClient) QueryCreator(_m *TenantAccountAssignment) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := taa.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tenantaccountassignment.Table, tenantaccountassignment.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tenantaccountassignment.CreatorTable, tenantaccountassignment.CreatorColumn),
 		)
-		fromV = sqlgraph.Neighbors(taa.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryUpdater queries the updater edge of a TenantAccountAssignment.
-func (c *TenantAccountAssignmentClient) QueryUpdater(taa *TenantAccountAssignment) *AccountQuery {
+func (c *TenantAccountAssignmentClient) QueryUpdater(_m *TenantAccountAssignment) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := taa.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tenantaccountassignment.Table, tenantaccountassignment.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tenantaccountassignment.UpdaterTable, tenantaccountassignment.UpdaterColumn),
 		)
-		fromV = sqlgraph.Neighbors(taa.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryTenant queries the tenant edge of a TenantAccountAssignment.
-func (c *TenantAccountAssignmentClient) QueryTenant(taa *TenantAccountAssignment) *TenantQuery {
+func (c *TenantAccountAssignmentClient) QueryTenant(_m *TenantAccountAssignment) *TenantQuery {
 	query := (&TenantClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := taa.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tenantaccountassignment.Table, tenantaccountassignment.FieldID, id),
 			sqlgraph.To(tenant.Table, tenant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tenantaccountassignment.TenantTable, tenantaccountassignment.TenantColumn),
 		)
-		fromV = sqlgraph.Neighbors(taa.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryAccount queries the account edge of a TenantAccountAssignment.
-func (c *TenantAccountAssignmentClient) QueryAccount(taa *TenantAccountAssignment) *AccountQuery {
+func (c *TenantAccountAssignmentClient) QueryAccount(_m *TenantAccountAssignment) *AccountQuery {
 	query := (&AccountClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := taa.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tenantaccountassignment.Table, tenantaccountassignment.FieldID, id),
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tenantaccountassignment.AccountTable, tenantaccountassignment.AccountColumn),
 		)
-		fromV = sqlgraph.Neighbors(taa.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query

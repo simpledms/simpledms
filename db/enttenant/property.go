@@ -94,7 +94,7 @@ func (*Property) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Property fields.
-func (pr *Property) assignValues(columns []string, values []any) error {
+func (_m *Property) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -105,33 +105,33 @@ func (pr *Property) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			pr.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case property.FieldSpaceID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
-				pr.SpaceID = value.Int64
+				_m.SpaceID = value.Int64
 			}
 		case property.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				pr.Name = value.String
+				_m.Name = value.String
 			}
 		case property.FieldType:
 			if value, ok := values[i].(*fieldtype.FieldType); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value != nil {
-				pr.Type = *value
+				_m.Type = *value
 			}
 		case property.FieldUnit:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field unit", values[i])
 			} else if value.Valid {
-				pr.Unit = value.String
+				_m.Unit = value.String
 			}
 		default:
-			pr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -139,59 +139,59 @@ func (pr *Property) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Property.
 // This includes values selected through modifiers, order, etc.
-func (pr *Property) Value(name string) (ent.Value, error) {
-	return pr.selectValues.Get(name)
+func (_m *Property) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QuerySpace queries the "space" edge of the Property entity.
-func (pr *Property) QuerySpace() *SpaceQuery {
-	return NewPropertyClient(pr.config).QuerySpace(pr)
+func (_m *Property) QuerySpace() *SpaceQuery {
+	return NewPropertyClient(_m.config).QuerySpace(_m)
 }
 
 // QueryFiles queries the "files" edge of the Property entity.
-func (pr *Property) QueryFiles() *FileQuery {
-	return NewPropertyClient(pr.config).QueryFiles(pr)
+func (_m *Property) QueryFiles() *FileQuery {
+	return NewPropertyClient(_m.config).QueryFiles(_m)
 }
 
 // QueryFileAssignments queries the "file_assignments" edge of the Property entity.
-func (pr *Property) QueryFileAssignments() *FilePropertyAssignmentQuery {
-	return NewPropertyClient(pr.config).QueryFileAssignments(pr)
+func (_m *Property) QueryFileAssignments() *FilePropertyAssignmentQuery {
+	return NewPropertyClient(_m.config).QueryFileAssignments(_m)
 }
 
 // Update returns a builder for updating this Property.
 // Note that you need to call Property.Unwrap() before calling this method if this Property
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (pr *Property) Update() *PropertyUpdateOne {
-	return NewPropertyClient(pr.config).UpdateOne(pr)
+func (_m *Property) Update() *PropertyUpdateOne {
+	return NewPropertyClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Property entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (pr *Property) Unwrap() *Property {
-	_tx, ok := pr.config.driver.(*txDriver)
+func (_m *Property) Unwrap() *Property {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: Property is not a transactional entity")
 	}
-	pr.config.driver = _tx.drv
-	return pr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (pr *Property) String() string {
+func (_m *Property) String() string {
 	var builder strings.Builder
 	builder.WriteString("Property(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", pr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("space_id=")
-	builder.WriteString(fmt.Sprintf("%v", pr.SpaceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(pr.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("type=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Type))
+	builder.WriteString(fmt.Sprintf("%v", _m.Type))
 	builder.WriteString(", ")
 	builder.WriteString("unit=")
-	builder.WriteString(pr.Unit)
+	builder.WriteString(_m.Unit)
 	builder.WriteByte(')')
 	return builder.String()
 }

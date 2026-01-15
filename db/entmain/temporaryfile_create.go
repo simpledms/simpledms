@@ -24,313 +24,313 @@ type TemporaryFileCreate struct {
 }
 
 // SetPublicID sets the "public_id" field.
-func (tfc *TemporaryFileCreate) SetPublicID(et entx.CIText) *TemporaryFileCreate {
-	tfc.mutation.SetPublicID(et)
-	return tfc
+func (_c *TemporaryFileCreate) SetPublicID(v entx.CIText) *TemporaryFileCreate {
+	_c.mutation.SetPublicID(v)
+	return _c
 }
 
 // SetNillablePublicID sets the "public_id" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillablePublicID(et *entx.CIText) *TemporaryFileCreate {
-	if et != nil {
-		tfc.SetPublicID(*et)
+func (_c *TemporaryFileCreate) SetNillablePublicID(v *entx.CIText) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetPublicID(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tfc *TemporaryFileCreate) SetCreatedAt(t time.Time) *TemporaryFileCreate {
-	tfc.mutation.SetCreatedAt(t)
-	return tfc
+func (_c *TemporaryFileCreate) SetCreatedAt(v time.Time) *TemporaryFileCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableCreatedAt(t *time.Time) *TemporaryFileCreate {
-	if t != nil {
-		tfc.SetCreatedAt(*t)
+func (_c *TemporaryFileCreate) SetNillableCreatedAt(v *time.Time) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (tfc *TemporaryFileCreate) SetCreatedBy(i int64) *TemporaryFileCreate {
-	tfc.mutation.SetCreatedBy(i)
-	return tfc
+func (_c *TemporaryFileCreate) SetCreatedBy(v int64) *TemporaryFileCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableCreatedBy(i *int64) *TemporaryFileCreate {
-	if i != nil {
-		tfc.SetCreatedBy(*i)
+func (_c *TemporaryFileCreate) SetNillableCreatedBy(v *int64) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tfc *TemporaryFileCreate) SetUpdatedAt(t time.Time) *TemporaryFileCreate {
-	tfc.mutation.SetUpdatedAt(t)
-	return tfc
+func (_c *TemporaryFileCreate) SetUpdatedAt(v time.Time) *TemporaryFileCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableUpdatedAt(t *time.Time) *TemporaryFileCreate {
-	if t != nil {
-		tfc.SetUpdatedAt(*t)
+func (_c *TemporaryFileCreate) SetNillableUpdatedAt(v *time.Time) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tfc *TemporaryFileCreate) SetUpdatedBy(i int64) *TemporaryFileCreate {
-	tfc.mutation.SetUpdatedBy(i)
-	return tfc
+func (_c *TemporaryFileCreate) SetUpdatedBy(v int64) *TemporaryFileCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableUpdatedBy(i *int64) *TemporaryFileCreate {
-	if i != nil {
-		tfc.SetUpdatedBy(*i)
+func (_c *TemporaryFileCreate) SetNillableUpdatedBy(v *int64) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (tfc *TemporaryFileCreate) SetDeletedBy(i int64) *TemporaryFileCreate {
-	tfc.mutation.SetDeletedBy(i)
-	return tfc
+func (_c *TemporaryFileCreate) SetDeletedBy(v int64) *TemporaryFileCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableDeletedBy(i *int64) *TemporaryFileCreate {
-	if i != nil {
-		tfc.SetDeletedBy(*i)
+func (_c *TemporaryFileCreate) SetNillableDeletedBy(v *int64) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (tfc *TemporaryFileCreate) SetDeletedAt(t time.Time) *TemporaryFileCreate {
-	tfc.mutation.SetDeletedAt(t)
-	return tfc
+func (_c *TemporaryFileCreate) SetDeletedAt(v time.Time) *TemporaryFileCreate {
+	_c.mutation.SetDeletedAt(v)
+	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableDeletedAt(t *time.Time) *TemporaryFileCreate {
-	if t != nil {
-		tfc.SetDeletedAt(*t)
+func (_c *TemporaryFileCreate) SetNillableDeletedAt(v *time.Time) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetDeletedAt(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetOwnerID sets the "owner_id" field.
-func (tfc *TemporaryFileCreate) SetOwnerID(i int64) *TemporaryFileCreate {
-	tfc.mutation.SetOwnerID(i)
-	return tfc
+func (_c *TemporaryFileCreate) SetOwnerID(v int64) *TemporaryFileCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
 }
 
 // SetFilename sets the "filename" field.
-func (tfc *TemporaryFileCreate) SetFilename(s string) *TemporaryFileCreate {
-	tfc.mutation.SetFilename(s)
-	return tfc
+func (_c *TemporaryFileCreate) SetFilename(v string) *TemporaryFileCreate {
+	_c.mutation.SetFilename(v)
+	return _c
 }
 
 // SetSize sets the "size" field.
-func (tfc *TemporaryFileCreate) SetSize(i int64) *TemporaryFileCreate {
-	tfc.mutation.SetSize(i)
-	return tfc
+func (_c *TemporaryFileCreate) SetSize(v int64) *TemporaryFileCreate {
+	_c.mutation.SetSize(v)
+	return _c
 }
 
 // SetNillableSize sets the "size" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableSize(i *int64) *TemporaryFileCreate {
-	if i != nil {
-		tfc.SetSize(*i)
+func (_c *TemporaryFileCreate) SetNillableSize(v *int64) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetSize(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetSizeInStorage sets the "size_in_storage" field.
-func (tfc *TemporaryFileCreate) SetSizeInStorage(i int64) *TemporaryFileCreate {
-	tfc.mutation.SetSizeInStorage(i)
-	return tfc
+func (_c *TemporaryFileCreate) SetSizeInStorage(v int64) *TemporaryFileCreate {
+	_c.mutation.SetSizeInStorage(v)
+	return _c
 }
 
 // SetSha256 sets the "sha256" field.
-func (tfc *TemporaryFileCreate) SetSha256(s string) *TemporaryFileCreate {
-	tfc.mutation.SetSha256(s)
-	return tfc
+func (_c *TemporaryFileCreate) SetSha256(v string) *TemporaryFileCreate {
+	_c.mutation.SetSha256(v)
+	return _c
 }
 
 // SetNillableSha256 sets the "sha256" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableSha256(s *string) *TemporaryFileCreate {
-	if s != nil {
-		tfc.SetSha256(*s)
+func (_c *TemporaryFileCreate) SetNillableSha256(v *string) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetSha256(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetMimeType sets the "mime_type" field.
-func (tfc *TemporaryFileCreate) SetMimeType(s string) *TemporaryFileCreate {
-	tfc.mutation.SetMimeType(s)
-	return tfc
+func (_c *TemporaryFileCreate) SetMimeType(v string) *TemporaryFileCreate {
+	_c.mutation.SetMimeType(v)
+	return _c
 }
 
 // SetNillableMimeType sets the "mime_type" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableMimeType(s *string) *TemporaryFileCreate {
-	if s != nil {
-		tfc.SetMimeType(*s)
+func (_c *TemporaryFileCreate) SetNillableMimeType(v *string) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetMimeType(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetStorageType sets the "storage_type" field.
-func (tfc *TemporaryFileCreate) SetStorageType(st storagetype.StorageType) *TemporaryFileCreate {
-	tfc.mutation.SetStorageType(st)
-	return tfc
+func (_c *TemporaryFileCreate) SetStorageType(v storagetype.StorageType) *TemporaryFileCreate {
+	_c.mutation.SetStorageType(v)
+	return _c
 }
 
 // SetBucketName sets the "bucket_name" field.
-func (tfc *TemporaryFileCreate) SetBucketName(s string) *TemporaryFileCreate {
-	tfc.mutation.SetBucketName(s)
-	return tfc
+func (_c *TemporaryFileCreate) SetBucketName(v string) *TemporaryFileCreate {
+	_c.mutation.SetBucketName(v)
+	return _c
 }
 
 // SetNillableBucketName sets the "bucket_name" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableBucketName(s *string) *TemporaryFileCreate {
-	if s != nil {
-		tfc.SetBucketName(*s)
+func (_c *TemporaryFileCreate) SetNillableBucketName(v *string) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetBucketName(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetStoragePath sets the "storage_path" field.
-func (tfc *TemporaryFileCreate) SetStoragePath(s string) *TemporaryFileCreate {
-	tfc.mutation.SetStoragePath(s)
-	return tfc
+func (_c *TemporaryFileCreate) SetStoragePath(v string) *TemporaryFileCreate {
+	_c.mutation.SetStoragePath(v)
+	return _c
 }
 
 // SetStorageFilename sets the "storage_filename" field.
-func (tfc *TemporaryFileCreate) SetStorageFilename(s string) *TemporaryFileCreate {
-	tfc.mutation.SetStorageFilename(s)
-	return tfc
+func (_c *TemporaryFileCreate) SetStorageFilename(v string) *TemporaryFileCreate {
+	_c.mutation.SetStorageFilename(v)
+	return _c
 }
 
 // SetUploadToken sets the "upload_token" field.
-func (tfc *TemporaryFileCreate) SetUploadToken(s string) *TemporaryFileCreate {
-	tfc.mutation.SetUploadToken(s)
-	return tfc
+func (_c *TemporaryFileCreate) SetUploadToken(v string) *TemporaryFileCreate {
+	_c.mutation.SetUploadToken(v)
+	return _c
 }
 
 // SetConvertedToStoredFileAt sets the "converted_to_stored_file_at" field.
-func (tfc *TemporaryFileCreate) SetConvertedToStoredFileAt(t time.Time) *TemporaryFileCreate {
-	tfc.mutation.SetConvertedToStoredFileAt(t)
-	return tfc
+func (_c *TemporaryFileCreate) SetConvertedToStoredFileAt(v time.Time) *TemporaryFileCreate {
+	_c.mutation.SetConvertedToStoredFileAt(v)
+	return _c
 }
 
 // SetNillableConvertedToStoredFileAt sets the "converted_to_stored_file_at" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableConvertedToStoredFileAt(t *time.Time) *TemporaryFileCreate {
-	if t != nil {
-		tfc.SetConvertedToStoredFileAt(*t)
+func (_c *TemporaryFileCreate) SetNillableConvertedToStoredFileAt(v *time.Time) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetConvertedToStoredFileAt(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (tfc *TemporaryFileCreate) SetExpiresAt(t time.Time) *TemporaryFileCreate {
-	tfc.mutation.SetExpiresAt(t)
-	return tfc
+func (_c *TemporaryFileCreate) SetExpiresAt(v time.Time) *TemporaryFileCreate {
+	_c.mutation.SetExpiresAt(v)
+	return _c
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableExpiresAt(t *time.Time) *TemporaryFileCreate {
-	if t != nil {
-		tfc.SetExpiresAt(*t)
+func (_c *TemporaryFileCreate) SetNillableExpiresAt(v *time.Time) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetExpiresAt(*v)
 	}
-	return tfc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tfc *TemporaryFileCreate) SetID(i int64) *TemporaryFileCreate {
-	tfc.mutation.SetID(i)
-	return tfc
+func (_c *TemporaryFileCreate) SetID(v int64) *TemporaryFileCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetCreatorID sets the "creator" edge to the Account entity by ID.
-func (tfc *TemporaryFileCreate) SetCreatorID(id int64) *TemporaryFileCreate {
-	tfc.mutation.SetCreatorID(id)
-	return tfc
+func (_c *TemporaryFileCreate) SetCreatorID(id int64) *TemporaryFileCreate {
+	_c.mutation.SetCreatorID(id)
+	return _c
 }
 
 // SetNillableCreatorID sets the "creator" edge to the Account entity by ID if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableCreatorID(id *int64) *TemporaryFileCreate {
+func (_c *TemporaryFileCreate) SetNillableCreatorID(id *int64) *TemporaryFileCreate {
 	if id != nil {
-		tfc = tfc.SetCreatorID(*id)
+		_c = _c.SetCreatorID(*id)
 	}
-	return tfc
+	return _c
 }
 
 // SetCreator sets the "creator" edge to the Account entity.
-func (tfc *TemporaryFileCreate) SetCreator(a *Account) *TemporaryFileCreate {
-	return tfc.SetCreatorID(a.ID)
+func (_c *TemporaryFileCreate) SetCreator(v *Account) *TemporaryFileCreate {
+	return _c.SetCreatorID(v.ID)
 }
 
 // SetUpdaterID sets the "updater" edge to the Account entity by ID.
-func (tfc *TemporaryFileCreate) SetUpdaterID(id int64) *TemporaryFileCreate {
-	tfc.mutation.SetUpdaterID(id)
-	return tfc
+func (_c *TemporaryFileCreate) SetUpdaterID(id int64) *TemporaryFileCreate {
+	_c.mutation.SetUpdaterID(id)
+	return _c
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the Account entity by ID if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableUpdaterID(id *int64) *TemporaryFileCreate {
+func (_c *TemporaryFileCreate) SetNillableUpdaterID(id *int64) *TemporaryFileCreate {
 	if id != nil {
-		tfc = tfc.SetUpdaterID(*id)
+		_c = _c.SetUpdaterID(*id)
 	}
-	return tfc
+	return _c
 }
 
 // SetUpdater sets the "updater" edge to the Account entity.
-func (tfc *TemporaryFileCreate) SetUpdater(a *Account) *TemporaryFileCreate {
-	return tfc.SetUpdaterID(a.ID)
+func (_c *TemporaryFileCreate) SetUpdater(v *Account) *TemporaryFileCreate {
+	return _c.SetUpdaterID(v.ID)
 }
 
 // SetDeleterID sets the "deleter" edge to the Account entity by ID.
-func (tfc *TemporaryFileCreate) SetDeleterID(id int64) *TemporaryFileCreate {
-	tfc.mutation.SetDeleterID(id)
-	return tfc
+func (_c *TemporaryFileCreate) SetDeleterID(id int64) *TemporaryFileCreate {
+	_c.mutation.SetDeleterID(id)
+	return _c
 }
 
 // SetNillableDeleterID sets the "deleter" edge to the Account entity by ID if the given value is not nil.
-func (tfc *TemporaryFileCreate) SetNillableDeleterID(id *int64) *TemporaryFileCreate {
+func (_c *TemporaryFileCreate) SetNillableDeleterID(id *int64) *TemporaryFileCreate {
 	if id != nil {
-		tfc = tfc.SetDeleterID(*id)
+		_c = _c.SetDeleterID(*id)
 	}
-	return tfc
+	return _c
 }
 
 // SetDeleter sets the "deleter" edge to the Account entity.
-func (tfc *TemporaryFileCreate) SetDeleter(a *Account) *TemporaryFileCreate {
-	return tfc.SetDeleterID(a.ID)
+func (_c *TemporaryFileCreate) SetDeleter(v *Account) *TemporaryFileCreate {
+	return _c.SetDeleterID(v.ID)
 }
 
 // SetOwner sets the "owner" edge to the Account entity.
-func (tfc *TemporaryFileCreate) SetOwner(a *Account) *TemporaryFileCreate {
-	return tfc.SetOwnerID(a.ID)
+func (_c *TemporaryFileCreate) SetOwner(v *Account) *TemporaryFileCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // Mutation returns the TemporaryFileMutation object of the builder.
-func (tfc *TemporaryFileCreate) Mutation() *TemporaryFileMutation {
-	return tfc.mutation
+func (_c *TemporaryFileCreate) Mutation() *TemporaryFileMutation {
+	return _c.mutation
 }
 
 // Save creates the TemporaryFile in the database.
-func (tfc *TemporaryFileCreate) Save(ctx context.Context) (*TemporaryFile, error) {
-	if err := tfc.defaults(); err != nil {
+func (_c *TemporaryFileCreate) Save(ctx context.Context) (*TemporaryFile, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, tfc.sqlSave, tfc.mutation, tfc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tfc *TemporaryFileCreate) SaveX(ctx context.Context) *TemporaryFile {
-	v, err := tfc.Save(ctx)
+func (_c *TemporaryFileCreate) SaveX(ctx context.Context) *TemporaryFile {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -338,93 +338,93 @@ func (tfc *TemporaryFileCreate) SaveX(ctx context.Context) *TemporaryFile {
 }
 
 // Exec executes the query.
-func (tfc *TemporaryFileCreate) Exec(ctx context.Context) error {
-	_, err := tfc.Save(ctx)
+func (_c *TemporaryFileCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tfc *TemporaryFileCreate) ExecX(ctx context.Context) {
-	if err := tfc.Exec(ctx); err != nil {
+func (_c *TemporaryFileCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tfc *TemporaryFileCreate) defaults() error {
-	if _, ok := tfc.mutation.PublicID(); !ok {
+func (_c *TemporaryFileCreate) defaults() error {
+	if _, ok := _c.mutation.PublicID(); !ok {
 		if temporaryfile.DefaultPublicID == nil {
 			return fmt.Errorf("entmain: uninitialized temporaryfile.DefaultPublicID (forgotten import entmain/runtime?)")
 		}
 		v := temporaryfile.DefaultPublicID()
-		tfc.mutation.SetPublicID(v)
+		_c.mutation.SetPublicID(v)
 	}
-	if _, ok := tfc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if temporaryfile.DefaultCreatedAt == nil {
 			return fmt.Errorf("entmain: uninitialized temporaryfile.DefaultCreatedAt (forgotten import entmain/runtime?)")
 		}
 		v := temporaryfile.DefaultCreatedAt()
-		tfc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := tfc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if temporaryfile.DefaultUpdatedAt == nil {
 			return fmt.Errorf("entmain: uninitialized temporaryfile.DefaultUpdatedAt (forgotten import entmain/runtime?)")
 		}
 		v := temporaryfile.DefaultUpdatedAt()
-		tfc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tfc *TemporaryFileCreate) check() error {
-	if _, ok := tfc.mutation.PublicID(); !ok {
+func (_c *TemporaryFileCreate) check() error {
+	if _, ok := _c.mutation.PublicID(); !ok {
 		return &ValidationError{Name: "public_id", err: errors.New(`entmain: missing required field "TemporaryFile.public_id"`)}
 	}
-	if _, ok := tfc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`entmain: missing required field "TemporaryFile.created_at"`)}
 	}
-	if _, ok := tfc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`entmain: missing required field "TemporaryFile.updated_at"`)}
 	}
-	if _, ok := tfc.mutation.OwnerID(); !ok {
+	if _, ok := _c.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`entmain: missing required field "TemporaryFile.owner_id"`)}
 	}
-	if _, ok := tfc.mutation.Filename(); !ok {
+	if _, ok := _c.mutation.Filename(); !ok {
 		return &ValidationError{Name: "filename", err: errors.New(`entmain: missing required field "TemporaryFile.filename"`)}
 	}
-	if _, ok := tfc.mutation.SizeInStorage(); !ok {
+	if _, ok := _c.mutation.SizeInStorage(); !ok {
 		return &ValidationError{Name: "size_in_storage", err: errors.New(`entmain: missing required field "TemporaryFile.size_in_storage"`)}
 	}
-	if _, ok := tfc.mutation.StorageType(); !ok {
+	if _, ok := _c.mutation.StorageType(); !ok {
 		return &ValidationError{Name: "storage_type", err: errors.New(`entmain: missing required field "TemporaryFile.storage_type"`)}
 	}
-	if v, ok := tfc.mutation.StorageType(); ok {
+	if v, ok := _c.mutation.StorageType(); ok {
 		if err := temporaryfile.StorageTypeValidator(v); err != nil {
 			return &ValidationError{Name: "storage_type", err: fmt.Errorf(`entmain: validator failed for field "TemporaryFile.storage_type": %w`, err)}
 		}
 	}
-	if _, ok := tfc.mutation.StoragePath(); !ok {
+	if _, ok := _c.mutation.StoragePath(); !ok {
 		return &ValidationError{Name: "storage_path", err: errors.New(`entmain: missing required field "TemporaryFile.storage_path"`)}
 	}
-	if _, ok := tfc.mutation.StorageFilename(); !ok {
+	if _, ok := _c.mutation.StorageFilename(); !ok {
 		return &ValidationError{Name: "storage_filename", err: errors.New(`entmain: missing required field "TemporaryFile.storage_filename"`)}
 	}
-	if _, ok := tfc.mutation.UploadToken(); !ok {
+	if _, ok := _c.mutation.UploadToken(); !ok {
 		return &ValidationError{Name: "upload_token", err: errors.New(`entmain: missing required field "TemporaryFile.upload_token"`)}
 	}
-	if len(tfc.mutation.OwnerIDs()) == 0 {
+	if len(_c.mutation.OwnerIDs()) == 0 {
 		return &ValidationError{Name: "owner", err: errors.New(`entmain: missing required edge "TemporaryFile.owner"`)}
 	}
 	return nil
 }
 
-func (tfc *TemporaryFileCreate) sqlSave(ctx context.Context) (*TemporaryFile, error) {
-	if err := tfc.check(); err != nil {
+func (_c *TemporaryFileCreate) sqlSave(ctx context.Context) (*TemporaryFile, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tfc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tfc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -434,85 +434,85 @@ func (tfc *TemporaryFileCreate) sqlSave(ctx context.Context) (*TemporaryFile, er
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	tfc.mutation.id = &_node.ID
-	tfc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tfc *TemporaryFileCreate) createSpec() (*TemporaryFile, *sqlgraph.CreateSpec) {
+func (_c *TemporaryFileCreate) createSpec() (*TemporaryFile, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TemporaryFile{config: tfc.config}
+		_node = &TemporaryFile{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(temporaryfile.Table, sqlgraph.NewFieldSpec(temporaryfile.FieldID, field.TypeInt64))
 	)
-	if id, ok := tfc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := tfc.mutation.PublicID(); ok {
+	if value, ok := _c.mutation.PublicID(); ok {
 		_spec.SetField(temporaryfile.FieldPublicID, field.TypeString, value)
 		_node.PublicID = value
 	}
-	if value, ok := tfc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(temporaryfile.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := tfc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(temporaryfile.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := tfc.mutation.DeletedAt(); ok {
+	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(temporaryfile.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
 	}
-	if value, ok := tfc.mutation.Filename(); ok {
+	if value, ok := _c.mutation.Filename(); ok {
 		_spec.SetField(temporaryfile.FieldFilename, field.TypeString, value)
 		_node.Filename = value
 	}
-	if value, ok := tfc.mutation.Size(); ok {
+	if value, ok := _c.mutation.Size(); ok {
 		_spec.SetField(temporaryfile.FieldSize, field.TypeInt64, value)
 		_node.Size = value
 	}
-	if value, ok := tfc.mutation.SizeInStorage(); ok {
+	if value, ok := _c.mutation.SizeInStorage(); ok {
 		_spec.SetField(temporaryfile.FieldSizeInStorage, field.TypeInt64, value)
 		_node.SizeInStorage = value
 	}
-	if value, ok := tfc.mutation.Sha256(); ok {
+	if value, ok := _c.mutation.Sha256(); ok {
 		_spec.SetField(temporaryfile.FieldSha256, field.TypeString, value)
 		_node.Sha256 = value
 	}
-	if value, ok := tfc.mutation.MimeType(); ok {
+	if value, ok := _c.mutation.MimeType(); ok {
 		_spec.SetField(temporaryfile.FieldMimeType, field.TypeString, value)
 		_node.MimeType = value
 	}
-	if value, ok := tfc.mutation.StorageType(); ok {
+	if value, ok := _c.mutation.StorageType(); ok {
 		_spec.SetField(temporaryfile.FieldStorageType, field.TypeEnum, value)
 		_node.StorageType = value
 	}
-	if value, ok := tfc.mutation.BucketName(); ok {
+	if value, ok := _c.mutation.BucketName(); ok {
 		_spec.SetField(temporaryfile.FieldBucketName, field.TypeString, value)
 		_node.BucketName = value
 	}
-	if value, ok := tfc.mutation.StoragePath(); ok {
+	if value, ok := _c.mutation.StoragePath(); ok {
 		_spec.SetField(temporaryfile.FieldStoragePath, field.TypeString, value)
 		_node.StoragePath = value
 	}
-	if value, ok := tfc.mutation.StorageFilename(); ok {
+	if value, ok := _c.mutation.StorageFilename(); ok {
 		_spec.SetField(temporaryfile.FieldStorageFilename, field.TypeString, value)
 		_node.StorageFilename = value
 	}
-	if value, ok := tfc.mutation.UploadToken(); ok {
+	if value, ok := _c.mutation.UploadToken(); ok {
 		_spec.SetField(temporaryfile.FieldUploadToken, field.TypeString, value)
 		_node.UploadToken = value
 	}
-	if value, ok := tfc.mutation.ConvertedToStoredFileAt(); ok {
+	if value, ok := _c.mutation.ConvertedToStoredFileAt(); ok {
 		_spec.SetField(temporaryfile.FieldConvertedToStoredFileAt, field.TypeTime, value)
 		_node.ConvertedToStoredFileAt = &value
 	}
-	if value, ok := tfc.mutation.ExpiresAt(); ok {
+	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(temporaryfile.FieldExpiresAt, field.TypeTime, value)
 		_node.ExpiresAt = &value
 	}
-	if nodes := tfc.mutation.CreatorIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CreatorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -529,7 +529,7 @@ func (tfc *TemporaryFileCreate) createSpec() (*TemporaryFile, *sqlgraph.CreateSp
 		_node.CreatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tfc.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -546,7 +546,7 @@ func (tfc *TemporaryFileCreate) createSpec() (*TemporaryFile, *sqlgraph.CreateSp
 		_node.UpdatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tfc.mutation.DeleterIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.DeleterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -563,7 +563,7 @@ func (tfc *TemporaryFileCreate) createSpec() (*TemporaryFile, *sqlgraph.CreateSp
 		_node.DeletedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tfc.mutation.OwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -591,16 +591,16 @@ type TemporaryFileCreateBulk struct {
 }
 
 // Save creates the TemporaryFile entities in the database.
-func (tfcb *TemporaryFileCreateBulk) Save(ctx context.Context) ([]*TemporaryFile, error) {
-	if tfcb.err != nil {
-		return nil, tfcb.err
+func (_c *TemporaryFileCreateBulk) Save(ctx context.Context) ([]*TemporaryFile, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tfcb.builders))
-	nodes := make([]*TemporaryFile, len(tfcb.builders))
-	mutators := make([]Mutator, len(tfcb.builders))
-	for i := range tfcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TemporaryFile, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tfcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TemporaryFileMutation)
@@ -614,11 +614,11 @@ func (tfcb *TemporaryFileCreateBulk) Save(ctx context.Context) ([]*TemporaryFile
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tfcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tfcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -642,7 +642,7 @@ func (tfcb *TemporaryFileCreateBulk) Save(ctx context.Context) ([]*TemporaryFile
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tfcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -650,8 +650,8 @@ func (tfcb *TemporaryFileCreateBulk) Save(ctx context.Context) ([]*TemporaryFile
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tfcb *TemporaryFileCreateBulk) SaveX(ctx context.Context) []*TemporaryFile {
-	v, err := tfcb.Save(ctx)
+func (_c *TemporaryFileCreateBulk) SaveX(ctx context.Context) []*TemporaryFile {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -659,14 +659,14 @@ func (tfcb *TemporaryFileCreateBulk) SaveX(ctx context.Context) []*TemporaryFile
 }
 
 // Exec executes the query.
-func (tfcb *TemporaryFileCreateBulk) Exec(ctx context.Context) error {
-	_, err := tfcb.Save(ctx)
+func (_c *TemporaryFileCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tfcb *TemporaryFileCreateBulk) ExecX(ctx context.Context) {
-	if err := tfcb.Exec(ctx); err != nil {
+func (_c *TemporaryFileCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

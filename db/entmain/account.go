@@ -152,7 +152,7 @@ func (*Account) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Account fields.
-func (a *Account) assignValues(columns []string, values []any) error {
+func (_m *Account) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -163,133 +163,133 @@ func (a *Account) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			a.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case account.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				a.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case account.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				a.CreatedBy = value.Int64
+				_m.CreatedBy = value.Int64
 			}
 		case account.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				a.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case account.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				a.UpdatedBy = value.Int64
+				_m.UpdatedBy = value.Int64
 			}
 		case account.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				a.DeletedBy = value.Int64
+				_m.DeletedBy = value.Int64
 			}
 		case account.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				a.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case account.FieldPublicID:
 			if value, ok := values[i].(*entx.CIText); !ok {
 				return fmt.Errorf("unexpected type %T for field public_id", values[i])
 			} else if value != nil {
-				a.PublicID = *value
+				_m.PublicID = *value
 			}
 		case account.FieldEmail:
 			if value, ok := values[i].(*entx.CIText); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value != nil {
-				a.Email = *value
+				_m.Email = *value
 			}
 		case account.FieldFirstName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field first_name", values[i])
 			} else if value.Valid {
-				a.FirstName = value.String
+				_m.FirstName = value.String
 			}
 		case account.FieldLastName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field last_name", values[i])
 			} else if value.Valid {
-				a.LastName = value.String
+				_m.LastName = value.String
 			}
 		case account.FieldLanguage:
 			if value, ok := values[i].(*language.Language); !ok {
 				return fmt.Errorf("unexpected type %T for field language", values[i])
 			} else if value != nil {
-				a.Language = *value
+				_m.Language = *value
 			}
 		case account.FieldSubscribedToNewsletterAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field subscribed_to_newsletter_at", values[i])
 			} else if value.Valid {
-				a.SubscribedToNewsletterAt = new(time.Time)
-				*a.SubscribedToNewsletterAt = value.Time
+				_m.SubscribedToNewsletterAt = new(time.Time)
+				*_m.SubscribedToNewsletterAt = value.Time
 			}
 		case account.FieldPasswordSalt:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field password_salt", values[i])
 			} else if value.Valid {
-				a.PasswordSalt = value.String
+				_m.PasswordSalt = value.String
 			}
 		case account.FieldPasswordHash:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field password_hash", values[i])
 			} else if value.Valid {
-				a.PasswordHash = value.String
+				_m.PasswordHash = value.String
 			}
 		case account.FieldTemporaryPasswordSalt:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field temporary_password_salt", values[i])
 			} else if value.Valid {
-				a.TemporaryPasswordSalt = value.String
+				_m.TemporaryPasswordSalt = value.String
 			}
 		case account.FieldTemporaryPasswordHash:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field temporary_password_hash", values[i])
 			} else if value.Valid {
-				a.TemporaryPasswordHash = value.String
+				_m.TemporaryPasswordHash = value.String
 			}
 		case account.FieldTemporaryPasswordExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field temporary_password_expires_at", values[i])
 			} else if value.Valid {
-				a.TemporaryPasswordExpiresAt = value.Time
+				_m.TemporaryPasswordExpiresAt = value.Time
 			}
 		case account.FieldTemporaryTwoFactorAuthKeyEncrypted:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field temporary_two_factor_auth_key_encrypted", values[i])
 			} else if value.Valid {
-				a.TemporaryTwoFactorAuthKeyEncrypted = value.String
+				_m.TemporaryTwoFactorAuthKeyEncrypted = value.String
 			}
 		case account.FieldTwoFactoryAuthKeyEncrypted:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field two_factory_auth_key_encrypted", values[i])
 			} else if value.Valid {
-				a.TwoFactoryAuthKeyEncrypted = value.String
+				_m.TwoFactoryAuthKeyEncrypted = value.String
 			}
 		case account.FieldTwoFactorAuthRecoveryCodeSalt:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field two_factor_auth_recovery_code_salt", values[i])
 			} else if value.Valid {
-				a.TwoFactorAuthRecoveryCodeSalt = value.String
+				_m.TwoFactorAuthRecoveryCodeSalt = value.String
 			}
 		case account.FieldTwoFactorAuthRecoveryCodeHashes:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field two_factor_auth_recovery_code_hashes", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &a.TwoFactorAuthRecoveryCodeHashes); err != nil {
+				if err := json.Unmarshal(*value, &_m.TwoFactorAuthRecoveryCodeHashes); err != nil {
 					return fmt.Errorf("unmarshal field two_factor_auth_recovery_code_hashes: %w", err)
 				}
 			}
@@ -297,16 +297,16 @@ func (a *Account) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_login_attempt_at", values[i])
 			} else if value.Valid {
-				a.LastLoginAttemptAt = value.Time
+				_m.LastLoginAttemptAt = value.Time
 			}
 		case account.FieldRole:
 			if value, ok := values[i].(*mainrole.MainRole); !ok {
 				return fmt.Errorf("unexpected type %T for field role", values[i])
 			} else if value != nil {
-				a.Role = *value
+				_m.Role = *value
 			}
 		default:
-			a.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -314,87 +314,87 @@ func (a *Account) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Account.
 // This includes values selected through modifiers, order, etc.
-func (a *Account) Value(name string) (ent.Value, error) {
-	return a.selectValues.Get(name)
+func (_m *Account) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryTenants queries the "tenants" edge of the Account entity.
-func (a *Account) QueryTenants() *TenantQuery {
-	return NewAccountClient(a.config).QueryTenants(a)
+func (_m *Account) QueryTenants() *TenantQuery {
+	return NewAccountClient(_m.config).QueryTenants(_m)
 }
 
 // QueryReceivedMails queries the "received_mails" edge of the Account entity.
-func (a *Account) QueryReceivedMails() *MailQuery {
-	return NewAccountClient(a.config).QueryReceivedMails(a)
+func (_m *Account) QueryReceivedMails() *MailQuery {
+	return NewAccountClient(_m.config).QueryReceivedMails(_m)
 }
 
 // QueryTemporaryFiles queries the "temporary_files" edge of the Account entity.
-func (a *Account) QueryTemporaryFiles() *TemporaryFileQuery {
-	return NewAccountClient(a.config).QueryTemporaryFiles(a)
+func (_m *Account) QueryTemporaryFiles() *TemporaryFileQuery {
+	return NewAccountClient(_m.config).QueryTemporaryFiles(_m)
 }
 
 // QueryTenantAssignment queries the "tenant_assignment" edge of the Account entity.
-func (a *Account) QueryTenantAssignment() *TenantAccountAssignmentQuery {
-	return NewAccountClient(a.config).QueryTenantAssignment(a)
+func (_m *Account) QueryTenantAssignment() *TenantAccountAssignmentQuery {
+	return NewAccountClient(_m.config).QueryTenantAssignment(_m)
 }
 
 // Update returns a builder for updating this Account.
 // Note that you need to call Account.Unwrap() before calling this method if this Account
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (a *Account) Update() *AccountUpdateOne {
-	return NewAccountClient(a.config).UpdateOne(a)
+func (_m *Account) Update() *AccountUpdateOne {
+	return NewAccountClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Account entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (a *Account) Unwrap() *Account {
-	_tx, ok := a.config.driver.(*txDriver)
+func (_m *Account) Unwrap() *Account {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("entmain: Account is not a transactional entity")
 	}
-	a.config.driver = _tx.drv
-	return a
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (a *Account) String() string {
+func (_m *Account) String() string {
 	var builder strings.Builder
 	builder.WriteString("Account(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", a.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(a.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", a.CreatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(a.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", a.UpdatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(fmt.Sprintf("%v", a.DeletedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.DeletedBy))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(a.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("public_id=")
-	builder.WriteString(fmt.Sprintf("%v", a.PublicID))
+	builder.WriteString(fmt.Sprintf("%v", _m.PublicID))
 	builder.WriteString(", ")
 	builder.WriteString("email=")
-	builder.WriteString(fmt.Sprintf("%v", a.Email))
+	builder.WriteString(fmt.Sprintf("%v", _m.Email))
 	builder.WriteString(", ")
 	builder.WriteString("first_name=")
-	builder.WriteString(a.FirstName)
+	builder.WriteString(_m.FirstName)
 	builder.WriteString(", ")
 	builder.WriteString("last_name=")
-	builder.WriteString(a.LastName)
+	builder.WriteString(_m.LastName)
 	builder.WriteString(", ")
 	builder.WriteString("language=")
-	builder.WriteString(fmt.Sprintf("%v", a.Language))
+	builder.WriteString(fmt.Sprintf("%v", _m.Language))
 	builder.WriteString(", ")
-	if v := a.SubscribedToNewsletterAt; v != nil {
+	if v := _m.SubscribedToNewsletterAt; v != nil {
 		builder.WriteString("subscribed_to_newsletter_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
@@ -408,7 +408,7 @@ func (a *Account) String() string {
 	builder.WriteString("temporary_password_hash=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("temporary_password_expires_at=")
-	builder.WriteString(a.TemporaryPasswordExpiresAt.Format(time.ANSIC))
+	builder.WriteString(_m.TemporaryPasswordExpiresAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("temporary_two_factor_auth_key_encrypted=<sensitive>")
 	builder.WriteString(", ")
@@ -419,10 +419,10 @@ func (a *Account) String() string {
 	builder.WriteString("two_factor_auth_recovery_code_hashes=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("last_login_attempt_at=")
-	builder.WriteString(a.LastLoginAttemptAt.Format(time.ANSIC))
+	builder.WriteString(_m.LastLoginAttemptAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("role=")
-	builder.WriteString(fmt.Sprintf("%v", a.Role))
+	builder.WriteString(fmt.Sprintf("%v", _m.Role))
 	builder.WriteByte(')')
 	return builder.String()
 }

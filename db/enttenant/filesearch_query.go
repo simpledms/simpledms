@@ -29,40 +29,40 @@ type FileSearchQuery struct {
 }
 
 // Where adds a new predicate for the FileSearchQuery builder.
-func (fsq *FileSearchQuery) Where(ps ...predicate.FileSearch) *FileSearchQuery {
-	fsq.predicates = append(fsq.predicates, ps...)
-	return fsq
+func (_q *FileSearchQuery) Where(ps ...predicate.FileSearch) *FileSearchQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (fsq *FileSearchQuery) Limit(limit int) *FileSearchQuery {
-	fsq.ctx.Limit = &limit
-	return fsq
+func (_q *FileSearchQuery) Limit(limit int) *FileSearchQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (fsq *FileSearchQuery) Offset(offset int) *FileSearchQuery {
-	fsq.ctx.Offset = &offset
-	return fsq
+func (_q *FileSearchQuery) Offset(offset int) *FileSearchQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (fsq *FileSearchQuery) Unique(unique bool) *FileSearchQuery {
-	fsq.ctx.Unique = &unique
-	return fsq
+func (_q *FileSearchQuery) Unique(unique bool) *FileSearchQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (fsq *FileSearchQuery) Order(o ...filesearch.OrderOption) *FileSearchQuery {
-	fsq.order = append(fsq.order, o...)
-	return fsq
+func (_q *FileSearchQuery) Order(o ...filesearch.OrderOption) *FileSearchQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first FileSearch entity from the query.
 // Returns a *NotFoundError when no FileSearch was found.
-func (fsq *FileSearchQuery) First(ctx context.Context) (*FileSearch, error) {
-	nodes, err := fsq.Limit(1).All(setContextOp(ctx, fsq.ctx, ent.OpQueryFirst))
+func (_q *FileSearchQuery) First(ctx context.Context) (*FileSearch, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +73,8 @@ func (fsq *FileSearchQuery) First(ctx context.Context) (*FileSearch, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (fsq *FileSearchQuery) FirstX(ctx context.Context) *FileSearch {
-	node, err := fsq.First(ctx)
+func (_q *FileSearchQuery) FirstX(ctx context.Context) *FileSearch {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -84,8 +84,8 @@ func (fsq *FileSearchQuery) FirstX(ctx context.Context) *FileSearch {
 // Only returns a single FileSearch entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one FileSearch entity is found.
 // Returns a *NotFoundError when no FileSearch entities are found.
-func (fsq *FileSearchQuery) Only(ctx context.Context) (*FileSearch, error) {
-	nodes, err := fsq.Limit(2).All(setContextOp(ctx, fsq.ctx, ent.OpQueryOnly))
+func (_q *FileSearchQuery) Only(ctx context.Context) (*FileSearch, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -100,8 +100,8 @@ func (fsq *FileSearchQuery) Only(ctx context.Context) (*FileSearch, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (fsq *FileSearchQuery) OnlyX(ctx context.Context) *FileSearch {
-	node, err := fsq.Only(ctx)
+func (_q *FileSearchQuery) OnlyX(ctx context.Context) *FileSearch {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -109,18 +109,18 @@ func (fsq *FileSearchQuery) OnlyX(ctx context.Context) *FileSearch {
 }
 
 // All executes the query and returns a list of FileSearches.
-func (fsq *FileSearchQuery) All(ctx context.Context) ([]*FileSearch, error) {
-	ctx = setContextOp(ctx, fsq.ctx, ent.OpQueryAll)
-	if err := fsq.prepareQuery(ctx); err != nil {
+func (_q *FileSearchQuery) All(ctx context.Context) ([]*FileSearch, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*FileSearch, *FileSearchQuery]()
-	return withInterceptors[[]*FileSearch](ctx, fsq, qr, fsq.inters)
+	return withInterceptors[[]*FileSearch](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (fsq *FileSearchQuery) AllX(ctx context.Context) []*FileSearch {
-	nodes, err := fsq.All(ctx)
+func (_q *FileSearchQuery) AllX(ctx context.Context) []*FileSearch {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -128,17 +128,17 @@ func (fsq *FileSearchQuery) AllX(ctx context.Context) []*FileSearch {
 }
 
 // Count returns the count of the given query.
-func (fsq *FileSearchQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, fsq.ctx, ent.OpQueryCount)
-	if err := fsq.prepareQuery(ctx); err != nil {
+func (_q *FileSearchQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, fsq, querierCount[*FileSearchQuery](), fsq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*FileSearchQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (fsq *FileSearchQuery) CountX(ctx context.Context) int {
-	count, err := fsq.Count(ctx)
+func (_q *FileSearchQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -146,9 +146,9 @@ func (fsq *FileSearchQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (fsq *FileSearchQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, fsq.ctx, ent.OpQueryExist)
-	switch _, err := fsq.First(ctx); {
+func (_q *FileSearchQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.First(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -159,8 +159,8 @@ func (fsq *FileSearchQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (fsq *FileSearchQuery) ExistX(ctx context.Context) bool {
-	exist, err := fsq.Exist(ctx)
+func (_q *FileSearchQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -169,20 +169,20 @@ func (fsq *FileSearchQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the FileSearchQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (fsq *FileSearchQuery) Clone() *FileSearchQuery {
-	if fsq == nil {
+func (_q *FileSearchQuery) Clone() *FileSearchQuery {
+	if _q == nil {
 		return nil
 	}
 	return &FileSearchQuery{
-		config:     fsq.config,
-		ctx:        fsq.ctx.Clone(),
-		order:      append([]filesearch.OrderOption{}, fsq.order...),
-		inters:     append([]Interceptor{}, fsq.inters...),
-		predicates: append([]predicate.FileSearch{}, fsq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]filesearch.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.FileSearch{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       fsq.sql.Clone(),
-		path:      fsq.path,
-		modifiers: append([]func(*sql.Selector){}, fsq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -200,10 +200,10 @@ func (fsq *FileSearchQuery) Clone() *FileSearchQuery {
 //		GroupBy(filesearch.FieldSpaceID).
 //		Aggregate(enttenant.Count()).
 //		Scan(ctx, &v)
-func (fsq *FileSearchQuery) GroupBy(field string, fields ...string) *FileSearchGroupBy {
-	fsq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &FileSearchGroupBy{build: fsq}
-	grbuild.flds = &fsq.ctx.Fields
+func (_q *FileSearchQuery) GroupBy(field string, fields ...string) *FileSearchGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &FileSearchGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = filesearch.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -221,71 +221,71 @@ func (fsq *FileSearchQuery) GroupBy(field string, fields ...string) *FileSearchG
 //	client.FileSearch.Query().
 //		Select(filesearch.FieldSpaceID).
 //		Scan(ctx, &v)
-func (fsq *FileSearchQuery) Select(fields ...string) *FileSearchSelect {
-	fsq.ctx.Fields = append(fsq.ctx.Fields, fields...)
-	sbuild := &FileSearchSelect{FileSearchQuery: fsq}
+func (_q *FileSearchQuery) Select(fields ...string) *FileSearchSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &FileSearchSelect{FileSearchQuery: _q}
 	sbuild.label = filesearch.Label
-	sbuild.flds, sbuild.scan = &fsq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a FileSearchSelect configured with the given aggregations.
-func (fsq *FileSearchQuery) Aggregate(fns ...AggregateFunc) *FileSearchSelect {
-	return fsq.Select().Aggregate(fns...)
+func (_q *FileSearchQuery) Aggregate(fns ...AggregateFunc) *FileSearchSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (fsq *FileSearchQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range fsq.inters {
+func (_q *FileSearchQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("enttenant: uninitialized interceptor (forgotten import enttenant/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, fsq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range fsq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !filesearch.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("enttenant: invalid field %q for query", f)}
 		}
 	}
-	if fsq.path != nil {
-		prev, err := fsq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		fsq.sql = prev
+		_q.sql = prev
 	}
 	if filesearch.Policy == nil {
 		return errors.New("enttenant: uninitialized filesearch.Policy (forgotten import enttenant/runtime?)")
 	}
-	if err := filesearch.Policy.EvalQuery(ctx, fsq); err != nil {
+	if err := filesearch.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (fsq *FileSearchQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FileSearch, error) {
+func (_q *FileSearchQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FileSearch, error) {
 	var (
 		nodes = []*FileSearch{}
-		_spec = fsq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*FileSearch).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &FileSearch{config: fsq.config}
+		node := &FileSearch{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	if len(fsq.modifiers) > 0 {
-		_spec.Modifiers = fsq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, fsq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -294,46 +294,46 @@ func (fsq *FileSearchQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	return nodes, nil
 }
 
-func (fsq *FileSearchQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := fsq.querySpec()
-	if len(fsq.modifiers) > 0 {
-		_spec.Modifiers = fsq.modifiers
+func (_q *FileSearchQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = fsq.ctx.Fields
-	if len(fsq.ctx.Fields) > 0 {
-		_spec.Unique = fsq.ctx.Unique != nil && *fsq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, fsq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (fsq *FileSearchQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *FileSearchQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(filesearch.Table, filesearch.Columns, nil)
-	_spec.From = fsq.sql
-	if unique := fsq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if fsq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := fsq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		for i := range fields {
 			_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 		}
 	}
-	if ps := fsq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := fsq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := fsq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := fsq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -343,45 +343,45 @@ func (fsq *FileSearchQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (fsq *FileSearchQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(fsq.driver.Dialect())
+func (_q *FileSearchQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(filesearch.Table)
-	columns := fsq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = filesearch.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if fsq.sql != nil {
-		selector = fsq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if fsq.ctx.Unique != nil && *fsq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range fsq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range fsq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range fsq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := fsq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := fsq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (fsq *FileSearchQuery) Modify(modifiers ...func(s *sql.Selector)) *FileSearchSelect {
-	fsq.modifiers = append(fsq.modifiers, modifiers...)
-	return fsq.Select()
+func (_q *FileSearchQuery) Modify(modifiers ...func(s *sql.Selector)) *FileSearchSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // FileSearchGroupBy is the group-by builder for FileSearch entities.
@@ -391,41 +391,41 @@ type FileSearchGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (fsgb *FileSearchGroupBy) Aggregate(fns ...AggregateFunc) *FileSearchGroupBy {
-	fsgb.fns = append(fsgb.fns, fns...)
-	return fsgb
+func (_g *FileSearchGroupBy) Aggregate(fns ...AggregateFunc) *FileSearchGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (fsgb *FileSearchGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fsgb.build.ctx, ent.OpQueryGroupBy)
-	if err := fsgb.build.prepareQuery(ctx); err != nil {
+func (_g *FileSearchGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*FileSearchQuery, *FileSearchGroupBy](ctx, fsgb.build, fsgb, fsgb.build.inters, v)
+	return scanWithInterceptors[*FileSearchQuery, *FileSearchGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (fsgb *FileSearchGroupBy) sqlScan(ctx context.Context, root *FileSearchQuery, v any) error {
+func (_g *FileSearchGroupBy) sqlScan(ctx context.Context, root *FileSearchQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(fsgb.fns))
-	for _, fn := range fsgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*fsgb.flds)+len(fsgb.fns))
-		for _, f := range *fsgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*fsgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := fsgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -439,27 +439,27 @@ type FileSearchSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (fss *FileSearchSelect) Aggregate(fns ...AggregateFunc) *FileSearchSelect {
-	fss.fns = append(fss.fns, fns...)
-	return fss
+func (_s *FileSearchSelect) Aggregate(fns ...AggregateFunc) *FileSearchSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (fss *FileSearchSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fss.ctx, ent.OpQuerySelect)
-	if err := fss.prepareQuery(ctx); err != nil {
+func (_s *FileSearchSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*FileSearchQuery, *FileSearchSelect](ctx, fss.FileSearchQuery, fss, fss.inters, v)
+	return scanWithInterceptors[*FileSearchQuery, *FileSearchSelect](ctx, _s.FileSearchQuery, _s, _s.inters, v)
 }
 
-func (fss *FileSearchSelect) sqlScan(ctx context.Context, root *FileSearchQuery, v any) error {
+func (_s *FileSearchSelect) sqlScan(ctx context.Context, root *FileSearchQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(fss.fns))
-	for _, fn := range fss.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*fss.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -467,7 +467,7 @@ func (fss *FileSearchSelect) sqlScan(ctx context.Context, root *FileSearchQuery,
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := fss.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -475,7 +475,7 @@ func (fss *FileSearchSelect) sqlScan(ctx context.Context, root *FileSearchQuery,
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (fss *FileSearchSelect) Modify(modifiers ...func(s *sql.Selector)) *FileSearchSelect {
-	fss.modifiers = append(fss.modifiers, modifiers...)
-	return fss
+func (_s *FileSearchSelect) Modify(modifiers ...func(s *sql.Selector)) *FileSearchSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

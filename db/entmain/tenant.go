@@ -168,7 +168,7 @@ func (*Tenant) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Tenant fields.
-func (t *Tenant) assignValues(columns []string, values []any) error {
+func (_m *Tenant) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -179,149 +179,149 @@ func (t *Tenant) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			t.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case tenant.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				t.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case tenant.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				t.CreatedBy = value.Int64
+				_m.CreatedBy = value.Int64
 			}
 		case tenant.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				t.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case tenant.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				t.UpdatedBy = value.Int64
+				_m.UpdatedBy = value.Int64
 			}
 		case tenant.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				t.DeletedBy = value.Int64
+				_m.DeletedBy = value.Int64
 			}
 		case tenant.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				t.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case tenant.FieldPublicID:
 			if value, ok := values[i].(*entx.CIText); !ok {
 				return fmt.Errorf("unexpected type %T for field public_id", values[i])
 			} else if value != nil {
-				t.PublicID = *value
+				_m.PublicID = *value
 			}
 		case tenant.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				t.Name = value.String
+				_m.Name = value.String
 			}
 		case tenant.FieldFirstName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field first_name", values[i])
 			} else if value.Valid {
-				t.FirstName = value.String
+				_m.FirstName = value.String
 			}
 		case tenant.FieldLastName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field last_name", values[i])
 			} else if value.Valid {
-				t.LastName = value.String
+				_m.LastName = value.String
 			}
 		case tenant.FieldStreet:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field street", values[i])
 			} else if value.Valid {
-				t.Street = value.String
+				_m.Street = value.String
 			}
 		case tenant.FieldHouseNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field house_number", values[i])
 			} else if value.Valid {
-				t.HouseNumber = value.String
+				_m.HouseNumber = value.String
 			}
 		case tenant.FieldAdditionalAddressInfo:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field additional_address_info", values[i])
 			} else if value.Valid {
-				t.AdditionalAddressInfo = value.String
+				_m.AdditionalAddressInfo = value.String
 			}
 		case tenant.FieldPostalCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field postal_code", values[i])
 			} else if value.Valid {
-				t.PostalCode = value.String
+				_m.PostalCode = value.String
 			}
 		case tenant.FieldCity:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field city", values[i])
 			} else if value.Valid {
-				t.City = value.String
+				_m.City = value.String
 			}
 		case tenant.FieldCountry:
 			if value, ok := values[i].(*country.Country); !ok {
 				return fmt.Errorf("unexpected type %T for field country", values[i])
 			} else if value != nil {
-				t.Country = *value
+				_m.Country = *value
 			}
 		case tenant.FieldVatID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vat_id", values[i])
 			} else if value.Valid {
-				t.VatID = value.String
+				_m.VatID = value.String
 			}
 		case tenant.FieldTermsOfServiceAccepted:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field terms_of_service_accepted", values[i])
 			} else if value.Valid {
-				t.TermsOfServiceAccepted = value.Time
+				_m.TermsOfServiceAccepted = value.Time
 			}
 		case tenant.FieldPrivacyPolicyAccepted:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field privacy_policy_accepted", values[i])
 			} else if value.Valid {
-				t.PrivacyPolicyAccepted = value.Time
+				_m.PrivacyPolicyAccepted = value.Time
 			}
 		case tenant.FieldTwoFactorAuthEnforced:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field two_factor_auth_enforced", values[i])
 			} else if value.Valid {
-				t.TwoFactorAuthEnforced = value.Bool
+				_m.TwoFactorAuthEnforced = value.Bool
 			}
 		case tenant.FieldX25519IdentityEncrypted:
 			if value, ok := values[i].(*entx.EncryptedX25519Identity); !ok {
 				return fmt.Errorf("unexpected type %T for field x25519_identity_encrypted", values[i])
 			} else if value != nil {
-				t.X25519IdentityEncrypted = *value
+				_m.X25519IdentityEncrypted = *value
 			}
 		case tenant.FieldMaintenanceModeEnabledAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field maintenance_mode_enabled_at", values[i])
 			} else if value.Valid {
-				t.MaintenanceModeEnabledAt = new(time.Time)
-				*t.MaintenanceModeEnabledAt = value.Time
+				_m.MaintenanceModeEnabledAt = new(time.Time)
+				*_m.MaintenanceModeEnabledAt = value.Time
 			}
 		case tenant.FieldInitializedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field initialized_at", values[i])
 			} else if value.Valid {
-				t.InitializedAt = new(time.Time)
-				*t.InitializedAt = value.Time
+				_m.InitializedAt = new(time.Time)
+				*_m.InitializedAt = value.Time
 			}
 		default:
-			t.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -329,126 +329,126 @@ func (t *Tenant) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Tenant.
 // This includes values selected through modifiers, order, etc.
-func (t *Tenant) Value(name string) (ent.Value, error) {
-	return t.selectValues.Get(name)
+func (_m *Tenant) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryCreator queries the "creator" edge of the Tenant entity.
-func (t *Tenant) QueryCreator() *AccountQuery {
-	return NewTenantClient(t.config).QueryCreator(t)
+func (_m *Tenant) QueryCreator() *AccountQuery {
+	return NewTenantClient(_m.config).QueryCreator(_m)
 }
 
 // QueryUpdater queries the "updater" edge of the Tenant entity.
-func (t *Tenant) QueryUpdater() *AccountQuery {
-	return NewTenantClient(t.config).QueryUpdater(t)
+func (_m *Tenant) QueryUpdater() *AccountQuery {
+	return NewTenantClient(_m.config).QueryUpdater(_m)
 }
 
 // QueryDeleter queries the "deleter" edge of the Tenant entity.
-func (t *Tenant) QueryDeleter() *AccountQuery {
-	return NewTenantClient(t.config).QueryDeleter(t)
+func (_m *Tenant) QueryDeleter() *AccountQuery {
+	return NewTenantClient(_m.config).QueryDeleter(_m)
 }
 
 // QueryAccounts queries the "accounts" edge of the Tenant entity.
-func (t *Tenant) QueryAccounts() *AccountQuery {
-	return NewTenantClient(t.config).QueryAccounts(t)
+func (_m *Tenant) QueryAccounts() *AccountQuery {
+	return NewTenantClient(_m.config).QueryAccounts(_m)
 }
 
 // QueryAccountAssignment queries the "account_assignment" edge of the Tenant entity.
-func (t *Tenant) QueryAccountAssignment() *TenantAccountAssignmentQuery {
-	return NewTenantClient(t.config).QueryAccountAssignment(t)
+func (_m *Tenant) QueryAccountAssignment() *TenantAccountAssignmentQuery {
+	return NewTenantClient(_m.config).QueryAccountAssignment(_m)
 }
 
 // Update returns a builder for updating this Tenant.
 // Note that you need to call Tenant.Unwrap() before calling this method if this Tenant
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (t *Tenant) Update() *TenantUpdateOne {
-	return NewTenantClient(t.config).UpdateOne(t)
+func (_m *Tenant) Update() *TenantUpdateOne {
+	return NewTenantClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Tenant entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (t *Tenant) Unwrap() *Tenant {
-	_tx, ok := t.config.driver.(*txDriver)
+func (_m *Tenant) Unwrap() *Tenant {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("entmain: Tenant is not a transactional entity")
 	}
-	t.config.driver = _tx.drv
-	return t
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (t *Tenant) String() string {
+func (_m *Tenant) String() string {
 	var builder strings.Builder
 	builder.WriteString("Tenant(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(t.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", t.CreatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(t.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", t.UpdatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(fmt.Sprintf("%v", t.DeletedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.DeletedBy))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(t.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("public_id=")
-	builder.WriteString(fmt.Sprintf("%v", t.PublicID))
+	builder.WriteString(fmt.Sprintf("%v", _m.PublicID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(t.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("first_name=")
-	builder.WriteString(t.FirstName)
+	builder.WriteString(_m.FirstName)
 	builder.WriteString(", ")
 	builder.WriteString("last_name=")
-	builder.WriteString(t.LastName)
+	builder.WriteString(_m.LastName)
 	builder.WriteString(", ")
 	builder.WriteString("street=")
-	builder.WriteString(t.Street)
+	builder.WriteString(_m.Street)
 	builder.WriteString(", ")
 	builder.WriteString("house_number=")
-	builder.WriteString(t.HouseNumber)
+	builder.WriteString(_m.HouseNumber)
 	builder.WriteString(", ")
 	builder.WriteString("additional_address_info=")
-	builder.WriteString(t.AdditionalAddressInfo)
+	builder.WriteString(_m.AdditionalAddressInfo)
 	builder.WriteString(", ")
 	builder.WriteString("postal_code=")
-	builder.WriteString(t.PostalCode)
+	builder.WriteString(_m.PostalCode)
 	builder.WriteString(", ")
 	builder.WriteString("city=")
-	builder.WriteString(t.City)
+	builder.WriteString(_m.City)
 	builder.WriteString(", ")
 	builder.WriteString("country=")
-	builder.WriteString(fmt.Sprintf("%v", t.Country))
+	builder.WriteString(fmt.Sprintf("%v", _m.Country))
 	builder.WriteString(", ")
 	builder.WriteString("vat_id=")
-	builder.WriteString(t.VatID)
+	builder.WriteString(_m.VatID)
 	builder.WriteString(", ")
 	builder.WriteString("terms_of_service_accepted=")
-	builder.WriteString(t.TermsOfServiceAccepted.Format(time.ANSIC))
+	builder.WriteString(_m.TermsOfServiceAccepted.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("privacy_policy_accepted=")
-	builder.WriteString(t.PrivacyPolicyAccepted.Format(time.ANSIC))
+	builder.WriteString(_m.PrivacyPolicyAccepted.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("two_factor_auth_enforced=")
-	builder.WriteString(fmt.Sprintf("%v", t.TwoFactorAuthEnforced))
+	builder.WriteString(fmt.Sprintf("%v", _m.TwoFactorAuthEnforced))
 	builder.WriteString(", ")
 	builder.WriteString("x25519_identity_encrypted=<sensitive>")
 	builder.WriteString(", ")
-	if v := t.MaintenanceModeEnabledAt; v != nil {
+	if v := _m.MaintenanceModeEnabledAt; v != nil {
 		builder.WriteString("maintenance_mode_enabled_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := t.InitializedAt; v != nil {
+	if v := _m.InitializedAt; v != nil {
 		builder.WriteString("initialized_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}

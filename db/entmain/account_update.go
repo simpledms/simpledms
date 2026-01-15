@@ -32,505 +32,505 @@ type AccountUpdate struct {
 }
 
 // Where appends a list predicates to the AccountUpdate builder.
-func (au *AccountUpdate) Where(ps ...predicate.Account) *AccountUpdate {
-	au.mutation.Where(ps...)
-	return au
+func (_u *AccountUpdate) Where(ps ...predicate.Account) *AccountUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (au *AccountUpdate) SetUpdatedAt(t time.Time) *AccountUpdate {
-	au.mutation.SetUpdatedAt(t)
-	return au
+func (_u *AccountUpdate) SetUpdatedAt(v time.Time) *AccountUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (au *AccountUpdate) SetUpdatedBy(i int64) *AccountUpdate {
-	au.mutation.ResetUpdatedBy()
-	au.mutation.SetUpdatedBy(i)
-	return au
+func (_u *AccountUpdate) SetUpdatedBy(v int64) *AccountUpdate {
+	_u.mutation.ResetUpdatedBy()
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableUpdatedBy(i *int64) *AccountUpdate {
-	if i != nil {
-		au.SetUpdatedBy(*i)
+func (_u *AccountUpdate) SetNillableUpdatedBy(v *int64) *AccountUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return au
+	return _u
 }
 
-// AddUpdatedBy adds i to the "updated_by" field.
-func (au *AccountUpdate) AddUpdatedBy(i int64) *AccountUpdate {
-	au.mutation.AddUpdatedBy(i)
-	return au
+// AddUpdatedBy adds value to the "updated_by" field.
+func (_u *AccountUpdate) AddUpdatedBy(v int64) *AccountUpdate {
+	_u.mutation.AddUpdatedBy(v)
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (au *AccountUpdate) ClearUpdatedBy() *AccountUpdate {
-	au.mutation.ClearUpdatedBy()
-	return au
+func (_u *AccountUpdate) ClearUpdatedBy() *AccountUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (au *AccountUpdate) SetDeletedBy(i int64) *AccountUpdate {
-	au.mutation.ResetDeletedBy()
-	au.mutation.SetDeletedBy(i)
-	return au
+func (_u *AccountUpdate) SetDeletedBy(v int64) *AccountUpdate {
+	_u.mutation.ResetDeletedBy()
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableDeletedBy(i *int64) *AccountUpdate {
-	if i != nil {
-		au.SetDeletedBy(*i)
+func (_u *AccountUpdate) SetNillableDeletedBy(v *int64) *AccountUpdate {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return au
+	return _u
 }
 
-// AddDeletedBy adds i to the "deleted_by" field.
-func (au *AccountUpdate) AddDeletedBy(i int64) *AccountUpdate {
-	au.mutation.AddDeletedBy(i)
-	return au
+// AddDeletedBy adds value to the "deleted_by" field.
+func (_u *AccountUpdate) AddDeletedBy(v int64) *AccountUpdate {
+	_u.mutation.AddDeletedBy(v)
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (au *AccountUpdate) ClearDeletedBy() *AccountUpdate {
-	au.mutation.ClearDeletedBy()
-	return au
+func (_u *AccountUpdate) ClearDeletedBy() *AccountUpdate {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (au *AccountUpdate) SetDeletedAt(t time.Time) *AccountUpdate {
-	au.mutation.SetDeletedAt(t)
-	return au
+func (_u *AccountUpdate) SetDeletedAt(v time.Time) *AccountUpdate {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableDeletedAt(t *time.Time) *AccountUpdate {
-	if t != nil {
-		au.SetDeletedAt(*t)
+func (_u *AccountUpdate) SetNillableDeletedAt(v *time.Time) *AccountUpdate {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (au *AccountUpdate) ClearDeletedAt() *AccountUpdate {
-	au.mutation.ClearDeletedAt()
-	return au
+func (_u *AccountUpdate) ClearDeletedAt() *AccountUpdate {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetPublicID sets the "public_id" field.
-func (au *AccountUpdate) SetPublicID(et entx.CIText) *AccountUpdate {
-	au.mutation.SetPublicID(et)
-	return au
+func (_u *AccountUpdate) SetPublicID(v entx.CIText) *AccountUpdate {
+	_u.mutation.SetPublicID(v)
+	return _u
 }
 
 // SetNillablePublicID sets the "public_id" field if the given value is not nil.
-func (au *AccountUpdate) SetNillablePublicID(et *entx.CIText) *AccountUpdate {
-	if et != nil {
-		au.SetPublicID(*et)
+func (_u *AccountUpdate) SetNillablePublicID(v *entx.CIText) *AccountUpdate {
+	if v != nil {
+		_u.SetPublicID(*v)
 	}
-	return au
+	return _u
 }
 
 // SetEmail sets the "email" field.
-func (au *AccountUpdate) SetEmail(et entx.CIText) *AccountUpdate {
-	au.mutation.SetEmail(et)
-	return au
+func (_u *AccountUpdate) SetEmail(v entx.CIText) *AccountUpdate {
+	_u.mutation.SetEmail(v)
+	return _u
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableEmail(et *entx.CIText) *AccountUpdate {
-	if et != nil {
-		au.SetEmail(*et)
+func (_u *AccountUpdate) SetNillableEmail(v *entx.CIText) *AccountUpdate {
+	if v != nil {
+		_u.SetEmail(*v)
 	}
-	return au
+	return _u
 }
 
 // SetFirstName sets the "first_name" field.
-func (au *AccountUpdate) SetFirstName(s string) *AccountUpdate {
-	au.mutation.SetFirstName(s)
-	return au
+func (_u *AccountUpdate) SetFirstName(v string) *AccountUpdate {
+	_u.mutation.SetFirstName(v)
+	return _u
 }
 
 // SetNillableFirstName sets the "first_name" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableFirstName(s *string) *AccountUpdate {
-	if s != nil {
-		au.SetFirstName(*s)
+func (_u *AccountUpdate) SetNillableFirstName(v *string) *AccountUpdate {
+	if v != nil {
+		_u.SetFirstName(*v)
 	}
-	return au
+	return _u
 }
 
 // SetLastName sets the "last_name" field.
-func (au *AccountUpdate) SetLastName(s string) *AccountUpdate {
-	au.mutation.SetLastName(s)
-	return au
+func (_u *AccountUpdate) SetLastName(v string) *AccountUpdate {
+	_u.mutation.SetLastName(v)
+	return _u
 }
 
 // SetNillableLastName sets the "last_name" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableLastName(s *string) *AccountUpdate {
-	if s != nil {
-		au.SetLastName(*s)
+func (_u *AccountUpdate) SetNillableLastName(v *string) *AccountUpdate {
+	if v != nil {
+		_u.SetLastName(*v)
 	}
-	return au
+	return _u
 }
 
 // SetLanguage sets the "language" field.
-func (au *AccountUpdate) SetLanguage(l language.Language) *AccountUpdate {
-	au.mutation.SetLanguage(l)
-	return au
+func (_u *AccountUpdate) SetLanguage(v language.Language) *AccountUpdate {
+	_u.mutation.SetLanguage(v)
+	return _u
 }
 
 // SetNillableLanguage sets the "language" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableLanguage(l *language.Language) *AccountUpdate {
-	if l != nil {
-		au.SetLanguage(*l)
+func (_u *AccountUpdate) SetNillableLanguage(v *language.Language) *AccountUpdate {
+	if v != nil {
+		_u.SetLanguage(*v)
 	}
-	return au
+	return _u
 }
 
 // SetSubscribedToNewsletterAt sets the "subscribed_to_newsletter_at" field.
-func (au *AccountUpdate) SetSubscribedToNewsletterAt(t time.Time) *AccountUpdate {
-	au.mutation.SetSubscribedToNewsletterAt(t)
-	return au
+func (_u *AccountUpdate) SetSubscribedToNewsletterAt(v time.Time) *AccountUpdate {
+	_u.mutation.SetSubscribedToNewsletterAt(v)
+	return _u
 }
 
 // SetNillableSubscribedToNewsletterAt sets the "subscribed_to_newsletter_at" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableSubscribedToNewsletterAt(t *time.Time) *AccountUpdate {
-	if t != nil {
-		au.SetSubscribedToNewsletterAt(*t)
+func (_u *AccountUpdate) SetNillableSubscribedToNewsletterAt(v *time.Time) *AccountUpdate {
+	if v != nil {
+		_u.SetSubscribedToNewsletterAt(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearSubscribedToNewsletterAt clears the value of the "subscribed_to_newsletter_at" field.
-func (au *AccountUpdate) ClearSubscribedToNewsletterAt() *AccountUpdate {
-	au.mutation.ClearSubscribedToNewsletterAt()
-	return au
+func (_u *AccountUpdate) ClearSubscribedToNewsletterAt() *AccountUpdate {
+	_u.mutation.ClearSubscribedToNewsletterAt()
+	return _u
 }
 
 // SetPasswordSalt sets the "password_salt" field.
-func (au *AccountUpdate) SetPasswordSalt(s string) *AccountUpdate {
-	au.mutation.SetPasswordSalt(s)
-	return au
+func (_u *AccountUpdate) SetPasswordSalt(v string) *AccountUpdate {
+	_u.mutation.SetPasswordSalt(v)
+	return _u
 }
 
 // SetNillablePasswordSalt sets the "password_salt" field if the given value is not nil.
-func (au *AccountUpdate) SetNillablePasswordSalt(s *string) *AccountUpdate {
-	if s != nil {
-		au.SetPasswordSalt(*s)
+func (_u *AccountUpdate) SetNillablePasswordSalt(v *string) *AccountUpdate {
+	if v != nil {
+		_u.SetPasswordSalt(*v)
 	}
-	return au
+	return _u
 }
 
 // SetPasswordHash sets the "password_hash" field.
-func (au *AccountUpdate) SetPasswordHash(s string) *AccountUpdate {
-	au.mutation.SetPasswordHash(s)
-	return au
+func (_u *AccountUpdate) SetPasswordHash(v string) *AccountUpdate {
+	_u.mutation.SetPasswordHash(v)
+	return _u
 }
 
 // SetNillablePasswordHash sets the "password_hash" field if the given value is not nil.
-func (au *AccountUpdate) SetNillablePasswordHash(s *string) *AccountUpdate {
-	if s != nil {
-		au.SetPasswordHash(*s)
+func (_u *AccountUpdate) SetNillablePasswordHash(v *string) *AccountUpdate {
+	if v != nil {
+		_u.SetPasswordHash(*v)
 	}
-	return au
+	return _u
 }
 
 // SetTemporaryPasswordSalt sets the "temporary_password_salt" field.
-func (au *AccountUpdate) SetTemporaryPasswordSalt(s string) *AccountUpdate {
-	au.mutation.SetTemporaryPasswordSalt(s)
-	return au
+func (_u *AccountUpdate) SetTemporaryPasswordSalt(v string) *AccountUpdate {
+	_u.mutation.SetTemporaryPasswordSalt(v)
+	return _u
 }
 
 // SetNillableTemporaryPasswordSalt sets the "temporary_password_salt" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableTemporaryPasswordSalt(s *string) *AccountUpdate {
-	if s != nil {
-		au.SetTemporaryPasswordSalt(*s)
+func (_u *AccountUpdate) SetNillableTemporaryPasswordSalt(v *string) *AccountUpdate {
+	if v != nil {
+		_u.SetTemporaryPasswordSalt(*v)
 	}
-	return au
+	return _u
 }
 
 // SetTemporaryPasswordHash sets the "temporary_password_hash" field.
-func (au *AccountUpdate) SetTemporaryPasswordHash(s string) *AccountUpdate {
-	au.mutation.SetTemporaryPasswordHash(s)
-	return au
+func (_u *AccountUpdate) SetTemporaryPasswordHash(v string) *AccountUpdate {
+	_u.mutation.SetTemporaryPasswordHash(v)
+	return _u
 }
 
 // SetNillableTemporaryPasswordHash sets the "temporary_password_hash" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableTemporaryPasswordHash(s *string) *AccountUpdate {
-	if s != nil {
-		au.SetTemporaryPasswordHash(*s)
+func (_u *AccountUpdate) SetNillableTemporaryPasswordHash(v *string) *AccountUpdate {
+	if v != nil {
+		_u.SetTemporaryPasswordHash(*v)
 	}
-	return au
+	return _u
 }
 
 // SetTemporaryPasswordExpiresAt sets the "temporary_password_expires_at" field.
-func (au *AccountUpdate) SetTemporaryPasswordExpiresAt(t time.Time) *AccountUpdate {
-	au.mutation.SetTemporaryPasswordExpiresAt(t)
-	return au
+func (_u *AccountUpdate) SetTemporaryPasswordExpiresAt(v time.Time) *AccountUpdate {
+	_u.mutation.SetTemporaryPasswordExpiresAt(v)
+	return _u
 }
 
 // SetNillableTemporaryPasswordExpiresAt sets the "temporary_password_expires_at" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableTemporaryPasswordExpiresAt(t *time.Time) *AccountUpdate {
-	if t != nil {
-		au.SetTemporaryPasswordExpiresAt(*t)
+func (_u *AccountUpdate) SetNillableTemporaryPasswordExpiresAt(v *time.Time) *AccountUpdate {
+	if v != nil {
+		_u.SetTemporaryPasswordExpiresAt(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearTemporaryPasswordExpiresAt clears the value of the "temporary_password_expires_at" field.
-func (au *AccountUpdate) ClearTemporaryPasswordExpiresAt() *AccountUpdate {
-	au.mutation.ClearTemporaryPasswordExpiresAt()
-	return au
+func (_u *AccountUpdate) ClearTemporaryPasswordExpiresAt() *AccountUpdate {
+	_u.mutation.ClearTemporaryPasswordExpiresAt()
+	return _u
 }
 
 // SetTemporaryTwoFactorAuthKeyEncrypted sets the "temporary_two_factor_auth_key_encrypted" field.
-func (au *AccountUpdate) SetTemporaryTwoFactorAuthKeyEncrypted(s string) *AccountUpdate {
-	au.mutation.SetTemporaryTwoFactorAuthKeyEncrypted(s)
-	return au
+func (_u *AccountUpdate) SetTemporaryTwoFactorAuthKeyEncrypted(v string) *AccountUpdate {
+	_u.mutation.SetTemporaryTwoFactorAuthKeyEncrypted(v)
+	return _u
 }
 
 // SetNillableTemporaryTwoFactorAuthKeyEncrypted sets the "temporary_two_factor_auth_key_encrypted" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableTemporaryTwoFactorAuthKeyEncrypted(s *string) *AccountUpdate {
-	if s != nil {
-		au.SetTemporaryTwoFactorAuthKeyEncrypted(*s)
+func (_u *AccountUpdate) SetNillableTemporaryTwoFactorAuthKeyEncrypted(v *string) *AccountUpdate {
+	if v != nil {
+		_u.SetTemporaryTwoFactorAuthKeyEncrypted(*v)
 	}
-	return au
+	return _u
 }
 
 // SetTwoFactoryAuthKeyEncrypted sets the "two_factory_auth_key_encrypted" field.
-func (au *AccountUpdate) SetTwoFactoryAuthKeyEncrypted(s string) *AccountUpdate {
-	au.mutation.SetTwoFactoryAuthKeyEncrypted(s)
-	return au
+func (_u *AccountUpdate) SetTwoFactoryAuthKeyEncrypted(v string) *AccountUpdate {
+	_u.mutation.SetTwoFactoryAuthKeyEncrypted(v)
+	return _u
 }
 
 // SetNillableTwoFactoryAuthKeyEncrypted sets the "two_factory_auth_key_encrypted" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableTwoFactoryAuthKeyEncrypted(s *string) *AccountUpdate {
-	if s != nil {
-		au.SetTwoFactoryAuthKeyEncrypted(*s)
+func (_u *AccountUpdate) SetNillableTwoFactoryAuthKeyEncrypted(v *string) *AccountUpdate {
+	if v != nil {
+		_u.SetTwoFactoryAuthKeyEncrypted(*v)
 	}
-	return au
+	return _u
 }
 
 // SetTwoFactorAuthRecoveryCodeSalt sets the "two_factor_auth_recovery_code_salt" field.
-func (au *AccountUpdate) SetTwoFactorAuthRecoveryCodeSalt(s string) *AccountUpdate {
-	au.mutation.SetTwoFactorAuthRecoveryCodeSalt(s)
-	return au
+func (_u *AccountUpdate) SetTwoFactorAuthRecoveryCodeSalt(v string) *AccountUpdate {
+	_u.mutation.SetTwoFactorAuthRecoveryCodeSalt(v)
+	return _u
 }
 
 // SetNillableTwoFactorAuthRecoveryCodeSalt sets the "two_factor_auth_recovery_code_salt" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableTwoFactorAuthRecoveryCodeSalt(s *string) *AccountUpdate {
-	if s != nil {
-		au.SetTwoFactorAuthRecoveryCodeSalt(*s)
+func (_u *AccountUpdate) SetNillableTwoFactorAuthRecoveryCodeSalt(v *string) *AccountUpdate {
+	if v != nil {
+		_u.SetTwoFactorAuthRecoveryCodeSalt(*v)
 	}
-	return au
+	return _u
 }
 
 // SetTwoFactorAuthRecoveryCodeHashes sets the "two_factor_auth_recovery_code_hashes" field.
-func (au *AccountUpdate) SetTwoFactorAuthRecoveryCodeHashes(s []string) *AccountUpdate {
-	au.mutation.SetTwoFactorAuthRecoveryCodeHashes(s)
-	return au
+func (_u *AccountUpdate) SetTwoFactorAuthRecoveryCodeHashes(v []string) *AccountUpdate {
+	_u.mutation.SetTwoFactorAuthRecoveryCodeHashes(v)
+	return _u
 }
 
-// AppendTwoFactorAuthRecoveryCodeHashes appends s to the "two_factor_auth_recovery_code_hashes" field.
-func (au *AccountUpdate) AppendTwoFactorAuthRecoveryCodeHashes(s []string) *AccountUpdate {
-	au.mutation.AppendTwoFactorAuthRecoveryCodeHashes(s)
-	return au
+// AppendTwoFactorAuthRecoveryCodeHashes appends value to the "two_factor_auth_recovery_code_hashes" field.
+func (_u *AccountUpdate) AppendTwoFactorAuthRecoveryCodeHashes(v []string) *AccountUpdate {
+	_u.mutation.AppendTwoFactorAuthRecoveryCodeHashes(v)
+	return _u
 }
 
 // SetLastLoginAttemptAt sets the "last_login_attempt_at" field.
-func (au *AccountUpdate) SetLastLoginAttemptAt(t time.Time) *AccountUpdate {
-	au.mutation.SetLastLoginAttemptAt(t)
-	return au
+func (_u *AccountUpdate) SetLastLoginAttemptAt(v time.Time) *AccountUpdate {
+	_u.mutation.SetLastLoginAttemptAt(v)
+	return _u
 }
 
 // SetNillableLastLoginAttemptAt sets the "last_login_attempt_at" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableLastLoginAttemptAt(t *time.Time) *AccountUpdate {
-	if t != nil {
-		au.SetLastLoginAttemptAt(*t)
+func (_u *AccountUpdate) SetNillableLastLoginAttemptAt(v *time.Time) *AccountUpdate {
+	if v != nil {
+		_u.SetLastLoginAttemptAt(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearLastLoginAttemptAt clears the value of the "last_login_attempt_at" field.
-func (au *AccountUpdate) ClearLastLoginAttemptAt() *AccountUpdate {
-	au.mutation.ClearLastLoginAttemptAt()
-	return au
+func (_u *AccountUpdate) ClearLastLoginAttemptAt() *AccountUpdate {
+	_u.mutation.ClearLastLoginAttemptAt()
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (au *AccountUpdate) SetRole(mr mainrole.MainRole) *AccountUpdate {
-	au.mutation.SetRole(mr)
-	return au
+func (_u *AccountUpdate) SetRole(v mainrole.MainRole) *AccountUpdate {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (au *AccountUpdate) SetNillableRole(mr *mainrole.MainRole) *AccountUpdate {
-	if mr != nil {
-		au.SetRole(*mr)
+func (_u *AccountUpdate) SetNillableRole(v *mainrole.MainRole) *AccountUpdate {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return au
+	return _u
 }
 
 // AddTenantIDs adds the "tenants" edge to the Tenant entity by IDs.
-func (au *AccountUpdate) AddTenantIDs(ids ...int64) *AccountUpdate {
-	au.mutation.AddTenantIDs(ids...)
-	return au
+func (_u *AccountUpdate) AddTenantIDs(ids ...int64) *AccountUpdate {
+	_u.mutation.AddTenantIDs(ids...)
+	return _u
 }
 
 // AddTenants adds the "tenants" edges to the Tenant entity.
-func (au *AccountUpdate) AddTenants(t ...*Tenant) *AccountUpdate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *AccountUpdate) AddTenants(v ...*Tenant) *AccountUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.AddTenantIDs(ids...)
+	return _u.AddTenantIDs(ids...)
 }
 
 // AddReceivedMailIDs adds the "received_mails" edge to the Mail entity by IDs.
-func (au *AccountUpdate) AddReceivedMailIDs(ids ...int64) *AccountUpdate {
-	au.mutation.AddReceivedMailIDs(ids...)
-	return au
+func (_u *AccountUpdate) AddReceivedMailIDs(ids ...int64) *AccountUpdate {
+	_u.mutation.AddReceivedMailIDs(ids...)
+	return _u
 }
 
 // AddReceivedMails adds the "received_mails" edges to the Mail entity.
-func (au *AccountUpdate) AddReceivedMails(m ...*Mail) *AccountUpdate {
-	ids := make([]int64, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_u *AccountUpdate) AddReceivedMails(v ...*Mail) *AccountUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.AddReceivedMailIDs(ids...)
+	return _u.AddReceivedMailIDs(ids...)
 }
 
 // AddTemporaryFileIDs adds the "temporary_files" edge to the TemporaryFile entity by IDs.
-func (au *AccountUpdate) AddTemporaryFileIDs(ids ...int64) *AccountUpdate {
-	au.mutation.AddTemporaryFileIDs(ids...)
-	return au
+func (_u *AccountUpdate) AddTemporaryFileIDs(ids ...int64) *AccountUpdate {
+	_u.mutation.AddTemporaryFileIDs(ids...)
+	return _u
 }
 
 // AddTemporaryFiles adds the "temporary_files" edges to the TemporaryFile entity.
-func (au *AccountUpdate) AddTemporaryFiles(t ...*TemporaryFile) *AccountUpdate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *AccountUpdate) AddTemporaryFiles(v ...*TemporaryFile) *AccountUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.AddTemporaryFileIDs(ids...)
+	return _u.AddTemporaryFileIDs(ids...)
 }
 
 // AddTenantAssignmentIDs adds the "tenant_assignment" edge to the TenantAccountAssignment entity by IDs.
-func (au *AccountUpdate) AddTenantAssignmentIDs(ids ...int64) *AccountUpdate {
-	au.mutation.AddTenantAssignmentIDs(ids...)
-	return au
+func (_u *AccountUpdate) AddTenantAssignmentIDs(ids ...int64) *AccountUpdate {
+	_u.mutation.AddTenantAssignmentIDs(ids...)
+	return _u
 }
 
 // AddTenantAssignment adds the "tenant_assignment" edges to the TenantAccountAssignment entity.
-func (au *AccountUpdate) AddTenantAssignment(t ...*TenantAccountAssignment) *AccountUpdate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *AccountUpdate) AddTenantAssignment(v ...*TenantAccountAssignment) *AccountUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.AddTenantAssignmentIDs(ids...)
+	return _u.AddTenantAssignmentIDs(ids...)
 }
 
 // Mutation returns the AccountMutation object of the builder.
-func (au *AccountUpdate) Mutation() *AccountMutation {
-	return au.mutation
+func (_u *AccountUpdate) Mutation() *AccountMutation {
+	return _u.mutation
 }
 
 // ClearTenants clears all "tenants" edges to the Tenant entity.
-func (au *AccountUpdate) ClearTenants() *AccountUpdate {
-	au.mutation.ClearTenants()
-	return au
+func (_u *AccountUpdate) ClearTenants() *AccountUpdate {
+	_u.mutation.ClearTenants()
+	return _u
 }
 
 // RemoveTenantIDs removes the "tenants" edge to Tenant entities by IDs.
-func (au *AccountUpdate) RemoveTenantIDs(ids ...int64) *AccountUpdate {
-	au.mutation.RemoveTenantIDs(ids...)
-	return au
+func (_u *AccountUpdate) RemoveTenantIDs(ids ...int64) *AccountUpdate {
+	_u.mutation.RemoveTenantIDs(ids...)
+	return _u
 }
 
 // RemoveTenants removes "tenants" edges to Tenant entities.
-func (au *AccountUpdate) RemoveTenants(t ...*Tenant) *AccountUpdate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *AccountUpdate) RemoveTenants(v ...*Tenant) *AccountUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.RemoveTenantIDs(ids...)
+	return _u.RemoveTenantIDs(ids...)
 }
 
 // ClearReceivedMails clears all "received_mails" edges to the Mail entity.
-func (au *AccountUpdate) ClearReceivedMails() *AccountUpdate {
-	au.mutation.ClearReceivedMails()
-	return au
+func (_u *AccountUpdate) ClearReceivedMails() *AccountUpdate {
+	_u.mutation.ClearReceivedMails()
+	return _u
 }
 
 // RemoveReceivedMailIDs removes the "received_mails" edge to Mail entities by IDs.
-func (au *AccountUpdate) RemoveReceivedMailIDs(ids ...int64) *AccountUpdate {
-	au.mutation.RemoveReceivedMailIDs(ids...)
-	return au
+func (_u *AccountUpdate) RemoveReceivedMailIDs(ids ...int64) *AccountUpdate {
+	_u.mutation.RemoveReceivedMailIDs(ids...)
+	return _u
 }
 
 // RemoveReceivedMails removes "received_mails" edges to Mail entities.
-func (au *AccountUpdate) RemoveReceivedMails(m ...*Mail) *AccountUpdate {
-	ids := make([]int64, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_u *AccountUpdate) RemoveReceivedMails(v ...*Mail) *AccountUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.RemoveReceivedMailIDs(ids...)
+	return _u.RemoveReceivedMailIDs(ids...)
 }
 
 // ClearTemporaryFiles clears all "temporary_files" edges to the TemporaryFile entity.
-func (au *AccountUpdate) ClearTemporaryFiles() *AccountUpdate {
-	au.mutation.ClearTemporaryFiles()
-	return au
+func (_u *AccountUpdate) ClearTemporaryFiles() *AccountUpdate {
+	_u.mutation.ClearTemporaryFiles()
+	return _u
 }
 
 // RemoveTemporaryFileIDs removes the "temporary_files" edge to TemporaryFile entities by IDs.
-func (au *AccountUpdate) RemoveTemporaryFileIDs(ids ...int64) *AccountUpdate {
-	au.mutation.RemoveTemporaryFileIDs(ids...)
-	return au
+func (_u *AccountUpdate) RemoveTemporaryFileIDs(ids ...int64) *AccountUpdate {
+	_u.mutation.RemoveTemporaryFileIDs(ids...)
+	return _u
 }
 
 // RemoveTemporaryFiles removes "temporary_files" edges to TemporaryFile entities.
-func (au *AccountUpdate) RemoveTemporaryFiles(t ...*TemporaryFile) *AccountUpdate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *AccountUpdate) RemoveTemporaryFiles(v ...*TemporaryFile) *AccountUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.RemoveTemporaryFileIDs(ids...)
+	return _u.RemoveTemporaryFileIDs(ids...)
 }
 
 // ClearTenantAssignment clears all "tenant_assignment" edges to the TenantAccountAssignment entity.
-func (au *AccountUpdate) ClearTenantAssignment() *AccountUpdate {
-	au.mutation.ClearTenantAssignment()
-	return au
+func (_u *AccountUpdate) ClearTenantAssignment() *AccountUpdate {
+	_u.mutation.ClearTenantAssignment()
+	return _u
 }
 
 // RemoveTenantAssignmentIDs removes the "tenant_assignment" edge to TenantAccountAssignment entities by IDs.
-func (au *AccountUpdate) RemoveTenantAssignmentIDs(ids ...int64) *AccountUpdate {
-	au.mutation.RemoveTenantAssignmentIDs(ids...)
-	return au
+func (_u *AccountUpdate) RemoveTenantAssignmentIDs(ids ...int64) *AccountUpdate {
+	_u.mutation.RemoveTenantAssignmentIDs(ids...)
+	return _u
 }
 
 // RemoveTenantAssignment removes "tenant_assignment" edges to TenantAccountAssignment entities.
-func (au *AccountUpdate) RemoveTenantAssignment(t ...*TenantAccountAssignment) *AccountUpdate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *AccountUpdate) RemoveTenantAssignment(v ...*TenantAccountAssignment) *AccountUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return au.RemoveTenantAssignmentIDs(ids...)
+	return _u.RemoveTenantAssignmentIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (au *AccountUpdate) Save(ctx context.Context) (int, error) {
-	if err := au.defaults(); err != nil {
+func (_u *AccountUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, au.sqlSave, au.mutation, au.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (au *AccountUpdate) SaveX(ctx context.Context) int {
-	affected, err := au.Save(ctx)
+func (_u *AccountUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -538,38 +538,38 @@ func (au *AccountUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (au *AccountUpdate) Exec(ctx context.Context) error {
-	_, err := au.Save(ctx)
+func (_u *AccountUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (au *AccountUpdate) ExecX(ctx context.Context) {
-	if err := au.Exec(ctx); err != nil {
+func (_u *AccountUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (au *AccountUpdate) defaults() error {
-	if _, ok := au.mutation.UpdatedAt(); !ok {
+func (_u *AccountUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		if account.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("entmain: uninitialized account.UpdateDefaultUpdatedAt (forgotten import entmain/runtime?)")
 		}
 		v := account.UpdateDefaultUpdatedAt()
-		au.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (au *AccountUpdate) check() error {
-	if v, ok := au.mutation.Language(); ok {
+func (_u *AccountUpdate) check() error {
+	if v, ok := _u.mutation.Language(); ok {
 		if err := account.LanguageValidator(v); err != nil {
 			return &ValidationError{Name: "language", err: fmt.Errorf(`entmain: validator failed for field "Account.language": %w`, err)}
 		}
 	}
-	if v, ok := au.mutation.Role(); ok {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := account.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`entmain: validator failed for field "Account.role": %w`, err)}
 		}
@@ -578,119 +578,119 @@ func (au *AccountUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (au *AccountUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AccountUpdate {
-	au.modifiers = append(au.modifiers, modifiers...)
-	return au
+func (_u *AccountUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AccountUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := au.check(); err != nil {
-		return n, err
+func (_u *AccountUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(account.Table, account.Columns, sqlgraph.NewFieldSpec(account.FieldID, field.TypeInt64))
-	if ps := au.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if au.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(account.FieldCreatedBy, field.TypeInt64)
 	}
-	if value, ok := au.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(account.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := au.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(account.FieldUpdatedBy, field.TypeInt64, value)
 	}
-	if value, ok := au.mutation.AddedUpdatedBy(); ok {
+	if value, ok := _u.mutation.AddedUpdatedBy(); ok {
 		_spec.AddField(account.FieldUpdatedBy, field.TypeInt64, value)
 	}
-	if au.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(account.FieldUpdatedBy, field.TypeInt64)
 	}
-	if value, ok := au.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(account.FieldDeletedBy, field.TypeInt64, value)
 	}
-	if value, ok := au.mutation.AddedDeletedBy(); ok {
+	if value, ok := _u.mutation.AddedDeletedBy(); ok {
 		_spec.AddField(account.FieldDeletedBy, field.TypeInt64, value)
 	}
-	if au.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(account.FieldDeletedBy, field.TypeInt64)
 	}
-	if value, ok := au.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(account.FieldDeletedAt, field.TypeTime, value)
 	}
-	if au.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(account.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := au.mutation.PublicID(); ok {
+	if value, ok := _u.mutation.PublicID(); ok {
 		_spec.SetField(account.FieldPublicID, field.TypeString, value)
 	}
-	if value, ok := au.mutation.Email(); ok {
+	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(account.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := au.mutation.FirstName(); ok {
+	if value, ok := _u.mutation.FirstName(); ok {
 		_spec.SetField(account.FieldFirstName, field.TypeString, value)
 	}
-	if value, ok := au.mutation.LastName(); ok {
+	if value, ok := _u.mutation.LastName(); ok {
 		_spec.SetField(account.FieldLastName, field.TypeString, value)
 	}
-	if value, ok := au.mutation.Language(); ok {
+	if value, ok := _u.mutation.Language(); ok {
 		_spec.SetField(account.FieldLanguage, field.TypeEnum, value)
 	}
-	if value, ok := au.mutation.SubscribedToNewsletterAt(); ok {
+	if value, ok := _u.mutation.SubscribedToNewsletterAt(); ok {
 		_spec.SetField(account.FieldSubscribedToNewsletterAt, field.TypeTime, value)
 	}
-	if au.mutation.SubscribedToNewsletterAtCleared() {
+	if _u.mutation.SubscribedToNewsletterAtCleared() {
 		_spec.ClearField(account.FieldSubscribedToNewsletterAt, field.TypeTime)
 	}
-	if value, ok := au.mutation.PasswordSalt(); ok {
+	if value, ok := _u.mutation.PasswordSalt(); ok {
 		_spec.SetField(account.FieldPasswordSalt, field.TypeString, value)
 	}
-	if value, ok := au.mutation.PasswordHash(); ok {
+	if value, ok := _u.mutation.PasswordHash(); ok {
 		_spec.SetField(account.FieldPasswordHash, field.TypeString, value)
 	}
-	if value, ok := au.mutation.TemporaryPasswordSalt(); ok {
+	if value, ok := _u.mutation.TemporaryPasswordSalt(); ok {
 		_spec.SetField(account.FieldTemporaryPasswordSalt, field.TypeString, value)
 	}
-	if value, ok := au.mutation.TemporaryPasswordHash(); ok {
+	if value, ok := _u.mutation.TemporaryPasswordHash(); ok {
 		_spec.SetField(account.FieldTemporaryPasswordHash, field.TypeString, value)
 	}
-	if value, ok := au.mutation.TemporaryPasswordExpiresAt(); ok {
+	if value, ok := _u.mutation.TemporaryPasswordExpiresAt(); ok {
 		_spec.SetField(account.FieldTemporaryPasswordExpiresAt, field.TypeTime, value)
 	}
-	if au.mutation.TemporaryPasswordExpiresAtCleared() {
+	if _u.mutation.TemporaryPasswordExpiresAtCleared() {
 		_spec.ClearField(account.FieldTemporaryPasswordExpiresAt, field.TypeTime)
 	}
-	if value, ok := au.mutation.TemporaryTwoFactorAuthKeyEncrypted(); ok {
+	if value, ok := _u.mutation.TemporaryTwoFactorAuthKeyEncrypted(); ok {
 		_spec.SetField(account.FieldTemporaryTwoFactorAuthKeyEncrypted, field.TypeString, value)
 	}
-	if value, ok := au.mutation.TwoFactoryAuthKeyEncrypted(); ok {
+	if value, ok := _u.mutation.TwoFactoryAuthKeyEncrypted(); ok {
 		_spec.SetField(account.FieldTwoFactoryAuthKeyEncrypted, field.TypeString, value)
 	}
-	if value, ok := au.mutation.TwoFactorAuthRecoveryCodeSalt(); ok {
+	if value, ok := _u.mutation.TwoFactorAuthRecoveryCodeSalt(); ok {
 		_spec.SetField(account.FieldTwoFactorAuthRecoveryCodeSalt, field.TypeString, value)
 	}
-	if value, ok := au.mutation.TwoFactorAuthRecoveryCodeHashes(); ok {
+	if value, ok := _u.mutation.TwoFactorAuthRecoveryCodeHashes(); ok {
 		_spec.SetField(account.FieldTwoFactorAuthRecoveryCodeHashes, field.TypeJSON, value)
 	}
-	if value, ok := au.mutation.AppendedTwoFactorAuthRecoveryCodeHashes(); ok {
+	if value, ok := _u.mutation.AppendedTwoFactorAuthRecoveryCodeHashes(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, account.FieldTwoFactorAuthRecoveryCodeHashes, value)
 		})
 	}
-	if value, ok := au.mutation.LastLoginAttemptAt(); ok {
+	if value, ok := _u.mutation.LastLoginAttemptAt(); ok {
 		_spec.SetField(account.FieldLastLoginAttemptAt, field.TypeTime, value)
 	}
-	if au.mutation.LastLoginAttemptAtCleared() {
+	if _u.mutation.LastLoginAttemptAtCleared() {
 		_spec.ClearField(account.FieldLastLoginAttemptAt, field.TypeTime)
 	}
-	if value, ok := au.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(account.FieldRole, field.TypeEnum, value)
 	}
-	if au.mutation.TenantsCleared() {
+	if _u.mutation.TenantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -701,33 +701,13 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt64),
 			},
 		}
-		createE := &TenantAccountAssignmentCreate{config: au.config, mutation: newTenantAccountAssignmentMutation(au.config, OpCreate)}
+		createE := &TenantAccountAssignmentCreate{config: _u.config, mutation: newTenantAccountAssignmentMutation(_u.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedTenantsIDs(); len(nodes) > 0 && !au.mutation.TenantsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   account.TenantsTable,
-			Columns: account.TenantsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		createE := &TenantAccountAssignmentCreate{config: au.config, mutation: newTenantAccountAssignmentMutation(au.config, OpCreate)}
-		createE.defaults()
-		_, specE := createE.createSpec()
-		edge.Target.Fields = specE.Fields
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := au.mutation.TenantsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedTenantsIDs(); len(nodes) > 0 && !_u.mutation.TenantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -741,13 +721,33 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &TenantAccountAssignmentCreate{config: au.config, mutation: newTenantAccountAssignmentMutation(au.config, OpCreate)}
+		createE := &TenantAccountAssignmentCreate{config: _u.config, mutation: newTenantAccountAssignmentMutation(_u.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TenantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   account.TenantsTable,
+			Columns: account.TenantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &TenantAccountAssignmentCreate{config: _u.config, mutation: newTenantAccountAssignmentMutation(_u.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.ReceivedMailsCleared() {
+	if _u.mutation.ReceivedMailsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -760,7 +760,7 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedReceivedMailsIDs(); len(nodes) > 0 && !au.mutation.ReceivedMailsCleared() {
+	if nodes := _u.mutation.RemovedReceivedMailsIDs(); len(nodes) > 0 && !_u.mutation.ReceivedMailsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -776,7 +776,7 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.ReceivedMailsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ReceivedMailsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -792,7 +792,7 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.TemporaryFilesCleared() {
+	if _u.mutation.TemporaryFilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -805,7 +805,7 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedTemporaryFilesIDs(); len(nodes) > 0 && !au.mutation.TemporaryFilesCleared() {
+	if nodes := _u.mutation.RemovedTemporaryFilesIDs(); len(nodes) > 0 && !_u.mutation.TemporaryFilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -821,7 +821,7 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.TemporaryFilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TemporaryFilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -837,7 +837,7 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.TenantAssignmentCleared() {
+	if _u.mutation.TenantAssignmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -850,7 +850,7 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedTenantAssignmentIDs(); len(nodes) > 0 && !au.mutation.TenantAssignmentCleared() {
+	if nodes := _u.mutation.RemovedTenantAssignmentIDs(); len(nodes) > 0 && !_u.mutation.TenantAssignmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -866,7 +866,7 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.TenantAssignmentIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TenantAssignmentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -882,8 +882,8 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(au.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{account.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -891,8 +891,8 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	au.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // AccountUpdateOne is the builder for updating a single Account entity.
@@ -905,512 +905,512 @@ type AccountUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (auo *AccountUpdateOne) SetUpdatedAt(t time.Time) *AccountUpdateOne {
-	auo.mutation.SetUpdatedAt(t)
-	return auo
+func (_u *AccountUpdateOne) SetUpdatedAt(v time.Time) *AccountUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (auo *AccountUpdateOne) SetUpdatedBy(i int64) *AccountUpdateOne {
-	auo.mutation.ResetUpdatedBy()
-	auo.mutation.SetUpdatedBy(i)
-	return auo
+func (_u *AccountUpdateOne) SetUpdatedBy(v int64) *AccountUpdateOne {
+	_u.mutation.ResetUpdatedBy()
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableUpdatedBy(i *int64) *AccountUpdateOne {
-	if i != nil {
-		auo.SetUpdatedBy(*i)
+func (_u *AccountUpdateOne) SetNillableUpdatedBy(v *int64) *AccountUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return auo
+	return _u
 }
 
-// AddUpdatedBy adds i to the "updated_by" field.
-func (auo *AccountUpdateOne) AddUpdatedBy(i int64) *AccountUpdateOne {
-	auo.mutation.AddUpdatedBy(i)
-	return auo
+// AddUpdatedBy adds value to the "updated_by" field.
+func (_u *AccountUpdateOne) AddUpdatedBy(v int64) *AccountUpdateOne {
+	_u.mutation.AddUpdatedBy(v)
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (auo *AccountUpdateOne) ClearUpdatedBy() *AccountUpdateOne {
-	auo.mutation.ClearUpdatedBy()
-	return auo
+func (_u *AccountUpdateOne) ClearUpdatedBy() *AccountUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (auo *AccountUpdateOne) SetDeletedBy(i int64) *AccountUpdateOne {
-	auo.mutation.ResetDeletedBy()
-	auo.mutation.SetDeletedBy(i)
-	return auo
+func (_u *AccountUpdateOne) SetDeletedBy(v int64) *AccountUpdateOne {
+	_u.mutation.ResetDeletedBy()
+	_u.mutation.SetDeletedBy(v)
+	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableDeletedBy(i *int64) *AccountUpdateOne {
-	if i != nil {
-		auo.SetDeletedBy(*i)
+func (_u *AccountUpdateOne) SetNillableDeletedBy(v *int64) *AccountUpdateOne {
+	if v != nil {
+		_u.SetDeletedBy(*v)
 	}
-	return auo
+	return _u
 }
 
-// AddDeletedBy adds i to the "deleted_by" field.
-func (auo *AccountUpdateOne) AddDeletedBy(i int64) *AccountUpdateOne {
-	auo.mutation.AddDeletedBy(i)
-	return auo
+// AddDeletedBy adds value to the "deleted_by" field.
+func (_u *AccountUpdateOne) AddDeletedBy(v int64) *AccountUpdateOne {
+	_u.mutation.AddDeletedBy(v)
+	return _u
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (auo *AccountUpdateOne) ClearDeletedBy() *AccountUpdateOne {
-	auo.mutation.ClearDeletedBy()
-	return auo
+func (_u *AccountUpdateOne) ClearDeletedBy() *AccountUpdateOne {
+	_u.mutation.ClearDeletedBy()
+	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (auo *AccountUpdateOne) SetDeletedAt(t time.Time) *AccountUpdateOne {
-	auo.mutation.SetDeletedAt(t)
-	return auo
+func (_u *AccountUpdateOne) SetDeletedAt(v time.Time) *AccountUpdateOne {
+	_u.mutation.SetDeletedAt(v)
+	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableDeletedAt(t *time.Time) *AccountUpdateOne {
-	if t != nil {
-		auo.SetDeletedAt(*t)
+func (_u *AccountUpdateOne) SetNillableDeletedAt(v *time.Time) *AccountUpdateOne {
+	if v != nil {
+		_u.SetDeletedAt(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (auo *AccountUpdateOne) ClearDeletedAt() *AccountUpdateOne {
-	auo.mutation.ClearDeletedAt()
-	return auo
+func (_u *AccountUpdateOne) ClearDeletedAt() *AccountUpdateOne {
+	_u.mutation.ClearDeletedAt()
+	return _u
 }
 
 // SetPublicID sets the "public_id" field.
-func (auo *AccountUpdateOne) SetPublicID(et entx.CIText) *AccountUpdateOne {
-	auo.mutation.SetPublicID(et)
-	return auo
+func (_u *AccountUpdateOne) SetPublicID(v entx.CIText) *AccountUpdateOne {
+	_u.mutation.SetPublicID(v)
+	return _u
 }
 
 // SetNillablePublicID sets the "public_id" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillablePublicID(et *entx.CIText) *AccountUpdateOne {
-	if et != nil {
-		auo.SetPublicID(*et)
+func (_u *AccountUpdateOne) SetNillablePublicID(v *entx.CIText) *AccountUpdateOne {
+	if v != nil {
+		_u.SetPublicID(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetEmail sets the "email" field.
-func (auo *AccountUpdateOne) SetEmail(et entx.CIText) *AccountUpdateOne {
-	auo.mutation.SetEmail(et)
-	return auo
+func (_u *AccountUpdateOne) SetEmail(v entx.CIText) *AccountUpdateOne {
+	_u.mutation.SetEmail(v)
+	return _u
 }
 
 // SetNillableEmail sets the "email" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableEmail(et *entx.CIText) *AccountUpdateOne {
-	if et != nil {
-		auo.SetEmail(*et)
+func (_u *AccountUpdateOne) SetNillableEmail(v *entx.CIText) *AccountUpdateOne {
+	if v != nil {
+		_u.SetEmail(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetFirstName sets the "first_name" field.
-func (auo *AccountUpdateOne) SetFirstName(s string) *AccountUpdateOne {
-	auo.mutation.SetFirstName(s)
-	return auo
+func (_u *AccountUpdateOne) SetFirstName(v string) *AccountUpdateOne {
+	_u.mutation.SetFirstName(v)
+	return _u
 }
 
 // SetNillableFirstName sets the "first_name" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableFirstName(s *string) *AccountUpdateOne {
-	if s != nil {
-		auo.SetFirstName(*s)
+func (_u *AccountUpdateOne) SetNillableFirstName(v *string) *AccountUpdateOne {
+	if v != nil {
+		_u.SetFirstName(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetLastName sets the "last_name" field.
-func (auo *AccountUpdateOne) SetLastName(s string) *AccountUpdateOne {
-	auo.mutation.SetLastName(s)
-	return auo
+func (_u *AccountUpdateOne) SetLastName(v string) *AccountUpdateOne {
+	_u.mutation.SetLastName(v)
+	return _u
 }
 
 // SetNillableLastName sets the "last_name" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableLastName(s *string) *AccountUpdateOne {
-	if s != nil {
-		auo.SetLastName(*s)
+func (_u *AccountUpdateOne) SetNillableLastName(v *string) *AccountUpdateOne {
+	if v != nil {
+		_u.SetLastName(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetLanguage sets the "language" field.
-func (auo *AccountUpdateOne) SetLanguage(l language.Language) *AccountUpdateOne {
-	auo.mutation.SetLanguage(l)
-	return auo
+func (_u *AccountUpdateOne) SetLanguage(v language.Language) *AccountUpdateOne {
+	_u.mutation.SetLanguage(v)
+	return _u
 }
 
 // SetNillableLanguage sets the "language" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableLanguage(l *language.Language) *AccountUpdateOne {
-	if l != nil {
-		auo.SetLanguage(*l)
+func (_u *AccountUpdateOne) SetNillableLanguage(v *language.Language) *AccountUpdateOne {
+	if v != nil {
+		_u.SetLanguage(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetSubscribedToNewsletterAt sets the "subscribed_to_newsletter_at" field.
-func (auo *AccountUpdateOne) SetSubscribedToNewsletterAt(t time.Time) *AccountUpdateOne {
-	auo.mutation.SetSubscribedToNewsletterAt(t)
-	return auo
+func (_u *AccountUpdateOne) SetSubscribedToNewsletterAt(v time.Time) *AccountUpdateOne {
+	_u.mutation.SetSubscribedToNewsletterAt(v)
+	return _u
 }
 
 // SetNillableSubscribedToNewsletterAt sets the "subscribed_to_newsletter_at" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableSubscribedToNewsletterAt(t *time.Time) *AccountUpdateOne {
-	if t != nil {
-		auo.SetSubscribedToNewsletterAt(*t)
+func (_u *AccountUpdateOne) SetNillableSubscribedToNewsletterAt(v *time.Time) *AccountUpdateOne {
+	if v != nil {
+		_u.SetSubscribedToNewsletterAt(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearSubscribedToNewsletterAt clears the value of the "subscribed_to_newsletter_at" field.
-func (auo *AccountUpdateOne) ClearSubscribedToNewsletterAt() *AccountUpdateOne {
-	auo.mutation.ClearSubscribedToNewsletterAt()
-	return auo
+func (_u *AccountUpdateOne) ClearSubscribedToNewsletterAt() *AccountUpdateOne {
+	_u.mutation.ClearSubscribedToNewsletterAt()
+	return _u
 }
 
 // SetPasswordSalt sets the "password_salt" field.
-func (auo *AccountUpdateOne) SetPasswordSalt(s string) *AccountUpdateOne {
-	auo.mutation.SetPasswordSalt(s)
-	return auo
+func (_u *AccountUpdateOne) SetPasswordSalt(v string) *AccountUpdateOne {
+	_u.mutation.SetPasswordSalt(v)
+	return _u
 }
 
 // SetNillablePasswordSalt sets the "password_salt" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillablePasswordSalt(s *string) *AccountUpdateOne {
-	if s != nil {
-		auo.SetPasswordSalt(*s)
+func (_u *AccountUpdateOne) SetNillablePasswordSalt(v *string) *AccountUpdateOne {
+	if v != nil {
+		_u.SetPasswordSalt(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetPasswordHash sets the "password_hash" field.
-func (auo *AccountUpdateOne) SetPasswordHash(s string) *AccountUpdateOne {
-	auo.mutation.SetPasswordHash(s)
-	return auo
+func (_u *AccountUpdateOne) SetPasswordHash(v string) *AccountUpdateOne {
+	_u.mutation.SetPasswordHash(v)
+	return _u
 }
 
 // SetNillablePasswordHash sets the "password_hash" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillablePasswordHash(s *string) *AccountUpdateOne {
-	if s != nil {
-		auo.SetPasswordHash(*s)
+func (_u *AccountUpdateOne) SetNillablePasswordHash(v *string) *AccountUpdateOne {
+	if v != nil {
+		_u.SetPasswordHash(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetTemporaryPasswordSalt sets the "temporary_password_salt" field.
-func (auo *AccountUpdateOne) SetTemporaryPasswordSalt(s string) *AccountUpdateOne {
-	auo.mutation.SetTemporaryPasswordSalt(s)
-	return auo
+func (_u *AccountUpdateOne) SetTemporaryPasswordSalt(v string) *AccountUpdateOne {
+	_u.mutation.SetTemporaryPasswordSalt(v)
+	return _u
 }
 
 // SetNillableTemporaryPasswordSalt sets the "temporary_password_salt" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableTemporaryPasswordSalt(s *string) *AccountUpdateOne {
-	if s != nil {
-		auo.SetTemporaryPasswordSalt(*s)
+func (_u *AccountUpdateOne) SetNillableTemporaryPasswordSalt(v *string) *AccountUpdateOne {
+	if v != nil {
+		_u.SetTemporaryPasswordSalt(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetTemporaryPasswordHash sets the "temporary_password_hash" field.
-func (auo *AccountUpdateOne) SetTemporaryPasswordHash(s string) *AccountUpdateOne {
-	auo.mutation.SetTemporaryPasswordHash(s)
-	return auo
+func (_u *AccountUpdateOne) SetTemporaryPasswordHash(v string) *AccountUpdateOne {
+	_u.mutation.SetTemporaryPasswordHash(v)
+	return _u
 }
 
 // SetNillableTemporaryPasswordHash sets the "temporary_password_hash" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableTemporaryPasswordHash(s *string) *AccountUpdateOne {
-	if s != nil {
-		auo.SetTemporaryPasswordHash(*s)
+func (_u *AccountUpdateOne) SetNillableTemporaryPasswordHash(v *string) *AccountUpdateOne {
+	if v != nil {
+		_u.SetTemporaryPasswordHash(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetTemporaryPasswordExpiresAt sets the "temporary_password_expires_at" field.
-func (auo *AccountUpdateOne) SetTemporaryPasswordExpiresAt(t time.Time) *AccountUpdateOne {
-	auo.mutation.SetTemporaryPasswordExpiresAt(t)
-	return auo
+func (_u *AccountUpdateOne) SetTemporaryPasswordExpiresAt(v time.Time) *AccountUpdateOne {
+	_u.mutation.SetTemporaryPasswordExpiresAt(v)
+	return _u
 }
 
 // SetNillableTemporaryPasswordExpiresAt sets the "temporary_password_expires_at" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableTemporaryPasswordExpiresAt(t *time.Time) *AccountUpdateOne {
-	if t != nil {
-		auo.SetTemporaryPasswordExpiresAt(*t)
+func (_u *AccountUpdateOne) SetNillableTemporaryPasswordExpiresAt(v *time.Time) *AccountUpdateOne {
+	if v != nil {
+		_u.SetTemporaryPasswordExpiresAt(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearTemporaryPasswordExpiresAt clears the value of the "temporary_password_expires_at" field.
-func (auo *AccountUpdateOne) ClearTemporaryPasswordExpiresAt() *AccountUpdateOne {
-	auo.mutation.ClearTemporaryPasswordExpiresAt()
-	return auo
+func (_u *AccountUpdateOne) ClearTemporaryPasswordExpiresAt() *AccountUpdateOne {
+	_u.mutation.ClearTemporaryPasswordExpiresAt()
+	return _u
 }
 
 // SetTemporaryTwoFactorAuthKeyEncrypted sets the "temporary_two_factor_auth_key_encrypted" field.
-func (auo *AccountUpdateOne) SetTemporaryTwoFactorAuthKeyEncrypted(s string) *AccountUpdateOne {
-	auo.mutation.SetTemporaryTwoFactorAuthKeyEncrypted(s)
-	return auo
+func (_u *AccountUpdateOne) SetTemporaryTwoFactorAuthKeyEncrypted(v string) *AccountUpdateOne {
+	_u.mutation.SetTemporaryTwoFactorAuthKeyEncrypted(v)
+	return _u
 }
 
 // SetNillableTemporaryTwoFactorAuthKeyEncrypted sets the "temporary_two_factor_auth_key_encrypted" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableTemporaryTwoFactorAuthKeyEncrypted(s *string) *AccountUpdateOne {
-	if s != nil {
-		auo.SetTemporaryTwoFactorAuthKeyEncrypted(*s)
+func (_u *AccountUpdateOne) SetNillableTemporaryTwoFactorAuthKeyEncrypted(v *string) *AccountUpdateOne {
+	if v != nil {
+		_u.SetTemporaryTwoFactorAuthKeyEncrypted(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetTwoFactoryAuthKeyEncrypted sets the "two_factory_auth_key_encrypted" field.
-func (auo *AccountUpdateOne) SetTwoFactoryAuthKeyEncrypted(s string) *AccountUpdateOne {
-	auo.mutation.SetTwoFactoryAuthKeyEncrypted(s)
-	return auo
+func (_u *AccountUpdateOne) SetTwoFactoryAuthKeyEncrypted(v string) *AccountUpdateOne {
+	_u.mutation.SetTwoFactoryAuthKeyEncrypted(v)
+	return _u
 }
 
 // SetNillableTwoFactoryAuthKeyEncrypted sets the "two_factory_auth_key_encrypted" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableTwoFactoryAuthKeyEncrypted(s *string) *AccountUpdateOne {
-	if s != nil {
-		auo.SetTwoFactoryAuthKeyEncrypted(*s)
+func (_u *AccountUpdateOne) SetNillableTwoFactoryAuthKeyEncrypted(v *string) *AccountUpdateOne {
+	if v != nil {
+		_u.SetTwoFactoryAuthKeyEncrypted(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetTwoFactorAuthRecoveryCodeSalt sets the "two_factor_auth_recovery_code_salt" field.
-func (auo *AccountUpdateOne) SetTwoFactorAuthRecoveryCodeSalt(s string) *AccountUpdateOne {
-	auo.mutation.SetTwoFactorAuthRecoveryCodeSalt(s)
-	return auo
+func (_u *AccountUpdateOne) SetTwoFactorAuthRecoveryCodeSalt(v string) *AccountUpdateOne {
+	_u.mutation.SetTwoFactorAuthRecoveryCodeSalt(v)
+	return _u
 }
 
 // SetNillableTwoFactorAuthRecoveryCodeSalt sets the "two_factor_auth_recovery_code_salt" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableTwoFactorAuthRecoveryCodeSalt(s *string) *AccountUpdateOne {
-	if s != nil {
-		auo.SetTwoFactorAuthRecoveryCodeSalt(*s)
+func (_u *AccountUpdateOne) SetNillableTwoFactorAuthRecoveryCodeSalt(v *string) *AccountUpdateOne {
+	if v != nil {
+		_u.SetTwoFactorAuthRecoveryCodeSalt(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetTwoFactorAuthRecoveryCodeHashes sets the "two_factor_auth_recovery_code_hashes" field.
-func (auo *AccountUpdateOne) SetTwoFactorAuthRecoveryCodeHashes(s []string) *AccountUpdateOne {
-	auo.mutation.SetTwoFactorAuthRecoveryCodeHashes(s)
-	return auo
+func (_u *AccountUpdateOne) SetTwoFactorAuthRecoveryCodeHashes(v []string) *AccountUpdateOne {
+	_u.mutation.SetTwoFactorAuthRecoveryCodeHashes(v)
+	return _u
 }
 
-// AppendTwoFactorAuthRecoveryCodeHashes appends s to the "two_factor_auth_recovery_code_hashes" field.
-func (auo *AccountUpdateOne) AppendTwoFactorAuthRecoveryCodeHashes(s []string) *AccountUpdateOne {
-	auo.mutation.AppendTwoFactorAuthRecoveryCodeHashes(s)
-	return auo
+// AppendTwoFactorAuthRecoveryCodeHashes appends value to the "two_factor_auth_recovery_code_hashes" field.
+func (_u *AccountUpdateOne) AppendTwoFactorAuthRecoveryCodeHashes(v []string) *AccountUpdateOne {
+	_u.mutation.AppendTwoFactorAuthRecoveryCodeHashes(v)
+	return _u
 }
 
 // SetLastLoginAttemptAt sets the "last_login_attempt_at" field.
-func (auo *AccountUpdateOne) SetLastLoginAttemptAt(t time.Time) *AccountUpdateOne {
-	auo.mutation.SetLastLoginAttemptAt(t)
-	return auo
+func (_u *AccountUpdateOne) SetLastLoginAttemptAt(v time.Time) *AccountUpdateOne {
+	_u.mutation.SetLastLoginAttemptAt(v)
+	return _u
 }
 
 // SetNillableLastLoginAttemptAt sets the "last_login_attempt_at" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableLastLoginAttemptAt(t *time.Time) *AccountUpdateOne {
-	if t != nil {
-		auo.SetLastLoginAttemptAt(*t)
+func (_u *AccountUpdateOne) SetNillableLastLoginAttemptAt(v *time.Time) *AccountUpdateOne {
+	if v != nil {
+		_u.SetLastLoginAttemptAt(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearLastLoginAttemptAt clears the value of the "last_login_attempt_at" field.
-func (auo *AccountUpdateOne) ClearLastLoginAttemptAt() *AccountUpdateOne {
-	auo.mutation.ClearLastLoginAttemptAt()
-	return auo
+func (_u *AccountUpdateOne) ClearLastLoginAttemptAt() *AccountUpdateOne {
+	_u.mutation.ClearLastLoginAttemptAt()
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (auo *AccountUpdateOne) SetRole(mr mainrole.MainRole) *AccountUpdateOne {
-	auo.mutation.SetRole(mr)
-	return auo
+func (_u *AccountUpdateOne) SetRole(v mainrole.MainRole) *AccountUpdateOne {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (auo *AccountUpdateOne) SetNillableRole(mr *mainrole.MainRole) *AccountUpdateOne {
-	if mr != nil {
-		auo.SetRole(*mr)
+func (_u *AccountUpdateOne) SetNillableRole(v *mainrole.MainRole) *AccountUpdateOne {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return auo
+	return _u
 }
 
 // AddTenantIDs adds the "tenants" edge to the Tenant entity by IDs.
-func (auo *AccountUpdateOne) AddTenantIDs(ids ...int64) *AccountUpdateOne {
-	auo.mutation.AddTenantIDs(ids...)
-	return auo
+func (_u *AccountUpdateOne) AddTenantIDs(ids ...int64) *AccountUpdateOne {
+	_u.mutation.AddTenantIDs(ids...)
+	return _u
 }
 
 // AddTenants adds the "tenants" edges to the Tenant entity.
-func (auo *AccountUpdateOne) AddTenants(t ...*Tenant) *AccountUpdateOne {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *AccountUpdateOne) AddTenants(v ...*Tenant) *AccountUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.AddTenantIDs(ids...)
+	return _u.AddTenantIDs(ids...)
 }
 
 // AddReceivedMailIDs adds the "received_mails" edge to the Mail entity by IDs.
-func (auo *AccountUpdateOne) AddReceivedMailIDs(ids ...int64) *AccountUpdateOne {
-	auo.mutation.AddReceivedMailIDs(ids...)
-	return auo
+func (_u *AccountUpdateOne) AddReceivedMailIDs(ids ...int64) *AccountUpdateOne {
+	_u.mutation.AddReceivedMailIDs(ids...)
+	return _u
 }
 
 // AddReceivedMails adds the "received_mails" edges to the Mail entity.
-func (auo *AccountUpdateOne) AddReceivedMails(m ...*Mail) *AccountUpdateOne {
-	ids := make([]int64, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_u *AccountUpdateOne) AddReceivedMails(v ...*Mail) *AccountUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.AddReceivedMailIDs(ids...)
+	return _u.AddReceivedMailIDs(ids...)
 }
 
 // AddTemporaryFileIDs adds the "temporary_files" edge to the TemporaryFile entity by IDs.
-func (auo *AccountUpdateOne) AddTemporaryFileIDs(ids ...int64) *AccountUpdateOne {
-	auo.mutation.AddTemporaryFileIDs(ids...)
-	return auo
+func (_u *AccountUpdateOne) AddTemporaryFileIDs(ids ...int64) *AccountUpdateOne {
+	_u.mutation.AddTemporaryFileIDs(ids...)
+	return _u
 }
 
 // AddTemporaryFiles adds the "temporary_files" edges to the TemporaryFile entity.
-func (auo *AccountUpdateOne) AddTemporaryFiles(t ...*TemporaryFile) *AccountUpdateOne {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *AccountUpdateOne) AddTemporaryFiles(v ...*TemporaryFile) *AccountUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.AddTemporaryFileIDs(ids...)
+	return _u.AddTemporaryFileIDs(ids...)
 }
 
 // AddTenantAssignmentIDs adds the "tenant_assignment" edge to the TenantAccountAssignment entity by IDs.
-func (auo *AccountUpdateOne) AddTenantAssignmentIDs(ids ...int64) *AccountUpdateOne {
-	auo.mutation.AddTenantAssignmentIDs(ids...)
-	return auo
+func (_u *AccountUpdateOne) AddTenantAssignmentIDs(ids ...int64) *AccountUpdateOne {
+	_u.mutation.AddTenantAssignmentIDs(ids...)
+	return _u
 }
 
 // AddTenantAssignment adds the "tenant_assignment" edges to the TenantAccountAssignment entity.
-func (auo *AccountUpdateOne) AddTenantAssignment(t ...*TenantAccountAssignment) *AccountUpdateOne {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *AccountUpdateOne) AddTenantAssignment(v ...*TenantAccountAssignment) *AccountUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.AddTenantAssignmentIDs(ids...)
+	return _u.AddTenantAssignmentIDs(ids...)
 }
 
 // Mutation returns the AccountMutation object of the builder.
-func (auo *AccountUpdateOne) Mutation() *AccountMutation {
-	return auo.mutation
+func (_u *AccountUpdateOne) Mutation() *AccountMutation {
+	return _u.mutation
 }
 
 // ClearTenants clears all "tenants" edges to the Tenant entity.
-func (auo *AccountUpdateOne) ClearTenants() *AccountUpdateOne {
-	auo.mutation.ClearTenants()
-	return auo
+func (_u *AccountUpdateOne) ClearTenants() *AccountUpdateOne {
+	_u.mutation.ClearTenants()
+	return _u
 }
 
 // RemoveTenantIDs removes the "tenants" edge to Tenant entities by IDs.
-func (auo *AccountUpdateOne) RemoveTenantIDs(ids ...int64) *AccountUpdateOne {
-	auo.mutation.RemoveTenantIDs(ids...)
-	return auo
+func (_u *AccountUpdateOne) RemoveTenantIDs(ids ...int64) *AccountUpdateOne {
+	_u.mutation.RemoveTenantIDs(ids...)
+	return _u
 }
 
 // RemoveTenants removes "tenants" edges to Tenant entities.
-func (auo *AccountUpdateOne) RemoveTenants(t ...*Tenant) *AccountUpdateOne {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *AccountUpdateOne) RemoveTenants(v ...*Tenant) *AccountUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.RemoveTenantIDs(ids...)
+	return _u.RemoveTenantIDs(ids...)
 }
 
 // ClearReceivedMails clears all "received_mails" edges to the Mail entity.
-func (auo *AccountUpdateOne) ClearReceivedMails() *AccountUpdateOne {
-	auo.mutation.ClearReceivedMails()
-	return auo
+func (_u *AccountUpdateOne) ClearReceivedMails() *AccountUpdateOne {
+	_u.mutation.ClearReceivedMails()
+	return _u
 }
 
 // RemoveReceivedMailIDs removes the "received_mails" edge to Mail entities by IDs.
-func (auo *AccountUpdateOne) RemoveReceivedMailIDs(ids ...int64) *AccountUpdateOne {
-	auo.mutation.RemoveReceivedMailIDs(ids...)
-	return auo
+func (_u *AccountUpdateOne) RemoveReceivedMailIDs(ids ...int64) *AccountUpdateOne {
+	_u.mutation.RemoveReceivedMailIDs(ids...)
+	return _u
 }
 
 // RemoveReceivedMails removes "received_mails" edges to Mail entities.
-func (auo *AccountUpdateOne) RemoveReceivedMails(m ...*Mail) *AccountUpdateOne {
-	ids := make([]int64, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_u *AccountUpdateOne) RemoveReceivedMails(v ...*Mail) *AccountUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.RemoveReceivedMailIDs(ids...)
+	return _u.RemoveReceivedMailIDs(ids...)
 }
 
 // ClearTemporaryFiles clears all "temporary_files" edges to the TemporaryFile entity.
-func (auo *AccountUpdateOne) ClearTemporaryFiles() *AccountUpdateOne {
-	auo.mutation.ClearTemporaryFiles()
-	return auo
+func (_u *AccountUpdateOne) ClearTemporaryFiles() *AccountUpdateOne {
+	_u.mutation.ClearTemporaryFiles()
+	return _u
 }
 
 // RemoveTemporaryFileIDs removes the "temporary_files" edge to TemporaryFile entities by IDs.
-func (auo *AccountUpdateOne) RemoveTemporaryFileIDs(ids ...int64) *AccountUpdateOne {
-	auo.mutation.RemoveTemporaryFileIDs(ids...)
-	return auo
+func (_u *AccountUpdateOne) RemoveTemporaryFileIDs(ids ...int64) *AccountUpdateOne {
+	_u.mutation.RemoveTemporaryFileIDs(ids...)
+	return _u
 }
 
 // RemoveTemporaryFiles removes "temporary_files" edges to TemporaryFile entities.
-func (auo *AccountUpdateOne) RemoveTemporaryFiles(t ...*TemporaryFile) *AccountUpdateOne {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *AccountUpdateOne) RemoveTemporaryFiles(v ...*TemporaryFile) *AccountUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.RemoveTemporaryFileIDs(ids...)
+	return _u.RemoveTemporaryFileIDs(ids...)
 }
 
 // ClearTenantAssignment clears all "tenant_assignment" edges to the TenantAccountAssignment entity.
-func (auo *AccountUpdateOne) ClearTenantAssignment() *AccountUpdateOne {
-	auo.mutation.ClearTenantAssignment()
-	return auo
+func (_u *AccountUpdateOne) ClearTenantAssignment() *AccountUpdateOne {
+	_u.mutation.ClearTenantAssignment()
+	return _u
 }
 
 // RemoveTenantAssignmentIDs removes the "tenant_assignment" edge to TenantAccountAssignment entities by IDs.
-func (auo *AccountUpdateOne) RemoveTenantAssignmentIDs(ids ...int64) *AccountUpdateOne {
-	auo.mutation.RemoveTenantAssignmentIDs(ids...)
-	return auo
+func (_u *AccountUpdateOne) RemoveTenantAssignmentIDs(ids ...int64) *AccountUpdateOne {
+	_u.mutation.RemoveTenantAssignmentIDs(ids...)
+	return _u
 }
 
 // RemoveTenantAssignment removes "tenant_assignment" edges to TenantAccountAssignment entities.
-func (auo *AccountUpdateOne) RemoveTenantAssignment(t ...*TenantAccountAssignment) *AccountUpdateOne {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *AccountUpdateOne) RemoveTenantAssignment(v ...*TenantAccountAssignment) *AccountUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return auo.RemoveTenantAssignmentIDs(ids...)
+	return _u.RemoveTenantAssignmentIDs(ids...)
 }
 
 // Where appends a list predicates to the AccountUpdate builder.
-func (auo *AccountUpdateOne) Where(ps ...predicate.Account) *AccountUpdateOne {
-	auo.mutation.Where(ps...)
-	return auo
+func (_u *AccountUpdateOne) Where(ps ...predicate.Account) *AccountUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (auo *AccountUpdateOne) Select(field string, fields ...string) *AccountUpdateOne {
-	auo.fields = append([]string{field}, fields...)
-	return auo
+func (_u *AccountUpdateOne) Select(field string, fields ...string) *AccountUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Account entity.
-func (auo *AccountUpdateOne) Save(ctx context.Context) (*Account, error) {
-	if err := auo.defaults(); err != nil {
+func (_u *AccountUpdateOne) Save(ctx context.Context) (*Account, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, auo.sqlSave, auo.mutation, auo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (auo *AccountUpdateOne) SaveX(ctx context.Context) *Account {
-	node, err := auo.Save(ctx)
+func (_u *AccountUpdateOne) SaveX(ctx context.Context) *Account {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -1418,38 +1418,38 @@ func (auo *AccountUpdateOne) SaveX(ctx context.Context) *Account {
 }
 
 // Exec executes the query on the entity.
-func (auo *AccountUpdateOne) Exec(ctx context.Context) error {
-	_, err := auo.Save(ctx)
+func (_u *AccountUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (auo *AccountUpdateOne) ExecX(ctx context.Context) {
-	if err := auo.Exec(ctx); err != nil {
+func (_u *AccountUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (auo *AccountUpdateOne) defaults() error {
-	if _, ok := auo.mutation.UpdatedAt(); !ok {
+func (_u *AccountUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		if account.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("entmain: uninitialized account.UpdateDefaultUpdatedAt (forgotten import entmain/runtime?)")
 		}
 		v := account.UpdateDefaultUpdatedAt()
-		auo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (auo *AccountUpdateOne) check() error {
-	if v, ok := auo.mutation.Language(); ok {
+func (_u *AccountUpdateOne) check() error {
+	if v, ok := _u.mutation.Language(); ok {
 		if err := account.LanguageValidator(v); err != nil {
 			return &ValidationError{Name: "language", err: fmt.Errorf(`entmain: validator failed for field "Account.language": %w`, err)}
 		}
 	}
-	if v, ok := auo.mutation.Role(); ok {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := account.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`entmain: validator failed for field "Account.role": %w`, err)}
 		}
@@ -1458,22 +1458,22 @@ func (auo *AccountUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (auo *AccountUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AccountUpdateOne {
-	auo.modifiers = append(auo.modifiers, modifiers...)
-	return auo
+func (_u *AccountUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AccountUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err error) {
-	if err := auo.check(); err != nil {
+func (_u *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(account.Table, account.Columns, sqlgraph.NewFieldSpec(account.FieldID, field.TypeInt64))
-	id, ok := auo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`entmain: missing "Account.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := auo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, account.FieldID)
 		for _, f := range fields {
@@ -1485,109 +1485,109 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 			}
 		}
 	}
-	if ps := auo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if auo.mutation.CreatedByCleared() {
+	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(account.FieldCreatedBy, field.TypeInt64)
 	}
-	if value, ok := auo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(account.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := auo.mutation.UpdatedBy(); ok {
+	if value, ok := _u.mutation.UpdatedBy(); ok {
 		_spec.SetField(account.FieldUpdatedBy, field.TypeInt64, value)
 	}
-	if value, ok := auo.mutation.AddedUpdatedBy(); ok {
+	if value, ok := _u.mutation.AddedUpdatedBy(); ok {
 		_spec.AddField(account.FieldUpdatedBy, field.TypeInt64, value)
 	}
-	if auo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(account.FieldUpdatedBy, field.TypeInt64)
 	}
-	if value, ok := auo.mutation.DeletedBy(); ok {
+	if value, ok := _u.mutation.DeletedBy(); ok {
 		_spec.SetField(account.FieldDeletedBy, field.TypeInt64, value)
 	}
-	if value, ok := auo.mutation.AddedDeletedBy(); ok {
+	if value, ok := _u.mutation.AddedDeletedBy(); ok {
 		_spec.AddField(account.FieldDeletedBy, field.TypeInt64, value)
 	}
-	if auo.mutation.DeletedByCleared() {
+	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(account.FieldDeletedBy, field.TypeInt64)
 	}
-	if value, ok := auo.mutation.DeletedAt(); ok {
+	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(account.FieldDeletedAt, field.TypeTime, value)
 	}
-	if auo.mutation.DeletedAtCleared() {
+	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(account.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := auo.mutation.PublicID(); ok {
+	if value, ok := _u.mutation.PublicID(); ok {
 		_spec.SetField(account.FieldPublicID, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.Email(); ok {
+	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(account.FieldEmail, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.FirstName(); ok {
+	if value, ok := _u.mutation.FirstName(); ok {
 		_spec.SetField(account.FieldFirstName, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.LastName(); ok {
+	if value, ok := _u.mutation.LastName(); ok {
 		_spec.SetField(account.FieldLastName, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.Language(); ok {
+	if value, ok := _u.mutation.Language(); ok {
 		_spec.SetField(account.FieldLanguage, field.TypeEnum, value)
 	}
-	if value, ok := auo.mutation.SubscribedToNewsletterAt(); ok {
+	if value, ok := _u.mutation.SubscribedToNewsletterAt(); ok {
 		_spec.SetField(account.FieldSubscribedToNewsletterAt, field.TypeTime, value)
 	}
-	if auo.mutation.SubscribedToNewsletterAtCleared() {
+	if _u.mutation.SubscribedToNewsletterAtCleared() {
 		_spec.ClearField(account.FieldSubscribedToNewsletterAt, field.TypeTime)
 	}
-	if value, ok := auo.mutation.PasswordSalt(); ok {
+	if value, ok := _u.mutation.PasswordSalt(); ok {
 		_spec.SetField(account.FieldPasswordSalt, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.PasswordHash(); ok {
+	if value, ok := _u.mutation.PasswordHash(); ok {
 		_spec.SetField(account.FieldPasswordHash, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.TemporaryPasswordSalt(); ok {
+	if value, ok := _u.mutation.TemporaryPasswordSalt(); ok {
 		_spec.SetField(account.FieldTemporaryPasswordSalt, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.TemporaryPasswordHash(); ok {
+	if value, ok := _u.mutation.TemporaryPasswordHash(); ok {
 		_spec.SetField(account.FieldTemporaryPasswordHash, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.TemporaryPasswordExpiresAt(); ok {
+	if value, ok := _u.mutation.TemporaryPasswordExpiresAt(); ok {
 		_spec.SetField(account.FieldTemporaryPasswordExpiresAt, field.TypeTime, value)
 	}
-	if auo.mutation.TemporaryPasswordExpiresAtCleared() {
+	if _u.mutation.TemporaryPasswordExpiresAtCleared() {
 		_spec.ClearField(account.FieldTemporaryPasswordExpiresAt, field.TypeTime)
 	}
-	if value, ok := auo.mutation.TemporaryTwoFactorAuthKeyEncrypted(); ok {
+	if value, ok := _u.mutation.TemporaryTwoFactorAuthKeyEncrypted(); ok {
 		_spec.SetField(account.FieldTemporaryTwoFactorAuthKeyEncrypted, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.TwoFactoryAuthKeyEncrypted(); ok {
+	if value, ok := _u.mutation.TwoFactoryAuthKeyEncrypted(); ok {
 		_spec.SetField(account.FieldTwoFactoryAuthKeyEncrypted, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.TwoFactorAuthRecoveryCodeSalt(); ok {
+	if value, ok := _u.mutation.TwoFactorAuthRecoveryCodeSalt(); ok {
 		_spec.SetField(account.FieldTwoFactorAuthRecoveryCodeSalt, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.TwoFactorAuthRecoveryCodeHashes(); ok {
+	if value, ok := _u.mutation.TwoFactorAuthRecoveryCodeHashes(); ok {
 		_spec.SetField(account.FieldTwoFactorAuthRecoveryCodeHashes, field.TypeJSON, value)
 	}
-	if value, ok := auo.mutation.AppendedTwoFactorAuthRecoveryCodeHashes(); ok {
+	if value, ok := _u.mutation.AppendedTwoFactorAuthRecoveryCodeHashes(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, account.FieldTwoFactorAuthRecoveryCodeHashes, value)
 		})
 	}
-	if value, ok := auo.mutation.LastLoginAttemptAt(); ok {
+	if value, ok := _u.mutation.LastLoginAttemptAt(); ok {
 		_spec.SetField(account.FieldLastLoginAttemptAt, field.TypeTime, value)
 	}
-	if auo.mutation.LastLoginAttemptAtCleared() {
+	if _u.mutation.LastLoginAttemptAtCleared() {
 		_spec.ClearField(account.FieldLastLoginAttemptAt, field.TypeTime)
 	}
-	if value, ok := auo.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(account.FieldRole, field.TypeEnum, value)
 	}
-	if auo.mutation.TenantsCleared() {
+	if _u.mutation.TenantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1598,33 +1598,13 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt64),
 			},
 		}
-		createE := &TenantAccountAssignmentCreate{config: auo.config, mutation: newTenantAccountAssignmentMutation(auo.config, OpCreate)}
+		createE := &TenantAccountAssignmentCreate{config: _u.config, mutation: newTenantAccountAssignmentMutation(_u.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedTenantsIDs(); len(nodes) > 0 && !auo.mutation.TenantsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   account.TenantsTable,
-			Columns: account.TenantsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt64),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		createE := &TenantAccountAssignmentCreate{config: auo.config, mutation: newTenantAccountAssignmentMutation(auo.config, OpCreate)}
-		createE.defaults()
-		_, specE := createE.createSpec()
-		edge.Target.Fields = specE.Fields
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := auo.mutation.TenantsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedTenantsIDs(); len(nodes) > 0 && !_u.mutation.TenantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -1638,13 +1618,33 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &TenantAccountAssignmentCreate{config: auo.config, mutation: newTenantAccountAssignmentMutation(auo.config, OpCreate)}
+		createE := &TenantAccountAssignmentCreate{config: _u.config, mutation: newTenantAccountAssignmentMutation(_u.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TenantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   account.TenantsTable,
+			Columns: account.TenantsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &TenantAccountAssignmentCreate{config: _u.config, mutation: newTenantAccountAssignmentMutation(_u.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.ReceivedMailsCleared() {
+	if _u.mutation.ReceivedMailsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1657,7 +1657,7 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedReceivedMailsIDs(); len(nodes) > 0 && !auo.mutation.ReceivedMailsCleared() {
+	if nodes := _u.mutation.RemovedReceivedMailsIDs(); len(nodes) > 0 && !_u.mutation.ReceivedMailsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1673,7 +1673,7 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.ReceivedMailsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ReceivedMailsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1689,7 +1689,7 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.TemporaryFilesCleared() {
+	if _u.mutation.TemporaryFilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1702,7 +1702,7 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedTemporaryFilesIDs(); len(nodes) > 0 && !auo.mutation.TemporaryFilesCleared() {
+	if nodes := _u.mutation.RemovedTemporaryFilesIDs(); len(nodes) > 0 && !_u.mutation.TemporaryFilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1718,7 +1718,7 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.TemporaryFilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TemporaryFilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1734,7 +1734,7 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.TenantAssignmentCleared() {
+	if _u.mutation.TenantAssignmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1747,7 +1747,7 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedTenantAssignmentIDs(); len(nodes) > 0 && !auo.mutation.TenantAssignmentCleared() {
+	if nodes := _u.mutation.RemovedTenantAssignmentIDs(); len(nodes) > 0 && !_u.mutation.TenantAssignmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1763,7 +1763,7 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.TenantAssignmentIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TenantAssignmentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -1779,11 +1779,11 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(auo.modifiers...)
-	_node = &Account{config: auo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Account{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, auo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{account.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1791,6 +1791,6 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 		}
 		return nil, err
 	}
-	auo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

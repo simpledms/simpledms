@@ -929,13 +929,13 @@ type predicateAdder interface {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (aq *AttributeQuery) addPredicate(pred func(s *sql.Selector)) {
-	aq.predicates = append(aq.predicates, pred)
+func (_q *AttributeQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the AttributeQuery builder.
-func (aq *AttributeQuery) Filter() *AttributeFilter {
-	return &AttributeFilter{config: aq.config, predicateAdder: aq}
+func (_q *AttributeQuery) Filter() *AttributeFilter {
+	return &AttributeFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -1075,13 +1075,13 @@ func (f *AttributeFilter) WhereHasPropertyWith(preds ...predicate.Property) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (dtq *DocumentTypeQuery) addPredicate(pred func(s *sql.Selector)) {
-	dtq.predicates = append(dtq.predicates, pred)
+func (_q *DocumentTypeQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the DocumentTypeQuery builder.
-func (dtq *DocumentTypeQuery) Filter() *DocumentTypeFilter {
-	return &DocumentTypeFilter{config: dtq.config, predicateAdder: dtq}
+func (_q *DocumentTypeQuery) Filter() *DocumentTypeFilter {
+	return &DocumentTypeFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -1168,13 +1168,13 @@ func (f *DocumentTypeFilter) WhereHasAttributesWith(preds ...predicate.Attribute
 }
 
 // addPredicate implements the predicateAdder interface.
-func (fq *FileQuery) addPredicate(pred func(s *sql.Selector)) {
-	fq.predicates = append(fq.predicates, pred)
+func (_q *FileQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the FileQuery builder.
-func (fq *FileQuery) Filter() *FileFilter {
-	return &FileFilter{config: fq.config, predicateAdder: fq}
+func (_q *FileQuery) Filter() *FileFilter {
+	return &FileFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -1486,13 +1486,13 @@ func (f *FileFilter) WhereHasPropertyAssignmentWith(preds ...predicate.FilePrope
 }
 
 // addPredicate implements the predicateAdder interface.
-func (fiq *FileInfoQuery) addPredicate(pred func(s *sql.Selector)) {
-	fiq.predicates = append(fiq.predicates, pred)
+func (_q *FileInfoQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the FileInfoQuery builder.
-func (fiq *FileInfoQuery) Filter() *FileInfoFilter {
-	return &FileInfoFilter{config: fiq.config, predicateAdder: fiq}
+func (_q *FileInfoQuery) Filter() *FileInfoFilter {
+	return &FileInfoFilter{config: _q.config, predicateAdder: _q}
 }
 
 // FileInfoFilter provides a generic filtering capability at runtime for FileInfoQuery.
@@ -1541,13 +1541,13 @@ func (f *FileInfoFilter) WherePublicPath(p entql.BytesP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (fpaq *FilePropertyAssignmentQuery) addPredicate(pred func(s *sql.Selector)) {
-	fpaq.predicates = append(fpaq.predicates, pred)
+func (_q *FilePropertyAssignmentQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the FilePropertyAssignmentQuery builder.
-func (fpaq *FilePropertyAssignmentQuery) Filter() *FilePropertyAssignmentFilter {
-	return &FilePropertyAssignmentFilter{config: fpaq.config, predicateAdder: fpaq}
+func (_q *FilePropertyAssignmentQuery) Filter() *FilePropertyAssignmentFilter {
+	return &FilePropertyAssignmentFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -1658,13 +1658,13 @@ func (f *FilePropertyAssignmentFilter) WhereHasPropertyWith(preds ...predicate.P
 }
 
 // addPredicate implements the predicateAdder interface.
-func (fsq *FileSearchQuery) addPredicate(pred func(s *sql.Selector)) {
-	fsq.predicates = append(fsq.predicates, pred)
+func (_q *FileSearchQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the FileSearchQuery builder.
-func (fsq *FileSearchQuery) Filter() *FileSearchFilter {
-	return &FileSearchFilter{config: fsq.config, predicateAdder: fsq}
+func (_q *FileSearchQuery) Filter() *FileSearchFilter {
+	return &FileSearchFilter{config: _q.config, predicateAdder: _q}
 }
 
 // FileSearchFilter provides a generic filtering capability at runtime for FileSearchQuery.
@@ -1713,13 +1713,13 @@ func (f *FileSearchFilter) WhereOcrContent(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (pq *PropertyQuery) addPredicate(pred func(s *sql.Selector)) {
-	pq.predicates = append(pq.predicates, pred)
+func (_q *PropertyQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the PropertyQuery builder.
-func (pq *PropertyQuery) Filter() *PropertyFilter {
-	return &PropertyFilter{config: pq.config, predicateAdder: pq}
+func (_q *PropertyQuery) Filter() *PropertyFilter {
+	return &PropertyFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -1815,13 +1815,13 @@ func (f *PropertyFilter) WhereHasFileAssignmentsWith(preds ...predicate.FileProp
 }
 
 // addPredicate implements the predicateAdder interface.
-func (rtaq *ResolvedTagAssignmentQuery) addPredicate(pred func(s *sql.Selector)) {
-	rtaq.predicates = append(rtaq.predicates, pred)
+func (_q *ResolvedTagAssignmentQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the ResolvedTagAssignmentQuery builder.
-func (rtaq *ResolvedTagAssignmentQuery) Filter() *ResolvedTagAssignmentFilter {
-	return &ResolvedTagAssignmentFilter{config: rtaq.config, predicateAdder: rtaq}
+func (_q *ResolvedTagAssignmentQuery) Filter() *ResolvedTagAssignmentFilter {
+	return &ResolvedTagAssignmentFilter{config: _q.config, predicateAdder: _q}
 }
 
 // ResolvedTagAssignmentFilter provides a generic filtering capability at runtime for ResolvedTagAssignmentQuery.
@@ -1855,13 +1855,13 @@ func (f *ResolvedTagAssignmentFilter) WhereSpaceID(p entql.Int64P) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (sq *SpaceQuery) addPredicate(pred func(s *sql.Selector)) {
-	sq.predicates = append(sq.predicates, pred)
+func (_q *SpaceQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the SpaceQuery builder.
-func (sq *SpaceQuery) Filter() *SpaceFilter {
-	return &SpaceFilter{config: sq.config, predicateAdder: sq}
+func (_q *SpaceQuery) Filter() *SpaceFilter {
+	return &SpaceFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -2028,13 +2028,13 @@ func (f *SpaceFilter) WhereHasUserAssignmentWith(preds ...predicate.SpaceUserAss
 }
 
 // addPredicate implements the predicateAdder interface.
-func (suaq *SpaceUserAssignmentQuery) addPredicate(pred func(s *sql.Selector)) {
-	suaq.predicates = append(suaq.predicates, pred)
+func (_q *SpaceUserAssignmentQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the SpaceUserAssignmentQuery builder.
-func (suaq *SpaceUserAssignmentQuery) Filter() *SpaceUserAssignmentFilter {
-	return &SpaceUserAssignmentFilter{config: suaq.config, predicateAdder: suaq}
+func (_q *SpaceUserAssignmentQuery) Filter() *SpaceUserAssignmentFilter {
+	return &SpaceUserAssignmentFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -2164,13 +2164,13 @@ func (f *SpaceUserAssignmentFilter) WhereHasUserWith(preds ...predicate.User) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (sfq *StoredFileQuery) addPredicate(pred func(s *sql.Selector)) {
-	sfq.predicates = append(sfq.predicates, pred)
+func (_q *StoredFileQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the StoredFileQuery builder.
-func (sfq *StoredFileQuery) Filter() *StoredFileFilter {
-	return &StoredFileFilter{config: sfq.config, predicateAdder: sfq}
+func (_q *StoredFileQuery) Filter() *StoredFileFilter {
+	return &StoredFileFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -2331,13 +2331,13 @@ func (f *StoredFileFilter) WhereHasFilesWith(preds ...predicate.File) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tq *TagQuery) addPredicate(pred func(s *sql.Selector)) {
-	tq.predicates = append(tq.predicates, pred)
+func (_q *TagQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TagQuery builder.
-func (tq *TagQuery) Filter() *TagFilter {
-	return &TagFilter{config: tq.config, predicateAdder: tq}
+func (_q *TagQuery) Filter() *TagFilter {
+	return &TagFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -2499,13 +2499,13 @@ func (f *TagFilter) WhereHasTagAssignmentWith(preds ...predicate.TagAssignment) 
 }
 
 // addPredicate implements the predicateAdder interface.
-func (taq *TagAssignmentQuery) addPredicate(pred func(s *sql.Selector)) {
-	taq.predicates = append(taq.predicates, pred)
+func (_q *TagAssignmentQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TagAssignmentQuery builder.
-func (taq *TagAssignmentQuery) Filter() *TagAssignmentFilter {
-	return &TagAssignmentFilter{config: taq.config, predicateAdder: taq}
+func (_q *TagAssignmentQuery) Filter() *TagAssignmentFilter {
+	return &TagAssignmentFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -2596,13 +2596,13 @@ func (f *TagAssignmentFilter) WhereHasFileWith(preds ...predicate.File) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (uq *UserQuery) addPredicate(pred func(s *sql.Selector)) {
-	uq.predicates = append(uq.predicates, pred)
+func (_q *UserQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the UserQuery builder.
-func (uq *UserQuery) Filter() *UserFilter {
-	return &UserFilter{config: uq.config, predicateAdder: uq}
+func (_q *UserQuery) Filter() *UserFilter {
+	return &UserFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.

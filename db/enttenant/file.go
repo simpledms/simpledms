@@ -246,7 +246,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the File fields.
-func (f *File) assignValues(columns []string, values []any) error {
+func (_m *File) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -257,144 +257,144 @@ func (f *File) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			f.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case file.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				f.DeletedBy = value.Int64
+				_m.DeletedBy = value.Int64
 			}
 		case file.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				f.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case file.FieldPublicID:
 			if value, ok := values[i].(*entx.CIText); !ok {
 				return fmt.Errorf("unexpected type %T for field public_id", values[i])
 			} else if value != nil {
-				f.PublicID = *value
+				_m.PublicID = *value
 			}
 		case file.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				f.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case file.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				f.CreatedBy = value.Int64
+				_m.CreatedBy = value.Int64
 			}
 		case file.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				f.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case file.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				f.UpdatedBy = value.Int64
+				_m.UpdatedBy = value.Int64
 			}
 		case file.FieldSpaceID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
-				f.SpaceID = value.Int64
+				_m.SpaceID = value.Int64
 			}
 		case file.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				f.Name = value.String
+				_m.Name = value.String
 			}
 		case file.FieldIsDirectory:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_directory", values[i])
 			} else if value.Valid {
-				f.IsDirectory = value.Bool
+				_m.IsDirectory = value.Bool
 			}
 		case file.FieldNotes:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field notes", values[i])
 			} else if value.Valid {
-				f.Notes = value.String
+				_m.Notes = value.String
 			}
 		case file.FieldModifiedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field modified_at", values[i])
 			} else if value.Valid {
-				f.ModifiedAt = new(time.Time)
-				*f.ModifiedAt = value.Time
+				_m.ModifiedAt = new(time.Time)
+				*_m.ModifiedAt = value.Time
 			}
 		case file.FieldIndexedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field indexed_at", values[i])
 			} else if value.Valid {
-				f.IndexedAt = value.Time
+				_m.IndexedAt = value.Time
 			}
 		case file.FieldIndexingCompletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field indexing_completed_at", values[i])
 			} else if value.Valid {
-				f.IndexingCompletedAt = new(time.Time)
-				*f.IndexingCompletedAt = value.Time
+				_m.IndexingCompletedAt = new(time.Time)
+				*_m.IndexingCompletedAt = value.Time
 			}
 		case file.FieldParentID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field parent_id", values[i])
 			} else if value.Valid {
-				f.ParentID = value.Int64
+				_m.ParentID = value.Int64
 			}
 		case file.FieldDocumentTypeID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field document_type_id", values[i])
 			} else if value.Valid {
-				f.DocumentTypeID = value.Int64
+				_m.DocumentTypeID = value.Int64
 			}
 		case file.FieldIsInInbox:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_in_inbox", values[i])
 			} else if value.Valid {
-				f.IsInInbox = value.Bool
+				_m.IsInInbox = value.Bool
 			}
 		case file.FieldIsRootDir:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_root_dir", values[i])
 			} else if value.Valid {
-				f.IsRootDir = value.Bool
+				_m.IsRootDir = value.Bool
 			}
 		case file.FieldOcrContent:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ocr_content", values[i])
 			} else if value.Valid {
-				f.OcrContent = value.String
+				_m.OcrContent = value.String
 			}
 		case file.FieldOcrSuccessAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field ocr_success_at", values[i])
 			} else if value.Valid {
-				f.OcrSuccessAt = new(time.Time)
-				*f.OcrSuccessAt = value.Time
+				_m.OcrSuccessAt = new(time.Time)
+				*_m.OcrSuccessAt = value.Time
 			}
 		case file.FieldOcrRetryCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field ocr_retry_count", values[i])
 			} else if value.Valid {
-				f.OcrRetryCount = int(value.Int64)
+				_m.OcrRetryCount = int(value.Int64)
 			}
 		case file.FieldOcrLastTriedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field ocr_last_tried_at", values[i])
 			} else if value.Valid {
-				f.OcrLastTriedAt = value.Time
+				_m.OcrLastTriedAt = value.Time
 			}
 		default:
-			f.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -402,164 +402,164 @@ func (f *File) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the File.
 // This includes values selected through modifiers, order, etc.
-func (f *File) Value(name string) (ent.Value, error) {
-	return f.selectValues.Get(name)
+func (_m *File) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryDeleter queries the "deleter" edge of the File entity.
-func (f *File) QueryDeleter() *UserQuery {
-	return NewFileClient(f.config).QueryDeleter(f)
+func (_m *File) QueryDeleter() *UserQuery {
+	return NewFileClient(_m.config).QueryDeleter(_m)
 }
 
 // QueryCreator queries the "creator" edge of the File entity.
-func (f *File) QueryCreator() *UserQuery {
-	return NewFileClient(f.config).QueryCreator(f)
+func (_m *File) QueryCreator() *UserQuery {
+	return NewFileClient(_m.config).QueryCreator(_m)
 }
 
 // QueryUpdater queries the "updater" edge of the File entity.
-func (f *File) QueryUpdater() *UserQuery {
-	return NewFileClient(f.config).QueryUpdater(f)
+func (_m *File) QueryUpdater() *UserQuery {
+	return NewFileClient(_m.config).QueryUpdater(_m)
 }
 
 // QuerySpace queries the "space" edge of the File entity.
-func (f *File) QuerySpace() *SpaceQuery {
-	return NewFileClient(f.config).QuerySpace(f)
+func (_m *File) QuerySpace() *SpaceQuery {
+	return NewFileClient(_m.config).QuerySpace(_m)
 }
 
 // QueryVersions queries the "versions" edge of the File entity.
-func (f *File) QueryVersions() *StoredFileQuery {
-	return NewFileClient(f.config).QueryVersions(f)
+func (_m *File) QueryVersions() *StoredFileQuery {
+	return NewFileClient(_m.config).QueryVersions(_m)
 }
 
 // QueryChildren queries the "children" edge of the File entity.
-func (f *File) QueryChildren() *FileQuery {
-	return NewFileClient(f.config).QueryChildren(f)
+func (_m *File) QueryChildren() *FileQuery {
+	return NewFileClient(_m.config).QueryChildren(_m)
 }
 
 // QueryParent queries the "parent" edge of the File entity.
-func (f *File) QueryParent() *FileQuery {
-	return NewFileClient(f.config).QueryParent(f)
+func (_m *File) QueryParent() *FileQuery {
+	return NewFileClient(_m.config).QueryParent(_m)
 }
 
 // QueryDocumentType queries the "document_type" edge of the File entity.
-func (f *File) QueryDocumentType() *DocumentTypeQuery {
-	return NewFileClient(f.config).QueryDocumentType(f)
+func (_m *File) QueryDocumentType() *DocumentTypeQuery {
+	return NewFileClient(_m.config).QueryDocumentType(_m)
 }
 
 // QueryTags queries the "tags" edge of the File entity.
-func (f *File) QueryTags() *TagQuery {
-	return NewFileClient(f.config).QueryTags(f)
+func (_m *File) QueryTags() *TagQuery {
+	return NewFileClient(_m.config).QueryTags(_m)
 }
 
 // QueryProperties queries the "properties" edge of the File entity.
-func (f *File) QueryProperties() *PropertyQuery {
-	return NewFileClient(f.config).QueryProperties(f)
+func (_m *File) QueryProperties() *PropertyQuery {
+	return NewFileClient(_m.config).QueryProperties(_m)
 }
 
 // QueryTagAssignment queries the "tag_assignment" edge of the File entity.
-func (f *File) QueryTagAssignment() *TagAssignmentQuery {
-	return NewFileClient(f.config).QueryTagAssignment(f)
+func (_m *File) QueryTagAssignment() *TagAssignmentQuery {
+	return NewFileClient(_m.config).QueryTagAssignment(_m)
 }
 
 // QueryPropertyAssignment queries the "property_assignment" edge of the File entity.
-func (f *File) QueryPropertyAssignment() *FilePropertyAssignmentQuery {
-	return NewFileClient(f.config).QueryPropertyAssignment(f)
+func (_m *File) QueryPropertyAssignment() *FilePropertyAssignmentQuery {
+	return NewFileClient(_m.config).QueryPropertyAssignment(_m)
 }
 
 // Update returns a builder for updating this File.
 // Note that you need to call File.Unwrap() before calling this method if this File
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (f *File) Update() *FileUpdateOne {
-	return NewFileClient(f.config).UpdateOne(f)
+func (_m *File) Update() *FileUpdateOne {
+	return NewFileClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the File entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (f *File) Unwrap() *File {
-	_tx, ok := f.config.driver.(*txDriver)
+func (_m *File) Unwrap() *File {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: File is not a transactional entity")
 	}
-	f.config.driver = _tx.drv
-	return f
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (f *File) String() string {
+func (_m *File) String() string {
 	var builder strings.Builder
 	builder.WriteString("File(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", f.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("deleted_by=")
-	builder.WriteString(fmt.Sprintf("%v", f.DeletedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.DeletedBy))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(f.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("public_id=")
-	builder.WriteString(fmt.Sprintf("%v", f.PublicID))
+	builder.WriteString(fmt.Sprintf("%v", _m.PublicID))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(f.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", f.CreatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(f.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", f.UpdatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("space_id=")
-	builder.WriteString(fmt.Sprintf("%v", f.SpaceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(f.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("is_directory=")
-	builder.WriteString(fmt.Sprintf("%v", f.IsDirectory))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsDirectory))
 	builder.WriteString(", ")
 	builder.WriteString("notes=")
-	builder.WriteString(f.Notes)
+	builder.WriteString(_m.Notes)
 	builder.WriteString(", ")
-	if v := f.ModifiedAt; v != nil {
+	if v := _m.ModifiedAt; v != nil {
 		builder.WriteString("modified_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("indexed_at=")
-	builder.WriteString(f.IndexedAt.Format(time.ANSIC))
+	builder.WriteString(_m.IndexedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	if v := f.IndexingCompletedAt; v != nil {
+	if v := _m.IndexingCompletedAt; v != nil {
 		builder.WriteString("indexing_completed_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("parent_id=")
-	builder.WriteString(fmt.Sprintf("%v", f.ParentID))
+	builder.WriteString(fmt.Sprintf("%v", _m.ParentID))
 	builder.WriteString(", ")
 	builder.WriteString("document_type_id=")
-	builder.WriteString(fmt.Sprintf("%v", f.DocumentTypeID))
+	builder.WriteString(fmt.Sprintf("%v", _m.DocumentTypeID))
 	builder.WriteString(", ")
 	builder.WriteString("is_in_inbox=")
-	builder.WriteString(fmt.Sprintf("%v", f.IsInInbox))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsInInbox))
 	builder.WriteString(", ")
 	builder.WriteString("is_root_dir=")
-	builder.WriteString(fmt.Sprintf("%v", f.IsRootDir))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsRootDir))
 	builder.WriteString(", ")
 	builder.WriteString("ocr_content=")
-	builder.WriteString(f.OcrContent)
+	builder.WriteString(_m.OcrContent)
 	builder.WriteString(", ")
-	if v := f.OcrSuccessAt; v != nil {
+	if v := _m.OcrSuccessAt; v != nil {
 		builder.WriteString("ocr_success_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("ocr_retry_count=")
-	builder.WriteString(fmt.Sprintf("%v", f.OcrRetryCount))
+	builder.WriteString(fmt.Sprintf("%v", _m.OcrRetryCount))
 	builder.WriteString(", ")
 	builder.WriteString("ocr_last_tried_at=")
-	builder.WriteString(f.OcrLastTriedAt.Format(time.ANSIC))
+	builder.WriteString(_m.OcrLastTriedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

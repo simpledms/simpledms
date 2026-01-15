@@ -36,44 +36,44 @@ type StoredFileQuery struct {
 }
 
 // Where adds a new predicate for the StoredFileQuery builder.
-func (sfq *StoredFileQuery) Where(ps ...predicate.StoredFile) *StoredFileQuery {
-	sfq.predicates = append(sfq.predicates, ps...)
-	return sfq
+func (_q *StoredFileQuery) Where(ps ...predicate.StoredFile) *StoredFileQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (sfq *StoredFileQuery) Limit(limit int) *StoredFileQuery {
-	sfq.ctx.Limit = &limit
-	return sfq
+func (_q *StoredFileQuery) Limit(limit int) *StoredFileQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (sfq *StoredFileQuery) Offset(offset int) *StoredFileQuery {
-	sfq.ctx.Offset = &offset
-	return sfq
+func (_q *StoredFileQuery) Offset(offset int) *StoredFileQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (sfq *StoredFileQuery) Unique(unique bool) *StoredFileQuery {
-	sfq.ctx.Unique = &unique
-	return sfq
+func (_q *StoredFileQuery) Unique(unique bool) *StoredFileQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (sfq *StoredFileQuery) Order(o ...storedfile.OrderOption) *StoredFileQuery {
-	sfq.order = append(sfq.order, o...)
-	return sfq
+func (_q *StoredFileQuery) Order(o ...storedfile.OrderOption) *StoredFileQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryCreator chains the current query on the "creator" edge.
-func (sfq *StoredFileQuery) QueryCreator() *UserQuery {
-	query := (&UserClient{config: sfq.config}).Query()
+func (_q *StoredFileQuery) QueryCreator() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sfq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sfq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -82,20 +82,20 @@ func (sfq *StoredFileQuery) QueryCreator() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, storedfile.CreatorTable, storedfile.CreatorColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(sfq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryUpdater chains the current query on the "updater" edge.
-func (sfq *StoredFileQuery) QueryUpdater() *UserQuery {
-	query := (&UserClient{config: sfq.config}).Query()
+func (_q *StoredFileQuery) QueryUpdater() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sfq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sfq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -104,20 +104,20 @@ func (sfq *StoredFileQuery) QueryUpdater() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, storedfile.UpdaterTable, storedfile.UpdaterColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(sfq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFiles chains the current query on the "files" edge.
-func (sfq *StoredFileQuery) QueryFiles() *FileQuery {
-	query := (&FileClient{config: sfq.config}).Query()
+func (_q *StoredFileQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sfq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := sfq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -126,7 +126,7 @@ func (sfq *StoredFileQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, storedfile.FilesTable, storedfile.FilesPrimaryKey...),
 		)
-		fromU = sqlgraph.SetNeighbors(sfq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -134,8 +134,8 @@ func (sfq *StoredFileQuery) QueryFiles() *FileQuery {
 
 // First returns the first StoredFile entity from the query.
 // Returns a *NotFoundError when no StoredFile was found.
-func (sfq *StoredFileQuery) First(ctx context.Context) (*StoredFile, error) {
-	nodes, err := sfq.Limit(1).All(setContextOp(ctx, sfq.ctx, ent.OpQueryFirst))
+func (_q *StoredFileQuery) First(ctx context.Context) (*StoredFile, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -146,8 +146,8 @@ func (sfq *StoredFileQuery) First(ctx context.Context) (*StoredFile, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (sfq *StoredFileQuery) FirstX(ctx context.Context) *StoredFile {
-	node, err := sfq.First(ctx)
+func (_q *StoredFileQuery) FirstX(ctx context.Context) *StoredFile {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -156,9 +156,9 @@ func (sfq *StoredFileQuery) FirstX(ctx context.Context) *StoredFile {
 
 // FirstID returns the first StoredFile ID from the query.
 // Returns a *NotFoundError when no StoredFile ID was found.
-func (sfq *StoredFileQuery) FirstID(ctx context.Context) (id int64, err error) {
+func (_q *StoredFileQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = sfq.Limit(1).IDs(setContextOp(ctx, sfq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -169,8 +169,8 @@ func (sfq *StoredFileQuery) FirstID(ctx context.Context) (id int64, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (sfq *StoredFileQuery) FirstIDX(ctx context.Context) int64 {
-	id, err := sfq.FirstID(ctx)
+func (_q *StoredFileQuery) FirstIDX(ctx context.Context) int64 {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -180,8 +180,8 @@ func (sfq *StoredFileQuery) FirstIDX(ctx context.Context) int64 {
 // Only returns a single StoredFile entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one StoredFile entity is found.
 // Returns a *NotFoundError when no StoredFile entities are found.
-func (sfq *StoredFileQuery) Only(ctx context.Context) (*StoredFile, error) {
-	nodes, err := sfq.Limit(2).All(setContextOp(ctx, sfq.ctx, ent.OpQueryOnly))
+func (_q *StoredFileQuery) Only(ctx context.Context) (*StoredFile, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -196,8 +196,8 @@ func (sfq *StoredFileQuery) Only(ctx context.Context) (*StoredFile, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (sfq *StoredFileQuery) OnlyX(ctx context.Context) *StoredFile {
-	node, err := sfq.Only(ctx)
+func (_q *StoredFileQuery) OnlyX(ctx context.Context) *StoredFile {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -207,9 +207,9 @@ func (sfq *StoredFileQuery) OnlyX(ctx context.Context) *StoredFile {
 // OnlyID is like Only, but returns the only StoredFile ID in the query.
 // Returns a *NotSingularError when more than one StoredFile ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (sfq *StoredFileQuery) OnlyID(ctx context.Context) (id int64, err error) {
+func (_q *StoredFileQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = sfq.Limit(2).IDs(setContextOp(ctx, sfq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -224,8 +224,8 @@ func (sfq *StoredFileQuery) OnlyID(ctx context.Context) (id int64, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (sfq *StoredFileQuery) OnlyIDX(ctx context.Context) int64 {
-	id, err := sfq.OnlyID(ctx)
+func (_q *StoredFileQuery) OnlyIDX(ctx context.Context) int64 {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -233,18 +233,18 @@ func (sfq *StoredFileQuery) OnlyIDX(ctx context.Context) int64 {
 }
 
 // All executes the query and returns a list of StoredFiles.
-func (sfq *StoredFileQuery) All(ctx context.Context) ([]*StoredFile, error) {
-	ctx = setContextOp(ctx, sfq.ctx, ent.OpQueryAll)
-	if err := sfq.prepareQuery(ctx); err != nil {
+func (_q *StoredFileQuery) All(ctx context.Context) ([]*StoredFile, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*StoredFile, *StoredFileQuery]()
-	return withInterceptors[[]*StoredFile](ctx, sfq, qr, sfq.inters)
+	return withInterceptors[[]*StoredFile](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (sfq *StoredFileQuery) AllX(ctx context.Context) []*StoredFile {
-	nodes, err := sfq.All(ctx)
+func (_q *StoredFileQuery) AllX(ctx context.Context) []*StoredFile {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -252,20 +252,20 @@ func (sfq *StoredFileQuery) AllX(ctx context.Context) []*StoredFile {
 }
 
 // IDs executes the query and returns a list of StoredFile IDs.
-func (sfq *StoredFileQuery) IDs(ctx context.Context) (ids []int64, err error) {
-	if sfq.ctx.Unique == nil && sfq.path != nil {
-		sfq.Unique(true)
+func (_q *StoredFileQuery) IDs(ctx context.Context) (ids []int64, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, sfq.ctx, ent.OpQueryIDs)
-	if err = sfq.Select(storedfile.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(storedfile.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (sfq *StoredFileQuery) IDsX(ctx context.Context) []int64 {
-	ids, err := sfq.IDs(ctx)
+func (_q *StoredFileQuery) IDsX(ctx context.Context) []int64 {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -273,17 +273,17 @@ func (sfq *StoredFileQuery) IDsX(ctx context.Context) []int64 {
 }
 
 // Count returns the count of the given query.
-func (sfq *StoredFileQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, sfq.ctx, ent.OpQueryCount)
-	if err := sfq.prepareQuery(ctx); err != nil {
+func (_q *StoredFileQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, sfq, querierCount[*StoredFileQuery](), sfq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*StoredFileQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (sfq *StoredFileQuery) CountX(ctx context.Context) int {
-	count, err := sfq.Count(ctx)
+func (_q *StoredFileQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -291,9 +291,9 @@ func (sfq *StoredFileQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (sfq *StoredFileQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, sfq.ctx, ent.OpQueryExist)
-	switch _, err := sfq.FirstID(ctx); {
+func (_q *StoredFileQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -304,8 +304,8 @@ func (sfq *StoredFileQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (sfq *StoredFileQuery) ExistX(ctx context.Context) bool {
-	exist, err := sfq.Exist(ctx)
+func (_q *StoredFileQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -314,57 +314,57 @@ func (sfq *StoredFileQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the StoredFileQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (sfq *StoredFileQuery) Clone() *StoredFileQuery {
-	if sfq == nil {
+func (_q *StoredFileQuery) Clone() *StoredFileQuery {
+	if _q == nil {
 		return nil
 	}
 	return &StoredFileQuery{
-		config:      sfq.config,
-		ctx:         sfq.ctx.Clone(),
-		order:       append([]storedfile.OrderOption{}, sfq.order...),
-		inters:      append([]Interceptor{}, sfq.inters...),
-		predicates:  append([]predicate.StoredFile{}, sfq.predicates...),
-		withCreator: sfq.withCreator.Clone(),
-		withUpdater: sfq.withUpdater.Clone(),
-		withFiles:   sfq.withFiles.Clone(),
+		config:      _q.config,
+		ctx:         _q.ctx.Clone(),
+		order:       append([]storedfile.OrderOption{}, _q.order...),
+		inters:      append([]Interceptor{}, _q.inters...),
+		predicates:  append([]predicate.StoredFile{}, _q.predicates...),
+		withCreator: _q.withCreator.Clone(),
+		withUpdater: _q.withUpdater.Clone(),
+		withFiles:   _q.withFiles.Clone(),
 		// clone intermediate query.
-		sql:       sfq.sql.Clone(),
-		path:      sfq.path,
-		modifiers: append([]func(*sql.Selector){}, sfq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithCreator tells the query-builder to eager-load the nodes that are connected to
 // the "creator" edge. The optional arguments are used to configure the query builder of the edge.
-func (sfq *StoredFileQuery) WithCreator(opts ...func(*UserQuery)) *StoredFileQuery {
-	query := (&UserClient{config: sfq.config}).Query()
+func (_q *StoredFileQuery) WithCreator(opts ...func(*UserQuery)) *StoredFileQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sfq.withCreator = query
-	return sfq
+	_q.withCreator = query
+	return _q
 }
 
 // WithUpdater tells the query-builder to eager-load the nodes that are connected to
 // the "updater" edge. The optional arguments are used to configure the query builder of the edge.
-func (sfq *StoredFileQuery) WithUpdater(opts ...func(*UserQuery)) *StoredFileQuery {
-	query := (&UserClient{config: sfq.config}).Query()
+func (_q *StoredFileQuery) WithUpdater(opts ...func(*UserQuery)) *StoredFileQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sfq.withUpdater = query
-	return sfq
+	_q.withUpdater = query
+	return _q
 }
 
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
 // the "files" edge. The optional arguments are used to configure the query builder of the edge.
-func (sfq *StoredFileQuery) WithFiles(opts ...func(*FileQuery)) *StoredFileQuery {
-	query := (&FileClient{config: sfq.config}).Query()
+func (_q *StoredFileQuery) WithFiles(opts ...func(*FileQuery)) *StoredFileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sfq.withFiles = query
-	return sfq
+	_q.withFiles = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -381,10 +381,10 @@ func (sfq *StoredFileQuery) WithFiles(opts ...func(*FileQuery)) *StoredFileQuery
 //		GroupBy(storedfile.FieldCreatedAt).
 //		Aggregate(enttenant.Count()).
 //		Scan(ctx, &v)
-func (sfq *StoredFileQuery) GroupBy(field string, fields ...string) *StoredFileGroupBy {
-	sfq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &StoredFileGroupBy{build: sfq}
-	grbuild.flds = &sfq.ctx.Fields
+func (_q *StoredFileQuery) GroupBy(field string, fields ...string) *StoredFileGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &StoredFileGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = storedfile.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -402,96 +402,96 @@ func (sfq *StoredFileQuery) GroupBy(field string, fields ...string) *StoredFileG
 //	client.StoredFile.Query().
 //		Select(storedfile.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (sfq *StoredFileQuery) Select(fields ...string) *StoredFileSelect {
-	sfq.ctx.Fields = append(sfq.ctx.Fields, fields...)
-	sbuild := &StoredFileSelect{StoredFileQuery: sfq}
+func (_q *StoredFileQuery) Select(fields ...string) *StoredFileSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &StoredFileSelect{StoredFileQuery: _q}
 	sbuild.label = storedfile.Label
-	sbuild.flds, sbuild.scan = &sfq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a StoredFileSelect configured with the given aggregations.
-func (sfq *StoredFileQuery) Aggregate(fns ...AggregateFunc) *StoredFileSelect {
-	return sfq.Select().Aggregate(fns...)
+func (_q *StoredFileQuery) Aggregate(fns ...AggregateFunc) *StoredFileSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (sfq *StoredFileQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range sfq.inters {
+func (_q *StoredFileQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("enttenant: uninitialized interceptor (forgotten import enttenant/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, sfq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range sfq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !storedfile.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("enttenant: invalid field %q for query", f)}
 		}
 	}
-	if sfq.path != nil {
-		prev, err := sfq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		sfq.sql = prev
+		_q.sql = prev
 	}
 	if storedfile.Policy == nil {
 		return errors.New("enttenant: uninitialized storedfile.Policy (forgotten import enttenant/runtime?)")
 	}
-	if err := storedfile.Policy.EvalQuery(ctx, sfq); err != nil {
+	if err := storedfile.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (sfq *StoredFileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*StoredFile, error) {
+func (_q *StoredFileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*StoredFile, error) {
 	var (
 		nodes       = []*StoredFile{}
-		_spec       = sfq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			sfq.withCreator != nil,
-			sfq.withUpdater != nil,
-			sfq.withFiles != nil,
+			_q.withCreator != nil,
+			_q.withUpdater != nil,
+			_q.withFiles != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*StoredFile).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &StoredFile{config: sfq.config}
+		node := &StoredFile{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(sfq.modifiers) > 0 {
-		_spec.Modifiers = sfq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, sfq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sfq.withCreator; query != nil {
-		if err := sfq.loadCreator(ctx, query, nodes, nil,
+	if query := _q.withCreator; query != nil {
+		if err := _q.loadCreator(ctx, query, nodes, nil,
 			func(n *StoredFile, e *User) { n.Edges.Creator = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sfq.withUpdater; query != nil {
-		if err := sfq.loadUpdater(ctx, query, nodes, nil,
+	if query := _q.withUpdater; query != nil {
+		if err := _q.loadUpdater(ctx, query, nodes, nil,
 			func(n *StoredFile, e *User) { n.Edges.Updater = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := sfq.withFiles; query != nil {
-		if err := sfq.loadFiles(ctx, query, nodes,
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *StoredFile) { n.Edges.Files = []*File{} },
 			func(n *StoredFile, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
 			return nil, err
@@ -500,7 +500,7 @@ func (sfq *StoredFileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	return nodes, nil
 }
 
-func (sfq *StoredFileQuery) loadCreator(ctx context.Context, query *UserQuery, nodes []*StoredFile, init func(*StoredFile), assign func(*StoredFile, *User)) error {
+func (_q *StoredFileQuery) loadCreator(ctx context.Context, query *UserQuery, nodes []*StoredFile, init func(*StoredFile), assign func(*StoredFile, *User)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*StoredFile)
 	for i := range nodes {
@@ -529,7 +529,7 @@ func (sfq *StoredFileQuery) loadCreator(ctx context.Context, query *UserQuery, n
 	}
 	return nil
 }
-func (sfq *StoredFileQuery) loadUpdater(ctx context.Context, query *UserQuery, nodes []*StoredFile, init func(*StoredFile), assign func(*StoredFile, *User)) error {
+func (_q *StoredFileQuery) loadUpdater(ctx context.Context, query *UserQuery, nodes []*StoredFile, init func(*StoredFile), assign func(*StoredFile, *User)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*StoredFile)
 	for i := range nodes {
@@ -558,7 +558,7 @@ func (sfq *StoredFileQuery) loadUpdater(ctx context.Context, query *UserQuery, n
 	}
 	return nil
 }
-func (sfq *StoredFileQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*StoredFile, init func(*StoredFile), assign func(*StoredFile, *File)) error {
+func (_q *StoredFileQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*StoredFile, init func(*StoredFile), assign func(*StoredFile, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int64]*StoredFile)
 	nids := make(map[int64]map[*StoredFile]struct{})
@@ -620,27 +620,27 @@ func (sfq *StoredFileQuery) loadFiles(ctx context.Context, query *FileQuery, nod
 	return nil
 }
 
-func (sfq *StoredFileQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := sfq.querySpec()
-	if len(sfq.modifiers) > 0 {
-		_spec.Modifiers = sfq.modifiers
+func (_q *StoredFileQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = sfq.ctx.Fields
-	if len(sfq.ctx.Fields) > 0 {
-		_spec.Unique = sfq.ctx.Unique != nil && *sfq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, sfq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (sfq *StoredFileQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *StoredFileQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(storedfile.Table, storedfile.Columns, sqlgraph.NewFieldSpec(storedfile.FieldID, field.TypeInt64))
-	_spec.From = sfq.sql
-	if unique := sfq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if sfq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := sfq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, storedfile.FieldID)
 		for i := range fields {
@@ -648,27 +648,27 @@ func (sfq *StoredFileQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if sfq.withCreator != nil {
+		if _q.withCreator != nil {
 			_spec.Node.AddColumnOnce(storedfile.FieldCreatedBy)
 		}
-		if sfq.withUpdater != nil {
+		if _q.withUpdater != nil {
 			_spec.Node.AddColumnOnce(storedfile.FieldUpdatedBy)
 		}
 	}
-	if ps := sfq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := sfq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := sfq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := sfq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -678,45 +678,45 @@ func (sfq *StoredFileQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (sfq *StoredFileQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(sfq.driver.Dialect())
+func (_q *StoredFileQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(storedfile.Table)
-	columns := sfq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = storedfile.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if sfq.sql != nil {
-		selector = sfq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if sfq.ctx.Unique != nil && *sfq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range sfq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range sfq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range sfq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := sfq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := sfq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (sfq *StoredFileQuery) Modify(modifiers ...func(s *sql.Selector)) *StoredFileSelect {
-	sfq.modifiers = append(sfq.modifiers, modifiers...)
-	return sfq.Select()
+func (_q *StoredFileQuery) Modify(modifiers ...func(s *sql.Selector)) *StoredFileSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // StoredFileGroupBy is the group-by builder for StoredFile entities.
@@ -726,41 +726,41 @@ type StoredFileGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (sfgb *StoredFileGroupBy) Aggregate(fns ...AggregateFunc) *StoredFileGroupBy {
-	sfgb.fns = append(sfgb.fns, fns...)
-	return sfgb
+func (_g *StoredFileGroupBy) Aggregate(fns ...AggregateFunc) *StoredFileGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sfgb *StoredFileGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sfgb.build.ctx, ent.OpQueryGroupBy)
-	if err := sfgb.build.prepareQuery(ctx); err != nil {
+func (_g *StoredFileGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*StoredFileQuery, *StoredFileGroupBy](ctx, sfgb.build, sfgb, sfgb.build.inters, v)
+	return scanWithInterceptors[*StoredFileQuery, *StoredFileGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (sfgb *StoredFileGroupBy) sqlScan(ctx context.Context, root *StoredFileQuery, v any) error {
+func (_g *StoredFileGroupBy) sqlScan(ctx context.Context, root *StoredFileQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(sfgb.fns))
-	for _, fn := range sfgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*sfgb.flds)+len(sfgb.fns))
-		for _, f := range *sfgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*sfgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sfgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -774,27 +774,27 @@ type StoredFileSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (sfs *StoredFileSelect) Aggregate(fns ...AggregateFunc) *StoredFileSelect {
-	sfs.fns = append(sfs.fns, fns...)
-	return sfs
+func (_s *StoredFileSelect) Aggregate(fns ...AggregateFunc) *StoredFileSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sfs *StoredFileSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sfs.ctx, ent.OpQuerySelect)
-	if err := sfs.prepareQuery(ctx); err != nil {
+func (_s *StoredFileSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*StoredFileQuery, *StoredFileSelect](ctx, sfs.StoredFileQuery, sfs, sfs.inters, v)
+	return scanWithInterceptors[*StoredFileQuery, *StoredFileSelect](ctx, _s.StoredFileQuery, _s, _s.inters, v)
 }
 
-func (sfs *StoredFileSelect) sqlScan(ctx context.Context, root *StoredFileQuery, v any) error {
+func (_s *StoredFileSelect) sqlScan(ctx context.Context, root *StoredFileQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(sfs.fns))
-	for _, fn := range sfs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*sfs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -802,7 +802,7 @@ func (sfs *StoredFileSelect) sqlScan(ctx context.Context, root *StoredFileQuery,
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sfs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -810,7 +810,7 @@ func (sfs *StoredFileSelect) sqlScan(ctx context.Context, root *StoredFileQuery,
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (sfs *StoredFileSelect) Modify(modifiers ...func(s *sql.Selector)) *StoredFileSelect {
-	sfs.modifiers = append(sfs.modifiers, modifiers...)
-	return sfs
+func (_s *StoredFileSelect) Modify(modifiers ...func(s *sql.Selector)) *StoredFileSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

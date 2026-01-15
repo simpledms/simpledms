@@ -36,44 +36,44 @@ type FilePropertyAssignmentQuery struct {
 }
 
 // Where adds a new predicate for the FilePropertyAssignmentQuery builder.
-func (fpaq *FilePropertyAssignmentQuery) Where(ps ...predicate.FilePropertyAssignment) *FilePropertyAssignmentQuery {
-	fpaq.predicates = append(fpaq.predicates, ps...)
-	return fpaq
+func (_q *FilePropertyAssignmentQuery) Where(ps ...predicate.FilePropertyAssignment) *FilePropertyAssignmentQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (fpaq *FilePropertyAssignmentQuery) Limit(limit int) *FilePropertyAssignmentQuery {
-	fpaq.ctx.Limit = &limit
-	return fpaq
+func (_q *FilePropertyAssignmentQuery) Limit(limit int) *FilePropertyAssignmentQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (fpaq *FilePropertyAssignmentQuery) Offset(offset int) *FilePropertyAssignmentQuery {
-	fpaq.ctx.Offset = &offset
-	return fpaq
+func (_q *FilePropertyAssignmentQuery) Offset(offset int) *FilePropertyAssignmentQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (fpaq *FilePropertyAssignmentQuery) Unique(unique bool) *FilePropertyAssignmentQuery {
-	fpaq.ctx.Unique = &unique
-	return fpaq
+func (_q *FilePropertyAssignmentQuery) Unique(unique bool) *FilePropertyAssignmentQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (fpaq *FilePropertyAssignmentQuery) Order(o ...filepropertyassignment.OrderOption) *FilePropertyAssignmentQuery {
-	fpaq.order = append(fpaq.order, o...)
-	return fpaq
+func (_q *FilePropertyAssignmentQuery) Order(o ...filepropertyassignment.OrderOption) *FilePropertyAssignmentQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QuerySpace chains the current query on the "space" edge.
-func (fpaq *FilePropertyAssignmentQuery) QuerySpace() *SpaceQuery {
-	query := (&SpaceClient{config: fpaq.config}).Query()
+func (_q *FilePropertyAssignmentQuery) QuerySpace() *SpaceQuery {
+	query := (&SpaceClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := fpaq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := fpaq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -82,20 +82,20 @@ func (fpaq *FilePropertyAssignmentQuery) QuerySpace() *SpaceQuery {
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, filepropertyassignment.SpaceTable, filepropertyassignment.SpaceColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(fpaq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFile chains the current query on the "file" edge.
-func (fpaq *FilePropertyAssignmentQuery) QueryFile() *FileQuery {
-	query := (&FileClient{config: fpaq.config}).Query()
+func (_q *FilePropertyAssignmentQuery) QueryFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := fpaq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := fpaq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -104,20 +104,20 @@ func (fpaq *FilePropertyAssignmentQuery) QueryFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, filepropertyassignment.FileTable, filepropertyassignment.FileColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(fpaq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryProperty chains the current query on the "property" edge.
-func (fpaq *FilePropertyAssignmentQuery) QueryProperty() *PropertyQuery {
-	query := (&PropertyClient{config: fpaq.config}).Query()
+func (_q *FilePropertyAssignmentQuery) QueryProperty() *PropertyQuery {
+	query := (&PropertyClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := fpaq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := fpaq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -126,7 +126,7 @@ func (fpaq *FilePropertyAssignmentQuery) QueryProperty() *PropertyQuery {
 			sqlgraph.To(property.Table, property.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, filepropertyassignment.PropertyTable, filepropertyassignment.PropertyColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(fpaq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -134,8 +134,8 @@ func (fpaq *FilePropertyAssignmentQuery) QueryProperty() *PropertyQuery {
 
 // First returns the first FilePropertyAssignment entity from the query.
 // Returns a *NotFoundError when no FilePropertyAssignment was found.
-func (fpaq *FilePropertyAssignmentQuery) First(ctx context.Context) (*FilePropertyAssignment, error) {
-	nodes, err := fpaq.Limit(1).All(setContextOp(ctx, fpaq.ctx, ent.OpQueryFirst))
+func (_q *FilePropertyAssignmentQuery) First(ctx context.Context) (*FilePropertyAssignment, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -146,8 +146,8 @@ func (fpaq *FilePropertyAssignmentQuery) First(ctx context.Context) (*FileProper
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (fpaq *FilePropertyAssignmentQuery) FirstX(ctx context.Context) *FilePropertyAssignment {
-	node, err := fpaq.First(ctx)
+func (_q *FilePropertyAssignmentQuery) FirstX(ctx context.Context) *FilePropertyAssignment {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -156,9 +156,9 @@ func (fpaq *FilePropertyAssignmentQuery) FirstX(ctx context.Context) *FileProper
 
 // FirstID returns the first FilePropertyAssignment ID from the query.
 // Returns a *NotFoundError when no FilePropertyAssignment ID was found.
-func (fpaq *FilePropertyAssignmentQuery) FirstID(ctx context.Context) (id int64, err error) {
+func (_q *FilePropertyAssignmentQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = fpaq.Limit(1).IDs(setContextOp(ctx, fpaq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -169,8 +169,8 @@ func (fpaq *FilePropertyAssignmentQuery) FirstID(ctx context.Context) (id int64,
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (fpaq *FilePropertyAssignmentQuery) FirstIDX(ctx context.Context) int64 {
-	id, err := fpaq.FirstID(ctx)
+func (_q *FilePropertyAssignmentQuery) FirstIDX(ctx context.Context) int64 {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -180,8 +180,8 @@ func (fpaq *FilePropertyAssignmentQuery) FirstIDX(ctx context.Context) int64 {
 // Only returns a single FilePropertyAssignment entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one FilePropertyAssignment entity is found.
 // Returns a *NotFoundError when no FilePropertyAssignment entities are found.
-func (fpaq *FilePropertyAssignmentQuery) Only(ctx context.Context) (*FilePropertyAssignment, error) {
-	nodes, err := fpaq.Limit(2).All(setContextOp(ctx, fpaq.ctx, ent.OpQueryOnly))
+func (_q *FilePropertyAssignmentQuery) Only(ctx context.Context) (*FilePropertyAssignment, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -196,8 +196,8 @@ func (fpaq *FilePropertyAssignmentQuery) Only(ctx context.Context) (*FilePropert
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (fpaq *FilePropertyAssignmentQuery) OnlyX(ctx context.Context) *FilePropertyAssignment {
-	node, err := fpaq.Only(ctx)
+func (_q *FilePropertyAssignmentQuery) OnlyX(ctx context.Context) *FilePropertyAssignment {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -207,9 +207,9 @@ func (fpaq *FilePropertyAssignmentQuery) OnlyX(ctx context.Context) *FilePropert
 // OnlyID is like Only, but returns the only FilePropertyAssignment ID in the query.
 // Returns a *NotSingularError when more than one FilePropertyAssignment ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (fpaq *FilePropertyAssignmentQuery) OnlyID(ctx context.Context) (id int64, err error) {
+func (_q *FilePropertyAssignmentQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = fpaq.Limit(2).IDs(setContextOp(ctx, fpaq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -224,8 +224,8 @@ func (fpaq *FilePropertyAssignmentQuery) OnlyID(ctx context.Context) (id int64, 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (fpaq *FilePropertyAssignmentQuery) OnlyIDX(ctx context.Context) int64 {
-	id, err := fpaq.OnlyID(ctx)
+func (_q *FilePropertyAssignmentQuery) OnlyIDX(ctx context.Context) int64 {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -233,18 +233,18 @@ func (fpaq *FilePropertyAssignmentQuery) OnlyIDX(ctx context.Context) int64 {
 }
 
 // All executes the query and returns a list of FilePropertyAssignments.
-func (fpaq *FilePropertyAssignmentQuery) All(ctx context.Context) ([]*FilePropertyAssignment, error) {
-	ctx = setContextOp(ctx, fpaq.ctx, ent.OpQueryAll)
-	if err := fpaq.prepareQuery(ctx); err != nil {
+func (_q *FilePropertyAssignmentQuery) All(ctx context.Context) ([]*FilePropertyAssignment, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*FilePropertyAssignment, *FilePropertyAssignmentQuery]()
-	return withInterceptors[[]*FilePropertyAssignment](ctx, fpaq, qr, fpaq.inters)
+	return withInterceptors[[]*FilePropertyAssignment](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (fpaq *FilePropertyAssignmentQuery) AllX(ctx context.Context) []*FilePropertyAssignment {
-	nodes, err := fpaq.All(ctx)
+func (_q *FilePropertyAssignmentQuery) AllX(ctx context.Context) []*FilePropertyAssignment {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -252,20 +252,20 @@ func (fpaq *FilePropertyAssignmentQuery) AllX(ctx context.Context) []*FileProper
 }
 
 // IDs executes the query and returns a list of FilePropertyAssignment IDs.
-func (fpaq *FilePropertyAssignmentQuery) IDs(ctx context.Context) (ids []int64, err error) {
-	if fpaq.ctx.Unique == nil && fpaq.path != nil {
-		fpaq.Unique(true)
+func (_q *FilePropertyAssignmentQuery) IDs(ctx context.Context) (ids []int64, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, fpaq.ctx, ent.OpQueryIDs)
-	if err = fpaq.Select(filepropertyassignment.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(filepropertyassignment.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (fpaq *FilePropertyAssignmentQuery) IDsX(ctx context.Context) []int64 {
-	ids, err := fpaq.IDs(ctx)
+func (_q *FilePropertyAssignmentQuery) IDsX(ctx context.Context) []int64 {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -273,17 +273,17 @@ func (fpaq *FilePropertyAssignmentQuery) IDsX(ctx context.Context) []int64 {
 }
 
 // Count returns the count of the given query.
-func (fpaq *FilePropertyAssignmentQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, fpaq.ctx, ent.OpQueryCount)
-	if err := fpaq.prepareQuery(ctx); err != nil {
+func (_q *FilePropertyAssignmentQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, fpaq, querierCount[*FilePropertyAssignmentQuery](), fpaq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*FilePropertyAssignmentQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (fpaq *FilePropertyAssignmentQuery) CountX(ctx context.Context) int {
-	count, err := fpaq.Count(ctx)
+func (_q *FilePropertyAssignmentQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -291,9 +291,9 @@ func (fpaq *FilePropertyAssignmentQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (fpaq *FilePropertyAssignmentQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, fpaq.ctx, ent.OpQueryExist)
-	switch _, err := fpaq.FirstID(ctx); {
+func (_q *FilePropertyAssignmentQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -304,8 +304,8 @@ func (fpaq *FilePropertyAssignmentQuery) Exist(ctx context.Context) (bool, error
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (fpaq *FilePropertyAssignmentQuery) ExistX(ctx context.Context) bool {
-	exist, err := fpaq.Exist(ctx)
+func (_q *FilePropertyAssignmentQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -314,57 +314,57 @@ func (fpaq *FilePropertyAssignmentQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the FilePropertyAssignmentQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (fpaq *FilePropertyAssignmentQuery) Clone() *FilePropertyAssignmentQuery {
-	if fpaq == nil {
+func (_q *FilePropertyAssignmentQuery) Clone() *FilePropertyAssignmentQuery {
+	if _q == nil {
 		return nil
 	}
 	return &FilePropertyAssignmentQuery{
-		config:       fpaq.config,
-		ctx:          fpaq.ctx.Clone(),
-		order:        append([]filepropertyassignment.OrderOption{}, fpaq.order...),
-		inters:       append([]Interceptor{}, fpaq.inters...),
-		predicates:   append([]predicate.FilePropertyAssignment{}, fpaq.predicates...),
-		withSpace:    fpaq.withSpace.Clone(),
-		withFile:     fpaq.withFile.Clone(),
-		withProperty: fpaq.withProperty.Clone(),
+		config:       _q.config,
+		ctx:          _q.ctx.Clone(),
+		order:        append([]filepropertyassignment.OrderOption{}, _q.order...),
+		inters:       append([]Interceptor{}, _q.inters...),
+		predicates:   append([]predicate.FilePropertyAssignment{}, _q.predicates...),
+		withSpace:    _q.withSpace.Clone(),
+		withFile:     _q.withFile.Clone(),
+		withProperty: _q.withProperty.Clone(),
 		// clone intermediate query.
-		sql:       fpaq.sql.Clone(),
-		path:      fpaq.path,
-		modifiers: append([]func(*sql.Selector){}, fpaq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithSpace tells the query-builder to eager-load the nodes that are connected to
 // the "space" edge. The optional arguments are used to configure the query builder of the edge.
-func (fpaq *FilePropertyAssignmentQuery) WithSpace(opts ...func(*SpaceQuery)) *FilePropertyAssignmentQuery {
-	query := (&SpaceClient{config: fpaq.config}).Query()
+func (_q *FilePropertyAssignmentQuery) WithSpace(opts ...func(*SpaceQuery)) *FilePropertyAssignmentQuery {
+	query := (&SpaceClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	fpaq.withSpace = query
-	return fpaq
+	_q.withSpace = query
+	return _q
 }
 
 // WithFile tells the query-builder to eager-load the nodes that are connected to
 // the "file" edge. The optional arguments are used to configure the query builder of the edge.
-func (fpaq *FilePropertyAssignmentQuery) WithFile(opts ...func(*FileQuery)) *FilePropertyAssignmentQuery {
-	query := (&FileClient{config: fpaq.config}).Query()
+func (_q *FilePropertyAssignmentQuery) WithFile(opts ...func(*FileQuery)) *FilePropertyAssignmentQuery {
+	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	fpaq.withFile = query
-	return fpaq
+	_q.withFile = query
+	return _q
 }
 
 // WithProperty tells the query-builder to eager-load the nodes that are connected to
 // the "property" edge. The optional arguments are used to configure the query builder of the edge.
-func (fpaq *FilePropertyAssignmentQuery) WithProperty(opts ...func(*PropertyQuery)) *FilePropertyAssignmentQuery {
-	query := (&PropertyClient{config: fpaq.config}).Query()
+func (_q *FilePropertyAssignmentQuery) WithProperty(opts ...func(*PropertyQuery)) *FilePropertyAssignmentQuery {
+	query := (&PropertyClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	fpaq.withProperty = query
-	return fpaq
+	_q.withProperty = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -381,10 +381,10 @@ func (fpaq *FilePropertyAssignmentQuery) WithProperty(opts ...func(*PropertyQuer
 //		GroupBy(filepropertyassignment.FieldSpaceID).
 //		Aggregate(enttenant.Count()).
 //		Scan(ctx, &v)
-func (fpaq *FilePropertyAssignmentQuery) GroupBy(field string, fields ...string) *FilePropertyAssignmentGroupBy {
-	fpaq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &FilePropertyAssignmentGroupBy{build: fpaq}
-	grbuild.flds = &fpaq.ctx.Fields
+func (_q *FilePropertyAssignmentQuery) GroupBy(field string, fields ...string) *FilePropertyAssignmentGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &FilePropertyAssignmentGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = filepropertyassignment.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -402,96 +402,96 @@ func (fpaq *FilePropertyAssignmentQuery) GroupBy(field string, fields ...string)
 //	client.FilePropertyAssignment.Query().
 //		Select(filepropertyassignment.FieldSpaceID).
 //		Scan(ctx, &v)
-func (fpaq *FilePropertyAssignmentQuery) Select(fields ...string) *FilePropertyAssignmentSelect {
-	fpaq.ctx.Fields = append(fpaq.ctx.Fields, fields...)
-	sbuild := &FilePropertyAssignmentSelect{FilePropertyAssignmentQuery: fpaq}
+func (_q *FilePropertyAssignmentQuery) Select(fields ...string) *FilePropertyAssignmentSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &FilePropertyAssignmentSelect{FilePropertyAssignmentQuery: _q}
 	sbuild.label = filepropertyassignment.Label
-	sbuild.flds, sbuild.scan = &fpaq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a FilePropertyAssignmentSelect configured with the given aggregations.
-func (fpaq *FilePropertyAssignmentQuery) Aggregate(fns ...AggregateFunc) *FilePropertyAssignmentSelect {
-	return fpaq.Select().Aggregate(fns...)
+func (_q *FilePropertyAssignmentQuery) Aggregate(fns ...AggregateFunc) *FilePropertyAssignmentSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (fpaq *FilePropertyAssignmentQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range fpaq.inters {
+func (_q *FilePropertyAssignmentQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("enttenant: uninitialized interceptor (forgotten import enttenant/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, fpaq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range fpaq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !filepropertyassignment.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("enttenant: invalid field %q for query", f)}
 		}
 	}
-	if fpaq.path != nil {
-		prev, err := fpaq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		fpaq.sql = prev
+		_q.sql = prev
 	}
 	if filepropertyassignment.Policy == nil {
 		return errors.New("enttenant: uninitialized filepropertyassignment.Policy (forgotten import enttenant/runtime?)")
 	}
-	if err := filepropertyassignment.Policy.EvalQuery(ctx, fpaq); err != nil {
+	if err := filepropertyassignment.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (fpaq *FilePropertyAssignmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FilePropertyAssignment, error) {
+func (_q *FilePropertyAssignmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FilePropertyAssignment, error) {
 	var (
 		nodes       = []*FilePropertyAssignment{}
-		_spec       = fpaq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			fpaq.withSpace != nil,
-			fpaq.withFile != nil,
-			fpaq.withProperty != nil,
+			_q.withSpace != nil,
+			_q.withFile != nil,
+			_q.withProperty != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*FilePropertyAssignment).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &FilePropertyAssignment{config: fpaq.config}
+		node := &FilePropertyAssignment{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(fpaq.modifiers) > 0 {
-		_spec.Modifiers = fpaq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, fpaq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := fpaq.withSpace; query != nil {
-		if err := fpaq.loadSpace(ctx, query, nodes, nil,
+	if query := _q.withSpace; query != nil {
+		if err := _q.loadSpace(ctx, query, nodes, nil,
 			func(n *FilePropertyAssignment, e *Space) { n.Edges.Space = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := fpaq.withFile; query != nil {
-		if err := fpaq.loadFile(ctx, query, nodes, nil,
+	if query := _q.withFile; query != nil {
+		if err := _q.loadFile(ctx, query, nodes, nil,
 			func(n *FilePropertyAssignment, e *File) { n.Edges.File = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := fpaq.withProperty; query != nil {
-		if err := fpaq.loadProperty(ctx, query, nodes, nil,
+	if query := _q.withProperty; query != nil {
+		if err := _q.loadProperty(ctx, query, nodes, nil,
 			func(n *FilePropertyAssignment, e *Property) { n.Edges.Property = e }); err != nil {
 			return nil, err
 		}
@@ -499,7 +499,7 @@ func (fpaq *FilePropertyAssignmentQuery) sqlAll(ctx context.Context, hooks ...qu
 	return nodes, nil
 }
 
-func (fpaq *FilePropertyAssignmentQuery) loadSpace(ctx context.Context, query *SpaceQuery, nodes []*FilePropertyAssignment, init func(*FilePropertyAssignment), assign func(*FilePropertyAssignment, *Space)) error {
+func (_q *FilePropertyAssignmentQuery) loadSpace(ctx context.Context, query *SpaceQuery, nodes []*FilePropertyAssignment, init func(*FilePropertyAssignment), assign func(*FilePropertyAssignment, *Space)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*FilePropertyAssignment)
 	for i := range nodes {
@@ -528,7 +528,7 @@ func (fpaq *FilePropertyAssignmentQuery) loadSpace(ctx context.Context, query *S
 	}
 	return nil
 }
-func (fpaq *FilePropertyAssignmentQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*FilePropertyAssignment, init func(*FilePropertyAssignment), assign func(*FilePropertyAssignment, *File)) error {
+func (_q *FilePropertyAssignmentQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*FilePropertyAssignment, init func(*FilePropertyAssignment), assign func(*FilePropertyAssignment, *File)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*FilePropertyAssignment)
 	for i := range nodes {
@@ -557,7 +557,7 @@ func (fpaq *FilePropertyAssignmentQuery) loadFile(ctx context.Context, query *Fi
 	}
 	return nil
 }
-func (fpaq *FilePropertyAssignmentQuery) loadProperty(ctx context.Context, query *PropertyQuery, nodes []*FilePropertyAssignment, init func(*FilePropertyAssignment), assign func(*FilePropertyAssignment, *Property)) error {
+func (_q *FilePropertyAssignmentQuery) loadProperty(ctx context.Context, query *PropertyQuery, nodes []*FilePropertyAssignment, init func(*FilePropertyAssignment), assign func(*FilePropertyAssignment, *Property)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*FilePropertyAssignment)
 	for i := range nodes {
@@ -587,27 +587,27 @@ func (fpaq *FilePropertyAssignmentQuery) loadProperty(ctx context.Context, query
 	return nil
 }
 
-func (fpaq *FilePropertyAssignmentQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := fpaq.querySpec()
-	if len(fpaq.modifiers) > 0 {
-		_spec.Modifiers = fpaq.modifiers
+func (_q *FilePropertyAssignmentQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = fpaq.ctx.Fields
-	if len(fpaq.ctx.Fields) > 0 {
-		_spec.Unique = fpaq.ctx.Unique != nil && *fpaq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, fpaq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (fpaq *FilePropertyAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *FilePropertyAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(filepropertyassignment.Table, filepropertyassignment.Columns, sqlgraph.NewFieldSpec(filepropertyassignment.FieldID, field.TypeInt64))
-	_spec.From = fpaq.sql
-	if unique := fpaq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if fpaq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := fpaq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, filepropertyassignment.FieldID)
 		for i := range fields {
@@ -615,30 +615,30 @@ func (fpaq *FilePropertyAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if fpaq.withSpace != nil {
+		if _q.withSpace != nil {
 			_spec.Node.AddColumnOnce(filepropertyassignment.FieldSpaceID)
 		}
-		if fpaq.withFile != nil {
+		if _q.withFile != nil {
 			_spec.Node.AddColumnOnce(filepropertyassignment.FieldFileID)
 		}
-		if fpaq.withProperty != nil {
+		if _q.withProperty != nil {
 			_spec.Node.AddColumnOnce(filepropertyassignment.FieldPropertyID)
 		}
 	}
-	if ps := fpaq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := fpaq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := fpaq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := fpaq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -648,45 +648,45 @@ func (fpaq *FilePropertyAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (fpaq *FilePropertyAssignmentQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(fpaq.driver.Dialect())
+func (_q *FilePropertyAssignmentQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(filepropertyassignment.Table)
-	columns := fpaq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = filepropertyassignment.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if fpaq.sql != nil {
-		selector = fpaq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if fpaq.ctx.Unique != nil && *fpaq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range fpaq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range fpaq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range fpaq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := fpaq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := fpaq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (fpaq *FilePropertyAssignmentQuery) Modify(modifiers ...func(s *sql.Selector)) *FilePropertyAssignmentSelect {
-	fpaq.modifiers = append(fpaq.modifiers, modifiers...)
-	return fpaq.Select()
+func (_q *FilePropertyAssignmentQuery) Modify(modifiers ...func(s *sql.Selector)) *FilePropertyAssignmentSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // FilePropertyAssignmentGroupBy is the group-by builder for FilePropertyAssignment entities.
@@ -696,41 +696,41 @@ type FilePropertyAssignmentGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (fpagb *FilePropertyAssignmentGroupBy) Aggregate(fns ...AggregateFunc) *FilePropertyAssignmentGroupBy {
-	fpagb.fns = append(fpagb.fns, fns...)
-	return fpagb
+func (_g *FilePropertyAssignmentGroupBy) Aggregate(fns ...AggregateFunc) *FilePropertyAssignmentGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (fpagb *FilePropertyAssignmentGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fpagb.build.ctx, ent.OpQueryGroupBy)
-	if err := fpagb.build.prepareQuery(ctx); err != nil {
+func (_g *FilePropertyAssignmentGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*FilePropertyAssignmentQuery, *FilePropertyAssignmentGroupBy](ctx, fpagb.build, fpagb, fpagb.build.inters, v)
+	return scanWithInterceptors[*FilePropertyAssignmentQuery, *FilePropertyAssignmentGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (fpagb *FilePropertyAssignmentGroupBy) sqlScan(ctx context.Context, root *FilePropertyAssignmentQuery, v any) error {
+func (_g *FilePropertyAssignmentGroupBy) sqlScan(ctx context.Context, root *FilePropertyAssignmentQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(fpagb.fns))
-	for _, fn := range fpagb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*fpagb.flds)+len(fpagb.fns))
-		for _, f := range *fpagb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*fpagb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := fpagb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -744,27 +744,27 @@ type FilePropertyAssignmentSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (fpas *FilePropertyAssignmentSelect) Aggregate(fns ...AggregateFunc) *FilePropertyAssignmentSelect {
-	fpas.fns = append(fpas.fns, fns...)
-	return fpas
+func (_s *FilePropertyAssignmentSelect) Aggregate(fns ...AggregateFunc) *FilePropertyAssignmentSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (fpas *FilePropertyAssignmentSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fpas.ctx, ent.OpQuerySelect)
-	if err := fpas.prepareQuery(ctx); err != nil {
+func (_s *FilePropertyAssignmentSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*FilePropertyAssignmentQuery, *FilePropertyAssignmentSelect](ctx, fpas.FilePropertyAssignmentQuery, fpas, fpas.inters, v)
+	return scanWithInterceptors[*FilePropertyAssignmentQuery, *FilePropertyAssignmentSelect](ctx, _s.FilePropertyAssignmentQuery, _s, _s.inters, v)
 }
 
-func (fpas *FilePropertyAssignmentSelect) sqlScan(ctx context.Context, root *FilePropertyAssignmentQuery, v any) error {
+func (_s *FilePropertyAssignmentSelect) sqlScan(ctx context.Context, root *FilePropertyAssignmentQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(fpas.fns))
-	for _, fn := range fpas.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*fpas.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -772,7 +772,7 @@ func (fpas *FilePropertyAssignmentSelect) sqlScan(ctx context.Context, root *Fil
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := fpas.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -780,7 +780,7 @@ func (fpas *FilePropertyAssignmentSelect) sqlScan(ctx context.Context, root *Fil
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (fpas *FilePropertyAssignmentSelect) Modify(modifiers ...func(s *sql.Selector)) *FilePropertyAssignmentSelect {
-	fpas.modifiers = append(fpas.modifiers, modifiers...)
-	return fpas
+func (_s *FilePropertyAssignmentSelect) Modify(modifiers ...func(s *sql.Selector)) *FilePropertyAssignmentSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

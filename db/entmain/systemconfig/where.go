@@ -161,6 +161,11 @@ func MailerInsecureSkipVerify(v bool) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldEQ(FieldMailerInsecureSkipVerify, v))
 }
 
+// MailerUseImplicitSslTLS applies equality check predicate on the "mailer_use_implicit_ssl_tls" field. It's identical to MailerUseImplicitSslTLSEQ.
+func MailerUseImplicitSslTLS(v bool) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldMailerUseImplicitSslTLS, v))
+}
+
 // OcrTikaURL applies equality check predicate on the "ocr_tika_url" field. It's identical to OcrTikaURLEQ.
 func OcrTikaURL(v string) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldEQ(FieldOcrTikaURL, v))
@@ -1104,6 +1109,16 @@ func MailerInsecureSkipVerifyEQ(v bool) predicate.SystemConfig {
 // MailerInsecureSkipVerifyNEQ applies the NEQ predicate on the "mailer_insecure_skip_verify" field.
 func MailerInsecureSkipVerifyNEQ(v bool) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldNEQ(FieldMailerInsecureSkipVerify, v))
+}
+
+// MailerUseImplicitSslTLSEQ applies the EQ predicate on the "mailer_use_implicit_ssl_tls" field.
+func MailerUseImplicitSslTLSEQ(v bool) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldMailerUseImplicitSslTLS, v))
+}
+
+// MailerUseImplicitSslTLSNEQ applies the NEQ predicate on the "mailer_use_implicit_ssl_tls" field.
+func MailerUseImplicitSslTLSNEQ(v bool) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNEQ(FieldMailerUseImplicitSslTLS, v))
 }
 
 // OcrTikaURLEQ applies the EQ predicate on the "ocr_tika_url" field.

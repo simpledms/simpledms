@@ -20,56 +20,56 @@ type AttributeDelete struct {
 }
 
 // Where appends a list predicates to the AttributeDelete builder.
-func (ad *AttributeDelete) Where(ps ...predicate.Attribute) *AttributeDelete {
-	ad.mutation.Where(ps...)
-	return ad
+func (_d *AttributeDelete) Where(ps ...predicate.Attribute) *AttributeDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (ad *AttributeDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, ad.sqlExec, ad.mutation, ad.hooks)
+func (_d *AttributeDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ad *AttributeDelete) ExecX(ctx context.Context) int {
-	n, err := ad.Exec(ctx)
+func (_d *AttributeDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (ad *AttributeDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *AttributeDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(attribute.Table, sqlgraph.NewFieldSpec(attribute.FieldID, field.TypeInt64))
-	if ps := ad.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, ad.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	ad.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // AttributeDeleteOne is the builder for deleting a single Attribute entity.
 type AttributeDeleteOne struct {
-	ad *AttributeDelete
+	_d *AttributeDelete
 }
 
 // Where appends a list predicates to the AttributeDelete builder.
-func (ado *AttributeDeleteOne) Where(ps ...predicate.Attribute) *AttributeDeleteOne {
-	ado.ad.mutation.Where(ps...)
-	return ado
+func (_d *AttributeDeleteOne) Where(ps ...predicate.Attribute) *AttributeDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (ado *AttributeDeleteOne) Exec(ctx context.Context) error {
-	n, err := ado.ad.Exec(ctx)
+func (_d *AttributeDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (ado *AttributeDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ado *AttributeDeleteOne) ExecX(ctx context.Context) {
-	if err := ado.Exec(ctx); err != nil {
+func (_d *AttributeDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

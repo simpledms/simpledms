@@ -149,7 +149,7 @@ func (*TemporaryFile) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TemporaryFile fields.
-func (tf *TemporaryFile) assignValues(columns []string, values []any) error {
+func (_m *TemporaryFile) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -160,131 +160,131 @@ func (tf *TemporaryFile) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			tf.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case temporaryfile.FieldPublicID:
 			if value, ok := values[i].(*entx.CIText); !ok {
 				return fmt.Errorf("unexpected type %T for field public_id", values[i])
 			} else if value != nil {
-				tf.PublicID = *value
+				_m.PublicID = *value
 			}
 		case temporaryfile.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				tf.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case temporaryfile.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				tf.CreatedBy = value.Int64
+				_m.CreatedBy = value.Int64
 			}
 		case temporaryfile.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				tf.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case temporaryfile.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				tf.UpdatedBy = value.Int64
+				_m.UpdatedBy = value.Int64
 			}
 		case temporaryfile.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				tf.DeletedBy = value.Int64
+				_m.DeletedBy = value.Int64
 			}
 		case temporaryfile.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				tf.DeletedAt = value.Time
+				_m.DeletedAt = value.Time
 			}
 		case temporaryfile.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				tf.OwnerID = value.Int64
+				_m.OwnerID = value.Int64
 			}
 		case temporaryfile.FieldFilename:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field filename", values[i])
 			} else if value.Valid {
-				tf.Filename = value.String
+				_m.Filename = value.String
 			}
 		case temporaryfile.FieldSize:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field size", values[i])
 			} else if value.Valid {
-				tf.Size = value.Int64
+				_m.Size = value.Int64
 			}
 		case temporaryfile.FieldSizeInStorage:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field size_in_storage", values[i])
 			} else if value.Valid {
-				tf.SizeInStorage = value.Int64
+				_m.SizeInStorage = value.Int64
 			}
 		case temporaryfile.FieldSha256:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field sha256", values[i])
 			} else if value.Valid {
-				tf.Sha256 = value.String
+				_m.Sha256 = value.String
 			}
 		case temporaryfile.FieldMimeType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mime_type", values[i])
 			} else if value.Valid {
-				tf.MimeType = value.String
+				_m.MimeType = value.String
 			}
 		case temporaryfile.FieldStorageType:
 			if value, ok := values[i].(*storagetype.StorageType); !ok {
 				return fmt.Errorf("unexpected type %T for field storage_type", values[i])
 			} else if value != nil {
-				tf.StorageType = *value
+				_m.StorageType = *value
 			}
 		case temporaryfile.FieldBucketName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field bucket_name", values[i])
 			} else if value.Valid {
-				tf.BucketName = value.String
+				_m.BucketName = value.String
 			}
 		case temporaryfile.FieldStoragePath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field storage_path", values[i])
 			} else if value.Valid {
-				tf.StoragePath = value.String
+				_m.StoragePath = value.String
 			}
 		case temporaryfile.FieldStorageFilename:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field storage_filename", values[i])
 			} else if value.Valid {
-				tf.StorageFilename = value.String
+				_m.StorageFilename = value.String
 			}
 		case temporaryfile.FieldUploadToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field upload_token", values[i])
 			} else if value.Valid {
-				tf.UploadToken = value.String
+				_m.UploadToken = value.String
 			}
 		case temporaryfile.FieldConvertedToStoredFileAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field converted_to_stored_file_at", values[i])
 			} else if value.Valid {
-				tf.ConvertedToStoredFileAt = new(time.Time)
-				*tf.ConvertedToStoredFileAt = value.Time
+				_m.ConvertedToStoredFileAt = new(time.Time)
+				*_m.ConvertedToStoredFileAt = value.Time
 			}
 		case temporaryfile.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
 			} else if value.Valid {
-				tf.ExpiresAt = new(time.Time)
-				*tf.ExpiresAt = value.Time
+				_m.ExpiresAt = new(time.Time)
+				*_m.ExpiresAt = value.Time
 			}
 		default:
-			tf.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -292,113 +292,113 @@ func (tf *TemporaryFile) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TemporaryFile.
 // This includes values selected through modifiers, order, etc.
-func (tf *TemporaryFile) Value(name string) (ent.Value, error) {
-	return tf.selectValues.Get(name)
+func (_m *TemporaryFile) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryCreator queries the "creator" edge of the TemporaryFile entity.
-func (tf *TemporaryFile) QueryCreator() *AccountQuery {
-	return NewTemporaryFileClient(tf.config).QueryCreator(tf)
+func (_m *TemporaryFile) QueryCreator() *AccountQuery {
+	return NewTemporaryFileClient(_m.config).QueryCreator(_m)
 }
 
 // QueryUpdater queries the "updater" edge of the TemporaryFile entity.
-func (tf *TemporaryFile) QueryUpdater() *AccountQuery {
-	return NewTemporaryFileClient(tf.config).QueryUpdater(tf)
+func (_m *TemporaryFile) QueryUpdater() *AccountQuery {
+	return NewTemporaryFileClient(_m.config).QueryUpdater(_m)
 }
 
 // QueryDeleter queries the "deleter" edge of the TemporaryFile entity.
-func (tf *TemporaryFile) QueryDeleter() *AccountQuery {
-	return NewTemporaryFileClient(tf.config).QueryDeleter(tf)
+func (_m *TemporaryFile) QueryDeleter() *AccountQuery {
+	return NewTemporaryFileClient(_m.config).QueryDeleter(_m)
 }
 
 // QueryOwner queries the "owner" edge of the TemporaryFile entity.
-func (tf *TemporaryFile) QueryOwner() *AccountQuery {
-	return NewTemporaryFileClient(tf.config).QueryOwner(tf)
+func (_m *TemporaryFile) QueryOwner() *AccountQuery {
+	return NewTemporaryFileClient(_m.config).QueryOwner(_m)
 }
 
 // Update returns a builder for updating this TemporaryFile.
 // Note that you need to call TemporaryFile.Unwrap() before calling this method if this TemporaryFile
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tf *TemporaryFile) Update() *TemporaryFileUpdateOne {
-	return NewTemporaryFileClient(tf.config).UpdateOne(tf)
+func (_m *TemporaryFile) Update() *TemporaryFileUpdateOne {
+	return NewTemporaryFileClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TemporaryFile entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tf *TemporaryFile) Unwrap() *TemporaryFile {
-	_tx, ok := tf.config.driver.(*txDriver)
+func (_m *TemporaryFile) Unwrap() *TemporaryFile {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("entmain: TemporaryFile is not a transactional entity")
 	}
-	tf.config.driver = _tx.drv
-	return tf
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tf *TemporaryFile) String() string {
+func (_m *TemporaryFile) String() string {
 	var builder strings.Builder
 	builder.WriteString("TemporaryFile(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tf.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("public_id=")
-	builder.WriteString(fmt.Sprintf("%v", tf.PublicID))
+	builder.WriteString(fmt.Sprintf("%v", _m.PublicID))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(tf.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", tf.CreatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(tf.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", tf.UpdatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(fmt.Sprintf("%v", tf.DeletedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.DeletedBy))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(tf.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(fmt.Sprintf("%v", tf.OwnerID))
+	builder.WriteString(fmt.Sprintf("%v", _m.OwnerID))
 	builder.WriteString(", ")
 	builder.WriteString("filename=")
-	builder.WriteString(tf.Filename)
+	builder.WriteString(_m.Filename)
 	builder.WriteString(", ")
 	builder.WriteString("size=")
-	builder.WriteString(fmt.Sprintf("%v", tf.Size))
+	builder.WriteString(fmt.Sprintf("%v", _m.Size))
 	builder.WriteString(", ")
 	builder.WriteString("size_in_storage=")
-	builder.WriteString(fmt.Sprintf("%v", tf.SizeInStorage))
+	builder.WriteString(fmt.Sprintf("%v", _m.SizeInStorage))
 	builder.WriteString(", ")
 	builder.WriteString("sha256=")
-	builder.WriteString(tf.Sha256)
+	builder.WriteString(_m.Sha256)
 	builder.WriteString(", ")
 	builder.WriteString("mime_type=")
-	builder.WriteString(tf.MimeType)
+	builder.WriteString(_m.MimeType)
 	builder.WriteString(", ")
 	builder.WriteString("storage_type=")
-	builder.WriteString(fmt.Sprintf("%v", tf.StorageType))
+	builder.WriteString(fmt.Sprintf("%v", _m.StorageType))
 	builder.WriteString(", ")
 	builder.WriteString("bucket_name=")
-	builder.WriteString(tf.BucketName)
+	builder.WriteString(_m.BucketName)
 	builder.WriteString(", ")
 	builder.WriteString("storage_path=")
-	builder.WriteString(tf.StoragePath)
+	builder.WriteString(_m.StoragePath)
 	builder.WriteString(", ")
 	builder.WriteString("storage_filename=")
-	builder.WriteString(tf.StorageFilename)
+	builder.WriteString(_m.StorageFilename)
 	builder.WriteString(", ")
 	builder.WriteString("upload_token=")
-	builder.WriteString(tf.UploadToken)
+	builder.WriteString(_m.UploadToken)
 	builder.WriteString(", ")
-	if v := tf.ConvertedToStoredFileAt; v != nil {
+	if v := _m.ConvertedToStoredFileAt; v != nil {
 		builder.WriteString("converted_to_stored_file_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := tf.ExpiresAt; v != nil {
+	if v := _m.ExpiresAt; v != nil {
 		builder.WriteString("expires_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}

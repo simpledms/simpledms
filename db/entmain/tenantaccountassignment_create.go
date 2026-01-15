@@ -24,189 +24,189 @@ type TenantAccountAssignmentCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (taac *TenantAccountAssignmentCreate) SetCreatedAt(t time.Time) *TenantAccountAssignmentCreate {
-	taac.mutation.SetCreatedAt(t)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetCreatedAt(v time.Time) *TenantAccountAssignmentCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (taac *TenantAccountAssignmentCreate) SetNillableCreatedAt(t *time.Time) *TenantAccountAssignmentCreate {
-	if t != nil {
-		taac.SetCreatedAt(*t)
+func (_c *TenantAccountAssignmentCreate) SetNillableCreatedAt(v *time.Time) *TenantAccountAssignmentCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return taac
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (taac *TenantAccountAssignmentCreate) SetCreatedBy(i int64) *TenantAccountAssignmentCreate {
-	taac.mutation.SetCreatedBy(i)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetCreatedBy(v int64) *TenantAccountAssignmentCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (taac *TenantAccountAssignmentCreate) SetNillableCreatedBy(i *int64) *TenantAccountAssignmentCreate {
-	if i != nil {
-		taac.SetCreatedBy(*i)
+func (_c *TenantAccountAssignmentCreate) SetNillableCreatedBy(v *int64) *TenantAccountAssignmentCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return taac
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (taac *TenantAccountAssignmentCreate) SetUpdatedAt(t time.Time) *TenantAccountAssignmentCreate {
-	taac.mutation.SetUpdatedAt(t)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetUpdatedAt(v time.Time) *TenantAccountAssignmentCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (taac *TenantAccountAssignmentCreate) SetNillableUpdatedAt(t *time.Time) *TenantAccountAssignmentCreate {
-	if t != nil {
-		taac.SetUpdatedAt(*t)
+func (_c *TenantAccountAssignmentCreate) SetNillableUpdatedAt(v *time.Time) *TenantAccountAssignmentCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return taac
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (taac *TenantAccountAssignmentCreate) SetUpdatedBy(i int64) *TenantAccountAssignmentCreate {
-	taac.mutation.SetUpdatedBy(i)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetUpdatedBy(v int64) *TenantAccountAssignmentCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (taac *TenantAccountAssignmentCreate) SetNillableUpdatedBy(i *int64) *TenantAccountAssignmentCreate {
-	if i != nil {
-		taac.SetUpdatedBy(*i)
+func (_c *TenantAccountAssignmentCreate) SetNillableUpdatedBy(v *int64) *TenantAccountAssignmentCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return taac
+	return _c
 }
 
 // SetTenantID sets the "tenant_id" field.
-func (taac *TenantAccountAssignmentCreate) SetTenantID(i int64) *TenantAccountAssignmentCreate {
-	taac.mutation.SetTenantID(i)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetTenantID(v int64) *TenantAccountAssignmentCreate {
+	_c.mutation.SetTenantID(v)
+	return _c
 }
 
 // SetAccountID sets the "account_id" field.
-func (taac *TenantAccountAssignmentCreate) SetAccountID(i int64) *TenantAccountAssignmentCreate {
-	taac.mutation.SetAccountID(i)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetAccountID(v int64) *TenantAccountAssignmentCreate {
+	_c.mutation.SetAccountID(v)
+	return _c
 }
 
 // SetIsContactPerson sets the "is_contact_person" field.
-func (taac *TenantAccountAssignmentCreate) SetIsContactPerson(b bool) *TenantAccountAssignmentCreate {
-	taac.mutation.SetIsContactPerson(b)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetIsContactPerson(v bool) *TenantAccountAssignmentCreate {
+	_c.mutation.SetIsContactPerson(v)
+	return _c
 }
 
 // SetNillableIsContactPerson sets the "is_contact_person" field if the given value is not nil.
-func (taac *TenantAccountAssignmentCreate) SetNillableIsContactPerson(b *bool) *TenantAccountAssignmentCreate {
-	if b != nil {
-		taac.SetIsContactPerson(*b)
+func (_c *TenantAccountAssignmentCreate) SetNillableIsContactPerson(v *bool) *TenantAccountAssignmentCreate {
+	if v != nil {
+		_c.SetIsContactPerson(*v)
 	}
-	return taac
+	return _c
 }
 
 // SetIsDefault sets the "is_default" field.
-func (taac *TenantAccountAssignmentCreate) SetIsDefault(b bool) *TenantAccountAssignmentCreate {
-	taac.mutation.SetIsDefault(b)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetIsDefault(v bool) *TenantAccountAssignmentCreate {
+	_c.mutation.SetIsDefault(v)
+	return _c
 }
 
 // SetNillableIsDefault sets the "is_default" field if the given value is not nil.
-func (taac *TenantAccountAssignmentCreate) SetNillableIsDefault(b *bool) *TenantAccountAssignmentCreate {
-	if b != nil {
-		taac.SetIsDefault(*b)
+func (_c *TenantAccountAssignmentCreate) SetNillableIsDefault(v *bool) *TenantAccountAssignmentCreate {
+	if v != nil {
+		_c.SetIsDefault(*v)
 	}
-	return taac
+	return _c
 }
 
 // SetRole sets the "role" field.
-func (taac *TenantAccountAssignmentCreate) SetRole(tr tenantrole.TenantRole) *TenantAccountAssignmentCreate {
-	taac.mutation.SetRole(tr)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetRole(v tenantrole.TenantRole) *TenantAccountAssignmentCreate {
+	_c.mutation.SetRole(v)
+	return _c
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (taac *TenantAccountAssignmentCreate) SetExpiresAt(t time.Time) *TenantAccountAssignmentCreate {
-	taac.mutation.SetExpiresAt(t)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetExpiresAt(v time.Time) *TenantAccountAssignmentCreate {
+	_c.mutation.SetExpiresAt(v)
+	return _c
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (taac *TenantAccountAssignmentCreate) SetNillableExpiresAt(t *time.Time) *TenantAccountAssignmentCreate {
-	if t != nil {
-		taac.SetExpiresAt(*t)
+func (_c *TenantAccountAssignmentCreate) SetNillableExpiresAt(v *time.Time) *TenantAccountAssignmentCreate {
+	if v != nil {
+		_c.SetExpiresAt(*v)
 	}
-	return taac
+	return _c
 }
 
 // SetID sets the "id" field.
-func (taac *TenantAccountAssignmentCreate) SetID(i int64) *TenantAccountAssignmentCreate {
-	taac.mutation.SetID(i)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetID(v int64) *TenantAccountAssignmentCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetCreatorID sets the "creator" edge to the Account entity by ID.
-func (taac *TenantAccountAssignmentCreate) SetCreatorID(id int64) *TenantAccountAssignmentCreate {
-	taac.mutation.SetCreatorID(id)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetCreatorID(id int64) *TenantAccountAssignmentCreate {
+	_c.mutation.SetCreatorID(id)
+	return _c
 }
 
 // SetNillableCreatorID sets the "creator" edge to the Account entity by ID if the given value is not nil.
-func (taac *TenantAccountAssignmentCreate) SetNillableCreatorID(id *int64) *TenantAccountAssignmentCreate {
+func (_c *TenantAccountAssignmentCreate) SetNillableCreatorID(id *int64) *TenantAccountAssignmentCreate {
 	if id != nil {
-		taac = taac.SetCreatorID(*id)
+		_c = _c.SetCreatorID(*id)
 	}
-	return taac
+	return _c
 }
 
 // SetCreator sets the "creator" edge to the Account entity.
-func (taac *TenantAccountAssignmentCreate) SetCreator(a *Account) *TenantAccountAssignmentCreate {
-	return taac.SetCreatorID(a.ID)
+func (_c *TenantAccountAssignmentCreate) SetCreator(v *Account) *TenantAccountAssignmentCreate {
+	return _c.SetCreatorID(v.ID)
 }
 
 // SetUpdaterID sets the "updater" edge to the Account entity by ID.
-func (taac *TenantAccountAssignmentCreate) SetUpdaterID(id int64) *TenantAccountAssignmentCreate {
-	taac.mutation.SetUpdaterID(id)
-	return taac
+func (_c *TenantAccountAssignmentCreate) SetUpdaterID(id int64) *TenantAccountAssignmentCreate {
+	_c.mutation.SetUpdaterID(id)
+	return _c
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the Account entity by ID if the given value is not nil.
-func (taac *TenantAccountAssignmentCreate) SetNillableUpdaterID(id *int64) *TenantAccountAssignmentCreate {
+func (_c *TenantAccountAssignmentCreate) SetNillableUpdaterID(id *int64) *TenantAccountAssignmentCreate {
 	if id != nil {
-		taac = taac.SetUpdaterID(*id)
+		_c = _c.SetUpdaterID(*id)
 	}
-	return taac
+	return _c
 }
 
 // SetUpdater sets the "updater" edge to the Account entity.
-func (taac *TenantAccountAssignmentCreate) SetUpdater(a *Account) *TenantAccountAssignmentCreate {
-	return taac.SetUpdaterID(a.ID)
+func (_c *TenantAccountAssignmentCreate) SetUpdater(v *Account) *TenantAccountAssignmentCreate {
+	return _c.SetUpdaterID(v.ID)
 }
 
 // SetTenant sets the "tenant" edge to the Tenant entity.
-func (taac *TenantAccountAssignmentCreate) SetTenant(t *Tenant) *TenantAccountAssignmentCreate {
-	return taac.SetTenantID(t.ID)
+func (_c *TenantAccountAssignmentCreate) SetTenant(v *Tenant) *TenantAccountAssignmentCreate {
+	return _c.SetTenantID(v.ID)
 }
 
 // SetAccount sets the "account" edge to the Account entity.
-func (taac *TenantAccountAssignmentCreate) SetAccount(a *Account) *TenantAccountAssignmentCreate {
-	return taac.SetAccountID(a.ID)
+func (_c *TenantAccountAssignmentCreate) SetAccount(v *Account) *TenantAccountAssignmentCreate {
+	return _c.SetAccountID(v.ID)
 }
 
 // Mutation returns the TenantAccountAssignmentMutation object of the builder.
-func (taac *TenantAccountAssignmentCreate) Mutation() *TenantAccountAssignmentMutation {
-	return taac.mutation
+func (_c *TenantAccountAssignmentCreate) Mutation() *TenantAccountAssignmentMutation {
+	return _c.mutation
 }
 
 // Save creates the TenantAccountAssignment in the database.
-func (taac *TenantAccountAssignmentCreate) Save(ctx context.Context) (*TenantAccountAssignment, error) {
-	taac.defaults()
-	return withHooks(ctx, taac.sqlSave, taac.mutation, taac.hooks)
+func (_c *TenantAccountAssignmentCreate) Save(ctx context.Context) (*TenantAccountAssignment, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (taac *TenantAccountAssignmentCreate) SaveX(ctx context.Context) *TenantAccountAssignment {
-	v, err := taac.Save(ctx)
+func (_c *TenantAccountAssignmentCreate) SaveX(ctx context.Context) *TenantAccountAssignment {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -214,81 +214,81 @@ func (taac *TenantAccountAssignmentCreate) SaveX(ctx context.Context) *TenantAcc
 }
 
 // Exec executes the query.
-func (taac *TenantAccountAssignmentCreate) Exec(ctx context.Context) error {
-	_, err := taac.Save(ctx)
+func (_c *TenantAccountAssignmentCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (taac *TenantAccountAssignmentCreate) ExecX(ctx context.Context) {
-	if err := taac.Exec(ctx); err != nil {
+func (_c *TenantAccountAssignmentCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (taac *TenantAccountAssignmentCreate) defaults() {
-	if _, ok := taac.mutation.CreatedAt(); !ok {
+func (_c *TenantAccountAssignmentCreate) defaults() {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := tenantaccountassignment.DefaultCreatedAt()
-		taac.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := taac.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := tenantaccountassignment.DefaultUpdatedAt()
-		taac.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := taac.mutation.IsContactPerson(); !ok {
+	if _, ok := _c.mutation.IsContactPerson(); !ok {
 		v := tenantaccountassignment.DefaultIsContactPerson
-		taac.mutation.SetIsContactPerson(v)
+		_c.mutation.SetIsContactPerson(v)
 	}
-	if _, ok := taac.mutation.IsDefault(); !ok {
+	if _, ok := _c.mutation.IsDefault(); !ok {
 		v := tenantaccountassignment.DefaultIsDefault
-		taac.mutation.SetIsDefault(v)
+		_c.mutation.SetIsDefault(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (taac *TenantAccountAssignmentCreate) check() error {
-	if _, ok := taac.mutation.CreatedAt(); !ok {
+func (_c *TenantAccountAssignmentCreate) check() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`entmain: missing required field "TenantAccountAssignment.created_at"`)}
 	}
-	if _, ok := taac.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`entmain: missing required field "TenantAccountAssignment.updated_at"`)}
 	}
-	if _, ok := taac.mutation.TenantID(); !ok {
+	if _, ok := _c.mutation.TenantID(); !ok {
 		return &ValidationError{Name: "tenant_id", err: errors.New(`entmain: missing required field "TenantAccountAssignment.tenant_id"`)}
 	}
-	if _, ok := taac.mutation.AccountID(); !ok {
+	if _, ok := _c.mutation.AccountID(); !ok {
 		return &ValidationError{Name: "account_id", err: errors.New(`entmain: missing required field "TenantAccountAssignment.account_id"`)}
 	}
-	if _, ok := taac.mutation.IsContactPerson(); !ok {
+	if _, ok := _c.mutation.IsContactPerson(); !ok {
 		return &ValidationError{Name: "is_contact_person", err: errors.New(`entmain: missing required field "TenantAccountAssignment.is_contact_person"`)}
 	}
-	if _, ok := taac.mutation.IsDefault(); !ok {
+	if _, ok := _c.mutation.IsDefault(); !ok {
 		return &ValidationError{Name: "is_default", err: errors.New(`entmain: missing required field "TenantAccountAssignment.is_default"`)}
 	}
-	if _, ok := taac.mutation.Role(); !ok {
+	if _, ok := _c.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`entmain: missing required field "TenantAccountAssignment.role"`)}
 	}
-	if v, ok := taac.mutation.Role(); ok {
+	if v, ok := _c.mutation.Role(); ok {
 		if err := tenantaccountassignment.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`entmain: validator failed for field "TenantAccountAssignment.role": %w`, err)}
 		}
 	}
-	if len(taac.mutation.TenantIDs()) == 0 {
+	if len(_c.mutation.TenantIDs()) == 0 {
 		return &ValidationError{Name: "tenant", err: errors.New(`entmain: missing required edge "TenantAccountAssignment.tenant"`)}
 	}
-	if len(taac.mutation.AccountIDs()) == 0 {
+	if len(_c.mutation.AccountIDs()) == 0 {
 		return &ValidationError{Name: "account", err: errors.New(`entmain: missing required edge "TenantAccountAssignment.account"`)}
 	}
 	return nil
 }
 
-func (taac *TenantAccountAssignmentCreate) sqlSave(ctx context.Context) (*TenantAccountAssignment, error) {
-	if err := taac.check(); err != nil {
+func (_c *TenantAccountAssignmentCreate) sqlSave(ctx context.Context) (*TenantAccountAssignment, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := taac.createSpec()
-	if err := sqlgraph.CreateNode(ctx, taac.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -298,45 +298,45 @@ func (taac *TenantAccountAssignmentCreate) sqlSave(ctx context.Context) (*Tenant
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	taac.mutation.id = &_node.ID
-	taac.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (taac *TenantAccountAssignmentCreate) createSpec() (*TenantAccountAssignment, *sqlgraph.CreateSpec) {
+func (_c *TenantAccountAssignmentCreate) createSpec() (*TenantAccountAssignment, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TenantAccountAssignment{config: taac.config}
+		_node = &TenantAccountAssignment{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(tenantaccountassignment.Table, sqlgraph.NewFieldSpec(tenantaccountassignment.FieldID, field.TypeInt64))
 	)
-	if id, ok := taac.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := taac.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(tenantaccountassignment.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := taac.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(tenantaccountassignment.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := taac.mutation.IsContactPerson(); ok {
+	if value, ok := _c.mutation.IsContactPerson(); ok {
 		_spec.SetField(tenantaccountassignment.FieldIsContactPerson, field.TypeBool, value)
 		_node.IsContactPerson = value
 	}
-	if value, ok := taac.mutation.IsDefault(); ok {
+	if value, ok := _c.mutation.IsDefault(); ok {
 		_spec.SetField(tenantaccountassignment.FieldIsDefault, field.TypeBool, value)
 		_node.IsDefault = value
 	}
-	if value, ok := taac.mutation.Role(); ok {
+	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(tenantaccountassignment.FieldRole, field.TypeEnum, value)
 		_node.Role = value
 	}
-	if value, ok := taac.mutation.ExpiresAt(); ok {
+	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(tenantaccountassignment.FieldExpiresAt, field.TypeTime, value)
 		_node.ExpiresAt = &value
 	}
-	if nodes := taac.mutation.CreatorIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CreatorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -353,7 +353,7 @@ func (taac *TenantAccountAssignmentCreate) createSpec() (*TenantAccountAssignmen
 		_node.CreatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := taac.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -370,7 +370,7 @@ func (taac *TenantAccountAssignmentCreate) createSpec() (*TenantAccountAssignmen
 		_node.UpdatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := taac.mutation.TenantIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TenantIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -387,7 +387,7 @@ func (taac *TenantAccountAssignmentCreate) createSpec() (*TenantAccountAssignmen
 		_node.TenantID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := taac.mutation.AccountIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.AccountIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -415,16 +415,16 @@ type TenantAccountAssignmentCreateBulk struct {
 }
 
 // Save creates the TenantAccountAssignment entities in the database.
-func (taacb *TenantAccountAssignmentCreateBulk) Save(ctx context.Context) ([]*TenantAccountAssignment, error) {
-	if taacb.err != nil {
-		return nil, taacb.err
+func (_c *TenantAccountAssignmentCreateBulk) Save(ctx context.Context) ([]*TenantAccountAssignment, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(taacb.builders))
-	nodes := make([]*TenantAccountAssignment, len(taacb.builders))
-	mutators := make([]Mutator, len(taacb.builders))
-	for i := range taacb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TenantAccountAssignment, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := taacb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TenantAccountAssignmentMutation)
@@ -438,11 +438,11 @@ func (taacb *TenantAccountAssignmentCreateBulk) Save(ctx context.Context) ([]*Te
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, taacb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, taacb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -466,7 +466,7 @@ func (taacb *TenantAccountAssignmentCreateBulk) Save(ctx context.Context) ([]*Te
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, taacb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -474,8 +474,8 @@ func (taacb *TenantAccountAssignmentCreateBulk) Save(ctx context.Context) ([]*Te
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (taacb *TenantAccountAssignmentCreateBulk) SaveX(ctx context.Context) []*TenantAccountAssignment {
-	v, err := taacb.Save(ctx)
+func (_c *TenantAccountAssignmentCreateBulk) SaveX(ctx context.Context) []*TenantAccountAssignment {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -483,14 +483,14 @@ func (taacb *TenantAccountAssignmentCreateBulk) SaveX(ctx context.Context) []*Te
 }
 
 // Exec executes the query.
-func (taacb *TenantAccountAssignmentCreateBulk) Exec(ctx context.Context) error {
-	_, err := taacb.Save(ctx)
+func (_c *TenantAccountAssignmentCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (taacb *TenantAccountAssignmentCreateBulk) ExecX(ctx context.Context) {
-	if err := taacb.Exec(ctx); err != nil {
+func (_c *TenantAccountAssignmentCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -27,349 +27,363 @@ type SystemConfigUpdate struct {
 }
 
 // Where appends a list predicates to the SystemConfigUpdate builder.
-func (scu *SystemConfigUpdate) Where(ps ...predicate.SystemConfig) *SystemConfigUpdate {
-	scu.mutation.Where(ps...)
-	return scu
+func (_u *SystemConfigUpdate) Where(ps ...predicate.SystemConfig) *SystemConfigUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (scu *SystemConfigUpdate) SetUpdatedAt(t time.Time) *SystemConfigUpdate {
-	scu.mutation.SetUpdatedAt(t)
-	return scu
+func (_u *SystemConfigUpdate) SetUpdatedAt(v time.Time) *SystemConfigUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (scu *SystemConfigUpdate) SetUpdatedBy(i int64) *SystemConfigUpdate {
-	scu.mutation.SetUpdatedBy(i)
-	return scu
+func (_u *SystemConfigUpdate) SetUpdatedBy(v int64) *SystemConfigUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableUpdatedBy(i *int64) *SystemConfigUpdate {
-	if i != nil {
-		scu.SetUpdatedBy(*i)
+func (_u *SystemConfigUpdate) SetNillableUpdatedBy(v *int64) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return scu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (scu *SystemConfigUpdate) ClearUpdatedBy() *SystemConfigUpdate {
-	scu.mutation.ClearUpdatedBy()
-	return scu
+func (_u *SystemConfigUpdate) ClearUpdatedBy() *SystemConfigUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetX25519Identity sets the "x25519_identity" field.
-func (scu *SystemConfigUpdate) SetX25519Identity(b []byte) *SystemConfigUpdate {
-	scu.mutation.SetX25519Identity(b)
-	return scu
+func (_u *SystemConfigUpdate) SetX25519Identity(v []byte) *SystemConfigUpdate {
+	_u.mutation.SetX25519Identity(v)
+	return _u
 }
 
 // SetIsIdentityEncryptedWithPassphrase sets the "is_identity_encrypted_with_passphrase" field.
-func (scu *SystemConfigUpdate) SetIsIdentityEncryptedWithPassphrase(b bool) *SystemConfigUpdate {
-	scu.mutation.SetIsIdentityEncryptedWithPassphrase(b)
-	return scu
+func (_u *SystemConfigUpdate) SetIsIdentityEncryptedWithPassphrase(v bool) *SystemConfigUpdate {
+	_u.mutation.SetIsIdentityEncryptedWithPassphrase(v)
+	return _u
 }
 
 // SetNillableIsIdentityEncryptedWithPassphrase sets the "is_identity_encrypted_with_passphrase" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableIsIdentityEncryptedWithPassphrase(b *bool) *SystemConfigUpdate {
-	if b != nil {
-		scu.SetIsIdentityEncryptedWithPassphrase(*b)
+func (_u *SystemConfigUpdate) SetNillableIsIdentityEncryptedWithPassphrase(v *bool) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetIsIdentityEncryptedWithPassphrase(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetS3Endpoint sets the "s3_endpoint" field.
-func (scu *SystemConfigUpdate) SetS3Endpoint(s string) *SystemConfigUpdate {
-	scu.mutation.SetS3Endpoint(s)
-	return scu
+func (_u *SystemConfigUpdate) SetS3Endpoint(v string) *SystemConfigUpdate {
+	_u.mutation.SetS3Endpoint(v)
+	return _u
 }
 
 // SetNillableS3Endpoint sets the "s3_endpoint" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableS3Endpoint(s *string) *SystemConfigUpdate {
-	if s != nil {
-		scu.SetS3Endpoint(*s)
+func (_u *SystemConfigUpdate) SetNillableS3Endpoint(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetS3Endpoint(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetS3AccessKeyID sets the "s3_access_key_id" field.
-func (scu *SystemConfigUpdate) SetS3AccessKeyID(s string) *SystemConfigUpdate {
-	scu.mutation.SetS3AccessKeyID(s)
-	return scu
+func (_u *SystemConfigUpdate) SetS3AccessKeyID(v string) *SystemConfigUpdate {
+	_u.mutation.SetS3AccessKeyID(v)
+	return _u
 }
 
 // SetNillableS3AccessKeyID sets the "s3_access_key_id" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableS3AccessKeyID(s *string) *SystemConfigUpdate {
-	if s != nil {
-		scu.SetS3AccessKeyID(*s)
+func (_u *SystemConfigUpdate) SetNillableS3AccessKeyID(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetS3AccessKeyID(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetS3SecretAccessKey sets the "s3_secret_access_key" field.
-func (scu *SystemConfigUpdate) SetS3SecretAccessKey(es entx.EncryptedString) *SystemConfigUpdate {
-	scu.mutation.SetS3SecretAccessKey(es)
-	return scu
+func (_u *SystemConfigUpdate) SetS3SecretAccessKey(v entx.EncryptedString) *SystemConfigUpdate {
+	_u.mutation.SetS3SecretAccessKey(v)
+	return _u
 }
 
 // SetS3BucketName sets the "s3_bucket_name" field.
-func (scu *SystemConfigUpdate) SetS3BucketName(s string) *SystemConfigUpdate {
-	scu.mutation.SetS3BucketName(s)
-	return scu
+func (_u *SystemConfigUpdate) SetS3BucketName(v string) *SystemConfigUpdate {
+	_u.mutation.SetS3BucketName(v)
+	return _u
 }
 
 // SetNillableS3BucketName sets the "s3_bucket_name" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableS3BucketName(s *string) *SystemConfigUpdate {
-	if s != nil {
-		scu.SetS3BucketName(*s)
+func (_u *SystemConfigUpdate) SetNillableS3BucketName(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetS3BucketName(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetS3UseSsl sets the "s3_use_ssl" field.
-func (scu *SystemConfigUpdate) SetS3UseSsl(b bool) *SystemConfigUpdate {
-	scu.mutation.SetS3UseSsl(b)
-	return scu
+func (_u *SystemConfigUpdate) SetS3UseSsl(v bool) *SystemConfigUpdate {
+	_u.mutation.SetS3UseSsl(v)
+	return _u
 }
 
 // SetNillableS3UseSsl sets the "s3_use_ssl" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableS3UseSsl(b *bool) *SystemConfigUpdate {
-	if b != nil {
-		scu.SetS3UseSsl(*b)
+func (_u *SystemConfigUpdate) SetNillableS3UseSsl(v *bool) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetS3UseSsl(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetTLSEnableAutocert sets the "tls_enable_autocert" field.
-func (scu *SystemConfigUpdate) SetTLSEnableAutocert(b bool) *SystemConfigUpdate {
-	scu.mutation.SetTLSEnableAutocert(b)
-	return scu
+func (_u *SystemConfigUpdate) SetTLSEnableAutocert(v bool) *SystemConfigUpdate {
+	_u.mutation.SetTLSEnableAutocert(v)
+	return _u
 }
 
 // SetNillableTLSEnableAutocert sets the "tls_enable_autocert" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableTLSEnableAutocert(b *bool) *SystemConfigUpdate {
-	if b != nil {
-		scu.SetTLSEnableAutocert(*b)
+func (_u *SystemConfigUpdate) SetNillableTLSEnableAutocert(v *bool) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetTLSEnableAutocert(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetTLSCertFilepath sets the "tls_cert_filepath" field.
-func (scu *SystemConfigUpdate) SetTLSCertFilepath(s string) *SystemConfigUpdate {
-	scu.mutation.SetTLSCertFilepath(s)
-	return scu
+func (_u *SystemConfigUpdate) SetTLSCertFilepath(v string) *SystemConfigUpdate {
+	_u.mutation.SetTLSCertFilepath(v)
+	return _u
 }
 
 // SetNillableTLSCertFilepath sets the "tls_cert_filepath" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableTLSCertFilepath(s *string) *SystemConfigUpdate {
-	if s != nil {
-		scu.SetTLSCertFilepath(*s)
+func (_u *SystemConfigUpdate) SetNillableTLSCertFilepath(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetTLSCertFilepath(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetTLSPrivateKeyFilepath sets the "tls_private_key_filepath" field.
-func (scu *SystemConfigUpdate) SetTLSPrivateKeyFilepath(s string) *SystemConfigUpdate {
-	scu.mutation.SetTLSPrivateKeyFilepath(s)
-	return scu
+func (_u *SystemConfigUpdate) SetTLSPrivateKeyFilepath(v string) *SystemConfigUpdate {
+	_u.mutation.SetTLSPrivateKeyFilepath(v)
+	return _u
 }
 
 // SetNillableTLSPrivateKeyFilepath sets the "tls_private_key_filepath" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableTLSPrivateKeyFilepath(s *string) *SystemConfigUpdate {
-	if s != nil {
-		scu.SetTLSPrivateKeyFilepath(*s)
+func (_u *SystemConfigUpdate) SetNillableTLSPrivateKeyFilepath(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetTLSPrivateKeyFilepath(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetTLSAutocertEmail sets the "tls_autocert_email" field.
-func (scu *SystemConfigUpdate) SetTLSAutocertEmail(s string) *SystemConfigUpdate {
-	scu.mutation.SetTLSAutocertEmail(s)
-	return scu
+func (_u *SystemConfigUpdate) SetTLSAutocertEmail(v string) *SystemConfigUpdate {
+	_u.mutation.SetTLSAutocertEmail(v)
+	return _u
 }
 
 // SetNillableTLSAutocertEmail sets the "tls_autocert_email" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableTLSAutocertEmail(s *string) *SystemConfigUpdate {
-	if s != nil {
-		scu.SetTLSAutocertEmail(*s)
+func (_u *SystemConfigUpdate) SetNillableTLSAutocertEmail(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetTLSAutocertEmail(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetTLSAutocertHosts sets the "tls_autocert_hosts" field.
-func (scu *SystemConfigUpdate) SetTLSAutocertHosts(s []string) *SystemConfigUpdate {
-	scu.mutation.SetTLSAutocertHosts(s)
-	return scu
+func (_u *SystemConfigUpdate) SetTLSAutocertHosts(v []string) *SystemConfigUpdate {
+	_u.mutation.SetTLSAutocertHosts(v)
+	return _u
 }
 
-// AppendTLSAutocertHosts appends s to the "tls_autocert_hosts" field.
-func (scu *SystemConfigUpdate) AppendTLSAutocertHosts(s []string) *SystemConfigUpdate {
-	scu.mutation.AppendTLSAutocertHosts(s)
-	return scu
+// AppendTLSAutocertHosts appends value to the "tls_autocert_hosts" field.
+func (_u *SystemConfigUpdate) AppendTLSAutocertHosts(v []string) *SystemConfigUpdate {
+	_u.mutation.AppendTLSAutocertHosts(v)
+	return _u
 }
 
 // SetMailerHost sets the "mailer_host" field.
-func (scu *SystemConfigUpdate) SetMailerHost(s string) *SystemConfigUpdate {
-	scu.mutation.SetMailerHost(s)
-	return scu
+func (_u *SystemConfigUpdate) SetMailerHost(v string) *SystemConfigUpdate {
+	_u.mutation.SetMailerHost(v)
+	return _u
 }
 
 // SetNillableMailerHost sets the "mailer_host" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableMailerHost(s *string) *SystemConfigUpdate {
-	if s != nil {
-		scu.SetMailerHost(*s)
+func (_u *SystemConfigUpdate) SetNillableMailerHost(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetMailerHost(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetMailerPort sets the "mailer_port" field.
-func (scu *SystemConfigUpdate) SetMailerPort(i int) *SystemConfigUpdate {
-	scu.mutation.ResetMailerPort()
-	scu.mutation.SetMailerPort(i)
-	return scu
+func (_u *SystemConfigUpdate) SetMailerPort(v int) *SystemConfigUpdate {
+	_u.mutation.ResetMailerPort()
+	_u.mutation.SetMailerPort(v)
+	return _u
 }
 
 // SetNillableMailerPort sets the "mailer_port" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableMailerPort(i *int) *SystemConfigUpdate {
-	if i != nil {
-		scu.SetMailerPort(*i)
+func (_u *SystemConfigUpdate) SetNillableMailerPort(v *int) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetMailerPort(*v)
 	}
-	return scu
+	return _u
 }
 
-// AddMailerPort adds i to the "mailer_port" field.
-func (scu *SystemConfigUpdate) AddMailerPort(i int) *SystemConfigUpdate {
-	scu.mutation.AddMailerPort(i)
-	return scu
+// AddMailerPort adds value to the "mailer_port" field.
+func (_u *SystemConfigUpdate) AddMailerPort(v int) *SystemConfigUpdate {
+	_u.mutation.AddMailerPort(v)
+	return _u
 }
 
 // SetMailerUsername sets the "mailer_username" field.
-func (scu *SystemConfigUpdate) SetMailerUsername(s string) *SystemConfigUpdate {
-	scu.mutation.SetMailerUsername(s)
-	return scu
+func (_u *SystemConfigUpdate) SetMailerUsername(v string) *SystemConfigUpdate {
+	_u.mutation.SetMailerUsername(v)
+	return _u
 }
 
 // SetNillableMailerUsername sets the "mailer_username" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableMailerUsername(s *string) *SystemConfigUpdate {
-	if s != nil {
-		scu.SetMailerUsername(*s)
+func (_u *SystemConfigUpdate) SetNillableMailerUsername(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetMailerUsername(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetMailerPassword sets the "mailer_password" field.
-func (scu *SystemConfigUpdate) SetMailerPassword(es entx.EncryptedString) *SystemConfigUpdate {
-	scu.mutation.SetMailerPassword(es)
-	return scu
+func (_u *SystemConfigUpdate) SetMailerPassword(v entx.EncryptedString) *SystemConfigUpdate {
+	_u.mutation.SetMailerPassword(v)
+	return _u
 }
 
 // ClearMailerPassword clears the value of the "mailer_password" field.
-func (scu *SystemConfigUpdate) ClearMailerPassword() *SystemConfigUpdate {
-	scu.mutation.ClearMailerPassword()
-	return scu
+func (_u *SystemConfigUpdate) ClearMailerPassword() *SystemConfigUpdate {
+	_u.mutation.ClearMailerPassword()
+	return _u
 }
 
 // SetMailerFrom sets the "mailer_from" field.
-func (scu *SystemConfigUpdate) SetMailerFrom(s string) *SystemConfigUpdate {
-	scu.mutation.SetMailerFrom(s)
-	return scu
+func (_u *SystemConfigUpdate) SetMailerFrom(v string) *SystemConfigUpdate {
+	_u.mutation.SetMailerFrom(v)
+	return _u
 }
 
 // SetNillableMailerFrom sets the "mailer_from" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableMailerFrom(s *string) *SystemConfigUpdate {
-	if s != nil {
-		scu.SetMailerFrom(*s)
+func (_u *SystemConfigUpdate) SetNillableMailerFrom(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetMailerFrom(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetMailerInsecureSkipVerify sets the "mailer_insecure_skip_verify" field.
-func (scu *SystemConfigUpdate) SetMailerInsecureSkipVerify(b bool) *SystemConfigUpdate {
-	scu.mutation.SetMailerInsecureSkipVerify(b)
-	return scu
+func (_u *SystemConfigUpdate) SetMailerInsecureSkipVerify(v bool) *SystemConfigUpdate {
+	_u.mutation.SetMailerInsecureSkipVerify(v)
+	return _u
 }
 
 // SetNillableMailerInsecureSkipVerify sets the "mailer_insecure_skip_verify" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableMailerInsecureSkipVerify(b *bool) *SystemConfigUpdate {
-	if b != nil {
-		scu.SetMailerInsecureSkipVerify(*b)
+func (_u *SystemConfigUpdate) SetNillableMailerInsecureSkipVerify(v *bool) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetMailerInsecureSkipVerify(*v)
 	}
-	return scu
+	return _u
+}
+
+// SetMailerUseImplicitSslTLS sets the "mailer_use_implicit_ssl_tls" field.
+func (_u *SystemConfigUpdate) SetMailerUseImplicitSslTLS(v bool) *SystemConfigUpdate {
+	_u.mutation.SetMailerUseImplicitSslTLS(v)
+	return _u
+}
+
+// SetNillableMailerUseImplicitSslTLS sets the "mailer_use_implicit_ssl_tls" field if the given value is not nil.
+func (_u *SystemConfigUpdate) SetNillableMailerUseImplicitSslTLS(v *bool) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetMailerUseImplicitSslTLS(*v)
+	}
+	return _u
 }
 
 // SetOcrTikaURL sets the "ocr_tika_url" field.
-func (scu *SystemConfigUpdate) SetOcrTikaURL(s string) *SystemConfigUpdate {
-	scu.mutation.SetOcrTikaURL(s)
-	return scu
+func (_u *SystemConfigUpdate) SetOcrTikaURL(v string) *SystemConfigUpdate {
+	_u.mutation.SetOcrTikaURL(v)
+	return _u
 }
 
 // SetNillableOcrTikaURL sets the "ocr_tika_url" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableOcrTikaURL(s *string) *SystemConfigUpdate {
-	if s != nil {
-		scu.SetOcrTikaURL(*s)
+func (_u *SystemConfigUpdate) SetNillableOcrTikaURL(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetOcrTikaURL(*v)
 	}
-	return scu
+	return _u
 }
 
 // SetInitializedAt sets the "initialized_at" field.
-func (scu *SystemConfigUpdate) SetInitializedAt(t time.Time) *SystemConfigUpdate {
-	scu.mutation.SetInitializedAt(t)
-	return scu
+func (_u *SystemConfigUpdate) SetInitializedAt(v time.Time) *SystemConfigUpdate {
+	_u.mutation.SetInitializedAt(v)
+	return _u
 }
 
 // SetNillableInitializedAt sets the "initialized_at" field if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableInitializedAt(t *time.Time) *SystemConfigUpdate {
-	if t != nil {
-		scu.SetInitializedAt(*t)
+func (_u *SystemConfigUpdate) SetNillableInitializedAt(v *time.Time) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetInitializedAt(*v)
 	}
-	return scu
+	return _u
 }
 
 // ClearInitializedAt clears the value of the "initialized_at" field.
-func (scu *SystemConfigUpdate) ClearInitializedAt() *SystemConfigUpdate {
-	scu.mutation.ClearInitializedAt()
-	return scu
+func (_u *SystemConfigUpdate) ClearInitializedAt() *SystemConfigUpdate {
+	_u.mutation.ClearInitializedAt()
+	return _u
 }
 
 // SetUpdaterID sets the "updater" edge to the Account entity by ID.
-func (scu *SystemConfigUpdate) SetUpdaterID(id int64) *SystemConfigUpdate {
-	scu.mutation.SetUpdaterID(id)
-	return scu
+func (_u *SystemConfigUpdate) SetUpdaterID(id int64) *SystemConfigUpdate {
+	_u.mutation.SetUpdaterID(id)
+	return _u
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the Account entity by ID if the given value is not nil.
-func (scu *SystemConfigUpdate) SetNillableUpdaterID(id *int64) *SystemConfigUpdate {
+func (_u *SystemConfigUpdate) SetNillableUpdaterID(id *int64) *SystemConfigUpdate {
 	if id != nil {
-		scu = scu.SetUpdaterID(*id)
+		_u = _u.SetUpdaterID(*id)
 	}
-	return scu
+	return _u
 }
 
 // SetUpdater sets the "updater" edge to the Account entity.
-func (scu *SystemConfigUpdate) SetUpdater(a *Account) *SystemConfigUpdate {
-	return scu.SetUpdaterID(a.ID)
+func (_u *SystemConfigUpdate) SetUpdater(v *Account) *SystemConfigUpdate {
+	return _u.SetUpdaterID(v.ID)
 }
 
 // Mutation returns the SystemConfigMutation object of the builder.
-func (scu *SystemConfigUpdate) Mutation() *SystemConfigMutation {
-	return scu.mutation
+func (_u *SystemConfigUpdate) Mutation() *SystemConfigMutation {
+	return _u.mutation
 }
 
 // ClearUpdater clears the "updater" edge to the Account entity.
-func (scu *SystemConfigUpdate) ClearUpdater() *SystemConfigUpdate {
-	scu.mutation.ClearUpdater()
-	return scu
+func (_u *SystemConfigUpdate) ClearUpdater() *SystemConfigUpdate {
+	_u.mutation.ClearUpdater()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (scu *SystemConfigUpdate) Save(ctx context.Context) (int, error) {
-	scu.defaults()
-	return withHooks(ctx, scu.sqlSave, scu.mutation, scu.hooks)
+func (_u *SystemConfigUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (scu *SystemConfigUpdate) SaveX(ctx context.Context) int {
-	affected, err := scu.Save(ctx)
+func (_u *SystemConfigUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -377,119 +391,122 @@ func (scu *SystemConfigUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (scu *SystemConfigUpdate) Exec(ctx context.Context) error {
-	_, err := scu.Save(ctx)
+func (_u *SystemConfigUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scu *SystemConfigUpdate) ExecX(ctx context.Context) {
-	if err := scu.Exec(ctx); err != nil {
+func (_u *SystemConfigUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (scu *SystemConfigUpdate) defaults() {
-	if _, ok := scu.mutation.UpdatedAt(); !ok {
+func (_u *SystemConfigUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := systemconfig.UpdateDefaultUpdatedAt()
-		scu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (scu *SystemConfigUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SystemConfigUpdate {
-	scu.modifiers = append(scu.modifiers, modifiers...)
-	return scu
+func (_u *SystemConfigUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SystemConfigUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (scu *SystemConfigUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *SystemConfigUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(systemconfig.Table, systemconfig.Columns, sqlgraph.NewFieldSpec(systemconfig.FieldID, field.TypeInt64))
-	if ps := scu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := scu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(systemconfig.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := scu.mutation.X25519Identity(); ok {
+	if value, ok := _u.mutation.X25519Identity(); ok {
 		_spec.SetField(systemconfig.FieldX25519Identity, field.TypeBytes, value)
 	}
-	if value, ok := scu.mutation.IsIdentityEncryptedWithPassphrase(); ok {
+	if value, ok := _u.mutation.IsIdentityEncryptedWithPassphrase(); ok {
 		_spec.SetField(systemconfig.FieldIsIdentityEncryptedWithPassphrase, field.TypeBool, value)
 	}
-	if value, ok := scu.mutation.S3Endpoint(); ok {
+	if value, ok := _u.mutation.S3Endpoint(); ok {
 		_spec.SetField(systemconfig.FieldS3Endpoint, field.TypeString, value)
 	}
-	if value, ok := scu.mutation.S3AccessKeyID(); ok {
+	if value, ok := _u.mutation.S3AccessKeyID(); ok {
 		_spec.SetField(systemconfig.FieldS3AccessKeyID, field.TypeString, value)
 	}
-	if value, ok := scu.mutation.S3SecretAccessKey(); ok {
+	if value, ok := _u.mutation.S3SecretAccessKey(); ok {
 		_spec.SetField(systemconfig.FieldS3SecretAccessKey, field.TypeBytes, value)
 	}
-	if value, ok := scu.mutation.S3BucketName(); ok {
+	if value, ok := _u.mutation.S3BucketName(); ok {
 		_spec.SetField(systemconfig.FieldS3BucketName, field.TypeString, value)
 	}
-	if value, ok := scu.mutation.S3UseSsl(); ok {
+	if value, ok := _u.mutation.S3UseSsl(); ok {
 		_spec.SetField(systemconfig.FieldS3UseSsl, field.TypeBool, value)
 	}
-	if value, ok := scu.mutation.TLSEnableAutocert(); ok {
+	if value, ok := _u.mutation.TLSEnableAutocert(); ok {
 		_spec.SetField(systemconfig.FieldTLSEnableAutocert, field.TypeBool, value)
 	}
-	if value, ok := scu.mutation.TLSCertFilepath(); ok {
+	if value, ok := _u.mutation.TLSCertFilepath(); ok {
 		_spec.SetField(systemconfig.FieldTLSCertFilepath, field.TypeString, value)
 	}
-	if value, ok := scu.mutation.TLSPrivateKeyFilepath(); ok {
+	if value, ok := _u.mutation.TLSPrivateKeyFilepath(); ok {
 		_spec.SetField(systemconfig.FieldTLSPrivateKeyFilepath, field.TypeString, value)
 	}
-	if value, ok := scu.mutation.TLSAutocertEmail(); ok {
+	if value, ok := _u.mutation.TLSAutocertEmail(); ok {
 		_spec.SetField(systemconfig.FieldTLSAutocertEmail, field.TypeString, value)
 	}
-	if value, ok := scu.mutation.TLSAutocertHosts(); ok {
+	if value, ok := _u.mutation.TLSAutocertHosts(); ok {
 		_spec.SetField(systemconfig.FieldTLSAutocertHosts, field.TypeJSON, value)
 	}
-	if value, ok := scu.mutation.AppendedTLSAutocertHosts(); ok {
+	if value, ok := _u.mutation.AppendedTLSAutocertHosts(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, systemconfig.FieldTLSAutocertHosts, value)
 		})
 	}
-	if value, ok := scu.mutation.MailerHost(); ok {
+	if value, ok := _u.mutation.MailerHost(); ok {
 		_spec.SetField(systemconfig.FieldMailerHost, field.TypeString, value)
 	}
-	if value, ok := scu.mutation.MailerPort(); ok {
+	if value, ok := _u.mutation.MailerPort(); ok {
 		_spec.SetField(systemconfig.FieldMailerPort, field.TypeInt, value)
 	}
-	if value, ok := scu.mutation.AddedMailerPort(); ok {
+	if value, ok := _u.mutation.AddedMailerPort(); ok {
 		_spec.AddField(systemconfig.FieldMailerPort, field.TypeInt, value)
 	}
-	if value, ok := scu.mutation.MailerUsername(); ok {
+	if value, ok := _u.mutation.MailerUsername(); ok {
 		_spec.SetField(systemconfig.FieldMailerUsername, field.TypeString, value)
 	}
-	if value, ok := scu.mutation.MailerPassword(); ok {
+	if value, ok := _u.mutation.MailerPassword(); ok {
 		_spec.SetField(systemconfig.FieldMailerPassword, field.TypeBytes, value)
 	}
-	if scu.mutation.MailerPasswordCleared() {
+	if _u.mutation.MailerPasswordCleared() {
 		_spec.ClearField(systemconfig.FieldMailerPassword, field.TypeBytes)
 	}
-	if value, ok := scu.mutation.MailerFrom(); ok {
+	if value, ok := _u.mutation.MailerFrom(); ok {
 		_spec.SetField(systemconfig.FieldMailerFrom, field.TypeString, value)
 	}
-	if value, ok := scu.mutation.MailerInsecureSkipVerify(); ok {
+	if value, ok := _u.mutation.MailerInsecureSkipVerify(); ok {
 		_spec.SetField(systemconfig.FieldMailerInsecureSkipVerify, field.TypeBool, value)
 	}
-	if value, ok := scu.mutation.OcrTikaURL(); ok {
+	if value, ok := _u.mutation.MailerUseImplicitSslTLS(); ok {
+		_spec.SetField(systemconfig.FieldMailerUseImplicitSslTLS, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)
 	}
-	if value, ok := scu.mutation.InitializedAt(); ok {
+	if value, ok := _u.mutation.InitializedAt(); ok {
 		_spec.SetField(systemconfig.FieldInitializedAt, field.TypeTime, value)
 	}
-	if scu.mutation.InitializedAtCleared() {
+	if _u.mutation.InitializedAtCleared() {
 		_spec.ClearField(systemconfig.FieldInitializedAt, field.TypeTime)
 	}
-	if scu.mutation.UpdaterCleared() {
+	if _u.mutation.UpdaterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -502,7 +519,7 @@ func (scu *SystemConfigUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := scu.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -518,8 +535,8 @@ func (scu *SystemConfigUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(scu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, scu.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{systemconfig.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -527,8 +544,8 @@ func (scu *SystemConfigUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	scu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // SystemConfigUpdateOne is the builder for updating a single SystemConfig entity.
@@ -541,356 +558,370 @@ type SystemConfigUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (scuo *SystemConfigUpdateOne) SetUpdatedAt(t time.Time) *SystemConfigUpdateOne {
-	scuo.mutation.SetUpdatedAt(t)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetUpdatedAt(v time.Time) *SystemConfigUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (scuo *SystemConfigUpdateOne) SetUpdatedBy(i int64) *SystemConfigUpdateOne {
-	scuo.mutation.SetUpdatedBy(i)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetUpdatedBy(v int64) *SystemConfigUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableUpdatedBy(i *int64) *SystemConfigUpdateOne {
-	if i != nil {
-		scuo.SetUpdatedBy(*i)
+func (_u *SystemConfigUpdateOne) SetNillableUpdatedBy(v *int64) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return scuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (scuo *SystemConfigUpdateOne) ClearUpdatedBy() *SystemConfigUpdateOne {
-	scuo.mutation.ClearUpdatedBy()
-	return scuo
+func (_u *SystemConfigUpdateOne) ClearUpdatedBy() *SystemConfigUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetX25519Identity sets the "x25519_identity" field.
-func (scuo *SystemConfigUpdateOne) SetX25519Identity(b []byte) *SystemConfigUpdateOne {
-	scuo.mutation.SetX25519Identity(b)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetX25519Identity(v []byte) *SystemConfigUpdateOne {
+	_u.mutation.SetX25519Identity(v)
+	return _u
 }
 
 // SetIsIdentityEncryptedWithPassphrase sets the "is_identity_encrypted_with_passphrase" field.
-func (scuo *SystemConfigUpdateOne) SetIsIdentityEncryptedWithPassphrase(b bool) *SystemConfigUpdateOne {
-	scuo.mutation.SetIsIdentityEncryptedWithPassphrase(b)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetIsIdentityEncryptedWithPassphrase(v bool) *SystemConfigUpdateOne {
+	_u.mutation.SetIsIdentityEncryptedWithPassphrase(v)
+	return _u
 }
 
 // SetNillableIsIdentityEncryptedWithPassphrase sets the "is_identity_encrypted_with_passphrase" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableIsIdentityEncryptedWithPassphrase(b *bool) *SystemConfigUpdateOne {
-	if b != nil {
-		scuo.SetIsIdentityEncryptedWithPassphrase(*b)
+func (_u *SystemConfigUpdateOne) SetNillableIsIdentityEncryptedWithPassphrase(v *bool) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetIsIdentityEncryptedWithPassphrase(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetS3Endpoint sets the "s3_endpoint" field.
-func (scuo *SystemConfigUpdateOne) SetS3Endpoint(s string) *SystemConfigUpdateOne {
-	scuo.mutation.SetS3Endpoint(s)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetS3Endpoint(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetS3Endpoint(v)
+	return _u
 }
 
 // SetNillableS3Endpoint sets the "s3_endpoint" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableS3Endpoint(s *string) *SystemConfigUpdateOne {
-	if s != nil {
-		scuo.SetS3Endpoint(*s)
+func (_u *SystemConfigUpdateOne) SetNillableS3Endpoint(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetS3Endpoint(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetS3AccessKeyID sets the "s3_access_key_id" field.
-func (scuo *SystemConfigUpdateOne) SetS3AccessKeyID(s string) *SystemConfigUpdateOne {
-	scuo.mutation.SetS3AccessKeyID(s)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetS3AccessKeyID(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetS3AccessKeyID(v)
+	return _u
 }
 
 // SetNillableS3AccessKeyID sets the "s3_access_key_id" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableS3AccessKeyID(s *string) *SystemConfigUpdateOne {
-	if s != nil {
-		scuo.SetS3AccessKeyID(*s)
+func (_u *SystemConfigUpdateOne) SetNillableS3AccessKeyID(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetS3AccessKeyID(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetS3SecretAccessKey sets the "s3_secret_access_key" field.
-func (scuo *SystemConfigUpdateOne) SetS3SecretAccessKey(es entx.EncryptedString) *SystemConfigUpdateOne {
-	scuo.mutation.SetS3SecretAccessKey(es)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetS3SecretAccessKey(v entx.EncryptedString) *SystemConfigUpdateOne {
+	_u.mutation.SetS3SecretAccessKey(v)
+	return _u
 }
 
 // SetS3BucketName sets the "s3_bucket_name" field.
-func (scuo *SystemConfigUpdateOne) SetS3BucketName(s string) *SystemConfigUpdateOne {
-	scuo.mutation.SetS3BucketName(s)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetS3BucketName(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetS3BucketName(v)
+	return _u
 }
 
 // SetNillableS3BucketName sets the "s3_bucket_name" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableS3BucketName(s *string) *SystemConfigUpdateOne {
-	if s != nil {
-		scuo.SetS3BucketName(*s)
+func (_u *SystemConfigUpdateOne) SetNillableS3BucketName(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetS3BucketName(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetS3UseSsl sets the "s3_use_ssl" field.
-func (scuo *SystemConfigUpdateOne) SetS3UseSsl(b bool) *SystemConfigUpdateOne {
-	scuo.mutation.SetS3UseSsl(b)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetS3UseSsl(v bool) *SystemConfigUpdateOne {
+	_u.mutation.SetS3UseSsl(v)
+	return _u
 }
 
 // SetNillableS3UseSsl sets the "s3_use_ssl" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableS3UseSsl(b *bool) *SystemConfigUpdateOne {
-	if b != nil {
-		scuo.SetS3UseSsl(*b)
+func (_u *SystemConfigUpdateOne) SetNillableS3UseSsl(v *bool) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetS3UseSsl(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetTLSEnableAutocert sets the "tls_enable_autocert" field.
-func (scuo *SystemConfigUpdateOne) SetTLSEnableAutocert(b bool) *SystemConfigUpdateOne {
-	scuo.mutation.SetTLSEnableAutocert(b)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetTLSEnableAutocert(v bool) *SystemConfigUpdateOne {
+	_u.mutation.SetTLSEnableAutocert(v)
+	return _u
 }
 
 // SetNillableTLSEnableAutocert sets the "tls_enable_autocert" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableTLSEnableAutocert(b *bool) *SystemConfigUpdateOne {
-	if b != nil {
-		scuo.SetTLSEnableAutocert(*b)
+func (_u *SystemConfigUpdateOne) SetNillableTLSEnableAutocert(v *bool) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetTLSEnableAutocert(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetTLSCertFilepath sets the "tls_cert_filepath" field.
-func (scuo *SystemConfigUpdateOne) SetTLSCertFilepath(s string) *SystemConfigUpdateOne {
-	scuo.mutation.SetTLSCertFilepath(s)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetTLSCertFilepath(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetTLSCertFilepath(v)
+	return _u
 }
 
 // SetNillableTLSCertFilepath sets the "tls_cert_filepath" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableTLSCertFilepath(s *string) *SystemConfigUpdateOne {
-	if s != nil {
-		scuo.SetTLSCertFilepath(*s)
+func (_u *SystemConfigUpdateOne) SetNillableTLSCertFilepath(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetTLSCertFilepath(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetTLSPrivateKeyFilepath sets the "tls_private_key_filepath" field.
-func (scuo *SystemConfigUpdateOne) SetTLSPrivateKeyFilepath(s string) *SystemConfigUpdateOne {
-	scuo.mutation.SetTLSPrivateKeyFilepath(s)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetTLSPrivateKeyFilepath(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetTLSPrivateKeyFilepath(v)
+	return _u
 }
 
 // SetNillableTLSPrivateKeyFilepath sets the "tls_private_key_filepath" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableTLSPrivateKeyFilepath(s *string) *SystemConfigUpdateOne {
-	if s != nil {
-		scuo.SetTLSPrivateKeyFilepath(*s)
+func (_u *SystemConfigUpdateOne) SetNillableTLSPrivateKeyFilepath(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetTLSPrivateKeyFilepath(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetTLSAutocertEmail sets the "tls_autocert_email" field.
-func (scuo *SystemConfigUpdateOne) SetTLSAutocertEmail(s string) *SystemConfigUpdateOne {
-	scuo.mutation.SetTLSAutocertEmail(s)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetTLSAutocertEmail(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetTLSAutocertEmail(v)
+	return _u
 }
 
 // SetNillableTLSAutocertEmail sets the "tls_autocert_email" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableTLSAutocertEmail(s *string) *SystemConfigUpdateOne {
-	if s != nil {
-		scuo.SetTLSAutocertEmail(*s)
+func (_u *SystemConfigUpdateOne) SetNillableTLSAutocertEmail(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetTLSAutocertEmail(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetTLSAutocertHosts sets the "tls_autocert_hosts" field.
-func (scuo *SystemConfigUpdateOne) SetTLSAutocertHosts(s []string) *SystemConfigUpdateOne {
-	scuo.mutation.SetTLSAutocertHosts(s)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetTLSAutocertHosts(v []string) *SystemConfigUpdateOne {
+	_u.mutation.SetTLSAutocertHosts(v)
+	return _u
 }
 
-// AppendTLSAutocertHosts appends s to the "tls_autocert_hosts" field.
-func (scuo *SystemConfigUpdateOne) AppendTLSAutocertHosts(s []string) *SystemConfigUpdateOne {
-	scuo.mutation.AppendTLSAutocertHosts(s)
-	return scuo
+// AppendTLSAutocertHosts appends value to the "tls_autocert_hosts" field.
+func (_u *SystemConfigUpdateOne) AppendTLSAutocertHosts(v []string) *SystemConfigUpdateOne {
+	_u.mutation.AppendTLSAutocertHosts(v)
+	return _u
 }
 
 // SetMailerHost sets the "mailer_host" field.
-func (scuo *SystemConfigUpdateOne) SetMailerHost(s string) *SystemConfigUpdateOne {
-	scuo.mutation.SetMailerHost(s)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetMailerHost(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetMailerHost(v)
+	return _u
 }
 
 // SetNillableMailerHost sets the "mailer_host" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableMailerHost(s *string) *SystemConfigUpdateOne {
-	if s != nil {
-		scuo.SetMailerHost(*s)
+func (_u *SystemConfigUpdateOne) SetNillableMailerHost(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetMailerHost(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetMailerPort sets the "mailer_port" field.
-func (scuo *SystemConfigUpdateOne) SetMailerPort(i int) *SystemConfigUpdateOne {
-	scuo.mutation.ResetMailerPort()
-	scuo.mutation.SetMailerPort(i)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetMailerPort(v int) *SystemConfigUpdateOne {
+	_u.mutation.ResetMailerPort()
+	_u.mutation.SetMailerPort(v)
+	return _u
 }
 
 // SetNillableMailerPort sets the "mailer_port" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableMailerPort(i *int) *SystemConfigUpdateOne {
-	if i != nil {
-		scuo.SetMailerPort(*i)
+func (_u *SystemConfigUpdateOne) SetNillableMailerPort(v *int) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetMailerPort(*v)
 	}
-	return scuo
+	return _u
 }
 
-// AddMailerPort adds i to the "mailer_port" field.
-func (scuo *SystemConfigUpdateOne) AddMailerPort(i int) *SystemConfigUpdateOne {
-	scuo.mutation.AddMailerPort(i)
-	return scuo
+// AddMailerPort adds value to the "mailer_port" field.
+func (_u *SystemConfigUpdateOne) AddMailerPort(v int) *SystemConfigUpdateOne {
+	_u.mutation.AddMailerPort(v)
+	return _u
 }
 
 // SetMailerUsername sets the "mailer_username" field.
-func (scuo *SystemConfigUpdateOne) SetMailerUsername(s string) *SystemConfigUpdateOne {
-	scuo.mutation.SetMailerUsername(s)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetMailerUsername(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetMailerUsername(v)
+	return _u
 }
 
 // SetNillableMailerUsername sets the "mailer_username" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableMailerUsername(s *string) *SystemConfigUpdateOne {
-	if s != nil {
-		scuo.SetMailerUsername(*s)
+func (_u *SystemConfigUpdateOne) SetNillableMailerUsername(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetMailerUsername(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetMailerPassword sets the "mailer_password" field.
-func (scuo *SystemConfigUpdateOne) SetMailerPassword(es entx.EncryptedString) *SystemConfigUpdateOne {
-	scuo.mutation.SetMailerPassword(es)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetMailerPassword(v entx.EncryptedString) *SystemConfigUpdateOne {
+	_u.mutation.SetMailerPassword(v)
+	return _u
 }
 
 // ClearMailerPassword clears the value of the "mailer_password" field.
-func (scuo *SystemConfigUpdateOne) ClearMailerPassword() *SystemConfigUpdateOne {
-	scuo.mutation.ClearMailerPassword()
-	return scuo
+func (_u *SystemConfigUpdateOne) ClearMailerPassword() *SystemConfigUpdateOne {
+	_u.mutation.ClearMailerPassword()
+	return _u
 }
 
 // SetMailerFrom sets the "mailer_from" field.
-func (scuo *SystemConfigUpdateOne) SetMailerFrom(s string) *SystemConfigUpdateOne {
-	scuo.mutation.SetMailerFrom(s)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetMailerFrom(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetMailerFrom(v)
+	return _u
 }
 
 // SetNillableMailerFrom sets the "mailer_from" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableMailerFrom(s *string) *SystemConfigUpdateOne {
-	if s != nil {
-		scuo.SetMailerFrom(*s)
+func (_u *SystemConfigUpdateOne) SetNillableMailerFrom(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetMailerFrom(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetMailerInsecureSkipVerify sets the "mailer_insecure_skip_verify" field.
-func (scuo *SystemConfigUpdateOne) SetMailerInsecureSkipVerify(b bool) *SystemConfigUpdateOne {
-	scuo.mutation.SetMailerInsecureSkipVerify(b)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetMailerInsecureSkipVerify(v bool) *SystemConfigUpdateOne {
+	_u.mutation.SetMailerInsecureSkipVerify(v)
+	return _u
 }
 
 // SetNillableMailerInsecureSkipVerify sets the "mailer_insecure_skip_verify" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableMailerInsecureSkipVerify(b *bool) *SystemConfigUpdateOne {
-	if b != nil {
-		scuo.SetMailerInsecureSkipVerify(*b)
+func (_u *SystemConfigUpdateOne) SetNillableMailerInsecureSkipVerify(v *bool) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetMailerInsecureSkipVerify(*v)
 	}
-	return scuo
+	return _u
+}
+
+// SetMailerUseImplicitSslTLS sets the "mailer_use_implicit_ssl_tls" field.
+func (_u *SystemConfigUpdateOne) SetMailerUseImplicitSslTLS(v bool) *SystemConfigUpdateOne {
+	_u.mutation.SetMailerUseImplicitSslTLS(v)
+	return _u
+}
+
+// SetNillableMailerUseImplicitSslTLS sets the "mailer_use_implicit_ssl_tls" field if the given value is not nil.
+func (_u *SystemConfigUpdateOne) SetNillableMailerUseImplicitSslTLS(v *bool) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetMailerUseImplicitSslTLS(*v)
+	}
+	return _u
 }
 
 // SetOcrTikaURL sets the "ocr_tika_url" field.
-func (scuo *SystemConfigUpdateOne) SetOcrTikaURL(s string) *SystemConfigUpdateOne {
-	scuo.mutation.SetOcrTikaURL(s)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetOcrTikaURL(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetOcrTikaURL(v)
+	return _u
 }
 
 // SetNillableOcrTikaURL sets the "ocr_tika_url" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableOcrTikaURL(s *string) *SystemConfigUpdateOne {
-	if s != nil {
-		scuo.SetOcrTikaURL(*s)
+func (_u *SystemConfigUpdateOne) SetNillableOcrTikaURL(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetOcrTikaURL(*v)
 	}
-	return scuo
+	return _u
 }
 
 // SetInitializedAt sets the "initialized_at" field.
-func (scuo *SystemConfigUpdateOne) SetInitializedAt(t time.Time) *SystemConfigUpdateOne {
-	scuo.mutation.SetInitializedAt(t)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetInitializedAt(v time.Time) *SystemConfigUpdateOne {
+	_u.mutation.SetInitializedAt(v)
+	return _u
 }
 
 // SetNillableInitializedAt sets the "initialized_at" field if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableInitializedAt(t *time.Time) *SystemConfigUpdateOne {
-	if t != nil {
-		scuo.SetInitializedAt(*t)
+func (_u *SystemConfigUpdateOne) SetNillableInitializedAt(v *time.Time) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetInitializedAt(*v)
 	}
-	return scuo
+	return _u
 }
 
 // ClearInitializedAt clears the value of the "initialized_at" field.
-func (scuo *SystemConfigUpdateOne) ClearInitializedAt() *SystemConfigUpdateOne {
-	scuo.mutation.ClearInitializedAt()
-	return scuo
+func (_u *SystemConfigUpdateOne) ClearInitializedAt() *SystemConfigUpdateOne {
+	_u.mutation.ClearInitializedAt()
+	return _u
 }
 
 // SetUpdaterID sets the "updater" edge to the Account entity by ID.
-func (scuo *SystemConfigUpdateOne) SetUpdaterID(id int64) *SystemConfigUpdateOne {
-	scuo.mutation.SetUpdaterID(id)
-	return scuo
+func (_u *SystemConfigUpdateOne) SetUpdaterID(id int64) *SystemConfigUpdateOne {
+	_u.mutation.SetUpdaterID(id)
+	return _u
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the Account entity by ID if the given value is not nil.
-func (scuo *SystemConfigUpdateOne) SetNillableUpdaterID(id *int64) *SystemConfigUpdateOne {
+func (_u *SystemConfigUpdateOne) SetNillableUpdaterID(id *int64) *SystemConfigUpdateOne {
 	if id != nil {
-		scuo = scuo.SetUpdaterID(*id)
+		_u = _u.SetUpdaterID(*id)
 	}
-	return scuo
+	return _u
 }
 
 // SetUpdater sets the "updater" edge to the Account entity.
-func (scuo *SystemConfigUpdateOne) SetUpdater(a *Account) *SystemConfigUpdateOne {
-	return scuo.SetUpdaterID(a.ID)
+func (_u *SystemConfigUpdateOne) SetUpdater(v *Account) *SystemConfigUpdateOne {
+	return _u.SetUpdaterID(v.ID)
 }
 
 // Mutation returns the SystemConfigMutation object of the builder.
-func (scuo *SystemConfigUpdateOne) Mutation() *SystemConfigMutation {
-	return scuo.mutation
+func (_u *SystemConfigUpdateOne) Mutation() *SystemConfigMutation {
+	return _u.mutation
 }
 
 // ClearUpdater clears the "updater" edge to the Account entity.
-func (scuo *SystemConfigUpdateOne) ClearUpdater() *SystemConfigUpdateOne {
-	scuo.mutation.ClearUpdater()
-	return scuo
+func (_u *SystemConfigUpdateOne) ClearUpdater() *SystemConfigUpdateOne {
+	_u.mutation.ClearUpdater()
+	return _u
 }
 
 // Where appends a list predicates to the SystemConfigUpdate builder.
-func (scuo *SystemConfigUpdateOne) Where(ps ...predicate.SystemConfig) *SystemConfigUpdateOne {
-	scuo.mutation.Where(ps...)
-	return scuo
+func (_u *SystemConfigUpdateOne) Where(ps ...predicate.SystemConfig) *SystemConfigUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (scuo *SystemConfigUpdateOne) Select(field string, fields ...string) *SystemConfigUpdateOne {
-	scuo.fields = append([]string{field}, fields...)
-	return scuo
+func (_u *SystemConfigUpdateOne) Select(field string, fields ...string) *SystemConfigUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated SystemConfig entity.
-func (scuo *SystemConfigUpdateOne) Save(ctx context.Context) (*SystemConfig, error) {
-	scuo.defaults()
-	return withHooks(ctx, scuo.sqlSave, scuo.mutation, scuo.hooks)
+func (_u *SystemConfigUpdateOne) Save(ctx context.Context) (*SystemConfig, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (scuo *SystemConfigUpdateOne) SaveX(ctx context.Context) *SystemConfig {
-	node, err := scuo.Save(ctx)
+func (_u *SystemConfigUpdateOne) SaveX(ctx context.Context) *SystemConfig {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -898,40 +929,40 @@ func (scuo *SystemConfigUpdateOne) SaveX(ctx context.Context) *SystemConfig {
 }
 
 // Exec executes the query on the entity.
-func (scuo *SystemConfigUpdateOne) Exec(ctx context.Context) error {
-	_, err := scuo.Save(ctx)
+func (_u *SystemConfigUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scuo *SystemConfigUpdateOne) ExecX(ctx context.Context) {
-	if err := scuo.Exec(ctx); err != nil {
+func (_u *SystemConfigUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (scuo *SystemConfigUpdateOne) defaults() {
-	if _, ok := scuo.mutation.UpdatedAt(); !ok {
+func (_u *SystemConfigUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := systemconfig.UpdateDefaultUpdatedAt()
-		scuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (scuo *SystemConfigUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SystemConfigUpdateOne {
-	scuo.modifiers = append(scuo.modifiers, modifiers...)
-	return scuo
+func (_u *SystemConfigUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SystemConfigUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (scuo *SystemConfigUpdateOne) sqlSave(ctx context.Context) (_node *SystemConfig, err error) {
+func (_u *SystemConfigUpdateOne) sqlSave(ctx context.Context) (_node *SystemConfig, err error) {
 	_spec := sqlgraph.NewUpdateSpec(systemconfig.Table, systemconfig.Columns, sqlgraph.NewFieldSpec(systemconfig.FieldID, field.TypeInt64))
-	id, ok := scuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`entmain: missing "SystemConfig.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := scuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, systemconfig.FieldID)
 		for _, f := range fields {
@@ -943,91 +974,94 @@ func (scuo *SystemConfigUpdateOne) sqlSave(ctx context.Context) (_node *SystemCo
 			}
 		}
 	}
-	if ps := scuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := scuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(systemconfig.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := scuo.mutation.X25519Identity(); ok {
+	if value, ok := _u.mutation.X25519Identity(); ok {
 		_spec.SetField(systemconfig.FieldX25519Identity, field.TypeBytes, value)
 	}
-	if value, ok := scuo.mutation.IsIdentityEncryptedWithPassphrase(); ok {
+	if value, ok := _u.mutation.IsIdentityEncryptedWithPassphrase(); ok {
 		_spec.SetField(systemconfig.FieldIsIdentityEncryptedWithPassphrase, field.TypeBool, value)
 	}
-	if value, ok := scuo.mutation.S3Endpoint(); ok {
+	if value, ok := _u.mutation.S3Endpoint(); ok {
 		_spec.SetField(systemconfig.FieldS3Endpoint, field.TypeString, value)
 	}
-	if value, ok := scuo.mutation.S3AccessKeyID(); ok {
+	if value, ok := _u.mutation.S3AccessKeyID(); ok {
 		_spec.SetField(systemconfig.FieldS3AccessKeyID, field.TypeString, value)
 	}
-	if value, ok := scuo.mutation.S3SecretAccessKey(); ok {
+	if value, ok := _u.mutation.S3SecretAccessKey(); ok {
 		_spec.SetField(systemconfig.FieldS3SecretAccessKey, field.TypeBytes, value)
 	}
-	if value, ok := scuo.mutation.S3BucketName(); ok {
+	if value, ok := _u.mutation.S3BucketName(); ok {
 		_spec.SetField(systemconfig.FieldS3BucketName, field.TypeString, value)
 	}
-	if value, ok := scuo.mutation.S3UseSsl(); ok {
+	if value, ok := _u.mutation.S3UseSsl(); ok {
 		_spec.SetField(systemconfig.FieldS3UseSsl, field.TypeBool, value)
 	}
-	if value, ok := scuo.mutation.TLSEnableAutocert(); ok {
+	if value, ok := _u.mutation.TLSEnableAutocert(); ok {
 		_spec.SetField(systemconfig.FieldTLSEnableAutocert, field.TypeBool, value)
 	}
-	if value, ok := scuo.mutation.TLSCertFilepath(); ok {
+	if value, ok := _u.mutation.TLSCertFilepath(); ok {
 		_spec.SetField(systemconfig.FieldTLSCertFilepath, field.TypeString, value)
 	}
-	if value, ok := scuo.mutation.TLSPrivateKeyFilepath(); ok {
+	if value, ok := _u.mutation.TLSPrivateKeyFilepath(); ok {
 		_spec.SetField(systemconfig.FieldTLSPrivateKeyFilepath, field.TypeString, value)
 	}
-	if value, ok := scuo.mutation.TLSAutocertEmail(); ok {
+	if value, ok := _u.mutation.TLSAutocertEmail(); ok {
 		_spec.SetField(systemconfig.FieldTLSAutocertEmail, field.TypeString, value)
 	}
-	if value, ok := scuo.mutation.TLSAutocertHosts(); ok {
+	if value, ok := _u.mutation.TLSAutocertHosts(); ok {
 		_spec.SetField(systemconfig.FieldTLSAutocertHosts, field.TypeJSON, value)
 	}
-	if value, ok := scuo.mutation.AppendedTLSAutocertHosts(); ok {
+	if value, ok := _u.mutation.AppendedTLSAutocertHosts(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, systemconfig.FieldTLSAutocertHosts, value)
 		})
 	}
-	if value, ok := scuo.mutation.MailerHost(); ok {
+	if value, ok := _u.mutation.MailerHost(); ok {
 		_spec.SetField(systemconfig.FieldMailerHost, field.TypeString, value)
 	}
-	if value, ok := scuo.mutation.MailerPort(); ok {
+	if value, ok := _u.mutation.MailerPort(); ok {
 		_spec.SetField(systemconfig.FieldMailerPort, field.TypeInt, value)
 	}
-	if value, ok := scuo.mutation.AddedMailerPort(); ok {
+	if value, ok := _u.mutation.AddedMailerPort(); ok {
 		_spec.AddField(systemconfig.FieldMailerPort, field.TypeInt, value)
 	}
-	if value, ok := scuo.mutation.MailerUsername(); ok {
+	if value, ok := _u.mutation.MailerUsername(); ok {
 		_spec.SetField(systemconfig.FieldMailerUsername, field.TypeString, value)
 	}
-	if value, ok := scuo.mutation.MailerPassword(); ok {
+	if value, ok := _u.mutation.MailerPassword(); ok {
 		_spec.SetField(systemconfig.FieldMailerPassword, field.TypeBytes, value)
 	}
-	if scuo.mutation.MailerPasswordCleared() {
+	if _u.mutation.MailerPasswordCleared() {
 		_spec.ClearField(systemconfig.FieldMailerPassword, field.TypeBytes)
 	}
-	if value, ok := scuo.mutation.MailerFrom(); ok {
+	if value, ok := _u.mutation.MailerFrom(); ok {
 		_spec.SetField(systemconfig.FieldMailerFrom, field.TypeString, value)
 	}
-	if value, ok := scuo.mutation.MailerInsecureSkipVerify(); ok {
+	if value, ok := _u.mutation.MailerInsecureSkipVerify(); ok {
 		_spec.SetField(systemconfig.FieldMailerInsecureSkipVerify, field.TypeBool, value)
 	}
-	if value, ok := scuo.mutation.OcrTikaURL(); ok {
+	if value, ok := _u.mutation.MailerUseImplicitSslTLS(); ok {
+		_spec.SetField(systemconfig.FieldMailerUseImplicitSslTLS, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)
 	}
-	if value, ok := scuo.mutation.InitializedAt(); ok {
+	if value, ok := _u.mutation.InitializedAt(); ok {
 		_spec.SetField(systemconfig.FieldInitializedAt, field.TypeTime, value)
 	}
-	if scuo.mutation.InitializedAtCleared() {
+	if _u.mutation.InitializedAtCleared() {
 		_spec.ClearField(systemconfig.FieldInitializedAt, field.TypeTime)
 	}
-	if scuo.mutation.UpdaterCleared() {
+	if _u.mutation.UpdaterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1040,7 +1074,7 @@ func (scuo *SystemConfigUpdateOne) sqlSave(ctx context.Context) (_node *SystemCo
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := scuo.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1056,11 +1090,11 @@ func (scuo *SystemConfigUpdateOne) sqlSave(ctx context.Context) (_node *SystemCo
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(scuo.modifiers...)
-	_node = &SystemConfig{config: scuo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &SystemConfig{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, scuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{systemconfig.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1068,6 +1102,6 @@ func (scuo *SystemConfigUpdateOne) sqlSave(ctx context.Context) (_node *SystemCo
 		}
 		return nil, err
 	}
-	scuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

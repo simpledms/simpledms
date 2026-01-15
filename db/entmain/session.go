@@ -80,7 +80,7 @@ func (*Session) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Session fields.
-func (s *Session) assignValues(columns []string, values []any) error {
+func (_m *Session) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -91,51 +91,51 @@ func (s *Session) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			s.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case session.FieldValue:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field value", values[i])
 			} else if value.Valid {
-				s.Value = value.String
+				_m.Value = value.String
 			}
 		case session.FieldAccountID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field account_id", values[i])
 			} else if value.Valid {
-				s.AccountID = value.Int64
+				_m.AccountID = value.Int64
 			}
 		case session.FieldIsTemporarySession:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_temporary_session", values[i])
 			} else if value.Valid {
-				s.IsTemporarySession = value.Bool
+				_m.IsTemporarySession = value.Bool
 			}
 		case session.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
 			} else if value.Valid {
-				s.ExpiresAt = value.Time
+				_m.ExpiresAt = value.Time
 			}
 		case session.FieldDeletableAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deletable_at", values[i])
 			} else if value.Valid {
-				s.DeletableAt = value.Time
+				_m.DeletableAt = value.Time
 			}
 		case session.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				s.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case session.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				s.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		default:
-			s.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -143,57 +143,57 @@ func (s *Session) assignValues(columns []string, values []any) error {
 
 // GetValue returns the ent.Value that was dynamically selected and assigned to the Session.
 // This includes values selected through modifiers, order, etc.
-func (s *Session) GetValue(name string) (ent.Value, error) {
-	return s.selectValues.Get(name)
+func (_m *Session) GetValue(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryAccount queries the "account" edge of the Session entity.
-func (s *Session) QueryAccount() *AccountQuery {
-	return NewSessionClient(s.config).QueryAccount(s)
+func (_m *Session) QueryAccount() *AccountQuery {
+	return NewSessionClient(_m.config).QueryAccount(_m)
 }
 
 // Update returns a builder for updating this Session.
 // Note that you need to call Session.Unwrap() before calling this method if this Session
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (s *Session) Update() *SessionUpdateOne {
-	return NewSessionClient(s.config).UpdateOne(s)
+func (_m *Session) Update() *SessionUpdateOne {
+	return NewSessionClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Session entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (s *Session) Unwrap() *Session {
-	_tx, ok := s.config.driver.(*txDriver)
+func (_m *Session) Unwrap() *Session {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("entmain: Session is not a transactional entity")
 	}
-	s.config.driver = _tx.drv
-	return s
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (s *Session) String() string {
+func (_m *Session) String() string {
 	var builder strings.Builder
 	builder.WriteString("Session(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("value=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("account_id=")
-	builder.WriteString(fmt.Sprintf("%v", s.AccountID))
+	builder.WriteString(fmt.Sprintf("%v", _m.AccountID))
 	builder.WriteString(", ")
 	builder.WriteString("is_temporary_session=")
-	builder.WriteString(fmt.Sprintf("%v", s.IsTemporarySession))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsTemporarySession))
 	builder.WriteString(", ")
 	builder.WriteString("expires_at=")
-	builder.WriteString(s.ExpiresAt.Format(time.ANSIC))
+	builder.WriteString(_m.ExpiresAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deletable_at=")
-	builder.WriteString(s.DeletableAt.Format(time.ANSIC))
+	builder.WriteString(_m.DeletableAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(s.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

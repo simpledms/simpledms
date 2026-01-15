@@ -49,7 +49,7 @@ func (*FileSearch) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the FileSearch fields.
-func (fs *FileSearch) assignValues(columns []string, values []any) error {
+func (_m *FileSearch) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -59,40 +59,40 @@ func (fs *FileSearch) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
-				fs.SpaceID = value.Int64
+				_m.SpaceID = value.Int64
 			}
 		case filesearch.FieldFileSearches:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field file_searches", values[i])
 			} else if value.Valid {
-				fs.FileSearches = value.String
+				_m.FileSearches = value.String
 			}
 		case filesearch.FieldRank:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field rank", values[i])
 			} else if value.Valid {
-				fs.Rank = value.Float64
+				_m.Rank = value.Float64
 			}
 		case filesearch.FieldRowid:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field rowid", values[i])
 			} else if value.Valid {
-				fs.Rowid = value.Int64
+				_m.Rowid = value.Int64
 			}
 		case filesearch.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				fs.Name = value.String
+				_m.Name = value.String
 			}
 		case filesearch.FieldOcrContent:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ocr_content", values[i])
 			} else if value.Valid {
-				fs.OcrContent = value.String
+				_m.OcrContent = value.String
 			}
 		default:
-			fs.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -100,42 +100,42 @@ func (fs *FileSearch) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the FileSearch.
 // This includes values selected through modifiers, order, etc.
-func (fs *FileSearch) Value(name string) (ent.Value, error) {
-	return fs.selectValues.Get(name)
+func (_m *FileSearch) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Unwrap unwraps the FileSearch entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (fs *FileSearch) Unwrap() *FileSearch {
-	_tx, ok := fs.config.driver.(*txDriver)
+func (_m *FileSearch) Unwrap() *FileSearch {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: FileSearch is not a transactional entity")
 	}
-	fs.config.driver = _tx.drv
-	return fs
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (fs *FileSearch) String() string {
+func (_m *FileSearch) String() string {
 	var builder strings.Builder
 	builder.WriteString("FileSearch(")
 	builder.WriteString("space_id=")
-	builder.WriteString(fmt.Sprintf("%v", fs.SpaceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
 	builder.WriteString(", ")
 	builder.WriteString("file_searches=")
-	builder.WriteString(fs.FileSearches)
+	builder.WriteString(_m.FileSearches)
 	builder.WriteString(", ")
 	builder.WriteString("rank=")
-	builder.WriteString(fmt.Sprintf("%v", fs.Rank))
+	builder.WriteString(fmt.Sprintf("%v", _m.Rank))
 	builder.WriteString(", ")
 	builder.WriteString("rowid=")
-	builder.WriteString(fmt.Sprintf("%v", fs.Rowid))
+	builder.WriteString(fmt.Sprintf("%v", _m.Rowid))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(fs.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("ocr_content=")
-	builder.WriteString(fs.OcrContent)
+	builder.WriteString(_m.OcrContent)
 	builder.WriteByte(')')
 	return builder.String()
 }

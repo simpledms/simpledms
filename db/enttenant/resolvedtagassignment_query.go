@@ -29,40 +29,40 @@ type ResolvedTagAssignmentQuery struct {
 }
 
 // Where adds a new predicate for the ResolvedTagAssignmentQuery builder.
-func (rtaq *ResolvedTagAssignmentQuery) Where(ps ...predicate.ResolvedTagAssignment) *ResolvedTagAssignmentQuery {
-	rtaq.predicates = append(rtaq.predicates, ps...)
-	return rtaq
+func (_q *ResolvedTagAssignmentQuery) Where(ps ...predicate.ResolvedTagAssignment) *ResolvedTagAssignmentQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (rtaq *ResolvedTagAssignmentQuery) Limit(limit int) *ResolvedTagAssignmentQuery {
-	rtaq.ctx.Limit = &limit
-	return rtaq
+func (_q *ResolvedTagAssignmentQuery) Limit(limit int) *ResolvedTagAssignmentQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (rtaq *ResolvedTagAssignmentQuery) Offset(offset int) *ResolvedTagAssignmentQuery {
-	rtaq.ctx.Offset = &offset
-	return rtaq
+func (_q *ResolvedTagAssignmentQuery) Offset(offset int) *ResolvedTagAssignmentQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (rtaq *ResolvedTagAssignmentQuery) Unique(unique bool) *ResolvedTagAssignmentQuery {
-	rtaq.ctx.Unique = &unique
-	return rtaq
+func (_q *ResolvedTagAssignmentQuery) Unique(unique bool) *ResolvedTagAssignmentQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (rtaq *ResolvedTagAssignmentQuery) Order(o ...resolvedtagassignment.OrderOption) *ResolvedTagAssignmentQuery {
-	rtaq.order = append(rtaq.order, o...)
-	return rtaq
+func (_q *ResolvedTagAssignmentQuery) Order(o ...resolvedtagassignment.OrderOption) *ResolvedTagAssignmentQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first ResolvedTagAssignment entity from the query.
 // Returns a *NotFoundError when no ResolvedTagAssignment was found.
-func (rtaq *ResolvedTagAssignmentQuery) First(ctx context.Context) (*ResolvedTagAssignment, error) {
-	nodes, err := rtaq.Limit(1).All(setContextOp(ctx, rtaq.ctx, ent.OpQueryFirst))
+func (_q *ResolvedTagAssignmentQuery) First(ctx context.Context) (*ResolvedTagAssignment, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +73,8 @@ func (rtaq *ResolvedTagAssignmentQuery) First(ctx context.Context) (*ResolvedTag
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (rtaq *ResolvedTagAssignmentQuery) FirstX(ctx context.Context) *ResolvedTagAssignment {
-	node, err := rtaq.First(ctx)
+func (_q *ResolvedTagAssignmentQuery) FirstX(ctx context.Context) *ResolvedTagAssignment {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -84,8 +84,8 @@ func (rtaq *ResolvedTagAssignmentQuery) FirstX(ctx context.Context) *ResolvedTag
 // Only returns a single ResolvedTagAssignment entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ResolvedTagAssignment entity is found.
 // Returns a *NotFoundError when no ResolvedTagAssignment entities are found.
-func (rtaq *ResolvedTagAssignmentQuery) Only(ctx context.Context) (*ResolvedTagAssignment, error) {
-	nodes, err := rtaq.Limit(2).All(setContextOp(ctx, rtaq.ctx, ent.OpQueryOnly))
+func (_q *ResolvedTagAssignmentQuery) Only(ctx context.Context) (*ResolvedTagAssignment, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -100,8 +100,8 @@ func (rtaq *ResolvedTagAssignmentQuery) Only(ctx context.Context) (*ResolvedTagA
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (rtaq *ResolvedTagAssignmentQuery) OnlyX(ctx context.Context) *ResolvedTagAssignment {
-	node, err := rtaq.Only(ctx)
+func (_q *ResolvedTagAssignmentQuery) OnlyX(ctx context.Context) *ResolvedTagAssignment {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -109,18 +109,18 @@ func (rtaq *ResolvedTagAssignmentQuery) OnlyX(ctx context.Context) *ResolvedTagA
 }
 
 // All executes the query and returns a list of ResolvedTagAssignments.
-func (rtaq *ResolvedTagAssignmentQuery) All(ctx context.Context) ([]*ResolvedTagAssignment, error) {
-	ctx = setContextOp(ctx, rtaq.ctx, ent.OpQueryAll)
-	if err := rtaq.prepareQuery(ctx); err != nil {
+func (_q *ResolvedTagAssignmentQuery) All(ctx context.Context) ([]*ResolvedTagAssignment, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ResolvedTagAssignment, *ResolvedTagAssignmentQuery]()
-	return withInterceptors[[]*ResolvedTagAssignment](ctx, rtaq, qr, rtaq.inters)
+	return withInterceptors[[]*ResolvedTagAssignment](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (rtaq *ResolvedTagAssignmentQuery) AllX(ctx context.Context) []*ResolvedTagAssignment {
-	nodes, err := rtaq.All(ctx)
+func (_q *ResolvedTagAssignmentQuery) AllX(ctx context.Context) []*ResolvedTagAssignment {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -128,17 +128,17 @@ func (rtaq *ResolvedTagAssignmentQuery) AllX(ctx context.Context) []*ResolvedTag
 }
 
 // Count returns the count of the given query.
-func (rtaq *ResolvedTagAssignmentQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, rtaq.ctx, ent.OpQueryCount)
-	if err := rtaq.prepareQuery(ctx); err != nil {
+func (_q *ResolvedTagAssignmentQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, rtaq, querierCount[*ResolvedTagAssignmentQuery](), rtaq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ResolvedTagAssignmentQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (rtaq *ResolvedTagAssignmentQuery) CountX(ctx context.Context) int {
-	count, err := rtaq.Count(ctx)
+func (_q *ResolvedTagAssignmentQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -146,9 +146,9 @@ func (rtaq *ResolvedTagAssignmentQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (rtaq *ResolvedTagAssignmentQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, rtaq.ctx, ent.OpQueryExist)
-	switch _, err := rtaq.First(ctx); {
+func (_q *ResolvedTagAssignmentQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.First(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -159,8 +159,8 @@ func (rtaq *ResolvedTagAssignmentQuery) Exist(ctx context.Context) (bool, error)
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (rtaq *ResolvedTagAssignmentQuery) ExistX(ctx context.Context) bool {
-	exist, err := rtaq.Exist(ctx)
+func (_q *ResolvedTagAssignmentQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -169,20 +169,20 @@ func (rtaq *ResolvedTagAssignmentQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ResolvedTagAssignmentQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (rtaq *ResolvedTagAssignmentQuery) Clone() *ResolvedTagAssignmentQuery {
-	if rtaq == nil {
+func (_q *ResolvedTagAssignmentQuery) Clone() *ResolvedTagAssignmentQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ResolvedTagAssignmentQuery{
-		config:     rtaq.config,
-		ctx:        rtaq.ctx.Clone(),
-		order:      append([]resolvedtagassignment.OrderOption{}, rtaq.order...),
-		inters:     append([]Interceptor{}, rtaq.inters...),
-		predicates: append([]predicate.ResolvedTagAssignment{}, rtaq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]resolvedtagassignment.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.ResolvedTagAssignment{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       rtaq.sql.Clone(),
-		path:      rtaq.path,
-		modifiers: append([]func(*sql.Selector){}, rtaq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -200,10 +200,10 @@ func (rtaq *ResolvedTagAssignmentQuery) Clone() *ResolvedTagAssignmentQuery {
 //		GroupBy(resolvedtagassignment.FieldTagID).
 //		Aggregate(enttenant.Count()).
 //		Scan(ctx, &v)
-func (rtaq *ResolvedTagAssignmentQuery) GroupBy(field string, fields ...string) *ResolvedTagAssignmentGroupBy {
-	rtaq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ResolvedTagAssignmentGroupBy{build: rtaq}
-	grbuild.flds = &rtaq.ctx.Fields
+func (_q *ResolvedTagAssignmentQuery) GroupBy(field string, fields ...string) *ResolvedTagAssignmentGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ResolvedTagAssignmentGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = resolvedtagassignment.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -221,71 +221,71 @@ func (rtaq *ResolvedTagAssignmentQuery) GroupBy(field string, fields ...string) 
 //	client.ResolvedTagAssignment.Query().
 //		Select(resolvedtagassignment.FieldTagID).
 //		Scan(ctx, &v)
-func (rtaq *ResolvedTagAssignmentQuery) Select(fields ...string) *ResolvedTagAssignmentSelect {
-	rtaq.ctx.Fields = append(rtaq.ctx.Fields, fields...)
-	sbuild := &ResolvedTagAssignmentSelect{ResolvedTagAssignmentQuery: rtaq}
+func (_q *ResolvedTagAssignmentQuery) Select(fields ...string) *ResolvedTagAssignmentSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ResolvedTagAssignmentSelect{ResolvedTagAssignmentQuery: _q}
 	sbuild.label = resolvedtagassignment.Label
-	sbuild.flds, sbuild.scan = &rtaq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ResolvedTagAssignmentSelect configured with the given aggregations.
-func (rtaq *ResolvedTagAssignmentQuery) Aggregate(fns ...AggregateFunc) *ResolvedTagAssignmentSelect {
-	return rtaq.Select().Aggregate(fns...)
+func (_q *ResolvedTagAssignmentQuery) Aggregate(fns ...AggregateFunc) *ResolvedTagAssignmentSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (rtaq *ResolvedTagAssignmentQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range rtaq.inters {
+func (_q *ResolvedTagAssignmentQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("enttenant: uninitialized interceptor (forgotten import enttenant/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, rtaq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range rtaq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !resolvedtagassignment.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("enttenant: invalid field %q for query", f)}
 		}
 	}
-	if rtaq.path != nil {
-		prev, err := rtaq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		rtaq.sql = prev
+		_q.sql = prev
 	}
 	if resolvedtagassignment.Policy == nil {
 		return errors.New("enttenant: uninitialized resolvedtagassignment.Policy (forgotten import enttenant/runtime?)")
 	}
-	if err := resolvedtagassignment.Policy.EvalQuery(ctx, rtaq); err != nil {
+	if err := resolvedtagassignment.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (rtaq *ResolvedTagAssignmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ResolvedTagAssignment, error) {
+func (_q *ResolvedTagAssignmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ResolvedTagAssignment, error) {
 	var (
 		nodes = []*ResolvedTagAssignment{}
-		_spec = rtaq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ResolvedTagAssignment).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ResolvedTagAssignment{config: rtaq.config}
+		node := &ResolvedTagAssignment{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	if len(rtaq.modifiers) > 0 {
-		_spec.Modifiers = rtaq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, rtaq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -294,46 +294,46 @@ func (rtaq *ResolvedTagAssignmentQuery) sqlAll(ctx context.Context, hooks ...que
 	return nodes, nil
 }
 
-func (rtaq *ResolvedTagAssignmentQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := rtaq.querySpec()
-	if len(rtaq.modifiers) > 0 {
-		_spec.Modifiers = rtaq.modifiers
+func (_q *ResolvedTagAssignmentQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = rtaq.ctx.Fields
-	if len(rtaq.ctx.Fields) > 0 {
-		_spec.Unique = rtaq.ctx.Unique != nil && *rtaq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, rtaq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (rtaq *ResolvedTagAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ResolvedTagAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(resolvedtagassignment.Table, resolvedtagassignment.Columns, nil)
-	_spec.From = rtaq.sql
-	if unique := rtaq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if rtaq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := rtaq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		for i := range fields {
 			_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 		}
 	}
-	if ps := rtaq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := rtaq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := rtaq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := rtaq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -343,45 +343,45 @@ func (rtaq *ResolvedTagAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (rtaq *ResolvedTagAssignmentQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(rtaq.driver.Dialect())
+func (_q *ResolvedTagAssignmentQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(resolvedtagassignment.Table)
-	columns := rtaq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = resolvedtagassignment.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if rtaq.sql != nil {
-		selector = rtaq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if rtaq.ctx.Unique != nil && *rtaq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range rtaq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range rtaq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range rtaq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := rtaq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := rtaq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (rtaq *ResolvedTagAssignmentQuery) Modify(modifiers ...func(s *sql.Selector)) *ResolvedTagAssignmentSelect {
-	rtaq.modifiers = append(rtaq.modifiers, modifiers...)
-	return rtaq.Select()
+func (_q *ResolvedTagAssignmentQuery) Modify(modifiers ...func(s *sql.Selector)) *ResolvedTagAssignmentSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // ResolvedTagAssignmentGroupBy is the group-by builder for ResolvedTagAssignment entities.
@@ -391,41 +391,41 @@ type ResolvedTagAssignmentGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (rtagb *ResolvedTagAssignmentGroupBy) Aggregate(fns ...AggregateFunc) *ResolvedTagAssignmentGroupBy {
-	rtagb.fns = append(rtagb.fns, fns...)
-	return rtagb
+func (_g *ResolvedTagAssignmentGroupBy) Aggregate(fns ...AggregateFunc) *ResolvedTagAssignmentGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (rtagb *ResolvedTagAssignmentGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rtagb.build.ctx, ent.OpQueryGroupBy)
-	if err := rtagb.build.prepareQuery(ctx); err != nil {
+func (_g *ResolvedTagAssignmentGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ResolvedTagAssignmentQuery, *ResolvedTagAssignmentGroupBy](ctx, rtagb.build, rtagb, rtagb.build.inters, v)
+	return scanWithInterceptors[*ResolvedTagAssignmentQuery, *ResolvedTagAssignmentGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (rtagb *ResolvedTagAssignmentGroupBy) sqlScan(ctx context.Context, root *ResolvedTagAssignmentQuery, v any) error {
+func (_g *ResolvedTagAssignmentGroupBy) sqlScan(ctx context.Context, root *ResolvedTagAssignmentQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(rtagb.fns))
-	for _, fn := range rtagb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*rtagb.flds)+len(rtagb.fns))
-		for _, f := range *rtagb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*rtagb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := rtagb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -439,27 +439,27 @@ type ResolvedTagAssignmentSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (rtas *ResolvedTagAssignmentSelect) Aggregate(fns ...AggregateFunc) *ResolvedTagAssignmentSelect {
-	rtas.fns = append(rtas.fns, fns...)
-	return rtas
+func (_s *ResolvedTagAssignmentSelect) Aggregate(fns ...AggregateFunc) *ResolvedTagAssignmentSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (rtas *ResolvedTagAssignmentSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rtas.ctx, ent.OpQuerySelect)
-	if err := rtas.prepareQuery(ctx); err != nil {
+func (_s *ResolvedTagAssignmentSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ResolvedTagAssignmentQuery, *ResolvedTagAssignmentSelect](ctx, rtas.ResolvedTagAssignmentQuery, rtas, rtas.inters, v)
+	return scanWithInterceptors[*ResolvedTagAssignmentQuery, *ResolvedTagAssignmentSelect](ctx, _s.ResolvedTagAssignmentQuery, _s, _s.inters, v)
 }
 
-func (rtas *ResolvedTagAssignmentSelect) sqlScan(ctx context.Context, root *ResolvedTagAssignmentQuery, v any) error {
+func (_s *ResolvedTagAssignmentSelect) sqlScan(ctx context.Context, root *ResolvedTagAssignmentQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(rtas.fns))
-	for _, fn := range rtas.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*rtas.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -467,7 +467,7 @@ func (rtas *ResolvedTagAssignmentSelect) sqlScan(ctx context.Context, root *Reso
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := rtas.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -475,7 +475,7 @@ func (rtas *ResolvedTagAssignmentSelect) sqlScan(ctx context.Context, root *Reso
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (rtas *ResolvedTagAssignmentSelect) Modify(modifiers ...func(s *sql.Selector)) *ResolvedTagAssignmentSelect {
-	rtas.modifiers = append(rtas.modifiers, modifiers...)
-	return rtas
+func (_s *ResolvedTagAssignmentSelect) Modify(modifiers ...func(s *sql.Selector)) *ResolvedTagAssignmentSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

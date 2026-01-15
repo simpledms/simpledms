@@ -27,188 +27,188 @@ type TenantAccountAssignmentUpdate struct {
 }
 
 // Where appends a list predicates to the TenantAccountAssignmentUpdate builder.
-func (taau *TenantAccountAssignmentUpdate) Where(ps ...predicate.TenantAccountAssignment) *TenantAccountAssignmentUpdate {
-	taau.mutation.Where(ps...)
-	return taau
+func (_u *TenantAccountAssignmentUpdate) Where(ps ...predicate.TenantAccountAssignment) *TenantAccountAssignmentUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (taau *TenantAccountAssignmentUpdate) SetUpdatedAt(t time.Time) *TenantAccountAssignmentUpdate {
-	taau.mutation.SetUpdatedAt(t)
-	return taau
+func (_u *TenantAccountAssignmentUpdate) SetUpdatedAt(v time.Time) *TenantAccountAssignmentUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (taau *TenantAccountAssignmentUpdate) SetUpdatedBy(i int64) *TenantAccountAssignmentUpdate {
-	taau.mutation.SetUpdatedBy(i)
-	return taau
+func (_u *TenantAccountAssignmentUpdate) SetUpdatedBy(v int64) *TenantAccountAssignmentUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (taau *TenantAccountAssignmentUpdate) SetNillableUpdatedBy(i *int64) *TenantAccountAssignmentUpdate {
-	if i != nil {
-		taau.SetUpdatedBy(*i)
+func (_u *TenantAccountAssignmentUpdate) SetNillableUpdatedBy(v *int64) *TenantAccountAssignmentUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return taau
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (taau *TenantAccountAssignmentUpdate) ClearUpdatedBy() *TenantAccountAssignmentUpdate {
-	taau.mutation.ClearUpdatedBy()
-	return taau
+func (_u *TenantAccountAssignmentUpdate) ClearUpdatedBy() *TenantAccountAssignmentUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetTenantID sets the "tenant_id" field.
-func (taau *TenantAccountAssignmentUpdate) SetTenantID(i int64) *TenantAccountAssignmentUpdate {
-	taau.mutation.SetTenantID(i)
-	return taau
+func (_u *TenantAccountAssignmentUpdate) SetTenantID(v int64) *TenantAccountAssignmentUpdate {
+	_u.mutation.SetTenantID(v)
+	return _u
 }
 
 // SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
-func (taau *TenantAccountAssignmentUpdate) SetNillableTenantID(i *int64) *TenantAccountAssignmentUpdate {
-	if i != nil {
-		taau.SetTenantID(*i)
+func (_u *TenantAccountAssignmentUpdate) SetNillableTenantID(v *int64) *TenantAccountAssignmentUpdate {
+	if v != nil {
+		_u.SetTenantID(*v)
 	}
-	return taau
+	return _u
 }
 
 // SetAccountID sets the "account_id" field.
-func (taau *TenantAccountAssignmentUpdate) SetAccountID(i int64) *TenantAccountAssignmentUpdate {
-	taau.mutation.SetAccountID(i)
-	return taau
+func (_u *TenantAccountAssignmentUpdate) SetAccountID(v int64) *TenantAccountAssignmentUpdate {
+	_u.mutation.SetAccountID(v)
+	return _u
 }
 
 // SetNillableAccountID sets the "account_id" field if the given value is not nil.
-func (taau *TenantAccountAssignmentUpdate) SetNillableAccountID(i *int64) *TenantAccountAssignmentUpdate {
-	if i != nil {
-		taau.SetAccountID(*i)
+func (_u *TenantAccountAssignmentUpdate) SetNillableAccountID(v *int64) *TenantAccountAssignmentUpdate {
+	if v != nil {
+		_u.SetAccountID(*v)
 	}
-	return taau
+	return _u
 }
 
 // SetIsContactPerson sets the "is_contact_person" field.
-func (taau *TenantAccountAssignmentUpdate) SetIsContactPerson(b bool) *TenantAccountAssignmentUpdate {
-	taau.mutation.SetIsContactPerson(b)
-	return taau
+func (_u *TenantAccountAssignmentUpdate) SetIsContactPerson(v bool) *TenantAccountAssignmentUpdate {
+	_u.mutation.SetIsContactPerson(v)
+	return _u
 }
 
 // SetNillableIsContactPerson sets the "is_contact_person" field if the given value is not nil.
-func (taau *TenantAccountAssignmentUpdate) SetNillableIsContactPerson(b *bool) *TenantAccountAssignmentUpdate {
-	if b != nil {
-		taau.SetIsContactPerson(*b)
+func (_u *TenantAccountAssignmentUpdate) SetNillableIsContactPerson(v *bool) *TenantAccountAssignmentUpdate {
+	if v != nil {
+		_u.SetIsContactPerson(*v)
 	}
-	return taau
+	return _u
 }
 
 // SetIsDefault sets the "is_default" field.
-func (taau *TenantAccountAssignmentUpdate) SetIsDefault(b bool) *TenantAccountAssignmentUpdate {
-	taau.mutation.SetIsDefault(b)
-	return taau
+func (_u *TenantAccountAssignmentUpdate) SetIsDefault(v bool) *TenantAccountAssignmentUpdate {
+	_u.mutation.SetIsDefault(v)
+	return _u
 }
 
 // SetNillableIsDefault sets the "is_default" field if the given value is not nil.
-func (taau *TenantAccountAssignmentUpdate) SetNillableIsDefault(b *bool) *TenantAccountAssignmentUpdate {
-	if b != nil {
-		taau.SetIsDefault(*b)
+func (_u *TenantAccountAssignmentUpdate) SetNillableIsDefault(v *bool) *TenantAccountAssignmentUpdate {
+	if v != nil {
+		_u.SetIsDefault(*v)
 	}
-	return taau
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (taau *TenantAccountAssignmentUpdate) SetRole(tr tenantrole.TenantRole) *TenantAccountAssignmentUpdate {
-	taau.mutation.SetRole(tr)
-	return taau
+func (_u *TenantAccountAssignmentUpdate) SetRole(v tenantrole.TenantRole) *TenantAccountAssignmentUpdate {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (taau *TenantAccountAssignmentUpdate) SetNillableRole(tr *tenantrole.TenantRole) *TenantAccountAssignmentUpdate {
-	if tr != nil {
-		taau.SetRole(*tr)
+func (_u *TenantAccountAssignmentUpdate) SetNillableRole(v *tenantrole.TenantRole) *TenantAccountAssignmentUpdate {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return taau
+	return _u
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (taau *TenantAccountAssignmentUpdate) SetExpiresAt(t time.Time) *TenantAccountAssignmentUpdate {
-	taau.mutation.SetExpiresAt(t)
-	return taau
+func (_u *TenantAccountAssignmentUpdate) SetExpiresAt(v time.Time) *TenantAccountAssignmentUpdate {
+	_u.mutation.SetExpiresAt(v)
+	return _u
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (taau *TenantAccountAssignmentUpdate) SetNillableExpiresAt(t *time.Time) *TenantAccountAssignmentUpdate {
-	if t != nil {
-		taau.SetExpiresAt(*t)
+func (_u *TenantAccountAssignmentUpdate) SetNillableExpiresAt(v *time.Time) *TenantAccountAssignmentUpdate {
+	if v != nil {
+		_u.SetExpiresAt(*v)
 	}
-	return taau
+	return _u
 }
 
 // ClearExpiresAt clears the value of the "expires_at" field.
-func (taau *TenantAccountAssignmentUpdate) ClearExpiresAt() *TenantAccountAssignmentUpdate {
-	taau.mutation.ClearExpiresAt()
-	return taau
+func (_u *TenantAccountAssignmentUpdate) ClearExpiresAt() *TenantAccountAssignmentUpdate {
+	_u.mutation.ClearExpiresAt()
+	return _u
 }
 
 // SetUpdaterID sets the "updater" edge to the Account entity by ID.
-func (taau *TenantAccountAssignmentUpdate) SetUpdaterID(id int64) *TenantAccountAssignmentUpdate {
-	taau.mutation.SetUpdaterID(id)
-	return taau
+func (_u *TenantAccountAssignmentUpdate) SetUpdaterID(id int64) *TenantAccountAssignmentUpdate {
+	_u.mutation.SetUpdaterID(id)
+	return _u
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the Account entity by ID if the given value is not nil.
-func (taau *TenantAccountAssignmentUpdate) SetNillableUpdaterID(id *int64) *TenantAccountAssignmentUpdate {
+func (_u *TenantAccountAssignmentUpdate) SetNillableUpdaterID(id *int64) *TenantAccountAssignmentUpdate {
 	if id != nil {
-		taau = taau.SetUpdaterID(*id)
+		_u = _u.SetUpdaterID(*id)
 	}
-	return taau
+	return _u
 }
 
 // SetUpdater sets the "updater" edge to the Account entity.
-func (taau *TenantAccountAssignmentUpdate) SetUpdater(a *Account) *TenantAccountAssignmentUpdate {
-	return taau.SetUpdaterID(a.ID)
+func (_u *TenantAccountAssignmentUpdate) SetUpdater(v *Account) *TenantAccountAssignmentUpdate {
+	return _u.SetUpdaterID(v.ID)
 }
 
 // SetTenant sets the "tenant" edge to the Tenant entity.
-func (taau *TenantAccountAssignmentUpdate) SetTenant(t *Tenant) *TenantAccountAssignmentUpdate {
-	return taau.SetTenantID(t.ID)
+func (_u *TenantAccountAssignmentUpdate) SetTenant(v *Tenant) *TenantAccountAssignmentUpdate {
+	return _u.SetTenantID(v.ID)
 }
 
 // SetAccount sets the "account" edge to the Account entity.
-func (taau *TenantAccountAssignmentUpdate) SetAccount(a *Account) *TenantAccountAssignmentUpdate {
-	return taau.SetAccountID(a.ID)
+func (_u *TenantAccountAssignmentUpdate) SetAccount(v *Account) *TenantAccountAssignmentUpdate {
+	return _u.SetAccountID(v.ID)
 }
 
 // Mutation returns the TenantAccountAssignmentMutation object of the builder.
-func (taau *TenantAccountAssignmentUpdate) Mutation() *TenantAccountAssignmentMutation {
-	return taau.mutation
+func (_u *TenantAccountAssignmentUpdate) Mutation() *TenantAccountAssignmentMutation {
+	return _u.mutation
 }
 
 // ClearUpdater clears the "updater" edge to the Account entity.
-func (taau *TenantAccountAssignmentUpdate) ClearUpdater() *TenantAccountAssignmentUpdate {
-	taau.mutation.ClearUpdater()
-	return taau
+func (_u *TenantAccountAssignmentUpdate) ClearUpdater() *TenantAccountAssignmentUpdate {
+	_u.mutation.ClearUpdater()
+	return _u
 }
 
 // ClearTenant clears the "tenant" edge to the Tenant entity.
-func (taau *TenantAccountAssignmentUpdate) ClearTenant() *TenantAccountAssignmentUpdate {
-	taau.mutation.ClearTenant()
-	return taau
+func (_u *TenantAccountAssignmentUpdate) ClearTenant() *TenantAccountAssignmentUpdate {
+	_u.mutation.ClearTenant()
+	return _u
 }
 
 // ClearAccount clears the "account" edge to the Account entity.
-func (taau *TenantAccountAssignmentUpdate) ClearAccount() *TenantAccountAssignmentUpdate {
-	taau.mutation.ClearAccount()
-	return taau
+func (_u *TenantAccountAssignmentUpdate) ClearAccount() *TenantAccountAssignmentUpdate {
+	_u.mutation.ClearAccount()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (taau *TenantAccountAssignmentUpdate) Save(ctx context.Context) (int, error) {
-	taau.defaults()
-	return withHooks(ctx, taau.sqlSave, taau.mutation, taau.hooks)
+func (_u *TenantAccountAssignmentUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (taau *TenantAccountAssignmentUpdate) SaveX(ctx context.Context) int {
-	affected, err := taau.Save(ctx)
+func (_u *TenantAccountAssignmentUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -216,79 +216,79 @@ func (taau *TenantAccountAssignmentUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (taau *TenantAccountAssignmentUpdate) Exec(ctx context.Context) error {
-	_, err := taau.Save(ctx)
+func (_u *TenantAccountAssignmentUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (taau *TenantAccountAssignmentUpdate) ExecX(ctx context.Context) {
-	if err := taau.Exec(ctx); err != nil {
+func (_u *TenantAccountAssignmentUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (taau *TenantAccountAssignmentUpdate) defaults() {
-	if _, ok := taau.mutation.UpdatedAt(); !ok {
+func (_u *TenantAccountAssignmentUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := tenantaccountassignment.UpdateDefaultUpdatedAt()
-		taau.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (taau *TenantAccountAssignmentUpdate) check() error {
-	if v, ok := taau.mutation.Role(); ok {
+func (_u *TenantAccountAssignmentUpdate) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := tenantaccountassignment.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`entmain: validator failed for field "TenantAccountAssignment.role": %w`, err)}
 		}
 	}
-	if taau.mutation.TenantCleared() && len(taau.mutation.TenantIDs()) > 0 {
+	if _u.mutation.TenantCleared() && len(_u.mutation.TenantIDs()) > 0 {
 		return errors.New(`entmain: clearing a required unique edge "TenantAccountAssignment.tenant"`)
 	}
-	if taau.mutation.AccountCleared() && len(taau.mutation.AccountIDs()) > 0 {
+	if _u.mutation.AccountCleared() && len(_u.mutation.AccountIDs()) > 0 {
 		return errors.New(`entmain: clearing a required unique edge "TenantAccountAssignment.account"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (taau *TenantAccountAssignmentUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TenantAccountAssignmentUpdate {
-	taau.modifiers = append(taau.modifiers, modifiers...)
-	return taau
+func (_u *TenantAccountAssignmentUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TenantAccountAssignmentUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (taau *TenantAccountAssignmentUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := taau.check(); err != nil {
-		return n, err
+func (_u *TenantAccountAssignmentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(tenantaccountassignment.Table, tenantaccountassignment.Columns, sqlgraph.NewFieldSpec(tenantaccountassignment.FieldID, field.TypeInt64))
-	if ps := taau.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := taau.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(tenantaccountassignment.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := taau.mutation.IsContactPerson(); ok {
+	if value, ok := _u.mutation.IsContactPerson(); ok {
 		_spec.SetField(tenantaccountassignment.FieldIsContactPerson, field.TypeBool, value)
 	}
-	if value, ok := taau.mutation.IsDefault(); ok {
+	if value, ok := _u.mutation.IsDefault(); ok {
 		_spec.SetField(tenantaccountassignment.FieldIsDefault, field.TypeBool, value)
 	}
-	if value, ok := taau.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(tenantaccountassignment.FieldRole, field.TypeEnum, value)
 	}
-	if value, ok := taau.mutation.ExpiresAt(); ok {
+	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(tenantaccountassignment.FieldExpiresAt, field.TypeTime, value)
 	}
-	if taau.mutation.ExpiresAtCleared() {
+	if _u.mutation.ExpiresAtCleared() {
 		_spec.ClearField(tenantaccountassignment.FieldExpiresAt, field.TypeTime)
 	}
-	if taau.mutation.UpdaterCleared() {
+	if _u.mutation.UpdaterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -301,7 +301,7 @@ func (taau *TenantAccountAssignmentUpdate) sqlSave(ctx context.Context) (n int, 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := taau.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -317,7 +317,7 @@ func (taau *TenantAccountAssignmentUpdate) sqlSave(ctx context.Context) (n int, 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if taau.mutation.TenantCleared() {
+	if _u.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -330,7 +330,7 @@ func (taau *TenantAccountAssignmentUpdate) sqlSave(ctx context.Context) (n int, 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := taau.mutation.TenantIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TenantIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -346,7 +346,7 @@ func (taau *TenantAccountAssignmentUpdate) sqlSave(ctx context.Context) (n int, 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if taau.mutation.AccountCleared() {
+	if _u.mutation.AccountCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -359,7 +359,7 @@ func (taau *TenantAccountAssignmentUpdate) sqlSave(ctx context.Context) (n int, 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := taau.mutation.AccountIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AccountIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -375,8 +375,8 @@ func (taau *TenantAccountAssignmentUpdate) sqlSave(ctx context.Context) (n int, 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(taau.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, taau.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{tenantaccountassignment.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -384,8 +384,8 @@ func (taau *TenantAccountAssignmentUpdate) sqlSave(ctx context.Context) (n int, 
 		}
 		return 0, err
 	}
-	taau.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TenantAccountAssignmentUpdateOne is the builder for updating a single TenantAccountAssignment entity.
@@ -398,195 +398,195 @@ type TenantAccountAssignmentUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (taauo *TenantAccountAssignmentUpdateOne) SetUpdatedAt(t time.Time) *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.SetUpdatedAt(t)
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) SetUpdatedAt(v time.Time) *TenantAccountAssignmentUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (taauo *TenantAccountAssignmentUpdateOne) SetUpdatedBy(i int64) *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.SetUpdatedBy(i)
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) SetUpdatedBy(v int64) *TenantAccountAssignmentUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (taauo *TenantAccountAssignmentUpdateOne) SetNillableUpdatedBy(i *int64) *TenantAccountAssignmentUpdateOne {
-	if i != nil {
-		taauo.SetUpdatedBy(*i)
+func (_u *TenantAccountAssignmentUpdateOne) SetNillableUpdatedBy(v *int64) *TenantAccountAssignmentUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return taauo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (taauo *TenantAccountAssignmentUpdateOne) ClearUpdatedBy() *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.ClearUpdatedBy()
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) ClearUpdatedBy() *TenantAccountAssignmentUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetTenantID sets the "tenant_id" field.
-func (taauo *TenantAccountAssignmentUpdateOne) SetTenantID(i int64) *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.SetTenantID(i)
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) SetTenantID(v int64) *TenantAccountAssignmentUpdateOne {
+	_u.mutation.SetTenantID(v)
+	return _u
 }
 
 // SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
-func (taauo *TenantAccountAssignmentUpdateOne) SetNillableTenantID(i *int64) *TenantAccountAssignmentUpdateOne {
-	if i != nil {
-		taauo.SetTenantID(*i)
+func (_u *TenantAccountAssignmentUpdateOne) SetNillableTenantID(v *int64) *TenantAccountAssignmentUpdateOne {
+	if v != nil {
+		_u.SetTenantID(*v)
 	}
-	return taauo
+	return _u
 }
 
 // SetAccountID sets the "account_id" field.
-func (taauo *TenantAccountAssignmentUpdateOne) SetAccountID(i int64) *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.SetAccountID(i)
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) SetAccountID(v int64) *TenantAccountAssignmentUpdateOne {
+	_u.mutation.SetAccountID(v)
+	return _u
 }
 
 // SetNillableAccountID sets the "account_id" field if the given value is not nil.
-func (taauo *TenantAccountAssignmentUpdateOne) SetNillableAccountID(i *int64) *TenantAccountAssignmentUpdateOne {
-	if i != nil {
-		taauo.SetAccountID(*i)
+func (_u *TenantAccountAssignmentUpdateOne) SetNillableAccountID(v *int64) *TenantAccountAssignmentUpdateOne {
+	if v != nil {
+		_u.SetAccountID(*v)
 	}
-	return taauo
+	return _u
 }
 
 // SetIsContactPerson sets the "is_contact_person" field.
-func (taauo *TenantAccountAssignmentUpdateOne) SetIsContactPerson(b bool) *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.SetIsContactPerson(b)
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) SetIsContactPerson(v bool) *TenantAccountAssignmentUpdateOne {
+	_u.mutation.SetIsContactPerson(v)
+	return _u
 }
 
 // SetNillableIsContactPerson sets the "is_contact_person" field if the given value is not nil.
-func (taauo *TenantAccountAssignmentUpdateOne) SetNillableIsContactPerson(b *bool) *TenantAccountAssignmentUpdateOne {
-	if b != nil {
-		taauo.SetIsContactPerson(*b)
+func (_u *TenantAccountAssignmentUpdateOne) SetNillableIsContactPerson(v *bool) *TenantAccountAssignmentUpdateOne {
+	if v != nil {
+		_u.SetIsContactPerson(*v)
 	}
-	return taauo
+	return _u
 }
 
 // SetIsDefault sets the "is_default" field.
-func (taauo *TenantAccountAssignmentUpdateOne) SetIsDefault(b bool) *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.SetIsDefault(b)
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) SetIsDefault(v bool) *TenantAccountAssignmentUpdateOne {
+	_u.mutation.SetIsDefault(v)
+	return _u
 }
 
 // SetNillableIsDefault sets the "is_default" field if the given value is not nil.
-func (taauo *TenantAccountAssignmentUpdateOne) SetNillableIsDefault(b *bool) *TenantAccountAssignmentUpdateOne {
-	if b != nil {
-		taauo.SetIsDefault(*b)
+func (_u *TenantAccountAssignmentUpdateOne) SetNillableIsDefault(v *bool) *TenantAccountAssignmentUpdateOne {
+	if v != nil {
+		_u.SetIsDefault(*v)
 	}
-	return taauo
+	return _u
 }
 
 // SetRole sets the "role" field.
-func (taauo *TenantAccountAssignmentUpdateOne) SetRole(tr tenantrole.TenantRole) *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.SetRole(tr)
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) SetRole(v tenantrole.TenantRole) *TenantAccountAssignmentUpdateOne {
+	_u.mutation.SetRole(v)
+	return _u
 }
 
 // SetNillableRole sets the "role" field if the given value is not nil.
-func (taauo *TenantAccountAssignmentUpdateOne) SetNillableRole(tr *tenantrole.TenantRole) *TenantAccountAssignmentUpdateOne {
-	if tr != nil {
-		taauo.SetRole(*tr)
+func (_u *TenantAccountAssignmentUpdateOne) SetNillableRole(v *tenantrole.TenantRole) *TenantAccountAssignmentUpdateOne {
+	if v != nil {
+		_u.SetRole(*v)
 	}
-	return taauo
+	return _u
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (taauo *TenantAccountAssignmentUpdateOne) SetExpiresAt(t time.Time) *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.SetExpiresAt(t)
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) SetExpiresAt(v time.Time) *TenantAccountAssignmentUpdateOne {
+	_u.mutation.SetExpiresAt(v)
+	return _u
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (taauo *TenantAccountAssignmentUpdateOne) SetNillableExpiresAt(t *time.Time) *TenantAccountAssignmentUpdateOne {
-	if t != nil {
-		taauo.SetExpiresAt(*t)
+func (_u *TenantAccountAssignmentUpdateOne) SetNillableExpiresAt(v *time.Time) *TenantAccountAssignmentUpdateOne {
+	if v != nil {
+		_u.SetExpiresAt(*v)
 	}
-	return taauo
+	return _u
 }
 
 // ClearExpiresAt clears the value of the "expires_at" field.
-func (taauo *TenantAccountAssignmentUpdateOne) ClearExpiresAt() *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.ClearExpiresAt()
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) ClearExpiresAt() *TenantAccountAssignmentUpdateOne {
+	_u.mutation.ClearExpiresAt()
+	return _u
 }
 
 // SetUpdaterID sets the "updater" edge to the Account entity by ID.
-func (taauo *TenantAccountAssignmentUpdateOne) SetUpdaterID(id int64) *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.SetUpdaterID(id)
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) SetUpdaterID(id int64) *TenantAccountAssignmentUpdateOne {
+	_u.mutation.SetUpdaterID(id)
+	return _u
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the Account entity by ID if the given value is not nil.
-func (taauo *TenantAccountAssignmentUpdateOne) SetNillableUpdaterID(id *int64) *TenantAccountAssignmentUpdateOne {
+func (_u *TenantAccountAssignmentUpdateOne) SetNillableUpdaterID(id *int64) *TenantAccountAssignmentUpdateOne {
 	if id != nil {
-		taauo = taauo.SetUpdaterID(*id)
+		_u = _u.SetUpdaterID(*id)
 	}
-	return taauo
+	return _u
 }
 
 // SetUpdater sets the "updater" edge to the Account entity.
-func (taauo *TenantAccountAssignmentUpdateOne) SetUpdater(a *Account) *TenantAccountAssignmentUpdateOne {
-	return taauo.SetUpdaterID(a.ID)
+func (_u *TenantAccountAssignmentUpdateOne) SetUpdater(v *Account) *TenantAccountAssignmentUpdateOne {
+	return _u.SetUpdaterID(v.ID)
 }
 
 // SetTenant sets the "tenant" edge to the Tenant entity.
-func (taauo *TenantAccountAssignmentUpdateOne) SetTenant(t *Tenant) *TenantAccountAssignmentUpdateOne {
-	return taauo.SetTenantID(t.ID)
+func (_u *TenantAccountAssignmentUpdateOne) SetTenant(v *Tenant) *TenantAccountAssignmentUpdateOne {
+	return _u.SetTenantID(v.ID)
 }
 
 // SetAccount sets the "account" edge to the Account entity.
-func (taauo *TenantAccountAssignmentUpdateOne) SetAccount(a *Account) *TenantAccountAssignmentUpdateOne {
-	return taauo.SetAccountID(a.ID)
+func (_u *TenantAccountAssignmentUpdateOne) SetAccount(v *Account) *TenantAccountAssignmentUpdateOne {
+	return _u.SetAccountID(v.ID)
 }
 
 // Mutation returns the TenantAccountAssignmentMutation object of the builder.
-func (taauo *TenantAccountAssignmentUpdateOne) Mutation() *TenantAccountAssignmentMutation {
-	return taauo.mutation
+func (_u *TenantAccountAssignmentUpdateOne) Mutation() *TenantAccountAssignmentMutation {
+	return _u.mutation
 }
 
 // ClearUpdater clears the "updater" edge to the Account entity.
-func (taauo *TenantAccountAssignmentUpdateOne) ClearUpdater() *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.ClearUpdater()
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) ClearUpdater() *TenantAccountAssignmentUpdateOne {
+	_u.mutation.ClearUpdater()
+	return _u
 }
 
 // ClearTenant clears the "tenant" edge to the Tenant entity.
-func (taauo *TenantAccountAssignmentUpdateOne) ClearTenant() *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.ClearTenant()
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) ClearTenant() *TenantAccountAssignmentUpdateOne {
+	_u.mutation.ClearTenant()
+	return _u
 }
 
 // ClearAccount clears the "account" edge to the Account entity.
-func (taauo *TenantAccountAssignmentUpdateOne) ClearAccount() *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.ClearAccount()
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) ClearAccount() *TenantAccountAssignmentUpdateOne {
+	_u.mutation.ClearAccount()
+	return _u
 }
 
 // Where appends a list predicates to the TenantAccountAssignmentUpdate builder.
-func (taauo *TenantAccountAssignmentUpdateOne) Where(ps ...predicate.TenantAccountAssignment) *TenantAccountAssignmentUpdateOne {
-	taauo.mutation.Where(ps...)
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) Where(ps ...predicate.TenantAccountAssignment) *TenantAccountAssignmentUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (taauo *TenantAccountAssignmentUpdateOne) Select(field string, fields ...string) *TenantAccountAssignmentUpdateOne {
-	taauo.fields = append([]string{field}, fields...)
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) Select(field string, fields ...string) *TenantAccountAssignmentUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TenantAccountAssignment entity.
-func (taauo *TenantAccountAssignmentUpdateOne) Save(ctx context.Context) (*TenantAccountAssignment, error) {
-	taauo.defaults()
-	return withHooks(ctx, taauo.sqlSave, taauo.mutation, taauo.hooks)
+func (_u *TenantAccountAssignmentUpdateOne) Save(ctx context.Context) (*TenantAccountAssignment, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (taauo *TenantAccountAssignmentUpdateOne) SaveX(ctx context.Context) *TenantAccountAssignment {
-	node, err := taauo.Save(ctx)
+func (_u *TenantAccountAssignmentUpdateOne) SaveX(ctx context.Context) *TenantAccountAssignment {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -594,59 +594,59 @@ func (taauo *TenantAccountAssignmentUpdateOne) SaveX(ctx context.Context) *Tenan
 }
 
 // Exec executes the query on the entity.
-func (taauo *TenantAccountAssignmentUpdateOne) Exec(ctx context.Context) error {
-	_, err := taauo.Save(ctx)
+func (_u *TenantAccountAssignmentUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (taauo *TenantAccountAssignmentUpdateOne) ExecX(ctx context.Context) {
-	if err := taauo.Exec(ctx); err != nil {
+func (_u *TenantAccountAssignmentUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (taauo *TenantAccountAssignmentUpdateOne) defaults() {
-	if _, ok := taauo.mutation.UpdatedAt(); !ok {
+func (_u *TenantAccountAssignmentUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := tenantaccountassignment.UpdateDefaultUpdatedAt()
-		taauo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (taauo *TenantAccountAssignmentUpdateOne) check() error {
-	if v, ok := taauo.mutation.Role(); ok {
+func (_u *TenantAccountAssignmentUpdateOne) check() error {
+	if v, ok := _u.mutation.Role(); ok {
 		if err := tenantaccountassignment.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`entmain: validator failed for field "TenantAccountAssignment.role": %w`, err)}
 		}
 	}
-	if taauo.mutation.TenantCleared() && len(taauo.mutation.TenantIDs()) > 0 {
+	if _u.mutation.TenantCleared() && len(_u.mutation.TenantIDs()) > 0 {
 		return errors.New(`entmain: clearing a required unique edge "TenantAccountAssignment.tenant"`)
 	}
-	if taauo.mutation.AccountCleared() && len(taauo.mutation.AccountIDs()) > 0 {
+	if _u.mutation.AccountCleared() && len(_u.mutation.AccountIDs()) > 0 {
 		return errors.New(`entmain: clearing a required unique edge "TenantAccountAssignment.account"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (taauo *TenantAccountAssignmentUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TenantAccountAssignmentUpdateOne {
-	taauo.modifiers = append(taauo.modifiers, modifiers...)
-	return taauo
+func (_u *TenantAccountAssignmentUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TenantAccountAssignmentUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (taauo *TenantAccountAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *TenantAccountAssignment, err error) {
-	if err := taauo.check(); err != nil {
+func (_u *TenantAccountAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *TenantAccountAssignment, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(tenantaccountassignment.Table, tenantaccountassignment.Columns, sqlgraph.NewFieldSpec(tenantaccountassignment.FieldID, field.TypeInt64))
-	id, ok := taauo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`entmain: missing "TenantAccountAssignment.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := taauo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, tenantaccountassignment.FieldID)
 		for _, f := range fields {
@@ -658,32 +658,32 @@ func (taauo *TenantAccountAssignmentUpdateOne) sqlSave(ctx context.Context) (_no
 			}
 		}
 	}
-	if ps := taauo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := taauo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(tenantaccountassignment.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := taauo.mutation.IsContactPerson(); ok {
+	if value, ok := _u.mutation.IsContactPerson(); ok {
 		_spec.SetField(tenantaccountassignment.FieldIsContactPerson, field.TypeBool, value)
 	}
-	if value, ok := taauo.mutation.IsDefault(); ok {
+	if value, ok := _u.mutation.IsDefault(); ok {
 		_spec.SetField(tenantaccountassignment.FieldIsDefault, field.TypeBool, value)
 	}
-	if value, ok := taauo.mutation.Role(); ok {
+	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(tenantaccountassignment.FieldRole, field.TypeEnum, value)
 	}
-	if value, ok := taauo.mutation.ExpiresAt(); ok {
+	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(tenantaccountassignment.FieldExpiresAt, field.TypeTime, value)
 	}
-	if taauo.mutation.ExpiresAtCleared() {
+	if _u.mutation.ExpiresAtCleared() {
 		_spec.ClearField(tenantaccountassignment.FieldExpiresAt, field.TypeTime)
 	}
-	if taauo.mutation.UpdaterCleared() {
+	if _u.mutation.UpdaterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -696,7 +696,7 @@ func (taauo *TenantAccountAssignmentUpdateOne) sqlSave(ctx context.Context) (_no
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := taauo.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -712,7 +712,7 @@ func (taauo *TenantAccountAssignmentUpdateOne) sqlSave(ctx context.Context) (_no
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if taauo.mutation.TenantCleared() {
+	if _u.mutation.TenantCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -725,7 +725,7 @@ func (taauo *TenantAccountAssignmentUpdateOne) sqlSave(ctx context.Context) (_no
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := taauo.mutation.TenantIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TenantIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -741,7 +741,7 @@ func (taauo *TenantAccountAssignmentUpdateOne) sqlSave(ctx context.Context) (_no
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if taauo.mutation.AccountCleared() {
+	if _u.mutation.AccountCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -754,7 +754,7 @@ func (taauo *TenantAccountAssignmentUpdateOne) sqlSave(ctx context.Context) (_no
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := taauo.mutation.AccountIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.AccountIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -770,11 +770,11 @@ func (taauo *TenantAccountAssignmentUpdateOne) sqlSave(ctx context.Context) (_no
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(taauo.modifiers...)
-	_node = &TenantAccountAssignment{config: taauo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &TenantAccountAssignment{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, taauo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{tenantaccountassignment.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -782,6 +782,6 @@ func (taauo *TenantAccountAssignmentUpdateOne) sqlSave(ctx context.Context) (_no
 		}
 		return nil, err
 	}
-	taauo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

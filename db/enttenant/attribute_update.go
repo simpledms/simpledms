@@ -27,195 +27,195 @@ type AttributeUpdate struct {
 }
 
 // Where appends a list predicates to the AttributeUpdate builder.
-func (au *AttributeUpdate) Where(ps ...predicate.Attribute) *AttributeUpdate {
-	au.mutation.Where(ps...)
-	return au
+func (_u *AttributeUpdate) Where(ps ...predicate.Attribute) *AttributeUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetDocumentTypeID sets the "document_type_id" field.
-func (au *AttributeUpdate) SetDocumentTypeID(i int64) *AttributeUpdate {
-	au.mutation.SetDocumentTypeID(i)
-	return au
+func (_u *AttributeUpdate) SetDocumentTypeID(v int64) *AttributeUpdate {
+	_u.mutation.SetDocumentTypeID(v)
+	return _u
 }
 
 // SetNillableDocumentTypeID sets the "document_type_id" field if the given value is not nil.
-func (au *AttributeUpdate) SetNillableDocumentTypeID(i *int64) *AttributeUpdate {
-	if i != nil {
-		au.SetDocumentTypeID(*i)
+func (_u *AttributeUpdate) SetNillableDocumentTypeID(v *int64) *AttributeUpdate {
+	if v != nil {
+		_u.SetDocumentTypeID(*v)
 	}
-	return au
+	return _u
 }
 
 // SetName sets the "name" field.
-func (au *AttributeUpdate) SetName(s string) *AttributeUpdate {
-	au.mutation.SetName(s)
-	return au
+func (_u *AttributeUpdate) SetName(v string) *AttributeUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (au *AttributeUpdate) SetNillableName(s *string) *AttributeUpdate {
-	if s != nil {
-		au.SetName(*s)
+func (_u *AttributeUpdate) SetNillableName(v *string) *AttributeUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return au
+	return _u
 }
 
 // SetIsNameGiving sets the "is_name_giving" field.
-func (au *AttributeUpdate) SetIsNameGiving(b bool) *AttributeUpdate {
-	au.mutation.SetIsNameGiving(b)
-	return au
+func (_u *AttributeUpdate) SetIsNameGiving(v bool) *AttributeUpdate {
+	_u.mutation.SetIsNameGiving(v)
+	return _u
 }
 
 // SetNillableIsNameGiving sets the "is_name_giving" field if the given value is not nil.
-func (au *AttributeUpdate) SetNillableIsNameGiving(b *bool) *AttributeUpdate {
-	if b != nil {
-		au.SetIsNameGiving(*b)
+func (_u *AttributeUpdate) SetNillableIsNameGiving(v *bool) *AttributeUpdate {
+	if v != nil {
+		_u.SetIsNameGiving(*v)
 	}
-	return au
+	return _u
 }
 
 // SetIsProtected sets the "is_protected" field.
-func (au *AttributeUpdate) SetIsProtected(b bool) *AttributeUpdate {
-	au.mutation.SetIsProtected(b)
-	return au
+func (_u *AttributeUpdate) SetIsProtected(v bool) *AttributeUpdate {
+	_u.mutation.SetIsProtected(v)
+	return _u
 }
 
 // SetNillableIsProtected sets the "is_protected" field if the given value is not nil.
-func (au *AttributeUpdate) SetNillableIsProtected(b *bool) *AttributeUpdate {
-	if b != nil {
-		au.SetIsProtected(*b)
+func (_u *AttributeUpdate) SetNillableIsProtected(v *bool) *AttributeUpdate {
+	if v != nil {
+		_u.SetIsProtected(*v)
 	}
-	return au
+	return _u
 }
 
 // SetIsDisabled sets the "is_disabled" field.
-func (au *AttributeUpdate) SetIsDisabled(b bool) *AttributeUpdate {
-	au.mutation.SetIsDisabled(b)
-	return au
+func (_u *AttributeUpdate) SetIsDisabled(v bool) *AttributeUpdate {
+	_u.mutation.SetIsDisabled(v)
+	return _u
 }
 
 // SetNillableIsDisabled sets the "is_disabled" field if the given value is not nil.
-func (au *AttributeUpdate) SetNillableIsDisabled(b *bool) *AttributeUpdate {
-	if b != nil {
-		au.SetIsDisabled(*b)
+func (_u *AttributeUpdate) SetNillableIsDisabled(v *bool) *AttributeUpdate {
+	if v != nil {
+		_u.SetIsDisabled(*v)
 	}
-	return au
+	return _u
 }
 
 // SetIsRequired sets the "is_required" field.
-func (au *AttributeUpdate) SetIsRequired(b bool) *AttributeUpdate {
-	au.mutation.SetIsRequired(b)
-	return au
+func (_u *AttributeUpdate) SetIsRequired(v bool) *AttributeUpdate {
+	_u.mutation.SetIsRequired(v)
+	return _u
 }
 
 // SetNillableIsRequired sets the "is_required" field if the given value is not nil.
-func (au *AttributeUpdate) SetNillableIsRequired(b *bool) *AttributeUpdate {
-	if b != nil {
-		au.SetIsRequired(*b)
+func (_u *AttributeUpdate) SetNillableIsRequired(v *bool) *AttributeUpdate {
+	if v != nil {
+		_u.SetIsRequired(*v)
 	}
-	return au
+	return _u
 }
 
 // SetType sets the "type" field.
-func (au *AttributeUpdate) SetType(at attributetype.AttributeType) *AttributeUpdate {
-	au.mutation.SetType(at)
-	return au
+func (_u *AttributeUpdate) SetType(v attributetype.AttributeType) *AttributeUpdate {
+	_u.mutation.SetType(v)
+	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (au *AttributeUpdate) SetNillableType(at *attributetype.AttributeType) *AttributeUpdate {
-	if at != nil {
-		au.SetType(*at)
+func (_u *AttributeUpdate) SetNillableType(v *attributetype.AttributeType) *AttributeUpdate {
+	if v != nil {
+		_u.SetType(*v)
 	}
-	return au
+	return _u
 }
 
 // SetTagID sets the "tag_id" field.
-func (au *AttributeUpdate) SetTagID(i int64) *AttributeUpdate {
-	au.mutation.SetTagID(i)
-	return au
+func (_u *AttributeUpdate) SetTagID(v int64) *AttributeUpdate {
+	_u.mutation.SetTagID(v)
+	return _u
 }
 
 // SetNillableTagID sets the "tag_id" field if the given value is not nil.
-func (au *AttributeUpdate) SetNillableTagID(i *int64) *AttributeUpdate {
-	if i != nil {
-		au.SetTagID(*i)
+func (_u *AttributeUpdate) SetNillableTagID(v *int64) *AttributeUpdate {
+	if v != nil {
+		_u.SetTagID(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearTagID clears the value of the "tag_id" field.
-func (au *AttributeUpdate) ClearTagID() *AttributeUpdate {
-	au.mutation.ClearTagID()
-	return au
+func (_u *AttributeUpdate) ClearTagID() *AttributeUpdate {
+	_u.mutation.ClearTagID()
+	return _u
 }
 
 // SetPropertyID sets the "property_id" field.
-func (au *AttributeUpdate) SetPropertyID(i int64) *AttributeUpdate {
-	au.mutation.SetPropertyID(i)
-	return au
+func (_u *AttributeUpdate) SetPropertyID(v int64) *AttributeUpdate {
+	_u.mutation.SetPropertyID(v)
+	return _u
 }
 
 // SetNillablePropertyID sets the "property_id" field if the given value is not nil.
-func (au *AttributeUpdate) SetNillablePropertyID(i *int64) *AttributeUpdate {
-	if i != nil {
-		au.SetPropertyID(*i)
+func (_u *AttributeUpdate) SetNillablePropertyID(v *int64) *AttributeUpdate {
+	if v != nil {
+		_u.SetPropertyID(*v)
 	}
-	return au
+	return _u
 }
 
 // ClearPropertyID clears the value of the "property_id" field.
-func (au *AttributeUpdate) ClearPropertyID() *AttributeUpdate {
-	au.mutation.ClearPropertyID()
-	return au
+func (_u *AttributeUpdate) ClearPropertyID() *AttributeUpdate {
+	_u.mutation.ClearPropertyID()
+	return _u
 }
 
 // SetDocumentType sets the "document_type" edge to the DocumentType entity.
-func (au *AttributeUpdate) SetDocumentType(d *DocumentType) *AttributeUpdate {
-	return au.SetDocumentTypeID(d.ID)
+func (_u *AttributeUpdate) SetDocumentType(v *DocumentType) *AttributeUpdate {
+	return _u.SetDocumentTypeID(v.ID)
 }
 
 // SetTag sets the "tag" edge to the Tag entity.
-func (au *AttributeUpdate) SetTag(t *Tag) *AttributeUpdate {
-	return au.SetTagID(t.ID)
+func (_u *AttributeUpdate) SetTag(v *Tag) *AttributeUpdate {
+	return _u.SetTagID(v.ID)
 }
 
 // SetProperty sets the "property" edge to the Property entity.
-func (au *AttributeUpdate) SetProperty(p *Property) *AttributeUpdate {
-	return au.SetPropertyID(p.ID)
+func (_u *AttributeUpdate) SetProperty(v *Property) *AttributeUpdate {
+	return _u.SetPropertyID(v.ID)
 }
 
 // Mutation returns the AttributeMutation object of the builder.
-func (au *AttributeUpdate) Mutation() *AttributeMutation {
-	return au.mutation
+func (_u *AttributeUpdate) Mutation() *AttributeMutation {
+	return _u.mutation
 }
 
 // ClearDocumentType clears the "document_type" edge to the DocumentType entity.
-func (au *AttributeUpdate) ClearDocumentType() *AttributeUpdate {
-	au.mutation.ClearDocumentType()
-	return au
+func (_u *AttributeUpdate) ClearDocumentType() *AttributeUpdate {
+	_u.mutation.ClearDocumentType()
+	return _u
 }
 
 // ClearTag clears the "tag" edge to the Tag entity.
-func (au *AttributeUpdate) ClearTag() *AttributeUpdate {
-	au.mutation.ClearTag()
-	return au
+func (_u *AttributeUpdate) ClearTag() *AttributeUpdate {
+	_u.mutation.ClearTag()
+	return _u
 }
 
 // ClearProperty clears the "property" edge to the Property entity.
-func (au *AttributeUpdate) ClearProperty() *AttributeUpdate {
-	au.mutation.ClearProperty()
-	return au
+func (_u *AttributeUpdate) ClearProperty() *AttributeUpdate {
+	_u.mutation.ClearProperty()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (au *AttributeUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, au.sqlSave, au.mutation, au.hooks)
+func (_u *AttributeUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (au *AttributeUpdate) SaveX(ctx context.Context) int {
-	affected, err := au.Save(ctx)
+func (_u *AttributeUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -223,71 +223,71 @@ func (au *AttributeUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (au *AttributeUpdate) Exec(ctx context.Context) error {
-	_, err := au.Save(ctx)
+func (_u *AttributeUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (au *AttributeUpdate) ExecX(ctx context.Context) {
-	if err := au.Exec(ctx); err != nil {
+func (_u *AttributeUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (au *AttributeUpdate) check() error {
-	if v, ok := au.mutation.GetType(); ok {
+func (_u *AttributeUpdate) check() error {
+	if v, ok := _u.mutation.GetType(); ok {
 		if err := attribute.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`enttenant: validator failed for field "Attribute.type": %w`, err)}
 		}
 	}
-	if au.mutation.SpaceCleared() && len(au.mutation.SpaceIDs()) > 0 {
+	if _u.mutation.SpaceCleared() && len(_u.mutation.SpaceIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "Attribute.space"`)
 	}
-	if au.mutation.DocumentTypeCleared() && len(au.mutation.DocumentTypeIDs()) > 0 {
+	if _u.mutation.DocumentTypeCleared() && len(_u.mutation.DocumentTypeIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "Attribute.document_type"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (au *AttributeUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AttributeUpdate {
-	au.modifiers = append(au.modifiers, modifiers...)
-	return au
+func (_u *AttributeUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AttributeUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (au *AttributeUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := au.check(); err != nil {
-		return n, err
+func (_u *AttributeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(attribute.Table, attribute.Columns, sqlgraph.NewFieldSpec(attribute.FieldID, field.TypeInt64))
-	if ps := au.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := au.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(attribute.FieldName, field.TypeString, value)
 	}
-	if value, ok := au.mutation.IsNameGiving(); ok {
+	if value, ok := _u.mutation.IsNameGiving(); ok {
 		_spec.SetField(attribute.FieldIsNameGiving, field.TypeBool, value)
 	}
-	if value, ok := au.mutation.IsProtected(); ok {
+	if value, ok := _u.mutation.IsProtected(); ok {
 		_spec.SetField(attribute.FieldIsProtected, field.TypeBool, value)
 	}
-	if value, ok := au.mutation.IsDisabled(); ok {
+	if value, ok := _u.mutation.IsDisabled(); ok {
 		_spec.SetField(attribute.FieldIsDisabled, field.TypeBool, value)
 	}
-	if value, ok := au.mutation.IsRequired(); ok {
+	if value, ok := _u.mutation.IsRequired(); ok {
 		_spec.SetField(attribute.FieldIsRequired, field.TypeBool, value)
 	}
-	if value, ok := au.mutation.GetType(); ok {
+	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(attribute.FieldType, field.TypeEnum, value)
 	}
-	if au.mutation.DocumentTypeCleared() {
+	if _u.mutation.DocumentTypeCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -300,7 +300,7 @@ func (au *AttributeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.DocumentTypeIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DocumentTypeIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -316,7 +316,7 @@ func (au *AttributeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.TagCleared() {
+	if _u.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -329,7 +329,7 @@ func (au *AttributeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -345,7 +345,7 @@ func (au *AttributeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.PropertyCleared() {
+	if _u.mutation.PropertyCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -358,7 +358,7 @@ func (au *AttributeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.PropertyIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.PropertyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -374,8 +374,8 @@ func (au *AttributeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(au.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{attribute.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -383,8 +383,8 @@ func (au *AttributeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	au.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // AttributeUpdateOne is the builder for updating a single Attribute entity.
@@ -397,202 +397,202 @@ type AttributeUpdateOne struct {
 }
 
 // SetDocumentTypeID sets the "document_type_id" field.
-func (auo *AttributeUpdateOne) SetDocumentTypeID(i int64) *AttributeUpdateOne {
-	auo.mutation.SetDocumentTypeID(i)
-	return auo
+func (_u *AttributeUpdateOne) SetDocumentTypeID(v int64) *AttributeUpdateOne {
+	_u.mutation.SetDocumentTypeID(v)
+	return _u
 }
 
 // SetNillableDocumentTypeID sets the "document_type_id" field if the given value is not nil.
-func (auo *AttributeUpdateOne) SetNillableDocumentTypeID(i *int64) *AttributeUpdateOne {
-	if i != nil {
-		auo.SetDocumentTypeID(*i)
+func (_u *AttributeUpdateOne) SetNillableDocumentTypeID(v *int64) *AttributeUpdateOne {
+	if v != nil {
+		_u.SetDocumentTypeID(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetName sets the "name" field.
-func (auo *AttributeUpdateOne) SetName(s string) *AttributeUpdateOne {
-	auo.mutation.SetName(s)
-	return auo
+func (_u *AttributeUpdateOne) SetName(v string) *AttributeUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (auo *AttributeUpdateOne) SetNillableName(s *string) *AttributeUpdateOne {
-	if s != nil {
-		auo.SetName(*s)
+func (_u *AttributeUpdateOne) SetNillableName(v *string) *AttributeUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetIsNameGiving sets the "is_name_giving" field.
-func (auo *AttributeUpdateOne) SetIsNameGiving(b bool) *AttributeUpdateOne {
-	auo.mutation.SetIsNameGiving(b)
-	return auo
+func (_u *AttributeUpdateOne) SetIsNameGiving(v bool) *AttributeUpdateOne {
+	_u.mutation.SetIsNameGiving(v)
+	return _u
 }
 
 // SetNillableIsNameGiving sets the "is_name_giving" field if the given value is not nil.
-func (auo *AttributeUpdateOne) SetNillableIsNameGiving(b *bool) *AttributeUpdateOne {
-	if b != nil {
-		auo.SetIsNameGiving(*b)
+func (_u *AttributeUpdateOne) SetNillableIsNameGiving(v *bool) *AttributeUpdateOne {
+	if v != nil {
+		_u.SetIsNameGiving(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetIsProtected sets the "is_protected" field.
-func (auo *AttributeUpdateOne) SetIsProtected(b bool) *AttributeUpdateOne {
-	auo.mutation.SetIsProtected(b)
-	return auo
+func (_u *AttributeUpdateOne) SetIsProtected(v bool) *AttributeUpdateOne {
+	_u.mutation.SetIsProtected(v)
+	return _u
 }
 
 // SetNillableIsProtected sets the "is_protected" field if the given value is not nil.
-func (auo *AttributeUpdateOne) SetNillableIsProtected(b *bool) *AttributeUpdateOne {
-	if b != nil {
-		auo.SetIsProtected(*b)
+func (_u *AttributeUpdateOne) SetNillableIsProtected(v *bool) *AttributeUpdateOne {
+	if v != nil {
+		_u.SetIsProtected(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetIsDisabled sets the "is_disabled" field.
-func (auo *AttributeUpdateOne) SetIsDisabled(b bool) *AttributeUpdateOne {
-	auo.mutation.SetIsDisabled(b)
-	return auo
+func (_u *AttributeUpdateOne) SetIsDisabled(v bool) *AttributeUpdateOne {
+	_u.mutation.SetIsDisabled(v)
+	return _u
 }
 
 // SetNillableIsDisabled sets the "is_disabled" field if the given value is not nil.
-func (auo *AttributeUpdateOne) SetNillableIsDisabled(b *bool) *AttributeUpdateOne {
-	if b != nil {
-		auo.SetIsDisabled(*b)
+func (_u *AttributeUpdateOne) SetNillableIsDisabled(v *bool) *AttributeUpdateOne {
+	if v != nil {
+		_u.SetIsDisabled(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetIsRequired sets the "is_required" field.
-func (auo *AttributeUpdateOne) SetIsRequired(b bool) *AttributeUpdateOne {
-	auo.mutation.SetIsRequired(b)
-	return auo
+func (_u *AttributeUpdateOne) SetIsRequired(v bool) *AttributeUpdateOne {
+	_u.mutation.SetIsRequired(v)
+	return _u
 }
 
 // SetNillableIsRequired sets the "is_required" field if the given value is not nil.
-func (auo *AttributeUpdateOne) SetNillableIsRequired(b *bool) *AttributeUpdateOne {
-	if b != nil {
-		auo.SetIsRequired(*b)
+func (_u *AttributeUpdateOne) SetNillableIsRequired(v *bool) *AttributeUpdateOne {
+	if v != nil {
+		_u.SetIsRequired(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetType sets the "type" field.
-func (auo *AttributeUpdateOne) SetType(at attributetype.AttributeType) *AttributeUpdateOne {
-	auo.mutation.SetType(at)
-	return auo
+func (_u *AttributeUpdateOne) SetType(v attributetype.AttributeType) *AttributeUpdateOne {
+	_u.mutation.SetType(v)
+	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (auo *AttributeUpdateOne) SetNillableType(at *attributetype.AttributeType) *AttributeUpdateOne {
-	if at != nil {
-		auo.SetType(*at)
+func (_u *AttributeUpdateOne) SetNillableType(v *attributetype.AttributeType) *AttributeUpdateOne {
+	if v != nil {
+		_u.SetType(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetTagID sets the "tag_id" field.
-func (auo *AttributeUpdateOne) SetTagID(i int64) *AttributeUpdateOne {
-	auo.mutation.SetTagID(i)
-	return auo
+func (_u *AttributeUpdateOne) SetTagID(v int64) *AttributeUpdateOne {
+	_u.mutation.SetTagID(v)
+	return _u
 }
 
 // SetNillableTagID sets the "tag_id" field if the given value is not nil.
-func (auo *AttributeUpdateOne) SetNillableTagID(i *int64) *AttributeUpdateOne {
-	if i != nil {
-		auo.SetTagID(*i)
+func (_u *AttributeUpdateOne) SetNillableTagID(v *int64) *AttributeUpdateOne {
+	if v != nil {
+		_u.SetTagID(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearTagID clears the value of the "tag_id" field.
-func (auo *AttributeUpdateOne) ClearTagID() *AttributeUpdateOne {
-	auo.mutation.ClearTagID()
-	return auo
+func (_u *AttributeUpdateOne) ClearTagID() *AttributeUpdateOne {
+	_u.mutation.ClearTagID()
+	return _u
 }
 
 // SetPropertyID sets the "property_id" field.
-func (auo *AttributeUpdateOne) SetPropertyID(i int64) *AttributeUpdateOne {
-	auo.mutation.SetPropertyID(i)
-	return auo
+func (_u *AttributeUpdateOne) SetPropertyID(v int64) *AttributeUpdateOne {
+	_u.mutation.SetPropertyID(v)
+	return _u
 }
 
 // SetNillablePropertyID sets the "property_id" field if the given value is not nil.
-func (auo *AttributeUpdateOne) SetNillablePropertyID(i *int64) *AttributeUpdateOne {
-	if i != nil {
-		auo.SetPropertyID(*i)
+func (_u *AttributeUpdateOne) SetNillablePropertyID(v *int64) *AttributeUpdateOne {
+	if v != nil {
+		_u.SetPropertyID(*v)
 	}
-	return auo
+	return _u
 }
 
 // ClearPropertyID clears the value of the "property_id" field.
-func (auo *AttributeUpdateOne) ClearPropertyID() *AttributeUpdateOne {
-	auo.mutation.ClearPropertyID()
-	return auo
+func (_u *AttributeUpdateOne) ClearPropertyID() *AttributeUpdateOne {
+	_u.mutation.ClearPropertyID()
+	return _u
 }
 
 // SetDocumentType sets the "document_type" edge to the DocumentType entity.
-func (auo *AttributeUpdateOne) SetDocumentType(d *DocumentType) *AttributeUpdateOne {
-	return auo.SetDocumentTypeID(d.ID)
+func (_u *AttributeUpdateOne) SetDocumentType(v *DocumentType) *AttributeUpdateOne {
+	return _u.SetDocumentTypeID(v.ID)
 }
 
 // SetTag sets the "tag" edge to the Tag entity.
-func (auo *AttributeUpdateOne) SetTag(t *Tag) *AttributeUpdateOne {
-	return auo.SetTagID(t.ID)
+func (_u *AttributeUpdateOne) SetTag(v *Tag) *AttributeUpdateOne {
+	return _u.SetTagID(v.ID)
 }
 
 // SetProperty sets the "property" edge to the Property entity.
-func (auo *AttributeUpdateOne) SetProperty(p *Property) *AttributeUpdateOne {
-	return auo.SetPropertyID(p.ID)
+func (_u *AttributeUpdateOne) SetProperty(v *Property) *AttributeUpdateOne {
+	return _u.SetPropertyID(v.ID)
 }
 
 // Mutation returns the AttributeMutation object of the builder.
-func (auo *AttributeUpdateOne) Mutation() *AttributeMutation {
-	return auo.mutation
+func (_u *AttributeUpdateOne) Mutation() *AttributeMutation {
+	return _u.mutation
 }
 
 // ClearDocumentType clears the "document_type" edge to the DocumentType entity.
-func (auo *AttributeUpdateOne) ClearDocumentType() *AttributeUpdateOne {
-	auo.mutation.ClearDocumentType()
-	return auo
+func (_u *AttributeUpdateOne) ClearDocumentType() *AttributeUpdateOne {
+	_u.mutation.ClearDocumentType()
+	return _u
 }
 
 // ClearTag clears the "tag" edge to the Tag entity.
-func (auo *AttributeUpdateOne) ClearTag() *AttributeUpdateOne {
-	auo.mutation.ClearTag()
-	return auo
+func (_u *AttributeUpdateOne) ClearTag() *AttributeUpdateOne {
+	_u.mutation.ClearTag()
+	return _u
 }
 
 // ClearProperty clears the "property" edge to the Property entity.
-func (auo *AttributeUpdateOne) ClearProperty() *AttributeUpdateOne {
-	auo.mutation.ClearProperty()
-	return auo
+func (_u *AttributeUpdateOne) ClearProperty() *AttributeUpdateOne {
+	_u.mutation.ClearProperty()
+	return _u
 }
 
 // Where appends a list predicates to the AttributeUpdate builder.
-func (auo *AttributeUpdateOne) Where(ps ...predicate.Attribute) *AttributeUpdateOne {
-	auo.mutation.Where(ps...)
-	return auo
+func (_u *AttributeUpdateOne) Where(ps ...predicate.Attribute) *AttributeUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (auo *AttributeUpdateOne) Select(field string, fields ...string) *AttributeUpdateOne {
-	auo.fields = append([]string{field}, fields...)
-	return auo
+func (_u *AttributeUpdateOne) Select(field string, fields ...string) *AttributeUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Attribute entity.
-func (auo *AttributeUpdateOne) Save(ctx context.Context) (*Attribute, error) {
-	return withHooks(ctx, auo.sqlSave, auo.mutation, auo.hooks)
+func (_u *AttributeUpdateOne) Save(ctx context.Context) (*Attribute, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (auo *AttributeUpdateOne) SaveX(ctx context.Context) *Attribute {
-	node, err := auo.Save(ctx)
+func (_u *AttributeUpdateOne) SaveX(ctx context.Context) *Attribute {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -600,51 +600,51 @@ func (auo *AttributeUpdateOne) SaveX(ctx context.Context) *Attribute {
 }
 
 // Exec executes the query on the entity.
-func (auo *AttributeUpdateOne) Exec(ctx context.Context) error {
-	_, err := auo.Save(ctx)
+func (_u *AttributeUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (auo *AttributeUpdateOne) ExecX(ctx context.Context) {
-	if err := auo.Exec(ctx); err != nil {
+func (_u *AttributeUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (auo *AttributeUpdateOne) check() error {
-	if v, ok := auo.mutation.GetType(); ok {
+func (_u *AttributeUpdateOne) check() error {
+	if v, ok := _u.mutation.GetType(); ok {
 		if err := attribute.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`enttenant: validator failed for field "Attribute.type": %w`, err)}
 		}
 	}
-	if auo.mutation.SpaceCleared() && len(auo.mutation.SpaceIDs()) > 0 {
+	if _u.mutation.SpaceCleared() && len(_u.mutation.SpaceIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "Attribute.space"`)
 	}
-	if auo.mutation.DocumentTypeCleared() && len(auo.mutation.DocumentTypeIDs()) > 0 {
+	if _u.mutation.DocumentTypeCleared() && len(_u.mutation.DocumentTypeIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "Attribute.document_type"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (auo *AttributeUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AttributeUpdateOne {
-	auo.modifiers = append(auo.modifiers, modifiers...)
-	return auo
+func (_u *AttributeUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AttributeUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (auo *AttributeUpdateOne) sqlSave(ctx context.Context) (_node *Attribute, err error) {
-	if err := auo.check(); err != nil {
+func (_u *AttributeUpdateOne) sqlSave(ctx context.Context) (_node *Attribute, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(attribute.Table, attribute.Columns, sqlgraph.NewFieldSpec(attribute.FieldID, field.TypeInt64))
-	id, ok := auo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`enttenant: missing "Attribute.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := auo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, attribute.FieldID)
 		for _, f := range fields {
@@ -656,32 +656,32 @@ func (auo *AttributeUpdateOne) sqlSave(ctx context.Context) (_node *Attribute, e
 			}
 		}
 	}
-	if ps := auo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := auo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(attribute.FieldName, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.IsNameGiving(); ok {
+	if value, ok := _u.mutation.IsNameGiving(); ok {
 		_spec.SetField(attribute.FieldIsNameGiving, field.TypeBool, value)
 	}
-	if value, ok := auo.mutation.IsProtected(); ok {
+	if value, ok := _u.mutation.IsProtected(); ok {
 		_spec.SetField(attribute.FieldIsProtected, field.TypeBool, value)
 	}
-	if value, ok := auo.mutation.IsDisabled(); ok {
+	if value, ok := _u.mutation.IsDisabled(); ok {
 		_spec.SetField(attribute.FieldIsDisabled, field.TypeBool, value)
 	}
-	if value, ok := auo.mutation.IsRequired(); ok {
+	if value, ok := _u.mutation.IsRequired(); ok {
 		_spec.SetField(attribute.FieldIsRequired, field.TypeBool, value)
 	}
-	if value, ok := auo.mutation.GetType(); ok {
+	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(attribute.FieldType, field.TypeEnum, value)
 	}
-	if auo.mutation.DocumentTypeCleared() {
+	if _u.mutation.DocumentTypeCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -694,7 +694,7 @@ func (auo *AttributeUpdateOne) sqlSave(ctx context.Context) (_node *Attribute, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.DocumentTypeIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.DocumentTypeIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -710,7 +710,7 @@ func (auo *AttributeUpdateOne) sqlSave(ctx context.Context) (_node *Attribute, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.TagCleared() {
+	if _u.mutation.TagCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -723,7 +723,7 @@ func (auo *AttributeUpdateOne) sqlSave(ctx context.Context) (_node *Attribute, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.TagIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TagIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -739,7 +739,7 @@ func (auo *AttributeUpdateOne) sqlSave(ctx context.Context) (_node *Attribute, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.PropertyCleared() {
+	if _u.mutation.PropertyCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -752,7 +752,7 @@ func (auo *AttributeUpdateOne) sqlSave(ctx context.Context) (_node *Attribute, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.PropertyIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.PropertyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -768,11 +768,11 @@ func (auo *AttributeUpdateOne) sqlSave(ctx context.Context) (_node *Attribute, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(auo.modifiers...)
-	_node = &Attribute{config: auo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Attribute{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, auo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{attribute.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -780,6 +780,6 @@ func (auo *AttributeUpdateOne) sqlSave(ctx context.Context) (_node *Attribute, e
 		}
 		return nil, err
 	}
-	auo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

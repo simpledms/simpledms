@@ -41,6 +41,9 @@ func (SystemConfig) Fields() []ent.Field {
 		field.Bytes("mailer_password").Optional().Sensitive().GoType(entx.EncryptedString("")), // FIXME encrypt; also not encrypted in config file
 		field.String("mailer_from").Default(""),                                                // TODO name okay?
 		field.Bool("mailer_insecure_skip_verify").Default(false),
+		// true would be recommended as default, but set to false because this was the default
+		// before implicit SSL/TLS support was implemented
+		field.Bool("mailer_use_implicit_ssl_tls").Default(false),
 
 		field.String("ocr_tika_url").Default(""),
 

@@ -29,40 +29,40 @@ type FileInfoQuery struct {
 }
 
 // Where adds a new predicate for the FileInfoQuery builder.
-func (fiq *FileInfoQuery) Where(ps ...predicate.FileInfo) *FileInfoQuery {
-	fiq.predicates = append(fiq.predicates, ps...)
-	return fiq
+func (_q *FileInfoQuery) Where(ps ...predicate.FileInfo) *FileInfoQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (fiq *FileInfoQuery) Limit(limit int) *FileInfoQuery {
-	fiq.ctx.Limit = &limit
-	return fiq
+func (_q *FileInfoQuery) Limit(limit int) *FileInfoQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (fiq *FileInfoQuery) Offset(offset int) *FileInfoQuery {
-	fiq.ctx.Offset = &offset
-	return fiq
+func (_q *FileInfoQuery) Offset(offset int) *FileInfoQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (fiq *FileInfoQuery) Unique(unique bool) *FileInfoQuery {
-	fiq.ctx.Unique = &unique
-	return fiq
+func (_q *FileInfoQuery) Unique(unique bool) *FileInfoQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (fiq *FileInfoQuery) Order(o ...fileinfo.OrderOption) *FileInfoQuery {
-	fiq.order = append(fiq.order, o...)
-	return fiq
+func (_q *FileInfoQuery) Order(o ...fileinfo.OrderOption) *FileInfoQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first FileInfo entity from the query.
 // Returns a *NotFoundError when no FileInfo was found.
-func (fiq *FileInfoQuery) First(ctx context.Context) (*FileInfo, error) {
-	nodes, err := fiq.Limit(1).All(setContextOp(ctx, fiq.ctx, ent.OpQueryFirst))
+func (_q *FileInfoQuery) First(ctx context.Context) (*FileInfo, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +73,8 @@ func (fiq *FileInfoQuery) First(ctx context.Context) (*FileInfo, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (fiq *FileInfoQuery) FirstX(ctx context.Context) *FileInfo {
-	node, err := fiq.First(ctx)
+func (_q *FileInfoQuery) FirstX(ctx context.Context) *FileInfo {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -84,8 +84,8 @@ func (fiq *FileInfoQuery) FirstX(ctx context.Context) *FileInfo {
 // Only returns a single FileInfo entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one FileInfo entity is found.
 // Returns a *NotFoundError when no FileInfo entities are found.
-func (fiq *FileInfoQuery) Only(ctx context.Context) (*FileInfo, error) {
-	nodes, err := fiq.Limit(2).All(setContextOp(ctx, fiq.ctx, ent.OpQueryOnly))
+func (_q *FileInfoQuery) Only(ctx context.Context) (*FileInfo, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -100,8 +100,8 @@ func (fiq *FileInfoQuery) Only(ctx context.Context) (*FileInfo, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (fiq *FileInfoQuery) OnlyX(ctx context.Context) *FileInfo {
-	node, err := fiq.Only(ctx)
+func (_q *FileInfoQuery) OnlyX(ctx context.Context) *FileInfo {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -109,18 +109,18 @@ func (fiq *FileInfoQuery) OnlyX(ctx context.Context) *FileInfo {
 }
 
 // All executes the query and returns a list of FileInfos.
-func (fiq *FileInfoQuery) All(ctx context.Context) ([]*FileInfo, error) {
-	ctx = setContextOp(ctx, fiq.ctx, ent.OpQueryAll)
-	if err := fiq.prepareQuery(ctx); err != nil {
+func (_q *FileInfoQuery) All(ctx context.Context) ([]*FileInfo, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*FileInfo, *FileInfoQuery]()
-	return withInterceptors[[]*FileInfo](ctx, fiq, qr, fiq.inters)
+	return withInterceptors[[]*FileInfo](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (fiq *FileInfoQuery) AllX(ctx context.Context) []*FileInfo {
-	nodes, err := fiq.All(ctx)
+func (_q *FileInfoQuery) AllX(ctx context.Context) []*FileInfo {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -128,17 +128,17 @@ func (fiq *FileInfoQuery) AllX(ctx context.Context) []*FileInfo {
 }
 
 // Count returns the count of the given query.
-func (fiq *FileInfoQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, fiq.ctx, ent.OpQueryCount)
-	if err := fiq.prepareQuery(ctx); err != nil {
+func (_q *FileInfoQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, fiq, querierCount[*FileInfoQuery](), fiq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*FileInfoQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (fiq *FileInfoQuery) CountX(ctx context.Context) int {
-	count, err := fiq.Count(ctx)
+func (_q *FileInfoQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -146,9 +146,9 @@ func (fiq *FileInfoQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (fiq *FileInfoQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, fiq.ctx, ent.OpQueryExist)
-	switch _, err := fiq.First(ctx); {
+func (_q *FileInfoQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.First(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -159,8 +159,8 @@ func (fiq *FileInfoQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (fiq *FileInfoQuery) ExistX(ctx context.Context) bool {
-	exist, err := fiq.Exist(ctx)
+func (_q *FileInfoQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -169,20 +169,20 @@ func (fiq *FileInfoQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the FileInfoQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (fiq *FileInfoQuery) Clone() *FileInfoQuery {
-	if fiq == nil {
+func (_q *FileInfoQuery) Clone() *FileInfoQuery {
+	if _q == nil {
 		return nil
 	}
 	return &FileInfoQuery{
-		config:     fiq.config,
-		ctx:        fiq.ctx.Clone(),
-		order:      append([]fileinfo.OrderOption{}, fiq.order...),
-		inters:     append([]Interceptor{}, fiq.inters...),
-		predicates: append([]predicate.FileInfo{}, fiq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]fileinfo.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.FileInfo{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       fiq.sql.Clone(),
-		path:      fiq.path,
-		modifiers: append([]func(*sql.Selector){}, fiq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
@@ -200,10 +200,10 @@ func (fiq *FileInfoQuery) Clone() *FileInfoQuery {
 //		GroupBy(fileinfo.FieldSpaceID).
 //		Aggregate(enttenant.Count()).
 //		Scan(ctx, &v)
-func (fiq *FileInfoQuery) GroupBy(field string, fields ...string) *FileInfoGroupBy {
-	fiq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &FileInfoGroupBy{build: fiq}
-	grbuild.flds = &fiq.ctx.Fields
+func (_q *FileInfoQuery) GroupBy(field string, fields ...string) *FileInfoGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &FileInfoGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = fileinfo.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -221,71 +221,71 @@ func (fiq *FileInfoQuery) GroupBy(field string, fields ...string) *FileInfoGroup
 //	client.FileInfo.Query().
 //		Select(fileinfo.FieldSpaceID).
 //		Scan(ctx, &v)
-func (fiq *FileInfoQuery) Select(fields ...string) *FileInfoSelect {
-	fiq.ctx.Fields = append(fiq.ctx.Fields, fields...)
-	sbuild := &FileInfoSelect{FileInfoQuery: fiq}
+func (_q *FileInfoQuery) Select(fields ...string) *FileInfoSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &FileInfoSelect{FileInfoQuery: _q}
 	sbuild.label = fileinfo.Label
-	sbuild.flds, sbuild.scan = &fiq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a FileInfoSelect configured with the given aggregations.
-func (fiq *FileInfoQuery) Aggregate(fns ...AggregateFunc) *FileInfoSelect {
-	return fiq.Select().Aggregate(fns...)
+func (_q *FileInfoQuery) Aggregate(fns ...AggregateFunc) *FileInfoSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (fiq *FileInfoQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range fiq.inters {
+func (_q *FileInfoQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("enttenant: uninitialized interceptor (forgotten import enttenant/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, fiq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range fiq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !fileinfo.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("enttenant: invalid field %q for query", f)}
 		}
 	}
-	if fiq.path != nil {
-		prev, err := fiq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		fiq.sql = prev
+		_q.sql = prev
 	}
 	if fileinfo.Policy == nil {
 		return errors.New("enttenant: uninitialized fileinfo.Policy (forgotten import enttenant/runtime?)")
 	}
-	if err := fileinfo.Policy.EvalQuery(ctx, fiq); err != nil {
+	if err := fileinfo.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (fiq *FileInfoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FileInfo, error) {
+func (_q *FileInfoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FileInfo, error) {
 	var (
 		nodes = []*FileInfo{}
-		_spec = fiq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*FileInfo).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &FileInfo{config: fiq.config}
+		node := &FileInfo{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	if len(fiq.modifiers) > 0 {
-		_spec.Modifiers = fiq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, fiq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -294,46 +294,46 @@ func (fiq *FileInfoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Fi
 	return nodes, nil
 }
 
-func (fiq *FileInfoQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := fiq.querySpec()
-	if len(fiq.modifiers) > 0 {
-		_spec.Modifiers = fiq.modifiers
+func (_q *FileInfoQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = fiq.ctx.Fields
-	if len(fiq.ctx.Fields) > 0 {
-		_spec.Unique = fiq.ctx.Unique != nil && *fiq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, fiq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (fiq *FileInfoQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *FileInfoQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(fileinfo.Table, fileinfo.Columns, nil)
-	_spec.From = fiq.sql
-	if unique := fiq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if fiq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := fiq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		for i := range fields {
 			_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 		}
 	}
-	if ps := fiq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := fiq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := fiq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := fiq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -343,45 +343,45 @@ func (fiq *FileInfoQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (fiq *FileInfoQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(fiq.driver.Dialect())
+func (_q *FileInfoQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(fileinfo.Table)
-	columns := fiq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = fileinfo.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if fiq.sql != nil {
-		selector = fiq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if fiq.ctx.Unique != nil && *fiq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range fiq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range fiq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range fiq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := fiq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := fiq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (fiq *FileInfoQuery) Modify(modifiers ...func(s *sql.Selector)) *FileInfoSelect {
-	fiq.modifiers = append(fiq.modifiers, modifiers...)
-	return fiq.Select()
+func (_q *FileInfoQuery) Modify(modifiers ...func(s *sql.Selector)) *FileInfoSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // FileInfoGroupBy is the group-by builder for FileInfo entities.
@@ -391,41 +391,41 @@ type FileInfoGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (figb *FileInfoGroupBy) Aggregate(fns ...AggregateFunc) *FileInfoGroupBy {
-	figb.fns = append(figb.fns, fns...)
-	return figb
+func (_g *FileInfoGroupBy) Aggregate(fns ...AggregateFunc) *FileInfoGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (figb *FileInfoGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, figb.build.ctx, ent.OpQueryGroupBy)
-	if err := figb.build.prepareQuery(ctx); err != nil {
+func (_g *FileInfoGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*FileInfoQuery, *FileInfoGroupBy](ctx, figb.build, figb, figb.build.inters, v)
+	return scanWithInterceptors[*FileInfoQuery, *FileInfoGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (figb *FileInfoGroupBy) sqlScan(ctx context.Context, root *FileInfoQuery, v any) error {
+func (_g *FileInfoGroupBy) sqlScan(ctx context.Context, root *FileInfoQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(figb.fns))
-	for _, fn := range figb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*figb.flds)+len(figb.fns))
-		for _, f := range *figb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*figb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := figb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -439,27 +439,27 @@ type FileInfoSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (fis *FileInfoSelect) Aggregate(fns ...AggregateFunc) *FileInfoSelect {
-	fis.fns = append(fis.fns, fns...)
-	return fis
+func (_s *FileInfoSelect) Aggregate(fns ...AggregateFunc) *FileInfoSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (fis *FileInfoSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fis.ctx, ent.OpQuerySelect)
-	if err := fis.prepareQuery(ctx); err != nil {
+func (_s *FileInfoSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*FileInfoQuery, *FileInfoSelect](ctx, fis.FileInfoQuery, fis, fis.inters, v)
+	return scanWithInterceptors[*FileInfoQuery, *FileInfoSelect](ctx, _s.FileInfoQuery, _s, _s.inters, v)
 }
 
-func (fis *FileInfoSelect) sqlScan(ctx context.Context, root *FileInfoQuery, v any) error {
+func (_s *FileInfoSelect) sqlScan(ctx context.Context, root *FileInfoQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(fis.fns))
-	for _, fn := range fis.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*fis.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -467,7 +467,7 @@ func (fis *FileInfoSelect) sqlScan(ctx context.Context, root *FileInfoQuery, v a
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := fis.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -475,7 +475,7 @@ func (fis *FileInfoSelect) sqlScan(ctx context.Context, root *FileInfoQuery, v a
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (fis *FileInfoSelect) Modify(modifiers ...func(s *sql.Selector)) *FileInfoSelect {
-	fis.modifiers = append(fis.modifiers, modifiers...)
-	return fis
+func (_s *FileInfoSelect) Modify(modifiers ...func(s *sql.Selector)) *FileInfoSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

@@ -27,332 +27,332 @@ type StoredFileUpdate struct {
 }
 
 // Where appends a list predicates to the StoredFileUpdate builder.
-func (sfu *StoredFileUpdate) Where(ps ...predicate.StoredFile) *StoredFileUpdate {
-	sfu.mutation.Where(ps...)
-	return sfu
+func (_u *StoredFileUpdate) Where(ps ...predicate.StoredFile) *StoredFileUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (sfu *StoredFileUpdate) SetUpdatedAt(t time.Time) *StoredFileUpdate {
-	sfu.mutation.SetUpdatedAt(t)
-	return sfu
+func (_u *StoredFileUpdate) SetUpdatedAt(v time.Time) *StoredFileUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (sfu *StoredFileUpdate) SetUpdatedBy(i int64) *StoredFileUpdate {
-	sfu.mutation.SetUpdatedBy(i)
-	return sfu
+func (_u *StoredFileUpdate) SetUpdatedBy(v int64) *StoredFileUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableUpdatedBy(i *int64) *StoredFileUpdate {
-	if i != nil {
-		sfu.SetUpdatedBy(*i)
+func (_u *StoredFileUpdate) SetNillableUpdatedBy(v *int64) *StoredFileUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return sfu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (sfu *StoredFileUpdate) ClearUpdatedBy() *StoredFileUpdate {
-	sfu.mutation.ClearUpdatedBy()
-	return sfu
+func (_u *StoredFileUpdate) ClearUpdatedBy() *StoredFileUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetSize sets the "size" field.
-func (sfu *StoredFileUpdate) SetSize(i int64) *StoredFileUpdate {
-	sfu.mutation.ResetSize()
-	sfu.mutation.SetSize(i)
-	return sfu
+func (_u *StoredFileUpdate) SetSize(v int64) *StoredFileUpdate {
+	_u.mutation.ResetSize()
+	_u.mutation.SetSize(v)
+	return _u
 }
 
 // SetNillableSize sets the "size" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableSize(i *int64) *StoredFileUpdate {
-	if i != nil {
-		sfu.SetSize(*i)
+func (_u *StoredFileUpdate) SetNillableSize(v *int64) *StoredFileUpdate {
+	if v != nil {
+		_u.SetSize(*v)
 	}
-	return sfu
+	return _u
 }
 
-// AddSize adds i to the "size" field.
-func (sfu *StoredFileUpdate) AddSize(i int64) *StoredFileUpdate {
-	sfu.mutation.AddSize(i)
-	return sfu
+// AddSize adds value to the "size" field.
+func (_u *StoredFileUpdate) AddSize(v int64) *StoredFileUpdate {
+	_u.mutation.AddSize(v)
+	return _u
 }
 
 // ClearSize clears the value of the "size" field.
-func (sfu *StoredFileUpdate) ClearSize() *StoredFileUpdate {
-	sfu.mutation.ClearSize()
-	return sfu
+func (_u *StoredFileUpdate) ClearSize() *StoredFileUpdate {
+	_u.mutation.ClearSize()
+	return _u
 }
 
 // SetSizeInStorage sets the "size_in_storage" field.
-func (sfu *StoredFileUpdate) SetSizeInStorage(i int64) *StoredFileUpdate {
-	sfu.mutation.ResetSizeInStorage()
-	sfu.mutation.SetSizeInStorage(i)
-	return sfu
+func (_u *StoredFileUpdate) SetSizeInStorage(v int64) *StoredFileUpdate {
+	_u.mutation.ResetSizeInStorage()
+	_u.mutation.SetSizeInStorage(v)
+	return _u
 }
 
 // SetNillableSizeInStorage sets the "size_in_storage" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableSizeInStorage(i *int64) *StoredFileUpdate {
-	if i != nil {
-		sfu.SetSizeInStorage(*i)
+func (_u *StoredFileUpdate) SetNillableSizeInStorage(v *int64) *StoredFileUpdate {
+	if v != nil {
+		_u.SetSizeInStorage(*v)
 	}
-	return sfu
+	return _u
 }
 
-// AddSizeInStorage adds i to the "size_in_storage" field.
-func (sfu *StoredFileUpdate) AddSizeInStorage(i int64) *StoredFileUpdate {
-	sfu.mutation.AddSizeInStorage(i)
-	return sfu
+// AddSizeInStorage adds value to the "size_in_storage" field.
+func (_u *StoredFileUpdate) AddSizeInStorage(v int64) *StoredFileUpdate {
+	_u.mutation.AddSizeInStorage(v)
+	return _u
 }
 
 // SetSha256 sets the "sha256" field.
-func (sfu *StoredFileUpdate) SetSha256(s string) *StoredFileUpdate {
-	sfu.mutation.SetSha256(s)
-	return sfu
+func (_u *StoredFileUpdate) SetSha256(v string) *StoredFileUpdate {
+	_u.mutation.SetSha256(v)
+	return _u
 }
 
 // SetNillableSha256 sets the "sha256" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableSha256(s *string) *StoredFileUpdate {
-	if s != nil {
-		sfu.SetSha256(*s)
+func (_u *StoredFileUpdate) SetNillableSha256(v *string) *StoredFileUpdate {
+	if v != nil {
+		_u.SetSha256(*v)
 	}
-	return sfu
+	return _u
 }
 
 // ClearSha256 clears the value of the "sha256" field.
-func (sfu *StoredFileUpdate) ClearSha256() *StoredFileUpdate {
-	sfu.mutation.ClearSha256()
-	return sfu
+func (_u *StoredFileUpdate) ClearSha256() *StoredFileUpdate {
+	_u.mutation.ClearSha256()
+	return _u
 }
 
 // SetMimeType sets the "mime_type" field.
-func (sfu *StoredFileUpdate) SetMimeType(s string) *StoredFileUpdate {
-	sfu.mutation.SetMimeType(s)
-	return sfu
+func (_u *StoredFileUpdate) SetMimeType(v string) *StoredFileUpdate {
+	_u.mutation.SetMimeType(v)
+	return _u
 }
 
 // SetNillableMimeType sets the "mime_type" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableMimeType(s *string) *StoredFileUpdate {
-	if s != nil {
-		sfu.SetMimeType(*s)
+func (_u *StoredFileUpdate) SetNillableMimeType(v *string) *StoredFileUpdate {
+	if v != nil {
+		_u.SetMimeType(*v)
 	}
-	return sfu
+	return _u
 }
 
 // ClearMimeType clears the value of the "mime_type" field.
-func (sfu *StoredFileUpdate) ClearMimeType() *StoredFileUpdate {
-	sfu.mutation.ClearMimeType()
-	return sfu
+func (_u *StoredFileUpdate) ClearMimeType() *StoredFileUpdate {
+	_u.mutation.ClearMimeType()
+	return _u
 }
 
 // SetStorageType sets the "storage_type" field.
-func (sfu *StoredFileUpdate) SetStorageType(st storagetype.StorageType) *StoredFileUpdate {
-	sfu.mutation.SetStorageType(st)
-	return sfu
+func (_u *StoredFileUpdate) SetStorageType(v storagetype.StorageType) *StoredFileUpdate {
+	_u.mutation.SetStorageType(v)
+	return _u
 }
 
 // SetNillableStorageType sets the "storage_type" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableStorageType(st *storagetype.StorageType) *StoredFileUpdate {
-	if st != nil {
-		sfu.SetStorageType(*st)
+func (_u *StoredFileUpdate) SetNillableStorageType(v *storagetype.StorageType) *StoredFileUpdate {
+	if v != nil {
+		_u.SetStorageType(*v)
 	}
-	return sfu
+	return _u
 }
 
 // SetBucketName sets the "bucket_name" field.
-func (sfu *StoredFileUpdate) SetBucketName(s string) *StoredFileUpdate {
-	sfu.mutation.SetBucketName(s)
-	return sfu
+func (_u *StoredFileUpdate) SetBucketName(v string) *StoredFileUpdate {
+	_u.mutation.SetBucketName(v)
+	return _u
 }
 
 // SetNillableBucketName sets the "bucket_name" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableBucketName(s *string) *StoredFileUpdate {
-	if s != nil {
-		sfu.SetBucketName(*s)
+func (_u *StoredFileUpdate) SetNillableBucketName(v *string) *StoredFileUpdate {
+	if v != nil {
+		_u.SetBucketName(*v)
 	}
-	return sfu
+	return _u
 }
 
 // ClearBucketName clears the value of the "bucket_name" field.
-func (sfu *StoredFileUpdate) ClearBucketName() *StoredFileUpdate {
-	sfu.mutation.ClearBucketName()
-	return sfu
+func (_u *StoredFileUpdate) ClearBucketName() *StoredFileUpdate {
+	_u.mutation.ClearBucketName()
+	return _u
 }
 
 // SetStoragePath sets the "storage_path" field.
-func (sfu *StoredFileUpdate) SetStoragePath(s string) *StoredFileUpdate {
-	sfu.mutation.SetStoragePath(s)
-	return sfu
+func (_u *StoredFileUpdate) SetStoragePath(v string) *StoredFileUpdate {
+	_u.mutation.SetStoragePath(v)
+	return _u
 }
 
 // SetNillableStoragePath sets the "storage_path" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableStoragePath(s *string) *StoredFileUpdate {
-	if s != nil {
-		sfu.SetStoragePath(*s)
+func (_u *StoredFileUpdate) SetNillableStoragePath(v *string) *StoredFileUpdate {
+	if v != nil {
+		_u.SetStoragePath(*v)
 	}
-	return sfu
+	return _u
 }
 
 // SetStorageFilename sets the "storage_filename" field.
-func (sfu *StoredFileUpdate) SetStorageFilename(s string) *StoredFileUpdate {
-	sfu.mutation.SetStorageFilename(s)
-	return sfu
+func (_u *StoredFileUpdate) SetStorageFilename(v string) *StoredFileUpdate {
+	_u.mutation.SetStorageFilename(v)
+	return _u
 }
 
 // SetNillableStorageFilename sets the "storage_filename" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableStorageFilename(s *string) *StoredFileUpdate {
-	if s != nil {
-		sfu.SetStorageFilename(*s)
+func (_u *StoredFileUpdate) SetNillableStorageFilename(v *string) *StoredFileUpdate {
+	if v != nil {
+		_u.SetStorageFilename(*v)
 	}
-	return sfu
+	return _u
 }
 
 // SetTemporaryStoragePath sets the "temporary_storage_path" field.
-func (sfu *StoredFileUpdate) SetTemporaryStoragePath(s string) *StoredFileUpdate {
-	sfu.mutation.SetTemporaryStoragePath(s)
-	return sfu
+func (_u *StoredFileUpdate) SetTemporaryStoragePath(v string) *StoredFileUpdate {
+	_u.mutation.SetTemporaryStoragePath(v)
+	return _u
 }
 
 // SetNillableTemporaryStoragePath sets the "temporary_storage_path" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableTemporaryStoragePath(s *string) *StoredFileUpdate {
-	if s != nil {
-		sfu.SetTemporaryStoragePath(*s)
+func (_u *StoredFileUpdate) SetNillableTemporaryStoragePath(v *string) *StoredFileUpdate {
+	if v != nil {
+		_u.SetTemporaryStoragePath(*v)
 	}
-	return sfu
+	return _u
 }
 
 // SetTemporaryStorageFilename sets the "temporary_storage_filename" field.
-func (sfu *StoredFileUpdate) SetTemporaryStorageFilename(s string) *StoredFileUpdate {
-	sfu.mutation.SetTemporaryStorageFilename(s)
-	return sfu
+func (_u *StoredFileUpdate) SetTemporaryStorageFilename(v string) *StoredFileUpdate {
+	_u.mutation.SetTemporaryStorageFilename(v)
+	return _u
 }
 
 // SetNillableTemporaryStorageFilename sets the "temporary_storage_filename" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableTemporaryStorageFilename(s *string) *StoredFileUpdate {
-	if s != nil {
-		sfu.SetTemporaryStorageFilename(*s)
+func (_u *StoredFileUpdate) SetNillableTemporaryStorageFilename(v *string) *StoredFileUpdate {
+	if v != nil {
+		_u.SetTemporaryStorageFilename(*v)
 	}
-	return sfu
+	return _u
 }
 
 // SetCopiedToFinalDestinationAt sets the "copied_to_final_destination_at" field.
-func (sfu *StoredFileUpdate) SetCopiedToFinalDestinationAt(t time.Time) *StoredFileUpdate {
-	sfu.mutation.SetCopiedToFinalDestinationAt(t)
-	return sfu
+func (_u *StoredFileUpdate) SetCopiedToFinalDestinationAt(v time.Time) *StoredFileUpdate {
+	_u.mutation.SetCopiedToFinalDestinationAt(v)
+	return _u
 }
 
 // SetNillableCopiedToFinalDestinationAt sets the "copied_to_final_destination_at" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableCopiedToFinalDestinationAt(t *time.Time) *StoredFileUpdate {
-	if t != nil {
-		sfu.SetCopiedToFinalDestinationAt(*t)
+func (_u *StoredFileUpdate) SetNillableCopiedToFinalDestinationAt(v *time.Time) *StoredFileUpdate {
+	if v != nil {
+		_u.SetCopiedToFinalDestinationAt(*v)
 	}
-	return sfu
+	return _u
 }
 
 // ClearCopiedToFinalDestinationAt clears the value of the "copied_to_final_destination_at" field.
-func (sfu *StoredFileUpdate) ClearCopiedToFinalDestinationAt() *StoredFileUpdate {
-	sfu.mutation.ClearCopiedToFinalDestinationAt()
-	return sfu
+func (_u *StoredFileUpdate) ClearCopiedToFinalDestinationAt() *StoredFileUpdate {
+	_u.mutation.ClearCopiedToFinalDestinationAt()
+	return _u
 }
 
 // SetDeletedTemporaryFileAt sets the "deleted_temporary_file_at" field.
-func (sfu *StoredFileUpdate) SetDeletedTemporaryFileAt(t time.Time) *StoredFileUpdate {
-	sfu.mutation.SetDeletedTemporaryFileAt(t)
-	return sfu
+func (_u *StoredFileUpdate) SetDeletedTemporaryFileAt(v time.Time) *StoredFileUpdate {
+	_u.mutation.SetDeletedTemporaryFileAt(v)
+	return _u
 }
 
 // SetNillableDeletedTemporaryFileAt sets the "deleted_temporary_file_at" field if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableDeletedTemporaryFileAt(t *time.Time) *StoredFileUpdate {
-	if t != nil {
-		sfu.SetDeletedTemporaryFileAt(*t)
+func (_u *StoredFileUpdate) SetNillableDeletedTemporaryFileAt(v *time.Time) *StoredFileUpdate {
+	if v != nil {
+		_u.SetDeletedTemporaryFileAt(*v)
 	}
-	return sfu
+	return _u
 }
 
 // ClearDeletedTemporaryFileAt clears the value of the "deleted_temporary_file_at" field.
-func (sfu *StoredFileUpdate) ClearDeletedTemporaryFileAt() *StoredFileUpdate {
-	sfu.mutation.ClearDeletedTemporaryFileAt()
-	return sfu
+func (_u *StoredFileUpdate) ClearDeletedTemporaryFileAt() *StoredFileUpdate {
+	_u.mutation.ClearDeletedTemporaryFileAt()
+	return _u
 }
 
 // SetUpdaterID sets the "updater" edge to the User entity by ID.
-func (sfu *StoredFileUpdate) SetUpdaterID(id int64) *StoredFileUpdate {
-	sfu.mutation.SetUpdaterID(id)
-	return sfu
+func (_u *StoredFileUpdate) SetUpdaterID(id int64) *StoredFileUpdate {
+	_u.mutation.SetUpdaterID(id)
+	return _u
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the User entity by ID if the given value is not nil.
-func (sfu *StoredFileUpdate) SetNillableUpdaterID(id *int64) *StoredFileUpdate {
+func (_u *StoredFileUpdate) SetNillableUpdaterID(id *int64) *StoredFileUpdate {
 	if id != nil {
-		sfu = sfu.SetUpdaterID(*id)
+		_u = _u.SetUpdaterID(*id)
 	}
-	return sfu
+	return _u
 }
 
 // SetUpdater sets the "updater" edge to the User entity.
-func (sfu *StoredFileUpdate) SetUpdater(u *User) *StoredFileUpdate {
-	return sfu.SetUpdaterID(u.ID)
+func (_u *StoredFileUpdate) SetUpdater(v *User) *StoredFileUpdate {
+	return _u.SetUpdaterID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (sfu *StoredFileUpdate) AddFileIDs(ids ...int64) *StoredFileUpdate {
-	sfu.mutation.AddFileIDs(ids...)
-	return sfu
+func (_u *StoredFileUpdate) AddFileIDs(ids ...int64) *StoredFileUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (sfu *StoredFileUpdate) AddFiles(f ...*File) *StoredFileUpdate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *StoredFileUpdate) AddFiles(v ...*File) *StoredFileUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sfu.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the StoredFileMutation object of the builder.
-func (sfu *StoredFileUpdate) Mutation() *StoredFileMutation {
-	return sfu.mutation
+func (_u *StoredFileUpdate) Mutation() *StoredFileMutation {
+	return _u.mutation
 }
 
 // ClearUpdater clears the "updater" edge to the User entity.
-func (sfu *StoredFileUpdate) ClearUpdater() *StoredFileUpdate {
-	sfu.mutation.ClearUpdater()
-	return sfu
+func (_u *StoredFileUpdate) ClearUpdater() *StoredFileUpdate {
+	_u.mutation.ClearUpdater()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (sfu *StoredFileUpdate) ClearFiles() *StoredFileUpdate {
-	sfu.mutation.ClearFiles()
-	return sfu
+func (_u *StoredFileUpdate) ClearFiles() *StoredFileUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (sfu *StoredFileUpdate) RemoveFileIDs(ids ...int64) *StoredFileUpdate {
-	sfu.mutation.RemoveFileIDs(ids...)
-	return sfu
+func (_u *StoredFileUpdate) RemoveFileIDs(ids ...int64) *StoredFileUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (sfu *StoredFileUpdate) RemoveFiles(f ...*File) *StoredFileUpdate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *StoredFileUpdate) RemoveFiles(v ...*File) *StoredFileUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sfu.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (sfu *StoredFileUpdate) Save(ctx context.Context) (int, error) {
-	if err := sfu.defaults(); err != nil {
+func (_u *StoredFileUpdate) Save(ctx context.Context) (int, error) {
+	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
-	return withHooks(ctx, sfu.sqlSave, sfu.mutation, sfu.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (sfu *StoredFileUpdate) SaveX(ctx context.Context) int {
-	affected, err := sfu.Save(ctx)
+func (_u *StoredFileUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -360,33 +360,33 @@ func (sfu *StoredFileUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (sfu *StoredFileUpdate) Exec(ctx context.Context) error {
-	_, err := sfu.Save(ctx)
+func (_u *StoredFileUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sfu *StoredFileUpdate) ExecX(ctx context.Context) {
-	if err := sfu.Exec(ctx); err != nil {
+func (_u *StoredFileUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sfu *StoredFileUpdate) defaults() error {
-	if _, ok := sfu.mutation.UpdatedAt(); !ok {
+func (_u *StoredFileUpdate) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		if storedfile.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("enttenant: uninitialized storedfile.UpdateDefaultUpdatedAt (forgotten import enttenant/runtime?)")
 		}
 		v := storedfile.UpdateDefaultUpdatedAt()
-		sfu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sfu *StoredFileUpdate) check() error {
-	if v, ok := sfu.mutation.StorageType(); ok {
+func (_u *StoredFileUpdate) check() error {
+	if v, ok := _u.mutation.StorageType(); ok {
 		if err := storedfile.StorageTypeValidator(v); err != nil {
 			return &ValidationError{Name: "storage_type", err: fmt.Errorf(`enttenant: validator failed for field "StoredFile.storage_type": %w`, err)}
 		}
@@ -395,87 +395,87 @@ func (sfu *StoredFileUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (sfu *StoredFileUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StoredFileUpdate {
-	sfu.modifiers = append(sfu.modifiers, modifiers...)
-	return sfu
+func (_u *StoredFileUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StoredFileUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (sfu *StoredFileUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := sfu.check(); err != nil {
-		return n, err
+func (_u *StoredFileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(storedfile.Table, storedfile.Columns, sqlgraph.NewFieldSpec(storedfile.FieldID, field.TypeInt64))
-	if ps := sfu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := sfu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(storedfile.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := sfu.mutation.Size(); ok {
+	if value, ok := _u.mutation.Size(); ok {
 		_spec.SetField(storedfile.FieldSize, field.TypeInt64, value)
 	}
-	if value, ok := sfu.mutation.AddedSize(); ok {
+	if value, ok := _u.mutation.AddedSize(); ok {
 		_spec.AddField(storedfile.FieldSize, field.TypeInt64, value)
 	}
-	if sfu.mutation.SizeCleared() {
+	if _u.mutation.SizeCleared() {
 		_spec.ClearField(storedfile.FieldSize, field.TypeInt64)
 	}
-	if value, ok := sfu.mutation.SizeInStorage(); ok {
+	if value, ok := _u.mutation.SizeInStorage(); ok {
 		_spec.SetField(storedfile.FieldSizeInStorage, field.TypeInt64, value)
 	}
-	if value, ok := sfu.mutation.AddedSizeInStorage(); ok {
+	if value, ok := _u.mutation.AddedSizeInStorage(); ok {
 		_spec.AddField(storedfile.FieldSizeInStorage, field.TypeInt64, value)
 	}
-	if value, ok := sfu.mutation.Sha256(); ok {
+	if value, ok := _u.mutation.Sha256(); ok {
 		_spec.SetField(storedfile.FieldSha256, field.TypeString, value)
 	}
-	if sfu.mutation.Sha256Cleared() {
+	if _u.mutation.Sha256Cleared() {
 		_spec.ClearField(storedfile.FieldSha256, field.TypeString)
 	}
-	if value, ok := sfu.mutation.MimeType(); ok {
+	if value, ok := _u.mutation.MimeType(); ok {
 		_spec.SetField(storedfile.FieldMimeType, field.TypeString, value)
 	}
-	if sfu.mutation.MimeTypeCleared() {
+	if _u.mutation.MimeTypeCleared() {
 		_spec.ClearField(storedfile.FieldMimeType, field.TypeString)
 	}
-	if value, ok := sfu.mutation.StorageType(); ok {
+	if value, ok := _u.mutation.StorageType(); ok {
 		_spec.SetField(storedfile.FieldStorageType, field.TypeEnum, value)
 	}
-	if value, ok := sfu.mutation.BucketName(); ok {
+	if value, ok := _u.mutation.BucketName(); ok {
 		_spec.SetField(storedfile.FieldBucketName, field.TypeString, value)
 	}
-	if sfu.mutation.BucketNameCleared() {
+	if _u.mutation.BucketNameCleared() {
 		_spec.ClearField(storedfile.FieldBucketName, field.TypeString)
 	}
-	if value, ok := sfu.mutation.StoragePath(); ok {
+	if value, ok := _u.mutation.StoragePath(); ok {
 		_spec.SetField(storedfile.FieldStoragePath, field.TypeString, value)
 	}
-	if value, ok := sfu.mutation.StorageFilename(); ok {
+	if value, ok := _u.mutation.StorageFilename(); ok {
 		_spec.SetField(storedfile.FieldStorageFilename, field.TypeString, value)
 	}
-	if value, ok := sfu.mutation.TemporaryStoragePath(); ok {
+	if value, ok := _u.mutation.TemporaryStoragePath(); ok {
 		_spec.SetField(storedfile.FieldTemporaryStoragePath, field.TypeString, value)
 	}
-	if value, ok := sfu.mutation.TemporaryStorageFilename(); ok {
+	if value, ok := _u.mutation.TemporaryStorageFilename(); ok {
 		_spec.SetField(storedfile.FieldTemporaryStorageFilename, field.TypeString, value)
 	}
-	if value, ok := sfu.mutation.CopiedToFinalDestinationAt(); ok {
+	if value, ok := _u.mutation.CopiedToFinalDestinationAt(); ok {
 		_spec.SetField(storedfile.FieldCopiedToFinalDestinationAt, field.TypeTime, value)
 	}
-	if sfu.mutation.CopiedToFinalDestinationAtCleared() {
+	if _u.mutation.CopiedToFinalDestinationAtCleared() {
 		_spec.ClearField(storedfile.FieldCopiedToFinalDestinationAt, field.TypeTime)
 	}
-	if value, ok := sfu.mutation.DeletedTemporaryFileAt(); ok {
+	if value, ok := _u.mutation.DeletedTemporaryFileAt(); ok {
 		_spec.SetField(storedfile.FieldDeletedTemporaryFileAt, field.TypeTime, value)
 	}
-	if sfu.mutation.DeletedTemporaryFileAtCleared() {
+	if _u.mutation.DeletedTemporaryFileAtCleared() {
 		_spec.ClearField(storedfile.FieldDeletedTemporaryFileAt, field.TypeTime)
 	}
-	if sfu.mutation.UpdaterCleared() {
+	if _u.mutation.UpdaterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -488,7 +488,7 @@ func (sfu *StoredFileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sfu.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -504,7 +504,7 @@ func (sfu *StoredFileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if sfu.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -517,7 +517,7 @@ func (sfu *StoredFileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sfu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !sfu.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -533,7 +533,7 @@ func (sfu *StoredFileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sfu.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -549,8 +549,8 @@ func (sfu *StoredFileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(sfu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, sfu.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{storedfile.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -558,8 +558,8 @@ func (sfu *StoredFileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	sfu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // StoredFileUpdateOne is the builder for updating a single StoredFile entity.
@@ -572,339 +572,339 @@ type StoredFileUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (sfuo *StoredFileUpdateOne) SetUpdatedAt(t time.Time) *StoredFileUpdateOne {
-	sfuo.mutation.SetUpdatedAt(t)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetUpdatedAt(v time.Time) *StoredFileUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (sfuo *StoredFileUpdateOne) SetUpdatedBy(i int64) *StoredFileUpdateOne {
-	sfuo.mutation.SetUpdatedBy(i)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetUpdatedBy(v int64) *StoredFileUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableUpdatedBy(i *int64) *StoredFileUpdateOne {
-	if i != nil {
-		sfuo.SetUpdatedBy(*i)
+func (_u *StoredFileUpdateOne) SetNillableUpdatedBy(v *int64) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return sfuo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (sfuo *StoredFileUpdateOne) ClearUpdatedBy() *StoredFileUpdateOne {
-	sfuo.mutation.ClearUpdatedBy()
-	return sfuo
+func (_u *StoredFileUpdateOne) ClearUpdatedBy() *StoredFileUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetSize sets the "size" field.
-func (sfuo *StoredFileUpdateOne) SetSize(i int64) *StoredFileUpdateOne {
-	sfuo.mutation.ResetSize()
-	sfuo.mutation.SetSize(i)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetSize(v int64) *StoredFileUpdateOne {
+	_u.mutation.ResetSize()
+	_u.mutation.SetSize(v)
+	return _u
 }
 
 // SetNillableSize sets the "size" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableSize(i *int64) *StoredFileUpdateOne {
-	if i != nil {
-		sfuo.SetSize(*i)
+func (_u *StoredFileUpdateOne) SetNillableSize(v *int64) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetSize(*v)
 	}
-	return sfuo
+	return _u
 }
 
-// AddSize adds i to the "size" field.
-func (sfuo *StoredFileUpdateOne) AddSize(i int64) *StoredFileUpdateOne {
-	sfuo.mutation.AddSize(i)
-	return sfuo
+// AddSize adds value to the "size" field.
+func (_u *StoredFileUpdateOne) AddSize(v int64) *StoredFileUpdateOne {
+	_u.mutation.AddSize(v)
+	return _u
 }
 
 // ClearSize clears the value of the "size" field.
-func (sfuo *StoredFileUpdateOne) ClearSize() *StoredFileUpdateOne {
-	sfuo.mutation.ClearSize()
-	return sfuo
+func (_u *StoredFileUpdateOne) ClearSize() *StoredFileUpdateOne {
+	_u.mutation.ClearSize()
+	return _u
 }
 
 // SetSizeInStorage sets the "size_in_storage" field.
-func (sfuo *StoredFileUpdateOne) SetSizeInStorage(i int64) *StoredFileUpdateOne {
-	sfuo.mutation.ResetSizeInStorage()
-	sfuo.mutation.SetSizeInStorage(i)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetSizeInStorage(v int64) *StoredFileUpdateOne {
+	_u.mutation.ResetSizeInStorage()
+	_u.mutation.SetSizeInStorage(v)
+	return _u
 }
 
 // SetNillableSizeInStorage sets the "size_in_storage" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableSizeInStorage(i *int64) *StoredFileUpdateOne {
-	if i != nil {
-		sfuo.SetSizeInStorage(*i)
+func (_u *StoredFileUpdateOne) SetNillableSizeInStorage(v *int64) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetSizeInStorage(*v)
 	}
-	return sfuo
+	return _u
 }
 
-// AddSizeInStorage adds i to the "size_in_storage" field.
-func (sfuo *StoredFileUpdateOne) AddSizeInStorage(i int64) *StoredFileUpdateOne {
-	sfuo.mutation.AddSizeInStorage(i)
-	return sfuo
+// AddSizeInStorage adds value to the "size_in_storage" field.
+func (_u *StoredFileUpdateOne) AddSizeInStorage(v int64) *StoredFileUpdateOne {
+	_u.mutation.AddSizeInStorage(v)
+	return _u
 }
 
 // SetSha256 sets the "sha256" field.
-func (sfuo *StoredFileUpdateOne) SetSha256(s string) *StoredFileUpdateOne {
-	sfuo.mutation.SetSha256(s)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetSha256(v string) *StoredFileUpdateOne {
+	_u.mutation.SetSha256(v)
+	return _u
 }
 
 // SetNillableSha256 sets the "sha256" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableSha256(s *string) *StoredFileUpdateOne {
-	if s != nil {
-		sfuo.SetSha256(*s)
+func (_u *StoredFileUpdateOne) SetNillableSha256(v *string) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetSha256(*v)
 	}
-	return sfuo
+	return _u
 }
 
 // ClearSha256 clears the value of the "sha256" field.
-func (sfuo *StoredFileUpdateOne) ClearSha256() *StoredFileUpdateOne {
-	sfuo.mutation.ClearSha256()
-	return sfuo
+func (_u *StoredFileUpdateOne) ClearSha256() *StoredFileUpdateOne {
+	_u.mutation.ClearSha256()
+	return _u
 }
 
 // SetMimeType sets the "mime_type" field.
-func (sfuo *StoredFileUpdateOne) SetMimeType(s string) *StoredFileUpdateOne {
-	sfuo.mutation.SetMimeType(s)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetMimeType(v string) *StoredFileUpdateOne {
+	_u.mutation.SetMimeType(v)
+	return _u
 }
 
 // SetNillableMimeType sets the "mime_type" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableMimeType(s *string) *StoredFileUpdateOne {
-	if s != nil {
-		sfuo.SetMimeType(*s)
+func (_u *StoredFileUpdateOne) SetNillableMimeType(v *string) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetMimeType(*v)
 	}
-	return sfuo
+	return _u
 }
 
 // ClearMimeType clears the value of the "mime_type" field.
-func (sfuo *StoredFileUpdateOne) ClearMimeType() *StoredFileUpdateOne {
-	sfuo.mutation.ClearMimeType()
-	return sfuo
+func (_u *StoredFileUpdateOne) ClearMimeType() *StoredFileUpdateOne {
+	_u.mutation.ClearMimeType()
+	return _u
 }
 
 // SetStorageType sets the "storage_type" field.
-func (sfuo *StoredFileUpdateOne) SetStorageType(st storagetype.StorageType) *StoredFileUpdateOne {
-	sfuo.mutation.SetStorageType(st)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetStorageType(v storagetype.StorageType) *StoredFileUpdateOne {
+	_u.mutation.SetStorageType(v)
+	return _u
 }
 
 // SetNillableStorageType sets the "storage_type" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableStorageType(st *storagetype.StorageType) *StoredFileUpdateOne {
-	if st != nil {
-		sfuo.SetStorageType(*st)
+func (_u *StoredFileUpdateOne) SetNillableStorageType(v *storagetype.StorageType) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetStorageType(*v)
 	}
-	return sfuo
+	return _u
 }
 
 // SetBucketName sets the "bucket_name" field.
-func (sfuo *StoredFileUpdateOne) SetBucketName(s string) *StoredFileUpdateOne {
-	sfuo.mutation.SetBucketName(s)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetBucketName(v string) *StoredFileUpdateOne {
+	_u.mutation.SetBucketName(v)
+	return _u
 }
 
 // SetNillableBucketName sets the "bucket_name" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableBucketName(s *string) *StoredFileUpdateOne {
-	if s != nil {
-		sfuo.SetBucketName(*s)
+func (_u *StoredFileUpdateOne) SetNillableBucketName(v *string) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetBucketName(*v)
 	}
-	return sfuo
+	return _u
 }
 
 // ClearBucketName clears the value of the "bucket_name" field.
-func (sfuo *StoredFileUpdateOne) ClearBucketName() *StoredFileUpdateOne {
-	sfuo.mutation.ClearBucketName()
-	return sfuo
+func (_u *StoredFileUpdateOne) ClearBucketName() *StoredFileUpdateOne {
+	_u.mutation.ClearBucketName()
+	return _u
 }
 
 // SetStoragePath sets the "storage_path" field.
-func (sfuo *StoredFileUpdateOne) SetStoragePath(s string) *StoredFileUpdateOne {
-	sfuo.mutation.SetStoragePath(s)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetStoragePath(v string) *StoredFileUpdateOne {
+	_u.mutation.SetStoragePath(v)
+	return _u
 }
 
 // SetNillableStoragePath sets the "storage_path" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableStoragePath(s *string) *StoredFileUpdateOne {
-	if s != nil {
-		sfuo.SetStoragePath(*s)
+func (_u *StoredFileUpdateOne) SetNillableStoragePath(v *string) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetStoragePath(*v)
 	}
-	return sfuo
+	return _u
 }
 
 // SetStorageFilename sets the "storage_filename" field.
-func (sfuo *StoredFileUpdateOne) SetStorageFilename(s string) *StoredFileUpdateOne {
-	sfuo.mutation.SetStorageFilename(s)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetStorageFilename(v string) *StoredFileUpdateOne {
+	_u.mutation.SetStorageFilename(v)
+	return _u
 }
 
 // SetNillableStorageFilename sets the "storage_filename" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableStorageFilename(s *string) *StoredFileUpdateOne {
-	if s != nil {
-		sfuo.SetStorageFilename(*s)
+func (_u *StoredFileUpdateOne) SetNillableStorageFilename(v *string) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetStorageFilename(*v)
 	}
-	return sfuo
+	return _u
 }
 
 // SetTemporaryStoragePath sets the "temporary_storage_path" field.
-func (sfuo *StoredFileUpdateOne) SetTemporaryStoragePath(s string) *StoredFileUpdateOne {
-	sfuo.mutation.SetTemporaryStoragePath(s)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetTemporaryStoragePath(v string) *StoredFileUpdateOne {
+	_u.mutation.SetTemporaryStoragePath(v)
+	return _u
 }
 
 // SetNillableTemporaryStoragePath sets the "temporary_storage_path" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableTemporaryStoragePath(s *string) *StoredFileUpdateOne {
-	if s != nil {
-		sfuo.SetTemporaryStoragePath(*s)
+func (_u *StoredFileUpdateOne) SetNillableTemporaryStoragePath(v *string) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetTemporaryStoragePath(*v)
 	}
-	return sfuo
+	return _u
 }
 
 // SetTemporaryStorageFilename sets the "temporary_storage_filename" field.
-func (sfuo *StoredFileUpdateOne) SetTemporaryStorageFilename(s string) *StoredFileUpdateOne {
-	sfuo.mutation.SetTemporaryStorageFilename(s)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetTemporaryStorageFilename(v string) *StoredFileUpdateOne {
+	_u.mutation.SetTemporaryStorageFilename(v)
+	return _u
 }
 
 // SetNillableTemporaryStorageFilename sets the "temporary_storage_filename" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableTemporaryStorageFilename(s *string) *StoredFileUpdateOne {
-	if s != nil {
-		sfuo.SetTemporaryStorageFilename(*s)
+func (_u *StoredFileUpdateOne) SetNillableTemporaryStorageFilename(v *string) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetTemporaryStorageFilename(*v)
 	}
-	return sfuo
+	return _u
 }
 
 // SetCopiedToFinalDestinationAt sets the "copied_to_final_destination_at" field.
-func (sfuo *StoredFileUpdateOne) SetCopiedToFinalDestinationAt(t time.Time) *StoredFileUpdateOne {
-	sfuo.mutation.SetCopiedToFinalDestinationAt(t)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetCopiedToFinalDestinationAt(v time.Time) *StoredFileUpdateOne {
+	_u.mutation.SetCopiedToFinalDestinationAt(v)
+	return _u
 }
 
 // SetNillableCopiedToFinalDestinationAt sets the "copied_to_final_destination_at" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableCopiedToFinalDestinationAt(t *time.Time) *StoredFileUpdateOne {
-	if t != nil {
-		sfuo.SetCopiedToFinalDestinationAt(*t)
+func (_u *StoredFileUpdateOne) SetNillableCopiedToFinalDestinationAt(v *time.Time) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetCopiedToFinalDestinationAt(*v)
 	}
-	return sfuo
+	return _u
 }
 
 // ClearCopiedToFinalDestinationAt clears the value of the "copied_to_final_destination_at" field.
-func (sfuo *StoredFileUpdateOne) ClearCopiedToFinalDestinationAt() *StoredFileUpdateOne {
-	sfuo.mutation.ClearCopiedToFinalDestinationAt()
-	return sfuo
+func (_u *StoredFileUpdateOne) ClearCopiedToFinalDestinationAt() *StoredFileUpdateOne {
+	_u.mutation.ClearCopiedToFinalDestinationAt()
+	return _u
 }
 
 // SetDeletedTemporaryFileAt sets the "deleted_temporary_file_at" field.
-func (sfuo *StoredFileUpdateOne) SetDeletedTemporaryFileAt(t time.Time) *StoredFileUpdateOne {
-	sfuo.mutation.SetDeletedTemporaryFileAt(t)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetDeletedTemporaryFileAt(v time.Time) *StoredFileUpdateOne {
+	_u.mutation.SetDeletedTemporaryFileAt(v)
+	return _u
 }
 
 // SetNillableDeletedTemporaryFileAt sets the "deleted_temporary_file_at" field if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableDeletedTemporaryFileAt(t *time.Time) *StoredFileUpdateOne {
-	if t != nil {
-		sfuo.SetDeletedTemporaryFileAt(*t)
+func (_u *StoredFileUpdateOne) SetNillableDeletedTemporaryFileAt(v *time.Time) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetDeletedTemporaryFileAt(*v)
 	}
-	return sfuo
+	return _u
 }
 
 // ClearDeletedTemporaryFileAt clears the value of the "deleted_temporary_file_at" field.
-func (sfuo *StoredFileUpdateOne) ClearDeletedTemporaryFileAt() *StoredFileUpdateOne {
-	sfuo.mutation.ClearDeletedTemporaryFileAt()
-	return sfuo
+func (_u *StoredFileUpdateOne) ClearDeletedTemporaryFileAt() *StoredFileUpdateOne {
+	_u.mutation.ClearDeletedTemporaryFileAt()
+	return _u
 }
 
 // SetUpdaterID sets the "updater" edge to the User entity by ID.
-func (sfuo *StoredFileUpdateOne) SetUpdaterID(id int64) *StoredFileUpdateOne {
-	sfuo.mutation.SetUpdaterID(id)
-	return sfuo
+func (_u *StoredFileUpdateOne) SetUpdaterID(id int64) *StoredFileUpdateOne {
+	_u.mutation.SetUpdaterID(id)
+	return _u
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the User entity by ID if the given value is not nil.
-func (sfuo *StoredFileUpdateOne) SetNillableUpdaterID(id *int64) *StoredFileUpdateOne {
+func (_u *StoredFileUpdateOne) SetNillableUpdaterID(id *int64) *StoredFileUpdateOne {
 	if id != nil {
-		sfuo = sfuo.SetUpdaterID(*id)
+		_u = _u.SetUpdaterID(*id)
 	}
-	return sfuo
+	return _u
 }
 
 // SetUpdater sets the "updater" edge to the User entity.
-func (sfuo *StoredFileUpdateOne) SetUpdater(u *User) *StoredFileUpdateOne {
-	return sfuo.SetUpdaterID(u.ID)
+func (_u *StoredFileUpdateOne) SetUpdater(v *User) *StoredFileUpdateOne {
+	return _u.SetUpdaterID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (sfuo *StoredFileUpdateOne) AddFileIDs(ids ...int64) *StoredFileUpdateOne {
-	sfuo.mutation.AddFileIDs(ids...)
-	return sfuo
+func (_u *StoredFileUpdateOne) AddFileIDs(ids ...int64) *StoredFileUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (sfuo *StoredFileUpdateOne) AddFiles(f ...*File) *StoredFileUpdateOne {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *StoredFileUpdateOne) AddFiles(v ...*File) *StoredFileUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sfuo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the StoredFileMutation object of the builder.
-func (sfuo *StoredFileUpdateOne) Mutation() *StoredFileMutation {
-	return sfuo.mutation
+func (_u *StoredFileUpdateOne) Mutation() *StoredFileMutation {
+	return _u.mutation
 }
 
 // ClearUpdater clears the "updater" edge to the User entity.
-func (sfuo *StoredFileUpdateOne) ClearUpdater() *StoredFileUpdateOne {
-	sfuo.mutation.ClearUpdater()
-	return sfuo
+func (_u *StoredFileUpdateOne) ClearUpdater() *StoredFileUpdateOne {
+	_u.mutation.ClearUpdater()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (sfuo *StoredFileUpdateOne) ClearFiles() *StoredFileUpdateOne {
-	sfuo.mutation.ClearFiles()
-	return sfuo
+func (_u *StoredFileUpdateOne) ClearFiles() *StoredFileUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (sfuo *StoredFileUpdateOne) RemoveFileIDs(ids ...int64) *StoredFileUpdateOne {
-	sfuo.mutation.RemoveFileIDs(ids...)
-	return sfuo
+func (_u *StoredFileUpdateOne) RemoveFileIDs(ids ...int64) *StoredFileUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (sfuo *StoredFileUpdateOne) RemoveFiles(f ...*File) *StoredFileUpdateOne {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *StoredFileUpdateOne) RemoveFiles(v ...*File) *StoredFileUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sfuo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the StoredFileUpdate builder.
-func (sfuo *StoredFileUpdateOne) Where(ps ...predicate.StoredFile) *StoredFileUpdateOne {
-	sfuo.mutation.Where(ps...)
-	return sfuo
+func (_u *StoredFileUpdateOne) Where(ps ...predicate.StoredFile) *StoredFileUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (sfuo *StoredFileUpdateOne) Select(field string, fields ...string) *StoredFileUpdateOne {
-	sfuo.fields = append([]string{field}, fields...)
-	return sfuo
+func (_u *StoredFileUpdateOne) Select(field string, fields ...string) *StoredFileUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated StoredFile entity.
-func (sfuo *StoredFileUpdateOne) Save(ctx context.Context) (*StoredFile, error) {
-	if err := sfuo.defaults(); err != nil {
+func (_u *StoredFileUpdateOne) Save(ctx context.Context) (*StoredFile, error) {
+	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, sfuo.sqlSave, sfuo.mutation, sfuo.hooks)
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (sfuo *StoredFileUpdateOne) SaveX(ctx context.Context) *StoredFile {
-	node, err := sfuo.Save(ctx)
+func (_u *StoredFileUpdateOne) SaveX(ctx context.Context) *StoredFile {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -912,33 +912,33 @@ func (sfuo *StoredFileUpdateOne) SaveX(ctx context.Context) *StoredFile {
 }
 
 // Exec executes the query on the entity.
-func (sfuo *StoredFileUpdateOne) Exec(ctx context.Context) error {
-	_, err := sfuo.Save(ctx)
+func (_u *StoredFileUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sfuo *StoredFileUpdateOne) ExecX(ctx context.Context) {
-	if err := sfuo.Exec(ctx); err != nil {
+func (_u *StoredFileUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sfuo *StoredFileUpdateOne) defaults() error {
-	if _, ok := sfuo.mutation.UpdatedAt(); !ok {
+func (_u *StoredFileUpdateOne) defaults() error {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		if storedfile.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("enttenant: uninitialized storedfile.UpdateDefaultUpdatedAt (forgotten import enttenant/runtime?)")
 		}
 		v := storedfile.UpdateDefaultUpdatedAt()
-		sfuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sfuo *StoredFileUpdateOne) check() error {
-	if v, ok := sfuo.mutation.StorageType(); ok {
+func (_u *StoredFileUpdateOne) check() error {
+	if v, ok := _u.mutation.StorageType(); ok {
 		if err := storedfile.StorageTypeValidator(v); err != nil {
 			return &ValidationError{Name: "storage_type", err: fmt.Errorf(`enttenant: validator failed for field "StoredFile.storage_type": %w`, err)}
 		}
@@ -947,22 +947,22 @@ func (sfuo *StoredFileUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (sfuo *StoredFileUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StoredFileUpdateOne {
-	sfuo.modifiers = append(sfuo.modifiers, modifiers...)
-	return sfuo
+func (_u *StoredFileUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *StoredFileUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (sfuo *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile, err error) {
-	if err := sfuo.check(); err != nil {
+func (_u *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(storedfile.Table, storedfile.Columns, sqlgraph.NewFieldSpec(storedfile.FieldID, field.TypeInt64))
-	id, ok := sfuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`enttenant: missing "StoredFile.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := sfuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, storedfile.FieldID)
 		for _, f := range fields {
@@ -974,77 +974,77 @@ func (sfuo *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile
 			}
 		}
 	}
-	if ps := sfuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := sfuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(storedfile.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := sfuo.mutation.Size(); ok {
+	if value, ok := _u.mutation.Size(); ok {
 		_spec.SetField(storedfile.FieldSize, field.TypeInt64, value)
 	}
-	if value, ok := sfuo.mutation.AddedSize(); ok {
+	if value, ok := _u.mutation.AddedSize(); ok {
 		_spec.AddField(storedfile.FieldSize, field.TypeInt64, value)
 	}
-	if sfuo.mutation.SizeCleared() {
+	if _u.mutation.SizeCleared() {
 		_spec.ClearField(storedfile.FieldSize, field.TypeInt64)
 	}
-	if value, ok := sfuo.mutation.SizeInStorage(); ok {
+	if value, ok := _u.mutation.SizeInStorage(); ok {
 		_spec.SetField(storedfile.FieldSizeInStorage, field.TypeInt64, value)
 	}
-	if value, ok := sfuo.mutation.AddedSizeInStorage(); ok {
+	if value, ok := _u.mutation.AddedSizeInStorage(); ok {
 		_spec.AddField(storedfile.FieldSizeInStorage, field.TypeInt64, value)
 	}
-	if value, ok := sfuo.mutation.Sha256(); ok {
+	if value, ok := _u.mutation.Sha256(); ok {
 		_spec.SetField(storedfile.FieldSha256, field.TypeString, value)
 	}
-	if sfuo.mutation.Sha256Cleared() {
+	if _u.mutation.Sha256Cleared() {
 		_spec.ClearField(storedfile.FieldSha256, field.TypeString)
 	}
-	if value, ok := sfuo.mutation.MimeType(); ok {
+	if value, ok := _u.mutation.MimeType(); ok {
 		_spec.SetField(storedfile.FieldMimeType, field.TypeString, value)
 	}
-	if sfuo.mutation.MimeTypeCleared() {
+	if _u.mutation.MimeTypeCleared() {
 		_spec.ClearField(storedfile.FieldMimeType, field.TypeString)
 	}
-	if value, ok := sfuo.mutation.StorageType(); ok {
+	if value, ok := _u.mutation.StorageType(); ok {
 		_spec.SetField(storedfile.FieldStorageType, field.TypeEnum, value)
 	}
-	if value, ok := sfuo.mutation.BucketName(); ok {
+	if value, ok := _u.mutation.BucketName(); ok {
 		_spec.SetField(storedfile.FieldBucketName, field.TypeString, value)
 	}
-	if sfuo.mutation.BucketNameCleared() {
+	if _u.mutation.BucketNameCleared() {
 		_spec.ClearField(storedfile.FieldBucketName, field.TypeString)
 	}
-	if value, ok := sfuo.mutation.StoragePath(); ok {
+	if value, ok := _u.mutation.StoragePath(); ok {
 		_spec.SetField(storedfile.FieldStoragePath, field.TypeString, value)
 	}
-	if value, ok := sfuo.mutation.StorageFilename(); ok {
+	if value, ok := _u.mutation.StorageFilename(); ok {
 		_spec.SetField(storedfile.FieldStorageFilename, field.TypeString, value)
 	}
-	if value, ok := sfuo.mutation.TemporaryStoragePath(); ok {
+	if value, ok := _u.mutation.TemporaryStoragePath(); ok {
 		_spec.SetField(storedfile.FieldTemporaryStoragePath, field.TypeString, value)
 	}
-	if value, ok := sfuo.mutation.TemporaryStorageFilename(); ok {
+	if value, ok := _u.mutation.TemporaryStorageFilename(); ok {
 		_spec.SetField(storedfile.FieldTemporaryStorageFilename, field.TypeString, value)
 	}
-	if value, ok := sfuo.mutation.CopiedToFinalDestinationAt(); ok {
+	if value, ok := _u.mutation.CopiedToFinalDestinationAt(); ok {
 		_spec.SetField(storedfile.FieldCopiedToFinalDestinationAt, field.TypeTime, value)
 	}
-	if sfuo.mutation.CopiedToFinalDestinationAtCleared() {
+	if _u.mutation.CopiedToFinalDestinationAtCleared() {
 		_spec.ClearField(storedfile.FieldCopiedToFinalDestinationAt, field.TypeTime)
 	}
-	if value, ok := sfuo.mutation.DeletedTemporaryFileAt(); ok {
+	if value, ok := _u.mutation.DeletedTemporaryFileAt(); ok {
 		_spec.SetField(storedfile.FieldDeletedTemporaryFileAt, field.TypeTime, value)
 	}
-	if sfuo.mutation.DeletedTemporaryFileAtCleared() {
+	if _u.mutation.DeletedTemporaryFileAtCleared() {
 		_spec.ClearField(storedfile.FieldDeletedTemporaryFileAt, field.TypeTime)
 	}
-	if sfuo.mutation.UpdaterCleared() {
+	if _u.mutation.UpdaterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1057,7 +1057,7 @@ func (sfuo *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sfuo.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -1073,7 +1073,7 @@ func (sfuo *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if sfuo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1086,7 +1086,7 @@ func (sfuo *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sfuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !sfuo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1102,7 +1102,7 @@ func (sfuo *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := sfuo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -1118,11 +1118,11 @@ func (sfuo *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(sfuo.modifiers...)
-	_node = &StoredFile{config: sfuo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &StoredFile{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, sfuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{storedfile.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -1130,6 +1130,6 @@ func (sfuo *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile
 		}
 		return nil, err
 	}
-	sfuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

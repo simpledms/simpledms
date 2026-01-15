@@ -20,56 +20,56 @@ type TagAssignmentDelete struct {
 }
 
 // Where appends a list predicates to the TagAssignmentDelete builder.
-func (tad *TagAssignmentDelete) Where(ps ...predicate.TagAssignment) *TagAssignmentDelete {
-	tad.mutation.Where(ps...)
-	return tad
+func (_d *TagAssignmentDelete) Where(ps ...predicate.TagAssignment) *TagAssignmentDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (tad *TagAssignmentDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, tad.sqlExec, tad.mutation, tad.hooks)
+func (_d *TagAssignmentDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tad *TagAssignmentDelete) ExecX(ctx context.Context) int {
-	n, err := tad.Exec(ctx)
+func (_d *TagAssignmentDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (tad *TagAssignmentDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TagAssignmentDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(tagassignment.Table, sqlgraph.NewFieldSpec(tagassignment.FieldID, field.TypeInt64))
-	if ps := tad.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, tad.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	tad.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TagAssignmentDeleteOne is the builder for deleting a single TagAssignment entity.
 type TagAssignmentDeleteOne struct {
-	tad *TagAssignmentDelete
+	_d *TagAssignmentDelete
 }
 
 // Where appends a list predicates to the TagAssignmentDelete builder.
-func (tado *TagAssignmentDeleteOne) Where(ps ...predicate.TagAssignment) *TagAssignmentDeleteOne {
-	tado.tad.mutation.Where(ps...)
-	return tado
+func (_d *TagAssignmentDeleteOne) Where(ps ...predicate.TagAssignment) *TagAssignmentDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (tado *TagAssignmentDeleteOne) Exec(ctx context.Context) error {
-	n, err := tado.tad.Exec(ctx)
+func (_d *TagAssignmentDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (tado *TagAssignmentDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tado *TagAssignmentDeleteOne) ExecX(ctx context.Context) {
-	if err := tado.Exec(ctx); err != nil {
+func (_d *TagAssignmentDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

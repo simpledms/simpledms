@@ -20,56 +20,56 @@ type TemporaryFileDelete struct {
 }
 
 // Where appends a list predicates to the TemporaryFileDelete builder.
-func (tfd *TemporaryFileDelete) Where(ps ...predicate.TemporaryFile) *TemporaryFileDelete {
-	tfd.mutation.Where(ps...)
-	return tfd
+func (_d *TemporaryFileDelete) Where(ps ...predicate.TemporaryFile) *TemporaryFileDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (tfd *TemporaryFileDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, tfd.sqlExec, tfd.mutation, tfd.hooks)
+func (_d *TemporaryFileDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tfd *TemporaryFileDelete) ExecX(ctx context.Context) int {
-	n, err := tfd.Exec(ctx)
+func (_d *TemporaryFileDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (tfd *TemporaryFileDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TemporaryFileDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(temporaryfile.Table, sqlgraph.NewFieldSpec(temporaryfile.FieldID, field.TypeInt64))
-	if ps := tfd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, tfd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	tfd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TemporaryFileDeleteOne is the builder for deleting a single TemporaryFile entity.
 type TemporaryFileDeleteOne struct {
-	tfd *TemporaryFileDelete
+	_d *TemporaryFileDelete
 }
 
 // Where appends a list predicates to the TemporaryFileDelete builder.
-func (tfdo *TemporaryFileDeleteOne) Where(ps ...predicate.TemporaryFile) *TemporaryFileDeleteOne {
-	tfdo.tfd.mutation.Where(ps...)
-	return tfdo
+func (_d *TemporaryFileDeleteOne) Where(ps ...predicate.TemporaryFile) *TemporaryFileDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (tfdo *TemporaryFileDeleteOne) Exec(ctx context.Context) error {
-	n, err := tfdo.tfd.Exec(ctx)
+func (_d *TemporaryFileDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (tfdo *TemporaryFileDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tfdo *TemporaryFileDeleteOne) ExecX(ctx context.Context) {
-	if err := tfdo.Exec(ctx); err != nil {
+func (_d *TemporaryFileDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

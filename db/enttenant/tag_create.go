@@ -24,169 +24,169 @@ type TagCreate struct {
 }
 
 // SetSpaceID sets the "space_id" field.
-func (tc *TagCreate) SetSpaceID(i int64) *TagCreate {
-	tc.mutation.SetSpaceID(i)
-	return tc
+func (_c *TagCreate) SetSpaceID(v int64) *TagCreate {
+	_c.mutation.SetSpaceID(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (tc *TagCreate) SetName(s string) *TagCreate {
-	tc.mutation.SetName(s)
-	return tc
+func (_c *TagCreate) SetName(v string) *TagCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetColor sets the "color" field.
-func (tc *TagCreate) SetColor(s string) *TagCreate {
-	tc.mutation.SetColor(s)
-	return tc
+func (_c *TagCreate) SetColor(v string) *TagCreate {
+	_c.mutation.SetColor(v)
+	return _c
 }
 
 // SetNillableColor sets the "color" field if the given value is not nil.
-func (tc *TagCreate) SetNillableColor(s *string) *TagCreate {
-	if s != nil {
-		tc.SetColor(*s)
+func (_c *TagCreate) SetNillableColor(v *string) *TagCreate {
+	if v != nil {
+		_c.SetColor(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetIcon sets the "icon" field.
-func (tc *TagCreate) SetIcon(s string) *TagCreate {
-	tc.mutation.SetIcon(s)
-	return tc
+func (_c *TagCreate) SetIcon(v string) *TagCreate {
+	_c.mutation.SetIcon(v)
+	return _c
 }
 
 // SetNillableIcon sets the "icon" field if the given value is not nil.
-func (tc *TagCreate) SetNillableIcon(s *string) *TagCreate {
-	if s != nil {
-		tc.SetIcon(*s)
+func (_c *TagCreate) SetNillableIcon(v *string) *TagCreate {
+	if v != nil {
+		_c.SetIcon(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetType sets the "type" field.
-func (tc *TagCreate) SetType(tt tagtype.TagType) *TagCreate {
-	tc.mutation.SetType(tt)
-	return tc
+func (_c *TagCreate) SetType(v tagtype.TagType) *TagCreate {
+	_c.mutation.SetType(v)
+	return _c
 }
 
 // SetGroupID sets the "group_id" field.
-func (tc *TagCreate) SetGroupID(i int64) *TagCreate {
-	tc.mutation.SetGroupID(i)
-	return tc
+func (_c *TagCreate) SetGroupID(v int64) *TagCreate {
+	_c.mutation.SetGroupID(v)
+	return _c
 }
 
 // SetNillableGroupID sets the "group_id" field if the given value is not nil.
-func (tc *TagCreate) SetNillableGroupID(i *int64) *TagCreate {
-	if i != nil {
-		tc.SetGroupID(*i)
+func (_c *TagCreate) SetNillableGroupID(v *int64) *TagCreate {
+	if v != nil {
+		_c.SetGroupID(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tc *TagCreate) SetID(i int64) *TagCreate {
-	tc.mutation.SetID(i)
-	return tc
+func (_c *TagCreate) SetID(v int64) *TagCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetSpace sets the "space" edge to the Space entity.
-func (tc *TagCreate) SetSpace(s *Space) *TagCreate {
-	return tc.SetSpaceID(s.ID)
+func (_c *TagCreate) SetSpace(v *Space) *TagCreate {
+	return _c.SetSpaceID(v.ID)
 }
 
 // AddChildIDs adds the "children" edge to the Tag entity by IDs.
-func (tc *TagCreate) AddChildIDs(ids ...int64) *TagCreate {
-	tc.mutation.AddChildIDs(ids...)
-	return tc
+func (_c *TagCreate) AddChildIDs(ids ...int64) *TagCreate {
+	_c.mutation.AddChildIDs(ids...)
+	return _c
 }
 
 // AddChildren adds the "children" edges to the Tag entity.
-func (tc *TagCreate) AddChildren(t ...*Tag) *TagCreate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *TagCreate) AddChildren(v ...*Tag) *TagCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddChildIDs(ids...)
+	return _c.AddChildIDs(ids...)
 }
 
 // SetGroup sets the "group" edge to the Tag entity.
-func (tc *TagCreate) SetGroup(t *Tag) *TagCreate {
-	return tc.SetGroupID(t.ID)
+func (_c *TagCreate) SetGroup(v *Tag) *TagCreate {
+	return _c.SetGroupID(v.ID)
 }
 
 // AddSuperTagIDs adds the "super_tags" edge to the Tag entity by IDs.
-func (tc *TagCreate) AddSuperTagIDs(ids ...int64) *TagCreate {
-	tc.mutation.AddSuperTagIDs(ids...)
-	return tc
+func (_c *TagCreate) AddSuperTagIDs(ids ...int64) *TagCreate {
+	_c.mutation.AddSuperTagIDs(ids...)
+	return _c
 }
 
 // AddSuperTags adds the "super_tags" edges to the Tag entity.
-func (tc *TagCreate) AddSuperTags(t ...*Tag) *TagCreate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *TagCreate) AddSuperTags(v ...*Tag) *TagCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddSuperTagIDs(ids...)
+	return _c.AddSuperTagIDs(ids...)
 }
 
 // AddSubTagIDs adds the "sub_tags" edge to the Tag entity by IDs.
-func (tc *TagCreate) AddSubTagIDs(ids ...int64) *TagCreate {
-	tc.mutation.AddSubTagIDs(ids...)
-	return tc
+func (_c *TagCreate) AddSubTagIDs(ids ...int64) *TagCreate {
+	_c.mutation.AddSubTagIDs(ids...)
+	return _c
 }
 
 // AddSubTags adds the "sub_tags" edges to the Tag entity.
-func (tc *TagCreate) AddSubTags(t ...*Tag) *TagCreate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *TagCreate) AddSubTags(v ...*Tag) *TagCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddSubTagIDs(ids...)
+	return _c.AddSubTagIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (tc *TagCreate) AddFileIDs(ids ...int64) *TagCreate {
-	tc.mutation.AddFileIDs(ids...)
-	return tc
+func (_c *TagCreate) AddFileIDs(ids ...int64) *TagCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (tc *TagCreate) AddFiles(f ...*File) *TagCreate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *TagCreate) AddFiles(v ...*File) *TagCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // AddTagAssignmentIDs adds the "tag_assignment" edge to the TagAssignment entity by IDs.
-func (tc *TagCreate) AddTagAssignmentIDs(ids ...int64) *TagCreate {
-	tc.mutation.AddTagAssignmentIDs(ids...)
-	return tc
+func (_c *TagCreate) AddTagAssignmentIDs(ids ...int64) *TagCreate {
+	_c.mutation.AddTagAssignmentIDs(ids...)
+	return _c
 }
 
 // AddTagAssignment adds the "tag_assignment" edges to the TagAssignment entity.
-func (tc *TagCreate) AddTagAssignment(t ...*TagAssignment) *TagCreate {
-	ids := make([]int64, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *TagCreate) AddTagAssignment(v ...*TagAssignment) *TagCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tc.AddTagAssignmentIDs(ids...)
+	return _c.AddTagAssignmentIDs(ids...)
 }
 
 // Mutation returns the TagMutation object of the builder.
-func (tc *TagCreate) Mutation() *TagMutation {
-	return tc.mutation
+func (_c *TagCreate) Mutation() *TagMutation {
+	return _c.mutation
 }
 
 // Save creates the Tag in the database.
-func (tc *TagCreate) Save(ctx context.Context) (*Tag, error) {
-	return withHooks(ctx, tc.sqlSave, tc.mutation, tc.hooks)
+func (_c *TagCreate) Save(ctx context.Context) (*Tag, error) {
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tc *TagCreate) SaveX(ctx context.Context) *Tag {
-	v, err := tc.Save(ctx)
+func (_c *TagCreate) SaveX(ctx context.Context) *Tag {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -194,46 +194,46 @@ func (tc *TagCreate) SaveX(ctx context.Context) *Tag {
 }
 
 // Exec executes the query.
-func (tc *TagCreate) Exec(ctx context.Context) error {
-	_, err := tc.Save(ctx)
+func (_c *TagCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tc *TagCreate) ExecX(ctx context.Context) {
-	if err := tc.Exec(ctx); err != nil {
+func (_c *TagCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tc *TagCreate) check() error {
-	if _, ok := tc.mutation.SpaceID(); !ok {
+func (_c *TagCreate) check() error {
+	if _, ok := _c.mutation.SpaceID(); !ok {
 		return &ValidationError{Name: "space_id", err: errors.New(`enttenant: missing required field "Tag.space_id"`)}
 	}
-	if _, ok := tc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`enttenant: missing required field "Tag.name"`)}
 	}
-	if _, ok := tc.mutation.GetType(); !ok {
+	if _, ok := _c.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`enttenant: missing required field "Tag.type"`)}
 	}
-	if v, ok := tc.mutation.GetType(); ok {
+	if v, ok := _c.mutation.GetType(); ok {
 		if err := tag.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`enttenant: validator failed for field "Tag.type": %w`, err)}
 		}
 	}
-	if len(tc.mutation.SpaceIDs()) == 0 {
+	if len(_c.mutation.SpaceIDs()) == 0 {
 		return &ValidationError{Name: "space", err: errors.New(`enttenant: missing required edge "Tag.space"`)}
 	}
 	return nil
 }
 
-func (tc *TagCreate) sqlSave(ctx context.Context) (*Tag, error) {
-	if err := tc.check(); err != nil {
+func (_c *TagCreate) sqlSave(ctx context.Context) (*Tag, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -243,37 +243,37 @@ func (tc *TagCreate) sqlSave(ctx context.Context) (*Tag, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	tc.mutation.id = &_node.ID
-	tc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
+func (_c *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Tag{config: tc.config}
+		_node = &Tag{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(tag.Table, sqlgraph.NewFieldSpec(tag.FieldID, field.TypeInt64))
 	)
-	if id, ok := tc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := tc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(tag.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := tc.mutation.Color(); ok {
+	if value, ok := _c.mutation.Color(); ok {
 		_spec.SetField(tag.FieldColor, field.TypeString, value)
 		_node.Color = value
 	}
-	if value, ok := tc.mutation.Icon(); ok {
+	if value, ok := _c.mutation.Icon(); ok {
 		_spec.SetField(tag.FieldIcon, field.TypeString, value)
 		_node.Icon = value
 	}
-	if value, ok := tc.mutation.GetType(); ok {
+	if value, ok := _c.mutation.GetType(); ok {
 		_spec.SetField(tag.FieldType, field.TypeEnum, value)
 		_node.Type = value
 	}
-	if nodes := tc.mutation.SpaceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SpaceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -290,7 +290,7 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 		_node.SpaceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.ChildrenIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ChildrenIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -306,7 +306,7 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.GroupIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -323,7 +323,7 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 		_node.GroupID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.SuperTagsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SuperTagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -339,7 +339,7 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.SubTagsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubTagsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -355,7 +355,7 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -371,7 +371,7 @@ func (tc *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tc.mutation.TagAssignmentIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TagAssignmentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -398,16 +398,16 @@ type TagCreateBulk struct {
 }
 
 // Save creates the Tag entities in the database.
-func (tcb *TagCreateBulk) Save(ctx context.Context) ([]*Tag, error) {
-	if tcb.err != nil {
-		return nil, tcb.err
+func (_c *TagCreateBulk) Save(ctx context.Context) ([]*Tag, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tcb.builders))
-	nodes := make([]*Tag, len(tcb.builders))
-	mutators := make([]Mutator, len(tcb.builders))
-	for i := range tcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Tag, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tcb.builders[i]
+			builder := _c.builders[i]
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TagMutation)
 				if !ok {
@@ -420,11 +420,11 @@ func (tcb *TagCreateBulk) Save(ctx context.Context) ([]*Tag, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -448,7 +448,7 @@ func (tcb *TagCreateBulk) Save(ctx context.Context) ([]*Tag, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -456,8 +456,8 @@ func (tcb *TagCreateBulk) Save(ctx context.Context) ([]*Tag, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcb *TagCreateBulk) SaveX(ctx context.Context) []*Tag {
-	v, err := tcb.Save(ctx)
+func (_c *TagCreateBulk) SaveX(ctx context.Context) []*Tag {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -465,14 +465,14 @@ func (tcb *TagCreateBulk) SaveX(ctx context.Context) []*Tag {
 }
 
 // Exec executes the query.
-func (tcb *TagCreateBulk) Exec(ctx context.Context) error {
-	_, err := tcb.Save(ctx)
+func (_c *TagCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcb *TagCreateBulk) ExecX(ctx context.Context) {
-	if err := tcb.Exec(ctx); err != nil {
+func (_c *TagCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

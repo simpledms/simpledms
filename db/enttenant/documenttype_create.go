@@ -22,101 +22,101 @@ type DocumentTypeCreate struct {
 }
 
 // SetSpaceID sets the "space_id" field.
-func (dtc *DocumentTypeCreate) SetSpaceID(i int64) *DocumentTypeCreate {
-	dtc.mutation.SetSpaceID(i)
-	return dtc
+func (_c *DocumentTypeCreate) SetSpaceID(v int64) *DocumentTypeCreate {
+	_c.mutation.SetSpaceID(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (dtc *DocumentTypeCreate) SetName(s string) *DocumentTypeCreate {
-	dtc.mutation.SetName(s)
-	return dtc
+func (_c *DocumentTypeCreate) SetName(v string) *DocumentTypeCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetIcon sets the "icon" field.
-func (dtc *DocumentTypeCreate) SetIcon(s string) *DocumentTypeCreate {
-	dtc.mutation.SetIcon(s)
-	return dtc
+func (_c *DocumentTypeCreate) SetIcon(v string) *DocumentTypeCreate {
+	_c.mutation.SetIcon(v)
+	return _c
 }
 
 // SetNillableIcon sets the "icon" field if the given value is not nil.
-func (dtc *DocumentTypeCreate) SetNillableIcon(s *string) *DocumentTypeCreate {
-	if s != nil {
-		dtc.SetIcon(*s)
+func (_c *DocumentTypeCreate) SetNillableIcon(v *string) *DocumentTypeCreate {
+	if v != nil {
+		_c.SetIcon(*v)
 	}
-	return dtc
+	return _c
 }
 
 // SetIsProtected sets the "is_protected" field.
-func (dtc *DocumentTypeCreate) SetIsProtected(b bool) *DocumentTypeCreate {
-	dtc.mutation.SetIsProtected(b)
-	return dtc
+func (_c *DocumentTypeCreate) SetIsProtected(v bool) *DocumentTypeCreate {
+	_c.mutation.SetIsProtected(v)
+	return _c
 }
 
 // SetNillableIsProtected sets the "is_protected" field if the given value is not nil.
-func (dtc *DocumentTypeCreate) SetNillableIsProtected(b *bool) *DocumentTypeCreate {
-	if b != nil {
-		dtc.SetIsProtected(*b)
+func (_c *DocumentTypeCreate) SetNillableIsProtected(v *bool) *DocumentTypeCreate {
+	if v != nil {
+		_c.SetIsProtected(*v)
 	}
-	return dtc
+	return _c
 }
 
 // SetIsDisabled sets the "is_disabled" field.
-func (dtc *DocumentTypeCreate) SetIsDisabled(b bool) *DocumentTypeCreate {
-	dtc.mutation.SetIsDisabled(b)
-	return dtc
+func (_c *DocumentTypeCreate) SetIsDisabled(v bool) *DocumentTypeCreate {
+	_c.mutation.SetIsDisabled(v)
+	return _c
 }
 
 // SetNillableIsDisabled sets the "is_disabled" field if the given value is not nil.
-func (dtc *DocumentTypeCreate) SetNillableIsDisabled(b *bool) *DocumentTypeCreate {
-	if b != nil {
-		dtc.SetIsDisabled(*b)
+func (_c *DocumentTypeCreate) SetNillableIsDisabled(v *bool) *DocumentTypeCreate {
+	if v != nil {
+		_c.SetIsDisabled(*v)
 	}
-	return dtc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (dtc *DocumentTypeCreate) SetID(i int64) *DocumentTypeCreate {
-	dtc.mutation.SetID(i)
-	return dtc
+func (_c *DocumentTypeCreate) SetID(v int64) *DocumentTypeCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetSpace sets the "space" edge to the Space entity.
-func (dtc *DocumentTypeCreate) SetSpace(s *Space) *DocumentTypeCreate {
-	return dtc.SetSpaceID(s.ID)
+func (_c *DocumentTypeCreate) SetSpace(v *Space) *DocumentTypeCreate {
+	return _c.SetSpaceID(v.ID)
 }
 
 // AddAttributeIDs adds the "attributes" edge to the Attribute entity by IDs.
-func (dtc *DocumentTypeCreate) AddAttributeIDs(ids ...int64) *DocumentTypeCreate {
-	dtc.mutation.AddAttributeIDs(ids...)
-	return dtc
+func (_c *DocumentTypeCreate) AddAttributeIDs(ids ...int64) *DocumentTypeCreate {
+	_c.mutation.AddAttributeIDs(ids...)
+	return _c
 }
 
 // AddAttributes adds the "attributes" edges to the Attribute entity.
-func (dtc *DocumentTypeCreate) AddAttributes(a ...*Attribute) *DocumentTypeCreate {
-	ids := make([]int64, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
+func (_c *DocumentTypeCreate) AddAttributes(v ...*Attribute) *DocumentTypeCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return dtc.AddAttributeIDs(ids...)
+	return _c.AddAttributeIDs(ids...)
 }
 
 // Mutation returns the DocumentTypeMutation object of the builder.
-func (dtc *DocumentTypeCreate) Mutation() *DocumentTypeMutation {
-	return dtc.mutation
+func (_c *DocumentTypeCreate) Mutation() *DocumentTypeMutation {
+	return _c.mutation
 }
 
 // Save creates the DocumentType in the database.
-func (dtc *DocumentTypeCreate) Save(ctx context.Context) (*DocumentType, error) {
-	if err := dtc.defaults(); err != nil {
+func (_c *DocumentTypeCreate) Save(ctx context.Context) (*DocumentType, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, dtc.sqlSave, dtc.mutation, dtc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (dtc *DocumentTypeCreate) SaveX(ctx context.Context) *DocumentType {
-	v, err := dtc.Save(ctx)
+func (_c *DocumentTypeCreate) SaveX(ctx context.Context) *DocumentType {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -124,57 +124,57 @@ func (dtc *DocumentTypeCreate) SaveX(ctx context.Context) *DocumentType {
 }
 
 // Exec executes the query.
-func (dtc *DocumentTypeCreate) Exec(ctx context.Context) error {
-	_, err := dtc.Save(ctx)
+func (_c *DocumentTypeCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dtc *DocumentTypeCreate) ExecX(ctx context.Context) {
-	if err := dtc.Exec(ctx); err != nil {
+func (_c *DocumentTypeCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (dtc *DocumentTypeCreate) defaults() error {
-	if _, ok := dtc.mutation.IsProtected(); !ok {
+func (_c *DocumentTypeCreate) defaults() error {
+	if _, ok := _c.mutation.IsProtected(); !ok {
 		v := documenttype.DefaultIsProtected
-		dtc.mutation.SetIsProtected(v)
+		_c.mutation.SetIsProtected(v)
 	}
-	if _, ok := dtc.mutation.IsDisabled(); !ok {
+	if _, ok := _c.mutation.IsDisabled(); !ok {
 		v := documenttype.DefaultIsDisabled
-		dtc.mutation.SetIsDisabled(v)
+		_c.mutation.SetIsDisabled(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (dtc *DocumentTypeCreate) check() error {
-	if _, ok := dtc.mutation.SpaceID(); !ok {
+func (_c *DocumentTypeCreate) check() error {
+	if _, ok := _c.mutation.SpaceID(); !ok {
 		return &ValidationError{Name: "space_id", err: errors.New(`enttenant: missing required field "DocumentType.space_id"`)}
 	}
-	if _, ok := dtc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`enttenant: missing required field "DocumentType.name"`)}
 	}
-	if _, ok := dtc.mutation.IsProtected(); !ok {
+	if _, ok := _c.mutation.IsProtected(); !ok {
 		return &ValidationError{Name: "is_protected", err: errors.New(`enttenant: missing required field "DocumentType.is_protected"`)}
 	}
-	if _, ok := dtc.mutation.IsDisabled(); !ok {
+	if _, ok := _c.mutation.IsDisabled(); !ok {
 		return &ValidationError{Name: "is_disabled", err: errors.New(`enttenant: missing required field "DocumentType.is_disabled"`)}
 	}
-	if len(dtc.mutation.SpaceIDs()) == 0 {
+	if len(_c.mutation.SpaceIDs()) == 0 {
 		return &ValidationError{Name: "space", err: errors.New(`enttenant: missing required edge "DocumentType.space"`)}
 	}
 	return nil
 }
 
-func (dtc *DocumentTypeCreate) sqlSave(ctx context.Context) (*DocumentType, error) {
-	if err := dtc.check(); err != nil {
+func (_c *DocumentTypeCreate) sqlSave(ctx context.Context) (*DocumentType, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := dtc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, dtc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -184,37 +184,37 @@ func (dtc *DocumentTypeCreate) sqlSave(ctx context.Context) (*DocumentType, erro
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	dtc.mutation.id = &_node.ID
-	dtc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (dtc *DocumentTypeCreate) createSpec() (*DocumentType, *sqlgraph.CreateSpec) {
+func (_c *DocumentTypeCreate) createSpec() (*DocumentType, *sqlgraph.CreateSpec) {
 	var (
-		_node = &DocumentType{config: dtc.config}
+		_node = &DocumentType{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(documenttype.Table, sqlgraph.NewFieldSpec(documenttype.FieldID, field.TypeInt64))
 	)
-	if id, ok := dtc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := dtc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(documenttype.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := dtc.mutation.Icon(); ok {
+	if value, ok := _c.mutation.Icon(); ok {
 		_spec.SetField(documenttype.FieldIcon, field.TypeString, value)
 		_node.Icon = value
 	}
-	if value, ok := dtc.mutation.IsProtected(); ok {
+	if value, ok := _c.mutation.IsProtected(); ok {
 		_spec.SetField(documenttype.FieldIsProtected, field.TypeBool, value)
 		_node.IsProtected = value
 	}
-	if value, ok := dtc.mutation.IsDisabled(); ok {
+	if value, ok := _c.mutation.IsDisabled(); ok {
 		_spec.SetField(documenttype.FieldIsDisabled, field.TypeBool, value)
 		_node.IsDisabled = value
 	}
-	if nodes := dtc.mutation.SpaceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SpaceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -231,7 +231,7 @@ func (dtc *DocumentTypeCreate) createSpec() (*DocumentType, *sqlgraph.CreateSpec
 		_node.SpaceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := dtc.mutation.AttributesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.AttributesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -258,16 +258,16 @@ type DocumentTypeCreateBulk struct {
 }
 
 // Save creates the DocumentType entities in the database.
-func (dtcb *DocumentTypeCreateBulk) Save(ctx context.Context) ([]*DocumentType, error) {
-	if dtcb.err != nil {
-		return nil, dtcb.err
+func (_c *DocumentTypeCreateBulk) Save(ctx context.Context) ([]*DocumentType, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(dtcb.builders))
-	nodes := make([]*DocumentType, len(dtcb.builders))
-	mutators := make([]Mutator, len(dtcb.builders))
-	for i := range dtcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*DocumentType, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := dtcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*DocumentTypeMutation)
@@ -281,11 +281,11 @@ func (dtcb *DocumentTypeCreateBulk) Save(ctx context.Context) ([]*DocumentType, 
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, dtcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, dtcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -309,7 +309,7 @@ func (dtcb *DocumentTypeCreateBulk) Save(ctx context.Context) ([]*DocumentType, 
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, dtcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -317,8 +317,8 @@ func (dtcb *DocumentTypeCreateBulk) Save(ctx context.Context) ([]*DocumentType, 
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (dtcb *DocumentTypeCreateBulk) SaveX(ctx context.Context) []*DocumentType {
-	v, err := dtcb.Save(ctx)
+func (_c *DocumentTypeCreateBulk) SaveX(ctx context.Context) []*DocumentType {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -326,14 +326,14 @@ func (dtcb *DocumentTypeCreateBulk) SaveX(ctx context.Context) []*DocumentType {
 }
 
 // Exec executes the query.
-func (dtcb *DocumentTypeCreateBulk) Exec(ctx context.Context) error {
-	_, err := dtcb.Save(ctx)
+func (_c *DocumentTypeCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dtcb *DocumentTypeCreateBulk) ExecX(ctx context.Context) {
-	if err := dtcb.Exec(ctx); err != nil {
+func (_c *DocumentTypeCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

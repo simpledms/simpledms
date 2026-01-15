@@ -162,6 +162,7 @@ func (qq *Server) Start() error {
 				MailerPassword:           os.Getenv("SIMPLEDMS_MAILER_PASSWORD"),
 				MailerFrom:               os.Getenv("SIMPLEDMS_MAILER_FROM"),
 				MailerInsecureSkipVerify: os.Getenv("SIMPLEDMS_MAILER_INSECURE_SKIP_VERIFY") == "true",
+				MailerUseImplicitSSLTLS:  os.Getenv("SIMPLEDMS_MAILER_USE_IMPLICIT_SSL_TLS") == "true",
 			},
 			modelmain.OCRConfig{
 				TikaURL: os.Getenv("SIMPLEDMS_OCR_TIKA_URL"),
@@ -434,8 +435,8 @@ func (qq *Server) Start() error {
 	}()
 
 	factory := common.NewFactory(
-		// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
-		// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
+	// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
+	// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
 	)
 	// storagePath := common.StoragePath(metaPath)
 	fileRepo := common.NewFileRepository()

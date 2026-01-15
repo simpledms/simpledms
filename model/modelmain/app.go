@@ -27,6 +27,7 @@ type MailerConfig struct {
 	MailerPassword           string `validate:"required"`
 	MailerFrom               string `validate:"required"`
 	MailerInsecureSkipVerify bool
+	MailerUseImplicitSSLTLS  bool
 }
 
 type S3Config struct {
@@ -161,6 +162,7 @@ func InitAppWithoutCustomContext(
 		SetMailerPassword([]byte(mailerConfig.MailerPassword)).
 		SetMailerFrom(mailerConfig.MailerFrom).
 		SetMailerInsecureSkipVerify(mailerConfig.MailerInsecureSkipVerify).
+		SetMailerUseImplicitSslTLS(mailerConfig.MailerUseImplicitSSLTLS).
 		// ocr
 		SetOcrTikaURL(ocrConfig.TikaURL).
 		// other

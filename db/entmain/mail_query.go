@@ -33,44 +33,44 @@ type MailQuery struct {
 }
 
 // Where adds a new predicate for the MailQuery builder.
-func (mq *MailQuery) Where(ps ...predicate.Mail) *MailQuery {
-	mq.predicates = append(mq.predicates, ps...)
-	return mq
+func (_q *MailQuery) Where(ps ...predicate.Mail) *MailQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (mq *MailQuery) Limit(limit int) *MailQuery {
-	mq.ctx.Limit = &limit
-	return mq
+func (_q *MailQuery) Limit(limit int) *MailQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (mq *MailQuery) Offset(offset int) *MailQuery {
-	mq.ctx.Offset = &offset
-	return mq
+func (_q *MailQuery) Offset(offset int) *MailQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (mq *MailQuery) Unique(unique bool) *MailQuery {
-	mq.ctx.Unique = &unique
-	return mq
+func (_q *MailQuery) Unique(unique bool) *MailQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (mq *MailQuery) Order(o ...mail.OrderOption) *MailQuery {
-	mq.order = append(mq.order, o...)
-	return mq
+func (_q *MailQuery) Order(o ...mail.OrderOption) *MailQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryCreator chains the current query on the "creator" edge.
-func (mq *MailQuery) QueryCreator() *AccountQuery {
-	query := (&AccountClient{config: mq.config}).Query()
+func (_q *MailQuery) QueryCreator() *AccountQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := mq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := mq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -79,20 +79,20 @@ func (mq *MailQuery) QueryCreator() *AccountQuery {
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, mail.CreatorTable, mail.CreatorColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryUpdater chains the current query on the "updater" edge.
-func (mq *MailQuery) QueryUpdater() *AccountQuery {
-	query := (&AccountClient{config: mq.config}).Query()
+func (_q *MailQuery) QueryUpdater() *AccountQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := mq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := mq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -101,20 +101,20 @@ func (mq *MailQuery) QueryUpdater() *AccountQuery {
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, mail.UpdaterTable, mail.UpdaterColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryReceiver chains the current query on the "receiver" edge.
-func (mq *MailQuery) QueryReceiver() *AccountQuery {
-	query := (&AccountClient{config: mq.config}).Query()
+func (_q *MailQuery) QueryReceiver() *AccountQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := mq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := mq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -123,7 +123,7 @@ func (mq *MailQuery) QueryReceiver() *AccountQuery {
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, mail.ReceiverTable, mail.ReceiverColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -131,8 +131,8 @@ func (mq *MailQuery) QueryReceiver() *AccountQuery {
 
 // First returns the first Mail entity from the query.
 // Returns a *NotFoundError when no Mail was found.
-func (mq *MailQuery) First(ctx context.Context) (*Mail, error) {
-	nodes, err := mq.Limit(1).All(setContextOp(ctx, mq.ctx, ent.OpQueryFirst))
+func (_q *MailQuery) First(ctx context.Context) (*Mail, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -143,8 +143,8 @@ func (mq *MailQuery) First(ctx context.Context) (*Mail, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (mq *MailQuery) FirstX(ctx context.Context) *Mail {
-	node, err := mq.First(ctx)
+func (_q *MailQuery) FirstX(ctx context.Context) *Mail {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -153,9 +153,9 @@ func (mq *MailQuery) FirstX(ctx context.Context) *Mail {
 
 // FirstID returns the first Mail ID from the query.
 // Returns a *NotFoundError when no Mail ID was found.
-func (mq *MailQuery) FirstID(ctx context.Context) (id int64, err error) {
+func (_q *MailQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mq.Limit(1).IDs(setContextOp(ctx, mq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -166,8 +166,8 @@ func (mq *MailQuery) FirstID(ctx context.Context) (id int64, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (mq *MailQuery) FirstIDX(ctx context.Context) int64 {
-	id, err := mq.FirstID(ctx)
+func (_q *MailQuery) FirstIDX(ctx context.Context) int64 {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -177,8 +177,8 @@ func (mq *MailQuery) FirstIDX(ctx context.Context) int64 {
 // Only returns a single Mail entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Mail entity is found.
 // Returns a *NotFoundError when no Mail entities are found.
-func (mq *MailQuery) Only(ctx context.Context) (*Mail, error) {
-	nodes, err := mq.Limit(2).All(setContextOp(ctx, mq.ctx, ent.OpQueryOnly))
+func (_q *MailQuery) Only(ctx context.Context) (*Mail, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -193,8 +193,8 @@ func (mq *MailQuery) Only(ctx context.Context) (*Mail, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (mq *MailQuery) OnlyX(ctx context.Context) *Mail {
-	node, err := mq.Only(ctx)
+func (_q *MailQuery) OnlyX(ctx context.Context) *Mail {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,9 +204,9 @@ func (mq *MailQuery) OnlyX(ctx context.Context) *Mail {
 // OnlyID is like Only, but returns the only Mail ID in the query.
 // Returns a *NotSingularError when more than one Mail ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (mq *MailQuery) OnlyID(ctx context.Context) (id int64, err error) {
+func (_q *MailQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = mq.Limit(2).IDs(setContextOp(ctx, mq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -221,8 +221,8 @@ func (mq *MailQuery) OnlyID(ctx context.Context) (id int64, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (mq *MailQuery) OnlyIDX(ctx context.Context) int64 {
-	id, err := mq.OnlyID(ctx)
+func (_q *MailQuery) OnlyIDX(ctx context.Context) int64 {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -230,18 +230,18 @@ func (mq *MailQuery) OnlyIDX(ctx context.Context) int64 {
 }
 
 // All executes the query and returns a list of Mails.
-func (mq *MailQuery) All(ctx context.Context) ([]*Mail, error) {
-	ctx = setContextOp(ctx, mq.ctx, ent.OpQueryAll)
-	if err := mq.prepareQuery(ctx); err != nil {
+func (_q *MailQuery) All(ctx context.Context) ([]*Mail, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Mail, *MailQuery]()
-	return withInterceptors[[]*Mail](ctx, mq, qr, mq.inters)
+	return withInterceptors[[]*Mail](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (mq *MailQuery) AllX(ctx context.Context) []*Mail {
-	nodes, err := mq.All(ctx)
+func (_q *MailQuery) AllX(ctx context.Context) []*Mail {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -249,20 +249,20 @@ func (mq *MailQuery) AllX(ctx context.Context) []*Mail {
 }
 
 // IDs executes the query and returns a list of Mail IDs.
-func (mq *MailQuery) IDs(ctx context.Context) (ids []int64, err error) {
-	if mq.ctx.Unique == nil && mq.path != nil {
-		mq.Unique(true)
+func (_q *MailQuery) IDs(ctx context.Context) (ids []int64, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, mq.ctx, ent.OpQueryIDs)
-	if err = mq.Select(mail.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(mail.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (mq *MailQuery) IDsX(ctx context.Context) []int64 {
-	ids, err := mq.IDs(ctx)
+func (_q *MailQuery) IDsX(ctx context.Context) []int64 {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -270,17 +270,17 @@ func (mq *MailQuery) IDsX(ctx context.Context) []int64 {
 }
 
 // Count returns the count of the given query.
-func (mq *MailQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, mq.ctx, ent.OpQueryCount)
-	if err := mq.prepareQuery(ctx); err != nil {
+func (_q *MailQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, mq, querierCount[*MailQuery](), mq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*MailQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (mq *MailQuery) CountX(ctx context.Context) int {
-	count, err := mq.Count(ctx)
+func (_q *MailQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -288,9 +288,9 @@ func (mq *MailQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (mq *MailQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, mq.ctx, ent.OpQueryExist)
-	switch _, err := mq.FirstID(ctx); {
+func (_q *MailQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -301,8 +301,8 @@ func (mq *MailQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (mq *MailQuery) ExistX(ctx context.Context) bool {
-	exist, err := mq.Exist(ctx)
+func (_q *MailQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -311,57 +311,57 @@ func (mq *MailQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the MailQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (mq *MailQuery) Clone() *MailQuery {
-	if mq == nil {
+func (_q *MailQuery) Clone() *MailQuery {
+	if _q == nil {
 		return nil
 	}
 	return &MailQuery{
-		config:       mq.config,
-		ctx:          mq.ctx.Clone(),
-		order:        append([]mail.OrderOption{}, mq.order...),
-		inters:       append([]Interceptor{}, mq.inters...),
-		predicates:   append([]predicate.Mail{}, mq.predicates...),
-		withCreator:  mq.withCreator.Clone(),
-		withUpdater:  mq.withUpdater.Clone(),
-		withReceiver: mq.withReceiver.Clone(),
+		config:       _q.config,
+		ctx:          _q.ctx.Clone(),
+		order:        append([]mail.OrderOption{}, _q.order...),
+		inters:       append([]Interceptor{}, _q.inters...),
+		predicates:   append([]predicate.Mail{}, _q.predicates...),
+		withCreator:  _q.withCreator.Clone(),
+		withUpdater:  _q.withUpdater.Clone(),
+		withReceiver: _q.withReceiver.Clone(),
 		// clone intermediate query.
-		sql:       mq.sql.Clone(),
-		path:      mq.path,
-		modifiers: append([]func(*sql.Selector){}, mq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithCreator tells the query-builder to eager-load the nodes that are connected to
 // the "creator" edge. The optional arguments are used to configure the query builder of the edge.
-func (mq *MailQuery) WithCreator(opts ...func(*AccountQuery)) *MailQuery {
-	query := (&AccountClient{config: mq.config}).Query()
+func (_q *MailQuery) WithCreator(opts ...func(*AccountQuery)) *MailQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mq.withCreator = query
-	return mq
+	_q.withCreator = query
+	return _q
 }
 
 // WithUpdater tells the query-builder to eager-load the nodes that are connected to
 // the "updater" edge. The optional arguments are used to configure the query builder of the edge.
-func (mq *MailQuery) WithUpdater(opts ...func(*AccountQuery)) *MailQuery {
-	query := (&AccountClient{config: mq.config}).Query()
+func (_q *MailQuery) WithUpdater(opts ...func(*AccountQuery)) *MailQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mq.withUpdater = query
-	return mq
+	_q.withUpdater = query
+	return _q
 }
 
 // WithReceiver tells the query-builder to eager-load the nodes that are connected to
 // the "receiver" edge. The optional arguments are used to configure the query builder of the edge.
-func (mq *MailQuery) WithReceiver(opts ...func(*AccountQuery)) *MailQuery {
-	query := (&AccountClient{config: mq.config}).Query()
+func (_q *MailQuery) WithReceiver(opts ...func(*AccountQuery)) *MailQuery {
+	query := (&AccountClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mq.withReceiver = query
-	return mq
+	_q.withReceiver = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -378,10 +378,10 @@ func (mq *MailQuery) WithReceiver(opts ...func(*AccountQuery)) *MailQuery {
 //		GroupBy(mail.FieldCreatedAt).
 //		Aggregate(entmain.Count()).
 //		Scan(ctx, &v)
-func (mq *MailQuery) GroupBy(field string, fields ...string) *MailGroupBy {
-	mq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &MailGroupBy{build: mq}
-	grbuild.flds = &mq.ctx.Fields
+func (_q *MailQuery) GroupBy(field string, fields ...string) *MailGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &MailGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = mail.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -399,90 +399,90 @@ func (mq *MailQuery) GroupBy(field string, fields ...string) *MailGroupBy {
 //	client.Mail.Query().
 //		Select(mail.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (mq *MailQuery) Select(fields ...string) *MailSelect {
-	mq.ctx.Fields = append(mq.ctx.Fields, fields...)
-	sbuild := &MailSelect{MailQuery: mq}
+func (_q *MailQuery) Select(fields ...string) *MailSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &MailSelect{MailQuery: _q}
 	sbuild.label = mail.Label
-	sbuild.flds, sbuild.scan = &mq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a MailSelect configured with the given aggregations.
-func (mq *MailQuery) Aggregate(fns ...AggregateFunc) *MailSelect {
-	return mq.Select().Aggregate(fns...)
+func (_q *MailQuery) Aggregate(fns ...AggregateFunc) *MailSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (mq *MailQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range mq.inters {
+func (_q *MailQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("entmain: uninitialized interceptor (forgotten import entmain/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, mq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range mq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !mail.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("entmain: invalid field %q for query", f)}
 		}
 	}
-	if mq.path != nil {
-		prev, err := mq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		mq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (mq *MailQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mail, error) {
+func (_q *MailQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mail, error) {
 	var (
 		nodes       = []*Mail{}
-		_spec       = mq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			mq.withCreator != nil,
-			mq.withUpdater != nil,
-			mq.withReceiver != nil,
+			_q.withCreator != nil,
+			_q.withUpdater != nil,
+			_q.withReceiver != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Mail).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Mail{config: mq.config}
+		node := &Mail{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(mq.modifiers) > 0 {
-		_spec.Modifiers = mq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, mq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := mq.withCreator; query != nil {
-		if err := mq.loadCreator(ctx, query, nodes, nil,
+	if query := _q.withCreator; query != nil {
+		if err := _q.loadCreator(ctx, query, nodes, nil,
 			func(n *Mail, e *Account) { n.Edges.Creator = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := mq.withUpdater; query != nil {
-		if err := mq.loadUpdater(ctx, query, nodes, nil,
+	if query := _q.withUpdater; query != nil {
+		if err := _q.loadUpdater(ctx, query, nodes, nil,
 			func(n *Mail, e *Account) { n.Edges.Updater = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := mq.withReceiver; query != nil {
-		if err := mq.loadReceiver(ctx, query, nodes, nil,
+	if query := _q.withReceiver; query != nil {
+		if err := _q.loadReceiver(ctx, query, nodes, nil,
 			func(n *Mail, e *Account) { n.Edges.Receiver = e }); err != nil {
 			return nil, err
 		}
@@ -490,7 +490,7 @@ func (mq *MailQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mail, e
 	return nodes, nil
 }
 
-func (mq *MailQuery) loadCreator(ctx context.Context, query *AccountQuery, nodes []*Mail, init func(*Mail), assign func(*Mail, *Account)) error {
+func (_q *MailQuery) loadCreator(ctx context.Context, query *AccountQuery, nodes []*Mail, init func(*Mail), assign func(*Mail, *Account)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*Mail)
 	for i := range nodes {
@@ -519,7 +519,7 @@ func (mq *MailQuery) loadCreator(ctx context.Context, query *AccountQuery, nodes
 	}
 	return nil
 }
-func (mq *MailQuery) loadUpdater(ctx context.Context, query *AccountQuery, nodes []*Mail, init func(*Mail), assign func(*Mail, *Account)) error {
+func (_q *MailQuery) loadUpdater(ctx context.Context, query *AccountQuery, nodes []*Mail, init func(*Mail), assign func(*Mail, *Account)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*Mail)
 	for i := range nodes {
@@ -548,7 +548,7 @@ func (mq *MailQuery) loadUpdater(ctx context.Context, query *AccountQuery, nodes
 	}
 	return nil
 }
-func (mq *MailQuery) loadReceiver(ctx context.Context, query *AccountQuery, nodes []*Mail, init func(*Mail), assign func(*Mail, *Account)) error {
+func (_q *MailQuery) loadReceiver(ctx context.Context, query *AccountQuery, nodes []*Mail, init func(*Mail), assign func(*Mail, *Account)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*Mail)
 	for i := range nodes {
@@ -578,27 +578,27 @@ func (mq *MailQuery) loadReceiver(ctx context.Context, query *AccountQuery, node
 	return nil
 }
 
-func (mq *MailQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := mq.querySpec()
-	if len(mq.modifiers) > 0 {
-		_spec.Modifiers = mq.modifiers
+func (_q *MailQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = mq.ctx.Fields
-	if len(mq.ctx.Fields) > 0 {
-		_spec.Unique = mq.ctx.Unique != nil && *mq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, mq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (mq *MailQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *MailQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(mail.Table, mail.Columns, sqlgraph.NewFieldSpec(mail.FieldID, field.TypeInt64))
-	_spec.From = mq.sql
-	if unique := mq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if mq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := mq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, mail.FieldID)
 		for i := range fields {
@@ -606,30 +606,30 @@ func (mq *MailQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if mq.withCreator != nil {
+		if _q.withCreator != nil {
 			_spec.Node.AddColumnOnce(mail.FieldCreatedBy)
 		}
-		if mq.withUpdater != nil {
+		if _q.withUpdater != nil {
 			_spec.Node.AddColumnOnce(mail.FieldUpdatedBy)
 		}
-		if mq.withReceiver != nil {
+		if _q.withReceiver != nil {
 			_spec.Node.AddColumnOnce(mail.FieldReceiverID)
 		}
 	}
-	if ps := mq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := mq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := mq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := mq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -639,45 +639,45 @@ func (mq *MailQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (mq *MailQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(mq.driver.Dialect())
+func (_q *MailQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(mail.Table)
-	columns := mq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = mail.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if mq.sql != nil {
-		selector = mq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if mq.ctx.Unique != nil && *mq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range mq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range mq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range mq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := mq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := mq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (mq *MailQuery) Modify(modifiers ...func(s *sql.Selector)) *MailSelect {
-	mq.modifiers = append(mq.modifiers, modifiers...)
-	return mq.Select()
+func (_q *MailQuery) Modify(modifiers ...func(s *sql.Selector)) *MailSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // MailGroupBy is the group-by builder for Mail entities.
@@ -687,41 +687,41 @@ type MailGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (mgb *MailGroupBy) Aggregate(fns ...AggregateFunc) *MailGroupBy {
-	mgb.fns = append(mgb.fns, fns...)
-	return mgb
+func (_g *MailGroupBy) Aggregate(fns ...AggregateFunc) *MailGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (mgb *MailGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mgb.build.ctx, ent.OpQueryGroupBy)
-	if err := mgb.build.prepareQuery(ctx); err != nil {
+func (_g *MailGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*MailQuery, *MailGroupBy](ctx, mgb.build, mgb, mgb.build.inters, v)
+	return scanWithInterceptors[*MailQuery, *MailGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (mgb *MailGroupBy) sqlScan(ctx context.Context, root *MailQuery, v any) error {
+func (_g *MailGroupBy) sqlScan(ctx context.Context, root *MailQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(mgb.fns))
-	for _, fn := range mgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*mgb.flds)+len(mgb.fns))
-		for _, f := range *mgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*mgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := mgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -735,27 +735,27 @@ type MailSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ms *MailSelect) Aggregate(fns ...AggregateFunc) *MailSelect {
-	ms.fns = append(ms.fns, fns...)
-	return ms
+func (_s *MailSelect) Aggregate(fns ...AggregateFunc) *MailSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ms *MailSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ms.ctx, ent.OpQuerySelect)
-	if err := ms.prepareQuery(ctx); err != nil {
+func (_s *MailSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*MailQuery, *MailSelect](ctx, ms.MailQuery, ms, ms.inters, v)
+	return scanWithInterceptors[*MailQuery, *MailSelect](ctx, _s.MailQuery, _s, _s.inters, v)
 }
 
-func (ms *MailSelect) sqlScan(ctx context.Context, root *MailQuery, v any) error {
+func (_s *MailSelect) sqlScan(ctx context.Context, root *MailQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ms.fns))
-	for _, fn := range ms.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ms.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -763,7 +763,7 @@ func (ms *MailSelect) sqlScan(ctx context.Context, root *MailQuery, v any) error
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ms.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -771,7 +771,7 @@ func (ms *MailSelect) sqlScan(ctx context.Context, root *MailQuery, v any) error
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (ms *MailSelect) Modify(modifiers ...func(s *sql.Selector)) *MailSelect {
-	ms.modifiers = append(ms.modifiers, modifiers...)
-	return ms
+func (_s *MailSelect) Modify(modifiers ...func(s *sql.Selector)) *MailSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

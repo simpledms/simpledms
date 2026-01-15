@@ -36,44 +36,44 @@ type SpaceUserAssignmentQuery struct {
 }
 
 // Where adds a new predicate for the SpaceUserAssignmentQuery builder.
-func (suaq *SpaceUserAssignmentQuery) Where(ps ...predicate.SpaceUserAssignment) *SpaceUserAssignmentQuery {
-	suaq.predicates = append(suaq.predicates, ps...)
-	return suaq
+func (_q *SpaceUserAssignmentQuery) Where(ps ...predicate.SpaceUserAssignment) *SpaceUserAssignmentQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (suaq *SpaceUserAssignmentQuery) Limit(limit int) *SpaceUserAssignmentQuery {
-	suaq.ctx.Limit = &limit
-	return suaq
+func (_q *SpaceUserAssignmentQuery) Limit(limit int) *SpaceUserAssignmentQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (suaq *SpaceUserAssignmentQuery) Offset(offset int) *SpaceUserAssignmentQuery {
-	suaq.ctx.Offset = &offset
-	return suaq
+func (_q *SpaceUserAssignmentQuery) Offset(offset int) *SpaceUserAssignmentQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (suaq *SpaceUserAssignmentQuery) Unique(unique bool) *SpaceUserAssignmentQuery {
-	suaq.ctx.Unique = &unique
-	return suaq
+func (_q *SpaceUserAssignmentQuery) Unique(unique bool) *SpaceUserAssignmentQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (suaq *SpaceUserAssignmentQuery) Order(o ...spaceuserassignment.OrderOption) *SpaceUserAssignmentQuery {
-	suaq.order = append(suaq.order, o...)
-	return suaq
+func (_q *SpaceUserAssignmentQuery) Order(o ...spaceuserassignment.OrderOption) *SpaceUserAssignmentQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QuerySpace chains the current query on the "space" edge.
-func (suaq *SpaceUserAssignmentQuery) QuerySpace() *SpaceQuery {
-	query := (&SpaceClient{config: suaq.config}).Query()
+func (_q *SpaceUserAssignmentQuery) QuerySpace() *SpaceQuery {
+	query := (&SpaceClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := suaq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := suaq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -82,20 +82,20 @@ func (suaq *SpaceUserAssignmentQuery) QuerySpace() *SpaceQuery {
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, spaceuserassignment.SpaceTable, spaceuserassignment.SpaceColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(suaq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryCreator chains the current query on the "creator" edge.
-func (suaq *SpaceUserAssignmentQuery) QueryCreator() *UserQuery {
-	query := (&UserClient{config: suaq.config}).Query()
+func (_q *SpaceUserAssignmentQuery) QueryCreator() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := suaq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := suaq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -104,20 +104,20 @@ func (suaq *SpaceUserAssignmentQuery) QueryCreator() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, spaceuserassignment.CreatorTable, spaceuserassignment.CreatorColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(suaq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryUpdater chains the current query on the "updater" edge.
-func (suaq *SpaceUserAssignmentQuery) QueryUpdater() *UserQuery {
-	query := (&UserClient{config: suaq.config}).Query()
+func (_q *SpaceUserAssignmentQuery) QueryUpdater() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := suaq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := suaq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -126,20 +126,20 @@ func (suaq *SpaceUserAssignmentQuery) QueryUpdater() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, spaceuserassignment.UpdaterTable, spaceuserassignment.UpdaterColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(suaq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryUser chains the current query on the "user" edge.
-func (suaq *SpaceUserAssignmentQuery) QueryUser() *UserQuery {
-	query := (&UserClient{config: suaq.config}).Query()
+func (_q *SpaceUserAssignmentQuery) QueryUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := suaq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := suaq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -148,7 +148,7 @@ func (suaq *SpaceUserAssignmentQuery) QueryUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, spaceuserassignment.UserTable, spaceuserassignment.UserColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(suaq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -156,8 +156,8 @@ func (suaq *SpaceUserAssignmentQuery) QueryUser() *UserQuery {
 
 // First returns the first SpaceUserAssignment entity from the query.
 // Returns a *NotFoundError when no SpaceUserAssignment was found.
-func (suaq *SpaceUserAssignmentQuery) First(ctx context.Context) (*SpaceUserAssignment, error) {
-	nodes, err := suaq.Limit(1).All(setContextOp(ctx, suaq.ctx, ent.OpQueryFirst))
+func (_q *SpaceUserAssignmentQuery) First(ctx context.Context) (*SpaceUserAssignment, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -168,8 +168,8 @@ func (suaq *SpaceUserAssignmentQuery) First(ctx context.Context) (*SpaceUserAssi
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (suaq *SpaceUserAssignmentQuery) FirstX(ctx context.Context) *SpaceUserAssignment {
-	node, err := suaq.First(ctx)
+func (_q *SpaceUserAssignmentQuery) FirstX(ctx context.Context) *SpaceUserAssignment {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -178,9 +178,9 @@ func (suaq *SpaceUserAssignmentQuery) FirstX(ctx context.Context) *SpaceUserAssi
 
 // FirstID returns the first SpaceUserAssignment ID from the query.
 // Returns a *NotFoundError when no SpaceUserAssignment ID was found.
-func (suaq *SpaceUserAssignmentQuery) FirstID(ctx context.Context) (id int64, err error) {
+func (_q *SpaceUserAssignmentQuery) FirstID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = suaq.Limit(1).IDs(setContextOp(ctx, suaq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -191,8 +191,8 @@ func (suaq *SpaceUserAssignmentQuery) FirstID(ctx context.Context) (id int64, er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (suaq *SpaceUserAssignmentQuery) FirstIDX(ctx context.Context) int64 {
-	id, err := suaq.FirstID(ctx)
+func (_q *SpaceUserAssignmentQuery) FirstIDX(ctx context.Context) int64 {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -202,8 +202,8 @@ func (suaq *SpaceUserAssignmentQuery) FirstIDX(ctx context.Context) int64 {
 // Only returns a single SpaceUserAssignment entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one SpaceUserAssignment entity is found.
 // Returns a *NotFoundError when no SpaceUserAssignment entities are found.
-func (suaq *SpaceUserAssignmentQuery) Only(ctx context.Context) (*SpaceUserAssignment, error) {
-	nodes, err := suaq.Limit(2).All(setContextOp(ctx, suaq.ctx, ent.OpQueryOnly))
+func (_q *SpaceUserAssignmentQuery) Only(ctx context.Context) (*SpaceUserAssignment, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -218,8 +218,8 @@ func (suaq *SpaceUserAssignmentQuery) Only(ctx context.Context) (*SpaceUserAssig
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (suaq *SpaceUserAssignmentQuery) OnlyX(ctx context.Context) *SpaceUserAssignment {
-	node, err := suaq.Only(ctx)
+func (_q *SpaceUserAssignmentQuery) OnlyX(ctx context.Context) *SpaceUserAssignment {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -229,9 +229,9 @@ func (suaq *SpaceUserAssignmentQuery) OnlyX(ctx context.Context) *SpaceUserAssig
 // OnlyID is like Only, but returns the only SpaceUserAssignment ID in the query.
 // Returns a *NotSingularError when more than one SpaceUserAssignment ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (suaq *SpaceUserAssignmentQuery) OnlyID(ctx context.Context) (id int64, err error) {
+func (_q *SpaceUserAssignmentQuery) OnlyID(ctx context.Context) (id int64, err error) {
 	var ids []int64
-	if ids, err = suaq.Limit(2).IDs(setContextOp(ctx, suaq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -246,8 +246,8 @@ func (suaq *SpaceUserAssignmentQuery) OnlyID(ctx context.Context) (id int64, err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (suaq *SpaceUserAssignmentQuery) OnlyIDX(ctx context.Context) int64 {
-	id, err := suaq.OnlyID(ctx)
+func (_q *SpaceUserAssignmentQuery) OnlyIDX(ctx context.Context) int64 {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -255,18 +255,18 @@ func (suaq *SpaceUserAssignmentQuery) OnlyIDX(ctx context.Context) int64 {
 }
 
 // All executes the query and returns a list of SpaceUserAssignments.
-func (suaq *SpaceUserAssignmentQuery) All(ctx context.Context) ([]*SpaceUserAssignment, error) {
-	ctx = setContextOp(ctx, suaq.ctx, ent.OpQueryAll)
-	if err := suaq.prepareQuery(ctx); err != nil {
+func (_q *SpaceUserAssignmentQuery) All(ctx context.Context) ([]*SpaceUserAssignment, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*SpaceUserAssignment, *SpaceUserAssignmentQuery]()
-	return withInterceptors[[]*SpaceUserAssignment](ctx, suaq, qr, suaq.inters)
+	return withInterceptors[[]*SpaceUserAssignment](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (suaq *SpaceUserAssignmentQuery) AllX(ctx context.Context) []*SpaceUserAssignment {
-	nodes, err := suaq.All(ctx)
+func (_q *SpaceUserAssignmentQuery) AllX(ctx context.Context) []*SpaceUserAssignment {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -274,20 +274,20 @@ func (suaq *SpaceUserAssignmentQuery) AllX(ctx context.Context) []*SpaceUserAssi
 }
 
 // IDs executes the query and returns a list of SpaceUserAssignment IDs.
-func (suaq *SpaceUserAssignmentQuery) IDs(ctx context.Context) (ids []int64, err error) {
-	if suaq.ctx.Unique == nil && suaq.path != nil {
-		suaq.Unique(true)
+func (_q *SpaceUserAssignmentQuery) IDs(ctx context.Context) (ids []int64, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, suaq.ctx, ent.OpQueryIDs)
-	if err = suaq.Select(spaceuserassignment.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(spaceuserassignment.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (suaq *SpaceUserAssignmentQuery) IDsX(ctx context.Context) []int64 {
-	ids, err := suaq.IDs(ctx)
+func (_q *SpaceUserAssignmentQuery) IDsX(ctx context.Context) []int64 {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -295,17 +295,17 @@ func (suaq *SpaceUserAssignmentQuery) IDsX(ctx context.Context) []int64 {
 }
 
 // Count returns the count of the given query.
-func (suaq *SpaceUserAssignmentQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, suaq.ctx, ent.OpQueryCount)
-	if err := suaq.prepareQuery(ctx); err != nil {
+func (_q *SpaceUserAssignmentQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, suaq, querierCount[*SpaceUserAssignmentQuery](), suaq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*SpaceUserAssignmentQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (suaq *SpaceUserAssignmentQuery) CountX(ctx context.Context) int {
-	count, err := suaq.Count(ctx)
+func (_q *SpaceUserAssignmentQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -313,9 +313,9 @@ func (suaq *SpaceUserAssignmentQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (suaq *SpaceUserAssignmentQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, suaq.ctx, ent.OpQueryExist)
-	switch _, err := suaq.FirstID(ctx); {
+func (_q *SpaceUserAssignmentQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -326,8 +326,8 @@ func (suaq *SpaceUserAssignmentQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (suaq *SpaceUserAssignmentQuery) ExistX(ctx context.Context) bool {
-	exist, err := suaq.Exist(ctx)
+func (_q *SpaceUserAssignmentQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -336,69 +336,69 @@ func (suaq *SpaceUserAssignmentQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the SpaceUserAssignmentQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (suaq *SpaceUserAssignmentQuery) Clone() *SpaceUserAssignmentQuery {
-	if suaq == nil {
+func (_q *SpaceUserAssignmentQuery) Clone() *SpaceUserAssignmentQuery {
+	if _q == nil {
 		return nil
 	}
 	return &SpaceUserAssignmentQuery{
-		config:      suaq.config,
-		ctx:         suaq.ctx.Clone(),
-		order:       append([]spaceuserassignment.OrderOption{}, suaq.order...),
-		inters:      append([]Interceptor{}, suaq.inters...),
-		predicates:  append([]predicate.SpaceUserAssignment{}, suaq.predicates...),
-		withSpace:   suaq.withSpace.Clone(),
-		withCreator: suaq.withCreator.Clone(),
-		withUpdater: suaq.withUpdater.Clone(),
-		withUser:    suaq.withUser.Clone(),
+		config:      _q.config,
+		ctx:         _q.ctx.Clone(),
+		order:       append([]spaceuserassignment.OrderOption{}, _q.order...),
+		inters:      append([]Interceptor{}, _q.inters...),
+		predicates:  append([]predicate.SpaceUserAssignment{}, _q.predicates...),
+		withSpace:   _q.withSpace.Clone(),
+		withCreator: _q.withCreator.Clone(),
+		withUpdater: _q.withUpdater.Clone(),
+		withUser:    _q.withUser.Clone(),
 		// clone intermediate query.
-		sql:       suaq.sql.Clone(),
-		path:      suaq.path,
-		modifiers: append([]func(*sql.Selector){}, suaq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithSpace tells the query-builder to eager-load the nodes that are connected to
 // the "space" edge. The optional arguments are used to configure the query builder of the edge.
-func (suaq *SpaceUserAssignmentQuery) WithSpace(opts ...func(*SpaceQuery)) *SpaceUserAssignmentQuery {
-	query := (&SpaceClient{config: suaq.config}).Query()
+func (_q *SpaceUserAssignmentQuery) WithSpace(opts ...func(*SpaceQuery)) *SpaceUserAssignmentQuery {
+	query := (&SpaceClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	suaq.withSpace = query
-	return suaq
+	_q.withSpace = query
+	return _q
 }
 
 // WithCreator tells the query-builder to eager-load the nodes that are connected to
 // the "creator" edge. The optional arguments are used to configure the query builder of the edge.
-func (suaq *SpaceUserAssignmentQuery) WithCreator(opts ...func(*UserQuery)) *SpaceUserAssignmentQuery {
-	query := (&UserClient{config: suaq.config}).Query()
+func (_q *SpaceUserAssignmentQuery) WithCreator(opts ...func(*UserQuery)) *SpaceUserAssignmentQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	suaq.withCreator = query
-	return suaq
+	_q.withCreator = query
+	return _q
 }
 
 // WithUpdater tells the query-builder to eager-load the nodes that are connected to
 // the "updater" edge. The optional arguments are used to configure the query builder of the edge.
-func (suaq *SpaceUserAssignmentQuery) WithUpdater(opts ...func(*UserQuery)) *SpaceUserAssignmentQuery {
-	query := (&UserClient{config: suaq.config}).Query()
+func (_q *SpaceUserAssignmentQuery) WithUpdater(opts ...func(*UserQuery)) *SpaceUserAssignmentQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	suaq.withUpdater = query
-	return suaq
+	_q.withUpdater = query
+	return _q
 }
 
 // WithUser tells the query-builder to eager-load the nodes that are connected to
 // the "user" edge. The optional arguments are used to configure the query builder of the edge.
-func (suaq *SpaceUserAssignmentQuery) WithUser(opts ...func(*UserQuery)) *SpaceUserAssignmentQuery {
-	query := (&UserClient{config: suaq.config}).Query()
+func (_q *SpaceUserAssignmentQuery) WithUser(opts ...func(*UserQuery)) *SpaceUserAssignmentQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	suaq.withUser = query
-	return suaq
+	_q.withUser = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -415,10 +415,10 @@ func (suaq *SpaceUserAssignmentQuery) WithUser(opts ...func(*UserQuery)) *SpaceU
 //		GroupBy(spaceuserassignment.FieldSpaceID).
 //		Aggregate(enttenant.Count()).
 //		Scan(ctx, &v)
-func (suaq *SpaceUserAssignmentQuery) GroupBy(field string, fields ...string) *SpaceUserAssignmentGroupBy {
-	suaq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &SpaceUserAssignmentGroupBy{build: suaq}
-	grbuild.flds = &suaq.ctx.Fields
+func (_q *SpaceUserAssignmentQuery) GroupBy(field string, fields ...string) *SpaceUserAssignmentGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &SpaceUserAssignmentGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = spaceuserassignment.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -436,103 +436,103 @@ func (suaq *SpaceUserAssignmentQuery) GroupBy(field string, fields ...string) *S
 //	client.SpaceUserAssignment.Query().
 //		Select(spaceuserassignment.FieldSpaceID).
 //		Scan(ctx, &v)
-func (suaq *SpaceUserAssignmentQuery) Select(fields ...string) *SpaceUserAssignmentSelect {
-	suaq.ctx.Fields = append(suaq.ctx.Fields, fields...)
-	sbuild := &SpaceUserAssignmentSelect{SpaceUserAssignmentQuery: suaq}
+func (_q *SpaceUserAssignmentQuery) Select(fields ...string) *SpaceUserAssignmentSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &SpaceUserAssignmentSelect{SpaceUserAssignmentQuery: _q}
 	sbuild.label = spaceuserassignment.Label
-	sbuild.flds, sbuild.scan = &suaq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a SpaceUserAssignmentSelect configured with the given aggregations.
-func (suaq *SpaceUserAssignmentQuery) Aggregate(fns ...AggregateFunc) *SpaceUserAssignmentSelect {
-	return suaq.Select().Aggregate(fns...)
+func (_q *SpaceUserAssignmentQuery) Aggregate(fns ...AggregateFunc) *SpaceUserAssignmentSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (suaq *SpaceUserAssignmentQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range suaq.inters {
+func (_q *SpaceUserAssignmentQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("enttenant: uninitialized interceptor (forgotten import enttenant/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, suaq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range suaq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !spaceuserassignment.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("enttenant: invalid field %q for query", f)}
 		}
 	}
-	if suaq.path != nil {
-		prev, err := suaq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		suaq.sql = prev
+		_q.sql = prev
 	}
 	if spaceuserassignment.Policy == nil {
 		return errors.New("enttenant: uninitialized spaceuserassignment.Policy (forgotten import enttenant/runtime?)")
 	}
-	if err := spaceuserassignment.Policy.EvalQuery(ctx, suaq); err != nil {
+	if err := spaceuserassignment.Policy.EvalQuery(ctx, _q); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (suaq *SpaceUserAssignmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*SpaceUserAssignment, error) {
+func (_q *SpaceUserAssignmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*SpaceUserAssignment, error) {
 	var (
 		nodes       = []*SpaceUserAssignment{}
-		_spec       = suaq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [4]bool{
-			suaq.withSpace != nil,
-			suaq.withCreator != nil,
-			suaq.withUpdater != nil,
-			suaq.withUser != nil,
+			_q.withSpace != nil,
+			_q.withCreator != nil,
+			_q.withUpdater != nil,
+			_q.withUser != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*SpaceUserAssignment).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &SpaceUserAssignment{config: suaq.config}
+		node := &SpaceUserAssignment{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(suaq.modifiers) > 0 {
-		_spec.Modifiers = suaq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, suaq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := suaq.withSpace; query != nil {
-		if err := suaq.loadSpace(ctx, query, nodes, nil,
+	if query := _q.withSpace; query != nil {
+		if err := _q.loadSpace(ctx, query, nodes, nil,
 			func(n *SpaceUserAssignment, e *Space) { n.Edges.Space = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := suaq.withCreator; query != nil {
-		if err := suaq.loadCreator(ctx, query, nodes, nil,
+	if query := _q.withCreator; query != nil {
+		if err := _q.loadCreator(ctx, query, nodes, nil,
 			func(n *SpaceUserAssignment, e *User) { n.Edges.Creator = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := suaq.withUpdater; query != nil {
-		if err := suaq.loadUpdater(ctx, query, nodes, nil,
+	if query := _q.withUpdater; query != nil {
+		if err := _q.loadUpdater(ctx, query, nodes, nil,
 			func(n *SpaceUserAssignment, e *User) { n.Edges.Updater = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := suaq.withUser; query != nil {
-		if err := suaq.loadUser(ctx, query, nodes, nil,
+	if query := _q.withUser; query != nil {
+		if err := _q.loadUser(ctx, query, nodes, nil,
 			func(n *SpaceUserAssignment, e *User) { n.Edges.User = e }); err != nil {
 			return nil, err
 		}
@@ -540,7 +540,7 @@ func (suaq *SpaceUserAssignmentQuery) sqlAll(ctx context.Context, hooks ...query
 	return nodes, nil
 }
 
-func (suaq *SpaceUserAssignmentQuery) loadSpace(ctx context.Context, query *SpaceQuery, nodes []*SpaceUserAssignment, init func(*SpaceUserAssignment), assign func(*SpaceUserAssignment, *Space)) error {
+func (_q *SpaceUserAssignmentQuery) loadSpace(ctx context.Context, query *SpaceQuery, nodes []*SpaceUserAssignment, init func(*SpaceUserAssignment), assign func(*SpaceUserAssignment, *Space)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*SpaceUserAssignment)
 	for i := range nodes {
@@ -569,7 +569,7 @@ func (suaq *SpaceUserAssignmentQuery) loadSpace(ctx context.Context, query *Spac
 	}
 	return nil
 }
-func (suaq *SpaceUserAssignmentQuery) loadCreator(ctx context.Context, query *UserQuery, nodes []*SpaceUserAssignment, init func(*SpaceUserAssignment), assign func(*SpaceUserAssignment, *User)) error {
+func (_q *SpaceUserAssignmentQuery) loadCreator(ctx context.Context, query *UserQuery, nodes []*SpaceUserAssignment, init func(*SpaceUserAssignment), assign func(*SpaceUserAssignment, *User)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*SpaceUserAssignment)
 	for i := range nodes {
@@ -598,7 +598,7 @@ func (suaq *SpaceUserAssignmentQuery) loadCreator(ctx context.Context, query *Us
 	}
 	return nil
 }
-func (suaq *SpaceUserAssignmentQuery) loadUpdater(ctx context.Context, query *UserQuery, nodes []*SpaceUserAssignment, init func(*SpaceUserAssignment), assign func(*SpaceUserAssignment, *User)) error {
+func (_q *SpaceUserAssignmentQuery) loadUpdater(ctx context.Context, query *UserQuery, nodes []*SpaceUserAssignment, init func(*SpaceUserAssignment), assign func(*SpaceUserAssignment, *User)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*SpaceUserAssignment)
 	for i := range nodes {
@@ -627,7 +627,7 @@ func (suaq *SpaceUserAssignmentQuery) loadUpdater(ctx context.Context, query *Us
 	}
 	return nil
 }
-func (suaq *SpaceUserAssignmentQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*SpaceUserAssignment, init func(*SpaceUserAssignment), assign func(*SpaceUserAssignment, *User)) error {
+func (_q *SpaceUserAssignmentQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*SpaceUserAssignment, init func(*SpaceUserAssignment), assign func(*SpaceUserAssignment, *User)) error {
 	ids := make([]int64, 0, len(nodes))
 	nodeids := make(map[int64][]*SpaceUserAssignment)
 	for i := range nodes {
@@ -657,27 +657,27 @@ func (suaq *SpaceUserAssignmentQuery) loadUser(ctx context.Context, query *UserQ
 	return nil
 }
 
-func (suaq *SpaceUserAssignmentQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := suaq.querySpec()
-	if len(suaq.modifiers) > 0 {
-		_spec.Modifiers = suaq.modifiers
+func (_q *SpaceUserAssignmentQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = suaq.ctx.Fields
-	if len(suaq.ctx.Fields) > 0 {
-		_spec.Unique = suaq.ctx.Unique != nil && *suaq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, suaq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (suaq *SpaceUserAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *SpaceUserAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(spaceuserassignment.Table, spaceuserassignment.Columns, sqlgraph.NewFieldSpec(spaceuserassignment.FieldID, field.TypeInt64))
-	_spec.From = suaq.sql
-	if unique := suaq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if suaq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := suaq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, spaceuserassignment.FieldID)
 		for i := range fields {
@@ -685,33 +685,33 @@ func (suaq *SpaceUserAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if suaq.withSpace != nil {
+		if _q.withSpace != nil {
 			_spec.Node.AddColumnOnce(spaceuserassignment.FieldSpaceID)
 		}
-		if suaq.withCreator != nil {
+		if _q.withCreator != nil {
 			_spec.Node.AddColumnOnce(spaceuserassignment.FieldCreatedBy)
 		}
-		if suaq.withUpdater != nil {
+		if _q.withUpdater != nil {
 			_spec.Node.AddColumnOnce(spaceuserassignment.FieldUpdatedBy)
 		}
-		if suaq.withUser != nil {
+		if _q.withUser != nil {
 			_spec.Node.AddColumnOnce(spaceuserassignment.FieldUserID)
 		}
 	}
-	if ps := suaq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := suaq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := suaq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := suaq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -721,45 +721,45 @@ func (suaq *SpaceUserAssignmentQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (suaq *SpaceUserAssignmentQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(suaq.driver.Dialect())
+func (_q *SpaceUserAssignmentQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(spaceuserassignment.Table)
-	columns := suaq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = spaceuserassignment.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if suaq.sql != nil {
-		selector = suaq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if suaq.ctx.Unique != nil && *suaq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range suaq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range suaq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range suaq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := suaq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := suaq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (suaq *SpaceUserAssignmentQuery) Modify(modifiers ...func(s *sql.Selector)) *SpaceUserAssignmentSelect {
-	suaq.modifiers = append(suaq.modifiers, modifiers...)
-	return suaq.Select()
+func (_q *SpaceUserAssignmentQuery) Modify(modifiers ...func(s *sql.Selector)) *SpaceUserAssignmentSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // SpaceUserAssignmentGroupBy is the group-by builder for SpaceUserAssignment entities.
@@ -769,41 +769,41 @@ type SpaceUserAssignmentGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (suagb *SpaceUserAssignmentGroupBy) Aggregate(fns ...AggregateFunc) *SpaceUserAssignmentGroupBy {
-	suagb.fns = append(suagb.fns, fns...)
-	return suagb
+func (_g *SpaceUserAssignmentGroupBy) Aggregate(fns ...AggregateFunc) *SpaceUserAssignmentGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (suagb *SpaceUserAssignmentGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, suagb.build.ctx, ent.OpQueryGroupBy)
-	if err := suagb.build.prepareQuery(ctx); err != nil {
+func (_g *SpaceUserAssignmentGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*SpaceUserAssignmentQuery, *SpaceUserAssignmentGroupBy](ctx, suagb.build, suagb, suagb.build.inters, v)
+	return scanWithInterceptors[*SpaceUserAssignmentQuery, *SpaceUserAssignmentGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (suagb *SpaceUserAssignmentGroupBy) sqlScan(ctx context.Context, root *SpaceUserAssignmentQuery, v any) error {
+func (_g *SpaceUserAssignmentGroupBy) sqlScan(ctx context.Context, root *SpaceUserAssignmentQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(suagb.fns))
-	for _, fn := range suagb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*suagb.flds)+len(suagb.fns))
-		for _, f := range *suagb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*suagb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := suagb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -817,27 +817,27 @@ type SpaceUserAssignmentSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (suas *SpaceUserAssignmentSelect) Aggregate(fns ...AggregateFunc) *SpaceUserAssignmentSelect {
-	suas.fns = append(suas.fns, fns...)
-	return suas
+func (_s *SpaceUserAssignmentSelect) Aggregate(fns ...AggregateFunc) *SpaceUserAssignmentSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (suas *SpaceUserAssignmentSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, suas.ctx, ent.OpQuerySelect)
-	if err := suas.prepareQuery(ctx); err != nil {
+func (_s *SpaceUserAssignmentSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*SpaceUserAssignmentQuery, *SpaceUserAssignmentSelect](ctx, suas.SpaceUserAssignmentQuery, suas, suas.inters, v)
+	return scanWithInterceptors[*SpaceUserAssignmentQuery, *SpaceUserAssignmentSelect](ctx, _s.SpaceUserAssignmentQuery, _s, _s.inters, v)
 }
 
-func (suas *SpaceUserAssignmentSelect) sqlScan(ctx context.Context, root *SpaceUserAssignmentQuery, v any) error {
+func (_s *SpaceUserAssignmentSelect) sqlScan(ctx context.Context, root *SpaceUserAssignmentQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(suas.fns))
-	for _, fn := range suas.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*suas.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -845,7 +845,7 @@ func (suas *SpaceUserAssignmentSelect) sqlScan(ctx context.Context, root *SpaceU
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := suas.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -853,7 +853,7 @@ func (suas *SpaceUserAssignmentSelect) sqlScan(ctx context.Context, root *SpaceU
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (suas *SpaceUserAssignmentSelect) Modify(modifiers ...func(s *sql.Selector)) *SpaceUserAssignmentSelect {
-	suas.modifiers = append(suas.modifiers, modifiers...)
-	return suas
+func (_s *SpaceUserAssignmentSelect) Modify(modifiers ...func(s *sql.Selector)) *SpaceUserAssignmentSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

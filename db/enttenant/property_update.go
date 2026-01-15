@@ -26,138 +26,138 @@ type PropertyUpdate struct {
 }
 
 // Where appends a list predicates to the PropertyUpdate builder.
-func (pu *PropertyUpdate) Where(ps ...predicate.Property) *PropertyUpdate {
-	pu.mutation.Where(ps...)
-	return pu
+func (_u *PropertyUpdate) Where(ps ...predicate.Property) *PropertyUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (pu *PropertyUpdate) SetName(s string) *PropertyUpdate {
-	pu.mutation.SetName(s)
-	return pu
+func (_u *PropertyUpdate) SetName(v string) *PropertyUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (pu *PropertyUpdate) SetNillableName(s *string) *PropertyUpdate {
-	if s != nil {
-		pu.SetName(*s)
+func (_u *PropertyUpdate) SetNillableName(v *string) *PropertyUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return pu
+	return _u
 }
 
 // SetType sets the "type" field.
-func (pu *PropertyUpdate) SetType(ft fieldtype.FieldType) *PropertyUpdate {
-	pu.mutation.SetType(ft)
-	return pu
+func (_u *PropertyUpdate) SetType(v fieldtype.FieldType) *PropertyUpdate {
+	_u.mutation.SetType(v)
+	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (pu *PropertyUpdate) SetNillableType(ft *fieldtype.FieldType) *PropertyUpdate {
-	if ft != nil {
-		pu.SetType(*ft)
+func (_u *PropertyUpdate) SetNillableType(v *fieldtype.FieldType) *PropertyUpdate {
+	if v != nil {
+		_u.SetType(*v)
 	}
-	return pu
+	return _u
 }
 
 // SetUnit sets the "unit" field.
-func (pu *PropertyUpdate) SetUnit(s string) *PropertyUpdate {
-	pu.mutation.SetUnit(s)
-	return pu
+func (_u *PropertyUpdate) SetUnit(v string) *PropertyUpdate {
+	_u.mutation.SetUnit(v)
+	return _u
 }
 
 // SetNillableUnit sets the "unit" field if the given value is not nil.
-func (pu *PropertyUpdate) SetNillableUnit(s *string) *PropertyUpdate {
-	if s != nil {
-		pu.SetUnit(*s)
+func (_u *PropertyUpdate) SetNillableUnit(v *string) *PropertyUpdate {
+	if v != nil {
+		_u.SetUnit(*v)
 	}
-	return pu
+	return _u
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (pu *PropertyUpdate) AddFileIDs(ids ...int64) *PropertyUpdate {
-	pu.mutation.AddFileIDs(ids...)
-	return pu
+func (_u *PropertyUpdate) AddFileIDs(ids ...int64) *PropertyUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (pu *PropertyUpdate) AddFiles(f ...*File) *PropertyUpdate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *PropertyUpdate) AddFiles(v ...*File) *PropertyUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // AddFileAssignmentIDs adds the "file_assignments" edge to the FilePropertyAssignment entity by IDs.
-func (pu *PropertyUpdate) AddFileAssignmentIDs(ids ...int64) *PropertyUpdate {
-	pu.mutation.AddFileAssignmentIDs(ids...)
-	return pu
+func (_u *PropertyUpdate) AddFileAssignmentIDs(ids ...int64) *PropertyUpdate {
+	_u.mutation.AddFileAssignmentIDs(ids...)
+	return _u
 }
 
 // AddFileAssignments adds the "file_assignments" edges to the FilePropertyAssignment entity.
-func (pu *PropertyUpdate) AddFileAssignments(f ...*FilePropertyAssignment) *PropertyUpdate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *PropertyUpdate) AddFileAssignments(v ...*FilePropertyAssignment) *PropertyUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.AddFileAssignmentIDs(ids...)
+	return _u.AddFileAssignmentIDs(ids...)
 }
 
 // Mutation returns the PropertyMutation object of the builder.
-func (pu *PropertyUpdate) Mutation() *PropertyMutation {
-	return pu.mutation
+func (_u *PropertyUpdate) Mutation() *PropertyMutation {
+	return _u.mutation
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (pu *PropertyUpdate) ClearFiles() *PropertyUpdate {
-	pu.mutation.ClearFiles()
-	return pu
+func (_u *PropertyUpdate) ClearFiles() *PropertyUpdate {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (pu *PropertyUpdate) RemoveFileIDs(ids ...int64) *PropertyUpdate {
-	pu.mutation.RemoveFileIDs(ids...)
-	return pu
+func (_u *PropertyUpdate) RemoveFileIDs(ids ...int64) *PropertyUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (pu *PropertyUpdate) RemoveFiles(f ...*File) *PropertyUpdate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *PropertyUpdate) RemoveFiles(v ...*File) *PropertyUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearFileAssignments clears all "file_assignments" edges to the FilePropertyAssignment entity.
-func (pu *PropertyUpdate) ClearFileAssignments() *PropertyUpdate {
-	pu.mutation.ClearFileAssignments()
-	return pu
+func (_u *PropertyUpdate) ClearFileAssignments() *PropertyUpdate {
+	_u.mutation.ClearFileAssignments()
+	return _u
 }
 
 // RemoveFileAssignmentIDs removes the "file_assignments" edge to FilePropertyAssignment entities by IDs.
-func (pu *PropertyUpdate) RemoveFileAssignmentIDs(ids ...int64) *PropertyUpdate {
-	pu.mutation.RemoveFileAssignmentIDs(ids...)
-	return pu
+func (_u *PropertyUpdate) RemoveFileAssignmentIDs(ids ...int64) *PropertyUpdate {
+	_u.mutation.RemoveFileAssignmentIDs(ids...)
+	return _u
 }
 
 // RemoveFileAssignments removes "file_assignments" edges to FilePropertyAssignment entities.
-func (pu *PropertyUpdate) RemoveFileAssignments(f ...*FilePropertyAssignment) *PropertyUpdate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *PropertyUpdate) RemoveFileAssignments(v ...*FilePropertyAssignment) *PropertyUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return pu.RemoveFileAssignmentIDs(ids...)
+	return _u.RemoveFileAssignmentIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (pu *PropertyUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, pu.sqlSave, pu.mutation, pu.hooks)
+func (_u *PropertyUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (pu *PropertyUpdate) SaveX(ctx context.Context) int {
-	affected, err := pu.Save(ctx)
+func (_u *PropertyUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -165,59 +165,59 @@ func (pu *PropertyUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (pu *PropertyUpdate) Exec(ctx context.Context) error {
-	_, err := pu.Save(ctx)
+func (_u *PropertyUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (pu *PropertyUpdate) ExecX(ctx context.Context) {
-	if err := pu.Exec(ctx); err != nil {
+func (_u *PropertyUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (pu *PropertyUpdate) check() error {
-	if v, ok := pu.mutation.GetType(); ok {
+func (_u *PropertyUpdate) check() error {
+	if v, ok := _u.mutation.GetType(); ok {
 		if err := property.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`enttenant: validator failed for field "Property.type": %w`, err)}
 		}
 	}
-	if pu.mutation.SpaceCleared() && len(pu.mutation.SpaceIDs()) > 0 {
+	if _u.mutation.SpaceCleared() && len(_u.mutation.SpaceIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "Property.space"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (pu *PropertyUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PropertyUpdate {
-	pu.modifiers = append(pu.modifiers, modifiers...)
-	return pu
+func (_u *PropertyUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PropertyUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (pu *PropertyUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := pu.check(); err != nil {
-		return n, err
+func (_u *PropertyUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(property.Table, property.Columns, sqlgraph.NewFieldSpec(property.FieldID, field.TypeInt64))
-	if ps := pu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := pu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(property.FieldName, field.TypeString, value)
 	}
-	if value, ok := pu.mutation.GetType(); ok {
+	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(property.FieldType, field.TypeEnum, value)
 	}
-	if value, ok := pu.mutation.Unit(); ok {
+	if value, ok := _u.mutation.Unit(); ok {
 		_spec.SetField(property.FieldUnit, field.TypeString, value)
 	}
-	if pu.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -230,7 +230,7 @@ func (pu *PropertyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !pu.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -246,7 +246,7 @@ func (pu *PropertyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -262,7 +262,7 @@ func (pu *PropertyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.FileAssignmentsCleared() {
+	if _u.mutation.FileAssignmentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -275,7 +275,7 @@ func (pu *PropertyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedFileAssignmentsIDs(); len(nodes) > 0 && !pu.mutation.FileAssignmentsCleared() {
+	if nodes := _u.mutation.RemovedFileAssignmentsIDs(); len(nodes) > 0 && !_u.mutation.FileAssignmentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -291,7 +291,7 @@ func (pu *PropertyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.FileAssignmentsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FileAssignmentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -307,8 +307,8 @@ func (pu *PropertyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(pu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{property.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -316,8 +316,8 @@ func (pu *PropertyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	pu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // PropertyUpdateOne is the builder for updating a single Property entity.
@@ -330,145 +330,145 @@ type PropertyUpdateOne struct {
 }
 
 // SetName sets the "name" field.
-func (puo *PropertyUpdateOne) SetName(s string) *PropertyUpdateOne {
-	puo.mutation.SetName(s)
-	return puo
+func (_u *PropertyUpdateOne) SetName(v string) *PropertyUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (puo *PropertyUpdateOne) SetNillableName(s *string) *PropertyUpdateOne {
-	if s != nil {
-		puo.SetName(*s)
+func (_u *PropertyUpdateOne) SetNillableName(v *string) *PropertyUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return puo
+	return _u
 }
 
 // SetType sets the "type" field.
-func (puo *PropertyUpdateOne) SetType(ft fieldtype.FieldType) *PropertyUpdateOne {
-	puo.mutation.SetType(ft)
-	return puo
+func (_u *PropertyUpdateOne) SetType(v fieldtype.FieldType) *PropertyUpdateOne {
+	_u.mutation.SetType(v)
+	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (puo *PropertyUpdateOne) SetNillableType(ft *fieldtype.FieldType) *PropertyUpdateOne {
-	if ft != nil {
-		puo.SetType(*ft)
+func (_u *PropertyUpdateOne) SetNillableType(v *fieldtype.FieldType) *PropertyUpdateOne {
+	if v != nil {
+		_u.SetType(*v)
 	}
-	return puo
+	return _u
 }
 
 // SetUnit sets the "unit" field.
-func (puo *PropertyUpdateOne) SetUnit(s string) *PropertyUpdateOne {
-	puo.mutation.SetUnit(s)
-	return puo
+func (_u *PropertyUpdateOne) SetUnit(v string) *PropertyUpdateOne {
+	_u.mutation.SetUnit(v)
+	return _u
 }
 
 // SetNillableUnit sets the "unit" field if the given value is not nil.
-func (puo *PropertyUpdateOne) SetNillableUnit(s *string) *PropertyUpdateOne {
-	if s != nil {
-		puo.SetUnit(*s)
+func (_u *PropertyUpdateOne) SetNillableUnit(v *string) *PropertyUpdateOne {
+	if v != nil {
+		_u.SetUnit(*v)
 	}
-	return puo
+	return _u
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (puo *PropertyUpdateOne) AddFileIDs(ids ...int64) *PropertyUpdateOne {
-	puo.mutation.AddFileIDs(ids...)
-	return puo
+func (_u *PropertyUpdateOne) AddFileIDs(ids ...int64) *PropertyUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (puo *PropertyUpdateOne) AddFiles(f ...*File) *PropertyUpdateOne {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *PropertyUpdateOne) AddFiles(v ...*File) *PropertyUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddFileIDs(ids...)
+	return _u.AddFileIDs(ids...)
 }
 
 // AddFileAssignmentIDs adds the "file_assignments" edge to the FilePropertyAssignment entity by IDs.
-func (puo *PropertyUpdateOne) AddFileAssignmentIDs(ids ...int64) *PropertyUpdateOne {
-	puo.mutation.AddFileAssignmentIDs(ids...)
-	return puo
+func (_u *PropertyUpdateOne) AddFileAssignmentIDs(ids ...int64) *PropertyUpdateOne {
+	_u.mutation.AddFileAssignmentIDs(ids...)
+	return _u
 }
 
 // AddFileAssignments adds the "file_assignments" edges to the FilePropertyAssignment entity.
-func (puo *PropertyUpdateOne) AddFileAssignments(f ...*FilePropertyAssignment) *PropertyUpdateOne {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *PropertyUpdateOne) AddFileAssignments(v ...*FilePropertyAssignment) *PropertyUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.AddFileAssignmentIDs(ids...)
+	return _u.AddFileAssignmentIDs(ids...)
 }
 
 // Mutation returns the PropertyMutation object of the builder.
-func (puo *PropertyUpdateOne) Mutation() *PropertyMutation {
-	return puo.mutation
+func (_u *PropertyUpdateOne) Mutation() *PropertyMutation {
+	return _u.mutation
 }
 
 // ClearFiles clears all "files" edges to the File entity.
-func (puo *PropertyUpdateOne) ClearFiles() *PropertyUpdateOne {
-	puo.mutation.ClearFiles()
-	return puo
+func (_u *PropertyUpdateOne) ClearFiles() *PropertyUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
 }
 
 // RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (puo *PropertyUpdateOne) RemoveFileIDs(ids ...int64) *PropertyUpdateOne {
-	puo.mutation.RemoveFileIDs(ids...)
-	return puo
+func (_u *PropertyUpdateOne) RemoveFileIDs(ids ...int64) *PropertyUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
 }
 
 // RemoveFiles removes "files" edges to File entities.
-func (puo *PropertyUpdateOne) RemoveFiles(f ...*File) *PropertyUpdateOne {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *PropertyUpdateOne) RemoveFiles(v ...*File) *PropertyUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveFileIDs(ids...)
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearFileAssignments clears all "file_assignments" edges to the FilePropertyAssignment entity.
-func (puo *PropertyUpdateOne) ClearFileAssignments() *PropertyUpdateOne {
-	puo.mutation.ClearFileAssignments()
-	return puo
+func (_u *PropertyUpdateOne) ClearFileAssignments() *PropertyUpdateOne {
+	_u.mutation.ClearFileAssignments()
+	return _u
 }
 
 // RemoveFileAssignmentIDs removes the "file_assignments" edge to FilePropertyAssignment entities by IDs.
-func (puo *PropertyUpdateOne) RemoveFileAssignmentIDs(ids ...int64) *PropertyUpdateOne {
-	puo.mutation.RemoveFileAssignmentIDs(ids...)
-	return puo
+func (_u *PropertyUpdateOne) RemoveFileAssignmentIDs(ids ...int64) *PropertyUpdateOne {
+	_u.mutation.RemoveFileAssignmentIDs(ids...)
+	return _u
 }
 
 // RemoveFileAssignments removes "file_assignments" edges to FilePropertyAssignment entities.
-func (puo *PropertyUpdateOne) RemoveFileAssignments(f ...*FilePropertyAssignment) *PropertyUpdateOne {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *PropertyUpdateOne) RemoveFileAssignments(v ...*FilePropertyAssignment) *PropertyUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return puo.RemoveFileAssignmentIDs(ids...)
+	return _u.RemoveFileAssignmentIDs(ids...)
 }
 
 // Where appends a list predicates to the PropertyUpdate builder.
-func (puo *PropertyUpdateOne) Where(ps ...predicate.Property) *PropertyUpdateOne {
-	puo.mutation.Where(ps...)
-	return puo
+func (_u *PropertyUpdateOne) Where(ps ...predicate.Property) *PropertyUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (puo *PropertyUpdateOne) Select(field string, fields ...string) *PropertyUpdateOne {
-	puo.fields = append([]string{field}, fields...)
-	return puo
+func (_u *PropertyUpdateOne) Select(field string, fields ...string) *PropertyUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Property entity.
-func (puo *PropertyUpdateOne) Save(ctx context.Context) (*Property, error) {
-	return withHooks(ctx, puo.sqlSave, puo.mutation, puo.hooks)
+func (_u *PropertyUpdateOne) Save(ctx context.Context) (*Property, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (puo *PropertyUpdateOne) SaveX(ctx context.Context) *Property {
-	node, err := puo.Save(ctx)
+func (_u *PropertyUpdateOne) SaveX(ctx context.Context) *Property {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -476,48 +476,48 @@ func (puo *PropertyUpdateOne) SaveX(ctx context.Context) *Property {
 }
 
 // Exec executes the query on the entity.
-func (puo *PropertyUpdateOne) Exec(ctx context.Context) error {
-	_, err := puo.Save(ctx)
+func (_u *PropertyUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (puo *PropertyUpdateOne) ExecX(ctx context.Context) {
-	if err := puo.Exec(ctx); err != nil {
+func (_u *PropertyUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (puo *PropertyUpdateOne) check() error {
-	if v, ok := puo.mutation.GetType(); ok {
+func (_u *PropertyUpdateOne) check() error {
+	if v, ok := _u.mutation.GetType(); ok {
 		if err := property.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`enttenant: validator failed for field "Property.type": %w`, err)}
 		}
 	}
-	if puo.mutation.SpaceCleared() && len(puo.mutation.SpaceIDs()) > 0 {
+	if _u.mutation.SpaceCleared() && len(_u.mutation.SpaceIDs()) > 0 {
 		return errors.New(`enttenant: clearing a required unique edge "Property.space"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (puo *PropertyUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PropertyUpdateOne {
-	puo.modifiers = append(puo.modifiers, modifiers...)
-	return puo
+func (_u *PropertyUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PropertyUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (puo *PropertyUpdateOne) sqlSave(ctx context.Context) (_node *Property, err error) {
-	if err := puo.check(); err != nil {
+func (_u *PropertyUpdateOne) sqlSave(ctx context.Context) (_node *Property, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(property.Table, property.Columns, sqlgraph.NewFieldSpec(property.FieldID, field.TypeInt64))
-	id, ok := puo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`enttenant: missing "Property.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := puo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, property.FieldID)
 		for _, f := range fields {
@@ -529,23 +529,23 @@ func (puo *PropertyUpdateOne) sqlSave(ctx context.Context) (_node *Property, err
 			}
 		}
 	}
-	if ps := puo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := puo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(property.FieldName, field.TypeString, value)
 	}
-	if value, ok := puo.mutation.GetType(); ok {
+	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(property.FieldType, field.TypeEnum, value)
 	}
-	if value, ok := puo.mutation.Unit(); ok {
+	if value, ok := _u.mutation.Unit(); ok {
 		_spec.SetField(property.FieldUnit, field.TypeString, value)
 	}
-	if puo.mutation.FilesCleared() {
+	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -558,7 +558,7 @@ func (puo *PropertyUpdateOne) sqlSave(ctx context.Context) (_node *Property, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !puo.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -574,7 +574,7 @@ func (puo *PropertyUpdateOne) sqlSave(ctx context.Context) (_node *Property, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -590,7 +590,7 @@ func (puo *PropertyUpdateOne) sqlSave(ctx context.Context) (_node *Property, err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.FileAssignmentsCleared() {
+	if _u.mutation.FileAssignmentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -603,7 +603,7 @@ func (puo *PropertyUpdateOne) sqlSave(ctx context.Context) (_node *Property, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedFileAssignmentsIDs(); len(nodes) > 0 && !puo.mutation.FileAssignmentsCleared() {
+	if nodes := _u.mutation.RemovedFileAssignmentsIDs(); len(nodes) > 0 && !_u.mutation.FileAssignmentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -619,7 +619,7 @@ func (puo *PropertyUpdateOne) sqlSave(ctx context.Context) (_node *Property, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.FileAssignmentsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FileAssignmentsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -635,11 +635,11 @@ func (puo *PropertyUpdateOne) sqlSave(ctx context.Context) (_node *Property, err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(puo.modifiers...)
-	_node = &Property{config: puo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Property{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, puo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{property.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -647,6 +647,6 @@ func (puo *PropertyUpdateOne) sqlSave(ctx context.Context) (_node *Property, err
 		}
 		return nil, err
 	}
-	puo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

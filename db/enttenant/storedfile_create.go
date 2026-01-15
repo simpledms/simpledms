@@ -24,262 +24,262 @@ type StoredFileCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (sfc *StoredFileCreate) SetCreatedAt(t time.Time) *StoredFileCreate {
-	sfc.mutation.SetCreatedAt(t)
-	return sfc
+func (_c *StoredFileCreate) SetCreatedAt(v time.Time) *StoredFileCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (sfc *StoredFileCreate) SetNillableCreatedAt(t *time.Time) *StoredFileCreate {
-	if t != nil {
-		sfc.SetCreatedAt(*t)
+func (_c *StoredFileCreate) SetNillableCreatedAt(v *time.Time) *StoredFileCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return sfc
+	return _c
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (sfc *StoredFileCreate) SetCreatedBy(i int64) *StoredFileCreate {
-	sfc.mutation.SetCreatedBy(i)
-	return sfc
+func (_c *StoredFileCreate) SetCreatedBy(v int64) *StoredFileCreate {
+	_c.mutation.SetCreatedBy(v)
+	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (sfc *StoredFileCreate) SetNillableCreatedBy(i *int64) *StoredFileCreate {
-	if i != nil {
-		sfc.SetCreatedBy(*i)
+func (_c *StoredFileCreate) SetNillableCreatedBy(v *int64) *StoredFileCreate {
+	if v != nil {
+		_c.SetCreatedBy(*v)
 	}
-	return sfc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (sfc *StoredFileCreate) SetUpdatedAt(t time.Time) *StoredFileCreate {
-	sfc.mutation.SetUpdatedAt(t)
-	return sfc
+func (_c *StoredFileCreate) SetUpdatedAt(v time.Time) *StoredFileCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (sfc *StoredFileCreate) SetNillableUpdatedAt(t *time.Time) *StoredFileCreate {
-	if t != nil {
-		sfc.SetUpdatedAt(*t)
+func (_c *StoredFileCreate) SetNillableUpdatedAt(v *time.Time) *StoredFileCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return sfc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (sfc *StoredFileCreate) SetUpdatedBy(i int64) *StoredFileCreate {
-	sfc.mutation.SetUpdatedBy(i)
-	return sfc
+func (_c *StoredFileCreate) SetUpdatedBy(v int64) *StoredFileCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (sfc *StoredFileCreate) SetNillableUpdatedBy(i *int64) *StoredFileCreate {
-	if i != nil {
-		sfc.SetUpdatedBy(*i)
+func (_c *StoredFileCreate) SetNillableUpdatedBy(v *int64) *StoredFileCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return sfc
+	return _c
 }
 
 // SetFilename sets the "filename" field.
-func (sfc *StoredFileCreate) SetFilename(s string) *StoredFileCreate {
-	sfc.mutation.SetFilename(s)
-	return sfc
+func (_c *StoredFileCreate) SetFilename(v string) *StoredFileCreate {
+	_c.mutation.SetFilename(v)
+	return _c
 }
 
 // SetSize sets the "size" field.
-func (sfc *StoredFileCreate) SetSize(i int64) *StoredFileCreate {
-	sfc.mutation.SetSize(i)
-	return sfc
+func (_c *StoredFileCreate) SetSize(v int64) *StoredFileCreate {
+	_c.mutation.SetSize(v)
+	return _c
 }
 
 // SetNillableSize sets the "size" field if the given value is not nil.
-func (sfc *StoredFileCreate) SetNillableSize(i *int64) *StoredFileCreate {
-	if i != nil {
-		sfc.SetSize(*i)
+func (_c *StoredFileCreate) SetNillableSize(v *int64) *StoredFileCreate {
+	if v != nil {
+		_c.SetSize(*v)
 	}
-	return sfc
+	return _c
 }
 
 // SetSizeInStorage sets the "size_in_storage" field.
-func (sfc *StoredFileCreate) SetSizeInStorage(i int64) *StoredFileCreate {
-	sfc.mutation.SetSizeInStorage(i)
-	return sfc
+func (_c *StoredFileCreate) SetSizeInStorage(v int64) *StoredFileCreate {
+	_c.mutation.SetSizeInStorage(v)
+	return _c
 }
 
 // SetSha256 sets the "sha256" field.
-func (sfc *StoredFileCreate) SetSha256(s string) *StoredFileCreate {
-	sfc.mutation.SetSha256(s)
-	return sfc
+func (_c *StoredFileCreate) SetSha256(v string) *StoredFileCreate {
+	_c.mutation.SetSha256(v)
+	return _c
 }
 
 // SetNillableSha256 sets the "sha256" field if the given value is not nil.
-func (sfc *StoredFileCreate) SetNillableSha256(s *string) *StoredFileCreate {
-	if s != nil {
-		sfc.SetSha256(*s)
+func (_c *StoredFileCreate) SetNillableSha256(v *string) *StoredFileCreate {
+	if v != nil {
+		_c.SetSha256(*v)
 	}
-	return sfc
+	return _c
 }
 
 // SetMimeType sets the "mime_type" field.
-func (sfc *StoredFileCreate) SetMimeType(s string) *StoredFileCreate {
-	sfc.mutation.SetMimeType(s)
-	return sfc
+func (_c *StoredFileCreate) SetMimeType(v string) *StoredFileCreate {
+	_c.mutation.SetMimeType(v)
+	return _c
 }
 
 // SetNillableMimeType sets the "mime_type" field if the given value is not nil.
-func (sfc *StoredFileCreate) SetNillableMimeType(s *string) *StoredFileCreate {
-	if s != nil {
-		sfc.SetMimeType(*s)
+func (_c *StoredFileCreate) SetNillableMimeType(v *string) *StoredFileCreate {
+	if v != nil {
+		_c.SetMimeType(*v)
 	}
-	return sfc
+	return _c
 }
 
 // SetStorageType sets the "storage_type" field.
-func (sfc *StoredFileCreate) SetStorageType(st storagetype.StorageType) *StoredFileCreate {
-	sfc.mutation.SetStorageType(st)
-	return sfc
+func (_c *StoredFileCreate) SetStorageType(v storagetype.StorageType) *StoredFileCreate {
+	_c.mutation.SetStorageType(v)
+	return _c
 }
 
 // SetBucketName sets the "bucket_name" field.
-func (sfc *StoredFileCreate) SetBucketName(s string) *StoredFileCreate {
-	sfc.mutation.SetBucketName(s)
-	return sfc
+func (_c *StoredFileCreate) SetBucketName(v string) *StoredFileCreate {
+	_c.mutation.SetBucketName(v)
+	return _c
 }
 
 // SetNillableBucketName sets the "bucket_name" field if the given value is not nil.
-func (sfc *StoredFileCreate) SetNillableBucketName(s *string) *StoredFileCreate {
-	if s != nil {
-		sfc.SetBucketName(*s)
+func (_c *StoredFileCreate) SetNillableBucketName(v *string) *StoredFileCreate {
+	if v != nil {
+		_c.SetBucketName(*v)
 	}
-	return sfc
+	return _c
 }
 
 // SetStoragePath sets the "storage_path" field.
-func (sfc *StoredFileCreate) SetStoragePath(s string) *StoredFileCreate {
-	sfc.mutation.SetStoragePath(s)
-	return sfc
+func (_c *StoredFileCreate) SetStoragePath(v string) *StoredFileCreate {
+	_c.mutation.SetStoragePath(v)
+	return _c
 }
 
 // SetStorageFilename sets the "storage_filename" field.
-func (sfc *StoredFileCreate) SetStorageFilename(s string) *StoredFileCreate {
-	sfc.mutation.SetStorageFilename(s)
-	return sfc
+func (_c *StoredFileCreate) SetStorageFilename(v string) *StoredFileCreate {
+	_c.mutation.SetStorageFilename(v)
+	return _c
 }
 
 // SetTemporaryStoragePath sets the "temporary_storage_path" field.
-func (sfc *StoredFileCreate) SetTemporaryStoragePath(s string) *StoredFileCreate {
-	sfc.mutation.SetTemporaryStoragePath(s)
-	return sfc
+func (_c *StoredFileCreate) SetTemporaryStoragePath(v string) *StoredFileCreate {
+	_c.mutation.SetTemporaryStoragePath(v)
+	return _c
 }
 
 // SetTemporaryStorageFilename sets the "temporary_storage_filename" field.
-func (sfc *StoredFileCreate) SetTemporaryStorageFilename(s string) *StoredFileCreate {
-	sfc.mutation.SetTemporaryStorageFilename(s)
-	return sfc
+func (_c *StoredFileCreate) SetTemporaryStorageFilename(v string) *StoredFileCreate {
+	_c.mutation.SetTemporaryStorageFilename(v)
+	return _c
 }
 
 // SetCopiedToFinalDestinationAt sets the "copied_to_final_destination_at" field.
-func (sfc *StoredFileCreate) SetCopiedToFinalDestinationAt(t time.Time) *StoredFileCreate {
-	sfc.mutation.SetCopiedToFinalDestinationAt(t)
-	return sfc
+func (_c *StoredFileCreate) SetCopiedToFinalDestinationAt(v time.Time) *StoredFileCreate {
+	_c.mutation.SetCopiedToFinalDestinationAt(v)
+	return _c
 }
 
 // SetNillableCopiedToFinalDestinationAt sets the "copied_to_final_destination_at" field if the given value is not nil.
-func (sfc *StoredFileCreate) SetNillableCopiedToFinalDestinationAt(t *time.Time) *StoredFileCreate {
-	if t != nil {
-		sfc.SetCopiedToFinalDestinationAt(*t)
+func (_c *StoredFileCreate) SetNillableCopiedToFinalDestinationAt(v *time.Time) *StoredFileCreate {
+	if v != nil {
+		_c.SetCopiedToFinalDestinationAt(*v)
 	}
-	return sfc
+	return _c
 }
 
 // SetDeletedTemporaryFileAt sets the "deleted_temporary_file_at" field.
-func (sfc *StoredFileCreate) SetDeletedTemporaryFileAt(t time.Time) *StoredFileCreate {
-	sfc.mutation.SetDeletedTemporaryFileAt(t)
-	return sfc
+func (_c *StoredFileCreate) SetDeletedTemporaryFileAt(v time.Time) *StoredFileCreate {
+	_c.mutation.SetDeletedTemporaryFileAt(v)
+	return _c
 }
 
 // SetNillableDeletedTemporaryFileAt sets the "deleted_temporary_file_at" field if the given value is not nil.
-func (sfc *StoredFileCreate) SetNillableDeletedTemporaryFileAt(t *time.Time) *StoredFileCreate {
-	if t != nil {
-		sfc.SetDeletedTemporaryFileAt(*t)
+func (_c *StoredFileCreate) SetNillableDeletedTemporaryFileAt(v *time.Time) *StoredFileCreate {
+	if v != nil {
+		_c.SetDeletedTemporaryFileAt(*v)
 	}
-	return sfc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (sfc *StoredFileCreate) SetID(i int64) *StoredFileCreate {
-	sfc.mutation.SetID(i)
-	return sfc
+func (_c *StoredFileCreate) SetID(v int64) *StoredFileCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetCreatorID sets the "creator" edge to the User entity by ID.
-func (sfc *StoredFileCreate) SetCreatorID(id int64) *StoredFileCreate {
-	sfc.mutation.SetCreatorID(id)
-	return sfc
+func (_c *StoredFileCreate) SetCreatorID(id int64) *StoredFileCreate {
+	_c.mutation.SetCreatorID(id)
+	return _c
 }
 
 // SetNillableCreatorID sets the "creator" edge to the User entity by ID if the given value is not nil.
-func (sfc *StoredFileCreate) SetNillableCreatorID(id *int64) *StoredFileCreate {
+func (_c *StoredFileCreate) SetNillableCreatorID(id *int64) *StoredFileCreate {
 	if id != nil {
-		sfc = sfc.SetCreatorID(*id)
+		_c = _c.SetCreatorID(*id)
 	}
-	return sfc
+	return _c
 }
 
 // SetCreator sets the "creator" edge to the User entity.
-func (sfc *StoredFileCreate) SetCreator(u *User) *StoredFileCreate {
-	return sfc.SetCreatorID(u.ID)
+func (_c *StoredFileCreate) SetCreator(v *User) *StoredFileCreate {
+	return _c.SetCreatorID(v.ID)
 }
 
 // SetUpdaterID sets the "updater" edge to the User entity by ID.
-func (sfc *StoredFileCreate) SetUpdaterID(id int64) *StoredFileCreate {
-	sfc.mutation.SetUpdaterID(id)
-	return sfc
+func (_c *StoredFileCreate) SetUpdaterID(id int64) *StoredFileCreate {
+	_c.mutation.SetUpdaterID(id)
+	return _c
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the User entity by ID if the given value is not nil.
-func (sfc *StoredFileCreate) SetNillableUpdaterID(id *int64) *StoredFileCreate {
+func (_c *StoredFileCreate) SetNillableUpdaterID(id *int64) *StoredFileCreate {
 	if id != nil {
-		sfc = sfc.SetUpdaterID(*id)
+		_c = _c.SetUpdaterID(*id)
 	}
-	return sfc
+	return _c
 }
 
 // SetUpdater sets the "updater" edge to the User entity.
-func (sfc *StoredFileCreate) SetUpdater(u *User) *StoredFileCreate {
-	return sfc.SetUpdaterID(u.ID)
+func (_c *StoredFileCreate) SetUpdater(v *User) *StoredFileCreate {
+	return _c.SetUpdaterID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
-func (sfc *StoredFileCreate) AddFileIDs(ids ...int64) *StoredFileCreate {
-	sfc.mutation.AddFileIDs(ids...)
-	return sfc
+func (_c *StoredFileCreate) AddFileIDs(ids ...int64) *StoredFileCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
 }
 
 // AddFiles adds the "files" edges to the File entity.
-func (sfc *StoredFileCreate) AddFiles(f ...*File) *StoredFileCreate {
-	ids := make([]int64, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *StoredFileCreate) AddFiles(v ...*File) *StoredFileCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sfc.AddFileIDs(ids...)
+	return _c.AddFileIDs(ids...)
 }
 
 // Mutation returns the StoredFileMutation object of the builder.
-func (sfc *StoredFileCreate) Mutation() *StoredFileMutation {
-	return sfc.mutation
+func (_c *StoredFileCreate) Mutation() *StoredFileMutation {
+	return _c.mutation
 }
 
 // Save creates the StoredFile in the database.
-func (sfc *StoredFileCreate) Save(ctx context.Context) (*StoredFile, error) {
-	if err := sfc.defaults(); err != nil {
+func (_c *StoredFileCreate) Save(ctx context.Context) (*StoredFile, error) {
+	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
-	return withHooks(ctx, sfc.sqlSave, sfc.mutation, sfc.hooks)
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (sfc *StoredFileCreate) SaveX(ctx context.Context) *StoredFile {
-	v, err := sfc.Save(ctx)
+func (_c *StoredFileCreate) SaveX(ctx context.Context) *StoredFile {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -287,80 +287,80 @@ func (sfc *StoredFileCreate) SaveX(ctx context.Context) *StoredFile {
 }
 
 // Exec executes the query.
-func (sfc *StoredFileCreate) Exec(ctx context.Context) error {
-	_, err := sfc.Save(ctx)
+func (_c *StoredFileCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sfc *StoredFileCreate) ExecX(ctx context.Context) {
-	if err := sfc.Exec(ctx); err != nil {
+func (_c *StoredFileCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sfc *StoredFileCreate) defaults() error {
-	if _, ok := sfc.mutation.CreatedAt(); !ok {
+func (_c *StoredFileCreate) defaults() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if storedfile.DefaultCreatedAt == nil {
 			return fmt.Errorf("enttenant: uninitialized storedfile.DefaultCreatedAt (forgotten import enttenant/runtime?)")
 		}
 		v := storedfile.DefaultCreatedAt()
-		sfc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := sfc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		if storedfile.DefaultUpdatedAt == nil {
 			return fmt.Errorf("enttenant: uninitialized storedfile.DefaultUpdatedAt (forgotten import enttenant/runtime?)")
 		}
 		v := storedfile.DefaultUpdatedAt()
-		sfc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
 	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sfc *StoredFileCreate) check() error {
-	if _, ok := sfc.mutation.CreatedAt(); !ok {
+func (_c *StoredFileCreate) check() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`enttenant: missing required field "StoredFile.created_at"`)}
 	}
-	if _, ok := sfc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`enttenant: missing required field "StoredFile.updated_at"`)}
 	}
-	if _, ok := sfc.mutation.Filename(); !ok {
+	if _, ok := _c.mutation.Filename(); !ok {
 		return &ValidationError{Name: "filename", err: errors.New(`enttenant: missing required field "StoredFile.filename"`)}
 	}
-	if _, ok := sfc.mutation.SizeInStorage(); !ok {
+	if _, ok := _c.mutation.SizeInStorage(); !ok {
 		return &ValidationError{Name: "size_in_storage", err: errors.New(`enttenant: missing required field "StoredFile.size_in_storage"`)}
 	}
-	if _, ok := sfc.mutation.StorageType(); !ok {
+	if _, ok := _c.mutation.StorageType(); !ok {
 		return &ValidationError{Name: "storage_type", err: errors.New(`enttenant: missing required field "StoredFile.storage_type"`)}
 	}
-	if v, ok := sfc.mutation.StorageType(); ok {
+	if v, ok := _c.mutation.StorageType(); ok {
 		if err := storedfile.StorageTypeValidator(v); err != nil {
 			return &ValidationError{Name: "storage_type", err: fmt.Errorf(`enttenant: validator failed for field "StoredFile.storage_type": %w`, err)}
 		}
 	}
-	if _, ok := sfc.mutation.StoragePath(); !ok {
+	if _, ok := _c.mutation.StoragePath(); !ok {
 		return &ValidationError{Name: "storage_path", err: errors.New(`enttenant: missing required field "StoredFile.storage_path"`)}
 	}
-	if _, ok := sfc.mutation.StorageFilename(); !ok {
+	if _, ok := _c.mutation.StorageFilename(); !ok {
 		return &ValidationError{Name: "storage_filename", err: errors.New(`enttenant: missing required field "StoredFile.storage_filename"`)}
 	}
-	if _, ok := sfc.mutation.TemporaryStoragePath(); !ok {
+	if _, ok := _c.mutation.TemporaryStoragePath(); !ok {
 		return &ValidationError{Name: "temporary_storage_path", err: errors.New(`enttenant: missing required field "StoredFile.temporary_storage_path"`)}
 	}
-	if _, ok := sfc.mutation.TemporaryStorageFilename(); !ok {
+	if _, ok := _c.mutation.TemporaryStorageFilename(); !ok {
 		return &ValidationError{Name: "temporary_storage_filename", err: errors.New(`enttenant: missing required field "StoredFile.temporary_storage_filename"`)}
 	}
 	return nil
 }
 
-func (sfc *StoredFileCreate) sqlSave(ctx context.Context) (*StoredFile, error) {
-	if err := sfc.check(); err != nil {
+func (_c *StoredFileCreate) sqlSave(ctx context.Context) (*StoredFile, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := sfc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, sfc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -370,81 +370,81 @@ func (sfc *StoredFileCreate) sqlSave(ctx context.Context) (*StoredFile, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int64(id)
 	}
-	sfc.mutation.id = &_node.ID
-	sfc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (sfc *StoredFileCreate) createSpec() (*StoredFile, *sqlgraph.CreateSpec) {
+func (_c *StoredFileCreate) createSpec() (*StoredFile, *sqlgraph.CreateSpec) {
 	var (
-		_node = &StoredFile{config: sfc.config}
+		_node = &StoredFile{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(storedfile.Table, sqlgraph.NewFieldSpec(storedfile.FieldID, field.TypeInt64))
 	)
-	if id, ok := sfc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := sfc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(storedfile.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := sfc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(storedfile.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := sfc.mutation.Filename(); ok {
+	if value, ok := _c.mutation.Filename(); ok {
 		_spec.SetField(storedfile.FieldFilename, field.TypeString, value)
 		_node.Filename = value
 	}
-	if value, ok := sfc.mutation.Size(); ok {
+	if value, ok := _c.mutation.Size(); ok {
 		_spec.SetField(storedfile.FieldSize, field.TypeInt64, value)
 		_node.Size = value
 	}
-	if value, ok := sfc.mutation.SizeInStorage(); ok {
+	if value, ok := _c.mutation.SizeInStorage(); ok {
 		_spec.SetField(storedfile.FieldSizeInStorage, field.TypeInt64, value)
 		_node.SizeInStorage = value
 	}
-	if value, ok := sfc.mutation.Sha256(); ok {
+	if value, ok := _c.mutation.Sha256(); ok {
 		_spec.SetField(storedfile.FieldSha256, field.TypeString, value)
 		_node.Sha256 = value
 	}
-	if value, ok := sfc.mutation.MimeType(); ok {
+	if value, ok := _c.mutation.MimeType(); ok {
 		_spec.SetField(storedfile.FieldMimeType, field.TypeString, value)
 		_node.MimeType = value
 	}
-	if value, ok := sfc.mutation.StorageType(); ok {
+	if value, ok := _c.mutation.StorageType(); ok {
 		_spec.SetField(storedfile.FieldStorageType, field.TypeEnum, value)
 		_node.StorageType = value
 	}
-	if value, ok := sfc.mutation.BucketName(); ok {
+	if value, ok := _c.mutation.BucketName(); ok {
 		_spec.SetField(storedfile.FieldBucketName, field.TypeString, value)
 		_node.BucketName = value
 	}
-	if value, ok := sfc.mutation.StoragePath(); ok {
+	if value, ok := _c.mutation.StoragePath(); ok {
 		_spec.SetField(storedfile.FieldStoragePath, field.TypeString, value)
 		_node.StoragePath = value
 	}
-	if value, ok := sfc.mutation.StorageFilename(); ok {
+	if value, ok := _c.mutation.StorageFilename(); ok {
 		_spec.SetField(storedfile.FieldStorageFilename, field.TypeString, value)
 		_node.StorageFilename = value
 	}
-	if value, ok := sfc.mutation.TemporaryStoragePath(); ok {
+	if value, ok := _c.mutation.TemporaryStoragePath(); ok {
 		_spec.SetField(storedfile.FieldTemporaryStoragePath, field.TypeString, value)
 		_node.TemporaryStoragePath = value
 	}
-	if value, ok := sfc.mutation.TemporaryStorageFilename(); ok {
+	if value, ok := _c.mutation.TemporaryStorageFilename(); ok {
 		_spec.SetField(storedfile.FieldTemporaryStorageFilename, field.TypeString, value)
 		_node.TemporaryStorageFilename = value
 	}
-	if value, ok := sfc.mutation.CopiedToFinalDestinationAt(); ok {
+	if value, ok := _c.mutation.CopiedToFinalDestinationAt(); ok {
 		_spec.SetField(storedfile.FieldCopiedToFinalDestinationAt, field.TypeTime, value)
 		_node.CopiedToFinalDestinationAt = &value
 	}
-	if value, ok := sfc.mutation.DeletedTemporaryFileAt(); ok {
+	if value, ok := _c.mutation.DeletedTemporaryFileAt(); ok {
 		_spec.SetField(storedfile.FieldDeletedTemporaryFileAt, field.TypeTime, value)
 		_node.DeletedTemporaryFileAt = &value
 	}
-	if nodes := sfc.mutation.CreatorIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CreatorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -461,7 +461,7 @@ func (sfc *StoredFileCreate) createSpec() (*StoredFile, *sqlgraph.CreateSpec) {
 		_node.CreatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sfc.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -478,7 +478,7 @@ func (sfc *StoredFileCreate) createSpec() (*StoredFile, *sqlgraph.CreateSpec) {
 		_node.UpdatedBy = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sfc.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -505,16 +505,16 @@ type StoredFileCreateBulk struct {
 }
 
 // Save creates the StoredFile entities in the database.
-func (sfcb *StoredFileCreateBulk) Save(ctx context.Context) ([]*StoredFile, error) {
-	if sfcb.err != nil {
-		return nil, sfcb.err
+func (_c *StoredFileCreateBulk) Save(ctx context.Context) ([]*StoredFile, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(sfcb.builders))
-	nodes := make([]*StoredFile, len(sfcb.builders))
-	mutators := make([]Mutator, len(sfcb.builders))
-	for i := range sfcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*StoredFile, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := sfcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*StoredFileMutation)
@@ -528,11 +528,11 @@ func (sfcb *StoredFileCreateBulk) Save(ctx context.Context) ([]*StoredFile, erro
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, sfcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, sfcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -556,7 +556,7 @@ func (sfcb *StoredFileCreateBulk) Save(ctx context.Context) ([]*StoredFile, erro
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, sfcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -564,8 +564,8 @@ func (sfcb *StoredFileCreateBulk) Save(ctx context.Context) ([]*StoredFile, erro
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (sfcb *StoredFileCreateBulk) SaveX(ctx context.Context) []*StoredFile {
-	v, err := sfcb.Save(ctx)
+func (_c *StoredFileCreateBulk) SaveX(ctx context.Context) []*StoredFile {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -573,14 +573,14 @@ func (sfcb *StoredFileCreateBulk) SaveX(ctx context.Context) []*StoredFile {
 }
 
 // Exec executes the query.
-func (sfcb *StoredFileCreateBulk) Exec(ctx context.Context) error {
-	_, err := sfcb.Save(ctx)
+func (_c *StoredFileCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sfcb *StoredFileCreateBulk) ExecX(ctx context.Context) {
-	if err := sfcb.Exec(ctx); err != nil {
+func (_c *StoredFileCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

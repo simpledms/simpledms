@@ -360,8 +360,8 @@ func (c *AttributeClient) Update() *AttributeUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *AttributeClient) UpdateOne(a *Attribute) *AttributeUpdateOne {
-	mutation := newAttributeMutation(c.config, OpUpdateOne, withAttribute(a))
+func (c *AttributeClient) UpdateOne(_m *Attribute) *AttributeUpdateOne {
+	mutation := newAttributeMutation(c.config, OpUpdateOne, withAttribute(_m))
 	return &AttributeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -378,8 +378,8 @@ func (c *AttributeClient) Delete() *AttributeDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *AttributeClient) DeleteOne(a *Attribute) *AttributeDeleteOne {
-	return c.DeleteOneID(a.ID)
+func (c *AttributeClient) DeleteOne(_m *Attribute) *AttributeDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -414,64 +414,64 @@ func (c *AttributeClient) GetX(ctx context.Context, id int64) *Attribute {
 }
 
 // QuerySpace queries the space edge of a Attribute.
-func (c *AttributeClient) QuerySpace(a *Attribute) *SpaceQuery {
+func (c *AttributeClient) QuerySpace(_m *Attribute) *SpaceQuery {
 	query := (&SpaceClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := a.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(attribute.Table, attribute.FieldID, id),
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, attribute.SpaceTable, attribute.SpaceColumn),
 		)
-		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryDocumentType queries the document_type edge of a Attribute.
-func (c *AttributeClient) QueryDocumentType(a *Attribute) *DocumentTypeQuery {
+func (c *AttributeClient) QueryDocumentType(_m *Attribute) *DocumentTypeQuery {
 	query := (&DocumentTypeClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := a.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(attribute.Table, attribute.FieldID, id),
 			sqlgraph.To(documenttype.Table, documenttype.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, attribute.DocumentTypeTable, attribute.DocumentTypeColumn),
 		)
-		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryTag queries the tag edge of a Attribute.
-func (c *AttributeClient) QueryTag(a *Attribute) *TagQuery {
+func (c *AttributeClient) QueryTag(_m *Attribute) *TagQuery {
 	query := (&TagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := a.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(attribute.Table, attribute.FieldID, id),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, attribute.TagTable, attribute.TagColumn),
 		)
-		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryProperty queries the property edge of a Attribute.
-func (c *AttributeClient) QueryProperty(a *Attribute) *PropertyQuery {
+func (c *AttributeClient) QueryProperty(_m *Attribute) *PropertyQuery {
 	query := (&PropertyClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := a.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(attribute.Table, attribute.FieldID, id),
 			sqlgraph.To(property.Table, property.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, attribute.PropertyTable, attribute.PropertyColumn),
 		)
-		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -558,8 +558,8 @@ func (c *DocumentTypeClient) Update() *DocumentTypeUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *DocumentTypeClient) UpdateOne(dt *DocumentType) *DocumentTypeUpdateOne {
-	mutation := newDocumentTypeMutation(c.config, OpUpdateOne, withDocumentType(dt))
+func (c *DocumentTypeClient) UpdateOne(_m *DocumentType) *DocumentTypeUpdateOne {
+	mutation := newDocumentTypeMutation(c.config, OpUpdateOne, withDocumentType(_m))
 	return &DocumentTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -576,8 +576,8 @@ func (c *DocumentTypeClient) Delete() *DocumentTypeDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *DocumentTypeClient) DeleteOne(dt *DocumentType) *DocumentTypeDeleteOne {
-	return c.DeleteOneID(dt.ID)
+func (c *DocumentTypeClient) DeleteOne(_m *DocumentType) *DocumentTypeDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -612,32 +612,32 @@ func (c *DocumentTypeClient) GetX(ctx context.Context, id int64) *DocumentType {
 }
 
 // QuerySpace queries the space edge of a DocumentType.
-func (c *DocumentTypeClient) QuerySpace(dt *DocumentType) *SpaceQuery {
+func (c *DocumentTypeClient) QuerySpace(_m *DocumentType) *SpaceQuery {
 	query := (&SpaceClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := dt.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(documenttype.Table, documenttype.FieldID, id),
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, documenttype.SpaceTable, documenttype.SpaceColumn),
 		)
-		fromV = sqlgraph.Neighbors(dt.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryAttributes queries the attributes edge of a DocumentType.
-func (c *DocumentTypeClient) QueryAttributes(dt *DocumentType) *AttributeQuery {
+func (c *DocumentTypeClient) QueryAttributes(_m *DocumentType) *AttributeQuery {
 	query := (&AttributeClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := dt.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(documenttype.Table, documenttype.FieldID, id),
 			sqlgraph.To(attribute.Table, attribute.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, documenttype.AttributesTable, documenttype.AttributesColumn),
 		)
-		fromV = sqlgraph.Neighbors(dt.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -724,8 +724,8 @@ func (c *FileClient) Update() *FileUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *FileClient) UpdateOne(f *File) *FileUpdateOne {
-	mutation := newFileMutation(c.config, OpUpdateOne, withFile(f))
+func (c *FileClient) UpdateOne(_m *File) *FileUpdateOne {
+	mutation := newFileMutation(c.config, OpUpdateOne, withFile(_m))
 	return &FileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -742,8 +742,8 @@ func (c *FileClient) Delete() *FileDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *FileClient) DeleteOne(f *File) *FileDeleteOne {
-	return c.DeleteOneID(f.ID)
+func (c *FileClient) DeleteOne(_m *File) *FileDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -778,192 +778,192 @@ func (c *FileClient) GetX(ctx context.Context, id int64) *File {
 }
 
 // QueryDeleter queries the deleter edge of a File.
-func (c *FileClient) QueryDeleter(f *File) *UserQuery {
+func (c *FileClient) QueryDeleter(_m *File) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, file.DeleterTable, file.DeleterColumn),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryCreator queries the creator edge of a File.
-func (c *FileClient) QueryCreator(f *File) *UserQuery {
+func (c *FileClient) QueryCreator(_m *File) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, file.CreatorTable, file.CreatorColumn),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryUpdater queries the updater edge of a File.
-func (c *FileClient) QueryUpdater(f *File) *UserQuery {
+func (c *FileClient) QueryUpdater(_m *File) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, file.UpdaterTable, file.UpdaterColumn),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QuerySpace queries the space edge of a File.
-func (c *FileClient) QuerySpace(f *File) *SpaceQuery {
+func (c *FileClient) QuerySpace(_m *File) *SpaceQuery {
 	query := (&SpaceClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, file.SpaceTable, file.SpaceColumn),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryVersions queries the versions edge of a File.
-func (c *FileClient) QueryVersions(f *File) *StoredFileQuery {
+func (c *FileClient) QueryVersions(_m *File) *StoredFileQuery {
 	query := (&StoredFileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(storedfile.Table, storedfile.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, file.VersionsTable, file.VersionsPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryChildren queries the children edge of a File.
-func (c *FileClient) QueryChildren(f *File) *FileQuery {
+func (c *FileClient) QueryChildren(_m *File) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, file.ChildrenTable, file.ChildrenColumn),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryParent queries the parent edge of a File.
-func (c *FileClient) QueryParent(f *File) *FileQuery {
+func (c *FileClient) QueryParent(_m *File) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, file.ParentTable, file.ParentColumn),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryDocumentType queries the document_type edge of a File.
-func (c *FileClient) QueryDocumentType(f *File) *DocumentTypeQuery {
+func (c *FileClient) QueryDocumentType(_m *File) *DocumentTypeQuery {
 	query := (&DocumentTypeClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(documenttype.Table, documenttype.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, file.DocumentTypeTable, file.DocumentTypeColumn),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryTags queries the tags edge of a File.
-func (c *FileClient) QueryTags(f *File) *TagQuery {
+func (c *FileClient) QueryTags(_m *File) *TagQuery {
 	query := (&TagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, file.TagsTable, file.TagsPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryProperties queries the properties edge of a File.
-func (c *FileClient) QueryProperties(f *File) *PropertyQuery {
+func (c *FileClient) QueryProperties(_m *File) *PropertyQuery {
 	query := (&PropertyClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(property.Table, property.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, file.PropertiesTable, file.PropertiesPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryTagAssignment queries the tag_assignment edge of a File.
-func (c *FileClient) QueryTagAssignment(f *File) *TagAssignmentQuery {
+func (c *FileClient) QueryTagAssignment(_m *File) *TagAssignmentQuery {
 	query := (&TagAssignmentClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(tagassignment.Table, tagassignment.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, file.TagAssignmentTable, file.TagAssignmentColumn),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryPropertyAssignment queries the property_assignment edge of a File.
-func (c *FileClient) QueryPropertyAssignment(f *File) *FilePropertyAssignmentQuery {
+func (c *FileClient) QueryPropertyAssignment(_m *File) *FilePropertyAssignmentQuery {
 	query := (&FilePropertyAssignmentClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(filepropertyassignment.Table, filepropertyassignment.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, file.PropertyAssignmentTable, file.PropertyAssignmentColumn),
 		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -1081,8 +1081,8 @@ func (c *FilePropertyAssignmentClient) Update() *FilePropertyAssignmentUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *FilePropertyAssignmentClient) UpdateOne(fpa *FilePropertyAssignment) *FilePropertyAssignmentUpdateOne {
-	mutation := newFilePropertyAssignmentMutation(c.config, OpUpdateOne, withFilePropertyAssignment(fpa))
+func (c *FilePropertyAssignmentClient) UpdateOne(_m *FilePropertyAssignment) *FilePropertyAssignmentUpdateOne {
+	mutation := newFilePropertyAssignmentMutation(c.config, OpUpdateOne, withFilePropertyAssignment(_m))
 	return &FilePropertyAssignmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1099,8 +1099,8 @@ func (c *FilePropertyAssignmentClient) Delete() *FilePropertyAssignmentDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *FilePropertyAssignmentClient) DeleteOne(fpa *FilePropertyAssignment) *FilePropertyAssignmentDeleteOne {
-	return c.DeleteOneID(fpa.ID)
+func (c *FilePropertyAssignmentClient) DeleteOne(_m *FilePropertyAssignment) *FilePropertyAssignmentDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1135,48 +1135,48 @@ func (c *FilePropertyAssignmentClient) GetX(ctx context.Context, id int64) *File
 }
 
 // QuerySpace queries the space edge of a FilePropertyAssignment.
-func (c *FilePropertyAssignmentClient) QuerySpace(fpa *FilePropertyAssignment) *SpaceQuery {
+func (c *FilePropertyAssignmentClient) QuerySpace(_m *FilePropertyAssignment) *SpaceQuery {
 	query := (&SpaceClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := fpa.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(filepropertyassignment.Table, filepropertyassignment.FieldID, id),
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, filepropertyassignment.SpaceTable, filepropertyassignment.SpaceColumn),
 		)
-		fromV = sqlgraph.Neighbors(fpa.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryFile queries the file edge of a FilePropertyAssignment.
-func (c *FilePropertyAssignmentClient) QueryFile(fpa *FilePropertyAssignment) *FileQuery {
+func (c *FilePropertyAssignmentClient) QueryFile(_m *FilePropertyAssignment) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := fpa.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(filepropertyassignment.Table, filepropertyassignment.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, filepropertyassignment.FileTable, filepropertyassignment.FileColumn),
 		)
-		fromV = sqlgraph.Neighbors(fpa.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryProperty queries the property edge of a FilePropertyAssignment.
-func (c *FilePropertyAssignmentClient) QueryProperty(fpa *FilePropertyAssignment) *PropertyQuery {
+func (c *FilePropertyAssignmentClient) QueryProperty(_m *FilePropertyAssignment) *PropertyQuery {
 	query := (&PropertyClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := fpa.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(filepropertyassignment.Table, filepropertyassignment.FieldID, id),
 			sqlgraph.To(property.Table, property.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, filepropertyassignment.PropertyTable, filepropertyassignment.PropertyColumn),
 		)
-		fromV = sqlgraph.Neighbors(fpa.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -1293,8 +1293,8 @@ func (c *PropertyClient) Update() *PropertyUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *PropertyClient) UpdateOne(pr *Property) *PropertyUpdateOne {
-	mutation := newPropertyMutation(c.config, OpUpdateOne, withProperty(pr))
+func (c *PropertyClient) UpdateOne(_m *Property) *PropertyUpdateOne {
+	mutation := newPropertyMutation(c.config, OpUpdateOne, withProperty(_m))
 	return &PropertyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1311,8 +1311,8 @@ func (c *PropertyClient) Delete() *PropertyDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *PropertyClient) DeleteOne(pr *Property) *PropertyDeleteOne {
-	return c.DeleteOneID(pr.ID)
+func (c *PropertyClient) DeleteOne(_m *Property) *PropertyDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1347,48 +1347,48 @@ func (c *PropertyClient) GetX(ctx context.Context, id int64) *Property {
 }
 
 // QuerySpace queries the space edge of a Property.
-func (c *PropertyClient) QuerySpace(pr *Property) *SpaceQuery {
+func (c *PropertyClient) QuerySpace(_m *Property) *SpaceQuery {
 	query := (&SpaceClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pr.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(property.Table, property.FieldID, id),
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, property.SpaceTable, property.SpaceColumn),
 		)
-		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryFiles queries the files edge of a Property.
-func (c *PropertyClient) QueryFiles(pr *Property) *FileQuery {
+func (c *PropertyClient) QueryFiles(_m *Property) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pr.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(property.Table, property.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, property.FilesTable, property.FilesPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryFileAssignments queries the file_assignments edge of a Property.
-func (c *PropertyClient) QueryFileAssignments(pr *Property) *FilePropertyAssignmentQuery {
+func (c *PropertyClient) QueryFileAssignments(_m *Property) *FilePropertyAssignmentQuery {
 	query := (&FilePropertyAssignmentClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pr.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(property.Table, property.FieldID, id),
 			sqlgraph.To(filepropertyassignment.Table, filepropertyassignment.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, property.FileAssignmentsTable, property.FileAssignmentsColumn),
 		)
-		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -1505,8 +1505,8 @@ func (c *SpaceClient) Update() *SpaceUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *SpaceClient) UpdateOne(s *Space) *SpaceUpdateOne {
-	mutation := newSpaceMutation(c.config, OpUpdateOne, withSpace(s))
+func (c *SpaceClient) UpdateOne(_m *Space) *SpaceUpdateOne {
+	mutation := newSpaceMutation(c.config, OpUpdateOne, withSpace(_m))
 	return &SpaceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1523,8 +1523,8 @@ func (c *SpaceClient) Delete() *SpaceDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *SpaceClient) DeleteOne(s *Space) *SpaceDeleteOne {
-	return c.DeleteOneID(s.ID)
+func (c *SpaceClient) DeleteOne(_m *Space) *SpaceDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1559,112 +1559,112 @@ func (c *SpaceClient) GetX(ctx context.Context, id int64) *Space {
 }
 
 // QueryDeleter queries the deleter edge of a Space.
-func (c *SpaceClient) QueryDeleter(s *Space) *UserQuery {
+func (c *SpaceClient) QueryDeleter(_m *Space) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(space.Table, space.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, space.DeleterTable, space.DeleterColumn),
 		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryFiles queries the files edge of a Space.
-func (c *SpaceClient) QueryFiles(s *Space) *FileQuery {
+func (c *SpaceClient) QueryFiles(_m *Space) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(space.Table, space.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, space.FilesTable, space.FilesColumn),
 		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryUsers queries the users edge of a Space.
-func (c *SpaceClient) QueryUsers(s *Space) *UserQuery {
+func (c *SpaceClient) QueryUsers(_m *Space) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(space.Table, space.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, space.UsersTable, space.UsersPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryTags queries the tags edge of a Space.
-func (c *SpaceClient) QueryTags(s *Space) *TagQuery {
+func (c *SpaceClient) QueryTags(_m *Space) *TagQuery {
 	query := (&TagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(space.Table, space.FieldID, id),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, space.TagsTable, space.TagsColumn),
 		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryDocumentTypes queries the document_types edge of a Space.
-func (c *SpaceClient) QueryDocumentTypes(s *Space) *DocumentTypeQuery {
+func (c *SpaceClient) QueryDocumentTypes(_m *Space) *DocumentTypeQuery {
 	query := (&DocumentTypeClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(space.Table, space.FieldID, id),
 			sqlgraph.To(documenttype.Table, documenttype.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, space.DocumentTypesTable, space.DocumentTypesColumn),
 		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryProperties queries the properties edge of a Space.
-func (c *SpaceClient) QueryProperties(s *Space) *PropertyQuery {
+func (c *SpaceClient) QueryProperties(_m *Space) *PropertyQuery {
 	query := (&PropertyClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(space.Table, space.FieldID, id),
 			sqlgraph.To(property.Table, property.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, space.PropertiesTable, space.PropertiesColumn),
 		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryUserAssignment queries the user_assignment edge of a Space.
-func (c *SpaceClient) QueryUserAssignment(s *Space) *SpaceUserAssignmentQuery {
+func (c *SpaceClient) QueryUserAssignment(_m *Space) *SpaceUserAssignmentQuery {
 	query := (&SpaceUserAssignmentClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(space.Table, space.FieldID, id),
 			sqlgraph.To(spaceuserassignment.Table, spaceuserassignment.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, space.UserAssignmentTable, space.UserAssignmentColumn),
 		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -1752,8 +1752,8 @@ func (c *SpaceUserAssignmentClient) Update() *SpaceUserAssignmentUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *SpaceUserAssignmentClient) UpdateOne(sua *SpaceUserAssignment) *SpaceUserAssignmentUpdateOne {
-	mutation := newSpaceUserAssignmentMutation(c.config, OpUpdateOne, withSpaceUserAssignment(sua))
+func (c *SpaceUserAssignmentClient) UpdateOne(_m *SpaceUserAssignment) *SpaceUserAssignmentUpdateOne {
+	mutation := newSpaceUserAssignmentMutation(c.config, OpUpdateOne, withSpaceUserAssignment(_m))
 	return &SpaceUserAssignmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1770,8 +1770,8 @@ func (c *SpaceUserAssignmentClient) Delete() *SpaceUserAssignmentDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *SpaceUserAssignmentClient) DeleteOne(sua *SpaceUserAssignment) *SpaceUserAssignmentDeleteOne {
-	return c.DeleteOneID(sua.ID)
+func (c *SpaceUserAssignmentClient) DeleteOne(_m *SpaceUserAssignment) *SpaceUserAssignmentDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1806,64 +1806,64 @@ func (c *SpaceUserAssignmentClient) GetX(ctx context.Context, id int64) *SpaceUs
 }
 
 // QuerySpace queries the space edge of a SpaceUserAssignment.
-func (c *SpaceUserAssignmentClient) QuerySpace(sua *SpaceUserAssignment) *SpaceQuery {
+func (c *SpaceUserAssignmentClient) QuerySpace(_m *SpaceUserAssignment) *SpaceQuery {
 	query := (&SpaceClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := sua.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(spaceuserassignment.Table, spaceuserassignment.FieldID, id),
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, spaceuserassignment.SpaceTable, spaceuserassignment.SpaceColumn),
 		)
-		fromV = sqlgraph.Neighbors(sua.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryCreator queries the creator edge of a SpaceUserAssignment.
-func (c *SpaceUserAssignmentClient) QueryCreator(sua *SpaceUserAssignment) *UserQuery {
+func (c *SpaceUserAssignmentClient) QueryCreator(_m *SpaceUserAssignment) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := sua.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(spaceuserassignment.Table, spaceuserassignment.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, spaceuserassignment.CreatorTable, spaceuserassignment.CreatorColumn),
 		)
-		fromV = sqlgraph.Neighbors(sua.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryUpdater queries the updater edge of a SpaceUserAssignment.
-func (c *SpaceUserAssignmentClient) QueryUpdater(sua *SpaceUserAssignment) *UserQuery {
+func (c *SpaceUserAssignmentClient) QueryUpdater(_m *SpaceUserAssignment) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := sua.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(spaceuserassignment.Table, spaceuserassignment.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, spaceuserassignment.UpdaterTable, spaceuserassignment.UpdaterColumn),
 		)
-		fromV = sqlgraph.Neighbors(sua.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryUser queries the user edge of a SpaceUserAssignment.
-func (c *SpaceUserAssignmentClient) QueryUser(sua *SpaceUserAssignment) *UserQuery {
+func (c *SpaceUserAssignmentClient) QueryUser(_m *SpaceUserAssignment) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := sua.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(spaceuserassignment.Table, spaceuserassignment.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, spaceuserassignment.UserTable, spaceuserassignment.UserColumn),
 		)
-		fromV = sqlgraph.Neighbors(sua.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -1950,8 +1950,8 @@ func (c *StoredFileClient) Update() *StoredFileUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *StoredFileClient) UpdateOne(sf *StoredFile) *StoredFileUpdateOne {
-	mutation := newStoredFileMutation(c.config, OpUpdateOne, withStoredFile(sf))
+func (c *StoredFileClient) UpdateOne(_m *StoredFile) *StoredFileUpdateOne {
+	mutation := newStoredFileMutation(c.config, OpUpdateOne, withStoredFile(_m))
 	return &StoredFileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1968,8 +1968,8 @@ func (c *StoredFileClient) Delete() *StoredFileDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *StoredFileClient) DeleteOne(sf *StoredFile) *StoredFileDeleteOne {
-	return c.DeleteOneID(sf.ID)
+func (c *StoredFileClient) DeleteOne(_m *StoredFile) *StoredFileDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -2004,48 +2004,48 @@ func (c *StoredFileClient) GetX(ctx context.Context, id int64) *StoredFile {
 }
 
 // QueryCreator queries the creator edge of a StoredFile.
-func (c *StoredFileClient) QueryCreator(sf *StoredFile) *UserQuery {
+func (c *StoredFileClient) QueryCreator(_m *StoredFile) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := sf.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(storedfile.Table, storedfile.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, storedfile.CreatorTable, storedfile.CreatorColumn),
 		)
-		fromV = sqlgraph.Neighbors(sf.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryUpdater queries the updater edge of a StoredFile.
-func (c *StoredFileClient) QueryUpdater(sf *StoredFile) *UserQuery {
+func (c *StoredFileClient) QueryUpdater(_m *StoredFile) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := sf.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(storedfile.Table, storedfile.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, storedfile.UpdaterTable, storedfile.UpdaterColumn),
 		)
-		fromV = sqlgraph.Neighbors(sf.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryFiles queries the files edge of a StoredFile.
-func (c *StoredFileClient) QueryFiles(sf *StoredFile) *FileQuery {
+func (c *StoredFileClient) QueryFiles(_m *StoredFile) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := sf.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(storedfile.Table, storedfile.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, storedfile.FilesTable, storedfile.FilesPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(sf.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -2132,8 +2132,8 @@ func (c *TagClient) Update() *TagUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TagClient) UpdateOne(t *Tag) *TagUpdateOne {
-	mutation := newTagMutation(c.config, OpUpdateOne, withTag(t))
+func (c *TagClient) UpdateOne(_m *Tag) *TagUpdateOne {
+	mutation := newTagMutation(c.config, OpUpdateOne, withTag(_m))
 	return &TagUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -2150,8 +2150,8 @@ func (c *TagClient) Delete() *TagDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TagClient) DeleteOne(t *Tag) *TagDeleteOne {
-	return c.DeleteOneID(t.ID)
+func (c *TagClient) DeleteOne(_m *Tag) *TagDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -2186,112 +2186,112 @@ func (c *TagClient) GetX(ctx context.Context, id int64) *Tag {
 }
 
 // QuerySpace queries the space edge of a Tag.
-func (c *TagClient) QuerySpace(t *Tag) *SpaceQuery {
+func (c *TagClient) QuerySpace(_m *Tag) *SpaceQuery {
 	query := (&SpaceClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tag.Table, tag.FieldID, id),
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tag.SpaceTable, tag.SpaceColumn),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryChildren queries the children edge of a Tag.
-func (c *TagClient) QueryChildren(t *Tag) *TagQuery {
+func (c *TagClient) QueryChildren(_m *Tag) *TagQuery {
 	query := (&TagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tag.Table, tag.FieldID, id),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, tag.ChildrenTable, tag.ChildrenColumn),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryGroup queries the group edge of a Tag.
-func (c *TagClient) QueryGroup(t *Tag) *TagQuery {
+func (c *TagClient) QueryGroup(_m *Tag) *TagQuery {
 	query := (&TagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tag.Table, tag.FieldID, id),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tag.GroupTable, tag.GroupColumn),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QuerySuperTags queries the super_tags edge of a Tag.
-func (c *TagClient) QuerySuperTags(t *Tag) *TagQuery {
+func (c *TagClient) QuerySuperTags(_m *Tag) *TagQuery {
 	query := (&TagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tag.Table, tag.FieldID, id),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, tag.SuperTagsTable, tag.SuperTagsPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QuerySubTags queries the sub_tags edge of a Tag.
-func (c *TagClient) QuerySubTags(t *Tag) *TagQuery {
+func (c *TagClient) QuerySubTags(_m *Tag) *TagQuery {
 	query := (&TagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tag.Table, tag.FieldID, id),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, tag.SubTagsTable, tag.SubTagsPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryFiles queries the files edge of a Tag.
-func (c *TagClient) QueryFiles(t *Tag) *FileQuery {
+func (c *TagClient) QueryFiles(_m *Tag) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tag.Table, tag.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, tag.FilesTable, tag.FilesPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryTagAssignment queries the tag_assignment edge of a Tag.
-func (c *TagClient) QueryTagAssignment(t *Tag) *TagAssignmentQuery {
+func (c *TagClient) QueryTagAssignment(_m *Tag) *TagAssignmentQuery {
 	query := (&TagAssignmentClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := t.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tag.Table, tag.FieldID, id),
 			sqlgraph.To(tagassignment.Table, tagassignment.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, tag.TagAssignmentTable, tag.TagAssignmentColumn),
 		)
-		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -2378,8 +2378,8 @@ func (c *TagAssignmentClient) Update() *TagAssignmentUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TagAssignmentClient) UpdateOne(ta *TagAssignment) *TagAssignmentUpdateOne {
-	mutation := newTagAssignmentMutation(c.config, OpUpdateOne, withTagAssignment(ta))
+func (c *TagAssignmentClient) UpdateOne(_m *TagAssignment) *TagAssignmentUpdateOne {
+	mutation := newTagAssignmentMutation(c.config, OpUpdateOne, withTagAssignment(_m))
 	return &TagAssignmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -2396,8 +2396,8 @@ func (c *TagAssignmentClient) Delete() *TagAssignmentDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TagAssignmentClient) DeleteOne(ta *TagAssignment) *TagAssignmentDeleteOne {
-	return c.DeleteOneID(ta.ID)
+func (c *TagAssignmentClient) DeleteOne(_m *TagAssignment) *TagAssignmentDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -2432,48 +2432,48 @@ func (c *TagAssignmentClient) GetX(ctx context.Context, id int64) *TagAssignment
 }
 
 // QuerySpace queries the space edge of a TagAssignment.
-func (c *TagAssignmentClient) QuerySpace(ta *TagAssignment) *SpaceQuery {
+func (c *TagAssignmentClient) QuerySpace(_m *TagAssignment) *SpaceQuery {
 	query := (&SpaceClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := ta.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tagassignment.Table, tagassignment.FieldID, id),
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tagassignment.SpaceTable, tagassignment.SpaceColumn),
 		)
-		fromV = sqlgraph.Neighbors(ta.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryTag queries the tag edge of a TagAssignment.
-func (c *TagAssignmentClient) QueryTag(ta *TagAssignment) *TagQuery {
+func (c *TagAssignmentClient) QueryTag(_m *TagAssignment) *TagQuery {
 	query := (&TagClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := ta.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tagassignment.Table, tagassignment.FieldID, id),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tagassignment.TagTable, tagassignment.TagColumn),
 		)
-		fromV = sqlgraph.Neighbors(ta.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QueryFile queries the file edge of a TagAssignment.
-func (c *TagAssignmentClient) QueryFile(ta *TagAssignment) *FileQuery {
+func (c *TagAssignmentClient) QueryFile(_m *TagAssignment) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := ta.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(tagassignment.Table, tagassignment.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, tagassignment.FileTable, tagassignment.FileColumn),
 		)
-		fromV = sqlgraph.Neighbors(ta.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -2560,8 +2560,8 @@ func (c *UserClient) Update() *UserUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *UserClient) UpdateOne(u *User) *UserUpdateOne {
-	mutation := newUserMutation(c.config, OpUpdateOne, withUser(u))
+func (c *UserClient) UpdateOne(_m *User) *UserUpdateOne {
+	mutation := newUserMutation(c.config, OpUpdateOne, withUser(_m))
 	return &UserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -2578,8 +2578,8 @@ func (c *UserClient) Delete() *UserDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *UserClient) DeleteOne(u *User) *UserDeleteOne {
-	return c.DeleteOneID(u.ID)
+func (c *UserClient) DeleteOne(_m *User) *UserDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -2614,32 +2614,32 @@ func (c *UserClient) GetX(ctx context.Context, id int64) *User {
 }
 
 // QuerySpaces queries the spaces edge of a User.
-func (c *UserClient) QuerySpaces(u *User) *SpaceQuery {
+func (c *UserClient) QuerySpaces(_m *User) *SpaceQuery {
 	query := (&SpaceClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := u.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(space.Table, space.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, user.SpacesTable, user.SpacesPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // QuerySpaceAssignment queries the space_assignment edge of a User.
-func (c *UserClient) QuerySpaceAssignment(u *User) *SpaceUserAssignmentQuery {
+func (c *UserClient) QuerySpaceAssignment(_m *User) *SpaceUserAssignmentQuery {
 	query := (&SpaceUserAssignmentClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := u.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(spaceuserassignment.Table, spaceuserassignment.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, user.SpaceAssignmentTable, user.SpaceAssignmentColumn),
 		)
-		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query

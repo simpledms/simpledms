@@ -159,8 +159,12 @@ func init() {
 	systemconfigDescMailerInsecureSkipVerify := systemconfigFields[18].Descriptor()
 	// systemconfig.DefaultMailerInsecureSkipVerify holds the default value on creation for the mailer_insecure_skip_verify field.
 	systemconfig.DefaultMailerInsecureSkipVerify = systemconfigDescMailerInsecureSkipVerify.Default.(bool)
+	// systemconfigDescMailerUseImplicitSslTLS is the schema descriptor for mailer_use_implicit_ssl_tls field.
+	systemconfigDescMailerUseImplicitSslTLS := systemconfigFields[19].Descriptor()
+	// systemconfig.DefaultMailerUseImplicitSslTLS holds the default value on creation for the mailer_use_implicit_ssl_tls field.
+	systemconfig.DefaultMailerUseImplicitSslTLS = systemconfigDescMailerUseImplicitSslTLS.Default.(bool)
 	// systemconfigDescOcrTikaURL is the schema descriptor for ocr_tika_url field.
-	systemconfigDescOcrTikaURL := systemconfigFields[19].Descriptor()
+	systemconfigDescOcrTikaURL := systemconfigFields[20].Descriptor()
 	// systemconfig.DefaultOcrTikaURL holds the default value on creation for the ocr_tika_url field.
 	systemconfig.DefaultOcrTikaURL = systemconfigDescOcrTikaURL.Default.(string)
 	temporaryfileMixin := schema.TemporaryFile{}.Mixin()
@@ -275,5 +279,6 @@ func init() {
 }
 
 const (
-	Version = "v0.0.0-20250305074658-b99e7addfbe5" // Version of ent codegen.
+	Version = "v0.14.5"                                         // Version of ent codegen.
+	Sum     = "h1:Rj2WOYJtCkWyFo6a+5wB3EfBRP0rnx1fMk6gGA0UUe4=" // Sum of ent codegen.
 )

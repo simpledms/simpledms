@@ -108,7 +108,7 @@ func (*FilePropertyAssignment) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the FilePropertyAssignment fields.
-func (fpa *FilePropertyAssignment) assignValues(columns []string, values []any) error {
+func (_m *FilePropertyAssignment) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -119,51 +119,51 @@ func (fpa *FilePropertyAssignment) assignValues(columns []string, values []any) 
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			fpa.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case filepropertyassignment.FieldSpaceID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
-				fpa.SpaceID = value.Int64
+				_m.SpaceID = value.Int64
 			}
 		case filepropertyassignment.FieldFileID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field file_id", values[i])
 			} else if value.Valid {
-				fpa.FileID = value.Int64
+				_m.FileID = value.Int64
 			}
 		case filepropertyassignment.FieldPropertyID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field property_id", values[i])
 			} else if value.Valid {
-				fpa.PropertyID = value.Int64
+				_m.PropertyID = value.Int64
 			}
 		case filepropertyassignment.FieldTextValue:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field text_value", values[i])
 			} else if value.Valid {
-				fpa.TextValue = value.String
+				_m.TextValue = value.String
 			}
 		case filepropertyassignment.FieldNumberValue:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field number_value", values[i])
 			} else if value.Valid {
-				fpa.NumberValue = int(value.Int64)
+				_m.NumberValue = int(value.Int64)
 			}
 		case filepropertyassignment.FieldDateValue:
 			if value, ok := values[i].(*timex.Date); !ok {
 				return fmt.Errorf("unexpected type %T for field date_value", values[i])
 			} else if value != nil {
-				fpa.DateValue = *value
+				_m.DateValue = *value
 			}
 		case filepropertyassignment.FieldBoolValue:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field bool_value", values[i])
 			} else if value.Valid {
-				fpa.BoolValue = value.Bool
+				_m.BoolValue = value.Bool
 			}
 		default:
-			fpa.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -171,68 +171,68 @@ func (fpa *FilePropertyAssignment) assignValues(columns []string, values []any) 
 
 // Value returns the ent.Value that was dynamically selected and assigned to the FilePropertyAssignment.
 // This includes values selected through modifiers, order, etc.
-func (fpa *FilePropertyAssignment) Value(name string) (ent.Value, error) {
-	return fpa.selectValues.Get(name)
+func (_m *FilePropertyAssignment) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QuerySpace queries the "space" edge of the FilePropertyAssignment entity.
-func (fpa *FilePropertyAssignment) QuerySpace() *SpaceQuery {
-	return NewFilePropertyAssignmentClient(fpa.config).QuerySpace(fpa)
+func (_m *FilePropertyAssignment) QuerySpace() *SpaceQuery {
+	return NewFilePropertyAssignmentClient(_m.config).QuerySpace(_m)
 }
 
 // QueryFile queries the "file" edge of the FilePropertyAssignment entity.
-func (fpa *FilePropertyAssignment) QueryFile() *FileQuery {
-	return NewFilePropertyAssignmentClient(fpa.config).QueryFile(fpa)
+func (_m *FilePropertyAssignment) QueryFile() *FileQuery {
+	return NewFilePropertyAssignmentClient(_m.config).QueryFile(_m)
 }
 
 // QueryProperty queries the "property" edge of the FilePropertyAssignment entity.
-func (fpa *FilePropertyAssignment) QueryProperty() *PropertyQuery {
-	return NewFilePropertyAssignmentClient(fpa.config).QueryProperty(fpa)
+func (_m *FilePropertyAssignment) QueryProperty() *PropertyQuery {
+	return NewFilePropertyAssignmentClient(_m.config).QueryProperty(_m)
 }
 
 // Update returns a builder for updating this FilePropertyAssignment.
 // Note that you need to call FilePropertyAssignment.Unwrap() before calling this method if this FilePropertyAssignment
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (fpa *FilePropertyAssignment) Update() *FilePropertyAssignmentUpdateOne {
-	return NewFilePropertyAssignmentClient(fpa.config).UpdateOne(fpa)
+func (_m *FilePropertyAssignment) Update() *FilePropertyAssignmentUpdateOne {
+	return NewFilePropertyAssignmentClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the FilePropertyAssignment entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (fpa *FilePropertyAssignment) Unwrap() *FilePropertyAssignment {
-	_tx, ok := fpa.config.driver.(*txDriver)
+func (_m *FilePropertyAssignment) Unwrap() *FilePropertyAssignment {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: FilePropertyAssignment is not a transactional entity")
 	}
-	fpa.config.driver = _tx.drv
-	return fpa
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (fpa *FilePropertyAssignment) String() string {
+func (_m *FilePropertyAssignment) String() string {
 	var builder strings.Builder
 	builder.WriteString("FilePropertyAssignment(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", fpa.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("space_id=")
-	builder.WriteString(fmt.Sprintf("%v", fpa.SpaceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
 	builder.WriteString(", ")
 	builder.WriteString("file_id=")
-	builder.WriteString(fmt.Sprintf("%v", fpa.FileID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FileID))
 	builder.WriteString(", ")
 	builder.WriteString("property_id=")
-	builder.WriteString(fmt.Sprintf("%v", fpa.PropertyID))
+	builder.WriteString(fmt.Sprintf("%v", _m.PropertyID))
 	builder.WriteString(", ")
 	builder.WriteString("text_value=")
-	builder.WriteString(fpa.TextValue)
+	builder.WriteString(_m.TextValue)
 	builder.WriteString(", ")
 	builder.WriteString("number_value=")
-	builder.WriteString(fmt.Sprintf("%v", fpa.NumberValue))
+	builder.WriteString(fmt.Sprintf("%v", _m.NumberValue))
 	builder.WriteString(", ")
 	builder.WriteString("date_value=")
-	builder.WriteString(fmt.Sprintf("%v", fpa.DateValue))
+	builder.WriteString(fmt.Sprintf("%v", _m.DateValue))
 	builder.WriteString(", ")
 	builder.WriteString("bool_value=")
-	builder.WriteString(fmt.Sprintf("%v", fpa.BoolValue))
+	builder.WriteString(fmt.Sprintf("%v", _m.BoolValue))
 	builder.WriteByte(')')
 	return builder.String()
 }

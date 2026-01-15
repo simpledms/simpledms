@@ -127,7 +127,7 @@ func (*TenantAccountAssignment) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TenantAccountAssignment fields.
-func (taa *TenantAccountAssignment) assignValues(columns []string, values []any) error {
+func (_m *TenantAccountAssignment) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -138,70 +138,70 @@ func (taa *TenantAccountAssignment) assignValues(columns []string, values []any)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			taa.ID = int64(value.Int64)
+			_m.ID = int64(value.Int64)
 		case tenantaccountassignment.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				taa.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case tenantaccountassignment.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				taa.CreatedBy = value.Int64
+				_m.CreatedBy = value.Int64
 			}
 		case tenantaccountassignment.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				taa.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case tenantaccountassignment.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				taa.UpdatedBy = value.Int64
+				_m.UpdatedBy = value.Int64
 			}
 		case tenantaccountassignment.FieldTenantID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field tenant_id", values[i])
 			} else if value.Valid {
-				taa.TenantID = value.Int64
+				_m.TenantID = value.Int64
 			}
 		case tenantaccountassignment.FieldAccountID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field account_id", values[i])
 			} else if value.Valid {
-				taa.AccountID = value.Int64
+				_m.AccountID = value.Int64
 			}
 		case tenantaccountassignment.FieldIsContactPerson:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_contact_person", values[i])
 			} else if value.Valid {
-				taa.IsContactPerson = value.Bool
+				_m.IsContactPerson = value.Bool
 			}
 		case tenantaccountassignment.FieldIsDefault:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_default", values[i])
 			} else if value.Valid {
-				taa.IsDefault = value.Bool
+				_m.IsDefault = value.Bool
 			}
 		case tenantaccountassignment.FieldRole:
 			if value, ok := values[i].(*tenantrole.TenantRole); !ok {
 				return fmt.Errorf("unexpected type %T for field role", values[i])
 			} else if value != nil {
-				taa.Role = *value
+				_m.Role = *value
 			}
 		case tenantaccountassignment.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
 			} else if value.Valid {
-				taa.ExpiresAt = new(time.Time)
-				*taa.ExpiresAt = value.Time
+				_m.ExpiresAt = new(time.Time)
+				*_m.ExpiresAt = value.Time
 			}
 		default:
-			taa.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -209,81 +209,81 @@ func (taa *TenantAccountAssignment) assignValues(columns []string, values []any)
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TenantAccountAssignment.
 // This includes values selected through modifiers, order, etc.
-func (taa *TenantAccountAssignment) Value(name string) (ent.Value, error) {
-	return taa.selectValues.Get(name)
+func (_m *TenantAccountAssignment) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryCreator queries the "creator" edge of the TenantAccountAssignment entity.
-func (taa *TenantAccountAssignment) QueryCreator() *AccountQuery {
-	return NewTenantAccountAssignmentClient(taa.config).QueryCreator(taa)
+func (_m *TenantAccountAssignment) QueryCreator() *AccountQuery {
+	return NewTenantAccountAssignmentClient(_m.config).QueryCreator(_m)
 }
 
 // QueryUpdater queries the "updater" edge of the TenantAccountAssignment entity.
-func (taa *TenantAccountAssignment) QueryUpdater() *AccountQuery {
-	return NewTenantAccountAssignmentClient(taa.config).QueryUpdater(taa)
+func (_m *TenantAccountAssignment) QueryUpdater() *AccountQuery {
+	return NewTenantAccountAssignmentClient(_m.config).QueryUpdater(_m)
 }
 
 // QueryTenant queries the "tenant" edge of the TenantAccountAssignment entity.
-func (taa *TenantAccountAssignment) QueryTenant() *TenantQuery {
-	return NewTenantAccountAssignmentClient(taa.config).QueryTenant(taa)
+func (_m *TenantAccountAssignment) QueryTenant() *TenantQuery {
+	return NewTenantAccountAssignmentClient(_m.config).QueryTenant(_m)
 }
 
 // QueryAccount queries the "account" edge of the TenantAccountAssignment entity.
-func (taa *TenantAccountAssignment) QueryAccount() *AccountQuery {
-	return NewTenantAccountAssignmentClient(taa.config).QueryAccount(taa)
+func (_m *TenantAccountAssignment) QueryAccount() *AccountQuery {
+	return NewTenantAccountAssignmentClient(_m.config).QueryAccount(_m)
 }
 
 // Update returns a builder for updating this TenantAccountAssignment.
 // Note that you need to call TenantAccountAssignment.Unwrap() before calling this method if this TenantAccountAssignment
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (taa *TenantAccountAssignment) Update() *TenantAccountAssignmentUpdateOne {
-	return NewTenantAccountAssignmentClient(taa.config).UpdateOne(taa)
+func (_m *TenantAccountAssignment) Update() *TenantAccountAssignmentUpdateOne {
+	return NewTenantAccountAssignmentClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TenantAccountAssignment entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (taa *TenantAccountAssignment) Unwrap() *TenantAccountAssignment {
-	_tx, ok := taa.config.driver.(*txDriver)
+func (_m *TenantAccountAssignment) Unwrap() *TenantAccountAssignment {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("entmain: TenantAccountAssignment is not a transactional entity")
 	}
-	taa.config.driver = _tx.drv
-	return taa
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (taa *TenantAccountAssignment) String() string {
+func (_m *TenantAccountAssignment) String() string {
 	var builder strings.Builder
 	builder.WriteString("TenantAccountAssignment(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", taa.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(taa.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", taa.CreatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(taa.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", taa.UpdatedBy))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("tenant_id=")
-	builder.WriteString(fmt.Sprintf("%v", taa.TenantID))
+	builder.WriteString(fmt.Sprintf("%v", _m.TenantID))
 	builder.WriteString(", ")
 	builder.WriteString("account_id=")
-	builder.WriteString(fmt.Sprintf("%v", taa.AccountID))
+	builder.WriteString(fmt.Sprintf("%v", _m.AccountID))
 	builder.WriteString(", ")
 	builder.WriteString("is_contact_person=")
-	builder.WriteString(fmt.Sprintf("%v", taa.IsContactPerson))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsContactPerson))
 	builder.WriteString(", ")
 	builder.WriteString("is_default=")
-	builder.WriteString(fmt.Sprintf("%v", taa.IsDefault))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsDefault))
 	builder.WriteString(", ")
 	builder.WriteString("role=")
-	builder.WriteString(fmt.Sprintf("%v", taa.Role))
+	builder.WriteString(fmt.Sprintf("%v", _m.Role))
 	builder.WriteString(", ")
-	if v := taa.ExpiresAt; v != nil {
+	if v := _m.ExpiresAt; v != nil {
 		builder.WriteString("expires_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}

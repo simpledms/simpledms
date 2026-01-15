@@ -20,56 +20,56 @@ type TenantAccountAssignmentDelete struct {
 }
 
 // Where appends a list predicates to the TenantAccountAssignmentDelete builder.
-func (taad *TenantAccountAssignmentDelete) Where(ps ...predicate.TenantAccountAssignment) *TenantAccountAssignmentDelete {
-	taad.mutation.Where(ps...)
-	return taad
+func (_d *TenantAccountAssignmentDelete) Where(ps ...predicate.TenantAccountAssignment) *TenantAccountAssignmentDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (taad *TenantAccountAssignmentDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, taad.sqlExec, taad.mutation, taad.hooks)
+func (_d *TenantAccountAssignmentDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (taad *TenantAccountAssignmentDelete) ExecX(ctx context.Context) int {
-	n, err := taad.Exec(ctx)
+func (_d *TenantAccountAssignmentDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (taad *TenantAccountAssignmentDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TenantAccountAssignmentDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(tenantaccountassignment.Table, sqlgraph.NewFieldSpec(tenantaccountassignment.FieldID, field.TypeInt64))
-	if ps := taad.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, taad.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	taad.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TenantAccountAssignmentDeleteOne is the builder for deleting a single TenantAccountAssignment entity.
 type TenantAccountAssignmentDeleteOne struct {
-	taad *TenantAccountAssignmentDelete
+	_d *TenantAccountAssignmentDelete
 }
 
 // Where appends a list predicates to the TenantAccountAssignmentDelete builder.
-func (taado *TenantAccountAssignmentDeleteOne) Where(ps ...predicate.TenantAccountAssignment) *TenantAccountAssignmentDeleteOne {
-	taado.taad.mutation.Where(ps...)
-	return taado
+func (_d *TenantAccountAssignmentDeleteOne) Where(ps ...predicate.TenantAccountAssignment) *TenantAccountAssignmentDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (taado *TenantAccountAssignmentDeleteOne) Exec(ctx context.Context) error {
-	n, err := taado.taad.Exec(ctx)
+func (_d *TenantAccountAssignmentDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (taado *TenantAccountAssignmentDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (taado *TenantAccountAssignmentDeleteOne) ExecX(ctx context.Context) {
-	if err := taado.Exec(ctx); err != nil {
+func (_d *TenantAccountAssignmentDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

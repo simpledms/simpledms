@@ -25,204 +25,204 @@ type MailUpdate struct {
 }
 
 // Where appends a list predicates to the MailUpdate builder.
-func (mu *MailUpdate) Where(ps ...predicate.Mail) *MailUpdate {
-	mu.mutation.Where(ps...)
-	return mu
+func (_u *MailUpdate) Where(ps ...predicate.Mail) *MailUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (mu *MailUpdate) SetUpdatedAt(t time.Time) *MailUpdate {
-	mu.mutation.SetUpdatedAt(t)
-	return mu
+func (_u *MailUpdate) SetUpdatedAt(v time.Time) *MailUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (mu *MailUpdate) SetUpdatedBy(i int64) *MailUpdate {
-	mu.mutation.SetUpdatedBy(i)
-	return mu
+func (_u *MailUpdate) SetUpdatedBy(v int64) *MailUpdate {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (mu *MailUpdate) SetNillableUpdatedBy(i *int64) *MailUpdate {
-	if i != nil {
-		mu.SetUpdatedBy(*i)
+func (_u *MailUpdate) SetNillableUpdatedBy(v *int64) *MailUpdate {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return mu
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (mu *MailUpdate) ClearUpdatedBy() *MailUpdate {
-	mu.mutation.ClearUpdatedBy()
-	return mu
+func (_u *MailUpdate) ClearUpdatedBy() *MailUpdate {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetSubject sets the "subject" field.
-func (mu *MailUpdate) SetSubject(s string) *MailUpdate {
-	mu.mutation.SetSubject(s)
-	return mu
+func (_u *MailUpdate) SetSubject(v string) *MailUpdate {
+	_u.mutation.SetSubject(v)
+	return _u
 }
 
 // SetNillableSubject sets the "subject" field if the given value is not nil.
-func (mu *MailUpdate) SetNillableSubject(s *string) *MailUpdate {
-	if s != nil {
-		mu.SetSubject(*s)
+func (_u *MailUpdate) SetNillableSubject(v *string) *MailUpdate {
+	if v != nil {
+		_u.SetSubject(*v)
 	}
-	return mu
+	return _u
 }
 
 // SetBody sets the "body" field.
-func (mu *MailUpdate) SetBody(s string) *MailUpdate {
-	mu.mutation.SetBody(s)
-	return mu
+func (_u *MailUpdate) SetBody(v string) *MailUpdate {
+	_u.mutation.SetBody(v)
+	return _u
 }
 
 // SetNillableBody sets the "body" field if the given value is not nil.
-func (mu *MailUpdate) SetNillableBody(s *string) *MailUpdate {
-	if s != nil {
-		mu.SetBody(*s)
+func (_u *MailUpdate) SetNillableBody(v *string) *MailUpdate {
+	if v != nil {
+		_u.SetBody(*v)
 	}
-	return mu
+	return _u
 }
 
 // SetHTMLBody sets the "html_body" field.
-func (mu *MailUpdate) SetHTMLBody(s string) *MailUpdate {
-	mu.mutation.SetHTMLBody(s)
-	return mu
+func (_u *MailUpdate) SetHTMLBody(v string) *MailUpdate {
+	_u.mutation.SetHTMLBody(v)
+	return _u
 }
 
 // SetNillableHTMLBody sets the "html_body" field if the given value is not nil.
-func (mu *MailUpdate) SetNillableHTMLBody(s *string) *MailUpdate {
-	if s != nil {
-		mu.SetHTMLBody(*s)
+func (_u *MailUpdate) SetNillableHTMLBody(v *string) *MailUpdate {
+	if v != nil {
+		_u.SetHTMLBody(*v)
 	}
-	return mu
+	return _u
 }
 
 // ClearHTMLBody clears the value of the "html_body" field.
-func (mu *MailUpdate) ClearHTMLBody() *MailUpdate {
-	mu.mutation.ClearHTMLBody()
-	return mu
+func (_u *MailUpdate) ClearHTMLBody() *MailUpdate {
+	_u.mutation.ClearHTMLBody()
+	return _u
 }
 
 // SetSentAt sets the "sent_at" field.
-func (mu *MailUpdate) SetSentAt(t time.Time) *MailUpdate {
-	mu.mutation.SetSentAt(t)
-	return mu
+func (_u *MailUpdate) SetSentAt(v time.Time) *MailUpdate {
+	_u.mutation.SetSentAt(v)
+	return _u
 }
 
 // SetNillableSentAt sets the "sent_at" field if the given value is not nil.
-func (mu *MailUpdate) SetNillableSentAt(t *time.Time) *MailUpdate {
-	if t != nil {
-		mu.SetSentAt(*t)
+func (_u *MailUpdate) SetNillableSentAt(v *time.Time) *MailUpdate {
+	if v != nil {
+		_u.SetSentAt(*v)
 	}
-	return mu
+	return _u
 }
 
 // ClearSentAt clears the value of the "sent_at" field.
-func (mu *MailUpdate) ClearSentAt() *MailUpdate {
-	mu.mutation.ClearSentAt()
-	return mu
+func (_u *MailUpdate) ClearSentAt() *MailUpdate {
+	_u.mutation.ClearSentAt()
+	return _u
 }
 
 // SetLastTriedAt sets the "last_tried_at" field.
-func (mu *MailUpdate) SetLastTriedAt(t time.Time) *MailUpdate {
-	mu.mutation.SetLastTriedAt(t)
-	return mu
+func (_u *MailUpdate) SetLastTriedAt(v time.Time) *MailUpdate {
+	_u.mutation.SetLastTriedAt(v)
+	return _u
 }
 
 // SetNillableLastTriedAt sets the "last_tried_at" field if the given value is not nil.
-func (mu *MailUpdate) SetNillableLastTriedAt(t *time.Time) *MailUpdate {
-	if t != nil {
-		mu.SetLastTriedAt(*t)
+func (_u *MailUpdate) SetNillableLastTriedAt(v *time.Time) *MailUpdate {
+	if v != nil {
+		_u.SetLastTriedAt(*v)
 	}
-	return mu
+	return _u
 }
 
 // SetRetryCount sets the "retry_count" field.
-func (mu *MailUpdate) SetRetryCount(i int) *MailUpdate {
-	mu.mutation.ResetRetryCount()
-	mu.mutation.SetRetryCount(i)
-	return mu
+func (_u *MailUpdate) SetRetryCount(v int) *MailUpdate {
+	_u.mutation.ResetRetryCount()
+	_u.mutation.SetRetryCount(v)
+	return _u
 }
 
 // SetNillableRetryCount sets the "retry_count" field if the given value is not nil.
-func (mu *MailUpdate) SetNillableRetryCount(i *int) *MailUpdate {
-	if i != nil {
-		mu.SetRetryCount(*i)
+func (_u *MailUpdate) SetNillableRetryCount(v *int) *MailUpdate {
+	if v != nil {
+		_u.SetRetryCount(*v)
 	}
-	return mu
+	return _u
 }
 
-// AddRetryCount adds i to the "retry_count" field.
-func (mu *MailUpdate) AddRetryCount(i int) *MailUpdate {
-	mu.mutation.AddRetryCount(i)
-	return mu
+// AddRetryCount adds value to the "retry_count" field.
+func (_u *MailUpdate) AddRetryCount(v int) *MailUpdate {
+	_u.mutation.AddRetryCount(v)
+	return _u
 }
 
 // SetReceiverID sets the "receiver_id" field.
-func (mu *MailUpdate) SetReceiverID(i int64) *MailUpdate {
-	mu.mutation.SetReceiverID(i)
-	return mu
+func (_u *MailUpdate) SetReceiverID(v int64) *MailUpdate {
+	_u.mutation.SetReceiverID(v)
+	return _u
 }
 
 // SetNillableReceiverID sets the "receiver_id" field if the given value is not nil.
-func (mu *MailUpdate) SetNillableReceiverID(i *int64) *MailUpdate {
-	if i != nil {
-		mu.SetReceiverID(*i)
+func (_u *MailUpdate) SetNillableReceiverID(v *int64) *MailUpdate {
+	if v != nil {
+		_u.SetReceiverID(*v)
 	}
-	return mu
+	return _u
 }
 
 // SetUpdaterID sets the "updater" edge to the Account entity by ID.
-func (mu *MailUpdate) SetUpdaterID(id int64) *MailUpdate {
-	mu.mutation.SetUpdaterID(id)
-	return mu
+func (_u *MailUpdate) SetUpdaterID(id int64) *MailUpdate {
+	_u.mutation.SetUpdaterID(id)
+	return _u
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the Account entity by ID if the given value is not nil.
-func (mu *MailUpdate) SetNillableUpdaterID(id *int64) *MailUpdate {
+func (_u *MailUpdate) SetNillableUpdaterID(id *int64) *MailUpdate {
 	if id != nil {
-		mu = mu.SetUpdaterID(*id)
+		_u = _u.SetUpdaterID(*id)
 	}
-	return mu
+	return _u
 }
 
 // SetUpdater sets the "updater" edge to the Account entity.
-func (mu *MailUpdate) SetUpdater(a *Account) *MailUpdate {
-	return mu.SetUpdaterID(a.ID)
+func (_u *MailUpdate) SetUpdater(v *Account) *MailUpdate {
+	return _u.SetUpdaterID(v.ID)
 }
 
 // SetReceiver sets the "receiver" edge to the Account entity.
-func (mu *MailUpdate) SetReceiver(a *Account) *MailUpdate {
-	return mu.SetReceiverID(a.ID)
+func (_u *MailUpdate) SetReceiver(v *Account) *MailUpdate {
+	return _u.SetReceiverID(v.ID)
 }
 
 // Mutation returns the MailMutation object of the builder.
-func (mu *MailUpdate) Mutation() *MailMutation {
-	return mu.mutation
+func (_u *MailUpdate) Mutation() *MailMutation {
+	return _u.mutation
 }
 
 // ClearUpdater clears the "updater" edge to the Account entity.
-func (mu *MailUpdate) ClearUpdater() *MailUpdate {
-	mu.mutation.ClearUpdater()
-	return mu
+func (_u *MailUpdate) ClearUpdater() *MailUpdate {
+	_u.mutation.ClearUpdater()
+	return _u
 }
 
 // ClearReceiver clears the "receiver" edge to the Account entity.
-func (mu *MailUpdate) ClearReceiver() *MailUpdate {
-	mu.mutation.ClearReceiver()
-	return mu
+func (_u *MailUpdate) ClearReceiver() *MailUpdate {
+	_u.mutation.ClearReceiver()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (mu *MailUpdate) Save(ctx context.Context) (int, error) {
-	mu.defaults()
-	return withHooks(ctx, mu.sqlSave, mu.mutation, mu.hooks)
+func (_u *MailUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mu *MailUpdate) SaveX(ctx context.Context) int {
-	affected, err := mu.Save(ctx)
+func (_u *MailUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -230,83 +230,83 @@ func (mu *MailUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (mu *MailUpdate) Exec(ctx context.Context) error {
-	_, err := mu.Save(ctx)
+func (_u *MailUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mu *MailUpdate) ExecX(ctx context.Context) {
-	if err := mu.Exec(ctx); err != nil {
+func (_u *MailUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mu *MailUpdate) defaults() {
-	if _, ok := mu.mutation.UpdatedAt(); !ok {
+func (_u *MailUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := mail.UpdateDefaultUpdatedAt()
-		mu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (mu *MailUpdate) check() error {
-	if mu.mutation.ReceiverCleared() && len(mu.mutation.ReceiverIDs()) > 0 {
+func (_u *MailUpdate) check() error {
+	if _u.mutation.ReceiverCleared() && len(_u.mutation.ReceiverIDs()) > 0 {
 		return errors.New(`entmain: clearing a required unique edge "Mail.receiver"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mu *MailUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MailUpdate {
-	mu.modifiers = append(mu.modifiers, modifiers...)
-	return mu
+func (_u *MailUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MailUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (mu *MailUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := mu.check(); err != nil {
-		return n, err
+func (_u *MailUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(mail.Table, mail.Columns, sqlgraph.NewFieldSpec(mail.FieldID, field.TypeInt64))
-	if ps := mu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := mu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(mail.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := mu.mutation.Subject(); ok {
+	if value, ok := _u.mutation.Subject(); ok {
 		_spec.SetField(mail.FieldSubject, field.TypeString, value)
 	}
-	if value, ok := mu.mutation.Body(); ok {
+	if value, ok := _u.mutation.Body(); ok {
 		_spec.SetField(mail.FieldBody, field.TypeString, value)
 	}
-	if value, ok := mu.mutation.HTMLBody(); ok {
+	if value, ok := _u.mutation.HTMLBody(); ok {
 		_spec.SetField(mail.FieldHTMLBody, field.TypeString, value)
 	}
-	if mu.mutation.HTMLBodyCleared() {
+	if _u.mutation.HTMLBodyCleared() {
 		_spec.ClearField(mail.FieldHTMLBody, field.TypeString)
 	}
-	if value, ok := mu.mutation.SentAt(); ok {
+	if value, ok := _u.mutation.SentAt(); ok {
 		_spec.SetField(mail.FieldSentAt, field.TypeTime, value)
 	}
-	if mu.mutation.SentAtCleared() {
+	if _u.mutation.SentAtCleared() {
 		_spec.ClearField(mail.FieldSentAt, field.TypeTime)
 	}
-	if value, ok := mu.mutation.LastTriedAt(); ok {
+	if value, ok := _u.mutation.LastTriedAt(); ok {
 		_spec.SetField(mail.FieldLastTriedAt, field.TypeTime, value)
 	}
-	if value, ok := mu.mutation.RetryCount(); ok {
+	if value, ok := _u.mutation.RetryCount(); ok {
 		_spec.SetField(mail.FieldRetryCount, field.TypeInt, value)
 	}
-	if value, ok := mu.mutation.AddedRetryCount(); ok {
+	if value, ok := _u.mutation.AddedRetryCount(); ok {
 		_spec.AddField(mail.FieldRetryCount, field.TypeInt, value)
 	}
-	if mu.mutation.UpdaterCleared() {
+	if _u.mutation.UpdaterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -319,7 +319,7 @@ func (mu *MailUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mu.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -335,7 +335,7 @@ func (mu *MailUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if mu.mutation.ReceiverCleared() {
+	if _u.mutation.ReceiverCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -348,7 +348,7 @@ func (mu *MailUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := mu.mutation.ReceiverIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ReceiverIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -364,8 +364,8 @@ func (mu *MailUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(mu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{mail.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -373,8 +373,8 @@ func (mu *MailUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	mu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // MailUpdateOne is the builder for updating a single Mail entity.
@@ -387,211 +387,211 @@ type MailUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (muo *MailUpdateOne) SetUpdatedAt(t time.Time) *MailUpdateOne {
-	muo.mutation.SetUpdatedAt(t)
-	return muo
+func (_u *MailUpdateOne) SetUpdatedAt(v time.Time) *MailUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (muo *MailUpdateOne) SetUpdatedBy(i int64) *MailUpdateOne {
-	muo.mutation.SetUpdatedBy(i)
-	return muo
+func (_u *MailUpdateOne) SetUpdatedBy(v int64) *MailUpdateOne {
+	_u.mutation.SetUpdatedBy(v)
+	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (muo *MailUpdateOne) SetNillableUpdatedBy(i *int64) *MailUpdateOne {
-	if i != nil {
-		muo.SetUpdatedBy(*i)
+func (_u *MailUpdateOne) SetNillableUpdatedBy(v *int64) *MailUpdateOne {
+	if v != nil {
+		_u.SetUpdatedBy(*v)
 	}
-	return muo
+	return _u
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (muo *MailUpdateOne) ClearUpdatedBy() *MailUpdateOne {
-	muo.mutation.ClearUpdatedBy()
-	return muo
+func (_u *MailUpdateOne) ClearUpdatedBy() *MailUpdateOne {
+	_u.mutation.ClearUpdatedBy()
+	return _u
 }
 
 // SetSubject sets the "subject" field.
-func (muo *MailUpdateOne) SetSubject(s string) *MailUpdateOne {
-	muo.mutation.SetSubject(s)
-	return muo
+func (_u *MailUpdateOne) SetSubject(v string) *MailUpdateOne {
+	_u.mutation.SetSubject(v)
+	return _u
 }
 
 // SetNillableSubject sets the "subject" field if the given value is not nil.
-func (muo *MailUpdateOne) SetNillableSubject(s *string) *MailUpdateOne {
-	if s != nil {
-		muo.SetSubject(*s)
+func (_u *MailUpdateOne) SetNillableSubject(v *string) *MailUpdateOne {
+	if v != nil {
+		_u.SetSubject(*v)
 	}
-	return muo
+	return _u
 }
 
 // SetBody sets the "body" field.
-func (muo *MailUpdateOne) SetBody(s string) *MailUpdateOne {
-	muo.mutation.SetBody(s)
-	return muo
+func (_u *MailUpdateOne) SetBody(v string) *MailUpdateOne {
+	_u.mutation.SetBody(v)
+	return _u
 }
 
 // SetNillableBody sets the "body" field if the given value is not nil.
-func (muo *MailUpdateOne) SetNillableBody(s *string) *MailUpdateOne {
-	if s != nil {
-		muo.SetBody(*s)
+func (_u *MailUpdateOne) SetNillableBody(v *string) *MailUpdateOne {
+	if v != nil {
+		_u.SetBody(*v)
 	}
-	return muo
+	return _u
 }
 
 // SetHTMLBody sets the "html_body" field.
-func (muo *MailUpdateOne) SetHTMLBody(s string) *MailUpdateOne {
-	muo.mutation.SetHTMLBody(s)
-	return muo
+func (_u *MailUpdateOne) SetHTMLBody(v string) *MailUpdateOne {
+	_u.mutation.SetHTMLBody(v)
+	return _u
 }
 
 // SetNillableHTMLBody sets the "html_body" field if the given value is not nil.
-func (muo *MailUpdateOne) SetNillableHTMLBody(s *string) *MailUpdateOne {
-	if s != nil {
-		muo.SetHTMLBody(*s)
+func (_u *MailUpdateOne) SetNillableHTMLBody(v *string) *MailUpdateOne {
+	if v != nil {
+		_u.SetHTMLBody(*v)
 	}
-	return muo
+	return _u
 }
 
 // ClearHTMLBody clears the value of the "html_body" field.
-func (muo *MailUpdateOne) ClearHTMLBody() *MailUpdateOne {
-	muo.mutation.ClearHTMLBody()
-	return muo
+func (_u *MailUpdateOne) ClearHTMLBody() *MailUpdateOne {
+	_u.mutation.ClearHTMLBody()
+	return _u
 }
 
 // SetSentAt sets the "sent_at" field.
-func (muo *MailUpdateOne) SetSentAt(t time.Time) *MailUpdateOne {
-	muo.mutation.SetSentAt(t)
-	return muo
+func (_u *MailUpdateOne) SetSentAt(v time.Time) *MailUpdateOne {
+	_u.mutation.SetSentAt(v)
+	return _u
 }
 
 // SetNillableSentAt sets the "sent_at" field if the given value is not nil.
-func (muo *MailUpdateOne) SetNillableSentAt(t *time.Time) *MailUpdateOne {
-	if t != nil {
-		muo.SetSentAt(*t)
+func (_u *MailUpdateOne) SetNillableSentAt(v *time.Time) *MailUpdateOne {
+	if v != nil {
+		_u.SetSentAt(*v)
 	}
-	return muo
+	return _u
 }
 
 // ClearSentAt clears the value of the "sent_at" field.
-func (muo *MailUpdateOne) ClearSentAt() *MailUpdateOne {
-	muo.mutation.ClearSentAt()
-	return muo
+func (_u *MailUpdateOne) ClearSentAt() *MailUpdateOne {
+	_u.mutation.ClearSentAt()
+	return _u
 }
 
 // SetLastTriedAt sets the "last_tried_at" field.
-func (muo *MailUpdateOne) SetLastTriedAt(t time.Time) *MailUpdateOne {
-	muo.mutation.SetLastTriedAt(t)
-	return muo
+func (_u *MailUpdateOne) SetLastTriedAt(v time.Time) *MailUpdateOne {
+	_u.mutation.SetLastTriedAt(v)
+	return _u
 }
 
 // SetNillableLastTriedAt sets the "last_tried_at" field if the given value is not nil.
-func (muo *MailUpdateOne) SetNillableLastTriedAt(t *time.Time) *MailUpdateOne {
-	if t != nil {
-		muo.SetLastTriedAt(*t)
+func (_u *MailUpdateOne) SetNillableLastTriedAt(v *time.Time) *MailUpdateOne {
+	if v != nil {
+		_u.SetLastTriedAt(*v)
 	}
-	return muo
+	return _u
 }
 
 // SetRetryCount sets the "retry_count" field.
-func (muo *MailUpdateOne) SetRetryCount(i int) *MailUpdateOne {
-	muo.mutation.ResetRetryCount()
-	muo.mutation.SetRetryCount(i)
-	return muo
+func (_u *MailUpdateOne) SetRetryCount(v int) *MailUpdateOne {
+	_u.mutation.ResetRetryCount()
+	_u.mutation.SetRetryCount(v)
+	return _u
 }
 
 // SetNillableRetryCount sets the "retry_count" field if the given value is not nil.
-func (muo *MailUpdateOne) SetNillableRetryCount(i *int) *MailUpdateOne {
-	if i != nil {
-		muo.SetRetryCount(*i)
+func (_u *MailUpdateOne) SetNillableRetryCount(v *int) *MailUpdateOne {
+	if v != nil {
+		_u.SetRetryCount(*v)
 	}
-	return muo
+	return _u
 }
 
-// AddRetryCount adds i to the "retry_count" field.
-func (muo *MailUpdateOne) AddRetryCount(i int) *MailUpdateOne {
-	muo.mutation.AddRetryCount(i)
-	return muo
+// AddRetryCount adds value to the "retry_count" field.
+func (_u *MailUpdateOne) AddRetryCount(v int) *MailUpdateOne {
+	_u.mutation.AddRetryCount(v)
+	return _u
 }
 
 // SetReceiverID sets the "receiver_id" field.
-func (muo *MailUpdateOne) SetReceiverID(i int64) *MailUpdateOne {
-	muo.mutation.SetReceiverID(i)
-	return muo
+func (_u *MailUpdateOne) SetReceiverID(v int64) *MailUpdateOne {
+	_u.mutation.SetReceiverID(v)
+	return _u
 }
 
 // SetNillableReceiverID sets the "receiver_id" field if the given value is not nil.
-func (muo *MailUpdateOne) SetNillableReceiverID(i *int64) *MailUpdateOne {
-	if i != nil {
-		muo.SetReceiverID(*i)
+func (_u *MailUpdateOne) SetNillableReceiverID(v *int64) *MailUpdateOne {
+	if v != nil {
+		_u.SetReceiverID(*v)
 	}
-	return muo
+	return _u
 }
 
 // SetUpdaterID sets the "updater" edge to the Account entity by ID.
-func (muo *MailUpdateOne) SetUpdaterID(id int64) *MailUpdateOne {
-	muo.mutation.SetUpdaterID(id)
-	return muo
+func (_u *MailUpdateOne) SetUpdaterID(id int64) *MailUpdateOne {
+	_u.mutation.SetUpdaterID(id)
+	return _u
 }
 
 // SetNillableUpdaterID sets the "updater" edge to the Account entity by ID if the given value is not nil.
-func (muo *MailUpdateOne) SetNillableUpdaterID(id *int64) *MailUpdateOne {
+func (_u *MailUpdateOne) SetNillableUpdaterID(id *int64) *MailUpdateOne {
 	if id != nil {
-		muo = muo.SetUpdaterID(*id)
+		_u = _u.SetUpdaterID(*id)
 	}
-	return muo
+	return _u
 }
 
 // SetUpdater sets the "updater" edge to the Account entity.
-func (muo *MailUpdateOne) SetUpdater(a *Account) *MailUpdateOne {
-	return muo.SetUpdaterID(a.ID)
+func (_u *MailUpdateOne) SetUpdater(v *Account) *MailUpdateOne {
+	return _u.SetUpdaterID(v.ID)
 }
 
 // SetReceiver sets the "receiver" edge to the Account entity.
-func (muo *MailUpdateOne) SetReceiver(a *Account) *MailUpdateOne {
-	return muo.SetReceiverID(a.ID)
+func (_u *MailUpdateOne) SetReceiver(v *Account) *MailUpdateOne {
+	return _u.SetReceiverID(v.ID)
 }
 
 // Mutation returns the MailMutation object of the builder.
-func (muo *MailUpdateOne) Mutation() *MailMutation {
-	return muo.mutation
+func (_u *MailUpdateOne) Mutation() *MailMutation {
+	return _u.mutation
 }
 
 // ClearUpdater clears the "updater" edge to the Account entity.
-func (muo *MailUpdateOne) ClearUpdater() *MailUpdateOne {
-	muo.mutation.ClearUpdater()
-	return muo
+func (_u *MailUpdateOne) ClearUpdater() *MailUpdateOne {
+	_u.mutation.ClearUpdater()
+	return _u
 }
 
 // ClearReceiver clears the "receiver" edge to the Account entity.
-func (muo *MailUpdateOne) ClearReceiver() *MailUpdateOne {
-	muo.mutation.ClearReceiver()
-	return muo
+func (_u *MailUpdateOne) ClearReceiver() *MailUpdateOne {
+	_u.mutation.ClearReceiver()
+	return _u
 }
 
 // Where appends a list predicates to the MailUpdate builder.
-func (muo *MailUpdateOne) Where(ps ...predicate.Mail) *MailUpdateOne {
-	muo.mutation.Where(ps...)
-	return muo
+func (_u *MailUpdateOne) Where(ps ...predicate.Mail) *MailUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (muo *MailUpdateOne) Select(field string, fields ...string) *MailUpdateOne {
-	muo.fields = append([]string{field}, fields...)
-	return muo
+func (_u *MailUpdateOne) Select(field string, fields ...string) *MailUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Mail entity.
-func (muo *MailUpdateOne) Save(ctx context.Context) (*Mail, error) {
-	muo.defaults()
-	return withHooks(ctx, muo.sqlSave, muo.mutation, muo.hooks)
+func (_u *MailUpdateOne) Save(ctx context.Context) (*Mail, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (muo *MailUpdateOne) SaveX(ctx context.Context) *Mail {
-	node, err := muo.Save(ctx)
+func (_u *MailUpdateOne) SaveX(ctx context.Context) *Mail {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -599,51 +599,51 @@ func (muo *MailUpdateOne) SaveX(ctx context.Context) *Mail {
 }
 
 // Exec executes the query on the entity.
-func (muo *MailUpdateOne) Exec(ctx context.Context) error {
-	_, err := muo.Save(ctx)
+func (_u *MailUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (muo *MailUpdateOne) ExecX(ctx context.Context) {
-	if err := muo.Exec(ctx); err != nil {
+func (_u *MailUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (muo *MailUpdateOne) defaults() {
-	if _, ok := muo.mutation.UpdatedAt(); !ok {
+func (_u *MailUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := mail.UpdateDefaultUpdatedAt()
-		muo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (muo *MailUpdateOne) check() error {
-	if muo.mutation.ReceiverCleared() && len(muo.mutation.ReceiverIDs()) > 0 {
+func (_u *MailUpdateOne) check() error {
+	if _u.mutation.ReceiverCleared() && len(_u.mutation.ReceiverIDs()) > 0 {
 		return errors.New(`entmain: clearing a required unique edge "Mail.receiver"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (muo *MailUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MailUpdateOne {
-	muo.modifiers = append(muo.modifiers, modifiers...)
-	return muo
+func (_u *MailUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MailUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (muo *MailUpdateOne) sqlSave(ctx context.Context) (_node *Mail, err error) {
-	if err := muo.check(); err != nil {
+func (_u *MailUpdateOne) sqlSave(ctx context.Context) (_node *Mail, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(mail.Table, mail.Columns, sqlgraph.NewFieldSpec(mail.FieldID, field.TypeInt64))
-	id, ok := muo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`entmain: missing "Mail.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := muo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, mail.FieldID)
 		for _, f := range fields {
@@ -655,44 +655,44 @@ func (muo *MailUpdateOne) sqlSave(ctx context.Context) (_node *Mail, err error) 
 			}
 		}
 	}
-	if ps := muo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := muo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(mail.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := muo.mutation.Subject(); ok {
+	if value, ok := _u.mutation.Subject(); ok {
 		_spec.SetField(mail.FieldSubject, field.TypeString, value)
 	}
-	if value, ok := muo.mutation.Body(); ok {
+	if value, ok := _u.mutation.Body(); ok {
 		_spec.SetField(mail.FieldBody, field.TypeString, value)
 	}
-	if value, ok := muo.mutation.HTMLBody(); ok {
+	if value, ok := _u.mutation.HTMLBody(); ok {
 		_spec.SetField(mail.FieldHTMLBody, field.TypeString, value)
 	}
-	if muo.mutation.HTMLBodyCleared() {
+	if _u.mutation.HTMLBodyCleared() {
 		_spec.ClearField(mail.FieldHTMLBody, field.TypeString)
 	}
-	if value, ok := muo.mutation.SentAt(); ok {
+	if value, ok := _u.mutation.SentAt(); ok {
 		_spec.SetField(mail.FieldSentAt, field.TypeTime, value)
 	}
-	if muo.mutation.SentAtCleared() {
+	if _u.mutation.SentAtCleared() {
 		_spec.ClearField(mail.FieldSentAt, field.TypeTime)
 	}
-	if value, ok := muo.mutation.LastTriedAt(); ok {
+	if value, ok := _u.mutation.LastTriedAt(); ok {
 		_spec.SetField(mail.FieldLastTriedAt, field.TypeTime, value)
 	}
-	if value, ok := muo.mutation.RetryCount(); ok {
+	if value, ok := _u.mutation.RetryCount(); ok {
 		_spec.SetField(mail.FieldRetryCount, field.TypeInt, value)
 	}
-	if value, ok := muo.mutation.AddedRetryCount(); ok {
+	if value, ok := _u.mutation.AddedRetryCount(); ok {
 		_spec.AddField(mail.FieldRetryCount, field.TypeInt, value)
 	}
-	if muo.mutation.UpdaterCleared() {
+	if _u.mutation.UpdaterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -705,7 +705,7 @@ func (muo *MailUpdateOne) sqlSave(ctx context.Context) (_node *Mail, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := muo.mutation.UpdaterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UpdaterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -721,7 +721,7 @@ func (muo *MailUpdateOne) sqlSave(ctx context.Context) (_node *Mail, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if muo.mutation.ReceiverCleared() {
+	if _u.mutation.ReceiverCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -734,7 +734,7 @@ func (muo *MailUpdateOne) sqlSave(ctx context.Context) (_node *Mail, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := muo.mutation.ReceiverIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ReceiverIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
@@ -750,11 +750,11 @@ func (muo *MailUpdateOne) sqlSave(ctx context.Context) (_node *Mail, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(muo.modifiers...)
-	_node = &Mail{config: muo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Mail{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, muo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{mail.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -762,6 +762,6 @@ func (muo *MailUpdateOne) sqlSave(ctx context.Context) (_node *Mail, err error) 
 		}
 		return nil, err
 	}
-	muo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

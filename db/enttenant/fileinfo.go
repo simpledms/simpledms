@@ -50,7 +50,7 @@ func (*FileInfo) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the FileInfo fields.
-func (fi *FileInfo) assignValues(columns []string, values []any) error {
+func (_m *FileInfo) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -60,31 +60,31 @@ func (fi *FileInfo) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
-				fi.SpaceID = value.Int64
+				_m.SpaceID = value.Int64
 			}
 		case fileinfo.FieldFileID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field file_id", values[i])
 			} else if value.Valid {
-				fi.FileID = value.Int64
+				_m.FileID = value.Int64
 			}
 		case fileinfo.FieldPublicFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field public_file_id", values[i])
 			} else if value.Valid {
-				fi.PublicFileID = value.String
+				_m.PublicFileID = value.String
 			}
 		case fileinfo.FieldFullPath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field full_path", values[i])
 			} else if value.Valid {
-				fi.FullPath = value.String
+				_m.FullPath = value.String
 			}
 		case fileinfo.FieldPath:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field path", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &fi.Path); err != nil {
+				if err := json.Unmarshal(*value, &_m.Path); err != nil {
 					return fmt.Errorf("unmarshal field path: %w", err)
 				}
 			}
@@ -92,12 +92,12 @@ func (fi *FileInfo) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field public_path", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &fi.PublicPath); err != nil {
+				if err := json.Unmarshal(*value, &_m.PublicPath); err != nil {
 					return fmt.Errorf("unmarshal field public_path: %w", err)
 				}
 			}
 		default:
-			fi.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -105,42 +105,42 @@ func (fi *FileInfo) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the FileInfo.
 // This includes values selected through modifiers, order, etc.
-func (fi *FileInfo) Value(name string) (ent.Value, error) {
-	return fi.selectValues.Get(name)
+func (_m *FileInfo) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Unwrap unwraps the FileInfo entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (fi *FileInfo) Unwrap() *FileInfo {
-	_tx, ok := fi.config.driver.(*txDriver)
+func (_m *FileInfo) Unwrap() *FileInfo {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("enttenant: FileInfo is not a transactional entity")
 	}
-	fi.config.driver = _tx.drv
-	return fi
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (fi *FileInfo) String() string {
+func (_m *FileInfo) String() string {
 	var builder strings.Builder
 	builder.WriteString("FileInfo(")
 	builder.WriteString("space_id=")
-	builder.WriteString(fmt.Sprintf("%v", fi.SpaceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
 	builder.WriteString(", ")
 	builder.WriteString("file_id=")
-	builder.WriteString(fmt.Sprintf("%v", fi.FileID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FileID))
 	builder.WriteString(", ")
 	builder.WriteString("public_file_id=")
-	builder.WriteString(fi.PublicFileID)
+	builder.WriteString(_m.PublicFileID)
 	builder.WriteString(", ")
 	builder.WriteString("full_path=")
-	builder.WriteString(fi.FullPath)
+	builder.WriteString(_m.FullPath)
 	builder.WriteString(", ")
 	builder.WriteString("path=")
-	builder.WriteString(fmt.Sprintf("%v", fi.Path))
+	builder.WriteString(fmt.Sprintf("%v", _m.Path))
 	builder.WriteString(", ")
 	builder.WriteString("public_path=")
-	builder.WriteString(fmt.Sprintf("%v", fi.PublicPath))
+	builder.WriteString(fmt.Sprintf("%v", _m.PublicPath))
 	builder.WriteByte(')')
 	return builder.String()
 }
