@@ -403,9 +403,23 @@ func (qq *Server) Start() error {
 
 		encryptor.NilableX25519MainIdentity = x25519Identity
 	}
+
+	allowInsecureCookiesStr := os.Getenv("SIMPLEDMS_ALLOW_INSECURE_COOKIES")
+	allowInsecureCookies := false
+	if allowInsecureCookiesStr != "" {
+		allowInsecureCookies, err = strconv.ParseBool(allowInsecureCookiesStr)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
 	// TODO FirstX okay?
 	systemConfigx = mainDB.ReadOnlyConn.SystemConfig.Query().FirstX(ctx)
-	systemConfig := modelmain.NewSystemConfig(systemConfigx, qq.isSaaSModeEnabled)
+	systemConfig := modelmain.NewSystemConfig(
+		systemConfigx,
+		qq.isSaaSModeEnabled,
+		allowInsecureCookies,
+	)
 
 	tenantDBs := dbMigrationsTenantDBs(mainDB, qq.devMode, qq.metaPath)
 	defer func() {
@@ -420,8 +434,8 @@ func (qq *Server) Start() error {
 	}()
 
 	factory := common.NewFactory(
-	// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
-	// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
+		// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
+		// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
 	)
 	// storagePath := common.StoragePath(metaPath)
 	fileRepo := common.NewFileRepository()

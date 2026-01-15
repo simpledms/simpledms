@@ -18,7 +18,7 @@ func SessionCookieName() string {
 
 // IMPORTANT
 // caller must add cookie to database
-func SetSessionCookie(rw httpx.ResponseWriter, req *httpx.Request, isTemporarySession bool) (*http.Cookie, error) {
+func SetSessionCookie(rw httpx.ResponseWriter, req *httpx.Request, isTemporarySession, allowInsecureCookies bool) (*http.Cookie, error) {
 	// TODO check that no session exists for this user yet? what about mobile and desktop?
 	//		probably not a good idea
 
@@ -44,6 +44,11 @@ func SetSessionCookie(rw httpx.ResponseWriter, req *httpx.Request, isTemporarySe
 		expires = time.Now().Add(time.Hour * 24 * 14) // 2 weeks
 	}
 
+	secure := true
+	if allowInsecureCookies {
+		secure = false
+	}
+
 	// duplicate in RenewSessionCookie
 	cookie = &http.Cookie{
 		Name:   SessionCookieName(),
@@ -55,7 +60,7 @@ func SetSessionCookie(rw httpx.ResponseWriter, req *httpx.Request, isTemporarySe
 		Expires: expires,
 
 		MaxAge:   0,
-		Secure:   true,
+		Secure:   secure,
 		HttpOnly: true,
 		// shouldn't be necessary with http.CrossOriginProtection middleware
 		// but works as a fallback for older browsers because SameSite is longer
@@ -69,7 +74,12 @@ func SetSessionCookie(rw httpx.ResponseWriter, req *httpx.Request, isTemporarySe
 
 // IMPORTANT
 // caller must remove cookie from database
-func InvalidateSessionCookie(rw httpx.ResponseWriter) {
+func InvalidateSessionCookie(rw httpx.ResponseWriter, allowInsecureCookie bool) {
+	secure := true
+	if allowInsecureCookie {
+		secure = false
+	}
+
 	// IMPORTANT if changed, cookie creation in SignIn has to be changed too
 	http.SetCookie(rw, &http.Cookie{
 		Name:     SessionCookieName(),
@@ -77,7 +87,7 @@ func InvalidateSessionCookie(rw httpx.ResponseWriter) {
 		Path:     "/",
 		MaxAge:   -1, // deletes cookie
 		HttpOnly: true,
-		Secure:   true,
+		Secure:   secure,
 		// shouldn't be necessary with http.CrossOriginProtection middleware
 		// but works as a fallback for older browsers because SameSite is longer
 		// in baseline than Sec-Fetch-Site; only works for same site, not same origin
@@ -91,7 +101,12 @@ func InvalidateSessionCookie(rw httpx.ResponseWriter) {
 // only value is available when reading a cookie from a request;
 // thus renewal cookie must be reconstructed;
 // expiresAt must be read from database
-func RenewSessionCookie(rw httpx.ResponseWriter, value string, expiresAt time.Time) (*http.Cookie, bool) {
+func RenewSessionCookie(
+	rw httpx.ResponseWriter,
+	value string,
+	expiresAt time.Time,
+	allowInsecureCookies bool,
+) (*http.Cookie, bool) {
 	if expiresAt.IsZero() {
 		// temporary session cookie
 		return nil, false
@@ -101,6 +116,11 @@ func RenewSessionCookie(rw httpx.ResponseWriter, value string, expiresAt time.Ti
 	if expiresAt.After(time.Now().Add(time.Hour * 24 * 13)) {
 		// valid more than 13 days
 		return nil, false
+	}
+
+	secure := true
+	if allowInsecureCookies {
+		secure = false
 	}
 
 	// duplicate in SetSessionCookie
@@ -114,7 +134,7 @@ func RenewSessionCookie(rw httpx.ResponseWriter, value string, expiresAt time.Ti
 		Expires: time.Now().Add(time.Hour * 24 * 14),
 
 		MaxAge:   0,
-		Secure:   true,
+		Secure:   secure,
 		HttpOnly: true,
 		// shouldn't be necessary with http.CrossOriginProtection middleware
 		// but works as a fallback for older browsers because SameSite is longer

@@ -34,7 +34,7 @@ func (qq *SignInPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 		hostname = host
 	}
 	isSafeRequest := hostname == "localhost" || req.TLS != nil
-	if !isSafeRequest {
+	if !isSafeRequest && !qq.infra.SystemConfig().AllowInsecureCookies() {
 		rw.AddRenderables(wx.NewSnackbarf("Sign in only works over HTTPS or on localhost.").
 			SetIsError(true).
 			SetCustomAutoDismissTimeoutInMs(100000),

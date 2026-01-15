@@ -584,7 +584,7 @@ func (qq *Router) authenticateAccount(rw httpx.ResponseWriter, req *httpx.Reques
 
 	// doesn't do much because we only read the value...
 	if err = cookie.Valid(); err != nil {
-		cookiex.InvalidateSessionCookie(rw)
+		cookiex.InvalidateSessionCookie(rw, qq.infra.SystemConfig().AllowInsecureCookies())
 		mainTx.Session.Delete().Where(session.Value(cookie.Value)).ExecX(req.Context())
 		return nil, false, e.NewHTTPErrorf(http.StatusBadRequest, "Cookie set but not valid.")
 	}
@@ -605,7 +605,10 @@ func (qq *Router) authenticateAccount(rw httpx.ResponseWriter, req *httpx.Reques
 		Only(req.Context())
 	if err != nil {
 		log.Println(err)
-		cookiex.InvalidateSessionCookie(rw)
+		cookiex.InvalidateSessionCookie(
+			rw,
+			qq.infra.SystemConfig().AllowInsecureCookies(),
+		)
 		// no need to delete in db, because wasn't found...
 
 		// TODO show message to user
@@ -615,7 +618,12 @@ func (qq *Router) authenticateAccount(rw httpx.ResponseWriter, req *httpx.Reques
 	accountx := sessionx.QueryAccount().OnlyX(req.Context())
 	accountm := account.NewAccount(accountx)
 
-	cookie, isRenewed := cookiex.RenewSessionCookie(rw, cookie.Value, sessionx.ExpiresAt)
+	cookie, isRenewed := cookiex.RenewSessionCookie(
+		rw,
+		cookie.Value,
+		sessionx.ExpiresAt,
+		qq.infra.SystemConfig().AllowInsecureCookies(),
+	)
 	if isRenewed {
 		// mainTx could be read only
 		qq.mainDB.ReadWriteConn.Session.Update().

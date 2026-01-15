@@ -44,7 +44,7 @@ func (qq *SignOut) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid session cookie.")
 	}
 
-	cookiex.InvalidateSessionCookie(rw)
+	cookiex.InvalidateSessionCookie(rw, qq.infra.SystemConfig().AllowInsecureCookies())
 	// cookie value can be used directly because user is authenticated if MainCtx is used
 	ctx.MainCtx().MainTx.Session.Delete().Where(session.Value(cookie.Value)).ExecX(ctx)
 

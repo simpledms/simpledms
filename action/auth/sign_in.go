@@ -89,7 +89,7 @@ func (qq *SignIn) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.
 		return err
 	}
 
-	cookie, err := cookiex.SetSessionCookie(rw, req, data.TemporarySession)
+	cookie, err := cookiex.SetSessionCookie(rw, req, data.TemporarySession, qq.infra.SystemConfig().AllowInsecureCookies())
 	if err != nil {
 		log.Println(err)
 		return err

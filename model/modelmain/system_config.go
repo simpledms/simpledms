@@ -21,12 +21,14 @@ type SystemConfig struct {
 	data              *entmain.SystemConfig
 	isSaaSModeEnabled bool
 	// nilableX25519Identity *age.X25519Identity
+	allowInsecureCookies bool
 }
 
-func NewSystemConfig(data *entmain.SystemConfig, isSaaSModeEnabled bool) *SystemConfig {
+func NewSystemConfig(data *entmain.SystemConfig, isSaaSModeEnabled, allowInsecureCookies bool) *SystemConfig {
 	return &SystemConfig{
-		data:              data,
-		isSaaSModeEnabled: isSaaSModeEnabled,
+		data:                 data,
+		isSaaSModeEnabled:    isSaaSModeEnabled,
+		allowInsecureCookies: allowInsecureCookies,
 	}
 }
 
@@ -234,6 +236,10 @@ func (qq *SystemConfig) NilableX25519Identity() *age.X25519Identity {
 
 func (qq *SystemConfig) IsSaaSModeEnabled() bool {
 	return qq.isSaaSModeEnabled
+}
+
+func (qq *SystemConfig) AllowInsecureCookies() bool {
+	return qq.allowInsecureCookies
 }
 
 func (qq *SystemConfig) S3() *S3Config {
