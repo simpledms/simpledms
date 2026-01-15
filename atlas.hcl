@@ -1,13 +1,13 @@
 env "main" {
   migration {
-    dir = "file://entmain/migrate/migrations"
+    dir = "file://db/entmain/migrate/migrations"
     format = "golang-migrate"
   }
 }
 
 env "tenant" {
   migration {
-    dir = "file://enttenant/migrate/migrations"
+    dir = "file://db/enttenant/migrate/migrations"
     format = "golang-migrate"
   }
 }
