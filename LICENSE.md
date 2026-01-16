@@ -1,3 +1,5 @@
+# Licence
+
 Copyright (c) 2023–present Marco Beierer
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License version 3 as published by the Free Software Foundation.
@@ -6,7 +8,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-**Additional terms under GNU Affero General Public License version 3 section 7**
+## Additional terms under GNU Affero General Public License version 3 section 7
 
 In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):
 
