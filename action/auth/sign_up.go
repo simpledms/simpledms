@@ -91,6 +91,7 @@ func (qq *SignUp) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.
 		data.Country,
 		data.Language,
 		data.SubscribeToNewsletter,
+		false,
 	)
 	if err != nil {
 		log.Println(err)

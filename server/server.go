@@ -190,12 +190,19 @@ func (qq *Server) Start() error {
 	}
 
 	initialAccountEmail := os.Getenv("SIMPLEDMS_INITIAL_ACCOUNT_EMAIL")
+	initialTemporaryPassword := os.Getenv("SIMPLEDMS_INITIAL_TEMPORARY_PASSWORD")
 	initialTenantName := os.Getenv("SIMPLEDMS_INITIAL_TENANT_NAME")
 	if initialAccountEmail != "" && initialTenantName != "" {
 		if mainDB.ReadOnlyConn.Account.Query().CountX(ctx) > 0 {
 			log.Println("an account already exists, skipping creation of initial account")
 		} else {
-			err = qq.initInitialUser(ctx, mainDB, initialAccountEmail, initialTenantName)
+			err = qq.initInitialUser(
+				ctx,
+				mainDB,
+				initialAccountEmail,
+				initialTemporaryPassword,
+				initialTenantName,
+			)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -693,6 +700,7 @@ func (qq *Server) initInitialUser(
 	ctx context.Context,
 	mainDB *sqlx.MainDB,
 	initialAccountEmail string,
+	initialTemporaryPassword string,
 	initialTenantName string,
 ) error {
 	createInitialUserTx, err := mainDB.Tx(ctx, false)
@@ -709,6 +717,7 @@ func (qq *Server) initInitialUser(
 			}
 		}
 	}()
+
 	visitorCtx := ctxx.NewVisitorContext(
 		ctx,
 		createInitialUserTx,
@@ -718,6 +727,9 @@ func (qq *Server) initInitialUser(
 		"UTC",
 		false,
 	)
+
+	skipSendingMail := initialTemporaryPassword != ""
+
 	initialAccount, err := modelmain.NewSignUpService().SignUp(
 		visitorCtx,
 		initialAccountEmail,
@@ -727,6 +739,7 @@ func (qq *Server) initInitialUser(
 		country.Unknown,
 		language.Unknown,
 		false,
+		skipSendingMail,
 	)
 	if err != nil {
 		log.Println(err)
@@ -737,6 +750,17 @@ func (qq *Server) initInitialUser(
 	if err != nil {
 		log.Println(err)
 		return err
+	}
+
+	if initialTemporaryPassword != "" {
+		_, err = initialAccount.SetTemporaryPassword(visitorCtx, initialTemporaryPassword)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+		log.Println("the initial temporary password you provided was set")
+	} else {
+		log.Println("the initial temporary password was generated and sent to the provided mail address")
 	}
 
 	err = createInitialUserTx.Commit()

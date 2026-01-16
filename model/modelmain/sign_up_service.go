@@ -30,6 +30,7 @@ func (qq *SignUpService) SignUp(
 	country country.Country,
 	language language.Language,
 	subscribeToNewsletter bool,
+	skipSendingMail bool,
 ) (*account.Account, error) {
 	tenantxQuery := ctx.VisitorCtx().MainTx.Tenant.
 		Create().
@@ -77,6 +78,9 @@ func (qq *SignUpService) SignUp(
 		return nil, err
 	}
 
-	mailer.NewMailer().SignUp(ctx, accountx, password, expiresAt)
+	if !skipSendingMail {
+		mailer.NewMailer().SignUp(ctx, accountx, password, expiresAt)
+	}
+
 	return accountm, nil
 }

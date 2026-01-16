@@ -1,6 +1,7 @@
 package account
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"strings"
@@ -165,9 +166,20 @@ func (qq *Account) GenerateTemporaryPassword(ctx ctxx.Context) (string, time.Tim
 		return "", time.Time{}, e.NewHTTPErrorf(http.StatusInternalServerError, "could not generate temporary password")
 	}
 
+	expiresAt, err := qq.SetTemporaryPassword(ctx, password)
+	if err != nil {
+		log.Println(err)
+		return "", time.Time{}, err
+	}
+
+	return password, expiresAt, nil
+}
+
+// should only be used on app initialization
+func (qq *Account) SetTemporaryPassword(ctx context.Context, password string) (time.Time, error) {
 	salt, ok := accountutil.RandomSalt()
 	if !ok {
-		return "", time.Time{}, e.NewHTTPErrorf(http.StatusInternalServerError, "could not generate salt")
+		return time.Time{}, e.NewHTTPErrorf(http.StatusInternalServerError, "could not generate salt")
 	}
 
 	passwordHash := accountutil.PasswordHash(password, salt)
@@ -180,7 +192,8 @@ func (qq *Account) GenerateTemporaryPassword(ctx ctxx.Context) (string, time.Tim
 		SetTemporaryPasswordExpiresAt(expiresAt).
 		SaveX(ctx)
 
-	return password, expiresAt, nil
+	return expiresAt, nil
+
 }
 
 func (qq *Account) ChangePassword(ctx ctxx.Context, currentPassword, newPassword, confirmPassword string) error {

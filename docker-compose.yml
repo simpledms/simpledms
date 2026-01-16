@@ -4,6 +4,8 @@ volumes:
     #garage_meta:
     #garage_data:
 
+name: simpledms-dev
+
 services:
     #docling:
         #image: ghcr.io/docling-project/docling-serve-cpu
