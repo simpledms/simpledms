@@ -4,3 +4,5 @@ docker push ghcr.io/simpledms/simpledms:stable
 
 docker tag simpledms/simpledms:latest simpledms/simpledms:stable
 docker push simpledms/simpledms:stable
+
+echo "don't forget to create a release tag"
