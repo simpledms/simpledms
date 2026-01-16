@@ -93,7 +93,7 @@ func (qq *AboutPage) Widget(ctx ctxx.Context) renderable.Renderable {
 					// TODO or headline?
 					wx.P(`Additional terms under GNU Affero General Public License version 3 section 7`).SetBold(),
 
-					wx.P(`In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):`),
+					wx.H(wx.HeadingTypeTitleLg, wx.T("In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):")),
 
 					wx.P(`1. A visible menu item labeled «About SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be present in the main menu of the program linking to the attribution page described below.`),
 					wx.P(`2. A visible link labeled «Powered by SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be displayed on the login page of the program. The link must lead to the same attribution page described below or to https://simpledms.eu/open-source.`),
