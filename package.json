@@ -1,8 +1,8 @@
 {
   "name": "simpledms",
-  "version": "1.0.0",
+  "version": "",
   "author": "",
-  "license": "ISC",
+  "license": "",
   "description": "",
   "scripts": {
     "install-modules": "node ./install.deps.mjs"
