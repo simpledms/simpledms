@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 Copyright (c) 2023–present Marco Beierer
 
 This program is free software: you can redistribute it and/or modify
