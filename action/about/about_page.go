@@ -91,17 +91,25 @@ func (qq *AboutPage) Widget(ctx ctxx.Context) renderable.Renderable {
 					wx.P(`You should have received a copy of the GNU Affero General Public License
 					along with this program. If not, see <https://www.gnu.org/licenses/>.`),
 					// TODO or headline?
-					wx.P(`Additional terms under GNU Affero General Public License version 3 section 7:`).SetBold(),
-					wx.P(`All copies of the program, in both source code and executable form, must
-					preserve the "Powered by SimpleDMS" attribution notice on each user interface
-					screen. Clicking the notice must direct the user to https://simpledms.eu or https://simpledms.ch.`),
-					wx.P(`This notice must be visible to all users without additional interaction, and
-					must not be removed, obscured, or altered.`),
-					wx.P(`All copies of the program, in both source code and executable form, must
-					preserve the "About SimpleDMS" menu item in the main menu. The content of
-					the linked about page must not be modified.`),
-					wx.P(`This obligation also applies to all derivative works and any copies of
-					derivative works.`),
+					wx.P(`Additional terms under GNU Affero General Public License version 3 section 7`).SetBold(),
+
+					wx.P(`In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):`),
+
+					wx.P(`1. A visible menu item labeled «About SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be present in the main menu of the program linking to the attribution page described below.`),
+					wx.P(`2. A visible link labeled «Powered by SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be displayed on the login page of the program. The link must lead to the same attribution page described below or to https://simpledms.eu/open-source.`),
+
+					wx.P(`The attribution page must not be removed or modified so as to delete or obscure the required attribution notices. However, the attribution page may be extended, including by adding:`),
+
+					wx.P(`- additional copyright holders or contributors,`),
+					wx.P(`- notices describing modifications made to the program, or`),
+					wx.P(`- other legally required or informative notices, provided that the required attribution notices remain clearly identifiable and reasonably prominent.`),
+
+					wx.P(`The attribution notices required:`),
+
+					wx.P(`- may be presented in a manner consistent with the overall visual design of the program, but`),
+					wx.P(`- must not be deliberately hidden, obscured, or rendered non-functional.`),
+
+					wx.P(`This requirement does not apply where the Program is used exclusively without an interactive user interface.`),
 
 					// TODO explain rights (get source code) and obligations of provider (list modficiations)
 					// (link to page explaining more)
