@@ -54,7 +54,11 @@ func (qq *FileMetadata) Widget(
 
 	// how to sort files in browse if no primary filename? value tag?
 
-	children := []wx.IWidget{
+	var children []wx.IWidget
+
+	children = append(children, qq.FileAttributes.Widget(ctx, data))
+
+	children = append(children,
 		&wx.Button{
 			Label:     wx.T("Mark as done"),
 			StyleType: wx.ButtonStyleTypeElevated,
@@ -67,8 +71,7 @@ func (qq *FileMetadata) Widget(
 				),
 			},
 		},
-	}
-	children = append(children, qq.FileAttributes.Widget(ctx, data))
+	)
 
 	return &wx.ScrollableContent{
 		Widget: wx.Widget[wx.ScrollableContent]{
@@ -76,8 +79,8 @@ func (qq *FileMetadata) Widget(
 		},
 		// GapY:     true,
 		Children: children,
-		MarginY:  true,
-		FlexCol:  true,
+		// MarginY:  true,
+		FlexCol: true,
 	}
 }
 
