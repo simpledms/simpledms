@@ -91,7 +91,7 @@ func (qq *AboutPage) Widget(ctx ctxx.Context) renderable.Renderable {
 					wx.P(`You should have received a copy of the GNU Affero General Public License
 					along with this program. If not, see <https://www.gnu.org/licenses/>.`),
 
-					wx.H(wx.HeadingTypeTitleLg, wx.T(`Additional terms under GNU Affero General Public License version 3 section 7`).SetBold(),
+					wx.H(wx.HeadingTypeTitleLg, wx.T(`Additional terms under GNU Affero General Public License version 3 section 7`)),
 
 					wx.P(`In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):`),
 

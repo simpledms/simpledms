@@ -56,8 +56,8 @@ func (qq *FileMetadata) Widget(
 
 	var children []wx.IWidget
 
-	children = append(children, qq.FileAttributes.Widget(ctx, data))
-
+	// TODO above or below FileAttributes? Must remove MarginY
+	// 		on scrollable content if below
 	children = append(children,
 		&wx.Button{
 			Label:     wx.T("Mark as done"),
@@ -73,14 +73,16 @@ func (qq *FileMetadata) Widget(
 		},
 	)
 
+	children = append(children, qq.FileAttributes.Widget(ctx, data))
+
 	return &wx.ScrollableContent{
 		Widget: wx.Widget[wx.ScrollableContent]{
 			ID: qq.MetadataTabContentID(),
 		},
 		// GapY:     true,
 		Children: children,
-		// MarginY:  true,
-		FlexCol: true,
+		MarginY:  true,
+		FlexCol:  true,
 	}
 }
 
