@@ -17,9 +17,11 @@ type FilterChip struct {
 	LeadingIcon  string
 	TrailingIcon string
 
-	Name      string
-	Value     string
-	IsChecked bool
+	Name  string
+	Value string
+
+	IsChecked    bool
+	IsSuggestion bool
 }
 
 func (qq *FilterChip) GetInputType() string {
@@ -27,4 +29,11 @@ func (qq *FilterChip) GetInputType() string {
 		return "radio"
 	}
 	return "checkbox"
+}
+
+func (qq *FilterChip) GetTooltip() *Text {
+	if qq.IsSuggestion && !qq.IsChecked {
+		return T("Suggestion")
+	}
+	return T("")
 }

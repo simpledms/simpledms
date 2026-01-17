@@ -2,7 +2,11 @@
 	<div
 			id="{{ .GetID }}"
 			{{ template "HTMXAttrs" .HTMXAttrs }}
+			title="{{ render .GetContext .GetTooltip }}"
 			class="h-7 rounded-sm inline-flex
+			{{ if .IsSuggestion }}
+				 outline -outline-offset-2 outline-2 outline-secondary
+			{{ end }}
 			bg-surface-container-highest
 			{{/* has-[:checked]:outline-0
 			outline outline-outline-variant outline-1 -outline-offset-1
