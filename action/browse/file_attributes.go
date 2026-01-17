@@ -229,7 +229,7 @@ func (qq *FileAttributes) documentTypeBadge(
 		documentTypeChips = append(documentTypeChips, &wx.FilterChip{
 			Label:        wx.Tu(documentType.Name),
 			IsChecked:    documentType.ID == filex.Data.DocumentTypeID,
-			IsSuggested:  isSuggested,
+			IsSuggestion: isSuggested,
 			TrailingIcon: trailingIcon,
 			HTMXAttrs: wx.HTMXAttrs{
 				HxPost:   qq.actions.SelectDocumentType.Endpoint(),
@@ -475,11 +475,11 @@ func (qq *FileAttributes) tagBadge(
 		icon = "label_important"
 	}
 	chips = append(chips, &wx.FilterChip{
-		Label:       wx.Tu(tagx.Name),
-		LeadingIcon: icon,
-		Value:       fmt.Sprintf("%d", tagx.ID),
-		IsChecked:   tagAssignmentsMap[tagx.ID],
-		IsSuggested: isSuggested,
+		Label:        wx.Tu(tagx.Name),
+		LeadingIcon:  icon,
+		Value:        fmt.Sprintf("%d", tagx.ID),
+		IsChecked:    tagAssignmentsMap[tagx.ID],
+		IsSuggestion: isSuggested,
 		HTMXAttrs: wx.HTMXAttrs{
 			HxPost: qq.actions.Tagging.ToggleFileTag.Endpoint(),
 			HxVals: util.JSON(qq.actions.Tagging.ToggleFileTag.Data(filex.Data.ID, tagx.ID)),
