@@ -17,9 +17,11 @@ type FilterChip struct {
 	LeadingIcon  string
 	TrailingIcon string
 
-	Name      string
-	Value     string
-	IsChecked bool
+	Name  string
+	Value string
+
+	IsChecked   bool
+	IsSuggested bool
 }
 
 func (qq *FilterChip) GetInputType() string {

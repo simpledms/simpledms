@@ -4,12 +4,16 @@ import (
 	"fmt"
 	"log"
 
+	"entgo.io/ent/dialect/sql"
+
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
+	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
+	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/model/common/attributetype"
@@ -85,9 +89,47 @@ func (qq *FileAttributes) Content(
 	data *FileAttributesData,
 ) wx.IWidget {
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
-	documentTypes := ctx.SpaceCtx().Space.QueryDocumentTypes().Order(documenttype.ByName()).AllX(ctx)
 
-	if len(documentTypes) == 0 {
+	suggestedDocumentTypes := ctx.SpaceCtx().Space.QueryDocumentTypes().
+		Order(documenttype.ByName()).
+		Where(
+			func(qs *sql.Selector) {
+				fileSearchTable := sql.Table(filesearch.Table)
+				qs.Where(
+					sql.In(qs.C(file.FieldID),
+						sql.Select(qs.C(documenttype.FieldID)).From(fileSearchTable).
+							Where(
+								sql.And(
+									sql.ExprP(
+										fileSearchTable.C(filesearch.FieldFileSearches)+" MATCH "+
+											`'"' || replace(`+qs.C(documenttype.FieldName)+`, '"', '""') || '"'`,
+									),
+									// sql.EQ(
+									// fileSearchTable.C(filesearch.FieldFileSearches),
+									// `'"' || replace(`+qs.C(documenttype.FieldName)+`, '"', '""') || '"'`,
+									// ),
+									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+								),
+							).
+							OrderBy(fileSearchTable.C(filesearch.FieldRank)).
+							Limit(3),
+					),
+				)
+			},
+		).
+		AllX(ctx)
+
+	var suggestedDocumentTypeIDs []int64
+	for _, documentType := range suggestedDocumentTypes {
+		suggestedDocumentTypeIDs = append(suggestedDocumentTypeIDs, documentType.ID)
+	}
+
+	documentTypes := ctx.SpaceCtx().Space.QueryDocumentTypes().
+		Where(documenttype.IDNotIn(suggestedDocumentTypeIDs...)).
+		Order(documenttype.ByName()).
+		AllX(ctx)
+
+	if len(documentTypes) == 0 && len(suggestedDocumentTypes) == 0 {
 		return &wx.EmptyState{
 			Headline: wx.T("No document types available yet."),
 			Actions: []wx.IWidget{
@@ -110,53 +152,29 @@ func (qq *FileAttributes) Content(
 		tagAssignmentsMap[tagAssignment.TagID] = true
 	}
 
+	for _, documentType := range suggestedDocumentTypes {
+		documentTypeChips, attributeBlocks = qq.documentTypeBadge(
+			ctx,
+			data,
+			filex,
+			documentType,
+			true,
+			documentTypeChips,
+			tagAssignmentsMap,
+			attributeBlocks,
+		)
+	}
 	for _, documentType := range documentTypes {
-		// if selected, just show selected one, if nothing selected, show all
-		if filex.Data.DocumentTypeID == 0 || filex.Data.DocumentTypeID == documentType.ID {
-			trailingIcon := ""
-			if filex.Data.DocumentTypeID == documentType.ID {
-				trailingIcon = "close"
-			}
-			// TODO make it a InputChip instead of adding a `close` TrailingIcon?
-			//		or at least make Icon and IconButton?
-			documentTypeChips = append(documentTypeChips, &wx.FilterChip{
-				Label:        wx.Tu(documentType.Name),
-				IsChecked:    documentType.ID == filex.Data.DocumentTypeID,
-				TrailingIcon: trailingIcon,
-				HTMXAttrs: wx.HTMXAttrs{
-					HxPost:   qq.actions.SelectDocumentType.Endpoint(),
-					HxVals:   util.JSON(qq.actions.SelectDocumentType.Data(data.FileID, documentType.ID)),
-					HxTarget: "#" + qq.FilePropertiesID(),
-					HxSwap:   "outerHTML",
-					HxHeaders: autil.QueryHeader(
-						qq.Endpoint(),
-						qq.Data(data.FileID),
-					),
-				},
-			})
-		}
-
-		if documentType.ID == filex.Data.DocumentTypeID {
-			// TODO ordering
-			attributes := documentType.QueryAttributes().WithProperty().AllX(ctx)
-			for _, attributex := range attributes {
-				var block *wx.Column
-				switch attributex.Type {
-				case attributetype.Field:
-					block = qq.propertyAttributeBlock(ctx, filex, attributex)
-				case attributetype.Tag:
-					block = qq.tagGroupAttributeBlock(ctx, tagAssignmentsMap, filex, attributex)
-				default:
-					log.Println("unknown attribute type: ", attributex.Type)
-					continue
-				}
-
-				attributeBlocks = append(
-					attributeBlocks,
-					block,
-				)
-			}
-		}
+		documentTypeChips, attributeBlocks = qq.documentTypeBadge(
+			ctx,
+			data,
+			filex,
+			documentType,
+			false,
+			documentTypeChips,
+			tagAssignmentsMap,
+			attributeBlocks,
+		)
 	}
 
 	return []wx.IWidget{
@@ -185,6 +203,67 @@ func (qq *FileAttributes) Content(
 		},
 		attributeBlocks,
 	}
+}
+
+// TODO refactor should, just return one and caller should append
+func (qq *FileAttributes) documentTypeBadge(
+	ctx ctxx.Context,
+	data *FileAttributesData,
+	filex *model.File,
+	documentType *enttenant.DocumentType,
+	isSuggested bool,
+	documentTypeChips []*wx.FilterChip,
+	tagAssignmentsMap map[int64]bool,
+	attributeBlocks []*wx.Column,
+) ([]*wx.FilterChip, []*wx.Column) {
+	// if selected, just show selected one, if nothing selected, show all
+	if filex.Data.DocumentTypeID == 0 || filex.Data.DocumentTypeID == documentType.ID {
+		trailingIcon := ""
+		if filex.Data.DocumentTypeID == documentType.ID {
+			trailingIcon = "close"
+		}
+		// TODO make it a InputChip instead of adding a `close` TrailingIcon?
+		//		or at least make Icon and IconButton?
+		documentTypeChips = append(documentTypeChips, &wx.FilterChip{
+			Label:        wx.Tu(documentType.Name),
+			IsChecked:    documentType.ID == filex.Data.DocumentTypeID,
+			IsSuggested:  isSuggested,
+			TrailingIcon: trailingIcon,
+			HTMXAttrs: wx.HTMXAttrs{
+				HxPost:   qq.actions.SelectDocumentType.Endpoint(),
+				HxVals:   util.JSON(qq.actions.SelectDocumentType.Data(data.FileID, documentType.ID)),
+				HxTarget: "#" + qq.FilePropertiesID(),
+				HxSwap:   "outerHTML",
+				HxHeaders: autil.QueryHeader(
+					qq.Endpoint(),
+					qq.Data(data.FileID),
+				),
+			},
+		})
+	}
+
+	if documentType.ID == filex.Data.DocumentTypeID {
+		// TODO ordering
+		attributes := documentType.QueryAttributes().WithProperty().AllX(ctx)
+		for _, attributex := range attributes {
+			var block *wx.Column
+			switch attributex.Type {
+			case attributetype.Field:
+				block = qq.propertyAttributeBlock(ctx, filex, attributex)
+			case attributetype.Tag:
+				block = qq.tagGroupAttributeBlock(ctx, tagAssignmentsMap, filex, attributex)
+			default:
+				log.Println("unknown attribute type: ", attributex.Type)
+				continue
+			}
+
+			attributeBlocks = append(
+				attributeBlocks,
+				block,
+			)
+		}
+	}
+	return documentTypeChips, attributeBlocks
 }
 
 func (qq *FileAttributes) propertyAttributeBlock(
@@ -306,10 +385,45 @@ func (qq *FileAttributes) tagGroupAttributeBlock(
 	filex *model.File,
 	attributex *enttenant.Attribute,
 ) *wx.Column {
+	suggestedTags := ctx.SpaceCtx().Space.QueryTags().
+		Order(tag.ByName()).
+		Where(
+			func(qs *sql.Selector) {
+				fileSearchTable := sql.Table(filesearch.Table)
+				qs.Where(
+					sql.In(qs.C(file.FieldID),
+						sql.Select(qs.C(tag.FieldID)).From(fileSearchTable).
+							Where(
+								sql.And(
+									sql.ExprP(
+										fileSearchTable.C(filesearch.FieldFileSearches)+" MATCH "+
+											`'"' || replace(`+qs.C(tag.FieldName)+`, '"', '""') || '"'`,
+									),
+									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+									sql.EQ(tag.FieldGroupID, attributex.TagID),
+								),
+							).
+							OrderBy(fileSearchTable.C(filesearch.FieldRank)).
+							Limit(3),
+					),
+				)
+			},
+		).
+		AllX(ctx)
+
+	var suggestedTagIDs []int64
+	for _, tagx := range suggestedTags {
+		suggestedTagIDs = append(suggestedTagIDs, tagx.ID)
+	}
+
 	// TODO not efficient; do one query one layer above?
 	//		is it possible to query all and filter down on demand? or implement helper to split
 	// TODO show selected first
-	tags := ctx.SpaceCtx().Space.QueryTags().Order(tag.ByName()).Where(tag.GroupID(attributex.TagID)).AllX(ctx)
+	tags := ctx.SpaceCtx().Space.QueryTags().
+		Order(tag.ByName()).
+		Where(tag.GroupID(attributex.TagID), tag.IDNotIn(suggestedTagIDs...)).
+		AllX(ctx)
+
 	var chips []wx.IWidget
 
 	chips = append(chips, &wx.AssistChip{
@@ -321,22 +435,11 @@ func (qq *FileAttributes) tagGroupAttributeBlock(
 		),
 	})
 
+	for _, tagx := range suggestedTags {
+		chips = qq.tagBadge(tagx, chips, tagAssignmentsMap, filex, true)
+	}
 	for _, tagx := range tags {
-		icon := "label"
-		if tagx.Type == tagtype.Super {
-			icon = "label_important"
-		}
-		chips = append(chips, &wx.FilterChip{
-			Label:       wx.Tu(tagx.Name),
-			LeadingIcon: icon,
-			Value:       fmt.Sprintf("%d", tagx.ID),
-			IsChecked:   tagAssignmentsMap[tagx.ID],
-			HTMXAttrs: wx.HTMXAttrs{
-				HxPost: qq.actions.Tagging.ToggleFileTag.Endpoint(),
-				HxVals: util.JSON(qq.actions.Tagging.ToggleFileTag.Data(filex.Data.ID, tagx.ID)),
-				HxSwap: "none",
-			},
-		})
+		chips = qq.tagBadge(tagx, chips, tagAssignmentsMap, filex, false)
 	}
 
 	// attributeBlockID := fmt.Sprintf("attributeBlock-%d", attributex.ID)
@@ -356,6 +459,32 @@ func (qq *FileAttributes) tagGroupAttributeBlock(
 			},
 		},
 	}
+}
+
+func (qq *FileAttributes) tagBadge(
+	tagx *enttenant.Tag,
+	chips []wx.IWidget,
+	tagAssignmentsMap map[int64]bool,
+	filex *model.File,
+	isSuggested bool,
+) []wx.IWidget {
+	icon := "label"
+	if tagx.Type == tagtype.Super {
+		icon = "label_important"
+	}
+	chips = append(chips, &wx.FilterChip{
+		Label:       wx.Tu(tagx.Name),
+		LeadingIcon: icon,
+		Value:       fmt.Sprintf("%d", tagx.ID),
+		IsChecked:   tagAssignmentsMap[tagx.ID],
+		IsSuggested: isSuggested,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost: qq.actions.Tagging.ToggleFileTag.Endpoint(),
+			HxVals: util.JSON(qq.actions.Tagging.ToggleFileTag.Data(filex.Data.ID, tagx.ID)),
+			HxSwap: "none",
+		},
+	})
+	return chips
 }
 
 func (qq *FileAttributes) FilePropertiesID() string {

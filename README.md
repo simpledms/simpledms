@@ -1,6 +1,6 @@
 # SimpleDMS – Document Management for Small Businesses
 
-SimpleDMS is an easy-to-use document management system (DMS) for small businesses that sorts documents almost by itself.
+SimpleDMS is an easy-to-use open source document management system (DMS) for small businesses that sorts documents almost by itself.
 
 ## Simple and efficient
 
