@@ -11,7 +11,6 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
-	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
@@ -96,10 +95,12 @@ func (qq *FileAttributes) Content(
 			func(qs *sql.Selector) {
 				fileSearchTable := sql.Table(filesearch.Table)
 				qs.Where(
-					sql.In(qs.C(file.FieldID),
-						sql.Select(qs.C(documenttype.FieldID)).From(fileSearchTable).
+					sql.Exists(
+						sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
 							Where(
 								sql.And(
+									// Rowid is internal id
+									sql.EQ(fileSearchTable.C(filesearch.FieldRowid), filex.Data.ID),
 									sql.ExprP(
 										fileSearchTable.C(filesearch.FieldFileSearches)+" MATCH "+
 											`'"' || replace(`+qs.C(documenttype.FieldName)+`, '"', '""') || '"'`,
@@ -108,16 +109,17 @@ func (qq *FileAttributes) Content(
 									// fileSearchTable.C(filesearch.FieldFileSearches),
 									// `'"' || replace(`+qs.C(documenttype.FieldName)+`, '"', '""') || '"'`,
 									// ),
-									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0), // TODO what is a good threshold?
 								),
-							).
-							OrderBy(fileSearchTable.C(filesearch.FieldRank)).
-							Limit(3),
+							),
 					),
 				)
 			},
 		).
+		// Limit(3). // would need order by filesearch.FieldRank
 		AllX(ctx)
+
+	log.Println(suggestedDocumentTypes)
 
 	var suggestedDocumentTypeIDs []int64
 	for _, documentType := range suggestedDocumentTypes {
@@ -391,20 +393,20 @@ func (qq *FileAttributes) tagGroupAttributeBlock(
 			func(qs *sql.Selector) {
 				fileSearchTable := sql.Table(filesearch.Table)
 				qs.Where(
-					sql.In(qs.C(file.FieldID),
-						sql.Select(qs.C(tag.FieldID)).From(fileSearchTable).
+					sql.Exists(
+						sql.Select(qs.C(filesearch.FieldRowid)).From(fileSearchTable).
 							Where(
 								sql.And(
+									// Rowid is internal id
+									sql.EQ(fileSearchTable.C(filesearch.FieldRowid), filex.Data.ID),
+									sql.EQ(tag.FieldGroupID, attributex.TagID),
 									sql.ExprP(
 										fileSearchTable.C(filesearch.FieldFileSearches)+" MATCH "+
 											`'"' || replace(`+qs.C(tag.FieldName)+`, '"', '""') || '"'`,
 									),
 									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
-									sql.EQ(tag.FieldGroupID, attributex.TagID),
 								),
-							).
-							OrderBy(fileSearchTable.C(filesearch.FieldRank)).
-							Limit(3),
+							),
 					),
 				)
 			},
