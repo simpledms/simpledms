@@ -34,7 +34,7 @@ The goal is to keep all features, including future features, available for free.
 
 To prevent making competing the SimpleDMS SaaS offering (simpledms.eu / simpledms.ch) too easy, a control plane to manage multi-tenant setups (customer management, billing integration, per customer storage limits, maybe white-labeling in the future, etc.) is locked behind a paywall. The code in the paywalled repo is source-available and modification is allowed.
 
-In addition to the SaaS offering, there are business offerings to obtain the source code under a non-copyleft license or a license that allows removing the attribution notices in the app.
+In addition to the SaaS offering, there is a business offering to get the source code under a non-copyleft license.
 
 On demand, paid access to a SimpleDMS version with long-term support (LTS) and support plans can be offered.
 
