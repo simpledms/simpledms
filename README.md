@@ -57,6 +57,6 @@ When open-sourcing SimpleDMS in December 2025, I decided to remove the git histo
 
 ## License
 
-You can find the license in this repo in the file [LICENSE_WITH_ADDITIONAL_TERMS.md](https://github.com/simpledms/simpledms/blob/main/LICENSE_WITH_ADDITIONAL_TERMS.md).
+You can find the license for SimpleDMS in the file [LICENSE_WITH_ADDITIONAL_TERMS.md](https://github.com/simpledms/simpledms/blob/main/LICENSE_WITH_ADDITIONAL_TERMS.md) in this repo.
 
-The verbatim copy of the AGPL v3 can be found in the file [COPYING.md](https://github.com/simpledms/simpledms/blob/main/COPYING.md)
+The verbatim copy of the AGPL v3 can be found in the file [COPYING.md](https://github.com/simpledms/simpledms/blob/main/COPYING.md).
