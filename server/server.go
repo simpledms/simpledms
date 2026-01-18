@@ -264,7 +264,11 @@ func (qq *Server) Start() error {
 
 	if systemConfigx.IsIdentityEncryptedWithPassphrase {
 		maintenanceModeServer := http.Server{
-			Addr: fmt.Sprintf(":%d", qq.port(systemConfigx.TLSCertFilepath, systemConfigx.TLSPrivateKeyFilepath)),
+			Addr: fmt.Sprintf(":%d", qq.port(
+				useAutocert,
+				systemConfigx.TLSCertFilepath,
+				systemConfigx.TLSPrivateKeyFilepath,
+			)),
 		}
 
 		mux := http.NewServeMux()
@@ -616,6 +620,7 @@ func (qq *Server) Start() error {
 	if useAutocert {
 		server := &http.Server{
 			Addr: fmt.Sprintf(":%d", qq.port(
+				useAutocert,
 				systemConfig.TLS().TLSCertFilepath,
 				systemConfig.TLS().TLSPrivateKeyFilepath,
 			)),
@@ -626,6 +631,7 @@ func (qq *Server) Start() error {
 	} else if systemConfig.TLS().TLSCertFilepath == "" || systemConfig.TLS().TLSPrivateKeyFilepath == "" {
 		err = http.ListenAndServe(
 			fmt.Sprintf(":%d", qq.port(
+				useAutocert,
 				systemConfig.TLS().TLSCertFilepath,
 				systemConfig.TLS().TLSPrivateKeyFilepath,
 			)),
@@ -634,6 +640,7 @@ func (qq *Server) Start() error {
 	} else {
 		err = http.ListenAndServeTLS(
 			fmt.Sprintf(":%d", qq.port(
+				useAutocert,
 				systemConfig.TLS().TLSCertFilepath,
 				systemConfig.TLS().TLSPrivateKeyFilepath,
 			)),
@@ -772,11 +779,11 @@ func (qq *Server) initInitialUser(
 	return nil
 }
 
-func (qq *Server) port(tlsCertFilepath, tlsPrivateKeyFilepath string) int {
+func (qq *Server) port(useAutocert bool, tlsCertFilepath, tlsPrivateKeyFilepath string) int {
 	if qq.unsafePort > 0 {
 		return qq.unsafePort
 	}
-	if tlsCertFilepath != "" && tlsPrivateKeyFilepath != "" {
+	if useAutocert || (tlsCertFilepath != "" && tlsPrivateKeyFilepath != "") {
 		return 443
 	}
 	return 80
