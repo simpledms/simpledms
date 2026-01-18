@@ -55,3 +55,8 @@ In the beginning SimpleDMS was developed in a monorepo together with other apps 
 
 When open-sourcing SimpleDMS in December 2025, I decided to remove the git history, because preserving it while extracting the project from the monorepo was not worth the effort. In addition, I didn't want to risk exposing any personal notes or details of my other projects.
 
+## License
+
+You can find the license in this repo in the file [LICENSE_WITH_ADDITIONAL_TERMS.md](https://github.com/simpledms/simpledms/blob/main/LICENSE_WITH_ADDITIONAL_TERMS.md).
+
+The verbatim copy of the AGPL v3 can be found in the file [COPYING.md](https://github.com/simpledms/simpledms/blob/main/COPYING.md)
