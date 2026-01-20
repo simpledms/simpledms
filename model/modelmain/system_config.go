@@ -20,15 +20,21 @@ type SystemConfig struct {
 	// not exported so that nobody has write access
 	data              *entmain.SystemConfig
 	isSaaSModeEnabled bool
+	// also stored in VisitorContext
+	commercialLicenseEnabled bool
 	// nilableX25519Identity *age.X25519Identity
 	allowInsecureCookies bool
 }
 
-func NewSystemConfig(data *entmain.SystemConfig, isSaaSModeEnabled, allowInsecureCookies bool) *SystemConfig {
+func NewSystemConfig(
+	data *entmain.SystemConfig,
+	isSaaSModeEnabled, commercialLicenseEnabled, allowInsecureCookies bool,
+) *SystemConfig {
 	return &SystemConfig{
-		data:                 data,
-		isSaaSModeEnabled:    isSaaSModeEnabled,
-		allowInsecureCookies: allowInsecureCookies,
+		data:                     data,
+		isSaaSModeEnabled:        isSaaSModeEnabled,
+		commercialLicenseEnabled: commercialLicenseEnabled,
+		allowInsecureCookies:     allowInsecureCookies,
 	}
 }
 
@@ -236,6 +242,10 @@ func (qq *SystemConfig) NilableX25519Identity() *age.X25519Identity {
 
 func (qq *SystemConfig) IsSaaSModeEnabled() bool {
 	return qq.isSaaSModeEnabled
+}
+
+func (qq *SystemConfig) CommercialLicenseEnabled() bool {
+	return qq.commercialLicenseEnabled
 }
 
 func (qq *SystemConfig) AllowInsecureCookies() bool {

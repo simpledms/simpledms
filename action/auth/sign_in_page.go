@@ -83,6 +83,7 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 	}
 
 	return &wx.NarrowLayout{
-		Content: column,
+		Content:       column,
+		WithPoweredBy: !qq.infra.SystemConfig().CommercialLicenseEnabled(),
 	}
 }

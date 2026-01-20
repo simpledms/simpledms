@@ -54,6 +54,7 @@ func main() {
 		port,
 		assetsFS,
 		false,
+		false,
 	)
 	err = serverx.Start()
 	if err != nil {

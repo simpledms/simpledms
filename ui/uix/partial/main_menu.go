@@ -130,17 +130,21 @@ func NewMainMenu(ctx ctxx.Context) *wx.IconButton {
 				HxPost: route2.SignOutCmd(),
 			},
 		},
-		&wx.MenuItem{
-			IsDivider: true,
-		},
-		&wx.MenuItem{
-			LeadingIcon: "info",
-			Label:       wx.T("About SimpleDMS"),
-			HTMXAttrs: wx.HTMXAttrs{
-				HxGet: route2.AboutPage(),
-				// HxPost: route.SignOutCmd(),
+	)
+
+	if !ctx.VisitorCtx().CommercialLicenseEnabled {
+		items = append(items,
+			&wx.MenuItem{
+				IsDivider: true,
 			},
-		})
+			&wx.MenuItem{
+				LeadingIcon: "info",
+				Label:       wx.T("About SimpleDMS"),
+				HTMXAttrs: wx.HTMXAttrs{
+					HxGet: route2.AboutPage(),
+				},
+			})
+	}
 
 	return &wx.IconButton{
 		Icon: "menu",

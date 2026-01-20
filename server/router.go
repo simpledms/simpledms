@@ -232,6 +232,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 			acceptLanguage,
 			clientTimezone,
 			isHTMXRequest,
+			qq.infra.SystemConfig().CommercialLicenseEnabled(),
 		)
 
 		defer func() {

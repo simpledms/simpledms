@@ -23,6 +23,8 @@ type VisitorContext struct {
 	// IsAppLocked   bool
 	LanguageBCP47 string // used in widgets
 	Location      *time.Location
+	// also stored in system config
+	CommercialLicenseEnabled bool
 }
 
 func NewVisitorContext(
@@ -32,6 +34,7 @@ func NewVisitorContext(
 	acceptLanguageStr string,
 	clientTimezone string,
 	isHTMXRequest bool,
+	commercialLicenseEnabled bool,
 ) *VisitorContext {
 	var langTag language.Tag
 	if acceptLanguageStr != "" {
@@ -66,8 +69,9 @@ func NewVisitorContext(
 		Printer:       printer,
 		IsHTMXRequest: isHTMXRequest,
 		// IsAppLocked:   isAppLocked,
-		LanguageBCP47: langTagBase.String(),
-		Location:      location,
+		LanguageBCP47:            langTagBase.String(),
+		Location:                 location,
+		CommercialLicenseEnabled: commercialLicenseEnabled,
 	}
 	visitorCtx.Context = context.WithValue(ctx, visitorCtxKey, visitorCtx)
 	return visitorCtx

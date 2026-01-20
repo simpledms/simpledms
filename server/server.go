@@ -51,13 +51,14 @@ import (
 
 // TODO move to own package in cmd?
 type Server struct {
-	metaPath           string
-	devMode            bool
-	unsafePort         int // unsafe because it can be 0, use qq.port()
-	assetsFS           fs.FS
-	migrationsMainFS   fs.FS
-	migrationsTenantFS fs.FS
-	isSaaSModeEnabled  bool
+	metaPath                 string
+	devMode                  bool
+	unsafePort               int // unsafe because it can be 0, use qq.port()
+	assetsFS                 fs.FS
+	migrationsMainFS         fs.FS
+	migrationsTenantFS       fs.FS
+	isSaaSModeEnabled        bool
+	commercialLicenseEnabled bool
 }
 
 func NewServer(
@@ -66,6 +67,7 @@ func NewServer(
 	unsafePort int,
 	assetsFS fs.FS,
 	isSaaSModeEnabled bool,
+	commercialLicenseEnabled bool,
 ) *Server {
 	// TODO should path outside PWD be allowed? probably if someone likes
 	//		to manage all db files / meta data centrally
@@ -96,13 +98,14 @@ func NewServer(
 	}
 
 	return &Server{
-		metaPath:           metaPath,
-		devMode:            devMode,
-		unsafePort:         unsafePort,
-		assetsFS:           assetsFS,
-		migrationsMainFS:   migrationsMainFS,
-		migrationsTenantFS: migrationsTenantFS,
-		isSaaSModeEnabled:  isSaaSModeEnabled,
+		metaPath:                 metaPath,
+		devMode:                  devMode,
+		unsafePort:               unsafePort,
+		assetsFS:                 assetsFS,
+		migrationsMainFS:         migrationsMainFS,
+		migrationsTenantFS:       migrationsTenantFS,
+		isSaaSModeEnabled:        isSaaSModeEnabled,
+		commercialLicenseEnabled: commercialLicenseEnabled,
 	}
 }
 
@@ -341,6 +344,7 @@ func (qq *Server) Start() error {
 				req.Header.Get("Accept-Language"),
 				req.Header.Get("X-Client-Timezone"), // set for all HTMX requests
 				false,
+				qq.commercialLicenseEnabled,
 			)
 
 			titlex := wx.Tuf("%s | SimpleDMS", wx.T("Maintenance mode").String(visitorCtx))
@@ -430,6 +434,7 @@ func (qq *Server) Start() error {
 	systemConfig := modelmain.NewSystemConfig(
 		systemConfigx,
 		qq.isSaaSModeEnabled,
+		qq.commercialLicenseEnabled,
 		allowInsecureCookies,
 	)
 
@@ -733,6 +738,7 @@ func (qq *Server) initInitialUser(
 		"en",
 		"UTC",
 		false,
+		qq.commercialLicenseEnabled,
 	)
 
 	skipSendingMail := initialTemporaryPassword != ""
