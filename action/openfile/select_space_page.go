@@ -1,14 +1,11 @@
 package openfile
 
 import (
-	"log"
-
 	acommon "github.com/simpledms/simpledms/action/common"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/uix/route"
@@ -31,7 +28,7 @@ type SelectSpacePage struct {
 func NewSelectSpacePage(
 	infra *common.Infra,
 	actions *Actions,
-	// cachex *cache.Cache,
+// cachex *cache.Cache,
 	tenantDBs *tenantdbs.TenantDBs,
 ) *SelectSpacePage {
 	return &SelectSpacePage{
@@ -81,22 +78,10 @@ func (qq *SelectSpacePage) Widget(ctx ctxx.Context, uploadToken string, state *S
 
 	var spaceItems []*wx.ListItem
 
-	// TODO add all spaces
-	//		spaces list (tenant name)
+	spacesByTenant := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
 
-	tenants := ctx.MainCtx().Account.QueryTenants().AllX(ctx)
-
-	for _, tenantx := range tenants {
-		tenantDB, ok := qq.tenantDBs.Load(tenantx.ID)
-		if !ok {
-			log.Println("tenant db not found, tenant id was", tenantx.ID)
-			continue
-		}
-		spaces, err := tenantDB.ReadOnlyConn.Space.Query().All(ctx)
-		if err != nil && !enttenant.IsNotFound(err) {
-			log.Println("failed to query spaces for tenant", tenantx.ID, err)
-			continue
-		}
+	// TODO ordner?
+	for tenantx, spaces := range spacesByTenant {
 		if len(spaces) == 0 {
 			spaceItems = append(spaceItems, &wx.ListItem{
 				Type:           wx.ListItemTypeHelper,
@@ -119,32 +104,21 @@ func (qq *SelectSpacePage) Widget(ctx ctxx.Context, uploadToken string, state *S
 						}{
 							UploadToken: uploadToken,
 						})(tenantx.PublicID.String(), spacex.PublicID.String()),
-						// HxPost: qq.actions.SelectSpace.Endpoint(),
-						// HxVals: util.JSON(qq.actions.SelectSpace.Data()),
 					},
 				})
 			}
 		}
-
 	}
 
-	spaceList := &wx.List{
-		Children: spaceItems,
-	}
-
-	var children []wx.IWidget
-
-	children = append(children,
-		spaceList,
-	)
-
-	fabs := []*wx.FloatingActionButton{}
+	var fabs []*wx.FloatingActionButton
 
 	mainLayout := &wx.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, "upload", fabs),
 		Content: &wx.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
-			List:   children,
+			List: &wx.List{
+				Children: spaceItems,
+			},
 		},
 	}
 
