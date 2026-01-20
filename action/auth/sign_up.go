@@ -2,6 +2,7 @@ package auth
 
 import (
 	"log"
+	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -11,6 +12,7 @@ import (
 	"github.com/simpledms/simpledms/model/modelmain"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -71,6 +73,11 @@ func (qq *SignUp) Data(
 func (qq *SignUp) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	// TODO validate input
 	// TODO move to model?
+
+	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
+		// TODO or forbidden
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Sign up is disabled.")
+	}
 
 	data, err := autil.FormData[SignUpData](rw, req, ctx)
 	if err != nil {

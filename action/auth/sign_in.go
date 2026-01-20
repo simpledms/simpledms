@@ -69,13 +69,17 @@ func (qq *SignIn) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.
 	accountx, err := ctx.VisitorCtx().MainTx.Account.Query().Where(account.Email(entx.NewCIText(data.Email))).Only(ctx)
 	if err != nil {
 		if entmain.IsNotFound(err) {
-			snackbar := wx.NewSnackbarf("Found no account for this email address.").
-				WithAction(
+			snackbar := wx.NewSnackbarf("Found no account for this email address.")
+
+			if qq.infra.SystemConfig().IsSaaSModeEnabled() {
+				snackbar.WithAction(
 					qq.actions.SignUp.ModalLink(
 						qq.actions.SignUp.Data("", "", "", country.Unknown, language.Unknown, false),
 						wx.T("Sign up now."),
 						""),
 				)
+			}
+
 			return e.NewHTTPErrorWithSnackbar(http.StatusBadRequest, snackbar)
 		}
 		log.Println(err)
