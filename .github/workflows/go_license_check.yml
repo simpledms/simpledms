@@ -1,4 +1,4 @@
-name: go-licenses
+name: 'Go License Check'
 on:
   pull_request:
   workflow_dispatch: # trigger manually via GitHub Actions Workflows page
@@ -14,4 +14,4 @@ jobs:
       - name: Install
         run: go install github.com/google/go-licenses/v2@latest
       - name: Run
-        run: go-licenses check .
+        run: go-licenses check . --ignore github.com/simpledms/simpledms
