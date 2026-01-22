@@ -7,43 +7,45 @@ import (
 )
 
 type Actions struct {
-	Common *acommon.Actions
-	Page   *Page
+	Common                  *acommon.Actions
+	DocumentTypePage        *DocumentTypePage
+	ManageDocumentTypesPage *ManageDocumentTypesPage
 
-	ListDocumentTypes *ListDocumentTypes
-	Create            *Create
-	Delete            *Delete
-	Rename            *Rename
-	Details           *Details
+	ListDocumentTypesPartial *ListDocumentTypesPartial
+	CreateCmd                *CreateCmd
+	DeleteCmd                *DeleteCmd
+	RenameCmd                *RenameCmd
+	DetailsPartial           *DetailsPartial
 
-	Properties            *Attributes
-	CreateAttribute       *CreateAttribute
-	AddPropertyAttribute  *AddPropertyAttribute
-	DeleteAttribute       *DeleteAttribute
-	EditTagAttribute      *EditTagAttribute
-	EditPropertyAttribute *EditPropertyAttribute
+	Properties               *AttributesPartial
+	CreateAttributeCmd       *CreateAttributeCmd
+	AddPropertyAttributeCmd  *AddPropertyAttributeCmd
+	DeleteAttributeCmd       *DeleteAttributeCmd
+	EditTagAttributeCmd      *EditTagAttributeCmd
+	EditPropertyAttributeCmd *EditPropertyAttributeCmd
 }
 
 func NewActions(infra *common.Infra, commonActions *acommon.Actions) *Actions {
 	actions := new(Actions)
 
 	*actions = Actions{
-		Common: commonActions,
-		Page:   NewPage(infra, actions),
+		Common:                  commonActions,
+		DocumentTypePage:        NewDocumentTypePage(infra, actions),
+		ManageDocumentTypesPage: NewManageDocumentTypesPage(infra, actions),
 
-		ListDocumentTypes: NewListDocumentTypes(infra, actions),
-		Create:            NewCreate(infra, actions),
-		Delete:            NewDelete(infra, actions),
-		Rename:            NewRename(infra, actions),
+		ListDocumentTypesPartial: NewListDocumentTypesPartial(infra, actions),
+		CreateCmd:                NewCreateCmd(infra, actions),
+		DeleteCmd:                NewDeleteCmd(infra, actions),
+		RenameCmd:                NewRenameCmd(infra, actions),
 
-		Details: NewDetails(infra, actions),
+		DetailsPartial: NewDetailsPartial(infra, actions),
 
-		Properties:            NewAttributes(infra, actions),
-		CreateAttribute:       NewCreateAttribute(infra, actions),
-		AddPropertyAttribute:  NewAddPropertyAttribute(infra, actions),
-		DeleteAttribute:       NewDeleteAttribute(infra, actions),
-		EditTagAttribute:      NewEditTagAttribute(infra, actions),
-		EditPropertyAttribute: NewEditPropertyAttribute(infra, actions),
+		Properties:               NewAttributesPartial(infra, actions),
+		CreateAttributeCmd:       NewCreateAttributeCmd(infra, actions),
+		AddPropertyAttributeCmd:  NewAddPropertyAttributeCmd(infra, actions),
+		DeleteAttributeCmd:       NewDeleteAttributeCmd(infra, actions),
+		EditTagAttributeCmd:      NewEditTagAttributeCmd(infra, actions),
+		EditPropertyAttributeCmd: NewEditPropertyAttributeCmd(infra, actions),
 	}
 
 	return actions

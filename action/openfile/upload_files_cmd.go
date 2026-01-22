@@ -33,7 +33,7 @@ type UploadFilesCmd struct {
 
 func NewUploadFilesCmd(infra *common.Infra, actions *Actions) *UploadFilesCmd {
 	config := actionx.NewConfig(
-		actions.Route("upload-files"),
+		actions.Route("upload-files-cmd"),
 		false,
 	)
 	return &UploadFilesCmd{

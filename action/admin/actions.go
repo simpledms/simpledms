@@ -6,23 +6,23 @@ import (
 )
 
 type Actions struct {
-	InitApp   *InitApp
-	UnlockApp *UnlockApp
+	InitAppCmd   *InitAppCmd
+	UnlockAppCmd *UnlockAppCmd
 	// must also be possible per tenant
-	ToggleMaintenanceMode *ToggleMaintenanceMode
-	ChangePassphrase      *ChangePassphrase
-	RemovePassphrase      *RemovePassphrase
+	ToggleMaintenanceModeCmd *ToggleMaintenanceModeCmd
+	ChangePassphraseCmd      *ChangePassphraseCmd
+	RemovePassphraseCmd      *RemovePassphraseCmd
 }
 
 func NewActions(infra *common.Infra) *Actions {
 	actions := new(Actions)
 
 	*actions = Actions{
-		InitApp:               NewInitApp(infra, actions),
-		UnlockApp:             NewUnlockApp(infra, actions),
-		ToggleMaintenanceMode: NewToggleMaintenanceMode(infra, actions),
-		ChangePassphrase:      NewChangePassphrase(infra, actions),
-		RemovePassphrase:      NewRemovePassphrase(infra, actions),
+		InitAppCmd:               NewInitAppCmd(infra, actions),
+		UnlockAppCmd:             NewUnlockAppCmd(infra, actions),
+		ToggleMaintenanceModeCmd: NewToggleMaintenanceModeCmd(infra, actions),
+		ChangePassphraseCmd:      NewChangePassphraseCmd(infra, actions),
+		RemovePassphraseCmd:      NewRemovePassphraseCmd(infra, actions),
 	}
 
 	return actions

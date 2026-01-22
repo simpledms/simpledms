@@ -298,7 +298,7 @@ func State[T any](rw httpx.ResponseWriter, req *httpx.Request) (*T, error) {
 	// added on 1 April 2025;
 	// commented on 12 April 2025 because it had the side effect that switching via list between files
 	// did not preserve the url params, for example activeTab
-	// isCommand := strings.HasPrefix(req.URL.Path, "/-/cmd/")
+	// isCommand := strings.HasPrefix(req.URL.Path, "/-/")
 
 	currentURLStr := req.Header.Get("HX-Current-URL")
 	if currentURLStr != "" {

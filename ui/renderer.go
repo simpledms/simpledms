@@ -45,7 +45,7 @@ func (qq *Renderer) Render(rw httpx.ResponseWriter, ctx ctxx.Context, widgets ..
 		widget.SetContext(ctx)
 		if ctx == nil {
 			// don't log value because it could contain sensitive data, for example if
-			// auth.ChangePasswordData gets logged; see
+			// auth.ChangePasswordCmdData gets logged; see
 			// https://github.com/simpledms/simpledms/security/code-scanning/9
 			// for a concrete case
 			log.Printf("ctx is nil, widget type was %T", widget)

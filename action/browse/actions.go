@@ -8,57 +8,60 @@ import (
 )
 
 type SelectDirActions struct {
-	// SelectDir *SelectDir // not factored out from MoveFile yet
-	MakeDir *SelectDirMakeDir
+	// SelectDirPartial *SelectDirPartial // not factored out from MoveFileCmd yet
+	MakeDirCmd *SelectDirMakeDirPartial
 }
 
 type Actions struct {
 	Common  *acommon.Actions
 	Tagging *tagging.Actions
 
-	ChangeDir  *ChangeDir
-	ListDir    *ListDir
-	MakeDir    *MakeDir
-	DeleteFile *DeleteFile
+	BrowsePage              *BrowsePage
+	BrowseWithSelectionPage *BrowseWithSelectionPage
 
-	// SelectDir *SelectDirActions `actions:"select-dir"`
+	ChangeDirPartial *ChangeDirPartial
+	ListDirPartial   *ListDirPartial
+	MakeDirCmd       *MakeDirCmd
+	DeleteFile       *DeleteFile
 
-	FilePreview          *FilePreview
-	FileDetailsSideSheet *FileDetailsSideSheet
-	ShowFileInfo         *ShowFileInfo
-	ShowFileTabs         *ShowFileTabs
-	ShowFileSheet        *ShowFileSheet
-	UploadFile           *UploadFile
+	// SelectDirPartial *SelectDirActions `actions:"select-dir"`
+
+	FilePreviewPartial          *FilePreviewPartial
+	FileDetailsSideSheetPartial *FileDetailsSideSheetPartial
+	ShowFileInfoPartial         *ShowFileInfoPartial
+	ShowFileTabsPartial         *ShowFileTabsPartial
+	ShowFileSheetPartial        *ShowFileSheetPartial
+	UploadFileCmd               *UploadFileCmd
 	// UploadFileInFolderMode *UploadFileInFolderMode
-	FileAttributes     *FileAttributes
-	FileVersions       *FileVersions
-	FileInfo           *FileInfo
-	FileProperties     *FileProperties
-	SelectDocumentType *SelectDocumentType
-	SetFileProperty    *SetFileProperty
+	FileAttributesPartial     *FileAttributesPartial
+	FileVersionsPartial       *FileVersionsPartial
+	FileInfoPartial           *FileInfoPartial
+	FilePropertiesPartial     *FilePropertiesPartial
+	SelectDocumentTypePartial *SelectDocumentTypePartial
+	SetFilePropertyCmd        *SetFilePropertyCmd
 
 	// TODO rename to Rename and Move because they also work for folders?
-	RenameFile *RenameFile
-	MoveFile   *MoveFile
+	RenameFileCmd *RenameFileCmd
+	MoveFileCmd   *MoveFileCmd
 
-	FileListItem *FileListItem
+	FileListItemPartial *FileListItemPartial
 
 	// SearchList *SearchList
 
-	ListFilterTags           *ListFilterTags
-	ListFilterProperties     *ListFilterProperties
-	DocumentTypeFilter       *DocumentTypeFilter
-	ToggleTagFilter          *ToggleTagFilter
-	ToggleDocumentTypeFilter *ToggleDocumentTypeFilter
-	TogglePropertyFilter     *TogglePropertyFilter
-	DocumentTypeFilterDialog *DocumentTypeFilterDialog
-	TagsFilterDialog         *TagsFilterDialog
-	PropertiesFilterDialog   *PropertiesFilterDialog
-	UpdatePropertyFilter     *UpdatePropertyFilter
+	ListFilterTagsPartial           *ListFilterTagsPartial
+	ListFilterPropertiesPartial     *ListFilterPropertiesPartial
+	DocumentTypeFilterPartial       *DocumentTypeFilterPartial
+	ToggleTagFilterCmd              *ToggleTagFilterCmd
+	ToggleDocumentTypeFilterCmd     *ToggleDocumentTypeFilterCmd
+	TogglePropertyFilterCmd         *TogglePropertyFilterCmd
+	DocumentTypeFilterDialogPartial *DocumentTypeFilterDialogPartial
+	TagsFilterDialogPartial         *TagsFilterDialogPartial
+	PropertiesFilterDialogPartial   *PropertiesFilterDialogPartial
+	UpdatePropertyFilterCmd         *UpdatePropertyFilterCmd
 	// ToggleFolderMode         *ToggleFolderMode
 
-	FileUploadDialog *FileUploadDialog
-	UnzipArchiveCmd  *UnzipArchiveCmd
+	FileUploadDialogPartial *FileUploadDialogPartial
+	UnzipArchiveCmd         *UnzipArchiveCmd
 }
 
 func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActions *tagging.Actions) *Actions {
@@ -68,50 +71,53 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		Common:  commonActions,
 		Tagging: taggingActions,
 
-		ChangeDir:  NewChangeDir(infra, actions),
-		ListDir:    NewListDir(infra, actions),
-		MakeDir:    NewMakeDir(infra, actions),
-		DeleteFile: NewDeleteFile(infra, actions),
+		BrowsePage:              NewBrowsePage(infra, actions),
+		BrowseWithSelectionPage: NewBrowseWithSelectionPage(infra, actions),
 
-		// SelectDir: &SelectDirActions{
-		// MakeDir: NewSelectDirMakeDir(infra, actions),
+		ChangeDirPartial: NewChangeDirPartial(infra, actions),
+		ListDirPartial:   NewListDirPartial(infra, actions),
+		MakeDirCmd:       NewMakeDirCmd(infra, actions),
+		DeleteFile:       NewDeleteFile(infra, actions),
+
+		// SelectDirPartial: &SelectDirActions{
+		// MakeDirCmd: NewSelectDirMakeDirPartial(infra, actions),
 		// },
 
-		FilePreview:          NewFilePreview(infra, actions),
-		FileDetailsSideSheet: NewFileDetailsSideSheet(infra, actions),
-		ShowFileInfo:         NewShowFileInfo(infra, actions),
-		ShowFileTabs:         NewShowFileTabs(infra, actions),
-		ShowFileSheet:        NewShowFileSheet(infra, actions),
-		UploadFile:           NewUploadFile(infra, actions),
+		FilePreviewPartial:          NewFilePreviewPartial(infra, actions),
+		FileDetailsSideSheetPartial: NewFileDetailsSideSheetPartial(infra, actions),
+		ShowFileInfoPartial:         NewShowFileInfoPartial(infra, actions),
+		ShowFileTabsPartial:         NewShowFileTabsPartial(infra, actions),
+		ShowFileSheetPartial:        NewShowFileSheetPartial(infra, actions),
+		UploadFileCmd:               NewUploadFileCmd(infra, actions),
 		// UploadFileInFolderMode: NewUploadFileInFolderMode(infra, actions),
-		FileAttributes:     NewFileAttributes(infra, actions),
-		FileVersions:       NewFileVersions(infra, actions),
-		FileInfo:           NewFileInfo(infra, actions),
-		FileProperties:     NewFileProperties(infra, actions),
-		SelectDocumentType: NewSelectDocumentType(infra, actions),
-		SetFileProperty:    NewSetFileProperty(infra, actions),
+		FileAttributesPartial:     NewFileAttributesPartial(infra, actions),
+		FileVersionsPartial:       NewFileVersionsPartial(infra, actions),
+		FileInfoPartial:           NewFileInfoPartial(infra, actions),
+		FilePropertiesPartial:     NewFilePropertiesPartial(infra, actions),
+		SelectDocumentTypePartial: NewSelectDocumentTypePartial(infra, actions),
+		SetFilePropertyCmd:        NewSetFilePropertyCmd(infra, actions),
 
-		RenameFile: NewRenameFile(infra, actions),
-		MoveFile:   NewMoveFile(infra, actions),
+		RenameFileCmd: NewRenameFileCmd(infra, actions),
+		MoveFileCmd:   NewMoveFileCmd(infra, actions),
 
-		FileListItem: NewFileListItem(infra, actions),
+		FileListItemPartial: NewFileListItemPartial(infra, actions),
 
 		// SearchList: NewSearchList(infra, actions),
 
-		ListFilterTags:           NewListFilterTags(infra, actions),
-		ListFilterProperties:     NewListFilterProperties(infra, actions),
-		DocumentTypeFilter:       NewDocumentTypeFilter(infra, actions),
-		ToggleTagFilter:          NewToggleTagFilter(infra, actions),
-		ToggleDocumentTypeFilter: NewToggleDocumentTypeFilter(infra, actions),
-		TogglePropertyFilter:     NewTogglePropertyFilter(infra, actions),
-		DocumentTypeFilterDialog: NewDocumentTypeFilterDialog(infra, actions),
-		TagsFilterDialog:         NewTagsFilterDialog(infra, actions),
-		PropertiesFilterDialog:   NewPropertiesFilterDialog(infra, actions),
-		UpdatePropertyFilter:     NewUpdatePropertyFilter(infra, actions),
+		ListFilterTagsPartial:           NewListFilterTagsPartial(infra, actions),
+		ListFilterPropertiesPartial:     NewListFilterPropertiesPartial(infra, actions),
+		DocumentTypeFilterPartial:       NewDocumentTypeFilterPartial(infra, actions),
+		ToggleTagFilterCmd:              NewToggleTagFilterCmd(infra, actions),
+		ToggleDocumentTypeFilterCmd:     NewToggleDocumentTypeFilterCmd(infra, actions),
+		TogglePropertyFilterCmd:         NewTogglePropertyFilterCmd(infra, actions),
+		DocumentTypeFilterDialogPartial: NewDocumentTypeFilterDialogPartial(infra, actions),
+		TagsFilterDialogPartial:         NewTagsFilterDialogPartial(infra, actions),
+		PropertiesFilterDialogPartial:   NewPropertiesFilterDialogPartial(infra, actions),
+		UpdatePropertyFilterCmd:         NewUpdatePropertyFilterCmd(infra, actions),
 		// ToggleFolderMode:         NewToggleFolderMode(infra, actions),
 
-		FileUploadDialog: NewFileUploadDialog(infra, actions),
-		UnzipArchiveCmd:  NewUnzipArchiveCmd(infra, actions),
+		FileUploadDialogPartial: NewFileUploadDialogPartial(infra, actions),
+		UnzipArchiveCmd:         NewUnzipArchiveCmd(infra, actions),
 	}
 
 	return actions

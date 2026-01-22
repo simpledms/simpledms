@@ -76,7 +76,7 @@
 				hideUploadButton: true,
 				theme: 'auto'
 			}).use(Webcam).use(ScreenCapture).use(Audio).use(XHR, {
-				endpoint: '/-/cmd/browse/upload-file',
+				endpoint: '/-/browse/upload-file-cmd',
 				fieldName: 'File',
 				headers: { // TODO use htmx.ajax() instead?
 					// necessary for creating context

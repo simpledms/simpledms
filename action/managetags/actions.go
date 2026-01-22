@@ -11,9 +11,9 @@ type Actions struct {
 	Common  *acommon.Actions
 	Tagging *tagging.Actions
 
-	ManageTagsPage *ManageTagsPage
-	ToggleTagGroup *ToggleTagGroup
-	TagList        *TagList
+	ManageTagsPage    *ManageTagsPage
+	ToggleTagGroupCmd *ToggleTagGroupCmd
+	TagListPartial    *TagListPartial
 	// TagDetails     *TagDetails
 }
 
@@ -24,9 +24,9 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		Common:  commonActions,
 		Tagging: taggingActions,
 
-		ManageTagsPage: NewManageTagsPage(infra, actions),
-		ToggleTagGroup: NewToggleTagGroup(infra, actions),
-		TagList:        NewTagList(infra, actions),
+		ManageTagsPage:    NewManageTagsPage(infra, actions),
+		ToggleTagGroupCmd: NewToggleTagGroupCmd(infra, actions),
+		TagListPartial:    NewTagListPartial(infra, actions),
 		// TagDetails:     NewTagDetails(infra, actions),
 	}
 	return actions

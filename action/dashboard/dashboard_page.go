@@ -35,7 +35,7 @@ func (qq *DashboardPage) Widget(ctx ctxx.Context) renderable.Renderable {
 		Navigation: partial2.NewNavigationRail(ctx.MainCtx(), "dashboard", fabs),
 		Content: &wx.DefaultLayout{
 			AppBar:        qq.appBar(ctx),
-			Content:       qq.actions.DashboardCards.Widget(ctx),
+			Content:       qq.actions.DashboardCardsPartial.Widget(ctx),
 			WithPoweredBy: false,
 		},
 	}

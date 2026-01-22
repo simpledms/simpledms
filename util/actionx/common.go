@@ -3,6 +3,7 @@ package actionx
 import (
 	"fmt"
 	"net/url"
+	"strings"
 )
 
 type Config struct {
@@ -29,12 +30,12 @@ func (qq *Config) Route() string {
 
 // TODO rename to URL?
 func (qq *Config) Endpoint() string {
-	return "/-/cmd" + qq.endpoint
+	return "/-/" + strings.TrimPrefix(qq.endpoint, "/")
 }
 
 // TODO rename to FormURL?
 func (qq *Config) FormEndpoint() string {
-	return "/-/partial" + qq.endpoint + "-form"
+	return "/-/" + strings.TrimPrefix(qq.endpoint, "/") + "-form"
 }
 
 /*

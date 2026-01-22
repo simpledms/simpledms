@@ -52,8 +52,8 @@ func (qq *SpacesPage) Widget(ctx ctxx.Context, state *SpacesPageState) renderabl
 					wx.NewIcon("add"),
 					wx.T("Create space"),
 				},
-				HTMXAttrs: qq.actions.CreateSpace.ModalLinkAttrs(
-					qq.actions.CreateSpace.Data("", ""),
+				HTMXAttrs: qq.actions.CreateSpaceCmd.ModalLinkAttrs(
+					qq.actions.CreateSpaceCmd.Data("", ""),
 					"",
 				),
 			},
@@ -64,7 +64,7 @@ func (qq *SpacesPage) Widget(ctx ctxx.Context, state *SpacesPageState) renderabl
 		Navigation: partial2.NewNavigationRail(ctx, "spaces", fabs),
 		Content: &wx.DefaultLayout{
 			AppBar: qq.appBar(ctx),
-			Content: qq.actions.SpaceCards.Widget(
+			Content: qq.actions.SpaceCardsPartial.Widget(
 				ctx,
 			),
 		},

@@ -24,6 +24,7 @@ import (
 	"golang.org/x/crypto/acme/autocert"
 
 	"github.com/simpledms/simpledms/action"
+	"github.com/simpledms/simpledms/action/download"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain/migrate"
@@ -33,7 +34,6 @@ import (
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/i18n"
-	"github.com/simpledms/simpledms/internal"
 	"github.com/simpledms/simpledms/model/common/country"
 	"github.com/simpledms/simpledms/model/common/language"
 	"github.com/simpledms/simpledms/model/common/mainrole"
@@ -278,7 +278,7 @@ func (qq *Server) Start() error {
 
 		mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))))
 
-		mux.HandleFunc("/-/cmd/unlock", func(rw http.ResponseWriter, req *http.Request) {
+		mux.HandleFunc("/-/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
 			defer req.Body.Close()
 
 			// Parse JSON request body
@@ -483,7 +483,7 @@ func (qq *Server) Start() error {
 	)
 	router := NewRouter(mainDB, tenantDBs, infra, qq.devMode, qq.metaPath, i18nx)
 	actions := action.NewActions(infra, tenantDBs)
-	pages := internal.NewPages(infra, actions)
+	downloadHandler := download.NewDownload(infra)
 
 	/*
 		indexer := internal.NewFileIndexer(client, infra)
@@ -517,20 +517,20 @@ func (qq *Server) Start() error {
 	router.RegisterPage(route2.DashboardRoute(), actions.Dashboard.DashboardPage.Handler)
 	router.RegisterPage(route2.AboutPageRoute(), actions.About.AboutPage.Handler)
 
-	router.RegisterPage(route2.BrowseRoute(false), pages.Browse.Handler)
-	router.RegisterPage(route2.BrowseRoute(true), pages.Browse.Handler)
-	router.RegisterPage(route2.BrowseRouteWithSelection(), pages.BrowseWithSelection.Handler)
+	router.RegisterPage(route2.BrowseRoute(false), actions.Browse.BrowsePage.Handler)
+	router.RegisterPage(route2.BrowseRoute(true), actions.Browse.BrowsePage.Handler)
+	router.RegisterPage(route2.BrowseRouteWithSelection(), actions.Browse.BrowseWithSelectionPage.Handler)
 	// router.RegisterPage(route.BrowseRouteWithSelection(false), pages.BrowseWithSelection.Handler)
 
-	router.RegisterPage(route2.InboxRoute(false, false), pages.Inbox.Handler)
-	router.RegisterPage(route2.InboxRoute(true, false), pages.InboxWithSelection.Handler)
+	router.RegisterPage(route2.InboxRoute(false, false), actions.Inbox.InboxRootPage.Handler)
+	router.RegisterPage(route2.InboxRoute(true, false), actions.Inbox.InboxWithSelectionPage.Handler)
 	// for use with PWA share target
 	// router.RegisterPage(route.InboxRoute(false, true), pages.Inbox.Handler)
 
 	router.RegisterPage(route2.SpacesRoute(), actions.Spaces.SpacesPage.Handler)
 
-	router.RegisterPage(route2.ManageDocumentTypesRoute(), pages.ManageDocumentTypes.Handler)
-	router.RegisterPage(route2.ManageDocumentTypesRouteWithSelection(), pages.ManageDocumentTypes.Handler)
+	router.RegisterPage(route2.ManageDocumentTypesRoute(), actions.DocumentType.ManageDocumentTypesPage.Handler)
+	router.RegisterPage(route2.ManageDocumentTypesRouteWithSelection(), actions.DocumentType.ManageDocumentTypesPage.Handler)
 
 	router.RegisterPage(route2.ManageTagsRoute(), actions.ManageTags.ManageTagsPage.Handler)
 	// router.RegisterPage(route.ManageTagsRouteWithSelection(), actions.Tagging.ManageTagsPage.Handler)
@@ -545,7 +545,7 @@ func (qq *Server) Start() error {
 	// router.RegisterPage(route.FindRoute(false), actions.Find.Page.Handler)
 	// router.RegisterPage(route.FindRoute(true), actions.Find.PageWithSelection.Handler)
 
-	router.RegisterPage(route2.DownloadRoute(), pages.Download.Handler)
+	router.RegisterPage(route2.DownloadRoute(), downloadHandler.Handler)
 
 	router.RegisterActions(actions)
 

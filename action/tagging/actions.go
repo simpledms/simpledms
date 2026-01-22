@@ -8,35 +8,35 @@ import (
 
 // TODO rename to FileActions?
 type AssignedTagActions struct {
-	List               *ListAssignedTags
-	ListItem           *ListItemAssignedTags
-	CreateAndAssignTag *CreateAndAssignTag // TODO on FileActions or TagActions
-	Edit               *EditAssignedTags
-	EditListItem       *EditAssignedTagsItem
-	Count              *CountAssignedTags
+	List                  *ListAssignedTagsPartial
+	ListItem              *ListItemAssignedTagsPartial
+	CreateAndAssignTagCmd *CreateAndAssignTagCmd // TODO on FileActions or TagActions
+	Edit                  *EditAssignedTagsPartial
+	EditListItem          *EditAssignedTagsItemPartial
+	Count                 *CountAssignedTagsPartial
 
 	// TODO move to FileActions
-	AssignTag   *AssignTag
-	UnassignTag *UnassignTag
+	AssignTagCmd   *AssignTagCmd
+	UnassignTagCmd *UnassignTagCmd
 }
 
 type SubTagActions struct {
 	// TODO is name unique enough? only composed tags can have subtags, thus probably?
-	List           *ListSubTags
-	Edit           *EditSubTags
-	AssignSubTag   *AssignSubTag
-	UnassignSubTag *UnassignSubTag
+	List              *ListSubTagsPartial
+	Edit              *EditSubTagsPartial
+	AssignSubTagCmd   *AssignSubTagCmd
+	UnassignSubTagCmd *UnassignSubTagCmd
 }
 
 type Actions struct {
 	Common *acommon.Actions
 
-	CreateTag      *CreateTag
-	EditTag        *EditTag
-	DeleteTag      *DeleteTag
-	MoveTagToGroup *MoveTagToGroup
+	CreateTagCmd      *CreateTagCmd
+	EditTagCmd        *EditTagCmd
+	DeleteTagCmd      *DeleteTagCmd
+	MoveTagToGroupCmd *MoveTagToGroupCmd
 
-	ToggleFileTag *ToggleFileTag
+	ToggleFileTagCmd *ToggleFileTagCmd
 
 	AssignedTags *AssignedTagActions `actions:"assigned-tags"`
 	SubTags      *SubTagActions      `actions:"sub-tags"`
@@ -48,29 +48,29 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions) *Actions {
 	*actions = Actions{
 		Common: commonActions,
 
-		CreateTag:      NewCreateTag(infra, actions),
-		EditTag:        NewEditTag(infra, actions),
-		DeleteTag:      NewDeleteTag(infra, actions),
-		MoveTagToGroup: NewMoveTagToGroup(infra, actions),
+		CreateTagCmd:      NewCreateTagCmd(infra, actions),
+		EditTagCmd:        NewEditTagCmd(infra, actions),
+		DeleteTagCmd:      NewDeleteTagCmd(infra, actions),
+		MoveTagToGroupCmd: NewMoveTagToGroupCmd(infra, actions),
 
-		ToggleFileTag: NewToggleFileTag(infra, actions),
+		ToggleFileTagCmd: NewToggleFileTagCmd(infra, actions),
 
 		AssignedTags: &AssignedTagActions{
-			List:               NewListAssignedTags(infra, actions),
-			ListItem:           NewListItemAssignedTags(infra, actions),
-			CreateAndAssignTag: NewCreateAndAssignTag(infra, actions),
-			Edit:               NewEditAssignedTags(infra, actions),
-			EditListItem:       NewEditAssignedTagsItem(infra, actions),
-			Count:              NewCountAssignedTags(infra, actions),
-			AssignTag:          NewAssignTag(infra, actions),
-			UnassignTag:        NewUnassignTag(infra, actions),
+			List:                  NewListAssignedTagsPartial(infra, actions),
+			ListItem:              NewListItemAssignedTagsPartial(infra, actions),
+			CreateAndAssignTagCmd: NewCreateAndAssignTagCmd(infra, actions),
+			Edit:                  NewEditAssignedTagsPartial(infra, actions),
+			EditListItem:          NewEditAssignedTagsItemPartial(infra, actions),
+			Count:                 NewCountAssignedTagsPartial(infra, actions),
+			AssignTagCmd:          NewAssignTagCmd(infra, actions),
+			UnassignTagCmd:        NewUnassignTagCmd(infra, actions),
 		},
 
 		SubTags: &SubTagActions{
-			List:           NewListSubTags(infra, actions),
-			Edit:           NewEditSubTags(infra, actions),
-			AssignSubTag:   NewAssignSubTag(infra, actions),
-			UnassignSubTag: NewUnassignSubTag(infra, actions),
+			List:              NewListSubTagsPartial(infra, actions),
+			Edit:              NewEditSubTagsPartial(infra, actions),
+			AssignSubTagCmd:   NewAssignSubTagCmd(infra, actions),
+			UnassignSubTagCmd: NewUnassignSubTagCmd(infra, actions),
 		},
 	}
 

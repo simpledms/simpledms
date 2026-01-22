@@ -1,16 +1,5 @@
 package migratedata
 
-import (
-	"log"
-
-	"ariga.io/atlas/sql/sqltool"
-	"entgo.io/ent/dialect/sql/schema"
-
-	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/attribute"
-	"github.com/simpledms/simpledms/model/common/attributetype"
-)
-
 /*
 import (
 	"context"

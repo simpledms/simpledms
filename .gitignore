@@ -10,3 +10,4 @@ simpledms
 .env
 .idea/**
 garage.toml
+AGENTS.md
