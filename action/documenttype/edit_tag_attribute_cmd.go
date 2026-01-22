@@ -25,7 +25,7 @@ type EditTagAttributeCmd struct {
 
 func NewEditTagAttributeCmd(infra *common.Infra, actions *Actions) *EditTagAttributeCmd {
 	config := actionx.NewConfig(
-		actions.Route("edit-tag-attribute"),
+		actions.Route("edit-tag-attribute-cmd"),
 		false,
 	)
 	return &EditTagAttributeCmd{

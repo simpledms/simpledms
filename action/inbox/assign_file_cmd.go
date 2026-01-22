@@ -29,7 +29,7 @@ type AssignFileCmd struct {
 
 func NewAssignFileCmd(infra *common.Infra, actions *Actions) *AssignFileCmd {
 	config := actionx.NewConfig(
-		actions.Route("assign-file"),
+		actions.Route("assign-file-cmd"),
 		false,
 	)
 	formHelper := autil.NewFormHelper[AssignFileCmdData](infra, config, wx.T("Assign file"))

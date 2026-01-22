@@ -28,7 +28,7 @@ type SetInitialPasswordCmd struct {
 }
 
 func NewSetInitialPasswordCmd(infra *common.Infra, actions *Actions) *SetInitialPasswordCmd {
-	config := actionx.NewConfig(actions.Route("set-initial-password"), false)
+	config := actionx.NewConfig(actions.Route("set-initial-password-cmd"), false)
 	return &SetInitialPasswordCmd{
 		infra:      infra,
 		actions:    actions,

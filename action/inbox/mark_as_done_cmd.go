@@ -30,7 +30,7 @@ type MarkAsDoneCmd struct {
 
 func NewMarkAsDoneCmd(infra *common.Infra, actions *Actions) *MarkAsDoneCmd {
 	config := actionx.NewConfig(
-		actions.Route("mark-as-done"),
+		actions.Route("mark-as-done-cmd"),
 		false,
 	)
 	return &MarkAsDoneCmd{

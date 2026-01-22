@@ -24,7 +24,7 @@ type ClearTemporaryPasswordCmd struct {
 }
 
 func NewClearTemporaryPasswordCmd(infra *common.Infra, actions *Actions) *ClearTemporaryPasswordCmd {
-	config := actionx.NewConfig(actions.Route("clear-temporary-password"), false)
+	config := actionx.NewConfig(actions.Route("clear-temporary-password-cmd"), false)
 	return &ClearTemporaryPasswordCmd{
 		infra:      infra,
 		actions:    actions,

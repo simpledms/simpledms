@@ -31,7 +31,7 @@ type ToggleTagFilterCmd struct {
 
 func NewToggleTagFilterCmd(infra *common.Infra, actions *Actions) *ToggleTagFilterCmd {
 	config := actionx.NewConfig(
-		actions.Route("toggle-tag-filter"),
+		actions.Route("toggle-tag-filter-cmd"),
 		true,
 	)
 	return &ToggleTagFilterCmd{

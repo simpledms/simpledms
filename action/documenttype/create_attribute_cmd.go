@@ -39,7 +39,7 @@ type CreateAttributeCmd struct {
 
 func NewCreateAttributeCmd(infra *common.Infra, actions *Actions) *CreateAttributeCmd {
 	config := actionx.NewConfig(
-		actions.Route("create-attribute"),
+		actions.Route("create-attribute-cmd"),
 		false,
 	)
 	formHelper := autil.NewFormHelper[CreateAttributeCmdData](

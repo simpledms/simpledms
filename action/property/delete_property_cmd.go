@@ -22,7 +22,7 @@ type DeletePropertyCmd struct {
 }
 
 func NewDeletePropertyCmd(infra *common.Infra, actions *Actions) *DeletePropertyCmd {
-	config := actionx.NewConfig(actions.Route("delete-property"), false)
+	config := actionx.NewConfig(actions.Route("delete-property-cmd"), false)
 	return &DeletePropertyCmd{
 		infra:   infra,
 		actions: actions,

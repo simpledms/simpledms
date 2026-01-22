@@ -27,7 +27,7 @@ type ToggleTagGroupCmd struct {
 }
 
 func NewToggleTagGroupCmd(infra *common.Infra, actions *Actions) *ToggleTagGroupCmd {
-	config := actionx.NewConfig("/toggle-tag-group", true)
+	config := actionx.NewConfig("/toggle-tag-group-cmd", true)
 	return &ToggleTagGroupCmd{
 		infra:   infra,
 		actions: actions,

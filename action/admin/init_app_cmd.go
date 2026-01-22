@@ -34,7 +34,7 @@ type InitAppCmd struct {
 }
 
 func NewInitAppCmd(infra *common.Infra, actions *Actions) *InitAppCmd {
-	config := actionx.NewConfig(actions.Route("init-app"), false)
+	config := actionx.NewConfig(actions.Route("init-app-cmd"), false)
 	return &InitAppCmd{
 		infra:      infra,
 		actions:    actions,

@@ -30,7 +30,7 @@ type CreatePropertyCmd struct {
 
 func NewCreatePropertyCmd(infra *common.Infra, actions *Actions) *CreatePropertyCmd {
 	config := actionx.NewConfig(
-		actions.Route("create-property"),
+		actions.Route("create-property-cmd"),
 		false,
 	)
 	formHelper := autil.NewFormHelper[CreatePropertyCmdData](

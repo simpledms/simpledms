@@ -25,7 +25,7 @@ type RenameCmd struct {
 
 func NewRenameCmd(infra *common.Infra, actions *Actions) *RenameCmd {
 	config := actionx.NewConfig(
-		actions.Route("rename"),
+		actions.Route("rename-cmd"),
 		false,
 	)
 	return &RenameCmd{

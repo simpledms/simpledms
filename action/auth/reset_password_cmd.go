@@ -30,7 +30,7 @@ type ResetPasswordCmd struct {
 }
 
 func NewResetPasswordCmd(infra *common.Infra, actions *Actions) *ResetPasswordCmd {
-	config := actionx.NewConfig(actions.Route("reset-password"), false)
+	config := actionx.NewConfig(actions.Route("reset-password-cmd"), false)
 	return &ResetPasswordCmd{
 		infra:   infra,
 		actions: actions,

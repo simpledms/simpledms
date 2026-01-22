@@ -46,7 +46,7 @@ type SetFilePropertyCmd struct {
 
 func NewSetFilePropertyCmd(infra *common.Infra, actions *Actions) *SetFilePropertyCmd {
 	config := actionx.NewConfig(
-		actions.Route("set-file-property"),
+		actions.Route("set-file-property-cmd"),
 		false,
 	)
 	return &SetFilePropertyCmd{

@@ -26,7 +26,7 @@ func NewAssignTagCmd(
 	actions *Actions,
 ) *AssignTagCmd {
 	config := actionx.NewConfig(
-		actions.Route("assign-tag"),
+		actions.Route("assign-tag-cmd"),
 		false,
 	)
 	return &AssignTagCmd{

@@ -24,7 +24,7 @@ type EditPropertyAttributeCmd struct {
 
 func NewEditPropertyAttributeCmd(infra *common.Infra, actions *Actions) *EditPropertyAttributeCmd {
 	config := actionx.NewConfig(
-		actions.Route("edit-property-attribute"),
+		actions.Route("edit-property-attribute-cmd"),
 		false,
 	)
 	return &EditPropertyAttributeCmd{

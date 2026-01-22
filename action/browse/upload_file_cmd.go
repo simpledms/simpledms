@@ -36,7 +36,7 @@ func NewUploadFileCmd(
 	actions *Actions,
 ) *UploadFileCmd {
 	config := actionx.NewConfig(
-		actions.Route("upload-file"),
+		actions.Route("upload-file-cmd"),
 		false,
 	)
 

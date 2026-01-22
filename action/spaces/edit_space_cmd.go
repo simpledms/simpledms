@@ -26,7 +26,7 @@ type EditSpaceCmd struct {
 }
 
 func NewRenameSpace(infra *common.Infra, actions *Actions) *EditSpaceCmd {
-	config := actionx.NewConfig(actions.Route("edit-space"), false)
+	config := actionx.NewConfig(actions.Route("edit-space-cmd"), false)
 	return &EditSpaceCmd{
 		infra:      infra,
 		actions:    actions,

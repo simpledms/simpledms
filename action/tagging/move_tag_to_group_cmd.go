@@ -29,7 +29,7 @@ type MoveTagToGroupCmd struct {
 
 func NewMoveTagToGroupCmd(infra *common.Infra, actions *Actions) *MoveTagToGroupCmd {
 	config := actionx.NewConfig(
-		actions.Route("move-tag-to-group"),
+		actions.Route("move-tag-to-group-cmd"),
 		false,
 	)
 	return &MoveTagToGroupCmd{

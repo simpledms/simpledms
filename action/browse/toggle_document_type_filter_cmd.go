@@ -23,7 +23,7 @@ type ToggleDocumentTypeFilterCmd struct {
 
 func NewToggleDocumentTypeFilterCmd(infra *common.Infra, actions *Actions) *ToggleDocumentTypeFilterCmd {
 	config := actionx.NewConfig(
-		actions.Route("toggle-document-type-filter"),
+		actions.Route("toggle-document-type-filter-cmd"),
 		true,
 	)
 	return &ToggleDocumentTypeFilterCmd{

@@ -38,7 +38,7 @@ type SignInCmd struct {
 
 func NewSignInCmd(infra *common.Infra, actions *Actions) *SignInCmd {
 	config := actionx.NewConfig(
-		actions.Route("sign-in"),
+		actions.Route("sign-in-cmd"),
 		false,
 	)
 	return &SignInCmd{

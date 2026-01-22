@@ -23,7 +23,7 @@ type SignOutCmd struct {
 
 func NewSignOutCmd(infra *common.Infra, actions *Actions) *SignOutCmd {
 	config := actionx.NewConfig(
-		actions.Route("sign-out"),
+		actions.Route("sign-out-cmd"),
 		false,
 	)
 	return &SignOutCmd{

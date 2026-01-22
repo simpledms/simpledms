@@ -27,7 +27,7 @@ func NewEditTagCmd(
 	infra *common.Infra,
 	actions *Actions,
 ) *EditTagCmd {
-	config := actionx.NewConfig(actions.Route("edit-tag"), false)
+	config := actionx.NewConfig(actions.Route("edit-tag-cmd"), false)
 	return &EditTagCmd{
 		infra:   infra,
 		actions: actions,

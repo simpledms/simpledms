@@ -30,7 +30,7 @@ type CreateSpaceCmd struct {
 
 func NewCreateSpaceCmd(infra *common.Infra, actions *Actions) *CreateSpaceCmd {
 	config := actionx.NewConfig(
-		actions.Route("create-space"),
+		actions.Route("create-space-cmd"),
 		false,
 	)
 	return &CreateSpaceCmd{

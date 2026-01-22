@@ -14,7 +14,7 @@ type ToggleMaintenanceModeCmd struct {
 }
 
 func NewToggleMaintenanceModeCmd(infra *common.Infra, actions *Actions) *ToggleMaintenanceModeCmd {
-	config := actionx.NewConfig(actions.Route("toggle-maintenance-mode"), false)
+	config := actionx.NewConfig(actions.Route("toggle-maintenance-mode-cmd"), false)
 	return &ToggleMaintenanceModeCmd{
 		infra:   infra,
 		actions: actions,

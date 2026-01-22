@@ -29,7 +29,7 @@ type UnlockAppCmd struct {
 }
 
 func NewUnlockAppCmd(infra *common.Infra, actions *Actions) *UnlockAppCmd {
-	config := actionx.NewConfig(actions.Route("unlock-app"), false)
+	config := actionx.NewConfig(actions.Route("unlock-app-cmd"), false)
 	return &UnlockAppCmd{
 		infra:      infra,
 		actions:    actions,

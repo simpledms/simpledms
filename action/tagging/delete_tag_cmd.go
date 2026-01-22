@@ -23,7 +23,7 @@ type DeleteTagCmd struct {
 
 func NewDeleteTagCmd(infra *common.Infra, actions *Actions) *DeleteTagCmd {
 	config := actionx.NewConfig(
-		actions.Route("delete-tag"),
+		actions.Route("delete-tag-cmd"),
 		false,
 	)
 	return &DeleteTagCmd{

@@ -31,7 +31,7 @@ func NewCreateAndAssignTagCmd(
 	actions *Actions,
 ) *CreateAndAssignTagCmd {
 	config := actionx.NewConfig(
-		actions.Route("create-and-assign-tag"),
+		actions.Route("create-and-assign-tag-cmd"),
 		false,
 	)
 	return &CreateAndAssignTagCmd{

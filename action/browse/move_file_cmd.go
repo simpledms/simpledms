@@ -25,7 +25,7 @@ type MoveFileCmd struct {
 
 func NewMoveFileCmd(infra *common.Infra, actions *Actions) *MoveFileCmd {
 	config := actionx.NewConfig(
-		actions.Route("move-file"),
+		actions.Route("move-file-cmd"),
 		false,
 	)
 	return &MoveFileCmd{

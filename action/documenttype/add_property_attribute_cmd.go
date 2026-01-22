@@ -34,7 +34,7 @@ type AddPropertyAttributeCmd struct {
 
 func NewAddPropertyAttributeCmd(infra *common.Infra, actions *Actions) *AddPropertyAttributeCmd {
 	config := actionx.NewConfig(
-		actions.Route("add-property"),
+		actions.Route("add-property-cmd"),
 		false,
 	)
 	formHelper := autil.NewFormHelper[AddPropertyAttributeCmdData](

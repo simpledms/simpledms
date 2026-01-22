@@ -25,7 +25,7 @@ type CreateCmd struct {
 
 func NewCreateCmd(infra *common.Infra, actions *Actions) *CreateCmd {
 	config := actionx.NewConfig(
-		actions.Route("add-document-type"),
+		actions.Route("add-document-type-cmd"),
 		false,
 	)
 	formHelper := autil.NewFormHelper[CreateCmdData](

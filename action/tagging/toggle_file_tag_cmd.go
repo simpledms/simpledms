@@ -27,7 +27,7 @@ type ToggleFileTagCmd struct {
 
 func NewToggleFileTagCmd(infra *common.Infra, actions *Actions) *ToggleFileTagCmd {
 	config := actionx.NewConfig(
-		actions.Route("toggle-file-tag"),
+		actions.Route("toggle-file-tag-cmd"),
 		false,
 	)
 	return &ToggleFileTagCmd{

@@ -29,7 +29,7 @@ func NewUnassignSubTagCmd(infra *common.Infra, actions *Actions) *UnassignSubTag
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("unassign-sub-tag"),
+			actions.Route("unassign-sub-tag-cmd"),
 			false,
 		),
 	}

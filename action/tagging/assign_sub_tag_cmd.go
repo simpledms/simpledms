@@ -29,7 +29,7 @@ func NewAssignSubTagCmd(infra *common.Infra, actions *Actions) *AssignSubTagCmd 
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("assign-sub-tag"),
+			actions.Route("assign-sub-tag-cmd"),
 			false, // TODO is this correct?
 		),
 	}

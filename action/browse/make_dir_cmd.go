@@ -30,7 +30,7 @@ func NewMakeDirCmd(
 	actions *Actions,
 ) *MakeDirCmd {
 	config := actionx.NewConfig(
-		actions.Route("make-dir"),
+		actions.Route("make-dir-cmd"),
 		false,
 	)
 	return &MakeDirCmd{

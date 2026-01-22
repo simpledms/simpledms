@@ -25,7 +25,7 @@ type DeleteCmd struct {
 
 func NewDeleteCmd(infra *common.Infra, actions *Actions) *DeleteCmd {
 	config := actionx.NewConfig(
-		actions.Route("delete"),
+		actions.Route("delete-cmd"),
 		false,
 	)
 	return &DeleteCmd{

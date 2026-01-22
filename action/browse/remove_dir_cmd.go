@@ -36,7 +36,7 @@ func NewDeleteFile(
 		infra,
 		actions,
 		actionx.NewConfig(
-			actions.Route("delete-file"),
+			actions.Route("delete-file-cmd"),
 			false,
 		),
 	}

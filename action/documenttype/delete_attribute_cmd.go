@@ -24,7 +24,7 @@ type DeleteAttributeCmd struct {
 
 func NewDeleteAttributeCmd(infra *common.Infra, actions *Actions) *DeleteAttributeCmd {
 	config := actionx.NewConfig(
-		actions.Route("delete-attribute"),
+		actions.Route("delete-attribute-cmd"),
 		false,
 	)
 	return &DeleteAttributeCmd{

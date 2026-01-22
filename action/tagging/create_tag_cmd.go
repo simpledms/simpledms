@@ -41,7 +41,7 @@ func NewCreateTagCmd(
 	actions *Actions,
 ) *CreateTagCmd {
 	config := actionx.NewConfig(
-		actions.Route("create-tag"),
+		actions.Route("create-tag-cmd"),
 		false,
 	)
 	return &CreateTagCmd{

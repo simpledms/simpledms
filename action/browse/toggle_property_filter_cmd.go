@@ -25,7 +25,7 @@ type TogglePropertyFilterCmd struct {
 
 func NewTogglePropertyFilterCmd(infra *common.Infra, actions *Actions) *TogglePropertyFilterCmd {
 	config := actionx.NewConfig(
-		actions.Route("toggle-property-filter"),
+		actions.Route("toggle-property-filter-cmd"),
 		true,
 	)
 	return &TogglePropertyFilterCmd{

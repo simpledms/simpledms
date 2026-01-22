@@ -27,7 +27,7 @@ type RemovePassphraseCmd struct {
 }
 
 func NewRemovePassphraseCmd(infra *common.Infra, actions *Actions) *RemovePassphraseCmd {
-	config := actionx.NewConfig(actions.Route("remove-passphrase"), false)
+	config := actionx.NewConfig(actions.Route("remove-passphrase-cmd"), false)
 	return &RemovePassphraseCmd{
 		infra:      infra,
 		actions:    actions,

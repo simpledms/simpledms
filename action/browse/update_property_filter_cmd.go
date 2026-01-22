@@ -33,7 +33,7 @@ type UpdatePropertyFilterCmd struct {
 
 func NewUpdatePropertyFilterCmd(infra *common.Infra, actions *Actions) *UpdatePropertyFilterCmd {
 	config := actionx.NewConfig(
-		actions.Route("update-property-filter"),
+		actions.Route("update-property-filter-cmd"),
 		false,
 	)
 	return &UpdatePropertyFilterCmd{

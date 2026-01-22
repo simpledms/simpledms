@@ -31,7 +31,7 @@ type ChangePassphraseCmd struct {
 }
 
 func NewChangePassphraseCmd(infra *common.Infra, actions *Actions) *ChangePassphraseCmd {
-	config := actionx.NewConfig(actions.Route("change-passphrase"), false)
+	config := actionx.NewConfig(actions.Route("change-passphrase-cmd"), false)
 	return &ChangePassphraseCmd{
 		infra:      infra,
 		actions:    actions,

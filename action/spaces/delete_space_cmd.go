@@ -25,7 +25,7 @@ type DeleteSpaceCmd struct {
 }
 
 func NewDeleteSpaceCmd(infra *common.Infra, actions *Actions) *DeleteSpaceCmd {
-	config := actionx.NewConfig(actions.Route("delete-space"), false)
+	config := actionx.NewConfig(actions.Route("delete-space-cmd"), false)
 	return &DeleteSpaceCmd{
 		infra:   infra,
 		actions: actions,
