@@ -12,6 +12,6 @@ jobs:
         with:
           go-version: '1.25'
       - name: Install
-        run: go install github.com/google/go-licenses@v2.0.1
+        run: go install github.com/google/go-licenses/v2@latest
       - name: Run
         run: go-licenses check .
