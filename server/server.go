@@ -31,6 +31,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/systemconfig"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	migrate2 "github.com/simpledms/simpledms/db/enttenant/migrate"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/i18n"
@@ -123,6 +124,8 @@ func (qq *Server) Start() error {
 		}
 	}()
 
+	overrideDBConfig := os.Getenv("SIMPLEDMS_OVERRIDE_DB_CONFIG") == "true"
+
 	ctx := context.Background()
 	configCount := mainDB.ReadOnlyConn.SystemConfig.Query().CountX(ctx)
 	if configCount == 0 {
@@ -183,12 +186,32 @@ func (qq *Server) Start() error {
 			log.Fatalln(err)
 		}
 	} else {
-		overrideDBConfig := os.Getenv("OVERRIDE_DB_CONFIG") == "true"
 		if overrideDBConfig {
-			// FIXME impl, must be done after encryptor.X25519MainIdentity initialization;
-			//		 usually only used if startup is not possible; config in db should be preferred
-			//		 because of encryption of sensible values
-			log.Fatalln("OVERRIDE_DB_CONFIG is true, this is not implemented yet")
+			// IMPORTANT
+			// only TLS is overridden here because all encrypted fields can just
+			// be overridden when encryptor.NilableX25519MainIdentity is set;
+			// TLS config is read before that is the case
+			// END IMPORTANT
+
+			updateQuery := mainDB.ReadWriteConn.SystemConfig.Query().FirstX(ctx).Update()
+
+			if val, set := os.LookupEnv("SIMPLEDMS_TLS_ENABLE_AUTOCERT"); set {
+				updateQuery.SetTLSEnableAutocert(val == "true")
+			}
+			if val, set := os.LookupEnv("SIMPLEDMS_TLS_CERT_FILEPATH"); set {
+				updateQuery.SetTLSCertFilepath(val)
+			}
+			if val, set := os.LookupEnv("SIMPLEDMS_TLS_PRIVATE_KEY_FILEPATH"); set {
+				updateQuery.SetTLSPrivateKeyFilepath(val)
+			}
+			if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_EMAIL"); set {
+				updateQuery.SetTLSAutocertEmail(val)
+			}
+			if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_HOSTS"); set {
+				updateQuery.SetTLSAutocertHosts(strings.Split(val, ","))
+			}
+
+			updateQuery.SaveX(ctx)
 		}
 	}
 
@@ -229,7 +252,7 @@ func (qq *Server) Start() error {
 	}*/
 
 	// partial request because encrypted fields cannot be decrypted before
-	// encryptor.X25519MainIdentity is set
+	// encryptor.NilableX25519MainIdentity is set
 	// TODO FirstX okay?
 	systemConfigx := mainDB.ReadOnlyConn.SystemConfig.Query().
 		Select(
@@ -420,6 +443,62 @@ func (qq *Server) Start() error {
 		encryptor.NilableX25519MainIdentity = x25519Identity
 	}
 
+	if overrideDBConfig {
+		// TLS config is processed above because required earlier;
+		// It's important that this is after encryptor.NilableX25519MainIdentity
+		// is set
+
+		updateQuery := mainDB.ReadWriteConn.SystemConfig.Query().FirstX(ctx).Update()
+
+		if val, set := os.LookupEnv("SIMPLEDMS_S3_ENDPOINT"); set {
+			updateQuery.SetS3Endpoint(val)
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_S3_ACCESS_KEY_ID"); set {
+			updateQuery.SetS3AccessKeyID(val)
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_S3_SECRET_ACCESS_KEY"); set {
+			updateQuery.SetS3SecretAccessKey(entx.NewEncryptedString(val))
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_S3_BUCKET_NAME"); set {
+			updateQuery.SetS3BucketName(val)
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_S3_USE_SSL"); set {
+			updateQuery.SetS3UseSsl(val == "true")
+		}
+
+		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_HOST"); set {
+			updateQuery.SetMailerHost(val)
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_PORT"); set {
+			mailerPort, err := strconv.Atoi(val)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			updateQuery.SetMailerPort(mailerPort)
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_USERNAME"); set {
+			updateQuery.SetMailerUsername(val)
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_PASSWORD"); set {
+			updateQuery.SetMailerPassword(entx.NewEncryptedString(val))
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_FROM"); set {
+			updateQuery.SetMailerFrom(val)
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_INSECURE_SKIP_VERIFY"); set {
+			updateQuery.SetMailerInsecureSkipVerify(val == "true")
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_USE_IMPLICIT_SSL_TLS"); set {
+			updateQuery.SetMailerUseImplicitSslTLS(val == "true")
+		}
+
+		if val, set := os.LookupEnv("SIMPLEDMS_OCR_TIKA_URL"); set {
+			updateQuery.SetOcrTikaURL(val)
+		}
+
+		updateQuery.SaveX(ctx)
+	}
+
 	allowInsecureCookiesStr := os.Getenv("SIMPLEDMS_ALLOW_INSECURE_COOKIES")
 	allowInsecureCookies := false
 	if allowInsecureCookiesStr != "" {
@@ -451,8 +530,8 @@ func (qq *Server) Start() error {
 	}()
 
 	factory := common.NewFactory(
-	// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
-	// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
+		// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
+		// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
 	)
 	// storagePath := common.StoragePath(metaPath)
 	fileRepo := common.NewFileRepository()
