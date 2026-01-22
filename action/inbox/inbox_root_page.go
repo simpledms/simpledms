@@ -1,7 +1,6 @@
-package page
+package inbox
 
 import (
-	"github.com/simpledms/simpledms/action/inbox"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
@@ -11,22 +10,22 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type Inbox struct {
+type InboxRootPage struct {
 	infra   *common.Infra
-	actions *inbox.Actions
+	actions *Actions
 
 	// inboxDirInfo *ent.FileInfo
 }
 
-func NewInbox(infra *common.Infra, actions *inbox.Actions) *Inbox {
-	return &Inbox{
-		infra,
-		actions,
+func NewInboxRootPage(infra *common.Infra, actions *Actions) *InboxRootPage {
+	return &InboxRootPage{
+		infra:   infra,
+		actions: actions,
 		// infra.UnsafeDB().FileInfo.Query().Where(fileinfo.FullPath(infra.InboxPath())).OnlyX(context.Background()),
 	}
 }
 
-func (qq *Inbox) Handler(
+func (qq *InboxRootPage) Handler(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,

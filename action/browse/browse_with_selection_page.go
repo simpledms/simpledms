@@ -1,10 +1,9 @@
-package page
+package browse
 
 import (
 	"log"
 	"net/http"
 
-	"github.com/simpledms/simpledms/action/browse"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
@@ -19,22 +18,19 @@ import (
 )
 
 // TODO rename to BrowseFile?
-type BrowseWithSelection struct {
+type BrowseWithSelectionPage struct {
 	infra   *common.Infra
-	actions *browse.Actions
+	actions *Actions
 }
 
-func NewBrowseWithSelection(
-	infra *common.Infra,
-	actions *browse.Actions,
-) *BrowseWithSelection {
-	return &BrowseWithSelection{
+func NewBrowseWithSelectionPage(infra *common.Infra, actions *Actions) *BrowseWithSelectionPage {
+	return &BrowseWithSelectionPage{
 		infra:   infra,
 		actions: actions,
 	}
 }
 
-func (qq *BrowseWithSelection) Handler(
+func (qq *BrowseWithSelectionPage) Handler(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
@@ -52,7 +48,7 @@ func (qq *BrowseWithSelection) Handler(
 	filex := qq.infra.FileRepo.GetX(ctx, fileIDStr)
 	dirx := qq.infra.FileRepo.GetX(ctx, dirIDStr)
 
-	state := autil.StateX[browse.FilePreviewPartialState](rw, req)
+	state := autil.StateX[FilePreviewPartialState](rw, req)
 	rw.Header().Set("HX-Push-Url", route.BrowseFileWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, dirx.Data.PublicID.String(), filex.Data.PublicID.String()))
 
 	browsePage, err := qq.widget(rw, req, ctx, state, dirx, filex)
@@ -65,7 +61,7 @@ func (qq *BrowseWithSelection) Handler(
 	return nil
 }
 
-func (qq *BrowseWithSelection) render(
+func (qq *BrowseWithSelectionPage) render(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
@@ -83,11 +79,11 @@ func (qq *BrowseWithSelection) render(
 	qq.infra.Renderer().RenderX(rw, ctx, viewx)
 }
 
-func (qq *BrowseWithSelection) widget(
+func (qq *BrowseWithSelectionPage) widget(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
-	state *browse.FilePreviewPartialState,
+	state *FilePreviewPartialState,
 	dirx *model.File,
 	filex *model.File,
 ) (renderable.Renderable, error) {

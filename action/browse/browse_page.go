@@ -1,10 +1,9 @@
-package page
+package browse
 
 import (
 	"log"
 	"net/http"
 
-	"github.com/simpledms/simpledms/action/browse"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
@@ -20,22 +19,19 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type Browse struct {
+type BrowsePage struct {
 	infra   *common.Infra
-	actions *browse.Actions
+	actions *Actions
 }
 
-func NewBrowse(
-	infra *common.Infra,
-	actions *browse.Actions,
-) *Browse {
-	return &Browse{
-		infra,
-		actions,
+func NewBrowsePage(infra *common.Infra, actions *Actions) *BrowsePage {
+	return &BrowsePage{
+		infra:   infra,
+		actions: actions,
 	}
 }
 
-func (qq *Browse) Handler(
+func (qq *BrowsePage) Handler(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
@@ -54,7 +50,7 @@ func (qq *Browse) Handler(
 		return e.NewHTTPErrorf(http.StatusBadRequest, "file is not a directory")
 	}
 
-	state := autil.StateX[browse.ListDirPartialState](rw, req)
+	state := autil.StateX[ListDirPartialState](rw, req)
 	// TODO Push or Replace?
 	rw.Header().Set("HX-Push-Url", route.BrowseWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, dirx.PublicID.String()))
 
@@ -76,7 +72,7 @@ func (qq *Browse) Handler(
 	return nil
 }
 
-func (qq *Browse) render(
+func (qq *BrowsePage) render(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
@@ -94,10 +90,10 @@ func (qq *Browse) render(
 	qq.infra.Renderer().RenderX(rw, ctx, viewx)
 }
 
-func (qq *Browse) widget(
+func (qq *BrowsePage) widget(
 	req *httpx.Request,
 	ctx ctxx.Context,
-	state *browse.ListDirPartialState,
+	state *ListDirPartialState,
 	dir *enttenant.File,
 ) (renderable.Renderable, error) {
 	listDetailLayout := qq.actions.ListDirPartial.Widget(

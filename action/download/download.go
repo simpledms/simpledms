@@ -1,4 +1,4 @@
-package page
+package download
 
 import (
 	"fmt"
@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/util/e"
@@ -16,17 +15,12 @@ import (
 
 // TODO is this a good name and is `page` package the correct location?
 type Download struct {
-	infra   *common.Infra
-	actions *action.Actions
+	infra *common.Infra
 }
 
-func NewDownload(
-	infra *common.Infra,
-	actions *action.Actions,
-) *Download {
+func NewDownload(infra *common.Infra) *Download {
 	return &Download{
-		infra,
-		actions,
+		infra: infra,
 	}
 }
 

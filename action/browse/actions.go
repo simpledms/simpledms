@@ -16,6 +16,9 @@ type Actions struct {
 	Common  *acommon.Actions
 	Tagging *tagging.Actions
 
+	BrowsePage              *BrowsePage
+	BrowseWithSelectionPage *BrowseWithSelectionPage
+
 	ChangeDirPartial *ChangeDirPartial
 	ListDirPartial   *ListDirPartial
 	MakeDirCmd       *MakeDirCmd
@@ -67,6 +70,9 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 	*actions = Actions{
 		Common:  commonActions,
 		Tagging: taggingActions,
+
+		BrowsePage:              NewBrowsePage(infra, actions),
+		BrowseWithSelectionPage: NewBrowseWithSelectionPage(infra, actions),
 
 		ChangeDirPartial: NewChangeDirPartial(infra, actions),
 		ListDirPartial:   NewListDirPartial(infra, actions),

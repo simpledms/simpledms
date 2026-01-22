@@ -1,10 +1,9 @@
-package page
+package documenttype
 
 import (
 	"net/http"
 	"strconv"
 
-	"github.com/simpledms/simpledms/action/documenttype"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
@@ -15,19 +14,19 @@ import (
 )
 
 // TODO via settings or prefix with manage
-type ManageDocumentTypes struct {
+type ManageDocumentTypesPage struct {
 	infra   *common.Infra
-	actions *documenttype.Actions
+	actions *Actions
 }
 
-func NewManageDocumentTypes(infra *common.Infra, actions *documenttype.Actions) *ManageDocumentTypes {
-	return &ManageDocumentTypes{
+func NewManageDocumentTypesPage(infra *common.Infra, actions *Actions) *ManageDocumentTypesPage {
+	return &ManageDocumentTypesPage{
 		infra:   infra,
 		actions: actions,
 	}
 }
 
-func (qq *ManageDocumentTypes) Handler(
+func (qq *ManageDocumentTypesPage) Handler(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,

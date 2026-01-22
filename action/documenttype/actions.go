@@ -7,8 +7,9 @@ import (
 )
 
 type Actions struct {
-	Common           *acommon.Actions
-	DocumentTypePage *DocumentTypePage
+	Common                  *acommon.Actions
+	DocumentTypePage        *DocumentTypePage
+	ManageDocumentTypesPage *ManageDocumentTypesPage
 
 	ListDocumentTypesPartial *ListDocumentTypesPartial
 	CreateCmd                *CreateCmd
@@ -28,8 +29,9 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions) *Actions {
 	actions := new(Actions)
 
 	*actions = Actions{
-		Common:           commonActions,
-		DocumentTypePage: NewDocumentTypePage(infra, actions),
+		Common:                  commonActions,
+		DocumentTypePage:        NewDocumentTypePage(infra, actions),
+		ManageDocumentTypesPage: NewManageDocumentTypesPage(infra, actions),
 
 		ListDocumentTypesPartial: NewListDocumentTypesPartial(infra, actions),
 		CreateCmd:                NewCreateCmd(infra, actions),

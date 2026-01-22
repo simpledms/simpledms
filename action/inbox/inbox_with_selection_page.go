@@ -1,9 +1,8 @@
-package page
+package inbox
 
 import (
 	"net/http"
 
-	"github.com/simpledms/simpledms/action/inbox"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
@@ -16,22 +15,22 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type InboxWithSelection struct {
+type InboxWithSelectionPage struct {
 	infra   *common.Infra
-	actions *inbox.Actions
+	actions *Actions
 
 	// inboxDirInfo *ent.FileInfo
 }
 
-func NewInboxWithSelection(infra *common.Infra, actions *inbox.Actions) *InboxWithSelection {
-	return &InboxWithSelection{
+func NewInboxWithSelectionPage(infra *common.Infra, actions *Actions) *InboxWithSelectionPage {
+	return &InboxWithSelectionPage{
 		infra:   infra,
 		actions: actions,
 		// inboxDirInfo: infra.UnsafeDB().FileInfo.Query().Where(fileinfo.FullPathEqualFold(infra.InboxPath())).OnlyX(context.Background()),
 	}
 }
 
-func (qq *InboxWithSelection) Handler(
+func (qq *InboxWithSelectionPage) Handler(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,

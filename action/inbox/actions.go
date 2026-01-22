@@ -11,6 +11,9 @@ type Actions struct {
 	Common *acommon.Actions
 	Browse *browse.Actions // TODO get rid of?
 
+	InboxRootPage          *InboxRootPage
+	InboxWithSelectionPage *InboxWithSelectionPage
+
 	InboxPage *InboxPage
 
 	ListFilesPartial    *ListFilesPartial
@@ -41,6 +44,9 @@ func NewActions(
 	*actions = Actions{
 		Common: commonActions,
 		Browse: browseActions,
+
+		InboxRootPage:          NewInboxRootPage(infra, actions),
+		InboxWithSelectionPage: NewInboxWithSelectionPage(infra, actions),
 
 		InboxPage: NewInboxPage(infra, actions),
 
