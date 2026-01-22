@@ -278,7 +278,7 @@ func (qq *Server) Start() error {
 
 		mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))))
 
-		mux.HandleFunc("/-/cmd/unlock", func(rw http.ResponseWriter, req *http.Request) {
+		mux.HandleFunc("/-/cmd/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
 			defer req.Body.Close()
 
 			// Parse JSON request body

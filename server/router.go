@@ -437,9 +437,9 @@ func (qq *Router) context(
 			"/",
 			"/-/partial/auth/sign-up-form",
 			"/-/partial/auth/reset-password-form",
-			"/-/cmd/auth/sign-up",
-			"/-/cmd/auth/sign-in",
-			"/-/cmd/auth/reset-password",
+			"/-/cmd/auth/sign-up-cmd",
+			"/-/cmd/auth/sign-in-cmd",
+			"/-/cmd/auth/reset-password-cmd",
 		}, req.URL.Path) {
 			return visitorCtx, nil, false, nil
 		} else {

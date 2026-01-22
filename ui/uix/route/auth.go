@@ -13,5 +13,5 @@ func AuthActionsRoute() string {
 // not sure if a good idea to have command routes here...
 // should just get defined in one place
 func SignOutCmd() string {
-	return "/-/cmd/auth/sign-out"
+	return "/-/cmd/auth/sign-out-cmd"
 }
