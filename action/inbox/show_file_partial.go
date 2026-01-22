@@ -92,6 +92,14 @@ func (qq *ShowFilePartial) Widget(
 						DialogID: qq.SideSheetID(),
 					},
 				},
+				&wx.Link{
+					Href:      route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
+					IsNoColor: true,
+					Filename:  filex.Filename(ctx),
+					Child: &wx.IconButton{
+						Icon: "download",
+					},
+				},
 			},
 		),
 		Child: &wx.Column{
