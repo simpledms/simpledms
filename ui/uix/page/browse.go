@@ -54,7 +54,7 @@ func (qq *Browse) Handler(
 		return e.NewHTTPErrorf(http.StatusBadRequest, "file is not a directory")
 	}
 
-	state := autil.StateX[browse.ListDirState](rw, req)
+	state := autil.StateX[browse.ListDirPartialState](rw, req)
 	// TODO Push or Replace?
 	rw.Header().Set("HX-Push-Url", route.BrowseWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, dirx.PublicID.String()))
 
@@ -97,10 +97,10 @@ func (qq *Browse) render(
 func (qq *Browse) widget(
 	req *httpx.Request,
 	ctx ctxx.Context,
-	state *browse.ListDirState,
+	state *browse.ListDirPartialState,
 	dir *enttenant.File,
 ) (renderable.Renderable, error) {
-	listDetailLayout := qq.actions.ListDir.Widget(
+	listDetailLayout := qq.actions.ListDirPartial.Widget(
 		ctx,
 		state,
 		dir.PublicID.String(),
@@ -112,14 +112,14 @@ func (qq *Browse) widget(
 	fabs = append(fabs, &wx.FloatingActionButton{
 		Icon: "upload_file",
 		HTMXAttrs: wx.HTMXAttrs{
-			HxPost:        qq.actions.FileUploadDialog.Endpoint(),
-			HxVals:        util.JSON(qq.actions.FileUploadDialog.Data(dir.PublicID.String(), false)),
+			HxPost:        qq.actions.FileUploadDialogPartial.Endpoint(),
+			HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dir.PublicID.String(), false)),
 			LoadInPopover: true,
 		},
 		/*
-			HTMXAttrs: qq.actions.UploadFile.ModalLinkAttrs(
-				qq.actions.UploadFile.Data(dir.PublicID.String(), "", false),
-				"#"+qq.actions.ListDir.WrapperID(),
+			HTMXAttrs: qq.actions.UploadFileCmd.ModalLinkAttrs(
+				qq.actions.UploadFileCmd.Data(dir.PublicID.String(), "", false),
+				"#"+qq.actions.ListDirPartial.WrapperID(),
 			),
 		*/
 		Child: []wx.IWidget{
@@ -132,9 +132,9 @@ func (qq *Browse) widget(
 		fabs = append(fabs, &wx.FloatingActionButton{
 			FABSize: wx.FABSizeSmall,
 			Icon:    "create_new_folder",
-			HTMXAttrs: qq.actions.MakeDir.ModalLinkAttrs(
-				qq.actions.MakeDir.Data(dir.PublicID.String(), ""),
-				"#"+qq.actions.ListDir.WrapperID(),
+			HTMXAttrs: qq.actions.MakeDirCmd.ModalLinkAttrs(
+				qq.actions.MakeDirCmd.Data(dir.PublicID.String(), ""),
+				"#"+qq.actions.ListDirPartial.WrapperID(),
 			),
 			Child: []wx.IWidget{
 				wx.NewIcon("create_new_folder"),

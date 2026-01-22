@@ -73,7 +73,7 @@ func (qq *InboxWithSelection) Handler(
 	}
 	*/
 
-	content := qq.actions.Page.WidgetHandler(rw, req, ctx, filex.PublicID.String())
+	content := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, filex.PublicID.String())
 	if req.Header.Get("HX-Target") == "details" {
 		return qq.infra.Renderer().Render(
 			rw,
@@ -87,8 +87,8 @@ func (qq *InboxWithSelection) Handler(
 		{
 			Icon: "upload_file",
 			HTMXAttrs: wx.HTMXAttrs{
-				HxPost: qq.actions.Browse.FileUploadDialog.Endpoint(),
-				HxVals: util.JSON(qq.actions.Browse.FileUploadDialog.Data(
+				HxPost: qq.actions.Browse.FileUploadDialogPartial.Endpoint(),
+				HxVals: util.JSON(qq.actions.Browse.FileUploadDialogPartial.Data(
 					ctx.SpaceCtx().SpaceRootDir().PublicID.String(),
 					true,
 				)),

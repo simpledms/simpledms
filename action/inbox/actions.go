@@ -11,21 +11,21 @@ type Actions struct {
 	Common *acommon.Actions
 	Browse *browse.Actions // TODO get rid of?
 
-	Page *Page
+	InboxPage *InboxPage
 
-	ListFiles    *ListFiles
-	FileListItem *FileListItem
-	FileMetadata *FileMetadata
+	ListFilesPartial    *ListFilesPartial
+	FileListItemPartial *FileListItemPartial
+	FileMetadataPartial *FileMetadataPartial
 
-	ListInboxAssignmentSuggestions *ListInboxAssignmentSuggestions
-	AssignmentDirectoryListItem    *AssignmentDirectoryListItem
-	AssignFile                     *AssignFile
+	ListInboxAssignmentSuggestionsPartial *ListInboxAssignmentSuggestionsPartial
+	AssignmentDirectoryListItemPartial    *AssignmentDirectoryListItemPartial
+	AssignFileCmd                         *AssignFileCmd
 
-	ShowFile     *ShowFile
-	ShowFileTabs *ShowFileTabs
-	MoveFile     *MoveFile
-	UploadFile   *UploadFile
-	MarkAsDone   *MarkAsDone
+	ShowFilePartial     *ShowFilePartial
+	ShowFileTabsPartial *ShowFileTabsPartial
+	MoveFileCmd         *MoveFileCmd
+	UploadFileCmd       *UploadFileCmd
+	MarkAsDoneCmd       *MarkAsDoneCmd
 }
 
 func NewActions(
@@ -42,24 +42,24 @@ func NewActions(
 		Common: commonActions,
 		Browse: browseActions,
 
-		Page: NewPage(infra, actions),
+		InboxPage: NewInboxPage(infra, actions),
 
-		ListFiles:                      NewListFiles(infra, actions),
-		FileListItem:                   NewFileListItem(infra, actions),
-		ListInboxAssignmentSuggestions: NewListInboxAssignmentSuggestions(infra, actions),
-		AssignmentDirectoryListItem:    NewAssignmentDirectoryListItem(infra, actions),
-		AssignFile:                     NewAssignFile(infra, actions),
+		ListFilesPartial:                      NewListFilesPartial(infra, actions),
+		FileListItemPartial:                   NewFileListItemPartial(infra, actions),
+		ListInboxAssignmentSuggestionsPartial: NewListInboxAssignmentSuggestionsPartial(infra, actions),
+		AssignmentDirectoryListItemPartial:    NewAssignmentDirectoryListItemPartial(infra, actions),
+		AssignFileCmd:                         NewAssignFileCmd(infra, actions),
 
-		ShowFile:     NewShowFile(infra, actions),
-		ShowFileTabs: NewShowFileTabs(infra, actions),
-		MoveFile:     NewMoveFile(infra, actions),
-		UploadFile:   NewUploadFile(infra, actions),
+		ShowFilePartial:     NewShowFilePartial(infra, actions),
+		ShowFileTabsPartial: NewShowFileTabsPartial(infra, actions),
+		MoveFileCmd:         NewMoveFileCmd(infra, actions),
+		UploadFileCmd:       NewUploadFileCmd(infra, actions),
 
-		MarkAsDone: NewMarkAsDone(infra, actions),
+		MarkAsDoneCmd: NewMarkAsDoneCmd(infra, actions),
 	}
 
 	// uses actions in constructor, thus outside
-	actions.FileMetadata = NewFileMetadata(infra, actions)
+	actions.FileMetadataPartial = NewFileMetadataPartial(infra, actions)
 
 	return actions
 }

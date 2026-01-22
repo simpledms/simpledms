@@ -6,24 +6,24 @@ import (
 )
 
 type Actions struct {
-	PropertiesPage *PropertiesPage
-	PropertyList   *PropertyList
+	PropertiesPage      *PropertiesPage
+	PropertyListPartial *PropertyListPartial
 
-	CreateProperty *CreateProperty
-	EditProperty   *EditProperty
-	DeleteProperty *DeleteProperty
+	CreatePropertyCmd *CreatePropertyCmd
+	EditPropertyCmd   *EditPropertyCmd
+	DeletePropertyCmd *DeletePropertyCmd
 }
 
 func NewActions(infra *common.Infra) *Actions {
 	actions := new(Actions)
 
 	*actions = Actions{
-		PropertiesPage: NewPropertiesPage(infra, actions),
-		PropertyList:   NewPropertyList(infra, actions),
+		PropertiesPage:      NewPropertiesPage(infra, actions),
+		PropertyListPartial: NewPropertyListPartial(infra, actions),
 
-		CreateProperty: NewCreateProperty(infra, actions),
-		EditProperty:   NewEditProperty(infra, actions),
-		DeleteProperty: NewDeleteProperty(infra, actions),
+		CreatePropertyCmd: NewCreatePropertyCmd(infra, actions),
+		EditPropertyCmd:   NewEditPropertyCmd(infra, actions),
+		DeletePropertyCmd: NewDeletePropertyCmd(infra, actions),
 	}
 
 	return actions

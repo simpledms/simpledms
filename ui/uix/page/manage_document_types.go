@@ -38,8 +38,8 @@ func (qq *ManageDocumentTypes) Handler(
 		{
 			Icon:    "add",
 			Tooltip: wx.T("Add document type"),
-			HTMXAttrs: qq.actions.Create.ModalLinkAttrs(
-				qq.actions.Create.Data(""),
+			HTMXAttrs: qq.actions.CreateCmd.ModalLinkAttrs(
+				qq.actions.CreateCmd.Data(""),
 				"",
 			),
 			Child: []wx.IWidget{
@@ -63,7 +63,7 @@ func (qq *ManageDocumentTypes) Handler(
 
 	viewx = &wx.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, "", fabs),
-		Content:    qq.actions.Page.WidgetHandler(rw, req, ctx, id64),
+		Content:    qq.actions.DocumentTypePage.WidgetHandler(rw, req, ctx, id64),
 	}
 
 	renderFullPage := false

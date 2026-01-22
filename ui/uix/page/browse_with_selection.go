@@ -52,7 +52,7 @@ func (qq *BrowseWithSelection) Handler(
 	filex := qq.infra.FileRepo.GetX(ctx, fileIDStr)
 	dirx := qq.infra.FileRepo.GetX(ctx, dirIDStr)
 
-	state := autil.StateX[browse.FilePreviewState](rw, req)
+	state := autil.StateX[browse.FilePreviewPartialState](rw, req)
 	rw.Header().Set("HX-Push-Url", route.BrowseFileWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, dirx.Data.PublicID.String(), filex.Data.PublicID.String()))
 
 	browsePage, err := qq.widget(rw, req, ctx, state, dirx, filex)
@@ -87,11 +87,11 @@ func (qq *BrowseWithSelection) widget(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
-	state *browse.FilePreviewState,
+	state *browse.FilePreviewPartialState,
 	dirx *model.File,
 	filex *model.File,
 ) (renderable.Renderable, error) {
-	filePreview, err := qq.actions.FilePreview.Widget(
+	filePreview, err := qq.actions.FilePreviewPartial.Widget(
 		ctx,
 		state,
 		dirx,
@@ -106,7 +106,7 @@ func (qq *BrowseWithSelection) widget(
 		return filePreview, nil
 	}
 
-	listDetailsLayout := qq.actions.ListDir.WidgetHandler(
+	listDetailsLayout := qq.actions.ListDirPartial.WidgetHandler(
 		rw,
 		req,
 		ctx,
@@ -119,8 +119,8 @@ func (qq *BrowseWithSelection) widget(
 		{
 			Icon: "upload_file",
 			HTMXAttrs: wx.HTMXAttrs{
-				HxPost:        qq.actions.FileUploadDialog.Endpoint(),
-				HxVals:        util.JSON(qq.actions.FileUploadDialog.Data(dirx.Data.PublicID.String(), false)),
+				HxPost:        qq.actions.FileUploadDialogPartial.Endpoint(),
+				HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dirx.Data.PublicID.String(), false)),
 				LoadInPopover: true,
 			},
 			Child: []wx.IWidget{
@@ -134,9 +134,9 @@ func (qq *BrowseWithSelection) widget(
 		fabs = append(fabs, &wx.FloatingActionButton{
 			FABSize: wx.FABSizeSmall,
 			Icon:    "create_new_folder",
-			HTMXAttrs: qq.actions.MakeDir.ModalLinkAttrs(
-				qq.actions.MakeDir.Data(dirx.Data.PublicID.String(), ""),
-				"#"+qq.actions.ListDir.WrapperID(),
+			HTMXAttrs: qq.actions.MakeDirCmd.ModalLinkAttrs(
+				qq.actions.MakeDirCmd.Data(dirx.Data.PublicID.String(), ""),
+				"#"+qq.actions.ListDirPartial.WrapperID(),
 			),
 			Child: []wx.IWidget{
 				wx.NewIcon("create_new_folder"),
@@ -146,9 +146,9 @@ func (qq *BrowseWithSelection) widget(
 	}
 
 	/*
-		fileDetailsSideSheet := qq.actions.FileDetailsSideSheet.Widget(
+		fileDetailsSideSheet := qq.actions.FileDetailsSideSheetPartial.Widget(
 			ctx,
-			qq.actions.FileDetailsSideSheet.Data(dirx.Data.PublicID.String(), filex.Data.PublicID.String()),
+			qq.actions.FileDetailsSideSheetPartial.Data(dirx.Data.PublicID.String(), filex.Data.PublicID.String()),
 			state,
 		)
 	*/

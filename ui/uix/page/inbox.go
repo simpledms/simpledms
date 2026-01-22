@@ -35,8 +35,8 @@ func (qq *Inbox) Handler(
 		{
 			Icon: "upload_file",
 			HTMXAttrs: wx.HTMXAttrs{
-				HxPost: qq.actions.Browse.FileUploadDialog.Endpoint(),
-				HxVals: util.JSON(qq.actions.Browse.FileUploadDialog.Data(
+				HxPost: qq.actions.Browse.FileUploadDialogPartial.Endpoint(),
+				HxVals: util.JSON(qq.actions.Browse.FileUploadDialogPartial.Data(
 					ctx.SpaceCtx().SpaceRootDir().PublicID.String(),
 					true,
 				)),
@@ -52,7 +52,7 @@ func (qq *Inbox) Handler(
 	var viewx renderable.Renderable
 	viewx = &wx.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, "inbox", fabs),
-		Content:    qq.actions.Page.WidgetHandler(rw, req, ctx, ""),
+		Content:    qq.actions.InboxPage.WidgetHandler(rw, req, ctx, ""),
 	}
 
 	renderFullPage := false

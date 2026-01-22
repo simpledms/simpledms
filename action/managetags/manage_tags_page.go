@@ -11,7 +11,7 @@ import (
 )
 
 type ManageTagsPageState struct {
-	TagListState // TODO not embedded and flatten? or could this lead to conflicts?
+	TagListPartialState // TODO not embedded and flatten? or could this lead to conflicts?
 }
 
 type ManageTagsPage struct {
@@ -56,8 +56,8 @@ func (qq *ManageTagsPage) Widget(
 		{
 			Icon:    "add",
 			Tooltip: wx.T("Create new tag or group"),
-			HTMXAttrs: qq.actions.Tagging.CreateTag.ModalLinkAttrs(
-				qq.actions.Tagging.CreateTag.Data(0), ""),
+			HTMXAttrs: qq.actions.Tagging.CreateTagCmd.ModalLinkAttrs(
+				qq.actions.Tagging.CreateTagCmd.Data(0), ""),
 		},
 	}
 
@@ -65,7 +65,7 @@ func (qq *ManageTagsPage) Widget(
 		Navigation: partial2.NewNavigationRail(ctx, "manage-tags", fabs),
 		Content: &wx.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
-			Content: qq.actions.TagList.Widget(ctx, qq.actions.TagList.Data(0), &state.TagListState),
+			Content: qq.actions.TagListPartial.Widget(ctx, qq.actions.TagListPartial.Data(0), &state.TagListPartialState),
 		},
 	}
 }

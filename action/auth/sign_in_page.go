@@ -51,15 +51,15 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 	// TODO 2fa
 	children = append(children,
 		wx.H(wx.HeadingTypeHeadlineMd, wx.Tuf("%s | SimpleDMS", wx.T("Sign in [subject]").String(ctx))),
-		qq.actions.SignIn.Form(
+		qq.actions.SignInCmd.Form(
 			ctx,
-			qq.actions.SignIn.Data("", "", ""),
+			qq.actions.SignInCmd.Data("", "", ""),
 			actionx.ResponseWrapperNone,
 			wx.T("Sign in"),
 			"",
 		),
-		qq.actions.ResetPassword.ModalLink(
-			qq.actions.ResetPassword.Data(""),
+		qq.actions.ResetPasswordCmd.ModalLink(
+			qq.actions.ResetPasswordCmd.Data(""),
 			wx.T("Forget password?"),
 			"",
 		),
@@ -68,9 +68,9 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 	if qq.infra.SystemConfig().IsSaaSModeEnabled() {
 		children = append(
 			children,
-			qq.actions.SignUp.ModalLink(
+			qq.actions.SignUpCmd.ModalLink(
 				// TODO set country and language based on browser settings
-				qq.actions.SignUp.Data("", "", "", country.Unknown, language.Unknown, false),
+				qq.actions.SignUpCmd.Data("", "", "", country.Unknown, language.Unknown, false),
 				wx.T("Don't have an account? Sign up."),
 				"",
 			))

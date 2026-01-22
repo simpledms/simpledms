@@ -13,8 +13,8 @@ type Actions struct {
 	AuthActions  *auth.Actions
 	AdminActions *admin.Actions
 
-	DashboardPage  *DashboardPage
-	DashboardCards *DashboardCards
+	DashboardPage         *DashboardPage
+	DashboardCardsPartial *DashboardCardsPartial
 }
 
 func NewActions(
@@ -29,8 +29,8 @@ func NewActions(
 		AuthActions:  authActions,
 		AdminActions: adminActions,
 
-		DashboardPage:  NewDashboardPage(infra, actions),
-		DashboardCards: NewDashboardCards(infra, actions),
+		DashboardPage:         NewDashboardPage(infra, actions),
+		DashboardCardsPartial: NewDashboardCardsPartial(infra, actions),
 	}
 
 	return actions

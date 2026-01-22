@@ -6,24 +6,24 @@ import (
 )
 
 type Actions struct {
-	SpacesPage *SpacesPage // TODO SpacePage?
-	SpaceCards *SpaceCards
+	SpacesPage        *SpacesPage // TODO SpacePage?
+	SpaceCardsPartial *SpaceCardsPartial
 
-	CreateSpace *CreateSpace
-	EditSpace   *EditSpace
-	DeleteSpace *DeleteSpace
+	CreateSpaceCmd *CreateSpaceCmd
+	EditSpaceCmd   *EditSpaceCmd
+	DeleteSpaceCmd *DeleteSpaceCmd
 }
 
 func NewActions(infra *common.Infra) *Actions {
 	actions := new(Actions)
 
 	*actions = Actions{
-		SpacesPage: NewSpacesPage(infra, actions),
-		SpaceCards: NewSpaceCards(infra, actions),
+		SpacesPage:        NewSpacesPage(infra, actions),
+		SpaceCardsPartial: NewSpaceCardsPartial(infra, actions),
 
-		CreateSpace: NewCreateSpace(infra, actions),
-		EditSpace:   NewRenameSpace(infra, actions),
-		DeleteSpace: NewDeleteSpace(infra, actions),
+		CreateSpaceCmd: NewCreateSpaceCmd(infra, actions),
+		EditSpaceCmd:   NewRenameSpace(infra, actions),
+		DeleteSpaceCmd: NewDeleteSpaceCmd(infra, actions),
 	}
 	return actions
 }

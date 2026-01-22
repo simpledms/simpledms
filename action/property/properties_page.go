@@ -38,8 +38,8 @@ func (qq *PropertiesPage) Widget(
 				wx.NewIcon("add"),
 				wx.T("Add field"),
 			},
-			HTMXAttrs: qq.actions.CreateProperty.ModalLinkAttrs(
-				qq.actions.CreateProperty.Data(""),
+			HTMXAttrs: qq.actions.CreatePropertyCmd.ModalLinkAttrs(
+				qq.actions.CreatePropertyCmd.Data(""),
 				"",
 			),
 		},
@@ -48,9 +48,9 @@ func (qq *PropertiesPage) Widget(
 	var children []wx.IWidget
 
 	children = append(children,
-		qq.actions.PropertyList.Widget(
+		qq.actions.PropertyListPartial.Widget(
 			ctx,
-			qq.actions.PropertyList.Data(),
+			qq.actions.PropertyListPartial.Data(),
 		),
 	)
 
