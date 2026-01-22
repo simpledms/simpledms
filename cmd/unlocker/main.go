@@ -12,7 +12,7 @@ import (
 	"golang.org/x/term"
 )
 
-// usage: `unlocker https://app.simpledms.ch/-/cmd/unlock-cmd`
+// usage: `unlocker https://app.simpledms.ch/-/unlock-cmd`
 func main() {
 	// Get the first parameter passed to the command and save it in the variable "url"
 	if len(os.Args) < 2 {
