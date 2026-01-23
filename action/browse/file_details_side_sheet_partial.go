@@ -70,7 +70,7 @@ func (qq *FileDetailsSideSheetPartial) Widget(
 		KeepInDOMOnClose: true,
 		IsOpenOnLoad:     state.ActiveSideSheet == qq.ID(),
 		Layout:           wx.DialogLayoutSideSheet,
-		Child: qq.actions.ShowFileTabsPartial.Widget(
+		Child: qq.actions.FileTabsPartial.Widget(
 			ctx,
 			state,
 			data.CurrentDirID,

@@ -28,8 +28,8 @@ type Actions struct {
 
 	FilePreviewPartial          *FilePreviewPartial
 	FileDetailsSideSheetPartial *FileDetailsSideSheetPartial
-	ShowFileTabsPartial         *FileTabsPartial
-	ShowFileSheetPartial        *FileSheetPartial
+	FileTabsPartial             *FileTabsPartial
+	FileSheetPartial            *FileSheetPartial
 	UploadFileCmd               *UploadFileCmd
 	// UploadFileInFolderMode *UploadFileInFolderMode
 	FileAttributesPartial     *FileAttributesPartial
@@ -84,8 +84,8 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 
 		FilePreviewPartial:          NewFilePreviewPartial(infra, actions),
 		FileDetailsSideSheetPartial: NewFileDetailsSideSheetPartial(infra, actions),
-		ShowFileTabsPartial:         NewFileTabsPartial(infra, actions),
-		ShowFileSheetPartial:        NewFileSheetPartial(infra, actions),
+		FileTabsPartial:             NewFileTabsPartial(infra, actions),
+		FileSheetPartial:            NewFileSheetPartial(infra, actions),
 		UploadFileCmd:               NewUploadFileCmd(infra, actions),
 		// UploadFileInFolderMode: NewUploadFileInFolderMode(infra, actions),
 		FileAttributesPartial:     NewFileAttributesPartial(infra, actions),
