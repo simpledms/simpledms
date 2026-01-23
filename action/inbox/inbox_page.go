@@ -23,7 +23,7 @@ type InboxPageData struct {
 type InboxPageState struct {
 	UploadToken string `url:"upload_token,omitempty"`
 	ListFilesPartialState
-	ShowFilePartialState
+	FilePartialState
 }
 
 // TODO rename to PageContent?

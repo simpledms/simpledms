@@ -12,40 +12,40 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type ShowFilePartialData struct {
+type FilePartialData struct {
 	FileID string
 }
 
-type ShowFilePartial struct {
+type FilePartial struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
 }
 
-type ShowFilePartialState struct {
+type FilePartialState struct {
 	// ListFilesPartialState
 	ActiveTab string `url:"tab,omitempty"`
 }
 
-func NewShowFilePartial(infra *common.Infra, actions *Actions) *ShowFilePartial {
-	return &ShowFilePartial{
+func NewFilePartial(infra *common.Infra, actions *Actions) *FilePartial {
+	return &FilePartial{
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("show-file"),
+			actions.Route("file-partial"),
 			true,
 		),
 	}
 }
 
-func (qq *ShowFilePartial) Data(fileID string) *ShowFilePartialData {
-	return &ShowFilePartialData{
+func (qq *FilePartial) Data(fileID string) *FilePartialData {
+	return &FilePartialData{
 		FileID: fileID,
 	}
 }
 
-func (qq *ShowFilePartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	data, err := autil.FormData[ShowFilePartialData](rw, req, ctx)
+func (qq *FilePartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	data, err := autil.FormData[FilePartialData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
@@ -64,12 +64,12 @@ func (qq *ShowFilePartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 	)
 }
 
-func (qq *ShowFilePartial) WidgetHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context, filex *model.File) *wx.DetailsWithSheet {
+func (qq *FilePartial) WidgetHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context, filex *model.File) *wx.DetailsWithSheet {
 	state := autil.StateX[InboxPageState](rw, req)
 	return qq.Widget(ctx, state, filex)
 }
 
-func (qq *ShowFilePartial) Widget(
+func (qq *FilePartial) Widget(
 	ctx ctxx.Context,
 	state *InboxPageState,
 	filex *model.File,
@@ -123,6 +123,6 @@ func (qq *ShowFilePartial) Widget(
 	}
 }
 
-func (qq *ShowFilePartial) SideSheetID() string {
+func (qq *FilePartial) SideSheetID() string {
 	return "inboxShowFileSideSheet"
 }

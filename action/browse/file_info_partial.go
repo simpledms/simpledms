@@ -22,7 +22,7 @@ type FileInfoPartial struct {
 
 func NewFileInfoPartial(infra *common.Infra, actions *Actions) *FileInfoPartial {
 	config := actionx.NewConfig(
-		actions.Route("file-info"),
+		actions.Route("file-info-partial"),
 		true,
 	)
 	return &FileInfoPartial{

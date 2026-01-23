@@ -16,37 +16,37 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type ShowFileTabsPartialData struct {
+type FileTabsPartialData struct {
 	FileID    string
 	ActiveTab string
 }
 
-type ShowFileTabsPartial struct {
+type FileTabsPartial struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
 }
 
-func NewShowFileTabsPartial(infra *common.Infra, actions *Actions) *ShowFileTabsPartial {
-	return &ShowFileTabsPartial{
+func NewFileTabsPartial(infra *common.Infra, actions *Actions) *FileTabsPartial {
+	return &FileTabsPartial{
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("show-file-tabs"),
+			actions.Route("file-tabs-partial"),
 			true,
 		),
 	}
 }
 
-func (qq *ShowFileTabsPartial) Data(fileID string, activeTab string) *ShowFileTabsPartialData {
-	return &ShowFileTabsPartialData{
+func (qq *FileTabsPartial) Data(fileID string, activeTab string) *FileTabsPartialData {
+	return &FileTabsPartialData{
 		FileID:    fileID,
 		ActiveTab: activeTab,
 	}
 }
 
-func (qq *ShowFileTabsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	data, err := autil.FormData[ShowFileTabsPartialData](rw, req, ctx)
+func (qq *FileTabsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	data, err := autil.FormData[FileTabsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
@@ -63,7 +63,7 @@ func (qq *ShowFileTabsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 	)
 }
 
-func (qq *ShowFileTabsPartial) Widget(
+func (qq *FileTabsPartial) Widget(
 	ctx ctxx.Context,
 	state *InboxPageState,
 	fileID string,

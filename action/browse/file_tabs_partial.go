@@ -16,40 +16,40 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type ShowFileTabsPartialData struct {
+type FileTabsPartialData struct {
 	CurrentDirID string
 	FileID       string
 	ActiveTab    string
 }
 
 // TODO rename to ShowFileTabsPartial?
-type ShowFileTabsPartial struct {
+type FileTabsPartial struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
 }
 
-func NewShowFileTabsPartial(infra *common.Infra, actions *Actions) *ShowFileTabsPartial {
-	return &ShowFileTabsPartial{
+func NewFileTabsPartial(infra *common.Infra, actions *Actions) *FileTabsPartial {
+	return &FileTabsPartial{
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("show-file-tabs"),
+			actions.Route("file-tabs-partial"),
 			true,
 		),
 	}
 }
 
-func (qq *ShowFileTabsPartial) Data(currentDirID, fileID, activeTab string) *ShowFileTabsPartialData {
-	return &ShowFileTabsPartialData{
+func (qq *FileTabsPartial) Data(currentDirID, fileID, activeTab string) *FileTabsPartialData {
+	return &FileTabsPartialData{
 		CurrentDirID: currentDirID,
 		FileID:       fileID,
 		ActiveTab:    activeTab,
 	}
 }
 
-func (qq *ShowFileTabsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	data, err := autil.FormData[ShowFileTabsPartialData](rw, req, ctx)
+func (qq *FileTabsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	data, err := autil.FormData[FileTabsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
@@ -70,7 +70,7 @@ func (qq *ShowFileTabsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 //
 // nullableFile can be provided used if already loaded
 // not necessary for all tabs, thus optional
-func (qq *ShowFileTabsPartial) Widget(
+func (qq *FileTabsPartial) Widget(
 	ctx ctxx.Context,
 	state *FilePreviewPartialState,
 	dirID string,
