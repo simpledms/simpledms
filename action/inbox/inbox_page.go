@@ -130,7 +130,7 @@ func (qq *InboxPage) Widget(ctx ctxx.Context, state *InboxPageState, selectedFil
 
 	if selectedFileID != "" {
 		filex := qq.infra.FileRepo.GetX(ctx, selectedFileID)
-		listDetailLayout.Detail = qq.actions.ShowFilePartial.Widget(ctx, state, filex)
+		listDetailLayout.Detail = qq.actions.FilePartial.Widget(ctx, state, filex)
 	}
 
 	return listDetailLayout

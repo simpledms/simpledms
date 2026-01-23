@@ -11,6 +11,8 @@ type IconButton struct {
 	PopoverTargetAction string
 	ReplaceURL          string
 
+	Tooltip *Text
+
 	Children IWidget // used for menu // TODO get rid of label and icon?
 }
 

@@ -39,7 +39,7 @@ type FileAttributesPartial struct {
 
 func NewFileAttributesPartial(infra *common.Infra, actions *Actions) *FileAttributesPartial {
 	config := actionx.NewConfig(
-		actions.Route("file-attributes"),
+		actions.Route("file-attributes-partial"),
 		false,
 	)
 	return &FileAttributesPartial{

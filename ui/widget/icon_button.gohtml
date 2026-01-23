@@ -1,7 +1,7 @@
 {{- define "IconButton" }}
 	{{/* wrapper is necessary to make script execution relyable on morph, without
 	 the script isn't executed on some morphed IconButton (no clear pattern on first loop) */}}
-	<div id="{{ .GetID }}" class="-m-3">
+	<div id="{{ .GetID }}" class="-m-3" title="{{ render .GetContext .Tooltip }}">
 		{{ if .HTMXAttrs.IsPageLink }}<a{{ else }}<button{{ end }}
 				class="flex center-aligned size-12 rounded-full cursor-pointer"
 				{{ if .HTMXAttrs.IsPageLink }}

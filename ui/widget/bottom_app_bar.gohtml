@@ -12,9 +12,10 @@
 	 	     div#popovers, it's a child of #content
 		<footer class="bottomAppBar" hx-swap-oob="outerHTML:footer.bottomAppBar:not(:has(footer.bottomAppBar)),body:not(:has(footer.bottomAppBar))">
 	*/}}
-	<footer class="flex content-between items-center bg-surface-container min-h-20 h-20 py-3 px-4
+	<footer class="flex gap-x-3 content-between items-center bg-surface-container min-h-20 h-20 py-3 px-4
 		exp:min-h-12 exp:h-12 exp:rounded-b-lg">
 		{{ render .GetContext .Actions }}
+        {{ render .GetContext .Children }}
 		{{ render .GetContext .FAB }}
 	</footer>
 {{ end }}

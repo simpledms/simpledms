@@ -74,7 +74,7 @@ func (qq *FilePartial) Widget(
 	state *InboxPageState,
 	filex *model.File,
 ) *wx.DetailsWithSheet {
-	showFileTabs := qq.actions.ShowFileTabsPartial.Widget(
+	fileTabsPartial := qq.actions.FileTabsPartial.Widget(
 		ctx,
 		state,
 		filex.Data.PublicID.String(),
@@ -118,7 +118,7 @@ func (qq *FilePartial) Widget(
 			// allows for quick back and forth on mobile devices
 			KeepInDOMOnClose: true,
 			Layout:           wx.DialogLayoutSideSheet,
-			Child:            showFileTabs,
+			Child:            fileTabsPartial,
 		},
 	}
 }

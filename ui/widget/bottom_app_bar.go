@@ -2,6 +2,7 @@ package widget
 
 type BottomAppBar struct {
 	Widget[BottomAppBar]
-	Actions []IWidget
-	FAB     *FloatingActionButton
+	Actions  []IWidget
+	Children IWidget // TODO or Content?
+	FAB      *FloatingActionButton
 }
