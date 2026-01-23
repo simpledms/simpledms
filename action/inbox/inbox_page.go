@@ -22,7 +22,7 @@ type InboxPageData struct {
 
 type InboxPageState struct {
 	UploadToken string `url:"upload_token,omitempty"`
-	ListFilesPartialState
+	FilesListPartialState
 	FilePartialState
 }
 
@@ -35,7 +35,7 @@ type InboxPage struct {
 
 func NewInboxPage(infra *common.Infra, actions *Actions) *InboxPage {
 	config := actionx.NewConfig(
-		actions.Route("page"),
+		actions.Route("inbox-page"),
 		false,
 	)
 	return &InboxPage{

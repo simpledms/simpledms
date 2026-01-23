@@ -31,7 +31,7 @@ type DashboardCardsPartial struct {
 
 func NewDashboardCardsPartial(infra *common.Infra, actions *Actions) *DashboardCardsPartial {
 	config := actionx.NewConfig(
-		actions.Route("dashboard-cards"),
+		actions.Route("dashboard-cards-partial"),
 		true,
 	)
 	return &DashboardCardsPartial{

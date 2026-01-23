@@ -9,38 +9,38 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type SelectDocumentTypePartialData struct {
+type SelectDocumentTypeCmdData struct {
 	FileID         string
 	DocumentTypeID int64
 }
 
-type SelectDocumentTypePartial struct {
+type SelectDocumentTypeCmd struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
 }
 
-func NewSelectDocumentTypePartial(infra *common.Infra, actions *Actions) *SelectDocumentTypePartial {
+func NewSelectDocumentTypeCmd(infra *common.Infra, actions *Actions) *SelectDocumentTypeCmd {
 	config := actionx.NewConfig(
-		actions.Route("select-document-type"),
+		actions.Route("select-document-type-cmd"),
 		false,
 	)
-	return &SelectDocumentTypePartial{
+	return &SelectDocumentTypeCmd{
 		infra:   infra,
 		actions: actions,
 		Config:  config,
 	}
 }
 
-func (qq *SelectDocumentTypePartial) Data(fileID string, documentTypeID int64) *SelectDocumentTypePartialData {
-	return &SelectDocumentTypePartialData{
+func (qq *SelectDocumentTypeCmd) Data(fileID string, documentTypeID int64) *SelectDocumentTypeCmdData {
+	return &SelectDocumentTypeCmdData{
 		FileID:         fileID,
 		DocumentTypeID: documentTypeID,
 	}
 }
 
-func (qq *SelectDocumentTypePartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	data, err := autil.FormData[SelectDocumentTypePartialData](rw, req, ctx)
+func (qq *SelectDocumentTypeCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	data, err := autil.FormData[SelectDocumentTypeCmdData](rw, req, ctx)
 	if err != nil {
 		return err
 	}

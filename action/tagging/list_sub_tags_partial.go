@@ -27,7 +27,7 @@ func NewListSubTagsPartial(infra *common.Infra, actions *Actions) *ListSubTagsPa
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("list-sub-tags"),
+			actions.Route("list-sub-tags-partial"),
 			true,
 		),
 	}

@@ -42,7 +42,7 @@ func NewDocumentTypeFilterPartial(infra *common.Infra, actions *Actions) *Docume
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("document-type-filter"),
+			actions.Route("document-type-filter-partial"),
 			true,
 		),
 	}

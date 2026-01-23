@@ -27,7 +27,7 @@ type AttributesPartial struct {
 
 func NewAttributesPartial(infra *common.Infra, actions *Actions) *AttributesPartial {
 	config := actionx.NewConfig(
-		actions.Route("attributes"),
+		actions.Route("attributes-partial"),
 		true,
 	)
 	return &AttributesPartial{

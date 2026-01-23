@@ -21,7 +21,7 @@ type FileUploadDialogPartial struct {
 }
 
 func NewFileUploadDialogPartial(infra *common.Infra, actions *Actions) *FileUploadDialogPartial {
-	config := actionx.NewConfig(actions.Route("file-upload-dialog"), true)
+	config := actionx.NewConfig(actions.Route("file-upload-dialog-partial"), true)
 	return &FileUploadDialogPartial{
 		infra:   infra,
 		actions: actions,

@@ -21,7 +21,7 @@ type FileVersionsPartial struct {
 
 func NewFileVersionsPartial(infra *common.Infra, actions *Actions) *FileVersionsPartial {
 	config := actionx.NewConfig(
-		actions.Route("file-versions"),
+		actions.Route("file-versions-partial"),
 		true,
 	)
 	return &FileVersionsPartial{

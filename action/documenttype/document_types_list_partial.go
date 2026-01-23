@@ -16,33 +16,32 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type ListDocumentTypesPartialData struct {
+type DocumentTypesListPartialData struct {
 }
 
-// TODO rename to DocumentTypesList or just List
-type ListDocumentTypesPartial struct {
+type DocumentTypesListPartial struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
 }
 
-func NewListDocumentTypesPartial(infra *common.Infra, actions *Actions) *ListDocumentTypesPartial {
-	return &ListDocumentTypesPartial{
+func NewListDocumentTypesPartial(infra *common.Infra, actions *Actions) *DocumentTypesListPartial {
+	return &DocumentTypesListPartial{
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("list-document-types"),
+			actions.Route("document-types-list-partial"),
 			true,
 		),
 	}
 }
 
-func (qq *ListDocumentTypesPartial) Data() *ListDocumentTypesPartialData {
-	return &ListDocumentTypesPartialData{}
+func (qq *DocumentTypesListPartial) Data() *DocumentTypesListPartialData {
+	return &DocumentTypesListPartialData{}
 }
 
-func (qq *ListDocumentTypesPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	_, err := autil.FormData[ListDocumentTypesPartialData](rw, req, ctx)
+func (qq *DocumentTypesListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	_, err := autil.FormData[DocumentTypesListPartialData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
@@ -54,7 +53,7 @@ func (qq *ListDocumentTypesPartial) Handler(rw httpx.ResponseWriter, req *httpx.
 	)
 }
 
-func (qq *ListDocumentTypesPartial) Widget(ctx ctxx.Context, selectedTypeID int64) renderable.Renderable {
+func (qq *DocumentTypesListPartial) Widget(ctx ctxx.Context, selectedTypeID int64) renderable.Renderable {
 	types := ctx.SpaceCtx().Space.QueryDocumentTypes().Order(documenttype.ByName()).AllX(ctx)
 	var items []*wx.ListItem
 
@@ -106,7 +105,7 @@ func (qq *ListDocumentTypesPartial) Widget(ctx ctxx.Context, selectedTypeID int6
 	}
 }
 
-func (qq *ListDocumentTypesPartial) ListItem(ctx ctxx.Context, typex *enttenant.DocumentType, isSelected bool) *wx.ListItem {
+func (qq *DocumentTypesListPartial) ListItem(ctx ctxx.Context, typex *enttenant.DocumentType, isSelected bool) *wx.ListItem {
 	icon := "category"
 	if typex.Icon != "" {
 		icon = typex.Icon

@@ -42,7 +42,7 @@ func NewEditSubTagsPartial(
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("edit-sub-tags"),
+			actions.Route("edit-sub-tags-partial"),
 			true, // TODO is this correct?
 		),
 	}

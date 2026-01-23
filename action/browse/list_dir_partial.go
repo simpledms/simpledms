@@ -89,7 +89,7 @@ func NewListDirPartial(
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("list-dir"),
+			actions.Route("list-dir-partial"),
 			true,
 		),
 	}

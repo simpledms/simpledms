@@ -30,7 +30,7 @@ func NewAssignmentDirectoryListItemPartial(infra *common.Infra, actions *Actions
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("assignment-directory-list-item"),
+			actions.Route("assignment-directory-list-item-partial"),
 			true,
 		),
 	}

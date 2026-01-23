@@ -27,7 +27,7 @@ type FileMetadataPartial struct {
 func NewFileMetadataPartial(infra *common.Infra, actions *Actions) *FileMetadataPartial {
 	config := actionx.NewConfig(
 		actions.Route("file-metadata-partial"),
-		false,
+		true,
 	)
 	return &FileMetadataPartial{
 		// FileAttributesPartial: actions.Browse.FileAttributesPartial,

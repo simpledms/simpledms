@@ -12,33 +12,33 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type SelectDirMakeDirPartialData struct {
+type SelectDirMakeDirCmdData struct {
 	*acommon.MoveFileData `structs:",flatten"` // TODO use SelectDirPartialData once implemented
 	NewDirName            string               `form_attrs:"autofocus"`
 }
 
 // Name only makes sense once SelectDirPartial is factored out from MoveFileCmd and can
 // be used independently
-type SelectDirMakeDirPartial struct {
+type SelectDirMakeDirCmd struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
-	*autil.FormHelper[SelectDirMakeDirPartialData]
+	*autil.FormHelper[SelectDirMakeDirCmdData]
 }
 
-func NewSelectDirMakeDirPartial(
+func NewSelectDirMakeDirCmd(
 	infra *common.Infra,
 	actions *Actions,
-) *SelectDirMakeDirPartial {
+) *SelectDirMakeDirCmd {
 	config := actionx.NewConfig(
-		actions.Route("select-dir/make-dir"), // TODO suffix should be handled by actions (embedding)
+		actions.Route("select-dir/make-dir-cmd"), // TODO suffix should be handled by actions (embedding)
 		false,
 	)
-	return &SelectDirMakeDirPartial{
+	return &SelectDirMakeDirCmd{
 		infra,
 		actions,
 		config,
-		autil.NewFormHelper[SelectDirMakeDirPartialData](
+		autil.NewFormHelper[SelectDirMakeDirCmdData](
 			infra,
 			config,
 			wx.T("Create directory"),
@@ -47,15 +47,15 @@ func NewSelectDirMakeDirPartial(
 	}
 }
 
-func (qq *SelectDirMakeDirPartial) Data(moveFileData *acommon.MoveFileData, dirName string) *SelectDirMakeDirPartialData {
-	return &SelectDirMakeDirPartialData{
+func (qq *SelectDirMakeDirCmd) Data(moveFileData *acommon.MoveFileData, dirName string) *SelectDirMakeDirCmdData {
+	return &SelectDirMakeDirCmdData{
 		MoveFileData: moveFileData,
 		NewDirName:   dirName,
 	}
 }
 
-func (qq *SelectDirMakeDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	data, err := autil.FormData[SelectDirMakeDirPartialData](rw, req, ctx)
+func (qq *SelectDirMakeDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	data, err := autil.FormData[SelectDirMakeDirCmdData](rw, req, ctx)
 	if err != nil {
 		return err
 	}

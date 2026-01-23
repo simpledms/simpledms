@@ -38,7 +38,7 @@ func NewListFilterTagsPartial(infra *common.Infra, actions *Actions) *ListFilter
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("list-filter-tags"),
+			actions.Route("list-filter-tags-partial"),
 			true,
 		),
 	}

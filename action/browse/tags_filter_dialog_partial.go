@@ -22,7 +22,7 @@ type TagsFilterDialogPartial struct {
 
 func NewTagsFilterDialogPartial(infra *common.Infra, actions *Actions) *TagsFilterDialogPartial {
 	config := actionx.NewConfig(
-		actions.Route("tags-filter-dialog"),
+		actions.Route("tags-filter-dialog-partial"),
 		true,
 	)
 	return &TagsFilterDialogPartial{

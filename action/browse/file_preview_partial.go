@@ -37,7 +37,7 @@ func NewFilePreviewPartial(infra *common.Infra, actions *Actions) *FilePreviewPa
 		infra,
 		actions,
 		actionx.NewConfig(
-			actions.Route("file-preview"),
+			actions.Route("file-preview-partial"),
 			true,
 		),
 	}

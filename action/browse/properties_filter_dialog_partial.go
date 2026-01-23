@@ -21,7 +21,7 @@ type PropertiesFilterDialogPartial struct {
 
 func NewPropertiesFilterDialogPartial(infra *common.Infra, actions *Actions) *PropertiesFilterDialogPartial {
 	config := actionx.NewConfig(
-		actions.Route("properties-filter-dialog"),
+		actions.Route("properties-filter-dialog-partial"),
 		true,
 	)
 	return &PropertiesFilterDialogPartial{

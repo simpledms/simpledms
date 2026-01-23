@@ -16,7 +16,7 @@ func NewSortListContextMenuPartial(actions *Actions) *SortListContextMenuPartial
 	}
 }
 
-func (qq *SortListContextMenuPartial) Widget(ctx ctxx.Context, state *ListFilesPartialState) *wx.Menu {
+func (qq *SortListContextMenuPartial) Widget(ctx ctxx.Context, state *FilesListPartialState) *wx.Menu {
 	return &wx.Menu{
 		Widget: wx.Widget[wx.Menu]{
 			ID: "sortBy",

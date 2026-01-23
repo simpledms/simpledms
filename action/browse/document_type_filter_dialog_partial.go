@@ -21,7 +21,7 @@ type DocumentTypeFilterDialogPartial struct {
 
 func NewDocumentTypeFilterDialogPartial(infra *common.Infra, actions *Actions) *DocumentTypeFilterDialogPartial {
 	config := actionx.NewConfig(
-		actions.Route("document-type-filter-dialog"),
+		actions.Route("document-type-filter-dialog-partial"),
 		true,
 	)
 	return &DocumentTypeFilterDialogPartial{

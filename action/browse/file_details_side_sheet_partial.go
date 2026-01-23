@@ -21,7 +21,7 @@ type FileDetailsSideSheetPartial struct {
 }
 
 func NewFileDetailsSideSheetPartial(infra *common.Infra, actions *Actions) *FileDetailsSideSheetPartial {
-	config := actionx.NewConfig(actions.Route("file-details-side-sheet"), true)
+	config := actionx.NewConfig(actions.Route("file-details-side-sheet-partial"), true)
 	return &FileDetailsSideSheetPartial{
 		infra:   infra,
 		actions: actions,

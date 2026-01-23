@@ -37,7 +37,7 @@ func NewEditAssignedTagsItemPartial(infra *common.Infra, actions *Actions) *Edit
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("edit-assigned-tags-item"),
+			actions.Route("edit-assigned-tags-item-partial"),
 			true,
 		),
 	}

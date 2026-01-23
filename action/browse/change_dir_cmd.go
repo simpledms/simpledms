@@ -8,36 +8,36 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type ChangeDirPartialData struct {
+type ChangeDirCmdData struct {
 	DirID string
 }
 
-type ChangeDirPartial struct {
+type ChangeDirCmd struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
 }
 
-func NewChangeDirPartial(infra *common.Infra, actions *Actions) *ChangeDirPartial {
+func NewChangeDirCmd(infra *common.Infra, actions *Actions) *ChangeDirCmd {
 	config := actionx.NewConfig(
-		actions.Route("change-dir"),
+		actions.Route("change-dir-cmd"),
 		true,
 	)
-	return &ChangeDirPartial{
+	return &ChangeDirCmd{
 		infra:   infra,
 		actions: actions,
 		Config:  config,
 	}
 }
 
-func (qq *ChangeDirPartial) Data(dirID string) *ChangeDirPartialData {
-	return &ChangeDirPartialData{
+func (qq *ChangeDirCmd) Data(dirID string) *ChangeDirCmdData {
+	return &ChangeDirCmdData{
 		DirID: dirID,
 	}
 }
 
-func (qq *ChangeDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	data, err := autil.FormData[ChangeDirPartialData](rw, req, ctx)
+func (qq *ChangeDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	data, err := autil.FormData[ChangeDirCmdData](rw, req, ctx)
 	if err != nil {
 		return err
 	}

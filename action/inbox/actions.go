@@ -16,7 +16,7 @@ type Actions struct {
 
 	InboxPage *InboxPage
 
-	ListFilesPartial    *ListFilesPartial
+	ListFilesPartial    *FilesListPartial
 	FileListItemPartial *FileListItemPartial
 	FileMetadataPartial *FileMetadataPartial
 

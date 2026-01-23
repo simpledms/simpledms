@@ -27,7 +27,7 @@ type EditAssignedTagsPartial struct {
 
 func NewEditAssignedTagsPartial(infra *common.Infra, actions *Actions) *EditAssignedTagsPartial {
 	config := actionx.NewConfig(
-		actions.Route("edit-assigned-tags"),
+		actions.Route("edit-assigned-tags-partial"),
 		true, // TODO true or false?
 	)
 	return &EditAssignedTagsPartial{

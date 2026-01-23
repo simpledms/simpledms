@@ -29,7 +29,7 @@ func NewFileListItemPartial(infra *common.Infra, actions *Actions) *FileListItem
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("file-list-item"),
+			actions.Route("file-list-item-partial"),
 			true,
 		),
 	}

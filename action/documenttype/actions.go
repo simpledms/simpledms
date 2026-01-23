@@ -11,7 +11,7 @@ type Actions struct {
 	DocumentTypePage        *DocumentTypePage
 	ManageDocumentTypesPage *ManageDocumentTypesPage
 
-	ListDocumentTypesPartial *ListDocumentTypesPartial
+	ListDocumentTypesPartial *DocumentTypesListPartial
 	CreateCmd                *CreateCmd
 	DeleteCmd                *DeleteCmd
 	RenameCmd                *RenameCmd

@@ -29,7 +29,7 @@ func NewCountAssignedTagsPartial(infra *common.Infra, actions *Actions) *CountAs
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("count-assigned-tags"),
+			actions.Route("count-assigned-tags-partial"),
 			true,
 		),
 	}

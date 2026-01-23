@@ -30,7 +30,7 @@ type SpaceCardsPartial struct {
 
 func NewSpaceCardsPartial(infra *common.Infra, actions *Actions) *SpaceCardsPartial {
 	config := actionx.NewConfig(
-		actions.Route("spaces-cards"),
+		actions.Route("space-cards-partial"),
 		true,
 	)
 	return &SpaceCardsPartial{

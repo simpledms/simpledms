@@ -47,7 +47,7 @@ func NewListFilterPropertiesPartial(infra *common.Infra, actions *Actions) *List
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("list-filter-properties"),
+			actions.Route("list-filter-properties-partial"),
 			true,
 		),
 	}

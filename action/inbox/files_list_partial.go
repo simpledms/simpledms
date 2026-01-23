@@ -21,18 +21,18 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type ListFilesPartialData struct {
+type FilesListPartialData struct {
 	SelectedFileID string
 }
 
-type ListFilesPartialState struct {
+type FilesListPartialState struct {
 	SearchQuery string `url:"q,omitempty"`
 	// used in JS, thus don't change URL and as param name below
 	ActiveSideSheet string `url:"side_sheet,omitempty"`
 	SortBy          string `url:"sort_by,omitempty"` // TODO enum
 }
 
-type ListFilesPartial struct {
+type FilesListPartial struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
@@ -41,36 +41,36 @@ type ListFilesPartial struct {
 func NewListFilesPartial(
 	infra *common.Infra,
 	actions *Actions,
-) *ListFilesPartial {
-	return &ListFilesPartial{
+) *FilesListPartial {
+	return &FilesListPartial{
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("list-files"),
+			actions.Route("files-list-partial"),
 			true,
 		),
 	}
 }
 
-func (qq *ListFilesPartial) Data(selectedFileID string) *ListFilesPartialData {
-	return &ListFilesPartialData{
+func (qq *FilesListPartial) Data(selectedFileID string) *FilesListPartialData {
+	return &FilesListPartialData{
 		SelectedFileID: selectedFileID,
 	}
 }
 
-func (qq *ListFilesPartial) WrapperID() string {
+func (qq *FilesListPartial) WrapperID() string {
 	return "listDirWrapper"
 }
 
-func (qq *ListFilesPartial) FileListID() string {
+func (qq *FilesListPartial) FileListID() string {
 	return "fileList"
 }
-func (qq *ListFilesPartial) Handler(
+func (qq *FilesListPartial) Handler(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
-	data, err := autil.FormData[ListFilesPartialData](rw, req, ctx)
+	data, err := autil.FormData[FilesListPartialData](rw, req, ctx)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -100,7 +100,7 @@ func (qq *ListFilesPartial) Handler(
 	return qq.infra.Renderer().Render(rw, ctx, qq.Widget(ctx, state, data.SelectedFileID))
 }
 
-func (qq *ListFilesPartial) WidgetHandler(
+func (qq *FilesListPartial) WidgetHandler(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
@@ -118,7 +118,7 @@ func (qq *ListFilesPartial) WidgetHandler(
 // TODO return error?
 // TODO pass in enttenant.File as argument instead of path? how to handle breadcrumbs?
 // TODO ListDirData instead of path?
-func (qq *ListFilesPartial) Widget(
+func (qq *FilesListPartial) Widget(
 	ctx ctxx.Context,
 	state *InboxPageState,
 	selectedFileID string,
@@ -167,10 +167,10 @@ func (qq *ListFilesPartial) Widget(
 	}
 }
 
-func (qq *ListFilesPartial) filesList(
+func (qq *FilesListPartial) filesList(
 	ctx ctxx.Context,
 	state *InboxPageState,
-	data *ListFilesPartialData,
+	data *FilesListPartialData,
 ) renderable.Renderable {
 	var fileListItems []wx.IWidget
 
@@ -250,7 +250,7 @@ func (qq *ListFilesPartial) filesList(
 }
 
 // LIMIT must be applied by caller
-func (qq *ListFilesPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) *enttenant.FileQuery {
+func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) *enttenant.FileQuery {
 	searchResultQuery := ctx.TenantCtx().TTx.File.Query().
 		WithParent().
 		WithChildren() // necessary to count children
@@ -304,7 +304,7 @@ func (qq *ListFilesPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 	return searchResultQuery
 }
 
-func (qq *ListFilesPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.AppBar {
+func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.AppBar {
 	return &wx.AppBar{
 		Leading:          wx.NewIcon("inbox"),
 		LeadingAltMobile: partial.NewMainMenu(ctx),
@@ -312,7 +312,7 @@ func (qq *ListFilesPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.
 		Actions: []wx.IWidget{
 			&wx.IconButton{
 				Icon:     "sort",
-				Children: NewSortListContextMenuPartial(qq.actions).Widget(ctx, &state.ListFilesPartialState),
+				Children: NewSortListContextMenuPartial(qq.actions).Widget(ctx, &state.FilesListPartialState),
 			},
 		},
 		Search: &wx.Search{

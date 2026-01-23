@@ -13,35 +13,35 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type SelectDirPartialData struct {
+type SelectDirCmdData struct {
 	CurrentDirID int64
 }
 
-type SelectDirPartial struct {
+type SelectDirCmd struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
 }
 
-func NewSelectDirPartial(infra *common.Infra, actions *Actions) *SelectDirPartial {
-	return &SelectDirPartial{
+func NewSelectDirCmd(infra *common.Infra, actions *Actions) *SelectDirCmd {
+	return &SelectDirCmd{
 		infra:   infra,
 		actions: actions,
 		Config: actionx.NewConfig(
-			actions.Route("select-dir"),
+			actions.Route("select-dir-cmd"),
 			true, // TODO is this correct in the context it is used?
 		),
 	}
 }
 
-func (qq *SelectDirPartial) Data(currentDirID int64) *SelectDirPartialData {
-	return &SelectDirPartialData{
+func (qq *SelectDirCmd) Data(currentDirID int64) *SelectDirCmdData {
+	return &SelectDirCmdData{
 		CurrentDirID: currentDirID,
 	}
 }
 
-func (qq *SelectDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	_, err := autil.FormData[SelectDirPartialData](rw, req, ctx)
+func (qq *SelectDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	_, err := autil.FormData[SelectDirCmdData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
@@ -53,6 +53,6 @@ func (qq *SelectDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 	)
 }
 
-func (qq *SelectDirPartial) Widget(ctx context.Context) *wx.List {
+func (qq *SelectDirCmd) Widget(ctx context.Context) *wx.List {
 	return &wx.List{}
 }

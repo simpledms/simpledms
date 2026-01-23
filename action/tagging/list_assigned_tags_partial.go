@@ -43,7 +43,7 @@ func NewListAssignedTagsPartial(infra *common.Infra, actions *Actions) *ListAssi
 		infra,
 		actions,
 		actionx.NewConfig(
-			actions.Route("list-assigned-tags"),
+			actions.Route("list-assigned-tags-partial"),
 			true,
 		),
 	}

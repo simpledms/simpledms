@@ -9,7 +9,7 @@ import (
 
 type SelectDirActions struct {
 	// SelectDirPartial *SelectDirPartial // not factored out from MoveFileCmd yet
-	MakeDirCmd *SelectDirMakeDirPartial
+	MakeDirCmd *SelectDirMakeDirCmd
 }
 
 type Actions struct {
@@ -19,7 +19,7 @@ type Actions struct {
 	BrowsePage              *BrowsePage
 	BrowseWithSelectionPage *BrowseWithSelectionPage
 
-	ChangeDirPartial *ChangeDirPartial
+	ChangeDirPartial *ChangeDirCmd
 	ListDirPartial   *ListDirPartial
 	MakeDirCmd       *MakeDirCmd
 	DeleteFile       *DeleteFile
@@ -36,7 +36,7 @@ type Actions struct {
 	FileVersionsPartial       *FileVersionsPartial
 	FileInfoPartial           *FileInfoPartial
 	FilePropertiesPartial     *FilePropertiesPartial
-	SelectDocumentTypePartial *SelectDocumentTypePartial
+	SelectDocumentTypePartial *SelectDocumentTypeCmd
 	SetFilePropertyCmd        *SetFilePropertyCmd
 
 	// TODO rename to Rename and Move because they also work for folders?
@@ -73,13 +73,13 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		BrowsePage:              NewBrowsePage(infra, actions),
 		BrowseWithSelectionPage: NewBrowseWithSelectionPage(infra, actions),
 
-		ChangeDirPartial: NewChangeDirPartial(infra, actions),
+		ChangeDirPartial: NewChangeDirCmd(infra, actions),
 		ListDirPartial:   NewListDirPartial(infra, actions),
 		MakeDirCmd:       NewMakeDirCmd(infra, actions),
 		DeleteFile:       NewDeleteFile(infra, actions),
 
 		// SelectDirPartial: &SelectDirActions{
-		// MakeDirCmd: NewSelectDirMakeDirPartial(infra, actions),
+		// MakeDirCmd: NewSelectDirMakeDirCmd(infra, actions),
 		// },
 
 		FilePreviewPartial:          NewFilePreviewPartial(infra, actions),
@@ -92,7 +92,7 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		FileVersionsPartial:       NewFileVersionsPartial(infra, actions),
 		FileInfoPartial:           NewFileInfoPartial(infra, actions),
 		FilePropertiesPartial:     NewFilePropertiesPartial(infra, actions),
-		SelectDocumentTypePartial: NewSelectDocumentTypePartial(infra, actions),
+		SelectDocumentTypePartial: NewSelectDocumentTypeCmd(infra, actions),
 		SetFilePropertyCmd:        NewSetFilePropertyCmd(infra, actions),
 
 		RenameFileCmd: NewRenameFileCmd(infra, actions),

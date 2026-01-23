@@ -21,7 +21,7 @@ type FilePropertiesPartial struct {
 
 func NewFilePropertiesPartial(infra *common.Infra, actions *Actions) *FilePropertiesPartial {
 	config := actionx.NewConfig(
-		actions.Route("file-properties"),
+		actions.Route("file-properties-partial"),
 		true,
 	)
 	return &FilePropertiesPartial{

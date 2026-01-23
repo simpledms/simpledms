@@ -27,7 +27,7 @@ type DetailsPartial struct {
 
 func NewDetailsPartial(infra *common.Infra, actions *Actions) *DetailsPartial {
 	config := actionx.NewConfig(
-		actions.Route("details"),
+		actions.Route("details-partial"),
 		true,
 	)
 	return &DetailsPartial{

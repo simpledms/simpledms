@@ -22,7 +22,7 @@ type PropertyListPartial struct {
 
 func NewPropertyListPartial(infra *common.Infra, actions *Actions) *PropertyListPartial {
 	config := actionx.NewConfig(
-		actions.Route("property-list"),
+		actions.Route("property-list-partial"),
 		true,
 	)
 	return &PropertyListPartial{
