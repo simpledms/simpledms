@@ -9,35 +9,35 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type FileUploadDialogPartialData struct {
+type FileUploadDialogData struct {
 	ParentDirID string
 	AddToInbox  bool
 }
 
-type FileUploadDialogPartial struct {
+type FileUploadDialog struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
 }
 
-func NewFileUploadDialogPartial(infra *common.Infra, actions *Actions) *FileUploadDialogPartial {
-	config := actionx.NewConfig(actions.Route("file-upload-dialog-partial"), true)
-	return &FileUploadDialogPartial{
+func NewFileUploadDialog(infra *common.Infra, actions *Actions) *FileUploadDialog {
+	config := actionx.NewConfig(actions.Route("file-upload-dialog"), true)
+	return &FileUploadDialog{
 		infra:   infra,
 		actions: actions,
 		Config:  config,
 	}
 }
 
-func (qq *FileUploadDialogPartial) Data(parentDirID string, addToInbox bool) *FileUploadDialogPartialData {
-	return &FileUploadDialogPartialData{
+func (qq *FileUploadDialog) Data(parentDirID string, addToInbox bool) *FileUploadDialogData {
+	return &FileUploadDialogData{
 		ParentDirID: parentDirID,
 		AddToInbox:  addToInbox,
 	}
 }
 
-func (qq *FileUploadDialogPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	data, err := autil.FormData[FileUploadDialogPartialData](rw, req, ctx)
+func (qq *FileUploadDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	data, err := autil.FormData[FileUploadDialogData](rw, req, ctx)
 	if err != nil {
 		return err
 	}

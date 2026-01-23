@@ -77,7 +77,9 @@ func (qq HTMXAttrs) GetHxPost() string {
 	if (qq.LoadInPopover /*|| qq.LoadInDialog*/) &&
 		qq.HxPost != "" &&
 		!strings.Contains(qq.HxPost, "wrapper=") &&
-		!strings.HasSuffix(qq.HxPost, "-dialog") {
+		// -dialog-partial shouldn't be neccessary because dialog don't have partial
+		// suffix usually, but just for safety
+		!(strings.HasSuffix(qq.HxPost, "-dialog") || strings.HasSuffix(qq.HxPost, "-dialog-partial")) {
 		wrapper := actionx.ResponseWrapperDialog.String()
 		// if qq.LoadInDialog {
 		// wrapper = actionx.ResponseWrapperDialog.String()

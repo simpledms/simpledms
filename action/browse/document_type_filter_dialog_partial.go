@@ -9,36 +9,36 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type DocumentTypeFilterDialogPartialData struct {
+type DocumentTypeFilterDialogData struct {
 	CurrentDirID string
 }
 
-type DocumentTypeFilterDialogPartial struct {
+type DocumentTypeFilterDialog struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
 }
 
-func NewDocumentTypeFilterDialogPartial(infra *common.Infra, actions *Actions) *DocumentTypeFilterDialogPartial {
+func NewDocumentTypeFilterDialog(infra *common.Infra, actions *Actions) *DocumentTypeFilterDialog {
 	config := actionx.NewConfig(
-		actions.Route("document-type-filter-dialog-partial"),
+		actions.Route("document-type-filter-dialog"),
 		true,
 	)
-	return &DocumentTypeFilterDialogPartial{
+	return &DocumentTypeFilterDialog{
 		infra:   infra,
 		actions: actions,
 		Config:  config,
 	}
 }
 
-func (qq *DocumentTypeFilterDialogPartial) Data(currentDirID string) *DocumentTypeFilterDialogPartialData {
-	return &DocumentTypeFilterDialogPartialData{
+func (qq *DocumentTypeFilterDialog) Data(currentDirID string) *DocumentTypeFilterDialogData {
+	return &DocumentTypeFilterDialogData{
 		CurrentDirID: currentDirID,
 	}
 }
 
-func (qq *DocumentTypeFilterDialogPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	data, err := autil.FormData[DocumentTypeFilterDialogPartialData](rw, req, ctx)
+func (qq *DocumentTypeFilterDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	data, err := autil.FormData[DocumentTypeFilterDialogData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
@@ -51,7 +51,7 @@ func (qq *DocumentTypeFilterDialogPartial) Handler(rw httpx.ResponseWriter, req 
 	)
 }
 
-func (qq *DocumentTypeFilterDialogPartial) Widget(ctx ctxx.Context, data *DocumentTypeFilterDialogPartialData, listDirState *ListDirPartialState) *wx.Dialog {
+func (qq *DocumentTypeFilterDialog) Widget(ctx ctxx.Context, data *DocumentTypeFilterDialogData, listDirState *ListDirPartialState) *wx.Dialog {
 	return &wx.Dialog{
 		Widget: wx.Widget[wx.Dialog]{
 			ID: qq.ID(),
@@ -67,6 +67,6 @@ func (qq *DocumentTypeFilterDialogPartial) Widget(ctx ctxx.Context, data *Docume
 	}
 }
 
-func (qq *DocumentTypeFilterDialogPartial) ID() string {
+func (qq *DocumentTypeFilterDialog) ID() string {
 	return "filterDocumentTypeDialog"
 }

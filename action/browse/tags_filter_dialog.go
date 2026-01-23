@@ -10,36 +10,36 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type TagsFilterDialogPartialData struct {
+type TagsFilterDialogData struct {
 	CurrentDirID string
 }
 
-type TagsFilterDialogPartial struct {
+type TagsFilterDialog struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
 }
 
-func NewTagsFilterDialogPartial(infra *common.Infra, actions *Actions) *TagsFilterDialogPartial {
+func NewTagsFilterDialog(infra *common.Infra, actions *Actions) *TagsFilterDialog {
 	config := actionx.NewConfig(
-		actions.Route("tags-filter-dialog-partial"),
+		actions.Route("tags-filter-dialog"),
 		true,
 	)
-	return &TagsFilterDialogPartial{
+	return &TagsFilterDialog{
 		infra:   infra,
 		actions: actions,
 		Config:  config,
 	}
 }
 
-func (qq *TagsFilterDialogPartial) Data(currentDirID string) *TagsFilterDialogPartialData {
-	return &TagsFilterDialogPartialData{
+func (qq *TagsFilterDialog) Data(currentDirID string) *TagsFilterDialogData {
+	return &TagsFilterDialogData{
 		CurrentDirID: currentDirID,
 	}
 }
 
-func (qq *TagsFilterDialogPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	data, err := autil.FormData[TagsFilterDialogPartialData](rw, req, ctx)
+func (qq *TagsFilterDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	data, err := autil.FormData[TagsFilterDialogData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
@@ -52,9 +52,9 @@ func (qq *TagsFilterDialogPartial) Handler(rw httpx.ResponseWriter, req *httpx.R
 	)
 }
 
-func (qq *TagsFilterDialogPartial) Widget(
+func (qq *TagsFilterDialog) Widget(
 	ctx ctxx.Context,
-	data *TagsFilterDialogPartialData,
+	data *TagsFilterDialogData,
 	listDirState *ListDirPartialState,
 ) renderable.Renderable {
 	// if listDirState.OpenDialog == qq.ID() {
@@ -78,6 +78,6 @@ func (qq *TagsFilterDialogPartial) Widget(
 
 }
 
-func (qq *TagsFilterDialogPartial) ID() string {
+func (qq *TagsFilterDialog) ID() string {
 	return "filterTagsDialog"
 }

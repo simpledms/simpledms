@@ -53,13 +53,13 @@ type Actions struct {
 	ToggleTagFilterCmd              *ToggleTagFilterCmd
 	ToggleDocumentTypeFilterCmd     *ToggleDocumentTypeFilterCmd
 	TogglePropertyFilterCmd         *TogglePropertyFilterCmd
-	DocumentTypeFilterDialogPartial *DocumentTypeFilterDialogPartial
-	TagsFilterDialogPartial         *TagsFilterDialogPartial
-	PropertiesFilterDialogPartial   *PropertiesFilterDialogPartial
+	DocumentTypeFilterDialogPartial *DocumentTypeFilterDialog
+	TagsFilterDialogPartial         *TagsFilterDialog
+	PropertiesFilterDialogPartial   *PropertiesFilterDialog
 	UpdatePropertyFilterCmd         *UpdatePropertyFilterCmd
 	// ToggleFolderMode         *ToggleFolderMode
 
-	FileUploadDialogPartial *FileUploadDialogPartial
+	FileUploadDialogPartial *FileUploadDialog
 	UnzipArchiveCmd         *UnzipArchiveCmd
 }
 
@@ -108,13 +108,13 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		ToggleTagFilterCmd:              NewToggleTagFilterCmd(infra, actions),
 		ToggleDocumentTypeFilterCmd:     NewToggleDocumentTypeFilterCmd(infra, actions),
 		TogglePropertyFilterCmd:         NewTogglePropertyFilterCmd(infra, actions),
-		DocumentTypeFilterDialogPartial: NewDocumentTypeFilterDialogPartial(infra, actions),
-		TagsFilterDialogPartial:         NewTagsFilterDialogPartial(infra, actions),
-		PropertiesFilterDialogPartial:   NewPropertiesFilterDialogPartial(infra, actions),
+		DocumentTypeFilterDialogPartial: NewDocumentTypeFilterDialog(infra, actions),
+		TagsFilterDialogPartial:         NewTagsFilterDialog(infra, actions),
+		PropertiesFilterDialogPartial:   NewPropertiesFilterDialog(infra, actions),
 		UpdatePropertyFilterCmd:         NewUpdatePropertyFilterCmd(infra, actions),
 		// ToggleFolderMode:         NewToggleFolderMode(infra, actions),
 
-		FileUploadDialogPartial: NewFileUploadDialogPartial(infra, actions),
+		FileUploadDialogPartial: NewFileUploadDialog(infra, actions),
 		UnzipArchiveCmd:         NewUnzipArchiveCmd(infra, actions),
 	}
 

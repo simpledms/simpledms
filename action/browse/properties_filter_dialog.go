@@ -9,36 +9,36 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type PropertiesFilterDialogPartialData struct {
+type PropertiesFilterDialogData struct {
 	CurrentDirID string
 }
 
-type PropertiesFilterDialogPartial struct {
+type PropertiesFilterDialog struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
 }
 
-func NewPropertiesFilterDialogPartial(infra *common.Infra, actions *Actions) *PropertiesFilterDialogPartial {
+func NewPropertiesFilterDialog(infra *common.Infra, actions *Actions) *PropertiesFilterDialog {
 	config := actionx.NewConfig(
-		actions.Route("properties-filter-dialog-partial"),
+		actions.Route("properties-filter-dialog"),
 		true,
 	)
-	return &PropertiesFilterDialogPartial{
+	return &PropertiesFilterDialog{
 		infra:   infra,
 		actions: actions,
 		Config:  config,
 	}
 }
 
-func (qq *PropertiesFilterDialogPartial) Data(currentDirID string) *PropertiesFilterDialogPartialData {
-	return &PropertiesFilterDialogPartialData{
+func (qq *PropertiesFilterDialog) Data(currentDirID string) *PropertiesFilterDialogData {
+	return &PropertiesFilterDialogData{
 		CurrentDirID: currentDirID,
 	}
 }
 
-func (qq *PropertiesFilterDialogPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	data, err := autil.FormData[PropertiesFilterDialogPartialData](rw, req, ctx)
+func (qq *PropertiesFilterDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	data, err := autil.FormData[PropertiesFilterDialogData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
@@ -51,9 +51,9 @@ func (qq *PropertiesFilterDialogPartial) Handler(rw httpx.ResponseWriter, req *h
 	)
 }
 
-func (qq *PropertiesFilterDialogPartial) Widget(
+func (qq *PropertiesFilterDialog) Widget(
 	ctx ctxx.Context,
-	data *PropertiesFilterDialogPartialData,
+	data *PropertiesFilterDialogData,
 	listDirState *ListDirPartialState,
 ) *wx.Dialog {
 	return &wx.Dialog{
@@ -71,6 +71,6 @@ func (qq *PropertiesFilterDialogPartial) Widget(
 	}
 }
 
-func (qq *PropertiesFilterDialogPartial) ID() string {
+func (qq *PropertiesFilterDialog) ID() string {
 	return "filterPropertiesDialog"
 }
