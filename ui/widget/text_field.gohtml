@@ -2,11 +2,12 @@
 {{- define "TextField" }}
 	{{ if eq .Type "hidden" }}
 		<input
-                {{ template "HTMXAttrs" .HTMXAttrs }}
+				{{ template "HTMXAttrs" .HTMXAttrs }}
+				{{ if ne .GetID "" }}id="{{ .GetID }}"{{ end }}
 				name="{{ .Name }}"
 				value="{{ .DefaultValue }}"
 				type="{{ .Type }}"
-                {{ if .IsRequired }}required{{ end }}
+				{{ if .IsRequired }}required{{ end }}
 		/>
 	{{ else }}
 		{{ template "textField" . }}
@@ -36,7 +37,8 @@
             {{- end }}
 
 			<input
-                    {{ template "HTMXAttrs" .HTMXAttrs }}
+					{{ template "HTMXAttrs" .HTMXAttrs }}
+					{{ if ne .GetID "" }}id="{{ .GetID }}"{{ end }}
 					name="{{ .Name }}"
 					value="{{ .DefaultValue }}"
 					type="{{ .Type }}"

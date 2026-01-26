@@ -2,7 +2,9 @@ package browse
 
 import (
 	"fmt"
+	"html/template"
 	"log"
+	"strings"
 
 	"entgo.io/ent/dialect/sql"
 
@@ -24,6 +26,7 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/timex"
 )
 
 type FileAttributesPartialData struct {
@@ -274,6 +277,7 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 	attributex *enttenant.Attribute,
 ) *wx.Column {
 	var field wx.IWidget
+	var dateFieldID string
 
 	htmxAttrsFn := func(hxTrigger string) wx.HTMXAttrs {
 		return wx.HTMXAttrs{
@@ -294,6 +298,7 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 	}
 
 	var defaultValue string
+	hasDateValue := false
 	if nilableAssignment != nil {
 		switch attributex.Edges.Property.Type {
 		case fieldtype.Text:
@@ -306,7 +311,10 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 			defaultValue = fmt.Sprintf("%.2f", val)
 		case fieldtype.Date:
 			// TODO
-			defaultValue = nilableAssignment.DateValue.Format("2006-01-02")
+			if !nilableAssignment.DateValue.IsZero() {
+				hasDateValue = true
+				defaultValue = nilableAssignment.DateValue.Format("2006-01-02")
+			}
 		}
 	}
 
@@ -339,7 +347,11 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 			HTMXAttrs: htmxAttrsFn("input delay:1000ms"),
 		}
 	case fieldtype.Date:
+		dateFieldID = fmt.Sprintf("property-date-%d", attributex.Edges.Property.ID)
 		field = &wx.TextField{
+			Widget: wx.Widget[wx.TextField]{
+				ID: dateFieldID,
+			},
 			Label:        wx.Tu(attributex.Edges.Property.Name),
 			Name:         "DateValue",
 			Type:         "date",
@@ -364,20 +376,71 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 		return &wx.Column{} // TODO is there a better option
 	}
 
+	children := []wx.IWidget{
+		/*&wx.Label{
+			Text: wx.Tu(attributex.Edges.Property.Name),
+			Type: wx.LabelTypeLg,
+		},*/
+		&wx.Container{
+			Child: field,
+			Gap:   true,
+		},
+	}
+
+	if attributex.Edges.Property.Type == fieldtype.Date && !hasDateValue {
+		suggestions := qq.dateSuggestions(ctx, filex)
+		if len(suggestions) > 0 {
+			children = append(children, qq.dateSuggestionChips(ctx, dateFieldID, suggestions))
+		}
+	}
+
 	return &wx.Column{
 		GapYSize:         wx.Gap2,
 		NoOverflowHidden: true,
 		AutoHeight:       true,
-		Children: []wx.IWidget{
-			/*&wx.Label{
-				Text: wx.Tu(attributex.Edges.Property.Name),
-				Type: wx.LabelTypeLg,
-			},*/
-			&wx.Container{
-				Child: field,
-				Gap:   true,
+		Children:         children,
+	}
+}
+
+func (qq *FileAttributesPartial) dateSuggestions(ctx ctxx.Context, filex *model.File) []timex.Date {
+	content := strings.TrimSpace(filex.Data.Name)
+	if filex.Data.OcrContent != "" {
+		if content == "" {
+			content = filex.Data.OcrContent
+		} else {
+			content = content + "\n" + filex.Data.OcrContent
+		}
+	}
+
+	return timex.SuggestDatesFromText(content)
+}
+
+func (qq *FileAttributesPartial) dateSuggestionChips(ctx ctxx.Context, fieldID string, suggestions []timex.Date) *wx.Container {
+	var chips []wx.IWidget
+	for _, suggestion := range suggestions {
+		suggestionx := suggestion
+		label := suggestionx.String(ctx.MainCtx().LanguageBCP47)
+		dateValue := suggestionx.Format("2006-01-02")
+		handler := template.JS(fmt.Sprintf(
+			"const el=document.getElementById('%s'); if(el){el.value='%s'; el.dispatchEvent(new Event('change', {bubbles:true}));}",
+			fieldID,
+			dateValue,
+		))
+		chips = append(chips, &wx.AssistChip{
+			Label:       wx.Tu(label),
+			LeadingIcon: "event",
+			HTMXAttrs: wx.HTMXAttrs{
+				HxOn: &wx.HxOn{
+					Event:   "click",
+					Handler: handler,
+				},
 			},
-		},
+		})
+	}
+
+	return &wx.Container{
+		Gap:   true,
+		Child: chips,
 	}
 }
 
