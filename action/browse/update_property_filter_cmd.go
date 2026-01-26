@@ -2,6 +2,7 @@ package browse
 
 import (
 	"slices"
+	"strings"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -12,6 +13,7 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/timex"
 )
 
 type UpdatePropertyFilterCmdData struct {
@@ -21,8 +23,10 @@ type UpdatePropertyFilterCmdData struct {
 
 type UpdatePropertyFilterCmdFormData struct {
 	UpdatePropertyFilterCmdData
-	Operator string
-	Value    string // TODO typed? is string in URL...
+	Operator   string
+	Value      string // TODO typed? is string in URL...
+	ValueStart string
+	ValueEnd   string
 }
 
 type UpdatePropertyFilterCmd struct {
@@ -46,7 +50,7 @@ func NewUpdatePropertyFilterCmd(infra *common.Infra, actions *Actions) *UpdatePr
 func (qq *UpdatePropertyFilterCmd) Data(
 	currentDirID string,
 	propertyID int64,
-	// operator, value string,
+// operator, value string,
 ) *UpdatePropertyFilterCmdData {
 	return &UpdatePropertyFilterCmdData{
 		CurrentDirID: currentDirID,
@@ -73,12 +77,28 @@ func (qq *UpdatePropertyFilterCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 			PropertyID: data.PropertyID,
 			Operator:   data.Operator, // TODO? is this case even possible or is it always initialized?
 		}
+		state.PropertiesFilterState.PropertyValues = append(state.PropertiesFilterState.PropertyValues, valuex)
+		index = len(state.PropertiesFilterState.PropertyValues) - 1
 	} else {
 		valuex = state.PropertiesFilterState.PropertyValues[index]
 	}
 
-	valuex.Value = data.Value
 	valuex.Operator = data.Operator
+	if data.Operator == operatorValueBetween.String() {
+		valuex.Value = strings.TrimSuffix(data.ValueStart+","+data.ValueEnd, ",")
+		if data.ValueStart != "" && data.ValueEnd != "" {
+			startDate, err := timex.ParseDate(data.ValueStart)
+			if err == nil {
+				endDate, err := timex.ParseDate(data.ValueEnd)
+				if err == nil && endDate.Time.Before(startDate.Time) {
+					rw.AddRenderables(wx.NewSnackbarf("End date is before the start date.").SetIsError(true))
+					return nil
+				}
+			}
+		}
+	} else {
+		valuex.Value = data.Value
+	}
 
 	state.PropertiesFilterState.PropertyValues[index] = valuex
 
@@ -87,6 +107,18 @@ func (qq *UpdatePropertyFilterCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 
 	rw.Header().Set("HX-Replace-Url", route.BrowseWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, data.CurrentDirID))
 	rw.Header().Set("HX-Trigger-After-Swap", event.PropertyFilterChanged.String())
+
+	if req.Header.Get("HX-Target") != "" {
+		return qq.infra.Renderer().Render(
+			rw,
+			ctx,
+			qq.actions.ListFilterPropertiesPartial.Widget(
+				ctx,
+				qq.actions.ListFilterPropertiesPartial.Data(data.CurrentDirID, state.DocumentTypeID),
+				state,
+			),
+		)
+	}
 
 	return nil
 }

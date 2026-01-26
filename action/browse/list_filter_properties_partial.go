@@ -3,6 +3,7 @@ package browse
 import (
 	"fmt"
 	"slices"
+	"strings"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -210,7 +211,7 @@ var (
 	operatorValueEquals      = operatorValue("equals")
 	operatorValueGreaterThan = operatorValue("greater_than")
 	operatorValueLessThan    = operatorValue("less_than")
-	// TODO add between
+	operatorValueBetween     = operatorValue("between")
 
 	checkboxOperatorValueIsChecked    = operatorValue("is_checked")
 	checkboxOperatorValueIsNotChecked = operatorValue("is_not_checked")
@@ -300,8 +301,15 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 			HxTrigger: trigger,
 		}
 	}
+	attrsFnRefresh := func(trigger string) wx.HTMXAttrs {
+		attrs := attrsFn(trigger)
+		attrs.HxTarget = "#" + qq.id()
+		attrs.HxSwap = "outerHTML"
+		return attrs
+	}
 
-	operators := qq.operatorRadioGroup(value, attrsFn)
+	includeBetween := propertyx.Type == fieldtype.Date
+	operators := qq.operatorRadioGroup(value, attrsFnRefresh, includeBetween)
 
 	fieldType := ""
 	fieldStep := ""
@@ -319,13 +327,44 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 		panic(fmt.Errorf("unsupported property type: %s", propertyx.Type))
 	}
 
-	field := &wx.TextField{
-		HTMXAttrs:    attrsFn("change, input delay:1000ms"),
-		Label:        wx.Tu(propertyx.Name),
-		Name:         "Value",
-		Type:         fieldType,
-		Step:         fieldStep,
-		DefaultValue: value.Value,
+	var field wx.IWidget
+	if propertyx.Type == fieldtype.Date && operatorValueBetween.Equals(value.Operator) {
+		startValue := ""
+		endValue := ""
+		if value.Value != "" {
+			parts := strings.SplitN(value.Value, ",", 2)
+			startValue = parts[0]
+			if len(parts) > 1 {
+				endValue = parts[1]
+			}
+		}
+		field = &wx.Row{
+			Children: []wx.IWidget{
+				&wx.TextField{
+					HTMXAttrs:    attrsFn("change"),
+					Label:        wx.Tu("Start"),
+					Name:         "ValueStart",
+					Type:         fieldType,
+					DefaultValue: startValue,
+				},
+				&wx.TextField{
+					HTMXAttrs:    attrsFn("change"),
+					Label:        wx.Tu("End"),
+					Name:         "ValueEnd",
+					Type:         fieldType,
+					DefaultValue: endValue,
+				},
+			},
+		}
+	} else {
+		field = &wx.TextField{
+			HTMXAttrs:    attrsFn("change, input delay:1000ms"),
+			Label:        wx.Tu(propertyx.Name),
+			Name:         "Value",
+			Type:         fieldType,
+			Step:         fieldStep,
+			DefaultValue: value.Value,
+		}
 	}
 
 	return &wx.Container{
@@ -339,8 +378,8 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 	}
 }
 
-func (qq *ListFilterPropertiesPartial) operatorRadioGroup(value PropertyFilterValue, attrsFn func(string) wx.HTMXAttrs) wx.IWidget {
-	return []*wx.FilterChip{
+func (qq *ListFilterPropertiesPartial) operatorRadioGroup(value PropertyFilterValue, attrsFn func(string) wx.HTMXAttrs, includeBetween bool) wx.IWidget {
+	operators := []*wx.FilterChip{
 		{
 			Type:      wx.FilterChipTypeRadio,
 			Label:     wx.T("Equals"),
@@ -365,8 +404,20 @@ func (qq *ListFilterPropertiesPartial) operatorRadioGroup(value PropertyFilterVa
 			IsChecked: operatorValueLessThan.Equals(value.Operator),
 			HTMXAttrs: attrsFn("change"),
 		},
-		// TODO add between
 	}
+
+	if includeBetween {
+		operators = append(operators, &wx.FilterChip{
+			Type:      wx.FilterChipTypeRadio,
+			Label:     wx.T("Between"),
+			Name:      "Operator",
+			Value:     operatorValueBetween.String(),
+			IsChecked: operatorValueBetween.Equals(value.Operator),
+			HTMXAttrs: attrsFn("change"),
+		})
+	}
+
+	return operators
 }
 
 func (qq *ListFilterPropertiesPartial) renderCheckboxFilter(propertyx *enttenant.Property, value PropertyFilterValue, currentDirID string) wx.IWidget {

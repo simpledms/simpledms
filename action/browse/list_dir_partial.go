@@ -979,28 +979,71 @@ func (qq *ListDirPartial) applyPropertyFilter(ctx ctxx.Context, query *enttenant
 				))
 			}
 		case fieldtype.Date:
-			value, err := timex.ParseDate(propertyFilter.Value)
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-
 			switch propertyFilter.Operator {
 			case operatorValueEquals.String():
+				value, err := timex.ParseDate(propertyFilter.Value)
+				if err != nil {
+					log.Println(err)
+					continue
+				}
 				query = query.Where(file.HasPropertyAssignmentWith(
 					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
 					filepropertyassignment.DateValue(value),
 				))
 			case operatorValueGreaterThan.String():
+				value, err := timex.ParseDate(propertyFilter.Value)
+				if err != nil {
+					log.Println(err)
+					continue
+				}
 				query = query.Where(file.HasPropertyAssignmentWith(
 					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
 					filepropertyassignment.DateValueGT(value),
 				))
 			case operatorValueLessThan.String():
+				value, err := timex.ParseDate(propertyFilter.Value)
+				if err != nil {
+					log.Println(err)
+					continue
+				}
 				query = query.Where(file.HasPropertyAssignmentWith(
 					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
 					filepropertyassignment.DateValueLT(value),
 				))
+			case operatorValueBetween.String():
+				startDate := ""
+				endDate := ""
+				if propertyFilter.Value != "" {
+					parts := strings.SplitN(propertyFilter.Value, ",", 2)
+					startDate = parts[0]
+					if len(parts) > 1 {
+						endDate = parts[1]
+					}
+				}
+
+				if startDate != "" {
+					value, err := timex.ParseDate(startDate)
+					if err != nil {
+						log.Println(err)
+						continue
+					}
+					query = query.Where(file.HasPropertyAssignmentWith(
+						filepropertyassignment.PropertyID(propertyFilter.PropertyID),
+						filepropertyassignment.DateValueGTE(value),
+					))
+				}
+
+				if endDate != "" {
+					value, err := timex.ParseDate(endDate)
+					if err != nil {
+						log.Println(err)
+						continue
+					}
+					query = query.Where(file.HasPropertyAssignmentWith(
+						filepropertyassignment.PropertyID(propertyFilter.PropertyID),
+						filepropertyassignment.DateValueLTE(value),
+					))
+				}
 			}
 		case fieldtype.Money:
 			valueFloat, err := strconv.ParseFloat(propertyFilter.Value, 64)
