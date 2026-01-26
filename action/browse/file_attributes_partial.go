@@ -189,7 +189,7 @@ func (qq *FileAttributesPartial) Content(
 			AutoHeight:       true,
 			HTMXAttrs: wx.HTMXAttrs{
 				// TODO only reload affected tag group
-				HxTrigger: event.TagUpdated.Handler(), // TODO only update if ID is identical
+				HxTrigger: event.HxTrigger(event.TagUpdated, event.FilePropertyUpdated), // TODO only update if ID is identical
 				HxPost:    qq.Endpoint(),
 				HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String())),
 				HxTarget:  "#" + qq.FilePropertiesID(),
