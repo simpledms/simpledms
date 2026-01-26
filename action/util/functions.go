@@ -157,6 +157,9 @@ func FormDataX[T any](
 
 	decoder := form.NewDecoder()
 	decoder.RegisterCustomTypeFunc(func(vals []string) (interface{}, error) {
+		if vals[0] == "" {
+			return timex.Date{}, nil
+		}
 		return timex.ParseDate(vals[0])
 	}, timex.Date{})
 	decoder.RegisterCustomTypeFunc(converterFunc[tagtype.TagType](tagtype.TagTypeString), tagtype.Simple)
@@ -165,30 +168,6 @@ func FormDataX[T any](
 	decoder.RegisterCustomTypeFunc(converterFunc[fieldtype.FieldType](fieldtype.FieldTypeString), fieldtype.Unknown)
 	decoder.RegisterCustomTypeFunc(converterFunc[tenantrole.TenantRole](tenantrole.TenantRoleString), tenantrole.User)
 	decoder.RegisterCustomTypeFunc(converterFunc[spacerole.SpaceRole](spacerole.SpaceRoleString), spacerole.User)
-
-	/*
-		decoder := schema.NewDecoder()
-		decoder.IgnoreUnknownKeys(true)
-
-		// TODO find a better (generic) solution that works with all enums without manually defining them;
-		//		maybe switch to a library to supports implementing an interface for custom decoding
-		decoder.RegisterConverter(tagtype.Simple, converterFunc[tagtype.TagType](tagtype.TagTypeString))
-		decoder.RegisterConverter(country.Unknown, converterFunc[country.Country](country.CountryString))
-		decoder.RegisterConverter(language.Unknown, converterFunc[language.Language](language.LanguageString))
-		decoder.RegisterConverter(propertytype.Unknown, converterFunc[propertytype.PropertyType](propertytype.PropertyTypeString))
-		decoder.RegisterConverter(timex.Date{}, func(str string) reflect.Value {
-			datex, err := timex.ParseDate(str)
-			if err != nil {
-				// FIXME how to return an error?
-				//		decoder uses reflect.Value.IsValid() to decide if valid
-				//		this method checks val.flag != 0
-				return reflect.ValueOf(nil)
-			}
-			return reflect.ValueOf(datex)
-		})
-		// decoder.RegisterConverter()
-
-	*/
 
 	err := decoder.Decode(data, req.PostForm)
 	if err != nil {

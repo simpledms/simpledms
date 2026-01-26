@@ -112,6 +112,11 @@ func (qq *SetFilePropertyCmd) Handler(
 
 		query.ExecX(ctx)
 
+	} else if propertyx.Type == fieldtype.Date && data.DateValue.IsZero() {
+		ctx.SpaceCtx().TTx.FilePropertyAssignment.Delete().Where(
+			filepropertyassignment.PropertyID(data.PropertyID),
+			filepropertyassignment.FileID(filex.Data.ID),
+		).ExecX(ctx)
 	} else {
 		query := nilableAssignment.Update()
 
