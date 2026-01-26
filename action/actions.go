@@ -16,6 +16,7 @@ import (
 	"github.com/simpledms/simpledms/action/property"
 	"github.com/simpledms/simpledms/action/spaces"
 	"github.com/simpledms/simpledms/action/tagging"
+	"github.com/simpledms/simpledms/action/trash"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 )
@@ -40,6 +41,7 @@ type Actions struct {
 	ManageTenantUsers *managetenantusers.Actions `actions:"manageTenantUsers"`
 	ManageSpaceUsers  *managespaceusers.Actions  `actions:"manageSpaceUsers"`
 	About             *about.Actions             `actions:"about"`
+	Trash             *trash.Actions             `actions:"trash"`
 }
 
 func NewActions(infra *common.Infra, tenantDBs *tenantdbs.TenantDBs) *Actions {
@@ -50,6 +52,7 @@ func NewActions(infra *common.Infra, tenantDBs *tenantdbs.TenantDBs) *Actions {
 	spacesActions := spaces.NewActions(infra)
 	authActions := auth.NewActions(infra)
 	adminActions := admin.NewActions(infra)
+	trashActions := trash.NewActions(infra, browseActions)
 
 	return &Actions{
 		Dashboard:         dashboard.NewActions(infra, commonActions, authActions, adminActions),
@@ -67,5 +70,6 @@ func NewActions(infra *common.Infra, tenantDBs *tenantdbs.TenantDBs) *Actions {
 		ManageTenantUsers: managetenantusers.NewActions(infra),
 		ManageSpaceUsers:  managespaceusers.NewActions(infra),
 		About:             about.NewActions(infra),
+		Trash:             trashActions,
 	}
 }

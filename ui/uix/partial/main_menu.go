@@ -92,6 +92,13 @@ func NewMainMenu(ctx ctxx.Context) *wx.IconButton {
 				},
 			},
 			{
+				LeadingIcon: "delete",
+				Label:       wx.T("Trash"),
+				HTMXAttrs: wx.HTMXAttrs{
+					HxGet: route2.TrashRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
+				},
+			},
+			{
 				IsDivider: true,
 			},
 		}...)

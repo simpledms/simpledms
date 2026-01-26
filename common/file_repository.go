@@ -4,6 +4,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model"
 )
@@ -39,6 +40,12 @@ func (qq *FileRepository) GetX(ctx ctxx.Context, id string) *model.File {
 
 	// filex := ctx.TenantCtx().TTx.File.GetX(ctx, id)
 	filex := ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicIDEQ(entx.NewCIText(id))).OnlyX(ctx)
+	return model.NewFile(filex)
+}
+
+func (qq *FileRepository) GetWithDeletedX(ctx ctxx.Context, id string) *model.File {
+	ctxWithDeleted := schema.SkipSoftDelete(ctx)
+	filex := ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicIDEQ(entx.NewCIText(id))).OnlyX(ctxWithDeleted)
 	return model.NewFile(filex)
 }
 

@@ -25,6 +25,7 @@ import (
 
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/action/download"
+	trashaction "github.com/simpledms/simpledms/action/trash"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain/migrate"
@@ -530,8 +531,8 @@ func (qq *Server) Start() error {
 	}()
 
 	factory := common.NewFactory(
-		// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
-		// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
+	// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
+	// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
 	)
 	// storagePath := common.StoragePath(metaPath)
 	fileRepo := common.NewFileRepository()
@@ -563,6 +564,7 @@ func (qq *Server) Start() error {
 	router := NewRouter(mainDB, tenantDBs, infra, qq.devMode, qq.metaPath, i18nx)
 	actions := action.NewActions(infra, tenantDBs)
 	downloadHandler := download.NewDownload(infra)
+	trashDownloadHandler := trashaction.NewDownload(infra)
 
 	/*
 		indexer := internal.NewFileIndexer(client, infra)
@@ -606,6 +608,9 @@ func (qq *Server) Start() error {
 	// for use with PWA share target
 	// router.RegisterPage(route.InboxRoute(false, true), pages.Inbox.Handler)
 
+	router.RegisterPage(route2.TrashRoute(), actions.Trash.TrashRootPage.Handler)
+	router.RegisterPage(route2.TrashRouteWithSelection(), actions.Trash.TrashWithSelectionPage.Handler)
+
 	router.RegisterPage(route2.SpacesRoute(), actions.Spaces.SpacesPage.Handler)
 
 	router.RegisterPage(route2.ManageDocumentTypesRoute(), actions.DocumentType.ManageDocumentTypesPage.Handler)
@@ -625,6 +630,7 @@ func (qq *Server) Start() error {
 	// router.RegisterPage(route.FindRoute(true), actions.Find.PageWithSelection.Handler)
 
 	router.RegisterPage(route2.DownloadRoute(), downloadHandler.Handler)
+	router.RegisterPage(route2.TrashDownloadRoute(), trashDownloadHandler.Handler)
 
 	router.RegisterActions(actions)
 
