@@ -40,47 +40,47 @@
 					</div>
 				{{ end }}
 			</div>
-		</div>
-		<script defer>
-			(function() {
-				Array.from(document.getElementsByClassName("js-snackbar")).forEach((item) => {
-					document.dispatchEvent(new CustomEvent('closeAllSnackbars', {}))
-				})
-
-				let snackbar = document.getElementById('{{ .GetID }}');
-
-				let closeSnackbarFn = function () {
-					document.removeEventListener('closeAllSnackbars', closeSnackbarFn);
-					clearTimeout(timeoutID);
-					observer.disconnect();
-					snackbar.remove();
-				}
-				document.addEventListener('closeAllSnackbars', closeSnackbarFn);
-
-				// ensure snackbar is always visible, for example relocate if rendered in
-				// dialog and dialog gets closed
-				const observer = new IntersectionObserver(entries => {
-					entries.forEach(entry => {
-						if (!entry.isIntersecting) { // no longer visible
-							// [open] is necessary because if KeepInDOMOnClose is set, closed dialogs are kept in DOM
-							// and one of them could get selected
-							document
-								//.querySelector('div[popover].max:not(:has(div[popover].max)),body:not(:has(div[popover].max))')
-								.querySelector('dialog[open].js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))')
-								.insertAdjacentElement('beforeend', snackbar); // was afterbegin, not sure why
-						}
+			<script defer>
+				(function() {
+					Array.from(document.getElementsByClassName("js-snackbar")).forEach((item) => {
+						document.dispatchEvent(new CustomEvent('closeAllSnackbars', {}))
 					})
-				})
-				observer.observe(snackbar);
 
-				let timeoutID = setTimeout(() => {
-					closeSnackbarFn();
-				}, {{ .GetAutoDismissTimeout }})
+					let snackbar = document.getElementById('{{ .GetID }}');
 
-				snackbar.addEventListener('click', () => {
-					closeSnackbarFn();
-				})
-			})()
-		</script>
+					let closeSnackbarFn = function () {
+						document.removeEventListener('closeAllSnackbars', closeSnackbarFn);
+						clearTimeout(timeoutID);
+						observer.disconnect();
+						snackbar.remove();
+					}
+					document.addEventListener('closeAllSnackbars', closeSnackbarFn);
+
+					// ensure snackbar is always visible, for example relocate if rendered in
+					// dialog and dialog gets closed
+					const observer = new IntersectionObserver(entries => {
+						entries.forEach(entry => {
+							if (!entry.isIntersecting) { // no longer visible
+								// [open] is necessary because if KeepInDOMOnClose is set, closed dialogs are kept in DOM
+								// and one of them could get selected
+								document
+									//.querySelector('div[popover].max:not(:has(div[popover].max)),body:not(:has(div[popover].max))')
+									.querySelector('dialog[open].js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))')
+									.insertAdjacentElement('beforeend', snackbar); // was afterbegin, not sure why
+							}
+						})
+					})
+					observer.observe(snackbar);
+
+					let timeoutID = setTimeout(() => {
+						closeSnackbarFn();
+					}, {{ .GetAutoDismissTimeout }})
+
+					snackbar.addEventListener('click', () => {
+						closeSnackbarFn();
+					})
+				})()
+			</script>
+		</div>
 	</div>
 {{ end }}
