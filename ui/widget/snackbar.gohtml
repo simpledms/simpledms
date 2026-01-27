@@ -26,9 +26,9 @@
 	*/}}
 
 	{{ $ctx := .GetContext }}
-	<div hx-swap-oob="beforeend:dialog[open].js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))">
+	<div id="{{ .GetID }}" hx-swap-oob="beforeend:dialog[open].js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))">
 		{{/* snackbar class is used as selector */}}
-		<div id="{{ .GetID }}" popover="manual" class="js-snackbar bottom-24 flex top-auto group mx-auto left-4 right-4 max-w-md
+		<div popover="manual" class="js-snackbar bottom-24 flex top-auto group mx-auto left-4 right-4 max-w-md
 	bg-inverse-surface drop-shadow rounded-xs p-0 hover:cursor-pointer {{ .GetClass }}">
 			<div class="state-layer-inverse-primary flex min-h-12 max-h-[4.25rem] items-center justify-center gap-x-4 px-4">
 				<div class="text-inverse-on-surface body-md group-hover:text-inverse-primary">
@@ -40,47 +40,47 @@
 					</div>
 				{{ end }}
 			</div>
-			<script defer>
-				(function() {
-					Array.from(document.getElementsByClassName("js-snackbar")).forEach((item) => {
-						document.dispatchEvent(new CustomEvent('closeAllSnackbars', {}))
-					})
-
-					let snackbar = document.getElementById('{{ .GetID }}');
-
-					let closeSnackbarFn = function () {
-						document.removeEventListener('closeAllSnackbars', closeSnackbarFn);
-						clearTimeout(timeoutID);
-						observer.disconnect();
-						snackbar.remove();
-					}
-					document.addEventListener('closeAllSnackbars', closeSnackbarFn);
-
-					// ensure snackbar is always visible, for example relocate if rendered in
-					// dialog and dialog gets closed
-					const observer = new IntersectionObserver(entries => {
-						entries.forEach(entry => {
-							if (!entry.isIntersecting) { // no longer visible
-								// [open] is necessary because if KeepInDOMOnClose is set, closed dialogs are kept in DOM
-								// and one of them could get selected
-								document
-									//.querySelector('div[popover].max:not(:has(div[popover].max)),body:not(:has(div[popover].max))')
-									.querySelector('dialog[open].js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))')
-									.insertAdjacentElement('beforeend', snackbar); // was afterbegin, not sure why
-							}
-						})
-					})
-					observer.observe(snackbar);
-
-					let timeoutID = setTimeout(() => {
-						closeSnackbarFn();
-					}, {{ .GetAutoDismissTimeout }})
-
-					snackbar.addEventListener('click', () => {
-						closeSnackbarFn();
-					})
-				})()
-			</script>
 		</div>
+		<script defer>
+			(function() {
+				Array.from(document.getElementsByClassName("js-snackbar")).forEach((item) => {
+					document.dispatchEvent(new CustomEvent('closeAllSnackbars', {}))
+				})
+
+				let snackbar = document.getElementById('{{ .GetID }}');
+
+				let closeSnackbarFn = function () {
+					document.removeEventListener('closeAllSnackbars', closeSnackbarFn);
+					clearTimeout(timeoutID);
+					observer.disconnect();
+					snackbar.remove();
+				}
+				document.addEventListener('closeAllSnackbars', closeSnackbarFn);
+
+				// ensure snackbar is always visible, for example relocate if rendered in
+				// dialog and dialog gets closed
+				const observer = new IntersectionObserver(entries => {
+					entries.forEach(entry => {
+						if (!entry.isIntersecting) { // no longer visible
+							// [open] is necessary because if KeepInDOMOnClose is set, closed dialogs are kept in DOM
+							// and one of them could get selected
+							document
+								//.querySelector('div[popover].max:not(:has(div[popover].max)),body:not(:has(div[popover].max))')
+								.querySelector('dialog[open].js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))')
+								.insertAdjacentElement('beforeend', snackbar); // was afterbegin, not sure why
+						}
+					})
+				})
+				observer.observe(snackbar);
+
+				let timeoutID = setTimeout(() => {
+					closeSnackbarFn();
+				}, {{ .GetAutoDismissTimeout }})
+
+				snackbar.addEventListener('click', () => {
+					closeSnackbarFn();
+				})
+			})()
+		</script>
 	</div>
 {{ end }}
