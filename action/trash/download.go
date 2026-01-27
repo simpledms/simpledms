@@ -1,4 +1,4 @@
-package download
+package trash
 
 import (
 	"net/http"
@@ -6,11 +6,11 @@ import (
 	commonaction "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-// TODO is this a good name and is `page` package the correct location?
 type Download struct {
 	infra *common.Infra
 }
@@ -27,13 +27,13 @@ func (qq *Download) Handler(
 	ctx ctxx.Context,
 ) error {
 	fileIDStr := req.PathValue("file_id")
-	filex := qq.infra.FileRepo.GetX(ctx, fileIDStr)
+	ctxWithDeleted := schema.SkipSoftDelete(ctx)
+	filex := qq.infra.FileRepo.GetWithDeletedX(ctx, fileIDStr)
 
 	if filex.Data.IsDirectory {
-		// TODO impl support for this? download as zip archive?
 		return e.NewHTTPErrorf(http.StatusBadRequest, "cannot download directories")
 	}
 
-	currentVersion := filex.CurrentVersion(ctx)
+	currentVersion := filex.CurrentVersion(ctxWithDeleted)
 	return commonaction.StreamDownload(qq.infra, ctx, rw, req, filex, currentVersion)
 }

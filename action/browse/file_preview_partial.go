@@ -93,7 +93,10 @@ func (qq *FilePreviewPartial) Widget(
 
 	fileDetailsSideSheet := qq.actions.FileDetailsSideSheetPartial.Widget(
 		ctx,
-		qq.actions.FileDetailsSideSheetPartial.Data(dirx.Data.PublicID.String(), filex.Data.PublicID.String()),
+		qq.actions.FileDetailsSideSheetPartial.Data(
+			dirx.Data.PublicID.String(),
+			filex.Data.PublicID.String(),
+		),
 		state,
 	)
 
