@@ -61,13 +61,18 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	filex.Data.Update().SetIsInInbox(false).SaveX(ctx)
 
 	action := &wx.Link{
-		Href:  route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Parent(ctx).Data.PublicID.String(), filex.Data.PublicID.String()),
+		Href: route.BrowseFile(
+			ctx.TenantCtx().TenantID,
+			ctx.SpaceCtx().SpaceID,
+			filex.Parent(ctx).Data.PublicID.String(),
+			filex.Data.PublicID.String(),
+		),
 		Child: wx.T("Open file"),
 	}
 
-	return qq.infra.Renderer().Render(
-		rw,
-		ctx,
+	rw.AddRenderables(
 		wx.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
 	)
+
+	return nil
 }

@@ -110,11 +110,17 @@ func (qq *FileTabsPartial) Widget(
 			qq.actions.FileVersionsPartial.Data(fileID),
 		)
 	default:
-		log.Println("tab name not supported")
-		// FIXME fatal error or just continue?
-		// 		raise BadRequest error?
-		panic("Tab name not supported.") // log.Fatalln is not recoverable
-		// return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Tab name not supported.")
+		log.Println("tab name not supported, was", activeTab)
+
+		// necessary for example when files are moved from inbox, activeTab
+		// "move" is preserved in these cases
+
+		activeTab = ""
+		// TODO remove activeTab from URL
+		activeTabContent = qq.actions.FileAttributesPartial.Widget(
+			ctx,
+			qq.actions.FileAttributesPartial.Data(fileID),
+		)
 	}
 
 	tabsID := autil.GenerateID("showFileTabs")
