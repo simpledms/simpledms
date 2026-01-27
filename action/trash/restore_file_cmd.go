@@ -94,7 +94,7 @@ func (qq *RestoreFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	filex = update.SaveX(ctx)
 
 	if !parentExists {
-		rw.AddRenderables(wx.NewSnackbarf("The original folder is missing. Restored to Inbox."))
+		rw.AddRenderables(wx.NewSnackbarf("The original parent folder is missing. Restored to Inbox."))
 	} else {
 		rw.AddRenderables(wx.NewSnackbarf("File restored."))
 	}

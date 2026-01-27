@@ -418,21 +418,18 @@ func (qq *FileAttributesPartial) dateSuggestions(ctx ctxx.Context, filex *model.
 func (qq *FileAttributesPartial) dateSuggestionChips(ctx ctxx.Context, fieldID string, suggestions []timex.Date) *wx.Container {
 	var chips []wx.IWidget
 	for _, suggestion := range suggestions {
-		suggestionx := suggestion
-		label := suggestionx.String(ctx.MainCtx().LanguageBCP47)
-		dateValue := suggestionx.Format("2006-01-02")
-		handler := template.JS(fmt.Sprintf(
-			"const el=document.getElementById('%s'); if(el){el.value='%s'; el.dispatchEvent(new Event('change', {bubbles:true}));}",
-			fieldID,
-			dateValue,
-		))
+		label := suggestion.String(ctx.MainCtx().LanguageBCP47)
 		chips = append(chips, &wx.AssistChip{
 			Label:       wx.Tu(label),
 			LeadingIcon: "event",
 			HTMXAttrs: wx.HTMXAttrs{
 				HxOn: &wx.HxOn{
-					Event:   "click",
-					Handler: handler,
+					Event: "click",
+					Handler: template.JS(fmt.Sprintf(
+						"const el = document.getElementById('%s'); if (el) { el.value='%s'; el.dispatchEvent(new Event('change', { bubbles:true })); }",
+						fieldID,
+						suggestion.Format("2006-01-02"),
+					)),
 				},
 			},
 		})
