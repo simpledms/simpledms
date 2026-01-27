@@ -1,4 +1,4 @@
-# Licence
+# License
 
 Copyright (c) 2023–present Marco Beierer
 
