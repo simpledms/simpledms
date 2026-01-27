@@ -18,7 +18,7 @@
 					value="{{ .RadioValue }}"
 					id="radio-{{ .GetID }}"
                     {{ if .IsSelected }}checked{{ end }} />
-			<div class="flex flex-grow gap-x-4 overflow-hidden items-center px-4 py-3
+			<div class="flex flex-grow gap-x-4 overflow-hidden items-center px-4 py-4
 				{{ if ne .ContextMenu nil }}select-none exp:select-auto{{ end }}"
                     {{/* cannot be on <label> because request then fires twice, has something to do with radio input */}}
                     {{ template "HTMXAttrs" .HTMXAttrs }}
@@ -56,7 +56,7 @@
                 {{ template "HTMXAttrs" .HTMXAttrs }}
                 {{/* if .HTMXAttrs.IsLink }}role="link"{{ end */}}
 		>
-			<div class="flex flex-grow gap-x-4 overflow-hidden items-center px-4 py-3 {{ if ne .ContextMenu nil }}select-none exp:select-auto{{ end }}"
+			<div class="flex flex-grow gap-x-4 overflow-hidden items-center px-4 py-4 {{ if ne .ContextMenu nil }}select-none exp:select-auto{{ end }}"
 			>
 				<div class="flex {{ if .IsSelected }}text-on-secondary-container{{ else if .IsTypeHelper }}text-secondary{{ else }}text-on-surface-variant{{ end }}">
                     {{ render .GetContext .Leading }}

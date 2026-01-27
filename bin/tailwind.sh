@@ -1,2 +1,2 @@
 #!/bin/sh
-npx tailwindcss -i ui/web/tailwind.css -o ui/web/assets/tailwind.css --watch
+npx tailwindcss -i ui/uix/web/tailwind.css -o ui/uix/web/assets/tailwind.css --watch

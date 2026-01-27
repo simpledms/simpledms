@@ -107,7 +107,7 @@
 }
 
 /*
-! tailwindcss v3.4.14 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -572,7 +572,7 @@ video {
 
   font-weight: 400;
 
-  src: url('fonts/material-symbols-outlined.woff2') format('woff2');
+  src: url('./fonts/material-symbols-outlined.woff2') format('woff2');
 
   /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
@@ -606,7 +606,7 @@ video {
 
   font-weight: 400;
 
-  src: url('fonts/noto-sans-v39-latin_latin-ext-regular.woff2') format('woff2');
+  src: url('./fonts/noto-sans-v39-latin_latin-ext-regular.woff2') format('woff2');
 
   /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
@@ -624,7 +624,7 @@ video {
 
   font-weight: 500;
 
-  src: url('fonts/noto-sans-v39-latin_latin-ext-500.woff2') format('woff2');
+  src: url('./fonts/noto-sans-v39-latin_latin-ext-500.woff2') format('woff2');
 
   /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
@@ -642,7 +642,7 @@ video {
 
   font-weight: 700;
 
-  src: url('fonts/noto-sans-v39-latin_latin-ext-700.woff2') format('woff2');
+  src: url('./fonts/noto-sans-v39-latin_latin-ext-700.woff2') format('woff2');
 
   /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
@@ -660,7 +660,7 @@ video {
 
   font-weight: 400;
 
-  src: url('fonts/montserrat-v29-latin_latin-ext-regular.woff2') format('woff2');
+  src: url('./fonts/montserrat-v29-latin_latin-ext-regular.woff2') format('woff2');
 
   /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
@@ -678,7 +678,7 @@ video {
 
   font-weight: 500;
 
-  src: url('fonts/montserrat-v29-latin_latin-ext-500.woff2') format('woff2');
+  src: url('./fonts/montserrat-v29-latin_latin-ext-500.woff2') format('woff2');
 
   /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
@@ -1908,77 +1908,77 @@ input:-webkit-autofill::first-line,
 
 .border-on-surface-variant {
   --tw-border-opacity: 1;
-  border-color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-border-opacity));
+  border-color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-border-opacity, 1));
 }
 
 .border-outline-variant {
   --tw-border-opacity: 1;
-  border-color: rgb(var(--md-sys-color-outline-variant) / var(--tw-border-opacity));
+  border-color: rgb(var(--md-sys-color-outline-variant) / var(--tw-border-opacity, 1));
 }
 
 .bg-error {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-error) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-error) / var(--tw-bg-opacity, 1));
 }
 
 .bg-inverse-surface {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-inverse-surface) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-inverse-surface) / var(--tw-bg-opacity, 1));
 }
 
 .bg-primary {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-primary) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-primary) / var(--tw-bg-opacity, 1));
 }
 
 .bg-primary-container {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-primary-container) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-primary-container) / var(--tw-bg-opacity, 1));
 }
 
 .bg-secondary-container {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-secondary-container) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-secondary-container) / var(--tw-bg-opacity, 1));
 }
 
 .bg-surface {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-surface) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-surface) / var(--tw-bg-opacity, 1));
 }
 
 .bg-surface-bright {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-surface-bright) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-surface-bright) / var(--tw-bg-opacity, 1));
 }
 
 .bg-surface-container {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-surface-container) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-surface-container) / var(--tw-bg-opacity, 1));
 }
 
 .bg-surface-container-high {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-surface-container-high) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-surface-container-high) / var(--tw-bg-opacity, 1));
 }
 
 .bg-surface-container-highest {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-surface-container-highest) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-surface-container-highest) / var(--tw-bg-opacity, 1));
 }
 
 .bg-surface-container-low {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-surface-container-low) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-surface-container-low) / var(--tw-bg-opacity, 1));
 }
 
 .bg-surface-tint {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-surface-tint) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-surface-tint) / var(--tw-bg-opacity, 1));
 }
 
 .bg-tertiary-container {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-tertiary-container) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-tertiary-container) / var(--tw-bg-opacity, 1));
 }
 
 .bg-opacity-8 {
@@ -2053,6 +2053,11 @@ input:-webkit-autofill::first-line,
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .py-6 {
@@ -2158,62 +2163,62 @@ input:-webkit-autofill::first-line,
 
 .text-inverse-on-surface {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-inverse-on-surface) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-inverse-on-surface) / var(--tw-text-opacity, 1));
 }
 
 .text-inverse-primary {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-inverse-primary) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-inverse-primary) / var(--tw-text-opacity, 1));
 }
 
 .text-on-error {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-error) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-error) / var(--tw-text-opacity, 1));
 }
 
 .text-on-primary {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-primary) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-primary) / var(--tw-text-opacity, 1));
 }
 
 .text-on-primary-container {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-primary-container) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-primary-container) / var(--tw-text-opacity, 1));
 }
 
 .text-on-secondary-container {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-secondary-container) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-secondary-container) / var(--tw-text-opacity, 1));
 }
 
 .text-on-surface {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
 }
 
 .text-on-surface-variant {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-text-opacity, 1));
 }
 
 .text-outline-variant {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-outline-variant) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-outline-variant) / var(--tw-text-opacity, 1));
 }
 
 .text-primary {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity, 1));
 }
 
 .text-secondary {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-secondary) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-secondary) / var(--tw-text-opacity, 1));
 }
 
 .text-tertiary {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-tertiary) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-tertiary) / var(--tw-text-opacity, 1));
 }
 
 .text-opacity-\[0\.38\] {
@@ -2222,12 +2227,12 @@ input:-webkit-autofill::first-line,
 
 .placeholder-on-surface-variant::-moz-placeholder {
   --tw-placeholder-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-placeholder-opacity));
+  color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-placeholder-opacity, 1));
 }
 
 .placeholder-on-surface-variant::placeholder {
   --tw-placeholder-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-placeholder-opacity));
+  color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-placeholder-opacity, 1));
 }
 
 .opacity-25 {
@@ -2543,7 +2548,7 @@ input:-webkit-autofill::first-line,
 
 .backdrop\:bg-surface-variant::backdrop {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-surface-variant) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-surface-variant) / var(--tw-bg-opacity, 1));
 }
 
 .backdrop\:backdrop-blur-sm::backdrop {
@@ -2582,12 +2587,12 @@ input:-webkit-autofill::first-line,
 
 .invalid\:border-error:invalid {
   --tw-border-opacity: 1;
-  border-color: rgb(var(--md-sys-color-error) / var(--tw-border-opacity));
+  border-color: rgb(var(--md-sys-color-error) / var(--tw-border-opacity, 1));
 }
 
 .invalid\:text-on-surface:invalid {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
 }
 
 .checked\:invalid\:accent-error:invalid:checked {
@@ -2620,12 +2625,12 @@ input:-webkit-autofill::first-line,
 
 .hover\:border-on-surface:hover {
   --tw-border-opacity: 1;
-  border-color: rgb(var(--md-sys-color-on-surface) / var(--tw-border-opacity));
+  border-color: rgb(var(--md-sys-color-on-surface) / var(--tw-border-opacity, 1));
 }
 
 .hover\:text-on-surface:hover {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
 }
 
 .hover\:underline:hover {
@@ -2634,22 +2639,22 @@ input:-webkit-autofill::first-line,
 
 .group\/navdest:hover .group-hover\/navdest\:text-on-surface {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
 }
 
 .group:hover .group-hover\:text-inverse-primary {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-inverse-primary) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-inverse-primary) / var(--tw-text-opacity, 1));
 }
 
 .group\/navdest:focus .group-focus\/navdest\:text-on-surface {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
 }
 
 .group\/navdest:active .group-active\/navdest\:text-on-surface {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
 }
 
 .peer:-moz-placeholder-shown ~ .peer-placeholder-shown\:left-10 {
@@ -2696,12 +2701,12 @@ input:-webkit-autofill::first-line,
 
 .peer:-moz-placeholder-shown ~ .peer-placeholder-shown\:text-on-surface-variant {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-text-opacity, 1));
 }
 
 .peer:placeholder-shown ~ .peer-placeholder-shown\:text-on-surface-variant {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-text-opacity, 1));
 }
 
 .peer:-webkit-autofill ~ .peer-autofill\:-left-1 {
@@ -2730,12 +2735,12 @@ input:-webkit-autofill::first-line,
 
 .peer:-webkit-autofill ~ .peer-autofill\:bg-surface {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-surface) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-surface) / var(--tw-bg-opacity, 1));
 }
 
 .peer:autofill ~ .peer-autofill\:bg-surface {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-surface) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-surface) / var(--tw-bg-opacity, 1));
 }
 
 .peer:-webkit-autofill ~ .peer-autofill\:px-1 {
@@ -2750,12 +2755,12 @@ input:-webkit-autofill::first-line,
 
 .peer:-webkit-autofill ~ .peer-autofill\:text-primary {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity, 1));
 }
 
 .peer:autofill ~ .peer-autofill\:text-primary {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity, 1));
 }
 
 .peer:focus ~ .peer-focus\:-left-1 {
@@ -2772,7 +2777,7 @@ input:-webkit-autofill::first-line,
 
 .peer:focus ~ .peer-focus\:bg-surface {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-surface) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-surface) / var(--tw-bg-opacity, 1));
 }
 
 .peer:focus ~ .peer-focus\:px-1 {
@@ -2782,7 +2787,7 @@ input:-webkit-autofill::first-line,
 
 .peer:focus ~ .peer-focus\:text-primary {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity, 1));
 }
 
 .has-\[div\]\:block:has(div) {
@@ -2799,12 +2804,12 @@ input:-webkit-autofill::first-line,
 
 .has-\[\:checked\]\:bg-secondary-container:has(:checked) {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--md-sys-color-secondary-container) / var(--tw-bg-opacity));
+  background-color: rgb(var(--md-sys-color-secondary-container) / var(--tw-bg-opacity, 1));
 }
 
 .has-\[\:checked\]\:text-on-secondary-container:has(:checked) {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-secondary-container) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-secondary-container) / var(--tw-text-opacity, 1));
 }
 
 .has-\[\:checked\]\:outline-0:has(:checked) {
@@ -2859,12 +2864,12 @@ input:-webkit-autofill::first-line,
 
 .group\/list-item:has(:checked) .group-has-\[\:checked\]\/list-item\:text-on-secondary-container {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-secondary-container) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-secondary-container) / var(--tw-text-opacity, 1));
 }
 
 .group\/list-item:has(:checked) .group-has-\[\:checked\]\/list-item\:text-primary {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity, 1));
 }
 
 .group\/list-detail:has(.js-detail-content>div) .group-has-\[\.js-detail-content\>div\]\/list-detail\:opacity-75 {
@@ -2888,17 +2893,17 @@ input:-webkit-autofill::first-line,
 
 .hfa\:text-on-surface:hover {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
 }
 
 .hfa\:text-on-surface:focus {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
 }
 
 .hfa\:text-on-surface:active {
   --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity));
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
 }
 
 @media (min-width: 600px) {
@@ -3057,17 +3062,17 @@ input:-webkit-autofill::first-line,
 
   .md\:border-outline-variant {
     --tw-border-opacity: 1;
-    border-color: rgb(var(--md-sys-color-outline-variant) / var(--tw-border-opacity));
+    border-color: rgb(var(--md-sys-color-outline-variant) / var(--tw-border-opacity, 1));
   }
 
   .md\:bg-surface-container-lowest {
     --tw-bg-opacity: 1;
-    background-color: rgb(var(--md-sys-color-surface-container-lowest) / var(--tw-bg-opacity));
+    background-color: rgb(var(--md-sys-color-surface-container-lowest) / var(--tw-bg-opacity, 1));
   }
 
   .md\:bg-surface-variant {
     --tw-bg-opacity: 1;
-    background-color: rgb(var(--md-sys-color-surface-variant) / var(--tw-bg-opacity));
+    background-color: rgb(var(--md-sys-color-surface-variant) / var(--tw-bg-opacity, 1));
   }
 
   .md\:bg-transparent {
@@ -3135,7 +3140,7 @@ input:-webkit-autofill::first-line,
 
   .md\:text-on-surface-variant {
     --tw-text-opacity: 1;
-    color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-text-opacity));
+    color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-text-opacity, 1));
   }
 
   .md\:drop-shadow {
@@ -3156,17 +3161,17 @@ input:-webkit-autofill::first-line,
 
   .peer:-webkit-autofill ~ .md\:peer-autofill\:bg-surface-container-lowest {
     --tw-bg-opacity: 1;
-    background-color: rgb(var(--md-sys-color-surface-container-lowest) / var(--tw-bg-opacity));
+    background-color: rgb(var(--md-sys-color-surface-container-lowest) / var(--tw-bg-opacity, 1));
   }
 
   .peer:autofill ~ .md\:peer-autofill\:bg-surface-container-lowest {
     --tw-bg-opacity: 1;
-    background-color: rgb(var(--md-sys-color-surface-container-lowest) / var(--tw-bg-opacity));
+    background-color: rgb(var(--md-sys-color-surface-container-lowest) / var(--tw-bg-opacity, 1));
   }
 
   .peer:focus ~ .md\:peer-focus\:bg-surface-container-lowest {
     --tw-bg-opacity: 1;
-    background-color: rgb(var(--md-sys-color-surface-container-lowest) / var(--tw-bg-opacity));
+    background-color: rgb(var(--md-sys-color-surface-container-lowest) / var(--tw-bg-opacity, 1));
   }
 }
 
