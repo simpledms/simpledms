@@ -58,6 +58,7 @@ func (qq *AssignFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request
 	wrapper := req.URL.Query().Get("wrapper")
 	hxTarget := req.URL.Query().Get("hx-target")
 
+	formID := "assignFileForm"
 	container := &wx.Container{
 		GapY: true,
 		Child: []wx.IWidget{
@@ -68,6 +69,9 @@ func (qq *AssignFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request
 				},
 			},
 			&wx.Form{
+				Widget: wx.Widget[wx.Form]{
+					ID: formID,
+				},
 				HTMXAttrs: wx.HTMXAttrs{
 					HxPost:   qq.Endpoint(),
 					HxTarget: hxTarget,
@@ -81,12 +85,14 @@ func (qq *AssignFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request
 	}
 
 	qq.infra.Renderer().RenderX(rw, ctx,
-		autil.WrapWidget(
+		autil.WrapWidgetWithID(
 			wx.T("Assign file"),
 			wx.T("Save"),
 			container,
 			actionx.ResponseWrapper(wrapper),
 			wx.DialogLayoutDefault,
+			"",
+			formID,
 		),
 	)
 	return nil
@@ -107,6 +113,8 @@ func (qq *AssignFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		log.Println(err)
 		return err
 	}
+
+	filex.Data.Update().SetIsInInbox(false).SaveX(ctx)
 
 	// TODO snackbar not shown; modal not closed
 	// rw.Header().Set("HX-Location", route.InboxRoot())
