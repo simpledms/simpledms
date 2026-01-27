@@ -46,12 +46,19 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	destDir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
 	filex := qq.infra.FileRepo.GetWithParentX(ctx, data.FileID)
 
+	if !filex.Data.IsInInbox {
+		log.Println("file not in inbox")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "File must be in inbox.")
+	}
+
 	// TODO is this okay? probably not, but works as long as nilablePArent on File is used in FileWithParent // FIXME
 	filex.File, err = qq.infra.FileSystem().Move(ctx, destDir, filex.File, data.Filename, data.NewDirName)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
+
+	filex.Data.Update().SetIsInInbox(false).SaveX(ctx)
 
 	action := &wx.Link{
 		Href:  route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Parent(ctx).Data.PublicID.String(), filex.Data.PublicID.String()),
