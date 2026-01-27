@@ -19,6 +19,8 @@ The app is also available as a SaaS offering at [simpledms.eu](https://simpledms
 
 ![Screenshot of the SimpleDMS app](https://simpledms.ch/assets/simpledms/2025.01.22-simpledms-screenshot_metadaten.png)
 
+Dark mode is, of course, available too.
+
 ## Technical documentation
 
 You can find the [technical documentation](https://simpledms.eu/en/resources/technical-documentation), the [setup reference](https://simpledms.eu/en/resources/technical-documentation/setup), and a [step-by-step setup guide](https://simpledms.eu/en/resources/technical-documentation/how-to-setup-simpledms-locally-with-docker-compose) on the SimpleDMS website.
