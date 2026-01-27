@@ -67,6 +67,7 @@ func (qq *responseWriter) WriteData(value interface{}, statusCode int) {
 	return
 }
 
+// TODO only accept snackbars to limit misuse? or would that be to restrictive?
 func (qq *responseWriter) AddRenderables(widgets ...renderable.Renderable) {
 	qq.renderables = append(qq.renderables, widgets...)
 }

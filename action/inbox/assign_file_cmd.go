@@ -8,6 +8,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -120,10 +121,22 @@ func (qq *AssignFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	// rw.Header().Set("HX-Location", route.InboxRoot())
 
 	action := &wx.Link{
-		Href:  route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Parent(ctx).Data.PublicID.String(), filex.Data.PublicID.String()),
+		Href: route.BrowseFile(
+			ctx.TenantCtx().TenantID,
+			ctx.SpaceCtx().SpaceID,
+			filex.Parent(ctx).Data.PublicID.String(),
+			filex.Data.PublicID.String(),
+		),
 		Child: wx.T("Open file"),
 	}
-	return qq.infra.Renderer().Render(rw, ctx,
+
+	rw.AddRenderables(
 		wx.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
 	)
+	rw.Header().Set("HX-Trigger", event.FileMoved.String())
+	// TODO not nice because logic to reload list and close details is implemented by handling FileMoved event
+	// TODO select next file to process instead
+	rw.Header().Set("HX-Replace-Url", route.InboxRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID))
+
+	return nil
 }

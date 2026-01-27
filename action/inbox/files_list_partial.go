@@ -156,6 +156,7 @@ func (qq *FilesListPartial) Widget(
 			HxTrigger: strings.Join([]string{
 				// see comment on HTMXAttrs on ScrollableContent (FileList)
 				event.SortByUpdated.HandlerWithModifier("delay:100ms"), // TODO delay necessary?
+				event.FileMoved.Handler(),                              // because it also has to close details
 			}, ", "),
 			HxInclude: "#search,#sortBy",
 		},

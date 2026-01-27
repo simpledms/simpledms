@@ -101,10 +101,9 @@ func (qq *RestoreFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 
 	rw.Header().Set("HX-Retarget", "#details")
 	rw.Header().Set("HX-Reswap", "innerHTML")
+	// TODO not nice because logic to reload list and close details is implemented by handling FileRestored event
 	rw.Header().Set("HX-Replace-Url", route.TrashRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID))
-
-	rw.AddRenderables(&wx.View{})
 	rw.Header().Set("HX-Trigger", event.FileRestored.String())
 
-	return nil
+	return qq.infra.Renderer().Render(rw, ctx, &wx.View{})
 }

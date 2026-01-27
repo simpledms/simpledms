@@ -43,6 +43,7 @@ const (
 	FileUpdated        Event = "fileUpdated"
 	FileDeleted        Event = "fileDeleted"
 	FileRestored       Event = "fileRestored"
+	FileMoved          Event = "fileMoved"
 	FileUploaded       Event = "fileUploaded" // used in JS, FileUpload widget
 	ZIPArchiveUnzipped Event = "zipArchiveUnzipped"
 
