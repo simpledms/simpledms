@@ -715,6 +715,7 @@ func (qq *ListDirPartial) filters(
 			HTMXAttrs: wx.HTMXAttrs{
 				HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, currentDirID), // TODO or pass in href?
 				HxHeaders: autil.ResetStateHeader(),
+				HxOn:      event.CloseSideSheet.HxOn("click"),
 			},
 			LeadingIcon: "restart_alt", // TODO
 		},
