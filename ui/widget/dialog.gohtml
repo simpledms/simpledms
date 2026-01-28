@@ -53,7 +53,7 @@
 					"
 			>
 				<div class="flex items-center mb-4 md:h-fit gap-x-4 px-6 md:px-8 min-h-14 {{ if .IsDefaultLayout }}md:min-h-0{{ end }}">
-					<div class="{{ if .IsDefaultLayout }}md:hidden{{ end }}">
+					<div class="js-dialog-close {{ if .IsDefaultLayout }}md:hidden{{ end }}">
 						{{ render .GetContext .GetCloseIconButton }}
 					</div>
 					<h2 class="flex-grow md:headline-sm title-lg truncate">
@@ -70,7 +70,9 @@
 				</div>
 
 				<div class="hidden pt-6 px-6 md:px-8 justify-end items-center {{ if .IsDefaultLayout }}md:flex{{ end }} flex-row gap-x-2">
-					{{ render .GetContext .GetCloseButton }}
+					<div class="js-dialog-close">
+						{{ render .GetContext .GetCloseButton }}
+					</div>
 					{{ render .GetContext .GetSubmitButton }}
 				</div>
 		</div>
@@ -121,14 +123,13 @@
 				}
 				dialog.closeSideSheet = closeSideSheet;
 
-				dialog.querySelector('#{{ .GetCloseIconButtonID }}').addEventListener('click', function() {
+				dialog.addEventListener('click', (e) => {
+					if (!e.target.closest('.js-dialog-close')) {
+						return;
+					}
 					closeSideSheet();
 					dialog.close();
-				})
-				dialog.querySelector('#{{ .GetCloseButtonID }}').addEventListener('click', function() {
-					closeSideSheet();
-					dialog.close();
-				})
+				}, true)
 
 				{{/* if .AsPopover }}
 					dialog.addEventListener("toggle", (e) => {
