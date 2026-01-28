@@ -244,6 +244,25 @@
 				}
 			})
 
+			document.addEventListener('htmx:afterRequest', function(e) {
+				if (!e.detail.successful) {
+					return;
+				}
+
+				let requestConfig = e.detail.requestConfig;
+				if (!requestConfig || requestConfig.verb !== 'get') {
+					return;
+				}
+
+				let headers = requestConfig.headers;
+				if (!headers || headers['Reset-State'] === undefined || headers['Preserve-State'] !== undefined) {
+					return;
+				}
+
+				this.dispatchEvent(new CustomEvent('closeSideSheet', { bubbles: true }));
+				this.dispatchEvent(new CustomEvent('closeDialog', { bubbles: true }));
+			})
+
 			document.addEventListener('htmx:afterProcessNode', function(e) {
 				// class `js-semantic-link` is used to mark links that are duplicates, thus have a htmx wrapper;
 				// if propagation is not stopped, the request is executed twice
