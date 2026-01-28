@@ -12,7 +12,6 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/e"
@@ -51,8 +50,9 @@ func (qq *BrowsePage) Handler(
 	}
 
 	state := autil.StateX[ListDirPartialState](rw, req)
-	// TODO Push or Replace?
-	rw.Header().Set("HX-Push-Url", route.BrowseWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, dirx.PublicID.String()))
+
+	// commented on 28.01.2026; if reactivated, should be Replace
+	// rw.Header().Set("HX-Push-Url", route.BrowseWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, dirx.PublicID.String()))
 
 	// TODO is this a good idea, or would just targeting #details be better instead of custom header?
 	//		custom header is more meaningful...

@@ -189,7 +189,8 @@ func (qq *FileListItemPartial) fileListItem(
 		HxTarget: "#details",
 		HxSwap:   "outerHTML",
 		// dirID and not fileWithChildren.ID so that it works nicely with `recursive` filter
-		HxGet: route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, currentDirID, fileWithChildren.PublicID.String()),
+		HxGet:     route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, currentDirID, fileWithChildren.PublicID.String()),
+		HxHeaders: autil.PreserveStateHeader(),
 	}
 
 	filexx := qq.infra.FileRepo.GetXX(fileWithChildren)

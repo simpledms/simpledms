@@ -12,7 +12,7 @@
 		fine tuning of transitions in tailwind.css
 		<meta name="htmx-config" content='{"disableInheritance":true, "globalViewTransitions":false, "historyCacheSize": 0}'>
 		*/}}
-		<meta name="htmx-config" content='{"disableInheritance":true, "globalViewTransitions":true}'>
+		<meta name="htmx-config" content='{"disableInheritance":true, "globalViewTransitions":false}'>
 
 		{{- if .ShouldRefreshEvery60Seconds }}
 			<meta http-equiv="refresh" content="60" />
@@ -65,6 +65,31 @@
 				name="theme-color"
 				content="rgb(20, 19, 19)"
 				media="(prefers-color-scheme: dark)" />
+
+		<script type="text/javascript">
+			// loaded directly because required in openDialogFn
+
+			function _setQueryParamValue(paramName, paramValue) {
+				// there is also url.searchParams, but readonly... see also:
+				// https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams#interaction_with_url.searchparams
+				const searchParams = new URLSearchParams(window.location.search);
+				if (paramValue === '') {
+					searchParams.delete(paramName);
+				} else {
+					searchParams.set(paramName, paramValue);
+				}
+				_updateURL(searchParams);
+			}
+
+			function _updateURL(searchParams) {
+				if (searchParams.toString() === '') {
+					// setting empty string instead does nothing
+					window.history.replaceState(null, null, '?');
+				} else {
+					window.history.replaceState(null, null, '?' + searchParams.toString());
+				}
+			}
+		</script>
 
 		<script type="text/javascript">
 			let _wakeLock = null;
@@ -174,17 +199,6 @@
 				}
 				return _setQueryParamValue(paramName, paramValue);
 			}
-			function _setQueryParamValue(paramName, paramValue) {
-				// there is also url.searchParams, but readonly... see also:
-				// https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams#interaction_with_url.searchparams
-				const searchParams = new URLSearchParams(window.location.search);
-				if (paramValue === '') {
-					searchParams.delete(paramName);
-				} else {
-					searchParams.set(paramName, paramValue);
-				}
-				_updateURL(searchParams);
-			}
 
 			function _appendQueryParamSliceValue(paramName, paramValue) {
 				const searchParams = new URLSearchParams(window.location.search);
@@ -197,20 +211,28 @@
 				_updateURL(searchParams);
 			}
 
-			function _updateURL(searchParams) {
-				if (searchParams.toString() === '') {
-					// setting empty string instead does nothing
-					window.history.replaceState(null, null, '?');
-				} else {
-					window.history.replaceState(null, null, '?' + searchParams.toString());
-				}
-			}
 		</script>
 
 		<script type="module" defer>
 			import htmx from '/assets/vendor/htmx.js';
 			//import {} from '/assets/vendor/htmx.org/dist/ext/debug.js'; // not working
 			// htmx.logAll();
+
+			// global to ensure only registered once
+			// TODO media query condition?
+			document.addEventListener('closeSideSheet', (e) => {
+				document.querySelectorAll('.js-side-sheet-dialog').forEach((sideSheet) => {
+					sideSheet.closeSideSheet();
+					sideSheet.close();
+				})
+			});
+
+			// global to ensure only registered once
+			document.addEventListener('closeDialog', (e) => {
+				document.querySelectorAll('.js-dialog').forEach((dialog) => {
+					dialog.close();
+				})
+			});
 
 			document.addEventListener('htmx:beforeRequest', function(e) {
 				// does close side sheet on navigation to another page;
@@ -289,9 +311,21 @@
 				}
 			})
 
-			//document.addEventListener('htmx:beforeCleanupElement', function(e) {
+			document.addEventListener('htmx:beforeCleanupElement', function(e) {
 				//console.log('beforeCleanupElement', e.detail.elt)
-			//})
+				//debugger
+				/*var x = e.detail.elt["htmx-internal-data"];
+				if (x && x.listenerInfos) {
+					x.listenerInfos.forEach((listenerInfo) => {
+						//htmx.off(e.detail.elt, listenerInfo.eventName, listenerInfo.listener);
+						htmx.off(listenerInfo.on, listenerInfo.trigger, listenerInfo.listener);
+					})
+					if (x.listenerInfos.length > 5) {
+						console.log(e.detail.elt)
+					}
+					console.log(x.listenerInfos)
+				}*/
+			})
 		</script>
 		<div id="errorSwapDummy" style="display: none;"></div>
 

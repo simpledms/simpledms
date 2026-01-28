@@ -2,7 +2,6 @@ package tagging
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -196,7 +195,7 @@ func (qq *ListAssignedTagsPartial) Chips(
 		},
 		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:    qq.Config.Endpoint(),
-			HxTrigger: fmt.Sprintf("%s from:body", event.TagUpdated.String()),
+			HxTrigger: event.HxTrigger(event.TagUpdated),
 			HxVals:    util.JSON(data),
 			HxTarget:  "#" + id,
 		},

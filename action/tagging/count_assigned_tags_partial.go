@@ -66,7 +66,7 @@ func (qq *CountAssignedTagsPartial) Badge(ctx ctxx.Context, fileID string) *wx.B
 		IsInline: true,
 		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:    qq.Endpoint(),
-			HxTrigger: fmt.Sprintf("%s from:body", event.TagUpdated.String()),
+			HxTrigger: event.HxTrigger(event.TagUpdated),
 			HxVals:    util.JSON(qq.Data(fileID)),
 			HxTarget:  "#" + id,
 			HxSwap:    "outerHTML",

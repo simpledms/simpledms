@@ -57,6 +57,7 @@ const (
 	TemporaryPasswordCleared Event = "temporaryPasswordCleared"
 	PasswordChanged          Event = "passwordChanged"
 
+	// if something is added, don't forget to adjust Handler implementation
 	SideSheetToggled Event = "sideSheetToggled" // used in JS
 	CloseSideSheet   Event = "closeSideSheet"   // used in JS
 	// TODO separate Command type or implicit via name?
@@ -90,11 +91,25 @@ func (qq Event) String() string {
 }
 
 func (qq Event) Handler() string {
+	// TODO impl more generic
+	if qq == SideSheetToggled || qq == CloseSideSheet {
+		// return fmt.Sprintf("%s from:#popovers", qq.String())
+	}
+	if qq == CloseDialog {
+		// return fmt.Sprintf("%s from:#popovers target:.js-dialog", qq.String())
+	}
 	return fmt.Sprintf("%s from:body", qq.String())
 }
 
 // modifier can for example be delay:100ms
 func (qq Event) HandlerWithModifier(modifier string) string {
+	// TODO impl more generic
+	if qq == SideSheetToggled || qq == CloseSideSheet {
+		// return fmt.Sprintf("%s from:body target:.js-side-sheet-dialog %s", qq.String(), modifier)
+	}
+	if qq == CloseDialog {
+		// return fmt.Sprintf("%s from:body target:.js-dialog %s", qq.String(), modifier)
+	}
 	return fmt.Sprintf("%s from:body %s", qq.String(), modifier)
 }
 
@@ -174,7 +189,7 @@ func (qq EventWithID) String(id int64) string {
 }
 
 func (qq EventWithID) Handler(id int64) string {
-	return fmt.Sprintf("%s from:body", qq.String(id))
+	return fmt.Sprintf("%s", qq.String(id))
 }
 
 /*

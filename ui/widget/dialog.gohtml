@@ -75,6 +75,9 @@
 				</div>
 		</div>
 		<script defer>
+			// event listeners closeSideSheet and closeDialog are registered globally
+			// in base.gohtml
+
 			// necessary to have local variables
 			(function() {
 				let dialog = document.getElementById('{{ .GetID }}');
@@ -102,11 +105,6 @@
 					}
 				})
 
-				let closeDialogEventListenerFn = (e) => {
-					dialog.close();
-				}
-				document.addEventListener('closeDialog', closeDialogEventListenerFn);
-
 				// close on backdrop click
 				dialog.addEventListener('click', (e) => {
 					if (e.target === dialog) {
@@ -121,6 +119,7 @@
 						dialog.dispatchEvent(new CustomEvent('sideSheetToggled', { bubbles: true }))
 					{{ end }}
 				}
+				dialog.closeSideSheet = closeSideSheet;
 
 				dialog.querySelector('#{{ .GetCloseIconButtonID }}').addEventListener('click', function() {
 					closeSideSheet();
@@ -152,40 +151,13 @@
 					})
 				{{- else */}}
 
-				let closeSideSheetEventListenerFn = (e) => {
-					closeSideSheet();
-					dialog.close();
-				}
-
-    			{{ if .IsSideSheetLayout }}
-					// TODO media query condition?
-					document.addEventListener('closeSideSheet', closeSideSheetEventListenerFn);
-				{{ end }}
-
-				{{/*
-				const observer = new MutationObserver(function(mutations) {
-					for (const mutation of mutations) {
-						if (mutation.type === 'childList') {
-							for (const node of mutation.removedNodes) {
-								if (node.id === '{{ .GetID }}') {
-								}
-							}
-						}
-					}
-				})
-				observer.observe(dialog, {
-					childList: true,
-					subtree: true,
-				})
-				*/}}
-
 				dialog.addEventListener("close", (e) => {
 					//let snackbars = dialog.querySelectorAll(".js-snackbar");
 
 					{{/* TODO correct position? are snackbars still there when processed? */}}
 					{{ if not .KeepInDOMOnClose }}
-						document.removeEventListener('closeSideSheet', closeSideSheetEventListenerFn);
-						document.removeEventListener('closeDialog', closeDialogEventListenerFn);
+						//document.removeEventListener('closeSideSheet', closeSideSheetEventListenerFn);
+						//document.removeEventListener('closeDialog', closeDialogEventListenerFn);
 						dialog.remove();
 					{{ end }}
 
@@ -220,6 +192,8 @@
 						let openDialogs = document.querySelectorAll("dialog[open].js-side-sheet-dialog");
 						openDialogs.forEach(dialogx => dialogx.close())
 
+						_setQueryParamValue('side_sheet', dialog.id)
+						dialog.dispatchEvent(new CustomEvent('sideSheetToggled', { bubbles: true }))
 
 						{{/* sidebar is only shown on screens larger than lg, thus disable
 										backdrop click if screen is larger and sidebar layout is used only */}}
@@ -241,10 +215,6 @@
 						return;
 					}
 					openDialogFn();
-					{{ if .IsSideSheetLayout }}
-						{{/* TODO move to openDialogFn or would it have side effects? impl for toggle FileDetails button */}}
-						_setQueryParamValue('side_sheet', dialog.id)
-					{{ end }}
 				}
 
 				let openOnLoadFn = () => {
@@ -253,10 +223,6 @@
 							{{ if .IsOpenOnLoadOnExtraLargeScreens | and (not .IsOpenOnLoad) }}
 								if (window.matchMedia('(min-width: 1600px)').matches) {
 									openDialogFn();
-									setTimeout(() => {
-										// function not available directly...
-										_setQueryParamValue('side_sheet', dialog.id)
-									}, 100)
 								}
 							{{ else }}
 								openDialogFn();

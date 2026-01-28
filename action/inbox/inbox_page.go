@@ -108,11 +108,13 @@ func (qq *InboxPage) WidgetHandler(
 	} else {
 		// TODO is this the correct place?
 		// TODO why is this necessary?
+		/* commented on 28.01.2026 because it kept side_sheet param in URL alive when switching
+		from other pages to inbox
 		newURL := route.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID)
 		if selectedFileID != "" {
 			newURL = route.InboxWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, selectedFileID)
-		}
-		rw.Header().Set("HX-Replace-Url", newURL)
+		}*/
+		// rw.Header().Set("HX-Replace-Url", newURL)
 	}
 
 	// rw.Header().Set("HX-Retarget", "#innerContent")

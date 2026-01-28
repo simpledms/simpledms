@@ -742,9 +742,19 @@ func (qq *ListDirPartial) filterTagsBtn(
 		} else {
 			hxPost = ""
 		}
-		hxOn = event.CloseSideSheet.UnsafeHxOnWithQueryParamAndValue("click", "side_sheet", "")
+		/*hxOn = &wx.HxOn{
+			Event:   "click",
+			Handler: "document.querySelectorAll('.js-side-sheet-dialog').forEach(elem => elem.closeSideSheet())",
+		}*/
+		// hxOn = event.CloseSideSheet.UnsafeHxOnWithQueryParamAndValue("click", "side_sheet", "")
+		hxOn = event.CloseSideSheet.HxOn("click")
 	} else { // closed
-		hxOn = event.SideSheetToggled.UnsafeHxOnWithQueryParamAndValue("click", "side_sheet", qq.actions.TagsFilterDialogPartial.ID())
+		/*hxOn = &wx.HxOn{
+			Event:   "click",
+			Handler: "document.querySelectorAll('.js-side-sheet-dialog').forEach(elem => elem.toggleCustom())",
+		}*/
+		// hxOn = event.SideSheetToggled.UnsafeHxOnWithQueryParamAndValue("click", "side_sheet", qq.actions.TagsFilterDialogPartial.ID())
+		hxOn = event.SideSheetToggled.HxOn("click")
 	}
 
 	return &wx.Container{
@@ -755,6 +765,7 @@ func (qq *ListDirPartial) filterTagsBtn(
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data(currentDirID, "")),
 			HxTarget: "#filterTagsBtn",
+			HxSwap:   "outerHTML",
 			HxTrigger: strings.Join([]string{
 				event.FilterTagsChanged.Handler(),
 				event.SideSheetToggled.Handler(),
@@ -802,13 +813,9 @@ func (qq *ListDirPartial) filterPropertiesBtn(
 		} else {
 			hxPost = ""
 		}
-		hxOn = event.CloseSideSheet.UnsafeHxOnWithQueryParamAndValue("click", "side_sheet", "")
+		hxOn = event.CloseSideSheet.HxOn("click")
 	} else { // closed
-		hxOn = event.SideSheetToggled.UnsafeHxOnWithQueryParamAndValue(
-			"click",
-			"side_sheet",
-			qq.actions.PropertiesFilterDialogPartial.ID(),
-		)
+		hxOn = event.SideSheetToggled.HxOn("click")
 	}
 
 	return &wx.Container{
@@ -819,6 +826,7 @@ func (qq *ListDirPartial) filterPropertiesBtn(
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data(currentDirID, "")),
 			HxTarget: "#filterPropertiesBtn",
+			HxSwap:   "outerHTML",
 			HxTrigger: strings.Join([]string{
 				event.PropertyFilterChanged.Handler(),
 				event.SideSheetToggled.Handler(),
@@ -865,17 +873,9 @@ func (qq *ListDirPartial) filterDocumentTypeBtn(
 		} else {
 			hxPost = ""
 		}
-		hxOn = event.CloseSideSheet.UnsafeHxOnWithQueryParamAndValue(
-			"click",
-			"side_sheet",
-			"",
-		)
+		hxOn = event.CloseSideSheet.HxOn("click")
 	} else { // closed
-		hxOn = event.SideSheetToggled.UnsafeHxOnWithQueryParamAndValue(
-			"click",
-			"side_sheet",
-			qq.actions.DocumentTypeFilterDialogPartial.ID(),
-		)
+		hxOn = event.SideSheetToggled.HxOn("click")
 	}
 
 	return &wx.Container{
@@ -886,6 +886,7 @@ func (qq *ListDirPartial) filterDocumentTypeBtn(
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data(currentDirID, "")),
 			HxTarget: "#filterDocumentTypeBtn",
+			HxSwap:   "outerHTML",
 			HxTrigger: strings.Join([]string{
 				// TODO is this necessary (for all buttons) or are handlers on list enough?
 				event.FilterTagsChanged.Handler(),

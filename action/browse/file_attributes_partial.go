@@ -122,8 +122,6 @@ func (qq *FileAttributesPartial) Content(
 		// Limit(3). // would need order by filesearch.FieldRank
 		AllX(ctx)
 
-	log.Println(suggestedDocumentTypes)
-
 	var suggestedDocumentTypeIDs []int64
 	for _, documentType := range suggestedDocumentTypes {
 		suggestedDocumentTypeIDs = append(suggestedDocumentTypeIDs, documentType.ID)

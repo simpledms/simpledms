@@ -10,7 +10,6 @@ import (
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/e"
@@ -49,7 +48,6 @@ func (qq *BrowseWithSelectionPage) Handler(
 	dirx := qq.infra.FileRepo.GetX(ctx, dirIDStr)
 
 	state := autil.StateX[FilePreviewPartialState](rw, req)
-	rw.Header().Set("HX-Push-Url", route.BrowseFileWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, dirx.Data.PublicID.String(), filex.Data.PublicID.String()))
 
 	browsePage, err := qq.widget(rw, req, ctx, state, dirx, filex)
 	if err != nil {

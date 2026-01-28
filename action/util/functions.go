@@ -76,6 +76,16 @@ func ResetStateHeader() template.JS {
 	})
 }
 
+// can be used to preserve state and GET requests, for example when
+// switching between list items
+func PreserveStateHeader() template.JS {
+	return util.JSON(struct {
+		PreserveState bool `json:"Preserve-State"`
+	}{
+		PreserveState: true,
+	})
+}
+
 func CloseDetailsHeader() template.JS {
 	return util.JSON(struct {
 		CloseDetails bool `json:"Close-Details"`
@@ -286,11 +296,20 @@ func State[T any](rw httpx.ResponseWriter, req *httpx.Request) (*T, error) {
 			log.Println(err)
 			return data, e.NewHTTPErrorf(http.StatusBadRequest, "cannot parse current url")
 		}
-		values = currentURL.Query()
 
-		// for GET requests the params of the requested URL should be processed to, this is for example necessary
-		// for boosted link from /select-space/ to /inbox/ with upload_token as query
-		// param because HX-Current-URL is set to /select-space/ url in this scenario when the /inbox/ page gets loaded
+		preserveStateStr := req.Header.Get("Preserve-State")
+		if req.Method == http.MethodPost || preserveStateStr == "true" {
+			values = currentURL.Query()
+		}
+
+		if req.Method == http.MethodGet && preserveStateStr == "true" {
+			rw.Header().Set("HX-Replace-Url", req.URL.Path+"?"+values.Encode())
+		}
+
+		// for GET requests the params of the requested URL should be processed to, this is
+		// for example necessary for boosted link from /select-space/ to /inbox/ with
+		// upload_token as query param because HX-Current-URL is set to /select-space/ url
+		// in this scenario when the /inbox/ page gets loaded;
 		// added on 12 April 2025
 		if req.Method == http.MethodGet {
 			for key, value := range req.URL.Query() {
