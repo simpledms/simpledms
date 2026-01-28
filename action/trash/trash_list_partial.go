@@ -144,9 +144,10 @@ func (qq *TrashListPartial) listItem(ctx ctxx.Context, filex *enttenant.File, is
 	if !filex.IsDirectory {
 		item.ContextMenu = qq.actions.TrashContextMenuPartial.Widget(ctx, filex)
 		item.HTMXAttrs = wx.HTMXAttrs{
-			HxTarget: "#details",
-			HxSwap:   "outerHTML",
-			HxGet:    route.TrashFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID.String()),
+			HxTarget:  "#details",
+			HxSwap:    "outerHTML",
+			HxGet:     route.TrashFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID.String()),
+			HxHeaders: autil.PreserveStateHeader(),
 		}
 	}
 

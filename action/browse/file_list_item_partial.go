@@ -75,7 +75,7 @@ func (qq *FileListItemPartial) Widget(
 	filex *enttenant.File,
 	parentFullPath string, // only necessary with breadcrumbs
 	isSelected bool,
-	// hideContextMenu bool,
+// hideContextMenu bool,
 	showBreadcrumbs bool,
 ) *wx.ListItem {
 	if filex.IsDirectory {
@@ -131,8 +131,8 @@ func (qq *FileListItemPartial) DirectoryListItem(
 		SupportingText:  wx.Tu(supportingText),
 		ContextMenu:     NewFileContextMenuPartial(qq.actions).Widget(ctx, fileWithChildren),
 		HTMXAttrs: wx.HTMXAttrs{
-			HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID.String()),
-			HxHeaders: autil.ResetStateHeader(),
+			HxGet: route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID.String()),
+			// HxHeaders: autil.ResetStateHeader(),
 			HxSwap: fmt.Sprintf(
 				// duplicate in ListDirPartial
 				// bottom instead of top prevents small jump on nav
@@ -182,7 +182,7 @@ func (qq *FileListItemPartial) fileListItem(
 	fileWithChildren *enttenant.File,
 	parentFullPath string, // only necessary with breadcrumbs
 	isSelected bool,
-	// hideContextMenu bool,
+// hideContextMenu bool,
 	showBreadcrumbs bool,
 ) *wx.ListItem {
 	htmxAttrs := wx.HTMXAttrs{

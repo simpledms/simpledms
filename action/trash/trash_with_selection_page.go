@@ -47,7 +47,8 @@ func (qq *TrashWithSelectionPage) Handler(
 	}
 
 	state := autil.StateX[FileTabsPartialState](rw, req)
-	rw.Header().Set("HX-Push-Url", route.TrashFileWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()))
+	// commented on 28.01.2026
+	// rw.Header().Set("HX-Push-Url", route.TrashFileWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()))
 
 	viewx, err := qq.widget(rw, req, ctx, state, filex)
 	if err != nil {
