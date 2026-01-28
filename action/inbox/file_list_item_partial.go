@@ -72,9 +72,10 @@ func (qq *FileListItemPartial) Widget(
 	}*/
 
 	htmxAttrs := wx.HTMXAttrs{
-		HxTarget: "#details",
-		HxSwap:   "outerHTML",
-		HxGet:    hrefFn(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID.String()),
+		HxTarget:  "#details",
+		HxSwap:    "outerHTML",
+		HxGet:     hrefFn(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID.String()),
+		HxHeaders: autil.PreserveStateHeader(),
 	}
 
 	return &wx.ListItem{

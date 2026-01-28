@@ -67,6 +67,9 @@ func RefreshPageHeader() template.JS {
 }
 */
 
+// as of 28.01.2026, reset state is the default, use PreserveState
+// headers if state should be preserved
+//
 // TODO where is a ood location for this? bind to HTMXAttrs?
 func ResetStateHeader() template.JS {
 	return util.JSON(struct {
