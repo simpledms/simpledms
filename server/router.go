@@ -48,6 +48,9 @@ type Actionable interface {
 }
 type FormActionable interface {
 	// not always implemented
+	//
+	// usually you don't want to overwrite the default implementation in util.FormHelper
+	// and create a separate form action instead
 	FormHandler(httpx.ResponseWriter, *httpx.Request, ctxx.Context) error
 }
 

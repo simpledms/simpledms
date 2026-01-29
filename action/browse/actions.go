@@ -32,12 +32,16 @@ type Actions struct {
 	FileSheetPartial            *FileSheetPartial
 	UploadFileCmd               *UploadFileCmd
 	// UploadFileInFolderMode *UploadFileInFolderMode
-	FileAttributesPartial     *FileAttributesPartial
-	FileVersionsPartial       *FileVersionsPartial
-	FileInfoPartial           *FileInfoPartial
-	FilePropertiesPartial     *FilePropertiesPartial
-	SelectDocumentTypePartial *SelectDocumentTypeCmd
-	SetFilePropertyCmd        *SetFilePropertyCmd
+	FileAttributesPartial      *FileAttributesPartial
+	FileVersionsPartial        *FileVersionsPartial
+	FileInfoPartial            *FileInfoPartial
+	FilePropertiesPartial      *FilePropertiesPartial
+	AddFilePropertyCmd         *AddFilePropertyCmd
+	AddFilePropertyValueDialog *AddFilePropertyValueDialog
+	AddFilePropertyValueCmd    *AddFilePropertyValueCmd
+	RemoveFilePropertyCmd      *RemoveFilePropertyCmd
+	SelectDocumentTypePartial  *SelectDocumentTypeCmd
+	SetFilePropertyCmd         *SetFilePropertyCmd
 
 	// TODO rename to Rename and Move because they also work for folders?
 	RenameFileCmd *RenameFileCmd
@@ -88,12 +92,16 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		FileSheetPartial:            NewFileSheetPartial(infra, actions),
 		UploadFileCmd:               NewUploadFileCmd(infra, actions),
 		// UploadFileInFolderMode: NewUploadFileInFolderMode(infra, actions),
-		FileAttributesPartial:     NewFileAttributesPartial(infra, actions),
-		FileVersionsPartial:       NewFileVersionsPartial(infra, actions),
-		FileInfoPartial:           NewFileInfoPartial(infra, actions),
-		FilePropertiesPartial:     NewFilePropertiesPartial(infra, actions),
-		SelectDocumentTypePartial: NewSelectDocumentTypeCmd(infra, actions),
-		SetFilePropertyCmd:        NewSetFilePropertyCmd(infra, actions),
+		FileAttributesPartial:      NewFileAttributesPartial(infra, actions),
+		FileVersionsPartial:        NewFileVersionsPartial(infra, actions),
+		FileInfoPartial:            NewFileInfoPartial(infra, actions),
+		FilePropertiesPartial:      NewFilePropertiesPartial(infra, actions),
+		AddFilePropertyCmd:         NewAddFilePropertyCmd(infra, actions),
+		AddFilePropertyValueDialog: NewAddFilePropertyValueDialog(infra, actions),
+		AddFilePropertyValueCmd:    NewAddFilePropertyValueCmd(infra, actions),
+		RemoveFilePropertyCmd:      NewRemoveFilePropertyCmd(infra, actions),
+		SelectDocumentTypePartial:  NewSelectDocumentTypeCmd(infra, actions),
+		SetFilePropertyCmd:         NewSetFilePropertyCmd(infra, actions),
 
 		RenameFileCmd: NewRenameFileCmd(infra, actions),
 		MoveFileCmd:   NewMoveFileCmd(infra, actions),

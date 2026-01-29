@@ -26,6 +26,7 @@ type Text struct {
 	NoTranslation bool // used later
 	IsParagraph   bool
 	IsBold        bool
+	IsSmall       bool
 }
 
 func T(str string) *Text {
@@ -115,5 +116,11 @@ func (qq *Text) GetString() string {
 // only works for paragraphs or if wrapped
 func (qq *Text) SetBold() *Text {
 	qq.IsBold = true
+	return qq
+}
+
+// only works for paragraphs or if wrapped
+func (qq *Text) SetSmall() *Text {
+	qq.IsSmall = true
 	return qq
 }

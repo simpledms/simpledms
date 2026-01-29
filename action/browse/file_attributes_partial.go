@@ -78,7 +78,7 @@ func (qq *FileAttributesPartial) Widget(
 ) *wx.ScrollableContent {
 	return &wx.ScrollableContent{
 		Widget: wx.Widget[wx.ScrollableContent]{
-			ID: qq.FilePropertiesID(),
+			ID: qq.FileAttributesID(),
 		},
 		GapY:     true,
 		Children: qq.Content(ctx, data),
@@ -192,7 +192,7 @@ func (qq *FileAttributesPartial) Content(
 				HxTrigger: event.HxTrigger(event.TagUpdated, event.FilePropertyUpdated), // TODO only update if ID is identical
 				HxPost:    qq.Endpoint(),
 				HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String())),
-				HxTarget:  "#" + qq.FilePropertiesID(),
+				HxTarget:  "#" + qq.FileAttributesID(),
 				HxSwap:    "outerHTML",
 			},
 			Children: []wx.IWidget{
@@ -237,7 +237,7 @@ func (qq *FileAttributesPartial) documentTypeBadge(
 			HTMXAttrs: wx.HTMXAttrs{
 				HxPost:   qq.actions.SelectDocumentTypePartial.Endpoint(),
 				HxVals:   util.JSON(qq.actions.SelectDocumentTypePartial.Data(data.FileID, documentType.ID)),
-				HxTarget: "#" + qq.FilePropertiesID(),
+				HxTarget: "#" + qq.FileAttributesID(),
 				HxSwap:   "outerHTML",
 				HxHeaders: autil.QueryHeader(
 					qq.Endpoint(),
@@ -276,9 +276,6 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 	filex *model.File,
 	attributex *enttenant.Attribute,
 ) *wx.Column {
-	var field wx.IWidget
-	var dateFieldID string
-
 	htmxAttrsFn := func(hxTrigger string) wx.HTMXAttrs {
 		return wx.HTMXAttrs{
 			HxTrigger: hxTrigger,
@@ -297,100 +294,28 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 		panic(err)
 	}
 
-	var defaultValue string
-	hasDateValue := false
-	if nilableAssignment != nil {
-		switch attributex.Edges.Property.Type {
-		case fieldtype.Text:
-			defaultValue = nilableAssignment.TextValue
-		case fieldtype.Number:
-			defaultValue = fmt.Sprintf("%d", nilableAssignment.NumberValue)
-		case fieldtype.Money:
-			// TODO
-			val := float64(nilableAssignment.NumberValue) / 100.0
-			defaultValue = fmt.Sprintf("%.2f", val)
-		case fieldtype.Date:
-			// TODO
-			if !nilableAssignment.DateValue.IsZero() {
-				hasDateValue = true
-				defaultValue = nilableAssignment.DateValue.Format("2006-01-02")
-			}
-		}
-	}
-
-	switch attributex.Edges.Property.Type {
-	case fieldtype.Text:
-		field = &wx.TextField{
-			Label:        wx.Tu(attributex.Edges.Property.Name),
-			Name:         "TextValue",
-			Type:         "text",
-			DefaultValue: defaultValue,
-			HTMXAttrs:    htmxAttrsFn("change, input delay:1000ms"),
-		}
-	case fieldtype.Number:
-		field = &wx.TextField{
-			Label:        wx.Tu(attributex.Edges.Property.Name),
-			Name:         "NumberValue",
-			Type:         "number",
-			DefaultValue: defaultValue,
-			// `change` event doesn't work because a change is triggered all the time a user uses arrow increase/decrease
-			HTMXAttrs: htmxAttrsFn("input delay:1000ms"),
-		}
-	case fieldtype.Money:
-		field = &wx.TextField{
-			Label:        wx.Tu(attributex.Edges.Property.Name),
-			Name:         "MoneyValue",
-			Type:         "number",
-			Step:         "0.01",
-			DefaultValue: defaultValue,
-			// `change` event doesn't work because a change is triggered all the time a user uses arrow increase/decrease
-			HTMXAttrs: htmxAttrsFn("input delay:1000ms"),
-		}
-	case fieldtype.Date:
-		dateFieldID = fmt.Sprintf("property-date-%d", attributex.Edges.Property.ID)
-		field = &wx.TextField{
-			Widget: wx.Widget[wx.TextField]{
-				ID: dateFieldID,
-			},
-			Label:        wx.Tu(attributex.Edges.Property.Name),
-			Name:         "DateValue",
-			Type:         "date",
-			DefaultValue: defaultValue,
-			// short delay because going quickly up and down on day or month or year triggers change event
-			HTMXAttrs: htmxAttrsFn("change delay:250ms"),
-		}
-	case fieldtype.Checkbox:
-		// TODO cannot handle nil value; is this okay?
-		isChecked := false
-		if nilableAssignment != nil {
-			isChecked = nilableAssignment.BoolValue
-		}
-		field = &wx.Checkbox{
-			Label:     wx.Tu(attributex.Edges.Property.Name),
-			Name:      "CheckboxValue",
-			IsChecked: isChecked,
-			HTMXAttrs: htmxAttrsFn("change"),
-		}
-	default:
+	field, found := fieldByProperty(attributex.Edges.Property, nilableAssignment, htmxAttrsFn)
+	if !found {
 		log.Println("unknown property type: ", attributex.Edges.Property.Type)
-		return &wx.Column{} // TODO is there a better option
+		return &wx.Column{}
 	}
 
 	children := []wx.IWidget{
-		/*&wx.Label{
-			Text: wx.Tu(attributex.Edges.Property.Name),
-			Type: wx.LabelTypeLg,
-		},*/
 		&wx.Container{
 			Child: field,
 			Gap:   true,
 		},
 	}
 
+	hasDateValue := false
+	if nilableAssignment != nil && attributex.Edges.Property.Type == fieldtype.Date && !nilableAssignment.DateValue.IsZero() {
+		hasDateValue = true
+	}
 	if attributex.Edges.Property.Type == fieldtype.Date && !hasDateValue {
 		suggestions := qq.dateSuggestions(ctx, filex)
 		if len(suggestions) > 0 {
-			children = append(children, qq.dateSuggestionChips(ctx, dateFieldID, suggestions))
+			fieldID := field.(wx.IWidgetWithID).GetID()
+			children = append(children, qq.dateSuggestionChips(ctx, fieldID, suggestions))
 		}
 	}
 
@@ -549,6 +474,6 @@ func (qq *FileAttributesPartial) tagBadge(
 	return chips
 }
 
-func (qq *FileAttributesPartial) FilePropertiesID() string {
-	return "fileProperties"
+func (qq *FileAttributesPartial) FileAttributesID() string {
+	return "fileAttributes"
 }

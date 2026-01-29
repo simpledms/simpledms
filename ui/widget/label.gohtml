@@ -1,3 +1,8 @@
 {{- define "Label" }}
-	<label {{ if .For }}for="{{ .For }}"{{ end }} class="{{ .Type }} block text-on-surface">{{ render .GetContext .Text }}</label>
+	{{ if .For }}
+		<label for="{{ .For }}" class="{{ .Type }} block text-on-surface">{{ render .GetContext .Text }}</label>
+	{{ else }}
+		{{/* label is invalid without `for` attribute */}}
+		<span class="{{ .Type }} block text-on-surface">{{ render .GetContext .Text }}</span>
+	{{ end }}
 {{ end }}

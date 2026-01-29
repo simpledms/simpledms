@@ -4,8 +4,8 @@ const plugin = require('tailwindcss/plugin');
 
 module.exports = {
 	content: [
-		'../../ui/widget/**/*.gohtml',
-		'../../ui/widget/**/*.go',
+		//'../../ui/widget/**/*.gohtml',
+		//'../../ui/widget/**/*.go',
 		'./ui/widget/**/*.gohtml',
 		'./ui/widget/**/*.go'
 	],

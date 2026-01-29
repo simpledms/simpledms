@@ -57,6 +57,8 @@ func (qq *FormHelper[T]) SetIsMultipartFormData(val bool) {
 	qq.isMultipartFormData = val
 }
 
+// usually you don't want to overwrite this and create a separate form action instead;
+// this is mainly a helper for forms that can be rendered from the XData or XFormData struct
 func (qq *FormHelper[T]) FormHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	// TODO do prep if necessary... (filter selects, etc.)
 	// TODO set default value, for example for current

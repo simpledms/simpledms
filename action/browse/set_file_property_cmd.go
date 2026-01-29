@@ -2,8 +2,6 @@ package browse
 
 import (
 	"log"
-	"math"
-	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -15,7 +13,6 @@ import (
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/timex"
 )
@@ -92,22 +89,8 @@ func (qq *SetFilePropertyCmd) Handler(
 			SetFileID(filex.Data.ID).
 			SetPropertyID(data.PropertyID)
 
-		// duplicate below
-		// TODO move to propertym?
-		switch propertyx.Type {
-		case fieldtype.Text:
-			query.SetTextValue(data.TextValue)
-		case fieldtype.Number:
-			query.SetNumberValue(data.NumberValue)
-		case fieldtype.Money:
-			val := int(math.Round(data.MoneyValue * 100)) // convert to minor unit // TODO is this good enough?
-			query.SetNumberValue(val)
-		case fieldtype.Date:
-			query.SetDateValue(data.DateValue)
-		case fieldtype.Checkbox:
-			query.SetBoolValue(data.CheckboxValue)
-		default:
-			return e.NewHTTPErrorf(http.StatusBadRequest, "Unsupported field type.")
+		if err := applyPropertyValuesToCreate(query, propertyx.Type, filePropertyValuesFromSet(data)); err != nil {
+			return err
 		}
 
 		query.ExecX(ctx)
@@ -120,21 +103,8 @@ func (qq *SetFilePropertyCmd) Handler(
 	} else {
 		query := nilableAssignment.Update()
 
-		// duplicate above
-		switch propertyx.Type {
-		case fieldtype.Text:
-			query.SetTextValue(data.TextValue)
-		case fieldtype.Number:
-			query.SetNumberValue(data.NumberValue)
-		case fieldtype.Money:
-			val := int(math.Round(data.MoneyValue * 100)) // convert to minor unit // TODO is this good enough?
-			query.SetNumberValue(val)
-		case fieldtype.Date:
-			query.SetDateValue(data.DateValue)
-		case fieldtype.Checkbox:
-			query.SetBoolValue(data.CheckboxValue)
-		default:
-			return e.NewHTTPErrorf(http.StatusBadRequest, "Unsupported field type.")
+		if err := applyPropertyValuesToUpdate(query, propertyx.Type, filePropertyValuesFromSet(data)); err != nil {
+			return err
 		}
 
 		query.SaveX(ctx)
