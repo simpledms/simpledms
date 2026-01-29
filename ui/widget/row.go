@@ -7,5 +7,6 @@ type Row struct {
 
 	// TopAlign   bool // TODO wrap in Config or via Prefix?
 	// FullHeight bool
-	Children IWidget
+	JustifyEnd bool
+	Children   IWidget
 }

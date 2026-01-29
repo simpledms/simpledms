@@ -11,6 +11,11 @@ import (
 
 type IWidget interface{}
 
+// TODO find a betteRsolution
+type IWidgetWithID interface {
+	GetID() string
+}
+
 // TODO is it possible to not export this? would TemplateName still be accessible?
 type Widget[T any] struct {
 	// be careful, if ID is manually defined on a widget, for example ListItem, it has

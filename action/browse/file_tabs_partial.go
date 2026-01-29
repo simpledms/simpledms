@@ -86,7 +86,7 @@ func (qq *FileTabsPartial) Widget(
 			ctx,
 			qq.actions.FileAttributesPartial.Data(fileID),
 		)
-	case "properties":
+	case "fields":
 		// TODO
 		activeTabContent = qq.actions.FilePropertiesPartial.Widget(
 			ctx,
@@ -156,7 +156,7 @@ func (qq *FileTabsPartial) Widget(
 				Label: wx.T("Fields"),
 				HTMXAttrs: wx.HTMXAttrs{
 					HxPost:   qq.Endpoint(),
-					HxVals:   util.JSON(qq.Data(dirID, fileID, "properties")),
+					HxVals:   util.JSON(qq.Data(dirID, fileID, "fields")),
 					HxTarget: "#" + tabsID,
 					HxSwap:   "outerHTML",
 				},

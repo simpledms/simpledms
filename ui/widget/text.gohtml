@@ -1,9 +1,9 @@
 {{- /* spacing sometimes for text values matters, thus aggressive removal of spacing */ -}}
 {{- define "Text" -}}
 	{{- if .Wrap -}}
-		<span id="{{ .GetID }}" class="{{ if .IsBold }}font-bold{{ end }}">{{ .GetString }}</span>
+		<span id="{{ .GetID }}" class="{{ if .IsBold }}font-bold{{ end }} {{ if .IsSmall }}body-sm{{ end }}">{{ .GetString }}</span>
     {{- else if .IsParagraph -}}
-		<p id="{{ .GetID }}" class="{{ if .IsBold }}font-bold{{ end }}">{{ .GetString }}</p>
+		<p id="{{ .GetID }}" class="{{ if .IsBold }}font-bold{{ end }} {{ if .IsSmall }}body-sm{{ end }}">{{ .GetString }}</p>
 	{{- else -}}
 		{{ .GetString }}
 	{{- end -}}

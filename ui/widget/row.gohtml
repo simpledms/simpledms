@@ -1,6 +1,7 @@
 {{- define "Row" }}
 	<div id="{{ .GetID }}" class="flex flex-row gap-x-2 items-center
 			{{ if .OverflowScroll }}overflow-scroll{{ end }}
+			{{ if .JustifyEnd }}justify-end{{ end }}
 	">
 		{{ render .GetContext .Children }}
 	</div>
