@@ -84,10 +84,16 @@
 			(function() {
 				let dialog = document.getElementById('{{ .GetID }}');
 
-				if (window.matchMedia('(min-width: 1200px)').matches) {
-					// necessary to prevent rendering of snackbar in side sheet...
-					dialog.classList.remove('js-dialog');
-				}
+				{{ if .IsSideSheetLayout }}
+					{{/*
+						important that not for stable layout because then it would hide snackbars, for example
+						when adding attributes to document types
+					*/}}
+					if (window.matchMedia('(min-width: 1200px)').matches) {
+						// necessary to prevent rendering of snackbar in side sheet...
+						dialog.classList.remove('js-dialog');
+					}
+				{{ end }}
 
 				dialog.addEventListener("htmx:afterRequest", (e) => {
 					if (e.detail.successful && e.detail.requestConfig.triggeringEvent.type === 'submit') {
