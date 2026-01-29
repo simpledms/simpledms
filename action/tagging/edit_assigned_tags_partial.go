@@ -80,7 +80,8 @@ func (qq *EditAssignedTagsPartial) bottomAppBar(
 	return &wx.BottomAppBar{
 		Actions: []wx.IWidget{
 			&wx.IconButton{
-				Icon: "list_alt",
+				Icon:    "list_alt",
+				Tooltip: wx.T("Show assigned tags"),
 				HTMXAttrs: wx.HTMXAttrs{
 					HxPost: qq.actions.AssignedTags.List.EndpointWithParams(actionx.ResponseWrapperNone, hxTarget),
 					HxVals: util.JSON(qq.actions.AssignedTags.List.Data(data.FileID)),

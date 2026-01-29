@@ -145,7 +145,8 @@ func (qq *TrashWithSelectionPage) filePreview(
 func (qq *TrashWithSelectionPage) previewAppBar(ctx ctxx.Context, title *wx.Text, filex *model.File) *wx.AppBar {
 	return &wx.AppBar{
 		Leading: &wx.IconButton{
-			Icon: "close",
+			Icon:    "close",
+			Tooltip: wx.T("Close preview"),
 			HTMXAttrs: wx.HTMXAttrs{
 				HxGet:     route.TrashRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
 				HxOn:      event.DetailsClosed.HxOn("click"),
@@ -157,7 +158,8 @@ func (qq *TrashWithSelectionPage) previewAppBar(ctx ctxx.Context, title *wx.Text
 		},
 		Actions: []wx.IWidget{
 			&wx.IconButton{
-				Icon: "description",
+				Icon:    "description",
+				Tooltip: wx.T("Show details"),
 				HTMXAttrs: wx.HTMXAttrs{
 					DialogID: qq.actions.FileDetailsSideSheetPartial.ID(),
 				},
@@ -176,7 +178,8 @@ func (qq *TrashWithSelectionPage) previewAppBar(ctx ctxx.Context, title *wx.Text
 				IsNoColor: true,
 				Filename:  filex.Filename(ctx),
 				Child: &wx.IconButton{
-					Icon: "download",
+					Icon:    "download",
+					Tooltip: wx.T("Download"),
 				},
 			},
 		},

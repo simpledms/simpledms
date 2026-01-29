@@ -154,7 +154,8 @@ func NewMainMenu(ctx ctxx.Context) *wx.IconButton {
 	}
 
 	return &wx.IconButton{
-		Icon: "menu",
+		Icon:    "menu",
+		Tooltip: wx.T("Open main menu"),
 		Children: &wx.Menu{
 			Position: wx.PositionRight,
 			Items:    items,

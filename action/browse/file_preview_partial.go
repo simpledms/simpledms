@@ -122,7 +122,8 @@ func (qq *FilePreviewPartial) Widget(
 func (qq *FilePreviewPartial) appBar(ctx ctxx.Context, dirID string, title *wx.Text, filex *model.File) *wx.AppBar {
 	return &wx.AppBar{
 		Leading: &wx.IconButton{
-			Icon: "close",
+			Icon:    "close",
+			Tooltip: wx.T("Close preview"),
 			// TODO use link instead?
 			HTMXAttrs: wx.HTMXAttrs{
 				HxGet:     route2.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, dirID),
@@ -136,7 +137,8 @@ func (qq *FilePreviewPartial) appBar(ctx ctxx.Context, dirID string, title *wx.T
 		Actions: []wx.IWidget{
 			&wx.IconButton{
 				// TODO other icon if already open or hide...
-				Icon: "description", // right_panel_open, clarify, tune, description, info, ...?
+				Icon:    "description", // right_panel_open, clarify, tune, description, info, ...?
+				Tooltip: wx.T("Show details"),
 				HTMXAttrs: wx.HTMXAttrs{
 					DialogID: qq.actions.FileDetailsSideSheetPartial.ID(),
 				},
@@ -146,7 +148,8 @@ func (qq *FilePreviewPartial) appBar(ctx ctxx.Context, dirID string, title *wx.T
 				IsNoColor: true,
 				Filename:  filex.Filename(ctx),
 				Child: &wx.IconButton{
-					Icon: "download",
+					Icon:    "download",
+					Tooltip: wx.T("Download"),
 				},
 			},
 			/*

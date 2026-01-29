@@ -42,7 +42,8 @@ type Dialog struct {
 func (qq *Dialog) GetCloseIconButton() *IconButton {
 	if qq.closeIconButton == nil {
 		qq.closeIconButton = &IconButton{
-			Icon: "close",
+			Icon:    "close",
+			Tooltip: T("Close dialog"),
 			// PopoverTarget:       qq.ID,
 			// PopoverTargetAction: "hide",
 		}
