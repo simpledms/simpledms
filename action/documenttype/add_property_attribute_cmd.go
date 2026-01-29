@@ -2,15 +2,19 @@ package documenttype
 
 import (
 	"fmt"
+	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/enttenant/attribute"
+	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/model/common/attributetype"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -60,6 +64,20 @@ func (qq *AddPropertyAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 	data, err := autil.FormData[AddPropertyAttributeCmdFormData](rw, req, ctx)
 	if err != nil {
 		return err
+	}
+
+	exists := ctx.SpaceCtx().TTx.Attribute.Query().
+		Where(
+			attribute.DocumentTypeID(data.DocumentTypeID),
+			attribute.PropertyID(data.PropertyID),
+		).
+		ExistX(ctx)
+	if exists {
+		propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
+		return e.NewHTTPErrorWithSnackbar(
+			http.StatusBadRequest,
+			wx.NewSnackbarf("Field «%s» is already added to this document type.", propertyx.Name),
+		)
 	}
 
 	attributex := ctx.TenantCtx().TTx.Attribute.Create().

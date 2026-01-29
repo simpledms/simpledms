@@ -75,7 +75,7 @@ func (qq *FileListItemPartial) Widget(
 	filex *enttenant.File,
 	parentFullPath string, // only necessary with breadcrumbs
 	isSelected bool,
-// hideContextMenu bool,
+	// hideContextMenu bool,
 	showBreadcrumbs bool,
 ) *wx.ListItem {
 	if filex.IsDirectory {
@@ -182,7 +182,7 @@ func (qq *FileListItemPartial) fileListItem(
 	fileWithChildren *enttenant.File,
 	parentFullPath string, // only necessary with breadcrumbs
 	isSelected bool,
-// hideContextMenu bool,
+	// hideContextMenu bool,
 	showBreadcrumbs bool,
 ) *wx.ListItem {
 	htmxAttrs := wx.HTMXAttrs{
