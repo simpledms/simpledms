@@ -17,6 +17,7 @@ func NewFullscreenPopoverDialogAppBar(title string, closePopoverTarget string, s
 	return &wx.AppBar{
 		Leading: &wx.IconButton{
 			Icon:                "close",
+			Tooltip:             wx.T("Close"),
 			PopoverTarget:       closePopoverTarget,
 			PopoverTargetAction: "hide",
 		},
@@ -30,7 +31,8 @@ func NewFullscreenPopoverDialogAppBar(title string, closePopoverTarget string, s
 func NewFullscreenDialogAppBar(title *wx.Text, closeButtonHref string, actions []wx.IWidget) *wx.AppBar {
 	return &wx.AppBar{
 		Leading: &wx.IconButton{
-			Icon: "close",
+			Icon:    "close",
+			Tooltip: wx.T("Close"),
 			HTMXAttrs: wx.HTMXAttrs{
 				HxGet: closeButtonHref,
 			},

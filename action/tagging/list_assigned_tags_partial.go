@@ -125,7 +125,8 @@ func (qq *ListAssignedTagsPartial) List(
 	bottomAppBar := &wx.BottomAppBar{
 		Actions: []wx.IWidget{
 			&wx.IconButton{
-				Icon: "edit_square",
+				Icon:    "edit_square",
+				Tooltip: wx.T("Edit assigned tags"),
 				HTMXAttrs: wx.HTMXAttrs{
 					HxPost: qq.actions.AssignedTags.Edit.EndpointWithParams(actionx.ResponseWrapperNone, hxTarget),
 					HxVals: util.JSON(qq.actions.AssignedTags.Edit.Data(fileID, 0)),

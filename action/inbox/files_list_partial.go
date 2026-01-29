@@ -313,6 +313,7 @@ func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.
 		Actions: []wx.IWidget{
 			&wx.IconButton{
 				Icon:     "sort",
+				Tooltip:  wx.T("Sort files"),
 				Children: NewSortListContextMenuPartial(qq.actions).Widget(ctx, &state.FilesListPartialState),
 			},
 		},

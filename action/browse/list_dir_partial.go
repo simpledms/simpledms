@@ -644,7 +644,8 @@ func (qq *ListDirPartial) appBar(
 			panic(err)
 		}
 		leadingButton = &wx.IconButton{
-			Icon: "arrow_back",
+			Icon:    "arrow_back",
+			Tooltip: wx.T("Back to parent folder"),
 			HTMXAttrs: wx.HTMXAttrs{
 				HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, parent.Data.PublicID.String()),
 				HxHeaders: autil.ResetStateHeader(),

@@ -87,7 +87,8 @@ func (qq *FilePartial) Widget(
 			[]wx.IWidget{
 				&wx.IconButton{
 					// TODO other icon if already open or hide...
-					Icon: "description", // right_panel_open, clarify, tune, description, info, ...?
+					Icon:    "description", // right_panel_open, clarify, tune, description, info, ...?
+					Tooltip: wx.T("Show details"),
 					HTMXAttrs: wx.HTMXAttrs{
 						DialogID: qq.SideSheetID(),
 					},
@@ -97,7 +98,8 @@ func (qq *FilePartial) Widget(
 					IsNoColor: true,
 					Filename:  filex.Filename(ctx),
 					Child: &wx.IconButton{
-						Icon: "download",
+						Icon:    "download",
+						Tooltip: wx.T("Download"),
 					},
 				},
 			},

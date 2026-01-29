@@ -77,7 +77,8 @@ func (qq *DetailsPartial) Widget(
 func (qq *DetailsPartial) appBar(ctx ctxx.Context, documentTypex *enttenant.DocumentType) *wx.AppBar {
 	return &wx.AppBar{
 		Leading: &wx.IconButton{
-			Icon: "close",
+			Icon:    "close",
+			Tooltip: wx.T("Close details"),
 			// TODO use link instead?
 			HTMXAttrs: wx.HTMXAttrs{
 				HxGet:     route.ManageDocumentTypes(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
