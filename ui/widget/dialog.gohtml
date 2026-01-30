@@ -34,7 +34,7 @@
 			 {{ if .IsSideSheetLayout }}lg:my-0 lg:mr-0 lg:border-0 lg:border-l lg:rounded-none lg:drop-shadow-none lg:fixed lg:top-0 lg:max-h-full{{ end }}
 			{{/* backdrop:bg-surface-variant */}}
 			 md:max-h-[calc(100dvh-3rem)] md:rounded-xl md:bg-surface-container-lowest
-			  md:min-w-[17.5rem] md:max-w-[35rem]
+			 md:min-w-[17.5rem] {{ if .IsWideWidth }}md:max-w-full lg:max-w-screen-exp{{ else }}md:max-w-[35rem]{{ end }}
 			 {{ if .IsDefaultLayout }}
 			 	{{/* was md:w-fit before 28 Nov 24, not sure if w-full is good fit for everything, especially confirm dialog */}}
 			 	md:w-full md:h-fit

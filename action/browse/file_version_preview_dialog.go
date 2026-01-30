@@ -84,6 +84,7 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 		ctx,
 		&wx.Dialog{
 			Layout:   wx.DialogLayoutStable,
+			Width:    wx.DialogWidthWide,
 			Headline: wx.T("Version preview"),
 			HeaderActions: []wx.IWidget{
 				&wx.Link{
