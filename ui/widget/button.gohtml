@@ -25,7 +25,7 @@
 		<div class="{{ if .IsTonal }}state-layer-on-secondary-container{{ else }}state-layer-primary{{ end }}
 				flex gap-x-2 center-aligned
 				{{ if .Icon }}pl-4 pr-6{{ else }}px-6{{ end }}
-				{{ if .IsText }}text-primary{{ end }}{{/* for icon */}}
+				{{ if .IsText | or .IsElevated }}text-primary{{ end }}{{/* for icon */}}
 		">
             {{ render .GetContext .Icon }}
             {{ render .GetContext .Badge }}
