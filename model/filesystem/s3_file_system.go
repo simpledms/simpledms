@@ -169,7 +169,7 @@ func (qq *S3FileSystem) UnsafeOpenFile(ctx context.Context, x25519Identity *age.
 // caller has to close fileToSave
 func (qq *S3FileSystem) AddFile(
 	ctx ctxx.Context,
-// fileToSave multipart.File,
+	// fileToSave multipart.File,
 	fileToSave io.Reader,
 	filename string,
 	isInInbox bool,
@@ -296,7 +296,7 @@ func (qq *S3FileSystem) addFile(
 	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
 		// SetPublicID(entx.NewCIText(storedFilePublicID)).
 		SetFilename(filename).
-		SetSize(fileSize). // fileInfo.Size is gzipped size
+		SetSize(fileSize).               // fileInfo.Size is gzipped size
 		SetSizeInStorage(fileInfo.Size). // gzipped size
 		SetStorageType(storagetype.S3).
 		SetBucketName(qq.bucketName).
@@ -331,7 +331,7 @@ func (qq *S3FileSystem) addFile(
 
 func (qq *S3FileSystem) saveFile(
 	ctx context.Context,
-// passed in because PersistTemporaryTenantFile has no TenantContext
+	// passed in because PersistTemporaryTenantFile has no TenantContext
 	x25519Identity *age.X25519Identity,
 	fileToSave io.Reader,
 	originalFilename string,
@@ -576,7 +576,7 @@ func (qq *S3FileSystem) SaveTemporaryFileToAccount(
 	temporaryFile := ctx.MainCtx().MainTx.TemporaryFile.Create().
 		SetOwner(ctx.MainCtx().Account).
 		SetFilename(originalFilename).
-		SetSize(fileSize). // fileInfo.Size is gzipped size
+		SetSize(fileSize).               // fileInfo.Size is gzipped size
 		SetSizeInStorage(fileInfo.Size). // gzipped size
 		SetStorageType(storagetype.S3).
 		SetBucketName(qq.bucketName).
@@ -624,7 +624,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
 		// SetPublicID(entx.NewCIText(storedFilePublicID)).
 		SetFilename(tmpFile.Filename).
-		SetSize(tmpFile.Size). // fileInfo.Size is gzipped size
+		SetSize(tmpFile.Size).                   // fileInfo.Size is gzipped size
 		SetSizeInStorage(tmpFile.SizeInStorage). // gzipped size
 		SetStorageType(storagetype.S3).
 		SetBucketName(qq.bucketName).
@@ -785,6 +785,13 @@ func (qq *S3FileSystem) addFileVersion(ctx ctxx.Context, filex *enttenant.File, 
 		SetStoredFileID(storedFilex.ID).
 		SetVersionNumber(versionNumber).
 		SaveX(ctx)
+
+	filex.Update().
+		SetOcrContent("").
+		ClearOcrSuccessAt().
+		SetOcrRetryCount(0).
+		SetOcrLastTriedAt(time.Time{}).
+		ExecX(ctx)
 	return nil
 }
 
