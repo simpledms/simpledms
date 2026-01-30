@@ -4,6 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/uix/event"
@@ -55,6 +56,18 @@ func (qq *EditSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 		SetDescription(data.Description).
 		Where(space.PublicID(entx.NewCIText(data.SpaceID))).
 		ExecX(ctx)
+
+	spacex := ctx.TenantCtx().TTx.Space.Query().OnlyX(ctx)
+	spaceCtx := ctxx.NewSpaceContext(ctx.TenantCtx(), spacex)
+
+	ctx.TenantCtx().TTx.File.Update().
+		SetName(data.Name).
+		Where(
+			file.SpaceID(spacex.ID),
+			file.IsDirectory(true),
+			file.IsRootDir(true),
+		).
+		ExecX(spaceCtx)
 
 	rw.Header().Set("HX-Trigger", event.SpaceUpdated.String())
 	rw.AddRenderables(wx.NewSnackbarf("Changes saved."))
