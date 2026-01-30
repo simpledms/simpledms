@@ -65,6 +65,9 @@ func (qq *Snackbar) GetClass() string {
 }
 
 func (qq *Snackbar) GetAutoDismissTimeout() int64 {
+	if true {
+		return 10000000
+	}
 	if qq.customAutoDismissTimeoutInMs > 0 {
 		return qq.customAutoDismissTimeoutInMs
 	}

@@ -22,11 +22,15 @@
 	 	TODO as of 04 Sept 24 it could match two popovers because showFilePopover is no child of
 	 	     div#popovers, it's a child of #content
 
+		:first-child is necessary when multiple dialogs are stacked over each other, for example
+		when adding field values to a file, then the dialog on the top must be selected, which
+		is the first
+
 		<div hx-swap-oob="beforeend:div[popover].max:not(:has(div[popover].max)),body:not(:has(div[popover].max))">
 	*/}}
 
 	{{ $ctx := .GetContext }}
-	<div id="{{ .GetID }}" hx-swap-oob="beforeend:dialog[open].js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))">
+	<div id="{{ .GetID }}" hx-swap-oob="beforeend:dialog[open]:first-child.js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))">
 		{{/* snackbar class is used as selector */}}
 		<div popover="manual" class="js-snackbar bottom-24 flex top-auto group mx-auto left-4 right-4 max-w-md
 	bg-inverse-surface drop-shadow rounded-xs p-0 hover:cursor-pointer {{ .GetClass }}">
@@ -64,9 +68,11 @@
 						if (!entry.isIntersecting) { // no longer visible
 							// [open] is necessary because if KeepInDOMOnClose is set, closed dialogs are kept in DOM
 							// and one of them could get selected
+							//
+							// see comment above for info on :first-child
 							document
 								//.querySelector('div[popover].max:not(:has(div[popover].max)),body:not(:has(div[popover].max))')
-								.querySelector('dialog[open].js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))')
+								.querySelector('dialog[open]:first-child.js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))')
 								.insertAdjacentElement('beforeend', snackbar); // was afterbegin, not sure why
 						}
 					})
