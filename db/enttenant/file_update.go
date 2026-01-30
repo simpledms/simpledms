@@ -14,6 +14,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
@@ -449,6 +450,21 @@ func (_u *FileUpdate) AddProperties(v ...*Property) *FileUpdate {
 	return _u.AddPropertyIDs(ids...)
 }
 
+// AddFileVersionIDs adds the "file_versions" edge to the FileVersion entity by IDs.
+func (_u *FileUpdate) AddFileVersionIDs(ids ...int64) *FileUpdate {
+	_u.mutation.AddFileVersionIDs(ids...)
+	return _u
+}
+
+// AddFileVersions adds the "file_versions" edges to the FileVersion entity.
+func (_u *FileUpdate) AddFileVersions(v ...*FileVersion) *FileUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileVersionIDs(ids...)
+}
+
 // AddTagAssignmentIDs adds the "tag_assignment" edge to the TagAssignment entity by IDs.
 func (_u *FileUpdate) AddTagAssignmentIDs(ids ...int64) *FileUpdate {
 	_u.mutation.AddTagAssignmentIDs(ids...)
@@ -590,6 +606,27 @@ func (_u *FileUpdate) RemoveProperties(v ...*Property) *FileUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemovePropertyIDs(ids...)
+}
+
+// ClearFileVersions clears all "file_versions" edges to the FileVersion entity.
+func (_u *FileUpdate) ClearFileVersions() *FileUpdate {
+	_u.mutation.ClearFileVersions()
+	return _u
+}
+
+// RemoveFileVersionIDs removes the "file_versions" edge to FileVersion entities by IDs.
+func (_u *FileUpdate) RemoveFileVersionIDs(ids ...int64) *FileUpdate {
+	_u.mutation.RemoveFileVersionIDs(ids...)
+	return _u
+}
+
+// RemoveFileVersions removes "file_versions" edges to FileVersion entities.
+func (_u *FileUpdate) RemoveFileVersions(v ...*FileVersion) *FileUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileVersionIDs(ids...)
 }
 
 // ClearTagAssignment clears all "tag_assignment" edges to the TagAssignment entity.
@@ -831,6 +868,10 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(storedfile.FieldID, field.TypeInt64),
 			},
 		}
+		createE := &FileVersionCreate{config: _u.config, mutation: newFileVersionMutation(_u.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVersionsIDs(); len(nodes) > 0 && !_u.mutation.VersionsCleared() {
@@ -847,6 +888,10 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		createE := &FileVersionCreate{config: _u.config, mutation: newFileVersionMutation(_u.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.VersionsIDs(); len(nodes) > 0 {
@@ -863,6 +908,10 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		createE := &FileVersionCreate{config: _u.config, mutation: newFileVersionMutation(_u.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.ChildrenCleared() {
@@ -1051,6 +1100,51 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(property.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileVersionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.FileVersionsTable,
+			Columns: []string{file.FileVersionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(fileversion.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFileVersionsIDs(); len(nodes) > 0 && !_u.mutation.FileVersionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.FileVersionsTable,
+			Columns: []string{file.FileVersionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(fileversion.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileVersionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.FileVersionsTable,
+			Columns: []string{file.FileVersionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(fileversion.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1583,6 +1677,21 @@ func (_u *FileUpdateOne) AddProperties(v ...*Property) *FileUpdateOne {
 	return _u.AddPropertyIDs(ids...)
 }
 
+// AddFileVersionIDs adds the "file_versions" edge to the FileVersion entity by IDs.
+func (_u *FileUpdateOne) AddFileVersionIDs(ids ...int64) *FileUpdateOne {
+	_u.mutation.AddFileVersionIDs(ids...)
+	return _u
+}
+
+// AddFileVersions adds the "file_versions" edges to the FileVersion entity.
+func (_u *FileUpdateOne) AddFileVersions(v ...*FileVersion) *FileUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileVersionIDs(ids...)
+}
+
 // AddTagAssignmentIDs adds the "tag_assignment" edge to the TagAssignment entity by IDs.
 func (_u *FileUpdateOne) AddTagAssignmentIDs(ids ...int64) *FileUpdateOne {
 	_u.mutation.AddTagAssignmentIDs(ids...)
@@ -1724,6 +1833,27 @@ func (_u *FileUpdateOne) RemoveProperties(v ...*Property) *FileUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemovePropertyIDs(ids...)
+}
+
+// ClearFileVersions clears all "file_versions" edges to the FileVersion entity.
+func (_u *FileUpdateOne) ClearFileVersions() *FileUpdateOne {
+	_u.mutation.ClearFileVersions()
+	return _u
+}
+
+// RemoveFileVersionIDs removes the "file_versions" edge to FileVersion entities by IDs.
+func (_u *FileUpdateOne) RemoveFileVersionIDs(ids ...int64) *FileUpdateOne {
+	_u.mutation.RemoveFileVersionIDs(ids...)
+	return _u
+}
+
+// RemoveFileVersions removes "file_versions" edges to FileVersion entities.
+func (_u *FileUpdateOne) RemoveFileVersions(v ...*FileVersion) *FileUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileVersionIDs(ids...)
 }
 
 // ClearTagAssignment clears all "tag_assignment" edges to the TagAssignment entity.
@@ -1995,6 +2125,10 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(storedfile.FieldID, field.TypeInt64),
 			},
 		}
+		createE := &FileVersionCreate{config: _u.config, mutation: newFileVersionMutation(_u.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVersionsIDs(); len(nodes) > 0 && !_u.mutation.VersionsCleared() {
@@ -2011,6 +2145,10 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		createE := &FileVersionCreate{config: _u.config, mutation: newFileVersionMutation(_u.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.VersionsIDs(); len(nodes) > 0 {
@@ -2027,6 +2165,10 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		createE := &FileVersionCreate{config: _u.config, mutation: newFileVersionMutation(_u.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.ChildrenCleared() {
@@ -2215,6 +2357,51 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(property.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FileVersionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.FileVersionsTable,
+			Columns: []string{file.FileVersionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(fileversion.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFileVersionsIDs(); len(nodes) > 0 && !_u.mutation.FileVersionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.FileVersionsTable,
+			Columns: []string{file.FileVersionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(fileversion.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FileVersionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.FileVersionsTable,
+			Columns: []string{file.FileVersionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(fileversion.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

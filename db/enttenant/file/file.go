@@ -80,6 +80,8 @@ const (
 	EdgeTags = "tags"
 	// EdgeProperties holds the string denoting the properties edge name in mutations.
 	EdgeProperties = "properties"
+	// EdgeFileVersions holds the string denoting the file_versions edge name in mutations.
+	EdgeFileVersions = "file_versions"
 	// EdgeTagAssignment holds the string denoting the tag_assignment edge name in mutations.
 	EdgeTagAssignment = "tag_assignment"
 	// EdgePropertyAssignment holds the string denoting the property_assignment edge name in mutations.
@@ -144,6 +146,13 @@ const (
 	// PropertiesInverseTable is the table name for the Property entity.
 	// It exists in this package in order to avoid circular dependency with the "property" package.
 	PropertiesInverseTable = "properties"
+	// FileVersionsTable is the table that holds the file_versions relation/edge.
+	FileVersionsTable = "file_versions"
+	// FileVersionsInverseTable is the table name for the FileVersion entity.
+	// It exists in this package in order to avoid circular dependency with the "fileversion" package.
+	FileVersionsInverseTable = "file_versions"
+	// FileVersionsColumn is the table column denoting the file_versions relation/edge.
+	FileVersionsColumn = "file_id"
 	// TagAssignmentTable is the table that holds the tag_assignment relation/edge.
 	TagAssignmentTable = "tag_assignments"
 	// TagAssignmentInverseTable is the table name for the TagAssignment entity.
@@ -454,6 +463,20 @@ func ByProperties(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByFileVersionsCount orders the results by file_versions count.
+func ByFileVersionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFileVersionsStep(), opts...)
+	}
+}
+
+// ByFileVersions orders the results by file_versions terms.
+func ByFileVersions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFileVersionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByTagAssignmentCount orders the results by tag_assignment count.
 func ByTagAssignmentCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -549,6 +572,13 @@ func newPropertiesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PropertiesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, PropertiesTable, PropertiesPrimaryKey...),
+	)
+}
+func newFileVersionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FileVersionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, FileVersionsTable, FileVersionsColumn),
 	)
 }
 func newTagAssignmentStep() *sqlgraph.Step {

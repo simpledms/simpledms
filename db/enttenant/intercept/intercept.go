@@ -14,6 +14,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
@@ -241,6 +242,33 @@ func (f TraverseFileSearch) Traverse(ctx context.Context, q enttenant.Query) err
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *enttenant.FileSearchQuery", q)
+}
+
+// The FileVersionFunc type is an adapter to allow the use of ordinary function as a Querier.
+type FileVersionFunc func(context.Context, *enttenant.FileVersionQuery) (enttenant.Value, error)
+
+// Query calls f(ctx, q).
+func (f FileVersionFunc) Query(ctx context.Context, q enttenant.Query) (enttenant.Value, error) {
+	if q, ok := q.(*enttenant.FileVersionQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *enttenant.FileVersionQuery", q)
+}
+
+// The TraverseFileVersion type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseFileVersion func(context.Context, *enttenant.FileVersionQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseFileVersion) Intercept(next enttenant.Querier) enttenant.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseFileVersion) Traverse(ctx context.Context, q enttenant.Query) error {
+	if q, ok := q.(*enttenant.FileVersionQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *enttenant.FileVersionQuery", q)
 }
 
 // The PropertyFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -474,6 +502,8 @@ func NewQuery(q enttenant.Query) (Query, error) {
 		return &query[*enttenant.FilePropertyAssignmentQuery, predicate.FilePropertyAssignment, filepropertyassignment.OrderOption]{typ: enttenant.TypeFilePropertyAssignment, tq: q}, nil
 	case *enttenant.FileSearchQuery:
 		return &query[*enttenant.FileSearchQuery, predicate.FileSearch, filesearch.OrderOption]{typ: enttenant.TypeFileSearch, tq: q}, nil
+	case *enttenant.FileVersionQuery:
+		return &query[*enttenant.FileVersionQuery, predicate.FileVersion, fileversion.OrderOption]{typ: enttenant.TypeFileVersion, tq: q}, nil
 	case *enttenant.PropertyQuery:
 		return &query[*enttenant.PropertyQuery, predicate.Property, property.OrderOption]{typ: enttenant.TypeProperty, tq: q}, nil
 	case *enttenant.ResolvedTagAssignmentQuery:

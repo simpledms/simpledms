@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"filippo.io/age"
 	securejoin "github.com/cyphar/filepath-securejoin"
 	"github.com/minio/minio-go/v7"
@@ -19,6 +20,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/model/common/storagetype"
@@ -167,7 +169,7 @@ func (qq *S3FileSystem) UnsafeOpenFile(ctx context.Context, x25519Identity *age.
 // caller has to close fileToSave
 func (qq *S3FileSystem) AddFile(
 	ctx ctxx.Context,
-	// fileToSave multipart.File,
+// fileToSave multipart.File,
 	fileToSave io.Reader,
 	filename string,
 	isInInbox bool,
@@ -294,7 +296,7 @@ func (qq *S3FileSystem) addFile(
 	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
 		// SetPublicID(entx.NewCIText(storedFilePublicID)).
 		SetFilename(filename).
-		SetSize(fileSize).               // fileInfo.Size is gzipped size
+		SetSize(fileSize). // fileInfo.Size is gzipped size
 		SetSizeInStorage(fileInfo.Size). // gzipped size
 		SetStorageType(storagetype.S3).
 		SetBucketName(qq.bucketName).
@@ -307,9 +309,11 @@ func (qq *S3FileSystem) addFile(
 		SetSha256(fileInfo.ChecksumSHA256).
 		// SetMimeType(contentType).
 		SaveX(ctx)
-	filex.Update().
-		AddVersionIDs(storedFilex.ID).
-		SaveX(ctx)
+
+	if err := qq.addFileVersion(ctx, filex, storedFilex); err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
 	// log.Println("debug: 004a")
 
@@ -327,7 +331,7 @@ func (qq *S3FileSystem) addFile(
 
 func (qq *S3FileSystem) saveFile(
 	ctx context.Context,
-	// passed in because PersistTemporaryTenantFile has no TenantContext
+// passed in because PersistTemporaryTenantFile has no TenantContext
 	x25519Identity *age.X25519Identity,
 	fileToSave io.Reader,
 	originalFilename string,
@@ -572,7 +576,7 @@ func (qq *S3FileSystem) SaveTemporaryFileToAccount(
 	temporaryFile := ctx.MainCtx().MainTx.TemporaryFile.Create().
 		SetOwner(ctx.MainCtx().Account).
 		SetFilename(originalFilename).
-		SetSize(fileSize).               // fileInfo.Size is gzipped size
+		SetSize(fileSize). // fileInfo.Size is gzipped size
 		SetSizeInStorage(fileInfo.Size). // gzipped size
 		SetStorageType(storagetype.S3).
 		SetBucketName(qq.bucketName).
@@ -620,7 +624,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
 		// SetPublicID(entx.NewCIText(storedFilePublicID)).
 		SetFilename(tmpFile.Filename).
-		SetSize(tmpFile.Size).                   // fileInfo.Size is gzipped size
+		SetSize(tmpFile.Size). // fileInfo.Size is gzipped size
 		SetSizeInStorage(tmpFile.SizeInStorage). // gzipped size
 		SetStorageType(storagetype.S3).
 		SetBucketName(qq.bucketName).
@@ -633,9 +637,10 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 		SetSha256(tmpFile.Sha256).
 		SaveX(ctx)
 
-	filex.Update().
-		AddVersionIDs(storedFilex.ID).
-		SaveX(ctx)
+	if err := qq.addFileVersion(ctx, filex, storedFilex); err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
 	// TODO not very clean; only in case contentType is empty
 	_, err := qq.UpdateMimeType(ctx, false, model.NewStoredFile(storedFilex))
@@ -759,6 +764,27 @@ func (qq *S3FileSystem) PersistTemporaryTenantFile(
 		return err
 	}
 
+	return nil
+}
+
+func (qq *S3FileSystem) addFileVersion(ctx ctxx.Context, filex *enttenant.File, storedFilex *enttenant.StoredFile) error {
+	latestVersion, err := ctx.TenantCtx().TTx.FileVersion.Query().
+		Where(fileversion.FileID(filex.ID)).
+		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
+		First(ctx)
+	if err != nil && !enttenant.IsNotFound(err) {
+		log.Println(err)
+		return err
+	}
+	versionNumber := 1
+	if err == nil {
+		versionNumber = latestVersion.VersionNumber + 1
+	}
+	ctx.TenantCtx().TTx.FileVersion.Create().
+		SetFileID(filex.ID).
+		SetStoredFileID(storedFilex.ID).
+		SetVersionNumber(versionNumber).
+		SaveX(ctx)
 	return nil
 }
 

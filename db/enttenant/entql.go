@@ -9,6 +9,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
@@ -27,7 +28,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 14)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 15)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   attribute.Table,
@@ -158,6 +159,23 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[6] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   fileversion.Table,
+			Columns: fileversion.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeInt64,
+				Column: fileversion.FieldID,
+			},
+		},
+		Type: "FileVersion",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			fileversion.FieldFileID:        {Type: field.TypeInt64, Column: fileversion.FieldFileID},
+			fileversion.FieldStoredFileID:  {Type: field.TypeInt64, Column: fileversion.FieldStoredFileID},
+			fileversion.FieldVersionNumber: {Type: field.TypeInt, Column: fileversion.FieldVersionNumber},
+			fileversion.FieldNote:          {Type: field.TypeString, Column: fileversion.FieldNote},
+		},
+	}
+	graph.Nodes[7] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   property.Table,
 			Columns: property.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -173,7 +191,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			property.FieldUnit:    {Type: field.TypeString, Column: property.FieldUnit},
 		},
 	}
-	graph.Nodes[7] = &sqlgraph.Node{
+	graph.Nodes[8] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:       resolvedtagassignment.Table,
 			Columns:     resolvedtagassignment.Columns,
@@ -186,7 +204,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			resolvedtagassignment.FieldSpaceID: {Type: field.TypeInt64, Column: resolvedtagassignment.FieldSpaceID},
 		},
 	}
-	graph.Nodes[8] = &sqlgraph.Node{
+	graph.Nodes[9] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   space.Table,
 			Columns: space.Columns,
@@ -206,7 +224,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			space.FieldIsFolderMode: {Type: field.TypeBool, Column: space.FieldIsFolderMode},
 		},
 	}
-	graph.Nodes[9] = &sqlgraph.Node{
+	graph.Nodes[10] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   spaceuserassignment.Table,
 			Columns: spaceuserassignment.Columns,
@@ -227,7 +245,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			spaceuserassignment.FieldIsDefault: {Type: field.TypeBool, Column: spaceuserassignment.FieldIsDefault},
 		},
 	}
-	graph.Nodes[10] = &sqlgraph.Node{
+	graph.Nodes[11] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   storedfile.Table,
 			Columns: storedfile.Columns,
@@ -257,7 +275,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			storedfile.FieldDeletedTemporaryFileAt:     {Type: field.TypeTime, Column: storedfile.FieldDeletedTemporaryFileAt},
 		},
 	}
-	graph.Nodes[11] = &sqlgraph.Node{
+	graph.Nodes[12] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tag.Table,
 			Columns: tag.Columns,
@@ -276,7 +294,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tag.FieldGroupID: {Type: field.TypeInt64, Column: tag.FieldGroupID},
 		},
 	}
-	graph.Nodes[12] = &sqlgraph.Node{
+	graph.Nodes[13] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tagassignment.Table,
 			Columns: tagassignment.Columns,
@@ -292,7 +310,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tagassignment.FieldTagID:   {Type: field.TypeInt64, Column: tagassignment.FieldTagID},
 		},
 	}
-	graph.Nodes[13] = &sqlgraph.Node{
+	graph.Nodes[14] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -512,6 +530,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Property",
 	)
 	graph.MustAddE(
+		"file_versions",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.FileVersionsTable,
+			Columns: []string{file.FileVersionsColumn},
+			Bidi:    false,
+		},
+		"File",
+		"FileVersion",
+	)
+	graph.MustAddE(
 		"tag_assignment",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -570,6 +600,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"FilePropertyAssignment",
 		"Property",
+	)
+	graph.MustAddE(
+		"file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   fileversion.FileTable,
+			Columns: []string{fileversion.FileColumn},
+			Bidi:    false,
+		},
+		"FileVersion",
+		"File",
+	)
+	graph.MustAddE(
+		"stored_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   fileversion.StoredFileTable,
+			Columns: []string{fileversion.StoredFileColumn},
+			Bidi:    false,
+		},
+		"FileVersion",
+		"StoredFile",
 	)
 	graph.MustAddE(
 		"space",
@@ -774,6 +828,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"StoredFile",
 		"File",
+	)
+	graph.MustAddE(
+		"file_versions",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   storedfile.FileVersionsTable,
+			Columns: []string{storedfile.FileVersionsColumn},
+			Bidi:    false,
+		},
+		"StoredFile",
+		"FileVersion",
 	)
 	graph.MustAddE(
 		"space",
@@ -1457,6 +1523,20 @@ func (f *FileFilter) WhereHasPropertiesWith(preds ...predicate.Property) {
 	})))
 }
 
+// WhereHasFileVersions applies a predicate to check if query has an edge file_versions.
+func (f *FileFilter) WhereHasFileVersions() {
+	f.Where(entql.HasEdge("file_versions"))
+}
+
+// WhereHasFileVersionsWith applies a predicate to check if query has an edge file_versions with a given conditions (other predicates).
+func (f *FileFilter) WhereHasFileVersionsWith(preds ...predicate.FileVersion) {
+	f.Where(entql.HasEdgeWith("file_versions", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasTagAssignment applies a predicate to check if query has an edge tag_assignment.
 func (f *FileFilter) WhereHasTagAssignment() {
 	f.Where(entql.HasEdge("tag_assignment"))
@@ -1713,6 +1793,94 @@ func (f *FileSearchFilter) WhereOcrContent(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *FileVersionQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the FileVersionQuery builder.
+func (_q *FileVersionQuery) Filter() *FileVersionFilter {
+	return &FileVersionFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *FileVersionMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the FileVersionMutation builder.
+func (m *FileVersionMutation) Filter() *FileVersionFilter {
+	return &FileVersionFilter{config: m.config, predicateAdder: m}
+}
+
+// FileVersionFilter provides a generic filtering capability at runtime for FileVersionQuery.
+type FileVersionFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *FileVersionFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql int64 predicate on the id field.
+func (f *FileVersionFilter) WhereID(p entql.Int64P) {
+	f.Where(p.Field(fileversion.FieldID))
+}
+
+// WhereFileID applies the entql int64 predicate on the file_id field.
+func (f *FileVersionFilter) WhereFileID(p entql.Int64P) {
+	f.Where(p.Field(fileversion.FieldFileID))
+}
+
+// WhereStoredFileID applies the entql int64 predicate on the stored_file_id field.
+func (f *FileVersionFilter) WhereStoredFileID(p entql.Int64P) {
+	f.Where(p.Field(fileversion.FieldStoredFileID))
+}
+
+// WhereVersionNumber applies the entql int predicate on the version_number field.
+func (f *FileVersionFilter) WhereVersionNumber(p entql.IntP) {
+	f.Where(p.Field(fileversion.FieldVersionNumber))
+}
+
+// WhereNote applies the entql string predicate on the note field.
+func (f *FileVersionFilter) WhereNote(p entql.StringP) {
+	f.Where(p.Field(fileversion.FieldNote))
+}
+
+// WhereHasFile applies a predicate to check if query has an edge file.
+func (f *FileVersionFilter) WhereHasFile() {
+	f.Where(entql.HasEdge("file"))
+}
+
+// WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
+func (f *FileVersionFilter) WhereHasFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasStoredFile applies a predicate to check if query has an edge stored_file.
+func (f *FileVersionFilter) WhereHasStoredFile() {
+	f.Where(entql.HasEdge("stored_file"))
+}
+
+// WhereHasStoredFileWith applies a predicate to check if query has an edge stored_file with a given conditions (other predicates).
+func (f *FileVersionFilter) WhereHasStoredFileWith(preds ...predicate.StoredFile) {
+	f.Where(entql.HasEdgeWith("stored_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *PropertyQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -1741,7 +1909,7 @@ type PropertyFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PropertyFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1833,7 +2001,7 @@ type ResolvedTagAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ResolvedTagAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1883,7 +2051,7 @@ type SpaceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SpaceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[9].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2056,7 +2224,7 @@ type SpaceUserAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SpaceUserAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[9].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[10].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2192,7 +2360,7 @@ type StoredFileFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *StoredFileFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[10].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[11].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2330,6 +2498,20 @@ func (f *StoredFileFilter) WhereHasFilesWith(preds ...predicate.File) {
 	})))
 }
 
+// WhereHasFileVersions applies a predicate to check if query has an edge file_versions.
+func (f *StoredFileFilter) WhereHasFileVersions() {
+	f.Where(entql.HasEdge("file_versions"))
+}
+
+// WhereHasFileVersionsWith applies a predicate to check if query has an edge file_versions with a given conditions (other predicates).
+func (f *StoredFileFilter) WhereHasFileVersionsWith(preds ...predicate.FileVersion) {
+	f.Where(entql.HasEdgeWith("file_versions", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *TagQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -2359,7 +2541,7 @@ type TagFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TagFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[11].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[12].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2527,7 +2709,7 @@ type TagAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TagAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[12].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[13].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2624,7 +2806,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[13].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[14].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

@@ -24,6 +24,9 @@ type FilePropertyAssignment func(*sql.Selector)
 // FileSearch is the predicate function for filesearch builders.
 type FileSearch func(*sql.Selector)
 
+// FileVersion is the predicate function for fileversion builders.
+type FileVersion func(*sql.Selector)
+
 // Property is the predicate function for property builders.
 type Property func(*sql.Selector)
 

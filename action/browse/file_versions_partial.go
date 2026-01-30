@@ -9,7 +9,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/storedfile"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
@@ -62,7 +62,10 @@ func (qq *FileVersionsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 
 func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartialData) *wx.ScrollableContent {
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
-	versions := filex.Data.QueryVersions().Order(storedfile.ByCreatedAt(sql.OrderDesc())).AllX(ctx)
+	versions := filex.Data.QueryFileVersions().
+		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
+		WithStoredFile().
+		AllX(ctx)
 
 	var listItems []*wx.ListItem
 	if len(versions) == 0 {
@@ -74,24 +77,25 @@ func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartia
 			Type:           wx.ListItemTypeHelper,
 		})
 	} else {
-		for i, versionx := range versions {
-			versionm := model.NewStoredFile(versionx)
-			versionLabel := fmt.Sprintf("Version %d", len(versions)-i)
+		for _, versionx := range versions {
+			storedFile := versionx.Edges.StoredFile
+			versionm := model.NewStoredFile(storedFile)
+			versionLabel := fmt.Sprintf("Version %d", versionx.VersionNumber)
 
 			var supportingParts []string
 			supportingParts = append(supportingParts, versionLabel)
 			supportingParts = append(supportingParts, versionm.SizeString())
-			if versionx.MimeType != "" {
-				supportingParts = append(supportingParts, versionx.MimeType)
+			if versionm.Data.MimeType != "" {
+				supportingParts = append(supportingParts, versionm.Data.MimeType)
 			}
 
 			listItem := &wx.ListItem{
-				Headline:       wx.Tu(timex.NewDateTime(versionx.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
+				Headline:       wx.Tu(timex.NewDateTime(versionm.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
 				SupportingText: wx.Tu(strings.Join(supportingParts, " - ")),
 			}
 			listItem.HTMXAttrs = wx.HTMXAttrs{
 				HxPost:        qq.actions.FileVersionPreviewDialogPartial.Endpoint(),
-				HxVals:        util.JSON(qq.actions.FileVersionPreviewDialogPartial.Data(data.FileID, fmt.Sprintf("%d", versionx.ID))),
+				HxVals:        util.JSON(qq.actions.FileVersionPreviewDialogPartial.Data(data.FileID, fmt.Sprintf("%d", versionx.VersionNumber))),
 				LoadInPopover: true,
 			}
 

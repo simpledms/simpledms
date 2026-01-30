@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/model/common/storagetype"
@@ -264,6 +265,21 @@ func (_c *StoredFileCreate) AddFiles(v ...*File) *StoredFileCreate {
 	return _c.AddFileIDs(ids...)
 }
 
+// AddFileVersionIDs adds the "file_versions" edge to the FileVersion entity by IDs.
+func (_c *StoredFileCreate) AddFileVersionIDs(ids ...int64) *StoredFileCreate {
+	_c.mutation.AddFileVersionIDs(ids...)
+	return _c
+}
+
+// AddFileVersions adds the "file_versions" edges to the FileVersion entity.
+func (_c *StoredFileCreate) AddFileVersions(v ...*FileVersion) *StoredFileCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFileVersionIDs(ids...)
+}
+
 // Mutation returns the StoredFileMutation object of the builder.
 func (_c *StoredFileCreate) Mutation() *StoredFileMutation {
 	return _c.mutation
@@ -487,6 +503,26 @@ func (_c *StoredFileCreate) createSpec() (*StoredFile, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &FileVersionCreate{config: _c.config, mutation: newFileVersionMutation(_c.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FileVersionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   storedfile.FileVersionsTable,
+			Columns: []string{storedfile.FileVersionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(fileversion.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

@@ -13,6 +13,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
@@ -443,6 +444,21 @@ func (_c *FileCreate) AddProperties(v ...*Property) *FileCreate {
 	return _c.AddPropertyIDs(ids...)
 }
 
+// AddFileVersionIDs adds the "file_versions" edge to the FileVersion entity by IDs.
+func (_c *FileCreate) AddFileVersionIDs(ids ...int64) *FileCreate {
+	_c.mutation.AddFileVersionIDs(ids...)
+	return _c
+}
+
+// AddFileVersions adds the "file_versions" edges to the FileVersion entity.
+func (_c *FileCreate) AddFileVersions(v ...*FileVersion) *FileCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFileVersionIDs(ids...)
+}
+
 // AddTagAssignmentIDs adds the "tag_assignment" edge to the TagAssignment entity by IDs.
 func (_c *FileCreate) AddTagAssignmentIDs(ids ...int64) *FileCreate {
 	_c.mutation.AddTagAssignmentIDs(ids...)
@@ -773,6 +789,10 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		createE := &FileVersionCreate{config: _c.config, mutation: newFileVersionMutation(_c.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ChildrenIDs(); len(nodes) > 0 {
@@ -850,6 +870,22 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(property.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FileVersionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.FileVersionsTable,
+			Columns: []string{file.FileVersionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(fileversion.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

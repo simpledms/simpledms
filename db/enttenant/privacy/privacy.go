@@ -231,6 +231,30 @@ func (f FileSearchQueryRuleFunc) EvalQuery(ctx context.Context, q enttenant.Quer
 	return Denyf("enttenant/privacy: unexpected query type %T, expect *enttenant.FileSearchQuery", q)
 }
 
+// The FileVersionQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type FileVersionQueryRuleFunc func(context.Context, *enttenant.FileVersionQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f FileVersionQueryRuleFunc) EvalQuery(ctx context.Context, q enttenant.Query) error {
+	if q, ok := q.(*enttenant.FileVersionQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("enttenant/privacy: unexpected query type %T, expect *enttenant.FileVersionQuery", q)
+}
+
+// The FileVersionMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type FileVersionMutationRuleFunc func(context.Context, *enttenant.FileVersionMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f FileVersionMutationRuleFunc) EvalMutation(ctx context.Context, m enttenant.Mutation) error {
+	if m, ok := m.(*enttenant.FileVersionMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("enttenant/privacy: unexpected mutation type %T, expect *enttenant.FileVersionMutation", m)
+}
+
 // The PropertyQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type PropertyQueryRuleFunc func(context.Context, *enttenant.PropertyQuery) error
@@ -458,6 +482,8 @@ func queryFilter(q enttenant.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *enttenant.FileSearchQuery:
 		return q.Filter(), nil
+	case *enttenant.FileVersionQuery:
+		return q.Filter(), nil
 	case *enttenant.PropertyQuery:
 		return q.Filter(), nil
 	case *enttenant.ResolvedTagAssignmentQuery:
@@ -488,6 +514,8 @@ func mutationFilter(m enttenant.Mutation) (Filter, error) {
 	case *enttenant.FileMutation:
 		return m.Filter(), nil
 	case *enttenant.FilePropertyAssignmentMutation:
+		return m.Filter(), nil
+	case *enttenant.FileVersionMutation:
 		return m.Filter(), nil
 	case *enttenant.PropertyMutation:
 		return m.Filter(), nil

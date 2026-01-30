@@ -17,10 +17,10 @@ func DownloadInline(tenantID, spaceID, fileID string) string {
 	return fmt.Sprintf("/org/%s/space/%s/download/%s?inline=1", tenantID, spaceID, fileID)
 }
 
-func DownloadWithVersion(tenantID, spaceID, fileID, versionID string) string {
-	return fmt.Sprintf("/org/%s/space/%s/download/%s?version_id=%s", tenantID, spaceID, fileID, url.QueryEscape(versionID))
+func DownloadWithVersion(tenantID, spaceID, fileID, versionNumber string) string {
+	return fmt.Sprintf("/org/%s/space/%s/download/%s?version=%s", tenantID, spaceID, fileID, url.QueryEscape(versionNumber))
 }
 
-func DownloadInlineWithVersion(tenantID, spaceID, fileID, versionID string) string {
-	return fmt.Sprintf("/org/%s/space/%s/download/%s?inline=1&version_id=%s", tenantID, spaceID, fileID, url.QueryEscape(versionID))
+func DownloadInlineWithVersion(tenantID, spaceID, fileID, versionNumber string) string {
+	return fmt.Sprintf("/org/%s/space/%s/download/%s?inline=1&version=%s", tenantID, spaceID, fileID, url.QueryEscape(versionNumber))
 }

@@ -8,7 +8,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/storedfile"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/model"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -148,12 +148,8 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 }
 
 func (qq *FileInfoPartial) versionLabel(ctx ctxx.Context, filem *model.File) *wx.Text {
-	versions := filem.Data.QueryVersions().Order(storedfile.ByCreatedAt(sql.OrderDesc())).AllX(ctx)
-	if len(versions) == 0 {
-		return wx.T("-")
-	}
-
-	return wx.Tu(fmt.Sprintf("Version %d", len(versions)))
+	versionData := filem.Data.QueryFileVersions().Order(fileversion.ByVersionNumber(sql.OrderDesc())).FirstX(ctx)
+	return wx.Tu(fmt.Sprintf("%d", versionData.VersionNumber))
 }
 
 func (qq *FileInfoPartial) ID() string {

@@ -8,7 +8,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/storedfile"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -38,20 +38,24 @@ func (qq *Download) Handler(
 		return e.NewHTTPErrorf(http.StatusBadRequest, "cannot download directories")
 	}
 
-	versionID := req.URL.Query().Get("version_id")
-	if versionID != "" {
-		versionInt, err := strconv.ParseInt(versionID, 10, 64)
+	versionNumber := req.URL.Query().Get("version")
+	if versionNumber != "" {
+		versionInt, err := strconv.Atoi(versionNumber)
 		if err != nil {
-			return e.NewHTTPErrorf(http.StatusBadRequest, "invalid version id")
+			return e.NewHTTPErrorf(http.StatusBadRequest, "invalid version number")
 		}
-		version, err := filex.Data.QueryVersions().Where(storedfile.ID(versionInt)).Only(ctx)
+		version, err := filex.Data.QueryFileVersions().
+			Where(fileversion.VersionNumber(versionInt)).
+			WithStoredFile().
+			Only(ctx)
 		if err != nil {
 			if enttenant.IsNotFound(err) {
 				return e.NewHTTPErrorf(http.StatusNotFound, "version not found")
 			}
 			return err
 		}
-		return commonaction.StreamDownload(qq.infra, ctx, rw, req, filex, model.NewStoredFile(version))
+		storedFile := version.Edges.StoredFile
+		return commonaction.StreamDownload(qq.infra, ctx, rw, req, filex, model.NewStoredFile(storedFile))
 	}
 
 	currentVersion := filex.CurrentVersion(ctx)

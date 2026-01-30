@@ -14,7 +14,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
-	"github.com/simpledms/simpledms/db/enttenant/storedfile"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/common/fieldtype"
 	mproperty "github.com/simpledms/simpledms/model/property"
@@ -159,19 +159,25 @@ func (qq *File) CurrentVersion(ctx context.Context) *StoredFile {
 
 	// TODO handle if File is Directory
 
-	version := qq.Data.QueryVersions().Order(storedfile.ByCreatedAt(sql.OrderDesc())).FirstX(ctx)
-	qq.nilableCurrentVersion = NewStoredFile(version) // TODO inject factory into ctx?
+	version := qq.Data.QueryFileVersions().
+		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
+		WithStoredFile().
+		FirstX(ctx)
+	qq.nilableCurrentVersion = NewStoredFile(version.Edges.StoredFile) // TODO inject factory into ctx?
 
 	return qq.nilableCurrentVersion
 }
 
 // TODO is this okay?
 func (qq *File) Versions(ctx ctxx.Context) []*StoredFile {
-	versionsx := qq.Data.QueryVersions().AllX(ctx)
+	versionsx := qq.Data.QueryFileVersions().
+		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
+		WithStoredFile().
+		AllX(ctx)
 	var versions []*StoredFile
 
 	for _, versionx := range versionsx {
-		versions = append(versions, NewStoredFile(versionx))
+		versions = append(versions, NewStoredFile(versionx.Edges.StoredFile))
 	}
 
 	return versions

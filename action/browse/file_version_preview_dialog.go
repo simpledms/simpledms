@@ -8,7 +8,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/storedfile"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -18,8 +18,8 @@ import (
 )
 
 type FileVersionPreviewDialogData struct {
-	FileID    string
-	VersionID string
+	FileID        string
+	VersionNumber string
 }
 
 type FileVersionPreviewDialog struct {
@@ -37,10 +37,10 @@ func NewFileVersionPreviewDialog(infra *common.Infra, actions *Actions) *FileVer
 	}
 }
 
-func (qq *FileVersionPreviewDialog) Data(fileID, versionID string) *FileVersionPreviewDialogData {
+func (qq *FileVersionPreviewDialog) Data(fileID, versionNumber string) *FileVersionPreviewDialogData {
 	return &FileVersionPreviewDialogData{
-		FileID:    fileID,
-		VersionID: versionID,
+		FileID:        fileID,
+		VersionNumber: versionNumber,
 	}
 }
 
@@ -50,17 +50,20 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 		return err
 	}
 
-	if data.VersionID == "" {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "missing version id")
+	if data.VersionNumber == "" {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "missing version number")
 	}
 
-	versionInt, err := strconv.ParseInt(data.VersionID, 10, 64)
+	versionInt, err := strconv.Atoi(data.VersionNumber)
 	if err != nil {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "invalid version id")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "invalid version number")
 	}
 
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
-	versionx, err := filex.Data.QueryVersions().Where(storedfile.ID(versionInt)).Only(ctx)
+	versionx, err := filex.Data.QueryFileVersions().
+		Where(fileversion.VersionNumber(versionInt)).
+		WithStoredFile().
+		Only(ctx)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
 			return e.NewHTTPErrorf(http.StatusNotFound, "version not found")
@@ -68,12 +71,13 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 		return err
 	}
 
-	versionm := model.NewStoredFile(versionx)
+	storedFile := versionx.Edges.StoredFile
+	versionm := model.NewStoredFile(storedFile)
 	filename := filex.Data.Name
 	if versionm.Data.Filename != "" {
 		filename = versionm.Data.Filename
 	}
-	downloadURL := route.DownloadWithVersion(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String(), data.VersionID)
+	downloadURL := route.DownloadWithVersion(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String(), data.VersionNumber)
 
 	return qq.infra.Renderer().Render(
 		rw,
@@ -95,7 +99,7 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 			},
 			IsOpenOnLoad: true,
 			Child: &wx.FilePreview{
-				FileURL:  route.DownloadInlineWithVersion(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String(), data.VersionID),
+				FileURL:  route.DownloadInlineWithVersion(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String(), data.VersionNumber),
 				Filename: filename,
 				MimeType: versionm.Data.MimeType,
 			},

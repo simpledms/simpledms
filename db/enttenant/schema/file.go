@@ -54,8 +54,10 @@ func (File) Fields() []ent.Field {
 // Edges of the File.
 func (File) Edges() []ent.Edge {
 	return []ent.Edge{
+		// not required because directories have no version...
 		edge.
-			To("versions", StoredFile.Type), // not required because directories have no version...
+			To("versions", StoredFile.Type).
+			Through("file_versions", FileVersion.Type),
 		edge.
 			To("parent", File.Type).
 			Field("parent_id").

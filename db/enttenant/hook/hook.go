@@ -57,6 +57,18 @@ func (f FilePropertyAssignmentFunc) Mutate(ctx context.Context, m enttenant.Muta
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *enttenant.FilePropertyAssignmentMutation", m)
 }
 
+// The FileVersionFunc type is an adapter to allow the use of ordinary
+// function as FileVersion mutator.
+type FileVersionFunc func(context.Context, *enttenant.FileVersionMutation) (enttenant.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FileVersionFunc) Mutate(ctx context.Context, m enttenant.Mutation) (enttenant.Value, error) {
+	if mv, ok := m.(*enttenant.FileVersionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *enttenant.FileVersionMutation", m)
+}
+
 // The PropertyFunc type is an adapter to allow the use of ordinary
 // function as Property mutator.
 type PropertyFunc func(context.Context, *enttenant.PropertyMutation) (enttenant.Value, error)
