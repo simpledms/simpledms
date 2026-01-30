@@ -159,7 +159,7 @@ func (qq *File) CurrentVersion(ctx context.Context) *StoredFile {
 
 	// TODO handle if File is Directory
 
-	version := qq.Data.QueryVersions().Order(storedfile.ByCreatedAt(sql.OrderDesc())).Limit(1).OnlyX(ctx)
+	version := qq.Data.QueryVersions().Order(storedfile.ByCreatedAt(sql.OrderDesc())).FirstX(ctx)
 	qq.nilableCurrentVersion = NewStoredFile(version) // TODO inject factory into ctx?
 
 	return qq.nilableCurrentVersion

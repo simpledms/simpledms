@@ -8,6 +8,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -65,6 +66,7 @@ func (qq *UploadFileCmd) Data(parentDirID string, filename string, addToInbox bo
 	}
 }
 
+// very similar to UploadFileVersionCmd
 func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[UploadFileCmdData](rw, req, ctx)
 	if err != nil {
@@ -93,10 +95,9 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	}
 	filename = filepath.Clean(filename)
 
-	// parentDirInfo := ctx.TenantCtx().TTx.FileInfoPartial.Query().Where(fileinfo.PublicFileID(data.ParentDirID)).OnlyX(ctx)
 	parentDir := qq.infra.FileRepo.GetX(ctx, data.ParentDirID)
 
-	filex, err := qq.infra.FileSystem().SaveFile(
+	filex, err := qq.infra.FileSystem().AddFile(
 		ctx,
 		uploadedFile,
 		filename,
@@ -107,24 +108,9 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	// TODO trigger event (wouldn't work with uppy because not an HTMX request...)
-
 	rw.AddRenderables(wx.NewSnackbarf("«%s» uploaded.", filex.Name))
+	// TODO does triggering event have an effect? request comes from uppy and isn't a HTMX request...
+	rw.Header().Add("HX-Trigger", event.FileUploaded.String())
 
-	// TODO render snackbar
-	/*
-		qq.infra.Renderer().RenderX(rw, ctx,
-			// TODO get rid of this
-			qq.actions.ListDirPartial.WidgetHandler(
-				rw,
-				req,
-				ctx,
-				parentDir.Data.PublicID.String(),
-				"",
-			),
-			wx.NewSnackbarf("«%s» uploaded.", filex.Name),
-		)
-
-	*/
 	return nil
 }
