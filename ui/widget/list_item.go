@@ -51,7 +51,7 @@ type ListItem struct {
 	IsDisabled  bool // TODO implement
 
 	// TODO just temporary for neobrutalism experiment
-	BackgroundColor string
+	// BackgroundColor string
 
 	Type           ListItemType
 	RadioGroupName string // not all chars are allow, UUIDs not working
@@ -78,12 +78,12 @@ func (qq *ListItem) GetID() string {
 }
 
 // TODO just temporary for neobrutalism experiment
-func (qq *ListItem) GetBackgroundColor() string {
+/*func (qq *ListItem) GetBackgroundColor() string {
 	if qq.BackgroundColor != "" {
 		return qq.BackgroundColor
 	}
 	return "var(--surface)"
-}
+}*/
 
 func (qq *ListItem) IsTypeHelper() bool {
 	return qq.Type == ListItemTypeHelper

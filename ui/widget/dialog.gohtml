@@ -59,6 +59,13 @@
 					<h2 class="flex-grow md:headline-sm title-lg truncate">
 						{{ render .GetContext .Headline }}
 					</h2>
+					{{ if .HeaderActions }}
+						<div class="flex items-center gap-x-2">
+							{{ range .HeaderActions }}
+								{{ render $.GetContext . }}
+							{{ end }}
+						</div>
+					{{ end }}
 					<div class="{{ if .IsDefaultLayout }}md:hidden{{ end }}">
 						{{ render .GetContext .GetSubmitButton }}
 					</div>

@@ -24,6 +24,7 @@ func (File) Fields() []ent.Field {
 		// TODO move to StoredFile? what if it contains a date or version string?
 		//		but shouldn't get changed all the time either;
 		//		what if extension changes because new version has another file type?
+		// TODO get rid of name? and always use filename from StoredFile?
 		field.String("name"), // is filename // TODO rename to filename?
 		field.Bool("is_directory"),
 

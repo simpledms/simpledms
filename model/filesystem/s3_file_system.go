@@ -165,7 +165,7 @@ func (qq *S3FileSystem) UnsafeOpenFile(ctx context.Context, x25519Identity *age.
 // very similar code in FileSystem
 //
 // caller has to close fileToSave
-func (qq *S3FileSystem) SaveFile(
+func (qq *S3FileSystem) AddFile(
 	ctx ctxx.Context,
 	// fileToSave multipart.File,
 	fileToSave io.Reader,
@@ -176,6 +176,8 @@ func (qq *S3FileSystem) SaveFile(
 	// TODO check if bucket exists
 
 	if ctx.SpaceCtx().Space.IsFolderMode {
+		// TODO how to handle this? is somewhat uncessary...
+
 		fileExists := ctx.SpaceCtx().Space.QueryFiles().
 			Where(file.Name(filename), file.ParentID(parentDirFileID), file.IsInInbox(isInInbox)).
 			ExistX(ctx)
@@ -202,6 +204,64 @@ func (qq *S3FileSystem) SaveFile(
 
 	// log.Println("debug: 002a")
 
+	_, err := qq.addFile(
+		ctx,
+		filex,
+		fileToSave,
+		filename,
+	)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return filex, nil
+}
+
+func (qq *S3FileSystem) AddFileVersion(
+	ctx ctxx.Context,
+	fileToSave io.Reader,
+	filename string,
+	fileID int64,
+) (*enttenant.StoredFile, error) {
+	filex := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
+	if filex.IsDirectory {
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
+	}
+
+	if ctx.SpaceCtx().Space.IsFolderMode {
+		// TODO how to handle this? is somewhat uncessary...
+
+		fileExists := ctx.SpaceCtx().Space.QueryFiles().
+			Where(file.Name(filename), file.ParentID(filex.ParentID), file.IsInInbox(filex.IsInInbox)).
+			ExistX(ctx)
+		if fileExists {
+			return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File already exists.")
+		}
+	}
+
+	filex.Update().SetName(filename).SaveX(ctx)
+
+	storedFilex, err := qq.addFile(
+		ctx,
+		filex,
+		fileToSave,
+		filename,
+	)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return storedFilex, nil
+}
+
+func (qq *S3FileSystem) addFile(
+	ctx ctxx.Context,
+	filex *enttenant.File,
+	fileToSave io.Reader,
+	filename string,
+) (*enttenant.StoredFile, error) {
 	tmpStoragePrefix := pathx.S3TemporaryStoragePrefix(ctx.TenantCtx().TenantID) // ctx.TenantCtx().S3StoragePrefix
 	if tmpStoragePrefix == "" {
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Storage path is empty.")
@@ -262,7 +322,7 @@ func (qq *S3FileSystem) SaveFile(
 
 	// log.Println("debug: 005a")
 
-	return filex, nil
+	return storedFilex, nil
 }
 
 func (qq *S3FileSystem) saveFile(

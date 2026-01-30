@@ -21,9 +21,10 @@ type Dialog struct {
 	// Mobile version is always fullscreen
 	Layout DialogLayout
 
-	Headline    *Text
-	SubmitLabel *Text // TODO name?? PrimaryActionLabel??
-	FormID      string
+	Headline      *Text
+	SubmitLabel   *Text // TODO name?? PrimaryActionLabel??
+	FormID        string
+	HeaderActions []IWidget
 	// CloseLabel  string
 
 	IsOpenOnLoad                    bool

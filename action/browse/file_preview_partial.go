@@ -10,6 +10,7 @@ import (
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -56,6 +57,7 @@ func (qq *FilePreviewPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 		return err
 	}
 	state := autil.StateX[FilePreviewPartialState](rw, req)
+	rw.Header().Set("HX-Push-Url", route2.BrowseFileWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, data.CurrentDirID, data.FileID))
 
 	// filex := ctx.TenantCtx().TTx.File.GetX(ctx, data.FileID)
 	dirx := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
@@ -86,11 +88,6 @@ func (qq *FilePreviewPartial) Widget(
 	// soft delete filter is not applied via TagAssignment
 	// tagsCount := qq.infra.Client().File.GetX(ctx, filepathxx.FileID).QueryTags().CountX(ctx)
 
-	title := wx.T("Preview") // TODO or `File preview`?
-	if ctx.SpaceCtx().Space.IsFolderMode {
-		title = wx.Tu(filex.Data.Name)
-	}
-
 	fileDetailsSideSheet := qq.actions.FileDetailsSideSheetPartial.Widget(
 		ctx,
 		qq.actions.FileDetailsSideSheetPartial.Data(
@@ -100,12 +97,27 @@ func (qq *FilePreviewPartial) Widget(
 		state,
 	)
 
+	fileURL := route2.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String())
+
 	return &wx.DetailsWithSheet{
-		AppBar: qq.appBar(ctx, dirx.Data.PublicID.String(), title, filex),
+		HTMXAttrs: wx.HTMXAttrs{
+			HxTrigger: event.FileUploaded.Handler(),
+			HxPost:    qq.Endpoint(),
+			HxVals:    util.JSON(qq.Data(dirx.Data.PublicID.String(), filex.Data.PublicID.String())),
+			HxTarget:  "#details",
+			HxSwap:    "outerHTML",
+		},
+		AppBar: qq.appBar(
+			ctx,
+			dirx.Data.PublicID.String(),
+			wx.Tu(filex.FilenameInApp(ctx, true)),
+			filex,
+			filex.Filename(ctx),
+		),
 		Child: &wx.Column{
 			Children: []wx.IWidget{
 				&wx.FilePreview{
-					FileURL:  route2.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
+					FileURL:  fileURL,
 					Filename: filex.Filename(ctx),
 					MimeType: filex.CurrentVersion(ctx).Data.MimeType,
 				},
@@ -119,7 +131,15 @@ func (qq *FilePreviewPartial) Widget(
 	}, nil
 }
 
-func (qq *FilePreviewPartial) appBar(ctx ctxx.Context, dirID string, title *wx.Text, filex *model.File) *wx.AppBar {
+func (qq *FilePreviewPartial) appBar(
+	ctx ctxx.Context,
+	dirID string,
+	title *wx.Text,
+	filex *model.File,
+	filename string,
+) *wx.AppBar {
+	downloadURL := route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String())
+
 	return &wx.AppBar{
 		Leading: &wx.IconButton{
 			Icon: "close",
@@ -142,9 +162,9 @@ func (qq *FilePreviewPartial) appBar(ctx ctxx.Context, dirID string, title *wx.T
 				},
 			},
 			&wx.Link{
-				Href:      route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
+				Href:      downloadURL,
 				IsNoColor: true,
-				Filename:  filex.Filename(ctx),
+				Filename:  filename,
 				Child: &wx.IconButton{
 					Icon: "download",
 				},
