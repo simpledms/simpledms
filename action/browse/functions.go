@@ -80,8 +80,11 @@ func fieldByProperty(
 			Name:         "DateValue",
 			Type:         "date",
 			DefaultValue: defaultValue,
-			// short delay because going quickly up and down on day or month or year triggers change event
-			HTMXAttrs: htmxAttrsFn("change delay:250ms"),
+			// short delay because going quickly up and down on day or month or
+			// year triggers change event;
+			// 30.01.2026: increased delay because 250ms was to short when
+			// year gets modified manually and focus is lost on update
+			HTMXAttrs: htmxAttrsFn("change delay:1000ms"),
 		}, true
 	case fieldtype.Checkbox:
 		// TODO cannot handle nil value; is this okay?
