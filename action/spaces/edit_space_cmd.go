@@ -57,7 +57,9 @@ func (qq *EditSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 		Where(space.PublicID(entx.NewCIText(data.SpaceID))).
 		ExecX(ctx)
 
-	spacex := ctx.TenantCtx().TTx.Space.Query().OnlyX(ctx)
+	spacex := ctx.TenantCtx().TTx.Space.Query().Where(
+		space.PublicID(entx.NewCIText(data.SpaceID)),
+	).OnlyX(ctx)
 	spaceCtx := ctxx.NewSpaceContext(ctx.TenantCtx(), spacex)
 
 	ctx.TenantCtx().TTx.File.Update().
