@@ -20,6 +20,9 @@ func (FileVersion) Fields() []ent.Field {
 		field.Int64("stored_file_id"),
 		// TODO remove Default, only for auto migration
 		field.Int("version_number").Default(1),
+		// field.Int64("merged_from_file_id").Optional(),
+		// field.Time("merged_at").Optional().Nillable(),
+		// field.Int64("merged_by").Optional(),
 		field.Text("note").Optional(),
 	}
 }

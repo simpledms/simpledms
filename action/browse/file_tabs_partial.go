@@ -9,6 +9,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -76,7 +77,7 @@ func (qq *FileTabsPartial) Widget(
 	dirID string,
 	fileID string,
 ) *wx.TabBar {
-	var activeTabContent *wx.ScrollableContent
+	var activeTabContent renderable.Renderable
 
 	activeTab := strings.ToLower(state.ActiveTab)
 

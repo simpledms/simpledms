@@ -7,12 +7,11 @@ import (
 // TODO rename to Tabs?, maybe refactor is necessary
 type TabBar struct {
 	Widget[TabBar]
-	Tabs        []*Tab // TODO Tabs or Children
-	IsSecondary bool
-	IsFlowing   bool // TODO find a better name; IsFloating?
-	ActiveTab   string
-	// TODO ScrollableContent should be implicit, always automatic and not responsibiliy of caller
-	ActiveTabContent *ScrollableContent
+	Tabs             []*Tab // TODO Tabs or Children
+	IsSecondary      bool
+	IsFlowing        bool // TODO find a better name; IsFloating?
+	ActiveTab        string
+	ActiveTabContent IWidget // usually you want *ScrollableContent
 	NoContentMargin  bool
 }
 

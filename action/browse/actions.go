@@ -67,6 +67,9 @@ type Actions struct {
 	FileUploadDialogPartial         *FileUploadDialog
 	FileVersionUploadDialogPartial  *FileVersionUploadDialog
 	FileVersionPreviewDialogPartial *FileVersionPreviewDialog
+	FileVersionFromInboxDialog      *FileVersionFromInboxDialog
+	FileVersionFromInboxListPartial *FileVersionFromInboxListPartial
+	FileVersionFromInboxCmd         *FileVersionFromInboxCmd
 	UnzipArchiveCmd                 *UnzipArchiveCmd
 }
 
@@ -129,6 +132,9 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		FileUploadDialogPartial:         NewFileUploadDialog(infra, actions),
 		FileVersionUploadDialogPartial:  NewFileVersionUploadDialog(infra, actions),
 		FileVersionPreviewDialogPartial: NewFileVersionPreviewDialog(infra, actions),
+		FileVersionFromInboxDialog:      NewFileVersionFromInboxDialog(infra, actions),
+		FileVersionFromInboxListPartial: NewFileVersionFromInboxListPartial(infra, actions),
+		FileVersionFromInboxCmd:         NewFileVersionFromInboxCmd(infra, actions),
 		UnzipArchiveCmd:                 NewUnzipArchiveCmd(infra, actions),
 	}
 

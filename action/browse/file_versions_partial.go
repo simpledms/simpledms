@@ -11,6 +11,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/model"
+	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -60,7 +61,7 @@ func (qq *FileVersionsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 	)
 }
 
-func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartialData) *wx.ScrollableContent {
+func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartialData) renderable.Renderable {
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 	versions := filex.Data.QueryFileVersions().
 		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
@@ -103,11 +104,12 @@ func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartia
 		}
 	}
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &wx.Column{
+		Widget: wx.Widget[wx.Column]{
 			ID: qq.ID(),
 		},
-		GapY: true,
+		GapYSize: wx.Gap4,
+		MarginY:  wx.Margin4,
 		HTMXAttrs: wx.HTMXAttrs{
 			HxTrigger: event.FileUploaded.Handler(),
 			HxPost:    qq.Endpoint(),
@@ -118,22 +120,39 @@ func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartia
 		Children: []wx.IWidget{
 			&wx.Column{
 				AutoHeight: true,
-				Children: &wx.Button{
-					Icon:      wx.NewIcon("upload_file"),
-					Label:     wx.T("Add new version"),
-					StyleType: wx.ButtonStyleTypeElevated,
-					HTMXAttrs: wx.HTMXAttrs{
-						HxPost:        qq.actions.FileVersionUploadDialogPartial.Endpoint(),
-						HxVals:        util.JSON(qq.actions.FileVersionUploadDialogPartial.Data(data.FileID)),
-						LoadInPopover: true,
+				GapYSize:   wx.Gap2,
+				// necessary that column doesn't get shrunk when available space is tight
+				// (version lists grows)
+				NoOverflowHidden: true,
+				Children: []wx.IWidget{
+					&wx.Button{
+						Icon:      wx.NewIcon("upload_file"),
+						Label:     wx.T("Add new version"),
+						StyleType: wx.ButtonStyleTypeElevated,
+						HTMXAttrs: wx.HTMXAttrs{
+							HxPost:        qq.actions.FileVersionUploadDialogPartial.Endpoint(),
+							HxVals:        util.JSON(qq.actions.FileVersionUploadDialogPartial.Data(data.FileID)),
+							LoadInPopover: true,
+						},
+					},
+					&wx.Button{
+						Icon:      wx.NewIcon("merge"),
+						Label:     wx.T("Add new version from inbox"),
+						StyleType: wx.ButtonStyleTypeElevated,
+						HTMXAttrs: wx.HTMXAttrs{
+							HxPost:        qq.actions.FileVersionFromInboxDialog.Endpoint(),
+							HxVals:        util.JSON(qq.actions.FileVersionFromInboxDialog.Data(data.FileID, "", "")),
+							LoadInPopover: true,
+						},
 					},
 				},
 			},
-			&wx.List{
-				Children: listItems,
+			&wx.ScrollableContent{
+				Children: &wx.List{
+					Children: listItems,
+				},
 			},
 		},
-		MarginY: true,
 	}
 }
 
