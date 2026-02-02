@@ -851,7 +851,7 @@
         {
             "id": "Added new version from inbox.",
             "message": "Added new version from inbox.",
-            "translation": "Neue Version aus dem Posteingang hinzugefügt.",
+            "translation": "Neue Version aus der Inbox hinzugefügt.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -921,7 +921,7 @@
         {
             "id": "Source file is not in inbox.",
             "message": "Source file is not in inbox.",
-            "translation": "Quelldatei ist nicht im Posteingang.",
+            "translation": "Quelldatei ist nicht in der Inbox.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -942,21 +942,21 @@
         {
             "id": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged.",
             "message": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged.",
-            "translation": "Ich verstehe, dass die Metadaten der Posteingangsdatei (Dokumenttyp, Tags, Felder) beim Zusammenführen verloren gehen.",
+            "translation": "Ich verstehe, dass die Metadaten der Inbox-Datei (Dokumenttyp, Tags, Felder) beim Zusammenführen verloren gehen.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Search inbox files",
             "message": "Search inbox files",
-            "translation": "Posteingangsdateien suchen",
+            "translation": "Inbox-Dateien suchen",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Add new version from inbox",
             "message": "Add new version from inbox",
-            "translation": "Neue Version aus dem Posteingang hinzufügen",
+            "translation": "Neue Version aus der Inbox hinzufügen",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -984,8 +984,8 @@
         {
             "id": "File must be in inbox.",
             "message": "File must be in inbox.",
-            "translation": "Datei muss im Posteingang sein.",
-            "translatorComment": "Translated from English by Junie",
+            "translation": "Datei muss in der Inbox sein.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -2115,8 +2115,8 @@
         {
             "id": "File is not in inbox.",
             "message": "File is not in inbox.",
-            "translation": "Datei ist nicht im Posteingang.",
-            "translatorComment": "Translated from English by Junie",
+            "translation": "Datei ist nicht in der Inbox.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -2905,7 +2905,7 @@
         {
             "id": "The original parent folder is missing. Restored to Inbox.",
             "message": "The original parent folder is missing. Restored to Inbox.",
-            "translation": "Der ursprüngliche übergeordnete Ordner fehlt. In den Posteingang wiederhergestellt.",
+            "translation": "Der ursprüngliche übergeordnete Ordner fehlt. In die Inbox wiederhergestellt.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3079,8 +3079,8 @@
         {
             "id": "Add to inbox",
             "message": "Add to inbox",
-            "translation": "Zum Posteingang hinzufügen",
-            "translatorComment": "Translated from English by Junie",
+            "translation": "Zur Inbox hinzufügen",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {

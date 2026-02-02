@@ -611,126 +611,126 @@ var deIndex = []uint32{ // 533 elements
 	0x0000130f, 0x00001323, 0x00001334, 0x00001342,
 	0x00001360, 0x0000136a, 0x00001385, 0x0000138f,
 	0x00001394, 0x00001399, 0x000013a3, 0x000013b0,
-	0x000013f4, 0x0000141c, 0x0000144b, 0x00001482,
-	0x000014ab, 0x000014e0, 0x000014fa, 0x0000151a,
+	0x000013f4, 0x0000141c, 0x00001445, 0x0000147c,
+	0x000014a5, 0x000014da, 0x000014f4, 0x00001514,
 	// Entry 80 - 9F
-	0x00001544, 0x0000156d, 0x00001599, 0x000015c5,
-	0x000015ea, 0x00001618, 0x00001642, 0x000016ba,
-	0x000016d5, 0x00001702, 0x0000170e, 0x0000172a,
-	0x00001747, 0x00001767, 0x0000177f, 0x00001797,
-	0x000017b1, 0x000017c8, 0x000017d9, 0x000017f0,
-	0x00001811, 0x0000183e, 0x00001857, 0x00001876,
-	0x000018a8, 0x000018b5, 0x000018d8, 0x000018de,
-	0x000018f1, 0x0000190f, 0x00001928, 0x00001931,
+	0x0000153e, 0x00001567, 0x00001593, 0x000015bf,
+	0x000015e2, 0x00001610, 0x0000163a, 0x000016ac,
+	0x000016c1, 0x000016e8, 0x000016f4, 0x00001710,
+	0x0000172d, 0x0000174b, 0x00001763, 0x0000177b,
+	0x00001795, 0x000017ac, 0x000017bd, 0x000017d4,
+	0x000017f5, 0x00001822, 0x0000183b, 0x0000185a,
+	0x0000188c, 0x00001899, 0x000018bc, 0x000018c2,
+	0x000018d5, 0x000018f3, 0x0000190c, 0x00001915,
 	// Entry A0 - BF
-	0x0000193d, 0x00001944, 0x00001951, 0x0000195d,
-	0x00001966, 0x0000197d, 0x0000199a, 0x000019a8,
-	0x000019c4, 0x000019d3, 0x000019e7, 0x000019fb,
-	0x00001a17, 0x00001a25, 0x00001a40, 0x00001a50,
-	0x00001a64, 0x00001a75, 0x00001a8c, 0x00001aa4,
-	0x00001abd, 0x00001ace, 0x00001af7, 0x00001b1c,
-	0x00001b43, 0x00001b75, 0x00001bb5, 0x00001bc6,
-	0x00001bf5, 0x00001c2a, 0x00001c4d, 0x00001c6c,
+	0x00001921, 0x00001928, 0x00001935, 0x00001941,
+	0x0000194a, 0x00001961, 0x0000197e, 0x0000198c,
+	0x000019a8, 0x000019b7, 0x000019cb, 0x000019df,
+	0x000019fb, 0x00001a09, 0x00001a24, 0x00001a34,
+	0x00001a48, 0x00001a59, 0x00001a70, 0x00001a88,
+	0x00001aa1, 0x00001ab2, 0x00001adb, 0x00001b00,
+	0x00001b27, 0x00001b59, 0x00001b99, 0x00001baa,
+	0x00001bd9, 0x00001c0e, 0x00001c31, 0x00001c50,
 	// Entry C0 - DF
-	0x00001c98, 0x00001cba, 0x00001cd1, 0x00001ced,
-	0x00001d2c, 0x00001d55, 0x00001d88, 0x00001d9a,
-	0x00001dbb, 0x00001dd1, 0x00001ddc, 0x00001dec,
-	0x00001e03, 0x00001e13, 0x00001e1a, 0x00001e24,
-	0x00001e2f, 0x00001e43, 0x00001e50, 0x00001eb6,
-	0x00001ec4, 0x00001eca, 0x00001ed5, 0x00001ee4,
-	0x00001efa, 0x00001f00, 0x00001f82, 0x00001f98,
-	0x00001fb5, 0x00002057, 0x00002072, 0x000020bf,
+	0x00001c7c, 0x00001c9e, 0x00001cb5, 0x00001cd1,
+	0x00001d10, 0x00001d39, 0x00001d6c, 0x00001d7e,
+	0x00001d9f, 0x00001db5, 0x00001dc0, 0x00001dd0,
+	0x00001de7, 0x00001df7, 0x00001dfe, 0x00001e08,
+	0x00001e13, 0x00001e27, 0x00001e34, 0x00001e9a,
+	0x00001ea8, 0x00001eae, 0x00001eb9, 0x00001ec8,
+	0x00001ede, 0x00001ee4, 0x00001f66, 0x00001f7c,
+	0x00001f99, 0x0000203b, 0x00002056, 0x000020a3,
 	// Entry E0 - FF
-	0x000020e5, 0x000020f6, 0x00002105, 0x00002110,
-	0x00002123, 0x00002165, 0x0000217b, 0x0000218d,
-	0x000021c9, 0x000021d4, 0x000021de, 0x000021ff,
-	0x0000220d, 0x00002216, 0x00002252, 0x00002273,
-	0x0000228c, 0x000022ac, 0x000022b7, 0x000022df,
-	0x000022ec, 0x00002301, 0x00002343, 0x00002360,
-	0x00002383, 0x000023aa, 0x000023c2, 0x000023d8,
-	0x000023ec, 0x00002403, 0x00002416, 0x0000242e,
+	0x000020c9, 0x000020da, 0x000020e9, 0x000020f4,
+	0x00002107, 0x00002149, 0x0000215f, 0x00002171,
+	0x000021ad, 0x000021b8, 0x000021c2, 0x000021e3,
+	0x000021f1, 0x000021fa, 0x00002236, 0x00002257,
+	0x00002270, 0x00002290, 0x0000229b, 0x000022c3,
+	0x000022d0, 0x000022e5, 0x00002327, 0x00002344,
+	0x00002367, 0x0000238e, 0x000023a6, 0x000023bc,
+	0x000023d0, 0x000023e7, 0x000023fa, 0x00002412,
 	// Entry 100 - 11F
-	0x00002445, 0x0000245d, 0x0000247e, 0x000024b3,
-	0x000024ca, 0x000024ee, 0x000024fd, 0x00002513,
-	0x0000252a, 0x0000253e, 0x00002596, 0x000025ae,
-	0x000025d7, 0x000025dd, 0x000025ef, 0x00002603,
-	0x00002621, 0x00002642, 0x00002662, 0x00002689,
-	0x00002698, 0x000026a8, 0x000026bc, 0x000026da,
-	0x00002717, 0x00002765, 0x00002793, 0x000027be,
-	0x000027ec, 0x0000283d, 0x00002850, 0x0000286d,
+	0x00002429, 0x00002441, 0x00002462, 0x00002497,
+	0x000024ae, 0x000024d2, 0x000024e1, 0x000024f7,
+	0x0000250e, 0x00002522, 0x0000257a, 0x00002592,
+	0x000025bb, 0x000025c1, 0x000025d3, 0x000025e7,
+	0x00002605, 0x00002626, 0x00002644, 0x0000266b,
+	0x0000267a, 0x0000268a, 0x0000269e, 0x000026bc,
+	0x000026f9, 0x00002747, 0x00002775, 0x000027a0,
+	0x000027ce, 0x0000281f, 0x00002832, 0x0000284f,
 	// Entry 120 - 13F
-	0x000028a4, 0x000028d1, 0x000028db, 0x000028f3,
-	0x00002913, 0x00002967, 0x00002975, 0x0000298b,
-	0x0000299d, 0x000029b0, 0x000029c4, 0x000029ce,
-	0x000029ef, 0x00002a05, 0x00002a18, 0x00002a55,
-	0x00002a9d, 0x00002b2d, 0x00002bdb, 0x00002c8e,
-	0x00002cad, 0x00002cc8, 0x00002cd2, 0x00002d08,
-	0x00002d56, 0x00002d69, 0x00002dd3, 0x00002de4,
-	0x00002e17, 0x00002e4a, 0x00002e63, 0x00002e73,
+	0x00002886, 0x000028b3, 0x000028bd, 0x000028d5,
+	0x000028f5, 0x00002949, 0x00002957, 0x0000296d,
+	0x0000297f, 0x00002992, 0x000029a6, 0x000029b0,
+	0x000029d1, 0x000029e7, 0x000029fa, 0x00002a37,
+	0x00002a7f, 0x00002b0f, 0x00002bbd, 0x00002c70,
+	0x00002c8f, 0x00002caa, 0x00002cb4, 0x00002cea,
+	0x00002d38, 0x00002d4b, 0x00002db5, 0x00002dc6,
+	0x00002df9, 0x00002e2c, 0x00002e45, 0x00002e55,
 	// Entry 140 - 15F
-	0x00002e83, 0x00002e96, 0x00002ea6, 0x00002ec0,
-	0x00002ed1, 0x00002ee2, 0x00002efb, 0x00002f19,
-	0x00002f27, 0x00002f2d, 0x00002f34, 0x00002f4a,
-	0x00002f65, 0x00002f88, 0x00002f96, 0x00002fae,
-	0x00002fe7, 0x00002ffc, 0x00003016, 0x0000302c,
-	0x0000303f, 0x0000304e, 0x00003066, 0x00003085,
-	0x000030a1, 0x000030b2, 0x000030cc, 0x000030e6,
-	0x000030f9, 0x00003119, 0x0000312a, 0x0000319b,
+	0x00002e65, 0x00002e78, 0x00002e88, 0x00002ea2,
+	0x00002eb3, 0x00002ec4, 0x00002edd, 0x00002efb,
+	0x00002f09, 0x00002f0f, 0x00002f16, 0x00002f2c,
+	0x00002f47, 0x00002f6a, 0x00002f78, 0x00002f90,
+	0x00002fc9, 0x00002fde, 0x00002ff8, 0x0000300e,
+	0x00003021, 0x00003030, 0x00003048, 0x00003067,
+	0x00003083, 0x00003094, 0x000030ae, 0x000030c8,
+	0x000030db, 0x000030fb, 0x0000310c, 0x0000317d,
 	// Entry 160 - 17F
-	0x000031bb, 0x000031d2, 0x000031d7, 0x000031df,
-	0x000031eb, 0x000031f8, 0x0000320f, 0x0000323e,
-	0x00003259, 0x000032af, 0x000032c8, 0x000032d9,
-	0x000032ee, 0x000032ff, 0x00003309, 0x00003323,
-	0x00003336, 0x00003341, 0x00003371, 0x0000337a,
-	0x0000339a, 0x000033bd, 0x000033e2, 0x00003408,
-	0x0000342c, 0x0000344f, 0x00003476, 0x0000349f,
-	0x000034aa, 0x000034b6, 0x000034dd, 0x000034f9,
+	0x0000319d, 0x000031b4, 0x000031b9, 0x000031c1,
+	0x000031cd, 0x000031da, 0x000031f1, 0x00003220,
+	0x0000323b, 0x0000328b, 0x000032a4, 0x000032b5,
+	0x000032ca, 0x000032db, 0x000032e5, 0x000032ff,
+	0x00003312, 0x0000331d, 0x0000334d, 0x00003356,
+	0x00003376, 0x00003399, 0x000033be, 0x000033e4,
+	0x00003408, 0x0000342b, 0x00003452, 0x0000347b,
+	0x00003486, 0x00003492, 0x000034b9, 0x000034cf,
 	// Entry 180 - 19F
-	0x000034ff, 0x0000350b, 0x00003514, 0x00003522,
-	0x0000353e, 0x00003555, 0x0000356a, 0x0000357e,
-	0x00003583, 0x000035a7, 0x000035bb, 0x000035c1,
-	0x000035cc, 0x000035e0, 0x000035ed, 0x000035fd,
-	0x00003604, 0x0000360d, 0x00003612, 0x00003618,
-	0x00003622, 0x0000362a, 0x00003637, 0x0000363f,
-	0x0000364b, 0x00003652, 0x00003663, 0x0000366f,
-	0x00003677, 0x00003680, 0x00003687, 0x0000368d,
+	0x000034d5, 0x000034e1, 0x000034ea, 0x000034f8,
+	0x00003514, 0x0000352b, 0x00003540, 0x00003554,
+	0x00003559, 0x0000357d, 0x00003591, 0x00003597,
+	0x000035a2, 0x000035b6, 0x000035c3, 0x000035d3,
+	0x000035da, 0x000035e3, 0x000035e8, 0x000035ee,
+	0x000035f8, 0x00003600, 0x0000360d, 0x00003615,
+	0x00003621, 0x00003628, 0x00003639, 0x00003645,
+	0x0000364d, 0x00003656, 0x0000365d, 0x00003663,
 	// Entry 1A0 - 1BF
-	0x00003692, 0x0000369b, 0x000036b1, 0x000036c1,
-	0x000036cc, 0x000036dc, 0x000036eb, 0x000036f0,
-	0x000036fb, 0x0000370a, 0x00003713, 0x00003725,
-	0x0000372e, 0x00003739, 0x00003742, 0x0000374d,
-	0x00003757, 0x0000375d, 0x00003760, 0x0000376c,
-	0x00003774, 0x0000378a, 0x00003790, 0x0000379a,
-	0x000037a2, 0x000037a6, 0x000037b9, 0x000037be,
-	0x000037c7, 0x000037cb, 0x000037d3, 0x000037dc,
+	0x00003668, 0x00003671, 0x00003687, 0x00003697,
+	0x000036a2, 0x000036b2, 0x000036c1, 0x000036c6,
+	0x000036d1, 0x000036e0, 0x000036e9, 0x000036fb,
+	0x00003704, 0x0000370f, 0x00003718, 0x00003723,
+	0x0000372d, 0x00003733, 0x00003736, 0x00003742,
+	0x0000374a, 0x00003760, 0x00003766, 0x00003770,
+	0x00003778, 0x0000377c, 0x0000378f, 0x00003794,
+	0x0000379d, 0x000037a1, 0x000037a9, 0x000037b2,
 	// Entry 1C0 - 1DF
-	0x000037e1, 0x000037ea, 0x000037f5, 0x00003804,
-	0x0000382f, 0x00003872, 0x000038bc, 0x000038dd,
-	0x00003910, 0x00003933, 0x00003955, 0x00003994,
-	0x000039c5, 0x000039e9, 0x00003a0a, 0x00003a38,
-	0x00003a64, 0x00003a93, 0x00003aae, 0x00003ae7,
-	0x00003b04, 0x00003b1e, 0x00003b59, 0x00003b73,
-	0x00003ba0, 0x00003bca, 0x00003bef, 0x00003c08,
-	0x00003c1f, 0x00003c36, 0x00003c4c, 0x00003c69,
+	0x000037b7, 0x000037c0, 0x000037cb, 0x000037da,
+	0x00003805, 0x00003848, 0x00003892, 0x000038b3,
+	0x000038e6, 0x00003909, 0x0000392b, 0x0000396a,
+	0x0000399b, 0x000039bf, 0x000039e0, 0x00003a0e,
+	0x00003a3a, 0x00003a69, 0x00003a84, 0x00003abd,
+	0x00003ada, 0x00003af4, 0x00003b2f, 0x00003b49,
+	0x00003b76, 0x00003ba0, 0x00003bc5, 0x00003bde,
+	0x00003bf5, 0x00003c0c, 0x00003c22, 0x00003c3f,
 	// Entry 1E0 - 1FF
-	0x00003c90, 0x00003cc1, 0x00003cdf, 0x00003d0d,
-	0x00003d2b, 0x00003d3b, 0x00003d45, 0x00003d5e,
-	0x00003d76, 0x00003d97, 0x00003ddc, 0x00003e03,
-	0x00003e48, 0x00003e69, 0x00003ea9, 0x00003ee9,
-	0x00003f1d, 0x00003f3c, 0x00003f57, 0x00003f74,
-	0x00003f8f, 0x00003fa6, 0x00003fd3, 0x00003fed,
-	0x0000400f, 0x0000404b, 0x0000406d, 0x000040a9,
-	0x000040ed, 0x0000413b, 0x00004166, 0x000041ae,
+	0x00003c66, 0x00003c97, 0x00003cb5, 0x00003ce3,
+	0x00003d01, 0x00003d11, 0x00003d1b, 0x00003d34,
+	0x00003d4c, 0x00003d6d, 0x00003db2, 0x00003dd9,
+	0x00003e1e, 0x00003e3f, 0x00003e7f, 0x00003ebf,
+	0x00003ef3, 0x00003f12, 0x00003f2d, 0x00003f4a,
+	0x00003f65, 0x00003f7c, 0x00003fa9, 0x00003fc3,
+	0x00003fe5, 0x00004021, 0x00004043, 0x0000407f,
+	0x000040c3, 0x00004111, 0x0000413c, 0x00004184,
 	// Entry 200 - 21F
-	0x000041f5, 0x00004216, 0x0000424c, 0x0000428d,
-	0x000042ae, 0x000042ec, 0x00004310, 0x00004334,
-	0x0000434f, 0x0000435d, 0x000043aa, 0x000043b5,
-	0x000043bf, 0x000043d2, 0x000043e4, 0x000043ee,
-	0x000043f7, 0x00004404, 0x00004421, 0x0000444b,
-	0x00004485,
+	0x000041cb, 0x000041ec, 0x00004222, 0x00004263,
+	0x00004284, 0x000042c2, 0x000042e6, 0x0000430a,
+	0x00004325, 0x00004333, 0x00004380, 0x0000438b,
+	0x00004395, 0x000043a8, 0x000043ba, 0x000043c4,
+	0x000043cd, 0x000043da, 0x000043f7, 0x00004421,
+	0x0000445b,
 } // Size: 2156 bytes
 
-const deData string = "" + // Size: 17541 bytes
+const deData string = "" + // Size: 17499 bytes
 	"\x02Über\x02Copyright (c) 2023–heute Marco Beierer\x02SimpleDMS ist ein " +
 	"Open-Source-Projekt von Marco Beierer. Die offiziellen Websites sind:" +
 	"\x02simpledms.eu\x02simpledms.ch\x02marcobeierer.com\x02marcobeierer.ch" +
@@ -806,193 +806,193 @@ const deData string = "" + // Size: 17541 bytes
 	"rladen\x02Noch keine Felder zugewiesen.\x02Entfernen\x02Diesen Feldwert " +
 	"entfernen?\x02Metadaten\x02Tags\x02Info\x02Versionen\x02Datei-Upload\x02" +
 	"Bitte bestätige, dass die Metadaten der Quelldatei verloren gehen.\x02Qu" +
-	"ell- und Zieldatei sind erforderlich.\x02Neue Version aus dem Posteingan" +
-	"g hinzugefügt.\x02Quelle und Ziel müssen unterschiedliche Dateien sein." +
-	"\x02Datei gehört nicht zum aktuellen Space.\x02Verzeichnisse können nich" +
-	"t zusammengeführt werden.\x02Quelldatei ist gelöscht.\x02Quelldatei hat " +
-	"keine Versionen.\x02Quellversion konnte nicht gelesen werden.\x02Quellda" +
-	"tei hat keine gespeicherte Datei.\x02Zielversionen konnten nicht gelesen" +
-	" werden.\x02Zieldatei konnte nicht aktualisiert werden.\x02Quelldatei is" +
-	"t nicht im Posteingang.\x02Quellversionen konnten nicht entfernt werden." +
-	"\x02Quelldatei konnte nicht gelöscht werden.\x02Ich verstehe, dass die M" +
-	"etadaten der Posteingangsdatei (Dokumenttyp, Tags, Felder) beim Zusammen" +
-	"führen verloren gehen.\x02Posteingangsdateien suchen\x02Neue Version aus" +
-	" dem Posteingang hinzufügen\x02Hinzufügen\x02Zieldatei ist erforderlich." +
-	"\x02Quelldatei ist erforderlich.\x02Datei muss im Posteingang sein.\x02K" +
-	"eine Treffer gefunden.\x02fehlende Versionsnummer\x02ungültige Versionsn" +
-	"ummer\x02Version nicht gefunden\x02Versionsvorschau\x02Neue Version hoch" +
-	"laden\x02Noch keine Versionen verfügbar.\x02Lade eine neue Version hoch," +
-	" um zu beginnen.\x02Neue Version hinzufügen\x02Noch keine Dateien verfüg" +
-	"bar.\x02Noch keine Dateien oder Verzeichnisse verfügbar.\x02Lade mehr..." +
-	"\x02Zurück zum übergeordneten Ordner\x02Suche\x02Suche in «%[1]s»\x02Noc" +
-	"h keine Felder verfügbar.\x02Keine Felder verfügbar.\x02Enthält\x02Begin" +
-	"nt mit\x02Gleich\x02Größer als\x02Kleiner als\x02Zwischen\x02«%[1]s» ist" +
-	" markiert\x02«%[1]s» ist nicht markiert\x02Tags | Filter\x02Noch keine T" +
-	"ags verfügbar.\x02Tags verwalten\x02«%[1]s» erstellt.\x02Verzeichnis öff" +
-	"nen\x02Nur im Ordnermodus erlaubt.\x02Datei öffnen\x02Verschoben nach «%" +
-	"[1]s».\x02Felder | Filter\x02«%[1]s» entfernt.\x02Datei umbenennen\x02Um" +
-	"benannt zu «%[1]s»\x02Dokumenttyp abgewählt.\x02Dokumenttyp ausgewählt." +
-	"\x02Keine ZIP-Datei.\x02ZIP-Datei konnte nicht geöffnet werden.\x02Archi" +
-	"v konnte nicht entpackt werden.\x02ZIP-Datei konnte nicht gelesen werden" +
-	".\x02Verzeichnisstruktur konnte nicht erstellt werden.\x02Es konnten nic" +
-	"ht alle Dateien aus dem Archiv extrahiert werden.\x02Archiv entpackt." +
-	"\x02Datei im Archiv konnte nicht geöffnet werden.\x02Datei konnte nicht " +
-	"aus dem Archiv extrahiert werden.\x02Enddatum liegt vor dem Startdatum." +
-	"\x02«%[1]s» Filter aktualisiert.\x02Kein übergeordnetes Verzeichnis ange" +
-	"geben.\x02Datei konnte nicht gelesen werden\x02«%[1]s» hochgeladen.\x02K" +
-	"eine Datei bereitgestellt.\x02Für Verzeichnisse können keine Versionen h" +
-	"ochgeladen werden.\x02Neue Version für «%[1]s» hochgeladen.\x02Verzeichn" +
-	"isse können nicht heruntergeladen werden\x02Datei verschieben\x02Datei n" +
-	"ach «%[1]s» verschieben\x02Verzeichnis nach oben\x02Startseite\x02Offene" +
-	" Aufgaben\x02Organisation «%[1]s»\x02Konto «%[1]s»\x02System\x02Testphas" +
-	"e\x02Abonnement\x02Nicht initialisiert\x02Bitte warten\x02Die Organisati" +
-	"on ist noch nicht initialisiert, bitte warte bis die Initialisierung abg" +
-	"eschlossen ist.\x02Aktualisieren\x02Space\x02Auswählen\x02Konto löschen" +
-	"\x02Kein Passwort gesetzt\x02Konto\x02Du hast dich mit einem temporären " +
-	"Passwort angemeldet. Bitte setze ein Passwort, um dein Konto zu sichern " +
-	"und die App zu nutzen.\x02Passwort jetzt setzen\x02Aktives temporäres Pa" +
-	"sswort\x02Dein Konto hat ein aktives temporäres Passwort. Bitte ändere d" +
-	"ein Passwort oder lösche das temporäre Passwort so bald wie möglich, um " +
-	"dein Konto zu sichern.\x02Noch kein Space verfügbar\x02Du hast keine Ber" +
-	"echtigung, auf einen Space dieser Organisation zuzugreifen.\x02Bitte ers" +
-	"telle einen, um zu beginnen.\x02Spaces verwalten\x02%[1]d Benutzer\x021 " +
-	"Benutzer\x02Benutzer verwalten\x02Die App ist entsperrt und nicht durch " +
-	"eine Passphrase geschützt.\x02Die App ist gesperrt.\x02Passphrase setzen" +
-	"\x02Die App ist entsperrt und durch eine Passphrase geschützt.\x02App-St" +
-	"atus\x02Dashboard\x02In «Spaces»-Ansicht bearbeiten\x02Dokumenttypen\x02" +
-	"Benutzer\x02Feld «%[1]s» ist diesem Dokumenttyp bereits hinzugefügt.\x02" +
-	"Attribut «%[1]s» hinzugefügt.\x02Feldattribut hinzufügen\x02Bitte erstel" +
-	"le zuerst ein Feld.\x02Bearbeiten\x02Listenattribut hinzufügen (Tag-Grup" +
-	"pe)\x02namensgebend\x02Attribut hinzufügen\x02Tag-Gruppe «%[1]s» ist die" +
-	"sem Dokumenttyp bereits hinzugefügt.\x02Attribut «%[1]s» erstellt.\x02No" +
-	"ch keine Tag-Gruppen verfügbar.\x02Bitte erstelle zuerst eine Tag-Gruppe" +
-	".\x02Dokumenttyp hinzufügen\x02Dokumenttyp erstellt.\x02Attribut gelösch" +
-	"t.\x02Dokumenttyp gelöscht.\x02Details schließen\x02Feldattribut bearbei" +
-	"ten\x02Attribut aktualisiert.\x02Tag-Attribut bearbeiten\x02Attribut «%[" +
-	"1]s» aktualisiert.\x02ID konnte nicht in eine Ganzzahl umgewandelt werde" +
-	"n.\x02Dokumenttyp umbenennen\x02Dokumenttyp umbenannt zu «%[1]s».\x02Dat" +
-	"ei zuweisen\x02Metadaten neu geladen\x02Als erledigt markieren\x02Metada" +
-	"ten neu laden\x02Texterkennung (OCR) ist noch nicht bereit, Vorschläge b" +
-	"asieren nur auf dem Dateinamen.\x02Ziel manuell auswählen\x02Vorschläge " +
-	"basierend auf dem Dateinamen\x02Inbox\x02Dateien sortieren\x02In «Inbox»" +
-	" suchen\x02Keine neuen Dateien gefunden.\x02Dateien erfolgreich hochgela" +
-	"den.\x02Datei ist nicht im Posteingang.\x02Datei «%[1]s» als erledigt ma" +
-	"rkiert.\x02Neueste zuerst\x02Älteste zuerst\x02Sortieren nach Name\x02Be" +
-	"nutzer einem Space zuweisen\x02Kein Space ausgewählt. Bitte wähle zuerst" +
-	" einen Space aus.\x02Du darfst Benutzer nicht Spaces zuweisen, weil du n" +
-	"icht der Eigentümer bist.\x02Benutzer ist diesem Space bereits zugewiese" +
-	"n.\x02Benutzer erfolgreich dem Space zugewiesen.\x02Keine nicht zugewies" +
-	"enen Benutzer verfügbar.\x02Bitte erstelle zuerst einen Benutzer in der " +
-	"Benutzerverwaltung der Organisation.\x02Benutzer «%[1]s»\x02Benutzer aus" +
-	" Space entfernen\x02Du kannst dich nicht selbst aus einem Space entferne" +
-	"n.\x02Benutzer erfolgreich aus dem Space entfernt.\x02Entfernen\x02Einen" +
-	" Benutzer zuweisen\x02Neuen Tag oder Gruppe erstellen\x02Bist du sicher?" +
-	" Diese Aktion wird den Tag löschen und von allen Dateien entfernen!\x02T" +
-	"ags zuweisen\x02In Gruppe verschieben\x02Gruppe, %[1]d Tag\x02Gruppe, %[" +
-	"1]d Tags\x02Neuen Tag erstellen\x02Super-Tag\x02Tag-Gruppen-ID ist erfor" +
-	"derlich.\x02Tag ist keine Gruppe.\x02Benutzer erstellen\x02Du darfst kei" +
-	"ne Benutzer erstellen. Kein Tenant ausgewählt.\x02Du darfst keine Benutz" +
-	"er erstellen, weil du nicht der Eigentümer bist.\x02Ein Benutzer mit die" +
-	"ser E-Mail-Adresse existiert bereits. Bitte kontaktiere den Support, wen" +
-	"n du diesen Benutzer dennoch hinzufügen möchtest.\x02Der neue Benutzer w" +
-	"urde erfolgreich erstellt. Das Passwort wurde dem Benutzer per E-Mail ge" +
-	"sendet. Ein Eigentümer kann ohne weitere Konfiguration auf alle Spaces z" +
-	"ugreifen.\x02Der neue Benutzer wurde erfolgreich erstellt. Das Passwort " +
-	"wurde dem Benutzer per E-Mail gesendet. Der nächste Schritt ist, dem Ben" +
-	"utzer den Zugriff auf einen Space zu erlauben.\x02Benutzer des Tenants v" +
-	"erwalten\x02Neuen Benutzer hinzufügen\x02Hochladen\x02Dateien werden hoc" +
-	"hgeladen, bitte warte einen Moment.\x02Die Seite wird automatisch aktual" +
-	"isiert, sobald der Upload abgeschlossen ist.\x02Noch keine Spaces.\x02Bi" +
-	"tte versuche es erneut, sobald du einen Space erstellt hast oder eingela" +
-	"den wurdest, einem beizutreten.\x02Space auswählen\x02Verarbeitung der g" +
-	"eteilten Dateien fehlgeschlagen.\x02Dateien hochgeladen, bitte wähle ein" +
-	"en Space aus.\x02Feld «%[1]s» erstellt.\x02Feld gelöscht.\x02Feld bearbe" +
-	"iten\x02Feld aktualisiert.\x02Space erstellen\x02Space «%[1]s» erstellt." +
-	"\x02Space gelöscht.\x02Space bearbeiten\x02Änderungen gespeichert.\x02No" +
-	"ch keine Spaces verfügbar.\x02%[1]s (%[2]s)\x02aktiv\x02Spaces\x02«%[1]s" +
-	"» zugewiesen.\x02Tag erstellen und zuweisen\x02«%[1]s» erstellt und zug" +
-	"ewiesen.\x02Tag erstellen\x02Tag «%[1]s» erstellt.\x02Eine Tag-Gruppe ka" +
-	"nn nicht als Kind hinzugefügt werden.\x02«%[1]s» gelöscht.\x02Zugewiesen" +
-	"e Tags anzeigen\x02Neue Gruppe erstellen\x02Tags von «%[1]s»\x02Tag bear" +
-	"beiten\x02«%[1]s» aktualisiert.\x02Layout wird nicht unterstützt\x02Zuge" +
-	"wiesene Tags bearbeiten\x02Gruppe «%[1]s»\x02Zusammengesetzt aus %[1]s" +
-	"\x02Tag in Gruppe verschieben\x02Gruppe abgewählt.\x02In Gruppe «%[1]s» " +
-	"verschoben.\x02Gruppe abwählen\x02Bist du sicher? Diese Aktion wird den " +
-	"Tag vollständig löschen und nicht nur von der aktuellen Datei entfernen!" +
-	"\x02«%[1]s» Zuweisung aufgehoben.\x02Übergeordneter Ordner\x02Name\x02No" +
-	"tizen\x02Erstellt am\x02Geändert am\x02Keine Tags zugewiesen.\x02Ordner " +
-	"können nicht wiederhergestellt werden.\x02Datei ist nicht gelöscht.\x02D" +
-	"er ursprüngliche übergeordnete Ordner fehlt. In den Posteingang wiederhe" +
-	"rgestellt.\x02Datei wiederhergestellt.\x02Wiederherstellen\x02Papierkorb" +
-	" ist leer.\x02Ordner gelöscht\x02Gelöscht\x02Ordner gelöscht am %[1]s" +
-	"\x02Gelöscht am %[1]s\x02Papierkorb\x02Dateivorschau ist für Ordner nich" +
-	"t verfügbar.\x02Vorschau\x02Datei kann nicht geparst werden\x02Formular " +
-	"kann nicht geparst werden\x02Formular kann nicht dekodiert werden\x02For" +
-	"mular kann nicht validiert werden.\x02Formularvalidierung fehlgeschlagen" +
-	".\x02Filter erfolgreich zurückgesetzt.\x02Aktuelle URL kann nicht gepars" +
-	"t werden\x02URL-Abfrage kann nicht dekodiert werden.\x02Akzeptiert\x02Ak" +
-	"tiver Tab\x02Mich als Space-Eigentümer hinzufügen\x02Zum Posteingang hin" +
-	"zufügen\x02Admin\x02Österreich\x02Checkbox\x02Checkbox-Wert\x02Neue Pass" +
-	"phrase bestätigen\x02Passphrase bestätigen\x02Passwort bestätigen\x02War" +
-	"nung bestätigen\x02Land\x02Aktuelles oder temporäres Passwort\x02Aktuell" +
-	"e Passphrase\x02Datum\x02Datumswert\x02Bei Erfolg löschen\x02Beschreibun" +
-	"g\x02Verzeichnisname\x02E-Mail\x02Englisch\x02Feld\x02Datei\x02Dateiname" +
-	"\x02Vorname\x02Französisch\x02Deutsch\x02Deutschland\x02Gruppe\x02Ist na" +
-	"mensgebend\x02Italienisch\x02Sprache\x02Nachname\x02Layout\x02Lokal\x02G" +
-	"eld\x02Geldwert\x02Neuer Verzeichnisname\x02Neuer Dateiname\x02Neuer Nam" +
-	"e\x02Neue Passphrase\x02Neues Passwort\x02Zahl\x02Zahlenwert\x02Nur zuge" +
-	"wiesen\x02Operator\x02Organisationsname\x02Besitzer\x02Passphrase\x02Pas" +
-	"swort\x02Ausstehend\x02Abgelehnt\x02Rolle\x02S3\x02Suchanfrage\x02Einfac" +
-	"h\x02Newsletter abonnieren\x02Super\x02Supporter\x02Schweiz\x02Tag\x02Te" +
-	"mporäre Sitzung\x02Text\x02Textwert\x02Typ\x02Einheit\x02Benutzer\x02Wer" +
-	"t\x02Wertende\x02Wertbeginn\x02Versionsnummer\x02Datei hat kein übergeor" +
-	"dnetes Verzeichnis\x02Zu viele Anmeldeversuche. Bitte versuche es in 10 " +
-	"Sekunden erneut.\x022FA-Code wurde angegeben, aber 2FA ist für dieses Ko" +
-	"nto nicht aktiviert.\x02Temporäres Passwort abgelaufen.\x02Temporäres Pa" +
-	"sswort konnte nicht generiert werden\x02Salt konnte nicht generiert werd" +
-	"en\x02Aktuelles Passwort ist ungültig.\x02Neues Passwort muss sich vom a" +
-	"ktuellen Passwort unterscheiden.\x02Passwort muss mindestens acht Zeiche" +
-	"n lang sein.\x02Passwörter stimmen nicht überein.\x02Ordnermodus ist nic" +
-	"ht aktiviert.\x02Pfadelement ist eine Datei, kein Verzeichnis.\x02Der an" +
-	"gegebene Dateiname ist nicht erlaubt.\x02Ein Ordner mit diesem Namen exi" +
-	"stiert bereits.\x02Ziel ist kein Verzeichnis.\x02Verzeichnis kann nicht " +
-	"in sich selbst verschoben werden.\x02Ziel ist aktueller Standort.\x02Zie" +
-	"l ist kein Verzeichnis\x02Datei kann nicht in ein Unterverzeichnis versc" +
-	"hoben werden\x02Neuer Dateiname ist leer.\x02Neuer Dateiname ist identis" +
-	"ch mit dem alten.\x02Objektname konnte nicht ermittelt werden.\x02Datei " +
-	"konnte nicht geöffnet werden.\x02Datei existiert bereits.\x02Speicherpfa" +
-	"d ist leer.\x02Ungültiger Dateiname.\x02Bucket-Name ist leer.\x02Dateina" +
-	"me existiert bereits.\x02Datei konnte nicht gespeichert werden.\x02X2551" +
-	"9-Identität konnte nicht abgerufen werden.\x02App ist noch nicht entsper" +
-	"rt.\x02Temporäre Datei konnte nicht kopiert werden.\x02Dein temporäres P" +
-	"asswort ist\x02Es läuft ab am\x02Bemerkung\x02Willkommen bei SimpleDMS" +
-	"\x0202.01.2006 um 15:04 Uhr\x02SimpleDMS Passwort zurücksetzen\x02Dies i" +
-	"st eine automatisierte Nachricht, bitte antworte nicht darauf.\x02Dein K" +
-	"onto wurde erfolgreich erstellt.\x02Bitte logge dich ein und ändere dein" +
-	" Passwort so bald wie möglich.\x02SimpleDMS Passwort zurücksetzen\x02Für" +
-	" dein Konto wurde eine Passwort-Zurücksetzung angefordert.\x02Dein altes" +
-	" Passwort funktioniert weiterhin, bis du es änderst.\x02«%[1]s» hat dich" +
-	" zum Tenant «%[2]s» eingeladen.\x02«%[1]s» hat dich eingeladen.\x02App b" +
-	"ereits initialisiert.\x02Passphrase ist erforderlich.\x02App ist bereits" +
-	" entsperrt.\x02Ungültige Passphrase.\x02App ist nicht mit Passphrase ver" +
-	"schlüsselt.\x02Keine Passphrase gesetzt.\x02Neue Passphrase ist erforder" +
-	"lich.\x02Neue Passphrase stimmt nicht mit der Bestätigung überein.\x02Al" +
-	"te Passphrase ist erforderlich.\x02App noch nicht entsperrt. Bitte versu" +
-	"che es später erneut.\x02Mandant noch nicht initialisiert. Bitte versuch" +
-	"e es später erneut.\x02Fehler beim Öffnen der Mandantendatenbank. Bitte " +
-	"versuche es später erneut.\x02Eine ähnliche Entität existiert bereits." +
-	"\x02Eine Entität, die noch in Verwendung ist, kann nicht gelöscht werden" +
-	".\x02Es ist ein Datenbankfehler aufgetreten. Bitte kontaktiere den Suppo" +
-	"rt.\x02Datenvalidierung fehlgeschlagen.\x02Ein Fehler ist aufgetreten. B" +
-	"itte versuche es erneut.\x02Du bist nicht eingeloggt. Bitte logge dich e" +
-	"in, um fortzufahren.\x02URL konnte nicht geparst werden.\x02Du hast kein" +
-	"e Berechtigung, auf diesen Mandanten zuzugreifen.\x02Cookie konnte nicht" +
-	" gelesen werden.\x02Cookie gesetzt, aber nicht gültig.\x02Cookie gesetzt" +
-	", aber leer.\x02Wartungsmodus\x02Der Wartungsmodus ist aktiviert. Bitte " +
-	"warte, bis die App wieder bereit ist.\x02Schliessen\x02Ausloggen\x02Haup" +
-	"tmenü öffnen\x02Dialog schließen\x02Vorschlag\x02optional\x02erforderlic" +
-	"h\x02Auth-Cookie bereits gesetzt.\x02Session-ID konnte nicht generiert w" +
-	"erden.\x02Du darfst nicht auf die angeforderte Ressource zugreifen."
+	"ell- und Zieldatei sind erforderlich.\x02Neue Version aus der Inbox hinz" +
+	"ugefügt.\x02Quelle und Ziel müssen unterschiedliche Dateien sein.\x02Dat" +
+	"ei gehört nicht zum aktuellen Space.\x02Verzeichnisse können nicht zusam" +
+	"mengeführt werden.\x02Quelldatei ist gelöscht.\x02Quelldatei hat keine V" +
+	"ersionen.\x02Quellversion konnte nicht gelesen werden.\x02Quelldatei hat" +
+	" keine gespeicherte Datei.\x02Zielversionen konnten nicht gelesen werden" +
+	".\x02Zieldatei konnte nicht aktualisiert werden.\x02Quelldatei ist nicht" +
+	" in der Inbox.\x02Quellversionen konnten nicht entfernt werden.\x02Quell" +
+	"datei konnte nicht gelöscht werden.\x02Ich verstehe, dass die Metadaten " +
+	"der Inbox-Datei (Dokumenttyp, Tags, Felder) beim Zusammenführen verloren" +
+	" gehen.\x02Inbox-Dateien suchen\x02Neue Version aus der Inbox hinzufügen" +
+	"\x02Hinzufügen\x02Zieldatei ist erforderlich.\x02Quelldatei ist erforder" +
+	"lich.\x02Datei muss in der Inbox sein.\x02Keine Treffer gefunden.\x02feh" +
+	"lende Versionsnummer\x02ungültige Versionsnummer\x02Version nicht gefund" +
+	"en\x02Versionsvorschau\x02Neue Version hochladen\x02Noch keine Versionen" +
+	" verfügbar.\x02Lade eine neue Version hoch, um zu beginnen.\x02Neue Vers" +
+	"ion hinzufügen\x02Noch keine Dateien verfügbar.\x02Noch keine Dateien od" +
+	"er Verzeichnisse verfügbar.\x02Lade mehr...\x02Zurück zum übergeordneten" +
+	" Ordner\x02Suche\x02Suche in «%[1]s»\x02Noch keine Felder verfügbar.\x02" +
+	"Keine Felder verfügbar.\x02Enthält\x02Beginnt mit\x02Gleich\x02Größer al" +
+	"s\x02Kleiner als\x02Zwischen\x02«%[1]s» ist markiert\x02«%[1]s» ist nich" +
+	"t markiert\x02Tags | Filter\x02Noch keine Tags verfügbar.\x02Tags verwal" +
+	"ten\x02«%[1]s» erstellt.\x02Verzeichnis öffnen\x02Nur im Ordnermodus erl" +
+	"aubt.\x02Datei öffnen\x02Verschoben nach «%[1]s».\x02Felder | Filter\x02" +
+	"«%[1]s» entfernt.\x02Datei umbenennen\x02Umbenannt zu «%[1]s»\x02Dokume" +
+	"nttyp abgewählt.\x02Dokumenttyp ausgewählt.\x02Keine ZIP-Datei.\x02ZIP-D" +
+	"atei konnte nicht geöffnet werden.\x02Archiv konnte nicht entpackt werde" +
+	"n.\x02ZIP-Datei konnte nicht gelesen werden.\x02Verzeichnisstruktur konn" +
+	"te nicht erstellt werden.\x02Es konnten nicht alle Dateien aus dem Archi" +
+	"v extrahiert werden.\x02Archiv entpackt.\x02Datei im Archiv konnte nicht" +
+	" geöffnet werden.\x02Datei konnte nicht aus dem Archiv extrahiert werden" +
+	".\x02Enddatum liegt vor dem Startdatum.\x02«%[1]s» Filter aktualisiert." +
+	"\x02Kein übergeordnetes Verzeichnis angegeben.\x02Datei konnte nicht gel" +
+	"esen werden\x02«%[1]s» hochgeladen.\x02Keine Datei bereitgestellt.\x02Fü" +
+	"r Verzeichnisse können keine Versionen hochgeladen werden.\x02Neue Versi" +
+	"on für «%[1]s» hochgeladen.\x02Verzeichnisse können nicht heruntergelade" +
+	"n werden\x02Datei verschieben\x02Datei nach «%[1]s» verschieben\x02Verze" +
+	"ichnis nach oben\x02Startseite\x02Offene Aufgaben\x02Organisation «%[1]s" +
+	"»\x02Konto «%[1]s»\x02System\x02Testphase\x02Abonnement\x02Nicht initia" +
+	"lisiert\x02Bitte warten\x02Die Organisation ist noch nicht initialisiert" +
+	", bitte warte bis die Initialisierung abgeschlossen ist.\x02Aktualisiere" +
+	"n\x02Space\x02Auswählen\x02Konto löschen\x02Kein Passwort gesetzt\x02Kon" +
+	"to\x02Du hast dich mit einem temporären Passwort angemeldet. Bitte setze" +
+	" ein Passwort, um dein Konto zu sichern und die App zu nutzen.\x02Passwo" +
+	"rt jetzt setzen\x02Aktives temporäres Passwort\x02Dein Konto hat ein akt" +
+	"ives temporäres Passwort. Bitte ändere dein Passwort oder lösche das tem" +
+	"poräre Passwort so bald wie möglich, um dein Konto zu sichern.\x02Noch k" +
+	"ein Space verfügbar\x02Du hast keine Berechtigung, auf einen Space diese" +
+	"r Organisation zuzugreifen.\x02Bitte erstelle einen, um zu beginnen.\x02" +
+	"Spaces verwalten\x02%[1]d Benutzer\x021 Benutzer\x02Benutzer verwalten" +
+	"\x02Die App ist entsperrt und nicht durch eine Passphrase geschützt.\x02" +
+	"Die App ist gesperrt.\x02Passphrase setzen\x02Die App ist entsperrt und " +
+	"durch eine Passphrase geschützt.\x02App-Status\x02Dashboard\x02In «Space" +
+	"s»-Ansicht bearbeiten\x02Dokumenttypen\x02Benutzer\x02Feld «%[1]s» ist d" +
+	"iesem Dokumenttyp bereits hinzugefügt.\x02Attribut «%[1]s» hinzugefügt." +
+	"\x02Feldattribut hinzufügen\x02Bitte erstelle zuerst ein Feld.\x02Bearbe" +
+	"iten\x02Listenattribut hinzufügen (Tag-Gruppe)\x02namensgebend\x02Attrib" +
+	"ut hinzufügen\x02Tag-Gruppe «%[1]s» ist diesem Dokumenttyp bereits hinzu" +
+	"gefügt.\x02Attribut «%[1]s» erstellt.\x02Noch keine Tag-Gruppen verfügba" +
+	"r.\x02Bitte erstelle zuerst eine Tag-Gruppe.\x02Dokumenttyp hinzufügen" +
+	"\x02Dokumenttyp erstellt.\x02Attribut gelöscht.\x02Dokumenttyp gelöscht." +
+	"\x02Details schließen\x02Feldattribut bearbeiten\x02Attribut aktualisier" +
+	"t.\x02Tag-Attribut bearbeiten\x02Attribut «%[1]s» aktualisiert.\x02ID ko" +
+	"nnte nicht in eine Ganzzahl umgewandelt werden.\x02Dokumenttyp umbenenne" +
+	"n\x02Dokumenttyp umbenannt zu «%[1]s».\x02Datei zuweisen\x02Metadaten ne" +
+	"u geladen\x02Als erledigt markieren\x02Metadaten neu laden\x02Texterkenn" +
+	"ung (OCR) ist noch nicht bereit, Vorschläge basieren nur auf dem Dateina" +
+	"men.\x02Ziel manuell auswählen\x02Vorschläge basierend auf dem Dateiname" +
+	"n\x02Inbox\x02Dateien sortieren\x02In «Inbox» suchen\x02Keine neuen Date" +
+	"ien gefunden.\x02Dateien erfolgreich hochgeladen.\x02Datei ist nicht in " +
+	"der Inbox.\x02Datei «%[1]s» als erledigt markiert.\x02Neueste zuerst\x02" +
+	"Älteste zuerst\x02Sortieren nach Name\x02Benutzer einem Space zuweisen" +
+	"\x02Kein Space ausgewählt. Bitte wähle zuerst einen Space aus.\x02Du dar" +
+	"fst Benutzer nicht Spaces zuweisen, weil du nicht der Eigentümer bist." +
+	"\x02Benutzer ist diesem Space bereits zugewiesen.\x02Benutzer erfolgreic" +
+	"h dem Space zugewiesen.\x02Keine nicht zugewiesenen Benutzer verfügbar." +
+	"\x02Bitte erstelle zuerst einen Benutzer in der Benutzerverwaltung der O" +
+	"rganisation.\x02Benutzer «%[1]s»\x02Benutzer aus Space entfernen\x02Du k" +
+	"annst dich nicht selbst aus einem Space entfernen.\x02Benutzer erfolgrei" +
+	"ch aus dem Space entfernt.\x02Entfernen\x02Einen Benutzer zuweisen\x02Ne" +
+	"uen Tag oder Gruppe erstellen\x02Bist du sicher? Diese Aktion wird den T" +
+	"ag löschen und von allen Dateien entfernen!\x02Tags zuweisen\x02In Grupp" +
+	"e verschieben\x02Gruppe, %[1]d Tag\x02Gruppe, %[1]d Tags\x02Neuen Tag er" +
+	"stellen\x02Super-Tag\x02Tag-Gruppen-ID ist erforderlich.\x02Tag ist kein" +
+	"e Gruppe.\x02Benutzer erstellen\x02Du darfst keine Benutzer erstellen. K" +
+	"ein Tenant ausgewählt.\x02Du darfst keine Benutzer erstellen, weil du ni" +
+	"cht der Eigentümer bist.\x02Ein Benutzer mit dieser E-Mail-Adresse exist" +
+	"iert bereits. Bitte kontaktiere den Support, wenn du diesen Benutzer den" +
+	"noch hinzufügen möchtest.\x02Der neue Benutzer wurde erfolgreich erstell" +
+	"t. Das Passwort wurde dem Benutzer per E-Mail gesendet. Ein Eigentümer k" +
+	"ann ohne weitere Konfiguration auf alle Spaces zugreifen.\x02Der neue Be" +
+	"nutzer wurde erfolgreich erstellt. Das Passwort wurde dem Benutzer per E" +
+	"-Mail gesendet. Der nächste Schritt ist, dem Benutzer den Zugriff auf ei" +
+	"nen Space zu erlauben.\x02Benutzer des Tenants verwalten\x02Neuen Benutz" +
+	"er hinzufügen\x02Hochladen\x02Dateien werden hochgeladen, bitte warte ei" +
+	"nen Moment.\x02Die Seite wird automatisch aktualisiert, sobald der Uploa" +
+	"d abgeschlossen ist.\x02Noch keine Spaces.\x02Bitte versuche es erneut, " +
+	"sobald du einen Space erstellt hast oder eingeladen wurdest, einem beizu" +
+	"treten.\x02Space auswählen\x02Verarbeitung der geteilten Dateien fehlges" +
+	"chlagen.\x02Dateien hochgeladen, bitte wähle einen Space aus.\x02Feld «%" +
+	"[1]s» erstellt.\x02Feld gelöscht.\x02Feld bearbeiten\x02Feld aktualisier" +
+	"t.\x02Space erstellen\x02Space «%[1]s» erstellt.\x02Space gelöscht.\x02S" +
+	"pace bearbeiten\x02Änderungen gespeichert.\x02Noch keine Spaces verfügba" +
+	"r.\x02%[1]s (%[2]s)\x02aktiv\x02Spaces\x02«%[1]s» zugewiesen.\x02Tag ers" +
+	"tellen und zuweisen\x02«%[1]s» erstellt und zugewiesen.\x02Tag erstellen" +
+	"\x02Tag «%[1]s» erstellt.\x02Eine Tag-Gruppe kann nicht als Kind hinzuge" +
+	"fügt werden.\x02«%[1]s» gelöscht.\x02Zugewiesene Tags anzeigen\x02Neue G" +
+	"ruppe erstellen\x02Tags von «%[1]s»\x02Tag bearbeiten\x02«%[1]s» aktuali" +
+	"siert.\x02Layout wird nicht unterstützt\x02Zugewiesene Tags bearbeiten" +
+	"\x02Gruppe «%[1]s»\x02Zusammengesetzt aus %[1]s\x02Tag in Gruppe verschi" +
+	"eben\x02Gruppe abgewählt.\x02In Gruppe «%[1]s» verschoben.\x02Gruppe abw" +
+	"ählen\x02Bist du sicher? Diese Aktion wird den Tag vollständig löschen " +
+	"und nicht nur von der aktuellen Datei entfernen!\x02«%[1]s» Zuweisung au" +
+	"fgehoben.\x02Übergeordneter Ordner\x02Name\x02Notizen\x02Erstellt am\x02" +
+	"Geändert am\x02Keine Tags zugewiesen.\x02Ordner können nicht wiederherge" +
+	"stellt werden.\x02Datei ist nicht gelöscht.\x02Der ursprüngliche übergeo" +
+	"rdnete Ordner fehlt. In die Inbox wiederhergestellt.\x02Datei wiederherg" +
+	"estellt.\x02Wiederherstellen\x02Papierkorb ist leer.\x02Ordner gelöscht" +
+	"\x02Gelöscht\x02Ordner gelöscht am %[1]s\x02Gelöscht am %[1]s\x02Papierk" +
+	"orb\x02Dateivorschau ist für Ordner nicht verfügbar.\x02Vorschau\x02Date" +
+	"i kann nicht geparst werden\x02Formular kann nicht geparst werden\x02For" +
+	"mular kann nicht dekodiert werden\x02Formular kann nicht validiert werde" +
+	"n.\x02Formularvalidierung fehlgeschlagen.\x02Filter erfolgreich zurückge" +
+	"setzt.\x02Aktuelle URL kann nicht geparst werden\x02URL-Abfrage kann nic" +
+	"ht dekodiert werden.\x02Akzeptiert\x02Aktiver Tab\x02Mich als Space-Eige" +
+	"ntümer hinzufügen\x02Zur Inbox hinzufügen\x02Admin\x02Österreich\x02Chec" +
+	"kbox\x02Checkbox-Wert\x02Neue Passphrase bestätigen\x02Passphrase bestät" +
+	"igen\x02Passwort bestätigen\x02Warnung bestätigen\x02Land\x02Aktuelles o" +
+	"der temporäres Passwort\x02Aktuelle Passphrase\x02Datum\x02Datumswert" +
+	"\x02Bei Erfolg löschen\x02Beschreibung\x02Verzeichnisname\x02E-Mail\x02E" +
+	"nglisch\x02Feld\x02Datei\x02Dateiname\x02Vorname\x02Französisch\x02Deuts" +
+	"ch\x02Deutschland\x02Gruppe\x02Ist namensgebend\x02Italienisch\x02Sprach" +
+	"e\x02Nachname\x02Layout\x02Lokal\x02Geld\x02Geldwert\x02Neuer Verzeichni" +
+	"sname\x02Neuer Dateiname\x02Neuer Name\x02Neue Passphrase\x02Neues Passw" +
+	"ort\x02Zahl\x02Zahlenwert\x02Nur zugewiesen\x02Operator\x02Organisations" +
+	"name\x02Besitzer\x02Passphrase\x02Passwort\x02Ausstehend\x02Abgelehnt" +
+	"\x02Rolle\x02S3\x02Suchanfrage\x02Einfach\x02Newsletter abonnieren\x02Su" +
+	"per\x02Supporter\x02Schweiz\x02Tag\x02Temporäre Sitzung\x02Text\x02Textw" +
+	"ert\x02Typ\x02Einheit\x02Benutzer\x02Wert\x02Wertende\x02Wertbeginn\x02V" +
+	"ersionsnummer\x02Datei hat kein übergeordnetes Verzeichnis\x02Zu viele A" +
+	"nmeldeversuche. Bitte versuche es in 10 Sekunden erneut.\x022FA-Code wur" +
+	"de angegeben, aber 2FA ist für dieses Konto nicht aktiviert.\x02Temporär" +
+	"es Passwort abgelaufen.\x02Temporäres Passwort konnte nicht generiert we" +
+	"rden\x02Salt konnte nicht generiert werden\x02Aktuelles Passwort ist ung" +
+	"ültig.\x02Neues Passwort muss sich vom aktuellen Passwort unterscheiden" +
+	".\x02Passwort muss mindestens acht Zeichen lang sein.\x02Passwörter stim" +
+	"men nicht überein.\x02Ordnermodus ist nicht aktiviert.\x02Pfadelement is" +
+	"t eine Datei, kein Verzeichnis.\x02Der angegebene Dateiname ist nicht er" +
+	"laubt.\x02Ein Ordner mit diesem Namen existiert bereits.\x02Ziel ist kei" +
+	"n Verzeichnis.\x02Verzeichnis kann nicht in sich selbst verschoben werde" +
+	"n.\x02Ziel ist aktueller Standort.\x02Ziel ist kein Verzeichnis\x02Datei" +
+	" kann nicht in ein Unterverzeichnis verschoben werden\x02Neuer Dateiname" +
+	" ist leer.\x02Neuer Dateiname ist identisch mit dem alten.\x02Objektname" +
+	" konnte nicht ermittelt werden.\x02Datei konnte nicht geöffnet werden." +
+	"\x02Datei existiert bereits.\x02Speicherpfad ist leer.\x02Ungültiger Dat" +
+	"einame.\x02Bucket-Name ist leer.\x02Dateiname existiert bereits.\x02Date" +
+	"i konnte nicht gespeichert werden.\x02X25519-Identität konnte nicht abge" +
+	"rufen werden.\x02App ist noch nicht entsperrt.\x02Temporäre Datei konnte" +
+	" nicht kopiert werden.\x02Dein temporäres Passwort ist\x02Es läuft ab am" +
+	"\x02Bemerkung\x02Willkommen bei SimpleDMS\x0202.01.2006 um 15:04 Uhr\x02" +
+	"SimpleDMS Passwort zurücksetzen\x02Dies ist eine automatisierte Nachrich" +
+	"t, bitte antworte nicht darauf.\x02Dein Konto wurde erfolgreich erstellt" +
+	".\x02Bitte logge dich ein und ändere dein Passwort so bald wie möglich." +
+	"\x02SimpleDMS Passwort zurücksetzen\x02Für dein Konto wurde eine Passwor" +
+	"t-Zurücksetzung angefordert.\x02Dein altes Passwort funktioniert weiterh" +
+	"in, bis du es änderst.\x02«%[1]s» hat dich zum Tenant «%[2]s» eingeladen" +
+	".\x02«%[1]s» hat dich eingeladen.\x02App bereits initialisiert.\x02Passp" +
+	"hrase ist erforderlich.\x02App ist bereits entsperrt.\x02Ungültige Passp" +
+	"hrase.\x02App ist nicht mit Passphrase verschlüsselt.\x02Keine Passphras" +
+	"e gesetzt.\x02Neue Passphrase ist erforderlich.\x02Neue Passphrase stimm" +
+	"t nicht mit der Bestätigung überein.\x02Alte Passphrase ist erforderlich" +
+	".\x02App noch nicht entsperrt. Bitte versuche es später erneut.\x02Manda" +
+	"nt noch nicht initialisiert. Bitte versuche es später erneut.\x02Fehler " +
+	"beim Öffnen der Mandantendatenbank. Bitte versuche es später erneut.\x02" +
+	"Eine ähnliche Entität existiert bereits.\x02Eine Entität, die noch in Ve" +
+	"rwendung ist, kann nicht gelöscht werden.\x02Es ist ein Datenbankfehler " +
+	"aufgetreten. Bitte kontaktiere den Support.\x02Datenvalidierung fehlgesc" +
+	"hlagen.\x02Ein Fehler ist aufgetreten. Bitte versuche es erneut.\x02Du b" +
+	"ist nicht eingeloggt. Bitte logge dich ein, um fortzufahren.\x02URL konn" +
+	"te nicht geparst werden.\x02Du hast keine Berechtigung, auf diesen Manda" +
+	"nten zuzugreifen.\x02Cookie konnte nicht gelesen werden.\x02Cookie geset" +
+	"zt, aber nicht gültig.\x02Cookie gesetzt, aber leer.\x02Wartungsmodus" +
+	"\x02Der Wartungsmodus ist aktiviert. Bitte warte, bis die App wieder ber" +
+	"eit ist.\x02Schliessen\x02Ausloggen\x02Hauptmenü öffnen\x02Dialog schlie" +
+	"ßen\x02Vorschlag\x02optional\x02erforderlich\x02Auth-Cookie bereits ges" +
+	"etzt.\x02Session-ID konnte nicht generiert werden.\x02Du darfst nicht au" +
+	"f die angeforderte Ressource zugreifen."
 
 var enIndex = []uint32{ // 533 elements
 	// Entry 0 - 1F
@@ -1575,135 +1575,135 @@ var frIndex = []uint32{ // 533 elements
 	0x0000117e, 0x0000119d, 0x000011a7, 0x000011c0,
 	0x000011d6, 0x000011ff, 0x00001224, 0x0000123f,
 	0x00001252, 0x00001265, 0x0000127f, 0x000012b1,
-	0x000012cf, 0x000012dc, 0x000012f2, 0x00001319,
-	0x0000132a, 0x00001333, 0x0000133d, 0x00001347,
+	0x000012cf, 0x000012dc, 0x000012eb, 0x0000130b,
+	0x0000131c, 0x00001325, 0x0000132f, 0x00001339,
 	// Entry 60 - 7F
-	0x00001359, 0x00001371, 0x0000137a, 0x0000138c,
-	0x00001396, 0x000013a6, 0x000013bf, 0x000013cf,
-	0x000013d7, 0x000013f9, 0x00001408, 0x00001415,
-	0x00001425, 0x00001436, 0x0000144c, 0x0000145a,
-	0x00001480, 0x0000148a, 0x000014ac, 0x000014ba,
-	0x000014c6, 0x000014cb, 0x000014d4, 0x000014f0,
-	0x0000153b, 0x00001565, 0x0000159f, 0x000015d7,
-	0x00001607, 0x00001631, 0x00001652, 0x00001679,
+	0x0000134b, 0x00001363, 0x0000136c, 0x0000137e,
+	0x00001388, 0x00001398, 0x000013b1, 0x000013c1,
+	0x000013c9, 0x000013eb, 0x000013fa, 0x00001407,
+	0x00001417, 0x00001428, 0x0000143e, 0x0000144c,
+	0x00001472, 0x0000147c, 0x0000149e, 0x000014ac,
+	0x000014b1, 0x000014b6, 0x000014bf, 0x000014db,
+	0x00001526, 0x00001550, 0x0000157a, 0x000015b2,
+	0x000015e1, 0x0000160b, 0x0000162c, 0x00001653,
 	// Entry 80 - 9F
-	0x0000169f, 0x000016cd, 0x000016f5, 0x00001724,
-	0x0000175e, 0x0000178b, 0x000017b6, 0x00001849,
-	0x00001881, 0x000018bd, 0x000018c5, 0x000018e2,
-	0x00001900, 0x00001934, 0x0000194d, 0x00001969,
-	0x00001985, 0x00001999, 0x000019ac, 0x000019ce,
-	0x000019f8, 0x00001a2a, 0x00001a47, 0x00001a70,
-	0x00001aa8, 0x00001abf, 0x00001ad8, 0x00001ae3,
-	0x00001afd, 0x00001b2b, 0x00001b4a, 0x00001b53,
+	0x00001679, 0x000016a7, 0x000016cf, 0x000016fe,
+	0x00001728, 0x00001755, 0x00001780, 0x000017fc,
+	0x00001824, 0x00001850, 0x00001858, 0x00001875,
+	0x00001893, 0x000018b7, 0x000018d0, 0x000018ec,
+	0x00001908, 0x0000191c, 0x0000192f, 0x00001951,
+	0x0000197b, 0x000019ad, 0x000019ca, 0x000019f3,
+	0x00001a2b, 0x00001a42, 0x00001a5b, 0x00001a66,
+	0x00001a80, 0x00001aae, 0x00001acd, 0x00001ad6,
 	// Entry A0 - BF
-	0x00001b60, 0x00001b69, 0x00001b77, 0x00001b85,
-	0x00001b8b, 0x00001ba0, 0x00001bbb, 0x00001bd0,
-	0x00001bfd, 0x00001c14, 0x00001c26, 0x00001c3c,
-	0x00001c62, 0x00001c74, 0x00001c8e, 0x00001c9e,
-	0x00001cb3, 0x00001cc7, 0x00001cdd, 0x00001d00,
-	0x00001d20, 0x00001d3e, 0x00001d61, 0x00001d88,
-	0x00001daa, 0x00001ddf, 0x00001e15, 0x00001e2d,
-	0x00001e5c, 0x00001e8b, 0x00001ec0, 0x00001ede,
+	0x00001ae3, 0x00001aec, 0x00001afa, 0x00001b08,
+	0x00001b0e, 0x00001b23, 0x00001b3e, 0x00001b4c,
+	0x00001b72, 0x00001b82, 0x00001b94, 0x00001baa,
+	0x00001bd0, 0x00001be2, 0x00001bfc, 0x00001c0c,
+	0x00001c21, 0x00001c35, 0x00001c4b, 0x00001c6e,
+	0x00001c8e, 0x00001cac, 0x00001ccf, 0x00001cf6,
+	0x00001d18, 0x00001d4d, 0x00001d83, 0x00001d9b,
+	0x00001dca, 0x00001df9, 0x00001e2e, 0x00001e4c,
 	// Entry C0 - DF
-	0x00001eff, 0x00001f1d, 0x00001f35, 0x00001f4b,
-	0x00001f8a, 0x00001fb9, 0x00001fe6, 0x00001ffb,
-	0x0000201f, 0x00002034, 0x0000203c, 0x0000204f,
-	0x00002066, 0x00002077, 0x00002080, 0x00002091,
-	0x0000209c, 0x000020ac, 0x000020bf, 0x00002124,
-	0x0000212f, 0x00002136, 0x00002144, 0x00002158,
-	0x00002173, 0x0000217a, 0x0000220f, 0x00002233,
-	0x00002251, 0x000022fe, 0x00002325, 0x00002373,
+	0x00001e6d, 0x00001e8b, 0x00001ea3, 0x00001eb9,
+	0x00001ef8, 0x00001f27, 0x00001f54, 0x00001f69,
+	0x00001f8d, 0x00001fa2, 0x00001faa, 0x00001fbd,
+	0x00001fd4, 0x00001fe5, 0x00001fee, 0x00001fff,
+	0x0000200a, 0x0000201a, 0x0000202d, 0x00002092,
+	0x0000209d, 0x000020a3, 0x000020b1, 0x000020c5,
+	0x000020e0, 0x000020e7, 0x0000217c, 0x000021a0,
+	0x000021be, 0x0000226b, 0x00002291, 0x000022de,
 	// Entry E0 - FF
-	0x00002399, 0x000023ac, 0x000023bf, 0x000023cd,
-	0x000023e5, 0x00002438, 0x00002458, 0x00002474,
-	0x000024bd, 0x000024d5, 0x000024e5, 0x00002506,
-	0x00002518, 0x00002525, 0x00002563, 0x0000257f,
-	0x0000259c, 0x000025be, 0x000025c7, 0x000025fb,
-	0x00002605, 0x00002619, 0x00002666, 0x00002681,
-	0x000026b7, 0x000026e8, 0x00002704, 0x0000271d,
-	0x00002731, 0x0000274d, 0x00002761, 0x0000277e,
+	0x00002304, 0x00002316, 0x00002329, 0x00002337,
+	0x0000234f, 0x000023a2, 0x000023c2, 0x000023de,
+	0x00002427, 0x0000243f, 0x0000244f, 0x0000246f,
+	0x00002481, 0x0000248e, 0x000024cc, 0x000024e8,
+	0x00002505, 0x00002527, 0x00002530, 0x0000255d,
+	0x00002567, 0x0000257b, 0x000025c1, 0x000025dc,
+	0x0000260b, 0x00002635, 0x00002651, 0x0000266a,
+	0x0000267e, 0x0000269a, 0x000026ae, 0x000026cb,
 	// Entry 100 - 11F
-	0x00002794, 0x000027b8, 0x000027d8, 0x00002809,
-	0x00002826, 0x0000284e, 0x00002863, 0x0000287d,
-	0x00002894, 0x000028b0, 0x00002926, 0x00002950,
-	0x0000297a, 0x0000298f, 0x000029a2, 0x000029cb,
-	0x000029ea, 0x00002a0f, 0x00002a42, 0x00002a6c,
-	0x00002a84, 0x00002a9b, 0x00002aa9, 0x00002ace,
-	0x00002b14, 0x00002b83, 0x00002bb5, 0x00002be5,
-	0x00002c11, 0x00002c6c, 0x00002c83, 0x00002cab,
+	0x000026e1, 0x000026fe, 0x0000271e, 0x0000274f,
+	0x0000276c, 0x00002794, 0x000027a9, 0x000027c3,
+	0x000027da, 0x000027f6, 0x0000286c, 0x00002896,
+	0x000028c0, 0x000028d5, 0x000028e8, 0x00002911,
+	0x00002930, 0x00002955, 0x00002978, 0x000029a2,
+	0x000029ba, 0x000029d1, 0x000029df, 0x00002a03,
+	0x00002a47, 0x00002ab5, 0x00002ae6, 0x00002b15,
+	0x00002b41, 0x00002b9c, 0x00002bb3, 0x00002bda,
 	// Entry 120 - 13F
-	0x00002cde, 0x00002d12, 0x00002d20, 0x00002d39,
-	0x00002d65, 0x00002dc2, 0x00002ddc, 0x00002df5,
-	0x00002e0e, 0x00002e28, 0x00002e47, 0x00002e58,
-	0x00002e8a, 0x00002eac, 0x00002ec2, 0x00002f18,
-	0x00002f75, 0x00003006, 0x000030cd, 0x0000318d,
-	0x000031b2, 0x000031d0, 0x000031dd, 0x00003219,
-	0x00003268, 0x00003285, 0x000032f6, 0x0000330e,
-	0x0000333f, 0x00003379, 0x00003391, 0x000033a2,
+	0x00002c0c, 0x00002c3f, 0x00002c4d, 0x00002c66,
+	0x00002c8b, 0x00002ce1, 0x00002cf4, 0x00002d0d,
+	0x00002d1f, 0x00002d32, 0x00002d4a, 0x00002d54,
+	0x00002d7f, 0x00002d9a, 0x00002db0, 0x00002e06,
+	0x00002e63, 0x00002ef4, 0x00002fba, 0x00003079,
+	0x0000309e, 0x000030bc, 0x000030c9, 0x00003105,
+	0x00003154, 0x00003170, 0x000031e0, 0x000031f7,
+	0x00003228, 0x00003261, 0x00003279, 0x0000328a,
 	// Entry 140 - 15F
-	0x000033b4, 0x000033c7, 0x000033d8, 0x000033f1,
-	0x00003403, 0x00003415, 0x00003432, 0x0000345a,
-	0x00003468, 0x0000346e, 0x00003476, 0x0000348b,
-	0x000034ae, 0x000034cd, 0x000034e3, 0x00003501,
-	0x0000353c, 0x00003551, 0x00003576, 0x0000358f,
-	0x000035a8, 0x000035be, 0x000035d5, 0x000035f5,
-	0x0000361a, 0x0000362b, 0x0000363d, 0x00003663,
-	0x0000367c, 0x000036a0, 0x000036bb, 0x00003737,
+	0x0000329c, 0x000032af, 0x000032bf, 0x000032d7,
+	0x000032e8, 0x000032f9, 0x00003316, 0x0000333d,
+	0x0000334b, 0x00003351, 0x00003358, 0x0000336d,
+	0x00003389, 0x000033a8, 0x000033b7, 0x000033ce,
+	0x00003402, 0x00003417, 0x00003435, 0x0000344e,
+	0x00003460, 0x0000346f, 0x00003486, 0x000034a6,
+	0x000034c4, 0x000034d5, 0x000034e7, 0x00003506,
+	0x0000351f, 0x00003543, 0x0000355e, 0x000035d3,
 	// Entry 160 - 17F
-	0x00003750, 0x0000375f, 0x00003763, 0x00003769,
-	0x00003773, 0x0000377f, 0x0000379d, 0x000037cb,
-	0x000037eb, 0x0000383d, 0x00003850, 0x0000385a,
-	0x00003871, 0x00003883, 0x0000388d, 0x000038a8,
-	0x000038bb, 0x000038c5, 0x00003902, 0x0000390a,
-	0x0000392b, 0x0000394f, 0x00003974, 0x00003999,
-	0x000039c1, 0x000039e7, 0x00003a0c, 0x00003a34,
-	0x00003a3d, 0x00003a4a, 0x00003a74, 0x00003a97,
+	0x000035ec, 0x000035fb, 0x000035ff, 0x00003605,
+	0x0000360f, 0x0000361b, 0x00003632, 0x00003660,
+	0x00003680, 0x000036c2, 0x000036d5, 0x000036df,
+	0x000036f6, 0x00003708, 0x00003712, 0x0000372d,
+	0x00003740, 0x0000374a, 0x00003787, 0x0000378f,
+	0x000037b0, 0x000037d4, 0x000037f9, 0x0000381e,
+	0x00003846, 0x0000386c, 0x00003891, 0x000038b9,
+	0x000038c2, 0x000038cf, 0x000038f8, 0x0000390b,
 	// Entry 180 - 19F
-	0x00003aa6, 0x00003aaf, 0x00003ab8, 0x00003acb,
-	0x00003af1, 0x00003b0e, 0x00003b28, 0x00003b42,
-	0x00003b47, 0x00003b69, 0x00003b82, 0x00003b87,
-	0x00003b96, 0x00003bb2, 0x00003bbe, 0x00003bd1,
-	0x00003bd8, 0x00003be0, 0x00003be6, 0x00003bee,
-	0x00003bfd, 0x00003c05, 0x00003c0f, 0x00003c18,
-	0x00003c22, 0x00003c29, 0x00003c37, 0x00003c3f,
-	0x00003c46, 0x00003c4a, 0x00003c56, 0x00003c5c,
+	0x0000391a, 0x00003923, 0x0000392c, 0x0000393f,
+	0x00003965, 0x00003982, 0x0000399c, 0x000039b6,
+	0x000039bb, 0x000039dd, 0x000039f6, 0x000039fb,
+	0x00003a0a, 0x00003a26, 0x00003a32, 0x00003a45,
+	0x00003a4c, 0x00003a54, 0x00003a5a, 0x00003a62,
+	0x00003a71, 0x00003a79, 0x00003a83, 0x00003a8c,
+	0x00003a96, 0x00003a9d, 0x00003aab, 0x00003ab3,
+	0x00003aba, 0x00003abe, 0x00003aca, 0x00003ad0,
 	// Entry 1A0 - 1BF
-	0x00003c63, 0x00003c75, 0x00003c90, 0x00003ca7,
-	0x00003cb3, 0x00003ccc, 0x00003ce1, 0x00003ce8,
-	0x00003cfa, 0x00003d0f, 0x00003d1a, 0x00003d30,
-	0x00003d3e, 0x00003d4e, 0x00003d5b, 0x00003d66,
-	0x00003d6e, 0x00003d74, 0x00003d78, 0x00003d8e,
-	0x00003d95, 0x00003db0, 0x00003db6, 0x00003dc0,
-	0x00003dc7, 0x00003dd2, 0x00003de5, 0x00003deb,
-	0x00003dfb, 0x00003e00, 0x00003e07, 0x00003e13,
+	0x00003ad7, 0x00003ae9, 0x00003b04, 0x00003b1b,
+	0x00003b27, 0x00003b40, 0x00003b55, 0x00003b5c,
+	0x00003b6e, 0x00003b83, 0x00003b8e, 0x00003ba4,
+	0x00003bb2, 0x00003bc2, 0x00003bcf, 0x00003bda,
+	0x00003be2, 0x00003be8, 0x00003bec, 0x00003c02,
+	0x00003c09, 0x00003c24, 0x00003c2a, 0x00003c34,
+	0x00003c3b, 0x00003c3f, 0x00003c52, 0x00003c58,
+	0x00003c68, 0x00003c6d, 0x00003c74, 0x00003c80,
 	// Entry 1C0 - 1DF
-	0x00003e1a, 0x00003e28, 0x00003e39, 0x00003e4c,
-	0x00003e69, 0x00003eb0, 0x00003efb, 0x00003f21,
-	0x00003f54, 0x00003f73, 0x00003f98, 0x00003fde,
-	0x00004018, 0x00004040, 0x00004063, 0x0000409d,
-	0x000040cb, 0x000040f4, 0x0000411d, 0x00004154,
-	0x0000417d, 0x000041a5, 0x000041e3, 0x00004207,
-	0x0000423c, 0x00004264, 0x00004284, 0x0000429e,
-	0x000042be, 0x000042d7, 0x000042f2, 0x00004313,
+	0x00003c87, 0x00003c95, 0x00003ca6, 0x00003cb9,
+	0x00003cd6, 0x00003d1d, 0x00003d68, 0x00003d8e,
+	0x00003dc1, 0x00003de0, 0x00003e05, 0x00003e4b,
+	0x00003e85, 0x00003ead, 0x00003ed0, 0x00003f0a,
+	0x00003f38, 0x00003f61, 0x00003f8a, 0x00003fc1,
+	0x00003fea, 0x00004012, 0x00004050, 0x00004074,
+	0x000040a9, 0x000040d1, 0x000040f1, 0x0000410b,
+	0x0000412b, 0x00004144, 0x0000415f, 0x00004180,
 	// Entry 1E0 - 1FF
-	0x00004338, 0x00004361, 0x00004391, 0x000043bd,
-	0x000043df, 0x000043e9, 0x000043ee, 0x00004406,
-	0x0000441a, 0x00004446, 0x00004482, 0x000044ac,
-	0x000044f5, 0x00004521, 0x0000456c, 0x000045bc,
-	0x000045ed, 0x00004607, 0x0000462e, 0x0000464e,
-	0x00004678, 0x00004692, 0x000046ce, 0x000046ef,
-	0x00004718, 0x0000475a, 0x00004782, 0x000047d1,
-	0x0000481b, 0x0000487a, 0x0000489f, 0x000048d5,
+	0x000041a5, 0x000041ce, 0x000041fe, 0x0000422a,
+	0x0000424c, 0x00004256, 0x0000425b, 0x00004273,
+	0x00004287, 0x000042b3, 0x000042ef, 0x00004319,
+	0x00004362, 0x0000438e, 0x000043d9, 0x00004429,
+	0x0000445a, 0x00004474, 0x0000449b, 0x000044bb,
+	0x000044e5, 0x000044ff, 0x0000453b, 0x0000455c,
+	0x00004585, 0x000045c7, 0x000045ef, 0x0000463e,
+	0x00004688, 0x000046e7, 0x0000470c, 0x00004742,
 	// Entry 200 - 21F
-	0x00004934, 0x0000495b, 0x0000498b, 0x000049cf,
-	0x000049ec, 0x00004a24, 0x00004a42, 0x00004a62,
-	0x00004a7c, 0x00004a8d, 0x00004af7, 0x00004afe,
-	0x00004b0b, 0x00004b24, 0x00004b41, 0x00004b4c,
-	0x00004b56, 0x00004b5d, 0x00004b87, 0x00004bb5,
-	0x00004bf7,
+	0x000047a1, 0x000047c8, 0x000047f8, 0x0000483c,
+	0x00004859, 0x00004891, 0x000048af, 0x000048cf,
+	0x000048e9, 0x000048fa, 0x00004964, 0x0000496b,
+	0x00004978, 0x00004991, 0x000049ae, 0x000049b9,
+	0x000049c3, 0x000049ca, 0x000049f4, 0x00004a22,
+	0x00004a64,
 } // Size: 2156 bytes
 
-const frData string = "" + // Size: 19447 bytes
+const frData string = "" + // Size: 19044 bytes
 	"\x02À propos\x02Copyright (c) 2023–présent Marco Beierer\x02SimpleDMS es" +
 	"t un projet Open Source de Marco Beierer. Les sites web officiels sont :" +
 	"\x02simpledms.eu\x02simpledms.ch\x02marcobeierer.com\x02marcobeierer.ch" +
@@ -1774,221 +1774,216 @@ const frData string = "" + // Size: 19447 bytes
 	"identifiant de répertoire fourni.\x02Aucun identifiant de fichier fourni" +
 	".\x02Le dossier n'est pas vide.\x02Dossier supprimé.\x02Fichier supprimé" +
 	".\x02Type de document | Filtre\x02Aucun type de document disponible pour" +
-	" le moment.\x02Gérer les types de documents\x02Propriétés\x02Groupes d'é" +
-	"tiquettes\x02Aucun groupe d'étiquettes disponible.\x02Type de document" +
-	"\x02Renommer\x02Déplacer\x02Supprimer\x02Êtes-vous sûr ?\x02Décompresser" +
-	" l'archive\x02Détails\x02Taille du fichier\x02Type MIME\x02Hachage SHA-2" +
-	"56\x02Nom de fichier d'origine\x02Téléversé le\x02Version\x02Version act" +
-	"uelle téléversée le\x02OCR réussi le\x02Supprimé le\x02échec du rendu" +
-	"\x02Fermer l'aperçu\x02Afficher les détails\x02Télécharger\x02Aucun cham" +
-	"p attribué pour le moment.\x02Supprimer\x02Supprimer cette valeur de cha" +
-	"mp ?\x02Métadonnées\x02Étiquettes\x02Info\x02Versions\x02Téléchargement " +
-	"de fichier\x02Veuillez confirmer que les métadonnées du fichier source s" +
-	"eront perdues.\x02Les fichiers source et cible sont requis.\x02Nouvelle " +
-	"version ajoutée depuis la boîte de réception.\x02Les fichiers source et " +
-	"cible doivent être différents.\x02Le fichier n'appartient pas à l'espace" +
-	" actuel.\x02Impossible de fusionner les répertoires.\x02Le fichier sourc" +
-	"e est supprimé.\x02Le fichier source n'a pas de versions.\x02Impossible " +
-	"de lire la version source.\x02Le fichier source n'a pas de fichier stock" +
-	"é.\x02Impossible de lire les versions cibles.\x02Impossible de mettre à" +
-	" jour le fichier cible.\x02Le fichier source n'est pas dans la boîte de " +
-	"réception.\x02Impossible de supprimer les versions source.\x02Impossible" +
-	" de supprimer le fichier source.\x02Je comprends que les métadonnées du " +
-	"fichier de la boîte de réception (type de document, étiquettes, champs) " +
-	"seront perdues lors de la fusion.\x02Rechercher dans les fichiers de la " +
-	"boîte de réception\x02Ajouter une nouvelle version depuis la boîte de ré" +
-	"ception\x02Ajouter\x02Le fichier cible est requis.\x02Le fichier source " +
-	"est requis.\x02Le fichier doit être dans la boîte de réception.\x02Aucun" +
-	" résultat trouvé.\x02numéro de version manquant\x02numéro de version inv" +
-	"alide\x02version introuvable\x02Aperçu de version\x02Téléverser une nouv" +
-	"elle version\x02Aucune version disponible pour le moment.\x02Téléversez " +
-	"une nouvelle version pour commencer.\x02Ajouter une nouvelle version\x02" +
-	"Aucun fichier disponible pour le moment.\x02Aucun fichier ou répertoire " +
-	"disponible pour le moment.\x02Chargement en cours...\x02Retour au dossie" +
-	"r parent\x02Rechercher\x02Rechercher dans «%[1]s»\x02Aucune propriété di" +
-	"sponible pour le moment.\x02Aucune propriété disponible.\x02Contient\x02" +
-	"Commence par\x02Égal à\x02Supérieur à\x02Inférieur à\x02Entre\x02«%[1]s»" +
-	" est coché\x02«%[1]s» n'est pas coché\x02Étiquettes | Filtre\x02Aucune é" +
-	"tiquette disponible pour le moment.\x02Gérer les étiquettes\x02«%[1]s» c" +
-	"réé.\x02Ouvrir le répertoire\x02Autorisé uniquement en mode dossier.\x02" +
-	"Ouvrir le fichier\x02Déplacé vers «%[1]s».\x02Champs | Filtre\x02«%[1]s»" +
-	" supprimé.\x02Renommer le fichier\x02Renommé en «%[1]s»\x02Type de docum" +
-	"ent désélectionné.\x02Type de document sélectionné.\x02Ce n'est pas une " +
-	"archive ZIP.\x02Impossible d'ouvrir l'archive ZIP.\x02Impossible de déco" +
-	"mpresser l'archive.\x02Impossible de lire l'archive ZIP.\x02Impossible d" +
-	"e créer l'arborescence de répertoires.\x02Impossible d'extraire tous les" +
-	" fichiers de l'archive.\x02Archive décompressée.\x02Impossible d'ouvrir " +
-	"le fichier dans l'archive.\x02Impossible d'extraire le fichier de l'arch" +
-	"ive.\x02La date de fin est antérieure à la date de début.\x02Filtre «%[1" +
-	"]s» mis à jour.\x02Aucun répertoire parent fourni.\x02impossible de lire" +
-	" le fichier\x02«%[1]s» téléversé.\x02Aucun fichier fourni.\x02Impossible" +
-	" de téléverser des versions pour les répertoires.\x02Nouvelle version té" +
-	"léversée pour «%[1]s».\x02impossible de télécharger des répertoires\x02D" +
-	"éplacer le fichier\x02Déplacer le fichier vers «%[1]s»\x02Remonter d'un" +
-	" niveau\x02Accueil\x02Ouvrir les tâches\x02Organisation «%[1]s»\x02Compt" +
-	"e «%[1]s»\x02Système\x02Période d'essai\x02Abonnement\x02Non initialisé" +
-	"\x02Veuillez patienter\x02L'organisation n'est pas encore initialisée, v" +
-	"euillez attendre que l'initialisation soit terminée.\x02Actualiser\x02Es" +
-	"pace\x02Sélectionner\x02Supprimer le compte\x02Aucun mot de passe défini" +
-	"\x02Compte\x02Vous vous êtes connecté avec un mot de passe temporaire. V" +
-	"euillez définir un mot de passe pour sécuriser votre compte et utiliser " +
-	"l'application.\x02Définir le mot de passe maintenant\x02Mot de passe tem" +
-	"poraire actif\x02Votre compte a un mot de passe temporaire actif. Veuill" +
-	"ez changer votre mot de passe ou supprimer le mot de passe temporaire dè" +
-	"s que possible pour sécuriser votre compte.\x02Aucun espace disponible p" +
-	"our le moment\x02Vous n'avez pas l'autorisation d'accéder à un espace de" +
-	" cette organisation.\x02Veuillez en créer un pour commencer.\x02Gérer le" +
-	"s espaces\x02%[1]d utilisateurs\x021 utilisateur\x02Gérer les utilisateu" +
-	"rs\x02L'application est déverrouillée et n'est pas protégée par une phra" +
-	"se secrète.\x02L'application est verrouillée.\x02Définir la phrase secrè" +
-	"te\x02L'application est déverrouillée et protégée par une phrase secrète" +
-	".\x02Statut de l'application\x02Tableau de bord\x02Modifier dans la vue " +
-	"«Espaces»\x02Types de document\x02Utilisateurs\x02Le champ «%[1]s» est " +
-	"déjà ajouté à ce type de document.\x02Attribut «%[1]s» ajouté.\x02Ajoute" +
-	"r un attribut de champ\x02Veuillez d'abord créer un champ.\x02Modifier" +
-	"\x02Ajouter un attribut de liste (groupe d'étiquettes)\x02nominatif\x02A" +
-	"jouter un attribut\x02Le groupe d'étiquettes «%[1]s» est déjà ajouté à c" +
-	"e type de document.\x02Attribut «%[1]s» créé.\x02Aucun groupe d'étiquett" +
-	"es disponible pour le moment.\x02Veuillez d'abord créer un groupe d'étiq" +
-	"uettes.\x02Ajouter un type de document\x02Type de document créé.\x02Attr" +
-	"ibut supprimé.\x02Type de document supprimé.\x02Fermer les détails\x02Mo" +
-	"difier l'attribut du champ\x02Attribut mis à jour.\x02Modifier l'attribu" +
-	"t de l'étiquette\x02Attribut «%[1]s» mis à jour.\x02Impossible de conver" +
-	"tir l'identifiant en entier.\x02Renommer le type de document\x02Type de " +
-	"document renommé en «%[1]s».\x02Attribuer un fichier\x02Métadonnées rech" +
-	"argées\x02Marquer comme terminé\x02Recharger les métadonnées\x02La recon" +
-	"naissance de texte (OCR) n'est pas encore prête, les suggestions se base" +
-	"nt uniquement sur le nom de fichier.\x02Sélectionner la destination manu" +
-	"ellement\x02Suggestions basées sur le nom de fichier\x02Boîte de récepti" +
-	"on\x02Trier les fichiers\x02Rechercher dans «Boîte de réception»\x02Aucu" +
-	"n nouveau fichier trouvé.\x02Fichiers téléversés avec succès.\x02Le fich" +
-	"ier n'est pas dans la boîte de réception.\x02Fichier «%[1]s» marqué comm" +
-	"e terminé.\x02Le plus récent d'abord\x02Le plus ancien d'abord\x02Trier " +
-	"par nom\x02Attribuer un utilisateur à l'espace\x02Aucun espace sélection" +
-	"né. Veuillez d'abord sélectionner un espace.\x02Vous n'êtes pas autorisé" +
-	" à attribuer des utilisateurs à des espaces car vous n'êtes pas le propr" +
-	"iétaire.\x02L'utilisateur est déjà attribué à cet espace.\x02Utilisateur" +
-	" attribué à l'espace avec succès.\x02Aucun utilisateur non attribué disp" +
-	"onible.\x02Veuillez d'abord créer un utilisateur dans la gestion des uti" +
-	"lisateurs de l'organisation.\x02Utilisateurs «%[1]s»\x02Désattribuer l'u" +
-	"tilisateur de l'espace\x02Vous ne pouvez pas vous désattribuer d'un espa" +
-	"ce.\x02Utilisateur désattribué de l'espace avec succès.\x02Désattribuer" +
-	"\x02Attribuer un utilisateur\x02Créer une nouvelle étiquette ou un group" +
-	"e\x02Êtes-vous sûr ? Cette action supprimera l'étiquette et la retirera " +
-	"de tous les fichiers !\x02Attribuer des étiquettes\x02Déplacer vers le g" +
-	"roupe\x02Groupe, %[1]d étiquette\x02Groupe, %[1]d étiquettes\x02Créer un" +
-	"e nouvelle étiquette\x02Super étiquette\x02L'identifiant du groupe d'éti" +
-	"quettes est requis.\x02L'étiquette n'est pas un groupe.\x02Créer un util" +
-	"isateur\x02Vous n'êtes pas autorisé à créer des utilisateurs. Aucun loca" +
-	"taire sélectionné.\x02Vous n'êtes pas autorisé à créer des utilisateurs " +
-	"car vous n'êtes pas le propriétaire.\x02Un utilisateur avec cette adress" +
-	"e e-mail existe déjà, veuillez contacter l'assistance si vous souhaitez " +
-	"tout de même ajouter cet utilisateur.\x02Le nouvel utilisateur a été cré" +
-	"é avec succès. Le mot de passe a été envoyé à l'utilisateur par e-mail." +
-	" Un propriétaire peut accéder à tous les espaces sans configuration supp" +
-	"lémentaire.\x02Le nouvel utilisateur a été créé avec succès. Le mot de p" +
-	"asse a été envoyé à l'utilisateur par e-mail. L'étape suivante consiste " +
-	"à autoriser l'utilisateur à accéder à un espace.\x02Gérer les utilisate" +
-	"urs du locataire\x02Ajouter un nouvel utilisateur\x02Téléverser\x02Télév" +
-	"ersement des fichiers, veuillez patienter un moment.\x02La page sera act" +
-	"ualisée automatiquement une fois le téléversement terminé.\x02Aucun espa" +
-	"ce pour le moment.\x02Veuillez réessayer une fois que vous aurez créé un" +
-	" espace ou que vous aurez été invité à en rejoindre un.\x02Sélectionner " +
-	"un espace\x02Le traitement des fichiers partagés a échoué.\x02Fichiers t" +
-	"éléversés, veuillez sélectionner un espace.\x02Champ «%[1]s» créé.\x02C" +
-	"hamp supprimé.\x02Modifier le champ\x02Champ mis à jour.\x02Créer un esp" +
-	"ace\x02Espace «%[1]s» créé.\x02Espace supprimé.\x02Modifier l'espace\x02" +
-	"Modifications enregistrées.\x02Aucun espace disponible pour le moment." +
-	"\x02%[1]s (%[2]s)\x02actif\x02Espaces\x02«%[1]s» attribué.\x02Créer et a" +
-	"ttribuer une étiquette\x02«%[1]s» créé et attribué.\x02Créer une étiquet" +
-	"te\x02Étiquette «%[1]s» créée.\x02Impossible d'ajouter un groupe d'étiqu" +
-	"ettes comme enfant.\x02«%[1]s» supprimé.\x02Afficher les étiquettes attr" +
-	"ibuées\x02Créer un nouveau groupe\x02Étiquettes de «%[1]s»\x02Modifier l" +
-	"'étiquette\x02«%[1]s» mis à jour.\x02disposition non prise en charge\x02" +
-	"Modifier les étiquettes attribuées\x02Groupe «%[1]s»\x02Composé de %[1]s" +
-	"\x02Déplacer l'étiquette vers le groupe\x02Groupe désélectionné.\x02Dépl" +
-	"acé vers le groupe «%[1]s».\x02Désélectionner le groupe\x02Êtes-vous sûr" +
-	" ? Cette action supprimera entièrement l'étiquette et pas seulement sa d" +
-	"ésattribution du fichier actuel !\x02«%[1]s» désattribué.\x02Dossier pa" +
-	"rent\x02Nom\x02Notes\x02Créé le\x02Modifié le\x02Aucune étiquette attrib" +
-	"uée.\x02Les dossiers ne peuvent pas être restaurés.\x02Le fichier n'est " +
-	"pas supprimé.\x02Le dossier parent d'origine est manquant. Restauré dans" +
-	" la boîte de réception.\x02Fichier restauré.\x02Restaurer\x02La corbeill" +
-	"e est vide.\x02Dossier supprimé\x02Supprimé\x02Dossier supprimé le %[1]s" +
-	"\x02Supprimé le %[1]s\x02Corbeille\x02L'aperçu de fichier n'est pas disp" +
-	"onible pour les dossiers.\x02Aperçu\x02impossible d'analyser le fichier" +
-	"\x02impossible d'analyser le formulaire\x02impossible de décoder le form" +
-	"ulaire\x02Impossible de valider le formulaire.\x02La validation du formu" +
-	"laire a échoué.\x02Filtres réinitialisés avec succès.\x02impossible d'an" +
-	"alyser l'URL actuelle\x02Impossible de décoder la requête URL.\x02Accept" +
-	"é\x02Onglet actif\x02M'ajouter comme propriétaire de l'espace\x02Ajoute" +
-	"r à la boîte de réception\x02Administrateur\x02Autriche\x02Checkbox\x02V" +
-	"aleur de Checkbox\x02Confirmer la nouvelle phrase secrète\x02Confirmer l" +
-	"a phrase secrète\x02Confirmer le mot de passe\x02Confirmer l'avertisseme" +
-	"nt\x02Pays\x02Mot de passe actuel ou temporaire\x02Phrase secrète actuel" +
-	"le\x02Date\x02Valeur de date\x02Supprimer en cas de succès\x02Descriptio" +
-	"n\x02Nom du répertoire\x02E-mail\x02Anglais\x02Champ\x02Fichier\x02Nom d" +
-	"e fichier\x02Prénom\x02Français\x02Allemand\x02Allemagne\x02Groupe\x02Es" +
-	"t nominatif\x02Italien\x02Langue\x02Nom\x02Disposition\x02Local\x02Argen" +
-	"t\x02Valeur monétaire\x02Nouveau nom de répertoire\x02Nouveau nom de fic" +
-	"hier\x02Nouveau nom\x02Nouvelle phrase secrète\x02Nouveau mot de passe" +
-	"\x02Nombre\x02Valeur numérique\x02Uniquement attribué\x02Opérateur\x02No" +
-	"m de l'organisation\x02Propriétaire\x02Phrase secrète\x02Mot de passe" +
-	"\x02En attente\x02Rejeté\x02Rôle\x02S 3\x02Requête de recherche\x02Simpl" +
-	"e\x02S'abonner à la newsletter\x02Super\x02Supporter\x02Suisse\x02Étique" +
-	"tte\x02Session temporaire\x02Texte\x02Valeur de texte\x02Type\x02Unité" +
-	"\x02Utilisateur\x02Valeur\x02Valeur de fin\x02Valeur de début\x02Numéro " +
-	"de version\x02le fichier n'a pas de parent\x02Trop de tentatives de conn" +
-	"exion. Veuillez réessayer dans 10 secondes.\x02Un code 2FA a été fourni," +
-	" mais la 2FA n'est pas activée pour ce compte.\x02Le mot de passe tempor" +
-	"aire a expiré.\x02impossible de générer le mot de passe temporaire\x02im" +
-	"possible de générer le sel\x02Le mot de passe actuel est invalide.\x02Le" +
-	" nouveau mot de passe doit être différent du mot de passe actuel.\x02Le " +
-	"mot de passe doit comporter au moins huit caractères.\x02Les mots de pas" +
-	"se ne correspondent pas.\x02Le mode dossier n'est pas activé.\x02L'éléme" +
-	"nt du chemin est un fichier, pas un répertoire.\x02Le nom de fichier fou" +
-	"rni n'est pas autorisé.\x02Un dossier portant ce nom existe déjà.\x02La " +
-	"destination n'est pas un répertoire.\x02Impossible de déplacer le répert" +
-	"oire vers lui-même.\x02La destination est l'emplacement actuel.\x02la de" +
-	"stination n'est pas un répertoire\x02impossible de déplacer le fichier d" +
-	"ans un répertoire enfant\x02Le nouveau nom de fichier est vide.\x02Le no" +
-	"uveau nom de fichier est identique à l'ancien.\x02Impossible d'obtenir l" +
-	"e nom de l'objet.\x02Impossible d'ouvrir le fichier.\x02Le fichier exist" +
-	"e déjà.\x02Le chemin de stockage est vide.\x02Nom de fichier invalide." +
-	"\x02Le nom du bucket est vide.\x02Le nom de fichier existe déjà.\x02Impo" +
-	"ssible d'enregistrer le fichier.\x02Impossible d'obtenir l'identité x255" +
-	"19.\x02L'application n'est pas encore déverrouillée.\x02Impossible de co" +
-	"pier le fichier temporaire.\x02Votre mot de passe temporaire est\x02Expi" +
-	"re le\x02Note\x02Bienvenue sur SimpleDMS\x0202-01-2006 à 15:04\x02Réinit" +
-	"ialisation du mot de passe SimpleDMS\x02Ceci est un message automatisé, " +
-	"veuillez ne pas répondre.\x02Votre compte a été créé avec succès.\x02Veu" +
-	"illez vous connecter et changer votre mot de passe dès que possible.\x02" +
-	"Réinitialisation du mot de passe SimpleDMS\x02Une réinitialisation du mo" +
-	"t de passe a été demandée pour votre compte.\x02Votre ancien mot de pass" +
-	"e fonctionnera encore jusqu'à ce que vous le changiez.\x02«%[1]s» vous a" +
-	" invité au locataire «%[2]s».\x02«%[1]s» vous a invité.\x02L'application" +
-	" est déjà initialisée.\x02La phrase secrète est requise.\x02L'applicatio" +
-	"n est déjà déverrouillée.\x02Phrase secrète invalide.\x02L'application n" +
-	"'est pas chiffrée avec une phrase secrète.\x02Aucune phrase secrète défi" +
-	"nie.\x02La nouvelle phrase secrète est requise.\x02La nouvelle phrase se" +
-	"crète ne correspond pas à la confirmation.\x02L'ancienne phrase secrète " +
-	"est requise.\x02L'application n'est pas encore déverrouillée. Veuillez r" +
-	"éessayer plus tard.\x02Le locataire n'est pas encore initialisé. Veuill" +
-	"ez réessayer plus tard.\x02Erreur lors de l'ouverture de la base de donn" +
-	"ées du locataire. Veuillez réessayer plus tard.\x02Une entité similaire" +
-	" existe déjà.\x02Impossible de supprimer une entité encore utilisée.\x02" +
-	"Une violation de contrainte de base de données s'est produite. Veuillez " +
-	"contacter le support.\x02La validation des données a échoué.\x02Une erre" +
-	"ur s'est produite. Veuillez réessayer.\x02Vous n'êtes pas connecté. Veui" +
-	"llez vous connecter pour continuer.\x02Impossible d'analyser l'URL.\x02V" +
-	"ous n'êtes pas autorisé à accéder à ce locataire.\x02Impossible de lire " +
-	"le cookie.\x02Cookie défini mais non valide.\x02Cookie défini mais vide." +
-	"\x02Mode maintenance\x02Le mode maintenance est activé. Veuillez patient" +
-	"er jusqu'à ce que l'application soit à nouveau prête.\x02Fermer\x02Décon" +
-	"nexion\x02Ouvrir le menu principal\x02Fermer la boîte de dialogue\x02Sug" +
-	"gestion\x02optionnel\x02requis\x02Cookie d'authentification déjà défini." +
-	"\x02Impossible de générer la valeur de session.\x02Vous n'êtes pas autor" +
-	"isé à accéder à la ressource demandée."
+	" le moment.\x02Gérer les types de documents\x02Propriétés\x02Groupes d'T" +
+	"ags\x02Aucun groupe d'Tags disponible.\x02Type de document\x02Renommer" +
+	"\x02Déplacer\x02Supprimer\x02Êtes-vous sûr ?\x02Décompresser l'archive" +
+	"\x02Détails\x02Taille du fichier\x02Type MIME\x02Hachage SHA-256\x02Nom " +
+	"de fichier d'origine\x02Téléversé le\x02Version\x02Version actuelle télé" +
+	"versée le\x02OCR réussi le\x02Supprimé le\x02échec du rendu\x02Fermer l'" +
+	"aperçu\x02Afficher les détails\x02Télécharger\x02Aucun champ attribué po" +
+	"ur le moment.\x02Supprimer\x02Supprimer cette valeur de champ ?\x02Métad" +
+	"onnées\x02Tags\x02Info\x02Versions\x02Téléchargement de fichier\x02Veuil" +
+	"lez confirmer que les métadonnées du fichier source seront perdues.\x02L" +
+	"es fichiers source et cible sont requis.\x02Nouvelle version ajoutée dep" +
+	"uis l'Inbox.\x02Les fichiers source et cible doivent être différents." +
+	"\x02Le fichier n'appartient pas à l'Space actuel.\x02Impossible de fusio" +
+	"nner les répertoires.\x02Le fichier source est supprimé.\x02Le fichier s" +
+	"ource n'a pas de versions.\x02Impossible de lire la version source.\x02L" +
+	"e fichier source n'a pas de fichier stocké.\x02Impossible de lire les ve" +
+	"rsions cibles.\x02Impossible de mettre à jour le fichier cible.\x02Le fi" +
+	"chier source n'est pas dans l'Inbox.\x02Impossible de supprimer les vers" +
+	"ions source.\x02Impossible de supprimer le fichier source.\x02Je compren" +
+	"ds que les métadonnées du fichier de l'Inbox (type de document, Tags, ch" +
+	"amps) seront perdues lors de la fusion.\x02Rechercher dans les fichiers " +
+	"de l'Inbox\x02Ajouter une nouvelle version depuis l'Inbox\x02Ajouter\x02" +
+	"Le fichier cible est requis.\x02Le fichier source est requis.\x02Le fich" +
+	"ier doit être dans l'Inbox.\x02Aucun résultat trouvé.\x02numéro de versi" +
+	"on manquant\x02numéro de version invalide\x02version introuvable\x02Aper" +
+	"çu de version\x02Téléverser une nouvelle version\x02Aucune version disp" +
+	"onible pour le moment.\x02Téléversez une nouvelle version pour commencer" +
+	".\x02Ajouter une nouvelle version\x02Aucun fichier disponible pour le mo" +
+	"ment.\x02Aucun fichier ou répertoire disponible pour le moment.\x02Charg" +
+	"ement en cours...\x02Retour au dossier parent\x02Rechercher\x02Recherche" +
+	"r dans «%[1]s»\x02Aucune propriété disponible pour le moment.\x02Aucune " +
+	"propriété disponible.\x02Contient\x02Commence par\x02Égal à\x02Supérieur" +
+	" à\x02Inférieur à\x02Entre\x02«%[1]s» est coché\x02«%[1]s» n'est pas coc" +
+	"hé\x02Tags | Filtre\x02Aucune Tag disponible pour le moment.\x02Gérer le" +
+	"s Tags\x02«%[1]s» créé.\x02Ouvrir le répertoire\x02Autorisé uniquement e" +
+	"n mode dossier.\x02Ouvrir le fichier\x02Déplacé vers «%[1]s».\x02Champs " +
+	"| Filtre\x02«%[1]s» supprimé.\x02Renommer le fichier\x02Renommé en «%[1]" +
+	"s»\x02Type de document désélectionné.\x02Type de document sélectionné." +
+	"\x02Ce n'est pas une archive ZIP.\x02Impossible d'ouvrir l'archive ZIP." +
+	"\x02Impossible de décompresser l'archive.\x02Impossible de lire l'archiv" +
+	"e ZIP.\x02Impossible de créer l'arborescence de répertoires.\x02Impossib" +
+	"le d'extraire tous les fichiers de l'archive.\x02Archive décompressée." +
+	"\x02Impossible d'ouvrir le fichier dans l'archive.\x02Impossible d'extra" +
+	"ire le fichier de l'archive.\x02La date de fin est antérieure à la date " +
+	"de début.\x02Filtre «%[1]s» mis à jour.\x02Aucun répertoire parent fourn" +
+	"i.\x02impossible de lire le fichier\x02«%[1]s» téléversé.\x02Aucun fichi" +
+	"er fourni.\x02Impossible de téléverser des versions pour les répertoires" +
+	".\x02Nouvelle version téléversée pour «%[1]s».\x02impossible de téléchar" +
+	"ger des répertoires\x02Déplacer le fichier\x02Déplacer le fichier vers «" +
+	"%[1]s»\x02Remonter d'un niveau\x02Accueil\x02Ouvrir les tâches\x02Organi" +
+	"sation «%[1]s»\x02Compte «%[1]s»\x02Système\x02Période d'essai\x02Abonne" +
+	"ment\x02Non initialisé\x02Veuillez patienter\x02L'organisation n'est pas" +
+	" encore initialisée, veuillez attendre que l'initialisation soit terminé" +
+	"e.\x02Actualiser\x02Space\x02Sélectionner\x02Supprimer le compte\x02Aucu" +
+	"n mot de passe défini\x02Compte\x02Vous vous êtes connecté avec un mot d" +
+	"e passe temporaire. Veuillez définir un mot de passe pour sécuriser votr" +
+	"e compte et utiliser l'application.\x02Définir le mot de passe maintenan" +
+	"t\x02Mot de passe temporaire actif\x02Votre compte a un mot de passe tem" +
+	"poraire actif. Veuillez changer votre mot de passe ou supprimer le mot d" +
+	"e passe temporaire dès que possible pour sécuriser votre compte.\x02Aucu" +
+	"n Space disponible pour le moment\x02Vous n'avez pas l'autorisation d'ac" +
+	"céder à un Space de cette organisation.\x02Veuillez en créer un pour com" +
+	"mencer.\x02Gérer les Spaces\x02%[1]d utilisateurs\x021 utilisateur\x02Gé" +
+	"rer les utilisateurs\x02L'application est déverrouillée et n'est pas pro" +
+	"tégée par une phrase secrète.\x02L'application est verrouillée.\x02Défin" +
+	"ir la phrase secrète\x02L'application est déverrouillée et protégée par " +
+	"une phrase secrète.\x02Statut de l'application\x02Tableau de bord\x02Mod" +
+	"ifier dans la vue «Spaces»\x02Types de document\x02Utilisateurs\x02Le ch" +
+	"amp «%[1]s» est déjà ajouté à ce type de document.\x02Attribut «%[1]s» a" +
+	"jouté.\x02Ajouter un attribut de champ\x02Veuillez d'abord créer un cham" +
+	"p.\x02Modifier\x02Ajouter un attribut de liste (groupe d'Tags)\x02nomina" +
+	"tif\x02Ajouter un attribut\x02Le groupe d'Tags «%[1]s» est déjà ajouté à" +
+	" ce type de document.\x02Attribut «%[1]s» créé.\x02Aucun groupe d'Tags d" +
+	"isponible pour le moment.\x02Veuillez d'abord créer un groupe d'Tags." +
+	"\x02Ajouter un type de document\x02Type de document créé.\x02Attribut su" +
+	"pprimé.\x02Type de document supprimé.\x02Fermer les détails\x02Modifier " +
+	"l'attribut du champ\x02Attribut mis à jour.\x02Modifier l'attribut de l'" +
+	"Tag\x02Attribut «%[1]s» mis à jour.\x02Impossible de convertir l'identif" +
+	"iant en entier.\x02Renommer le type de document\x02Type de document reno" +
+	"mmé en «%[1]s».\x02Attribuer un fichier\x02Métadonnées rechargées\x02Mar" +
+	"quer comme terminé\x02Recharger les métadonnées\x02La reconnaissance de " +
+	"texte (OCR) n'est pas encore prête, les suggestions se basent uniquement" +
+	" sur le nom de fichier.\x02Sélectionner la destination manuellement\x02S" +
+	"uggestions basées sur le nom de fichier\x02Boîte de réception\x02Trier l" +
+	"es fichiers\x02Rechercher dans «Boîte de réception»\x02Aucun nouveau fic" +
+	"hier trouvé.\x02Fichiers téléversés avec succès.\x02Le fichier n'est pas" +
+	" dans l'Inbox.\x02Fichier «%[1]s» marqué comme terminé.\x02Le plus récen" +
+	"t d'abord\x02Le plus ancien d'abord\x02Trier par nom\x02Attribuer un uti" +
+	"lisateur à l'Space\x02Aucun Space sélectionné. Veuillez d'abord sélectio" +
+	"nner un Space.\x02Vous n'êtes pas autorisé à attribuer des utilisateurs " +
+	"à des Spaces car vous n'êtes pas le propriétaire.\x02L'utilisateur est " +
+	"déjà attribué à cet Space.\x02Utilisateur attribué à l'Space avec succès" +
+	".\x02Aucun utilisateur non attribué disponible.\x02Veuillez d'abord crée" +
+	"r un utilisateur dans la gestion des utilisateurs de l'organisation.\x02" +
+	"Utilisateurs «%[1]s»\x02Désattribuer l'utilisateur de l'Space\x02Vous ne" +
+	" pouvez pas vous désattribuer d'un Space.\x02Utilisateur désattribué de " +
+	"l'Space avec succès.\x02Désattribuer\x02Attribuer un utilisateur\x02Crée" +
+	"r une nouvelle Tag ou un groupe\x02Êtes-vous sûr ? Cette action supprime" +
+	"ra l'Tag et la retirera de tous les fichiers !\x02Attribuer des Tags\x02" +
+	"Déplacer vers le groupe\x02Groupe, %[1]d Tag\x02Groupe, %[1]d Tags\x02Cr" +
+	"éer une nouvelle Tag\x02Super Tag\x02L'identifiant du groupe d'Tags est" +
+	" requis.\x02L'Tag n'est pas un groupe.\x02Créer un utilisateur\x02Vous n" +
+	"'êtes pas autorisé à créer des utilisateurs. Aucun locataire sélectionné" +
+	".\x02Vous n'êtes pas autorisé à créer des utilisateurs car vous n'êtes p" +
+	"as le propriétaire.\x02Un utilisateur avec cette adresse e-mail existe d" +
+	"éjà, veuillez contacter l'assistance si vous souhaitez tout de même ajo" +
+	"uter cet utilisateur.\x02Le nouvel utilisateur a été créé avec succès. L" +
+	"e mot de passe a été envoyé à l'utilisateur par e-mail. Un propriétaire " +
+	"peut accéder à tous les Spaces sans configuration supplémentaire.\x02Le " +
+	"nouvel utilisateur a été créé avec succès. Le mot de passe a été envoyé " +
+	"à l'utilisateur par e-mail. L'étape suivante consiste à autoriser l'uti" +
+	"lisateur à accéder à un Space.\x02Gérer les utilisateurs du locataire" +
+	"\x02Ajouter un nouvel utilisateur\x02Téléverser\x02Téléversement des fic" +
+	"hiers, veuillez patienter un moment.\x02La page sera actualisée automati" +
+	"quement une fois le téléversement terminé.\x02Aucun Space pour le moment" +
+	".\x02Veuillez réessayer une fois que vous aurez créé un Space ou que vou" +
+	"s aurez été invité à en rejoindre un.\x02Sélectionner un Space\x02Le tra" +
+	"itement des fichiers partagés a échoué.\x02Fichiers téléversés, veuillez" +
+	" sélectionner un Space.\x02Champ «%[1]s» créé.\x02Champ supprimé.\x02Mod" +
+	"ifier le champ\x02Champ mis à jour.\x02Créer un Space\x02Space «%[1]s» c" +
+	"réé.\x02Space supprimé.\x02Modifier l'Space\x02Modifications enregistrée" +
+	"s.\x02Aucun Space disponible pour le moment.\x02%[1]s (%[2]s)\x02actif" +
+	"\x02Spaces\x02«%[1]s» attribué.\x02Créer et attribuer une Tag\x02«%[1]s»" +
+	" créé et attribué.\x02Créer une Tag\x02Tag «%[1]s» créée.\x02Impossible " +
+	"d'ajouter un groupe d'Tags comme enfant.\x02«%[1]s» supprimé.\x02Affiche" +
+	"r les Tags attribuées\x02Créer un nouveau groupe\x02Tags de «%[1]s»\x02M" +
+	"odifier l'Tag\x02«%[1]s» mis à jour.\x02disposition non prise en charge" +
+	"\x02Modifier les Tags attribuées\x02Groupe «%[1]s»\x02Composé de %[1]s" +
+	"\x02Déplacer l'Tag vers le groupe\x02Groupe désélectionné.\x02Déplacé ve" +
+	"rs le groupe «%[1]s».\x02Désélectionner le groupe\x02Êtes-vous sûr ? Cet" +
+	"te action supprimera entièrement l'Tag et pas seulement sa désattributio" +
+	"n du fichier actuel !\x02«%[1]s» désattribué.\x02Dossier parent\x02Nom" +
+	"\x02Notes\x02Créé le\x02Modifié le\x02Aucune Tag attribuée.\x02Les dossi" +
+	"ers ne peuvent pas être restaurés.\x02Le fichier n'est pas supprimé.\x02" +
+	"Le dossier parent d'origine est manquant. Restauré dans l'Inbox.\x02Fich" +
+	"ier restauré.\x02Restaurer\x02La corbeille est vide.\x02Dossier supprimé" +
+	"\x02Supprimé\x02Dossier supprimé le %[1]s\x02Supprimé le %[1]s\x02Corbei" +
+	"lle\x02L'aperçu de fichier n'est pas disponible pour les dossiers.\x02Ap" +
+	"erçu\x02impossible d'analyser le fichier\x02impossible d'analyser le for" +
+	"mulaire\x02impossible de décoder le formulaire\x02Impossible de valider " +
+	"le formulaire.\x02La validation du formulaire a échoué.\x02Filtres réini" +
+	"tialisés avec succès.\x02impossible d'analyser l'URL actuelle\x02Impossi" +
+	"ble de décoder la requête URL.\x02Accepté\x02Onglet actif\x02M'ajouter c" +
+	"omme propriétaire de l'Space\x02Ajouter à l'Inbox\x02Administrateur\x02A" +
+	"utriche\x02Checkbox\x02Valeur de Checkbox\x02Confirmer la nouvelle phras" +
+	"e secrète\x02Confirmer la phrase secrète\x02Confirmer le mot de passe" +
+	"\x02Confirmer l'avertissement\x02Pays\x02Mot de passe actuel ou temporai" +
+	"re\x02Phrase secrète actuelle\x02Date\x02Valeur de date\x02Supprimer en " +
+	"cas de succès\x02Description\x02Nom du répertoire\x02E-mail\x02Anglais" +
+	"\x02Champ\x02Fichier\x02Nom de fichier\x02Prénom\x02Français\x02Allemand" +
+	"\x02Allemagne\x02Groupe\x02Est nominatif\x02Italien\x02Langue\x02Nom\x02" +
+	"Disposition\x02Local\x02Argent\x02Valeur monétaire\x02Nouveau nom de rép" +
+	"ertoire\x02Nouveau nom de fichier\x02Nouveau nom\x02Nouvelle phrase secr" +
+	"ète\x02Nouveau mot de passe\x02Nombre\x02Valeur numérique\x02Uniquement" +
+	" attribué\x02Opérateur\x02Nom de l'organisation\x02Propriétaire\x02Phras" +
+	"e secrète\x02Mot de passe\x02En attente\x02Rejeté\x02Rôle\x02S 3\x02Requ" +
+	"ête de recherche\x02Simple\x02S'abonner à la newsletter\x02Super\x02Sup" +
+	"porter\x02Suisse\x02Tag\x02Session temporaire\x02Texte\x02Valeur de text" +
+	"e\x02Type\x02Unité\x02Utilisateur\x02Valeur\x02Valeur de fin\x02Valeur d" +
+	"e début\x02Numéro de version\x02le fichier n'a pas de parent\x02Trop de " +
+	"tentatives de connexion. Veuillez réessayer dans 10 secondes.\x02Un code" +
+	" 2FA a été fourni, mais la 2FA n'est pas activée pour ce compte.\x02Le m" +
+	"ot de passe temporaire a expiré.\x02impossible de générer le mot de pass" +
+	"e temporaire\x02impossible de générer le sel\x02Le mot de passe actuel e" +
+	"st invalide.\x02Le nouveau mot de passe doit être différent du mot de pa" +
+	"sse actuel.\x02Le mot de passe doit comporter au moins huit caractères." +
+	"\x02Les mots de passe ne correspondent pas.\x02Le mode dossier n'est pas" +
+	" activé.\x02L'élément du chemin est un fichier, pas un répertoire.\x02Le" +
+	" nom de fichier fourni n'est pas autorisé.\x02Un dossier portant ce nom " +
+	"existe déjà.\x02La destination n'est pas un répertoire.\x02Impossible de" +
+	" déplacer le répertoire vers lui-même.\x02La destination est l'emplaceme" +
+	"nt actuel.\x02la destination n'est pas un répertoire\x02impossible de dé" +
+	"placer le fichier dans un répertoire enfant\x02Le nouveau nom de fichier" +
+	" est vide.\x02Le nouveau nom de fichier est identique à l'ancien.\x02Imp" +
+	"ossible d'obtenir le nom de l'objet.\x02Impossible d'ouvrir le fichier." +
+	"\x02Le fichier existe déjà.\x02Le chemin de stockage est vide.\x02Nom de" +
+	" fichier invalide.\x02Le nom du bucket est vide.\x02Le nom de fichier ex" +
+	"iste déjà.\x02Impossible d'enregistrer le fichier.\x02Impossible d'obten" +
+	"ir l'identité x25519.\x02L'application n'est pas encore déverrouillée." +
+	"\x02Impossible de copier le fichier temporaire.\x02Votre mot de passe te" +
+	"mporaire est\x02Expire le\x02Note\x02Bienvenue sur SimpleDMS\x0202-01-20" +
+	"06 à 15:04\x02Réinitialisation du mot de passe SimpleDMS\x02Ceci est un " +
+	"message automatisé, veuillez ne pas répondre.\x02Votre compte a été créé" +
+	" avec succès.\x02Veuillez vous connecter et changer votre mot de passe d" +
+	"ès que possible.\x02Réinitialisation du mot de passe SimpleDMS\x02Une r" +
+	"éinitialisation du mot de passe a été demandée pour votre compte.\x02Vo" +
+	"tre ancien mot de passe fonctionnera encore jusqu'à ce que vous le chang" +
+	"iez.\x02«%[1]s» vous a invité au locataire «%[2]s».\x02«%[1]s» vous a in" +
+	"vité.\x02L'application est déjà initialisée.\x02La phrase secrète est re" +
+	"quise.\x02L'application est déjà déverrouillée.\x02Phrase secrète invali" +
+	"de.\x02L'application n'est pas chiffrée avec une phrase secrète.\x02Aucu" +
+	"ne phrase secrète définie.\x02La nouvelle phrase secrète est requise." +
+	"\x02La nouvelle phrase secrète ne correspond pas à la confirmation.\x02L" +
+	"'ancienne phrase secrète est requise.\x02L'application n'est pas encore " +
+	"déverrouillée. Veuillez réessayer plus tard.\x02Le locataire n'est pas e" +
+	"ncore initialisé. Veuillez réessayer plus tard.\x02Erreur lors de l'ouve" +
+	"rture de la base de données du locataire. Veuillez réessayer plus tard." +
+	"\x02Une entité similaire existe déjà.\x02Impossible de supprimer une ent" +
+	"ité encore utilisée.\x02Une violation de contrainte de base de données s" +
+	"'est produite. Veuillez contacter le support.\x02La validation des donné" +
+	"es a échoué.\x02Une erreur s'est produite. Veuillez réessayer.\x02Vous n" +
+	"'êtes pas connecté. Veuillez vous connecter pour continuer.\x02Impossibl" +
+	"e d'analyser l'URL.\x02Vous n'êtes pas autorisé à accéder à ce locataire" +
+	".\x02Impossible de lire le cookie.\x02Cookie défini mais non valide.\x02" +
+	"Cookie défini mais vide.\x02Mode maintenance\x02Le mode maintenance est " +
+	"activé. Veuillez patienter jusqu'à ce que l'application soit à nouveau p" +
+	"rête.\x02Fermer\x02Déconnexion\x02Ouvrir le menu principal\x02Fermer la " +
+	"boîte de dialogue\x02Suggestion\x02optionnel\x02requis\x02Cookie d'authe" +
+	"ntification déjà défini.\x02Impossible de générer la valeur de session." +
+	"\x02Vous n'êtes pas autorisé à accéder à la ressource demandée."
 
 var itIndex = []uint32{ // 533 elements
 	// Entry 0 - 1F
@@ -2026,125 +2021,125 @@ var itIndex = []uint32{ // 533 elements
 	0x000012e6, 0x000012ee, 0x00001311, 0x0000131a,
 	0x00001324, 0x00001329, 0x00001332, 0x00001343,
 	0x0000137d, 0x000013ad, 0x000013d1, 0x00001405,
-	0x00001432, 0x00001452, 0x00001471, 0x00001493,
+	0x00001431, 0x00001451, 0x00001470, 0x00001492,
 	// Entry 80 - 9F
-	0x000014bd, 0x000014e9, 0x0000151a, 0x0000154a,
-	0x0000156c, 0x00001598, 0x000015c0, 0x00001629,
-	0x0000163d, 0x00001660, 0x00001669, 0x00001692,
-	0x000016b4, 0x000016d2, 0x000016f2, 0x0000170b,
-	0x00001726, 0x0000173b, 0x0000174e, 0x00001764,
-	0x00001789, 0x000017b1, 0x000017c9, 0x000017ed,
-	0x0000181d, 0x00001835, 0x00001853, 0x00001859,
-	0x0000186c, 0x0000188d, 0x000018a7, 0x000018b0,
+	0x000014bc, 0x000014e8, 0x00001519, 0x00001549,
+	0x0000156b, 0x00001597, 0x000015bf, 0x00001628,
+	0x0000163c, 0x0000165f, 0x00001668, 0x00001691,
+	0x000016b3, 0x000016d1, 0x000016f1, 0x0000170a,
+	0x00001725, 0x0000173a, 0x0000174d, 0x00001763,
+	0x00001788, 0x000017b0, 0x000017c8, 0x000017ec,
+	0x0000181c, 0x00001834, 0x00001852, 0x00001858,
+	0x0000186b, 0x0000188c, 0x000018a6, 0x000018af,
 	// Entry A0 - BF
-	0x000018bb, 0x000018c4, 0x000018d0, 0x000018da,
-	0x000018de, 0x000018f7, 0x00001914, 0x00001921,
-	0x00001940, 0x0000194d, 0x0000195f, 0x0000196e,
-	0x00001995, 0x0000199f, 0x000019b6, 0x000019c5,
-	0x000019d8, 0x000019e6, 0x000019fe, 0x00001a1c,
-	0x00001a38, 0x00001a50, 0x00001a73, 0x00001a98,
-	0x00001abc, 0x00001aea, 0x00001b1b, 0x00001b2e,
-	0x00001b58, 0x00001b84, 0x00001bb7, 0x00001bd4,
+	0x000018ba, 0x000018c3, 0x000018cf, 0x000018d9,
+	0x000018dd, 0x000018f6, 0x00001913, 0x00001920,
+	0x0000193f, 0x0000194c, 0x0000195e, 0x0000196d,
+	0x00001994, 0x0000199e, 0x000019b5, 0x000019c4,
+	0x000019d7, 0x000019e5, 0x000019fd, 0x00001a1b,
+	0x00001a37, 0x00001a4f, 0x00001a72, 0x00001a97,
+	0x00001abb, 0x00001ae9, 0x00001b1a, 0x00001b2d,
+	0x00001b57, 0x00001b83, 0x00001bb6, 0x00001bd3,
 	// Entry C0 - DF
-	0x00001bf5, 0x00001c11, 0x00001c25, 0x00001c3a,
-	0x00001c6a, 0x00001c91, 0x00001cb1, 0x00001cbd,
-	0x00001cd6, 0x00001cea, 0x00001cef, 0x00001cfe,
-	0x00001d17, 0x00001d29, 0x00001d31, 0x00001d42,
-	0x00001d4e, 0x00001d60, 0x00001d70, 0x00001dd3,
-	0x00001ddc, 0x00001de3, 0x00001ded, 0x00001dfd,
-	0x00001e18, 0x00001e20, 0x00001e98, 0x00001ead,
-	0x00001ec8, 0x00001f64, 0x00001f86, 0x00001fd1,
+	0x00001bf4, 0x00001c10, 0x00001c24, 0x00001c39,
+	0x00001c69, 0x00001c90, 0x00001cb0, 0x00001cbc,
+	0x00001cd5, 0x00001ce9, 0x00001cee, 0x00001cfd,
+	0x00001d16, 0x00001d28, 0x00001d30, 0x00001d41,
+	0x00001d4d, 0x00001d5f, 0x00001d6f, 0x00001dd2,
+	0x00001ddb, 0x00001de1, 0x00001deb, 0x00001dfb,
+	0x00001e16, 0x00001e1e, 0x00001e96, 0x00001eab,
+	0x00001ec6, 0x00001f62, 0x00001f83, 0x00001fcd,
 	// Entry E0 - FF
-	0x00001fed, 0x00001ffc, 0x00002009, 0x00002012,
-	0x00002022, 0x0000205a, 0x0000206d, 0x00002080,
-	0x000020b1, 0x000020c0, 0x000020ca, 0x000020ea,
-	0x000020f9, 0x00002100, 0x0000213d, 0x0000215b,
-	0x00002174, 0x00002189, 0x00002192, 0x000021bc,
-	0x000021d2, 0x000021e5, 0x0000222a, 0x00002246,
-	0x0000226f, 0x0000228c, 0x000022a4, 0x000022bb,
-	0x000022d0, 0x000022ea, 0x000022fa, 0x00002313,
+	0x00001fe9, 0x00001ff8, 0x00002005, 0x0000200e,
+	0x0000201e, 0x00002056, 0x00002069, 0x0000207c,
+	0x000020ad, 0x000020bc, 0x000020c6, 0x000020e6,
+	0x000020f5, 0x000020fc, 0x00002139, 0x00002157,
+	0x00002170, 0x00002185, 0x0000218e, 0x000021b8,
+	0x000021ce, 0x000021e1, 0x00002226, 0x00002242,
+	0x0000226b, 0x00002288, 0x000022a0, 0x000022b7,
+	0x000022cc, 0x000022e6, 0x000022f6, 0x0000230f,
 	// Entry 100 - 11F
-	0x00002329, 0x00002340, 0x00002360, 0x00002387,
-	0x000023a0, 0x000023c8, 0x000023d5, 0x000023e9,
-	0x000023ff, 0x00002411, 0x00002476, 0x00002499,
-	0x000024bb, 0x000024c1, 0x000024cd, 0x000024e0,
-	0x000024fb, 0x00002518, 0x00002531, 0x00002559,
-	0x0000256c, 0x0000257e, 0x0000258e, 0x000025a9,
-	0x000025e1, 0x00002631, 0x0000265d, 0x00002689,
-	0x000026b2, 0x000026f2, 0x00002703, 0x0000272c,
+	0x00002325, 0x0000233c, 0x0000235c, 0x00002383,
+	0x0000239c, 0x000023c4, 0x000023d1, 0x000023e5,
+	0x000023fb, 0x0000240d, 0x00002472, 0x00002495,
+	0x000024b7, 0x000024bd, 0x000024c9, 0x000024dc,
+	0x000024f7, 0x00002514, 0x0000252d, 0x00002555,
+	0x00002568, 0x0000257a, 0x0000258a, 0x000025a4,
+	0x000025da, 0x0000262a, 0x00002655, 0x00002680,
+	0x000026a9, 0x000026e9, 0x000026fa, 0x00002722,
 	// Entry 120 - 13F
-	0x00002762, 0x0000279a, 0x000027af, 0x000027c1,
-	0x000027d9, 0x00002826, 0x00002832, 0x00002844,
-	0x00002856, 0x00002868, 0x00002877, 0x00002881,
-	0x000028a9, 0x000028c2, 0x000028ce, 0x0000290b,
-	0x0000294d, 0x000029bf, 0x00002a67, 0x00002b06,
-	0x00002b21, 0x00002b3a, 0x00002b41, 0x00002b74,
-	0x00002bc4, 0x00002bdb, 0x00002c25, 0x00002c36,
-	0x00002c64, 0x00002c89, 0x00002ca1, 0x00002cb2,
+	0x00002757, 0x0000278e, 0x000027a3, 0x000027b5,
+	0x000027cd, 0x0000281a, 0x00002826, 0x00002838,
+	0x0000284a, 0x0000285c, 0x0000286b, 0x00002875,
+	0x0000289d, 0x000028b6, 0x000028c2, 0x000028ff,
+	0x00002941, 0x000029b3, 0x00002a5b, 0x00002af9,
+	0x00002b14, 0x00002b2d, 0x00002b34, 0x00002b67,
+	0x00002bb7, 0x00002bcd, 0x00002c16, 0x00002c26,
+	0x00002c54, 0x00002c78, 0x00002c90, 0x00002ca1,
 	// Entry 140 - 15F
-	0x00002cc1, 0x00002cd3, 0x00002cdf, 0x00002cf8,
-	0x00002d0a, 0x00002d1a, 0x00002d2d, 0x00002d50,
-	0x00002d5e, 0x00002d65, 0x00002d6b, 0x00002d80,
-	0x00002d93, 0x00002db1, 0x00002dba, 0x00002dd0,
-	0x00002e05, 0x00002e1a, 0x00002e2f, 0x00002e41,
-	0x00002e52, 0x00002e5f, 0x00002e75, 0x00002e8b,
-	0x00002ea2, 0x00002eb3, 0x00002ec5, 0x00002edb,
-	0x00002ef1, 0x00002f10, 0x00002f23, 0x00002f89,
+	0x00002cb0, 0x00002cc2, 0x00002ccd, 0x00002ce5,
+	0x00002cf6, 0x00002d05, 0x00002d18, 0x00002d3a,
+	0x00002d48, 0x00002d4f, 0x00002d55, 0x00002d6a,
+	0x00002d7d, 0x00002d9b, 0x00002da4, 0x00002dba,
+	0x00002def, 0x00002e04, 0x00002e19, 0x00002e2b,
+	0x00002e3c, 0x00002e49, 0x00002e5f, 0x00002e75,
+	0x00002e8c, 0x00002e9d, 0x00002eaf, 0x00002ec5,
+	0x00002edb, 0x00002efa, 0x00002f0d, 0x00002f73,
 	// Entry 160 - 17F
-	0x00002fa2, 0x00002fb5, 0x00002fba, 0x00002fbf,
-	0x00002fc9, 0x00002fd7, 0x00002fed, 0x0000301a,
-	0x00003034, 0x00003072, 0x00003085, 0x00003090,
-	0x000030a5, 0x000030b8, 0x000030c2, 0x000030de,
-	0x000030f1, 0x000030f9, 0x00003132, 0x0000313c,
-	0x0000315b, 0x0000317c, 0x0000319f, 0x000031bf,
-	0x000031e2, 0x00003204, 0x0000322a, 0x00003251,
-	0x0000325b, 0x00003269, 0x00003293, 0x000032a6,
+	0x00002f8c, 0x00002f9f, 0x00002fa4, 0x00002fa9,
+	0x00002fb3, 0x00002fc1, 0x00002fd7, 0x00003004,
+	0x0000301e, 0x0000305c, 0x0000306f, 0x0000307a,
+	0x0000308f, 0x000030a2, 0x000030ac, 0x000030c8,
+	0x000030db, 0x000030e3, 0x0000311c, 0x00003126,
+	0x00003145, 0x00003166, 0x00003189, 0x000031a9,
+	0x000031cc, 0x000031ee, 0x00003214, 0x0000323b,
+	0x00003245, 0x00003253, 0x0000327c, 0x0000328f,
 	// Entry 180 - 19F
-	0x000032ac, 0x000032b4, 0x000032bd, 0x000032cd,
-	0x000032e7, 0x000032fb, 0x0000330d, 0x0000331d,
-	0x00003323, 0x00003341, 0x00003354, 0x00003359,
-	0x00003365, 0x00003381, 0x0000338d, 0x0000339c,
-	0x000033a2, 0x000033aa, 0x000033b0, 0x000033b5,
-	0x000033bf, 0x000033c4, 0x000033cd, 0x000033d5,
-	0x000033de, 0x000033e5, 0x000033fe, 0x00003407,
-	0x0000340e, 0x00003416, 0x0000341d, 0x00003424,
+	0x00003295, 0x0000329d, 0x000032a6, 0x000032b6,
+	0x000032d0, 0x000032e4, 0x000032f6, 0x00003306,
+	0x0000330c, 0x0000332a, 0x0000333d, 0x00003342,
+	0x0000334e, 0x0000336a, 0x00003376, 0x00003385,
+	0x0000338b, 0x00003393, 0x00003399, 0x0000339e,
+	0x000033a8, 0x000033ad, 0x000033b6, 0x000033be,
+	0x000033c7, 0x000033ce, 0x000033e7, 0x000033f0,
+	0x000033f7, 0x000033ff, 0x00003406, 0x0000340d,
 	// Entry 1A0 - 1BF
-	0x0000342b, 0x0000343c, 0x00003451, 0x00003461,
-	0x0000346c, 0x0000347d, 0x0000348c, 0x00003493,
-	0x000034a3, 0x000034b2, 0x000034bc, 0x000034d0,
-	0x000034dd, 0x000034e8, 0x000034f1, 0x000034fc,
-	0x00003506, 0x0000350c, 0x00003510, 0x00003521,
-	0x0000352a, 0x00003544, 0x0000354a, 0x00003556,
-	0x0000355f, 0x00003563, 0x00003576, 0x0000357c,
-	0x00003589, 0x0000358e, 0x00003595, 0x0000359c,
+	0x00003414, 0x00003425, 0x0000343a, 0x0000344a,
+	0x00003455, 0x00003466, 0x00003475, 0x0000347c,
+	0x0000348c, 0x0000349b, 0x000034a5, 0x000034b9,
+	0x000034c6, 0x000034d1, 0x000034da, 0x000034e5,
+	0x000034ef, 0x000034f5, 0x000034f9, 0x0000350a,
+	0x00003513, 0x0000352d, 0x00003533, 0x0000353f,
+	0x00003548, 0x0000354c, 0x0000355f, 0x00003565,
+	0x00003572, 0x00003577, 0x0000357e, 0x00003585,
 	// Entry 1C0 - 1DF
-	0x000035a3, 0x000035b1, 0x000035c1, 0x000035d1,
-	0x000035f7, 0x0000362c, 0x0000367b, 0x00003698,
-	0x000036c4, 0x000036e1, 0x00003704, 0x00003742,
-	0x00003777, 0x00003796, 0x000037be, 0x000037f5,
-	0x0000381d, 0x00003847, 0x0000386d, 0x0000389e,
-	0x000038c8, 0x000038ed, 0x00003922, 0x0000393f,
-	0x0000396b, 0x00003996, 0x000039b2, 0x000039c7,
-	0x000039ee, 0x00003a04, 0x00003a21, 0x00003a3b,
+	0x0000358c, 0x0000359a, 0x000035aa, 0x000035ba,
+	0x000035e0, 0x00003615, 0x00003664, 0x00003681,
+	0x000036ad, 0x000036ca, 0x000036ed, 0x0000372b,
+	0x00003760, 0x0000377f, 0x000037a7, 0x000037de,
+	0x00003806, 0x00003830, 0x00003856, 0x00003887,
+	0x000038b1, 0x000038d6, 0x0000390b, 0x00003928,
+	0x00003954, 0x0000397f, 0x0000399b, 0x000039b0,
+	0x000039d7, 0x000039ed, 0x00003a0a, 0x00003a24,
 	// Entry 1E0 - 1FF
-	0x00003a58, 0x00003a81, 0x00003aa0, 0x00003ac8,
-	0x00003ae6, 0x00003aef, 0x00003af4, 0x00003b0b,
-	0x00003b21, 0x00003b43, 0x00003b76, 0x00003ba3,
-	0x00003bd7, 0x00003bf9, 0x00003c42, 0x00003c89,
-	0x00003cb7, 0x00003cd1, 0x00003cee, 0x00003d0d,
-	0x00003d26, 0x00003d3d, 0x00003d63, 0x00003d81,
-	0x00003da6, 0x00003dd9, 0x00003e00, 0x00003e33,
-	0x00003e6e, 0x00003eb0, 0x00003ecf, 0x00003eff,
+	0x00003a41, 0x00003a6a, 0x00003a89, 0x00003ab1,
+	0x00003acf, 0x00003ad8, 0x00003add, 0x00003af4,
+	0x00003b0a, 0x00003b2c, 0x00003b5f, 0x00003b8c,
+	0x00003bc0, 0x00003be2, 0x00003c2b, 0x00003c72,
+	0x00003ca0, 0x00003cba, 0x00003cd7, 0x00003cf6,
+	0x00003d0f, 0x00003d26, 0x00003d4c, 0x00003d6a,
+	0x00003d8f, 0x00003dc2, 0x00003de9, 0x00003e1c,
+	0x00003e57, 0x00003e99, 0x00003eb8, 0x00003ee8,
 	// Entry 200 - 21F
-	0x00003f4e, 0x00003f6c, 0x00003f9b, 0x00003fd0,
-	0x00003fee, 0x0000401f, 0x0000403e, 0x0000405e,
-	0x00004079, 0x00004090, 0x000040f7, 0x000040fe,
-	0x0000410a, 0x0000411f, 0x0000412f, 0x0000413c,
-	0x00004146, 0x00004153, 0x0000417c, 0x000041ab,
-	0x000041e3,
+	0x00003f37, 0x00003f55, 0x00003f84, 0x00003fb9,
+	0x00003fd7, 0x00004008, 0x00004027, 0x00004047,
+	0x00004062, 0x00004079, 0x000040e0, 0x000040e7,
+	0x000040f3, 0x00004108, 0x00004118, 0x00004125,
+	0x0000412f, 0x0000413c, 0x00004165, 0x00004194,
+	0x000041cc,
 } // Size: 2156 bytes
 
-const itData string = "" + // Size: 16867 bytes
+const itData string = "" + // Size: 16844 bytes
 	"\x02Informazioni\x02Copyright (c) 2023–presente Marco Beierer\x02SimpleD" +
 	"MS è un progetto Open Source di Marco Beierer. I siti ufficiali sono:" +
 	"\x02simpledms.eu\x02simpledms.ch\x02marcobeierer.com\x02marcobeierer.ch" +
@@ -2223,14 +2218,14 @@ const itData string = "" + // Size: 16867 bytes
 	"\x02Caricamento file\x02Conferma che i metadati del file sorgente andran" +
 	"no persi.\x02Sono richiesti file sorgente e di destinazione.\x02Aggiunta" +
 	" nuova versione dall'Inbox.\x02Sorgente e destinazione devono essere fil" +
-	"e diversi.\x02Il file non appartiene allo spazio corrente.\x02Impossibil" +
-	"e unire le directory.\x02Il file sorgente è eliminato.\x02Il file sorgen" +
-	"te non ha versioni.\x02Impossibile leggere la versione sorgente.\x02Il f" +
-	"ile sorgente non ha un file archiviato.\x02Impossibile leggere le versio" +
-	"ni di destinazione.\x02Impossibile aggiornare il file di destinazione." +
+	"e diversi.\x02Il file non appartiene allo Space corrente.\x02Impossibile" +
+	" unire le directory.\x02Il file sorgente è eliminato.\x02Il file sorgent" +
+	"e non ha versioni.\x02Impossibile leggere la versione sorgente.\x02Il fi" +
+	"le sorgente non ha un file archiviato.\x02Impossibile leggere le version" +
+	"i di destinazione.\x02Impossibile aggiornare il file di destinazione." +
 	"\x02Il file sorgente non è in Inbox.\x02Impossibile rimuovere le version" +
 	"i sorgente.\x02Impossibile eliminare il file sorgente.\x02Capisco che i " +
-	"metadati del file in Inbox (tipo documento, tag, campi) andranno persi q" +
+	"metadati del file in Inbox (tipo documento, Tag, campi) andranno persi q" +
 	"uando viene unito.\x02Cerca file in Inbox\x02Aggiungi nuova versione dal" +
 	"l'Inbox\x02Aggiungi\x02Il file di destinazione è obbligatorio.\x02Il fil" +
 	"e sorgente è obbligatorio.\x02Il file deve essere in Inbox.\x02Nessuna c" +
@@ -2243,7 +2238,7 @@ const itData string = "" + // Size: 16867 bytes
 	" «%[1]s»\x02Nessun campo disponibile finora.\x02Nessun campo disponibile" +
 	".\x02Contiene\x02Inizia con\x02Uguale a\x02Maggiore di\x02Minore di\x02T" +
 	"ra\x02«%[1]s» è selezionato\x02«%[1]s» non è selezionato\x02Tag | Filtro" +
-	"\x02Nessun tag disponibile finora.\x02Gestisci tag\x02«%[1]s» creato." +
+	"\x02Nessun Tag disponibile finora.\x02Gestisci Tag\x02«%[1]s» creato." +
 	"\x02Apri directory\x02Consentito solo in modalità cartella.\x02Apri file" +
 	"\x02Spostato in «%[1]s».\x02Campi | Filtro\x02«%[1]s» rimosso.\x02Rinomi" +
 	"na file\x02Rinominato in «%[1]s»\x02Tipo documento deselezionato.\x02Tip" +
@@ -2261,146 +2256,146 @@ const itData string = "" + // Size: 16867 bytes
 	"ità\x02Organizzazione «%[1]s»\x02Account «%[1]s»\x02Sistema\x02Periodo d" +
 	"i prova\x02Abbonamento\x02Non inizializzato\x02Attendere prego\x02L'orga" +
 	"nizzazione non è ancora inizializzata, attendi fino al completamento del" +
-	"l'inizializzazione.\x02Aggiorna\x02Spazio\x02Seleziona\x02Elimina accoun" +
-	"t\x02Nessuna password impostata\x02Account\x02Hai effettuato l'accesso c" +
-	"on una password temporanea. Imposta una password per proteggere il tuo a" +
-	"ccount e usare l'app.\x02Imposta password ora\x02Password temporanea att" +
-	"iva\x02Il tuo account ha una password temporanea attiva. Cambia la tua p" +
-	"assword o rimuovi la password temporanea il prima possibile per protegge" +
-	"re il tuo account.\x02Nessuno spazio disponibile finora\x02Non hai il pe" +
-	"rmesso di accedere a nessuno spazio di questa organizzazione.\x02Crea un" +
-	"a voce per iniziare.\x02Gestisci spazi\x02%[1]d utenti\x021 utente\x02Ge" +
-	"stisci utenti\x02L'app è sbloccata e non è protetta da una passphrase." +
-	"\x02L'app è bloccata.\x02Imposta passphrase\x02L'app è sbloccata e prote" +
-	"tta da una passphrase.\x02Stato dell'app\x02Dashboard\x02Modifica nella " +
-	"vista «Spaces»\x02Tipi documento\x02Utenti\x02Il campo «%[1]s» è già agg" +
-	"iunto a questo tipo documento.\x02Attributo «%[1]s» aggiunto.\x02Aggiung" +
-	"i attributo campo\x02Crea prima un campo.\x02Modifica\x02Aggiungi attrib" +
-	"uto elenco (gruppo di tag)\x02attribuzione del nome\x02Aggiungi attribut" +
-	"o\x02Il gruppo di tag «%[1]s» è già aggiunto a questo tipo documento." +
-	"\x02Attributo «%[1]s» creato.\x02Nessun gruppo di tag disponibile finora" +
-	".\x02Crea prima un gruppo di tag.\x02Aggiungi tipo documento\x02Tipo doc" +
-	"umento creato.\x02Attributo eliminato.\x02Tipo documento eliminato.\x02C" +
-	"hiudi dettagli\x02Modifica attributo campo\x02Attributo aggiornato.\x02M" +
-	"odifica attributo tag\x02Attributo «%[1]s» aggiornato.\x02Impossibile co" +
-	"nvertire l'id in intero.\x02RenameCmd tipo documento\x02Tipo documento r" +
-	"inominato in «%[1]s».\x02Assegna file\x02Metadati ricaricati\x02Segna co" +
-	"me completato\x02Ricarica metadati\x02Il riconoscimento del testo (OCR) " +
-	"non è ancora pronto, i suggerimenti si basano solo sul nome file.\x02Sel" +
-	"eziona destinazione manualmente\x02Suggerimenti basati sul nome file\x02" +
-	"Inbox\x02Ordina file\x02Cerca in «Inbox»\x02Nessun nuovo file trovato." +
-	"\x02File caricati correttamente.\x02Il file non è in Inbox.\x02File «%[1" +
-	"]s» segnato come completato.\x02Più recenti prima\x02Più vecchi prima" +
-	"\x02Ordina per nome\x02Assegna utente allo spazio\x02Nessuno spazio sele" +
-	"zionato. Seleziona prima uno spazio.\x02Non ti è permesso assegnare uten" +
-	"ti agli spazi perché non sei il proprietario.\x02L'utente è già assegnat" +
-	"o a questo spazio.\x02Utente assegnato allo spazio correttamente.\x02Nes" +
-	"sun utente non assegnato disponibile.\x02Crea prima un utente nella gest" +
-	"ione utenti dell'organizzazione.\x02Utenti «%[1]s»\x02Rimuovi assegnazio" +
-	"ne utente dallo spazio\x02Non puoi rimuovere la tua assegnazione da uno " +
-	"spazio.\x02Assegnazione utente rimossa dallo spazio correttamente.\x02Ri" +
-	"muovi assegnazione\x02Assegna un utente\x02Crea nuovo tag o gruppo\x02Se" +
-	"i sicuro? Questa azione eliminerà il tag e lo rimuoverà da tutti i file!" +
-	"\x02Assegna tag\x02Sposta nel gruppo\x02Gruppo, %[1]d tag\x02Gruppo, %[1" +
-	"]d tag\x02Crea nuovo tag\x02Super tag\x02L'ID del gruppo di tag è obblig" +
-	"atorio.\x02Il tag non è un gruppo.\x02Crea utente\x02Non ti è permesso c" +
-	"reare utenti. Nessun tenant selezionato.\x02Non ti è permesso creare ute" +
-	"nti perché non sei il proprietario.\x02Esiste già un utente con questo i" +
-	"ndirizzo email, contatta il supporto se vuoi comunque aggiungere questo " +
-	"utente.\x02Creato con successo il nuovo utente. La password è stata invi" +
-	"ata all'utente via email. Un proprietario può accedere a tutti gli spazi" +
-	" senza ulteriori configurazioni.\x02Creato con successo il nuovo utente." +
-	" La password è stata inviata all'utente via email. Il passo successivo è" +
-	" consentire all'utente di accedere a uno spazio.\x02Gestisci utenti del " +
-	"tenant\x02Aggiungi un nuovo utente\x02Carica\x02Caricamento dei file in " +
-	"corso, attendi un momento.\x02La pagina verrà aggiornata automaticamente" +
-	" una volta terminato il caricamento.\x02Nessuno spazio ancora.\x02Riprov" +
-	"a quando hai creato uno spazio o sei stato invitato a unirti a uno.\x02S" +
-	"eleziona spazio\x02L'elaborazione dei file condivisi è fallita.\x02File " +
-	"caricati, seleziona uno spazio.\x02Campo «%[1]s» creato.\x02Campo elimin" +
-	"ato.\x02Modifica campo\x02Campo aggiornato.\x02Crea spazio\x02Spazio «%[" +
-	"1]s» creato.\x02Spazio eliminato.\x02Modifica spazio\x02Modifiche salvat" +
-	"e.\x02Nessuno spazio disponibile finora.\x02%[1]s (%[2]s)\x02attivo\x02S" +
-	"pazi\x02«%[1]s» assegnato.\x02Crea e assegna tag\x02«%[1]s» creato e ass" +
-	"egnato.\x02Crea tag\x02Tag «%[1]s» creato.\x02Impossibile aggiungere un " +
-	"gruppo di tag come figlio.\x02«%[1]s» eliminato.\x02Mostra tag assegnati" +
-	"\x02Crea nuovo gruppo\x02Tag di «%[1]s»\x02Modifica tag\x02«%[1]s» aggio" +
-	"rnato.\x02layout non supportato\x02Modifica tag assegnati\x02Gruppo «%[1" +
-	"]s»\x02Composto da %[1]s\x02Sposta tag nel gruppo\x02Gruppo deselezionat" +
-	"o.\x02Spostato nel gruppo «%[1]s».\x02Deseleziona gruppo\x02Sei sicuro? " +
-	"Questa azione eliminerà completamente il tag e non solo lo rimuoverà dal" +
-	" file corrente!\x02«%[1]s» non assegnato.\x02Cartella superiore\x02Nome" +
-	"\x02Note\x02Creato il\x02Modificato il\x02Nessun tag assegnato.\x02Le ca" +
-	"rtelle non possono essere ripristinate.\x02Il file non è eliminato.\x02L" +
-	"a cartella superiore originale manca. Ripristinato in Inbox.\x02File rip" +
-	"ristinato.\x02Ripristina\x02Il cestino è vuoto.\x02Cartella eliminata" +
-	"\x02Eliminato\x02Cartella eliminata il %[1]s\x02Eliminato il %[1]s\x02Ce" +
-	"stino\x02L'anteprima del file non è disponibile per le cartelle.\x02Ante" +
-	"prima\x02impossibile analizzare il file\x02impossibile analizzare il mod" +
-	"ulo\x02impossibile decodificare il modulo\x02Impossibile validare il mod" +
-	"ulo.\x02Convalida del modulo non riuscita.\x02Filtri reimpostati corrett" +
-	"amente.\x02impossibile analizzare l'url corrente\x02Impossibile decodifi" +
-	"care la query url.\x02Accettato\x02Scheda attiva\x02Aggiungimi come prop" +
-	"rietario dello spazio\x02Aggiungi all'Inbox\x02Admin\x02Austria\x02Check" +
-	"box\x02Valore Checkbox\x02Conferma nuova passphrase\x02Conferma passphra" +
-	"se\x02Conferma password\x02Conferma avviso\x02Paese\x02Password attuale " +
-	"o temporanea\x02Passphrase attuale\x02Data\x02Valore data\x02Elimina in " +
-	"caso di successo\x02Descrizione\x02Nome directory\x02Email\x02Inglese" +
-	"\x02Campo\x02File\x02Nome file\x02Nome\x02Francese\x02Tedesco\x02Germani" +
-	"a\x02Gruppo\x02È attribuzione del nome\x02Italiano\x02Lingua\x02Cognome" +
-	"\x02Layout\x02Locale\x02Denaro\x02Valore monetario\x02Nuovo nome directo" +
-	"ry\x02Nuovo nome file\x02Nuovo nome\x02Nuova passphrase\x02Nuova passwor" +
-	"d\x02Numero\x02Valore numerico\x02Solo assegnati\x02Operatore\x02Nome or" +
-	"ganizzazione\x02Proprietario\x02Passphrase\x02Password\x02In sospeso\x02" +
-	"Rifiutato\x02Ruolo\x02S 3\x02Query di ricerca\x02Semplice\x02Iscriviti a" +
-	"lla newsletter\x02Super\x02Sostenitore\x02Svizzera\x02Tag\x02Session tem" +
-	"poranea\x02Testo\x02Valore testo\x02Tipo\x02Unità\x02Utente\x02Valore" +
-	"\x02Valore finale\x02Valore iniziale\x02Numero versione\x02il file non h" +
-	"a una cartella superiore\x02Troppi tentativi di accesso. Riprova tra 10 " +
-	"secondi.\x02È stato fornito un codice 2FA, ma la 2FA non è abilitata per" +
-	" questo account.\x02Password temporanea scaduta.\x02impossibile generare" +
-	" la password temporanea\x02impossibile generare il salt\x02La password a" +
-	"ttuale non è valida.\x02La nuova password deve essere diversa dalla pass" +
-	"word attuale.\x02La password deve essere lunga almeno otto caratteri." +
-	"\x02Le password non corrispondono.\x02La modalità cartella non è abilita" +
-	"ta.\x02L'elemento del percorso è un file, non una directory.\x02Il nome " +
-	"file fornito non è consentito.\x02Esiste già una cartella con questo nom" +
-	"e.\x02La destinazione non è una directory.\x02Impossibile spostare la di" +
-	"rectory su sé stessa.\x02La destinazione è la posizione corrente.\x02la " +
-	"destinazione non è una directory\x02impossibile spostare il file in una " +
-	"directory figlia\x02Il nuovo nome file è vuoto.\x02Il nuovo nome file è " +
-	"uguale al precedente.\x02Impossibile ottenere il nome dell'oggetto.\x02I" +
-	"mpossibile aprire il file.\x02Il file esiste già.\x02Il percorso di arch" +
-	"iviazione è vuoto.\x02Nome file non valido.\x02Il nome del bucket è vuot" +
-	"o.\x02Il nome file esiste già.\x02Impossibile salvare il file.\x02Imposs" +
-	"ibile ottenere l'identità x25519.\x02L'app non è ancora sbloccata.\x02Im" +
-	"possibile copiare il file temporaneo.\x02La tua password temporanea è" +
-	"\x02Scade il\x02Nota\x02Benvenuto in SimpleDMS\x0202-01-2006 alle 15:04" +
-	"\x02Reimpostazione password SimpleDMS\x02Questo è un messaggio automatic" +
-	"o, non rispondere.\x02Il tuo account è stato creato con successo.\x02Acc" +
-	"edi e cambia la tua password il prima possibile.\x02Reimpostazione passw" +
-	"ord SimpleDMS\x02È stata richiesta una reimpostazione della password per" +
-	" il tuo account.\x02La tua vecchia password continuerà a funzionare finc" +
-	"hé non la cambi.\x02«%[1]s» ti ha invitato al tenant «%[2]s».\x02«%[1]s»" +
-	" ti ha invitato.\x02L'app è già inizializzata.\x02La passphrase è obblig" +
-	"atoria.\x02L'app è già sbloccata.\x02Passphrase non valida.\x02L'app non" +
-	" è criptata con passphrase.\x02Nessuna passphrase impostata.\x02La nuova" +
-	" passphrase è obbligatoria.\x02La nuova passphrase non corrisponde alla " +
-	"conferma.\x02La vecchia passphrase è obbligatoria.\x02L'app non è ancora" +
-	" sbloccata. Riprova più tardi.\x02Il tenant non è ancora inizializzato. " +
-	"Riprova più tardi.\x02Errore nell'apertura del database del tenant. Ripr" +
-	"ova più tardi.\x02Esiste già un'entità simile.\x02Impossibile eliminare " +
-	"un'entità ancora in uso.\x02Si è verificata una violazione di vincolo de" +
-	"l database. Contatta il supporto.\x02Validazione dei dati fallita.\x02Qu" +
-	"alcosa è andato storto. Riprova per favore.\x02Non hai effettuato l'acce" +
-	"sso. Accedi per continuare.\x02Impossibile analizzare l'URL.\x02Non sei " +
-	"autorizzato ad accedere a questo tenant.\x02Impossibile leggere il cooki" +
-	"e.\x02Cookie impostato ma non valido.\x02Cookie impostato ma vuoto.\x02M" +
-	"odalità manutenzione\x02La modalità manutenzione è attivata. Attendere f" +
-	"ino a quando l'applicazione sarà nuovamente pronta.\x02Chiudi\x02Disconn" +
-	"etti\x02Apri menu principale\x02Chiudi finestra\x02Suggerimento\x02opzio" +
-	"nale\x02obbligatorio\x02Cookie di autenticazione già impostato.\x02Impos" +
-	"sibile generare il valore della sessione.\x02Non sei autorizzato ad acce" +
-	"dere alla risorsa richiesta."
+	"l'inizializzazione.\x02Aggiorna\x02Space\x02Seleziona\x02Elimina account" +
+	"\x02Nessuna password impostata\x02Account\x02Hai effettuato l'accesso co" +
+	"n una password temporanea. Imposta una password per proteggere il tuo ac" +
+	"count e usare l'app.\x02Imposta password ora\x02Password temporanea atti" +
+	"va\x02Il tuo account ha una password temporanea attiva. Cambia la tua pa" +
+	"ssword o rimuovi la password temporanea il prima possibile per protegger" +
+	"e il tuo account.\x02Nessuno Space disponibile finora\x02Non hai il perm" +
+	"esso di accedere a nessuno Space di questa organizzazione.\x02Crea una v" +
+	"oce per iniziare.\x02Gestisci spazi\x02%[1]d utenti\x021 utente\x02Gesti" +
+	"sci utenti\x02L'app è sbloccata e non è protetta da una passphrase.\x02L" +
+	"'app è bloccata.\x02Imposta passphrase\x02L'app è sbloccata e protetta d" +
+	"a una passphrase.\x02Stato dell'app\x02Dashboard\x02Modifica nella vista" +
+	" «Spaces»\x02Tipi documento\x02Utenti\x02Il campo «%[1]s» è già aggiunto" +
+	" a questo tipo documento.\x02Attributo «%[1]s» aggiunto.\x02Aggiungi att" +
+	"ributo campo\x02Crea prima un campo.\x02Modifica\x02Aggiungi attributo e" +
+	"lenco (gruppo di Tag)\x02attribuzione del nome\x02Aggiungi attributo\x02" +
+	"Il gruppo di Tag «%[1]s» è già aggiunto a questo tipo documento.\x02Attr" +
+	"ibuto «%[1]s» creato.\x02Nessun gruppo di Tag disponibile finora.\x02Cre" +
+	"a prima un gruppo di Tag.\x02Aggiungi tipo documento\x02Tipo documento c" +
+	"reato.\x02Attributo eliminato.\x02Tipo documento eliminato.\x02Chiudi de" +
+	"ttagli\x02Modifica attributo campo\x02Attributo aggiornato.\x02Modifica " +
+	"attributo Tag\x02Attributo «%[1]s» aggiornato.\x02Impossibile convertire" +
+	" l'id in intero.\x02RenameCmd tipo documento\x02Tipo documento rinominat" +
+	"o in «%[1]s».\x02Assegna file\x02Metadati ricaricati\x02Segna come compl" +
+	"etato\x02Ricarica metadati\x02Il riconoscimento del testo (OCR) non è an" +
+	"cora pronto, i suggerimenti si basano solo sul nome file.\x02Seleziona d" +
+	"estinazione manualmente\x02Suggerimenti basati sul nome file\x02Inbox" +
+	"\x02Ordina file\x02Cerca in «Inbox»\x02Nessun nuovo file trovato.\x02Fil" +
+	"e caricati correttamente.\x02Il file non è in Inbox.\x02File «%[1]s» seg" +
+	"nato come completato.\x02Più recenti prima\x02Più vecchi prima\x02Ordina" +
+	" per nome\x02Assegna utente allo Space\x02Nessuno Space selezionato. Sel" +
+	"eziona prima uno Space.\x02Non ti è permesso assegnare utenti agli spazi" +
+	" perché non sei il proprietario.\x02L'utente è già assegnato a questo Sp" +
+	"ace.\x02Utente assegnato allo Space correttamente.\x02Nessun utente non " +
+	"assegnato disponibile.\x02Crea prima un utente nella gestione utenti del" +
+	"l'organizzazione.\x02Utenti «%[1]s»\x02Rimuovi assegnazione utente dallo" +
+	" Space\x02Non puoi rimuovere la tua assegnazione da uno Space.\x02Assegn" +
+	"azione utente rimossa dallo Space correttamente.\x02Rimuovi assegnazione" +
+	"\x02Assegna un utente\x02Crea nuovo Tag o gruppo\x02Sei sicuro? Questa a" +
+	"zione eliminerà il Tag e lo rimuoverà da tutti i file!\x02Assegna Tag" +
+	"\x02Sposta nel gruppo\x02Gruppo, %[1]d Tag\x02Gruppo, %[1]d Tag\x02Crea " +
+	"nuovo Tag\x02Super Tag\x02L'ID del gruppo di Tag è obbligatorio.\x02Il T" +
+	"ag non è un gruppo.\x02Crea utente\x02Non ti è permesso creare utenti. N" +
+	"essun tenant selezionato.\x02Non ti è permesso creare utenti perché non " +
+	"sei il proprietario.\x02Esiste già un utente con questo indirizzo email," +
+	" contatta il supporto se vuoi comunque aggiungere questo utente.\x02Crea" +
+	"to con successo il nuovo utente. La password è stata inviata all'utente " +
+	"via email. Un proprietario può accedere a tutti gli spazi senza ulterior" +
+	"i configurazioni.\x02Creato con successo il nuovo utente. La password è " +
+	"stata inviata all'utente via email. Il passo successivo è consentire all" +
+	"'utente di accedere a uno Space.\x02Gestisci utenti del tenant\x02Aggiun" +
+	"gi un nuovo utente\x02Carica\x02Caricamento dei file in corso, attendi u" +
+	"n momento.\x02La pagina verrà aggiornata automaticamente una volta termi" +
+	"nato il caricamento.\x02Nessuno Space ancora.\x02Riprova quando hai crea" +
+	"to uno Space o sei stato invitato a unirti a uno.\x02Seleziona Space\x02" +
+	"L'elaborazione dei file condivisi è fallita.\x02File caricati, seleziona" +
+	" uno Space.\x02Campo «%[1]s» creato.\x02Campo eliminato.\x02Modifica cam" +
+	"po\x02Campo aggiornato.\x02Crea Space\x02Space «%[1]s» creato.\x02Space " +
+	"eliminato.\x02Modifica Space\x02Modifiche salvate.\x02Nessuno Space disp" +
+	"onibile finora.\x02%[1]s (%[2]s)\x02attivo\x02Spazi\x02«%[1]s» assegnato" +
+	".\x02Crea e assegna Tag\x02«%[1]s» creato e assegnato.\x02Crea Tag\x02Ta" +
+	"g «%[1]s» creato.\x02Impossibile aggiungere un gruppo di Tag come figlio" +
+	".\x02«%[1]s» eliminato.\x02Mostra Tag assegnati\x02Crea nuovo gruppo\x02" +
+	"Tag di «%[1]s»\x02Modifica Tag\x02«%[1]s» aggiornato.\x02layout non supp" +
+	"ortato\x02Modifica Tag assegnati\x02Gruppo «%[1]s»\x02Composto da %[1]s" +
+	"\x02Sposta Tag nel gruppo\x02Gruppo deselezionato.\x02Spostato nel grupp" +
+	"o «%[1]s».\x02Deseleziona gruppo\x02Sei sicuro? Questa azione eliminerà " +
+	"completamente il Tag e non solo lo rimuoverà dal file corrente!\x02«%[1]" +
+	"s» non assegnato.\x02Cartella superiore\x02Nome\x02Note\x02Creato il\x02" +
+	"Modificato il\x02Nessun Tag assegnato.\x02Le cartelle non possono essere" +
+	" ripristinate.\x02Il file non è eliminato.\x02La cartella superiore orig" +
+	"inale manca. Ripristinato in Inbox.\x02File ripristinato.\x02Ripristina" +
+	"\x02Il cestino è vuoto.\x02Cartella eliminata\x02Eliminato\x02Cartella e" +
+	"liminata il %[1]s\x02Eliminato il %[1]s\x02Cestino\x02L'anteprima del fi" +
+	"le non è disponibile per le cartelle.\x02Anteprima\x02impossibile analiz" +
+	"zare il file\x02impossibile analizzare il modulo\x02impossibile decodifi" +
+	"care il modulo\x02Impossibile validare il modulo.\x02Convalida del modul" +
+	"o non riuscita.\x02Filtri reimpostati correttamente.\x02impossibile anal" +
+	"izzare l'url corrente\x02Impossibile decodificare la query url.\x02Accet" +
+	"tato\x02Scheda attiva\x02Aggiungimi come proprietario dello Space\x02Agg" +
+	"iungi all'Inbox\x02Admin\x02Austria\x02Checkbox\x02Valore Checkbox\x02Co" +
+	"nferma nuova passphrase\x02Conferma passphrase\x02Conferma password\x02C" +
+	"onferma avviso\x02Paese\x02Password attuale o temporanea\x02Passphrase a" +
+	"ttuale\x02Data\x02Valore data\x02Elimina in caso di successo\x02Descrizi" +
+	"one\x02Nome directory\x02Email\x02Inglese\x02Campo\x02File\x02Nome file" +
+	"\x02Nome\x02Francese\x02Tedesco\x02Germania\x02Gruppo\x02È attribuzione " +
+	"del nome\x02Italiano\x02Lingua\x02Cognome\x02Layout\x02Locale\x02Denaro" +
+	"\x02Valore monetario\x02Nuovo nome directory\x02Nuovo nome file\x02Nuovo" +
+	" nome\x02Nuova passphrase\x02Nuova password\x02Numero\x02Valore numerico" +
+	"\x02Solo assegnati\x02Operatore\x02Nome organizzazione\x02Proprietario" +
+	"\x02Passphrase\x02Password\x02In sospeso\x02Rifiutato\x02Ruolo\x02S 3" +
+	"\x02Query di ricerca\x02Semplice\x02Iscriviti alla newsletter\x02Super" +
+	"\x02Sostenitore\x02Svizzera\x02Tag\x02Session temporanea\x02Testo\x02Val" +
+	"ore testo\x02Tipo\x02Unità\x02Utente\x02Valore\x02Valore finale\x02Valor" +
+	"e iniziale\x02Numero versione\x02il file non ha una cartella superiore" +
+	"\x02Troppi tentativi di accesso. Riprova tra 10 secondi.\x02È stato forn" +
+	"ito un codice 2FA, ma la 2FA non è abilitata per questo account.\x02Pass" +
+	"word temporanea scaduta.\x02impossibile generare la password temporanea" +
+	"\x02impossibile generare il salt\x02La password attuale non è valida." +
+	"\x02La nuova password deve essere diversa dalla password attuale.\x02La " +
+	"password deve essere lunga almeno otto caratteri.\x02Le password non cor" +
+	"rispondono.\x02La modalità cartella non è abilitata.\x02L'elemento del p" +
+	"ercorso è un file, non una directory.\x02Il nome file fornito non è cons" +
+	"entito.\x02Esiste già una cartella con questo nome.\x02La destinazione n" +
+	"on è una directory.\x02Impossibile spostare la directory su sé stessa." +
+	"\x02La destinazione è la posizione corrente.\x02la destinazione non è un" +
+	"a directory\x02impossibile spostare il file in una directory figlia\x02I" +
+	"l nuovo nome file è vuoto.\x02Il nuovo nome file è uguale al precedente." +
+	"\x02Impossibile ottenere il nome dell'oggetto.\x02Impossibile aprire il " +
+	"file.\x02Il file esiste già.\x02Il percorso di archiviazione è vuoto." +
+	"\x02Nome file non valido.\x02Il nome del bucket è vuoto.\x02Il nome file" +
+	" esiste già.\x02Impossibile salvare il file.\x02Impossibile ottenere l'i" +
+	"dentità x25519.\x02L'app non è ancora sbloccata.\x02Impossibile copiare " +
+	"il file temporaneo.\x02La tua password temporanea è\x02Scade il\x02Nota" +
+	"\x02Benvenuto in SimpleDMS\x0202-01-2006 alle 15:04\x02Reimpostazione pa" +
+	"ssword SimpleDMS\x02Questo è un messaggio automatico, non rispondere." +
+	"\x02Il tuo account è stato creato con successo.\x02Accedi e cambia la tu" +
+	"a password il prima possibile.\x02Reimpostazione password SimpleDMS\x02È" +
+	" stata richiesta una reimpostazione della password per il tuo account." +
+	"\x02La tua vecchia password continuerà a funzionare finché non la cambi." +
+	"\x02«%[1]s» ti ha invitato al tenant «%[2]s».\x02«%[1]s» ti ha invitato." +
+	"\x02L'app è già inizializzata.\x02La passphrase è obbligatoria.\x02L'app" +
+	" è già sbloccata.\x02Passphrase non valida.\x02L'app non è criptata con " +
+	"passphrase.\x02Nessuna passphrase impostata.\x02La nuova passphrase è ob" +
+	"bligatoria.\x02La nuova passphrase non corrisponde alla conferma.\x02La " +
+	"vecchia passphrase è obbligatoria.\x02L'app non è ancora sbloccata. Ripr" +
+	"ova più tardi.\x02Il tenant non è ancora inizializzato. Riprova più tard" +
+	"i.\x02Errore nell'apertura del database del tenant. Riprova più tardi." +
+	"\x02Esiste già un'entità simile.\x02Impossibile eliminare un'entità anco" +
+	"ra in uso.\x02Si è verificata una violazione di vincolo del database. Co" +
+	"ntatta il supporto.\x02Validazione dei dati fallita.\x02Qualcosa è andat" +
+	"o storto. Riprova per favore.\x02Non hai effettuato l'accesso. Accedi pe" +
+	"r continuare.\x02Impossibile analizzare l'URL.\x02Non sei autorizzato ad" +
+	" accedere a questo tenant.\x02Impossibile leggere il cookie.\x02Cookie i" +
+	"mpostato ma non valido.\x02Cookie impostato ma vuoto.\x02Modalità manute" +
+	"nzione\x02La modalità manutenzione è attivata. Attendere fino a quando l" +
+	"'applicazione sarà nuovamente pronta.\x02Chiudi\x02Disconnetti\x02Apri m" +
+	"enu principale\x02Chiudi finestra\x02Suggerimento\x02opzionale\x02obblig" +
+	"atorio\x02Cookie di autenticazione già impostato.\x02Impossibile generar" +
+	"e il valore della sessione.\x02Non sei autorizzato ad accedere alla riso" +
+	"rsa richiesta."
 
-	// Total table size 80276 bytes (78KiB); checksum: 55EEC060
+	// Total table size 79808 bytes (77KiB); checksum: E324AB1B

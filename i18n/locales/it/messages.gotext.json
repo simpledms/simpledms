@@ -238,14 +238,14 @@
         {
             "id": "Add list attribute (tag group)",
             "message": "Add list attribute (tag group)",
-            "translation": "Aggiungi attributo elenco (gruppo di tag)",
+            "translation": "Aggiungi attributo elenco (gruppo di Tag)",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Add me as space owner",
             "message": "Add me as space owner",
-            "translation": "Aggiungimi come proprietario dello spazio",
+            "translation": "Aggiungimi come proprietario dello Space",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -364,14 +364,14 @@
         {
             "id": "Are you sure? This action will delete the tag and unassign it from all files!",
             "message": "Are you sure? This action will delete the tag and unassign it from all files!",
-            "translation": "Sei sicuro? Questa azione eliminerà il tag e lo rimuoverà da tutti i file!",
+            "translation": "Sei sicuro? Questa azione eliminerà il Tag e lo rimuoverà da tutti i file!",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Are you sure? This action will delete the tag entirely and not just unassign it from the current file!",
             "message": "Are you sure? This action will delete the tag entirely and not just unassign it from the current file!",
-            "translation": "Sei sicuro? Questa azione eliminerà completamente il tag e non solo lo rimuoverà dal file corrente!",
+            "translation": "Sei sicuro? Questa azione eliminerà completamente il Tag e non solo lo rimuoverà dal file corrente!",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -392,14 +392,14 @@
         {
             "id": "Assign tags",
             "message": "Assign tags",
-            "translation": "Assegna tag",
+            "translation": "Assegna Tag",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Assign user to space",
             "message": "Assign user to space",
-            "translation": "Assegna utente allo spazio",
+            "translation": "Assegna utente allo Space",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -513,7 +513,7 @@
         {
             "id": "Cannot add a tag group as child.",
             "message": "Cannot add a tag group as child.",
-            "translation": "Impossibile aggiungere un gruppo di tag come figlio.",
+            "translation": "Impossibile aggiungere un gruppo di Tag come figlio.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -873,7 +873,7 @@
         {
             "id": "Create and assign tag",
             "message": "Create and assign tag",
-            "translation": "Crea e assegna tag",
+            "translation": "Crea e assegna Tag",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -894,28 +894,28 @@
         {
             "id": "Create new tag",
             "message": "Create new tag",
-            "translation": "Crea nuovo tag",
+            "translation": "Crea nuovo Tag",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Create new tag or group",
             "message": "Create new tag or group",
-            "translation": "Crea nuovo tag o gruppo",
+            "translation": "Crea nuovo Tag o gruppo",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Create space",
             "message": "Create space",
-            "translation": "Crea spazio",
+            "translation": "Crea Space",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Create tag",
             "message": "Create tag",
-            "translation": "Crea tag",
+            "translation": "Crea Tag",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1194,7 +1194,7 @@
         {
             "id": "Edit assigned tags",
             "message": "Edit assigned tags",
-            "translation": "Modifica tag assegnati",
+            "translation": "Modifica Tag assegnati",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1222,21 +1222,21 @@
         {
             "id": "Edit space",
             "message": "Edit space",
-            "translation": "Modifica spazio",
+            "translation": "Modifica Space",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Edit tag",
             "message": "Edit tag",
-            "translation": "Modifica tag",
+            "translation": "Modifica Tag",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Edit tag attribute",
             "message": "Edit tag attribute",
-            "translation": "Modifica attributo tag",
+            "translation": "Modifica attributo Tag",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1368,7 +1368,7 @@
         {
             "id": "File does not belong to current space.",
             "message": "File does not belong to current space.",
-            "translation": "Il file non appartiene allo spazio corrente.",
+            "translation": "Il file non appartiene allo Space corrente.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1445,7 +1445,7 @@
         {
             "id": "Files uploaded, please select a space.",
             "message": "Files uploaded, please select a space.",
-            "translation": "File caricati, seleziona uno spazio.",
+            "translation": "File caricati, seleziona uno Space.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1591,7 +1591,7 @@
         {
             "id": "Group, {ChildCount} tag",
             "message": "Group, {ChildCount} tag",
-            "translation": "Gruppo, {ChildCount} tag",
+            "translation": "Gruppo, {ChildCount} Tag",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true,
             "placeholders": [
@@ -1608,7 +1608,7 @@
         {
             "id": "Group, {ChildCount} tags",
             "message": "Group, {ChildCount} tags",
-            "translation": "Gruppo, {ChildCount} tag",
+            "translation": "Gruppo, {ChildCount} Tag",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true,
             "placeholders": [
@@ -1632,7 +1632,7 @@
         {
             "id": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged.",
             "message": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged.",
-            "translation": "Capisco che i metadati del file in Inbox (tipo documento, tag, campi) andranno persi quando viene unito.",
+            "translation": "Capisco che i metadati del file in Inbox (tipo documento, Tag, campi) andranno persi quando viene unito.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1828,7 +1828,7 @@
         {
             "id": "Manage tags",
             "message": "Manage tags",
-            "translation": "Gestisci tag",
+            "translation": "Gestisci Tag",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1932,7 +1932,7 @@
         {
             "id": "Move tag to group",
             "message": "Move tag to group",
-            "translation": "Sposta tag nel gruppo",
+            "translation": "Sposta Tag nel gruppo",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2179,35 +2179,35 @@
         {
             "id": "No space available yet",
             "message": "No space available yet",
-            "translation": "Nessuno spazio disponibile finora",
+            "translation": "Nessuno Space disponibile finora",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "No space selected. Please select a space first.",
             "message": "No space selected. Please select a space first.",
-            "translation": "Nessuno spazio selezionato. Seleziona prima uno spazio.",
+            "translation": "Nessuno Space selezionato. Seleziona prima uno Space.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "No spaces available yet.",
             "message": "No spaces available yet.",
-            "translation": "Nessuno spazio disponibile finora.",
+            "translation": "Nessuno Space disponibile finora.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "No spaces yet.",
             "message": "No spaces yet.",
-            "translation": "Nessuno spazio ancora.",
+            "translation": "Nessuno Space ancora.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "No tag groups available yet.",
             "message": "No tag groups available yet.",
-            "translation": "Nessun gruppo di tag disponibile finora.",
+            "translation": "Nessun gruppo di Tag disponibile finora.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2221,14 +2221,14 @@
         {
             "id": "No tags assigned.",
             "message": "No tags assigned.",
-            "translation": "Nessun tag assegnato.",
+            "translation": "Nessun Tag assegnato.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "No tags available yet.",
             "message": "No tags available yet.",
-            "translation": "Nessun tag disponibile finora.",
+            "translation": "Nessun Tag disponibile finora.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2504,7 +2504,7 @@
         {
             "id": "Please create a tag group first.",
             "message": "Please create a tag group first.",
-            "translation": "Crea prima un gruppo di tag.",
+            "translation": "Crea prima un gruppo di Tag.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2532,7 +2532,7 @@
         {
             "id": "Please try again once you created a space or were invited to join one.",
             "message": "Please try again once you created a space or were invited to join one.",
-            "translation": "Riprova quando hai creato uno spazio o sei stato invitato a unirti a uno.",
+            "translation": "Riprova quando hai creato uno Space o sei stato invitato a unirti a uno.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2761,7 +2761,7 @@
         {
             "id": "Select space",
             "message": "Select space",
-            "translation": "Seleziona spazio",
+            "translation": "Seleziona Space",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2789,7 +2789,7 @@
         {
             "id": "Show assigned tags",
             "message": "Show assigned tags",
-            "translation": "Mostra tag assegnati",
+            "translation": "Mostra Tag assegnati",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2957,21 +2957,21 @@
         {
             "id": "Space",
             "message": "Space",
-            "translation": "Spazio",
+            "translation": "Space",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Space deleted.",
             "message": "Space deleted.",
-            "translation": "Spazio eliminato.",
+            "translation": "Space eliminato.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Space «{Name}» created.",
             "message": "Space «{Name}» created.",
-            "translation": "Spazio «{Name}» creato.",
+            "translation": "Space «{Name}» creato.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true,
             "placeholders": [
@@ -3030,7 +3030,7 @@
         {
             "id": "Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space.",
             "message": "Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space.",
-            "translation": "Creato con successo il nuovo utente. La password è stata inviata all'utente via email. Il passo successivo è consentire all'utente di accedere a uno spazio.",
+            "translation": "Creato con successo il nuovo utente. La password è stata inviata all'utente via email. Il passo successivo è consentire all'utente di accedere a uno Space.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3058,7 +3058,7 @@
         {
             "id": "Super tag",
             "message": "Super tag",
-            "translation": "Super tag",
+            "translation": "Super Tag",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3093,14 +3093,14 @@
         {
             "id": "Tag group ID is required.",
             "message": "Tag group ID is required.",
-            "translation": "L'ID del gruppo di tag è obbligatorio.",
+            "translation": "L'ID del gruppo di Tag è obbligatorio.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Tag group «{Name}» is already added to this document type.",
             "message": "Tag group «{Name}» is already added to this document type.",
-            "translation": "Il gruppo di tag «{Name}» è già aggiunto a questo tipo documento.",
+            "translation": "Il gruppo di Tag «{Name}» è già aggiunto a questo tipo documento.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true,
             "placeholders": [
@@ -3124,7 +3124,7 @@
         {
             "id": "Tag is not a group.",
             "message": "Tag is not a group.",
-            "translation": "Il tag non è un gruppo.",
+            "translation": "Il Tag non è un gruppo.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3375,7 +3375,7 @@
         {
             "id": "Unassign user from space",
             "message": "Unassign user from space",
-            "translation": "Rimuovi assegnazione utente dallo spazio",
+            "translation": "Rimuovi assegnazione utente dallo Space",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3459,21 +3459,21 @@
         {
             "id": "User assigned to space successfully.",
             "message": "User assigned to space successfully.",
-            "translation": "Utente assegnato allo spazio correttamente.",
+            "translation": "Utente assegnato allo Space correttamente.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "User is already assigned to this space.",
             "message": "User is already assigned to this space.",
-            "translation": "L'utente è già assegnato a questo spazio.",
+            "translation": "L'utente è già assegnato a questo Space.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "User unassigned from space successfully.",
             "message": "User unassigned from space successfully.",
-            "translation": "Assegnazione utente rimossa dallo spazio correttamente.",
+            "translation": "Assegnazione utente rimossa dallo Space correttamente.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3574,8 +3574,8 @@
         {
             "id": "You are not allowed to access this space.",
             "message": "You are not allowed to access this space.",
-            "translation": "Non sei autorizzato ad accedere a questo spazio.",
-            "translatorComment": "Translated from English by Junie",
+            "translation": "Non sei autorizzato ad accedere a questo Space.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -3630,14 +3630,14 @@
         {
             "id": "You cannot unassign yourself from a space.",
             "message": "You cannot unassign yourself from a space.",
-            "translation": "Non puoi rimuovere la tua assegnazione da uno spazio.",
+            "translation": "Non puoi rimuovere la tua assegnazione da uno Space.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "You have no permission to access any space of this organization.",
             "message": "You have no permission to access any space of this organization.",
-            "translation": "Non hai il permesso di accedere a nessuno spazio di questa organizzazione.",
+            "translation": "Non hai il permesso di accedere a nessuno Space di questa organizzazione.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
