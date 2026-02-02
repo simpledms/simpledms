@@ -652,6 +652,23 @@ func (qq *Server) Start() error {
 		})
 	*/
 
+	tenantsInMaintenanceMode := mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.MaintenanceModeEnabledAtNotNil()).CountX(ctx)
+	if tenantsInMaintenanceMode > 0 {
+		// TODO abort??
+		msg := `
+
+WARNING 
+there are tenants in maintenance mode;
+the database migrations won't run for them; 
+this must be fixed manually;
+END WARNING
+`
+		if qq.devMode {
+			log.Fatalln(msg)
+		}
+		log.Println(msg)
+	}
+
 	// migrate all existing tenants to the newest db version
 	tenantsToMigrate := mainDB.ReadWriteConn.Tenant.Query().Where(tenant.MaintenanceModeEnabledAtIsNil()).AllX(ctx)
 	// FIXME enable only if migration is required... version can be read with migx.Version()

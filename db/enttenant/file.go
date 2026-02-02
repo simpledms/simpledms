@@ -93,13 +93,15 @@ type FileEdges struct {
 	Tags []*Tag `json:"tags,omitempty"`
 	// Properties holds the value of the properties edge.
 	Properties []*Property `json:"properties,omitempty"`
+	// FileVersions holds the value of the file_versions edge.
+	FileVersions []*FileVersion `json:"file_versions,omitempty"`
 	// TagAssignment holds the value of the tag_assignment edge.
 	TagAssignment []*TagAssignment `json:"tag_assignment,omitempty"`
 	// PropertyAssignment holds the value of the property_assignment edge.
 	PropertyAssignment []*FilePropertyAssignment `json:"property_assignment,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [13]bool
 }
 
 // DeleterOrErr returns the Deleter value or an error if the edge
@@ -204,10 +206,19 @@ func (e FileEdges) PropertiesOrErr() ([]*Property, error) {
 	return nil, &NotLoadedError{edge: "properties"}
 }
 
+// FileVersionsOrErr returns the FileVersions value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) FileVersionsOrErr() ([]*FileVersion, error) {
+	if e.loadedTypes[10] {
+		return e.FileVersions, nil
+	}
+	return nil, &NotLoadedError{edge: "file_versions"}
+}
+
 // TagAssignmentOrErr returns the TagAssignment value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TagAssignmentOrErr() ([]*TagAssignment, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.TagAssignment, nil
 	}
 	return nil, &NotLoadedError{edge: "tag_assignment"}
@@ -216,7 +227,7 @@ func (e FileEdges) TagAssignmentOrErr() ([]*TagAssignment, error) {
 // PropertyAssignmentOrErr returns the PropertyAssignment value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) PropertyAssignmentOrErr() ([]*FilePropertyAssignment, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.PropertyAssignment, nil
 	}
 	return nil, &NotLoadedError{edge: "property_assignment"}
@@ -454,6 +465,11 @@ func (_m *File) QueryTags() *TagQuery {
 // QueryProperties queries the "properties" edge of the File entity.
 func (_m *File) QueryProperties() *PropertyQuery {
 	return NewFileClient(_m.config).QueryProperties(_m)
+}
+
+// QueryFileVersions queries the "file_versions" edge of the File entity.
+func (_m *File) QueryFileVersions() *FileVersionQuery {
+	return NewFileClient(_m.config).QueryFileVersions(_m)
 }
 
 // QueryTagAssignment queries the "tag_assignment" edge of the File entity.

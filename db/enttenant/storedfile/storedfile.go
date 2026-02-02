@@ -57,6 +57,8 @@ const (
 	EdgeUpdater = "updater"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
+	// EdgeFileVersions holds the string denoting the file_versions edge name in mutations.
+	EdgeFileVersions = "file_versions"
 	// Table holds the table name of the storedfile in the database.
 	Table = "stored_files"
 	// CreatorTable is the table that holds the creator relation/edge.
@@ -78,6 +80,13 @@ const (
 	// FilesInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	FilesInverseTable = "files"
+	// FileVersionsTable is the table that holds the file_versions relation/edge.
+	FileVersionsTable = "file_versions"
+	// FileVersionsInverseTable is the table name for the FileVersion entity.
+	// It exists in this package in order to avoid circular dependency with the "fileversion" package.
+	FileVersionsInverseTable = "file_versions"
+	// FileVersionsColumn is the table column denoting the file_versions relation/edge.
+	FileVersionsColumn = "stored_file_id"
 )
 
 // Columns holds all SQL columns for storedfile fields.
@@ -264,6 +273,20 @@ func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByFileVersionsCount orders the results by file_versions count.
+func ByFileVersionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFileVersionsStep(), opts...)
+	}
+}
+
+// ByFileVersions orders the results by file_versions terms.
+func ByFileVersions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFileVersionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newCreatorStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -283,5 +306,12 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, FilesTable, FilesPrimaryKey...),
+	)
+}
+func newFileVersionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FileVersionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, FileVersionsTable, FileVersionsColumn),
 	)
 }

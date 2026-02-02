@@ -1,9 +1,15 @@
 package browse
 
 import (
+	"fmt"
+
+	"entgo.io/ent/dialect/sql"
+
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
+	"github.com/simpledms/simpledms/model"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -84,7 +90,15 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 		},
 		{
 			Headline:       wx.T("Uploaded at"),
-			SupportingText: wx.Tu(timex.NewDateTime(filem.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)), // TODO file or version?
+			SupportingText: wx.Tu(timex.NewDateTime(filem.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
+		},
+		{
+			Headline:       wx.T("Version"),
+			SupportingText: qq.versionLabel(ctx, filem),
+		},
+		{
+			Headline:       wx.T("Current version uploaded at"),
+			SupportingText: wx.Tu(timex.NewDateTime(currentVersion.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
 		},
 		/*
 			{
@@ -131,6 +145,11 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 		},
 		MarginY: true,
 	}
+}
+
+func (qq *FileInfoPartial) versionLabel(ctx ctxx.Context, filem *model.File) *wx.Text {
+	versionData := filem.Data.QueryFileVersions().Order(fileversion.ByVersionNumber(sql.OrderDesc())).FirstX(ctx)
+	return wx.Tu(fmt.Sprintf("%d", versionData.VersionNumber))
 }
 
 func (qq *FileInfoPartial) ID() string {

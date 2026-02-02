@@ -71,7 +71,7 @@ func (qq *FileTabsPartial) Widget(
 	fileID string,
 ) *wx.TabBar {
 	activeTab := strings.ToLower(state.ActiveTab)
-	var activeTabContent *wx.ScrollableContent
+	var activeTabContent wx.IWidget
 
 	switch activeTab {
 	case "metadata", "":

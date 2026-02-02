@@ -14,16 +14,25 @@ const (
 	DialogLayoutSideSheet
 )
 
+type DialogWidth int
+
+const (
+	DialogWidthDefault DialogWidth = iota
+	DialogWidthWide
+)
+
 type Dialog struct {
 	Widget[Dialog]
 	HTMXAttrs
 
 	// Mobile version is always fullscreen
 	Layout DialogLayout
+	Width  DialogWidth
 
-	Headline    *Text
-	SubmitLabel *Text // TODO name?? PrimaryActionLabel??
-	FormID      string
+	Headline      *Text
+	SubmitLabel   *Text // TODO name?? PrimaryActionLabel??
+	FormID        string
+	HeaderActions []IWidget
 	// CloseLabel  string
 
 	IsOpenOnLoad                    bool
@@ -102,6 +111,13 @@ func (qq *Dialog) IsSideSheetLayout() bool {
 }
 func (qq *Dialog) IsDefaultLayout() bool {
 	return qq.Layout == DialogLayoutDefault
+}
+
+func (qq *Dialog) IsWideWidth() bool {
+	if qq.IsSideSheetLayout() {
+		return false
+	}
+	return qq.Width == DialogWidthWide
 }
 
 func (qq *Dialog) GetClass() string {

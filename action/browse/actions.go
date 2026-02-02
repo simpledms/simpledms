@@ -31,6 +31,7 @@ type Actions struct {
 	FileTabsPartial             *FileTabsPartial
 	FileSheetPartial            *FileSheetPartial
 	UploadFileCmd               *UploadFileCmd
+	UploadFileVersionCmd        *UploadFileVersionCmd
 	// UploadFileInFolderMode *UploadFileInFolderMode
 	FileAttributesPartial      *FileAttributesPartial
 	FileVersionsPartial        *FileVersionsPartial
@@ -63,8 +64,13 @@ type Actions struct {
 	UpdatePropertyFilterCmd         *UpdatePropertyFilterCmd
 	// ToggleFolderMode         *ToggleFolderMode
 
-	FileUploadDialogPartial *FileUploadDialog
-	UnzipArchiveCmd         *UnzipArchiveCmd
+	FileUploadDialogPartial         *FileUploadDialog
+	FileVersionUploadDialogPartial  *FileVersionUploadDialog
+	FileVersionPreviewDialogPartial *FileVersionPreviewDialog
+	FileVersionFromInboxDialog      *FileVersionFromInboxDialog
+	FileVersionFromInboxListPartial *FileVersionFromInboxListPartial
+	FileVersionFromInboxCmd         *FileVersionFromInboxCmd
+	UnzipArchiveCmd                 *UnzipArchiveCmd
 }
 
 func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActions *tagging.Actions) *Actions {
@@ -91,6 +97,7 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		FileTabsPartial:             NewFileTabsPartial(infra, actions),
 		FileSheetPartial:            NewFileSheetPartial(infra, actions),
 		UploadFileCmd:               NewUploadFileCmd(infra, actions),
+		UploadFileVersionCmd:        NewUploadFileVersionCmd(infra, actions),
 		// UploadFileInFolderMode: NewUploadFileInFolderMode(infra, actions),
 		FileAttributesPartial:      NewFileAttributesPartial(infra, actions),
 		FileVersionsPartial:        NewFileVersionsPartial(infra, actions),
@@ -122,8 +129,13 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		UpdatePropertyFilterCmd:         NewUpdatePropertyFilterCmd(infra, actions),
 		// ToggleFolderMode:         NewToggleFolderMode(infra, actions),
 
-		FileUploadDialogPartial: NewFileUploadDialog(infra, actions),
-		UnzipArchiveCmd:         NewUnzipArchiveCmd(infra, actions),
+		FileUploadDialogPartial:         NewFileUploadDialog(infra, actions),
+		FileVersionUploadDialogPartial:  NewFileVersionUploadDialog(infra, actions),
+		FileVersionPreviewDialogPartial: NewFileVersionPreviewDialog(infra, actions),
+		FileVersionFromInboxDialog:      NewFileVersionFromInboxDialog(infra, actions),
+		FileVersionFromInboxListPartial: NewFileVersionFromInboxListPartial(infra, actions),
+		FileVersionFromInboxCmd:         NewFileVersionFromInboxCmd(infra, actions),
+		UnzipArchiveCmd:                 NewUnzipArchiveCmd(infra, actions),
 	}
 
 	return actions

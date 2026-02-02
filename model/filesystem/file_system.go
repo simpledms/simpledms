@@ -208,7 +208,7 @@ func (qq *FileSystem) Rename(ctx ctxx.Context, filex *model.File, newFilename st
 /*
 // IMPORTANT
 // very similar code in S3FileSystem
-func (qq *FileSystem) SaveFile(
+func (qq *FileSystem) AddFile(
 	ctx ctxx.Context,
 	fileToSave multipart.File,
 	filename string,

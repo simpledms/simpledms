@@ -269,7 +269,7 @@ func (qq *UnzipArchiveCmd) unzipAndSaveFile(ctx ctxx.Context, zippedFile *zip.Fi
 	filename := filepath.Base(zippedFile.Name)
 
 	// Save the file to a temporary location
-	_, err = qq.infra.FileSystem().SaveFile(
+	_, err = qq.infra.FileSystem().AddFile(
 		ctx,
 		fileToSave,
 		filename,

@@ -230,6 +230,46 @@ var (
 			},
 		},
 	}
+	// FileVersionsColumns holds the columns for the "file_versions" table.
+	FileVersionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "version_number", Type: field.TypeInt, Default: 1},
+		{Name: "note", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "file_id", Type: field.TypeInt64},
+		{Name: "stored_file_id", Type: field.TypeInt64},
+	}
+	// FileVersionsTable holds the schema information for the "file_versions" table.
+	FileVersionsTable = &schema.Table{
+		Name:       "file_versions",
+		Columns:    FileVersionsColumns,
+		PrimaryKey: []*schema.Column{FileVersionsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "file_versions_files_file",
+				Columns:    []*schema.Column{FileVersionsColumns[3]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "file_versions_stored_files_stored_file",
+				Columns:    []*schema.Column{FileVersionsColumns[4]},
+				RefColumns: []*schema.Column{StoredFilesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "fileversion_file_id_stored_file_id",
+				Unique:  true,
+				Columns: []*schema.Column{FileVersionsColumns[3], FileVersionsColumns[4]},
+			},
+			{
+				Name:    "fileversion_file_id_version_number",
+				Unique:  true,
+				Columns: []*schema.Column{FileVersionsColumns[3], FileVersionsColumns[1]},
+			},
+		},
+	}
 	// PropertiesColumns holds the columns for the "properties" table.
 	PropertiesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
@@ -503,31 +543,6 @@ var (
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 	}
-	// FileVersionsColumns holds the columns for the "file_versions" table.
-	FileVersionsColumns = []*schema.Column{
-		{Name: "file_id", Type: field.TypeInt64},
-		{Name: "stored_file_id", Type: field.TypeInt64},
-	}
-	// FileVersionsTable holds the schema information for the "file_versions" table.
-	FileVersionsTable = &schema.Table{
-		Name:       "file_versions",
-		Columns:    FileVersionsColumns,
-		PrimaryKey: []*schema.Column{FileVersionsColumns[0], FileVersionsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "file_versions_file_id",
-				Columns:    []*schema.Column{FileVersionsColumns[0]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "file_versions_stored_file_id",
-				Columns:    []*schema.Column{FileVersionsColumns[1]},
-				RefColumns: []*schema.Column{StoredFilesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// TagSubTagsColumns holds the columns for the "tag_sub_tags" table.
 	TagSubTagsColumns = []*schema.Column{
 		{Name: "tag_id", Type: field.TypeInt64},
@@ -559,6 +574,7 @@ var (
 		DocumentTypesTable,
 		FilesTable,
 		FilePropertyAssignmentsTable,
+		FileVersionsTable,
 		PropertiesTable,
 		SpacesTable,
 		SpaceUserAssignmentsTable,
@@ -566,7 +582,6 @@ var (
 		TagsTable,
 		TagAssignmentsTable,
 		UsersTable,
-		FileVersionsTable,
 		TagSubTagsTable,
 	}
 )
@@ -586,6 +601,8 @@ func init() {
 	FilePropertyAssignmentsTable.ForeignKeys[0].RefTable = SpacesTable
 	FilePropertyAssignmentsTable.ForeignKeys[1].RefTable = FilesTable
 	FilePropertyAssignmentsTable.ForeignKeys[2].RefTable = PropertiesTable
+	FileVersionsTable.ForeignKeys[0].RefTable = FilesTable
+	FileVersionsTable.ForeignKeys[1].RefTable = StoredFilesTable
 	PropertiesTable.ForeignKeys[0].RefTable = SpacesTable
 	SpacesTable.ForeignKeys[0].RefTable = UsersTable
 	SpaceUserAssignmentsTable.ForeignKeys[0].RefTable = SpacesTable
@@ -599,8 +616,6 @@ func init() {
 	TagAssignmentsTable.ForeignKeys[0].RefTable = SpacesTable
 	TagAssignmentsTable.ForeignKeys[1].RefTable = TagsTable
 	TagAssignmentsTable.ForeignKeys[2].RefTable = FilesTable
-	FileVersionsTable.ForeignKeys[0].RefTable = FilesTable
-	FileVersionsTable.ForeignKeys[1].RefTable = StoredFilesTable
 	TagSubTagsTable.ForeignKeys[0].RefTable = TagsTable
 	TagSubTagsTable.ForeignKeys[1].RefTable = TagsTable
 }

@@ -76,7 +76,7 @@
 				hideUploadButton: true,
 				theme: 'auto'
 			}).use(Webcam).use(ScreenCapture).use(Audio).use(XHR, {
-				endpoint: '/-/browse/upload-file-cmd',
+				endpoint: '{{ .GetEndpoint }}',
 				fieldName: 'File',
 				headers: { // TODO use htmx.ajax() instead?
 					// necessary for creating context
@@ -107,7 +107,11 @@
 				}
 			}).on('file-added', (file) => {
 				uppy.setFileMeta(file.id, {
+					{{- if .FileID }}
+					FileID: {{ .FileID }},
+					{{- else }}
 					ParentDirID: {{ .ParentDirID }},
+					{{- end }}
 					AddToInbox: {{ .AddToInbox }},
 				});
 			});

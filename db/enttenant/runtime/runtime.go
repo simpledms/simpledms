@@ -12,6 +12,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
@@ -166,6 +167,12 @@ func init() {
 			return next.Mutate(ctx, m)
 		})
 	}
+	fileversionFields := schema.FileVersion{}.Fields()
+	_ = fileversionFields
+	// fileversionDescVersionNumber is the schema descriptor for version_number field.
+	fileversionDescVersionNumber := fileversionFields[3].Descriptor()
+	// fileversion.DefaultVersionNumber holds the default value on creation for the version_number field.
+	fileversion.DefaultVersionNumber = fileversionDescVersionNumber.Default.(int)
 	propertyMixin := schema.Property{}.Mixin()
 	property.Policy = privacy.NewPolicies(propertyMixin[0], schema.Property{})
 	property.Hooks[0] = func(next ent.Mutator) ent.Mutator {

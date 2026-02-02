@@ -1105,6 +1105,29 @@ func HasFilesWith(preds ...predicate.File) predicate.StoredFile {
 	})
 }
 
+// HasFileVersions applies the HasEdge predicate on the "file_versions" edge.
+func HasFileVersions() predicate.StoredFile {
+	return predicate.StoredFile(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, FileVersionsTable, FileVersionsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFileVersionsWith applies the HasEdge predicate on the "file_versions" edge with a given conditions (other predicates).
+func HasFileVersionsWith(preds ...predicate.FileVersion) predicate.StoredFile {
+	return predicate.StoredFile(func(s *sql.Selector) {
+		step := newFileVersionsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.StoredFile) predicate.StoredFile {
 	return predicate.StoredFile(sql.AndPredicates(predicates...))

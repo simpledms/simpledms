@@ -24,6 +24,7 @@ func (File) Fields() []ent.Field {
 		// TODO move to StoredFile? what if it contains a date or version string?
 		//		but shouldn't get changed all the time either;
 		//		what if extension changes because new version has another file type?
+		// TODO get rid of name? and always use filename from StoredFile?
 		field.String("name"), // is filename // TODO rename to filename?
 		field.Bool("is_directory"),
 
@@ -53,8 +54,10 @@ func (File) Fields() []ent.Field {
 // Edges of the File.
 func (File) Edges() []ent.Edge {
 	return []ent.Edge{
+		// not required because directories have no version...
 		edge.
-			To("versions", StoredFile.Type), // not required because directories have no version...
+			To("versions", StoredFile.Type).
+			Through("file_versions", FileVersion.Type),
 		edge.
 			To("parent", File.Type).
 			Field("parent_id").

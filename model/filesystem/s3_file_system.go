@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"filippo.io/age"
 	securejoin "github.com/cyphar/filepath-securejoin"
 	"github.com/minio/minio-go/v7"
@@ -19,6 +20,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/model/common/storagetype"
@@ -165,7 +167,7 @@ func (qq *S3FileSystem) UnsafeOpenFile(ctx context.Context, x25519Identity *age.
 // very similar code in FileSystem
 //
 // caller has to close fileToSave
-func (qq *S3FileSystem) SaveFile(
+func (qq *S3FileSystem) AddFile(
 	ctx ctxx.Context,
 	// fileToSave multipart.File,
 	fileToSave io.Reader,
@@ -176,6 +178,8 @@ func (qq *S3FileSystem) SaveFile(
 	// TODO check if bucket exists
 
 	if ctx.SpaceCtx().Space.IsFolderMode {
+		// TODO how to handle this? is somewhat uncessary...
+
 		fileExists := ctx.SpaceCtx().Space.QueryFiles().
 			Where(file.Name(filename), file.ParentID(parentDirFileID), file.IsInInbox(isInInbox)).
 			ExistX(ctx)
@@ -202,6 +206,64 @@ func (qq *S3FileSystem) SaveFile(
 
 	// log.Println("debug: 002a")
 
+	_, err := qq.addFile(
+		ctx,
+		filex,
+		fileToSave,
+		filename,
+	)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return filex, nil
+}
+
+func (qq *S3FileSystem) AddFileVersion(
+	ctx ctxx.Context,
+	fileToSave io.Reader,
+	filename string,
+	fileID int64,
+) (*enttenant.StoredFile, error) {
+	filex := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
+	if filex.IsDirectory {
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
+	}
+
+	if ctx.SpaceCtx().Space.IsFolderMode {
+		// TODO how to handle this? is somewhat uncessary...
+
+		fileExists := ctx.SpaceCtx().Space.QueryFiles().
+			Where(file.Name(filename), file.ParentID(filex.ParentID), file.IsInInbox(filex.IsInInbox)).
+			ExistX(ctx)
+		if fileExists {
+			return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File already exists.")
+		}
+	}
+
+	filex.Update().SetName(filename).SaveX(ctx)
+
+	storedFilex, err := qq.addFile(
+		ctx,
+		filex,
+		fileToSave,
+		filename,
+	)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return storedFilex, nil
+}
+
+func (qq *S3FileSystem) addFile(
+	ctx ctxx.Context,
+	filex *enttenant.File,
+	fileToSave io.Reader,
+	filename string,
+) (*enttenant.StoredFile, error) {
 	tmpStoragePrefix := pathx.S3TemporaryStoragePrefix(ctx.TenantCtx().TenantID) // ctx.TenantCtx().S3StoragePrefix
 	if tmpStoragePrefix == "" {
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Storage path is empty.")
@@ -247,9 +309,11 @@ func (qq *S3FileSystem) SaveFile(
 		SetSha256(fileInfo.ChecksumSHA256).
 		// SetMimeType(contentType).
 		SaveX(ctx)
-	filex.Update().
-		AddVersionIDs(storedFilex.ID).
-		SaveX(ctx)
+
+	if err := qq.addFileVersion(ctx, filex, storedFilex); err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
 	// log.Println("debug: 004a")
 
@@ -262,7 +326,7 @@ func (qq *S3FileSystem) SaveFile(
 
 	// log.Println("debug: 005a")
 
-	return filex, nil
+	return storedFilex, nil
 }
 
 func (qq *S3FileSystem) saveFile(
@@ -573,9 +637,10 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 		SetSha256(tmpFile.Sha256).
 		SaveX(ctx)
 
-	filex.Update().
-		AddVersionIDs(storedFilex.ID).
-		SaveX(ctx)
+	if err := qq.addFileVersion(ctx, filex, storedFilex); err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
 	// TODO not very clean; only in case contentType is empty
 	_, err := qq.UpdateMimeType(ctx, false, model.NewStoredFile(storedFilex))
@@ -699,6 +764,34 @@ func (qq *S3FileSystem) PersistTemporaryTenantFile(
 		return err
 	}
 
+	return nil
+}
+
+func (qq *S3FileSystem) addFileVersion(ctx ctxx.Context, filex *enttenant.File, storedFilex *enttenant.StoredFile) error {
+	latestVersion, err := ctx.TenantCtx().TTx.FileVersion.Query().
+		Where(fileversion.FileID(filex.ID)).
+		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
+		First(ctx)
+	if err != nil && !enttenant.IsNotFound(err) {
+		log.Println(err)
+		return err
+	}
+	versionNumber := 1
+	if err == nil {
+		versionNumber = latestVersion.VersionNumber + 1
+	}
+	ctx.TenantCtx().TTx.FileVersion.Create().
+		SetFileID(filex.ID).
+		SetStoredFileID(storedFilex.ID).
+		SetVersionNumber(versionNumber).
+		SaveX(ctx)
+
+	filex.Update().
+		SetOcrContent("").
+		ClearOcrSuccessAt().
+		SetOcrRetryCount(0).
+		SetOcrLastTriedAt(time.Time{}).
+		ExecX(ctx)
 	return nil
 }
 

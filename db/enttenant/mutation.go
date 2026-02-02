@@ -15,6 +15,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/space"
@@ -48,6 +49,7 @@ const (
 	TypeFileInfo               = "FileInfo"
 	TypeFilePropertyAssignment = "FilePropertyAssignment"
 	TypeFileSearch             = "FileSearch"
+	TypeFileVersion            = "FileVersion"
 	TypeProperty               = "Property"
 	TypeResolvedTagAssignment  = "ResolvedTagAssignment"
 	TypeSpace                  = "Space"
@@ -1872,6 +1874,9 @@ type FileMutation struct {
 	properties                 map[int64]struct{}
 	removedproperties          map[int64]struct{}
 	clearedproperties          bool
+	file_versions              map[int64]struct{}
+	removedfile_versions       map[int64]struct{}
+	clearedfile_versions       bool
 	tag_assignment             map[int64]struct{}
 	removedtag_assignment      map[int64]struct{}
 	clearedtag_assignment      bool
@@ -3346,6 +3351,60 @@ func (m *FileMutation) ResetProperties() {
 	m.removedproperties = nil
 }
 
+// AddFileVersionIDs adds the "file_versions" edge to the FileVersion entity by ids.
+func (m *FileMutation) AddFileVersionIDs(ids ...int64) {
+	if m.file_versions == nil {
+		m.file_versions = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.file_versions[ids[i]] = struct{}{}
+	}
+}
+
+// ClearFileVersions clears the "file_versions" edge to the FileVersion entity.
+func (m *FileMutation) ClearFileVersions() {
+	m.clearedfile_versions = true
+}
+
+// FileVersionsCleared reports if the "file_versions" edge to the FileVersion entity was cleared.
+func (m *FileMutation) FileVersionsCleared() bool {
+	return m.clearedfile_versions
+}
+
+// RemoveFileVersionIDs removes the "file_versions" edge to the FileVersion entity by IDs.
+func (m *FileMutation) RemoveFileVersionIDs(ids ...int64) {
+	if m.removedfile_versions == nil {
+		m.removedfile_versions = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.file_versions, ids[i])
+		m.removedfile_versions[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedFileVersions returns the removed IDs of the "file_versions" edge to the FileVersion entity.
+func (m *FileMutation) RemovedFileVersionsIDs() (ids []int64) {
+	for id := range m.removedfile_versions {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// FileVersionsIDs returns the "file_versions" edge IDs in the mutation.
+func (m *FileMutation) FileVersionsIDs() (ids []int64) {
+	for id := range m.file_versions {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetFileVersions resets all changes to the "file_versions" edge.
+func (m *FileMutation) ResetFileVersions() {
+	m.file_versions = nil
+	m.clearedfile_versions = false
+	m.removedfile_versions = nil
+}
+
 // AddTagAssignmentIDs adds the "tag_assignment" edge to the TagAssignment entity by ids.
 func (m *FileMutation) AddTagAssignmentIDs(ids ...int64) {
 	if m.tag_assignment == nil {
@@ -4022,7 +4081,7 @@ func (m *FileMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *FileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 12)
+	edges := make([]string, 0, 13)
 	if m.deleter != nil {
 		edges = append(edges, file.EdgeDeleter)
 	}
@@ -4052,6 +4111,9 @@ func (m *FileMutation) AddedEdges() []string {
 	}
 	if m.properties != nil {
 		edges = append(edges, file.EdgeProperties)
+	}
+	if m.file_versions != nil {
+		edges = append(edges, file.EdgeFileVersions)
 	}
 	if m.tag_assignment != nil {
 		edges = append(edges, file.EdgeTagAssignment)
@@ -4114,6 +4176,12 @@ func (m *FileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeFileVersions:
+		ids := make([]ent.Value, 0, len(m.file_versions))
+		for id := range m.file_versions {
+			ids = append(ids, id)
+		}
+		return ids
 	case file.EdgeTagAssignment:
 		ids := make([]ent.Value, 0, len(m.tag_assignment))
 		for id := range m.tag_assignment {
@@ -4132,7 +4200,7 @@ func (m *FileMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *FileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 12)
+	edges := make([]string, 0, 13)
 	if m.removedversions != nil {
 		edges = append(edges, file.EdgeVersions)
 	}
@@ -4144,6 +4212,9 @@ func (m *FileMutation) RemovedEdges() []string {
 	}
 	if m.removedproperties != nil {
 		edges = append(edges, file.EdgeProperties)
+	}
+	if m.removedfile_versions != nil {
+		edges = append(edges, file.EdgeFileVersions)
 	}
 	if m.removedtag_assignment != nil {
 		edges = append(edges, file.EdgeTagAssignment)
@@ -4182,6 +4253,12 @@ func (m *FileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeFileVersions:
+		ids := make([]ent.Value, 0, len(m.removedfile_versions))
+		for id := range m.removedfile_versions {
+			ids = append(ids, id)
+		}
+		return ids
 	case file.EdgeTagAssignment:
 		ids := make([]ent.Value, 0, len(m.removedtag_assignment))
 		for id := range m.removedtag_assignment {
@@ -4200,7 +4277,7 @@ func (m *FileMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *FileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 12)
+	edges := make([]string, 0, 13)
 	if m.cleareddeleter {
 		edges = append(edges, file.EdgeDeleter)
 	}
@@ -4230,6 +4307,9 @@ func (m *FileMutation) ClearedEdges() []string {
 	}
 	if m.clearedproperties {
 		edges = append(edges, file.EdgeProperties)
+	}
+	if m.clearedfile_versions {
+		edges = append(edges, file.EdgeFileVersions)
 	}
 	if m.clearedtag_assignment {
 		edges = append(edges, file.EdgeTagAssignment)
@@ -4264,6 +4344,8 @@ func (m *FileMutation) EdgeCleared(name string) bool {
 		return m.clearedtags
 	case file.EdgeProperties:
 		return m.clearedproperties
+	case file.EdgeFileVersions:
+		return m.clearedfile_versions
 	case file.EdgeTagAssignment:
 		return m.clearedtag_assignment
 	case file.EdgePropertyAssignment:
@@ -4331,6 +4413,9 @@ func (m *FileMutation) ResetEdge(name string) error {
 		return nil
 	case file.EdgeProperties:
 		m.ResetProperties()
+		return nil
+	case file.EdgeFileVersions:
+		m.ResetFileVersions()
 		return nil
 	case file.EdgeTagAssignment:
 		m.ResetTagAssignment()
@@ -5258,6 +5343,658 @@ func (m *FilePropertyAssignmentMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown FilePropertyAssignment edge %s", name)
+}
+
+// FileVersionMutation represents an operation that mutates the FileVersion nodes in the graph.
+type FileVersionMutation struct {
+	config
+	op                 Op
+	typ                string
+	id                 *int64
+	version_number     *int
+	addversion_number  *int
+	note               *string
+	clearedFields      map[string]struct{}
+	file               *int64
+	clearedfile        bool
+	stored_file        *int64
+	clearedstored_file bool
+	done               bool
+	oldValue           func(context.Context) (*FileVersion, error)
+	predicates         []predicate.FileVersion
+}
+
+var _ ent.Mutation = (*FileVersionMutation)(nil)
+
+// fileversionOption allows management of the mutation configuration using functional options.
+type fileversionOption func(*FileVersionMutation)
+
+// newFileVersionMutation creates new mutation for the FileVersion entity.
+func newFileVersionMutation(c config, op Op, opts ...fileversionOption) *FileVersionMutation {
+	m := &FileVersionMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeFileVersion,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withFileVersionID sets the ID field of the mutation.
+func withFileVersionID(id int64) fileversionOption {
+	return func(m *FileVersionMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *FileVersion
+		)
+		m.oldValue = func(ctx context.Context) (*FileVersion, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().FileVersion.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withFileVersion sets the old FileVersion of the mutation.
+func withFileVersion(node *FileVersion) fileversionOption {
+	return func(m *FileVersionMutation) {
+		m.oldValue = func(context.Context) (*FileVersion, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m FileVersionMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m FileVersionMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("enttenant: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of FileVersion entities.
+func (m *FileVersionMutation) SetID(id int64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *FileVersionMutation) ID() (id int64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *FileVersionMutation) IDs(ctx context.Context) ([]int64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().FileVersion.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetFileID sets the "file_id" field.
+func (m *FileVersionMutation) SetFileID(i int64) {
+	m.file = &i
+}
+
+// FileID returns the value of the "file_id" field in the mutation.
+func (m *FileVersionMutation) FileID() (r int64, exists bool) {
+	v := m.file
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFileID returns the old "file_id" field's value of the FileVersion entity.
+// If the FileVersion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileVersionMutation) OldFileID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFileID: %w", err)
+	}
+	return oldValue.FileID, nil
+}
+
+// ResetFileID resets all changes to the "file_id" field.
+func (m *FileVersionMutation) ResetFileID() {
+	m.file = nil
+}
+
+// SetStoredFileID sets the "stored_file_id" field.
+func (m *FileVersionMutation) SetStoredFileID(i int64) {
+	m.stored_file = &i
+}
+
+// StoredFileID returns the value of the "stored_file_id" field in the mutation.
+func (m *FileVersionMutation) StoredFileID() (r int64, exists bool) {
+	v := m.stored_file
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStoredFileID returns the old "stored_file_id" field's value of the FileVersion entity.
+// If the FileVersion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileVersionMutation) OldStoredFileID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStoredFileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStoredFileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStoredFileID: %w", err)
+	}
+	return oldValue.StoredFileID, nil
+}
+
+// ResetStoredFileID resets all changes to the "stored_file_id" field.
+func (m *FileVersionMutation) ResetStoredFileID() {
+	m.stored_file = nil
+}
+
+// SetVersionNumber sets the "version_number" field.
+func (m *FileVersionMutation) SetVersionNumber(i int) {
+	m.version_number = &i
+	m.addversion_number = nil
+}
+
+// VersionNumber returns the value of the "version_number" field in the mutation.
+func (m *FileVersionMutation) VersionNumber() (r int, exists bool) {
+	v := m.version_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVersionNumber returns the old "version_number" field's value of the FileVersion entity.
+// If the FileVersion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileVersionMutation) OldVersionNumber(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVersionNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVersionNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVersionNumber: %w", err)
+	}
+	return oldValue.VersionNumber, nil
+}
+
+// AddVersionNumber adds i to the "version_number" field.
+func (m *FileVersionMutation) AddVersionNumber(i int) {
+	if m.addversion_number != nil {
+		*m.addversion_number += i
+	} else {
+		m.addversion_number = &i
+	}
+}
+
+// AddedVersionNumber returns the value that was added to the "version_number" field in this mutation.
+func (m *FileVersionMutation) AddedVersionNumber() (r int, exists bool) {
+	v := m.addversion_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetVersionNumber resets all changes to the "version_number" field.
+func (m *FileVersionMutation) ResetVersionNumber() {
+	m.version_number = nil
+	m.addversion_number = nil
+}
+
+// SetNote sets the "note" field.
+func (m *FileVersionMutation) SetNote(s string) {
+	m.note = &s
+}
+
+// Note returns the value of the "note" field in the mutation.
+func (m *FileVersionMutation) Note() (r string, exists bool) {
+	v := m.note
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNote returns the old "note" field's value of the FileVersion entity.
+// If the FileVersion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileVersionMutation) OldNote(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNote is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNote requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNote: %w", err)
+	}
+	return oldValue.Note, nil
+}
+
+// ClearNote clears the value of the "note" field.
+func (m *FileVersionMutation) ClearNote() {
+	m.note = nil
+	m.clearedFields[fileversion.FieldNote] = struct{}{}
+}
+
+// NoteCleared returns if the "note" field was cleared in this mutation.
+func (m *FileVersionMutation) NoteCleared() bool {
+	_, ok := m.clearedFields[fileversion.FieldNote]
+	return ok
+}
+
+// ResetNote resets all changes to the "note" field.
+func (m *FileVersionMutation) ResetNote() {
+	m.note = nil
+	delete(m.clearedFields, fileversion.FieldNote)
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (m *FileVersionMutation) ClearFile() {
+	m.clearedfile = true
+	m.clearedFields[fileversion.FieldFileID] = struct{}{}
+}
+
+// FileCleared reports if the "file" edge to the File entity was cleared.
+func (m *FileVersionMutation) FileCleared() bool {
+	return m.clearedfile
+}
+
+// FileIDs returns the "file" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// FileID instead. It exists only for internal usage by the builders.
+func (m *FileVersionMutation) FileIDs() (ids []int64) {
+	if id := m.file; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetFile resets all changes to the "file" edge.
+func (m *FileVersionMutation) ResetFile() {
+	m.file = nil
+	m.clearedfile = false
+}
+
+// ClearStoredFile clears the "stored_file" edge to the StoredFile entity.
+func (m *FileVersionMutation) ClearStoredFile() {
+	m.clearedstored_file = true
+	m.clearedFields[fileversion.FieldStoredFileID] = struct{}{}
+}
+
+// StoredFileCleared reports if the "stored_file" edge to the StoredFile entity was cleared.
+func (m *FileVersionMutation) StoredFileCleared() bool {
+	return m.clearedstored_file
+}
+
+// StoredFileIDs returns the "stored_file" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// StoredFileID instead. It exists only for internal usage by the builders.
+func (m *FileVersionMutation) StoredFileIDs() (ids []int64) {
+	if id := m.stored_file; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetStoredFile resets all changes to the "stored_file" edge.
+func (m *FileVersionMutation) ResetStoredFile() {
+	m.stored_file = nil
+	m.clearedstored_file = false
+}
+
+// Where appends a list predicates to the FileVersionMutation builder.
+func (m *FileVersionMutation) Where(ps ...predicate.FileVersion) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the FileVersionMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *FileVersionMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.FileVersion, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *FileVersionMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *FileVersionMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (FileVersion).
+func (m *FileVersionMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *FileVersionMutation) Fields() []string {
+	fields := make([]string, 0, 4)
+	if m.file != nil {
+		fields = append(fields, fileversion.FieldFileID)
+	}
+	if m.stored_file != nil {
+		fields = append(fields, fileversion.FieldStoredFileID)
+	}
+	if m.version_number != nil {
+		fields = append(fields, fileversion.FieldVersionNumber)
+	}
+	if m.note != nil {
+		fields = append(fields, fileversion.FieldNote)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *FileVersionMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case fileversion.FieldFileID:
+		return m.FileID()
+	case fileversion.FieldStoredFileID:
+		return m.StoredFileID()
+	case fileversion.FieldVersionNumber:
+		return m.VersionNumber()
+	case fileversion.FieldNote:
+		return m.Note()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *FileVersionMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case fileversion.FieldFileID:
+		return m.OldFileID(ctx)
+	case fileversion.FieldStoredFileID:
+		return m.OldStoredFileID(ctx)
+	case fileversion.FieldVersionNumber:
+		return m.OldVersionNumber(ctx)
+	case fileversion.FieldNote:
+		return m.OldNote(ctx)
+	}
+	return nil, fmt.Errorf("unknown FileVersion field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FileVersionMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case fileversion.FieldFileID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFileID(v)
+		return nil
+	case fileversion.FieldStoredFileID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStoredFileID(v)
+		return nil
+	case fileversion.FieldVersionNumber:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVersionNumber(v)
+		return nil
+	case fileversion.FieldNote:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNote(v)
+		return nil
+	}
+	return fmt.Errorf("unknown FileVersion field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *FileVersionMutation) AddedFields() []string {
+	var fields []string
+	if m.addversion_number != nil {
+		fields = append(fields, fileversion.FieldVersionNumber)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *FileVersionMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case fileversion.FieldVersionNumber:
+		return m.AddedVersionNumber()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FileVersionMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case fileversion.FieldVersionNumber:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddVersionNumber(v)
+		return nil
+	}
+	return fmt.Errorf("unknown FileVersion numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *FileVersionMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(fileversion.FieldNote) {
+		fields = append(fields, fileversion.FieldNote)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *FileVersionMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *FileVersionMutation) ClearField(name string) error {
+	switch name {
+	case fileversion.FieldNote:
+		m.ClearNote()
+		return nil
+	}
+	return fmt.Errorf("unknown FileVersion nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *FileVersionMutation) ResetField(name string) error {
+	switch name {
+	case fileversion.FieldFileID:
+		m.ResetFileID()
+		return nil
+	case fileversion.FieldStoredFileID:
+		m.ResetStoredFileID()
+		return nil
+	case fileversion.FieldVersionNumber:
+		m.ResetVersionNumber()
+		return nil
+	case fileversion.FieldNote:
+		m.ResetNote()
+		return nil
+	}
+	return fmt.Errorf("unknown FileVersion field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *FileVersionMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.file != nil {
+		edges = append(edges, fileversion.EdgeFile)
+	}
+	if m.stored_file != nil {
+		edges = append(edges, fileversion.EdgeStoredFile)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *FileVersionMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case fileversion.EdgeFile:
+		if id := m.file; id != nil {
+			return []ent.Value{*id}
+		}
+	case fileversion.EdgeStoredFile:
+		if id := m.stored_file; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *FileVersionMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *FileVersionMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *FileVersionMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedfile {
+		edges = append(edges, fileversion.EdgeFile)
+	}
+	if m.clearedstored_file {
+		edges = append(edges, fileversion.EdgeStoredFile)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *FileVersionMutation) EdgeCleared(name string) bool {
+	switch name {
+	case fileversion.EdgeFile:
+		return m.clearedfile
+	case fileversion.EdgeStoredFile:
+		return m.clearedstored_file
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *FileVersionMutation) ClearEdge(name string) error {
+	switch name {
+	case fileversion.EdgeFile:
+		m.ClearFile()
+		return nil
+	case fileversion.EdgeStoredFile:
+		m.ClearStoredFile()
+		return nil
+	}
+	return fmt.Errorf("unknown FileVersion unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *FileVersionMutation) ResetEdge(name string) error {
+	switch name {
+	case fileversion.EdgeFile:
+		m.ResetFile()
+		return nil
+	case fileversion.EdgeStoredFile:
+		m.ResetStoredFile()
+		return nil
+	}
+	return fmt.Errorf("unknown FileVersion edge %s", name)
 }
 
 // PropertyMutation represents an operation that mutates the Property nodes in the graph.
@@ -8287,6 +9024,9 @@ type StoredFileMutation struct {
 	files                          map[int64]struct{}
 	removedfiles                   map[int64]struct{}
 	clearedfiles                   bool
+	file_versions                  map[int64]struct{}
+	removedfile_versions           map[int64]struct{}
+	clearedfile_versions           bool
 	done                           bool
 	oldValue                       func(context.Context) (*StoredFile, error)
 	predicates                     []predicate.StoredFile
@@ -9287,6 +10027,60 @@ func (m *StoredFileMutation) ResetFiles() {
 	m.removedfiles = nil
 }
 
+// AddFileVersionIDs adds the "file_versions" edge to the FileVersion entity by ids.
+func (m *StoredFileMutation) AddFileVersionIDs(ids ...int64) {
+	if m.file_versions == nil {
+		m.file_versions = make(map[int64]struct{})
+	}
+	for i := range ids {
+		m.file_versions[ids[i]] = struct{}{}
+	}
+}
+
+// ClearFileVersions clears the "file_versions" edge to the FileVersion entity.
+func (m *StoredFileMutation) ClearFileVersions() {
+	m.clearedfile_versions = true
+}
+
+// FileVersionsCleared reports if the "file_versions" edge to the FileVersion entity was cleared.
+func (m *StoredFileMutation) FileVersionsCleared() bool {
+	return m.clearedfile_versions
+}
+
+// RemoveFileVersionIDs removes the "file_versions" edge to the FileVersion entity by IDs.
+func (m *StoredFileMutation) RemoveFileVersionIDs(ids ...int64) {
+	if m.removedfile_versions == nil {
+		m.removedfile_versions = make(map[int64]struct{})
+	}
+	for i := range ids {
+		delete(m.file_versions, ids[i])
+		m.removedfile_versions[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedFileVersions returns the removed IDs of the "file_versions" edge to the FileVersion entity.
+func (m *StoredFileMutation) RemovedFileVersionsIDs() (ids []int64) {
+	for id := range m.removedfile_versions {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// FileVersionsIDs returns the "file_versions" edge IDs in the mutation.
+func (m *StoredFileMutation) FileVersionsIDs() (ids []int64) {
+	for id := range m.file_versions {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetFileVersions resets all changes to the "file_versions" edge.
+func (m *StoredFileMutation) ResetFileVersions() {
+	m.file_versions = nil
+	m.clearedfile_versions = false
+	m.removedfile_versions = nil
+}
+
 // Where appends a list predicates to the StoredFileMutation builder.
 func (m *StoredFileMutation) Where(ps ...predicate.StoredFile) {
 	m.predicates = append(m.predicates, ps...)
@@ -9770,7 +10564,7 @@ func (m *StoredFileMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *StoredFileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.creator != nil {
 		edges = append(edges, storedfile.EdgeCreator)
 	}
@@ -9779,6 +10573,9 @@ func (m *StoredFileMutation) AddedEdges() []string {
 	}
 	if m.files != nil {
 		edges = append(edges, storedfile.EdgeFiles)
+	}
+	if m.file_versions != nil {
+		edges = append(edges, storedfile.EdgeFileVersions)
 	}
 	return edges
 }
@@ -9801,15 +10598,24 @@ func (m *StoredFileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case storedfile.EdgeFileVersions:
+		ids := make([]ent.Value, 0, len(m.file_versions))
+		for id := range m.file_versions {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *StoredFileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.removedfiles != nil {
 		edges = append(edges, storedfile.EdgeFiles)
+	}
+	if m.removedfile_versions != nil {
+		edges = append(edges, storedfile.EdgeFileVersions)
 	}
 	return edges
 }
@@ -9824,13 +10630,19 @@ func (m *StoredFileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case storedfile.EdgeFileVersions:
+		ids := make([]ent.Value, 0, len(m.removedfile_versions))
+		for id := range m.removedfile_versions {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *StoredFileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.clearedcreator {
 		edges = append(edges, storedfile.EdgeCreator)
 	}
@@ -9839,6 +10651,9 @@ func (m *StoredFileMutation) ClearedEdges() []string {
 	}
 	if m.clearedfiles {
 		edges = append(edges, storedfile.EdgeFiles)
+	}
+	if m.clearedfile_versions {
+		edges = append(edges, storedfile.EdgeFileVersions)
 	}
 	return edges
 }
@@ -9853,6 +10668,8 @@ func (m *StoredFileMutation) EdgeCleared(name string) bool {
 		return m.clearedupdater
 	case storedfile.EdgeFiles:
 		return m.clearedfiles
+	case storedfile.EdgeFileVersions:
+		return m.clearedfile_versions
 	}
 	return false
 }
@@ -9883,6 +10700,9 @@ func (m *StoredFileMutation) ResetEdge(name string) error {
 		return nil
 	case storedfile.EdgeFiles:
 		m.ResetFiles()
+		return nil
+	case storedfile.EdgeFileVersions:
+		m.ResetFileVersions()
 		return nil
 	}
 	return fmt.Errorf("unknown StoredFile edge %s", name)

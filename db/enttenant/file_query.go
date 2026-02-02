@@ -16,6 +16,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/space"
@@ -42,6 +43,7 @@ type FileQuery struct {
 	withDocumentType       *DocumentTypeQuery
 	withTags               *TagQuery
 	withProperties         *PropertyQuery
+	withFileVersions       *FileVersionQuery
 	withTagAssignment      *TagAssignmentQuery
 	withPropertyAssignment *FilePropertyAssignmentQuery
 	modifiers              []func(*sql.Selector)
@@ -301,6 +303,28 @@ func (_q *FileQuery) QueryProperties() *PropertyQuery {
 	return query
 }
 
+// QueryFileVersions chains the current query on the "file_versions" edge.
+func (_q *FileQuery) QueryFileVersions() *FileVersionQuery {
+	query := (&FileVersionClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(fileversion.Table, fileversion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.FileVersionsTable, file.FileVersionsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryTagAssignment chains the current query on the "tag_assignment" edge.
 func (_q *FileQuery) QueryTagAssignment() *TagAssignmentQuery {
 	query := (&TagAssignmentClient{config: _q.config}).Query()
@@ -547,6 +571,7 @@ func (_q *FileQuery) Clone() *FileQuery {
 		withDocumentType:       _q.withDocumentType.Clone(),
 		withTags:               _q.withTags.Clone(),
 		withProperties:         _q.withProperties.Clone(),
+		withFileVersions:       _q.withFileVersions.Clone(),
 		withTagAssignment:      _q.withTagAssignment.Clone(),
 		withPropertyAssignment: _q.withPropertyAssignment.Clone(),
 		// clone intermediate query.
@@ -666,6 +691,17 @@ func (_q *FileQuery) WithProperties(opts ...func(*PropertyQuery)) *FileQuery {
 	return _q
 }
 
+// WithFileVersions tells the query-builder to eager-load the nodes that are connected to
+// the "file_versions" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithFileVersions(opts ...func(*FileVersionQuery)) *FileQuery {
+	query := (&FileVersionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFileVersions = query
+	return _q
+}
+
 // WithTagAssignment tells the query-builder to eager-load the nodes that are connected to
 // the "tag_assignment" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *FileQuery) WithTagAssignment(opts ...func(*TagAssignmentQuery)) *FileQuery {
@@ -772,7 +808,7 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 	var (
 		nodes       = []*File{}
 		_spec       = _q.querySpec()
-		loadedTypes = [12]bool{
+		loadedTypes = [13]bool{
 			_q.withDeleter != nil,
 			_q.withCreator != nil,
 			_q.withUpdater != nil,
@@ -783,6 +819,7 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			_q.withDocumentType != nil,
 			_q.withTags != nil,
 			_q.withProperties != nil,
+			_q.withFileVersions != nil,
 			_q.withTagAssignment != nil,
 			_q.withPropertyAssignment != nil,
 		}
@@ -869,6 +906,13 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		if err := _q.loadProperties(ctx, query, nodes,
 			func(n *File) { n.Edges.Properties = []*Property{} },
 			func(n *File, e *Property) { n.Edges.Properties = append(n.Edges.Properties, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFileVersions; query != nil {
+		if err := _q.loadFileVersions(ctx, query, nodes,
+			func(n *File) { n.Edges.FileVersions = []*FileVersion{} },
+			func(n *File, e *FileVersion) { n.Edges.FileVersions = append(n.Edges.FileVersions, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1275,6 +1319,36 @@ func (_q *FileQuery) loadProperties(ctx context.Context, query *PropertyQuery, n
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *FileQuery) loadFileVersions(ctx context.Context, query *FileVersionQuery, nodes []*File, init func(*File), assign func(*File, *FileVersion)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*File)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(fileversion.FieldFileID)
+	}
+	query.Where(predicate.FileVersion(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(file.FileVersionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.FileID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "file_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

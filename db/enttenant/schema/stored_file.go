@@ -58,7 +58,8 @@ func (StoredFile) Edges() []ent.Edge {
 		edge.
 			// TODO required or not? orphans might have no files linked and are ready for cleanup?
 			From("files", File.Type).
-			Ref("versions"),
+			Ref("versions").
+			Through("file_versions", FileVersion.Type),
 		// Field("file_id").
 		// Unique().
 		// Required(),

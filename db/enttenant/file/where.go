@@ -1271,6 +1271,29 @@ func HasPropertiesWith(preds ...predicate.Property) predicate.File {
 	})
 }
 
+// HasFileVersions applies the HasEdge predicate on the "file_versions" edge.
+func HasFileVersions() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, FileVersionsTable, FileVersionsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFileVersionsWith applies the HasEdge predicate on the "file_versions" edge with a given conditions (other predicates).
+func HasFileVersionsWith(preds ...predicate.FileVersion) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newFileVersionsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasTagAssignment applies the HasEdge predicate on the "tag_assignment" edge.
 func HasTagAssignment() predicate.File {
 	return predicate.File(func(s *sql.Selector) {

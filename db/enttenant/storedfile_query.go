@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/enttenant/user"
@@ -22,14 +23,15 @@ import (
 // StoredFileQuery is the builder for querying StoredFile entities.
 type StoredFileQuery struct {
 	config
-	ctx         *QueryContext
-	order       []storedfile.OrderOption
-	inters      []Interceptor
-	predicates  []predicate.StoredFile
-	withCreator *UserQuery
-	withUpdater *UserQuery
-	withFiles   *FileQuery
-	modifiers   []func(*sql.Selector)
+	ctx              *QueryContext
+	order            []storedfile.OrderOption
+	inters           []Interceptor
+	predicates       []predicate.StoredFile
+	withCreator      *UserQuery
+	withUpdater      *UserQuery
+	withFiles        *FileQuery
+	withFileVersions *FileVersionQuery
+	modifiers        []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -125,6 +127,28 @@ func (_q *StoredFileQuery) QueryFiles() *FileQuery {
 			sqlgraph.From(storedfile.Table, storedfile.FieldID, selector),
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, storedfile.FilesTable, storedfile.FilesPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFileVersions chains the current query on the "file_versions" edge.
+func (_q *StoredFileQuery) QueryFileVersions() *FileVersionQuery {
+	query := (&FileVersionClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(storedfile.Table, storedfile.FieldID, selector),
+			sqlgraph.To(fileversion.Table, fileversion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, storedfile.FileVersionsTable, storedfile.FileVersionsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -319,14 +343,15 @@ func (_q *StoredFileQuery) Clone() *StoredFileQuery {
 		return nil
 	}
 	return &StoredFileQuery{
-		config:      _q.config,
-		ctx:         _q.ctx.Clone(),
-		order:       append([]storedfile.OrderOption{}, _q.order...),
-		inters:      append([]Interceptor{}, _q.inters...),
-		predicates:  append([]predicate.StoredFile{}, _q.predicates...),
-		withCreator: _q.withCreator.Clone(),
-		withUpdater: _q.withUpdater.Clone(),
-		withFiles:   _q.withFiles.Clone(),
+		config:           _q.config,
+		ctx:              _q.ctx.Clone(),
+		order:            append([]storedfile.OrderOption{}, _q.order...),
+		inters:           append([]Interceptor{}, _q.inters...),
+		predicates:       append([]predicate.StoredFile{}, _q.predicates...),
+		withCreator:      _q.withCreator.Clone(),
+		withUpdater:      _q.withUpdater.Clone(),
+		withFiles:        _q.withFiles.Clone(),
+		withFileVersions: _q.withFileVersions.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -364,6 +389,17 @@ func (_q *StoredFileQuery) WithFiles(opts ...func(*FileQuery)) *StoredFileQuery 
 		opt(query)
 	}
 	_q.withFiles = query
+	return _q
+}
+
+// WithFileVersions tells the query-builder to eager-load the nodes that are connected to
+// the "file_versions" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *StoredFileQuery) WithFileVersions(opts ...func(*FileVersionQuery)) *StoredFileQuery {
+	query := (&FileVersionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFileVersions = query
 	return _q
 }
 
@@ -451,10 +487,11 @@ func (_q *StoredFileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	var (
 		nodes       = []*StoredFile{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			_q.withCreator != nil,
 			_q.withUpdater != nil,
 			_q.withFiles != nil,
+			_q.withFileVersions != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -494,6 +531,13 @@ func (_q *StoredFileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *StoredFile) { n.Edges.Files = []*File{} },
 			func(n *StoredFile, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFileVersions; query != nil {
+		if err := _q.loadFileVersions(ctx, query, nodes,
+			func(n *StoredFile) { n.Edges.FileVersions = []*FileVersion{} },
+			func(n *StoredFile, e *FileVersion) { n.Edges.FileVersions = append(n.Edges.FileVersions, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -616,6 +660,36 @@ func (_q *StoredFileQuery) loadFiles(ctx context.Context, query *FileQuery, node
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *StoredFileQuery) loadFileVersions(ctx context.Context, query *FileVersionQuery, nodes []*StoredFile, init func(*StoredFile), assign func(*StoredFile, *FileVersion)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*StoredFile)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(fileversion.FieldStoredFileID)
+	}
+	query.Where(predicate.FileVersion(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(storedfile.FileVersionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.StoredFileID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "stored_file_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

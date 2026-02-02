@@ -29,8 +29,8 @@ type Column struct {
 
 	MaxWidth bool
 	GapYSize Gap
-	// MarginY        Margin
-	Height string
+	MarginY  Margin
+	Height   string
 	// IsNarrowLayout bool
 
 	// necessary for sign in page, alternative would be to also add
@@ -61,18 +61,15 @@ func (qq *Column) GetClass() string {
 		// nothing
 	}
 
-	/*
-		switch qq.MarginY {
-		case Margin3:
-			classes = append(classes, "my-3")
-		case Margin4:
-			classes = append(classes, "my-4")
-		case MarginNone:
-		default:
-			// nothing
-		}
-
-	*/
+	switch qq.MarginY {
+	case Margin3:
+		classes = append(classes, "my-3")
+	case Margin4:
+		classes = append(classes, "my-4")
+	case MarginNone:
+	default:
+		// nothing
+	}
 
 	return strings.Join(classes, " ")
 }

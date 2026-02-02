@@ -73,7 +73,7 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	filename := uploadedFileHeader.Filename
 	filename = filepath.Clean(filename)
 
-	filex, err := qq.infra.FileSystem().SaveFile(
+	filex, err := qq.infra.FileSystem().AddFile(
 		ctx,
 		uploadedFile,
 		filename,

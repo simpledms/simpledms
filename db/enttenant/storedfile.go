@@ -67,9 +67,11 @@ type StoredFileEdges struct {
 	Updater *User `json:"updater,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
+	// FileVersions holds the value of the file_versions edge.
+	FileVersions []*FileVersion `json:"file_versions,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 }
 
 // CreatorOrErr returns the Creator value or an error if the edge
@@ -101,6 +103,15 @@ func (e StoredFileEdges) FilesOrErr() ([]*File, error) {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
+}
+
+// FileVersionsOrErr returns the FileVersions value or an error if the edge
+// was not loaded in eager-loading.
+func (e StoredFileEdges) FileVersionsOrErr() ([]*FileVersion, error) {
+	if e.loadedTypes[3] {
+		return e.FileVersions, nil
+	}
+	return nil, &NotLoadedError{edge: "file_versions"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -267,6 +278,11 @@ func (_m *StoredFile) QueryUpdater() *UserQuery {
 // QueryFiles queries the "files" edge of the StoredFile entity.
 func (_m *StoredFile) QueryFiles() *FileQuery {
 	return NewStoredFileClient(_m.config).QueryFiles(_m)
+}
+
+// QueryFileVersions queries the "file_versions" edge of the StoredFile entity.
+func (_m *StoredFile) QueryFileVersions() *FileVersionQuery {
+	return NewStoredFileClient(_m.config).QueryFileVersions(_m)
 }
 
 // Update returns a builder for updating this StoredFile.

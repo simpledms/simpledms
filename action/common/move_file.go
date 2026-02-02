@@ -375,10 +375,10 @@ func (qq *MoveFile) formFilesListItems(
 
 		fileListItems = append(fileListItems,
 			&wx.ListItem{
-				BackgroundColor: "beige",
-				Leading:         wx.NewIcon("folder").SmallPadding().HorizontalPadding(),
-				Headline:        wx.T(childDir.Name),
-				SupportingText:  wx.Tu(supportingText),
+				// BackgroundColor: "beige",
+				Leading:        wx.NewIcon("folder").SmallPadding().HorizontalPadding(),
+				Headline:       wx.T(childDir.Name),
+				SupportingText: wx.Tu(supportingText),
 				HTMXAttrs: wx.HTMXAttrs{
 					HxPost:    qq.FormEndpointWithParams(actionx.ResponseWrapperDialog, hxTargetForm),
 					HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String(), childDir.PublicID.String())),

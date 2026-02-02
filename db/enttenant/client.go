@@ -19,6 +19,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
@@ -47,6 +48,8 @@ type Client struct {
 	FilePropertyAssignment *FilePropertyAssignmentClient
 	// FileSearch is the client for interacting with the FileSearch builders.
 	FileSearch *FileSearchClient
+	// FileVersion is the client for interacting with the FileVersion builders.
+	FileVersion *FileVersionClient
 	// Property is the client for interacting with the Property builders.
 	Property *PropertyClient
 	// ResolvedTagAssignment is the client for interacting with the ResolvedTagAssignment builders.
@@ -80,6 +83,7 @@ func (c *Client) init() {
 	c.FileInfo = NewFileInfoClient(c.config)
 	c.FilePropertyAssignment = NewFilePropertyAssignmentClient(c.config)
 	c.FileSearch = NewFileSearchClient(c.config)
+	c.FileVersion = NewFileVersionClient(c.config)
 	c.Property = NewPropertyClient(c.config)
 	c.ResolvedTagAssignment = NewResolvedTagAssignmentClient(c.config)
 	c.Space = NewSpaceClient(c.config)
@@ -186,6 +190,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		FileInfo:               NewFileInfoClient(cfg),
 		FilePropertyAssignment: NewFilePropertyAssignmentClient(cfg),
 		FileSearch:             NewFileSearchClient(cfg),
+		FileVersion:            NewFileVersionClient(cfg),
 		Property:               NewPropertyClient(cfg),
 		ResolvedTagAssignment:  NewResolvedTagAssignmentClient(cfg),
 		Space:                  NewSpaceClient(cfg),
@@ -219,6 +224,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		FileInfo:               NewFileInfoClient(cfg),
 		FilePropertyAssignment: NewFilePropertyAssignmentClient(cfg),
 		FileSearch:             NewFileSearchClient(cfg),
+		FileVersion:            NewFileVersionClient(cfg),
 		Property:               NewPropertyClient(cfg),
 		ResolvedTagAssignment:  NewResolvedTagAssignmentClient(cfg),
 		Space:                  NewSpaceClient(cfg),
@@ -256,8 +262,9 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Attribute, c.DocumentType, c.File, c.FilePropertyAssignment, c.Property,
-		c.Space, c.SpaceUserAssignment, c.StoredFile, c.Tag, c.TagAssignment, c.User,
+		c.Attribute, c.DocumentType, c.File, c.FilePropertyAssignment, c.FileVersion,
+		c.Property, c.Space, c.SpaceUserAssignment, c.StoredFile, c.Tag,
+		c.TagAssignment, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -268,7 +275,7 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Attribute, c.DocumentType, c.File, c.FileInfo, c.FilePropertyAssignment,
-		c.FileSearch, c.Property, c.ResolvedTagAssignment, c.Space,
+		c.FileSearch, c.FileVersion, c.Property, c.ResolvedTagAssignment, c.Space,
 		c.SpaceUserAssignment, c.StoredFile, c.Tag, c.TagAssignment, c.User,
 	} {
 		n.Intercept(interceptors...)
@@ -286,6 +293,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.File.mutate(ctx, m)
 	case *FilePropertyAssignmentMutation:
 		return c.FilePropertyAssignment.mutate(ctx, m)
+	case *FileVersionMutation:
+		return c.FileVersion.mutate(ctx, m)
 	case *PropertyMutation:
 		return c.Property.mutate(ctx, m)
 	case *SpaceMutation:
@@ -937,6 +946,22 @@ func (c *FileClient) QueryProperties(_m *File) *PropertyQuery {
 	return query
 }
 
+// QueryFileVersions queries the file_versions edge of a File.
+func (c *FileClient) QueryFileVersions(_m *File) *FileVersionQuery {
+	query := (&FileVersionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(fileversion.Table, fileversion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.FileVersionsTable, file.FileVersionsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryTagAssignment queries the tag_assignment edge of a File.
 func (c *FileClient) QueryTagAssignment(_m *File) *TagAssignmentQuery {
 	query := (&TagAssignmentClient{config: c.config}).Query()
@@ -1236,6 +1261,171 @@ func (c *FileSearchClient) Query() *FileSearchQuery {
 // Interceptors returns the client interceptors.
 func (c *FileSearchClient) Interceptors() []Interceptor {
 	return c.inters.FileSearch
+}
+
+// FileVersionClient is a client for the FileVersion schema.
+type FileVersionClient struct {
+	config
+}
+
+// NewFileVersionClient returns a client for the FileVersion from the given config.
+func NewFileVersionClient(c config) *FileVersionClient {
+	return &FileVersionClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `fileversion.Hooks(f(g(h())))`.
+func (c *FileVersionClient) Use(hooks ...Hook) {
+	c.hooks.FileVersion = append(c.hooks.FileVersion, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `fileversion.Intercept(f(g(h())))`.
+func (c *FileVersionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.FileVersion = append(c.inters.FileVersion, interceptors...)
+}
+
+// Create returns a builder for creating a FileVersion entity.
+func (c *FileVersionClient) Create() *FileVersionCreate {
+	mutation := newFileVersionMutation(c.config, OpCreate)
+	return &FileVersionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of FileVersion entities.
+func (c *FileVersionClient) CreateBulk(builders ...*FileVersionCreate) *FileVersionCreateBulk {
+	return &FileVersionCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FileVersionClient) MapCreateBulk(slice any, setFunc func(*FileVersionCreate, int)) *FileVersionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FileVersionCreateBulk{err: fmt.Errorf("calling to FileVersionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FileVersionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FileVersionCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for FileVersion.
+func (c *FileVersionClient) Update() *FileVersionUpdate {
+	mutation := newFileVersionMutation(c.config, OpUpdate)
+	return &FileVersionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FileVersionClient) UpdateOne(_m *FileVersion) *FileVersionUpdateOne {
+	mutation := newFileVersionMutation(c.config, OpUpdateOne, withFileVersion(_m))
+	return &FileVersionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FileVersionClient) UpdateOneID(id int64) *FileVersionUpdateOne {
+	mutation := newFileVersionMutation(c.config, OpUpdateOne, withFileVersionID(id))
+	return &FileVersionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for FileVersion.
+func (c *FileVersionClient) Delete() *FileVersionDelete {
+	mutation := newFileVersionMutation(c.config, OpDelete)
+	return &FileVersionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FileVersionClient) DeleteOne(_m *FileVersion) *FileVersionDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FileVersionClient) DeleteOneID(id int64) *FileVersionDeleteOne {
+	builder := c.Delete().Where(fileversion.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FileVersionDeleteOne{builder}
+}
+
+// Query returns a query builder for FileVersion.
+func (c *FileVersionClient) Query() *FileVersionQuery {
+	return &FileVersionQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFileVersion},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a FileVersion entity by its id.
+func (c *FileVersionClient) Get(ctx context.Context, id int64) (*FileVersion, error) {
+	return c.Query().Where(fileversion.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FileVersionClient) GetX(ctx context.Context, id int64) *FileVersion {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryFile queries the file edge of a FileVersion.
+func (c *FileVersionClient) QueryFile(_m *FileVersion) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(fileversion.Table, fileversion.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, fileversion.FileTable, fileversion.FileColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStoredFile queries the stored_file edge of a FileVersion.
+func (c *FileVersionClient) QueryStoredFile(_m *FileVersion) *StoredFileQuery {
+	query := (&StoredFileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(fileversion.Table, fileversion.FieldID, id),
+			sqlgraph.To(storedfile.Table, storedfile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, fileversion.StoredFileTable, fileversion.StoredFileColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FileVersionClient) Hooks() []Hook {
+	return c.hooks.FileVersion
+}
+
+// Interceptors returns the client interceptors.
+func (c *FileVersionClient) Interceptors() []Interceptor {
+	return c.inters.FileVersion
+}
+
+func (c *FileVersionClient) mutate(ctx context.Context, m *FileVersionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FileVersionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FileVersionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FileVersionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FileVersionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("enttenant: unknown FileVersion mutation op: %q", m.Op())
+	}
 }
 
 // PropertyClient is a client for the Property schema.
@@ -2051,6 +2241,22 @@ func (c *StoredFileClient) QueryFiles(_m *StoredFile) *FileQuery {
 	return query
 }
 
+// QueryFileVersions queries the file_versions edge of a StoredFile.
+func (c *StoredFileClient) QueryFileVersions(_m *StoredFile) *FileVersionQuery {
+	query := (&FileVersionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(storedfile.Table, storedfile.FieldID, id),
+			sqlgraph.To(fileversion.Table, fileversion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, storedfile.FileVersionsTable, storedfile.FileVersionsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *StoredFileClient) Hooks() []Hook {
 	hooks := c.hooks.StoredFile
@@ -2675,13 +2881,13 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Attribute, DocumentType, File, FilePropertyAssignment, Property, Space,
-		SpaceUserAssignment, StoredFile, Tag, TagAssignment, User []ent.Hook
+		Attribute, DocumentType, File, FilePropertyAssignment, FileVersion, Property,
+		Space, SpaceUserAssignment, StoredFile, Tag, TagAssignment, User []ent.Hook
 	}
 	inters struct {
 		Attribute, DocumentType, File, FileInfo, FilePropertyAssignment, FileSearch,
-		Property, ResolvedTagAssignment, Space, SpaceUserAssignment, StoredFile, Tag,
-		TagAssignment, User []ent.Interceptor
+		FileVersion, Property, ResolvedTagAssignment, Space, SpaceUserAssignment,
+		StoredFile, Tag, TagAssignment, User []ent.Interceptor
 	}
 )
 

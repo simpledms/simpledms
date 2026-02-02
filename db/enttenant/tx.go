@@ -26,6 +26,8 @@ type Tx struct {
 	FilePropertyAssignment *FilePropertyAssignmentClient
 	// FileSearch is the client for interacting with the FileSearch builders.
 	FileSearch *FileSearchClient
+	// FileVersion is the client for interacting with the FileVersion builders.
+	FileVersion *FileVersionClient
 	// Property is the client for interacting with the Property builders.
 	Property *PropertyClient
 	// ResolvedTagAssignment is the client for interacting with the ResolvedTagAssignment builders.
@@ -179,6 +181,7 @@ func (tx *Tx) init() {
 	tx.FileInfo = NewFileInfoClient(tx.config)
 	tx.FilePropertyAssignment = NewFilePropertyAssignmentClient(tx.config)
 	tx.FileSearch = NewFileSearchClient(tx.config)
+	tx.FileVersion = NewFileVersionClient(tx.config)
 	tx.Property = NewPropertyClient(tx.config)
 	tx.ResolvedTagAssignment = NewResolvedTagAssignmentClient(tx.config)
 	tx.Space = NewSpaceClient(tx.config)

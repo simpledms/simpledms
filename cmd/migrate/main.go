@@ -17,7 +17,7 @@ import (
 )
 
 // run with:
-// CGO_ENABLED=1 go run ./cmd/migrate/main.go v1.0.0-beta.x
+// CGO_ENABLED=1 go run ./cmd/migrate/main.go v1.0.0-beta.x (or feature name)
 // cgo just necessary as long as using old driver
 //
 // there are some issues with .down. files, which can lead to a `checksum mismatch` error;

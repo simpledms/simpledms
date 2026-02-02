@@ -18,6 +18,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/space"
@@ -92,6 +93,7 @@ func checkColumn(t, c string) error {
 			fileinfo.Table:               fileinfo.ValidColumn,
 			filepropertyassignment.Table: filepropertyassignment.ValidColumn,
 			filesearch.Table:             filesearch.ValidColumn,
+			fileversion.Table:            fileversion.ValidColumn,
 			property.Table:               property.ValidColumn,
 			resolvedtagassignment.Table:  resolvedtagassignment.ValidColumn,
 			space.Table:                  space.ValidColumn,
