@@ -2,74 +2,139 @@
     "language": "en",
     "messages": [
         {
-            "id": "Maintenance mode",
-            "message": "Maintenance mode",
-            "translation": "Maintenance mode"
-        },
-        {
-            "id": "Maintenance mode is enabled. Please wait until the app ready again.",
-            "message": "Maintenance mode is enabled. Please wait until the app ready again.",
-            "translation": "Maintenance mode is enabled. Please wait until the app ready again."
-        },
-        {
-            "id": "A similar entity already exists.",
-            "message": "A similar entity already exists.",
+            "id": "About",
+            "message": "About",
             "translation": ""
         },
         {
-            "id": "Cannot delete an entity still in use.",
-            "message": "Cannot delete an entity still in use.",
+            "id": "Copyright (c) 2023–present Marco Beierer",
+            "message": "Copyright (c) 2023–present Marco Beierer",
             "translation": ""
         },
         {
-            "id": "A database constraint violation happened. Please contact the support.",
-            "message": "A database constraint violation happened. Please contact the support.",
+            "id": "SimpleDMS is an Open Source project by Marco Beierer. The official websites are:",
+            "message": "SimpleDMS is an Open Source project by Marco Beierer. The official websites are:",
             "translation": ""
         },
         {
-            "id": "Data validation failed.",
-            "message": "Data validation failed.",
+            "id": "simpledms.eu",
+            "message": "simpledms.eu",
             "translation": ""
         },
         {
-            "id": "Something went wrong. Please try again.",
-            "message": "Something went wrong. Please try again.",
-            "translation": "Something went wrong. Please try again."
+            "id": "simpledms.ch",
+            "message": "simpledms.ch",
+            "translation": ""
         },
         {
-            "id": "You are not signed in. Please sign in to continue.",
-            "message": "You are not signed in. Please sign in to continue.",
-            "translation": "You are not signed in. Please sign in to continue."
+            "id": "marcobeierer.com",
+            "message": "marcobeierer.com",
+            "translation": ""
         },
         {
-            "id": "Could not parse url.",
-            "message": "Could not parse url.",
-            "translation": "Could not parse url."
+            "id": "marcobeierer.ch",
+            "message": "marcobeierer.ch",
+            "translation": ""
         },
         {
-            "id": "You are not allowed to access this tenant.",
-            "message": "You are not allowed to access this tenant.",
-            "translation": "You are not allowed to access this tenant."
+            "id": "The project is hosted on GitHub. You find the repository with the source code at:",
+            "message": "The project is hosted on GitHub. You find the repository with the source code at:",
+            "translation": ""
         },
         {
-            "id": "You are not allowed to access this space.",
-            "message": "You are not allowed to access this space.",
-            "translation": "You are not allowed to access this space."
+            "id": "https://github.com/simpledms/simpledms",
+            "message": "https://github.com/simpledms/simpledms",
+            "translation": ""
         },
         {
-            "id": "Could not read cookie.",
-            "message": "Could not read cookie.",
-            "translation": "Could not read cookie."
+            "id": "If you got your copy from someone else or using a hosted version by \n\t\t\t\t\tanother provider, the vendor must provide you a list with all modifications and\n\t\t\t\t\ta copy of the modified source code.",
+            "message": "If you got your copy from someone else or using a hosted version by \n\t\t\t\t\tanother provider, the vendor must provide you a list with all modifications and\n\t\t\t\t\ta copy of the modified source code.",
+            "translation": ""
         },
         {
-            "id": "Cookie set but not valid.",
-            "message": "Cookie set but not valid.",
-            "translation": "Cookie set but not valid."
+            "id": "License",
+            "message": "License",
+            "translation": ""
         },
         {
-            "id": "Cookie set but empty.",
-            "message": "Cookie set but empty.",
-            "translation": "Cookie set but empty."
+            "id": "This program is free software: you can redistribute it and/or modify\n\t\t\t\t\tit under the terms of the GNU Affero General Public License version 3 as\n\t\t\t\t\tpublished by the Free Software Foundation.",
+            "message": "This program is free software: you can redistribute it and/or modify\n\t\t\t\t\tit under the terms of the GNU Affero General Public License version 3 as\n\t\t\t\t\tpublished by the Free Software Foundation.",
+            "translation": ""
+        },
+        {
+            "id": "This program is distributed in the hope that it will be useful,\n\t\t\t\t\tbut WITHOUT ANY WARRANTY; without even the implied warranty of\n\t\t\t\t\tMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n\t\t\t\t\tGNU Affero General Public License for more details.",
+            "message": "This program is distributed in the hope that it will be useful,\n\t\t\t\t\tbut WITHOUT ANY WARRANTY; without even the implied warranty of\n\t\t\t\t\tMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n\t\t\t\t\tGNU Affero General Public License for more details.",
+            "translation": ""
+        },
+        {
+            "id": "You should have received a copy of the GNU Affero General Public License\n\t\t\t\t\talong with this program. If not, see \u003chttps://www.gnu.org/licenses/\u003e.",
+            "message": "You should have received a copy of the GNU Affero General Public License\n\t\t\t\t\talong with this program. If not, see \u003chttps://www.gnu.org/licenses/\u003e.",
+            "translation": ""
+        },
+        {
+            "id": "Additional terms under GNU Affero General Public License version 3 section 7",
+            "message": "Additional terms under GNU Affero General Public License version 3 section 7",
+            "translation": ""
+        },
+        {
+            "id": "In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):",
+            "message": "In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):",
+            "translation": ""
+        },
+        {
+            "id": "1. A visible menu item labeled «About SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be present in the main menu of the program linking to the attribution page described below.",
+            "message": "1. A visible menu item labeled «About SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be present in the main menu of the program linking to the attribution page described below.",
+            "translation": ""
+        },
+        {
+            "id": "2. A visible link labeled «Powered by SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be displayed on the login page of the program. The link must lead to the same attribution page described below or to https://simpledms.eu/open-source.",
+            "message": "2. A visible link labeled «Powered by SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be displayed on the login page of the program. The link must lead to the same attribution page described below or to https://simpledms.eu/open-source.",
+            "translation": ""
+        },
+        {
+            "id": "The attribution page must not be removed or modified so as to delete or obscure the required attribution notices. However, the attribution page may be extended, including by adding:",
+            "message": "The attribution page must not be removed or modified so as to delete or obscure the required attribution notices. However, the attribution page may be extended, including by adding:",
+            "translation": ""
+        },
+        {
+            "id": "- additional copyright holders or contributors,",
+            "message": "- additional copyright holders or contributors,",
+            "translation": ""
+        },
+        {
+            "id": "- notices describing modifications made to the program, or",
+            "message": "- notices describing modifications made to the program, or",
+            "translation": ""
+        },
+        {
+            "id": "- other legally required or informative notices, provided that the required attribution notices remain clearly identifiable and reasonably prominent.",
+            "message": "- other legally required or informative notices, provided that the required attribution notices remain clearly identifiable and reasonably prominent.",
+            "translation": ""
+        },
+        {
+            "id": "The attribution notices required:",
+            "message": "The attribution notices required:",
+            "translation": ""
+        },
+        {
+            "id": "- may be presented in a manner consistent with the overall visual design of the program, but",
+            "message": "- may be presented in a manner consistent with the overall visual design of the program, but",
+            "translation": ""
+        },
+        {
+            "id": "- must not be deliberately hidden, obscured, or rendered non-functional.",
+            "message": "- must not be deliberately hidden, obscured, or rendered non-functional.",
+            "translation": ""
+        },
+        {
+            "id": "This requirement does not apply where the Program is used exclusively without an interactive user interface.",
+            "message": "This requirement does not apply where the Program is used exclusively without an interactive user interface.",
+            "translation": ""
+        },
+        {
+            "id": "About SimpleDMS",
+            "message": "About SimpleDMS",
+            "translation": ""
         },
         {
             "id": "Change passphrase",
@@ -237,6 +302,11 @@
             "translation": "Logged in successfully."
         },
         {
+            "id": "Sign in only works over HTTPS or on localhost.",
+            "message": "Sign in only works over HTTPS or on localhost.",
+            "translation": ""
+        },
+        {
             "id": "Sign in [subject]",
             "message": "Sign in [subject]",
             "translation": "Sign in"
@@ -267,9 +337,109 @@
             "translation": "Sign up"
         },
         {
+            "id": "Sign up is disabled.",
+            "message": "Sign up is disabled.",
+            "translation": ""
+        },
+        {
             "id": "Registration successful, please check your email for your password.",
             "message": "Registration successful, please check your email for your password.",
             "translation": "Registration successful, please check your email for your password."
+        },
+        {
+            "id": "Add field",
+            "message": "Add field",
+            "translation": ""
+        },
+        {
+            "id": "No unassigned fields available.",
+            "message": "No unassigned fields available.",
+            "translation": ""
+        },
+        {
+            "id": "Manage fields",
+            "message": "Manage fields",
+            "translation": ""
+        },
+        {
+            "id": "«{Name}» saved.",
+            "message": "«{Name}» saved.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ]
+        },
+        {
+            "id": "Value is required.",
+            "message": "Value is required.",
+            "translation": ""
+        },
+        {
+            "id": "Unsupported field type.",
+            "message": "Unsupported field type.",
+            "translation": ""
+        },
+        {
+            "id": "Save",
+            "message": "Save",
+            "translation": ""
+        },
+        {
+            "id": "file is not a directory",
+            "message": "file is not a directory",
+            "translation": ""
+        },
+        {
+            "id": "could not render widget",
+            "message": "could not render widget",
+            "translation": ""
+        },
+        {
+            "id": "Browse",
+            "message": "Browse",
+            "translation": ""
+        },
+        {
+            "id": "Upload file",
+            "message": "Upload file",
+            "translation": ""
+        },
+        {
+            "id": "Create directory",
+            "message": "Create directory",
+            "translation": ""
+        },
+        {
+            "id": "No dir id provided.",
+            "message": "No dir id provided.",
+            "translation": ""
+        },
+        {
+            "id": "No file id provided.",
+            "message": "No file id provided.",
+            "translation": ""
+        },
+        {
+            "id": "Folder isn't empty.",
+            "message": "Folder isn't empty.",
+            "translation": ""
+        },
+        {
+            "id": "Folder deleted.",
+            "message": "Folder deleted.",
+            "translation": ""
+        },
+        {
+            "id": "File deleted.",
+            "message": "File deleted.",
+            "translation": ""
         },
         {
             "id": "Document type | Filter",
@@ -362,6 +532,16 @@
             "translation": ""
         },
         {
+            "id": "Version",
+            "message": "Version",
+            "translation": ""
+        },
+        {
+            "id": "Current version uploaded at",
+            "message": "Current version uploaded at",
+            "translation": ""
+        },
+        {
             "id": "OCR succeeded at",
             "message": "OCR succeeded at",
             "translation": "",
@@ -378,18 +558,214 @@
             "translation": ""
         },
         {
-            "id": "Preview",
-            "message": "Preview",
+            "id": "Close preview",
+            "message": "Close preview",
             "translation": ""
         },
         {
-            "id": "Coming soon.",
-            "message": "Coming soon.",
+            "id": "Show details",
+            "message": "Show details",
+            "translation": ""
+        },
+        {
+            "id": "Download",
+            "message": "Download",
+            "translation": "",
+            "comment": "\u0026wx.IconButton{\n\t\t\t\t\tIcon: \"more_vert\",\n\t\t\t\t\tChildren: \u0026wx.Menu{\n\t\t\t\t\t\tItems: []*wx.MenuItem{\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\tLeadingIcon:          \"download\",\n\t\t\t\t\t\t\t\tLabel:                wx.T(\"Download\"),\n\t\t\t\t\t\t\t\tDownloadLinkURL:      route.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),\n\t\t\t\t\t\t\t\tDownloadLinkFilename: filex.Filename(ctx),\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t},"
+        },
+        {
+            "id": "No fields assigned yet.",
+            "message": "No fields assigned yet.",
+            "translation": ""
+        },
+        {
+            "id": "Remove",
+            "message": "Remove",
+            "translation": ""
+        },
+        {
+            "id": "Remove this field value?",
+            "message": "Remove this field value?",
+            "translation": ""
+        },
+        {
+            "id": "Metadata",
+            "message": "Metadata",
+            "translation": ""
+        },
+        {
+            "id": "Tags",
+            "message": "Tags",
+            "translation": ""
+        },
+        {
+            "id": "Info",
+            "message": "Info",
+            "translation": ""
+        },
+        {
+            "id": "Versions",
+            "message": "Versions",
             "translation": ""
         },
         {
             "id": "File upload",
             "message": "File upload",
+            "translation": ""
+        },
+        {
+            "id": "Please confirm that the source file metadata will be lost.",
+            "message": "Please confirm that the source file metadata will be lost.",
+            "translation": ""
+        },
+        {
+            "id": "Source and target files are required.",
+            "message": "Source and target files are required.",
+            "translation": ""
+        },
+        {
+            "id": "Added new version from inbox.",
+            "message": "Added new version from inbox.",
+            "translation": ""
+        },
+        {
+            "id": "Source and target must be different files.",
+            "message": "Source and target must be different files.",
+            "translation": ""
+        },
+        {
+            "id": "File does not belong to current space.",
+            "message": "File does not belong to current space.",
+            "translation": ""
+        },
+        {
+            "id": "Cannot merge directories.",
+            "message": "Cannot merge directories.",
+            "translation": ""
+        },
+        {
+            "id": "Source file is deleted.",
+            "message": "Source file is deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Source file has no versions.",
+            "message": "Source file has no versions.",
+            "translation": ""
+        },
+        {
+            "id": "Could not read source version.",
+            "message": "Could not read source version.",
+            "translation": ""
+        },
+        {
+            "id": "Source file has no stored file.",
+            "message": "Source file has no stored file.",
+            "translation": ""
+        },
+        {
+            "id": "Could not read target versions.",
+            "message": "Could not read target versions.",
+            "translation": ""
+        },
+        {
+            "id": "Could not update target file.",
+            "message": "Could not update target file.",
+            "translation": ""
+        },
+        {
+            "id": "Source file is not in inbox.",
+            "message": "Source file is not in inbox.",
+            "translation": ""
+        },
+        {
+            "id": "Could not remove source versions.",
+            "message": "Could not remove source versions.",
+            "translation": ""
+        },
+        {
+            "id": "Could not delete source file.",
+            "message": "Could not delete source file.",
+            "translation": ""
+        },
+        {
+            "id": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged.",
+            "message": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged.",
+            "translation": ""
+        },
+        {
+            "id": "Search inbox files",
+            "message": "Search inbox files",
+            "translation": ""
+        },
+        {
+            "id": "Add new version from inbox",
+            "message": "Add new version from inbox",
+            "translation": ""
+        },
+        {
+            "id": "Add",
+            "message": "Add",
+            "translation": ""
+        },
+        {
+            "id": "Target file is required.",
+            "message": "Target file is required.",
+            "translation": ""
+        },
+        {
+            "id": "Source file is required.",
+            "message": "Source file is required.",
+            "translation": ""
+        },
+        {
+            "id": "File must be in inbox.",
+            "message": "File must be in inbox.",
+            "translation": ""
+        },
+        {
+            "id": "No matches found.",
+            "message": "No matches found.",
+            "translation": ""
+        },
+        {
+            "id": "missing version number",
+            "message": "missing version number",
+            "translation": ""
+        },
+        {
+            "id": "invalid version number",
+            "message": "invalid version number",
+            "translation": ""
+        },
+        {
+            "id": "version not found",
+            "message": "version not found",
+            "translation": ""
+        },
+        {
+            "id": "Version preview",
+            "message": "Version preview",
+            "translation": ""
+        },
+        {
+            "id": "Upload new version",
+            "message": "Upload new version",
+            "translation": ""
+        },
+        {
+            "id": "No versions available yet.",
+            "message": "No versions available yet.",
+            "translation": ""
+        },
+        {
+            "id": "Upload a new version to get started.",
+            "message": "Upload a new version to get started.",
+            "translation": ""
+        },
+        {
+            "id": "Add new version",
+            "message": "Add new version",
             "translation": ""
         },
         {
@@ -403,18 +779,13 @@
             "translation": ""
         },
         {
-            "id": "Create directory",
-            "message": "Create directory",
-            "translation": ""
-        },
-        {
-            "id": "Upload file",
-            "message": "Upload file",
-            "translation": ""
-        },
-        {
             "id": "Loading more...",
             "message": "Loading more...",
+            "translation": ""
+        },
+        {
+            "id": "Back to parent folder",
+            "message": "Back to parent folder",
             "translation": ""
         },
         {
@@ -438,18 +809,8 @@
             ]
         },
         {
-            "id": "Tags",
-            "message": "Tags",
-            "translation": ""
-        },
-        {
             "id": "No fields available yet.",
             "message": "No fields available yet.",
-            "translation": ""
-        },
-        {
-            "id": "Manage fields",
-            "message": "Manage fields",
             "translation": ""
         },
         {
@@ -480,6 +841,11 @@
         {
             "id": "Less than",
             "message": "Less than",
+            "translation": ""
+        },
+        {
+            "id": "Between",
+            "message": "Between",
             "translation": ""
         },
         {
@@ -580,28 +946,23 @@
             "translation": ""
         },
         {
-            "id": "Folder isn't empty.",
-            "message": "Folder isn't empty.",
-            "translation": ""
-        },
-        {
-            "id": "Folder deleted.",
-            "message": "Folder deleted.",
-            "translation": ""
-        },
-        {
-            "id": "File deleted.",
-            "message": "File deleted.",
-            "translation": ""
+            "id": "«{Name}» removed.",
+            "message": "«{Name}» removed.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ]
         },
         {
             "id": "Rename file",
             "message": "Rename file",
-            "translation": ""
-        },
-        {
-            "id": "Save",
-            "message": "Save",
             "translation": ""
         },
         {
@@ -627,52 +988,6 @@
         {
             "id": "Document type selected.",
             "message": "Document type selected.",
-            "translation": ""
-        },
-        {
-            "id": "Unsupported field type.",
-            "message": "Unsupported field type.",
-            "translation": ""
-        },
-        {
-            "id": "«{Name}» saved.",
-            "message": "«{Name}» saved.",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "propertyx.Name"
-                }
-            ]
-        },
-        {
-            "id": "File Name",
-            "message": "File Name",
-            "translation": ""
-        },
-        {
-            "id": "Size",
-            "message": "Size",
-            "translation": "",
-            "comment": "Text{\"Name:\"},\n\t\t\t\tText{\"Size:\"},\n\t\t\t\tText{\"Created At:\"},\n\t\t\t\tText{\"Modified At:\"},\n\t\t\t\tText{\"Permissions:\"},\n\t\t\t\tText{\"Owner:\"},\n\t\t\t\tText{\"Group:\"},\n\t\t\t\tText{\"Links:\"},\n\t\t\t\tText{\"SHA256:\"},\n\t\t\t\tText{Label: \"Content:\"},"
-        },
-        {
-            "id": "Metadata",
-            "message": "Metadata",
-            "translation": ""
-        },
-        {
-            "id": "Info",
-            "message": "Info",
-            "translation": ""
-        },
-        {
-            "id": "Versions",
-            "message": "Versions",
             "translation": ""
         },
         {
@@ -721,6 +1036,11 @@
             "translation": ""
         },
         {
+            "id": "End date is before the start date.",
+            "message": "End date is before the start date.",
+            "translation": ""
+        },
+        {
             "id": "«{Name}» filter updated.",
             "message": "«{Name}» filter updated.",
             "translation": "",
@@ -761,6 +1081,36 @@
             ]
         },
         {
+            "id": "No file provided.",
+            "message": "No file provided.",
+            "translation": ""
+        },
+        {
+            "id": "Cannot upload versions for directories.",
+            "message": "Cannot upload versions for directories.",
+            "translation": ""
+        },
+        {
+            "id": "New version uploaded for «{Name}».",
+            "message": "New version uploaded for «{Name}».",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "filex.Data.Name"
+                }
+            ]
+        },
+        {
+            "id": "cannot download directories",
+            "message": "cannot download directories",
+            "translation": ""
+        },
+        {
             "id": "Move file",
             "message": "Move file",
             "translation": ""
@@ -791,8 +1141,64 @@
             "translation": ""
         },
         {
-            "id": "Free plan",
-            "message": "Free plan",
+            "id": "Open tasks",
+            "message": "Open tasks",
+            "translation": ""
+        },
+        {
+            "id": "Organization «{Name}»",
+            "message": "Organization «{Name}»",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tenantx.Name"
+                }
+            ]
+        },
+        {
+            "id": "Account «{String}»",
+            "message": "Account «{String}»",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "String",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "ctx.MainCtx().Account.Email.String()"
+                }
+            ]
+        },
+        {
+            "id": "System",
+            "message": "System",
+            "translation": "",
+            "comment": "TODO admin, system or app?"
+        },
+        {
+            "id": "Trial phase",
+            "message": "Trial phase",
+            "translation": ""
+        },
+        {
+            "id": "Subscription",
+            "message": "Subscription",
+            "translation": ""
+        },
+        {
+            "id": "Not initialized",
+            "message": "Not initialized",
+            "translation": ""
+        },
+        {
+            "id": "Please wait",
+            "message": "Please wait",
             "translation": ""
         },
         {
@@ -806,41 +1212,15 @@
             "translation": ""
         },
         {
-            "id": "Organization",
-            "message": "Organization",
-            "translation": ""
-        },
-        {
             "id": "Space",
             "message": "Space",
             "translation": ""
-        },
-        {
-            "id": "Organization: {Name}",
-            "message": "Organization: {Name}",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "tenant.Name"
-                }
-            ]
         },
         {
             "id": "Select",
             "message": "Select",
             "translation": "",
             "comment": "TODO Browse, Open, Switch or activate? or Select?"
-        },
-        {
-            "id": "Account",
-            "message": "Account",
-            "translation": "",
-            "comment": "TODO or Account settings / Security / Account security?"
         },
         {
             "id": "Delete account",
@@ -850,6 +1230,11 @@
         {
             "id": "No password set",
             "message": "No password set",
+            "translation": ""
+        },
+        {
+            "id": "Account",
+            "message": "Account",
             "translation": ""
         },
         {
@@ -873,67 +1258,49 @@
             "translation": ""
         },
         {
+            "id": "No space available yet",
+            "message": "No space available yet",
+            "translation": ""
+        },
+        {
+            "id": "You have no permission to access any space of this organization.",
+            "message": "You have no permission to access any space of this organization.",
+            "translation": ""
+        },
+        {
+            "id": "Please create one to get started.",
+            "message": "Please create one to get started.",
+            "translation": ""
+        },
+        {
             "id": "Manage spaces",
             "message": "Manage spaces",
             "translation": ""
         },
         {
-            "id": "The organization «{Name}» has {SpacesCount} spaces.",
-            "message": "The organization «{Name}» has {SpacesCount} spaces.",
+            "id": "{UsersCount} users",
+            "message": "{UsersCount} users",
             "translation": "",
             "placeholders": [
                 {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "tenantx.Name"
-                },
-                {
-                    "id": "SpacesCount",
-                    "string": "%[2]d",
+                    "id": "UsersCount",
+                    "string": "%[1]d",
                     "type": "int",
                     "underlyingType": "int",
-                    "argNum": 2,
-                    "expr": "spacesCount"
+                    "argNum": 1,
+                    "expr": "usersCount"
                 }
             ]
         },
         {
-            "id": "No spaces yet",
-            "message": "No spaces yet",
+            "id": "1 user",
+            "message": "1 user",
             "translation": ""
         },
         {
-            "id": "The organization «{Name}» has no space yet. Please create one to get started.",
-            "message": "The organization «{Name}» has no space yet. Please create one to get started.",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "tenantx.Name"
-                }
-            ]
-        },
-        {
-            "id": "The organization «{Name}» has one space.",
-            "message": "The organization «{Name}» has one space.",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "tenantx.Name"
-                }
-            ]
+            "id": "Manage users",
+            "message": "Manage users",
+            "translation": ""
         },
         {
             "id": "The app is unlocked and not protected by a passphrase.",
@@ -961,11 +1328,6 @@
             "translation": ""
         },
         {
-            "id": "Admin",
-            "message": "Admin",
-            "translation": ""
-        },
-        {
             "id": "Dashboard",
             "message": "Dashboard",
             "translation": ""
@@ -976,9 +1338,29 @@
             "translation": ""
         },
         {
-            "id": "Add field",
-            "message": "Add field",
+            "id": "Document types",
+            "message": "Document types",
             "translation": ""
+        },
+        {
+            "id": "Users",
+            "message": "Users",
+            "translation": ""
+        },
+        {
+            "id": "Field «{Name}» is already added to this document type.",
+            "message": "Field «{Name}» is already added to this document type.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ]
         },
         {
             "id": "Attribute «{Name}» added.",
@@ -1022,19 +1404,24 @@
             "translation": ""
         },
         {
-            "id": "Add document type",
-            "message": "Add document type",
-            "translation": ""
-        },
-        {
-            "id": "Document type created.",
-            "message": "Document type created.",
-            "translation": ""
-        },
-        {
             "id": "Add attribute",
             "message": "Add attribute",
             "translation": ""
+        },
+        {
+            "id": "Tag group «{Name}» is already added to this document type.",
+            "message": "Tag group «{Name}» is already added to this document type.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Name"
+                }
+            ]
         },
         {
             "id": "Attribute «{Name}» created.",
@@ -1062,13 +1449,28 @@
             "translation": ""
         },
         {
-            "id": "Document type deleted.",
-            "message": "Document type deleted.",
+            "id": "Add document type",
+            "message": "Add document type",
+            "translation": ""
+        },
+        {
+            "id": "Document type created.",
+            "message": "Document type created.",
             "translation": ""
         },
         {
             "id": "Attribute deleted.",
             "message": "Attribute deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Document type deleted.",
+            "message": "Document type deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Close details",
+            "message": "Close details",
             "translation": ""
         },
         {
@@ -1102,13 +1504,13 @@
             ]
         },
         {
-            "id": "Document types",
-            "message": "Document types",
+            "id": "Could not convert id to integer.",
+            "message": "Could not convert id to integer.",
             "translation": ""
         },
         {
-            "id": "Rename document type",
-            "message": "Rename document type",
+            "id": "RenameCmd document type",
+            "message": "RenameCmd document type",
             "translation": ""
         },
         {
@@ -1132,8 +1534,33 @@
             "translation": ""
         },
         {
+            "id": "Reloaded metadata",
+            "message": "Reloaded metadata",
+            "translation": ""
+        },
+        {
             "id": "Mark as done",
             "message": "Mark as done",
+            "translation": ""
+        },
+        {
+            "id": "Reload metadata",
+            "message": "Reload metadata",
+            "translation": ""
+        },
+        {
+            "id": "Text recognition (OCR) is not ready yet, suggestions are based on the filename only.",
+            "message": "Text recognition (OCR) is not ready yet, suggestions are based on the filename only.",
+            "translation": ""
+        },
+        {
+            "id": "Select destination manually",
+            "message": "Select destination manually",
+            "translation": ""
+        },
+        {
+            "id": "Suggestions based on filename",
+            "message": "Suggestions based on filename",
             "translation": ""
         },
         {
@@ -1142,13 +1569,28 @@
             "translation": ""
         },
         {
+            "id": "Sort files",
+            "message": "Sort files",
+            "translation": ""
+        },
+        {
             "id": "Search in «Inbox»",
             "message": "Search in «Inbox»",
             "translation": ""
         },
         {
-            "id": "File must be in inbox.",
-            "message": "File must be in inbox.",
+            "id": "No new files found.",
+            "message": "No new files found.",
+            "translation": ""
+        },
+        {
+            "id": "Files uploaded successfully.",
+            "message": "Files uploaded successfully.",
+            "translation": ""
+        },
+        {
+            "id": "File is not in inbox.",
+            "message": "File is not in inbox.",
             "translation": ""
         },
         {
@@ -1167,26 +1609,6 @@
             ]
         },
         {
-            "id": "No new files found.",
-            "message": "No new files found.",
-            "translation": ""
-        },
-        {
-            "id": "Files uploaded successfully.",
-            "message": "Files uploaded successfully.",
-            "translation": ""
-        },
-        {
-            "id": "Select destination manually",
-            "message": "Select destination manually",
-            "translation": ""
-        },
-        {
-            "id": "Suggestions based on filename",
-            "message": "Suggestions based on filename",
-            "translation": ""
-        },
-        {
             "id": "Newest first",
             "message": "Newest first",
             "translation": ""
@@ -1200,6 +1622,83 @@
             "id": "Sort by name",
             "message": "Sort by name",
             "translation": ""
+        },
+        {
+            "id": "Assign user to space",
+            "message": "Assign user to space",
+            "translation": ""
+        },
+        {
+            "id": "No space selected. Please select a space first.",
+            "message": "No space selected. Please select a space first.",
+            "translation": ""
+        },
+        {
+            "id": "You are not allowed to assign users to spaces because you aren't the owner.",
+            "message": "You are not allowed to assign users to spaces because you aren't the owner.",
+            "translation": ""
+        },
+        {
+            "id": "User is already assigned to this space.",
+            "message": "User is already assigned to this space.",
+            "translation": ""
+        },
+        {
+            "id": "User assigned to space successfully.",
+            "message": "User assigned to space successfully.",
+            "translation": ""
+        },
+        {
+            "id": "No unassigned users available.",
+            "message": "No unassigned users available.",
+            "translation": ""
+        },
+        {
+            "id": "Please create a user in the organization user management first.",
+            "message": "Please create a user in the organization user management first.",
+            "translation": "",
+            "comment": "TODO link"
+        },
+        {
+            "id": "Users «{Name}»",
+            "message": "Users «{Name}»",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "ctx.SpaceCtx().Space.Name"
+                }
+            ]
+        },
+        {
+            "id": "Unassign user from space",
+            "message": "Unassign user from space",
+            "translation": ""
+        },
+        {
+            "id": "You cannot unassign yourself from a space.",
+            "message": "You cannot unassign yourself from a space.",
+            "translation": ""
+        },
+        {
+            "id": "User unassigned from space successfully.",
+            "message": "User unassigned from space successfully.",
+            "translation": ""
+        },
+        {
+            "id": "Unassign",
+            "message": "Unassign",
+            "translation": ""
+        },
+        {
+            "id": "Assign a user",
+            "message": "Assign a user",
+            "translation": "",
+            "comment": "TODO Create or add? system or real world perspective?"
         },
         {
             "id": "Create new tag or group",
@@ -1274,14 +1773,45 @@
             "translation": ""
         },
         {
-            "id": "Manage users",
-            "message": "Manage users",
+            "id": "Create user",
+            "message": "Create user",
             "translation": ""
         },
         {
-            "id": "Users",
-            "message": "Users",
+            "id": "You are not allowed to create users. No tenant selected.",
+            "message": "You are not allowed to create users. No tenant selected.",
             "translation": ""
+        },
+        {
+            "id": "You are not allowed to create users because you are not the owner.",
+            "message": "You are not allowed to create users because you are not the owner.",
+            "translation": ""
+        },
+        {
+            "id": "A user with this email address already exists, please contact support if you want to add this user anyway.",
+            "message": "A user with this email address already exists, please contact support if you want to add this user anyway.",
+            "translation": ""
+        },
+        {
+            "id": "Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.",
+            "message": "Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.",
+            "translation": ""
+        },
+        {
+            "id": "Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space.",
+            "message": "Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space.",
+            "translation": ""
+        },
+        {
+            "id": "Manage users of tenant",
+            "message": "Manage users of tenant",
+            "translation": ""
+        },
+        {
+            "id": "Add a new user",
+            "message": "Add a new user",
+            "translation": "",
+            "comment": "TODO Create or add? system or real world perspective?"
         },
         {
             "id": "Upload",
@@ -1394,26 +1924,20 @@
             "translation": ""
         },
         {
-            "id": "Browse",
-            "message": "Browse",
-            "translation": "",
-            "comment": "TODO or Selected or Active?"
-        },
-        {
-            "id": "{Name} ({Stringctx})",
-            "message": "{Name} ({Stringctx})",
+            "id": "{Stringctx} ({Stringctx_1})",
+            "message": "{Stringctx} ({Stringctx_1})",
             "translation": "",
             "placeholders": [
                 {
-                    "id": "Name",
+                    "id": "Stringctx",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "spacex.Name"
+                    "expr": "wx.Tu(spacex.Name).String(ctx)"
                 },
                 {
-                    "id": "Stringctx",
+                    "id": "Stringctx_1",
                     "string": "%[2]s",
                     "type": "string",
                     "underlyingType": "string",
@@ -1510,6 +2034,11 @@
             ]
         },
         {
+            "id": "Show assigned tags",
+            "message": "Show assigned tags",
+            "translation": ""
+        },
+        {
             "id": "Create new group",
             "message": "Create new group",
             "translation": ""
@@ -1554,6 +2083,11 @@
         {
             "id": "layout not supported",
             "message": "layout not supported",
+            "translation": ""
+        },
+        {
+            "id": "Edit assigned tags",
+            "message": "Edit assigned tags",
             "translation": ""
         },
         {
@@ -1637,6 +2171,121 @@
             ]
         },
         {
+            "id": "Parent folder",
+            "message": "Parent folder",
+            "translation": ""
+        },
+        {
+            "id": "Name",
+            "message": "Name",
+            "translation": ""
+        },
+        {
+            "id": "Notes",
+            "message": "Notes",
+            "translation": ""
+        },
+        {
+            "id": "Created at",
+            "message": "Created at",
+            "translation": ""
+        },
+        {
+            "id": "Modified at",
+            "message": "Modified at",
+            "translation": ""
+        },
+        {
+            "id": "No tags assigned.",
+            "message": "No tags assigned.",
+            "translation": ""
+        },
+        {
+            "id": "Folders cannot be restored.",
+            "message": "Folders cannot be restored.",
+            "translation": ""
+        },
+        {
+            "id": "File is not deleted.",
+            "message": "File is not deleted.",
+            "translation": ""
+        },
+        {
+            "id": "The original parent folder is missing. Restored to Inbox.",
+            "message": "The original parent folder is missing. Restored to Inbox.",
+            "translation": ""
+        },
+        {
+            "id": "File restored.",
+            "message": "File restored.",
+            "translation": ""
+        },
+        {
+            "id": "Restore",
+            "message": "Restore",
+            "translation": ""
+        },
+        {
+            "id": "Trash is empty.",
+            "message": "Trash is empty.",
+            "translation": ""
+        },
+        {
+            "id": "Folder deleted",
+            "message": "Folder deleted",
+            "translation": ""
+        },
+        {
+            "id": "Deleted",
+            "message": "Deleted",
+            "translation": ""
+        },
+        {
+            "id": "Folder deleted on {Format02_Jan_2006}",
+            "message": "Folder deleted on {Format02_Jan_2006}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Format02_Jan_2006",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "filex.DeletedAt.Format(\"02 Jan 2006\")"
+                }
+            ]
+        },
+        {
+            "id": "Deleted on {Format02_Jan_2006}",
+            "message": "Deleted on {Format02_Jan_2006}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Format02_Jan_2006",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "filex.DeletedAt.Format(\"02 Jan 2006\")"
+                }
+            ]
+        },
+        {
+            "id": "Trash",
+            "message": "Trash",
+            "translation": ""
+        },
+        {
+            "id": "File preview is not available for folders.",
+            "message": "File preview is not available for folders.",
+            "translation": ""
+        },
+        {
+            "id": "Preview",
+            "message": "Preview",
+            "translation": ""
+        },
+        {
             "id": "cannot parse file",
             "message": "cannot parse file",
             "translation": ""
@@ -1677,13 +2326,28 @@
             "translation": ""
         },
         {
+            "id": "Accepted",
+            "message": "Accepted",
+            "translation": ""
+        },
+        {
             "id": "Active tab",
             "message": "Active tab",
             "translation": ""
         },
         {
+            "id": "Add me as space owner",
+            "message": "Add me as space owner",
+            "translation": ""
+        },
+        {
             "id": "Add to inbox",
             "message": "Add to inbox",
+            "translation": ""
+        },
+        {
+            "id": "Admin",
+            "message": "Admin",
             "translation": ""
         },
         {
@@ -1717,6 +2381,11 @@
             "translation": ""
         },
         {
+            "id": "Confirm warning",
+            "message": "Confirm warning",
+            "translation": ""
+        },
+        {
             "id": "Country",
             "message": "Country",
             "translation": ""
@@ -1729,11 +2398,6 @@
         {
             "id": "Current passphrase",
             "message": "Current passphrase",
-            "translation": ""
-        },
-        {
-            "id": "Current path",
-            "message": "Current path",
             "translation": ""
         },
         {
@@ -1759,11 +2423,6 @@
         {
             "id": "Dir name",
             "message": "Dir name",
-            "translation": ""
-        },
-        {
-            "id": "Editor",
-            "message": "Editor",
             "translation": ""
         },
         {
@@ -1857,11 +2516,6 @@
             "translation": ""
         },
         {
-            "id": "Name",
-            "message": "Name",
-            "translation": ""
-        },
-        {
             "id": "New dir name",
             "message": "New dir name",
             "translation": ""
@@ -1927,8 +2581,28 @@
             "translation": ""
         },
         {
+            "id": "Pending",
+            "message": "Pending",
+            "translation": ""
+        },
+        {
+            "id": "Rejected",
+            "message": "Rejected",
+            "translation": ""
+        },
+        {
+            "id": "Role",
+            "message": "Role",
+            "translation": ""
+        },
+        {
             "id": "S 3",
             "message": "S 3",
+            "translation": ""
+        },
+        {
+            "id": "Search query",
+            "message": "Search query",
             "translation": ""
         },
         {
@@ -1997,13 +2671,68 @@
             "translation": ""
         },
         {
-            "id": "Viewer",
-            "message": "Viewer",
+            "id": "Value end",
+            "message": "Value end",
+            "translation": ""
+        },
+        {
+            "id": "Value start",
+            "message": "Value start",
+            "translation": ""
+        },
+        {
+            "id": "Version number",
+            "message": "Version number",
             "translation": ""
         },
         {
             "id": "file has no parent",
             "message": "file has no parent",
+            "translation": ""
+        },
+        {
+            "id": "Too many login attempts. Please try again in 10 seconds.",
+            "message": "Too many login attempts. Please try again in 10 seconds.",
+            "translation": ""
+        },
+        {
+            "id": "2FA code was provided, but 2FA is not enabled for this account.",
+            "message": "2FA code was provided, but 2FA is not enabled for this account.",
+            "translation": ""
+        },
+        {
+            "id": "Temporary password expired.",
+            "message": "Temporary password expired.",
+            "translation": ""
+        },
+        {
+            "id": "could not generate temporary password",
+            "message": "could not generate temporary password",
+            "translation": ""
+        },
+        {
+            "id": "could not generate salt",
+            "message": "could not generate salt",
+            "translation": ""
+        },
+        {
+            "id": "Current password is invalid.",
+            "message": "Current password is invalid.",
+            "translation": ""
+        },
+        {
+            "id": "New password must be different from current password.",
+            "message": "New password must be different from current password.",
+            "translation": ""
+        },
+        {
+            "id": "Password must be at least eight characters long.",
+            "message": "Password must be at least eight characters long.",
+            "translation": ""
+        },
+        {
+            "id": "Passwords do not match.",
+            "message": "Passwords do not match.",
             "translation": ""
         },
         {
@@ -2177,49 +2906,42 @@
             "translation": ""
         },
         {
-            "id": "Too many login attempts. Please try again in 10 seconds.",
-            "message": "Too many login attempts. Please try again in 10 seconds.",
-            "translation": ""
+            "id": "«{Name}» invited you to the tenant «{Name_1}».",
+            "message": "«{Name}» invited you to the tenant «{Name_1}».",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "accountm.Name()"
+                },
+                {
+                    "id": "Name_1",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "tenant.NewTenant(ctx.TenantCtx().Tenant).Name()"
+                }
+            ]
         },
         {
-            "id": "2FA code was provided, but 2FA is not enabled for this account.",
-            "message": "2FA code was provided, but 2FA is not enabled for this account.",
-            "translation": ""
-        },
-        {
-            "id": "Temporary password expired.",
-            "message": "Temporary password expired.",
-            "translation": ""
-        },
-        {
-            "id": "could not generate temporary password",
-            "message": "could not generate temporary password",
-            "translation": ""
-        },
-        {
-            "id": "could not generate salt",
-            "message": "could not generate salt",
-            "translation": ""
-        },
-        {
-            "id": "Current password is invalid.",
-            "message": "Current password is invalid.",
-            "translation": ""
-        },
-        {
-            "id": "New password must be different from current password.",
-            "message": "New password must be different from current password.",
-            "translation": ""
-        },
-        {
-            "id": "Password must be at least eight characters long.",
-            "message": "Password must be at least eight characters long.",
-            "translation": ""
-        },
-        {
-            "id": "Passwords do not match.",
-            "message": "Passwords do not match.",
-            "translation": ""
+            "id": "«{Name}» invited you.",
+            "message": "«{Name}» invited you.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "accountm.Name()"
+                }
+            ]
         },
         {
             "id": "App already initialized.",
@@ -2282,38 +3004,73 @@
             "translation": ""
         },
         {
-            "id": "file is not a directory",
-            "message": "file is not a directory",
+            "id": "A similar entity already exists.",
+            "message": "A similar entity already exists.",
             "translation": ""
         },
         {
-            "id": "could not render widget",
-            "message": "could not render widget",
+            "id": "Cannot delete an entity still in use.",
+            "message": "Cannot delete an entity still in use.",
             "translation": ""
         },
         {
-            "id": "No dir id provided.",
-            "message": "No dir id provided.",
+            "id": "A database constraint violation happened. Please contact the support.",
+            "message": "A database constraint violation happened. Please contact the support.",
             "translation": ""
         },
         {
-            "id": "No file id provided.",
-            "message": "No file id provided.",
+            "id": "Data validation failed.",
+            "message": "Data validation failed.",
             "translation": ""
         },
         {
-            "id": "cannot download directories",
-            "message": "cannot download directories",
-            "translation": ""
+            "id": "Something went wrong. Please try again.",
+            "message": "Something went wrong. Please try again.",
+            "translation": "Something went wrong. Please try again."
         },
         {
-            "id": "File is not in inbox.",
-            "message": "File is not in inbox.",
-            "translation": ""
+            "id": "You are not signed in. Please sign in to continue.",
+            "message": "You are not signed in. Please sign in to continue.",
+            "translation": "You are not signed in. Please sign in to continue."
         },
         {
-            "id": "Could not convert id to integer.",
-            "message": "Could not convert id to integer.",
+            "id": "Could not parse url.",
+            "message": "Could not parse url.",
+            "translation": "Could not parse url."
+        },
+        {
+            "id": "You are not allowed to access this tenant.",
+            "message": "You are not allowed to access this tenant.",
+            "translation": "You are not allowed to access this tenant."
+        },
+        {
+            "id": "Could not read cookie.",
+            "message": "Could not read cookie.",
+            "translation": "Could not read cookie."
+        },
+        {
+            "id": "Cookie set but not valid.",
+            "message": "Cookie set but not valid.",
+            "translation": "Cookie set but not valid."
+        },
+        {
+            "id": "Cookie set but empty.",
+            "message": "Cookie set but empty.",
+            "translation": "Cookie set but empty."
+        },
+        {
+            "id": "Maintenance mode",
+            "message": "Maintenance mode",
+            "translation": "Maintenance mode"
+        },
+        {
+            "id": "Maintenance mode is enabled. Please wait until the app ready again.",
+            "message": "Maintenance mode is enabled. Please wait until the app ready again.",
+            "translation": "Maintenance mode is enabled. Please wait until the app ready again."
+        },
+        {
+            "id": "Close",
+            "message": "Close",
             "translation": ""
         },
         {
@@ -2322,8 +3079,19 @@
             "translation": ""
         },
         {
-            "id": "Close",
-            "message": "Close",
+            "id": "Open main menu",
+            "message": "Open main menu",
+            "translation": ""
+        },
+        {
+            "id": "Close dialog",
+            "message": "Close dialog",
+            "translation": "",
+            "comment": "PopoverTarget:       qq.ID,\nPopoverTargetAction: \"hide\","
+        },
+        {
+            "id": "Suggestion",
+            "message": "Suggestion",
             "translation": ""
         },
         {

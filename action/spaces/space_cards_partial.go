@@ -152,7 +152,7 @@ func (qq *SpaceCardsPartial) card(
 		})
 
 		// TODO use icon to indicate instead?
-		heading = wx.H(wx.HeadingTypeTitleLg, wx.Tf("%s (%s)", spacex.Name, wx.T("active").String(ctx)))
+		heading = wx.H(wx.HeadingTypeTitleLg, wx.Tf("%s (%s)", wx.Tu(spacex.Name).String(ctx), wx.T("active").String(ctx)))
 	} else {
 		actions = append(actions, &wx.Button{
 			Label:     wx.T("Select"), // TODO Switch or activate? or Select?
