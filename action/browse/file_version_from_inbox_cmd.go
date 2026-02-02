@@ -153,13 +153,18 @@ func (qq *FileVersionFromInboxCmd) mergeFromInbox(
 		SetVersionNumber(versionNumber).
 		SaveX(ctx)
 
-	targetFile, err = targetFile.Update().
+	update := targetFile.Update().
 		SetName(fileToMerge.Name).
-		SetOcrContent("").
-		ClearOcrSuccessAt().
 		SetOcrRetryCount(0).
-		SetOcrLastTriedAt(time.Time{}).
-		Save(ctx)
+		SetOcrLastTriedAt(time.Time{})
+	if fileToMerge.OcrSuccessAt != nil {
+		update.SetOcrContent(fileToMerge.OcrContent)
+		update.SetOcrSuccessAt(*fileToMerge.OcrSuccessAt)
+	} else {
+		update.SetOcrContent("")
+		update.ClearOcrSuccessAt()
+	}
+	targetFile, err = update.Save(ctx)
 	if err != nil {
 		log.Println(err)
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not update target file.")
