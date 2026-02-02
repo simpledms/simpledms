@@ -25,7 +25,7 @@ func NewContextMenuPartial(actions *Actions) *ContextMenuPartial {
 func (qq *ContextMenuPartial) Widget(ctx ctxx.Context, documentType *enttenant.DocumentType) *wx.Menu {
 	renameItem := &wx.MenuItem{
 		TrailingIcon: "edit", // TODO
-		Label:        wx.T("RenameCmd"),
+		Label:        wx.T("Rename"),
 		HTMXAttrs: qq.actions.RenameCmd.ModalLinkAttrs(
 			qq.actions.RenameCmd.Data(documentType.ID, documentType.Name),
 			"",
@@ -35,7 +35,7 @@ func (qq *ContextMenuPartial) Widget(ctx ctxx.Context, documentType *enttenant.D
 
 	deleteItem := &wx.MenuItem{
 		TrailingIcon: "delete",
-		Label:        wx.T("DeleteCmd"),
+		Label:        wx.T("Delete"),
 		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:    qq.actions.DeleteCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.DeleteCmd.Data(documentType.ID)),

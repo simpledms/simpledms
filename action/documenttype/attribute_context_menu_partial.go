@@ -57,7 +57,7 @@ func (qq *AttributeContextMenuPartial) Widget(ctx ctxx.Context, attributex *entt
 
 	items = append(items, &wx.MenuItem{
 		TrailingIcon: "delete",
-		Label:        wx.T("DeleteCmd"),
+		Label:        wx.T("Delete"),
 		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:    qq.actions.DeleteAttributeCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.DeleteAttributeCmd.Data(attributex.ID)),
