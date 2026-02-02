@@ -100,13 +100,6 @@
             "fuzzy": true
         },
         {
-            "id": "Additional terms under GNU Affero General Public License version 3 section 7",
-            "message": "Additional terms under GNU Affero General Public License version 3 section 7",
-            "translation": "Conditions supplémentaires au titre de la GNU Affero General Public License version 3, section 7",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):",
             "message": "In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):",
             "translation": "Conformément à la section 7(b) de la GNU Affero General Public License version 3, les conditions supplémentaires suivantes sont ajoutées afin de préserver les avis d'attribution en vertu de la section 5(d) :",
