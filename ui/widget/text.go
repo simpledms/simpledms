@@ -74,6 +74,25 @@ func P(str string) *Text {
 	}
 }
 
+func Pu(str string) *Text {
+	_ = message.NewPrinter(language.English).Sprintf(str)
+	return &Text{
+		format:        str,
+		IsParagraph:   true,
+		NoTranslation: true,
+	}
+}
+
+func Puf(str string, a ...any) *Text {
+	_ = message.NewPrinter(language.English).Sprintf(str)
+	return &Text{
+		format:        str,
+		args:          a,
+		IsParagraph:   true,
+		NoTranslation: true,
+	}
+}
+
 func (qq *Text) SetWrap() *Text {
 	qq.Wrap = true
 	return qq
