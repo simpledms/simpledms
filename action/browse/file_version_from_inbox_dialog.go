@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 
-	acommon "github.com/simpledms/simpledms/action/common"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
@@ -27,7 +26,6 @@ type FileVersionFromInboxDialogFormData struct {
 type FileVersionFromInboxDialog struct {
 	infra   *common.Infra
 	actions *Actions
-	helper  *acommon.MergeFileVersionHelper
 	*actionx.Config
 }
 
@@ -36,7 +34,6 @@ func NewFileVersionFromInboxDialog(infra *common.Infra, actions *Actions) *FileV
 	return &FileVersionFromInboxDialog{
 		infra:   infra,
 		actions: actions,
-		helper:  acommon.NewMergeFileVersionHelper(),
 		Config:  config,
 	}
 }
@@ -56,25 +53,22 @@ func (qq *FileVersionFromInboxDialog) Handler(rw httpx.ResponseWriter, req *http
 		return err
 	}
 
-	if data.TargetFileID == "" {
-		log.Println(err)
-		return nil
+	files, err := qq.actions.FileVersionFromInboxListPartial.listFiles(ctx, data)
+	if err != nil {
+		return err
 	}
-
-	targetFile := qq.infra.FileRepo.GetX(ctx, data.TargetFileID)
-	suggestions := qq.helper.SuggestInboxSources(ctx, targetFile.Data, data.SearchQuery, 0)
 
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		qq.Widget(ctx, data, suggestions),
+		qq.Widget(ctx, data, files),
 	)
 }
 
 func (qq *FileVersionFromInboxDialog) Widget(
 	ctx ctxx.Context,
 	data *FileVersionFromInboxDialogData,
-	suggestions []*enttenant.File,
+	files []*enttenant.File,
 ) *wx.Dialog {
 	var formChildren []wx.IWidget
 
@@ -107,7 +101,7 @@ func (qq *FileVersionFromInboxDialog) Widget(
 			SupportingText: wx.T("Search inbox files"),
 			Autofocus:      true,
 		},
-		qq.listWrapper(ctx, data, suggestions),
+		qq.actions.FileVersionFromInboxListPartial.listWrapper(ctx, data, files),
 	)
 
 	content := &wx.Container{
@@ -133,39 +127,6 @@ func (qq *FileVersionFromInboxDialog) Widget(
 		qq.dialogID(),
 		qq.formID(),
 	).(*wx.Dialog)
-}
-
-func (qq *FileVersionFromInboxDialog) listItems(ctx ctxx.Context, data *FileVersionFromInboxDialogData, files []*enttenant.File) []wx.IWidget {
-	if len(files) == 0 {
-		return []wx.IWidget{
-			&wx.ListItem{
-				Headline: wx.T("No matches found."),
-				Type:     wx.ListItemTypeHelper,
-			},
-		}
-	}
-
-	items := make([]wx.IWidget, 0, len(files))
-	for _, filex := range files {
-		listItem := &wx.ListItem{
-			Headline:       wx.T(filex.Name),
-			IsSelected:     filex.PublicID.String() == data.SourceFileID,
-			RadioGroupName: "SourceFileID",
-			RadioValue:     filex.PublicID.String(),
-		}
-		items = append(items, listItem)
-	}
-
-	return items
-}
-
-func (qq *FileVersionFromInboxDialog) listWrapper(ctx ctxx.Context, data *FileVersionFromInboxDialogData, files []*enttenant.File) *wx.Container {
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
-			ID: qq.listID(),
-		},
-		Child: &wx.List{Children: qq.listItems(ctx, data, files)},
-	}
 }
 
 func (qq *FileVersionFromInboxDialog) dialogID() string {
