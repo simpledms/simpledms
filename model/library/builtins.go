@@ -49,7 +49,6 @@ var builtinTemplates = []BuiltinTemplate{
 		Fields: []BuiltinField{
 			{Key: "invoice_number", Name: "Invoice number", Type: fieldtype.Text},
 			{Key: "invoice_date", Name: "Invoice date", Type: fieldtype.Date},
-			{Key: "supplier", Name: "Supplier", Type: fieldtype.Text},
 			{Key: "total_amount", Name: "Total amount", Type: fieldtype.Money},
 			{Key: "due_date", Name: "Due date", Type: fieldtype.Date},
 		},
@@ -62,15 +61,16 @@ var builtinTemplates = []BuiltinTemplate{
 			{Key: "currency_eur", Name: "EUR", Type: tagtype.Simple, GroupKey: "currency"},
 			{Key: "currency_usd", Name: "USD", Type: tagtype.Simple, GroupKey: "currency"},
 			{Key: "currency_gbp", Name: "GBP", Type: tagtype.Simple, GroupKey: "currency"},
+			{Key: "organization", Name: "Organization", Type: tagtype.Group},
 		},
 		Attributes: []BuiltinAttribute{
 			{Type: attributetype.Field, FieldKey: "invoice_number", IsNameGiving: true},
 			{Type: attributetype.Field, FieldKey: "invoice_date"},
-			{Type: attributetype.Field, FieldKey: "supplier"},
 			{Type: attributetype.Field, FieldKey: "total_amount"},
 			{Type: attributetype.Field, FieldKey: "due_date"},
-			{Type: attributetype.Tag, TagKey: "invoice_status", Name: "Status"},
+			{Type: attributetype.Tag, TagKey: "invoice_status", Name: "Status", IsNameGiving: true},
 			{Type: attributetype.Tag, TagKey: "currency", Name: "Currency"},
+			{Type: attributetype.Tag, TagKey: "organization", Name: "Supplier", IsNameGiving: true},
 		},
 	},
 	{
@@ -79,7 +79,6 @@ var builtinTemplates = []BuiltinTemplate{
 		Icon: "receipt",
 		Fields: []BuiltinField{
 			{Key: "receipt_date", Name: "Receipt date", Type: fieldtype.Date},
-			{Key: "vendor", Name: "Vendor", Type: fieldtype.Text},
 			{Key: "receipt_total", Name: "Total amount", Type: fieldtype.Money},
 			{Key: "payment_method", Name: "Payment method", Type: fieldtype.Text},
 		},
@@ -90,9 +89,10 @@ var builtinTemplates = []BuiltinTemplate{
 			{Key: "expense_category_office", Name: "Office", Type: tagtype.Simple, GroupKey: "expense_category"},
 			{Key: "expense_category_software", Name: "Software", Type: tagtype.Simple, GroupKey: "expense_category"},
 			{Key: "expense_category_other", Name: "Other", Type: tagtype.Simple, GroupKey: "expense_category"},
+			{Key: "organization", Name: "Organization", Type: tagtype.Group},
 		},
 		Attributes: []BuiltinAttribute{
-			{Type: attributetype.Field, FieldKey: "vendor", IsNameGiving: true},
+			{Type: attributetype.Tag, TagKey: "organization", Name: "Vendor", IsNameGiving: true},
 			{Type: attributetype.Field, FieldKey: "receipt_date"},
 			{Type: attributetype.Field, FieldKey: "receipt_total"},
 			{Type: attributetype.Field, FieldKey: "payment_method"},
@@ -105,7 +105,6 @@ var builtinTemplates = []BuiltinTemplate{
 		Icon: "gavel",
 		Fields: []BuiltinField{
 			{Key: "contract_name", Name: "Contract name", Type: fieldtype.Text},
-			{Key: "parties", Name: "Parties", Type: fieldtype.Text},
 			{Key: "start_date", Name: "Start date", Type: fieldtype.Date},
 			{Key: "end_date", Name: "End date", Type: fieldtype.Date},
 			{Key: "contract_value", Name: "Value", Type: fieldtype.Money},
@@ -121,15 +120,16 @@ var builtinTemplates = []BuiltinTemplate{
 			{Key: "contract_type_sales", Name: "Sales", Type: tagtype.Simple, GroupKey: "contract_type"},
 			{Key: "contract_type_nda", Name: "NDA", Type: tagtype.Simple, GroupKey: "contract_type"},
 			{Key: "contract_type_other", Name: "Other", Type: tagtype.Simple, GroupKey: "contract_type"},
+			{Key: "organization", Name: "Organization", Type: tagtype.Group},
 		},
 		Attributes: []BuiltinAttribute{
 			{Type: attributetype.Field, FieldKey: "contract_name", IsNameGiving: true},
-			{Type: attributetype.Field, FieldKey: "parties"},
 			{Type: attributetype.Field, FieldKey: "start_date"},
 			{Type: attributetype.Field, FieldKey: "end_date"},
 			{Type: attributetype.Field, FieldKey: "contract_value"},
-			{Type: attributetype.Tag, TagKey: "contract_status", Name: "Status"},
+			{Type: attributetype.Tag, TagKey: "contract_status", Name: "Status", IsNameGiving: true},
 			{Type: attributetype.Tag, TagKey: "contract_type", Name: "Type"},
+			{Type: attributetype.Tag, TagKey: "organization", Name: "Parties", IsNameGiving: true},
 		},
 	},
 	{
@@ -139,9 +139,7 @@ var builtinTemplates = []BuiltinTemplate{
 		Fields: []BuiltinField{
 			{Key: "po_number", Name: "PO number", Type: fieldtype.Text},
 			{Key: "order_date", Name: "Order date", Type: fieldtype.Date},
-			{Key: "supplier", Name: "Supplier", Type: fieldtype.Text},
 			{Key: "total_amount", Name: "Total amount", Type: fieldtype.Money},
-			{Key: "requested_by", Name: "Requested by", Type: fieldtype.Text},
 		},
 		Tags: []BuiltinTag{
 			{Key: "po_status", Name: "Purchase order status", Type: tagtype.Group},
@@ -149,14 +147,16 @@ var builtinTemplates = []BuiltinTemplate{
 			{Key: "po_status_sent", Name: "Sent", Type: tagtype.Simple, GroupKey: "po_status"},
 			{Key: "po_status_approved", Name: "Approved", Type: tagtype.Simple, GroupKey: "po_status"},
 			{Key: "po_status_fulfilled", Name: "Fulfilled", Type: tagtype.Simple, GroupKey: "po_status"},
+			{Key: "organization", Name: "Organization", Type: tagtype.Group},
+			{Key: "person", Name: "Person", Type: tagtype.Group},
 		},
 		Attributes: []BuiltinAttribute{
 			{Type: attributetype.Field, FieldKey: "po_number", IsNameGiving: true},
 			{Type: attributetype.Field, FieldKey: "order_date"},
-			{Type: attributetype.Field, FieldKey: "supplier"},
 			{Type: attributetype.Field, FieldKey: "total_amount"},
-			{Type: attributetype.Field, FieldKey: "requested_by"},
-			{Type: attributetype.Tag, TagKey: "po_status", Name: "Status"},
+			{Type: attributetype.Tag, TagKey: "po_status", Name: "Status", IsNameGiving: true},
+			{Type: attributetype.Tag, TagKey: "organization", Name: "Supplier", IsNameGiving: true},
+			{Type: attributetype.Tag, TagKey: "person", Name: "Requested by"},
 		},
 	},
 	{
@@ -167,7 +167,6 @@ var builtinTemplates = []BuiltinTemplate{
 			{Key: "policy_name", Name: "Policy name", Type: fieldtype.Text},
 			{Key: "effective_date", Name: "Effective date", Type: fieldtype.Date},
 			{Key: "version", Name: "Version", Type: fieldtype.Text},
-			{Key: "owner", Name: "Owner", Type: fieldtype.Text},
 		},
 		Tags: []BuiltinTag{
 			{Key: "policy_status", Name: "Policy status", Type: tagtype.Group},
@@ -180,14 +179,15 @@ var builtinTemplates = []BuiltinTemplate{
 			{Key: "department_finance", Name: "Finance", Type: tagtype.Simple, GroupKey: "department"},
 			{Key: "department_operations", Name: "Operations", Type: tagtype.Simple, GroupKey: "department"},
 			{Key: "department_other", Name: "Other", Type: tagtype.Simple, GroupKey: "department"},
+			{Key: "person", Name: "Person", Type: tagtype.Group},
 		},
 		Attributes: []BuiltinAttribute{
 			{Type: attributetype.Field, FieldKey: "policy_name", IsNameGiving: true},
 			{Type: attributetype.Field, FieldKey: "effective_date"},
 			{Type: attributetype.Field, FieldKey: "version"},
-			{Type: attributetype.Field, FieldKey: "owner"},
-			{Type: attributetype.Tag, TagKey: "policy_status", Name: "Status"},
+			{Type: attributetype.Tag, TagKey: "policy_status", Name: "Status", IsNameGiving: true},
 			{Type: attributetype.Tag, TagKey: "department", Name: "Department"},
+			{Type: attributetype.Tag, TagKey: "person", Name: "Owner", IsNameGiving: true},
 		},
 	},
 	{
@@ -196,7 +196,6 @@ var builtinTemplates = []BuiltinTemplate{
 		Icon: "assignment",
 		Fields: []BuiltinField{
 			{Key: "project_name", Name: "Project name", Type: fieldtype.Text},
-			{Key: "owner", Name: "Owner", Type: fieldtype.Text},
 			{Key: "start_date", Name: "Start date", Type: fieldtype.Date},
 			{Key: "target_date", Name: "Target date", Type: fieldtype.Date},
 		},
@@ -211,14 +210,15 @@ var builtinTemplates = []BuiltinTemplate{
 			{Key: "project_type_report", Name: "Report", Type: tagtype.Simple, GroupKey: "project_type"},
 			{Key: "project_type_spec", Name: "Spec", Type: tagtype.Simple, GroupKey: "project_type"},
 			{Key: "project_type_other", Name: "Other", Type: tagtype.Simple, GroupKey: "project_type"},
+			{Key: "person", Name: "Person", Type: tagtype.Group},
 		},
 		Attributes: []BuiltinAttribute{
 			{Type: attributetype.Field, FieldKey: "project_name", IsNameGiving: true},
-			{Type: attributetype.Field, FieldKey: "owner"},
 			{Type: attributetype.Field, FieldKey: "start_date"},
 			{Type: attributetype.Field, FieldKey: "target_date"},
-			{Type: attributetype.Tag, TagKey: "project_status", Name: "Status"},
+			{Type: attributetype.Tag, TagKey: "project_status", Name: "Status", IsNameGiving: true},
 			{Type: attributetype.Tag, TagKey: "project_type", Name: "Type"},
+			{Type: attributetype.Tag, TagKey: "person", Name: "Owner", IsNameGiving: true},
 		},
 	},
 	{
@@ -228,8 +228,6 @@ var builtinTemplates = []BuiltinTemplate{
 		Fields: []BuiltinField{
 			{Key: "meeting_date", Name: "Meeting date", Type: fieldtype.Date},
 			{Key: "title", Name: "Title", Type: fieldtype.Text},
-			{Key: "organizer", Name: "Organizer", Type: fieldtype.Text},
-			{Key: "participants", Name: "Participants", Type: fieldtype.Text},
 		},
 		Tags: []BuiltinTag{
 			{Key: "meeting_type", Name: "Meeting type", Type: tagtype.Group},
@@ -239,14 +237,15 @@ var builtinTemplates = []BuiltinTemplate{
 			{Key: "meeting_status", Name: "Meeting status", Type: tagtype.Group},
 			{Key: "meeting_status_draft", Name: "Draft", Type: tagtype.Simple, GroupKey: "meeting_status"},
 			{Key: "meeting_status_final", Name: "Final", Type: tagtype.Simple, GroupKey: "meeting_status"},
+			{Key: "person", Name: "Person", Type: tagtype.Group},
 		},
 		Attributes: []BuiltinAttribute{
 			{Type: attributetype.Field, FieldKey: "title", IsNameGiving: true},
 			{Type: attributetype.Field, FieldKey: "meeting_date"},
-			{Type: attributetype.Field, FieldKey: "organizer"},
-			{Type: attributetype.Field, FieldKey: "participants"},
 			{Type: attributetype.Tag, TagKey: "meeting_type", Name: "Type"},
-			{Type: attributetype.Tag, TagKey: "meeting_status", Name: "Status"},
+			{Type: attributetype.Tag, TagKey: "meeting_status", Name: "Status", IsNameGiving: true},
+			{Type: attributetype.Tag, TagKey: "person", Name: "Organizer", IsNameGiving: true},
+			{Type: attributetype.Tag, TagKey: "person", Name: "Participants", IsNameGiving: true},
 		},
 	},
 	{
@@ -255,7 +254,6 @@ var builtinTemplates = []BuiltinTemplate{
 		Icon: "account_balance_wallet",
 		Fields: []BuiltinField{
 			{Key: "report_period", Name: "Report period", Type: fieldtype.Text},
-			{Key: "employee", Name: "Employee", Type: fieldtype.Text},
 			{Key: "total_amount", Name: "Total amount", Type: fieldtype.Money},
 			{Key: "submission_date", Name: "Submission date", Type: fieldtype.Date},
 		},
@@ -271,13 +269,14 @@ var builtinTemplates = []BuiltinTemplate{
 			{Key: "department_finance", Name: "Finance", Type: tagtype.Simple, GroupKey: "department"},
 			{Key: "department_operations", Name: "Operations", Type: tagtype.Simple, GroupKey: "department"},
 			{Key: "department_other", Name: "Other", Type: tagtype.Simple, GroupKey: "department"},
+			{Key: "person", Name: "Person", Type: tagtype.Group},
 		},
 		Attributes: []BuiltinAttribute{
-			{Type: attributetype.Field, FieldKey: "employee", IsNameGiving: true},
-			{Type: attributetype.Field, FieldKey: "report_period"},
+			{Type: attributetype.Tag, TagKey: "person", Name: "Employee", IsNameGiving: true},
+			{Type: attributetype.Field, FieldKey: "report_period", IsNameGiving: true},
 			{Type: attributetype.Field, FieldKey: "total_amount"},
 			{Type: attributetype.Field, FieldKey: "submission_date"},
-			{Type: attributetype.Tag, TagKey: "expense_status", Name: "Status"},
+			{Type: attributetype.Tag, TagKey: "expense_status", Name: "Status", IsNameGiving: true},
 			{Type: attributetype.Tag, TagKey: "department", Name: "Department"},
 		},
 	},
@@ -308,6 +307,7 @@ func registerBuiltinStrings() {
 	wx.T("EUR")
 	wx.T("USD")
 	wx.T("GBP")
+	wx.T("Organization")
 	wx.T("Receipt")
 	wx.T("Receipt date")
 	wx.T("Vendor")
@@ -384,4 +384,5 @@ func registerBuiltinStrings() {
 	wx.T("Rejected")
 	wx.T("Expense status")
 	wx.T("Expense department")
+	wx.T("Person")
 }

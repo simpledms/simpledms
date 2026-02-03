@@ -72,8 +72,15 @@ func (qq *File) FilenameInApp(ctx ctxx.Context, withDocumentType bool) string {
 		return qq.Data.Name
 	}
 
+	if len(filenameElems) == 0 {
+		return qq.Data.Name
+	}
+
 	if withDocumentType {
-		return strings.Join(filenameElems, ", ")
+		if len(filenameElems) == 1 {
+			return filenameElems[0] + ": " + qq.Data.Name
+		}
+		return filenameElems[0] + ": " + strings.Join(filenameElems[1:], ", ")
 	}
 
 	if len(filenameElems) <= 1 {
