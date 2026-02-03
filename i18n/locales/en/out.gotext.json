@@ -1499,6 +1499,41 @@
             ]
         },
         {
+            "id": "Import is only available for empty spaces.",
+            "message": "Import is only available for empty spaces.",
+            "translation": ""
+        },
+        {
+            "id": "Please select at least one document type.",
+            "message": "Please select at least one document type.",
+            "translation": ""
+        },
+        {
+            "id": "Document types imported.",
+            "message": "Document types imported.",
+            "translation": ""
+        },
+        {
+            "id": "Import from library",
+            "message": "Import from library",
+            "translation": ""
+        },
+        {
+            "id": "Import",
+            "message": "Import",
+            "translation": ""
+        },
+        {
+            "id": "No library document types available yet.",
+            "message": "No library document types available yet.",
+            "translation": ""
+        },
+        {
+            "id": "Select document types to import:",
+            "message": "Select document types to import:",
+            "translation": ""
+        },
+        {
             "id": "Could not convert id to integer.",
             "message": "Could not convert id to integer.",
             "translation": ""
@@ -1879,11 +1914,6 @@
             "translation": ""
         },
         {
-            "id": "Create space",
-            "message": "Create space",
-            "translation": ""
-        },
-        {
             "id": "Space «{Name}» created.",
             "message": "Space «{Name}» created.",
             "translation": "",
@@ -1897,6 +1927,16 @@
                     "expr": "data.Name"
                 }
             ]
+        },
+        {
+            "id": "Create space",
+            "message": "Create space",
+            "translation": ""
+        },
+        {
+            "id": "Select document types to add to this space:",
+            "message": "Select document types to add to this space:",
+            "translation": ""
         },
         {
             "id": "Space deleted.",
@@ -2496,6 +2536,11 @@
             "translation": ""
         },
         {
+            "id": "Library template keys",
+            "message": "Library template keys",
+            "translation": ""
+        },
+        {
             "id": "Local",
             "message": "Local",
             "translation": ""
@@ -2628,6 +2673,11 @@
         {
             "id": "Tag",
             "message": "Tag",
+            "translation": ""
+        },
+        {
+            "id": "Template keys",
+            "message": "Template keys",
             "translation": ""
         },
         {
@@ -2838,6 +2888,421 @@
         {
             "id": "Could not copy temporary file.",
             "message": "Could not copy temporary file.",
+            "translation": ""
+        },
+        {
+            "id": "Invoice",
+            "message": "Invoice",
+            "translation": ""
+        },
+        {
+            "id": "Invoice number",
+            "message": "Invoice number",
+            "translation": ""
+        },
+        {
+            "id": "Invoice date",
+            "message": "Invoice date",
+            "translation": ""
+        },
+        {
+            "id": "Supplier",
+            "message": "Supplier",
+            "translation": ""
+        },
+        {
+            "id": "Due date",
+            "message": "Due date",
+            "translation": ""
+        },
+        {
+            "id": "Status",
+            "message": "Status",
+            "translation": ""
+        },
+        {
+            "id": "Open",
+            "message": "Open",
+            "translation": ""
+        },
+        {
+            "id": "Paid",
+            "message": "Paid",
+            "translation": ""
+        },
+        {
+            "id": "Overdue",
+            "message": "Overdue",
+            "translation": ""
+        },
+        {
+            "id": "Invoice status",
+            "message": "Invoice status",
+            "translation": ""
+        },
+        {
+            "id": "Organization",
+            "message": "Organization",
+            "translation": ""
+        },
+        {
+            "id": "Receipt",
+            "message": "Receipt",
+            "translation": ""
+        },
+        {
+            "id": "Receipt date",
+            "message": "Receipt date",
+            "translation": ""
+        },
+        {
+            "id": "Vendor",
+            "message": "Vendor",
+            "translation": ""
+        },
+        {
+            "id": "Payment method",
+            "message": "Payment method",
+            "translation": ""
+        },
+        {
+            "id": "Receipt category",
+            "message": "Receipt category",
+            "translation": ""
+        },
+        {
+            "id": "Travel",
+            "message": "Travel",
+            "translation": ""
+        },
+        {
+            "id": "Meals",
+            "message": "Meals",
+            "translation": ""
+        },
+        {
+            "id": "Office",
+            "message": "Office",
+            "translation": ""
+        },
+        {
+            "id": "Software",
+            "message": "Software",
+            "translation": ""
+        },
+        {
+            "id": "Other",
+            "message": "Other",
+            "translation": ""
+        },
+        {
+            "id": "Contract",
+            "message": "Contract",
+            "translation": ""
+        },
+        {
+            "id": "Contract name",
+            "message": "Contract name",
+            "translation": ""
+        },
+        {
+            "id": "Parties",
+            "message": "Parties",
+            "translation": ""
+        },
+        {
+            "id": "Start date",
+            "message": "Start date",
+            "translation": ""
+        },
+        {
+            "id": "End date",
+            "message": "End date",
+            "translation": ""
+        },
+        {
+            "id": "Draft",
+            "message": "Draft",
+            "translation": ""
+        },
+        {
+            "id": "Active",
+            "message": "Active",
+            "translation": ""
+        },
+        {
+            "id": "Expired",
+            "message": "Expired",
+            "translation": ""
+        },
+        {
+            "id": "Terminated",
+            "message": "Terminated",
+            "translation": ""
+        },
+        {
+            "id": "Contract status",
+            "message": "Contract status",
+            "translation": ""
+        },
+        {
+            "id": "Contract type",
+            "message": "Contract type",
+            "translation": ""
+        },
+        {
+            "id": "Service",
+            "message": "Service",
+            "translation": ""
+        },
+        {
+            "id": "Sales",
+            "message": "Sales",
+            "translation": ""
+        },
+        {
+            "id": "NDA",
+            "message": "NDA",
+            "translation": ""
+        },
+        {
+            "id": "Purchase Order",
+            "message": "Purchase Order",
+            "translation": ""
+        },
+        {
+            "id": "PO number",
+            "message": "PO number",
+            "translation": ""
+        },
+        {
+            "id": "Order date",
+            "message": "Order date",
+            "translation": ""
+        },
+        {
+            "id": "Requested by",
+            "message": "Requested by",
+            "translation": ""
+        },
+        {
+            "id": "Sent",
+            "message": "Sent",
+            "translation": ""
+        },
+        {
+            "id": "Approved",
+            "message": "Approved",
+            "translation": ""
+        },
+        {
+            "id": "Fulfilled",
+            "message": "Fulfilled",
+            "translation": ""
+        },
+        {
+            "id": "Purchase order status",
+            "message": "Purchase order status",
+            "translation": ""
+        },
+        {
+            "id": "Policy",
+            "message": "Policy",
+            "translation": ""
+        },
+        {
+            "id": "Policy name",
+            "message": "Policy name",
+            "translation": ""
+        },
+        {
+            "id": "Effective date",
+            "message": "Effective date",
+            "translation": ""
+        },
+        {
+            "id": "Archived",
+            "message": "Archived",
+            "translation": ""
+        },
+        {
+            "id": "Policy status",
+            "message": "Policy status",
+            "translation": ""
+        },
+        {
+            "id": "Policy department",
+            "message": "Policy department",
+            "translation": ""
+        },
+        {
+            "id": "Department",
+            "message": "Department",
+            "translation": ""
+        },
+        {
+            "id": "HR",
+            "message": "HR",
+            "translation": ""
+        },
+        {
+            "id": "IT",
+            "message": "IT",
+            "translation": ""
+        },
+        {
+            "id": "Finance",
+            "message": "Finance",
+            "translation": ""
+        },
+        {
+            "id": "Operations",
+            "message": "Operations",
+            "translation": ""
+        },
+        {
+            "id": "Project Document",
+            "message": "Project Document",
+            "translation": ""
+        },
+        {
+            "id": "Project name",
+            "message": "Project name",
+            "translation": ""
+        },
+        {
+            "id": "Target date",
+            "message": "Target date",
+            "translation": ""
+        },
+        {
+            "id": "In progress",
+            "message": "In progress",
+            "translation": ""
+        },
+        {
+            "id": "Complete",
+            "message": "Complete",
+            "translation": ""
+        },
+        {
+            "id": "On hold",
+            "message": "On hold",
+            "translation": ""
+        },
+        {
+            "id": "Project status",
+            "message": "Project status",
+            "translation": ""
+        },
+        {
+            "id": "Project type",
+            "message": "Project type",
+            "translation": ""
+        },
+        {
+            "id": "Plan",
+            "message": "Plan",
+            "translation": ""
+        },
+        {
+            "id": "Report",
+            "message": "Report",
+            "translation": ""
+        },
+        {
+            "id": "Spec",
+            "message": "Spec",
+            "translation": ""
+        },
+        {
+            "id": "Meeting Notes",
+            "message": "Meeting Notes",
+            "translation": ""
+        },
+        {
+            "id": "Meeting date",
+            "message": "Meeting date",
+            "translation": ""
+        },
+        {
+            "id": "Title",
+            "message": "Title",
+            "translation": ""
+        },
+        {
+            "id": "Organizer",
+            "message": "Organizer",
+            "translation": ""
+        },
+        {
+            "id": "Participants",
+            "message": "Participants",
+            "translation": ""
+        },
+        {
+            "id": "Internal",
+            "message": "Internal",
+            "translation": ""
+        },
+        {
+            "id": "Client",
+            "message": "Client",
+            "translation": ""
+        },
+        {
+            "id": "Final",
+            "message": "Final",
+            "translation": ""
+        },
+        {
+            "id": "Meeting type",
+            "message": "Meeting type",
+            "translation": ""
+        },
+        {
+            "id": "Meeting status",
+            "message": "Meeting status",
+            "translation": ""
+        },
+        {
+            "id": "Expense Report",
+            "message": "Expense Report",
+            "translation": ""
+        },
+        {
+            "id": "Report period",
+            "message": "Report period",
+            "translation": ""
+        },
+        {
+            "id": "Employee",
+            "message": "Employee",
+            "translation": ""
+        },
+        {
+            "id": "Submission date",
+            "message": "Submission date",
+            "translation": ""
+        },
+        {
+            "id": "Submitted",
+            "message": "Submitted",
+            "translation": ""
+        },
+        {
+            "id": "Expense status",
+            "message": "Expense status",
+            "translation": ""
+        },
+        {
+            "id": "Expense department",
+            "message": "Expense department",
+            "translation": ""
+        },
+        {
+            "id": "Person",
+            "message": "Person",
             "translation": ""
         },
         {
