@@ -2,7 +2,6 @@
 *.sqlite
 .tmp
 .secrets
-*notes*
 .simpledms/inbox/**
 **/.testdata/**
 node_modules
