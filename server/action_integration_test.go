@@ -32,10 +32,17 @@ type actionTestHarness struct {
 	mainDB    *sqlx.MainDB
 	tenantDBs *tenantdbs.TenantDBs
 	infra     *common.Infra
+	actions   *action.Actions
 	router    *Router
+	metaPath  string
+	i18n      *i18n.I18n
 }
 
 func newActionTestHarness(t *testing.T) *actionTestHarness {
+	return newActionTestHarnessWithSaaS(t, false)
+}
+
+func newActionTestHarnessWithSaaS(t *testing.T, isSaaSModeEnabled bool) *actionTestHarness {
 	t.Helper()
 
 	metaPath := t.TempDir()
@@ -52,7 +59,7 @@ func newActionTestHarness(t *testing.T) *actionTestHarness {
 		}
 	})
 
-	systemConfig := initSystemConfig(t, mainDB)
+	systemConfig := initSystemConfig(t, mainDB, isSaaSModeEnabled)
 
 	templates := template.New("app")
 	templates.Funcs(ui.TemplateFuncMap(templates))
@@ -86,11 +93,14 @@ func newActionTestHarness(t *testing.T) *actionTestHarness {
 		mainDB:    mainDB,
 		tenantDBs: tenantDBs,
 		infra:     infra,
+		actions:   actions,
 		router:    router,
+		metaPath:  metaPath,
+		i18n:      i18nx,
 	}
 }
 
-func initSystemConfig(t *testing.T, mainDB *sqlx.MainDB) *modelmain.SystemConfig {
+func initSystemConfig(t *testing.T, mainDB *sqlx.MainDB, isSaaSModeEnabled bool) *modelmain.SystemConfig {
 	t.Helper()
 
 	ctx := context.Background()
@@ -119,7 +129,7 @@ func initSystemConfig(t *testing.T, mainDB *sqlx.MainDB) *modelmain.SystemConfig
 	}
 
 	systemConfigx := mainDB.ReadWriteConn.SystemConfig.Query().FirstX(ctx)
-	return modelmain.NewSystemConfig(systemConfigx, false, false, true)
+	return modelmain.NewSystemConfig(systemConfigx, isSaaSModeEnabled, false, true)
 }
 
 func createAccount(t *testing.T, mainDB *sqlx.MainDB, email, password string) {
