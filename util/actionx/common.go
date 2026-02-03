@@ -7,9 +7,10 @@ import (
 )
 
 type Config struct {
-	endpoint   string
-	method     string
-	isReadOnly bool
+	endpoint         string
+	method           string
+	isReadOnly       bool
+	usesSeparatedCmd bool // TODO reference to cmd instead?
 }
 
 func NewConfig(
@@ -54,6 +55,11 @@ func (qq *Config) EndpointWithParams(wrapper ResponseWrapper, hxTarget string) s
 
 func (qq *Config) IsReadOnly() bool {
 	return qq.isReadOnly
+}
+
+func (qq *Config) SetUsesSeparatedCmd(val bool) *Config {
+	qq.usesSeparatedCmd = val
+	return qq
 }
 
 // TODO return url?
@@ -107,7 +113,7 @@ func (qq *Config) endpointWithParams(endpoint string, wrapper ResponseWrapper, h
 }
 
 func (qq *Config) FormRoute() string {
-	if qq.isReadOnly {
+	if qq.isReadOnly && !qq.usesSeparatedCmd {
 		return ""
 	}
 	return fmt.Sprintf("POST %s", qq.FormEndpoint())

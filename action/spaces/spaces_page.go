@@ -52,8 +52,8 @@ func (qq *SpacesPage) Widget(ctx ctxx.Context, state *SpacesPageState) renderabl
 					wx.NewIcon("add"),
 					wx.T("Create space"),
 				},
-				HTMXAttrs: qq.actions.CreateSpaceCmd.ModalLinkAttrs(
-					qq.actions.CreateSpaceCmd.Data("", ""),
+				HTMXAttrs: qq.actions.CreateSpaceDialog.ModalLinkAttrs(
+					qq.actions.CreateSpaceDialog.Data("", ""),
 					"",
 				),
 			},

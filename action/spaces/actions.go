@@ -9,9 +9,10 @@ type Actions struct {
 	SpacesPage        *SpacesPage // TODO SpacePage?
 	SpaceCardsPartial *SpaceCardsPartial
 
-	CreateSpaceCmd *CreateSpaceCmd
-	EditSpaceCmd   *EditSpaceCmd
-	DeleteSpaceCmd *DeleteSpaceCmd
+	CreateSpaceCmd    *CreateSpaceCmd
+	CreateSpaceDialog *CreateSpaceDialog
+	EditSpaceCmd      *EditSpaceCmd
+	DeleteSpaceCmd    *DeleteSpaceCmd
 }
 
 func NewActions(infra *common.Infra) *Actions {
@@ -21,9 +22,10 @@ func NewActions(infra *common.Infra) *Actions {
 		SpacesPage:        NewSpacesPage(infra, actions),
 		SpaceCardsPartial: NewSpaceCardsPartial(infra, actions),
 
-		CreateSpaceCmd: NewCreateSpaceCmd(infra, actions),
-		EditSpaceCmd:   NewRenameSpace(infra, actions),
-		DeleteSpaceCmd: NewDeleteSpaceCmd(infra, actions),
+		CreateSpaceCmd:    NewCreateSpaceCmd(infra, actions),
+		CreateSpaceDialog: NewCreateSpaceDialog(infra, actions),
+		EditSpaceCmd:      NewRenameSpace(infra, actions),
+		DeleteSpaceCmd:    NewDeleteSpaceCmd(infra, actions),
 	}
 	return actions
 }

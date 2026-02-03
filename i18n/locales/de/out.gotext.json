@@ -1999,6 +1999,55 @@
             "fuzzy": true
         },
         {
+            "id": "Import is only available for empty spaces.",
+            "message": "Import is only available for empty spaces.",
+            "translation": "Import ist nur für leere Spaces verfügbar.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Please select at least one document type.",
+            "message": "Please select at least one document type.",
+            "translation": "Bitte wähle mindestens einen Dokumenttyp aus.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Document types imported.",
+            "message": "Document types imported.",
+            "translation": "Dokumenttypen importiert.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Import from library",
+            "message": "Import from library",
+            "translation": "Aus der Bibliothek importieren",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Import",
+            "message": "Import",
+            "translation": "Importieren",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No library document types available yet.",
+            "message": "No library document types available yet.",
+            "translation": "Noch keine Dokumenttypen in der Bibliothek verfügbar.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Select document types to import:",
+            "message": "Select document types to import:",
+            "translation": "Wähle Dokumenttypen zum Importieren:",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Could not convert id to integer.",
             "message": "Could not convert id to integer.",
             "translation": "ID konnte nicht in eine Ganzzahl umgewandelt werden.",
@@ -2498,13 +2547,6 @@
             "fuzzy": true
         },
         {
-            "id": "Create space",
-            "message": "Create space",
-            "translation": "Space erstellen",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "Space «{Name}» created.",
             "message": "Space «{Name}» created.",
             "translation": "Space «{Name}» erstellt.",
@@ -2519,6 +2561,20 @@
                     "expr": "data.Name"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "Create space",
+            "message": "Create space",
+            "translation": "Space erstellen",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Select document types to add to this space:",
+            "message": "Select document types to add to this space:",
+            "translation": "Wähle Dokumenttypen, die zu diesem Space hinzugefügt werden sollen:",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -3298,6 +3354,13 @@
             "fuzzy": true
         },
         {
+            "id": "Library template keys",
+            "message": "Library template keys",
+            "translation": "Bibliothek-Vorlagenschlüssel",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Local",
             "message": "Local",
             "translation": "Lokal",
@@ -3482,6 +3545,13 @@
             "message": "Tag",
             "translation": "Tag",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Template keys",
+            "message": "Template keys",
+            "translation": "Vorlagenschlüssel",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -3774,6 +3844,587 @@
             "message": "Could not copy temporary file.",
             "translation": "Temporäre Datei konnte nicht kopiert werden.",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Invoice",
+            "message": "Invoice",
+            "translation": "Rechnung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invoice number",
+            "message": "Invoice number",
+            "translation": "Rechnungsnummer",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invoice date",
+            "message": "Invoice date",
+            "translation": "Rechnungsdatum",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Supplier",
+            "message": "Supplier",
+            "translation": "Lieferant",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Due date",
+            "message": "Due date",
+            "translation": "Fälligkeitsdatum",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Status",
+            "message": "Status",
+            "translation": "Status",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Open",
+            "message": "Open",
+            "translation": "Offen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Paid",
+            "message": "Paid",
+            "translation": "Bezahlt",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Overdue",
+            "message": "Overdue",
+            "translation": "Überfällig",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invoice status",
+            "message": "Invoice status",
+            "translation": "Rechnungsstatus",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Organization",
+            "message": "Organization",
+            "translation": "Organisation",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Receipt",
+            "message": "Receipt",
+            "translation": "Beleg",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Receipt date",
+            "message": "Receipt date",
+            "translation": "Belegdatum",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Vendor",
+            "message": "Vendor",
+            "translation": "Händler",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Payment method",
+            "message": "Payment method",
+            "translation": "Zahlungsmethode",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Receipt category",
+            "message": "Receipt category",
+            "translation": "Belegkategorie",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Travel",
+            "message": "Travel",
+            "translation": "Reise",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Meals",
+            "message": "Meals",
+            "translation": "Mahlzeiten",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Office",
+            "message": "Office",
+            "translation": "Büro",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Software",
+            "message": "Software",
+            "translation": "Software",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Other",
+            "message": "Other",
+            "translation": "Sonstiges",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Contract",
+            "message": "Contract",
+            "translation": "Vertrag",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Contract name",
+            "message": "Contract name",
+            "translation": "Vertragsname",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Parties",
+            "message": "Parties",
+            "translation": "Parteien",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Start date",
+            "message": "Start date",
+            "translation": "Startdatum",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "End date",
+            "message": "End date",
+            "translation": "Enddatum",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Draft",
+            "message": "Draft",
+            "translation": "Entwurf",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Active",
+            "message": "Active",
+            "translation": "Aktiv",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Expired",
+            "message": "Expired",
+            "translation": "Abgelaufen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Terminated",
+            "message": "Terminated",
+            "translation": "Gekündigt",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Contract status",
+            "message": "Contract status",
+            "translation": "Vertragsstatus",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Contract type",
+            "message": "Contract type",
+            "translation": "Vertragstyp",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Service",
+            "message": "Service",
+            "translation": "Dienstleistung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sales",
+            "message": "Sales",
+            "translation": "Verkauf",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "NDA",
+            "message": "NDA",
+            "translation": "NDA",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Purchase Order",
+            "message": "Purchase Order",
+            "translation": "Bestellauftrag",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "PO number",
+            "message": "PO number",
+            "translation": "Bestellnummer",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Order date",
+            "message": "Order date",
+            "translation": "Bestelldatum",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Requested by",
+            "message": "Requested by",
+            "translation": "Angefordert von",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sent",
+            "message": "Sent",
+            "translation": "Gesendet",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Approved",
+            "message": "Approved",
+            "translation": "Genehmigt",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Fulfilled",
+            "message": "Fulfilled",
+            "translation": "Erfüllt",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Purchase order status",
+            "message": "Purchase order status",
+            "translation": "Status des Bestellauftrags",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Policy",
+            "message": "Policy",
+            "translation": "Richtlinie",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Policy name",
+            "message": "Policy name",
+            "translation": "Richtlinienname",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Effective date",
+            "message": "Effective date",
+            "translation": "Gültig ab",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Archived",
+            "message": "Archived",
+            "translation": "Archiviert",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Policy status",
+            "message": "Policy status",
+            "translation": "Richtlinienstatus",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Policy department",
+            "message": "Policy department",
+            "translation": "Richtlinienabteilung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Department",
+            "message": "Department",
+            "translation": "Abteilung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "HR",
+            "message": "HR",
+            "translation": "HR",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "IT",
+            "message": "IT",
+            "translation": "IT",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Finance",
+            "message": "Finance",
+            "translation": "Finanzen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Operations",
+            "message": "Operations",
+            "translation": "Betrieb",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Project Document",
+            "message": "Project Document",
+            "translation": "Projektdokument",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Project name",
+            "message": "Project name",
+            "translation": "Projektname",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Target date",
+            "message": "Target date",
+            "translation": "Zieldatum",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "In progress",
+            "message": "In progress",
+            "translation": "In Bearbeitung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Complete",
+            "message": "Complete",
+            "translation": "Abgeschlossen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "On hold",
+            "message": "On hold",
+            "translation": "Pausiert",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Project status",
+            "message": "Project status",
+            "translation": "Projektstatus",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Project type",
+            "message": "Project type",
+            "translation": "Projekttyp",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Plan",
+            "message": "Plan",
+            "translation": "Plan",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Report",
+            "message": "Report",
+            "translation": "Bericht",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Spec",
+            "message": "Spec",
+            "translation": "Spezifikation",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Meeting Notes",
+            "message": "Meeting Notes",
+            "translation": "Besprechungsnotizen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Meeting date",
+            "message": "Meeting date",
+            "translation": "Besprechungsdatum",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Title",
+            "message": "Title",
+            "translation": "Titel",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Organizer",
+            "message": "Organizer",
+            "translation": "Organisator",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Participants",
+            "message": "Participants",
+            "translation": "Teilnehmende",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Internal",
+            "message": "Internal",
+            "translation": "Intern",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Client",
+            "message": "Client",
+            "translation": "Kunde",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Final",
+            "message": "Final",
+            "translation": "Final",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Meeting type",
+            "message": "Meeting type",
+            "translation": "Besprechungstyp",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Meeting status",
+            "message": "Meeting status",
+            "translation": "Besprechungsstatus",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Expense Report",
+            "message": "Expense Report",
+            "translation": "Spesenbericht",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Report period",
+            "message": "Report period",
+            "translation": "Berichtszeitraum",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Employee",
+            "message": "Employee",
+            "translation": "Mitarbeitende",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Submission date",
+            "message": "Submission date",
+            "translation": "Einreichungsdatum",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Submitted",
+            "message": "Submitted",
+            "translation": "Eingereicht",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Expense status",
+            "message": "Expense status",
+            "translation": "Spesenstatus",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Expense department",
+            "message": "Expense department",
+            "translation": "Spesenabteilung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Person",
+            "message": "Person",
+            "translation": "Person",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {

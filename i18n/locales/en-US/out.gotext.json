@@ -2015,6 +2015,55 @@
             "fuzzy": true
         },
         {
+            "id": "Import is only available for empty spaces.",
+            "message": "Import is only available for empty spaces.",
+            "translation": "Import is only available for empty spaces.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Please select at least one document type.",
+            "message": "Please select at least one document type.",
+            "translation": "Please select at least one document type.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document types imported.",
+            "message": "Document types imported.",
+            "translation": "Document types imported.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Import from library",
+            "message": "Import from library",
+            "translation": "Import from library",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Import",
+            "message": "Import",
+            "translation": "Import",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No library document types available yet.",
+            "message": "No library document types available yet.",
+            "translation": "No library document types available yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Select document types to import:",
+            "message": "Select document types to import:",
+            "translation": "Select document types to import:",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Could not convert id to integer.",
             "message": "Could not convert id to integer.",
             "translation": "Could not convert id to integer.",
@@ -2521,13 +2570,6 @@
             "fuzzy": true
         },
         {
-            "id": "Create space",
-            "message": "Create space",
-            "translation": "Create space",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Space «{Name}» created.",
             "message": "Space «{Name}» created.",
             "translation": "Space «{Name}» created.",
@@ -2542,6 +2584,20 @@
                     "expr": "data.Name"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "Create space",
+            "message": "Create space",
+            "translation": "Create space",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Select document types to add to this space:",
+            "message": "Select document types to add to this space:",
+            "translation": "Select document types to add to this space:",
+            "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
@@ -3324,6 +3380,13 @@
             "fuzzy": true
         },
         {
+            "id": "Library template keys",
+            "message": "Library template keys",
+            "translation": "Library template keys",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Local",
             "message": "Local",
             "translation": "Local",
@@ -3509,6 +3572,13 @@
             "id": "Tag",
             "message": "Tag",
             "translation": "Tag",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Template keys",
+            "message": "Template keys",
+            "translation": "Template keys",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3803,6 +3873,587 @@
             "id": "Could not copy temporary file.",
             "message": "Could not copy temporary file.",
             "translation": "Could not copy temporary file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invoice",
+            "message": "Invoice",
+            "translation": "Invoice",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invoice number",
+            "message": "Invoice number",
+            "translation": "Invoice number",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invoice date",
+            "message": "Invoice date",
+            "translation": "Invoice date",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Supplier",
+            "message": "Supplier",
+            "translation": "Supplier",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Due date",
+            "message": "Due date",
+            "translation": "Due date",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Status",
+            "message": "Status",
+            "translation": "Status",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Open",
+            "message": "Open",
+            "translation": "Open",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Paid",
+            "message": "Paid",
+            "translation": "Paid",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Overdue",
+            "message": "Overdue",
+            "translation": "Overdue",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invoice status",
+            "message": "Invoice status",
+            "translation": "Invoice status",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Organization",
+            "message": "Organization",
+            "translation": "Organization",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Receipt",
+            "message": "Receipt",
+            "translation": "Receipt",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Receipt date",
+            "message": "Receipt date",
+            "translation": "Receipt date",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Vendor",
+            "message": "Vendor",
+            "translation": "Vendor",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Payment method",
+            "message": "Payment method",
+            "translation": "Payment method",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Receipt category",
+            "message": "Receipt category",
+            "translation": "Receipt category",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Travel",
+            "message": "Travel",
+            "translation": "Travel",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Meals",
+            "message": "Meals",
+            "translation": "Meals",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Office",
+            "message": "Office",
+            "translation": "Office",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Software",
+            "message": "Software",
+            "translation": "Software",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Other",
+            "message": "Other",
+            "translation": "Other",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Contract",
+            "message": "Contract",
+            "translation": "Contract",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Contract name",
+            "message": "Contract name",
+            "translation": "Contract name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Parties",
+            "message": "Parties",
+            "translation": "Parties",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Start date",
+            "message": "Start date",
+            "translation": "Start date",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "End date",
+            "message": "End date",
+            "translation": "End date",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Draft",
+            "message": "Draft",
+            "translation": "Draft",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Active",
+            "message": "Active",
+            "translation": "Active",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Expired",
+            "message": "Expired",
+            "translation": "Expired",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Terminated",
+            "message": "Terminated",
+            "translation": "Terminated",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Contract status",
+            "message": "Contract status",
+            "translation": "Contract status",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Contract type",
+            "message": "Contract type",
+            "translation": "Contract type",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Service",
+            "message": "Service",
+            "translation": "Service",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sales",
+            "message": "Sales",
+            "translation": "Sales",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "NDA",
+            "message": "NDA",
+            "translation": "NDA",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Purchase Order",
+            "message": "Purchase Order",
+            "translation": "Purchase Order",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "PO number",
+            "message": "PO number",
+            "translation": "PO number",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Order date",
+            "message": "Order date",
+            "translation": "Order date",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Requested by",
+            "message": "Requested by",
+            "translation": "Requested by",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sent",
+            "message": "Sent",
+            "translation": "Sent",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Approved",
+            "message": "Approved",
+            "translation": "Approved",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Fulfilled",
+            "message": "Fulfilled",
+            "translation": "Fulfilled",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Purchase order status",
+            "message": "Purchase order status",
+            "translation": "Purchase order status",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Policy",
+            "message": "Policy",
+            "translation": "Policy",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Policy name",
+            "message": "Policy name",
+            "translation": "Policy name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Effective date",
+            "message": "Effective date",
+            "translation": "Effective date",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Archived",
+            "message": "Archived",
+            "translation": "Archived",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Policy status",
+            "message": "Policy status",
+            "translation": "Policy status",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Policy department",
+            "message": "Policy department",
+            "translation": "Policy department",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Department",
+            "message": "Department",
+            "translation": "Department",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "HR",
+            "message": "HR",
+            "translation": "HR",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "IT",
+            "message": "IT",
+            "translation": "IT",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Finance",
+            "message": "Finance",
+            "translation": "Finance",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Operations",
+            "message": "Operations",
+            "translation": "Operations",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Project Document",
+            "message": "Project Document",
+            "translation": "Project Document",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Project name",
+            "message": "Project name",
+            "translation": "Project name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Target date",
+            "message": "Target date",
+            "translation": "Target date",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "In progress",
+            "message": "In progress",
+            "translation": "In progress",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Complete",
+            "message": "Complete",
+            "translation": "Complete",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "On hold",
+            "message": "On hold",
+            "translation": "On hold",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Project status",
+            "message": "Project status",
+            "translation": "Project status",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Project type",
+            "message": "Project type",
+            "translation": "Project type",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Plan",
+            "message": "Plan",
+            "translation": "Plan",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Report",
+            "message": "Report",
+            "translation": "Report",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Spec",
+            "message": "Spec",
+            "translation": "Spec",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Meeting Notes",
+            "message": "Meeting Notes",
+            "translation": "Meeting Notes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Meeting date",
+            "message": "Meeting date",
+            "translation": "Meeting date",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Title",
+            "message": "Title",
+            "translation": "Title",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Organizer",
+            "message": "Organizer",
+            "translation": "Organizer",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Participants",
+            "message": "Participants",
+            "translation": "Participants",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Internal",
+            "message": "Internal",
+            "translation": "Internal",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Client",
+            "message": "Client",
+            "translation": "Client",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Final",
+            "message": "Final",
+            "translation": "Final",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Meeting type",
+            "message": "Meeting type",
+            "translation": "Meeting type",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Meeting status",
+            "message": "Meeting status",
+            "translation": "Meeting status",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Expense Report",
+            "message": "Expense Report",
+            "translation": "Expense Report",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Report period",
+            "message": "Report period",
+            "translation": "Report period",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Employee",
+            "message": "Employee",
+            "translation": "Employee",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Submission date",
+            "message": "Submission date",
+            "translation": "Submission date",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Submitted",
+            "message": "Submitted",
+            "translation": "Submitted",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Expense status",
+            "message": "Expense status",
+            "translation": "Expense status",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Expense department",
+            "message": "Expense department",
+            "translation": "Expense department",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Person",
+            "message": "Person",
+            "translation": "Person",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
