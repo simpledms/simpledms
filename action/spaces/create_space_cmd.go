@@ -7,6 +7,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/common/spacerole"
+	"github.com/simpledms/simpledms/model/library"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -21,11 +22,15 @@ type CreateSpaceCmdData struct {
 	// TODO icon
 }
 
+type CreateSpaceCmdFormData struct {
+	CreateSpaceCmdData  `structs:",flatten"`
+	LibraryTemplateKeys []string `form:"library_template_keys"`
+}
+
 type CreateSpaceCmd struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
-	*autil.FormHelper[CreateSpaceCmdData]
 }
 
 func NewCreateSpaceCmd(infra *common.Infra, actions *Actions) *CreateSpaceCmd {
@@ -34,22 +39,14 @@ func NewCreateSpaceCmd(infra *common.Infra, actions *Actions) *CreateSpaceCmd {
 		false,
 	)
 	return &CreateSpaceCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[CreateSpaceCmdData](infra, config, wx.T("Create space")),
-	}
-}
-
-func (qq *CreateSpaceCmd) Data(name, description string) *CreateSpaceCmdData {
-	return &CreateSpaceCmdData{
-		Name:        name,
-		Description: description,
+		infra:   infra,
+		actions: actions,
+		Config:  config,
 	}
 }
 
 func (qq *CreateSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	data, err := autil.FormData[CreateSpaceCmdData](rw, req, ctx)
+	data, err := autil.FormData[CreateSpaceCmdFormData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
@@ -87,14 +84,13 @@ func (qq *CreateSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		SetIsRootDir(true).
 		SaveX(spaceCtx)
 
-	// TODO is there a better way to do this? in combination with AddSpaceIDs
-	/*ctx.TenantCtx().TTx.SpaceFileAssignment.Update().
-	SetIsRootDir(true).
-	Where(
-		spacefileassignment.SpaceID(spacex.ID),
-		spacefileassignment.FileID(rootDir.ID),
-	).ExecX(ctx)
-	*/
+	if len(data.LibraryTemplateKeys) > 0 {
+		service := library.NewService()
+		err = service.ImportBuiltinDocumentTypes(spaceCtx, data.LibraryTemplateKeys, false)
+		if err != nil {
+			return err
+		}
+	}
 
 	rw.Header().Set("HX-Trigger", event.SpaceCreated.String())
 	rw.AddRenderables(wx.NewSnackbarf("Space «%s» created.", data.Name))
