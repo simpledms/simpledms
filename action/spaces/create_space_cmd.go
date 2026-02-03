@@ -1,6 +1,7 @@
 package spaces
 
 import (
+	"log"
 	"time"
 
 	autil "github.com/simpledms/simpledms/action/util"
@@ -58,34 +59,44 @@ func (qq *CreateSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	// isDefault := ctx.TenantCtx().TTx.Space.Query().CountX(ctx) == 0
 	isDefault := false
 
-	spacex := ctx.TenantCtx().TTx.Space.Create().
+	spacex, err := ctx.TenantCtx().TTx.Space.Create().
 		SetName(data.Name).
 		SetDescription(data.Description).
 		SetIsFolderMode(true). // data.FolderMode).
-		SaveX(ctx)
+		Save(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 
 	// TODO could also use privacy.DecisionContext(ctx, privacy.Allow) instead
 	spaceCtx := ctxx.NewSpaceContext(ctx.TenantCtx(), spacex)
 
 	if data.AddMeAsSpaceOwner {
-		_ = ctx.TenantCtx().TTx.SpaceUserAssignment.
+		_, err := ctx.TenantCtx().TTx.SpaceUserAssignment.
 			Create().
 			SetSpaceID(spacex.ID).
 			SetUserID(ctx.TenantCtx().User.ID).
 			SetRole(spacerole.Owner).
 			SetIsDefault(isDefault).
-			SaveX(spaceCtx)
+			Save(spaceCtx)
+		if err != nil {
+			return err
+		}
 
 	}
 
-	_ = ctx.TenantCtx().TTx.File.Create().
+	_, err = ctx.TenantCtx().TTx.File.Create().
 		SetName(data.Name).
 		SetIsDirectory(true).
 		SetIndexedAt(time.Now()).
 		SetModifiedAt(time.Now()).
 		SetSpaceID(spacex.ID).
 		SetIsRootDir(true).
-		SaveX(spaceCtx)
+		Save(spaceCtx)
+	if err != nil {
+		return err
+	}
 
 	// TODO is there a better way to do this? in combination with AddSpaceIDs
 	/*ctx.TenantCtx().TTx.SpaceFileAssignment.Update().

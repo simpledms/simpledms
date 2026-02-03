@@ -1,6 +1,7 @@
 package spaces
 
 import (
+	"log"
 	"time"
 
 	autil "github.com/simpledms/simpledms/action/util"
@@ -46,11 +47,15 @@ func (qq *DeleteSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	}
 
 	// assumes it is on spaces screen, not dashboard
-	ctx.TenantCtx().TTx.Space.Update().
+	err = ctx.TenantCtx().TTx.Space.Update().
 		SetDeletedAt(time.Now()).
 		SetDeleter(ctx.TenantCtx().User).
 		Where(space.PublicID(entx.NewCIText(data.SpaceID))).
-		ExecX(ctx)
+		Exec(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 
 	rw.Header().Set("HX-Trigger", event.SpaceDeleted.String())
 	rw.AddRenderables(wx.NewSnackbarf("Space deleted."))
