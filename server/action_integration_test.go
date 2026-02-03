@@ -6,8 +6,13 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
+	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/common"
@@ -38,11 +43,30 @@ type actionTestHarness struct {
 	i18n      *i18n.I18n
 }
 
+type testS3Config struct {
+	client            *minio.Client
+	bucketName        string
+	disableEncryption bool
+}
+
 func newActionTestHarness(t *testing.T) *actionTestHarness {
-	return newActionTestHarnessWithSaaS(t, false)
+	return newActionTestHarnessWithSaaS(t, true) // saas mode required for registration
 }
 
 func newActionTestHarnessWithSaaS(t *testing.T, isSaaSModeEnabled bool) *actionTestHarness {
+	return newActionTestHarnessWithSaaSAndS3Config(t, isSaaSModeEnabled, nil)
+}
+
+func newActionTestHarnessWithS3(t *testing.T) *actionTestHarness {
+	return newActionTestHarnessWithSaaSAndS3(t, true) // saas mode required for registration
+}
+
+func newActionTestHarnessWithSaaSAndS3(t *testing.T, isSaaSModeEnabled bool) *actionTestHarness {
+	s3Config := newTestS3Config(t)
+	return newActionTestHarnessWithSaaSAndS3Config(t, isSaaSModeEnabled, s3Config)
+}
+
+func newActionTestHarnessWithSaaSAndS3Config(t *testing.T, isSaaSModeEnabled bool, s3Config *testS3Config) *actionTestHarness {
 	t.Helper()
 
 	metaPath := t.TempDir()
@@ -73,6 +97,9 @@ func newActionTestHarnessWithSaaS(t *testing.T, isSaaSModeEnabled bool) *actionT
 
 	fileSystem := filesystem.NewFileSystem(metaPath)
 	s3FileSystem := filesystem.NewS3FileSystem(nil, "", fileSystem, false)
+	if s3Config != nil {
+		s3FileSystem = filesystem.NewS3FileSystem(s3Config.client, s3Config.bucketName, fileSystem, s3Config.disableEncryption)
+	}
 
 	infra := common.NewInfra(
 		renderer,
@@ -98,6 +125,62 @@ func newActionTestHarnessWithSaaS(t *testing.T, isSaaSModeEnabled bool) *actionT
 		metaPath:  metaPath,
 		i18n:      i18nx,
 	}
+}
+
+func newTestS3Config(t *testing.T) *testS3Config {
+	t.Helper()
+
+	endpoint := envOrDefault("SIMPLEDMS_S3_ENDPOINT", "localhost:7070")
+	accessKey := envOrDefault("SIMPLEDMS_S3_ACCESS_KEY_ID", "unsafe-placeholder-access-key-id")
+	secretKey := envOrDefault("SIMPLEDMS_S3_SECRET_ACCESS_KEY", "unsafe-placeholder-secret-access-key")
+	bucketName := envOrDefault("SIMPLEDMS_S3_BUCKET_NAME", "simpledms")
+	useSSL := envOrDefaultBool("SIMPLEDMS_S3_USE_SSL", false)
+	disableEncryption := envOrDefaultBool("SIMPLEDMS_DISABLE_FILE_ENCRYPTION", false)
+
+	client, err := minio.New(endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(accessKey, secretKey, ""),
+		Secure: useSSL,
+	})
+	if err != nil {
+		t.Fatalf("init s3 client: %v", err)
+	}
+
+	ctx := context.Background()
+	exists, err := client.BucketExists(ctx, bucketName)
+	if err != nil {
+		t.Fatalf("s3 bucket exists: %v", err)
+	}
+	if !exists {
+		if err := client.MakeBucket(ctx, bucketName, minio.MakeBucketOptions{}); err != nil {
+			t.Fatalf("create s3 bucket: %v", err)
+		}
+	}
+
+	return &testS3Config{
+		client:            client,
+		bucketName:        bucketName,
+		disableEncryption: disableEncryption,
+	}
+}
+
+func envOrDefault(key, fallback string) string {
+	val := strings.TrimSpace(os.Getenv(key))
+	if val == "" {
+		return fallback
+	}
+	return val
+}
+
+func envOrDefaultBool(key string, fallback bool) bool {
+	val := strings.TrimSpace(os.Getenv(key))
+	if val == "" {
+		return fallback
+	}
+	parsed, err := strconv.ParseBool(val)
+	if err != nil {
+		return fallback
+	}
+	return parsed
 }
 
 func initSystemConfig(t *testing.T, mainDB *sqlx.MainDB, isSaaSModeEnabled bool) *modelmain.SystemConfig {
