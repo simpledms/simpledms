@@ -13,6 +13,8 @@ type Actions struct {
 
 	ListDocumentTypesPartial *DocumentTypesListPartial
 	CreateCmd                *CreateCmd
+	ImportFromLibraryCmd     *ImportFromLibraryCmd
+	ImportFromLibraryDialog  *ImportFromLibraryDialog
 	DeleteCmd                *DeleteCmd
 	RenameCmd                *RenameCmd
 	DetailsPartial           *DetailsPartial
@@ -35,6 +37,8 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions) *Actions {
 
 		ListDocumentTypesPartial: NewListDocumentTypesPartial(infra, actions),
 		CreateCmd:                NewCreateCmd(infra, actions),
+		ImportFromLibraryCmd:     NewImportFromLibraryCmd(infra, actions),
+		ImportFromLibraryDialog:  NewImportFromLibraryDialog(infra, actions),
 		DeleteCmd:                NewDeleteCmd(infra, actions),
 		RenameCmd:                NewRenameCmd(infra, actions),
 

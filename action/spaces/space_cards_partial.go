@@ -95,8 +95,8 @@ func (qq *SpaceCardsPartial) Widget(
 
 		if ctx.TenantCtx().User.Role == tenantrole.Owner {
 			actions = append(actions,
-				qq.actions.CreateSpaceCmd.ModalLink(
-					qq.actions.CreateSpaceCmd.Data("", ""),
+				qq.actions.CreateSpaceDialog.ModalLink(
+					qq.actions.CreateSpaceDialog.Data("", ""),
 					[]wx.IWidget{
 						&wx.Button{
 							Icon:  wx.NewIcon("add"),

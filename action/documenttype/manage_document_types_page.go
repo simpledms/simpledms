@@ -6,6 +6,7 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/model/library"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -46,6 +47,23 @@ func (qq *ManageDocumentTypesPage) Handler(
 				wx.T("Add document type"),
 			},
 		},
+	}
+
+	service := library.NewService()
+	if !service.SpaceHasMetadata(ctx) {
+		fabs = append(fabs, &wx.FloatingActionButton{
+			Icon:    "download",
+			Tooltip: wx.T("Import from library"),
+			FABSize: wx.FABSizeSmall,
+			HTMXAttrs: qq.actions.ImportFromLibraryDialog.ModalLinkAttrs(
+				qq.actions.ImportFromLibraryDialog.Data(),
+				"",
+			),
+			Child: []wx.IWidget{
+				wx.NewIcon("download"),
+				wx.T("Import from library"),
+			},
+		})
 	}
 
 	idStr := req.PathValue("id")

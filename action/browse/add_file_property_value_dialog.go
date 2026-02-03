@@ -24,8 +24,8 @@ type AddFilePropertyValueDialog struct {
 func NewAddFilePropertyValueDialog(infra *common.Infra, actions *Actions) *AddFilePropertyValueDialog {
 	config := actionx.NewConfig(
 		actions.Route("add-file-property-value-dialog"),
-		false,
-	)
+		true,
+	).SetUsesSeparatedCmd(true)
 	return &AddFilePropertyValueDialog{
 		infra:   infra,
 		actions: actions,
