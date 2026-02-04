@@ -26,6 +26,7 @@ import (
 	"github.com/simpledms/simpledms/model/common/mainrole"
 	"github.com/simpledms/simpledms/model/filesystem"
 	"github.com/simpledms/simpledms/model/modelmain"
+	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/ui"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/accountutil"
@@ -82,6 +83,11 @@ func newActionTestHarnessWithSaaSAndS3Config(t *testing.T, isSaaSModeEnabled boo
 			t.Fatalf("close main db: %v", err)
 		}
 	})
+	if s3Config != nil {
+		t.Cleanup(func() {
+			cleanupS3TestObjects(t, mainDB, s3Config)
+		})
+	}
 
 	systemConfig := initSystemConfig(t, mainDB, isSaaSModeEnabled)
 
@@ -124,6 +130,57 @@ func newActionTestHarnessWithSaaSAndS3Config(t *testing.T, isSaaSModeEnabled boo
 		router:    router,
 		metaPath:  metaPath,
 		i18n:      i18nx,
+	}
+}
+
+func cleanupS3TestObjects(t *testing.T, mainDB *sqlx.MainDB, s3Config *testS3Config) {
+	t.Helper()
+
+	if s3Config.client == nil || s3Config.bucketName == "" {
+		return
+	}
+
+	ctx := context.Background()
+	accounts := mainDB.ReadOnlyConn.Account.Query().AllX(ctx)
+	tenants := mainDB.ReadOnlyConn.Tenant.Query().AllX(ctx)
+
+	prefixes := make([]string, 0, len(accounts)+len(tenants)*3)
+	for _, accountx := range accounts {
+		prefixes = append(prefixes, pathx.S3TemporaryAccountStoragePrefix(accountx.PublicID.String()))
+	}
+	for _, tenantx := range tenants {
+		tenantID := tenantx.PublicID.String()
+		prefixes = append(prefixes,
+			pathx.S3StoragePrefix(tenantID),
+			pathx.S3TemporaryStoragePrefix(tenantID),
+			pathx.S3SqliteReplicationPrefix(tenantID),
+		)
+	}
+
+	for _, prefix := range prefixes {
+		if prefix == "" {
+			continue
+		}
+		cleanupS3Prefix(t, s3Config.client, s3Config.bucketName, prefix)
+	}
+}
+
+func cleanupS3Prefix(t *testing.T, client *minio.Client, bucketName, prefix string) {
+	t.Helper()
+
+	ctx := context.Background()
+	for object := range client.ListObjects(ctx, bucketName, minio.ListObjectsOptions{
+		Prefix:    prefix,
+		Recursive: true,
+	}) {
+		if object.Err != nil {
+			t.Errorf("list objects %s: %v", prefix, object.Err)
+			continue
+		}
+
+		if err := client.RemoveObject(ctx, bucketName, object.Key, minio.RemoveObjectOptions{}); err != nil {
+			t.Errorf("remove object %s: %v", object.Key, err)
+		}
 	}
 }
 
