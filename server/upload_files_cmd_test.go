@@ -3,6 +3,7 @@ package server
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
@@ -10,9 +11,11 @@ import (
 	"testing"
 
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -20,68 +23,48 @@ func TestUploadFilesCmdCreatesTemporaryFilesAndRedirects(t *testing.T) {
 	harness := newActionTestHarnessWithS3(t)
 
 	email := "shared@example.com"
-	password := "shared-secret"
-	createAccount(t, harness.mainDB, email, password)
+	createAccount(t, harness.mainDB, email, "shared-secret")
 
 	accountx := harness.mainDB.ReadWriteConn.Account.Query().
 		Where(account.EmailEQ(entx.NewCIText(email))).
 		OnlyX(context.Background())
 
-	mainTx, err := harness.mainDB.ReadWriteConn.Tx(context.Background())
-	if err != nil {
-		t.Fatalf("start main tx: %v", err)
-	}
-	committed := false
-	defer func() {
-		if committed {
-			return
+	var location string
+	err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+		req := newSharedUploadRequest(t, map[string]string{
+			"first.txt":  "hello",
+			"second.txt": "world",
+		})
+
+		rr := httptest.NewRecorder()
+		err := harness.actions.OpenFile.UploadFilesCmd.Handler(
+			httpx.NewResponseWriter(rr),
+			httpx.NewRequest(req),
+			mainCtx,
+		)
+		if err != nil {
+			return fmt.Errorf("upload files command: %w", err)
 		}
-		_ = mainTx.Rollback()
-	}()
 
-	visitorCtx := ctxx.NewVisitorContext(
-		context.Background(),
-		mainTx,
-		harness.i18n,
-		"",
-		"",
-		true,
-		harness.infra.SystemConfig().CommercialLicenseEnabled(),
-	)
-	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.tenantDBs)
+		if rr.Code != http.StatusFound {
+			return fmt.Errorf("expected status %d, got %d", http.StatusFound, rr.Code)
+		}
 
-	req := newSharedUploadRequest(t, map[string]string{
-		"first.txt":  "hello",
-		"second.txt": "world",
+		location = rr.Header().Get("Location")
+		if !strings.HasPrefix(location, "/open-file/select-space/") {
+			return fmt.Errorf("expected redirect to select-space, got %q", location)
+		}
+
+		return nil
 	})
-
-	rr := httptest.NewRecorder()
-	err = harness.actions.OpenFile.UploadFilesCmd.Handler(
-		httpx.NewResponseWriter(rr),
-		httpx.NewRequest(req),
-		mainCtx,
-	)
 	if err != nil {
 		t.Fatalf("upload files command: %v", err)
 	}
 
-	if rr.Code != http.StatusFound {
-		t.Fatalf("expected status %d, got %d", http.StatusFound, rr.Code)
-	}
-
-	location := rr.Header().Get("Location")
-	if !strings.HasPrefix(location, "/open-file/select-space/") {
-		t.Fatalf("expected redirect to select-space, got %q", location)
-	}
 	uploadToken := strings.TrimPrefix(location, "/open-file/select-space/")
 	if uploadToken == "" {
 		t.Fatal("expected upload token in redirect")
 	}
-
-	if err := mainTx.Commit(); err != nil {
-		t.Fatalf("commit main tx: %v", err)
-	}
-	committed = true
 
 	temporaryFiles := harness.mainDB.ReadWriteConn.TemporaryFile.Query().Where(
 		temporaryfile.OwnerID(accountx.ID),
@@ -89,6 +72,46 @@ func TestUploadFilesCmdCreatesTemporaryFilesAndRedirects(t *testing.T) {
 	).AllX(context.Background())
 	if len(temporaryFiles) != 2 {
 		t.Fatalf("expected 2 temporary files, got %d", len(temporaryFiles))
+	}
+}
+
+func TestUploadFilesCmdRejectsNonMultipartRequests(t *testing.T) {
+	harness := newActionTestHarnessWithS3(t)
+
+	email := "shared-invalid@example.com"
+	createAccount(t, harness.mainDB, email, "shared-secret")
+
+	accountx := harness.mainDB.ReadWriteConn.Account.Query().
+		Where(account.EmailEQ(entx.NewCIText(email))).
+		OnlyX(context.Background())
+
+	var handlerErr error
+	err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+		req := httptest.NewRequest(http.MethodPost, "/-/open-file/upload-files-cmd", strings.NewReader("plain"))
+		req.Header.Set("Content-Type", "text/plain")
+
+		rr := httptest.NewRecorder()
+		handlerErr = harness.actions.OpenFile.UploadFilesCmd.Handler(
+			httpx.NewResponseWriter(rr),
+			httpx.NewRequest(req),
+			mainCtx,
+		)
+		if handlerErr == nil {
+			return fmt.Errorf("expected error")
+		}
+
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("setup failed: %v", err)
+	}
+
+	httpErr, ok := handlerErr.(*e.HTTPError)
+	if !ok {
+		t.Fatalf("expected HTTPError, got %T", handlerErr)
+	}
+	if httpErr.StatusCode() != http.StatusInternalServerError {
+		t.Fatalf("expected status %d, got %d", http.StatusInternalServerError, httpErr.StatusCode())
 	}
 }
 
