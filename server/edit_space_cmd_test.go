@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -53,71 +54,58 @@ func TestEditSpaceCmdUpdatesSpaceAndRootDir(t *testing.T) {
 	accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
 	tenantDB := initTenantDB(t, harness, tenantx)
 
-	mainTx, tenantTx, tenantCtx := newTenantContext(t, harness, accountx, tenantx, tenantDB)
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+		spaceName := "Operations"
+		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
-	spaceName := "Operations"
-	createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
+		spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
 
-	spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
+		updatedName := "Operations & Logistics"
+		updatedDescription := "Updated description"
 
-	updatedName := "Operations & Logistics"
-	updatedDescription := "Updated description"
+		form := url.Values{}
+		form.Set("SpaceID", spacex.PublicID.String())
+		form.Set("Name", updatedName)
+		form.Set("Description", updatedDescription)
 
-	form := url.Values{}
-	form.Set("SpaceID", spacex.PublicID.String())
-	form.Set("Name", updatedName)
-	form.Set("Description", updatedDescription)
+		req := httptest.NewRequest(http.MethodPost, "/-/spaces/edit-space-cmd", strings.NewReader(form.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
-	req := httptest.NewRequest(http.MethodPost, "/-/spaces/edit-space-cmd", strings.NewReader(form.Encode()))
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		rr := httptest.NewRecorder()
+		err := harness.actions.Spaces.EditSpaceCmd.Handler(
+			httpx.NewResponseWriter(rr),
+			httpx.NewRequest(req),
+			tenantCtx,
+		)
+		if err != nil {
+			return fmt.Errorf("edit space command: %w", err)
+		}
 
-	rr := httptest.NewRecorder()
-	err := harness.actions.Spaces.EditSpaceCmd.Handler(
-		httpx.NewResponseWriter(rr),
-		httpx.NewRequest(req),
-		tenantCtx,
-	)
+		if header := rr.Header().Get("HX-Trigger"); header != event.SpaceUpdated.String() {
+			return fmt.Errorf("expected HX-Trigger %q, got %q", event.SpaceUpdated.String(), header)
+		}
+
+		updatedSpace := tenantCtx.TTx.Space.Query().Where(space.ID(spacex.ID)).OnlyX(tenantCtx)
+		if updatedSpace.Name != updatedName {
+			return fmt.Errorf("expected space name %q, got %q", updatedName, updatedSpace.Name)
+		}
+		if updatedSpace.Description != updatedDescription {
+			return fmt.Errorf("expected space description %q, got %q", updatedDescription, updatedSpace.Description)
+		}
+
+		rootDir := tenantCtx.TTx.File.Query().Where(
+			file.SpaceID(spacex.ID),
+			file.IsDirectory(true),
+			file.IsRootDir(true),
+		).OnlyX(tenantCtx)
+		if rootDir.Name != updatedName {
+			return fmt.Errorf("expected root dir name %q, got %q", updatedName, rootDir.Name)
+		}
+
+		return nil
+	})
 	if err != nil {
-		_ = tenantTx.Rollback()
-		_ = mainTx.Rollback()
 		t.Fatalf("edit space command: %v", err)
-	}
-
-	if header := rr.Header().Get("HX-Trigger"); header != event.SpaceUpdated.String() {
-		_ = tenantTx.Rollback()
-		_ = mainTx.Rollback()
-		t.Fatalf("expected HX-Trigger %q, got %q", event.SpaceUpdated.String(), header)
-	}
-
-	updatedSpace := tenantCtx.TTx.Space.Query().Where(space.ID(spacex.ID)).OnlyX(tenantCtx)
-	if updatedSpace.Name != updatedName {
-		_ = tenantTx.Rollback()
-		_ = mainTx.Rollback()
-		t.Fatalf("expected space name %q, got %q", updatedName, updatedSpace.Name)
-	}
-	if updatedSpace.Description != updatedDescription {
-		_ = tenantTx.Rollback()
-		_ = mainTx.Rollback()
-		t.Fatalf("expected space description %q, got %q", updatedDescription, updatedSpace.Description)
-	}
-
-	rootDir := tenantCtx.TTx.File.Query().Where(
-		file.SpaceID(spacex.ID),
-		file.IsDirectory(true),
-		file.IsRootDir(true),
-	).OnlyX(tenantCtx)
-	if rootDir.Name != updatedName {
-		_ = tenantTx.Rollback()
-		_ = mainTx.Rollback()
-		t.Fatalf("expected root dir name %q, got %q", updatedName, rootDir.Name)
-	}
-
-	if err := mainTx.Commit(); err != nil {
-		_ = tenantTx.Rollback()
-		t.Fatalf("commit main tx: %v", err)
-	}
-	if err := tenantTx.Commit(); err != nil {
-		t.Fatalf("commit tenant tx: %v", err)
 	}
 }
 

@@ -9,8 +9,10 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
+	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
@@ -48,43 +50,32 @@ func TestSpaceCreatePermissions(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			spaceName := fmt.Sprintf("Create Space %s", tc.name)
 
-			mainTx, tenantTx, tenantCtx := newTenantContext(t, harness, tc.accountx, tenantx, tenantDB)
-			form := url.Values{}
-			form.Set("Name", spaceName)
-			form.Set("Description", "Test description")
-			form.Set("AddMeAsSpaceOwner", "true")
+			err := withTenantContext(t, harness, tc.accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+				form := url.Values{}
+				form.Set("Name", spaceName)
+				form.Set("Description", "Test description")
+				form.Set("AddMeAsSpaceOwner", "true")
 
-			req := httptest.NewRequest(http.MethodPost, "/-/spaces/create-space-cmd", strings.NewReader(form.Encode()))
-			req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+				req := httptest.NewRequest(http.MethodPost, "/-/spaces/create-space-cmd", strings.NewReader(form.Encode()))
+				req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
-			rr := httptest.NewRecorder()
-			err := harness.actions.Spaces.CreateSpaceCmd.Handler(
-				httpx.NewResponseWriter(rr),
-				httpx.NewRequest(req),
-				tenantCtx,
-			)
-
+				rr := httptest.NewRecorder()
+				err := harness.actions.Spaces.CreateSpaceCmd.Handler(
+					httpx.NewResponseWriter(rr),
+					httpx.NewRequest(req),
+					tenantCtx,
+				)
+				if err != nil {
+					return err
+				}
+				return nil
+			})
 			if tc.expectErr {
 				if err == nil {
-					_ = tenantTx.Rollback()
-					_ = mainTx.Rollback()
 					t.Fatalf("expected error")
 				}
-				_ = tenantTx.Rollback()
-				_ = mainTx.Rollback()
-			} else {
-				if err != nil {
-					_ = tenantTx.Rollback()
-					_ = mainTx.Rollback()
-					t.Fatalf("create space: %v", err)
-				}
-				if err := mainTx.Commit(); err != nil {
-					_ = tenantTx.Rollback()
-					t.Fatalf("commit main tx: %v", err)
-				}
-				if err := tenantTx.Commit(); err != nil {
-					t.Fatalf("commit tenant tx: %v", err)
-				}
+			} else if err != nil {
+				t.Fatalf("create space: %v", err)
 			}
 
 			verifyMainTx, verifyTenantTx, verifyCtx := newTenantContext(t, harness, ownerAccount, tenantx, tenantDB)
@@ -132,41 +123,30 @@ func TestSpaceDeletePermissions(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			spaceID, spaceEntityID := createSpaceForDelete(t, harness, tenantx, tenantDB, ownerAccount, tc.name)
 
-			mainTx, tenantTx, tenantCtx := newTenantContext(t, harness, tc.accountx, tenantx, tenantDB)
-			form := url.Values{}
-			form.Set("SpaceID", spaceID)
+			err := withTenantContext(t, harness, tc.accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+				form := url.Values{}
+				form.Set("SpaceID", spaceID)
 
-			req := httptest.NewRequest(http.MethodPost, "/-/spaces/delete-space-cmd", strings.NewReader(form.Encode()))
-			req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+				req := httptest.NewRequest(http.MethodPost, "/-/spaces/delete-space-cmd", strings.NewReader(form.Encode()))
+				req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
-			rr := httptest.NewRecorder()
-			err := harness.actions.Spaces.DeleteSpaceCmd.Handler(
-				httpx.NewResponseWriter(rr),
-				httpx.NewRequest(req),
-				tenantCtx,
-			)
-
+				rr := httptest.NewRecorder()
+				err := harness.actions.Spaces.DeleteSpaceCmd.Handler(
+					httpx.NewResponseWriter(rr),
+					httpx.NewRequest(req),
+					tenantCtx,
+				)
+				if err != nil {
+					return err
+				}
+				return nil
+			})
 			if tc.expectErr {
 				if err == nil {
-					_ = tenantTx.Rollback()
-					_ = mainTx.Rollback()
 					t.Fatalf("expected error")
 				}
-				_ = tenantTx.Rollback()
-				_ = mainTx.Rollback()
-			} else {
-				if err != nil {
-					_ = tenantTx.Rollback()
-					_ = mainTx.Rollback()
-					t.Fatalf("delete space: %v", err)
-				}
-				if err := mainTx.Commit(); err != nil {
-					_ = tenantTx.Rollback()
-					t.Fatalf("commit main tx: %v", err)
-				}
-				if err := tenantTx.Commit(); err != nil {
-					t.Fatalf("commit tenant tx: %v", err)
-				}
+			} else if err != nil {
+				t.Fatalf("delete space: %v", err)
 			}
 
 			verifyMainTx, verifyTenantTx, verifyCtx := newTenantContext(t, harness, ownerAccount, tenantx, tenantDB)
