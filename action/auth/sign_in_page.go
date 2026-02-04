@@ -60,7 +60,7 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 		),
 		qq.actions.ResetPasswordCmd.ModalLink(
 			qq.actions.ResetPasswordCmd.Data(""),
-			wx.T("Forget password?"),
+			wx.T("Forgot password?"),
 			"",
 		),
 	)

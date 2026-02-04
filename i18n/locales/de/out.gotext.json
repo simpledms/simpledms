@@ -429,8 +429,8 @@
             "fuzzy": true
         },
         {
-            "id": "Forget password?",
-            "message": "Forget password?",
+            "id": "Forgot password?",
+            "message": "Forgot password?",
             "translation": "Passwort vergessen?",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true

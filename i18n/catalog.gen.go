@@ -266,7 +266,7 @@ var messageKeyToIndex = map[string]int{
 	"Folder isn't empty.":                      82,
 	"Folder mode is not enabled.":              471,
 	"Folders cannot be restored.":              366,
-	"Forget password?":                         61,
+	"Forgot password?":                         61,
 	"Form validation failed.":                  383,
 	"Found no account for this email address.": 55,
 	"French":                                   413,
@@ -1326,7 +1326,7 @@ const enData string = "" + // Size: 1213 bytes
 	"\x02A new temporary password was sent to your email address.\x02Set pass" +
 	"word\x02Initial password set successfully.\x02Sign in\x02Found no accoun" +
 	"t for this email address.\x02Sign up now.\x02Invalid credentials. Please" +
-	" try again.\x02Logged in successfully.\x02Sign in\x02Forget password?" +
+	" try again.\x02Logged in successfully.\x02Sign in\x02Forgot password?" +
 	"\x02Don't have an account? Sign up.\x02Invalid session cookie.\x02Sign u" +
 	"p\x02Sign up\x02Registration successful, please check your email for you" +
 	"r password.\x02Document type | Filter\x02Fields\x02Tag groups\x02No tag " +
@@ -1568,7 +1568,7 @@ const en_USData string = "" + // Size: 15585 bytes
 	"ess.\x02Set password\x02Initial password set successfully.\x02Sign in" +
 	"\x02Found no account for this email address.\x02Sign up now.\x02Invalid " +
 	"credentials. Please try again.\x02Logged in successfully.\x02Sign in onl" +
-	"y works over HTTPS or on localhost.\x02Sign in [subject]\x02Forget passw" +
+	"y works over HTTPS or on localhost.\x02Sign in [subject]\x02Forgot passw" +
 	"ord?\x02Don't have an account? Sign up.\x02Invalid session cookie.\x02Si" +
 	"gn up [subject]\x02Sign up\x02Sign up is disabled.\x02Registration succe" +
 	"ssful, please check your email for your password.\x02Add field\x02No una" +
@@ -2710,4 +2710,4 @@ const itData string = "" + // Size: 18200 bytes
 	"enticazione già impostato.\x02Impossibile generare il valore della sessi" +
 	"one.\x02Non sei autorizzato ad accedere alla risorsa richiesta."
 
-	// Total table size 86970 bytes (84KiB); checksum: A26F8D15
+	// Total table size 86970 bytes (84KiB); checksum: 63CAE569

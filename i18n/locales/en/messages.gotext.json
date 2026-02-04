@@ -275,9 +275,9 @@
 			"fuzzy": true
 		},
 		{
-			"id": "Forget password?",
-			"message": "Forget password?",
-			"translation": "Forget password?",
+			"id": "Forgot password?",
+			"message": "Forgot password?",
+			"translation": "Forgot password?",
 			"translatorComment": "",
 			"fuzzy": true
 		},

@@ -307,9 +307,9 @@
             "translation": "Sign in"
         },
         {
-            "id": "Forget password?",
-            "message": "Forget password?",
-            "translation": "Forget password?"
+            "id": "Forgot password?",
+            "message": "Forgot password?",
+            "translation": "Forgot password?"
         },
         {
             "id": "Don't have an account? Sign up.",
