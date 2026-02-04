@@ -57,7 +57,7 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 		tenantx := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).OnlyX(ctx)
 		tenantIdentity := tenantx.X25519IdentityEncrypted.Identity()
 
-		// TODO transaction?
+		// TODO transaction? if so, make sure OCRRetryCount gets increased
 		// TODO ensure that only files at final destination get processed;
 		//		are inbox files at final destination?
 		filesToProcess := tenantDB.ReadWriteConn.File.

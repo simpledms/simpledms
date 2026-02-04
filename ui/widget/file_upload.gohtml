@@ -78,6 +78,7 @@
 			}).use(Webcam).use(ScreenCapture).use(Audio).use(XHR, {
 				endpoint: '{{ .GetEndpoint }}',
 				fieldName: 'File',
+				limit: 5, // default value is 5
 				headers: { // TODO use htmx.ajax() instead?
 					// necessary for creating context
 					'HX-Current-URL': location.href, // FIXME is this okay?
