@@ -58,6 +58,15 @@ services:
         VGW_BACKEND: posix
         VGW_BACKEND_ARG: /data
 
+    toxiproxy:
+      image: shopify/toxiproxy:latest
+      restart: unless-stopped
+      depends_on:
+        - versitygw
+      ports:
+        - "8474:8474" # API
+        - "7071:7071" # s3 proxy listen port for tests
+
     #garage:
       #image: dxflrs/garage:v2.1.0
       #restart: unless-stopped
