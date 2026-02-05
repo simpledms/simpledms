@@ -78,6 +78,9 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	if data.ParentDirID == "" {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "No parent dir provided.")
 	}
+	if !ctx.SpaceCtx().TenantCtx().IsReadOnlyTx() {
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Read-only request context required.")
+	}
 
 	uploadedFile, uploadedFileHeader, err := req.FormFile("File")
 	if err != nil {
@@ -103,69 +106,42 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	prepared, filex, err := func() (*filesystem.PreparedUpload, *enttenant.File, error) {
-		tenantDB, ok := ctx.SpaceCtx().UnsafeTenantDB()
-		if !ok {
-			log.Println("tenant db not found", ctx.TenantCtx().Tenant.ID)
-			return nil, nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Tenant database not found.")
-		}
+	type uploadPrepareResult struct {
+		prepared *filesystem.PreparedUpload
+		filex    *enttenant.File
+	}
 
-		writeTx, err := tenantDB.Tx(ctx, false)
-		if err != nil {
-			log.Println(err)
-			return nil, nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not start transaction.")
-		}
-		committed := false
-		defer func() {
-			if committed {
-				return
-			}
-			if err := writeTx.Rollback(); err != nil {
-				log.Println(err)
-			}
-		}()
-
-		writeTenantCtx := ctxx.NewTenantContext(ctx.MainCtx(), writeTx, ctx.TenantCtx().Tenant)
-		writeSpace := writeTx.Space.GetX(writeTenantCtx, ctx.SpaceCtx().Space.ID)
-		writeSpaceCtx := ctxx.NewSpaceContext(writeTenantCtx, writeSpace)
-
+	prep, err := autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
 		prepared, filex, err := qq.infra.FileSystem().PrepareFileUpload(
-			writeSpaceCtx,
+			writeCtx,
 			filename,
 			parentDir.Data.ID,
 			data.AddToInbox,
 		)
 		if err != nil {
-			return nil, nil, err
+			return nil, err
 		}
-
-		if err := writeTx.Commit(); err != nil {
-			log.Println(err)
-			return nil, nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not save file.")
-		}
-		committed = true
-
-		return prepared, filex, nil
-	}()
+		return &uploadPrepareResult{prepared: prepared, filex: filex}, nil
+	})
 	if err != nil {
 		return err
 	}
 
-	fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFile(ctx, uploadedFile, prepared)
+	fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFile(ctx, uploadedFile, prep.prepared)
 	if err != nil {
-		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prepared, err, true)
+		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
 		return err
 	}
 
 	_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prepared, fileInfo, fileSize)
+		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep.prepared, fileInfo, fileSize)
 	})
 	if err != nil {
-		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prepared, err, false)
+		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, false)
 		return err
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("«%s» uploaded.", filex.Name))
+	rw.AddRenderables(wx.NewSnackbarf("«%s» uploaded.", prep.filex.Name))
 	// TODO does triggering event have an effect? request comes from uppy and isn't a HTMX request...
 	rw.Header().Add("HX-Trigger", event.FileUploaded.String())
 

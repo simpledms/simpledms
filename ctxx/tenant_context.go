@@ -16,10 +16,11 @@ type TenantContext struct {
 	// context.Context
 	// MainTx      *entmain.Tx
 	// Account     *entmain.Account // modelmain.Account would be better, but leads to circular dependency
-	TTx      *enttenant.Tx
-	TenantID string
-	Tenant   *entmain.Tenant // see comment on Account
-	User     *enttenant.User
+	TTx        *enttenant.Tx
+	TenantID   string
+	Tenant     *entmain.Tenant // see comment on Account
+	User       *enttenant.User
+	isReadOnly bool
 	// to dangerous because of newly introduced tmpStoragePrefix
 	// StoragePath     string // TODO belongs to context?
 	// S3StoragePrefix string
@@ -29,6 +30,7 @@ func NewTenantContext(
 	mainContext *MainContext,
 	tenantTx *enttenant.Tx,
 	tenant *entmain.Tenant,
+	isReadOnly bool,
 ) *TenantContext {
 	tenantID := tenant.PublicID.String()
 
@@ -43,6 +45,7 @@ func NewTenantContext(
 		TenantID:    tenantID,
 		Tenant:      tenant,
 		User:        userx,
+		isReadOnly:  isReadOnly,
 	}
 	tenantCtx.Context = context.WithValue(mainContext.Context, tenantCtxKey, tenantCtx)
 	return tenantCtx
@@ -54,6 +57,10 @@ func (qq *TenantContext) UnsafeTenantDB() (*sqlx.TenantDB, bool) {
 
 func (qq *TenantContext) TenantCtx() *TenantContext {
 	return qq
+}
+
+func (qq *TenantContext) IsReadOnlyTx() bool {
+	return qq.isReadOnly
 }
 
 func (qq *TenantContext) SpaceCtx() *SpaceContext {

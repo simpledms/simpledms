@@ -18,6 +18,7 @@ type MainContext struct {
 	// unsafe because must be used with care
 	unsafeMainDB    *sqlx.MainDB
 	unsafeTenantDBs *tenantdbs.TenantDBs
+	isReadOnly      bool
 }
 
 func NewMainContext(
@@ -26,6 +27,7 @@ func NewMainContext(
 	i18nx *i18n.I18n,
 	mainDB *sqlx.MainDB,
 	tenantDBs *tenantdbs.TenantDBs,
+	isReadOnly bool,
 ) *MainContext {
 	ctx.Printer = i18nx.Printer(account.Language.Tag())
 	langTagBase, _ := account.Language.Tag().Base() // TODO evaluate confidence?
@@ -36,6 +38,7 @@ func NewMainContext(
 		Account:         account,
 		unsafeMainDB:    mainDB,
 		unsafeTenantDBs: tenantDBs,
+		isReadOnly:      isReadOnly,
 	}
 	mainCtx.Context = context.WithValue(ctx.Context, mainCtxKey, mainCtx)
 	return mainCtx
@@ -67,7 +70,7 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() map[*entmain.Tenant][]*en
 		}
 
 		// necessary for permissions
-		tenantCtx := NewTenantContext(qq, tenantTx, tenantx)
+		tenantCtx := NewTenantContext(qq, tenantTx, tenantx, true)
 
 		// spaces = append(spaces, tenantDB.Space.Query().AllX(ctx)...)
 		spacesx, err := tenantDB.ReadOnlyConn.Space.Query().All(tenantCtx)
@@ -97,6 +100,10 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() map[*entmain.Tenant][]*en
 
 func (qq *MainContext) MainCtx() *MainContext {
 	return qq
+}
+
+func (qq *MainContext) IsReadOnlyTx() bool {
+	return qq.isReadOnly
 }
 
 func (qq *MainContext) TenantCtx() *TenantContext {

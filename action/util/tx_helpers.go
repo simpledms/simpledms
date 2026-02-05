@@ -16,6 +16,9 @@ import (
 
 func WithTenantWriteSpaceTx[T any](ctx *ctxx.SpaceContext, fn func(*ctxx.SpaceContext) (T, error)) (T, error) {
 	var zero T
+	if ctx != nil && !ctx.TenantCtx().IsReadOnlyTx() {
+		return fn(ctx)
+	}
 
 	tenantDB, ok := ctx.UnsafeTenantDB()
 	if !ok {
@@ -38,7 +41,7 @@ func WithTenantWriteSpaceTx[T any](ctx *ctxx.SpaceContext, fn func(*ctxx.SpaceCo
 		}
 	}()
 
-	writeTenantCtx := ctxx.NewTenantContext(ctx.MainCtx(), writeTx, ctx.TenantCtx().Tenant)
+	writeTenantCtx := ctxx.NewTenantContext(ctx.MainCtx(), writeTx, ctx.TenantCtx().Tenant, false)
 	writeSpace := writeTx.Space.GetX(writeTenantCtx, ctx.SpaceCtx().Space.ID)
 	writeSpaceCtx := ctxx.NewSpaceContext(writeTenantCtx, writeSpace)
 
@@ -73,6 +76,9 @@ func EnsureFileDoesNotExist(ctx ctxx.Context, filename string, parentDirID int64
 
 func WithMainWriteTx[T any](ctx ctxx.Context, fn func(*entmain.Tx) (T, error)) (T, error) {
 	var zero T
+	if ctx != nil && ctx.MainCtx() != nil && !ctx.MainCtx().IsReadOnlyTx() {
+		return fn(ctx.MainCtx().MainTx)
+	}
 
 	mainDB := ctx.MainCtx().UnsafeMainDB()
 	if mainDB == nil {
