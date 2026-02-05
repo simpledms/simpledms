@@ -139,7 +139,7 @@ func newTenantContextForUpload(
 	tenantx *entmain.Tenant,
 	tenantDB *sqlx.TenantDB,
 ) (*entmain.Tx, *enttenant.Tx, *ctxx.TenantContext, error) {
-	mainTx, err := harness.mainDB.ReadWriteConn.Tx(context.Background())
+	mainTx, err := harness.mainDB.ReadOnlyConn.Tx(context.Background())
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -153,15 +153,15 @@ func newTenantContextForUpload(
 		true,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
-	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs)
+	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs, true)
 
-	tenantTx, err := tenantDB.ReadWriteConn.Tx(context.Background())
+	tenantTx, err := tenantDB.ReadOnlyConn.Tx(context.Background())
 	if err != nil {
 		_ = mainTx.Rollback()
 		return nil, nil, nil, err
 	}
 
-	tenantCtx := ctxx.NewTenantContext(mainCtx, tenantTx, tenantx)
+	tenantCtx := ctxx.NewTenantContext(mainCtx, tenantTx, tenantx, true)
 	return mainTx, tenantTx, tenantCtx, nil
 }
 

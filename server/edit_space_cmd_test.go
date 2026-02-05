@@ -206,7 +206,7 @@ func newTenantContext(
 		true,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
-	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs)
+	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs, false)
 
 	tenantTx, err := tenantDB.ReadWriteConn.Tx(context.Background())
 	if err != nil {
@@ -214,7 +214,7 @@ func newTenantContext(
 		t.Fatalf("start tenant tx: %v", err)
 	}
 
-	tenantCtx := ctxx.NewTenantContext(mainCtx, tenantTx, tenantx)
+	tenantCtx := ctxx.NewTenantContext(mainCtx, tenantTx, tenantx, false)
 
 	return mainTx, tenantTx, tenantCtx
 }

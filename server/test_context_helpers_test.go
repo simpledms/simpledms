@@ -75,7 +75,7 @@ func withMainContext(
 		true,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
-	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs)
+	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs, false)
 
 	if err := fn(mainTx, mainCtx); err != nil {
 		return err
