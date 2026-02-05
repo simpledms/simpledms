@@ -126,7 +126,7 @@ func (qq *Config) endpointWithParams(endpoint string, wrapper ResponseWrapper, h
 }
 
 func (qq *Config) FormRoute() string {
-	if qq.isReadOnly && !qq.useManualTxManagement && !qq.usesSeparatedCmd {
+	if qq.isReadOnly {
 		return ""
 	}
 	return fmt.Sprintf("POST %s", qq.FormEndpoint())
