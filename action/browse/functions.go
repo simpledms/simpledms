@@ -5,7 +5,6 @@ import (
 	"math"
 	"net/http"
 
-	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/common/fieldtype"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -18,7 +17,7 @@ func fieldByProperty(
 	nilableAssignment *enttenant.FilePropertyAssignment,
 	htmxAttrsFn func(string) wx.HTMXAttrs,
 ) (wx.IWidget, bool) {
-	fieldID := autil.GenerateID(propertyx.Name) // TODO unique enough?
+	fieldID := filePropertyFieldID(propertyx.ID)
 	defaultValue := ""
 
 	switch propertyx.Type {

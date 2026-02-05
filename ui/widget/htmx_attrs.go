@@ -25,12 +25,16 @@ type HTMXAttrs struct {
 	HxTarget     string
 	HxSelect     string
 	HxSwap       string
+	HxSwapOOB    string
 	HxConfirm    string
 	HxInclude    string
 	HxBoost      string // for example used for file download links to disable boosting
 	HxHeaders    template.JS
 	HxOn         *HxOn
 	HxIndicator  string
+	// hxPerserve doesn't work well for input[text], see:
+	// https://htmx.org/attributes/hx-preserve/
+	HxPreserve bool
 
 	// Action        Actionable
 	LoadInPopover bool

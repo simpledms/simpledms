@@ -104,7 +104,7 @@ func (qq *FilePropertiesPartial) Widget(ctx ctxx.Context, data *FilePropertiesPa
 		},
 		HTMXAttrs: wx.HTMXAttrs{
 			HxTrigger: event.HxTrigger(
-				event.FilePropertyUpdated,
+				// event.FilePropertyUpdated,
 				event.PropertyCreated,
 				event.PropertyUpdated,
 				event.PropertyDeleted,
