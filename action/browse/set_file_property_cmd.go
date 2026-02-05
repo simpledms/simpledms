@@ -114,11 +114,9 @@ func (qq *SetFilePropertyCmd) Handler(
 	rw.Header().Set("HX-Trigger", event.FilePropertyUpdated.String())
 
 	if propertyx.Type == fieldtype.Date {
-		rw.AddRenderables(dateSuggestionsContainer(
+		dateSuggestionsWidget := NewDateSuggestionsWidget(filex, filePropertyFieldID(propertyx.ID), propertyx.ID)
+		rw.AddRenderables(dateSuggestionsWidget.Widget(
 			ctx,
-			filex,
-			filePropertyFieldID(propertyx.ID),
-			propertyx.ID,
 			data.DateValue.IsZero(),
 			"outerHTML",
 		))

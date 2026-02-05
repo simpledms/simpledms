@@ -309,11 +309,9 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 			hasDateValue = true
 		}
 		fieldID := field.(wx.IWidgetWithID).GetID()
-		children = append(children, dateSuggestionsContainer(
+		dateSuggestionsWidget := NewDateSuggestionsWidget(filex, fieldID, attributex.Edges.Property.ID)
+		children = append(children, dateSuggestionsWidget.Widget(
 			ctx,
-			filex,
-			fieldID,
-			attributex.Edges.Property.ID,
 			!hasDateValue,
 			"",
 		))
