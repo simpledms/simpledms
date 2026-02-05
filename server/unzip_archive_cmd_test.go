@@ -39,15 +39,28 @@ func TestUnzipArchiveCmdExtractsFilesAndDeletesArchive(t *testing.T) {
 		rootDir := spaceCtx.SpaceRootDir()
 
 		zipData := createZipArchive(t)
-		zipFile, err := harness.infra.FileSystem().AddFile(
+		prepared, zipFile, err := harness.infra.FileSystem().PrepareFileUpload(
 			spaceCtx,
-			bytes.NewReader(zipData),
 			"archive.zip",
-			false,
 			rootDir.ID,
+			false,
 		)
 		if err != nil {
-			return fmt.Errorf("add zip file: %w", err)
+			return fmt.Errorf("prepare zip file: %w", err)
+		}
+
+		fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFile(
+			spaceCtx,
+			bytes.NewReader(zipData),
+			prepared,
+		)
+		if err != nil {
+			return fmt.Errorf("upload zip file: %w", err)
+		}
+
+		err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+		if err != nil {
+			return fmt.Errorf("finalize zip file: %w", err)
 		}
 
 		form := url.Values{}
@@ -119,15 +132,28 @@ func TestUnzipArchiveCmdRejectsNonZipFile(t *testing.T) {
 		spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
 		rootDir := spaceCtx.SpaceRootDir()
 
-		filex, err := harness.infra.FileSystem().AddFile(
+		prepared, filex, err := harness.infra.FileSystem().PrepareFileUpload(
 			spaceCtx,
-			bytes.NewReader([]byte("not a zip")),
 			"notes.txt",
-			false,
 			rootDir.ID,
+			false,
 		)
 		if err != nil {
-			return fmt.Errorf("add file: %w", err)
+			return fmt.Errorf("prepare file: %w", err)
+		}
+
+		fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFile(
+			spaceCtx,
+			bytes.NewReader([]byte("not a zip")),
+			prepared,
+		)
+		if err != nil {
+			return fmt.Errorf("upload file: %w", err)
+		}
+
+		err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+		if err != nil {
+			return fmt.Errorf("finalize file: %w", err)
 		}
 
 		form := url.Values{}
