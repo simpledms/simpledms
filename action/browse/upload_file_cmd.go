@@ -8,6 +8,8 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/model/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -39,7 +41,7 @@ func NewUploadFileCmd(
 	config := actionx.NewConfig(
 		actions.Route("upload-file-cmd"),
 		false,
-	)
+	).EnableManualTxManagement()
 
 	formHelper := autil.NewFormHelper[UploadFileCmdData](
 		infra,
@@ -97,14 +99,69 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 
 	parentDir := qq.infra.FileRepo.GetX(ctx, data.ParentDirID)
 
-	filex, err := qq.infra.FileSystem().AddFile(
-		ctx,
-		uploadedFile,
-		filename,
-		data.AddToInbox,
-		parentDir.Data.ID,
-	)
+	if err := autil.EnsureFileDoesNotExist(ctx, filename, parentDir.Data.ID, data.AddToInbox); err != nil {
+		return err
+	}
+
+	prepared, filex, err := func() (*filesystem.PreparedUpload, *enttenant.File, error) {
+		tenantDB, ok := ctx.SpaceCtx().UnsafeTenantDB()
+		if !ok {
+			log.Println("tenant db not found", ctx.TenantCtx().Tenant.ID)
+			return nil, nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Tenant database not found.")
+		}
+
+		writeTx, err := tenantDB.Tx(ctx, false)
+		if err != nil {
+			log.Println(err)
+			return nil, nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not start transaction.")
+		}
+		committed := false
+		defer func() {
+			if committed {
+				return
+			}
+			if err := writeTx.Rollback(); err != nil {
+				log.Println(err)
+			}
+		}()
+
+		writeTenantCtx := ctxx.NewTenantContext(ctx.MainCtx(), writeTx, ctx.TenantCtx().Tenant)
+		writeSpace := writeTx.Space.GetX(writeTenantCtx, ctx.SpaceCtx().Space.ID)
+		writeSpaceCtx := ctxx.NewSpaceContext(writeTenantCtx, writeSpace)
+
+		prepared, filex, err := qq.infra.FileSystem().PrepareFileUpload(
+			writeSpaceCtx,
+			filename,
+			parentDir.Data.ID,
+			data.AddToInbox,
+		)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		if err := writeTx.Commit(); err != nil {
+			log.Println(err)
+			return nil, nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not save file.")
+		}
+		committed = true
+
+		return prepared, filex, nil
+	}()
 	if err != nil {
+		return err
+	}
+
+	fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFile(ctx, uploadedFile, prepared)
+	if err != nil {
+		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prepared, err, true)
+		return err
+	}
+
+	_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prepared, fileInfo, fileSize)
+	})
+	if err != nil {
+		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prepared, err, false)
 		return err
 	}
 

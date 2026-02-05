@@ -398,6 +398,9 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "upload_started_at", Type: field.TypeTime, Nullable: true},
+		{Name: "upload_failed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "upload_succeeded_at", Type: field.TypeTime, Nullable: true},
 		{Name: "filename", Type: field.TypeString},
 		{Name: "size", Type: field.TypeInt64, Nullable: true},
 		{Name: "size_in_storage", Type: field.TypeInt64},
@@ -422,13 +425,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "stored_files_users_creator",
-				Columns:    []*schema.Column{StoredFilesColumns[16]},
+				Columns:    []*schema.Column{StoredFilesColumns[19]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "stored_files_users_updater",
-				Columns:    []*schema.Column{StoredFilesColumns[17]},
+				Columns:    []*schema.Column{StoredFilesColumns[20]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

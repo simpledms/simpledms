@@ -18,9 +18,11 @@ import (
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
+	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
+	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/model/common/storagetype"
@@ -163,170 +165,220 @@ func (qq *S3FileSystem) UnsafeOpenFile(ctx context.Context, x25519Identity *age.
 	return pipeReader, nil
 }
 
-// IMPORTANT
-// very similar code in FileSystem
-//
-// caller has to close fileToSave
-func (qq *S3FileSystem) AddFile(
+func (qq *S3FileSystem) PrepareFileUpload(
 	ctx ctxx.Context,
-	// fileToSave multipart.File,
-	fileToSave io.Reader,
-	filename string,
-	isInInbox bool,
+	originalFilename string,
 	parentDirFileID int64,
-) (*enttenant.File, error) {
-	// TODO check if bucket exists
-
-	if ctx.SpaceCtx().Space.IsFolderMode {
-		// TODO how to handle this? is somewhat uncessary...
-
-		fileExists := ctx.SpaceCtx().Space.QueryFiles().
-			Where(file.Name(filename), file.ParentID(parentDirFileID), file.IsInInbox(isInInbox)).
-			ExistX(ctx)
-		if fileExists {
-			return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File already exists.")
-		}
+	isInInbox bool,
+) (*PreparedUpload, *enttenant.File, error) {
+	meta, err := qq.prepareUploadMetadata(ctx, originalFilename)
+	if err != nil {
+		return nil, nil, err
+	}
+	if err := qq.ensureFileDoesNotExistInFolderMode(ctx, meta.originalFilename, parentDirFileID, isInInbox); err != nil {
+		return nil, nil, err
 	}
 
-	// log.Println("debug: 001a")
-
-	// FIXME handle transaction or let indexer handle such situations?
 	filex := ctx.TenantCtx().TTx.File.Create().
-		SetName(filename).
+		SetName(meta.originalFilename).
 		SetIsDirectory(false).
 		SetIndexedAt(time.Now()).
-		// TODO take mode time from uploadedFile if possible at all
-		// SetModifiedAt(fileInfo.ModTime()). // TODO necessary?
 		SetParentID(parentDirFileID).
 		SetSpaceID(ctx.SpaceCtx().Space.ID).
 		SetIsInInbox(isInInbox).
-		// AddSpaceIDs(ctx.SpaceCtx().Space.ID).
-		// AddVersions(fileVersionx).
 		SaveX(ctx)
 
-	// log.Println("debug: 002a")
-
-	_, err := qq.addFile(
-		ctx,
-		filex,
-		fileToSave,
-		filename,
-	)
+	storedFilex, prepared, err := qq.createStoredFileForPreparedUpload(ctx, meta)
 	if err != nil {
 		log.Println(err)
+		return nil, nil, err
+	}
+
+	if err := qq.addFileVersion(ctx, filex, storedFilex); err != nil {
+		log.Println(err)
+		return nil, nil, err
+	}
+
+	return prepared, filex, nil
+}
+
+func (qq *S3FileSystem) PrepareFileVersionUpload(
+	ctx ctxx.Context,
+	originalFilename string,
+	fileID int64,
+) (*PreparedUpload, error) {
+	meta, err := qq.prepareUploadMetadata(ctx, originalFilename)
+	if err != nil {
 		return nil, err
 	}
 
-	return filex, nil
-}
-
-func (qq *S3FileSystem) AddFileVersion(
-	ctx ctxx.Context,
-	fileToSave io.Reader,
-	filename string,
-	fileID int64,
-) (*enttenant.StoredFile, error) {
 	filex := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
 	if filex.IsDirectory {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
 	}
-
-	if ctx.SpaceCtx().Space.IsFolderMode {
-		// TODO how to handle this? is somewhat uncessary...
-
-		fileExists := ctx.SpaceCtx().Space.QueryFiles().
-			Where(file.Name(filename), file.ParentID(filex.ParentID), file.IsInInbox(filex.IsInInbox)).
-			ExistX(ctx)
-		if fileExists {
-			return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File already exists.")
-		}
+	if err := qq.ensureFileDoesNotExistInFolderMode(ctx, meta.originalFilename, filex.ParentID, filex.IsInInbox); err != nil {
+		return nil, err
 	}
 
-	filex.Update().SetName(filename).SaveX(ctx)
+	filex.Update().SetName(meta.originalFilename).SaveX(ctx)
 
-	storedFilex, err := qq.addFile(
-		ctx,
-		filex,
-		fileToSave,
-		filename,
-	)
+	storedFilex, prepared, err := qq.createStoredFileForPreparedUpload(ctx, meta)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
-
-	return storedFilex, nil
-}
-
-func (qq *S3FileSystem) addFile(
-	ctx ctxx.Context,
-	filex *enttenant.File,
-	fileToSave io.Reader,
-	filename string,
-) (*enttenant.StoredFile, error) {
-	tmpStoragePrefix := pathx.S3TemporaryStoragePrefix(ctx.TenantCtx().TenantID) // ctx.TenantCtx().S3StoragePrefix
-	if tmpStoragePrefix == "" {
-		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Storage path is empty.")
-	}
-	finalStoragePrefix := pathx.S3StoragePrefix(ctx.TenantCtx().TenantID)
-
-	x25519Identity, err := qq.x25519Identity(ctx, tmpStoragePrefix)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-	// don't use public id of model.File because a file has multiple versions
-	// and thus it breaks if another version is added
-	storedFilePublicID := util.NewPublicID()
-	fileInfo, storageFilename, fileSize, err := qq.saveFile(
-		ctx,
-		x25519Identity,
-		fileToSave,
-		filename,
-		storedFilePublicID,
-		tmpStoragePrefix,
-	)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-
-	// log.Println("debug: 003a")
-
-	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
-		// SetPublicID(entx.NewCIText(storedFilePublicID)).
-		SetFilename(filename).
-		SetSize(fileSize).               // fileInfo.Size is gzipped size
-		SetSizeInStorage(fileInfo.Size). // gzipped size
-		SetStorageType(storagetype.S3).
-		SetBucketName(qq.bucketName).
-		SetStoragePath(finalStoragePrefix).
-		SetStorageFilename(storageFilename).
-		// temporary because it gets moved by scheduler to prevent orphan files in object storage
-		// if transaction fails
-		SetTemporaryStoragePath(tmpStoragePrefix).
-		SetTemporaryStorageFilename(storageFilename).
-		SetSha256(fileInfo.ChecksumSHA256).
-		// SetMimeType(contentType).
-		SaveX(ctx)
 
 	if err := qq.addFileVersion(ctx, filex, storedFilex); err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	// log.Println("debug: 004a")
+	return prepared, nil
+}
 
-	// TODO not very clean; only in case contentType is empty
-	_, err = qq.UpdateMimeType(ctx, false, model.NewStoredFile(storedFilex))
-	if err != nil {
-		log.Println(err)
-		// not critical
+func (qq *S3FileSystem) prepareUploadMetadata(ctx ctxx.Context, originalFilename string) (*uploadMetadata, error) {
+	originalFilename = filepath.Clean(originalFilename)
+	if !filenamex.IsAllowed(originalFilename) {
+		log.Println("invalid filename")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
 	}
 
-	// log.Println("debug: 005a")
+	tmpStoragePrefix := pathx.S3TemporaryStoragePrefix(ctx.TenantCtx().TenantID)
+	if tmpStoragePrefix == "" {
+		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Storage path is empty.")
+	}
 
-	return storedFilex, nil
+	storageFilenameWithoutExt := util.NewPublicID()
+	storageFilename := qq.storageFilename(originalFilename, storageFilenameWithoutExt)
+
+	return &uploadMetadata{
+		originalFilename:          originalFilename,
+		temporaryStoragePath:      tmpStoragePrefix,
+		storageFilenameWithoutExt: storageFilenameWithoutExt,
+		storageFilename:           storageFilename,
+	}, nil
+}
+
+func (qq *S3FileSystem) createStoredFileForPreparedUpload(
+	ctx ctxx.Context,
+	meta *uploadMetadata,
+) (*enttenant.StoredFile, *PreparedUpload, error) {
+	finalStoragePrefix := pathx.S3StoragePrefix(ctx.TenantCtx().TenantID)
+	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
+		SetFilename(meta.originalFilename).
+		SetSizeInStorage(0).
+		SetStorageType(storagetype.S3).
+		SetBucketName(qq.bucketName).
+		SetStoragePath(finalStoragePrefix).
+		SetStorageFilename(meta.storageFilename).
+		// temporary because it gets moved by scheduler to prevent orphan files in object storage
+		// if transaction fails
+		SetTemporaryStoragePath(meta.temporaryStoragePath).
+		SetTemporaryStorageFilename(meta.storageFilename).
+		SaveX(ctx)
+
+	prepared := &PreparedUpload{
+		StoredFileID:              storedFilex.ID,
+		OriginalFilename:          meta.originalFilename,
+		StorageFilenameWithoutExt: meta.storageFilenameWithoutExt,
+		StorageFilename:           meta.storageFilename,
+		TemporaryStoragePath:      meta.temporaryStoragePath,
+		TemporaryStorageFilename:  meta.storageFilename,
+	}
+
+	return storedFilex, prepared, nil
+}
+
+func (qq *S3FileSystem) ensureFileDoesNotExistInFolderMode(
+	ctx ctxx.Context,
+	filename string,
+	parentDirFileID int64,
+	isInInbox bool,
+) error {
+	if !ctx.SpaceCtx().Space.IsFolderMode {
+		return nil
+	}
+
+	fileExists := ctx.SpaceCtx().Space.QueryFiles().
+		Where(file.Name(filename), file.ParentID(parentDirFileID), file.IsInInbox(isInInbox)).
+		ExistX(ctx)
+	if fileExists {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "File already exists.")
+	}
+
+	return nil
+}
+
+// caller has to close fileToSave
+func (qq *S3FileSystem) UploadPreparedFile(
+	ctx ctxx.Context,
+	fileToSave io.Reader,
+	prepared *PreparedUpload,
+) (*minio.UploadInfo, int64, error) {
+	return qq.uploadPreparedFileWithParams(
+		ctx,
+		fileToSave,
+		prepared.OriginalFilename,
+		prepared.StorageFilenameWithoutExt,
+		prepared.TemporaryStoragePath,
+		prepared.StorageFilename,
+	)
+}
+
+func (qq *S3FileSystem) FinalizePreparedUpload(
+	ctx ctxx.Context,
+	prepared *PreparedUpload,
+	fileInfo *minio.UploadInfo,
+	fileSize int64,
+) error {
+	ctxWithIncomplete := enttenantschema.WithUnfinishedUploads(ctx)
+	storedFilex := ctx.TenantCtx().TTx.StoredFile.GetX(ctxWithIncomplete, prepared.StoredFileID)
+	storedFilex = storedFilex.Update().
+		SetSize(fileSize).
+		SetSizeInStorage(fileInfo.Size).
+		SetSha256(fileInfo.ChecksumSHA256).
+		SetUploadSucceededAt(time.Now()).
+		SaveX(ctxWithIncomplete)
+
+	_, err := qq.UpdateMimeType(ctx, false, model.NewStoredFile(storedFilex))
+	if err != nil {
+		log.Println(err)
+	}
+
+	return nil
+}
+
+func (qq *S3FileSystem) RemoveTemporaryObject(ctx context.Context, storagePath string, storageFilename string) error {
+	if storagePath == "" || storageFilename == "" {
+		return nil
+	}
+
+	if qq.bucketName == "" {
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Bucket name is empty.")
+	}
+
+	objectName, err := securejoin.SecureJoin(storagePath, storageFilename)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	err = qq.client.RemoveObject(ctx, qq.bucketName, objectName, minio.RemoveObjectOptions{})
+	if err != nil {
+		minioErr := minio.ToErrorResponse(err)
+		if minioErr.Code == "NoSuchKey" {
+			return nil
+		}
+		log.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func (qq *S3FileSystem) storageFilename(originalFilename, storageFilenameWithoutExt string) string {
+	fileExtension := filepath.Ext(originalFilename)
+	return storageFilenameWithoutExt + fileExtension + ".gz.age"
 }
 
 func (qq *S3FileSystem) saveFile(
@@ -543,52 +595,112 @@ func (qq *S3FileSystem) x25519Identity(ctx ctxx.Context, objectNameOrStoragePref
 	return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not get x25519 identity.")
 }
 
-func (qq *S3FileSystem) SaveTemporaryFileToAccount(
+func (qq *S3FileSystem) PrepareTemporaryAccountUpload(
 	ctx ctxx.Context,
-	fileToSave io.Reader,
+	mainTx *entmain.Tx,
 	originalFilename string,
 	uploadToken string,
 	fileIndex int,
 	expiresAt time.Time,
-) (*entmain.TemporaryFile, error) {
+) (*PreparedAccountUpload, error) {
+	originalFilename = filepath.Clean(originalFilename)
+	if !filenamex.IsAllowed(originalFilename) {
+		log.Println("invalid filename")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
+	}
+
 	storageFilenameWithoutExt := fmt.Sprintf("%s-%06d", uploadToken, fileIndex)
 	storagePrefix := pathx.S3TemporaryAccountStoragePrefix(ctx.MainCtx().Account.PublicID.String())
+	storageFilename := qq.storageFilename(originalFilename, storageFilenameWithoutExt)
 
-	// outside of go func() to return quickly
-	x25519Identity, err := qq.x25519Identity(ctx, storagePrefix)
+	temporaryFile := mainTx.TemporaryFile.Create().
+		SetOwner(ctx.MainCtx().Account).
+		SetFilename(originalFilename).
+		SetSizeInStorage(0).
+		SetStorageType(storagetype.S3).
+		SetBucketName(qq.bucketName).
+		SetStoragePath(storagePrefix).
+		SetStorageFilename(storageFilename).
+		SetUploadToken(uploadToken).
+		SetExpiresAt(expiresAt).
+		SaveX(ctx)
+
+	return &PreparedAccountUpload{
+		TemporaryFileID:           temporaryFile.ID,
+		OriginalFilename:          originalFilename,
+		StorageFilenameWithoutExt: storageFilenameWithoutExt,
+		StorageFilename:           storageFilename,
+		StoragePath:               storagePrefix,
+	}, nil
+}
+
+func (qq *S3FileSystem) UploadPreparedTemporaryAccountFile(
+	ctx ctxx.Context,
+	fileToSave io.Reader,
+	prepared *PreparedAccountUpload,
+) (*minio.UploadInfo, int64, error) {
+	return qq.uploadPreparedFileWithParams(
+		ctx,
+		fileToSave,
+		prepared.OriginalFilename,
+		prepared.StorageFilenameWithoutExt,
+		prepared.StoragePath,
+		prepared.StorageFilename,
+	)
+}
+
+func (qq *S3FileSystem) uploadPreparedFileWithParams(
+	ctx ctxx.Context,
+	fileToSave io.Reader,
+	originalFilename string,
+	storageFilenameWithoutExt string,
+	storagePath string,
+	expectedStorageFilename string,
+) (*minio.UploadInfo, int64, error) {
+	x25519Identity, err := qq.x25519Identity(ctx, storagePath)
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		return nil, 0, err
 	}
+
 	fileInfo, storageFilename, fileSize, err := qq.saveFile(
 		ctx,
 		x25519Identity,
 		fileToSave,
 		originalFilename,
 		storageFilenameWithoutExt,
-		storagePrefix,
+		storagePath,
 	)
 	if err != nil {
 		log.Println(err)
-		return nil, err
+		return nil, 0, err
 	}
 
-	temporaryFile := ctx.MainCtx().MainTx.TemporaryFile.Create().
-		SetOwner(ctx.MainCtx().Account).
-		SetFilename(originalFilename).
-		SetSize(fileSize).               // fileInfo.Size is gzipped size
-		SetSizeInStorage(fileInfo.Size). // gzipped size
-		SetStorageType(storagetype.S3).
-		SetBucketName(qq.bucketName).
-		SetStoragePath(storagePrefix).
-		SetStorageFilename(storageFilename).
-		SetSha256(fileInfo.ChecksumSHA256).
-		SetUploadToken(uploadToken).
-		SetExpiresAt(expiresAt).
-		// SetMimeType(contentType).
-		SaveX(ctx)
+	if storageFilename != expectedStorageFilename {
+		log.Println("storage filename mismatch", storageFilename, expectedStorageFilename)
+		return nil, 0, e.NewHTTPErrorf(http.StatusInternalServerError, "Storage filename mismatch.")
+	}
 
-	return temporaryFile, nil
+	return fileInfo, fileSize, nil
+}
+
+func (qq *S3FileSystem) FinalizePreparedTemporaryAccountUpload(
+	ctx ctxx.Context,
+	mainTx *entmain.Tx,
+	prepared *PreparedAccountUpload,
+	fileInfo *minio.UploadInfo,
+	fileSize int64,
+) error {
+	ctxWithIncomplete := entmainschema.WithUnfinishedUploads(ctx)
+	mainTx.TemporaryFile.
+		UpdateOneID(prepared.TemporaryFileID).
+		SetSize(fileSize).
+		SetSizeInStorage(fileInfo.Size).
+		SetSha256(fileInfo.ChecksumSHA256).
+		SetUploadSucceededAt(time.Now()).
+		SaveX(ctxWithIncomplete)
+
+	return nil
 }
 
 // Prepares persistence of temporary account file. Doesn't move the file itself, but

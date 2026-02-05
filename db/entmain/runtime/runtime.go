@@ -171,11 +171,15 @@ func init() {
 	temporaryfileMixinHooks2 := temporaryfileMixin[2].Hooks()
 	temporaryfile.Hooks[0] = temporaryfileMixinHooks2[0]
 	temporaryfileMixinInters2 := temporaryfileMixin[2].Interceptors()
+	temporaryfileMixinInters3 := temporaryfileMixin[3].Interceptors()
 	temporaryfile.Interceptors[0] = temporaryfileMixinInters2[0]
+	temporaryfile.Interceptors[1] = temporaryfileMixinInters3[0]
 	temporaryfileMixinFields0 := temporaryfileMixin[0].Fields()
 	_ = temporaryfileMixinFields0
 	temporaryfileMixinFields1 := temporaryfileMixin[1].Fields()
 	_ = temporaryfileMixinFields1
+	temporaryfileMixinFields3 := temporaryfileMixin[3].Fields()
+	_ = temporaryfileMixinFields3
 	temporaryfileFields := schema.TemporaryFile{}.Fields()
 	_ = temporaryfileFields
 	// temporaryfileDescPublicID is the schema descriptor for public_id field.
@@ -192,6 +196,10 @@ func init() {
 	temporaryfile.DefaultUpdatedAt = temporaryfileDescUpdatedAt.Default.(func() time.Time)
 	// temporaryfile.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	temporaryfile.UpdateDefaultUpdatedAt = temporaryfileDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// temporaryfileDescUploadStartedAt is the schema descriptor for upload_started_at field.
+	temporaryfileDescUploadStartedAt := temporaryfileMixinFields3[0].Descriptor()
+	// temporaryfile.DefaultUploadStartedAt holds the default value on creation for the upload_started_at field.
+	temporaryfile.DefaultUploadStartedAt = temporaryfileDescUploadStartedAt.Default.(func() time.Time)
 	tenantMixin := schema.Tenant{}.Mixin()
 	tenantMixinHooks1 := tenantMixin[1].Hooks()
 	tenant.Hooks[0] = tenantMixinHooks1[0]

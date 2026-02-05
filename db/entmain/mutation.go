@@ -5931,6 +5931,9 @@ type TemporaryFileMutation struct {
 	created_at                  *time.Time
 	updated_at                  *time.Time
 	deleted_at                  *time.Time
+	upload_started_at           *time.Time
+	upload_failed_at            *time.Time
+	upload_succeeded_at         *time.Time
 	filename                    *string
 	size                        *int64
 	addsize                     *int64
@@ -6365,6 +6368,153 @@ func (m *TemporaryFileMutation) DeletedAtCleared() bool {
 func (m *TemporaryFileMutation) ResetDeletedAt() {
 	m.deleted_at = nil
 	delete(m.clearedFields, temporaryfile.FieldDeletedAt)
+}
+
+// SetUploadStartedAt sets the "upload_started_at" field.
+func (m *TemporaryFileMutation) SetUploadStartedAt(t time.Time) {
+	m.upload_started_at = &t
+}
+
+// UploadStartedAt returns the value of the "upload_started_at" field in the mutation.
+func (m *TemporaryFileMutation) UploadStartedAt() (r time.Time, exists bool) {
+	v := m.upload_started_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUploadStartedAt returns the old "upload_started_at" field's value of the TemporaryFile entity.
+// If the TemporaryFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TemporaryFileMutation) OldUploadStartedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUploadStartedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUploadStartedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUploadStartedAt: %w", err)
+	}
+	return oldValue.UploadStartedAt, nil
+}
+
+// ClearUploadStartedAt clears the value of the "upload_started_at" field.
+func (m *TemporaryFileMutation) ClearUploadStartedAt() {
+	m.upload_started_at = nil
+	m.clearedFields[temporaryfile.FieldUploadStartedAt] = struct{}{}
+}
+
+// UploadStartedAtCleared returns if the "upload_started_at" field was cleared in this mutation.
+func (m *TemporaryFileMutation) UploadStartedAtCleared() bool {
+	_, ok := m.clearedFields[temporaryfile.FieldUploadStartedAt]
+	return ok
+}
+
+// ResetUploadStartedAt resets all changes to the "upload_started_at" field.
+func (m *TemporaryFileMutation) ResetUploadStartedAt() {
+	m.upload_started_at = nil
+	delete(m.clearedFields, temporaryfile.FieldUploadStartedAt)
+}
+
+// SetUploadFailedAt sets the "upload_failed_at" field.
+func (m *TemporaryFileMutation) SetUploadFailedAt(t time.Time) {
+	m.upload_failed_at = &t
+}
+
+// UploadFailedAt returns the value of the "upload_failed_at" field in the mutation.
+func (m *TemporaryFileMutation) UploadFailedAt() (r time.Time, exists bool) {
+	v := m.upload_failed_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUploadFailedAt returns the old "upload_failed_at" field's value of the TemporaryFile entity.
+// If the TemporaryFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TemporaryFileMutation) OldUploadFailedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUploadFailedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUploadFailedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUploadFailedAt: %w", err)
+	}
+	return oldValue.UploadFailedAt, nil
+}
+
+// ClearUploadFailedAt clears the value of the "upload_failed_at" field.
+func (m *TemporaryFileMutation) ClearUploadFailedAt() {
+	m.upload_failed_at = nil
+	m.clearedFields[temporaryfile.FieldUploadFailedAt] = struct{}{}
+}
+
+// UploadFailedAtCleared returns if the "upload_failed_at" field was cleared in this mutation.
+func (m *TemporaryFileMutation) UploadFailedAtCleared() bool {
+	_, ok := m.clearedFields[temporaryfile.FieldUploadFailedAt]
+	return ok
+}
+
+// ResetUploadFailedAt resets all changes to the "upload_failed_at" field.
+func (m *TemporaryFileMutation) ResetUploadFailedAt() {
+	m.upload_failed_at = nil
+	delete(m.clearedFields, temporaryfile.FieldUploadFailedAt)
+}
+
+// SetUploadSucceededAt sets the "upload_succeeded_at" field.
+func (m *TemporaryFileMutation) SetUploadSucceededAt(t time.Time) {
+	m.upload_succeeded_at = &t
+}
+
+// UploadSucceededAt returns the value of the "upload_succeeded_at" field in the mutation.
+func (m *TemporaryFileMutation) UploadSucceededAt() (r time.Time, exists bool) {
+	v := m.upload_succeeded_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUploadSucceededAt returns the old "upload_succeeded_at" field's value of the TemporaryFile entity.
+// If the TemporaryFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TemporaryFileMutation) OldUploadSucceededAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUploadSucceededAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUploadSucceededAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUploadSucceededAt: %w", err)
+	}
+	return oldValue.UploadSucceededAt, nil
+}
+
+// ClearUploadSucceededAt clears the value of the "upload_succeeded_at" field.
+func (m *TemporaryFileMutation) ClearUploadSucceededAt() {
+	m.upload_succeeded_at = nil
+	m.clearedFields[temporaryfile.FieldUploadSucceededAt] = struct{}{}
+}
+
+// UploadSucceededAtCleared returns if the "upload_succeeded_at" field was cleared in this mutation.
+func (m *TemporaryFileMutation) UploadSucceededAtCleared() bool {
+	_, ok := m.clearedFields[temporaryfile.FieldUploadSucceededAt]
+	return ok
+}
+
+// ResetUploadSucceededAt resets all changes to the "upload_succeeded_at" field.
+func (m *TemporaryFileMutation) ResetUploadSucceededAt() {
+	m.upload_succeeded_at = nil
+	delete(m.clearedFields, temporaryfile.FieldUploadSucceededAt)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -7135,7 +7285,7 @@ func (m *TemporaryFileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TemporaryFileMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 23)
 	if m.public_id != nil {
 		fields = append(fields, temporaryfile.FieldPublicID)
 	}
@@ -7156,6 +7306,15 @@ func (m *TemporaryFileMutation) Fields() []string {
 	}
 	if m.deleted_at != nil {
 		fields = append(fields, temporaryfile.FieldDeletedAt)
+	}
+	if m.upload_started_at != nil {
+		fields = append(fields, temporaryfile.FieldUploadStartedAt)
+	}
+	if m.upload_failed_at != nil {
+		fields = append(fields, temporaryfile.FieldUploadFailedAt)
+	}
+	if m.upload_succeeded_at != nil {
+		fields = append(fields, temporaryfile.FieldUploadSucceededAt)
 	}
 	if m.owner != nil {
 		fields = append(fields, temporaryfile.FieldOwnerID)
@@ -7218,6 +7377,12 @@ func (m *TemporaryFileMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedBy()
 	case temporaryfile.FieldDeletedAt:
 		return m.DeletedAt()
+	case temporaryfile.FieldUploadStartedAt:
+		return m.UploadStartedAt()
+	case temporaryfile.FieldUploadFailedAt:
+		return m.UploadFailedAt()
+	case temporaryfile.FieldUploadSucceededAt:
+		return m.UploadSucceededAt()
 	case temporaryfile.FieldOwnerID:
 		return m.OwnerID()
 	case temporaryfile.FieldFilename:
@@ -7267,6 +7432,12 @@ func (m *TemporaryFileMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldDeletedBy(ctx)
 	case temporaryfile.FieldDeletedAt:
 		return m.OldDeletedAt(ctx)
+	case temporaryfile.FieldUploadStartedAt:
+		return m.OldUploadStartedAt(ctx)
+	case temporaryfile.FieldUploadFailedAt:
+		return m.OldUploadFailedAt(ctx)
+	case temporaryfile.FieldUploadSucceededAt:
+		return m.OldUploadSucceededAt(ctx)
 	case temporaryfile.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case temporaryfile.FieldFilename:
@@ -7350,6 +7521,27 @@ func (m *TemporaryFileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDeletedAt(v)
+		return nil
+	case temporaryfile.FieldUploadStartedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUploadStartedAt(v)
+		return nil
+	case temporaryfile.FieldUploadFailedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUploadFailedAt(v)
+		return nil
+	case temporaryfile.FieldUploadSucceededAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUploadSucceededAt(v)
 		return nil
 	case temporaryfile.FieldOwnerID:
 		v, ok := value.(int64)
@@ -7511,6 +7703,15 @@ func (m *TemporaryFileMutation) ClearedFields() []string {
 	if m.FieldCleared(temporaryfile.FieldDeletedAt) {
 		fields = append(fields, temporaryfile.FieldDeletedAt)
 	}
+	if m.FieldCleared(temporaryfile.FieldUploadStartedAt) {
+		fields = append(fields, temporaryfile.FieldUploadStartedAt)
+	}
+	if m.FieldCleared(temporaryfile.FieldUploadFailedAt) {
+		fields = append(fields, temporaryfile.FieldUploadFailedAt)
+	}
+	if m.FieldCleared(temporaryfile.FieldUploadSucceededAt) {
+		fields = append(fields, temporaryfile.FieldUploadSucceededAt)
+	}
 	if m.FieldCleared(temporaryfile.FieldSize) {
 		fields = append(fields, temporaryfile.FieldSize)
 	}
@@ -7554,6 +7755,15 @@ func (m *TemporaryFileMutation) ClearField(name string) error {
 		return nil
 	case temporaryfile.FieldDeletedAt:
 		m.ClearDeletedAt()
+		return nil
+	case temporaryfile.FieldUploadStartedAt:
+		m.ClearUploadStartedAt()
+		return nil
+	case temporaryfile.FieldUploadFailedAt:
+		m.ClearUploadFailedAt()
+		return nil
+	case temporaryfile.FieldUploadSucceededAt:
+		m.ClearUploadSucceededAt()
 		return nil
 	case temporaryfile.FieldSize:
 		m.ClearSize()
@@ -7601,6 +7811,15 @@ func (m *TemporaryFileMutation) ResetField(name string) error {
 		return nil
 	case temporaryfile.FieldDeletedAt:
 		m.ResetDeletedAt()
+		return nil
+	case temporaryfile.FieldUploadStartedAt:
+		m.ResetUploadStartedAt()
+		return nil
+	case temporaryfile.FieldUploadFailedAt:
+		m.ResetUploadFailedAt()
+		return nil
+	case temporaryfile.FieldUploadSucceededAt:
+		m.ResetUploadSucceededAt()
 		return nil
 	case temporaryfile.FieldOwnerID:
 		m.ResetOwnerID()

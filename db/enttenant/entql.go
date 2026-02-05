@@ -260,6 +260,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			storedfile.FieldCreatedBy:                  {Type: field.TypeInt64, Column: storedfile.FieldCreatedBy},
 			storedfile.FieldUpdatedAt:                  {Type: field.TypeTime, Column: storedfile.FieldUpdatedAt},
 			storedfile.FieldUpdatedBy:                  {Type: field.TypeInt64, Column: storedfile.FieldUpdatedBy},
+			storedfile.FieldUploadStartedAt:            {Type: field.TypeTime, Column: storedfile.FieldUploadStartedAt},
+			storedfile.FieldUploadFailedAt:             {Type: field.TypeTime, Column: storedfile.FieldUploadFailedAt},
+			storedfile.FieldUploadSucceededAt:          {Type: field.TypeTime, Column: storedfile.FieldUploadSucceededAt},
 			storedfile.FieldFilename:                   {Type: field.TypeString, Column: storedfile.FieldFilename},
 			storedfile.FieldSize:                       {Type: field.TypeInt64, Column: storedfile.FieldSize},
 			storedfile.FieldSizeInStorage:              {Type: field.TypeInt64, Column: storedfile.FieldSizeInStorage},
@@ -2389,6 +2392,21 @@ func (f *StoredFileFilter) WhereUpdatedAt(p entql.TimeP) {
 // WhereUpdatedBy applies the entql int64 predicate on the updated_by field.
 func (f *StoredFileFilter) WhereUpdatedBy(p entql.Int64P) {
 	f.Where(p.Field(storedfile.FieldUpdatedBy))
+}
+
+// WhereUploadStartedAt applies the entql time.Time predicate on the upload_started_at field.
+func (f *StoredFileFilter) WhereUploadStartedAt(p entql.TimeP) {
+	f.Where(p.Field(storedfile.FieldUploadStartedAt))
+}
+
+// WhereUploadFailedAt applies the entql time.Time predicate on the upload_failed_at field.
+func (f *StoredFileFilter) WhereUploadFailedAt(p entql.TimeP) {
+	f.Where(p.Field(storedfile.FieldUploadFailedAt))
+}
+
+// WhereUploadSucceededAt applies the entql time.Time predicate on the upload_succeeded_at field.
+func (f *StoredFileFilter) WhereUploadSucceededAt(p entql.TimeP) {
+	f.Where(p.Field(storedfile.FieldUploadSucceededAt))
 }
 
 // WhereFilename applies the entql string predicate on the filename field.

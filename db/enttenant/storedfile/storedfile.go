@@ -25,6 +25,12 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldUploadStartedAt holds the string denoting the upload_started_at field in the database.
+	FieldUploadStartedAt = "upload_started_at"
+	// FieldUploadFailedAt holds the string denoting the upload_failed_at field in the database.
+	FieldUploadFailedAt = "upload_failed_at"
+	// FieldUploadSucceededAt holds the string denoting the upload_succeeded_at field in the database.
+	FieldUploadSucceededAt = "upload_succeeded_at"
 	// FieldFilename holds the string denoting the filename field in the database.
 	FieldFilename = "filename"
 	// FieldSize holds the string denoting the size field in the database.
@@ -96,6 +102,9 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedAt,
 	FieldUpdatedBy,
+	FieldUploadStartedAt,
+	FieldUploadFailedAt,
+	FieldUploadSucceededAt,
 	FieldFilename,
 	FieldSize,
 	FieldSizeInStorage,
@@ -133,14 +142,17 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/simpledms/simpledms/db/enttenant/runtime"
 var (
-	Hooks  [1]ent.Hook
-	Policy ent.Policy
+	Hooks        [1]ent.Hook
+	Interceptors [1]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultUploadStartedAt holds the default value on creation for the "upload_started_at" field.
+	DefaultUploadStartedAt func() time.Time
 )
 
 // StorageTypeValidator is a validator for the "storage_type" field enum values. It is called by the builders before save.
@@ -179,6 +191,21 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedBy orders the results by the updated_by field.
 func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByUploadStartedAt orders the results by the upload_started_at field.
+func ByUploadStartedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUploadStartedAt, opts...).ToFunc()
+}
+
+// ByUploadFailedAt orders the results by the upload_failed_at field.
+func ByUploadFailedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUploadFailedAt, opts...).ToFunc()
+}
+
+// ByUploadSucceededAt orders the results by the upload_succeeded_at field.
+func ByUploadSucceededAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUploadSucceededAt, opts...).ToFunc()
 }
 
 // ByFilename orders the results by the filename field.

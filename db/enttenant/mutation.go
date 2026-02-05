@@ -9001,6 +9001,9 @@ type StoredFileMutation struct {
 	id                             *int64
 	created_at                     *time.Time
 	updated_at                     *time.Time
+	upload_started_at              *time.Time
+	upload_failed_at               *time.Time
+	upload_succeeded_at            *time.Time
 	filename                       *string
 	size                           *int64
 	addsize                        *int64
@@ -9304,6 +9307,153 @@ func (m *StoredFileMutation) UpdatedByCleared() bool {
 func (m *StoredFileMutation) ResetUpdatedBy() {
 	m.updater = nil
 	delete(m.clearedFields, storedfile.FieldUpdatedBy)
+}
+
+// SetUploadStartedAt sets the "upload_started_at" field.
+func (m *StoredFileMutation) SetUploadStartedAt(t time.Time) {
+	m.upload_started_at = &t
+}
+
+// UploadStartedAt returns the value of the "upload_started_at" field in the mutation.
+func (m *StoredFileMutation) UploadStartedAt() (r time.Time, exists bool) {
+	v := m.upload_started_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUploadStartedAt returns the old "upload_started_at" field's value of the StoredFile entity.
+// If the StoredFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StoredFileMutation) OldUploadStartedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUploadStartedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUploadStartedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUploadStartedAt: %w", err)
+	}
+	return oldValue.UploadStartedAt, nil
+}
+
+// ClearUploadStartedAt clears the value of the "upload_started_at" field.
+func (m *StoredFileMutation) ClearUploadStartedAt() {
+	m.upload_started_at = nil
+	m.clearedFields[storedfile.FieldUploadStartedAt] = struct{}{}
+}
+
+// UploadStartedAtCleared returns if the "upload_started_at" field was cleared in this mutation.
+func (m *StoredFileMutation) UploadStartedAtCleared() bool {
+	_, ok := m.clearedFields[storedfile.FieldUploadStartedAt]
+	return ok
+}
+
+// ResetUploadStartedAt resets all changes to the "upload_started_at" field.
+func (m *StoredFileMutation) ResetUploadStartedAt() {
+	m.upload_started_at = nil
+	delete(m.clearedFields, storedfile.FieldUploadStartedAt)
+}
+
+// SetUploadFailedAt sets the "upload_failed_at" field.
+func (m *StoredFileMutation) SetUploadFailedAt(t time.Time) {
+	m.upload_failed_at = &t
+}
+
+// UploadFailedAt returns the value of the "upload_failed_at" field in the mutation.
+func (m *StoredFileMutation) UploadFailedAt() (r time.Time, exists bool) {
+	v := m.upload_failed_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUploadFailedAt returns the old "upload_failed_at" field's value of the StoredFile entity.
+// If the StoredFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StoredFileMutation) OldUploadFailedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUploadFailedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUploadFailedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUploadFailedAt: %w", err)
+	}
+	return oldValue.UploadFailedAt, nil
+}
+
+// ClearUploadFailedAt clears the value of the "upload_failed_at" field.
+func (m *StoredFileMutation) ClearUploadFailedAt() {
+	m.upload_failed_at = nil
+	m.clearedFields[storedfile.FieldUploadFailedAt] = struct{}{}
+}
+
+// UploadFailedAtCleared returns if the "upload_failed_at" field was cleared in this mutation.
+func (m *StoredFileMutation) UploadFailedAtCleared() bool {
+	_, ok := m.clearedFields[storedfile.FieldUploadFailedAt]
+	return ok
+}
+
+// ResetUploadFailedAt resets all changes to the "upload_failed_at" field.
+func (m *StoredFileMutation) ResetUploadFailedAt() {
+	m.upload_failed_at = nil
+	delete(m.clearedFields, storedfile.FieldUploadFailedAt)
+}
+
+// SetUploadSucceededAt sets the "upload_succeeded_at" field.
+func (m *StoredFileMutation) SetUploadSucceededAt(t time.Time) {
+	m.upload_succeeded_at = &t
+}
+
+// UploadSucceededAt returns the value of the "upload_succeeded_at" field in the mutation.
+func (m *StoredFileMutation) UploadSucceededAt() (r time.Time, exists bool) {
+	v := m.upload_succeeded_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUploadSucceededAt returns the old "upload_succeeded_at" field's value of the StoredFile entity.
+// If the StoredFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StoredFileMutation) OldUploadSucceededAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUploadSucceededAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUploadSucceededAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUploadSucceededAt: %w", err)
+	}
+	return oldValue.UploadSucceededAt, nil
+}
+
+// ClearUploadSucceededAt clears the value of the "upload_succeeded_at" field.
+func (m *StoredFileMutation) ClearUploadSucceededAt() {
+	m.upload_succeeded_at = nil
+	m.clearedFields[storedfile.FieldUploadSucceededAt] = struct{}{}
+}
+
+// UploadSucceededAtCleared returns if the "upload_succeeded_at" field was cleared in this mutation.
+func (m *StoredFileMutation) UploadSucceededAtCleared() bool {
+	_, ok := m.clearedFields[storedfile.FieldUploadSucceededAt]
+	return ok
+}
+
+// ResetUploadSucceededAt resets all changes to the "upload_succeeded_at" field.
+func (m *StoredFileMutation) ResetUploadSucceededAt() {
+	m.upload_succeeded_at = nil
+	delete(m.clearedFields, storedfile.FieldUploadSucceededAt)
 }
 
 // SetFilename sets the "filename" field.
@@ -10115,7 +10265,7 @@ func (m *StoredFileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *StoredFileMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 20)
 	if m.created_at != nil {
 		fields = append(fields, storedfile.FieldCreatedAt)
 	}
@@ -10127,6 +10277,15 @@ func (m *StoredFileMutation) Fields() []string {
 	}
 	if m.updater != nil {
 		fields = append(fields, storedfile.FieldUpdatedBy)
+	}
+	if m.upload_started_at != nil {
+		fields = append(fields, storedfile.FieldUploadStartedAt)
+	}
+	if m.upload_failed_at != nil {
+		fields = append(fields, storedfile.FieldUploadFailedAt)
+	}
+	if m.upload_succeeded_at != nil {
+		fields = append(fields, storedfile.FieldUploadSucceededAt)
 	}
 	if m.filename != nil {
 		fields = append(fields, storedfile.FieldFilename)
@@ -10183,6 +10342,12 @@ func (m *StoredFileMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case storedfile.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case storedfile.FieldUploadStartedAt:
+		return m.UploadStartedAt()
+	case storedfile.FieldUploadFailedAt:
+		return m.UploadFailedAt()
+	case storedfile.FieldUploadSucceededAt:
+		return m.UploadSucceededAt()
 	case storedfile.FieldFilename:
 		return m.Filename()
 	case storedfile.FieldSize:
@@ -10226,6 +10391,12 @@ func (m *StoredFileMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldUpdatedAt(ctx)
 	case storedfile.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case storedfile.FieldUploadStartedAt:
+		return m.OldUploadStartedAt(ctx)
+	case storedfile.FieldUploadFailedAt:
+		return m.OldUploadFailedAt(ctx)
+	case storedfile.FieldUploadSucceededAt:
+		return m.OldUploadSucceededAt(ctx)
 	case storedfile.FieldFilename:
 		return m.OldFilename(ctx)
 	case storedfile.FieldSize:
@@ -10288,6 +10459,27 @@ func (m *StoredFileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case storedfile.FieldUploadStartedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUploadStartedAt(v)
+		return nil
+	case storedfile.FieldUploadFailedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUploadFailedAt(v)
+		return nil
+	case storedfile.FieldUploadSucceededAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUploadSucceededAt(v)
 		return nil
 	case storedfile.FieldFilename:
 		v, ok := value.(string)
@@ -10443,6 +10635,15 @@ func (m *StoredFileMutation) ClearedFields() []string {
 	if m.FieldCleared(storedfile.FieldUpdatedBy) {
 		fields = append(fields, storedfile.FieldUpdatedBy)
 	}
+	if m.FieldCleared(storedfile.FieldUploadStartedAt) {
+		fields = append(fields, storedfile.FieldUploadStartedAt)
+	}
+	if m.FieldCleared(storedfile.FieldUploadFailedAt) {
+		fields = append(fields, storedfile.FieldUploadFailedAt)
+	}
+	if m.FieldCleared(storedfile.FieldUploadSucceededAt) {
+		fields = append(fields, storedfile.FieldUploadSucceededAt)
+	}
 	if m.FieldCleared(storedfile.FieldSize) {
 		fields = append(fields, storedfile.FieldSize)
 	}
@@ -10481,6 +10682,15 @@ func (m *StoredFileMutation) ClearField(name string) error {
 	case storedfile.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case storedfile.FieldUploadStartedAt:
+		m.ClearUploadStartedAt()
+		return nil
+	case storedfile.FieldUploadFailedAt:
+		m.ClearUploadFailedAt()
+		return nil
+	case storedfile.FieldUploadSucceededAt:
+		m.ClearUploadSucceededAt()
+		return nil
 	case storedfile.FieldSize:
 		m.ClearSize()
 		return nil
@@ -10518,6 +10728,15 @@ func (m *StoredFileMutation) ResetField(name string) error {
 		return nil
 	case storedfile.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case storedfile.FieldUploadStartedAt:
+		m.ResetUploadStartedAt()
+		return nil
+	case storedfile.FieldUploadFailedAt:
+		m.ResetUploadFailedAt()
+		return nil
+	case storedfile.FieldUploadSucceededAt:
+		m.ResetUploadSucceededAt()
 		return nil
 	case storedfile.FieldFilename:
 		m.ResetFilename()

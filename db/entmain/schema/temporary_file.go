@@ -69,5 +69,6 @@ func (TemporaryFile) Mixin() []ent.Mixin {
 		entx.NewPublicIDMixin(true),
 		NewCommonMixin(TemporaryFile.Type),
 		NewSoftDeleteMixin(TemporaryFile.Type),
+		NewUploadStatusMixin(),
 	}
 }

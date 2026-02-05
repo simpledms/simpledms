@@ -92,6 +92,21 @@ func DeletedAt(v time.Time) predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldEQ(FieldDeletedAt, v))
 }
 
+// UploadStartedAt applies equality check predicate on the "upload_started_at" field. It's identical to UploadStartedAtEQ.
+func UploadStartedAt(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldUploadStartedAt, v))
+}
+
+// UploadFailedAt applies equality check predicate on the "upload_failed_at" field. It's identical to UploadFailedAtEQ.
+func UploadFailedAt(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldUploadFailedAt, v))
+}
+
+// UploadSucceededAt applies equality check predicate on the "upload_succeeded_at" field. It's identical to UploadSucceededAtEQ.
+func UploadSucceededAt(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldUploadSucceededAt, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v int64) predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldEQ(FieldOwnerID, v))
@@ -440,6 +455,156 @@ func DeletedAtIsNil() predicate.TemporaryFile {
 // DeletedAtNotNil applies the NotNil predicate on the "deleted_at" field.
 func DeletedAtNotNil() predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldNotNull(FieldDeletedAt))
+}
+
+// UploadStartedAtEQ applies the EQ predicate on the "upload_started_at" field.
+func UploadStartedAtEQ(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldUploadStartedAt, v))
+}
+
+// UploadStartedAtNEQ applies the NEQ predicate on the "upload_started_at" field.
+func UploadStartedAtNEQ(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNEQ(FieldUploadStartedAt, v))
+}
+
+// UploadStartedAtIn applies the In predicate on the "upload_started_at" field.
+func UploadStartedAtIn(vs ...time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIn(FieldUploadStartedAt, vs...))
+}
+
+// UploadStartedAtNotIn applies the NotIn predicate on the "upload_started_at" field.
+func UploadStartedAtNotIn(vs ...time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotIn(FieldUploadStartedAt, vs...))
+}
+
+// UploadStartedAtGT applies the GT predicate on the "upload_started_at" field.
+func UploadStartedAtGT(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGT(FieldUploadStartedAt, v))
+}
+
+// UploadStartedAtGTE applies the GTE predicate on the "upload_started_at" field.
+func UploadStartedAtGTE(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGTE(FieldUploadStartedAt, v))
+}
+
+// UploadStartedAtLT applies the LT predicate on the "upload_started_at" field.
+func UploadStartedAtLT(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLT(FieldUploadStartedAt, v))
+}
+
+// UploadStartedAtLTE applies the LTE predicate on the "upload_started_at" field.
+func UploadStartedAtLTE(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLTE(FieldUploadStartedAt, v))
+}
+
+// UploadStartedAtIsNil applies the IsNil predicate on the "upload_started_at" field.
+func UploadStartedAtIsNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIsNull(FieldUploadStartedAt))
+}
+
+// UploadStartedAtNotNil applies the NotNil predicate on the "upload_started_at" field.
+func UploadStartedAtNotNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotNull(FieldUploadStartedAt))
+}
+
+// UploadFailedAtEQ applies the EQ predicate on the "upload_failed_at" field.
+func UploadFailedAtEQ(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldUploadFailedAt, v))
+}
+
+// UploadFailedAtNEQ applies the NEQ predicate on the "upload_failed_at" field.
+func UploadFailedAtNEQ(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNEQ(FieldUploadFailedAt, v))
+}
+
+// UploadFailedAtIn applies the In predicate on the "upload_failed_at" field.
+func UploadFailedAtIn(vs ...time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIn(FieldUploadFailedAt, vs...))
+}
+
+// UploadFailedAtNotIn applies the NotIn predicate on the "upload_failed_at" field.
+func UploadFailedAtNotIn(vs ...time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotIn(FieldUploadFailedAt, vs...))
+}
+
+// UploadFailedAtGT applies the GT predicate on the "upload_failed_at" field.
+func UploadFailedAtGT(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGT(FieldUploadFailedAt, v))
+}
+
+// UploadFailedAtGTE applies the GTE predicate on the "upload_failed_at" field.
+func UploadFailedAtGTE(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGTE(FieldUploadFailedAt, v))
+}
+
+// UploadFailedAtLT applies the LT predicate on the "upload_failed_at" field.
+func UploadFailedAtLT(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLT(FieldUploadFailedAt, v))
+}
+
+// UploadFailedAtLTE applies the LTE predicate on the "upload_failed_at" field.
+func UploadFailedAtLTE(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLTE(FieldUploadFailedAt, v))
+}
+
+// UploadFailedAtIsNil applies the IsNil predicate on the "upload_failed_at" field.
+func UploadFailedAtIsNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIsNull(FieldUploadFailedAt))
+}
+
+// UploadFailedAtNotNil applies the NotNil predicate on the "upload_failed_at" field.
+func UploadFailedAtNotNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotNull(FieldUploadFailedAt))
+}
+
+// UploadSucceededAtEQ applies the EQ predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtEQ(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldUploadSucceededAt, v))
+}
+
+// UploadSucceededAtNEQ applies the NEQ predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtNEQ(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNEQ(FieldUploadSucceededAt, v))
+}
+
+// UploadSucceededAtIn applies the In predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtIn(vs ...time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIn(FieldUploadSucceededAt, vs...))
+}
+
+// UploadSucceededAtNotIn applies the NotIn predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtNotIn(vs ...time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotIn(FieldUploadSucceededAt, vs...))
+}
+
+// UploadSucceededAtGT applies the GT predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtGT(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGT(FieldUploadSucceededAt, v))
+}
+
+// UploadSucceededAtGTE applies the GTE predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtGTE(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGTE(FieldUploadSucceededAt, v))
+}
+
+// UploadSucceededAtLT applies the LT predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtLT(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLT(FieldUploadSucceededAt, v))
+}
+
+// UploadSucceededAtLTE applies the LTE predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtLTE(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLTE(FieldUploadSucceededAt, v))
+}
+
+// UploadSucceededAtIsNil applies the IsNil predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtIsNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIsNull(FieldUploadSucceededAt))
+}
+
+// UploadSucceededAtNotNil applies the NotNil predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtNotNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotNull(FieldUploadSucceededAt))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.

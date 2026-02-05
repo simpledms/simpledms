@@ -80,6 +80,48 @@ func (_c *StoredFileCreate) SetNillableUpdatedBy(v *int64) *StoredFileCreate {
 	return _c
 }
 
+// SetUploadStartedAt sets the "upload_started_at" field.
+func (_c *StoredFileCreate) SetUploadStartedAt(v time.Time) *StoredFileCreate {
+	_c.mutation.SetUploadStartedAt(v)
+	return _c
+}
+
+// SetNillableUploadStartedAt sets the "upload_started_at" field if the given value is not nil.
+func (_c *StoredFileCreate) SetNillableUploadStartedAt(v *time.Time) *StoredFileCreate {
+	if v != nil {
+		_c.SetUploadStartedAt(*v)
+	}
+	return _c
+}
+
+// SetUploadFailedAt sets the "upload_failed_at" field.
+func (_c *StoredFileCreate) SetUploadFailedAt(v time.Time) *StoredFileCreate {
+	_c.mutation.SetUploadFailedAt(v)
+	return _c
+}
+
+// SetNillableUploadFailedAt sets the "upload_failed_at" field if the given value is not nil.
+func (_c *StoredFileCreate) SetNillableUploadFailedAt(v *time.Time) *StoredFileCreate {
+	if v != nil {
+		_c.SetUploadFailedAt(*v)
+	}
+	return _c
+}
+
+// SetUploadSucceededAt sets the "upload_succeeded_at" field.
+func (_c *StoredFileCreate) SetUploadSucceededAt(v time.Time) *StoredFileCreate {
+	_c.mutation.SetUploadSucceededAt(v)
+	return _c
+}
+
+// SetNillableUploadSucceededAt sets the "upload_succeeded_at" field if the given value is not nil.
+func (_c *StoredFileCreate) SetNillableUploadSucceededAt(v *time.Time) *StoredFileCreate {
+	if v != nil {
+		_c.SetUploadSucceededAt(*v)
+	}
+	return _c
+}
+
 // SetFilename sets the "filename" field.
 func (_c *StoredFileCreate) SetFilename(v string) *StoredFileCreate {
 	_c.mutation.SetFilename(v)
@@ -331,6 +373,13 @@ func (_c *StoredFileCreate) defaults() error {
 		v := storedfile.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.UploadStartedAt(); !ok {
+		if storedfile.DefaultUploadStartedAt == nil {
+			return fmt.Errorf("enttenant: uninitialized storedfile.DefaultUploadStartedAt (forgotten import enttenant/runtime?)")
+		}
+		v := storedfile.DefaultUploadStartedAt()
+		_c.mutation.SetUploadStartedAt(v)
+	}
 	return nil
 }
 
@@ -407,6 +456,18 @@ func (_c *StoredFileCreate) createSpec() (*StoredFile, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(storedfile.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := _c.mutation.UploadStartedAt(); ok {
+		_spec.SetField(storedfile.FieldUploadStartedAt, field.TypeTime, value)
+		_node.UploadStartedAt = value
+	}
+	if value, ok := _c.mutation.UploadFailedAt(); ok {
+		_spec.SetField(storedfile.FieldUploadFailedAt, field.TypeTime, value)
+		_node.UploadFailedAt = &value
+	}
+	if value, ok := _c.mutation.UploadSucceededAt(); ok {
+		_spec.SetField(storedfile.FieldUploadSucceededAt, field.TypeTime, value)
+		_node.UploadSucceededAt = &value
 	}
 	if value, ok := _c.mutation.Filename(); ok {
 		_spec.SetField(storedfile.FieldFilename, field.TypeString, value)
