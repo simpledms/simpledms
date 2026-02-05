@@ -198,6 +198,7 @@ func (qq *S3FileSystem) PrepareFileUpload(
 		log.Println(err)
 		return nil, nil, err
 	}
+	prepared.FileID = filex.ID
 
 	return prepared, filex, nil
 }
