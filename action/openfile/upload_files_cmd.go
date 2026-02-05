@@ -8,8 +8,11 @@ import (
 
 	gonanoid "github.com/matoous/go-nanoid"
 
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/model/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -35,7 +38,7 @@ func NewUploadFilesCmd(infra *common.Infra, actions *Actions) *UploadFilesCmd {
 	config := actionx.NewConfig(
 		actions.Route("upload-files-cmd"),
 		false,
-	)
+	).EnableManualTxManagement()
 	return &UploadFilesCmd{
 		infra:   infra,
 		actions: actions,
@@ -65,7 +68,6 @@ func (qq *UploadFilesCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	http.Redirect(rw, req.Request, route.SelectSpace(uploadToken), http.StatusFound)
 
 	return nil
-
 }
 
 // FIXME check file size
@@ -109,16 +111,35 @@ func (qq *UploadFilesCmd) processSharedFiles(rw httpx.ResponseWriter, req *httpx
 		// TODO to long? user has 15 minutes to select a space
 		expiresAt := time.Now().Add(15 * time.Minute)
 
-		_, err = qq.infra.FileSystem().SaveTemporaryFileToAccount(ctx, part, part.FileName(), uploadToken, qi, expiresAt)
+		prepared, err := autil.WithMainWriteTx(ctx, func(writeTx *entmain.Tx) (*filesystem.PreparedAccountUpload, error) {
+			return qq.infra.FileSystem().PrepareTemporaryAccountUpload(
+				ctx,
+				writeTx,
+				part.FileName(),
+				uploadToken,
+				qi,
+				expiresAt,
+			)
+		})
 		if err != nil {
-			part.Close()
-			// returning instead of continue to enforce cleanup, transaction doesn't get committed and thus
-			// no orphaned entries in db; with continue, it could happen that a file is added to db, but upload failed;
-			// just is an issue because user could open multiple files at once...
+			_ = part.Close()
 			return "", err
 		}
 
-		part.Close()
+		fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedTemporaryAccountFile(ctx, part, prepared)
+		_ = part.Close()
+		if err != nil {
+			autil.HandleTemporaryFileUploadFailure(ctx, qq.infra.FileSystem(), prepared, err, true)
+			return "", err
+		}
+
+		_, err = autil.WithMainWriteTx(ctx, func(writeTx *entmain.Tx) (*struct{}, error) {
+			return nil, qq.infra.FileSystem().FinalizePreparedTemporaryAccountUpload(ctx, writeTx, prepared, fileInfo, fileSize)
+		})
+		if err != nil {
+			autil.HandleTemporaryFileUploadFailure(ctx, qq.infra.FileSystem(), prepared, err, false)
+			return "", err
+		}
 	}
 
 	// qq.cache.Set(uploadToken, files, cache.DefaultExpiration)

@@ -121,6 +121,48 @@ func (_c *TemporaryFileCreate) SetNillableDeletedAt(v *time.Time) *TemporaryFile
 	return _c
 }
 
+// SetUploadStartedAt sets the "upload_started_at" field.
+func (_c *TemporaryFileCreate) SetUploadStartedAt(v time.Time) *TemporaryFileCreate {
+	_c.mutation.SetUploadStartedAt(v)
+	return _c
+}
+
+// SetNillableUploadStartedAt sets the "upload_started_at" field if the given value is not nil.
+func (_c *TemporaryFileCreate) SetNillableUploadStartedAt(v *time.Time) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetUploadStartedAt(*v)
+	}
+	return _c
+}
+
+// SetUploadFailedAt sets the "upload_failed_at" field.
+func (_c *TemporaryFileCreate) SetUploadFailedAt(v time.Time) *TemporaryFileCreate {
+	_c.mutation.SetUploadFailedAt(v)
+	return _c
+}
+
+// SetNillableUploadFailedAt sets the "upload_failed_at" field if the given value is not nil.
+func (_c *TemporaryFileCreate) SetNillableUploadFailedAt(v *time.Time) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetUploadFailedAt(*v)
+	}
+	return _c
+}
+
+// SetUploadSucceededAt sets the "upload_succeeded_at" field.
+func (_c *TemporaryFileCreate) SetUploadSucceededAt(v time.Time) *TemporaryFileCreate {
+	_c.mutation.SetUploadSucceededAt(v)
+	return _c
+}
+
+// SetNillableUploadSucceededAt sets the "upload_succeeded_at" field if the given value is not nil.
+func (_c *TemporaryFileCreate) SetNillableUploadSucceededAt(v *time.Time) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetUploadSucceededAt(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *TemporaryFileCreate) SetOwnerID(v int64) *TemporaryFileCreate {
 	_c.mutation.SetOwnerID(v)
@@ -373,6 +415,13 @@ func (_c *TemporaryFileCreate) defaults() error {
 		v := temporaryfile.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.UploadStartedAt(); !ok {
+		if temporaryfile.DefaultUploadStartedAt == nil {
+			return fmt.Errorf("entmain: uninitialized temporaryfile.DefaultUploadStartedAt (forgotten import entmain/runtime?)")
+		}
+		v := temporaryfile.DefaultUploadStartedAt()
+		_c.mutation.SetUploadStartedAt(v)
+	}
 	return nil
 }
 
@@ -463,6 +512,18 @@ func (_c *TemporaryFileCreate) createSpec() (*TemporaryFile, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.DeletedAt(); ok {
 		_spec.SetField(temporaryfile.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = value
+	}
+	if value, ok := _c.mutation.UploadStartedAt(); ok {
+		_spec.SetField(temporaryfile.FieldUploadStartedAt, field.TypeTime, value)
+		_node.UploadStartedAt = value
+	}
+	if value, ok := _c.mutation.UploadFailedAt(); ok {
+		_spec.SetField(temporaryfile.FieldUploadFailedAt, field.TypeTime, value)
+		_node.UploadFailedAt = &value
+	}
+	if value, ok := _c.mutation.UploadSucceededAt(); ok {
+		_spec.SetField(temporaryfile.FieldUploadSucceededAt, field.TypeTime, value)
+		_node.UploadSucceededAt = &value
 	}
 	if value, ok := _c.mutation.Filename(); ok {
 		_spec.SetField(temporaryfile.FieldFilename, field.TypeString, value)

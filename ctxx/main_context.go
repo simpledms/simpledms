@@ -7,6 +7,7 @@ import (
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
 )
 
@@ -15,6 +16,7 @@ type MainContext struct {
 	Account *entmain.Account // modelmain.Account would be better, but leads to circular dependency
 	// should never be exposed directly;
 	// unsafe because must be used with care
+	unsafeMainDB    *sqlx.MainDB
 	unsafeTenantDBs *tenantdbs.TenantDBs
 }
 
@@ -22,6 +24,7 @@ func NewMainContext(
 	ctx *VisitorContext,
 	account *entmain.Account,
 	i18nx *i18n.I18n,
+	mainDB *sqlx.MainDB,
 	tenantDBs *tenantdbs.TenantDBs,
 ) *MainContext {
 	ctx.Printer = i18nx.Printer(account.Language.Tag())
@@ -31,10 +34,15 @@ func NewMainContext(
 	mainCtx := &MainContext{
 		VisitorContext:  ctx,
 		Account:         account,
+		unsafeMainDB:    mainDB,
 		unsafeTenantDBs: tenantDBs,
 	}
 	mainCtx.Context = context.WithValue(ctx.Context, mainCtxKey, mainCtx)
 	return mainCtx
+}
+
+func (qq *MainContext) UnsafeMainDB() *sqlx.MainDB {
+	return qq.unsafeMainDB
 }
 
 // TODO cache?

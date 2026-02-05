@@ -8,21 +8,29 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"sync"
 	"time"
 
+	"github.com/minio/minio-go/v7"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/model/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/recoverx"
 )
+
+type unzipPreparedEntry struct {
+	zipFile  *zip.File
+	prepared *filesystem.PreparedUpload
+	fileID   int64
+	fileInfo *minio.UploadInfo
+	fileSize int64
+}
 
 type UnzipArchiveCmdData struct {
 	// TODO show warning that flatten if not in folder mode
@@ -41,7 +49,7 @@ type UnzipArchiveCmd struct {
 }
 
 func NewUnzipArchiveCmd(infra *common.Infra, actions *Actions) *UnzipArchiveCmd {
-	config := actionx.NewConfig(actions.Route("unzip-archive-cmd"), false)
+	config := actionx.NewConfig(actions.Route("unzip-archive-cmd"), false).EnableManualTxManagement()
 	return &UnzipArchiveCmd{
 		infra:      infra,
 		actions:    actions,
@@ -145,140 +153,153 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 	// only used in non-folder mode
 	parentDirID := filem.Data.ParentID
 
-	// create all directories first because they cannot be created on demand concurrently; files in the same
-	// subdirectory may gets processed concurrently and thus both go routines would try to create
-	// the subdirectory...
-	for _, zippedFile := range zipArchiveReader.File {
-		err = qq.createDirectoryStructure(ctx, zippedFile, parentDirID)
-		if err != nil {
-			log.Println(err)
-			return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not create directory structure.")
+	preparedEntries, err := autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) ([]*unzipPreparedEntry, error) {
+		entries := make([]*unzipPreparedEntry, 0, len(zipArchiveReader.File))
+		parentDir := writeCtx.SpaceCtx().Space.QueryFiles().Where(file.ID(parentDirID)).OnlyX(writeCtx)
+
+		for _, zippedFile := range zipArchiveReader.File {
+			if zippedFile.FileInfo().IsDir() {
+				if !writeCtx.SpaceCtx().Space.IsFolderMode {
+					continue
+				}
+
+				_, err := qq.infra.FileSystem().MakeDirAllIfNotExists(writeCtx, parentDir, zippedFile.Name)
+				if err != nil {
+					log.Println(err)
+					return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not create directory structure.")
+				}
+				continue
+			}
+
+			fileParentID := parentDirID
+			if writeCtx.SpaceCtx().Space.IsFolderMode {
+				pathWithoutFilename := filepath.Dir(zippedFile.Name)
+				if pathWithoutFilename != "." {
+					newParentDir, err := qq.infra.FileSystem().MakeDirAllIfNotExists(writeCtx, parentDir, pathWithoutFilename)
+					if err != nil {
+						log.Println(err)
+						return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not create directory structure.")
+					}
+					fileParentID = newParentDir.ID
+				}
+			}
+
+			filename := filepath.Base(zippedFile.Name)
+			if err := autil.EnsureFileDoesNotExist(writeCtx, filename, fileParentID, false); err != nil {
+				return nil, err
+			}
+
+			prepared, filex, err := qq.infra.FileSystem().PrepareFileUpload(
+				writeCtx,
+				filename,
+				fileParentID,
+				false,
+			)
+			if err != nil {
+				return nil, err
+			}
+
+			entries = append(entries, &unzipPreparedEntry{
+				zipFile:  zippedFile,
+				prepared: prepared,
+				fileID:   filex.ID,
+			})
 		}
+
+		return entries, nil
+	})
+	if err != nil {
+		return err
 	}
 
 	hasErr := false
-	ch := make(chan bool, 25) // TODO as config option?
-	wg := sync.WaitGroup{}
+	for _, entry := range preparedEntries {
+		fileToSave, err := entry.zipFile.Open()
+		if err != nil {
+			log.Println(err)
+			hasErr = true
+			break
+		}
 
-	for _, zippedFile := range zipArchiveReader.File {
-		wg.Add(1)
-		ch <- true // acquire slot
+		fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFile(ctx, fileToSave, entry.prepared)
+		_ = fileToSave.Close()
+		if err != nil {
+			log.Println(err)
+			hasErr = true
+			break
+		}
 
-		go func() {
-			defer recoverx.Recover("unzipAndSaveFile")
-
-			defer wg.Done()
-			defer func() {
-				<-ch // release slot
-			}()
-
-			err = qq.unzipAndSaveFile(ctx, zippedFile, parentDirID)
-			if err != nil {
-				log.Println(err)
-				// TODO more detailed? thus all failed filenames?
-				rw.AddRenderables(wx.NewSnackbarf("Could not extract all files from archive.").SetIsError(true))
-
-				// FIXME return and rollback? could be implemented by adding uploadToken to files
-				//		and only persist if the upload was successful
-				hasErr = true
-
-				// continue
-			}
-		}()
+		entry.fileInfo = fileInfo
+		entry.fileSize = fileSize
 	}
 
-	wg.Wait()
+	if hasErr {
+		rw.AddRenderables(wx.NewSnackbarf("Could not extract all files from archive.").SetIsError(true))
+
+		for _, entry := range preparedEntries {
+			cleanup := entry.fileInfo != nil
+			autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), entry.prepared, nil, cleanup)
+		}
+
+		fileIDs := make([]int64, 0, len(preparedEntries))
+		for _, entry := range preparedEntries {
+			fileIDs = append(fileIDs, entry.fileID)
+		}
+		_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+			if len(fileIDs) == 0 {
+				return nil, nil
+			}
+			writeCtx.TTx.File.Update().
+				Where(file.IDIn(fileIDs...)).
+				SetDeletedAt(time.Now()).
+				SetDeleter(writeCtx.SpaceCtx().User).
+				ExecX(writeCtx)
+			return nil, nil
+		})
+		if err != nil {
+			log.Println(err)
+		}
+	} else {
+		_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+			for _, entry := range preparedEntries {
+				if entry.fileInfo == nil {
+					return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not extract all files from archive.")
+				}
+				err := qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, entry.prepared, entry.fileInfo, entry.fileSize)
+				if err != nil {
+					return nil, err
+				}
+			}
+			return nil, nil
+		})
+		if err != nil {
+			log.Println(err)
+			for _, entry := range preparedEntries {
+				cleanup := entry.fileInfo != nil
+				autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), entry.prepared, nil, cleanup)
+			}
+			hasErr = true
+		}
+	}
 
 	// If DeleteOnSuccess is true, mark the ZIP file as deleted
 	if data.DeleteOnSuccess && !hasErr {
-		// TODO via FileSystem?
-		filem.Data.Update().
-			SetDeletedAt(time.Now()).
-			SetDeleter(ctx.SpaceCtx().User).
-			SaveX(ctx)
+		_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+			writeCtx.TTx.File.UpdateOneID(filem.Data.ID).
+				SetDeletedAt(time.Now()).
+				SetDeleter(writeCtx.SpaceCtx().User).
+				ExecX(writeCtx)
+			return nil, nil
+		})
+		if err != nil {
+			log.Println(err)
+			hasErr = true
+		}
 	}
 
 	rw.Header().Set("HX-Trigger", event.ZIPArchiveUnzipped.String())
 	if !hasErr {
 		rw.AddRenderables(wx.NewSnackbarf("Archive unzipped."))
-	}
-
-	return nil
-}
-
-func (qq *UnzipArchiveCmd) createDirectoryStructure(ctx ctxx.Context, zippedFile *zip.File, parentDirID int64) error {
-	if !zippedFile.FileInfo().IsDir() {
-		// do nothing
-		return nil
-	}
-
-	if !ctx.SpaceCtx().Space.IsFolderMode {
-		// do nothing
-		return nil
-	}
-
-	parentDir := ctx.SpaceCtx().Space.QueryFiles().Where(file.ID(parentDirID)).OnlyX(ctx)
-
-	// Name is relative path
-	_, err := qq.infra.FileSystem().MakeDirAllIfNotExists(ctx, parentDir, zippedFile.Name)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-
-	return nil
-}
-
-func (qq *UnzipArchiveCmd) unzipAndSaveFile(ctx ctxx.Context, zippedFile *zip.File, parentDirID int64) error {
-	if zippedFile.FileInfo().IsDir() {
-		// do nothing
-		return nil
-	}
-
-	if ctx.SpaceCtx().Space.IsFolderMode {
-		parentDir := ctx.SpaceCtx().Space.QueryFiles().Where(file.ID(parentDirID)).OnlyX(ctx)
-
-		// if file and in folder mode, set parentDirID
-		pathWithoutFilename := filepath.Dir(zippedFile.Name)
-
-		newParentDir, err := qq.infra.FileSystem().MakeDirAllIfNotExists(ctx, parentDir, pathWithoutFilename)
-		if err != nil {
-			log.Println(err)
-			return err
-		}
-
-		parentDirID = newParentDir.ID
-	} else {
-		// nothing to do in non folder mode
-	}
-
-	// Open the file in the ZIP archive
-	fileToSave, err := zippedFile.Open()
-	if err != nil {
-		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not open file in archive.")
-	}
-	defer func() {
-		err = fileToSave.Close()
-		if err != nil {
-			log.Println(err)
-		}
-	}()
-
-	// Get the filename from the ZIP entry
-	filename := filepath.Base(zippedFile.Name)
-
-	// Save the file to a temporary location
-	_, err = qq.infra.FileSystem().AddFile(
-		ctx,
-		fileToSave,
-		filename,
-		false,
-		parentDirID,
-	)
-	if err != nil {
-		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not extract file from archive.")
 	}
 
 	return nil

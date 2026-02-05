@@ -34,6 +34,12 @@ type TemporaryFile struct {
 	DeletedBy int64 `json:"deleted_by,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	// UploadStartedAt holds the value of the "upload_started_at" field.
+	UploadStartedAt time.Time `json:"upload_started_at,omitempty"`
+	// UploadFailedAt holds the value of the "upload_failed_at" field.
+	UploadFailedAt *time.Time `json:"upload_failed_at,omitempty"`
+	// UploadSucceededAt holds the value of the "upload_succeeded_at" field.
+	UploadSucceededAt *time.Time `json:"upload_succeeded_at,omitempty"`
 	// OwnerID holds the value of the "owner_id" field.
 	OwnerID int64 `json:"owner_id,omitempty"`
 	// Filename holds the value of the "filename" field.
@@ -136,7 +142,7 @@ func (*TemporaryFile) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case temporaryfile.FieldFilename, temporaryfile.FieldSha256, temporaryfile.FieldMimeType, temporaryfile.FieldBucketName, temporaryfile.FieldStoragePath, temporaryfile.FieldStorageFilename, temporaryfile.FieldUploadToken:
 			values[i] = new(sql.NullString)
-		case temporaryfile.FieldCreatedAt, temporaryfile.FieldUpdatedAt, temporaryfile.FieldDeletedAt, temporaryfile.FieldConvertedToStoredFileAt, temporaryfile.FieldExpiresAt:
+		case temporaryfile.FieldCreatedAt, temporaryfile.FieldUpdatedAt, temporaryfile.FieldDeletedAt, temporaryfile.FieldUploadStartedAt, temporaryfile.FieldUploadFailedAt, temporaryfile.FieldUploadSucceededAt, temporaryfile.FieldConvertedToStoredFileAt, temporaryfile.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
 		case temporaryfile.FieldStorageType:
 			values[i] = new(storagetype.StorageType)
@@ -202,6 +208,26 @@ func (_m *TemporaryFile) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
 				_m.DeletedAt = value.Time
+			}
+		case temporaryfile.FieldUploadStartedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field upload_started_at", values[i])
+			} else if value.Valid {
+				_m.UploadStartedAt = value.Time
+			}
+		case temporaryfile.FieldUploadFailedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field upload_failed_at", values[i])
+			} else if value.Valid {
+				_m.UploadFailedAt = new(time.Time)
+				*_m.UploadFailedAt = value.Time
+			}
+		case temporaryfile.FieldUploadSucceededAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field upload_succeeded_at", values[i])
+			} else if value.Valid {
+				_m.UploadSucceededAt = new(time.Time)
+				*_m.UploadSucceededAt = value.Time
 			}
 		case temporaryfile.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -359,6 +385,19 @@ func (_m *TemporaryFile) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
 	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("upload_started_at=")
+	builder.WriteString(_m.UploadStartedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	if v := _m.UploadFailedAt; v != nil {
+		builder.WriteString("upload_failed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.UploadSucceededAt; v != nil {
+		builder.WriteString("upload_succeeded_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(fmt.Sprintf("%v", _m.OwnerID))

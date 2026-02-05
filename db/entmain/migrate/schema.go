@@ -174,6 +174,9 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "upload_started_at", Type: field.TypeTime, Nullable: true},
+		{Name: "upload_failed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "upload_succeeded_at", Type: field.TypeTime, Nullable: true},
 		{Name: "filename", Type: field.TypeString},
 		{Name: "size", Type: field.TypeInt64, Nullable: true},
 		{Name: "size_in_storage", Type: field.TypeInt64},
@@ -199,25 +202,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "temporary_files_accounts_creator",
-				Columns:    []*schema.Column{TemporaryFilesColumns[17]},
+				Columns:    []*schema.Column{TemporaryFilesColumns[20]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "temporary_files_accounts_updater",
-				Columns:    []*schema.Column{TemporaryFilesColumns[18]},
+				Columns:    []*schema.Column{TemporaryFilesColumns[21]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "temporary_files_accounts_deleter",
-				Columns:    []*schema.Column{TemporaryFilesColumns[19]},
+				Columns:    []*schema.Column{TemporaryFilesColumns[22]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "temporary_files_accounts_owner",
-				Columns:    []*schema.Column{TemporaryFilesColumns[20]},
+				Columns:    []*schema.Column{TemporaryFilesColumns[23]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -226,7 +229,7 @@ var (
 			{
 				Name:    "temporaryfile_upload_token",
 				Unique:  false,
-				Columns: []*schema.Column{TemporaryFilesColumns[14]},
+				Columns: []*schema.Column{TemporaryFilesColumns[17]},
 			},
 		},
 	}

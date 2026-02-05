@@ -10,6 +10,9 @@ type Config struct {
 	endpoint   string
 	method     string
 	isReadOnly bool
+	// some actions open their own write transactions and should avoid long-lived
+	// request transactions
+	useManualTxManagement bool
 }
 
 func NewConfig(
@@ -52,8 +55,18 @@ func (qq *Config) EndpointWithParams(wrapper ResponseWrapper, hxTarget string) s
 	return qq.endpointWithParams(qq.Endpoint(), wrapper, hxTarget)
 }
 
+// TODO rename to something more meaningful, also var where value is used
 func (qq *Config) IsReadOnly() bool {
-	return qq.isReadOnly
+	return qq.isReadOnly || qq.UseManualTxManagement()
+}
+
+func (qq *Config) UseManualTxManagement() bool {
+	return qq.useManualTxManagement
+}
+
+func (qq *Config) EnableManualTxManagement() *Config {
+	qq.useManualTxManagement = true
+	return qq
 }
 
 // TODO return url?
@@ -107,7 +120,7 @@ func (qq *Config) endpointWithParams(endpoint string, wrapper ResponseWrapper, h
 }
 
 func (qq *Config) FormRoute() string {
-	if qq.isReadOnly {
+	if qq.isReadOnly && !qq.useManualTxManagement {
 		return ""
 	}
 	return fmt.Sprintf("POST %s", qq.FormEndpoint())

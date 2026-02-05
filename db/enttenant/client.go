@@ -2265,7 +2265,8 @@ func (c *StoredFileClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *StoredFileClient) Interceptors() []Interceptor {
-	return c.inters.StoredFile
+	inters := c.inters.StoredFile
+	return append(inters[:len(inters):len(inters)], storedfile.Interceptors[:]...)
 }
 
 func (c *StoredFileClient) mutate(ctx context.Context, m *StoredFileMutation) (Value, error) {
