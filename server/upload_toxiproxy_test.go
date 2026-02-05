@@ -14,6 +14,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/util/e"
@@ -236,6 +237,17 @@ func TestUploadFileCmdFailsWhenS3Unavailable(t *testing.T) {
 		file.IsDirectory(false),
 	).CountX(spaceCtx)
 	if fileCount != 0 {
+		/*
+			ctx := enttenantschema.WithUnfinishedUploads(spaceCtx)
+			filex := spaceCtx.TTx.File.Query().Where(
+				file.ParentID(rootDirID),
+				file.IsDirectory(false),
+			).OnlyX(ctx)
+			t.Log(filex)
+			versionx := filex.QueryVersions().OnlyX(ctx)
+			t.Log(versionx)
+		*/
+
 		t.Fatalf("expected 0 files, got %d", fileCount)
 	}
 }

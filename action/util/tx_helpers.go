@@ -116,10 +116,6 @@ func WithMainWriteTx[T any](ctx ctxx.Context, fn func(*entmain.Tx) (T, error)) (
 }
 
 func MarkStoredFileUploadFailed(ctx *ctxx.SpaceContext, storedFileID int64) {
-	if storedFileID == 0 {
-		return
-	}
-
 	_, err := WithTenantWriteSpaceTx(ctx, func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
 		ctxWithIncomplete := enttenantschema.WithUnfinishedUploads(writeCtx)
 		err := writeCtx.TTx.StoredFile.
@@ -134,10 +130,6 @@ func MarkStoredFileUploadFailed(ctx *ctxx.SpaceContext, storedFileID int64) {
 }
 
 func MarkTemporaryFileUploadFailed(ctx ctxx.Context, temporaryFileID int64) {
-	if temporaryFileID == 0 {
-		return
-	}
-
 	_, err := WithMainWriteTx(ctx, func(writeTx *entmain.Tx) (*struct{}, error) {
 		ctxWithIncomplete := entmainschema.WithUnfinishedUploads(ctx)
 		err := writeTx.TemporaryFile.

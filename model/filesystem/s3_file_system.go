@@ -275,6 +275,7 @@ func (qq *S3FileSystem) createStoredFileForPreparedUpload(
 		// if transaction fails
 		SetTemporaryStoragePath(meta.temporaryStoragePath).
 		SetTemporaryStorageFilename(meta.storageFilename).
+		SetUploadStartedAt(time.Now()).
 		SaveX(ctx)
 
 	prepared := &PreparedUpload{
@@ -457,10 +458,13 @@ func (qq *S3FileSystem) saveFile(
 			if err != nil {
 				log.Println(err)
 
-				err = encryptorx.Close()
-				if err != nil {
-					log.Println(err)
+				if encryptorx != nil {
+					err = encryptorx.Close()
+					if err != nil {
+						log.Println(err)
+					}
 				}
+
 				erry := pipeWriter.CloseWithError(err)
 				if erry != nil {
 					log.Println(erry)
@@ -746,6 +750,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 		// if transaction fails
 		SetTemporaryStoragePath(tmpFile.StoragePath).
 		SetTemporaryStorageFilename(tmpFile.StorageFilename).
+		SetUploadStartedAt(time.Now()).
 		SetSha256(tmpFile.Sha256).
 		SaveX(ctx)
 
