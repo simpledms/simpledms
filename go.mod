@@ -16,6 +16,7 @@ require (
 	ariga.io/atlas v1.0.0
 	entgo.io/ent v0.14.5
 	filippo.io/age v1.3.1
+	github.com/Shopify/toxiproxy v2.1.4+incompatible
 	github.com/cyphar/filepath-securejoin v0.6.1
 	github.com/go-playground/form v3.1.4+incompatible
 	github.com/go-playground/validator/v10 v10.30.1
