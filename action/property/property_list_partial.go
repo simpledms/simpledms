@@ -72,7 +72,7 @@ func (qq *PropertyListPartial) Widget(ctx ctxx.Context, data *PropertyListPartia
 			Headline:       wx.Tu(propertyx.Name),
 			SupportingText: wx.T(propertyx.Type.String()),
 			Leading:        wx.NewIcon("list_alt"),
-			ContextMenu:    NewPropertyContextMenuPartial(qq.actions).Widget(ctx, propertyx),
+			ContextMenu:    NewPropertyContextMenuWidget(qq.actions).Widget(ctx, propertyx),
 			/*Trailing: &wx.IconButton{
 				Icon: "more_vert",
 				// Children:  // TODO context menu

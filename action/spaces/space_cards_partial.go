@@ -177,7 +177,7 @@ func (qq *SpaceCardsPartial) card(
 		// TODO Subhead:        wx.T("Show stats about user access (new manage button) and files (on view button)"),
 		SupportingText: wx.Tu(spacex.Description),
 		Actions:        actions,
-		ContextMenu:    NewSpaceContextMenuPartial(qq.actions).Widget(ctx, model.NewSpace(spacex)),
+		ContextMenu:    NewSpaceContextMenuWidget(qq.actions).Widget(ctx, model.NewSpace(spacex)),
 	}
 }
 

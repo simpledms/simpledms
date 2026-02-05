@@ -8,17 +8,17 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
-type UserAssignmentContextMenuPartial struct {
+type UserAssignmentContextMenuWidget struct {
 	actions *Actions
 }
 
-func NewUserAssignmentContextMenuPartial(actions *Actions) *UserAssignmentContextMenuPartial {
-	return &UserAssignmentContextMenuPartial{
+func NewUserAssignmentContextMenuWidget(actions *Actions) *UserAssignmentContextMenuWidget {
+	return &UserAssignmentContextMenuWidget{
 		actions: actions,
 	}
 }
 
-func (qq *UserAssignmentContextMenuPartial) Widget(ctx ctxx.Context, userAssignment *enttenant.SpaceUserAssignment) *wx.Menu {
+func (qq *UserAssignmentContextMenuWidget) Widget(ctx ctxx.Context, userAssignment *enttenant.SpaceUserAssignment) *wx.Menu {
 	var items []*wx.MenuItem
 
 	if ctx.SpaceCtx().UserRoleInSpace() == spacerole.Owner {

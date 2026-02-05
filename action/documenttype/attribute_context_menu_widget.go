@@ -8,21 +8,21 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
-type AttributeContextMenuPartialData struct {
+type AttributeContextMenuWidgetData struct {
 	AttributeID int64
 }
 
-type AttributeContextMenuPartial struct {
+type AttributeContextMenuWidget struct {
 	actions *Actions
 }
 
-func NewAttributeContextMenuPartial(actions *Actions) *AttributeContextMenuPartial {
-	return &AttributeContextMenuPartial{
+func NewAttributeContextMenuWidget(actions *Actions) *AttributeContextMenuWidget {
+	return &AttributeContextMenuWidget{
 		actions: actions,
 	}
 }
 
-func (qq *AttributeContextMenuPartial) Widget(ctx ctxx.Context, attributex *enttenant.Attribute) *wx.Menu {
+func (qq *AttributeContextMenuWidget) Widget(ctx ctxx.Context, attributex *enttenant.Attribute) *wx.Menu {
 	// TODO change tag group
 
 	var items []*wx.MenuItem

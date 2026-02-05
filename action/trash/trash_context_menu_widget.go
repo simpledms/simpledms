@@ -7,17 +7,17 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
-type TrashContextMenuPartial struct {
+type TrashContextMenuWidget struct {
 	actions *Actions
 }
 
-func NewTrashContextMenuPartial(actions *Actions) *TrashContextMenuPartial {
-	return &TrashContextMenuPartial{
+func NewTrashContextMenuWidget(actions *Actions) *TrashContextMenuWidget {
+	return &TrashContextMenuWidget{
 		actions: actions,
 	}
 }
 
-func (qq *TrashContextMenuPartial) Widget(ctx ctxx.Context, filex *enttenant.File) *wx.Menu {
+func (qq *TrashContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File) *wx.Menu {
 	var items []*wx.MenuItem
 
 	items = append(items, &wx.MenuItem{

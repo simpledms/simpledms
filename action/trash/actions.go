@@ -13,7 +13,7 @@ type Actions struct {
 	TrashWithSelectionPage *TrashWithSelectionPage
 
 	TrashListPartial            *TrashListPartial
-	TrashContextMenuPartial     *TrashContextMenuPartial
+	TrashContextMenuWidget      *TrashContextMenuWidget
 	FileDetailsSideSheetPartial *FileDetailsSideSheetPartial
 	FileTabsPartial             *FileTabsPartial
 	FileMetadataPartial         *FileMetadataPartial
@@ -33,7 +33,7 @@ func NewActions(infra *common.Infra, browseActions *browse.Actions) *Actions {
 		TrashWithSelectionPage: NewTrashWithSelectionPage(infra, actions),
 
 		TrashListPartial:            NewTrashListPartial(infra, actions),
-		TrashContextMenuPartial:     NewTrashContextMenuPartial(actions),
+		TrashContextMenuWidget:      NewTrashContextMenuWidget(actions),
 		FileDetailsSideSheetPartial: NewFileDetailsSideSheetPartial(infra, actions),
 		FileTabsPartial:             NewFileTabsPartial(infra, actions),
 		FileMetadataPartial:         NewFileMetadataPartial(infra, actions),

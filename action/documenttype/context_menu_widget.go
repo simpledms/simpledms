@@ -7,22 +7,22 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
-type ContextMenuPartialData struct {
+type ContextMenuWidgetData struct {
 	DocumentTypeID int64
 }
 
 // TODO name?
-type ContextMenuPartial struct {
+type ContextMenuWidget struct {
 	actions *Actions
 }
 
-func NewContextMenuPartial(actions *Actions) *ContextMenuPartial {
-	return &ContextMenuPartial{
+func NewContextMenuWidget(actions *Actions) *ContextMenuWidget {
+	return &ContextMenuWidget{
 		actions: actions,
 	}
 }
 
-func (qq *ContextMenuPartial) Widget(ctx ctxx.Context, documentType *enttenant.DocumentType) *wx.Menu {
+func (qq *ContextMenuWidget) Widget(ctx ctxx.Context, documentType *enttenant.DocumentType) *wx.Menu {
 	renameItem := &wx.MenuItem{
 		TrailingIcon: "edit", // TODO
 		Label:        wx.T("Rename"),

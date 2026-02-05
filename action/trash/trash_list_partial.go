@@ -142,7 +142,7 @@ func (qq *TrashListPartial) listItem(ctx ctxx.Context, filex *enttenant.File, is
 	}
 
 	if !filex.IsDirectory {
-		item.ContextMenu = qq.actions.TrashContextMenuPartial.Widget(ctx, filex)
+		item.ContextMenu = qq.actions.TrashContextMenuWidget.Widget(ctx, filex)
 		item.HTMXAttrs = wx.HTMXAttrs{
 			HxTarget:  "#details",
 			HxSwap:    "outerHTML",

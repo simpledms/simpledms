@@ -6,17 +6,17 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
-type SortListContextMenuPartial struct {
+type SortListContextMenuWidget struct {
 	actions *Actions
 }
 
-func NewSortListContextMenuPartial(actions *Actions) *SortListContextMenuPartial {
-	return &SortListContextMenuPartial{
+func NewSortListContextMenuWidget(actions *Actions) *SortListContextMenuWidget {
+	return &SortListContextMenuWidget{
 		actions: actions,
 	}
 }
 
-func (qq *SortListContextMenuPartial) Widget(ctx ctxx.Context, state *FilesListPartialState) *wx.Menu {
+func (qq *SortListContextMenuWidget) Widget(ctx ctxx.Context, state *FilesListPartialState) *wx.Menu {
 	return &wx.Menu{
 		Widget: wx.Widget[wx.Menu]{
 			ID: "sortBy",

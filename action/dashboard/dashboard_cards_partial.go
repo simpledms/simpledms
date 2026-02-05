@@ -236,7 +236,7 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 func (qq *DashboardCardsPartial) spaceCard(ctx ctxx.Context, spacex *enttenant.Space, tenant *entmain.Tenant) *wx.Card {
 	var contextMenu *wx.Menu
 	// if ctx.TenantCtx().User.Role == tenantrole.Owner {
-	contextMenu = NewSpaceContextMenuPartial(qq.actions).Widget(ctx, tenant.PublicID.String(), spacex.PublicID.String())
+	contextMenu = NewSpaceContextMenuWidget(qq.actions).Widget(ctx, tenant.PublicID.String(), spacex.PublicID.String())
 	// }
 
 	return &wx.Card{

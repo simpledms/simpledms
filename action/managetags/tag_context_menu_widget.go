@@ -11,21 +11,21 @@ import (
 )
 
 // TODO move to partial package?
-type TagContextMenuPartial struct {
+type TagContextMenuWidget struct {
 	// TODO add infra? not sure, partials probably shouldn't
 	//		do db queries
 
 	actions *Actions
 }
 
-func NewTagContextMenuPartial(actions *Actions) *TagContextMenuPartial {
-	return &TagContextMenuPartial{
+func NewTagContextMenuWidget(actions *Actions) *TagContextMenuWidget {
+	return &TagContextMenuWidget{
 		actions: actions,
 	}
 }
 
 // TODO should also work without file
-func (qq *TagContextMenuPartial) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *wx.Menu {
+func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *wx.Menu {
 	deleteLink := &wx.MenuItem{
 		LeadingIcon: "delete",
 		Label:       wx.T("Delete"),

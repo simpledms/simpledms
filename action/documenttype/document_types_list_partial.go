@@ -119,6 +119,6 @@ func (qq *DocumentTypesListPartial) ListItem(ctx ctxx.Context, typex *enttenant.
 		Leading:        wx.NewIcon(icon),
 		Headline:       wx.Tu(typex.Name),
 		IsSelected:     isSelected,
-		ContextMenu:    NewContextMenuPartial(qq.actions).Widget(ctx, typex),
+		ContextMenu:    NewContextMenuWidget(qq.actions).Widget(ctx, typex),
 	}
 }

@@ -129,7 +129,7 @@ func (qq *FileListItemPartial) DirectoryListItem(
 		Leading:        icon.SmallPadding(),
 		Headline:       headline,
 		SupportingText: wx.Tu(supportingText),
-		ContextMenu:    NewFileContextMenuPartial(qq.actions).Widget(ctx, fileWithChildren),
+		ContextMenu:    NewFileContextMenuWidget(qq.actions).Widget(ctx, fileWithChildren),
 		HTMXAttrs: wx.HTMXAttrs{
 			HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID.String()),
 			HxHeaders: autil.ResetStateHeader(), // necessary to close side sheet
@@ -227,7 +227,7 @@ func (qq *FileListItemPartial) fileListItem(
 		RadioGroupName: "fileListRadioGroup",
 		// BackgroundColor: "aliceblue",
 		Leading:        wx.NewIcon("description").SmallPadding(),
-		ContextMenu:    NewFileContextMenuPartial(qq.actions).Widget(ctx, fileWithChildren),
+		ContextMenu:    NewFileContextMenuWidget(qq.actions).Widget(ctx, fileWithChildren),
 		Headline:       headline,
 		SupportingText: wx.Tu(supportingText),
 		HTMXAttrs:      htmxAttrs,

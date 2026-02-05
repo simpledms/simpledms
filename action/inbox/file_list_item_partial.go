@@ -68,7 +68,7 @@ func (qq *FileListItemPartial) Widget(
 ) *wx.ListItem {
 	/*trailing := &IconButton{
 		Icon:     "more_vert",
-		Children: NewFileContextMenuPartial(qq.actions).Widget(fileWithChildren),
+		Children: NewFileContextMenuWidget(qq.actions).Widget(fileWithChildren),
 	}*/
 
 	htmxAttrs := wx.HTMXAttrs{
@@ -90,6 +90,6 @@ func (qq *FileListItemPartial) Widget(
 		HTMXAttrs: htmxAttrs,
 		// Trailing:   trailing,
 		IsSelected:  isSelected,
-		ContextMenu: NewFileContextMenuPartial(qq.actions).Widget(ctx, fileWithChildren),
+		ContextMenu: NewFileContextMenuWidget(qq.actions).Widget(ctx, fileWithChildren),
 	}
 }
