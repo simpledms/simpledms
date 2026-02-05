@@ -44,7 +44,9 @@ func dateSuggestionChips(ctx ctxx.Context, fieldID string, suggestions []timex.D
 					Event: "click",
 					Handler: template.JS(fmt.Sprintf(
 						"const el = document.getElementById('%s'); if (el) { el.value='%s'; el.dispatchEvent(new Event('change', { bubbles:true })); }",
+						// safe, not user input:
 						fieldID,
+						// safe, strictly formatted user input:
 						suggestion.Format("2006-01-02"),
 					)),
 				},

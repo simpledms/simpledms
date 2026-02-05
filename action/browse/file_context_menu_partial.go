@@ -56,8 +56,8 @@ func (qq *FileContextMenuPartial) Widget(ctx ctxx.Context, filex *enttenant.File
 			TrailingIcon: "delete",
 			Label:        wx.T("Delete"),
 			HTMXAttrs: wx.HTMXAttrs{
-				HxPost:    qq.actions.DeleteFile.Endpoint(),
-				HxVals:    util.JSON(qq.actions.DeleteFile.Data(filex.PublicID.String())),
+				HxPost:    qq.actions.DeleteFileCmd.Endpoint(),
+				HxVals:    util.JSON(qq.actions.DeleteFileCmd.Data(filex.PublicID.String())),
 				HxTarget:  "#" + qq.actions.ListDirPartial.WrapperID(),
 				HxConfirm: wx.T("Are you sure?").String(ctx),
 			},

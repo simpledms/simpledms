@@ -22,17 +22,17 @@ type DeleteFileData struct {
 	// CurrentPath string `form_attr_type:"hidden"`
 }
 
-type DeleteFile struct {
+type DeleteFileCmd struct {
 	infra   *common.Infra
 	actions *Actions
 	*actionx.Config
 }
 
-func NewDeleteFile(
+func NewDeleteFileCmd(
 	infra *common.Infra,
 	actions *Actions,
-) *DeleteFile {
-	return &DeleteFile{
+) *DeleteFileCmd {
+	return &DeleteFileCmd{
 		infra,
 		actions,
 		actionx.NewConfig(
@@ -42,13 +42,13 @@ func NewDeleteFile(
 	}
 }
 
-func (qq *DeleteFile) Data(fileID string) *DeleteFileData {
+func (qq *DeleteFileCmd) Data(fileID string) *DeleteFileData {
 	return &DeleteFileData{
 		FileID: fileID,
 	}
 }
 
-func (qq *DeleteFile) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *DeleteFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[DeleteFileData](rw, req, ctx)
 	if err != nil {
 		return err
