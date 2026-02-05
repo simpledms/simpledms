@@ -97,6 +97,66 @@ func (_u *TemporaryFileUpdate) ClearDeletedAt() *TemporaryFileUpdate {
 	return _u
 }
 
+// SetUploadStartedAt sets the "upload_started_at" field.
+func (_u *TemporaryFileUpdate) SetUploadStartedAt(v time.Time) *TemporaryFileUpdate {
+	_u.mutation.SetUploadStartedAt(v)
+	return _u
+}
+
+// SetNillableUploadStartedAt sets the "upload_started_at" field if the given value is not nil.
+func (_u *TemporaryFileUpdate) SetNillableUploadStartedAt(v *time.Time) *TemporaryFileUpdate {
+	if v != nil {
+		_u.SetUploadStartedAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadStartedAt clears the value of the "upload_started_at" field.
+func (_u *TemporaryFileUpdate) ClearUploadStartedAt() *TemporaryFileUpdate {
+	_u.mutation.ClearUploadStartedAt()
+	return _u
+}
+
+// SetUploadFailedAt sets the "upload_failed_at" field.
+func (_u *TemporaryFileUpdate) SetUploadFailedAt(v time.Time) *TemporaryFileUpdate {
+	_u.mutation.SetUploadFailedAt(v)
+	return _u
+}
+
+// SetNillableUploadFailedAt sets the "upload_failed_at" field if the given value is not nil.
+func (_u *TemporaryFileUpdate) SetNillableUploadFailedAt(v *time.Time) *TemporaryFileUpdate {
+	if v != nil {
+		_u.SetUploadFailedAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadFailedAt clears the value of the "upload_failed_at" field.
+func (_u *TemporaryFileUpdate) ClearUploadFailedAt() *TemporaryFileUpdate {
+	_u.mutation.ClearUploadFailedAt()
+	return _u
+}
+
+// SetUploadSucceededAt sets the "upload_succeeded_at" field.
+func (_u *TemporaryFileUpdate) SetUploadSucceededAt(v time.Time) *TemporaryFileUpdate {
+	_u.mutation.SetUploadSucceededAt(v)
+	return _u
+}
+
+// SetNillableUploadSucceededAt sets the "upload_succeeded_at" field if the given value is not nil.
+func (_u *TemporaryFileUpdate) SetNillableUploadSucceededAt(v *time.Time) *TemporaryFileUpdate {
+	if v != nil {
+		_u.SetUploadSucceededAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadSucceededAt clears the value of the "upload_succeeded_at" field.
+func (_u *TemporaryFileUpdate) ClearUploadSucceededAt() *TemporaryFileUpdate {
+	_u.mutation.ClearUploadSucceededAt()
+	return _u
+}
+
 // SetSize sets the "size" field.
 func (_u *TemporaryFileUpdate) SetSize(v int64) *TemporaryFileUpdate {
 	_u.mutation.ResetSize()
@@ -438,6 +498,24 @@ func (_u *TemporaryFileUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(temporaryfile.FieldDeletedAt, field.TypeTime)
 	}
+	if value, ok := _u.mutation.UploadStartedAt(); ok {
+		_spec.SetField(temporaryfile.FieldUploadStartedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadStartedAtCleared() {
+		_spec.ClearField(temporaryfile.FieldUploadStartedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.UploadFailedAt(); ok {
+		_spec.SetField(temporaryfile.FieldUploadFailedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadFailedAtCleared() {
+		_spec.ClearField(temporaryfile.FieldUploadFailedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.UploadSucceededAt(); ok {
+		_spec.SetField(temporaryfile.FieldUploadSucceededAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadSucceededAtCleared() {
+		_spec.ClearField(temporaryfile.FieldUploadSucceededAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.Size(); ok {
 		_spec.SetField(temporaryfile.FieldSize, field.TypeInt64, value)
 	}
@@ -638,6 +716,66 @@ func (_u *TemporaryFileUpdateOne) SetNillableDeletedAt(v *time.Time) *TemporaryF
 // ClearDeletedAt clears the value of the "deleted_at" field.
 func (_u *TemporaryFileUpdateOne) ClearDeletedAt() *TemporaryFileUpdateOne {
 	_u.mutation.ClearDeletedAt()
+	return _u
+}
+
+// SetUploadStartedAt sets the "upload_started_at" field.
+func (_u *TemporaryFileUpdateOne) SetUploadStartedAt(v time.Time) *TemporaryFileUpdateOne {
+	_u.mutation.SetUploadStartedAt(v)
+	return _u
+}
+
+// SetNillableUploadStartedAt sets the "upload_started_at" field if the given value is not nil.
+func (_u *TemporaryFileUpdateOne) SetNillableUploadStartedAt(v *time.Time) *TemporaryFileUpdateOne {
+	if v != nil {
+		_u.SetUploadStartedAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadStartedAt clears the value of the "upload_started_at" field.
+func (_u *TemporaryFileUpdateOne) ClearUploadStartedAt() *TemporaryFileUpdateOne {
+	_u.mutation.ClearUploadStartedAt()
+	return _u
+}
+
+// SetUploadFailedAt sets the "upload_failed_at" field.
+func (_u *TemporaryFileUpdateOne) SetUploadFailedAt(v time.Time) *TemporaryFileUpdateOne {
+	_u.mutation.SetUploadFailedAt(v)
+	return _u
+}
+
+// SetNillableUploadFailedAt sets the "upload_failed_at" field if the given value is not nil.
+func (_u *TemporaryFileUpdateOne) SetNillableUploadFailedAt(v *time.Time) *TemporaryFileUpdateOne {
+	if v != nil {
+		_u.SetUploadFailedAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadFailedAt clears the value of the "upload_failed_at" field.
+func (_u *TemporaryFileUpdateOne) ClearUploadFailedAt() *TemporaryFileUpdateOne {
+	_u.mutation.ClearUploadFailedAt()
+	return _u
+}
+
+// SetUploadSucceededAt sets the "upload_succeeded_at" field.
+func (_u *TemporaryFileUpdateOne) SetUploadSucceededAt(v time.Time) *TemporaryFileUpdateOne {
+	_u.mutation.SetUploadSucceededAt(v)
+	return _u
+}
+
+// SetNillableUploadSucceededAt sets the "upload_succeeded_at" field if the given value is not nil.
+func (_u *TemporaryFileUpdateOne) SetNillableUploadSucceededAt(v *time.Time) *TemporaryFileUpdateOne {
+	if v != nil {
+		_u.SetUploadSucceededAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadSucceededAt clears the value of the "upload_succeeded_at" field.
+func (_u *TemporaryFileUpdateOne) ClearUploadSucceededAt() *TemporaryFileUpdateOne {
+	_u.mutation.ClearUploadSucceededAt()
 	return _u
 }
 
@@ -1011,6 +1149,24 @@ func (_u *TemporaryFileUpdateOne) sqlSave(ctx context.Context) (_node *Temporary
 	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(temporaryfile.FieldDeletedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.UploadStartedAt(); ok {
+		_spec.SetField(temporaryfile.FieldUploadStartedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadStartedAtCleared() {
+		_spec.ClearField(temporaryfile.FieldUploadStartedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.UploadFailedAt(); ok {
+		_spec.SetField(temporaryfile.FieldUploadFailedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadFailedAtCleared() {
+		_spec.ClearField(temporaryfile.FieldUploadFailedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.UploadSucceededAt(); ok {
+		_spec.SetField(temporaryfile.FieldUploadSucceededAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadSucceededAtCleared() {
+		_spec.ClearField(temporaryfile.FieldUploadSucceededAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.Size(); ok {
 		_spec.SetField(temporaryfile.FieldSize, field.TypeInt64, value)

@@ -157,6 +157,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			temporaryfile.FieldUpdatedBy:               {Type: field.TypeInt64, Column: temporaryfile.FieldUpdatedBy},
 			temporaryfile.FieldDeletedBy:               {Type: field.TypeInt64, Column: temporaryfile.FieldDeletedBy},
 			temporaryfile.FieldDeletedAt:               {Type: field.TypeTime, Column: temporaryfile.FieldDeletedAt},
+			temporaryfile.FieldUploadStartedAt:         {Type: field.TypeTime, Column: temporaryfile.FieldUploadStartedAt},
+			temporaryfile.FieldUploadFailedAt:          {Type: field.TypeTime, Column: temporaryfile.FieldUploadFailedAt},
+			temporaryfile.FieldUploadSucceededAt:       {Type: field.TypeTime, Column: temporaryfile.FieldUploadSucceededAt},
 			temporaryfile.FieldOwnerID:                 {Type: field.TypeInt64, Column: temporaryfile.FieldOwnerID},
 			temporaryfile.FieldFilename:                {Type: field.TypeString, Column: temporaryfile.FieldFilename},
 			temporaryfile.FieldSize:                    {Type: field.TypeInt64, Column: temporaryfile.FieldSize},
@@ -1219,6 +1222,21 @@ func (f *TemporaryFileFilter) WhereDeletedBy(p entql.Int64P) {
 // WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
 func (f *TemporaryFileFilter) WhereDeletedAt(p entql.TimeP) {
 	f.Where(p.Field(temporaryfile.FieldDeletedAt))
+}
+
+// WhereUploadStartedAt applies the entql time.Time predicate on the upload_started_at field.
+func (f *TemporaryFileFilter) WhereUploadStartedAt(p entql.TimeP) {
+	f.Where(p.Field(temporaryfile.FieldUploadStartedAt))
+}
+
+// WhereUploadFailedAt applies the entql time.Time predicate on the upload_failed_at field.
+func (f *TemporaryFileFilter) WhereUploadFailedAt(p entql.TimeP) {
+	f.Where(p.Field(temporaryfile.FieldUploadFailedAt))
+}
+
+// WhereUploadSucceededAt applies the entql time.Time predicate on the upload_succeeded_at field.
+func (f *TemporaryFileFilter) WhereUploadSucceededAt(p entql.TimeP) {
+	f.Where(p.Field(temporaryfile.FieldUploadSucceededAt))
 }
 
 // WhereOwnerID applies the entql int64 predicate on the owner_id field.

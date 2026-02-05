@@ -56,6 +56,9 @@ func (qq SoftDeleteMixin) Edges() []ent.Edge {
 // P adds a storage-level predicate to the queries and mutations.
 func (qq SoftDeleteMixin) P(w interface{ WhereP(...func(*sql.Selector)) }) {
 	w.WhereP(
-		sql.FieldIsNull(qq.Fields()[0].Descriptor().Name),
+		// changed on 04.02.2026 to field 1 (deleted_at) because it should be
+		// more reliable than deleted_by
+		sql.FieldIsNull("deleted_at"),
+		// sql.FieldIsNull(qq.Fields()[1].Descriptor().Name),
 	)
 }

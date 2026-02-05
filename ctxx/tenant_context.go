@@ -8,6 +8,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	"github.com/simpledms/simpledms/db/sqlx"
 )
 
 type TenantContext struct {
@@ -45,6 +46,10 @@ func NewTenantContext(
 	}
 	tenantCtx.Context = context.WithValue(mainContext.Context, tenantCtxKey, tenantCtx)
 	return tenantCtx
+}
+
+func (qq *TenantContext) UnsafeTenantDB() (*sqlx.TenantDB, bool) {
+	return qq.unsafeTenantDBs.Load(qq.Tenant.ID)
 }
 
 func (qq *TenantContext) TenantCtx() *TenantContext {

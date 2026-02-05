@@ -14,8 +14,8 @@ import (
 )
 
 // IMPORTANT
-// shares most code with entmain.SoftDeleteMixin; cannot merge because hook and intercept dependencies
-// belong to enttenant/entmain
+// shares most code with entmain.SoftDeleteMixin; cannot merge because hook and
+// intercept dependencies belong to enttenant/entmain
 type SoftDeleteMixin struct {
 	entx.SoftDeleteMixin
 }

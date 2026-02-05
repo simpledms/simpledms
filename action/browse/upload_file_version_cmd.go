@@ -8,6 +8,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/model/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -33,7 +34,7 @@ func NewUploadFileVersionCmd(
 	config := actionx.NewConfig(
 		actions.Route("upload-file-version-cmd"),
 		false,
-	)
+	).EnableManualTxManagement()
 
 	return &UploadFileVersionCmd{
 		infra:   infra,
@@ -77,14 +78,32 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 	if filex.Data.IsDirectory {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
 	}
+	if err := autil.EnsureFileDoesNotExist(ctx, filename, filex.Data.ParentID, filex.Data.IsInInbox); err != nil {
+		return err
+	}
 
-	_, err = qq.infra.FileSystem().AddFileVersion(
-		ctx,
-		uploadedFile,
-		filename,
-		filex.Data.ID,
-	)
+	prep, err := autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*filesystem.PreparedUpload, error) {
+		return qq.infra.FileSystem().PrepareFileVersionUpload(
+			writeCtx,
+			filename,
+			filex.Data.ID,
+		)
+	})
 	if err != nil {
+		return err
+	}
+
+	fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFile(ctx, uploadedFile, prep)
+	if err != nil {
+		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep, err, true)
+		return err
+	}
+
+	_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep, fileInfo, fileSize)
+	})
+	if err != nil {
+		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep, err, false)
 		return err
 	}
 

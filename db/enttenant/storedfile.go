@@ -27,6 +27,12 @@ type StoredFile struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy int64 `json:"updated_by,omitempty"`
+	// UploadStartedAt holds the value of the "upload_started_at" field.
+	UploadStartedAt time.Time `json:"upload_started_at,omitempty"`
+	// UploadFailedAt holds the value of the "upload_failed_at" field.
+	UploadFailedAt *time.Time `json:"upload_failed_at,omitempty"`
+	// UploadSucceededAt holds the value of the "upload_succeeded_at" field.
+	UploadSucceededAt *time.Time `json:"upload_succeeded_at,omitempty"`
 	// Filename holds the value of the "filename" field.
 	Filename string `json:"filename,omitempty"`
 	// Size holds the value of the "size" field.
@@ -123,7 +129,7 @@ func (*StoredFile) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case storedfile.FieldFilename, storedfile.FieldSha256, storedfile.FieldMimeType, storedfile.FieldBucketName, storedfile.FieldStoragePath, storedfile.FieldStorageFilename, storedfile.FieldTemporaryStoragePath, storedfile.FieldTemporaryStorageFilename:
 			values[i] = new(sql.NullString)
-		case storedfile.FieldCreatedAt, storedfile.FieldUpdatedAt, storedfile.FieldCopiedToFinalDestinationAt, storedfile.FieldDeletedTemporaryFileAt:
+		case storedfile.FieldCreatedAt, storedfile.FieldUpdatedAt, storedfile.FieldUploadStartedAt, storedfile.FieldUploadFailedAt, storedfile.FieldUploadSucceededAt, storedfile.FieldCopiedToFinalDestinationAt, storedfile.FieldDeletedTemporaryFileAt:
 			values[i] = new(sql.NullTime)
 		case storedfile.FieldStorageType:
 			values[i] = new(storagetype.StorageType)
@@ -171,6 +177,26 @@ func (_m *StoredFile) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.Int64
+			}
+		case storedfile.FieldUploadStartedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field upload_started_at", values[i])
+			} else if value.Valid {
+				_m.UploadStartedAt = value.Time
+			}
+		case storedfile.FieldUploadFailedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field upload_failed_at", values[i])
+			} else if value.Valid {
+				_m.UploadFailedAt = new(time.Time)
+				*_m.UploadFailedAt = value.Time
+			}
+		case storedfile.FieldUploadSucceededAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field upload_succeeded_at", values[i])
+			} else if value.Valid {
+				_m.UploadSucceededAt = new(time.Time)
+				*_m.UploadSucceededAt = value.Time
 			}
 		case storedfile.FieldFilename:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -319,6 +345,19 @@ func (_m *StoredFile) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedBy))
+	builder.WriteString(", ")
+	builder.WriteString("upload_started_at=")
+	builder.WriteString(_m.UploadStartedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	if v := _m.UploadFailedAt; v != nil {
+		builder.WriteString("upload_failed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.UploadSucceededAt; v != nil {
+		builder.WriteString("upload_succeeded_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("filename=")
 	builder.WriteString(_m.Filename)

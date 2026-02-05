@@ -76,6 +76,21 @@ func UpdatedBy(v int64) predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// UploadStartedAt applies equality check predicate on the "upload_started_at" field. It's identical to UploadStartedAtEQ.
+func UploadStartedAt(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldUploadStartedAt, v))
+}
+
+// UploadFailedAt applies equality check predicate on the "upload_failed_at" field. It's identical to UploadFailedAtEQ.
+func UploadFailedAt(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldUploadFailedAt, v))
+}
+
+// UploadSucceededAt applies equality check predicate on the "upload_succeeded_at" field. It's identical to UploadSucceededAtEQ.
+func UploadSucceededAt(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldUploadSucceededAt, v))
+}
+
 // Filename applies equality check predicate on the "filename" field. It's identical to FilenameEQ.
 func Filename(v string) predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldEQ(FieldFilename, v))
@@ -274,6 +289,156 @@ func UpdatedByIsNil() predicate.StoredFile {
 // UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
 func UpdatedByNotNil() predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldNotNull(FieldUpdatedBy))
+}
+
+// UploadStartedAtEQ applies the EQ predicate on the "upload_started_at" field.
+func UploadStartedAtEQ(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldUploadStartedAt, v))
+}
+
+// UploadStartedAtNEQ applies the NEQ predicate on the "upload_started_at" field.
+func UploadStartedAtNEQ(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNEQ(FieldUploadStartedAt, v))
+}
+
+// UploadStartedAtIn applies the In predicate on the "upload_started_at" field.
+func UploadStartedAtIn(vs ...time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIn(FieldUploadStartedAt, vs...))
+}
+
+// UploadStartedAtNotIn applies the NotIn predicate on the "upload_started_at" field.
+func UploadStartedAtNotIn(vs ...time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotIn(FieldUploadStartedAt, vs...))
+}
+
+// UploadStartedAtGT applies the GT predicate on the "upload_started_at" field.
+func UploadStartedAtGT(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGT(FieldUploadStartedAt, v))
+}
+
+// UploadStartedAtGTE applies the GTE predicate on the "upload_started_at" field.
+func UploadStartedAtGTE(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGTE(FieldUploadStartedAt, v))
+}
+
+// UploadStartedAtLT applies the LT predicate on the "upload_started_at" field.
+func UploadStartedAtLT(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLT(FieldUploadStartedAt, v))
+}
+
+// UploadStartedAtLTE applies the LTE predicate on the "upload_started_at" field.
+func UploadStartedAtLTE(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLTE(FieldUploadStartedAt, v))
+}
+
+// UploadStartedAtIsNil applies the IsNil predicate on the "upload_started_at" field.
+func UploadStartedAtIsNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIsNull(FieldUploadStartedAt))
+}
+
+// UploadStartedAtNotNil applies the NotNil predicate on the "upload_started_at" field.
+func UploadStartedAtNotNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotNull(FieldUploadStartedAt))
+}
+
+// UploadFailedAtEQ applies the EQ predicate on the "upload_failed_at" field.
+func UploadFailedAtEQ(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldUploadFailedAt, v))
+}
+
+// UploadFailedAtNEQ applies the NEQ predicate on the "upload_failed_at" field.
+func UploadFailedAtNEQ(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNEQ(FieldUploadFailedAt, v))
+}
+
+// UploadFailedAtIn applies the In predicate on the "upload_failed_at" field.
+func UploadFailedAtIn(vs ...time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIn(FieldUploadFailedAt, vs...))
+}
+
+// UploadFailedAtNotIn applies the NotIn predicate on the "upload_failed_at" field.
+func UploadFailedAtNotIn(vs ...time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotIn(FieldUploadFailedAt, vs...))
+}
+
+// UploadFailedAtGT applies the GT predicate on the "upload_failed_at" field.
+func UploadFailedAtGT(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGT(FieldUploadFailedAt, v))
+}
+
+// UploadFailedAtGTE applies the GTE predicate on the "upload_failed_at" field.
+func UploadFailedAtGTE(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGTE(FieldUploadFailedAt, v))
+}
+
+// UploadFailedAtLT applies the LT predicate on the "upload_failed_at" field.
+func UploadFailedAtLT(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLT(FieldUploadFailedAt, v))
+}
+
+// UploadFailedAtLTE applies the LTE predicate on the "upload_failed_at" field.
+func UploadFailedAtLTE(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLTE(FieldUploadFailedAt, v))
+}
+
+// UploadFailedAtIsNil applies the IsNil predicate on the "upload_failed_at" field.
+func UploadFailedAtIsNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIsNull(FieldUploadFailedAt))
+}
+
+// UploadFailedAtNotNil applies the NotNil predicate on the "upload_failed_at" field.
+func UploadFailedAtNotNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotNull(FieldUploadFailedAt))
+}
+
+// UploadSucceededAtEQ applies the EQ predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtEQ(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldUploadSucceededAt, v))
+}
+
+// UploadSucceededAtNEQ applies the NEQ predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtNEQ(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNEQ(FieldUploadSucceededAt, v))
+}
+
+// UploadSucceededAtIn applies the In predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtIn(vs ...time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIn(FieldUploadSucceededAt, vs...))
+}
+
+// UploadSucceededAtNotIn applies the NotIn predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtNotIn(vs ...time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotIn(FieldUploadSucceededAt, vs...))
+}
+
+// UploadSucceededAtGT applies the GT predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtGT(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGT(FieldUploadSucceededAt, v))
+}
+
+// UploadSucceededAtGTE applies the GTE predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtGTE(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGTE(FieldUploadSucceededAt, v))
+}
+
+// UploadSucceededAtLT applies the LT predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtLT(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLT(FieldUploadSucceededAt, v))
+}
+
+// UploadSucceededAtLTE applies the LTE predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtLTE(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLTE(FieldUploadSucceededAt, v))
+}
+
+// UploadSucceededAtIsNil applies the IsNil predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtIsNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIsNull(FieldUploadSucceededAt))
+}
+
+// UploadSucceededAtNotNil applies the NotNil predicate on the "upload_succeeded_at" field.
+func UploadSucceededAtNotNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotNull(FieldUploadSucceededAt))
 }
 
 // FilenameEQ applies the EQ predicate on the "filename" field.

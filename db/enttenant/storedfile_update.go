@@ -59,6 +59,66 @@ func (_u *StoredFileUpdate) ClearUpdatedBy() *StoredFileUpdate {
 	return _u
 }
 
+// SetUploadStartedAt sets the "upload_started_at" field.
+func (_u *StoredFileUpdate) SetUploadStartedAt(v time.Time) *StoredFileUpdate {
+	_u.mutation.SetUploadStartedAt(v)
+	return _u
+}
+
+// SetNillableUploadStartedAt sets the "upload_started_at" field if the given value is not nil.
+func (_u *StoredFileUpdate) SetNillableUploadStartedAt(v *time.Time) *StoredFileUpdate {
+	if v != nil {
+		_u.SetUploadStartedAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadStartedAt clears the value of the "upload_started_at" field.
+func (_u *StoredFileUpdate) ClearUploadStartedAt() *StoredFileUpdate {
+	_u.mutation.ClearUploadStartedAt()
+	return _u
+}
+
+// SetUploadFailedAt sets the "upload_failed_at" field.
+func (_u *StoredFileUpdate) SetUploadFailedAt(v time.Time) *StoredFileUpdate {
+	_u.mutation.SetUploadFailedAt(v)
+	return _u
+}
+
+// SetNillableUploadFailedAt sets the "upload_failed_at" field if the given value is not nil.
+func (_u *StoredFileUpdate) SetNillableUploadFailedAt(v *time.Time) *StoredFileUpdate {
+	if v != nil {
+		_u.SetUploadFailedAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadFailedAt clears the value of the "upload_failed_at" field.
+func (_u *StoredFileUpdate) ClearUploadFailedAt() *StoredFileUpdate {
+	_u.mutation.ClearUploadFailedAt()
+	return _u
+}
+
+// SetUploadSucceededAt sets the "upload_succeeded_at" field.
+func (_u *StoredFileUpdate) SetUploadSucceededAt(v time.Time) *StoredFileUpdate {
+	_u.mutation.SetUploadSucceededAt(v)
+	return _u
+}
+
+// SetNillableUploadSucceededAt sets the "upload_succeeded_at" field if the given value is not nil.
+func (_u *StoredFileUpdate) SetNillableUploadSucceededAt(v *time.Time) *StoredFileUpdate {
+	if v != nil {
+		_u.SetUploadSucceededAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadSucceededAt clears the value of the "upload_succeeded_at" field.
+func (_u *StoredFileUpdate) ClearUploadSucceededAt() *StoredFileUpdate {
+	_u.mutation.ClearUploadSucceededAt()
+	return _u
+}
+
 // SetSize sets the "size" field.
 func (_u *StoredFileUpdate) SetSize(v int64) *StoredFileUpdate {
 	_u.mutation.ResetSize()
@@ -452,6 +512,24 @@ func (_u *StoredFileUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(storedfile.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if value, ok := _u.mutation.UploadStartedAt(); ok {
+		_spec.SetField(storedfile.FieldUploadStartedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadStartedAtCleared() {
+		_spec.ClearField(storedfile.FieldUploadStartedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.UploadFailedAt(); ok {
+		_spec.SetField(storedfile.FieldUploadFailedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadFailedAtCleared() {
+		_spec.ClearField(storedfile.FieldUploadFailedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.UploadSucceededAt(); ok {
+		_spec.SetField(storedfile.FieldUploadSucceededAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadSucceededAtCleared() {
+		_spec.ClearField(storedfile.FieldUploadSucceededAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.Size(); ok {
 		_spec.SetField(storedfile.FieldSize, field.TypeInt64, value)
 	}
@@ -688,6 +766,66 @@ func (_u *StoredFileUpdateOne) SetNillableUpdatedBy(v *int64) *StoredFileUpdateO
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *StoredFileUpdateOne) ClearUpdatedBy() *StoredFileUpdateOne {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetUploadStartedAt sets the "upload_started_at" field.
+func (_u *StoredFileUpdateOne) SetUploadStartedAt(v time.Time) *StoredFileUpdateOne {
+	_u.mutation.SetUploadStartedAt(v)
+	return _u
+}
+
+// SetNillableUploadStartedAt sets the "upload_started_at" field if the given value is not nil.
+func (_u *StoredFileUpdateOne) SetNillableUploadStartedAt(v *time.Time) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetUploadStartedAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadStartedAt clears the value of the "upload_started_at" field.
+func (_u *StoredFileUpdateOne) ClearUploadStartedAt() *StoredFileUpdateOne {
+	_u.mutation.ClearUploadStartedAt()
+	return _u
+}
+
+// SetUploadFailedAt sets the "upload_failed_at" field.
+func (_u *StoredFileUpdateOne) SetUploadFailedAt(v time.Time) *StoredFileUpdateOne {
+	_u.mutation.SetUploadFailedAt(v)
+	return _u
+}
+
+// SetNillableUploadFailedAt sets the "upload_failed_at" field if the given value is not nil.
+func (_u *StoredFileUpdateOne) SetNillableUploadFailedAt(v *time.Time) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetUploadFailedAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadFailedAt clears the value of the "upload_failed_at" field.
+func (_u *StoredFileUpdateOne) ClearUploadFailedAt() *StoredFileUpdateOne {
+	_u.mutation.ClearUploadFailedAt()
+	return _u
+}
+
+// SetUploadSucceededAt sets the "upload_succeeded_at" field.
+func (_u *StoredFileUpdateOne) SetUploadSucceededAt(v time.Time) *StoredFileUpdateOne {
+	_u.mutation.SetUploadSucceededAt(v)
+	return _u
+}
+
+// SetNillableUploadSucceededAt sets the "upload_succeeded_at" field if the given value is not nil.
+func (_u *StoredFileUpdateOne) SetNillableUploadSucceededAt(v *time.Time) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetUploadSucceededAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadSucceededAt clears the value of the "upload_succeeded_at" field.
+func (_u *StoredFileUpdateOne) ClearUploadSucceededAt() *StoredFileUpdateOne {
+	_u.mutation.ClearUploadSucceededAt()
 	return _u
 }
 
@@ -1113,6 +1251,24 @@ func (_u *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile, 
 	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(storedfile.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := _u.mutation.UploadStartedAt(); ok {
+		_spec.SetField(storedfile.FieldUploadStartedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadStartedAtCleared() {
+		_spec.ClearField(storedfile.FieldUploadStartedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.UploadFailedAt(); ok {
+		_spec.SetField(storedfile.FieldUploadFailedAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadFailedAtCleared() {
+		_spec.ClearField(storedfile.FieldUploadFailedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.UploadSucceededAt(); ok {
+		_spec.SetField(storedfile.FieldUploadSucceededAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadSucceededAtCleared() {
+		_spec.ClearField(storedfile.FieldUploadSucceededAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.Size(); ok {
 		_spec.SetField(storedfile.FieldSize, field.TypeInt64, value)
