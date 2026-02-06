@@ -7,9 +7,9 @@ import (
 )
 
 type Config struct {
-	endpoint   string
-	method     string
-	isReadOnly bool
+	endpoint         string
+	method           string
+	isReadOnly       bool
 	usesSeparatedCmd bool // TODO reference to cmd instead?
 	// some actions open their own write transactions and should avoid long-lived
 	// request transactions
@@ -56,7 +56,10 @@ func (qq *Config) EndpointWithParams(wrapper ResponseWrapper, hxTarget string) s
 	return qq.endpointWithParams(qq.Endpoint(), wrapper, hxTarget)
 }
 
-// TODO rename to something more meaningful, also var where value is used
+// TODO
+//
+//	rename to something more meaningful, also var where value is used
+//	maybe IsReadOnlyTx or UseReadOnlyTx?
 func (qq *Config) IsReadOnly() bool {
 	return qq.isReadOnly || qq.UseManualTxManagement()
 }
