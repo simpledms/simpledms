@@ -57,7 +57,7 @@ func TestConcurrentUploadFileCmdWithSlowS3(t *testing.T) {
 		t.Fatalf("commit tenant tx: %v", err)
 	}
 
-	const uploadCount = 4
+	const uploadCount = 15
 	var wg sync.WaitGroup
 	errCh := make(chan error, uploadCount)
 
