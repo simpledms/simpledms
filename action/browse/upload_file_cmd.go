@@ -8,6 +8,8 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/model/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -39,7 +41,7 @@ func NewUploadFileCmd(
 	config := actionx.NewConfig(
 		actions.Route("upload-file-cmd"),
 		false,
-	)
+	).EnableManualTxManagement()
 
 	formHelper := autil.NewFormHelper[UploadFileCmdData](
 		infra,
@@ -76,6 +78,9 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	if data.ParentDirID == "" {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "No parent dir provided.")
 	}
+	if !ctx.SpaceCtx().TenantCtx().IsReadOnlyTx() {
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Read-only request context required.")
+	}
 
 	uploadedFile, uploadedFileHeader, err := req.FormFile("File")
 	if err != nil {
@@ -97,18 +102,46 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 
 	parentDir := qq.infra.FileRepo.GetX(ctx, data.ParentDirID)
 
-	filex, err := qq.infra.FileSystem().AddFile(
-		ctx,
-		uploadedFile,
-		filename,
-		data.AddToInbox,
-		parentDir.Data.ID,
-	)
+	if err := autil.EnsureFileDoesNotExist(ctx, filename, parentDir.Data.ID, data.AddToInbox); err != nil {
+		return err
+	}
+
+	type uploadPrepareResult struct {
+		prepared *filesystem.PreparedUpload
+		filex    *enttenant.File
+	}
+
+	prep, err := autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
+		prepared, filex, err := qq.infra.FileSystem().PrepareFileUpload(
+			writeCtx,
+			filename,
+			parentDir.Data.ID,
+			data.AddToInbox,
+		)
+		if err != nil {
+			return nil, err
+		}
+		return &uploadPrepareResult{prepared: prepared, filex: filex}, nil
+	})
 	if err != nil {
 		return err
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("«%s» uploaded.", filex.Name))
+	fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFile(ctx, uploadedFile, prep.prepared)
+	if err != nil {
+		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
+		return err
+	}
+
+	_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep.prepared, fileInfo, fileSize)
+	})
+	if err != nil {
+		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, false)
+		return err
+	}
+
+	rw.AddRenderables(wx.NewSnackbarf("«%s» uploaded.", prep.filex.Name))
 	// TODO does triggering event have an effect? request comes from uppy and isn't a HTMX request...
 	rw.Header().Add("HX-Trigger", event.FileUploaded.String())
 

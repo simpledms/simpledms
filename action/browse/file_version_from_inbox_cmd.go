@@ -181,6 +181,7 @@ func (qq *FileVersionFromInboxCmd) mergeFromInbox(
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not remove source versions.")
 	}
 
+	// TODO seems unnecessary?
 	ctxWithDeleted := schema.SkipSoftDelete(ctx)
 	err = ctx.TenantCtx().TTx.File.DeleteOneID(fileToMerge.ID).Exec(ctxWithDeleted)
 	if err != nil {

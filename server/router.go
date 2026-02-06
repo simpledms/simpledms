@@ -43,6 +43,7 @@ type Actionable interface {
 	Endpoint() string
 	FormRoute() string
 	IsReadOnly() bool
+	UseManualTxManagement() bool
 	// Handler(httpx.ResponseWriter, *httpx.Request, *ent.Tx) error
 	Handler(httpx.ResponseWriter, *httpx.Request, ctxx.Context) error
 }
@@ -503,7 +504,7 @@ func (qq *Router) context(
 		}
 	}
 
-	mainCtx := ctxx.NewMainContext(visitorCtx, accountm.Data, qq.i18n, qq.tenantDBs)
+	mainCtx := ctxx.NewMainContext(visitorCtx, accountm.Data, qq.i18n, qq.mainDB, qq.tenantDBs, isReadOnly)
 	if tenantID == "" { // spaceID doesn't have to be checked, can only be set if Tenant is set
 		return mainCtx, nil, false, nil
 	}
@@ -540,7 +541,7 @@ func (qq *Router) context(
 		return mainCtx, tenantTx, false, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
 	}
 
-	tenantCtx := ctxx.NewTenantContext(mainCtx, tenantTx, tenantx)
+	tenantCtx := ctxx.NewTenantContext(mainCtx, tenantTx, tenantx, isReadOnly)
 	if spaceID == "" {
 		return tenantCtx, tenantTx, false, nil
 	}

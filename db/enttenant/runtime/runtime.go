@@ -263,8 +263,12 @@ func init() {
 			return next.Mutate(ctx, m)
 		})
 	}
+	storedfileMixinInters1 := storedfileMixin[1].Interceptors()
+	storedfile.Interceptors[0] = storedfileMixinInters1[0]
 	storedfileMixinFields0 := storedfileMixin[0].Fields()
 	_ = storedfileMixinFields0
+	storedfileMixinFields1 := storedfileMixin[1].Fields()
+	_ = storedfileMixinFields1
 	storedfileFields := schema.StoredFile{}.Fields()
 	_ = storedfileFields
 	// storedfileDescCreatedAt is the schema descriptor for created_at field.
@@ -277,6 +281,10 @@ func init() {
 	storedfile.DefaultUpdatedAt = storedfileDescUpdatedAt.Default.(func() time.Time)
 	// storedfile.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	storedfile.UpdateDefaultUpdatedAt = storedfileDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// storedfileDescUploadStartedAt is the schema descriptor for upload_started_at field.
+	storedfileDescUploadStartedAt := storedfileMixinFields1[0].Descriptor()
+	// storedfile.DefaultUploadStartedAt holds the default value on creation for the upload_started_at field.
+	storedfile.DefaultUploadStartedAt = storedfileDescUploadStartedAt.Default.(func() time.Time)
 	tagMixin := schema.Tag{}.Mixin()
 	tag.Policy = privacy.NewPolicies(tagMixin[0], schema.Tag{})
 	tag.Hooks[0] = func(next ent.Mutator) ent.Mutator {

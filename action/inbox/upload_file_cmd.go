@@ -10,11 +10,18 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/model/filesystem"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
+
+type uploadPrepareResult struct {
+	prepared *filesystem.PreparedUpload
+	file     *enttenant.File
+}
 
 type UploadFileCmdData struct {
 	File []byte `schema:"-"`
@@ -32,7 +39,7 @@ func NewUploadFileCmd(infra *common.Infra, actions *Actions) *UploadFileCmd {
 	config := actionx.NewConfig(
 		actions.Route("upload-file-cmd"),
 		false,
-	)
+	).EnableManualTxManagement()
 	formHelper := autil.NewFormHelper[UploadFileCmdData](
 		infra,
 		config,
@@ -73,14 +80,37 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	filename := uploadedFileHeader.Filename
 	filename = filepath.Clean(filename)
 
-	filex, err := qq.infra.FileSystem().AddFile(
-		ctx,
-		uploadedFile,
-		filename,
-		true,
-		ctx.SpaceCtx().SpaceRootDir().ID,
-	)
+	if err := autil.EnsureFileDoesNotExist(ctx, filename, ctx.SpaceCtx().SpaceRootDir().ID, true); err != nil {
+		return err
+	}
+
+	prep, err := autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
+		prepared, filex, err := qq.infra.FileSystem().PrepareFileUpload(
+			writeCtx,
+			filename,
+			ctx.SpaceCtx().SpaceRootDir().ID,
+			true,
+		)
+		if err != nil {
+			return nil, err
+		}
+		return &uploadPrepareResult{prepared: prepared, file: filex}, nil
+	})
 	if err != nil {
+		return err
+	}
+
+	fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFile(ctx, uploadedFile, prep.prepared)
+	if err != nil {
+		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
+		return err
+	}
+
+	_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep.prepared, fileInfo, fileSize)
+	})
+	if err != nil {
+		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, false)
 		return err
 	}
 
@@ -90,7 +120,7 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		qq.actions.InboxPage.WidgetHandler(rw, req, ctx, filex.PublicID.String()),
-		wx.NewSnackbarf("«%s» uploaded.", filex.Name),
+		qq.actions.InboxPage.WidgetHandler(rw, req, ctx, prep.file.PublicID.String()),
+		wx.NewSnackbarf("«%s» uploaded.", prep.file.Name),
 	)
 }

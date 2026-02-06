@@ -172,7 +172,7 @@ func (qq *FileListItemPartial) supportingTextDirectory(fileWithChildren *enttena
 		supportingTextArr = append(supportingTextArr, "Empty directory")
 	}
 
-	supportingText = fmt.Sprintf(strings.Join(supportingTextArr, ", ")) // TODO add size?
+	supportingText = fmt.Sprint(strings.Join(supportingTextArr, ", ")) // TODO add size?
 	return supportingText
 }
 

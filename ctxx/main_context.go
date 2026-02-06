@@ -7,6 +7,7 @@ import (
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
 )
 
@@ -15,14 +16,18 @@ type MainContext struct {
 	Account *entmain.Account // modelmain.Account would be better, but leads to circular dependency
 	// should never be exposed directly;
 	// unsafe because must be used with care
+	unsafeMainDB    *sqlx.MainDB
 	unsafeTenantDBs *tenantdbs.TenantDBs
+	isReadOnly      bool
 }
 
 func NewMainContext(
 	ctx *VisitorContext,
 	account *entmain.Account,
 	i18nx *i18n.I18n,
+	mainDB *sqlx.MainDB,
 	tenantDBs *tenantdbs.TenantDBs,
+	isReadOnly bool,
 ) *MainContext {
 	ctx.Printer = i18nx.Printer(account.Language.Tag())
 	langTagBase, _ := account.Language.Tag().Base() // TODO evaluate confidence?
@@ -31,10 +36,16 @@ func NewMainContext(
 	mainCtx := &MainContext{
 		VisitorContext:  ctx,
 		Account:         account,
+		unsafeMainDB:    mainDB,
 		unsafeTenantDBs: tenantDBs,
+		isReadOnly:      isReadOnly,
 	}
 	mainCtx.Context = context.WithValue(ctx.Context, mainCtxKey, mainCtx)
 	return mainCtx
+}
+
+func (qq *MainContext) UnsafeMainDB() *sqlx.MainDB {
+	return qq.unsafeMainDB
 }
 
 // TODO cache?
@@ -59,7 +70,7 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() map[*entmain.Tenant][]*en
 		}
 
 		// necessary for permissions
-		tenantCtx := NewTenantContext(qq, tenantTx, tenantx)
+		tenantCtx := NewTenantContext(qq, tenantTx, tenantx, true)
 
 		// spaces = append(spaces, tenantDB.Space.Query().AllX(ctx)...)
 		spacesx, err := tenantDB.ReadOnlyConn.Space.Query().All(tenantCtx)
@@ -89,6 +100,10 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() map[*entmain.Tenant][]*en
 
 func (qq *MainContext) MainCtx() *MainContext {
 	return qq
+}
+
+func (qq *MainContext) IsReadOnlyTx() bool {
+	return qq.isReadOnly
 }
 
 func (qq *MainContext) TenantCtx() *TenantContext {

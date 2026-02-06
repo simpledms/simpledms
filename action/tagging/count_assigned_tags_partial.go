@@ -57,7 +57,7 @@ func (qq *CountAssignedTagsPartial) Badge(ctx ctxx.Context, fileID string) *wx.B
 	filex := qq.infra.FileRepo.GetX(ctx, fileID)
 	tagsCount := filex.Data.QueryTags().CountX(ctx)
 
-	id := autil.GenerateID(fmt.Sprintf("tagsCount-%d", fileID))
+	id := autil.GenerateID(fmt.Sprintf("tagsCount-%s", fileID))
 	return &wx.Badge{
 		Widget: wx.Widget[wx.Badge]{
 			ID: id,

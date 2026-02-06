@@ -74,6 +74,7 @@ func (StoredFile) Mixin() []ent.Mixin {
 		// and enforced double bookkeeping on user (keep publicID and filename in sync)
 		// entx.NewPublicIDMixin(true),
 		NewCommonMixin(StoredFile.Type),
+		NewUploadStatusMixin(),
 	}
 }
 
