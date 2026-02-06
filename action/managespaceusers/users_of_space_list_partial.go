@@ -70,7 +70,7 @@ func (qq *UsersOfSpaceListPartial) Widget(ctx ctxx.Context, state *UsersOfSpaceL
 			Leading:        leading,
 			Headline:       wx.Tu(userm.Name()),
 			SupportingText: wx.Tu(userm.NameSecondLine()),
-			ContextMenu:    NewUserAssignmentContextMenuPartial(qq.actions).Widget(ctx, assignment),
+			ContextMenu:    NewUserAssignmentContextMenuWidget(qq.actions).Widget(ctx, assignment),
 		})
 	}
 

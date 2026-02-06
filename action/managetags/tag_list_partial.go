@@ -240,7 +240,7 @@ func (qq *TagListPartial) listItem(
 		Headline:       wx.Tu(tagx.Name),
 		SupportingText: supportingText,
 		Trailing:       trailing,
-		ContextMenu:    NewTagContextMenuPartial(qq.actions).Widget(ctx, tagx),
+		ContextMenu:    NewTagContextMenuWidget(qq.actions).Widget(ctx, tagx),
 		Child:          childItems,
 		IsCollapsible:  isCollapsible,
 		IsOpen:         isOpen,

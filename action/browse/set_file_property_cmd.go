@@ -113,6 +113,15 @@ func (qq *SetFilePropertyCmd) Handler(
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.FilePropertyUpdated.String())
 
+	if propertyx.Type == fieldtype.Date {
+		dateSuggestionsWidget := NewDateSuggestionsWidget(filex, filePropertyFieldID(propertyx.ID), propertyx.ID)
+		rw.AddRenderables(dateSuggestionsWidget.Widget(
+			ctx,
+			data.DateValue.IsZero(),
+			"outerHTML",
+		))
+	}
+
 	rw.AddRenderables(wx.NewSnackbarf("«%s» saved.", propertyx.Name))
 
 	return nil

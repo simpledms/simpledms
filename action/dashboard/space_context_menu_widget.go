@@ -6,19 +6,19 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
-type SpaceContextMenuPartial struct {
+type SpaceContextMenuWidget struct {
 	actions *Actions
 }
 
-func NewSpaceContextMenuPartial(actions *Actions) *SpaceContextMenuPartial {
-	return &SpaceContextMenuPartial{
+func NewSpaceContextMenuWidget(actions *Actions) *SpaceContextMenuWidget {
+	return &SpaceContextMenuWidget{
 		actions: actions,
 	}
 }
 
-func (qq *SpaceContextMenuPartial) Widget(ctx ctxx.Context, tenantID, spaceID string) *wx.Menu {
+func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, tenantID, spaceID string) *wx.Menu {
 	return &wx.Menu{
-		// near duplicate in MainMenu and space.SpaceContextMenuPartial
+		// near duplicate in MainMenu and space.SpaceContextMenuWidget
 		Items: []*wx.MenuItem{
 			{
 				LeadingIcon: "edit",

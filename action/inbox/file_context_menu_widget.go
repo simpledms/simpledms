@@ -7,17 +7,17 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
-type FileContextMenuPartial struct {
+type FileContextMenuWidget struct {
 	actions *Actions
 }
 
-func NewFileContextMenuPartial(actions *Actions) *FileContextMenuPartial {
-	return &FileContextMenuPartial{
+func NewFileContextMenuWidget(actions *Actions) *FileContextMenuWidget {
+	return &FileContextMenuWidget{
 		actions: actions,
 	}
 }
 
-func (qq *FileContextMenuPartial) Widget(ctx ctxx.Context, filex *enttenant.File) *wx.Menu {
+func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File) *wx.Menu {
 	// filem := model.NewFile(filex)
 	var menuItems []*wx.MenuItem
 
@@ -41,8 +41,8 @@ func (qq *FileContextMenuPartial) Widget(ctx ctxx.Context, filex *enttenant.File
 			TrailingIcon: "delete",
 			Label:        wx.T("Delete"),
 			HTMXAttrs: wx.HTMXAttrs{
-				HxPost: qq.actions.Browse.DeleteFile.Endpoint(),
-				HxVals: util.JSON(qq.actions.Browse.DeleteFile.Data(filex.PublicID.String())),
+				HxPost: qq.actions.Browse.DeleteFileCmd.Endpoint(),
+				HxVals: util.JSON(qq.actions.Browse.DeleteFileCmd.Data(filex.PublicID.String())),
 				// HxTarget:  "#" + qq.actions.ListDir.WrapperID(),
 				HxConfirm: wx.T("Are you sure?").String(ctx),
 			},

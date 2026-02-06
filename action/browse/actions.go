@@ -22,7 +22,7 @@ type Actions struct {
 	ChangeDirPartial *ChangeDirCmd
 	ListDirPartial   *ListDirPartial
 	MakeDirCmd       *MakeDirCmd
-	DeleteFile       *DeleteFile
+	DeleteFileCmd    *DeleteFileCmd
 
 	// SelectDirPartial *SelectDirActions `actions:"select-dir"`
 
@@ -86,7 +86,7 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		ChangeDirPartial: NewChangeDirCmd(infra, actions),
 		ListDirPartial:   NewListDirPartial(infra, actions),
 		MakeDirCmd:       NewMakeDirCmd(infra, actions),
-		DeleteFile:       NewDeleteFile(infra, actions),
+		DeleteFileCmd:    NewDeleteFileCmd(infra, actions),
 
 		// SelectDirPartial: &SelectDirActions{
 		// MakeDirCmd: NewSelectDirMakeDirCmd(infra, actions),

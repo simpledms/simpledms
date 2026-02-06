@@ -8,17 +8,17 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
-type SpaceContextMenuPartial struct {
+type SpaceContextMenuWidget struct {
 	actions *Actions
 }
 
-func NewSpaceContextMenuPartial(actions *Actions) *SpaceContextMenuPartial {
-	return &SpaceContextMenuPartial{
+func NewSpaceContextMenuWidget(actions *Actions) *SpaceContextMenuWidget {
+	return &SpaceContextMenuWidget{
 		actions: actions,
 	}
 }
 
-func (qq *SpaceContextMenuPartial) Widget(ctx ctxx.Context, spacem *model.Space) *wx.Menu {
+func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, spacem *model.Space) *wx.Menu {
 	renameItem := &wx.MenuItem{
 		LeadingIcon: "edit",
 		Label:       wx.T("Edit"),
@@ -51,7 +51,7 @@ func (qq *SpaceContextMenuPartial) Widget(ctx ctxx.Context, spacem *model.Space)
 		{
 			IsDivider: true,
 		},
-		// similar code in SpaceContextMenuPartial and MainMenu
+		// similar code in SpaceContextMenuWidget and MainMenu
 		{
 			LeadingIcon: "category", // TODO category or description?
 			Label:       wx.T("Document types"),

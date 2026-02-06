@@ -7,17 +7,17 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
-type PropertyContextMenuPartial struct {
+type PropertyContextMenuWidget struct {
 	actions *Actions
 }
 
-func NewPropertyContextMenuPartial(actions *Actions) *PropertyContextMenuPartial {
-	return &PropertyContextMenuPartial{
+func NewPropertyContextMenuWidget(actions *Actions) *PropertyContextMenuWidget {
+	return &PropertyContextMenuWidget{
 		actions: actions,
 	}
 }
 
-func (qq *PropertyContextMenuPartial) Widget(ctx ctxx.Context, propertyx *enttenant.Property) *wx.Menu {
+func (qq *PropertyContextMenuWidget) Widget(ctx ctxx.Context, propertyx *enttenant.Property) *wx.Menu {
 	renameItem := &wx.MenuItem{
 		TrailingIcon: "edit",
 		Label:        wx.T("Edit"),

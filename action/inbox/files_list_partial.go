@@ -314,7 +314,7 @@ func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.
 			&wx.IconButton{
 				Icon:     "sort",
 				Tooltip:  wx.T("Sort files"),
-				Children: NewSortListContextMenuPartial(qq.actions).Widget(ctx, &state.FilesListPartialState),
+				Children: NewSortListContextMenuWidget(qq.actions).Widget(ctx, &state.FilesListPartialState),
 			},
 		},
 		Search: &wx.Search{

@@ -94,7 +94,7 @@ func (qq *AttributesPartial) Widget(ctx ctxx.Context, data *AttributesPartialDat
 				Headline:       wx.Tu(attributex.Edges.Property.Name),
 				SupportingText: supportingText,
 				Leading:        wx.NewIcon("list_alt"), // TODO okay?
-				ContextMenu:    NewAttributeContextMenuPartial(qq.actions).Widget(ctx, attributex),
+				ContextMenu:    NewAttributeContextMenuWidget(qq.actions).Widget(ctx, attributex),
 			})
 		} else if attributex.Type == attributetype.Tag {
 			supportingText := wx.Tu(attributex.Edges.Tag.Name)
@@ -105,7 +105,7 @@ func (qq *AttributesPartial) Widget(ctx ctxx.Context, data *AttributesPartialDat
 				Headline:       wx.Tu(attributex.Name),
 				SupportingText: supportingText,
 				Leading:        wx.NewIcon("list_alt"), // TODO okay?
-				ContextMenu:    NewAttributeContextMenuPartial(qq.actions).Widget(ctx, attributex),
+				ContextMenu:    NewAttributeContextMenuWidget(qq.actions).Widget(ctx, attributex),
 			})
 		} else {
 			// TODO okay?

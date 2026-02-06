@@ -109,6 +109,6 @@ func (qq *ListItemAssignedTagsPartial) Widget(ctx ctxx.Context, tagx *enttenant.
 		Headline:       headline,
 		SupportingText: supportingText,
 		// Trailing:      nil,
-		ContextMenu: NewTagContextMenuPartial(qq.actions).Widget(ctx, "", tagx),
+		ContextMenu: NewTagContextMenuWidget(qq.actions).Widget(ctx, "", tagx),
 	}
 }

@@ -9,10 +9,12 @@
     {{ if ne .GetHxTarget "" }}hx-target="{{ .GetHxTarget }}"{{ end }}
     {{ if ne .GetHxSelect "" }}hx-select="{{ .GetHxSelect }}"{{ end }}
     {{ if ne .GetHxSwap "" }}hx-swap="{{ .GetHxSwap }}"{{ end }}
+    {{ if ne .HxSwapOOB "" }}hx-swap-oob="{{ .HxSwapOOB }}"{{ end }}
     {{ if ne .HxConfirm "" }}hx-confirm="{{ .HxConfirm }}"{{ end }}
     {{ if ne .HxInclude "" }}hx-include="{{ .HxInclude }}"{{ end }}
     {{ if ne .GetHxBoost "" }}hx-boost="{{ .GetHxBoost }}"{{ end }}
     {{ with .GetHxIndicator }}hx-indicator="{{ . }}"{{ end }}
+    {{ if .HxPreserve }}hx-preserve{{ end }}
     {{ with .HxHeaders }}hx-headers="{{ . }}"{{ end }}
     {{ with .HxOn }}
         hx-on:{{ .Event }}="{{ .Handler }}"

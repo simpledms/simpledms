@@ -266,7 +266,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 		SupportingText: wx.Tu(supportingText),
 		Trailing:       trailing,
 		IsCollapsible:  isCollapsible,
-		ContextMenu:    NewTagContextMenuPartial(qq.actions).Widget(ctx, fileID, tagx),
+		ContextMenu:    NewTagContextMenuWidget(qq.actions).Widget(ctx, fileID, tagx),
 		Child:          childItems,
 	}
 }

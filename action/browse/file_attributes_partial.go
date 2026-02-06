@@ -2,9 +2,7 @@ package browse
 
 import (
 	"fmt"
-	"html/template"
 	"log"
-	"strings"
 
 	"entgo.io/ent/dialect/sql"
 
@@ -26,7 +24,6 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/timex"
 )
 
 type FileAttributesPartialData struct {
@@ -187,7 +184,8 @@ func (qq *FileAttributesPartial) Content(
 			AutoHeight:       true,
 			HTMXAttrs: wx.HTMXAttrs{
 				// TODO only reload affected tag group
-				HxTrigger: event.HxTrigger(event.TagUpdated, event.FilePropertyUpdated), // TODO only update if ID is identical
+				// TODO only update if ID is identical
+				HxTrigger: event.HxTrigger(event.TagUpdated),
 				HxPost:    qq.Endpoint(),
 				HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String())),
 				HxTarget:  "#" + qq.FileAttributesID(),
@@ -305,16 +303,18 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 		},
 	}
 
-	hasDateValue := false
-	if nilableAssignment != nil && attributex.Edges.Property.Type == fieldtype.Date && !nilableAssignment.DateValue.IsZero() {
-		hasDateValue = true
-	}
-	if attributex.Edges.Property.Type == fieldtype.Date && !hasDateValue {
-		suggestions := qq.dateSuggestions(ctx, filex)
-		if len(suggestions) > 0 {
-			fieldID := field.(wx.IWidgetWithID).GetID()
-			children = append(children, qq.dateSuggestionChips(ctx, fieldID, suggestions))
+	if attributex.Edges.Property.Type == fieldtype.Date {
+		hasDateValue := false
+		if nilableAssignment != nil && !nilableAssignment.DateValue.IsZero() {
+			hasDateValue = true
 		}
+		fieldID := field.(wx.IWidgetWithID).GetID()
+		dateSuggestionsWidget := NewDateSuggestionsWidget(filex, fieldID, attributex.Edges.Property.ID)
+		children = append(children, dateSuggestionsWidget.Widget(
+			ctx,
+			!hasDateValue,
+			"",
+		))
 	}
 
 	return &wx.Column{
@@ -322,45 +322,6 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 		NoOverflowHidden: true,
 		AutoHeight:       true,
 		Children:         children,
-	}
-}
-
-func (qq *FileAttributesPartial) dateSuggestions(ctx ctxx.Context, filex *model.File) []timex.Date {
-	content := strings.TrimSpace(filex.Data.Name)
-	if filex.Data.OcrContent != "" {
-		if content == "" {
-			content = filex.Data.OcrContent
-		} else {
-			content = content + "\n" + filex.Data.OcrContent
-		}
-	}
-
-	return timex.SuggestDatesFromText(content)
-}
-
-func (qq *FileAttributesPartial) dateSuggestionChips(ctx ctxx.Context, fieldID string, suggestions []timex.Date) *wx.Container {
-	var chips []wx.IWidget
-	for _, suggestion := range suggestions {
-		label := suggestion.String(ctx.MainCtx().LanguageBCP47)
-		chips = append(chips, &wx.AssistChip{
-			Label:       wx.Tu(label),
-			LeadingIcon: "event",
-			HTMXAttrs: wx.HTMXAttrs{
-				HxOn: &wx.HxOn{
-					Event: "click",
-					Handler: template.JS(fmt.Sprintf(
-						"const el = document.getElementById('%s'); if (el) { el.value='%s'; el.dispatchEvent(new Event('change', { bubbles:true })); }",
-						fieldID,
-						suggestion.Format("2006-01-02"),
-					)),
-				},
-			},
-		})
-	}
-
-	return &wx.Container{
-		Gap:   true,
-		Child: chips,
 	}
 }
 
