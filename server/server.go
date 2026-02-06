@@ -42,6 +42,7 @@ import (
 	"github.com/simpledms/simpledms/model/filesystem"
 	"github.com/simpledms/simpledms/model/modelmain"
 	tenant2 "github.com/simpledms/simpledms/model/tenant"
+	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/scheduler"
 	"github.com/simpledms/simpledms/ui"
 	"github.com/simpledms/simpledms/ui/uix/partial"
@@ -559,6 +560,7 @@ func (qq *Server) Start() error {
 		),
 		factory,
 		fileRepo,
+		pluginx.NewRegistry(),
 		systemConfig,
 	)
 	router := NewRouter(mainDB, tenantDBs, infra, qq.devMode, qq.metaPath, i18nx)
@@ -633,6 +635,12 @@ func (qq *Server) Start() error {
 	router.RegisterPage(route2.TrashDownloadRoute(), trashDownloadHandler.Handler)
 
 	router.RegisterActions(actions)
+
+	err = infra.PluginRegistry().RegisterActions(router)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 
 	// router.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./webapp/assets"))))
 	// slash suffix is necessary to match all paths with the prefix

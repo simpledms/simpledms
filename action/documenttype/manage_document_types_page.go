@@ -79,7 +79,7 @@ func (qq *ManageDocumentTypesPage) Handler(
 	id64 := int64(id)
 
 	viewx = &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, "", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "", fabs),
 		Content:    qq.actions.DocumentTypePage.WidgetHandler(rw, req, ctx, id64),
 	}
 

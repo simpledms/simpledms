@@ -32,7 +32,7 @@ func (qq *DashboardPage) Widget(ctx ctxx.Context) renderable.Renderable {
 
 	mainLayout := &wx.MainLayout{
 		// MainCtx is necessary when navigating back from space, otherwise all menu items are rendered
-		Navigation: partial2.NewNavigationRail(ctx.MainCtx(), "dashboard", fabs),
+		Navigation: partial2.NewNavigationRail(ctx.MainCtx(), qq.infra, "dashboard", fabs),
 		Content: &wx.DefaultLayout{
 			AppBar:        qq.appBar(ctx),
 			Content:       qq.actions.DashboardCardsPartial.Widget(ctx),
@@ -48,7 +48,7 @@ func (qq *DashboardPage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "dashboard",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
 		Title: &wx.AppBarTitle{
 			Text: wx.T("Dashboard"),
 		},

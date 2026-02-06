@@ -31,7 +31,7 @@ func (qq *AboutPage) Widget(ctx ctxx.Context) renderable.Renderable {
 	var fabs []*wx.FloatingActionButton
 
 	mainLayout := &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, "about", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "about", fabs),
 		Content: &wx.DefaultLayout{
 			AppBar: qq.appBar(ctx),
 			Content: &wx.Column{
@@ -128,7 +128,7 @@ func (qq *AboutPage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "info",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
 		Title: &wx.AppBarTitle{
 			Text: wx.T("About SimpleDMS"),
 		},

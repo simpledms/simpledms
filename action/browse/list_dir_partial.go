@@ -676,7 +676,7 @@ func (qq *ListDirPartial) appBar(
 
 	return &wx.AppBar{
 		Leading:          leadingButton,
-		LeadingAltMobile: partial.NewMainMenu(ctx),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title:            wx.Tu(dir.Data.Name),
 		// Actions:          actions,
 		Search: &wx.Search{

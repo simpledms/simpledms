@@ -10,6 +10,7 @@ import (
 	"github.com/simpledms/simpledms/model/common/country"
 	"github.com/simpledms/simpledms/model/common/language"
 	"github.com/simpledms/simpledms/model/modelmain"
+	"github.com/simpledms/simpledms/pluginx"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -89,7 +90,7 @@ func (qq *SignUpCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 		tenantName = data.FirstName + " " + data.LastName
 	}
 
-	_, err = modelmain.NewSignUpService().SignUp(
+	accountm, err := modelmain.NewSignUpService().SignUp(
 		ctx,
 		data.Email,
 		tenantName,
@@ -100,6 +101,26 @@ func (qq *SignUpCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 		data.SubscribeToNewsletter,
 		false,
 	)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	tenantx, err := accountm.Data.QueryTenants().Only(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	err = qq.infra.PluginRegistry().EmitSignUp(ctx, pluginx.SignUpEvent{
+		AccountID:             accountm.Data.ID,
+		AccountPublicID:       accountm.Data.PublicID.String(),
+		AccountEmail:          accountm.Data.Email.String(),
+		TenantID:              tenantx.ID,
+		TenantPublicID:        tenantx.PublicID.String(),
+		TenantName:            tenantx.Name,
+		SubscribeToNewsletter: data.SubscribeToNewsletter,
+	})
 	if err != nil {
 		log.Println(err)
 		return err
