@@ -20,99 +20,103 @@ import (
 )
 
 func TestUploadFilesCmdCreatesTemporaryFilesAndRedirects(t *testing.T) {
-	harness := newActionTestHarnessWithS3(t)
+	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
+		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
 
-	email := "shared@example.com"
-	createAccount(t, harness.mainDB, email, "shared-secret")
+		email := "shared@example.com"
+		createAccount(t, harness.mainDB, email, "shared-secret")
 
-	accountx := harness.mainDB.ReadWriteConn.Account.Query().
-		Where(account.EmailEQ(entx.NewCIText(email))).
-		OnlyX(context.Background())
+		accountx := harness.mainDB.ReadWriteConn.Account.Query().
+			Where(account.EmailEQ(entx.NewCIText(email))).
+			OnlyX(context.Background())
 
-	var location string
-	err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
-		req := newSharedUploadRequest(t, map[string]string{
-			"first.txt":  "hello",
-			"second.txt": "world",
+		var location string
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+			req := newSharedUploadRequest(t, map[string]string{
+				"first.txt":  "hello",
+				"second.txt": "world",
+			})
+
+			rr := httptest.NewRecorder()
+			err := harness.actions.OpenFile.UploadFilesCmd.Handler(
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
+				mainCtx,
+			)
+			if err != nil {
+				return fmt.Errorf("upload files command: %w", err)
+			}
+
+			if rr.Code != http.StatusFound {
+				return fmt.Errorf("expected status %d, got %d", http.StatusFound, rr.Code)
+			}
+
+			location = rr.Header().Get("Location")
+			if !strings.HasPrefix(location, "/open-file/select-space/") {
+				return fmt.Errorf("expected redirect to select-space, got %q", location)
+			}
+
+			return nil
 		})
-
-		rr := httptest.NewRecorder()
-		err := harness.actions.OpenFile.UploadFilesCmd.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
-			mainCtx,
-		)
 		if err != nil {
-			return fmt.Errorf("upload files command: %w", err)
+			t.Fatalf("upload files command: %v", err)
 		}
 
-		if rr.Code != http.StatusFound {
-			return fmt.Errorf("expected status %d, got %d", http.StatusFound, rr.Code)
+		uploadToken := strings.TrimPrefix(location, "/open-file/select-space/")
+		if uploadToken == "" {
+			t.Fatal("expected upload token in redirect")
 		}
 
-		location = rr.Header().Get("Location")
-		if !strings.HasPrefix(location, "/open-file/select-space/") {
-			return fmt.Errorf("expected redirect to select-space, got %q", location)
+		temporaryFiles := harness.mainDB.ReadWriteConn.TemporaryFile.Query().Where(
+			temporaryfile.OwnerID(accountx.ID),
+			temporaryfile.UploadToken(uploadToken),
+		).AllX(context.Background())
+		if len(temporaryFiles) != 2 {
+			t.Fatalf("expected 2 temporary files, got %d", len(temporaryFiles))
 		}
-
-		return nil
 	})
-	if err != nil {
-		t.Fatalf("upload files command: %v", err)
-	}
-
-	uploadToken := strings.TrimPrefix(location, "/open-file/select-space/")
-	if uploadToken == "" {
-		t.Fatal("expected upload token in redirect")
-	}
-
-	temporaryFiles := harness.mainDB.ReadWriteConn.TemporaryFile.Query().Where(
-		temporaryfile.OwnerID(accountx.ID),
-		temporaryfile.UploadToken(uploadToken),
-	).AllX(context.Background())
-	if len(temporaryFiles) != 2 {
-		t.Fatalf("expected 2 temporary files, got %d", len(temporaryFiles))
-	}
 }
 
 func TestUploadFilesCmdRejectsNonMultipartRequests(t *testing.T) {
-	harness := newActionTestHarnessWithS3(t)
+	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
+		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
 
-	email := "shared-invalid@example.com"
-	createAccount(t, harness.mainDB, email, "shared-secret")
+		email := "shared-invalid@example.com"
+		createAccount(t, harness.mainDB, email, "shared-secret")
 
-	accountx := harness.mainDB.ReadWriteConn.Account.Query().
-		Where(account.EmailEQ(entx.NewCIText(email))).
-		OnlyX(context.Background())
+		accountx := harness.mainDB.ReadWriteConn.Account.Query().
+			Where(account.EmailEQ(entx.NewCIText(email))).
+			OnlyX(context.Background())
 
-	var handlerErr error
-	err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
-		req := httptest.NewRequest(http.MethodPost, "/-/open-file/upload-files-cmd", strings.NewReader("plain"))
-		req.Header.Set("Content-Type", "text/plain")
+		var handlerErr error
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+			req := httptest.NewRequest(http.MethodPost, "/-/open-file/upload-files-cmd", strings.NewReader("plain"))
+			req.Header.Set("Content-Type", "text/plain")
 
-		rr := httptest.NewRecorder()
-		handlerErr = harness.actions.OpenFile.UploadFilesCmd.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
-			mainCtx,
-		)
-		if handlerErr == nil {
-			return fmt.Errorf("expected error")
+			rr := httptest.NewRecorder()
+			handlerErr = harness.actions.OpenFile.UploadFilesCmd.Handler(
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
+				mainCtx,
+			)
+			if handlerErr == nil {
+				return fmt.Errorf("expected error")
+			}
+
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("setup failed: %v", err)
 		}
 
-		return nil
+		httpErr, ok := handlerErr.(*e.HTTPError)
+		if !ok {
+			t.Fatalf("expected HTTPError, got %T", handlerErr)
+		}
+		if httpErr.StatusCode() != http.StatusInternalServerError {
+			t.Fatalf("expected status %d, got %d", http.StatusInternalServerError, httpErr.StatusCode())
+		}
 	})
-	if err != nil {
-		t.Fatalf("setup failed: %v", err)
-	}
-
-	httpErr, ok := handlerErr.(*e.HTTPError)
-	if !ok {
-		t.Fatalf("expected HTTPError, got %T", handlerErr)
-	}
-	if httpErr.StatusCode() != http.StatusInternalServerError {
-		t.Fatalf("expected status %d, got %d", http.StatusInternalServerError, httpErr.StatusCode())
-	}
 }
 
 func newSharedUploadRequest(t *testing.T, files map[string]string) *http.Request {

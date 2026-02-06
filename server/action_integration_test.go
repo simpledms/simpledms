@@ -62,6 +62,32 @@ func newActionTestHarnessWithS3(t *testing.T) *actionTestHarness {
 	return newActionTestHarnessWithSaaSAndS3(t, true) // saas mode required for registration
 }
 
+func newActionTestHarnessWithS3AndEncryption(t *testing.T, disableEncryption bool) *actionTestHarness {
+	s3Config := newTestS3Config(t)
+	s3Config.disableEncryption = disableEncryption
+
+	return newActionTestHarnessWithSaaSAndS3Config(t, true, s3Config) // saas mode required for registration
+}
+
+func runWithFileEncryptionModes(t *testing.T, testFn func(t *testing.T, disableEncryption bool)) {
+	t.Helper()
+
+	testCases := []struct {
+		name              string
+		disableEncryption bool
+	}{
+		{name: "encryption-enabled", disableEncryption: false},
+		{name: "encryption-disabled", disableEncryption: true},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			testFn(t, tc.disableEncryption)
+		})
+	}
+}
+
 func newActionTestHarnessWithSaaSAndS3(t *testing.T, isSaaSModeEnabled bool) *actionTestHarness {
 	s3Config := newTestS3Config(t)
 	return newActionTestHarnessWithSaaSAndS3Config(t, isSaaSModeEnabled, s3Config)

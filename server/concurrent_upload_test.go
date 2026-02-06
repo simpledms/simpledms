@@ -20,117 +20,119 @@ import (
 )
 
 func TestConcurrentUploadFileCmd(t *testing.T) {
-	harness := newActionTestHarnessWithS3(t)
+	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
+		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
 
-	accountx, tenantx := signUpAccount(t, harness, "uploader@example.com")
-	tenantDB := initTenantDB(t, harness, tenantx)
-	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
+		accountx, tenantx := signUpAccount(t, harness, "uploader@example.com")
+		tenantDB := initTenantDB(t, harness, tenantx)
+		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
-	mainTx, tenantTx, tenantCtx := newTenantContext(t, harness, accountx, tenantx, tenantDB)
-	spaceName := "Concurrent Uploads"
-	createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
+		mainTx, tenantTx, tenantCtx := newTenantContext(t, harness, accountx, tenantx, tenantDB)
+		spaceName := "Concurrent Uploads"
+		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
-	spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
-	spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-	rootDir := spaceCtx.SpaceRootDir()
-	parentDirID := rootDir.PublicID.String()
-	rootDirID := rootDir.ID
-	spaceID := spacex.ID
+		spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
+		spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+		rootDir := spaceCtx.SpaceRootDir()
+		parentDirID := rootDir.PublicID.String()
+		rootDirID := rootDir.ID
+		spaceID := spacex.ID
 
-	if err := mainTx.Commit(); err != nil {
-		_ = tenantTx.Rollback()
-		t.Fatalf("commit main tx: %v", err)
-	}
-	if err := tenantTx.Commit(); err != nil {
-		t.Fatalf("commit tenant tx: %v", err)
-	}
+		if err := mainTx.Commit(); err != nil {
+			_ = tenantTx.Rollback()
+			t.Fatalf("commit main tx: %v", err)
+		}
+		if err := tenantTx.Commit(); err != nil {
+			t.Fatalf("commit tenant tx: %v", err)
+		}
 
-	const uploadCount = 15
-	var wg sync.WaitGroup
-	errCh := make(chan error, uploadCount)
+		const uploadCount = 15
+		var wg sync.WaitGroup
+		errCh := make(chan error, uploadCount)
 
-	for i := 0; i < uploadCount; i++ {
-		i := i
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		for i := 0; i < uploadCount; i++ {
+			i := i
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
 
-			mainTx, tenantTx, tenantCtx, err := newTenantContextForUpload(harness, accountx, tenantx, tenantDB)
-			if err != nil {
-				errCh <- err
-				return
-			}
-
-			committed := false
-			defer func() {
-				if committed {
+				mainTx, tenantTx, tenantCtx, err := newTenantContextForUpload(harness, accountx, tenantx, tenantDB)
+				if err != nil {
+					errCh <- err
 					return
 				}
-				_ = tenantTx.Rollback()
-				_ = mainTx.Rollback()
+
+				committed := false
+				defer func() {
+					if committed {
+						return
+					}
+					_ = tenantTx.Rollback()
+					_ = mainTx.Rollback()
+				}()
+
+				spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
+				spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+
+				filename := fmt.Sprintf("concurrent-%d.txt", i)
+				req, err := newUploadRequest(parentDirID, filename, []byte("hello"))
+				if err != nil {
+					errCh <- err
+					return
+				}
+
+				rr := httptest.NewRecorder()
+				err = harness.actions.Browse.UploadFileCmd.Handler(
+					httpx.NewResponseWriter(rr),
+					httpx.NewRequest(req),
+					spaceCtx,
+				)
+				if err != nil {
+					errCh <- err
+					return
+				}
+
+				if err := mainTx.Commit(); err != nil {
+					errCh <- err
+					return
+				}
+				if err := tenantTx.Commit(); err != nil {
+					errCh <- err
+					return
+				}
+				committed = true
+				errCh <- nil
 			}()
-
-			spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
-			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-
-			filename := fmt.Sprintf("concurrent-%d.txt", i)
-			req, err := newUploadRequest(parentDirID, filename, []byte("hello"))
-			if err != nil {
-				errCh <- err
-				return
-			}
-
-			rr := httptest.NewRecorder()
-			err = harness.actions.Browse.UploadFileCmd.Handler(
-				httpx.NewResponseWriter(rr),
-				httpx.NewRequest(req),
-				spaceCtx,
-			)
-			if err != nil {
-				errCh <- err
-				return
-			}
-
-			if err := mainTx.Commit(); err != nil {
-				errCh <- err
-				return
-			}
-			if err := tenantTx.Commit(); err != nil {
-				errCh <- err
-				return
-			}
-			committed = true
-			errCh <- nil
-		}()
-	}
-
-	wg.Wait()
-	close(errCh)
-
-	for err := range errCh {
-		if err != nil {
-			t.Fatalf("upload failed: %v", err)
 		}
-	}
 
-	mainTx, tenantTx, tenantCtx, err := newTenantContextForUpload(harness, accountx, tenantx, tenantDB)
-	if err != nil {
-		t.Fatalf("new tenant context: %v", err)
-	}
-	defer func() {
-		_ = tenantTx.Rollback()
-		_ = mainTx.Rollback()
-	}()
+		wg.Wait()
+		close(errCh)
 
-	spacex = tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
-	spaceCtx = ctxx.NewSpaceContext(tenantCtx, spacex)
-	fileCount := spaceCtx.TTx.File.Query().Where(
-		file.ParentID(rootDirID),
-		file.IsDirectory(false),
-	).CountX(spaceCtx)
-	if fileCount != uploadCount {
-		t.Fatalf("expected %d files, got %d", uploadCount, fileCount)
-	}
+		for err := range errCh {
+			if err != nil {
+				t.Fatalf("upload failed: %v", err)
+			}
+		}
+
+		mainTx, tenantTx, tenantCtx, err := newTenantContextForUpload(harness, accountx, tenantx, tenantDB)
+		if err != nil {
+			t.Fatalf("new tenant context: %v", err)
+		}
+		defer func() {
+			_ = tenantTx.Rollback()
+			_ = mainTx.Rollback()
+		}()
+
+		spacex = tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
+		spaceCtx = ctxx.NewSpaceContext(tenantCtx, spacex)
+		fileCount := spaceCtx.TTx.File.Query().Where(
+			file.ParentID(rootDirID),
+			file.IsDirectory(false),
+		).CountX(spaceCtx)
+		if fileCount != uploadCount {
+			t.Fatalf("expected %d files, got %d", uploadCount, fileCount)
+		}
+	})
 }
 
 func newTenantContextForUpload(
