@@ -45,7 +45,7 @@ func TestConcurrentUploadFileCmd(t *testing.T) {
 		t.Fatalf("commit tenant tx: %v", err)
 	}
 
-	const uploadCount = 6
+	const uploadCount = 15
 	var wg sync.WaitGroup
 	errCh := make(chan error, uploadCount)
 
