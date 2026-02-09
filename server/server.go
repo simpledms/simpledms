@@ -27,7 +27,9 @@ import (
 	"github.com/simpledms/simpledms/action/download"
 	trashaction "github.com/simpledms/simpledms/action/trash"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/migrate"
 	"github.com/simpledms/simpledms/db/entmain/systemconfig"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
@@ -264,28 +266,97 @@ func (qq *Server) Start() error {
 // handlers on Router before calling PreparedServer.Start.
 // TODO way to long, needs refactoring
 func (qq *Server) Prepare() (*PreparedServer, error) {
-	var err error
-
 	// TODO close all clients
 	mainDB := dbMigrationsMainDB(qq.devMode, qq.metaPath, qq.migrationsMainFS)
-
+	ctx := context.Background()
 	overrideDBConfig := os.Getenv("SIMPLEDMS_OVERRIDE_DB_CONFIG") == "true"
 
-	ctx := context.Background()
+	qq.initializeMainConfig(ctx, mainDB, overrideDBConfig)
+
+	renderer, i18nx := qq.newRendererAndI18n()
+	bootstrapConfig := qq.loadBootstrapSystemConfig(ctx, mainDB)
+	manager, useAutocert := qq.startAutocertIfRequired(bootstrapConfig)
+	qq.ensureMainIdentity(mainDB, i18nx, renderer, bootstrapConfig, useAutocert, manager)
+	qq.applyOverrideDBConfigAfterIdentity(ctx, mainDB, overrideDBConfig)
+
+	rawSystemConfig, systemConfig := qq.loadRuntimeSystemConfig(ctx, mainDB)
+	tenantDBs := dbMigrationsTenantDBs(mainDB, qq.devMode, qq.metaPath)
+
+	infra, minioClient := qq.newInfra(renderer, systemConfig)
+	router := NewRouter(mainDB, tenantDBs, infra, qq.devMode, qq.metaPath, i18nx)
+	actions := action.NewActions(infra, tenantDBs)
+	downloadHandler := download.NewDownload(infra)
+	trashDownloadHandler := trashaction.NewDownload(infra)
+
+	qq.registerCoreRoutes(router, actions, downloadHandler, trashDownloadHandler)
+
+	err := infra.PluginRegistry().RegisterActions(router)
+	if err != nil {
+		log.Println(err)
+		closePreparedResources(mainDB, tenantDBs)
+		return nil, err
+	}
+
+	// router.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./webapp/assets"))))
+	// slash suffix is necessary to match all paths with the prefix
+	router.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))))
+
+	/*
+		// mounting also works with `/webdav`, but if `/webdav` is defined
+		// as route, it would work...
+		router.Handle("/webdav/", &webdav.Handler{
+			Prefix:     "/webdav/",
+			FileSystem: webdavx.NewDir(infra, "."),
+			LockSystem: webdav.NewMemLS(),
+			Logger: func(request *http.Request, err error) {
+				// log.Println(request)
+				// log.Println(err)
+			},
+		})
+	*/
+
+	qq.migrateTenantDatabases(ctx, mainDB, tenantDBs)
+	qq.startScheduler(infra, mainDB, tenantDBs, minioClient, systemConfig, rawSystemConfig)
+
+	handlerChain := handlers.CompressHandler(
+		handlers.RecoveryHandler(
+			handlers.PrintRecoveryStack(true),
+		)(
+			// see https://words.filippo.io/csrf/ for implementation details
+			http.NewCrossOriginProtection().Handler(router),
+			// handlers.LoggingHandler(),
+		),
+	)
+
+	return &PreparedServer{
+		server:          qq,
+		mainDB:          mainDB,
+		tenantDBs:       tenantDBs,
+		router:          router,
+		handler:         handlerChain,
+		systemConfig:    systemConfig,
+		autocertManager: manager,
+	}, nil
+}
+
+func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB, overrideDBConfig bool) {
 	configCount := mainDB.ReadOnlyConn.SystemConfig.Query().CountX(ctx)
 	if configCount == 0 {
 		mailerPort := 25
 		mailerPortStr := os.Getenv("SIMPLEDMS_MAILER_PORT")
 		if mailerPortStr != "" {
-			mailerPort, err = strconv.Atoi(mailerPortStr)
+			mailerPortx, err := strconv.Atoi(mailerPortStr)
 			if err != nil {
 				log.Fatalln(err)
 			}
+			mailerPort = mailerPortx
 		}
+
 		initAppTx, err := mainDB.Tx(ctx, false)
 		if err != nil {
 			log.Fatalln(err)
 		}
+
 		err = modelmain.InitAppWithoutCustomContext(
 			ctx,
 			initAppTx,
@@ -315,9 +386,7 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 				MailerInsecureSkipVerify: os.Getenv("SIMPLEDMS_MAILER_INSECURE_SKIP_VERIFY") == "true",
 				MailerUseImplicitSSLTLS:  os.Getenv("SIMPLEDMS_MAILER_USE_IMPLICIT_SSL_TLS") == "true",
 			},
-			modelmain.OCRConfig{
-				TikaURL: os.Getenv("SIMPLEDMS_OCR_TIKA_URL"),
-			},
+			modelmain.OCRConfig{TikaURL: os.Getenv("SIMPLEDMS_OCR_TIKA_URL")},
 		)
 		if err != nil {
 			erry := initAppTx.Rollback()
@@ -326,80 +395,90 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 			}
 			log.Fatalln(err)
 		}
+
 		err = initAppTx.Commit()
 		if err != nil {
 			log.Fatalln(err)
 		}
-	} else {
-		if overrideDBConfig {
-			// IMPORTANT
-			// only TLS is overridden here because all encrypted fields can just
-			// be overridden when encryptor.NilableX25519MainIdentity is set;
-			// TLS config is read before that is the case
-			// END IMPORTANT
+	} else if overrideDBConfig {
+		// IMPORTANT
+		// only TLS is overridden here because all encrypted fields can just
+		// be overridden when encryptor.NilableX25519MainIdentity is set;
+		// TLS config is read before that is the case
+		// END IMPORTANT
 
-			updateQuery := mainDB.ReadWriteConn.SystemConfig.Query().FirstX(ctx).Update()
+		updateQuery := mainDB.ReadWriteConn.SystemConfig.Query().FirstX(ctx).Update()
 
-			if val, set := os.LookupEnv("SIMPLEDMS_TLS_ENABLE_AUTOCERT"); set {
-				updateQuery.SetTLSEnableAutocert(val == "true")
-			}
-			if val, set := os.LookupEnv("SIMPLEDMS_TLS_CERT_FILEPATH"); set {
-				updateQuery.SetTLSCertFilepath(val)
-			}
-			if val, set := os.LookupEnv("SIMPLEDMS_TLS_PRIVATE_KEY_FILEPATH"); set {
-				updateQuery.SetTLSPrivateKeyFilepath(val)
-			}
-			if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_EMAIL"); set {
-				updateQuery.SetTLSAutocertEmail(val)
-			}
-			if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_HOSTS"); set {
-				updateQuery.SetTLSAutocertHosts(strings.Split(val, ","))
-			}
-
-			updateQuery.SaveX(ctx)
+		if val, set := os.LookupEnv("SIMPLEDMS_TLS_ENABLE_AUTOCERT"); set {
+			updateQuery.SetTLSEnableAutocert(val == "true")
 		}
+		if val, set := os.LookupEnv("SIMPLEDMS_TLS_CERT_FILEPATH"); set {
+			updateQuery.SetTLSCertFilepath(val)
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_TLS_PRIVATE_KEY_FILEPATH"); set {
+			updateQuery.SetTLSPrivateKeyFilepath(val)
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_EMAIL"); set {
+			updateQuery.SetTLSAutocertEmail(val)
+		}
+		if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_HOSTS"); set {
+			updateQuery.SetTLSAutocertHosts(strings.Split(val, ","))
+		}
+
+		updateQuery.SaveX(ctx)
 	}
 
+	qq.initializeInitialUserIfRequired(ctx, mainDB)
+}
+
+func (qq *Server) initializeInitialUserIfRequired(ctx context.Context, mainDB *sqlx.MainDB) {
 	initialAccountEmail := os.Getenv("SIMPLEDMS_INITIAL_ACCOUNT_EMAIL")
 	initialTemporaryPassword := os.Getenv("SIMPLEDMS_INITIAL_TEMPORARY_PASSWORD")
 	initialTenantName := os.Getenv("SIMPLEDMS_INITIAL_TENANT_NAME")
-	if initialAccountEmail != "" && initialTenantName != "" {
-		if mainDB.ReadOnlyConn.Account.Query().CountX(ctx) > 0 {
-			log.Println("an account already exists, skipping creation of initial account")
-		} else {
-			err = qq.initInitialUser(
-				ctx,
-				mainDB,
-				initialAccountEmail,
-				initialTemporaryPassword,
-				initialTenantName,
-			)
-			if err != nil {
-				log.Fatalln(err)
-			}
-		}
+	if initialAccountEmail == "" || initialTenantName == "" {
+		return
 	}
 
+	if mainDB.ReadOnlyConn.Account.Query().CountX(ctx) > 0 {
+		log.Println("an account already exists, skipping creation of initial account")
+		return
+	}
+
+	err := qq.initInitialUser(
+		ctx,
+		mainDB,
+		initialAccountEmail,
+		initialTemporaryPassword,
+		initialTenantName,
+	)
+	if err != nil {
+		log.Fatalln(err)
+	}
+}
+
+func (qq *Server) newRendererAndI18n() (*ui.Renderer, *i18n.I18n) {
 	// TODO are there any naming conflicts?
 	templates := template.New("app")
-
 	templates.Funcs(ui.TemplateFuncMap(templates))
-	templates, err = templates.ParseFS(ui.WidgetFS, "widget/*.gohtml") // , "widget/*.tw.gohtml") // TODO was ui/widget/*.gohtml
+
+	templatesx, err := templates.ParseFS(ui.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		log.Fatal(err)
 	}
-	renderer := ui.NewRenderer(templates)
-	i18nx := i18n.NewI18n()
 
 	/*assetsFS, err := fs.Sub(qq.assetsFS, "ui/web/assets")
 	if err != nil {
 		log.Fatal(err)
 	}*/
 
+	return ui.NewRenderer(templatesx), i18n.NewI18n()
+}
+
+func (qq *Server) loadBootstrapSystemConfig(ctx context.Context, mainDB *sqlx.MainDB) *entmain.SystemConfig {
 	// partial request because encrypted fields cannot be decrypted before
 	// encryptor.NilableX25519MainIdentity is set
 	// TODO FirstX okay?
-	systemConfigx := mainDB.ReadOnlyConn.SystemConfig.Query().
+	return mainDB.ReadOnlyConn.SystemConfig.Query().
 		Select(
 			systemconfig.FieldX25519Identity,
 			systemconfig.FieldIsIdentityEncryptedWithPassphrase,
@@ -410,29 +489,42 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 			systemconfig.FieldTLSAutocertHosts,
 		).
 		FirstX(ctx)
+}
 
-	var manager *autocert.Manager
+func (qq *Server) startAutocertIfRequired(systemConfigx *entmain.SystemConfig) (*autocert.Manager, bool) {
 	useAutocert := shouldUseAutocert(systemConfigx.TLSEnableAutocert, qq.devMode)
-
-	// autocert server runs always, in maintenance mode and normal mode
-	if useAutocert {
-		manager = &autocert.Manager{
-			Cache:      autocert.DirCache(qq.metaPath + "/autocert"),
-			Prompt:     autocert.AcceptTOS,
-			HostPolicy: autocert.HostWhitelist(systemConfigx.TLSAutocertHosts...),
-			Email:      systemConfigx.TLSAutocertEmail,
-		}
-
-		go func() {
-			recoverx.Recover("autocert server")
-
-			errx := http.ListenAndServe(":http", manager.HTTPHandler(nil))
-			if errx != nil {
-				log.Println(errx)
-			}
-		}()
+	if !useAutocert {
+		return nil, false
 	}
 
+	// autocert server runs always, in maintenance mode and normal mode
+	manager := &autocert.Manager{
+		Cache:      autocert.DirCache(qq.metaPath + "/autocert"),
+		Prompt:     autocert.AcceptTOS,
+		HostPolicy: autocert.HostWhitelist(systemConfigx.TLSAutocertHosts...),
+		Email:      systemConfigx.TLSAutocertEmail,
+	}
+
+	go func() {
+		recoverx.Recover("autocert server")
+
+		err := http.ListenAndServe(":http", manager.HTTPHandler(nil))
+		if err != nil {
+			log.Println(err)
+		}
+	}()
+
+	return manager, true
+}
+
+func (qq *Server) ensureMainIdentity(
+	mainDB *sqlx.MainDB,
+	i18nx *i18n.I18n,
+	renderer *ui.Renderer,
+	systemConfigx *entmain.SystemConfig,
+	useAutocert bool,
+	manager *autocert.Manager,
+) {
 	if systemConfigx.IsIdentityEncryptedWithPassphrase {
 		maintenanceModeServer := http.Server{
 			Addr: fmt.Sprintf(":%d", qq.port(
@@ -461,13 +553,13 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		)
 
 		maintenanceModeServer.Handler = handlerChain
-
 		maintenanceListenMode := resolveListenMode(
 			useAutocert,
 			systemConfigx.TLSCertFilepath,
 			systemConfigx.TLSPrivateKeyFilepath,
 		)
 
+		var err error
 		switch maintenanceListenMode {
 		case listenModeTLSAutocert:
 			maintenanceModeServer.TLSConfig = &tls.Config{GetCertificate: manager.GetCertificate}
@@ -489,87 +581,97 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 
 		// TODO maintenance mode and wait for unlock
 		// log.Fatalln("identity encrypted with passphrase")
-	} else {
-		identityBytes := systemConfigx.X25519Identity
-		if len(identityBytes) == 0 {
-			// TODO init or maintenance mode?
-			log.Fatalln("no identity")
-		}
-		x25519Identity, err := age.ParseX25519Identity(string(identityBytes))
-		if err != nil {
-			log.Fatalln(err, "could not parse identity")
-		}
 
-		encryptor.NilableX25519MainIdentity = x25519Identity
+		return
 	}
 
-	if overrideDBConfig {
-		// TLS config is processed above because required earlier;
-		// It's important that this is after encryptor.NilableX25519MainIdentity
-		// is set
-
-		updateQuery := mainDB.ReadWriteConn.SystemConfig.Query().FirstX(ctx).Update()
-
-		if val, set := os.LookupEnv("SIMPLEDMS_S3_ENDPOINT"); set {
-			updateQuery.SetS3Endpoint(val)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_S3_ACCESS_KEY_ID"); set {
-			updateQuery.SetS3AccessKeyID(val)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_S3_SECRET_ACCESS_KEY"); set {
-			updateQuery.SetS3SecretAccessKey(entx.NewEncryptedString(val))
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_S3_BUCKET_NAME"); set {
-			updateQuery.SetS3BucketName(val)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_S3_USE_SSL"); set {
-			updateQuery.SetS3UseSsl(val == "true")
-		}
-
-		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_HOST"); set {
-			updateQuery.SetMailerHost(val)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_PORT"); set {
-			mailerPort, err := strconv.Atoi(val)
-			if err != nil {
-				log.Fatalln(err)
-			}
-			updateQuery.SetMailerPort(mailerPort)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_USERNAME"); set {
-			updateQuery.SetMailerUsername(val)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_PASSWORD"); set {
-			updateQuery.SetMailerPassword(entx.NewEncryptedString(val))
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_FROM"); set {
-			updateQuery.SetMailerFrom(val)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_INSECURE_SKIP_VERIFY"); set {
-			updateQuery.SetMailerInsecureSkipVerify(val == "true")
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_MAILER_USE_IMPLICIT_SSL_TLS"); set {
-			updateQuery.SetMailerUseImplicitSslTLS(val == "true")
-		}
-
-		if val, set := os.LookupEnv("SIMPLEDMS_OCR_TIKA_URL"); set {
-			updateQuery.SetOcrTikaURL(val)
-		}
-
-		updateQuery.SaveX(ctx)
+	identityBytes := systemConfigx.X25519Identity
+	if len(identityBytes) == 0 {
+		// TODO init or maintenance mode?
+		log.Fatalln("no identity")
 	}
 
-	allowInsecureCookiesStr := os.Getenv("SIMPLEDMS_ALLOW_INSECURE_COOKIES")
-	allowInsecureCookies := false
-	if allowInsecureCookiesStr != "" {
-		allowInsecureCookies, err = strconv.ParseBool(allowInsecureCookiesStr)
+	x25519Identity, err := age.ParseX25519Identity(string(identityBytes))
+	if err != nil {
+		log.Fatalln(err, "could not parse identity")
+	}
+
+	encryptor.NilableX25519MainIdentity = x25519Identity
+}
+
+func (qq *Server) applyOverrideDBConfigAfterIdentity(ctx context.Context, mainDB *sqlx.MainDB, overrideDBConfig bool) {
+	if !overrideDBConfig {
+		return
+	}
+
+	// TLS config is processed above because required earlier;
+	// It's important that this is after encryptor.NilableX25519MainIdentity
+	// is set
+
+	updateQuery := mainDB.ReadWriteConn.SystemConfig.Query().FirstX(ctx).Update()
+
+	if val, set := os.LookupEnv("SIMPLEDMS_S3_ENDPOINT"); set {
+		updateQuery.SetS3Endpoint(val)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_S3_ACCESS_KEY_ID"); set {
+		updateQuery.SetS3AccessKeyID(val)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_S3_SECRET_ACCESS_KEY"); set {
+		updateQuery.SetS3SecretAccessKey(entx.NewEncryptedString(val))
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_S3_BUCKET_NAME"); set {
+		updateQuery.SetS3BucketName(val)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_S3_USE_SSL"); set {
+		updateQuery.SetS3UseSsl(val == "true")
+	}
+
+	if val, set := os.LookupEnv("SIMPLEDMS_MAILER_HOST"); set {
+		updateQuery.SetMailerHost(val)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_MAILER_PORT"); set {
+		mailerPort, err := strconv.Atoi(val)
 		if err != nil {
 			log.Fatalln(err)
 		}
+		updateQuery.SetMailerPort(mailerPort)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_MAILER_USERNAME"); set {
+		updateQuery.SetMailerUsername(val)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_MAILER_PASSWORD"); set {
+		updateQuery.SetMailerPassword(entx.NewEncryptedString(val))
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_MAILER_FROM"); set {
+		updateQuery.SetMailerFrom(val)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_MAILER_INSECURE_SKIP_VERIFY"); set {
+		updateQuery.SetMailerInsecureSkipVerify(val == "true")
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_MAILER_USE_IMPLICIT_SSL_TLS"); set {
+		updateQuery.SetMailerUseImplicitSslTLS(val == "true")
+	}
+
+	if val, set := os.LookupEnv("SIMPLEDMS_OCR_TIKA_URL"); set {
+		updateQuery.SetOcrTikaURL(val)
+	}
+
+	updateQuery.SaveX(ctx)
+}
+
+func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.MainDB) (*entmain.SystemConfig, *modelmain.SystemConfig) {
+	allowInsecureCookies := false
+	allowInsecureCookiesStr := os.Getenv("SIMPLEDMS_ALLOW_INSECURE_COOKIES")
+	if allowInsecureCookiesStr != "" {
+		allowInsecureCookiesx, err := strconv.ParseBool(allowInsecureCookiesStr)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		allowInsecureCookies = allowInsecureCookiesx
 	}
 
 	// TODO FirstX okay?
-	systemConfigx = mainDB.ReadOnlyConn.SystemConfig.Query().FirstX(ctx)
+	systemConfigx := mainDB.ReadOnlyConn.SystemConfig.Query().FirstX(ctx)
 	systemConfig := modelmain.NewSystemConfig(
 		systemConfigx,
 		qq.isSaaSModeEnabled,
@@ -577,8 +679,10 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		allowInsecureCookies,
 	)
 
-	tenantDBs := dbMigrationsTenantDBs(mainDB, qq.devMode, qq.metaPath)
+	return systemConfigx, systemConfig
+}
 
+func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *modelmain.SystemConfig) (*common.Infra, *minio.Client) {
 	factory := common.NewFactory(
 	// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
 	// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
@@ -588,13 +692,25 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	minioClient := qq.initNilableMinioClient(systemConfig.S3())
 	fileSystem := filesystem.NewFileSystem(qq.metaPath)
 
-	disableFileEncryptionStr := os.Getenv("SIMPLEDMS_DISABLE_FILE_ENCRYPTION")
+	/*
+		indexer := internal.NewFileIndexer(client, infra)
+		go func() {
+			pwd, err := os.Getwd()
+			if err != nil {
+				log.Fatalln(err)
+			}
+			indexer.Index(context.Background(), pwd)
+		}()
+	*/
+
 	disableFileEncryption := false
+	disableFileEncryptionStr := os.Getenv("SIMPLEDMS_DISABLE_FILE_ENCRYPTION")
 	if disableFileEncryptionStr != "" {
-		disableFileEncryption, err = strconv.ParseBool(disableFileEncryptionStr)
+		disableFileEncryptionx, err := strconv.ParseBool(disableFileEncryptionStr)
 		if err != nil {
 			log.Fatalln(err)
 		}
+		disableFileEncryption = disableFileEncryptionx
 	}
 
 	infra := common.NewInfra(
@@ -611,22 +727,16 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		pluginx.NewRegistry(),
 		systemConfig,
 	)
-	router := NewRouter(mainDB, tenantDBs, infra, qq.devMode, qq.metaPath, i18nx)
-	actions := action.NewActions(infra, tenantDBs)
-	downloadHandler := download.NewDownload(infra)
-	trashDownloadHandler := trashaction.NewDownload(infra)
 
-	/*
-		indexer := internal.NewFileIndexer(client, infra)
-		go func() {
-			pwd, err := os.Getwd()
-			if err != nil {
-				log.Fatalln(err)
-			}
-			indexer.Index(context.Background(), pwd)
-		}()
-	*/
+	return infra, minioClient
+}
 
+func (qq *Server) registerCoreRoutes(
+	router *Router,
+	actions *action.Actions,
+	downloadHandler *download.Download,
+	trashDownloadHandler *trashaction.Download,
+) {
 	// concept:
 	// rpc style API;
 	// use GET for all read requests and POST for all write requests?
@@ -683,32 +793,9 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	router.RegisterPage(route2.TrashDownloadRoute(), trashDownloadHandler.Handler)
 
 	router.RegisterActions(actions)
+}
 
-	err = infra.PluginRegistry().RegisterActions(router)
-	if err != nil {
-		log.Println(err)
-		closePreparedResources(mainDB, tenantDBs)
-		return nil, err
-	}
-
-	// router.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./webapp/assets"))))
-	// slash suffix is necessary to match all paths with the prefix
-	router.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))))
-
-	/*
-		// mounting also works with `/webdav`, but if `/webdav` is defined
-		// as route, it would work...
-		router.Handle("/webdav/", &webdav.Handler{
-			Prefix:     "/webdav/",
-			FileSystem: webdavx.NewDir(infra, "."),
-			LockSystem: webdav.NewMemLS(),
-			Logger: func(request *http.Request, err error) {
-				// log.Println(request)
-				// log.Println(err)
-			},
-		})
-	*/
-
+func (qq *Server) migrateTenantDatabases(ctx context.Context, mainDB *sqlx.MainDB, tenantDBs *tenantdbs.TenantDBs) {
 	tenantsInMaintenanceMode := mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.MaintenanceModeEnabledAtNotNil()).CountX(ctx)
 	if tenantsInMaintenanceMode > 0 {
 		// TODO abort??
@@ -733,6 +820,7 @@ END WARNING
 		SetMaintenanceModeEnabledAt(time.Now()).
 		Where(tenant.MaintenanceModeEnabledAtIsNil()).
 		ExecX(ctx)
+
 	for _, tenantx := range tenantsToMigrate {
 		tenantm := tenant2.NewTenant(tenantx)
 		tenantDB, found := tenantDBs.Load(tenantm.Data.ID)
@@ -742,22 +830,28 @@ END WARNING
 			continue
 		}
 
-		err = tenantm.ExecuteDBMigrations(qq.devMode, qq.metaPath, qq.migrationsTenantFS, tenantDB)
+		err := tenantm.ExecuteDBMigrations(qq.devMode, qq.metaPath, qq.migrationsTenantFS, tenantDB)
 		if err != nil {
 			// TODO make this more robust, maybe continue and deactivate tenant till restart or fixed
 			log.Println(err, "; tenant is in maintenance mode now, must be fixed manually")
 			continue
 		}
 
-		tenantx.
-			Update().
-			ClearMaintenanceModeEnabledAt().
-			ExecX(ctx)
+		tenantx.Update().ClearMaintenanceModeEnabledAt().ExecX(ctx)
 	}
+}
 
+func (qq *Server) startScheduler(
+	infra *common.Infra,
+	mainDB *sqlx.MainDB,
+	tenantDBs *tenantdbs.TenantDBs,
+	minioClient *minio.Client,
+	systemConfig *modelmain.SystemConfig,
+	rawSystemConfig *entmain.SystemConfig,
+) {
 	var tikaClientNilable *tika.Client
-	if systemConfigx.OcrTikaURL != "" {
-		tikaClientNilable = tika.NewDefaultClient(systemConfigx.OcrTikaURL)
+	if rawSystemConfig.OcrTikaURL != "" {
+		tikaClientNilable = tika.NewDefaultClient(rawSystemConfig.OcrTikaURL)
 	}
 
 	schedulerx := scheduler.NewScheduler(
@@ -769,28 +863,6 @@ END WARNING
 		tikaClientNilable,
 	)
 	schedulerx.Run(qq.devMode, qq.metaPath, qq.migrationsTenantFS)
-
-	handlerChain := handlers.CompressHandler(
-		handlers.RecoveryHandler(
-			handlers.PrintRecoveryStack(true),
-		)(
-			// see https://words.filippo.io/csrf/ for implementation details
-			http.NewCrossOriginProtection().Handler(router),
-			// handlers.LoggingHandler(),
-		),
-	)
-
-	preparedServer := &PreparedServer{
-		server:          qq,
-		mainDB:          mainDB,
-		tenantDBs:       tenantDBs,
-		router:          router,
-		handler:         handlerChain,
-		systemConfig:    systemConfig,
-		autocertManager: manager,
-	}
-
-	return preparedServer, nil
 }
 
 func (qq *Server) initNilableMinioClient(config *modelmain.S3Config) *minio.Client {
