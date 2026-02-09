@@ -11,6 +11,7 @@ import (
 	"github.com/simpledms/simpledms/model/common/language"
 	"github.com/simpledms/simpledms/model/modelmain"
 	"github.com/simpledms/simpledms/pluginx"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -127,6 +128,7 @@ func (qq *SignUpCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 	}
 
 	rw.AddRenderables(wx.NewSnackbarf("Registration successful, please check your email for your password."))
+	rw.Header().Set("HX-Trigger", event.TenantCreated.String())
 
 	// TODO how to add tenant user? TTx not existing yet; on login or security risk?
 	return nil
