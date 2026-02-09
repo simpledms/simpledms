@@ -68,7 +68,7 @@ func (qq *StaticPage) Widget(ctx ctxx.Context, definition StaticPageDefinition, 
 	var fabs []*wx.FloatingActionButton
 
 	mainLayout := &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, definition.Slug, fabs),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, definition.Slug, fabs),
 		Content: &wx.DefaultLayout{
 			AppBar: qq.appBar(ctx, definition),
 			Content: &wx.Column{
@@ -94,7 +94,7 @@ func (qq *StaticPage) appBar(ctx ctxx.Context, definition StaticPageDefinition) 
 		Leading: &wx.Icon{
 			Name: iconName,
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
 		Title: &wx.AppBarTitle{
 			Text: wx.T(definition.AppBarTitle),
 		},
