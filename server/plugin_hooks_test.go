@@ -15,6 +15,7 @@ import (
 	"github.com/simpledms/simpledms/model/common/country"
 	"github.com/simpledms/simpledms/model/common/language"
 	"github.com/simpledms/simpledms/pluginx"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -90,7 +91,27 @@ func TestSignUpCmdEmitsPluginHookEvent(t *testing.T) {
 	}
 }
 
+func TestSignUpCmdSetsTenantCreatedTrigger(t *testing.T) {
+	harness := newActionTestHarnessWithSaaS(t, true)
+
+	rr, err := executeSignUpCmdWithRecorder(t, harness, "signup-trigger@example.com")
+	if err != nil {
+		t.Fatalf("signup command: %v", err)
+	}
+
+	if header := rr.Header().Get("HX-Trigger"); header != event.TenantCreated.String() {
+		t.Fatalf("expected HX-Trigger %q, got %q", event.TenantCreated.String(), header)
+	}
+}
+
 func executeSignUpCmd(t *testing.T, harness *actionTestHarness, email string) error {
+	t.Helper()
+
+	_, err := executeSignUpCmdWithRecorder(t, harness, email)
+	return err
+}
+
+func executeSignUpCmdWithRecorder(t *testing.T, harness *actionTestHarness, email string) (*httptest.ResponseRecorder, error) {
 	t.Helper()
 
 	mainTx, err := harness.mainDB.ReadWriteConn.Tx(context.Background())
@@ -127,12 +148,12 @@ func executeSignUpCmd(t *testing.T, harness *actionTestHarness, email string) er
 	)
 	if err != nil {
 		_ = mainTx.Rollback()
-		return err
+		return rr, err
 	}
 
 	if err := mainTx.Commit(); err != nil {
-		return err
+		return rr, err
 	}
 
-	return nil
+	return rr, nil
 }
