@@ -64,6 +64,144 @@ type Server struct {
 	commercialLicenseEnabled bool
 }
 
+type listenMode int
+
+const (
+	listenModeHTTP listenMode = iota
+	listenModeTLSFiles
+	listenModeTLSAutocert
+)
+
+func shouldUseAutocert(enableAutocert, devMode bool) bool {
+	return enableAutocert && !devMode
+}
+
+func resolveListenMode(useAutocert bool, tlsCertFilepath, tlsPrivateKeyFilepath string) listenMode {
+	// only if reverse proxy is used
+	if useAutocert {
+		return listenModeTLSAutocert
+	}
+	if tlsCertFilepath == "" || tlsPrivateKeyFilepath == "" {
+		return listenModeHTTP
+	}
+	return listenModeTLSFiles
+}
+
+func newMaintenanceModeHandler(
+	mainDB *sqlx.MainDB,
+	assetsFS fs.FS,
+	i18nx *i18n.I18n,
+	renderer *ui.Renderer,
+	encryptedIdentity []byte,
+	commercialLicenseEnabled bool,
+	shutdownFn func(context.Context) error,
+) http.Handler {
+	mux := http.NewServeMux()
+
+	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assetsFS))))
+
+	mux.HandleFunc("/-/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
+		defer req.Body.Close()
+
+		var reqBody struct {
+			Passphrase string `json:"passphrase"`
+		}
+
+		err := json.NewDecoder(req.Body).Decode(&reqBody)
+		if err != nil {
+			log.Println(err)
+			rw.WriteHeader(http.StatusBadRequest)
+			_, _ = rw.Write([]byte("Invalid request payload"))
+			return
+		}
+
+		passphrase := reqBody.Passphrase
+		if passphrase == "" {
+			rw.WriteHeader(http.StatusBadRequest)
+			_, _ = rw.Write([]byte("Passphrase is required"))
+			return
+		}
+
+		identity, err := modelmain.DecryptMainIdentity(encryptedIdentity, passphrase)
+		if err != nil {
+			log.Println(err)
+			rw.WriteHeader(http.StatusBadRequest)
+			_, _ = rw.Write([]byte("Invalid passphrase"))
+			return
+		}
+
+		encryptor.NilableX25519MainIdentity = identity
+
+		if shutdownFn != nil {
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+
+			err = shutdownFn(ctx)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+	})
+
+	// TODO recovery handler
+	// TODO status code?
+	mux.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+		mainTx, err := mainDB.Tx(req.Context(), true)
+		if err != nil {
+			log.Println(err)
+			rw.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		defer func() {
+			err = mainTx.Commit()
+			if err != nil {
+				log.Println(err)
+			}
+		}()
+
+		visitorCtx := ctxx.NewVisitorContext(
+			req.Context(),
+			mainTx,
+			i18nx,
+			req.Header.Get("Accept-Language"),
+			req.Header.Get("X-Client-Timezone"),
+			false,
+			commercialLicenseEnabled,
+		)
+
+		titlex := wx.Tuf("%s | SimpleDMS", wx.T("Maintenance mode").String(visitorCtx))
+		viewx := partial.NewBase(
+			titlex,
+			&wx.MainLayout{
+				Content: &wx.NarrowLayout{
+					Content: &wx.Column{
+						GapYSize:         wx.Gap4,
+						NoOverflowHidden: true,
+						Children: []wx.IWidget{
+							wx.H(wx.HeadingTypeHeadlineMd, titlex),
+							wx.T("Maintenance mode is enabled. Please wait until the app ready again.").SetWrap(),
+							// wx.T("This page automatically refreshes every 60 seconds.").SetWrap(),
+						},
+					},
+				},
+			},
+		)
+		viewx.ShouldRefreshEvery60Seconds = true
+
+		rwx := httpx.NewResponseWriter(rw)
+		rwx.WriteHeader(http.StatusServiceUnavailable) // must be before render
+
+		err = renderer.Render(rwx, visitorCtx, viewx)
+		if err != nil {
+			rw.WriteHeader(http.StatusInternalServerError)
+			log.Println(err)
+			return
+		}
+	})
+
+	return mux
+}
+
 func NewServer(
 	metaPath string,
 	devMode bool,
@@ -274,7 +412,7 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		FirstX(ctx)
 
 	var manager *autocert.Manager
-	useAutocert := systemConfigx.TLSEnableAutocert && !qq.devMode
+	useAutocert := shouldUseAutocert(systemConfigx.TLSEnableAutocert, qq.devMode)
 
 	// autocert server runs always, in maintenance mode and normal mode
 	if useAutocert {
@@ -304,130 +442,45 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 			)),
 		}
 
-		mux := http.NewServeMux()
-
-		mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))))
-
-		mux.HandleFunc("/-/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
-			defer req.Body.Close()
-
-			// Parse JSON request body
-			var reqBody struct {
-				Passphrase string `json:"passphrase"`
-			}
-
-			err = json.NewDecoder(req.Body).Decode(&reqBody)
-			if err != nil {
-				log.Println(err)
-				rw.WriteHeader(http.StatusBadRequest)
-				_, _ = rw.Write([]byte("Invalid request payload"))
-				return
-			}
-
-			passphrase := reqBody.Passphrase
-			if passphrase == "" {
-				rw.WriteHeader(http.StatusBadRequest)
-				_, _ = rw.Write([]byte("Passphrase is required"))
-				return
-			}
-
-			identity, err := modelmain.DecryptMainIdentity(systemConfigx.X25519Identity, passphrase)
-			if err != nil {
-				log.Println(err)
-				rw.WriteHeader(http.StatusBadRequest)
-				_, _ = rw.Write([]byte("Invalid passphrase"))
-				return
-			}
-
-			encryptor.NilableX25519MainIdentity = identity
-
-			// Create a context with a timeout to allow for graceful shutdown.
-			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-			defer cancel()
-
-			err = maintenanceModeServer.Shutdown(ctx)
-			if err != nil {
-				log.Println(err)
-			}
-		})
-
-		// TODO recovery handler, etc.
-		// TODO status code?
-		mux.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
-			mainTx, err := mainDB.Tx(req.Context(), true)
-			if err != nil {
-				log.Println(err)
-				rw.WriteHeader(http.StatusInternalServerError)
-				return
-			}
-			defer func() {
-				err = mainTx.Commit()
-				if err != nil {
-					log.Println(err)
-				}
-			}()
-
-			visitorCtx := ctxx.NewVisitorContext(
-				req.Context(),
-				mainTx,
-				i18nx,
-				req.Header.Get("Accept-Language"),
-				req.Header.Get("X-Client-Timezone"), // set for all HTMX requests
-				false,
-				qq.commercialLicenseEnabled,
-			)
-
-			titlex := wx.Tuf("%s | SimpleDMS", wx.T("Maintenance mode").String(visitorCtx))
-			viewx := partial.NewBase(
-				titlex,
-				&wx.MainLayout{
-					Content: &wx.NarrowLayout{
-						Content: &wx.Column{
-							GapYSize:         wx.Gap4,
-							NoOverflowHidden: true,
-							Children: []wx.IWidget{
-								wx.H(wx.HeadingTypeHeadlineMd, titlex),
-								wx.T("Maintenance mode is enabled. Please wait until the app ready again.").SetWrap(),
-								// wx.T("This page automatically refreshes every 60 seconds.").SetWrap(),
-							},
-						},
-					},
-				},
-			)
-			viewx.ShouldRefreshEvery60Seconds = true
-
-			rwx := httpx.NewResponseWriter(rw)
-			rwx.WriteHeader(http.StatusServiceUnavailable) // must be before render
-
-			err = renderer.Render(rwx, visitorCtx, viewx)
-			if err != nil {
-				rw.WriteHeader(http.StatusInternalServerError)
-				log.Println(err)
-				return
-			}
-
-		})
+		maintenanceMux := newMaintenanceModeHandler(
+			mainDB,
+			qq.assetsFS,
+			i18nx,
+			renderer,
+			systemConfigx.X25519Identity,
+			qq.commercialLicenseEnabled,
+			maintenanceModeServer.Shutdown,
+		)
 
 		handlerChain := handlers.CompressHandler(
 			handlers.RecoveryHandler(
 				handlers.PrintRecoveryStack(true),
 			)(
-				mux,
+				maintenanceMux,
 			),
 		)
 
 		maintenanceModeServer.Handler = handlerChain
 
-		if useAutocert {
+		maintenanceListenMode := resolveListenMode(
+			useAutocert,
+			systemConfigx.TLSCertFilepath,
+			systemConfigx.TLSPrivateKeyFilepath,
+		)
+
+		switch maintenanceListenMode {
+		case listenModeTLSAutocert:
 			maintenanceModeServer.TLSConfig = &tls.Config{GetCertificate: manager.GetCertificate}
 			err = maintenanceModeServer.ListenAndServeTLS("", "")
-		} else if systemConfigx.TLSCertFilepath == "" || systemConfigx.TLSPrivateKeyFilepath == "" {
+		case listenModeHTTP:
 			err = maintenanceModeServer.ListenAndServe()
-		} else {
+		case listenModeTLSFiles:
 			err = maintenanceModeServer.ListenAndServeTLS(
 				systemConfigx.TLSCertFilepath,
 				systemConfigx.TLSPrivateKeyFilepath,
 			)
+		default:
+			log.Fatalln("unknown maintenance listen mode")
 		}
 		if err != nil {
 			// err is set if the server gets shutdown on unlock, thus no aborting
