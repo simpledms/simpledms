@@ -112,19 +112,24 @@ func NewServer(
 	}
 }
 
-// TODO way to long, needs refactoring
 func (qq *Server) Start() error {
+	preparedServer, err := qq.Prepare()
+	if err != nil {
+		return err
+	}
+
+	return preparedServer.Start()
+}
+
+// Prepare initializes all runtime dependencies and routes without listening yet.
+// Wrapping applications can use the returned PreparedServer to register additional
+// handlers on Router before calling PreparedServer.Start.
+// TODO way to long, needs refactoring
+func (qq *Server) Prepare() (*PreparedServer, error) {
 	var err error
 
 	// TODO close all clients
 	mainDB := dbMigrationsMainDB(qq.devMode, qq.metaPath, qq.migrationsMainFS)
-	// FIXME is it okay to keep all databases open all the time?
-	defer func() {
-		err = mainDB.Close()
-		if err != nil {
-			log.Println(err)
-		}
-	}()
 
 	overrideDBConfig := os.Getenv("SIMPLEDMS_OVERRIDE_DB_CONFIG") == "true"
 
@@ -520,16 +525,6 @@ func (qq *Server) Start() error {
 	)
 
 	tenantDBs := dbMigrationsTenantDBs(mainDB, qq.devMode, qq.metaPath)
-	defer func() {
-		// must run over tenantDBs at time of closing, thus in wrapper func
-		tenantDBs.Range(func(tenantID int64, tenantDB *sqlx.TenantDB) bool {
-			err = tenantDB.Close()
-			if err != nil {
-				log.Println(err)
-			}
-			return true
-		})
-	}()
 
 	factory := common.NewFactory(
 	// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
@@ -639,7 +634,8 @@ func (qq *Server) Start() error {
 	err = infra.PluginRegistry().RegisterActions(router)
 	if err != nil {
 		log.Println(err)
-		return err
+		closePreparedResources(mainDB, tenantDBs)
+		return nil, err
 	}
 
 	// router.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./webapp/assets"))))
@@ -731,44 +727,17 @@ END WARNING
 		),
 	)
 
-	// only if reverse proxy is used
-	if useAutocert {
-		server := &http.Server{
-			Addr: fmt.Sprintf(":%d", qq.port(
-				useAutocert,
-				systemConfig.TLS().TLSCertFilepath,
-				systemConfig.TLS().TLSPrivateKeyFilepath,
-			)),
-			TLSConfig: &tls.Config{GetCertificate: manager.GetCertificate},
-			Handler:   handlerChain,
-		}
-		err = server.ListenAndServeTLS("", "")
-	} else if systemConfig.TLS().TLSCertFilepath == "" || systemConfig.TLS().TLSPrivateKeyFilepath == "" {
-		err = http.ListenAndServe(
-			fmt.Sprintf(":%d", qq.port(
-				useAutocert,
-				systemConfig.TLS().TLSCertFilepath,
-				systemConfig.TLS().TLSPrivateKeyFilepath,
-			)),
-			handlerChain,
-		)
-	} else {
-		err = http.ListenAndServeTLS(
-			fmt.Sprintf(":%d", qq.port(
-				useAutocert,
-				systemConfig.TLS().TLSCertFilepath,
-				systemConfig.TLS().TLSPrivateKeyFilepath,
-			)),
-			systemConfig.TLS().TLSCertFilepath,
-			systemConfig.TLS().TLSPrivateKeyFilepath,
-			handlerChain,
-		)
-	}
-	if err != nil {
-		log.Fatalln(err)
+	preparedServer := &PreparedServer{
+		server:          qq,
+		mainDB:          mainDB,
+		tenantDBs:       tenantDBs,
+		router:          router,
+		handler:         handlerChain,
+		systemConfig:    systemConfig,
+		autocertManager: manager,
 	}
 
-	return nil
+	return preparedServer, nil
 }
 
 func (qq *Server) initNilableMinioClient(config *modelmain.S3Config) *minio.Client {
