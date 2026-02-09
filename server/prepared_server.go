@@ -68,7 +68,7 @@ func (qq *PreparedServer) Start() error {
 	switch mainListenMode {
 	case listenModeTLSAutocert:
 		server := &http.Server{
-			Addr: fmt.Sprintf(":%d", qq.port(
+			Addr: fmt.Sprintf(":%d", qq.server.port(
 				useAutocert,
 				tlsConfig.TLSCertFilepath,
 				tlsConfig.TLSPrivateKeyFilepath,
@@ -79,7 +79,7 @@ func (qq *PreparedServer) Start() error {
 		err = server.ListenAndServeTLS("", "")
 	case listenModeHTTP:
 		err = http.ListenAndServe(
-			fmt.Sprintf(":%d", qq.port(
+			fmt.Sprintf(":%d", qq.server.port(
 				useAutocert,
 				tlsConfig.TLSCertFilepath,
 				tlsConfig.TLSPrivateKeyFilepath,
@@ -88,7 +88,7 @@ func (qq *PreparedServer) Start() error {
 		)
 	case listenModeTLSFiles:
 		err = http.ListenAndServeTLS(
-			fmt.Sprintf(":%d", qq.port(
+			fmt.Sprintf(":%d", qq.server.port(
 				useAutocert,
 				tlsConfig.TLSCertFilepath,
 				tlsConfig.TLSPrivateKeyFilepath,
@@ -105,14 +105,4 @@ func (qq *PreparedServer) Start() error {
 	}
 
 	return nil
-}
-
-func (qq *PreparedServer) port(useAutocert bool, tlsCertFilepath, tlsPrivateKeyFilepath string) int {
-	if qq.unsafePort > 0 {
-		return qq.unsafePort
-	}
-	if useAutocert || (tlsCertFilepath != "" && tlsPrivateKeyFilepath != "") {
-		return 443
-	}
-	return 80
 }
