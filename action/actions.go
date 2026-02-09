@@ -1,7 +1,6 @@
 package action
 
 import (
-	"github.com/simpledms/simpledms/action/about"
 	"github.com/simpledms/simpledms/action/admin"
 	"github.com/simpledms/simpledms/action/auth"
 	"github.com/simpledms/simpledms/action/browse"
@@ -15,6 +14,7 @@ import (
 	"github.com/simpledms/simpledms/action/openfile"
 	"github.com/simpledms/simpledms/action/property"
 	"github.com/simpledms/simpledms/action/spaces"
+	"github.com/simpledms/simpledms/action/staticpage"
 	"github.com/simpledms/simpledms/action/tagging"
 	"github.com/simpledms/simpledms/action/trash"
 	"github.com/simpledms/simpledms/common"
@@ -40,7 +40,7 @@ type Actions struct {
 	ManageTags        *managetags.Actions        `actions:"manageTags"`
 	ManageTenantUsers *managetenantusers.Actions `actions:"manageTenantUsers"`
 	ManageSpaceUsers  *managespaceusers.Actions  `actions:"manageSpaceUsers"`
-	About             *about.Actions             `actions:"about"`
+	StaticPage        *staticpage.Actions        `actions:"staticPage"`
 	Trash             *trash.Actions             `actions:"trash"`
 }
 
@@ -69,7 +69,7 @@ func NewActions(infra *common.Infra, tenantDBs *tenantdbs.TenantDBs) *Actions {
 		ManageTags:        managetags.NewActions(infra, commonActions, taggingActions),
 		ManageTenantUsers: managetenantusers.NewActions(infra),
 		ManageSpaceUsers:  managespaceusers.NewActions(infra),
-		About:             about.NewActions(infra),
+		StaticPage:        staticpage.NewActions(infra),
 		Trash:             trashActions,
 	}
 }
