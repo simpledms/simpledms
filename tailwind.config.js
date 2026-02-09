@@ -6,6 +6,8 @@ module.exports = {
 	content: [
 		//'../../ui/widget/**/*.gohtml',
 		//'../../ui/widget/**/*.go',
+		'./action/staticpage/content/*.md',
+		'./action/staticpage/*.go', // styles are in markdown_renderer.go
 		'./ui/widget/**/*.gohtml',
 		'./ui/widget/**/*.go'
 	],
