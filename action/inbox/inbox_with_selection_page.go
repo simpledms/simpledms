@@ -102,7 +102,7 @@ func (qq *InboxWithSelectionPage) Handler(
 
 	var viewx renderable.Renderable
 	viewx = &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, "inbox", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
 		Content:    content, // TODO pass in filex?
 	}
 

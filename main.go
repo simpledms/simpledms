@@ -56,8 +56,13 @@ func main() {
 		false,
 		false,
 	)
-	err = serverx.Start()
+	preparedServer, err := serverx.Prepare()
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
+	}
+
+	err = preparedServer.Start()
+	if err != nil {
+		log.Fatalln(err)
 	}
 }

@@ -55,7 +55,7 @@ func (qq *ManageUsersOfSpacePage) Widget(
 	*/
 
 	return &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, "manage-users", nil),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "manage-users", nil),
 		Content: &wx.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
 			Content: qq.actions.UsersOfSpaceListPartial.Widget(ctx, &state.UsersOfSpaceListPartialState),
@@ -68,7 +68,7 @@ func (qq *ManageUsersOfSpacePage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "person",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
 		Title: &wx.AppBarTitle{
 			Text: wx.Tf("Users «%s»", ctx.SpaceCtx().Space.Name),
 		},

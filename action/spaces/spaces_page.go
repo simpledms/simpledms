@@ -61,7 +61,7 @@ func (qq *SpacesPage) Widget(ctx ctxx.Context, state *SpacesPageState) renderabl
 	}
 
 	return &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, "spaces", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "spaces", fabs),
 		Content: &wx.DefaultLayout{
 			AppBar: qq.appBar(ctx),
 			Content: qq.actions.SpaceCardsPartial.Widget(
@@ -76,7 +76,7 @@ func (qq *SpacesPage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "hub",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
 		Title: &wx.AppBarTitle{
 			Text: wx.Tuf("%s «%s»", wx.T("Spaces").String(ctx), ctx.TenantCtx().Tenant.Name),
 		},

@@ -148,7 +148,7 @@ func (qq *BrowseWithSelectionPage) widget(
 	*/
 
 	mainLayout := &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, "browse", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "browse", fabs),
 		Content:    listDetailsLayout,
 		// SideSheet:  fileDetailsSideSheet,
 	}

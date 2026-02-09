@@ -37,7 +37,7 @@ func (qq *TrashRootPage) Handler(
 
 func (qq *TrashRootPage) widget(ctx ctxx.Context) renderable.Renderable {
 	mainLayout := &wx.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, "trash", nil),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "trash", nil),
 		Content: &wx.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List:   qq.actions.TrashListPartial.Widget(ctx, qq.actions.TrashListPartial.Data("")),
@@ -49,7 +49,7 @@ func (qq *TrashRootPage) widget(ctx ctxx.Context) renderable.Renderable {
 func (qq *TrashRootPage) appBar(ctx ctxx.Context) *wx.AppBar {
 	return &wx.AppBar{
 		Leading:          wx.NewIcon("delete"),
-		LeadingAltMobile: partial.NewMainMenu(ctx),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title:            wx.T("Trash"),
 	}
 }

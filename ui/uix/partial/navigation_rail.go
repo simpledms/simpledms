@@ -1,13 +1,14 @@
 package partial
 
 import (
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 // fab must be injected because it differs on each page...
-func NewNavigationRail(ctx ctxx.Context, active string, fabs []*wx.FloatingActionButton) *wx.NavigationRail {
+func NewNavigationRail(ctx ctxx.Context, infra *common.Infra, active string, fabs []*wx.FloatingActionButton) *wx.NavigationRail {
 	var destinations []*wx.NavigationDestination
 	/*
 		{
@@ -61,7 +62,7 @@ func NewNavigationRail(ctx ctxx.Context, active string, fabs []*wx.FloatingActio
 	*/
 
 	return &wx.NavigationRail{
-		MenuBtn: NewMainMenu(ctx),
+		MenuBtn: NewMainMenu(ctx, infra),
 		// must be after main block, otherwise margin is added on top
 		// and z-index: 1 is necessary on fab
 		FABs:         fabs,

@@ -73,7 +73,7 @@ func (qq *DocumentTypePage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "category",
 		},
-		LeadingAltMobile: partial.NewMainMenu(ctx),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title: &wx.AppBarTitle{
 			Text: wx.T("Document types"),
 		},
