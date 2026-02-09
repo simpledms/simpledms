@@ -75,6 +75,8 @@ const (
 
 	UserAssignedToSpace     Event = "userAssignedToSpace"
 	UserUnassignedFromSpace Event = "userUnassignedFromSpace"
+
+	TenantCreated Event = "tenantCreated"
 )
 
 // doesn't support modifiers at the moment...

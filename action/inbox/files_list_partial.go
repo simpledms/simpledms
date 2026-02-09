@@ -308,7 +308,7 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.AppBar {
 	return &wx.AppBar{
 		Leading:          wx.NewIcon("inbox"),
-		LeadingAltMobile: partial.NewMainMenu(ctx),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title:            wx.T("Inbox"),
 		Actions: []wx.IWidget{
 			&wx.IconButton{

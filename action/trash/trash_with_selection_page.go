@@ -96,7 +96,7 @@ func (qq *TrashWithSelectionPage) widget(
 	}
 
 	mainLayout := &wx.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, "trash", nil),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "trash", nil),
 		Content:    listDetailLayout,
 	}
 	return mainLayout, nil
@@ -105,7 +105,7 @@ func (qq *TrashWithSelectionPage) widget(
 func (qq *TrashWithSelectionPage) appBar(ctx ctxx.Context) *wx.AppBar {
 	return &wx.AppBar{
 		Leading:          wx.NewIcon("delete"),
-		LeadingAltMobile: partial.NewMainMenu(ctx),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title:            wx.T("Trash"),
 	}
 }

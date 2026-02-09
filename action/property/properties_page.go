@@ -55,7 +55,7 @@ func (qq *PropertiesPage) Widget(
 	)
 
 	mainLayout := &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, "properties", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "properties", fabs),
 		Content: &wx.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List:   children,
@@ -69,7 +69,7 @@ func (qq *PropertiesPage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "tune",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
 		Title: &wx.AppBarTitle{
 			Text: wx.T("Fields"),
 		},

@@ -27,6 +27,7 @@ import (
 	"github.com/simpledms/simpledms/model/filesystem"
 	"github.com/simpledms/simpledms/model/modelmain"
 	"github.com/simpledms/simpledms/pathx"
+	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/ui"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/accountutil"
@@ -139,6 +140,7 @@ func newActionTestHarnessWithSaaSAndS3Config(t *testing.T, isSaaSModeEnabled boo
 		s3FileSystem,
 		common.NewFactory(),
 		common.NewFileRepository(),
+		pluginx.NewRegistry(),
 		systemConfig,
 	)
 
@@ -146,6 +148,11 @@ func newActionTestHarnessWithSaaSAndS3Config(t *testing.T, isSaaSModeEnabled boo
 	router := NewRouter(mainDB, tenantDBs, infra, true, metaPath, i18nx)
 	actions := action.NewActions(infra, tenantDBs)
 	router.RegisterActions(actions)
+
+	err = infra.PluginRegistry().RegisterActions(router)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	return &actionTestHarness{
 		t:         t,

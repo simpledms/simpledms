@@ -83,6 +83,15 @@ func Pu(str string) *Text {
 	}
 }
 
+func Pf(str string, a ...any) *Text {
+	_ = message.NewPrinter(language.English).Sprintf(str)
+	return &Text{
+		format:      str,
+		args:        a,
+		IsParagraph: true,
+	}
+}
+
 func Puf(str string, a ...any) *Text {
 	_ = message.NewPrinter(language.English).Sprintf(str)
 	return &Text{

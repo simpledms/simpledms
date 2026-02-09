@@ -56,7 +56,7 @@ func (qq *SelectSpacePage) WaitWidget(ctx ctxx.Context, uploadToken string, stat
 
 	// TODO make clear if nothing happens, if there are no files...
 	return &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, "upload", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "upload", fabs),
 		Content: &wx.ListDetailLayout{ // TODO implement a FullPageLayout instead
 			AppBar: qq.appBar(ctx),
 			List: []wx.IWidget{
@@ -113,7 +113,7 @@ func (qq *SelectSpacePage) Widget(ctx ctxx.Context, uploadToken string, state *S
 	var fabs []*wx.FloatingActionButton
 
 	mainLayout := &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, "upload", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "upload", fabs),
 		Content: &wx.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List: &wx.List{
@@ -130,7 +130,7 @@ func (qq *SelectSpacePage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "upload", // TODO hub or upload?
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
 		Title: &wx.AppBarTitle{
 			Text: wx.T("Select space"),
 		},
