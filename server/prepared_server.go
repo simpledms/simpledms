@@ -8,6 +8,7 @@ import (
 
 	"golang.org/x/crypto/acme/autocert"
 
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/model/modelmain"
@@ -48,6 +49,12 @@ func closePreparedResources(mainDB *sqlx.MainDB, tenantDBs *tenantdbs.TenantDBs)
 // before the server starts listening.
 func (qq *PreparedServer) Router() *Router {
 	return qq.router
+}
+
+// Infra returns the initialized infrastructure so wrappers can build actions
+// that depend on renderer, config, and other runtime services.
+func (qq *PreparedServer) Infra() *common.Infra {
+	return qq.router.infra
 }
 
 // Start starts background services and begins listening for HTTP requests.
