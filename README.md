@@ -51,6 +51,12 @@ SimpleDMS is built with:
 - [htmx](https://htmx.org/) with Go templates
 - [Tailwind CSS](https://tailwindcss.com/)
 
+## Testing
+
+Playwright E2E tests and environment variable documentation are in `e2e/README.md`.
+
+Go tests on the action layer are implemented in the `server` package.
+
 ## Where is the git history?
 
 In the beginning SimpleDMS was developed in a monorepo together with other apps as a closed source project.

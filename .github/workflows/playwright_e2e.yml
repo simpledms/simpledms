@@ -1,0 +1,71 @@
+name: 'Playwright E2E'
+
+on:
+  #pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  playwright-e2e:
+    runs-on: ubuntu-latest
+    env:
+      E2E_BASE_URL: https://localhost:7003
+      E2E_LOGIN_EMAIL: ${{ secrets.E2E_LOGIN_EMAIL }}
+      E2E_LOGIN_PASSWORD: ${{ secrets.E2E_LOGIN_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.25'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Start SimpleDMS
+        run: |
+          mkdir -p .tmp/e2e-meta
+          CGO_ENABLED=1 go run . -meta .tmp/e2e-meta > /tmp/simpledms-e2e.log 2>&1 &
+          echo $! > /tmp/simpledms-e2e.pid
+
+      - name: Wait for app
+        run: |
+          for i in {1..60}; do
+            if curl -kfsS https://localhost:7003/ >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "App did not become ready in time"
+          exit 1
+
+      - name: Run Playwright tests
+        run: npm run test:e2e
+
+      - name: Stop SimpleDMS
+        if: always()
+        run: |
+          if [ -f /tmp/simpledms-e2e.pid ]; then
+            kill "$(cat /tmp/simpledms-e2e.pid)" || true
+          fi
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          if-no-files-found: ignore
+          path: |
+            test-results
+            playwright-report
+            /tmp/simpledms-e2e.log
