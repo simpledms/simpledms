@@ -19,6 +19,9 @@ import (
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/model/common/language"
 	"github.com/simpledms/simpledms/model/common/mainrole"
+	"github.com/simpledms/simpledms/model/filesystem"
+	"github.com/simpledms/simpledms/model/modelmain"
+	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/ui"
 	"github.com/simpledms/simpledms/util/accountutil"
 	"github.com/simpledms/simpledms/util/e"
@@ -118,6 +121,40 @@ func TestStaticPageHandlerRendersAbout(t *testing.T) {
 
 func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 	t.Helper()
+	metaPath := t.TempDir()
+	ctx := context.Background()
+
+	client := enttest.Open(t, "sqlite3", "file:staticpage-test?mode=memory&cache=shared&_fk=1")
+	t.Cleanup(func() {
+		_ = client.Close()
+	})
+
+	tx, err := client.Tx(ctx)
+	if err != nil {
+		t.Fatalf("begin tx: %v", err)
+	}
+
+	err = modelmain.InitAppWithoutCustomContext(
+		ctx,
+		tx,
+		"",
+		true,
+		modelmain.S3Config{},
+		modelmain.TLSConfig{},
+		modelmain.MailerConfig{},
+		modelmain.OCRConfig{},
+	)
+	if err != nil {
+		_ = tx.Rollback()
+		t.Fatalf("init app: %v", err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		t.Fatalf("commit tx: %v", err)
+	}
+
+	systemConfigx := client.SystemConfig.Query().FirstX(ctx)
+	systemConfig := modelmain.NewSystemConfig(systemConfigx, false, false, true)
 
 	templates := template.New("app")
 	templates.Funcs(ui.TemplateFuncMap(templates))
@@ -128,23 +165,20 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 	}
 
 	renderer := ui.NewRenderer(parsedTemplates)
+	fileSystem := filesystem.NewS3FileSystem(nil, "", filesystem.NewFileSystem(metaPath), false)
 	infra := common.NewInfra(
 		renderer,
-		t.TempDir(),
-		nil,
+		metaPath,
+		fileSystem,
 		common.NewFactory(),
 		common.NewFileRepository(),
-		nil,
+		pluginx.NewRegistry(),
+		systemConfig,
 	)
 
 	actions := new(Actions)
 	page := NewStaticPage(infra, actions)
 	actions.StaticPage = page
-
-	client := enttest.Open(t, "sqlite3", "file:staticpage-test?mode=memory&cache=shared&_fk=1")
-	t.Cleanup(func() {
-		_ = client.Close()
-	})
 
 	salt, ok := accountutil.RandomSalt()
 	if !ok {
@@ -161,10 +195,10 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 		SetRole(mainrole.User).
 		SetPasswordSalt(salt).
 		SetPasswordHash(passwordHash).
-		SaveX(context.Background())
+		SaveX(ctx)
 
 	i18nx := i18n.NewI18n()
-	visitorCtx := ctxx.NewVisitorContext(context.Background(), nil, i18nx, "", "UTC", true, false)
+	visitorCtx := ctxx.NewVisitorContext(ctx, nil, i18nx, "", "UTC", true, false)
 	mainCtx := ctxx.NewMainContext(visitorCtx, account, i18nx, nil, tenantdbs.NewTenantDBs(), true)
 
 	return page, mainCtx
