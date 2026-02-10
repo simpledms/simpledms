@@ -17,9 +17,9 @@ test.describe("menu, about, and access control", () => {
 	});
 
 	test("renders about page legal and attribution links", async ({ page }) => {
-		await page.goto("/about/");
+		await page.goto("/pages/about/");
 
-		await expect(page).toHaveURL(/\/about\/$/);
+		await expect(page).toHaveURL(/\/pages\/about\/$/);
 		await expect(page.getByRole("heading", { name: "About SimpleDMS" })).toBeVisible();
 		await expect(page.getByRole("link", { name: "simpledms.eu" })).toBeVisible();
 		await expect(page.getByRole("link", { name: "simpledms.ch" })).toBeVisible();

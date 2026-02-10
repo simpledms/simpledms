@@ -8,7 +8,7 @@ async function globalSetup(config: FullConfig) {
 		throw new Error("Missing baseURL in Playwright config");
 	}
 
-	const email = process.env.E2E_LOGIN_EMAIL ?? "testing+admin@simpledms.app";
+	const email = process.env.E2E_LOGIN_EMAIL ?? "dev+admin@simpledms.app";
 	const password = process.env.E2E_LOGIN_PASSWORD ?? "12345678";
 	const storageStatePath = path.join(process.cwd(), "e2e/.auth/admin.json");
 

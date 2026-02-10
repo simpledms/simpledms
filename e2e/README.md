@@ -16,10 +16,14 @@ Run with Playwright UI:
 npm run test:e2e:ui
 ```
 
+## Important
+
+The user used for testing must have the `admin` role and have English as default language.
+
 ## Environment variables
 
 - `E2E_BASE_URL`: Base URL for the app under test. Default: `https://localhost:7003`
-- `E2E_LOGIN_EMAIL`: Login email used by the global setup and auth helpers. Default: `testing+admin@simpledms.app`
+- `E2E_LOGIN_EMAIL`: Login email used by the global setup and auth helpers. Default: `dev+admin@simpledms.app`
 - `E2E_LOGIN_PASSWORD`: Login password used by the global setup and auth helpers. Default: `12345678`
 - `E2E_ALLOW_STATE_MUTATION`: Set to `1` to run state-mutating tests (for example, successful password/passphrase updates). Default: not enabled
 

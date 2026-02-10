@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 import path from "node:path";
 
-export const loginEmail = process.env.E2E_LOGIN_EMAIL ?? "testing+admin@simpledms.app";
+export const loginEmail = process.env.E2E_LOGIN_EMAIL ?? "dev+admin@simpledms.app";
 export const loginPassword = process.env.E2E_LOGIN_PASSWORD ?? "12345678";
 
 export function uniqueSuffix() {
