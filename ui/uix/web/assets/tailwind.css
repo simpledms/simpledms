@@ -1582,6 +1582,10 @@ input:-webkit-autofill::first-line,
   max-width: 48rem;
 }
 
+.max-w-\[35rem\] {
+  max-width: 35rem;
+}
+
 .max-w-full {
   max-width: 100%;
 }
@@ -3089,6 +3093,10 @@ input:-webkit-autofill::first-line,
 
   .md\:min-w-\[17\.5rem\] {
     min-width: 17.5rem;
+  }
+
+  .md\:max-w-\[35rem\] {
+    max-width: 35rem;
   }
 
   .md\:max-w-full {

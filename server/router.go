@@ -439,11 +439,11 @@ func (qq *Router) context(
 		// FIXME should be dynamicly generated list...
 		if slices.Contains([]string{
 			"/",
-			"/-/auth/sign-up-form",
-			"/-/auth/reset-password-form",
-			"/-/auth/sign-up-cmd",
-			"/-/auth/sign-in-cmd",
 			"/-/auth/reset-password-cmd",
+			"/-/auth/reset-password-cmd-form",
+			"/-/auth/sign-up-cmd",
+			"/-/auth/sign-up-cmd-form",
+			"/-/auth/sign-in-cmd",
 		}, req.URL.Path) {
 			return visitorCtx, nil, false, nil
 		} else {
