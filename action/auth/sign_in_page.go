@@ -27,6 +27,7 @@ func NewSignInPage(infra *common.Infra, actions *Actions) *SignInPage {
 }
 
 func (qq *SignInPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	// duplicate in simpledms-saas.SignInPage
 	hostname := req.Host
 	if host, _, err := net.SplitHostPort(req.Host); err == nil {
 		// err check is necessary because net.SplitHostPort returns an error
@@ -40,6 +41,7 @@ func (qq *SignInPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 			SetCustomAutoDismissTimeoutInMs(100000),
 		)
 	}
+
 	return qq.Render(rw, req, ctx, qq.infra, "Sign in", qq.Widget(ctx))
 }
 
