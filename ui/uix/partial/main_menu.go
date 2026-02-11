@@ -28,37 +28,39 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 		}}...,
 	)
 
-	for tenantx, spaces := range ctx.MainCtx().ReadOnlyAccountSpacesByTenant() {
-		items = append(items, &wx.MenuItem{
-			LeadingIcon: "hub",
-			// TODO or `all spaces` or `manage spaces`? `|` or «»
-			Label: wx.Tuf("%s «%s»", wx.T("Spaces").String(ctx), tenantx.Name),
-			HTMXAttrs: wx.HTMXAttrs{
-				HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
-			},
-		})
-		// TODO add Label with Tenant name
-		for _, spacex := range spaces {
-			// trailingIcon := ""
-			leadingIcon := "check_box_outline_blank"
-			isCurrent := ctx.IsSpaceCtx() && ctx.SpaceCtx().SpaceID == spacex.PublicID.String()
-			if isCurrent {
-				// trailingIcon = "check"
-				leadingIcon = "check_box"
-			}
+	if ctx.IsMainCtx() {
+		for tenantx, spaces := range ctx.MainCtx().ReadOnlyAccountSpacesByTenant() {
 			items = append(items, &wx.MenuItem{
-				LeadingIcon: leadingIcon,
-				// TrailingIcon: trailingIcon,
-				// TODO tenant name as label or supporting text or tooltip?
-				Label: wx.Tu(fmt.Sprintf("%s", spacex.Name)),
+				LeadingIcon: "hub",
+				// TODO or `all spaces` or `manage spaces`? `|` or «»
+				Label: wx.Tuf("%s «%s»", wx.T("Spaces").String(ctx), tenantx.Name),
 				HTMXAttrs: wx.HTMXAttrs{
-					HxGet: route2.BrowseRoot(tenantx.PublicID.String(), spacex.PublicID.String()),
+					HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
 				},
 			})
+			// TODO add Label with Tenant name
+			for _, spacex := range spaces {
+				// trailingIcon := ""
+				leadingIcon := "check_box_outline_blank"
+				isCurrent := ctx.IsSpaceCtx() && ctx.SpaceCtx().SpaceID == spacex.PublicID.String()
+				if isCurrent {
+					// trailingIcon = "check"
+					leadingIcon = "check_box"
+				}
+				items = append(items, &wx.MenuItem{
+					LeadingIcon: leadingIcon,
+					// TrailingIcon: trailingIcon,
+					// TODO tenant name as label or supporting text or tooltip?
+					Label: wx.Tu(fmt.Sprintf("%s", spacex.Name)),
+					HTMXAttrs: wx.HTMXAttrs{
+						HxGet: route2.BrowseRoot(tenantx.PublicID.String(), spacex.PublicID.String()),
+					},
+				})
+			}
+			items = append(items, &wx.MenuItem{
+				IsDivider: true,
+			})
 		}
-		items = append(items, &wx.MenuItem{
-			IsDivider: true,
-		})
 	}
 
 	if ctx.IsSpaceCtx() {
@@ -133,50 +135,54 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 		}
 	*/
 
-	pluginMenuItems := infra.PluginRegistry().MenuItems(pluginx.MenuContext{
-		AccountID: ctx.MainCtx().Account.ID,
-		IsAdmin:   ctx.MainCtx().Account.Role == mainrole.Admin,
-		Language:  ctx.MainCtx().Account.Language.String(),
-	})
-	slices.SortFunc(pluginMenuItems, func(a, b pluginx.MenuItem) int {
-		if a.Order != b.Order {
-			return a.Order - b.Order
-		}
-		if a.Label < b.Label {
-			return -1
-		}
-		if a.Label > b.Label {
-			return 1
-		}
-		return 0
-	})
-	visiblePluginItems := 0
-	for _, item := range pluginMenuItems {
-		if item.RequiresAdmin && ctx.MainCtx().Account.Role != mainrole.Admin {
-			continue
-		}
-		visiblePluginItems++
-		items = append(items, &wx.MenuItem{
-			LeadingIcon: item.Icon,
-			Label:       wx.Tu(item.Label),
-			HTMXAttrs: wx.HTMXAttrs{
-				HxGet: item.Href,
-			},
+	if ctx.IsMainCtx() {
+		pluginMenuItems := infra.PluginRegistry().MenuItems(pluginx.MenuContext{
+			AccountID: ctx.MainCtx().Account.ID,
+			IsAdmin:   ctx.MainCtx().Account.Role == mainrole.Admin,
+			Language:  ctx.MainCtx().Account.Language.String(),
 		})
-	}
-	if visiblePluginItems > 0 {
-		items = append(items, &wx.MenuItem{IsDivider: true})
+		slices.SortFunc(pluginMenuItems, func(a, b pluginx.MenuItem) int {
+			if a.Order != b.Order {
+				return a.Order - b.Order
+			}
+			if a.Label < b.Label {
+				return -1
+			}
+			if a.Label > b.Label {
+				return 1
+			}
+			return 0
+		})
+		visiblePluginItems := 0
+		for _, item := range pluginMenuItems {
+			if item.RequiresAdmin && ctx.MainCtx().Account.Role != mainrole.Admin {
+				continue
+			}
+			visiblePluginItems++
+			items = append(items, &wx.MenuItem{
+				LeadingIcon: item.Icon,
+				Label:       wx.Tu(item.Label),
+				HTMXAttrs: wx.HTMXAttrs{
+					HxGet: item.Href,
+				},
+			})
+		}
+		if visiblePluginItems > 0 {
+			items = append(items, &wx.MenuItem{IsDivider: true})
+		}
 	}
 
-	items = append(items,
-		&wx.MenuItem{
-			LeadingIcon: "logout",
-			Label:       wx.T("Sign out"),
-			HTMXAttrs: wx.HTMXAttrs{
-				HxPost: route2.SignOutCmd(),
+	if ctx.IsMainCtx() {
+		items = append(items,
+			&wx.MenuItem{
+				LeadingIcon: "logout",
+				Label:       wx.T("Sign out"),
+				HTMXAttrs: wx.HTMXAttrs{
+					HxPost: route2.SignOutCmd(),
+				},
 			},
-		},
-	)
+		)
+	}
 
 	if !ctx.VisitorCtx().CommercialLicenseEnabled {
 		items = append(items,

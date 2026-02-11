@@ -1493,6 +1493,14 @@ input:-webkit-autofill::first-line,
   height: 100%;
 }
 
+.h-svh {
+  height: 100svh;
+}
+
+.h-lvh {
+  height: 100lvh;
+}
+
 .max-h-14 {
   max-height: 3.5rem;
 }
@@ -1513,6 +1521,10 @@ input:-webkit-autofill::first-line,
   max-height: 100%;
 }
 
+.max-h-svh {
+  max-height: 100svh;
+}
+
 .min-h-12 {
   min-height: 3rem;
 }
@@ -1527,10 +1539,6 @@ input:-webkit-autofill::first-line,
 
 .min-h-7 {
   min-height: 1.75rem;
-}
-
-.min-h-dvh {
-  min-height: 100dvh;
 }
 
 .w-10 {
@@ -1604,6 +1612,10 @@ input:-webkit-autofill::first-line,
 
 .flex-shrink-0 {
   flex-shrink: 0;
+}
+
+.flex-shrink {
+  flex-shrink: 1;
 }
 
 .flex-grow {
@@ -2214,6 +2226,10 @@ input:-webkit-autofill::first-line,
 
 .pt-6 {
   padding-top: 1.5rem;
+}
+
+.pb-6 {
+  padding-bottom: 1.5rem;
 }
 
 .text-left {
@@ -3225,6 +3241,14 @@ input:-webkit-autofill::first-line,
     padding-top: 0.25rem;
   }
 
+  .md\:pb-8 {
+    padding-bottom: 2rem;
+  }
+
+  .md\:pt-8 {
+    padding-top: 2rem;
+  }
+
   .md\:text-on-surface-variant {
     --tw-text-opacity: 1;
     color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-text-opacity, 1));
@@ -3244,6 +3268,11 @@ input:-webkit-autofill::first-line,
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
+  }
+
+  .md\:center-aligned {
+    align-items: center;
+    justify-content: center;
   }
 
   .peer:-webkit-autofill ~ .md\:peer-autofill\:bg-surface-container-lowest {

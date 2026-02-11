@@ -1,17 +1,38 @@
 {{- /*gotype: github.com/simpledms/simpledms/ui/widget.NarrowLayout */ -}}
 {{- define "NarrowLayout" }}
 	{{/* this is a mix of Card and Dialog */}}
-	<div class="flex flex-col bg-surface md:bg-surface-variant
-		text-on-surface md:text-on-surface-variant h-dvh center-aligned">
-		<div id="innerContent" class="w-full max-w-md min-h-dvh md:min-h-fit px-6 md:px-8 py-6 md:py-8
-			md:rounded-xl bg-surface text-on-surface
-			md:border md:border-outline-variant md:drop-shadow
-			overflow-y-scroll
-			">
-            {{ render .GetContext .Content }}
+		{{/*
+		h-svh instead of h-dvh because PWAs in Chrome do not calculate
+		h-dvh correctly as of 10.02.2026
+		*/}}
+		{{/*
+		following was removed on 10.02.2026 for more consistent experience on saas login page:
+		bg-surface md:bg-surface-variant text-on-surface md:text-on-surface-variant
+		*/}}
+	<div class="flex flex-col-reverse md:flex-row h-svh
+		">
+        {{ render .GetContext .Navigation }}
+		<div id="innerContent" class="
+			 flex flex-col flex-grow overflow-hidden
+		">
+            {{ if .AppBar }}
+				<div class="flex-shrink md:mt-3">
+						{{ render .GetContext .AppBar }}
+				</div>
+            {{ end }}
+			<div class="flex justify-center md:center-aligned flex-grow">
+				<div class="max-w-md w-full px-6 md:px-8 py-6 md:py-8
+					md:rounded-xl
+					overflow-y-scroll
+				">
+                    {{ render .GetContext .Content }}
+				</div>
+			</div>
 		</div>
 	</div>
 	{{ if .WithPoweredBy }}
-		<div class="py-1.5 px-3 fixed bottom-0 text-center text-primary w-full"><a href="https://simpledms.eu/open-source"><small>Powered by SimpleDMS</small></a></div>
+		<div class="py-1.5 px-3 fixed bottom-0 text-center text-primary w-full">
+			<a href="https://simpledms.eu/open-source"><small>Powered by SimpleDMS</small></a>
+		</div>
 	{{ end }}
 {{ end }}

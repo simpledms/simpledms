@@ -52,7 +52,7 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 
 	// TODO 2fa
 	children = append(children,
-		wx.H(wx.HeadingTypeHeadlineMd, wx.Tuf("%s | SimpleDMS", wx.T("Sign in [subject]").String(ctx))),
+		wx.H(wx.HeadingTypeHeadlineMd, wx.Tuf("%s", wx.T("Sign in [subject]").String(ctx))),
 		qq.actions.SignInCmd.Form(
 			ctx,
 			qq.actions.SignInCmd.Data("", "", ""),
@@ -85,7 +85,13 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 	}
 
 	return &wx.NarrowLayout{
-		Content:       column,
+		Content: column,
+		/*Navigation: partial2.NewNavigationRail(
+			ctx,
+			qq.infra,
+			"sign-in",
+			nil,
+		),*/
 		WithPoweredBy: !qq.infra.SystemConfig().CommercialLicenseEnabled(),
 	}
 }

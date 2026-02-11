@@ -5,7 +5,11 @@
 	{{- /* Deprecated: bg-surface-container is for extension of nav bar color around edge into content area
 	 must match background color of nav rail*/}}
 	{{- /* was bg-surface-bright before 22.01.2025 */}}
-	<div class="flex flex-col-reverse md:flex-row h-dvh">
+    {{/*
+		h-svh instead of h-dvh because PWAs in Chrome do not calculate
+		h-dvh correctly as of 10.02.2026
+		*/}}
+	<div class="flex flex-col-reverse md:flex-row h-svh">
         {{ render .GetContext .Navigation }}
 		<div id="innerContent" class="flex-grow overflow-hidden">
             {{ render .GetContext .Content }}
