@@ -222,3 +222,16 @@ func (qq *File) IsZIPArchive(ctx ctxx.Context) bool {
 func (qq *File) IsMovedToFinalDestination(ctx ctxx.Context) bool {
 	return qq.CurrentVersion(ctx).IsMovedToFinalDestination()
 }
+
+func (qq *File) HasOCRSuccess(ctx ctxx.Context) bool {
+	return qq.Data.OcrSuccessAt != nil && !qq.Data.OcrSuccessAt.IsZero()
+}
+
+func (qq *File) Size(ctx ctxx.Context) int64 {
+	if qq.Data.IsDirectory {
+		// TODO is this a good value?
+		//		or -1 or size for dir on disk?
+		return 0
+	}
+	return qq.CurrentVersion(ctx).Data.Size
+}
