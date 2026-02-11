@@ -439,6 +439,7 @@ func (qq *Router) context(
 		// FIXME should be dynamicly generated list (by declaration)...
 		if slices.Contains([]string{
 			"/",
+			"/pages/about/",
 			"/pages/imprint/",
 			"/pages/privacy-policy/",
 			"/pages/terms-of-service/",

@@ -147,10 +147,13 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 	items = infra.PluginRegistry().ExtendMenuItems(ctx, items)
 
 	if !ctx.VisitorCtx().CommercialLicenseEnabled {
-		items = append(items,
-			&wx.MenuItem{
+		// 0 on login page
+		if len(items) > 0 {
+			items = append(items, &wx.MenuItem{
 				IsDivider: true,
-			},
+			})
+		}
+		items = append(items,
 			&wx.MenuItem{
 				LeadingIcon: "info",
 				Label:       wx.T("About SimpleDMS"),
