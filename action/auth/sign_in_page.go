@@ -8,6 +8,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/common/country"
 	"github.com/simpledms/simpledms/model/common/language"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -27,6 +28,7 @@ func NewSignInPage(infra *common.Infra, actions *Actions) *SignInPage {
 }
 
 func (qq *SignInPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	// duplicate in simpledms-saas.SignInPage
 	hostname := req.Host
 	if host, _, err := net.SplitHostPort(req.Host); err == nil {
 		// err check is necessary because net.SplitHostPort returns an error
@@ -40,6 +42,7 @@ func (qq *SignInPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 			SetCustomAutoDismissTimeoutInMs(100000),
 		)
 	}
+
 	return qq.Render(rw, req, ctx, qq.infra, "Sign in", qq.Widget(ctx))
 }
 
@@ -50,7 +53,7 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 
 	// TODO 2fa
 	children = append(children,
-		wx.H(wx.HeadingTypeHeadlineMd, wx.Tuf("%s | SimpleDMS", wx.T("Sign in [subject]").String(ctx))),
+		wx.H(wx.HeadingTypeHeadlineMd, wx.Tuf("%s", wx.T("Sign in [subject]").String(ctx))),
 		qq.actions.SignInCmd.Form(
 			ctx,
 			qq.actions.SignInCmd.Data("", "", ""),
@@ -83,7 +86,23 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 	}
 
 	return &wx.NarrowLayout{
-		Content:       column,
+		Content: column,
+		AppBar:  qq.appBar(ctx),
+		Navigation: partial2.NewNavigationRail(
+			ctx,
+			qq.infra,
+			"sign-in",
+			nil,
+		),
 		WithPoweredBy: !qq.infra.SystemConfig().CommercialLicenseEnabled(),
+	}
+}
+
+func (qq *SignInPage) appBar(ctx ctxx.Context) *wx.AppBar {
+	return &wx.AppBar{
+		Leading:          &wx.Icon{Name: "folder_open"},
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		Title:            &wx.AppBarTitle{Text: wx.Tu("SimpleDMS")},
+		Actions:          []wx.IWidget{},
 	}
 }
