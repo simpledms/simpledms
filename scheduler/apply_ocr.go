@@ -17,6 +17,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/model"
+	"github.com/simpledms/simpledms/util/ocrutil"
 )
 
 func (qq *Scheduler) applyOCR() {
@@ -76,7 +77,8 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 			AllX(ctx)
 
 		for _, fileToProcess := range filesToProcess {
-			content, fileNotReady, err := qq.applyOCROneFile(ctx, tenantIdentity, model.NewFile(fileToProcess))
+			currentVersion := model.NewFile(fileToProcess).CurrentVersion(ctx)
+			content, fileNotReady, fileTooLarge, err := qq.applyOCROneFile(ctx, tenantIdentity, currentVersion)
 			if err != nil {
 				log.Println(err)
 
@@ -89,7 +91,18 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 				return true
 			}
 			if fileNotReady {
-				return true // continue
+				return true // continue with next tenant
+			}
+			if fileTooLarge {
+				// TODO find a more expressive solution to store in database
+				//		that file is to large
+				fileToProcess.Update().
+					SetOcrContent("").
+					SetOcrRetryCount(3).
+					SetOcrLastTriedAt(time.Now()).
+					ExecX(ctx)
+
+				continue
 			}
 
 			// FIXME start transaction?
@@ -105,21 +118,28 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 	})
 }
 
-// bool return value indicates if file is not ready, for example not moved to final destination
-func (qq *Scheduler) applyOCROneFile(ctx context.Context, tenantIdentity *age.X25519Identity, filem *model.File) (string, bool, error) {
+// bool return values indicate if file is not ready, for example not moved to final destination
+// second bool value indicates if OCR was not applied because file is too large
+func (qq *Scheduler) applyOCROneFile(
+	ctx context.Context,
+	tenantIdentity *age.X25519Identity,
+	currentVersion *model.StoredFile,
+) (string, bool, bool, error) {
 	// TODO use language of user?
 	tikaHeader := tika.NewHeader().AcceptText().SetOCRLanguage("eng+deu+fra+ita+spa")
 
-	currentVersion := filem.CurrentVersion(ctx)
-
-	if !currentVersion.IsMovedToFinalDestination() {
-		return "", true, nil
+	if ocrutil.IsFileTooLarge(currentVersion.Data.Size) {
+		return "", false, true, nil
 	}
 
-	openedFile, err := qq.infra.FileSystem().UnsafeOpenFile(ctx, tenantIdentity, filem.CurrentVersion(ctx))
+	if !currentVersion.IsMovedToFinalDestination() {
+		return "", true, false, nil
+	}
+
+	openedFile, err := qq.infra.FileSystem().UnsafeOpenFile(ctx, tenantIdentity, currentVersion)
 	if err != nil {
 		log.Println(err)
-		return "", false, err
+		return "", false, false, err
 	}
 	defer func() {
 		err := openedFile.Close()
@@ -131,10 +151,10 @@ func (qq *Scheduler) applyOCROneFile(ctx context.Context, tenantIdentity *age.X2
 	parsedContent, err := qq.tikaClientNilable.Parse(context.Background(), openedFile, tikaHeader)
 	if err != nil {
 		log.Println(err)
-		return "", false, err
+		return "", false, false, err
 	}
 
-	return removeAllWhitespace(parsedContent), false, nil
+	return removeAllWhitespace(parsedContent), false, false, nil
 }
 
 var regexpEndsAlphanumeric = regexp.MustCompile("[a-zA-Z0-9]$")

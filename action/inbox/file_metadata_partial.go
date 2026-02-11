@@ -11,6 +11,7 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/ocrutil"
 )
 
 type FileMetadataPartialData struct {
@@ -106,7 +107,7 @@ func (qq *FileMetadataPartial) Widget(
 
 	var nilableBottomAppBar *wx.BottomAppBar
 
-	if filex.Data.OcrSuccessAt == nil || filex.Data.OcrSuccessAt.IsZero() {
+	if message := qq.nilableOCRStatusMessage(filex.HasOCRSuccess(ctx), filex.Size(ctx)); message != nil {
 		nilableBottomAppBar = &wx.BottomAppBar{
 			Actions: []wx.IWidget{
 				&wx.IconButton{
@@ -122,7 +123,7 @@ func (qq *FileMetadataPartial) Widget(
 			},
 			Children: wx.NewBody(
 				wx.BodyTypeSm,
-				wx.T("Text recognition (OCR) is not ready yet, suggestions are based on the filename only."),
+				message,
 			),
 		}
 	}
@@ -141,4 +142,16 @@ func (qq *FileMetadataPartial) Widget(
 
 func (qq *FileMetadataPartial) MetadataTabContentID() string {
 	return "metadataTabContent"
+}
+
+func (qq *FileMetadataPartial) nilableOCRStatusMessage(hasOCRSuccess bool, fileSize int64) *wx.Text {
+	if hasOCRSuccess {
+		return nil
+	}
+
+	if ocrutil.IsFileTooLarge(fileSize) {
+		return wx.T("Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.")
+	}
+
+	return wx.T("Text recognition (OCR) is not ready yet, suggestions are based on the filename only.")
 }
