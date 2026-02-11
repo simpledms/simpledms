@@ -2,12 +2,9 @@ package partial
 
 import (
 	"fmt"
-	"slices"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/common/mainrole"
-	"github.com/simpledms/simpledms/pluginx"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
@@ -15,20 +12,20 @@ import (
 func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 	var items []*wx.MenuItem
 
-	items = append(items, []*wx.MenuItem{
-		{
-			LeadingIcon: "dashboard",
-			Label:       wx.T("Dashboard"),
-			HTMXAttrs: wx.HTMXAttrs{
-				HxGet: route2.Dashboard(),
-			},
-		},
-		{
-			IsDivider: true,
-		}}...,
-	)
-
 	if ctx.IsMainCtx() {
+		items = append(items, []*wx.MenuItem{
+			{
+				LeadingIcon: "dashboard",
+				Label:       wx.T("Dashboard"),
+				HTMXAttrs: wx.HTMXAttrs{
+					HxGet: route2.Dashboard(),
+				},
+			},
+			{
+				IsDivider: true,
+			}}...,
+		)
+
 		for tenantx, spaces := range ctx.MainCtx().ReadOnlyAccountSpacesByTenant() {
 			items = append(items, &wx.MenuItem{
 				LeadingIcon: "hub",
@@ -136,43 +133,6 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 	*/
 
 	if ctx.IsMainCtx() {
-		pluginMenuItems := infra.PluginRegistry().MenuItems(pluginx.MenuContext{
-			AccountID: ctx.MainCtx().Account.ID,
-			IsAdmin:   ctx.MainCtx().Account.Role == mainrole.Admin,
-			Language:  ctx.MainCtx().Account.Language.String(),
-		})
-		slices.SortFunc(pluginMenuItems, func(a, b pluginx.MenuItem) int {
-			if a.Order != b.Order {
-				return a.Order - b.Order
-			}
-			if a.Label < b.Label {
-				return -1
-			}
-			if a.Label > b.Label {
-				return 1
-			}
-			return 0
-		})
-		visiblePluginItems := 0
-		for _, item := range pluginMenuItems {
-			if item.RequiresAdmin && ctx.MainCtx().Account.Role != mainrole.Admin {
-				continue
-			}
-			visiblePluginItems++
-			items = append(items, &wx.MenuItem{
-				LeadingIcon: item.Icon,
-				Label:       wx.Tu(item.Label),
-				HTMXAttrs: wx.HTMXAttrs{
-					HxGet: item.Href,
-				},
-			})
-		}
-		if visiblePluginItems > 0 {
-			items = append(items, &wx.MenuItem{IsDivider: true})
-		}
-	}
-
-	if ctx.IsMainCtx() {
 		items = append(items,
 			&wx.MenuItem{
 				LeadingIcon: "logout",
@@ -183,6 +143,8 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 			},
 		)
 	}
+
+	items = infra.PluginRegistry().ExtendMenuItems(ctx, items)
 
 	if !ctx.VisitorCtx().CommercialLicenseEnabled {
 		items = append(items,

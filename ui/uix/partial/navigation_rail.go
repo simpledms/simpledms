@@ -20,6 +20,17 @@ func NewNavigationRail(ctx ctxx.Context, infra *common.Infra, active string, fab
 
 	*/
 
+	// check for IsMainCtx instead of IsVisitorCtx because IsVisitor
+	// is true in all contexts
+	if !ctx.IsMainCtx() {
+		destinations = append(destinations, &wx.NavigationDestination{
+			Label:    "Sign in",
+			Icon:     "login",
+			IsActive: active == "sign-in",
+			Href:     "/",
+		})
+	}
+
 	if ctx.IsSpaceCtx() {
 		destinations = append(destinations, &wx.NavigationDestination{
 			Label:    "Browse", // TODO Files or Browse?

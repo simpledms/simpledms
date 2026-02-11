@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/simpledms/simpledms/ctxx"
+	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type Registry struct {
@@ -40,14 +41,15 @@ func (qq *Registry) RegisterActions(reg Registrar) error {
 	return nil
 }
 
-func (qq *Registry) MenuItems(ctx MenuContext) []MenuItem {
-	var items []MenuItem
+// TODO add Position argument and call multiple times for different positions?
+func (qq *Registry) ExtendMenuItems(ctx ctxx.Context, items []*wx.MenuItem) []*wx.MenuItem {
 	for _, plugin := range qq.Plugins() {
-		hook, ok := plugin.(MenuItemsHook)
+		hook, ok := plugin.(ExtendMenuItemsHook)
 		if !ok {
 			continue
 		}
-		items = append(items, hook.MenuItems(ctx)...)
+		// TODO does this work correctly if multiple plugins are registered?
+		items = hook.ExtendMenuItems(ctx, items)
 	}
 	return items
 }

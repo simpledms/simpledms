@@ -436,9 +436,12 @@ func (qq *Router) context(
 	}
 	// TODO is "/" robust enough? should also work if URL is `/?test=123`
 	if !isAuthenticated {
-		// FIXME should be dynamicly generated list...
+		// FIXME should be dynamicly generated list (by declaration)...
 		if slices.Contains([]string{
 			"/",
+			"/pages/imprint/",
+			"/pages/privacy-policy/",
+			"/pages/terms-of-service/",
 			"/-/auth/reset-password-cmd",
 			"/-/auth/reset-password-cmd-form",
 			"/-/auth/sign-up-cmd",

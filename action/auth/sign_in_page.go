@@ -8,6 +8,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/common/country"
 	"github.com/simpledms/simpledms/model/common/language"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -86,12 +87,22 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 
 	return &wx.NarrowLayout{
 		Content: column,
-		/*Navigation: partial2.NewNavigationRail(
+		AppBar:  qq.appBar(ctx),
+		Navigation: partial2.NewNavigationRail(
 			ctx,
 			qq.infra,
 			"sign-in",
 			nil,
-		),*/
+		),
 		WithPoweredBy: !qq.infra.SystemConfig().CommercialLicenseEnabled(),
+	}
+}
+
+func (qq *SignInPage) appBar(ctx ctxx.Context) *wx.AppBar {
+	return &wx.AppBar{
+		Leading:          &wx.Icon{Name: "folder_open"},
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		Title:            &wx.AppBarTitle{Text: wx.Tu("SimpleDMS")},
+		Actions:          []wx.IWidget{},
 	}
 }
