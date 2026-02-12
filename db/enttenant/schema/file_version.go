@@ -40,5 +40,6 @@ func (FileVersion) Indexes() []ent.Index {
 		// TODO necessary or implicit?
 		index.Fields("file_id", "stored_file_id").Unique(),
 		index.Fields("file_id", "version_number").Unique(),
+		index.Fields("stored_file_id"),
 	}
 }

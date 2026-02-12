@@ -268,6 +268,11 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{FileVersionsColumns[3], FileVersionsColumns[1]},
 			},
+			{
+				Name:    "fileversion_stored_file_id",
+				Unique:  false,
+				Columns: []*schema.Column{FileVersionsColumns[4]},
+			},
 		},
 	}
 	// PropertiesColumns holds the columns for the "properties" table.
