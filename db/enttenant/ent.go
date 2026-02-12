@@ -15,7 +15,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
@@ -90,7 +89,6 @@ func checkColumn(t, c string) error {
 			attribute.Table:              attribute.ValidColumn,
 			documenttype.Table:           documenttype.ValidColumn,
 			file.Table:                   file.ValidColumn,
-			fileinfo.Table:               fileinfo.ValidColumn,
 			filepropertyassignment.Table: filepropertyassignment.ValidColumn,
 			filesearch.Table:             filesearch.ValidColumn,
 			fileversion.Table:            fileversion.ValidColumn,

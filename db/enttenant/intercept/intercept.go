@@ -11,7 +11,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
@@ -161,33 +160,6 @@ func (f TraverseFile) Traverse(ctx context.Context, q enttenant.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *enttenant.FileQuery", q)
-}
-
-// The FileInfoFunc type is an adapter to allow the use of ordinary function as a Querier.
-type FileInfoFunc func(context.Context, *enttenant.FileInfoQuery) (enttenant.Value, error)
-
-// Query calls f(ctx, q).
-func (f FileInfoFunc) Query(ctx context.Context, q enttenant.Query) (enttenant.Value, error) {
-	if q, ok := q.(*enttenant.FileInfoQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *enttenant.FileInfoQuery", q)
-}
-
-// The TraverseFileInfo type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseFileInfo func(context.Context, *enttenant.FileInfoQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseFileInfo) Intercept(next enttenant.Querier) enttenant.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseFileInfo) Traverse(ctx context.Context, q enttenant.Query) error {
-	if q, ok := q.(*enttenant.FileInfoQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *enttenant.FileInfoQuery", q)
 }
 
 // The FilePropertyAssignmentFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -496,8 +468,6 @@ func NewQuery(q enttenant.Query) (Query, error) {
 		return &query[*enttenant.DocumentTypeQuery, predicate.DocumentType, documenttype.OrderOption]{typ: enttenant.TypeDocumentType, tq: q}, nil
 	case *enttenant.FileQuery:
 		return &query[*enttenant.FileQuery, predicate.File, file.OrderOption]{typ: enttenant.TypeFile, tq: q}, nil
-	case *enttenant.FileInfoQuery:
-		return &query[*enttenant.FileInfoQuery, predicate.FileInfo, fileinfo.OrderOption]{typ: enttenant.TypeFileInfo, tq: q}, nil
 	case *enttenant.FilePropertyAssignmentQuery:
 		return &query[*enttenant.FilePropertyAssignmentQuery, predicate.FilePropertyAssignment, filepropertyassignment.OrderOption]{typ: enttenant.TypeFilePropertyAssignment, tq: q}, nil
 	case *enttenant.FileSearchQuery:

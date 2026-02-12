@@ -42,8 +42,6 @@ type Client struct {
 	DocumentType *DocumentTypeClient
 	// File is the client for interacting with the File builders.
 	File *FileClient
-	// FileInfo is the client for interacting with the FileInfo builders.
-	FileInfo *FileInfoClient
 	// FilePropertyAssignment is the client for interacting with the FilePropertyAssignment builders.
 	FilePropertyAssignment *FilePropertyAssignmentClient
 	// FileSearch is the client for interacting with the FileSearch builders.
@@ -80,7 +78,6 @@ func (c *Client) init() {
 	c.Attribute = NewAttributeClient(c.config)
 	c.DocumentType = NewDocumentTypeClient(c.config)
 	c.File = NewFileClient(c.config)
-	c.FileInfo = NewFileInfoClient(c.config)
 	c.FilePropertyAssignment = NewFilePropertyAssignmentClient(c.config)
 	c.FileSearch = NewFileSearchClient(c.config)
 	c.FileVersion = NewFileVersionClient(c.config)
@@ -187,7 +184,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Attribute:              NewAttributeClient(cfg),
 		DocumentType:           NewDocumentTypeClient(cfg),
 		File:                   NewFileClient(cfg),
-		FileInfo:               NewFileInfoClient(cfg),
 		FilePropertyAssignment: NewFilePropertyAssignmentClient(cfg),
 		FileSearch:             NewFileSearchClient(cfg),
 		FileVersion:            NewFileVersionClient(cfg),
@@ -221,7 +217,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Attribute:              NewAttributeClient(cfg),
 		DocumentType:           NewDocumentTypeClient(cfg),
 		File:                   NewFileClient(cfg),
-		FileInfo:               NewFileInfoClient(cfg),
 		FilePropertyAssignment: NewFilePropertyAssignmentClient(cfg),
 		FileSearch:             NewFileSearchClient(cfg),
 		FileVersion:            NewFileVersionClient(cfg),
@@ -274,8 +269,8 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Attribute, c.DocumentType, c.File, c.FileInfo, c.FilePropertyAssignment,
-		c.FileSearch, c.FileVersion, c.Property, c.ResolvedTagAssignment, c.Space,
+		c.Attribute, c.DocumentType, c.File, c.FilePropertyAssignment, c.FileSearch,
+		c.FileVersion, c.Property, c.ResolvedTagAssignment, c.Space,
 		c.SpaceUserAssignment, c.StoredFile, c.Tag, c.TagAssignment, c.User,
 	} {
 		n.Intercept(interceptors...)
@@ -1019,36 +1014,6 @@ func (c *FileClient) mutate(ctx context.Context, m *FileMutation) (Value, error)
 	default:
 		return nil, fmt.Errorf("enttenant: unknown File mutation op: %q", m.Op())
 	}
-}
-
-// FileInfoClient is a client for the FileInfo schema.
-type FileInfoClient struct {
-	config
-}
-
-// NewFileInfoClient returns a client for the FileInfo from the given config.
-func NewFileInfoClient(c config) *FileInfoClient {
-	return &FileInfoClient{config: c}
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `fileinfo.Intercept(f(g(h())))`.
-func (c *FileInfoClient) Intercept(interceptors ...Interceptor) {
-	c.inters.FileInfo = append(c.inters.FileInfo, interceptors...)
-}
-
-// Query returns a query builder for FileInfo.
-func (c *FileInfoClient) Query() *FileInfoQuery {
-	return &FileInfoQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeFileInfo},
-		inters: c.Interceptors(),
-	}
-}
-
-// Interceptors returns the client interceptors.
-func (c *FileInfoClient) Interceptors() []Interceptor {
-	return c.inters.FileInfo
 }
 
 // FilePropertyAssignmentClient is a client for the FilePropertyAssignment schema.
@@ -2886,9 +2851,9 @@ type (
 		Space, SpaceUserAssignment, StoredFile, Tag, TagAssignment, User []ent.Hook
 	}
 	inters struct {
-		Attribute, DocumentType, File, FileInfo, FilePropertyAssignment, FileSearch,
-		FileVersion, Property, ResolvedTagAssignment, Space, SpaceUserAssignment,
-		StoredFile, Tag, TagAssignment, User []ent.Interceptor
+		Attribute, DocumentType, File, FilePropertyAssignment, FileSearch, FileVersion,
+		Property, ResolvedTagAssignment, Space, SpaceUserAssignment, StoredFile, Tag,
+		TagAssignment, User []ent.Interceptor
 	}
 )
 

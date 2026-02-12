@@ -6,7 +6,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
@@ -28,7 +27,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 15)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 14)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   attribute.Table,
@@ -107,22 +106,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[3] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
-			Table:       fileinfo.Table,
-			Columns:     fileinfo.Columns,
-			CompositeID: []*sqlgraph.FieldSpec{},
-		},
-		Type: "FileInfo",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			fileinfo.FieldSpaceID:      {Type: field.TypeInt64, Column: fileinfo.FieldSpaceID},
-			fileinfo.FieldFileID:       {Type: field.TypeInt64, Column: fileinfo.FieldFileID},
-			fileinfo.FieldPublicFileID: {Type: field.TypeString, Column: fileinfo.FieldPublicFileID},
-			fileinfo.FieldFullPath:     {Type: field.TypeString, Column: fileinfo.FieldFullPath},
-			fileinfo.FieldPath:         {Type: field.TypeJSON, Column: fileinfo.FieldPath},
-			fileinfo.FieldPublicPath:   {Type: field.TypeJSON, Column: fileinfo.FieldPublicPath},
-		},
-	}
-	graph.Nodes[4] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
 			Table:   filepropertyassignment.Table,
 			Columns: filepropertyassignment.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -141,7 +124,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filepropertyassignment.FieldBoolValue:   {Type: field.TypeBool, Column: filepropertyassignment.FieldBoolValue},
 		},
 	}
-	graph.Nodes[5] = &sqlgraph.Node{
+	graph.Nodes[4] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:       filesearch.Table,
 			Columns:     filesearch.Columns,
@@ -157,7 +140,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filesearch.FieldOcrContent:   {Type: field.TypeString, Column: filesearch.FieldOcrContent},
 		},
 	}
-	graph.Nodes[6] = &sqlgraph.Node{
+	graph.Nodes[5] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   fileversion.Table,
 			Columns: fileversion.Columns,
@@ -174,7 +157,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			fileversion.FieldNote:          {Type: field.TypeString, Column: fileversion.FieldNote},
 		},
 	}
-	graph.Nodes[7] = &sqlgraph.Node{
+	graph.Nodes[6] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   property.Table,
 			Columns: property.Columns,
@@ -191,7 +174,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			property.FieldUnit:    {Type: field.TypeString, Column: property.FieldUnit},
 		},
 	}
-	graph.Nodes[8] = &sqlgraph.Node{
+	graph.Nodes[7] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:       resolvedtagassignment.Table,
 			Columns:     resolvedtagassignment.Columns,
@@ -204,7 +187,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			resolvedtagassignment.FieldSpaceID: {Type: field.TypeInt64, Column: resolvedtagassignment.FieldSpaceID},
 		},
 	}
-	graph.Nodes[9] = &sqlgraph.Node{
+	graph.Nodes[8] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   space.Table,
 			Columns: space.Columns,
@@ -224,7 +207,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			space.FieldIsFolderMode: {Type: field.TypeBool, Column: space.FieldIsFolderMode},
 		},
 	}
-	graph.Nodes[10] = &sqlgraph.Node{
+	graph.Nodes[9] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   spaceuserassignment.Table,
 			Columns: spaceuserassignment.Columns,
@@ -245,7 +228,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			spaceuserassignment.FieldIsDefault: {Type: field.TypeBool, Column: spaceuserassignment.FieldIsDefault},
 		},
 	}
-	graph.Nodes[11] = &sqlgraph.Node{
+	graph.Nodes[10] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   storedfile.Table,
 			Columns: storedfile.Columns,
@@ -278,7 +261,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			storedfile.FieldDeletedTemporaryFileAt:     {Type: field.TypeTime, Column: storedfile.FieldDeletedTemporaryFileAt},
 		},
 	}
-	graph.Nodes[12] = &sqlgraph.Node{
+	graph.Nodes[11] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tag.Table,
 			Columns: tag.Columns,
@@ -297,7 +280,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tag.FieldGroupID: {Type: field.TypeInt64, Column: tag.FieldGroupID},
 		},
 	}
-	graph.Nodes[13] = &sqlgraph.Node{
+	graph.Nodes[12] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tagassignment.Table,
 			Columns: tagassignment.Columns,
@@ -313,7 +296,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tagassignment.FieldTagID:   {Type: field.TypeInt64, Column: tagassignment.FieldTagID},
 		},
 	}
-	graph.Nodes[14] = &sqlgraph.Node{
+	graph.Nodes[13] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -1569,61 +1552,6 @@ func (f *FileFilter) WhereHasPropertyAssignmentWith(preds ...predicate.FilePrope
 }
 
 // addPredicate implements the predicateAdder interface.
-func (_q *FileInfoQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the FileInfoQuery builder.
-func (_q *FileInfoQuery) Filter() *FileInfoFilter {
-	return &FileInfoFilter{config: _q.config, predicateAdder: _q}
-}
-
-// FileInfoFilter provides a generic filtering capability at runtime for FileInfoQuery.
-type FileInfoFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *FileInfoFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[3].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereSpaceID applies the entql int64 predicate on the space_id field.
-func (f *FileInfoFilter) WhereSpaceID(p entql.Int64P) {
-	f.Where(p.Field(fileinfo.FieldSpaceID))
-}
-
-// WhereFileID applies the entql int64 predicate on the file_id field.
-func (f *FileInfoFilter) WhereFileID(p entql.Int64P) {
-	f.Where(p.Field(fileinfo.FieldFileID))
-}
-
-// WherePublicFileID applies the entql string predicate on the public_file_id field.
-func (f *FileInfoFilter) WherePublicFileID(p entql.StringP) {
-	f.Where(p.Field(fileinfo.FieldPublicFileID))
-}
-
-// WhereFullPath applies the entql string predicate on the full_path field.
-func (f *FileInfoFilter) WhereFullPath(p entql.StringP) {
-	f.Where(p.Field(fileinfo.FieldFullPath))
-}
-
-// WherePath applies the entql json.RawMessage predicate on the path field.
-func (f *FileInfoFilter) WherePath(p entql.BytesP) {
-	f.Where(p.Field(fileinfo.FieldPath))
-}
-
-// WherePublicPath applies the entql json.RawMessage predicate on the public_path field.
-func (f *FileInfoFilter) WherePublicPath(p entql.BytesP) {
-	f.Where(p.Field(fileinfo.FieldPublicPath))
-}
-
-// addPredicate implements the predicateAdder interface.
 func (_q *FilePropertyAssignmentQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -1652,7 +1580,7 @@ type FilePropertyAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FilePropertyAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[4].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[3].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1759,7 +1687,7 @@ type FileSearchFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FileSearchFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[5].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[4].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1824,7 +1752,7 @@ type FileVersionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FileVersionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[5].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1912,7 +1840,7 @@ type PropertyFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PropertyFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2004,7 +1932,7 @@ type ResolvedTagAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ResolvedTagAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2054,7 +1982,7 @@ type SpaceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SpaceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[9].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2227,7 +2155,7 @@ type SpaceUserAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SpaceUserAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[10].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[9].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2363,7 +2291,7 @@ type StoredFileFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *StoredFileFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[11].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[10].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2559,7 +2487,7 @@ type TagFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TagFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[12].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[11].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2727,7 +2655,7 @@ type TagAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TagAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[13].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[12].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2824,7 +2752,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[14].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[13].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

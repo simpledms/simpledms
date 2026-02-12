@@ -245,7 +245,6 @@ func (qq *Tenant) ExecuteDBMigrations(
 	}
 	// TODO find a better way
 	for _, query := range []string{
-		schema.FileInfo{}.SQL(),
 		schema.ResolvedTagAssignment{}.SQL(),
 		schema.FileSearch{}.SQL(),
 	} {

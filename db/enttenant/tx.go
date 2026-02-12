@@ -20,8 +20,6 @@ type Tx struct {
 	DocumentType *DocumentTypeClient
 	// File is the client for interacting with the File builders.
 	File *FileClient
-	// FileInfo is the client for interacting with the FileInfo builders.
-	FileInfo *FileInfoClient
 	// FilePropertyAssignment is the client for interacting with the FilePropertyAssignment builders.
 	FilePropertyAssignment *FilePropertyAssignmentClient
 	// FileSearch is the client for interacting with the FileSearch builders.
@@ -178,7 +176,6 @@ func (tx *Tx) init() {
 	tx.Attribute = NewAttributeClient(tx.config)
 	tx.DocumentType = NewDocumentTypeClient(tx.config)
 	tx.File = NewFileClient(tx.config)
-	tx.FileInfo = NewFileInfoClient(tx.config)
 	tx.FilePropertyAssignment = NewFilePropertyAssignmentClient(tx.config)
 	tx.FileSearch = NewFileSearchClient(tx.config)
 	tx.FileVersion = NewFileVersionClient(tx.config)

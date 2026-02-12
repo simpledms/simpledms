@@ -10,7 +10,6 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/ui/uix/route"
@@ -96,10 +95,10 @@ func (qq *FileListItemPartial) DirectoryListItem(
 	if showBreadcrumbs {
 		if parentFullPath == "" {
 			// if ID is used instead of ParentID, lastElem must be removed in next step (filepath.Dir)
-			parentFullPath = ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FileID(fileWithChildren.ParentID)).OnlyX(ctx).FullPath
+			parentFullPath = qq.infra.FileSystem().FileTree().FullPathByFileIDX(ctx, fileWithChildren.ParentID)
 		}
 
-		currentDirPath := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.PublicFileID(currentDirID)).OnlyX(ctx).FullPath
+		currentDirPath := qq.infra.FileSystem().FileTree().FullPathByPublicIDX(ctx, currentDirID)
 		if parentFullPath == currentDirPath {
 			supportingText = qq.supportingTextDirectory(fileWithChildren, supportingText)
 		} else {
@@ -200,10 +199,10 @@ func (qq *FileListItemPartial) fileListItem(
 	if showBreadcrumbs {
 		if parentFullPath == "" {
 			// if ID is used instead of ParentID, lastElem must be removed in next step (filepath.Dir)
-			parentFullPath = ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FileID(fileWithChildren.ParentID)).OnlyX(ctx).FullPath
+			parentFullPath = qq.infra.FileSystem().FileTree().FullPathByFileIDX(ctx, fileWithChildren.ParentID)
 		}
 
-		currentDirPath := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.PublicFileID(currentDirID)).OnlyX(ctx).FullPath
+		currentDirPath := qq.infra.FileSystem().FileTree().FullPathByPublicIDX(ctx, currentDirID)
 		if parentFullPath == currentDirPath {
 			supportingText = qq.supportingTextFile(ctx, filexx, supportingText)
 		} else {

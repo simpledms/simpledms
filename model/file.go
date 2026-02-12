@@ -170,6 +170,7 @@ func (qq *File) CurrentVersion(ctx context.Context) *StoredFile {
 		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
 		WithStoredFile().
 		FirstX(ctx)
+
 	qq.nilableCurrentVersion = NewStoredFile(version.Edges.StoredFile) // TODO inject factory into ctx?
 
 	return qq.nilableCurrentVersion

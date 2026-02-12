@@ -35,7 +35,7 @@ import (
 )
 
 type actionTestHarness struct {
-	t         *testing.T
+	tb        testing.TB
 	mainDB    *sqlx.MainDB
 	tenantDBs *tenantdbs.TenantDBs
 	infra     *common.Infra
@@ -51,19 +51,19 @@ type testS3Config struct {
 	disableEncryption bool
 }
 
-func newActionTestHarness(t *testing.T) *actionTestHarness {
+func newActionTestHarness(t testing.TB) *actionTestHarness {
 	return newActionTestHarnessWithSaaS(t, true) // saas mode required for registration
 }
 
-func newActionTestHarnessWithSaaS(t *testing.T, isSaaSModeEnabled bool) *actionTestHarness {
+func newActionTestHarnessWithSaaS(t testing.TB, isSaaSModeEnabled bool) *actionTestHarness {
 	return newActionTestHarnessWithSaaSAndS3Config(t, isSaaSModeEnabled, nil)
 }
 
-func newActionTestHarnessWithS3(t *testing.T) *actionTestHarness {
+func newActionTestHarnessWithS3(t testing.TB) *actionTestHarness {
 	return newActionTestHarnessWithSaaSAndS3(t, true) // saas mode required for registration
 }
 
-func newActionTestHarnessWithS3AndEncryption(t *testing.T, disableEncryption bool) *actionTestHarness {
+func newActionTestHarnessWithS3AndEncryption(t testing.TB, disableEncryption bool) *actionTestHarness {
 	s3Config := newTestS3Config(t)
 	s3Config.disableEncryption = disableEncryption
 
@@ -89,12 +89,12 @@ func runWithFileEncryptionModes(t *testing.T, testFn func(t *testing.T, disableE
 	}
 }
 
-func newActionTestHarnessWithSaaSAndS3(t *testing.T, isSaaSModeEnabled bool) *actionTestHarness {
+func newActionTestHarnessWithSaaSAndS3(t testing.TB, isSaaSModeEnabled bool) *actionTestHarness {
 	s3Config := newTestS3Config(t)
 	return newActionTestHarnessWithSaaSAndS3Config(t, isSaaSModeEnabled, s3Config)
 }
 
-func newActionTestHarnessWithSaaSAndS3Config(t *testing.T, isSaaSModeEnabled bool, s3Config *testS3Config) *actionTestHarness {
+func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled bool, s3Config *testS3Config) *actionTestHarness {
 	t.Helper()
 
 	metaPath := t.TempDir()
@@ -161,7 +161,7 @@ func newActionTestHarnessWithSaaSAndS3Config(t *testing.T, isSaaSModeEnabled boo
 	}
 
 	return &actionTestHarness{
-		t:         t,
+		tb:        t,
 		mainDB:    mainDB,
 		tenantDBs: tenantDBs,
 		infra:     infra,
@@ -172,7 +172,7 @@ func newActionTestHarnessWithSaaSAndS3Config(t *testing.T, isSaaSModeEnabled boo
 	}
 }
 
-func cleanupS3TestObjects(t *testing.T, mainDB *sqlx.MainDB, s3Config *testS3Config) {
+func cleanupS3TestObjects(t testing.TB, mainDB *sqlx.MainDB, s3Config *testS3Config) {
 	t.Helper()
 
 	if s3Config.client == nil || s3Config.bucketName == "" {
@@ -204,7 +204,7 @@ func cleanupS3TestObjects(t *testing.T, mainDB *sqlx.MainDB, s3Config *testS3Con
 	}
 }
 
-func cleanupS3Prefix(t *testing.T, client *minio.Client, bucketName, prefix string) {
+func cleanupS3Prefix(t testing.TB, client *minio.Client, bucketName, prefix string) {
 	t.Helper()
 
 	ctx := context.Background()
@@ -223,7 +223,7 @@ func cleanupS3Prefix(t *testing.T, client *minio.Client, bucketName, prefix stri
 	}
 }
 
-func newTestS3Config(t *testing.T) *testS3Config {
+func newTestS3Config(t testing.TB) *testS3Config {
 	t.Helper()
 
 	endpoint := envOrDefault("SIMPLEDMS_S3_ENDPOINT", "localhost:7070")
@@ -279,7 +279,7 @@ func envOrDefaultBool(key string, fallback bool) bool {
 	return parsed
 }
 
-func initSystemConfig(t *testing.T, mainDB *sqlx.MainDB, isSaaSModeEnabled bool) *modelmain.SystemConfig {
+func initSystemConfig(t testing.TB, mainDB *sqlx.MainDB, isSaaSModeEnabled bool) *modelmain.SystemConfig {
 	t.Helper()
 
 	ctx := context.Background()
@@ -311,7 +311,7 @@ func initSystemConfig(t *testing.T, mainDB *sqlx.MainDB, isSaaSModeEnabled bool)
 	return modelmain.NewSystemConfig(systemConfigx, isSaaSModeEnabled, false, true)
 }
 
-func createAccount(t *testing.T, mainDB *sqlx.MainDB, email, password string) {
+func createAccount(t testing.TB, mainDB *sqlx.MainDB, email, password string) {
 	t.Helper()
 
 	salt, ok := accountutil.RandomSalt()
