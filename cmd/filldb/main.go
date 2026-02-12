@@ -112,6 +112,11 @@ func resolveTenant(mainDB *sqlx.MainDB, tenantPublicID string) *entmain.Tenant {
 
 	if tenantPublicID != "" {
 		tenantx, err := mainDB.ReadOnlyConn.Tenant.Query().
+			Select(
+				tenantpred.FieldID,
+				tenantpred.FieldPublicID,
+				tenantpred.FieldInitializedAt,
+			).
 			Where(
 				tenantpred.PublicID(entx.NewCIText(tenantPublicID)),
 				tenantpred.InitializedAtNotNil(),
@@ -124,6 +129,11 @@ func resolveTenant(mainDB *sqlx.MainDB, tenantPublicID string) *entmain.Tenant {
 	}
 
 	tenants, err := mainDB.ReadOnlyConn.Tenant.Query().
+		Select(
+			tenantpred.FieldID,
+			tenantpred.FieldPublicID,
+			tenantpred.FieldInitializedAt,
+		).
 		Where(tenantpred.InitializedAtNotNil()).
 		Order(tenantpred.ByID()).
 		All(ctx)
