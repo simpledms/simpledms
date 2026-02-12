@@ -1016,6 +1016,12 @@ input:-webkit-autofill::first-line,
   }
 }
 
+@media (min-width: 1930px) {
+  .container {
+    max-width: 1930px;
+  }
+}
+
 /* used for popovers */
 
 .active {
@@ -1497,10 +1503,6 @@ input:-webkit-autofill::first-line,
   height: 100svh;
 }
 
-.h-lvh {
-  height: 100lvh;
-}
-
 .max-h-14 {
   max-height: 3.5rem;
 }
@@ -1511,10 +1513,6 @@ input:-webkit-autofill::first-line,
 
 .max-h-\[inherit\] {
   max-height: inherit;
-}
-
-.max-h-dvh {
-  max-height: 100dvh;
 }
 
 .max-h-full {
@@ -1610,12 +1608,12 @@ input:-webkit-autofill::first-line,
   max-width: 24rem;
 }
 
-.flex-shrink-0 {
-  flex-shrink: 0;
-}
-
 .flex-shrink {
   flex-shrink: 1;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
 }
 
 .flex-grow {
@@ -2226,10 +2224,6 @@ input:-webkit-autofill::first-line,
 
 .pt-6 {
   padding-top: 1.5rem;
-}
-
-.pb-6 {
-  padding-bottom: 1.5rem;
 }
 
 .text-left {
@@ -3085,11 +3079,6 @@ input:-webkit-autofill::first-line,
     min-height: 0px;
   }
 
-  .md\:min-h-fit {
-    min-height: -moz-fit-content;
-    min-height: fit-content;
-  }
-
   .md\:w-20 {
     width: 5rem;
   }
@@ -3153,10 +3142,6 @@ input:-webkit-autofill::first-line,
 
   .md\:rounded-xl {
     border-radius: 1.75rem;
-  }
-
-  .md\:border {
-    border-width: 1px;
   }
 
   .md\:border-2 {
@@ -3239,14 +3224,6 @@ input:-webkit-autofill::first-line,
 
   .md\:pt-1 {
     padding-top: 0.25rem;
-  }
-
-  .md\:pb-8 {
-    padding-bottom: 2rem;
-  }
-
-  .md\:pt-8 {
-    padding-top: 2rem;
   }
 
   .md\:text-on-surface-variant {
@@ -3488,5 +3465,32 @@ input:-webkit-autofill::first-line,
 @media (min-width: 1600px) {
   .group\/list-detail:has(.js-detail-content>div) .group-has-\[\.js-detail-content\>div\]\/list-detail\:xl\:max-w-md {
     max-width: 28rem;
+  }
+}
+
+@media (min-width: 1930px) {
+  .\32xl\:left-\[1400px\] {
+    left: 1400px;
+  }
+
+  .\32xl\:right-auto {
+    right: auto;
+  }
+
+  .\32xl\:left-\[1390px\] {
+    left: 1390px;
+  }
+
+  .\32xl\:border-l-0 {
+    border-left-width: 0px;
+  }
+
+  .\32xl\:bg-surface {
+    --tw-bg-opacity: 1;
+    background-color: rgb(var(--md-sys-color-surface) / var(--tw-bg-opacity, 1));
+  }
+
+  .\32xl\:transition-none {
+    transition-property: none;
   }
 }

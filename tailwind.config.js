@@ -22,6 +22,7 @@ module.exports = {
 			'exp': '840px', // expanded // TODO ex or exp?
 			'lg': '1200px', // large
 			'xl': '1600px', // extra-large
+			'2xl': '1930px', // 2026.02.12: only for side sheet border
 		},
 		fontSize: {
 			/*
