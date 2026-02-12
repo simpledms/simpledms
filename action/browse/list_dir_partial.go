@@ -4,20 +4,17 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"os"
 	"slices"
 	"strconv"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqljson"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
@@ -262,9 +259,8 @@ func (qq *ListDirPartial) Widget(
 	if ctx.SpaceCtx().Space.IsFolderMode {
 		var breadcrumbs []wx.IWidget
 		if dirWithParent.Data.ID > 0 {
-			fileInfo := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FileID(dirWithParent.Data.ID)).OnlyX(ctx)
-			breadcrumbElems := strings.Split(fileInfo.FullPath, string(os.PathSeparator))
-			for qi, pathElemID := range fileInfo.PublicPath {
+			pathFiles := qq.infra.FileSystem().FileTree().PathFilesByFileIDX(ctx, dirWithParent.Data.ID)
+			for qi, pathFile := range pathFiles {
 				var breadcrumbLabel wx.IWidget
 				if qi == 0 {
 					// TODO home Icon
@@ -273,11 +269,11 @@ func (qq *ListDirPartial) Widget(
 						Size: wx.IconSizeSmall,
 					}
 				} else {
-					breadcrumbLabel = wx.Tu(breadcrumbElems[qi-1]).SetWrap()
+					breadcrumbLabel = wx.Tu(pathFile.Name).SetWrap()
 				}
-				if qi != len(fileInfo.Path)-1 {
+				if qi != len(pathFiles)-1 {
 					breadcrumbs = append(breadcrumbs, &wx.Link{
-						Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, pathElemID),
+						Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, pathFile.PublicID.String()),
 						Child: breadcrumbLabel,
 					})
 					breadcrumbs = append(breadcrumbs, wx.T("»")) // TODO use icon instead?
@@ -460,18 +456,7 @@ func (qq *ListDirPartial) filesListItems(
 			if !state.IsRecursive {
 				qs.Where(sql.EQ(qs.C(file.FieldParentID), currentDir.ID))
 			} else {
-				fileInfoView := sql.Table(fileinfo.Table)
-				qs.Where(
-					sql.In(
-						qs.C(file.FieldID),
-						sql.Select(fileInfoView.C(fileinfo.FieldFileID)).
-							From(fileInfoView).
-							Where(sql.And(
-								sqljson.ValueContains(fileInfoView.C(fileinfo.FieldPath), currentDir.ID),
-								sql.NEQ(fileInfoView.C(fileinfo.FieldFileID), currentDir.ID),
-							)),
-					),
-				)
+				qs.Where(qq.descendantScopePredicate(qs.C(file.FieldID), currentDir.ID, ctx.SpaceCtx().Space.ID))
 			}
 
 			if len(state.ListFilterTagsPartialState.CheckedTagIDs) > 0 {
@@ -557,8 +542,8 @@ func (qq *ListDirPartial) filesListItems(
 		children = children[:qq.pageSize()]
 	}
 
-	// get parent file info full paths for breadcrumbs...
-	var childParentFileInfos map[int64]*enttenant.FileInfo
+	// get parent directory full paths for breadcrumbs...
+	var childParentFullPaths map[int64]string
 	if state.IsRecursive {
 		var childParentIDs []int64
 		for _, child := range children {
@@ -566,11 +551,7 @@ func (qq *ListDirPartial) filesListItems(
 		}
 		slices.Sort(childParentIDs) // necessary for compact to work?
 		childParentIDs = slices.Compact(childParentIDs)
-		childParentFileInfosSlice := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FileIDIn(childParentIDs...)).AllX(ctx)
-		childParentFileInfos = make(map[int64]*enttenant.FileInfo)
-		for _, childParentFileInfo := range childParentFileInfosSlice {
-			childParentFileInfos[childParentFileInfo.FileID] = childParentFileInfo
-		}
+		childParentFullPaths = qq.infra.FileSystem().FileTree().FullPathsByFileIDX(ctx, childParentIDs)
 	}
 
 	for _, child := range children {
@@ -580,7 +561,7 @@ func (qq *ListDirPartial) filesListItems(
 
 		fullPath := ""
 		if state.IsRecursive {
-			fullPath = childParentFileInfos[child.ParentID].FullPath
+			fullPath = childParentFullPaths[child.ParentID]
 		}
 
 		fileListItems = append(fileListItems, qq.actions.FileListItemPartial.DirectoryListItem(
@@ -598,7 +579,7 @@ func (qq *ListDirPartial) filesListItems(
 
 		fullPath := ""
 		if state.IsRecursive {
-			fullPath = childParentFileInfos[child.ParentID].FullPath
+			fullPath = childParentFullPaths[child.ParentID]
 		}
 
 		fileListItems = append(fileListItems, qq.actions.FileListItemPartial.fileListItem(
@@ -628,6 +609,10 @@ func (qq *ListDirPartial) filesListItems(
 	}
 
 	return fileListItems
+}
+
+func (qq *ListDirPartial) descendantScopePredicate(fileColumn string, rootID, spaceID int64) *sql.Predicate {
+	return sql.In(fileColumn, qq.infra.FileSystem().FileTree().DescendantIDsSubQuery(rootID, spaceID))
 }
 
 func (qq *ListDirPartial) appBar(

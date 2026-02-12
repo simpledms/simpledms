@@ -4,16 +4,12 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
-	"slices"
 	"strings"
 	"time"
-
-	securejoin "github.com/cyphar/filepath-securejoin"
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/util/e"
@@ -24,14 +20,23 @@ import (
 type FileSystem struct {
 	// storageDirPath string
 	metaPath string
+	fileTree *FileTree
 }
 
 // Deprecated: use S3FileSystem instead
 func NewFileSystem(metaPath string) *FileSystem {
 	return &FileSystem{
 		metaPath: metaPath,
+		fileTree: NewFileTree(),
 		// storageDirPath: storageDirPath,
 	}
+}
+
+func (qq *FileSystem) FileTree() *FileTree {
+	if qq.fileTree == nil {
+		qq.fileTree = NewFileTree()
+	}
+	return qq.fileTree
 }
 
 // TODO public ID or private ID?
@@ -46,48 +51,39 @@ func (qq *FileSystem) MakeDirAllIfNotExists(ctx ctxx.Context, currentParentDir *
 	// TODO correct that os specific? for unzip it seems so because paths are handled on server
 	pathElems := strings.Split(pathToCreate, string(filepath.Separator))
 
-	// currentParentDir := ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicID(entx.NewCIText(parentDirID))).OnlyX(ctx)
-	currentParentDirFileInfo := ctx.SpaceCtx().TTx.FileInfo.Query().Where(fileinfo.FileID(currentParentDir.ID)).OnlyX(ctx)
-
 	for _, pathElem := range pathElems {
-		fullPath, err := securejoin.SecureJoin(currentParentDirFileInfo.FullPath, pathElem)
-		if err != nil {
-			log.Println(err)
-			return nil, err
-		}
-		if strings.HasPrefix(fullPath, "/") {
-			// TODO is this always true and okay?
-			fullPath = fullPath[1:]
+		if pathElem == "" || pathElem == "." {
+			continue
 		}
 
-		var newCurrentDir *model.File
-		newCurrentDirFileInfo, err := ctx.SpaceCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(fullPath)).Only(ctx)
+		newCurrentDirx, err := ctx.TenantCtx().TTx.File.Query().
+			Where(
+				file.SpaceID(ctx.SpaceCtx().Space.ID),
+				file.ParentID(currentParentDir.ID),
+				file.Name(pathElem),
+			).
+			Only(ctx)
 		if err != nil && !enttenant.IsNotFound(err) {
 			log.Println(err)
 			return nil, err
 		}
+
 		if enttenant.IsNotFound(err) {
-			newCurrentDir, err = qq.MakeDir(ctx, currentParentDir.PublicID.String(), pathElem)
+			newCurrentDir, err := qq.MakeDir(ctx, currentParentDir.PublicID.String(), pathElem)
 			if err != nil {
 				log.Println(err)
 				return nil, err
 			}
-			newCurrentDirFileInfo = ctx.SpaceCtx().TTx.FileInfo.Query().
-				Where(fileinfo.FileID(newCurrentDir.Data.ID)).
-				OnlyX(ctx)
+			currentParentDir = newCurrentDir.Data
+			continue
 		} else {
-			// newCurrentDirFileInfo already set
-			newCurrentDirx := ctx.SpaceCtx().Space.QueryFiles().Where(file.ID(newCurrentDirFileInfo.FileID)).OnlyX(ctx)
-			newCurrentDir = model.NewFile(newCurrentDirx)
-
 			// TODO good? correct location
-			if !newCurrentDir.Data.IsDirectory {
+			if !newCurrentDirx.IsDirectory {
 				return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Path element is file, not a directory.")
 			}
 		}
 
-		currentParentDir = newCurrentDir.Data
-		currentParentDirFileInfo = newCurrentDirFileInfo
+		currentParentDir = newCurrentDirx
 	}
 
 	return currentParentDir, nil
@@ -164,8 +160,12 @@ func (qq *FileSystem) Move(
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "destination is not a directory")
 	}
 
-	destDirInfo := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FileID(destDir.Data.ID)).OnlyX(ctx)
-	if slices.Contains(destDirInfo.Path, filex.Data.ID) {
+	isDescendant, err := qq.FileTree().IsDescendantOf(ctx, destDir.Data.ID, filex.Data.ID)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	if isDescendant {
 		log.Println("cannot move file into child directory")
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "cannot move file into child directory")
 	}

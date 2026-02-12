@@ -15,9 +15,6 @@ type DocumentType func(*sql.Selector)
 // File is the predicate function for file builders.
 type File func(*sql.Selector)
 
-// FileInfo is the predicate function for fileinfo builders.
-type FileInfo func(*sql.Selector)
-
 // FilePropertyAssignment is the predicate function for filepropertyassignment builders.
 type FilePropertyAssignment func(*sql.Selector)
 

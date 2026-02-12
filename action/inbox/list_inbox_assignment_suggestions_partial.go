@@ -10,9 +10,7 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
@@ -170,11 +168,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 	}
 	slices.Sort(destDirParentIDs) // necessary for compact to work?
 	destDirParentIDs = slices.Compact(destDirParentIDs)
-	destDirParentFileInfosSlice := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FileIDIn(destDirParentIDs...)).AllX(ctx)
-	destDirParentFileInfos := make(map[int64]*enttenant.FileInfo)
-	for _, destDirParentFileInfo := range destDirParentFileInfosSlice {
-		destDirParentFileInfos[destDirParentFileInfo.FileID] = destDirParentFileInfo
-	}
+	destDirParentFullPaths := qq.infra.FileSystem().FileTree().FullPathsByFileIDX(ctx, destDirParentIDs)
 
 	var items []*wx.ListItem
 
@@ -187,7 +181,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 			ctx,
 			destDir,
 			fileToAssign,
-			destDirParentFileInfos[destDir.ParentID].FullPath,
+			destDirParentFullPaths[destDir.ParentID],
 		))
 	}
 
