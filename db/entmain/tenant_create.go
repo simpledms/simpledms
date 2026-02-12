@@ -15,6 +15,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/common/country"
+	"github.com/simpledms/simpledms/model/common/plan"
 )
 
 // TenantCreate is the builder for creating a Tenant entity.
@@ -229,6 +230,12 @@ func (_c *TenantCreate) SetNillableCity(v *string) *TenantCreate {
 // SetCountry sets the "country" field.
 func (_c *TenantCreate) SetCountry(v country.Country) *TenantCreate {
 	_c.mutation.SetCountry(v)
+	return _c
+}
+
+// SetPlan sets the "plan" field.
+func (_c *TenantCreate) SetPlan(v plan.Plan) *TenantCreate {
+	_c.mutation.SetPlan(v)
 	return _c
 }
 
@@ -547,6 +554,14 @@ func (_c *TenantCreate) check() error {
 			return &ValidationError{Name: "country", err: fmt.Errorf(`entmain: validator failed for field "Tenant.country": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.Plan(); !ok {
+		return &ValidationError{Name: "plan", err: errors.New(`entmain: missing required field "Tenant.plan"`)}
+	}
+	if v, ok := _c.mutation.Plan(); ok {
+		if err := tenant.PlanValidator(v); err != nil {
+			return &ValidationError{Name: "plan", err: fmt.Errorf(`entmain: validator failed for field "Tenant.plan": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.VatID(); !ok {
 		return &ValidationError{Name: "vat_id", err: errors.New(`entmain: missing required field "Tenant.vat_id"`)}
 	}
@@ -642,6 +657,10 @@ func (_c *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Country(); ok {
 		_spec.SetField(tenant.FieldCountry, field.TypeEnum, value)
 		_node.Country = value
+	}
+	if value, ok := _c.mutation.Plan(); ok {
+		_spec.SetField(tenant.FieldPlan, field.TypeEnum, value)
+		_node.Plan = value
 	}
 	if value, ok := _c.mutation.VatID(); ok {
 		_spec.SetField(tenant.FieldVatID, field.TypeString, value)

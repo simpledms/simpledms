@@ -13,6 +13,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/common/country"
+	"github.com/simpledms/simpledms/model/common/plan"
 )
 
 // Tenant is the model entity for the Tenant schema.
@@ -52,6 +53,8 @@ type Tenant struct {
 	City string `json:"city,omitempty"`
 	// Country holds the value of the "country" field.
 	Country country.Country `json:"country,omitempty"`
+	// Plan holds the value of the "plan" field.
+	Plan plan.Plan `json:"plan,omitempty"`
 	// VatID holds the value of the "vat_id" field.
 	VatID string `json:"vat_id,omitempty"`
 	// TermsOfServiceAccepted holds the value of the "terms_of_service_accepted" field.
@@ -151,6 +154,8 @@ func (*Tenant) scanValues(columns []string) ([]any, error) {
 			values[i] = new(entx.CIText)
 		case tenant.FieldX25519IdentityEncrypted:
 			values[i] = new(entx.EncryptedX25519Identity)
+		case tenant.FieldPlan:
+			values[i] = new(plan.Plan)
 		case tenant.FieldTwoFactorAuthEnforced:
 			values[i] = new(sql.NullBool)
 		case tenant.FieldID, tenant.FieldCreatedBy, tenant.FieldUpdatedBy, tenant.FieldDeletedBy:
@@ -275,6 +280,12 @@ func (_m *Tenant) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field country", values[i])
 			} else if value != nil {
 				_m.Country = *value
+			}
+		case tenant.FieldPlan:
+			if value, ok := values[i].(*plan.Plan); !ok {
+				return fmt.Errorf("unexpected type %T for field plan", values[i])
+			} else if value != nil {
+				_m.Plan = *value
 			}
 		case tenant.FieldVatID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -428,6 +439,9 @@ func (_m *Tenant) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("country=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Country))
+	builder.WriteString(", ")
+	builder.WriteString("plan=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Plan))
 	builder.WriteString(", ")
 	builder.WriteString("vat_id=")
 	builder.WriteString(_m.VatID)

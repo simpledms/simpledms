@@ -10,6 +10,7 @@ import (
 	"github.com/simpledms/simpledms/model/common/country"
 	"github.com/simpledms/simpledms/model/common/language"
 	"github.com/simpledms/simpledms/model/common/mainrole"
+	"github.com/simpledms/simpledms/model/common/plan"
 	"github.com/simpledms/simpledms/model/common/tenantrole"
 	"github.com/simpledms/simpledms/model/mailer"
 	"github.com/simpledms/simpledms/util/timex"
@@ -35,7 +36,8 @@ func (qq *SignUpService) SignUp(
 	tenantxQuery := ctx.VisitorCtx().MainTx.Tenant.
 		Create().
 		SetName(tenantName).
-		SetCountry(country)
+		SetCountry(country).
+		SetPlan(plan.Trial)
 	/* FIXME
 	if data.AcceptPrivacyPolicy {
 		tenantxQuery = tenantxQuery.SetPrivacyPolicyAccepted(time.Now())

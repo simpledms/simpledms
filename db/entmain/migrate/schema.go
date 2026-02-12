@@ -249,6 +249,7 @@ var (
 		{Name: "postal_code", Type: field.TypeString, Default: ""},
 		{Name: "city", Type: field.TypeString, Default: ""},
 		{Name: "country", Type: field.TypeEnum, Enums: []string{"Unknown", "Austria", "Germany", "Switzerland"}},
+		{Name: "plan", Type: field.TypeEnum, Enums: []string{"Unknown", "Trial", "Pro", "Unlimited"}, Default: "Unknown"},
 		{Name: "vat_id", Type: field.TypeString, Default: ""},
 		{Name: "terms_of_service_accepted", Type: field.TypeTime},
 		{Name: "privacy_policy_accepted", Type: field.TypeTime},
@@ -268,19 +269,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tenants_accounts_creator",
-				Columns:    []*schema.Column{TenantsColumns[21]},
-				RefColumns: []*schema.Column{AccountsColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "tenants_accounts_updater",
 				Columns:    []*schema.Column{TenantsColumns[22]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "tenants_accounts_deleter",
+				Symbol:     "tenants_accounts_updater",
 				Columns:    []*schema.Column{TenantsColumns[23]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "tenants_accounts_deleter",
+				Columns:    []*schema.Column{TenantsColumns[24]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

@@ -23,6 +23,7 @@ import (
 	"github.com/simpledms/simpledms/model/common/country"
 	"github.com/simpledms/simpledms/model/common/language"
 	"github.com/simpledms/simpledms/model/common/mainrole"
+	"github.com/simpledms/simpledms/model/common/plan"
 	"github.com/simpledms/simpledms/model/common/storagetype"
 	"github.com/simpledms/simpledms/model/common/tenantrole"
 )
@@ -8011,6 +8012,7 @@ type TenantMutation struct {
 	postal_code                 *string
 	city                        *string
 	country                     *country.Country
+	plan                        *plan.Plan
 	vat_id                      *string
 	terms_of_service_accepted   *time.Time
 	privacy_policy_accepted     *time.Time
@@ -8768,6 +8770,42 @@ func (m *TenantMutation) ResetCountry() {
 	m.country = nil
 }
 
+// SetPlan sets the "plan" field.
+func (m *TenantMutation) SetPlan(pl plan.Plan) {
+	m.plan = &pl
+}
+
+// Plan returns the value of the "plan" field in the mutation.
+func (m *TenantMutation) Plan() (r plan.Plan, exists bool) {
+	v := m.plan
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPlan returns the old "plan" field's value of the Tenant entity.
+// If the Tenant object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantMutation) OldPlan(ctx context.Context) (v plan.Plan, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPlan is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPlan requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPlan: %w", err)
+	}
+	return oldValue.Plan, nil
+}
+
+// ResetPlan resets all changes to the "plan" field.
+func (m *TenantMutation) ResetPlan() {
+	m.plan = nil
+}
+
 // SetVatID sets the "vat_id" field.
 func (m *TenantMutation) SetVatID(s string) {
 	m.vat_id = &s
@@ -9321,7 +9359,7 @@ func (m *TenantMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TenantMutation) Fields() []string {
-	fields := make([]string, 0, 23)
+	fields := make([]string, 0, 24)
 	if m.created_at != nil {
 		fields = append(fields, tenant.FieldCreatedAt)
 	}
@@ -9369,6 +9407,9 @@ func (m *TenantMutation) Fields() []string {
 	}
 	if m.country != nil {
 		fields = append(fields, tenant.FieldCountry)
+	}
+	if m.plan != nil {
+		fields = append(fields, tenant.FieldPlan)
 	}
 	if m.vat_id != nil {
 		fields = append(fields, tenant.FieldVatID)
@@ -9431,6 +9472,8 @@ func (m *TenantMutation) Field(name string) (ent.Value, bool) {
 		return m.City()
 	case tenant.FieldCountry:
 		return m.Country()
+	case tenant.FieldPlan:
+		return m.Plan()
 	case tenant.FieldVatID:
 		return m.VatID()
 	case tenant.FieldTermsOfServiceAccepted:
@@ -9486,6 +9529,8 @@ func (m *TenantMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldCity(ctx)
 	case tenant.FieldCountry:
 		return m.OldCountry(ctx)
+	case tenant.FieldPlan:
+		return m.OldPlan(ctx)
 	case tenant.FieldVatID:
 		return m.OldVatID(ctx)
 	case tenant.FieldTermsOfServiceAccepted:
@@ -9620,6 +9665,13 @@ func (m *TenantMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCountry(v)
+		return nil
+	case tenant.FieldPlan:
+		v, ok := value.(plan.Plan)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPlan(v)
 		return nil
 	case tenant.FieldVatID:
 		v, ok := value.(string)
@@ -9814,6 +9866,9 @@ func (m *TenantMutation) ResetField(name string) error {
 		return nil
 	case tenant.FieldCountry:
 		m.ResetCountry()
+		return nil
+	case tenant.FieldPlan:
+		m.ResetPlan()
 		return nil
 	case tenant.FieldVatID:
 		m.ResetVatID()

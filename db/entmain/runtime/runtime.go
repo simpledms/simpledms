@@ -254,11 +254,11 @@ func init() {
 	// tenant.DefaultCity holds the default value on creation for the city field.
 	tenant.DefaultCity = tenantDescCity.Default.(string)
 	// tenantDescVatID is the schema descriptor for vat_id field.
-	tenantDescVatID := tenantFields[10].Descriptor()
+	tenantDescVatID := tenantFields[11].Descriptor()
 	// tenant.DefaultVatID holds the default value on creation for the vat_id field.
 	tenant.DefaultVatID = tenantDescVatID.Default.(string)
 	// tenantDescTwoFactorAuthEnforced is the schema descriptor for two_factor_auth_enforced field.
-	tenantDescTwoFactorAuthEnforced := tenantFields[13].Descriptor()
+	tenantDescTwoFactorAuthEnforced := tenantFields[14].Descriptor()
 	// tenant.DefaultTwoFactorAuthEnforced holds the default value on creation for the two_factor_auth_enforced field.
 	tenant.DefaultTwoFactorAuthEnforced = tenantDescTwoFactorAuthEnforced.Default.(bool)
 	tenantaccountassignmentMixin := schema.TenantAccountAssignment{}.Mixin()
