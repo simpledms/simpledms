@@ -9,7 +9,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
@@ -139,15 +138,6 @@ func init() {
 	fileDescOcrLastTriedAt := fileFields[14].Descriptor()
 	// file.DefaultOcrLastTriedAt holds the default value on creation for the ocr_last_tried_at field.
 	file.DefaultOcrLastTriedAt = fileDescOcrLastTriedAt.Default.(time.Time)
-	fileinfo.Policy = privacy.NewPolicies(schema.FileInfo{})
-	fileinfo.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := fileinfo.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
 	filepropertyassignmentMixin := schema.FilePropertyAssignment{}.Mixin()
 	filepropertyassignment.Policy = privacy.NewPolicies(filepropertyassignmentMixin[0], schema.FilePropertyAssignment{})
 	filepropertyassignment.Hooks[0] = func(next ent.Mutator) ent.Mutator {

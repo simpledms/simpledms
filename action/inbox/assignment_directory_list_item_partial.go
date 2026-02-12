@@ -8,7 +8,6 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -67,7 +66,7 @@ func (qq *AssignmentDirectoryListItemPartial) Widget(
 ) *wx.ListItem {
 	if destParentFullPath == "" {
 		// if ID is used instead of ParentID, lastElem must be removed in next step (filepath.Dir)
-		destParentFullPath = ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FileID(destDir.ParentID)).OnlyX(ctx).FullPath
+		destParentFullPath = qq.infra.FileSystem().FileTree().FullPathByFileIDX(ctx, destDir.ParentID)
 	}
 	breadcrumbElems := []string{wx.T("Home").String(ctx)}
 	if destParentFullPath != "" {

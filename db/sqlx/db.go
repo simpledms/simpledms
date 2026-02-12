@@ -31,6 +31,7 @@ func (qq *DB[T, U]) ReadWriteDataSourceURL() string {
 }
 
 func (qq *DB[T, U]) Debug() {
+	queryTimingLogger.Enable()
 	qq.ReadWriteConn = qq.ReadWriteConn.Debug()
 	qq.ReadOnlyConn = qq.ReadOnlyConn.Debug()
 }

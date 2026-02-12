@@ -10,14 +10,12 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqljson"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/fileinfo"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/util"
@@ -284,18 +282,7 @@ func (qq *MoveFile) formFilesListItems(
 			).
 			Where(func(qs *sql.Selector) {
 				// add dirs recursively from current dir if in search mode
-				fileInfoView := sql.Table(fileinfo.Table)
-				qs.Where(
-					sql.In(
-						qs.C(file.FieldID),
-						sql.Select(fileInfoView.C(fileinfo.FieldFileID)).
-							From(fileInfoView).
-							Where(sql.And(
-								sqljson.ValueContains(fileInfoView.C(fileinfo.FieldPath), currentDir.Data.ID),
-								sql.NEQ(fileInfoView.C(fileinfo.FieldFileID), currentDir.Data.ID),
-							)),
-					),
-				)
+				qs.Where(qq.descendantScopePredicate(qs.C(file.FieldID), currentDir.Data.ID, ctx.SpaceCtx().Space.ID))
 			})
 	}
 
@@ -336,8 +323,8 @@ func (qq *MoveFile) formFilesListItems(
 		)
 	}
 
-	// load childDirFileInfos for breadcrumbs
-	var childDirParentFileInfos map[int64]*enttenant.FileInfo
+	// load parent directory full paths for breadcrumbs
+	var childDirParentFullPaths map[int64]string
 	if searchQuery != "" {
 		var childDirIDs []int64
 		for _, childDir := range childDirs {
@@ -346,13 +333,7 @@ func (qq *MoveFile) formFilesListItems(
 
 		slices.Sort(childDirIDs) // necessary for compact to work?
 		childDirIDs = slices.Compact(childDirIDs)
-
-		childDirFileInfosSlice := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FileIDIn(childDirIDs...)).AllX(ctx)
-
-		childDirParentFileInfos = make(map[int64]*enttenant.FileInfo)
-		for _, childDirFileInfo := range childDirFileInfosSlice {
-			childDirParentFileInfos[childDirFileInfo.FileID] = childDirFileInfo
-		}
+		childDirParentFullPaths = qq.infra.FileSystem().FileTree().FullPathsByFileIDX(ctx, childDirIDs)
 	}
 
 	for _, childDir := range childDirs {
@@ -363,11 +344,11 @@ func (qq *MoveFile) formFilesListItems(
 
 		supportingText := ""
 		if searchQuery != "" {
-			fileInfo := childDirParentFileInfos[childDir.ParentID]
-			if fileInfo != nil {
+			fullPath, found := childDirParentFullPaths[childDir.ParentID]
+			if found {
 				breadcrumbElems := []string{wx.T("Home").String(ctx)}
-				if fileInfo.FullPath != "" {
-					breadcrumbElems = append(breadcrumbElems, strings.Split(fileInfo.FullPath, string(os.PathSeparator))...)
+				if fullPath != "" {
+					breadcrumbElems = append(breadcrumbElems, strings.Split(fullPath, string(os.PathSeparator))...)
 				}
 				supportingText = strings.Join(breadcrumbElems, " » ")
 			}
@@ -408,6 +389,10 @@ func (qq *MoveFile) formFilesListItems(
 	}
 
 	return fileListItems
+}
+
+func (qq *MoveFile) descendantScopePredicate(fileColumn string, rootID, spaceID int64) *sql.Predicate {
+	return sql.In(fileColumn, qq.infra.FileSystem().FileTree().DescendantIDsSubQuery(rootID, spaceID))
 }
 
 func (qq *MoveFile) filesListID() string {

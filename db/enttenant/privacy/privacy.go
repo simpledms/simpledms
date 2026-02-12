@@ -183,18 +183,6 @@ func (f FileMutationRuleFunc) EvalMutation(ctx context.Context, m enttenant.Muta
 	return Denyf("enttenant/privacy: unexpected mutation type %T, expect *enttenant.FileMutation", m)
 }
 
-// The FileInfoQueryRuleFunc type is an adapter to allow the use of ordinary
-// functions as a query rule.
-type FileInfoQueryRuleFunc func(context.Context, *enttenant.FileInfoQuery) error
-
-// EvalQuery return f(ctx, q).
-func (f FileInfoQueryRuleFunc) EvalQuery(ctx context.Context, q enttenant.Query) error {
-	if q, ok := q.(*enttenant.FileInfoQuery); ok {
-		return f(ctx, q)
-	}
-	return Denyf("enttenant/privacy: unexpected query type %T, expect *enttenant.FileInfoQuery", q)
-}
-
 // The FilePropertyAssignmentQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type FilePropertyAssignmentQueryRuleFunc func(context.Context, *enttenant.FilePropertyAssignmentQuery) error
@@ -475,8 +463,6 @@ func queryFilter(q enttenant.Query) (Filter, error) {
 	case *enttenant.DocumentTypeQuery:
 		return q.Filter(), nil
 	case *enttenant.FileQuery:
-		return q.Filter(), nil
-	case *enttenant.FileInfoQuery:
 		return q.Filter(), nil
 	case *enttenant.FilePropertyAssignmentQuery:
 		return q.Filter(), nil

@@ -56,6 +56,11 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "attribute_space_id",
+				Unique:  false,
+				Columns: []*schema.Column{AttributesColumns[7]},
+			},
+			{
 				Name:    "attribute_space_id_document_type_id_name",
 				Unique:  true,
 				Columns: []*schema.Column{AttributesColumns[7], AttributesColumns[10], AttributesColumns[1]},
@@ -95,6 +100,13 @@ var (
 				Columns:    []*schema.Column{DocumentTypesColumns[5]},
 				RefColumns: []*schema.Column{SpacesColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "documenttype_space_id",
+				Unique:  false,
+				Columns: []*schema.Column{DocumentTypesColumns[5]},
 			},
 		},
 	}
@@ -169,6 +181,11 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "file_space_id",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20]},
+			},
+			{
 				Name:    "file_space_id_name_parent_id",
 				Unique:  true,
 				Columns: []*schema.Column{FilesColumns[20], FilesColumns[5], FilesColumns[21]},
@@ -183,6 +200,26 @@ var (
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`is_root_dir` = true",
 				},
+			},
+			{
+				Name:    "file_parent_id",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[21]},
+			},
+			{
+				Name:    "file_is_directory",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[6]},
+			},
+			{
+				Name:    "file_is_in_inbox",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[11]},
+			},
+			{
+				Name:    "file_space_id_parent_id",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21]},
 			},
 		},
 	}
@@ -223,6 +260,11 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "filepropertyassignment_space_id",
+				Unique:  false,
+				Columns: []*schema.Column{FilePropertyAssignmentsColumns[5]},
+			},
 			{
 				Name:    "filepropertyassignment_file_id_property_id",
 				Unique:  true,
@@ -268,6 +310,11 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{FileVersionsColumns[3], FileVersionsColumns[1]},
 			},
+			{
+				Name:    "fileversion_stored_file_id",
+				Unique:  false,
+				Columns: []*schema.Column{FileVersionsColumns[4]},
+			},
 		},
 	}
 	// PropertiesColumns holds the columns for the "properties" table.
@@ -292,6 +339,11 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "property_space_id",
+				Unique:  false,
+				Columns: []*schema.Column{PropertiesColumns[4]},
+			},
 			{
 				Name:    "property_space_id_name",
 				Unique:  true,
@@ -378,6 +430,11 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "spaceuserassignment_space_id",
+				Unique:  false,
+				Columns: []*schema.Column{SpaceUserAssignmentsColumns[5]},
+			},
 			{
 				Name:    "spaceuserassignment_space_id_user_id",
 				Unique:  true,
@@ -468,6 +525,11 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "tag_space_id",
+				Unique:  false,
+				Columns: []*schema.Column{TagsColumns[5]},
+			},
+			{
 				Name:    "tag_space_id_name",
 				Unique:  true,
 				Columns: []*schema.Column{TagsColumns[5], TagsColumns[1]},
@@ -515,6 +577,11 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "tagassignment_space_id",
+				Unique:  false,
+				Columns: []*schema.Column{TagAssignmentsColumns[1]},
+			},
 			{
 				Name:    "tagassignment_file_id_tag_id",
 				Unique:  true,

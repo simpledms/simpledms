@@ -73,7 +73,6 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 				"",
 			),
 		})
-
 	}
 
 	return &wx.Menu{

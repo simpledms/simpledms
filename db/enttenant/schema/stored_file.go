@@ -9,9 +9,9 @@ import (
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/privacy"
-	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/model/common/storagetype"
 )
 
@@ -80,7 +80,7 @@ func (StoredFile) Mixin() []ent.Mixin {
 
 func (StoredFile) Policy() ent.Policy {
 	type SpacesFilter interface {
-		WhereHasFilesWith(...predicate.File)
+		WhereHasFileVersionsWith(...predicate.FileVersion)
 	}
 	privacyFn := privacy.FilterFunc(func(untypedCtx context.Context, filterx privacy.Filter) error {
 		ctx, ok := ctxx.SpaceCtx(untypedCtx)
@@ -92,9 +92,13 @@ func (StoredFile) Policy() ent.Policy {
 		if !ok {
 			return privacy.Denyf("unexpected filter type %T", filterx)
 		}
-		spacesFilter.WhereHasFilesWith(
-			file.HasSpaceWith(space.ID(ctx.SpaceCtx().Space.ID)),
-			// entql.Int64EQ(ctx.SpaceCtx().Space.ID),
+		// changed on 12.02.2026 to fix performance issue;
+		// query is more efficient than
+		// spacesFilter.WhereHasFilesWith(file.SpaceID(ctx.SpaceCtx().Space.ID))
+		// because it doesn't JOIN files table and thus prevents a
+		// full SCAN on files table
+		spacesFilter.WhereHasFileVersionsWith(
+			fileversion.HasFileWith(file.SpaceID(ctx.SpaceCtx().Space.ID)),
 		)
 
 		return privacy.Skip
