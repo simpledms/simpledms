@@ -100,6 +100,72 @@ func BenchmarkFileListing(b *testing.B) {
 	}
 }
 
+func BenchmarkFileListingAcrossTenSpaces(b *testing.B) {
+	originalLogOutput := log.Writer()
+	log.SetOutput(io.Discard)
+	b.Cleanup(func() {
+		log.SetOutput(originalLogOutput)
+	})
+
+	fileCounts := []int{0, 1000, 5000, 10000, 100000, 1000000}
+	const spaceCount = 10
+
+	for _, fileCount := range fileCounts {
+		fileCount := fileCount
+		targetSpaceFileCount := distributedFileCount(fileCount, spaceCount, 0)
+
+		b.Run(fmt.Sprintf("inbox_%d", fileCount), func(b *testing.B) {
+			fixture := newListingBenchmarkFixtureAcrossSpaces(b, fileCount, true, spaceCount)
+			defer fixture.cleanup()
+
+			expectedRowCount := 0
+			if targetSpaceFileCount > 0 {
+				expectedRowCount = 1
+			}
+
+			rows, err := inboxListingQuery(fixture.spaceCtx, fixture.spaceID, inboxEventSearchQuery())
+			if err != nil {
+				b.Fatalf("initial inbox listing query failed: %v", err)
+			}
+			if len(rows) != expectedRowCount {
+				b.Fatalf("expected %d inbox rows, got %d", expectedRowCount, len(rows))
+			}
+
+			b.Run("query", func(b *testing.B) {
+				benchmarkInboxListingQuery(b, fixture, expectedRowCount)
+			})
+			b.Run("handler", func(b *testing.B) {
+				benchmarkInboxListingHandler(b, fixture, targetSpaceFileCount)
+			})
+		})
+
+		b.Run(fmt.Sprintf("browse_%d", fileCount), func(b *testing.B) {
+			fixture := newListingBenchmarkFixtureAcrossSpaces(b, fileCount, false, spaceCount)
+			defer fixture.cleanup()
+
+			rows, err := browseListingQuery(fixture.spaceCtx, fixture.spaceID, fixture.rootDirID)
+			if err != nil {
+				b.Fatalf("initial browse listing query failed: %v", err)
+			}
+
+			expectedRowCount := targetSpaceFileCount
+			if expectedRowCount > 51 {
+				expectedRowCount = 51
+			}
+			if len(rows) != expectedRowCount {
+				b.Fatalf("expected %d browse rows, got %d", expectedRowCount, len(rows))
+			}
+
+			b.Run("query", func(b *testing.B) {
+				benchmarkBrowseListingQuery(b, fixture, expectedRowCount)
+			})
+			b.Run("handler", func(b *testing.B) {
+				benchmarkBrowseListingHandler(b, fixture, expectedRowCount)
+			})
+		})
+	}
+}
+
 func benchmarkInboxListingQuery(b *testing.B, fixture *listingBenchmarkFixture, expectedRowCount int) {
 	b.Helper()
 	b.ReportAllocs()
@@ -299,7 +365,19 @@ func newListingBenchmarkFixture(
 	fileCount int,
 	isInInbox bool,
 ) *listingBenchmarkFixture {
+	return newListingBenchmarkFixtureAcrossSpaces(tb, fileCount, isInInbox, 1)
+}
+
+func newListingBenchmarkFixtureAcrossSpaces(
+	tb testing.TB,
+	fileCount int,
+	isInInbox bool,
+	spaceCount int,
+) *listingBenchmarkFixture {
 	tb.Helper()
+	if spaceCount <= 0 {
+		tb.Fatal("spaceCount must be greater than 0")
+	}
 
 	harness := newActionTestHarnessWithSaaS(tb, true)
 
@@ -309,33 +387,53 @@ func newListingBenchmarkFixture(
 	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
 	mainTx, tenantTx, tenantCtx := newTenantContext(tb, harness, accountx, tenantx, tenantDB)
-	spaceName := fmt.Sprintf("Listing Benchmark %d", time.Now().UnixNano())
-	createSpaceViaCmd(tb, harness.actions, tenantCtx, spaceName)
 
-	spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
-	spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-	rootDir := spaceCtx.SpaceRootDir()
+	spaceNamePrefix := fmt.Sprintf("Listing Benchmark %d", time.Now().UnixNano())
+	var targetSpace *enttenant.Space
+	var targetRootDir *enttenant.File
 
-	versionSeedLimit := 0
-	if !isInInbox {
-		versionSeedLimit = 51
-		if versionSeedLimit > fileCount {
-			versionSeedLimit = fileCount
+	for spaceIndex := 0; spaceIndex < spaceCount; spaceIndex++ {
+		spaceName := fmt.Sprintf("%s Space %02d", spaceNamePrefix, spaceIndex)
+		createSpaceViaCmd(tb, harness.actions, tenantCtx, spaceName)
+
+		spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
+		spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+		rootDir := spaceCtx.SpaceRootDir()
+
+		spaceFileCount := distributedFileCount(fileCount, spaceCount, spaceIndex)
+
+		versionSeedLimit := 0
+		if !isInInbox && spaceIndex == 0 {
+			versionSeedLimit = 51
+			if versionSeedLimit > spaceFileCount {
+				versionSeedLimit = spaceFileCount
+			}
+		}
+
+		err := seedListingBenchmarkFiles(
+			spaceCtx,
+			rootDir.ID,
+			spacex.ID,
+			spaceFileCount,
+			isInInbox,
+			versionSeedLimit,
+		)
+		if err != nil {
+			_ = tenantTx.Rollback()
+			_ = mainTx.Rollback()
+			tb.Fatalf("seed benchmark files: %v", err)
+		}
+
+		if spaceIndex == 0 {
+			targetSpace = spacex
+			targetRootDir = rootDir
 		}
 	}
 
-	err := seedListingBenchmarkFiles(
-		spaceCtx,
-		rootDir.ID,
-		spacex.ID,
-		fileCount,
-		isInInbox,
-		versionSeedLimit,
-	)
-	if err != nil {
+	if targetSpace == nil || targetRootDir == nil {
 		_ = tenantTx.Rollback()
 		_ = mainTx.Rollback()
-		tb.Fatalf("seed benchmark files: %v", err)
+		tb.Fatal("target space not initialized")
 	}
 
 	if err := mainTx.Commit(); err != nil {
@@ -356,7 +454,7 @@ func newListingBenchmarkFixture(
 		tb.Fatalf("new read-only tenant context: %v", err)
 	}
 
-	readOnlySpace := tenantReadOnlyCtx.TTx.Space.Query().Where(space.ID(spacex.ID)).OnlyX(tenantReadOnlyCtx)
+	readOnlySpace := tenantReadOnlyCtx.TTx.Space.Query().Where(space.ID(targetSpace.ID)).OnlyX(tenantReadOnlyCtx)
 	readOnlySpaceCtx := ctxx.NewSpaceContext(tenantReadOnlyCtx, readOnlySpace)
 
 	cleanup := func() {
@@ -367,11 +465,25 @@ func newListingBenchmarkFixture(
 	return &listingBenchmarkFixture{
 		actions:         harness.actions,
 		spaceCtx:        readOnlySpaceCtx,
-		spaceID:         spacex.ID,
-		rootDirID:       rootDir.ID,
-		rootDirPublicID: rootDir.PublicID.String(),
+		spaceID:         targetSpace.ID,
+		rootDirID:       targetRootDir.ID,
+		rootDirPublicID: targetRootDir.PublicID.String(),
 		cleanup:         cleanup,
 	}
+}
+
+func distributedFileCount(totalFileCount int, spaceCount int, spaceIndex int) int {
+	if totalFileCount <= 0 {
+		return 0
+	}
+
+	baseCount := totalFileCount / spaceCount
+	remainder := totalFileCount % spaceCount
+	if spaceIndex < remainder {
+		return baseCount + 1
+	}
+
+	return baseCount
 }
 
 func seedListingBenchmarkFiles(
