@@ -38,14 +38,22 @@ type S3FileSystem struct {
 	client                *minio.Client
 	bucketName            string
 	disableFileEncryption bool
+	storageQuota          *StorageQuota
 }
 
-func NewS3FileSystem(client *minio.Client, bucketName string, fileSystem *FileSystem, disableFileEncryption bool) *S3FileSystem {
+func NewS3FileSystem(
+	client *minio.Client,
+	bucketName string,
+	fileSystem *FileSystem,
+	disableFileEncryption bool,
+	isSaaSModeEnabled bool,
+) *S3FileSystem {
 	return &S3FileSystem{
 		FileSystem:            fileSystem,
 		client:                client,
 		bucketName:            bucketName,
 		disableFileEncryption: disableFileEncryption,
+		storageQuota:          NewStorageQuota(isSaaSModeEnabled),
 	}
 }
 
@@ -312,11 +320,19 @@ func (qq *S3FileSystem) ensureFileDoesNotExistInFolderMode(
 }
 
 // caller has to close fileToSave
-func (qq *S3FileSystem) UploadPreparedFile(
+func (qq *S3FileSystem) UploadPreparedFileWithExpectedSize(
 	ctx ctxx.Context,
 	fileToSave io.Reader,
 	prepared *PreparedUpload,
+	expectedUploadedBytes int64,
 ) (*minio.UploadInfo, int64, error) {
+	if expectedUploadedBytes > 0 && ctx.IsTenantCtx() {
+		err := qq.EnsureTenantStorageLimit(ctx, expectedUploadedBytes)
+		if err != nil {
+			return nil, 0, err
+		}
+	}
+
 	return qq.uploadPreparedFileWithParams(
 		ctx,
 		fileToSave,
@@ -333,6 +349,11 @@ func (qq *S3FileSystem) FinalizePreparedUpload(
 	fileInfo *minio.UploadInfo,
 	fileSize int64,
 ) error {
+	err := qq.EnsureTenantStorageLimit(ctx, fileSize)
+	if err != nil {
+		return err
+	}
+
 	ctxWithIncomplete := enttenantschema.WithUnfinishedUploads(ctx)
 	storedFilex := ctx.TenantCtx().TTx.StoredFile.GetX(ctxWithIncomplete, prepared.StoredFileID)
 	storedFilex = storedFilex.Update().
@@ -342,7 +363,7 @@ func (qq *S3FileSystem) FinalizePreparedUpload(
 		SetUploadSucceededAt(time.Now()).
 		SaveX(ctxWithIncomplete)
 
-	_, err := qq.UpdateMimeType(ctx, false, model.NewStoredFile(storedFilex))
+	_, err = qq.UpdateMimeType(ctx, false, model.NewStoredFile(storedFilex))
 	if err != nil {
 		log.Println(err)
 	}
@@ -716,6 +737,12 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 	parentDirFileID int64,
 	isInInbox bool,
 ) (*enttenant.File, error) {
+	err := qq.EnsureTenantStorageLimit(ctx, tmpFile.Size)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
 	// create db entries
 	filex := ctx.TenantCtx().TTx.File.Create().
 		SetName(tmpFile.Filename). // TODO okay?
@@ -761,7 +788,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 	}
 
 	// TODO not very clean; only in case contentType is empty
-	_, err := qq.UpdateMimeType(ctx, false, model.NewStoredFile(storedFilex))
+	_, err = qq.UpdateMimeType(ctx, false, model.NewStoredFile(storedFilex))
 	if err != nil {
 		log.Println(err)
 		// not critical
@@ -951,4 +978,8 @@ func (qq *S3FileSystem) UpdateMimeType(ctx ctxx.Context, force bool, filex *mode
 	*/
 
 	return mimeType, nil
+}
+
+func (qq *S3FileSystem) EnsureTenantStorageLimit(ctx ctxx.Context, incomingUploadedBytes int64) error {
+	return qq.storageQuota.EnsureTenantStorageLimit(ctx, incomingUploadedBytes)
 }
