@@ -104,6 +104,10 @@ func (File) Indexes() []ent.Index {
 			Fields("space_id", "is_root_dir").
 			Annotations(entsql.IndexWhere("`is_root_dir` = true")).
 			Unique(),
+		index.Fields("parent_id"),
+		index.Fields("is_directory"),
+		index.Fields("is_in_inbox"),
+		index.Fields("space_id", "parent_id"),
 	}
 }
 
