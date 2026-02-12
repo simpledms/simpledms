@@ -22,7 +22,6 @@ func TestApplyOCROneFileSkipsTooLargeFile(t *testing.T) {
 	content, fileNotReady, fileTooLarge, err := (&Scheduler{}).applyOCROneFile(
 		context.Background(),
 		nil,
-		nil,
 		currentVersion,
 	)
 	if err != nil {
@@ -48,7 +47,6 @@ func TestApplyOCROneFileReturnsNotReadyForUnmovedFile(t *testing.T) {
 
 	content, fileNotReady, fileTooLarge, err := (&Scheduler{}).applyOCROneFile(
 		context.Background(),
-		nil,
 		nil,
 		currentVersion,
 	)

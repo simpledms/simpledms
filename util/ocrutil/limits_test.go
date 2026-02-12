@@ -3,6 +3,7 @@ package ocrutil
 import "testing"
 
 func TestMaxFileSizeBytesDefaultWhenUnset(t *testing.T) {
+	unsafeMaxFileSizeBytes = -1
 	t.Setenv(MaxFileSizeEnvVar, "")
 
 	got := MaxFileSizeBytes()
@@ -12,6 +13,7 @@ func TestMaxFileSizeBytesDefaultWhenUnset(t *testing.T) {
 }
 
 func TestMaxFileSizeBytesFromEnv(t *testing.T) {
+	unsafeMaxFileSizeBytes = -1
 	t.Setenv(MaxFileSizeEnvVar, "1048576")
 
 	got := MaxFileSizeBytes()
@@ -21,6 +23,7 @@ func TestMaxFileSizeBytesFromEnv(t *testing.T) {
 }
 
 func TestMaxFileSizeBytesFallsBackForInvalidValue(t *testing.T) {
+	unsafeMaxFileSizeBytes = -1
 	t.Setenv(MaxFileSizeEnvVar, "invalid")
 
 	got := MaxFileSizeBytes()
@@ -30,6 +33,7 @@ func TestMaxFileSizeBytesFallsBackForInvalidValue(t *testing.T) {
 }
 
 func TestMaxFileSizeBytesFallsBackForNonPositiveValue(t *testing.T) {
+	unsafeMaxFileSizeBytes = -1
 	t.Setenv(MaxFileSizeEnvVar, "0")
 
 	got := MaxFileSizeBytes()

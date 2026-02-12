@@ -10,17 +10,18 @@ const (
 	DefaultMaxFileSizeBytes int64 = 25 * 1024 * 1024
 )
 
-var defaultMaxFileSizeBytes int64 = -1
+// unsafe because it should not be used directly
+var unsafeMaxFileSizeBytes int64 = -1
 
 func MaxFileSizeBytes() int64 {
-	if defaultMaxFileSizeBytes >= 0 {
-		return defaultMaxFileSizeBytes
+	if unsafeMaxFileSizeBytes >= 0 {
+		return unsafeMaxFileSizeBytes
 	}
 
 	raw := os.Getenv(MaxFileSizeEnvVar)
 	if raw == "" {
-		defaultMaxFileSizeBytes = DefaultMaxFileSizeBytes
-		return defaultMaxFileSizeBytes
+		unsafeMaxFileSizeBytes = DefaultMaxFileSizeBytes
+		return unsafeMaxFileSizeBytes
 	}
 
 	limit, err := strconv.ParseInt(raw, 10, 64)
@@ -28,8 +29,8 @@ func MaxFileSizeBytes() int64 {
 		return DefaultMaxFileSizeBytes
 	}
 
-	defaultMaxFileSizeBytes = limit
-	return defaultMaxFileSizeBytes
+	unsafeMaxFileSizeBytes = limit
+	return unsafeMaxFileSizeBytes
 }
 
 func IsFileTooLarge(fileSizeBytes int64) bool {

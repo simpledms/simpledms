@@ -165,7 +165,7 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 	}
 
 	renderer := ui.NewRenderer(parsedTemplates)
-	fileSystem := filesystem.NewS3FileSystem(nil, "", filesystem.NewFileSystem(metaPath), false)
+	fileSystem := filesystem.NewS3FileSystem(nil, "", filesystem.NewFileSystem(metaPath), false, false)
 	infra := common.NewInfra(
 		renderer,
 		metaPath,
