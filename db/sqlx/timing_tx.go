@@ -4,9 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"runtime"
+	"strings"
 	"time"
 
 	"entgo.io/ent/dialect"
+	entsql "entgo.io/ent/dialect/sql"
 )
 
 type timingTx struct {
@@ -41,8 +44,47 @@ func (qq *timingTx) Query(ctx context.Context, query string, args, v any) error 
 	queryTimingLogger.LogQuery("Tx.Query", queryID, query, args)
 	startedAt := time.Now()
 	err := qq.tx.Query(ctx, query, args, v)
+	openedAt := time.Now()
 	queryTimingLogger.LogQueryTiming("Tx.Query", queryID, startedAt, err)
+	if err != nil {
+		return err
+	}
+	if qq.shouldSkipRowScannerWrapping() {
+		return err
+	}
+
+	rows, ok := v.(*entsql.Rows)
+	if ok && rows != nil && rows.ColumnScanner != nil {
+		rows.ColumnScanner = newTimedColumnScanner(
+			rows.ColumnScanner,
+			"Tx.Query",
+			queryID,
+			startedAt,
+			openedAt,
+		)
+	}
+
 	return err
+}
+
+func (qq *timingTx) shouldSkipRowScannerWrapping() bool {
+	const callDepth = 16
+	pcs := make([]uintptr, callDepth)
+	n := runtime.Callers(3, pcs)
+	frames := runtime.CallersFrames(pcs[:n])
+
+	for {
+		frame, more := frames.Next()
+		if strings.Contains(frame.File, "/dialect/sql/schema/") ||
+			strings.Contains(frame.File, "/ariga.io/atlas@") {
+			return true
+		}
+		if !more {
+			break
+		}
+	}
+
+	return false
 }
 
 func (qq *timingTx) Commit() error {

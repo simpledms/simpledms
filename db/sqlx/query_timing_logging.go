@@ -49,3 +49,49 @@ func (qq *QueryTimingLogger) LogQueryTiming(
 	}
 	log.Printf("ent query timing: id=%d op=%s elapsed=%s", queryID, operation, time.Since(startedAt))
 }
+
+func (qq *QueryTimingLogger) LogQueryConsumption(
+	operation string,
+	queryID uint64,
+	startedAt time.Time,
+	openedAt time.Time,
+	rowCount int64,
+	queryErr error,
+	closeErr error,
+) {
+	totalElapsed := time.Since(startedAt)
+	openElapsed := openedAt.Sub(startedAt)
+	if openElapsed < 0 {
+		openElapsed = 0
+	}
+
+	consumeElapsed := totalElapsed - openElapsed
+	if consumeElapsed < 0 {
+		consumeElapsed = 0
+	}
+
+	if queryErr != nil || closeErr != nil {
+		log.Printf(
+			"ent query consume timing: id=%d op=%s open_elapsed=%s consume_elapsed=%s total_elapsed=%s rows=%d query_err=%v close_err=%v",
+			queryID,
+			operation,
+			openElapsed,
+			consumeElapsed,
+			totalElapsed,
+			rowCount,
+			queryErr,
+			closeErr,
+		)
+		return
+	}
+
+	log.Printf(
+		"ent query consume timing: id=%d op=%s open_elapsed=%s consume_elapsed=%s total_elapsed=%s rows=%d",
+		queryID,
+		operation,
+		openElapsed,
+		consumeElapsed,
+		totalElapsed,
+		rowCount,
+	)
+}
