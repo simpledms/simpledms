@@ -15,9 +15,10 @@ import (
 	securejoin "github.com/cyphar/filepath-securejoin"
 	_ "github.com/mattn/go-sqlite3"
 
+	"github.com/simpledms/simpledms/db/entmain"
 	mainprivacy "github.com/simpledms/simpledms/db/entmain/privacy"
 	_ "github.com/simpledms/simpledms/db/entmain/runtime"
-	"github.com/simpledms/simpledms/db/entmain/tenant"
+	tenantpred "github.com/simpledms/simpledms/db/entmain/tenant"
 	tenantprivacy "github.com/simpledms/simpledms/db/enttenant/privacy"
 	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
 	"github.com/simpledms/simpledms/db/entx"
@@ -106,14 +107,14 @@ func openMainDB(metaPath string) *sqlx.MainDB {
 	return sqlx.NewMainDB(mainDBPath)
 }
 
-func resolveTenant(mainDB *sqlx.MainDB, tenantPublicID string) *tenant.Tenant {
+func resolveTenant(mainDB *sqlx.MainDB, tenantPublicID string) *entmain.Tenant {
 	ctx := mainprivacy.DecisionContext(context.Background(), mainprivacy.Allow)
 
 	if tenantPublicID != "" {
 		tenantx, err := mainDB.ReadOnlyConn.Tenant.Query().
 			Where(
-				tenant.PublicID(entx.NewCIText(tenantPublicID)),
-				tenant.InitializedAtNotNil(),
+				tenantpred.PublicID(entx.NewCIText(tenantPublicID)),
+				tenantpred.InitializedAtNotNil(),
 			).
 			Only(ctx)
 		if err != nil {
@@ -123,8 +124,8 @@ func resolveTenant(mainDB *sqlx.MainDB, tenantPublicID string) *tenant.Tenant {
 	}
 
 	tenants, err := mainDB.ReadOnlyConn.Tenant.Query().
-		Where(tenant.InitializedAtNotNil()).
-		Order(tenant.ByID()).
+		Where(tenantpred.InitializedAtNotNil()).
+		Order(tenantpred.ByID()).
 		All(ctx)
 	if err != nil {
 		log.Fatalln(err)
@@ -140,7 +141,7 @@ func resolveTenant(mainDB *sqlx.MainDB, tenantPublicID string) *tenant.Tenant {
 	return tenants[0]
 }
 
-func openTenantDB(tenantx *tenant.Tenant, metaPath string) *sqlx.TenantDB {
+func openTenantDB(tenantx *entmain.Tenant, metaPath string) *sqlx.TenantDB {
 	tenantDB, err := tenantm.NewTenant(tenantx).OpenDB(false, metaPath)
 	if err != nil {
 		log.Fatalln(err)
