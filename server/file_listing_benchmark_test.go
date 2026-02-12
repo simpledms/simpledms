@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand/v2"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -20,15 +21,21 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/model/common/storagetype"
+	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type listingBenchmarkFixture struct {
 	actions         *action.Actions
+	router          *Router
 	spaceCtx        *ctxx.SpaceContext
 	spaceID         int64
+	tenantPublicID  string
+	spacePublicID   string
 	rootDirID       int64
 	rootDirPublicID string
+	sessionValue    string
 	cleanup         func()
 }
 
@@ -71,6 +78,9 @@ func BenchmarkFileListing(b *testing.B) {
 			b.Run("handler", func(b *testing.B) {
 				benchmarkInboxListingHandler(b, fixture, fileCount)
 			})
+			b.Run("router", func(b *testing.B) {
+				benchmarkInboxListingRouter(b, fixture, fileCount)
+			})
 		})
 
 		b.Run(fmt.Sprintf("browse_%d", fileCount), func(b *testing.B) {
@@ -95,6 +105,9 @@ func BenchmarkFileListing(b *testing.B) {
 			})
 			b.Run("handler", func(b *testing.B) {
 				benchmarkBrowseListingHandler(b, fixture, expectedRowCount)
+			})
+			b.Run("router", func(b *testing.B) {
+				benchmarkBrowseListingRouter(b, fixture, expectedRowCount)
 			})
 		})
 	}
@@ -137,6 +150,9 @@ func BenchmarkFileListingAcrossTenSpaces(b *testing.B) {
 			b.Run("handler", func(b *testing.B) {
 				benchmarkInboxListingHandler(b, fixture, targetSpaceFileCount)
 			})
+			b.Run("router", func(b *testing.B) {
+				benchmarkInboxListingRouter(b, fixture, targetSpaceFileCount)
+			})
 		})
 
 		b.Run(fmt.Sprintf("browse_%d", fileCount), func(b *testing.B) {
@@ -161,6 +177,9 @@ func BenchmarkFileListingAcrossTenSpaces(b *testing.B) {
 			})
 			b.Run("handler", func(b *testing.B) {
 				benchmarkBrowseListingHandler(b, fixture, expectedRowCount)
+			})
+			b.Run("router", func(b *testing.B) {
+				benchmarkBrowseListingRouter(b, fixture, expectedRowCount)
 			})
 		})
 	}
@@ -258,6 +277,57 @@ func benchmarkBrowseListingHandler(b *testing.B, fixture *listingBenchmarkFixtur
 	reportEventTime(b)
 }
 
+func benchmarkInboxListingRouter(b *testing.B, fixture *listingBenchmarkFixture, fileCount int) {
+	b.Helper()
+	b.ReportAllocs()
+
+	searchQuery := ""
+	if fileCount > 0 {
+		searchQuery = inboxEventSearchQuery()
+	}
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		listEventSize, err := runInboxListEventViaRouter(fixture, searchQuery)
+		if err != nil {
+			b.Fatalf("inbox list event via router failed: %v", err)
+		}
+		if listEventSize == 0 {
+			b.Fatal("inbox list event via router returned empty body")
+		}
+		if listEventSize < 100 {
+			b.Fatalf("inbox list event via router body too small: %d", listEventSize)
+		}
+	}
+
+	b.StopTimer()
+	reportEventTime(b)
+}
+
+func benchmarkBrowseListingRouter(b *testing.B, fixture *listingBenchmarkFixture, expectedRowCount int) {
+	b.Helper()
+	b.ReportAllocs()
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		listEventSize, err := runBrowseListEventViaRouter(fixture)
+		if err != nil {
+			b.Fatalf("browse list event via router failed: %v", err)
+		}
+		if listEventSize == 0 {
+			b.Fatal("browse list event via router returned empty body")
+		}
+		if expectedRowCount > 0 && listEventSize < 100 {
+			b.Fatalf("browse list event via router body too small: %d", listEventSize)
+		}
+	}
+
+	b.StopTimer()
+	reportEventTime(b)
+}
+
 func runInboxListEvent(fixture *listingBenchmarkFixture, searchQuery string) (int, error) {
 	form := url.Values{}
 	form.Set("SelectedFileID", "")
@@ -311,6 +381,62 @@ func runBrowseListEvent(fixture *listingBenchmarkFixture) (int, error) {
 	if err != nil {
 		return 0, err
 	}
+	if rr.Code != http.StatusOK {
+		return 0, fmt.Errorf("unexpected status code: %d", rr.Code)
+	}
+
+	return rr.Body.Len(), nil
+}
+
+func runInboxListEventViaRouter(fixture *listingBenchmarkFixture, searchQuery string) (int, error) {
+	form := url.Values{}
+	form.Set("SelectedFileID", "")
+	form.Set("SearchQuery", searchQuery)
+	form.Set("ActiveSideSheet", "")
+	form.Set("SortBy", "newestFirst")
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/-/inbox/files-list-partial?hx-target=%23fileList",
+		strings.NewReader(form.Encode()),
+	)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("HX-Request", "true")
+	req.Header.Set("HX-Current-URL", route.InboxRoot(fixture.tenantPublicID, fixture.spacePublicID))
+	req.AddCookie(&http.Cookie{
+		Name:  cookiex.SessionCookieName(),
+		Value: fixture.sessionValue,
+	})
+
+	rr := httptest.NewRecorder()
+	fixture.router.ServeHTTP(rr, req)
+	if rr.Code != http.StatusOK {
+		return 0, fmt.Errorf("unexpected status code: %d", rr.Code)
+	}
+
+	return rr.Body.Len(), nil
+}
+
+func runBrowseListEventViaRouter(fixture *listingBenchmarkFixture) (int, error) {
+	form := url.Values{}
+	form.Set("CurrentDirID", fixture.rootDirPublicID)
+	form.Set("SelectedFileID", "")
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/-/browse/list-dir-partial?hx-target=%23fileList",
+		strings.NewReader(form.Encode()),
+	)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("HX-Request", "true")
+	req.Header.Set("HX-Current-URL", route.Browse(fixture.tenantPublicID, fixture.spacePublicID, fixture.rootDirPublicID))
+	req.AddCookie(&http.Cookie{
+		Name:  cookiex.SessionCookieName(),
+		Value: fixture.sessionValue,
+	})
+
+	rr := httptest.NewRecorder()
+	fixture.router.ServeHTTP(rr, req)
 	if rr.Code != http.StatusOK {
 		return 0, fmt.Errorf("unexpected status code: %d", rr.Code)
 	}
@@ -444,6 +570,8 @@ func newListingBenchmarkFixtureAcrossSpaces(
 		tb.Fatalf("commit tenant tx: %v", err)
 	}
 
+	sessionValue := createBenchmarkSession(tb, harness, accountx.ID)
+
 	mainReadOnlyTx, tenantReadOnlyTx, tenantReadOnlyCtx, err := newTenantContextForUpload(
 		harness,
 		accountx,
@@ -464,12 +592,36 @@ func newListingBenchmarkFixtureAcrossSpaces(
 
 	return &listingBenchmarkFixture{
 		actions:         harness.actions,
+		router:          harness.router,
 		spaceCtx:        readOnlySpaceCtx,
 		spaceID:         targetSpace.ID,
+		tenantPublicID:  tenantx.PublicID.String(),
+		spacePublicID:   targetSpace.PublicID.String(),
 		rootDirID:       targetRootDir.ID,
 		rootDirPublicID: targetRootDir.PublicID.String(),
+		sessionValue:    sessionValue,
 		cleanup:         cleanup,
 	}
+}
+
+func createBenchmarkSession(tb testing.TB, harness *actionTestHarness, accountID int64) string {
+	tb.Helper()
+
+	sessionValue := fmt.Sprintf("bench-session-%d-%d", time.Now().UnixNano(), rand.IntN(1_000_000))
+	expiresAt := time.Now().Add(14 * 24 * time.Hour)
+
+	_, err := harness.mainDB.ReadWriteConn.Session.Create().
+		SetValue(sessionValue).
+		SetAccountID(accountID).
+		SetIsTemporarySession(false).
+		SetExpiresAt(expiresAt).
+		SetDeletableAt(expiresAt).
+		Save(context.Background())
+	if err != nil {
+		tb.Fatalf("create benchmark session: %v", err)
+	}
+
+	return sessionValue
 }
 
 func distributedFileCount(totalFileCount int, spaceCount int, spaceIndex int) int {
