@@ -202,6 +202,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tenant.FieldPostalCode:               {Type: field.TypeString, Column: tenant.FieldPostalCode},
 			tenant.FieldCity:                     {Type: field.TypeString, Column: tenant.FieldCity},
 			tenant.FieldCountry:                  {Type: field.TypeEnum, Column: tenant.FieldCountry},
+			tenant.FieldPlan:                     {Type: field.TypeEnum, Column: tenant.FieldPlan},
 			tenant.FieldVatID:                    {Type: field.TypeString, Column: tenant.FieldVatID},
 			tenant.FieldTermsOfServiceAccepted:   {Type: field.TypeTime, Column: tenant.FieldTermsOfServiceAccepted},
 			tenant.FieldPrivacyPolicyAccepted:    {Type: field.TypeTime, Column: tenant.FieldPrivacyPolicyAccepted},
@@ -1478,6 +1479,11 @@ func (f *TenantFilter) WhereCity(p entql.StringP) {
 // WhereCountry applies the entql string predicate on the country field.
 func (f *TenantFilter) WhereCountry(p entql.StringP) {
 	f.Where(p.Field(tenant.FieldCountry))
+}
+
+// WherePlan applies the entql string predicate on the plan field.
+func (f *TenantFilter) WherePlan(p entql.StringP) {
+	f.Where(p.Field(tenant.FieldPlan))
 }
 
 // WhereVatID applies the entql string predicate on the vat_id field.

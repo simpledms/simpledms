@@ -189,7 +189,7 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 		}
 
 		// TODO add role info
-		headline = wx.H(wx.HeadingTypeTitleLg, wx.T("Trial phase"))
+		headline = wx.H(wx.HeadingTypeTitleLg, wx.Tu(tenantx.Plan.String()))
 		subhead = wx.T("Subscription")
 
 		accountm := account.NewAccount(ctx.MainCtx().Account)

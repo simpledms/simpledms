@@ -10,6 +10,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/predicate"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/common/country"
+	"github.com/simpledms/simpledms/model/common/plan"
 )
 
 // ID filters vertices based on their ID field.
@@ -995,6 +996,26 @@ func CountryIn(vs ...country.Country) predicate.Tenant {
 // CountryNotIn applies the NotIn predicate on the "country" field.
 func CountryNotIn(vs ...country.Country) predicate.Tenant {
 	return predicate.Tenant(sql.FieldNotIn(FieldCountry, vs...))
+}
+
+// PlanEQ applies the EQ predicate on the "plan" field.
+func PlanEQ(v plan.Plan) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldPlan, v))
+}
+
+// PlanNEQ applies the NEQ predicate on the "plan" field.
+func PlanNEQ(v plan.Plan) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNEQ(FieldPlan, v))
+}
+
+// PlanIn applies the In predicate on the "plan" field.
+func PlanIn(vs ...plan.Plan) predicate.Tenant {
+	return predicate.Tenant(sql.FieldIn(FieldPlan, vs...))
+}
+
+// PlanNotIn applies the NotIn predicate on the "plan" field.
+func PlanNotIn(vs ...plan.Plan) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNotIn(FieldPlan, vs...))
 }
 
 // VatIDEQ applies the EQ predicate on the "vat_id" field.

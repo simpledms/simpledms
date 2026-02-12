@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/minio/minio-go/v7"
+
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
@@ -150,6 +152,17 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not read ZIP archive.")
 	}
 
+	zipArchiveTotalUncompressedSize, err := qq.unzipArchiveTotalUncompressedSize(zipArchiveReader.File)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	err = qq.infra.FileSystem().EnsureTenantStorageLimit(ctx, zipArchiveTotalUncompressedSize)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
 	// only used in non-folder mode
 	parentDirID := filem.Data.ParentID
 
@@ -221,7 +234,12 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 			break
 		}
 
-		fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFile(ctx, fileToSave, entry.prepared)
+		fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+			ctx,
+			fileToSave,
+			entry.prepared,
+			int64(entry.zipFile.UncompressedSize64),
+		)
 		_ = fileToSave.Close()
 		if err != nil {
 			log.Println(err)
@@ -261,6 +279,15 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		}
 	} else {
 		_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+			totalUploadedBytes, err := qq.unzipPreparedEntriesTotalUploadedSize(preparedEntries)
+			if err != nil {
+				return nil, err
+			}
+			err = qq.infra.FileSystem().EnsureTenantStorageLimit(writeCtx, totalUploadedBytes)
+			if err != nil {
+				return nil, err
+			}
+
 			for _, entry := range preparedEntries {
 				if entry.fileInfo == nil {
 					return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not extract all files from archive.")
@@ -303,4 +330,39 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 	}
 
 	return nil
+}
+
+func (qq *UnzipArchiveCmd) unzipArchiveTotalUncompressedSize(zipFiles []*zip.File) (int64, error) {
+	var total uint64
+	for _, zippedFile := range zipFiles {
+		if zippedFile.FileInfo().IsDir() {
+			continue
+		}
+		if zippedFile.UncompressedSize64 > uint64(math.MaxInt64) {
+			return 0, e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Archive is too large.")
+		}
+		if total > uint64(math.MaxInt64)-zippedFile.UncompressedSize64 {
+			return 0, e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Archive is too large.")
+		}
+
+		total += zippedFile.UncompressedSize64
+	}
+
+	return int64(total), nil
+}
+
+func (qq *UnzipArchiveCmd) unzipPreparedEntriesTotalUploadedSize(preparedEntries []*unzipPreparedEntry) (int64, error) {
+	var total int64
+	for _, entry := range preparedEntries {
+		if entry.fileSize < 0 {
+			return 0, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify archive size.")
+		}
+		if total > math.MaxInt64-entry.fileSize {
+			return 0, e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Archive is too large.")
+		}
+
+		total += entry.fileSize
+	}
+
+	return total, nil
 }

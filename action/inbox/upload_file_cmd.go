@@ -100,7 +100,12 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFile(ctx, uploadedFile, prep.prepared)
+	fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+		ctx,
+		uploadedFile,
+		prep.prepared,
+		uploadedFileHeader.Size,
+	)
 	if err != nil {
 		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
 		return err

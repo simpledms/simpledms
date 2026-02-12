@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/common/country"
+	"github.com/simpledms/simpledms/model/common/plan"
 )
 
 const (
@@ -50,6 +51,8 @@ const (
 	FieldCity = "city"
 	// FieldCountry holds the string denoting the country field in the database.
 	FieldCountry = "country"
+	// FieldPlan holds the string denoting the plan field in the database.
+	FieldPlan = "plan"
 	// FieldVatID holds the string denoting the vat_id field in the database.
 	FieldVatID = "vat_id"
 	// FieldTermsOfServiceAccepted holds the string denoting the terms_of_service_accepted field in the database.
@@ -130,6 +133,7 @@ var Columns = []string{
 	FieldPostalCode,
 	FieldCity,
 	FieldCountry,
+	FieldPlan,
 	FieldVatID,
 	FieldTermsOfServiceAccepted,
 	FieldPrivacyPolicyAccepted,
@@ -198,6 +202,16 @@ func CountryValidator(c country.Country) error {
 		return nil
 	default:
 		return fmt.Errorf("tenant: invalid enum value for country field: %q", c)
+	}
+}
+
+// PlanValidator is a validator for the "plan" field enum values. It is called by the builders before save.
+func PlanValidator(pl plan.Plan) error {
+	switch pl.String() {
+	case "Unknown", "Trial", "Pro", "Unlimited":
+		return nil
+	default:
+		return fmt.Errorf("tenant: invalid enum value for plan field: %q", pl)
 	}
 }
 
@@ -287,6 +301,11 @@ func ByCity(opts ...sql.OrderTermOption) OrderOption {
 // ByCountry orders the results by the country field.
 func ByCountry(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCountry, opts...).ToFunc()
+}
+
+// ByPlan orders the results by the plan field.
+func ByPlan(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlan, opts...).ToFunc()
 }
 
 // ByVatID orders the results by the vat_id field.

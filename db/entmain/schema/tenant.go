@@ -2,11 +2,13 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/common/country"
+	"github.com/simpledms/simpledms/model/common/plan"
 )
 
 // Tenant holds the schema definition for the Tenant entity.
@@ -33,6 +35,9 @@ func (Tenant) Fields() []ent.Field {
 		field.String("city").Default(""),
 		// TODO state?
 		field.Enum("country").GoType(country.Unknown),
+		field.Enum("plan").
+			GoType(plan.Unknown).
+			Annotations(entsql.Default(plan.Unknown.String())), // for migrations
 		field.String("vat_id").Default(""),
 
 		field.Time("terms_of_service_accepted"),
@@ -67,6 +72,30 @@ func (Tenant) Edges() []ent.Edge {
 			Through("account_assignment", TenantAccountAssignment.Type), // TODO unique?
 	}
 }
+
+/*
+func (Tenant) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hook.On(func(next ent.Mutator) ent.Mutator {
+			return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+				mutation, ok := m.(interface {
+					Plan() (plan.Plan, bool)
+					SetPlan(plan.Plan)
+				})
+				if !ok {
+					return next.Mutate(ctx, m)
+				}
+
+				if _, exists := mutation.Plan(); !exists {
+					mutation.SetPlan(plan.Unknown)
+				}
+
+				return next.Mutate(ctx, m)
+			})
+		}, ent.OpCreate),
+	}
+}
+*/
 
 func (Tenant) Mixin() []ent.Mixin {
 	// TODO

@@ -17,6 +17,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/common/country"
+	"github.com/simpledms/simpledms/model/common/plan"
 )
 
 // TenantUpdate is the builder for updating Tenant entities.
@@ -235,6 +236,20 @@ func (_u *TenantUpdate) SetCountry(v country.Country) *TenantUpdate {
 func (_u *TenantUpdate) SetNillableCountry(v *country.Country) *TenantUpdate {
 	if v != nil {
 		_u.SetCountry(*v)
+	}
+	return _u
+}
+
+// SetPlan sets the "plan" field.
+func (_u *TenantUpdate) SetPlan(v plan.Plan) *TenantUpdate {
+	_u.mutation.SetPlan(v)
+	return _u
+}
+
+// SetNillablePlan sets the "plan" field if the given value is not nil.
+func (_u *TenantUpdate) SetNillablePlan(v *plan.Plan) *TenantUpdate {
+	if v != nil {
+		_u.SetPlan(*v)
 	}
 	return _u
 }
@@ -531,6 +546,11 @@ func (_u *TenantUpdate) check() error {
 			return &ValidationError{Name: "country", err: fmt.Errorf(`entmain: validator failed for field "Tenant.country": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Plan(); ok {
+		if err := tenant.PlanValidator(v); err != nil {
+			return &ValidationError{Name: "plan", err: fmt.Errorf(`entmain: validator failed for field "Tenant.plan": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -590,6 +610,9 @@ func (_u *TenantUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Country(); ok {
 		_spec.SetField(tenant.FieldCountry, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.Plan(); ok {
+		_spec.SetField(tenant.FieldPlan, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.VatID(); ok {
 		_spec.SetField(tenant.FieldVatID, field.TypeString, value)
@@ -1009,6 +1032,20 @@ func (_u *TenantUpdateOne) SetNillableCountry(v *country.Country) *TenantUpdateO
 	return _u
 }
 
+// SetPlan sets the "plan" field.
+func (_u *TenantUpdateOne) SetPlan(v plan.Plan) *TenantUpdateOne {
+	_u.mutation.SetPlan(v)
+	return _u
+}
+
+// SetNillablePlan sets the "plan" field if the given value is not nil.
+func (_u *TenantUpdateOne) SetNillablePlan(v *plan.Plan) *TenantUpdateOne {
+	if v != nil {
+		_u.SetPlan(*v)
+	}
+	return _u
+}
+
 // SetVatID sets the "vat_id" field.
 func (_u *TenantUpdateOne) SetVatID(v string) *TenantUpdateOne {
 	_u.mutation.SetVatID(v)
@@ -1314,6 +1351,11 @@ func (_u *TenantUpdateOne) check() error {
 			return &ValidationError{Name: "country", err: fmt.Errorf(`entmain: validator failed for field "Tenant.country": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Plan(); ok {
+		if err := tenant.PlanValidator(v); err != nil {
+			return &ValidationError{Name: "plan", err: fmt.Errorf(`entmain: validator failed for field "Tenant.plan": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1390,6 +1432,9 @@ func (_u *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err erro
 	}
 	if value, ok := _u.mutation.Country(); ok {
 		_spec.SetField(tenant.FieldCountry, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.Plan(); ok {
+		_spec.SetField(tenant.FieldPlan, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.VatID(); ok {
 		_spec.SetField(tenant.FieldVatID, field.TypeString, value)

@@ -50,10 +50,11 @@ func TestUnzipArchiveCmdExtractsFilesAndDeletesArchive(t *testing.T) {
 				return fmt.Errorf("prepare zip file: %w", err)
 			}
 
-			fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFile(
+			fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 				spaceCtx,
 				bytes.NewReader(zipData),
 				prepared,
+				int64(len(zipData)),
 			)
 			if err != nil {
 				return fmt.Errorf("upload zip file: %w", err)
@@ -145,10 +146,12 @@ func TestUnzipArchiveCmdRejectsNonZipFile(t *testing.T) {
 				return fmt.Errorf("prepare file: %w", err)
 			}
 
-			fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFile(
+			nonZipContent := []byte("not a zip")
+			fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 				spaceCtx,
-				bytes.NewReader([]byte("not a zip")),
+				bytes.NewReader(nonZipContent),
 				prepared,
+				int64(len(nonZipContent)),
 			)
 			if err != nil {
 				return fmt.Errorf("upload file: %w", err)
@@ -187,6 +190,107 @@ func TestUnzipArchiveCmdRejectsNonZipFile(t *testing.T) {
 		}
 		if httpErr.StatusCode() != http.StatusBadRequest {
 			t.Fatalf("expected status %d, got %d", http.StatusBadRequest, httpErr.StatusCode())
+		}
+	})
+}
+
+func TestUnzipArchiveCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
+	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
+		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
+
+		accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
+		tenantDB := initTenantDB(t, harness, tenantx)
+		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
+
+		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+			spaceName := "Quota Unzip Space"
+			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
+
+			spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
+			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+			rootDir := spaceCtx.SpaceRootDir()
+
+			zipData := createZipArchive(t)
+			prepared, zipFile, err := harness.infra.FileSystem().PrepareFileUpload(
+				spaceCtx,
+				"archive.zip",
+				rootDir.ID,
+				false,
+			)
+			if err != nil {
+				return fmt.Errorf("prepare zip file: %w", err)
+			}
+
+			fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+				spaceCtx,
+				bytes.NewReader(zipData),
+				prepared,
+				int64(len(zipData)),
+			)
+			if err != nil {
+				return fmt.Errorf("upload zip file: %w", err)
+			}
+
+			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+			if err != nil {
+				return fmt.Errorf("finalize zip file: %w", err)
+			}
+
+			spaceCtx.TTx.StoredFile.UpdateOneID(prepared.StoredFileID).
+				SetSize(testTenantQuotaTrialBytes).
+				ExecX(spaceCtx)
+
+			form := url.Values{}
+			form.Set("FileID", zipFile.PublicID.String())
+			form.Set("DeleteOnSuccess", "true")
+
+			req := httptest.NewRequest(http.MethodPost, "/-/browse/unzip-archive-cmd", strings.NewReader(form.Encode()))
+			req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+			rr := httptest.NewRecorder()
+			handlerErr := harness.actions.Browse.UnzipArchiveCmd.Handler(
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
+				spaceCtx,
+			)
+			if handlerErr == nil {
+				return fmt.Errorf("expected quota error")
+			}
+
+			httpErr, ok := handlerErr.(*e.HTTPError)
+			if !ok {
+				return fmt.Errorf("expected HTTPError, got %T", handlerErr)
+			}
+			if httpErr.StatusCode() != http.StatusRequestEntityTooLarge {
+				return fmt.Errorf("expected status %d, got %d", http.StatusRequestEntityTooLarge, httpErr.StatusCode())
+			}
+
+			filesInRootCount := spaceCtx.TTx.File.Query().Where(
+				file.ParentID(rootDir.ID),
+				file.IsDirectory(false),
+			).CountX(spaceCtx)
+			if filesInRootCount != 1 {
+				return fmt.Errorf("expected only archive file to remain, got %d files", filesInRootCount)
+			}
+
+			docsDirCount := spaceCtx.TTx.File.Query().Where(
+				file.Name("docs"),
+				file.ParentID(rootDir.ID),
+				file.IsDirectory(true),
+			).CountX(spaceCtx)
+			if docsDirCount != 0 {
+				return fmt.Errorf("expected no extracted directories, got %d", docsDirCount)
+			}
+
+			zipRecord := spaceCtx.TTx.File.GetX(spaceCtx, zipFile.ID)
+			if !zipRecord.DeletedAt.IsZero() {
+				return fmt.Errorf("expected zip archive to remain undeleted")
+			}
+
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("unzip archive command: %v", err)
 		}
 	})
 }
