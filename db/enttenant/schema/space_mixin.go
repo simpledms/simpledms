@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/entql"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"entgo.io/ent/schema/mixin"
 
 	"github.com/simpledms/simpledms/ctxx"
@@ -34,6 +35,12 @@ func (SpaceMixin) Edges() []ent.Edge {
 			Immutable().
 			Unique().
 			Required(),
+	}
+}
+
+func (SpaceMixin) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("space_id"),
 	}
 }
 
