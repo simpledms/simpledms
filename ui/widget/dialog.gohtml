@@ -27,14 +27,19 @@
 		 	js-dialog {{ if .IsSideSheetLayout }}js-side-sheet-dialog{{ end }}
 		 	md:transition-all
 		 	overflow-hidden
-			 bg-surface text-on-surface w-full max-w-full h-dvh max-h-dvh
+			 bg-surface text-on-surface w-full max-w-full h-svh max-h-svh
 			 {{/* backdrop:backdrop-blur-sm backdrop:backdrop-brightness-75 backdrop:backdrop-grayscale backdrop:backdrop-contrast-50 */}}
 			 md:drop-shadow md:border-2 md:border-outline-variant
 			 {{/* IMPORTANT if lg: is changed, media query in JS of this widget must be changed too */}}
 			 {{ if .IsSideSheetLayout }}lg:my-0 lg:mr-0 lg:border-0 lg:border-l lg:rounded-none lg:drop-shadow-none lg:fixed lg:top-0 lg:max-h-full{{ end }}
 			{{/* backdrop:bg-surface-variant */}}
 			 md:max-h-[calc(100dvh-3rem)] md:rounded-xl md:bg-surface-container-lowest
-			 md:min-w-[17.5rem] {{ if .IsWideWidth }}md:max-w-full lg:max-w-screen-exp{{ else }}md:max-w-[35rem]{{ end }}
+			 md:min-w-[17.5rem]
+			 {{/*
+			 	spaces around max-w-[35rem] are necessary, otherwise the class doesn't get
+			 	detected by tailwind parser as of 10.02.2026
+			 */}}
+			{{ if .IsWideWidth }}md:max-w-full lg:max-w-screen-exp{{ else }} md:max-w-[35rem] {{ end }}
 			 {{ if .IsDefaultLayout }}
 			 	{{/* was md:w-fit before 28 Nov 24, not sure if w-full is good fit for everything, especially confirm dialog */}}
 			 	md:w-full md:h-fit

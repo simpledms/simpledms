@@ -57,11 +57,25 @@ func (qq *StaticPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 
 	htmlContent, err := qq.pageContent(definition)
 	if err != nil {
-		log.Printf("static page content load failed for %s: %v", definition.Slug, err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "The requested page could not be loaded.")
+		log.Printf(
+			"static page content load failed for %s: %v",
+			definition.Slug,
+			err,
+		)
+		return e.NewHTTPErrorf(
+			http.StatusInternalServerError,
+			"The requested page could not be loaded.",
+		)
 	}
 
-	return qq.Render(rw, req, ctx, qq.infra, definition.PageTitle, qq.Widget(ctx, definition, htmlContent))
+	return qq.Render(
+		rw,
+		req,
+		ctx,
+		qq.infra,
+		definition.PageTitle,
+		qq.Widget(ctx, definition, htmlContent),
+	)
 }
 
 func (qq *StaticPage) Widget(ctx ctxx.Context, definition StaticPageDefinition, htmlContent template.HTML) renderable.Renderable {
