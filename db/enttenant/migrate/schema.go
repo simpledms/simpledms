@@ -201,6 +201,26 @@ var (
 					Where: "`is_root_dir` = true",
 				},
 			},
+			{
+				Name:    "file_parent_id",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[21]},
+			},
+			{
+				Name:    "file_is_directory",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[6]},
+			},
+			{
+				Name:    "file_is_in_inbox",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[11]},
+			},
+			{
+				Name:    "file_space_id_parent_id",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21]},
+			},
 		},
 	}
 	// FilePropertyAssignmentsColumns holds the columns for the "file_property_assignments" table.
