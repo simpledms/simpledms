@@ -24,7 +24,7 @@ func NewMainDB(dbPath string) *MainDB {
 	}
 	readOnlyDrv.DB().SetMaxIdleConns(0)
 	readOnlyDrv.DB().SetMaxOpenConns(runtime.NumCPU()) // TODO enough?
-	readOnlyConn := entmain.NewClient(entmain.Driver(readOnlyDrv))
+	readOnlyConn := entmain.NewClient(entmain.Driver(newTimingDriver(readOnlyDrv)))
 
 	// read write
 	readWriteDataSourceURL := fmt.Sprintf("file:%s?%s", dbPath, SQLiteQueryParamsReadWrite)
@@ -34,7 +34,7 @@ func NewMainDB(dbPath string) *MainDB {
 	}
 	readWriteDrv.DB().SetMaxIdleConns(0)
 	readWriteDrv.DB().SetMaxOpenConns(1)
-	readWriteConn := entmain.NewClient(entmain.Driver(readWriteDrv))
+	readWriteConn := entmain.NewClient(entmain.Driver(newTimingDriver(readWriteDrv)))
 
 	return &MainDB{
 		DB: newDB(readOnlyConn, readWriteConn, readWriteDataSourceURL),

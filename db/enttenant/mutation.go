@@ -46,7 +46,6 @@ const (
 	TypeAttribute              = "Attribute"
 	TypeDocumentType           = "DocumentType"
 	TypeFile                   = "File"
-	TypeFileInfo               = "FileInfo"
 	TypeFilePropertyAssignment = "FilePropertyAssignment"
 	TypeFileSearch             = "FileSearch"
 	TypeFileVersion            = "FileVersion"

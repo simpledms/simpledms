@@ -109,7 +109,7 @@ func TestEditSpaceCmdUpdatesSpaceAndRootDir(t *testing.T) {
 	}
 }
 
-func signUpAccount(t *testing.T, harness *actionTestHarness, email string) (*entmain.Account, *entmain.Tenant) {
+func signUpAccount(t testing.TB, harness *actionTestHarness, email string) (*entmain.Account, *entmain.Tenant) {
 	t.Helper()
 
 	mainTx, err := harness.mainDB.ReadWriteConn.Tx(context.Background())
@@ -161,7 +161,7 @@ func signUpAccount(t *testing.T, harness *actionTestHarness, email string) (*ent
 	return accountx, tenantx
 }
 
-func initTenantDB(t *testing.T, harness *actionTestHarness, tenantx *entmain.Tenant) *sqlx.TenantDB {
+func initTenantDB(t testing.TB, harness *actionTestHarness, tenantx *entmain.Tenant) *sqlx.TenantDB {
 	t.Helper()
 
 	migrationsTenantFS, err := migrate.NewMigrationsTenantFS()
@@ -184,7 +184,7 @@ func initTenantDB(t *testing.T, harness *actionTestHarness, tenantx *entmain.Ten
 }
 
 func newTenantContext(
-	t *testing.T,
+	t testing.TB,
 	harness *actionTestHarness,
 	accountx *entmain.Account,
 	tenantx *entmain.Tenant,
@@ -219,7 +219,7 @@ func newTenantContext(
 	return mainTx, tenantTx, tenantCtx
 }
 
-func createSpaceViaCmd(t *testing.T, actions *action.Actions, tenantCtx *ctxx.TenantContext, name string) {
+func createSpaceViaCmd(t testing.TB, actions *action.Actions, tenantCtx *ctxx.TenantContext, name string) {
 	t.Helper()
 
 	form := url.Values{}
