@@ -237,7 +237,7 @@ func TestUnzipArchiveCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 			}
 
 			spaceCtx.TTx.StoredFile.UpdateOneID(prepared.StoredFileID).
-				SetSize(testTenantQuotaPerUserBytes).
+				SetSize(testTenantQuotaTrialBytes).
 				ExecX(spaceCtx)
 
 			form := url.Values{}
