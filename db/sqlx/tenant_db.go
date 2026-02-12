@@ -24,7 +24,7 @@ func NewTenantDB(readOnlyDataSourceURL, readWriteDataSourceURL string) *TenantDB
 	// TODO related to number of cpus? runtime.NumCPU
 	//		if in doubt, set it low to prevent out of memory issue?
 	readOnlyDrv.DB().SetMaxOpenConns(runtime.NumCPU()) // TODO enough?
-	readOnlyConn := enttenant.NewClient(enttenant.Driver(readOnlyDrv))
+	readOnlyConn := enttenant.NewClient(enttenant.Driver(newTimingDriver(readOnlyDrv)))
 
 	// read write
 	readWriteDrv, err := sql.Open(dialect.SQLite, readWriteDataSourceURL)
@@ -33,7 +33,7 @@ func NewTenantDB(readOnlyDataSourceURL, readWriteDataSourceURL string) *TenantDB
 	}
 	readWriteDrv.DB().SetMaxIdleConns(0)
 	readWriteDrv.DB().SetMaxOpenConns(1)
-	readWriteConn := enttenant.NewClient(enttenant.Driver(readWriteDrv))
+	readWriteConn := enttenant.NewClient(enttenant.Driver(newTimingDriver(readWriteDrv)))
 
 	return &TenantDB{
 		DB: newDB(readOnlyConn, readWriteConn, readWriteDataSourceURL),
