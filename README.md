@@ -57,6 +57,8 @@ Playwright E2E tests and environment variable documentation are in `e2e/README.m
 
 Go tests on the action layer are implemented in the `server` package.
 
+A command reference for tests and benchmarks is available in `README_TESTS_AND_BENCHMARKS.md`.
+
 ## Where is the git history?
 
 In the beginning SimpleDMS was developed in a monorepo together with other apps as a closed source project.
