@@ -3469,16 +3469,20 @@ input:-webkit-autofill::first-line,
 }
 
 @media (min-width: 1930px) {
-  .\32xl\:left-\[1400px\] {
-    left: 1400px;
+  .\32xl\:left-\[1390px\] {
+    left: 1390px;
   }
 
   .\32xl\:right-auto {
     right: auto;
   }
 
-  .\32xl\:left-\[1390px\] {
-    left: 1390px;
+  .\32xl\:mt-1 {
+    margin-top: 0.25rem;
+  }
+
+  .\32xl\:-mt-1 {
+    margin-top: -0.25rem;
   }
 
   .\32xl\:border-l-0 {

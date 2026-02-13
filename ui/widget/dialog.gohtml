@@ -35,6 +35,8 @@
 			 {{ if .IsSideSheetLayout }}
 				lg:my-0 lg:mr-0 lg:border-0 lg:border-l 2xl:border-l-0 lg:rounded-none lg:drop-shadow-none lg:fixed
 				lg:top-0 lg:max-h-full 2xl:bg-surface 2xl:right-auto 2xl:left-[1390px] 2xl:transition-none
+				{{/* 2xl:mt-1 is necessary for progress indicator to not be hidden behind */}}
+				2xl:mt-1
 			{{ end }}
 			{{/* backdrop:bg-surface-variant */}}
 			 md:max-h-[calc(100dvh-3rem)] md:rounded-xl
@@ -63,6 +65,7 @@
 					{{ if .IsDefaultLayout }}md:py-8{{ else }}md:py-4{{ end }}
 					{{ if .IsSideSheetLayout }}lg:py-3{{ end }}
 					h-full flex flex-col max-h-[inherit]
+					2xl:-mt-1
 					"
 			>
 				<div class="flex items-center mb-4 md:h-fit gap-x-4 px-6 md:px-8 min-h-14 {{ if .IsDefaultLayout }}md:min-h-0{{ end }}">
