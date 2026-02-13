@@ -2558,6 +2558,13 @@
             "fuzzy": true
         },
         {
+            "id": "Privacy policy",
+            "message": "Privacy policy",
+            "translation": "Politique de confidentialité",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Refresh",
             "message": "Refresh",
             "translation": "Actualiser",
@@ -4238,6 +4245,13 @@
             "fuzzy": true
         },
         {
+            "id": "Imprint",
+            "message": "Imprint",
+            "translation": "Mentions légales",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "No library document types available yet.",
             "message": "No library document types available yet.",
             "translation": "Aucun type de document de bibliothèque disponible pour le moment.",
@@ -4479,6 +4493,13 @@
             "id": "Terminated",
             "message": "Terminated",
             "translation": "Résilié",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Terms of service",
+            "message": "Terms of service",
+            "translation": "Conditions d'utilisation",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

@@ -64,6 +64,23 @@ func TestRenderMarkdownMissingFile(t *testing.T) {
 	}
 }
 
+func TestRenderMarkdownAllowsInlineHTML(t *testing.T) {
+	htmlContent, err := RenderMarkdown("content/html_support_test.md")
+	if err != nil {
+		t.Fatalf("render markdown: %v", err)
+	}
+
+	rendered := string(htmlContent)
+
+	if !strings.Contains(rendered, `<span class="inline-html">inline html</span>`) {
+		t.Fatalf("expected rendered markdown to include inline html span, got: %s", rendered)
+	}
+
+	if !strings.Contains(rendered, `<div class="custom-block">`) {
+		t.Fatalf("expected rendered markdown to include html div block, got: %s", rendered)
+	}
+}
+
 func TestStaticPageHandlerReturnsNotFoundForUnknownSlug(t *testing.T) {
 	page, ctx := newStaticPageTestSetup(t)
 

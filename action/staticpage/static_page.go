@@ -73,7 +73,7 @@ func (qq *StaticPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 		req,
 		ctx,
 		qq.infra,
-		definition.PageTitle,
+		wx.T(definition.PageTitle).String(ctx),
 		qq.Widget(ctx, definition, htmlContent),
 	)
 }

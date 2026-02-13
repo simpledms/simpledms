@@ -2,188 +2,6 @@
     "language": "fr",
     "messages": [
         {
-            "id": "About",
-            "message": "About",
-            "translation": "À propos",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Copyright (c) 2023–present Marco Beierer",
-            "message": "Copyright (c) 2023–present Marco Beierer",
-            "translation": "Copyright (c) 2023–présent Marco Beierer",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "SimpleDMS is an Open Source project by Marco Beierer. The official websites are:",
-            "message": "SimpleDMS is an Open Source project by Marco Beierer. The official websites are:",
-            "translation": "SimpleDMS est un projet Open Source de Marco Beierer. Les sites web officiels sont :",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "simpledms.eu",
-            "message": "simpledms.eu",
-            "translation": "simpledms.eu",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "simpledms.ch",
-            "message": "simpledms.ch",
-            "translation": "simpledms.ch",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "marcobeierer.com",
-            "message": "marcobeierer.com",
-            "translation": "marcobeierer.com",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "marcobeierer.ch",
-            "message": "marcobeierer.ch",
-            "translation": "marcobeierer.ch",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "The project is hosted on GitHub. You find the repository with the source code at:",
-            "message": "The project is hosted on GitHub. You find the repository with the source code at:",
-            "translation": "Le projet est hébergé sur GitHub. Vous trouverez le dépôt contenant le code source à l'adresse suivante :",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "https://github.com/simpledms/simpledms",
-            "message": "https://github.com/simpledms/simpledms",
-            "translation": "https://github.com/simpledms/simpledms",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "If you got your copy from someone else or using a hosted version by \n\t\t\t\t\tanother provider, the vendor must provide you a list with all modifications and\n\t\t\t\t\ta copy of the modified source code.",
-            "message": "If you got your copy from someone else or using a hosted version by \n\t\t\t\t\tanother provider, the vendor must provide you a list with all modifications and\n\t\t\t\t\ta copy of the modified source code.",
-            "translation": "Si vous avez obtenu votre copie auprès de quelqu'un d'autre ou via une version hébergée par \n\t\t\t\t\tun autre fournisseur, le fournisseur doit vous fournir une liste de toutes les modifications et\n\t\t\t\t\tune copie du code source modifié.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "License",
-            "message": "License",
-            "translation": "Licence",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "This program is free software: you can redistribute it and/or modify\n\t\t\t\t\tit under the terms of the GNU Affero General Public License version 3 as\n\t\t\t\t\tpublished by the Free Software Foundation.",
-            "message": "This program is free software: you can redistribute it and/or modify\n\t\t\t\t\tit under the terms of the GNU Affero General Public License version 3 as\n\t\t\t\t\tpublished by the Free Software Foundation.",
-            "translation": "Ce programme est un logiciel libre : vous pouvez le redistribuer et/ou le modifier\n\t\t\t\t\tselon les termes de la GNU Affero General Public License version 3 telle que\n\t\t\t\t\tpubliée par la Free Software Foundation.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "This program is distributed in the hope that it will be useful,\n\t\t\t\t\tbut WITHOUT ANY WARRANTY; without even the implied warranty of\n\t\t\t\t\tMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n\t\t\t\t\tGNU Affero General Public License for more details.",
-            "message": "This program is distributed in the hope that it will be useful,\n\t\t\t\t\tbut WITHOUT ANY WARRANTY; without even the implied warranty of\n\t\t\t\t\tMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n\t\t\t\t\tGNU Affero General Public License for more details.",
-            "translation": "Ce programme est distribué dans l'espoir qu'il sera utile,\n\t\t\t\t\tmais SANS AUCUNE GARANTIE ; sans même la garantie implicite de\n\t\t\t\t\tQUALITÉ MARCHANDE ou d'ADÉQUATION À UN USAGE PARTICULIER. Voir la\n\t\t\t\t\tGNU Affero General Public License pour plus de détails.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "You should have received a copy of the GNU Affero General Public License\n\t\t\t\t\talong with this program. If not, see \u003chttps://www.gnu.org/licenses/\u003e.",
-            "message": "You should have received a copy of the GNU Affero General Public License\n\t\t\t\t\talong with this program. If not, see \u003chttps://www.gnu.org/licenses/\u003e.",
-            "translation": "Vous devriez avoir reçu une copie de la GNU Affero General Public License\n\t\t\t\t\tavec ce programme. Sinon, consultez \u003chttps://www.gnu.org/licenses/\u003e.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):",
-            "message": "In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):",
-            "translation": "Conformément à la section 7(b) de la GNU Affero General Public License version 3, les conditions supplémentaires suivantes sont ajoutées afin de préserver les avis d'attribution en vertu de la section 5(d) :",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "1. A visible menu item labeled «About SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be present in the main menu of the program linking to the attribution page described below.",
-            "message": "1. A visible menu item labeled «About SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be present in the main menu of the program linking to the attribution page described below.",
-            "translation": "1. Un élément de menu visible intitulé «About SimpleDMS», «Legal», «License Information», «About» ou un terme équivalent doit être présent dans le menu principal du programme, avec un lien vers la page d'attribution décrite ci-dessous.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "2. A visible link labeled «Powered by SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be displayed on the login page of the program. The link must lead to the same attribution page described below or to https://simpledms.eu/open-source.",
-            "message": "2. A visible link labeled «Powered by SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be displayed on the login page of the program. The link must lead to the same attribution page described below or to https://simpledms.eu/open-source.",
-            "translation": "2. Un lien visible intitulé «Powered by SimpleDMS», «Legal», «License Information», «About» ou un terme équivalent doit être affiché sur la page de connexion du programme. Le lien doit mener à la même page d'attribution décrite ci-dessous ou à https://simpledms.eu/open-source.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "The attribution page must not be removed or modified so as to delete or obscure the required attribution notices. However, the attribution page may be extended, including by adding:",
-            "message": "The attribution page must not be removed or modified so as to delete or obscure the required attribution notices. However, the attribution page may be extended, including by adding:",
-            "translation": "La page d'attribution ne doit pas être supprimée ni modifiée de manière à supprimer ou masquer les avis d'attribution requis. Toutefois, la page d'attribution peut être étendue, notamment en ajoutant :",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "- additional copyright holders or contributors,",
-            "message": "- additional copyright holders or contributors,",
-            "translation": "- détenteurs de droits d'auteur ou contributeurs supplémentaires,",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "- notices describing modifications made to the program, or",
-            "message": "- notices describing modifications made to the program, or",
-            "translation": "- des avis décrivant les modifications apportées au programme, ou",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "- other legally required or informative notices, provided that the required attribution notices remain clearly identifiable and reasonably prominent.",
-            "message": "- other legally required or informative notices, provided that the required attribution notices remain clearly identifiable and reasonably prominent.",
-            "translation": "- d'autres avis légalement requis ou informatifs, à condition que les avis d'attribution requis restent clairement identifiables et raisonnablement visibles.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "The attribution notices required:",
-            "message": "The attribution notices required:",
-            "translation": "Les avis d'attribution requis :",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "- may be presented in a manner consistent with the overall visual design of the program, but",
-            "message": "- may be presented in a manner consistent with the overall visual design of the program, but",
-            "translation": "- peuvent être présentés d'une manière cohérente avec la conception visuelle globale du programme, mais",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "- must not be deliberately hidden, obscured, or rendered non-functional.",
-            "message": "- must not be deliberately hidden, obscured, or rendered non-functional.",
-            "translation": "- ne doivent pas être délibérément cachés, masqués ou rendus non fonctionnels.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "This requirement does not apply where the Program is used exclusively without an interactive user interface.",
-            "message": "This requirement does not apply where the Program is used exclusively without an interactive user interface.",
-            "translation": "Cette exigence ne s'applique pas lorsque le Programme est utilisé exclusivement sans interface utilisateur interactive.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "About SimpleDMS",
-            "message": "About SimpleDMS",
-            "translation": "À propos de SimpleDMS",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Change passphrase",
             "message": "Change passphrase",
             "translation": "Changer la phrase secrète",
@@ -1395,18 +1213,14 @@
             "fuzzy": true
         },
         {
-            "id": "Could not open file in archive.",
-            "message": "Could not open file in archive.",
-            "translation": "Impossible d'ouvrir le fichier dans l'archive.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
+            "id": "Archive is too large.",
+            "message": "Archive is too large.",
+            "translation": ""
         },
         {
-            "id": "Could not extract file from archive.",
-            "message": "Could not extract file from archive.",
-            "translation": "Impossible d'extraire le fichier de l'archive.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
+            "id": "Could not verify archive size.",
+            "message": "Could not verify archive size.",
+            "translation": ""
         },
         {
             "id": "End date is before the start date.",
@@ -1440,6 +1254,11 @@
             "fuzzy": true
         },
         {
+            "id": "Read-only request context required.",
+            "message": "Read-only request context required.",
+            "translation": ""
+        },
+        {
             "id": "could not read file",
             "message": "could not read file",
             "translation": "impossible de lire le fichier",
@@ -1458,7 +1277,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "filex.Name"
+                    "expr": "prep.filex.Name"
                 }
             ],
             "fuzzy": true
@@ -1585,13 +1404,6 @@
             "message": "System",
             "translation": "Système",
             "comment": "TODO admin, system or app?",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Trial phase",
-            "message": "Trial phase",
-            "translation": "Période d'essai",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2121,6 +1933,11 @@
             "translation": "Recharger les métadonnées",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.",
+            "message": "Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.",
+            "translation": ""
         },
         {
             "id": "Text recognition (OCR) is not ready yet, suggestions are based on the filename only.",
@@ -2668,6 +2485,16 @@
             "fuzzy": true
         },
         {
+            "id": "The requested page was not found.",
+            "message": "The requested page was not found.",
+            "translation": ""
+        },
+        {
+            "id": "The requested page could not be loaded.",
+            "message": "The requested page could not be loaded.",
+            "translation": ""
+        },
+        {
             "id": "«{Name}» assigned.",
             "message": "«{Name}» assigned.",
             "translation": "«{Name}» attribué.",
@@ -3135,6 +2962,30 @@
             "fuzzy": true
         },
         {
+            "id": "Tenant database not found.",
+            "message": "Tenant database not found.",
+            "translation": ""
+        },
+        {
+            "id": "Could not start transaction.",
+            "message": "Could not start transaction.",
+            "translation": ""
+        },
+        {
+            "id": "Could not save file.",
+            "message": "Could not save file.",
+            "translation": "Impossible d'enregistrer le fichier.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File already exists.",
+            "message": "File already exists.",
+            "translation": "Le fichier existe déjà.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Accepted",
             "message": "Accepted",
             "translation": "Accepté",
@@ -3506,6 +3357,11 @@
             "fuzzy": true
         },
         {
+            "id": "Pro",
+            "message": "Pro",
+            "translation": ""
+        },
+        {
             "id": "Rejected",
             "message": "Rejected",
             "translation": "Rejeté",
@@ -3604,6 +3460,11 @@
             "fuzzy": true
         },
         {
+            "id": "Trial",
+            "message": "Trial",
+            "translation": ""
+        },
+        {
             "id": "Type",
             "message": "Type",
             "translation": "Type",
@@ -3616,6 +3477,11 @@
             "translation": "Unité",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "Unlimited",
+            "message": "Unlimited",
+            "translation": ""
         },
         {
             "id": "User",
@@ -3649,6 +3515,27 @@
             "id": "Version number",
             "message": "Version number",
             "translation": "Numéro de version",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Imprint",
+            "message": "Imprint",
+            "translation": "Mentions légales",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Privacy policy",
+            "message": "Privacy policy",
+            "translation": "Politique de confidentialité",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Terms of service",
+            "message": "Terms of service",
+            "translation": "Conditions d'utilisation",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3800,6 +3687,16 @@
             "fuzzy": true
         },
         {
+            "id": "Detected cycle in directory tree.",
+            "message": "Detected cycle in directory tree.",
+            "translation": ""
+        },
+        {
+            "id": "Could not load path of file.",
+            "message": "Could not load path of file.",
+            "translation": ""
+        },
+        {
             "id": "Could not get object name.",
             "message": "Could not get object name.",
             "translation": "Impossible d'obtenir le nom de l'objet.",
@@ -3814,9 +3711,9 @@
             "fuzzy": true
         },
         {
-            "id": "File already exists.",
-            "message": "File already exists.",
-            "translation": "Le fichier existe déjà.",
+            "id": "Invalid filename.",
+            "message": "Invalid filename.",
+            "translation": "Nom de fichier invalide.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3824,13 +3721,6 @@
             "id": "Storage path is empty.",
             "message": "Storage path is empty.",
             "translation": "Le chemin de stockage est vide.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Invalid filename.",
-            "message": "Invalid filename.",
-            "translation": "Nom de fichier invalide.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3849,18 +3739,16 @@
             "fuzzy": true
         },
         {
-            "id": "Could not save file.",
-            "message": "Could not save file.",
-            "translation": "Impossible d'enregistrer le fichier.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Could not get x25519 identity.",
             "message": "Could not get x25519 identity.",
             "translation": "Impossible d'obtenir l'identité x25519.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "Storage filename mismatch.",
+            "message": "Storage filename mismatch.",
+            "translation": ""
         },
         {
             "id": "App not unlocked yet.",
@@ -3875,6 +3763,34 @@
             "translation": "Impossible de copier le fichier temporaire.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "Could not verify storage limit.",
+            "message": "Could not verify storage limit.",
+            "translation": ""
+        },
+        {
+            "id": "Storage limit reached for this organization. Used: {FormatSizeusedBytes} of {FormatSizelimitBytes}.",
+            "message": "Storage limit reached for this organization. Used: {FormatSizeusedBytes} of {FormatSizelimitBytes}.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "FormatSizeusedBytes",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "fileutil.FormatSize(usedBytes)"
+                },
+                {
+                    "id": "FormatSizelimitBytes",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "fileutil.FormatSize(limitBytes)"
+                }
+            ]
         },
         {
             "id": "Invoice",
@@ -4770,6 +4686,13 @@
             "message": "Sign out",
             "translation": "Déconnexion",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "About SimpleDMS",
+            "message": "About SimpleDMS",
+            "translation": "À propos de SimpleDMS",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
