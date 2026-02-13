@@ -43,6 +43,7 @@ func TestMaxFileSizeBytesFallsBackForNonPositiveValue(t *testing.T) {
 }
 
 func TestIsFileTooLarge(t *testing.T) {
+	unsafeMaxFileSizeBytes = -1
 	t.Setenv(MaxFileSizeEnvVar, "100")
 
 	if IsFileTooLarge(100) {
@@ -50,5 +51,31 @@ func TestIsFileTooLarge(t *testing.T) {
 	}
 	if !IsFileTooLarge(101) {
 		t.Fatalf("expected file larger than limit to be too large")
+	}
+}
+
+func TestSetUnsafeMaxFileSizeBytes(t *testing.T) {
+	unsafeMaxFileSizeBytes = -1
+	t.Cleanup(func() {
+		unsafeMaxFileSizeBytes = -1
+	})
+
+	SetUnsafeMaxFileSizeBytes(100)
+
+	if MaxFileSizeBytes() != 100 {
+		t.Fatalf("expected unsafe max file size to be 100")
+	}
+}
+
+func TestSetUnsafeMaxFileSizeBytesFallsBackForInvalidValue(t *testing.T) {
+	unsafeMaxFileSizeBytes = -1
+	t.Cleanup(func() {
+		unsafeMaxFileSizeBytes = -1
+	})
+
+	SetUnsafeMaxFileSizeBytes(0)
+
+	if MaxFileSizeBytes() != DefaultMaxFileSizeBytes {
+		t.Fatalf("expected default for invalid value")
 	}
 }

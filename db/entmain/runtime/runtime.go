@@ -167,6 +167,10 @@ func init() {
 	systemconfigDescOcrTikaURL := systemconfigFields[20].Descriptor()
 	// systemconfig.DefaultOcrTikaURL holds the default value on creation for the ocr_tika_url field.
 	systemconfig.DefaultOcrTikaURL = systemconfigDescOcrTikaURL.Default.(string)
+	// systemconfigDescOcrMaxFileSizeBytes is the schema descriptor for ocr_max_file_size_bytes field.
+	systemconfigDescOcrMaxFileSizeBytes := systemconfigFields[21].Descriptor()
+	// systemconfig.DefaultOcrMaxFileSizeBytes holds the default value on creation for the ocr_max_file_size_bytes field.
+	systemconfig.DefaultOcrMaxFileSizeBytes = systemconfigDescOcrMaxFileSizeBytes.Default.(int64)
 	temporaryfileMixin := schema.TemporaryFile{}.Mixin()
 	temporaryfileMixinHooks2 := temporaryfileMixin[2].Hooks()
 	temporaryfile.Hooks[0] = temporaryfileMixinHooks2[0]

@@ -171,6 +171,11 @@ func OcrTikaURL(v string) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldEQ(FieldOcrTikaURL, v))
 }
 
+// OcrMaxFileSizeBytes applies equality check predicate on the "ocr_max_file_size_bytes" field. It's identical to OcrMaxFileSizeBytesEQ.
+func OcrMaxFileSizeBytes(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldOcrMaxFileSizeBytes, v))
+}
+
 // InitializedAt applies equality check predicate on the "initialized_at" field. It's identical to InitializedAtEQ.
 func InitializedAt(v time.Time) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldEQ(FieldInitializedAt, v))
@@ -1184,6 +1189,46 @@ func OcrTikaURLEqualFold(v string) predicate.SystemConfig {
 // OcrTikaURLContainsFold applies the ContainsFold predicate on the "ocr_tika_url" field.
 func OcrTikaURLContainsFold(v string) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldContainsFold(FieldOcrTikaURL, v))
+}
+
+// OcrMaxFileSizeBytesEQ applies the EQ predicate on the "ocr_max_file_size_bytes" field.
+func OcrMaxFileSizeBytesEQ(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldOcrMaxFileSizeBytes, v))
+}
+
+// OcrMaxFileSizeBytesNEQ applies the NEQ predicate on the "ocr_max_file_size_bytes" field.
+func OcrMaxFileSizeBytesNEQ(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNEQ(FieldOcrMaxFileSizeBytes, v))
+}
+
+// OcrMaxFileSizeBytesIn applies the In predicate on the "ocr_max_file_size_bytes" field.
+func OcrMaxFileSizeBytesIn(vs ...int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldIn(FieldOcrMaxFileSizeBytes, vs...))
+}
+
+// OcrMaxFileSizeBytesNotIn applies the NotIn predicate on the "ocr_max_file_size_bytes" field.
+func OcrMaxFileSizeBytesNotIn(vs ...int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNotIn(FieldOcrMaxFileSizeBytes, vs...))
+}
+
+// OcrMaxFileSizeBytesGT applies the GT predicate on the "ocr_max_file_size_bytes" field.
+func OcrMaxFileSizeBytesGT(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldGT(FieldOcrMaxFileSizeBytes, v))
+}
+
+// OcrMaxFileSizeBytesGTE applies the GTE predicate on the "ocr_max_file_size_bytes" field.
+func OcrMaxFileSizeBytesGTE(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldGTE(FieldOcrMaxFileSizeBytes, v))
+}
+
+// OcrMaxFileSizeBytesLT applies the LT predicate on the "ocr_max_file_size_bytes" field.
+func OcrMaxFileSizeBytesLT(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldLT(FieldOcrMaxFileSizeBytes, v))
+}
+
+// OcrMaxFileSizeBytesLTE applies the LTE predicate on the "ocr_max_file_size_bytes" field.
+func OcrMaxFileSizeBytesLTE(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldLTE(FieldOcrMaxFileSizeBytes, v))
 }
 
 // InitializedAtEQ applies the EQ predicate on the "initialized_at" field.

@@ -4067,6 +4067,8 @@ type SystemConfigMutation struct {
 	mailer_insecure_skip_verify           *bool
 	mailer_use_implicit_ssl_tls           *bool
 	ocr_tika_url                          *string
+	ocr_max_file_size_bytes               *int64
+	addocr_max_file_size_bytes            *int64
 	initialized_at                        *time.Time
 	clearedFields                         map[string]struct{}
 	creator                               *int64
@@ -5120,6 +5122,62 @@ func (m *SystemConfigMutation) ResetOcrTikaURL() {
 	m.ocr_tika_url = nil
 }
 
+// SetOcrMaxFileSizeBytes sets the "ocr_max_file_size_bytes" field.
+func (m *SystemConfigMutation) SetOcrMaxFileSizeBytes(i int64) {
+	m.ocr_max_file_size_bytes = &i
+	m.addocr_max_file_size_bytes = nil
+}
+
+// OcrMaxFileSizeBytes returns the value of the "ocr_max_file_size_bytes" field in the mutation.
+func (m *SystemConfigMutation) OcrMaxFileSizeBytes() (r int64, exists bool) {
+	v := m.ocr_max_file_size_bytes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOcrMaxFileSizeBytes returns the old "ocr_max_file_size_bytes" field's value of the SystemConfig entity.
+// If the SystemConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemConfigMutation) OldOcrMaxFileSizeBytes(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOcrMaxFileSizeBytes is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOcrMaxFileSizeBytes requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOcrMaxFileSizeBytes: %w", err)
+	}
+	return oldValue.OcrMaxFileSizeBytes, nil
+}
+
+// AddOcrMaxFileSizeBytes adds i to the "ocr_max_file_size_bytes" field.
+func (m *SystemConfigMutation) AddOcrMaxFileSizeBytes(i int64) {
+	if m.addocr_max_file_size_bytes != nil {
+		*m.addocr_max_file_size_bytes += i
+	} else {
+		m.addocr_max_file_size_bytes = &i
+	}
+}
+
+// AddedOcrMaxFileSizeBytes returns the value that was added to the "ocr_max_file_size_bytes" field in this mutation.
+func (m *SystemConfigMutation) AddedOcrMaxFileSizeBytes() (r int64, exists bool) {
+	v := m.addocr_max_file_size_bytes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetOcrMaxFileSizeBytes resets all changes to the "ocr_max_file_size_bytes" field.
+func (m *SystemConfigMutation) ResetOcrMaxFileSizeBytes() {
+	m.ocr_max_file_size_bytes = nil
+	m.addocr_max_file_size_bytes = nil
+}
+
 // SetInitializedAt sets the "initialized_at" field.
 func (m *SystemConfigMutation) SetInitializedAt(t time.Time) {
 	m.initialized_at = &t
@@ -5283,7 +5341,7 @@ func (m *SystemConfigMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SystemConfigMutation) Fields() []string {
-	fields := make([]string, 0, 25)
+	fields := make([]string, 0, 26)
 	if m.created_at != nil {
 		fields = append(fields, systemconfig.FieldCreatedAt)
 	}
@@ -5356,6 +5414,9 @@ func (m *SystemConfigMutation) Fields() []string {
 	if m.ocr_tika_url != nil {
 		fields = append(fields, systemconfig.FieldOcrTikaURL)
 	}
+	if m.ocr_max_file_size_bytes != nil {
+		fields = append(fields, systemconfig.FieldOcrMaxFileSizeBytes)
+	}
 	if m.initialized_at != nil {
 		fields = append(fields, systemconfig.FieldInitializedAt)
 	}
@@ -5415,6 +5476,8 @@ func (m *SystemConfigMutation) Field(name string) (ent.Value, bool) {
 		return m.MailerUseImplicitSslTLS()
 	case systemconfig.FieldOcrTikaURL:
 		return m.OcrTikaURL()
+	case systemconfig.FieldOcrMaxFileSizeBytes:
+		return m.OcrMaxFileSizeBytes()
 	case systemconfig.FieldInitializedAt:
 		return m.InitializedAt()
 	}
@@ -5474,6 +5537,8 @@ func (m *SystemConfigMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldMailerUseImplicitSslTLS(ctx)
 	case systemconfig.FieldOcrTikaURL:
 		return m.OldOcrTikaURL(ctx)
+	case systemconfig.FieldOcrMaxFileSizeBytes:
+		return m.OldOcrMaxFileSizeBytes(ctx)
 	case systemconfig.FieldInitializedAt:
 		return m.OldInitializedAt(ctx)
 	}
@@ -5653,6 +5718,13 @@ func (m *SystemConfigMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetOcrTikaURL(v)
 		return nil
+	case systemconfig.FieldOcrMaxFileSizeBytes:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOcrMaxFileSizeBytes(v)
+		return nil
 	case systemconfig.FieldInitializedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -5671,6 +5743,9 @@ func (m *SystemConfigMutation) AddedFields() []string {
 	if m.addmailer_port != nil {
 		fields = append(fields, systemconfig.FieldMailerPort)
 	}
+	if m.addocr_max_file_size_bytes != nil {
+		fields = append(fields, systemconfig.FieldOcrMaxFileSizeBytes)
+	}
 	return fields
 }
 
@@ -5681,6 +5756,8 @@ func (m *SystemConfigMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case systemconfig.FieldMailerPort:
 		return m.AddedMailerPort()
+	case systemconfig.FieldOcrMaxFileSizeBytes:
+		return m.AddedOcrMaxFileSizeBytes()
 	}
 	return nil, false
 }
@@ -5696,6 +5773,13 @@ func (m *SystemConfigMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddMailerPort(v)
+		return nil
+	case systemconfig.FieldOcrMaxFileSizeBytes:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddOcrMaxFileSizeBytes(v)
 		return nil
 	}
 	return fmt.Errorf("unknown SystemConfig numeric field %s", name)
@@ -5822,6 +5906,9 @@ func (m *SystemConfigMutation) ResetField(name string) error {
 		return nil
 	case systemconfig.FieldOcrTikaURL:
 		m.ResetOcrTikaURL()
+		return nil
+	case systemconfig.FieldOcrMaxFileSizeBytes:
+		m.ResetOcrMaxFileSizeBytes()
 		return nil
 	case systemconfig.FieldInitializedAt:
 		m.ResetInitializedAt()

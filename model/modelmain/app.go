@@ -16,6 +16,7 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/ocrutil"
 )
 
 // TODO remove prefix from all certs as soon as forms support fieldgroups
@@ -47,7 +48,8 @@ type TLSConfig struct {
 }
 
 type OCRConfig struct {
-	TikaURL string // optional, can also be used without OCR
+	TikaURL          string // optional, can also be used without OCR
+	MaxFileSizeBytes int64
 }
 
 // used for reconfiguration, thus no initial account email and tenant name
@@ -93,6 +95,11 @@ func InitAppWithoutCustomContext(
 	}
 	if passphrase == "" && !acceptEmptyPassphrase {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Passphrase is required.")
+	}
+
+	maxFileSizeBytes := ocrConfig.MaxFileSizeBytes
+	if maxFileSizeBytes <= 0 {
+		maxFileSizeBytes = ocrutil.DefaultMaxFileSizeBytes
 	}
 
 	x25519identity, err := age.GenerateX25519Identity()
@@ -165,6 +172,7 @@ func InitAppWithoutCustomContext(
 		SetMailerUseImplicitSslTLS(mailerConfig.MailerUseImplicitSSLTLS).
 		// ocr
 		SetOcrTikaURL(ocrConfig.TikaURL).
+		SetOcrMaxFileSizeBytes(maxFileSizeBytes).
 		// other
 		SetInitializedAt(time.Now()).
 		SaveX(ctx)

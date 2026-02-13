@@ -325,6 +325,27 @@ func (_u *SystemConfigUpdate) SetNillableOcrTikaURL(v *string) *SystemConfigUpda
 	return _u
 }
 
+// SetOcrMaxFileSizeBytes sets the "ocr_max_file_size_bytes" field.
+func (_u *SystemConfigUpdate) SetOcrMaxFileSizeBytes(v int64) *SystemConfigUpdate {
+	_u.mutation.ResetOcrMaxFileSizeBytes()
+	_u.mutation.SetOcrMaxFileSizeBytes(v)
+	return _u
+}
+
+// SetNillableOcrMaxFileSizeBytes sets the "ocr_max_file_size_bytes" field if the given value is not nil.
+func (_u *SystemConfigUpdate) SetNillableOcrMaxFileSizeBytes(v *int64) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetOcrMaxFileSizeBytes(*v)
+	}
+	return _u
+}
+
+// AddOcrMaxFileSizeBytes adds value to the "ocr_max_file_size_bytes" field.
+func (_u *SystemConfigUpdate) AddOcrMaxFileSizeBytes(v int64) *SystemConfigUpdate {
+	_u.mutation.AddOcrMaxFileSizeBytes(v)
+	return _u
+}
+
 // SetInitializedAt sets the "initialized_at" field.
 func (_u *SystemConfigUpdate) SetInitializedAt(v time.Time) *SystemConfigUpdate {
 	_u.mutation.SetInitializedAt(v)
@@ -499,6 +520,12 @@ func (_u *SystemConfigUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if value, ok := _u.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.OcrMaxFileSizeBytes(); ok {
+		_spec.SetField(systemconfig.FieldOcrMaxFileSizeBytes, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedOcrMaxFileSizeBytes(); ok {
+		_spec.AddField(systemconfig.FieldOcrMaxFileSizeBytes, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.InitializedAt(); ok {
 		_spec.SetField(systemconfig.FieldInitializedAt, field.TypeTime, value)
@@ -850,6 +877,27 @@ func (_u *SystemConfigUpdateOne) SetNillableOcrTikaURL(v *string) *SystemConfigU
 	return _u
 }
 
+// SetOcrMaxFileSizeBytes sets the "ocr_max_file_size_bytes" field.
+func (_u *SystemConfigUpdateOne) SetOcrMaxFileSizeBytes(v int64) *SystemConfigUpdateOne {
+	_u.mutation.ResetOcrMaxFileSizeBytes()
+	_u.mutation.SetOcrMaxFileSizeBytes(v)
+	return _u
+}
+
+// SetNillableOcrMaxFileSizeBytes sets the "ocr_max_file_size_bytes" field if the given value is not nil.
+func (_u *SystemConfigUpdateOne) SetNillableOcrMaxFileSizeBytes(v *int64) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetOcrMaxFileSizeBytes(*v)
+	}
+	return _u
+}
+
+// AddOcrMaxFileSizeBytes adds value to the "ocr_max_file_size_bytes" field.
+func (_u *SystemConfigUpdateOne) AddOcrMaxFileSizeBytes(v int64) *SystemConfigUpdateOne {
+	_u.mutation.AddOcrMaxFileSizeBytes(v)
+	return _u
+}
+
 // SetInitializedAt sets the "initialized_at" field.
 func (_u *SystemConfigUpdateOne) SetInitializedAt(v time.Time) *SystemConfigUpdateOne {
 	_u.mutation.SetInitializedAt(v)
@@ -1054,6 +1102,12 @@ func (_u *SystemConfigUpdateOne) sqlSave(ctx context.Context) (_node *SystemConf
 	}
 	if value, ok := _u.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.OcrMaxFileSizeBytes(); ok {
+		_spec.SetField(systemconfig.FieldOcrMaxFileSizeBytes, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedOcrMaxFileSizeBytes(); ok {
+		_spec.AddField(systemconfig.FieldOcrMaxFileSizeBytes, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.InitializedAt(); ok {
 		_spec.SetField(systemconfig.FieldInitializedAt, field.TypeTime, value)

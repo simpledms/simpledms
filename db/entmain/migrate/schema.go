@@ -143,6 +143,7 @@ var (
 		{Name: "mailer_insecure_skip_verify", Type: field.TypeBool, Default: false},
 		{Name: "mailer_use_implicit_ssl_tls", Type: field.TypeBool, Default: false},
 		{Name: "ocr_tika_url", Type: field.TypeString, Default: ""},
+		{Name: "ocr_max_file_size_bytes", Type: field.TypeInt64, Default: 26214400},
 		{Name: "initialized_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
@@ -155,13 +156,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "system_configs_accounts_creator",
-				Columns:    []*schema.Column{SystemConfigsColumns[24]},
+				Columns:    []*schema.Column{SystemConfigsColumns[25]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "system_configs_accounts_updater",
-				Columns:    []*schema.Column{SystemConfigsColumns[25]},
+				Columns:    []*schema.Column{SystemConfigsColumns[26]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

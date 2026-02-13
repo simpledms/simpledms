@@ -51,6 +51,7 @@ import (
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/ocrutil"
 	"github.com/simpledms/simpledms/util/recoverx"
 )
 
@@ -386,7 +387,10 @@ func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB,
 				MailerInsecureSkipVerify: os.Getenv("SIMPLEDMS_MAILER_INSECURE_SKIP_VERIFY") == "true",
 				MailerUseImplicitSSLTLS:  os.Getenv("SIMPLEDMS_MAILER_USE_IMPLICIT_SSL_TLS") == "true",
 			},
-			modelmain.OCRConfig{TikaURL: os.Getenv("SIMPLEDMS_OCR_TIKA_URL")},
+			modelmain.OCRConfig{
+				TikaURL:          os.Getenv("SIMPLEDMS_OCR_TIKA_URL"),
+				MaxFileSizeBytes: ocrutil.MaxFileSizeBytes(),
+			},
 		)
 		if err != nil {
 			erry := initAppTx.Rollback()
@@ -655,6 +659,16 @@ func (qq *Server) applyOverrideDBConfigAfterIdentity(ctx context.Context, mainDB
 	if val, set := os.LookupEnv("SIMPLEDMS_OCR_TIKA_URL"); set {
 		updateQuery.SetOcrTikaURL(val)
 	}
+	if val, set := os.LookupEnv(ocrutil.MaxFileSizeEnvVar); set {
+		limit := ocrutil.DefaultMaxFileSizeBytes
+		parsed, err := strconv.ParseInt(val, 10, 64)
+		if err != nil || parsed <= 0 {
+			log.Println("invalid OCR max file size env var, using default")
+		} else {
+			limit = parsed
+		}
+		updateQuery.SetOcrMaxFileSizeBytes(limit)
+	}
 
 	updateQuery.SaveX(ctx)
 }
@@ -672,6 +686,8 @@ func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.Main
 
 	// TODO FirstX okay?
 	systemConfigx := mainDB.ReadOnlyConn.SystemConfig.Query().FirstX(ctx)
+	ocrutil.SetUnsafeMaxFileSizeBytes(systemConfigx.OcrMaxFileSizeBytes)
+
 	systemConfig := modelmain.NewSystemConfig(
 		systemConfigx,
 		qq.isSaaSModeEnabled,
