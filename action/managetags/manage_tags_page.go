@@ -62,7 +62,7 @@ func (qq *ManageTagsPage) Widget(
 	}
 
 	return &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "manage-tags", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "tags", fabs),
 		Content: &wx.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
 			Content: qq.actions.TagListPartial.Widget(ctx, qq.actions.TagListPartial.Data(0), &state.TagListPartialState),

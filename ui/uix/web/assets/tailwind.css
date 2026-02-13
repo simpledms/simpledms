@@ -1820,6 +1820,10 @@ input:-webkit-autofill::first-line,
   justify-content: space-evenly;
 }
 
+.justify-items-center {
+  justify-items: center;
+}
+
 .gap-1 {
   gap: 0.25rem;
 }
@@ -3065,6 +3069,10 @@ input:-webkit-autofill::first-line,
 
   .md\:h-full {
     height: 100%;
+  }
+
+  .md\:h-auto {
+    height: auto;
   }
 
   .md\:max-h-\[calc\(100dvh-3rem\)\] {

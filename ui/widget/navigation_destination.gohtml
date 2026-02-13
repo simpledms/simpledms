@@ -2,7 +2,9 @@
 {{- define "NavigationDestination" }}
 	<a
             {{ template "HTMXAttrs" .HTMXAttrs }}
-			class="navigationDestination group/navdest flex flex-col gap-y-1 text-center h-14"
+			class="navigationDestination group/navdest flex flex-col gap-y-1 text-center h-14 center-aligned
+			{{/* necessary for multiline labels: */}}
+			md:h-auto"
 			href="{{ .Href }}"
 	>
 		{{/* active indicator */}}
