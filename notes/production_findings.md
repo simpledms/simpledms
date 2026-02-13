@@ -3,7 +3,6 @@
 ## Bugs
 
 - [ ] height of multi-line tag groups in filters is not correct; probably set NoOverflowHidden
-- [ ] form requests of commands (via FormHelper) are probably not read-only yet (needs verification)
 - [ ] when opening a second file with the PWA on Desktop, it doesn't upload the file. The first one works fine.
 - [ ] if an open file is deleted in Browse view, details are not closed...
 - [ ] http: superfluous response.WriteHeader call from github.com/gorilla/handlers.(*compressResponseWriter).WriteHeader (compress.go:26)

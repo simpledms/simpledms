@@ -154,12 +154,15 @@ func (qq *DocumentTypeFilterPartial) Widget(
 					qq.attributeBlock(ctx, data, state, attributex),
 				)
 			}
-			tagGroupAttributes = append(tagGroupAttributes, wx.NewLabel(wx.LabelTypeLg, wx.T("Tag groups")))
-			if len(tagGroupAttributes) == 1 {
-				tagGroupAttributes = append(tagGroupAttributes, wx.T("No tag groups available."))
+			if len(tagGroupAttributes) == 0 {
+				tagGroupAttributes = append(
+					tagGroupAttributes,
+					wx.NewLabel(wx.LabelTypeLg, wx.T("Tag groups")),
+					wx.T("No tag groups available."),
+				)
 			}
 			attributeBlocks = append(attributeBlocks, &wx.Column{
-				GapYSize:         wx.Gap1,
+				GapYSize:         wx.Gap4,
 				NoOverflowHidden: true,
 				Children:         tagGroupAttributes,
 			})
@@ -224,7 +227,8 @@ func (qq *DocumentTypeFilterPartial) attributeBlock(
 	}
 
 	return &wx.Column{
-		GapYSize: wx.Gap2,
+		GapYSize:         wx.Gap2,
+		NoOverflowHidden: true,
 		Children: []wx.IWidget{
 			&wx.Label{
 				Text: wx.Tu(attributex.Name),
