@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"filippo.io/age"
@@ -196,6 +197,9 @@ func (qq *Tenant) ExecuteDBMigrations(
 		// multi-statement transaction (when SQLite is not in autocommit mode).
 		// Attempting to do so does not return an error; it simply has no effect.
 		// https://www.sqlite.org/foreignkeys.html
+		//
+		// if auto migration fails because of foreign key constraint violation,
+		// just create migration scripts and execute them manually
 		if err := tenantDB.ReadWriteConn.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -206,41 +210,10 @@ func (qq *Tenant) ExecuteDBMigrations(
 			return err
 		}
 	} else {
-		drv, err := iofs.New(migrationsTenantFS, ".")
-		if err != nil {
-			log.Printf("failed reading migration filesystem: %v", err)
-			return err
-		}
-
-		// TODO shouldCreateDirs okay? should already exists...
-		_, readWriteTenantDataSourceURL, err := qq.tenantDataSourceURL(metaPath, false)
+		err := qq.migrateTenant(migrationsTenantFS, metaPath)
 		if err != nil {
 			log.Println(err)
 			return err
-		}
-
-		// sqlite is pure go driver; sqlite3 is with cgo
-		// TODO can it lead to conflicts if db is opened a second time?
-		// TODO disable foreign keys?
-		migx, err := migratex.NewWithSourceInstance(
-			"migrationsTenantFS",
-			drv,
-			dialect.SQLite+"://"+readWriteTenantDataSourceURL,
-		)
-		if err != nil {
-			log.Printf("failed loading migration instance: %v", err)
-			return err
-		}
-		err = migx.Up()
-		if err != nil && !errors.Is(err, migratex.ErrNoChange) {
-			log.Printf("failed running migrations up: %v", err)
-			return err
-		}
-
-		srcErr, dbErr := migx.Close()
-		if srcErr != nil || dbErr != nil {
-			log.Println(srcErr, dbErr)
-			return fmt.Errorf("failed closing migration instance: %v, %v", srcErr, dbErr)
 		}
 	}
 	// TODO find a better way
@@ -253,6 +226,60 @@ func (qq *Tenant) ExecuteDBMigrations(
 			log.Println(err)
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (qq *Tenant) migrateTenant(migrationsTenantFS fs.FS, metaPath string) error {
+	drv, err := iofs.New(migrationsTenantFS, ".")
+	if err != nil {
+		log.Printf("failed reading migration filesystem: %v", err)
+		return err
+	}
+	defer func() {
+		if err = drv.Close(); err != nil {
+			log.Println(err)
+		}
+	}()
+
+	// TODO shouldCreateDirs okay? should already exists...
+	_, readWriteTenantDataSourceURL, err := qq.tenantDataSourceURL(metaPath, false)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	// necessary because `PRAGMA foreign_keys = off` doesn't work in many
+	// circumstances
+	readWriteTenantDataSourceURL = strings.Replace(
+		readWriteTenantDataSourceURL,
+		"_foreign_keys=1",
+		"_foreign_keys=0",
+		1,
+	)
+
+	// sqlite is pure go driver; sqlite3 is with cgo
+	// TODO can it lead to conflicts if db is opened a second time?
+	// TODO disable foreign keys?
+	migx, err := migratex.NewWithSourceInstance(
+		"migrationsTenantFS",
+		drv,
+		dialect.SQLite+"://"+readWriteTenantDataSourceURL,
+	)
+	if err != nil {
+		log.Printf("failed loading migration instance: %v", err)
+		return err
+	}
+	err = migx.Up()
+	if err != nil && !errors.Is(err, migratex.ErrNoChange) {
+		log.Printf("failed running migrations up: %v", err)
+		return err
+	}
+
+	srcErr, dbErr := migx.Close()
+	if srcErr != nil || dbErr != nil {
+		log.Println(srcErr, dbErr)
+		return fmt.Errorf("failed closing migration instance: %v, %v", srcErr, dbErr)
 	}
 
 	return nil

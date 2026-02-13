@@ -10,6 +10,9 @@ package sqlx
 // TODO set timezone (_loc?)
 // TODO set cache_size and Temp_store?
 // https://kerkour.com/sqlite-for-servers
+//
+// _foreign_keys=1 gets replaced dynamically in server.dbMigrationsMainDB and
+// model.Tenant.ExecuteDBMigrations
 var sqliteQueryParams = "cache=private&_foreign_keys=1&_journal_mode=wal&_synchronous=normal&_busy_timeout=5000"
 
 var SQLiteQueryParamsReadOnly = "mode=ro&" + sqliteQueryParams
