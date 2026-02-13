@@ -13,7 +13,7 @@ tool (
 )
 
 require (
-	ariga.io/atlas v1.0.0
+	ariga.io/atlas v1.1.0
 	entgo.io/ent v0.14.5
 	filippo.io/age v1.3.1
 	github.com/Shopify/toxiproxy v2.1.4+incompatible

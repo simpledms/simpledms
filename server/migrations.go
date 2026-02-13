@@ -43,7 +43,11 @@ func dbMigrationsMainDB(isDevMode bool, metaPath string, migrationsMainFS fs.FS)
 		if err != nil {
 			log.Fatalf("failed reading migration filesystem: %v", err)
 		}
-		mainMigx, err := migratex.NewWithSourceInstance("migrationsMainFS", mainDrv, dialect.SQLite+"://"+mainDB.ReadWriteDataSourceURL())
+		mainMigx, err := migratex.NewWithSourceInstance(
+			"migrationsMainFS",
+			mainDrv,
+			dialect.SQLite+"://"+mainDB.ReadWriteDataSourceURL(),
+		)
 		if err != nil {
 			log.Fatalf("failed loading migration instance: %v", err)
 		}
