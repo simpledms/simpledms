@@ -2,136 +2,6 @@
     "language": "en",
     "messages": [
         {
-            "id": "About",
-            "message": "About",
-            "translation": ""
-        },
-        {
-            "id": "Copyright (c) 2023–present Marco Beierer",
-            "message": "Copyright (c) 2023–present Marco Beierer",
-            "translation": ""
-        },
-        {
-            "id": "SimpleDMS is an Open Source project by Marco Beierer. The official websites are:",
-            "message": "SimpleDMS is an Open Source project by Marco Beierer. The official websites are:",
-            "translation": ""
-        },
-        {
-            "id": "simpledms.eu",
-            "message": "simpledms.eu",
-            "translation": ""
-        },
-        {
-            "id": "simpledms.ch",
-            "message": "simpledms.ch",
-            "translation": ""
-        },
-        {
-            "id": "marcobeierer.com",
-            "message": "marcobeierer.com",
-            "translation": ""
-        },
-        {
-            "id": "marcobeierer.ch",
-            "message": "marcobeierer.ch",
-            "translation": ""
-        },
-        {
-            "id": "The project is hosted on GitHub. You find the repository with the source code at:",
-            "message": "The project is hosted on GitHub. You find the repository with the source code at:",
-            "translation": ""
-        },
-        {
-            "id": "https://github.com/simpledms/simpledms",
-            "message": "https://github.com/simpledms/simpledms",
-            "translation": ""
-        },
-        {
-            "id": "If you got your copy from someone else or using a hosted version by \n\t\t\t\t\tanother provider, the vendor must provide you a list with all modifications and\n\t\t\t\t\ta copy of the modified source code.",
-            "message": "If you got your copy from someone else or using a hosted version by \n\t\t\t\t\tanother provider, the vendor must provide you a list with all modifications and\n\t\t\t\t\ta copy of the modified source code.",
-            "translation": ""
-        },
-        {
-            "id": "License",
-            "message": "License",
-            "translation": ""
-        },
-        {
-            "id": "This program is free software: you can redistribute it and/or modify\n\t\t\t\t\tit under the terms of the GNU Affero General Public License version 3 as\n\t\t\t\t\tpublished by the Free Software Foundation.",
-            "message": "This program is free software: you can redistribute it and/or modify\n\t\t\t\t\tit under the terms of the GNU Affero General Public License version 3 as\n\t\t\t\t\tpublished by the Free Software Foundation.",
-            "translation": ""
-        },
-        {
-            "id": "This program is distributed in the hope that it will be useful,\n\t\t\t\t\tbut WITHOUT ANY WARRANTY; without even the implied warranty of\n\t\t\t\t\tMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n\t\t\t\t\tGNU Affero General Public License for more details.",
-            "message": "This program is distributed in the hope that it will be useful,\n\t\t\t\t\tbut WITHOUT ANY WARRANTY; without even the implied warranty of\n\t\t\t\t\tMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n\t\t\t\t\tGNU Affero General Public License for more details.",
-            "translation": ""
-        },
-        {
-            "id": "You should have received a copy of the GNU Affero General Public License\n\t\t\t\t\talong with this program. If not, see \u003chttps://www.gnu.org/licenses/\u003e.",
-            "message": "You should have received a copy of the GNU Affero General Public License\n\t\t\t\t\talong with this program. If not, see \u003chttps://www.gnu.org/licenses/\u003e.",
-            "translation": ""
-        },
-        {
-            "id": "In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):",
-            "message": "In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):",
-            "translation": ""
-        },
-        {
-            "id": "1. A visible menu item labeled «About SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be present in the main menu of the program linking to the attribution page described below.",
-            "message": "1. A visible menu item labeled «About SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be present in the main menu of the program linking to the attribution page described below.",
-            "translation": ""
-        },
-        {
-            "id": "2. A visible link labeled «Powered by SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be displayed on the login page of the program. The link must lead to the same attribution page described below or to https://simpledms.eu/open-source.",
-            "message": "2. A visible link labeled «Powered by SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be displayed on the login page of the program. The link must lead to the same attribution page described below or to https://simpledms.eu/open-source.",
-            "translation": ""
-        },
-        {
-            "id": "The attribution page must not be removed or modified so as to delete or obscure the required attribution notices. However, the attribution page may be extended, including by adding:",
-            "message": "The attribution page must not be removed or modified so as to delete or obscure the required attribution notices. However, the attribution page may be extended, including by adding:",
-            "translation": ""
-        },
-        {
-            "id": "- additional copyright holders or contributors,",
-            "message": "- additional copyright holders or contributors,",
-            "translation": ""
-        },
-        {
-            "id": "- notices describing modifications made to the program, or",
-            "message": "- notices describing modifications made to the program, or",
-            "translation": ""
-        },
-        {
-            "id": "- other legally required or informative notices, provided that the required attribution notices remain clearly identifiable and reasonably prominent.",
-            "message": "- other legally required or informative notices, provided that the required attribution notices remain clearly identifiable and reasonably prominent.",
-            "translation": ""
-        },
-        {
-            "id": "The attribution notices required:",
-            "message": "The attribution notices required:",
-            "translation": ""
-        },
-        {
-            "id": "- may be presented in a manner consistent with the overall visual design of the program, but",
-            "message": "- may be presented in a manner consistent with the overall visual design of the program, but",
-            "translation": ""
-        },
-        {
-            "id": "- must not be deliberately hidden, obscured, or rendered non-functional.",
-            "message": "- must not be deliberately hidden, obscured, or rendered non-functional.",
-            "translation": ""
-        },
-        {
-            "id": "This requirement does not apply where the Program is used exclusively without an interactive user interface.",
-            "message": "This requirement does not apply where the Program is used exclusively without an interactive user interface.",
-            "translation": ""
-        },
-        {
-            "id": "About SimpleDMS",
-            "message": "About SimpleDMS",
-            "translation": ""
-        },
-        {
             "id": "Change passphrase",
             "message": "Change passphrase",
             "translation": "Change passphrase"
@@ -1021,13 +891,13 @@
             "translation": ""
         },
         {
-            "id": "Could not open file in archive.",
-            "message": "Could not open file in archive.",
+            "id": "Archive is too large.",
+            "message": "Archive is too large.",
             "translation": ""
         },
         {
-            "id": "Could not extract file from archive.",
-            "message": "Could not extract file from archive.",
+            "id": "Could not verify archive size.",
+            "message": "Could not verify archive size.",
             "translation": ""
         },
         {
@@ -1056,6 +926,11 @@
             "translation": ""
         },
         {
+            "id": "Read-only request context required.",
+            "message": "Read-only request context required.",
+            "translation": ""
+        },
+        {
             "id": "could not read file",
             "message": "could not read file",
             "translation": ""
@@ -1071,7 +946,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "filex.Name"
+                    "expr": "prep.filex.Name"
                 }
             ]
         },
@@ -1175,11 +1050,6 @@
             "message": "System",
             "translation": "",
             "comment": "TODO admin, system or app?"
-        },
-        {
-            "id": "Trial phase",
-            "message": "Trial phase",
-            "translation": ""
         },
         {
             "id": "Subscription",
@@ -1576,6 +1446,11 @@
         {
             "id": "Reload metadata",
             "message": "Reload metadata",
+            "translation": ""
+        },
+        {
+            "id": "Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.",
+            "message": "Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.",
             "translation": ""
         },
         {
@@ -1992,6 +1867,16 @@
             "translation": ""
         },
         {
+            "id": "The requested page was not found.",
+            "message": "The requested page was not found.",
+            "translation": ""
+        },
+        {
+            "id": "The requested page could not be loaded.",
+            "message": "The requested page could not be loaded.",
+            "translation": ""
+        },
+        {
             "id": "«{Name}» assigned.",
             "message": "«{Name}» assigned.",
             "translation": "",
@@ -2361,6 +2246,26 @@
             "translation": ""
         },
         {
+            "id": "Tenant database not found.",
+            "message": "Tenant database not found.",
+            "translation": ""
+        },
+        {
+            "id": "Could not start transaction.",
+            "message": "Could not start transaction.",
+            "translation": ""
+        },
+        {
+            "id": "Could not save file.",
+            "message": "Could not save file.",
+            "translation": ""
+        },
+        {
+            "id": "File already exists.",
+            "message": "File already exists.",
+            "translation": ""
+        },
+        {
             "id": "Accepted",
             "message": "Accepted",
             "translation": ""
@@ -2626,6 +2531,11 @@
             "translation": ""
         },
         {
+            "id": "Pro",
+            "message": "Pro",
+            "translation": ""
+        },
+        {
             "id": "Rejected",
             "message": "Rejected",
             "translation": ""
@@ -2696,6 +2606,11 @@
             "translation": ""
         },
         {
+            "id": "Trial",
+            "message": "Trial",
+            "translation": ""
+        },
+        {
             "id": "Type",
             "message": "Type",
             "translation": ""
@@ -2703,6 +2618,11 @@
         {
             "id": "Unit",
             "message": "Unit",
+            "translation": ""
+        },
+        {
+            "id": "Unlimited",
+            "message": "Unlimited",
             "translation": ""
         },
         {
@@ -2728,6 +2648,21 @@
         {
             "id": "Version number",
             "message": "Version number",
+            "translation": ""
+        },
+        {
+            "id": "Imprint",
+            "message": "Imprint",
+            "translation": ""
+        },
+        {
+            "id": "Privacy policy",
+            "message": "Privacy policy",
+            "translation": ""
+        },
+        {
+            "id": "Terms of service",
+            "message": "Terms of service",
             "translation": ""
         },
         {
@@ -2836,6 +2771,16 @@
             "translation": ""
         },
         {
+            "id": "Detected cycle in directory tree.",
+            "message": "Detected cycle in directory tree.",
+            "translation": ""
+        },
+        {
+            "id": "Could not load path of file.",
+            "message": "Could not load path of file.",
+            "translation": ""
+        },
+        {
             "id": "Could not get object name.",
             "message": "Could not get object name.",
             "translation": ""
@@ -2846,18 +2791,13 @@
             "translation": ""
         },
         {
-            "id": "File already exists.",
-            "message": "File already exists.",
+            "id": "Invalid filename.",
+            "message": "Invalid filename.",
             "translation": ""
         },
         {
             "id": "Storage path is empty.",
             "message": "Storage path is empty.",
-            "translation": ""
-        },
-        {
-            "id": "Invalid filename.",
-            "message": "Invalid filename.",
             "translation": ""
         },
         {
@@ -2871,13 +2811,13 @@
             "translation": ""
         },
         {
-            "id": "Could not save file.",
-            "message": "Could not save file.",
+            "id": "Could not get x25519 identity.",
+            "message": "Could not get x25519 identity.",
             "translation": ""
         },
         {
-            "id": "Could not get x25519 identity.",
-            "message": "Could not get x25519 identity.",
+            "id": "Storage filename mismatch.",
+            "message": "Storage filename mismatch.",
             "translation": ""
         },
         {
@@ -2889,6 +2829,34 @@
             "id": "Could not copy temporary file.",
             "message": "Could not copy temporary file.",
             "translation": ""
+        },
+        {
+            "id": "Could not verify storage limit.",
+            "message": "Could not verify storage limit.",
+            "translation": ""
+        },
+        {
+            "id": "Storage limit reached for this organization. Used: {FormatSizeusedBytes} of {FormatSizelimitBytes}.",
+            "message": "Storage limit reached for this organization. Used: {FormatSizeusedBytes} of {FormatSizelimitBytes}.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "FormatSizeusedBytes",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "fileutil.FormatSize(usedBytes)"
+                },
+                {
+                    "id": "FormatSizelimitBytes",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "fileutil.FormatSize(limitBytes)"
+                }
+            ]
         },
         {
             "id": "Invoice",
@@ -3536,6 +3504,11 @@
         {
             "id": "Sign out",
             "message": "Sign out",
+            "translation": ""
+        },
+        {
+            "id": "About SimpleDMS",
+            "message": "About SimpleDMS",
             "translation": ""
         },
         {

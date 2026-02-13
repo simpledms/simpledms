@@ -10,6 +10,7 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
+	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -29,6 +30,9 @@ func NewMarkdownRenderer(contentFS embed.FS) *MarkdownRenderer {
 			),
 			goldmark.WithParserOptions(
 				parser.WithAutoHeadingID(),
+			),
+			goldmark.WithRendererOptions(
+				goldmarkhtml.WithUnsafe(),
 			),
 		),
 	}
