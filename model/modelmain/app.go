@@ -48,8 +48,8 @@ type TLSConfig struct {
 }
 
 type OCRConfig struct {
-	TikaURL          string // optional, can also be used without OCR
-	MaxFileSizeBytes int64
+	TikaURL        string // optional, can also be used without OCR
+	MaxFileSizeMiB int64
 }
 
 // used for reconfiguration, thus no initial account email and tenant name
@@ -97,9 +97,9 @@ func InitAppWithoutCustomContext(
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Passphrase is required.")
 	}
 
-	maxFileSizeBytes := ocrConfig.MaxFileSizeBytes
-	if maxFileSizeBytes <= 0 {
-		maxFileSizeBytes = ocrutil.DefaultMaxFileSizeBytes
+	maxFileSizeMiB := ocrConfig.MaxFileSizeMiB
+	if maxFileSizeMiB <= 0 {
+		maxFileSizeMiB = ocrutil.DefaultMaxFileSizeMiB
 	}
 
 	x25519identity, err := age.GenerateX25519Identity()
@@ -172,7 +172,7 @@ func InitAppWithoutCustomContext(
 		SetMailerUseImplicitSslTLS(mailerConfig.MailerUseImplicitSSLTLS).
 		// ocr
 		SetOcrTikaURL(ocrConfig.TikaURL).
-		SetOcrMaxFileSizeBytes(maxFileSizeBytes).
+		SetOcrMaxFileSizeMib(maxFileSizeMiB).
 		// other
 		SetInitializedAt(time.Now()).
 		SaveX(ctx)

@@ -136,7 +136,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemconfig.FieldMailerInsecureSkipVerify:          {Type: field.TypeBool, Column: systemconfig.FieldMailerInsecureSkipVerify},
 			systemconfig.FieldMailerUseImplicitSslTLS:           {Type: field.TypeBool, Column: systemconfig.FieldMailerUseImplicitSslTLS},
 			systemconfig.FieldOcrTikaURL:                        {Type: field.TypeString, Column: systemconfig.FieldOcrTikaURL},
-			systemconfig.FieldOcrMaxFileSizeBytes:               {Type: field.TypeInt64, Column: systemconfig.FieldOcrMaxFileSizeBytes},
+			systemconfig.FieldOcrMaxFileSizeMib:                 {Type: field.TypeInt64, Column: systemconfig.FieldOcrMaxFileSizeMib},
 			systemconfig.FieldInitializedAt:                     {Type: field.TypeTime, Column: systemconfig.FieldInitializedAt},
 		},
 	}
@@ -1118,9 +1118,9 @@ func (f *SystemConfigFilter) WhereOcrTikaURL(p entql.StringP) {
 	f.Where(p.Field(systemconfig.FieldOcrTikaURL))
 }
 
-// WhereOcrMaxFileSizeBytes applies the entql int64 predicate on the ocr_max_file_size_bytes field.
-func (f *SystemConfigFilter) WhereOcrMaxFileSizeBytes(p entql.Int64P) {
-	f.Where(p.Field(systemconfig.FieldOcrMaxFileSizeBytes))
+// WhereOcrMaxFileSizeMib applies the entql int64 predicate on the ocr_max_file_size_mib field.
+func (f *SystemConfigFilter) WhereOcrMaxFileSizeMib(p entql.Int64P) {
+	f.Where(p.Field(systemconfig.FieldOcrMaxFileSizeMib))
 }
 
 // WhereInitializedAt applies the entql time.Time predicate on the initialized_at field.

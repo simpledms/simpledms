@@ -11,11 +11,11 @@ import (
 )
 
 func TestApplyOCROneFileSkipsTooLargeFile(t *testing.T) {
-	t.Setenv(ocrutil.MaxFileSizeEnvVar, "100")
+	t.Setenv(ocrutil.MaxFileSizeMiBEnvVar, "1")
 
 	now := time.Now()
 	currentVersion := model.NewStoredFile(&enttenant.StoredFile{
-		Size:                       101,
+		Size:                       (1024 * 1024) + 1,
 		CopiedToFinalDestinationAt: &now,
 	})
 
@@ -39,10 +39,10 @@ func TestApplyOCROneFileSkipsTooLargeFile(t *testing.T) {
 }
 
 func TestApplyOCROneFileReturnsNotReadyForUnmovedFile(t *testing.T) {
-	t.Setenv(ocrutil.MaxFileSizeEnvVar, "100")
+	t.Setenv(ocrutil.MaxFileSizeMiBEnvVar, "1")
 
 	currentVersion := model.NewStoredFile(&enttenant.StoredFile{
-		Size: 100,
+		Size: 1024,
 	})
 
 	content, fileNotReady, fileTooLarge, err := (&Scheduler{}).applyOCROneFile(

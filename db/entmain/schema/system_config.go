@@ -46,7 +46,7 @@ func (SystemConfig) Fields() []ent.Field {
 		field.Bool("mailer_use_implicit_ssl_tls").Default(false),
 
 		field.String("ocr_tika_url").Default(""),
-		field.Int64("ocr_max_file_size_bytes").Default(25 * 1024 * 1024),
+		field.Int64("ocr_max_file_size_mib").Default(25),
 
 		field.Time("initialized_at").Optional().Nillable(),
 	}

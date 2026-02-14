@@ -3,79 +3,79 @@ package ocrutil
 import "testing"
 
 func TestMaxFileSizeBytesDefaultWhenUnset(t *testing.T) {
-	unsafeMaxFileSizeBytes = -1
-	t.Setenv(MaxFileSizeEnvVar, "")
+	unsafeMaxFileSizeMiB = -1
+	t.Setenv(MaxFileSizeMiBEnvVar, "")
 
 	got := MaxFileSizeBytes()
-	if got != DefaultMaxFileSizeBytes {
-		t.Fatalf("expected default %d, got %d", DefaultMaxFileSizeBytes, got)
+	if got != DefaultMaxFileSizeMiB*bytesPerMiB {
+		t.Fatalf("expected default %d, got %d", DefaultMaxFileSizeMiB*bytesPerMiB, got)
 	}
 }
 
-func TestMaxFileSizeBytesFromEnv(t *testing.T) {
-	unsafeMaxFileSizeBytes = -1
-	t.Setenv(MaxFileSizeEnvVar, "1048576")
+func TestMaxFileSizeMiBFromEnv(t *testing.T) {
+	unsafeMaxFileSizeMiB = -1
+	t.Setenv(MaxFileSizeMiBEnvVar, "3")
 
-	got := MaxFileSizeBytes()
-	if got != 1048576 {
-		t.Fatalf("expected env limit 1048576, got %d", got)
+	got := MaxFileSizeMiB()
+	if got != 3 {
+		t.Fatalf("expected env limit 3, got %d", got)
 	}
 }
 
-func TestMaxFileSizeBytesFallsBackForInvalidValue(t *testing.T) {
-	unsafeMaxFileSizeBytes = -1
-	t.Setenv(MaxFileSizeEnvVar, "invalid")
+func TestMaxFileSizeMiBFallsBackForInvalidValue(t *testing.T) {
+	unsafeMaxFileSizeMiB = -1
+	t.Setenv(MaxFileSizeMiBEnvVar, "invalid")
 
-	got := MaxFileSizeBytes()
-	if got != DefaultMaxFileSizeBytes {
-		t.Fatalf("expected default %d, got %d", DefaultMaxFileSizeBytes, got)
+	got := MaxFileSizeMiB()
+	if got != DefaultMaxFileSizeMiB {
+		t.Fatalf("expected default %d, got %d", DefaultMaxFileSizeMiB, got)
 	}
 }
 
-func TestMaxFileSizeBytesFallsBackForNonPositiveValue(t *testing.T) {
-	unsafeMaxFileSizeBytes = -1
-	t.Setenv(MaxFileSizeEnvVar, "0")
+func TestMaxFileSizeMiBFallsBackForNonPositiveValue(t *testing.T) {
+	unsafeMaxFileSizeMiB = -1
+	t.Setenv(MaxFileSizeMiBEnvVar, "0")
 
-	got := MaxFileSizeBytes()
-	if got != DefaultMaxFileSizeBytes {
-		t.Fatalf("expected default %d, got %d", DefaultMaxFileSizeBytes, got)
+	got := MaxFileSizeMiB()
+	if got != DefaultMaxFileSizeMiB {
+		t.Fatalf("expected default %d, got %d", DefaultMaxFileSizeMiB, got)
 	}
 }
 
 func TestIsFileTooLarge(t *testing.T) {
-	unsafeMaxFileSizeBytes = -1
-	t.Setenv(MaxFileSizeEnvVar, "100")
+	unsafeMaxFileSizeMiB = -1
+	t.Setenv(MaxFileSizeMiBEnvVar, "1")
 
-	if IsFileTooLarge(100) {
+	if IsFileTooLarge(bytesPerMiB) {
 		t.Fatalf("expected file with exact limit not to be too large")
 	}
-	if !IsFileTooLarge(101) {
+	if !IsFileTooLarge(bytesPerMiB + 1) {
 		t.Fatalf("expected file larger than limit to be too large")
 	}
 }
 
-func TestSetUnsafeMaxFileSizeBytes(t *testing.T) {
-	unsafeMaxFileSizeBytes = -1
+func TestSetUnsafeMaxFileSizeMiB(t *testing.T) {
+	unsafeMaxFileSizeMiB = -1
 	t.Cleanup(func() {
-		unsafeMaxFileSizeBytes = -1
+		unsafeMaxFileSizeMiB = -1
 	})
 
-	SetUnsafeMaxFileSizeBytes(100)
+	SetMaxFileSizeMiB(3)
 
-	if MaxFileSizeBytes() != 100 {
-		t.Fatalf("expected unsafe max file size to be 100")
+	if MaxFileSizeMiB() != 3 {
+		t.Fatalf("expected unsafe max file size to be 3")
 	}
 }
 
-func TestSetUnsafeMaxFileSizeBytesFallsBackForInvalidValue(t *testing.T) {
-	unsafeMaxFileSizeBytes = -1
+func TestSetUnsafeMaxFileSizeMiBFallsBackForInvalidValue(t *testing.T) {
+	unsafeMaxFileSizeMiB = -1
 	t.Cleanup(func() {
-		unsafeMaxFileSizeBytes = -1
+		unsafeMaxFileSizeMiB = -1
 	})
 
-	SetUnsafeMaxFileSizeBytes(0)
+	SetMaxFileSizeMiB(0)
 
-	if MaxFileSizeBytes() != DefaultMaxFileSizeBytes {
+	if MaxFileSizeMiB() != DefaultMaxFileSizeMiB {
 		t.Fatalf("expected default for invalid value")
 	}
 }

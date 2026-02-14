@@ -262,16 +262,16 @@ func (_c *SystemConfigCreate) SetNillableOcrTikaURL(v *string) *SystemConfigCrea
 	return _c
 }
 
-// SetOcrMaxFileSizeBytes sets the "ocr_max_file_size_bytes" field.
-func (_c *SystemConfigCreate) SetOcrMaxFileSizeBytes(v int64) *SystemConfigCreate {
-	_c.mutation.SetOcrMaxFileSizeBytes(v)
+// SetOcrMaxFileSizeMib sets the "ocr_max_file_size_mib" field.
+func (_c *SystemConfigCreate) SetOcrMaxFileSizeMib(v int64) *SystemConfigCreate {
+	_c.mutation.SetOcrMaxFileSizeMib(v)
 	return _c
 }
 
-// SetNillableOcrMaxFileSizeBytes sets the "ocr_max_file_size_bytes" field if the given value is not nil.
-func (_c *SystemConfigCreate) SetNillableOcrMaxFileSizeBytes(v *int64) *SystemConfigCreate {
+// SetNillableOcrMaxFileSizeMib sets the "ocr_max_file_size_mib" field if the given value is not nil.
+func (_c *SystemConfigCreate) SetNillableOcrMaxFileSizeMib(v *int64) *SystemConfigCreate {
 	if v != nil {
-		_c.SetOcrMaxFileSizeBytes(*v)
+		_c.SetOcrMaxFileSizeMib(*v)
 	}
 	return _c
 }
@@ -409,9 +409,9 @@ func (_c *SystemConfigCreate) defaults() {
 		v := systemconfig.DefaultOcrTikaURL
 		_c.mutation.SetOcrTikaURL(v)
 	}
-	if _, ok := _c.mutation.OcrMaxFileSizeBytes(); !ok {
-		v := systemconfig.DefaultOcrMaxFileSizeBytes
-		_c.mutation.SetOcrMaxFileSizeBytes(v)
+	if _, ok := _c.mutation.OcrMaxFileSizeMib(); !ok {
+		v := systemconfig.DefaultOcrMaxFileSizeMib
+		_c.mutation.SetOcrMaxFileSizeMib(v)
 	}
 }
 
@@ -480,8 +480,8 @@ func (_c *SystemConfigCreate) check() error {
 	if _, ok := _c.mutation.OcrTikaURL(); !ok {
 		return &ValidationError{Name: "ocr_tika_url", err: errors.New(`entmain: missing required field "SystemConfig.ocr_tika_url"`)}
 	}
-	if _, ok := _c.mutation.OcrMaxFileSizeBytes(); !ok {
-		return &ValidationError{Name: "ocr_max_file_size_bytes", err: errors.New(`entmain: missing required field "SystemConfig.ocr_max_file_size_bytes"`)}
+	if _, ok := _c.mutation.OcrMaxFileSizeMib(); !ok {
+		return &ValidationError{Name: "ocr_max_file_size_mib", err: errors.New(`entmain: missing required field "SystemConfig.ocr_max_file_size_mib"`)}
 	}
 	return nil
 }
@@ -603,9 +603,9 @@ func (_c *SystemConfigCreate) createSpec() (*SystemConfig, *sqlgraph.CreateSpec)
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)
 		_node.OcrTikaURL = value
 	}
-	if value, ok := _c.mutation.OcrMaxFileSizeBytes(); ok {
-		_spec.SetField(systemconfig.FieldOcrMaxFileSizeBytes, field.TypeInt64, value)
-		_node.OcrMaxFileSizeBytes = value
+	if value, ok := _c.mutation.OcrMaxFileSizeMib(); ok {
+		_spec.SetField(systemconfig.FieldOcrMaxFileSizeMib, field.TypeInt64, value)
+		_node.OcrMaxFileSizeMib = value
 	}
 	if value, ok := _c.mutation.InitializedAt(); ok {
 		_spec.SetField(systemconfig.FieldInitializedAt, field.TypeTime, value)

@@ -62,8 +62,8 @@ const (
 	FieldMailerUseImplicitSslTLS = "mailer_use_implicit_ssl_tls"
 	// FieldOcrTikaURL holds the string denoting the ocr_tika_url field in the database.
 	FieldOcrTikaURL = "ocr_tika_url"
-	// FieldOcrMaxFileSizeBytes holds the string denoting the ocr_max_file_size_bytes field in the database.
-	FieldOcrMaxFileSizeBytes = "ocr_max_file_size_bytes"
+	// FieldOcrMaxFileSizeMib holds the string denoting the ocr_max_file_size_mib field in the database.
+	FieldOcrMaxFileSizeMib = "ocr_max_file_size_mib"
 	// FieldInitializedAt holds the string denoting the initialized_at field in the database.
 	FieldInitializedAt = "initialized_at"
 	// EdgeCreator holds the string denoting the creator edge name in mutations.
@@ -115,7 +115,7 @@ var Columns = []string{
 	FieldMailerInsecureSkipVerify,
 	FieldMailerUseImplicitSslTLS,
 	FieldOcrTikaURL,
-	FieldOcrMaxFileSizeBytes,
+	FieldOcrMaxFileSizeMib,
 	FieldInitializedAt,
 }
 
@@ -152,8 +152,8 @@ var (
 	DefaultMailerUseImplicitSslTLS bool
 	// DefaultOcrTikaURL holds the default value on creation for the "ocr_tika_url" field.
 	DefaultOcrTikaURL string
-	// DefaultOcrMaxFileSizeBytes holds the default value on creation for the "ocr_max_file_size_bytes" field.
-	DefaultOcrMaxFileSizeBytes int64
+	// DefaultOcrMaxFileSizeMib holds the default value on creation for the "ocr_max_file_size_mib" field.
+	DefaultOcrMaxFileSizeMib int64
 )
 
 // OrderOption defines the ordering options for the SystemConfig queries.
@@ -264,9 +264,9 @@ func ByOcrTikaURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOcrTikaURL, opts...).ToFunc()
 }
 
-// ByOcrMaxFileSizeBytes orders the results by the ocr_max_file_size_bytes field.
-func ByOcrMaxFileSizeBytes(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOcrMaxFileSizeBytes, opts...).ToFunc()
+// ByOcrMaxFileSizeMib orders the results by the ocr_max_file_size_mib field.
+func ByOcrMaxFileSizeMib(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOcrMaxFileSizeMib, opts...).ToFunc()
 }
 
 // ByInitializedAt orders the results by the initialized_at field.

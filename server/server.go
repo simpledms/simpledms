@@ -388,8 +388,8 @@ func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB,
 				MailerUseImplicitSSLTLS:  os.Getenv("SIMPLEDMS_MAILER_USE_IMPLICIT_SSL_TLS") == "true",
 			},
 			modelmain.OCRConfig{
-				TikaURL:          os.Getenv("SIMPLEDMS_OCR_TIKA_URL"),
-				MaxFileSizeBytes: ocrutil.MaxFileSizeBytes(),
+				TikaURL:        os.Getenv("SIMPLEDMS_OCR_TIKA_URL"),
+				MaxFileSizeMiB: ocrutil.MaxFileSizeMiB(),
 			},
 		)
 		if err != nil {
@@ -659,15 +659,15 @@ func (qq *Server) applyOverrideDBConfigAfterIdentity(ctx context.Context, mainDB
 	if val, set := os.LookupEnv("SIMPLEDMS_OCR_TIKA_URL"); set {
 		updateQuery.SetOcrTikaURL(val)
 	}
-	if val, set := os.LookupEnv(ocrutil.MaxFileSizeEnvVar); set {
-		limit := ocrutil.DefaultMaxFileSizeBytes
+	if val, set := os.LookupEnv(ocrutil.MaxFileSizeMiBEnvVar); set {
+		limit := ocrutil.DefaultMaxFileSizeMiB
 		parsed, err := strconv.ParseInt(val, 10, 64)
 		if err != nil || parsed <= 0 {
-			log.Println("invalid OCR max file size env var, using default")
+			log.Println("invalid OCR max file size MiB env var, using default")
 		} else {
 			limit = parsed
 		}
-		updateQuery.SetOcrMaxFileSizeBytes(limit)
+		updateQuery.SetOcrMaxFileSizeMib(limit)
 	}
 
 	updateQuery.SaveX(ctx)
@@ -686,7 +686,7 @@ func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.Main
 
 	// TODO FirstX okay?
 	systemConfigx := mainDB.ReadOnlyConn.SystemConfig.Query().FirstX(ctx)
-	ocrutil.SetUnsafeMaxFileSizeBytes(systemConfigx.OcrMaxFileSizeBytes)
+	ocrutil.SetMaxFileSizeMiB(systemConfigx.OcrMaxFileSizeMib)
 
 	systemConfig := modelmain.NewSystemConfig(
 		systemConfigx,
