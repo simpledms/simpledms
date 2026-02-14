@@ -25,7 +25,7 @@ func NewNavigationRail(ctx ctxx.Context, infra *common.Infra, active string, fab
 	// is true in all contexts
 	if !ctx.IsMainCtx() {
 		destinations = append(destinations, &wx.NavigationDestination{
-			Label:    "Sign in",
+			Label:    wx.T("Sign in").String(ctx),
 			Icon:     "login",
 			IsActive: active == "sign-in",
 			Href:     "/",
@@ -35,45 +35,45 @@ func NewNavigationRail(ctx ctxx.Context, infra *common.Infra, active string, fab
 	if ctx.IsSpaceCtx() {
 		if isMetadataRail {
 			destinations = append(destinations, &wx.NavigationDestination{
-				Label:    "Browse",
+				Label:    wx.T("Browse").String(ctx),
 				Icon:     "folder_open",
 				IsActive: false,
 				Href:     route2.BrowseRoot(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
 			})
 			destinations = append(destinations, &wx.NavigationDestination{
-				Label:    "Document types",
+				Label:    wx.T("Document types").String(ctx),
 				Icon:     "category",
 				IsActive: active == "document-types",
 				Href:     route2.ManageDocumentTypes(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
 			})
 			destinations = append(destinations, &wx.NavigationDestination{
-				Label:    "Tags",
+				Label:    wx.T("Tags").String(ctx),
 				Icon:     "label",
 				IsActive: active == "tags",
 				Href:     route2.ManageTags(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
 			})
 			destinations = append(destinations, &wx.NavigationDestination{
-				Label:    "Fields",
+				Label:    wx.T("Fields").String(ctx),
 				Icon:     "tune",
 				IsActive: active == "fields",
 				Href:     route2.ManageProperties(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
 			})
 		} else {
 			destinations = append(destinations, &wx.NavigationDestination{
-				Label:    "Browse", // TODO Files or Browse?
+				Label:    wx.T("Browse").String(ctx), // TODO Files or Browse?
 				Icon:     "folder_open",
 				IsActive: active == "browse",
 				Href:     route2.BrowseRoot(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
 			})
 			destinations = append(destinations, &wx.NavigationDestination{
-				Label:    "Inbox",
+				Label:    wx.T("Inbox").String(ctx),
 				Icon:     "inbox",
 				IsActive: active == "inbox",
 				Href:     route2.InboxRoot(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
 			})
 			destinations = append(destinations, &wx.NavigationDestination{
-				Label:    "Document types",
-				Icon:     "category",
+				Label:    wx.T("Metadata").String(ctx),
+				Icon:     "database",
 				IsActive: active == "document-types",
 				Href:     route2.ManageDocumentTypes(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
 			})
