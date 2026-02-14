@@ -1820,10 +1820,6 @@ input:-webkit-autofill::first-line,
   justify-content: space-evenly;
 }
 
-.justify-items-center {
-  justify-items: center;
-}
-
 .gap-1 {
   gap: 0.25rem;
 }
@@ -2236,6 +2232,10 @@ input:-webkit-autofill::first-line,
 
 .text-center {
   text-align: center;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .font-sans {
@@ -3062,6 +3062,10 @@ input:-webkit-autofill::first-line,
     display: none;
   }
 
+  .md\:h-auto {
+    height: auto;
+  }
+
   .md\:h-fit {
     height: -moz-fit-content;
     height: fit-content;
@@ -3069,10 +3073,6 @@ input:-webkit-autofill::first-line,
 
   .md\:h-full {
     height: 100%;
-  }
-
-  .md\:h-auto {
-    height: auto;
   }
 
   .md\:max-h-\[calc\(100dvh-3rem\)\] {
@@ -3232,6 +3232,10 @@ input:-webkit-autofill::first-line,
 
   .md\:pt-1 {
     padding-top: 0.25rem;
+  }
+
+  .md\:text-center {
+    text-align: center;
   }
 
   .md\:text-on-surface-variant {
@@ -3485,12 +3489,12 @@ input:-webkit-autofill::first-line,
     right: auto;
   }
 
-  .\32xl\:mt-1 {
-    margin-top: 0.25rem;
-  }
-
   .\32xl\:-mt-1 {
     margin-top: -0.25rem;
+  }
+
+  .\32xl\:mt-1 {
+    margin-top: 0.25rem;
   }
 
   .\32xl\:border-l-0 {
