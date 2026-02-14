@@ -406,7 +406,7 @@ func (qq *S3FileSystem) storageFilename(originalFilename, storageFilenameWithout
 
 func (qq *S3FileSystem) saveFile(
 	ctx context.Context,
-// passed in because PersistTemporaryTenantFile has no TenantContext
+	// passed in because PersistTemporaryTenantFile has no TenantContext
 	x25519Identity *age.X25519Identity,
 	fileToSave io.Reader,
 	originalFilename string,
@@ -768,7 +768,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
 		// SetPublicID(entx.NewCIText(storedFilePublicID)).
 		SetFilename(tmpFile.Filename).
-		SetSize(tmpFile.Size). // fileInfo.Size is gzipped size
+		SetSize(tmpFile.Size).                   // fileInfo.Size is gzipped size
 		SetSizeInStorage(tmpFile.SizeInStorage). // gzipped size
 		SetStorageType(storagetype.S3).
 		SetBucketName(qq.bucketName).

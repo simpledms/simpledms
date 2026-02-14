@@ -3,10 +3,25 @@
 	if really popover causes issue */}}
 	<menu
 			id="{{ .GetID }}"
-			class="border-outline-variant border inset-auto drop-shadow rounded-xs bg-surface-container"
+			class="border-outline-variant border inset-auto drop-shadow rounded-xs
+			bg-surface-container max-h-svh position-area"
 			role="menu"
 			style="
 					position-anchor: --{{ .GetID }};
+					{{/*
+						with position-area, inset-x values should no longer be necessary
+						but they do not harm and are kept for backwards compatibility;
+						the advantage of position-area, for example for PositionRight,
+						is, that the menu (tooltip) is slowly moved to the top if there is no
+						space left at the bottom; thus the intended position is preserved
+						as long as possible and the menu (tooltip) is always fully visible or
+						scrollable if to large.
+
+						the values 'left' and 'right' are not fully supported yet
+						as of 14.02.2026;
+
+						TODO add position-area for bottom and top position
+					*/}}
 					inset-block-start: anchor(--{{ .GetID }} {{ .GetInsetBlockStart }});
 					{{- if ne .GetInsetBlockEnd "" }}
 						inset-block-end: anchor(--{{ .GetID }} {{ .GetInsetBlockEnd }});
@@ -17,6 +32,12 @@
 					{{- if ne .GetInsetInlineStart "" }}
 						inset-inline-start: anchor(--{{ .GetID }} {{ .GetInsetInlineStart }});
 					{{- end }}
+					{{ if .IsPositionRight }}
+						position-area: right span-bottom;
+					{{ end }}
+					{{ if .IsPositionLeft }}
+						position-area: left span-bottom;
+					{{ end }}
 					"
 			popover="manual"
 			hx-ext="morph">
