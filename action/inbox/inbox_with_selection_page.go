@@ -1,10 +1,12 @@
 package inbox
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/renderable"
@@ -41,7 +43,15 @@ func (qq *InboxWithSelectionPage) Handler(
 	if fileIDStr == "" {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "No file id provided.")
 	}
-	filex := ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicID(entx.NewCIText(fileIDStr))).OnlyX(ctx)
+	filex, err := ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicID(entx.NewCIText(fileIDStr))).Only(ctx)
+	if err != nil {
+		if enttenant.IsNotFound(err) {
+			return e.NewHTTPErrorf(http.StatusBadRequest, "File not found.")
+		}
+
+		log.Println(err)
+		return err
+	}
 
 	// assignment := ctx.SpaceCtx().Space.QueryFileAssignment().Where(spacefileassignment.FileID(fileID64)).OnlyX(ctx)
 
