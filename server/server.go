@@ -93,6 +93,7 @@ func resolveListenMode(useAutocert bool, tlsCertFilepath, tlsPrivateKeyFilepath 
 func newMaintenanceModeHandler(
 	mainDB *sqlx.MainDB,
 	assetsFS fs.FS,
+	devMode bool,
 	i18nx *i18n.I18n,
 	renderer *ui.Renderer,
 	encryptedIdentity []byte,
@@ -100,7 +101,9 @@ func newMaintenanceModeHandler(
 	shutdownFn func(context.Context) error,
 ) http.Handler {
 	mux := http.NewServeMux()
+	pwaManifestHandler := NewPWAManifestHandler(assetsFS, devMode)
 
+	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assetsFS))))
 
 	mux.HandleFunc("/-/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
@@ -298,9 +301,14 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		return nil, err
 	}
 
+	pwaManifestHandler := NewPWAManifestHandler(qq.assetsFS, qq.devMode)
+	router.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
 	// router.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./webapp/assets"))))
 	// slash suffix is necessary to match all paths with the prefix
-	router.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))))
+	router.Handle(
+		"GET /assets/",
+		http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))),
+	)
 
 	/*
 		// mounting also works with `/webdav`, but if `/webdav` is defined
@@ -541,6 +549,7 @@ func (qq *Server) ensureMainIdentity(
 		maintenanceMux := newMaintenanceModeHandler(
 			mainDB,
 			qq.assetsFS,
+			qq.devMode,
 			i18nx,
 			renderer,
 			systemConfigx.X25519Identity,
