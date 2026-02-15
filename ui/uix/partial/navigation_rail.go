@@ -35,7 +35,7 @@ func NewNavigationRail(ctx ctxx.Context, infra *common.Infra, active string, fab
 	if ctx.IsSpaceCtx() {
 		if isMetadataRail {
 			destinations = append(destinations, &wx.NavigationDestination{
-				Label:    wx.T("Browse").String(ctx),
+				Label:    wx.T("Files").String(ctx),
 				Icon:     "folder_open",
 				IsActive: false,
 				Href:     route2.BrowseRoot(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
@@ -60,7 +60,7 @@ func NewNavigationRail(ctx ctxx.Context, infra *common.Infra, active string, fab
 			})
 		} else {
 			destinations = append(destinations, &wx.NavigationDestination{
-				Label:    wx.T("Browse").String(ctx), // TODO Files or Browse?
+				Label:    wx.T("Files").String(ctx), // TODO Files or Browse?
 				Icon:     "folder_open",
 				IsActive: active == "browse",
 				Href:     route2.BrowseRoot(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),

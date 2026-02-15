@@ -369,9 +369,9 @@
             "fuzzy": true
         },
         {
-            "id": "Browse",
-            "message": "Browse",
-            "translation": "Browse",
+            "id": "Files",
+            "message": "Files",
+            "translation": "Files",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2000,6 +2000,13 @@
             "id": "Files uploaded successfully.",
             "message": "Files uploaded successfully.",
             "translation": "Files uploaded successfully.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File not found.",
+            "message": "File not found.",
+            "translation": "File not found.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

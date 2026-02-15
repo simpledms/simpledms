@@ -144,7 +144,7 @@ func (qq *SpaceCardsPartial) card(
 		// TODO change layout of card when active
 		// TODO seems never the case because in TenantCtx...
 		actions = append(actions, &wx.Button{
-			Label:     wx.T("Browse"), // TODO or Selected or Active?
+			Label:     wx.T("Files"), // TODO or Selected or Active?
 			StyleType: wx.ButtonStyleTypeOutlined,
 			HTMXAttrs: wx.HTMXAttrs{
 				HxGet: route.BrowseRoot(tenantID, spacex.PublicID.String()),

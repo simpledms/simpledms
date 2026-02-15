@@ -71,7 +71,7 @@ func (qq *BrowseWithSelectionPage) render(
 	}
 
 	if renderFullPage {
-		viewx = partial2.NewBase(wx.T("Browse"), viewx)
+		viewx = partial2.NewBase(wx.T("Files"), viewx)
 	}
 
 	qq.infra.Renderer().RenderX(rw, ctx, viewx)

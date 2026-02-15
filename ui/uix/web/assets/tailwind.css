@@ -1916,6 +1916,11 @@ input:-webkit-autofill::first-line,
   text-overflow: ellipsis;
 }
 
+.hyphens-auto {
+  -webkit-hyphens: auto;
+          hyphens: auto;
+}
+
 .whitespace-nowrap {
   white-space: nowrap;
 }
@@ -2232,10 +2237,6 @@ input:-webkit-autofill::first-line,
 
 .text-center {
   text-align: center;
-}
-
-.text-right {
-  text-align: right;
 }
 
 .font-sans {
@@ -3232,10 +3233,6 @@ input:-webkit-autofill::first-line,
 
   .md\:pt-1 {
     padding-top: 0.25rem;
-  }
-
-  .md\:text-center {
-    text-align: center;
   }
 
   .md\:text-on-surface-variant {

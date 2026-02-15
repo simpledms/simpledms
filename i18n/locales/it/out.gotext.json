@@ -369,11 +369,9 @@
             "fuzzy": true
         },
         {
-            "id": "Browse",
-            "message": "Browse",
-            "translation": "Sfoglia",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
+            "id": "Files",
+            "message": "Files",
+            "translation": ""
         },
         {
             "id": "Upload file",
@@ -1994,6 +1992,11 @@
             "translation": "File caricati correttamente.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "File not found.",
+            "message": "File not found.",
+            "translation": ""
         },
         {
             "id": "File is not in inbox.",

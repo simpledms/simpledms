@@ -267,8 +267,8 @@
             "translation": ""
         },
         {
-            "id": "Browse",
-            "message": "Browse",
+            "id": "Files",
+            "message": "Files",
             "translation": ""
         },
         {
@@ -1491,6 +1491,11 @@
         {
             "id": "Files uploaded successfully.",
             "message": "Files uploaded successfully.",
+            "translation": ""
+        },
+        {
+            "id": "File not found.",
+            "message": "File not found.",
             "translation": ""
         },
         {

@@ -573,9 +573,16 @@
             "id": "Browse",
             "message": "Browse",
             "translation": "Durchsuchen",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
+            "translatorComment": "",
+            "fuzzy": false
         },
+		{
+			"id": "Files",
+			"message": "Files",
+			"translation": "Dateien",
+			"translatorComment": "",
+			"fuzzy": false
+		},
         {
             "id": "Bucket name is empty.",
             "message": "Bucket name is empty.",
