@@ -13,6 +13,7 @@
 ## UX
 
 - [ ] On tag creation, tag type "Simple" should be preselected.
+- [ ] Add a loading indicator when file preview is loading
 
 ## Technical
 - [ ] partial package
