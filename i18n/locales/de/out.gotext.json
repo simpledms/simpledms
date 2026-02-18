@@ -2966,6 +2966,20 @@
             "fuzzy": true
         },
         {
+            "id": "Belgium",
+            "message": "Belgium",
+            "translation": "Belgien",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Bulgaria",
+            "message": "Bulgaria",
+            "translation": "Bulgarien",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Checkbox",
             "message": "Checkbox",
             "translation": "Checkbox",
@@ -3007,6 +3021,13 @@
             "fuzzy": true
         },
         {
+            "id": "Croatia",
+            "message": "Croatia",
+            "translation": "Kroatien",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Current or temporary password",
             "message": "Current or temporary password",
             "translation": "Aktuelles oder temporäres Passwort",
@@ -3018,6 +3039,20 @@
             "message": "Current passphrase",
             "translation": "Aktuelle Passphrase",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Cyprus",
+            "message": "Cyprus",
+            "translation": "Zypern",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Czech republic",
+            "message": "Czech republic",
+            "translation": "Tschechien",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -3039,6 +3074,13 @@
             "message": "Delete on success",
             "translation": "Bei Erfolg löschen",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Denmark",
+            "message": "Denmark",
+            "translation": "Dänemark",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -3070,6 +3112,13 @@
             "fuzzy": true
         },
         {
+            "id": "Estonia",
+            "message": "Estonia",
+            "translation": "Estland",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Field",
             "message": "Field",
             "translation": "Feld"
@@ -3089,10 +3138,24 @@
             "fuzzy": true
         },
         {
+            "id": "Finland",
+            "message": "Finland",
+            "translation": "Finnland",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "First name",
             "message": "First name",
             "translation": "Vorname",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "France",
+            "message": "France",
+            "translation": "Frankreich",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -3117,10 +3180,38 @@
             "fuzzy": true
         },
         {
+            "id": "Greece",
+            "message": "Greece",
+            "translation": "Griechenland",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Group",
             "message": "Group",
             "translation": "Gruppe",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Hungary",
+            "message": "Hungary",
+            "translation": "Ungarn",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Iceland",
+            "message": "Iceland",
+            "translation": "Island",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Ireland",
+            "message": "Ireland",
+            "translation": "Irland",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -3138,6 +3229,13 @@
             "fuzzy": true
         },
         {
+            "id": "Italy",
+            "message": "Italy",
+            "translation": "Italien",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Language",
             "message": "Language",
             "translation": "Sprache",
@@ -3149,6 +3247,13 @@
             "message": "Last name",
             "translation": "Nachname",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Latvia",
+            "message": "Latvia",
+            "translation": "Lettland",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -3166,10 +3271,38 @@
             "fuzzy": true
         },
         {
+            "id": "Liechtenstein",
+            "message": "Liechtenstein",
+            "translation": "Liechtenstein",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Lithuania",
+            "message": "Lithuania",
+            "translation": "Litauen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Local",
             "message": "Local",
             "translation": "Lokal",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Luxembourg",
+            "message": "Luxembourg",
+            "translation": "Luxemburg",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Malta",
+            "message": "Malta",
+            "translation": "Malta",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -3184,6 +3317,13 @@
             "message": "Money value",
             "translation": "Geldwert",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Netherlands",
+            "message": "Netherlands",
+            "translation": "Niederlande",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -3222,6 +3362,13 @@
             "fuzzy": true
         },
         {
+            "id": "Norway",
+            "message": "Norway",
+            "translation": "Norwegen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Number",
             "message": "Number",
             "translation": "Zahl",
@@ -3247,6 +3394,13 @@
             "message": "Operator",
             "translation": "Operator",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Other",
+            "message": "Other",
+            "translation": "Sonstiges",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -3278,6 +3432,20 @@
             "fuzzy": true
         },
         {
+            "id": "Poland",
+            "message": "Poland",
+            "translation": "Polen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Portugal",
+            "message": "Portugal",
+            "translation": "Portugal",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Pro",
             "message": "Pro",
             "translation": ""
@@ -3293,6 +3461,13 @@
             "id": "Role",
             "message": "Role",
             "translation": "Rolle",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Romania",
+            "message": "Romania",
+            "translation": "Rumänien",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3318,6 +3493,27 @@
             "fuzzy": true
         },
         {
+            "id": "Slovakia",
+            "message": "Slovakia",
+            "translation": "Slowakei",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Slovenia",
+            "message": "Slovenia",
+            "translation": "Slowenien",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Spain",
+            "message": "Spain",
+            "translation": "Spanien",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Subscribe to newsletter",
             "message": "Subscribe to newsletter",
             "translation": "Newsletter abonnieren",
@@ -3335,6 +3531,13 @@
             "id": "Supporter",
             "message": "Supporter",
             "translation": "Supporter"
+        },
+        {
+            "id": "Sweden",
+            "message": "Sweden",
+            "translation": "Schweden",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Switzerland",
@@ -3448,6 +3651,20 @@
             "id": "Sign up [subject]",
             "message": "Sign up [subject]",
             "translation": "Registrierung",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Organization name",
+            "message": "Organization name",
+            "translation": "Organisationsname",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Country",
+            "message": "Country",
+            "translation": "Land",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -3874,13 +4091,6 @@
             "id": "Software",
             "message": "Software",
             "translation": "Software",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Other",
-            "message": "Other",
-            "translation": "Sonstiges",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

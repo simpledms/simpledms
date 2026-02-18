@@ -3009,6 +3009,20 @@
             "fuzzy": true
         },
         {
+            "id": "Belgium",
+            "message": "Belgium",
+            "translation": "Belgium",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Bulgaria",
+            "message": "Bulgaria",
+            "translation": "Bulgaria",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Checkbox",
             "message": "Checkbox",
             "translation": "Checkbox",
@@ -3051,6 +3065,13 @@
             "fuzzy": true
         },
         {
+            "id": "Croatia",
+            "message": "Croatia",
+            "translation": "Croatia",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Current or temporary password",
             "message": "Current or temporary password",
             "translation": "Current or temporary password",
@@ -3061,6 +3082,20 @@
             "id": "Current passphrase",
             "message": "Current passphrase",
             "translation": "Current passphrase",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Cyprus",
+            "message": "Cyprus",
+            "translation": "Cyprus",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Czech republic",
+            "message": "Czech republic",
+            "translation": "Czech republic",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3082,6 +3117,13 @@
             "id": "Delete on success",
             "message": "Delete on success",
             "translation": "Delete on success",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Denmark",
+            "message": "Denmark",
+            "translation": "Denmark",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3114,6 +3156,13 @@
             "fuzzy": true
         },
         {
+            "id": "Estonia",
+            "message": "Estonia",
+            "translation": "Estonia",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Field",
             "message": "Field",
             "translation": "Field",
@@ -3135,9 +3184,23 @@
             "fuzzy": true
         },
         {
+            "id": "Finland",
+            "message": "Finland",
+            "translation": "Finland",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "First name",
             "message": "First name",
             "translation": "First name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "France",
+            "message": "France",
+            "translation": "France",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3163,9 +3226,37 @@
             "fuzzy": true
         },
         {
+            "id": "Greece",
+            "message": "Greece",
+            "translation": "Greece",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Group",
             "message": "Group",
             "translation": "Group",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Hungary",
+            "message": "Hungary",
+            "translation": "Hungary",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Iceland",
+            "message": "Iceland",
+            "translation": "Iceland",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Ireland",
+            "message": "Ireland",
+            "translation": "Ireland",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3184,6 +3275,13 @@
             "fuzzy": true
         },
         {
+            "id": "Italy",
+            "message": "Italy",
+            "translation": "Italy",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Language",
             "message": "Language",
             "translation": "Language",
@@ -3194,6 +3292,13 @@
             "id": "Last name",
             "message": "Last name",
             "translation": "Last name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Latvia",
+            "message": "Latvia",
+            "translation": "Latvia",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3212,9 +3317,37 @@
             "fuzzy": true
         },
         {
+            "id": "Liechtenstein",
+            "message": "Liechtenstein",
+            "translation": "Liechtenstein",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Lithuania",
+            "message": "Lithuania",
+            "translation": "Lithuania",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Local",
             "message": "Local",
             "translation": "Local",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Luxembourg",
+            "message": "Luxembourg",
+            "translation": "Luxembourg",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Malta",
+            "message": "Malta",
+            "translation": "Malta",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3229,6 +3362,13 @@
             "id": "Money value",
             "message": "Money value",
             "translation": "Money value",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Netherlands",
+            "message": "Netherlands",
+            "translation": "Netherlands",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3268,6 +3408,13 @@
             "fuzzy": true
         },
         {
+            "id": "Norway",
+            "message": "Norway",
+            "translation": "Norway",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Number",
             "message": "Number",
             "translation": "Number",
@@ -3292,6 +3439,13 @@
             "id": "Operator",
             "message": "Operator",
             "translation": "Operator",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Other",
+            "message": "Other",
+            "translation": "Other",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3324,6 +3478,20 @@
             "fuzzy": true
         },
         {
+            "id": "Poland",
+            "message": "Poland",
+            "translation": "Poland",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Portugal",
+            "message": "Portugal",
+            "translation": "Portugal",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Pro",
             "message": "Pro",
             "translation": "Pro",
@@ -3341,6 +3509,13 @@
             "id": "Role",
             "message": "Role",
             "translation": "Role",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Romania",
+            "message": "Romania",
+            "translation": "Romania",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3366,6 +3541,27 @@
             "fuzzy": true
         },
         {
+            "id": "Slovakia",
+            "message": "Slovakia",
+            "translation": "Slovakia",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Slovenia",
+            "message": "Slovenia",
+            "translation": "Slovenia",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Spain",
+            "message": "Spain",
+            "translation": "Spain",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Subscribe to newsletter",
             "message": "Subscribe to newsletter",
             "translation": "Subscribe to newsletter",
@@ -3383,6 +3579,13 @@
             "id": "Supporter",
             "message": "Supporter",
             "translation": "Supporter",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sweden",
+            "message": "Sweden",
+            "translation": "Sweden",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3502,6 +3705,20 @@
             "id": "Sign up [subject]",
             "message": "Sign up [subject]",
             "translation": "Sign up [subject]",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Organization name",
+            "message": "Organization name",
+            "translation": "Organization name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Country",
+            "message": "Country",
+            "translation": "Country",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3940,13 +4157,6 @@
             "id": "Software",
             "message": "Software",
             "translation": "Software",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Other",
-            "message": "Other",
-            "translation": "Other",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

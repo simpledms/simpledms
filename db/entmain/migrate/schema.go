@@ -249,7 +249,7 @@ var (
 		{Name: "additional_address_info", Type: field.TypeString, Default: ""},
 		{Name: "postal_code", Type: field.TypeString, Default: ""},
 		{Name: "city", Type: field.TypeString, Default: ""},
-		{Name: "country", Type: field.TypeEnum, Enums: []string{"Unknown", "Austria", "Germany", "Switzerland"}},
+		{Name: "country", Type: field.TypeEnum, Enums: []string{"Unknown", "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "CzechRepublic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Norway", "Other", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland"}},
 		{Name: "plan", Type: field.TypeEnum, Enums: []string{"Unknown", "Trial", "Pro", "Unlimited"}, Default: "Unknown"},
 		{Name: "vat_id", Type: field.TypeString, Default: ""},
 		{Name: "terms_of_service_accepted", Type: field.TypeTime},

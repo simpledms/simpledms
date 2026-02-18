@@ -198,7 +198,7 @@ var (
 // CountryValidator is a validator for the "country" field enum values. It is called by the builders before save.
 func CountryValidator(c country.Country) error {
 	switch c.String() {
-	case "Unknown", "Austria", "Germany", "Switzerland":
+	case "Unknown", "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "CzechRepublic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Norway", "Other", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland":
 		return nil
 	default:
 		return fmt.Errorf("tenant: invalid enum value for country field: %q", c)

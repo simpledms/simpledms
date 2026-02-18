@@ -8,9 +8,9 @@ import (
 	"fmt"
 )
 
-const _Country_name = "UnknownAustriaGermanySwitzerland"
+const _Country_name = "UnknownAustriaBelgiumBulgariaCroatiaCyprusCzechRepublicDenmarkEstoniaFinlandFranceGermanyGreeceHungaryIcelandIrelandItalyLatviaLiechtensteinLithuaniaLuxembourgMaltaNetherlandsNorwayOtherPolandPortugalRomaniaSlovakiaSloveniaSpainSwedenSwitzerland"
 
-var _Country_index = [...]uint8{0, 7, 14, 21, 32}
+var _Country_index = [...]uint8{0, 7, 14, 21, 29, 36, 42, 55, 62, 69, 76, 82, 89, 95, 102, 109, 116, 121, 127, 140, 149, 159, 164, 175, 181, 186, 192, 200, 207, 215, 223, 228, 234, 245}
 
 func (i Country) String() string {
 	if i < 0 || i >= Country(len(_Country_index)-1) {
@@ -23,10 +23,39 @@ func (i Country) String() string {
 }
 
 var _CountryNameToValue_map = map[string]Country{
-	_Country_name[0:7]:   0,
-	_Country_name[7:14]:  1,
-	_Country_name[14:21]: 2,
-	_Country_name[21:32]: 3,
+	_Country_name[0:7]:     0,
+	_Country_name[7:14]:    1,
+	_Country_name[14:21]:   2,
+	_Country_name[21:29]:   3,
+	_Country_name[29:36]:   4,
+	_Country_name[36:42]:   5,
+	_Country_name[42:55]:   6,
+	_Country_name[55:62]:   7,
+	_Country_name[62:69]:   8,
+	_Country_name[69:76]:   9,
+	_Country_name[76:82]:   10,
+	_Country_name[82:89]:   11,
+	_Country_name[89:95]:   12,
+	_Country_name[95:102]:  13,
+	_Country_name[102:109]: 14,
+	_Country_name[109:116]: 15,
+	_Country_name[116:121]: 16,
+	_Country_name[121:127]: 17,
+	_Country_name[127:140]: 18,
+	_Country_name[140:149]: 19,
+	_Country_name[149:159]: 20,
+	_Country_name[159:164]: 21,
+	_Country_name[164:175]: 22,
+	_Country_name[175:181]: 23,
+	_Country_name[181:186]: 24,
+	_Country_name[186:192]: 25,
+	_Country_name[192:200]: 26,
+	_Country_name[200:207]: 27,
+	_Country_name[207:215]: 28,
+	_Country_name[215:223]: 29,
+	_Country_name[223:228]: 30,
+	_Country_name[228:234]: 31,
+	_Country_name[234:245]: 32,
 }
 
 func CountryString(s string) (Country, error) {
@@ -95,7 +124,36 @@ func (i Country) Values() []string {
 	return []string{
 		Unknown.String(),
 		Austria.String(),
+		Belgium.String(),
+		Bulgaria.String(),
+		Croatia.String(),
+		Cyprus.String(),
+		CzechRepublic.String(),
+		Denmark.String(),
+		Estonia.String(),
+		Finland.String(),
+		France.String(),
 		Germany.String(),
+		Greece.String(),
+		Hungary.String(),
+		Iceland.String(),
+		Ireland.String(),
+		Italy.String(),
+		Latvia.String(),
+		Liechtenstein.String(),
+		Lithuania.String(),
+		Luxembourg.String(),
+		Malta.String(),
+		Netherlands.String(),
+		Norway.String(),
+		Other.String(),
+		Poland.String(),
+		Portugal.String(),
+		Romania.String(),
+		Slovakia.String(),
+		Slovenia.String(),
+		Spain.String(),
+		Sweden.String(),
 		Switzerland.String(),
 	}
 }

@@ -2271,6 +2271,16 @@
             "translation": ""
         },
         {
+            "id": "Belgium",
+            "message": "Belgium",
+            "translation": ""
+        },
+        {
+            "id": "Bulgaria",
+            "message": "Bulgaria",
+            "translation": ""
+        },
+        {
             "id": "Checkbox",
             "message": "Checkbox",
             "translation": ""
@@ -2301,6 +2311,11 @@
             "translation": ""
         },
         {
+            "id": "Croatia",
+            "message": "Croatia",
+            "translation": ""
+        },
+        {
             "id": "Current or temporary password",
             "message": "Current or temporary password",
             "translation": ""
@@ -2308,6 +2323,16 @@
         {
             "id": "Current passphrase",
             "message": "Current passphrase",
+            "translation": ""
+        },
+        {
+            "id": "Cyprus",
+            "message": "Cyprus",
+            "translation": ""
+        },
+        {
+            "id": "Czech republic",
+            "message": "Czech republic",
             "translation": ""
         },
         {
@@ -2323,6 +2348,11 @@
         {
             "id": "Delete on success",
             "message": "Delete on success",
+            "translation": ""
+        },
+        {
+            "id": "Denmark",
+            "message": "Denmark",
             "translation": ""
         },
         {
@@ -2346,6 +2376,11 @@
             "translation": ""
         },
         {
+            "id": "Estonia",
+            "message": "Estonia",
+            "translation": ""
+        },
+        {
             "id": "Field",
             "message": "Field",
             "translation": ""
@@ -2361,8 +2396,18 @@
             "translation": ""
         },
         {
+            "id": "Finland",
+            "message": "Finland",
+            "translation": ""
+        },
+        {
             "id": "First name",
             "message": "First name",
+            "translation": ""
+        },
+        {
+            "id": "France",
+            "message": "France",
             "translation": ""
         },
         {
@@ -2381,8 +2426,28 @@
             "translation": ""
         },
         {
+            "id": "Greece",
+            "message": "Greece",
+            "translation": ""
+        },
+        {
             "id": "Group",
             "message": "Group",
+            "translation": ""
+        },
+        {
+            "id": "Hungary",
+            "message": "Hungary",
+            "translation": ""
+        },
+        {
+            "id": "Iceland",
+            "message": "Iceland",
+            "translation": ""
+        },
+        {
+            "id": "Ireland",
+            "message": "Ireland",
             "translation": ""
         },
         {
@@ -2396,6 +2461,11 @@
             "translation": ""
         },
         {
+            "id": "Italy",
+            "message": "Italy",
+            "translation": ""
+        },
+        {
             "id": "Language",
             "message": "Language",
             "translation": ""
@@ -2403,6 +2473,11 @@
         {
             "id": "Last name",
             "message": "Last name",
+            "translation": ""
+        },
+        {
+            "id": "Latvia",
+            "message": "Latvia",
             "translation": ""
         },
         {
@@ -2416,8 +2491,28 @@
             "translation": ""
         },
         {
+            "id": "Liechtenstein",
+            "message": "Liechtenstein",
+            "translation": ""
+        },
+        {
+            "id": "Lithuania",
+            "message": "Lithuania",
+            "translation": ""
+        },
+        {
             "id": "Local",
             "message": "Local",
+            "translation": ""
+        },
+        {
+            "id": "Luxembourg",
+            "message": "Luxembourg",
+            "translation": ""
+        },
+        {
+            "id": "Malta",
+            "message": "Malta",
             "translation": ""
         },
         {
@@ -2428,6 +2523,11 @@
         {
             "id": "Money value",
             "message": "Money value",
+            "translation": ""
+        },
+        {
+            "id": "Netherlands",
+            "message": "Netherlands",
             "translation": ""
         },
         {
@@ -2456,6 +2556,11 @@
             "translation": ""
         },
         {
+            "id": "Norway",
+            "message": "Norway",
+            "translation": ""
+        },
+        {
             "id": "Number",
             "message": "Number",
             "translation": ""
@@ -2473,6 +2578,11 @@
         {
             "id": "Operator",
             "message": "Operator",
+            "translation": ""
+        },
+        {
+            "id": "Other",
+            "message": "Other",
             "translation": ""
         },
         {
@@ -2496,6 +2606,16 @@
             "translation": ""
         },
         {
+            "id": "Poland",
+            "message": "Poland",
+            "translation": ""
+        },
+        {
+            "id": "Portugal",
+            "message": "Portugal",
+            "translation": ""
+        },
+        {
             "id": "Pro",
             "message": "Pro",
             "translation": ""
@@ -2508,6 +2628,11 @@
         {
             "id": "Role",
             "message": "Role",
+            "translation": ""
+        },
+        {
+            "id": "Romania",
+            "message": "Romania",
             "translation": ""
         },
         {
@@ -2526,6 +2651,21 @@
             "translation": ""
         },
         {
+            "id": "Slovakia",
+            "message": "Slovakia",
+            "translation": ""
+        },
+        {
+            "id": "Slovenia",
+            "message": "Slovenia",
+            "translation": ""
+        },
+        {
+            "id": "Spain",
+            "message": "Spain",
+            "translation": ""
+        },
+        {
             "id": "Subscribe to newsletter",
             "message": "Subscribe to newsletter",
             "translation": ""
@@ -2538,6 +2678,11 @@
         {
             "id": "Supporter",
             "message": "Supporter",
+            "translation": ""
+        },
+        {
+            "id": "Sweden",
+            "message": "Sweden",
             "translation": ""
         },
         {
@@ -2624,6 +2769,16 @@
             "id": "Sign up [subject]",
             "message": "Sign up [subject]",
             "translation": "Sign up"
+        },
+        {
+            "id": "Organization name",
+            "message": "Organization name",
+            "translation": ""
+        },
+        {
+            "id": "Country",
+            "message": "Country",
+            "translation": ""
         },
         {
             "id": "Accept terms of service",
@@ -2941,11 +3096,6 @@
         {
             "id": "Software",
             "message": "Software",
-            "translation": ""
-        },
-        {
-            "id": "Other",
-            "message": "Other",
             "translation": ""
         },
         {
