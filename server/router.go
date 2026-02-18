@@ -460,6 +460,7 @@ func (qq *Router) context(
 		// FIXME should be dynamicly generated list (by declaration)...
 		if slices.Contains([]string{
 			"/",
+			"/register/",
 			"/pages/about/",
 			"/pages/imprint/",
 			"/pages/privacy-policy/",
@@ -481,7 +482,7 @@ func (qq *Router) context(
 			return visitorCtx, nil, true, nil
 		}
 	}
-	if req.URL.Path == "/" {
+	if req.URL.Path == "/" || req.URL.Path == "/register/" {
 		// authenticated, but accessing login page
 
 		// duplicate code in SignIn

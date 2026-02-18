@@ -11,8 +11,6 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entx"
 	account2 "github.com/simpledms/simpledms/model/account"
-	"github.com/simpledms/simpledms/model/common/country"
-	"github.com/simpledms/simpledms/model/common/language"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -69,18 +67,10 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 	accountx, err := ctx.VisitorCtx().MainTx.Account.Query().Where(account.Email(entx.NewCIText(data.Email))).Only(ctx)
 	if err != nil {
 		if entmain.IsNotFound(err) {
-			snackbar := wx.NewSnackbarf("Found no account for this email address.")
-
-			if qq.infra.SystemConfig().IsSaaSModeEnabled() {
-				snackbar.WithAction(
-					qq.actions.SignUpCmd.ModalLink(
-						qq.actions.SignUpCmd.Data("", "", "", country.Unknown, language.Unknown, false),
-						wx.T("Sign up now."),
-						""),
-				)
-			}
-
-			return e.NewHTTPErrorWithSnackbar(http.StatusBadRequest, snackbar)
+			return e.NewHTTPErrorWithSnackbar(
+				http.StatusBadRequest,
+				wx.NewSnackbarf("Found no account for this email address."),
+			)
 		}
 		log.Println(err)
 		return err

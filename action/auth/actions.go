@@ -7,7 +7,6 @@ import (
 
 type Actions struct {
 	SignInPage                *SignInPage
-	SignUpCmd                 *SignUpCmd
 	SignInCmd                 *SignInCmd
 	SignOutCmd                *SignOutCmd
 	ResetPasswordCmd          *ResetPasswordCmd
@@ -23,7 +22,6 @@ func NewActions(infra *common.Infra) *Actions {
 
 	*actions = Actions{
 		SignInPage:                NewSignInPage(infra, actions),
-		SignUpCmd:                 NewSignUpCmd(infra, actions),
 		SignInCmd:                 NewSignInCmd(infra, actions),
 		SignOutCmd:                NewSignOutCmd(infra, actions),
 		ResetPasswordCmd:          NewResetPasswordCmd(infra, actions),

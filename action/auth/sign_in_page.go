@@ -6,8 +6,6 @@ import (
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/common/country"
-	"github.com/simpledms/simpledms/model/common/language"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -67,17 +65,6 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 			"",
 		),
 	)
-
-	if qq.infra.SystemConfig().IsSaaSModeEnabled() {
-		children = append(
-			children,
-			qq.actions.SignUpCmd.ModalLink(
-				// TODO set country and language based on browser settings
-				qq.actions.SignUpCmd.Data("", "", "", country.Unknown, language.Unknown, false),
-				wx.T("Don't have an account? Sign up."),
-				"",
-			))
-	}
 
 	column := &wx.Column{
 		GapYSize:         wx.Gap4,

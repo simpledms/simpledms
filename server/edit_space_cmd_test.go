@@ -23,6 +23,7 @@ import (
 	"github.com/simpledms/simpledms/model/common/country"
 	"github.com/simpledms/simpledms/model/common/language"
 	"github.com/simpledms/simpledms/model/common/tenantrole"
+	"github.com/simpledms/simpledms/model/modelmain"
 	tenant2 "github.com/simpledms/simpledms/model/tenant"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -127,26 +128,20 @@ func signUpAccount(t testing.TB, harness *actionTestHarness, email string) (*ent
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
 
-	form := url.Values{}
-	form.Set("Email", email)
-	form.Set("FirstName", "Test")
-	form.Set("LastName", "User")
-	form.Set("Country", country.Switzerland.String())
-	form.Set("Language", language.English.String())
-	form.Set("SubscribeToNewsletter", "false")
-
-	req := httptest.NewRequest(http.MethodPost, "/-/auth/sign-up-cmd", strings.NewReader(form.Encode()))
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-	rr := httptest.NewRecorder()
-	err = harness.actions.Auth.SignUpCmd.Handler(
-		httpx.NewResponseWriter(rr),
-		httpx.NewRequest(req),
+	_, err = modelmain.NewSignUpService().SignUp(
 		ctx,
+		email,
+		"Test User",
+		"Test",
+		"User",
+		country.Switzerland,
+		language.English,
+		false,
+		true,
 	)
 	if err != nil {
 		_ = mainTx.Rollback()
-		t.Fatalf("sign up command: %v", err)
+		t.Fatalf("sign up service: %v", err)
 	}
 
 	if err := mainTx.Commit(); err != nil {

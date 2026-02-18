@@ -1339,6 +1339,11 @@ input:-webkit-autofill::first-line,
   margin-bottom: 1rem;
 }
 
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -1808,6 +1813,10 @@ input:-webkit-autofill::first-line,
   align-items: center;
 }
 
+.items-baseline {
+  align-items: baseline;
+}
+
 .justify-end {
   justify-content: flex-end;
 }
@@ -2237,6 +2246,10 @@ input:-webkit-autofill::first-line,
 
 .text-center {
   text-align: center;
+}
+
+.align-baseline {
+  vertical-align: baseline;
 }
 
 .font-sans {
@@ -3137,8 +3150,16 @@ input:-webkit-autofill::first-line,
     align-items: center;
   }
 
+  .md\:items-baseline {
+    align-items: baseline;
+  }
+
   .md\:justify-normal {
     justify-content: normal;
+  }
+
+  .md\:justify-center {
+    justify-content: center;
   }
 
   .md\:gap-y-3 {

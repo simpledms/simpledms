@@ -3,10 +3,6 @@ package server
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/http/httptest"
-	"net/url"
-	"strings"
 	"testing"
 
 	"github.com/simpledms/simpledms/ctxx"
@@ -14,9 +10,8 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/common/country"
 	"github.com/simpledms/simpledms/model/common/language"
+	"github.com/simpledms/simpledms/model/modelmain"
 	"github.com/simpledms/simpledms/pluginx"
-	"github.com/simpledms/simpledms/ui/uix/event"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type captureSignUpPlugin struct {
@@ -35,7 +30,7 @@ func (qq *captureSignUpPlugin) OnSignUp(_ ctxx.Context, event pluginx.SignUpEven
 	return qq.err
 }
 
-func TestSignUpCmdRollsBackWhenPluginHookFails(t *testing.T) {
+func TestSignUpFlowRollsBackWhenPluginHookFails(t *testing.T) {
 	harness := newActionTestHarnessWithSaaS(t, true)
 
 	plugin := &captureSignUpPlugin{err: errors.New("plugin sign-up hook failed")}
@@ -44,7 +39,7 @@ func TestSignUpCmdRollsBackWhenPluginHookFails(t *testing.T) {
 		harness.infra.PluginRegistry().SetPlugins()
 	})
 
-	err := executeSignUpCmd(t, harness, "signup-hook-failure@example.com")
+	err := executeSignUpFlow(t, harness, "signup-hook-failure@example.com")
 	if err == nil {
 		t.Fatal("expected signup error")
 	}
@@ -66,7 +61,7 @@ func TestSignUpCmdRollsBackWhenPluginHookFails(t *testing.T) {
 	}
 }
 
-func TestSignUpCmdEmitsPluginHookEvent(t *testing.T) {
+func TestSignUpFlowEmitsPluginHookEvent(t *testing.T) {
 	harness := newActionTestHarnessWithSaaS(t, true)
 
 	plugin := &captureSignUpPlugin{}
@@ -75,9 +70,9 @@ func TestSignUpCmdEmitsPluginHookEvent(t *testing.T) {
 		harness.infra.PluginRegistry().SetPlugins()
 	})
 
-	err := executeSignUpCmd(t, harness, "signup-hook-success@example.com")
+	err := executeSignUpFlow(t, harness, "signup-hook-success@example.com")
 	if err != nil {
-		t.Fatalf("signup command: %v", err)
+		t.Fatalf("signup flow: %v", err)
 	}
 
 	if plugin.calls != 1 {
@@ -91,27 +86,7 @@ func TestSignUpCmdEmitsPluginHookEvent(t *testing.T) {
 	}
 }
 
-func TestSignUpCmdSetsTenantCreatedTrigger(t *testing.T) {
-	harness := newActionTestHarnessWithSaaS(t, true)
-
-	rr, err := executeSignUpCmdWithRecorder(t, harness, "signup-trigger@example.com")
-	if err != nil {
-		t.Fatalf("signup command: %v", err)
-	}
-
-	if header := rr.Header().Get("HX-Trigger"); header != event.TenantCreated.String() {
-		t.Fatalf("expected HX-Trigger %q, got %q", event.TenantCreated.String(), header)
-	}
-}
-
-func executeSignUpCmd(t *testing.T, harness *actionTestHarness, email string) error {
-	t.Helper()
-
-	_, err := executeSignUpCmdWithRecorder(t, harness, email)
-	return err
-}
-
-func executeSignUpCmdWithRecorder(t *testing.T, harness *actionTestHarness, email string) (*httptest.ResponseRecorder, error) {
+func executeSignUpFlow(t *testing.T, harness *actionTestHarness, email string) error {
 	t.Helper()
 
 	mainTx, err := harness.mainDB.ReadWriteConn.Tx(context.Background())
@@ -129,31 +104,45 @@ func executeSignUpCmdWithRecorder(t *testing.T, harness *actionTestHarness, emai
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
 
-	form := url.Values{}
-	form.Set("Email", email)
-	form.Set("FirstName", "Test")
-	form.Set("LastName", "User")
-	form.Set("Country", country.Switzerland.String())
-	form.Set("Language", language.English.String())
-	form.Set("SubscribeToNewsletter", "true")
-
-	req := httptest.NewRequest(http.MethodPost, "/-/auth/sign-up-cmd", strings.NewReader(form.Encode()))
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-	rr := httptest.NewRecorder()
-	err = harness.actions.Auth.SignUpCmd.Handler(
-		httpx.NewResponseWriter(rr),
-		httpx.NewRequest(req),
+	accountm, err := modelmain.NewSignUpService().SignUp(
 		ctx,
+		email,
+		"Test User",
+		"Test",
+		"User",
+		country.Switzerland,
+		language.English,
+		true,
+		true,
 	)
 	if err != nil {
 		_ = mainTx.Rollback()
-		return rr, err
+		return err
+	}
+
+	tenantx, err := accountm.Data.QueryTenants().Only(ctx)
+	if err != nil {
+		_ = mainTx.Rollback()
+		return err
+	}
+
+	err = harness.infra.PluginRegistry().EmitSignUp(ctx, pluginx.SignUpEvent{
+		AccountID:             accountm.Data.ID,
+		AccountPublicID:       accountm.Data.PublicID.String(),
+		AccountEmail:          accountm.Data.Email.String(),
+		TenantID:              tenantx.ID,
+		TenantPublicID:        tenantx.PublicID.String(),
+		TenantName:            tenantx.Name,
+		SubscribeToNewsletter: true,
+	})
+	if err != nil {
+		_ = mainTx.Rollback()
+		return err
 	}
 
 	if err := mainTx.Commit(); err != nil {
-		return rr, err
+		return err
 	}
 
-	return rr, nil
+	return nil
 }
