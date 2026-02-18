@@ -25,7 +25,7 @@ func NewNavigationRail(ctx ctxx.Context, infra *common.Infra, active string, fab
 	// is true in all contexts
 	if !ctx.IsMainCtx() {
 		destinations = append(destinations, &wx.NavigationDestination{
-			Label:    wx.T("Sign in").String(ctx),
+			Label:    wx.T("Sign in [subject]").String(ctx),
 			Icon:     "login",
 			IsActive: active == "sign-in",
 			Href:     "/",

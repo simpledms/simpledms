@@ -128,6 +128,20 @@
             "fuzzy": true
         },
         {
+            "id": "Accept privacy policy",
+            "message": "Accept privacy policy",
+            "translation": "Accepter la politique de confidentialité",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Accept terms of service",
+            "message": "Accept terms of service",
+            "translation": "Accepter les conditions d'utilisation",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Accepted",
             "message": "Accepted",
             "translation": "Accepté",

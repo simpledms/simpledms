@@ -3105,8 +3105,8 @@
         {
             "id": "Sign in [subject]",
             "message": "Sign in [subject]",
-            "translation": "Anmelden",
-            "translatorComment": "Translated from English by Junie",
+            "translation": "Anmeldung",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {

@@ -212,13 +212,6 @@
             "fuzzy": true
         },
         {
-            "id": "Sign up now.",
-            "message": "Sign up now.",
-            "translation": "Inscrivez-vous maintenant.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "Invalid credentials. Please try again.",
             "message": "Invalid credentials. Please try again.",
             "translation": "Identifiants invalides. Veuillez réessayer.",
@@ -254,44 +247,9 @@
             "fuzzy": true
         },
         {
-            "id": "Don't have an account? Sign up.",
-            "message": "Don't have an account? Sign up.",
-            "translation": "Vous n'avez pas de compte ? Inscrivez-vous.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "Invalid session cookie.",
             "message": "Invalid session cookie.",
             "translation": "Cookie de session invalide.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Sign up [subject]",
-            "message": "Sign up [subject]",
-            "translation": "Inscription",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Sign up",
-            "message": "Sign up",
-            "translation": "S'inscrire",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Sign up is disabled.",
-            "message": "Sign up is disabled.",
-            "translation": "L'inscription est désactivée.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Registration successful, please check your email for your password.",
-            "message": "Registration successful, please check your email for your password.",
-            "translation": "Inscription réussie, veuillez vérifier votre e-mail pour votre mot de passe.",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -3073,13 +3031,6 @@
             "fuzzy": true
         },
         {
-            "id": "Country",
-            "message": "Country",
-            "translation": "Pays",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Current or temporary password",
             "message": "Current or temporary password",
             "translation": "Mot de passe actuel ou temporaire",
@@ -3325,13 +3276,6 @@
             "fuzzy": true
         },
         {
-            "id": "Organization name",
-            "message": "Organization name",
-            "translation": "Nom de l'organisation",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Owner",
             "message": "Owner",
             "translation": "Propriétaire",
@@ -3518,6 +3462,34 @@
             "id": "Version number",
             "message": "Version number",
             "translation": "Numéro de version",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign up",
+            "message": "Sign up",
+            "translation": "S'inscrire",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign up [subject]",
+            "message": "Sign up [subject]",
+            "translation": "Inscription",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Accept terms of service",
+            "message": "Accept terms of service",
+            "translation": "Accepter les conditions d'utilisation",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Accept privacy policy",
+            "message": "Accept privacy policy",
+            "translation": "Accepter la politique de confidentialité",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

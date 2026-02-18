@@ -152,11 +152,6 @@
             "translation": "Found no account for this email address."
         },
         {
-            "id": "Sign up now.",
-            "message": "Sign up now.",
-            "translation": "Sign up now."
-        },
-        {
             "id": "Invalid credentials. Please try again.",
             "message": "Invalid credentials. Please try again.",
             "translation": "Invalid credentials. Please try again."
@@ -182,34 +177,9 @@
             "translation": "Forgot password?"
         },
         {
-            "id": "Don't have an account? Sign up.",
-            "message": "Don't have an account? Sign up.",
-            "translation": "Don't have an account? Sign up."
-        },
-        {
             "id": "Invalid session cookie.",
             "message": "Invalid session cookie.",
             "translation": "Invalid session cookie."
-        },
-        {
-            "id": "Sign up [subject]",
-            "message": "Sign up [subject]",
-            "translation": "Sign up"
-        },
-        {
-            "id": "Sign up",
-            "message": "Sign up",
-            "translation": "Sign up"
-        },
-        {
-            "id": "Sign up is disabled.",
-            "message": "Sign up is disabled.",
-            "translation": ""
-        },
-        {
-            "id": "Registration successful, please check your email for your password.",
-            "message": "Registration successful, please check your email for your password.",
-            "translation": "Registration successful, please check your email for your password."
         },
         {
             "id": "Add field",
@@ -2331,11 +2301,6 @@
             "translation": ""
         },
         {
-            "id": "Country",
-            "message": "Country",
-            "translation": ""
-        },
-        {
             "id": "Current or temporary password",
             "message": "Current or temporary password",
             "translation": ""
@@ -2511,11 +2476,6 @@
             "translation": ""
         },
         {
-            "id": "Organization name",
-            "message": "Organization name",
-            "translation": ""
-        },
-        {
             "id": "Owner",
             "message": "Owner",
             "translation": ""
@@ -2653,6 +2613,26 @@
         {
             "id": "Version number",
             "message": "Version number",
+            "translation": ""
+        },
+        {
+            "id": "Sign up",
+            "message": "Sign up",
+            "translation": "Sign up"
+        },
+        {
+            "id": "Sign up [subject]",
+            "message": "Sign up [subject]",
+            "translation": "Sign up"
+        },
+        {
+            "id": "Accept terms of service",
+            "message": "Accept terms of service",
+            "translation": ""
+        },
+        {
+            "id": "Accept privacy policy",
+            "message": "Accept privacy policy",
             "translation": ""
         },
         {
