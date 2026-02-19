@@ -19,11 +19,13 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/model/common/storagetype"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/sqlutil"
 )
 
 type listingBenchmarkFixture struct {
@@ -41,6 +43,10 @@ type listingBenchmarkFixture struct {
 
 func inboxEventSearchQuery() string {
 	return "benchmark-file-000000.txt"
+}
+
+func browseFTSBenchmarkSearchQuery() string {
+	return sqlutil.FTSSafeAndQuery(inboxEventSearchQuery(), 300)
 }
 
 func BenchmarkFileListing(b *testing.B) {
@@ -185,6 +191,61 @@ func BenchmarkFileListingAcrossTenSpaces(b *testing.B) {
 	}
 }
 
+func BenchmarkBrowseFTSQuery(b *testing.B) {
+	originalLogOutput := log.Writer()
+	log.SetOutput(io.Discard)
+	b.Cleanup(func() {
+		log.SetOutput(originalLogOutput)
+	})
+
+	fileCounts := []int{0, 1000, 5000, 10000, 100000, 1000000}
+	searchQuery := browseFTSBenchmarkSearchQuery()
+
+	for _, fileCount := range fileCounts {
+		fileCount := fileCount
+
+		b.Run(fmt.Sprintf("single_space_%d", fileCount), func(b *testing.B) {
+			fixture := newListingBenchmarkFixture(b, fileCount, false)
+			defer fixture.cleanup()
+
+			expectedRowCount := 0
+			if fileCount > 0 {
+				expectedRowCount = 1
+			}
+
+			rows, err := browseFTSListingQuery(fixture.spaceCtx, fixture.spaceID, searchQuery)
+			if err != nil {
+				b.Fatalf("initial browse fts query failed: %v", err)
+			}
+			if len(rows) != expectedRowCount {
+				b.Fatalf("expected %d browse fts rows, got %d", expectedRowCount, len(rows))
+			}
+
+			benchmarkBrowseFTSQuery(b, fixture, searchQuery, expectedRowCount)
+		})
+
+		b.Run(fmt.Sprintf("ten_spaces_%d", fileCount), func(b *testing.B) {
+			fixture := newListingBenchmarkFixtureAcrossSpaces(b, fileCount, false, 10)
+			defer fixture.cleanup()
+
+			expectedRowCount := 0
+			if distributedFileCount(fileCount, 10, 0) > 0 {
+				expectedRowCount = 1
+			}
+
+			rows, err := browseFTSListingQuery(fixture.spaceCtx, fixture.spaceID, searchQuery)
+			if err != nil {
+				b.Fatalf("initial browse fts query failed: %v", err)
+			}
+			if len(rows) != expectedRowCount {
+				b.Fatalf("expected %d browse fts rows, got %d", expectedRowCount, len(rows))
+			}
+
+			benchmarkBrowseFTSQuery(b, fixture, searchQuery, expectedRowCount)
+		})
+	}
+}
+
 func benchmarkInboxListingQuery(b *testing.B, fixture *listingBenchmarkFixture, expectedRowCount int) {
 	b.Helper()
 	b.ReportAllocs()
@@ -219,6 +280,31 @@ func benchmarkBrowseListingQuery(b *testing.B, fixture *listingBenchmarkFixture,
 		}
 		if len(rows) != expectedRowCount {
 			b.Fatalf("expected %d browse rows, got %d", expectedRowCount, len(rows))
+		}
+	}
+
+	b.StopTimer()
+	reportEventTime(b)
+}
+
+func benchmarkBrowseFTSQuery(
+	b *testing.B,
+	fixture *listingBenchmarkFixture,
+	searchQuery string,
+	expectedRowCount int,
+) {
+	b.Helper()
+	b.ReportAllocs()
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		rows, err := browseFTSListingQuery(fixture.spaceCtx, fixture.spaceID, searchQuery)
+		if err != nil {
+			b.Fatalf("browse fts query failed: %v", err)
+		}
+		if len(rows) != expectedRowCount {
+			b.Fatalf("expected %d browse fts rows, got %d", expectedRowCount, len(rows))
 		}
 	}
 
@@ -481,6 +567,47 @@ func browseListingQuery(spaceCtx *ctxx.SpaceContext, spaceID int64, rootDirID in
 			file.SpaceID(spaceID),
 			file.IsInInbox(false),
 		).
+		Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName()).
+		Limit(51).
+		All(spaceCtx)
+}
+
+func browseFTSListingQuery(
+	spaceCtx *ctxx.SpaceContext,
+	spaceID int64,
+	searchQuery string,
+) ([]*enttenant.File, error) {
+	query := spaceCtx.TTx.File.Query().
+		WithParent().
+		WithChildren().
+		Where(
+			file.SpaceID(spaceID),
+			file.IsInInbox(false),
+		)
+
+	if searchQuery != "" {
+		query = query.Where(
+			func(qs *sql.Selector) {
+				fileSearchTable := sql.Table(filesearch.Table)
+
+				qs.Where(
+					sql.In(
+						qs.C(file.FieldID),
+						sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
+							Where(
+								sql.And(
+									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
+									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+								),
+							).
+							OrderBy(fileSearchTable.C(filesearch.FieldRank)),
+					),
+				)
+			},
+		)
+	}
+
+	return query.
 		Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName()).
 		Limit(51).
 		All(spaceCtx)
