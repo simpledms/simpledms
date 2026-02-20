@@ -533,7 +533,7 @@
         {
             "id": "Close preview",
             "message": "Close preview",
-            "translation": "Vorschau schließen",
+            "translation": "Vorschau schliessen",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -915,7 +915,7 @@
         {
             "id": "Greater than",
             "message": "Greater than",
-            "translation": "Größer als",
+            "translation": "Grösser als",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -1724,7 +1724,7 @@
         {
             "id": "Close details",
             "message": "Close details",
-            "translation": "Details schließen",
+            "translation": "Details schliessen",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -4854,7 +4854,7 @@
         {
             "id": "Close dialog",
             "message": "Close dialog",
-            "translation": "Dialog schließen",
+            "translation": "Dialog schliessen",
             "comment": "PopoverTarget:       qq.ID,\nPopoverTargetAction: \"hide\",",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true

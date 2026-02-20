@@ -901,16 +901,16 @@ const deData string = "" + // Size: 16095 bytes
 	"cher?\x02Archiv entpacken\x02Details\x02Dateigrösse\x02MIME-Type\x02SHA-" +
 	"256-Hash\x02Originaler Dateiname\x02Hochgeladen um\x02Version\x02Aktuell" +
 	"e Version hochgeladen am\x02OCR erfolgreich um\x02Gelöscht um\x02Renderi" +
-	"ng fehlgeschlagen\x02Vorschau schließen\x02Details anzeigen\x02Herunterl" +
-	"aden\x02Noch keine Felder zugewiesen.\x02Entfernen\x02Diesen Feldwert en" +
-	"tfernen?\x02Metadaten\x02Tags\x02Info\x02Versionen\x02Datei-Upload\x02Bi" +
-	"tte bestätige, dass die Metadaten der Quelldatei verloren gehen.\x02Quel" +
-	"l- und Zieldatei sind erforderlich.\x02Neue Version aus der Inbox hinzug" +
-	"efügt.\x02Quelle und Ziel müssen unterschiedliche Dateien sein.\x02Datei" +
-	" gehört nicht zum aktuellen Space.\x02Verzeichnisse können nicht zusamme" +
-	"ngeführt werden.\x02Quelldatei ist gelöscht.\x02Quelldatei hat keine Ver" +
-	"sionen.\x02Quellversion konnte nicht gelesen werden.\x02Quelldatei hat k" +
-	"eine gespeicherte Datei.\x02Zielversionen konnten nicht gelesen werden." +
+	"ng fehlgeschlagen\x02Vorschau schliessen\x02Details anzeigen\x02Herunter" +
+	"laden\x02Noch keine Felder zugewiesen.\x02Entfernen\x02Diesen Feldwert e" +
+	"ntfernen?\x02Metadaten\x02Tags\x02Info\x02Versionen\x02Datei-Upload\x02B" +
+	"itte bestätige, dass die Metadaten der Quelldatei verloren gehen.\x02Que" +
+	"ll- und Zieldatei sind erforderlich.\x02Neue Version aus der Inbox hinzu" +
+	"gefügt.\x02Quelle und Ziel müssen unterschiedliche Dateien sein.\x02Date" +
+	"i gehört nicht zum aktuellen Space.\x02Verzeichnisse können nicht zusamm" +
+	"engeführt werden.\x02Quelldatei ist gelöscht.\x02Quelldatei hat keine Ve" +
+	"rsionen.\x02Quellversion konnte nicht gelesen werden.\x02Quelldatei hat " +
+	"keine gespeicherte Datei.\x02Zielversionen konnten nicht gelesen werden." +
 	"\x02Zieldatei konnte nicht aktualisiert werden.\x02Quelldatei ist nicht " +
 	"in der Inbox.\x02Quellversionen konnten nicht entfernt werden.\x02Quelld" +
 	"atei konnte nicht gelöscht werden.\x02Ich verstehe, dass die Metadaten d" +
@@ -924,50 +924,50 @@ const deData string = "" + // Size: 16095 bytes
 	"ion hinzufügen\x02Noch keine Dateien verfügbar.\x02Noch keine Dateien od" +
 	"er Verzeichnisse verfügbar.\x02Lade mehr...\x02Zurück zum übergeordneten" +
 	" Ordner\x02Suche\x02Suche in «%[1]s»\x02Noch keine Felder verfügbar.\x02" +
-	"Keine Felder verfügbar.\x02Enthält\x02Beginnt mit\x02Gleich\x02Größer al" +
-	"s\x02Kleiner als\x02Zwischen\x02«%[1]s» ist markiert\x02«%[1]s» ist nich" +
-	"t markiert\x02Tags | Filter\x02Noch keine Tags verfügbar.\x02Tags verwal" +
-	"ten\x02«%[1]s» erstellt.\x02Verzeichnis öffnen\x02Nur im Ordnermodus erl" +
-	"aubt.\x02Datei öffnen\x02Verschoben nach «%[1]s».\x02Felder | Filter\x02" +
-	"«%[1]s» entfernt.\x02Datei umbenennen\x02Umbenannt zu «%[1]s»\x02Dokume" +
-	"nttyp abgewählt.\x02Dokumenttyp ausgewählt.\x02Keine ZIP-Datei.\x02ZIP-D" +
-	"atei konnte nicht geöffnet werden.\x02Archiv konnte nicht entpackt werde" +
-	"n.\x02ZIP-Datei konnte nicht gelesen werden.\x02Verzeichnisstruktur konn" +
-	"te nicht erstellt werden.\x02Es konnten nicht alle Dateien aus dem Archi" +
-	"v extrahiert werden.\x02Archiv entpackt.\x02Enddatum liegt vor dem Start" +
-	"datum.\x02«%[1]s» Filter aktualisiert.\x02Kein übergeordnetes Verzeichni" +
-	"s angegeben.\x02Datei konnte nicht gelesen werden\x02«%[1]s» hochgeladen" +
-	".\x02Keine Datei bereitgestellt.\x02Für Verzeichnisse können keine Versi" +
-	"onen hochgeladen werden.\x02Neue Version für «%[1]s» hochgeladen.\x02Ver" +
-	"zeichnisse können nicht heruntergeladen werden\x02Datei verschieben\x02D" +
-	"atei nach «%[1]s» verschieben\x02Verzeichnis nach oben\x02Startseite\x02" +
-	"Offene Aufgaben\x02Organisation «%[1]s»\x02Konto «%[1]s»\x02System\x02Ab" +
-	"onnement\x02Nicht initialisiert\x02Bitte warten\x02Die Organisation ist " +
-	"noch nicht initialisiert, bitte warte bis die Initialisierung abgeschlos" +
-	"sen ist.\x02Aktualisieren\x02Space\x02Auswählen\x02Konto löschen\x02Kein" +
-	" Passwort gesetzt\x02Konto\x02Du hast dich mit einem temporären Passwort" +
-	" angemeldet. Bitte setze ein Passwort, um dein Konto zu sichern und die " +
-	"App zu nutzen.\x02Passwort jetzt setzen\x02Aktives temporäres Passwort" +
-	"\x02Dein Konto hat ein aktives temporäres Passwort. Bitte ändere dein Pa" +
-	"sswort oder lösche das temporäre Passwort so bald wie möglich, um dein K" +
-	"onto zu sichern.\x02Noch kein Space verfügbar\x02Du hast keine Berechtig" +
-	"ung, auf einen Space dieser Organisation zuzugreifen.\x02Bitte erstelle " +
-	"einen, um zu beginnen.\x02Spaces verwalten\x02%[1]d Benutzer\x021 Benutz" +
-	"er\x02Benutzer verwalten\x02Die App ist entsperrt und nicht durch eine P" +
-	"assphrase geschützt.\x02Die App ist gesperrt.\x02Passphrase setzen\x02Di" +
-	"e App ist entsperrt und durch eine Passphrase geschützt.\x02App-Status" +
-	"\x02Dashboard\x02In «Spaces»-Ansicht bearbeiten\x02Dokumenttypen\x02Benu" +
-	"tzer\x02Feld «%[1]s» ist diesem Dokumenttyp bereits hinzugefügt.\x02Attr" +
-	"ibut «%[1]s» hinzugefügt.\x02Feldattribut hinzufügen\x02Bitte erstelle z" +
-	"uerst ein Feld.\x02Bearbeiten\x02Listenattribut hinzufügen (Tag-Gruppe)" +
-	"\x02namensgebend\x02Attribut hinzufügen\x02Tag-Gruppe «%[1]s» ist diesem" +
-	" Dokumenttyp bereits hinzugefügt.\x02Attribut «%[1]s» erstellt.\x02Noch " +
-	"keine Tag-Gruppen verfügbar.\x02Bitte erstelle zuerst eine Tag-Gruppe." +
-	"\x02Dokumenttyp hinzufügen\x02Dokumenttyp erstellt.\x02Attribut gelöscht" +
-	".\x02Dokumenttyp gelöscht.\x02Details schließen\x02Feldattribut bearbeit" +
-	"en\x02Attribut aktualisiert.\x02Tag-Attribut bearbeiten\x02Attribut «%[1" +
-	"]s» aktualisiert.\x02Import ist nur für leere Spaces verfügbar.\x02Bitte" +
-	" wähle mindestens einen Dokumenttyp aus.\x02Dokumenttypen importiert." +
+	"Keine Felder verfügbar.\x02Enthält\x02Beginnt mit\x02Gleich\x02Grösser a" +
+	"ls\x02Kleiner als\x02Zwischen\x02«%[1]s» ist markiert\x02«%[1]s» ist nic" +
+	"ht markiert\x02Tags | Filter\x02Noch keine Tags verfügbar.\x02Tags verwa" +
+	"lten\x02«%[1]s» erstellt.\x02Verzeichnis öffnen\x02Nur im Ordnermodus er" +
+	"laubt.\x02Datei öffnen\x02Verschoben nach «%[1]s».\x02Felder | Filter" +
+	"\x02«%[1]s» entfernt.\x02Datei umbenennen\x02Umbenannt zu «%[1]s»\x02Dok" +
+	"umenttyp abgewählt.\x02Dokumenttyp ausgewählt.\x02Keine ZIP-Datei.\x02ZI" +
+	"P-Datei konnte nicht geöffnet werden.\x02Archiv konnte nicht entpackt we" +
+	"rden.\x02ZIP-Datei konnte nicht gelesen werden.\x02Verzeichnisstruktur k" +
+	"onnte nicht erstellt werden.\x02Es konnten nicht alle Dateien aus dem Ar" +
+	"chiv extrahiert werden.\x02Archiv entpackt.\x02Enddatum liegt vor dem St" +
+	"artdatum.\x02«%[1]s» Filter aktualisiert.\x02Kein übergeordnetes Verzeic" +
+	"hnis angegeben.\x02Datei konnte nicht gelesen werden\x02«%[1]s» hochgela" +
+	"den.\x02Keine Datei bereitgestellt.\x02Für Verzeichnisse können keine Ve" +
+	"rsionen hochgeladen werden.\x02Neue Version für «%[1]s» hochgeladen.\x02" +
+	"Verzeichnisse können nicht heruntergeladen werden\x02Datei verschieben" +
+	"\x02Datei nach «%[1]s» verschieben\x02Verzeichnis nach oben\x02Startseit" +
+	"e\x02Offene Aufgaben\x02Organisation «%[1]s»\x02Konto «%[1]s»\x02System" +
+	"\x02Abonnement\x02Nicht initialisiert\x02Bitte warten\x02Die Organisatio" +
+	"n ist noch nicht initialisiert, bitte warte bis die Initialisierung abge" +
+	"schlossen ist.\x02Aktualisieren\x02Space\x02Auswählen\x02Konto löschen" +
+	"\x02Kein Passwort gesetzt\x02Konto\x02Du hast dich mit einem temporären " +
+	"Passwort angemeldet. Bitte setze ein Passwort, um dein Konto zu sichern " +
+	"und die App zu nutzen.\x02Passwort jetzt setzen\x02Aktives temporäres Pa" +
+	"sswort\x02Dein Konto hat ein aktives temporäres Passwort. Bitte ändere d" +
+	"ein Passwort oder lösche das temporäre Passwort so bald wie möglich, um " +
+	"dein Konto zu sichern.\x02Noch kein Space verfügbar\x02Du hast keine Ber" +
+	"echtigung, auf einen Space dieser Organisation zuzugreifen.\x02Bitte ers" +
+	"telle einen, um zu beginnen.\x02Spaces verwalten\x02%[1]d Benutzer\x021 " +
+	"Benutzer\x02Benutzer verwalten\x02Die App ist entsperrt und nicht durch " +
+	"eine Passphrase geschützt.\x02Die App ist gesperrt.\x02Passphrase setzen" +
+	"\x02Die App ist entsperrt und durch eine Passphrase geschützt.\x02App-St" +
+	"atus\x02Dashboard\x02In «Spaces»-Ansicht bearbeiten\x02Dokumenttypen\x02" +
+	"Benutzer\x02Feld «%[1]s» ist diesem Dokumenttyp bereits hinzugefügt.\x02" +
+	"Attribut «%[1]s» hinzugefügt.\x02Feldattribut hinzufügen\x02Bitte erstel" +
+	"le zuerst ein Feld.\x02Bearbeiten\x02Listenattribut hinzufügen (Tag-Grup" +
+	"pe)\x02namensgebend\x02Attribut hinzufügen\x02Tag-Gruppe «%[1]s» ist die" +
+	"sem Dokumenttyp bereits hinzugefügt.\x02Attribut «%[1]s» erstellt.\x02No" +
+	"ch keine Tag-Gruppen verfügbar.\x02Bitte erstelle zuerst eine Tag-Gruppe" +
+	".\x02Dokumenttyp hinzufügen\x02Dokumenttyp erstellt.\x02Attribut gelösch" +
+	"t.\x02Dokumenttyp gelöscht.\x02Details schliessen\x02Feldattribut bearbe" +
+	"iten\x02Attribut aktualisiert.\x02Tag-Attribut bearbeiten\x02Attribut «%" +
+	"[1]s» aktualisiert.\x02Import ist nur für leere Spaces verfügbar.\x02Bit" +
+	"te wähle mindestens einen Dokumenttyp aus.\x02Dokumenttypen importiert." +
 	"\x02Aus der Bibliothek importieren\x02Importieren\x02Noch keine Dokument" +
 	"typen in der Bibliothek verfügbar.\x02Wähle Dokumenttypen zum Importiere" +
 	"n:\x02ID konnte nicht in eine Ganzzahl umgewandelt werden.\x02Dokumentty" +
@@ -1117,9 +1117,9 @@ const deData string = "" + // Size: 16095 bytes
 	"zt, aber nicht gültig.\x02Cookie gesetzt, aber leer.\x02Wartungsmodus" +
 	"\x02Der Wartungsmodus ist aktiviert. Bitte warte, bis die App wieder ber" +
 	"eit ist.\x02Schliessen\x02Ausloggen\x02Über SimpleDMS\x02Hauptmenü öffne" +
-	"n\x02Dialog schließen\x02Vorschlag\x02optional\x02erforderlich\x02Auth-C" +
-	"ookie bereits gesetzt.\x02Session-ID konnte nicht generiert werden.\x02D" +
-	"u darfst nicht auf die angeforderte Ressource zugreifen."
+	"n\x02Dialog schliessen\x02Vorschlag\x02optional\x02erforderlich\x02Auth-" +
+	"Cookie bereits gesetzt.\x02Session-ID konnte nicht generiert werden.\x02" +
+	"Du darfst nicht auf die angeforderte Ressource zugreifen."
 
 var enIndex = []uint32{ // 644 elements
 	// Entry 0 - 1F
@@ -2611,4 +2611,4 @@ const itData string = "" + // Size: 15591 bytes
 	"ie di autenticazione già impostato.\x02Impossibile generare il valore de" +
 	"lla sessione.\x02Non sei autorizzato ad accedere alla risorsa richiesta."
 
-	// Total table size 77275 bytes (75KiB); checksum: C1E7F9A5
+	// Total table size 77275 bytes (75KiB); checksum: D0DCF7FD

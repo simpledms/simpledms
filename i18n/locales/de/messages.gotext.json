@@ -294,7 +294,7 @@
         {
             "id": "Additional terms under GNU Affero General Public License version 3 section 7",
             "message": "Additional terms under GNU Affero General Public License version 3 section 7",
-            "translation": "Zusätzliche Bedingungen gemäß GNU Affero General Public License Version 3 Abschnitt 7",
+            "translation": "Zusätzliche Bedingungen gemäss GNU Affero General Public License Version 3 Abschnitt 7",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -908,21 +908,21 @@
         {
             "id": "Close details",
             "message": "Close details",
-            "translation": "Details schließen",
+            "translation": "Details schliessen",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Close dialog",
             "message": "Close dialog",
-            "translation": "Dialog schließen",
+            "translation": "Dialog schliessen",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Close preview",
             "message": "Close preview",
-            "translation": "Vorschau schließen",
+            "translation": "Vorschau schliessen",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1951,7 +1951,7 @@
         {
             "id": "Greater than",
             "message": "Greater than",
-            "translation": "Größer als",
+            "translation": "Grösser als",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -2048,7 +2048,7 @@
         {
             "id": "In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):",
             "message": "In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):",
-            "translation": "Gemäß Abschnitt 7(b) der GNU Affero General Public License Version 3 werden die folgenden zusätzlichen Bedingungen hinzugefügt, um die Namensnennungen gemäß Abschnitt 5(d) zu bewahren:",
+            "translation": "Gemäss Abschnitt 7(b) der GNU Affero General Public License Version 3 werden die folgenden zusätzlichen Bedingungen hinzugefügt, um die Namensnennungen gemäss Abschnitt 5(d) zu bewahren:",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3378,7 +3378,7 @@
         {
             "id": "Size",
             "message": "Size",
-            "translation": "Größe",
+            "translation": "Grösse",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -3775,7 +3775,7 @@
         {
             "id": "The attribution page must not be removed or modified so as to delete or obscure the required attribution notices. However, the attribution page may be extended, including by adding:",
             "message": "The attribution page must not be removed or modified so as to delete or obscure the required attribution notices. However, the attribution page may be extended, including by adding:",
-            "translation": "Die Attributionsseite darf nicht entfernt oder so verändert werden, dass die erforderlichen Namensnennungen gelöscht oder verschleiert werden. Die Attributionsseite darf jedoch erweitert werden, einschließlich durch Hinzufügen von:",
+            "translation": "Die Attributionsseite darf nicht entfernt oder so verändert werden, dass die erforderlichen Namensnennungen gelöscht oder verschleiert werden. Die Attributionsseite darf jedoch erweitert werden, einschliesslich durch Hinzufügen von:",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3892,7 +3892,7 @@
         {
             "id": "This requirement does not apply where the Program is used exclusively without an interactive user interface.",
             "message": "This requirement does not apply where the Program is used exclusively without an interactive user interface.",
-            "translation": "Diese Anforderung gilt nicht, wenn das Programm ausschließlich ohne interaktive Benutzeroberfläche verwendet wird.",
+            "translation": "Diese Anforderung gilt nicht, wenn das Programm ausschliesslich ohne interaktive Benutzeroberfläche verwendet wird.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
