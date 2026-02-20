@@ -46,15 +46,23 @@ func NewS3FileSystem(
 	bucketName string,
 	fileSystem *FileSystem,
 	disableFileEncryption bool,
-	isSaaSModeEnabled bool,
+	storageQuota *StorageQuota,
 ) *S3FileSystem {
+	if storageQuota == nil {
+		storageQuota = NewStorageQuota(false)
+	}
+
 	return &S3FileSystem{
 		FileSystem:            fileSystem,
 		client:                client,
 		bucketName:            bucketName,
 		disableFileEncryption: disableFileEncryption,
-		storageQuota:          NewStorageQuota(isSaaSModeEnabled),
+		storageQuota:          storageQuota,
 	}
+}
+
+func (qq *S3FileSystem) StorageQuota() *StorageQuota {
+	return qq.storageQuota
 }
 
 // caller has to close io.ReadCloser

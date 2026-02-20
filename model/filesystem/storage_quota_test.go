@@ -116,7 +116,7 @@ func TestStorageQuotaLimitBytesForPlan(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			actual := storageQuota.limitBytesForPlan(tt.tenantPlan, tt.activeUserCount)
+			actual := storageQuota.LimitBytesForPlan(tt.tenantPlan, tt.activeUserCount)
 			if actual != tt.expected {
 				t.Fatalf("expected %d, got %d", tt.expected, actual)
 			}
@@ -128,7 +128,7 @@ func TestStorageQuotaLimitBytesForPlanCapsAtMaxInt64(t *testing.T) {
 	storageQuota := NewStorageQuota(true)
 
 	overflowActiveUsers := int(math.MaxInt64/tenantQuotaProPerUserBytes) + 1
-	actual := storageQuota.limitBytesForPlan(plan.Pro, overflowActiveUsers)
+	actual := storageQuota.LimitBytesForPlan(plan.Pro, overflowActiveUsers)
 	if actual != math.MaxInt64 {
 		t.Fatalf("expected %d, got %d", int64(math.MaxInt64), actual)
 	}
@@ -238,7 +238,7 @@ func TestStorageQuotaExceedsStorageLimitAcrossPlans(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			limitBytes := storageQuota.limitBytesForPlan(tt.tenantPlan, tt.activeUserCount)
+			limitBytes := storageQuota.LimitBytesForPlan(tt.tenantPlan, tt.activeUserCount)
 			actual := storageQuota.exceedsStorageLimit(
 				tt.usedBytes,
 				tt.incomingUploadSize,

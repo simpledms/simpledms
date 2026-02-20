@@ -129,14 +129,20 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 	i18nx := i18n.NewI18n()
 
 	fileSystem := filesystem.NewFileSystem(metaPath)
-	s3FileSystem := filesystem.NewS3FileSystem(nil, "", fileSystem, false, isSaaSModeEnabled)
+	s3FileSystem := filesystem.NewS3FileSystem(
+		nil,
+		"",
+		fileSystem,
+		false,
+		filesystem.NewStorageQuota(isSaaSModeEnabled),
+	)
 	if s3Config != nil {
 		s3FileSystem = filesystem.NewS3FileSystem(
 			s3Config.client,
 			s3Config.bucketName,
 			fileSystem,
 			s3Config.disableEncryption,
-			isSaaSModeEnabled,
+			filesystem.NewStorageQuota(isSaaSModeEnabled),
 		)
 	}
 

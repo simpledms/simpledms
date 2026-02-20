@@ -64,7 +64,7 @@ func (qq *StorageQuota) EnsureTenantStorageLimit(ctx ctxx.Context, incomingUploa
 func (qq *StorageQuota) tenantStorageLimitBytes(ctx ctxx.Context) (int64, error) {
 	tenantPlan := ctx.TenantCtx().Tenant.Plan
 	if !qq.planNeedsActiveUserCount(tenantPlan) {
-		return qq.limitBytesForPlan(tenantPlan, 0), nil
+		return qq.LimitBytesForPlan(tenantPlan, 0), nil
 	}
 
 	activeUserCount, err := qq.activeTenantUserCount(ctx)
@@ -72,7 +72,7 @@ func (qq *StorageQuota) tenantStorageLimitBytes(ctx ctxx.Context) (int64, error)
 		return 0, err
 	}
 
-	return qq.limitBytesForPlan(tenantPlan, activeUserCount), nil
+	return qq.LimitBytesForPlan(tenantPlan, activeUserCount), nil
 }
 
 func (qq *StorageQuota) activeTenantUserCount(ctx ctxx.Context) (int, error) {
@@ -97,7 +97,7 @@ func (qq *StorageQuota) planNeedsActiveUserCount(tenantPlan plan.Plan) bool {
 	return tenantPlan == plan.Pro
 }
 
-func (qq *StorageQuota) limitBytesForPlan(tenantPlan plan.Plan, activeUserCount int) int64 {
+func (qq *StorageQuota) LimitBytesForPlan(tenantPlan plan.Plan, activeUserCount int) int64 {
 	if tenantPlan == plan.Trial {
 		return tenantQuotaTrialBytes
 	}

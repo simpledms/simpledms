@@ -746,7 +746,7 @@ func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *modelmain.System
 			systemConfig.S3().S3BucketName,
 			fileSystem,
 			disableFileEncryption,
-			qq.isSaaSModeEnabled,
+			filesystem.NewStorageQuota(qq.isSaaSModeEnabled),
 		),
 		factory,
 		fileRepo,
