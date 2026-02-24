@@ -7,6 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/common/language"
@@ -60,12 +61,15 @@ func (qq *EditAccountCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		return err
 	}
 
-	if ctx.MainCtx().Account.PublicID.String() != data.AccountID {
-		return e.NewHTTPErrorf(http.StatusForbidden, "You cannot edit another account.")
-	}
-
 	// querying instead of using MainCtx().Account is more robust against future changes
-	accountx := ctx.MainCtx().MainTx.Account.Query().Where(account.PublicID(entx.NewCIText(data.AccountID))).OnlyX(ctx)
+	accountx, err := ctx.MainCtx().MainTx.Account.Query().Where(account.PublicID(entx.NewCIText(data.AccountID))).Only(ctx)
+	if err != nil {
+		if entmain.IsNotFound(err) {
+			return e.NewHTTPErrorf(http.StatusForbidden, "You cannot edit another account.")
+		}
+
+		return err
+	}
 
 	query := accountx.Update().SetLanguage(data.Language)
 	if accountx.SubscribedToNewsletterAt == nil && data.SubscribeToNewsletter {
