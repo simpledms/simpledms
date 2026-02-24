@@ -13,7 +13,6 @@ type Actions struct {
 	ChangePasswordCmd         *ChangePasswordCmd
 	SetInitialPasswordCmd     *SetInitialPasswordCmd
 	ClearTemporaryPasswordCmd *ClearTemporaryPasswordCmd
-	DeleteAccountCmd          *DeleteAccountCmd
 	EditAccountCmd            *EditAccountCmd
 }
 
@@ -28,7 +27,6 @@ func NewActions(infra *common.Infra) *Actions {
 		ChangePasswordCmd:         NewChangePasswordCmd(infra, actions),
 		SetInitialPasswordCmd:     NewSetInitialPasswordCmd(infra, actions),
 		ClearTemporaryPasswordCmd: NewClearTemporaryPasswordCmd(infra, actions),
-		DeleteAccountCmd:          NewDeleteAccountCmd(infra, actions),
 		EditAccountCmd:            NewEditAccountCmd(infra, actions),
 	}
 

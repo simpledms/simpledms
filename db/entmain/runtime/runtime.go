@@ -3,6 +3,7 @@
 package runtime
 
 import (
+	"context"
 	"time"
 
 	"github.com/simpledms/simpledms/db/entmain/account"
@@ -14,6 +15,9 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/entx"
+
+	"entgo.io/ent"
+	"entgo.io/ent/privacy"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -21,8 +25,18 @@ import (
 // to their package variables.
 func init() {
 	accountMixin := schema.Account{}.Mixin()
+	account.Policy = privacy.NewPolicies(schema.Account{})
+	account.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := account.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	accountMixinHooks1 := accountMixin[1].Hooks()
-	account.Hooks[0] = accountMixinHooks1[0]
+
+	account.Hooks[1] = accountMixinHooks1[0]
 	accountMixinInters1 := accountMixin[1].Interceptors()
 	account.Interceptors[0] = accountMixinInters1[0]
 	accountMixinFields0 := accountMixin[0].Fields()
@@ -288,6 +302,10 @@ func init() {
 	tenantaccountassignmentDescIsDefault := tenantaccountassignmentFields[4].Descriptor()
 	// tenantaccountassignment.DefaultIsDefault holds the default value on creation for the is_default field.
 	tenantaccountassignment.DefaultIsDefault = tenantaccountassignmentDescIsDefault.Default.(bool)
+	// tenantaccountassignmentDescIsOwningTenant is the schema descriptor for is_owning_tenant field.
+	tenantaccountassignmentDescIsOwningTenant := tenantaccountassignmentFields[5].Descriptor()
+	// tenantaccountassignment.DefaultIsOwningTenant holds the default value on creation for the is_owning_tenant field.
+	tenantaccountassignment.DefaultIsOwningTenant = tenantaccountassignmentDescIsOwningTenant.Default.(bool)
 }
 
 const (

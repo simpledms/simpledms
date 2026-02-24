@@ -9,12 +9,13 @@ import (
 
 // TODO move to internal? was not possible because of circular deps...
 type Infra struct {
-	renderer       *ui.Renderer
-	metaPath       string
-	fileSystem     *filesystem.S3FileSystem // TODO is this a good location?
-	factory        *Factory
-	FileRepo       *FileRepository
-	pluginRegistry *pluginx.Registry
+	renderer                             *ui.Renderer
+	metaPath                             string
+	fileSystem                           *filesystem.S3FileSystem // TODO is this a good location?
+	factory                              *Factory
+	FileRepo                             *FileRepository
+	pluginRegistry                       *pluginx.Registry
+	manageTenantsDeleteTenantCmdEndpoint string
 	// nilableMainIdentity *age.X25519Identity
 	systemConfig *modelmain.SystemConfig
 	// no minio.Client, seems to risky for misuse; inject on demand
@@ -32,13 +33,14 @@ func NewInfra(
 	systemConfig *modelmain.SystemConfig,
 ) *Infra {
 	return &Infra{
-		renderer:       renderer,
-		metaPath:       metaPath,
-		fileSystem:     fileSystem,
-		factory:        factory,
-		FileRepo:       fileRepo,
-		pluginRegistry: pluginRegistry,
-		systemConfig:   systemConfig,
+		renderer:                             renderer,
+		metaPath:                             metaPath,
+		fileSystem:                           fileSystem,
+		factory:                              factory,
+		FileRepo:                             fileRepo,
+		pluginRegistry:                       pluginRegistry,
+		manageTenantsDeleteTenantCmdEndpoint: "",
+		systemConfig:                         systemConfig,
 		// nilableMainIdentity: nilableMainIdentity,
 	}
 }
@@ -68,6 +70,14 @@ func (qq *Infra) SystemConfig() *modelmain.SystemConfig {
 
 func (qq *Infra) PluginRegistry() *pluginx.Registry {
 	return qq.pluginRegistry
+}
+
+func (qq *Infra) ManageTenantsDeleteTenantCmdEndpoint() string {
+	return qq.manageTenantsDeleteTenantCmdEndpoint
+}
+
+func (qq *Infra) SetManageTenantsDeleteTenantCmdEndpoint(endpoint string) {
+	qq.manageTenantsDeleteTenantCmdEndpoint = endpoint
 }
 
 /*func (qq *Infra) NilableMainIdentity() *age.X25519Identity {

@@ -9,6 +9,7 @@ type Actions struct {
 	ManageUsersOfTenantPage *ManageUsersOfTenantPage
 	UserListPartial         *UserListPartial
 	CreateUserCmd           *CreateUserCmd
+	DeleteUserCmd           *DeleteUserCmd
 }
 
 func NewActions(infra *common.Infra) *Actions {
@@ -18,6 +19,7 @@ func NewActions(infra *common.Infra) *Actions {
 		ManageUsersOfTenantPage: NewManageUsersOfTenantPage(infra, actions),
 		UserListPartial:         NewUserListPartial(infra, actions),
 		CreateUserCmd:           NewCreateUserCmd(infra, actions),
+		DeleteUserCmd:           NewDeleteUserCmd(infra, actions),
 	}
 
 	return actions

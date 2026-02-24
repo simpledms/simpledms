@@ -232,6 +232,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tenantaccountassignment.FieldAccountID:       {Type: field.TypeInt64, Column: tenantaccountassignment.FieldAccountID},
 			tenantaccountassignment.FieldIsContactPerson: {Type: field.TypeBool, Column: tenantaccountassignment.FieldIsContactPerson},
 			tenantaccountassignment.FieldIsDefault:       {Type: field.TypeBool, Column: tenantaccountassignment.FieldIsDefault},
+			tenantaccountassignment.FieldIsOwningTenant:  {Type: field.TypeBool, Column: tenantaccountassignment.FieldIsOwningTenant},
 			tenantaccountassignment.FieldRole:            {Type: field.TypeEnum, Column: tenantaccountassignment.FieldRole},
 			tenantaccountassignment.FieldExpiresAt:       {Type: field.TypeTime, Column: tenantaccountassignment.FieldExpiresAt},
 		},
@@ -1675,6 +1676,11 @@ func (f *TenantAccountAssignmentFilter) WhereIsContactPerson(p entql.BoolP) {
 // WhereIsDefault applies the entql bool predicate on the is_default field.
 func (f *TenantAccountAssignmentFilter) WhereIsDefault(p entql.BoolP) {
 	f.Where(p.Field(tenantaccountassignment.FieldIsDefault))
+}
+
+// WhereIsOwningTenant applies the entql bool predicate on the is_owning_tenant field.
+func (f *TenantAccountAssignmentFilter) WhereIsOwningTenant(p entql.BoolP) {
+	f.Where(p.Field(tenantaccountassignment.FieldIsOwningTenant))
 }
 
 // WhereRole applies the entql string predicate on the role field.

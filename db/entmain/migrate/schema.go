@@ -295,6 +295,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "is_contact_person", Type: field.TypeBool, Default: false},
 		{Name: "is_default", Type: field.TypeBool, Default: false},
+		{Name: "is_owning_tenant", Type: field.TypeBool, Default: false},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"User", "Owner"}},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
@@ -310,25 +311,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tenant_account_assignments_accounts_creator",
-				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[7]},
-				RefColumns: []*schema.Column{AccountsColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "tenant_account_assignments_accounts_updater",
 				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[8]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "tenant_account_assignments_tenants_tenant",
+				Symbol:     "tenant_account_assignments_accounts_updater",
 				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[9]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "tenant_account_assignments_tenants_tenant",
+				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[10]},
 				RefColumns: []*schema.Column{TenantsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "tenant_account_assignments_accounts_account",
-				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[10]},
+				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[11]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -337,14 +338,22 @@ var (
 			{
 				Name:    "tenantaccountassignment_tenant_id_account_id",
 				Unique:  true,
-				Columns: []*schema.Column{TenantAccountAssignmentsColumns[9], TenantAccountAssignmentsColumns[10]},
+				Columns: []*schema.Column{TenantAccountAssignmentsColumns[10], TenantAccountAssignmentsColumns[11]},
 			},
 			{
 				Name:    "tenantaccountassignment_account_id_is_default",
 				Unique:  true,
-				Columns: []*schema.Column{TenantAccountAssignmentsColumns[10], TenantAccountAssignmentsColumns[4]},
+				Columns: []*schema.Column{TenantAccountAssignmentsColumns[11], TenantAccountAssignmentsColumns[4]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`is_default` = true",
+				},
+			},
+			{
+				Name:    "tenantaccountassignment_account_id_is_owning_tenant",
+				Unique:  true,
+				Columns: []*schema.Column{TenantAccountAssignmentsColumns[11], TenantAccountAssignmentsColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`is_owning_tenant` = true",
 				},
 			},
 		},

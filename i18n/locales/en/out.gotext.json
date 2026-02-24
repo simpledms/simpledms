@@ -87,16 +87,6 @@
             "translation": "Temporary password cleared successfully."
         },
         {
-            "id": "You are not allowed to delete this account.",
-            "message": "You are not allowed to delete this account.",
-            "translation": ""
-        },
-        {
-            "id": "Account deleted.",
-            "message": "Account deleted.",
-            "translation": ""
-        },
-        {
             "id": "Edit account",
             "message": "Edit account",
             "translation": ""
@@ -155,6 +145,16 @@
             "id": "Invalid credentials. Please try again.",
             "message": "Invalid credentials. Please try again.",
             "translation": "Invalid credentials. Please try again."
+        },
+        {
+            "id": "Could not verify organization access.",
+            "message": "Could not verify organization access.",
+            "translation": ""
+        },
+        {
+            "id": "Your organization is no longer active. Please contact support.",
+            "message": "Your organization is no longer active. Please contact support.",
+            "translation": ""
         },
         {
             "id": "Logged in successfully.",
@@ -1016,6 +1016,29 @@
             ]
         },
         {
+            "id": "Account «{String}», owned by «{OwningTenantName}»",
+            "message": "Account «{String}», owned by «{OwningTenantName}»",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "String",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "ctx.MainCtx().Account.Email.String()"
+                },
+                {
+                    "id": "OwningTenantName",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "owningTenantName"
+                }
+            ]
+        },
+        {
             "id": "System",
             "message": "System",
             "translation": "",
@@ -1056,11 +1079,6 @@
             "message": "Select",
             "translation": "",
             "comment": "TODO Browse, Open, Switch or activate? or Select?"
-        },
-        {
-            "id": "Delete account",
-            "message": "Delete account",
-            "translation": ""
         },
         {
             "id": "No password set",
@@ -1135,6 +1153,16 @@
         {
             "id": "Manage users",
             "message": "Manage users",
+            "translation": ""
+        },
+        {
+            "id": "Delete organization",
+            "message": "Delete organization",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
             "translation": ""
         },
         {
@@ -1683,8 +1711,43 @@
             "translation": ""
         },
         {
+            "id": "You are not allowed to delete users. No organization selected.",
+            "message": "You are not allowed to delete users. No organization selected.",
+            "translation": ""
+        },
+        {
+            "id": "You are not allowed to delete users because you are not the owner.",
+            "message": "You are not allowed to delete users because you are not the owner.",
+            "translation": ""
+        },
+        {
+            "id": "You cannot delete your own user in organization management.",
+            "message": "You cannot delete your own user in organization management.",
+            "translation": ""
+        },
+        {
+            "id": "User removed from organization and account deleted globally.",
+            "message": "User removed from organization and account deleted globally.",
+            "translation": ""
+        },
+        {
+            "id": "User removed from organization.",
+            "message": "User removed from organization.",
+            "translation": ""
+        },
+        {
             "id": "Manage users of tenant",
             "message": "Manage users of tenant",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization only.",
+            "message": "Are you sure? This user will be removed from this organization only.",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
+            "message": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
             "translation": ""
         },
         {
@@ -1692,6 +1755,39 @@
             "message": "Add a new user",
             "translation": "",
             "comment": "TODO Create or add? system or real world perspective?"
+        },
+        {
+            "id": "Member account",
+            "message": "Member account",
+            "translation": ""
+        },
+        {
+            "id": "Owned account",
+            "message": "Owned account",
+            "translation": ""
+        },
+        {
+            "id": "{NameSecondLine} - {OwnershipText}",
+            "message": "{NameSecondLine} - {OwnershipText}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "NameSecondLine",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(userm.NameSecondLine())"
+                },
+                {
+                    "id": "OwnershipText",
+                    "string": "%[2]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 2,
+                    "expr": "ownershipText"
+                }
+            ]
         },
         {
             "id": "Upload",
@@ -2789,6 +2885,11 @@
             "id": "Accept privacy policy",
             "message": "Accept privacy policy",
             "translation": ""
+        },
+        {
+            "id": "Registration successful, please check your emails for your password.",
+            "message": "Registration successful, please check your emails for your password.",
+            "translation": "Registration successful, please check your emails for your password."
         },
         {
             "id": "Imprint",

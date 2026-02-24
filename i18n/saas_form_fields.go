@@ -14,4 +14,5 @@ func saasFormFieldsGotextHelper() {
 	pp.Sprintf("Country")
 	pp.Sprintf("Accept terms of service")
 	pp.Sprintf("Accept privacy policy")
+	pp.Sprintf("Registration successful, please check your emails for your password.")
 }

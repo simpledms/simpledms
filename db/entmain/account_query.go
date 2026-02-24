@@ -5,6 +5,7 @@ package entmain
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -473,6 +474,12 @@ func (_q *AccountQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
+	}
+	if account.Policy == nil {
+		return errors.New("entmain: uninitialized account.Policy (forgotten import entmain/runtime?)")
+	}
+	if err := account.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
 	}
 	return nil
 }

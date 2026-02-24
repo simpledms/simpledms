@@ -10156,6 +10156,7 @@ type TenantAccountAssignmentMutation struct {
 	updated_at        *time.Time
 	is_contact_person *bool
 	is_default        *bool
+	is_owning_tenant  *bool
 	role              *tenantrole.TenantRole
 	expires_at        *time.Time
 	clearedFields     map[string]struct{}
@@ -10590,6 +10591,42 @@ func (m *TenantAccountAssignmentMutation) ResetIsDefault() {
 	m.is_default = nil
 }
 
+// SetIsOwningTenant sets the "is_owning_tenant" field.
+func (m *TenantAccountAssignmentMutation) SetIsOwningTenant(b bool) {
+	m.is_owning_tenant = &b
+}
+
+// IsOwningTenant returns the value of the "is_owning_tenant" field in the mutation.
+func (m *TenantAccountAssignmentMutation) IsOwningTenant() (r bool, exists bool) {
+	v := m.is_owning_tenant
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsOwningTenant returns the old "is_owning_tenant" field's value of the TenantAccountAssignment entity.
+// If the TenantAccountAssignment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantAccountAssignmentMutation) OldIsOwningTenant(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsOwningTenant is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsOwningTenant requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsOwningTenant: %w", err)
+	}
+	return oldValue.IsOwningTenant, nil
+}
+
+// ResetIsOwningTenant resets all changes to the "is_owning_tenant" field.
+func (m *TenantAccountAssignmentMutation) ResetIsOwningTenant() {
+	m.is_owning_tenant = nil
+}
+
 // SetRole sets the "role" field.
 func (m *TenantAccountAssignmentMutation) SetRole(tr tenantrole.TenantRole) {
 	m.role = &tr
@@ -10843,7 +10880,7 @@ func (m *TenantAccountAssignmentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TenantAccountAssignmentMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, tenantaccountassignment.FieldCreatedAt)
 	}
@@ -10867,6 +10904,9 @@ func (m *TenantAccountAssignmentMutation) Fields() []string {
 	}
 	if m.is_default != nil {
 		fields = append(fields, tenantaccountassignment.FieldIsDefault)
+	}
+	if m.is_owning_tenant != nil {
+		fields = append(fields, tenantaccountassignment.FieldIsOwningTenant)
 	}
 	if m.role != nil {
 		fields = append(fields, tenantaccountassignment.FieldRole)
@@ -10898,6 +10938,8 @@ func (m *TenantAccountAssignmentMutation) Field(name string) (ent.Value, bool) {
 		return m.IsContactPerson()
 	case tenantaccountassignment.FieldIsDefault:
 		return m.IsDefault()
+	case tenantaccountassignment.FieldIsOwningTenant:
+		return m.IsOwningTenant()
 	case tenantaccountassignment.FieldRole:
 		return m.Role()
 	case tenantaccountassignment.FieldExpiresAt:
@@ -10927,6 +10969,8 @@ func (m *TenantAccountAssignmentMutation) OldField(ctx context.Context, name str
 		return m.OldIsContactPerson(ctx)
 	case tenantaccountassignment.FieldIsDefault:
 		return m.OldIsDefault(ctx)
+	case tenantaccountassignment.FieldIsOwningTenant:
+		return m.OldIsOwningTenant(ctx)
 	case tenantaccountassignment.FieldRole:
 		return m.OldRole(ctx)
 	case tenantaccountassignment.FieldExpiresAt:
@@ -10995,6 +11039,13 @@ func (m *TenantAccountAssignmentMutation) SetField(name string, value ent.Value)
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsDefault(v)
+		return nil
+	case tenantaccountassignment.FieldIsOwningTenant:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsOwningTenant(v)
 		return nil
 	case tenantaccountassignment.FieldRole:
 		v, ok := value.(tenantrole.TenantRole)
@@ -11106,6 +11157,9 @@ func (m *TenantAccountAssignmentMutation) ResetField(name string) error {
 		return nil
 	case tenantaccountassignment.FieldIsDefault:
 		m.ResetIsDefault()
+		return nil
+	case tenantaccountassignment.FieldIsOwningTenant:
+		m.ResetIsOwningTenant()
 		return nil
 	case tenantaccountassignment.FieldRole:
 		m.ResetRole()

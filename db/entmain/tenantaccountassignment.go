@@ -36,6 +36,8 @@ type TenantAccountAssignment struct {
 	IsContactPerson bool `json:"is_contact_person,omitempty"`
 	// IsDefault holds the value of the "is_default" field.
 	IsDefault bool `json:"is_default,omitempty"`
+	// IsOwningTenant holds the value of the "is_owning_tenant" field.
+	IsOwningTenant bool `json:"is_owning_tenant,omitempty"`
 	// Role holds the value of the "role" field.
 	Role tenantrole.TenantRole `json:"role,omitempty"`
 	// ExpiresAt holds the value of the "expires_at" field.
@@ -110,7 +112,7 @@ func (*TenantAccountAssignment) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case tenantaccountassignment.FieldIsContactPerson, tenantaccountassignment.FieldIsDefault:
+		case tenantaccountassignment.FieldIsContactPerson, tenantaccountassignment.FieldIsDefault, tenantaccountassignment.FieldIsOwningTenant:
 			values[i] = new(sql.NullBool)
 		case tenantaccountassignment.FieldID, tenantaccountassignment.FieldCreatedBy, tenantaccountassignment.FieldUpdatedBy, tenantaccountassignment.FieldTenantID, tenantaccountassignment.FieldAccountID:
 			values[i] = new(sql.NullInt64)
@@ -186,6 +188,12 @@ func (_m *TenantAccountAssignment) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field is_default", values[i])
 			} else if value.Valid {
 				_m.IsDefault = value.Bool
+			}
+		case tenantaccountassignment.FieldIsOwningTenant:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_owning_tenant", values[i])
+			} else if value.Valid {
+				_m.IsOwningTenant = value.Bool
 			}
 		case tenantaccountassignment.FieldRole:
 			if value, ok := values[i].(*tenantrole.TenantRole); !ok {
@@ -279,6 +287,9 @@ func (_m *TenantAccountAssignment) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_default=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IsDefault))
+	builder.WriteString(", ")
+	builder.WriteString("is_owning_tenant=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsOwningTenant))
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Role))

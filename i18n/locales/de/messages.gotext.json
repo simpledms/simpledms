@@ -3012,10 +3012,10 @@
             "fuzzy": true
         },
         {
-            "id": "Registration successful, please check your email for your password.",
-            "message": "Registration successful, please check your email for your password.",
-            "translation": "Registrierung erfolgreich, bitte überprüfe deine E-Mail für dein Passwort.",
-            "translatorComment": "Translated from English by Junie",
+            "id": "Registration successful, please check your emails for your password.",
+            "message": "Registration successful, please check your emails for your password.",
+            "translation": "Registrierung erfolgreich, bitte überprüfe deine E-Mails für dein Passwort.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -5445,6 +5445,265 @@
             "id": "Person",
             "message": "Person",
             "translation": "Person",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete organization",
+            "message": "Delete organization",
+            "translation": "Organisation löschen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This organization will be deleted.",
+            "message": "Are you sure? This organization will be deleted.",
+            "translation": "Bist du sicher? Diese Organisation wird gelöscht.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not verify organization access.",
+            "message": "Could not verify organization access.",
+            "translation": "Der Organisationszugriff konnte nicht überprüft werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Your organization is no longer active. Please contact support.",
+            "message": "Your organization is no longer active. Please contact support.",
+            "translation": "Deine Organisation ist nicht mehr aktiv. Bitte kontaktiere den Support.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot delete your account while you still belong to an active organization.",
+            "message": "You cannot delete your account while you still belong to an active organization.",
+            "translation": "Du kannst dein Konto nicht löschen, solange du noch zu einer aktiven Organisation gehörst.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to delete users. No organization selected.",
+            "message": "You are not allowed to delete users. No organization selected.",
+            "translation": "Du darfst keine Benutzer löschen. Keine Organisation ausgewählt.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to delete users because you are not the owner.",
+            "message": "You are not allowed to delete users because you are not the owner.",
+            "translation": "Du darfst keine Benutzer löschen, weil du nicht der Besitzer bist.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot delete your own user in organization management.",
+            "message": "You cannot delete your own user in organization management.",
+            "translation": "Du kannst deinen eigenen Benutzer in der Organisationsverwaltung nicht löschen.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot delete this account because the user still belongs to another active organization.",
+            "message": "You cannot delete this account because the user still belongs to another active organization.",
+            "translation": "Du kannst dieses Konto nicht löschen, weil der Benutzer noch zu einer anderen aktiven Organisation gehört.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "User removed from organization.",
+            "message": "User removed from organization.",
+            "translation": "Benutzer aus der Organisation entfernt.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to edit this account.",
+            "message": "You are not allowed to edit this account.",
+            "translation": "Du darfst dieses Konto nicht bearbeiten.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot delete this organization while it still owns active accounts.",
+            "message": "You cannot delete this organization while it still owns active accounts.",
+            "translation": "Du kannst diese Organisation nicht löschen, solange sie noch aktive Konten besitzt.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Account «{String}», owned by «{OwningTenantName}»",
+            "message": "Account «{String}», owned by «{OwningTenantName}»",
+            "translation": "Konto «{String}», im Besitz von «{OwningTenantName}»",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Archive is too large.",
+            "message": "Archive is too large.",
+            "translation": "Archiv ist zu gross.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "translation": "Bist du sicher? Diese Organisation wird gelöscht. Alle Konten, die dieser Organisation gehören, werden global gelöscht.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
+            "message": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
+            "translation": "Bist du sicher? Dieser Benutzer wird aus dieser Organisation entfernt und das Konto wird global gelöscht.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization only.",
+            "message": "Are you sure? This user will be removed from this organization only.",
+            "translation": "Bist du sicher? Dieser Benutzer wird nur aus dieser Organisation entfernt.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not load path of file.",
+            "message": "Could not load path of file.",
+            "translation": "Dateipfad konnte nicht geladen werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not start transaction.",
+            "message": "Could not start transaction.",
+            "translation": "Transaktion konnte nicht gestartet werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not verify archive size.",
+            "message": "Could not verify archive size.",
+            "translation": "Archivgrösse konnte nicht überprüft werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not verify storage limit.",
+            "message": "Could not verify storage limit.",
+            "translation": "Speicherlimit konnte nicht überprüft werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Detected cycle in directory tree.",
+            "message": "Detected cycle in directory tree.",
+            "translation": "Zyklus im Verzeichnisbaum erkannt.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File not found.",
+            "message": "File not found.",
+            "translation": "Datei nicht gefunden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Member account",
+            "message": "Member account",
+            "translation": "Mitgliedskonto",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Owned account",
+            "message": "Owned account",
+            "translation": "Besitzerkonto",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Pro",
+            "message": "Pro",
+            "translation": "Pro",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Read-only request context required.",
+            "message": "Read-only request context required.",
+            "translation": "Nur-Lese-Anfragekontext erforderlich.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Storage filename mismatch.",
+            "message": "Storage filename mismatch.",
+            "translation": "Speicherdateiname stimmt nicht überein.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Storage limit reached for this organization. Used: {FormatSizeusedBytes} of {FormatSizelimitBytes}.",
+            "message": "Storage limit reached for this organization. Used: {FormatSizeusedBytes} of {FormatSizelimitBytes}.",
+            "translation": "Speicherlimit für diese Organisation erreicht. Verwendet: {FormatSizeusedBytes} von {FormatSizelimitBytes}.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant database not found.",
+            "message": "Tenant database not found.",
+            "translation": "Mandantendatenbank nicht gefunden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.",
+            "message": "Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.",
+            "translation": "Texterkennung (OCR) kann nicht angewendet werden, weil die Datei zu gross ist. Vorschläge basieren nur auf dem Dateinamen.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "The requested page could not be loaded.",
+            "message": "The requested page could not be loaded.",
+            "translation": "Die angeforderte Seite konnte nicht geladen werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "The requested page was not found.",
+            "message": "The requested page was not found.",
+            "translation": "Die angeforderte Seite wurde nicht gefunden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Trial",
+            "message": "Trial",
+            "translation": "Testphase",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unlimited",
+            "message": "Unlimited",
+            "translation": "Unbegrenzt",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "User removed from organization and account deleted globally.",
+            "message": "User removed from organization and account deleted globally.",
+            "translation": "Benutzer aus der Organisation entfernt und Konto global gelöscht.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "{NameSecondLine} - {OwnershipText}",
+            "message": "{NameSecondLine} - {OwnershipText}",
+            "translation": "{NameSecondLine} - {OwnershipText}",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         }

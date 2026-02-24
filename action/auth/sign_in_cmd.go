@@ -11,6 +11,8 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entx"
 	account2 "github.com/simpledms/simpledms/model/account"
+	"github.com/simpledms/simpledms/model/common/mainrole"
+	"github.com/simpledms/simpledms/model/modelmain"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -81,6 +83,25 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 	if !isValid {
 		rw.AddRenderables(wx.NewSnackbarf("Invalid credentials. Please try again."))
 		return err
+	}
+
+	if qq.infra.SystemConfig().IsSaaSModeEnabled() && accountx.Role == mainrole.User {
+		hasActiveTenantAssignment, err := modelmain.NewTenantAccessService().HasActiveTenantAssignment(
+			ctx,
+			ctx.VisitorCtx().MainTx,
+			accountx.ID,
+		)
+		if err != nil {
+			log.Println(err)
+			return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify organization access.")
+		}
+
+		if !hasActiveTenantAssignment {
+			return e.NewHTTPErrorWithSnackbar(
+				http.StatusForbidden,
+				wx.NewSnackbarf("Your organization is no longer active. Please contact support."),
+			)
+		}
 	}
 
 	cookie, err := cookiex.SetSessionCookie(rw, req, data.TemporarySession, qq.infra.SystemConfig().AllowInsecureCookies())

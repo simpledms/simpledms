@@ -17,6 +17,7 @@ import (
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	"github.com/simpledms/simpledms/db/entmain/account"
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
 	_ "github.com/simpledms/simpledms/db/entmain/runtime"
 	"github.com/simpledms/simpledms/db/entx"
@@ -344,6 +345,10 @@ func TestSignInCmdSetsSessionAndRedirect(t *testing.T) {
 	email := "user@example.com"
 	password := "supersecret"
 	createAccount(t, harness.mainDB, email, password)
+	harness.mainDB.ReadWriteConn.Account.Update().
+		Where(account.EmailEQ(entx.NewCIText(email))).
+		SetRole(mainrole.Admin).
+		ExecX(context.Background())
 
 	form := url.Values{}
 	form.Set("Email", email)

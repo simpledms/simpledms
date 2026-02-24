@@ -29,6 +29,8 @@ import (
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/model/account"
+	"github.com/simpledms/simpledms/model/common/mainrole"
+	"github.com/simpledms/simpledms/model/modelmain"
 	tenant2 "github.com/simpledms/simpledms/model/tenant"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -602,7 +604,11 @@ func (qq *Router) context(
 
 var ErrSessionNotFound = errors.New("session not found")
 
-func (qq *Router) authenticateAccount(rw httpx.ResponseWriter, req *httpx.Request, mainTx *entmain.Tx) (*account.Account, bool, error) {
+func (qq *Router) authenticateAccount(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	mainTx *entmain.Tx,
+) (*account.Account, bool, error) {
 	// reads only the value, all other fields have zero value
 	// this is the correct behavior, as only the name and value are send via HTTP
 	cookie, err := req.Cookie(cookiex.SessionCookieName())
@@ -648,6 +654,29 @@ func (qq *Router) authenticateAccount(rw httpx.ResponseWriter, req *httpx.Reques
 
 	accountx := sessionx.QueryAccount().OnlyX(req.Context())
 	accountm := account.NewAccount(accountx)
+
+	// TODO is this efficient enough to do on every request? or is there a better way to invalidate sessions
+	//		on tenant deletion?
+	if qq.infra.SystemConfig().IsSaaSModeEnabled() && accountx.Role == mainrole.User {
+		hasActiveTenantAssignment, err := modelmain.NewTenantAccessService().HasActiveTenantAssignment(
+			req.Context(),
+			mainTx,
+			accountx.ID,
+		)
+		if err != nil {
+			log.Println(err)
+			return nil, false, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify organization access.")
+		}
+
+		if !hasActiveTenantAssignment {
+			cookiex.InvalidateSessionCookie(
+				rw,
+				qq.infra.SystemConfig().AllowInsecureCookies(),
+			)
+			mainTx.Session.Delete().Where(session.AccountID(accountx.ID)).ExecX(req.Context())
+			return nil, false, ErrSessionNotFound
+		}
+	}
 
 	cookie, isRenewed := cookiex.RenewSessionCookie(
 		rw,

@@ -101,6 +101,7 @@ func (qq *CreateUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		SetTenant(ctx.TenantCtx().Tenant).
 		SetAccount(accountx).
 		SetRole(data.Role).
+		SetIsOwningTenant(true).
 		SetIsDefault(true).
 		SaveX(ctx)
 

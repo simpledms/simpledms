@@ -310,9 +310,9 @@
 			"fuzzy": true
 		},
 		{
-			"id": "Registration successful, please check your email for your password.",
-			"message": "Registration successful, please check your email for your password.",
-			"translation": "Registration successful, please check your email for your password.",
+			"id": "Registration successful, please check your emails for your password.",
+			"message": "Registration successful, please check your emails for your password.",
+			"translation": "Registration successful, please check your emails for your password.",
 			"translatorComment": "",
 			"fuzzy": true
 		},

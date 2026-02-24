@@ -121,20 +121,6 @@
             "fuzzy": true
         },
         {
-            "id": "You are not allowed to delete this account.",
-            "message": "You are not allowed to delete this account.",
-            "translation": "You are not allowed to delete this account.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Account deleted.",
-            "message": "Account deleted.",
-            "translation": "Account deleted.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Edit account",
             "message": "Edit account",
             "translation": "Edit account",
@@ -215,6 +201,20 @@
             "id": "Invalid credentials. Please try again.",
             "message": "Invalid credentials. Please try again.",
             "translation": "Invalid credentials. Please try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not verify organization access.",
+            "message": "Could not verify organization access.",
+            "translation": "Could not verify organization access.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Your organization is no longer active. Please contact support.",
+            "message": "Your organization is no longer active. Please contact support.",
+            "translation": "Your organization is no longer active. Please contact support.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1364,6 +1364,31 @@
             "fuzzy": true
         },
         {
+            "id": "Account «{String}», owned by «{OwningTenantName}»",
+            "message": "Account «{String}», owned by «{OwningTenantName}»",
+            "translation": "Account «{String}», owned by «{OwningTenantName}»",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "String",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "ctx.MainCtx().Account.Email.String()"
+                },
+                {
+                    "id": "OwningTenantName",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "owningTenantName"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "System",
             "message": "System",
             "translation": "System",
@@ -1418,13 +1443,6 @@
             "message": "Select",
             "translation": "Select",
             "comment": "TODO Browse, Open, Switch or activate? or Select?",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Delete account",
-            "message": "Delete account",
-            "translation": "Delete account",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1526,6 +1544,20 @@
             "id": "Manage users",
             "message": "Manage users",
             "translation": "Manage users",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete organization",
+            "message": "Delete organization",
+            "translation": "Delete organization",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "translation": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2251,9 +2283,58 @@
             "fuzzy": true
         },
         {
+            "id": "You are not allowed to delete users. No organization selected.",
+            "message": "You are not allowed to delete users. No organization selected.",
+            "translation": "You are not allowed to delete users. No organization selected.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to delete users because you are not the owner.",
+            "message": "You are not allowed to delete users because you are not the owner.",
+            "translation": "You are not allowed to delete users because you are not the owner.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot delete your own user in organization management.",
+            "message": "You cannot delete your own user in organization management.",
+            "translation": "You cannot delete your own user in organization management.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "User removed from organization and account deleted globally.",
+            "message": "User removed from organization and account deleted globally.",
+            "translation": "User removed from organization and account deleted globally.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "User removed from organization.",
+            "message": "User removed from organization.",
+            "translation": "User removed from organization.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Manage users of tenant",
             "message": "Manage users of tenant",
             "translation": "Manage users of tenant",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization only.",
+            "message": "Are you sure? This user will be removed from this organization only.",
+            "translation": "Are you sure? This user will be removed from this organization only.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
+            "message": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
+            "translation": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2263,6 +2344,45 @@
             "translation": "Add a new user",
             "comment": "TODO Create or add? system or real world perspective?",
             "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Member account",
+            "message": "Member account",
+            "translation": "Member account",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Owned account",
+            "message": "Owned account",
+            "translation": "Owned account",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "{NameSecondLine} - {OwnershipText}",
+            "message": "{NameSecondLine} - {OwnershipText}",
+            "translation": "{NameSecondLine} - {OwnershipText}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "NameSecondLine",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(userm.NameSecondLine())"
+                },
+                {
+                    "id": "OwnershipText",
+                    "string": "%[2]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 2,
+                    "expr": "ownershipText"
+                }
+            ],
             "fuzzy": true
         },
         {
@@ -3733,6 +3853,13 @@
             "id": "Accept privacy policy",
             "message": "Accept privacy policy",
             "translation": "Accept privacy policy",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Registration successful, please check your emails for your password.",
+            "message": "Registration successful, please check your emails for your password.",
+            "translation": "Registration successful, please check your emails for your password.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

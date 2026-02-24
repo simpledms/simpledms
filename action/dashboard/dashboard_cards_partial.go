@@ -2,10 +2,14 @@ package dashboard
 
 import (
 	"log"
+	"time"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
+	mainaccount "github.com/simpledms/simpledms/db/entmain/account"
+	maintenant "github.com/simpledms/simpledms/db/entmain/tenant"
+	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/model/account"
@@ -104,6 +108,9 @@ func (qq *DashboardCardsPartial) Widget(
 		if btn, ok := qq.manageSpacesBtn(ctx, tenantx); ok {
 			tenantHeaderBtns = append(tenantHeaderBtns, btn)
 		}
+		if btn, ok := qq.deleteTenantBtn(ctx, tenantx); ok {
+			tenantHeaderBtns = append(tenantHeaderBtns, btn)
+		}
 		for _, spacex := range spaces {
 			tenantCards = append(tenantCards, qq.spaceCard(ctx, spacex, tenantx))
 		}
@@ -123,15 +130,22 @@ func (qq *DashboardCardsPartial) Widget(
 		accountCardsBtns = append(accountCardsBtns, qq.changePasswordBtn(ctx))
 	}
 
-	accountCardsBtns = append(
-		accountCardsBtns,
-		qq.editAccountBtn(ctx),
-		qq.deleteAccountBtn(ctx),
-	)
+	if btn, ok := qq.editAccountBtn(ctx); ok {
+		accountCardsBtns = append(accountCardsBtns, btn)
+	}
+
+	accountHeading := wx.Tf("Account «%s»", ctx.MainCtx().Account.Email.String())
+	if owningTenantName, ok := qq.owningTenantName(ctx); ok {
+		accountHeading = wx.Tf(
+			"Account «%s», owned by «%s»",
+			ctx.MainCtx().Account.Email.String(),
+			owningTenantName,
+		)
+	}
 
 	grids = append(grids, &wx.Grid{
 		// TODO show Name and email?
-		Heading:  wx.H(wx.HeadingTypeTitleMd, wx.Tf("Account «%s»", ctx.MainCtx().Account.Email.String())),
+		Heading:  wx.H(wx.HeadingTypeTitleMd, accountHeading),
 		Children: accountCards,
 		Footer:   &wx.Row{Children: accountCardsBtns},
 	})
@@ -278,6 +292,40 @@ func (qq *DashboardCardsPartial) changePasswordBtn(ctx ctxx.Context) *wx.Button 
 	}
 }
 
+func (qq *DashboardCardsPartial) owningTenantName(ctx ctxx.Context) (string, bool) {
+	now := time.Now()
+
+	owningAssignment, err := ctx.MainCtx().MainTx.TenantAccountAssignment.Query().
+		Where(
+			tenantaccountassignment.AccountID(ctx.MainCtx().Account.ID),
+			tenantaccountassignment.IsOwningTenant(true),
+			tenantaccountassignment.Or(
+				tenantaccountassignment.ExpiresAtIsNil(),
+				tenantaccountassignment.ExpiresAtGT(now),
+			),
+			tenantaccountassignment.HasAccountWith(mainaccount.DeletedAtIsNil()),
+			tenantaccountassignment.HasTenantWith(maintenant.DeletedAtIsNil()),
+		).
+		Only(ctx)
+	if err != nil {
+		log.Println("failed to query owning tenant assignment", ctx.MainCtx().Account.ID, err)
+		return "", false
+	}
+
+	owningTenantx, err := ctx.MainCtx().MainTx.Tenant.Query().
+		Where(
+			maintenant.ID(owningAssignment.TenantID),
+			maintenant.DeletedAtIsNil(),
+		).
+		Only(ctx)
+	if err != nil {
+		log.Println("failed to query owning tenant", owningAssignment.TenantID, err)
+		return "", false
+	}
+
+	return owningTenantx.Name, true
+}
+
 /*func (qq *DashboardCardsPartial) deleteAccountCard(ctx ctxx.Context) *wx.Card {
 	return &wx.Card{
 		Style:    wx.CardStyleFilled,
@@ -286,18 +334,6 @@ func (qq *DashboardCardsPartial) changePasswordBtn(ctx ctxx.Context) *wx.Button 
 		Actions: qq.deleteAccountBtn(ctx),
 	}
 }*/
-
-func (qq *DashboardCardsPartial) deleteAccountBtn(ctx ctxx.Context) *wx.Button {
-	return &wx.Button{
-		Label:     wx.T("Delete account"),
-		StyleType: wx.ButtonStyleTypeElevated,
-		HTMXAttrs: wx.HTMXAttrs{
-			HxPost:    qq.actions.AuthActions.DeleteAccountCmd.Endpoint(),
-			HxVals:    util.JSON(qq.actions.AuthActions.DeleteAccountCmd.Data(ctx.MainCtx().Account.PublicID.String())),
-			HxConfirm: wx.T("Are you sure?").String(ctx),
-		},
-	}
-}
 
 func (qq *DashboardCardsPartial) id() string {
 	return "dashboardCards"
@@ -335,7 +371,7 @@ func (qq *DashboardCardsPartial) editAccountCard(ctx ctxx.Context) *wx.Card {
 }
 */
 
-func (qq *DashboardCardsPartial) editAccountBtn(ctx ctxx.Context) *wx.Button {
+func (qq *DashboardCardsPartial) editAccountBtn(ctx ctxx.Context) (*wx.Button, bool) {
 	return &wx.Button{
 		Label:     wx.T("Edit account"),
 		StyleType: wx.ButtonStyleTypeElevated,
@@ -347,7 +383,7 @@ func (qq *DashboardCardsPartial) editAccountBtn(ctx ctxx.Context) *wx.Button {
 			),
 			"",
 		),
-	}
+	}, true
 }
 
 func (qq *DashboardCardsPartial) clearTemporaryPasswordCard(ctx ctxx.Context) *wx.Card {
@@ -481,6 +517,36 @@ func (qq *DashboardCardsPartial) manageUsersBtn(ctx ctxx.Context, tenantx *entma
 		StyleType: wx.ButtonStyleTypeElevated,
 		HTMXAttrs: wx.HTMXAttrs{
 			HxGet: route2.ManageUsersOfTenant(tenantx.PublicID.String()),
+		},
+	}, true
+}
+
+func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
+	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
+		return nil, false
+	}
+
+	deleteTenantCmdEndpoint := qq.infra.ManageTenantsDeleteTenantCmdEndpoint()
+	if deleteTenantCmdEndpoint == "" {
+		return nil, false
+	}
+
+	tenantm := tenant.NewTenant(tenantx)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
+	if !tenantm.IsOwner(accountm) {
+		return nil, false
+	}
+	if !tenantm.IsInitialized() {
+		return nil, false
+	}
+
+	return &wx.Button{
+		Label:     wx.T("Delete organization"),
+		StyleType: wx.ButtonStyleTypeElevated,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost:    deleteTenantCmdEndpoint,
+			HxVals:    util.JSON(map[string]any{"TenantID": tenantx.PublicID.String()}),
+			HxConfirm: wx.T("Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.").String(ctx),
 		},
 	}, true
 }
