@@ -94,13 +94,6 @@ func (qq *TenantAccountLifecycleService) RemoveAccountFromTenant(
 }
 
 func (qq *TenantAccountLifecycleService) softDeleteOwningAccount(ctx ctxx.Context, accountID int64) error {
-	_, err := ctx.MainCtx().MainTx.TenantAccountAssignment.Delete().
-		Where(tenantaccountassignment.AccountID(accountID)).
-		Exec(ctx)
-	if err != nil {
-		return err
-	}
-
 	accountx, err := ctx.MainCtx().MainTx.Account.Query().
 		Where(
 			account.ID(accountID),
@@ -117,6 +110,13 @@ func (qq *TenantAccountLifecycleService) softDeleteOwningAccount(ctx ctxx.Contex
 
 	accountm := account2.NewAccount(accountx)
 	accountm.UnsafeDelete(ctx)
+
+	_, err = ctx.MainCtx().MainTx.TenantAccountAssignment.Delete().
+		Where(tenantaccountassignment.AccountID(accountID)).
+		Exec(ctx)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

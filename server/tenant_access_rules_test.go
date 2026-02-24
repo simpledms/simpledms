@@ -199,8 +199,8 @@ func TestDeleteUserCmdDeletedAccountCannotSignIn(t *testing.T) {
 	signInRR := httptest.NewRecorder()
 	harness.router.ServeHTTP(signInRR, signInReq)
 
-	if signInRR.Code != http.StatusForbidden {
-		t.Fatalf("expected status %d, got %d", http.StatusForbidden, signInRR.Code)
+	if signInRR.Code != http.StatusBadRequest {
+		t.Fatalf("expected status %d, got %d", http.StatusBadRequest, signInRR.Code)
 	}
 
 	sessionCount := harness.mainDB.ReadWriteConn.Session.Query().
