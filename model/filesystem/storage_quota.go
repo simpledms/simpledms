@@ -126,7 +126,11 @@ func (qq *StorageQuota) currentUsedTenantStorageBytes(ctx ctxx.Context) (int64, 
 	rows := make([]tenantUsedStorageRow, 0, 1)
 	ctxWithPrivacyBypass := privacy.DecisionContext(ctx, privacy.Allow)
 	err := ctx.TenantCtx().TTx.StoredFile.Query().
-		Where(storedfile.UploadSucceededAtNotNil()).
+		// Legacy files created before upload status tracking have no upload timestamps.
+		Where(storedfile.Or(
+			storedfile.UploadSucceededAtNotNil(),
+			storedfile.UploadStartedAtIsNil(),
+		)).
 		Aggregate(enttenant.As(enttenant.Sum(storedfile.FieldSize), "tenant_used_bytes")).
 		Scan(ctxWithPrivacyBypass, &rows)
 	if err != nil {
