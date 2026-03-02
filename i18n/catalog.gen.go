@@ -45,25 +45,25 @@ var messageKeyToIndex = map[string]int{
 	"%d users":                    193,
 	"%s (%s)":                     317,
 	"%s - %s":                     297,
-	"02-01-2006 at 15:04 o'clock": 610,
+	"02-01-2006 at 15:04 o'clock": 611,
 	"1 user":                      194,
-	"2FA code was provided, but 2FA is not enabled for this account.":                                            491,
-	"A database constraint violation happened. Please contact the support.":                                      634,
-	"A folder with this name already exists.":                                                                    502,
+	"2FA code was provided, but 2FA is not enabled for this account.":                                            492,
+	"A database constraint violation happened. Please contact the support.":                                      635,
+	"A folder with this name already exists.":                                                                    503,
 	"A new temporary password was sent to your email address.":                                                   23,
-	"A password reset has been requested for your account.":                                                      616,
-	"A similar entity already exists.":                                                                           632,
+	"A password reset has been requested for your account.":                                                      617,
+	"A similar entity already exists.":                                                                           633,
 	"A user with this email address already exists, please contact support if you want to add this user anyway.": 283,
-	"About SimpleDMS":                       647,
-	"Accept privacy policy":                 484,
-	"Accept terms of service":               483,
+	"About SimpleDMS":                       648,
+	"Accept privacy policy":                 485,
+	"Accept terms of service":               484,
 	"Accepted":                              375,
 	"Account":                               184,
 	"Account not found.":                    22,
 	"Account updated.":                      19,
 	"Account «%s»":                          173,
 	"Account «%s», owned by «%s»":           174,
-	"Active":                                550,
+	"Active":                                551,
 	"Active tab":                            376,
 	"Active temporary password":             187,
 	"Add":                                   105,
@@ -79,18 +79,18 @@ var messageKeyToIndex = map[string]int{
 	"Add to inbox":                          378,
 	"Added new version from inbox.":         89,
 	"Admin":                                 379,
-	"App already initialized.":              620,
+	"App already initialized.":              621,
 	"App initialized.":                      6,
-	"App is already unlocked.":              622,
-	"App is not encrypted with passphrase.": 624,
-	"App not unlocked yet.":                 520,
-	"App not unlocked yet. Please try again later.": 629,
+	"App is already unlocked.":              623,
+	"App is not encrypted with passphrase.": 625,
+	"App not unlocked yet.":                 521,
+	"App not unlocked yet. Please try again later.": 630,
 	"App status":            202,
 	"App unlocked.":         10,
-	"Approved":              563,
+	"Approved":              564,
 	"Archive is too large.": 155,
 	"Archive unzipped.":     154,
-	"Archived":              569,
+	"Archived":              570,
 	"Are you sure?":         63,
 	"Are you sure? This action will delete the tag and unassign it from all files!":                                      271,
 	"Are you sure? This action will delete the tag entirely and not just unassign it from the current file!":             342,
@@ -107,17 +107,17 @@ var messageKeyToIndex = map[string]int{
 	"Attribute «%s» created.":                   216,
 	"Attribute «%s» updated.":                   227,
 	"Austria":                                   380,
-	"Auth cookie already set.":                  653,
+	"Auth cookie already set.":                  654,
 	"Back to parent folder":                     121,
 	"Belgium":                                   381,
 	"Between":                                   131,
-	"Bucket name is empty.":                     516,
+	"Bucket name is empty.":                     517,
 	"Bulgaria":                                  382,
 	"Cannot add a tag group as child.":          327,
 	"Cannot decode url query.":                  370,
-	"Cannot delete an entity still in use.":     633,
+	"Cannot delete an entity still in use.":     634,
 	"Cannot merge directories.":                 92,
-	"Cannot move directory to itself.":          504,
+	"Cannot move directory to itself.":          505,
 	"Cannot upload versions for directories.":   164,
 	"Cannot validate form.":                     366,
 	"Change":                                    12,
@@ -127,38 +127,38 @@ var messageKeyToIndex = map[string]int{
 	"Checkbox":                                  383,
 	"Checkbox value":                            384,
 	"Clear temporary password":                  15,
-	"Client":                                    594,
-	"Close":                                     645,
+	"Client":                                    595,
+	"Close":                                     646,
 	"Close details":                             223,
-	"Close dialog":                              649,
+	"Close dialog":                              650,
 	"Close preview":                             76,
-	"Complete":                                  581,
+	"Complete":                                  582,
 	"Composed of %s":                            337,
 	"Confirm new passphrase":                    385,
 	"Confirm passphrase":                        386,
 	"Confirm password":                          387,
 	"Confirm warning":                           388,
 	"Contains":                                  126,
-	"Contract":                                  544,
-	"Contract name":                             545,
-	"Contract status":                           553,
-	"Contract type":                             554,
-	"Cookie set but empty.":                     642,
-	"Cookie set but not valid.":                 641,
+	"Contract":                                  545,
+	"Contract name":                             546,
+	"Contract status":                           554,
+	"Contract type":                             555,
+	"Cookie set but empty.":                     643,
+	"Cookie set but not valid.":                 642,
 	"Could not convert id to integer.":          235,
-	"Could not copy temporary file.":            521,
+	"Could not copy temporary file.":            522,
 	"Could not create directory structure.":     152,
 	"Could not delete source file.":             101,
 	"Could not extract all files from archive.": 153,
-	"Could not generate session id.":            654,
-	"Could not get object name.":                512,
-	"Could not get x25519 identity.":            518,
-	"Could not load path of file.":              511,
+	"Could not generate session id.":            655,
+	"Could not get object name.":                513,
+	"Could not get x25519 identity.":            519,
+	"Could not load path of file.":              512,
 	"Could not open ZIP archive.":               149,
-	"Could not open file.":                      513,
-	"Could not parse url.":                      638,
+	"Could not open file.":                      514,
+	"Could not parse url.":                      639,
 	"Could not read ZIP archive.":               151,
-	"Could not read cookie.":                    640,
+	"Could not read cookie.":                    641,
 	"Could not read source version.":            95,
 	"Could not read target versions.":           97,
 	"Could not remove source versions.":         100,
@@ -168,8 +168,8 @@ var messageKeyToIndex = map[string]int{
 	"Could not update target file.":             98,
 	"Could not verify archive size.":            156,
 	"Could not verify organization access.":     29,
-	"Could not verify storage limit.":           522,
-	"Country":                                   482,
+	"Could not verify storage limit.":           523,
+	"Country":                                   483,
 	"Create and assign tag":                     323,
 	"Create directory":                          47,
 	"Create new group":                          330,
@@ -182,12 +182,12 @@ var messageKeyToIndex = map[string]int{
 	"Croatia":                                   389,
 	"Current or temporary password":             390,
 	"Current passphrase":                        391,
-	"Current password is invalid.":              495,
+	"Current password is invalid.":              496,
 	"Current version uploaded at":               72,
 	"Cyprus":                                    392,
 	"Czech republic":                            393,
 	"Dashboard":                                 203,
-	"Data validation failed.":                   635,
+	"Data validation failed.":                   636,
 	"Date":                                      394,
 	"Date value":                                395,
 	"Delete":                                    62,
@@ -197,14 +197,14 @@ var messageKeyToIndex = map[string]int{
 	"Deleted at":                                74,
 	"Deleted on %s":                             359,
 	"Denmark":                                   397,
-	"Department":                                572,
+	"Department":                                573,
 	"Description":                               398,
 	"Deselect group":                            341,
 	"Deselected group.":                         339,
-	"Destination is current location.":          505,
-	"Destination is not a directory.":           503,
+	"Destination is current location.":          506,
+	"Destination is not a directory.":           504,
 	"Details":                                   65,
-	"Detected cycle in directory tree.":         510,
+	"Detected cycle in directory tree.":         511,
 	"Dir name":                                  399,
 	"Directory up":                              169,
 	"Document type":                             59,
@@ -217,8 +217,8 @@ var messageKeyToIndex = map[string]int{
 	"Document types":                            205,
 	"Document types imported.":                  230,
 	"Download":                                  78,
-	"Draft":                                     549,
-	"Due date":                                  528,
+	"Draft":                                     550,
+	"Due date":                                  529,
 	"Edit":                                      211,
 	"Edit account":                              17,
 	"Edit assigned tags":                        335,
@@ -228,19 +228,19 @@ var messageKeyToIndex = map[string]int{
 	"Edit space":                                314,
 	"Edit tag":                                  332,
 	"Edit tag attribute":                        226,
-	"Effective date":                            568,
+	"Effective date":                            569,
 	"Email":                                     400,
-	"Employee":                                  600,
-	"End date":                                  548,
+	"Employee":                                  601,
+	"End date":                                  549,
 	"End date is before the start date.":        157,
 	"English":                                   401,
 	"Equals":                                    128,
-	"Error opening tenant database. Please try again later.": 631,
+	"Error opening tenant database. Please try again later.": 632,
 	"Estonia":             402,
-	"Expense Report":      598,
-	"Expense department":  604,
-	"Expense status":      603,
-	"Expired":             551,
+	"Expense Report":      599,
+	"Expense department":  605,
+	"Expense status":      604,
+	"Expired":             552,
 	"Field":               403,
 	"Field deleted.":      307,
 	"Field updated.":      309,
@@ -261,27 +261,28 @@ var messageKeyToIndex = map[string]int{
 	"File size":                              66,
 	"File upload":                            86,
 	"Filename":                               405,
-	"Filename already exists.":               517,
+	"Filename already exists.":               518,
 	"Files":                                  45,
 	"Files uploaded successfully.":           250,
 	"Files uploaded, please select a space.": 305,
 	"Filters successfully reset.":            368,
-	"Final":                                  595,
-	"Finance":                                575,
+	"Final":                                  596,
+	"Finance":                                576,
 	"Finland":                                406,
 	"First name":                             407,
 	"Folder deleted":                         356,
 	"Folder deleted on %s":                   358,
 	"Folder deleted.":                        51,
 	"Folder isn't empty.":                    50,
-	"Folder mode is not enabled.":            499,
+	"Folder mode is not enabled.":            500,
 	"Folders cannot be restored.":            350,
 	"Forgot password?":                       34,
 	"Form validation failed.":                367,
 	"Found no account for this email address.": 27,
-	"France":         408,
+	"France": 408,
+	"Free 30-day trial, no credit card required.": 481,
 	"French":         409,
-	"Fulfilled":      564,
+	"Fulfilled":      565,
 	"German":         410,
 	"Germany":        411,
 	"Greater than":   129,
@@ -290,33 +291,33 @@ var messageKeyToIndex = map[string]int{
 	"Group «%s»":     336,
 	"Group, %d tag":  274,
 	"Group, %d tags": 275,
-	"HR":             573,
+	"HR":             574,
 	"Home":           170,
 	"Hungary":        414,
 	"I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged.": 102,
-	"IT":                  574,
+	"IT":                  575,
 	"Iceland":             415,
 	"Import":              232,
 	"Import from library": 231,
 	"Import is only available for empty spaces.": 228,
-	"Imprint":                                486,
-	"In progress":                            580,
+	"Imprint":                                487,
+	"In progress":                            581,
 	"Inbox":                                  246,
 	"Info":                                   84,
 	"Init app":                               4,
 	"Initial password set successfully.":     25,
-	"Internal":                               593,
+	"Internal":                               594,
 	"Invalid credentials. Please try again.": 28,
-	"Invalid filename.":                      514,
-	"Invalid passphrase.":                    623,
+	"Invalid filename.":                      515,
+	"Invalid passphrase.":                    624,
 	"Invalid session cookie.":                35,
-	"Invoice":                                524,
-	"Invoice date":                           526,
-	"Invoice number":                         525,
-	"Invoice status":                         533,
+	"Invoice":                                525,
+	"Invoice date":                           527,
+	"Invoice number":                         526,
+	"Invoice status":                         534,
 	"Ireland":                                416,
 	"Is name giving":                         417,
-	"It expires at":                          607,
+	"It expires at":                          608,
 	"Italian":                                418,
 	"Italy":                                  419,
 	"Language":                               420,
@@ -332,8 +333,8 @@ var messageKeyToIndex = map[string]int{
 	"Logged in successfully.":                31,
 	"Luxembourg":                             428,
 	"MIME type":                              67,
-	"Maintenance mode":                       643,
-	"Maintenance mode is enabled. Please wait until the app ready again.": 644,
+	"Maintenance mode":                       644,
+	"Maintenance mode is enabled. Please wait until the app ready again.": 645,
 	"Malta":                            429,
 	"Manage document types":            55,
 	"Manage fields":                    38,
@@ -343,11 +344,11 @@ var messageKeyToIndex = map[string]int{
 	"Manage users of tenant":           291,
 	"Mark as done":                     240,
 	"Marked file «%s» as done.":        253,
-	"Meals":                            541,
-	"Meeting Notes":                    588,
-	"Meeting date":                     589,
-	"Meeting status":                   597,
-	"Meeting type":                     596,
+	"Meals":                            542,
+	"Meeting Notes":                    589,
+	"Meeting date":                     590,
+	"Meeting status":                   598,
+	"Meeting type":                     597,
 	"Member account":                   295,
 	"Metadata":                         82,
 	"Modified at":                      348,
@@ -360,19 +361,19 @@ var messageKeyToIndex = map[string]int{
 	"Move to group":                    273,
 	"Moved to group «%s».":             340,
 	"Moved to «%s».":                   141,
-	"NDA":                              557,
+	"NDA":                              558,
 	"Name":                             345,
 	"Netherlands":                      432,
 	"New dir name":                     433,
 	"New filename":                     434,
-	"New filename is empty.":           508,
-	"New filename is the same as old.": 509,
+	"New filename is empty.":           509,
+	"New filename is the same as old.": 510,
 	"New name":                         435,
 	"New passphrase":                   436,
-	"New passphrase does not match confirmation.":           627,
-	"New passphrase is required.":                           626,
+	"New passphrase does not match confirmation.":           628,
+	"New passphrase is required.":                           627,
 	"New password":                                          437,
-	"New password must be different from current password.": 496,
+	"New password must be different from current password.": 497,
 	"New version uploaded for «%s».":                        165,
 	"Newest first":                                          254,
 	"No dir id provided.":                                   48,
@@ -388,7 +389,7 @@ var messageKeyToIndex = map[string]int{
 	"No matches found.":                                     109,
 	"No new files found.":                                   249,
 	"No parent dir provided.":                               159,
-	"No passphrase set.":                                    625,
+	"No passphrase set.":                                    626,
 	"No password set":                                       183,
 	"No space available yet":                                189,
 	"No space selected. Please select a space first.":       258,
@@ -404,84 +405,84 @@ var messageKeyToIndex = map[string]int{
 	"Norway":                                                438,
 	"Not a ZIP archive.":                                    148,
 	"Not initialized":                                       177,
-	"Note":                                                  608,
+	"Note":                                                  609,
 	"Notes":                                                 346,
 	"Number":                                                439,
 	"Number value":                                          440,
 	"OCR succeeded at":                                      73,
-	"Office":                                                542,
-	"Old passphrase is required.":                           628,
+	"Office":                                                543,
+	"Old passphrase is required.":                           629,
 	"Oldest first":                                          255,
-	"On hold":                                               582,
+	"On hold":                                               583,
 	"Only allowed in folder mode.":                          139,
 	"Only assigned":                                         441,
-	"Open":                                                  530,
+	"Open":                                                  531,
 	"Open directory":                                        138,
 	"Open file":                                             140,
-	"Open main menu":                                        648,
+	"Open main menu":                                        649,
 	"Open tasks":                                            171,
-	"Operations":                                            576,
+	"Operations":                                            577,
 	"Operator":                                              442,
-	"Order date":                                            560,
-	"Organization":                                          534,
-	"Organization name":                                     481,
+	"Order date":                                            561,
+	"Organization":                                          535,
+	"Organization name":                                     482,
 	"Organization «%s»":                                     172,
-	"Organizer":                                             591,
+	"Organizer":                                             592,
 	"Original filename":                                     69,
 	"Other":                                                 443,
-	"Overdue":                                               532,
+	"Overdue":                                               533,
 	"Owned account":                                         296,
 	"Owner":                                                 444,
-	"PO number":                                             559,
-	"Paid":                                                  531,
+	"PO number":                                             560,
+	"Paid":                                                  532,
 	"Parent folder":                                         344,
-	"Participants":                                          592,
-	"Parties":                                               546,
+	"Participants":                                          593,
+	"Parties":                                               547,
 	"Passphrase":                                            445,
 	"Passphrase changed.":                                   3,
-	"Passphrase is required.":                               621,
+	"Passphrase is required.":                               622,
 	"Passphrase removed.":                                   8,
 	"Passphrases do not match.":                             5,
 	"Password":                                              446,
 	"Password changed successfully.":                        14,
-	"Password must be at least eight characters long.": 497,
-	"Passwords do not match.":                          498,
-	"Path element is file, not a directory.":           500,
-	"Payment method":                                   538,
+	"Password must be at least eight characters long.": 498,
+	"Passwords do not match.":                          499,
+	"Path element is file, not a directory.":           501,
+	"Payment method":                                   539,
 	"Pending":                                          447,
-	"Person":                                           605,
-	"Plan":                                             585,
+	"Person":                                           606,
+	"Plan":                                             586,
 	"Please confirm that the source file metadata will be lost.":             87,
 	"Please create a field first.":                                           210,
 	"Please create a tag group first.":                                       218,
 	"Please create a user in the organization user management first.":        263,
 	"Please create one to get started.":                                      191,
-	"Please log in and change your password as soon as possible.":            614,
+	"Please log in and change your password as soon as possible.":            615,
 	"Please select at least one document type.":                              229,
 	"Please try again once you created a space or were invited to join one.": 302,
 	"Please wait":                         178,
 	"Poland":                              448,
-	"Policy":                              566,
-	"Policy department":                   571,
-	"Policy name":                         567,
-	"Policy status":                       570,
+	"Policy":                              567,
+	"Policy department":                   572,
+	"Policy name":                         568,
+	"Policy status":                       571,
 	"Portugal":                            449,
 	"Preview":                             362,
-	"Privacy policy":                      487,
+	"Privacy policy":                      488,
 	"Pro":                                 450,
 	"Processing of shared files failed.":  304,
-	"Project Document":                    577,
-	"Project name":                        578,
-	"Project status":                      583,
-	"Project type":                        584,
-	"Purchase Order":                      558,
-	"Purchase order status":               565,
+	"Project Document":                    578,
+	"Project name":                        579,
+	"Project status":                      584,
+	"Project type":                        585,
+	"Purchase Order":                      559,
+	"Purchase order status":               566,
 	"Read-only request context required.": 160,
-	"Receipt":                             535,
-	"Receipt category":                    539,
-	"Receipt date":                        536,
+	"Receipt":                             536,
+	"Receipt category":                    540,
+	"Receipt date":                        537,
 	"Refresh":                             180,
-	"Registration successful, please check your emails for your password.": 485,
+	"Registration successful, please check your emails for your password.": 486,
 	"Rejected":                    451,
 	"Reload metadata":             241,
 	"Reloaded metadata":           239,
@@ -492,9 +493,9 @@ var messageKeyToIndex = map[string]int{
 	"Rename file":                 144,
 	"RenameCmd document type":     236,
 	"Renamed to «%s»":             145,
-	"Report":                      586,
-	"Report period":               599,
-	"Requested by":                561,
+	"Report":                      587,
+	"Report period":               600,
+	"Requested by":                562,
 	"Reset":                       21,
 	"Reset password":              20,
 	"Restore":                     354,
@@ -502,7 +503,7 @@ var messageKeyToIndex = map[string]int{
 	"Romania":                     453,
 	"S 3":                         454,
 	"SHA-256 hash":                68,
-	"Sales":                       556,
+	"Sales":                       557,
 	"Save":                        42,
 	"Search":                      122,
 	"Search in «%s»":              123,
@@ -514,8 +515,8 @@ var messageKeyToIndex = map[string]int{
 	"Select document types to add to this space:": 312,
 	"Select document types to import:":            234,
 	"Select space":                                303,
-	"Sent":                                        562,
-	"Service":                                     555,
+	"Sent":                                        563,
+	"Service":                                     556,
 	"Set passphrase":                              200,
 	"Set password":                                24,
 	"Set password now":                            186,
@@ -524,16 +525,16 @@ var messageKeyToIndex = map[string]int{
 	"Sign in":                                     26,
 	"Sign in [subject]":                           33,
 	"Sign in only works over HTTPS or on localhost.": 32,
-	"Sign out":                 646,
+	"Sign out":                 647,
 	"Sign up":                  479,
 	"Sign up [subject]":        480,
 	"Simple":                   456,
-	"SimpleDMS Password Reset": 615,
-	"SimpleDMS password reset": 611,
+	"SimpleDMS Password Reset": 616,
+	"SimpleDMS password reset": 612,
 	"Slovakia":                 457,
 	"Slovenia":                 458,
-	"Software":                 543,
-	"Something went wrong. Please try again.": 636,
+	"Software":                 544,
+	"Something went wrong. Please try again.": 637,
 	"Sort by name":                               256,
 	"Sort files":                                 247,
 	"Source and target files are required.":      88,
@@ -548,24 +549,24 @@ var messageKeyToIndex = map[string]int{
 	"Space «%s» created.":                        310,
 	"Spaces":                                     319,
 	"Spain":                                      459,
-	"Spec":                                       587,
-	"Start date":                                 547,
+	"Spec":                                       588,
+	"Start date":                                 548,
 	"Starts with":                                127,
-	"Status":                                     529,
-	"Storage filename mismatch.":                 519,
-	"Storage limit reached for this organization. Used: %s of %s.": 523,
-	"Storage path is empty.":  515,
-	"Submission date":         601,
-	"Submitted":               602,
+	"Status":                                     530,
+	"Storage filename mismatch.":                 520,
+	"Storage limit reached for this organization. Used: %s of %s.": 524,
+	"Storage path is empty.":  516,
+	"Submission date":         602,
+	"Submitted":               603,
 	"Subscribe to newsletter": 460,
 	"Subscription":            176,
 	"Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.": 284,
 	"Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space.":        285,
-	"Suggestion":                    650,
+	"Suggestion":                    651,
 	"Suggestions based on filename": 245,
 	"Super":                         461,
 	"Super tag":                     277,
-	"Supplier":                      527,
+	"Supplier":                      528,
 	"Supporter":                     462,
 	"Sweden":                        463,
 	"Switzerland":                   464,
@@ -579,16 +580,16 @@ var messageKeyToIndex = map[string]int{
 	"Tags":                     83,
 	"Tags of «%s»":             331,
 	"Tags | Filter":            134,
-	"Target date":              579,
+	"Target date":              580,
 	"Target file is required.": 106,
 	"Template keys":            466,
 	"Temporary password cleared successfully.":            16,
-	"Temporary password expired.":                         492,
+	"Temporary password expired.":                         493,
 	"Temporary session":                                   467,
 	"Tenant database not found.":                          371,
-	"Tenant not initialized yet. Please try again later.": 630,
-	"Terminated":       552,
-	"Terms of service": 488,
+	"Tenant not initialized yet. Please try again later.": 631,
+	"Terminated":       553,
+	"Terms of service": 489,
 	"Text":             468,
 	"Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.": 242,
 	"Text recognition (OCR) is not ready yet, suggestions are based on the filename only.":                                243,
@@ -599,15 +600,15 @@ var messageKeyToIndex = map[string]int{
 	"The organization is not initialized yet, please wait until the initialization is complete.": 179,
 	"The original parent folder is missing. Restored to Inbox.":                                  352,
 	"The page will be refreshed automatically once the upload is finished.":                      300,
-	"The provided filename is not allowed.":                                                      501,
+	"The provided filename is not allowed.":                                                      502,
 	"The requested page could not be loaded.":                                                    321,
 	"The requested page was not found.":                                                          320,
-	"This is an automated message, please do not reply.":                                         612,
-	"Title": 590,
-	"Too many login attempts. Please try again in 10 seconds.": 490,
+	"This is an automated message, please do not reply.":                                         613,
+	"Title": 591,
+	"Too many login attempts. Please try again in 10 seconds.": 491,
 	"Trash":                                  360,
 	"Trash is empty.":                        355,
-	"Travel":                                 540,
+	"Travel":                                 541,
 	"Trial":                                  470,
 	"Type":                                   471,
 	"Unassign":                               268,
@@ -635,20 +636,20 @@ var messageKeyToIndex = map[string]int{
 	"Value end":            476,
 	"Value is required.":   40,
 	"Value start":          477,
-	"Vendor":               537,
+	"Vendor":               538,
 	"Version":              71,
 	"Version number":       478,
 	"Version preview":      113,
 	"Versions":             85,
-	"Welcome to SimpleDMS": 609,
-	"You are not allowed to access the requested resource.":                                                     655,
-	"You are not allowed to access this tenant.":                                                                639,
+	"Welcome to SimpleDMS": 610,
+	"You are not allowed to access the requested resource.":                                                     656,
+	"You are not allowed to access this tenant.":                                                                640,
 	"You are not allowed to assign users to spaces because you aren't the owner.":                               259,
 	"You are not allowed to create users because you are not the owner.":                                        282,
 	"You are not allowed to create users. No tenant selected.":                                                  281,
 	"You are not allowed to delete users because you are not the owner.":                                        287,
 	"You are not allowed to delete users. No organization selected.":                                            286,
-	"You are not signed in. Please sign in to continue.":                                                        637,
+	"You are not signed in. Please sign in to continue.":                                                        638,
 	"You cannot delete your own user in organization management.":                                               288,
 	"You cannot edit another account.":                                                                          18,
 	"You cannot unassign yourself from a space.":                                                                266,
@@ -658,39 +659,39 @@ var messageKeyToIndex = map[string]int{
 	"You must be logged in to unlock the app.":                                                                  1,
 	"You've logged in with a temporary password. Please set a password to secure your account and use the app.": 185,
 	"Your account has an active temporary password. Please change your password or clear the temporary password as soon as possible to secure your account.": 188,
-	"Your account has been created successfully.":                    613,
-	"Your old password will still work until you change it.":         617,
+	"Your account has been created successfully.":                    614,
+	"Your old password will still work until you change it.":         618,
 	"Your organization is no longer active. Please contact support.": 30,
-	"Your temporary password is":                                     606,
+	"Your temporary password is":                                     607,
 	"active":                                                         318,
 	"cannot decode form":                                             365,
 	"cannot download directories":                                    166,
-	"cannot move file into child directory":                          507,
+	"cannot move file into child directory":                          508,
 	"cannot parse current url":                                       369,
 	"cannot parse file":                                              363,
 	"cannot parse form":                                              364,
-	"could not generate salt":                                        494,
-	"could not generate temporary password":                          493,
+	"could not generate salt":                                        495,
+	"could not generate temporary password":                          494,
 	"could not read file":                                            161,
 	"could not render widget":                                        44,
-	"destination is not a directory":                                 506,
-	"file has no parent":                                             489,
+	"destination is not a directory":                                 507,
+	"file has no parent":                                             490,
 	"file is not a directory":                                        43,
 	"invalid version number":                                         111,
 	"layout not supported":                                           334,
 	"missing version number":                                         110,
 	"name-giving":                                                    213,
-	"optional":                                                       651,
+	"optional":                                                       652,
 	"rendering failed":                                               75,
-	"required":                                                       652,
+	"required":                                                       653,
 	"version not found":                                              112,
 	"«%s» assigned.":                                                 322,
 	"«%s» created and assigned.":                                     324,
 	"«%s» created.":                                                  137,
 	"«%s» deleted.":                                                  328,
 	"«%s» filter updated.":                                           158,
-	"«%s» invited you to the tenant «%s».":                           618,
-	"«%s» invited you.":                                              619,
+	"«%s» invited you to the tenant «%s».":                           619,
+	"«%s» invited you.":                                              620,
 	"«%s» is checked":                                                132,
 	"«%s» is not checked":                                            133,
 	"«%s» removed.":                                                  143,
@@ -700,7 +701,7 @@ var messageKeyToIndex = map[string]int{
 	"«%s» uploaded.":                                                 162,
 }
 
-var deIndex = []uint32{ // 657 elements
+var deIndex = []uint32{ // 658 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000013, 0x00000047, 0x0000007e,
 	0x00000094, 0x000000a7, 0x000000cb, 0x000000de,
@@ -837,59 +838,59 @@ var deIndex = []uint32{ // 657 elements
 	0x000032c3, 0x000032cb, 0x000032d6, 0x000032df,
 	0x000032e4, 0x000032ed, 0x000032f8, 0x00003307,
 	// Entry 1E0 - 1FF
-	0x00003314, 0x00003322, 0x00003334, 0x00003339,
-	0x00003359, 0x0000337b, 0x000033ca, 0x000033d4,
-	0x000033ea, 0x000033fe, 0x00003429, 0x0000346c,
-	0x000034b6, 0x000034d7, 0x0000350a, 0x0000352d,
-	0x0000354f, 0x0000358e, 0x000035bf, 0x000035e3,
-	0x00003604, 0x00003632, 0x0000365e, 0x0000368d,
-	0x000036a8, 0x000036e1, 0x000036fe, 0x00003718,
-	0x00003753, 0x0000376d, 0x0000379a, 0x000037bd,
+	0x00003314, 0x00003322, 0x00003360, 0x00003372,
+	0x00003377, 0x00003397, 0x000033b9, 0x00003408,
+	0x00003412, 0x00003428, 0x0000343c, 0x00003467,
+	0x000034aa, 0x000034f4, 0x00003515, 0x00003548,
+	0x0000356b, 0x0000358d, 0x000035cc, 0x000035fd,
+	0x00003621, 0x00003642, 0x00003670, 0x0000369c,
+	0x000036cb, 0x000036e6, 0x0000371f, 0x0000373c,
+	0x00003756, 0x00003791, 0x000037ab, 0x000037d8,
 	// Entry 200 - 21F
-	0x000037e4, 0x0000380e, 0x00003833, 0x0000384a,
-	0x00003861, 0x00003877, 0x00003894, 0x000038c5,
-	0x000038ee, 0x0000390c, 0x0000393a, 0x00003969,
-	0x000039b5, 0x000039be, 0x000039ce, 0x000039dd,
-	0x000039e7, 0x000039f9, 0x00003a00, 0x00003a06,
-	0x00003a0e, 0x00003a1b, 0x00003a2b, 0x00003a38,
-	0x00003a3e, 0x00003a49, 0x00003a52, 0x00003a62,
-	0x00003a71, 0x00003a77, 0x00003a82, 0x00003a88,
+	0x000037fb, 0x00003822, 0x0000384c, 0x00003871,
+	0x00003888, 0x0000389f, 0x000038b5, 0x000038d2,
+	0x00003903, 0x0000392c, 0x0000394a, 0x00003978,
+	0x000039a7, 0x000039f3, 0x000039fc, 0x00003a0c,
+	0x00003a1b, 0x00003a25, 0x00003a37, 0x00003a3e,
+	0x00003a44, 0x00003a4c, 0x00003a59, 0x00003a69,
+	0x00003a76, 0x00003a7c, 0x00003a87, 0x00003a90,
+	0x00003aa0, 0x00003aaf, 0x00003ab5, 0x00003ac0,
 	// Entry 220 - 23F
-	0x00003a91, 0x00003a99, 0x00003aa6, 0x00003aaf,
-	0x00003aba, 0x00003ac3, 0x00003acb, 0x00003ad1,
-	0x00003adc, 0x00003ae7, 0x00003af6, 0x00003b02,
-	0x00003b11, 0x00003b19, 0x00003b1d, 0x00003b2c,
-	0x00003b3a, 0x00003b47, 0x00003b57, 0x00003b60,
-	0x00003b6a, 0x00003b73, 0x00003b8e, 0x00003b99,
-	0x00003ba9, 0x00003bb4, 0x00003bbf, 0x00003bd1,
-	0x00003be6, 0x00003bf0, 0x00003bf3, 0x00003bf6,
+	0x00003ac6, 0x00003acf, 0x00003ad7, 0x00003ae4,
+	0x00003aed, 0x00003af8, 0x00003b01, 0x00003b09,
+	0x00003b0f, 0x00003b1a, 0x00003b25, 0x00003b34,
+	0x00003b40, 0x00003b4f, 0x00003b57, 0x00003b5b,
+	0x00003b6a, 0x00003b78, 0x00003b85, 0x00003b95,
+	0x00003b9e, 0x00003ba8, 0x00003bb1, 0x00003bcc,
+	0x00003bd7, 0x00003be7, 0x00003bf2, 0x00003bfd,
+	0x00003c0f, 0x00003c24, 0x00003c2e, 0x00003c31,
 	// Entry 240 - 25F
-	0x00003bff, 0x00003c07, 0x00003c17, 0x00003c23,
-	0x00003c2d, 0x00003c3c, 0x00003c4a, 0x00003c53,
-	0x00003c61, 0x00003c6c, 0x00003c71, 0x00003c79,
-	0x00003c87, 0x00003c9b, 0x00003cad, 0x00003cb3,
-	0x00003cbf, 0x00003ccc, 0x00003cd3, 0x00003cd9,
-	0x00003cdf, 0x00003cef, 0x00003d02, 0x00003d10,
-	0x00003d21, 0x00003d2f, 0x00003d41, 0x00003d4d,
-	0x00003d5a, 0x00003d6a, 0x00003d71, 0x00003d8f,
+	0x00003c34, 0x00003c3d, 0x00003c45, 0x00003c55,
+	0x00003c61, 0x00003c6b, 0x00003c7a, 0x00003c88,
+	0x00003c91, 0x00003c9f, 0x00003caa, 0x00003caf,
+	0x00003cb7, 0x00003cc5, 0x00003cd9, 0x00003ceb,
+	0x00003cf1, 0x00003cfd, 0x00003d0a, 0x00003d11,
+	0x00003d17, 0x00003d1d, 0x00003d2d, 0x00003d40,
+	0x00003d4e, 0x00003d5f, 0x00003d6d, 0x00003d7f,
+	0x00003d8b, 0x00003d98, 0x00003da8, 0x00003daf,
 	// Entry 260 - 27F
-	0x00003d9f, 0x00003da9, 0x00003dc2, 0x00003dda,
-	0x00003dfb, 0x00003e40, 0x00003e67, 0x00003eac,
-	0x00003ecd, 0x00003f0d, 0x00003f4d, 0x00003f81,
-	0x00003fa0, 0x00003fbb, 0x00003fd8, 0x00003ff3,
-	0x0000400a, 0x00004037, 0x00004051, 0x00004073,
-	0x000040af, 0x000040d1, 0x0000410d, 0x00004151,
-	0x0000419f, 0x000041ca, 0x00004212, 0x00004259,
-	0x0000427a, 0x000042b0, 0x000042f1, 0x00004312,
+	0x00003dcd, 0x00003ddd, 0x00003de7, 0x00003e00,
+	0x00003e18, 0x00003e39, 0x00003e7e, 0x00003ea5,
+	0x00003eea, 0x00003f0b, 0x00003f4b, 0x00003f8b,
+	0x00003fbf, 0x00003fde, 0x00003ff9, 0x00004016,
+	0x00004031, 0x00004048, 0x00004075, 0x0000408f,
+	0x000040b1, 0x000040ed, 0x0000410f, 0x0000414b,
+	0x0000418f, 0x000041dd, 0x00004208, 0x00004250,
+	0x00004297, 0x000042b8, 0x000042ee, 0x0000432f,
 	// Entry 280 - 29F
-	0x00004350, 0x00004374, 0x00004398, 0x000043b3,
-	0x000043c1, 0x0000440e, 0x00004419, 0x00004423,
-	0x00004433, 0x00004446, 0x00004458, 0x00004462,
-	0x0000446b, 0x00004478, 0x00004495, 0x000044bf,
-	0x000044f9,
-} // Size: 2652 bytes
+	0x00004350, 0x0000438e, 0x000043b2, 0x000043d6,
+	0x000043f1, 0x000043ff, 0x0000444c, 0x00004457,
+	0x00004461, 0x00004471, 0x00004484, 0x00004496,
+	0x000044a0, 0x000044a9, 0x000044b6, 0x000044d3,
+	0x000044fd, 0x00004537,
+} // Size: 2656 bytes
 
-const deData string = "" + // Size: 17657 bytes
+const deData string = "" + // Size: 17719 bytes
 	"\x02Passphrase ändern\x02Du musst eingeloggt sein, um die App zu entsper" +
 	"ren.\x02Du musst Administrator sein, um die App zu entsperren.\x02Passph" +
 	"rase geändert.\x02App initialisieren\x02Passphrasen stimmen nicht überei" +
@@ -1089,79 +1090,80 @@ const deData string = "" + // Size: 17657 bytes
 	"eden\x02Schweiz\x02Tag\x02Vorlagenschlüssel\x02Temporäre Sitzung\x02Text" +
 	"\x02Textwert\x02Testphase\x02Typ\x02Einheit\x02Unbegrenzt\x02Benutzer" +
 	"\x02Wert\x02Wertende\x02Wertbeginn\x02Versionsnummer\x02Registrieren\x02" +
-	"Registrierung\x02Organisationsname\x02Land\x02Nutzungsbedingungen akzept" +
-	"ieren\x02Datenschutzrichtlinie akzeptieren\x02Registrierung erfolgreich," +
-	" bitte überprüfe deine E-Mails für dein Passwort.\x02Impressum\x02Datens" +
-	"chutzerklärung\x02Nutzungsbedingungen\x02Datei hat kein übergeordnetes V" +
-	"erzeichnis\x02Zu viele Anmeldeversuche. Bitte versuche es in 10 Sekunden" +
-	" erneut.\x022FA-Code wurde angegeben, aber 2FA ist für dieses Konto nich" +
-	"t aktiviert.\x02Temporäres Passwort abgelaufen.\x02Temporäres Passwort k" +
-	"onnte nicht generiert werden\x02Salt konnte nicht generiert werden\x02Ak" +
-	"tuelles Passwort ist ungültig.\x02Neues Passwort muss sich vom aktuellen" +
-	" Passwort unterscheiden.\x02Passwort muss mindestens acht Zeichen lang s" +
-	"ein.\x02Passwörter stimmen nicht überein.\x02Ordnermodus ist nicht aktiv" +
-	"iert.\x02Pfadelement ist eine Datei, kein Verzeichnis.\x02Der angegebene" +
-	" Dateiname ist nicht erlaubt.\x02Ein Ordner mit diesem Namen existiert b" +
-	"ereits.\x02Ziel ist kein Verzeichnis.\x02Verzeichnis kann nicht in sich " +
-	"selbst verschoben werden.\x02Ziel ist aktueller Standort.\x02Ziel ist ke" +
-	"in Verzeichnis\x02Datei kann nicht in ein Unterverzeichnis verschoben we" +
-	"rden\x02Neuer Dateiname ist leer.\x02Neuer Dateiname ist identisch mit d" +
-	"em alten.\x02Zyklus im Verzeichnisbaum erkannt.\x02Dateipfad konnte nich" +
-	"t geladen werden.\x02Objektname konnte nicht ermittelt werden.\x02Datei " +
-	"konnte nicht geöffnet werden.\x02Ungültiger Dateiname.\x02Speicherpfad i" +
-	"st leer.\x02Bucket-Name ist leer.\x02Dateiname existiert bereits.\x02X25" +
-	"519-Identität konnte nicht abgerufen werden.\x02Speicherdateiname stimmt" +
-	" nicht überein.\x02App ist noch nicht entsperrt.\x02Temporäre Datei konn" +
-	"te nicht kopiert werden.\x02Speicherlimit konnte nicht überprüft werden." +
-	"\x02Speicherlimit für diese Organisation erreicht. Verwendet: %[1]s von " +
-	"%[2]s.\x02Rechnung\x02Rechnungsnummer\x02Rechnungsdatum\x02Lieferant\x02" +
-	"Fälligkeitsdatum\x02Status\x02Offen\x02Bezahlt\x02Überfällig\x02Rechnung" +
-	"sstatus\x02Organisation\x02Beleg\x02Belegdatum\x02Händler\x02Zahlungsmet" +
-	"hode\x02Belegkategorie\x02Reise\x02Mahlzeiten\x02Büro\x02Software\x02Ver" +
-	"trag\x02Vertragsname\x02Parteien\x02Startdatum\x02Enddatum\x02Entwurf" +
-	"\x02Aktiv\x02Abgelaufen\x02Gekündigt\x02Vertragsstatus\x02Vertragstyp" +
-	"\x02Dienstleistung\x02Verkauf\x02NDA\x02Bestellauftrag\x02Bestellnummer" +
-	"\x02Bestelldatum\x02Angefordert von\x02Gesendet\x02Genehmigt\x02Erfüllt" +
-	"\x02Status des Bestellauftrags\x02Richtlinie\x02Richtlinienname\x02Gülti" +
-	"g ab\x02Archiviert\x02Richtlinienstatus\x02Richtlinienabteilung\x02Abtei" +
-	"lung\x02HR\x02IT\x02Finanzen\x02Betrieb\x02Projektdokument\x02Projektnam" +
-	"e\x02Zieldatum\x02In Bearbeitung\x02Abgeschlossen\x02Pausiert\x02Projekt" +
-	"status\x02Projekttyp\x02Plan\x02Bericht\x02Spezifikation\x02Besprechungs" +
-	"notizen\x02Besprechungsdatum\x02Titel\x02Organisator\x02Teilnehmende\x02" +
-	"Intern\x02Kunde\x02Final\x02Besprechungstyp\x02Besprechungsstatus\x02Spe" +
-	"senbericht\x02Berichtszeitraum\x02Mitarbeitende\x02Einreichungsdatum\x02" +
-	"Eingereicht\x02Spesenstatus\x02Spesenabteilung\x02Person\x02Dein temporä" +
-	"res Passwort ist\x02Es läuft ab am\x02Bemerkung\x02Willkommen bei Simple" +
-	"DMS\x0202.01.2006 um 15:04 Uhr\x02SimpleDMS Passwort zurücksetzen\x02Die" +
-	"s ist eine automatisierte Nachricht, bitte antworte nicht darauf.\x02Dei" +
-	"n Konto wurde erfolgreich erstellt.\x02Bitte logge dich ein und ändere d" +
-	"ein Passwort so bald wie möglich.\x02SimpleDMS Passwort zurücksetzen\x02" +
-	"Für dein Konto wurde eine Passwort-Zurücksetzung angefordert.\x02Dein al" +
-	"tes Passwort funktioniert weiterhin, bis du es änderst.\x02«%[1]s» hat d" +
-	"ich zum Tenant «%[2]s» eingeladen.\x02«%[1]s» hat dich eingeladen.\x02Ap" +
-	"p bereits initialisiert.\x02Passphrase ist erforderlich.\x02App ist bere" +
-	"its entsperrt.\x02Ungültige Passphrase.\x02App ist nicht mit Passphrase " +
-	"verschlüsselt.\x02Keine Passphrase gesetzt.\x02Neue Passphrase ist erfor" +
-	"derlich.\x02Neue Passphrase stimmt nicht mit der Bestätigung überein." +
-	"\x02Alte Passphrase ist erforderlich.\x02App noch nicht entsperrt. Bitte" +
-	" versuche es später erneut.\x02Mandant noch nicht initialisiert. Bitte v" +
-	"ersuche es später erneut.\x02Fehler beim Öffnen der Mandantendatenbank. " +
-	"Bitte versuche es später erneut.\x02Eine ähnliche Entität existiert bere" +
-	"its.\x02Eine Entität, die noch in Verwendung ist, kann nicht gelöscht we" +
-	"rden.\x02Es ist ein Datenbankfehler aufgetreten. Bitte kontaktiere den S" +
-	"upport.\x02Datenvalidierung fehlgeschlagen.\x02Ein Fehler ist aufgetrete" +
-	"n. Bitte versuche es erneut.\x02Du bist nicht eingeloggt. Bitte logge di" +
-	"ch ein, um fortzufahren.\x02URL konnte nicht geparst werden.\x02Du hast " +
-	"keine Berechtigung, auf diesen Mandanten zuzugreifen.\x02Cookie konnte n" +
-	"icht gelesen werden.\x02Cookie gesetzt, aber nicht gültig.\x02Cookie ges" +
-	"etzt, aber leer.\x02Wartungsmodus\x02Der Wartungsmodus ist aktiviert. Bi" +
-	"tte warte, bis die App wieder bereit ist.\x02Schliessen\x02Ausloggen\x02" +
-	"Über SimpleDMS\x02Hauptmenü öffnen\x02Dialog schliessen\x02Vorschlag" +
-	"\x02optional\x02erforderlich\x02Auth-Cookie bereits gesetzt.\x02Session-" +
-	"ID konnte nicht generiert werden.\x02Du darfst nicht auf die angefordert" +
-	"e Ressource zugreifen."
+	"Registrierung\x02Kostenlose 30-Tage-Testphase, keine Kreditkarte erforde" +
+	"rlich.\x02Organisationsname\x02Land\x02Nutzungsbedingungen akzeptieren" +
+	"\x02Datenschutzrichtlinie akzeptieren\x02Registrierung erfolgreich, bitt" +
+	"e überprüfe deine E-Mails für dein Passwort.\x02Impressum\x02Datenschutz" +
+	"erklärung\x02Nutzungsbedingungen\x02Datei hat kein übergeordnetes Verzei" +
+	"chnis\x02Zu viele Anmeldeversuche. Bitte versuche es in 10 Sekunden erne" +
+	"ut.\x022FA-Code wurde angegeben, aber 2FA ist für dieses Konto nicht akt" +
+	"iviert.\x02Temporäres Passwort abgelaufen.\x02Temporäres Passwort konnte" +
+	" nicht generiert werden\x02Salt konnte nicht generiert werden\x02Aktuell" +
+	"es Passwort ist ungültig.\x02Neues Passwort muss sich vom aktuellen Pass" +
+	"wort unterscheiden.\x02Passwort muss mindestens acht Zeichen lang sein." +
+	"\x02Passwörter stimmen nicht überein.\x02Ordnermodus ist nicht aktiviert" +
+	".\x02Pfadelement ist eine Datei, kein Verzeichnis.\x02Der angegebene Dat" +
+	"einame ist nicht erlaubt.\x02Ein Ordner mit diesem Namen existiert berei" +
+	"ts.\x02Ziel ist kein Verzeichnis.\x02Verzeichnis kann nicht in sich selb" +
+	"st verschoben werden.\x02Ziel ist aktueller Standort.\x02Ziel ist kein V" +
+	"erzeichnis\x02Datei kann nicht in ein Unterverzeichnis verschoben werden" +
+	"\x02Neuer Dateiname ist leer.\x02Neuer Dateiname ist identisch mit dem a" +
+	"lten.\x02Zyklus im Verzeichnisbaum erkannt.\x02Dateipfad konnte nicht ge" +
+	"laden werden.\x02Objektname konnte nicht ermittelt werden.\x02Datei konn" +
+	"te nicht geöffnet werden.\x02Ungültiger Dateiname.\x02Speicherpfad ist l" +
+	"eer.\x02Bucket-Name ist leer.\x02Dateiname existiert bereits.\x02X25519-" +
+	"Identität konnte nicht abgerufen werden.\x02Speicherdateiname stimmt nic" +
+	"ht überein.\x02App ist noch nicht entsperrt.\x02Temporäre Datei konnte n" +
+	"icht kopiert werden.\x02Speicherlimit konnte nicht überprüft werden.\x02" +
+	"Speicherlimit für diese Organisation erreicht. Verwendet: %[1]s von %[2]" +
+	"s.\x02Rechnung\x02Rechnungsnummer\x02Rechnungsdatum\x02Lieferant\x02Fäll" +
+	"igkeitsdatum\x02Status\x02Offen\x02Bezahlt\x02Überfällig\x02Rechnungssta" +
+	"tus\x02Organisation\x02Beleg\x02Belegdatum\x02Händler\x02Zahlungsmethode" +
+	"\x02Belegkategorie\x02Reise\x02Mahlzeiten\x02Büro\x02Software\x02Vertrag" +
+	"\x02Vertragsname\x02Parteien\x02Startdatum\x02Enddatum\x02Entwurf\x02Akt" +
+	"iv\x02Abgelaufen\x02Gekündigt\x02Vertragsstatus\x02Vertragstyp\x02Dienst" +
+	"leistung\x02Verkauf\x02NDA\x02Bestellauftrag\x02Bestellnummer\x02Bestell" +
+	"datum\x02Angefordert von\x02Gesendet\x02Genehmigt\x02Erfüllt\x02Status d" +
+	"es Bestellauftrags\x02Richtlinie\x02Richtlinienname\x02Gültig ab\x02Arch" +
+	"iviert\x02Richtlinienstatus\x02Richtlinienabteilung\x02Abteilung\x02HR" +
+	"\x02IT\x02Finanzen\x02Betrieb\x02Projektdokument\x02Projektname\x02Zield" +
+	"atum\x02In Bearbeitung\x02Abgeschlossen\x02Pausiert\x02Projektstatus\x02" +
+	"Projekttyp\x02Plan\x02Bericht\x02Spezifikation\x02Besprechungsnotizen" +
+	"\x02Besprechungsdatum\x02Titel\x02Organisator\x02Teilnehmende\x02Intern" +
+	"\x02Kunde\x02Final\x02Besprechungstyp\x02Besprechungsstatus\x02Spesenber" +
+	"icht\x02Berichtszeitraum\x02Mitarbeitende\x02Einreichungsdatum\x02Einger" +
+	"eicht\x02Spesenstatus\x02Spesenabteilung\x02Person\x02Dein temporäres Pa" +
+	"sswort ist\x02Es läuft ab am\x02Bemerkung\x02Willkommen bei SimpleDMS" +
+	"\x0202.01.2006 um 15:04 Uhr\x02SimpleDMS Passwort zurücksetzen\x02Dies i" +
+	"st eine automatisierte Nachricht, bitte antworte nicht darauf.\x02Dein K" +
+	"onto wurde erfolgreich erstellt.\x02Bitte logge dich ein und ändere dein" +
+	" Passwort so bald wie möglich.\x02SimpleDMS Passwort zurücksetzen\x02Für" +
+	" dein Konto wurde eine Passwort-Zurücksetzung angefordert.\x02Dein altes" +
+	" Passwort funktioniert weiterhin, bis du es änderst.\x02«%[1]s» hat dich" +
+	" zum Tenant «%[2]s» eingeladen.\x02«%[1]s» hat dich eingeladen.\x02App b" +
+	"ereits initialisiert.\x02Passphrase ist erforderlich.\x02App ist bereits" +
+	" entsperrt.\x02Ungültige Passphrase.\x02App ist nicht mit Passphrase ver" +
+	"schlüsselt.\x02Keine Passphrase gesetzt.\x02Neue Passphrase ist erforder" +
+	"lich.\x02Neue Passphrase stimmt nicht mit der Bestätigung überein.\x02Al" +
+	"te Passphrase ist erforderlich.\x02App noch nicht entsperrt. Bitte versu" +
+	"che es später erneut.\x02Mandant noch nicht initialisiert. Bitte versuch" +
+	"e es später erneut.\x02Fehler beim Öffnen der Mandantendatenbank. Bitte " +
+	"versuche es später erneut.\x02Eine ähnliche Entität existiert bereits." +
+	"\x02Eine Entität, die noch in Verwendung ist, kann nicht gelöscht werden" +
+	".\x02Es ist ein Datenbankfehler aufgetreten. Bitte kontaktiere den Suppo" +
+	"rt.\x02Datenvalidierung fehlgeschlagen.\x02Ein Fehler ist aufgetreten. B" +
+	"itte versuche es erneut.\x02Du bist nicht eingeloggt. Bitte logge dich e" +
+	"in, um fortzufahren.\x02URL konnte nicht geparst werden.\x02Du hast kein" +
+	"e Berechtigung, auf diesen Mandanten zuzugreifen.\x02Cookie konnte nicht" +
+	" gelesen werden.\x02Cookie gesetzt, aber nicht gültig.\x02Cookie gesetzt" +
+	", aber leer.\x02Wartungsmodus\x02Der Wartungsmodus ist aktiviert. Bitte " +
+	"warte, bis die App wieder bereit ist.\x02Schliessen\x02Ausloggen\x02Über" +
+	" SimpleDMS\x02Hauptmenü öffnen\x02Dialog schliessen\x02Vorschlag\x02opti" +
+	"onal\x02erforderlich\x02Auth-Cookie bereits gesetzt.\x02Session-ID konnt" +
+	"e nicht generiert werden.\x02Du darfst nicht auf die angeforderte Ressou" +
+	"rce zugreifen."
 
-var enIndex = []uint32{ // 657 elements
+var enIndex = []uint32{ // 658 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000012, 0x0000003b, 0x00000063,
 	0x00000077, 0x00000080, 0x0000009a, 0x000000ab,
@@ -1299,7 +1301,7 @@ var enIndex = []uint32{ // 657 elements
 	0x00000305, 0x00000305, 0x00000305, 0x00000305,
 	// Entry 1E0 - 1FF
 	0x0000030d, 0x00000315, 0x00000315, 0x00000315,
-	0x00000315, 0x00000315, 0x0000035a, 0x0000035a,
+	0x00000315, 0x00000315, 0x00000315, 0x0000035a,
 	0x0000035a, 0x0000035a, 0x0000035a, 0x0000035a,
 	0x0000035a, 0x0000035a, 0x0000035a, 0x0000035a,
 	0x0000035a, 0x0000035a, 0x0000035a, 0x0000035a,
@@ -1341,14 +1343,14 @@ var enIndex = []uint32{ // 657 elements
 	0x0000035a, 0x0000035a, 0x0000035a, 0x0000035a,
 	0x0000035a, 0x0000035a, 0x0000035a, 0x0000035a,
 	0x0000035a, 0x0000035a, 0x0000035a, 0x0000035a,
-	0x0000035a, 0x00000382, 0x000003b5, 0x000003ca,
+	0x0000035a, 0x0000035a, 0x00000382, 0x000003b5,
 	// Entry 280 - 29F
-	0x000003f5, 0x0000040c, 0x00000426, 0x0000043c,
-	0x0000044d, 0x00000491, 0x00000491, 0x00000491,
+	0x000003ca, 0x000003f5, 0x0000040c, 0x00000426,
+	0x0000043c, 0x0000044d, 0x00000491, 0x00000491,
 	0x00000491, 0x00000491, 0x00000491, 0x00000491,
 	0x00000491, 0x00000491, 0x00000491, 0x00000491,
-	0x00000491,
-} // Size: 2652 bytes
+	0x00000491, 0x00000491,
+} // Size: 2656 bytes
 
 const enData string = "" + // Size: 1169 bytes
 	"\x02Change passphrase\x02You must be logged in to unlock the app.\x02You" +
@@ -1371,7 +1373,7 @@ const enData string = "" + // Size: 1169 bytes
 	"aintenance mode\x02Maintenance mode is enabled. Please wait until the ap" +
 	"p ready again."
 
-var en_USIndex = []uint32{ // 657 elements
+var en_USIndex = []uint32{ // 658 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000012, 0x0000003b, 0x00000063,
 	0x00000077, 0x00000080, 0x0000009a, 0x000000ab,
@@ -1508,59 +1510,59 @@ var en_USIndex = []uint32{ // 657 elements
 	0x0000298e, 0x00002993, 0x0000299d, 0x000029a2,
 	0x000029a8, 0x000029b2, 0x000029be, 0x000029cd,
 	// Entry 1E0 - 1FF
-	0x000029d5, 0x000029e7, 0x000029f9, 0x00002a01,
-	0x00002a19, 0x00002a2f, 0x00002a74, 0x00002a7c,
-	0x00002a8b, 0x00002a9c, 0x00002aaf, 0x00002ae8,
-	0x00002b28, 0x00002b44, 0x00002b6a, 0x00002b82,
-	0x00002b9f, 0x00002bd5, 0x00002c06, 0x00002c1e,
-	0x00002c3a, 0x00002c61, 0x00002c87, 0x00002caf,
-	0x00002ccf, 0x00002cf0, 0x00002d11, 0x00002d30,
-	0x00002d56, 0x00002d6d, 0x00002d8e, 0x00002db0,
+	0x000029d5, 0x000029e7, 0x00002a13, 0x00002a25,
+	0x00002a2d, 0x00002a45, 0x00002a5b, 0x00002aa0,
+	0x00002aa8, 0x00002ab7, 0x00002ac8, 0x00002adb,
+	0x00002b14, 0x00002b54, 0x00002b70, 0x00002b96,
+	0x00002bae, 0x00002bcb, 0x00002c01, 0x00002c32,
+	0x00002c4a, 0x00002c66, 0x00002c8d, 0x00002cb3,
+	0x00002cdb, 0x00002cfb, 0x00002d1c, 0x00002d3d,
+	0x00002d5c, 0x00002d82, 0x00002d99, 0x00002dba,
 	// Entry 200 - 21F
-	0x00002dcd, 0x00002de8, 0x00002dfd, 0x00002e0f,
-	0x00002e26, 0x00002e3c, 0x00002e55, 0x00002e74,
-	0x00002e8f, 0x00002ea5, 0x00002ec4, 0x00002ee4,
-	0x00002f27, 0x00002f2f, 0x00002f3e, 0x00002f4b,
-	0x00002f54, 0x00002f5d, 0x00002f64, 0x00002f69,
-	0x00002f6e, 0x00002f76, 0x00002f85, 0x00002f92,
-	0x00002f9a, 0x00002fa7, 0x00002fae, 0x00002fbd,
-	0x00002fce, 0x00002fd5, 0x00002fdb, 0x00002fe2,
+	0x00002ddc, 0x00002df9, 0x00002e14, 0x00002e29,
+	0x00002e3b, 0x00002e52, 0x00002e68, 0x00002e81,
+	0x00002ea0, 0x00002ebb, 0x00002ed1, 0x00002ef0,
+	0x00002f10, 0x00002f53, 0x00002f5b, 0x00002f6a,
+	0x00002f77, 0x00002f80, 0x00002f89, 0x00002f90,
+	0x00002f95, 0x00002f9a, 0x00002fa2, 0x00002fb1,
+	0x00002fbe, 0x00002fc6, 0x00002fd3, 0x00002fda,
+	0x00002fe9, 0x00002ffa, 0x00003001, 0x00003007,
 	// Entry 220 - 23F
-	0x00002feb, 0x00002ff4, 0x00003002, 0x0000300a,
-	0x00003015, 0x0000301e, 0x00003024, 0x0000302b,
-	0x00003033, 0x0000303e, 0x0000304e, 0x0000305c,
-	0x00003064, 0x0000306a, 0x0000306e, 0x0000307d,
-	0x00003087, 0x00003092, 0x0000309f, 0x000030a4,
-	0x000030ad, 0x000030b7, 0x000030cd, 0x000030d4,
-	0x000030e0, 0x000030ef, 0x000030f8, 0x00003106,
-	0x00003118, 0x00003123, 0x00003126, 0x00003129,
+	0x0000300e, 0x00003017, 0x00003020, 0x0000302e,
+	0x00003036, 0x00003041, 0x0000304a, 0x00003050,
+	0x00003057, 0x0000305f, 0x0000306a, 0x0000307a,
+	0x00003088, 0x00003090, 0x00003096, 0x0000309a,
+	0x000030a9, 0x000030b3, 0x000030be, 0x000030cb,
+	0x000030d0, 0x000030d9, 0x000030e3, 0x000030f9,
+	0x00003100, 0x0000310c, 0x0000311b, 0x00003124,
+	0x00003132, 0x00003144, 0x0000314f, 0x00003152,
 	// Entry 240 - 25F
-	0x00003131, 0x0000313c, 0x0000314d, 0x0000315a,
-	0x00003166, 0x00003172, 0x0000317b, 0x00003183,
-	0x00003192, 0x0000319f, 0x000031a4, 0x000031ab,
-	0x000031b0, 0x000031be, 0x000031cb, 0x000031d1,
-	0x000031db, 0x000031e8, 0x000031f1, 0x000031f8,
-	0x000031fe, 0x0000320b, 0x0000321a, 0x00003229,
-	0x00003237, 0x00003240, 0x00003250, 0x0000325a,
-	0x00003269, 0x0000327c, 0x00003283, 0x0000329e,
+	0x00003155, 0x0000315d, 0x00003168, 0x00003179,
+	0x00003186, 0x00003192, 0x0000319e, 0x000031a7,
+	0x000031af, 0x000031be, 0x000031cb, 0x000031d0,
+	0x000031d7, 0x000031dc, 0x000031ea, 0x000031f7,
+	0x000031fd, 0x00003207, 0x00003214, 0x0000321d,
+	0x00003224, 0x0000322a, 0x00003237, 0x00003246,
+	0x00003255, 0x00003263, 0x0000326c, 0x0000327c,
+	0x00003286, 0x00003295, 0x000032a8, 0x000032af,
 	// Entry 260 - 27F
-	0x000032ac, 0x000032b1, 0x000032c6, 0x000032e2,
-	0x000032fb, 0x0000332e, 0x0000335a, 0x00003396,
-	0x000033af, 0x000033e5, 0x0000341c, 0x0000344b,
-	0x00003462, 0x0000347b, 0x00003493, 0x000034ac,
-	0x000034c0, 0x000034e6, 0x000034f9, 0x00003515,
-	0x00003541, 0x0000355d, 0x0000358b, 0x000035bf,
-	0x000035f6, 0x00003617, 0x0000363d, 0x00003683,
-	0x0000369b, 0x000036c3, 0x000036f6, 0x0000370b,
+	0x000032ca, 0x000032d8, 0x000032dd, 0x000032f2,
+	0x0000330e, 0x00003327, 0x0000335a, 0x00003386,
+	0x000033c2, 0x000033db, 0x00003411, 0x00003448,
+	0x00003477, 0x0000348e, 0x000034a7, 0x000034bf,
+	0x000034d8, 0x000034ec, 0x00003512, 0x00003525,
+	0x00003541, 0x0000356d, 0x00003589, 0x000035b7,
+	0x000035eb, 0x00003622, 0x00003643, 0x00003669,
+	0x000036af, 0x000036c7, 0x000036ef, 0x00003722,
 	// Entry 280 - 29F
-	0x00003736, 0x0000374d, 0x00003767, 0x0000377d,
-	0x0000378e, 0x000037d2, 0x000037d8, 0x000037e1,
-	0x000037f1, 0x00003800, 0x0000380d, 0x00003818,
-	0x00003821, 0x0000382a, 0x00003843, 0x00003862,
-	0x00003898,
-} // Size: 2652 bytes
+	0x00003737, 0x00003762, 0x00003779, 0x00003793,
+	0x000037a9, 0x000037ba, 0x000037fe, 0x00003804,
+	0x0000380d, 0x0000381d, 0x0000382c, 0x00003839,
+	0x00003844, 0x0000384d, 0x00003856, 0x0000386f,
+	0x0000388e, 0x000038c4,
+} // Size: 2656 bytes
 
-const en_USData string = "" + // Size: 14488 bytes
+const en_USData string = "" + // Size: 14532 bytes
 	"\x02Change passphrase\x02You must be logged in to unlock the app.\x02You" +
 	" must be an admin to unlock the app.\x02Passphrase changed.\x02Init app" +
 	"\x02Passphrases do not match.\x02App initialized.\x02Remove passphrase" +
@@ -1729,69 +1731,70 @@ const en_USData string = "" + // Size: 14488 bytes
 	"bscribe to newsletter\x02Super\x02Supporter\x02Sweden\x02Switzerland\x02" +
 	"Tag\x02Template keys\x02Temporary session\x02Text\x02Text value\x02Trial" +
 	"\x02Type\x02Unit\x02Unlimited\x02User\x02Value\x02Value end\x02Value sta" +
-	"rt\x02Version number\x02Sign up\x02Sign up [subject]\x02Organization nam" +
-	"e\x02Country\x02Accept terms of service\x02Accept privacy policy\x02Regi" +
-	"stration successful, please check your emails for your password.\x02Impr" +
-	"int\x02Privacy policy\x02Terms of service\x02file has no parent\x02Too m" +
-	"any login attempts. Please try again in 10 seconds.\x022FA code was prov" +
-	"ided, but 2FA is not enabled for this account.\x02Temporary password exp" +
-	"ired.\x02could not generate temporary password\x02could not generate sal" +
-	"t\x02Current password is invalid.\x02New password must be different from" +
-	" current password.\x02Password must be at least eight characters long." +
-	"\x02Passwords do not match.\x02Folder mode is not enabled.\x02Path eleme" +
-	"nt is file, not a directory.\x02The provided filename is not allowed." +
-	"\x02A folder with this name already exists.\x02Destination is not a dire" +
-	"ctory.\x02Cannot move directory to itself.\x02Destination is current loc" +
-	"ation.\x02destination is not a directory\x02cannot move file into child " +
-	"directory\x02New filename is empty.\x02New filename is the same as old." +
-	"\x02Detected cycle in directory tree.\x02Could not load path of file." +
-	"\x02Could not get object name.\x02Could not open file.\x02Invalid filena" +
-	"me.\x02Storage path is empty.\x02Bucket name is empty.\x02Filename alrea" +
-	"dy exists.\x02Could not get x25519 identity.\x02Storage filename mismatc" +
-	"h.\x02App not unlocked yet.\x02Could not copy temporary file.\x02Could n" +
-	"ot verify storage limit.\x02Storage limit reached for this organization." +
-	" Used: %[1]s of %[2]s.\x02Invoice\x02Invoice number\x02Invoice date\x02S" +
-	"upplier\x02Due date\x02Status\x02Open\x02Paid\x02Overdue\x02Invoice stat" +
-	"us\x02Organization\x02Receipt\x02Receipt date\x02Vendor\x02Payment metho" +
-	"d\x02Receipt category\x02Travel\x02Meals\x02Office\x02Software\x02Contra" +
-	"ct\x02Contract name\x02Parties\x02Start date\x02End date\x02Draft\x02Act" +
-	"ive\x02Expired\x02Terminated\x02Contract status\x02Contract type\x02Serv" +
-	"ice\x02Sales\x02NDA\x02Purchase Order\x02PO number\x02Order date\x02Requ" +
-	"ested by\x02Sent\x02Approved\x02Fulfilled\x02Purchase order status\x02Po" +
-	"licy\x02Policy name\x02Effective date\x02Archived\x02Policy status\x02Po" +
-	"licy department\x02Department\x02HR\x02IT\x02Finance\x02Operations\x02Pr" +
-	"oject Document\x02Project name\x02Target date\x02In progress\x02Complete" +
-	"\x02On hold\x02Project status\x02Project type\x02Plan\x02Report\x02Spec" +
-	"\x02Meeting Notes\x02Meeting date\x02Title\x02Organizer\x02Participants" +
-	"\x02Internal\x02Client\x02Final\x02Meeting type\x02Meeting status\x02Exp" +
-	"ense Report\x02Report period\x02Employee\x02Submission date\x02Submitted" +
-	"\x02Expense status\x02Expense department\x02Person\x02Your temporary pas" +
-	"sword is\x02It expires at\x02Note\x02Welcome to SimpleDMS\x0202-01-2006 " +
-	"at 15:04 o'clock\x02SimpleDMS password reset\x02This is an automated mes" +
-	"sage, please do not reply.\x02Your account has been created successfully" +
-	".\x02Please log in and change your password as soon as possible.\x02Simp" +
-	"leDMS Password Reset\x02A password reset has been requested for your acc" +
-	"ount.\x02Your old password will still work until you change it.\x02«%[1]" +
-	"s» invited you to the tenant «%[2]s».\x02«%[1]s» invited you.\x02App alr" +
-	"eady initialized.\x02Passphrase is required.\x02App is already unlocked." +
-	"\x02Invalid passphrase.\x02App is not encrypted with passphrase.\x02No p" +
-	"assphrase set.\x02New passphrase is required.\x02New passphrase does not" +
-	" match confirmation.\x02Old passphrase is required.\x02App not unlocked " +
-	"yet. Please try again later.\x02Tenant not initialized yet. Please try a" +
-	"gain later.\x02Error opening tenant database. Please try again later." +
-	"\x02A similar entity already exists.\x02Cannot delete an entity still in" +
-	" use.\x02A database constraint violation happened. Please contact the su" +
-	"pport.\x02Data validation failed.\x02Something went wrong. Please try ag" +
-	"ain.\x02You are not signed in. Please sign in to continue.\x02Could not " +
-	"parse url.\x02You are not allowed to access this tenant.\x02Could not re" +
-	"ad cookie.\x02Cookie set but not valid.\x02Cookie set but empty.\x02Main" +
-	"tenance mode\x02Maintenance mode is enabled. Please wait until the app r" +
-	"eady again.\x02Close\x02Sign out\x02About SimpleDMS\x02Open main menu" +
-	"\x02Close dialog\x02Suggestion\x02optional\x02required\x02Auth cookie al" +
-	"ready set.\x02Could not generate session id.\x02You are not allowed to a" +
-	"ccess the requested resource."
+	"rt\x02Version number\x02Sign up\x02Sign up [subject]\x02Free 30-day tria" +
+	"l, no credit card required.\x02Organization name\x02Country\x02Accept te" +
+	"rms of service\x02Accept privacy policy\x02Registration successful, plea" +
+	"se check your emails for your password.\x02Imprint\x02Privacy policy\x02" +
+	"Terms of service\x02file has no parent\x02Too many login attempts. Pleas" +
+	"e try again in 10 seconds.\x022FA code was provided, but 2FA is not enab" +
+	"led for this account.\x02Temporary password expired.\x02could not genera" +
+	"te temporary password\x02could not generate salt\x02Current password is " +
+	"invalid.\x02New password must be different from current password.\x02Pas" +
+	"sword must be at least eight characters long.\x02Passwords do not match." +
+	"\x02Folder mode is not enabled.\x02Path element is file, not a directory" +
+	".\x02The provided filename is not allowed.\x02A folder with this name al" +
+	"ready exists.\x02Destination is not a directory.\x02Cannot move director" +
+	"y to itself.\x02Destination is current location.\x02destination is not a" +
+	" directory\x02cannot move file into child directory\x02New filename is e" +
+	"mpty.\x02New filename is the same as old.\x02Detected cycle in directory" +
+	" tree.\x02Could not load path of file.\x02Could not get object name.\x02" +
+	"Could not open file.\x02Invalid filename.\x02Storage path is empty.\x02B" +
+	"ucket name is empty.\x02Filename already exists.\x02Could not get x25519" +
+	" identity.\x02Storage filename mismatch.\x02App not unlocked yet.\x02Cou" +
+	"ld not copy temporary file.\x02Could not verify storage limit.\x02Storag" +
+	"e limit reached for this organization. Used: %[1]s of %[2]s.\x02Invoice" +
+	"\x02Invoice number\x02Invoice date\x02Supplier\x02Due date\x02Status\x02" +
+	"Open\x02Paid\x02Overdue\x02Invoice status\x02Organization\x02Receipt\x02" +
+	"Receipt date\x02Vendor\x02Payment method\x02Receipt category\x02Travel" +
+	"\x02Meals\x02Office\x02Software\x02Contract\x02Contract name\x02Parties" +
+	"\x02Start date\x02End date\x02Draft\x02Active\x02Expired\x02Terminated" +
+	"\x02Contract status\x02Contract type\x02Service\x02Sales\x02NDA\x02Purch" +
+	"ase Order\x02PO number\x02Order date\x02Requested by\x02Sent\x02Approved" +
+	"\x02Fulfilled\x02Purchase order status\x02Policy\x02Policy name\x02Effec" +
+	"tive date\x02Archived\x02Policy status\x02Policy department\x02Departmen" +
+	"t\x02HR\x02IT\x02Finance\x02Operations\x02Project Document\x02Project na" +
+	"me\x02Target date\x02In progress\x02Complete\x02On hold\x02Project statu" +
+	"s\x02Project type\x02Plan\x02Report\x02Spec\x02Meeting Notes\x02Meeting " +
+	"date\x02Title\x02Organizer\x02Participants\x02Internal\x02Client\x02Fina" +
+	"l\x02Meeting type\x02Meeting status\x02Expense Report\x02Report period" +
+	"\x02Employee\x02Submission date\x02Submitted\x02Expense status\x02Expens" +
+	"e department\x02Person\x02Your temporary password is\x02It expires at" +
+	"\x02Note\x02Welcome to SimpleDMS\x0202-01-2006 at 15:04 o'clock\x02Simpl" +
+	"eDMS password reset\x02This is an automated message, please do not reply" +
+	".\x02Your account has been created successfully.\x02Please log in and ch" +
+	"ange your password as soon as possible.\x02SimpleDMS Password Reset\x02A" +
+	" password reset has been requested for your account.\x02Your old passwor" +
+	"d will still work until you change it.\x02«%[1]s» invited you to the ten" +
+	"ant «%[2]s».\x02«%[1]s» invited you.\x02App already initialized.\x02Pass" +
+	"phrase is required.\x02App is already unlocked.\x02Invalid passphrase." +
+	"\x02App is not encrypted with passphrase.\x02No passphrase set.\x02New p" +
+	"assphrase is required.\x02New passphrase does not match confirmation." +
+	"\x02Old passphrase is required.\x02App not unlocked yet. Please try agai" +
+	"n later.\x02Tenant not initialized yet. Please try again later.\x02Error" +
+	" opening tenant database. Please try again later.\x02A similar entity al" +
+	"ready exists.\x02Cannot delete an entity still in use.\x02A database con" +
+	"straint violation happened. Please contact the support.\x02Data validati" +
+	"on failed.\x02Something went wrong. Please try again.\x02You are not sig" +
+	"ned in. Please sign in to continue.\x02Could not parse url.\x02You are n" +
+	"ot allowed to access this tenant.\x02Could not read cookie.\x02Cookie se" +
+	"t but not valid.\x02Cookie set but empty.\x02Maintenance mode\x02Mainten" +
+	"ance mode is enabled. Please wait until the app ready again.\x02Close" +
+	"\x02Sign out\x02About SimpleDMS\x02Open main menu\x02Close dialog\x02Sug" +
+	"gestion\x02optional\x02required\x02Auth cookie already set.\x02Could not" +
+	" generate session id.\x02You are not allowed to access the requested res" +
+	"ource."
 
-var frIndex = []uint32{ // 657 elements
+var frIndex = []uint32{ // 658 elements
 	// Entry 0 - 1F
 	0x00000000, 0x0000001b, 0x00000059, 0x0000009c,
 	0x000000b7, 0x000000d1, 0x000000fd, 0x00000117,
@@ -1928,59 +1931,59 @@ var frIndex = []uint32{ // 657 elements
 	0x00003819, 0x00003820, 0x0000382a, 0x00003836,
 	0x0000383d, 0x0000384b, 0x0000385c, 0x0000386f,
 	// Entry 1E0 - 1FF
-	0x0000387a, 0x00003886, 0x0000389c, 0x000038a1,
-	0x000038c7, 0x000038f1, 0x0000393f, 0x00003951,
-	0x0000396f, 0x00003988, 0x000039a5, 0x000039ec,
-	0x00003a37, 0x00003a5d, 0x00003a90, 0x00003aaf,
-	0x00003ad4, 0x00003b1a, 0x00003b54, 0x00003b7c,
-	0x00003b9f, 0x00003bd9, 0x00003c07, 0x00003c30,
-	0x00003c59, 0x00003c90, 0x00003cb9, 0x00003ce1,
-	0x00003d1f, 0x00003d43, 0x00003d78, 0x00003dae,
+	0x0000387a, 0x00003886, 0x000038c0, 0x000038d6,
+	0x000038db, 0x00003901, 0x0000392b, 0x00003979,
+	0x0000398b, 0x000039a9, 0x000039c2, 0x000039df,
+	0x00003a26, 0x00003a71, 0x00003a97, 0x00003aca,
+	0x00003ae9, 0x00003b0e, 0x00003b54, 0x00003b8e,
+	0x00003bb6, 0x00003bd9, 0x00003c13, 0x00003c41,
+	0x00003c6a, 0x00003c93, 0x00003cca, 0x00003cf3,
+	0x00003d1b, 0x00003d59, 0x00003d7d, 0x00003db2,
 	// Entry 200 - 21F
-	0x00003dda, 0x00003e02, 0x00003e22, 0x00003e3b,
-	0x00003e5b, 0x00003e76, 0x00003e97, 0x00003ec0,
-	0x00003ef1, 0x00003f21, 0x00003f4d, 0x00003f7c,
-	0x00003fcd, 0x00003fd5, 0x00003fe8, 0x00003ff8,
-	0x00004004, 0x00004016, 0x0000401d, 0x00004024,
-	0x0000402a, 0x00004034, 0x00004046, 0x00004053,
-	0x00004059, 0x00004067, 0x0000406f, 0x00004080,
-	0x00004094, 0x0000409b, 0x000040a1, 0x000040a8,
+	0x00003de8, 0x00003e14, 0x00003e3c, 0x00003e5c,
+	0x00003e75, 0x00003e95, 0x00003eb0, 0x00003ed1,
+	0x00003efa, 0x00003f2b, 0x00003f5b, 0x00003f87,
+	0x00003fb6, 0x00004007, 0x0000400f, 0x00004022,
+	0x00004032, 0x0000403e, 0x00004050, 0x00004057,
+	0x0000405e, 0x00004064, 0x0000406e, 0x00004080,
+	0x0000408d, 0x00004093, 0x000040a1, 0x000040a9,
+	0x000040ba, 0x000040ce, 0x000040d5, 0x000040db,
 	// Entry 220 - 23F
-	0x000040b1, 0x000040b9, 0x000040c8, 0x000040d0,
-	0x000040df, 0x000040eb, 0x000040f5, 0x000040fb,
-	0x00004103, 0x0000410d, 0x0000411f, 0x0000412f,
-	0x00004137, 0x0000413d, 0x00004141, 0x00004151,
-	0x00004165, 0x00004176, 0x00004183, 0x0000418b,
-	0x00004195, 0x0000419f, 0x000041b9, 0x000041c3,
-	0x000041d7, 0x000041f1, 0x000041fa, 0x00004211,
-	0x0000422e, 0x0000423b, 0x0000423e, 0x00004241,
+	0x000040e2, 0x000040eb, 0x000040f3, 0x00004102,
+	0x0000410a, 0x00004119, 0x00004125, 0x0000412f,
+	0x00004135, 0x0000413d, 0x00004147, 0x00004159,
+	0x00004169, 0x00004171, 0x00004177, 0x0000417b,
+	0x0000418b, 0x0000419f, 0x000041b0, 0x000041bd,
+	0x000041c5, 0x000041cf, 0x000041d9, 0x000041f3,
+	0x000041fd, 0x00004211, 0x0000422b, 0x00004234,
+	0x0000424b, 0x00004268, 0x00004275, 0x00004278,
 	// Entry 240 - 25F
-	0x00004249, 0x00004255, 0x00004268, 0x00004276,
-	0x00004281, 0x0000428a, 0x00004293, 0x0000429c,
-	0x000042ad, 0x000042bc, 0x000042c1, 0x000042c9,
-	0x000042d8, 0x000042ea, 0x000042fb, 0x00004301,
-	0x0000430e, 0x0000431b, 0x00004323, 0x0000432a,
-	0x00004330, 0x00004341, 0x00004357, 0x00004365,
-	0x00004379, 0x00004382, 0x00004395, 0x0000439c,
-	0x000043ad, 0x000043c4, 0x000043cd, 0x000043ef,
+	0x0000427b, 0x00004283, 0x0000428f, 0x000042a2,
+	0x000042b0, 0x000042bb, 0x000042c4, 0x000042cd,
+	0x000042d6, 0x000042e7, 0x000042f6, 0x000042fb,
+	0x00004303, 0x00004312, 0x00004324, 0x00004335,
+	0x0000433b, 0x00004348, 0x00004355, 0x0000435d,
+	0x00004364, 0x0000436a, 0x0000437b, 0x00004391,
+	0x0000439f, 0x000043b3, 0x000043bc, 0x000043cf,
+	0x000043d6, 0x000043e7, 0x000043fe, 0x00004407,
 	// Entry 260 - 27F
-	0x000043f9, 0x000043fe, 0x00004416, 0x0000442a,
-	0x00004456, 0x00004492, 0x000044bc, 0x00004505,
-	0x00004531, 0x0000457c, 0x000045cc, 0x000045fd,
-	0x00004617, 0x0000463e, 0x0000465e, 0x00004688,
-	0x000046a2, 0x000046de, 0x000046ff, 0x00004728,
-	0x0000476a, 0x00004792, 0x000047e1, 0x0000482b,
-	0x0000488a, 0x000048af, 0x000048e5, 0x00004944,
-	0x0000496b, 0x0000499b, 0x000049df, 0x000049fc,
+	0x00004429, 0x00004433, 0x00004438, 0x00004450,
+	0x00004464, 0x00004490, 0x000044cc, 0x000044f6,
+	0x0000453f, 0x0000456b, 0x000045b6, 0x00004606,
+	0x00004637, 0x00004651, 0x00004678, 0x00004698,
+	0x000046c2, 0x000046dc, 0x00004718, 0x00004739,
+	0x00004762, 0x000047a4, 0x000047cc, 0x0000481b,
+	0x00004865, 0x000048c4, 0x000048e9, 0x0000491f,
+	0x0000497e, 0x000049a5, 0x000049d5, 0x00004a19,
 	// Entry 280 - 29F
-	0x00004a34, 0x00004a52, 0x00004a72, 0x00004a8c,
-	0x00004a9d, 0x00004b07, 0x00004b0e, 0x00004b1b,
-	0x00004b32, 0x00004b4b, 0x00004b68, 0x00004b73,
-	0x00004b7d, 0x00004b84, 0x00004bae, 0x00004bdc,
-	0x00004c1e,
-} // Size: 2652 bytes
+	0x00004a36, 0x00004a6e, 0x00004a8c, 0x00004aac,
+	0x00004ac6, 0x00004ad7, 0x00004b41, 0x00004b48,
+	0x00004b55, 0x00004b6c, 0x00004b85, 0x00004ba2,
+	0x00004bad, 0x00004bb7, 0x00004bbe, 0x00004be8,
+	0x00004c16, 0x00004c58,
+} // Size: 2656 bytes
 
-const frData string = "" + // Size: 19486 bytes
+const frData string = "" + // Size: 19544 bytes
 	"\x02Changer la phrase secrète\x02Vous devez être connecté pour déverroui" +
 	"ller l'application.\x02Vous devez être administrateur pour déverrouiller" +
 	" l'application.\x02Phrase secrète modifiée.\x02Initialiser l'application" +
@@ -2195,84 +2198,85 @@ const frData string = "" + // Size: 19486 bytes
 	"Suède\x02Suisse\x02Tag\x02Clés de modèle\x02Session temporaire\x02Texte" +
 	"\x02Valeur de texte\x02Essai\x02Type\x02Unité\x02Illimité\x02Utilisateur" +
 	"\x02Valeur\x02Valeur de fin\x02Valeur de début\x02Numéro de version\x02S" +
-	"'inscrire\x02Inscription\x02Nom de l'organisation\x02Pays\x02Accepter le" +
-	"s conditions d'utilisation\x02Accepter la politique de confidentialité" +
-	"\x02Inscription réussie, veuillez vérifier vos e-mails pour votre mot de" +
-	" passe.\x02Mentions légales\x02Politique de confidentialité\x02Condition" +
-	"s d'utilisation\x02le fichier n'a pas de parent\x02Trop de tentatives de" +
-	" connexion. Veuillez réessayer dans 10 secondes.\x02Un code 2FA a été fo" +
-	"urni, mais la 2FA n'est pas activée pour ce compte.\x02Le mot de passe t" +
-	"emporaire a expiré.\x02impossible de générer le mot de passe temporaire" +
-	"\x02impossible de générer le sel\x02Le mot de passe actuel est invalide." +
-	"\x02Le nouveau mot de passe doit être différent du mot de passe actuel." +
-	"\x02Le mot de passe doit comporter au moins huit caractères.\x02Les mots" +
-	" de passe ne correspondent pas.\x02Le mode dossier n'est pas activé.\x02" +
-	"L'élément du chemin est un fichier, pas un répertoire.\x02Le nom de fich" +
-	"ier fourni n'est pas autorisé.\x02Un dossier portant ce nom existe déjà." +
-	"\x02La destination n'est pas un répertoire.\x02Impossible de déplacer le" +
-	" répertoire vers lui-même.\x02La destination est l'emplacement actuel." +
-	"\x02la destination n'est pas un répertoire\x02impossible de déplacer le " +
-	"fichier dans un répertoire enfant\x02Le nouveau nom de fichier est vide." +
-	"\x02Le nouveau nom de fichier est identique à l'ancien.\x02Cycle détecté" +
-	" dans l'arborescence des répertoires.\x02Impossible de charger le chemin" +
-	" du fichier.\x02Impossible d'obtenir le nom de l'objet.\x02Impossible d'" +
-	"ouvrir le fichier.\x02Nom de fichier invalide.\x02Le chemin de stockage " +
-	"est vide.\x02Le nom du bucket est vide.\x02Le nom de fichier existe déjà" +
-	".\x02Impossible d'obtenir l'identité x25519.\x02Le nom de fichier de sto" +
-	"ckage ne correspond pas.\x02L'application n'est pas encore déverrouillée" +
-	".\x02Impossible de copier le fichier temporaire.\x02Impossible de vérifi" +
-	"er la limite de stockage.\x02Limite de stockage atteinte pour cette orga" +
-	"nisation. Utilisé : %[1]s sur %[2]s.\x02Facture\x02Numéro de facture\x02" +
-	"Date de facture\x02Fournisseur\x02Date d'échéance\x02Statut\x02Ouvert" +
-	"\x02Payé\x02En retard\x02Statut de facture\x02Organisation\x02Reçu\x02Da" +
-	"te du reçu\x02Vendeur\x02Mode de paiement\x02Catégorie du reçu\x02Voyage" +
-	"\x02Repas\x02Bureau\x02Logiciel\x02Contrat\x02Nom du contrat\x02Parties" +
-	"\x02Date de début\x02Date de fin\x02Brouillon\x02Actif\x02Expiré\x02Rési" +
-	"lié\x02Statut du contrat\x02Type de contrat\x02Service\x02Vente\x02NDA" +
-	"\x02Bon de commande\x02Numéro de commande\x02Date de commande\x02Demandé" +
-	" par\x02Envoyé\x02Approuvé\x02Exécuté\x02Statut du bon de commande\x02Po" +
-	"litique\x02Nom de la politique\x02Date d'entrée en vigueur\x02Archivé" +
-	"\x02Statut de la politique\x02Département de la politique\x02Département" +
-	"\x02RH\x02IT\x02Finance\x02Opérations\x02Document de projet\x02Nom du pr" +
-	"ojet\x02Date cible\x02En cours\x02Terminé\x02En pause\x02Statut du proje" +
-	"t\x02Type de projet\x02Plan\x02Rapport\x02Spécification\x02Notes de réun" +
-	"ion\x02Date de réunion\x02Titre\x02Organisateur\x02Participants\x02Inter" +
-	"ne\x02Client\x02Final\x02Type de réunion\x02Statut de la réunion\x02Note" +
-	" de frais\x02Période du rapport\x02Employé\x02Date de soumission\x02Soum" +
-	"is\x02Statut des frais\x02Département des frais\x02Personne\x02Votre mot" +
-	" de passe temporaire est\x02Expire le\x02Note\x02Bienvenue sur SimpleDMS" +
-	"\x0202-01-2006 à 15:04\x02Réinitialisation du mot de passe SimpleDMS\x02" +
-	"Ceci est un message automatisé, veuillez ne pas répondre.\x02Votre compt" +
-	"e a été créé avec succès.\x02Veuillez vous connecter et changer votre mo" +
-	"t de passe dès que possible.\x02Réinitialisation du mot de passe SimpleD" +
-	"MS\x02Une réinitialisation du mot de passe a été demandée pour votre com" +
-	"pte.\x02Votre ancien mot de passe fonctionnera encore jusqu'à ce que vou" +
-	"s le changiez.\x02«%[1]s» vous a invité au locataire «%[2]s».\x02«%[1]s»" +
-	" vous a invité.\x02L'application est déjà initialisée.\x02La phrase secr" +
-	"ète est requise.\x02L'application est déjà déverrouillée.\x02Phrase sec" +
-	"rète invalide.\x02L'application n'est pas chiffrée avec une phrase secrè" +
-	"te.\x02Aucune phrase secrète définie.\x02La nouvelle phrase secrète est " +
-	"requise.\x02La nouvelle phrase secrète ne correspond pas à la confirmati" +
-	"on.\x02L'ancienne phrase secrète est requise.\x02L'application n'est pas" +
-	" encore déverrouillée. Veuillez réessayer plus tard.\x02Le locataire n'e" +
-	"st pas encore initialisé. Veuillez réessayer plus tard.\x02Erreur lors d" +
-	"e l'ouverture de la base de données du locataire. Veuillez réessayer plu" +
-	"s tard.\x02Une entité similaire existe déjà.\x02Impossible de supprimer " +
-	"une entité encore utilisée.\x02Une violation de contrainte de base de do" +
-	"nnées s'est produite. Veuillez contacter le support.\x02La validation de" +
-	"s données a échoué.\x02Une erreur s'est produite. Veuillez réessayer." +
-	"\x02Vous n'êtes pas connecté. Veuillez vous connecter pour continuer." +
-	"\x02Impossible d'analyser l'URL.\x02Vous n'êtes pas autorisé à accéder à" +
-	" ce locataire.\x02Impossible de lire le cookie.\x02Cookie défini mais no" +
-	"n valide.\x02Cookie défini mais vide.\x02Mode maintenance\x02Le mode mai" +
-	"ntenance est activé. Veuillez patienter jusqu'à ce que l'application soi" +
-	"t à nouveau prête.\x02Fermer\x02Déconnexion\x02À propos de SimpleDMS\x02" +
-	"Ouvrir le menu principal\x02Fermer la boîte de dialogue\x02Suggestion" +
-	"\x02optionnel\x02requis\x02Cookie d'authentification déjà défini.\x02Imp" +
-	"ossible de générer la valeur de session.\x02Vous n'êtes pas autorisé à a" +
-	"ccéder à la ressource demandée."
+	"'inscrire\x02Inscription\x02Essai gratuit de 30 jours, sans carte de cré" +
+	"dit requise.\x02Nom de l'organisation\x02Pays\x02Accepter les conditions" +
+	" d'utilisation\x02Accepter la politique de confidentialité\x02Inscriptio" +
+	"n réussie, veuillez vérifier vos e-mails pour votre mot de passe.\x02Men" +
+	"tions légales\x02Politique de confidentialité\x02Conditions d'utilisatio" +
+	"n\x02le fichier n'a pas de parent\x02Trop de tentatives de connexion. Ve" +
+	"uillez réessayer dans 10 secondes.\x02Un code 2FA a été fourni, mais la " +
+	"2FA n'est pas activée pour ce compte.\x02Le mot de passe temporaire a ex" +
+	"piré.\x02impossible de générer le mot de passe temporaire\x02impossible " +
+	"de générer le sel\x02Le mot de passe actuel est invalide.\x02Le nouveau " +
+	"mot de passe doit être différent du mot de passe actuel.\x02Le mot de pa" +
+	"sse doit comporter au moins huit caractères.\x02Les mots de passe ne cor" +
+	"respondent pas.\x02Le mode dossier n'est pas activé.\x02L'élément du che" +
+	"min est un fichier, pas un répertoire.\x02Le nom de fichier fourni n'est" +
+	" pas autorisé.\x02Un dossier portant ce nom existe déjà.\x02La destinati" +
+	"on n'est pas un répertoire.\x02Impossible de déplacer le répertoire vers" +
+	" lui-même.\x02La destination est l'emplacement actuel.\x02la destination" +
+	" n'est pas un répertoire\x02impossible de déplacer le fichier dans un ré" +
+	"pertoire enfant\x02Le nouveau nom de fichier est vide.\x02Le nouveau nom" +
+	" de fichier est identique à l'ancien.\x02Cycle détecté dans l'arborescen" +
+	"ce des répertoires.\x02Impossible de charger le chemin du fichier.\x02Im" +
+	"possible d'obtenir le nom de l'objet.\x02Impossible d'ouvrir le fichier." +
+	"\x02Nom de fichier invalide.\x02Le chemin de stockage est vide.\x02Le no" +
+	"m du bucket est vide.\x02Le nom de fichier existe déjà.\x02Impossible d'" +
+	"obtenir l'identité x25519.\x02Le nom de fichier de stockage ne correspon" +
+	"d pas.\x02L'application n'est pas encore déverrouillée.\x02Impossible de" +
+	" copier le fichier temporaire.\x02Impossible de vérifier la limite de st" +
+	"ockage.\x02Limite de stockage atteinte pour cette organisation. Utilisé " +
+	": %[1]s sur %[2]s.\x02Facture\x02Numéro de facture\x02Date de facture" +
+	"\x02Fournisseur\x02Date d'échéance\x02Statut\x02Ouvert\x02Payé\x02En ret" +
+	"ard\x02Statut de facture\x02Organisation\x02Reçu\x02Date du reçu\x02Vend" +
+	"eur\x02Mode de paiement\x02Catégorie du reçu\x02Voyage\x02Repas\x02Burea" +
+	"u\x02Logiciel\x02Contrat\x02Nom du contrat\x02Parties\x02Date de début" +
+	"\x02Date de fin\x02Brouillon\x02Actif\x02Expiré\x02Résilié\x02Statut du " +
+	"contrat\x02Type de contrat\x02Service\x02Vente\x02NDA\x02Bon de commande" +
+	"\x02Numéro de commande\x02Date de commande\x02Demandé par\x02Envoyé\x02A" +
+	"pprouvé\x02Exécuté\x02Statut du bon de commande\x02Politique\x02Nom de l" +
+	"a politique\x02Date d'entrée en vigueur\x02Archivé\x02Statut de la polit" +
+	"ique\x02Département de la politique\x02Département\x02RH\x02IT\x02Financ" +
+	"e\x02Opérations\x02Document de projet\x02Nom du projet\x02Date cible\x02" +
+	"En cours\x02Terminé\x02En pause\x02Statut du projet\x02Type de projet" +
+	"\x02Plan\x02Rapport\x02Spécification\x02Notes de réunion\x02Date de réun" +
+	"ion\x02Titre\x02Organisateur\x02Participants\x02Interne\x02Client\x02Fin" +
+	"al\x02Type de réunion\x02Statut de la réunion\x02Note de frais\x02Périod" +
+	"e du rapport\x02Employé\x02Date de soumission\x02Soumis\x02Statut des fr" +
+	"ais\x02Département des frais\x02Personne\x02Votre mot de passe temporair" +
+	"e est\x02Expire le\x02Note\x02Bienvenue sur SimpleDMS\x0202-01-2006 à 15" +
+	":04\x02Réinitialisation du mot de passe SimpleDMS\x02Ceci est un message" +
+	" automatisé, veuillez ne pas répondre.\x02Votre compte a été créé avec s" +
+	"uccès.\x02Veuillez vous connecter et changer votre mot de passe dès que " +
+	"possible.\x02Réinitialisation du mot de passe SimpleDMS\x02Une réinitial" +
+	"isation du mot de passe a été demandée pour votre compte.\x02Votre ancie" +
+	"n mot de passe fonctionnera encore jusqu'à ce que vous le changiez.\x02«" +
+	"%[1]s» vous a invité au locataire «%[2]s».\x02«%[1]s» vous a invité.\x02" +
+	"L'application est déjà initialisée.\x02La phrase secrète est requise." +
+	"\x02L'application est déjà déverrouillée.\x02Phrase secrète invalide." +
+	"\x02L'application n'est pas chiffrée avec une phrase secrète.\x02Aucune " +
+	"phrase secrète définie.\x02La nouvelle phrase secrète est requise.\x02La" +
+	" nouvelle phrase secrète ne correspond pas à la confirmation.\x02L'ancie" +
+	"nne phrase secrète est requise.\x02L'application n'est pas encore déverr" +
+	"ouillée. Veuillez réessayer plus tard.\x02Le locataire n'est pas encore " +
+	"initialisé. Veuillez réessayer plus tard.\x02Erreur lors de l'ouverture " +
+	"de la base de données du locataire. Veuillez réessayer plus tard.\x02Une" +
+	" entité similaire existe déjà.\x02Impossible de supprimer une entité enc" +
+	"ore utilisée.\x02Une violation de contrainte de base de données s'est pr" +
+	"oduite. Veuillez contacter le support.\x02La validation des données a éc" +
+	"houé.\x02Une erreur s'est produite. Veuillez réessayer.\x02Vous n'êtes p" +
+	"as connecté. Veuillez vous connecter pour continuer.\x02Impossible d'ana" +
+	"lyser l'URL.\x02Vous n'êtes pas autorisé à accéder à ce locataire.\x02Im" +
+	"possible de lire le cookie.\x02Cookie défini mais non valide.\x02Cookie " +
+	"défini mais vide.\x02Mode maintenance\x02Le mode maintenance est activé." +
+	" Veuillez patienter jusqu'à ce que l'application soit à nouveau prête." +
+	"\x02Fermer\x02Déconnexion\x02À propos de SimpleDMS\x02Ouvrir le menu pri" +
+	"ncipal\x02Fermer la boîte de dialogue\x02Suggestion\x02optionnel\x02requ" +
+	"is\x02Cookie d'authentification déjà défini.\x02Impossible de générer la" +
+	" valeur de session.\x02Vous n'êtes pas autorisé à accéder à la ressource" +
+	" demandée."
 
-var itIndex = []uint32{ // 657 elements
+var itIndex = []uint32{ // 658 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000012, 0x00000044, 0x00000080,
 	0x00000097, 0x000000a7, 0x000000c8, 0x000000e4,
@@ -2409,59 +2413,59 @@ var itIndex = []uint32{ // 657 elements
 	0x00003128, 0x0000312f, 0x0000313a, 0x00003141,
 	0x00003148, 0x00003156, 0x00003166, 0x00003176,
 	// Entry 1E0 - 1FF
-	0x00003181, 0x0000318f, 0x000031a3, 0x000031a9,
-	0x000031c7, 0x000031eb, 0x0000322d, 0x00003239,
-	0x00003253, 0x00003267, 0x0000328d, 0x000032c2,
-	0x00003311, 0x0000332e, 0x0000335a, 0x00003377,
-	0x0000339a, 0x000033d8, 0x0000340d, 0x0000342c,
-	0x00003454, 0x0000348b, 0x000034b3, 0x000034dd,
-	0x00003503, 0x00003534, 0x0000355e, 0x00003583,
-	0x000035b8, 0x000035d5, 0x00003601, 0x00003630,
+	0x00003181, 0x0000318f, 0x000031d0, 0x000031e4,
+	0x000031ea, 0x00003208, 0x0000322c, 0x0000326e,
+	0x0000327a, 0x00003294, 0x000032a8, 0x000032ce,
+	0x00003303, 0x00003352, 0x0000336f, 0x0000339b,
+	0x000033b8, 0x000033db, 0x00003419, 0x0000344e,
+	0x0000346d, 0x00003495, 0x000034cc, 0x000034f4,
+	0x0000351e, 0x00003544, 0x00003575, 0x0000359f,
+	0x000035c4, 0x000035f9, 0x00003616, 0x00003642,
 	// Entry 200 - 21F
-	0x0000365b, 0x00003686, 0x000036a2, 0x000036b8,
-	0x000036df, 0x000036fc, 0x00003716, 0x0000373f,
-	0x0000376e, 0x0000378d, 0x000037b5, 0x000037e8,
-	0x00003841, 0x00003849, 0x00003858, 0x00003865,
-	0x0000386f, 0x00003880, 0x00003886, 0x0000388d,
-	0x00003894, 0x0000389f, 0x000038ad, 0x000038bc,
-	0x000038c5, 0x000038d3, 0x000038dd, 0x000038f1,
-	0x00003904, 0x0000390c, 0x00003912, 0x0000391a,
+	0x00003671, 0x0000369c, 0x000036c7, 0x000036e3,
+	0x000036f9, 0x00003720, 0x0000373d, 0x00003757,
+	0x00003780, 0x000037af, 0x000037ce, 0x000037f6,
+	0x00003829, 0x00003882, 0x0000388a, 0x00003899,
+	0x000038a6, 0x000038b0, 0x000038c1, 0x000038c7,
+	0x000038ce, 0x000038d5, 0x000038e0, 0x000038ee,
+	0x000038fd, 0x00003906, 0x00003914, 0x0000391e,
+	0x00003932, 0x00003945, 0x0000394d, 0x00003953,
 	// Entry 220 - 23F
-	0x00003923, 0x0000392d, 0x0000393c, 0x00003942,
-	0x0000394e, 0x00003958, 0x0000395e, 0x00003965,
-	0x0000396d, 0x00003977, 0x00003987, 0x00003999,
-	0x000039a2, 0x000039aa, 0x000039ae, 0x000039c1,
-	0x000039cf, 0x000039db, 0x000039e8, 0x000039f0,
-	0x000039fa, 0x00003a00, 0x00003a19, 0x00003a22,
-	0x00003a36, 0x00003a48, 0x00003a53, 0x00003a68,
-	0x00003a7f, 0x00003a87, 0x00003a8a, 0x00003a8d,
+	0x0000395b, 0x00003964, 0x0000396e, 0x0000397d,
+	0x00003983, 0x0000398f, 0x00003999, 0x0000399f,
+	0x000039a6, 0x000039ae, 0x000039b8, 0x000039c8,
+	0x000039da, 0x000039e3, 0x000039eb, 0x000039ef,
+	0x00003a02, 0x00003a10, 0x00003a1c, 0x00003a29,
+	0x00003a31, 0x00003a3b, 0x00003a41, 0x00003a5a,
+	0x00003a63, 0x00003a77, 0x00003a89, 0x00003a94,
+	0x00003aa9, 0x00003ac0, 0x00003ac8, 0x00003acb,
 	// Entry 240 - 25F
-	0x00003a95, 0x00003aa0, 0x00003ab6, 0x00003ac4,
-	0x00003ad3, 0x00003adc, 0x00003ae7, 0x00003af0,
-	0x00003b03, 0x00003b14, 0x00003b1a, 0x00003b23,
-	0x00003b2e, 0x00003b3c, 0x00003b4a, 0x00003b51,
-	0x00003b5f, 0x00003b6c, 0x00003b74, 0x00003b7c,
-	0x00003b83, 0x00003b94, 0x00003ba9, 0x00003bb4,
-	0x00003bc9, 0x00003bd4, 0x00003be2, 0x00003bea,
-	0x00003bf6, 0x00003c04, 0x00003c0c, 0x00003c2a,
+	0x00003ace, 0x00003ad6, 0x00003ae1, 0x00003af7,
+	0x00003b05, 0x00003b14, 0x00003b1d, 0x00003b28,
+	0x00003b31, 0x00003b44, 0x00003b55, 0x00003b5b,
+	0x00003b64, 0x00003b6f, 0x00003b7d, 0x00003b8b,
+	0x00003b92, 0x00003ba0, 0x00003bad, 0x00003bb5,
+	0x00003bbd, 0x00003bc4, 0x00003bd5, 0x00003bea,
+	0x00003bf5, 0x00003c0a, 0x00003c15, 0x00003c23,
+	0x00003c2b, 0x00003c37, 0x00003c45, 0x00003c4d,
 	// Entry 260 - 27F
-	0x00003c33, 0x00003c38, 0x00003c4f, 0x00003c65,
-	0x00003c87, 0x00003cba, 0x00003ce7, 0x00003d1b,
-	0x00003d3d, 0x00003d86, 0x00003dcd, 0x00003dfb,
-	0x00003e15, 0x00003e32, 0x00003e51, 0x00003e6a,
-	0x00003e81, 0x00003ea7, 0x00003ec5, 0x00003eea,
-	0x00003f1d, 0x00003f44, 0x00003f77, 0x00003fb2,
-	0x00003ff4, 0x00004013, 0x00004043, 0x00004092,
-	0x000040b0, 0x000040df, 0x00004114, 0x00004132,
+	0x00003c6b, 0x00003c74, 0x00003c79, 0x00003c90,
+	0x00003ca6, 0x00003cc8, 0x00003cfb, 0x00003d28,
+	0x00003d5c, 0x00003d7e, 0x00003dc7, 0x00003e0e,
+	0x00003e3c, 0x00003e56, 0x00003e73, 0x00003e92,
+	0x00003eab, 0x00003ec2, 0x00003ee8, 0x00003f06,
+	0x00003f2b, 0x00003f5e, 0x00003f85, 0x00003fb8,
+	0x00003ff3, 0x00004035, 0x00004054, 0x00004084,
+	0x000040d3, 0x000040f1, 0x00004120, 0x00004155,
 	// Entry 280 - 29F
-	0x00004163, 0x00004182, 0x000041a2, 0x000041bd,
-	0x000041d4, 0x0000423b, 0x00004242, 0x0000424e,
-	0x00004268, 0x0000427d, 0x0000428d, 0x0000429a,
-	0x000042a4, 0x000042b1, 0x000042da, 0x00004309,
-	0x00004341,
-} // Size: 2652 bytes
+	0x00004173, 0x000041a4, 0x000041c3, 0x000041e3,
+	0x000041fe, 0x00004215, 0x0000427c, 0x00004283,
+	0x0000428f, 0x000042a9, 0x000042be, 0x000042ce,
+	0x000042db, 0x000042e5, 0x000042f2, 0x0000431b,
+	0x0000434a, 0x00004382,
+} // Size: 2656 bytes
 
-const itData string = "" + // Size: 17217 bytes
+const itData string = "" + // Size: 17282 bytes
 	"\x02Cambia passphrase\x02Devi essere loggato per sbloccare l'applicazion" +
 	"e.\x02Devi essere un amministratore per sbloccare l'applicazione.\x02Pas" +
 	"sphrase modificata.\x02Inizializza app\x02Le passphrase non corrispondon" +
@@ -2656,76 +2660,77 @@ const itData string = "" + // Size: 17217 bytes
 	"\x02Super\x02Sostenitore\x02Svezia\x02Svizzera\x02Tag\x02Chiavi del mode" +
 	"llo\x02Session temporanea\x02Testo\x02Valore testo\x02Prova\x02Tipo\x02U" +
 	"nità\x02Illimitato\x02Utente\x02Valore\x02Valore finale\x02Valore inizia" +
-	"le\x02Numero versione\x02Registrati\x02Registrazione\x02Nome organizzazi" +
-	"one\x02Paese\x02Accetta i termini di servizio\x02Accetta l'informativa s" +
-	"ulla privacy\x02Registrazione completata, controlla le tue email per la " +
-	"password.\x02Note legali\x02Informativa sulla privacy\x02Termini di serv" +
-	"izio\x02il file non ha una cartella superiore\x02Troppi tentativi di acc" +
-	"esso. Riprova tra 10 secondi.\x02È stato fornito un codice 2FA, ma la 2F" +
-	"A non è abilitata per questo account.\x02Password temporanea scaduta." +
-	"\x02impossibile generare la password temporanea\x02impossibile generare " +
-	"il salt\x02La password attuale non è valida.\x02La nuova password deve e" +
-	"ssere diversa dalla password attuale.\x02La password deve essere lunga a" +
-	"lmeno otto caratteri.\x02Le password non corrispondono.\x02La modalità c" +
-	"artella non è abilitata.\x02L'elemento del percorso è un file, non una d" +
-	"irectory.\x02Il nome file fornito non è consentito.\x02Esiste già una ca" +
-	"rtella con questo nome.\x02La destinazione non è una directory.\x02Impos" +
-	"sibile spostare la directory su sé stessa.\x02La destinazione è la posiz" +
-	"ione corrente.\x02la destinazione non è una directory\x02impossibile spo" +
-	"stare il file in una directory figlia\x02Il nuovo nome file è vuoto.\x02" +
-	"Il nuovo nome file è uguale al precedente.\x02Rilevato un ciclo nell'alb" +
-	"ero delle directory.\x02Impossibile caricare il percorso del file.\x02Im" +
-	"possibile ottenere il nome dell'oggetto.\x02Impossibile aprire il file." +
-	"\x02Nome file non valido.\x02Il percorso di archiviazione è vuoto.\x02Il" +
-	" nome del bucket è vuoto.\x02Il nome file esiste già.\x02Impossibile ott" +
-	"enere l'identità x25519.\x02Il nome file di archiviazione non corrispond" +
-	"e.\x02L'app non è ancora sbloccata.\x02Impossibile copiare il file tempo" +
-	"raneo.\x02Impossibile verificare il limite di archiviazione.\x02Limite d" +
-	"i archiviazione raggiunta per questa organizzazione. Utilizzato: %[1]s d" +
-	"i %[2]s.\x02Fattura\x02Numero fattura\x02Data fattura\x02Fornitore\x02Da" +
-	"ta di scadenza\x02Stato\x02Aperto\x02Pagato\x02In ritardo\x02Stato fattu" +
-	"ra\x02Organizzazione\x02Ricevuta\x02Data ricevuta\x02Venditore\x02Metodo" +
-	" di pagamento\x02Categoria ricevuta\x02Viaggio\x02Pasti\x02Ufficio\x02So" +
-	"ftware\x02Contratto\x02Nome contratto\x02Parti\x02Data inizio\x02Data fi" +
-	"ne\x02Bozza\x02Attivo\x02Scaduto\x02Terminato\x02Stato contratto\x02Tipo" +
-	" di contratto\x02Servizio\x02Vendita\x02NDA\x02Ordine di acquisto\x02Num" +
-	"ero ordine\x02Data ordine\x02Richiesto da\x02Inviato\x02Approvato\x02Eva" +
-	"so\x02Stato ordine di acquisto\x02Politica\x02Nome della politica\x02Dat" +
-	"a di validità\x02Archiviato\x02Stato della politica\x02Reparto della pol" +
-	"itica\x02Reparto\x02HR\x02IT\x02Finanza\x02Operazioni\x02Documento di pr" +
-	"ogetto\x02Nome progetto\x02Data obiettivo\x02In corso\x02Completato\x02I" +
-	"n pausa\x02Stato del progetto\x02Tipo di progetto\x02Piano\x02Rapporto" +
-	"\x02Specifiche\x02Note riunione\x02Data riunione\x02Titolo\x02Organizzat" +
-	"ore\x02Partecipanti\x02Interno\x02Cliente\x02Finale\x02Tipo di riunione" +
-	"\x02Stato della riunione\x02Nota spese\x02Periodo del rapporto\x02Dipend" +
-	"ente\x02Data di invio\x02Inviato\x02Stato spese\x02Reparto spese\x02Pers" +
-	"ona\x02La tua password temporanea è\x02Scade il\x02Nota\x02Benvenuto in " +
-	"SimpleDMS\x0202-01-2006 alle 15:04\x02Reimpostazione password SimpleDMS" +
-	"\x02Questo è un messaggio automatico, non rispondere.\x02Il tuo account " +
-	"è stato creato con successo.\x02Accedi e cambia la tua password il prim" +
-	"a possibile.\x02Reimpostazione password SimpleDMS\x02È stata richiesta u" +
-	"na reimpostazione della password per il tuo account.\x02La tua vecchia p" +
-	"assword continuerà a funzionare finché non la cambi.\x02«%[1]s» ti ha in" +
-	"vitato al tenant «%[2]s».\x02«%[1]s» ti ha invitato.\x02L'app è già iniz" +
-	"ializzata.\x02La passphrase è obbligatoria.\x02L'app è già sbloccata." +
-	"\x02Passphrase non valida.\x02L'app non è criptata con passphrase.\x02Ne" +
-	"ssuna passphrase impostata.\x02La nuova passphrase è obbligatoria.\x02La" +
-	" nuova passphrase non corrisponde alla conferma.\x02La vecchia passphras" +
-	"e è obbligatoria.\x02L'app non è ancora sbloccata. Riprova più tardi." +
-	"\x02Il tenant non è ancora inizializzato. Riprova più tardi.\x02Errore n" +
-	"ell'apertura del database del tenant. Riprova più tardi.\x02Esiste già u" +
-	"n'entità simile.\x02Impossibile eliminare un'entità ancora in uso.\x02Si" +
-	" è verificata una violazione di vincolo del database. Contatta il suppor" +
-	"to.\x02Validazione dei dati fallita.\x02Qualcosa è andato storto. Riprov" +
-	"a per favore.\x02Non hai effettuato l'accesso. Accedi per continuare." +
-	"\x02Impossibile analizzare l'URL.\x02Non sei autorizzato ad accedere a q" +
-	"uesto tenant.\x02Impossibile leggere il cookie.\x02Cookie impostato ma n" +
-	"on valido.\x02Cookie impostato ma vuoto.\x02Modalità manutenzione\x02La " +
-	"modalità manutenzione è attivata. Attendere fino a quando l'applicazione" +
-	" sarà nuovamente pronta.\x02Chiudi\x02Disconnetti\x02Informazioni su Sim" +
-	"pleDMS\x02Apri menu principale\x02Chiudi finestra\x02Suggerimento\x02opz" +
-	"ionale\x02obbligatorio\x02Cookie di autenticazione già impostato.\x02Imp" +
-	"ossibile generare il valore della sessione.\x02Non sei autorizzato ad ac" +
-	"cedere alla risorsa richiesta."
+	"le\x02Numero versione\x02Registrati\x02Registrazione\x02Prova gratuita d" +
+	"i 30 giorni, nessuna carta di credito richiesta.\x02Nome organizzazione" +
+	"\x02Paese\x02Accetta i termini di servizio\x02Accetta l'informativa sull" +
+	"a privacy\x02Registrazione completata, controlla le tue email per la pas" +
+	"sword.\x02Note legali\x02Informativa sulla privacy\x02Termini di servizi" +
+	"o\x02il file non ha una cartella superiore\x02Troppi tentativi di access" +
+	"o. Riprova tra 10 secondi.\x02È stato fornito un codice 2FA, ma la 2FA n" +
+	"on è abilitata per questo account.\x02Password temporanea scaduta.\x02im" +
+	"possibile generare la password temporanea\x02impossibile generare il sal" +
+	"t\x02La password attuale non è valida.\x02La nuova password deve essere " +
+	"diversa dalla password attuale.\x02La password deve essere lunga almeno " +
+	"otto caratteri.\x02Le password non corrispondono.\x02La modalità cartell" +
+	"a non è abilitata.\x02L'elemento del percorso è un file, non una directo" +
+	"ry.\x02Il nome file fornito non è consentito.\x02Esiste già una cartella" +
+	" con questo nome.\x02La destinazione non è una directory.\x02Impossibile" +
+	" spostare la directory su sé stessa.\x02La destinazione è la posizione c" +
+	"orrente.\x02la destinazione non è una directory\x02impossibile spostare " +
+	"il file in una directory figlia\x02Il nuovo nome file è vuoto.\x02Il nuo" +
+	"vo nome file è uguale al precedente.\x02Rilevato un ciclo nell'albero de" +
+	"lle directory.\x02Impossibile caricare il percorso del file.\x02Impossib" +
+	"ile ottenere il nome dell'oggetto.\x02Impossibile aprire il file.\x02Nom" +
+	"e file non valido.\x02Il percorso di archiviazione è vuoto.\x02Il nome d" +
+	"el bucket è vuoto.\x02Il nome file esiste già.\x02Impossibile ottenere l" +
+	"'identità x25519.\x02Il nome file di archiviazione non corrisponde.\x02L" +
+	"'app non è ancora sbloccata.\x02Impossibile copiare il file temporaneo." +
+	"\x02Impossibile verificare il limite di archiviazione.\x02Limite di arch" +
+	"iviazione raggiunta per questa organizzazione. Utilizzato: %[1]s di %[2]" +
+	"s.\x02Fattura\x02Numero fattura\x02Data fattura\x02Fornitore\x02Data di " +
+	"scadenza\x02Stato\x02Aperto\x02Pagato\x02In ritardo\x02Stato fattura\x02" +
+	"Organizzazione\x02Ricevuta\x02Data ricevuta\x02Venditore\x02Metodo di pa" +
+	"gamento\x02Categoria ricevuta\x02Viaggio\x02Pasti\x02Ufficio\x02Software" +
+	"\x02Contratto\x02Nome contratto\x02Parti\x02Data inizio\x02Data fine\x02" +
+	"Bozza\x02Attivo\x02Scaduto\x02Terminato\x02Stato contratto\x02Tipo di co" +
+	"ntratto\x02Servizio\x02Vendita\x02NDA\x02Ordine di acquisto\x02Numero or" +
+	"dine\x02Data ordine\x02Richiesto da\x02Inviato\x02Approvato\x02Evaso\x02" +
+	"Stato ordine di acquisto\x02Politica\x02Nome della politica\x02Data di v" +
+	"alidità\x02Archiviato\x02Stato della politica\x02Reparto della politica" +
+	"\x02Reparto\x02HR\x02IT\x02Finanza\x02Operazioni\x02Documento di progett" +
+	"o\x02Nome progetto\x02Data obiettivo\x02In corso\x02Completato\x02In pau" +
+	"sa\x02Stato del progetto\x02Tipo di progetto\x02Piano\x02Rapporto\x02Spe" +
+	"cifiche\x02Note riunione\x02Data riunione\x02Titolo\x02Organizzatore\x02" +
+	"Partecipanti\x02Interno\x02Cliente\x02Finale\x02Tipo di riunione\x02Stat" +
+	"o della riunione\x02Nota spese\x02Periodo del rapporto\x02Dipendente\x02" +
+	"Data di invio\x02Inviato\x02Stato spese\x02Reparto spese\x02Persona\x02L" +
+	"a tua password temporanea è\x02Scade il\x02Nota\x02Benvenuto in SimpleDM" +
+	"S\x0202-01-2006 alle 15:04\x02Reimpostazione password SimpleDMS\x02Quest" +
+	"o è un messaggio automatico, non rispondere.\x02Il tuo account è stato c" +
+	"reato con successo.\x02Accedi e cambia la tua password il prima possibil" +
+	"e.\x02Reimpostazione password SimpleDMS\x02È stata richiesta una reimpos" +
+	"tazione della password per il tuo account.\x02La tua vecchia password co" +
+	"ntinuerà a funzionare finché non la cambi.\x02«%[1]s» ti ha invitato al " +
+	"tenant «%[2]s».\x02«%[1]s» ti ha invitato.\x02L'app è già inizializzata." +
+	"\x02La passphrase è obbligatoria.\x02L'app è già sbloccata.\x02Passphras" +
+	"e non valida.\x02L'app non è criptata con passphrase.\x02Nessuna passphr" +
+	"ase impostata.\x02La nuova passphrase è obbligatoria.\x02La nuova passph" +
+	"rase non corrisponde alla conferma.\x02La vecchia passphrase è obbligato" +
+	"ria.\x02L'app non è ancora sbloccata. Riprova più tardi.\x02Il tenant no" +
+	"n è ancora inizializzato. Riprova più tardi.\x02Errore nell'apertura del" +
+	" database del tenant. Riprova più tardi.\x02Esiste già un'entità simile." +
+	"\x02Impossibile eliminare un'entità ancora in uso.\x02Si è verificata un" +
+	"a violazione di vincolo del database. Contatta il supporto.\x02Validazio" +
+	"ne dei dati fallita.\x02Qualcosa è andato storto. Riprova per favore." +
+	"\x02Non hai effettuato l'accesso. Accedi per continuare.\x02Impossibile " +
+	"analizzare l'URL.\x02Non sei autorizzato ad accedere a questo tenant." +
+	"\x02Impossibile leggere il cookie.\x02Cookie impostato ma non valido." +
+	"\x02Cookie impostato ma vuoto.\x02Modalità manutenzione\x02La modalità m" +
+	"anutenzione è attivata. Attendere fino a quando l'applicazione sarà nuov" +
+	"amente pronta.\x02Chiudi\x02Disconnetti\x02Informazioni su SimpleDMS\x02" +
+	"Apri menu principale\x02Chiudi finestra\x02Suggerimento\x02opzionale\x02" +
+	"obbligatorio\x02Cookie di autenticazione già impostato.\x02Impossibile g" +
+	"enerare il valore della sessione.\x02Non sei autorizzato ad accedere all" +
+	"a risorsa richiesta."
 
-	// Total table size 83277 bytes (81KiB); checksum: A62C57A0
+	// Total table size 83526 bytes (81KiB); checksum: 35952ECB

@@ -2867,6 +2867,11 @@
             "translation": "Sign up"
         },
         {
+            "id": "Free 30-day trial, no credit card required.",
+            "message": "Free 30-day trial, no credit card required.",
+            "translation": ""
+        },
+        {
             "id": "Organization name",
             "message": "Organization name",
             "translation": ""

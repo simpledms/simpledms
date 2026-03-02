@@ -10,6 +10,7 @@ func saasFormFieldsGotextHelper() {
 	pp := message.NewPrinter(language.English)
 	pp.Sprintf("Sign up")
 	pp.Sprintf("Sign up [subject]")
+	pp.Sprintf("Free 30-day trial, no credit card required.")
 	pp.Sprintf("Organization name")
 	pp.Sprintf("Country")
 	pp.Sprintf("Accept terms of service")

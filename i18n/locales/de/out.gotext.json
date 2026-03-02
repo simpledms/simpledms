@@ -3799,6 +3799,13 @@
             "fuzzy": true
         },
         {
+            "id": "Free 30-day trial, no credit card required.",
+            "message": "Free 30-day trial, no credit card required.",
+            "translation": "Kostenlose 30-Tage-Testphase, keine Kreditkarte erforderlich.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Organization name",
             "message": "Organization name",
             "translation": "Organisationsname",

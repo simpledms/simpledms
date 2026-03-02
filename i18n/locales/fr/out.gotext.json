@@ -3829,6 +3829,13 @@
             "fuzzy": true
         },
         {
+            "id": "Free 30-day trial, no credit card required.",
+            "message": "Free 30-day trial, no credit card required.",
+            "translation": "Essai gratuit de 30 jours, sans carte de crédit requise.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Organization name",
             "message": "Organization name",
             "translation": "Nom de l'organisation",

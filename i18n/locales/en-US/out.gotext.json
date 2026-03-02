@@ -3829,6 +3829,13 @@
             "fuzzy": true
         },
         {
+            "id": "Free 30-day trial, no credit card required.",
+            "message": "Free 30-day trial, no credit card required.",
+            "translation": "Free 30-day trial, no credit card required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Organization name",
             "message": "Organization name",
             "translation": "Organization name",

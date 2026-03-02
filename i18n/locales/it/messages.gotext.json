@@ -1747,6 +1747,13 @@
             "fuzzy": true
         },
         {
+            "id": "Free 30-day trial, no credit card required.",
+            "message": "Free 30-day trial, no credit card required.",
+            "translation": "Prova gratuita di 30 giorni, nessuna carta di credito richiesta.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "French",
             "message": "French",
             "translation": "Francese",
