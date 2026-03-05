@@ -19,7 +19,7 @@
 		disabled globalViewTransactions because they seemed the cause for dramatic random slow downs of
 		the ui after some time of using; at least they made this situation occur more often..
 		*/}}
-		<meta name="htmx-config" content='{"disableInheritance":true, "globalViewTransitions":false}'>
+		<meta name="htmx-config" content='{"disableInheritance":true, "globalViewTransitions":false, "timeout":30000}'>
 
 		{{- if .ShouldRefreshEvery60Seconds }}
 			<meta http-equiv="refresh" content="60" />
@@ -241,6 +241,40 @@
 				})
 			});
 
+			const showClientSnackbar = (text) => {
+				document.dispatchEvent(new CustomEvent('closeAllSnackbars', {}));
+				document.querySelectorAll('.js-client-snackbar').forEach((snackbar) => {
+					snackbar.remove();
+				})
+
+				const template = document.getElementById('js-client-snackbar-template');
+				if (!template) {
+					return;
+				}
+
+				const fragment = template.content.cloneNode(true);
+				const snackbarContainer = fragment.querySelector('.js-client-snackbar');
+				const snackbar = fragment.querySelector('.js-snackbar');
+				const content = fragment.querySelector('.js-client-snackbar-text');
+				if (!snackbarContainer || !snackbar || !content) {
+					return;
+				}
+
+				content.textContent = text;
+
+				const target = document.querySelector('dialog[open]:first-child.js-dialog:not(:has(dialog[open].js-dialog))') || document.body;
+				target.appendChild(snackbarContainer);
+
+				let timeoutID = setTimeout(() => {
+					snackbarContainer.remove();
+				}, 8000);
+
+				snackbar.addEventListener('click', () => {
+					clearTimeout(timeoutID);
+					snackbarContainer.remove();
+				})
+			}
+
 			document.addEventListener('htmx:beforeRequest', function(e) {
 				// does close side sheet on navigation to another page;
 				// page nav is always boosted;
@@ -319,6 +353,12 @@
 					e.detail.parameters = new FormData();
 				}
 			})
+
+			document.addEventListener('htmx:timeout', function(e) {
+				console.warn('htmx request timed out', e.detail.pathInfo)
+				showClientSnackbar('The request timed out. Please try again.')
+			})
+
 			document.addEventListener('htmx:beforeSwap', function(e) {
 				// show snackbar on errors, by default htmx doesn't swap for non 2xx status codes
 				// https://htmx.org/docs/#modifying_swapping_behavior_with_events
@@ -354,11 +394,22 @@
 			})
 		</script>
 		<div id="errorSwapDummy" style="display: none;"></div>
+		<template id="js-client-snackbar-template">
+			<div class="js-client-snackbar">
+				<div popover="manual" class="js-snackbar bottom-24 flex top-auto group mx-auto left-4 right-4 max-w-md bg-inverse-surface drop-shadow rounded-xs p-0 hover:cursor-pointer">
+					<div class="state-layer-inverse-primary flex min-h-12 max-h-[4.25rem] items-center justify-center gap-x-4 px-4">
+						<div class="js-client-snackbar-text text-inverse-on-surface body-md group-hover:text-inverse-primary"></div>
+					</div>
+				</div>
+			</div>
+		</template>
 
 	{{/* workaround because encoding cannot set directly when using htmx.ajax */}}
 	<div id="fileHandlingAPI"
 			hx-post="/-/open-file/upload-files-cmd"
 			hx-encoding="multipart/form-data"
+			{{/* TODO verify that 120s timeout is long enough for file uploads */}}
+			hx-request='{"timeout":120000}'
 			hx-trigger="none"
 	></div>
 	<script type="module" defer>

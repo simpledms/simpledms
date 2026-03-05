@@ -2,7 +2,10 @@
 {{- define "Form" }}
 	<form
 			id="{{ .GetID }}"
-			{{ if .IsMultipartFormData }}hx-encoding="multipart/form-data"{{ end }}
+			{{ if .IsMultipartFormData }}
+				{{/* TODO verify that 120s timeout is long enough for file uploads */}}
+				hx-encoding="multipart/form-data" hx-request='{"timeout":120000}'
+			{{ end }}
 			hx-trigger="submit"
 			{{ template "HTMXAttrs" .HTMXAttrs }}
 			class="flex flex-col gap-y-4 max-h-full"
