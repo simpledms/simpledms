@@ -211,12 +211,14 @@ func (qq *Router) wrapCommand(handlerFn handlerFn) handlerFn {
 // TODO is this the best place?
 func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc {
 	return func(rw http.ResponseWriter, req *http.Request) {
+		requestIsReadOnly := isReadOnly
+
 		// workaround for `open with` function // TODO find a better solution
 		if strings.Contains(req.URL.Path, "/inbox/") && req.URL.Query().Has("upload_token") {
-			isReadOnly = false
+			requestIsReadOnly = false
 		}
 
-		mainTx, err := qq.mainDB.Tx(req.Context(), isReadOnly)
+		mainTx, err := qq.mainDB.Tx(req.Context(), requestIsReadOnly)
 		if err != nil {
 			log.Println(err)
 			rw.WriteHeader(http.StatusInternalServerError)
@@ -259,13 +261,23 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 		}()
 
 		// FIXME is nilableTenantTx assigned to var defined above?
-		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, isReadOnly)
+		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, requestIsReadOnly)
 		if err != nil {
 			log.Println(err)
 			qq.handleError(rwx, visitorCtx, err, mainTx, nilableTenantTx)
 			return
 		}
 		if isRedirected {
+			err = mainTx.Rollback()
+			if err != nil {
+				log.Println(err)
+			}
+			if nilableTenantTx != nil {
+				err = nilableTenantTx.Rollback()
+				if err != nil {
+					log.Println(err)
+				}
+			}
 			return
 		}
 
