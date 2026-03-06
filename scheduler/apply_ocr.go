@@ -46,7 +46,9 @@ func (qq *Scheduler) applyOCR() {
 		ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 		qq.applyOCRx(ctx)
-		time.Sleep(15 * time.Second)
+
+		// TODO is this to short? how expensive is this in larger instances?
+		time.Sleep(5 * time.Second)
 	}
 }
 

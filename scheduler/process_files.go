@@ -38,16 +38,11 @@ func (qq *Scheduler) processFiles() {
 		ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 		qq.copyTempFilesToFinalDest(ctx)
-
-		// some delay between copying and deletion in case someone is reading temp file at the moment;
-		// not a problem that high because user can access files anyway and in the meantime
-		// newly started reads read from final destination
-		time.Sleep(5 * time.Minute)
-
 		qq.deleteProcessedTempFiles(ctx)
 		qq.deleteTempAccountFiles(ctx)
 
-		// no sleep necessary because of Sleep above
+		// TODO is this to short? how expensive is this in larger instances?
+		time.Sleep(5 * time.Second)
 	}
 }
 
@@ -84,10 +79,15 @@ func (qq *Scheduler) copyTempFilesToFinalDest(ctx context.Context) {
 }
 
 func (qq *Scheduler) deleteProcessedTempFiles(ctx context.Context) {
+	// some delay between copying and deletion in case someone is reading temp file at the moment;
+	// not a problem that high because user can access files anyway and in the meantime
+	// newly started reads read from final destination
+	deletionThreshold := time.Now().Add(-5 * time.Minute)
+
 	qq.tenantDBs.Range(func(tenantID int64, tenantDB *sqlx.TenantDB) bool {
 		filesToDelete := tenantDB.ReadWriteConn.StoredFile.Query().Where(
-			storedfile.CopiedToFinalDestinationAtNotNil(), // already copied
-			storedfile.DeletedTemporaryFileAtIsNil(),      // not deleted yet
+			storedfile.CopiedToFinalDestinationAtLT(deletionThreshold), // already copied with safety margin
+			storedfile.DeletedTemporaryFileAtIsNil(),                   // not deleted yet
 		).AllX(ctx)
 
 		for _, fileToDelete := range filesToDelete {
