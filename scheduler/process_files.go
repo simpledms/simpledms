@@ -10,8 +10,10 @@ import (
 	"entgo.io/ent/privacy"
 	"github.com/minio/minio-go/v7"
 
+	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
+	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/model"
@@ -85,10 +87,7 @@ func (qq *Scheduler) deleteProcessedTempFiles(ctx context.Context) {
 	deletionThreshold := time.Now().Add(-5 * time.Minute)
 
 	qq.tenantDBs.Range(func(tenantID int64, tenantDB *sqlx.TenantDB) bool {
-		filesToDelete := tenantDB.ReadWriteConn.StoredFile.Query().Where(
-			storedfile.CopiedToFinalDestinationAtLT(deletionThreshold), // already copied with safety margin
-			storedfile.DeletedTemporaryFileAtIsNil(),                   // not deleted yet
-		).AllX(ctx)
+		filesToDelete := qq.processedTempFilesToDelete(ctx, tenantDB, deletionThreshold)
 
 		for _, fileToDelete := range filesToDelete {
 			filem := model.NewStoredFile(fileToDelete)
@@ -127,16 +126,19 @@ func (qq *Scheduler) deleteProcessedTempFiles(ctx context.Context) {
 	})
 }
 
+func (qq *Scheduler) processedTempFilesToDelete(
+	ctx context.Context,
+	tenantDB *sqlx.TenantDB,
+	deletionThreshold time.Time,
+) []*enttenant.StoredFile {
+	return tenantDB.ReadWriteConn.StoredFile.Query().Where(
+		storedfile.CopiedToFinalDestinationAtLT(deletionThreshold), // already copied with safety margin
+		storedfile.DeletedTemporaryFileAtIsNil(),                   // not deleted yet
+	).AllX(ctx)
+}
+
 func (qq *Scheduler) deleteTempAccountFiles(ctx context.Context) {
-	expiredTmpFiles := qq.mainDB.ReadWriteConn.TemporaryFile.
-		Query().
-		Where(
-			// if not nil, file deletion is handled by procedures for stored files
-			temporaryfile.ConvertedToStoredFileAtIsNil(),
-			temporaryfile.ExpiresAtLT(time.Now()), // TODO is nil ignored?
-		).
-		Order(temporaryfile.ByCreatedAt(sql.OrderDesc())).
-		AllX(ctx)
+	expiredTmpFiles := qq.tempAccountFilesToDelete(ctx, time.Now())
 
 	for _, tmpFile := range expiredTmpFiles {
 		tmpFilem := modelmain.NewTemporaryFile(tmpFile)
@@ -171,4 +173,19 @@ func (qq *Scheduler) deleteTempAccountFiles(ctx context.Context) {
 		}
 	}
 
+}
+
+func (qq *Scheduler) tempAccountFilesToDelete(
+	ctx context.Context,
+	now time.Time,
+) []*entmain.TemporaryFile {
+	return qq.mainDB.ReadWriteConn.TemporaryFile.
+		Query().
+		Where(
+			// if not nil, file deletion is handled by procedures for stored files
+			temporaryfile.ConvertedToStoredFileAtIsNil(),
+			temporaryfile.ExpiresAtLT(now), // TODO is nil ignored?
+		).
+		Order(temporaryfile.ByCreatedAt(sql.OrderDesc())).
+		AllX(ctx)
 }

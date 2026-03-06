@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	entsql "entgo.io/ent/dialect/sql"
 	"entgo.io/ent/privacy"
 	"filippo.io/age"
 	"github.com/marcobeierer/go-tika"
@@ -86,6 +87,7 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 				),
 				file.IsDirectory(false),
 			).
+			Order(file.ByID(entsql.OrderAsc())).
 			AllX(ctx)
 
 		for _, fileToProcess := range filesToProcess {
@@ -103,7 +105,7 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 				return true
 			}
 			if fileNotReady {
-				return true // continue with next tenant
+				continue
 			}
 			if fileTooLarge {
 				// TODO find a more expressive solution to store in database
