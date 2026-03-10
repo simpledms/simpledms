@@ -16,6 +16,7 @@ type Infra struct {
 	FileRepo                             *FileRepository
 	pluginRegistry                       *pluginx.Registry
 	manageTenantsDeleteTenantCmdEndpoint string
+	manageTenantsDownloadBackupEndpoint  string
 	// nilableMainIdentity *age.X25519Identity
 	systemConfig *modelmain.SystemConfig
 	// no minio.Client, seems to risky for misuse; inject on demand
@@ -40,6 +41,7 @@ func NewInfra(
 		FileRepo:                             fileRepo,
 		pluginRegistry:                       pluginRegistry,
 		manageTenantsDeleteTenantCmdEndpoint: "",
+		manageTenantsDownloadBackupEndpoint:  "",
 		systemConfig:                         systemConfig,
 		// nilableMainIdentity: nilableMainIdentity,
 	}
@@ -54,6 +56,10 @@ func (qq *Infra) UnsafeDB() *enttenant.Client {
 
 func (qq *Infra) Renderer() *ui.Renderer {
 	return qq.renderer
+}
+
+func (qq *Infra) MetaPath() string {
+	return qq.metaPath
 }
 
 func (qq *Infra) FileSystem() *filesystem.S3FileSystem {
@@ -78,6 +84,14 @@ func (qq *Infra) ManageTenantsDeleteTenantCmdEndpoint() string {
 
 func (qq *Infra) SetManageTenantsDeleteTenantCmdEndpoint(endpoint string) {
 	qq.manageTenantsDeleteTenantCmdEndpoint = endpoint
+}
+
+func (qq *Infra) ManageTenantsDownloadBackupEndpoint() string {
+	return qq.manageTenantsDownloadBackupEndpoint
+}
+
+func (qq *Infra) SetManageTenantsDownloadBackupEndpoint(endpoint string) {
+	qq.manageTenantsDownloadBackupEndpoint = endpoint
 }
 
 /*func (qq *Infra) NilableMainIdentity() *age.X25519Identity {

@@ -2,6 +2,7 @@ package dashboard
 
 import (
 	"log"
+	"net/url"
 	"time"
 
 	"github.com/simpledms/simpledms/common"
@@ -92,7 +93,7 @@ func (qq *DashboardCardsPartial) Widget(
 	spacesByTenant := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
 	for tenantx, spaces := range spacesByTenant {
 		var tenantCards []*wx.Card
-		var tenantHeaderBtns []*wx.Button
+		var tenantHeaderBtns []wx.IWidget
 
 		if tenantCard := qq.nilableTenantCard(ctx, tenantx); tenantCard != nil {
 			tenantCards = append(tenantCards, tenantCard)
@@ -110,6 +111,9 @@ func (qq *DashboardCardsPartial) Widget(
 		}
 		if btn, ok := qq.deleteTenantBtn(ctx, tenantx); ok {
 			tenantHeaderBtns = append(tenantHeaderBtns, btn)
+		}
+		if link, ok := qq.downloadTenantBackupLink(ctx, tenantx); ok {
+			tenantHeaderBtns = append(tenantHeaderBtns, link)
 		}
 		for _, spacex := range spaces {
 			tenantCards = append(tenantCards, qq.spaceCard(ctx, spacex, tenantx))
@@ -547,6 +551,40 @@ func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entm
 			HxPost:    deleteTenantCmdEndpoint,
 			HxVals:    util.JSON(map[string]any{"TenantID": tenantx.PublicID.String()}),
 			HxConfirm: wx.T("Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.").String(ctx),
+		},
+	}, true
+}
+
+func (qq *DashboardCardsPartial) downloadTenantBackupLink(
+	ctx ctxx.Context,
+	tenantx *entmain.Tenant,
+) (*wx.Link, bool) {
+	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
+		return nil, false
+	}
+
+	endpoint := qq.infra.ManageTenantsDownloadBackupEndpoint()
+	if endpoint == "" {
+		return nil, false
+	}
+
+	tenantm := tenant.NewTenant(tenantx)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
+	if !tenantm.IsOwner(accountm) {
+		return nil, false
+	}
+	if !tenantm.IsInitialized() {
+		return nil, false
+	}
+
+	filename := "tenant-backup-" + tenantx.PublicID.String() + ".zip"
+
+	return &wx.Link{
+		Href:     endpoint + "?tenant_id=" + url.QueryEscape(tenantx.PublicID.String()),
+		Filename: filename,
+		Child: &wx.Button{
+			Label:     wx.T("Download backup"),
+			StyleType: wx.ButtonStyleTypeElevated,
 		},
 	}, true
 }

@@ -604,6 +604,55 @@ func (qq *S3FileSystem) saveFile(
 	return &fileInfo, storageFilename, fileSize, nil
 }
 
+// necessary to restore backups
+func (qq *S3FileSystem) UnsafeUploadBlobToStorageLocation(
+	ctx context.Context,
+	x25519Identity *age.X25519Identity,
+	fileToSave io.Reader,
+	originalFilename string,
+	storagePath string,
+	storageFilename string,
+) error {
+	storageFilenameWithoutExt, err := qq.unsafeTrimGzipAgeSuffix(originalFilename, storageFilename)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	_, actualStorageFilename, _, err := qq.saveFile(
+		ctx,
+		x25519Identity,
+		fileToSave,
+		originalFilename,
+		storageFilenameWithoutExt,
+		storagePath,
+	)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if actualStorageFilename != storageFilename {
+		return fmt.Errorf("unexpected storage filename generated: %s", actualStorageFilename)
+	}
+
+	return nil
+}
+
+func (qq *S3FileSystem) unsafeTrimGzipAgeSuffix(originalFilename string, storageFilename string) (string, error) {
+	originalFilename = filepath.Clean(originalFilename)
+	expectedSuffix := filepath.Ext(originalFilename) + ".gz.age"
+	if !strings.HasSuffix(storageFilename, expectedSuffix) {
+		return "", fmt.Errorf("storage filename does not match original filename extension")
+	}
+
+	storageFilenameWithoutExt := strings.TrimSuffix(storageFilename, expectedSuffix)
+	if storageFilenameWithoutExt == "" {
+		return "", fmt.Errorf("storage filename prefix is empty")
+	}
+
+	return storageFilenameWithoutExt, nil
+}
+
 type progressWriter struct {
 	total int64
 }
