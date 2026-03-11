@@ -51,15 +51,23 @@ func NewS3FileSystem(
 	bucketName string,
 	fileSystem *FileSystem,
 	disableFileEncryption bool,
-	isSaaSModeEnabled bool,
+	storageQuota *StorageQuota,
 ) *S3FileSystem {
+	if storageQuota == nil {
+		storageQuota = NewStorageQuota(false)
+	}
+
 	return &S3FileSystem{
 		FileSystem:            fileSystem,
 		client:                client,
 		bucketName:            bucketName,
 		disableFileEncryption: disableFileEncryption,
-		storageQuota:          NewStorageQuota(isSaaSModeEnabled),
+		storageQuota:          storageQuota,
 	}
+}
+
+func (qq *S3FileSystem) StorageQuota() *StorageQuota {
+	return qq.storageQuota
 }
 
 func (qq *S3FileSystem) TenantUsageBytes(ctx ctxx.Context) (int64, int64, error) {
@@ -634,6 +642,55 @@ func (qq *S3FileSystem) saveFile(
 	return &fileInfo, storageFilename, fileSize, nil
 }
 
+// necessary to restore backups
+func (qq *S3FileSystem) UnsafeUploadBlobToStorageLocation(
+	ctx context.Context,
+	x25519Identity *age.X25519Identity,
+	fileToSave io.Reader,
+	originalFilename string,
+	storagePath string,
+	storageFilename string,
+) error {
+	storageFilenameWithoutExt, err := qq.unsafeTrimGzipAgeSuffix(originalFilename, storageFilename)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	_, actualStorageFilename, _, err := qq.saveFile(
+		ctx,
+		x25519Identity,
+		fileToSave,
+		originalFilename,
+		storageFilenameWithoutExt,
+		storagePath,
+	)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if actualStorageFilename != storageFilename {
+		return fmt.Errorf("unexpected storage filename generated: %s", actualStorageFilename)
+	}
+
+	return nil
+}
+
+func (qq *S3FileSystem) unsafeTrimGzipAgeSuffix(originalFilename string, storageFilename string) (string, error) {
+	originalFilename = filepath.Clean(originalFilename)
+	expectedSuffix := filepath.Ext(originalFilename) + ".gz.age"
+	if !strings.HasSuffix(storageFilename, expectedSuffix) {
+		return "", fmt.Errorf("storage filename does not match original filename extension")
+	}
+
+	storageFilenameWithoutExt := strings.TrimSuffix(storageFilename, expectedSuffix)
+	if storageFilenameWithoutExt == "" {
+		return "", fmt.Errorf("storage filename prefix is empty")
+	}
+
+	return storageFilenameWithoutExt, nil
+}
+
 type progressWriter struct {
 	total int64
 }
@@ -846,7 +903,8 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 		// if transaction fails
 		SetTemporaryStoragePath(tmpFile.StoragePath).
 		SetTemporaryStorageFilename(tmpFile.StorageFilename).
-		SetUploadStartedAt(time.Now()).
+		SetUploadStartedAt(tmpFile.UploadStartedAt).
+		SetUploadSucceededAt(*tmpFile.UploadSucceededAt).
 		SetSha256(tmpFile.Sha256).
 		SaveX(ctx)
 

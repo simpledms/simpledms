@@ -52,3 +52,11 @@ func (qq *Menu) GetInsetInlineEnd() string {
 	// TODO impl for bottom and top position
 	return ""
 }
+
+func (qq *Menu) IsPositionRight() bool {
+	return qq.Position == PositionRight
+}
+
+func (qq *Menu) IsPositionLeft() bool {
+	return qq.Position == PositionLeft
+}

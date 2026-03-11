@@ -96,6 +96,11 @@ func IsDefault(v bool) predicate.TenantAccountAssignment {
 	return predicate.TenantAccountAssignment(sql.FieldEQ(FieldIsDefault, v))
 }
 
+// IsOwningTenant applies equality check predicate on the "is_owning_tenant" field. It's identical to IsOwningTenantEQ.
+func IsOwningTenant(v bool) predicate.TenantAccountAssignment {
+	return predicate.TenantAccountAssignment(sql.FieldEQ(FieldIsOwningTenant, v))
+}
+
 // ExpiresAt applies equality check predicate on the "expires_at" field. It's identical to ExpiresAtEQ.
 func ExpiresAt(v time.Time) predicate.TenantAccountAssignment {
 	return predicate.TenantAccountAssignment(sql.FieldEQ(FieldExpiresAt, v))
@@ -299,6 +304,16 @@ func IsDefaultEQ(v bool) predicate.TenantAccountAssignment {
 // IsDefaultNEQ applies the NEQ predicate on the "is_default" field.
 func IsDefaultNEQ(v bool) predicate.TenantAccountAssignment {
 	return predicate.TenantAccountAssignment(sql.FieldNEQ(FieldIsDefault, v))
+}
+
+// IsOwningTenantEQ applies the EQ predicate on the "is_owning_tenant" field.
+func IsOwningTenantEQ(v bool) predicate.TenantAccountAssignment {
+	return predicate.TenantAccountAssignment(sql.FieldEQ(FieldIsOwningTenant, v))
+}
+
+// IsOwningTenantNEQ applies the NEQ predicate on the "is_owning_tenant" field.
+func IsOwningTenantNEQ(v bool) predicate.TenantAccountAssignment {
+	return predicate.TenantAccountAssignment(sql.FieldNEQ(FieldIsOwningTenant, v))
 }
 
 // RoleEQ applies the EQ predicate on the "role" field.

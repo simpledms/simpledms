@@ -119,6 +119,20 @@ func (_c *TenantAccountAssignmentCreate) SetNillableIsDefault(v *bool) *TenantAc
 	return _c
 }
 
+// SetIsOwningTenant sets the "is_owning_tenant" field.
+func (_c *TenantAccountAssignmentCreate) SetIsOwningTenant(v bool) *TenantAccountAssignmentCreate {
+	_c.mutation.SetIsOwningTenant(v)
+	return _c
+}
+
+// SetNillableIsOwningTenant sets the "is_owning_tenant" field if the given value is not nil.
+func (_c *TenantAccountAssignmentCreate) SetNillableIsOwningTenant(v *bool) *TenantAccountAssignmentCreate {
+	if v != nil {
+		_c.SetIsOwningTenant(*v)
+	}
+	return _c
+}
+
 // SetRole sets the "role" field.
 func (_c *TenantAccountAssignmentCreate) SetRole(v tenantrole.TenantRole) *TenantAccountAssignmentCreate {
 	_c.mutation.SetRole(v)
@@ -244,6 +258,10 @@ func (_c *TenantAccountAssignmentCreate) defaults() {
 		v := tenantaccountassignment.DefaultIsDefault
 		_c.mutation.SetIsDefault(v)
 	}
+	if _, ok := _c.mutation.IsOwningTenant(); !ok {
+		v := tenantaccountassignment.DefaultIsOwningTenant
+		_c.mutation.SetIsOwningTenant(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -265,6 +283,9 @@ func (_c *TenantAccountAssignmentCreate) check() error {
 	}
 	if _, ok := _c.mutation.IsDefault(); !ok {
 		return &ValidationError{Name: "is_default", err: errors.New(`entmain: missing required field "TenantAccountAssignment.is_default"`)}
+	}
+	if _, ok := _c.mutation.IsOwningTenant(); !ok {
+		return &ValidationError{Name: "is_owning_tenant", err: errors.New(`entmain: missing required field "TenantAccountAssignment.is_owning_tenant"`)}
 	}
 	if _, ok := _c.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`entmain: missing required field "TenantAccountAssignment.role"`)}
@@ -327,6 +348,10 @@ func (_c *TenantAccountAssignmentCreate) createSpec() (*TenantAccountAssignment,
 	if value, ok := _c.mutation.IsDefault(); ok {
 		_spec.SetField(tenantaccountassignment.FieldIsDefault, field.TypeBool, value)
 		_node.IsDefault = value
+	}
+	if value, ok := _c.mutation.IsOwningTenant(); ok {
+		_spec.SetField(tenantaccountassignment.FieldIsOwningTenant, field.TypeBool, value)
+		_node.IsOwningTenant = value
 	}
 	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(tenantaccountassignment.FieldRole, field.TypeEnum, value)

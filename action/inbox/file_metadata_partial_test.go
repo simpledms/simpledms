@@ -15,7 +15,7 @@ func TestOcrStatusMessageReturnsNilWhenOCRSucceeded(t *testing.T) {
 }
 
 func TestOcrStatusMessageForPendingOCR(t *testing.T) {
-	t.Setenv(ocrutil.MaxFileSizeEnvVar, "100")
+	t.Setenv(ocrutil.MaxFileSizeMiBEnvVar, "1")
 
 	partial := &FileMetadataPartial{}
 	msg := partial.nilableOCRStatusMessage(false, 100)
@@ -30,10 +30,10 @@ func TestOcrStatusMessageForPendingOCR(t *testing.T) {
 }
 
 func TestOcrStatusMessageForTooLargeFile(t *testing.T) {
-	t.Setenv(ocrutil.MaxFileSizeEnvVar, "100")
+	t.Setenv(ocrutil.MaxFileSizeMiBEnvVar, "1")
 
 	partial := &FileMetadataPartial{}
-	msg := partial.nilableOCRStatusMessage(false, 101)
+	msg := partial.nilableOCRStatusMessage(false, (1024*1024)+1)
 	if msg == nil {
 		t.Fatalf("expected message for too-large OCR file")
 	}

@@ -73,7 +73,7 @@ func (qq *StorageQuota) EnsureTenantStorageLimit(ctx ctxx.Context, incomingUploa
 func (qq *StorageQuota) tenantStorageLimitBytes(ctx ctxx.Context) (int64, error) {
 	tenantPlan := ctx.TenantCtx().Tenant.Plan
 	if !qq.planNeedsActiveUserCount(tenantPlan) {
-		return qq.limitBytesForPlan(tenantPlan, 0), nil
+		return qq.LimitBytesForPlan(tenantPlan, 0), nil
 	}
 
 	activeUserCount, err := qq.activeTenantUserCount(ctx)
@@ -81,7 +81,7 @@ func (qq *StorageQuota) tenantStorageLimitBytes(ctx ctxx.Context) (int64, error)
 		return 0, err
 	}
 
-	return qq.limitBytesForPlan(tenantPlan, activeUserCount), nil
+	return qq.LimitBytesForPlan(tenantPlan, activeUserCount), nil
 }
 
 func (qq *StorageQuota) activeTenantUserCount(ctx ctxx.Context) (int, error) {
@@ -106,7 +106,7 @@ func (qq *StorageQuota) planNeedsActiveUserCount(tenantPlan plan.Plan) bool {
 	return tenantPlan == plan.Pro
 }
 
-func (qq *StorageQuota) limitBytesForPlan(tenantPlan plan.Plan, activeUserCount int) int64 {
+func (qq *StorageQuota) LimitBytesForPlan(tenantPlan plan.Plan, activeUserCount int) int64 {
 	if tenantPlan == plan.Trial {
 		return tenantQuotaTrialBytes
 	}
@@ -135,7 +135,11 @@ func (qq *StorageQuota) currentUsedTenantStorageBytes(ctx ctxx.Context) (int64, 
 	rows := make([]tenantUsedStorageRow, 0, 1)
 	ctxWithPrivacyBypass := privacy.DecisionContext(ctx, privacy.Allow)
 	err := ctx.TenantCtx().TTx.StoredFile.Query().
-		Where(storedfile.UploadSucceededAtNotNil()).
+		// Legacy files created before upload status tracking have no upload timestamps.
+		Where(storedfile.Or(
+			storedfile.UploadSucceededAtNotNil(),
+			storedfile.UploadStartedAtIsNil(),
+		)).
 		Aggregate(enttenant.As(enttenant.Sum(storedfile.FieldSize), "tenant_used_bytes")).
 		Scan(ctxWithPrivacyBypass, &rows)
 	if err != nil {

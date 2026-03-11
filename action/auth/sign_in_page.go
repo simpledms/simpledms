@@ -1,13 +1,12 @@
 package auth
 
 import (
+	"html/template"
 	"net"
 
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/common/country"
-	"github.com/simpledms/simpledms/model/common/language"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -51,33 +50,36 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 
 	var children []wx.IWidget
 
-	// TODO 2fa
 	children = append(children,
 		wx.H(wx.HeadingTypeHeadlineMd, wx.Tuf("%s", wx.T("Sign in [subject]").String(ctx))),
 		qq.actions.SignInCmd.Form(
 			ctx,
-			qq.actions.SignInCmd.Data("", "", ""),
+			qq.actions.SignInCmd.Data("", ""),
 			actionx.ResponseWrapperNone,
 			wx.T("Sign in"),
 			"",
 		),
+		&wx.Button{
+			Label:     wx.T("Sign in with passkey"),
+			StyleType: wx.ButtonStyleTypeElevated,
+			HTMXAttrs: wx.HTMXAttrs{
+				HxOn: &wx.HxOn{
+					Event:   "click",
+					Handler: template.JS("window.simpledmsPasskeySignIn(event)"),
+				},
+			},
+		},
 		qq.actions.ResetPasswordCmd.ModalLink(
 			qq.actions.ResetPasswordCmd.Data(""),
 			wx.T("Forgot password?"),
 			"",
 		),
+		qq.actions.PasskeyRecoverySignInCmd.ModalLink(
+			qq.actions.PasskeyRecoverySignInCmd.Data("", ""),
+			wx.T("Use backup code"),
+			"",
+		),
 	)
-
-	if qq.infra.SystemConfig().IsSaaSModeEnabled() {
-		children = append(
-			children,
-			qq.actions.SignUpCmd.ModalLink(
-				// TODO set country and language based on browser settings
-				qq.actions.SignUpCmd.Data("", "", "", country.Unknown, language.Unknown, false),
-				wx.T("Don't have an account? Sign up."),
-				"",
-			))
-	}
 
 	column := &wx.Column{
 		GapYSize:         wx.Gap4,

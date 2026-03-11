@@ -16,7 +16,13 @@ func NewMailer() *Mailer {
 	return &Mailer{}
 }
 
-func (qq *Mailer) SignUp(ctx ctxx.Context, accountx *entmain.Account, tmpPassword string, expiresAt time.Time) {
+func (qq *Mailer) SignUp(
+	ctx ctxx.Context,
+	accountx *entmain.Account,
+	tmpPassword string,
+	expiresAt time.Time,
+	signInURL string,
+) {
 	// wx.T for translations
 	subject := wx.T("Welcome to SimpleDMS").String(ctx)
 
@@ -24,7 +30,7 @@ func (qq *Mailer) SignUp(ctx ctxx.Context, accountx *entmain.Account, tmpPasswor
 	formattedExpiresAt := expiresAt.In(ctx.VisitorCtx().Location).Format(wx.T("02-01-2006 at 15:04 o'clock").String(ctx))
 
 	// Create email template
-	template := CreateSignUpTemplate(ctx, tmpPassword, formattedExpiresAt)
+	template := CreateSignUpTemplate(ctx, tmpPassword, formattedExpiresAt, signInURL)
 
 	// Generate HTML and plain text versions
 	htmlBody := template.RenderHTML(ctx)
@@ -38,7 +44,13 @@ func (qq *Mailer) SignUp(ctx ctxx.Context, accountx *entmain.Account, tmpPasswor
 		SaveX(ctx)
 }
 
-func (qq *Mailer) ResetPassword(ctx ctxx.Context, accountx *entmain.Account, tmpPassword string, expiresAt time.Time) {
+func (qq *Mailer) ResetPassword(
+	ctx ctxx.Context,
+	accountx *entmain.Account,
+	tmpPassword string,
+	expiresAt time.Time,
+	signInURL string,
+) {
 	// wx.T for translations
 	subject := wx.T("SimpleDMS password reset").String(ctx)
 
@@ -46,7 +58,7 @@ func (qq *Mailer) ResetPassword(ctx ctxx.Context, accountx *entmain.Account, tmp
 	formattedExpiresAt := expiresAt.In(ctx.VisitorCtx().Location).Format(wx.T("02-01-2006 at 15:04 o'clock").String(ctx))
 
 	// Create email template
-	template := CreateResetPasswordTemplate(ctx, tmpPassword, formattedExpiresAt)
+	template := CreateResetPasswordTemplate(ctx, tmpPassword, formattedExpiresAt, signInURL)
 
 	// Generate HTML and plain text versions
 	htmlBody := template.RenderHTML(ctx)
@@ -60,12 +72,18 @@ func (qq *Mailer) ResetPassword(ctx ctxx.Context, accountx *entmain.Account, tmp
 		SaveX(ctx)
 }
 
-func (qq *Mailer) CreateUser(ctx ctxx.Context, accountx *entmain.Account, tmpPassword string, expiresAt time.Time) {
+func (qq *Mailer) CreateUser(
+	ctx ctxx.Context,
+	accountx *entmain.Account,
+	tmpPassword string,
+	expiresAt time.Time,
+	signInURL string,
+) {
 	subject := wx.T("Welcome to SimpleDMS").String(ctx)
 	formattedExpiresAt := expiresAt.In(ctx.VisitorCtx().Location).Format(wx.T("02-01-2006 at 15:04 o'clock").String(ctx))
 
 	// Create email template
-	template := CreateUserTemplate(ctx, tmpPassword, formattedExpiresAt)
+	template := CreateUserTemplate(ctx, tmpPassword, formattedExpiresAt, signInURL)
 
 	// Generate HTML and plain text versions
 	htmlBody := template.RenderHTML(ctx)

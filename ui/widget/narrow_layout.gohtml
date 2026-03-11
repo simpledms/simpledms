@@ -20,18 +20,15 @@
 						{{ render .GetContext .AppBar }}
 				</div>
             {{ end }}
-			<div class="flex justify-center md:center-aligned flex-grow">
-				<div class="max-w-md w-full px-6 md:px-8 py-6 md:py-8
-					md:rounded-xl
-					overflow-y-scroll
-				">
+			<div class="flex justify-center flex-grow overflow-y-scroll">
+				<div class="my-auto max-w-md w-full px-6 md:px-8 py-6 md:py-8 md:rounded-xl">
                     {{ render .GetContext .Content }}
 				</div>
 			</div>
 		</div>
 	</div>
 	{{ if .WithPoweredBy }}
-		<div class="py-1.5 px-3 fixed bottom-0 text-center text-primary w-full">
+		<div class="py-1.5 px-3 fixed bottom-0 text-center text-primary w-full hidden md:block">
 			<a href="https://simpledms.eu/open-source"><small>Powered by SimpleDMS</small></a>
 		</div>
 	{{ end }}

@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"filippo.io/age"
@@ -24,17 +25,24 @@ type SystemConfig struct {
 	commercialLicenseEnabled bool
 	// nilableX25519Identity *age.X25519Identity
 	allowInsecureCookies bool
+	publicOrigin         string
+	webauthnRPID         string
+	webauthnRPName       string
 }
 
 func NewSystemConfig(
 	data *entmain.SystemConfig,
 	isSaaSModeEnabled, commercialLicenseEnabled, allowInsecureCookies bool,
+	publicOrigin, webauthnRPID, webauthnRPName string,
 ) *SystemConfig {
 	return &SystemConfig{
 		data:                     data,
 		isSaaSModeEnabled:        isSaaSModeEnabled,
 		commercialLicenseEnabled: commercialLicenseEnabled,
 		allowInsecureCookies:     allowInsecureCookies,
+		publicOrigin:             strings.TrimSpace(publicOrigin),
+		webauthnRPID:             strings.TrimSpace(webauthnRPID),
+		webauthnRPName:           strings.TrimSpace(webauthnRPName),
 	}
 }
 
@@ -286,6 +294,59 @@ func (qq *SystemConfig) SetMaxUploadSizeMib(ctx ctxx.Context, maxUploadSizeMib i
 		SaveX(ctx)
 
 	return nil
+}
+
+func (qq *SystemConfig) PublicOrigin() string {
+	return qq.publicOrigin
+}
+
+func (qq *SystemConfig) CanonicalHost() string {
+	if qq.publicOrigin == "" {
+		return ""
+	}
+
+	publicOriginURL, err := url.Parse(qq.publicOrigin)
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
+
+	return strings.ToLower(publicOriginURL.Hostname())
+}
+
+func (qq *SystemConfig) WebAuthnRPID() string {
+	if qq.webauthnRPID != "" {
+		return qq.webauthnRPID
+	}
+
+	return qq.CanonicalHost()
+}
+
+func (qq *SystemConfig) WebAuthnRPName() string {
+	if qq.webauthnRPName != "" {
+		return qq.webauthnRPName
+	}
+	return "SimpleDMS"
+}
+
+func (qq *SystemConfig) AbsoluteURL(path string) string {
+	if qq.publicOrigin == "" {
+		return path
+	}
+
+	baseURL, err := url.Parse(qq.publicOrigin)
+	if err != nil {
+		log.Println(err)
+		return path
+	}
+
+	resolvedURL, err := baseURL.Parse(path)
+	if err != nil {
+		log.Println(err)
+		return path
+	}
+
+	return resolvedURL.String()
 }
 
 func (qq *SystemConfig) S3() *S3Config {

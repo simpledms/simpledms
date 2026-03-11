@@ -23,3 +23,15 @@ func (qq *Base) GetProgressIndicator() *ProgressIndicator {
 	}
 	return qq.ProgressIndicator
 }
+
+func (qq *Base) NoBackupCodesReturnedMessage() *Text {
+	return T("No backup codes were returned.")
+}
+
+func (qq *Base) BackupCodesRegeneratedMessage() *Text {
+	return T("The backup codes were regenerated.")
+}
+
+func (qq *Base) CouldNotRegenerateBackupCodesMessage() *Text {
+	return T("Could not regenerate backup codes.")
+}

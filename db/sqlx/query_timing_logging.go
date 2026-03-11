@@ -30,11 +30,11 @@ func (qq *QueryTimingLogger) NextQueryLogID() uint64 {
 }
 
 func (qq *QueryTimingLogger) LogQuery(operation string, queryID uint64, query string, args any) {
-	log.Printf("ent query: id=%d op=%s query=%v args=%v", queryID, operation, query, args)
+	// TODO log.Printf("ent query: id=%d op=%s query=%v args=%v", queryID, operation, query, args)
 }
 
 func (qq *QueryTimingLogger) LogOperation(operation string, queryID uint64) {
-	log.Printf("ent query: id=%d op=%s", queryID, operation)
+	// TODO log.Printf("ent query: id=%d op=%s", queryID, operation)
 }
 
 func (qq *QueryTimingLogger) LogQueryTiming(

@@ -33,6 +33,7 @@ type Dialog struct {
 	SubmitLabel   *Text // TODO name?? PrimaryActionLabel??
 	FormID        string
 	HeaderActions []IWidget
+	FooterActions []IWidget
 	// CloseLabel  string
 
 	IsOpenOnLoad                    bool

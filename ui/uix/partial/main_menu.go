@@ -2,9 +2,11 @@ package partial
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/model/account"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
@@ -13,6 +15,42 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 	var items []*wx.MenuItem
 
 	if ctx.IsMainCtx() {
+		accountm := account.NewAccount(ctx.MainCtx().Account)
+		passkeyPolicy, err := accountm.PasskeyPolicy(ctx)
+		if err != nil {
+			log.Println(err)
+			passkeyPolicy = account.NewPasskeyPolicy(false, false, false)
+		}
+		isTenantPasskeyEnrollmentRequired := passkeyPolicy.IsTenantPasskeyEnrollmentRequired()
+		if isTenantPasskeyEnrollmentRequired {
+			return &wx.IconButton{
+				Icon:    "menu",
+				Tooltip: wx.T("Open main menu"),
+				Children: &wx.Menu{
+					Position: wx.PositionRight,
+					Items: []*wx.MenuItem{
+						{
+							LeadingIcon: "dashboard",
+							Label:       wx.T("Dashboard"),
+							HTMXAttrs: wx.HTMXAttrs{
+								HxGet: route2.Dashboard(),
+							},
+						},
+						{
+							IsDivider: true,
+						},
+						{
+							LeadingIcon: "logout",
+							Label:       wx.T("Sign out"),
+							HTMXAttrs: wx.HTMXAttrs{
+								HxPost: route2.SignOutCmd(),
+							},
+						},
+					},
+				},
+			}
+		}
+
 		items = append(items, []*wx.MenuItem{
 			{
 				LeadingIcon: "dashboard",

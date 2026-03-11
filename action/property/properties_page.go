@@ -55,7 +55,7 @@ func (qq *PropertiesPage) Widget(
 	)
 
 	mainLayout := &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "properties", fabs),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "fields", fabs),
 		Content: &wx.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List:   children,

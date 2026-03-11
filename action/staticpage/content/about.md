@@ -26,7 +26,7 @@ You should have received a copy of the GNU Affero General Public License along w
 In accordance with Section 7(b) of the GNU Affero General Public License version 3, the following additional terms are added to preserve attribution notices under Section 5(d):
 
 1. A visible menu item labeled «About SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be present in the main menu of the program linking to the attribution page described below.
-2. A visible link labeled «Powered by SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be displayed on the login page of the program. The link must lead to the same attribution page described below or to https://simpledms.eu/open-source.
+2. A visible link labeled «Powered by SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be displayed on the login page of the program. The link must lead to the same attribution page described below or to https://simpledms.eu/open-source. This is only required if the login page does not provide a main menu as described in clause 1.
 
 The attribution page must not be removed or modified so as to delete or obscure the required attribution notices. However, the attribution page may be extended, including by adding:
 

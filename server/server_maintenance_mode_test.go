@@ -31,6 +31,7 @@ func TestMaintenanceRootReturnsServiceUnavailable(t *testing.T) {
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
 		os.DirFS(t.TempDir()),
+		false,
 		deps.i18n,
 		deps.renderer,
 		[]byte("irrelevant"),
@@ -63,6 +64,7 @@ func TestMaintenanceUnlockCmdInvalidJSONReturnsBadRequest(t *testing.T) {
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
 		os.DirFS(t.TempDir()),
+		false,
 		deps.i18n,
 		deps.renderer,
 		[]byte("irrelevant"),
@@ -94,6 +96,7 @@ func TestMaintenanceUnlockCmdEmptyPassphraseReturnsBadRequest(t *testing.T) {
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
 		os.DirFS(t.TempDir()),
+		false,
 		deps.i18n,
 		deps.renderer,
 		[]byte("irrelevant"),
@@ -128,6 +131,7 @@ func TestMaintenanceUnlockCmdInvalidPassphraseReturnsBadRequest(t *testing.T) {
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
 		os.DirFS(t.TempDir()),
+		false,
 		deps.i18n,
 		deps.renderer,
 		encryptedIdentity,
@@ -166,6 +170,7 @@ func TestMaintenanceUnlockCmdValidPassphraseSetsIdentityAndCallsShutdown(t *test
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
 		os.DirFS(t.TempDir()),
+		false,
 		deps.i18n,
 		deps.renderer,
 		encryptedIdentity,
@@ -258,7 +263,7 @@ func newMaintenanceTestDependencies(t *testing.T) *maintenanceTestDependencies {
 		}
 	})
 
-	_ = initSystemConfig(t, mainDB, true)
+	_ = initSystemConfig(t, mainDB, true, "", "", "")
 
 	tpl := template.New("app")
 	tpl.Funcs(ui.TemplateFuncMap(tpl))

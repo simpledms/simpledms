@@ -1,4 +1,5 @@
 {
+	"x_simpledms_comment": "This file is processed by the PWAManifestHandler before it is served.",
 	"name": "SimpleDMS",
 	"short_name": "SimpleDMS",
 	"id": "/",

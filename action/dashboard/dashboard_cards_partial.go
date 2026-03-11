@@ -3,10 +3,17 @@ package dashboard
 import (
 	"fmt"
 	"log"
+	"strings"
+	"net/url"
+	"time"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
+	mainaccount "github.com/simpledms/simpledms/db/entmain/account"
+	maintenant "github.com/simpledms/simpledms/db/entmain/tenant"
+	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/model/account"
@@ -35,7 +42,7 @@ func NewDashboardCardsPartial(infra *common.Infra, actions *Actions) *DashboardC
 	config := actionx.NewConfig(
 		actions.Route("dashboard-cards-partial"),
 		true,
-	)
+	).EnableSetupSessionAccess()
 	return &DashboardCardsPartial{
 		infra:   infra,
 		actions: actions,
@@ -69,6 +76,21 @@ func (qq *DashboardCardsPartial) Widget(
 	var systemFooterBtns []*wx.Button
 
 	accountm := account.NewAccount(ctx.MainCtx().Account)
+	passkeyPolicy, err := accountm.PasskeyPolicy(ctx)
+	if err != nil {
+		log.Println(err)
+		passkeyPolicy = account.NewPasskeyPolicy(false, false, false)
+	}
+	isTenantPasskeyEnrollmentRequired := passkeyPolicy.IsTenantPasskeyEnrollmentRequired()
+
+	if isTenantPasskeyEnrollmentRequired {
+		return qq.setupRequiredWidget(ctx)
+	}
+
+	passkeyCredentials := ctx.MainCtx().MainTx.PasskeyCredential.Query().
+		Where(passkeycredential.AccountID(ctx.MainCtx().Account.ID)).
+		AllX(ctx)
+
 	if accountm.Data.Role == mainrole.Admin {
 		systemCards = append(systemCards, qq.appStatusCard(ctx))
 		systemFooterBtns = append(systemFooterBtns, qq.manageUploadLimitBtn(ctx))
@@ -92,10 +114,14 @@ func (qq *DashboardCardsPartial) Widget(
 	spacesByTenant := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
 	for tenantx, spaces := range spacesByTenant {
 		var tenantCards []*wx.Card
-		var tenantHeaderBtns []*wx.Button
+		var tenantHeaderBtns []wx.IWidget
 
 		if tenantCard := qq.nilableTenantCard(ctx, tenantx); tenantCard != nil {
 			tenantCards = append(tenantCards, tenantCard)
+		}
+
+		if btn, ok := qq.passkeyEnforcementBtn(ctx, tenantx); ok {
+			tenantHeaderBtns = append(tenantHeaderBtns, btn)
 		}
 
 		if btn, ok := qq.manageUsersBtn(ctx, tenantx); ok {
@@ -107,6 +133,12 @@ func (qq *DashboardCardsPartial) Widget(
 		}
 		if btn, ok := qq.manageSpacesBtn(ctx, tenantx); ok {
 			tenantHeaderBtns = append(tenantHeaderBtns, btn)
+		}
+		if btn, ok := qq.deleteTenantBtn(ctx, tenantx); ok {
+			tenantHeaderBtns = append(tenantHeaderBtns, btn)
+		}
+		if link, ok := qq.downloadTenantBackupLink(ctx, tenantx); ok {
+			tenantHeaderBtns = append(tenantHeaderBtns, link)
 		}
 		for _, spacex := range spaces {
 			tenantCards = append(tenantCards, qq.spaceCard(ctx, spacex, tenantx))
@@ -123,19 +155,71 @@ func (qq *DashboardCardsPartial) Widget(
 
 	var accountCardsBtns []*wx.Button
 
-	if accountm.HasPassword() && !accountm.HasTemporaryPassword() {
+	if accountm.HasPassword() && !accountm.HasTemporaryPassword() && len(passkeyCredentials) == 0 {
 		accountCardsBtns = append(accountCardsBtns, qq.changePasswordBtn(ctx))
 	}
+	if btn, ok := qq.editAccountBtn(ctx); ok {
+		accountCardsBtns = append(accountCardsBtns, btn)
+	}
 
-	accountCardsBtns = append(
-		accountCardsBtns,
-		qq.editAccountBtn(ctx),
-		qq.deleteAccountBtn(ctx),
-	)
+	if len(passkeyCredentials) == 0 {
+		accountCards = append(accountCards, &wx.Card{
+			Style:          wx.CardStyleFilled,
+			Headline:       wx.H(wx.HeadingTypeTitleLg, wx.T("No passkeys registered")),
+			Subhead:        wx.T("Passkeys"),
+			SupportingText: wx.T("Register a passkey to enable passwordless sign in."),
+			Actions: []*wx.Button{
+				qq.registerPasskeyBtn(ctx, wx.ButtonStyleTypeTonal),
+			},
+		})
+	} else {
+		recoveryCodesCount := len(accountm.Data.PasskeyRecoveryCodeHashes)
+		accountCards = append(accountCards, qq.recoveryCodesLeftCard(ctx, recoveryCodesCount))
+
+		for _, credentialx := range passkeyCredentials {
+			accountCards = append(accountCards, qq.passkeyCredentialCard(ctx, credentialx))
+		}
+
+		if len(passkeyCredentials) == 1 {
+			accountCards = append(accountCards, &wx.Card{
+				Style:          wx.CardStyleFilled,
+				Headline:       wx.H(wx.HeadingTypeTitleLg, wx.T("Add a backup passkey")),
+				Subhead:        wx.T("Passkey recommendation"),
+				SupportingText: wx.T("Set up a second passkey on another device as backup in case one device is lost."),
+			})
+		}
+
+		accountCardsBtns = append(accountCardsBtns, qq.registerPasskeyBtn(ctx, wx.ButtonStyleTypeElevated))
+	}
+
+	if len(passkeyCredentials) > 0 {
+		accountCardsBtns = append(
+			accountCardsBtns,
+			&wx.Button{
+				Label:     wx.T("Regenerate backup codes"),
+				StyleType: wx.ButtonStyleTypeElevated,
+				HTMXAttrs: wx.HTMXAttrs{
+					HxPost:    qq.actions.AuthActions.RegeneratePasskeyCodesCmd.Endpoint(),
+					HxVals:    util.JSON(qq.actions.AuthActions.RegeneratePasskeyCodesCmd.Data()),
+					HxConfirm: wx.T("Regenerate backup codes? Existing codes will stop working.").String(ctx),
+					HxSwap:    "none",
+				},
+			},
+		)
+	}
+
+	accountHeading := wx.Tf("Account «%s»", ctx.MainCtx().Account.Email.String())
+	if owningTenantName, ok := qq.owningTenantName(ctx); ok {
+		accountHeading = wx.Tf(
+			"Account «%s», owned by «%s»",
+			ctx.MainCtx().Account.Email.String(),
+			owningTenantName,
+		)
+	}
 
 	grids = append(grids, &wx.Grid{
 		// TODO show Name and email?
-		Heading:  wx.H(wx.HeadingTypeTitleMd, wx.Tf("Account «%s»", ctx.MainCtx().Account.Email.String())),
+		Heading:  wx.H(wx.HeadingTypeTitleMd, accountHeading),
 		Children: accountCards,
 		Footer:   &wx.Row{Children: accountCardsBtns},
 	})
@@ -180,6 +264,64 @@ func (qq *DashboardCardsPartial) Widget(
 		PaddingX: true,
 		Children: grid,
 	}*/
+}
+
+func (qq *DashboardCardsPartial) setupRequiredWidget(ctx ctxx.Context) *wx.Container {
+	grids := []*wx.Grid{{
+		Heading: wx.H(wx.HeadingTypeTitleMd, wx.Tf("Account «%s»", ctx.MainCtx().Account.Email.String())),
+		Children: []*wx.Card{
+			{
+				Style:          wx.CardStyleFilled,
+				Headline:       wx.H(wx.HeadingTypeTitleLg, wx.T("Passkey setup required")),
+				Subhead:        wx.T("Passkeys"),
+				SupportingText: wx.T("Your organization requires passkey sign-in. Register a passkey to continue."),
+				Actions: []*wx.Button{
+					qq.registerPasskeyBtn(ctx, wx.ButtonStyleTypeTonal),
+				},
+			},
+		},
+	}}
+
+	return &wx.Container{
+		Widget: wx.Widget[wx.Container]{
+			ID: qq.id(),
+		},
+		GapY: true,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxTrigger: event.HxTrigger(
+				event.AccountUpdated,
+			),
+			HxPost:   qq.Endpoint(),
+			HxVals:   util.JSON(qq.Data()),
+			HxTarget: "#" + qq.id(),
+			HxSelect: "#" + qq.id(),
+			HxSwap:   "outerHTML",
+		},
+		Child: grids,
+	}
+}
+
+func (qq *DashboardCardsPartial) recoveryCodesLeftCard(ctx ctxx.Context, recoveryCodesCount int) *wx.Card {
+	return &wx.Card{
+		Style:    wx.CardStyleFilled,
+		Headline: wx.H(wx.HeadingTypeTitleLg, wx.Tf("%d backup codes left", recoveryCodesCount)),
+		Subhead:  wx.T("Passkeys"),
+	}
+}
+
+func (qq *DashboardCardsPartial) registerPasskeyBtn(ctx ctxx.Context, styleType wx.ButtonStyleType) *wx.Button {
+	return &wx.Button{
+		Label:     wx.T("Register passkey"),
+		StyleType: styleType,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost: qq.actions.AuthActions.PasskeyRegisterDialog.EndpointWithParams(
+				actionx.ResponseWrapperDialog,
+				"",
+			),
+			HxVals:        util.JSON(qq.actions.AuthActions.PasskeyRegisterDialog.Data()),
+			LoadInPopover: true,
+		},
+	}
 }
 
 func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *entmain.Tenant) *wx.Card {
@@ -364,6 +506,40 @@ func (qq *DashboardCardsPartial) changePasswordBtn(ctx ctxx.Context) *wx.Button 
 	}
 }
 
+func (qq *DashboardCardsPartial) owningTenantName(ctx ctxx.Context) (string, bool) {
+	now := time.Now()
+
+	owningAssignment, err := ctx.MainCtx().MainTx.TenantAccountAssignment.Query().
+		Where(
+			tenantaccountassignment.AccountID(ctx.MainCtx().Account.ID),
+			tenantaccountassignment.IsOwningTenant(true),
+			tenantaccountassignment.Or(
+				tenantaccountassignment.ExpiresAtIsNil(),
+				tenantaccountassignment.ExpiresAtGT(now),
+			),
+			tenantaccountassignment.HasAccountWith(mainaccount.DeletedAtIsNil()),
+			tenantaccountassignment.HasTenantWith(maintenant.DeletedAtIsNil()),
+		).
+		Only(ctx)
+	if err != nil {
+		log.Println("failed to query owning tenant assignment", ctx.MainCtx().Account.ID, err)
+		return "", false
+	}
+
+	owningTenantx, err := ctx.MainCtx().MainTx.Tenant.Query().
+		Where(
+			maintenant.ID(owningAssignment.TenantID),
+			maintenant.DeletedAtIsNil(),
+		).
+		Only(ctx)
+	if err != nil {
+		log.Println("failed to query owning tenant", owningAssignment.TenantID, err)
+		return "", false
+	}
+
+	return owningTenantx.Name, true
+}
+
 /*func (qq *DashboardCardsPartial) deleteAccountCard(ctx ctxx.Context) *wx.Card {
 	return &wx.Card{
 		Style:    wx.CardStyleFilled,
@@ -372,18 +548,6 @@ func (qq *DashboardCardsPartial) changePasswordBtn(ctx ctxx.Context) *wx.Button 
 		Actions: qq.deleteAccountBtn(ctx),
 	}
 }*/
-
-func (qq *DashboardCardsPartial) deleteAccountBtn(ctx ctxx.Context) *wx.Button {
-	return &wx.Button{
-		Label:     wx.T("Delete account"),
-		StyleType: wx.ButtonStyleTypeElevated,
-		HTMXAttrs: wx.HTMXAttrs{
-			HxPost:    qq.actions.AuthActions.DeleteAccountCmd.Endpoint(),
-			HxVals:    util.JSON(qq.actions.AuthActions.DeleteAccountCmd.Data(ctx.MainCtx().Account.PublicID.String())),
-			HxConfirm: wx.T("Are you sure?").String(ctx),
-		},
-	}
-}
 
 func (qq *DashboardCardsPartial) id() string {
 	return "dashboardCards"
@@ -421,7 +585,7 @@ func (qq *DashboardCardsPartial) editAccountCard(ctx ctxx.Context) *wx.Card {
 }
 */
 
-func (qq *DashboardCardsPartial) editAccountBtn(ctx ctxx.Context) *wx.Button {
+func (qq *DashboardCardsPartial) editAccountBtn(ctx ctxx.Context) (*wx.Button, bool) {
 	return &wx.Button{
 		Label:     wx.T("Edit account"),
 		StyleType: wx.ButtonStyleTypeElevated,
@@ -433,7 +597,7 @@ func (qq *DashboardCardsPartial) editAccountBtn(ctx ctxx.Context) *wx.Button {
 			),
 			"",
 		),
-	}
+	}, true
 }
 
 func (qq *DashboardCardsPartial) clearTemporaryPasswordCard(ctx ctxx.Context) *wx.Card {
@@ -495,6 +659,40 @@ func (qq *DashboardCardsPartial) manageSpacesCard(ctx ctxx.Context, tenantx *ent
 				HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
 			},
 		}},
+	}, true
+}
+
+func (qq *DashboardCardsPartial) passkeyEnforcementBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
+	tenantm := tenant.NewTenant(tenantx)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
+	if !tenantm.IsOwner(accountm) {
+		return nil, false
+	}
+	if !tenantm.IsInitialized() {
+		return nil, false
+	}
+
+	buttonLabel := wx.T("Enable passkey enforcement")
+	confirmText := wx.T("Enable passkey enforcement for this organization? Members will need passkeys to sign in.")
+	if tenantx.PasskeyAuthEnforced {
+		buttonLabel = wx.T("Disable passkey enforcement")
+		confirmText = wx.T("Disable passkey enforcement for this organization? Members can use passwords again if allowed.")
+	}
+
+	return &wx.Button{
+		Label:     buttonLabel,
+		StyleType: wx.ButtonStyleTypeElevated,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost: qq.actions.ToggleTenantPasskeyEnforcementCmd.Endpoint(),
+			HxVals: util.JSON(
+				qq.actions.ToggleTenantPasskeyEnforcementCmd.Data(
+					tenantx.PublicID.String(),
+					!tenantx.PasskeyAuthEnforced,
+				),
+			),
+			HxConfirm: confirmText.String(ctx),
+			HxSwap:    "none",
+		},
 	}, true
 }
 
@@ -571,6 +769,70 @@ func (qq *DashboardCardsPartial) manageUsersBtn(ctx ctxx.Context, tenantx *entma
 	}, true
 }
 
+func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
+	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
+		return nil, false
+	}
+
+	deleteTenantCmdEndpoint := qq.infra.ManageTenantsDeleteTenantCmdEndpoint()
+	if deleteTenantCmdEndpoint == "" {
+		return nil, false
+	}
+
+	tenantm := tenant.NewTenant(tenantx)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
+	if !tenantm.IsOwner(accountm) {
+		return nil, false
+	}
+	if !tenantm.IsInitialized() {
+		return nil, false
+	}
+
+	return &wx.Button{
+		Label:     wx.T("Delete organization"),
+		StyleType: wx.ButtonStyleTypeElevated,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost:    deleteTenantCmdEndpoint,
+			HxVals:    util.JSON(map[string]any{"TenantID": tenantx.PublicID.String()}),
+			HxConfirm: wx.T("Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.").String(ctx),
+		},
+	}, true
+}
+
+func (qq *DashboardCardsPartial) downloadTenantBackupLink(
+	ctx ctxx.Context,
+	tenantx *entmain.Tenant,
+) (*wx.Link, bool) {
+	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
+		return nil, false
+	}
+
+	endpoint := qq.infra.ManageTenantsDownloadBackupEndpoint()
+	if endpoint == "" {
+		return nil, false
+	}
+
+	tenantm := tenant.NewTenant(tenantx)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
+	if !tenantm.IsOwner(accountm) {
+		return nil, false
+	}
+	if !tenantm.IsInitialized() {
+		return nil, false
+	}
+
+	filename := "tenant-backup-" + tenantx.PublicID.String() + ".zip"
+
+	return &wx.Link{
+		Href:     endpoint + "?tenant_id=" + url.QueryEscape(tenantx.PublicID.String()),
+		Filename: filename,
+		Child: &wx.Button{
+			Label:     wx.T("Download backup"),
+			StyleType: wx.ButtonStyleTypeElevated,
+		},
+	}, true
+}
+
 func (qq *DashboardCardsPartial) appStatusCard(ctx ctxx.Context) *wx.Card {
 	var actions []*wx.Button
 	supportingText := wx.T("The app is unlocked and not protected by a passphrase.")
@@ -618,6 +880,29 @@ func (qq *DashboardCardsPartial) appStatusCard(ctx ctxx.Context) *wx.Card {
 		Actions:        actions,
 	}
 
+}
+
+func (qq *DashboardCardsPartial) passkeyCredentialCard(
+	ctx ctxx.Context,
+	credentialx *entmain.PasskeyCredential,
+) *wx.Card {
+	supportingText := wx.Tf("Created on %s", credentialx.CreatedAt.Format("2006-01-02 15:04"))
+	if credentialx.LastUsedAt != nil {
+		supportingText = wx.Tf("Last used on %s", credentialx.LastUsedAt.Format("2006-01-02 15:04"))
+	}
+
+	credentialName := strings.TrimSpace(credentialx.Name)
+	if credentialName == "" {
+		credentialName = wx.T("Passkey").String(ctx)
+	}
+
+	return &wx.Card{
+		Style:          wx.CardStyleFilled,
+		Headline:       wx.H(wx.HeadingTypeTitleLg, wx.Tu(credentialName)),
+		Subhead:        wx.T("Passkey"),
+		SupportingText: supportingText,
+		ContextMenu:    NewPasskeyContextMenuWidget(qq.actions).Widget(ctx, credentialx.PublicID.String(), credentialName),
+	}
 }
 
 func (qq *DashboardCardsPartial) manageUploadLimitBtn(ctx ctxx.Context) *wx.Button {

@@ -32,6 +32,7 @@ func (qq *SignUpService) SignUp(
 	language language.Language,
 	subscribeToNewsletter bool,
 	skipSendingMail bool,
+	signInURL string,
 ) (*account.Account, error) {
 	tenantxQuery := ctx.VisitorCtx().MainTx.Tenant.
 		Create().
@@ -68,6 +69,7 @@ func (qq *SignUpService) SignUp(
 		SetAccount(accountx).
 		SetIsContactPerson(true).
 		SetRole(tenantrole.Owner).
+		SetIsOwningTenant(true).
 		SetIsDefault(true).
 		SaveX(ctx)
 
@@ -81,7 +83,7 @@ func (qq *SignUpService) SignUp(
 	}
 
 	if !skipSendingMail {
-		mailer.NewMailer().SignUp(ctx, accountx, password, expiresAt)
+		mailer.NewMailer().SignUp(ctx, accountx, password, expiresAt, signInURL)
 	}
 
 	return accountm, nil

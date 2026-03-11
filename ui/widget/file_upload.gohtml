@@ -84,7 +84,7 @@
 				endpoint: '{{ .GetEndpoint }}',
 				fieldName: 'File',
 				limit: 5, // default value is 5
-				headers: { // TODO use htmx.ajax() instead?
+				headers: { // TODO use htmx.ajax() instead? if so, don't forget to handle timeouts
 					// necessary for creating context
 					'HX-Current-URL': location.href, // FIXME is this okay?
 					'HX-Request': 'true',
