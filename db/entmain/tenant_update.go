@@ -310,6 +310,20 @@ func (_u *TenantUpdate) SetNillableTwoFactorAuthEnforced(v *bool) *TenantUpdate 
 	return _u
 }
 
+// SetPasskeyAuthEnforced sets the "passkey_auth_enforced" field.
+func (_u *TenantUpdate) SetPasskeyAuthEnforced(v bool) *TenantUpdate {
+	_u.mutation.SetPasskeyAuthEnforced(v)
+	return _u
+}
+
+// SetNillablePasskeyAuthEnforced sets the "passkey_auth_enforced" field if the given value is not nil.
+func (_u *TenantUpdate) SetNillablePasskeyAuthEnforced(v *bool) *TenantUpdate {
+	if v != nil {
+		_u.SetPasskeyAuthEnforced(*v)
+	}
+	return _u
+}
+
 // SetMaxUploadSizeMibOverride sets the "max_upload_size_mib_override" field.
 func (_u *TenantUpdate) SetMaxUploadSizeMibOverride(v int64) *TenantUpdate {
 	_u.mutation.ResetMaxUploadSizeMibOverride()
@@ -652,6 +666,9 @@ func (_u *TenantUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.TwoFactorAuthEnforced(); ok {
 		_spec.SetField(tenant.FieldTwoFactorAuthEnforced, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.PasskeyAuthEnforced(); ok {
+		_spec.SetField(tenant.FieldPasskeyAuthEnforced, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.MaxUploadSizeMibOverride(); ok {
 		_spec.SetField(tenant.FieldMaxUploadSizeMibOverride, field.TypeInt64, value)
@@ -1138,6 +1155,20 @@ func (_u *TenantUpdateOne) SetNillableTwoFactorAuthEnforced(v *bool) *TenantUpda
 	return _u
 }
 
+// SetPasskeyAuthEnforced sets the "passkey_auth_enforced" field.
+func (_u *TenantUpdateOne) SetPasskeyAuthEnforced(v bool) *TenantUpdateOne {
+	_u.mutation.SetPasskeyAuthEnforced(v)
+	return _u
+}
+
+// SetNillablePasskeyAuthEnforced sets the "passkey_auth_enforced" field if the given value is not nil.
+func (_u *TenantUpdateOne) SetNillablePasskeyAuthEnforced(v *bool) *TenantUpdateOne {
+	if v != nil {
+		_u.SetPasskeyAuthEnforced(*v)
+	}
+	return _u
+}
+
 // SetMaxUploadSizeMibOverride sets the "max_upload_size_mib_override" field.
 func (_u *TenantUpdateOne) SetMaxUploadSizeMibOverride(v int64) *TenantUpdateOne {
 	_u.mutation.ResetMaxUploadSizeMibOverride()
@@ -1510,6 +1541,9 @@ func (_u *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err erro
 	}
 	if value, ok := _u.mutation.TwoFactorAuthEnforced(); ok {
 		_spec.SetField(tenant.FieldTwoFactorAuthEnforced, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.PasskeyAuthEnforced(); ok {
+		_spec.SetField(tenant.FieldPasskeyAuthEnforced, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.MaxUploadSizeMibOverride(); ok {
 		_spec.SetField(tenant.FieldMaxUploadSizeMibOverride, field.TypeInt64, value)

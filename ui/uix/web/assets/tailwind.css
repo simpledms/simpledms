@@ -1673,10 +1673,6 @@ input:-webkit-autofill::first-line,
   cursor: default;
 }
 
-.cursor-not-allowed {
-  cursor: not-allowed;
-}
-
 .cursor-pointer {
   cursor: pointer;
 }
@@ -2349,16 +2345,6 @@ input:-webkit-autofill::first-line,
   text-decoration-line: underline;
 }
 
-.placeholder-on-surface::-moz-placeholder {
-  --tw-placeholder-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-placeholder-opacity, 1));
-}
-
-.placeholder-on-surface::placeholder {
-  --tw-placeholder-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-placeholder-opacity, 1));
-}
-
 .placeholder-on-surface-variant::-moz-placeholder {
   --tw-placeholder-opacity: 1;
   color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-placeholder-opacity, 1));
@@ -2367,14 +2353,6 @@ input:-webkit-autofill::first-line,
 .placeholder-on-surface-variant::placeholder {
   --tw-placeholder-opacity: 1;
   color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-placeholder-opacity, 1));
-}
-
-.placeholder-opacity-\[0\.38\]::-moz-placeholder {
-  --tw-placeholder-opacity: 0.38;
-}
-
-.placeholder-opacity-\[0\.38\]::placeholder {
-  --tw-placeholder-opacity: 0.38;
 }
 
 .opacity-25 {
@@ -2408,10 +2386,6 @@ input:-webkit-autofill::first-line,
 
 .-outline-offset-2 {
   outline-offset: -2px;
-}
-
-.outline-on-surface {
-  outline-color: rgb(var(--md-sys-color-on-surface) / 1);
 }
 
 .outline-outline {
@@ -2913,16 +2887,6 @@ input:-webkit-autofill::first-line,
   padding-right: 0px;
 }
 
-.peer:-moz-placeholder-shown ~ .peer-placeholder-shown\:text-on-surface {
-  --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
-}
-
-.peer:placeholder-shown ~ .peer-placeholder-shown\:text-on-surface {
-  --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
-}
-
 .peer:-moz-placeholder-shown ~ .peer-placeholder-shown\:text-on-surface-variant {
   --tw-text-opacity: 1;
   color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-text-opacity, 1));
@@ -2931,14 +2895,6 @@ input:-webkit-autofill::first-line,
 .peer:placeholder-shown ~ .peer-placeholder-shown\:text-on-surface-variant {
   --tw-text-opacity: 1;
   color: rgb(var(--md-sys-color-on-surface-variant) / var(--tw-text-opacity, 1));
-}
-
-.peer:-moz-placeholder-shown ~ .peer-placeholder-shown\:text-opacity-\[0\.38\] {
-  --tw-text-opacity: 0.38;
-}
-
-.peer:placeholder-shown ~ .peer-placeholder-shown\:text-opacity-\[0\.38\] {
-  --tw-text-opacity: 0.38;
 }
 
 .peer:-webkit-autofill ~ .peer-autofill\:-left-1 {
@@ -2985,16 +2941,6 @@ input:-webkit-autofill::first-line,
   padding-right: 0.25rem;
 }
 
-.peer:-webkit-autofill ~ .peer-autofill\:text-on-surface {
-  --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
-}
-
-.peer:autofill ~ .peer-autofill\:text-on-surface {
-  --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
-}
-
 .peer:-webkit-autofill ~ .peer-autofill\:text-primary {
   --tw-text-opacity: 1;
   color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity, 1));
@@ -3003,14 +2949,6 @@ input:-webkit-autofill::first-line,
 .peer:autofill ~ .peer-autofill\:text-primary {
   --tw-text-opacity: 1;
   color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity, 1));
-}
-
-.peer:-webkit-autofill ~ .peer-autofill\:text-opacity-\[0\.38\] {
-  --tw-text-opacity: 0.38;
-}
-
-.peer:autofill ~ .peer-autofill\:text-opacity-\[0\.38\] {
-  --tw-text-opacity: 0.38;
 }
 
 .peer:focus ~ .peer-focus\:-left-1 {
@@ -3035,18 +2973,9 @@ input:-webkit-autofill::first-line,
   padding-right: 0.25rem;
 }
 
-.peer:focus ~ .peer-focus\:text-on-surface {
-  --tw-text-opacity: 1;
-  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
-}
-
 .peer:focus ~ .peer-focus\:text-primary {
   --tw-text-opacity: 1;
   color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity, 1));
-}
-
-.peer:focus ~ .peer-focus\:text-opacity-\[0\.38\] {
-  --tw-text-opacity: 0.38;
 }
 
 .peer:disabled ~ .peer-disabled\:\!text-on-surface {

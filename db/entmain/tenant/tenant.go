@@ -61,6 +61,8 @@ const (
 	FieldPrivacyPolicyAccepted = "privacy_policy_accepted"
 	// FieldTwoFactorAuthEnforced holds the string denoting the two_factor_auth_enforced field in the database.
 	FieldTwoFactorAuthEnforced = "two_factor_auth_enforced"
+	// FieldPasskeyAuthEnforced holds the string denoting the passkey_auth_enforced field in the database.
+	FieldPasskeyAuthEnforced = "passkey_auth_enforced"
 	// FieldMaxUploadSizeMibOverride holds the string denoting the max_upload_size_mib_override field in the database.
 	FieldMaxUploadSizeMibOverride = "max_upload_size_mib_override"
 	// FieldX25519IdentityEncrypted holds the string denoting the x25519_identity_encrypted field in the database.
@@ -140,6 +142,7 @@ var Columns = []string{
 	FieldTermsOfServiceAccepted,
 	FieldPrivacyPolicyAccepted,
 	FieldTwoFactorAuthEnforced,
+	FieldPasskeyAuthEnforced,
 	FieldMaxUploadSizeMibOverride,
 	FieldX25519IdentityEncrypted,
 	FieldMaintenanceModeEnabledAt,
@@ -196,12 +199,14 @@ var (
 	DefaultVatID string
 	// DefaultTwoFactorAuthEnforced holds the default value on creation for the "two_factor_auth_enforced" field.
 	DefaultTwoFactorAuthEnforced bool
+	// DefaultPasskeyAuthEnforced holds the default value on creation for the "passkey_auth_enforced" field.
+	DefaultPasskeyAuthEnforced bool
 )
 
 // CountryValidator is a validator for the "country" field enum values. It is called by the builders before save.
 func CountryValidator(c country.Country) error {
 	switch c.String() {
-	case "Unknown", "Austria", "Germany", "Switzerland":
+	case "Unknown", "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "CzechRepublic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Norway", "Other", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland":
 		return nil
 	default:
 		return fmt.Errorf("tenant: invalid enum value for country field: %q", c)
@@ -329,6 +334,11 @@ func ByPrivacyPolicyAccepted(opts ...sql.OrderTermOption) OrderOption {
 // ByTwoFactorAuthEnforced orders the results by the two_factor_auth_enforced field.
 func ByTwoFactorAuthEnforced(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTwoFactorAuthEnforced, opts...).ToFunc()
+}
+
+// ByPasskeyAuthEnforced orders the results by the passkey_auth_enforced field.
+func ByPasskeyAuthEnforced(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPasskeyAuthEnforced, opts...).ToFunc()
 }
 
 // ByMaxUploadSizeMibOverride orders the results by the max_upload_size_mib_override field.

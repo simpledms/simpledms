@@ -68,6 +68,8 @@ type SystemConfig struct {
 	MailerUseImplicitSslTLS bool `json:"mailer_use_implicit_ssl_tls,omitempty"`
 	// OcrTikaURL holds the value of the "ocr_tika_url" field.
 	OcrTikaURL string `json:"ocr_tika_url,omitempty"`
+	// OcrMaxFileSizeMib holds the value of the "ocr_max_file_size_mib" field.
+	OcrMaxFileSizeMib int64 `json:"ocr_max_file_size_mib,omitempty"`
 	// MaxUploadSizeMib holds the value of the "max_upload_size_mib" field.
 	MaxUploadSizeMib int64 `json:"max_upload_size_mib,omitempty"`
 	// InitializedAt holds the value of the "initialized_at" field.
@@ -122,7 +124,7 @@ func (*SystemConfig) scanValues(columns []string) ([]any, error) {
 			values[i] = new(entx.EncryptedString)
 		case systemconfig.FieldIsIdentityEncryptedWithPassphrase, systemconfig.FieldS3UseSsl, systemconfig.FieldTLSEnableAutocert, systemconfig.FieldMailerInsecureSkipVerify, systemconfig.FieldMailerUseImplicitSslTLS:
 			values[i] = new(sql.NullBool)
-		case systemconfig.FieldID, systemconfig.FieldCreatedBy, systemconfig.FieldUpdatedBy, systemconfig.FieldMailerPort, systemconfig.FieldMaxUploadSizeMib:
+		case systemconfig.FieldID, systemconfig.FieldCreatedBy, systemconfig.FieldUpdatedBy, systemconfig.FieldMailerPort, systemconfig.FieldOcrMaxFileSizeMib, systemconfig.FieldMaxUploadSizeMib:
 			values[i] = new(sql.NullInt64)
 		case systemconfig.FieldS3Endpoint, systemconfig.FieldS3AccessKeyID, systemconfig.FieldS3BucketName, systemconfig.FieldTLSCertFilepath, systemconfig.FieldTLSPrivateKeyFilepath, systemconfig.FieldTLSAutocertEmail, systemconfig.FieldMailerHost, systemconfig.FieldMailerUsername, systemconfig.FieldMailerFrom, systemconfig.FieldOcrTikaURL:
 			values[i] = new(sql.NullString)
@@ -295,6 +297,12 @@ func (_m *SystemConfig) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OcrTikaURL = value.String
 			}
+		case systemconfig.FieldOcrMaxFileSizeMib:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field ocr_max_file_size_mib", values[i])
+			} else if value.Valid {
+				_m.OcrMaxFileSizeMib = value.Int64
+			}
 		case systemconfig.FieldMaxUploadSizeMib:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field max_upload_size_mib", values[i])
@@ -422,6 +430,9 @@ func (_m *SystemConfig) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("ocr_tika_url=")
 	builder.WriteString(_m.OcrTikaURL)
+	builder.WriteString(", ")
+	builder.WriteString("ocr_max_file_size_mib=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OcrMaxFileSizeMib))
 	builder.WriteString(", ")
 	builder.WriteString("max_upload_size_mib=")
 	builder.WriteString(fmt.Sprintf("%v", _m.MaxUploadSizeMib))

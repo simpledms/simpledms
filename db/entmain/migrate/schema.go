@@ -34,6 +34,9 @@ var (
 		{Name: "two_factor_auth_recovery_code_salt", Type: field.TypeString, Default: ""},
 		{Name: "two_factor_auth_recovery_code_hashes", Type: field.TypeJSON},
 		{Name: "last_login_attempt_at", Type: field.TypeTime, Nullable: true},
+		{Name: "passkey_login_enabled", Type: field.TypeBool, Default: false},
+		{Name: "passkey_recovery_code_salt", Type: field.TypeString, Default: ""},
+		{Name: "passkey_recovery_code_hashes", Type: field.TypeJSON, Default: "[]"},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"User", "Supporter", "Admin"}},
 	}
 	// AccountsTable holds the schema information for the "accounts" table.
@@ -93,6 +96,53 @@ var (
 			},
 		},
 	}
+	// PasskeyCredentialsColumns holds the columns for the "passkey_credentials" table.
+	PasskeyCredentialsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "public_id", Type: field.TypeString, Unique: true},
+		{Name: "credential_id", Type: field.TypeBytes, Unique: true},
+		{Name: "credential_json", Type: field.TypeBytes},
+		{Name: "name", Type: field.TypeString, Default: ""},
+		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "account_id", Type: field.TypeInt64},
+	}
+	// PasskeyCredentialsTable holds the schema information for the "passkey_credentials" table.
+	PasskeyCredentialsTable = &schema.Table{
+		Name:       "passkey_credentials",
+		Columns:    PasskeyCredentialsColumns,
+		PrimaryKey: []*schema.Column{PasskeyCredentialsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "passkey_credentials_accounts_creator",
+				Columns:    []*schema.Column{PasskeyCredentialsColumns[8]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "passkey_credentials_accounts_updater",
+				Columns:    []*schema.Column{PasskeyCredentialsColumns[9]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "passkey_credentials_accounts_account",
+				Columns:    []*schema.Column{PasskeyCredentialsColumns[10]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "passkeycredential_account_id",
+				Unique:  false,
+				Columns: []*schema.Column{PasskeyCredentialsColumns[10]},
+			},
+		},
+	}
 	// SessionsColumns holds the columns for the "sessions" table.
 	SessionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
@@ -143,6 +193,7 @@ var (
 		{Name: "mailer_insecure_skip_verify", Type: field.TypeBool, Default: false},
 		{Name: "mailer_use_implicit_ssl_tls", Type: field.TypeBool, Default: false},
 		{Name: "ocr_tika_url", Type: field.TypeString, Default: ""},
+		{Name: "ocr_max_file_size_mib", Type: field.TypeInt64, Default: 25},
 		{Name: "max_upload_size_mib", Type: field.TypeInt64, Default: 0},
 		{Name: "initialized_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
@@ -156,13 +207,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "system_configs_accounts_creator",
-				Columns:    []*schema.Column{SystemConfigsColumns[25]},
+				Columns:    []*schema.Column{SystemConfigsColumns[26]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "system_configs_accounts_updater",
-				Columns:    []*schema.Column{SystemConfigsColumns[26]},
+				Columns:    []*schema.Column{SystemConfigsColumns[27]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -249,12 +300,13 @@ var (
 		{Name: "additional_address_info", Type: field.TypeString, Default: ""},
 		{Name: "postal_code", Type: field.TypeString, Default: ""},
 		{Name: "city", Type: field.TypeString, Default: ""},
-		{Name: "country", Type: field.TypeEnum, Enums: []string{"Unknown", "Austria", "Germany", "Switzerland"}},
+		{Name: "country", Type: field.TypeEnum, Enums: []string{"Unknown", "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "CzechRepublic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Norway", "Other", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland"}},
 		{Name: "plan", Type: field.TypeEnum, Enums: []string{"Unknown", "Trial", "Pro", "Unlimited"}, Default: "Unknown"},
 		{Name: "vat_id", Type: field.TypeString, Default: ""},
 		{Name: "terms_of_service_accepted", Type: field.TypeTime},
 		{Name: "privacy_policy_accepted", Type: field.TypeTime},
 		{Name: "two_factor_auth_enforced", Type: field.TypeBool, Default: false},
+		{Name: "passkey_auth_enforced", Type: field.TypeBool, Default: false},
 		{Name: "max_upload_size_mib_override", Type: field.TypeInt64, Nullable: true},
 		{Name: "x25519_identity_encrypted", Type: field.TypeBytes, Nullable: true},
 		{Name: "maintenance_mode_enabled_at", Type: field.TypeTime, Nullable: true},
@@ -271,19 +323,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tenants_accounts_creator",
-				Columns:    []*schema.Column{TenantsColumns[23]},
-				RefColumns: []*schema.Column{AccountsColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "tenants_accounts_updater",
 				Columns:    []*schema.Column{TenantsColumns[24]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "tenants_accounts_deleter",
+				Symbol:     "tenants_accounts_updater",
 				Columns:    []*schema.Column{TenantsColumns[25]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "tenants_accounts_deleter",
+				Columns:    []*schema.Column{TenantsColumns[26]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -296,6 +348,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "is_contact_person", Type: field.TypeBool, Default: false},
 		{Name: "is_default", Type: field.TypeBool, Default: false},
+		{Name: "is_owning_tenant", Type: field.TypeBool, Default: false},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"User", "Owner"}},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
@@ -311,25 +364,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tenant_account_assignments_accounts_creator",
-				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[7]},
-				RefColumns: []*schema.Column{AccountsColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "tenant_account_assignments_accounts_updater",
 				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[8]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "tenant_account_assignments_tenants_tenant",
+				Symbol:     "tenant_account_assignments_accounts_updater",
 				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[9]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "tenant_account_assignments_tenants_tenant",
+				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[10]},
 				RefColumns: []*schema.Column{TenantsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "tenant_account_assignments_accounts_account",
-				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[10]},
+				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[11]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -338,15 +391,66 @@ var (
 			{
 				Name:    "tenantaccountassignment_tenant_id_account_id",
 				Unique:  true,
-				Columns: []*schema.Column{TenantAccountAssignmentsColumns[9], TenantAccountAssignmentsColumns[10]},
+				Columns: []*schema.Column{TenantAccountAssignmentsColumns[10], TenantAccountAssignmentsColumns[11]},
 			},
 			{
 				Name:    "tenantaccountassignment_account_id_is_default",
 				Unique:  true,
-				Columns: []*schema.Column{TenantAccountAssignmentsColumns[10], TenantAccountAssignmentsColumns[4]},
+				Columns: []*schema.Column{TenantAccountAssignmentsColumns[11], TenantAccountAssignmentsColumns[4]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`is_default` = true",
 				},
+			},
+			{
+				Name:    "tenantaccountassignment_account_id_is_owning_tenant",
+				Unique:  true,
+				Columns: []*schema.Column{TenantAccountAssignmentsColumns[11], TenantAccountAssignmentsColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`is_owning_tenant` = true",
+				},
+			},
+		},
+	}
+	// WebAuthnChallengesColumns holds the columns for the "web_authn_challenges" table.
+	WebAuthnChallengesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "challenge_id", Type: field.TypeString, Unique: true},
+		{Name: "client_key", Type: field.TypeString, Nullable: true},
+		{Name: "ceremony", Type: field.TypeString},
+		{Name: "session_data_json", Type: field.TypeBytes},
+		{Name: "expires_at", Type: field.TypeTime},
+		{Name: "used_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "account_id", Type: field.TypeInt64, Nullable: true},
+	}
+	// WebAuthnChallengesTable holds the schema information for the "web_authn_challenges" table.
+	WebAuthnChallengesTable = &schema.Table{
+		Name:       "web_authn_challenges",
+		Columns:    WebAuthnChallengesColumns,
+		PrimaryKey: []*schema.Column{WebAuthnChallengesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "web_authn_challenges_accounts_account",
+				Columns:    []*schema.Column{WebAuthnChallengesColumns[8]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "webauthnchallenge_expires_at",
+				Unique:  false,
+				Columns: []*schema.Column{WebAuthnChallengesColumns[5]},
+			},
+			{
+				Name:    "webauthnchallenge_account_id_ceremony",
+				Unique:  false,
+				Columns: []*schema.Column{WebAuthnChallengesColumns[8], WebAuthnChallengesColumns[3]},
+			},
+			{
+				Name:    "webauthnchallenge_client_key_ceremony",
+				Unique:  false,
+				Columns: []*schema.Column{WebAuthnChallengesColumns[2], WebAuthnChallengesColumns[3]},
 			},
 		},
 	}
@@ -354,11 +458,13 @@ var (
 	Tables = []*schema.Table{
 		AccountsTable,
 		MailsTable,
+		PasskeyCredentialsTable,
 		SessionsTable,
 		SystemConfigsTable,
 		TemporaryFilesTable,
 		TenantsTable,
 		TenantAccountAssignmentsTable,
+		WebAuthnChallengesTable,
 	}
 )
 
@@ -366,6 +472,9 @@ func init() {
 	MailsTable.ForeignKeys[0].RefTable = AccountsTable
 	MailsTable.ForeignKeys[1].RefTable = AccountsTable
 	MailsTable.ForeignKeys[2].RefTable = AccountsTable
+	PasskeyCredentialsTable.ForeignKeys[0].RefTable = AccountsTable
+	PasskeyCredentialsTable.ForeignKeys[1].RefTable = AccountsTable
+	PasskeyCredentialsTable.ForeignKeys[2].RefTable = AccountsTable
 	SessionsTable.ForeignKeys[0].RefTable = AccountsTable
 	SystemConfigsTable.ForeignKeys[0].RefTable = AccountsTable
 	SystemConfigsTable.ForeignKeys[1].RefTable = AccountsTable
@@ -380,4 +489,5 @@ func init() {
 	TenantAccountAssignmentsTable.ForeignKeys[1].RefTable = AccountsTable
 	TenantAccountAssignmentsTable.ForeignKeys[2].RefTable = TenantsTable
 	TenantAccountAssignmentsTable.ForeignKeys[3].RefTable = AccountsTable
+	WebAuthnChallengesTable.ForeignKeys[0].RefTable = AccountsTable
 }

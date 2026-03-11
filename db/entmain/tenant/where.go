@@ -153,6 +153,11 @@ func TwoFactorAuthEnforced(v bool) predicate.Tenant {
 	return predicate.Tenant(sql.FieldEQ(FieldTwoFactorAuthEnforced, v))
 }
 
+// PasskeyAuthEnforced applies equality check predicate on the "passkey_auth_enforced" field. It's identical to PasskeyAuthEnforcedEQ.
+func PasskeyAuthEnforced(v bool) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldPasskeyAuthEnforced, v))
+}
+
 // MaxUploadSizeMibOverride applies equality check predicate on the "max_upload_size_mib_override" field. It's identical to MaxUploadSizeMibOverrideEQ.
 func MaxUploadSizeMibOverride(v int64) predicate.Tenant {
 	return predicate.Tenant(sql.FieldEQ(FieldMaxUploadSizeMibOverride, v))
@@ -1176,6 +1181,16 @@ func TwoFactorAuthEnforcedEQ(v bool) predicate.Tenant {
 // TwoFactorAuthEnforcedNEQ applies the NEQ predicate on the "two_factor_auth_enforced" field.
 func TwoFactorAuthEnforcedNEQ(v bool) predicate.Tenant {
 	return predicate.Tenant(sql.FieldNEQ(FieldTwoFactorAuthEnforced, v))
+}
+
+// PasskeyAuthEnforcedEQ applies the EQ predicate on the "passkey_auth_enforced" field.
+func PasskeyAuthEnforcedEQ(v bool) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldPasskeyAuthEnforced, v))
+}
+
+// PasskeyAuthEnforcedNEQ applies the NEQ predicate on the "passkey_auth_enforced" field.
+func PasskeyAuthEnforcedNEQ(v bool) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNEQ(FieldPasskeyAuthEnforced, v))
 }
 
 // MaxUploadSizeMibOverrideEQ applies the EQ predicate on the "max_upload_size_mib_override" field.
