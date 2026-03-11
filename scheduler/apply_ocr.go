@@ -8,10 +8,12 @@ import (
 	"strings"
 	"time"
 
+	entsql "entgo.io/ent/dialect/sql"
 	"entgo.io/ent/privacy"
 	"filippo.io/age"
 	"github.com/marcobeierer/go-tika"
 
+	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
@@ -45,7 +47,9 @@ func (qq *Scheduler) applyOCR() {
 		ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 		qq.applyOCRx(ctx)
-		time.Sleep(15 * time.Second)
+
+		// TODO is this to short? how expensive is this in larger instances?
+		time.Sleep(5 * time.Second)
 	}
 }
 
@@ -55,7 +59,16 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 	// iterate over all tenantDBs (or create one scheduler per tenant?)
 	qq.tenantDBs.Range(func(tenantID int64, tenantDB *sqlx.TenantDB) bool {
 		// TODO is tx necessary on mainDB?
-		tenantx := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).OnlyX(ctx)
+		tenantx, err := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).Only(ctx)
+		if err != nil {
+			if entmain.IsNotFound(err) {
+				// can happen if tenant was deleted and not removed from tenantDBs yet
+				log.Println("tenant not found", tenantID)
+				return true // continue
+			}
+			log.Println(err)
+			return true
+		}
 		tenantIdentity := tenantx.X25519IdentityEncrypted.Identity()
 
 		// TODO transaction? if so, make sure OCRRetryCount gets increased
@@ -74,6 +87,7 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 				),
 				file.IsDirectory(false),
 			).
+			Order(file.ByID(entsql.OrderAsc())).
 			AllX(ctx)
 
 		for _, fileToProcess := range filesToProcess {
@@ -91,7 +105,7 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 				return true
 			}
 			if fileNotReady {
-				return true // continue with next tenant
+				continue
 			}
 			if fileTooLarge {
 				// TODO find a more expressive solution to store in database

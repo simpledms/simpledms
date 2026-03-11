@@ -24,6 +24,12 @@
 				">{{ .Icon }}</i>
 			</div>
 		</div>
-		<span class="label-md {{ if .IsActive }}label-prominent text-on-surface{{ else }}text-on-surface-variant group-hover/navdest:text-on-surface group-focus/navdest:text-on-surface group-active/navdest:text-on-surface{{ end }}">{{ .Label }}</span>
+		<span class="label-md md:w-20 hyphens-auto
+			{{ if .IsActive }}
+				label-prominent text-on-surface
+			{{ else }}
+				text-on-surface-variant group-hover/navdest:text-on-surface
+				group-focus/navdest:text-on-surface group-active/navdest:text-on-surface
+			{{ end }}">{{ .Label }}</span>
 	</a>
 {{ end }}

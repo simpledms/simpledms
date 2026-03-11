@@ -5468,6 +5468,8 @@ type SystemConfigMutation struct {
 	mailer_insecure_skip_verify           *bool
 	mailer_use_implicit_ssl_tls           *bool
 	ocr_tika_url                          *string
+	ocr_max_file_size_mib                 *int64
+	addocr_max_file_size_mib              *int64
 	initialized_at                        *time.Time
 	clearedFields                         map[string]struct{}
 	creator                               *int64
@@ -6521,6 +6523,62 @@ func (m *SystemConfigMutation) ResetOcrTikaURL() {
 	m.ocr_tika_url = nil
 }
 
+// SetOcrMaxFileSizeMib sets the "ocr_max_file_size_mib" field.
+func (m *SystemConfigMutation) SetOcrMaxFileSizeMib(i int64) {
+	m.ocr_max_file_size_mib = &i
+	m.addocr_max_file_size_mib = nil
+}
+
+// OcrMaxFileSizeMib returns the value of the "ocr_max_file_size_mib" field in the mutation.
+func (m *SystemConfigMutation) OcrMaxFileSizeMib() (r int64, exists bool) {
+	v := m.ocr_max_file_size_mib
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOcrMaxFileSizeMib returns the old "ocr_max_file_size_mib" field's value of the SystemConfig entity.
+// If the SystemConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemConfigMutation) OldOcrMaxFileSizeMib(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOcrMaxFileSizeMib is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOcrMaxFileSizeMib requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOcrMaxFileSizeMib: %w", err)
+	}
+	return oldValue.OcrMaxFileSizeMib, nil
+}
+
+// AddOcrMaxFileSizeMib adds i to the "ocr_max_file_size_mib" field.
+func (m *SystemConfigMutation) AddOcrMaxFileSizeMib(i int64) {
+	if m.addocr_max_file_size_mib != nil {
+		*m.addocr_max_file_size_mib += i
+	} else {
+		m.addocr_max_file_size_mib = &i
+	}
+}
+
+// AddedOcrMaxFileSizeMib returns the value that was added to the "ocr_max_file_size_mib" field in this mutation.
+func (m *SystemConfigMutation) AddedOcrMaxFileSizeMib() (r int64, exists bool) {
+	v := m.addocr_max_file_size_mib
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetOcrMaxFileSizeMib resets all changes to the "ocr_max_file_size_mib" field.
+func (m *SystemConfigMutation) ResetOcrMaxFileSizeMib() {
+	m.ocr_max_file_size_mib = nil
+	m.addocr_max_file_size_mib = nil
+}
+
 // SetInitializedAt sets the "initialized_at" field.
 func (m *SystemConfigMutation) SetInitializedAt(t time.Time) {
 	m.initialized_at = &t
@@ -6684,7 +6742,7 @@ func (m *SystemConfigMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SystemConfigMutation) Fields() []string {
-	fields := make([]string, 0, 25)
+	fields := make([]string, 0, 26)
 	if m.created_at != nil {
 		fields = append(fields, systemconfig.FieldCreatedAt)
 	}
@@ -6757,6 +6815,9 @@ func (m *SystemConfigMutation) Fields() []string {
 	if m.ocr_tika_url != nil {
 		fields = append(fields, systemconfig.FieldOcrTikaURL)
 	}
+	if m.ocr_max_file_size_mib != nil {
+		fields = append(fields, systemconfig.FieldOcrMaxFileSizeMib)
+	}
 	if m.initialized_at != nil {
 		fields = append(fields, systemconfig.FieldInitializedAt)
 	}
@@ -6816,6 +6877,8 @@ func (m *SystemConfigMutation) Field(name string) (ent.Value, bool) {
 		return m.MailerUseImplicitSslTLS()
 	case systemconfig.FieldOcrTikaURL:
 		return m.OcrTikaURL()
+	case systemconfig.FieldOcrMaxFileSizeMib:
+		return m.OcrMaxFileSizeMib()
 	case systemconfig.FieldInitializedAt:
 		return m.InitializedAt()
 	}
@@ -6875,6 +6938,8 @@ func (m *SystemConfigMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldMailerUseImplicitSslTLS(ctx)
 	case systemconfig.FieldOcrTikaURL:
 		return m.OldOcrTikaURL(ctx)
+	case systemconfig.FieldOcrMaxFileSizeMib:
+		return m.OldOcrMaxFileSizeMib(ctx)
 	case systemconfig.FieldInitializedAt:
 		return m.OldInitializedAt(ctx)
 	}
@@ -7054,6 +7119,13 @@ func (m *SystemConfigMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetOcrTikaURL(v)
 		return nil
+	case systemconfig.FieldOcrMaxFileSizeMib:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOcrMaxFileSizeMib(v)
+		return nil
 	case systemconfig.FieldInitializedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -7072,6 +7144,9 @@ func (m *SystemConfigMutation) AddedFields() []string {
 	if m.addmailer_port != nil {
 		fields = append(fields, systemconfig.FieldMailerPort)
 	}
+	if m.addocr_max_file_size_mib != nil {
+		fields = append(fields, systemconfig.FieldOcrMaxFileSizeMib)
+	}
 	return fields
 }
 
@@ -7082,6 +7157,8 @@ func (m *SystemConfigMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case systemconfig.FieldMailerPort:
 		return m.AddedMailerPort()
+	case systemconfig.FieldOcrMaxFileSizeMib:
+		return m.AddedOcrMaxFileSizeMib()
 	}
 	return nil, false
 }
@@ -7097,6 +7174,13 @@ func (m *SystemConfigMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddMailerPort(v)
+		return nil
+	case systemconfig.FieldOcrMaxFileSizeMib:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddOcrMaxFileSizeMib(v)
 		return nil
 	}
 	return fmt.Errorf("unknown SystemConfig numeric field %s", name)
@@ -7223,6 +7307,9 @@ func (m *SystemConfigMutation) ResetField(name string) error {
 		return nil
 	case systemconfig.FieldOcrTikaURL:
 		m.ResetOcrTikaURL()
+		return nil
+	case systemconfig.FieldOcrMaxFileSizeMib:
+		m.ResetOcrMaxFileSizeMib()
 		return nil
 	case systemconfig.FieldInitializedAt:
 		m.ResetInitializedAt()
@@ -11524,6 +11611,7 @@ type TenantAccountAssignmentMutation struct {
 	updated_at        *time.Time
 	is_contact_person *bool
 	is_default        *bool
+	is_owning_tenant  *bool
 	role              *tenantrole.TenantRole
 	expires_at        *time.Time
 	clearedFields     map[string]struct{}
@@ -11958,6 +12046,42 @@ func (m *TenantAccountAssignmentMutation) ResetIsDefault() {
 	m.is_default = nil
 }
 
+// SetIsOwningTenant sets the "is_owning_tenant" field.
+func (m *TenantAccountAssignmentMutation) SetIsOwningTenant(b bool) {
+	m.is_owning_tenant = &b
+}
+
+// IsOwningTenant returns the value of the "is_owning_tenant" field in the mutation.
+func (m *TenantAccountAssignmentMutation) IsOwningTenant() (r bool, exists bool) {
+	v := m.is_owning_tenant
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsOwningTenant returns the old "is_owning_tenant" field's value of the TenantAccountAssignment entity.
+// If the TenantAccountAssignment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantAccountAssignmentMutation) OldIsOwningTenant(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsOwningTenant is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsOwningTenant requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsOwningTenant: %w", err)
+	}
+	return oldValue.IsOwningTenant, nil
+}
+
+// ResetIsOwningTenant resets all changes to the "is_owning_tenant" field.
+func (m *TenantAccountAssignmentMutation) ResetIsOwningTenant() {
+	m.is_owning_tenant = nil
+}
+
 // SetRole sets the "role" field.
 func (m *TenantAccountAssignmentMutation) SetRole(tr tenantrole.TenantRole) {
 	m.role = &tr
@@ -12211,7 +12335,7 @@ func (m *TenantAccountAssignmentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TenantAccountAssignmentMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, tenantaccountassignment.FieldCreatedAt)
 	}
@@ -12235,6 +12359,9 @@ func (m *TenantAccountAssignmentMutation) Fields() []string {
 	}
 	if m.is_default != nil {
 		fields = append(fields, tenantaccountassignment.FieldIsDefault)
+	}
+	if m.is_owning_tenant != nil {
+		fields = append(fields, tenantaccountassignment.FieldIsOwningTenant)
 	}
 	if m.role != nil {
 		fields = append(fields, tenantaccountassignment.FieldRole)
@@ -12266,6 +12393,8 @@ func (m *TenantAccountAssignmentMutation) Field(name string) (ent.Value, bool) {
 		return m.IsContactPerson()
 	case tenantaccountassignment.FieldIsDefault:
 		return m.IsDefault()
+	case tenantaccountassignment.FieldIsOwningTenant:
+		return m.IsOwningTenant()
 	case tenantaccountassignment.FieldRole:
 		return m.Role()
 	case tenantaccountassignment.FieldExpiresAt:
@@ -12295,6 +12424,8 @@ func (m *TenantAccountAssignmentMutation) OldField(ctx context.Context, name str
 		return m.OldIsContactPerson(ctx)
 	case tenantaccountassignment.FieldIsDefault:
 		return m.OldIsDefault(ctx)
+	case tenantaccountassignment.FieldIsOwningTenant:
+		return m.OldIsOwningTenant(ctx)
 	case tenantaccountassignment.FieldRole:
 		return m.OldRole(ctx)
 	case tenantaccountassignment.FieldExpiresAt:
@@ -12363,6 +12494,13 @@ func (m *TenantAccountAssignmentMutation) SetField(name string, value ent.Value)
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsDefault(v)
+		return nil
+	case tenantaccountassignment.FieldIsOwningTenant:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsOwningTenant(v)
 		return nil
 	case tenantaccountassignment.FieldRole:
 		v, ok := value.(tenantrole.TenantRole)
@@ -12474,6 +12612,9 @@ func (m *TenantAccountAssignmentMutation) ResetField(name string) error {
 		return nil
 	case tenantaccountassignment.FieldIsDefault:
 		m.ResetIsDefault()
+		return nil
+	case tenantaccountassignment.FieldIsOwningTenant:
+		m.ResetIsOwningTenant()
 		return nil
 	case tenantaccountassignment.FieldRole:
 		m.ResetRole()

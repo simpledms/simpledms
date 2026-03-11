@@ -164,6 +164,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemconfig.FieldMailerInsecureSkipVerify:          {Type: field.TypeBool, Column: systemconfig.FieldMailerInsecureSkipVerify},
 			systemconfig.FieldMailerUseImplicitSslTLS:           {Type: field.TypeBool, Column: systemconfig.FieldMailerUseImplicitSslTLS},
 			systemconfig.FieldOcrTikaURL:                        {Type: field.TypeString, Column: systemconfig.FieldOcrTikaURL},
+			systemconfig.FieldOcrMaxFileSizeMib:                 {Type: field.TypeInt64, Column: systemconfig.FieldOcrMaxFileSizeMib},
 			systemconfig.FieldInitializedAt:                     {Type: field.TypeTime, Column: systemconfig.FieldInitializedAt},
 		},
 	}
@@ -260,6 +261,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tenantaccountassignment.FieldAccountID:       {Type: field.TypeInt64, Column: tenantaccountassignment.FieldAccountID},
 			tenantaccountassignment.FieldIsContactPerson: {Type: field.TypeBool, Column: tenantaccountassignment.FieldIsContactPerson},
 			tenantaccountassignment.FieldIsDefault:       {Type: field.TypeBool, Column: tenantaccountassignment.FieldIsDefault},
+			tenantaccountassignment.FieldIsOwningTenant:  {Type: field.TypeBool, Column: tenantaccountassignment.FieldIsOwningTenant},
 			tenantaccountassignment.FieldRole:            {Type: field.TypeEnum, Column: tenantaccountassignment.FieldRole},
 			tenantaccountassignment.FieldExpiresAt:       {Type: field.TypeTime, Column: tenantaccountassignment.FieldExpiresAt},
 		},
@@ -1414,6 +1416,11 @@ func (f *SystemConfigFilter) WhereOcrTikaURL(p entql.StringP) {
 	f.Where(p.Field(systemconfig.FieldOcrTikaURL))
 }
 
+// WhereOcrMaxFileSizeMib applies the entql int64 predicate on the ocr_max_file_size_mib field.
+func (f *SystemConfigFilter) WhereOcrMaxFileSizeMib(p entql.Int64P) {
+	f.Where(p.Field(systemconfig.FieldOcrMaxFileSizeMib))
+}
+
 // WhereInitializedAt applies the entql time.Time predicate on the initialized_at field.
 func (f *SystemConfigFilter) WhereInitializedAt(p entql.TimeP) {
 	f.Where(p.Field(systemconfig.FieldInitializedAt))
@@ -1971,6 +1978,11 @@ func (f *TenantAccountAssignmentFilter) WhereIsContactPerson(p entql.BoolP) {
 // WhereIsDefault applies the entql bool predicate on the is_default field.
 func (f *TenantAccountAssignmentFilter) WhereIsDefault(p entql.BoolP) {
 	f.Where(p.Field(tenantaccountassignment.FieldIsDefault))
+}
+
+// WhereIsOwningTenant applies the entql bool predicate on the is_owning_tenant field.
+func (f *TenantAccountAssignmentFilter) WhereIsOwningTenant(p entql.BoolP) {
+	f.Where(p.Field(tenantaccountassignment.FieldIsOwningTenant))
 }
 
 // WhereRole applies the entql string predicate on the role field.

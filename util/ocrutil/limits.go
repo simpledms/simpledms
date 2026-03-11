@@ -1,36 +1,54 @@
 package ocrutil
 
 import (
+	"log"
 	"os"
 	"strconv"
 )
 
 const (
-	MaxFileSizeEnvVar             = "SIMPLEDMS_OCR_MAX_FILE_SIZE_BYTES"
-	DefaultMaxFileSizeBytes int64 = 25 * 1024 * 1024
+	MaxFileSizeMiBEnvVar        = "SIMPLEDMS_OCR_MAX_FILE_SIZE_MIB"
+	DefaultMaxFileSizeMiB int64 = 25
+	bytesPerMiB           int64 = 1024 * 1024
 )
 
 // unsafe because it should not be used directly
-var unsafeMaxFileSizeBytes int64 = -1
+var unsafeMaxFileSizeMiB int64 = -1
 
-func MaxFileSizeBytes() int64 {
-	if unsafeMaxFileSizeBytes >= 0 {
-		return unsafeMaxFileSizeBytes
+func SetMaxFileSizeMiB(limit int64) {
+	if limit <= 0 {
+		unsafeMaxFileSizeMiB = DefaultMaxFileSizeMiB
+		return
 	}
 
-	raw := os.Getenv(MaxFileSizeEnvVar)
+	unsafeMaxFileSizeMiB = limit
+}
+
+func parseMaxFileSizeMiB(raw string) int64 {
 	if raw == "" {
-		unsafeMaxFileSizeBytes = DefaultMaxFileSizeBytes
-		return unsafeMaxFileSizeBytes
+		return DefaultMaxFileSizeMiB
 	}
 
 	limit, err := strconv.ParseInt(raw, 10, 64)
 	if err != nil || limit <= 0 {
-		return DefaultMaxFileSizeBytes
+		log.Println("invalid OCR max file size MiB env var, using default")
+		return DefaultMaxFileSizeMiB
 	}
 
-	unsafeMaxFileSizeBytes = limit
-	return unsafeMaxFileSizeBytes
+	return limit
+}
+
+func MaxFileSizeMiB() int64 {
+	if unsafeMaxFileSizeMiB >= 0 {
+		return unsafeMaxFileSizeMiB
+	}
+
+	unsafeMaxFileSizeMiB = parseMaxFileSizeMiB(os.Getenv(MaxFileSizeMiBEnvVar))
+	return unsafeMaxFileSizeMiB
+}
+
+func MaxFileSizeBytes() int64 {
+	return MaxFileSizeMiB() * bytesPerMiB
 }
 
 func IsFileTooLarge(fileSizeBytes int64) bool {

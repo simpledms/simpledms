@@ -1,9 +1,12 @@
 package managetenantusers
 
 import (
+	"log"
+
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/model/common/tenantrole"
@@ -54,8 +57,31 @@ func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState)
 	// TODO filtered by tenant?
 	users := ctx.TenantCtx().TTx.User.Query().Order(user.ByLastName(), user.ByFirstName()).AllX(ctx)
 
+	accountIDs := make([]int64, 0, len(users))
+	for _, userx := range users {
+		accountIDs = append(accountIDs, userx.AccountID)
+	}
+
+	isOwningTenantByAccountID := make(map[int64]bool, len(accountIDs))
+	if len(accountIDs) > 0 {
+		assignments, err := ctx.MainCtx().MainTx.TenantAccountAssignment.Query().
+			Where(
+				tenantaccountassignment.TenantID(ctx.TenantCtx().Tenant.ID),
+				tenantaccountassignment.AccountIDIn(accountIDs...),
+			).
+			All(ctx)
+		if err != nil {
+			log.Println(err)
+		} else {
+			for _, assignment := range assignments {
+				isOwningTenantByAccountID[assignment.AccountID] = assignment.IsOwningTenant
+			}
+		}
+	}
+
 	for _, userx := range users {
 		userm := model.NewUser(userx)
+		isOwningTenantAssignment := isOwningTenantByAccountID[userx.AccountID]
 
 		leading := wx.NewIcon("person")
 		if userx.Role == tenantrole.Owner {
@@ -63,10 +89,20 @@ func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState)
 			leading = wx.NewIcon("manage_accounts")
 		}
 
+		ownershipText := wx.T("Member account")
+		if isOwningTenantAssignment {
+			ownershipText = wx.T("Owned account")
+		}
+
 		listItems = append(listItems, &wx.ListItem{
 			Leading:        leading,
 			Headline:       wx.Tu(userm.Name()),
-			SupportingText: wx.Tu(userm.NameSecondLine()),
+			SupportingText: wx.Tf("%s - %s", wx.Tu(userm.NameSecondLine()), ownershipText),
+			ContextMenu: NewUserContextMenuWidget(qq.actions).Widget(
+				ctx,
+				userx,
+				isOwningTenantAssignment,
+			),
 		})
 	}
 

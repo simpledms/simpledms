@@ -69,6 +69,7 @@ func (qq *SignUpService) SignUp(
 		SetAccount(accountx).
 		SetIsContactPerson(true).
 		SetRole(tenantrole.Owner).
+		SetIsOwningTenant(true).
 		SetIsDefault(true).
 		SaveX(ctx)
 

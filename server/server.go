@@ -51,6 +51,7 @@ import (
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/ocrutil"
 	"github.com/simpledms/simpledms/util/recoverx"
 )
 
@@ -92,6 +93,7 @@ func resolveListenMode(useAutocert bool, tlsCertFilepath, tlsPrivateKeyFilepath 
 func newMaintenanceModeHandler(
 	mainDB *sqlx.MainDB,
 	assetsFS fs.FS,
+	devMode bool,
 	i18nx *i18n.I18n,
 	renderer *ui.Renderer,
 	encryptedIdentity []byte,
@@ -99,7 +101,9 @@ func newMaintenanceModeHandler(
 	shutdownFn func(context.Context) error,
 ) http.Handler {
 	mux := http.NewServeMux()
+	pwaManifestHandler := NewPWAManifestHandler(assetsFS, devMode)
 
+	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assetsFS))))
 
 	mux.HandleFunc("/-/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
@@ -297,9 +301,14 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		return nil, err
 	}
 
+	pwaManifestHandler := NewPWAManifestHandler(qq.assetsFS, qq.devMode)
+	router.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
 	// router.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./webapp/assets"))))
 	// slash suffix is necessary to match all paths with the prefix
-	router.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))))
+	router.Handle(
+		"GET /assets/",
+		http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))),
+	)
 
 	/*
 		// mounting also works with `/webdav`, but if `/webdav` is defined
@@ -386,7 +395,10 @@ func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB,
 				MailerInsecureSkipVerify: os.Getenv("SIMPLEDMS_MAILER_INSECURE_SKIP_VERIFY") == "true",
 				MailerUseImplicitSSLTLS:  os.Getenv("SIMPLEDMS_MAILER_USE_IMPLICIT_SSL_TLS") == "true",
 			},
-			modelmain.OCRConfig{TikaURL: os.Getenv("SIMPLEDMS_OCR_TIKA_URL")},
+			modelmain.OCRConfig{
+				TikaURL:        os.Getenv("SIMPLEDMS_OCR_TIKA_URL"),
+				MaxFileSizeMiB: ocrutil.MaxFileSizeMiB(),
+			},
 		)
 		if err != nil {
 			erry := initAppTx.Rollback()
@@ -537,6 +549,7 @@ func (qq *Server) ensureMainIdentity(
 		maintenanceMux := newMaintenanceModeHandler(
 			mainDB,
 			qq.assetsFS,
+			qq.devMode,
 			i18nx,
 			renderer,
 			systemConfigx.X25519Identity,
@@ -655,6 +668,16 @@ func (qq *Server) applyOverrideDBConfigAfterIdentity(ctx context.Context, mainDB
 	if val, set := os.LookupEnv("SIMPLEDMS_OCR_TIKA_URL"); set {
 		updateQuery.SetOcrTikaURL(val)
 	}
+	if val, set := os.LookupEnv(ocrutil.MaxFileSizeMiBEnvVar); set {
+		limit := ocrutil.DefaultMaxFileSizeMiB
+		parsed, err := strconv.ParseInt(val, 10, 64)
+		if err != nil || parsed <= 0 {
+			log.Println("invalid OCR max file size MiB env var, using default")
+		} else {
+			limit = parsed
+		}
+		updateQuery.SetOcrMaxFileSizeMib(limit)
+	}
 
 	updateQuery.SaveX(ctx)
 }
@@ -676,6 +699,8 @@ func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.Main
 
 	// TODO FirstX okay?
 	systemConfigx := mainDB.ReadOnlyConn.SystemConfig.Query().FirstX(ctx)
+	ocrutil.SetMaxFileSizeMiB(systemConfigx.OcrMaxFileSizeMib)
+
 	systemConfig := modelmain.NewSystemConfig(
 		systemConfigx,
 		qq.isSaaSModeEnabled,
@@ -728,7 +753,7 @@ func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *modelmain.System
 			systemConfig.S3().S3BucketName,
 			fileSystem,
 			disableFileEncryption,
-			qq.isSaaSModeEnabled,
+			filesystem.NewStorageQuota(qq.isSaaSModeEnabled),
 		),
 		factory,
 		fileRepo,

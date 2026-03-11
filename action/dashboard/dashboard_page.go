@@ -5,6 +5,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -29,13 +30,21 @@ func (qq *DashboardPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 
 func (qq *DashboardPage) Widget(ctx ctxx.Context) renderable.Renderable {
 	fabs := []*wx.FloatingActionButton{}
+	dashboardCardsContent := &wx.Container{
+		HTMXAttrs: wx.HTMXAttrs{
+			HxGet:     "/",
+			HxTrigger: event.HxTrigger(event.AccountDeleted),
+			HxTarget:  "#content",
+		},
+		Child: qq.actions.DashboardCardsPartial.Widget(ctx),
+	}
 
 	mainLayout := &wx.MainLayout{
 		// MainCtx is necessary when navigating back from space, otherwise all menu items are rendered
 		Navigation: partial2.NewNavigationRail(ctx.MainCtx(), qq.infra, "dashboard", fabs),
 		Content: &wx.DefaultLayout{
 			AppBar:        qq.appBar(ctx),
-			Content:       qq.actions.DashboardCardsPartial.Widget(ctx),
+			Content:       dashboardCardsContent,
 			WithPoweredBy: false,
 		},
 	}

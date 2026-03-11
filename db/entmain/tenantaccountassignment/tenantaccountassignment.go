@@ -32,6 +32,8 @@ const (
 	FieldIsContactPerson = "is_contact_person"
 	// FieldIsDefault holds the string denoting the is_default field in the database.
 	FieldIsDefault = "is_default"
+	// FieldIsOwningTenant holds the string denoting the is_owning_tenant field in the database.
+	FieldIsOwningTenant = "is_owning_tenant"
 	// FieldRole holds the string denoting the role field in the database.
 	FieldRole = "role"
 	// FieldExpiresAt holds the string denoting the expires_at field in the database.
@@ -87,6 +89,7 @@ var Columns = []string{
 	FieldAccountID,
 	FieldIsContactPerson,
 	FieldIsDefault,
+	FieldIsOwningTenant,
 	FieldRole,
 	FieldExpiresAt,
 }
@@ -112,6 +115,8 @@ var (
 	DefaultIsContactPerson bool
 	// DefaultIsDefault holds the default value on creation for the "is_default" field.
 	DefaultIsDefault bool
+	// DefaultIsOwningTenant holds the default value on creation for the "is_owning_tenant" field.
+	DefaultIsOwningTenant bool
 )
 
 // RoleValidator is a validator for the "role" field enum values. It is called by the builders before save.
@@ -170,6 +175,11 @@ func ByIsContactPerson(opts ...sql.OrderTermOption) OrderOption {
 // ByIsDefault orders the results by the is_default field.
 func ByIsDefault(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsDefault, opts...).ToFunc()
+}
+
+// ByIsOwningTenant orders the results by the is_owning_tenant field.
+func ByIsOwningTenant(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsOwningTenant, opts...).ToFunc()
 }
 
 // ByRole orders the results by the role field.

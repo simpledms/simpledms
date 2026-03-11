@@ -193,6 +193,7 @@ var (
 		{Name: "mailer_insecure_skip_verify", Type: field.TypeBool, Default: false},
 		{Name: "mailer_use_implicit_ssl_tls", Type: field.TypeBool, Default: false},
 		{Name: "ocr_tika_url", Type: field.TypeString, Default: ""},
+		{Name: "ocr_max_file_size_mib", Type: field.TypeInt64, Default: 25},
 		{Name: "initialized_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
@@ -205,13 +206,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "system_configs_accounts_creator",
-				Columns:    []*schema.Column{SystemConfigsColumns[24]},
+				Columns:    []*schema.Column{SystemConfigsColumns[25]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "system_configs_accounts_updater",
-				Columns:    []*schema.Column{SystemConfigsColumns[25]},
+				Columns:    []*schema.Column{SystemConfigsColumns[26]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -298,7 +299,7 @@ var (
 		{Name: "additional_address_info", Type: field.TypeString, Default: ""},
 		{Name: "postal_code", Type: field.TypeString, Default: ""},
 		{Name: "city", Type: field.TypeString, Default: ""},
-		{Name: "country", Type: field.TypeEnum, Enums: []string{"Unknown", "Austria", "Germany", "Switzerland"}},
+		{Name: "country", Type: field.TypeEnum, Enums: []string{"Unknown", "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "CzechRepublic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Norway", "Other", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland"}},
 		{Name: "plan", Type: field.TypeEnum, Enums: []string{"Unknown", "Trial", "Pro", "Unlimited"}, Default: "Unknown"},
 		{Name: "vat_id", Type: field.TypeString, Default: ""},
 		{Name: "terms_of_service_accepted", Type: field.TypeTime},
@@ -345,6 +346,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "is_contact_person", Type: field.TypeBool, Default: false},
 		{Name: "is_default", Type: field.TypeBool, Default: false},
+		{Name: "is_owning_tenant", Type: field.TypeBool, Default: false},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"User", "Owner"}},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
@@ -360,25 +362,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tenant_account_assignments_accounts_creator",
-				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[7]},
-				RefColumns: []*schema.Column{AccountsColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "tenant_account_assignments_accounts_updater",
 				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[8]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "tenant_account_assignments_tenants_tenant",
+				Symbol:     "tenant_account_assignments_accounts_updater",
 				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[9]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "tenant_account_assignments_tenants_tenant",
+				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[10]},
 				RefColumns: []*schema.Column{TenantsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "tenant_account_assignments_accounts_account",
-				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[10]},
+				Columns:    []*schema.Column{TenantAccountAssignmentsColumns[11]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -387,14 +389,22 @@ var (
 			{
 				Name:    "tenantaccountassignment_tenant_id_account_id",
 				Unique:  true,
-				Columns: []*schema.Column{TenantAccountAssignmentsColumns[9], TenantAccountAssignmentsColumns[10]},
+				Columns: []*schema.Column{TenantAccountAssignmentsColumns[10], TenantAccountAssignmentsColumns[11]},
 			},
 			{
 				Name:    "tenantaccountassignment_account_id_is_default",
 				Unique:  true,
-				Columns: []*schema.Column{TenantAccountAssignmentsColumns[10], TenantAccountAssignmentsColumns[4]},
+				Columns: []*schema.Column{TenantAccountAssignmentsColumns[11], TenantAccountAssignmentsColumns[4]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`is_default` = true",
+				},
+			},
+			{
+				Name:    "tenantaccountassignment_account_id_is_owning_tenant",
+				Unique:  true,
+				Columns: []*schema.Column{TenantAccountAssignmentsColumns[11], TenantAccountAssignmentsColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`is_owning_tenant` = true",
 				},
 			},
 		},

@@ -2,6 +2,7 @@
 
 ## Bugs
 
+- [x] browse view: adding a field in browse view doesn't update field list
 - [ ] height of multi-line tag groups in filters is not correct; probably set NoOverflowHidden
 - [ ] when opening a second file with the PWA on Desktop, it doesn't upload the file. The first one works fine.
 - [ ] if an open file is deleted in Browse view, details are not closed...
@@ -13,6 +14,7 @@
 ## UX
 
 - [ ] On tag creation, tag type "Simple" should be preselected.
+- [ ] Add a loading indicator when file preview is loading
 
 ## Technical
 - [ ] partial package

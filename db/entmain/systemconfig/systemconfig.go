@@ -62,6 +62,8 @@ const (
 	FieldMailerUseImplicitSslTLS = "mailer_use_implicit_ssl_tls"
 	// FieldOcrTikaURL holds the string denoting the ocr_tika_url field in the database.
 	FieldOcrTikaURL = "ocr_tika_url"
+	// FieldOcrMaxFileSizeMib holds the string denoting the ocr_max_file_size_mib field in the database.
+	FieldOcrMaxFileSizeMib = "ocr_max_file_size_mib"
 	// FieldInitializedAt holds the string denoting the initialized_at field in the database.
 	FieldInitializedAt = "initialized_at"
 	// EdgeCreator holds the string denoting the creator edge name in mutations.
@@ -113,6 +115,7 @@ var Columns = []string{
 	FieldMailerInsecureSkipVerify,
 	FieldMailerUseImplicitSslTLS,
 	FieldOcrTikaURL,
+	FieldOcrMaxFileSizeMib,
 	FieldInitializedAt,
 }
 
@@ -149,6 +152,8 @@ var (
 	DefaultMailerUseImplicitSslTLS bool
 	// DefaultOcrTikaURL holds the default value on creation for the "ocr_tika_url" field.
 	DefaultOcrTikaURL string
+	// DefaultOcrMaxFileSizeMib holds the default value on creation for the "ocr_max_file_size_mib" field.
+	DefaultOcrMaxFileSizeMib int64
 )
 
 // OrderOption defines the ordering options for the SystemConfig queries.
@@ -257,6 +262,11 @@ func ByMailerUseImplicitSslTLS(opts ...sql.OrderTermOption) OrderOption {
 // ByOcrTikaURL orders the results by the ocr_tika_url field.
 func ByOcrTikaURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOcrTikaURL, opts...).ToFunc()
+}
+
+// ByOcrMaxFileSizeMib orders the results by the ocr_max_file_size_mib field.
+func ByOcrMaxFileSizeMib(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOcrMaxFileSizeMib, opts...).ToFunc()
 }
 
 // ByInitializedAt orders the results by the initialized_at field.

@@ -30,6 +30,8 @@ import (
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/model/account"
+	"github.com/simpledms/simpledms/model/common/mainrole"
+	"github.com/simpledms/simpledms/model/modelmain"
 	tenant2 "github.com/simpledms/simpledms/model/tenant"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -228,12 +230,14 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 			return
 		}
 
+		requestIsReadOnly := isReadOnly
+
 		// workaround for `open with` function // TODO find a better solution
 		if strings.Contains(req.URL.Path, "/inbox/") && req.URL.Query().Has("upload_token") {
-			isReadOnly = false
+			requestIsReadOnly = false
 		}
 
-		mainTx, err := qq.mainDB.Tx(req.Context(), isReadOnly)
+		mainTx, err := qq.mainDB.Tx(req.Context(), requestIsReadOnly)
 		if err != nil {
 			log.Println(err)
 			rw.WriteHeader(http.StatusInternalServerError)
@@ -261,6 +265,8 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 		defer func() {
 			// tested and works
 			if r := recover(); r != nil {
+				qq.logRecoveredPanic(reqx.Request, r)
+
 				// cannot use errors.As because r is `any` not `error`
 				// TODO added on 2 April 2025, not sure if it makes sense...
 				if err, isErr := r.(error); isErr {
@@ -268,16 +274,13 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 					return
 				}
 
-				log.Printf("%v: %s", r, debug.Stack())
-				log.Println("trying to recover and rollback transaction")
-
 				qq.handleError(rwx, visitorCtx, fmt.Errorf("Internal error, please contact support."), mainTx, nilableTenantTx)
 				return
 			}
 		}()
 
 		// FIXME is nilableTenantTx assigned to var defined above?
-		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, isReadOnly)
+		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, requestIsReadOnly)
 		if err != nil {
 			log.Println(err)
 			qq.handleError(rwx, visitorCtx, err, mainTx, nilableTenantTx)
@@ -326,6 +329,28 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 			}
 		}
 	}
+}
+
+func (qq *Router) logRecoveredPanic(req *http.Request, recovered any) {
+	if req == nil {
+		log.Printf("recovered panic with nil request; panic_type=%T panic=%v stack=%s", recovered, recovered, debug.Stack())
+		return
+	}
+
+	log.Printf(
+		"recovered panic; method=%s path=%s raw_query=%q upload_token=%q hx_current_url=%q x_query_endpoint=%q panic_type=%T panic=%v stack=%s",
+		req.Method,
+		req.URL.Path,
+		req.URL.RawQuery,
+		req.URL.Query().Get("upload_token"),
+		req.Header.Get("HX-Current-URL"),
+		req.Header.Get("X-Query-Endpoint"),
+		recovered,
+		recovered,
+		debug.Stack(),
+	)
+
+	log.Println("trying to recover and rollback transaction")
 }
 
 func (qq *Router) canonicalRedirectURL(req *http.Request) (string, bool) {
@@ -517,6 +542,7 @@ func (qq *Router) context(
 		// FIXME should be dynamicly generated list (by declaration)...
 		if slices.Contains([]string{
 			"/",
+			"/register/",
 			"/pages/about/",
 			"/pages/imprint/",
 			"/pages/privacy-policy/",
@@ -542,7 +568,7 @@ func (qq *Router) context(
 			return visitorCtx, nil, true, nil
 		}
 	}
-	if req.URL.Path == "/" {
+	if req.URL.Path == "/" || req.URL.Path == "/register/" {
 		// authenticated, but accessing login page
 
 		// duplicate code in SignIn
@@ -757,6 +783,29 @@ func (qq *Router) authenticateAccount(
 
 	accountx := sessionx.QueryAccount().OnlyX(req.Context())
 	accountm := account.NewAccount(accountx)
+
+	// TODO is this efficient enough to do on every request? or is there a better way to invalidate sessions
+	//		on tenant deletion?
+	if qq.infra.SystemConfig().IsSaaSModeEnabled() && accountx.Role == mainrole.User {
+		hasActiveTenantAssignment, err := modelmain.NewTenantAccessService().HasActiveTenantAssignment(
+			req.Context(),
+			mainTx,
+			accountx.ID,
+		)
+		if err != nil {
+			log.Println(err)
+			return nil, false, false, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify organization access.")
+		}
+
+		if !hasActiveTenantAssignment {
+			cookiex.InvalidateSessionCookie(
+				rw,
+				qq.infra.SystemConfig().AllowInsecureCookies(),
+			)
+			mainTx.Session.Delete().Where(session.AccountID(accountx.ID)).ExecX(req.Context())
+			return nil, false, false, ErrSessionNotFound
+		}
+	}
 
 	cookie, isRenewed := cookiex.RenewSessionCookie(
 		rw,

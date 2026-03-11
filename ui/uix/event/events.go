@@ -20,6 +20,7 @@ const (
 	// TagMovedToGroup    EventWithID = "tagMovedToGroup"
 
 	AccountUpdated Event = "accountUpdated"
+	AccountDeleted Event = "accountDeleted"
 
 	FilterTagsChanged            Event = "filterTagsChanged"
 	DocumentTypeFilterChanged    Event = "documentTypeFilterChanged"
