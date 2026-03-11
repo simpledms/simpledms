@@ -7,12 +7,14 @@ import (
 
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/schema"
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/systemconfig"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
 	"github.com/simpledms/simpledms/db/entx"
 )
 
@@ -85,6 +87,18 @@ func init() {
 	accountDescLastLoginAttemptAt := accountFields[15].Descriptor()
 	// account.DefaultLastLoginAttemptAt holds the default value on creation for the last_login_attempt_at field.
 	account.DefaultLastLoginAttemptAt = accountDescLastLoginAttemptAt.Default.(time.Time)
+	// accountDescPasskeyLoginEnabled is the schema descriptor for passkey_login_enabled field.
+	accountDescPasskeyLoginEnabled := accountFields[16].Descriptor()
+	// account.DefaultPasskeyLoginEnabled holds the default value on creation for the passkey_login_enabled field.
+	account.DefaultPasskeyLoginEnabled = accountDescPasskeyLoginEnabled.Default.(bool)
+	// accountDescPasskeyRecoveryCodeSalt is the schema descriptor for passkey_recovery_code_salt field.
+	accountDescPasskeyRecoveryCodeSalt := accountFields[17].Descriptor()
+	// account.DefaultPasskeyRecoveryCodeSalt holds the default value on creation for the passkey_recovery_code_salt field.
+	account.DefaultPasskeyRecoveryCodeSalt = accountDescPasskeyRecoveryCodeSalt.Default.(string)
+	// accountDescPasskeyRecoveryCodeHashes is the schema descriptor for passkey_recovery_code_hashes field.
+	accountDescPasskeyRecoveryCodeHashes := accountFields[18].Descriptor()
+	// account.DefaultPasskeyRecoveryCodeHashes holds the default value on creation for the passkey_recovery_code_hashes field.
+	account.DefaultPasskeyRecoveryCodeHashes = accountDescPasskeyRecoveryCodeHashes.Default.([]string)
 	mailMixin := schema.Mail{}.Mixin()
 	mailMixinFields0 := mailMixin[0].Fields()
 	_ = mailMixinFields0
@@ -108,6 +122,31 @@ func init() {
 	mailDescRetryCount := mailFields[6].Descriptor()
 	// mail.DefaultRetryCount holds the default value on creation for the retry_count field.
 	mail.DefaultRetryCount = mailDescRetryCount.Default.(int)
+	passkeycredentialMixin := schema.PasskeyCredential{}.Mixin()
+	passkeycredentialMixinFields0 := passkeycredentialMixin[0].Fields()
+	_ = passkeycredentialMixinFields0
+	passkeycredentialMixinFields1 := passkeycredentialMixin[1].Fields()
+	_ = passkeycredentialMixinFields1
+	passkeycredentialFields := schema.PasskeyCredential{}.Fields()
+	_ = passkeycredentialFields
+	// passkeycredentialDescCreatedAt is the schema descriptor for created_at field.
+	passkeycredentialDescCreatedAt := passkeycredentialMixinFields0[0].Descriptor()
+	// passkeycredential.DefaultCreatedAt holds the default value on creation for the created_at field.
+	passkeycredential.DefaultCreatedAt = passkeycredentialDescCreatedAt.Default.(func() time.Time)
+	// passkeycredentialDescUpdatedAt is the schema descriptor for updated_at field.
+	passkeycredentialDescUpdatedAt := passkeycredentialMixinFields0[2].Descriptor()
+	// passkeycredential.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	passkeycredential.DefaultUpdatedAt = passkeycredentialDescUpdatedAt.Default.(func() time.Time)
+	// passkeycredential.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	passkeycredential.UpdateDefaultUpdatedAt = passkeycredentialDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// passkeycredentialDescPublicID is the schema descriptor for public_id field.
+	passkeycredentialDescPublicID := passkeycredentialMixinFields1[0].Descriptor()
+	// passkeycredential.DefaultPublicID holds the default value on creation for the public_id field.
+	passkeycredential.DefaultPublicID = passkeycredentialDescPublicID.Default.(func() entx.CIText)
+	// passkeycredentialDescName is the schema descriptor for name field.
+	passkeycredentialDescName := passkeycredentialFields[4].Descriptor()
+	// passkeycredential.DefaultName holds the default value on creation for the name field.
+	passkeycredential.DefaultName = passkeycredentialDescName.Default.(string)
 	sessionFields := schema.Session{}.Fields()
 	_ = sessionFields
 	// sessionDescCreatedAt is the schema descriptor for created_at field.
@@ -261,6 +300,10 @@ func init() {
 	tenantDescTwoFactorAuthEnforced := tenantFields[14].Descriptor()
 	// tenant.DefaultTwoFactorAuthEnforced holds the default value on creation for the two_factor_auth_enforced field.
 	tenant.DefaultTwoFactorAuthEnforced = tenantDescTwoFactorAuthEnforced.Default.(bool)
+	// tenantDescPasskeyAuthEnforced is the schema descriptor for passkey_auth_enforced field.
+	tenantDescPasskeyAuthEnforced := tenantFields[15].Descriptor()
+	// tenant.DefaultPasskeyAuthEnforced holds the default value on creation for the passkey_auth_enforced field.
+	tenant.DefaultPasskeyAuthEnforced = tenantDescPasskeyAuthEnforced.Default.(bool)
 	tenantaccountassignmentMixin := schema.TenantAccountAssignment{}.Mixin()
 	tenantaccountassignmentMixinFields0 := tenantaccountassignmentMixin[0].Fields()
 	_ = tenantaccountassignmentMixinFields0
@@ -284,6 +327,12 @@ func init() {
 	tenantaccountassignmentDescIsDefault := tenantaccountassignmentFields[4].Descriptor()
 	// tenantaccountassignment.DefaultIsDefault holds the default value on creation for the is_default field.
 	tenantaccountassignment.DefaultIsDefault = tenantaccountassignmentDescIsDefault.Default.(bool)
+	webauthnchallengeFields := schema.WebAuthnChallenge{}.Fields()
+	_ = webauthnchallengeFields
+	// webauthnchallengeDescCreatedAt is the schema descriptor for created_at field.
+	webauthnchallengeDescCreatedAt := webauthnchallengeFields[8].Descriptor()
+	// webauthnchallenge.DefaultCreatedAt holds the default value on creation for the created_at field.
+	webauthnchallenge.DefaultCreatedAt = webauthnchallengeDescCreatedAt.Default.(func() time.Time)
 }
 
 const (

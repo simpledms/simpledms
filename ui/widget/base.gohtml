@@ -158,7 +158,7 @@
 		  hx-indicator=".js-progress-indicator"
 		  hx-inherit="hx-boost hx-ext hx-target hx-indicator"
 	>
-    	{{ render .GetContext .GetProgressIndicator }}
+	    	{{ render .GetContext .GetProgressIndicator }}
 
     	{{/*
 			without hx-history-elt back button could brake with boosted links, for example
@@ -172,6 +172,13 @@
 			{{ render .GetContext .Content }}
 		</div>
         {{ render .GetContext .Children }}
+		<div
+			id="passkey-runtime-messages"
+			hidden
+			data-no-backup-codes-returned="{{ render .GetContext .NoBackupCodesReturnedMessage }}"
+			data-backup-codes-regenerated="{{ render .GetContext .BackupCodesRegeneratedMessage }}"
+			data-could-not-regenerate-backup-codes="{{ render .GetContext .CouldNotRegenerateBackupCodesMessage }}"
+		></div>
 
 		<!-- TODO snackbar, use mdui? -->
 		<script type="text/javascript">
@@ -188,6 +195,8 @@
 		-->
 		<script defer src="/assets/vendor/htmx.js" type="module"></script>
 		<script defer src="/assets/vendor/idiomorph/dist/idiomorph-ext.esm.js" type="module"></script>
+		<script defer src="/assets/snackbar_runtime.js"></script>
+		<script defer src="/assets/passkey.js"></script>
 
 		<!--
 		script defer src="/assets/vendor/pdfjs-dist.js" type="module"></script>
@@ -218,6 +227,7 @@
 
 		<script type="module" defer>
 			import htmx from '/assets/vendor/htmx.js';
+			window.htmx = htmx;
 			//import {} from '/assets/vendor/htmx.org/dist/ext/debug.js'; // not working
 			// htmx.logAll();
 
@@ -252,7 +262,7 @@
 					return;
 				}
 
-				let requestConfig = e.detail.requestConfig;
+				const requestConfig = e.detail.requestConfig;
 				if (!requestConfig || requestConfig.verb !== 'get') {
 					return;
 				}

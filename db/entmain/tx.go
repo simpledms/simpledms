@@ -18,6 +18,8 @@ type Tx struct {
 	Account *AccountClient
 	// Mail is the client for interacting with the Mail builders.
 	Mail *MailClient
+	// PasskeyCredential is the client for interacting with the PasskeyCredential builders.
+	PasskeyCredential *PasskeyCredentialClient
 	// Session is the client for interacting with the Session builders.
 	Session *SessionClient
 	// SystemConfig is the client for interacting with the SystemConfig builders.
@@ -28,6 +30,8 @@ type Tx struct {
 	Tenant *TenantClient
 	// TenantAccountAssignment is the client for interacting with the TenantAccountAssignment builders.
 	TenantAccountAssignment *TenantAccountAssignmentClient
+	// WebAuthnChallenge is the client for interacting with the WebAuthnChallenge builders.
+	WebAuthnChallenge *WebAuthnChallengeClient
 
 	// lazily loaded.
 	client     *Client
@@ -161,11 +165,13 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.Account = NewAccountClient(tx.config)
 	tx.Mail = NewMailClient(tx.config)
+	tx.PasskeyCredential = NewPasskeyCredentialClient(tx.config)
 	tx.Session = NewSessionClient(tx.config)
 	tx.SystemConfig = NewSystemConfigClient(tx.config)
 	tx.TemporaryFile = NewTemporaryFileClient(tx.config)
 	tx.Tenant = NewTenantClient(tx.config)
 	tx.TenantAccountAssignment = NewTenantAccountAssignmentClient(tx.config)
+	tx.WebAuthnChallenge = NewWebAuthnChallengeClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

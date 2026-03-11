@@ -101,6 +101,7 @@ func (qq *SignUpCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 		data.Language,
 		data.SubscribeToNewsletter,
 		false,
+		qq.infra.SystemConfig().AbsoluteURL("/"),
 	)
 	if err != nil {
 		log.Println(err)

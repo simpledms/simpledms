@@ -61,6 +61,8 @@ const (
 	FieldPrivacyPolicyAccepted = "privacy_policy_accepted"
 	// FieldTwoFactorAuthEnforced holds the string denoting the two_factor_auth_enforced field in the database.
 	FieldTwoFactorAuthEnforced = "two_factor_auth_enforced"
+	// FieldPasskeyAuthEnforced holds the string denoting the passkey_auth_enforced field in the database.
+	FieldPasskeyAuthEnforced = "passkey_auth_enforced"
 	// FieldX25519IdentityEncrypted holds the string denoting the x25519_identity_encrypted field in the database.
 	FieldX25519IdentityEncrypted = "x25519_identity_encrypted"
 	// FieldMaintenanceModeEnabledAt holds the string denoting the maintenance_mode_enabled_at field in the database.
@@ -138,6 +140,7 @@ var Columns = []string{
 	FieldTermsOfServiceAccepted,
 	FieldPrivacyPolicyAccepted,
 	FieldTwoFactorAuthEnforced,
+	FieldPasskeyAuthEnforced,
 	FieldX25519IdentityEncrypted,
 	FieldMaintenanceModeEnabledAt,
 	FieldInitializedAt,
@@ -193,6 +196,8 @@ var (
 	DefaultVatID string
 	// DefaultTwoFactorAuthEnforced holds the default value on creation for the "two_factor_auth_enforced" field.
 	DefaultTwoFactorAuthEnforced bool
+	// DefaultPasskeyAuthEnforced holds the default value on creation for the "passkey_auth_enforced" field.
+	DefaultPasskeyAuthEnforced bool
 )
 
 // CountryValidator is a validator for the "country" field enum values. It is called by the builders before save.
@@ -326,6 +331,11 @@ func ByPrivacyPolicyAccepted(opts ...sql.OrderTermOption) OrderOption {
 // ByTwoFactorAuthEnforced orders the results by the two_factor_auth_enforced field.
 func ByTwoFactorAuthEnforced(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTwoFactorAuthEnforced, opts...).ToFunc()
+}
+
+// ByPasskeyAuthEnforced orders the results by the passkey_auth_enforced field.
+func ByPasskeyAuthEnforced(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPasskeyAuthEnforced, opts...).ToFunc()
 }
 
 // ByMaintenanceModeEnabledAt orders the results by the maintenance_mode_enabled_at field.

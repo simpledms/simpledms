@@ -49,6 +49,13 @@ func (Account) Fields() []ent.Field {
 
 		field.Time("last_login_attempt_at").Default(time.Time{}).Optional(),
 
+		field.Bool("passkey_login_enabled").Default(false),
+		field.String("passkey_recovery_code_salt").Default("").Sensitive(),
+		field.Strings("passkey_recovery_code_hashes").
+			Default([]string{}).
+			Annotations(entsql.Default("[]")). // for migrations
+			Sensitive(),
+
 		// field.Int64("tenant_id").Optional(),
 		field.Enum("role").GoType(mainrole.User),
 	}
@@ -60,6 +67,8 @@ func (Account) Edges() []ent.Edge {
 		edge.
 			To("tenants", Tenant.Type).
 			Through("tenant_assignment", TenantAccountAssignment.Type), // TODO unique?
+		edge.From("passkey_credentials", PasskeyCredential.Type).Ref("account"),
+		edge.From("webauthn_challenges", WebAuthnChallenge.Type).Ref("account"),
 		edge.From("received_mails", Mail.Type).Ref("receiver"),
 		edge.From("temporary_files", TemporaryFile.Type).Ref("owner"),
 		/*

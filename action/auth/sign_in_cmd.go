@@ -16,15 +16,13 @@ import (
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type SignInCmdData struct {
-	Email                       string `validate:"required,email" form_attrs:"autofocus"`
-	Password                    string `validate:"required" form_attr_type:"password"`
-	TwoFactorAuthenticationCode string `form_attr_type:"hidden"`
+	Email    string `validate:"required,email" form_attrs:"autofocus"`
+	Password string `validate:"required" form_attr_type:"password"`
 	// TODO show to user how long it would be valid (x hours or if session ends, whatever comes first) or sign out
 	TemporarySession bool
 }
@@ -49,11 +47,10 @@ func NewSignInCmd(infra *common.Infra, actions *Actions) *SignInCmd {
 	}
 }
 
-func (qq *SignInCmd) Data(email, password, twoFactorAuthenticationCode string) *SignInCmdData {
+func (qq *SignInCmd) Data(email, password string) *SignInCmdData {
 	return &SignInCmdData{
-		Email:                       email,
-		Password:                    password,
-		TwoFactorAuthenticationCode: twoFactorAuthenticationCode,
+		Email:    email,
+		Password: password,
 	}
 }
 
@@ -86,32 +83,37 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 		return err
 	}
 	accountm := account2.NewAccount(accountx)
+	passkeyPolicy, err := accountm.PasskeyPolicy(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	isTenantPasskeyEnrollmentRequired := passkeyPolicy.IsTenantPasskeyEnrollmentRequired()
 
-	isValid, err := accountm.Auth(ctx, data.Password, data.TwoFactorAuthenticationCode)
+	isValid, err := accountm.AuthWithPasskeyPolicy(ctx, data.Password, passkeyPolicy)
 	if !isValid {
 		rw.AddRenderables(wx.NewSnackbarf("Invalid credentials. Please try again."))
 		return err
 	}
 
-	cookie, err := cookiex.SetSessionCookie(rw, req, data.TemporarySession, qq.infra.SystemConfig().AllowInsecureCookies())
+	err = createAccountSession(
+		rw,
+		req,
+		ctx,
+		accountx,
+		data.TemporarySession || isTenantPasskeyEnrollmentRequired,
+		qq.infra.SystemConfig().AllowInsecureCookies(),
+	)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
-	deletableAt := cookiex.DeletableAt(cookie)
-
-	ctx.VisitorCtx().MainTx.Session.
-		Create().
-		SetAccountID(accountx.ID).
-		SetValue(cookie.Value).
-		SetIsTemporarySession(data.TemporarySession).
-		SetDeletableAt(deletableAt).
-		SetExpiresAt(cookie.Expires).
-		SaveX(ctx)
-
-	// TODO not shown
-	rw.AddRenderables(wx.NewSnackbarf("Logged in successfully."))
+	if isTenantPasskeyEnrollmentRequired {
+		rw.AddRenderables(wx.NewSnackbarf("Passkey setup is required by your organization. Register a passkey now."))
+	} else {
+		rw.AddRenderables(wx.NewSnackbarf("Logged in successfully."))
+	}
 
 	rw.Header().Set("HX-Redirect", route.Dashboard())
 

@@ -1535,8 +1535,20 @@ input:-webkit-autofill::first-line,
   min-height: 5rem;
 }
 
+.min-h-5 {
+  min-height: 1.25rem;
+}
+
 .min-h-7 {
   min-height: 1.75rem;
+}
+
+.min-h-\[12rem\] {
+  min-height: 12rem;
+}
+
+.min-h-\[18rem\] {
+  min-height: 18rem;
 }
 
 .w-10 {
@@ -1818,10 +1830,6 @@ input:-webkit-autofill::first-line,
 
 .justify-evenly {
   justify-content: space-evenly;
-}
-
-.justify-items-center {
-  justify-items: center;
 }
 
 .gap-1 {
@@ -2238,6 +2246,10 @@ input:-webkit-autofill::first-line,
   text-align: center;
 }
 
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
 .font-sans {
   font-family: "Noto Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
@@ -2252,6 +2264,11 @@ input:-webkit-autofill::first-line,
 
 .leading-none {
   line-height: 1;
+}
+
+.text-error {
+  --tw-text-opacity: 1;
+  color: rgb(var(--md-sys-color-error) / var(--tw-text-opacity, 1));
 }
 
 .text-inverse-on-surface {
@@ -2375,6 +2392,11 @@ input:-webkit-autofill::first-line,
 
 .outline-secondary {
   outline-color: rgb(var(--md-sys-color-secondary) / 1);
+}
+
+.blur {
+  --tw-blur: blur(8px);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .drop-shadow {
@@ -3062,6 +3084,10 @@ input:-webkit-autofill::first-line,
     display: none;
   }
 
+  .md\:h-auto {
+    height: auto;
+  }
+
   .md\:h-fit {
     height: -moz-fit-content;
     height: fit-content;
@@ -3069,10 +3095,6 @@ input:-webkit-autofill::first-line,
 
   .md\:h-full {
     height: 100%;
-  }
-
-  .md\:h-auto {
-    height: auto;
   }
 
   .md\:max-h-\[calc\(100dvh-3rem\)\] {
@@ -3085,6 +3107,10 @@ input:-webkit-autofill::first-line,
 
   .md\:min-h-0 {
     min-height: 0px;
+  }
+
+  .md\:min-h-\[22rem\] {
+    min-height: 22rem;
   }
 
   .md\:w-20 {
@@ -3485,12 +3511,12 @@ input:-webkit-autofill::first-line,
     right: auto;
   }
 
-  .\32xl\:mt-1 {
-    margin-top: 0.25rem;
-  }
-
   .\32xl\:-mt-1 {
     margin-top: -0.25rem;
+  }
+
+  .\32xl\:mt-1 {
+    margin-top: 0.25rem;
   }
 
   .\32xl\:border-l-0 {

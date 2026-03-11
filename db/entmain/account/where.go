@@ -158,6 +158,16 @@ func LastLoginAttemptAt(v time.Time) predicate.Account {
 	return predicate.Account(sql.FieldEQ(FieldLastLoginAttemptAt, v))
 }
 
+// PasskeyLoginEnabled applies equality check predicate on the "passkey_login_enabled" field. It's identical to PasskeyLoginEnabledEQ.
+func PasskeyLoginEnabled(v bool) predicate.Account {
+	return predicate.Account(sql.FieldEQ(FieldPasskeyLoginEnabled, v))
+}
+
+// PasskeyRecoveryCodeSalt applies equality check predicate on the "passkey_recovery_code_salt" field. It's identical to PasskeyRecoveryCodeSaltEQ.
+func PasskeyRecoveryCodeSalt(v string) predicate.Account {
+	return predicate.Account(sql.FieldEQ(FieldPasskeyRecoveryCodeSalt, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Account {
 	return predicate.Account(sql.FieldEQ(FieldCreatedAt, v))
@@ -1333,6 +1343,81 @@ func LastLoginAttemptAtNotNil() predicate.Account {
 	return predicate.Account(sql.FieldNotNull(FieldLastLoginAttemptAt))
 }
 
+// PasskeyLoginEnabledEQ applies the EQ predicate on the "passkey_login_enabled" field.
+func PasskeyLoginEnabledEQ(v bool) predicate.Account {
+	return predicate.Account(sql.FieldEQ(FieldPasskeyLoginEnabled, v))
+}
+
+// PasskeyLoginEnabledNEQ applies the NEQ predicate on the "passkey_login_enabled" field.
+func PasskeyLoginEnabledNEQ(v bool) predicate.Account {
+	return predicate.Account(sql.FieldNEQ(FieldPasskeyLoginEnabled, v))
+}
+
+// PasskeyRecoveryCodeSaltEQ applies the EQ predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltEQ(v string) predicate.Account {
+	return predicate.Account(sql.FieldEQ(FieldPasskeyRecoveryCodeSalt, v))
+}
+
+// PasskeyRecoveryCodeSaltNEQ applies the NEQ predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltNEQ(v string) predicate.Account {
+	return predicate.Account(sql.FieldNEQ(FieldPasskeyRecoveryCodeSalt, v))
+}
+
+// PasskeyRecoveryCodeSaltIn applies the In predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltIn(vs ...string) predicate.Account {
+	return predicate.Account(sql.FieldIn(FieldPasskeyRecoveryCodeSalt, vs...))
+}
+
+// PasskeyRecoveryCodeSaltNotIn applies the NotIn predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltNotIn(vs ...string) predicate.Account {
+	return predicate.Account(sql.FieldNotIn(FieldPasskeyRecoveryCodeSalt, vs...))
+}
+
+// PasskeyRecoveryCodeSaltGT applies the GT predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltGT(v string) predicate.Account {
+	return predicate.Account(sql.FieldGT(FieldPasskeyRecoveryCodeSalt, v))
+}
+
+// PasskeyRecoveryCodeSaltGTE applies the GTE predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltGTE(v string) predicate.Account {
+	return predicate.Account(sql.FieldGTE(FieldPasskeyRecoveryCodeSalt, v))
+}
+
+// PasskeyRecoveryCodeSaltLT applies the LT predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltLT(v string) predicate.Account {
+	return predicate.Account(sql.FieldLT(FieldPasskeyRecoveryCodeSalt, v))
+}
+
+// PasskeyRecoveryCodeSaltLTE applies the LTE predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltLTE(v string) predicate.Account {
+	return predicate.Account(sql.FieldLTE(FieldPasskeyRecoveryCodeSalt, v))
+}
+
+// PasskeyRecoveryCodeSaltContains applies the Contains predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltContains(v string) predicate.Account {
+	return predicate.Account(sql.FieldContains(FieldPasskeyRecoveryCodeSalt, v))
+}
+
+// PasskeyRecoveryCodeSaltHasPrefix applies the HasPrefix predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltHasPrefix(v string) predicate.Account {
+	return predicate.Account(sql.FieldHasPrefix(FieldPasskeyRecoveryCodeSalt, v))
+}
+
+// PasskeyRecoveryCodeSaltHasSuffix applies the HasSuffix predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltHasSuffix(v string) predicate.Account {
+	return predicate.Account(sql.FieldHasSuffix(FieldPasskeyRecoveryCodeSalt, v))
+}
+
+// PasskeyRecoveryCodeSaltEqualFold applies the EqualFold predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltEqualFold(v string) predicate.Account {
+	return predicate.Account(sql.FieldEqualFold(FieldPasskeyRecoveryCodeSalt, v))
+}
+
+// PasskeyRecoveryCodeSaltContainsFold applies the ContainsFold predicate on the "passkey_recovery_code_salt" field.
+func PasskeyRecoveryCodeSaltContainsFold(v string) predicate.Account {
+	return predicate.Account(sql.FieldContainsFold(FieldPasskeyRecoveryCodeSalt, v))
+}
+
 // RoleEQ applies the EQ predicate on the "role" field.
 func RoleEQ(v mainrole.MainRole) predicate.Account {
 	return predicate.Account(sql.FieldEQ(FieldRole, v))
@@ -1368,6 +1453,52 @@ func HasTenants() predicate.Account {
 func HasTenantsWith(preds ...predicate.Tenant) predicate.Account {
 	return predicate.Account(func(s *sql.Selector) {
 		step := newTenantsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPasskeyCredentials applies the HasEdge predicate on the "passkey_credentials" edge.
+func HasPasskeyCredentials() predicate.Account {
+	return predicate.Account(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, PasskeyCredentialsTable, PasskeyCredentialsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPasskeyCredentialsWith applies the HasEdge predicate on the "passkey_credentials" edge with a given conditions (other predicates).
+func HasPasskeyCredentialsWith(preds ...predicate.PasskeyCredential) predicate.Account {
+	return predicate.Account(func(s *sql.Selector) {
+		step := newPasskeyCredentialsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasWebauthnChallenges applies the HasEdge predicate on the "webauthn_challenges" edge.
+func HasWebauthnChallenges() predicate.Account {
+	return predicate.Account(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, WebauthnChallengesTable, WebauthnChallengesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWebauthnChallengesWith applies the HasEdge predicate on the "webauthn_challenges" edge with a given conditions (other predicates).
+func HasWebauthnChallengesWith(preds ...predicate.WebAuthnChallenge) predicate.Account {
+	return predicate.Account(func(s *sql.Selector) {
+		step := newWebauthnChallengesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -119,7 +119,13 @@ func (qq *CreateUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	mailer.NewMailer().CreateUser(ctx, accountx, password, expiresAt)
+	mailer.NewMailer().CreateUser(
+		ctx,
+		accountx,
+		password,
+		expiresAt,
+		qq.infra.SystemConfig().AbsoluteURL("/"),
+	)
 
 	if data.Role == tenantrole.Owner {
 		rw.AddRenderables(wx.NewSnackbarf("Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration."))

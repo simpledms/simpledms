@@ -159,6 +159,30 @@ func (f MailMutationRuleFunc) EvalMutation(ctx context.Context, m entmain.Mutati
 	return Denyf("entmain/privacy: unexpected mutation type %T, expect *entmain.MailMutation", m)
 }
 
+// The PasskeyCredentialQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type PasskeyCredentialQueryRuleFunc func(context.Context, *entmain.PasskeyCredentialQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f PasskeyCredentialQueryRuleFunc) EvalQuery(ctx context.Context, q entmain.Query) error {
+	if q, ok := q.(*entmain.PasskeyCredentialQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("entmain/privacy: unexpected query type %T, expect *entmain.PasskeyCredentialQuery", q)
+}
+
+// The PasskeyCredentialMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type PasskeyCredentialMutationRuleFunc func(context.Context, *entmain.PasskeyCredentialMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f PasskeyCredentialMutationRuleFunc) EvalMutation(ctx context.Context, m entmain.Mutation) error {
+	if m, ok := m.(*entmain.PasskeyCredentialMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("entmain/privacy: unexpected mutation type %T, expect *entmain.PasskeyCredentialMutation", m)
+}
+
 // The SessionQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type SessionQueryRuleFunc func(context.Context, *entmain.SessionQuery) error
@@ -279,6 +303,30 @@ func (f TenantAccountAssignmentMutationRuleFunc) EvalMutation(ctx context.Contex
 	return Denyf("entmain/privacy: unexpected mutation type %T, expect *entmain.TenantAccountAssignmentMutation", m)
 }
 
+// The WebAuthnChallengeQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type WebAuthnChallengeQueryRuleFunc func(context.Context, *entmain.WebAuthnChallengeQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f WebAuthnChallengeQueryRuleFunc) EvalQuery(ctx context.Context, q entmain.Query) error {
+	if q, ok := q.(*entmain.WebAuthnChallengeQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("entmain/privacy: unexpected query type %T, expect *entmain.WebAuthnChallengeQuery", q)
+}
+
+// The WebAuthnChallengeMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type WebAuthnChallengeMutationRuleFunc func(context.Context, *entmain.WebAuthnChallengeMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f WebAuthnChallengeMutationRuleFunc) EvalMutation(ctx context.Context, m entmain.Mutation) error {
+	if m, ok := m.(*entmain.WebAuthnChallengeMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("entmain/privacy: unexpected mutation type %T, expect *entmain.WebAuthnChallengeMutation", m)
+}
+
 type (
 	// Filter is the interface that wraps the Where function
 	// for filtering nodes in queries and mutations.
@@ -318,6 +366,8 @@ func queryFilter(q entmain.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *entmain.MailQuery:
 		return q.Filter(), nil
+	case *entmain.PasskeyCredentialQuery:
+		return q.Filter(), nil
 	case *entmain.SessionQuery:
 		return q.Filter(), nil
 	case *entmain.SystemConfigQuery:
@@ -327,6 +377,8 @@ func queryFilter(q entmain.Query) (Filter, error) {
 	case *entmain.TenantQuery:
 		return q.Filter(), nil
 	case *entmain.TenantAccountAssignmentQuery:
+		return q.Filter(), nil
+	case *entmain.WebAuthnChallengeQuery:
 		return q.Filter(), nil
 	default:
 		return nil, Denyf("entmain/privacy: unexpected query type %T for query filter", q)
@@ -339,6 +391,8 @@ func mutationFilter(m entmain.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *entmain.MailMutation:
 		return m.Filter(), nil
+	case *entmain.PasskeyCredentialMutation:
+		return m.Filter(), nil
 	case *entmain.SessionMutation:
 		return m.Filter(), nil
 	case *entmain.SystemConfigMutation:
@@ -348,6 +402,8 @@ func mutationFilter(m entmain.Mutation) (Filter, error) {
 	case *entmain.TenantMutation:
 		return m.Filter(), nil
 	case *entmain.TenantAccountAssignmentMutation:
+		return m.Filter(), nil
+	case *entmain.WebAuthnChallengeMutation:
 		return m.Filter(), nil
 	default:
 		return nil, Denyf("entmain/privacy: unexpected mutation type %T for mutation filter", m)

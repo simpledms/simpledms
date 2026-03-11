@@ -670,6 +670,10 @@ func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.Main
 		allowInsecureCookies = allowInsecureCookiesx
 	}
 
+	publicOrigin := strings.TrimSpace(os.Getenv("SIMPLEDMS_PUBLIC_ORIGIN"))
+	webauthnRPID := strings.TrimSpace(os.Getenv("SIMPLEDMS_WEBAUTHN_RP_ID"))
+	webauthnRPName := strings.TrimSpace(os.Getenv("SIMPLEDMS_WEBAUTHN_RP_NAME"))
+
 	// TODO FirstX okay?
 	systemConfigx := mainDB.ReadOnlyConn.SystemConfig.Query().FirstX(ctx)
 	systemConfig := modelmain.NewSystemConfig(
@@ -677,6 +681,9 @@ func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.Main
 		qq.isSaaSModeEnabled,
 		qq.commercialLicenseEnabled,
 		allowInsecureCookies,
+		publicOrigin,
+		webauthnRPID,
+		webauthnRPName,
 	)
 
 	return systemConfigx, systemConfig
@@ -947,6 +954,10 @@ func (qq *Server) initInitialUser(
 	)
 
 	skipSendingMail := initialTemporaryPassword != ""
+	initialSignInURL := strings.TrimSpace(os.Getenv("SIMPLEDMS_PUBLIC_ORIGIN"))
+	if initialSignInURL != "" {
+		initialSignInURL = strings.TrimRight(initialSignInURL, "/") + "/"
+	}
 
 	initialAccount, err := modelmain.NewSignUpService().SignUp(
 		visitorCtx,
@@ -958,6 +969,7 @@ func (qq *Server) initInitialUser(
 		language.Unknown,
 		false,
 		skipSendingMail,
+		initialSignInURL,
 	)
 	if err != nil {
 		log.Println(err)

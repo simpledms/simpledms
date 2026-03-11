@@ -79,6 +79,20 @@
             "fuzzy": true
         },
         {
+            "id": "You must be logged in to perform this action.",
+            "message": "You must be logged in to perform this action.",
+            "translation": "You must be logged in to perform this action.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Only admins and supporters can run assisted passkey recovery.",
+            "message": "Only admins and supporters can run assisted passkey recovery.",
+            "translation": "Only admins and supporters can run assisted passkey recovery.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Change password",
             "message": "Change password",
             "translation": "Change password",
@@ -103,6 +117,27 @@
             "id": "Password changed successfully.",
             "message": "Password changed successfully.",
             "translation": "Password changed successfully.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to manage passkeys.",
+            "message": "You must be logged in to manage passkeys.",
+            "translation": "You must be logged in to manage passkeys.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkeys cannot be removed because a tenant requires passkey login.",
+            "message": "Passkeys cannot be removed because a tenant requires passkey login.",
+            "translation": "Passkeys cannot be removed because a tenant requires passkey login.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "All passkeys were removed.",
+            "message": "All passkeys were removed.",
+            "translation": "All passkeys were removed.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -135,6 +170,20 @@
             "fuzzy": true
         },
         {
+            "id": "A tenant requires passkey login, so at least one passkey must remain.",
+            "message": "A tenant requires passkey login, so at least one passkey must remain.",
+            "translation": "A tenant requires passkey login, so at least one passkey must remain.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey removed.",
+            "message": "Passkey removed.",
+            "translation": "Passkey removed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Edit account",
             "message": "Edit account",
             "translation": "Edit account",
@@ -152,6 +201,128 @@
             "id": "Account updated.",
             "message": "Account updated.",
             "translation": "Account updated.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid request payload.",
+            "message": "Invalid request payload.",
+            "translation": "Invalid request payload.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to view backup codes.",
+            "message": "You must be logged in to view backup codes.",
+            "translation": "You must be logged in to view backup codes.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes are no longer available. Please generate a new set.",
+            "message": "The backup codes are no longer available. Please generate a new set.",
+            "translation": "The backup codes are no longer available. Please generate a new set.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey backup codes",
+            "message": "Passkey backup codes",
+            "translation": "Passkey backup codes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign in with backup code",
+            "message": "Sign in with backup code",
+            "translation": "Sign in with backup code",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign in",
+            "message": "Sign in",
+            "translation": "Sign in",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
+            "message": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
+            "translation": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "RecoveryCodesCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "recoveryCodesCount"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to register a passkey.",
+            "message": "You must be logged in to register a passkey.",
+            "translation": "You must be logged in to register a passkey.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Register passkey",
+            "message": "Register passkey",
+            "translation": "Register passkey",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid passkey registration payload.",
+            "message": "Invalid passkey registration payload.",
+            "translation": "Invalid passkey registration payload.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid passkey response payload.",
+            "message": "Invalid passkey response payload.",
+            "translation": "Invalid passkey response payload.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to manage backup codes.",
+            "message": "You must be logged in to manage backup codes.",
+            "translation": "You must be logged in to manage backup codes.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Rename passkey",
+            "message": "Rename passkey",
+            "translation": "Rename passkey",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Rename",
+            "message": "Rename",
+            "translation": "Rename",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey name is required.",
+            "message": "Passkey name is required.",
+            "translation": "Passkey name is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey renamed.",
+            "message": "Passkey renamed.",
+            "translation": "Passkey renamed.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -198,13 +369,6 @@
             "fuzzy": true
         },
         {
-            "id": "Sign in",
-            "message": "Sign in",
-            "translation": "Sign in",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Found no account for this email address.",
             "message": "Found no account for this email address.",
             "translation": "Found no account for this email address.",
@@ -222,6 +386,13 @@
             "id": "Invalid credentials. Please try again.",
             "message": "Invalid credentials. Please try again.",
             "translation": "Invalid credentials. Please try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey setup is required by your organization. Register a passkey now.",
+            "message": "Passkey setup is required by your organization. Register a passkey now.",
+            "translation": "Passkey setup is required by your organization. Register a passkey now.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -247,9 +418,23 @@
             "fuzzy": true
         },
         {
+            "id": "Sign in with passkey",
+            "message": "Sign in with passkey",
+            "translation": "Sign in with passkey",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Forgot password?",
             "message": "Forgot password?",
             "translation": "Forgot password?",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Use backup code",
+            "message": "Use backup code",
+            "translation": "Use backup code",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -470,13 +655,6 @@
             "id": "Document type",
             "message": "Document type",
             "translation": "Document type",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Rename",
-            "message": "Rename",
-            "translation": "Rename",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1389,6 +1567,62 @@
             "fuzzy": true
         },
         {
+            "id": "No passkeys registered",
+            "message": "No passkeys registered",
+            "translation": "No passkeys registered",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkeys",
+            "message": "Passkeys",
+            "translation": "Passkeys",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Register a passkey to enable passwordless sign in.",
+            "message": "Register a passkey to enable passwordless sign in.",
+            "translation": "Register a passkey to enable passwordless sign in.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Add a backup passkey",
+            "message": "Add a backup passkey",
+            "translation": "Add a backup passkey",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey recommendation",
+            "message": "Passkey recommendation",
+            "translation": "Passkey recommendation",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Set up a second passkey on another device as backup in case one device is lost.",
+            "message": "Set up a second passkey on another device as backup in case one device is lost.",
+            "translation": "Set up a second passkey on another device as backup in case one device is lost.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Regenerate backup codes",
+            "message": "Regenerate backup codes",
+            "translation": "Regenerate backup codes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Regenerate backup codes? Existing codes will stop working.",
+            "message": "Regenerate backup codes? Existing codes will stop working.",
+            "translation": "Regenerate backup codes? Existing codes will stop working.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Account «{String}»",
             "message": "Account «{String}»",
             "translation": "Account «{String}»",
@@ -1411,6 +1645,37 @@
             "translation": "System",
             "comment": "TODO admin, system or app?",
             "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey setup required",
+            "message": "Passkey setup required",
+            "translation": "Passkey setup required",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Your organization requires passkey sign-in. Register a passkey to continue.",
+            "message": "Your organization requires passkey sign-in. Register a passkey to continue.",
+            "translation": "Your organization requires passkey sign-in. Register a passkey to continue.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "{RecoveryCodesCount} backup codes left",
+            "message": "{RecoveryCodesCount} backup codes left",
+            "translation": "{RecoveryCodesCount} backup codes left",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "RecoveryCodesCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "recoveryCodesCount"
+                }
+            ],
             "fuzzy": true
         },
         {
@@ -1541,6 +1806,34 @@
             "fuzzy": true
         },
         {
+            "id": "Enable passkey enforcement",
+            "message": "Enable passkey enforcement",
+            "translation": "Enable passkey enforcement",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "message": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "translation": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Disable passkey enforcement",
+            "message": "Disable passkey enforcement",
+            "translation": "Disable passkey enforcement",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "message": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "translation": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "{UsersCount} users",
             "message": "{UsersCount} users",
             "translation": "{UsersCount} users",
@@ -1607,6 +1900,47 @@
             "fuzzy": true
         },
         {
+            "id": "Created on {Format2006_01_02_1504}",
+            "message": "Created on {Format2006_01_02_1504}",
+            "translation": "Created on {Format2006_01_02_1504}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Format2006_01_02_1504",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "credentialx.CreatedAt.Format(\"2006-01-02 15:04\")"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Last used on {Format2006_01_02_1504}",
+            "message": "Last used on {Format2006_01_02_1504}",
+            "translation": "Last used on {Format2006_01_02_1504}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Format2006_01_02_1504",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "credentialx.LastUsedAt.Format(\"2006-01-02 15:04\")"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey",
+            "message": "Passkey",
+            "translation": "Passkey",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Dashboard",
             "message": "Dashboard",
             "translation": "Dashboard",
@@ -1631,6 +1965,41 @@
             "id": "Users",
             "message": "Users",
             "translation": "Users",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to manage organizations.",
+            "message": "You must be logged in to manage organizations.",
+            "translation": "You must be logged in to manage organizations.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Organization not found.",
+            "message": "Organization not found.",
+            "translation": "Organization not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Only owners can change passkey enforcement.",
+            "message": "Only owners can change passkey enforcement.",
+            "translation": "Only owners can change passkey enforcement.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey enforcement enabled for organization.",
+            "message": "Passkey enforcement enabled for organization.",
+            "translation": "Passkey enforcement enabled for organization.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey enforcement disabled for organization.",
+            "message": "Passkey enforcement disabled for organization.",
+            "translation": "Passkey enforcement disabled for organization.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3044,6 +3413,27 @@
             "fuzzy": true
         },
         {
+            "id": "Backup code",
+            "message": "Backup code",
+            "translation": "Backup code",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Belgium",
+            "message": "Belgium",
+            "translation": "Belgium",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Bulgaria",
+            "message": "Bulgaria",
+            "translation": "Bulgaria",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Checkbox",
             "message": "Checkbox",
             "translation": "Checkbox",
@@ -3093,6 +3483,13 @@
             "fuzzy": true
         },
         {
+            "id": "Croatia",
+            "message": "Croatia",
+            "translation": "Croatia",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Current or temporary password",
             "message": "Current or temporary password",
             "translation": "Current or temporary password",
@@ -3103,6 +3500,20 @@
             "id": "Current passphrase",
             "message": "Current passphrase",
             "translation": "Current passphrase",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Cyprus",
+            "message": "Cyprus",
+            "translation": "Cyprus",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Czech republic",
+            "message": "Czech republic",
+            "translation": "Czech republic",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3124,6 +3535,13 @@
             "id": "Delete on success",
             "message": "Delete on success",
             "translation": "Delete on success",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Denmark",
+            "message": "Denmark",
+            "translation": "Denmark",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3156,6 +3574,13 @@
             "fuzzy": true
         },
         {
+            "id": "Estonia",
+            "message": "Estonia",
+            "translation": "Estonia",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Field",
             "message": "Field",
             "translation": "Field",
@@ -3177,9 +3602,23 @@
             "fuzzy": true
         },
         {
+            "id": "Finland",
+            "message": "Finland",
+            "translation": "Finland",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "First name",
             "message": "First name",
             "translation": "First name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "France",
+            "message": "France",
+            "translation": "France",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3205,9 +3644,37 @@
             "fuzzy": true
         },
         {
+            "id": "Greece",
+            "message": "Greece",
+            "translation": "Greece",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Group",
             "message": "Group",
             "translation": "Group",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Hungary",
+            "message": "Hungary",
+            "translation": "Hungary",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Iceland",
+            "message": "Iceland",
+            "translation": "Iceland",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Ireland",
+            "message": "Ireland",
+            "translation": "Ireland",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3226,6 +3693,13 @@
             "fuzzy": true
         },
         {
+            "id": "Italy",
+            "message": "Italy",
+            "translation": "Italy",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Language",
             "message": "Language",
             "translation": "Language",
@@ -3236,6 +3710,13 @@
             "id": "Last name",
             "message": "Last name",
             "translation": "Last name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Latvia",
+            "message": "Latvia",
+            "translation": "Latvia",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3254,9 +3735,37 @@
             "fuzzy": true
         },
         {
+            "id": "Liechtenstein",
+            "message": "Liechtenstein",
+            "translation": "Liechtenstein",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Lithuania",
+            "message": "Lithuania",
+            "translation": "Lithuania",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Local",
             "message": "Local",
             "translation": "Local",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Luxembourg",
+            "message": "Luxembourg",
+            "translation": "Luxembourg",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Malta",
+            "message": "Malta",
+            "translation": "Malta",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3271,6 +3780,13 @@
             "id": "Money value",
             "message": "Money value",
             "translation": "Money value",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Netherlands",
+            "message": "Netherlands",
+            "translation": "Netherlands",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3310,6 +3826,13 @@
             "fuzzy": true
         },
         {
+            "id": "Norway",
+            "message": "Norway",
+            "translation": "Norway",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Number",
             "message": "Number",
             "translation": "Number",
@@ -3345,6 +3868,13 @@
             "fuzzy": true
         },
         {
+            "id": "Other",
+            "message": "Other",
+            "translation": "Other",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Owner",
             "message": "Owner",
             "translation": "Owner",
@@ -3373,6 +3903,20 @@
             "fuzzy": true
         },
         {
+            "id": "Poland",
+            "message": "Poland",
+            "translation": "Poland",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Portugal",
+            "message": "Portugal",
+            "translation": "Portugal",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Pro",
             "message": "Pro",
             "translation": "Pro",
@@ -3390,6 +3934,13 @@
             "id": "Role",
             "message": "Role",
             "translation": "Role",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Romania",
+            "message": "Romania",
+            "translation": "Romania",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3415,6 +3966,27 @@
             "fuzzy": true
         },
         {
+            "id": "Slovakia",
+            "message": "Slovakia",
+            "translation": "Slovakia",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Slovenia",
+            "message": "Slovenia",
+            "translation": "Slovenia",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Spain",
+            "message": "Spain",
+            "translation": "Spain",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Subscribe to newsletter",
             "message": "Subscribe to newsletter",
             "translation": "Subscribe to newsletter",
@@ -3432,6 +4004,13 @@
             "id": "Supporter",
             "message": "Supporter",
             "translation": "Supporter",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sweden",
+            "message": "Sweden",
+            "translation": "Sweden",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3474,6 +4053,13 @@
             "id": "Text value",
             "message": "Text value",
             "translation": "Text value",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Token",
+            "message": "Token",
+            "translation": "Token",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3569,6 +4155,13 @@
             "fuzzy": true
         },
         {
+            "id": "Passkey sign-in is required for this account.",
+            "message": "Passkey sign-in is required for this account.",
+            "translation": "Passkey sign-in is required for this account.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Too many login attempts. Please try again in 10 seconds.",
             "message": "Too many login attempts. Please try again in 10 seconds.",
             "translation": "Too many login attempts. Please try again in 10 seconds.",
@@ -3576,9 +4169,9 @@
             "fuzzy": true
         },
         {
-            "id": "2FA code was provided, but 2FA is not enabled for this account.",
-            "message": "2FA code was provided, but 2FA is not enabled for this account.",
-            "translation": "2FA code was provided, but 2FA is not enabled for this account.",
+            "id": "Could not generate backup codes.",
+            "message": "Could not generate backup codes.",
+            "translation": "Could not generate backup codes.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3618,9 +4211,9 @@
             "fuzzy": true
         },
         {
-            "id": "Password must be at least eight characters long.",
-            "message": "Password must be at least eight characters long.",
-            "translation": "Password must be at least eight characters long.",
+            "id": "Password must be at least twelve characters long.",
+            "message": "Password must be at least twelve characters long.",
+            "translation": "Password must be at least twelve characters long.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3628,6 +4221,118 @@
             "id": "Passwords do not match.",
             "message": "Passwords do not match.",
             "translation": "Passwords do not match.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid passkey sign-in.",
+            "message": "Invalid passkey sign-in.",
+            "translation": "Invalid passkey sign-in.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey sign-in failed.",
+            "message": "Passkey sign-in failed.",
+            "translation": "Passkey sign-in failed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey login is not enabled for this account.",
+            "message": "Passkey login is not enabled for this account.",
+            "translation": "Passkey login is not enabled for this account.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey registration failed.",
+            "message": "Passkey registration failed.",
+            "translation": "Passkey registration failed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You need at least one passkey before creating backup codes.",
+            "message": "You need at least one passkey before creating backup codes.",
+            "translation": "You need at least one passkey before creating backup codes.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid backup sign-in credentials.",
+            "message": "Invalid backup sign-in credentials.",
+            "translation": "Invalid backup sign-in credentials.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Too many backup sign-in attempts. Please try again in 10 seconds.",
+            "message": "Too many backup sign-in attempts. Please try again in 10 seconds.",
+            "translation": "Too many backup sign-in attempts. Please try again in 10 seconds.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Target account has no passkeys configured.",
+            "message": "Target account has no passkeys configured.",
+            "translation": "Target account has no passkeys configured.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey not found.",
+            "message": "Passkey not found.",
+            "translation": "Passkey not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid passkey origin configuration.",
+            "message": "Invalid passkey origin configuration.",
+            "translation": "Invalid passkey origin configuration.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Missing passkey rp id configuration.",
+            "message": "Missing passkey rp id configuration.",
+            "translation": "Missing passkey rp id configuration.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not initialize passkey service.",
+            "message": "Could not initialize passkey service.",
+            "translation": "Could not initialize passkey service.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey challenge is invalid or expired.",
+            "message": "Passkey challenge is invalid or expired.",
+            "translation": "Passkey challenge is invalid or expired.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Too many passkey requests. Please try again shortly.",
+            "message": "Too many passkey requests. Please try again shortly.",
+            "translation": "Too many passkey requests. Please try again shortly.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Unknown passkey credential.",
+            "message": "Unknown passkey credential.",
+            "translation": "Unknown passkey credential.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey account not found.",
+            "message": "Passkey account not found.",
+            "translation": "Passkey account not found.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3961,13 +4666,6 @@
             "id": "Software",
             "message": "Software",
             "translation": "Software",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Other",
-            "message": "Other",
-            "translation": "Other",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4469,6 +5167,13 @@
             "fuzzy": true
         },
         {
+            "id": "Open sign in page",
+            "message": "Open sign in page",
+            "translation": "Open sign in page",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "SimpleDMS Password Reset",
             "message": "SimpleDMS Password Reset",
             "translation": "SimpleDMS Password Reset",
@@ -4665,6 +5370,13 @@
             "fuzzy": true
         },
         {
+            "id": "Please register a passkey to continue.",
+            "message": "Please register a passkey to continue.",
+            "translation": "Please register a passkey to continue.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "You are not allowed to access this tenant.",
             "message": "You are not allowed to access this tenant.",
             "translation": "You are not allowed to access this tenant.",
@@ -4714,6 +5426,13 @@
             "fuzzy": true
         },
         {
+            "id": "Open main menu",
+            "message": "Open main menu",
+            "translation": "Open main menu",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Sign out",
             "message": "Sign out",
             "translation": "Sign out",
@@ -4728,9 +5447,23 @@
             "fuzzy": true
         },
         {
-            "id": "Open main menu",
-            "message": "Open main menu",
-            "translation": "Open main menu",
+            "id": "No backup codes were returned.",
+            "message": "No backup codes were returned.",
+            "translation": "No backup codes were returned.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes were regenerated.",
+            "message": "The backup codes were regenerated.",
+            "translation": "The backup codes were regenerated.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not regenerate backup codes.",
+            "message": "Could not regenerate backup codes.",
+            "translation": "Could not regenerate backup codes.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4760,6 +5493,125 @@
             "id": "required",
             "message": "required",
             "translation": "required",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Give this passkey an optional name so you can recognize it later.",
+            "message": "Give this passkey an optional name so you can recognize it later.",
+            "translation": "Give this passkey an optional name so you can recognize it later.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "message": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "translation": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "message": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "translation": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey name (optional)",
+            "message": "Passkey name (optional)",
+            "translation": "Passkey name (optional)",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "message": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "translation": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "message": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "translation": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "SimpleDMS backup codes",
+            "message": "SimpleDMS backup codes",
+            "translation": "SimpleDMS backup codes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Generated",
+            "message": "Generated",
+            "translation": "Generated",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Keep these backup codes in a secure place.",
+            "message": "Keep these backup codes in a secure place.",
+            "translation": "Keep these backup codes in a secure place.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "These codes are shown only once.",
+            "message": "These codes are shown only once.",
+            "translation": "These codes are shown only once.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Codes",
+            "message": "Codes",
+            "translation": "Codes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Print dialog opened.",
+            "message": "Print dialog opened.",
+            "translation": "Print dialog opened.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes were copied to clipboard.",
+            "message": "The backup codes were copied to clipboard.",
+            "translation": "The backup codes were copied to clipboard.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not copy backup codes automatically.",
+            "message": "Could not copy backup codes automatically.",
+            "translation": "Could not copy backup codes automatically.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes were downloaded.",
+            "message": "The backup codes were downloaded.",
+            "translation": "The backup codes were downloaded.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Print codes",
+            "message": "Print codes",
+            "translation": "Print codes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Copy codes",
+            "message": "Copy codes",
+            "translation": "Copy codes",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

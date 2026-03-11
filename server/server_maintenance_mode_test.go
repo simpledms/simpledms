@@ -258,7 +258,7 @@ func newMaintenanceTestDependencies(t *testing.T) *maintenanceTestDependencies {
 		}
 	})
 
-	_ = initSystemConfig(t, mainDB, true)
+	_ = initSystemConfig(t, mainDB, true, "", "", "")
 
 	tpl := template.New("app")
 	tpl.Funcs(ui.TemplateFuncMap(tpl))

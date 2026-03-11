@@ -5,12 +5,14 @@ package entmain
 import (
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/predicate"
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/systemconfig"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -20,7 +22,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 7)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 9)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   account.Table,
@@ -54,6 +56,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			account.FieldTwoFactorAuthRecoveryCodeSalt:      {Type: field.TypeString, Column: account.FieldTwoFactorAuthRecoveryCodeSalt},
 			account.FieldTwoFactorAuthRecoveryCodeHashes:    {Type: field.TypeJSON, Column: account.FieldTwoFactorAuthRecoveryCodeHashes},
 			account.FieldLastLoginAttemptAt:                 {Type: field.TypeTime, Column: account.FieldLastLoginAttemptAt},
+			account.FieldPasskeyLoginEnabled:                {Type: field.TypeBool, Column: account.FieldPasskeyLoginEnabled},
+			account.FieldPasskeyRecoveryCodeSalt:            {Type: field.TypeString, Column: account.FieldPasskeyRecoveryCodeSalt},
+			account.FieldPasskeyRecoveryCodeHashes:          {Type: field.TypeJSON, Column: account.FieldPasskeyRecoveryCodeHashes},
 			account.FieldRole:                               {Type: field.TypeEnum, Column: account.FieldRole},
 		},
 	}
@@ -83,6 +88,29 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[2] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   passkeycredential.Table,
+			Columns: passkeycredential.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeInt64,
+				Column: passkeycredential.FieldID,
+			},
+		},
+		Type: "PasskeyCredential",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			passkeycredential.FieldCreatedAt:      {Type: field.TypeTime, Column: passkeycredential.FieldCreatedAt},
+			passkeycredential.FieldCreatedBy:      {Type: field.TypeInt64, Column: passkeycredential.FieldCreatedBy},
+			passkeycredential.FieldUpdatedAt:      {Type: field.TypeTime, Column: passkeycredential.FieldUpdatedAt},
+			passkeycredential.FieldUpdatedBy:      {Type: field.TypeInt64, Column: passkeycredential.FieldUpdatedBy},
+			passkeycredential.FieldPublicID:       {Type: field.TypeString, Column: passkeycredential.FieldPublicID},
+			passkeycredential.FieldAccountID:      {Type: field.TypeInt64, Column: passkeycredential.FieldAccountID},
+			passkeycredential.FieldCredentialID:   {Type: field.TypeBytes, Column: passkeycredential.FieldCredentialID},
+			passkeycredential.FieldCredentialJSON: {Type: field.TypeBytes, Column: passkeycredential.FieldCredentialJSON},
+			passkeycredential.FieldName:           {Type: field.TypeString, Column: passkeycredential.FieldName},
+			passkeycredential.FieldLastUsedAt:     {Type: field.TypeTime, Column: passkeycredential.FieldLastUsedAt},
+		},
+	}
+	graph.Nodes[3] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   session.Table,
 			Columns: session.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -101,7 +129,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			session.FieldUpdatedAt:          {Type: field.TypeTime, Column: session.FieldUpdatedAt},
 		},
 	}
-	graph.Nodes[3] = &sqlgraph.Node{
+	graph.Nodes[4] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   systemconfig.Table,
 			Columns: systemconfig.Columns,
@@ -139,7 +167,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemconfig.FieldInitializedAt:                     {Type: field.TypeTime, Column: systemconfig.FieldInitializedAt},
 		},
 	}
-	graph.Nodes[4] = &sqlgraph.Node{
+	graph.Nodes[5] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   temporaryfile.Table,
 			Columns: temporaryfile.Columns,
@@ -175,7 +203,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			temporaryfile.FieldExpiresAt:               {Type: field.TypeTime, Column: temporaryfile.FieldExpiresAt},
 		},
 	}
-	graph.Nodes[5] = &sqlgraph.Node{
+	graph.Nodes[6] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tenant.Table,
 			Columns: tenant.Columns,
@@ -207,12 +235,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tenant.FieldTermsOfServiceAccepted:   {Type: field.TypeTime, Column: tenant.FieldTermsOfServiceAccepted},
 			tenant.FieldPrivacyPolicyAccepted:    {Type: field.TypeTime, Column: tenant.FieldPrivacyPolicyAccepted},
 			tenant.FieldTwoFactorAuthEnforced:    {Type: field.TypeBool, Column: tenant.FieldTwoFactorAuthEnforced},
+			tenant.FieldPasskeyAuthEnforced:      {Type: field.TypeBool, Column: tenant.FieldPasskeyAuthEnforced},
 			tenant.FieldX25519IdentityEncrypted:  {Type: field.TypeBytes, Column: tenant.FieldX25519IdentityEncrypted},
 			tenant.FieldMaintenanceModeEnabledAt: {Type: field.TypeTime, Column: tenant.FieldMaintenanceModeEnabledAt},
 			tenant.FieldInitializedAt:            {Type: field.TypeTime, Column: tenant.FieldInitializedAt},
 		},
 	}
-	graph.Nodes[6] = &sqlgraph.Node{
+	graph.Nodes[7] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tenantaccountassignment.Table,
 			Columns: tenantaccountassignment.Columns,
@@ -235,6 +264,27 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tenantaccountassignment.FieldExpiresAt:       {Type: field.TypeTime, Column: tenantaccountassignment.FieldExpiresAt},
 		},
 	}
+	graph.Nodes[8] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   webauthnchallenge.Table,
+			Columns: webauthnchallenge.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeInt64,
+				Column: webauthnchallenge.FieldID,
+			},
+		},
+		Type: "WebAuthnChallenge",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			webauthnchallenge.FieldChallengeID:     {Type: field.TypeString, Column: webauthnchallenge.FieldChallengeID},
+			webauthnchallenge.FieldAccountID:       {Type: field.TypeInt64, Column: webauthnchallenge.FieldAccountID},
+			webauthnchallenge.FieldClientKey:       {Type: field.TypeString, Column: webauthnchallenge.FieldClientKey},
+			webauthnchallenge.FieldCeremony:        {Type: field.TypeString, Column: webauthnchallenge.FieldCeremony},
+			webauthnchallenge.FieldSessionDataJSON: {Type: field.TypeBytes, Column: webauthnchallenge.FieldSessionDataJSON},
+			webauthnchallenge.FieldExpiresAt:       {Type: field.TypeTime, Column: webauthnchallenge.FieldExpiresAt},
+			webauthnchallenge.FieldUsedAt:          {Type: field.TypeTime, Column: webauthnchallenge.FieldUsedAt},
+			webauthnchallenge.FieldCreatedAt:       {Type: field.TypeTime, Column: webauthnchallenge.FieldCreatedAt},
+		},
+	}
 	graph.MustAddE(
 		"tenants",
 		&sqlgraph.EdgeSpec{
@@ -246,6 +296,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Account",
 		"Tenant",
+	)
+	graph.MustAddE(
+		"passkey_credentials",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.PasskeyCredentialsTable,
+			Columns: []string{account.PasskeyCredentialsColumn},
+			Bidi:    false,
+		},
+		"Account",
+		"PasskeyCredential",
+	)
+	graph.MustAddE(
+		"webauthn_challenges",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.WebauthnChallengesTable,
+			Columns: []string{account.WebauthnChallengesColumn},
+			Bidi:    false,
+		},
+		"Account",
+		"WebAuthnChallenge",
 	)
 	graph.MustAddE(
 		"received_mails",
@@ -317,6 +391,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Mail",
+		"Account",
+	)
+	graph.MustAddE(
+		"creator",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passkeycredential.CreatorTable,
+			Columns: []string{passkeycredential.CreatorColumn},
+			Bidi:    false,
+		},
+		"PasskeyCredential",
+		"Account",
+	)
+	graph.MustAddE(
+		"updater",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passkeycredential.UpdaterTable,
+			Columns: []string{passkeycredential.UpdaterColumn},
+			Bidi:    false,
+		},
+		"PasskeyCredential",
+		"Account",
+	)
+	graph.MustAddE(
+		"account",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   passkeycredential.AccountTable,
+			Columns: []string{passkeycredential.AccountColumn},
+			Bidi:    false,
+		},
+		"PasskeyCredential",
 		"Account",
 	)
 	graph.MustAddE(
@@ -511,6 +621,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"TenantAccountAssignment",
 		"Account",
 	)
+	graph.MustAddE(
+		"account",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   webauthnchallenge.AccountTable,
+			Columns: []string{webauthnchallenge.AccountColumn},
+			Bidi:    false,
+		},
+		"WebAuthnChallenge",
+		"Account",
+	)
 	return graph
 }()
 
@@ -670,6 +792,21 @@ func (f *AccountFilter) WhereLastLoginAttemptAt(p entql.TimeP) {
 	f.Where(p.Field(account.FieldLastLoginAttemptAt))
 }
 
+// WherePasskeyLoginEnabled applies the entql bool predicate on the passkey_login_enabled field.
+func (f *AccountFilter) WherePasskeyLoginEnabled(p entql.BoolP) {
+	f.Where(p.Field(account.FieldPasskeyLoginEnabled))
+}
+
+// WherePasskeyRecoveryCodeSalt applies the entql string predicate on the passkey_recovery_code_salt field.
+func (f *AccountFilter) WherePasskeyRecoveryCodeSalt(p entql.StringP) {
+	f.Where(p.Field(account.FieldPasskeyRecoveryCodeSalt))
+}
+
+// WherePasskeyRecoveryCodeHashes applies the entql json.RawMessage predicate on the passkey_recovery_code_hashes field.
+func (f *AccountFilter) WherePasskeyRecoveryCodeHashes(p entql.BytesP) {
+	f.Where(p.Field(account.FieldPasskeyRecoveryCodeHashes))
+}
+
 // WhereRole applies the entql string predicate on the role field.
 func (f *AccountFilter) WhereRole(p entql.StringP) {
 	f.Where(p.Field(account.FieldRole))
@@ -683,6 +820,34 @@ func (f *AccountFilter) WhereHasTenants() {
 // WhereHasTenantsWith applies a predicate to check if query has an edge tenants with a given conditions (other predicates).
 func (f *AccountFilter) WhereHasTenantsWith(preds ...predicate.Tenant) {
 	f.Where(entql.HasEdgeWith("tenants", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPasskeyCredentials applies a predicate to check if query has an edge passkey_credentials.
+func (f *AccountFilter) WhereHasPasskeyCredentials() {
+	f.Where(entql.HasEdge("passkey_credentials"))
+}
+
+// WhereHasPasskeyCredentialsWith applies a predicate to check if query has an edge passkey_credentials with a given conditions (other predicates).
+func (f *AccountFilter) WhereHasPasskeyCredentialsWith(preds ...predicate.PasskeyCredential) {
+	f.Where(entql.HasEdgeWith("passkey_credentials", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasWebauthnChallenges applies a predicate to check if query has an edge webauthn_challenges.
+func (f *AccountFilter) WhereHasWebauthnChallenges() {
+	f.Where(entql.HasEdge("webauthn_challenges"))
+}
+
+// WhereHasWebauthnChallengesWith applies a predicate to check if query has an edge webauthn_challenges with a given conditions (other predicates).
+func (f *AccountFilter) WhereHasWebauthnChallengesWith(preds ...predicate.WebAuthnChallenge) {
+	f.Where(entql.HasEdgeWith("webauthn_challenges", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -869,6 +1034,138 @@ func (f *MailFilter) WhereHasReceiverWith(preds ...predicate.Account) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *PasskeyCredentialQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the PasskeyCredentialQuery builder.
+func (_q *PasskeyCredentialQuery) Filter() *PasskeyCredentialFilter {
+	return &PasskeyCredentialFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *PasskeyCredentialMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the PasskeyCredentialMutation builder.
+func (m *PasskeyCredentialMutation) Filter() *PasskeyCredentialFilter {
+	return &PasskeyCredentialFilter{config: m.config, predicateAdder: m}
+}
+
+// PasskeyCredentialFilter provides a generic filtering capability at runtime for PasskeyCredentialQuery.
+type PasskeyCredentialFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *PasskeyCredentialFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[2].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql int64 predicate on the id field.
+func (f *PasskeyCredentialFilter) WhereID(p entql.Int64P) {
+	f.Where(p.Field(passkeycredential.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *PasskeyCredentialFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(passkeycredential.FieldCreatedAt))
+}
+
+// WhereCreatedBy applies the entql int64 predicate on the created_by field.
+func (f *PasskeyCredentialFilter) WhereCreatedBy(p entql.Int64P) {
+	f.Where(p.Field(passkeycredential.FieldCreatedBy))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *PasskeyCredentialFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(passkeycredential.FieldUpdatedAt))
+}
+
+// WhereUpdatedBy applies the entql int64 predicate on the updated_by field.
+func (f *PasskeyCredentialFilter) WhereUpdatedBy(p entql.Int64P) {
+	f.Where(p.Field(passkeycredential.FieldUpdatedBy))
+}
+
+// WherePublicID applies the entql string predicate on the public_id field.
+func (f *PasskeyCredentialFilter) WherePublicID(p entql.StringP) {
+	f.Where(p.Field(passkeycredential.FieldPublicID))
+}
+
+// WhereAccountID applies the entql int64 predicate on the account_id field.
+func (f *PasskeyCredentialFilter) WhereAccountID(p entql.Int64P) {
+	f.Where(p.Field(passkeycredential.FieldAccountID))
+}
+
+// WhereCredentialID applies the entql []byte predicate on the credential_id field.
+func (f *PasskeyCredentialFilter) WhereCredentialID(p entql.BytesP) {
+	f.Where(p.Field(passkeycredential.FieldCredentialID))
+}
+
+// WhereCredentialJSON applies the entql []byte predicate on the credential_json field.
+func (f *PasskeyCredentialFilter) WhereCredentialJSON(p entql.BytesP) {
+	f.Where(p.Field(passkeycredential.FieldCredentialJSON))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *PasskeyCredentialFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(passkeycredential.FieldName))
+}
+
+// WhereLastUsedAt applies the entql time.Time predicate on the last_used_at field.
+func (f *PasskeyCredentialFilter) WhereLastUsedAt(p entql.TimeP) {
+	f.Where(p.Field(passkeycredential.FieldLastUsedAt))
+}
+
+// WhereHasCreator applies a predicate to check if query has an edge creator.
+func (f *PasskeyCredentialFilter) WhereHasCreator() {
+	f.Where(entql.HasEdge("creator"))
+}
+
+// WhereHasCreatorWith applies a predicate to check if query has an edge creator with a given conditions (other predicates).
+func (f *PasskeyCredentialFilter) WhereHasCreatorWith(preds ...predicate.Account) {
+	f.Where(entql.HasEdgeWith("creator", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdater applies a predicate to check if query has an edge updater.
+func (f *PasskeyCredentialFilter) WhereHasUpdater() {
+	f.Where(entql.HasEdge("updater"))
+}
+
+// WhereHasUpdaterWith applies a predicate to check if query has an edge updater with a given conditions (other predicates).
+func (f *PasskeyCredentialFilter) WhereHasUpdaterWith(preds ...predicate.Account) {
+	f.Where(entql.HasEdgeWith("updater", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAccount applies a predicate to check if query has an edge account.
+func (f *PasskeyCredentialFilter) WhereHasAccount() {
+	f.Where(entql.HasEdge("account"))
+}
+
+// WhereHasAccountWith applies a predicate to check if query has an edge account with a given conditions (other predicates).
+func (f *PasskeyCredentialFilter) WhereHasAccountWith(preds ...predicate.Account) {
+	f.Where(entql.HasEdgeWith("account", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *SessionQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -897,7 +1194,7 @@ type SessionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SessionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[2].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[3].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -986,7 +1283,7 @@ type SystemConfigFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SystemConfigFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[3].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[4].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1179,7 +1476,7 @@ type TemporaryFileFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemporaryFileFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[4].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[5].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1390,7 +1687,7 @@ type TenantFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TenantFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[5].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1504,6 +1801,11 @@ func (f *TenantFilter) WherePrivacyPolicyAccepted(p entql.TimeP) {
 // WhereTwoFactorAuthEnforced applies the entql bool predicate on the two_factor_auth_enforced field.
 func (f *TenantFilter) WhereTwoFactorAuthEnforced(p entql.BoolP) {
 	f.Where(p.Field(tenant.FieldTwoFactorAuthEnforced))
+}
+
+// WherePasskeyAuthEnforced applies the entql bool predicate on the passkey_auth_enforced field.
+func (f *TenantFilter) WherePasskeyAuthEnforced(p entql.BoolP) {
+	f.Where(p.Field(tenant.FieldPasskeyAuthEnforced))
 }
 
 // WhereX25519IdentityEncrypted applies the entql []byte predicate on the x25519_identity_encrypted field.
@@ -1620,7 +1922,7 @@ type TenantAccountAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TenantAccountAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1730,6 +2032,100 @@ func (f *TenantAccountAssignmentFilter) WhereHasAccount() {
 
 // WhereHasAccountWith applies a predicate to check if query has an edge account with a given conditions (other predicates).
 func (f *TenantAccountAssignmentFilter) WhereHasAccountWith(preds ...predicate.Account) {
+	f.Where(entql.HasEdgeWith("account", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *WebAuthnChallengeQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the WebAuthnChallengeQuery builder.
+func (_q *WebAuthnChallengeQuery) Filter() *WebAuthnChallengeFilter {
+	return &WebAuthnChallengeFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *WebAuthnChallengeMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the WebAuthnChallengeMutation builder.
+func (m *WebAuthnChallengeMutation) Filter() *WebAuthnChallengeFilter {
+	return &WebAuthnChallengeFilter{config: m.config, predicateAdder: m}
+}
+
+// WebAuthnChallengeFilter provides a generic filtering capability at runtime for WebAuthnChallengeQuery.
+type WebAuthnChallengeFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *WebAuthnChallengeFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql int64 predicate on the id field.
+func (f *WebAuthnChallengeFilter) WhereID(p entql.Int64P) {
+	f.Where(p.Field(webauthnchallenge.FieldID))
+}
+
+// WhereChallengeID applies the entql string predicate on the challenge_id field.
+func (f *WebAuthnChallengeFilter) WhereChallengeID(p entql.StringP) {
+	f.Where(p.Field(webauthnchallenge.FieldChallengeID))
+}
+
+// WhereAccountID applies the entql int64 predicate on the account_id field.
+func (f *WebAuthnChallengeFilter) WhereAccountID(p entql.Int64P) {
+	f.Where(p.Field(webauthnchallenge.FieldAccountID))
+}
+
+// WhereClientKey applies the entql string predicate on the client_key field.
+func (f *WebAuthnChallengeFilter) WhereClientKey(p entql.StringP) {
+	f.Where(p.Field(webauthnchallenge.FieldClientKey))
+}
+
+// WhereCeremony applies the entql string predicate on the ceremony field.
+func (f *WebAuthnChallengeFilter) WhereCeremony(p entql.StringP) {
+	f.Where(p.Field(webauthnchallenge.FieldCeremony))
+}
+
+// WhereSessionDataJSON applies the entql []byte predicate on the session_data_json field.
+func (f *WebAuthnChallengeFilter) WhereSessionDataJSON(p entql.BytesP) {
+	f.Where(p.Field(webauthnchallenge.FieldSessionDataJSON))
+}
+
+// WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
+func (f *WebAuthnChallengeFilter) WhereExpiresAt(p entql.TimeP) {
+	f.Where(p.Field(webauthnchallenge.FieldExpiresAt))
+}
+
+// WhereUsedAt applies the entql time.Time predicate on the used_at field.
+func (f *WebAuthnChallengeFilter) WhereUsedAt(p entql.TimeP) {
+	f.Where(p.Field(webauthnchallenge.FieldUsedAt))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *WebAuthnChallengeFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(webauthnchallenge.FieldCreatedAt))
+}
+
+// WhereHasAccount applies a predicate to check if query has an edge account.
+func (f *WebAuthnChallengeFilter) WhereHasAccount() {
+	f.Where(entql.HasEdge("account"))
+}
+
+// WhereHasAccountWith applies a predicate to check if query has an edge account with a given conditions (other predicates).
+func (f *WebAuthnChallengeFilter) WhereHasAccountWith(preds ...predicate.Account) {
 	f.Where(entql.HasEdgeWith("account", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)

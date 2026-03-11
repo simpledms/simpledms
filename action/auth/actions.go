@@ -1,37 +1,73 @@
 package auth
 
 import (
+	"net/http"
+
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/ctxx"
+	account2 "github.com/simpledms/simpledms/model/account"
+	"github.com/simpledms/simpledms/model/common/mainrole"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/util/e"
 )
 
 type Actions struct {
-	SignInPage                *SignInPage
-	SignUpCmd                 *SignUpCmd
-	SignInCmd                 *SignInCmd
-	SignOutCmd                *SignOutCmd
-	ResetPasswordCmd          *ResetPasswordCmd
-	ChangePasswordCmd         *ChangePasswordCmd
-	SetInitialPasswordCmd     *SetInitialPasswordCmd
-	ClearTemporaryPasswordCmd *ClearTemporaryPasswordCmd
-	DeleteAccountCmd          *DeleteAccountCmd
-	EditAccountCmd            *EditAccountCmd
+	SignInPage                 *SignInPage
+	SignUpCmd                  *SignUpCmd
+	SignInCmd                  *SignInCmd
+	PasskeySignInBeginCmd      *PasskeySignInBeginCmd
+	PasskeySignInFinishCmd     *PasskeySignInFinishCmd
+	PasskeyRegisterDialog      *PasskeyRegisterDialog
+	PasskeyRegisterBeginCmd    *PasskeyRegisterBeginCmd
+	PasskeyRegisterFinishCmd   *PasskeyRegisterFinishCmd
+	PasskeyRecoveryCodesDialog *PasskeyRecoveryCodesDialog
+	RenamePasskeyCmd           *RenamePasskeyCmd
+	DeletePasskeyCmd           *DeletePasskeyCmd
+	RegeneratePasskeyCodesCmd  *RegeneratePasskeyCodesCmd
+	PasskeyRecoverySignInCmd   *PasskeyRecoverySignInCmd
+	ClearPasskeysCmd           *ClearPasskeysCmd
+	AdminPasskeyRecoveryCmd    *AdminPasskeyRecoveryCmd
+	SignOutCmd                 *SignOutCmd
+	ResetPasswordCmd           *ResetPasswordCmd
+	ChangePasswordCmd          *ChangePasswordCmd
+	SetInitialPasswordCmd      *SetInitialPasswordCmd
+	ClearTemporaryPasswordCmd  *ClearTemporaryPasswordCmd
+	DeleteAccountCmd           *DeleteAccountCmd
+	EditAccountCmd             *EditAccountCmd
 }
 
 func NewActions(infra *common.Infra) *Actions {
-	actions := new(Actions)
+	recoveryCodesStore := account2.NewPasskeyRecoveryCodesStore()
+	passkeyService := account2.NewPasskeyService(
+		infra.SystemConfig().PublicOrigin(),
+		infra.SystemConfig().WebAuthnRPID(),
+		infra.SystemConfig().WebAuthnRPName(),
+	)
+	actions := &Actions{}
 
 	*actions = Actions{
-		SignInPage:                NewSignInPage(infra, actions),
-		SignUpCmd:                 NewSignUpCmd(infra, actions),
-		SignInCmd:                 NewSignInCmd(infra, actions),
-		SignOutCmd:                NewSignOutCmd(infra, actions),
-		ResetPasswordCmd:          NewResetPasswordCmd(infra, actions),
-		ChangePasswordCmd:         NewChangePasswordCmd(infra, actions),
-		SetInitialPasswordCmd:     NewSetInitialPasswordCmd(infra, actions),
-		ClearTemporaryPasswordCmd: NewClearTemporaryPasswordCmd(infra, actions),
-		DeleteAccountCmd:          NewDeleteAccountCmd(infra, actions),
-		EditAccountCmd:            NewEditAccountCmd(infra, actions),
+		SignInPage:                 NewSignInPage(infra, actions),
+		SignUpCmd:                  NewSignUpCmd(infra, actions),
+		SignInCmd:                  NewSignInCmd(infra, actions),
+		PasskeySignInBeginCmd:      NewPasskeySignInBeginCmd(infra, actions, passkeyService),
+		PasskeySignInFinishCmd:     NewPasskeySignInFinishCmd(infra, actions, passkeyService),
+		PasskeyRegisterDialog:      NewPasskeyRegisterDialog(infra, actions),
+		PasskeyRegisterBeginCmd:    NewPasskeyRegisterBeginCmd(infra, actions, passkeyService),
+		PasskeyRegisterFinishCmd:   NewPasskeyRegisterFinishCmd(infra, actions, passkeyService, recoveryCodesStore),
+		PasskeyRecoveryCodesDialog: NewPasskeyRecoveryCodesDialog(infra, actions, recoveryCodesStore),
+		RenamePasskeyCmd:           NewRenamePasskeyCmd(infra, actions, passkeyService),
+		DeletePasskeyCmd:           NewDeletePasskeyCmd(infra, actions, passkeyService),
+		RegeneratePasskeyCodesCmd:  NewRegeneratePasskeyCodesCmd(infra, actions, passkeyService, recoveryCodesStore),
+		PasskeyRecoverySignInCmd:   NewPasskeyRecoverySignInCmd(infra, actions, passkeyService),
+		ClearPasskeysCmd:           NewClearPasskeysCmd(infra, actions),
+		AdminPasskeyRecoveryCmd:    NewAdminPasskeyRecoveryCmd(infra, actions, passkeyService),
+		SignOutCmd:                 NewSignOutCmd(infra, actions),
+		ResetPasswordCmd:           NewResetPasswordCmd(infra, actions),
+		ChangePasswordCmd:          NewChangePasswordCmd(infra, actions),
+		SetInitialPasswordCmd:      NewSetInitialPasswordCmd(infra, actions),
+		ClearTemporaryPasswordCmd:  NewClearTemporaryPasswordCmd(infra, actions),
+		DeleteAccountCmd:           NewDeleteAccountCmd(infra, actions),
+		EditAccountCmd:             NewEditAccountCmd(infra, actions),
 	}
 
 	return actions
@@ -39,4 +75,29 @@ func NewActions(infra *common.Infra) *Actions {
 
 func (qq *Actions) Route(path string) string {
 	return route.AuthActionsRoute() + path
+}
+
+func (qq *Actions) RequireMainCtx(
+	ctx ctxx.Context,
+	unauthorizedMessage string,
+) (*ctxx.MainContext, error) {
+	if ctx.IsMainCtx() {
+		return ctx.MainCtx(), nil
+	}
+
+	return nil, e.NewHTTPErrorf(http.StatusUnauthorized, unauthorizedMessage)
+}
+
+func (qq *Actions) RequireMainRole(
+	mainCtx *ctxx.MainContext,
+	forbiddenMessage string,
+	roles ...mainrole.MainRole,
+) error {
+	for _, role := range roles {
+		if mainCtx.Account.Role == role {
+			return nil
+		}
+	}
+
+	return e.NewHTTPErrorf(http.StatusForbidden, forbiddenMessage)
 }
