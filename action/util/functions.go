@@ -158,6 +158,12 @@ func FormDataX[T any](
 		err := req.ParseMultipartForm(50 * 1024)
 		if err != nil {
 			log.Println(err)
+
+			var maxBytesErr *http.MaxBytesError
+			if errors.As(err, &maxBytesErr) {
+				return data, e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Upload is too large.")
+			}
+
 			return data, e.NewHTTPErrorf(http.StatusBadRequest, "cannot parse file")
 		}
 	} else {

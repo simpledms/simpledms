@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"path/filepath"
 	"strings"
@@ -19,6 +20,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
+	"github.com/simpledms/simpledms/db/entmain/systemconfig"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
@@ -30,6 +32,7 @@ import (
 	"github.com/simpledms/simpledms/util"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/filenamex"
+	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/recoverx"
 )
 
@@ -40,6 +43,8 @@ type S3FileSystem struct {
 	disableFileEncryption bool
 	storageQuota          *StorageQuota
 }
+
+const bytesPerMiB int64 = 1024 * 1024
 
 func NewS3FileSystem(
 	client *minio.Client,
@@ -63,6 +68,10 @@ func NewS3FileSystem(
 
 func (qq *S3FileSystem) StorageQuota() *StorageQuota {
 	return qq.storageQuota
+}
+
+func (qq *S3FileSystem) TenantUsageBytes(ctx ctxx.Context) (int64, int64, error) {
+	return qq.storageQuota.TenantUsageBytes(ctx)
 }
 
 // caller has to close io.ReadCloser
@@ -334,6 +343,25 @@ func (qq *S3FileSystem) UploadPreparedFileWithExpectedSize(
 	prepared *PreparedUpload,
 	expectedUploadedBytes int64,
 ) (*minio.UploadInfo, int64, error) {
+	nilableUploadLimitBytes, err := qq.NilableEffectiveUploadSizeLimitBytes(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, 0, err
+	}
+
+	if nilableUploadLimitBytes != nil && expectedUploadedBytes > *nilableUploadLimitBytes {
+		return nil, 0, qq.uploadTooLargeError(*nilableUploadLimitBytes)
+	}
+
+	limitedFileToSave := fileToSave
+	if nilableUploadLimitBytes != nil {
+		limitedBytes := *nilableUploadLimitBytes
+		if limitedBytes < math.MaxInt64 {
+			limitedBytes++
+		}
+		limitedFileToSave = io.LimitReader(fileToSave, limitedBytes)
+	}
+
 	if expectedUploadedBytes > 0 && ctx.IsTenantCtx() {
 		err := qq.EnsureTenantStorageLimit(ctx, expectedUploadedBytes)
 		if err != nil {
@@ -341,14 +369,24 @@ func (qq *S3FileSystem) UploadPreparedFileWithExpectedSize(
 		}
 	}
 
-	return qq.uploadPreparedFileWithParams(
+	fileInfo, fileSize, err := qq.uploadPreparedFileWithParams(
 		ctx,
-		fileToSave,
+		limitedFileToSave,
 		prepared.OriginalFilename,
 		prepared.StorageFilenameWithoutExt,
 		prepared.TemporaryStoragePath,
 		prepared.StorageFilename,
 	)
+	if err != nil {
+		log.Println(err)
+		return nil, 0, err
+	}
+
+	if nilableUploadLimitBytes != nil && fileSize > *nilableUploadLimitBytes {
+		return nil, 0, qq.uploadTooLargeError(*nilableUploadLimitBytes)
+	}
+
+	return fileInfo, fileSize, nil
 }
 
 func (qq *S3FileSystem) FinalizePreparedUpload(
@@ -722,14 +760,38 @@ func (qq *S3FileSystem) UploadPreparedTemporaryAccountFile(
 	fileToSave io.Reader,
 	prepared *PreparedAccountUpload,
 ) (*minio.UploadInfo, int64, error) {
-	return qq.uploadPreparedFileWithParams(
+	nilableUploadLimitBytes, err := qq.NilableEffectiveUploadSizeLimitBytes(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, 0, err
+	}
+
+	limitedFileToSave := fileToSave
+	if nilableUploadLimitBytes != nil {
+		limitedBytes := *nilableUploadLimitBytes
+		if limitedBytes < math.MaxInt64 {
+			limitedBytes++
+		}
+		limitedFileToSave = io.LimitReader(fileToSave, limitedBytes)
+	}
+
+	fileInfo, fileSize, err := qq.uploadPreparedFileWithParams(
 		ctx,
-		fileToSave,
+		limitedFileToSave,
 		prepared.OriginalFilename,
 		prepared.StorageFilenameWithoutExt,
 		prepared.StoragePath,
 		prepared.StorageFilename,
 	)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	if nilableUploadLimitBytes != nil && fileSize > *nilableUploadLimitBytes {
+		return nil, 0, qq.uploadTooLargeError(*nilableUploadLimitBytes)
+	}
+
+	return fileInfo, fileSize, nil
 }
 
 func (qq *S3FileSystem) uploadPreparedFileWithParams(
@@ -794,7 +856,13 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 	parentDirFileID int64,
 	isInInbox bool,
 ) (*enttenant.File, error) {
-	err := qq.EnsureTenantStorageLimit(ctx, tmpFile.Size)
+	err := qq.EnsureUploadSizeLimit(ctx, tmpFile.Size)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	err = qq.EnsureTenantStorageLimit(ctx, tmpFile.Size)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -1040,4 +1108,75 @@ func (qq *S3FileSystem) UpdateMimeType(ctx ctxx.Context, force bool, filex *mode
 
 func (qq *S3FileSystem) EnsureTenantStorageLimit(ctx ctxx.Context, incomingUploadedBytes int64) error {
 	return qq.storageQuota.EnsureTenantStorageLimit(ctx, incomingUploadedBytes)
+}
+
+func (qq *S3FileSystem) EnsureUploadSizeLimit(ctx ctxx.Context, incomingUploadedBytes int64) error {
+	if incomingUploadedBytes <= 0 {
+		return nil
+	}
+
+	nilableUploadLimitBytes, err := qq.NilableEffectiveUploadSizeLimitBytes(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if nilableUploadLimitBytes == nil {
+		return nil
+	}
+
+	if incomingUploadedBytes > *nilableUploadLimitBytes {
+		return qq.uploadTooLargeError(*nilableUploadLimitBytes)
+	}
+
+	return nil
+}
+
+func (qq *S3FileSystem) NilableEffectiveUploadSizeLimitBytes(ctx ctxx.Context) (*int64, error) {
+	globalLimitBytes, err := qq.globalUploadSizeLimitBytes(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	effectiveLimitBytes := globalLimitBytes
+	if ctx.IsTenantCtx() {
+		nilableTenantOverride := ctx.TenantCtx().Tenant.MaxUploadSizeMibOverride
+		if nilableTenantOverride != nil {
+			effectiveLimitBytes = *nilableTenantOverride * bytesPerMiB
+		}
+	}
+
+	if effectiveLimitBytes <= 0 {
+		return nil, nil
+	}
+
+	return &effectiveLimitBytes, nil
+}
+
+func (qq *S3FileSystem) globalUploadSizeLimitBytes(ctx ctxx.Context) (int64, error) {
+	systemConfigx, err := ctx.MainCtx().MainTx.SystemConfig.Query().
+		Select(systemconfig.FieldMaxUploadSizeMib).
+		First(ctx)
+	if err != nil {
+		log.Println(err)
+		return 0, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify upload size limit.")
+	}
+
+	if systemConfigx.MaxUploadSizeMib <= 0 {
+		return 0, nil
+	}
+
+	return systemConfigx.MaxUploadSizeMib * bytesPerMiB, nil
+}
+
+func (qq *S3FileSystem) uploadTooLargeError(maxUploadSizeBytes int64) error {
+	if maxUploadSizeBytes <= 0 {
+		return e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Upload is too large.")
+	}
+
+	return e.NewHTTPErrorf(
+		http.StatusRequestEntityTooLarge,
+		"Upload is too large. Maximum allowed size is %s.",
+		fileutil.FormatSize(maxUploadSizeBytes),
+	)
 }

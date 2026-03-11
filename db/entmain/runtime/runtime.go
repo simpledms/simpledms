@@ -224,6 +224,10 @@ func init() {
 	systemconfigDescOcrMaxFileSizeMib := systemconfigFields[21].Descriptor()
 	// systemconfig.DefaultOcrMaxFileSizeMib holds the default value on creation for the ocr_max_file_size_mib field.
 	systemconfig.DefaultOcrMaxFileSizeMib = systemconfigDescOcrMaxFileSizeMib.Default.(int64)
+	// systemconfigDescMaxUploadSizeMib is the schema descriptor for max_upload_size_mib field.
+	systemconfigDescMaxUploadSizeMib := systemconfigFields[22].Descriptor()
+	// systemconfig.DefaultMaxUploadSizeMib holds the default value on creation for the max_upload_size_mib field.
+	systemconfig.DefaultMaxUploadSizeMib = systemconfigDescMaxUploadSizeMib.Default.(int64)
 	temporaryfileMixin := schema.TemporaryFile{}.Mixin()
 	temporaryfileMixinHooks2 := temporaryfileMixin[2].Hooks()
 	temporaryfile.Hooks[0] = temporaryfileMixinHooks2[0]

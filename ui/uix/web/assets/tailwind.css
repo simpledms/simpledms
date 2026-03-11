@@ -2794,6 +2794,37 @@ input:-webkit-autofill::first-line,
   text-decoration-line: underline;
 }
 
+.disabled\:cursor-not-allowed:disabled {
+  cursor: not-allowed;
+}
+
+.disabled\:text-on-surface:disabled {
+  --tw-text-opacity: 1;
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
+}
+
+.disabled\:text-opacity-\[0\.38\]:disabled {
+  --tw-text-opacity: 0.38;
+}
+
+.disabled\:placeholder-on-surface:disabled::-moz-placeholder {
+  --tw-placeholder-opacity: 1;
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-placeholder-opacity, 1));
+}
+
+.disabled\:placeholder-on-surface:disabled::placeholder {
+  --tw-placeholder-opacity: 1;
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-placeholder-opacity, 1));
+}
+
+.disabled\:placeholder-opacity-\[0\.38\]:disabled::-moz-placeholder {
+  --tw-placeholder-opacity: 0.38;
+}
+
+.disabled\:placeholder-opacity-\[0\.38\]:disabled::placeholder {
+  --tw-placeholder-opacity: 0.38;
+}
+
 .group\/navdest:hover .group-hover\/navdest\:text-on-surface {
   --tw-text-opacity: 1;
   color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
@@ -2947,6 +2978,60 @@ input:-webkit-autofill::first-line,
   color: rgb(var(--md-sys-color-primary) / var(--tw-text-opacity, 1));
 }
 
+.peer:disabled ~ .peer-disabled\:\!text-on-surface {
+  --tw-text-opacity: 1 !important;
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1)) !important;
+}
+
+.peer:disabled ~ .peer-disabled\:\!text-opacity-\[0\.38\] {
+  --tw-text-opacity: 0.38 !important;
+}
+
+.peer:disabled:-moz-placeholder-shown ~ .peer-disabled\:peer-placeholder-shown\:\!text-on-surface {
+  --tw-text-opacity: 1 !important;
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1)) !important;
+}
+
+.peer:disabled:placeholder-shown ~ .peer-disabled\:peer-placeholder-shown\:\!text-on-surface {
+  --tw-text-opacity: 1 !important;
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1)) !important;
+}
+
+.peer:disabled:-moz-placeholder-shown ~ .peer-disabled\:peer-placeholder-shown\:\!text-opacity-\[0\.38\] {
+  --tw-text-opacity: 0.38 !important;
+}
+
+.peer:disabled:placeholder-shown ~ .peer-disabled\:peer-placeholder-shown\:\!text-opacity-\[0\.38\] {
+  --tw-text-opacity: 0.38 !important;
+}
+
+.peer:disabled:-webkit-autofill ~ .peer-disabled\:peer-autofill\:\!text-on-surface {
+  --tw-text-opacity: 1 !important;
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1)) !important;
+}
+
+.peer:disabled:autofill ~ .peer-disabled\:peer-autofill\:\!text-on-surface {
+  --tw-text-opacity: 1 !important;
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1)) !important;
+}
+
+.peer:disabled:-webkit-autofill ~ .peer-disabled\:peer-autofill\:\!text-opacity-\[0\.38\] {
+  --tw-text-opacity: 0.38 !important;
+}
+
+.peer:disabled:autofill ~ .peer-disabled\:peer-autofill\:\!text-opacity-\[0\.38\] {
+  --tw-text-opacity: 0.38 !important;
+}
+
+.peer:disabled:focus ~ .peer-disabled\:peer-focus\:\!text-on-surface {
+  --tw-text-opacity: 1 !important;
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1)) !important;
+}
+
+.peer:disabled:focus ~ .peer-disabled\:peer-focus\:\!text-opacity-\[0\.38\] {
+  --tw-text-opacity: 0.38 !important;
+}
+
 .has-\[div\]\:block:has(div) {
   display: block;
 }
@@ -2959,6 +3044,10 @@ input:-webkit-autofill::first-line,
   display: flex;
 }
 
+.has-\[\:disabled\]\:cursor-not-allowed:has(:disabled) {
+  cursor: not-allowed;
+}
+
 .has-\[\:checked\]\:bg-secondary-container:has(:checked) {
   --tw-bg-opacity: 1;
   background-color: rgb(var(--md-sys-color-secondary-container) / var(--tw-bg-opacity, 1));
@@ -2969,8 +3058,21 @@ input:-webkit-autofill::first-line,
   color: rgb(var(--md-sys-color-on-secondary-container) / var(--tw-text-opacity, 1));
 }
 
+.has-\[\:disabled\]\:text-on-surface:has(:disabled) {
+  --tw-text-opacity: 1;
+  color: rgb(var(--md-sys-color-on-surface) / var(--tw-text-opacity, 1));
+}
+
+.has-\[\:disabled\]\:text-opacity-\[0\.38\]:has(:disabled) {
+  --tw-text-opacity: 0.38;
+}
+
 .has-\[\:checked\]\:outline-0:has(:checked) {
   outline-width: 0px;
+}
+
+.has-\[\:disabled\]\:outline-on-surface:has(:disabled) {
+  outline-color: rgb(var(--md-sys-color-on-surface) / 1);
 }
 
 .has-\[\:checked\]\:state-layer-primary:has(:checked) {

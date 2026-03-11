@@ -293,6 +293,20 @@ func (_c *TenantCreate) SetNillablePasskeyAuthEnforced(v *bool) *TenantCreate {
 	return _c
 }
 
+// SetMaxUploadSizeMibOverride sets the "max_upload_size_mib_override" field.
+func (_c *TenantCreate) SetMaxUploadSizeMibOverride(v int64) *TenantCreate {
+	_c.mutation.SetMaxUploadSizeMibOverride(v)
+	return _c
+}
+
+// SetNillableMaxUploadSizeMibOverride sets the "max_upload_size_mib_override" field if the given value is not nil.
+func (_c *TenantCreate) SetNillableMaxUploadSizeMibOverride(v *int64) *TenantCreate {
+	if v != nil {
+		_c.SetMaxUploadSizeMibOverride(*v)
+	}
+	return _c
+}
+
 // SetX25519IdentityEncrypted sets the "x25519_identity_encrypted" field.
 func (_c *TenantCreate) SetX25519IdentityEncrypted(v entx.EncryptedX25519Identity) *TenantCreate {
 	_c.mutation.SetX25519IdentityEncrypted(v)
@@ -702,6 +716,10 @@ func (_c *TenantCreate) createSpec() (*Tenant, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.PasskeyAuthEnforced(); ok {
 		_spec.SetField(tenant.FieldPasskeyAuthEnforced, field.TypeBool, value)
 		_node.PasskeyAuthEnforced = value
+	}
+	if value, ok := _c.mutation.MaxUploadSizeMibOverride(); ok {
+		_spec.SetField(tenant.FieldMaxUploadSizeMibOverride, field.TypeInt64, value)
+		_node.MaxUploadSizeMibOverride = &value
 	}
 	if value, ok := _c.mutation.X25519IdentityEncrypted(); ok {
 		_spec.SetField(tenant.FieldX25519IdentityEncrypted, field.TypeBytes, value)

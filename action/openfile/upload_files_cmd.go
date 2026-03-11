@@ -1,6 +1,7 @@
 package openfile
 
 import (
+	"errors"
 	"io"
 	"log"
 	"net/http"
@@ -60,6 +61,12 @@ func (qq *UploadFilesCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	uploadToken, err := qq.processSharedFiles(rw, req, ctx)
 	if err != nil {
 		log.Println(err)
+
+		var httpErr *e.HTTPError
+		if errors.As(err, &httpErr) {
+			return err
+		}
+
 		return e.NewHTTPErrorf(http.StatusInternalServerError, "Processing of shared files failed.")
 	}
 
@@ -70,7 +77,6 @@ func (qq *UploadFilesCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	return nil
 }
 
-// FIXME check file size
 // FIXME limit number of files?
 func (qq *UploadFilesCmd) processSharedFiles(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) (string, error) {
 	reader, err := req.MultipartReader()

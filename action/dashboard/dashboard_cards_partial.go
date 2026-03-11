@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"net/url"
@@ -24,6 +25,7 @@ import (
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -71,6 +73,7 @@ func (qq *DashboardCardsPartial) Widget(
 	var openTaskCards []*wx.Card
 	var accountCards []*wx.Card
 	var systemCards []*wx.Card
+	var systemFooterBtns []*wx.Button
 
 	accountm := account.NewAccount(ctx.MainCtx().Account)
 	passkeyPolicy, err := accountm.PasskeyPolicy(ctx)
@@ -90,6 +93,7 @@ func (qq *DashboardCardsPartial) Widget(
 
 	if accountm.Data.Role == mainrole.Admin {
 		systemCards = append(systemCards, qq.appStatusCard(ctx))
+		systemFooterBtns = append(systemFooterBtns, qq.manageUploadLimitBtn(ctx))
 	}
 	if accountm.HasPassword() {
 		// only if main password is already set
@@ -224,6 +228,9 @@ func (qq *DashboardCardsPartial) Widget(
 		grids = append(grids, &wx.Grid{
 			Heading:  wx.H(wx.HeadingTypeTitleMd, wx.T("System")), // TODO admin, system or app?
 			Children: systemCards,
+			Footer: &wx.Row{
+				Children: systemFooterBtns,
+			},
 		})
 	}
 
@@ -240,6 +247,7 @@ func (qq *DashboardCardsPartial) Widget(
 				event.AppInitialized,
 				event.AppUnlocked,
 				event.AppPassphraseChanged,
+				event.UploadLimitUpdated,
 				event.AccountUpdated, // refresh from when opening again and update language
 			),
 			HxPost:   qq.Endpoint(),
@@ -318,6 +326,7 @@ func (qq *DashboardCardsPartial) registerPasskeyBtn(ctx ctxx.Context, styleType 
 
 func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *entmain.Tenant) *wx.Card {
 	var actions []*wx.Button
+	var nilableContent wx.IWidget
 
 	tenantm := tenant.NewTenant(tenantx)
 
@@ -341,6 +350,48 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 				Label:     wx.T("Change plan"),
 				StyleType: wx.ButtonStyleTypeOutlined,
 			})*/
+		}
+
+		contentChildren := []wx.IWidget{
+			wx.Tf("Quota usage: %s", qq.tenantStorageUsageLabel(ctx, tenantx)),
+		}
+
+		if ctx.MainCtx().Account.Role == mainrole.Admin {
+			uploadLimitLabel := wx.T("global default").String(ctx)
+			nilableUploadLimitOverride := tenantx.MaxUploadSizeMibOverride
+			if nilableUploadLimitOverride != nil {
+				uploadLimitLabel = wx.T("unlimited").String(ctx)
+				if *nilableUploadLimitOverride > 0 {
+					uploadLimitLabel = wx.Tuf("%d MiB", *nilableUploadLimitOverride).String(ctx)
+				}
+			}
+
+			contentChildren = append(contentChildren, &wx.Row{Children: []wx.IWidget{
+				wx.Tuf("Upload limit: %s", uploadLimitLabel),
+				&wx.IconButton{
+					Icon:    "more_vert",
+					Tooltip: wx.T("Upload limit options"),
+					Children: &wx.Menu{
+						Position: wx.PositionLeft,
+						Items: []*wx.MenuItem{{
+							LeadingIcon: "tune",
+							Label:       wx.T("Edit upload limit"),
+							HTMXAttrs: qq.actions.AdminActions.SetTenantUploadLimitOverrideForm.ModalLinkAttrs(
+								qq.actions.AdminActions.SetTenantUploadLimitOverrideForm.Data(
+									tenantx.PublicID.String(),
+									nilableUploadLimitOverride,
+								),
+								"",
+							),
+						}},
+					},
+				},
+			}})
+		}
+
+		nilableContent = &wx.Container{
+			GapY:  true,
+			Child: contentChildren,
 		}
 		/*actions = append(actions, &wx.Button{
 			Label:     wx.T("Spaces"),
@@ -371,8 +422,43 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 		// Headline: wx.H(wx.HeadingTypeTitleLg, wx.Tu(tenantx.Name)),
 		Subhead:        subhead,
 		SupportingText: supportingText,
+		Content:        nilableContent,
 		Actions:        actions,
 	}
+}
+
+func (qq *DashboardCardsPartial) tenantStorageUsageLabel(ctx ctxx.Context, tenantx *entmain.Tenant) string {
+	tenantDB, ok := ctx.MainCtx().UnsafeTenantDB(tenantx.ID)
+	if !ok {
+		log.Println("tenant db not found, tenant id was", tenantx.ID)
+		return wx.T("Unavailable").String(ctx)
+	}
+
+	tenantTx, err := tenantDB.ReadOnlyConn.Tx(ctx)
+	if err != nil {
+		log.Println("failed to start transaction for tenant", tenantx.ID, err)
+		return wx.T("Unavailable").String(ctx)
+	}
+
+	tenantCtx := ctxx.NewTenantContext(ctx.MainCtx(), tenantTx, tenantx, true)
+	usedBytes, limitBytes, err := qq.infra.FileSystem().TenantUsageBytes(tenantCtx)
+	if err != nil {
+		log.Println("failed to query storage usage for tenant", tenantx.ID, err)
+		if rollbackErr := tenantTx.Rollback(); rollbackErr != nil {
+			log.Println("failed to rollback transaction for tenant", tenantx.ID, rollbackErr)
+		}
+		return wx.T("Unavailable").String(ctx)
+	}
+
+	if err := tenantTx.Commit(); err != nil {
+		log.Println("failed to commit transaction for tenant", tenantx.ID, err)
+		if rollbackErr := tenantTx.Rollback(); rollbackErr != nil {
+			log.Println("failed to rollback transaction for tenant", tenantx.ID, rollbackErr)
+		}
+		return wx.T("Unavailable").String(ctx)
+	}
+
+	return fmt.Sprintf("%s of %s", fileutil.FormatSize(usedBytes), fileutil.FormatSize(limitBytes))
 }
 
 func (qq *DashboardCardsPartial) spaceCard(ctx ctxx.Context, spacex *enttenant.Space, tenant *entmain.Tenant) *wx.Card {
@@ -816,5 +902,16 @@ func (qq *DashboardCardsPartial) passkeyCredentialCard(
 		Subhead:        wx.T("Passkey"),
 		SupportingText: supportingText,
 		ContextMenu:    NewPasskeyContextMenuWidget(qq.actions).Widget(ctx, credentialx.PublicID.String(), credentialName),
+	}
+}
+
+func (qq *DashboardCardsPartial) manageUploadLimitBtn(ctx ctxx.Context) *wx.Button {
+	return &wx.Button{
+		Label:     wx.T("Manage upload limit"),
+		StyleType: wx.ButtonStyleTypeElevated,
+		HTMXAttrs: qq.actions.AdminActions.SetGlobalUploadLimitForm.ModalLinkAttrs(
+			qq.actions.AdminActions.SetGlobalUploadLimitForm.Data(),
+			"",
+		),
 	}
 }

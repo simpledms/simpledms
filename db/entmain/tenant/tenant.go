@@ -63,6 +63,8 @@ const (
 	FieldTwoFactorAuthEnforced = "two_factor_auth_enforced"
 	// FieldPasskeyAuthEnforced holds the string denoting the passkey_auth_enforced field in the database.
 	FieldPasskeyAuthEnforced = "passkey_auth_enforced"
+	// FieldMaxUploadSizeMibOverride holds the string denoting the max_upload_size_mib_override field in the database.
+	FieldMaxUploadSizeMibOverride = "max_upload_size_mib_override"
 	// FieldX25519IdentityEncrypted holds the string denoting the x25519_identity_encrypted field in the database.
 	FieldX25519IdentityEncrypted = "x25519_identity_encrypted"
 	// FieldMaintenanceModeEnabledAt holds the string denoting the maintenance_mode_enabled_at field in the database.
@@ -141,6 +143,7 @@ var Columns = []string{
 	FieldPrivacyPolicyAccepted,
 	FieldTwoFactorAuthEnforced,
 	FieldPasskeyAuthEnforced,
+	FieldMaxUploadSizeMibOverride,
 	FieldX25519IdentityEncrypted,
 	FieldMaintenanceModeEnabledAt,
 	FieldInitializedAt,
@@ -336,6 +339,11 @@ func ByTwoFactorAuthEnforced(opts ...sql.OrderTermOption) OrderOption {
 // ByPasskeyAuthEnforced orders the results by the passkey_auth_enforced field.
 func ByPasskeyAuthEnforced(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPasskeyAuthEnforced, opts...).ToFunc()
+}
+
+// ByMaxUploadSizeMibOverride orders the results by the max_upload_size_mib_override field.
+func ByMaxUploadSizeMibOverride(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMaxUploadSizeMibOverride, opts...).ToFunc()
 }
 
 // ByMaintenanceModeEnabledAt orders the results by the maintenance_mode_enabled_at field.

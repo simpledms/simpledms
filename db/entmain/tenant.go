@@ -65,6 +65,8 @@ type Tenant struct {
 	TwoFactorAuthEnforced bool `json:"two_factor_auth_enforced,omitempty"`
 	// PasskeyAuthEnforced holds the value of the "passkey_auth_enforced" field.
 	PasskeyAuthEnforced bool `json:"passkey_auth_enforced,omitempty"`
+	// MaxUploadSizeMibOverride holds the value of the "max_upload_size_mib_override" field.
+	MaxUploadSizeMibOverride *int64 `json:"max_upload_size_mib_override,omitempty"`
 	// X25519IdentityEncrypted holds the value of the "x25519_identity_encrypted" field.
 	X25519IdentityEncrypted entx.EncryptedX25519Identity `json:"-"`
 	// MaintenanceModeEnabledAt holds the value of the "maintenance_mode_enabled_at" field.
@@ -160,7 +162,7 @@ func (*Tenant) scanValues(columns []string) ([]any, error) {
 			values[i] = new(plan.Plan)
 		case tenant.FieldTwoFactorAuthEnforced, tenant.FieldPasskeyAuthEnforced:
 			values[i] = new(sql.NullBool)
-		case tenant.FieldID, tenant.FieldCreatedBy, tenant.FieldUpdatedBy, tenant.FieldDeletedBy:
+		case tenant.FieldID, tenant.FieldCreatedBy, tenant.FieldUpdatedBy, tenant.FieldDeletedBy, tenant.FieldMaxUploadSizeMibOverride:
 			values[i] = new(sql.NullInt64)
 		case tenant.FieldName, tenant.FieldFirstName, tenant.FieldLastName, tenant.FieldStreet, tenant.FieldHouseNumber, tenant.FieldAdditionalAddressInfo, tenant.FieldPostalCode, tenant.FieldCity, tenant.FieldVatID:
 			values[i] = new(sql.NullString)
@@ -319,6 +321,13 @@ func (_m *Tenant) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.PasskeyAuthEnforced = value.Bool
 			}
+		case tenant.FieldMaxUploadSizeMibOverride:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field max_upload_size_mib_override", values[i])
+			} else if value.Valid {
+				_m.MaxUploadSizeMibOverride = new(int64)
+				*_m.MaxUploadSizeMibOverride = value.Int64
+			}
 		case tenant.FieldX25519IdentityEncrypted:
 			if value, ok := values[i].(*entx.EncryptedX25519Identity); !ok {
 				return fmt.Errorf("unexpected type %T for field x25519_identity_encrypted", values[i])
@@ -465,6 +474,11 @@ func (_m *Tenant) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("passkey_auth_enforced=")
 	builder.WriteString(fmt.Sprintf("%v", _m.PasskeyAuthEnforced))
+	builder.WriteString(", ")
+	if v := _m.MaxUploadSizeMibOverride; v != nil {
+		builder.WriteString("max_upload_size_mib_override=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("x25519_identity_encrypted=<sensitive>")
 	builder.WriteString(", ")

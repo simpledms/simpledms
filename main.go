@@ -20,6 +20,11 @@ import (
 
 /*//go:generate ent generate simpledms/db/entx/schema/ --feature intercept,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./enttmpl*/
 // TODO switch to `go tool ent` once it works; see comment in go.mod
+//
+// TROUBLESHOOTING:
+// if generation fails because of errors in the generated files (caused by a merge), delete alll files in entmain or enttenant except:
+// ent.go, the folder internal and the schema folder, and then run the command below manually (not via go generate)
+//
 //go:generate ent generate ./db/enttenant/schema/ --target ./db/enttenant --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./db/enttmpl
 //go:generate ent generate ./db/entmain/schema/ --target ./db/entmain/ --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./db/enttmpl
 func main() {

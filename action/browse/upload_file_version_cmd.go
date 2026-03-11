@@ -2,6 +2,7 @@ package browse
 
 import (
 	"log"
+	"math"
 	"net/http"
 	"path/filepath"
 
@@ -52,6 +53,19 @@ func (qq *UploadFileVersionCmd) Data(fileID string) *UploadFileVersionCmdData {
 
 // very similar to UploadFileCmd
 func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	nilableUploadLimitBytes, err := qq.infra.FileSystem().NilableEffectiveUploadSizeLimitBytes(ctx)
+	if err != nil {
+		return err
+	}
+	if nilableUploadLimitBytes != nil {
+		bodyLimitBytes := *nilableUploadLimitBytes
+		const multipartOverheadBytes int64 = 1 * 1024 * 1024
+		if bodyLimitBytes < math.MaxInt64-multipartOverheadBytes {
+			bodyLimitBytes += multipartOverheadBytes
+		}
+		req.Request.Body = http.MaxBytesReader(rw, req.Request.Body, bodyLimitBytes)
+	}
+
 	data, err := autil.FormData[UploadFileVersionCmdData](rw, req, ctx)
 	if err != nil {
 		return err
