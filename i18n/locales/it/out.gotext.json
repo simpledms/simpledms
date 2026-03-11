@@ -156,20 +156,6 @@
             "fuzzy": true
         },
         {
-            "id": "You are not allowed to delete this account.",
-            "message": "You are not allowed to delete this account.",
-            "translation": "Non sei autorizzato a eliminare questo account.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Account deleted.",
-            "message": "Account deleted.",
-            "translation": "Account eliminato.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "A tenant requires passkey login, so at least one passkey must remain.",
             "message": "A tenant requires passkey login, so at least one passkey must remain.",
             "translation": "Un organizzazione richiede l accesso con Passkey, quindi deve rimanere almeno un Passkey.",
@@ -376,17 +362,24 @@
             "fuzzy": true
         },
         {
-            "id": "Sign up now.",
-            "message": "Sign up now.",
-            "translation": "Registrati ora.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "Invalid credentials. Please try again.",
             "message": "Invalid credentials. Please try again.",
             "translation": "Credenziali non valide. Riprova per favore.",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not verify organization access.",
+            "message": "Could not verify organization access.",
+            "translation": "Impossibile verificare l'accesso all'organizzazione.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Your organization is no longer active. Please contact support.",
+            "message": "Your organization is no longer active. Please contact support.",
+            "translation": "La tua organizzazione non è più attiva. Contatta il supporto.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -439,44 +432,9 @@
             "fuzzy": true
         },
         {
-            "id": "Don't have an account? Sign up.",
-            "message": "Don't have an account? Sign up.",
-            "translation": "Non hai un account? Registrati.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "Invalid session cookie.",
             "message": "Invalid session cookie.",
             "translation": "Cookie di sessione non valido.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Sign up [subject]",
-            "message": "Sign up [subject]",
-            "translation": "Registrazione",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Sign up",
-            "message": "Sign up",
-            "translation": "Registrati",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Sign up is disabled.",
-            "message": "Sign up is disabled.",
-            "translation": "La registrazione è disabilitata.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Registration successful, please check your email for your password.",
-            "message": "Registration successful, please check your email for your password.",
-            "translation": "Registrazione completata, controlla la tua email per la password.",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -554,9 +512,9 @@
             "fuzzy": true
         },
         {
-            "id": "Browse",
-            "message": "Browse",
-            "translation": "Sfoglia",
+            "id": "Files",
+            "message": "Files",
+            "translation": "File",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1393,12 +1351,16 @@
         {
             "id": "Archive is too large.",
             "message": "Archive is too large.",
-            "translation": ""
+            "translation": "L'archivio è troppo grande.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Could not verify archive size.",
             "message": "Could not verify archive size.",
-            "translation": ""
+            "translation": "Impossibile verificare la dimensione dell'archivio.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "End date is before the start date.",
@@ -1434,7 +1396,9 @@
         {
             "id": "Read-only request context required.",
             "message": "Read-only request context required.",
-            "translation": ""
+            "translation": "È richiesto un contesto della richiesta in sola lettura.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "could not read file",
@@ -1634,6 +1598,31 @@
             "fuzzy": true
         },
         {
+            "id": "Account «{String}», owned by «{OwningTenantName}»",
+            "message": "Account «{String}», owned by «{OwningTenantName}»",
+            "translation": "Account «{String}», di proprietà di «{OwningTenantName}»",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "String",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "ctx.MainCtx().Account.Email.String()"
+                },
+                {
+                    "id": "OwningTenantName",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "owningTenantName"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "System",
             "message": "System",
             "translation": "Sistema",
@@ -1719,13 +1708,6 @@
             "message": "Select",
             "translation": "Seleziona",
             "comment": "TODO Browse, Open, Switch or activate? or Select?",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Delete account",
-            "message": "Delete account",
-            "translation": "Elimina account",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1857,6 +1839,25 @@
             "translation": "Gestisci utenti",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "Delete organization",
+            "message": "Delete organization",
+            "translation": "Elimina organizzazione",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "translation": "Sei sicuro? Questa organizzazione verrà eliminata. Tutti gli account di proprietà di questa organizzazione verranno eliminati globalmente.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Download backup",
+            "message": "Download backup",
+            "translation": ""
         },
         {
             "id": "The app is unlocked and not protected by a passphrase.",
@@ -2300,7 +2301,9 @@
         {
             "id": "Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.",
             "message": "Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.",
-            "translation": ""
+            "translation": "Il riconoscimento del testo (OCR) non può essere applicato perché il file è troppo grande, i suggerimenti si basano solo sul nome del file.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Text recognition (OCR) is not ready yet, suggestions are based on the filename only.",
@@ -2355,6 +2358,13 @@
             "id": "Files uploaded successfully.",
             "message": "Files uploaded successfully.",
             "translation": "File caricati correttamente.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File not found.",
+            "message": "File not found.",
+            "translation": "File non trovato.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2641,9 +2651,58 @@
             "fuzzy": true
         },
         {
+            "id": "You are not allowed to delete users. No organization selected.",
+            "message": "You are not allowed to delete users. No organization selected.",
+            "translation": "Non ti è consentito eliminare utenti. Nessuna organizzazione selezionata.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to delete users because you are not the owner.",
+            "message": "You are not allowed to delete users because you are not the owner.",
+            "translation": "Non ti è consentito eliminare utenti perché non sei il proprietario.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot delete your own user in organization management.",
+            "message": "You cannot delete your own user in organization management.",
+            "translation": "Non puoi eliminare il tuo stesso utente nella gestione dell'organizzazione.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "User removed from organization and account deleted globally.",
+            "message": "User removed from organization and account deleted globally.",
+            "translation": "Utente rimosso dall'organizzazione e account eliminato globalmente.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "User removed from organization.",
+            "message": "User removed from organization.",
+            "translation": "Utente rimosso dall'organizzazione.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Manage users of tenant",
             "message": "Manage users of tenant",
             "translation": "Gestisci utenti del tenant",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization only.",
+            "message": "Are you sure? This user will be removed from this organization only.",
+            "translation": "Sei sicuro? Questo utente verrà rimosso solo da questa organizzazione.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
+            "message": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
+            "translation": "Sei sicuro? Questo utente verrà rimosso da questa organizzazione e l'account verrà eliminato globalmente.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2653,6 +2712,45 @@
             "translation": "Aggiungi un nuovo utente",
             "comment": "TODO Create or add? system or real world perspective?",
             "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Member account",
+            "message": "Member account",
+            "translation": "Account membro",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Owned account",
+            "message": "Owned account",
+            "translation": "Account proprietario",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "{NameSecondLine} - {OwnershipText}",
+            "message": "{NameSecondLine} - {OwnershipText}",
+            "translation": "{NameSecondLine} - {OwnershipText}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "NameSecondLine",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(userm.NameSecondLine())"
+                },
+                {
+                    "id": "OwnershipText",
+                    "string": "%[2]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 2,
+                    "expr": "ownershipText"
+                }
+            ],
             "fuzzy": true
         },
         {
@@ -2850,12 +2948,16 @@
         {
             "id": "The requested page was not found.",
             "message": "The requested page was not found.",
-            "translation": ""
+            "translation": "La pagina richiesta non è stata trovata.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "The requested page could not be loaded.",
             "message": "The requested page could not be loaded.",
-            "translation": ""
+            "translation": "La pagina richiesta non può essere caricata.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "«{Name}» assigned.",
@@ -3327,12 +3429,16 @@
         {
             "id": "Tenant database not found.",
             "message": "Tenant database not found.",
-            "translation": ""
+            "translation": "Database del tenant non trovato.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Could not start transaction.",
             "message": "Could not start transaction.",
-            "translation": ""
+            "translation": "Impossibile avviare la transazione.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Could not save file.",
@@ -3400,12 +3506,16 @@
         {
             "id": "Belgium",
             "message": "Belgium",
-            "translation": ""
+            "translation": "Belgio",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Bulgaria",
             "message": "Bulgaria",
-            "translation": ""
+            "translation": "Bulgaria",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Checkbox",
@@ -3450,16 +3560,11 @@
             "fuzzy": true
         },
         {
-            "id": "Country",
-            "message": "Country",
-            "translation": "Paese",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Croatia",
             "message": "Croatia",
-            "translation": ""
+            "translation": "Croazia",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Current or temporary password",
@@ -3478,12 +3583,16 @@
         {
             "id": "Cyprus",
             "message": "Cyprus",
-            "translation": ""
+            "translation": "Cipro",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Czech republic",
             "message": "Czech republic",
-            "translation": ""
+            "translation": "Repubblica Ceca",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Date",
@@ -3509,7 +3618,9 @@
         {
             "id": "Denmark",
             "message": "Denmark",
-            "translation": ""
+            "translation": "Danimarca",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Description",
@@ -3542,7 +3653,9 @@
         {
             "id": "Estonia",
             "message": "Estonia",
-            "translation": ""
+            "translation": "Estonia",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Field",
@@ -3568,7 +3681,9 @@
         {
             "id": "Finland",
             "message": "Finland",
-            "translation": ""
+            "translation": "Finlandia",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "First name",
@@ -3580,7 +3695,9 @@
         {
             "id": "France",
             "message": "France",
-            "translation": ""
+            "translation": "Francia",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "French",
@@ -3606,7 +3723,9 @@
         {
             "id": "Greece",
             "message": "Greece",
-            "translation": ""
+            "translation": "Grecia",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Group",
@@ -3618,17 +3737,23 @@
         {
             "id": "Hungary",
             "message": "Hungary",
-            "translation": ""
+            "translation": "Ungheria",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Iceland",
             "message": "Iceland",
-            "translation": ""
+            "translation": "Islanda",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Ireland",
             "message": "Ireland",
-            "translation": ""
+            "translation": "Irlanda",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Is name giving",
@@ -3647,7 +3772,9 @@
         {
             "id": "Italy",
             "message": "Italy",
-            "translation": ""
+            "translation": "Italia",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Language",
@@ -3666,7 +3793,9 @@
         {
             "id": "Latvia",
             "message": "Latvia",
-            "translation": ""
+            "translation": "Lettonia",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Layout",
@@ -3685,12 +3814,16 @@
         {
             "id": "Liechtenstein",
             "message": "Liechtenstein",
-            "translation": ""
+            "translation": "Liechtenstein",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Lithuania",
             "message": "Lithuania",
-            "translation": ""
+            "translation": "Lituania",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Local",
@@ -3702,12 +3835,16 @@
         {
             "id": "Luxembourg",
             "message": "Luxembourg",
-            "translation": ""
+            "translation": "Lussemburgo",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Malta",
             "message": "Malta",
-            "translation": ""
+            "translation": "Malta",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Money",
@@ -3726,7 +3863,9 @@
         {
             "id": "Netherlands",
             "message": "Netherlands",
-            "translation": ""
+            "translation": "Paesi Bassi",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "New dir name",
@@ -3766,7 +3905,9 @@
         {
             "id": "Norway",
             "message": "Norway",
-            "translation": ""
+            "translation": "Norvegia",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Number",
@@ -3793,13 +3934,6 @@
             "id": "Operator",
             "message": "Operator",
             "translation": "Operatore",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Organization name",
-            "message": "Organization name",
-            "translation": "Nome organizzazione",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3841,17 +3975,23 @@
         {
             "id": "Poland",
             "message": "Poland",
-            "translation": ""
+            "translation": "Polonia",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Portugal",
             "message": "Portugal",
-            "translation": ""
+            "translation": "Portogallo",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Pro",
             "message": "Pro",
-            "translation": ""
+            "translation": "Pro",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Rejected",
@@ -3870,7 +4010,9 @@
         {
             "id": "Romania",
             "message": "Romania",
-            "translation": ""
+            "translation": "Romania",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "S 3",
@@ -3896,17 +4038,23 @@
         {
             "id": "Slovakia",
             "message": "Slovakia",
-            "translation": ""
+            "translation": "Slovacchia",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Slovenia",
             "message": "Slovenia",
-            "translation": ""
+            "translation": "Slovenia",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Spain",
             "message": "Spain",
-            "translation": ""
+            "translation": "Spagna",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Subscribe to newsletter",
@@ -3932,7 +4080,9 @@
         {
             "id": "Sweden",
             "message": "Sweden",
-            "translation": ""
+            "translation": "Svezia",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Switzerland",
@@ -3984,7 +4134,9 @@
         {
             "id": "Trial",
             "message": "Trial",
-            "translation": ""
+            "translation": "Prova",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Type",
@@ -4003,7 +4155,9 @@
         {
             "id": "Unlimited",
             "message": "Unlimited",
-            "translation": ""
+            "translation": "Illimitato",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "User",
@@ -4037,6 +4191,62 @@
             "id": "Version number",
             "message": "Version number",
             "translation": "Numero versione",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign up",
+            "message": "Sign up",
+            "translation": "Registrati",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign up [subject]",
+            "message": "Sign up [subject]",
+            "translation": "Registrazione",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Free 30-day trial, no credit card required.",
+            "message": "Free 30-day trial, no credit card required.",
+            "translation": "Prova gratuita di 30 giorni, nessuna carta di credito richiesta.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Organization name",
+            "message": "Organization name",
+            "translation": "Nome organizzazione",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Country",
+            "message": "Country",
+            "translation": "Paese",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Accept terms of service",
+            "message": "Accept terms of service",
+            "translation": "Accetta i termini di servizio",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Accept privacy policy",
+            "message": "Accept privacy policy",
+            "translation": "Accetta l'informativa sulla privacy",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Registration successful, please check your emails for your password.",
+            "message": "Registration successful, please check your emails for your password.",
+            "translation": "Registrazione completata, controlla le tue email per la password.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -4328,12 +4538,16 @@
         {
             "id": "Detected cycle in directory tree.",
             "message": "Detected cycle in directory tree.",
-            "translation": ""
+            "translation": "Rilevato un ciclo nell'albero delle directory.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Could not load path of file.",
             "message": "Could not load path of file.",
-            "translation": ""
+            "translation": "Impossibile caricare il percorso del file.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Could not get object name.",
@@ -4387,7 +4601,9 @@
         {
             "id": "Storage filename mismatch.",
             "message": "Storage filename mismatch.",
-            "translation": ""
+            "translation": "Il nome file di archiviazione non corrisponde.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "App not unlocked yet.",
@@ -4406,12 +4622,15 @@
         {
             "id": "Could not verify storage limit.",
             "message": "Could not verify storage limit.",
-            "translation": ""
+            "translation": "Impossibile verificare il limite di archiviazione.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Storage limit reached for this organization. Used: {FormatSizeusedBytes} of {FormatSizelimitBytes}.",
             "message": "Storage limit reached for this organization. Used: {FormatSizeusedBytes} of {FormatSizelimitBytes}.",
-            "translation": "",
+            "translation": "Limite di archiviazione raggiunta per questa organizzazione. Utilizzato: {FormatSizeusedBytes} di {FormatSizelimitBytes}.",
+            "translatorComment": "Translated from English by Codex",
             "placeholders": [
                 {
                     "id": "FormatSizeusedBytes",
@@ -4429,7 +4648,8 @@
                     "argNum": 2,
                     "expr": "fileutil.FormatSize(limitBytes)"
                 }
-            ]
+            ],
+            "fuzzy": true
         },
         {
             "id": "Invoice",

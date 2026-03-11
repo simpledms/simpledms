@@ -13,7 +13,6 @@ import (
 
 type Actions struct {
 	SignInPage                *SignInPage
-	SignUpCmd                 *SignUpCmd
 	SignInCmd                 *SignInCmd
 	SignOutCmd                *SignOutCmd
 	ResetPasswordCmd          *ResetPasswordCmd
@@ -21,7 +20,6 @@ type Actions struct {
 	SetInitialPasswordCmd     *SetInitialPasswordCmd
 	ClearTemporaryPasswordCmd *ClearTemporaryPasswordCmd
 	EditAccountCmd            *EditAccountCmd
-	DeleteAccountCmd          *DeleteAccountCmd
 
 	PasskeySignInBeginCmd      *PasskeySignInBeginCmd
 	PasskeySignInFinishCmd     *PasskeySignInFinishCmd
@@ -47,16 +45,14 @@ func NewActions(infra *common.Infra) *Actions {
 	actions := &Actions{}
 
 	*actions = Actions{
-		SignInPage:                 NewSignInPage(infra, actions),
-		SignUpCmd:                  NewSignUpCmd(infra, actions),
-		SignInCmd:                  NewSignInCmd(infra, actions),
-		SignOutCmd:                 NewSignOutCmd(infra, actions),
-		ResetPasswordCmd:           NewResetPasswordCmd(infra, actions),
-		ChangePasswordCmd:          NewChangePasswordCmd(infra, actions),
-		SetInitialPasswordCmd:      NewSetInitialPasswordCmd(infra, actions),
-		ClearTemporaryPasswordCmd:  NewClearTemporaryPasswordCmd(infra, actions),
-		EditAccountCmd:             NewEditAccountCmd(infra, actions),
-		DeleteAccountCmd:           NewDeleteAccountCmd(infra, actions),
+		SignInPage:                NewSignInPage(infra, actions),
+		SignInCmd:                 NewSignInCmd(infra, actions),
+		SignOutCmd:                NewSignOutCmd(infra, actions),
+		ResetPasswordCmd:          NewResetPasswordCmd(infra, actions),
+		ChangePasswordCmd:         NewChangePasswordCmd(infra, actions),
+		SetInitialPasswordCmd:     NewSetInitialPasswordCmd(infra, actions),
+		ClearTemporaryPasswordCmd: NewClearTemporaryPasswordCmd(infra, actions),
+		EditAccountCmd:            NewEditAccountCmd(infra, actions),
 
 		PasskeySignInBeginCmd:      NewPasskeySignInBeginCmd(infra, actions, passkeyService),
 		PasskeySignInFinishCmd:     NewPasskeySignInFinishCmd(infra, actions, passkeyService),

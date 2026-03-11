@@ -1339,6 +1339,11 @@ input:-webkit-autofill::first-line,
   margin-bottom: 1rem;
 }
 
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -1545,10 +1550,6 @@ input:-webkit-autofill::first-line,
 
 .min-h-\[12rem\] {
   min-height: 12rem;
-}
-
-.min-h-\[18rem\] {
-  min-height: 18rem;
 }
 
 .w-10 {
@@ -1926,6 +1927,11 @@ input:-webkit-autofill::first-line,
 
 .overflow-ellipsis {
   text-overflow: ellipsis;
+}
+
+.hyphens-auto {
+  -webkit-hyphens: auto;
+          hyphens: auto;
 }
 
 .whitespace-nowrap {
@@ -2665,6 +2671,38 @@ input:-webkit-autofill::first-line,
   }
 }
 
+.file\:mr-3::file-selector-button {
+  margin-right: 0.75rem;
+}
+
+.file\:rounded-full::file-selector-button {
+  border-radius: 9999px;
+}
+
+.file\:border-0::file-selector-button {
+  border-width: 0px;
+}
+
+.file\:bg-secondary-container::file-selector-button {
+  --tw-bg-opacity: 1;
+  background-color: rgb(var(--md-sys-color-secondary-container) / var(--tw-bg-opacity, 1));
+}
+
+.file\:px-4::file-selector-button {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.file\:py-2::file-selector-button {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.file\:text-on-secondary-container::file-selector-button {
+  --tw-text-opacity: 1;
+  color: rgb(var(--md-sys-color-on-secondary-container) / var(--tw-text-opacity, 1));
+}
+
 .backdrop\:bg-surface-variant::backdrop {
   --tw-bg-opacity: 1;
   background-color: rgb(var(--md-sys-color-surface-variant) / var(--tw-bg-opacity, 1));
@@ -3109,10 +3147,6 @@ input:-webkit-autofill::first-line,
     min-height: 0px;
   }
 
-  .md\:min-h-\[22rem\] {
-    min-height: 22rem;
-  }
-
   .md\:w-20 {
     width: 5rem;
   }
@@ -3279,11 +3313,6 @@ input:-webkit-autofill::first-line,
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
-  }
-
-  .md\:center-aligned {
-    align-items: center;
-    justify-content: center;
   }
 
   .peer:-webkit-autofill ~ .md\:peer-autofill\:bg-surface-container-lowest {

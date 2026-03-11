@@ -3,6 +3,7 @@
 package runtime
 
 import (
+	"context"
 	"time"
 
 	"github.com/simpledms/simpledms/db/entmain/account"
@@ -16,6 +17,9 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
 	"github.com/simpledms/simpledms/db/entx"
+
+	"entgo.io/ent"
+	"entgo.io/ent/privacy"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -23,8 +27,18 @@ import (
 // to their package variables.
 func init() {
 	accountMixin := schema.Account{}.Mixin()
+	account.Policy = privacy.NewPolicies(schema.Account{})
+	account.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := account.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	accountMixinHooks1 := accountMixin[1].Hooks()
-	account.Hooks[0] = accountMixinHooks1[0]
+
+	account.Hooks[1] = accountMixinHooks1[0]
 	accountMixinInters1 := accountMixin[1].Interceptors()
 	account.Interceptors[0] = accountMixinInters1[0]
 	accountMixinFields0 := accountMixin[0].Fields()
@@ -206,6 +220,10 @@ func init() {
 	systemconfigDescOcrTikaURL := systemconfigFields[20].Descriptor()
 	// systemconfig.DefaultOcrTikaURL holds the default value on creation for the ocr_tika_url field.
 	systemconfig.DefaultOcrTikaURL = systemconfigDescOcrTikaURL.Default.(string)
+	// systemconfigDescOcrMaxFileSizeMib is the schema descriptor for ocr_max_file_size_mib field.
+	systemconfigDescOcrMaxFileSizeMib := systemconfigFields[21].Descriptor()
+	// systemconfig.DefaultOcrMaxFileSizeMib holds the default value on creation for the ocr_max_file_size_mib field.
+	systemconfig.DefaultOcrMaxFileSizeMib = systemconfigDescOcrMaxFileSizeMib.Default.(int64)
 	temporaryfileMixin := schema.TemporaryFile{}.Mixin()
 	temporaryfileMixinHooks2 := temporaryfileMixin[2].Hooks()
 	temporaryfile.Hooks[0] = temporaryfileMixinHooks2[0]
@@ -327,6 +345,10 @@ func init() {
 	tenantaccountassignmentDescIsDefault := tenantaccountassignmentFields[4].Descriptor()
 	// tenantaccountassignment.DefaultIsDefault holds the default value on creation for the is_default field.
 	tenantaccountassignment.DefaultIsDefault = tenantaccountassignmentDescIsDefault.Default.(bool)
+	// tenantaccountassignmentDescIsOwningTenant is the schema descriptor for is_owning_tenant field.
+	tenantaccountassignmentDescIsOwningTenant := tenantaccountassignmentFields[5].Descriptor()
+	// tenantaccountassignment.DefaultIsOwningTenant holds the default value on creation for the is_owning_tenant field.
+	tenantaccountassignment.DefaultIsOwningTenant = tenantaccountassignmentDescIsOwningTenant.Default.(bool)
 	webauthnchallengeFields := schema.WebAuthnChallenge{}.Fields()
 	_ = webauthnchallengeFields
 	// webauthnchallengeDescCreatedAt is the schema descriptor for created_at field.

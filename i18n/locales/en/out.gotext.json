@@ -112,16 +112,6 @@
             "translation": "Temporary password cleared successfully."
         },
         {
-            "id": "You are not allowed to delete this account.",
-            "message": "You are not allowed to delete this account.",
-            "translation": ""
-        },
-        {
-            "id": "Account deleted.",
-            "message": "Account deleted.",
-            "translation": ""
-        },
-        {
             "id": "A tenant requires passkey login, so at least one passkey must remain.",
             "message": "A tenant requires passkey login, so at least one passkey must remain.",
             "translation": ""
@@ -272,14 +262,19 @@
             "translation": "Found no account for this email address."
         },
         {
-            "id": "Sign up now.",
-            "message": "Sign up now.",
-            "translation": "Sign up now."
-        },
-        {
             "id": "Invalid credentials. Please try again.",
             "message": "Invalid credentials. Please try again.",
             "translation": "Invalid credentials. Please try again."
+        },
+        {
+            "id": "Could not verify organization access.",
+            "message": "Could not verify organization access.",
+            "translation": ""
+        },
+        {
+            "id": "Your organization is no longer active. Please contact support.",
+            "message": "Your organization is no longer active. Please contact support.",
+            "translation": ""
         },
         {
             "id": "Passkey setup is required by your organization. Register a passkey now.",
@@ -317,34 +312,9 @@
             "translation": ""
         },
         {
-            "id": "Don't have an account? Sign up.",
-            "message": "Don't have an account? Sign up.",
-            "translation": "Don't have an account? Sign up."
-        },
-        {
             "id": "Invalid session cookie.",
             "message": "Invalid session cookie.",
             "translation": "Invalid session cookie."
-        },
-        {
-            "id": "Sign up [subject]",
-            "message": "Sign up [subject]",
-            "translation": "Sign up"
-        },
-        {
-            "id": "Sign up",
-            "message": "Sign up",
-            "translation": "Sign up"
-        },
-        {
-            "id": "Sign up is disabled.",
-            "message": "Sign up is disabled.",
-            "translation": ""
-        },
-        {
-            "id": "Registration successful, please check your email for your password.",
-            "message": "Registration successful, please check your email for your password.",
-            "translation": "Registration successful, please check your email for your password."
         },
         {
             "id": "Add field",
@@ -402,8 +372,8 @@
             "translation": ""
         },
         {
-            "id": "Browse",
-            "message": "Browse",
+            "id": "Files",
+            "message": "Files",
             "translation": ""
         },
         {
@@ -1216,6 +1186,29 @@
             ]
         },
         {
+            "id": "Account «{String}», owned by «{OwningTenantName}»",
+            "message": "Account «{String}», owned by «{OwningTenantName}»",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "String",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "ctx.MainCtx().Account.Email.String()"
+                },
+                {
+                    "id": "OwningTenantName",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "owningTenantName"
+                }
+            ]
+        },
+        {
             "id": "System",
             "message": "System",
             "translation": "",
@@ -1281,11 +1274,6 @@
             "message": "Select",
             "translation": "",
             "comment": "TODO Browse, Open, Switch or activate? or Select?"
-        },
-        {
-            "id": "Delete account",
-            "message": "Delete account",
-            "translation": ""
         },
         {
             "id": "No password set",
@@ -1380,6 +1368,21 @@
         {
             "id": "Manage users",
             "message": "Manage users",
+            "translation": ""
+        },
+        {
+            "id": "Delete organization",
+            "message": "Delete organization",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "translation": ""
+        },
+        {
+            "id": "Download backup",
+            "message": "Download backup",
             "translation": ""
         },
         {
@@ -1769,6 +1772,11 @@
             "translation": ""
         },
         {
+            "id": "File not found.",
+            "message": "File not found.",
+            "translation": ""
+        },
+        {
             "id": "File is not in inbox.",
             "message": "File is not in inbox.",
             "translation": ""
@@ -1983,8 +1991,43 @@
             "translation": ""
         },
         {
+            "id": "You are not allowed to delete users. No organization selected.",
+            "message": "You are not allowed to delete users. No organization selected.",
+            "translation": ""
+        },
+        {
+            "id": "You are not allowed to delete users because you are not the owner.",
+            "message": "You are not allowed to delete users because you are not the owner.",
+            "translation": ""
+        },
+        {
+            "id": "You cannot delete your own user in organization management.",
+            "message": "You cannot delete your own user in organization management.",
+            "translation": ""
+        },
+        {
+            "id": "User removed from organization and account deleted globally.",
+            "message": "User removed from organization and account deleted globally.",
+            "translation": ""
+        },
+        {
+            "id": "User removed from organization.",
+            "message": "User removed from organization.",
+            "translation": ""
+        },
+        {
             "id": "Manage users of tenant",
             "message": "Manage users of tenant",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization only.",
+            "message": "Are you sure? This user will be removed from this organization only.",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
+            "message": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
             "translation": ""
         },
         {
@@ -1992,6 +2035,39 @@
             "message": "Add a new user",
             "translation": "",
             "comment": "TODO Create or add? system or real world perspective?"
+        },
+        {
+            "id": "Member account",
+            "message": "Member account",
+            "translation": ""
+        },
+        {
+            "id": "Owned account",
+            "message": "Owned account",
+            "translation": ""
+        },
+        {
+            "id": "{NameSecondLine} - {OwnershipText}",
+            "message": "{NameSecondLine} - {OwnershipText}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "NameSecondLine",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(userm.NameSecondLine())"
+                },
+                {
+                    "id": "OwnershipText",
+                    "string": "%[2]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 2,
+                    "expr": "ownershipText"
+                }
+            ]
         },
         {
             "id": "Upload",
@@ -2616,11 +2692,6 @@
             "translation": ""
         },
         {
-            "id": "Country",
-            "message": "Country",
-            "translation": ""
-        },
-        {
             "id": "Croatia",
             "message": "Croatia",
             "translation": ""
@@ -2891,11 +2962,6 @@
             "translation": ""
         },
         {
-            "id": "Organization name",
-            "message": "Organization name",
-            "translation": ""
-        },
-        {
             "id": "Other",
             "message": "Other",
             "translation": ""
@@ -3079,6 +3145,46 @@
             "id": "Version number",
             "message": "Version number",
             "translation": ""
+        },
+        {
+            "id": "Sign up",
+            "message": "Sign up",
+            "translation": "Sign up"
+        },
+        {
+            "id": "Sign up [subject]",
+            "message": "Sign up [subject]",
+            "translation": "Sign up"
+        },
+        {
+            "id": "Free 30-day trial, no credit card required.",
+            "message": "Free 30-day trial, no credit card required.",
+            "translation": ""
+        },
+        {
+            "id": "Organization name",
+            "message": "Organization name",
+            "translation": ""
+        },
+        {
+            "id": "Country",
+            "message": "Country",
+            "translation": ""
+        },
+        {
+            "id": "Accept terms of service",
+            "message": "Accept terms of service",
+            "translation": ""
+        },
+        {
+            "id": "Accept privacy policy",
+            "message": "Accept privacy policy",
+            "translation": ""
+        },
+        {
+            "id": "Registration successful, please check your emails for your password.",
+            "message": "Registration successful, please check your emails for your password.",
+            "translation": "Registration successful, please check your emails for your password."
         },
         {
             "id": "Imprint",
