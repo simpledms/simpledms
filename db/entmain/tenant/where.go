@@ -153,6 +153,11 @@ func TwoFactorAuthEnforced(v bool) predicate.Tenant {
 	return predicate.Tenant(sql.FieldEQ(FieldTwoFactorAuthEnforced, v))
 }
 
+// PasskeyAuthEnforced applies equality check predicate on the "passkey_auth_enforced" field. It's identical to PasskeyAuthEnforcedEQ.
+func PasskeyAuthEnforced(v bool) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldPasskeyAuthEnforced, v))
+}
+
 // X25519IdentityEncrypted applies equality check predicate on the "x25519_identity_encrypted" field. It's identical to X25519IdentityEncryptedEQ.
 func X25519IdentityEncrypted(v entx.EncryptedX25519Identity) predicate.Tenant {
 	return predicate.Tenant(sql.FieldEQ(FieldX25519IdentityEncrypted, v))
@@ -1171,6 +1176,16 @@ func TwoFactorAuthEnforcedEQ(v bool) predicate.Tenant {
 // TwoFactorAuthEnforcedNEQ applies the NEQ predicate on the "two_factor_auth_enforced" field.
 func TwoFactorAuthEnforcedNEQ(v bool) predicate.Tenant {
 	return predicate.Tenant(sql.FieldNEQ(FieldTwoFactorAuthEnforced, v))
+}
+
+// PasskeyAuthEnforcedEQ applies the EQ predicate on the "passkey_auth_enforced" field.
+func PasskeyAuthEnforcedEQ(v bool) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldPasskeyAuthEnforced, v))
+}
+
+// PasskeyAuthEnforcedNEQ applies the NEQ predicate on the "passkey_auth_enforced" field.
+func PasskeyAuthEnforcedNEQ(v bool) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNEQ(FieldPasskeyAuthEnforced, v))
 }
 
 // X25519IdentityEncryptedEQ applies the EQ predicate on the "x25519_identity_encrypted" field.

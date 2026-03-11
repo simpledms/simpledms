@@ -1540,8 +1540,16 @@ input:-webkit-autofill::first-line,
   min-height: 5rem;
 }
 
+.min-h-5 {
+  min-height: 1.25rem;
+}
+
 .min-h-7 {
   min-height: 1.75rem;
+}
+
+.min-h-\[12rem\] {
+  min-height: 12rem;
 }
 
 .w-10 {
@@ -1811,10 +1819,6 @@ input:-webkit-autofill::first-line,
 
 .items-center {
   align-items: center;
-}
-
-.items-baseline {
-  align-items: baseline;
 }
 
 .justify-end {
@@ -2248,8 +2252,8 @@ input:-webkit-autofill::first-line,
   text-align: center;
 }
 
-.align-baseline {
-  vertical-align: baseline;
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .font-sans {
@@ -2266,6 +2270,11 @@ input:-webkit-autofill::first-line,
 
 .leading-none {
   line-height: 1;
+}
+
+.text-error {
+  --tw-text-opacity: 1;
+  color: rgb(var(--md-sys-color-error) / var(--tw-text-opacity, 1));
 }
 
 .text-inverse-on-surface {
@@ -2389,6 +2398,11 @@ input:-webkit-autofill::first-line,
 
 .outline-secondary {
   outline-color: rgb(var(--md-sys-color-secondary) / 1);
+}
+
+.blur {
+  --tw-blur: blur(8px);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .drop-shadow {
@@ -2655,6 +2669,38 @@ input:-webkit-autofill::first-line,
     line-height: 2rem;
     letter-spacing: 0;
   }
+}
+
+.file\:mr-3::file-selector-button {
+  margin-right: 0.75rem;
+}
+
+.file\:rounded-full::file-selector-button {
+  border-radius: 9999px;
+}
+
+.file\:border-0::file-selector-button {
+  border-width: 0px;
+}
+
+.file\:bg-secondary-container::file-selector-button {
+  --tw-bg-opacity: 1;
+  background-color: rgb(var(--md-sys-color-secondary-container) / var(--tw-bg-opacity, 1));
+}
+
+.file\:px-4::file-selector-button {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.file\:py-2::file-selector-button {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.file\:text-on-secondary-container::file-selector-button {
+  --tw-text-opacity: 1;
+  color: rgb(var(--md-sys-color-on-secondary-container) / var(--tw-text-opacity, 1));
 }
 
 .backdrop\:bg-surface-variant::backdrop {
@@ -3150,16 +3196,8 @@ input:-webkit-autofill::first-line,
     align-items: center;
   }
 
-  .md\:items-baseline {
-    align-items: baseline;
-  }
-
   .md\:justify-normal {
     justify-content: normal;
-  }
-
-  .md\:justify-center {
-    justify-content: center;
   }
 
   .md\:gap-y-3 {
@@ -3275,11 +3313,6 @@ input:-webkit-autofill::first-line,
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
-  }
-
-  .md\:center-aligned {
-    align-items: center;
-    justify-content: center;
   }
 
   .peer:-webkit-autofill ~ .md\:peer-autofill\:bg-surface-container-lowest {

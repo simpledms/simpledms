@@ -65,6 +65,12 @@ type Account struct {
 	TwoFactorAuthRecoveryCodeHashes []string `json:"-"`
 	// LastLoginAttemptAt holds the value of the "last_login_attempt_at" field.
 	LastLoginAttemptAt time.Time `json:"last_login_attempt_at,omitempty"`
+	// PasskeyLoginEnabled holds the value of the "passkey_login_enabled" field.
+	PasskeyLoginEnabled bool `json:"passkey_login_enabled,omitempty"`
+	// PasskeyRecoveryCodeSalt holds the value of the "passkey_recovery_code_salt" field.
+	PasskeyRecoveryCodeSalt string `json:"-"`
+	// PasskeyRecoveryCodeHashes holds the value of the "passkey_recovery_code_hashes" field.
+	PasskeyRecoveryCodeHashes []string `json:"-"`
 	// Role holds the value of the "role" field.
 	Role mainrole.MainRole `json:"role,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -77,6 +83,10 @@ type Account struct {
 type AccountEdges struct {
 	// Tenants holds the value of the tenants edge.
 	Tenants []*Tenant `json:"tenants,omitempty"`
+	// PasskeyCredentials holds the value of the passkey_credentials edge.
+	PasskeyCredentials []*PasskeyCredential `json:"passkey_credentials,omitempty"`
+	// WebauthnChallenges holds the value of the webauthn_challenges edge.
+	WebauthnChallenges []*WebAuthnChallenge `json:"webauthn_challenges,omitempty"`
 	// ReceivedMails holds the value of the received_mails edge.
 	ReceivedMails []*Mail `json:"received_mails,omitempty"`
 	// TemporaryFiles holds the value of the temporary_files edge.
@@ -85,7 +95,7 @@ type AccountEdges struct {
 	TenantAssignment []*TenantAccountAssignment `json:"tenant_assignment,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [6]bool
 }
 
 // TenantsOrErr returns the Tenants value or an error if the edge
@@ -97,10 +107,28 @@ func (e AccountEdges) TenantsOrErr() ([]*Tenant, error) {
 	return nil, &NotLoadedError{edge: "tenants"}
 }
 
+// PasskeyCredentialsOrErr returns the PasskeyCredentials value or an error if the edge
+// was not loaded in eager-loading.
+func (e AccountEdges) PasskeyCredentialsOrErr() ([]*PasskeyCredential, error) {
+	if e.loadedTypes[1] {
+		return e.PasskeyCredentials, nil
+	}
+	return nil, &NotLoadedError{edge: "passkey_credentials"}
+}
+
+// WebauthnChallengesOrErr returns the WebauthnChallenges value or an error if the edge
+// was not loaded in eager-loading.
+func (e AccountEdges) WebauthnChallengesOrErr() ([]*WebAuthnChallenge, error) {
+	if e.loadedTypes[2] {
+		return e.WebauthnChallenges, nil
+	}
+	return nil, &NotLoadedError{edge: "webauthn_challenges"}
+}
+
 // ReceivedMailsOrErr returns the ReceivedMails value or an error if the edge
 // was not loaded in eager-loading.
 func (e AccountEdges) ReceivedMailsOrErr() ([]*Mail, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.ReceivedMails, nil
 	}
 	return nil, &NotLoadedError{edge: "received_mails"}
@@ -109,7 +137,7 @@ func (e AccountEdges) ReceivedMailsOrErr() ([]*Mail, error) {
 // TemporaryFilesOrErr returns the TemporaryFiles value or an error if the edge
 // was not loaded in eager-loading.
 func (e AccountEdges) TemporaryFilesOrErr() ([]*TemporaryFile, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.TemporaryFiles, nil
 	}
 	return nil, &NotLoadedError{edge: "temporary_files"}
@@ -118,7 +146,7 @@ func (e AccountEdges) TemporaryFilesOrErr() ([]*TemporaryFile, error) {
 // TenantAssignmentOrErr returns the TenantAssignment value or an error if the edge
 // was not loaded in eager-loading.
 func (e AccountEdges) TenantAssignmentOrErr() ([]*TenantAccountAssignment, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.TenantAssignment, nil
 	}
 	return nil, &NotLoadedError{edge: "tenant_assignment"}
@@ -129,7 +157,7 @@ func (*Account) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case account.FieldTwoFactorAuthRecoveryCodeHashes:
+		case account.FieldTwoFactorAuthRecoveryCodeHashes, account.FieldPasskeyRecoveryCodeHashes:
 			values[i] = new([]byte)
 		case account.FieldPublicID, account.FieldEmail:
 			values[i] = new(entx.CIText)
@@ -137,9 +165,11 @@ func (*Account) scanValues(columns []string) ([]any, error) {
 			values[i] = new(language.Language)
 		case account.FieldRole:
 			values[i] = new(mainrole.MainRole)
+		case account.FieldPasskeyLoginEnabled:
+			values[i] = new(sql.NullBool)
 		case account.FieldID, account.FieldCreatedBy, account.FieldUpdatedBy, account.FieldDeletedBy:
 			values[i] = new(sql.NullInt64)
-		case account.FieldFirstName, account.FieldLastName, account.FieldPasswordSalt, account.FieldPasswordHash, account.FieldTemporaryPasswordSalt, account.FieldTemporaryPasswordHash, account.FieldTemporaryTwoFactorAuthKeyEncrypted, account.FieldTwoFactoryAuthKeyEncrypted, account.FieldTwoFactorAuthRecoveryCodeSalt:
+		case account.FieldFirstName, account.FieldLastName, account.FieldPasswordSalt, account.FieldPasswordHash, account.FieldTemporaryPasswordSalt, account.FieldTemporaryPasswordHash, account.FieldTemporaryTwoFactorAuthKeyEncrypted, account.FieldTwoFactoryAuthKeyEncrypted, account.FieldTwoFactorAuthRecoveryCodeSalt, account.FieldPasskeyRecoveryCodeSalt:
 			values[i] = new(sql.NullString)
 		case account.FieldCreatedAt, account.FieldUpdatedAt, account.FieldDeletedAt, account.FieldSubscribedToNewsletterAt, account.FieldTemporaryPasswordExpiresAt, account.FieldLastLoginAttemptAt:
 			values[i] = new(sql.NullTime)
@@ -299,6 +329,26 @@ func (_m *Account) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.LastLoginAttemptAt = value.Time
 			}
+		case account.FieldPasskeyLoginEnabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field passkey_login_enabled", values[i])
+			} else if value.Valid {
+				_m.PasskeyLoginEnabled = value.Bool
+			}
+		case account.FieldPasskeyRecoveryCodeSalt:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field passkey_recovery_code_salt", values[i])
+			} else if value.Valid {
+				_m.PasskeyRecoveryCodeSalt = value.String
+			}
+		case account.FieldPasskeyRecoveryCodeHashes:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field passkey_recovery_code_hashes", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.PasskeyRecoveryCodeHashes); err != nil {
+					return fmt.Errorf("unmarshal field passkey_recovery_code_hashes: %w", err)
+				}
+			}
 		case account.FieldRole:
 			if value, ok := values[i].(*mainrole.MainRole); !ok {
 				return fmt.Errorf("unexpected type %T for field role", values[i])
@@ -321,6 +371,16 @@ func (_m *Account) Value(name string) (ent.Value, error) {
 // QueryTenants queries the "tenants" edge of the Account entity.
 func (_m *Account) QueryTenants() *TenantQuery {
 	return NewAccountClient(_m.config).QueryTenants(_m)
+}
+
+// QueryPasskeyCredentials queries the "passkey_credentials" edge of the Account entity.
+func (_m *Account) QueryPasskeyCredentials() *PasskeyCredentialQuery {
+	return NewAccountClient(_m.config).QueryPasskeyCredentials(_m)
+}
+
+// QueryWebauthnChallenges queries the "webauthn_challenges" edge of the Account entity.
+func (_m *Account) QueryWebauthnChallenges() *WebAuthnChallengeQuery {
+	return NewAccountClient(_m.config).QueryWebauthnChallenges(_m)
 }
 
 // QueryReceivedMails queries the "received_mails" edge of the Account entity.
@@ -420,6 +480,13 @@ func (_m *Account) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("last_login_attempt_at=")
 	builder.WriteString(_m.LastLoginAttemptAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("passkey_login_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PasskeyLoginEnabled))
+	builder.WriteString(", ")
+	builder.WriteString("passkey_recovery_code_salt=<sensitive>")
+	builder.WriteString(", ")
+	builder.WriteString("passkey_recovery_code_hashes=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Role))

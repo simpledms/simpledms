@@ -414,6 +414,7 @@ func signUpAccountWithoutSaaSGating(
 		language.English,
 		false,
 		true,
+		"",
 	)
 	if err != nil {
 		_ = mainTx.Rollback()

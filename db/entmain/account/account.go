@@ -63,10 +63,20 @@ const (
 	FieldTwoFactorAuthRecoveryCodeHashes = "two_factor_auth_recovery_code_hashes"
 	// FieldLastLoginAttemptAt holds the string denoting the last_login_attempt_at field in the database.
 	FieldLastLoginAttemptAt = "last_login_attempt_at"
+	// FieldPasskeyLoginEnabled holds the string denoting the passkey_login_enabled field in the database.
+	FieldPasskeyLoginEnabled = "passkey_login_enabled"
+	// FieldPasskeyRecoveryCodeSalt holds the string denoting the passkey_recovery_code_salt field in the database.
+	FieldPasskeyRecoveryCodeSalt = "passkey_recovery_code_salt"
+	// FieldPasskeyRecoveryCodeHashes holds the string denoting the passkey_recovery_code_hashes field in the database.
+	FieldPasskeyRecoveryCodeHashes = "passkey_recovery_code_hashes"
 	// FieldRole holds the string denoting the role field in the database.
 	FieldRole = "role"
 	// EdgeTenants holds the string denoting the tenants edge name in mutations.
 	EdgeTenants = "tenants"
+	// EdgePasskeyCredentials holds the string denoting the passkey_credentials edge name in mutations.
+	EdgePasskeyCredentials = "passkey_credentials"
+	// EdgeWebauthnChallenges holds the string denoting the webauthn_challenges edge name in mutations.
+	EdgeWebauthnChallenges = "webauthn_challenges"
 	// EdgeReceivedMails holds the string denoting the received_mails edge name in mutations.
 	EdgeReceivedMails = "received_mails"
 	// EdgeTemporaryFiles holds the string denoting the temporary_files edge name in mutations.
@@ -80,6 +90,20 @@ const (
 	// TenantsInverseTable is the table name for the Tenant entity.
 	// It exists in this package in order to avoid circular dependency with the "tenant" package.
 	TenantsInverseTable = "tenants"
+	// PasskeyCredentialsTable is the table that holds the passkey_credentials relation/edge.
+	PasskeyCredentialsTable = "passkey_credentials"
+	// PasskeyCredentialsInverseTable is the table name for the PasskeyCredential entity.
+	// It exists in this package in order to avoid circular dependency with the "passkeycredential" package.
+	PasskeyCredentialsInverseTable = "passkey_credentials"
+	// PasskeyCredentialsColumn is the table column denoting the passkey_credentials relation/edge.
+	PasskeyCredentialsColumn = "account_id"
+	// WebauthnChallengesTable is the table that holds the webauthn_challenges relation/edge.
+	WebauthnChallengesTable = "web_authn_challenges"
+	// WebauthnChallengesInverseTable is the table name for the WebAuthnChallenge entity.
+	// It exists in this package in order to avoid circular dependency with the "webauthnchallenge" package.
+	WebauthnChallengesInverseTable = "web_authn_challenges"
+	// WebauthnChallengesColumn is the table column denoting the webauthn_challenges relation/edge.
+	WebauthnChallengesColumn = "account_id"
 	// ReceivedMailsTable is the table that holds the received_mails relation/edge.
 	ReceivedMailsTable = "mails"
 	// ReceivedMailsInverseTable is the table name for the Mail entity.
@@ -128,6 +152,9 @@ var Columns = []string{
 	FieldTwoFactorAuthRecoveryCodeSalt,
 	FieldTwoFactorAuthRecoveryCodeHashes,
 	FieldLastLoginAttemptAt,
+	FieldPasskeyLoginEnabled,
+	FieldPasskeyRecoveryCodeSalt,
+	FieldPasskeyRecoveryCodeHashes,
 	FieldRole,
 }
 
@@ -184,6 +211,12 @@ var (
 	DefaultTwoFactorAuthRecoveryCodeHashes []string
 	// DefaultLastLoginAttemptAt holds the default value on creation for the "last_login_attempt_at" field.
 	DefaultLastLoginAttemptAt time.Time
+	// DefaultPasskeyLoginEnabled holds the default value on creation for the "passkey_login_enabled" field.
+	DefaultPasskeyLoginEnabled bool
+	// DefaultPasskeyRecoveryCodeSalt holds the default value on creation for the "passkey_recovery_code_salt" field.
+	DefaultPasskeyRecoveryCodeSalt string
+	// DefaultPasskeyRecoveryCodeHashes holds the default value on creation for the "passkey_recovery_code_hashes" field.
+	DefaultPasskeyRecoveryCodeHashes []string
 )
 
 // LanguageValidator is a validator for the "language" field enum values. It is called by the builders before save.
@@ -319,6 +352,16 @@ func ByLastLoginAttemptAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastLoginAttemptAt, opts...).ToFunc()
 }
 
+// ByPasskeyLoginEnabled orders the results by the passkey_login_enabled field.
+func ByPasskeyLoginEnabled(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPasskeyLoginEnabled, opts...).ToFunc()
+}
+
+// ByPasskeyRecoveryCodeSalt orders the results by the passkey_recovery_code_salt field.
+func ByPasskeyRecoveryCodeSalt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPasskeyRecoveryCodeSalt, opts...).ToFunc()
+}
+
 // ByRole orders the results by the role field.
 func ByRole(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRole, opts...).ToFunc()
@@ -335,6 +378,34 @@ func ByTenantsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByTenants(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTenantsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPasskeyCredentialsCount orders the results by passkey_credentials count.
+func ByPasskeyCredentialsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPasskeyCredentialsStep(), opts...)
+	}
+}
+
+// ByPasskeyCredentials orders the results by passkey_credentials terms.
+func ByPasskeyCredentials(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPasskeyCredentialsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByWebauthnChallengesCount orders the results by webauthn_challenges count.
+func ByWebauthnChallengesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWebauthnChallengesStep(), opts...)
+	}
+}
+
+// ByWebauthnChallenges orders the results by webauthn_challenges terms.
+func ByWebauthnChallenges(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWebauthnChallengesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -384,6 +455,20 @@ func newTenantsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TenantsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, TenantsTable, TenantsPrimaryKey...),
+	)
+}
+func newPasskeyCredentialsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PasskeyCredentialsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, PasskeyCredentialsTable, PasskeyCredentialsColumn),
+	)
+}
+func newWebauthnChallengesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WebauthnChallengesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, WebauthnChallengesTable, WebauthnChallengesColumn),
 	)
 }
 func newReceivedMailsStep() *sqlgraph.Step {

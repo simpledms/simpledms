@@ -171,7 +171,7 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 	}
 
 	systemConfigx := client.SystemConfig.Query().FirstX(ctx)
-	systemConfig := modelmain.NewSystemConfig(systemConfigx, false, false, true)
+	systemConfig := modelmain.NewSystemConfig(systemConfigx, false, false, true, "", "", "")
 
 	templates := template.New("app")
 	templates.Funcs(ui.TemplateFuncMap(templates))

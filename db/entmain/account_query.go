@@ -15,24 +15,28 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/predicate"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
 )
 
 // AccountQuery is the builder for querying Account entities.
 type AccountQuery struct {
 	config
-	ctx                  *QueryContext
-	order                []account.OrderOption
-	inters               []Interceptor
-	predicates           []predicate.Account
-	withTenants          *TenantQuery
-	withReceivedMails    *MailQuery
-	withTemporaryFiles   *TemporaryFileQuery
-	withTenantAssignment *TenantAccountAssignmentQuery
-	modifiers            []func(*sql.Selector)
+	ctx                    *QueryContext
+	order                  []account.OrderOption
+	inters                 []Interceptor
+	predicates             []predicate.Account
+	withTenants            *TenantQuery
+	withPasskeyCredentials *PasskeyCredentialQuery
+	withWebauthnChallenges *WebAuthnChallengeQuery
+	withReceivedMails      *MailQuery
+	withTemporaryFiles     *TemporaryFileQuery
+	withTenantAssignment   *TenantAccountAssignmentQuery
+	modifiers              []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -84,6 +88,50 @@ func (_q *AccountQuery) QueryTenants() *TenantQuery {
 			sqlgraph.From(account.Table, account.FieldID, selector),
 			sqlgraph.To(tenant.Table, tenant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, account.TenantsTable, account.TenantsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPasskeyCredentials chains the current query on the "passkey_credentials" edge.
+func (_q *AccountQuery) QueryPasskeyCredentials() *PasskeyCredentialQuery {
+	query := (&PasskeyCredentialClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(account.Table, account.FieldID, selector),
+			sqlgraph.To(passkeycredential.Table, passkeycredential.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, account.PasskeyCredentialsTable, account.PasskeyCredentialsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryWebauthnChallenges chains the current query on the "webauthn_challenges" edge.
+func (_q *AccountQuery) QueryWebauthnChallenges() *WebAuthnChallengeQuery {
+	query := (&WebAuthnChallengeClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(account.Table, account.FieldID, selector),
+			sqlgraph.To(webauthnchallenge.Table, webauthnchallenge.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, account.WebauthnChallengesTable, account.WebauthnChallengesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -344,15 +392,17 @@ func (_q *AccountQuery) Clone() *AccountQuery {
 		return nil
 	}
 	return &AccountQuery{
-		config:               _q.config,
-		ctx:                  _q.ctx.Clone(),
-		order:                append([]account.OrderOption{}, _q.order...),
-		inters:               append([]Interceptor{}, _q.inters...),
-		predicates:           append([]predicate.Account{}, _q.predicates...),
-		withTenants:          _q.withTenants.Clone(),
-		withReceivedMails:    _q.withReceivedMails.Clone(),
-		withTemporaryFiles:   _q.withTemporaryFiles.Clone(),
-		withTenantAssignment: _q.withTenantAssignment.Clone(),
+		config:                 _q.config,
+		ctx:                    _q.ctx.Clone(),
+		order:                  append([]account.OrderOption{}, _q.order...),
+		inters:                 append([]Interceptor{}, _q.inters...),
+		predicates:             append([]predicate.Account{}, _q.predicates...),
+		withTenants:            _q.withTenants.Clone(),
+		withPasskeyCredentials: _q.withPasskeyCredentials.Clone(),
+		withWebauthnChallenges: _q.withWebauthnChallenges.Clone(),
+		withReceivedMails:      _q.withReceivedMails.Clone(),
+		withTemporaryFiles:     _q.withTemporaryFiles.Clone(),
+		withTenantAssignment:   _q.withTenantAssignment.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -368,6 +418,28 @@ func (_q *AccountQuery) WithTenants(opts ...func(*TenantQuery)) *AccountQuery {
 		opt(query)
 	}
 	_q.withTenants = query
+	return _q
+}
+
+// WithPasskeyCredentials tells the query-builder to eager-load the nodes that are connected to
+// the "passkey_credentials" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AccountQuery) WithPasskeyCredentials(opts ...func(*PasskeyCredentialQuery)) *AccountQuery {
+	query := (&PasskeyCredentialClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPasskeyCredentials = query
+	return _q
+}
+
+// WithWebauthnChallenges tells the query-builder to eager-load the nodes that are connected to
+// the "webauthn_challenges" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AccountQuery) WithWebauthnChallenges(opts ...func(*WebAuthnChallengeQuery)) *AccountQuery {
+	query := (&WebAuthnChallengeClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWebauthnChallenges = query
 	return _q
 }
 
@@ -488,8 +560,10 @@ func (_q *AccountQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Acco
 	var (
 		nodes       = []*Account{}
 		_spec       = _q.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [6]bool{
 			_q.withTenants != nil,
+			_q.withPasskeyCredentials != nil,
+			_q.withWebauthnChallenges != nil,
 			_q.withReceivedMails != nil,
 			_q.withTemporaryFiles != nil,
 			_q.withTenantAssignment != nil,
@@ -520,6 +594,24 @@ func (_q *AccountQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Acco
 		if err := _q.loadTenants(ctx, query, nodes,
 			func(n *Account) { n.Edges.Tenants = []*Tenant{} },
 			func(n *Account, e *Tenant) { n.Edges.Tenants = append(n.Edges.Tenants, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPasskeyCredentials; query != nil {
+		if err := _q.loadPasskeyCredentials(ctx, query, nodes,
+			func(n *Account) { n.Edges.PasskeyCredentials = []*PasskeyCredential{} },
+			func(n *Account, e *PasskeyCredential) {
+				n.Edges.PasskeyCredentials = append(n.Edges.PasskeyCredentials, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withWebauthnChallenges; query != nil {
+		if err := _q.loadWebauthnChallenges(ctx, query, nodes,
+			func(n *Account) { n.Edges.WebauthnChallenges = []*WebAuthnChallenge{} },
+			func(n *Account, e *WebAuthnChallenge) {
+				n.Edges.WebauthnChallenges = append(n.Edges.WebauthnChallenges, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -607,6 +699,69 @@ func (_q *AccountQuery) loadTenants(ctx context.Context, query *TenantQuery, nod
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *AccountQuery) loadPasskeyCredentials(ctx context.Context, query *PasskeyCredentialQuery, nodes []*Account, init func(*Account), assign func(*Account, *PasskeyCredential)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Account)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(passkeycredential.FieldAccountID)
+	}
+	query.Where(predicate.PasskeyCredential(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(account.PasskeyCredentialsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.AccountID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "account_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *AccountQuery) loadWebauthnChallenges(ctx context.Context, query *WebAuthnChallengeQuery, nodes []*Account, init func(*Account), assign func(*Account, *WebAuthnChallenge)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int64]*Account)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(webauthnchallenge.FieldAccountID)
+	}
+	query.Where(predicate.WebAuthnChallenge(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(account.WebauthnChallengesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.AccountID
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "account_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "account_id" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

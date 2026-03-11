@@ -79,3 +79,17 @@ func (qq NoteBlock) ToHTML(ctx ctxx.Context) string {
 func (qq NoteBlock) ToPlainText(ctx ctxx.Context) string {
 	return fmt.Sprintf("%s: %s", wx.T("Note").String(ctx), qq.Text)
 }
+
+// ActionLinkBlock displays a call-to-action link.
+type ActionLinkBlock struct {
+	Label string
+	URL   string
+}
+
+func (qq ActionLinkBlock) ToHTML(ctx ctxx.Context) string {
+	return fmt.Sprintf(`<p><a href="%s">%s</a></p>`, qq.URL, qq.Label)
+}
+
+func (qq ActionLinkBlock) ToPlainText(ctx ctxx.Context) string {
+	return fmt.Sprintf("%s: %s", qq.Label, qq.URL)
+}

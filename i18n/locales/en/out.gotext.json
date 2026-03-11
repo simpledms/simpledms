@@ -57,6 +57,16 @@
             "translation": "App unlocked."
         },
         {
+            "id": "You must be logged in to perform this action.",
+            "message": "You must be logged in to perform this action.",
+            "translation": ""
+        },
+        {
+            "id": "Only admins and supporters can run assisted passkey recovery.",
+            "message": "Only admins and supporters can run assisted passkey recovery.",
+            "translation": ""
+        },
+        {
             "id": "Change password",
             "message": "Change password",
             "translation": "Change password"
@@ -77,6 +87,21 @@
             "translation": "Password changed successfully."
         },
         {
+            "id": "You must be logged in to manage passkeys.",
+            "message": "You must be logged in to manage passkeys.",
+            "translation": ""
+        },
+        {
+            "id": "Passkeys cannot be removed because a tenant requires passkey login.",
+            "message": "Passkeys cannot be removed because a tenant requires passkey login.",
+            "translation": ""
+        },
+        {
+            "id": "All passkeys were removed.",
+            "message": "All passkeys were removed.",
+            "translation": ""
+        },
+        {
             "id": "Clear temporary password",
             "message": "Clear temporary password",
             "translation": "Clear temporary password"
@@ -85,6 +110,16 @@
             "id": "Temporary password cleared successfully.",
             "message": "Temporary password cleared successfully.",
             "translation": "Temporary password cleared successfully."
+        },
+        {
+            "id": "A tenant requires passkey login, so at least one passkey must remain.",
+            "message": "A tenant requires passkey login, so at least one passkey must remain.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey removed.",
+            "message": "Passkey removed.",
+            "translation": ""
         },
         {
             "id": "Edit account",
@@ -99,6 +134,96 @@
         {
             "id": "Account updated.",
             "message": "Account updated.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid request payload.",
+            "message": "Invalid request payload.",
+            "translation": ""
+        },
+        {
+            "id": "You must be logged in to view backup codes.",
+            "message": "You must be logged in to view backup codes.",
+            "translation": ""
+        },
+        {
+            "id": "The backup codes are no longer available. Please generate a new set.",
+            "message": "The backup codes are no longer available. Please generate a new set.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey backup codes",
+            "message": "Passkey backup codes",
+            "translation": ""
+        },
+        {
+            "id": "Sign in with backup code",
+            "message": "Sign in with backup code",
+            "translation": ""
+        },
+        {
+            "id": "Sign in",
+            "message": "Sign in",
+            "translation": "Sign in"
+        },
+        {
+            "id": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
+            "message": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "RecoveryCodesCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "recoveryCodesCount"
+                }
+            ]
+        },
+        {
+            "id": "You must be logged in to register a passkey.",
+            "message": "You must be logged in to register a passkey.",
+            "translation": ""
+        },
+        {
+            "id": "Register passkey",
+            "message": "Register passkey",
+            "translation": ""
+        },
+        {
+            "id": "Invalid passkey registration payload.",
+            "message": "Invalid passkey registration payload.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid passkey response payload.",
+            "message": "Invalid passkey response payload.",
+            "translation": ""
+        },
+        {
+            "id": "You must be logged in to manage backup codes.",
+            "message": "You must be logged in to manage backup codes.",
+            "translation": ""
+        },
+        {
+            "id": "Rename passkey",
+            "message": "Rename passkey",
+            "translation": ""
+        },
+        {
+            "id": "Rename",
+            "message": "Rename",
+            "translation": ""
+        },
+        {
+            "id": "Passkey name is required.",
+            "message": "Passkey name is required.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey renamed.",
+            "message": "Passkey renamed.",
             "translation": ""
         },
         {
@@ -132,11 +257,6 @@
             "translation": "Initial password set successfully."
         },
         {
-            "id": "Sign in",
-            "message": "Sign in",
-            "translation": "Sign in"
-        },
-        {
             "id": "Found no account for this email address.",
             "message": "Found no account for this email address.",
             "translation": "Found no account for this email address."
@@ -157,6 +277,11 @@
             "translation": ""
         },
         {
+            "id": "Passkey setup is required by your organization. Register a passkey now.",
+            "message": "Passkey setup is required by your organization. Register a passkey now.",
+            "translation": ""
+        },
+        {
             "id": "Logged in successfully.",
             "message": "Logged in successfully.",
             "translation": "Logged in successfully."
@@ -172,9 +297,19 @@
             "translation": "Sign in"
         },
         {
+            "id": "Sign in with passkey",
+            "message": "Sign in with passkey",
+            "translation": ""
+        },
+        {
             "id": "Forgot password?",
             "message": "Forgot password?",
             "translation": "Forgot password?"
+        },
+        {
+            "id": "Use backup code",
+            "message": "Use backup code",
+            "translation": ""
         },
         {
             "id": "Invalid session cookie.",
@@ -309,11 +444,6 @@
         {
             "id": "Document type",
             "message": "Document type",
-            "translation": ""
-        },
-        {
-            "id": "Rename",
-            "message": "Rename",
             "translation": ""
         },
         {
@@ -1001,6 +1131,46 @@
             ]
         },
         {
+            "id": "No passkeys registered",
+            "message": "No passkeys registered",
+            "translation": ""
+        },
+        {
+            "id": "Passkeys",
+            "message": "Passkeys",
+            "translation": ""
+        },
+        {
+            "id": "Register a passkey to enable passwordless sign in.",
+            "message": "Register a passkey to enable passwordless sign in.",
+            "translation": ""
+        },
+        {
+            "id": "Add a backup passkey",
+            "message": "Add a backup passkey",
+            "translation": ""
+        },
+        {
+            "id": "Passkey recommendation",
+            "message": "Passkey recommendation",
+            "translation": ""
+        },
+        {
+            "id": "Set up a second passkey on another device as backup in case one device is lost.",
+            "message": "Set up a second passkey on another device as backup in case one device is lost.",
+            "translation": ""
+        },
+        {
+            "id": "Regenerate backup codes",
+            "message": "Regenerate backup codes",
+            "translation": ""
+        },
+        {
+            "id": "Regenerate backup codes? Existing codes will stop working.",
+            "message": "Regenerate backup codes? Existing codes will stop working.",
+            "translation": ""
+        },
+        {
             "id": "Account «{String}»",
             "message": "Account «{String}»",
             "translation": "",
@@ -1043,6 +1213,31 @@
             "message": "System",
             "translation": "",
             "comment": "TODO admin, system or app?"
+        },
+        {
+            "id": "Passkey setup required",
+            "message": "Passkey setup required",
+            "translation": ""
+        },
+        {
+            "id": "Your organization requires passkey sign-in. Register a passkey to continue.",
+            "message": "Your organization requires passkey sign-in. Register a passkey to continue.",
+            "translation": ""
+        },
+        {
+            "id": "{RecoveryCodesCount} backup codes left",
+            "message": "{RecoveryCodesCount} backup codes left",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "RecoveryCodesCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "recoveryCodesCount"
+                }
+            ]
         },
         {
             "id": "Subscription",
@@ -1131,6 +1326,26 @@
             "translation": ""
         },
         {
+            "id": "Enable passkey enforcement",
+            "message": "Enable passkey enforcement",
+            "translation": ""
+        },
+        {
+            "id": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "message": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "translation": ""
+        },
+        {
+            "id": "Disable passkey enforcement",
+            "message": "Disable passkey enforcement",
+            "translation": ""
+        },
+        {
+            "id": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "message": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "translation": ""
+        },
+        {
             "id": "{UsersCount} users",
             "message": "{UsersCount} users",
             "translation": "",
@@ -1166,6 +1381,11 @@
             "translation": ""
         },
         {
+            "id": "Download backup",
+            "message": "Download backup",
+            "translation": ""
+        },
+        {
             "id": "The app is unlocked and not protected by a passphrase.",
             "message": "The app is unlocked and not protected by a passphrase.",
             "translation": ""
@@ -1191,6 +1411,41 @@
             "translation": ""
         },
         {
+            "id": "Created on {Format2006_01_02_1504}",
+            "message": "Created on {Format2006_01_02_1504}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Format2006_01_02_1504",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "credentialx.CreatedAt.Format(\"2006-01-02 15:04\")"
+                }
+            ]
+        },
+        {
+            "id": "Last used on {Format2006_01_02_1504}",
+            "message": "Last used on {Format2006_01_02_1504}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Format2006_01_02_1504",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "credentialx.LastUsedAt.Format(\"2006-01-02 15:04\")"
+                }
+            ]
+        },
+        {
+            "id": "Passkey",
+            "message": "Passkey",
+            "translation": ""
+        },
+        {
             "id": "Dashboard",
             "message": "Dashboard",
             "translation": ""
@@ -1208,6 +1463,31 @@
         {
             "id": "Users",
             "message": "Users",
+            "translation": ""
+        },
+        {
+            "id": "You must be logged in to manage organizations.",
+            "message": "You must be logged in to manage organizations.",
+            "translation": ""
+        },
+        {
+            "id": "Organization not found.",
+            "message": "Organization not found.",
+            "translation": ""
+        },
+        {
+            "id": "Only owners can change passkey enforcement.",
+            "message": "Only owners can change passkey enforcement.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey enforcement enabled for organization.",
+            "message": "Passkey enforcement enabled for organization.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey enforcement disabled for organization.",
+            "message": "Passkey enforcement disabled for organization.",
             "translation": ""
         },
         {
@@ -2367,6 +2647,11 @@
             "translation": ""
         },
         {
+            "id": "Backup code",
+            "message": "Backup code",
+            "translation": ""
+        },
+        {
             "id": "Belgium",
             "message": "Belgium",
             "translation": ""
@@ -2812,6 +3097,11 @@
             "translation": ""
         },
         {
+            "id": "Token",
+            "message": "Token",
+            "translation": ""
+        },
+        {
             "id": "Trial",
             "message": "Trial",
             "translation": ""
@@ -2917,13 +3207,18 @@
             "translation": ""
         },
         {
+            "id": "Passkey sign-in is required for this account.",
+            "message": "Passkey sign-in is required for this account.",
+            "translation": ""
+        },
+        {
             "id": "Too many login attempts. Please try again in 10 seconds.",
             "message": "Too many login attempts. Please try again in 10 seconds.",
             "translation": ""
         },
         {
-            "id": "2FA code was provided, but 2FA is not enabled for this account.",
-            "message": "2FA code was provided, but 2FA is not enabled for this account.",
+            "id": "Could not generate backup codes.",
+            "message": "Could not generate backup codes.",
             "translation": ""
         },
         {
@@ -2952,13 +3247,93 @@
             "translation": ""
         },
         {
-            "id": "Password must be at least eight characters long.",
-            "message": "Password must be at least eight characters long.",
+            "id": "Password must be at least twelve characters long.",
+            "message": "Password must be at least twelve characters long.",
             "translation": ""
         },
         {
             "id": "Passwords do not match.",
             "message": "Passwords do not match.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid passkey sign-in.",
+            "message": "Invalid passkey sign-in.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey sign-in failed.",
+            "message": "Passkey sign-in failed.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey login is not enabled for this account.",
+            "message": "Passkey login is not enabled for this account.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey registration failed.",
+            "message": "Passkey registration failed.",
+            "translation": ""
+        },
+        {
+            "id": "You need at least one passkey before creating backup codes.",
+            "message": "You need at least one passkey before creating backup codes.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid backup sign-in credentials.",
+            "message": "Invalid backup sign-in credentials.",
+            "translation": ""
+        },
+        {
+            "id": "Too many backup sign-in attempts. Please try again in 10 seconds.",
+            "message": "Too many backup sign-in attempts. Please try again in 10 seconds.",
+            "translation": ""
+        },
+        {
+            "id": "Target account has no passkeys configured.",
+            "message": "Target account has no passkeys configured.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey not found.",
+            "message": "Passkey not found.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid passkey origin configuration.",
+            "message": "Invalid passkey origin configuration.",
+            "translation": ""
+        },
+        {
+            "id": "Missing passkey rp id configuration.",
+            "message": "Missing passkey rp id configuration.",
+            "translation": ""
+        },
+        {
+            "id": "Could not initialize passkey service.",
+            "message": "Could not initialize passkey service.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey challenge is invalid or expired.",
+            "message": "Passkey challenge is invalid or expired.",
+            "translation": ""
+        },
+        {
+            "id": "Too many passkey requests. Please try again shortly.",
+            "message": "Too many passkey requests. Please try again shortly.",
+            "translation": ""
+        },
+        {
+            "id": "Unknown passkey credential.",
+            "message": "Unknown passkey credential.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey account not found.",
+            "message": "Passkey account not found.",
             "translation": ""
         },
         {
@@ -3560,6 +3935,11 @@
             "translation": ""
         },
         {
+            "id": "Open sign in page",
+            "message": "Open sign in page",
+            "translation": ""
+        },
+        {
             "id": "SimpleDMS Password Reset",
             "message": "SimpleDMS Password Reset",
             "translation": ""
@@ -3708,6 +4088,11 @@
             "translation": "Could not parse url."
         },
         {
+            "id": "Please register a passkey to continue.",
+            "message": "Please register a passkey to continue.",
+            "translation": ""
+        },
+        {
             "id": "You are not allowed to access this tenant.",
             "message": "You are not allowed to access this tenant.",
             "translation": "You are not allowed to access this tenant."
@@ -3743,6 +4128,11 @@
             "translation": ""
         },
         {
+            "id": "Open main menu",
+            "message": "Open main menu",
+            "translation": ""
+        },
+        {
             "id": "Sign out",
             "message": "Sign out",
             "translation": ""
@@ -3753,8 +4143,18 @@
             "translation": ""
         },
         {
-            "id": "Open main menu",
-            "message": "Open main menu",
+            "id": "No backup codes were returned.",
+            "message": "No backup codes were returned.",
+            "translation": ""
+        },
+        {
+            "id": "The backup codes were regenerated.",
+            "message": "The backup codes were regenerated.",
+            "translation": ""
+        },
+        {
+            "id": "Could not regenerate backup codes.",
+            "message": "Could not regenerate backup codes.",
             "translation": ""
         },
         {
@@ -3776,6 +4176,91 @@
         {
             "id": "required",
             "message": "required",
+            "translation": ""
+        },
+        {
+            "id": "Give this passkey an optional name so you can recognize it later.",
+            "message": "Give this passkey an optional name so you can recognize it later.",
+            "translation": ""
+        },
+        {
+            "id": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "message": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "translation": ""
+        },
+        {
+            "id": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "message": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey name (optional)",
+            "message": "Passkey name (optional)",
+            "translation": ""
+        },
+        {
+            "id": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "message": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "translation": ""
+        },
+        {
+            "id": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "message": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "translation": ""
+        },
+        {
+            "id": "SimpleDMS backup codes",
+            "message": "SimpleDMS backup codes",
+            "translation": ""
+        },
+        {
+            "id": "Generated",
+            "message": "Generated",
+            "translation": ""
+        },
+        {
+            "id": "Keep these backup codes in a secure place.",
+            "message": "Keep these backup codes in a secure place.",
+            "translation": ""
+        },
+        {
+            "id": "These codes are shown only once.",
+            "message": "These codes are shown only once.",
+            "translation": ""
+        },
+        {
+            "id": "Codes",
+            "message": "Codes",
+            "translation": ""
+        },
+        {
+            "id": "Print dialog opened.",
+            "message": "Print dialog opened.",
+            "translation": ""
+        },
+        {
+            "id": "The backup codes were copied to clipboard.",
+            "message": "The backup codes were copied to clipboard.",
+            "translation": ""
+        },
+        {
+            "id": "Could not copy backup codes automatically.",
+            "message": "Could not copy backup codes automatically.",
+            "translation": ""
+        },
+        {
+            "id": "The backup codes were downloaded.",
+            "message": "The backup codes were downloaded.",
+            "translation": ""
+        },
+        {
+            "id": "Print codes",
+            "message": "Print codes",
+            "translation": ""
+        },
+        {
+            "id": "Copy codes",
+            "message": "Copy codes",
             "translation": ""
         },
         {

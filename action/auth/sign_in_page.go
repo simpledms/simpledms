@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"html/template"
 	"net"
 
 	acommon "github.com/simpledms/simpledms/action/common"
@@ -49,19 +50,33 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 
 	var children []wx.IWidget
 
-	// TODO 2fa
 	children = append(children,
 		wx.H(wx.HeadingTypeHeadlineMd, wx.Tuf("%s", wx.T("Sign in [subject]").String(ctx))),
 		qq.actions.SignInCmd.Form(
 			ctx,
-			qq.actions.SignInCmd.Data("", "", ""),
+			qq.actions.SignInCmd.Data("", ""),
 			actionx.ResponseWrapperNone,
 			wx.T("Sign in"),
 			"",
 		),
+		&wx.Button{
+			Label:     wx.T("Sign in with passkey"),
+			StyleType: wx.ButtonStyleTypeElevated,
+			HTMXAttrs: wx.HTMXAttrs{
+				HxOn: &wx.HxOn{
+					Event:   "click",
+					Handler: template.JS("window.simpledmsPasskeySignIn(event)"),
+				},
+			},
+		},
 		qq.actions.ResetPasswordCmd.ModalLink(
 			qq.actions.ResetPasswordCmd.Data(""),
 			wx.T("Forgot password?"),
+			"",
+		),
+		qq.actions.PasskeyRecoverySignInCmd.ModalLink(
+			qq.actions.PasskeyRecoverySignInCmd.Data("", ""),
+			wx.T("Use backup code"),
 			"",
 		),
 	)

@@ -310,6 +310,20 @@ func (_u *TenantUpdate) SetNillableTwoFactorAuthEnforced(v *bool) *TenantUpdate 
 	return _u
 }
 
+// SetPasskeyAuthEnforced sets the "passkey_auth_enforced" field.
+func (_u *TenantUpdate) SetPasskeyAuthEnforced(v bool) *TenantUpdate {
+	_u.mutation.SetPasskeyAuthEnforced(v)
+	return _u
+}
+
+// SetNillablePasskeyAuthEnforced sets the "passkey_auth_enforced" field if the given value is not nil.
+func (_u *TenantUpdate) SetNillablePasskeyAuthEnforced(v *bool) *TenantUpdate {
+	if v != nil {
+		_u.SetPasskeyAuthEnforced(*v)
+	}
+	return _u
+}
+
 // SetX25519IdentityEncrypted sets the "x25519_identity_encrypted" field.
 func (_u *TenantUpdate) SetX25519IdentityEncrypted(v entx.EncryptedX25519Identity) *TenantUpdate {
 	_u.mutation.SetX25519IdentityEncrypted(v)
@@ -625,6 +639,9 @@ func (_u *TenantUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.TwoFactorAuthEnforced(); ok {
 		_spec.SetField(tenant.FieldTwoFactorAuthEnforced, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.PasskeyAuthEnforced(); ok {
+		_spec.SetField(tenant.FieldPasskeyAuthEnforced, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.X25519IdentityEncrypted(); ok {
 		_spec.SetField(tenant.FieldX25519IdentityEncrypted, field.TypeBytes, value)
@@ -1102,6 +1119,20 @@ func (_u *TenantUpdateOne) SetNillableTwoFactorAuthEnforced(v *bool) *TenantUpda
 	return _u
 }
 
+// SetPasskeyAuthEnforced sets the "passkey_auth_enforced" field.
+func (_u *TenantUpdateOne) SetPasskeyAuthEnforced(v bool) *TenantUpdateOne {
+	_u.mutation.SetPasskeyAuthEnforced(v)
+	return _u
+}
+
+// SetNillablePasskeyAuthEnforced sets the "passkey_auth_enforced" field if the given value is not nil.
+func (_u *TenantUpdateOne) SetNillablePasskeyAuthEnforced(v *bool) *TenantUpdateOne {
+	if v != nil {
+		_u.SetPasskeyAuthEnforced(*v)
+	}
+	return _u
+}
+
 // SetX25519IdentityEncrypted sets the "x25519_identity_encrypted" field.
 func (_u *TenantUpdateOne) SetX25519IdentityEncrypted(v entx.EncryptedX25519Identity) *TenantUpdateOne {
 	_u.mutation.SetX25519IdentityEncrypted(v)
@@ -1447,6 +1478,9 @@ func (_u *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err erro
 	}
 	if value, ok := _u.mutation.TwoFactorAuthEnforced(); ok {
 		_spec.SetField(tenant.FieldTwoFactorAuthEnforced, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.PasskeyAuthEnforced(); ok {
+		_spec.SetField(tenant.FieldPasskeyAuthEnforced, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.X25519IdentityEncrypted(); ok {
 		_spec.SetField(tenant.FieldX25519IdentityEncrypted, field.TypeBytes, value)

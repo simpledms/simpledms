@@ -78,7 +78,13 @@ func (qq *ResetPasswordCmd) Handler(
 		return err
 	}
 
-	mailer.NewMailer().ResetPassword(ctx, accountx, newPassword, expiresAt)
+	mailer.NewMailer().ResetPassword(
+		ctx,
+		accountx,
+		newPassword,
+		expiresAt,
+		qq.infra.SystemConfig().AbsoluteURL("/"),
+	)
 	rw.AddRenderables(wx.NewSnackbarf("A new temporary password was sent to your email address."))
 
 	return nil

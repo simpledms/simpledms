@@ -25,7 +25,7 @@ func NewSignOutCmd(infra *common.Infra, actions *Actions) *SignOutCmd {
 	config := actionx.NewConfig(
 		actions.Route("sign-out-cmd"),
 		false,
-	)
+	).EnableSetupSessionAccess()
 	return &SignOutCmd{
 		infra:   infra,
 		actions: actions,

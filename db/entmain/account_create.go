@@ -12,9 +12,11 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/common/language"
 	"github.com/simpledms/simpledms/model/common/mainrole"
@@ -295,6 +297,40 @@ func (_c *AccountCreate) SetNillableLastLoginAttemptAt(v *time.Time) *AccountCre
 	return _c
 }
 
+// SetPasskeyLoginEnabled sets the "passkey_login_enabled" field.
+func (_c *AccountCreate) SetPasskeyLoginEnabled(v bool) *AccountCreate {
+	_c.mutation.SetPasskeyLoginEnabled(v)
+	return _c
+}
+
+// SetNillablePasskeyLoginEnabled sets the "passkey_login_enabled" field if the given value is not nil.
+func (_c *AccountCreate) SetNillablePasskeyLoginEnabled(v *bool) *AccountCreate {
+	if v != nil {
+		_c.SetPasskeyLoginEnabled(*v)
+	}
+	return _c
+}
+
+// SetPasskeyRecoveryCodeSalt sets the "passkey_recovery_code_salt" field.
+func (_c *AccountCreate) SetPasskeyRecoveryCodeSalt(v string) *AccountCreate {
+	_c.mutation.SetPasskeyRecoveryCodeSalt(v)
+	return _c
+}
+
+// SetNillablePasskeyRecoveryCodeSalt sets the "passkey_recovery_code_salt" field if the given value is not nil.
+func (_c *AccountCreate) SetNillablePasskeyRecoveryCodeSalt(v *string) *AccountCreate {
+	if v != nil {
+		_c.SetPasskeyRecoveryCodeSalt(*v)
+	}
+	return _c
+}
+
+// SetPasskeyRecoveryCodeHashes sets the "passkey_recovery_code_hashes" field.
+func (_c *AccountCreate) SetPasskeyRecoveryCodeHashes(v []string) *AccountCreate {
+	_c.mutation.SetPasskeyRecoveryCodeHashes(v)
+	return _c
+}
+
 // SetRole sets the "role" field.
 func (_c *AccountCreate) SetRole(v mainrole.MainRole) *AccountCreate {
 	_c.mutation.SetRole(v)
@@ -320,6 +356,36 @@ func (_c *AccountCreate) AddTenants(v ...*Tenant) *AccountCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddTenantIDs(ids...)
+}
+
+// AddPasskeyCredentialIDs adds the "passkey_credentials" edge to the PasskeyCredential entity by IDs.
+func (_c *AccountCreate) AddPasskeyCredentialIDs(ids ...int64) *AccountCreate {
+	_c.mutation.AddPasskeyCredentialIDs(ids...)
+	return _c
+}
+
+// AddPasskeyCredentials adds the "passkey_credentials" edges to the PasskeyCredential entity.
+func (_c *AccountCreate) AddPasskeyCredentials(v ...*PasskeyCredential) *AccountCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPasskeyCredentialIDs(ids...)
+}
+
+// AddWebauthnChallengeIDs adds the "webauthn_challenges" edge to the WebAuthnChallenge entity by IDs.
+func (_c *AccountCreate) AddWebauthnChallengeIDs(ids ...int64) *AccountCreate {
+	_c.mutation.AddWebauthnChallengeIDs(ids...)
+	return _c
+}
+
+// AddWebauthnChallenges adds the "webauthn_challenges" edges to the WebAuthnChallenge entity.
+func (_c *AccountCreate) AddWebauthnChallenges(v ...*WebAuthnChallenge) *AccountCreate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWebauthnChallengeIDs(ids...)
 }
 
 // AddReceivedMailIDs adds the "received_mails" edge to the Mail entity by IDs.
@@ -465,6 +531,18 @@ func (_c *AccountCreate) defaults() error {
 		v := account.DefaultLastLoginAttemptAt
 		_c.mutation.SetLastLoginAttemptAt(v)
 	}
+	if _, ok := _c.mutation.PasskeyLoginEnabled(); !ok {
+		v := account.DefaultPasskeyLoginEnabled
+		_c.mutation.SetPasskeyLoginEnabled(v)
+	}
+	if _, ok := _c.mutation.PasskeyRecoveryCodeSalt(); !ok {
+		v := account.DefaultPasskeyRecoveryCodeSalt
+		_c.mutation.SetPasskeyRecoveryCodeSalt(v)
+	}
+	if _, ok := _c.mutation.PasskeyRecoveryCodeHashes(); !ok {
+		v := account.DefaultPasskeyRecoveryCodeHashes
+		_c.mutation.SetPasskeyRecoveryCodeHashes(v)
+	}
 	return nil
 }
 
@@ -519,6 +597,15 @@ func (_c *AccountCreate) check() error {
 	}
 	if _, ok := _c.mutation.TwoFactorAuthRecoveryCodeHashes(); !ok {
 		return &ValidationError{Name: "two_factor_auth_recovery_code_hashes", err: errors.New(`entmain: missing required field "Account.two_factor_auth_recovery_code_hashes"`)}
+	}
+	if _, ok := _c.mutation.PasskeyLoginEnabled(); !ok {
+		return &ValidationError{Name: "passkey_login_enabled", err: errors.New(`entmain: missing required field "Account.passkey_login_enabled"`)}
+	}
+	if _, ok := _c.mutation.PasskeyRecoveryCodeSalt(); !ok {
+		return &ValidationError{Name: "passkey_recovery_code_salt", err: errors.New(`entmain: missing required field "Account.passkey_recovery_code_salt"`)}
+	}
+	if _, ok := _c.mutation.PasskeyRecoveryCodeHashes(); !ok {
+		return &ValidationError{Name: "passkey_recovery_code_hashes", err: errors.New(`entmain: missing required field "Account.passkey_recovery_code_hashes"`)}
 	}
 	if _, ok := _c.mutation.Role(); !ok {
 		return &ValidationError{Name: "role", err: errors.New(`entmain: missing required field "Account.role"`)}
@@ -648,6 +735,18 @@ func (_c *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 		_spec.SetField(account.FieldLastLoginAttemptAt, field.TypeTime, value)
 		_node.LastLoginAttemptAt = value
 	}
+	if value, ok := _c.mutation.PasskeyLoginEnabled(); ok {
+		_spec.SetField(account.FieldPasskeyLoginEnabled, field.TypeBool, value)
+		_node.PasskeyLoginEnabled = value
+	}
+	if value, ok := _c.mutation.PasskeyRecoveryCodeSalt(); ok {
+		_spec.SetField(account.FieldPasskeyRecoveryCodeSalt, field.TypeString, value)
+		_node.PasskeyRecoveryCodeSalt = value
+	}
+	if value, ok := _c.mutation.PasskeyRecoveryCodeHashes(); ok {
+		_spec.SetField(account.FieldPasskeyRecoveryCodeHashes, field.TypeJSON, value)
+		_node.PasskeyRecoveryCodeHashes = value
+	}
 	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(account.FieldRole, field.TypeEnum, value)
 		_node.Role = value
@@ -670,6 +769,38 @@ func (_c *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PasskeyCredentialsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.PasskeyCredentialsTable,
+			Columns: []string{account.PasskeyCredentialsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(passkeycredential.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WebauthnChallengesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.WebauthnChallengesTable,
+			Columns: []string{account.WebauthnChallengesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(webauthnchallenge.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ReceivedMailsIDs(); len(nodes) > 0 {

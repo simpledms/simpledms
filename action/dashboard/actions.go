@@ -13,8 +13,9 @@ type Actions struct {
 	AuthActions  *auth.Actions
 	AdminActions *admin.Actions
 
-	DashboardPage         *DashboardPage
-	DashboardCardsPartial *DashboardCardsPartial
+	DashboardPage                     *DashboardPage
+	DashboardCardsPartial             *DashboardCardsPartial
+	ToggleTenantPasskeyEnforcementCmd *ToggleTenantPasskeyEnforcementCmd
 }
 
 func NewActions(
@@ -29,8 +30,9 @@ func NewActions(
 		AuthActions:  authActions,
 		AdminActions: adminActions,
 
-		DashboardPage:         NewDashboardPage(infra, actions),
-		DashboardCardsPartial: NewDashboardCardsPartial(infra, actions),
+		DashboardPage:                     NewDashboardPage(infra, actions),
+		DashboardCardsPartial:             NewDashboardCardsPartial(infra, actions),
+		ToggleTenantPasskeyEnforcementCmd: NewToggleTenantPasskeyEnforcementCmd(infra, actions),
 	}
 
 	return actions

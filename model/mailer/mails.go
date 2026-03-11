@@ -8,7 +8,7 @@ import (
 )
 
 // CreateSignUpTemplate creates a template for the signup email
-func CreateSignUpTemplate(ctx ctxx.Context, tmpPassword string, expiresAt string) EmailTemplate {
+func CreateSignUpTemplate(ctx ctxx.Context, tmpPassword string, expiresAt, signInURL string) EmailTemplate {
 	title := wx.T("Welcome to SimpleDMS").String(ctx)
 	heading := title
 	footer := wx.T("This is an automated message, please do not reply.").String(ctx)
@@ -18,6 +18,12 @@ func CreateSignUpTemplate(ctx ctxx.Context, tmpPassword string, expiresAt string
 		NewPasswordBlock(tmpPassword),
 		NewExpiryBlock(expiresAt),
 		TextBlock{Text: wx.T("Please log in and change your password as soon as possible.").String(ctx)},
+	}
+	if signInURL != "" {
+		content = append(content, ActionLinkBlock{
+			Label: wx.T("Open sign in page").String(ctx),
+			URL:   signInURL,
+		})
 	}
 
 	return EmailTemplate{
@@ -29,7 +35,7 @@ func CreateSignUpTemplate(ctx ctxx.Context, tmpPassword string, expiresAt string
 }
 
 // CreateResetPasswordTemplate creates a template for the password reset email
-func CreateResetPasswordTemplate(ctx ctxx.Context, tmpPassword string, expiresAt string) EmailTemplate {
+func CreateResetPasswordTemplate(ctx ctxx.Context, tmpPassword string, expiresAt, signInURL string) EmailTemplate {
 	title := wx.T("SimpleDMS Password Reset").String(ctx)
 	heading := title
 	footer := wx.T("This is an automated message, please do not reply.").String(ctx)
@@ -41,6 +47,12 @@ func CreateResetPasswordTemplate(ctx ctxx.Context, tmpPassword string, expiresAt
 		NoteBlock{Text: wx.T("Your old password will still work until you change it.").String(ctx)},
 		TextBlock{Text: wx.T("Please log in and change your password as soon as possible.").String(ctx)},
 	}
+	if signInURL != "" {
+		content = append(content, ActionLinkBlock{
+			Label: wx.T("Open sign in page").String(ctx),
+			URL:   signInURL,
+		})
+	}
 
 	return EmailTemplate{
 		Title:   title,
@@ -50,7 +62,7 @@ func CreateResetPasswordTemplate(ctx ctxx.Context, tmpPassword string, expiresAt
 	}
 }
 
-func CreateUserTemplate(ctx ctxx.Context, tmpPassword string, expiresAt string) EmailTemplate {
+func CreateUserTemplate(ctx ctxx.Context, tmpPassword string, expiresAt, signInURL string) EmailTemplate {
 	title := wx.T("Welcome to SimpleDMS").String(ctx)
 	heading := title
 	footer := wx.T("This is an automated message, please do not reply.").String(ctx)
@@ -88,6 +100,13 @@ func CreateUserTemplate(ctx ctxx.Context, tmpPassword string, expiresAt string) 
 		TextBlock{Text: wx.T("Please log in and change your password as soon as possible.").String(ctx)},
 		// TODO hint if not signed up yourself, report as abuse...
 	)
+
+	if signInURL != "" {
+		content = append(content, ActionLinkBlock{
+			Label: wx.T("Open sign in page").String(ctx),
+			URL:   signInURL,
+		})
+	}
 
 	return EmailTemplate{
 		Title:   title,
