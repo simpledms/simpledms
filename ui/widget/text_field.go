@@ -12,6 +12,7 @@ type TextField struct {
 	Type         string
 	Step         string
 	IsRequired   bool
+	IsDisabled   bool
 	HasAutofocus bool
 
 	LeadingIcon  *Icon

@@ -4873,6 +4873,104 @@
             "translation": "Personne",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "unlimited",
+            "message": "unlimited",
+            "translation": "illimité",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "global default",
+            "message": "global default",
+            "translation": "valeur globale par défaut",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Global upload limit updated to {UploadLimitLabel}.",
+            "message": "Global upload limit updated to {UploadLimitLabel}.",
+            "translation": "La limite d'envoi globale a été mise à jour à {UploadLimitLabel}.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant upload limit updated to {UploadLimitLabel}.",
+            "message": "Tenant upload limit updated to {UploadLimitLabel}.",
+            "translation": "La limite d'envoi de l'organisation a été mise à jour à {UploadLimitLabel}.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unlimited",
+            "message": "Unlimited",
+            "translation": "Illimité",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size (MiB)",
+            "message": "Max upload size (MiB)",
+            "translation": "Taille maximale d'envoi (MiB)",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Set global upload limit",
+            "message": "Set global upload limit",
+            "translation": "Définir la limite d'envoi globale",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Use global default",
+            "message": "Use global default",
+            "translation": "Utiliser la valeur globale par défaut",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Set tenant upload limit",
+            "message": "Set tenant upload limit",
+            "translation": "Définir la limite d'envoi de l'organisation",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Quota usage: {TenantStorageUsageLabelctx_tenantx}",
+            "message": "Quota usage: {TenantStorageUsageLabelctx_tenantx}",
+            "translation": "Utilisation du quota : {TenantStorageUsageLabelctx_tenantx}",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Upload limit options",
+            "message": "Upload limit options",
+            "translation": "Options de limite d'envoi",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit upload limit",
+            "message": "Edit upload limit",
+            "translation": "Modifier la limite d'envoi",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unavailable",
+            "message": "Unavailable",
+            "translation": "Indisponible",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage upload limit",
+            "message": "Manage upload limit",
+            "translation": "Gérer la limite d'envoi",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         }
     ]
 }

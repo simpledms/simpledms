@@ -136,6 +136,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemconfig.FieldMailerInsecureSkipVerify:          {Type: field.TypeBool, Column: systemconfig.FieldMailerInsecureSkipVerify},
 			systemconfig.FieldMailerUseImplicitSslTLS:           {Type: field.TypeBool, Column: systemconfig.FieldMailerUseImplicitSslTLS},
 			systemconfig.FieldOcrTikaURL:                        {Type: field.TypeString, Column: systemconfig.FieldOcrTikaURL},
+			systemconfig.FieldMaxUploadSizeMib:                  {Type: field.TypeInt64, Column: systemconfig.FieldMaxUploadSizeMib},
 			systemconfig.FieldInitializedAt:                     {Type: field.TypeTime, Column: systemconfig.FieldInitializedAt},
 		},
 	}
@@ -207,6 +208,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tenant.FieldTermsOfServiceAccepted:   {Type: field.TypeTime, Column: tenant.FieldTermsOfServiceAccepted},
 			tenant.FieldPrivacyPolicyAccepted:    {Type: field.TypeTime, Column: tenant.FieldPrivacyPolicyAccepted},
 			tenant.FieldTwoFactorAuthEnforced:    {Type: field.TypeBool, Column: tenant.FieldTwoFactorAuthEnforced},
+			tenant.FieldMaxUploadSizeMibOverride: {Type: field.TypeInt64, Column: tenant.FieldMaxUploadSizeMibOverride},
 			tenant.FieldX25519IdentityEncrypted:  {Type: field.TypeBytes, Column: tenant.FieldX25519IdentityEncrypted},
 			tenant.FieldMaintenanceModeEnabledAt: {Type: field.TypeTime, Column: tenant.FieldMaintenanceModeEnabledAt},
 			tenant.FieldInitializedAt:            {Type: field.TypeTime, Column: tenant.FieldInitializedAt},
@@ -1117,6 +1119,11 @@ func (f *SystemConfigFilter) WhereOcrTikaURL(p entql.StringP) {
 	f.Where(p.Field(systemconfig.FieldOcrTikaURL))
 }
 
+// WhereMaxUploadSizeMib applies the entql int64 predicate on the max_upload_size_mib field.
+func (f *SystemConfigFilter) WhereMaxUploadSizeMib(p entql.Int64P) {
+	f.Where(p.Field(systemconfig.FieldMaxUploadSizeMib))
+}
+
 // WhereInitializedAt applies the entql time.Time predicate on the initialized_at field.
 func (f *SystemConfigFilter) WhereInitializedAt(p entql.TimeP) {
 	f.Where(p.Field(systemconfig.FieldInitializedAt))
@@ -1504,6 +1511,11 @@ func (f *TenantFilter) WherePrivacyPolicyAccepted(p entql.TimeP) {
 // WhereTwoFactorAuthEnforced applies the entql bool predicate on the two_factor_auth_enforced field.
 func (f *TenantFilter) WhereTwoFactorAuthEnforced(p entql.BoolP) {
 	f.Where(p.Field(tenant.FieldTwoFactorAuthEnforced))
+}
+
+// WhereMaxUploadSizeMibOverride applies the entql int64 predicate on the max_upload_size_mib_override field.
+func (f *TenantFilter) WhereMaxUploadSizeMibOverride(p entql.Int64P) {
+	f.Where(p.Field(tenant.FieldMaxUploadSizeMibOverride))
 }
 
 // WhereX25519IdentityEncrypted applies the entql []byte predicate on the x25519_identity_encrypted field.

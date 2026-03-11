@@ -47,6 +47,9 @@ func (SystemConfig) Fields() []ent.Field {
 
 		field.String("ocr_tika_url").Default(""),
 
+		// 0 means unlimited
+		field.Int64("max_upload_size_mib").Default(0),
+
 		field.Time("initialized_at").Optional().Nillable(),
 	}
 }

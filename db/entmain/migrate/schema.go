@@ -143,6 +143,7 @@ var (
 		{Name: "mailer_insecure_skip_verify", Type: field.TypeBool, Default: false},
 		{Name: "mailer_use_implicit_ssl_tls", Type: field.TypeBool, Default: false},
 		{Name: "ocr_tika_url", Type: field.TypeString, Default: ""},
+		{Name: "max_upload_size_mib", Type: field.TypeInt64, Default: 0},
 		{Name: "initialized_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
@@ -155,13 +156,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "system_configs_accounts_creator",
-				Columns:    []*schema.Column{SystemConfigsColumns[24]},
+				Columns:    []*schema.Column{SystemConfigsColumns[25]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "system_configs_accounts_updater",
-				Columns:    []*schema.Column{SystemConfigsColumns[25]},
+				Columns:    []*schema.Column{SystemConfigsColumns[26]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -254,6 +255,7 @@ var (
 		{Name: "terms_of_service_accepted", Type: field.TypeTime},
 		{Name: "privacy_policy_accepted", Type: field.TypeTime},
 		{Name: "two_factor_auth_enforced", Type: field.TypeBool, Default: false},
+		{Name: "max_upload_size_mib_override", Type: field.TypeInt64, Nullable: true},
 		{Name: "x25519_identity_encrypted", Type: field.TypeBytes, Nullable: true},
 		{Name: "maintenance_mode_enabled_at", Type: field.TypeTime, Nullable: true},
 		{Name: "initialized_at", Type: field.TypeTime, Nullable: true},
@@ -269,19 +271,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tenants_accounts_creator",
-				Columns:    []*schema.Column{TenantsColumns[22]},
-				RefColumns: []*schema.Column{AccountsColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "tenants_accounts_updater",
 				Columns:    []*schema.Column{TenantsColumns[23]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "tenants_accounts_deleter",
+				Symbol:     "tenants_accounts_updater",
 				Columns:    []*schema.Column{TenantsColumns[24]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "tenants_accounts_deleter",
+				Columns:    []*schema.Column{TenantsColumns[25]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

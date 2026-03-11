@@ -4067,6 +4067,8 @@ type SystemConfigMutation struct {
 	mailer_insecure_skip_verify           *bool
 	mailer_use_implicit_ssl_tls           *bool
 	ocr_tika_url                          *string
+	max_upload_size_mib                   *int64
+	addmax_upload_size_mib                *int64
 	initialized_at                        *time.Time
 	clearedFields                         map[string]struct{}
 	creator                               *int64
@@ -5120,6 +5122,62 @@ func (m *SystemConfigMutation) ResetOcrTikaURL() {
 	m.ocr_tika_url = nil
 }
 
+// SetMaxUploadSizeMib sets the "max_upload_size_mib" field.
+func (m *SystemConfigMutation) SetMaxUploadSizeMib(i int64) {
+	m.max_upload_size_mib = &i
+	m.addmax_upload_size_mib = nil
+}
+
+// MaxUploadSizeMib returns the value of the "max_upload_size_mib" field in the mutation.
+func (m *SystemConfigMutation) MaxUploadSizeMib() (r int64, exists bool) {
+	v := m.max_upload_size_mib
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMaxUploadSizeMib returns the old "max_upload_size_mib" field's value of the SystemConfig entity.
+// If the SystemConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemConfigMutation) OldMaxUploadSizeMib(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMaxUploadSizeMib is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMaxUploadSizeMib requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMaxUploadSizeMib: %w", err)
+	}
+	return oldValue.MaxUploadSizeMib, nil
+}
+
+// AddMaxUploadSizeMib adds i to the "max_upload_size_mib" field.
+func (m *SystemConfigMutation) AddMaxUploadSizeMib(i int64) {
+	if m.addmax_upload_size_mib != nil {
+		*m.addmax_upload_size_mib += i
+	} else {
+		m.addmax_upload_size_mib = &i
+	}
+}
+
+// AddedMaxUploadSizeMib returns the value that was added to the "max_upload_size_mib" field in this mutation.
+func (m *SystemConfigMutation) AddedMaxUploadSizeMib() (r int64, exists bool) {
+	v := m.addmax_upload_size_mib
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetMaxUploadSizeMib resets all changes to the "max_upload_size_mib" field.
+func (m *SystemConfigMutation) ResetMaxUploadSizeMib() {
+	m.max_upload_size_mib = nil
+	m.addmax_upload_size_mib = nil
+}
+
 // SetInitializedAt sets the "initialized_at" field.
 func (m *SystemConfigMutation) SetInitializedAt(t time.Time) {
 	m.initialized_at = &t
@@ -5283,7 +5341,7 @@ func (m *SystemConfigMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SystemConfigMutation) Fields() []string {
-	fields := make([]string, 0, 25)
+	fields := make([]string, 0, 26)
 	if m.created_at != nil {
 		fields = append(fields, systemconfig.FieldCreatedAt)
 	}
@@ -5356,6 +5414,9 @@ func (m *SystemConfigMutation) Fields() []string {
 	if m.ocr_tika_url != nil {
 		fields = append(fields, systemconfig.FieldOcrTikaURL)
 	}
+	if m.max_upload_size_mib != nil {
+		fields = append(fields, systemconfig.FieldMaxUploadSizeMib)
+	}
 	if m.initialized_at != nil {
 		fields = append(fields, systemconfig.FieldInitializedAt)
 	}
@@ -5415,6 +5476,8 @@ func (m *SystemConfigMutation) Field(name string) (ent.Value, bool) {
 		return m.MailerUseImplicitSslTLS()
 	case systemconfig.FieldOcrTikaURL:
 		return m.OcrTikaURL()
+	case systemconfig.FieldMaxUploadSizeMib:
+		return m.MaxUploadSizeMib()
 	case systemconfig.FieldInitializedAt:
 		return m.InitializedAt()
 	}
@@ -5474,6 +5537,8 @@ func (m *SystemConfigMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldMailerUseImplicitSslTLS(ctx)
 	case systemconfig.FieldOcrTikaURL:
 		return m.OldOcrTikaURL(ctx)
+	case systemconfig.FieldMaxUploadSizeMib:
+		return m.OldMaxUploadSizeMib(ctx)
 	case systemconfig.FieldInitializedAt:
 		return m.OldInitializedAt(ctx)
 	}
@@ -5653,6 +5718,13 @@ func (m *SystemConfigMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetOcrTikaURL(v)
 		return nil
+	case systemconfig.FieldMaxUploadSizeMib:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMaxUploadSizeMib(v)
+		return nil
 	case systemconfig.FieldInitializedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -5671,6 +5743,9 @@ func (m *SystemConfigMutation) AddedFields() []string {
 	if m.addmailer_port != nil {
 		fields = append(fields, systemconfig.FieldMailerPort)
 	}
+	if m.addmax_upload_size_mib != nil {
+		fields = append(fields, systemconfig.FieldMaxUploadSizeMib)
+	}
 	return fields
 }
 
@@ -5681,6 +5756,8 @@ func (m *SystemConfigMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case systemconfig.FieldMailerPort:
 		return m.AddedMailerPort()
+	case systemconfig.FieldMaxUploadSizeMib:
+		return m.AddedMaxUploadSizeMib()
 	}
 	return nil, false
 }
@@ -5696,6 +5773,13 @@ func (m *SystemConfigMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddMailerPort(v)
+		return nil
+	case systemconfig.FieldMaxUploadSizeMib:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMaxUploadSizeMib(v)
 		return nil
 	}
 	return fmt.Errorf("unknown SystemConfig numeric field %s", name)
@@ -5822,6 +5906,9 @@ func (m *SystemConfigMutation) ResetField(name string) error {
 		return nil
 	case systemconfig.FieldOcrTikaURL:
 		m.ResetOcrTikaURL()
+		return nil
+	case systemconfig.FieldMaxUploadSizeMib:
+		m.ResetMaxUploadSizeMib()
 		return nil
 	case systemconfig.FieldInitializedAt:
 		m.ResetInitializedAt()
@@ -7996,46 +8083,48 @@ func (m *TemporaryFileMutation) ResetEdge(name string) error {
 // TenantMutation represents an operation that mutates the Tenant nodes in the graph.
 type TenantMutation struct {
 	config
-	op                          Op
-	typ                         string
-	id                          *int64
-	created_at                  *time.Time
-	updated_at                  *time.Time
-	deleted_at                  *time.Time
-	public_id                   *entx.CIText
-	name                        *string
-	first_name                  *string
-	last_name                   *string
-	street                      *string
-	house_number                *string
-	additional_address_info     *string
-	postal_code                 *string
-	city                        *string
-	country                     *country.Country
-	plan                        *plan.Plan
-	vat_id                      *string
-	terms_of_service_accepted   *time.Time
-	privacy_policy_accepted     *time.Time
-	two_factor_auth_enforced    *bool
-	x25519_identity_encrypted   *entx.EncryptedX25519Identity
-	maintenance_mode_enabled_at *time.Time
-	initialized_at              *time.Time
-	clearedFields               map[string]struct{}
-	creator                     *int64
-	clearedcreator              bool
-	updater                     *int64
-	clearedupdater              bool
-	deleter                     *int64
-	cleareddeleter              bool
-	accounts                    map[int64]struct{}
-	removedaccounts             map[int64]struct{}
-	clearedaccounts             bool
-	account_assignment          map[int64]struct{}
-	removedaccount_assignment   map[int64]struct{}
-	clearedaccount_assignment   bool
-	done                        bool
-	oldValue                    func(context.Context) (*Tenant, error)
-	predicates                  []predicate.Tenant
+	op                              Op
+	typ                             string
+	id                              *int64
+	created_at                      *time.Time
+	updated_at                      *time.Time
+	deleted_at                      *time.Time
+	public_id                       *entx.CIText
+	name                            *string
+	first_name                      *string
+	last_name                       *string
+	street                          *string
+	house_number                    *string
+	additional_address_info         *string
+	postal_code                     *string
+	city                            *string
+	country                         *country.Country
+	plan                            *plan.Plan
+	vat_id                          *string
+	terms_of_service_accepted       *time.Time
+	privacy_policy_accepted         *time.Time
+	two_factor_auth_enforced        *bool
+	max_upload_size_mib_override    *int64
+	addmax_upload_size_mib_override *int64
+	x25519_identity_encrypted       *entx.EncryptedX25519Identity
+	maintenance_mode_enabled_at     *time.Time
+	initialized_at                  *time.Time
+	clearedFields                   map[string]struct{}
+	creator                         *int64
+	clearedcreator                  bool
+	updater                         *int64
+	clearedupdater                  bool
+	deleter                         *int64
+	cleareddeleter                  bool
+	accounts                        map[int64]struct{}
+	removedaccounts                 map[int64]struct{}
+	clearedaccounts                 bool
+	account_assignment              map[int64]struct{}
+	removedaccount_assignment       map[int64]struct{}
+	clearedaccount_assignment       bool
+	done                            bool
+	oldValue                        func(context.Context) (*Tenant, error)
+	predicates                      []predicate.Tenant
 }
 
 var _ ent.Mutation = (*TenantMutation)(nil)
@@ -8950,6 +9039,76 @@ func (m *TenantMutation) ResetTwoFactorAuthEnforced() {
 	m.two_factor_auth_enforced = nil
 }
 
+// SetMaxUploadSizeMibOverride sets the "max_upload_size_mib_override" field.
+func (m *TenantMutation) SetMaxUploadSizeMibOverride(i int64) {
+	m.max_upload_size_mib_override = &i
+	m.addmax_upload_size_mib_override = nil
+}
+
+// MaxUploadSizeMibOverride returns the value of the "max_upload_size_mib_override" field in the mutation.
+func (m *TenantMutation) MaxUploadSizeMibOverride() (r int64, exists bool) {
+	v := m.max_upload_size_mib_override
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMaxUploadSizeMibOverride returns the old "max_upload_size_mib_override" field's value of the Tenant entity.
+// If the Tenant object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantMutation) OldMaxUploadSizeMibOverride(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMaxUploadSizeMibOverride is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMaxUploadSizeMibOverride requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMaxUploadSizeMibOverride: %w", err)
+	}
+	return oldValue.MaxUploadSizeMibOverride, nil
+}
+
+// AddMaxUploadSizeMibOverride adds i to the "max_upload_size_mib_override" field.
+func (m *TenantMutation) AddMaxUploadSizeMibOverride(i int64) {
+	if m.addmax_upload_size_mib_override != nil {
+		*m.addmax_upload_size_mib_override += i
+	} else {
+		m.addmax_upload_size_mib_override = &i
+	}
+}
+
+// AddedMaxUploadSizeMibOverride returns the value that was added to the "max_upload_size_mib_override" field in this mutation.
+func (m *TenantMutation) AddedMaxUploadSizeMibOverride() (r int64, exists bool) {
+	v := m.addmax_upload_size_mib_override
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearMaxUploadSizeMibOverride clears the value of the "max_upload_size_mib_override" field.
+func (m *TenantMutation) ClearMaxUploadSizeMibOverride() {
+	m.max_upload_size_mib_override = nil
+	m.addmax_upload_size_mib_override = nil
+	m.clearedFields[tenant.FieldMaxUploadSizeMibOverride] = struct{}{}
+}
+
+// MaxUploadSizeMibOverrideCleared returns if the "max_upload_size_mib_override" field was cleared in this mutation.
+func (m *TenantMutation) MaxUploadSizeMibOverrideCleared() bool {
+	_, ok := m.clearedFields[tenant.FieldMaxUploadSizeMibOverride]
+	return ok
+}
+
+// ResetMaxUploadSizeMibOverride resets all changes to the "max_upload_size_mib_override" field.
+func (m *TenantMutation) ResetMaxUploadSizeMibOverride() {
+	m.max_upload_size_mib_override = nil
+	m.addmax_upload_size_mib_override = nil
+	delete(m.clearedFields, tenant.FieldMaxUploadSizeMibOverride)
+}
+
 // SetX25519IdentityEncrypted sets the "x25519_identity_encrypted" field.
 func (m *TenantMutation) SetX25519IdentityEncrypted(ex entx.EncryptedX25519Identity) {
 	m.x25519_identity_encrypted = &ex
@@ -9359,7 +9518,7 @@ func (m *TenantMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TenantMutation) Fields() []string {
-	fields := make([]string, 0, 24)
+	fields := make([]string, 0, 25)
 	if m.created_at != nil {
 		fields = append(fields, tenant.FieldCreatedAt)
 	}
@@ -9423,6 +9582,9 @@ func (m *TenantMutation) Fields() []string {
 	if m.two_factor_auth_enforced != nil {
 		fields = append(fields, tenant.FieldTwoFactorAuthEnforced)
 	}
+	if m.max_upload_size_mib_override != nil {
+		fields = append(fields, tenant.FieldMaxUploadSizeMibOverride)
+	}
 	if m.x25519_identity_encrypted != nil {
 		fields = append(fields, tenant.FieldX25519IdentityEncrypted)
 	}
@@ -9482,6 +9644,8 @@ func (m *TenantMutation) Field(name string) (ent.Value, bool) {
 		return m.PrivacyPolicyAccepted()
 	case tenant.FieldTwoFactorAuthEnforced:
 		return m.TwoFactorAuthEnforced()
+	case tenant.FieldMaxUploadSizeMibOverride:
+		return m.MaxUploadSizeMibOverride()
 	case tenant.FieldX25519IdentityEncrypted:
 		return m.X25519IdentityEncrypted()
 	case tenant.FieldMaintenanceModeEnabledAt:
@@ -9539,6 +9703,8 @@ func (m *TenantMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldPrivacyPolicyAccepted(ctx)
 	case tenant.FieldTwoFactorAuthEnforced:
 		return m.OldTwoFactorAuthEnforced(ctx)
+	case tenant.FieldMaxUploadSizeMibOverride:
+		return m.OldMaxUploadSizeMibOverride(ctx)
 	case tenant.FieldX25519IdentityEncrypted:
 		return m.OldX25519IdentityEncrypted(ctx)
 	case tenant.FieldMaintenanceModeEnabledAt:
@@ -9701,6 +9867,13 @@ func (m *TenantMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetTwoFactorAuthEnforced(v)
 		return nil
+	case tenant.FieldMaxUploadSizeMibOverride:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMaxUploadSizeMibOverride(v)
+		return nil
 	case tenant.FieldX25519IdentityEncrypted:
 		v, ok := value.(entx.EncryptedX25519Identity)
 		if !ok {
@@ -9730,6 +9903,9 @@ func (m *TenantMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *TenantMutation) AddedFields() []string {
 	var fields []string
+	if m.addmax_upload_size_mib_override != nil {
+		fields = append(fields, tenant.FieldMaxUploadSizeMibOverride)
+	}
 	return fields
 }
 
@@ -9738,6 +9914,8 @@ func (m *TenantMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *TenantMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case tenant.FieldMaxUploadSizeMibOverride:
+		return m.AddedMaxUploadSizeMibOverride()
 	}
 	return nil, false
 }
@@ -9747,6 +9925,13 @@ func (m *TenantMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *TenantMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case tenant.FieldMaxUploadSizeMibOverride:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMaxUploadSizeMibOverride(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Tenant numeric field %s", name)
 }
@@ -9766,6 +9951,9 @@ func (m *TenantMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(tenant.FieldDeletedAt) {
 		fields = append(fields, tenant.FieldDeletedAt)
+	}
+	if m.FieldCleared(tenant.FieldMaxUploadSizeMibOverride) {
+		fields = append(fields, tenant.FieldMaxUploadSizeMibOverride)
 	}
 	if m.FieldCleared(tenant.FieldX25519IdentityEncrypted) {
 		fields = append(fields, tenant.FieldX25519IdentityEncrypted)
@@ -9801,6 +9989,9 @@ func (m *TenantMutation) ClearField(name string) error {
 		return nil
 	case tenant.FieldDeletedAt:
 		m.ClearDeletedAt()
+		return nil
+	case tenant.FieldMaxUploadSizeMibOverride:
+		m.ClearMaxUploadSizeMibOverride()
 		return nil
 	case tenant.FieldX25519IdentityEncrypted:
 		m.ClearX25519IdentityEncrypted()
@@ -9881,6 +10072,9 @@ func (m *TenantMutation) ResetField(name string) error {
 		return nil
 	case tenant.FieldTwoFactorAuthEnforced:
 		m.ResetTwoFactorAuthEnforced()
+		return nil
+	case tenant.FieldMaxUploadSizeMibOverride:
+		m.ResetMaxUploadSizeMibOverride()
 		return nil
 	case tenant.FieldX25519IdentityEncrypted:
 		m.ResetX25519IdentityEncrypted()

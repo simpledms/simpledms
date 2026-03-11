@@ -655,6 +655,17 @@ func (qq *Server) applyOverrideDBConfigAfterIdentity(ctx context.Context, mainDB
 	if val, set := os.LookupEnv("SIMPLEDMS_OCR_TIKA_URL"); set {
 		updateQuery.SetOcrTikaURL(val)
 	}
+	if val, set := os.LookupEnv("SIMPLEDMS_UPLOAD_MAX_FILE_SIZE_MIB"); set {
+		maxUploadSizeMib, err := strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		if maxUploadSizeMib < 0 {
+			log.Fatalln("SIMPLEDMS_UPLOAD_MAX_FILE_SIZE_MIB must be greater than or equal to 0")
+		}
+
+		updateQuery.SetMaxUploadSizeMib(maxUploadSizeMib)
+	}
 
 	updateQuery.SaveX(ctx)
 }

@@ -4,6 +4,7 @@ package inbox
 
 import (
 	"log"
+	"math"
 	"net/http"
 	"path/filepath"
 
@@ -60,7 +61,20 @@ func (qq *UploadFileCmd) Data() *UploadFileCmdData {
 }
 
 func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	_, err := autil.FormData[UploadFileCmdData](rw, req, ctx)
+	nilableUploadLimitBytes, err := qq.infra.FileSystem().NilableEffectiveUploadSizeLimitBytes(ctx)
+	if err != nil {
+		return err
+	}
+	if nilableUploadLimitBytes != nil {
+		bodyLimitBytes := *nilableUploadLimitBytes
+		const multipartOverheadBytes int64 = 1 * 1024 * 1024
+		if bodyLimitBytes < math.MaxInt64-multipartOverheadBytes {
+			bodyLimitBytes += multipartOverheadBytes
+		}
+		req.Request.Body = http.MaxBytesReader(rw, req.Request.Body, bodyLimitBytes)
+	}
+
+	_, err = autil.FormData[UploadFileCmdData](rw, req, ctx)
 	if err != nil {
 		return err
 	}

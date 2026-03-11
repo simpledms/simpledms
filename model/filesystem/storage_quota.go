@@ -31,6 +31,20 @@ func NewStorageQuota(isSaaSModeEnabled bool) *StorageQuota {
 	}
 }
 
+func (qq *StorageQuota) TenantUsageBytes(ctx ctxx.Context) (int64, int64, error) {
+	limitBytes, err := qq.tenantStorageLimitBytes(ctx)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	usedBytes, err := qq.currentUsedTenantStorageBytes(ctx)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	return usedBytes, limitBytes, nil
+}
+
 func (qq *StorageQuota) EnsureTenantStorageLimit(ctx ctxx.Context, incomingUploadedBytes int64) error {
 	if !qq.isSaaSModeEnabled {
 		return nil
@@ -39,12 +53,7 @@ func (qq *StorageQuota) EnsureTenantStorageLimit(ctx ctxx.Context, incomingUploa
 		return nil
 	}
 
-	limitBytes, err := qq.tenantStorageLimitBytes(ctx)
-	if err != nil {
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify storage limit.")
-	}
-
-	usedBytes, err := qq.currentUsedTenantStorageBytes(ctx)
+	usedBytes, limitBytes, err := qq.TenantUsageBytes(ctx)
 	if err != nil {
 		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify storage limit.")
 	}

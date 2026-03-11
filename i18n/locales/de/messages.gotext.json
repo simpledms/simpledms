@@ -5244,6 +5244,104 @@
             "translation": "Person",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "unlimited",
+            "message": "unlimited",
+            "translation": "unbegrenzt",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "global default",
+            "message": "global default",
+            "translation": "globaler Standardwert",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Global upload limit updated to {UploadLimitLabel}.",
+            "message": "Global upload limit updated to {UploadLimitLabel}.",
+            "translation": "Globales Upload-Limit wurde auf {UploadLimitLabel} aktualisiert.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant upload limit updated to {UploadLimitLabel}.",
+            "message": "Tenant upload limit updated to {UploadLimitLabel}.",
+            "translation": "Upload-Limit der Organisation wurde auf {UploadLimitLabel} aktualisiert.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unlimited",
+            "message": "Unlimited",
+            "translation": "Unbegrenzt",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size (MiB)",
+            "message": "Max upload size (MiB)",
+            "translation": "Maximale Upload-Grösse (MiB)",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Set global upload limit",
+            "message": "Set global upload limit",
+            "translation": "Globales Upload-Limit festlegen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Use global default",
+            "message": "Use global default",
+            "translation": "Globalen Standardwert verwenden",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Set tenant upload limit",
+            "message": "Set tenant upload limit",
+            "translation": "Upload-Limit der Organisation festlegen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Quota usage: {TenantStorageUsageLabelctx_tenantx}",
+            "message": "Quota usage: {TenantStorageUsageLabelctx_tenantx}",
+            "translation": "Kontingentnutzung: {TenantStorageUsageLabelctx_tenantx}",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Upload limit options",
+            "message": "Upload limit options",
+            "translation": "Upload-Limit-Optionen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit upload limit",
+            "message": "Edit upload limit",
+            "translation": "Upload-Limit bearbeiten",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unavailable",
+            "message": "Unavailable",
+            "translation": "Nicht verfügbar",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage upload limit",
+            "message": "Manage upload limit",
+            "translation": "Upload-Limit verwalten",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         }
     ]
 }

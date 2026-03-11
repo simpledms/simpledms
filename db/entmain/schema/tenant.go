@@ -44,6 +44,8 @@ func (Tenant) Fields() []ent.Field {
 		field.Time("privacy_policy_accepted"),
 
 		field.Bool("two_factor_auth_enforced").Default(false),
+		// nil means using global default; 0 means unlimited
+		field.Int64("max_upload_size_mib_override").Optional().Nillable(),
 
 		// optional because done during in initialization
 		field.Bytes("x25519_identity_encrypted").Optional().Sensitive().GoType(entx.EncryptedX25519Identity{}),

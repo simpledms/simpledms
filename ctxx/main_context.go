@@ -48,6 +48,10 @@ func (qq *MainContext) UnsafeMainDB() *sqlx.MainDB {
 	return qq.unsafeMainDB
 }
 
+func (qq *MainContext) UnsafeTenantDB(tenantID int64) (*sqlx.TenantDB, bool) {
+	return qq.unsafeTenantDBs.Load(tenantID)
+}
+
 // TODO cache?
 func (qq *MainContext) ReadOnlyAccountSpacesByTenant() map[*entmain.Tenant][]*enttenant.Space {
 	var spacesByTenant = make(map[*entmain.Tenant][]*enttenant.Space)

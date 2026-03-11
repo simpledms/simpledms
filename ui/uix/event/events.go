@@ -68,6 +68,7 @@ const (
 	AppUnlocked          Event = "appUnlocked"
 	AppInitialized       Event = "appInitialized"
 	AppPassphraseChanged Event = "appPassphraseChanged"
+	UploadLimitUpdated   Event = "uploadLimitUpdated"
 
 	UserCreated Event = "userCreated"
 	UserUpdated Event = "userUpdated"

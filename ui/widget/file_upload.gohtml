@@ -59,10 +59,15 @@
 
 			// TODO external buttons
 			// TODO progress bar on top?
+			const restrictions = {};
+			if ({{ .MaxUploadSizeBytes }} > 0) {
+				restrictions.maxFileSize = {{ .MaxUploadSizeBytes }};
+			}
+
 			let uppy = new Uppy({
 				locale: locale,
 				autoProceed: true, // automatically start upload on selection
-				// TODO restrictions
+				restrictions: restrictions,
 			})
 			uppy.use(Dashboard, {
 				inline: true,

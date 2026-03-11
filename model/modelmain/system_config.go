@@ -252,6 +252,42 @@ func (qq *SystemConfig) AllowInsecureCookies() bool {
 	return qq.allowInsecureCookies
 }
 
+func (qq *SystemConfig) MaxUploadSizeBytes() int64 {
+	if qq.data.MaxUploadSizeMib <= 0 {
+		return 0
+	}
+
+	return qq.data.MaxUploadSizeMib * bytesPerMiB
+}
+
+func (qq *SystemConfig) SetMaxUploadSizeBytes(ctx ctxx.Context, maxUploadSizeBytes int64) error {
+	if maxUploadSizeBytes < 0 {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Max upload size must be greater than or equal to 0.")
+	}
+
+	maxUploadSizeMib := int64(0)
+	if maxUploadSizeBytes > 0 {
+		maxUploadSizeMib = maxUploadSizeBytes / bytesPerMiB
+		if maxUploadSizeBytes%bytesPerMiB != 0 {
+			maxUploadSizeMib++
+		}
+	}
+
+	return qq.SetMaxUploadSizeMib(ctx, maxUploadSizeMib)
+}
+
+func (qq *SystemConfig) SetMaxUploadSizeMib(ctx ctxx.Context, maxUploadSizeMib int64) error {
+	if maxUploadSizeMib < 0 {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Max upload size must be greater than or equal to 0.")
+	}
+
+	qq.data = ctx.MainCtx().MainTx.SystemConfig.UpdateOneID(qq.data.ID).
+		SetMaxUploadSizeMib(maxUploadSizeMib).
+		SaveX(ctx)
+
+	return nil
+}
+
 func (qq *SystemConfig) S3() *S3Config {
 	return &S3Config{
 		S3Endpoint:        qq.data.S3Endpoint,

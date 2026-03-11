@@ -47,6 +47,76 @@
             "translation": "Passphrase removed."
         },
         {
+            "id": "unlimited",
+            "message": "unlimited",
+            "translation": ""
+        },
+        {
+            "id": "Global upload limit updated to {UploadLimitLabel}.",
+            "message": "Global upload limit updated to {UploadLimitLabel}.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "UploadLimitLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "uploadLimitLabel"
+                }
+            ]
+        },
+        {
+            "id": "Save",
+            "message": "Save",
+            "translation": ""
+        },
+        {
+            "id": "Unlimited",
+            "message": "Unlimited",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size (MiB)",
+            "message": "Max upload size (MiB)",
+            "translation": ""
+        },
+        {
+            "id": "Set global upload limit",
+            "message": "Set global upload limit",
+            "translation": ""
+        },
+        {
+            "id": "global default",
+            "message": "global default",
+            "translation": ""
+        },
+        {
+            "id": "Tenant upload limit updated to {UploadLimitLabel}.",
+            "message": "Tenant upload limit updated to {UploadLimitLabel}.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "UploadLimitLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "uploadLimitLabel"
+                }
+            ]
+        },
+        {
+            "id": "Use global default",
+            "message": "Use global default",
+            "translation": ""
+        },
+        {
+            "id": "Set tenant upload limit",
+            "message": "Set tenant upload limit",
+            "translation": ""
+        },
+        {
             "id": "Unlock app",
             "message": "Unlock app",
             "translation": "Unlock app"
@@ -249,11 +319,6 @@
         {
             "id": "Unsupported field type.",
             "message": "Unsupported field type.",
-            "translation": ""
-        },
-        {
-            "id": "Save",
-            "message": "Save",
             "translation": ""
         },
         {
@@ -1057,6 +1122,31 @@
             "translation": ""
         },
         {
+            "id": "Quota usage: {TenantStorageUsageLabelctx_tenantx}",
+            "message": "Quota usage: {TenantStorageUsageLabelctx_tenantx}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "TenantStorageUsageLabelctx_tenantx",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "qq.tenantStorageUsageLabel(ctx, tenantx)"
+                }
+            ]
+        },
+        {
+            "id": "Upload limit options",
+            "message": "Upload limit options",
+            "translation": ""
+        },
+        {
+            "id": "Edit upload limit",
+            "message": "Edit upload limit",
+            "translation": ""
+        },
+        {
             "id": "Not initialized",
             "message": "Not initialized",
             "translation": ""
@@ -1074,6 +1164,11 @@
         {
             "id": "Refresh",
             "message": "Refresh",
+            "translation": ""
+        },
+        {
+            "id": "Unavailable",
+            "message": "Unavailable",
             "translation": ""
         },
         {
@@ -1190,6 +1285,11 @@
         {
             "id": "App status",
             "message": "App status",
+            "translation": ""
+        },
+        {
+            "id": "Manage upload limit",
+            "message": "Manage upload limit",
             "translation": ""
         },
         {
@@ -2206,6 +2306,11 @@
             "translation": ""
         },
         {
+            "id": "Upload is too large.",
+            "message": "Upload is too large.",
+            "translation": ""
+        },
+        {
             "id": "cannot parse file",
             "message": "cannot parse file",
             "translation": ""
@@ -2296,6 +2401,16 @@
             "translation": ""
         },
         {
+            "id": "Belgium",
+            "message": "Belgium",
+            "translation": ""
+        },
+        {
+            "id": "Bulgaria",
+            "message": "Bulgaria",
+            "translation": ""
+        },
+        {
             "id": "Checkbox",
             "message": "Checkbox",
             "translation": ""
@@ -2331,6 +2446,11 @@
             "translation": ""
         },
         {
+            "id": "Croatia",
+            "message": "Croatia",
+            "translation": ""
+        },
+        {
             "id": "Current or temporary password",
             "message": "Current or temporary password",
             "translation": ""
@@ -2338,6 +2458,16 @@
         {
             "id": "Current passphrase",
             "message": "Current passphrase",
+            "translation": ""
+        },
+        {
+            "id": "Cyprus",
+            "message": "Cyprus",
+            "translation": ""
+        },
+        {
+            "id": "Czech republic",
+            "message": "Czech republic",
             "translation": ""
         },
         {
@@ -2353,6 +2483,11 @@
         {
             "id": "Delete on success",
             "message": "Delete on success",
+            "translation": ""
+        },
+        {
+            "id": "Denmark",
+            "message": "Denmark",
             "translation": ""
         },
         {
@@ -2376,6 +2511,11 @@
             "translation": ""
         },
         {
+            "id": "Estonia",
+            "message": "Estonia",
+            "translation": ""
+        },
+        {
             "id": "Field",
             "message": "Field",
             "translation": ""
@@ -2391,8 +2531,18 @@
             "translation": ""
         },
         {
+            "id": "Finland",
+            "message": "Finland",
+            "translation": ""
+        },
+        {
             "id": "First name",
             "message": "First name",
+            "translation": ""
+        },
+        {
+            "id": "France",
+            "message": "France",
             "translation": ""
         },
         {
@@ -2411,8 +2561,28 @@
             "translation": ""
         },
         {
+            "id": "Greece",
+            "message": "Greece",
+            "translation": ""
+        },
+        {
             "id": "Group",
             "message": "Group",
+            "translation": ""
+        },
+        {
+            "id": "Hungary",
+            "message": "Hungary",
+            "translation": ""
+        },
+        {
+            "id": "Iceland",
+            "message": "Iceland",
+            "translation": ""
+        },
+        {
+            "id": "Ireland",
+            "message": "Ireland",
             "translation": ""
         },
         {
@@ -2421,8 +2591,18 @@
             "translation": ""
         },
         {
+            "id": "Is unlimited",
+            "message": "Is unlimited",
+            "translation": ""
+        },
+        {
             "id": "Italian",
             "message": "Italian",
+            "translation": ""
+        },
+        {
+            "id": "Italy",
+            "message": "Italy",
             "translation": ""
         },
         {
@@ -2436,6 +2616,11 @@
             "translation": ""
         },
         {
+            "id": "Latvia",
+            "message": "Latvia",
+            "translation": ""
+        },
+        {
             "id": "Layout",
             "message": "Layout",
             "translation": ""
@@ -2446,8 +2631,33 @@
             "translation": ""
         },
         {
+            "id": "Liechtenstein",
+            "message": "Liechtenstein",
+            "translation": ""
+        },
+        {
+            "id": "Lithuania",
+            "message": "Lithuania",
+            "translation": ""
+        },
+        {
             "id": "Local",
             "message": "Local",
+            "translation": ""
+        },
+        {
+            "id": "Luxembourg",
+            "message": "Luxembourg",
+            "translation": ""
+        },
+        {
+            "id": "Malta",
+            "message": "Malta",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size mib",
+            "message": "Max upload size mib",
             "translation": ""
         },
         {
@@ -2458,6 +2668,11 @@
         {
             "id": "Money value",
             "message": "Money value",
+            "translation": ""
+        },
+        {
+            "id": "Netherlands",
+            "message": "Netherlands",
             "translation": ""
         },
         {
@@ -2486,6 +2701,11 @@
             "translation": ""
         },
         {
+            "id": "Norway",
+            "message": "Norway",
+            "translation": ""
+        },
+        {
             "id": "Number",
             "message": "Number",
             "translation": ""
@@ -2511,6 +2731,11 @@
             "translation": ""
         },
         {
+            "id": "Other",
+            "message": "Other",
+            "translation": ""
+        },
+        {
             "id": "Owner",
             "message": "Owner",
             "translation": ""
@@ -2531,6 +2756,16 @@
             "translation": ""
         },
         {
+            "id": "Poland",
+            "message": "Poland",
+            "translation": ""
+        },
+        {
+            "id": "Portugal",
+            "message": "Portugal",
+            "translation": ""
+        },
+        {
             "id": "Pro",
             "message": "Pro",
             "translation": ""
@@ -2543,6 +2778,11 @@
         {
             "id": "Role",
             "message": "Role",
+            "translation": ""
+        },
+        {
+            "id": "Romania",
+            "message": "Romania",
             "translation": ""
         },
         {
@@ -2561,6 +2801,21 @@
             "translation": ""
         },
         {
+            "id": "Slovakia",
+            "message": "Slovakia",
+            "translation": ""
+        },
+        {
+            "id": "Slovenia",
+            "message": "Slovenia",
+            "translation": ""
+        },
+        {
+            "id": "Spain",
+            "message": "Spain",
+            "translation": ""
+        },
+        {
             "id": "Subscribe to newsletter",
             "message": "Subscribe to newsletter",
             "translation": ""
@@ -2573,6 +2828,11 @@
         {
             "id": "Supporter",
             "message": "Supporter",
+            "translation": ""
+        },
+        {
+            "id": "Sweden",
+            "message": "Sweden",
             "translation": ""
         },
         {
@@ -2618,11 +2878,6 @@
         {
             "id": "Unit",
             "message": "Unit",
-            "translation": ""
-        },
-        {
-            "id": "Unlimited",
-            "message": "Unlimited",
             "translation": ""
         },
         {
@@ -2831,6 +3086,26 @@
             "translation": ""
         },
         {
+            "id": "Could not verify upload size limit.",
+            "message": "Could not verify upload size limit.",
+            "translation": ""
+        },
+        {
+            "id": "Upload is too large. Maximum allowed size is {FormatSizemaxUploadSizeBytes}.",
+            "message": "Upload is too large. Maximum allowed size is {FormatSizemaxUploadSizeBytes}.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "FormatSizemaxUploadSizeBytes",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "fileutil.FormatSize(maxUploadSizeBytes)"
+                }
+            ]
+        },
+        {
             "id": "Could not verify storage limit.",
             "message": "Could not verify storage limit.",
             "translation": ""
@@ -2956,11 +3231,6 @@
         {
             "id": "Software",
             "message": "Software",
-            "translation": ""
-        },
-        {
-            "id": "Other",
-            "message": "Other",
             "translation": ""
         },
         {
@@ -3414,6 +3684,46 @@
         {
             "id": "Old passphrase is required.",
             "message": "Old passphrase is required.",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size must be greater than or equal to 0.",
+            "message": "Max upload size must be greater than or equal to 0.",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size must be greater than or equal to 0 MiB.",
+            "message": "Max upload size must be greater than or equal to 0 MiB.",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size is too large.",
+            "message": "Max upload size is too large.",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
+            "message": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
+            "translation": ""
+        },
+        {
+            "id": "Tenant is required.",
+            "message": "Tenant is required.",
+            "translation": ""
+        },
+        {
+            "id": "Tenant not found.",
+            "message": "Tenant not found.",
+            "translation": ""
+        },
+        {
+            "id": "You must be logged in to manage upload limits.",
+            "message": "You must be logged in to manage upload limits.",
+            "translation": ""
+        },
+        {
+            "id": "You must be an admin to manage upload limits.",
+            "message": "You must be an admin to manage upload limits.",
             "translation": ""
         },
         {

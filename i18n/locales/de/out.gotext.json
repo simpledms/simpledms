@@ -65,6 +65,96 @@
             "fuzzy": true
         },
         {
+            "id": "unlimited",
+            "message": "unlimited",
+            "translation": "unbegrenzt",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Global upload limit updated to {UploadLimitLabel}.",
+            "message": "Global upload limit updated to {UploadLimitLabel}.",
+            "translation": "Globales Upload-Limit wurde auf {UploadLimitLabel} aktualisiert.",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "UploadLimitLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "uploadLimitLabel"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Save",
+            "message": "Save",
+            "translation": "Speichern",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Unlimited",
+            "message": "Unlimited",
+            "translation": "Unbegrenzt",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size (MiB)",
+            "message": "Max upload size (MiB)",
+            "translation": "Maximale Upload-Grösse (MiB)",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Set global upload limit",
+            "message": "Set global upload limit",
+            "translation": "Globales Upload-Limit festlegen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "global default",
+            "message": "global default",
+            "translation": "globaler Standardwert",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant upload limit updated to {UploadLimitLabel}.",
+            "message": "Tenant upload limit updated to {UploadLimitLabel}.",
+            "translation": "Upload-Limit der Organisation wurde auf {UploadLimitLabel} aktualisiert.",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "UploadLimitLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "uploadLimitLabel"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Use global default",
+            "message": "Use global default",
+            "translation": "Globalen Standardwert verwenden",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Set tenant upload limit",
+            "message": "Set tenant upload limit",
+            "translation": "Upload-Limit der Organisation festlegen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Unlock app",
             "message": "Unlock app",
             "translation": "App entsperren",
@@ -344,13 +434,6 @@
             "id": "Unsupported field type.",
             "message": "Unsupported field type.",
             "translation": "Nicht unterstützter Feldtyp.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Save",
-            "message": "Save",
-            "translation": "Speichern",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -1399,6 +1482,37 @@
             "fuzzy": true
         },
         {
+            "id": "Quota usage: {TenantStorageUsageLabelctx_tenantx}",
+            "message": "Quota usage: {TenantStorageUsageLabelctx_tenantx}",
+            "translation": "Kontingentnutzung: {TenantStorageUsageLabelctx_tenantx}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "TenantStorageUsageLabelctx_tenantx",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "qq.tenantStorageUsageLabel(ctx, tenantx)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Upload limit options",
+            "message": "Upload limit options",
+            "translation": "Upload-Limit-Optionen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit upload limit",
+            "message": "Edit upload limit",
+            "translation": "Upload-Limit bearbeiten",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Not initialized",
             "message": "Not initialized",
             "translation": "Nicht initialisiert",
@@ -1424,6 +1538,13 @@
             "message": "Refresh",
             "translation": "Aktualisieren",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Unavailable",
+            "message": "Unavailable",
+            "translation": "Nicht verfügbar",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -1582,6 +1703,13 @@
             "message": "App status",
             "translation": "App-Status",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage upload limit",
+            "message": "Manage upload limit",
+            "translation": "Upload-Limit verwalten",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -2883,6 +3011,11 @@
             "fuzzy": true
         },
         {
+            "id": "Upload is too large.",
+            "message": "Upload is too large.",
+            "translation": ""
+        },
+        {
             "id": "cannot parse file",
             "message": "cannot parse file",
             "translation": "Datei kann nicht geparst werden",
@@ -3005,6 +3138,16 @@
             "fuzzy": true
         },
         {
+            "id": "Belgium",
+            "message": "Belgium",
+            "translation": ""
+        },
+        {
+            "id": "Bulgaria",
+            "message": "Bulgaria",
+            "translation": ""
+        },
+        {
             "id": "Checkbox",
             "message": "Checkbox",
             "translation": "Checkbox",
@@ -3053,6 +3196,11 @@
             "fuzzy": true
         },
         {
+            "id": "Croatia",
+            "message": "Croatia",
+            "translation": ""
+        },
+        {
             "id": "Current or temporary password",
             "message": "Current or temporary password",
             "translation": "Aktuelles oder temporäres Passwort",
@@ -3065,6 +3213,16 @@
             "translation": "Aktuelle Passphrase",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
+        },
+        {
+            "id": "Cyprus",
+            "message": "Cyprus",
+            "translation": ""
+        },
+        {
+            "id": "Czech republic",
+            "message": "Czech republic",
+            "translation": ""
         },
         {
             "id": "Date",
@@ -3086,6 +3244,11 @@
             "translation": "Bei Erfolg löschen",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
+        },
+        {
+            "id": "Denmark",
+            "message": "Denmark",
+            "translation": ""
         },
         {
             "id": "Description",
@@ -3116,6 +3279,11 @@
             "fuzzy": true
         },
         {
+            "id": "Estonia",
+            "message": "Estonia",
+            "translation": ""
+        },
+        {
             "id": "Field",
             "message": "Field",
             "translation": "Feld"
@@ -3135,11 +3303,21 @@
             "fuzzy": true
         },
         {
+            "id": "Finland",
+            "message": "Finland",
+            "translation": ""
+        },
+        {
             "id": "First name",
             "message": "First name",
             "translation": "Vorname",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
+        },
+        {
+            "id": "France",
+            "message": "France",
+            "translation": ""
         },
         {
             "id": "French",
@@ -3163,11 +3341,31 @@
             "fuzzy": true
         },
         {
+            "id": "Greece",
+            "message": "Greece",
+            "translation": ""
+        },
+        {
             "id": "Group",
             "message": "Group",
             "translation": "Gruppe",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
+        },
+        {
+            "id": "Hungary",
+            "message": "Hungary",
+            "translation": ""
+        },
+        {
+            "id": "Iceland",
+            "message": "Iceland",
+            "translation": ""
+        },
+        {
+            "id": "Ireland",
+            "message": "Ireland",
+            "translation": ""
         },
         {
             "id": "Is name giving",
@@ -3177,11 +3375,21 @@
             "fuzzy": true
         },
         {
+            "id": "Is unlimited",
+            "message": "Is unlimited",
+            "translation": ""
+        },
+        {
             "id": "Italian",
             "message": "Italian",
             "translation": "Italienisch",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
+        },
+        {
+            "id": "Italy",
+            "message": "Italy",
+            "translation": ""
         },
         {
             "id": "Language",
@@ -3198,6 +3406,11 @@
             "fuzzy": true
         },
         {
+            "id": "Latvia",
+            "message": "Latvia",
+            "translation": ""
+        },
+        {
             "id": "Layout",
             "message": "Layout",
             "translation": "Layout",
@@ -3212,11 +3425,36 @@
             "fuzzy": true
         },
         {
+            "id": "Liechtenstein",
+            "message": "Liechtenstein",
+            "translation": ""
+        },
+        {
+            "id": "Lithuania",
+            "message": "Lithuania",
+            "translation": ""
+        },
+        {
             "id": "Local",
             "message": "Local",
             "translation": "Lokal",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
+        },
+        {
+            "id": "Luxembourg",
+            "message": "Luxembourg",
+            "translation": ""
+        },
+        {
+            "id": "Malta",
+            "message": "Malta",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size mib",
+            "message": "Max upload size mib",
+            "translation": ""
         },
         {
             "id": "Money",
@@ -3231,6 +3469,11 @@
             "translation": "Geldwert",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
+        },
+        {
+            "id": "Netherlands",
+            "message": "Netherlands",
+            "translation": ""
         },
         {
             "id": "New dir name",
@@ -3268,6 +3511,11 @@
             "fuzzy": true
         },
         {
+            "id": "Norway",
+            "message": "Norway",
+            "translation": ""
+        },
+        {
             "id": "Number",
             "message": "Number",
             "translation": "Zahl",
@@ -3303,6 +3551,13 @@
             "fuzzy": true
         },
         {
+            "id": "Other",
+            "message": "Other",
+            "translation": "Sonstiges",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Owner",
             "message": "Owner",
             "translation": "Besitzer",
@@ -3331,6 +3586,16 @@
             "fuzzy": true
         },
         {
+            "id": "Poland",
+            "message": "Poland",
+            "translation": ""
+        },
+        {
+            "id": "Portugal",
+            "message": "Portugal",
+            "translation": ""
+        },
+        {
             "id": "Pro",
             "message": "Pro",
             "translation": ""
@@ -3348,6 +3613,11 @@
             "translation": "Rolle",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "Romania",
+            "message": "Romania",
+            "translation": ""
         },
         {
             "id": "S 3",
@@ -3371,6 +3641,21 @@
             "fuzzy": true
         },
         {
+            "id": "Slovakia",
+            "message": "Slovakia",
+            "translation": ""
+        },
+        {
+            "id": "Slovenia",
+            "message": "Slovenia",
+            "translation": ""
+        },
+        {
+            "id": "Spain",
+            "message": "Spain",
+            "translation": ""
+        },
+        {
             "id": "Subscribe to newsletter",
             "message": "Subscribe to newsletter",
             "translation": "Newsletter abonnieren",
@@ -3388,6 +3673,11 @@
             "id": "Supporter",
             "message": "Supporter",
             "translation": "Supporter"
+        },
+        {
+            "id": "Sweden",
+            "message": "Sweden",
+            "translation": ""
         },
         {
             "id": "Switzerland",
@@ -3449,11 +3739,6 @@
             "translation": "Einheit",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
-        },
-        {
-            "id": "Unlimited",
-            "message": "Unlimited",
-            "translation": ""
         },
         {
             "id": "User",
@@ -3735,6 +4020,26 @@
             "fuzzy": true
         },
         {
+            "id": "Could not verify upload size limit.",
+            "message": "Could not verify upload size limit.",
+            "translation": ""
+        },
+        {
+            "id": "Upload is too large. Maximum allowed size is {FormatSizemaxUploadSizeBytes}.",
+            "message": "Upload is too large. Maximum allowed size is {FormatSizemaxUploadSizeBytes}.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "FormatSizemaxUploadSizeBytes",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "fileutil.FormatSize(maxUploadSizeBytes)"
+                }
+            ]
+        },
+        {
             "id": "Could not verify storage limit.",
             "message": "Could not verify storage limit.",
             "translation": ""
@@ -3899,13 +4204,6 @@
             "id": "Software",
             "message": "Software",
             "translation": "Software",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Other",
-            "message": "Other",
-            "translation": "Sonstiges",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -4525,6 +4823,46 @@
             "translation": "Alte Passphrase ist erforderlich.",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
+        },
+        {
+            "id": "Max upload size must be greater than or equal to 0.",
+            "message": "Max upload size must be greater than or equal to 0.",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size must be greater than or equal to 0 MiB.",
+            "message": "Max upload size must be greater than or equal to 0 MiB.",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size is too large.",
+            "message": "Max upload size is too large.",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
+            "message": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
+            "translation": ""
+        },
+        {
+            "id": "Tenant is required.",
+            "message": "Tenant is required.",
+            "translation": ""
+        },
+        {
+            "id": "Tenant not found.",
+            "message": "Tenant not found.",
+            "translation": ""
+        },
+        {
+            "id": "You must be logged in to manage upload limits.",
+            "message": "You must be logged in to manage upload limits.",
+            "translation": ""
+        },
+        {
+            "id": "You must be an admin to manage upload limits.",
+            "message": "You must be an admin to manage upload limits.",
+            "translation": ""
         },
         {
             "id": "App not unlocked yet. Please try again later.",
