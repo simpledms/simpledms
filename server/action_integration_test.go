@@ -235,12 +235,12 @@ func cleanupS3Prefix(t testing.TB, client *minio.Client, bucketName, prefix stri
 		Recursive: true,
 	}) {
 		if object.Err != nil {
-			t.Errorf("list objects %s: %v", prefix, object.Err)
+			t.Logf("list objects %s: %v", prefix, object.Err)
 			continue
 		}
 
 		if err := client.RemoveObject(ctx, bucketName, object.Key, minio.RemoveObjectOptions{}); err != nil {
-			t.Errorf("remove object %s: %v", object.Key, err)
+			t.Logf("remove object %s: %v", object.Key, err)
 		}
 	}
 }
@@ -381,6 +381,28 @@ func createAccountWithRole(
 
 func signInAndGetSessionCookie(t testing.TB, harness *actionTestHarness, email, password string) *http.Cookie {
 	t.Helper()
+
+	ctx := context.Background()
+	accountx := harness.mainDB.ReadWriteConn.Account.Query().
+		Where(account.EmailEQ(entx.NewCIText(email))).
+		OnlyX(ctx)
+	if !accountx.QueryTenants().ExistX(ctx) {
+		tenantx := createTenantWithPasskeyPolicy(
+			t,
+			harness.mainDB,
+			"Test Tenant",
+			false,
+			true,
+		)
+		assignAccountToTenant(
+			t,
+			harness.mainDB,
+			tenantx.ID,
+			accountx.ID,
+			tenantrole.Owner,
+			false,
+		)
+	}
 
 	form := url.Values{}
 	form.Set("Email", email)
@@ -1043,7 +1065,7 @@ func TestSetupSessionBlocksNonPasskeyPathsUntilEnrollment(t *testing.T) {
 
 	sessionCookie := signInAndGetSessionCookie(t, harness, email, password)
 
-	blockedReq := httptest.NewRequest(http.MethodPost, "/-/auth/delete-account-cmd", nil)
+	blockedReq := httptest.NewRequest(http.MethodPost, "/-/dashboard/toggle-tenant-passkey-enforcement-cmd", nil)
 	blockedReq.AddCookie(sessionCookie)
 	blockedReq.Header.Set("HX-Request", "true")
 
@@ -1382,6 +1404,19 @@ func TestAdminPasskeyRecoveryCmdReturnsCodesForAdmin(t *testing.T) {
 	targetAccountx := harness.mainDB.ReadWriteConn.Account.Query().
 		Where(account.Email(entx.NewCIText("target-admin-recovery@example.com"))).
 		OnlyX(context.Background())
+
+	adminAccountx := harness.mainDB.ReadWriteConn.Account.Query().
+		Where(account.Email(entx.NewCIText("admin@example.com"))).
+		OnlyX(context.Background())
+
+	sharedTenantx := createTenantWithPasskeyPolicy(t, harness.mainDB, "Admin Recovery Tenant", false, false)
+	assignAccountToTenant(t, harness.mainDB, sharedTenantx.ID, adminAccountx.ID, tenantrole.Owner, true)
+	harness.mainDB.ReadWriteConn.TenantAccountAssignment.Create().
+		SetTenantID(sharedTenantx.ID).
+		SetAccountID(targetAccountx.ID).
+		SetRole(tenantrole.Owner).
+		SetIsOwningTenant(true).
+		SaveX(context.Background())
 
 	harness.mainDB.ReadWriteConn.PasskeyCredential.Create().
 		SetAccountID(targetAccountx.ID).

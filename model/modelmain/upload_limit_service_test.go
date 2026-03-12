@@ -217,7 +217,15 @@ func newUploadLimitServiceTestEnv(t *testing.T, role mainrole.MainRole) *uploadL
 	}
 
 	systemConfigx := mainCtx.MainTx.SystemConfig.Query().OnlyX(mainCtx)
-	systemConfig := NewSystemConfig(systemConfigx, false, false, true)
+	systemConfig := NewSystemConfig(
+		systemConfigx,
+		false,
+		false,
+		true,
+		"",
+		"",
+		"",
+	)
 
 	cleanup := func() {
 		if err := mainTx.Rollback(); err != nil {

@@ -114,6 +114,7 @@ func executeSignUpFlow(t *testing.T, harness *actionTestHarness, email string) e
 		language.English,
 		true,
 		true,
+		"",
 	)
 	if err != nil {
 		_ = mainTx.Rollback()

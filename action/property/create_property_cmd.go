@@ -5,6 +5,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/common/fieldtype"
+	propertymodel "github.com/simpledms/simpledms/model/property"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -58,12 +59,16 @@ func (qq *CreatePropertyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request
 		return err
 	}
 
-	_ = ctx.SpaceCtx().TTx.Property.Create().
-		SetName(data.Name).
-		SetType(data.Type).
-		SetUnit(data.Unit).
-		SetSpaceID(ctx.SpaceCtx().Space.ID).
-		SaveX(ctx)
+	_, err = propertymodel.NewPropertyService().Create(
+		ctx,
+		ctx.SpaceCtx().Space.ID,
+		data.Name,
+		data.Type,
+		data.Unit,
+	)
+	if err != nil {
+		return err
+	}
 
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.PropertyCreated.String())

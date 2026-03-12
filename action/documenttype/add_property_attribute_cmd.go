@@ -2,19 +2,15 @@ package documenttype
 
 import (
 	"fmt"
-	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/attribute"
-	"github.com/simpledms/simpledms/db/enttenant/property"
-	"github.com/simpledms/simpledms/model/common/attributetype"
+	documenttypemodel "github.com/simpledms/simpledms/model/documenttype"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -66,27 +62,16 @@ func (qq *AddPropertyAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 		return err
 	}
 
-	exists := ctx.SpaceCtx().TTx.Attribute.Query().
-		Where(
-			attribute.DocumentTypeID(data.DocumentTypeID),
-			attribute.PropertyID(data.PropertyID),
-		).
-		ExistX(ctx)
-	if exists {
-		propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
-		return e.NewHTTPErrorWithSnackbar(
-			http.StatusBadRequest,
-			wx.NewSnackbarf("Field «%s» is already added to this document type.", propertyx.Name),
-		)
+	attributex, err := documenttypemodel.NewDocumentTypeService().CreatePropertyAttribute(
+		ctx,
+		ctx.SpaceCtx().Space,
+		data.DocumentTypeID,
+		data.PropertyID,
+		data.IsNameGiving,
+	)
+	if err != nil {
+		return err
 	}
-
-	attributex := ctx.TenantCtx().TTx.Attribute.Create().
-		SetType(attributetype.Field).
-		SetDocumentTypeID(data.DocumentTypeID).
-		SetPropertyID(data.PropertyID).
-		SetIsNameGiving(data.IsNameGiving).
-		SetSpaceID(ctx.SpaceCtx().Space.ID).
-		SaveX(ctx)
 
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.DocumentTypeAttributeCreated.String()) // TODO okay?

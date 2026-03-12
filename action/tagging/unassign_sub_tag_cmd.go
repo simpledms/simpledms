@@ -4,9 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/model/tagging/tagtype"
+	taggingmodel "github.com/simpledms/simpledms/model/tagging"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -48,23 +46,14 @@ func (qq *UnassignSubTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request
 		return err
 	}
 
-	superTag := ctx.TenantCtx().TTx.
-		Tag.
-		UpdateOneID(data.SuperTagID).
-		RemoveSubTagIDs(data.SubTagID).
-		SaveX(ctx)
-
-	subTag := ctx.TenantCtx().TTx.
-		Tag.
-		Query().
-		WithChildren(
-			func(query *enttenant.TagQuery) {
-				query.Order(tag.ByName())
-				query.Where(tag.TypeNEQ(tagtype.Super))
-			},
-		).
-		Where(tag.ID(data.SubTagID)).
-		OnlyX(ctx)
+	superTag, subTag, err := taggingmodel.NewTagService().UnassignSubTag(
+		ctx,
+		data.SuperTagID,
+		data.SubTagID,
+	)
+	if err != nil {
+		return err
+	}
 
 	rw.Header().Set("HX-Trigger", event.SuperTagUpdated.String(superTag.ID))
 

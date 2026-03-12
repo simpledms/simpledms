@@ -6,7 +6,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/documenttype"
+	documenttypemodel "github.com/simpledms/simpledms/model/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -51,10 +51,7 @@ func (qq *DeleteCmd) Handler(
 		return err
 	}
 
-	err = ctx.TenantCtx().TTx.DocumentType.
-		DeleteOneID(data.ID).
-		Where(documenttype.SpaceID(ctx.SpaceCtx().Space.ID)).
-		Exec(ctx)
+	err = documenttypemodel.NewDocumentTypeService().Delete(ctx, ctx.SpaceCtx().Space.ID, data.ID)
 	if err != nil {
 		log.Println(err)
 		return err

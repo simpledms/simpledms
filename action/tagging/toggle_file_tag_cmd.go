@@ -6,7 +6,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	taggingmodel "github.com/simpledms/simpledms/model/tagging"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -50,31 +50,22 @@ func (qq *ToggleFileTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 		return err
 	}
 
-	filex := ctx.TenantCtx().TTx.File.GetX(ctx, data.FileID)
-	tagx := ctx.TenantCtx().TTx.Tag.GetX(ctx, data.TagID)
-	isSelected := filex.QueryTagAssignment().Where(tagassignment.TagID(data.TagID)).ExistX(ctx)
+	isNowAssigned, tagx, err := taggingmodel.NewTagService().ToggleFileTag(
+		ctx,
+		data.FileID,
+		data.TagID,
+		ctx.SpaceCtx().Space.ID,
+	)
+	if err != nil {
+		return err
+	}
 
 	var snackbar *wx.Snackbar
 
-	// TODO move logic to model
-	if isSelected {
-		ctx.TenantCtx().TTx.TagAssignment.
-			Delete().
-			Where(
-				tagassignment.FileID(data.FileID),
-				tagassignment.TagID(data.TagID),
-				tagassignment.SpaceID(ctx.SpaceCtx().Space.ID),
-			).
-			ExecX(ctx)
-		snackbar = wx.NewSnackbarf("«%s» unassigned.", tagx.Name)
-	} else {
-		ctx.TenantCtx().TTx.TagAssignment.Create().
-			SetFileID(data.FileID).
-			SetTagID(data.TagID).
-			SetSpaceID(ctx.SpaceCtx().Space.ID).
-			// SetIsInherited(false).
-			SaveX(ctx)
+	if isNowAssigned {
 		snackbar = wx.NewSnackbarf("«%s» assigned.", tagx.Name)
+	} else {
+		snackbar = wx.NewSnackbarf("«%s» unassigned.", tagx.Name)
 	}
 
 	// must be set before writing to rw

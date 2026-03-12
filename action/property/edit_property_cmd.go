@@ -4,7 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/property"
+	propertymodel "github.com/simpledms/simpledms/model/property"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -50,12 +50,16 @@ func (qq *EditPropertyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		return err
 	}
 
-	propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
-
-	propertyx = propertyx.Update().
-		SetName(data.Name).
-		SetUnit(data.Unit).
-		SaveX(ctx)
+	_, err = propertymodel.NewPropertyService().Edit(
+		ctx,
+		ctx.SpaceCtx().Space,
+		data.PropertyID,
+		data.Name,
+		data.Unit,
+	)
+	if err != nil {
+		return err
+	}
 
 	rw.Header().Set("HX-Trigger", event.PropertyUpdated.String())
 	rw.AddRenderables(wx.NewSnackbarf("Field updated."))

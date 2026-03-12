@@ -4,6 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	documenttypemodel "github.com/simpledms/simpledms/model/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -48,9 +49,7 @@ func (qq *EditPropertyAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 		return err
 	}
 
-	err = ctx.TenantCtx().TTx.Attribute.UpdateOneID(data.ID).
-		SetIsNameGiving(data.IsNameGiving).
-		Exec(ctx)
+	err = documenttypemodel.NewDocumentTypeService().EditPropertyAttribute(ctx, data.ID, data.IsNameGiving)
 	if err != nil {
 		return err
 	}

@@ -112,7 +112,7 @@ func TestNormalizeMainDBBeforeDevSchemaCreateHandlesNullPasskeyRecoveryCodes(t *
 	}()
 
 	ctx := context.Background()
-	err = normalizeMainDBBeforeDevSchemaCreate(mainDB)
+	err = normalizeMainDBPasskeyColumnsForTest(mainDB)
 	if err != nil {
 		t.Fatalf("normalize main db: %v", err)
 	}
@@ -229,7 +229,7 @@ func TestNormalizeMainDBBeforeDevSchemaCreateHandlesMissingPasskeyColumns(t *tes
 	}()
 
 	ctx := context.Background()
-	err = normalizeMainDBBeforeDevSchemaCreate(mainDB)
+	err = normalizeMainDBPasskeyColumnsForTest(mainDB)
 	if err != nil {
 		t.Fatalf("normalize main db: %v", err)
 	}
@@ -253,4 +253,103 @@ func TestNormalizeMainDBBeforeDevSchemaCreateHandlesMissingPasskeyColumns(t *tes
 	if len(accountx.PasskeyRecoveryCodeHashes) != 0 {
 		t.Fatalf("expected empty passkey recovery code hashes, got %d", len(accountx.PasskeyRecoveryCodeHashes))
 	}
+}
+
+func normalizeMainDBPasskeyColumnsForTest(mainDB *sqlx.MainDB) error {
+	ctx := context.Background()
+
+	hasAccountsTable, err := sqliteTableExistsForTest(ctx, mainDB.ReadWriteConn, "accounts")
+	if err != nil {
+		return err
+	}
+	if !hasAccountsTable {
+		return nil
+	}
+
+	normalizations := []struct {
+		column string
+		addSQL string
+		query  string
+	}{
+		{
+			column: "passkey_login_enabled",
+			addSQL: "ALTER TABLE accounts ADD COLUMN passkey_login_enabled bool NOT NULL DEFAULT (false)",
+			query:  "UPDATE accounts SET passkey_login_enabled = 0 WHERE passkey_login_enabled IS NULL",
+		},
+		{
+			column: "passkey_recovery_code_salt",
+			addSQL: "ALTER TABLE accounts ADD COLUMN passkey_recovery_code_salt text NOT NULL DEFAULT ('')",
+			query:  "UPDATE accounts SET passkey_recovery_code_salt = '' WHERE passkey_recovery_code_salt IS NULL",
+		},
+		{
+			column: "passkey_recovery_code_hashes",
+			addSQL: "ALTER TABLE accounts ADD COLUMN passkey_recovery_code_hashes json NOT NULL DEFAULT ('[]')",
+			query:  "UPDATE accounts SET passkey_recovery_code_hashes = '[]' WHERE passkey_recovery_code_hashes IS NULL OR TRIM(passkey_recovery_code_hashes) = '' OR passkey_recovery_code_hashes = 'null'",
+		},
+	}
+
+	for _, normalization := range normalizations {
+		hasColumn, err := sqliteTableHasColumnForTest(ctx, mainDB.ReadWriteConn, "accounts", normalization.column)
+		if err != nil {
+			return err
+		}
+		if !hasColumn {
+			_, err = mainDB.ReadWriteConn.ExecContext(ctx, normalization.addSQL)
+			if err != nil {
+				return err
+			}
+		}
+
+		_, err = mainDB.ReadWriteConn.ExecContext(ctx, normalization.query)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func sqliteTableExistsForTest(
+	ctx context.Context,
+	queryer interface {
+		QueryContext(context.Context, string, ...any) (*sql.Rows, error)
+	},
+	tableName string,
+) (bool, error) {
+	rows, err := queryer.QueryContext(
+		ctx,
+		"SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ? LIMIT 1",
+		tableName,
+	)
+	if err != nil {
+		return false, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+
+	return rows.Next(), rows.Err()
+}
+
+func sqliteTableHasColumnForTest(
+	ctx context.Context,
+	queryer interface {
+		QueryContext(context.Context, string, ...any) (*sql.Rows, error)
+	},
+	tableName string,
+	columnName string,
+) (bool, error) {
+	rows, err := queryer.QueryContext(
+		ctx,
+		"SELECT 1 FROM pragma_table_info('"+tableName+"') WHERE name = ? LIMIT 1",
+		columnName,
+	)
+	if err != nil {
+		return false, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+
+	return rows.Next(), rows.Err()
 }

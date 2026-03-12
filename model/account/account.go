@@ -266,6 +266,20 @@ func (qq *Account) DisablePasskeyLoginAndClearRecoveryCodes(ctx ctxx.Context) {
 		SaveX(ctx)
 }
 
+func (qq *Account) ClearPasskeys(ctx ctxx.Context) error {
+	_, err := ctx.MainCtx().MainTx.PasskeyCredential.Delete().
+		Where(passkeycredential.AccountID(qq.Data.ID)).
+		Exec(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	qq.DisablePasskeyLoginAndClearRecoveryCodes(ctx)
+
+	return nil
+}
+
 func (qq *Account) DisablePasskeyLoginAndClearRecoveryCodesIfNoCredentials(
 	ctx ctxx.Context,
 ) (bool, error) {

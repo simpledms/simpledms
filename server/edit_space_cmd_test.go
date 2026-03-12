@@ -138,6 +138,7 @@ func signUpAccount(t testing.TB, harness *actionTestHarness, email string) (*ent
 		language.English,
 		false,
 		true,
+		"",
 	)
 	if err != nil {
 		_ = mainTx.Rollback()

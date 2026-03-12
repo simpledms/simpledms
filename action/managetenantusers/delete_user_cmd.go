@@ -1,17 +1,11 @@
 package managetenantusers
 
 import (
-	"log"
 	"net/http"
-	"time"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	enttenantprivacy "github.com/simpledms/simpledms/db/enttenant/privacy"
-	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
-	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/common/tenantrole"
 	"github.com/simpledms/simpledms/model/modelmain"
 	"github.com/simpledms/simpledms/ui/uix/event"
@@ -59,36 +53,14 @@ func (qq *DeleteUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	userx := ctx.TenantCtx().TTx.User.Query().
-		Where(user.PublicID(entx.NewCIText(data.UserID))).
-		OnlyX(ctx)
-
-	if userx.AccountID == ctx.MainCtx().Account.ID {
-		return e.NewHTTPErrorf(
-			http.StatusConflict,
-			"You cannot delete your own user in organization management.",
-		)
-	}
-
-	// TODO why is this necessary? should tenant owner not be allowed to do this?
-	ctxWithPrivacyOverride := enttenantprivacy.DecisionContext(ctx, enttenantprivacy.Allow)
-
-	ctx.TenantCtx().TTx.SpaceUserAssignment.Delete().
-		Where(spaceuserassignment.UserID(userx.ID)).
-		ExecX(ctxWithPrivacyOverride)
-
-	ctx.TenantCtx().TTx.User.UpdateOneID(userx.ID).
-		SetDeletedAt(time.Now()).
-		SetDeletedBy(ctx.TenantCtx().User.ID).
-		ExecX(ctx)
-
-	result, err := modelmain.NewTenantAccountLifecycleService().RemoveAccountFromTenant(
+	result, err := modelmain.NewTenantUserService().Delete(
 		ctx,
 		ctx.TenantCtx().Tenant.ID,
-		userx.AccountID,
+		data.UserID,
+		ctx.MainCtx().Account.ID,
+		ctx.TenantCtx().User.ID,
 	)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 

@@ -6,7 +6,6 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	account2 "github.com/simpledms/simpledms/model/account"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -51,11 +50,10 @@ func (qq *ClearPasskeysCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Passkeys cannot be removed because a tenant requires passkey login.")
 	}
 
-	mainCtx.MainTx.PasskeyCredential.Delete().
-		Where(passkeycredential.AccountID(mainCtx.Account.ID)).
-		ExecX(mainCtx)
-
-	accountm.DisablePasskeyLoginAndClearRecoveryCodes(mainCtx)
+	err = accountm.ClearPasskeys(mainCtx)
+	if err != nil {
+		return err
+	}
 
 	rw.AddRenderables(wx.NewSnackbarf("All passkeys were removed."))
 

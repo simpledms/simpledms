@@ -9,7 +9,6 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model"
 	"github.com/simpledms/simpledms/model/common/spacerole"
 	"github.com/simpledms/simpledms/ui/renderable"
@@ -64,18 +63,10 @@ func (qq *AssignUserToSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		return e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to assign users to spaces because you aren't the owner.")
 	}
 
-	userx := ctx.SpaceCtx().TTx.User.Query().Where(user.PublicID(entx.NewCIText(data.UserID))).OnlyX(ctx)
-	if ctx.SpaceCtx().Space.QueryUserAssignment().Where(
-		spaceuserassignment.UserID(userx.ID),
-	).ExistX(ctx) {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "User is already assigned to this space.")
+	err = model.NewSpaceService().AssignUser(ctx, ctx.SpaceCtx().Space, data.UserID, data.Role)
+	if err != nil {
+		return err
 	}
-
-	ctx.SpaceCtx().TTx.SpaceUserAssignment.Create().
-		SetSpace(ctx.SpaceCtx().Space).
-		SetUserID(userx.ID).
-		SetRole(data.Role).
-		SaveX(ctx)
 
 	// TODO send message to user via Chat?
 	rw.AddRenderables(wx.NewSnackbarf("User assigned to space successfully."))
