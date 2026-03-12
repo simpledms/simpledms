@@ -11,10 +11,3 @@ type Property struct {
 func NewProperty(data *enttenant.Property) *Property {
 	return &Property{data}
 }
-
-/*
-func (qq *Property) SetValue(ctx ctxx.Context, value string) {
-
-}
-
-*/

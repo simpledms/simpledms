@@ -222,42 +222,6 @@ func (qq *FileTree) FullPathsByFileIDX(ctx ctxx.Context, fileIDs []int64) map[in
 	return paths
 }
 
-func (qq *FileTree) FileByFullPath(ctx ctxx.Context, fullPath string) (*enttenant.File, error) {
-	cleanPath := filepath.Clean(fullPath)
-	if cleanPath == "." || cleanPath == "" || cleanPath == string(filepath.Separator) {
-		return ctx.SpaceCtx().SpaceRootDir(), nil
-	}
-
-	pathElems := strings.Split(cleanPath, string(filepath.Separator))
-	currentFile := ctx.SpaceCtx().SpaceRootDir()
-
-	for _, pathElem := range pathElems {
-		if pathElem == "" || pathElem == "." {
-			continue
-		}
-
-		if !currentFile.IsDirectory {
-			return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Path element is file, not a directory.")
-		}
-
-		nextFile, err := ctx.TenantCtx().TTx.File.Query().
-			Where(
-				file.SpaceID(ctx.SpaceCtx().Space.ID),
-				file.ParentID(currentFile.ID),
-				file.Name(pathElem),
-			).
-			Only(ctx)
-		if err != nil {
-			log.Println(err)
-			return nil, err
-		}
-
-		currentFile = nextFile
-	}
-
-	return currentFile, nil
-}
-
 func (qq *FileTree) IsDescendantOf(ctx ctxx.Context, fileID, ancestorFileID int64) (bool, error) {
 	if fileID == 0 || ancestorFileID == 0 {
 		return false, nil

@@ -22,12 +22,6 @@ func NewSpace(space *enttenant.Space) *Space {
 	return &Space{space}
 }
 
-// Enable a document type and tags library
-// TODO Enable or Subscribe?
-func (qq *Space) EnableLibrary() {
-	// TODO
-}
-
 func (qq *Space) Edit(ctx ctxx.Context, name string, description string) error {
 	spacex, err := qq.Data.Update().
 		SetName(name).

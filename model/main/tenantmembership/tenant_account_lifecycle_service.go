@@ -15,24 +15,6 @@ type RemoveAccountFromTenantResult struct {
 	AccountSoftDeleted       bool
 }
 
-func RemoveAccountsForDeletedTenant(ctx ctxx.Context, tenantID int64) error {
-	assignments, err := ctx.MainCtx().MainTx.TenantAccountAssignment.Query().
-		Where(tenantaccountassignment.TenantID(tenantID)).
-		All(ctx)
-	if err != nil {
-		return err
-	}
-
-	for _, assignment := range assignments {
-		_, err = RemoveAccountFromTenant(ctx, tenantID, assignment.AccountID)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 func RemoveAccountFromTenant(
 	ctx ctxx.Context,
 	tenantID int64,

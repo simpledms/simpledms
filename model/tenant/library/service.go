@@ -39,10 +39,6 @@ func (qq *Service) SpaceHasMetadata(ctx ctxx.Context) bool {
 	return false
 }
 
-func (qq *Service) ImportDocumentTypes(ctx ctxx.Context, templateKeys []string, requireEmpty bool) error {
-	return qq.ImportBuiltinDocumentTypes(ctx, templateKeys, requireEmpty)
-}
-
 func (qq *Service) ImportBuiltinDocumentTypes(ctx ctxx.Context, templateKeys []string, requireEmpty bool) error {
 	if len(templateKeys) == 0 {
 		return nil

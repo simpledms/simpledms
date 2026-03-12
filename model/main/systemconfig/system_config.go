@@ -270,22 +270,6 @@ func (qq *SystemConfig) MaxUploadSizeBytes() int64 {
 	return qq.data.MaxUploadSizeMib * bytesPerMiB
 }
 
-func (qq *SystemConfig) SetMaxUploadSizeBytes(ctx ctxx.Context, maxUploadSizeBytes int64) error {
-	if maxUploadSizeBytes < 0 {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "Max upload size must be greater than or equal to 0.")
-	}
-
-	maxUploadSizeMib := int64(0)
-	if maxUploadSizeBytes > 0 {
-		maxUploadSizeMib = maxUploadSizeBytes / bytesPerMiB
-		if maxUploadSizeBytes%bytesPerMiB != 0 {
-			maxUploadSizeMib++
-		}
-	}
-
-	return qq.SetMaxUploadSizeMib(ctx, maxUploadSizeMib)
-}
-
 func (qq *SystemConfig) SetMaxUploadSizeMib(ctx ctxx.Context, maxUploadSizeMib int64) error {
 	if maxUploadSizeMib < 0 {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Max upload size must be greater than or equal to 0.")
@@ -358,18 +342,6 @@ func (qq *SystemConfig) S3() *appmodel.S3Config {
 		S3SecretAccessKey: qq.data.S3SecretAccessKey.String(),
 		S3BucketName:      qq.data.S3BucketName,
 		S3UseSSL:          qq.data.S3UseSsl,
-	}
-}
-
-func (qq *SystemConfig) Mailer() *appmodel.MailerConfig {
-	return &appmodel.MailerConfig{
-		MailerHost:               qq.data.MailerHost,
-		MailerPort:               qq.data.MailerPort,
-		MailerUsername:           qq.data.MailerUsername,
-		MailerPassword:           qq.data.MailerPassword.String(),
-		MailerFrom:               qq.data.MailerFrom,
-		MailerInsecureSkipVerify: qq.data.MailerInsecureSkipVerify,
-		MailerUseImplicitSSLTLS:  qq.data.MailerUseImplicitSslTLS,
 	}
 }
 

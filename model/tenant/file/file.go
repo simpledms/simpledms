@@ -176,21 +176,6 @@ func (qq *File) CurrentVersion(ctx context.Context) *storedfilemodel.StoredFile 
 	return qq.nilableCurrentVersion
 }
 
-// TODO is this okay?
-func (qq *File) Versions(ctx ctxx.Context) []*storedfilemodel.StoredFile {
-	versionsx := qq.Data.QueryFileVersions().
-		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
-		WithStoredFile().
-		AllX(ctx)
-	var versions []*storedfilemodel.StoredFile
-
-	for _, versionx := range versionsx {
-		versions = append(versions, storedfilemodel.NewStoredFile(versionx.Edges.StoredFile))
-	}
-
-	return versions
-}
-
 func (qq *File) Parent(ctx ctxx.Context) (*File, error) {
 	if qq.Data.ParentID == 0 {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "file has no parent")
