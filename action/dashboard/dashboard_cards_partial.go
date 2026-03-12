@@ -3,15 +3,15 @@ package dashboard
 import (
 	"fmt"
 	"log"
-	"strings"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	mainaccount "github.com/simpledms/simpledms/db/entmain/account"
+	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	maintenant "github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
@@ -119,6 +119,9 @@ func (qq *DashboardCardsPartial) Widget(
 		if tenantCard := qq.nilableTenantCard(ctx, tenantx); tenantCard != nil {
 			tenantCards = append(tenantCards, tenantCard)
 		}
+		if quotaUsageCard := qq.nilableQuotaUsageCard(ctx, tenantx); quotaUsageCard != nil {
+			tenantCards = append(tenantCards, quotaUsageCard)
+		}
 
 		if btn, ok := qq.passkeyEnforcementBtn(ctx, tenantx); ok {
 			tenantHeaderBtns = append(tenantHeaderBtns, btn)
@@ -186,6 +189,7 @@ func (qq *DashboardCardsPartial) Widget(
 				Headline:       wx.H(wx.HeadingTypeTitleLg, wx.T("Add a backup passkey")),
 				Subhead:        wx.T("Passkey recommendation"),
 				SupportingText: wx.T("Set up a second passkey on another device as backup in case one device is lost."),
+				HTMXAttrs:      qq.registerPasskeyHTMXAttrs(),
 			})
 		}
 
@@ -313,20 +317,23 @@ func (qq *DashboardCardsPartial) registerPasskeyBtn(ctx ctxx.Context, styleType 
 	return &wx.Button{
 		Label:     wx.T("Register passkey"),
 		StyleType: styleType,
-		HTMXAttrs: wx.HTMXAttrs{
-			HxPost: qq.actions.AuthActions.PasskeyRegisterDialog.EndpointWithParams(
-				actionx.ResponseWrapperDialog,
-				"",
-			),
-			HxVals:        util.JSON(qq.actions.AuthActions.PasskeyRegisterDialog.Data()),
-			LoadInPopover: true,
-		},
+		HTMXAttrs: qq.registerPasskeyHTMXAttrs(),
+	}
+}
+
+func (qq *DashboardCardsPartial) registerPasskeyHTMXAttrs() wx.HTMXAttrs {
+	return wx.HTMXAttrs{
+		HxPost: qq.actions.AuthActions.PasskeyRegisterDialog.EndpointWithParams(
+			actionx.ResponseWrapperDialog,
+			"",
+		),
+		HxVals:        util.JSON(qq.actions.AuthActions.PasskeyRegisterDialog.Data()),
+		LoadInPopover: true,
 	}
 }
 
 func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *entmain.Tenant) *wx.Card {
 	var actions []*wx.Button
-	var nilableContent wx.IWidget
 
 	tenantm := tenant.NewTenant(tenantx)
 
@@ -352,47 +359,6 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 			})*/
 		}
 
-		contentChildren := []wx.IWidget{
-			wx.Tf("Quota usage: %s", qq.tenantStorageUsageLabel(ctx, tenantx)),
-		}
-
-		if ctx.MainCtx().Account.Role == mainrole.Admin {
-			uploadLimitLabel := wx.T("global default").String(ctx)
-			nilableUploadLimitOverride := tenantx.MaxUploadSizeMibOverride
-			if nilableUploadLimitOverride != nil {
-				uploadLimitLabel = wx.T("unlimited").String(ctx)
-				if *nilableUploadLimitOverride > 0 {
-					uploadLimitLabel = wx.Tuf("%d MiB", *nilableUploadLimitOverride).String(ctx)
-				}
-			}
-
-			contentChildren = append(contentChildren, &wx.Row{Children: []wx.IWidget{
-				wx.Tuf("Upload limit: %s", uploadLimitLabel),
-				&wx.IconButton{
-					Icon:    "more_vert",
-					Tooltip: wx.T("Upload limit options"),
-					Children: &wx.Menu{
-						Position: wx.PositionLeft,
-						Items: []*wx.MenuItem{{
-							LeadingIcon: "tune",
-							Label:       wx.T("Edit upload limit"),
-							HTMXAttrs: qq.actions.AdminActions.SetTenantUploadLimitOverrideForm.ModalLinkAttrs(
-								qq.actions.AdminActions.SetTenantUploadLimitOverrideForm.Data(
-									tenantx.PublicID.String(),
-									nilableUploadLimitOverride,
-								),
-								"",
-							),
-						}},
-					},
-				},
-			}})
-		}
-
-		nilableContent = &wx.Container{
-			GapY:  true,
-			Child: contentChildren,
-		}
 		/*actions = append(actions, &wx.Button{
 			Label:     wx.T("Spaces"),
 			StyleType: wx.ButtonStyleTypeTonal,
@@ -422,8 +388,26 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 		// Headline: wx.H(wx.HeadingTypeTitleLg, wx.Tu(tenantx.Name)),
 		Subhead:        subhead,
 		SupportingText: supportingText,
-		Content:        nilableContent,
 		Actions:        actions,
+	}
+}
+
+func (qq *DashboardCardsPartial) nilableQuotaUsageCard(ctx ctxx.Context, tenantx *entmain.Tenant) *wx.Card {
+	tenantm := tenant.NewTenant(tenantx)
+	if !tenantm.IsInitialized() {
+		return nil
+	}
+
+	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
+		return nil
+	}
+
+	quotaUsageLabel := qq.tenantStorageUsageLabel(ctx, tenantx)
+
+	return &wx.Card{
+		Style:    wx.CardStyleFilled,
+		Headline: wx.H(wx.HeadingTypeTitleLg, wx.Tu(quotaUsageLabel)),
+		Subhead:  wx.T("Quota usage"),
 	}
 }
 
