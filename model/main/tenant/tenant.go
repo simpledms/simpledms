@@ -340,3 +340,50 @@ func (qq *Tenant) HasAccount(ctx ctxx.Context, accountm *accountm.Account) bool 
 		tenantaccountassignment.AccountID(accountm.Data.ID),
 	).ExistX(ctx)
 }
+
+func (qq *Tenant) AddAccountAssignment(
+	ctx ctxx.Context,
+	accountm *accountm.Account,
+	role tenantrole.TenantRole,
+	isOwningTenant bool,
+	isDefault bool,
+) error {
+	_, err := ctx.MainCtx().MainTx.TenantAccountAssignment.Create().
+		SetTenantID(qq.Data.ID).
+		SetAccountID(accountm.Data.ID).
+		SetRole(role).
+		SetIsOwningTenant(isOwningTenant).
+		SetIsDefault(isDefault).
+		Save(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (qq *Tenant) SetMaxUploadSizeMibOverride(ctx ctxx.Context, maxUploadSizeMib int64) error {
+	tenantx, err := qq.Data.Update().
+		SetMaxUploadSizeMibOverride(maxUploadSizeMib).
+		Save(ctx)
+	if err != nil {
+		return err
+	}
+
+	qq.Data = tenantx
+
+	return nil
+}
+
+func (qq *Tenant) ClearMaxUploadSizeMibOverride(ctx ctxx.Context) error {
+	tenantx, err := qq.Data.Update().
+		ClearMaxUploadSizeMibOverride().
+		Save(ctx)
+	if err != nil {
+		return err
+	}
+
+	qq.Data = tenantx
+
+	return nil
+}

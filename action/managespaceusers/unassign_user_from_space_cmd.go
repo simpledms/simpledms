@@ -62,9 +62,8 @@ func (qq *UnassignUserFromSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 		)
 	}
 
-	err = spacemodel.NewSpaceService().UnassignUser(
+	err = spacemodel.NewSpace(ctx.SpaceCtx().Space).UnassignUser(
 		ctx,
-		ctx.SpaceCtx().Space,
 		data.UserAssignmentID,
 		ctx.SpaceCtx().User.ID,
 	)

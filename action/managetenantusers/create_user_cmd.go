@@ -69,7 +69,7 @@ func (qq *CreateUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return e.NewHTTPErrorf(http.StatusBadRequest, "You are not allowed to create users because you are not the owner.")
 	}
 
-	err = tenantusermodel.NewTenantUserService().Create(
+	err = tenantusermodel.Create(
 		ctx,
 		data.Role,
 		data.Email,

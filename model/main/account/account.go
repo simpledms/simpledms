@@ -353,6 +353,28 @@ func (qq *Account) UnsafeDelete(ctx ctxx.Context) {
 	ctx.MainCtx().MainTx.PasskeyCredential.Delete().Where(passkeycredential.AccountID(qq.Data.ID)).ExecX(ctx)
 }
 
+func (qq *Account) RemoveAllTenantAssignments(ctx ctxx.Context) error {
+	_, err := ctx.MainCtx().MainTx.TenantAccountAssignment.Delete().
+		Where(tenantaccountassignment.AccountID(qq.Data.ID)).
+		Exec(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (qq *Account) InvalidateSessions(ctx ctxx.Context) error {
+	_, err := ctx.MainCtx().MainTx.Session.Delete().
+		Where(session.AccountID(qq.Data.ID)).
+		Exec(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (qq *Account) isTemporaryPasswordValid(password string) (bool, error) {
 	if qq.Data.TemporaryPasswordHash == "" || qq.Data.TemporaryPasswordSalt == "" {
 		return false, nil

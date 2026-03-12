@@ -2,8 +2,12 @@ package user
 
 import (
 	"strings"
+	"time"
 
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
+	enttenantprivacy "github.com/simpledms/simpledms/db/enttenant/privacy"
+	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 )
 
 type User struct {
@@ -39,4 +43,27 @@ func (qq *User) NameSecondLine() string {
 		return ""
 	}
 	return qq.Data.Email.String()
+}
+
+func (qq *User) Delete(ctx ctxx.Context, deletedBy int64) error {
+	ctxWithPrivacyOverride := enttenantprivacy.DecisionContext(ctx, enttenantprivacy.Allow)
+
+	_, err := ctx.TenantCtx().TTx.SpaceUserAssignment.Delete().
+		Where(spaceuserassignment.UserID(qq.Data.ID)).
+		Exec(ctxWithPrivacyOverride)
+	if err != nil {
+		return err
+	}
+
+	userx, err := qq.Data.Update().
+		SetDeletedAt(time.Now()).
+		SetDeletedBy(deletedBy).
+		Save(ctx)
+	if err != nil {
+		return err
+	}
+
+	qq.Data = userx
+
+	return nil
 }

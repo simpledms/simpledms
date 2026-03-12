@@ -3,12 +3,9 @@ package tenantuser
 import (
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain/account"
-	enttenantprivacy "github.com/simpledms/simpledms/db/enttenant/privacy"
-	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
 	accountmodel "github.com/simpledms/simpledms/model/main/account"
@@ -16,17 +13,13 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	"github.com/simpledms/simpledms/model/main/mailer"
+	tenantmodel "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/model/main/tenantmembership"
+	usermodel "github.com/simpledms/simpledms/model/tenant/user"
 	"github.com/simpledms/simpledms/util/e"
 )
 
-type TenantUserService struct{}
-
-func NewTenantUserService() *TenantUserService {
-	return &TenantUserService{}
-}
-
-func (qq *TenantUserService) Create(
+func Create(
 	ctx ctxx.Context,
 	role tenantrole.TenantRole,
 	email string,
@@ -55,14 +48,13 @@ func (qq *TenantUserService) Create(
 		SetEmail(entx.NewCIText(email)).
 		SetRole(mainrole.User).
 		SaveX(ctx)
+	accountm := accountmodel.NewAccount(accountx)
 
-	_ = ctx.TenantCtx().MainTx.TenantAccountAssignment.Create().
-		SetTenant(ctx.TenantCtx().Tenant).
-		SetAccount(accountx).
-		SetRole(role).
-		SetIsOwningTenant(true).
-		SetIsDefault(true).
-		SaveX(ctx)
+	tenantm := tenantmodel.NewTenant(ctx.TenantCtx().Tenant)
+	err = tenantm.AddAccountAssignment(ctx, accountm, role, true, true)
+	if err != nil {
+		return err
+	}
 
 	ctx.TenantCtx().TTx.User.Create().
 		SetAccountID(accountx.ID).
@@ -72,7 +64,6 @@ func (qq *TenantUserService) Create(
 		SetLastName(accountx.LastName).
 		SaveX(ctx)
 
-	accountm := accountmodel.NewAccount(accountx)
 	password, expiresAt, err := accountm.GenerateTemporaryPassword(ctx)
 	if err != nil {
 		log.Println(err)
@@ -90,16 +81,19 @@ func (qq *TenantUserService) Create(
 	return nil
 }
 
-func (qq *TenantUserService) Delete(
+func Delete(
 	ctx ctxx.Context,
 	tenantID int64,
 	userPublicID string,
 	actingAccountID int64,
 	actingUserID int64,
 ) (*tenantmembership.RemoveAccountFromTenantResult, error) {
-	userx := ctx.TenantCtx().TTx.User.Query().
+	userx, err := ctx.TenantCtx().TTx.User.Query().
 		Where(user.PublicID(entx.NewCIText(userPublicID))).
-		OnlyX(ctx)
+		Only(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	if userx.AccountID == actingAccountID {
 		return nil, e.NewHTTPErrorf(
@@ -108,21 +102,16 @@ func (qq *TenantUserService) Delete(
 		)
 	}
 
-	ctxWithPrivacyOverride := enttenantprivacy.DecisionContext(ctx, enttenantprivacy.Allow)
+	userm := usermodel.NewUser(userx)
+	err = userm.Delete(ctx, actingUserID)
+	if err != nil {
+		return nil, err
+	}
 
-	ctx.TenantCtx().TTx.SpaceUserAssignment.Delete().
-		Where(spaceuserassignment.UserID(userx.ID)).
-		ExecX(ctxWithPrivacyOverride)
-
-	ctx.TenantCtx().TTx.User.UpdateOneID(userx.ID).
-		SetDeletedAt(time.Now()).
-		SetDeletedBy(actingUserID).
-		ExecX(ctx)
-
-	result, err := tenantmembership.NewTenantAccountLifecycleService().RemoveAccountFromTenant(
+	result, err := tenantmembership.RemoveAccountFromTenant(
 		ctx,
 		tenantID,
-		userx.AccountID,
+		userm.Data.AccountID,
 	)
 	if err != nil {
 		log.Println(err)

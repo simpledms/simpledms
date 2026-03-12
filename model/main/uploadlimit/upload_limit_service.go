@@ -6,10 +6,11 @@ import (
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/tenant"
+	tenantquery "github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/model/main/systemconfig"
+	tenantmodel "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/util/e"
 )
 
@@ -60,7 +61,7 @@ func (qq *UploadLimitService) SetTenantUploadLimitOverride(
 	}
 
 	tenantx, err := ctx.MainCtx().MainTx.Tenant.Query().
-		Where(tenant.PublicID(entx.NewCIText(tenantPublicID))).
+		Where(tenantquery.PublicID(entx.NewCIText(tenantPublicID))).
 		Only(ctx)
 	if err != nil {
 		log.Println(err)
@@ -70,23 +71,26 @@ func (qq *UploadLimitService) SetTenantUploadLimitOverride(
 		return nil, err
 	}
 
-	updateQuery := tenantx.Update()
+	tenantm := tenantmodel.NewTenant(tenantx)
 	if useGlobalDefault {
-		updateQuery.ClearMaxUploadSizeMibOverride()
+		err = tenantm.ClearMaxUploadSizeMibOverride(ctx)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
 	} else {
 		uploadLimit, err := NewUploadLimitFromForm(isUnlimited, maxUploadSizeMib)
 		if err != nil {
 			return nil, err
 		}
 
-		updateQuery.SetMaxUploadSizeMibOverride(uploadLimit.MiB())
+		err = tenantm.SetMaxUploadSizeMibOverride(ctx, uploadLimit.MiB())
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
 	}
-
-	tenantx, err = updateQuery.Save(ctx)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
+	tenantx = tenantm.Data
 
 	if ctx.IsTenantCtx() && ctx.TenantCtx().Tenant.ID == tenantx.ID {
 		ctx.TenantCtx().Tenant = tenantx

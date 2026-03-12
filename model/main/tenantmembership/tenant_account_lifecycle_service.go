@@ -4,7 +4,6 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	account2 "github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
@@ -16,17 +15,7 @@ type RemoveAccountFromTenantResult struct {
 	AccountSoftDeleted       bool
 }
 
-type TenantAccountLifecycleService struct {
-	tenantAccessService *tenantaccess.TenantAccessService
-}
-
-func NewTenantAccountLifecycleService() *TenantAccountLifecycleService {
-	return &TenantAccountLifecycleService{
-		tenantAccessService: tenantaccess.NewTenantAccessService(),
-	}
-}
-
-func (qq *TenantAccountLifecycleService) RemoveAccountsForDeletedTenant(ctx ctxx.Context, tenantID int64) error {
+func RemoveAccountsForDeletedTenant(ctx ctxx.Context, tenantID int64) error {
 	assignments, err := ctx.MainCtx().MainTx.TenantAccountAssignment.Query().
 		Where(tenantaccountassignment.TenantID(tenantID)).
 		All(ctx)
@@ -35,7 +24,7 @@ func (qq *TenantAccountLifecycleService) RemoveAccountsForDeletedTenant(ctx ctxx
 	}
 
 	for _, assignment := range assignments {
-		_, err = qq.RemoveAccountFromTenant(ctx, tenantID, assignment.AccountID)
+		_, err = RemoveAccountFromTenant(ctx, tenantID, assignment.AccountID)
 		if err != nil {
 			return err
 		}
@@ -44,7 +33,7 @@ func (qq *TenantAccountLifecycleService) RemoveAccountsForDeletedTenant(ctx ctxx
 	return nil
 }
 
-func (qq *TenantAccountLifecycleService) RemoveAccountFromTenant(
+func RemoveAccountFromTenant(
 	ctx ctxx.Context,
 	tenantID int64,
 	accountID int64,
@@ -62,9 +51,10 @@ func (qq *TenantAccountLifecycleService) RemoveAccountFromTenant(
 
 		return nil, err
 	}
+	membership := NewTenantMembership(assignment)
 
-	if assignment.IsOwningTenant {
-		err = qq.softDeleteOwningAccount(ctx, accountID)
+	if membership.IsOwningTenant() {
+		err = softDeleteOwningAccount(ctx, accountID)
 		if err != nil {
 			return nil, err
 		}
@@ -75,12 +65,12 @@ func (qq *TenantAccountLifecycleService) RemoveAccountFromTenant(
 		}, nil
 	}
 
-	err = ctx.MainCtx().MainTx.TenantAccountAssignment.DeleteOneID(assignment.ID).Exec(ctx)
+	err = membership.Remove(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	err = qq.invalidateSessionsIfNoActiveTenantAssignment(
+	err = invalidateSessionsIfNoActiveTenantAssignment(
 		ctx,
 		accountID,
 	)
@@ -94,7 +84,7 @@ func (qq *TenantAccountLifecycleService) RemoveAccountFromTenant(
 	}, nil
 }
 
-func (qq *TenantAccountLifecycleService) softDeleteOwningAccount(ctx ctxx.Context, accountID int64) error {
+func softDeleteOwningAccount(ctx ctxx.Context, accountID int64) error {
 	accountx, err := ctx.MainCtx().MainTx.Account.Query().
 		Where(
 			account.ID(accountID),
@@ -112,9 +102,7 @@ func (qq *TenantAccountLifecycleService) softDeleteOwningAccount(ctx ctxx.Contex
 	accountm := account2.NewAccount(accountx)
 	accountm.UnsafeDelete(ctx)
 
-	_, err = ctx.MainCtx().MainTx.TenantAccountAssignment.Delete().
-		Where(tenantaccountassignment.AccountID(accountID)).
-		Exec(ctx)
+	err = accountm.RemoveAllTenantAssignments(ctx)
 	if err != nil {
 		return err
 	}
@@ -122,7 +110,7 @@ func (qq *TenantAccountLifecycleService) softDeleteOwningAccount(ctx ctxx.Contex
 	return nil
 }
 
-func (qq *TenantAccountLifecycleService) invalidateSessionsIfNoActiveTenantAssignment(
+func invalidateSessionsIfNoActiveTenantAssignment(
 	ctx ctxx.Context,
 	accountID int64,
 ) error {
@@ -143,7 +131,7 @@ func (qq *TenantAccountLifecycleService) invalidateSessionsIfNoActiveTenantAssig
 		return nil
 	}
 
-	hasActiveTenantAssignment, err := qq.tenantAccessService.HasActiveTenantAssignment(
+	hasActiveTenantAssignment, err := tenantaccess.NewTenantAccessService().HasActiveTenantAssignment(
 		ctx,
 		ctx.MainCtx().MainTx,
 		accountID,
@@ -155,9 +143,8 @@ func (qq *TenantAccountLifecycleService) invalidateSessionsIfNoActiveTenantAssig
 		return nil
 	}
 
-	_, err = ctx.MainCtx().MainTx.Session.Delete().
-		Where(session.AccountID(accountID)).
-		Exec(ctx)
+	accountm := account2.NewAccount(accountx)
+	err = accountm.InvalidateSessions(ctx)
 
 	return err
 }

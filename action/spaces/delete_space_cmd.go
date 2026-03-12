@@ -4,6 +4,8 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/entx"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -42,7 +44,14 @@ func (qq *DeleteSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		return err
 	}
 
-	err = spacemodel.NewSpaceService().Delete(ctx, data.SpaceID, ctx.TenantCtx().User)
+	spacex, err := ctx.TenantCtx().TTx.Space.Query().
+		Where(space.PublicID(entx.NewCIText(data.SpaceID))).
+		Only(ctx)
+	if err != nil {
+		return err
+	}
+
+	err = spacemodel.NewSpace(spacex).Delete(ctx, ctx.TenantCtx().User)
 	if err != nil {
 		return err
 	}

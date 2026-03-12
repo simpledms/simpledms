@@ -64,7 +64,7 @@ func (qq *AssignUserToSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		return e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to assign users to spaces because you aren't the owner.")
 	}
 
-	err = spacemodel.NewSpaceService().AssignUser(ctx, ctx.SpaceCtx().Space, data.UserID, data.Role)
+	err = spacemodel.NewSpace(ctx.SpaceCtx().Space).AssignUser(ctx, data.UserID, data.Role)
 	if err != nil {
 		return err
 	}

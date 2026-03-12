@@ -48,7 +48,7 @@ func (qq *CreateSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		return err
 	}
 
-	_, err = spacemodel.NewSpaceService().Create(
+	_, err = spacemodel.Create(
 		ctx,
 		data.Name,
 		data.Description,

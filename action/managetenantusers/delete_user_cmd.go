@@ -53,7 +53,7 @@ func (qq *DeleteUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	result, err := tenantusermodel.NewTenantUserService().Delete(
+	result, err := tenantusermodel.Delete(
 		ctx,
 		ctx.TenantCtx().Tenant.ID,
 		data.UserID,
