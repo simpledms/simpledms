@@ -9,7 +9,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/privacy"
-
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 )

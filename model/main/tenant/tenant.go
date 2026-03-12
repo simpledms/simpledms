@@ -11,11 +11,16 @@ import (
 	"strings"
 	"time"
 
+	"entgo.io/ent/dialect"
 	"filippo.io/age"
-
+	securejoin "github.com/cyphar/filepath-securejoin"
+	migratex "github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/source/iofs"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/db/enttenant/migrate"
+	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
@@ -23,14 +28,6 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/util/e"
-
-	"entgo.io/ent/dialect"
-	securejoin "github.com/cyphar/filepath-securejoin"
-	migratex "github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/source/iofs"
-
-	"github.com/simpledms/simpledms/db/enttenant/migrate"
-	"github.com/simpledms/simpledms/db/enttenant/schema"
 )
 
 type Tenant struct {

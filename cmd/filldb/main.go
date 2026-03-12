@@ -14,7 +14,6 @@ import (
 
 	securejoin "github.com/cyphar/filepath-securejoin"
 	_ "github.com/mattn/go-sqlite3"
-
 	"github.com/simpledms/simpledms/db/entmain"
 	mainprivacy "github.com/simpledms/simpledms/db/entmain/privacy"
 	_ "github.com/simpledms/simpledms/db/entmain/runtime"

@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"entgo.io/ent/dialect/sql"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
@@ -16,7 +15,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/main/common/attributetype"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
@@ -210,7 +209,7 @@ func (qq *FileAttributesPartial) Content(
 func (qq *FileAttributesPartial) documentTypeBadge(
 	ctx ctxx.Context,
 	data *FileAttributesPartialData,
-	filex *model.File,
+	filex *filemodel.File,
 	documentType *enttenant.DocumentType,
 	isSuggested bool,
 	documentTypeChips []*wx.FilterChip,
@@ -269,7 +268,7 @@ func (qq *FileAttributesPartial) documentTypeBadge(
 
 func (qq *FileAttributesPartial) propertyAttributeBlock(
 	ctx ctxx.Context,
-	filex *model.File,
+	filex *filemodel.File,
 	attributex *enttenant.Attribute,
 ) *wx.Column {
 	htmxAttrsFn := func(hxTrigger string) wx.HTMXAttrs {
@@ -328,7 +327,7 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 func (qq *FileAttributesPartial) tagGroupAttributeBlock(
 	ctx ctxx.Context,
 	tagAssignmentsMap map[int64]bool,
-	filex *model.File,
+	filex *filemodel.File,
 	attributex *enttenant.Attribute,
 ) *wx.Column {
 	suggestedTags := ctx.SpaceCtx().Space.QueryTags().
@@ -411,7 +410,7 @@ func (qq *FileAttributesPartial) tagBadge(
 	tagx *enttenant.Tag,
 	chips []wx.IWidget,
 	tagAssignmentsMap map[int64]bool,
-	filex *model.File,
+	filex *filemodel.File,
 	isSuggested bool,
 ) []wx.IWidget {
 	icon := "label"

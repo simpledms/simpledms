@@ -7,7 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/main"
+	uploadlimitmodel "github.com/simpledms/simpledms/model/main/uploadlimit"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -39,7 +39,7 @@ func (qq *SetTenantUploadLimitOverrideForm) Data(
 	}
 
 	if nilableMaxUploadSizeMibOverride == nil {
-		uploadLimit, err := modelmain.NewUploadLimitFromBytes(qq.infra.SystemConfig().MaxUploadSizeBytes())
+		uploadLimit, err := uploadlimitmodel.NewUploadLimitFromBytes(qq.infra.SystemConfig().MaxUploadSizeBytes())
 		if err != nil {
 			log.Println(err)
 			data.IsUnlimited = true
@@ -52,7 +52,7 @@ func (qq *SetTenantUploadLimitOverrideForm) Data(
 		return data
 	}
 
-	uploadLimit, err := modelmain.NewUploadLimitFromMiB(*nilableMaxUploadSizeMibOverride)
+	uploadLimit, err := uploadlimitmodel.NewUploadLimitFromMiB(*nilableMaxUploadSizeMibOverride)
 	if err != nil {
 		log.Println(err)
 		data.IsUnlimited = true

@@ -5,12 +5,11 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
-	"github.com/simpledms/simpledms/model/tenant"
+	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
@@ -80,7 +79,7 @@ func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartia
 	} else {
 		for _, versionx := range versions {
 			storedFile := versionx.Edges.StoredFile
-			versionm := model.NewStoredFile(storedFile)
+			versionm := storedfilemodel.NewStoredFile(storedFile)
 			versionLabel := fmt.Sprintf("Version %d", versionx.VersionNumber)
 
 			var supportingParts []string

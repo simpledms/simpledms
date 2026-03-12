@@ -18,7 +18,6 @@ import (
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
@@ -31,12 +30,13 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
-	"github.com/simpledms/simpledms/model/main"
+	appmodel "github.com/simpledms/simpledms/model/main/app"
 	"github.com/simpledms/simpledms/model/main/common/country"
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/model/main/common/plan"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/pluginx"
@@ -308,7 +308,7 @@ func initSystemConfig(
 	publicOrigin,
 	webauthnRPID,
 	webauthnRPName string,
-) *modelmain.SystemConfig {
+) *systemconfigmodel.SystemConfig {
 	t.Helper()
 
 	ctx := context.Background()
@@ -317,15 +317,15 @@ func initSystemConfig(
 		t.Fatal(err)
 	}
 
-	err = modelmain.InitAppWithoutCustomContext(
+	err = appmodel.InitAppWithoutCustomContext(
 		ctx,
 		tx,
 		"",
 		true,
-		modelmain.S3Config{},
-		modelmain.TLSConfig{},
-		modelmain.MailerConfig{},
-		modelmain.OCRConfig{},
+		appmodel.S3Config{},
+		appmodel.TLSConfig{},
+		appmodel.MailerConfig{},
+		appmodel.OCRConfig{},
 	)
 	if err != nil {
 		_ = tx.Rollback()
@@ -337,7 +337,7 @@ func initSystemConfig(
 	}
 
 	systemConfigx := mainDB.ReadWriteConn.SystemConfig.Query().FirstX(ctx)
-	return modelmain.NewSystemConfig(
+	return systemconfigmodel.NewSystemConfig(
 		systemConfigx,
 		isSaaSModeEnabled,
 		false,

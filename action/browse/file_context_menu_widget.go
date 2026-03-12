@@ -3,7 +3,7 @@ package browse
 import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
@@ -19,7 +19,7 @@ func NewFileContextMenuWidget(actions *Actions) *FileContextMenuWidget {
 }
 
 func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File) *wx.Menu {
-	filem := model.NewFile(filex)
+	filem := filemodel.NewFile(filex)
 	var menuItems []*wx.MenuItem
 
 	// TODO `select` menu item for multiselection?

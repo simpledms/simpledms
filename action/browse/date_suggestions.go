@@ -6,13 +6,13 @@ import (
 	"strings"
 
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/timex"
 )
 
 type DateSuggestionsWidget struct {
-	filex      *model.File
+	filex      *filemodel.File
 	fieldID    string
 	propertyID int64
 }
@@ -21,7 +21,7 @@ func filePropertyFieldID(propertyID int64) string {
 	return fmt.Sprintf("file-property-%d", propertyID)
 }
 
-func NewDateSuggestionsWidget(filex *model.File, fieldID string, propertyID int64) *DateSuggestionsWidget {
+func NewDateSuggestionsWidget(filex *filemodel.File, fieldID string, propertyID int64) *DateSuggestionsWidget {
 	return &DateSuggestionsWidget{
 		filex:      filex,
 		fieldID:    fieldID,

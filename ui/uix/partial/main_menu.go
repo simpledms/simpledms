@@ -146,7 +146,7 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 	}
 
 	/*
-		if ctx.IsTenantCtx() && modelmain.NewTenant(ctx.TenantCtx().Tenant).IsOwner(modelmain.NewAccount(ctx.TenantCtx().Account)) {
+		if ctx.IsTenantCtx() && tenantmainmodel.NewTenant(ctx.TenantCtx().Tenant).IsOwner(accountmainmodel.NewAccount(ctx.TenantCtx().Account)) {
 			// TODO implement submenu or add label?
 			items = append(items, []*wx.MenuItem{
 				{

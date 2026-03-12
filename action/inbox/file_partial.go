@@ -4,7 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/partial"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -64,7 +64,7 @@ func (qq *FilePartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	)
 }
 
-func (qq *FilePartial) WidgetHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context, filex *model.File) *wx.DetailsWithSheet {
+func (qq *FilePartial) WidgetHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context, filex *filemodel.File) *wx.DetailsWithSheet {
 	state := autil.StateX[InboxPageState](rw, req)
 	return qq.Widget(ctx, state, filex)
 }
@@ -72,7 +72,7 @@ func (qq *FilePartial) WidgetHandler(rw httpx.ResponseWriter, req *httpx.Request
 func (qq *FilePartial) Widget(
 	ctx ctxx.Context,
 	state *InboxPageState,
-	filex *model.File,
+	filex *filemodel.File,
 ) *wx.DetailsWithSheet {
 	fileTabsPartial := qq.actions.FileTabsPartial.Widget(
 		ctx,

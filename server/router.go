@@ -16,7 +16,6 @@ import (
 
 	"github.com/marcobeierer/structs"
 	"github.com/mattn/go-sqlite3"
-
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/ctxx"
@@ -29,10 +28,10 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
-	"github.com/simpledms/simpledms/model/main"
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
+	tenantaccessmodel "github.com/simpledms/simpledms/model/main/tenantaccess"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/cookiex"
@@ -787,7 +786,7 @@ func (qq *Router) authenticateAccount(
 	// TODO is this efficient enough to do on every request? or is there a better way to invalidate sessions
 	//		on tenant deletion?
 	if qq.infra.SystemConfig().IsSaaSModeEnabled() && accountx.Role == mainrole.User {
-		hasActiveTenantAssignment, err := modelmain.NewTenantAccessService().HasActiveTenantAssignment(
+		hasActiveTenantAssignment, err := tenantaccessmodel.NewTenantAccessService().HasActiveTenantAssignment(
 			req.Context(),
 			mainTx,
 			accountx.ID,

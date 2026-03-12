@@ -10,13 +10,12 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -91,7 +90,7 @@ func (qq *MoveFile) FormHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 
-	var currentDir *model.File
+	var currentDir *filemodel.File
 	if data.CurrentDirID == "" {
 		// navigate from current directory
 		currentDir, err = filex.Parent(ctx)
@@ -166,8 +165,8 @@ func (qq *MoveFile) formID() string {
 // TODO use FormHelper instead?
 func (qq *MoveFile) Form(
 	ctx ctxx.Context,
-	currentDir *model.File,
-	filex *model.File,
+	currentDir *filemodel.File,
+	filex *filemodel.File,
 	data *MoveFileFormData,
 	wrapper actionx.ResponseWrapper,
 	hxTargetForm string,
@@ -240,8 +239,8 @@ func (qq *MoveFile) pageSize() int {
 
 func (qq *MoveFile) formFilesList(
 	ctx ctxx.Context,
-	currentDir *model.File,
-	filex *model.File,
+	currentDir *filemodel.File,
+	filex *filemodel.File,
 	hxTargetForm string,
 	searchQuery string,
 	offset int,
@@ -260,8 +259,8 @@ func (qq *MoveFile) formFilesList(
 
 func (qq *MoveFile) formFilesListItems(
 	ctx ctxx.Context,
-	currentDir *model.File,
-	filex *model.File,
+	currentDir *filemodel.File,
+	filex *filemodel.File,
 	hxTargetForm string,
 	searchQuery string,
 	offset int,

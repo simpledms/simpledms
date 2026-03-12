@@ -11,9 +11,7 @@ import (
 
 	"github.com/go-playground/form"
 	"github.com/go-playground/validator/v10"
-
 	"github.com/google/uuid"
-
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/common/country"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"

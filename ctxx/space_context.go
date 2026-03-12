@@ -27,7 +27,7 @@ type SpaceContext struct {
 	// Tenant       *entmain.Tenant  // see Account
 	// StoragePath  string           // TODO belongs to context?
 	SpaceID             string           // Unsafe because only set for Get requests via router..., not for commands
-	Space               *enttenant.Space // TODO rename to NilableSpace?; model.Space?
+	Space               *enttenant.Space // TODO rename to NilableSpace?; spacemodel.Space?
 	nilableSpaceRootDir *enttenant.File  // TODO is ID enough? read on demand... but query is necessary anyway...
 }
 

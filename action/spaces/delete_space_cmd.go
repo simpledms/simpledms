@@ -4,7 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/tenant"
+	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -42,7 +42,7 @@ func (qq *DeleteSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		return err
 	}
 
-	err = model.NewSpaceService().Delete(ctx, data.SpaceID, ctx.TenantCtx().User)
+	err = spacemodel.NewSpaceService().Delete(ctx, data.SpaceID, ctx.TenantCtx().User)
 	if err != nil {
 		return err
 	}

@@ -10,7 +10,8 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/model/main/common/spacerole"
-	"github.com/simpledms/simpledms/model/tenant"
+	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
+	usermodel "github.com/simpledms/simpledms/model/tenant/user"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -63,7 +64,7 @@ func (qq *AssignUserToSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		return e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to assign users to spaces because you aren't the owner.")
 	}
 
-	err = model.NewSpaceService().AssignUser(ctx, ctx.SpaceCtx().Space, data.UserID, data.Role)
+	err = spacemodel.NewSpaceService().AssignUser(ctx, ctx.SpaceCtx().Space, data.UserID, data.Role)
 	if err != nil {
 		return err
 	}
@@ -178,7 +179,7 @@ func (qq *AssignUserToSpaceCmd) userListItems(ctx ctxx.Context) interface{} {
 	}
 
 	for _, unassignedUser := range unassignedUsers {
-		userm := model.NewUser(unassignedUser)
+		userm := usermodel.NewUser(unassignedUser)
 		items = append(items, &wx.ListItem{
 			RadioGroupName: "UserID",
 			RadioValue:     fmt.Sprintf("%s", unassignedUser.PublicID),

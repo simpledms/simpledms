@@ -9,15 +9,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/privacy"
 	"github.com/minio/minio-go/v7"
-
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/model/main"
-	"github.com/simpledms/simpledms/model/tenant"
+	temporaryfilemodel "github.com/simpledms/simpledms/model/main/temporaryfile"
+	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 )
 
 func (qq *Scheduler) processFiles() {
@@ -90,7 +89,7 @@ func (qq *Scheduler) deleteProcessedTempFiles(ctx context.Context) {
 		filesToDelete := qq.processedTempFilesToDelete(ctx, tenantDB, deletionThreshold)
 
 		for _, fileToDelete := range filesToDelete {
-			filem := model.NewStoredFile(fileToDelete)
+			filem := storedfilemodel.NewStoredFile(fileToDelete)
 
 			tmpObjectName, err := filem.UnsafeTempObjectNameWithPrefix()
 			if err != nil {
@@ -141,7 +140,7 @@ func (qq *Scheduler) deleteTempAccountFiles(ctx context.Context) {
 	expiredTmpFiles := qq.tempAccountFilesToDelete(ctx, time.Now())
 
 	for _, tmpFile := range expiredTmpFiles {
-		tmpFilem := modelmain.NewTemporaryFile(tmpFile)
+		tmpFilem := temporaryfilemodel.NewTemporaryFile(tmpFile)
 
 		objectName, err := tmpFilem.ObjectNameWithPrefix()
 		if err != nil {

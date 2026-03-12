@@ -6,9 +6,9 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/main"
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	tenantusermodel "github.com/simpledms/simpledms/model/main/tenantuser"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -69,7 +69,7 @@ func (qq *CreateUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return e.NewHTTPErrorf(http.StatusBadRequest, "You are not allowed to create users because you are not the owner.")
 	}
 
-	err = modelmain.NewTenantUserService().Create(
+	err = tenantusermodel.NewTenantUserService().Create(
 		ctx,
 		data.Role,
 		data.Email,

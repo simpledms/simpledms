@@ -7,7 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
@@ -76,8 +76,8 @@ func (qq *FilePreviewPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 func (qq *FilePreviewPartial) Widget(
 	ctx ctxx.Context,
 	state *FilePreviewPartialState,
-	dirx *model.File,
-	filex *model.File,
+	dirx *filemodel.File,
+	filex *filemodel.File,
 ) (*wx.DetailsWithSheet, error) {
 	// TODO action.ShowFileData or primitive types?
 	//		is partial bound to action?
@@ -135,7 +135,7 @@ func (qq *FilePreviewPartial) appBar(
 	ctx ctxx.Context,
 	dirID string,
 	title *wx.Text,
-	filex *model.File,
+	filex *filemodel.File,
 	filename string,
 ) *wx.AppBar {
 	downloadURL := route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String())

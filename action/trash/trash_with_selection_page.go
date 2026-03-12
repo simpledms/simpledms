@@ -8,7 +8,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/partial"
@@ -78,7 +78,7 @@ func (qq *TrashWithSelectionPage) widget(
 	req *httpx.Request,
 	ctx ctxx.Context,
 	state *FileTabsPartialState,
-	filex *model.File,
+	filex *filemodel.File,
 ) (renderable.Renderable, error) {
 	filePreview, err := qq.filePreview(ctx, state, filex)
 	if err != nil {
@@ -113,7 +113,7 @@ func (qq *TrashWithSelectionPage) appBar(ctx ctxx.Context) *wx.AppBar {
 func (qq *TrashWithSelectionPage) filePreview(
 	ctx ctxx.Context,
 	state *FileTabsPartialState,
-	filex *model.File,
+	filex *filemodel.File,
 ) (*wx.DetailsWithSheet, error) {
 	title := wx.T("Preview")
 	if ctx.SpaceCtx().Space.IsFolderMode {
@@ -142,7 +142,7 @@ func (qq *TrashWithSelectionPage) filePreview(
 	}, nil
 }
 
-func (qq *TrashWithSelectionPage) previewAppBar(ctx ctxx.Context, title *wx.Text, filex *model.File) *wx.AppBar {
+func (qq *TrashWithSelectionPage) previewAppBar(ctx ctxx.Context, title *wx.Text, filex *filemodel.File) *wx.AppBar {
 	return &wx.AppBar{
 		Leading: &wx.IconButton{
 			Icon:    "close",

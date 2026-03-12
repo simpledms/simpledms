@@ -7,7 +7,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/common/spacerole"
-	"github.com/simpledms/simpledms/model/tenant"
+	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -62,7 +62,7 @@ func (qq *UnassignUserFromSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 		)
 	}
 
-	err = model.NewSpaceService().UnassignUser(
+	err = spacemodel.NewSpaceService().UnassignUser(
 		ctx,
 		ctx.SpaceCtx().Space,
 		data.UserAssignmentID,

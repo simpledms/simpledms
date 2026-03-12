@@ -6,7 +6,7 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/main"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
@@ -45,7 +45,7 @@ func (qq *SignOutCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 	}
 
 	cookiex.InvalidateSessionCookie(rw, qq.infra.SystemConfig().AllowInsecureCookies())
-	err = modelmain.NewSessionService().DeleteByValue(ctx, cookie.Value)
+	err = sessionmodel.NewSessionService().DeleteByValue(ctx, cookie.Value)
 	if err != nil {
 		return err
 	}

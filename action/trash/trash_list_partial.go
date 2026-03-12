@@ -2,14 +2,13 @@ package trash
 
 import (
 	"entgo.io/ent/dialect/sql"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
@@ -113,7 +112,7 @@ func (qq *TrashListPartial) listItem(ctx ctxx.Context, filex *enttenant.File, is
 	if filex.IsDirectory {
 		icon = wx.NewIcon("folder")
 	} else {
-		filem := model.NewFile(filex)
+		filem := filemodel.NewFile(filex)
 		headline = wx.Tu(filem.FilenameInApp(ctx, false))
 	}
 

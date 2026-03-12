@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent/privacy"
 	_ "github.com/mattn/go-sqlite3"
-
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/entmain"
 	entmaintest "github.com/simpledms/simpledms/db/entmain/enttest"

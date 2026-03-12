@@ -6,8 +6,8 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/main"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	tenantusermodel "github.com/simpledms/simpledms/model/main/tenantuser"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -53,7 +53,7 @@ func (qq *DeleteUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	result, err := modelmain.NewTenantUserService().Delete(
+	result, err := tenantusermodel.NewTenantUserService().Delete(
 		ctx,
 		ctx.TenantCtx().Tenant.ID,
 		data.UserID,

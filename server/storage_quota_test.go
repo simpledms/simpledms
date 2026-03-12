@@ -15,10 +15,10 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/main"
 	"github.com/simpledms/simpledms/model/main/common/country"
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/plan"
+	signupmodel "github.com/simpledms/simpledms/model/main/signup"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -404,7 +404,7 @@ func signUpAccountWithoutSaaSGating(
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
 
-	_, err = modelmain.NewSignUpService().SignUp(
+	_, err = signupmodel.NewSignUpService().SignUp(
 		ctx,
 		email,
 		"Quota Tenant",

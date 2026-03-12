@@ -8,7 +8,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -67,7 +67,7 @@ func (qq *FileTabsPartial) Widget(
 	ctx ctxx.Context,
 	state *InboxPageState,
 	fileID string,
-	nullableFile *model.File,
+	nullableFile *filemodel.File,
 ) *wx.TabBar {
 	var activeTabContent *wx.ScrollableContent
 	tabsID := autil.GenerateID("showFileTabs")

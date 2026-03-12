@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
@@ -23,7 +22,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/partial"
@@ -323,7 +322,7 @@ func (qq *ListDirPartial) Widget(
 	}
 }
 
-func (qq *ListDirPartial) tagsAndOptions(ctx ctxx.Context, state *ListDirPartialState, dir *model.File) *wx.ChipBar {
+func (qq *ListDirPartial) tagsAndOptions(ctx ctxx.Context, state *ListDirPartialState, dir *filemodel.File) *wx.ChipBar {
 	// TODO most used tags within folder, order alphabetically or by use?
 
 	// childDirCount := dir.Data.QueryChildren().Where(file.IsDirectory(true)).CountX(ctx)
@@ -347,7 +346,7 @@ func (qq *ListDirPartial) pageSize() int {
 func (qq *ListDirPartial) filesList(
 	ctx ctxx.Context,
 	state *ListDirPartialState,
-	dir *model.File,
+	dir *filemodel.File,
 	data *ListDirPartialData,
 	offset int,
 ) renderable.Renderable {
@@ -618,7 +617,7 @@ func (qq *ListDirPartial) descendantScopePredicate(fileColumn string, rootID, sp
 func (qq *ListDirPartial) appBar(
 	ctx ctxx.Context,
 	state *ListDirPartialState,
-	dir *model.File,
+	dir *filemodel.File,
 ) *wx.AppBar {
 	var leadingButton wx.IWidget
 

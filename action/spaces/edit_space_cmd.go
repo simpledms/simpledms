@@ -4,7 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/tenant"
+	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -48,7 +48,7 @@ func (qq *EditSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 		return err
 	}
 
-	_, err = model.NewSpaceService().Edit(ctx, data.SpaceID, data.Name, data.Description)
+	_, err = spacemodel.NewSpaceService().Edit(ctx, data.SpaceID, data.Name, data.Description)
 	if err != nil {
 		return err
 	}

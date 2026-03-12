@@ -11,7 +11,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/filenamex"
 )
@@ -90,7 +90,7 @@ func (qq *FileSystem) MakeDirAllIfNotExists(ctx ctxx.Context, currentParentDir *
 }
 
 // TODO public ID or private ID?
-func (qq *FileSystem) MakeDir(ctx ctxx.Context, parentDirID string, newDirName string) (*model.File, error) {
+func (qq *FileSystem) MakeDir(ctx ctxx.Context, parentDirID string, newDirName string) (*filemodel.File, error) {
 	if !ctx.SpaceCtx().Space.IsFolderMode {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Folder mode is not enabled.")
 	}
@@ -122,16 +122,16 @@ func (qq *FileSystem) MakeDir(ctx ctxx.Context, parentDirID string, newDirName s
 		SetSpaceID(ctx.SpaceCtx().Space.ID).
 		SaveX(ctx)
 
-	return model.NewFile(filex), nil
+	return filemodel.NewFile(filex), nil
 }
 
 // TODO name Move or Rename to be more consistent with FS interface?
 func (qq *FileSystem) Move(
 	ctx ctxx.Context,
-	destDir, filex *model.File,
+	destDir, filex *filemodel.File,
 	newFilename string,
 	dirNameToCreate string, // TODO name?
-) (*model.File, error) {
+) (*filemodel.File, error) {
 	if !ctx.SpaceCtx().Space.IsFolderMode {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Folder mode is not enabled.")
 	}
@@ -181,13 +181,13 @@ func (qq *FileSystem) Move(
 	// returns new pointer, thus must be returned to caller
 	// TODO not very nice solution
 	filexx := fileUpdate.SaveX(ctx)
-	filex = model.NewFile(filexx)
+	filex = filemodel.NewFile(filexx)
 
 	// FIXME is overwrite automatically prevented by unique constraint? impl test
 	return filex, nil
 }
 
-func (qq *FileSystem) Rename(ctx ctxx.Context, filex *model.File, newFilename string) (*model.File, error) {
+func (qq *FileSystem) Rename(ctx ctxx.Context, filex *filemodel.File, newFilename string) (*filemodel.File, error) {
 	// TODO block in non folder mode?
 
 	if newFilename == "" {
@@ -199,7 +199,7 @@ func (qq *FileSystem) Rename(ctx ctxx.Context, filex *model.File, newFilename st
 
 	// returns new pointer, thus must be returned to caller
 	filexx := filex.Data.Update().SetName(newFilename).SaveX(ctx)
-	filex = model.NewFile(filexx)
+	filex = filemodel.NewFile(filexx)
 
 	// FIXME is overwrite automatically prevented by unique constraint? impl test
 	return filex, nil
@@ -334,7 +334,7 @@ func (qq *FileSystem) AddFile(
 		SaveX(ctx)
 
 	// TODO not very clean; only in case contentType is empty
-	_, err = qq.UpdateMimeType(ctx, false, model.NewStoredFile(storedFilex))
+	_, err = qq.UpdateMimeType(ctx, false, storedfilemodel.NewStoredFile(storedFilex))
 	if err != nil {
 		log.Println(err)
 		// not critical
@@ -345,7 +345,7 @@ func (qq *FileSystem) AddFile(
 
 // near duplicate in S3FileSystem
 // TODO panic instead of error and rename to MimeType()? indexer must than handle panic!!
-func (qq *FileSystem) UpdateMimeType(ctx ctxx.Context, force bool, filex *model.StoredFile) (string, error) {
+func (qq *FileSystem) UpdateMimeType(ctx ctxx.Context, force bool, filex *storedfilemodel.StoredFile) (string, error) {
 	if filex.Data.MimeType != "" && !force {
 		return filex.Data.MimeType, nil
 	}

@@ -9,7 +9,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/property"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -126,7 +126,7 @@ func (qq *FilePropertiesPartial) ID() string {
 
 func (qq *FilePropertiesPartial) propertyAssignmentBlock(
 	ctx ctxx.Context,
-	filex *model.File,
+	filex *filemodel.File,
 	assignment *enttenant.FilePropertyAssignment,
 ) *wx.Column {
 	propertyx := assignment.Edges.Property

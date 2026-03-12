@@ -7,7 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/util"
@@ -82,8 +82,8 @@ func (qq *BrowseWithSelectionPage) widget(
 	req *httpx.Request,
 	ctx ctxx.Context,
 	state *FilePreviewPartialState,
-	dirx *model.File,
-	filex *model.File,
+	dirx *filemodel.File,
+	filex *filemodel.File,
 ) (renderable.Renderable, error) {
 	filePreview, err := qq.actions.FilePreviewPartial.Widget(
 		ctx,

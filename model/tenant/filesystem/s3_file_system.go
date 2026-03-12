@@ -16,7 +16,6 @@ import (
 	"filippo.io/age"
 	securejoin "github.com/cyphar/filepath-securejoin"
 	"github.com/minio/minio-go/v7"
-
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
@@ -27,7 +26,7 @@ import (
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
-	"github.com/simpledms/simpledms/model/tenant"
+	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/util"
 	"github.com/simpledms/simpledms/util/e"
@@ -76,7 +75,7 @@ func (qq *S3FileSystem) TenantUsageBytes(ctx ctxx.Context) (int64, int64, error)
 
 // caller has to close io.ReadCloser
 // TODO OpenFile or CopyFile?
-func (qq *S3FileSystem) OpenFile(ctx ctxx.Context, file *model.StoredFile) (io.ReadCloser, error) {
+func (qq *S3FileSystem) OpenFile(ctx ctxx.Context, file *storedfilemodel.StoredFile) (io.ReadCloser, error) {
 	objectName, err := file.ObjectNameWithPrefix()
 	if err != nil {
 		log.Println(err)
@@ -96,7 +95,7 @@ func (qq *S3FileSystem) OpenFile(ctx ctxx.Context, file *model.StoredFile) (io.R
 //
 // Unsafe because it should never be used directly, but is done in Scheduler because otherwise
 // ctxx.TenantContext needs to be constructed
-func (qq *S3FileSystem) UnsafeOpenFile(ctx context.Context, x25519Identity *age.X25519Identity, file *model.StoredFile) (io.ReadCloser, error) {
+func (qq *S3FileSystem) UnsafeOpenFile(ctx context.Context, x25519Identity *age.X25519Identity, file *storedfilemodel.StoredFile) (io.ReadCloser, error) {
 	objectName, err := file.ObjectNameWithPrefix()
 	if err != nil {
 		log.Println(err)
@@ -409,7 +408,7 @@ func (qq *S3FileSystem) FinalizePreparedUpload(
 		SetUploadSucceededAt(time.Now()).
 		SaveX(ctxWithIncomplete)
 
-	_, err = qq.UpdateMimeType(ctx, false, model.NewStoredFile(storedFilex))
+	_, err = qq.UpdateMimeType(ctx, false, storedfilemodel.NewStoredFile(storedFilex))
 	if err != nil {
 		log.Println(err)
 	}
@@ -885,7 +884,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 		// nothing because files don't need an extension...
 	}
 
-	// don't use public id of model.File because a file has multiple versions
+	// don't use public id of filemodel.File because a file has multiple versions
 	// and thus it breaks if another version is added
 	storedFilePublicID := util.NewPublicID()
 	storageFilename := storedFilePublicID + fileExtension + ".gz.age"
@@ -914,7 +913,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 	}
 
 	// TODO not very clean; only in case contentType is empty
-	_, err = qq.UpdateMimeType(ctx, false, model.NewStoredFile(storedFilex))
+	_, err = qq.UpdateMimeType(ctx, false, storedfilemodel.NewStoredFile(storedFilex))
 	if err != nil {
 		log.Println(err)
 		// not critical
@@ -933,7 +932,7 @@ func (qq *S3FileSystem) PersistTemporaryTenantFile(
 	tenantX25519Identity *age.X25519Identity,
 	filex *enttenant.StoredFile,
 ) error {
-	filem := model.NewStoredFile(filex)
+	filem := storedfilemodel.NewStoredFile(filex)
 
 	destObjectName, err := filem.UnsafeFinalObjectNameWithPrefix()
 	if err != nil {
@@ -1067,7 +1066,7 @@ func (qq *S3FileSystem) addFileVersion(ctx ctxx.Context, filex *enttenant.File, 
 }
 
 // near duplicate in FileSystem
-func (qq *S3FileSystem) UpdateMimeType(ctx ctxx.Context, force bool, filex *model.StoredFile) (string, error) {
+func (qq *S3FileSystem) UpdateMimeType(ctx ctxx.Context, force bool, filex *storedfilemodel.StoredFile) (string, error) {
 	if filex.Data.MimeType != "" && !force {
 		return filex.Data.MimeType, nil
 	}
