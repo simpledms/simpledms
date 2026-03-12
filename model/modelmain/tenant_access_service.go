@@ -7,6 +7,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
+	"github.com/simpledms/simpledms/db/entmain/predicate"
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
@@ -24,6 +25,22 @@ func NewTenantAccessService() *TenantAccessService {
 	}
 }
 
+func (qq *TenantAccessService) activeTenantAssignmentPredicates(
+	now time.Time,
+	predicates ...predicate.TenantAccountAssignment,
+) []predicate.TenantAccountAssignment {
+	activePredicates := []predicate.TenantAccountAssignment{
+		tenantaccountassignment.Or(
+			tenantaccountassignment.ExpiresAtIsNil(),
+			tenantaccountassignment.ExpiresAtGT(now),
+		),
+		tenantaccountassignment.HasAccountWith(account.DeletedAtIsNil()),
+		tenantaccountassignment.HasTenantWith(tenant.DeletedAtIsNil()),
+	}
+
+	return append(predicates, activePredicates...)
+}
+
 func (qq *TenantAccessService) HasActiveTenantAssignment(
 	ctx context.Context,
 	mainTx *entmain.Tx,
@@ -32,15 +49,10 @@ func (qq *TenantAccessService) HasActiveTenantAssignment(
 	now := qq.now()
 
 	return mainTx.TenantAccountAssignment.Query().
-		Where(
+		Where(qq.activeTenantAssignmentPredicates(
+			now,
 			tenantaccountassignment.AccountID(accountID),
-			tenantaccountassignment.Or(
-				tenantaccountassignment.ExpiresAtIsNil(),
-				tenantaccountassignment.ExpiresAtGT(now),
-			),
-			tenantaccountassignment.HasAccountWith(account.DeletedAtIsNil()),
-			tenantaccountassignment.HasTenantWith(tenant.DeletedAtIsNil()),
-		).
+		)...).
 		Exist(ctx)
 }
 
@@ -52,17 +64,12 @@ func (qq *TenantAccessService) IsActiveTenantOwner(
 	now := qq.now()
 
 	return ctx.MainCtx().MainTx.TenantAccountAssignment.Query().
-		Where(
+		Where(qq.activeTenantAssignmentPredicates(
+			now,
 			tenantaccountassignment.AccountID(accountID),
 			tenantaccountassignment.TenantID(tenantID),
 			tenantaccountassignment.RoleEQ(tenantrole.Owner),
-			tenantaccountassignment.Or(
-				tenantaccountassignment.ExpiresAtIsNil(),
-				tenantaccountassignment.ExpiresAtGT(now),
-			),
-			tenantaccountassignment.HasAccountWith(account.DeletedAtIsNil()),
-			tenantaccountassignment.HasTenantWith(tenant.DeletedAtIsNil()),
-		).
+		)...).
 		Exist(ctx)
 }
 
@@ -96,16 +103,11 @@ func (qq *TenantAccessService) OwningTenantIDForAccount(
 	now := qq.now()
 
 	owningAssignments, err := ctx.MainTx.TenantAccountAssignment.Query().
-		Where(
+		Where(qq.activeTenantAssignmentPredicates(
+			now,
 			tenantaccountassignment.AccountID(accountID),
 			tenantaccountassignment.IsOwningTenant(true),
-			tenantaccountassignment.Or(
-				tenantaccountassignment.ExpiresAtIsNil(),
-				tenantaccountassignment.ExpiresAtGT(now),
-			),
-			tenantaccountassignment.HasAccountWith(account.DeletedAtIsNil()),
-			tenantaccountassignment.HasTenantWith(tenant.DeletedAtIsNil()),
-		).
+		)...).
 		All(ctx)
 	if err != nil {
 		return 0, false, err
@@ -116,15 +118,10 @@ func (qq *TenantAccessService) OwningTenantIDForAccount(
 	}
 
 	activeAssignments, err := ctx.MainTx.TenantAccountAssignment.Query().
-		Where(
+		Where(qq.activeTenantAssignmentPredicates(
+			now,
 			tenantaccountassignment.AccountID(accountID),
-			tenantaccountassignment.Or(
-				tenantaccountassignment.ExpiresAtIsNil(),
-				tenantaccountassignment.ExpiresAtGT(now),
-			),
-			tenantaccountassignment.HasAccountWith(account.DeletedAtIsNil()),
-			tenantaccountassignment.HasTenantWith(tenant.DeletedAtIsNil()),
-		).
+		)...).
 		All(ctx)
 	if err != nil {
 		return 0, false, err
@@ -152,16 +149,11 @@ func (qq *TenantAccessService) TenantOwnsActiveAccounts(
 	now := qq.now()
 
 	hasOwnsActiveAccounts, err := ctx.MainTx.TenantAccountAssignment.Query().
-		Where(
+		Where(qq.activeTenantAssignmentPredicates(
+			now,
 			tenantaccountassignment.TenantID(tenantID),
 			tenantaccountassignment.IsOwningTenant(true),
-			tenantaccountassignment.Or(
-				tenantaccountassignment.ExpiresAtIsNil(),
-				tenantaccountassignment.ExpiresAtGT(now),
-			),
-			tenantaccountassignment.HasAccountWith(account.DeletedAtIsNil()),
-			tenantaccountassignment.HasTenantWith(tenant.DeletedAtIsNil()),
-		).
+		)...).
 		Exist(ctx)
 	if err != nil {
 		return false, err
@@ -171,16 +163,11 @@ func (qq *TenantAccessService) TenantOwnsActiveAccounts(
 	}
 
 	legacyAssignments, err := ctx.MainTx.TenantAccountAssignment.Query().
-		Where(
+		Where(qq.activeTenantAssignmentPredicates(
+			now,
 			tenantaccountassignment.TenantID(tenantID),
 			tenantaccountassignment.IsOwningTenant(false),
-			tenantaccountassignment.Or(
-				tenantaccountassignment.ExpiresAtIsNil(),
-				tenantaccountassignment.ExpiresAtGT(now),
-			),
-			tenantaccountassignment.HasAccountWith(account.DeletedAtIsNil()),
-			tenantaccountassignment.HasTenantWith(tenant.DeletedAtIsNil()),
-		).
+		)...).
 		All(ctx)
 	if err != nil {
 		return false, err
@@ -213,16 +200,11 @@ func (qq *TenantAccessService) IsSoleActiveOwnerOfAnyActiveTenant(
 	now := qq.now()
 
 	ownedAssignments, err := mainTx.TenantAccountAssignment.Query().
-		Where(
+		Where(qq.activeTenantAssignmentPredicates(
+			now,
 			tenantaccountassignment.AccountID(accountID),
 			tenantaccountassignment.RoleEQ(tenantrole.Owner),
-			tenantaccountassignment.Or(
-				tenantaccountassignment.ExpiresAtIsNil(),
-				tenantaccountassignment.ExpiresAtGT(now),
-			),
-			tenantaccountassignment.HasAccountWith(account.DeletedAtIsNil()),
-			tenantaccountassignment.HasTenantWith(tenant.DeletedAtIsNil()),
-		).
+		)...).
 		All(ctx)
 	if err != nil {
 		return false, err
@@ -230,16 +212,11 @@ func (qq *TenantAccessService) IsSoleActiveOwnerOfAnyActiveTenant(
 
 	for _, assignment := range ownedAssignments {
 		ownersCount, err := mainTx.TenantAccountAssignment.Query().
-			Where(
+			Where(qq.activeTenantAssignmentPredicates(
+				now,
 				tenantaccountassignment.TenantID(assignment.TenantID),
 				tenantaccountassignment.RoleEQ(tenantrole.Owner),
-				tenantaccountassignment.Or(
-					tenantaccountassignment.ExpiresAtIsNil(),
-					tenantaccountassignment.ExpiresAtGT(now),
-				),
-				tenantaccountassignment.HasAccountWith(account.DeletedAtIsNil()),
-				tenantaccountassignment.HasTenantWith(tenant.DeletedAtIsNil()),
-			).
+			)...).
 			Count(ctx)
 		if err != nil {
 			return false, err

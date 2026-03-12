@@ -17,6 +17,51 @@ func NewTagService() *TagService {
 	return &TagService{}
 }
 
+func (qq *TagService) assignTagToFile(ctx ctxx.Context, fileID int64, tagID int64, spaceID int64) error {
+	_, err := ctx.TenantCtx().TTx.TagAssignment.Create().
+		SetFileID(fileID).
+		SetTagID(tagID).
+		SetSpaceID(spaceID).
+		Save(ctx)
+
+	return err
+}
+
+func (qq *TagService) unassignTagFromFile(ctx ctxx.Context, fileID int64, tagID int64) error {
+	_, err := ctx.TenantCtx().TTx.TagAssignment.Delete().
+		Where(tagassignment.FileID(fileID), tagassignment.TagID(tagID)).
+		Exec(ctx)
+
+	return err
+}
+
+func (qq *TagService) unassignTagFromFileInSpace(
+	ctx ctxx.Context,
+	fileID int64,
+	tagID int64,
+	spaceID int64,
+) error {
+	_, err := ctx.TenantCtx().TTx.TagAssignment.Delete().
+		Where(
+			tagassignment.FileID(fileID),
+			tagassignment.TagID(tagID),
+			tagassignment.SpaceID(spaceID),
+		).
+		Exec(ctx)
+
+	return err
+}
+
+func (qq *TagService) querySubTagWithChildren(ctx ctxx.Context, subTagID int64) (*enttenant.Tag, error) {
+	return ctx.TenantCtx().TTx.Tag.Query().
+		WithChildren(func(query *enttenant.TagQuery) {
+			query.Order(tag.ByName())
+			query.Where(tag.TypeNEQ(tagtype.Super))
+		}).
+		Where(tag.ID(subTagID)).
+		Only(ctx)
+}
+
 func (qq *TagService) Create(
 	ctx ctxx.Context,
 	spaceID int64,
@@ -64,11 +109,7 @@ func (qq *TagService) AssignToFile(
 	tagID int64,
 	spaceID int64,
 ) (*enttenant.Tag, error) {
-	_, err := ctx.TenantCtx().TTx.TagAssignment.Create().
-		SetFileID(fileID).
-		SetTagID(tagID).
-		SetSpaceID(spaceID).
-		Save(ctx)
+	err := qq.assignTagToFile(ctx, fileID, tagID, spaceID)
 	if err != nil {
 		return nil, err
 	}
@@ -81,9 +122,7 @@ func (qq *TagService) UnassignFromFile(
 	fileID int64,
 	tagID int64,
 ) (*enttenant.Tag, error) {
-	_, err := ctx.TenantCtx().TTx.TagAssignment.Delete().
-		Where(tagassignment.FileID(fileID), tagassignment.TagID(tagID)).
-		Exec(ctx)
+	err := qq.unassignTagFromFile(ctx, fileID, tagID)
 	if err != nil {
 		return nil, err
 	}
@@ -113,13 +152,7 @@ func (qq *TagService) ToggleFileTag(
 	}
 
 	if isSelected {
-		_, err = ctx.TenantCtx().TTx.TagAssignment.Delete().
-			Where(
-				tagassignment.FileID(fileID),
-				tagassignment.TagID(tagID),
-				tagassignment.SpaceID(spaceID),
-			).
-			Exec(ctx)
+		err = qq.unassignTagFromFileInSpace(ctx, fileID, tagID, spaceID)
 		if err != nil {
 			return false, nil, err
 		}
@@ -127,11 +160,7 @@ func (qq *TagService) ToggleFileTag(
 		return false, tagx, nil
 	}
 
-	_, err = ctx.TenantCtx().TTx.TagAssignment.Create().
-		SetFileID(fileID).
-		SetTagID(tagID).
-		SetSpaceID(spaceID).
-		Save(ctx)
+	err = qq.assignTagToFile(ctx, fileID, tagID, spaceID)
 	if err != nil {
 		return false, nil, err
 	}
@@ -179,13 +208,7 @@ func (qq *TagService) AssignSubTag(
 		return nil, nil, err
 	}
 
-	subTag, err := ctx.TenantCtx().TTx.Tag.Query().
-		WithChildren(func(query *enttenant.TagQuery) {
-			query.Order(tag.ByName())
-			query.Where(tag.TypeNEQ(tagtype.Super))
-		}).
-		Where(tag.ID(subTagID)).
-		Only(ctx)
+	subTag, err := qq.querySubTagWithChildren(ctx, subTagID)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -206,13 +229,7 @@ func (qq *TagService) UnassignSubTag(
 		return nil, nil, err
 	}
 
-	subTag, err := ctx.TenantCtx().TTx.Tag.Query().
-		WithChildren(func(query *enttenant.TagQuery) {
-			query.Order(tag.ByName())
-			query.Where(tag.TypeNEQ(tagtype.Super))
-		}).
-		Where(tag.ID(subTagID)).
-		Only(ctx)
+	subTag, err := qq.querySubTagWithChildren(ctx, subTagID)
 	if err != nil {
 		return nil, nil, err
 	}
