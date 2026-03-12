@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/simpledms/simpledms/model/common/fieldtype"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 )
 
 // TODO Rename to Field

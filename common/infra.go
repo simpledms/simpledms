@@ -1,8 +1,8 @@
 package common
 
 import (
-	"github.com/simpledms/simpledms/model/filesystem"
-	"github.com/simpledms/simpledms/model/modelmain"
+	"github.com/simpledms/simpledms/model/main"
+	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/ui"
 )

@@ -2,8 +2,8 @@ package mailer
 
 import (
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/account"
-	"github.com/simpledms/simpledms/model/tenant"
+	"github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/model/main/tenant"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 

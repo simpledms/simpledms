@@ -7,7 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/simpledms/simpledms/model/common/attributetype"
+	"github.com/simpledms/simpledms/model/main/common/attributetype"
 )
 
 type Attribute struct {

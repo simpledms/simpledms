@@ -19,8 +19,8 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
-	accountm "github.com/simpledms/simpledms/model/account"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
+	accountm "github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/util/e"
 

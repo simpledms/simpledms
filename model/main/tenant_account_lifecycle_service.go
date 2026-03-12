@@ -6,8 +6,8 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
-	account2 "github.com/simpledms/simpledms/model/account"
-	"github.com/simpledms/simpledms/model/common/mainrole"
+	account2 "github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
 )
 
 type RemoveAccountFromTenantResult struct {

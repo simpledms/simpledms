@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/space"
-	"github.com/simpledms/simpledms/model/common/fieldtype"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 )
 
 // Property is the model entity for the Property schema.

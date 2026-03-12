@@ -11,11 +11,11 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
-	accountmodel "github.com/simpledms/simpledms/model/account"
-	"github.com/simpledms/simpledms/model/common/language"
-	"github.com/simpledms/simpledms/model/common/mainrole"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
-	"github.com/simpledms/simpledms/model/mailer"
+	accountmodel "github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/model/main/mailer"
 	"github.com/simpledms/simpledms/util/e"
 )
 

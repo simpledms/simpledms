@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 )
 
 // TODO rename to Account? User seems better for the moment...

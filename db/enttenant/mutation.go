@@ -25,12 +25,12 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/common/attributetype"
-	"github.com/simpledms/simpledms/model/common/fieldtype"
-	"github.com/simpledms/simpledms/model/common/spacerole"
-	"github.com/simpledms/simpledms/model/common/storagetype"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
-	"github.com/simpledms/simpledms/model/tagging/tagtype"
+	"github.com/simpledms/simpledms/model/main/common/attributetype"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/util/timex"
 )
 

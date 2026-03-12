@@ -9,8 +9,8 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/model/common/attributetype"
-	"github.com/simpledms/simpledms/model/library"
+	"github.com/simpledms/simpledms/model/main/common/attributetype"
+	"github.com/simpledms/simpledms/model/tenant/library"
 	"github.com/simpledms/simpledms/util/e"
 )
 

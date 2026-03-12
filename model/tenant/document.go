@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/simpledms/simpledms/model/tagging"
+	"github.com/simpledms/simpledms/model/tenant/tagging"
 )
 
 type Document struct {

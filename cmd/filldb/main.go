@@ -23,7 +23,7 @@ import (
 	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
-	tenantm "github.com/simpledms/simpledms/model/tenant"
+	tenantm "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/util"
 )

@@ -18,7 +18,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/model"
+	"github.com/simpledms/simpledms/model/tenant"
 	"github.com/simpledms/simpledms/util/ocrutil"
 )
 

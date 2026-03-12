@@ -12,7 +12,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
-	"github.com/simpledms/simpledms/model/common/plan"
+	"github.com/simpledms/simpledms/model/main/common/plan"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/fileutil"
 )

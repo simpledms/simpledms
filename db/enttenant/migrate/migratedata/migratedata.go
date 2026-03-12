@@ -11,7 +11,7 @@ import (
 
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
-	"github.com/simpledms/simpledms/model/common/attributetype"
+	"github.com/simpledms/simpledms/model/main/common/attributetype"
 )
 
 func RenamePropertyToField(dir *sqltool.GolangMigrateDir) error {

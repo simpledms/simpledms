@@ -1,9 +1,9 @@
 package library
 
 import (
-	"github.com/simpledms/simpledms/model/common/attributetype"
-	"github.com/simpledms/simpledms/model/common/fieldtype"
-	"github.com/simpledms/simpledms/model/tagging/tagtype"
+	"github.com/simpledms/simpledms/model/main/common/attributetype"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 

@@ -12,7 +12,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/privacy"
-	"github.com/simpledms/simpledms/model/common/storagetype"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
 // similar to entmain.TemporaryFile

@@ -16,9 +16,9 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/enttest"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/encryptor"
-	"github.com/simpledms/simpledms/model/common/country"
-	"github.com/simpledms/simpledms/model/common/mainrole"
-	"github.com/simpledms/simpledms/model/common/plan"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	"github.com/simpledms/simpledms/model/main/common/plan"
 	"github.com/simpledms/simpledms/util/e"
 )
 

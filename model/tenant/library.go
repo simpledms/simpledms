@@ -1,6 +1,6 @@
 package model
 
-import "github.com/simpledms/simpledms/model/tagging"
+import "github.com/simpledms/simpledms/model/tenant/tagging"
 
 type Library struct {
 	documentTypes []*DocumentType

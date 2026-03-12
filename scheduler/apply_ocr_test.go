@@ -10,10 +10,10 @@ import (
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/model"
-	"github.com/simpledms/simpledms/model/common/country"
-	"github.com/simpledms/simpledms/model/common/plan"
-	"github.com/simpledms/simpledms/model/common/storagetype"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/plan"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
+	"github.com/simpledms/simpledms/model/tenant"
 	"github.com/simpledms/simpledms/util/ocrutil"
 )
 

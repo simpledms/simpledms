@@ -5,8 +5,8 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	account2 "github.com/simpledms/simpledms/model/account"
-	"github.com/simpledms/simpledms/model/common/mainrole"
+	account2 "github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/e"
 )

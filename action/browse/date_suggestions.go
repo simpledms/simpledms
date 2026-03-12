@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model"
+	"github.com/simpledms/simpledms/model/tenant"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/timex"
 )
