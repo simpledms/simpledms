@@ -6,7 +6,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/modelmain"
+	uploadlimitmodel "github.com/simpledms/simpledms/model/main/uploadlimit"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -23,7 +23,7 @@ type SetTenantUploadLimitOverrideCmdData struct {
 type SetTenantUploadLimitOverrideCmd struct {
 	infra              *common.Infra
 	actions            *Actions
-	uploadLimitService *modelmain.UploadLimitService
+	uploadLimitService *uploadlimitmodel.UploadLimitService
 	*actionx.Config
 }
 
@@ -32,7 +32,7 @@ func NewSetTenantUploadLimitOverrideCmd(infra *common.Infra, actions *Actions) *
 	return &SetTenantUploadLimitOverrideCmd{
 		infra:              infra,
 		actions:            actions,
-		uploadLimitService: modelmain.NewUploadLimitService(),
+		uploadLimitService: uploadlimitmodel.NewUploadLimitService(),
 		Config:             config,
 	}
 }

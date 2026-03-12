@@ -4,7 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/property"
+	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -42,9 +42,10 @@ func (qq *DeletePropertyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request
 		return err
 	}
 
-	// first query ensures it belongs to current space
-	propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
-	ctx.SpaceCtx().TTx.Property.DeleteOne(propertyx).ExecX(ctx)
+	err = propertymodel.NewPropertyService().Delete(ctx, ctx.SpaceCtx().Space, data.PropertyID)
+	if err != nil {
+		return err
+	}
 
 	rw.Header().Set("HX-Trigger", event.PropertyDeleted.String())
 	rw.AddRenderables(wx.NewSnackbarf("Field deleted."))

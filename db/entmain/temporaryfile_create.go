@@ -13,7 +13,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/common/storagetype"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
 // TemporaryFileCreate is the builder for creating a TemporaryFile entity.

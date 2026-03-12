@@ -1,8 +1,8 @@
 package common
 
 import (
-	"github.com/simpledms/simpledms/model/filesystem"
-	"github.com/simpledms/simpledms/model/modelmain"
+	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
+	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/ui"
 )
@@ -18,7 +18,7 @@ type Infra struct {
 	manageTenantsDeleteTenantCmdEndpoint string
 	manageTenantsDownloadBackupEndpoint  string
 	// nilableMainIdentity *age.X25519Identity
-	systemConfig *modelmain.SystemConfig
+	systemConfig *systemconfigmodel.SystemConfig
 	// no minio.Client, seems to risky for misuse; inject on demand
 	// same is true for db clients
 }
@@ -31,7 +31,7 @@ func NewInfra(
 	fileRepo *FileRepository,
 	pluginRegistry *pluginx.Registry,
 	// nilableMainIdentity *age.X25519Identity,
-	systemConfig *modelmain.SystemConfig,
+	systemConfig *systemconfigmodel.SystemConfig,
 ) *Infra {
 	return &Infra{
 		renderer:                             renderer,
@@ -70,7 +70,7 @@ func (qq *Infra) Factory() *Factory {
 	return qq.factory
 }
 
-func (qq *Infra) SystemConfig() *modelmain.SystemConfig {
+func (qq *Infra) SystemConfig() *systemconfigmodel.SystemConfig {
 	return qq.systemConfig
 }
 

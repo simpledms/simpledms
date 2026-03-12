@@ -4,10 +4,9 @@ import (
 	"net/http"
 
 	"github.com/go-webauthn/webauthn/protocol"
-
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	account2 "github.com/simpledms/simpledms/model/account"
+	account2 "github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )

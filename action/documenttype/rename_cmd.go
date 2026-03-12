@@ -4,7 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/documenttype"
+	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -53,11 +53,12 @@ func (qq *RenameCmd) Handler(
 		return err
 	}
 
-	err = ctx.TenantCtx().TTx.DocumentType.
-		UpdateOneID(data.ID).
-		Where(documenttype.SpaceID(ctx.SpaceCtx().Space.ID)).
-		SetName(data.NewName).
-		Exec(ctx)
+	err = documenttypemodel.NewDocumentTypeService().Rename(
+		ctx,
+		ctx.SpaceCtx().Space.ID,
+		data.ID,
+		data.NewName,
+	)
 	if err != nil {
 		return err
 	}

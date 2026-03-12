@@ -4,20 +4,17 @@ package documenttype
 
 import (
 	"fmt"
-	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/model/common/attributetype"
-	"github.com/simpledms/simpledms/model/tagging/tagtype"
+	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -74,32 +71,17 @@ func (qq *CreateAttributeCmd) Handler(
 		return err
 	}
 
-	exists := ctx.SpaceCtx().TTx.Attribute.Query().
-		Where(
-			attribute.DocumentTypeID(data.DocumentTypeID),
-			attribute.TagID(data.TagID),
-		).
-		ExistX(ctx)
-	if exists {
-		tagx := ctx.SpaceCtx().Space.QueryTags().Where(tag.ID(data.TagID)).OnlyX(ctx)
-		return e.NewHTTPErrorWithSnackbar(
-			http.StatusBadRequest,
-			wx.NewSnackbarf("Tag group «%s» is already added to this document type.", tagx.Name),
-		)
+	attributex, err := documenttypemodel.NewDocumentTypeService().CreateTagAttribute(
+		ctx,
+		ctx.SpaceCtx().Space,
+		data.DocumentTypeID,
+		data.Name,
+		data.TagID,
+		data.IsNameGiving,
+	)
+	if err != nil {
+		return err
 	}
-
-	// state := autil.StateX[DocumentTypePageState](rw, req)
-
-	// documentTypex := ctx.TenantCtx().TTx.DocumentType.GetX(ctx, data.DocumentTypeID)
-
-	attributex := ctx.TenantCtx().TTx.Attribute.Create().
-		SetName(data.Name).
-		SetTagID(data.TagID).
-		SetType(attributetype.Tag).
-		SetIsNameGiving(data.IsNameGiving).
-		SetDocumentTypeID(data.DocumentTypeID).
-		SetSpaceID(ctx.SpaceCtx().Space.ID).
-		SaveX(ctx)
 
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.DocumentTypeAttributeCreated.String())

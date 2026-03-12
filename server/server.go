@@ -21,8 +21,6 @@ import (
 	"github.com/marcobeierer/go-tika"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	"golang.org/x/crypto/acme/autocert"
-
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/action/download"
 	trashaction "github.com/simpledms/simpledms/action/trash"
@@ -38,12 +36,14 @@ import (
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/i18n"
-	"github.com/simpledms/simpledms/model/common/country"
-	"github.com/simpledms/simpledms/model/common/language"
-	"github.com/simpledms/simpledms/model/common/mainrole"
-	"github.com/simpledms/simpledms/model/filesystem"
-	"github.com/simpledms/simpledms/model/modelmain"
-	tenant2 "github.com/simpledms/simpledms/model/tenant"
+	appmodel "github.com/simpledms/simpledms/model/main/app"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	signupmodel "github.com/simpledms/simpledms/model/main/signup"
+	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
+	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
+	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/scheduler"
 	"github.com/simpledms/simpledms/ui"
@@ -53,6 +53,7 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/ocrutil"
 	"github.com/simpledms/simpledms/util/recoverx"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 // TODO move to own package in cmd?
@@ -128,7 +129,7 @@ func newMaintenanceModeHandler(
 			return
 		}
 
-		identity, err := modelmain.DecryptMainIdentity(encryptedIdentity, passphrase)
+		identity, err := systemconfigmodel.DecryptMainIdentity(encryptedIdentity, passphrase)
 		if err != nil {
 			log.Println(err)
 			rw.WriteHeader(http.StatusBadRequest)
@@ -366,27 +367,27 @@ func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB,
 			log.Fatalln(err)
 		}
 
-		err = modelmain.InitAppWithoutCustomContext(
+		err = appmodel.InitAppWithoutCustomContext(
 			ctx,
 			initAppTx,
 			// true,
 			"",
 			true,
-			modelmain.S3Config{
+			appmodel.S3Config{
 				S3Endpoint:        os.Getenv("SIMPLEDMS_S3_ENDPOINT"),
 				S3AccessKeyID:     os.Getenv("SIMPLEDMS_S3_ACCESS_KEY_ID"),
 				S3SecretAccessKey: os.Getenv("SIMPLEDMS_S3_SECRET_ACCESS_KEY"),
 				S3BucketName:      os.Getenv("SIMPLEDMS_S3_BUCKET_NAME"),
 				S3UseSSL:          os.Getenv("SIMPLEDMS_S3_USE_SSL") == "true",
 			},
-			modelmain.TLSConfig{
+			appmodel.TLSConfig{
 				TLSEnableAutocert:     os.Getenv("SIMPLEDMS_TLS_ENABLE_AUTOCERT") == "true",
 				TLSCertFilepath:       os.Getenv("SIMPLEDMS_TLS_CERT_FILEPATH"),
 				TLSPrivateKeyFilepath: os.Getenv("SIMPLEDMS_TLS_PRIVATE_KEY_FILEPATH"),
 				TLSAutocertEmail:      os.Getenv("SIMPLEDMS_TLS_AUTOCERT_EMAIL"),
 				TLSAutocertHosts:      strings.Split(os.Getenv("SIMPLEDMS_TLS_AUTOCERT_HOSTS"), ","),
 			},
-			modelmain.MailerConfig{
+			appmodel.MailerConfig{
 				MailerHost:               os.Getenv("SIMPLEDMS_MAILER_HOST"),
 				MailerPort:               mailerPort,
 				MailerUsername:           os.Getenv("SIMPLEDMS_MAILER_USERNAME"),
@@ -395,7 +396,7 @@ func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB,
 				MailerInsecureSkipVerify: os.Getenv("SIMPLEDMS_MAILER_INSECURE_SKIP_VERIFY") == "true",
 				MailerUseImplicitSSLTLS:  os.Getenv("SIMPLEDMS_MAILER_USE_IMPLICIT_SSL_TLS") == "true",
 			},
-			modelmain.OCRConfig{
+			appmodel.OCRConfig{
 				TikaURL:        os.Getenv("SIMPLEDMS_OCR_TIKA_URL"),
 				MaxFileSizeMiB: ocrutil.MaxFileSizeMiB(),
 			},
@@ -695,7 +696,7 @@ func (qq *Server) applyOverrideDBConfigAfterIdentity(ctx context.Context, mainDB
 	updateQuery.SaveX(ctx)
 }
 
-func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.MainDB) (*entmain.SystemConfig, *modelmain.SystemConfig) {
+func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.MainDB) (*entmain.SystemConfig, *systemconfigmodel.SystemConfig) {
 	allowInsecureCookies := false
 	allowInsecureCookiesStr := os.Getenv("SIMPLEDMS_ALLOW_INSECURE_COOKIES")
 	if allowInsecureCookiesStr != "" {
@@ -714,7 +715,7 @@ func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.Main
 	systemConfigx := mainDB.ReadOnlyConn.SystemConfig.Query().FirstX(ctx)
 	ocrutil.SetMaxFileSizeMiB(systemConfigx.OcrMaxFileSizeMib)
 
-	systemConfig := modelmain.NewSystemConfig(
+	systemConfig := systemconfigmodel.NewSystemConfig(
 		systemConfigx,
 		qq.isSaaSModeEnabled,
 		qq.commercialLicenseEnabled,
@@ -727,7 +728,7 @@ func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.Main
 	return systemConfigx, systemConfig
 }
 
-func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *modelmain.SystemConfig) (*common.Infra, *minio.Client) {
+func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *systemconfigmodel.SystemConfig) (*common.Infra, *minio.Client) {
 	factory := common.NewFactory(
 	// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
 	// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
@@ -892,7 +893,7 @@ func (qq *Server) startScheduler(
 	mainDB *sqlx.MainDB,
 	tenantDBs *tenantdbs.TenantDBs,
 	minioClient *minio.Client,
-	systemConfig *modelmain.SystemConfig,
+	systemConfig *systemconfigmodel.SystemConfig,
 	rawSystemConfig *entmain.SystemConfig,
 ) {
 	var tikaClientNilable *tika.Client
@@ -911,7 +912,7 @@ func (qq *Server) startScheduler(
 	schedulerx.Run(qq.devMode, qq.metaPath, qq.migrationsTenantFS)
 }
 
-func (qq *Server) initNilableMinioClient(config *modelmain.S3Config) *minio.Client {
+func (qq *Server) initNilableMinioClient(config *appmodel.S3Config) *minio.Client {
 	if config.S3Endpoint == "" {
 		log.Println("No storage endpoint configured")
 		return nil
@@ -997,7 +998,7 @@ func (qq *Server) initInitialUser(
 		initialSignInURL = strings.TrimRight(initialSignInURL, "/") + "/"
 	}
 
-	initialAccount, err := modelmain.NewSignUpService().SignUp(
+	initialAccount, err := signupmodel.NewSignUpService().SignUp(
 		visitorCtx,
 		initialAccountEmail,
 		initialTenantName,

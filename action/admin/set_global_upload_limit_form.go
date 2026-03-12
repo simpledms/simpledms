@@ -7,7 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/modelmain"
+	uploadlimitmodel "github.com/simpledms/simpledms/model/main/uploadlimit"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -30,7 +30,7 @@ func NewSetGlobalUploadLimitForm(infra *common.Infra, actions *Actions) *SetGlob
 }
 
 func (qq *SetGlobalUploadLimitForm) Data() *SetGlobalUploadLimitCmdData {
-	uploadLimit, err := modelmain.NewUploadLimitFromBytes(qq.infra.SystemConfig().MaxUploadSizeBytes())
+	uploadLimit, err := uploadlimitmodel.NewUploadLimitFromBytes(qq.infra.SystemConfig().MaxUploadSizeBytes())
 	if err != nil {
 		log.Println(err)
 		return &SetGlobalUploadLimitCmdData{

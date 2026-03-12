@@ -6,6 +6,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -53,12 +54,14 @@ func (qq *CreateCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 		return err
 	}
 
-	// ctx.SpaceCtx().Space.QueryDocumentTypes().CreateCmd().SetName(data.Name).SaveX(ctx)
-	ctx.SpaceCtx().TTx.DocumentType.
-		Create().
-		SetName(data.Name).
-		SetSpaceID(ctx.SpaceCtx().Space.ID).
-		SaveX(ctx)
+	_, err = documenttypemodel.NewDocumentTypeService().Create(
+		ctx,
+		ctx.SpaceCtx().Space.ID,
+		data.Name,
+	)
+	if err != nil {
+		return err
+	}
 
 	rw.Header().Set("HX-Trigger", event.DocumentTypeCreated.String())
 	rw.Header().Set("HX-Reswap", "none")

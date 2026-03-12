@@ -112,7 +112,7 @@ func (qq *RenameFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 }
 
 /*
-func (qq *RenameFileCmd) Widget(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context, filex *model.File) *wx.ListDetailLayout {
+func (qq *RenameFileCmd) Widget(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context, filex *filemodel.File) *wx.ListDetailLayout {
 	parent, err := filex.Parent(ctx)
 	if err != nil {
 		log.Println(err)

@@ -50,7 +50,7 @@ func NewUpdatePropertyFilterCmd(infra *common.Infra, actions *Actions) *UpdatePr
 func (qq *UpdatePropertyFilterCmd) Data(
 	currentDirID string,
 	propertyID int64,
-// operator, value string,
+	// operator, value string,
 ) *UpdatePropertyFilterCmdData {
 	return &UpdatePropertyFilterCmdData{
 		CurrentDirID: currentDirID,

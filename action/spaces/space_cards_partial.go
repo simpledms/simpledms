@@ -7,8 +7,8 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
-	"github.com/simpledms/simpledms/model"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
@@ -177,7 +177,7 @@ func (qq *SpaceCardsPartial) card(
 		// TODO Subhead:        wx.T("Show stats about user access (new manage button) and files (on view button)"),
 		SupportingText: wx.Tu(spacex.Description),
 		Actions:        actions,
-		ContextMenu:    NewSpaceContextMenuWidget(qq.actions).Widget(ctx, model.NewSpace(spacex)),
+		ContextMenu:    NewSpaceContextMenuWidget(qq.actions).Widget(ctx, spacemodel.NewSpace(spacex)),
 	}
 }
 

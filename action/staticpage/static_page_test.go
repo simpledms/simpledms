@@ -10,17 +10,17 @@ import (
 	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
-
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain/enttest"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/i18n"
-	"github.com/simpledms/simpledms/model/common/language"
-	"github.com/simpledms/simpledms/model/common/mainrole"
-	"github.com/simpledms/simpledms/model/filesystem"
-	"github.com/simpledms/simpledms/model/modelmain"
+	appmodel "github.com/simpledms/simpledms/model/main/app"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
+	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/ui"
 	"github.com/simpledms/simpledms/util/accountutil"
@@ -151,15 +151,15 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 		t.Fatalf("begin tx: %v", err)
 	}
 
-	err = modelmain.InitAppWithoutCustomContext(
+	err = appmodel.InitAppWithoutCustomContext(
 		ctx,
 		tx,
 		"",
 		true,
-		modelmain.S3Config{},
-		modelmain.TLSConfig{},
-		modelmain.MailerConfig{},
-		modelmain.OCRConfig{},
+		appmodel.S3Config{},
+		appmodel.TLSConfig{},
+		appmodel.MailerConfig{},
+		appmodel.OCRConfig{},
 	)
 	if err != nil {
 		_ = tx.Rollback()
@@ -171,7 +171,7 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 	}
 
 	systemConfigx := client.SystemConfig.Query().FirstX(ctx)
-	systemConfig := modelmain.NewSystemConfig(systemConfigx, false, false, true, "", "", "")
+	systemConfig := systemconfigmodel.NewSystemConfig(systemConfigx, false, false, true, "", "", "")
 
 	templates := template.New("app")
 	templates.Funcs(ui.TemplateFuncMap(templates))

@@ -7,7 +7,8 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/model/tagging/tagtype"
+	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -59,12 +60,14 @@ func (qq *MoveTagToGroupCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request
 
 	var snackbar *wx.Snackbar
 
-	if data.GroupTagID == 0 {
-		ctx.TenantCtx().TTx.Tag.UpdateOneID(data.TagID).ClearGroupID().SaveX(ctx)
+	isDeselected, groupTag, err := taggingmodel.NewTagService().MoveToGroup(ctx, data.TagID, data.GroupTagID)
+	if err != nil {
+		return err
+	}
+
+	if isDeselected {
 		snackbar = wx.NewSnackbarf("Deselected group.")
 	} else {
-		ctx.TenantCtx().TTx.Tag.UpdateOneID(data.TagID).SetGroupID(data.GroupTagID).SaveX(ctx)
-		groupTag := ctx.TenantCtx().TTx.Tag.GetX(ctx, data.GroupTagID)
 		snackbar = wx.NewSnackbarf("Moved to group «%s».", groupTag.Name)
 	}
 

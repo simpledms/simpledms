@@ -9,7 +9,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
-	"github.com/simpledms/simpledms/model"
+	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -55,7 +55,7 @@ func (qq *Download) Handler(
 			return err
 		}
 		storedFile := version.Edges.StoredFile
-		return commonaction.StreamDownload(qq.infra, ctx, rw, req, filex, model.NewStoredFile(storedFile))
+		return commonaction.StreamDownload(qq.infra, ctx, rw, req, filex, storedfilemodel.NewStoredFile(storedFile))
 	}
 
 	currentVersion := filex.CurrentVersion(ctx)

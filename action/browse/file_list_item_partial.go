@@ -11,7 +11,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -234,7 +234,7 @@ func (qq *FileListItemPartial) fileListItem(
 	}
 }
 
-func (qq *FileListItemPartial) supportingTextFile(ctx ctxx.Context, filexx *model.File, supportingText string) string {
+func (qq *FileListItemPartial) supportingTextFile(ctx ctxx.Context, filexx *filemodel.File, supportingText string) string {
 	if filexx.Data.DocumentTypeID != 0 {
 		documentTypex, err := filexx.Data.Edges.DocumentTypeOrErr()
 		if err != nil {

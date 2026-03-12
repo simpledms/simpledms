@@ -6,8 +6,8 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/model"
-	"github.com/simpledms/simpledms/model/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	usermodel "github.com/simpledms/simpledms/model/tenant/user"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -65,7 +65,7 @@ func (qq *UsersOfSpaceListPartial) Widget(ctx ctxx.Context, state *UsersOfSpaceL
 			// TODO add tooltip...
 			leading = wx.NewIcon("manage_accounts")
 		}
-		userm := model.NewUser(assignment.Edges.User)
+		userm := usermodel.NewUser(assignment.Edges.User)
 		listItems = append(listItems, &wx.ListItem{
 			Leading:        leading,
 			Headline:       wx.Tu(userm.Name()),

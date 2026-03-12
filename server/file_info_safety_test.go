@@ -17,7 +17,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
-	"github.com/simpledms/simpledms/model"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/e"
@@ -320,7 +320,7 @@ func createDirectoryForTest(spaceCtx *ctxx.SpaceContext, parentID int64, name st
 		SaveX(spaceCtx)
 }
 
-func createRegularFileForTest(spaceCtx *ctxx.SpaceContext, parentID int64, name string) *model.File {
+func createRegularFileForTest(spaceCtx *ctxx.SpaceContext, parentID int64, name string) *filemodel.File {
 	now := time.Now()
 	filex := spaceCtx.TTx.File.Create().
 		SetName(name).
@@ -332,5 +332,5 @@ func createRegularFileForTest(spaceCtx *ctxx.SpaceContext, parentID int64, name 
 		SetIsInInbox(false).
 		SaveX(spaceCtx)
 
-	return model.NewFile(filex)
+	return filemodel.NewFile(filex)
 }

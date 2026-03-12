@@ -4,9 +4,9 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
+	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -50,26 +50,17 @@ func (qq *EditSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 		return err
 	}
 
-	// assumes it is on spaces screen, not dashboard
-	ctx.TenantCtx().TTx.Space.Update().
-		SetName(data.Name).
-		SetDescription(data.Description).
+	spacex, err := ctx.TenantCtx().TTx.Space.Query().
 		Where(space.PublicID(entx.NewCIText(data.SpaceID))).
-		ExecX(ctx)
+		Only(ctx)
+	if err != nil {
+		return err
+	}
 
-	spacex := ctx.TenantCtx().TTx.Space.Query().Where(
-		space.PublicID(entx.NewCIText(data.SpaceID)),
-	).OnlyX(ctx)
-	spaceCtx := ctxx.NewSpaceContext(ctx.TenantCtx(), spacex)
-
-	ctx.TenantCtx().TTx.File.Update().
-		SetName(data.Name).
-		Where(
-			file.SpaceID(spacex.ID),
-			file.IsDirectory(true),
-			file.IsRootDir(true),
-		).
-		ExecX(spaceCtx)
+	err = spacemodel.NewSpace(spacex).Edit(ctx, data.Name, data.Description)
+	if err != nil {
+		return err
+	}
 
 	rw.Header().Set("HX-Trigger", event.SpaceUpdated.String())
 	rw.AddRenderables(wx.NewSnackbarf("Changes saved."))

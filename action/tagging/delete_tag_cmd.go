@@ -4,6 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -53,15 +54,10 @@ func (qq *DeleteTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 	// TODO cleanup from time to time all tags that get deleted and files no longer exist
 	//		or just after a long time
 
-	tagName := ctx.TenantCtx().TTx.Tag.GetX(ctx, data.TagID).Name
-
-	// TODO unassign tag from all files
-
-	// FIXME permissions; must belong to space
-	ctx.TenantCtx().TTx.
-		Tag.
-		DeleteOneID(data.TagID).
-		ExecX(ctx)
+	tagName, err := taggingmodel.NewTagService().Delete(ctx, data.TagID)
+	if err != nil {
+		return err
+	}
 
 	/*
 		tagx := qq.infra.Client().

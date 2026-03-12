@@ -6,14 +6,13 @@ import (
 	"time"
 
 	"entgo.io/ent/privacy"
-
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/model"
-	"github.com/simpledms/simpledms/model/common/country"
-	"github.com/simpledms/simpledms/model/common/plan"
-	"github.com/simpledms/simpledms/model/common/storagetype"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/plan"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
+	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/util/ocrutil"
 )
 
@@ -21,7 +20,7 @@ func TestApplyOCROneFileSkipsTooLargeFile(t *testing.T) {
 	t.Setenv(ocrutil.MaxFileSizeMiBEnvVar, "1")
 
 	now := time.Now()
-	currentVersion := model.NewStoredFile(&enttenant.StoredFile{
+	currentVersion := storedfilemodel.NewStoredFile(&enttenant.StoredFile{
 		Size:                       (1024 * 1024) + 1,
 		CopiedToFinalDestinationAt: &now,
 	})
@@ -48,7 +47,7 @@ func TestApplyOCROneFileSkipsTooLargeFile(t *testing.T) {
 func TestApplyOCROneFileReturnsNotReadyForUnmovedFile(t *testing.T) {
 	t.Setenv(ocrutil.MaxFileSizeMiBEnvVar, "1")
 
-	currentVersion := model.NewStoredFile(&enttenant.StoredFile{
+	currentVersion := storedfilemodel.NewStoredFile(&enttenant.StoredFile{
 		Size: 1024,
 	})
 

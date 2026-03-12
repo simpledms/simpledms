@@ -8,8 +8,8 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/model"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	usermodel "github.com/simpledms/simpledms/model/tenant/user"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -80,7 +80,7 @@ func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState)
 	}
 
 	for _, userx := range users {
-		userm := model.NewUser(userx)
+		userm := usermodel.NewUser(userx)
 		isOwningTenantAssignment := isOwningTenantByAccountID[userx.AccountID]
 
 		leading := wx.NewIcon("person")

@@ -4,6 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -50,10 +51,12 @@ func (qq *EditTagAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 		return err
 	}
 
-	err = ctx.TenantCtx().TTx.Attribute.UpdateOneID(data.ID).
-		SetName(data.NewName).
-		SetIsNameGiving(data.IsNameGiving).
-		Exec(ctx)
+	err = documenttypemodel.NewDocumentTypeService().EditTagAttribute(
+		ctx,
+		data.ID,
+		data.NewName,
+		data.IsNameGiving,
+	)
 	if err != nil {
 		return err
 	}

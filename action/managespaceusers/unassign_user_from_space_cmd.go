@@ -6,8 +6,8 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
-	"github.com/simpledms/simpledms/model/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -62,12 +62,14 @@ func (qq *UnassignUserFromSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 		)
 	}
 
-	assignment := ctx.SpaceCtx().Space.QueryUserAssignment().Where(spaceuserassignment.ID(data.UserAssignmentID)).OnlyX(ctx)
-	if assignment.UserID == ctx.SpaceCtx().User.ID {
-		return e.NewHTTPErrorf(http.StatusForbidden, "You cannot unassign yourself from a space.")
+	err = spacemodel.NewSpace(ctx.SpaceCtx().Space).UnassignUser(
+		ctx,
+		data.UserAssignmentID,
+		ctx.SpaceCtx().User.ID,
+	)
+	if err != nil {
+		return err
 	}
-
-	ctx.SpaceCtx().TTx.SpaceUserAssignment.DeleteOneID(data.UserAssignmentID).ExecX(ctx)
 
 	rw.AddRenderables(wx.NewSnackbarf("User unassigned from space successfully."))
 	rw.Header().Set("HX-Trigger", event.UserUnassignedFromSpace.String())

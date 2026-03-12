@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent/privacy"
 	_ "github.com/mattn/go-sqlite3"
-
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/entmain"
 	entmaintest "github.com/simpledms/simpledms/db/entmain/enttest"
@@ -15,9 +14,9 @@ import (
 	enttenanttest "github.com/simpledms/simpledms/db/enttenant/enttest"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/model/common/language"
-	"github.com/simpledms/simpledms/model/common/mainrole"
-	"github.com/simpledms/simpledms/model/common/storagetype"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
 	"github.com/simpledms/simpledms/util/accountutil"
 )
 

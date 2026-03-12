@@ -1,16 +1,13 @@
 package documenttype
 
 import (
-	"net/http"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/library"
+	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -46,16 +43,7 @@ func (qq *ImportFromLibraryCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		return err
 	}
 
-	service := library.NewService()
-	if service.SpaceHasMetadata(ctx) {
-		return e.NewHTTPErrorf(http.StatusBadRequest, wx.T("Import is only available for empty spaces.").String(ctx))
-	}
-
-	if len(data.TemplateKeys) == 0 {
-		return e.NewHTTPErrorf(http.StatusBadRequest, wx.T("Please select at least one document type.").String(ctx))
-	}
-
-	if err := service.ImportBuiltinDocumentTypes(ctx, data.TemplateKeys, true); err != nil {
+	if err := documenttypemodel.NewDocumentTypeService().ImportFromLibrary(ctx, data.TemplateKeys); err != nil {
 		return err
 	}
 

@@ -12,13 +12,13 @@ import (
 	"entgo.io/ent/privacy"
 	"filippo.io/age"
 	"github.com/marcobeierer/go-tika"
-
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/model"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
+	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/util/ocrutil"
 )
 
@@ -91,7 +91,7 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 			AllX(ctx)
 
 		for _, fileToProcess := range filesToProcess {
-			currentVersion := model.NewFile(fileToProcess).CurrentVersion(ctx)
+			currentVersion := filemodel.NewFile(fileToProcess).CurrentVersion(ctx)
 			content, fileNotReady, fileTooLarge, err := qq.applyOCROneFile(ctx, tenantIdentity, currentVersion)
 			if err != nil {
 				log.Println(err)
@@ -137,7 +137,7 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 func (qq *Scheduler) applyOCROneFile(
 	ctx context.Context,
 	tenantIdentity *age.X25519Identity,
-	currentVersion *model.StoredFile,
+	currentVersion *storedfilemodel.StoredFile,
 ) (string, bool, bool, error) {
 	// TODO use language of user?
 	tikaHeader := tika.NewHeader().AcceptText().SetOCRLanguage("eng+deu+fra+ita+spa")

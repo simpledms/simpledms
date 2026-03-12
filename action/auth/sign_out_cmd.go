@@ -6,7 +6,7 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain/session"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
@@ -45,8 +45,10 @@ func (qq *SignOutCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 	}
 
 	cookiex.InvalidateSessionCookie(rw, qq.infra.SystemConfig().AllowInsecureCookies())
-	// cookie value can be used directly because user is authenticated if MainCtx is used
-	ctx.MainCtx().MainTx.Session.Delete().Where(session.Value(cookie.Value)).ExecX(ctx)
+	err = sessionmodel.NewSessionService().DeleteByValue(ctx, cookie.Value)
+	if err != nil {
+		return err
+	}
 
 	rw.Header().Set("HX-Redirect", "/")
 	return nil

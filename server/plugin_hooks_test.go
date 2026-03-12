@@ -8,9 +8,9 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/common/country"
-	"github.com/simpledms/simpledms/model/common/language"
-	"github.com/simpledms/simpledms/model/modelmain"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	signupmodel "github.com/simpledms/simpledms/model/main/signup"
 	"github.com/simpledms/simpledms/pluginx"
 )
 
@@ -104,7 +104,7 @@ func executeSignUpFlow(t *testing.T, harness *actionTestHarness, email string) e
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
 
-	accountm, err := modelmain.NewSignUpService().SignUp(
+	accountm, err := signupmodel.NewSignUpService().SignUp(
 		ctx,
 		email,
 		"Test User",
@@ -114,6 +114,7 @@ func executeSignUpFlow(t *testing.T, harness *actionTestHarness, email string) e
 		language.English,
 		true,
 		true,
+		"",
 	)
 	if err != nil {
 		_ = mainTx.Rollback()

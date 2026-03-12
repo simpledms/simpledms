@@ -4,12 +4,11 @@ import (
 	"fmt"
 
 	"entgo.io/ent/dialect/sql"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
-	"github.com/simpledms/simpledms/model"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -147,7 +146,7 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 	}
 }
 
-func (qq *FileInfoPartial) versionLabel(ctx ctxx.Context, filem *model.File) *wx.Text {
+func (qq *FileInfoPartial) versionLabel(ctx ctxx.Context, filem *filemodel.File) *wx.Text {
 	versionData := filem.Data.QueryFileVersions().Order(fileversion.ByVersionNumber(sql.OrderDesc())).FirstX(ctx)
 	return wx.Tu(fmt.Sprintf("%d", versionData.VersionNumber))
 }
