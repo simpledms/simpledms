@@ -6,7 +6,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
-	"github.com/simpledms/simpledms/db/enttenant/documenttype"
+	documenttypequery "github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/main/common/attributetype"
@@ -14,45 +14,74 @@ import (
 	"github.com/simpledms/simpledms/util/e"
 )
 
-type DocumentTypeService struct{}
-
-func NewDocumentTypeService() *DocumentTypeService {
-	return &DocumentTypeService{}
+type DocumentType struct {
+	Data *enttenant.DocumentType
 }
 
-func (qq *DocumentTypeService) Create(
+func NewDocumentType(data *enttenant.DocumentType) *DocumentType {
+	return &DocumentType{
+		Data: data,
+	}
+}
+
+func Create(
 	ctx ctxx.Context,
 	spaceID int64,
 	name string,
-) (*enttenant.DocumentType, error) {
-	return ctx.SpaceCtx().TTx.DocumentType.
+) (*DocumentType, error) {
+	documentTypex, err := ctx.SpaceCtx().TTx.DocumentType.
 		Create().
 		SetName(name).
 		SetSpaceID(spaceID).
 		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return NewDocumentType(documentTypex), nil
 }
 
-func (qq *DocumentTypeService) Rename(
+func QueryByID(
 	ctx ctxx.Context,
 	spaceID int64,
 	documentTypeID int64,
-	newName string,
-) error {
-	return ctx.TenantCtx().TTx.DocumentType.
-		UpdateOneID(documentTypeID).
-		Where(documenttype.SpaceID(spaceID)).
+) (*DocumentType, error) {
+	documentTypex, err := ctx.TenantCtx().TTx.DocumentType.Query().
+		Where(
+			documenttypequery.ID(documentTypeID),
+			documenttypequery.SpaceID(spaceID),
+		).
+		Only(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return NewDocumentType(documentTypex), nil
+}
+
+func (qq *DocumentType) Rename(ctx ctxx.Context, newName string) error {
+	documentTypex, err := ctx.TenantCtx().TTx.DocumentType.
+		UpdateOneID(qq.Data.ID).
+		Where(documenttypequery.SpaceID(qq.Data.SpaceID)).
 		SetName(newName).
-		Exec(ctx)
+		Save(ctx)
+	if err != nil {
+		return err
+	}
+
+	qq.Data = documentTypex
+
+	return nil
 }
 
-func (qq *DocumentTypeService) Delete(ctx ctxx.Context, spaceID int64, documentTypeID int64) error {
+func (qq *DocumentType) Delete(ctx ctxx.Context) error {
 	return ctx.TenantCtx().TTx.DocumentType.
-		DeleteOneID(documentTypeID).
-		Where(documenttype.SpaceID(spaceID)).
+		DeleteOneID(qq.Data.ID).
+		Where(documenttypequery.SpaceID(qq.Data.SpaceID)).
 		Exec(ctx)
 }
 
-func (qq *DocumentTypeService) ImportFromLibrary(ctx ctxx.Context, templateKeys []string) error {
+func ImportFromLibrary(ctx ctxx.Context, templateKeys []string) error {
 	service := library.NewService()
 	if service.SpaceHasMetadata(ctx) {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Import is only available for empty spaces.")
@@ -65,17 +94,15 @@ func (qq *DocumentTypeService) ImportFromLibrary(ctx ctxx.Context, templateKeys 
 	return service.ImportBuiltinDocumentTypes(ctx, templateKeys, true)
 }
 
-func (qq *DocumentTypeService) CreateTagAttribute(
+func (qq *DocumentType) CreateTagAttribute(
 	ctx ctxx.Context,
-	space *enttenant.Space,
-	documentTypeID int64,
 	name string,
 	tagID int64,
 	isNameGiving bool,
 ) (*enttenant.Attribute, error) {
 	exists, err := ctx.SpaceCtx().TTx.Attribute.Query().
 		Where(
-			attribute.DocumentTypeID(documentTypeID),
+			attribute.DocumentTypeID(qq.Data.ID),
 			attribute.TagID(tagID),
 		).
 		Exist(ctx)
@@ -84,7 +111,7 @@ func (qq *DocumentTypeService) CreateTagAttribute(
 	}
 
 	if exists {
-		tagx, err := space.QueryTags().Where(tag.ID(tagID)).Only(ctx)
+		tagx, err := qq.Data.QuerySpace().QueryTags().Where(tag.ID(tagID)).Only(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -101,21 +128,19 @@ func (qq *DocumentTypeService) CreateTagAttribute(
 		SetTagID(tagID).
 		SetType(attributetype.Tag).
 		SetIsNameGiving(isNameGiving).
-		SetDocumentTypeID(documentTypeID).
-		SetSpaceID(space.ID).
+		SetDocumentTypeID(qq.Data.ID).
+		SetSpaceID(qq.Data.SpaceID).
 		Save(ctx)
 }
 
-func (qq *DocumentTypeService) CreatePropertyAttribute(
+func (qq *DocumentType) CreatePropertyAttribute(
 	ctx ctxx.Context,
-	space *enttenant.Space,
-	documentTypeID int64,
 	propertyID int64,
 	isNameGiving bool,
 ) (*enttenant.Attribute, error) {
 	exists, err := ctx.SpaceCtx().TTx.Attribute.Query().
 		Where(
-			attribute.DocumentTypeID(documentTypeID),
+			attribute.DocumentTypeID(qq.Data.ID),
 			attribute.PropertyID(propertyID),
 		).
 		Exist(ctx)
@@ -124,7 +149,7 @@ func (qq *DocumentTypeService) CreatePropertyAttribute(
 	}
 
 	if exists {
-		propertyx, err := space.QueryProperties().Where(property.ID(propertyID)).Only(ctx)
+		propertyx, err := qq.Data.QuerySpace().QueryProperties().Where(property.ID(propertyID)).Only(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -138,35 +163,9 @@ func (qq *DocumentTypeService) CreatePropertyAttribute(
 
 	return ctx.TenantCtx().TTx.Attribute.Create().
 		SetType(attributetype.Field).
-		SetDocumentTypeID(documentTypeID).
+		SetDocumentTypeID(qq.Data.ID).
 		SetPropertyID(propertyID).
 		SetIsNameGiving(isNameGiving).
-		SetSpaceID(space.ID).
+		SetSpaceID(qq.Data.SpaceID).
 		Save(ctx)
-}
-
-func (qq *DocumentTypeService) EditPropertyAttribute(
-	ctx ctxx.Context,
-	attributeID int64,
-	isNameGiving bool,
-) error {
-	return ctx.TenantCtx().TTx.Attribute.UpdateOneID(attributeID).
-		SetIsNameGiving(isNameGiving).
-		Exec(ctx)
-}
-
-func (qq *DocumentTypeService) EditTagAttribute(
-	ctx ctxx.Context,
-	attributeID int64,
-	newName string,
-	isNameGiving bool,
-) error {
-	return ctx.TenantCtx().TTx.Attribute.UpdateOneID(attributeID).
-		SetName(newName).
-		SetIsNameGiving(isNameGiving).
-		Exec(ctx)
-}
-
-func (qq *DocumentTypeService) DeleteAttribute(ctx ctxx.Context, attributeID int64) error {
-	return ctx.TenantCtx().TTx.Attribute.DeleteOneID(attributeID).Exec(ctx)
 }

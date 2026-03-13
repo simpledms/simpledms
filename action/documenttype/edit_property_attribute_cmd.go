@@ -49,7 +49,12 @@ func (qq *EditPropertyAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 		return err
 	}
 
-	err = documenttypemodel.NewDocumentTypeService().EditPropertyAttribute(ctx, data.ID, data.IsNameGiving)
+	attributex, err := documenttypemodel.QueryAttributeByID(ctx, data.ID)
+	if err != nil {
+		return err
+	}
+
+	err = attributex.SetIsNameGiving(ctx, data.IsNameGiving)
 	if err != nil {
 		return err
 	}

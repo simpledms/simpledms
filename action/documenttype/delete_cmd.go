@@ -51,7 +51,13 @@ func (qq *DeleteCmd) Handler(
 		return err
 	}
 
-	err = documenttypemodel.NewDocumentTypeService().Delete(ctx, ctx.SpaceCtx().Space.ID, data.ID)
+	documentTypex, err := documenttypemodel.QueryByID(ctx, ctx.SpaceCtx().Space.ID, data.ID)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	err = documentTypex.Delete(ctx)
 	if err != nil {
 		log.Println(err)
 		return err

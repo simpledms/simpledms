@@ -47,7 +47,13 @@ func (qq *DeleteAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 		return err
 	}
 
-	err = documenttypemodel.NewDocumentTypeService().DeleteAttribute(ctx, data.ID)
+	attributex, err := documenttypemodel.QueryAttributeByID(ctx, data.ID)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	err = attributex.Delete(ctx)
 	if err != nil {
 		log.Println(err)
 		return err

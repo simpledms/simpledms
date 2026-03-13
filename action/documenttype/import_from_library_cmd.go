@@ -43,7 +43,7 @@ func (qq *ImportFromLibraryCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		return err
 	}
 
-	if err := documenttypemodel.NewDocumentTypeService().ImportFromLibrary(ctx, data.TemplateKeys); err != nil {
+	if err := documenttypemodel.ImportFromLibrary(ctx, data.TemplateKeys); err != nil {
 		return err
 	}
 

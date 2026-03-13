@@ -71,14 +71,16 @@ func (qq *CreateAttributeCmd) Handler(
 		return err
 	}
 
-	attributex, err := documenttypemodel.NewDocumentTypeService().CreateTagAttribute(
+	documentTypex, err := documenttypemodel.QueryByID(
 		ctx,
-		ctx.SpaceCtx().Space,
+		ctx.SpaceCtx().Space.ID,
 		data.DocumentTypeID,
-		data.Name,
-		data.TagID,
-		data.IsNameGiving,
 	)
+	if err != nil {
+		return err
+	}
+
+	attributex, err := documentTypex.CreateTagAttribute(ctx, data.Name, data.TagID, data.IsNameGiving)
 	if err != nil {
 		return err
 	}

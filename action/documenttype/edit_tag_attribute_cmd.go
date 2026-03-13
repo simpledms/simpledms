@@ -51,12 +51,12 @@ func (qq *EditTagAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 		return err
 	}
 
-	err = documenttypemodel.NewDocumentTypeService().EditTagAttribute(
-		ctx,
-		data.ID,
-		data.NewName,
-		data.IsNameGiving,
-	)
+	attributex, err := documenttypemodel.QueryAttributeByID(ctx, data.ID)
+	if err != nil {
+		return err
+	}
+
+	err = attributex.RenameAndSetIsNameGiving(ctx, data.NewName, data.IsNameGiving)
 	if err != nil {
 		return err
 	}

@@ -62,13 +62,16 @@ func (qq *AddPropertyAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 		return err
 	}
 
-	attributex, err := documenttypemodel.NewDocumentTypeService().CreatePropertyAttribute(
+	documentTypex, err := documenttypemodel.QueryByID(
 		ctx,
-		ctx.SpaceCtx().Space,
+		ctx.SpaceCtx().Space.ID,
 		data.DocumentTypeID,
-		data.PropertyID,
-		data.IsNameGiving,
 	)
+	if err != nil {
+		return err
+	}
+
+	attributex, err := documentTypex.CreatePropertyAttribute(ctx, data.PropertyID, data.IsNameGiving)
 	if err != nil {
 		return err
 	}

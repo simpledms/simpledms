@@ -53,12 +53,12 @@ func (qq *RenameCmd) Handler(
 		return err
 	}
 
-	err = documenttypemodel.NewDocumentTypeService().Rename(
-		ctx,
-		ctx.SpaceCtx().Space.ID,
-		data.ID,
-		data.NewName,
-	)
+	documentTypex, err := documenttypemodel.QueryByID(ctx, ctx.SpaceCtx().Space.ID, data.ID)
+	if err != nil {
+		return err
+	}
+
+	err = documentTypex.Rename(ctx, data.NewName)
 	if err != nil {
 		return err
 	}

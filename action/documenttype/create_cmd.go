@@ -54,7 +54,7 @@ func (qq *CreateCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 		return err
 	}
 
-	_, err = documenttypemodel.NewDocumentTypeService().Create(
+	_, err = documenttypemodel.Create(
 		ctx,
 		ctx.SpaceCtx().Space.ID,
 		data.Name,
