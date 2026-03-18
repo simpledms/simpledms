@@ -564,6 +564,109 @@ func TestSignInCmdRejectsWrongPassword(t *testing.T) {
 	}
 }
 
+func TestSignInCmdDoesNotEnumerateMissingAccount(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	form := url.Values{}
+	form.Set("Email", "missing-account@example.com")
+	form.Set("Password", "not-the-password")
+
+	req := httptest.NewRequest(http.MethodPost, "/-/auth/sign-in-cmd", strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("HX-Request", "true")
+
+	rr := httptest.NewRecorder()
+	harness.router.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, rr.Code)
+	}
+
+	body := rr.Body.String()
+	if !strings.Contains(body, "Invalid credentials. Please try again.") {
+		t.Fatalf("expected invalid-credentials hint in response body, got: %s", body)
+	}
+	if strings.Contains(body, "Found no account for this email address.") {
+		t.Fatal("response leaked account existence")
+	}
+}
+
+func TestSignInCmdRateLimitedByIP(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	for qi := 0; qi < 20; qi++ {
+		form := url.Values{}
+		form.Set("Email", fmt.Sprintf("missing-ip-%d@example.com", qi))
+		form.Set("Password", "wrong-password")
+
+		req := httptest.NewRequest(http.MethodPost, "/-/auth/sign-in-cmd", strings.NewReader(form.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		req.Header.Set("HX-Request", "true")
+		req.RemoteAddr = "198.51.100.20:1234"
+
+		rr := httptest.NewRecorder()
+		harness.router.ServeHTTP(rr, req)
+
+		if rr.Code != http.StatusOK {
+			t.Fatalf("warm-up request %d expected status %d, got %d", qi, http.StatusOK, rr.Code)
+		}
+	}
+
+	blockedForm := url.Values{}
+	blockedForm.Set("Email", "missing-ip-blocked@example.com")
+	blockedForm.Set("Password", "wrong-password")
+
+	blockedReq := httptest.NewRequest(http.MethodPost, "/-/auth/sign-in-cmd", strings.NewReader(blockedForm.Encode()))
+	blockedReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	blockedReq.Header.Set("HX-Request", "true")
+	blockedReq.RemoteAddr = "198.51.100.20:1234"
+
+	blockedRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(blockedRR, blockedReq)
+
+	if blockedRR.Code != http.StatusTooManyRequests {
+		t.Fatalf("expected status %d, got %d", http.StatusTooManyRequests, blockedRR.Code)
+	}
+}
+
+func TestSignInCmdRateLimitedByEmail(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	for qi := 0; qi < 8; qi++ {
+		form := url.Values{}
+		form.Set("Email", "missing-email-rate-limit@example.com")
+		form.Set("Password", "wrong-password")
+
+		req := httptest.NewRequest(http.MethodPost, "/-/auth/sign-in-cmd", strings.NewReader(form.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		req.Header.Set("HX-Request", "true")
+		req.RemoteAddr = fmt.Sprintf("198.51.100.%d:1234", qi+1)
+
+		rr := httptest.NewRecorder()
+		harness.router.ServeHTTP(rr, req)
+
+		if rr.Code != http.StatusOK {
+			t.Fatalf("warm-up request %d expected status %d, got %d", qi, http.StatusOK, rr.Code)
+		}
+	}
+
+	blockedForm := url.Values{}
+	blockedForm.Set("Email", "missing-email-rate-limit@example.com")
+	blockedForm.Set("Password", "wrong-password")
+
+	blockedReq := httptest.NewRequest(http.MethodPost, "/-/auth/sign-in-cmd", strings.NewReader(blockedForm.Encode()))
+	blockedReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	blockedReq.Header.Set("HX-Request", "true")
+	blockedReq.RemoteAddr = "203.0.113.10:9999"
+
+	blockedRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(blockedRR, blockedReq)
+
+	if blockedRR.Code != http.StatusTooManyRequests {
+		t.Fatalf("expected status %d, got %d", http.StatusTooManyRequests, blockedRR.Code)
+	}
+}
+
 func TestSignInCmdRejectsPasswordWhenPasskeyEnabled(t *testing.T) {
 	harness := newActionTestHarness(t)
 
@@ -596,6 +699,153 @@ func TestSignInCmdRejectsPasswordWhenPasskeyEnabled(t *testing.T) {
 	sessionCount := harness.mainDB.ReadWriteConn.Session.Query().CountX(context.Background())
 	if sessionCount != 0 {
 		t.Fatalf("expected 0 sessions, got %d", sessionCount)
+	}
+}
+
+func TestResetPasswordCmdDoesNotEnumerateMissingAccount(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	createAccount(t, harness.mainDB, "known-account@example.com", "supersecret")
+
+	baseMailCount := harness.mainDB.ReadWriteConn.Mail.Query().CountX(context.Background())
+
+	missingForm := url.Values{}
+	missingForm.Set("Email", "missing-account@example.com")
+
+	missingReq := httptest.NewRequest(
+		http.MethodPost,
+		"/-/auth/reset-password-cmd",
+		strings.NewReader(missingForm.Encode()),
+	)
+	missingReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	missingReq.Header.Set("HX-Request", "true")
+
+	missingRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(missingRR, missingReq)
+
+	if missingRR.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, missingRR.Code)
+	}
+
+	missingBody := missingRR.Body.String()
+	if strings.Contains(missingBody, "Account not found") {
+		t.Fatal("response leaked account existence")
+	}
+	if !strings.Contains(missingBody, "If an account with this email exists") {
+		t.Fatalf("expected generic confirmation in response body, got: %s", missingBody)
+	}
+
+	afterMissingMailCount := harness.mainDB.ReadWriteConn.Mail.Query().CountX(context.Background())
+	if afterMissingMailCount != baseMailCount {
+		t.Fatalf("expected no new mails for missing account, got %d", afterMissingMailCount-baseMailCount)
+	}
+
+	existingForm := url.Values{}
+	existingForm.Set("Email", "known-account@example.com")
+
+	existingReq := httptest.NewRequest(
+		http.MethodPost,
+		"/-/auth/reset-password-cmd",
+		strings.NewReader(existingForm.Encode()),
+	)
+	existingReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	existingReq.Header.Set("HX-Request", "true")
+
+	existingRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(existingRR, existingReq)
+
+	if existingRR.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, existingRR.Code)
+	}
+
+	existingBody := existingRR.Body.String()
+	if !strings.Contains(existingBody, "If an account with this email exists") {
+		t.Fatalf("expected generic confirmation in response body, got: %s", existingBody)
+	}
+
+	afterExistingMailCount := harness.mainDB.ReadWriteConn.Mail.Query().CountX(context.Background())
+	if afterExistingMailCount != baseMailCount+1 {
+		t.Fatalf("expected 1 new mail for existing account, got %d", afterExistingMailCount-baseMailCount)
+	}
+}
+
+func TestResetPasswordCmdRateLimitedByIP(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	for qi := 0; qi < 10; qi++ {
+		form := url.Values{}
+		form.Set("Email", fmt.Sprintf("missing-reset-ip-%d@example.com", qi))
+
+		req := httptest.NewRequest(http.MethodPost, "/-/auth/reset-password-cmd", strings.NewReader(form.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		req.Header.Set("HX-Request", "true")
+		req.RemoteAddr = "198.51.100.40:1234"
+
+		rr := httptest.NewRecorder()
+		harness.router.ServeHTTP(rr, req)
+
+		if rr.Code != http.StatusOK {
+			t.Fatalf("warm-up request %d expected status %d, got %d", qi, http.StatusOK, rr.Code)
+		}
+	}
+
+	blockedForm := url.Values{}
+	blockedForm.Set("Email", "missing-reset-ip-blocked@example.com")
+
+	blockedReq := httptest.NewRequest(
+		http.MethodPost,
+		"/-/auth/reset-password-cmd",
+		strings.NewReader(blockedForm.Encode()),
+	)
+	blockedReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	blockedReq.Header.Set("HX-Request", "true")
+	blockedReq.RemoteAddr = "198.51.100.40:1234"
+
+	blockedRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(blockedRR, blockedReq)
+
+	if blockedRR.Code != http.StatusTooManyRequests {
+		t.Fatalf("expected status %d, got %d", http.StatusTooManyRequests, blockedRR.Code)
+	}
+}
+
+func TestResetPasswordCmdRateLimitedByEmail(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	for qi := 0; qi < 3; qi++ {
+		form := url.Values{}
+		form.Set("Email", "missing-reset-email@example.com")
+
+		req := httptest.NewRequest(http.MethodPost, "/-/auth/reset-password-cmd", strings.NewReader(form.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		req.Header.Set("HX-Request", "true")
+		req.RemoteAddr = fmt.Sprintf("203.0.113.%d:5678", qi+1)
+
+		rr := httptest.NewRecorder()
+		harness.router.ServeHTTP(rr, req)
+
+		if rr.Code != http.StatusOK {
+			t.Fatalf("warm-up request %d expected status %d, got %d", qi, http.StatusOK, rr.Code)
+		}
+	}
+
+	blockedForm := url.Values{}
+	blockedForm.Set("Email", "missing-reset-email@example.com")
+
+	blockedReq := httptest.NewRequest(
+		http.MethodPost,
+		"/-/auth/reset-password-cmd",
+		strings.NewReader(blockedForm.Encode()),
+	)
+	blockedReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	blockedReq.Header.Set("HX-Request", "true")
+	blockedReq.RemoteAddr = "203.0.113.200:5678"
+
+	blockedRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(blockedRR, blockedReq)
+
+	if blockedRR.Code != http.StatusTooManyRequests {
+		t.Fatalf("expected status %d, got %d", http.StatusTooManyRequests, blockedRR.Code)
 	}
 }
 
@@ -640,6 +890,21 @@ func TestPasskeySignInFinishCmdRejectsInvalidCredential(t *testing.T) {
 
 	if finishRR.Code != http.StatusUnauthorized {
 		t.Fatalf("expected status %d, got %d", http.StatusUnauthorized, finishRR.Code)
+	}
+
+	replayReq := httptest.NewRequest(
+		http.MethodPost,
+		"/-/auth/passkey-sign-in-finish-cmd",
+		strings.NewReader(fmt.Sprintf(`{"challengeId":%q,"credential":{}}`, beginPayload.ChallengeID)),
+	)
+	replayReq.Header.Set("Content-Type", "application/json")
+	replayReq.Header.Set("HX-Request", "true")
+
+	replayRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(replayRR, replayReq)
+
+	if replayRR.Code != http.StatusUnauthorized {
+		t.Fatalf("expected replay status %d, got %d", http.StatusUnauthorized, replayRR.Code)
 	}
 
 	sessionCount := harness.mainDB.ReadWriteConn.Session.Query().CountX(context.Background())
@@ -1048,6 +1313,64 @@ func TestSignInCmdAllowsBootstrapWhenTenantRequiresPasskeyAndNoPasskeyExists(t *
 	).OnlyX(context.Background())
 	if !sessionx.IsTemporarySession {
 		t.Fatal("expected bootstrap sign-in to create temporary setup session")
+	}
+}
+
+func TestTemporarySetupSessionExpiresAtDeletableAt(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	email := "expired-setup-session@example.com"
+	password := "supersecret"
+	createAccount(t, harness.mainDB, email, password)
+
+	accountx := harness.mainDB.ReadWriteConn.Account.Query().Where(account.Email(entx.NewCIText(email))).OnlyX(context.Background())
+
+	tenantRequired := createTenantWithPasskeyPolicy(t, harness.mainDB, "Required Tenant", true, false)
+	assignAccountToTenant(t, harness.mainDB, tenantRequired.ID, accountx.ID, tenantrole.Owner, true)
+
+	form := url.Values{}
+	form.Set("Email", email)
+	form.Set("Password", password)
+
+	signInReq := httptest.NewRequest(http.MethodPost, "/-/auth/sign-in-cmd", strings.NewReader(form.Encode()))
+	signInReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	signInReq.Header.Set("HX-Request", "true")
+
+	signInRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(signInRR, signInReq)
+
+	if signInRR.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, signInRR.Code)
+	}
+
+	var sessionCookie *http.Cookie
+	for _, cookie := range signInRR.Result().Cookies() {
+		if cookie.Name == cookiex.SessionCookieName() {
+			sessionCookie = cookie
+			break
+		}
+	}
+	if sessionCookie == nil {
+		t.Fatalf("expected session cookie %q", cookiex.SessionCookieName())
+	}
+
+	harness.mainDB.ReadWriteConn.Session.Update().
+		Where(session.Value(sessionCookie.Value)).
+		SetDeletableAt(time.Now().Add(-time.Minute)).
+		ExecX(context.Background())
+
+	req := httptest.NewRequest(http.MethodPost, "/-/dashboard/dashboard-cards-partial", nil)
+	req.AddCookie(sessionCookie)
+	req.Header.Set("HX-Request", "true")
+
+	rr := httptest.NewRecorder()
+	harness.router.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusSeeOther {
+		t.Fatalf("expected status %d, got %d", http.StatusSeeOther, rr.Code)
+	}
+	if location := rr.Header().Get("Location"); location != "/" {
+		t.Fatalf("expected redirect location %q, got %q", "/", location)
 	}
 }
 
@@ -1534,6 +1857,39 @@ func TestPasskeySignInBeginCmdRateLimitScopedByClient(t *testing.T) {
 
 	if victimRR.Code != http.StatusOK {
 		t.Fatalf("expected status %d for a different client, got %d", http.StatusOK, victimRR.Code)
+	}
+}
+
+func TestPasskeySignInBeginCmdRateLimitedGlobally(t *testing.T) {
+	t.Setenv("SIMPLEDMS_PUBLIC_ORIGIN", "http://localhost")
+	t.Setenv("SIMPLEDMS_WEBAUTHN_RP_ID", "localhost")
+
+	harness := newActionTestHarness(t)
+
+	for qi := 0; qi < 120; qi++ {
+		req := httptest.NewRequest(http.MethodPost, "http://localhost/-/auth/passkey-sign-in-begin-cmd", nil)
+		req.Host = "localhost"
+		req.Header.Set("HX-Request", "true")
+		req.RemoteAddr = fmt.Sprintf("198.51.100.%d:4321", qi+1)
+
+		rr := httptest.NewRecorder()
+		harness.router.ServeHTTP(rr, req)
+
+		if rr.Code != http.StatusOK {
+			t.Fatalf("warm-up request %d expected status %d, got %d", qi, http.StatusOK, rr.Code)
+		}
+	}
+
+	blockedReq := httptest.NewRequest(http.MethodPost, "http://localhost/-/auth/passkey-sign-in-begin-cmd", nil)
+	blockedReq.Host = "localhost"
+	blockedReq.Header.Set("HX-Request", "true")
+	blockedReq.RemoteAddr = "203.0.113.10:5432"
+
+	blockedRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(blockedRR, blockedReq)
+
+	if blockedRR.Code != http.StatusTooManyRequests {
+		t.Fatalf("expected status %d, got %d", http.StatusTooManyRequests, blockedRR.Code)
 	}
 }
 

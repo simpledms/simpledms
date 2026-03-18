@@ -125,6 +125,7 @@ func (qq *PasskeyService) FinishDiscoverableSignIn(
 	if err != nil {
 		return nil, err
 	}
+	qq.markPasskeyChallengeUsed(ctx, challengex)
 
 	wa, err := qq.newWebAuthn(req)
 	if err != nil {
@@ -180,8 +181,6 @@ func (qq *PasskeyService) FinishDiscoverableSignIn(
 		SetCredentialJSON(encodedCredential).
 		SetLastUsedAt(time.Now()).
 		SaveX(ctx)
-
-	qq.markPasskeyChallengeUsed(ctx, challengex)
 
 	log.Printf("passkey sign-in success account_id=%d credential_id_len=%d", accountx.ID, len(credential.ID))
 
@@ -273,6 +272,7 @@ func (qq *PasskeyService) FinishRegistration(
 	if err != nil {
 		return nil, err
 	}
+	qq.markPasskeyChallengeUsed(ctx, challengex)
 
 	wa, err := qq.newWebAuthn(req)
 	if err != nil {
@@ -322,8 +322,6 @@ func (qq *PasskeyService) FinishRegistration(
 		log.Println(err)
 		return nil, err
 	}
-
-	qq.markPasskeyChallengeUsed(ctx, challengex)
 
 	log.Printf("passkey registered account_id=%d credential_id_len=%d", accountID, len(credential.ID))
 

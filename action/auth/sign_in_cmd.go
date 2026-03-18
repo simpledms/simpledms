@@ -28,22 +28,28 @@ type SignInCmdData struct {
 }
 
 type SignInCmd struct {
-	infra   *common.Infra
-	actions *Actions
+	infra              *common.Infra
+	actions            *Actions
+	requestRateLimiter *account2.RequestRateLimiter
 	*actionx.Config
 	*autil.FormHelper[SignInCmdData]
 }
 
-func NewSignInCmd(infra *common.Infra, actions *Actions) *SignInCmd {
+func NewSignInCmd(
+	infra *common.Infra,
+	actions *Actions,
+	requestRateLimiter *account2.RequestRateLimiter,
+) *SignInCmd {
 	config := actionx.NewConfig(
 		actions.Route("sign-in-cmd"),
 		false,
 	)
 	return &SignInCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[SignInCmdData](infra, config, wx.T("Sign in")),
+		infra:              infra,
+		actions:            actions,
+		requestRateLimiter: requestRateLimiter,
+		Config:             config,
+		FormHelper:         autil.NewFormHelper[SignInCmdData](infra, config, wx.T("Sign in")),
 	}
 }
 
@@ -60,6 +66,23 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 		return err
 	}
 
+	if !qq.requestRateLimiter.Allow(
+		rateLimitKey("sign-in-ip", clientIPFromRequest(req)),
+		signInRateLimitWindow,
+		signInRateLimitPerIP,
+	) {
+		return e.NewHTTPErrorf(http.StatusTooManyRequests, "Too many sign-in attempts. Please try again shortly.")
+	}
+
+	// not perfect, a real user can be locked out...
+	if !qq.requestRateLimiter.Allow(
+		rateLimitKey("sign-in-email", normalizeRateLimitedEmail(data.Email)),
+		signInRateLimitWindow,
+		signInRateLimitPerEmail,
+	) {
+		return e.NewHTTPErrorf(http.StatusTooManyRequests, "Too many sign-in attempts. Please try again shortly.")
+	}
+
 	// not checked if tenant is already initialized because tenant is independent of user;
 	// user can belong to multiple tenants
 
@@ -68,7 +91,7 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 		if entmain.IsNotFound(err) {
 			return e.NewHTTPErrorWithSnackbar(
 				http.StatusBadRequest,
-				wx.NewSnackbarf("Found no account for this email address."),
+				wx.NewSnackbarf("Invalid credentials. Please try again."),
 			)
 		}
 		log.Println(err)

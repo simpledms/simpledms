@@ -127,6 +127,16 @@
             "translation": "App unlocked."
         },
         {
+            "id": "You must be logged in to perform this action.",
+            "message": "You must be logged in to perform this action.",
+            "translation": ""
+        },
+        {
+            "id": "Only admins and supporters can run assisted passkey recovery.",
+            "message": "Only admins and supporters can run assisted passkey recovery.",
+            "translation": ""
+        },
+        {
             "id": "Change password",
             "message": "Change password",
             "translation": "Change password"
@@ -147,6 +157,21 @@
             "translation": "Password changed successfully."
         },
         {
+            "id": "You must be logged in to manage passkeys.",
+            "message": "You must be logged in to manage passkeys.",
+            "translation": ""
+        },
+        {
+            "id": "Passkeys cannot be removed because a tenant requires passkey login.",
+            "message": "Passkeys cannot be removed because a tenant requires passkey login.",
+            "translation": ""
+        },
+        {
+            "id": "All passkeys were removed.",
+            "message": "All passkeys were removed.",
+            "translation": ""
+        },
+        {
             "id": "Clear temporary password",
             "message": "Clear temporary password",
             "translation": "Clear temporary password"
@@ -157,13 +182,13 @@
             "translation": "Temporary password cleared successfully."
         },
         {
-            "id": "You are not allowed to delete this account.",
-            "message": "You are not allowed to delete this account.",
+            "id": "A tenant requires passkey login, so at least one passkey must remain.",
+            "message": "A tenant requires passkey login, so at least one passkey must remain.",
             "translation": ""
         },
         {
-            "id": "Account deleted.",
-            "message": "Account deleted.",
+            "id": "Passkey removed.",
+            "message": "Passkey removed.",
             "translation": ""
         },
         {
@@ -182,6 +207,101 @@
             "translation": ""
         },
         {
+            "id": "Invalid request payload.",
+            "message": "Invalid request payload.",
+            "translation": ""
+        },
+        {
+            "id": "You must be logged in to view backup codes.",
+            "message": "You must be logged in to view backup codes.",
+            "translation": ""
+        },
+        {
+            "id": "The backup codes are no longer available. Please generate a new set.",
+            "message": "The backup codes are no longer available. Please generate a new set.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey backup codes",
+            "message": "Passkey backup codes",
+            "translation": ""
+        },
+        {
+            "id": "Sign in with backup code",
+            "message": "Sign in with backup code",
+            "translation": ""
+        },
+        {
+            "id": "Sign in",
+            "message": "Sign in",
+            "translation": "Sign in"
+        },
+        {
+            "id": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
+            "message": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "RecoveryCodesCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "recoveryCodesCount"
+                }
+            ]
+        },
+        {
+            "id": "You must be logged in to register a passkey.",
+            "message": "You must be logged in to register a passkey.",
+            "translation": ""
+        },
+        {
+            "id": "Register passkey",
+            "message": "Register passkey",
+            "translation": ""
+        },
+        {
+            "id": "Invalid passkey registration payload.",
+            "message": "Invalid passkey registration payload.",
+            "translation": ""
+        },
+        {
+            "id": "Too many passkey requests. Please try again shortly.",
+            "message": "Too many passkey requests. Please try again shortly.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid passkey response payload.",
+            "message": "Invalid passkey response payload.",
+            "translation": ""
+        },
+        {
+            "id": "You must be logged in to manage backup codes.",
+            "message": "You must be logged in to manage backup codes.",
+            "translation": ""
+        },
+        {
+            "id": "Rename passkey",
+            "message": "Rename passkey",
+            "translation": ""
+        },
+        {
+            "id": "Rename",
+            "message": "Rename",
+            "translation": ""
+        },
+        {
+            "id": "Passkey name is required.",
+            "message": "Passkey name is required.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey renamed.",
+            "message": "Passkey renamed.",
+            "translation": ""
+        },
+        {
             "id": "Reset password",
             "message": "Reset password",
             "translation": "Reset password"
@@ -192,14 +312,14 @@
             "translation": "Reset"
         },
         {
-            "id": "Account not found.",
-            "message": "Account not found.",
-            "translation": "Account not found."
+            "id": "Too many password reset requests. Please try again shortly.",
+            "message": "Too many password reset requests. Please try again shortly.",
+            "translation": ""
         },
         {
-            "id": "A new temporary password was sent to your email address.",
-            "message": "A new temporary password was sent to your email address.",
-            "translation": "A new temporary password was sent to your email address."
+            "id": "If an account with this email exists, a new temporary password was sent.",
+            "message": "If an account with this email exists, a new temporary password was sent.",
+            "translation": ""
         },
         {
             "id": "Set password",
@@ -212,24 +332,29 @@
             "translation": "Initial password set successfully."
         },
         {
-            "id": "Sign in",
-            "message": "Sign in",
-            "translation": "Sign in"
-        },
-        {
-            "id": "Found no account for this email address.",
-            "message": "Found no account for this email address.",
-            "translation": "Found no account for this email address."
-        },
-        {
-            "id": "Sign up now.",
-            "message": "Sign up now.",
-            "translation": "Sign up now."
+            "id": "Too many sign-in attempts. Please try again shortly.",
+            "message": "Too many sign-in attempts. Please try again shortly.",
+            "translation": ""
         },
         {
             "id": "Invalid credentials. Please try again.",
             "message": "Invalid credentials. Please try again.",
             "translation": "Invalid credentials. Please try again."
+        },
+        {
+            "id": "Could not verify organization access.",
+            "message": "Could not verify organization access.",
+            "translation": ""
+        },
+        {
+            "id": "Your organization is no longer active. Please contact support.",
+            "message": "Your organization is no longer active. Please contact support.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey setup is required by your organization. Register a passkey now.",
+            "message": "Passkey setup is required by your organization. Register a passkey now.",
+            "translation": ""
         },
         {
             "id": "Logged in successfully.",
@@ -247,39 +372,24 @@
             "translation": "Sign in"
         },
         {
+            "id": "Sign in with passkey",
+            "message": "Sign in with passkey",
+            "translation": ""
+        },
+        {
             "id": "Forgot password?",
             "message": "Forgot password?",
             "translation": "Forgot password?"
         },
         {
-            "id": "Don't have an account? Sign up.",
-            "message": "Don't have an account? Sign up.",
-            "translation": "Don't have an account? Sign up."
+            "id": "Use backup code",
+            "message": "Use backup code",
+            "translation": ""
         },
         {
             "id": "Invalid session cookie.",
             "message": "Invalid session cookie.",
             "translation": "Invalid session cookie."
-        },
-        {
-            "id": "Sign up [subject]",
-            "message": "Sign up [subject]",
-            "translation": "Sign up"
-        },
-        {
-            "id": "Sign up",
-            "message": "Sign up",
-            "translation": "Sign up"
-        },
-        {
-            "id": "Sign up is disabled.",
-            "message": "Sign up is disabled.",
-            "translation": ""
-        },
-        {
-            "id": "Registration successful, please check your email for your password.",
-            "message": "Registration successful, please check your email for your password.",
-            "translation": "Registration successful, please check your email for your password."
         },
         {
             "id": "Add field",
@@ -332,8 +442,8 @@
             "translation": ""
         },
         {
-            "id": "Browse",
-            "message": "Browse",
+            "id": "Files",
+            "message": "Files",
             "translation": ""
         },
         {
@@ -404,11 +514,6 @@
         {
             "id": "Document type",
             "message": "Document type",
-            "translation": ""
-        },
-        {
-            "id": "Rename",
-            "message": "Rename",
             "translation": ""
         },
         {
@@ -1096,6 +1201,46 @@
             ]
         },
         {
+            "id": "No passkeys registered",
+            "message": "No passkeys registered",
+            "translation": ""
+        },
+        {
+            "id": "Passkeys",
+            "message": "Passkeys",
+            "translation": ""
+        },
+        {
+            "id": "Register a passkey to enable passwordless sign in.",
+            "message": "Register a passkey to enable passwordless sign in.",
+            "translation": ""
+        },
+        {
+            "id": "Add a backup passkey",
+            "message": "Add a backup passkey",
+            "translation": ""
+        },
+        {
+            "id": "Passkey recommendation",
+            "message": "Passkey recommendation",
+            "translation": ""
+        },
+        {
+            "id": "Set up a second passkey on another device as backup in case one device is lost.",
+            "message": "Set up a second passkey on another device as backup in case one device is lost.",
+            "translation": ""
+        },
+        {
+            "id": "Regenerate backup codes",
+            "message": "Regenerate backup codes",
+            "translation": ""
+        },
+        {
+            "id": "Regenerate backup codes? Existing codes will stop working.",
+            "message": "Regenerate backup codes? Existing codes will stop working.",
+            "translation": ""
+        },
+        {
             "id": "Account «{String}»",
             "message": "Account «{String}»",
             "translation": "",
@@ -1111,39 +1256,62 @@
             ]
         },
         {
+            "id": "Account «{String}», owned by «{OwningTenantName}»",
+            "message": "Account «{String}», owned by «{OwningTenantName}»",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "String",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "ctx.MainCtx().Account.Email.String()"
+                },
+                {
+                    "id": "OwningTenantName",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "owningTenantName"
+                }
+            ]
+        },
+        {
             "id": "System",
             "message": "System",
             "translation": "",
             "comment": "TODO admin, system or app?"
         },
         {
-            "id": "Subscription",
-            "message": "Subscription",
+            "id": "Passkey setup required",
+            "message": "Passkey setup required",
             "translation": ""
         },
         {
-            "id": "Quota usage: {TenantStorageUsageLabelctx_tenantx}",
-            "message": "Quota usage: {TenantStorageUsageLabelctx_tenantx}",
+            "id": "Your organization requires passkey sign-in. Register a passkey to continue.",
+            "message": "Your organization requires passkey sign-in. Register a passkey to continue.",
+            "translation": ""
+        },
+        {
+            "id": "{RecoveryCodesCount} backup codes left",
+            "message": "{RecoveryCodesCount} backup codes left",
             "translation": "",
             "placeholders": [
                 {
-                    "id": "TenantStorageUsageLabelctx_tenantx",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
+                    "id": "RecoveryCodesCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
                     "argNum": 1,
-                    "expr": "qq.tenantStorageUsageLabel(ctx, tenantx)"
+                    "expr": "recoveryCodesCount"
                 }
             ]
         },
         {
-            "id": "Upload limit options",
-            "message": "Upload limit options",
-            "translation": ""
-        },
-        {
-            "id": "Edit upload limit",
-            "message": "Edit upload limit",
+            "id": "Subscription",
+            "message": "Subscription",
             "translation": ""
         },
         {
@@ -1167,6 +1335,11 @@
             "translation": ""
         },
         {
+            "id": "Quota usage",
+            "message": "Quota usage",
+            "translation": ""
+        },
+        {
             "id": "Unavailable",
             "message": "Unavailable",
             "translation": ""
@@ -1181,11 +1354,6 @@
             "message": "Select",
             "translation": "",
             "comment": "TODO Browse, Open, Switch or activate? or Select?"
-        },
-        {
-            "id": "Delete account",
-            "message": "Delete account",
-            "translation": ""
         },
         {
             "id": "No password set",
@@ -1238,6 +1406,26 @@
             "translation": ""
         },
         {
+            "id": "Enable passkey enforcement",
+            "message": "Enable passkey enforcement",
+            "translation": ""
+        },
+        {
+            "id": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "message": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "translation": ""
+        },
+        {
+            "id": "Disable passkey enforcement",
+            "message": "Disable passkey enforcement",
+            "translation": ""
+        },
+        {
+            "id": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "message": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "translation": ""
+        },
+        {
             "id": "{UsersCount} users",
             "message": "{UsersCount} users",
             "translation": "",
@@ -1260,6 +1448,21 @@
         {
             "id": "Manage users",
             "message": "Manage users",
+            "translation": ""
+        },
+        {
+            "id": "Delete organization",
+            "message": "Delete organization",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "translation": ""
+        },
+        {
+            "id": "Download backup",
+            "message": "Download backup",
             "translation": ""
         },
         {
@@ -1288,6 +1491,41 @@
             "translation": ""
         },
         {
+            "id": "Created on {Format2006_01_02_1504}",
+            "message": "Created on {Format2006_01_02_1504}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Format2006_01_02_1504",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "credentialx.CreatedAt.Format(\"2006-01-02 15:04\")"
+                }
+            ]
+        },
+        {
+            "id": "Last used on {Format2006_01_02_1504}",
+            "message": "Last used on {Format2006_01_02_1504}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Format2006_01_02_1504",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "credentialx.LastUsedAt.Format(\"2006-01-02 15:04\")"
+                }
+            ]
+        },
+        {
+            "id": "Passkey",
+            "message": "Passkey",
+            "translation": ""
+        },
+        {
             "id": "Manage upload limit",
             "message": "Manage upload limit",
             "translation": ""
@@ -1313,19 +1551,29 @@
             "translation": ""
         },
         {
-            "id": "Field «{Name}» is already added to this document type.",
-            "message": "Field «{Name}» is already added to this document type.",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "propertyx.Name"
-                }
-            ]
+            "id": "You must be logged in to manage organizations.",
+            "message": "You must be logged in to manage organizations.",
+            "translation": ""
+        },
+        {
+            "id": "Organization not found.",
+            "message": "Organization not found.",
+            "translation": ""
+        },
+        {
+            "id": "Only owners can change passkey enforcement.",
+            "message": "Only owners can change passkey enforcement.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey enforcement enabled for organization.",
+            "message": "Passkey enforcement enabled for organization.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey enforcement disabled for organization.",
+            "message": "Passkey enforcement disabled for organization.",
+            "translation": ""
         },
         {
             "id": "Attribute «{Name}» added.",
@@ -1372,21 +1620,6 @@
             "id": "Add attribute",
             "message": "Add attribute",
             "translation": ""
-        },
-        {
-            "id": "Tag group «{Name}» is already added to this document type.",
-            "message": "Tag group «{Name}» is already added to this document type.",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "tagx.Name"
-                }
-            ]
         },
         {
             "id": "Attribute «{Name}» created.",
@@ -1469,16 +1702,6 @@
             ]
         },
         {
-            "id": "Import is only available for empty spaces.",
-            "message": "Import is only available for empty spaces.",
-            "translation": ""
-        },
-        {
-            "id": "Please select at least one document type.",
-            "message": "Please select at least one document type.",
-            "translation": ""
-        },
-        {
             "id": "Document types imported.",
             "message": "Document types imported.",
             "translation": ""
@@ -1491,6 +1714,11 @@
         {
             "id": "Import",
             "message": "Import",
+            "translation": ""
+        },
+        {
+            "id": "Import is only available for empty spaces.",
+            "message": "Import is only available for empty spaces.",
             "translation": ""
         },
         {
@@ -1594,6 +1822,11 @@
             "translation": ""
         },
         {
+            "id": "File not found.",
+            "message": "File not found.",
+            "translation": ""
+        },
+        {
             "id": "File is not in inbox.",
             "message": "File is not in inbox.",
             "translation": ""
@@ -1644,11 +1877,6 @@
             "translation": ""
         },
         {
-            "id": "User is already assigned to this space.",
-            "message": "User is already assigned to this space.",
-            "translation": ""
-        },
-        {
             "id": "User assigned to space successfully.",
             "message": "User assigned to space successfully.",
             "translation": ""
@@ -1682,11 +1910,6 @@
         {
             "id": "Unassign user from space",
             "message": "Unassign user from space",
-            "translation": ""
-        },
-        {
-            "id": "You cannot unassign yourself from a space.",
-            "message": "You cannot unassign yourself from a space.",
             "translation": ""
         },
         {
@@ -1793,11 +2016,6 @@
             "translation": ""
         },
         {
-            "id": "A user with this email address already exists, please contact support if you want to add this user anyway.",
-            "message": "A user with this email address already exists, please contact support if you want to add this user anyway.",
-            "translation": ""
-        },
-        {
             "id": "Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.",
             "message": "Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.",
             "translation": ""
@@ -1808,8 +2026,38 @@
             "translation": ""
         },
         {
+            "id": "You are not allowed to delete users. No organization selected.",
+            "message": "You are not allowed to delete users. No organization selected.",
+            "translation": ""
+        },
+        {
+            "id": "You are not allowed to delete users because you are not the owner.",
+            "message": "You are not allowed to delete users because you are not the owner.",
+            "translation": ""
+        },
+        {
+            "id": "User removed from organization and account deleted globally.",
+            "message": "User removed from organization and account deleted globally.",
+            "translation": ""
+        },
+        {
+            "id": "User removed from organization.",
+            "message": "User removed from organization.",
+            "translation": ""
+        },
+        {
             "id": "Manage users of tenant",
             "message": "Manage users of tenant",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization only.",
+            "message": "Are you sure? This user will be removed from this organization only.",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
+            "message": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
             "translation": ""
         },
         {
@@ -1817,6 +2065,39 @@
             "message": "Add a new user",
             "translation": "",
             "comment": "TODO Create or add? system or real world perspective?"
+        },
+        {
+            "id": "Member account",
+            "message": "Member account",
+            "translation": ""
+        },
+        {
+            "id": "Owned account",
+            "message": "Owned account",
+            "translation": ""
+        },
+        {
+            "id": "{NameSecondLine} - {OwnershipText}",
+            "message": "{NameSecondLine} - {OwnershipText}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "NameSecondLine",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(userm.NameSecondLine())"
+                },
+                {
+                    "id": "OwnershipText",
+                    "string": "%[2]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 2,
+                    "expr": "ownershipText"
+                }
+            ]
         },
         {
             "id": "Upload",
@@ -1856,6 +2137,26 @@
         {
             "id": "Files uploaded, please select a space.",
             "message": "Files uploaded, please select a space.",
+            "translation": ""
+        },
+        {
+            "id": "File uploaded, please select a space.",
+            "message": "File uploaded, please select a space.",
+            "translation": ""
+        },
+        {
+            "id": "Import URL",
+            "message": "Import URL",
+            "translation": ""
+        },
+        {
+            "id": "Import file from URL",
+            "message": "Import file from URL",
+            "translation": ""
+        },
+        {
+            "id": "Download and continue",
+            "message": "Download and continue",
             "translation": ""
         },
         {
@@ -2032,11 +2333,6 @@
                     "expr": "tagx.Name"
                 }
             ]
-        },
-        {
-            "id": "Cannot add a tag group as child.",
-            "message": "Cannot add a tag group as child.",
-            "translation": ""
         },
         {
             "id": "«{TagName}» deleted.",
@@ -2351,26 +2647,6 @@
             "translation": ""
         },
         {
-            "id": "Tenant database not found.",
-            "message": "Tenant database not found.",
-            "translation": ""
-        },
-        {
-            "id": "Could not start transaction.",
-            "message": "Could not start transaction.",
-            "translation": ""
-        },
-        {
-            "id": "Could not save file.",
-            "message": "Could not save file.",
-            "translation": ""
-        },
-        {
-            "id": "File already exists.",
-            "message": "File already exists.",
-            "translation": ""
-        },
-        {
             "id": "Accepted",
             "message": "Accepted",
             "translation": ""
@@ -2398,6 +2674,11 @@
         {
             "id": "Austria",
             "message": "Austria",
+            "translation": ""
+        },
+        {
+            "id": "Backup code",
+            "message": "Backup code",
             "translation": ""
         },
         {
@@ -2438,11 +2719,6 @@
         {
             "id": "Confirm warning",
             "message": "Confirm warning",
-            "translation": ""
-        },
-        {
-            "id": "Country",
-            "message": "Country",
             "translation": ""
         },
         {
@@ -2726,11 +3002,6 @@
             "translation": ""
         },
         {
-            "id": "Organization name",
-            "message": "Organization name",
-            "translation": ""
-        },
-        {
             "id": "Other",
             "message": "Other",
             "translation": ""
@@ -2866,6 +3137,11 @@
             "translation": ""
         },
         {
+            "id": "Token",
+            "message": "Token",
+            "translation": ""
+        },
+        {
             "id": "Trial",
             "message": "Trial",
             "translation": ""
@@ -2873,6 +3149,11 @@
         {
             "id": "Type",
             "message": "Type",
+            "translation": ""
+        },
+        {
+            "id": "Url",
+            "message": "Url",
             "translation": ""
         },
         {
@@ -2906,6 +3187,46 @@
             "translation": ""
         },
         {
+            "id": "Sign up",
+            "message": "Sign up",
+            "translation": "Sign up"
+        },
+        {
+            "id": "Sign up [subject]",
+            "message": "Sign up [subject]",
+            "translation": "Sign up"
+        },
+        {
+            "id": "Free 30-day trial, no credit card required.",
+            "message": "Free 30-day trial, no credit card required.",
+            "translation": ""
+        },
+        {
+            "id": "Organization name",
+            "message": "Organization name",
+            "translation": ""
+        },
+        {
+            "id": "Country",
+            "message": "Country",
+            "translation": ""
+        },
+        {
+            "id": "Accept terms of service",
+            "message": "Accept terms of service",
+            "translation": ""
+        },
+        {
+            "id": "Accept privacy policy",
+            "message": "Accept privacy policy",
+            "translation": ""
+        },
+        {
+            "id": "Registration successful, please check your emails for your password.",
+            "message": "Registration successful, please check your emails for your password.",
+            "translation": "Registration successful, please check your emails for your password."
+        },
+        {
             "id": "Imprint",
             "message": "Imprint",
             "translation": ""
@@ -2921,8 +3242,8 @@
             "translation": ""
         },
         {
-            "id": "file has no parent",
-            "message": "file has no parent",
+            "id": "Passkey sign-in is required for this account.",
+            "message": "Passkey sign-in is required for this account.",
             "translation": ""
         },
         {
@@ -2931,8 +3252,8 @@
             "translation": ""
         },
         {
-            "id": "2FA code was provided, but 2FA is not enabled for this account.",
-            "message": "2FA code was provided, but 2FA is not enabled for this account.",
+            "id": "Could not generate backup codes.",
+            "message": "Could not generate backup codes.",
             "translation": ""
         },
         {
@@ -2961,13 +3282,396 @@
             "translation": ""
         },
         {
-            "id": "Password must be at least eight characters long.",
-            "message": "Password must be at least eight characters long.",
+            "id": "Password must be at least twelve characters long.",
+            "message": "Password must be at least twelve characters long.",
             "translation": ""
         },
         {
             "id": "Passwords do not match.",
             "message": "Passwords do not match.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid passkey sign-in.",
+            "message": "Invalid passkey sign-in.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey sign-in failed.",
+            "message": "Passkey sign-in failed.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey login is not enabled for this account.",
+            "message": "Passkey login is not enabled for this account.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey registration failed.",
+            "message": "Passkey registration failed.",
+            "translation": ""
+        },
+        {
+            "id": "You need at least one passkey before creating backup codes.",
+            "message": "You need at least one passkey before creating backup codes.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid backup sign-in credentials.",
+            "message": "Invalid backup sign-in credentials.",
+            "translation": ""
+        },
+        {
+            "id": "Too many backup sign-in attempts. Please try again in 10 seconds.",
+            "message": "Too many backup sign-in attempts. Please try again in 10 seconds.",
+            "translation": ""
+        },
+        {
+            "id": "Target account has no passkeys configured.",
+            "message": "Target account has no passkeys configured.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey not found.",
+            "message": "Passkey not found.",
+            "translation": ""
+        },
+        {
+            "id": "Account not found.",
+            "message": "Account not found.",
+            "translation": "Account not found."
+        },
+        {
+            "id": "Invalid passkey origin configuration.",
+            "message": "Invalid passkey origin configuration.",
+            "translation": ""
+        },
+        {
+            "id": "Missing passkey rp id configuration.",
+            "message": "Missing passkey rp id configuration.",
+            "translation": ""
+        },
+        {
+            "id": "Could not initialize passkey service.",
+            "message": "Could not initialize passkey service.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey challenge is invalid or expired.",
+            "message": "Passkey challenge is invalid or expired.",
+            "translation": ""
+        },
+        {
+            "id": "Unknown passkey credential.",
+            "message": "Unknown passkey credential.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey account not found.",
+            "message": "Passkey account not found.",
+            "translation": ""
+        },
+        {
+            "id": "App already initialized.",
+            "message": "App already initialized.",
+            "translation": ""
+        },
+        {
+            "id": "Passphrase is required.",
+            "message": "Passphrase is required.",
+            "translation": ""
+        },
+        {
+            "id": "Your temporary password is",
+            "message": "Your temporary password is",
+            "translation": ""
+        },
+        {
+            "id": "It expires at",
+            "message": "It expires at",
+            "translation": ""
+        },
+        {
+            "id": "Note",
+            "message": "Note",
+            "translation": ""
+        },
+        {
+            "id": "Welcome to SimpleDMS",
+            "message": "Welcome to SimpleDMS",
+            "translation": ""
+        },
+        {
+            "id": "02-01-2006 at 15:04 o'clock",
+            "message": "02-01-2006 at 15:04 o'clock",
+            "translation": ""
+        },
+        {
+            "id": "SimpleDMS password reset",
+            "message": "SimpleDMS password reset",
+            "translation": ""
+        },
+        {
+            "id": "This is an automated message, please do not reply.",
+            "message": "This is an automated message, please do not reply.",
+            "translation": ""
+        },
+        {
+            "id": "Your account has been created successfully.",
+            "message": "Your account has been created successfully.",
+            "translation": ""
+        },
+        {
+            "id": "Please log in and change your password as soon as possible.",
+            "message": "Please log in and change your password as soon as possible.",
+            "translation": ""
+        },
+        {
+            "id": "Open sign in page",
+            "message": "Open sign in page",
+            "translation": ""
+        },
+        {
+            "id": "SimpleDMS Password Reset",
+            "message": "SimpleDMS Password Reset",
+            "translation": ""
+        },
+        {
+            "id": "A password reset has been requested for your account.",
+            "message": "A password reset has been requested for your account.",
+            "translation": ""
+        },
+        {
+            "id": "Your old password will still work until you change it.",
+            "message": "Your old password will still work until you change it.",
+            "translation": ""
+        },
+        {
+            "id": "«{Name}» invited you to the tenant «{Name_1}».",
+            "message": "«{Name}» invited you to the tenant «{Name_1}».",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "accountm.Name()"
+                },
+                {
+                    "id": "Name_1",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "tenant.NewTenant(ctx.TenantCtx().Tenant).Name()"
+                }
+            ]
+        },
+        {
+            "id": "«{Name}» invited you.",
+            "message": "«{Name}» invited you.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "accountm.Name()"
+                }
+            ]
+        },
+        {
+            "id": "App is already unlocked.",
+            "message": "App is already unlocked.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid passphrase.",
+            "message": "Invalid passphrase.",
+            "translation": ""
+        },
+        {
+            "id": "App is not encrypted with passphrase.",
+            "message": "App is not encrypted with passphrase.",
+            "translation": ""
+        },
+        {
+            "id": "No passphrase set.",
+            "message": "No passphrase set.",
+            "translation": ""
+        },
+        {
+            "id": "New passphrase is required.",
+            "message": "New passphrase is required.",
+            "translation": ""
+        },
+        {
+            "id": "New passphrase does not match confirmation.",
+            "message": "New passphrase does not match confirmation.",
+            "translation": ""
+        },
+        {
+            "id": "Old passphrase is required.",
+            "message": "Old passphrase is required.",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size must be greater than or equal to 0.",
+            "message": "Max upload size must be greater than or equal to 0.",
+            "translation": ""
+        },
+        {
+            "id": "Could not download file from URL.",
+            "message": "Could not download file from URL.",
+            "translation": ""
+        },
+        {
+            "id": "Processing of downloaded file failed.",
+            "message": "Processing of downloaded file failed.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid URL.",
+            "message": "Invalid URL.",
+            "translation": ""
+        },
+        {
+            "id": "Could not determine filename.",
+            "message": "Could not determine filename.",
+            "translation": ""
+        },
+        {
+            "id": "URL is required.",
+            "message": "URL is required.",
+            "translation": ""
+        },
+        {
+            "id": "Only HTTP and HTTPS URLs are allowed.",
+            "message": "Only HTTP and HTTPS URLs are allowed.",
+            "translation": ""
+        },
+        {
+            "id": "URL credentials are not allowed.",
+            "message": "URL credentials are not allowed.",
+            "translation": ""
+        },
+        {
+            "id": "Local URLs are not allowed.",
+            "message": "Local URLs are not allowed.",
+            "translation": ""
+        },
+        {
+            "id": "Target host is not allowed.",
+            "message": "Target host is not allowed.",
+            "translation": ""
+        },
+        {
+            "id": "Too many redirects.",
+            "message": "Too many redirects.",
+            "translation": ""
+        },
+        {
+            "id": "App not unlocked yet. Please try again later.",
+            "message": "App not unlocked yet. Please try again later.",
+            "translation": ""
+        },
+        {
+            "id": "Tenant not initialized yet. Please try again later.",
+            "message": "Tenant not initialized yet. Please try again later.",
+            "translation": ""
+        },
+        {
+            "id": "Error opening tenant database. Please try again later.",
+            "message": "Error opening tenant database. Please try again later.",
+            "translation": ""
+        },
+        {
+            "id": "A user with this email address already exists, please contact support if you want to add this user anyway.",
+            "message": "A user with this email address already exists, please contact support if you want to add this user anyway.",
+            "translation": ""
+        },
+        {
+            "id": "You cannot delete your own user in organization management.",
+            "message": "You cannot delete your own user in organization management.",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size must be greater than or equal to 0 MiB.",
+            "message": "Max upload size must be greater than or equal to 0 MiB.",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size is too large.",
+            "message": "Max upload size is too large.",
+            "translation": ""
+        },
+        {
+            "id": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
+            "message": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
+            "translation": ""
+        },
+        {
+            "id": "Tenant is required.",
+            "message": "Tenant is required.",
+            "translation": ""
+        },
+        {
+            "id": "Tenant not found.",
+            "message": "Tenant not found.",
+            "translation": ""
+        },
+        {
+            "id": "You must be logged in to manage upload limits.",
+            "message": "You must be logged in to manage upload limits.",
+            "translation": ""
+        },
+        {
+            "id": "You must be an admin to manage upload limits.",
+            "message": "You must be an admin to manage upload limits.",
+            "translation": ""
+        },
+        {
+            "id": "Please select at least one document type.",
+            "message": "Please select at least one document type.",
+            "translation": ""
+        },
+        {
+            "id": "Tag group «{Name}» is already added to this document type.",
+            "message": "Tag group «{Name}» is already added to this document type.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Name"
+                }
+            ]
+        },
+        {
+            "id": "Field «{Name}» is already added to this document type.",
+            "message": "Field «{Name}» is already added to this document type.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ]
+        },
+        {
+            "id": "file has no parent",
+            "message": "file has no parent",
             "translation": ""
         },
         {
@@ -3056,6 +3760,11 @@
             "translation": ""
         },
         {
+            "id": "File already exists.",
+            "message": "File already exists.",
+            "translation": ""
+        },
+        {
             "id": "Bucket name is empty.",
             "message": "Bucket name is empty.",
             "translation": ""
@@ -3063,6 +3772,11 @@
         {
             "id": "Filename already exists.",
             "message": "Filename already exists.",
+            "translation": ""
+        },
+        {
+            "id": "Could not save file.",
+            "message": "Could not save file.",
             "translation": ""
         },
         {
@@ -3544,201 +4258,18 @@
             "translation": ""
         },
         {
-            "id": "Your temporary password is",
-            "message": "Your temporary password is",
+            "id": "User is already assigned to this space.",
+            "message": "User is already assigned to this space.",
             "translation": ""
         },
         {
-            "id": "It expires at",
-            "message": "It expires at",
+            "id": "You cannot unassign yourself from a space.",
+            "message": "You cannot unassign yourself from a space.",
             "translation": ""
         },
         {
-            "id": "Note",
-            "message": "Note",
-            "translation": ""
-        },
-        {
-            "id": "Welcome to SimpleDMS",
-            "message": "Welcome to SimpleDMS",
-            "translation": ""
-        },
-        {
-            "id": "02-01-2006 at 15:04 o'clock",
-            "message": "02-01-2006 at 15:04 o'clock",
-            "translation": ""
-        },
-        {
-            "id": "SimpleDMS password reset",
-            "message": "SimpleDMS password reset",
-            "translation": ""
-        },
-        {
-            "id": "This is an automated message, please do not reply.",
-            "message": "This is an automated message, please do not reply.",
-            "translation": ""
-        },
-        {
-            "id": "Your account has been created successfully.",
-            "message": "Your account has been created successfully.",
-            "translation": ""
-        },
-        {
-            "id": "Please log in and change your password as soon as possible.",
-            "message": "Please log in and change your password as soon as possible.",
-            "translation": ""
-        },
-        {
-            "id": "SimpleDMS Password Reset",
-            "message": "SimpleDMS Password Reset",
-            "translation": ""
-        },
-        {
-            "id": "A password reset has been requested for your account.",
-            "message": "A password reset has been requested for your account.",
-            "translation": ""
-        },
-        {
-            "id": "Your old password will still work until you change it.",
-            "message": "Your old password will still work until you change it.",
-            "translation": ""
-        },
-        {
-            "id": "«{Name}» invited you to the tenant «{Name_1}».",
-            "message": "«{Name}» invited you to the tenant «{Name_1}».",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "accountm.Name()"
-                },
-                {
-                    "id": "Name_1",
-                    "string": "%[2]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 2,
-                    "expr": "tenant.NewTenant(ctx.TenantCtx().Tenant).Name()"
-                }
-            ]
-        },
-        {
-            "id": "«{Name}» invited you.",
-            "message": "«{Name}» invited you.",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "accountm.Name()"
-                }
-            ]
-        },
-        {
-            "id": "App already initialized.",
-            "message": "App already initialized.",
-            "translation": ""
-        },
-        {
-            "id": "Passphrase is required.",
-            "message": "Passphrase is required.",
-            "translation": ""
-        },
-        {
-            "id": "App is already unlocked.",
-            "message": "App is already unlocked.",
-            "translation": ""
-        },
-        {
-            "id": "Invalid passphrase.",
-            "message": "Invalid passphrase.",
-            "translation": ""
-        },
-        {
-            "id": "App is not encrypted with passphrase.",
-            "message": "App is not encrypted with passphrase.",
-            "translation": ""
-        },
-        {
-            "id": "No passphrase set.",
-            "message": "No passphrase set.",
-            "translation": ""
-        },
-        {
-            "id": "New passphrase is required.",
-            "message": "New passphrase is required.",
-            "translation": ""
-        },
-        {
-            "id": "New passphrase does not match confirmation.",
-            "message": "New passphrase does not match confirmation.",
-            "translation": ""
-        },
-        {
-            "id": "Old passphrase is required.",
-            "message": "Old passphrase is required.",
-            "translation": ""
-        },
-        {
-            "id": "Max upload size must be greater than or equal to 0.",
-            "message": "Max upload size must be greater than or equal to 0.",
-            "translation": ""
-        },
-        {
-            "id": "Max upload size must be greater than or equal to 0 MiB.",
-            "message": "Max upload size must be greater than or equal to 0 MiB.",
-            "translation": ""
-        },
-        {
-            "id": "Max upload size is too large.",
-            "message": "Max upload size is too large.",
-            "translation": ""
-        },
-        {
-            "id": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
-            "message": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
-            "translation": ""
-        },
-        {
-            "id": "Tenant is required.",
-            "message": "Tenant is required.",
-            "translation": ""
-        },
-        {
-            "id": "Tenant not found.",
-            "message": "Tenant not found.",
-            "translation": ""
-        },
-        {
-            "id": "You must be logged in to manage upload limits.",
-            "message": "You must be logged in to manage upload limits.",
-            "translation": ""
-        },
-        {
-            "id": "You must be an admin to manage upload limits.",
-            "message": "You must be an admin to manage upload limits.",
-            "translation": ""
-        },
-        {
-            "id": "App not unlocked yet. Please try again later.",
-            "message": "App not unlocked yet. Please try again later.",
-            "translation": ""
-        },
-        {
-            "id": "Tenant not initialized yet. Please try again later.",
-            "message": "Tenant not initialized yet. Please try again later.",
-            "translation": ""
-        },
-        {
-            "id": "Error opening tenant database. Please try again later.",
-            "message": "Error opening tenant database. Please try again later.",
+            "id": "Cannot add a tag group as child.",
+            "message": "Cannot add a tag group as child.",
             "translation": ""
         },
         {
@@ -3777,6 +4308,11 @@
             "translation": "Could not parse url."
         },
         {
+            "id": "Please register a passkey to continue.",
+            "message": "Please register a passkey to continue.",
+            "translation": ""
+        },
+        {
             "id": "You are not allowed to access this tenant.",
             "message": "You are not allowed to access this tenant.",
             "translation": "You are not allowed to access this tenant."
@@ -3812,6 +4348,11 @@
             "translation": ""
         },
         {
+            "id": "Open main menu",
+            "message": "Open main menu",
+            "translation": ""
+        },
+        {
             "id": "Sign out",
             "message": "Sign out",
             "translation": ""
@@ -3822,8 +4363,18 @@
             "translation": ""
         },
         {
-            "id": "Open main menu",
-            "message": "Open main menu",
+            "id": "No backup codes were returned.",
+            "message": "No backup codes were returned.",
+            "translation": ""
+        },
+        {
+            "id": "The backup codes were regenerated.",
+            "message": "The backup codes were regenerated.",
+            "translation": ""
+        },
+        {
+            "id": "Could not regenerate backup codes.",
+            "message": "Could not regenerate backup codes.",
             "translation": ""
         },
         {
@@ -3848,6 +4399,91 @@
             "translation": ""
         },
         {
+            "id": "Give this passkey an optional name so you can recognize it later.",
+            "message": "Give this passkey an optional name so you can recognize it later.",
+            "translation": ""
+        },
+        {
+            "id": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "message": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "translation": ""
+        },
+        {
+            "id": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "message": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey name (optional)",
+            "message": "Passkey name (optional)",
+            "translation": ""
+        },
+        {
+            "id": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "message": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "translation": ""
+        },
+        {
+            "id": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "message": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "translation": ""
+        },
+        {
+            "id": "SimpleDMS backup codes",
+            "message": "SimpleDMS backup codes",
+            "translation": ""
+        },
+        {
+            "id": "Generated",
+            "message": "Generated",
+            "translation": ""
+        },
+        {
+            "id": "Keep these backup codes in a secure place.",
+            "message": "Keep these backup codes in a secure place.",
+            "translation": ""
+        },
+        {
+            "id": "These codes are shown only once.",
+            "message": "These codes are shown only once.",
+            "translation": ""
+        },
+        {
+            "id": "Codes",
+            "message": "Codes",
+            "translation": ""
+        },
+        {
+            "id": "Print dialog opened.",
+            "message": "Print dialog opened.",
+            "translation": ""
+        },
+        {
+            "id": "The backup codes were copied to clipboard.",
+            "message": "The backup codes were copied to clipboard.",
+            "translation": ""
+        },
+        {
+            "id": "Could not copy backup codes automatically.",
+            "message": "Could not copy backup codes automatically.",
+            "translation": ""
+        },
+        {
+            "id": "The backup codes were downloaded.",
+            "message": "The backup codes were downloaded.",
+            "translation": ""
+        },
+        {
+            "id": "Print codes",
+            "message": "Print codes",
+            "translation": ""
+        },
+        {
+            "id": "Copy codes",
+            "message": "Copy codes",
+            "translation": ""
+        },
+        {
             "id": "Auth cookie already set.",
             "message": "Auth cookie already set.",
             "translation": ""
@@ -3860,6 +4496,16 @@
         {
             "id": "You are not allowed to access the requested resource.",
             "message": "You are not allowed to access the requested resource.",
+            "translation": ""
+        },
+        {
+            "id": "Tenant database not found.",
+            "message": "Tenant database not found.",
+            "translation": ""
+        },
+        {
+            "id": "Could not start transaction.",
+            "message": "Could not start transaction.",
             "translation": ""
         }
     ]

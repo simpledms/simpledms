@@ -877,13 +877,13 @@
             "translatorComment": "",
             "fuzzy": false
         },
-		{
-			"id": "Files",
-			"message": "Files",
-			"translation": "Dateien",
-			"translatorComment": "",
-			"fuzzy": false
-		},
+        {
+            "id": "Files",
+            "message": "Files",
+            "translation": "Dateien",
+            "translatorComment": "",
+            "fuzzy": false
+        },
         {
             "id": "Bucket name is empty.",
             "message": "Bucket name is empty.",
@@ -6726,6 +6726,279 @@
             "id": "Manage upload limit",
             "message": "Manage upload limit",
             "translation": "Upload-Limit verwalten",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Too many password reset requests. Please try again shortly.",
+            "message": "Too many password reset requests. Please try again shortly.",
+            "translation": "Zu viele Anfragen zur Passwort-Zurücksetzung. Bitte versuche es in Kürze erneut.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "If an account with this email exists, a new temporary password was sent.",
+            "message": "If an account with this email exists, a new temporary password was sent.",
+            "translation": "Falls ein Konto mit dieser E-Mail-Adresse existiert, wurde ein neues temporäres Passwort gesendet.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Too many sign-in attempts. Please try again shortly.",
+            "message": "Too many sign-in attempts. Please try again shortly.",
+            "translation": "Zu viele Anmeldeversuche. Bitte versuche es in Kürze erneut.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Quota usage",
+            "message": "Quota usage",
+            "translation": "Kontingentauslastung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Download backup",
+            "message": "Download backup",
+            "translation": "Backup herunterladen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Created on {Format2006_01_02_1504}",
+            "message": "Created on {Format2006_01_02_1504}",
+            "translation": "Erstellt am {Format2006_01_02_1504}",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Last used on {Format2006_01_02_1504}",
+            "message": "Last used on {Format2006_01_02_1504}",
+            "translation": "Zuletzt verwendet am {Format2006_01_02_1504}",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Organization not found.",
+            "message": "Organization not found.",
+            "translation": "Organisation nicht gefunden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File uploaded, please select a space.",
+            "message": "File uploaded, please select a space.",
+            "translation": "Datei hochgeladen, bitte wähle einen Space aus.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Import URL",
+            "message": "Import URL",
+            "translation": "URL importieren",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Import file from URL",
+            "message": "Import file from URL",
+            "translation": "Datei von URL importieren",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Download and continue",
+            "message": "Download and continue",
+            "translation": "Herunterladen und fortfahren",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Upload is too large.",
+            "message": "Upload is too large.",
+            "translation": "Upload ist zu gross.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Is unlimited",
+            "message": "Is unlimited",
+            "translation": "Ist unbegrenzt",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size mib",
+            "message": "Max upload size mib",
+            "translation": "Maximale Upload-Grösse MiB",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Token",
+            "message": "Token",
+            "translation": "Token",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Url",
+            "message": "Url",
+            "translation": "URL",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Password must be at least twelve characters long.",
+            "message": "Password must be at least twelve characters long.",
+            "translation": "Das Passwort muss mindestens zwölf Zeichen lang sein.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Open sign in page",
+            "message": "Open sign in page",
+            "translation": "Anmeldeseite öffnen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size must be greater than or equal to 0.",
+            "message": "Max upload size must be greater than or equal to 0.",
+            "translation": "Die maximale Upload-Grösse muss grösser oder gleich 0 sein.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not download file from URL.",
+            "message": "Could not download file from URL.",
+            "translation": "Datei konnte nicht von der URL heruntergeladen werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Processing of downloaded file failed.",
+            "message": "Processing of downloaded file failed.",
+            "translation": "Die Verarbeitung der heruntergeladenen Datei ist fehlgeschlagen.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid URL.",
+            "message": "Invalid URL.",
+            "translation": "Ungültige URL.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not determine filename.",
+            "message": "Could not determine filename.",
+            "translation": "Dateiname konnte nicht ermittelt werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "URL is required.",
+            "message": "URL is required.",
+            "translation": "URL ist erforderlich.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Only HTTP and HTTPS URLs are allowed.",
+            "message": "Only HTTP and HTTPS URLs are allowed.",
+            "translation": "Es sind nur HTTP- und HTTPS-URLs erlaubt.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "URL credentials are not allowed.",
+            "message": "URL credentials are not allowed.",
+            "translation": "URL-Zugangsdaten sind nicht erlaubt.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Local URLs are not allowed.",
+            "message": "Local URLs are not allowed.",
+            "translation": "Lokale URLs sind nicht erlaubt.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Target host is not allowed.",
+            "message": "Target host is not allowed.",
+            "translation": "Ziel-Host ist nicht erlaubt.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Too many redirects.",
+            "message": "Too many redirects.",
+            "translation": "Zu viele Weiterleitungen.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size must be greater than or equal to 0 MiB.",
+            "message": "Max upload size must be greater than or equal to 0 MiB.",
+            "translation": "Die maximale Upload-Grösse muss grösser oder gleich 0 MiB sein.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size is too large.",
+            "message": "Max upload size is too large.",
+            "translation": "Die maximale Upload-Grösse ist zu gross.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
+            "message": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
+            "translation": "Die maximale Upload-Grösse muss grösser als 0 MiB sein, wenn «Unbegrenzt» deaktiviert ist.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant is required.",
+            "message": "Tenant is required.",
+            "translation": "Mandant ist erforderlich.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant not found.",
+            "message": "Tenant not found.",
+            "translation": "Mandant nicht gefunden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to manage upload limits.",
+            "message": "You must be logged in to manage upload limits.",
+            "translation": "Du musst angemeldet sein, um Upload-Limits zu verwalten.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be an admin to manage upload limits.",
+            "message": "You must be an admin to manage upload limits.",
+            "translation": "Du musst Admin sein, um Upload-Limits zu verwalten.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not verify upload size limit.",
+            "message": "Could not verify upload size limit.",
+            "translation": "Upload-Grössenlimit konnte nicht überprüft werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Upload is too large. Maximum allowed size is {FormatSizemaxUploadSizeBytes}.",
+            "message": "Upload is too large. Maximum allowed size is {FormatSizemaxUploadSizeBytes}.",
+            "translation": "Upload ist zu gross. Die maximal erlaubte Grösse ist {FormatSizemaxUploadSizeBytes}.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         }

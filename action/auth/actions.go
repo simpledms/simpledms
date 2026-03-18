@@ -37,6 +37,7 @@ type Actions struct {
 
 func NewActions(infra *common.Infra) *Actions {
 	recoveryCodesStore := account2.NewPasskeyRecoveryCodesStore()
+	requestRateLimiter := account2.NewRequestRateLimiter()
 	passkeyService := account2.NewPasskeyService(
 		infra.SystemConfig().PublicOrigin(),
 		infra.SystemConfig().WebAuthnRPID(),
@@ -46,15 +47,15 @@ func NewActions(infra *common.Infra) *Actions {
 
 	*actions = Actions{
 		SignInPage:                NewSignInPage(infra, actions),
-		SignInCmd:                 NewSignInCmd(infra, actions),
+		SignInCmd:                 NewSignInCmd(infra, actions, requestRateLimiter),
 		SignOutCmd:                NewSignOutCmd(infra, actions),
-		ResetPasswordCmd:          NewResetPasswordCmd(infra, actions),
+		ResetPasswordCmd:          NewResetPasswordCmd(infra, actions, requestRateLimiter),
 		ChangePasswordCmd:         NewChangePasswordCmd(infra, actions),
 		SetInitialPasswordCmd:     NewSetInitialPasswordCmd(infra, actions),
 		ClearTemporaryPasswordCmd: NewClearTemporaryPasswordCmd(infra, actions),
 		EditAccountCmd:            NewEditAccountCmd(infra, actions),
 
-		PasskeySignInBeginCmd:      NewPasskeySignInBeginCmd(infra, actions, passkeyService),
+		PasskeySignInBeginCmd:      NewPasskeySignInBeginCmd(infra, actions, passkeyService, requestRateLimiter),
 		PasskeySignInFinishCmd:     NewPasskeySignInFinishCmd(infra, actions, passkeyService),
 		PasskeyRegisterDialog:      NewPasskeyRegisterDialog(infra, actions),
 		PasskeyRegisterBeginCmd:    NewPasskeyRegisterBeginCmd(infra, actions, passkeyService),

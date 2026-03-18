@@ -8,15 +8,18 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	account2 "github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type PasskeySignInBeginCmdData struct{}
+type PasskeySignInBeginCmdData struct {
+}
 
 type PasskeySignInBeginCmd struct {
-	infra          *common.Infra
-	actions        *Actions
-	passkeyService *account2.PasskeyService
+	infra              *common.Infra
+	actions            *Actions
+	passkeyService     *account2.PasskeyService
+	requestRateLimiter *account2.RequestRateLimiter
 	*actionx.Config
 }
 
@@ -24,13 +27,15 @@ func NewPasskeySignInBeginCmd(
 	infra *common.Infra,
 	actions *Actions,
 	passkeyService *account2.PasskeyService,
+	requestRateLimiter *account2.RequestRateLimiter,
 ) *PasskeySignInBeginCmd {
 	config := actionx.NewConfig(actions.Route("passkey-sign-in-begin-cmd"), false)
 	return &PasskeySignInBeginCmd{
-		infra:          infra,
-		actions:        actions,
-		passkeyService: passkeyService,
-		Config:         config,
+		infra:              infra,
+		actions:            actions,
+		passkeyService:     passkeyService,
+		requestRateLimiter: requestRateLimiter,
+		Config:             config,
 	}
 }
 
@@ -39,6 +44,21 @@ func (qq *PasskeySignInBeginCmd) Data() *PasskeySignInBeginCmdData {
 }
 
 func (qq *PasskeySignInBeginCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	if !qq.requestRateLimiter.Allow(
+		rateLimitKey("passkey-begin-ip", clientIPFromRequest(req)),
+		passkeyBeginRateLimitWindow,
+		passkeyBeginRateLimitPerIP,
+	) {
+		return e.NewHTTPErrorf(http.StatusTooManyRequests, "Too many passkey requests. Please try again shortly.")
+	}
+	if !qq.requestRateLimiter.Allow(
+		"passkey-begin-global",
+		passkeyBeginRateLimitWindow,
+		passkeyBeginRateLimitGlobal,
+	) {
+		return e.NewHTTPErrorf(http.StatusTooManyRequests, "Too many passkey requests. Please try again shortly.")
+	}
+
 	result, err := qq.passkeyService.BeginDiscoverableSignIn(ctx, req)
 	if err != nil {
 		return err

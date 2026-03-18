@@ -763,8 +763,14 @@ func (qq *Router) authenticateAccount(
 		Where(
 			session.Value(cookie.Value),
 			session.Or(
-				session.IsTemporarySession(true),
-				session.ExpiresAtGT(time.Now()),
+				session.And(
+					session.IsTemporarySession(true),
+					session.DeletableAtGT(time.Now()),
+				),
+				session.And(
+					session.IsTemporarySession(false),
+					session.ExpiresAtGT(time.Now()),
+				),
 			),
 		).
 		Only(req.Context())
