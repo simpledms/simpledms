@@ -14,7 +14,10 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/txx"
+	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type UploadFileVersionCmdData struct {
@@ -92,11 +95,11 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 	if filex.Data.IsDirectory {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
 	}
-	if err := autil.EnsureFileDoesNotExist(ctx, filename, filex.Data.ParentID, filex.Data.IsInInbox); err != nil {
+	if err := fileutil.EnsureFileDoesNotExist(ctx, filename, filex.Data.ParentID, filex.Data.IsInInbox); err != nil {
 		return err
 	}
 
-	prep, err := autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*filesystem.PreparedUpload, error) {
+	prep, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*filesystem.PreparedUpload, error) {
 		return qq.infra.FileSystem().PrepareFileVersionUpload(
 			writeCtx,
 			filename,
@@ -114,15 +117,15 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		uploadedFileHeader.Size,
 	)
 	if err != nil {
-		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep, err, true)
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep, err, true)
 		return err
 	}
 
-	_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
 		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep, fileInfo, fileSize)
 	})
 	if err != nil {
-		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep, err, false)
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep, err, false)
 		return err
 	}
 

@@ -289,7 +289,7 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 
 	infra, minioClient := qq.newInfra(renderer, systemConfig)
 	router := NewRouter(mainDB, tenantDBs, infra, qq.devMode, qq.metaPath, i18nx)
-	actions := action.NewActions(infra, tenantDBs)
+	actions := action.NewActions(infra, tenantDBs, qq.devMode)
 	downloadHandler := download.NewDownload(infra)
 	trashDownloadHandler := trashaction.NewDownload(infra)
 
@@ -832,6 +832,7 @@ func (qq *Server) registerCoreRoutes(
 
 	router.RegisterPage(route2.SelectSpaceRoute(false), actions.OpenFile.SelectSpacePage.Handler)
 	router.RegisterPage(route2.SelectSpaceRoute(true), actions.OpenFile.SelectSpacePage.Handler)
+	router.RegisterPage(route2.FromURLRoute(), actions.OpenFile.UploadFromURLPage.Handler)
 
 	// router.RegisterPage(route.FindRoute(false), actions.Find.Page.Handler)
 	// router.RegisterPage(route.FindRoute(true), actions.Find.PageWithSelection.Handler)

@@ -16,7 +16,10 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/txx"
+	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type uploadPrepareResult struct {
@@ -94,11 +97,11 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	filename := uploadedFileHeader.Filename
 	filename = filepath.Clean(filename)
 
-	if err := autil.EnsureFileDoesNotExist(ctx, filename, ctx.SpaceCtx().SpaceRootDir().ID, true); err != nil {
+	if err := fileutil.EnsureFileDoesNotExist(ctx, filename, ctx.SpaceCtx().SpaceRootDir().ID, true); err != nil {
 		return err
 	}
 
-	prep, err := autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
+	prep, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
 		prepared, filex, err := qq.infra.FileSystem().PrepareFileUpload(
 			writeCtx,
 			filename,
@@ -121,15 +124,15 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		uploadedFileHeader.Size,
 	)
 	if err != nil {
-		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
 		return err
 	}
 
-	_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
 		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep.prepared, fileInfo, fileSize)
 	})
 	if err != nil {
-		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, false)
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, false)
 		return err
 	}
 

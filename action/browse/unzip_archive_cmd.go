@@ -22,7 +22,10 @@ import (
 	"github.com/simpledms/simpledms/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/txx"
+	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type unzipPreparedEntry struct {
@@ -165,7 +168,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 	// only used in non-folder mode
 	parentDirID := filem.Data.ParentID
 
-	preparedEntries, err := autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) ([]*unzipPreparedEntry, error) {
+	preparedEntries, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) ([]*unzipPreparedEntry, error) {
 		entries := make([]*unzipPreparedEntry, 0, len(zipArchiveReader.File))
 		parentDir := writeCtx.SpaceCtx().Space.QueryFiles().Where(file.ID(parentDirID)).OnlyX(writeCtx)
 
@@ -197,7 +200,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 			}
 
 			filename := filepath.Base(zippedFile.Name)
-			if err := autil.EnsureFileDoesNotExist(writeCtx, filename, fileParentID, false); err != nil {
+			if err := fileutil.EnsureFileDoesNotExist(writeCtx, filename, fileParentID, false); err != nil {
 				return nil, err
 			}
 
@@ -255,14 +258,14 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 
 		for _, entry := range preparedEntries {
 			cleanup := entry.fileInfo != nil
-			autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), entry.prepared, nil, cleanup)
+			uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), entry.prepared, nil, cleanup)
 		}
 
 		fileIDs := make([]int64, 0, len(preparedEntries))
 		for _, entry := range preparedEntries {
 			fileIDs = append(fileIDs, entry.fileID)
 		}
-		_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+		_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
 			if len(fileIDs) == 0 {
 				return nil, nil
 			}
@@ -277,7 +280,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 			log.Println(err)
 		}
 	} else {
-		_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+		_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
 			totalUploadedBytes, err := qq.unzipPreparedEntriesTotalUploadedSize(preparedEntries)
 			if err != nil {
 				return nil, err
@@ -302,7 +305,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 			log.Println(err)
 			for _, entry := range preparedEntries {
 				cleanup := entry.fileInfo != nil
-				autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), entry.prepared, nil, cleanup)
+				uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), entry.prepared, nil, cleanup)
 			}
 			hasErr = true
 		}
@@ -310,7 +313,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 
 	// If DeleteOnSuccess is true, mark the ZIP file as deleted
 	if data.DeleteOnSuccess && !hasErr {
-		_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+		_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
 			writeCtx.TTx.File.UpdateOneID(filem.Data.ID).
 				SetDeletedAt(time.Now()).
 				SetDeleter(writeCtx.SpaceCtx().User).

@@ -4,25 +4,39 @@ import (
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	temporaryfilemodel "github.com/simpledms/simpledms/model/main/temporaryfile"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
 type Actions struct {
-	Common          *acommon.Actions
-	SelectSpacePage *SelectSpacePage
-	UploadFilesCmd  *UploadFilesCmd
+	Common            *acommon.Actions
+	SelectSpacePage   *SelectSpacePage
+	UploadFromURLPage *UploadFromURLPage
+	UploadFromURLCmd  *UploadFromURLCmd
+	UploadFilesCmd    *UploadFilesCmd
 	// SelectSpace  *SelectSpace
 }
 
-func NewActions(infra *common.Infra, commonActions *acommon.Actions, tenantDBs *tenantdbs.TenantDBs) *Actions {
+func NewActions(
+	infra *common.Infra,
+	commonActions *acommon.Actions,
+	tenantDBs *tenantdbs.TenantDBs,
+	isDevMode bool,
+) *Actions {
 	var actions = new(Actions)
+	uploadFromURLService := temporaryfilemodel.NewUploadFromURLService(
+		infra.FileSystem(),
+		isDevMode,
+	)
 
 	// cachex := NewFileUploadCache()
 
 	*actions = Actions{
-		Common:          commonActions,
-		SelectSpacePage: NewSelectSpacePage(infra, actions, tenantDBs),
-		UploadFilesCmd:  NewUploadFilesCmd(infra, actions),
+		Common:            commonActions,
+		SelectSpacePage:   NewSelectSpacePage(infra, actions, tenantDBs),
+		UploadFromURLCmd:  NewUploadFromURLCmd(actions, uploadFromURLService),
+		UploadFromURLPage: NewUploadFromURLPage(infra, actions, uploadFromURLService),
+		UploadFilesCmd:    NewUploadFilesCmd(infra, actions),
 		// SelectSpace:  NewSelectSpace(infra, actions, cachex),
 	}
 

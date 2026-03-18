@@ -15,7 +15,10 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/txx"
+	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type UploadFileCmdData struct {
@@ -116,7 +119,7 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 
 	parentDir := qq.infra.FileRepo.GetX(ctx, data.ParentDirID)
 
-	if err := autil.EnsureFileDoesNotExist(ctx, filename, parentDir.Data.ID, data.AddToInbox); err != nil {
+	if err := fileutil.EnsureFileDoesNotExist(ctx, filename, parentDir.Data.ID, data.AddToInbox); err != nil {
 		return err
 	}
 
@@ -125,7 +128,7 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		filex    *enttenant.File
 	}
 
-	prep, err := autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
+	prep, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
 		prepared, filex, err := qq.infra.FileSystem().PrepareFileUpload(
 			writeCtx,
 			filename,
@@ -148,15 +151,15 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		uploadedFileHeader.Size,
 	)
 	if err != nil {
-		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
 		return err
 	}
 
-	_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
 		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep.prepared, fileInfo, fileSize)
 	})
 	if err != nil {
-		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, false)
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, false)
 		return err
 	}
 
