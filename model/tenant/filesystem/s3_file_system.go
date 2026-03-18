@@ -16,6 +16,7 @@ import (
 	"filippo.io/age"
 	securejoin "github.com/cyphar/filepath-securejoin"
 	"github.com/minio/minio-go/v7"
+
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
@@ -67,6 +68,10 @@ func NewS3FileSystem(
 
 func (qq *S3FileSystem) TenantUsageBytes(ctx ctxx.Context) (int64, int64, error) {
 	return qq.storageQuota.TenantUsageBytes(ctx)
+}
+
+func (qq *S3FileSystem) StorageQuota() *StorageQuota {
+	return qq.storageQuota
 }
 
 // caller has to close io.ReadCloser
@@ -183,6 +188,27 @@ func (qq *S3FileSystem) UnsafeOpenFile(ctx context.Context, x25519Identity *age.
 	}()
 
 	return pipeReader, nil
+}
+
+// used for restore of backup
+func (qq *S3FileSystem) UnsafeUploadBlobToStorageLocation(
+	ctx context.Context,
+	x25519Identity *age.X25519Identity,
+	fileToSave io.Reader,
+	originalFilename string,
+	storagePath string,
+	storageFilename string,
+) error {
+	_, _, _, err := qq.saveFile(
+		ctx,
+		x25519Identity,
+		fileToSave,
+		originalFilename,
+		storagePath,
+		storageFilename,
+	)
+
+	return err
 }
 
 func (qq *S3FileSystem) PrepareFileUpload(
@@ -447,7 +473,7 @@ func (qq *S3FileSystem) storageFilename(originalFilename, storageFilenameWithout
 
 func (qq *S3FileSystem) saveFile(
 	ctx context.Context,
-	// passed in because PersistTemporaryTenantFile has no TenantContext
+// passed in because PersistTemporaryTenantFile has no TenantContext
 	x25519Identity *age.X25519Identity,
 	fileToSave io.Reader,
 	originalFilename string,
@@ -839,7 +865,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
 		// SetPublicID(entx.NewCIText(storedFilePublicID)).
 		SetFilename(tmpFile.Filename).
-		SetSize(tmpFile.Size).                   // fileInfo.Size is gzipped size
+		SetSize(tmpFile.Size). // fileInfo.Size is gzipped size
 		SetSizeInStorage(tmpFile.SizeInStorage). // gzipped size
 		SetStorageType(storagetype.S3).
 		SetBucketName(qq.bucketName).
