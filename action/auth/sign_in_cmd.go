@@ -89,10 +89,8 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 	accountx, err := ctx.VisitorCtx().MainTx.Account.Query().Where(account.Email(entx.NewCIText(data.Email))).Only(ctx)
 	if err != nil {
 		if entmain.IsNotFound(err) {
-			return e.NewHTTPErrorWithSnackbar(
-				http.StatusBadRequest,
-				wx.NewSnackbarf("Invalid credentials. Please try again."),
-			)
+			rw.AddRenderables(wx.NewSnackbarf("Invalid credentials. Please try again."))
+			return nil
 		}
 		log.Println(err)
 		return err
