@@ -1,6 +1,8 @@
 package dashboard
 
 import (
+	"log"
+
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
