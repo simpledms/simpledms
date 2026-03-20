@@ -55,19 +55,23 @@ func (qq *DashboardCardsPartial) Data() *DashboardCardsPartialData {
 }
 
 func (qq *DashboardCardsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	widget, err := qq.Widget(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		qq.Widget(ctx),
+		widget,
 	)
 }
 
 // guidelines:
 // most important card should always be in front, for example `set password` if not set yet
 // or `manage spaces` if no space exists yet
-func (qq *DashboardCardsPartial) Widget(
-	ctx ctxx.Context,
-) renderable.Renderable {
+func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
 	var grids []*wx.Grid
 
 	var openTaskCards []*wx.Card
@@ -84,7 +88,7 @@ func (qq *DashboardCardsPartial) Widget(
 	isTenantPasskeyEnrollmentRequired := passkeyPolicy.IsTenantPasskeyEnrollmentRequired()
 
 	if isTenantPasskeyEnrollmentRequired {
-		return qq.setupRequiredWidget(ctx)
+		return qq.setupRequiredWidget(ctx), nil
 	}
 
 	passkeyCredentials := ctx.MainCtx().MainTx.PasskeyCredential.Query().
@@ -111,7 +115,12 @@ func (qq *DashboardCardsPartial) Widget(
 		})
 	}
 
-	spacesByTenant := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
 	for tenantx, spaces := range spacesByTenant {
 		var tenantCards []*wx.Card
 		var tenantHeaderBtns []wx.IWidget
@@ -262,7 +271,7 @@ func (qq *DashboardCardsPartial) Widget(
 		},
 		Child: grids,
 		// HTMXAttrs: htmxAttrs,
-	}
+	}, nil
 
 	/*return &wx.ScrollableContent{
 		PaddingX: true,

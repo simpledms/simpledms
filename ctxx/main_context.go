@@ -2,6 +2,9 @@ package ctxx
 
 import (
 	"context"
+	"database/sql"
+	"errors"
+	"fmt"
 	"log"
 
 	"github.com/simpledms/simpledms/common/tenantdbs"
@@ -57,11 +60,16 @@ func (qq *MainContext) UnsafeTenantDBs() *tenantdbs.TenantDBs {
 }
 
 // TODO cache?
-func (qq *MainContext) ReadOnlyAccountSpacesByTenant() map[*entmain.Tenant][]*enttenant.Space {
+func (qq *MainContext) ReadOnlyAccountSpacesByTenant() (map[*entmain.Tenant][]*enttenant.Space, error) {
 	var spacesByTenant = make(map[*entmain.Tenant][]*enttenant.Space)
 
 	// similar code in DashboardCards
-	tenants := qq.Account.QueryTenants().AllX(qq)
+	tenants, err := qq.Account.QueryTenants().All(qq)
+	if err != nil {
+		log.Println(err)
+		return nil, fmt.Errorf("failed to query tenants for account %d: %w", qq.Account.ID, err)
+	}
+
 	for _, tenantx := range tenants {
 		var spaces []*enttenant.Space
 
@@ -84,9 +92,7 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() map[*entmain.Tenant][]*en
 		spacesx, err := tenantDB.ReadOnlyConn.Space.Query().All(tenantCtx)
 		if err != nil && !enttenant.IsNotFound(err) {
 			log.Println("failed to query spaces for tenant", tenantx.ID, err)
-			if err := tenantTx.Rollback(); err != nil {
-				log.Println("failed to rollback transaction for tenant", tenantx.ID, err)
-			}
+			qq.rollbackTenantTx(tenantTx, tenantx.ID)
 			continue
 		}
 		spaces = append(spaces, spacesx...)
@@ -95,15 +101,20 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() map[*entmain.Tenant][]*en
 		// TODO is it a problem that spaces get used in calling function after the tx is committed?
 		if err := tenantTx.Commit(); err != nil {
 			log.Println("failed to commit transaction for tenant", tenantx.ID, err)
-			if err := tenantTx.Rollback(); err != nil {
-				log.Println("failed to rollback transaction for tenant", tenantx.ID, err)
-			}
+			qq.rollbackTenantTx(tenantTx, tenantx.ID)
+			continue
 		}
 
 		spacesByTenant[tenantx] = spaces
 	}
 
-	return spacesByTenant
+	return spacesByTenant, nil
+}
+
+func (qq *MainContext) rollbackTenantTx(tenantTx *enttenant.Tx, tenantID int64) {
+	if err := tenantTx.Rollback(); err != nil && !errors.Is(err, sql.ErrTxDone) {
+		log.Println("failed to rollback transaction for tenant", tenantID, err)
+	}
 }
 
 func (qq *MainContext) MainCtx() *MainContext {

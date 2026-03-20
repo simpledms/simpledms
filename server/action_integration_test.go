@@ -18,6 +18,7 @@ import (
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
+
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
@@ -1990,6 +1991,7 @@ func TestPasskeyRecoverySignInCmdDoesNotEnumerateAccounts(t *testing.T) {
 	}
 }
 
+/* commented because Redirect was disabled
 func TestPasskeySignInBeginCmdRedirectsToCanonicalHost(t *testing.T) {
 	t.Setenv("SIMPLEDMS_PUBLIC_ORIGIN", "https://app.simpledms.eu")
 
@@ -2014,6 +2016,7 @@ func TestPasskeySignInBeginCmdRedirectsToCanonicalHost(t *testing.T) {
 		t.Fatalf("expected location %q, got %q", "https://app.simpledms.eu/-/auth/passkey-sign-in-begin-cmd", location)
 	}
 }
+*/
 
 func TestPasskeySignInFinishCmdRejectsUsedChallenge(t *testing.T) {
 	harness := newActionTestHarness(t)
@@ -2361,6 +2364,7 @@ func TestPasskeyRecoveryCodesDialogConsumesToken(t *testing.T) {
 	}
 }
 
+/* commented because Redirect was disabled
 func TestCanonicalHostRedirectForAuthRoutes(t *testing.T) {
 	t.Setenv("SIMPLEDMS_PUBLIC_ORIGIN", "https://app.simpledms.eu")
 
@@ -2390,3 +2394,4 @@ func TestCanonicalHostRedirectForAuthRoutes(t *testing.T) {
 		t.Fatalf("expected location %q, got %q", "https://app.simpledms.eu/-/auth/sign-in-cmd", location)
 	}
 }
+*/

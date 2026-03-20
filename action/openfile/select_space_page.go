@@ -1,6 +1,8 @@
 package openfile
 
 import (
+	"log"
+
 	acommon "github.com/simpledms/simpledms/action/common"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -48,7 +50,13 @@ func (qq *SelectSpacePage) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		// return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid token.")
 	}
 
-	return qq.Render(rw, req, ctx, qq.infra, "Upload", qq.Widget(ctx, token, state))
+	widget, err := qq.Widget(ctx, token, state)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return qq.Render(rw, req, ctx, qq.infra, "Upload", widget)
 }
 
 func (qq *SelectSpacePage) WaitWidget(ctx ctxx.Context, uploadToken string, state *SelectSpacePageState) renderable.Renderable {
@@ -70,7 +78,11 @@ func (qq *SelectSpacePage) WaitWidget(ctx ctxx.Context, uploadToken string, stat
 	}
 }
 
-func (qq *SelectSpacePage) Widget(ctx ctxx.Context, uploadToken string, state *SelectSpacePageState) renderable.Renderable {
+func (qq *SelectSpacePage) Widget(
+	ctx ctxx.Context,
+	uploadToken string,
+	state *SelectSpacePageState,
+) (renderable.Renderable, error) {
 	// TODO show files or just stats (number of files and total size)?
 	// TODO redirect to inbox of space (preselect first file)
 
@@ -78,7 +90,10 @@ func (qq *SelectSpacePage) Widget(ctx ctxx.Context, uploadToken string, state *S
 
 	var spaceItems []*wx.ListItem
 
-	spacesByTenant := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	if err != nil {
+		return nil, err
+	}
 
 	// TODO ordner?
 	for tenantx, spaces := range spacesByTenant {
@@ -122,7 +137,7 @@ func (qq *SelectSpacePage) Widget(ctx ctxx.Context, uploadToken string, state *S
 		},
 	}
 
-	return mainLayout
+	return mainLayout, nil
 }
 
 func (qq *SelectSpacePage) appBar(ctx ctxx.Context) *wx.AppBar {

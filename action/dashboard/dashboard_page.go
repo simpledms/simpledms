@@ -25,18 +25,29 @@ func NewDashboardPage(infra *common.Infra, actions *Actions) *DashboardPage {
 }
 
 func (qq *DashboardPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	return qq.Render(rw, req, ctx, qq.infra, "Dashboard", qq.Widget(ctx))
+	widget, err := qq.Widget(ctx)
+	if err != nil {
+		return err
+	}
+
+	return qq.Render(rw, req, ctx, qq.infra, "Dashboard", widget)
 }
 
-func (qq *DashboardPage) Widget(ctx ctxx.Context) renderable.Renderable {
+func (qq *DashboardPage) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
 	fabs := []*wx.FloatingActionButton{}
+	dashboardCardsWidget, err := qq.actions.DashboardCardsPartial.Widget(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
 	dashboardCardsContent := &wx.Container{
 		HTMXAttrs: wx.HTMXAttrs{
 			HxGet:     "/",
 			HxTrigger: event.HxTrigger(event.AccountDeleted),
 			HxTarget:  "#content",
 		},
-		Child: qq.actions.DashboardCardsPartial.Widget(ctx),
+		Child: dashboardCardsWidget,
 	}
 
 	mainLayout := &wx.MainLayout{
@@ -49,7 +60,7 @@ func (qq *DashboardPage) Widget(ctx ctxx.Context) renderable.Renderable {
 		},
 	}
 
-	return mainLayout
+	return mainLayout, nil
 }
 
 func (qq *DashboardPage) appBar(ctx ctxx.Context) *wx.AppBar {

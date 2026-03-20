@@ -64,37 +64,43 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 			}}...,
 		)
 
-		for tenantx, spaces := range ctx.MainCtx().ReadOnlyAccountSpacesByTenant() {
-			items = append(items, &wx.MenuItem{
-				LeadingIcon: "hub",
-				// TODO or `all spaces` or `manage spaces`? `|` or «»
-				Label: wx.Tuf("%s «%s»", wx.T("Spaces").String(ctx), tenantx.Name),
-				HTMXAttrs: wx.HTMXAttrs{
-					HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
-				},
-			})
-			// TODO add Label with Tenant name
-			for _, spacex := range spaces {
-				// trailingIcon := ""
-				leadingIcon := "check_box_outline_blank"
-				isCurrent := ctx.IsSpaceCtx() && ctx.SpaceCtx().SpaceID == spacex.PublicID.String()
-				if isCurrent {
-					// trailingIcon = "check"
-					leadingIcon = "check_box"
-				}
+		spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+		if err != nil {
+			// TODO returning an error would probably be better...
+			log.Println(err)
+		} else {
+			for tenantx, spaces := range spacesByTenant {
 				items = append(items, &wx.MenuItem{
-					LeadingIcon: leadingIcon,
-					// TrailingIcon: trailingIcon,
-					// TODO tenant name as label or supporting text or tooltip?
-					Label: wx.Tu(fmt.Sprintf("%s", spacex.Name)),
+					LeadingIcon: "hub",
+					// TODO or `all spaces` or `manage spaces`? `|` or «»
+					Label: wx.Tuf("%s «%s»", wx.T("Spaces").String(ctx), tenantx.Name),
 					HTMXAttrs: wx.HTMXAttrs{
-						HxGet: route2.BrowseRoot(tenantx.PublicID.String(), spacex.PublicID.String()),
+						HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
 					},
 				})
+				// TODO add Label with Tenant name
+				for _, spacex := range spaces {
+					// trailingIcon := ""
+					leadingIcon := "check_box_outline_blank"
+					isCurrent := ctx.IsSpaceCtx() && ctx.SpaceCtx().SpaceID == spacex.PublicID.String()
+					if isCurrent {
+						// trailingIcon = "check"
+						leadingIcon = "check_box"
+					}
+					items = append(items, &wx.MenuItem{
+						LeadingIcon: leadingIcon,
+						// TrailingIcon: trailingIcon,
+						// TODO tenant name as label or supporting text or tooltip?
+						Label: wx.Tu(fmt.Sprintf("%s", spacex.Name)),
+						HTMXAttrs: wx.HTMXAttrs{
+							HxGet: route2.BrowseRoot(tenantx.PublicID.String(), spacex.PublicID.String()),
+						},
+					})
+				}
+				items = append(items, &wx.MenuItem{
+					IsDivider: true,
+				})
 			}
-			items = append(items, &wx.MenuItem{
-				IsDivider: true,
-			})
 		}
 	}
 
