@@ -16,6 +16,7 @@ import (
 
 	"github.com/marcobeierer/structs"
 	"github.com/mattn/go-sqlite3"
+
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/ctxx"
@@ -39,17 +40,20 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type handlerFn func(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error
-type Actionable interface {
-	Route() string
-	Endpoint() string
-	FormRoute() string
-	IsReadOnly() bool
-	UseManualTxManagement() bool
-	AllowInSetupSession() bool
-	// Handler(httpx.ResponseWriter, *httpx.Request, *ent.Tx) error
-	Handler(httpx.ResponseWriter, *httpx.Request, ctxx.Context) error
-}
+type (
+	handlerFn  func(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error
+	Actionable interface {
+		Route() string
+		Endpoint() string
+		FormRoute() string
+		IsReadOnly() bool
+		UseManualTxManagement() bool
+		AllowInSetupSession() bool
+		// Handler(httpx.ResponseWriter, *httpx.Request, *ent.Tx) error
+		Handler(httpx.ResponseWriter, *httpx.Request, ctxx.Context) error
+	}
+)
+
 type FormActionable interface {
 	// not always implemented
 	//
@@ -58,8 +62,10 @@ type FormActionable interface {
 	FormHandler(httpx.ResponseWriter, *httpx.Request, ctxx.Context) error
 }
 
-var tenantIDRegex = regexp.MustCompile(`/org/(?P<id>[a-z0-9]+)`)
-var spaceIDRegex = regexp.MustCompile(`/space/(?P<id>[a-z0-9]+)`)
+var (
+	tenantIDRegex = regexp.MustCompile(`/org/(?P<id>[a-z0-9]+)`)
+	spaceIDRegex  = regexp.MustCompile(`/space/(?P<id>[a-z0-9]+)`)
+)
 
 type Router struct {
 	*http.ServeMux
@@ -224,10 +230,13 @@ func (qq *Router) wrapCommand(handlerFn handlerFn) handlerFn {
 // TODO is this the best place?
 func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc {
 	return func(rw http.ResponseWriter, req *http.Request) {
-		if redirectURL, shouldRedirect := qq.canonicalRedirectURL(req); shouldRedirect {
-			http.Redirect(rw, req, redirectURL, http.StatusTemporaryRedirect)
-			return
-		}
+		/*
+			//redirect doesn't make sense, should be resposibility of admin to configure domains correctly
+			if redirectURL, shouldRedirect := qq.canonicalRedirectURL(req); shouldRedirect {
+				http.Redirect(rw, req, redirectURL, http.StatusTemporaryRedirect)
+				return
+			}
+		*/
 
 		requestIsReadOnly := isReadOnly
 
