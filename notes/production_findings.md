@@ -2,6 +2,8 @@
 
 ## Bugs
 
+- [ ] dashboard on mobile is broken
+
 - [x] browse view: adding a field in browse view doesn't update field list
 - [ ] height of multi-line tag groups in filters is not correct; probably set NoOverflowHidden
 - [ ] when opening a second file with the PWA on Desktop, it doesn't upload the file. The first one works fine.
@@ -13,10 +15,15 @@
 
 ## UX
 
+- [ ] show login email address and app url on print for backup codes
+- [ ] add sort in Files view
 - [ ] On tag creation, tag type "Simple" should be preselected.
 - [ ] Add a loading indicator when file preview is loading
+- [ ] list should be hidden before sidebar overlay on smaller screens
 
 ## Technical
+
 - [ ] partial package
-	- rename to widget? or move to common
-		- suffix widget?
+ 	- rename to widget? or move to common
+  		- suffix widget?
+- [ ] PWA: set theme_color and background
