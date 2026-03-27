@@ -20,6 +20,7 @@ type VisitorContext struct {
 	MainTx        *entmain.Tx
 	Printer       *i18n.Printer
 	IsHTMXRequest bool
+	IsTWA         bool
 	// IsAppLocked   bool
 	LanguageBCP47 string // used in widgets
 	Location      *time.Location
@@ -34,6 +35,7 @@ func NewVisitorContext(
 	acceptLanguageStr string,
 	clientTimezone string,
 	isHTMXRequest bool,
+	isTWARequest bool,
 	commercialLicenseEnabled bool,
 ) *VisitorContext {
 	var langTag language.Tag
@@ -68,6 +70,7 @@ func NewVisitorContext(
 		MainTx:        mainTx,
 		Printer:       printer,
 		IsHTMXRequest: isHTMXRequest,
+		IsTWA:         isTWARequest,
 		// IsAppLocked:   isAppLocked,
 		LanguageBCP47:            langTagBase.String(),
 		Location:                 location,

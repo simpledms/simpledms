@@ -267,6 +267,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 			acceptLanguage,
 			clientTimezone,
 			isHTMXRequest,
+			isTWARequest(req),
 			qq.infra.SystemConfig().CommercialLicenseEnabled(),
 		)
 
@@ -337,6 +338,20 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 			}
 		}
 	}
+}
+
+func isTWARequest(req *http.Request) bool {
+	if req == nil {
+		return false
+	}
+
+	headerValue := strings.ToLower(strings.TrimSpace(req.Header.Get("X-Is-TWA")))
+	if headerValue == "true" || headerValue == "1" {
+		return true
+	}
+
+	referer := strings.ToLower(strings.TrimSpace(req.Header.Get("Referer")))
+	return strings.HasPrefix(referer, "android-app://")
 }
 
 func (qq *Router) logRecoveredPanic(req *http.Request, recovered any) {

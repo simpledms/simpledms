@@ -285,6 +285,29 @@
 				})
 			}
 
+			const twaStorageKey = 'simpledms:is-twa';
+
+			const updateTWAState = () => {
+				// TODO is generic okay or should we check for specific one from play store?
+				const isTWAReferrer = document.referrer.startsWith('android-app://');
+				if (isTWAReferrer) {
+					try {
+						sessionStorage.setItem(twaStorageKey, 'true');
+					} catch (_) {
+						return true;
+					}
+					return true;
+				}
+
+				try {
+					return sessionStorage.getItem(twaStorageKey) === 'true';
+				} catch (_) {
+					return false;
+				}
+			}
+
+			updateTWAState();
+
 			document.addEventListener('htmx:beforeRequest', function(e) {
 				// does close side sheet on navigation to another page;
 				// page nav is always boosted;
@@ -346,6 +369,9 @@
 
 			document.addEventListener('htmx:configRequest', function(e) {
 				e.detail.headers['X-Client-Timezone'] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+				if (updateTWAState()) {
+					e.detail.headers['X-Is-TWA'] = 'true';
+				}
 				
 				if (e.detail.boosted || e.detail.verb == 'get') {
 					// workaround to remove params from URL that were added by hx-vals inheritance;
