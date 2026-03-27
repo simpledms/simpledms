@@ -189,7 +189,7 @@ func newMaintenanceModeHandler(
 						NoOverflowHidden: true,
 						Children: []wx.IWidget{
 							wx.H(wx.HeadingTypeHeadlineMd, titlex),
-							wx.T("Maintenance mode is enabled. Please wait until the app ready again.").SetWrap(),
+							wx.T("Maintenance mode is enabled. Please wait until the app is ready again.").SetWrap(),
 							// wx.T("This page automatically refreshes every 60 seconds.").SetWrap(),
 						},
 					},

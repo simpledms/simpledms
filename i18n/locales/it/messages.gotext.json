@@ -2596,8 +2596,8 @@
             "fuzzy": true
         },
         {
-            "id": "Maintenance mode is enabled. Please wait until the app ready again.",
-            "message": "Maintenance mode is enabled. Please wait until the app ready again.",
+            "id": "Maintenance mode is enabled. Please wait until the app is ready again.",
+            "message": "Maintenance mode is enabled. Please wait until the app is ready again.",
             "translation": "La modalità manutenzione è attivata. Attendere fino a quando l'applicazione sarà nuovamente pronta.",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
