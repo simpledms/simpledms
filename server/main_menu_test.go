@@ -60,6 +60,7 @@ func TestMainMenuShowsOnlySetupEntriesWhenPasskeyEnrollmentRequired(t *testing.T
 		"",
 		"",
 		true,
+		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
 	mainCtx := ctxx.NewMainContext(visitorCtx, accountInTx, harness.i18n, harness.mainDB, harness.tenantDBs, true)

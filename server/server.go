@@ -173,6 +173,9 @@ func newMaintenanceModeHandler(
 			req.Header.Get("Accept-Language"),
 			req.Header.Get("X-Client-Timezone"),
 			false,
+			// Maintenance mode does not execute app navigation/HTMX flows, so there is no
+			// meaningful TWA signal to propagate to this context.
+			false,
 			commercialLicenseEnabled,
 		)
 
@@ -989,6 +992,7 @@ func (qq *Server) initInitialUser(
 		// TODO are there better defaults? or provide config?
 		"en",
 		"UTC",
+		false,
 		false,
 		qq.commercialLicenseEnabled,
 	)

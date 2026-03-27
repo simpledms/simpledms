@@ -101,6 +101,7 @@ func executeSignUpFlow(t *testing.T, harness *actionTestHarness, email string) e
 		"",
 		"",
 		true,
+		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
 

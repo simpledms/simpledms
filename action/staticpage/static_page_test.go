@@ -221,7 +221,7 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 		SaveX(ctx)
 
 	i18nx := i18n.NewI18n()
-	visitorCtx := ctxx.NewVisitorContext(ctx, nil, i18nx, "", "UTC", true, false)
+	visitorCtx := ctxx.NewVisitorContext(ctx, nil, i18nx, "", "UTC", true, false, false)
 	mainCtx := ctxx.NewMainContext(visitorCtx, account, i18nx, nil, tenantdbs.NewTenantDBs(), true)
 
 	return page, mainCtx

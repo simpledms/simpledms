@@ -401,6 +401,7 @@ func signUpAccountWithoutSaaSGating(
 		"",
 		"",
 		true,
+		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
 

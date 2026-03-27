@@ -260,6 +260,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 		acceptLanguage := req.Header.Get("Accept-Language")
 		clientTimezone := req.Header.Get("X-Client-Timezone") // set for all HTMX requests
 		isHTMXRequest := req.Header.Get("HX-Request") != ""
+		isTWA := isTWARequest(req)
 		visitorCtx := ctxx.NewVisitorContext(
 			req.Context(),
 			mainTx,
@@ -267,7 +268,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 			acceptLanguage,
 			clientTimezone,
 			isHTMXRequest,
-			isTWARequest(req),
+			isTWA,
 			qq.infra.SystemConfig().CommercialLicenseEnabled(),
 		)
 
