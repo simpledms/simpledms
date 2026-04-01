@@ -159,6 +159,7 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 		grids = append(grids, &wx.Grid{
 			Heading: wx.Hf(wx.HeadingTypeTitleMd, "Organization «%s»", tenantx.Name),
 			Footer: &wx.Row{
+				Wrap:     true,
 				Children: tenantHeaderBtns,
 			},
 			Children: tenantCards,
@@ -234,7 +235,10 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 		// TODO show Name and email?
 		Heading:  wx.H(wx.HeadingTypeTitleMd, accountHeading),
 		Children: accountCards,
-		Footer:   &wx.Row{Children: accountCardsBtns},
+		Footer: &wx.Row{
+			Wrap:     true,
+			Children: accountCardsBtns,
+		},
 	})
 
 	if len(systemCards) > 0 {
@@ -242,6 +246,7 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 			Heading:  wx.H(wx.HeadingTypeTitleMd, wx.T("System")), // TODO admin, system or app?
 			Children: systemCards,
 			Footer: &wx.Row{
+				Wrap:     true,
 				Children: systemFooterBtns,
 			},
 		})

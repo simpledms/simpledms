@@ -4,7 +4,7 @@ type Row struct {
 	Widget[Row]
 
 	OverflowScroll bool
-	Class          string
+	Wrap           bool
 
 	// TopAlign   bool // TODO wrap in Config or via Prefix?
 	// FullHeight bool
