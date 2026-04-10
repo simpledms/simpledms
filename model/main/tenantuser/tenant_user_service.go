@@ -5,12 +5,8 @@ import (
 	"net/http"
 
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/db/entx"
 	accountmodel "github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/common/language"
-	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	"github.com/simpledms/simpledms/model/main/mailer"
 	tenantmodel "github.com/simpledms/simpledms/model/main/tenant"
@@ -28,9 +24,9 @@ func Create(
 	language language.Language,
 	signInURL string,
 ) error {
-	exists, err := ctx.TenantCtx().MainTx.Account.Query().
-		Where(account.EmailEQ(entx.NewCIText(email))).
-		Exist(ctx)
+	repository := NewEntTenantUserRepository()
+
+	exists, err := repository.AccountExistsByEmail(ctx, email)
 	if err != nil {
 		return err
 	}
@@ -41,13 +37,10 @@ func Create(
 		)
 	}
 
-	accountx := ctx.TenantCtx().MainTx.Account.Create().
-		SetFirstName(firstName).
-		SetLastName(lastName).
-		SetLanguage(language).
-		SetEmail(entx.NewCIText(email)).
-		SetRole(mainrole.User).
-		SaveX(ctx)
+	accountx, err := repository.CreateAccount(ctx, firstName, lastName, language, email)
+	if err != nil {
+		return err
+	}
 	accountm := accountmodel.NewAccount(accountx)
 
 	tenantm := tenantmodel.NewTenant(ctx.TenantCtx().Tenant)
@@ -56,13 +49,10 @@ func Create(
 		return err
 	}
 
-	ctx.TenantCtx().TTx.User.Create().
-		SetAccountID(accountx.ID).
-		SetRole(role).
-		SetEmail(accountx.Email).
-		SetFirstName(accountx.FirstName).
-		SetLastName(accountx.LastName).
-		SaveX(ctx)
+	_, err = repository.CreateTenantUser(ctx, accountx, role)
+	if err != nil {
+		return err
+	}
 
 	password, expiresAt, err := accountm.GenerateTemporaryPassword(ctx)
 	if err != nil {
@@ -88,9 +78,9 @@ func Delete(
 	actingAccountID int64,
 	actingUserID int64,
 ) (*tenantmembership.RemoveAccountFromTenantResult, error) {
-	userx, err := ctx.TenantCtx().TTx.User.Query().
-		Where(user.PublicID(entx.NewCIText(userPublicID))).
-		Only(ctx)
+	repository := NewEntTenantUserRepository()
+
+	userx, err := repository.UserByPublicID(ctx, userPublicID)
 	if err != nil {
 		return nil, err
 	}

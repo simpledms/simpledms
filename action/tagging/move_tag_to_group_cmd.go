@@ -6,9 +6,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/tag"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
-	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -88,8 +86,17 @@ func (qq *MoveTagToGroupCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Req
 		return err
 	}
 
-	groupTags := ctx.TenantCtx().TTx.Tag.Query().Where(tag.TypeEQ(tagtype.Group)).AllX(ctx)
-	tag := ctx.TenantCtx().TTx.Tag.Query().Where(tag.ID(data.TagID)).OnlyX(ctx)
+	tagService := taggingmodel.NewTagService()
+
+	groupTags, err := tagService.GroupTags(ctx)
+	if err != nil {
+		return err
+	}
+
+	tag, err := tagService.Get(ctx, data.TagID)
+	if err != nil {
+		return err
+	}
 
 	hxTarget := req.URL.Query().Get("hx-target")
 

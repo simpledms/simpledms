@@ -52,7 +52,7 @@ func (qq *TogglePropertyFilterCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 	if slices.ContainsFunc(state.PropertyValues, func(value PropertyFilterValue) bool {
 		return value.PropertyID == data.PropertyID
 	}) {
-		slices.DeleteFunc(state.PropertyValues, func(value PropertyFilterValue) bool {
+		state.PropertyValues = slices.DeleteFunc(state.PropertyValues, func(value PropertyFilterValue) bool {
 			return value.PropertyID == data.PropertyID
 		})
 	} else {

@@ -5,61 +5,22 @@ import (
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/util/e"
 )
 
-type TagService struct{}
+type TagService struct {
+	repository TagRepository
+}
 
 func NewTagService() *TagService {
-	return &TagService{}
+	return NewTagServiceWithRepository(NewEntTagRepository())
 }
 
-func (qq *TagService) assignTagToFile(ctx ctxx.Context, fileID int64, tagID int64, spaceID int64) error {
-	_, err := ctx.TenantCtx().TTx.TagAssignment.Create().
-		SetFileID(fileID).
-		SetTagID(tagID).
-		SetSpaceID(spaceID).
-		Save(ctx)
-
-	return err
-}
-
-func (qq *TagService) unassignTagFromFile(ctx ctxx.Context, fileID int64, tagID int64) error {
-	_, err := ctx.TenantCtx().TTx.TagAssignment.Delete().
-		Where(tagassignment.FileID(fileID), tagassignment.TagID(tagID)).
-		Exec(ctx)
-
-	return err
-}
-
-func (qq *TagService) unassignTagFromFileInSpace(
-	ctx ctxx.Context,
-	fileID int64,
-	tagID int64,
-	spaceID int64,
-) error {
-	_, err := ctx.TenantCtx().TTx.TagAssignment.Delete().
-		Where(
-			tagassignment.FileID(fileID),
-			tagassignment.TagID(tagID),
-			tagassignment.SpaceID(spaceID),
-		).
-		Exec(ctx)
-
-	return err
-}
-
-func (qq *TagService) querySubTagWithChildren(ctx ctxx.Context, subTagID int64) (*enttenant.Tag, error) {
-	return ctx.TenantCtx().TTx.Tag.Query().
-		WithChildren(func(query *enttenant.TagQuery) {
-			query.Order(tag.ByName())
-			query.Where(tag.TypeNEQ(tagtype.Super))
-		}).
-		Where(tag.ID(subTagID)).
-		Only(ctx)
+func NewTagServiceWithRepository(repository TagRepository) *TagService {
+	return &TagService{
+		repository: repository,
+	}
 }
 
 func (qq *TagService) Create(
@@ -73,29 +34,20 @@ func (qq *TagService) Create(
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot add a tag group as child.")
 	}
 
-	tagCreate := ctx.TenantCtx().TTx.Tag.Create().
-		SetName(name).
-		SetType(typex).
-		SetSpaceID(spaceID)
-
-	if groupTagID != 0 {
-		tagCreate.SetGroupID(groupTagID)
-	}
-
-	return tagCreate.Save(ctx)
+	return qq.repository.CreateTag(ctx, spaceID, groupTagID, name, typex)
 }
 
 func (qq *TagService) Edit(ctx ctxx.Context, tagID int64, name string) (*enttenant.Tag, error) {
-	return ctx.TenantCtx().TTx.Tag.UpdateOneID(tagID).SetName(name).Save(ctx)
+	return qq.repository.UpdateTagName(ctx, tagID, name)
 }
 
 func (qq *TagService) Delete(ctx ctxx.Context, tagID int64) (string, error) {
-	tagx, err := ctx.TenantCtx().TTx.Tag.Get(ctx, tagID)
+	tagx, err := qq.repository.TagByID(ctx, tagID)
 	if err != nil {
 		return "", err
 	}
 
-	err = ctx.TenantCtx().TTx.Tag.DeleteOneID(tagID).Exec(ctx)
+	err = qq.repository.DeleteTag(ctx, tagID)
 	if err != nil {
 		return "", err
 	}
@@ -109,12 +61,12 @@ func (qq *TagService) AssignToFile(
 	tagID int64,
 	spaceID int64,
 ) (*enttenant.Tag, error) {
-	err := qq.assignTagToFile(ctx, fileID, tagID, spaceID)
+	err := qq.repository.AssignTagToFile(ctx, fileID, tagID, spaceID)
 	if err != nil {
 		return nil, err
 	}
 
-	return ctx.TenantCtx().TTx.Tag.Get(ctx, tagID)
+	return qq.repository.TagByID(ctx, tagID)
 }
 
 func (qq *TagService) UnassignFromFile(
@@ -122,12 +74,12 @@ func (qq *TagService) UnassignFromFile(
 	fileID int64,
 	tagID int64,
 ) (*enttenant.Tag, error) {
-	err := qq.unassignTagFromFile(ctx, fileID, tagID)
+	err := qq.repository.UnassignTagFromFile(ctx, fileID, tagID)
 	if err != nil {
 		return nil, err
 	}
 
-	return ctx.TenantCtx().TTx.Tag.Get(ctx, tagID)
+	return qq.repository.TagByID(ctx, tagID)
 }
 
 func (qq *TagService) ToggleFileTag(
@@ -136,23 +88,23 @@ func (qq *TagService) ToggleFileTag(
 	tagID int64,
 	spaceID int64,
 ) (bool, *enttenant.Tag, error) {
-	filex, err := ctx.TenantCtx().TTx.File.Get(ctx, fileID)
+	_, err := qq.repository.FileByID(ctx, fileID)
 	if err != nil {
 		return false, nil, err
 	}
 
-	tagx, err := ctx.TenantCtx().TTx.Tag.Get(ctx, tagID)
+	tagx, err := qq.repository.TagByID(ctx, tagID)
 	if err != nil {
 		return false, nil, err
 	}
 
-	isSelected, err := filex.QueryTagAssignment().Where(tagassignment.TagID(tagID)).Exist(ctx)
+	isSelected, err := qq.repository.FileHasTagAssignment(ctx, fileID, tagID)
 	if err != nil {
 		return false, nil, err
 	}
 
 	if isSelected {
-		err = qq.unassignTagFromFileInSpace(ctx, fileID, tagID, spaceID)
+		err = qq.repository.UnassignTagFromFileInSpace(ctx, fileID, tagID, spaceID)
 		if err != nil {
 			return false, nil, err
 		}
@@ -160,7 +112,7 @@ func (qq *TagService) ToggleFileTag(
 		return false, tagx, nil
 	}
 
-	err = qq.assignTagToFile(ctx, fileID, tagID, spaceID)
+	err = qq.repository.AssignTagToFile(ctx, fileID, tagID, spaceID)
 	if err != nil {
 		return false, nil, err
 	}
@@ -174,7 +126,7 @@ func (qq *TagService) MoveToGroup(
 	groupTagID int64,
 ) (bool, *enttenant.Tag, error) {
 	if groupTagID == 0 {
-		_, err := ctx.TenantCtx().TTx.Tag.UpdateOneID(tagID).ClearGroupID().Save(ctx)
+		err := qq.repository.ClearTagGroup(ctx, tagID)
 		if err != nil {
 			return false, nil, err
 		}
@@ -182,12 +134,12 @@ func (qq *TagService) MoveToGroup(
 		return true, nil, nil
 	}
 
-	_, err := ctx.TenantCtx().TTx.Tag.UpdateOneID(tagID).SetGroupID(groupTagID).Save(ctx)
+	err := qq.repository.SetTagGroup(ctx, tagID, groupTagID)
 	if err != nil {
 		return false, nil, err
 	}
 
-	groupTag, err := ctx.TenantCtx().TTx.Tag.Get(ctx, groupTagID)
+	groupTag, err := qq.repository.TagByID(ctx, groupTagID)
 	if err != nil {
 		return false, nil, err
 	}
@@ -200,15 +152,12 @@ func (qq *TagService) AssignSubTag(
 	superTagID int64,
 	subTagID int64,
 ) (*enttenant.Tag, *enttenant.Tag, error) {
-	superTag, err := ctx.TenantCtx().TTx.Tag.
-		UpdateOneID(superTagID).
-		AddSubTagIDs(subTagID).
-		Save(ctx)
+	superTag, err := qq.repository.AddSubTag(ctx, superTagID, subTagID)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	subTag, err := qq.querySubTagWithChildren(ctx, subTagID)
+	subTag, err := qq.repository.SubTagWithChildren(ctx, subTagID)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -221,18 +170,23 @@ func (qq *TagService) UnassignSubTag(
 	superTagID int64,
 	subTagID int64,
 ) (*enttenant.Tag, *enttenant.Tag, error) {
-	superTag, err := ctx.TenantCtx().TTx.Tag.
-		UpdateOneID(superTagID).
-		RemoveSubTagIDs(subTagID).
-		Save(ctx)
+	superTag, err := qq.repository.RemoveSubTag(ctx, superTagID, subTagID)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	subTag, err := qq.querySubTagWithChildren(ctx, subTagID)
+	subTag, err := qq.repository.SubTagWithChildren(ctx, subTagID)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	return superTag, subTag, nil
+}
+
+func (qq *TagService) Get(ctx ctxx.Context, tagID int64) (*enttenant.Tag, error) {
+	return qq.repository.TagByID(ctx, tagID)
+}
+
+func (qq *TagService) GroupTags(ctx ctxx.Context) ([]*enttenant.Tag, error) {
+	return qq.repository.GroupTags(ctx)
 }

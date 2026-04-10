@@ -3,8 +3,6 @@ package tenantmembership
 import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	account2 "github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/model/main/tenantaccess"
@@ -20,12 +18,9 @@ func RemoveAccountFromTenant(
 	tenantID int64,
 	accountID int64,
 ) (*RemoveAccountFromTenantResult, error) {
-	assignment, err := ctx.MainCtx().MainTx.TenantAccountAssignment.Query().
-		Where(
-			tenantaccountassignment.TenantID(tenantID),
-			tenantaccountassignment.AccountID(accountID),
-		).
-		Only(ctx)
+	repository := NewEntAccountLifecycleRepository()
+
+	assignment, err := repository.TenantAccountAssignmentByTenantAndAccount(ctx, tenantID, accountID)
 	if err != nil {
 		if entmain.IsNotFound(err) {
 			return &RemoveAccountFromTenantResult{}, nil
@@ -36,7 +31,7 @@ func RemoveAccountFromTenant(
 	membership := NewTenantMembership(assignment)
 
 	if membership.IsOwningTenant() {
-		err = softDeleteOwningAccount(ctx, accountID)
+		err = softDeleteOwningAccount(ctx, repository, accountID)
 		if err != nil {
 			return nil, err
 		}
@@ -54,6 +49,7 @@ func RemoveAccountFromTenant(
 
 	err = invalidateSessionsIfNoActiveTenantAssignment(
 		ctx,
+		repository,
 		accountID,
 	)
 	if err != nil {
@@ -66,13 +62,12 @@ func RemoveAccountFromTenant(
 	}, nil
 }
 
-func softDeleteOwningAccount(ctx ctxx.Context, accountID int64) error {
-	accountx, err := ctx.MainCtx().MainTx.Account.Query().
-		Where(
-			account.ID(accountID),
-			account.DeletedAtIsNil(),
-		).
-		Only(ctx)
+func softDeleteOwningAccount(
+	ctx ctxx.Context,
+	repository AccountLifecycleRepository,
+	accountID int64,
+) error {
+	accountx, err := repository.ActiveAccountByID(ctx, accountID)
 	if err != nil {
 		if entmain.IsNotFound(err) {
 			return nil
@@ -94,14 +89,10 @@ func softDeleteOwningAccount(ctx ctxx.Context, accountID int64) error {
 
 func invalidateSessionsIfNoActiveTenantAssignment(
 	ctx ctxx.Context,
+	repository AccountLifecycleRepository,
 	accountID int64,
 ) error {
-	accountx, err := ctx.MainCtx().MainTx.Account.Query().
-		Where(
-			account.ID(accountID),
-			account.DeletedAtIsNil(),
-		).
-		Only(ctx)
+	accountx, err := repository.ActiveAccountByID(ctx, accountID)
 	if err != nil {
 		if entmain.IsNotFound(err) {
 			return nil

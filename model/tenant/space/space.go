@@ -1,25 +1,28 @@
 package space
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
-	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/spacerole"
-	"github.com/simpledms/simpledms/util/e"
 )
 
 type Space struct {
-	Data *enttenant.Space
+	Data       *enttenant.Space
+	repository SpaceRepository
 }
 
 func NewSpace(space *enttenant.Space) *Space {
-	return &Space{space}
+	return NewSpaceWithRepository(space, NewEntSpaceRepository())
+}
+
+func NewSpaceWithRepository(space *enttenant.Space, repository SpaceRepository) *Space {
+	return &Space{
+		Data:       space,
+		repository: repository,
+	}
 }
 
 func (qq *Space) Edit(ctx ctxx.Context, name string, description string) error {
@@ -67,41 +70,31 @@ func (qq *Space) Delete(ctx ctxx.Context, deleter *enttenant.User) error {
 }
 
 func (qq *Space) AssignUser(ctx ctxx.Context, userPublicID string, role spacerole.SpaceRole) error {
-	userx, err := ctx.SpaceCtx().TTx.User.Query().Where(user.PublicID(entx.NewCIText(userPublicID))).Only(ctx)
+	userx, err := qq.repository.UserByPublicID(ctx, userPublicID)
 	if err != nil {
 		return err
 	}
 
-	isAlreadyAssigned, err := qq.Data.QueryUserAssignment().
-		Where(spaceuserassignment.UserID(userx.ID)).
-		Exist(ctx)
+	isAlreadyAssigned, err := qq.repository.UserAssignmentExists(ctx, qq.Data.ID, userx.ID)
 	if err != nil {
 		return err
 	}
 	if isAlreadyAssigned {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "User is already assigned to this space.")
+		return ErrUserAlreadyAssignedToSpace
 	}
 
-	_, err = ctx.SpaceCtx().TTx.SpaceUserAssignment.Create().
-		SetSpaceID(qq.Data.ID).
-		SetUserID(userx.ID).
-		SetRole(role).
-		Save(ctx)
-
-	return err
+	return qq.repository.CreateUserAssignment(ctx, qq.Data.ID, userx.ID, role)
 }
 
 func (qq *Space) UnassignUser(ctx ctxx.Context, userAssignmentID int64, actingUserID int64) error {
-	assignment, err := qq.Data.QueryUserAssignment().
-		Where(spaceuserassignment.ID(userAssignmentID)).
-		Only(ctx)
+	assignment, err := qq.repository.UserAssignmentByID(ctx, qq.Data.ID, userAssignmentID)
 	if err != nil {
 		return err
 	}
 
 	if assignment.UserID == actingUserID {
-		return e.NewHTTPErrorf(http.StatusForbidden, "You cannot unassign yourself from a space.")
+		return ErrCannotUnassignYourselfInSpace
 	}
 
-	return ctx.SpaceCtx().TTx.SpaceUserAssignment.DeleteOneID(userAssignmentID).Exec(ctx)
+	return qq.repository.DeleteUserAssignment(ctx, userAssignmentID)
 }
