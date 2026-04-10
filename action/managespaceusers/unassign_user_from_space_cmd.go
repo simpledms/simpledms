@@ -21,8 +21,9 @@ type UnassignUserFromSpaceCmdData struct {
 }
 
 type UnassignUserFromSpaceCmd struct {
-	infra   *common.Infra
-	actions *Actions
+	infra           *common.Infra
+	actions         *Actions
+	spaceRepository spacemodel.SpaceRepository
 	*actionx.Config
 	*autil.FormHelper[UnassignUserFromSpaceCmdData]
 }
@@ -30,10 +31,11 @@ type UnassignUserFromSpaceCmd struct {
 func NewUnassignUserFromSpaceCmd(infra *common.Infra, actions *Actions) *UnassignUserFromSpaceCmd {
 	config := actionx.NewConfig(actions.Route("unassign-user-from-space-cmd"), false)
 	return &UnassignUserFromSpaceCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[UnassignUserFromSpaceCmdData](infra, config, wx.T("Unassign user from space")),
+		infra:           infra,
+		actions:         actions,
+		spaceRepository: spacemodel.NewEntSpaceRepository(),
+		Config:          config,
+		FormHelper:      autil.NewFormHelper[UnassignUserFromSpaceCmdData](infra, config, wx.T("Unassign user from space")),
 	}
 }
 
@@ -62,13 +64,13 @@ func (qq *UnassignUserFromSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 		)
 	}
 
-	err = spacemodel.NewSpace(ctx.SpaceCtx().Space).UnassignUser(
+	err = spacemodel.NewSpaceWithRepository(ctx.SpaceCtx().Space, qq.spaceRepository).UnassignUser(
 		ctx,
 		data.UserAssignmentID,
 		ctx.SpaceCtx().User.ID,
 	)
 	if err != nil {
-		return err
+		return mapSpaceError(err)
 	}
 
 	rw.AddRenderables(wx.NewSnackbarf("User unassigned from space successfully."))

@@ -8,18 +8,13 @@ import (
 	"strconv"
 	"strings"
 
-	"entgo.io/ent/dialect/sql"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
-	"github.com/simpledms/simpledms/db/enttenant/filesearch"
-	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/property"
-	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
-	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
@@ -31,7 +26,6 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/sqlutil"
 	"github.com/simpledms/simpledms/util/timex"
 )
 
@@ -72,8 +66,9 @@ type ListDirPartialState struct {
 }
 
 type ListDirPartial struct {
-	infra   *common.Infra
-	actions *Actions
+	infra            *common.Infra
+	actions          *Actions
+	fileQueryService *ListDirFileQueryService
 	*actionx.Config
 }
 
@@ -82,8 +77,9 @@ func NewListDirPartial(
 	actions *Actions,
 ) *ListDirPartial {
 	return &ListDirPartial{
-		infra:   infra,
-		actions: actions,
+		infra:            infra,
+		actions:          actions,
+		fileQueryService: NewListDirFileQueryService(infra),
 		Config: actionx.NewConfig(
 			actions.Route("list-dir-partial"),
 			true,
@@ -416,142 +412,20 @@ func (qq *ListDirPartial) filesListItems(
 	data *ListDirPartialData,
 	offset int,
 ) []wx.IWidget {
-	// necessary to prevent putting escaped search query into search query field on re-rendering
-	state.searchQueryRaw = state.SearchQuery
-	// FIXME should be automatically applied on parsing state
-	state.SearchQuery = sqlutil.FTSSafeAndQuery(state.SearchQuery, 300)
-
-	// TODO find a better solution; not really robust
-	if ctx.SpaceCtx().Space.IsFolderMode && state.DocumentTypeID == 0 && len(state.CheckedTagIDs) == 0 && state.SearchQuery == "" {
-		state.IsRecursive = false
-		state.HideDirectories = false
-	} else {
-		state.IsRecursive = true
-		// state.HideDirectories = true
-	}
-	// children := dir.QueryChildren().Order(file.ByName()).WithChildren().AllX(ctx)
-
-	var currentDir *enttenant.File
-	if data.CurrentDirID == "" {
-		currentDir = ctx.SpaceCtx().SpaceRootDir()
-		data.CurrentDirID = currentDir.PublicID.String()
-	}
-	if currentDir == nil {
-		currentDir = ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicID(entx.NewCIText(data.CurrentDirID))).OnlyX(ctx)
-	}
-
-	// copied from Search...
-	var tagAssignmentPredicates []predicate.TagAssignment
-	for _, tagID := range state.ListFilterTagsPartialState.CheckedTagIDs {
-		tagAssignmentPredicates = append(tagAssignmentPredicates, tagassignment.TagID(int64(tagID)))
-	}
-
-	// TODO sort by relevance
-	searchResultQuery := ctx.TenantCtx().TTx.File.Query().
-		WithParent().
-		WithChildren(). // necessary to count children
-		Where(func(qs *sql.Selector) {
-			// subquery to select all files in search scope
-			if !state.IsRecursive {
-				qs.Where(sql.EQ(qs.C(file.FieldParentID), currentDir.ID))
-			} else {
-				qs.Where(qq.descendantScopePredicate(qs.C(file.FieldID), currentDir.ID, ctx.SpaceCtx().Space.ID))
-			}
-
-			if len(state.ListFilterTagsPartialState.CheckedTagIDs) > 0 {
-				resolvedTagAssignmentTable := sql.Table(resolvedtagassignment.Table)
-				qs.Where(
-					sql.Exists(
-						sql.Select(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldFileID)).
-							From(resolvedTagAssignmentTable).
-							Where(
-								sql.And(
-									// stange behavior if sql.EQ is used instead of sql.ColumnsEQ:
-									// executing the query from debugger manually would work, but not via
-									// ent because column name (files.id) is passed in as argument for the
-									// prepared statement
-									sql.ColumnsEQ(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldFileID), qs.C(file.FieldID)),
-									sql.InInts(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldTagID), state.ListFilterTagsPartialState.CheckedTagIDs...),
-								),
-							).
-							GroupBy(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldFileID)).
-							Having(sql.EQ(sql.Count(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldFileID)), len(state.ListFilterTagsPartialState.CheckedTagIDs))),
-					),
-				)
-			}
-		})
-
-	searchResultQuery = searchResultQuery.Where(file.IsInInbox(false))
-
-	// searchResultQuery = searchResultQuery.Where(file.HasSpaceAssignmentWith(spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID)))
-	searchResultQuery = searchResultQuery.Where(file.SpaceID(ctx.SpaceCtx().Space.ID))
-
-	if state.DocumentTypeID != 0 {
-		searchResultQuery = searchResultQuery.Where(file.DocumentTypeID(state.DocumentTypeID))
-	}
-
-	if state.SearchQuery != "" {
-		/*
-			searchResultQuery = searchResultQuery.Where(
-				file.NameContains(state.SearchQuery),
-			) // TODO .Limit(25) // needs hint if enabled
-		*/
-
-		// TODO give filename a higher priority?
-		searchResultQuery.Where(
-			func(qs *sql.Selector) {
-				fileSearchTable := sql.Table(filesearch.Table)
-
-				qs.Where(
-					sql.In(qs.C(file.FieldID),
-						sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
-							Where(
-								sql.And(
-									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), state.SearchQuery),
-									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
-								),
-							).
-							OrderBy(fileSearchTable.C(filesearch.FieldRank)),
-					),
-				)
-			},
-		)
-	}
-
-	// TODO use filesearch view instead and order by rank?
-	searchResultQuery = searchResultQuery.Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName())
-
 	var fileListItems []wx.IWidget
 
-	if state.HideDirectories && state.HideFiles {
-		// do nothing // TODO find a better solution (radio button?)
-		searchResultQuery = searchResultQuery.Where(file.And(file.IsDirectory(false), file.IsDirectory(true)))
-	} else if state.HideDirectories {
-		searchResultQuery = searchResultQuery.Where(file.IsDirectory(false))
-	} else if state.HideFiles {
-		searchResultQuery = searchResultQuery.Where(file.IsDirectory(true))
-	}
-
-	searchResultQuery = qq.applyPropertyFilter(ctx, searchResultQuery, state)
-
-	children := searchResultQuery.Offset(offset).Limit(qq.pageSize() + 1).AllX(ctx)
-	hasMore := len(children) > qq.pageSize()
-	if hasMore {
-		// conditional necessary to prevent out of bounce access
-		children = children[:qq.pageSize()]
-	}
-
-	// get parent directory full paths for breadcrumbs...
-	var childParentFullPaths map[int64]string
-	if state.IsRecursive {
-		var childParentIDs []int64
-		for _, child := range children {
-			childParentIDs = append(childParentIDs, child.ParentID)
-		}
-		slices.Sort(childParentIDs) // necessary for compact to work?
-		childParentIDs = slices.Compact(childParentIDs)
-		childParentFullPaths = qq.infra.FileSystem().FileTree().FullPathsByFileIDX(ctx, childParentIDs)
-	}
+	queryResult := qq.fileQueryService.Query(
+		ctx,
+		state,
+		data,
+		offset,
+		qq.pageSize(),
+		qq.applyPropertyFilter,
+	)
+	currentDir := queryResult.CurrentDir
+	children := queryResult.Children
+	hasMore := queryResult.HasMore
+	childParentFullPaths := queryResult.ChildParentFullPaths
 
 	for _, child := range children {
 		if !child.IsDirectory {
@@ -608,10 +482,6 @@ func (qq *ListDirPartial) filesListItems(
 	}
 
 	return fileListItems
-}
-
-func (qq *ListDirPartial) descendantScopePredicate(fileColumn string, rootID, spaceID int64) *sql.Predicate {
-	return sql.In(fileColumn, qq.infra.FileSystem().FileTree().DescendantIDsSubQuery(rootID, spaceID))
 }
 
 func (qq *ListDirPartial) appBar(
