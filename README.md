@@ -15,9 +15,9 @@ The core of the concept consists of:
 
 The app is also available as a SaaS offering at [simpledms.eu](https://simpledms.eu) and [simpledms.ch](https://simpledms.ch).
 
-## Screenshot
+## Screenshots
 
-![Screenshot of the SimpleDMS app](https://simpledms.ch/assets/simpledms/2025.01.22-simpledms-screenshot_metadaten.png)
+![Screenshot of the SimpleDMS app](https://simpledms.ch/assets/simpledms/2026.04.01-simpledms-screenshots-tablet_large.gif)
 
 Dark mode is, of course, available too.
 
