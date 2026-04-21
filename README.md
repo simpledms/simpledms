@@ -30,11 +30,12 @@ A video of the app where @marcobeierer guides you through the first steps in Sim
 You can find the [technical documentation](https://simpledms.eu/en/resources/technical-documentation), the [setup reference](https://simpledms.eu/en/resources/technical-documentation/setup), and a [step-by-step setup guide](https://simpledms.eu/en/resources/technical-documentation/how-to-setup-simpledms-locally-with-docker-compose) on the SimpleDMS website.
 
 ## Feedback
-This app has no analytics or tracking integrated. Therefore, I have no way of knowing how it is used or if it is useful to you. If you have any feedback, please let me know. I would highly appreciate it. Open an issue or discussion on GitHub or email me at email@marcobeierer.ch.
+
+This app has no analytics or tracking integrated. Therefore, I have no way of knowing how it is used or if it is useful to you. If you have any feedback, please let me know. I would highly appreciate it. Open an issue or discussion on GitHub or email me at <email@marcobeierer.ch>.
 
 ## Open Source philosophy and business model
 
-The SimpleDMS app in this repository contains all features relevant for the use by a single company or family. 
+The SimpleDMS app in this repository contains all features relevant for the use by a single company or family.
 
 The goal is to keep all features, including future features, available for free. However, it cannot be guaranteed that all future features are included in the free open source version, as the development of SimpleDMS has to be sustainable in the long term.
 
@@ -49,6 +50,7 @@ You can find the [prices on the SimpleDMS website](https://simpledms.eu/en/prici
 ## Tech stack
 
 SimpleDMS is built with:
+
 - [Go](https://go.dev/)
 - [ent](https://entgo.io/) Entity Framework
 - [SQLite](https://sqlite.org/)
@@ -63,9 +65,9 @@ Go tests on the action layer are implemented in the `server` package.
 
 A command reference for tests and benchmarks is available in `README_TESTS_AND_BENCHMARKS.md`.
 
-## Where is the git history?
+## Project history
 
-In the beginning SimpleDMS was developed in a monorepo together with other apps as a closed source project.
+Development of SimpleDMS began end of 2023 and in the beginning it was developed in a monorepo together with other apps as a closed source project.
 
 When open-sourcing SimpleDMS in December 2025, I decided to remove the git history, because preserving it while extracting the project from the monorepo was not worth the effort. In addition, I didn't want to risk exposing any personal notes or details of my other projects.
 
