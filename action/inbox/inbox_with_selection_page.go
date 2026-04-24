@@ -7,8 +7,6 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/util"
@@ -43,7 +41,8 @@ func (qq *InboxWithSelectionPage) Handler(
 	if fileIDStr == "" {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "No file id provided.")
 	}
-	filex, err := ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicID(entx.NewCIText(fileIDStr))).Only(ctx)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filex, err := repos.Read.FileByPublicID(ctx, fileIDStr)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
 			return e.NewHTTPErrorf(http.StatusBadRequest, "File not found.")
@@ -82,7 +81,7 @@ func (qq *InboxWithSelectionPage) Handler(
 	}
 	*/
 
-	content := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, filex.PublicID.String())
+	content := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, filex.PublicID)
 	if req.Header.Get("HX-Target") == "details" {
 		return qq.infra.Renderer().Render(
 			rw,

@@ -54,26 +54,37 @@ func (qq *MarkAsDoneCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetWithParentX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileWithParent := repos.Read.FileByPublicIDWithParentX(ctx, data.FileID)
 
 	// assignment := filex.Data.QuerySpaceAssignment().Where(spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID)).OnlyX(ctx)
 
-	if !filex.Data.IsInInbox {
+	if !fileWithParent.IsInInbox {
 		log.Println("file not in inbox")
 		return e.NewHTTPErrorf(http.StatusBadRequest, "File must be in inbox.")
 	}
 
-	filex.Data.Update().SetIsInInbox(false).SaveX(ctx)
+	err = repos.Write.SetFileInInboxByIDX(ctx, fileWithParent.ID, false)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
 	// assignment = assignment.Update().SetIsInInbox(false).SaveX(ctx)
 
 	// FIXME not correct, should not be opened in parent dir, but flat
 	action := &wx.Link{
-		Href:  route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Parent(ctx).Data.PublicID.String(), filex.Data.PublicID.String()),
+		Href: route.BrowseFile(
+			ctx.TenantCtx().TenantID,
+			ctx.SpaceCtx().SpaceID,
+			fileWithParent.Parent.PublicID,
+			fileWithParent.PublicID,
+		),
 		Child: wx.T("Open file"),
 	}
 
 	rw.AddRenderables(
-		wx.NewSnackbarf("Marked file «%s» as done.", filex.Data.Name).WithAction(action),
+		wx.NewSnackbarf("Marked file «%s» as done.", fileWithParent.Name).WithAction(action),
 	)
 
 	return nil

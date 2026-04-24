@@ -6,8 +6,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -47,7 +46,8 @@ func (qq *FileListItemPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 		return err
 	}
 
-	filex := ctx.TenantCtx().TTx.File.Query().WithChildren().Where(file.ID(data.FileID)).OnlyX(ctx)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filex := repos.Read.FileByIDWithChildrenX(ctx, data.FileID)
 
 	return qq.infra.Renderer().Render(
 		rw,
@@ -63,7 +63,7 @@ func (qq *FileListItemPartial) Widget(
 	ctx ctxx.Context,
 	hrefFn HrefFn,
 	// listState *ListFilesPartialState,
-	fileWithChildren *enttenant.File,
+	fileWithChildren *filemodel.FileWithChildrenDTO,
 	isSelected bool,
 ) *wx.ListItem {
 	/*trailing := &IconButton{
@@ -74,7 +74,7 @@ func (qq *FileListItemPartial) Widget(
 	htmxAttrs := wx.HTMXAttrs{
 		HxTarget:  "#details",
 		HxSwap:    "outerHTML",
-		HxGet:     hrefFn(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID.String()),
+		HxGet:     hrefFn(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID),
 		HxHeaders: autil.PreserveStateHeader(),
 	}
 
@@ -84,12 +84,16 @@ func (qq *FileListItemPartial) Widget(
 		Headline:       wx.T(fileWithChildren.Name),
 		/*SupportingText: wx.Tf(
 			"%s, %s",
-			qq.infra.FileRepo.GetXX(fileWithChildren).CurrentVersion(ctx).SizeString(),
+			fileWithChildrenModel.CurrentVersion(ctx).SizeString(),
 			fileWithChildren.ModifiedAt.Format("02. January 06"),
 		),*/
 		HTMXAttrs: htmxAttrs,
 		// Trailing:   trailing,
-		IsSelected:  isSelected,
-		ContextMenu: NewFileContextMenuWidget(qq.actions).Widget(ctx, fileWithChildren),
+		IsSelected: isSelected,
+		ContextMenu: NewFileContextMenuWidget(qq.actions).Widget(
+			ctx,
+			fileWithChildren.PublicID,
+			fileWithChildren.Name,
+		),
 	}
 }

@@ -9,7 +9,6 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -20,10 +19,11 @@ func StreamDownload(
 	ctx ctxx.Context,
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
-	filex *filemodel.File,
+	fileName string,
+	isDirectory bool,
 	currentVersion *storedfilemodel.StoredFile,
 ) error {
-	if filex.Data.IsDirectory {
+	if isDirectory {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "cannot download directories")
 	}
 
@@ -45,8 +45,8 @@ func StreamDownload(
 	} else {
 		rw.Header().Set("Content-Disposition", fmt.Sprintf(
 			"attachment; filename=\"%s\"; filename*=UTF-8''%s",
-			url.QueryEscape(filex.Data.Name),
-			url.QueryEscape(filex.Data.Name),
+			url.QueryEscape(fileName),
+			url.QueryEscape(fileName),
 		))
 	}
 

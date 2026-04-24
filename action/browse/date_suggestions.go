@@ -6,13 +6,13 @@ import (
 	"strings"
 
 	"github.com/simpledms/simpledms/ctxx"
-	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/timex"
 )
 
 type DateSuggestionsWidget struct {
-	filex      *filemodel.File
+	fileName   string
+	ocrContent string
 	fieldID    string
 	propertyID int64
 }
@@ -21,9 +21,15 @@ func filePropertyFieldID(propertyID int64) string {
 	return fmt.Sprintf("file-property-%d", propertyID)
 }
 
-func NewDateSuggestionsWidget(filex *filemodel.File, fieldID string, propertyID int64) *DateSuggestionsWidget {
+func NewDateSuggestionsWidget(
+	fileName string,
+	ocrContent string,
+	fieldID string,
+	propertyID int64,
+) *DateSuggestionsWidget {
 	return &DateSuggestionsWidget{
-		filex:      filex,
+		fileName:   fileName,
+		ocrContent: ocrContent,
 		fieldID:    fieldID,
 		propertyID: propertyID,
 	}
@@ -34,12 +40,12 @@ func (qq *DateSuggestionsWidget) suggestionsID() string {
 }
 
 func (qq *DateSuggestionsWidget) suggestionsFromFile() []timex.Date {
-	content := strings.TrimSpace(qq.filex.Data.Name)
-	if qq.filex.Data.OcrContent != "" {
+	content := strings.TrimSpace(qq.fileName)
+	if qq.ocrContent != "" {
 		if content == "" {
-			content = qq.filex.Data.OcrContent
+			content = qq.ocrContent
 		} else {
-			content = content + "\n" + qq.filex.Data.OcrContent
+			content = content + "\n" + qq.ocrContent
 		}
 	}
 

@@ -1,11 +1,10 @@
 package space
 
 import (
-	"time"
-
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/library"
 )
 
@@ -42,14 +41,8 @@ func Create(
 		}
 	}
 
-	_, err = ctx.TenantCtx().TTx.File.Create().
-		SetName(name).
-		SetIsDirectory(true).
-		SetIndexedAt(time.Now()).
-		SetModifiedAt(time.Now()).
-		SetSpaceID(spacex.ID).
-		SetIsRootDir(true).
-		Save(spaceCtx)
+	repos := filemodel.NewEntSpaceFileRepositoryFactory().ForSpaceX(spaceCtx)
+	_, err = repos.Write.CreateRootDirectory(spaceCtx, name)
 	if err != nil {
 		return nil, err
 	}

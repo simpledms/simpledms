@@ -1,19 +1,13 @@
 package trash
 
 import (
-	"net/http"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/schema"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -56,44 +50,13 @@ func (qq *RestoreFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		return err
 	}
 
-	ctxWithDeleted := schema.SkipSoftDelete(ctx)
-	filex := ctx.SpaceCtx().TTx.File.Query().
-		Where(
-			file.PublicID(entx.NewCIText(data.FileID)),
-			file.SpaceID(ctx.SpaceCtx().Space.ID), // not necessary because implicit, just for safety
-		).
-		OnlyX(ctxWithDeleted)
-
-	if filex.IsDirectory {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "Folders cannot be restored.")
-	}
-	if filex.DeletedAt.IsZero() {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "File is not deleted.")
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	result, err := repos.Write.RestoreDeletedFile(ctx, data.FileID)
+	if err != nil {
+		return err
 	}
 
-	parentExists := false
-	if filex.ParentID != 0 {
-		parentExists = ctx.TenantCtx().TTx.File.Query().
-			Where(
-				file.ID(filex.ParentID),
-				file.SpaceID(ctx.SpaceCtx().Space.ID),
-			).
-			ExistX(ctx)
-	}
-
-	update := filex.Update().
-		ClearDeletedAt().
-		ClearDeletedBy()
-
-	if !parentExists {
-		update = update.
-			SetIsInInbox(true).
-			SetParentID(ctx.SpaceCtx().SpaceRootDir().ID)
-	}
-
-	filex = update.SaveX(ctx)
-
-	if !parentExists {
+	if !result.ParentExists {
 		rw.AddRenderables(wx.NewSnackbarf("The original parent folder is missing. Restored to Inbox."))
 	} else {
 		rw.AddRenderables(wx.NewSnackbarf("File restored."))

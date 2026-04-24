@@ -61,8 +61,10 @@ func (qq *FileVersionsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 }
 
 func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartialData) renderable.Renderable {
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
-	versions := filex.Data.QueryFileVersions().
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
+	versions := ctx.TenantCtx().TTx.FileVersion.Query().
+		Where(fileversion.FileID(fileDTO.ID)).
 		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
 		WithStoredFile().
 		AllX(ctx)

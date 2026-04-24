@@ -116,7 +116,13 @@ func TestFileSystemMoveRejectsMovingDirectoryIntoDescendant(t *testing.T) {
 			return fmt.Errorf("create beta dir: %w", err)
 		}
 
-		_, err = harness.infra.FileSystem().Move(spaceCtx, dirB, dirA, "", "")
+		_, err = harness.infra.FileSystem().MoveByPublicIDs(
+			spaceCtx,
+			dirB.Data.PublicID.String(),
+			dirA.Data.PublicID.String(),
+			"",
+			"",
+		)
 		if err == nil {
 			return fmt.Errorf("expected move rejection for descendant destination")
 		}

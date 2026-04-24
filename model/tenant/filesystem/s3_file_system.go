@@ -22,11 +22,12 @@ import (
 	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
 	"github.com/simpledms/simpledms/db/entmain/systemconfig"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/util"
@@ -225,14 +226,12 @@ func (qq *S3FileSystem) PrepareFileUpload(
 		return nil, nil, err
 	}
 
-	filex := ctx.TenantCtx().TTx.File.Create().
-		SetName(meta.originalFilename).
-		SetIsDirectory(false).
-		SetIndexedAt(time.Now()).
-		SetParentID(parentDirFileID).
-		SetSpaceID(ctx.SpaceCtx().Space.ID).
-		SetIsInInbox(isInInbox).
-		SaveX(ctx)
+	repos := filemodel.NewEntSpaceFileRepositoryFactory().ForSpaceX(ctx)
+	fileDTO, err := repos.Write.CreateFile(ctx, parentDirFileID, meta.originalFilename, isInInbox)
+	if err != nil {
+		log.Println(err)
+		return nil, nil, err
+	}
 
 	storedFilex, prepared, err := qq.createStoredFileForPreparedUpload(ctx, meta)
 	if err != nil {
@@ -240,13 +239,13 @@ func (qq *S3FileSystem) PrepareFileUpload(
 		return nil, nil, err
 	}
 
-	if err := qq.addFileVersion(ctx, filex, storedFilex); err != nil {
+	if err := qq.addFileVersion(ctx, fileDTO.ID, storedFilex); err != nil {
 		log.Println(err)
 		return nil, nil, err
 	}
-	prepared.FileID = filex.ID
+	prepared.FileID = fileDTO.ID
 
-	return prepared, filex, nil
+	return prepared, entFileFromDTO(fileDTO), nil
 }
 
 func (qq *S3FileSystem) PrepareFileVersionUpload(
@@ -259,7 +258,8 @@ func (qq *S3FileSystem) PrepareFileVersionUpload(
 		return nil, err
 	}
 
-	filex := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
+	readRepo := filemodel.NewEntSpaceFileReadRepository(ctx.SpaceCtx().Space.ID)
+	filex := readRepo.FileByIDX(ctx, fileID)
 	if filex.IsDirectory {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
 	}
@@ -267,7 +267,11 @@ func (qq *S3FileSystem) PrepareFileVersionUpload(
 		return nil, err
 	}
 
-	filex.Update().SetName(meta.originalFilename).SaveX(ctx)
+	repos := filemodel.NewEntSpaceFileRepositoryFactory().ForSpaceX(ctx)
+	err = repos.Write.RenameFileByIDX(ctx, filex.ID, meta.originalFilename)
+	if err != nil {
+		return nil, err
+	}
 
 	storedFilex, prepared, err := qq.createStoredFileForPreparedUpload(ctx, meta)
 	if err != nil {
@@ -275,7 +279,7 @@ func (qq *S3FileSystem) PrepareFileVersionUpload(
 		return nil, err
 	}
 
-	if err := qq.addFileVersion(ctx, filex, storedFilex); err != nil {
+	if err := qq.addFileVersion(ctx, filex.ID, storedFilex); err != nil {
 		log.Println(err)
 		return nil, err
 	}
@@ -347,14 +351,7 @@ func (qq *S3FileSystem) ensureFileDoesNotExistInFolderMode(
 		return nil
 	}
 
-	fileExists := ctx.SpaceCtx().Space.QueryFiles().
-		Where(file.Name(filename), file.ParentID(parentDirFileID), file.IsInInbox(isInInbox)).
-		ExistX(ctx)
-	if fileExists {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "File already exists.")
-	}
-
-	return nil
+	return fileutil.EnsureFileDoesNotExist(ctx, filename, parentDirFileID, isInInbox)
 }
 
 // caller has to close fileToSave
@@ -841,14 +838,12 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 	}
 
 	// create db entries
-	filex := ctx.TenantCtx().TTx.File.Create().
-		SetName(tmpFile.Filename). // TODO okay?
-		SetIsDirectory(false).
-		SetIndexedAt(time.Now()).
-		SetParentID(parentDirFileID).
-		SetSpaceID(ctx.SpaceCtx().Space.ID).
-		SetIsInInbox(isInInbox).
-		SaveX(ctx)
+	repos := filemodel.NewEntSpaceFileRepositoryFactory().ForSpaceX(ctx)
+	fileDTO, err := repos.Write.CreateFile(ctx, parentDirFileID, tmpFile.Filename, isInInbox)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
 	finalStoragePath := pathx.S3StoragePrefix(ctx.TenantCtx().TenantID)
 
@@ -880,7 +875,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 		SetSha256(tmpFile.Sha256).
 		SaveX(ctx)
 
-	if err := qq.addFileVersion(ctx, filex, storedFilex); err != nil {
+	if err := qq.addFileVersion(ctx, fileDTO.ID, storedFilex); err != nil {
 		log.Println(err)
 		return nil, err
 	}
@@ -897,7 +892,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 		ClearExpiresAt().
 		ExecX(ctx)
 
-	return filex, nil
+	return entFileFromDTO(fileDTO), nil
 }
 
 func (qq *S3FileSystem) PersistTemporaryTenantFile(
@@ -1010,9 +1005,9 @@ func (qq *S3FileSystem) PersistTemporaryTenantFile(
 	return nil
 }
 
-func (qq *S3FileSystem) addFileVersion(ctx ctxx.Context, filex *enttenant.File, storedFilex *enttenant.StoredFile) error {
+func (qq *S3FileSystem) addFileVersion(ctx ctxx.Context, fileID int64, storedFilex *enttenant.StoredFile) error {
 	latestVersion, err := ctx.TenantCtx().TTx.FileVersion.Query().
-		Where(fileversion.FileID(filex.ID)).
+		Where(fileversion.FileID(fileID)).
 		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
 		First(ctx)
 	if err != nil && !enttenant.IsNotFound(err) {
@@ -1024,18 +1019,35 @@ func (qq *S3FileSystem) addFileVersion(ctx ctxx.Context, filex *enttenant.File, 
 		versionNumber = latestVersion.VersionNumber + 1
 	}
 	ctx.TenantCtx().TTx.FileVersion.Create().
-		SetFileID(filex.ID).
+		SetFileID(fileID).
 		SetStoredFileID(storedFilex.ID).
 		SetVersionNumber(versionNumber).
 		SaveX(ctx)
 
-	filex.Update().
-		SetOcrContent("").
-		ClearOcrSuccessAt().
-		SetOcrRetryCount(0).
-		SetOcrLastTriedAt(time.Time{}).
-		ExecX(ctx)
+	repos := filemodel.NewEntSpaceFileRepositoryFactory().ForSpaceX(ctx)
+	err = repos.Write.ResetFileOCRStateByIDX(ctx, fileID)
+	if err != nil {
+		return err
+	}
+
 	return nil
+}
+
+func entFileFromDTO(fileDTO *filemodel.FileDTO) *enttenant.File {
+	if fileDTO == nil {
+		return nil
+	}
+
+	return &enttenant.File{
+		ID:          fileDTO.ID,
+		PublicID:    entx.NewCIText(fileDTO.PublicID),
+		ParentID:    fileDTO.ParentID,
+		SpaceID:     fileDTO.SpaceID,
+		Name:        fileDTO.Name,
+		IsDirectory: fileDTO.IsDirectory,
+		IsInInbox:   fileDTO.IsInInbox,
+		DeletedAt:   fileDTO.DeletedAt,
+	}
 }
 
 // near duplicate in FileSystem

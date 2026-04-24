@@ -4,13 +4,10 @@ import (
 	"log"
 	"strings"
 
-	"entgo.io/ent/dialect/sql"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/partial"
@@ -175,9 +172,11 @@ func (qq *FilesListPartial) filesList(
 ) renderable.Renderable {
 	var fileListItems []wx.IWidget
 
-	searchResultQuery := qq.filesQuery(ctx, state)
-	// TODO .Limit(25) // needs hint if enabled
-	children := searchResultQuery.AllX(ctx)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	children := repos.Query.InboxFilesX(ctx, &filemodel.InboxFileQueryFilterDTO{
+		SearchQuery: state.SearchQuery,
+		SortBy:      state.SortBy,
+	})
 
 	for _, child := range children {
 		if child.IsDirectory {
@@ -189,7 +188,7 @@ func (qq *FilesListPartial) filesList(
 			// route.InboxWithState(state),
 			route.Inbox,
 			child,
-			child.PublicID.String() == data.SelectedFileID,
+			child.PublicID == data.SelectedFileID,
 		))
 	}
 
@@ -249,62 +248,6 @@ func (qq *FilesListPartial) filesList(
 		},
 	}
 }
-
-// LIMIT must be applied by caller
-func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) *enttenant.FileQuery {
-	searchResultQuery := ctx.TenantCtx().TTx.File.Query().
-		WithParent().
-		WithChildren() // necessary to count children
-	/*Where(func(qs *sql.Selector) {
-		// subquery to select all files in search scope
-		fileInfoView := sql.Table(fileinfo.Table)
-		qs.Where(
-			sql.In(
-				qs.C(file.FieldID),
-				sql.Select(fileInfoView.C(fileinfo.FieldFileID)).
-					From(fileInfoView).
-					Where(sql.And(
-						sqljson.ValueContains(fileInfoView.C(fileinfo.FieldPath), qq.inboxDir.ID),
-						sql.NEQ(fileInfoView.C(fileinfo.FieldFileID), qq.inboxDir.ID),
-					)),
-			),
-		)
-	})*/
-
-	searchResultQuery = searchResultQuery.Where(
-		file.SpaceID(ctx.SpaceCtx().Space.ID),
-		file.IsInInbox(true),
-		/*file.HasSpaceAssignmentWith(
-			spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID),
-			spacefileassignment.IsInInbox(true),
-		),*/
-	)
-
-	if state.SearchQuery != "" {
-		// TODO necessary if not full text search? probably not
-		// searchQuerySanitized := sqlutil.FTSSafeAndQuery(state.SearchQuery, 300)
-
-		searchResultQuery = searchResultQuery.Where(
-			file.NameContains(state.SearchQuery),
-		)
-	}
-
-	// TODO use filesearch view instead and order by rank?
-	switch state.SortBy {
-	case "name":
-		searchResultQuery = searchResultQuery.Order(file.ByName())
-	case "oldestFirst":
-		searchResultQuery = searchResultQuery.Order(file.ByCreatedAt())
-	case "newestFirst":
-		fallthrough
-	default:
-		searchResultQuery = searchResultQuery.Order(file.ByCreatedAt(sql.OrderDesc()))
-	}
-	// searchResultQuery = searchResultQuery.Order(file.ByName())
-
-	return searchResultQuery
-}
-
 func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.AppBar {
 	return &wx.AppBar{
 		Leading:          wx.NewIcon("inbox"),

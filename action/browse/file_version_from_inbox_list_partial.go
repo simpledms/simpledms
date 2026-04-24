@@ -3,13 +3,10 @@ package browse
 import (
 	"net/http"
 
-	"entgo.io/ent/dialect/sql"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -49,42 +46,36 @@ func (qq *FileVersionFromInboxListPartial) Handler(rw httpx.ResponseWriter, req 
 	)
 }
 
-func (qq *FileVersionFromInboxListPartial) listFiles(ctx ctxx.Context, data *FileVersionFromInboxDialogData) ([]*enttenant.File, error) {
+func (qq *FileVersionFromInboxListPartial) listFiles(
+	ctx ctxx.Context,
+	data *FileVersionFromInboxDialogData,
+) ([]*filemodel.FileWithChildrenDTO, error) {
 	if data.TargetFileID == "" {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Target file is required.")
 	}
 
-	query := ctx.TenantCtx().TTx.File.Query().
-		Where(
-			file.SpaceID(ctx.SpaceCtx().Space.ID),
-			file.IsInInbox(true),
-			file.IsDirectory(false),
-			file.DeletedAtIsNil(),
-		)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	files := repos.Query.InboxFilesX(ctx, &filemodel.InboxFileQueryFilterDTO{
+		SearchQuery: data.SearchQuery,
+		SortBy:      "name",
+	})
 
-	if data.SearchQuery != "" {
-		query = query.Where(file.NameContains(data.SearchQuery))
+	withoutDirectories := make([]*filemodel.FileWithChildrenDTO, 0, len(files))
+	for _, filex := range files {
+		if filex.IsDirectory {
+			continue
+		}
+		withoutDirectories = append(withoutDirectories, filex)
 	}
 
-	query = query.Order(file.ByName(sql.OrderAsc()))
-
-	return query.All(ctx)
+	return withoutDirectories, nil
 }
 
-func (qq *FileVersionFromInboxListPartial) findInboxFile(ctx ctxx.Context, sourceFileID string) (*enttenant.File, error) {
-	if sourceFileID == "" {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Source file is required.")
-	}
-
-	filex := qq.infra.FileRepo.GetX(ctx, sourceFileID)
-	if !filex.Data.IsInInbox {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File must be in inbox.")
-	}
-
-	return filex.Data, nil
-}
-
-func (qq *FileVersionFromInboxListPartial) listWrapper(ctx ctxx.Context, data *FileVersionFromInboxDialogData, files []*enttenant.File) *wx.Container {
+func (qq *FileVersionFromInboxListPartial) listWrapper(
+	ctx ctxx.Context,
+	data *FileVersionFromInboxDialogData,
+	files []*filemodel.FileWithChildrenDTO,
+) *wx.Container {
 	return &wx.Container{
 		Widget: wx.Widget[wx.Container]{
 			ID: qq.actions.FileVersionFromInboxDialog.listID(),
@@ -93,7 +84,11 @@ func (qq *FileVersionFromInboxListPartial) listWrapper(ctx ctxx.Context, data *F
 	}
 }
 
-func (qq *FileVersionFromInboxListPartial) listItems(ctx ctxx.Context, data *FileVersionFromInboxDialogData, files []*enttenant.File) []wx.IWidget {
+func (qq *FileVersionFromInboxListPartial) listItems(
+	ctx ctxx.Context,
+	data *FileVersionFromInboxDialogData,
+	files []*filemodel.FileWithChildrenDTO,
+) []wx.IWidget {
 	if len(files) == 0 {
 		return []wx.IWidget{
 			&wx.ListItem{
@@ -107,9 +102,9 @@ func (qq *FileVersionFromInboxListPartial) listItems(ctx ctxx.Context, data *Fil
 	for _, filex := range files {
 		listItem := &wx.ListItem{
 			Headline:       wx.T(filex.Name),
-			IsSelected:     filex.PublicID.String() == data.SourceFileID,
+			IsSelected:     filex.PublicID == data.SourceFileID,
 			RadioGroupName: "SourceFileID",
-			RadioValue:     filex.PublicID.String(),
+			RadioValue:     filex.PublicID,
 		}
 		items = append(items, listItem)
 	}

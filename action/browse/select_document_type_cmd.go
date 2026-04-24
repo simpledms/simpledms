@@ -45,12 +45,19 @@ func (qq *SelectDocumentTypeCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
-	if filex.Data.DocumentTypeID == data.DocumentTypeID {
-		filex.Data.Update().ClearDocumentTypeID().SaveX(ctx)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
+	if fileDTO.DocumentTypeID == data.DocumentTypeID {
+		err = repos.Write.SetFileDocumentTypeByIDX(ctx, fileDTO.ID, nil)
+		if err != nil {
+			return err
+		}
 		rw.AddRenderables(wx.NewSnackbarf("Document type deselected."))
 	} else {
-		filex.Data.Update().SetDocumentTypeID(data.DocumentTypeID).SaveX(ctx)
+		err = repos.Write.SetFileDocumentTypeByIDX(ctx, fileDTO.ID, &data.DocumentTypeID)
+		if err != nil {
+			return err
+		}
 		rw.AddRenderables(wx.NewSnackbarf("Document type selected."))
 	}
 

@@ -69,7 +69,8 @@ func (qq *AddFilePropertyValueCmd) Handler(
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
 	propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
 
 	if err := qq.validateValue(req, propertyx.Type, data); err != nil {
@@ -79,7 +80,7 @@ func (qq *AddFilePropertyValueCmd) Handler(
 	nilableAssignment, err := ctx.SpaceCtx().TTx.FilePropertyAssignment.Query().
 		Where(
 			filepropertyassignment.PropertyID(data.PropertyID),
-			filepropertyassignment.FileID(filex.Data.ID),
+			filepropertyassignment.FileID(fileDTO.ID),
 		).Only(ctx)
 	if err != nil && !enttenant.IsNotFound(err) {
 		log.Println(err)
@@ -89,7 +90,7 @@ func (qq *AddFilePropertyValueCmd) Handler(
 	if enttenant.IsNotFound(err) {
 		query := ctx.SpaceCtx().TTx.FilePropertyAssignment.Create().
 			SetSpaceID(ctx.SpaceCtx().Space.ID).
-			SetFileID(filex.Data.ID).
+			SetFileID(fileDTO.ID).
 			SetPropertyID(data.PropertyID)
 		if err := applyPropertyValuesToCreate(query, propertyx.Type, filePropertyValuesFromAdd(data)); err != nil {
 			return err

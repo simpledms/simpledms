@@ -43,6 +43,7 @@ import (
 	signupmodel "github.com/simpledms/simpledms/model/main/signup"
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/scheduler"
@@ -737,7 +738,7 @@ func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *systemconfigmode
 	// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
 	)
 	// storagePath := common.StoragePath(metaPath)
-	fileRepo := common.NewFileRepository()
+	spaceFileRepoFactory := filemodel.NewEntSpaceFileRepositoryFactory()
 	minioClient := qq.initNilableMinioClient(systemConfig.S3())
 	fileSystem := filesystem.NewFileSystem(qq.metaPath)
 
@@ -773,7 +774,7 @@ func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *systemconfigmode
 			filesystem.NewStorageQuota(qq.isSaaSModeEnabled),
 		),
 		factory,
-		fileRepo,
+		spaceFileRepoFactory,
 		pluginx.NewRegistry(),
 		systemConfig,
 	)

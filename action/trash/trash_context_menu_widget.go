@@ -2,7 +2,6 @@ package trash
 
 import (
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
@@ -17,7 +16,7 @@ func NewTrashContextMenuWidget(actions *Actions) *TrashContextMenuWidget {
 	}
 }
 
-func (qq *TrashContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File) *wx.Menu {
+func (qq *TrashContextMenuWidget) Widget(ctx ctxx.Context, filePublicID string) *wx.Menu {
 	var items []*wx.MenuItem
 
 	items = append(items, &wx.MenuItem{
@@ -25,7 +24,7 @@ func (qq *TrashContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File
 		Label:        wx.T("Restore"),
 		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:    qq.actions.RestoreFileCmd.Endpoint(),
-			HxVals:    util.JSON(qq.actions.RestoreFileCmd.DataWithOptions(filex.PublicID.String())),
+			HxVals:    util.JSON(qq.actions.RestoreFileCmd.DataWithOptions(filePublicID)),
 			HxConfirm: wx.T("Are you sure?").String(ctx),
 		},
 	})

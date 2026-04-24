@@ -2,15 +2,13 @@ package browse
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/entx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -53,7 +51,8 @@ func (qq *FileListItemPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 		return err
 	}
 
-	filex := ctx.TenantCtx().TTx.File.Query().WithChildren().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filex := repos.Read.FileByPublicIDWithChildrenX(ctx, data.FileID)
 
 	qq.infra.Renderer().RenderX(
 		rw,
@@ -71,7 +70,7 @@ func (qq *FileListItemPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 func (qq *FileListItemPartial) Widget(
 	ctx ctxx.Context,
 	currentDirID string,
-	filex *enttenant.File,
+	filex *filemodel.FileWithChildrenDTO,
 	parentFullPath string, // only necessary with breadcrumbs
 	isSelected bool,
 	// hideContextMenu bool,
@@ -87,7 +86,7 @@ func (qq *FileListItemPartial) Widget(
 func (qq *FileListItemPartial) DirectoryListItem(
 	ctx ctxx.Context,
 	currentDirID string,
-	fileWithChildren *enttenant.File,
+	fileWithChildren *filemodel.FileWithChildrenDTO,
 	parentFullPath string, // only necessary with breadcrumbs
 	showBreadcrumbs bool,
 ) *wx.ListItem {
@@ -128,9 +127,15 @@ func (qq *FileListItemPartial) DirectoryListItem(
 		Leading:        icon.SmallPadding(),
 		Headline:       headline,
 		SupportingText: wx.Tu(supportingText),
-		ContextMenu:    NewFileContextMenuWidget(qq.actions).Widget(ctx, fileWithChildren),
+		ContextMenu: NewFileContextMenuWidget(qq.infra, qq.actions).Widget(
+			ctx,
+			fileWithChildren.PublicID,
+			fileWithChildren.Name,
+			fileWithChildren.ID,
+			true,
+		),
 		HTMXAttrs: wx.HTMXAttrs{
-			HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID.String()),
+			HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID),
 			HxHeaders: autil.ResetStateHeader(), // necessary to close side sheet
 			HxSwap: fmt.Sprintf(
 				// duplicate in ListDirPartial
@@ -145,16 +150,13 @@ func (qq *FileListItemPartial) DirectoryListItem(
 	}
 }
 
-func (qq *FileListItemPartial) supportingTextDirectory(fileWithChildren *enttenant.File, supportingText string) string {
+func (qq *FileListItemPartial) supportingTextDirectory(
+	fileWithChildren *filemodel.FileWithChildrenDTO,
+	supportingText string,
+) string {
 	// TODO is this faster than queries above? probably
-	var dirCount, fileCount int64
-	for _, childOfChild := range fileWithChildren.Edges.Children {
-		if childOfChild.IsDirectory {
-			dirCount++
-		} else {
-			fileCount++
-		}
-	}
+	dirCount := fileWithChildren.ChildDirectoryCount
+	fileCount := fileWithChildren.ChildFileCount
 
 	var supportingTextArr []string
 	if dirCount > 1 {
@@ -178,7 +180,7 @@ func (qq *FileListItemPartial) supportingTextDirectory(fileWithChildren *enttena
 func (qq *FileListItemPartial) fileListItem(
 	ctx ctxx.Context,
 	currentDirID string,
-	fileWithChildren *enttenant.File,
+	fileWithChildren *filemodel.FileWithChildrenDTO,
 	parentFullPath string, // only necessary with breadcrumbs
 	isSelected bool,
 	// hideContextMenu bool,
@@ -188,11 +190,11 @@ func (qq *FileListItemPartial) fileListItem(
 		HxTarget: "#details",
 		HxSwap:   "outerHTML",
 		// dirID and not fileWithChildren.ID so that it works nicely with `recursive` filter
-		HxGet:     route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, currentDirID, fileWithChildren.PublicID.String()),
+		HxGet:     route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, currentDirID, fileWithChildren.PublicID),
 		HxHeaders: autil.PreserveStateHeader(),
 	}
 
-	filexx := qq.infra.FileRepo.GetXX(fileWithChildren)
+	documentTypeName := qq.documentTypeNameByID(ctx, fileWithChildren.DocumentTypeID)
 
 	supportingText := ""
 	hasBreadcrumbs := false
@@ -204,7 +206,7 @@ func (qq *FileListItemPartial) fileListItem(
 
 		currentDirPath := qq.infra.FileSystem().FileTree().FullPathByPublicIDX(ctx, currentDirID)
 		if parentFullPath == currentDirPath {
-			supportingText = qq.supportingTextFile(ctx, filexx, supportingText)
+			supportingText = qq.supportingTextFile(documentTypeName, supportingText)
 		} else {
 			parentFullPath = strings.TrimPrefix(parentFullPath, currentDirPath+string(os.PathSeparator))
 
@@ -216,17 +218,25 @@ func (qq *FileListItemPartial) fileListItem(
 			hasBreadcrumbs = true
 		}
 	} else {
-		supportingText = qq.supportingTextFile(ctx, filexx, supportingText)
+		supportingText = qq.supportingTextFile(documentTypeName, supportingText)
 	}
 
-	withDocumentType := hasBreadcrumbs
-	headline := wx.Tu(filexx.FilenameInApp(ctx, withDocumentType))
+	headline := wx.Tu(fileWithChildren.Name)
+	if hasBreadcrumbs && documentTypeName != "" {
+		headline = wx.Tf("%s: %s", documentTypeName, fileWithChildren.Name)
+	}
 
 	return &wx.ListItem{
 		RadioGroupName: "fileListRadioGroup",
 		// BackgroundColor: "aliceblue",
-		Leading:        wx.NewIcon("description").SmallPadding(),
-		ContextMenu:    NewFileContextMenuWidget(qq.actions).Widget(ctx, fileWithChildren),
+		Leading: wx.NewIcon("description").SmallPadding(),
+		ContextMenu: NewFileContextMenuWidget(qq.infra, qq.actions).Widget(
+			ctx,
+			fileWithChildren.PublicID,
+			fileWithChildren.Name,
+			fileWithChildren.ID,
+			false,
+		),
 		Headline:       headline,
 		SupportingText: wx.Tu(supportingText),
 		HTMXAttrs:      htmxAttrs,
@@ -234,13 +244,23 @@ func (qq *FileListItemPartial) fileListItem(
 	}
 }
 
-func (qq *FileListItemPartial) supportingTextFile(ctx ctxx.Context, filexx *filemodel.File, supportingText string) string {
-	if filexx.Data.DocumentTypeID != 0 {
-		documentTypex, err := filexx.Data.Edges.DocumentTypeOrErr()
-		if err != nil {
-			documentTypex = filexx.Data.QueryDocumentType().OnlyX(ctx)
-		}
-		supportingText = documentTypex.Name
+func (qq *FileListItemPartial) supportingTextFile(documentTypeName string, supportingText string) string {
+	if documentTypeName != "" {
+		supportingText = documentTypeName
 	}
 	return supportingText
+}
+
+func (qq *FileListItemPartial) documentTypeNameByID(ctx ctxx.Context, documentTypeID int64) string {
+	if documentTypeID == 0 {
+		return ""
+	}
+
+	documentTypex, err := ctx.SpaceCtx().TTx.DocumentType.Get(ctx, documentTypeID)
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
+
+	return documentTypex.Name
 }

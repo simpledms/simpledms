@@ -27,19 +27,17 @@ type FileVersionFromInboxCmdData struct {
 }
 
 type FileVersionFromInboxCmd struct {
-	actions  *Actions
-	fileRepo filemodel.FileRepository
-	service  *filemodel.FileVersionFromInboxService
+	actions *Actions
+	service *filemodel.FileVersionFromInboxService
 	*actionx.Config
 }
 
-func NewFileVersionFromInboxCmd(infra *common.Infra, actions *Actions) *FileVersionFromInboxCmd {
+func NewFileVersionFromInboxCmd(_ *common.Infra, actions *Actions) *FileVersionFromInboxCmd {
 	config := actionx.NewConfig(actions.Route("file-version-from-inbox-cmd"), false)
 	return &FileVersionFromInboxCmd{
-		actions:  actions,
-		fileRepo: infra.FileRepo,
-		service:  filemodel.NewFileVersionFromInboxService(),
-		Config:   config,
+		actions: actions,
+		service: filemodel.NewFileVersionFromInboxService(),
+		Config:  config,
 	}
 }
 
@@ -66,15 +64,7 @@ func (qq *FileVersionFromInboxCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Source and target files are required.")
 	}
 
-	sourceFile, err := qq.actions.FileVersionFromInboxListPartial.findInboxFile(ctx, data.SourceFileID)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-
-	targetFile := qq.fileRepo.GetX(ctx, data.TargetFileID)
-
-	_, err = qq.service.MergeFromInbox(ctx, sourceFile, targetFile.Data)
+	_, err = qq.service.MergeFromInbox(ctx, data.SourceFileID, data.TargetFileID)
 	if err != nil {
 		log.Println(err)
 		return err

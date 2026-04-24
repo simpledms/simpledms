@@ -9,13 +9,11 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/minio/minio-go/v7"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -75,14 +73,17 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		return err
 	}
 
-	filem := qq.infra.FileRepo.GetX(ctx, data.FileID)
-
-	if !filem.IsZIPArchive(ctx) {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "Not a ZIP archive.")
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
+	storedFile, err := qq.infra.FileSystem().CurrentVersionByFileIDX(ctx, fileDTO.ID)
+	if err != nil {
+		log.Println(err)
+		return err
 	}
 
-	// Get the current version of the file
-	storedFile := filem.CurrentVersion(ctx)
+	if !storedFile.IsZIPArchive() {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Not a ZIP archive.")
+	}
 
 	// Open the ZIP file using S3FileSystem
 	zipFileReader, err := qq.infra.FileSystem().OpenFile(ctx, storedFile)
@@ -166,11 +167,10 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 	}
 
 	// only used in non-folder mode
-	parentDirID := filem.Data.ParentID
+	parentDirID := fileDTO.ParentID
 
 	preparedEntries, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) ([]*unzipPreparedEntry, error) {
 		entries := make([]*unzipPreparedEntry, 0, len(zipArchiveReader.File))
-		parentDir := writeCtx.SpaceCtx().Space.QueryFiles().Where(file.ID(parentDirID)).OnlyX(writeCtx)
 
 		for _, zippedFile := range zipArchiveReader.File {
 			if zippedFile.FileInfo().IsDir() {
@@ -178,7 +178,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 					continue
 				}
 
-				_, err := qq.infra.FileSystem().MakeDirAllIfNotExists(writeCtx, parentDir, zippedFile.Name)
+				_, err := qq.infra.FileSystem().MakeDirAllIfNotExistsByID(writeCtx, parentDirID, zippedFile.Name)
 				if err != nil {
 					log.Println(err)
 					return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not create directory structure.")
@@ -190,7 +190,11 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 			if writeCtx.SpaceCtx().Space.IsFolderMode {
 				pathWithoutFilename := filepath.Dir(zippedFile.Name)
 				if pathWithoutFilename != "." {
-					newParentDir, err := qq.infra.FileSystem().MakeDirAllIfNotExists(writeCtx, parentDir, pathWithoutFilename)
+					newParentDir, err := qq.infra.FileSystem().MakeDirAllIfNotExistsByID(
+						writeCtx,
+						parentDirID,
+						pathWithoutFilename,
+					)
 					if err != nil {
 						log.Println(err)
 						return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not create directory structure.")
@@ -269,11 +273,11 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 			if len(fileIDs) == 0 {
 				return nil, nil
 			}
-			writeCtx.TTx.File.Update().
-				Where(file.IDIn(fileIDs...)).
-				SetDeletedAt(time.Now()).
-				SetDeleter(writeCtx.SpaceCtx().User).
-				ExecX(writeCtx)
+			repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(writeCtx)
+			err := repos.Write.SoftDeleteFilesByIDs(writeCtx, fileIDs, writeCtx.SpaceCtx().User.ID)
+			if err != nil {
+				return nil, err
+			}
 			return nil, nil
 		})
 		if err != nil {
@@ -314,10 +318,11 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 	// If DeleteOnSuccess is true, mark the ZIP file as deleted
 	if data.DeleteOnSuccess && !hasErr {
 		_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-			writeCtx.TTx.File.UpdateOneID(filem.Data.ID).
-				SetDeletedAt(time.Now()).
-				SetDeleter(writeCtx.SpaceCtx().User).
-				ExecX(writeCtx)
+			repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(writeCtx)
+			err := repos.Write.SoftDeleteFileByIDX(writeCtx, fileDTO.ID, writeCtx.SpaceCtx().User.ID)
+			if err != nil {
+				return nil, err
+			}
 			return nil, nil
 		})
 		if err != nil {

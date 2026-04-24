@@ -99,6 +99,8 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return e.NewHTTPErrorf(http.StatusInternalServerError, "Read-only request context required.")
 	}
 
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+
 	uploadedFile, uploadedFileHeader, err := req.FormFile("File")
 	if err != nil {
 		// TODO also triggers if no file provided
@@ -117,9 +119,9 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	}
 	filename = filepath.Clean(filename)
 
-	parentDir := qq.infra.FileRepo.GetX(ctx, data.ParentDirID)
+	parentDirDTO := repos.Read.FileByPublicIDX(ctx, data.ParentDirID)
 
-	if err := fileutil.EnsureFileDoesNotExist(ctx, filename, parentDir.Data.ID, data.AddToInbox); err != nil {
+	if err := fileutil.EnsureFileDoesNotExist(ctx, filename, parentDirDTO.ID, data.AddToInbox); err != nil {
 		return err
 	}
 
@@ -132,7 +134,7 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		prepared, filex, err := qq.infra.FileSystem().PrepareFileUpload(
 			writeCtx,
 			filename,
-			parentDir.Data.ID,
+			parentDirDTO.ID,
 			data.AddToInbox,
 		)
 		if err != nil {

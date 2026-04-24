@@ -6,12 +6,8 @@ import (
 	"slices"
 	"strings"
 
-	"entgo.io/ent/dialect/sql"
-
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
@@ -64,8 +60,8 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Handler(rw httpx.ResponseWriter
 var regexpLowerAlphaNum = regexp.MustCompile("[^a-z0-9àèìòùáéíóúýâêîôûãñõäëïöüÿåæœçðø¿¡ß]+")
 
 func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID int64) *wx.List {
-	// TODO
-	fileToAssign := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileToAssign := repos.Read.FileByIDX(ctx, fileID)
 
 	filename := filepath.Clean(fileToAssign.Name)
 	// remove file extension
@@ -138,29 +134,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 
 	*/
 
-	destDirs := ctx.TenantCtx().TTx.File.Query().
-		WithChildren().
-		Where(
-			file.IsDirectory(true),
-			func(qs *sql.Selector) {
-				fileSearchTable := sql.Table(filesearch.Table)
-
-				qs.Where(
-					sql.In(qs.C(file.FieldID),
-						sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
-							Where(
-								sql.And(
-									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
-									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
-								),
-							).
-							OrderBy(fileSearchTable.C(filesearch.FieldRank)),
-					),
-				)
-			},
-		).
-		Limit(10).
-		AllX(ctx)
+	destDirs := repos.Query.InboxAssignmentSuggestionDirectoriesX(ctx, searchQuery, 10)
 
 	var destDirParentIDs []int64
 	for _, child := range destDirs {

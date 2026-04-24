@@ -69,12 +69,13 @@ func (qq *CreateAndAssignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
 
 	if tagx.Type != tagtype.Group {
 		_, err = taggingmodel.NewTagService().AssignToFile(
 			ctx,
-			filex.Data.ID,
+			fileDTO.ID,
 			tagx.ID,
 			ctx.SpaceCtx().Space.ID,
 		)

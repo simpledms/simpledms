@@ -59,9 +59,10 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 		return e.NewHTTPErrorf(http.StatusBadRequest, "invalid version number")
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
-	versionx, err := filex.Data.QueryFileVersions().
-		Where(fileversion.VersionNumber(versionInt)).
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
+	versionx, err := ctx.TenantCtx().TTx.FileVersion.Query().
+		Where(fileversion.FileID(fileDTO.ID), fileversion.VersionNumber(versionInt)).
 		WithStoredFile().
 		Only(ctx)
 	if err != nil {
@@ -73,11 +74,16 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 
 	storedFile := versionx.Edges.StoredFile
 	versionm := storedfilemodel.NewStoredFile(storedFile)
-	filename := filex.Data.Name
+	filename := fileDTO.Name
 	if versionm.Data.Filename != "" {
 		filename = versionm.Data.Filename
 	}
-	downloadURL := route.DownloadWithVersion(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String(), data.VersionNumber)
+	downloadURL := route.DownloadWithVersion(
+		ctx.TenantCtx().TenantID,
+		ctx.SpaceCtx().SpaceID,
+		fileDTO.PublicID,
+		data.VersionNumber,
+	)
 
 	return qq.infra.Renderer().Render(
 		rw,
@@ -100,7 +106,12 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 			},
 			IsOpenOnLoad: true,
 			Child: &wx.FilePreview{
-				FileURL:  route.DownloadInlineWithVersion(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String(), data.VersionNumber),
+				FileURL: route.DownloadInlineWithVersion(
+					ctx.TenantCtx().TenantID,
+					ctx.SpaceCtx().SpaceID,
+					fileDTO.PublicID,
+					data.VersionNumber,
+				),
 				Filename: filename,
 				MimeType: versionm.Data.MimeType,
 			},

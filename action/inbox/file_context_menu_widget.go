@@ -2,7 +2,6 @@ package inbox
 
 import (
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
@@ -17,7 +16,7 @@ func NewFileContextMenuWidget(actions *Actions) *FileContextMenuWidget {
 	}
 }
 
-func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File) *wx.Menu {
+func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filePublicID string, fileName string) *wx.Menu {
 	// filem := filemodel.NewFile(filex)
 	var menuItems []*wx.MenuItem
 
@@ -26,7 +25,7 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 			TrailingIcon: "edit", // TODO
 			Label:        wx.T("Rename"),
 			HTMXAttrs: qq.actions.Browse.RenameFileCmd.ModalLinkAttrs(
-				qq.actions.Browse.RenameFileCmd.Data(filex.PublicID.String(), filex.Name),
+				qq.actions.Browse.RenameFileCmd.Data(filePublicID, fileName),
 				"",
 				// "#"+qq.actions.ListDir.WrapperID(),
 			),
@@ -42,7 +41,7 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 			Label:        wx.T("Delete"),
 			HTMXAttrs: wx.HTMXAttrs{
 				HxPost: qq.actions.Browse.DeleteFileCmd.Endpoint(),
-				HxVals: util.JSON(qq.actions.Browse.DeleteFileCmd.Data(filex.PublicID.String())),
+				HxVals: util.JSON(qq.actions.Browse.DeleteFileCmd.Data(filePublicID)),
 				// HxTarget:  "#" + qq.actions.ListDir.WrapperID(),
 				HxConfirm: wx.T("Are you sure?").String(ctx),
 			},

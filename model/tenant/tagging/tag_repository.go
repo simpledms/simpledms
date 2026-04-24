@@ -15,7 +15,7 @@ type TagRepository interface {
 	UpdateTagName(ctx ctxx.Context, tagID int64, name string) (*enttenant.Tag, error)
 	DeleteTag(ctx ctxx.Context, tagID int64) error
 	TagByID(ctx ctxx.Context, tagID int64) (*enttenant.Tag, error)
-	FileByID(ctx ctxx.Context, fileID int64) (*enttenant.File, error)
+	EnsureFileExists(ctx ctxx.Context, fileID int64) error
 	FileHasTagAssignment(ctx ctxx.Context, fileID int64, tagID int64) (bool, error)
 	ClearTagGroup(ctx ctxx.Context, tagID int64) error
 	SetTagGroup(ctx ctxx.Context, tagID int64, groupTagID int64) error

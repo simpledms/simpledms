@@ -4,18 +4,21 @@ import (
 	"net/http"
 
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/file"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/util/e"
 )
 
 func EnsureFileDoesNotExist(ctx ctxx.Context, filename string, parentDirID int64, isInInbox bool) error {
+	if !ctx.IsSpaceCtx() {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Space context is required.")
+	}
+
 	if !ctx.SpaceCtx().Space.IsFolderMode {
 		return nil
 	}
 
-	fileExists := ctx.SpaceCtx().Space.QueryFiles().
-		Where(file.Name(filename), file.ParentID(parentDirID), file.IsInInbox(isInInbox)).
-		ExistX(ctx)
+	readRepo := filemodel.NewEntSpaceFileReadRepository(ctx.SpaceCtx().Space.ID)
+	fileExists := readRepo.FileExistsByNameAndParentX(ctx, filename, parentDirID, isInInbox)
 	if fileExists {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "File already exists.")
 	}

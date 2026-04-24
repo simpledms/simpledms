@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"entgo.io/ent/dialect/sql"
 	commonaction "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
@@ -31,9 +32,10 @@ func (qq *Download) Handler(
 	ctx ctxx.Context,
 ) error {
 	fileIDStr := req.PathValue("file_id")
-	filex := qq.infra.FileRepo.GetX(ctx, fileIDStr)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, fileIDStr)
 
-	if filex.Data.IsDirectory {
+	if fileDTO.IsDirectory {
 		// TODO impl support for this? download as zip archive?
 		return e.NewHTTPErrorf(http.StatusBadRequest, "cannot download directories")
 	}
@@ -44,10 +46,11 @@ func (qq *Download) Handler(
 		if err != nil {
 			return e.NewHTTPErrorf(http.StatusBadRequest, "invalid version number")
 		}
-		version, err := filex.Data.QueryFileVersions().
-			Where(fileversion.VersionNumber(versionInt)).
+		version, err := ctx.TenantCtx().TTx.FileVersion.Query().
+			Where(fileversion.FileID(fileDTO.ID), fileversion.VersionNumber(versionInt)).
+			Order(fileversion.ByVersionNumber(sql.OrderDesc())).
 			WithStoredFile().
-			Only(ctx)
+			First(ctx)
 		if err != nil {
 			if enttenant.IsNotFound(err) {
 				return e.NewHTTPErrorf(http.StatusNotFound, "version not found")
@@ -55,9 +58,36 @@ func (qq *Download) Handler(
 			return err
 		}
 		storedFile := version.Edges.StoredFile
-		return commonaction.StreamDownload(qq.infra, ctx, rw, req, filex, storedfilemodel.NewStoredFile(storedFile))
+		return commonaction.StreamDownload(
+			qq.infra,
+			ctx,
+			rw,
+			req,
+			fileDTO.Name,
+			fileDTO.IsDirectory,
+			storedfilemodel.NewStoredFile(storedFile),
+		)
 	}
 
-	currentVersion := filex.CurrentVersion(ctx)
-	return commonaction.StreamDownload(qq.infra, ctx, rw, req, filex, currentVersion)
+	version, err := ctx.TenantCtx().TTx.FileVersion.Query().
+		Where(fileversion.FileID(fileDTO.ID)).
+		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
+		WithStoredFile().
+		First(ctx)
+	if err != nil {
+		if enttenant.IsNotFound(err) {
+			return e.NewHTTPErrorf(http.StatusNotFound, "version not found")
+		}
+		return err
+	}
+
+	return commonaction.StreamDownload(
+		qq.infra,
+		ctx,
+		rw,
+		req,
+		fileDTO.Name,
+		fileDTO.IsDirectory,
+		storedfilemodel.NewStoredFile(version.Edges.StoredFile),
+	)
 }

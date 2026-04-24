@@ -7,7 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -68,7 +68,7 @@ func (qq *FileVersionFromInboxDialog) Handler(rw httpx.ResponseWriter, req *http
 func (qq *FileVersionFromInboxDialog) Widget(
 	ctx ctxx.Context,
 	data *FileVersionFromInboxDialogData,
-	files []*enttenant.File,
+	files []*filemodel.FileWithChildrenDTO,
 ) *wx.Dialog {
 	var formChildren []wx.IWidget
 

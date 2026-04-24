@@ -8,8 +8,6 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -45,33 +43,36 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 		return err
 	}
 
-	// destDir := ctx.TenantCtx().TTx.File.GetX(ctx, data.CurrentDirID)
-	destDir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
-	fileWithParentx := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
-	fileWithParent := qq.infra.FileRepo.GetXX(fileWithParentx)
-
-	fileWithParent, err = qq.infra.FileSystem().Move(ctx, destDir, fileWithParent, data.Filename, data.NewDirName)
+	movedFileWithParent, err := qq.infra.FileSystem().MoveByPublicIDs(
+		ctx,
+		data.CurrentDirID,
+		data.FileID,
+		data.Filename,
+		data.NewDirName,
+	)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
+	if movedFileWithParent.Parent == nil {
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Moved file parent is missing.")
+	}
 
 	// show the appropriate link if either file or directory was moved
 	var action *wx.Link
-	if fileWithParent.Data.IsDirectory {
+	if movedFileWithParent.IsDirectory {
 		action = &wx.Link{
-			Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithParent.Data.PublicID.String()),
+			Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, movedFileWithParent.PublicID),
 			Child: wx.T("Open directory"), // TODO Go to, or Open?
 		}
 	} else {
-		parent, err := fileWithParent.Parent(ctx)
-		if err != nil {
-			log.Println(err)
-			return err
-		}
-
 		action = &wx.Link{
-			Href:  route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, parent.Data.PublicID.String(), fileWithParent.Data.PublicID.String()),
+			Href: route.BrowseFile(
+				ctx.TenantCtx().TenantID,
+				ctx.SpaceCtx().SpaceID,
+				movedFileWithParent.Parent.PublicID,
+				movedFileWithParent.PublicID,
+			),
 			Child: wx.T("Open file"), // TODO Go to, or Open?
 		}
 	}
@@ -96,6 +97,6 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 			dirIDStr,
 			"",
 		),
-		wx.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
+		wx.NewSnackbarf("Moved to «%s».", movedFileWithParent.Parent.Name).WithAction(action),
 	)
 }

@@ -1,25 +1,33 @@
 package browse
 
 import (
+	"log"
+
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
-	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type FileContextMenuWidget struct {
+	infra   *common.Infra
 	actions *Actions
 }
 
-func NewFileContextMenuWidget(actions *Actions) *FileContextMenuWidget {
+func NewFileContextMenuWidget(infra *common.Infra, actions *Actions) *FileContextMenuWidget {
 	return &FileContextMenuWidget{
+		infra:   infra,
 		actions: actions,
 	}
 }
 
-func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File) *wx.Menu {
-	filem := filemodel.NewFile(filex)
+func (qq *FileContextMenuWidget) Widget(
+	ctx ctxx.Context,
+	filePublicID string,
+	fileName string,
+	fileID int64,
+	isDirectory bool,
+) *wx.Menu {
 	var menuItems []*wx.MenuItem
 
 	// TODO `select` menu item for multiselection?
@@ -29,7 +37,7 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 			TrailingIcon: "edit", // TODO
 			Label:        wx.T("Rename"),
 			HTMXAttrs: qq.actions.RenameFileCmd.ModalLinkAttrs(
-				qq.actions.RenameFileCmd.Data(filex.PublicID.String(), filex.Name),
+				qq.actions.RenameFileCmd.Data(filePublicID, fileName),
 				"#"+qq.actions.ListDirPartial.WrapperID(),
 			),
 		},
@@ -41,7 +49,7 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 				TrailingIcon: "drive_file_move",
 				Label:        wx.T("Move"),
 				HTMXAttrs: qq.actions.MoveFileCmd.ModalLinkAttrs(
-					qq.actions.MoveFileCmd.Data(filex.PublicID.String(), ""),
+					qq.actions.MoveFileCmd.Data(filePublicID, ""),
 					"#"+qq.actions.ListDirPartial.WrapperID(),
 				),
 			},
@@ -57,22 +65,27 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 			Label:        wx.T("Delete"),
 			HTMXAttrs: wx.HTMXAttrs{
 				HxPost:    qq.actions.DeleteFileCmd.Endpoint(),
-				HxVals:    util.JSON(qq.actions.DeleteFileCmd.Data(filex.PublicID.String())),
+				HxVals:    util.JSON(qq.actions.DeleteFileCmd.Data(filePublicID)),
 				HxTarget:  "#" + qq.actions.ListDirPartial.WrapperID(),
 				HxConfirm: wx.T("Are you sure?").String(ctx),
 			},
 		},
 	)
 
-	if filem.IsZIPArchive(ctx) {
-		menuItems = append(menuItems, &wx.MenuItem{
-			TrailingIcon: "Unarchive",
-			Label:        wx.T("Unzip archive"),
-			HTMXAttrs: qq.actions.UnzipArchiveCmd.ModalLinkAttrs(
-				qq.actions.UnzipArchiveCmd.Data(filem.Data.PublicID.String(), false),
-				"",
-			),
-		})
+	if !isDirectory {
+		currentVersion, err := qq.infra.FileSystem().CurrentVersionByFileIDX(ctx, fileID)
+		if err != nil {
+			log.Println(err)
+		} else if currentVersion.IsZIPArchive() {
+			menuItems = append(menuItems, &wx.MenuItem{
+				TrailingIcon: "Unarchive",
+				Label:        wx.T("Unzip archive"),
+				HTMXAttrs: qq.actions.UnzipArchiveCmd.ModalLinkAttrs(
+					qq.actions.UnzipArchiveCmd.Data(filePublicID, false),
+					"",
+				),
+			})
+		}
 	}
 
 	return &wx.Menu{

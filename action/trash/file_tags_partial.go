@@ -5,6 +5,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
+	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -49,8 +50,10 @@ func (qq *FileTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 }
 
 func (qq *FileTagsPartial) Widget(ctx ctxx.Context, data *FileTagsPartialData) *wx.ScrollableContent {
-	filex := qq.infra.FileRepo.GetWithDeletedX(ctx, data.FileID)
-	assignedTags := filex.Data.QueryTags().
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filex := repos.Read.FileByPublicIDWithDeletedX(ctx, data.FileID)
+	assignedTags := ctx.SpaceCtx().TTx.Tag.Query().
+		Where(tag.HasTagAssignmentWith(tagassignment.FileID(filex.ID))).
 		WithGroup().
 		Order(tag.ByName()).
 		AllX(ctx)

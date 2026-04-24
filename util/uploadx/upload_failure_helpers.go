@@ -7,9 +7,8 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
-	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/util/txx"
 )
@@ -33,19 +32,8 @@ func DeleteFailedUploadFile(ctx *ctxx.SpaceContext, fileID int64) {
 		return
 	}
 	_, err := txx.WithTenantWriteSpaceTx(ctx, func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		ctxWithDeleted := enttenantschema.SkipSoftDelete(writeCtx)
-		_, err := writeCtx.TTx.FileVersion.
-			Delete().
-			Where(fileversion.FileID(fileID)).
-			Exec(ctxWithDeleted)
-		if err != nil {
-			return nil, err
-		}
-		_, err = writeCtx.TTx.File.
-			Delete().
-			Where(file.ID(fileID)).
-			Exec(ctxWithDeleted)
-		return nil, err
+		writeRepo := filemodel.NewEntSpaceFileWriteRepository(writeCtx.SpaceCtx().Space.ID)
+		return nil, writeRepo.DeleteFileWithVersionsByIDX(writeCtx, fileID)
 	})
 	if err != nil {
 		log.Println(err)

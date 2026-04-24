@@ -5,8 +5,8 @@ import (
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 )
 
 type Space struct {
@@ -36,15 +36,10 @@ func (qq *Space) Edit(ctx ctxx.Context, name string, description string) error {
 	qq.Data = spacex
 
 	spaceCtx := ctxx.NewSpaceContext(ctx.TenantCtx(), spacex)
+	rootDirID := spaceCtx.SpaceRootDir().ID
+	repos := filemodel.NewEntSpaceFileRepositoryFactory().ForSpaceX(spaceCtx)
 
-	err = ctx.TenantCtx().TTx.File.Update().
-		SetName(name).
-		Where(
-			file.SpaceID(spacex.ID),
-			file.IsDirectory(true),
-			file.IsRootDir(true),
-		).
-		Exec(spaceCtx)
+	err = repos.Write.RenameFileByIDX(spaceCtx, rootDirID, name)
 	if err != nil {
 		return err
 	}

@@ -1,6 +1,8 @@
 package inbox
 
 import (
+	"log"
+
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
@@ -55,7 +57,8 @@ func (qq *FilePartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filex := repos.Read.FileByPublicIDX(ctx, data.FileID)
 
 	return qq.infra.Renderer().Render(
 		rw,
@@ -64,7 +67,12 @@ func (qq *FilePartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	)
 }
 
-func (qq *FilePartial) WidgetHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context, filex *filemodel.File) *wx.DetailsWithSheet {
+func (qq *FilePartial) WidgetHandler(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
+	filex *filemodel.FileDTO,
+) *wx.DetailsWithSheet {
 	state := autil.StateX[InboxPageState](rw, req)
 	return qq.Widget(ctx, state, filex)
 }
@@ -72,17 +80,25 @@ func (qq *FilePartial) WidgetHandler(rw httpx.ResponseWriter, req *httpx.Request
 func (qq *FilePartial) Widget(
 	ctx ctxx.Context,
 	state *InboxPageState,
-	filex *filemodel.File,
+	filex *filemodel.FileDTO,
 ) *wx.DetailsWithSheet {
+	mimeType := ""
+	currentVersion, err := qq.infra.FileSystem().CurrentVersionByFileIDX(ctx, filex.ID)
+	if err != nil {
+		log.Println(err)
+	} else {
+		mimeType = currentVersion.Data.MimeType
+	}
+
 	fileTabsPartial := qq.actions.FileTabsPartial.Widget(
 		ctx,
 		state,
-		filex.Data.PublicID.String(),
-		filex,
+		filex.PublicID,
+		nil,
 	)
 	return &wx.DetailsWithSheet{
 		AppBar: partial.NewFullscreenDialogAppBar(
-			wx.Tuf("%s", filex.Data.Name),
+			wx.Tuf("%s", filex.Name),
 			route2.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
 			[]wx.IWidget{
 				&wx.IconButton{
@@ -94,9 +110,9 @@ func (qq *FilePartial) Widget(
 					},
 				},
 				&wx.Link{
-					Href:      route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
+					Href:      route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID),
 					IsNoColor: true,
-					Filename:  filex.Filename(ctx),
+					Filename:  filex.Name,
 					Child: &wx.IconButton{
 						Icon:    "download",
 						Tooltip: wx.T("Download"),
@@ -106,9 +122,9 @@ func (qq *FilePartial) Widget(
 		),
 		Child: &wx.Column{
 			Children: &wx.FilePreview{
-				FileURL:  route2.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
-				Filename: filex.Data.Name,
-				MimeType: filex.CurrentVersion(ctx).Data.MimeType,
+				FileURL:  route2.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID),
+				Filename: filex.Name,
+				MimeType: mimeType,
 			},
 		},
 		SideSheet: &wx.Dialog{

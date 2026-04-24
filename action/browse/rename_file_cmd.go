@@ -98,14 +98,13 @@ func (qq *RenameFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
-	filex, err = qq.infra.FileSystem().Rename(ctx, filex, data.NewFilename)
+	filex, err := qq.infra.FileSystem().RenameByPublicID(ctx, data.FileID, data.NewFilename)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("Renamed to «%s»", filex.Data.Name))
+	rw.AddRenderables(wx.NewSnackbarf("Renamed to «%s»", filex.Name))
 	rw.Header().Add("HX-Trigger", event.FileUpdated.String())
 
 	return nil

@@ -6,6 +6,8 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -54,8 +56,14 @@ func (qq *CountAssignedTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.
 
 func (qq *CountAssignedTagsPartial) Badge(ctx ctxx.Context, fileID string) *wx.Badge {
 	// soft delete filter is not applied via TagAssignment
-	filex := qq.infra.FileRepo.GetX(ctx, fileID)
-	tagsCount := filex.Data.QueryTags().CountX(ctx)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, fileID)
+	tagsCount := ctx.TenantCtx().TTx.Tag.Query().
+		Where(
+			tag.SpaceID(ctx.SpaceCtx().Space.ID),
+			tag.HasFilesWith(file.ID(fileDTO.ID)),
+		).
+		CountX(ctx)
 
 	id := autil.GenerateID(fmt.Sprintf("tagsCount-%s", fileID))
 	return &wx.Badge{

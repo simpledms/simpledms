@@ -6,6 +6,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -51,18 +52,21 @@ func (qq *FileMetadataPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 }
 
 func (qq *FileMetadataPartial) Widget(ctx ctxx.Context, data *FileMetadataPartialData) *wx.ScrollableContent {
-	filex := qq.infra.FileRepo.GetWithDeletedX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filex := repos.Read.FileByPublicIDWithDeletedX(ctx, data.FileID)
 
 	items := []*wx.ListItem{
 		{
 			Headline:       wx.T("Name"),
-			SupportingText: wx.Tu(filex.Data.Name),
+			SupportingText: wx.Tu(filex.Name),
 		},
 	}
 
 	docTypeName := "-"
-	if filex.Data.DocumentTypeID != 0 {
-		docType, err := filex.Data.QueryDocumentType().Only(ctx)
+	if filex.DocumentTypeID != 0 {
+		docType, err := ctx.SpaceCtx().Space.QueryDocumentTypes().
+			Where(documenttype.ID(filex.DocumentTypeID)).
+			Only(ctx)
 		if err == nil && docType != nil {
 			docTypeName = docType.Name
 		}
@@ -72,10 +76,10 @@ func (qq *FileMetadataPartial) Widget(ctx ctxx.Context, data *FileMetadataPartia
 		SupportingText: wx.Tu(docTypeName),
 	})
 
-	if filex.Data.Notes != "" {
+	if filex.Notes != "" {
 		items = append(items, &wx.ListItem{
 			Headline:       wx.T("Notes"),
-			SupportingText: wx.Tu(filex.Data.Notes),
+			SupportingText: wx.Tu(filex.Notes),
 		})
 	}
 
@@ -89,12 +93,12 @@ func (qq *FileMetadataPartial) Widget(ctx ctxx.Context, data *FileMetadataPartia
 		})
 	}
 
-	appendTime("Created at", filex.Data.CreatedAt)
-	if filex.Data.ModifiedAt != nil {
-		appendTime("Modified at", *filex.Data.ModifiedAt)
+	appendTime("Created at", filex.CreatedAt)
+	if filex.ModifiedAt != nil {
+		appendTime("Modified at", *filex.ModifiedAt)
 	}
-	if !filex.Data.DeletedAt.IsZero() {
-		appendTime("Deleted at", filex.Data.DeletedAt)
+	if !filex.DeletedAt.IsZero() {
+		appendTime("Deleted at", filex.DeletedAt)
 	}
 
 	return &wx.ScrollableContent{

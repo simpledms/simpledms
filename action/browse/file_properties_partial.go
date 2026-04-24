@@ -9,7 +9,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/property"
-	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -59,10 +58,11 @@ func (qq *FilePropertiesPartial) Handler(rw httpx.ResponseWriter, req *httpx.Req
 }
 
 func (qq *FilePropertiesPartial) Widget(ctx ctxx.Context, data *FilePropertiesPartialData) *wx.ScrollableContent {
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filex := repos.Read.FileByPublicIDX(ctx, data.FileID)
 
 	assignments := ctx.SpaceCtx().TTx.FilePropertyAssignment.Query().
-		Where(filepropertyassignment.FileID(filex.Data.ID)).
+		Where(filepropertyassignment.FileID(filex.ID)).
 		WithProperty(
 			func(query *enttenant.PropertyQuery) {
 				query.Order(property.ByName())
@@ -75,7 +75,7 @@ func (qq *FilePropertiesPartial) Widget(ctx ctxx.Context, data *FilePropertiesPa
 		Icon:      wx.NewIcon("add"),
 		StyleType: wx.ButtonStyleTypeElevated,
 		HTMXAttrs: qq.actions.AddFilePropertyCmd.ModalLinkAttrs(
-			qq.actions.AddFilePropertyCmd.Data(filex.Data.PublicID.String()),
+			qq.actions.AddFilePropertyCmd.Data(filex.PublicID),
 			"",
 		),
 	}
@@ -94,7 +94,7 @@ func (qq *FilePropertiesPartial) Widget(ctx ctxx.Context, data *FilePropertiesPa
 			if assignment.Edges.Property == nil {
 				continue
 			}
-			children = append(children, qq.propertyAssignmentBlock(ctx, filex, assignment))
+			children = append(children, qq.propertyAssignmentBlock(ctx, filex.PublicID, assignment))
 		}
 	}
 
@@ -126,7 +126,7 @@ func (qq *FilePropertiesPartial) ID() string {
 
 func (qq *FilePropertiesPartial) propertyAssignmentBlock(
 	ctx ctxx.Context,
-	filex *filemodel.File,
+	filePublicID string,
 	assignment *enttenant.FilePropertyAssignment,
 ) *wx.Column {
 	propertyx := assignment.Edges.Property
@@ -138,7 +138,7 @@ func (qq *FilePropertiesPartial) propertyAssignmentBlock(
 		return wx.HTMXAttrs{
 			HxTrigger: hxTrigger,
 			HxPost:    qq.actions.SetFilePropertyCmd.Endpoint(),
-			HxVals:    util.JSON(qq.actions.SetFilePropertyCmd.Data(filex.Data.PublicID.String(), propertyx.ID)),
+			HxVals:    util.JSON(qq.actions.SetFilePropertyCmd.Data(filePublicID, propertyx.ID)),
 			HxInclude: "this",
 		}
 	}
@@ -155,7 +155,7 @@ func (qq *FilePropertiesPartial) propertyAssignmentBlock(
 			Child: wx.T("Remove").SetWrap().SetSmall(),
 			HTMXAttrs: wx.HTMXAttrs{
 				HxPost:    qq.actions.RemoveFilePropertyCmd.Endpoint(),
-				HxVals:    util.JSON(qq.actions.RemoveFilePropertyCmd.Data(filex.Data.PublicID.String(), propertyx.ID)),
+				HxVals:    util.JSON(qq.actions.RemoveFilePropertyCmd.Data(filePublicID, propertyx.ID)),
 				HxSwap:    "none",
 				HxConfirm: wx.T("Remove this field value?").String(ctx),
 			},

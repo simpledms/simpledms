@@ -78,6 +78,8 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		return e.NewHTTPErrorf(http.StatusBadRequest, "No file provided.")
 	}
 
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+
 	uploadedFile, uploadedFileHeader, err := req.FormFile("File")
 	if err != nil {
 		log.Println(err)
@@ -91,11 +93,11 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 
 	filename := filepath.Clean(uploadedFileHeader.Filename)
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
-	if filex.Data.IsDirectory {
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
+	if fileDTO.IsDirectory {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
 	}
-	if err := fileutil.EnsureFileDoesNotExist(ctx, filename, filex.Data.ParentID, filex.Data.IsInInbox); err != nil {
+	if err := fileutil.EnsureFileDoesNotExist(ctx, filename, fileDTO.ParentID, fileDTO.IsInInbox); err != nil {
 		return err
 	}
 
@@ -103,7 +105,7 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		return qq.infra.FileSystem().PrepareFileVersionUpload(
 			writeCtx,
 			filename,
-			filex.Data.ID,
+			fileDTO.ID,
 		)
 	})
 	if err != nil {
@@ -129,7 +131,7 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		return err
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("New version uploaded for «%s».", filex.Data.Name))
+	rw.AddRenderables(wx.NewSnackbarf("New version uploaded for «%s».", fileDTO.Name))
 	// TODO does triggering event have an effect? request comes from uppy and isn't a HTMX request...
 	rw.Header().Add("HX-Trigger", event.FileUploaded.String())
 

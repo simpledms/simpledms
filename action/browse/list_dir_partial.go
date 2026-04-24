@@ -3,20 +3,12 @@ package browse
 import (
 	"fmt"
 	"log"
-	"math"
-	"slices"
 	"strconv"
 	"strings"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
-	"github.com/simpledms/simpledms/db/enttenant/property"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
@@ -26,7 +18,6 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/timex"
 )
 
 type ListDirPartialData struct {
@@ -121,8 +112,8 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	if hxTarget == "#"+qq.FileListID() {
 		// rw.Header().Set("HX-Replace-Url", route.BrowseWithState(state)(data.CurrentDirID))
 
-		// dir := ctx.TenantCtx().TTx.File.GetX(ctx, data.CurrentDirID)
-		dir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
+		repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+		dir := repos.Read.FileByPublicIDX(ctx, data.CurrentDirID)
 		return qq.infra.Renderer().Render(
 			rw,
 			ctx,
@@ -173,7 +164,8 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 			}
 		}
 
-		dir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
+		repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+		dir := repos.Read.FileByPublicIDX(ctx, data.CurrentDirID)
 		return qq.infra.Renderer().Render(
 			rw,
 			ctx,
@@ -181,7 +173,7 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 				Children: qq.filesListItems(
 					ctx,
 					state,
-					qq.Data(dir.Data.PublicID.String(), data.SelectedFileID),
+					qq.Data(dir.PublicID, data.SelectedFileID),
 					offset,
 				),
 			},
@@ -226,11 +218,10 @@ func (qq *ListDirPartial) Widget(
 	fileID string,
 	selectedFileID string,
 ) *wx.ListDetailLayout {
-	// dir := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
-	dirWithParentx := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(fileID))).OnlyX(ctx)
-	dirWithParent := qq.infra.FileRepo.GetXX(dirWithParentx)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	dirWithParent := repos.Read.FileByPublicIDWithParentX(ctx, fileID)
 
-	if dirWithParent.Data.IsDirectory == false {
+	if !dirWithParent.IsDirectory {
 		// TODO handle error... return container with error message for user? but should also be 404
 		return &wx.ListDetailLayout{}
 	}
@@ -245,16 +236,16 @@ func (qq *ListDirPartial) Widget(
 		qq.filesList(
 			ctx,
 			state,
-			dirWithParent,
-			qq.Data(dirWithParent.Data.PublicID.String(), selectedFileID),
+			&dirWithParent.FileDTO,
+			qq.Data(dirWithParent.PublicID, selectedFileID),
 			0,
 		),
 	)
 
 	if ctx.SpaceCtx().Space.IsFolderMode {
 		var breadcrumbs []wx.IWidget
-		if dirWithParent.Data.ID > 0 {
-			pathFiles := qq.infra.FileSystem().FileTree().PathFilesByFileIDX(ctx, dirWithParent.Data.ID)
+		if dirWithParent.ID > 0 {
+			pathFiles := qq.infra.FileSystem().FileTree().PathFilesByFileIDX(ctx, dirWithParent.ID)
 			for qi, pathFile := range pathFiles {
 				var breadcrumbLabel wx.IWidget
 				if qi == 0 {
@@ -291,7 +282,7 @@ func (qq *ListDirPartial) Widget(
 			HxPost: qq.EndpointWithParams(actionx.ResponseWrapperNone, "#"+qq.FileListID()),
 			// HxPost:    qq.EndpointWithState(state, actionx.ResponseWrapperNone, "#"+qq.WrapperID()),
 			// state is necessary because tags are not rendered if modal is closed
-			HxVals:   util.JSON(qq.Data(dirWithParent.Data.PublicID.String(), selectedFileID)), // overrides form fields, must be added via HxInclude
+			HxVals:   util.JSON(qq.Data(dirWithParent.PublicID, selectedFileID)), // overrides form fields, must be added via HxInclude
 			HxTarget: "#" + qq.FileListID(),
 			HxSwap:   "outerHTML",
 			HxTrigger: strings.Join([]string{
@@ -318,13 +309,17 @@ func (qq *ListDirPartial) Widget(
 	}
 }
 
-func (qq *ListDirPartial) tagsAndOptions(ctx ctxx.Context, state *ListDirPartialState, dir *filemodel.File) *wx.ChipBar {
+func (qq *ListDirPartial) tagsAndOptions(
+	ctx ctxx.Context,
+	state *ListDirPartialState,
+	dir *filemodel.FileWithParentDTO,
+) *wx.ChipBar {
 	// TODO most used tags within folder, order alphabetically or by use?
 
-	// childDirCount := dir.Data.QueryChildren().Where(file.IsDirectory(true)).CountX(ctx)
-	currentDirID := dir.Data.PublicID
+	// childDirCount := len(children)
+	currentDirID := dir.PublicID
 
-	children := qq.filters(ctx, state, currentDirID.String())
+	children := qq.filters(ctx, state, currentDirID)
 
 	return &wx.ChipBar{
 		Widget: wx.Widget[wx.ChipBar]{
@@ -342,7 +337,7 @@ func (qq *ListDirPartial) pageSize() int {
 func (qq *ListDirPartial) filesList(
 	ctx ctxx.Context,
 	state *ListDirPartialState,
-	dir *filemodel.File,
+	dir *filemodel.FileDTO,
 	data *ListDirPartialData,
 	offset int,
 ) renderable.Renderable {
@@ -362,7 +357,7 @@ func (qq *ListDirPartial) filesList(
 			widgets = append(
 				widgets,
 				qq.actions.MakeDirCmd.ModalLink(
-					qq.actions.MakeDirCmd.Data(dir.Data.PublicID.String(), ""),
+					qq.actions.MakeDirCmd.Data(dir.PublicID, ""),
 					[]wx.IWidget{
 						&wx.Button{
 							Icon:  wx.NewIcon("create_new_folder"),
@@ -379,7 +374,7 @@ func (qq *ListDirPartial) filesList(
 			&wx.Link{
 				HTMXAttrs: wx.HTMXAttrs{
 					HxPost:        qq.actions.FileUploadDialogPartial.Endpoint(),
-					HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dir.Data.PublicID.String(), false)),
+					HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dir.PublicID, false)),
 					LoadInPopover: true,
 				},
 				Child: &wx.Button{
@@ -420,7 +415,6 @@ func (qq *ListDirPartial) filesListItems(
 		data,
 		offset,
 		qq.pageSize(),
-		qq.applyPropertyFilter,
 	)
 	currentDir := queryResult.CurrentDir
 	children := queryResult.Children
@@ -439,7 +433,7 @@ func (qq *ListDirPartial) filesListItems(
 
 		fileListItems = append(fileListItems, qq.actions.FileListItemPartial.DirectoryListItem(
 			ctx,
-			currentDir.PublicID.String(),
+			currentDir.PublicID,
 			child,
 			fullPath,
 			state.IsRecursive,
@@ -460,7 +454,7 @@ func (qq *ListDirPartial) filesListItems(
 			data.CurrentDirID,
 			child,
 			fullPath,
-			child.PublicID.String() == data.SelectedFileID,
+			child.PublicID == data.SelectedFileID,
 			// data.SelectedFileID != 0,
 			state.IsRecursive && ctx.SpaceCtx().Space.IsFolderMode,
 		))
@@ -487,21 +481,24 @@ func (qq *ListDirPartial) filesListItems(
 func (qq *ListDirPartial) appBar(
 	ctx ctxx.Context,
 	state *ListDirPartialState,
-	dir *filemodel.File,
+	dir *filemodel.FileWithParentDTO,
 ) *wx.AppBar {
 	var leadingButton wx.IWidget
 
-	if dir.Data.ParentID != 0 {
-		parent, err := dir.Parent(ctx)
-		if err != nil {
-			log.Println(err)
-			panic(err)
+	if dir.ParentID != 0 {
+		parentPublicID := ""
+		if dir.Parent != nil {
+			parentPublicID = dir.Parent.PublicID
+		} else {
+			repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+			parent := repos.Read.FileByIDX(ctx, dir.ParentID)
+			parentPublicID = parent.PublicID
 		}
 		leadingButton = &wx.IconButton{
 			Icon:    "arrow_back",
 			Tooltip: wx.T("Back to parent folder"),
 			HTMXAttrs: wx.HTMXAttrs{
-				HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, parent.Data.PublicID.String()),
+				HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, parentPublicID),
 				HxHeaders: autil.ResetStateHeader(),
 				HxSwap: fmt.Sprintf(
 					// duplicate in FileListItemPartial
@@ -523,15 +520,15 @@ func (qq *ListDirPartial) appBar(
 	}
 
 	supportingText := wx.T("Search")
-	supportingTextAltMobile := wx.Tu(dir.Data.Name)
-	if ctx.SpaceCtx().Space.IsFolderMode && dir.Data.ID != ctx.SpaceCtx().SpaceRootDir().ID {
-		supportingText = wx.Tf("Search in «%s»", dir.Data.Name)
+	supportingTextAltMobile := wx.Tu(dir.Name)
+	if ctx.SpaceCtx().Space.IsFolderMode && dir.ID != ctx.SpaceCtx().SpaceRootDir().ID {
+		supportingText = wx.Tf("Search in «%s»", dir.Name)
 	}
 
 	return &wx.AppBar{
 		Leading:          leadingButton,
 		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
-		Title:            wx.Tu(dir.Data.Name),
+		Title:            wx.Tu(dir.Name),
 		// Actions:          actions,
 		Search: &wx.Search{
 			Widget: wx.Widget[wx.Search]{
@@ -770,190 +767,4 @@ func (qq *ListDirPartial) filterDocumentTypeBtn(
 			},
 		},
 	}
-}
-
-func (qq *ListDirPartial) applyPropertyFilter(ctx ctxx.Context, query *enttenant.FileQuery, state *ListDirPartialState) *enttenant.FileQuery {
-	var propertyIDs []int64
-	for _, propertyFilter := range state.PropertyValues {
-		propertyIDs = append(propertyIDs, propertyFilter.PropertyID)
-	}
-	slices.Sort(propertyIDs)
-	propertyIDs = slices.Compact(propertyIDs) // must be sorted
-
-	if len(propertyIDs) == 0 {
-		return query
-	}
-
-	propertiesx := ctx.SpaceCtx().Space.QueryProperties().Where(property.IDIn(propertyIDs...)).AllX(ctx)
-
-	for _, propertyFilter := range state.PropertyValues {
-		propertyx := propertiesx[slices.IndexFunc(propertiesx, func(prop *enttenant.Property) bool {
-			return prop.ID == propertyFilter.PropertyID
-		})]
-
-		switch propertyx.Type {
-		case fieldtype.Text:
-			switch propertyFilter.Operator {
-			case textOperatorValueContains.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					// TODO space necessary?
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.TextValueContainsFold(propertyFilter.Value), // Fold makes case insensitive
-				))
-			case operatorValueEquals.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.TextValueEqualFold(propertyFilter.Value), // Fold makes case insensitive
-				))
-			case textOperatorValueStartsWith.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.TextValueHasPrefix(propertyFilter.Value), // is case insensitive
-				))
-			}
-		case fieldtype.Number:
-			value, err := strconv.Atoi(propertyFilter.Value)
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-
-			switch propertyFilter.Operator {
-			case operatorValueEquals.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.NumberValue(value),
-				))
-			case operatorValueGreaterThan.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.NumberValueGT(value),
-				))
-			case operatorValueLessThan.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.NumberValueLT(value),
-				))
-			}
-		case fieldtype.Date:
-			switch propertyFilter.Operator {
-			case operatorValueEquals.String():
-				value, err := timex.ParseDate(propertyFilter.Value)
-				if err != nil {
-					log.Println(err)
-					continue
-				}
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.DateValue(value),
-				))
-			case operatorValueGreaterThan.String():
-				value, err := timex.ParseDate(propertyFilter.Value)
-				if err != nil {
-					log.Println(err)
-					continue
-				}
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.DateValueGT(value),
-				))
-			case operatorValueLessThan.String():
-				value, err := timex.ParseDate(propertyFilter.Value)
-				if err != nil {
-					log.Println(err)
-					continue
-				}
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.DateValueLT(value),
-				))
-			case operatorValueBetween.String():
-				startDate := ""
-				endDate := ""
-				if propertyFilter.Value != "" {
-					parts := strings.SplitN(propertyFilter.Value, ",", 2)
-					startDate = parts[0]
-					if len(parts) > 1 {
-						endDate = parts[1]
-					}
-				}
-
-				if startDate != "" {
-					value, err := timex.ParseDate(startDate)
-					if err != nil {
-						log.Println(err)
-						continue
-					}
-					query = query.Where(file.HasPropertyAssignmentWith(
-						filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-						filepropertyassignment.DateValueGTE(value),
-					))
-				}
-
-				if endDate != "" {
-					value, err := timex.ParseDate(endDate)
-					if err != nil {
-						log.Println(err)
-						continue
-					}
-					query = query.Where(file.HasPropertyAssignmentWith(
-						filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-						filepropertyassignment.DateValueLTE(value),
-					))
-				}
-			}
-		case fieldtype.Money:
-			valueFloat, err := strconv.ParseFloat(propertyFilter.Value, 64)
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-			value := int(math.Round(valueFloat * 100)) // convert to minor unit // TODO is this good enough?
-
-			switch propertyFilter.Operator {
-			case operatorValueEquals.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.NumberValue(value),
-				))
-			case operatorValueGreaterThan.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.NumberValueGT(value),
-				))
-			case operatorValueLessThan.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.NumberValueLT(value),
-				))
-			}
-		case fieldtype.Checkbox:
-			value, err := strconv.ParseBool(propertyFilter.Value)
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-			if value {
-				query = query.Where(file.HasPropertyAssignmentWith(
-					// TODO space necessary?
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.BoolValue(true),
-				))
-			} else {
-				// file.Or ensures that also listed if no property assignment
-				// FIXME doesn't return all results without assignment!
-				query = query.Where(
-					file.Or(
-						file.HasPropertyAssignmentWith(
-							filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-							filepropertyassignment.Or(filepropertyassignment.BoolValue(false), filepropertyassignment.BoolValueIsNil()),
-						),
-						file.Not(file.HasPropertyAssignment()),
-					),
-				)
-			}
-		}
-	}
-
-	return query
 }

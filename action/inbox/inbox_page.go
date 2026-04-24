@@ -10,6 +10,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -60,11 +61,15 @@ func (qq *InboxPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 	// select next file in queue
 	//
 	// OnlyX or OnlyID doesn't work with Limit, returns error if multiple before Limit is applied
-	files := qq.actions.ListFilesPartial.filesQuery(ctx, state).Limit(1).AllX(ctx)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	files := repos.Query.InboxFilesX(ctx, &filemodel.InboxFileQueryFilterDTO{
+		SearchQuery: state.SearchQuery,
+		SortBy:      state.SortBy,
+	})
 	if len(files) == 0 {
 		selectedFileID = ""
 	} else {
-		selectedFileID = files[0].PublicID.String()
+		selectedFileID = files[0].PublicID
 	}
 
 	// TODO necessary?
@@ -131,7 +136,8 @@ func (qq *InboxPage) Widget(ctx ctxx.Context, state *InboxPageState, selectedFil
 	)
 
 	if selectedFileID != "" {
-		filex := qq.infra.FileRepo.GetX(ctx, selectedFileID)
+		repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+		filex := repos.Read.FileByPublicIDX(ctx, selectedFileID)
 		listDetailLayout.Detail = qq.actions.FilePartial.Widget(ctx, state, filex)
 	}
 

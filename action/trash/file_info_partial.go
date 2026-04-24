@@ -1,11 +1,11 @@
 package trash
 
 import (
+	"log"
+
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/schema"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -54,13 +54,17 @@ func (qq *FileInfoPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 }
 
 func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *wx.ScrollableContent {
-	ctxWithDeleted := schema.SkipSoftDelete(ctx)
-	filem := qq.infra.FileRepo.GetWithDeletedX(ctx, data.FileID)
-	currentVersion := filem.CurrentVersion(ctxWithDeleted)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filem := repos.Read.FileByPublicIDWithDeletedX(ctx, data.FileID)
+	currentVersion, err := qq.infra.FileSystem().CurrentVersionByFileIDX(ctx, filem.ID)
+	if err != nil {
+		log.Println(err)
+		return &wx.ScrollableContent{}
+	}
 
 	ocrSucceededAt := wx.Tu("-")
-	if filem.Data.OcrSuccessAt != nil && !filem.Data.OcrSuccessAt.IsZero() {
-		ocrSucceededAt = wx.Tu(timex.NewDateTime(*filem.Data.OcrSuccessAt).String(ctx.MainCtx().LanguageBCP47))
+	if filem.OcrSuccessAt != nil && !filem.OcrSuccessAt.IsZero() {
+		ocrSucceededAt = wx.Tu(timex.NewDateTime(*filem.OcrSuccessAt).String(ctx.MainCtx().LanguageBCP47))
 	}
 
 	sha256 := wx.Tu("-")
@@ -87,7 +91,7 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 		},
 	}
 
-	if parentName := qq.parentName(ctx, filem.Data.ParentID); parentName != "" {
+	if parentName := qq.parentName(ctx, filem.ParentID); parentName != "" {
 		items = append(items, &wx.ListItem{
 			Headline:       wx.T("Parent folder"),
 			SupportingText: wx.Tu(parentName),
@@ -96,17 +100,17 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 
 	items = append(items, &wx.ListItem{
 		Headline:       wx.T("Uploaded at"),
-		SupportingText: wx.Tu(timex.NewDateTime(filem.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
+		SupportingText: wx.Tu(timex.NewDateTime(filem.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
 	})
 	items = append(items, &wx.ListItem{
 		Headline:       wx.T("OCR succeeded at"),
 		SupportingText: ocrSucceededAt,
 	})
 
-	if !filem.Data.DeletedAt.IsZero() {
+	if !filem.DeletedAt.IsZero() {
 		items = append(items, &wx.ListItem{
 			Headline:       wx.T("Deleted at"),
-			SupportingText: wx.T(timex.NewDateTime(filem.Data.DeletedAt).String(ctx.MainCtx().LanguageBCP47)),
+			SupportingText: wx.T(timex.NewDateTime(filem.DeletedAt).String(ctx.MainCtx().LanguageBCP47)),
 		})
 	}
 
@@ -126,14 +130,6 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 }
 
 func (qq *FileInfoPartial) parentName(ctx ctxx.Context, parentID int64) string {
-	if parentID == 0 {
-		return ""
-	}
-	parent, err := ctx.TenantCtx().TTx.File.Query().
-		Where(file.ID(parentID), file.IsDirectory(true)).
-		Only(ctx)
-	if err != nil || parent == nil {
-		return ""
-	}
-	return parent.Name
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	return repos.Read.ParentDirectoryNameByIDX(ctx, parentID)
 }

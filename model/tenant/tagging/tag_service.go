@@ -88,7 +88,7 @@ func (qq *TagService) ToggleFileTag(
 	tagID int64,
 	spaceID int64,
 ) (bool, *enttenant.Tag, error) {
-	_, err := qq.repository.FileByID(ctx, fileID)
+	err := qq.repository.EnsureFileExists(ctx, fileID)
 	if err != nil {
 		return false, nil, err
 	}

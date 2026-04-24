@@ -13,6 +13,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/entx"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/util/e"
 )
 
@@ -23,13 +24,28 @@ func NewFileTree() *FileTree {
 }
 
 func (qq *FileTree) PathFilesByFileID(ctx ctxx.Context, fileID int64) ([]*enttenant.File, error) {
-	if fileID == 0 {
-		return []*enttenant.File{}, nil
+	pathFileDTOs, err := qq.pathFilesByFileIDDTO(ctx, fileID)
+	if err != nil {
+		return nil, err
 	}
 
-	pathFiles := []*enttenant.File{}
+	pathFiles := make([]*enttenant.File, 0, len(pathFileDTOs))
+	for _, pathFileDTO := range pathFileDTOs {
+		pathFiles = append(pathFiles, qq.pathFileFromDTO(pathFileDTO))
+	}
+
+	return pathFiles, nil
+}
+
+func (qq *FileTree) pathFilesByFileIDDTO(ctx ctxx.Context, fileID int64) ([]*filemodel.FileDTO, error) {
+	if fileID == 0 {
+		return []*filemodel.FileDTO{}, nil
+	}
+
+	pathFiles := []*filemodel.FileDTO{}
 	seenFileIDs := map[int64]struct{}{}
 	currentFileID := fileID
+	readRepo := filemodel.NewEntSpaceFileReadRepository(ctx.SpaceCtx().Space.ID)
 
 	for currentFileID != 0 {
 		if _, found := seenFileIDs[currentFileID]; found {
@@ -37,18 +53,7 @@ func (qq *FileTree) PathFilesByFileID(ctx ctxx.Context, fileID int64) ([]*entten
 		}
 		seenFileIDs[currentFileID] = struct{}{}
 
-		currentFile, err := ctx.TenantCtx().TTx.File.Query().
-			Select(
-				file.FieldID,
-				file.FieldParentID,
-				file.FieldName,
-				file.FieldPublicID,
-			).
-			Where(
-				file.ID(currentFileID),
-				file.SpaceID(ctx.SpaceCtx().Space.ID),
-			).
-			Only(ctx)
+		currentFile, err := readRepo.FileByID(ctx, currentFileID)
 		if err != nil {
 			log.Println(err)
 			return nil, err
@@ -76,7 +81,7 @@ func (qq *FileTree) FullPathByFileID(ctx ctxx.Context, fileID int64) (string, er
 		return "", nil
 	}
 
-	pathFiles, err := qq.PathFilesByFileID(ctx, fileID)
+	pathFiles, err := qq.pathFilesByFileIDDTO(ctx, fileID)
 	if err != nil {
 		return "", err
 	}
@@ -94,13 +99,8 @@ func (qq *FileTree) FullPathByFileIDX(ctx ctxx.Context, fileID int64) string {
 }
 
 func (qq *FileTree) FullPathByPublicID(ctx ctxx.Context, filePublicID string) (string, error) {
-	filex, err := ctx.TenantCtx().TTx.File.Query().
-		Select(file.FieldID).
-		Where(
-			file.PublicID(entx.NewCIText(filePublicID)),
-			file.SpaceID(ctx.SpaceCtx().Space.ID),
-		).
-		Only(ctx)
+	readRepo := filemodel.NewEntSpaceFileReadRepository(ctx.SpaceCtx().Space.ID)
+	filex, err := readRepo.FileByPublicID(ctx, filePublicID)
 	if err != nil {
 		log.Println(err)
 		return "", err
@@ -140,22 +140,13 @@ func (qq *FileTree) FullPathsByFileID(ctx ctxx.Context, fileIDs []int64) (map[in
 		return pathByFileID, nil
 	}
 
-	fileByID := map[int64]*enttenant.File{}
+	readRepo := filemodel.NewEntSpaceFileReadRepository(ctx.SpaceCtx().Space.ID)
+	fileByID := map[int64]*filemodel.FileDTO{}
 	for len(pendingFileIDs) > 0 {
 		batch := slices.Clone(pendingFileIDs)
 		pendingFileIDs = []int64{}
 
-		batchFiles, err := ctx.TenantCtx().TTx.File.Query().
-			Select(
-				file.FieldID,
-				file.FieldParentID,
-				file.FieldName,
-			).
-			Where(
-				file.IDIn(batch...),
-				file.SpaceID(ctx.SpaceCtx().Space.ID),
-			).
-			All(ctx)
+		batchFiles, err := readRepo.FilesByIDs(ctx, batch)
 		if err != nil {
 			log.Println(err)
 			return nil, err
@@ -187,7 +178,7 @@ func (qq *FileTree) FullPathsByFileID(ctx ctxx.Context, fileIDs []int64) (map[in
 			continue
 		}
 
-		pathFiles := []*enttenant.File{}
+		pathFiles := []*filemodel.FileDTO{}
 		seenFileIDs := map[int64]struct{}{}
 		currentFileID := fileID
 
@@ -229,6 +220,7 @@ func (qq *FileTree) IsDescendantOf(ctx ctxx.Context, fileID, ancestorFileID int6
 
 	seenFileIDs := map[int64]struct{}{}
 	currentFileID := fileID
+	readRepo := filemodel.NewEntSpaceFileReadRepository(ctx.SpaceCtx().Space.ID)
 	for currentFileID != 0 {
 		if currentFileID == ancestorFileID {
 			return true, nil
@@ -239,16 +231,7 @@ func (qq *FileTree) IsDescendantOf(ctx ctxx.Context, fileID, ancestorFileID int6
 		}
 		seenFileIDs[currentFileID] = struct{}{}
 
-		currentFile, err := ctx.TenantCtx().TTx.File.Query().
-			Select(
-				file.FieldID,
-				file.FieldParentID,
-			).
-			Where(
-				file.ID(currentFileID),
-				file.SpaceID(ctx.SpaceCtx().Space.ID),
-			).
-			Only(ctx)
+		currentFile, err := readRepo.FileByID(ctx, currentFileID)
 		if err != nil {
 			log.Println(err)
 			return false, err
@@ -295,7 +278,7 @@ func (qq *FileTree) DescendantIDsSubQuery(rootID, spaceID int64) *sql.Selector {
 		Prefix(withDescendants)
 }
 
-func (qq *FileTree) fullPathFromPathFiles(pathFiles []*enttenant.File) string {
+func (qq *FileTree) fullPathFromPathFiles(pathFiles []*filemodel.FileDTO) string {
 	if len(pathFiles) <= 1 {
 		return ""
 	}
@@ -306,4 +289,17 @@ func (qq *FileTree) fullPathFromPathFiles(pathFiles []*enttenant.File) string {
 	}
 
 	return strings.Join(pathElems, string(filepath.Separator))
+}
+
+func (qq *FileTree) pathFileFromDTO(pathFile *filemodel.FileDTO) *enttenant.File {
+	if pathFile == nil {
+		return nil
+	}
+
+	return &enttenant.File{
+		ID:       pathFile.ID,
+		ParentID: pathFile.ParentID,
+		Name:     pathFile.Name,
+		PublicID: entx.NewCIText(pathFile.PublicID),
+	}
 }

@@ -13,6 +13,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
+	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/model/main/common/attributetype"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
@@ -86,7 +87,8 @@ func (qq *FileAttributesPartial) Content(
 	ctx ctxx.Context,
 	data *FileAttributesPartialData,
 ) wx.IWidget {
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filex := repos.Read.FileByPublicIDX(ctx, data.FileID)
 
 	suggestedDocumentTypes := ctx.SpaceCtx().Space.QueryDocumentTypes().
 		Order(documenttype.ByName()).
@@ -99,7 +101,7 @@ func (qq *FileAttributesPartial) Content(
 							Where(
 								sql.And(
 									// Rowid is internal id
-									sql.EQ(fileSearchTable.C(filesearch.FieldRowid), filex.Data.ID),
+									sql.EQ(fileSearchTable.C(filesearch.FieldRowid), filex.ID),
 									sql.ExprP(
 										fileSearchTable.C(filesearch.FieldFileSearches)+" MATCH "+
 											`'"' || replace(`+qs.C(documenttype.FieldName)+`, '"', '""') || '"'`,
@@ -147,8 +149,10 @@ func (qq *FileAttributesPartial) Content(
 	var attributeBlocks []*wx.Column
 
 	tagAssignmentsMap := make(map[int64]bool)
-	for _, tagAssignment := range filex.Data.QueryTagAssignment().AllX(ctx) {
-		tagAssignmentsMap[tagAssignment.TagID] = true
+	for _, assignment := range ctx.SpaceCtx().TTx.TagAssignment.Query().
+		Where(tagassignment.FileID(filex.ID)).
+		AllX(ctx) {
+		tagAssignmentsMap[assignment.TagID] = true
 	}
 
 	for _, documentType := range suggestedDocumentTypes {
@@ -186,7 +190,7 @@ func (qq *FileAttributesPartial) Content(
 				// TODO only update if ID is identical
 				HxTrigger: event.HxTrigger(event.TagUpdated),
 				HxPost:    qq.Endpoint(),
-				HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String())),
+				HxVals:    util.JSON(qq.Data(filex.PublicID)),
 				HxTarget:  "#" + qq.FileAttributesID(),
 				HxSwap:    "outerHTML",
 			},
@@ -209,7 +213,7 @@ func (qq *FileAttributesPartial) Content(
 func (qq *FileAttributesPartial) documentTypeBadge(
 	ctx ctxx.Context,
 	data *FileAttributesPartialData,
-	filex *filemodel.File,
+	filex *filemodel.FileDTO,
 	documentType *enttenant.DocumentType,
 	isSuggested bool,
 	documentTypeChips []*wx.FilterChip,
@@ -217,16 +221,16 @@ func (qq *FileAttributesPartial) documentTypeBadge(
 	attributeBlocks []*wx.Column,
 ) ([]*wx.FilterChip, []*wx.Column) {
 	// if selected, just show selected one, if nothing selected, show all
-	if filex.Data.DocumentTypeID == 0 || filex.Data.DocumentTypeID == documentType.ID {
+	if filex.DocumentTypeID == 0 || filex.DocumentTypeID == documentType.ID {
 		trailingIcon := ""
-		if filex.Data.DocumentTypeID == documentType.ID {
+		if filex.DocumentTypeID == documentType.ID {
 			trailingIcon = "close"
 		}
 		// TODO make it a InputChip instead of adding a `close` TrailingIcon?
 		//		or at least make Icon and IconButton?
 		documentTypeChips = append(documentTypeChips, &wx.FilterChip{
 			Label:        wx.Tu(documentType.Name),
-			IsChecked:    documentType.ID == filex.Data.DocumentTypeID,
+			IsChecked:    documentType.ID == filex.DocumentTypeID,
 			IsSuggestion: isSuggested,
 			TrailingIcon: trailingIcon,
 			HTMXAttrs: wx.HTMXAttrs{
@@ -242,7 +246,7 @@ func (qq *FileAttributesPartial) documentTypeBadge(
 		})
 	}
 
-	if documentType.ID == filex.Data.DocumentTypeID {
+	if documentType.ID == filex.DocumentTypeID {
 		// TODO ordering
 		attributes := documentType.QueryAttributes().WithProperty().AllX(ctx)
 		for _, attributex := range attributes {
@@ -268,14 +272,14 @@ func (qq *FileAttributesPartial) documentTypeBadge(
 
 func (qq *FileAttributesPartial) propertyAttributeBlock(
 	ctx ctxx.Context,
-	filex *filemodel.File,
+	filex *filemodel.FileDTO,
 	attributex *enttenant.Attribute,
 ) *wx.Column {
 	htmxAttrsFn := func(hxTrigger string) wx.HTMXAttrs {
 		return wx.HTMXAttrs{
 			HxTrigger: hxTrigger,
 			HxPost:    qq.actions.SetFilePropertyCmd.Endpoint(),
-			HxVals:    util.JSON(qq.actions.SetFilePropertyCmd.Data(filex.Data.PublicID.String(), attributex.Edges.Property.ID)),
+			HxVals:    util.JSON(qq.actions.SetFilePropertyCmd.Data(filex.PublicID, attributex.Edges.Property.ID)),
 			HxInclude: "this",
 		}
 	}
@@ -283,7 +287,7 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 	nilableAssignment, err := ctx.SpaceCtx().TTx.FilePropertyAssignment.Query().
 		Where(
 			filepropertyassignment.PropertyID(attributex.Edges.Property.ID),
-			filepropertyassignment.FileID(filex.Data.ID),
+			filepropertyassignment.FileID(filex.ID),
 		).Only(ctx)
 	if err != nil && !enttenant.IsNotFound(err) {
 		panic(err)
@@ -308,7 +312,12 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 			hasDateValue = true
 		}
 		fieldID := field.(wx.IWidgetWithID).GetID()
-		dateSuggestionsWidget := NewDateSuggestionsWidget(filex, fieldID, attributex.Edges.Property.ID)
+		dateSuggestionsWidget := NewDateSuggestionsWidget(
+			filex.Name,
+			filex.OcrContent,
+			fieldID,
+			attributex.Edges.Property.ID,
+		)
 		children = append(children, dateSuggestionsWidget.Widget(
 			ctx,
 			!hasDateValue,
@@ -327,7 +336,7 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 func (qq *FileAttributesPartial) tagGroupAttributeBlock(
 	ctx ctxx.Context,
 	tagAssignmentsMap map[int64]bool,
-	filex *filemodel.File,
+	filex *filemodel.FileDTO,
 	attributex *enttenant.Attribute,
 ) *wx.Column {
 	suggestedTags := ctx.SpaceCtx().Space.QueryTags().
@@ -341,7 +350,7 @@ func (qq *FileAttributesPartial) tagGroupAttributeBlock(
 							Where(
 								sql.And(
 									// Rowid is internal id
-									sql.EQ(fileSearchTable.C(filesearch.FieldRowid), filex.Data.ID),
+									sql.EQ(fileSearchTable.C(filesearch.FieldRowid), filex.ID),
 									sql.EQ(tag.FieldGroupID, attributex.TagID),
 									sql.ExprP(
 										fileSearchTable.C(filesearch.FieldFileSearches)+" MATCH "+
@@ -375,7 +384,7 @@ func (qq *FileAttributesPartial) tagGroupAttributeBlock(
 		// Label:        wx.T("Add"),
 		LeadingIcon: "add",
 		HTMXAttrs: qq.actions.Tagging.AssignedTags.CreateAndAssignTagCmd.ModalLinkAttrs(
-			qq.actions.Tagging.AssignedTags.CreateAndAssignTagCmd.Data(filex.Data.PublicID.String(), attributex.TagID),
+			qq.actions.Tagging.AssignedTags.CreateAndAssignTagCmd.Data(filex.PublicID, attributex.TagID),
 			"",
 		),
 	})
@@ -410,7 +419,7 @@ func (qq *FileAttributesPartial) tagBadge(
 	tagx *enttenant.Tag,
 	chips []wx.IWidget,
 	tagAssignmentsMap map[int64]bool,
-	filex *filemodel.File,
+	filex *filemodel.FileDTO,
 	isSuggested bool,
 ) []wx.IWidget {
 	icon := "label"
@@ -425,7 +434,7 @@ func (qq *FileAttributesPartial) tagBadge(
 		IsSuggestion: isSuggested,
 		HTMXAttrs: wx.HTMXAttrs{
 			HxPost: qq.actions.Tagging.ToggleFileTagCmd.Endpoint(),
-			HxVals: util.JSON(qq.actions.Tagging.ToggleFileTagCmd.Data(filex.Data.ID, tagx.ID)),
+			HxVals: util.JSON(qq.actions.Tagging.ToggleFileTagCmd.Data(filex.ID, tagx.ID)),
 			HxSwap: "none",
 		},
 	})

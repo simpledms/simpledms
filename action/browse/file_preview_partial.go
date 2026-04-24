@@ -59,9 +59,9 @@ func (qq *FilePreviewPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 	state := autil.StateX[FilePreviewPartialState](rw, req)
 	rw.Header().Set("HX-Push-Url", route2.BrowseFileWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, data.CurrentDirID, data.FileID))
 
-	// filex := ctx.TenantCtx().TTx.File.GetX(ctx, data.FileID)
-	dirx := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	dirx := repos.Read.FileByPublicIDX(ctx, data.CurrentDirID)
+	filex := repos.Read.FileByPublicIDX(ctx, data.FileID)
 
 	viewx, err := qq.Widget(ctx, state, dirx, filex)
 	if err != nil {
@@ -76,8 +76,8 @@ func (qq *FilePreviewPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 func (qq *FilePreviewPartial) Widget(
 	ctx ctxx.Context,
 	state *FilePreviewPartialState,
-	dirx *filemodel.File,
-	filex *filemodel.File,
+	dirx *filemodel.FileDTO,
+	filex *filemodel.FileDTO,
 ) (*wx.DetailsWithSheet, error) {
 	// TODO action.ShowFileData or primitive types?
 	//		is partial bound to action?
@@ -91,35 +91,40 @@ func (qq *FilePreviewPartial) Widget(
 	fileDetailsSideSheet := qq.actions.FileDetailsSideSheetPartial.Widget(
 		ctx,
 		qq.actions.FileDetailsSideSheetPartial.Data(
-			dirx.Data.PublicID.String(),
-			filex.Data.PublicID.String(),
+			dirx.PublicID,
+			filex.PublicID,
 		),
 		state,
 	)
 
-	fileURL := route2.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String())
+	currentVersion, err := qq.infra.FileSystem().CurrentVersionByFileIDX(ctx, filex.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	fileURL := route2.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID)
 
 	return &wx.DetailsWithSheet{
 		HTMXAttrs: wx.HTMXAttrs{
 			HxTrigger: event.FileUploaded.Handler(),
 			HxPost:    qq.Endpoint(),
-			HxVals:    util.JSON(qq.Data(dirx.Data.PublicID.String(), filex.Data.PublicID.String())),
+			HxVals:    util.JSON(qq.Data(dirx.PublicID, filex.PublicID)),
 			HxTarget:  "#details",
 			HxSwap:    "outerHTML",
 		},
 		AppBar: qq.appBar(
 			ctx,
-			dirx.Data.PublicID.String(),
-			wx.Tu(filex.FilenameInApp(ctx, true)),
+			dirx.PublicID,
+			wx.Tu(filex.Name),
 			filex,
-			filex.Filename(ctx),
+			filex.Name,
 		),
 		Child: &wx.Column{
 			Children: []wx.IWidget{
 				&wx.FilePreview{
 					FileURL:  fileURL,
-					Filename: filex.Filename(ctx),
-					MimeType: filex.CurrentVersion(ctx).Data.MimeType,
+					Filename: filex.Name,
+					MimeType: currentVersion.Data.MimeType,
 				},
 				/*&wx.ScrollableContent{
 					// TODO consider a custom type for FilePreviewx?
@@ -135,10 +140,10 @@ func (qq *FilePreviewPartial) appBar(
 	ctx ctxx.Context,
 	dirID string,
 	title *wx.Text,
-	filex *filemodel.File,
+	filex *filemodel.FileDTO,
 	filename string,
 ) *wx.AppBar {
-	downloadURL := route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String())
+	downloadURL := route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID)
 
 	return &wx.AppBar{
 		Leading: &wx.IconButton{

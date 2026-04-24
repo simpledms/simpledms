@@ -5,6 +5,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 )
 
@@ -92,8 +93,10 @@ func (qq *EntTagRepository) TagByID(ctx ctxx.Context, tagID int64) (*enttenant.T
 	return ctx.TenantCtx().TTx.Tag.Get(ctx, tagID)
 }
 
-func (qq *EntTagRepository) FileByID(ctx ctxx.Context, fileID int64) (*enttenant.File, error) {
-	return ctx.TenantCtx().TTx.File.Get(ctx, fileID)
+func (qq *EntTagRepository) EnsureFileExists(ctx ctxx.Context, fileID int64) error {
+	repos := filemodel.NewEntSpaceFileRepositoryFactory().ForSpaceX(ctx)
+	_, err := repos.Read.FileByID(ctx, fileID)
+	return err
 }
 
 func (qq *EntTagRepository) FileHasTagAssignment(ctx ctxx.Context, fileID int64, tagID int64) (bool, error) {

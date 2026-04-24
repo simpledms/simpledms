@@ -44,8 +44,9 @@ func (qq *BrowseWithSelectionPage) Handler(
 		return e.NewHTTPErrorf(http.StatusBadRequest, "No file id provided.")
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, fileIDStr)
-	dirx := qq.infra.FileRepo.GetX(ctx, dirIDStr)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filex := repos.Read.FileByPublicIDX(ctx, fileIDStr)
+	dirx := repos.Read.FileByPublicIDX(ctx, dirIDStr)
 
 	state := autil.StateX[FilePreviewPartialState](rw, req)
 
@@ -82,8 +83,8 @@ func (qq *BrowseWithSelectionPage) widget(
 	req *httpx.Request,
 	ctx ctxx.Context,
 	state *FilePreviewPartialState,
-	dirx *filemodel.File,
-	filex *filemodel.File,
+	dirx *filemodel.FileDTO,
+	filex *filemodel.FileDTO,
 ) (renderable.Renderable, error) {
 	filePreview, err := qq.actions.FilePreviewPartial.Widget(
 		ctx,
@@ -104,8 +105,8 @@ func (qq *BrowseWithSelectionPage) widget(
 		rw,
 		req,
 		ctx,
-		dirx.Data.PublicID.String(),  // TODO pass dirx?
-		filex.Data.PublicID.String(), // TODO pass filex?
+		dirx.PublicID,  // TODO pass dirx?
+		filex.PublicID, // TODO pass filex?
 	)
 	listDetailsLayout.Detail = filePreview
 
@@ -114,7 +115,7 @@ func (qq *BrowseWithSelectionPage) widget(
 			Icon: "upload_file",
 			HTMXAttrs: wx.HTMXAttrs{
 				HxPost:        qq.actions.FileUploadDialogPartial.Endpoint(),
-				HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dirx.Data.PublicID.String(), false)),
+				HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dirx.PublicID, false)),
 				LoadInPopover: true,
 			},
 			Child: []wx.IWidget{
@@ -129,7 +130,7 @@ func (qq *BrowseWithSelectionPage) widget(
 			FABSize: wx.FABSizeSmall,
 			Icon:    "create_new_folder",
 			HTMXAttrs: qq.actions.MakeDirCmd.ModalLinkAttrs(
-				qq.actions.MakeDirCmd.Data(dirx.Data.PublicID.String(), ""),
+				qq.actions.MakeDirCmd.Data(dirx.PublicID, ""),
 				"#"+qq.actions.ListDirPartial.WrapperID(),
 			),
 			Child: []wx.IWidget{
@@ -142,7 +143,7 @@ func (qq *BrowseWithSelectionPage) widget(
 	/*
 		fileDetailsSideSheet := qq.actions.FileDetailsSideSheetPartial.Widget(
 			ctx,
-			qq.actions.FileDetailsSideSheetPartial.Data(dirx.Data.PublicID.String(), filex.Data.PublicID.String()),
+			qq.actions.FileDetailsSideSheetPartial.Data(dirx.PublicID, filex.PublicID),
 			state,
 		)
 	*/

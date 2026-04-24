@@ -3,13 +3,10 @@ package browse
 import (
 	"log"
 	"net/http"
-	"time"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -54,23 +51,26 @@ func (qq *DeleteFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	filex := ctx.SpaceCtx().Space.QueryFiles().WithChildren().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
+	fileWithChildren := repos.Read.FileByPublicIDWithChildrenX(ctx, data.FileID)
 	// fileInfo := ctx.TenantCtx().TTx.FileInfoPartial.Query().Where(fileinfo.PublicFileID(data.FileID)).OnlyX(ctx)
 
 	// only delete empry dirs, otherwise we have to iterate recursively over all files... also risky for user
 	// and harder to undo
-	if filex.IsDirectory && len(filex.Edges.Children) > 0 {
+	if fileWithChildren.IsDirectory && fileWithChildren.ChildDirectoryCount+fileWithChildren.ChildFileCount > 0 {
 		log.Println("Folder not empty")
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Folder isn't empty.")
 	}
 
-	filex = filex.Update().
-		SetDeletedAt(time.Now()).
-		SetDeleter(ctx.SpaceCtx().User).
-		SaveX(ctx)
+	err = repos.Write.SoftDeleteFileByIDX(ctx, fileDTO.ID, ctx.SpaceCtx().User.ID)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 
 	rw.Header().Set("HX-Trigger", event.FileDeleted.String())
-	if filex.IsDirectory {
+	if fileDTO.IsDirectory {
 		rw.AddRenderables(wx.NewSnackbarf("Folder deleted."))
 	} else {
 		rw.AddRenderables(wx.NewSnackbarf("File deleted."))

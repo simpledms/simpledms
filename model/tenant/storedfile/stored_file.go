@@ -4,7 +4,7 @@ import (
 	securejoin "github.com/cyphar/filepath-securejoin"
 
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/util/fileutil"
+	"github.com/simpledms/simpledms/util/sizeutil"
 )
 
 type StoredFile struct {
@@ -41,7 +41,7 @@ func (qq *StoredFile) UnsafeFinalObjectNameWithPrefix() (string, error) {
 
 func (qq *StoredFile) SizeString() string {
 	// return fmt.Sprintf("%.f kB", math.Ceil(float64(qq.Data.Size)/1014))
-	return fileutil.FormatSize(qq.Data.Size)
+	return sizeutil.FormatSize(qq.Data.Size)
 }
 
 func (qq *StoredFile) IsZIPArchive() bool {

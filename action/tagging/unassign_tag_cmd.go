@@ -52,9 +52,10 @@ func (qq *UnassignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 
 	hxTarget := req.Header.Get("HX-Target") // id without leading #
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
 
-	tag, err := taggingmodel.NewTagService().UnassignFromFile(ctx, filex.Data.ID, data.TagID)
+	tag, err := taggingmodel.NewTagService().UnassignFromFile(ctx, fileDTO.ID, data.TagID)
 	if err != nil {
 		return err
 	}

@@ -2,13 +2,13 @@ package browse
 
 import (
 	"fmt"
+	"log"
 
 	"entgo.io/ent/dialect/sql"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
-	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -57,12 +57,17 @@ func (qq *FileInfoPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 }
 
 func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *wx.ScrollableContent {
-	filem := qq.infra.FileRepo.GetX(ctx, data.FileID) // TODO inject?
-	currentVersion := filem.CurrentVersion(ctx)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filem := repos.Read.FileByPublicIDX(ctx, data.FileID)
+	currentVersion, err := qq.infra.FileSystem().CurrentVersionByFileIDX(ctx, filem.ID)
+	if err != nil {
+		log.Println(err)
+		return &wx.ScrollableContent{}
+	}
 
 	ocrSucceededAt := wx.Tu("-")
-	if filem.Data.OcrSuccessAt != nil && !filem.Data.OcrSuccessAt.IsZero() {
-		ocrSucceededAt = wx.Tu(timex.NewDateTime(*filem.Data.OcrSuccessAt).String(ctx.MainCtx().LanguageBCP47))
+	if filem.OcrSuccessAt != nil && !filem.OcrSuccessAt.IsZero() {
+		ocrSucceededAt = wx.Tu(timex.NewDateTime(*filem.OcrSuccessAt).String(ctx.MainCtx().LanguageBCP47))
 	}
 
 	sha256 := wx.Tu("-")
@@ -89,11 +94,11 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 		},
 		{
 			Headline:       wx.T("Uploaded at"),
-			SupportingText: wx.Tu(timex.NewDateTime(filem.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
+			SupportingText: wx.Tu(timex.NewDateTime(filem.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
 		},
 		{
 			Headline:       wx.T("Version"),
-			SupportingText: qq.versionLabel(ctx, filem),
+			SupportingText: qq.versionLabel(ctx, filem.ID),
 		},
 		{
 			Headline:       wx.T("Current version uploaded at"),
@@ -114,12 +119,12 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 		// TODO copied to final location?
 	}
 
-	if !filem.Data.DeletedAt.IsZero() {
+	if !filem.DeletedAt.IsZero() {
 		// order is good, because oriented on lifecycle
 		items = append(items, []*wx.ListItem{
 			{
 				Headline:       wx.T("Deleted at"),
-				SupportingText: wx.T(timex.NewDateTime(filem.Data.DeletedAt).String(ctx.MainCtx().LanguageBCP47)),
+				SupportingText: wx.T(timex.NewDateTime(filem.DeletedAt).String(ctx.MainCtx().LanguageBCP47)),
 			},
 			/* TODO
 			{
@@ -146,8 +151,11 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 	}
 }
 
-func (qq *FileInfoPartial) versionLabel(ctx ctxx.Context, filem *filemodel.File) *wx.Text {
-	versionData := filem.Data.QueryFileVersions().Order(fileversion.ByVersionNumber(sql.OrderDesc())).FirstX(ctx)
+func (qq *FileInfoPartial) versionLabel(ctx ctxx.Context, fileID int64) *wx.Text {
+	versionData := ctx.TenantCtx().TTx.FileVersion.Query().
+		Where(fileversion.FileID(fileID)).
+		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
+		FirstX(ctx)
 	return wx.Tu(fmt.Sprintf("%d", versionData.VersionNumber))
 }
 

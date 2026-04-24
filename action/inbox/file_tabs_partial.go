@@ -67,14 +67,15 @@ func (qq *FileTabsPartial) Widget(
 	ctx ctxx.Context,
 	state *InboxPageState,
 	fileID string,
-	nullableFile *filemodel.File,
+	nullableFile *filemodel.FileDTO,
 ) *wx.TabBar {
 	var activeTabContent *wx.ScrollableContent
 	tabsID := autil.GenerateID("showFileTabs")
 	activeTab := strings.ToLower(state.ActiveTab)
 
 	if nullableFile == nil {
-		nullableFile = qq.infra.FileRepo.GetX(ctx, fileID)
+		repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+		nullableFile = repos.Read.FileByPublicIDX(ctx, fileID)
 	}
 
 	switch activeTab {
@@ -93,7 +94,7 @@ func (qq *FileTabsPartial) Widget(
 						Headline: wx.T("Select destination manually"),
 						Type:     wx.ListItemTypeHelper,
 						HTMXAttrs: qq.actions.MoveFileCmd.ModalLinkAttrs(
-							qq.actions.MoveFileCmd.Data(nullableFile.Data.PublicID.String(), ""),
+							qq.actions.MoveFileCmd.Data(nullableFile.PublicID, ""),
 							"#innerContent",
 						), /*.SetHxHeaders(autil.QueryHeader(
 							qq.actions.InboxPage.Endpoint(),
@@ -101,7 +102,7 @@ func (qq *FileTabsPartial) Widget(
 						)),*/
 					},
 					wx.H(wx.HeadingTypeTitleMd, wx.T("Suggestions based on filename")),
-					qq.actions.ListInboxAssignmentSuggestionsPartial.Widget(ctx, nullableFile.Data.ID),
+					qq.actions.ListInboxAssignmentSuggestionsPartial.Widget(ctx, nullableFile.ID),
 				},
 			}
 		}

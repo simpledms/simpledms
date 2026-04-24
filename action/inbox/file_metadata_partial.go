@@ -3,6 +3,8 @@ package inbox
 // package action
 
 import (
+	"log"
+
 	"github.com/simpledms/simpledms/action/browse"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -103,11 +105,18 @@ func (qq *FileMetadataPartial) Widget(
 	))
 
 	// TODO also loaded in qq.actions.Browse.FileAttributesPartial.Widget
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filex := repos.Read.FileByPublicIDX(ctx, data.FileID)
+	currentVersion, err := qq.infra.FileSystem().CurrentVersionByFileIDX(ctx, filex.ID)
+	if err != nil {
+		log.Println(err)
+		return &wx.ScrollableContent{}
+	}
 
 	var nilableBottomAppBar *wx.BottomAppBar
 
-	if message := qq.nilableOCRStatusMessage(filex.HasOCRSuccess(ctx), filex.Size(ctx)); message != nil {
+	hasOCRSuccess := filex.OcrSuccessAt != nil && !filex.OcrSuccessAt.IsZero()
+	if message := qq.nilableOCRStatusMessage(hasOCRSuccess, currentVersion.Data.Size); message != nil {
 		nilableBottomAppBar = &wx.BottomAppBar{
 			Actions: []wx.IWidget{
 				&wx.IconButton{

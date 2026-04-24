@@ -2,6 +2,7 @@ package common
 
 import (
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/ui"
@@ -13,7 +14,7 @@ type Infra struct {
 	metaPath                             string
 	fileSystem                           *filesystem.S3FileSystem // TODO is this a good location?
 	factory                              *Factory
-	FileRepo                             *FileRepository
+	spaceFileRepoFactory                 filemodel.SpaceFileRepositoryFactory
 	pluginRegistry                       *pluginx.Registry
 	manageTenantsDeleteTenantCmdEndpoint string
 	manageTenantsDownloadBackupEndpoint  string
@@ -28,7 +29,7 @@ func NewInfra(
 	metaPath string,
 	fileSystem *filesystem.S3FileSystem,
 	factory *Factory,
-	fileRepo *FileRepository,
+	spaceFileRepoFactory filemodel.SpaceFileRepositoryFactory,
 	pluginRegistry *pluginx.Registry,
 	// nilableMainIdentity *age.X25519Identity,
 	systemConfig *systemconfigmodel.SystemConfig,
@@ -38,7 +39,7 @@ func NewInfra(
 		metaPath:                             metaPath,
 		fileSystem:                           fileSystem,
 		factory:                              factory,
-		FileRepo:                             fileRepo,
+		spaceFileRepoFactory:                 spaceFileRepoFactory,
 		pluginRegistry:                       pluginRegistry,
 		manageTenantsDeleteTenantCmdEndpoint: "",
 		manageTenantsDownloadBackupEndpoint:  "",
@@ -68,6 +69,10 @@ func (qq *Infra) FileSystem() *filesystem.S3FileSystem {
 
 func (qq *Infra) Factory() *Factory {
 	return qq.factory
+}
+
+func (qq *Infra) SpaceFileRepoFactory() filemodel.SpaceFileRepositoryFactory {
+	return qq.spaceFileRepoFactory
 }
 
 func (qq *Infra) SystemConfig() *systemconfigmodel.SystemConfig {

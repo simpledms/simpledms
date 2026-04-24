@@ -44,35 +44,47 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 		return err
 	}
 
-	destDir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
-	filex := qq.infra.FileRepo.GetWithParentX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDWithParentX(ctx, data.FileID)
 
-	if !filex.Data.IsInInbox {
+	if !fileDTO.IsInInbox {
 		log.Println("file not in inbox")
 		return e.NewHTTPErrorf(http.StatusBadRequest, "File must be in inbox.")
 	}
 
-	// TODO is this okay? probably not, but works as long as nilablePArent on File is used in FileWithParent // FIXME
-	filex.File, err = qq.infra.FileSystem().Move(ctx, destDir, filex.File, data.Filename, data.NewDirName)
+	movedFileWithParent, err := qq.infra.FileSystem().MoveByPublicIDs(
+		ctx,
+		data.CurrentDirID,
+		data.FileID,
+		data.Filename,
+		data.NewDirName,
+	)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if movedFileWithParent.Parent == nil {
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Moved file parent is missing.")
+	}
+
+	err = repos.Write.SetFileInInboxByIDX(ctx, movedFileWithParent.ID, false)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
-	filex.Data.Update().SetIsInInbox(false).SaveX(ctx)
-
 	action := &wx.Link{
 		Href: route.BrowseFile(
 			ctx.TenantCtx().TenantID,
 			ctx.SpaceCtx().SpaceID,
-			filex.Parent(ctx).Data.PublicID.String(),
-			filex.Data.PublicID.String(),
+			movedFileWithParent.Parent.PublicID,
+			movedFileWithParent.PublicID,
 		),
 		Child: wx.T("Open file"),
 	}
 
 	rw.AddRenderables(
-		wx.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
+		wx.NewSnackbarf("Moved to «%s».", movedFileWithParent.Parent.Name).WithAction(action),
 	)
 
 	rw.Header().Set("HX-Trigger", event.FileMoved.String())

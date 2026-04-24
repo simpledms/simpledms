@@ -1,13 +1,9 @@
 package trash
 
 import (
-	"entgo.io/ent/dialect/sql"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/schema"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
@@ -60,20 +56,12 @@ func (qq *TrashListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 }
 
 func (qq *TrashListPartial) Widget(ctx ctxx.Context, data *TrashListPartialData) renderable.Renderable {
-	ctxWithDeleted := schema.SkipSoftDelete(ctx)
-
-	deletedFiles := ctx.TenantCtx().TTx.File.Query().
-		Where(
-			file.SpaceID(ctx.SpaceCtx().Space.ID),
-			file.DeletedAtNotNil(),
-			file.IsDirectory(false),
-		).
-		Order(file.ByDeletedAt(sql.OrderDesc())).
-		AllX(ctxWithDeleted)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	deletedFiles := repos.Query.TrashFilesX(ctx)
 
 	var listItems []wx.IWidget
 	for _, filex := range deletedFiles {
-		isSelected := data != nil && filex.PublicID.String() == data.SelectedFileID
+		isSelected := data != nil && filex.PublicID == data.SelectedFileID
 		listItems = append(listItems, qq.listItem(ctx, filex, isSelected))
 	}
 
@@ -105,15 +93,12 @@ func (qq *TrashListPartial) Widget(ctx ctxx.Context, data *TrashListPartialData)
 	}
 }
 
-func (qq *TrashListPartial) listItem(ctx ctxx.Context, filex *enttenant.File, isSelected bool) *wx.ListItem {
+func (qq *TrashListPartial) listItem(ctx ctxx.Context, filex *filemodel.FileDTO, isSelected bool) *wx.ListItem {
 	icon := wx.NewIcon("description")
 	headline := wx.Tu(filex.Name)
 
 	if filex.IsDirectory {
 		icon = wx.NewIcon("folder")
-	} else {
-		filem := filemodel.NewFile(filex)
-		headline = wx.Tu(filem.FilenameInApp(ctx, false))
 	}
 
 	var deletedAt *wx.Text
@@ -133,7 +118,7 @@ func (qq *TrashListPartial) listItem(ctx ctxx.Context, filex *enttenant.File, is
 
 	item := &wx.ListItem{
 		RadioGroupName: "trashListRadioGroup",
-		RadioValue:     filex.PublicID.String(),
+		RadioValue:     filex.PublicID,
 		Leading:        icon.SmallPadding(),
 		Headline:       headline,
 		SupportingText: deletedAt,
@@ -141,11 +126,11 @@ func (qq *TrashListPartial) listItem(ctx ctxx.Context, filex *enttenant.File, is
 	}
 
 	if !filex.IsDirectory {
-		item.ContextMenu = qq.actions.TrashContextMenuWidget.Widget(ctx, filex)
+		item.ContextMenu = qq.actions.TrashContextMenuWidget.Widget(ctx, filex.PublicID)
 		item.HTMXAttrs = wx.HTMXAttrs{
 			HxTarget:  "#details",
 			HxSwap:    "outerHTML",
-			HxGet:     route.TrashFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID.String()),
+			HxGet:     route.TrashFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID),
 			HxHeaders: autil.PreserveStateHeader(),
 		}
 	}

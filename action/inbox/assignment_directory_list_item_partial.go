@@ -7,7 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -48,8 +48,9 @@ func (qq *AssignmentDirectoryListItemPartial) Handler(rw httpx.ResponseWriter, r
 		return err
 	}
 
-	destDir := ctx.TenantCtx().TTx.File.GetX(ctx, data.DestDirID)
-	filex := ctx.TenantCtx().TTx.File.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	destDir := repos.Read.FileByIDWithChildrenX(ctx, data.DestDirID)
+	filex := repos.Read.FileByIDX(ctx, data.FileID)
 
 	return qq.infra.Renderer().Render(
 		rw,
@@ -60,8 +61,8 @@ func (qq *AssignmentDirectoryListItemPartial) Handler(rw httpx.ResponseWriter, r
 
 func (qq *AssignmentDirectoryListItemPartial) Widget(
 	ctx ctxx.Context,
-	destDir *enttenant.File,
-	fileToAssign *enttenant.File,
+	destDir *filemodel.FileWithChildrenDTO,
+	fileToAssign *filemodel.FileDTO,
 	destParentFullPath string,
 ) *wx.ListItem {
 	if destParentFullPath == "" {
@@ -78,7 +79,7 @@ func (qq *AssignmentDirectoryListItemPartial) Widget(
 		Headline:       wx.Tf(destDir.Name),
 		SupportingText: wx.Tu(supportingText),
 		HTMXAttrs: qq.actions.AssignFileCmd.ModalLinkAttrs(
-			qq.actions.AssignFileCmd.Data(destDir.PublicID.String(), fileToAssign.PublicID.String(), fileToAssign.Name),
+			qq.actions.AssignFileCmd.Data(destDir.PublicID, fileToAssign.PublicID, fileToAssign.Name),
 			"#innerContent",
 		).SetHxHeaders(autil.QueryHeader(
 			qq.actions.InboxPage.Endpoint(),

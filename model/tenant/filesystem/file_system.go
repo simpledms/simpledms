@@ -5,13 +5,15 @@ import (
 	"net/http"
 	"path/filepath"
 	"strings"
-	"time"
+
+	"entgo.io/ent/dialect/sql"
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/entx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
+	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/filenamex"
 )
@@ -42,6 +44,32 @@ func (qq *FileSystem) FileTree() *FileTree {
 // TODO public ID or private ID?
 // returns last created dir
 func (qq *FileSystem) MakeDirAllIfNotExists(ctx ctxx.Context, currentParentDir *enttenant.File, pathToCreate string) (*enttenant.File, error) {
+	if currentParentDir == nil {
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Current parent directory is required.")
+	}
+
+	currentParentDirDTO, err := qq.MakeDirAllIfNotExistsByID(ctx, currentParentDir.ID, pathToCreate)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return &enttenant.File{
+		ID:          currentParentDirDTO.ID,
+		PublicID:    entx.NewCIText(currentParentDirDTO.PublicID),
+		ParentID:    currentParentDirDTO.ParentID,
+		SpaceID:     currentParentDirDTO.SpaceID,
+		Name:        currentParentDirDTO.Name,
+		IsDirectory: currentParentDirDTO.IsDirectory,
+		DeletedAt:   currentParentDirDTO.DeletedAt,
+	}, nil
+}
+
+func (qq *FileSystem) MakeDirAllIfNotExistsByID(
+	ctx ctxx.Context,
+	currentParentDirID int64,
+	pathToCreate string,
+) (*filemodel.FileDTO, error) {
 	if !ctx.SpaceCtx().Space.IsFolderMode {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Folder mode is not enabled.")
 	}
@@ -50,31 +78,35 @@ func (qq *FileSystem) MakeDirAllIfNotExists(ctx ctxx.Context, currentParentDir *
 	// filepath.SplitList uses filepath.ListSeparator, thus not the same
 	// TODO correct that os specific? for unzip it seems so because paths are handled on server
 	pathElems := strings.Split(pathToCreate, string(filepath.Separator))
+	readRepo := filemodel.NewEntSpaceFileReadRepository(ctx.SpaceCtx().Space.ID)
+
+	currentParentDirDTO, err := readRepo.FileByID(ctx, currentParentDirID)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	currentParentDirPublicID := currentParentDirDTO.PublicID
 
 	for _, pathElem := range pathElems {
 		if pathElem == "" || pathElem == "." {
 			continue
 		}
 
-		newCurrentDirx, err := ctx.TenantCtx().TTx.File.Query().
-			Where(
-				file.SpaceID(ctx.SpaceCtx().Space.ID),
-				file.ParentID(currentParentDir.ID),
-				file.Name(pathElem),
-			).
-			Only(ctx)
+		newCurrentDirx, err := readRepo.FileByParentIDAndName(ctx, currentParentDirID, pathElem)
 		if err != nil && !enttenant.IsNotFound(err) {
 			log.Println(err)
 			return nil, err
 		}
 
 		if enttenant.IsNotFound(err) {
-			newCurrentDir, err := qq.MakeDir(ctx, currentParentDir.PublicID.String(), pathElem)
+			newCurrentDir, err := qq.MakeDir(ctx, currentParentDirPublicID, pathElem)
 			if err != nil {
 				log.Println(err)
 				return nil, err
 			}
-			currentParentDir = newCurrentDir.Data
+			currentParentDirID = newCurrentDir.Data.ID
+			currentParentDirPublicID = newCurrentDir.Data.PublicID.String()
 			continue
 		} else {
 			// TODO good? correct location
@@ -83,10 +115,17 @@ func (qq *FileSystem) MakeDirAllIfNotExists(ctx ctxx.Context, currentParentDir *
 			}
 		}
 
-		currentParentDir = newCurrentDirx
+		currentParentDirID = newCurrentDirx.ID
+		currentParentDirPublicID = newCurrentDirx.PublicID
 	}
 
-	return currentParentDir, nil
+	currentParentDirDTO, err = readRepo.FileByID(ctx, currentParentDirID)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return currentParentDirDTO, nil
 }
 
 // TODO public ID or private ID?
@@ -102,65 +141,79 @@ func (qq *FileSystem) MakeDir(ctx ctxx.Context, parentDirID string, newDirName s
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "The provided filename is not allowed.")
 	}
 
-	// parentDir := ctx.TenantCtx().TTx.File.GetX(ctx, parentDirID)
-	parentDir := ctx.TenantCtx().TTx.File.Query().Where(file.PublicID(entx.NewCIText(parentDirID))).OnlyX(ctx)
+	readRepo := filemodel.NewEntSpaceFileReadRepository(ctx.SpaceCtx().Space.ID)
+	parentDir := readRepo.FileByPublicIDX(ctx, parentDirID)
+	if !parentDir.IsDirectory {
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Parent is not a directory.")
+	}
 
-	// FIXME case sensitivy
-	if parentDir.QueryChildren().Where(file.Name(newDirName)).ExistX(ctx) {
+	if readRepo.FileExistsByNameAndParentX(ctx, newDirName, parentDir.ID, false) ||
+		readRepo.FileExistsByNameAndParentX(ctx, newDirName, parentDir.ID, true) {
 		log.Println("duplicate file", newDirName)
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "A folder with this name already exists.")
 	}
 
-	// FIXME handle transaction or let indexer handle such situations?
-	filex := ctx.TenantCtx().TTx.File.Create().
-		SetName(newDirName).
-		SetIsDirectory(true).
-		SetIndexedAt(time.Now()).
-		// TODO take mode time from uploadedFile if possible at all
-		SetModifiedAt(time.Now()).
-		SetParentID(parentDir.ID).
-		SetSpaceID(ctx.SpaceCtx().Space.ID).
-		SaveX(ctx)
+	repos := filemodel.NewEntSpaceFileRepositoryFactory().ForSpaceX(ctx)
+	fileDTO, err := repos.Write.CreateDirectory(ctx, parentDir.ID, newDirName)
+	if err != nil {
+		return nil, err
+	}
 
-	return filemodel.NewFile(filex), nil
+	return filemodel.NewFile(&enttenant.File{
+		ID:          fileDTO.ID,
+		PublicID:    entx.NewCIText(fileDTO.PublicID),
+		ParentID:    fileDTO.ParentID,
+		SpaceID:     fileDTO.SpaceID,
+		Name:        fileDTO.Name,
+		IsDirectory: fileDTO.IsDirectory,
+		DeletedAt:   fileDTO.DeletedAt,
+	}), nil
 }
 
-// TODO name Move or Rename to be more consistent with FS interface?
-func (qq *FileSystem) Move(
+func (qq *FileSystem) MoveByPublicIDs(
 	ctx ctxx.Context,
-	destDir, filex *filemodel.File,
+	destDirPublicID string,
+	filePublicID string,
 	newFilename string,
-	dirNameToCreate string, // TODO name?
-) (*filemodel.File, error) {
+	dirNameToCreate string,
+) (*filemodel.FileWithParentDTO, error) {
 	if !ctx.SpaceCtx().Space.IsFolderMode {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Folder mode is not enabled.")
 	}
 
-	if !destDir.Data.IsDirectory {
+	repos := filemodel.NewEntSpaceFileRepositoryFactory().ForSpaceX(ctx)
+	destDir := repos.Read.FileByPublicIDX(ctx, destDirPublicID)
+	fileWithParent := repos.Read.FileByPublicIDWithParentX(ctx, filePublicID)
+
+	if !destDir.IsDirectory {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Destination is not a directory.")
 	}
-	if filex.Data.ID == destDir.Data.ID {
+	if fileWithParent.ID == destDir.ID {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot move directory to itself.")
 	}
-	if filex.Data.ParentID == destDir.Data.ID {
+	if fileWithParent.ParentID == destDir.ID {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Destination is current location.")
 	}
 
 	if dirNameToCreate != "" {
-		newDir, err := qq.MakeDir(ctx, destDir.Data.PublicID.String(), dirNameToCreate)
+		newDir, err := qq.MakeDir(ctx, destDirPublicID, dirNameToCreate)
 		if err != nil {
 			log.Println(err)
 			return nil, err
 		}
-		destDir = newDir
+
+		destDir = &filemodel.FileDTO{
+			ID:          newDir.Data.ID,
+			PublicID:    newDir.Data.PublicID.String(),
+			ParentID:    newDir.Data.ParentID,
+			SpaceID:     newDir.Data.SpaceID,
+			Name:        newDir.Data.Name,
+			IsDirectory: newDir.Data.IsDirectory,
+			DeletedAt:   newDir.Data.DeletedAt,
+		}
 	}
 
-	if !destDir.Data.IsDirectory {
-		log.Println("not a directory")
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "destination is not a directory")
-	}
-
-	isDescendant, err := qq.FileTree().IsDescendantOf(ctx, destDir.Data.ID, filex.Data.ID)
+	isDescendant, err := qq.FileTree().IsDescendantOf(ctx, destDir.ID, fileWithParent.ID)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -170,39 +223,59 @@ func (qq *FileSystem) Move(
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "cannot move file into child directory")
 	}
 
-	fileUpdate := filex.Data.Update()
-	if destDir.Data.ID != filex.Data.ParentID {
-		fileUpdate.SetParent(destDir.Data)
-	}
+	var nilableNewFilename *string
 	if newFilename != "" {
-		fileUpdate.SetName(newFilename)
+		nilableNewFilename = &newFilename
 	}
 
-	// returns new pointer, thus must be returned to caller
-	// TODO not very nice solution
-	filexx := fileUpdate.SaveX(ctx)
-	filex = filemodel.NewFile(filexx)
+	_, err = repos.Write.MoveFileByIDX(ctx, fileWithParent.ID, destDir.ID, nilableNewFilename)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
-	// FIXME is overwrite automatically prevented by unique constraint? impl test
-	return filex, nil
+	return repos.Read.FileByPublicIDWithParentX(ctx, fileWithParent.PublicID), nil
 }
 
-func (qq *FileSystem) Rename(ctx ctxx.Context, filex *filemodel.File, newFilename string) (*filemodel.File, error) {
-	// TODO block in non folder mode?
-
+func (qq *FileSystem) RenameByPublicID(
+	ctx ctxx.Context,
+	filePublicID string,
+	newFilename string,
+) (*filemodel.FileDTO, error) {
 	if newFilename == "" {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "New filename is empty.")
 	}
-	if filex.Data.Name == newFilename {
+
+	repos := filemodel.NewEntSpaceFileRepositoryFactory().ForSpaceX(ctx)
+	filex := repos.Read.FileByPublicIDX(ctx, filePublicID)
+	if filex.Name == newFilename {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "New filename is the same as old.")
 	}
 
-	// returns new pointer, thus must be returned to caller
-	filexx := filex.Data.Update().SetName(newFilename).SaveX(ctx)
-	filex = filemodel.NewFile(filexx)
+	err := repos.Write.RenameFileByIDX(ctx, filex.ID, newFilename)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
-	// FIXME is overwrite automatically prevented by unique constraint? impl test
-	return filex, nil
+	return repos.Read.FileByPublicIDX(ctx, filePublicID), nil
+}
+
+func (qq *FileSystem) CurrentVersionByFileIDX(ctx ctxx.Context, fileID int64) (*storedfilemodel.StoredFile, error) {
+	version, err := ctx.TenantCtx().TTx.FileVersion.Query().
+		Where(fileversion.FileID(fileID)).
+		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
+		WithStoredFile().
+		First(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	if version.Edges.StoredFile == nil {
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File has no stored version.")
+	}
+
+	return storedfilemodel.NewStoredFile(version.Edges.StoredFile), nil
 }
 
 /*

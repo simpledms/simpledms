@@ -38,6 +38,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/plan"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/pluginx"
@@ -163,12 +164,13 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 		)
 	}
 
+	spaceFileRepoFactory := filemodel.NewEntSpaceFileRepositoryFactory()
 	infra := common.NewInfra(
 		renderer,
 		metaPath,
 		s3FileSystem,
 		common.NewFactory(),
-		common.NewFileRepository(),
+		spaceFileRepoFactory,
 		pluginx.NewRegistry(),
 		systemConfig,
 	)

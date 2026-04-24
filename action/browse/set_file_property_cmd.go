@@ -70,11 +70,15 @@ func (qq *SetFilePropertyCmd) Handler(
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
 
 	// TODO check if exists and update if so
-	nilableAssignment, err := filex.Data.
-		QueryPropertyAssignment().Where(filepropertyassignment.PropertyID(data.PropertyID)).
+	nilableAssignment, err := ctx.SpaceCtx().TTx.FilePropertyAssignment.Query().
+		Where(
+			filepropertyassignment.FileID(fileDTO.ID),
+			filepropertyassignment.PropertyID(data.PropertyID),
+		).
 		Only(ctx)
 	if err != nil && !enttenant.IsNotFound(err) {
 		log.Println(err)
@@ -86,7 +90,7 @@ func (qq *SetFilePropertyCmd) Handler(
 	if enttenant.IsNotFound(err) {
 		query := ctx.SpaceCtx().TTx.FilePropertyAssignment.Create().
 			SetSpaceID(ctx.SpaceCtx().Space.ID).
-			SetFileID(filex.Data.ID).
+			SetFileID(fileDTO.ID).
 			SetPropertyID(data.PropertyID)
 
 		if err := applyPropertyValuesToCreate(query, propertyx.Type, filePropertyValuesFromSet(data)); err != nil {
@@ -98,7 +102,7 @@ func (qq *SetFilePropertyCmd) Handler(
 	} else if propertyx.Type == fieldtype.Date && data.DateValue.IsZero() {
 		ctx.SpaceCtx().TTx.FilePropertyAssignment.Delete().Where(
 			filepropertyassignment.PropertyID(data.PropertyID),
-			filepropertyassignment.FileID(filex.Data.ID),
+			filepropertyassignment.FileID(fileDTO.ID),
 		).ExecX(ctx)
 	} else {
 		query := nilableAssignment.Update()
@@ -114,7 +118,12 @@ func (qq *SetFilePropertyCmd) Handler(
 	rw.Header().Set("HX-Trigger", event.FilePropertyUpdated.String())
 
 	if propertyx.Type == fieldtype.Date {
-		dateSuggestionsWidget := NewDateSuggestionsWidget(filex, filePropertyFieldID(propertyx.ID), propertyx.ID)
+		dateSuggestionsWidget := NewDateSuggestionsWidget(
+			fileDTO.Name,
+			fileDTO.OcrContent,
+			filePropertyFieldID(propertyx.ID),
+			propertyx.ID,
+		)
 		rw.AddRenderables(dateSuggestionsWidget.Widget(
 			ctx,
 			data.DateValue.IsZero(),

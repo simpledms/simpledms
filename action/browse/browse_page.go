@@ -7,9 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/entx"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/util"
@@ -36,13 +34,14 @@ func (qq *BrowsePage) Handler(
 	ctx ctxx.Context,
 ) error {
 	dirIDStr := req.PathValue("dir_id")
-	var dirx *enttenant.File
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	var dirx *filemodel.FileDTO
 
 	if dirIDStr == "" {
 		// set root
-		dirx = ctx.SpaceCtx().SpaceRootDir()
+		dirx = repos.Read.FileByPublicIDX(ctx, ctx.SpaceCtx().SpaceRootDir().PublicID.String())
 	} else {
-		dirx = ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicID(entx.NewCIText(dirIDStr))).OnlyX(ctx)
+		dirx = repos.Read.FileByPublicIDX(ctx, dirIDStr)
 	}
 
 	if !dirx.IsDirectory {
@@ -94,12 +93,12 @@ func (qq *BrowsePage) widget(
 	req *httpx.Request,
 	ctx ctxx.Context,
 	state *ListDirPartialState,
-	dir *enttenant.File,
+	dir *filemodel.FileDTO,
 ) (renderable.Renderable, error) {
 	listDetailLayout := qq.actions.ListDirPartial.Widget(
 		ctx,
 		state,
-		dir.PublicID.String(),
+		dir.PublicID,
 		"",
 	)
 
@@ -109,7 +108,7 @@ func (qq *BrowsePage) widget(
 		Icon: "upload_file",
 		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:        qq.actions.FileUploadDialogPartial.Endpoint(),
-			HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dir.PublicID.String(), false)),
+			HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dir.PublicID, false)),
 			LoadInPopover: true,
 		},
 		/*
@@ -129,7 +128,7 @@ func (qq *BrowsePage) widget(
 			FABSize: wx.FABSizeSmall,
 			Icon:    "create_new_folder",
 			HTMXAttrs: qq.actions.MakeDirCmd.ModalLinkAttrs(
-				qq.actions.MakeDirCmd.Data(dir.PublicID.String(), ""),
+				qq.actions.MakeDirCmd.Data(dir.PublicID, ""),
 				"#"+qq.actions.ListDirPartial.WrapperID(),
 			),
 			Child: []wx.IWidget{

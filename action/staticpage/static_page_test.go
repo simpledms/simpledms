@@ -20,6 +20,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/ui"
@@ -189,12 +190,13 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 		false,
 		filesystem.NewStorageQuota(false),
 	)
+	spaceFileRepoFactory := filemodel.NewEntSpaceFileRepositoryFactory()
 	infra := common.NewInfra(
 		renderer,
 		metaPath,
 		fileSystem,
 		common.NewFactory(),
-		common.NewFileRepository(),
+		spaceFileRepoFactory,
 		pluginx.NewRegistry(),
 		systemConfig,
 	)

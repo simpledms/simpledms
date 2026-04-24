@@ -52,12 +52,13 @@ func (qq *RemoveFilePropertyCmd) Handler(
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
 	propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
 
 	ctx.SpaceCtx().TTx.FilePropertyAssignment.Delete().
 		Where(
-			filepropertyassignment.FileID(filex.Data.ID),
+			filepropertyassignment.FileID(fileDTO.ID),
 			filepropertyassignment.PropertyID(data.PropertyID),
 		).ExecX(ctx)
 

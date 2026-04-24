@@ -11,7 +11,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
@@ -81,9 +80,14 @@ func (qq *ListAssignedTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.R
 }
 
 func (qq *ListAssignedTagsPartial) tags(ctx ctxx.Context, data *ListAssignedTagsPartialData) []*enttenant.Tag {
-	return ctx.TenantCtx().TTx.File.Query().
-		Where(file.PublicID(entx.NewCIText(data.FileID))).
-		QueryTags().
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
+
+	return ctx.TenantCtx().TTx.Tag.Query().
+		Where(
+			tag.SpaceID(ctx.SpaceCtx().Space.ID),
+			tag.HasFilesWith(file.ID(fileDTO.ID)),
+		).
 		WithGroup().
 		WithSubTags(func(query *enttenant.TagQuery) {
 			query.Order(tag.ByName())

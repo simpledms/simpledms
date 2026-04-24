@@ -103,7 +103,8 @@ func (qq *AddFilePropertyCmd) listID() string {
 }
 
 func (qq *AddFilePropertyCmd) listContent(ctx ctxx.Context, data *AddFilePropertyCmdData) renderable.Renderable {
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDX(ctx, data.FileID)
 
 	properties := ctx.SpaceCtx().Space.QueryProperties().
 		Where(func(qs *sql.Selector) {
@@ -114,7 +115,7 @@ func (qq *AddFilePropertyCmd) listContent(ctx ctxx.Context, data *AddFilePropert
 					sql.
 						Select(assignmentTable.C(filepropertyassignment.FieldPropertyID)).
 						From(assignmentTable).
-						Where(sql.EQ(assignmentTable.C(filepropertyassignment.FieldFileID), filex.Data.ID)),
+						Where(sql.EQ(assignmentTable.C(filepropertyassignment.FieldFileID), fileDTO.ID)),
 				),
 			)
 		}).

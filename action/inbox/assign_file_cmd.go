@@ -4,6 +4,7 @@ package inbox
 
 import (
 	"log"
+	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -12,6 +13,7 @@ import (
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -105,17 +107,34 @@ func (qq *AssignFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	destDir := qq.infra.FileRepo.GetX(ctx, data.DestDirID)
-	filex := qq.infra.FileRepo.GetWithParentX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	fileDTO := repos.Read.FileByPublicIDWithParentX(ctx, data.FileID)
+	if !fileDTO.IsInInbox {
+		log.Println("file not in inbox")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "File must be in inbox.")
+	}
 
 	// FIXME see comment in MoveFileCmd
-	filex.File, err = qq.infra.FileSystem().Move(ctx, destDir, filex.File, data.Filename, "")
+	movedFileWithParent, err := qq.infra.FileSystem().MoveByPublicIDs(
+		ctx,
+		data.DestDirID,
+		data.FileID,
+		data.Filename,
+		"",
+	)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
+	if movedFileWithParent.Parent == nil {
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Moved file parent is missing.")
+	}
 
-	filex.Data.Update().SetIsInInbox(false).SaveX(ctx)
+	err = repos.Write.SetFileInInboxByIDX(ctx, movedFileWithParent.ID, false)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 
 	// TODO snackbar not shown; modal not closed
 	// rw.Header().Set("HX-Location", route.InboxRoot())
@@ -124,14 +143,14 @@ func (qq *AssignFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		Href: route.BrowseFile(
 			ctx.TenantCtx().TenantID,
 			ctx.SpaceCtx().SpaceID,
-			filex.Parent(ctx).Data.PublicID.String(),
-			filex.Data.PublicID.String(),
+			movedFileWithParent.Parent.PublicID,
+			movedFileWithParent.PublicID,
 		),
 		Child: wx.T("Open file"),
 	}
 
 	rw.AddRenderables(
-		wx.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
+		wx.NewSnackbarf("Moved to «%s».", movedFileWithParent.Parent.Name).WithAction(action),
 	)
 	rw.Header().Set("HX-Trigger", event.FileMoved.String())
 	// TODO not nice because logic to reload list and close details is implemented by handling FileMoved event

@@ -9,12 +9,9 @@ import (
 	"strconv"
 	"strings"
 
-	"entgo.io/ent/dialect/sql"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/util"
@@ -88,22 +85,22 @@ func (qq *MoveFile) FormHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 	hxTarget := req.URL.Query().Get("hx-target")
 	wrapper := req.URL.Query().Get("wrapper")
 
-	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	filex := repos.Read.FileByPublicIDX(ctx, data.FileID)
 
-	var currentDir *filemodel.File
+	var currentDir *filemodel.FileDTO
 	if data.CurrentDirID == "" {
-		// navigate from current directory
-		currentDir, err = filex.Parent(ctx)
-		if err != nil {
-			log.Println(err)
-			return err
+		fileWithParent := repos.Read.FileByPublicIDWithParentX(ctx, data.FileID)
+		if fileWithParent.Parent == nil {
+			return e.NewHTTPErrorf(http.StatusBadRequest, "File has no parent directory.")
 		}
+		currentDir = fileWithParent.Parent
 	} else {
-		currentDir = qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
+		currentDir = repos.Read.FileByPublicIDX(ctx, data.CurrentDirID)
 	}
 
 	if data.Filename == "" {
-		data.Filename = filex.Data.Name
+		data.Filename = filex.Name
 	}
 
 	// state := autil.StateX[MoveDirSate](rw, req)
@@ -165,8 +162,8 @@ func (qq *MoveFile) formID() string {
 // TODO use FormHelper instead?
 func (qq *MoveFile) Form(
 	ctx ctxx.Context,
-	currentDir *filemodel.File,
-	filex *filemodel.File,
+	currentDir *filemodel.FileDTO,
+	filex *filemodel.FileDTO,
 	data *MoveFileFormData,
 	wrapper actionx.ResponseWrapper,
 	hxTargetForm string,
@@ -189,7 +186,7 @@ func (qq *MoveFile) Form(
 					&wx.Container{
 						Child: []wx.IWidget{
 							wx.NewLabel(wx.LabelTypeMd, wx.T("Original filename")),
-							wx.NewBody(wx.BodyTypeSm, wx.Tu(filex.Data.Name)),
+							wx.NewBody(wx.BodyTypeSm, wx.Tu(filex.Name)),
 						},
 					},
 				},
@@ -204,14 +201,14 @@ func (qq *MoveFile) Form(
 				},
 				HTMXAttrs: wx.HTMXAttrs{
 					HxPost:    qq.FormEndpoint(),
-					HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String(), currentDir.Data.PublicID.String())),
+					HxVals:    util.JSON(qq.Data(filex.PublicID, currentDir.PublicID)),
 					HxTarget:  "#" + qq.filesListID(),
 					HxTrigger: fmt.Sprintf("input from:#moveSearch delay:100ms"),
 					HxInclude: "#moveSearch, #" + qq.formID(),
 				},
 				Name:           "SearchQuery",
 				Value:          searchQuery,
-				SupportingText: wx.Tf("Search in «%s»", currentDir.Data.Name),
+				SupportingText: wx.Tf("Search in «%s»", currentDir.Name),
 				Autofocus:      true,
 			},
 			qq.formFilesList(ctx, currentDir, filex, hxTargetForm, "", 0), // TODO
@@ -223,7 +220,7 @@ func (qq *MoveFile) Form(
 
 	return autil.WrapWidgetWithID(
 		// fmt.Sprintf("Move «%s» from «%s» to «%s»", filex.Name, fileParentName, currentDir.Name),
-		wx.Tf("Move file to «%s»", currentDir.Data.Name),
+		wx.Tf("Move file to «%s»", currentDir.Name),
 		wx.T("Save"),
 		container,
 		wrapper,
@@ -239,8 +236,8 @@ func (qq *MoveFile) pageSize() int {
 
 func (qq *MoveFile) formFilesList(
 	ctx ctxx.Context,
-	currentDir *filemodel.File,
-	filex *filemodel.File,
+	currentDir *filemodel.FileDTO,
+	filex *filemodel.FileDTO,
 	hxTargetForm string,
 	searchQuery string,
 	offset int,
@@ -259,52 +256,37 @@ func (qq *MoveFile) formFilesList(
 
 func (qq *MoveFile) formFilesListItems(
 	ctx ctxx.Context,
-	currentDir *filemodel.File,
-	filex *filemodel.File,
+	currentDir *filemodel.FileDTO,
+	filex *filemodel.FileDTO,
 	hxTargetForm string,
 	searchQuery string,
 	offset int,
 ) []wx.IWidget {
 	// TODO process searchQuery and add breadcrumbs if search is used
 
-	var childDirsQuery *enttenant.FileQuery
-
-	if searchQuery == "" {
-		childDirsQuery = currentDir.Data.
-			QueryChildren().
-			Where(file.IsDirectory(true))
-	} else {
-		childDirsQuery = ctx.TenantCtx().TTx.File.Query().
-			Where(
-				file.NameContains(searchQuery),
-				file.IsDirectory(true),
-			).
-			Where(func(qs *sql.Selector) {
-				// add dirs recursively from current dir if in search mode
-				qs.Where(qq.descendantScopePredicate(qs.C(file.FieldID), currentDir.Data.ID, ctx.SpaceCtx().Space.ID))
-			})
-	}
-
-	childDirs := childDirsQuery.Order(file.ByName()).Offset(offset).Limit(qq.pageSize() + 1).AllX(ctx)
-	hasMore := len(childDirs) > qq.pageSize()
-	if hasMore {
-		// conditional necessary to prevent out of bounce access
-		childDirs = childDirs[:qq.pageSize()]
-	}
+	// add dirs recursively from current dir if in search mode
+	isRecursive := searchQuery != ""
+	repos := qq.infra.SpaceFileRepoFactory().ForSpaceX(ctx)
+	browseResult := repos.Query.BrowseFilesX(ctx, &filemodel.BrowseFileQueryFilterDTO{
+		CurrentDirPublicID: currentDir.PublicID,
+		SearchQuery:        searchQuery,
+		HideFiles:          true,
+		IsRecursive:        isRecursive,
+		Offset:             offset,
+		Limit:              qq.pageSize(),
+	})
+	childDirs := browseResult.Children
+	hasMore := browseResult.HasMore
 
 	var fileListItems []wx.IWidget
 
 	// TODO selectDir command with custom action...
 
 	// not safe to do in condition above because data.CurrentDirID could be id of root
-	currentDirIsRoot := currentDir.Data.ParentID == 0
+	currentDirIsRoot := currentDir.ParentID == 0
 
 	if !currentDirIsRoot {
-		parentDir, err := currentDir.Parent(ctx)
-		if err != nil {
-			log.Println(err)
-			panic(err) // FIXME panic or okay?
-		}
+		parentDir := repos.Read.FileByIDX(ctx, currentDir.ParentID)
 		fileListItems = append(fileListItems,
 			&wx.ListItem{
 				Leading:  wx.NewIcon("arrow_upward"),
@@ -312,7 +294,7 @@ func (qq *MoveFile) formFilesListItems(
 				Type:     wx.ListItemTypeHelper,
 				HTMXAttrs: wx.HTMXAttrs{
 					HxPost:    qq.FormEndpointWithParams(actionx.ResponseWrapperDialog, hxTargetForm),
-					HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String(), parentDir.Data.PublicID.String())),
+					HxVals:    util.JSON(qq.Data(filex.PublicID, parentDir.PublicID)),
 					HxTarget:  "#" + qq.popoverID() + " .js-dialog-content",
 					HxSelect:  ".js-dialog-content",
 					HxSwap:    "outerHTML",
@@ -336,7 +318,7 @@ func (qq *MoveFile) formFilesListItems(
 	}
 
 	for _, childDir := range childDirs {
-		if childDir.ID == filex.Data.ID {
+		if childDir.ID == filex.ID {
 			// cannot be moved to itself
 			continue
 		}
@@ -361,7 +343,7 @@ func (qq *MoveFile) formFilesListItems(
 				SupportingText: wx.Tu(supportingText),
 				HTMXAttrs: wx.HTMXAttrs{
 					HxPost:    qq.FormEndpointWithParams(actionx.ResponseWrapperDialog, hxTargetForm),
-					HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String(), childDir.PublicID.String())),
+					HxVals:    util.JSON(qq.Data(filex.PublicID, childDir.PublicID)),
 					HxTarget:  "#" + qq.popoverID() + " .js-dialog-content",
 					HxSelect:  ".js-dialog-content",
 					HxSwap:    "outerHTML",
@@ -379,7 +361,7 @@ func (qq *MoveFile) formFilesListItems(
 			Headline: wx.T("Loading more..."),
 			HTMXAttrs: wx.HTMXAttrs{
 				HxPost:    qq.FormEndpoint() + "?offset=" + strconv.Itoa(offset+qq.pageSize()), // FIXME
-				HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String(), currentDir.Data.PublicID.String())),
+				HxVals:    util.JSON(qq.Data(filex.PublicID, currentDir.PublicID)),
 				HxTrigger: "intersect once",
 				HxTarget:  "#moveFileLoadMore",
 				HxSwap:    "outerHTML",
@@ -389,11 +371,6 @@ func (qq *MoveFile) formFilesListItems(
 
 	return fileListItems
 }
-
-func (qq *MoveFile) descendantScopePredicate(fileColumn string, rootID, spaceID int64) *sql.Predicate {
-	return sql.In(fileColumn, qq.infra.FileSystem().FileTree().DescendantIDsSubQuery(rootID, spaceID))
-}
-
 func (qq *MoveFile) filesListID() string {
 	return "filesList"
 }
