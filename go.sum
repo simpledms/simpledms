@@ -210,6 +210,8 @@ github.com/makeworld-the-better-one/dither/v2 v2.4.0 h1:Az/dYXiTcwcRSe59Hzw4RI1r
 github.com/makeworld-the-better-one/dither/v2 v2.4.0/go.mod h1:VBtN8DXO7SNtyGmLiGA7IsFeKrBkQPze1/iAeM95arc=
 github.com/marcobeierer/enumer v0.0.0-20250424083623-3196a84fb274 h1:vhFf3vzJGvIUWeRrU4L+9NnV0th3AdUKKGF13HZ8fTQ=
 github.com/marcobeierer/enumer v0.0.0-20250424083623-3196a84fb274/go.mod h1:W/B8DbleeViqSEDmN+WLFfJkMaYfdYdReK1FXMxCPR4=
+github.com/marcobeierer/go-core v0.0.0-20260425152811-d04227d8db48 h1:4s0oWE75MIv24urbei6f7ihurrZ+hekyn7QYR6wKCzQ=
+github.com/marcobeierer/go-core v0.0.0-20260425152811-d04227d8db48/go.mod h1:wx8NcDK8PQVKqj7oqra4U4RDb0/2nEvq0R/WkNfq/jU=
 github.com/marcobeierer/go-tika v1.0.1 h1:oA6jx6EtKOPs6Mmv3ITu7+p8RdhfrvQdASReGKBFIoQ=
 github.com/marcobeierer/go-tika v1.0.1/go.mod h1:Hm5z9dsVJsZBO/3D5OFubny/WpmcO716XjIwyLdxnv0=
 github.com/marcobeierer/structs v1.0.0 h1:kZkENOT/jXpxI00QRFF49v8QxWyaPZRjsn3P6g/vunA=
