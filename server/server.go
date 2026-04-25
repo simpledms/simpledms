@@ -31,7 +31,6 @@ import (
 	"github.com/marcobeierer/go-core/encryptor"
 
 	common2 "github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/db/sqlx"
 	appmodel "github.com/marcobeierer/go-core/model/app"
 	"github.com/marcobeierer/go-core/model/common/country"
@@ -40,7 +39,6 @@ import (
 	signupmodel "github.com/marcobeierer/go-core/model/signup"
 	systemconfigmodel "github.com/marcobeierer/go-core/model/systemconfig"
 	tenant2 "github.com/marcobeierer/go-core/model/tenant"
-	"github.com/marcobeierer/go-core/pluginx"
 	corescheduler "github.com/marcobeierer/go-core/scheduler"
 	server2 "github.com/marcobeierer/go-core/server"
 	ui2 "github.com/marcobeierer/go-core/ui"
@@ -55,6 +53,7 @@ import (
 	trashaction "github.com/simpledms/simpledms/action/trash"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	"github.com/simpledms/simpledms/ctxx"
 	migrate2 "github.com/simpledms/simpledms/db/enttenant/migrate"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
@@ -788,7 +787,7 @@ func (qq *Server) newInfra(renderer *ui2.Renderer, systemConfig *systemconfigmod
 			filesystem.NewStorageQuota(qq.isSaaSModeEnabled),
 		),
 		fileRepo,
-		pluginx.NewRegistry(),
+		newDefaultPluginRegistry(),
 		systemConfig,
 	)
 

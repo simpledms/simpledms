@@ -37,7 +37,6 @@ import (
 	"github.com/marcobeierer/go-core/model/common/tenantrole"
 	systemconfigmodel "github.com/marcobeierer/go-core/model/systemconfig"
 	"github.com/marcobeierer/go-core/pathx"
-	"github.com/marcobeierer/go-core/pluginx"
 	server2 "github.com/marcobeierer/go-core/server"
 	ui2 "github.com/marcobeierer/go-core/ui"
 	"github.com/marcobeierer/go-core/ui/uix/route"
@@ -171,7 +170,7 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 		metaPath,
 		s3FileSystem,
 		common.NewFileRepository(),
-		pluginx.NewRegistry(),
+		newDefaultPluginRegistry(),
 		systemConfig,
 	)
 
