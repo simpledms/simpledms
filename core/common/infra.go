@@ -13,7 +13,6 @@ type Infra struct {
 	renderer                             *ui.Renderer
 	metaPath                             string
 	fileSystem                           *filesystem.S3FileSystem // TODO is this a good location?
-	factory                              *common2.Factory
 	FileRepo                             *common2.FileRepository
 	pluginRegistry                       *pluginx.Registry
 	manageTenantsDeleteTenantCmdEndpoint string
@@ -28,7 +27,6 @@ func NewInfra(
 	renderer *ui.Renderer,
 	metaPath string,
 	fileSystem *filesystem.S3FileSystem,
-	factory *common2.Factory,
 	fileRepo *common2.FileRepository,
 	pluginRegistry *pluginx.Registry,
 	// nilableMainIdentity *age.X25519Identity,
@@ -38,7 +36,6 @@ func NewInfra(
 		renderer:                             renderer,
 		metaPath:                             metaPath,
 		fileSystem:                           fileSystem,
-		factory:                              factory,
 		FileRepo:                             fileRepo,
 		pluginRegistry:                       pluginRegistry,
 		manageTenantsDeleteTenantCmdEndpoint: "",
@@ -65,10 +62,6 @@ func (qq *Infra) MetaPath() string {
 
 func (qq *Infra) FileSystem() *filesystem.S3FileSystem {
 	return qq.fileSystem
-}
-
-func (qq *Infra) Factory() *common2.Factory {
-	return qq.factory
 }
 
 func (qq *Infra) SystemConfig() *systemconfigmodel.SystemConfig {

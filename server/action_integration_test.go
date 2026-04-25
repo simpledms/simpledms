@@ -170,7 +170,6 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 		renderer,
 		metaPath,
 		s3FileSystem,
-		common.NewFactory(),
 		common.NewFileRepository(),
 		pluginx.NewRegistry(),
 		systemConfig,

@@ -737,10 +737,6 @@ func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.Main
 }
 
 func (qq *Server) newInfra(renderer *ui2.Renderer, systemConfig *systemconfigmodel.SystemConfig) (*common2.Infra, *minio.Client) {
-	factory := common.NewFactory(
-	// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
-	// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
-	)
 	// storagePath := common.StoragePath(metaPath)
 	fileRepo := common.NewFileRepository()
 	minioClient := qq.initNilableMinioClient(systemConfig.S3())
@@ -777,7 +773,6 @@ func (qq *Server) newInfra(renderer *ui2.Renderer, systemConfig *systemconfigmod
 			disableFileEncryption,
 			filesystem.NewStorageQuota(qq.isSaaSModeEnabled),
 		),
-		factory,
 		fileRepo,
 		pluginx.NewRegistry(),
 		systemConfig,

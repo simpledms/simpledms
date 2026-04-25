@@ -197,7 +197,6 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 		renderer,
 		metaPath,
 		fileSystem,
-		common.NewFactory(),
 		common.NewFileRepository(),
 		pluginx.NewRegistry(),
 		systemConfig,
