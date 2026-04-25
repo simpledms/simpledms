@@ -5,7 +5,7 @@ package documenttype
 import (
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/uix/events"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"

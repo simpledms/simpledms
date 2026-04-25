@@ -1,7 +1,7 @@
 package dashboard
 
 import (
-	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/util"
 	"github.com/marcobeierer/go-core/ui/widget"
 )

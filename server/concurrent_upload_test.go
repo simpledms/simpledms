@@ -12,8 +12,8 @@ import (
 
 	"github.com/marcobeierer/go-core/db/entmain"
 
-	"github.com/marcobeierer/go-core/ctxx"
-	ctxx2 "github.com/marcobeierer/go-core/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"

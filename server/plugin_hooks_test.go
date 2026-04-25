@@ -8,8 +8,8 @@ import (
 	"github.com/marcobeierer/go-core/db/entmain/account"
 	"github.com/marcobeierer/go-core/db/entx"
 
-	"github.com/marcobeierer/go-core/ctxx"
-	ctxx2 "github.com/marcobeierer/go-core/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/model/common/country"
 	"github.com/marcobeierer/go-core/model/common/language"
 	signupmodel "github.com/marcobeierer/go-core/model/signup"

@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/iancoleman/strcase"
 
-	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/model/common/fieldtype"
 	"github.com/marcobeierer/go-core/util/e"
 	"github.com/simpledms/simpledms/db/enttenant"

@@ -14,8 +14,8 @@ import (
 	"github.com/marcobeierer/go-core/db/entmain/tenantaccountassignment"
 
 	"github.com/marcobeierer/go-core/common"
-	"github.com/marcobeierer/go-core/ctxx"
-	ctxx2 "github.com/marcobeierer/go-core/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	account2 "github.com/marcobeierer/go-core/model/account"
 	"github.com/marcobeierer/go-core/model/common/mainrole"
 	"github.com/marcobeierer/go-core/model/tenant"

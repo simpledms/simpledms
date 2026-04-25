@@ -13,11 +13,11 @@ import (
 	"github.com/marcobeierer/go-core/db/entmain"
 	"github.com/marcobeierer/go-core/db/entmain/temporaryfile"
 	"github.com/marcobeierer/go-core/db/entmain/tenant"
-	temporaryfilemodel "github.com/marcobeierer/go-core/model/temporaryfile"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/sqlx"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
+	temporaryfilemodel "github.com/simpledms/simpledms/model/tenant/temporaryfile"
 )
 
 func (qq *Scheduler) processFiles() {

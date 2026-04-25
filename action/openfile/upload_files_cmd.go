@@ -12,7 +12,7 @@ import (
 	"github.com/marcobeierer/go-core/db/entmain"
 
 	"github.com/marcobeierer/go-core/common"
-	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
 	wx "github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	"github.com/marcobeierer/go-core/util/e"

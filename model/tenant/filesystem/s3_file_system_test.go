@@ -15,8 +15,8 @@ import (
 	"github.com/marcobeierer/go-core/db/entx"
 	"github.com/marcobeierer/go-core/encryptor"
 
-	"github.com/marcobeierer/go-core/ctxx"
-	ctxx2 "github.com/marcobeierer/go-core/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/util/e"
 )
 

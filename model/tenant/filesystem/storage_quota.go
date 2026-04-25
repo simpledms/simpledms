@@ -7,7 +7,7 @@ import (
 
 	"entgo.io/ent/privacy"
 
-	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/db/entmain/account"
 	"github.com/marcobeierer/go-core/db/entmain/tenantaccountassignment"
 	"github.com/marcobeierer/go-core/model/common/plan"

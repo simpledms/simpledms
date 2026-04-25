@@ -9,7 +9,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/db/entx"
 	"github.com/marcobeierer/go-core/model/common/tenantrole"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
