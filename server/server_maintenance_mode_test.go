@@ -32,6 +32,7 @@ func TestMaintenanceRootReturnsServiceUnavailable(t *testing.T) {
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
 		os.DirFS(t.TempDir()),
+		os.DirFS(t.TempDir()),
 		false,
 		deps.i18n,
 		deps.renderer,
@@ -65,6 +66,7 @@ func TestMaintenanceUnlockCmdInvalidJSONReturnsBadRequest(t *testing.T) {
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
 		os.DirFS(t.TempDir()),
+		os.DirFS(t.TempDir()),
 		false,
 		deps.i18n,
 		deps.renderer,
@@ -96,6 +98,7 @@ func TestMaintenanceUnlockCmdEmptyPassphraseReturnsBadRequest(t *testing.T) {
 
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
+		os.DirFS(t.TempDir()),
 		os.DirFS(t.TempDir()),
 		false,
 		deps.i18n,
@@ -131,6 +134,7 @@ func TestMaintenanceUnlockCmdInvalidPassphraseReturnsBadRequest(t *testing.T) {
 
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
+		os.DirFS(t.TempDir()),
 		os.DirFS(t.TempDir()),
 		false,
 		deps.i18n,
@@ -170,6 +174,7 @@ func TestMaintenanceUnlockCmdValidPassphraseSetsIdentityAndCallsShutdown(t *test
 
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
+		os.DirFS(t.TempDir()),
 		os.DirFS(t.TempDir()),
 		false,
 		deps.i18n,

@@ -13,6 +13,7 @@ import (
 	// necessary to prevent circular dependencies when interceptors, hooks or privacy policies
 	// are used; not tested, just taken from ent docs
 	_ "github.com/simpledms/simpledms/core/db/entmain/runtime"
+	coreui "github.com/simpledms/simpledms/core/ui"
 	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
 	"github.com/simpledms/simpledms/server"
 	"github.com/simpledms/simpledms/ui/uix"
@@ -48,7 +49,11 @@ func main() {
 		}
 	}
 
-	assetsFS, err := uix.NewAssetsFS()
+	coreAssetsFS, err := coreui.NewAssetsFS()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	simpleDMSAssetsFS, err := uix.NewAssetsFS()
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -57,7 +62,8 @@ func main() {
 		metaPath,
 		devMode,
 		port,
-		assetsFS,
+		coreAssetsFS,
+		simpleDMSAssetsFS,
 		false,
 		false,
 	)

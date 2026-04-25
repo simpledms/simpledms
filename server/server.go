@@ -66,7 +66,8 @@ type Server struct {
 	metaPath                 string
 	devMode                  bool
 	unsafePort               int // unsafe because it can be 0, use qq.port()
-	assetsFS                 fs.FS
+	coreAssetsFS             fs.FS
+	simpleDMSAssetsFS        fs.FS
 	migrationsMainFS         fs.FS
 	migrationsTenantFS       fs.FS
 	isSaaSModeEnabled        bool
@@ -98,7 +99,8 @@ func resolveListenMode(useAutocert bool, tlsCertFilepath, tlsPrivateKeyFilepath 
 
 func newMaintenanceModeHandler(
 	mainDB *sqlx.MainDB,
-	assetsFS fs.FS,
+	coreAssetsFS fs.FS,
+	simpleDMSAssetsFS fs.FS,
 	devMode bool,
 	i18nx *i18n.I18n,
 	renderer *ui2.Renderer,
@@ -107,10 +109,14 @@ func newMaintenanceModeHandler(
 	shutdownFn func(context.Context) error,
 ) http.Handler {
 	mux := http.NewServeMux()
-	pwaManifestHandler := NewPWAManifestHandler(assetsFS, devMode)
+	pwaManifestHandler := NewPWAManifestHandler(simpleDMSAssetsFS, devMode)
 
-	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
-	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assetsFS))))
+	mux.HandleFunc("GET /assets/simpledms/manifest.json", pwaManifestHandler.Handler)
+	mux.Handle(
+		"GET /assets/simpledms/",
+		http.StripPrefix("/assets/simpledms/", http.FileServer(http.FS(simpleDMSAssetsFS))),
+	)
+	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(coreAssetsFS))))
 
 	mux.HandleFunc("/-/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
 		defer req.Body.Close()
@@ -221,7 +227,8 @@ func NewServer(
 	metaPath string,
 	devMode bool,
 	unsafePort int,
-	assetsFS fs.FS,
+	coreAssetsFS fs.FS,
+	simpleDMSAssetsFS fs.FS,
 	isSaaSModeEnabled bool,
 	commercialLicenseEnabled bool,
 ) *Server {
@@ -257,7 +264,8 @@ func NewServer(
 		metaPath:                 metaPath,
 		devMode:                  devMode,
 		unsafePort:               unsafePort,
-		assetsFS:                 assetsFS,
+		coreAssetsFS:             coreAssetsFS,
+		simpleDMSAssetsFS:        simpleDMSAssetsFS,
 		migrationsMainFS:         migrationsMainFS,
 		migrationsTenantFS:       migrationsTenantFS,
 		isSaaSModeEnabled:        isSaaSModeEnabled,
@@ -310,13 +318,17 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		return nil, err
 	}
 
-	pwaManifestHandler := NewPWAManifestHandler(qq.assetsFS, qq.devMode)
-	router.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
+	pwaManifestHandler := NewPWAManifestHandler(qq.simpleDMSAssetsFS, qq.devMode)
+	router.HandleFunc("GET /assets/simpledms/manifest.json", pwaManifestHandler.Handler)
+	router.Handle(
+		"GET /assets/simpledms/",
+		http.StripPrefix("/assets/simpledms/", http.FileServer(http.FS(qq.simpleDMSAssetsFS))),
+	)
 	// router.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./webapp/assets"))))
 	// slash suffix is necessary to match all paths with the prefix
 	router.Handle(
 		"GET /assets/",
-		http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))),
+		http.StripPrefix("/assets/", http.FileServer(http.FS(qq.coreAssetsFS))),
 	)
 
 	/*
@@ -487,7 +499,7 @@ func (qq *Server) newRendererAndI18n() (*ui2.Renderer, *i18n.I18n) {
 		log.Fatal(err)
 	}
 
-	/*assetsFS, err := fs.Sub(qq.assetsFS, "ui/web/assets")
+	/*assetsFS, err := fs.Sub(qq.simpleDMSAssetsFS, "ui/web/assets")
 	if err != nil {
 		log.Fatal(err)
 	}*/
@@ -557,7 +569,8 @@ func (qq *Server) ensureMainIdentity(
 
 		maintenanceMux := newMaintenanceModeHandler(
 			mainDB,
-			qq.assetsFS,
+			qq.coreAssetsFS,
+			qq.simpleDMSAssetsFS,
 			qq.devMode,
 			i18nx,
 			renderer,
