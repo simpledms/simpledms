@@ -2,12 +2,12 @@ package browse
 
 import (
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type ToggleDocumentTypeFilterCmdData struct {
@@ -40,7 +40,7 @@ func (qq *ToggleDocumentTypeFilterCmd) Data(currentDirID string, documentTypeID 
 	}
 }
 
-func (qq *ToggleDocumentTypeFilterCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *ToggleDocumentTypeFilterCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[ToggleDocumentTypeFilterCmdData](rw, req, ctx)
 	if err != nil {
 		return err

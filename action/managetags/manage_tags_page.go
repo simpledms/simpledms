@@ -1,13 +1,14 @@
 package managetags
 
 import (
-	acommon "github.com/simpledms/simpledms/action/common"
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+
+	acommon "github.com/simpledms/simpledms/core/action/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type ManageTagsPageState struct {
@@ -27,7 +28,7 @@ func NewManageTagsPage(infra *common.Infra, actions *Actions) *ManageTagsPage {
 	}
 }
 
-func (qq *ManageTagsPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *ManageTagsPage) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	state := autil.StateX[ManageTagsPageState](rw, req)
 
 	/*
@@ -51,34 +52,34 @@ func (qq *ManageTagsPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 func (qq *ManageTagsPage) Widget(
 	ctx ctxx.Context,
 	state *ManageTagsPageState,
-) *wx.MainLayout {
-	fabs := []*wx.FloatingActionButton{
+) *widget.MainLayout {
+	fabs := []*widget.FloatingActionButton{
 		{
 			Icon:    "add",
-			Tooltip: wx.T("Create new tag or group"),
+			Tooltip: widget.T("Create new tag or group"),
 			HTMXAttrs: qq.actions.Tagging.CreateTagCmd.ModalLinkAttrs(
 				qq.actions.Tagging.CreateTagCmd.Data(0), ""),
 		},
 	}
 
-	return &wx.MainLayout{
+	return &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "tags", fabs),
-		Content: &wx.DefaultLayout{
+		Content: &widget.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
 			Content: qq.actions.TagListPartial.Widget(ctx, qq.actions.TagListPartial.Data(0), &state.TagListPartialState),
 		},
 	}
 }
 
-func (qq *ManageTagsPage) appBar(ctx ctxx.Context) *wx.AppBar {
-	return &wx.AppBar{
-		Leading: &wx.Icon{
+func (qq *ManageTagsPage) appBar(ctx ctxx.Context) *widget.AppBar {
+	return &widget.AppBar{
+		Leading: &widget.Icon{
 			Name: "label",
 		},
 		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
-		Title: &wx.AppBarTitle{
-			Text: wx.T("Tags"),
+		Title: &widget.AppBarTitle{
+			Text: widget.T("Tags"),
 		},
-		Actions: []wx.IWidget{},
+		Actions: []widget.IWidget{},
 	}
 }

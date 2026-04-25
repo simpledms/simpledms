@@ -2,6 +2,8 @@ package route
 
 import (
 	"fmt"
+
+	route2 "github.com/simpledms/simpledms/core/ui/uix/route"
 )
 
 func InboxRoute(withPath bool, post bool) string {
@@ -27,7 +29,7 @@ func InboxRoot(tenantID, spaceID string) string {
 
 // don't use this for links, just to set URL in browser
 func InboxRootWithState(state any) func(string, string) string {
-	return RootWithState(InboxRoot, state)
+	return route2.RootWithState(InboxRoot, state)
 }
 
 // TODO impl query support
@@ -37,5 +39,5 @@ func Inbox(tenantID, spaceID, fileID string) string {
 
 // don't use this for links, just to set URL in browser
 func InboxWithState(data any) func(string, string, string) string {
-	return WithState(Inbox, data)
+	return route2.WithState(Inbox, data)
 }

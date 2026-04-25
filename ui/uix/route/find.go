@@ -2,6 +2,8 @@ package route
 
 import (
 	"fmt"
+
+	route2 "github.com/simpledms/simpledms/core/ui/uix/route"
 )
 
 /*
@@ -37,9 +39,9 @@ func Find(tenantID, spaceID, fileID string) string {
 
 func FindRootWithState(data any) func(string, string) string {
 	// FIXME safety?
-	return RootWithState(FindRoot, data)
+	return route2.RootWithState(FindRoot, data)
 }
 
 func FindWithState(data any) func(string, string, string) string {
-	return WithState(Find, data)
+	return route2.WithState(Find, data)
 }

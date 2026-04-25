@@ -7,13 +7,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/simpledms/simpledms/core/util/e"
+	"github.com/simpledms/simpledms/core/util/filenamex"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/entx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/filenamex"
 )
 
 // Deprecated: use S3FileSystem instead

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/simpledms/simpledms/core/util/e"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
-	"github.com/simpledms/simpledms/util/e"
 )
 
 func mapSpaceError(err error) error {

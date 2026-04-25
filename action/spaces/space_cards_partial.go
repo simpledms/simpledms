@@ -3,18 +3,18 @@ package spaces
 import (
 	"strings"
 
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/model/common/tenantrole"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
-	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
-	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type SpaceCardsPartialData struct{}
@@ -44,7 +44,7 @@ func (qq *SpaceCardsPartial) Data() *SpaceCardsPartialData {
 	return &SpaceCardsPartialData{}
 }
 
-func (qq *SpaceCardsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *SpaceCardsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	/*
 		data, err := autil.FormData[SpacesCardsData](rw, req, ctx)
 		if err != nil {
@@ -73,13 +73,13 @@ func (qq *SpaceCardsPartial) Widget(
 		Order(space.ByName()).
 		AllX(ctx)
 
-	var cards []*wx.Card
+	var cards []*widget.Card
 
 	for _, spacex := range spaces {
 		cards = append(cards, qq.card(ctx, spacex, ctx.TenantCtx().Tenant.PublicID.String()))
 	}
 
-	htmxAttrs := wx.HTMXAttrs{
+	htmxAttrs := widget.HTMXAttrs{
 		HxTrigger: strings.Join([]string{
 			event.SpaceCreated.Handler(),
 			event.SpaceUpdated.Handler(),
@@ -91,16 +91,16 @@ func (qq *SpaceCardsPartial) Widget(
 	}
 
 	if len(spaces) == 0 {
-		var actions []wx.IWidget
+		var actions []widget.IWidget
 
 		if ctx.TenantCtx().User.Role == tenantrole.Owner {
 			actions = append(actions,
 				qq.actions.CreateSpaceDialog.ModalLink(
 					qq.actions.CreateSpaceDialog.Data("", ""),
-					[]wx.IWidget{
-						&wx.Button{
-							Icon:  wx.NewIcon("add"),
-							Label: wx.T("Create space"),
+					[]widget.IWidget{
+						&widget.Button{
+							Icon:  widget.NewIcon("add"),
+							Label: widget.T("Create space"),
 						},
 					},
 					"",
@@ -108,21 +108,21 @@ func (qq *SpaceCardsPartial) Widget(
 			)
 		}
 
-		return &wx.Container{
-			Widget: wx.Widget[wx.Container]{
+		return &widget.Container{
+			Widget: widget.Widget[widget.Container]{
 				ID: qq.ID(),
 			},
-			Child: &wx.EmptyState{
-				Icon:     wx.NewIcon("hub"),
-				Headline: wx.T("No spaces available yet."),
+			Child: &widget.EmptyState{
+				Icon:     widget.NewIcon("hub"),
+				Headline: widget.T("No spaces available yet."),
 				Actions:  actions,
 			},
 			HTMXAttrs: htmxAttrs,
 		}
 	}
 
-	return &wx.Grid{
-		Widget: wx.Widget[wx.Grid]{
+	return &widget.Grid{
+		Widget: widget.Widget[widget.Grid]{
 			ID: qq.ID(),
 		},
 		Children:  cards,
@@ -134,48 +134,48 @@ func (qq *SpaceCardsPartial) card(
 	ctx ctxx.Context,
 	spacex *enttenant.Space,
 	tenantID string,
-) *wx.Card {
-	var actions []*wx.Button
+) *widget.Card {
+	var actions []*widget.Button
 
-	heading := wx.H(wx.HeadingTypeTitleLg, wx.Tu(spacex.Name))
+	heading := widget.H(widget.HeadingTypeTitleLg, widget.Tu(spacex.Name))
 
 	isActive := ctx.IsSpaceCtx() && ctx.SpaceCtx().Space.ID == spacex.ID
 	if isActive {
 		// TODO change layout of card when active
 		// TODO seems never the case because in TenantCtx...
-		actions = append(actions, &wx.Button{
-			Label:     wx.T("Files"), // TODO or Selected or Active?
-			StyleType: wx.ButtonStyleTypeOutlined,
-			HTMXAttrs: wx.HTMXAttrs{
+		actions = append(actions, &widget.Button{
+			Label:     widget.T("Files"), // TODO or Selected or Active?
+			StyleType: widget.ButtonStyleTypeOutlined,
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet: route.BrowseRoot(tenantID, spacex.PublicID.String()),
 			},
 		})
 
 		// TODO use icon to indicate instead?
-		heading = wx.H(wx.HeadingTypeTitleLg, wx.Tf("%s (%s)", wx.Tu(spacex.Name).String(ctx), wx.T("active").String(ctx)))
+		heading = widget.H(widget.HeadingTypeTitleLg, widget.Tf("%s (%s)", widget.Tu(spacex.Name).String(ctx), widget.T("active").String(ctx)))
 	} else {
-		actions = append(actions, &wx.Button{
-			Label:     wx.T("Select"), // TODO Switch or activate? or Select?
-			StyleType: wx.ButtonStyleTypeOutlined,
-			HTMXAttrs: wx.HTMXAttrs{
+		actions = append(actions, &widget.Button{
+			Label:     widget.T("Select"), // TODO Switch or activate? or Select?
+			StyleType: widget.ButtonStyleTypeOutlined,
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet: route.BrowseRoot(tenantID, spacex.PublicID.String()),
 			},
 		})
 	}
 
-	var subhead *wx.Text
+	var subhead *widget.Text
 	if spacex.IsFolderMode {
 		// subhead = wx.T("Folder mode") // TODO rename to Hybrid mode?
 	} else {
 		// subhead = wx.T("Default mode")
 	}
 
-	return &wx.Card{
-		Style:    wx.CardStyleFilled,
+	return &widget.Card{
+		Style:    widget.CardStyleFilled,
 		Headline: heading,
 		Subhead:  subhead,
 		// TODO Subhead:        wx.T("Show stats about user access (new manage button) and files (on view button)"),
-		SupportingText: wx.Tu(spacex.Description),
+		SupportingText: widget.Tu(spacex.Description),
 		Actions:        actions,
 		ContextMenu:    NewSpaceContextMenuWidget(qq.actions).Widget(ctx, spacemodel.NewSpace(spacex)),
 	}

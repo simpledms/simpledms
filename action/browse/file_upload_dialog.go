@@ -2,11 +2,11 @@ package browse
 
 import (
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileUploadDialogData struct {
@@ -36,7 +36,7 @@ func (qq *FileUploadDialog) Data(parentDirID string, addToInbox bool) *FileUploa
 	}
 }
 
-func (qq *FileUploadDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FileUploadDialog) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileUploadDialogData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -55,11 +55,11 @@ func (qq *FileUploadDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 		rw,
 		ctx,
 
-		&wx.Dialog{
-			Layout:       wx.DialogLayoutStable,
-			Headline:     wx.T("File upload"),
+		&widget.Dialog{
+			Layout:       widget.DialogLayoutStable,
+			Headline:     widget.T("File upload"),
 			IsOpenOnLoad: true,
-			Child: &wx.FileUpload{
+			Child: &widget.FileUpload{
 				ParentDirID:        data.ParentDirID,
 				AddToInbox:         data.AddToInbox,
 				MaxUploadSizeBytes: maxUploadSizeBytes,

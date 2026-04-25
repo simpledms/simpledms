@@ -5,11 +5,12 @@ package ctxx
 import (
 	"context"
 
+	ctxx2 "github.com/simpledms/simpledms/core/ctxx"
+	"github.com/simpledms/simpledms/core/model/common/tenantrole"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
-	"github.com/simpledms/simpledms/model/main/common/spacerole"
-	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
 )
 
 // having TTx in Context allows for easier replacement of ent with jet later
@@ -18,7 +19,7 @@ type SpaceContext struct {
 	// ResponseWriter httpx.ResponseWriter
 	// Request        *httpx.Request
 	// Infra        *common.Infra // TODO is this a good idea?
-	*TenantContext
+	*ctxx2.TenantContext
 	// context.Context
 	// MainTx       *entmain.Tx
 	// Account      *entmain.Account // modelmain.Account would be better, but leads to circular dependency
@@ -32,7 +33,7 @@ type SpaceContext struct {
 }
 
 func NewSpaceContext(
-	tenantContext *TenantContext,
+	tenantContext *ctxx2.TenantContext,
 	space *enttenant.Space,
 ) *SpaceContext {
 	spaceCtx := &SpaceContext{

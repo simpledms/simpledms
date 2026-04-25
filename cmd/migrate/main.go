@@ -12,8 +12,9 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
+
+	"github.com/simpledms/simpledms/core/db/sqlx"
 	migratetenant "github.com/simpledms/simpledms/db/enttenant/migrate"
-	"github.com/simpledms/simpledms/db/sqlx"
 )
 
 // run with:

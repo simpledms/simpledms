@@ -5,18 +5,18 @@ import (
 	"math"
 	"net/http"
 
+	"github.com/simpledms/simpledms/core/model/common/fieldtype"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/e"
+	"github.com/simpledms/simpledms/core/util/timex"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/model/main/common/fieldtype"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/timex"
 )
 
 func fieldByProperty(
 	propertyx *enttenant.Property,
 	nilableAssignment *enttenant.FilePropertyAssignment,
-	htmxAttrsFn func(string) wx.HTMXAttrs,
-) (wx.IWidget, bool) {
+	htmxAttrsFn func(string) widget.HTMXAttrs,
+) (widget.IWidget, bool) {
 	fieldID := filePropertyFieldID(propertyx.ID)
 	defaultValue := ""
 
@@ -25,11 +25,11 @@ func fieldByProperty(
 		if nilableAssignment != nil {
 			defaultValue = nilableAssignment.TextValue
 		}
-		return &wx.TextField{
-			Widget: wx.Widget[wx.TextField]{
+		return &widget.TextField{
+			Widget: widget.Widget[widget.TextField]{
 				ID: fieldID,
 			},
-			Label:        wx.Tu(propertyx.Name),
+			Label:        widget.Tu(propertyx.Name),
 			Name:         "TextValue",
 			Type:         "text",
 			DefaultValue: defaultValue,
@@ -39,11 +39,11 @@ func fieldByProperty(
 		if nilableAssignment != nil {
 			defaultValue = fmt.Sprintf("%d", nilableAssignment.NumberValue)
 		}
-		return &wx.TextField{
-			Widget: wx.Widget[wx.TextField]{
+		return &widget.TextField{
+			Widget: widget.Widget[widget.TextField]{
 				ID: fieldID,
 			},
-			Label:        wx.Tu(propertyx.Name),
+			Label:        widget.Tu(propertyx.Name),
 			Name:         "NumberValue",
 			Type:         "number",
 			DefaultValue: defaultValue,
@@ -55,11 +55,11 @@ func fieldByProperty(
 			val := float64(nilableAssignment.NumberValue) / 100.0
 			defaultValue = fmt.Sprintf("%.2f", val)
 		}
-		return &wx.TextField{
-			Widget: wx.Widget[wx.TextField]{
+		return &widget.TextField{
+			Widget: widget.Widget[widget.TextField]{
 				ID: fieldID,
 			},
-			Label:        wx.Tu(propertyx.Name),
+			Label:        widget.Tu(propertyx.Name),
 			Name:         "MoneyValue",
 			Type:         "number",
 			Step:         "0.01",
@@ -71,11 +71,11 @@ func fieldByProperty(
 		if nilableAssignment != nil && !nilableAssignment.DateValue.IsZero() {
 			defaultValue = nilableAssignment.DateValue.Format("2006-01-02")
 		}
-		return &wx.TextField{
-			Widget: wx.Widget[wx.TextField]{
+		return &widget.TextField{
+			Widget: widget.Widget[widget.TextField]{
 				ID: fieldID,
 			},
-			Label:        wx.Tu(propertyx.Name),
+			Label:        widget.Tu(propertyx.Name),
 			Name:         "DateValue",
 			Type:         "date",
 			DefaultValue: defaultValue,
@@ -91,8 +91,8 @@ func fieldByProperty(
 		if nilableAssignment != nil {
 			isChecked = nilableAssignment.BoolValue
 		}
-		return &wx.Checkbox{
-			Label:     wx.Tu(propertyx.Name),
+		return &widget.Checkbox{
+			Label:     widget.Tu(propertyx.Name),
 			Name:      "CheckboxValue",
 			IsChecked: isChecked,
 			HTMXAttrs: htmxAttrsFn("change"),

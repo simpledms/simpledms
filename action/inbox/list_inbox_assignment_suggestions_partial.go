@@ -8,11 +8,11 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type ListInboxAssignmentSuggestionsPartialData struct {
@@ -63,7 +63,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Handler(rw httpx.ResponseWriter
 // last was used for list below
 var regexpLowerAlphaNum = regexp.MustCompile("[^a-z0-9àèìòùáéíóúýâêîôûãñõäëïöüÿåæœçðø¿¡ß]+")
 
-func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID int64) *wx.List {
+func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID int64) *widget.List {
 	// TODO
 	fileToAssign := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
 
@@ -170,7 +170,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 	destDirParentIDs = slices.Compact(destDirParentIDs)
 	destDirParentFullPaths := qq.infra.FileSystem().FileTree().FullPathsByFileIDX(ctx, destDirParentIDs)
 
-	var items []*wx.ListItem
+	var items []*widget.ListItem
 
 	for _, destDir := range destDirs {
 		// TODO context menu: Open / Browse (for pasting)
@@ -185,7 +185,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 		))
 	}
 
-	return &wx.List{
+	return &widget.List{
 		Children: items,
 	}
 

@@ -9,15 +9,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
+	"github.com/simpledms/simpledms/db/entx"
+
+	ctxx2 "github.com/simpledms/simpledms/core/ctxx"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestUploadFileCmdRejectsWhenGlobalUploadLimitExceeded(t *testing.T) {
@@ -51,8 +53,8 @@ func TestUploadFileCmdRejectsWhenGlobalUploadLimitExceeded(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 		handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
+			httpx2.NewResponseWriter(rr),
+			httpx2.NewRequest(req),
 			spaceCtx,
 		)
 		if handlerErr == nil {
@@ -103,8 +105,8 @@ func TestUploadFileCmdRejectsWhenTenantUploadLimitOverrideIsLower(t *testing.T) 
 
 		rr := httptest.NewRecorder()
 		handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
+			httpx2.NewResponseWriter(rr),
+			httpx2.NewRequest(req),
 			spaceCtx,
 		)
 		if handlerErr == nil {
@@ -155,8 +157,8 @@ func TestUploadFileCmdAllowsUnlimitedTenantOverride(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 		handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
+			httpx2.NewResponseWriter(rr),
+			httpx2.NewRequest(req),
 			spaceCtx,
 		)
 		if handlerErr != nil {
@@ -188,8 +190,8 @@ func TestUploadFilesCmdRejectsWhenGlobalUploadLimitExceeded(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			handlerErr = harness.actions.OpenFile.UploadFilesCmd.Handler(
-				httpx.NewResponseWriter(rr),
-				httpx.NewRequest(req),
+				httpx2.NewResponseWriter(rr),
+				httpx2.NewRequest(req),
 				mainCtx,
 			)
 			return nil
@@ -228,7 +230,7 @@ func setupUploadTestSpace(
 	var parentDirID string
 	var spaceID int64
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 		spaceName := "Upload Limit Space"
 		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 

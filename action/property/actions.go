@@ -1,7 +1,7 @@
 package property
 
 import (
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 

@@ -1,11 +1,11 @@
 package documenttype
 
 import (
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/model/main/common/attributetype"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/model/tenant/common/attributetype"
 )
 
 type AttributeContextMenuWidgetData struct {
@@ -22,52 +22,52 @@ func NewAttributeContextMenuWidget(actions *Actions) *AttributeContextMenuWidget
 	}
 }
 
-func (qq *AttributeContextMenuWidget) Widget(ctx ctxx.Context, attributex *enttenant.Attribute) *wx.Menu {
+func (qq *AttributeContextMenuWidget) Widget(ctx ctxx.Context, attributex *enttenant.Attribute) *widget.Menu {
 	// TODO change tag group
 
-	var items []*wx.MenuItem
+	var items []*widget.MenuItem
 
 	if attributex.Type == attributetype.Tag {
 		// properties have no name...
-		items = append(items, &wx.MenuItem{
+		items = append(items, &widget.MenuItem{
 			TrailingIcon: "edit",
-			Label:        wx.T("Edit"),
+			Label:        widget.T("Edit"),
 			HTMXAttrs: qq.actions.EditTagAttributeCmd.ModalLinkAttrs(
 				qq.actions.EditTagAttributeCmd.Data(attributex.ID, attributex.Name, attributex.IsNameGiving),
 				"",
 				// "#"+qq.actions.ListDir.WrapperID(),
 			),
-		}, &wx.MenuItem{
+		}, &widget.MenuItem{
 			IsDivider: true,
 		})
 	} else if attributex.Type == attributetype.Field {
-		items = append(items, &wx.MenuItem{
+		items = append(items, &widget.MenuItem{
 			TrailingIcon: "edit",
-			Label:        wx.T("Edit"),
+			Label:        widget.T("Edit"),
 			HTMXAttrs: qq.actions.EditPropertyAttributeCmd.ModalLinkAttrs(
 				qq.actions.EditPropertyAttributeCmd.Data(attributex.ID, attributex.IsNameGiving),
 				"",
 				// "#"+qq.actions.ListDir.WrapperID(),
 			),
-		}, &wx.MenuItem{
+		}, &widget.MenuItem{
 			IsDivider: true,
 		})
 
 	}
 
-	items = append(items, &wx.MenuItem{
+	items = append(items, &widget.MenuItem{
 		TrailingIcon: "delete",
-		Label:        wx.T("Delete"),
-		HTMXAttrs: wx.HTMXAttrs{
+		Label:        widget.T("Delete"),
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.actions.DeleteAttributeCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.DeleteAttributeCmd.Data(attributex.ID)),
-			HxConfirm: wx.T("Are you sure?").String(ctx),
+			HxConfirm: widget.T("Are you sure?").String(ctx),
 			HxSwap:    "none",
 			// HxTarget:  "#" + qq.actions.ListDir.WrapperID(),
 		},
 	})
 
-	return &wx.Menu{
+	return &widget.Menu{
 		Items: items,
 	}
 }

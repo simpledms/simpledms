@@ -4,17 +4,18 @@ import (
 	"log"
 
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/uix/events"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FilePropertiesPartialData struct {
@@ -45,7 +46,7 @@ func (qq *FilePropertiesPartial) Data(fileID string) *FilePropertiesPartialData 
 	}
 }
 
-func (qq *FilePropertiesPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FilePropertiesPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FilePropertiesPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -58,7 +59,7 @@ func (qq *FilePropertiesPartial) Handler(rw httpx.ResponseWriter, req *httpx.Req
 	)
 }
 
-func (qq *FilePropertiesPartial) Widget(ctx ctxx.Context, data *FilePropertiesPartialData) *wx.ScrollableContent {
+func (qq *FilePropertiesPartial) Widget(ctx ctxx.Context, data *FilePropertiesPartialData) *widget.ScrollableContent {
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 
 	assignments := ctx.SpaceCtx().TTx.FilePropertyAssignment.Query().
@@ -70,21 +71,21 @@ func (qq *FilePropertiesPartial) Widget(ctx ctxx.Context, data *FilePropertiesPa
 		).
 		AllX(ctx)
 
-	addFieldButton := &wx.Button{
-		Label:     wx.T("Add field"),
-		Icon:      wx.NewIcon("add"),
-		StyleType: wx.ButtonStyleTypeElevated,
+	addFieldButton := &widget.Button{
+		Label:     widget.T("Add field"),
+		Icon:      widget.NewIcon("add"),
+		StyleType: widget.ButtonStyleTypeElevated,
 		HTMXAttrs: qq.actions.AddFilePropertyCmd.ModalLinkAttrs(
 			qq.actions.AddFilePropertyCmd.Data(filex.Data.PublicID.String()),
 			"",
 		),
 	}
 
-	var children []wx.IWidget
+	var children []widget.IWidget
 	if len(assignments) == 0 {
-		children = append(children, &wx.EmptyState{
-			Headline: wx.T("No fields assigned yet."),
-			Actions: []wx.IWidget{
+		children = append(children, &widget.EmptyState{
+			Headline: widget.T("No fields assigned yet."),
+			Actions: []widget.IWidget{
 				addFieldButton,
 			},
 		})
@@ -98,12 +99,12 @@ func (qq *FilePropertiesPartial) Widget(ctx ctxx.Context, data *FilePropertiesPa
 		}
 	}
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.ID(),
 		},
-		HTMXAttrs: wx.HTMXAttrs{
-			HxTrigger: event.HxTrigger(
+		HTMXAttrs: widget.HTMXAttrs{
+			HxTrigger: events.HxTrigger(
 				event.FilePropertyUpdated,
 				event.PropertyCreated,
 				event.PropertyUpdated,
@@ -128,14 +129,14 @@ func (qq *FilePropertiesPartial) propertyAssignmentBlock(
 	ctx ctxx.Context,
 	filex *filemodel.File,
 	assignment *enttenant.FilePropertyAssignment,
-) *wx.Column {
+) *widget.Column {
 	propertyx := assignment.Edges.Property
 	if propertyx == nil {
-		return &wx.Column{}
+		return &widget.Column{}
 	}
 
-	htmxAttrsFn := func(hxTrigger string) wx.HTMXAttrs {
-		return wx.HTMXAttrs{
+	htmxAttrsFn := func(hxTrigger string) widget.HTMXAttrs {
+		return widget.HTMXAttrs{
 			HxTrigger: hxTrigger,
 			HxPost:    qq.actions.SetFilePropertyCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.SetFilePropertyCmd.Data(filex.Data.PublicID.String(), propertyx.ID)),
@@ -146,27 +147,27 @@ func (qq *FilePropertiesPartial) propertyAssignmentBlock(
 	field, found := fieldByProperty(propertyx, assignment, htmxAttrsFn)
 	if !found {
 		log.Println("unknown property type: ", propertyx.Type)
-		return &wx.Column{}
+		return &widget.Column{}
 	}
 
-	removeButton := &wx.Row{
+	removeButton := &widget.Row{
 		JustifyEnd: true,
-		Children: &wx.Link{
-			Child: wx.T("Remove").SetWrap().SetSmall(),
-			HTMXAttrs: wx.HTMXAttrs{
+		Children: &widget.Link{
+			Child: widget.T("Remove").SetWrap().SetSmall(),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    qq.actions.RemoveFilePropertyCmd.Endpoint(),
 				HxVals:    util.JSON(qq.actions.RemoveFilePropertyCmd.Data(filex.Data.PublicID.String(), propertyx.ID)),
 				HxSwap:    "none",
-				HxConfirm: wx.T("Remove this field value?").String(ctx),
+				HxConfirm: widget.T("Remove this field value?").String(ctx),
 			},
 		},
 	}
 
-	return &wx.Column{
-		GapYSize:         wx.Gap2,
+	return &widget.Column{
+		GapYSize:         widget.Gap2,
 		NoOverflowHidden: true,
 		AutoHeight:       true,
-		Children: []wx.IWidget{
+		Children: []widget.IWidget{
 			field,
 			removeButton,
 		},

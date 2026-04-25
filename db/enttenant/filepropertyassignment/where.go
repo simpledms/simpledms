@@ -5,8 +5,9 @@ package filepropertyassignment
 import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+
+	"github.com/simpledms/simpledms/core/util/timex"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
-	"github.com/simpledms/simpledms/util/timex"
 )
 
 // ID filters vertices based on their ID field.

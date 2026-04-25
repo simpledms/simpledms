@@ -11,17 +11,19 @@ import (
 	"testing"
 	"time"
 
-	browseaction "github.com/simpledms/simpledms/action/browse"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
+
+	browseaction "github.com/simpledms/simpledms/action/browse"
+	ctxx2 "github.com/simpledms/simpledms/core/ctxx"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestFileSystemMakeDirAllIfNotExists_IdempotentAndFileCollision(t *testing.T) {
@@ -31,7 +33,7 @@ func TestFileSystemMakeDirAllIfNotExists_IdempotentAndFileCollision(t *testing.T
 	tenantDB := initTenantDB(t, harness, tenantx)
 	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 		createSpaceViaCmd(t, harness.actions, tenantCtx, "FileInfo Safety Mkdir")
 
 		spacex := tenantCtx.TTx.Space.Query().Where(space.Name("FileInfo Safety Mkdir")).OnlyX(tenantCtx)
@@ -100,7 +102,7 @@ func TestFileSystemMoveRejectsMovingDirectoryIntoDescendant(t *testing.T) {
 	tenantDB := initTenantDB(t, harness, tenantx)
 	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 		createSpaceViaCmd(t, harness.actions, tenantCtx, "FileInfo Safety Move")
 
 		spacex := tenantCtx.TTx.Space.Query().Where(space.Name("FileInfo Safety Move")).OnlyX(tenantCtx)
@@ -148,7 +150,7 @@ func TestBrowseListDirPartialRecursiveSearchIsScopedToCurrentDirectory(t *testin
 	tenantDB := initTenantDB(t, harness, tenantx)
 	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 		createSpaceViaCmd(t, harness.actions, tenantCtx, "FileInfo Safety Browse Recursive")
 
 		spacex := tenantCtx.TTx.Space.Query().Where(space.Name("FileInfo Safety Browse Recursive")).OnlyX(tenantCtx)
@@ -180,8 +182,8 @@ func TestBrowseListDirPartialRecursiveSearchIsScopedToCurrentDirectory(t *testin
 
 		rr := httptest.NewRecorder()
 		err := harness.actions.Browse.ListDirPartial.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
+			httpx2.NewResponseWriter(rr),
+			httpx2.NewRequest(req),
 			spaceCtx,
 		)
 		if err != nil {
@@ -216,7 +218,7 @@ func TestBrowseListDirPartialWidgetBuildsFolderBreadcrumbs(t *testing.T) {
 	var spaceID int64
 	var dirBetaPublicID string
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 		createSpaceViaCmd(t, harness.actions, tenantCtx, "FileInfo Safety Breadcrumbs")
 
 		spacex := tenantCtx.TTx.Space.Query().Where(space.Name("FileInfo Safety Breadcrumbs")).OnlyX(tenantCtx)
@@ -253,19 +255,19 @@ func TestBrowseListDirPartialWidgetBuildsFolderBreadcrumbs(t *testing.T) {
 		"",
 	)
 
-	listColumn, ok := layout.List.(*wx.Column)
+	listColumn, ok := layout.List.(*widget.Column)
 	if !ok {
 		t.Fatalf("expected list to be *wx.Column, got %T", layout.List)
 	}
 
-	listChildren, ok := listColumn.Children.([]wx.IWidget)
+	listChildren, ok := listColumn.Children.([]widget.IWidget)
 	if !ok {
 		t.Fatalf("expected list children to be []wx.IWidget, got %T", listColumn.Children)
 	}
 
-	var statusBar *wx.StatusBar
+	var statusBar *widget.StatusBar
 	for _, child := range listChildren {
-		statusBarCandidate, isStatusBar := child.(*wx.StatusBar)
+		statusBarCandidate, isStatusBar := child.(*widget.StatusBar)
 		if isStatusBar {
 			statusBar = statusBarCandidate
 			break
@@ -275,7 +277,7 @@ func TestBrowseListDirPartialWidgetBuildsFolderBreadcrumbs(t *testing.T) {
 		t.Fatal("expected breadcrumbs status bar")
 	}
 
-	breadcrumbWidgets, ok := statusBar.Child.([]wx.IWidget)
+	breadcrumbWidgets, ok := statusBar.Child.([]widget.IWidget)
 	if !ok {
 		t.Fatalf("expected breadcrumbs to be []wx.IWidget, got %T", statusBar.Child)
 	}
@@ -285,11 +287,11 @@ func TestBrowseListDirPartialWidgetBuildsFolderBreadcrumbs(t *testing.T) {
 
 	foundAlphaLink := false
 	for _, breadcrumbWidget := range breadcrumbWidgets {
-		breadcrumbLink, isLink := breadcrumbWidget.(*wx.Link)
+		breadcrumbLink, isLink := breadcrumbWidget.(*widget.Link)
 		if !isLink {
 			continue
 		}
-		breadcrumbText, isText := breadcrumbLink.Child.(*wx.Text)
+		breadcrumbText, isText := breadcrumbLink.Child.(*widget.Text)
 		if isText && breadcrumbText.String(spaceCtx) == "alpha" {
 			foundAlphaLink = true
 			break
@@ -299,7 +301,7 @@ func TestBrowseListDirPartialWidgetBuildsFolderBreadcrumbs(t *testing.T) {
 		t.Fatal("expected breadcrumb link for alpha directory")
 	}
 
-	lastBreadcrumbText, ok := breadcrumbWidgets[len(breadcrumbWidgets)-1].(*wx.Text)
+	lastBreadcrumbText, ok := breadcrumbWidgets[len(breadcrumbWidgets)-1].(*widget.Text)
 	if !ok {
 		t.Fatalf("expected last breadcrumb element to be text, got %T", breadcrumbWidgets[len(breadcrumbWidgets)-1])
 	}

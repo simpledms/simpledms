@@ -4,36 +4,37 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	account2 "github.com/simpledms/simpledms/core/model/account"
+	"github.com/simpledms/simpledms/core/ui/uix/route"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/main/account"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
-func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
-	var items []*wx.MenuItem
+func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *widget.IconButton {
+	var items []*widget.MenuItem
 
 	if ctx.IsMainCtx() {
-		accountm := account.NewAccount(ctx.MainCtx().Account)
+		accountm := account2.NewAccount(ctx.MainCtx().Account)
 		passkeyPolicy, err := accountm.PasskeyPolicy(ctx)
 		if err != nil {
 			log.Println(err)
-			passkeyPolicy = account.NewPasskeyPolicy(false, false, false)
+			passkeyPolicy = account2.NewPasskeyPolicy(false, false, false)
 		}
 		isTenantPasskeyEnrollmentRequired := passkeyPolicy.IsTenantPasskeyEnrollmentRequired()
 		if isTenantPasskeyEnrollmentRequired {
-			return &wx.IconButton{
+			return &widget.IconButton{
 				Icon:    "menu",
-				Tooltip: wx.T("Open main menu"),
-				Children: &wx.Menu{
-					Position: wx.PositionRight,
-					Items: []*wx.MenuItem{
+				Tooltip: widget.T("Open main menu"),
+				Children: &widget.Menu{
+					Position: widget.PositionRight,
+					Items: []*widget.MenuItem{
 						{
 							LeadingIcon: "dashboard",
-							Label:       wx.T("Dashboard"),
-							HTMXAttrs: wx.HTMXAttrs{
-								HxGet: route2.Dashboard(),
+							Label:       widget.T("Dashboard"),
+							HTMXAttrs: widget.HTMXAttrs{
+								HxGet: route.Dashboard(),
 							},
 						},
 						{
@@ -41,9 +42,9 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 						},
 						{
 							LeadingIcon: "logout",
-							Label:       wx.T("Sign out"),
-							HTMXAttrs: wx.HTMXAttrs{
-								HxPost: route2.SignOutCmd(),
+							Label:       widget.T("Sign out"),
+							HTMXAttrs: widget.HTMXAttrs{
+								HxPost: route.SignOutCmd(),
 							},
 						},
 					},
@@ -51,12 +52,12 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 			}
 		}
 
-		items = append(items, []*wx.MenuItem{
+		items = append(items, []*widget.MenuItem{
 			{
 				LeadingIcon: "dashboard",
-				Label:       wx.T("Dashboard"),
-				HTMXAttrs: wx.HTMXAttrs{
-					HxGet: route2.Dashboard(),
+				Label:       widget.T("Dashboard"),
+				HTMXAttrs: widget.HTMXAttrs{
+					HxGet: route.Dashboard(),
 				},
 			},
 			{
@@ -70,11 +71,11 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 			log.Println(err)
 		} else {
 			for tenantx, spaces := range spacesByTenant {
-				items = append(items, &wx.MenuItem{
+				items = append(items, &widget.MenuItem{
 					LeadingIcon: "hub",
 					// TODO or `all spaces` or `manage spaces`? `|` or «»
-					Label: wx.Tuf("%s «%s»", wx.T("Spaces").String(ctx), tenantx.Name),
-					HTMXAttrs: wx.HTMXAttrs{
+					Label: widget.Tuf("%s «%s»", widget.T("Spaces").String(ctx), tenantx.Name),
+					HTMXAttrs: widget.HTMXAttrs{
 						HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
 					},
 				})
@@ -87,17 +88,17 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 						// trailingIcon = "check"
 						leadingIcon = "check_box"
 					}
-					items = append(items, &wx.MenuItem{
+					items = append(items, &widget.MenuItem{
 						LeadingIcon: leadingIcon,
 						// TrailingIcon: trailingIcon,
 						// TODO tenant name as label or supporting text or tooltip?
-						Label: wx.Tu(fmt.Sprintf("%s", spacex.Name)),
-						HTMXAttrs: wx.HTMXAttrs{
+						Label: widget.Tu(fmt.Sprintf("%s", spacex.Name)),
+						HTMXAttrs: widget.HTMXAttrs{
 							HxGet: route2.BrowseRoot(tenantx.PublicID.String(), spacex.PublicID.String()),
 						},
 					})
 				}
-				items = append(items, &wx.MenuItem{
+				items = append(items, &widget.MenuItem{
 					IsDivider: true,
 				})
 			}
@@ -107,41 +108,41 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 	if ctx.IsSpaceCtx() {
 		// near duplicate in SpaceContextMenu
 		// TODO implement submenu or add label?
-		items = append(items, []*wx.MenuItem{
+		items = append(items, []*widget.MenuItem{
 			{
 				// better from usability point of view if after tags and properties because they must
 				// be configured first
 				LeadingIcon: "category", // TODO category or description?
-				Label:       wx.T("Document types"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Label:       widget.T("Document types"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxGet: route2.ManageDocumentTypes(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
 				},
 			},
 			{
 				LeadingIcon: "label",
-				Label:       wx.T("Tags"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Label:       widget.T("Tags"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxGet: route2.ManageTags(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
 				},
 			},
 			{
 				LeadingIcon: "tune", // tune or assignment
-				Label:       wx.T("Fields"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Label:       widget.T("Fields"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxGet: route2.ManageProperties(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
 				},
 			},
 			{
 				LeadingIcon: "person",
-				Label:       wx.T("Users"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Label:       widget.T("Users"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxGet: route2.ManageUsersOfSpace(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
 				},
 			},
 			{
 				LeadingIcon: "delete",
-				Label:       wx.T("Trash"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Label:       widget.T("Trash"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxGet: route2.TrashRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
 				},
 			},
@@ -178,11 +179,11 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 
 	if ctx.IsMainCtx() {
 		items = append(items,
-			&wx.MenuItem{
+			&widget.MenuItem{
 				LeadingIcon: "logout",
-				Label:       wx.T("Sign out"),
-				HTMXAttrs: wx.HTMXAttrs{
-					HxPost: route2.SignOutCmd(),
+				Label:       widget.T("Sign out"),
+				HTMXAttrs: widget.HTMXAttrs{
+					HxPost: route.SignOutCmd(),
 				},
 			},
 		)
@@ -193,25 +194,25 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 	if !ctx.VisitorCtx().CommercialLicenseEnabled {
 		// 0 on login page
 		if len(items) > 0 {
-			items = append(items, &wx.MenuItem{
+			items = append(items, &widget.MenuItem{
 				IsDivider: true,
 			})
 		}
 		items = append(items,
-			&wx.MenuItem{
+			&widget.MenuItem{
 				LeadingIcon: "info",
-				Label:       wx.T("About SimpleDMS"),
-				HTMXAttrs: wx.HTMXAttrs{
-					HxGet: route2.AboutPage(),
+				Label:       widget.T("About SimpleDMS"),
+				HTMXAttrs: widget.HTMXAttrs{
+					HxGet: route.AboutPage(),
 				},
 			})
 	}
 
-	return &wx.IconButton{
+	return &widget.IconButton{
 		Icon:    "menu",
-		Tooltip: wx.T("Open main menu"),
-		Children: &wx.Menu{
-			Position: wx.PositionRight,
+		Tooltip: widget.T("Open main menu"),
+		Children: &widget.Menu{
+			Position: widget.PositionRight,
 			Items:    items,
 		},
 	}

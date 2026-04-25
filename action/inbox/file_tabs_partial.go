@@ -6,14 +6,14 @@ import (
 	"strings"
 
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileTabsPartialData struct {
@@ -45,7 +45,7 @@ func (qq *FileTabsPartial) Data(fileID string, activeTab string) *FileTabsPartia
 	}
 }
 
-func (qq *FileTabsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FileTabsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileTabsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -68,8 +68,8 @@ func (qq *FileTabsPartial) Widget(
 	state *InboxPageState,
 	fileID string,
 	nullableFile *filemodel.File,
-) *wx.TabBar {
-	var activeTabContent *wx.ScrollableContent
+) *widget.TabBar {
+	var activeTabContent *widget.ScrollableContent
 	tabsID := autil.GenerateID("showFileTabs")
 	activeTab := strings.ToLower(state.ActiveTab)
 
@@ -85,13 +85,13 @@ func (qq *FileTabsPartial) Widget(
 		)
 	case "move":
 		if ctx.SpaceCtx().Space.IsFolderMode {
-			activeTabContent = &wx.ScrollableContent{
+			activeTabContent = &widget.ScrollableContent{
 				MarginY: true,
 				GapY:    true,
-				Children: []wx.IWidget{
-					&wx.ListItem{
-						Headline: wx.T("Select destination manually"),
-						Type:     wx.ListItemTypeHelper,
+				Children: []widget.IWidget{
+					&widget.ListItem{
+						Headline: widget.T("Select destination manually"),
+						Type:     widget.ListItemTypeHelper,
 						HTMXAttrs: qq.actions.MoveFileCmd.ModalLinkAttrs(
 							qq.actions.MoveFileCmd.Data(nullableFile.Data.PublicID.String(), ""),
 							"#innerContent",
@@ -100,7 +100,7 @@ func (qq *FileTabsPartial) Widget(
 							qq.actions.InboxPage.Data(),
 						)),*/
 					},
-					wx.H(wx.HeadingTypeTitleMd, wx.T("Suggestions based on filename")),
+					widget.H(widget.HeadingTypeTitleMd, widget.T("Suggestions based on filename")),
 					qq.actions.ListInboxAssignmentSuggestionsPartial.Widget(ctx, nullableFile.Data.ID),
 				},
 			}
@@ -124,11 +124,11 @@ func (qq *FileTabsPartial) Widget(
 		)
 	}
 
-	var tabs []*wx.Tab
+	var tabs []*widget.Tab
 
-	tabs = append(tabs, &wx.Tab{
-		Label: wx.T("Metadata"),
-		HTMXAttrs: wx.HTMXAttrs{
+	tabs = append(tabs, &widget.Tab{
+		Label: widget.T("Metadata"),
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data(fileID, "")),
 			HxTarget: "#" + tabsID,
@@ -139,9 +139,9 @@ func (qq *FileTabsPartial) Widget(
 	)
 
 	if ctx.SpaceCtx().Space.IsFolderMode {
-		tabs = append(tabs, &wx.Tab{
-			Label: wx.T("Move"),
-			HTMXAttrs: wx.HTMXAttrs{
+		tabs = append(tabs, &widget.Tab{
+			Label: widget.T("Move"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(fileID, "move")),
 				HxTarget: "#" + tabsID,
@@ -151,11 +151,11 @@ func (qq *FileTabsPartial) Widget(
 		})
 	}
 
-	tabs = append(tabs, []*wx.Tab{
+	tabs = append(tabs, []*widget.Tab{
 		{
-			Label: wx.T("Tags"),
+			Label: widget.T("Tags"),
 			Badge: qq.actions.Browse.Tagging.AssignedTags.Count.Badge(ctx, fileID),
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(fileID, "tags")),
 				HxTarget: "#" + tabsID,
@@ -164,8 +164,8 @@ func (qq *FileTabsPartial) Widget(
 			IncreasedHeight: true,
 		},
 		{
-			Label: wx.T("Fields"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Label: widget.T("Fields"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(fileID, "fields")),
 				HxTarget: "#" + tabsID,
@@ -174,8 +174,8 @@ func (qq *FileTabsPartial) Widget(
 			IncreasedHeight: true,
 		},
 		{
-			Label: wx.T("Info"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Label: widget.T("Info"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(fileID, "info")),
 				HxTarget: "#" + tabsID,
@@ -185,8 +185,8 @@ func (qq *FileTabsPartial) Widget(
 		},
 	}...)
 
-	return &wx.TabBar{
-		Widget: wx.Widget[wx.TabBar]{
+	return &widget.TabBar{
+		Widget: widget.Widget[widget.TabBar]{
 			ID: tabsID,
 		},
 		ActiveTab:        activeTab,

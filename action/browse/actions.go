@@ -1,9 +1,9 @@
 package browse
 
 import (
-	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/action/tagging"
-	"github.com/simpledms/simpledms/common"
+	acommon "github.com/simpledms/simpledms/core/action/common"
+	"github.com/simpledms/simpledms/core/common"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 

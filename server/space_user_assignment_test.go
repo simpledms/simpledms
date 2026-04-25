@@ -8,17 +8,19 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entx"
+
+	ctxx2 "github.com/simpledms/simpledms/core/ctxx"
+	"github.com/simpledms/simpledms/core/model/common/tenantrole"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/main/common/spacerole"
-	"github.com/simpledms/simpledms/model/main/common/tenantrole"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
 )
 
 func TestSpaceUser_AssignUserToSpaceCmd_RejectsDuplicateAssignment(t *testing.T) {
@@ -29,7 +31,7 @@ func TestSpaceUser_AssignUserToSpaceCmd_RejectsDuplicateAssignment(t *testing.T)
 	tenantDB := initTenantDB(t, harness, tenantx)
 
 	var handlerErr error
-	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 		memberUser := ensureTenantUserForAccount(t, tenantCtx, memberAccount, tenantrole.User)
 
 		spaceName := "Manage Users Duplicate Space"
@@ -72,7 +74,7 @@ func TestSpaceUser_UnassignUserFromSpaceCmd_RejectsSelfUnassignment(t *testing.T
 	tenantDB := initTenantDB(t, harness, tenantx)
 
 	var handlerErr error
-	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 		spaceName := "Manage Users Self Unassign Space"
 		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -117,7 +119,7 @@ func TestSpaceUser_AssignUserToSpaceCmd_RequiresOwnerRole(t *testing.T) {
 	var spacePublicID string
 	var candidatePublicID string
 
-	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 		memberUser := ensureTenantUserForAccount(t, tenantCtx, memberAccount, tenantrole.User)
 		candidateUser := ensureTenantUserForAccount(t, tenantCtx, candidateAccount, tenantrole.User)
 
@@ -145,7 +147,7 @@ func TestSpaceUser_AssignUserToSpaceCmd_RequiresOwnerRole(t *testing.T) {
 	}
 
 	var handlerErr error
-	err = withTenantContext(t, harness, memberAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+	err = withTenantContext(t, harness, memberAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 		spacex := tenantCtx.TTx.Space.Query().Where(space.PublicID(entx.NewCIText(spacePublicID))).OnlyX(tenantCtx)
 		spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
 
@@ -187,8 +189,8 @@ func runAssignUserToSpaceCmd(
 
 	rr := httptest.NewRecorder()
 	err := harness.actions.ManageSpaceUsers.AssignUserToSpaceCmd.Handler(
-		httpx.NewResponseWriter(rr),
-		httpx.NewRequest(req),
+		httpx2.NewResponseWriter(rr),
+		httpx2.NewRequest(req),
 		spaceCtx,
 	)
 
@@ -212,8 +214,8 @@ func runUnassignUserFromSpaceCmd(
 
 	rr := httptest.NewRecorder()
 	err := harness.actions.ManageSpaceUsers.UnassignUserFromSpaceCmd.Handler(
-		httpx.NewResponseWriter(rr),
-		httpx.NewRequest(req),
+		httpx2.NewResponseWriter(rr),
+		httpx2.NewRequest(req),
 		spaceCtx,
 	)
 
@@ -222,7 +224,7 @@ func runUnassignUserFromSpaceCmd(
 
 func ensureTenantUserForAccount(
 	t testing.TB,
-	tenantCtx *ctxx.TenantContext,
+	tenantCtx *ctxx2.TenantContext,
 	accountx *entmain.Account,
 	role tenantrole.TenantRole,
 ) *enttenant.User {

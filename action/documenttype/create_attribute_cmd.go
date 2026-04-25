@@ -6,16 +6,16 @@ import (
 	"fmt"
 
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	actionx2 "github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
-	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type CreateAttributeCmdData struct {
@@ -33,19 +33,19 @@ type CreateAttributeCmdFormData struct {
 type CreateAttributeCmd struct {
 	infra   *common.Infra
 	actions *Actions
-	*actionx.Config
+	*actionx2.Config
 	*autil.FormHelper[CreateAttributeCmdData]
 }
 
 func NewCreateAttributeCmd(infra *common.Infra, actions *Actions) *CreateAttributeCmd {
-	config := actionx.NewConfig(
+	config := actionx2.NewConfig(
 		actions.Route("create-attribute-cmd"),
 		false,
 	)
 	formHelper := autil.NewFormHelper[CreateAttributeCmdData](
 		infra,
 		config,
-		wx.T("Add attribute"),
+		widget.T("Add attribute"),
 	)
 	return &CreateAttributeCmd{
 		infra:      infra,
@@ -62,8 +62,8 @@ func (qq *CreateAttributeCmd) Data(documentTypeID int64) *CreateAttributeCmdData
 }
 
 func (qq *CreateAttributeCmd) Handler(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 ) error {
 	data, err := autil.FormData[CreateAttributeCmdFormData](rw, req, ctx)
@@ -91,13 +91,13 @@ func (qq *CreateAttributeCmd) Handler(
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		wx.NewSnackbarf("Attribute «%s» created.", attributex.Name),
+		widget.NewSnackbarf("Attribute «%s» created.", attributex.Name),
 	)
 }
 
 func (qq *CreateAttributeCmd) FormHandler(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 ) error {
 	data, err := autil.FormDataX[CreateAttributeCmdFormData](rw, req, ctx, true)
@@ -114,7 +114,7 @@ func (qq *CreateAttributeCmd) FormHandler(
 		qq.Form(
 			ctx,
 			data,
-			actionx.ResponseWrapper(wrapper),
+			actionx2.ResponseWrapper(wrapper),
 			hxTarget,
 		),
 	)
@@ -123,23 +123,23 @@ func (qq *CreateAttributeCmd) FormHandler(
 func (qq *CreateAttributeCmd) Form(
 	ctx ctxx.Context,
 	data *CreateAttributeCmdFormData,
-	wrapper actionx.ResponseWrapper,
+	wrapper actionx2.ResponseWrapper,
 	hxTarget string,
 ) renderable.Renderable {
-	form := &wx.Form{
-		Widget: wx.Widget[wx.Form]{
+	form := &widget.Form{
+		Widget: widget.Widget[widget.Form]{
 			ID: qq.formID(),
 		},
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxTarget: hxTarget,
 			HxSwap:   "outerHTML",
 		},
-		Children: []wx.IWidget{
-			&wx.Container{
+		Children: []widget.IWidget{
+			&widget.Container{
 				GapY: true,
-				Child: []wx.IWidget{
-					wx.NewFormFields(ctx, data),
+				Child: []widget.IWidget{
+					widget.NewFormFields(ctx, data),
 					qq.tagsList(ctx, hxTarget),
 				},
 			},
@@ -147,11 +147,11 @@ func (qq *CreateAttributeCmd) Form(
 	}
 
 	return autil.WrapWidgetWithID(
-		wx.T("Add attribute"),
-		wx.T("Save"),
+		widget.T("Add attribute"),
+		widget.T("Save"),
 		form,
 		wrapper,
-		wx.DialogLayoutStable,
+		widget.DialogLayoutStable,
 		qq.popoverID(),
 		qq.formID(),
 	)
@@ -166,14 +166,14 @@ func (qq *CreateAttributeCmd) formID() string {
 	return "createAttributeForm"
 }
 
-func (qq *CreateAttributeCmd) tagsList(ctx ctxx.Context, hxTarget string) wx.IWidget {
+func (qq *CreateAttributeCmd) tagsList(ctx ctxx.Context, hxTarget string) widget.IWidget {
 	tagsListItems := qq.tagsListItems(ctx, hxTarget)
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.tagsListID(),
 		},
-		Children: &wx.List{
+		Children: &widget.List{
 			Children: tagsListItems,
 		},
 	}
@@ -186,15 +186,15 @@ func (qq *CreateAttributeCmd) tagsListID() string {
 func (qq *CreateAttributeCmd) tagsListItems(ctx ctxx.Context, target string) interface{} {
 	// TODO implement pagination
 
-	var items []*wx.ListItem
+	var items []*widget.ListItem
 
 	// TODO add value tags
 	tagGroups := ctx.SpaceCtx().Space.QueryTags().Where(tag.TypeEQ(tagtype.Group)).AllX(ctx)
 
 	if len(tagGroups) == 0 {
-		items = append(items, &wx.ListItem{
-			Headline:       wx.T("No tag groups available yet."),
-			SupportingText: wx.T("Please create a tag group first."),
+		items = append(items, &widget.ListItem{
+			Headline:       widget.T("No tag groups available yet."),
+			SupportingText: widget.T("Please create a tag group first."),
 		})
 		return items
 	}
@@ -204,11 +204,11 @@ func (qq *CreateAttributeCmd) tagsListItems(ctx ctxx.Context, target string) int
 		if tagGroup.Icon != "" {
 			icon = tagGroup.Icon
 		}
-		items = append(items, &wx.ListItem{
+		items = append(items, &widget.ListItem{
 			RadioGroupName: "TagID",
 			RadioValue:     fmt.Sprintf("%d", tagGroup.ID),
-			Headline:       wx.Tu(tagGroup.Name),
-			Leading:        wx.NewIcon(icon),
+			Headline:       widget.Tu(tagGroup.Name),
+			Leading:        widget.NewIcon(icon),
 		})
 	}
 

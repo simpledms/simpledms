@@ -1,11 +1,11 @@
 package spaces
 
 import (
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type SpaceContextMenuWidget struct {
@@ -18,10 +18,10 @@ func NewSpaceContextMenuWidget(actions *Actions) *SpaceContextMenuWidget {
 	}
 }
 
-func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, spacem *spacemodel.Space) *wx.Menu {
-	renameItem := &wx.MenuItem{
+func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, spacem *spacemodel.Space) *widget.Menu {
+	renameItem := &widget.MenuItem{
 		LeadingIcon: "edit",
-		Label:       wx.T("Edit"),
+		Label:       widget.T("Edit"),
 		HTMXAttrs: qq.actions.EditSpaceCmd.ModalLinkAttrs(
 			qq.actions.EditSpaceCmd.Data(
 				spacem.Data.PublicID.String(),
@@ -32,17 +32,17 @@ func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, spacem *spacemodel.Sp
 		),
 	}
 
-	deleteItem := &wx.MenuItem{
+	deleteItem := &widget.MenuItem{
 		LeadingIcon: "delete",
-		Label:       wx.T("Delete"),
-		HTMXAttrs: wx.HTMXAttrs{
+		Label:       widget.T("Delete"),
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.actions.DeleteSpaceCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.DeleteSpaceCmd.Data(spacem.Data.PublicID.String())),
-			HxConfirm: wx.T("Are you sure?").String(ctx),
+			HxConfirm: widget.T("Are you sure?").String(ctx),
 		},
 	}
 
-	menuItems := []*wx.MenuItem{
+	menuItems := []*widget.MenuItem{
 		renameItem,
 		{
 			IsDivider: true,
@@ -54,35 +54,35 @@ func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, spacem *spacemodel.Sp
 		// similar code in SpaceContextMenuWidget and MainMenu
 		{
 			LeadingIcon: "category", // TODO category or description?
-			Label:       wx.T("Document types"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Label:       widget.T("Document types"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet: route2.ManageDocumentTypes(ctx.TenantCtx().TenantID, spacem.Data.PublicID.String()),
 			},
 		},
 		{
 			LeadingIcon: "label",
-			Label:       wx.T("Tags"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Label:       widget.T("Tags"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet: route2.ManageTags(ctx.TenantCtx().TenantID, spacem.Data.PublicID.String()),
 			},
 		},
 		{
 			LeadingIcon: "tune", // tune or assignment
-			Label:       wx.T("Fields"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Label:       widget.T("Fields"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet: route2.ManageProperties(ctx.TenantCtx().TenantID, spacem.Data.PublicID.String()),
 			},
 		},
 		{
 			LeadingIcon: "person",
-			Label:       wx.T("Users"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Label:       widget.T("Users"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet: route2.ManageUsersOfSpace(ctx.TenantCtx().TenantID, spacem.Data.PublicID.String()),
 			},
 		},
 	}
 
-	return &wx.Menu{
+	return &widget.Menu{
 		Items: menuItems,
 	}
 }

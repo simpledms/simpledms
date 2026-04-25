@@ -1,11 +1,11 @@
 package dashboard
 
 import (
-	"github.com/simpledms/simpledms/action/admin"
-	"github.com/simpledms/simpledms/action/auth"
-	acommon "github.com/simpledms/simpledms/action/common"
-	"github.com/simpledms/simpledms/common"
-	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/core/action/admin"
+	"github.com/simpledms/simpledms/core/action/auth"
+	acommon "github.com/simpledms/simpledms/core/action/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/uix/route"
 )
 
 type Actions struct {

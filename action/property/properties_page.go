@@ -1,13 +1,13 @@
 package property
 
 import (
-	acommon "github.com/simpledms/simpledms/action/common"
-	"github.com/simpledms/simpledms/common"
+	acommon "github.com/simpledms/simpledms/core/action/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type PropertiesPage struct {
@@ -23,7 +23,7 @@ func NewPropertiesPage(infra *common.Infra, actions *Actions) *PropertiesPage {
 	}
 }
 
-func (qq *PropertiesPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *PropertiesPage) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	// state := autil.StateX[PropertiesPageState](rw, req)
 	return qq.Render(rw, req, ctx, qq.infra, "Fields", qq.Widget(ctx))
 }
@@ -31,12 +31,12 @@ func (qq *PropertiesPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 func (qq *PropertiesPage) Widget(
 	ctx ctxx.Context,
 ) renderable.Renderable {
-	fabs := []*wx.FloatingActionButton{
+	fabs := []*widget.FloatingActionButton{
 		{
 			Icon: "add",
-			Child: []wx.IWidget{
-				wx.NewIcon("add"),
-				wx.T("Add field"),
+			Child: []widget.IWidget{
+				widget.NewIcon("add"),
+				widget.T("Add field"),
 			},
 			HTMXAttrs: qq.actions.CreatePropertyCmd.ModalLinkAttrs(
 				qq.actions.CreatePropertyCmd.Data(""),
@@ -45,7 +45,7 @@ func (qq *PropertiesPage) Widget(
 		},
 	}
 
-	var children []wx.IWidget
+	var children []widget.IWidget
 
 	children = append(children,
 		qq.actions.PropertyListPartial.Widget(
@@ -54,9 +54,9 @@ func (qq *PropertiesPage) Widget(
 		),
 	)
 
-	mainLayout := &wx.MainLayout{
+	mainLayout := &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "fields", fabs),
-		Content: &wx.ListDetailLayout{
+		Content: &widget.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List:   children,
 		},
@@ -64,16 +64,16 @@ func (qq *PropertiesPage) Widget(
 	return mainLayout
 }
 
-func (qq *PropertiesPage) appBar(ctx ctxx.Context) *wx.AppBar {
-	return &wx.AppBar{
-		Leading: &wx.Icon{
+func (qq *PropertiesPage) appBar(ctx ctxx.Context) *widget.AppBar {
+	return &widget.AppBar{
+		Leading: &widget.Icon{
 			Name: "tune",
 		},
 		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
-		Title: &wx.AppBarTitle{
-			Text: wx.T("Fields"),
+		Title: &widget.AppBarTitle{
+			Text: widget.T("Fields"),
 		},
-		Actions: []wx.IWidget{
+		Actions: []widget.IWidget{
 			/*&wx.IconButton{
 				Icon: "more_vert",
 				Children: &wx.Menu{

@@ -6,14 +6,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileVersionFromInboxListPartial struct {
@@ -31,7 +31,7 @@ func NewFileVersionFromInboxListPartial(infra *common.Infra, actions *Actions) *
 	}
 }
 
-func (qq *FileVersionFromInboxListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FileVersionFromInboxListPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileVersionFromInboxDialogData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -84,29 +84,29 @@ func (qq *FileVersionFromInboxListPartial) findInboxFile(ctx ctxx.Context, sourc
 	return filex.Data, nil
 }
 
-func (qq *FileVersionFromInboxListPartial) listWrapper(ctx ctxx.Context, data *FileVersionFromInboxDialogData, files []*enttenant.File) *wx.Container {
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+func (qq *FileVersionFromInboxListPartial) listWrapper(ctx ctxx.Context, data *FileVersionFromInboxDialogData, files []*enttenant.File) *widget.Container {
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: qq.actions.FileVersionFromInboxDialog.listID(),
 		},
-		Child: &wx.List{Children: qq.listItems(ctx, data, files)},
+		Child: &widget.List{Children: qq.listItems(ctx, data, files)},
 	}
 }
 
-func (qq *FileVersionFromInboxListPartial) listItems(ctx ctxx.Context, data *FileVersionFromInboxDialogData, files []*enttenant.File) []wx.IWidget {
+func (qq *FileVersionFromInboxListPartial) listItems(ctx ctxx.Context, data *FileVersionFromInboxDialogData, files []*enttenant.File) []widget.IWidget {
 	if len(files) == 0 {
-		return []wx.IWidget{
-			&wx.ListItem{
-				Headline: wx.T("No matches found."),
-				Type:     wx.ListItemTypeHelper,
+		return []widget.IWidget{
+			&widget.ListItem{
+				Headline: widget.T("No matches found."),
+				Type:     widget.ListItemTypeHelper,
 			},
 		}
 	}
 
-	items := make([]wx.IWidget, 0, len(files))
+	items := make([]widget.IWidget, 0, len(files))
 	for _, filex := range files {
-		listItem := &wx.ListItem{
-			Headline:       wx.T(filex.Name),
+		listItem := &widget.ListItem{
+			Headline:       widget.T(filex.Name),
 			IsSelected:     filex.PublicID.String() == data.SourceFileID,
 			RadioGroupName: "SourceFileID",
 			RadioValue:     filex.PublicID.String(),

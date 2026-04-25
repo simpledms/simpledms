@@ -3,18 +3,19 @@ package trash
 import (
 	"net/http"
 
+	"github.com/simpledms/simpledms/db/entx"
+
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type RestoreFileCmdData struct {
@@ -50,7 +51,7 @@ func (qq *RestoreFileCmd) DataWithOptions(fileID string) *RestoreFileCmdData {
 	}
 }
 
-func (qq *RestoreFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *RestoreFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[RestoreFileCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -94,9 +95,9 @@ func (qq *RestoreFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	filex = update.SaveX(ctx)
 
 	if !parentExists {
-		rw.AddRenderables(wx.NewSnackbarf("The original parent folder is missing. Restored to Inbox."))
+		rw.AddRenderables(widget.NewSnackbarf("The original parent folder is missing. Restored to Inbox."))
 	} else {
-		rw.AddRenderables(wx.NewSnackbarf("File restored."))
+		rw.AddRenderables(widget.NewSnackbarf("File restored."))
 	}
 
 	rw.Header().Set("HX-Retarget", "#details")
@@ -105,5 +106,5 @@ func (qq *RestoreFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	rw.Header().Set("HX-Replace-Url", route.TrashRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID))
 	rw.Header().Set("HX-Trigger", event.FileRestored.String())
 
-	return qq.infra.Renderer().Render(rw, ctx, &wx.View{})
+	return qq.infra.Renderer().Render(rw, ctx, &widget.View{})
 }

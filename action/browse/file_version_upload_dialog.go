@@ -2,11 +2,11 @@ package browse
 
 import (
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileVersionUploadDialogData struct {
@@ -34,7 +34,7 @@ func (qq *FileVersionUploadDialog) Data(fileID string) *FileVersionUploadDialogD
 	}
 }
 
-func (qq *FileVersionUploadDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FileVersionUploadDialog) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileVersionUploadDialogData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -52,11 +52,11 @@ func (qq *FileVersionUploadDialog) Handler(rw httpx.ResponseWriter, req *httpx.R
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		&wx.Dialog{
-			Layout:       wx.DialogLayoutStable,
-			Headline:     wx.T("Upload new version"),
+		&widget.Dialog{
+			Layout:       widget.DialogLayoutStable,
+			Headline:     widget.T("Upload new version"),
 			IsOpenOnLoad: true,
-			Child: &wx.FileUpload{
+			Child: &widget.FileUpload{
 				Endpoint:           qq.actions.UploadFileVersionCmd.Endpoint(),
 				FileID:             data.FileID,
 				MaxUploadSizeBytes: maxUploadSizeBytes,

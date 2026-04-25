@@ -21,39 +21,44 @@ import (
 	"github.com/marcobeierer/go-tika"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
+	"golang.org/x/crypto/acme/autocert"
+
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/migrate"
+	"github.com/simpledms/simpledms/db/entmain/systemconfig"
+	"github.com/simpledms/simpledms/db/entmain/tenant"
+	"github.com/simpledms/simpledms/db/entx"
+
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/action/download"
 	trashaction "github.com/simpledms/simpledms/action/trash"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/migrate"
-	"github.com/simpledms/simpledms/db/entmain/systemconfig"
-	"github.com/simpledms/simpledms/db/entmain/tenant"
+	common2 "github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ctxx"
+	"github.com/simpledms/simpledms/core/db/sqlx"
+	appmodel "github.com/simpledms/simpledms/core/model/app"
+	"github.com/simpledms/simpledms/core/model/common/country"
+	"github.com/simpledms/simpledms/core/model/common/language"
+	"github.com/simpledms/simpledms/core/model/common/mainrole"
+	signupmodel "github.com/simpledms/simpledms/core/model/signup"
+	systemconfigmodel "github.com/simpledms/simpledms/core/model/systemconfig"
+	tenant2 "github.com/simpledms/simpledms/core/model/tenant"
+	"github.com/simpledms/simpledms/core/pluginx"
+	"github.com/simpledms/simpledms/core/scheduler"
+	server2 "github.com/simpledms/simpledms/core/server"
+	ui2 "github.com/simpledms/simpledms/core/ui"
+	"github.com/simpledms/simpledms/core/ui/uix/partial"
+	"github.com/simpledms/simpledms/core/ui/uix/route"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/core/util/ocrutil"
+	"github.com/simpledms/simpledms/core/util/recoverx"
 	migrate2 "github.com/simpledms/simpledms/db/enttenant/migrate"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/i18n"
-	appmodel "github.com/simpledms/simpledms/model/main/app"
-	"github.com/simpledms/simpledms/model/main/common/country"
-	"github.com/simpledms/simpledms/model/main/common/language"
-	"github.com/simpledms/simpledms/model/main/common/mainrole"
-	signupmodel "github.com/simpledms/simpledms/model/main/signup"
-	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
-	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
-	"github.com/simpledms/simpledms/pluginx"
-	"github.com/simpledms/simpledms/scheduler"
-	"github.com/simpledms/simpledms/ui"
-	"github.com/simpledms/simpledms/ui/uix/partial"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/ocrutil"
-	"github.com/simpledms/simpledms/util/recoverx"
-	"golang.org/x/crypto/acme/autocert"
 )
 
 // TODO move to own package in cmd?
@@ -96,7 +101,7 @@ func newMaintenanceModeHandler(
 	assetsFS fs.FS,
 	devMode bool,
 	i18nx *i18n.I18n,
-	renderer *ui.Renderer,
+	renderer *ui2.Renderer,
 	encryptedIdentity []byte,
 	commercialLicenseEnabled bool,
 	shutdownFn func(context.Context) error,
@@ -179,17 +184,17 @@ func newMaintenanceModeHandler(
 			commercialLicenseEnabled,
 		)
 
-		titlex := wx.Tuf("%s | SimpleDMS", wx.T("Maintenance mode").String(visitorCtx))
+		titlex := widget.Tuf("%s | SimpleDMS", widget.T("Maintenance mode").String(visitorCtx))
 		viewx := partial.NewBase(
 			titlex,
-			&wx.MainLayout{
-				Content: &wx.NarrowLayout{
-					Content: &wx.Column{
-						GapYSize:         wx.Gap4,
+			&widget.MainLayout{
+				Content: &widget.NarrowLayout{
+					Content: &widget.Column{
+						GapYSize:         widget.Gap4,
 						NoOverflowHidden: true,
-						Children: []wx.IWidget{
-							wx.H(wx.HeadingTypeHeadlineMd, titlex),
-							wx.T("Maintenance mode is enabled. Please wait until the app is ready again.").SetWrap(),
+						Children: []widget.IWidget{
+							widget.H(widget.HeadingTypeHeadlineMd, titlex),
+							widget.T("Maintenance mode is enabled. Please wait until the app is ready again.").SetWrap(),
 							// wx.T("This page automatically refreshes every 60 seconds.").SetWrap(),
 						},
 					},
@@ -291,7 +296,7 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	tenantDBs := dbMigrationsTenantDBs(mainDB, qq.devMode, qq.metaPath)
 
 	infra, minioClient := qq.newInfra(renderer, systemConfig)
-	router := NewRouter(mainDB, tenantDBs, infra, qq.devMode, qq.metaPath, i18nx)
+	router := server2.NewRouter(mainDB, tenantDBs, infra, qq.devMode, qq.metaPath, i18nx)
 	actions := action.NewActions(infra, tenantDBs, qq.devMode)
 	downloadHandler := download.NewDownload(infra)
 	trashDownloadHandler := trashaction.NewDownload(infra)
@@ -472,12 +477,12 @@ func (qq *Server) initializeInitialUserIfRequired(ctx context.Context, mainDB *s
 	}
 }
 
-func (qq *Server) newRendererAndI18n() (*ui.Renderer, *i18n.I18n) {
+func (qq *Server) newRendererAndI18n() (*ui2.Renderer, *i18n.I18n) {
 	// TODO are there any naming conflicts?
 	templates := template.New("app")
-	templates.Funcs(ui.TemplateFuncMap(templates))
+	templates.Funcs(ui2.TemplateFuncMap(templates))
 
-	templatesx, err := templates.ParseFS(ui.WidgetFS, "widget/*.gohtml")
+	templatesx, err := templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -487,7 +492,7 @@ func (qq *Server) newRendererAndI18n() (*ui.Renderer, *i18n.I18n) {
 		log.Fatal(err)
 	}*/
 
-	return ui.NewRenderer(templatesx), i18n.NewI18n()
+	return ui2.NewRenderer(templatesx), i18n.NewI18n()
 }
 
 func (qq *Server) loadBootstrapSystemConfig(ctx context.Context, mainDB *sqlx.MainDB) *entmain.SystemConfig {
@@ -536,7 +541,7 @@ func (qq *Server) startAutocertIfRequired(systemConfigx *entmain.SystemConfig) (
 func (qq *Server) ensureMainIdentity(
 	mainDB *sqlx.MainDB,
 	i18nx *i18n.I18n,
-	renderer *ui.Renderer,
+	renderer *ui2.Renderer,
 	systemConfigx *entmain.SystemConfig,
 	useAutocert bool,
 	manager *autocert.Manager,
@@ -731,7 +736,7 @@ func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.Main
 	return systemConfigx, systemConfig
 }
 
-func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *systemconfigmodel.SystemConfig) (*common.Infra, *minio.Client) {
+func (qq *Server) newInfra(renderer *ui2.Renderer, systemConfig *systemconfigmodel.SystemConfig) (*common2.Infra, *minio.Client) {
 	factory := common.NewFactory(
 	// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
 	// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
@@ -762,7 +767,7 @@ func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *systemconfigmode
 		disableFileEncryption = disableFileEncryptionx
 	}
 
-	infra := common.NewInfra(
+	infra := common2.NewInfra(
 		renderer,
 		qq.metaPath,
 		filesystem.NewS3FileSystem(
@@ -782,7 +787,7 @@ func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *systemconfigmode
 }
 
 func (qq *Server) registerCoreRoutes(
-	router *Router,
+	router *server2.Router,
 	actions *action.Actions,
 	downloadHandler *download.Download,
 	trashDownloadHandler *trashaction.Download,
@@ -805,8 +810,8 @@ func (qq *Server) registerCoreRoutes(
 
 	// TODO find a better way to handle paths
 	// TODO in TTx or not necessary because read only?
-	router.RegisterPage(route2.DashboardRoute(), actions.Dashboard.DashboardPage.Handler)
-	router.RegisterPage(route2.StaticPageRoute(), actions.StaticPage.StaticPage.Handler)
+	router.RegisterPage(route.DashboardRoute(), actions.Dashboard.DashboardPage.Handler)
+	router.RegisterPage(route.StaticPageRoute(), actions.StaticPage.StaticPage.Handler)
 
 	router.RegisterPage(route2.BrowseRoute(false), actions.Browse.BrowsePage.Handler)
 	router.RegisterPage(route2.BrowseRoute(true), actions.Browse.BrowsePage.Handler)
@@ -893,7 +898,7 @@ END WARNING
 }
 
 func (qq *Server) startScheduler(
-	infra *common.Infra,
+	infra *common2.Infra,
 	mainDB *sqlx.MainDB,
 	tenantDBs *tenantdbs.TenantDBs,
 	minioClient *minio.Client,

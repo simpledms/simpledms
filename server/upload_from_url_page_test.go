@@ -10,13 +10,13 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestUploadFromURLCmdCreatesTemporaryFileAndRedirects(t *testing.T) {
@@ -46,8 +46,8 @@ func TestUploadFromURLCmdCreatesTemporaryFileAndRedirects(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			err := harness.actions.OpenFile.UploadFromURLCmd.Handler(
-				httpx.NewResponseWriter(rr),
-				httpx.NewRequest(req),
+				httpx2.NewResponseWriter(rr),
+				httpx2.NewRequest(req),
 				mainCtx,
 			)
 			if err != nil {
@@ -115,8 +115,8 @@ func TestUploadFromURLCmdUsesHXRedirectForHTMXRequests(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			err := harness.actions.OpenFile.UploadFromURLCmd.Handler(
-				httpx.NewResponseWriter(rr),
-				httpx.NewRequest(req),
+				httpx2.NewResponseWriter(rr),
+				httpx2.NewRequest(req),
 				mainCtx,
 			)
 			if err != nil {
@@ -157,8 +157,8 @@ func TestUploadFromURLCmdRejectsMissingURL(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 		handlerErr = harness.actions.OpenFile.UploadFromURLCmd.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
+			httpx2.NewResponseWriter(rr),
+			httpx2.NewRequest(req),
 			mainCtx,
 		)
 		if handlerErr == nil {
@@ -206,8 +206,8 @@ func TestUploadFromURLCmdAllowsLocalhostURLInDevMode(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			err := harness.actions.OpenFile.UploadFromURLCmd.Handler(
-				httpx.NewResponseWriter(rr),
-				httpx.NewRequest(req),
+				httpx2.NewResponseWriter(rr),
+				httpx2.NewRequest(req),
 				mainCtx,
 			)
 			if err != nil {

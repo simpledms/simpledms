@@ -10,13 +10,15 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
+
+	ctxx2 "github.com/simpledms/simpledms/core/ctxx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestConcurrentUploadFileCmd(t *testing.T) {
@@ -83,8 +85,8 @@ func TestConcurrentUploadFileCmd(t *testing.T) {
 
 				rr := httptest.NewRecorder()
 				err = harness.actions.Browse.UploadFileCmd.Handler(
-					httpx.NewResponseWriter(rr),
-					httpx.NewRequest(req),
+					httpx2.NewResponseWriter(rr),
+					httpx2.NewRequest(req),
 					spaceCtx,
 				)
 				if err != nil {
@@ -140,13 +142,13 @@ func newTenantContextForUpload(
 	accountx *entmain.Account,
 	tenantx *entmain.Tenant,
 	tenantDB *sqlx.TenantDB,
-) (*entmain.Tx, *enttenant.Tx, *ctxx.TenantContext, error) {
+) (*entmain.Tx, *enttenant.Tx, *ctxx2.TenantContext, error) {
 	mainTx, err := harness.mainDB.ReadOnlyConn.Tx(context.Background())
 	if err != nil {
 		return nil, nil, nil, err
 	}
 
-	visitorCtx := ctxx.NewVisitorContext(
+	visitorCtx := ctxx2.NewVisitorContext(
 		context.Background(),
 		mainTx,
 		harness.i18n,
@@ -164,7 +166,7 @@ func newTenantContextForUpload(
 		return nil, nil, nil, err
 	}
 
-	tenantCtx := ctxx.NewTenantContext(mainCtx, tenantTx, tenantx, true)
+	tenantCtx := ctxx2.NewTenantContext(mainCtx, tenantTx, tenantx, true)
 	return mainTx, tenantTx, tenantCtx, nil
 }
 

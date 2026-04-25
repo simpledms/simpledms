@@ -4,14 +4,14 @@ package inbox
 
 import (
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileListItemPartialData struct {
@@ -41,7 +41,7 @@ func (qq *FileListItemPartial) Data(fileID int64) *FileListItemPartialData {
 	}
 }
 
-func (qq *FileListItemPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FileListItemPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileListItemPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -65,23 +65,23 @@ func (qq *FileListItemPartial) Widget(
 	// listState *ListFilesPartialState,
 	fileWithChildren *enttenant.File,
 	isSelected bool,
-) *wx.ListItem {
+) *widget.ListItem {
 	/*trailing := &IconButton{
 		Icon:     "more_vert",
 		Children: NewFileContextMenuWidget(qq.actions).Widget(fileWithChildren),
 	}*/
 
-	htmxAttrs := wx.HTMXAttrs{
+	htmxAttrs := widget.HTMXAttrs{
 		HxTarget:  "#details",
 		HxSwap:    "outerHTML",
 		HxGet:     hrefFn(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID.String()),
 		HxHeaders: autil.PreserveStateHeader(),
 	}
 
-	return &wx.ListItem{
+	return &widget.ListItem{
 		RadioGroupName: "fileListRadioGroup",
-		Leading:        wx.NewIcon("description").SmallPadding(),
-		Headline:       wx.T(fileWithChildren.Name),
+		Leading:        widget.NewIcon("description").SmallPadding(),
+		Headline:       widget.T(fileWithChildren.Name),
 		/*SupportingText: wx.Tf(
 			"%s, %s",
 			qq.infra.FileRepo.GetXX(fileWithChildren).CurrentVersion(ctx).SizeString(),

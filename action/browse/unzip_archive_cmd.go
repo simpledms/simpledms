@@ -12,20 +12,21 @@ import (
 	"time"
 
 	"github.com/minio/minio-go/v7"
+
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	"github.com/simpledms/simpledms/core/util/e"
+	"github.com/simpledms/simpledms/core/util/fileutil"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/core/util/txx"
+	"github.com/simpledms/simpledms/core/util/uploadx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/fileutil"
-	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/txx"
-	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type unzipPreparedEntry struct {
@@ -58,7 +59,7 @@ func NewUnzipArchiveCmd(infra *common.Infra, actions *Actions) *UnzipArchiveCmd 
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[UnzipArchiveCmdData](infra, config, wx.T("Unzip archive")),
+		FormHelper: autil.NewFormHelper[UnzipArchiveCmdData](infra, config, widget.T("Unzip archive")),
 	}
 }
 
@@ -69,7 +70,7 @@ func (qq *UnzipArchiveCmd) Data(fileID string, deleteOnSuccess bool) *UnzipArchi
 	}
 }
 
-func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *UnzipArchiveCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[UnzipArchiveCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -254,7 +255,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 	}
 
 	if hasErr {
-		rw.AddRenderables(wx.NewSnackbarf("Could not extract all files from archive.").SetIsError(true))
+		rw.AddRenderables(widget.NewSnackbarf("Could not extract all files from archive.").SetIsError(true))
 
 		for _, entry := range preparedEntries {
 			cleanup := entry.fileInfo != nil
@@ -328,7 +329,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 
 	rw.Header().Set("HX-Trigger", event.ZIPArchiveUnzipped.String())
 	if !hasErr {
-		rw.AddRenderables(wx.NewSnackbarf("Archive unzipped."))
+		rw.AddRenderables(widget.NewSnackbarf("Archive unzipped."))
 	}
 
 	return nil

@@ -7,13 +7,13 @@ import (
 	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type MarkAsDoneCmdData struct {
@@ -48,7 +48,7 @@ func (qq *MarkAsDoneCmd) Data(fileID string) *MarkAsDoneCmdData {
 	}
 }
 
-func (qq *MarkAsDoneCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *MarkAsDoneCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[MarkAsDoneCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -67,13 +67,13 @@ func (qq *MarkAsDoneCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	// assignment = assignment.Update().SetIsInInbox(false).SaveX(ctx)
 
 	// FIXME not correct, should not be opened in parent dir, but flat
-	action := &wx.Link{
+	action := &widget.Link{
 		Href:  route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Parent(ctx).Data.PublicID.String(), filex.Data.PublicID.String()),
-		Child: wx.T("Open file"),
+		Child: widget.T("Open file"),
 	}
 
 	rw.AddRenderables(
-		wx.NewSnackbarf("Marked file «%s» as done.", filex.Data.Name).WithAction(action),
+		widget.NewSnackbarf("Marked file «%s» as done.", filex.Data.Name).WithAction(action),
 	)
 
 	return nil

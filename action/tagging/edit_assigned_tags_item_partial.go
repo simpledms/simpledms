@@ -6,19 +6,20 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/simpledms/simpledms/db/entx"
+
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type EditAssignedTagsItemPartialData struct {
@@ -50,7 +51,7 @@ func (qq *EditAssignedTagsItemPartial) Data(fileID string, tagID int64) *EditAss
 	}
 }
 
-func (qq *EditAssignedTagsItemPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *EditAssignedTagsItemPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[EditAssignedTagsItemPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -101,7 +102,7 @@ func (qq *EditAssignedTagsItemPartial) ListItem(
 	ctx ctxx.Context,
 	fileID string,
 	tagx *enttenant.Tag,
-) *wx.ListItem {
+) *widget.ListItem {
 	listItem := qq.listItem(ctx, fileID, tagx, qq.IsCheckedFn(ctx, fileID))
 	if tagx.Type == tagtype.Group {
 		// if used as response/target
@@ -116,7 +117,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 	fileID string,
 	tagx *enttenant.Tag,
 	isCheckedFn func(tagID int64) bool,
-) *wx.ListItem {
+) *widget.ListItem {
 	var hxPost string
 	var hxVals template.JS
 	if isCheckedFn(tagx.ID) {
@@ -129,19 +130,19 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 
 	id := qq.listItemID(fileID, tagx.ID)
 
-	var icon *wx.Icon
+	var icon *widget.Icon
 	var supportingText string
-	var trailing wx.IWidget
+	var trailing widget.IWidget
 	var isCollapsible bool
-	var htmxAttrs wx.HTMXAttrs
+	var htmxAttrs widget.HTMXAttrs
 
-	var childItems []wx.IWidget
+	var childItems []widget.IWidget
 
 	if tagx.Type == tagtype.Group {
 		// TODO find something betteer
 		// folder_special
 		// note_stack
-		icon = wx.NewIcon("folder_special")
+		icon = widget.NewIcon("folder_special")
 
 		if tagx.Edges.Children == nil {
 			// TODO is there a better way to do this?
@@ -169,12 +170,12 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 			childTagsStr,
 			selectedStr,
 		)
-		trailing = wx.NewIcon("keyboard_arrow_down")
+		trailing = widget.NewIcon("keyboard_arrow_down")
 
-		childItems = append(childItems, &wx.ListItem{
-			Type:     wx.ListItemTypeHelper,
-			Leading:  wx.NewIcon("new_label"),
-			Headline: wx.T("Create new tag"), // group not possible
+		childItems = append(childItems, &widget.ListItem{
+			Type:     widget.ListItemTypeHelper,
+			Leading:  widget.NewIcon("new_label"),
+			Headline: widget.T("Create new tag"), // group not possible
 			HTMXAttrs: qq.actions.AssignedTags.CreateAndAssignTagCmd.ModalLinkAttrs(
 				qq.actions.AssignedTags.CreateAndAssignTagCmd.Data(fileID, tagx.ID),
 				"#"+qq.listItemID(fileID, tagx.ID),
@@ -193,7 +194,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 
 		isCollapsible = true
 	} else if tagx.Type == tagtype.Super {
-		icon = wx.NewIcon("label_important")
+		icon = widget.NewIcon("label_important")
 
 		supportingText = "Super tag"
 
@@ -211,7 +212,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 			supportingText = fmt.Sprintf("Composed of %s", strings.Join(tagNames, ", "))
 		}
 
-		htmxAttrs = wx.HTMXAttrs{
+		htmxAttrs = widget.HTMXAttrs{
 			HxTrigger: event.SuperTagUpdated.Handler(tagx.ID),
 			HxPost:    qq.actions.AssignedTags.EditListItem.Endpoint(),
 			HxVals:    util.JSON(qq.actions.AssignedTags.EditListItem.Data(fileID, tagx.ID)),
@@ -219,8 +220,8 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 			HxSwap:    "outerHTML",
 		}
 
-		trailing = &wx.Checkbox{
-			HTMXAttrs: wx.HTMXAttrs{
+		trailing = &widget.Checkbox{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    hxPost,
 				HxTrigger: "change",
 				HxVals:    hxVals,
@@ -230,9 +231,9 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 			IsChecked: isCheckedFn(tagx.ID),
 		}
 	} else {
-		icon = wx.NewIcon("label")
-		trailing = &wx.Checkbox{
-			HTMXAttrs: wx.HTMXAttrs{
+		icon = widget.NewIcon("label")
+		trailing = &widget.Checkbox{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    hxPost,
 				HxTrigger: "change",
 				HxVals:    hxVals,
@@ -248,7 +249,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 		//		results in a small gap because if margin
 		//
 		// impl on refactoring on 27.10.24, nur sure if correct, would solve comment above
-		htmxAttrs = wx.HTMXAttrs{
+		htmxAttrs = widget.HTMXAttrs{
 			HxPost:   hxPost,
 			HxVals:   hxVals,
 			HxTarget: "#" + id,
@@ -256,14 +257,14 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 		}
 	}
 
-	return &wx.ListItem{
-		Widget: wx.Widget[wx.ListItem]{
+	return &widget.ListItem{
+		Widget: widget.Widget[widget.ListItem]{
 			ID: id,
 		},
 		HTMXAttrs:      htmxAttrs,
 		Leading:        icon,
-		Headline:       wx.T(tagx.Name),
-		SupportingText: wx.Tu(supportingText),
+		Headline:       widget.T(tagx.Name),
+		SupportingText: widget.Tu(supportingText),
 		Trailing:       trailing,
 		IsCollapsible:  isCollapsible,
 		ContextMenu:    NewTagContextMenuWidget(qq.actions).Widget(ctx, fileID, tagx),

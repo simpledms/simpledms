@@ -1,9 +1,9 @@
 package inbox
 
 import (
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type SortListContextMenuWidget struct {
@@ -16,19 +16,19 @@ func NewSortListContextMenuWidget(actions *Actions) *SortListContextMenuWidget {
 	}
 }
 
-func (qq *SortListContextMenuWidget) Widget(ctx ctxx.Context, state *FilesListPartialState) *wx.Menu {
-	return &wx.Menu{
-		Widget: wx.Widget[wx.Menu]{
+func (qq *SortListContextMenuWidget) Widget(ctx ctxx.Context, state *FilesListPartialState) *widget.Menu {
+	return &widget.Menu{
+		Widget: widget.Widget[widget.Menu]{
 			ID: "sortBy",
 		},
-		Position: wx.PositionLeft,
-		Items: []*wx.MenuItem{
+		Position: widget.PositionLeft,
+		Items: []*widget.MenuItem{
 			{
-				Label:          wx.T("Newest first"),
+				Label:          widget.T("Newest first"),
 				RadioGroupName: "SortBy",
 				RadioValue:     "newestFirst",
 				IsSelected:     state.SortBy == "newestFirst" || state.SortBy == "",
-				HTMXAttrs: wx.HTMXAttrs{
+				HTMXAttrs: widget.HTMXAttrs{
 					HxOn: event.SortByUpdated.UnsafeHxOnWithQueryParamAndValue(
 						"click",
 						"sort_by",
@@ -37,11 +37,11 @@ func (qq *SortListContextMenuWidget) Widget(ctx ctxx.Context, state *FilesListPa
 				},
 			},
 			{
-				Label:          wx.T("Oldest first"),
+				Label:          widget.T("Oldest first"),
 				RadioGroupName: "SortBy",
 				RadioValue:     "oldestFirst",
 				IsSelected:     state.SortBy == "oldestFirst",
-				HTMXAttrs: wx.HTMXAttrs{
+				HTMXAttrs: widget.HTMXAttrs{
 					HxOn: event.SortByUpdated.UnsafeHxOnWithQueryParamAndValue(
 						"click",
 						"sort_by",
@@ -50,11 +50,11 @@ func (qq *SortListContextMenuWidget) Widget(ctx ctxx.Context, state *FilesListPa
 				},
 			},
 			{
-				Label:          wx.T("Sort by name"),
+				Label:          widget.T("Sort by name"),
 				RadioGroupName: "SortBy",
 				RadioValue:     "name",
 				IsSelected:     state.SortBy == "name",
-				HTMXAttrs: wx.HTMXAttrs{
+				HTMXAttrs: widget.HTMXAttrs{
 					HxOn: event.SortByUpdated.UnsafeHxOnWithQueryParamAndValue(
 						"click",
 						"sort_by",

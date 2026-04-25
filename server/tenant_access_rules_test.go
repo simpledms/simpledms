@@ -10,6 +10,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/simpledms/simpledms/core/model/common/language"
+	"github.com/simpledms/simpledms/core/model/common/tenantrole"
+	"github.com/simpledms/simpledms/core/ui/uix/events"
+	"github.com/simpledms/simpledms/core/util/accountutil"
+	"github.com/simpledms/simpledms/core/util/cookiex"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
 	"github.com/simpledms/simpledms/db/entmain/session"
@@ -17,12 +22,7 @@ import (
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/main/common/language"
-	"github.com/simpledms/simpledms/model/main/common/tenantrole"
-	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	"github.com/simpledms/simpledms/util/accountutil"
-	"github.com/simpledms/simpledms/util/cookiex"
 )
 
 func TestSignInCmdRejectsUserWithoutActiveTenantAssignment(t *testing.T) {
@@ -110,8 +110,8 @@ func TestDeleteUserCmdOwningTenantDeletesAccountGlobally(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Fatalf("expected status %d, got %d", http.StatusOK, rr.Code)
 	}
-	if trigger := rr.Header().Get("HX-Trigger"); trigger != event.UserDeleted.String() {
-		t.Fatalf("expected HX-Trigger %q, got %q", event.UserDeleted.String(), trigger)
+	if trigger := rr.Header().Get("HX-Trigger"); trigger != events.UserDeleted.String() {
+		t.Fatalf("expected HX-Trigger %q, got %q", events.UserDeleted.String(), trigger)
 	}
 
 	memberAccountAfter := harness.mainDB.ReadWriteConn.Account.Query().

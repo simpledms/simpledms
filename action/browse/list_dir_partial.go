@@ -8,25 +8,27 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/simpledms/simpledms/db/entx"
+
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/model/common/fieldtype"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/uix/events"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	actionx2 "github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/core/util/timex"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/property"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
-	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/timex"
 )
 
 type ListDirPartialData struct {
@@ -69,7 +71,7 @@ type ListDirPartial struct {
 	infra            *common.Infra
 	actions          *Actions
 	fileQueryService *ListDirFileQueryService
-	*actionx.Config
+	*actionx2.Config
 }
 
 func NewListDirPartial(
@@ -80,7 +82,7 @@ func NewListDirPartial(
 		infra:            infra,
 		actions:          actions,
 		fileQueryService: NewListDirFileQueryService(infra),
-		Config: actionx.NewConfig(
+		Config: actionx2.NewConfig(
 			actions.Route("list-dir-partial"),
 			true,
 		),
@@ -102,7 +104,7 @@ func (qq *ListDirPartial) FileListID() string {
 	return "fileList"
 }
 
-func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *ListDirPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[ListDirPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -177,7 +179,7 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		return qq.infra.Renderer().Render(
 			rw,
 			ctx,
-			&wx.View{
+			&widget.View{
 				Children: qq.filesListItems(
 					ctx,
 					state,
@@ -201,12 +203,12 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 }
 
 func (qq *ListDirPartial) WidgetHandler(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 	fileID string,
 	selectedFileID string,
-) *wx.ListDetailLayout {
+) *widget.ListDetailLayout {
 	state := autil.StateX[ListDirPartialState](rw, req)
 
 	return qq.Widget(
@@ -225,17 +227,17 @@ func (qq *ListDirPartial) Widget(
 	state *ListDirPartialState,
 	fileID string,
 	selectedFileID string,
-) *wx.ListDetailLayout {
+) *widget.ListDetailLayout {
 	// dir := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
 	dirWithParentx := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(fileID))).OnlyX(ctx)
 	dirWithParent := qq.infra.FileRepo.GetXX(dirWithParentx)
 
 	if dirWithParent.Data.IsDirectory == false {
 		// TODO handle error... return container with error message for user? but should also be 404
-		return &wx.ListDetailLayout{}
+		return &widget.ListDetailLayout{}
 	}
 
-	var children []wx.IWidget
+	var children []widget.IWidget
 
 	children = append(children,
 		qq.tagsAndOptions(ctx, state, dirWithParent),
@@ -252,26 +254,26 @@ func (qq *ListDirPartial) Widget(
 	)
 
 	if ctx.SpaceCtx().Space.IsFolderMode {
-		var breadcrumbs []wx.IWidget
+		var breadcrumbs []widget.IWidget
 		if dirWithParent.Data.ID > 0 {
 			pathFiles := qq.infra.FileSystem().FileTree().PathFilesByFileIDX(ctx, dirWithParent.Data.ID)
 			for qi, pathFile := range pathFiles {
-				var breadcrumbLabel wx.IWidget
+				var breadcrumbLabel widget.IWidget
 				if qi == 0 {
 					// TODO home Icon
-					breadcrumbLabel = &wx.Icon{
+					breadcrumbLabel = &widget.Icon{
 						Name: "home",
-						Size: wx.IconSizeSmall,
+						Size: widget.IconSizeSmall,
 					}
 				} else {
-					breadcrumbLabel = wx.Tu(pathFile.Name).SetWrap()
+					breadcrumbLabel = widget.Tu(pathFile.Name).SetWrap()
 				}
 				if qi != len(pathFiles)-1 {
-					breadcrumbs = append(breadcrumbs, &wx.Link{
+					breadcrumbs = append(breadcrumbs, &widget.Link{
 						Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, pathFile.PublicID.String()),
 						Child: breadcrumbLabel,
 					})
-					breadcrumbs = append(breadcrumbs, wx.T("»")) // TODO use icon instead?
+					breadcrumbs = append(breadcrumbs, widget.T("»")) // TODO use icon instead?
 				} else {
 					// last elem
 					breadcrumbs = append(breadcrumbs, breadcrumbLabel)
@@ -279,16 +281,16 @@ func (qq *ListDirPartial) Widget(
 			}
 		}
 		if len(breadcrumbs) > 0 {
-			children = append(children, &wx.StatusBar{
+			children = append(children, &widget.StatusBar{
 				Child: breadcrumbs,
 			})
 		}
 	}
 
-	list := &wx.Column{
-		GapYSize: wx.Gap2,
-		HTMXAttrs: wx.HTMXAttrs{
-			HxPost: qq.EndpointWithParams(actionx.ResponseWrapperNone, "#"+qq.FileListID()),
+	list := &widget.Column{
+		GapYSize: widget.Gap2,
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost: qq.EndpointWithParams(actionx2.ResponseWrapperNone, "#"+qq.FileListID()),
 			// HxPost:    qq.EndpointWithState(state, actionx.ResponseWrapperNone, "#"+qq.WrapperID()),
 			// state is necessary because tags are not rendered if modal is closed
 			HxVals:   util.JSON(qq.Data(dirWithParent.Data.PublicID.String(), selectedFileID)), // overrides form fields, must be added via HxInclude
@@ -309,8 +311,8 @@ func (qq *ListDirPartial) Widget(
 		Children: children,
 	}
 
-	return &wx.ListDetailLayout{
-		Widget: wx.Widget[wx.ListDetailLayout]{
+	return &widget.ListDetailLayout{
+		Widget: widget.Widget[widget.ListDetailLayout]{
 			ID: qq.WrapperID(),
 		},
 		AppBar: qq.appBar(ctx, state, dirWithParent),
@@ -318,7 +320,7 @@ func (qq *ListDirPartial) Widget(
 	}
 }
 
-func (qq *ListDirPartial) tagsAndOptions(ctx ctxx.Context, state *ListDirPartialState, dir *filemodel.File) *wx.ChipBar {
+func (qq *ListDirPartial) tagsAndOptions(ctx ctxx.Context, state *ListDirPartialState, dir *filemodel.File) *widget.ChipBar {
 	// TODO most used tags within folder, order alphabetically or by use?
 
 	// childDirCount := dir.Data.QueryChildren().Where(file.IsDirectory(true)).CountX(ctx)
@@ -326,8 +328,8 @@ func (qq *ListDirPartial) tagsAndOptions(ctx ctxx.Context, state *ListDirPartial
 
 	children := qq.filters(ctx, state, currentDirID.String())
 
-	return &wx.ChipBar{
-		Widget: wx.Widget[wx.ChipBar]{
+	return &widget.ChipBar{
+		Widget: widget.Widget[widget.ChipBar]{
 			ID: "filters", // TODO was `tags` before
 		},
 		Children: children,
@@ -348,25 +350,25 @@ func (qq *ListDirPartial) filesList(
 ) renderable.Renderable {
 	fileListItems := qq.filesListItems(ctx, state, data, offset)
 
-	var content wx.IWidget
-	content = &wx.List{
+	var content widget.IWidget
+	content = &widget.List{
 		Children: fileListItems,
 	}
 
 	if len(fileListItems) == 0 {
-		var widgets []wx.IWidget
-		headline := wx.T("No files available yet.")
+		var widgets []widget.IWidget
+		headline := widget.T("No files available yet.")
 
 		if ctx.SpaceCtx().Space.IsFolderMode {
-			headline = wx.T("No files or directories available yet.")
+			headline = widget.T("No files or directories available yet.")
 			widgets = append(
 				widgets,
 				qq.actions.MakeDirCmd.ModalLink(
 					qq.actions.MakeDirCmd.Data(dir.Data.PublicID.String(), ""),
-					[]wx.IWidget{
-						&wx.Button{
-							Icon:  wx.NewIcon("create_new_folder"),
-							Label: wx.T("Create directory"),
+					[]widget.IWidget{
+						&widget.Button{
+							Icon:  widget.NewIcon("create_new_folder"),
+							Label: widget.T("Create directory"),
 						},
 					},
 					"#"+qq.actions.ListDirPartial.WrapperID(),
@@ -376,29 +378,29 @@ func (qq *ListDirPartial) filesList(
 
 		widgets = append(
 			widgets,
-			&wx.Link{
-				HTMXAttrs: wx.HTMXAttrs{
+			&widget.Link{
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:        qq.actions.FileUploadDialogPartial.Endpoint(),
 					HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dir.Data.PublicID.String(), false)),
 					LoadInPopover: true,
 				},
-				Child: &wx.Button{
-					Icon:  wx.NewIcon("upload_file"),
-					Label: wx.T("Upload file"),
+				Child: &widget.Button{
+					Icon:  widget.NewIcon("upload_file"),
+					Label: widget.T("Upload file"),
 				},
 			},
 		)
 
-		content = &wx.EmptyState{
-			Icon:     wx.NewIcon("description"),
+		content = &widget.EmptyState{
+			Icon:     widget.NewIcon("description"),
 			Headline: headline,
 			// Description: NewText("There are no directories or files available yet, you can create"),
 			Actions: widgets,
 		}
 	}
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.FileListID(),
 		},
 		Children: content,
@@ -411,8 +413,8 @@ func (qq *ListDirPartial) filesListItems(
 	state *ListDirPartialState,
 	data *ListDirPartialData,
 	offset int,
-) []wx.IWidget {
-	var fileListItems []wx.IWidget
+) []widget.IWidget {
+	var fileListItems []widget.IWidget
 
 	queryResult := qq.fileQueryService.Query(
 		ctx,
@@ -467,12 +469,12 @@ func (qq *ListDirPartial) filesListItems(
 	}
 
 	if hasMore {
-		fileListItems = append(fileListItems, &wx.ListItem{
-			Widget: wx.Widget[wx.ListItem]{
+		fileListItems = append(fileListItems, &widget.ListItem{
+			Widget: widget.Widget[widget.ListItem]{
 				ID: "listDirLoadMore",
 			},
-			Headline: wx.T("Loading more..."),
-			HTMXAttrs: wx.HTMXAttrs{
+			Headline: widget.T("Loading more..."),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    qq.Endpoint() + "?offset=" + strconv.Itoa(offset+qq.pageSize()), // FIXME
 				HxTrigger: "intersect once",
 				HxTarget:  "#listDirLoadMore",
@@ -488,8 +490,8 @@ func (qq *ListDirPartial) appBar(
 	ctx ctxx.Context,
 	state *ListDirPartialState,
 	dir *filemodel.File,
-) *wx.AppBar {
-	var leadingButton wx.IWidget
+) *widget.AppBar {
+	var leadingButton widget.IWidget
 
 	if dir.Data.ParentID != 0 {
 		parent, err := dir.Parent(ctx)
@@ -497,10 +499,10 @@ func (qq *ListDirPartial) appBar(
 			log.Println(err)
 			panic(err)
 		}
-		leadingButton = &wx.IconButton{
+		leadingButton = &widget.IconButton{
 			Icon:    "arrow_back",
-			Tooltip: wx.T("Back to parent folder"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Tooltip: widget.T("Back to parent folder"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, parent.Data.PublicID.String()),
 				HxHeaders: autil.ResetStateHeader(),
 				HxSwap: fmt.Sprintf(
@@ -513,35 +515,35 @@ func (qq *ListDirPartial) appBar(
 			},
 		}
 	} else if ctx.SpaceCtx().Space.IsFolderMode {
-		leadingButton = &wx.Icon{
+		leadingButton = &widget.Icon{
 			Name: "folder_open",
 		}
 	} else {
-		leadingButton = &wx.Icon{
+		leadingButton = &widget.Icon{
 			Name: "folder_open", // TODO folder_open or hub or home?
 		}
 	}
 
-	supportingText := wx.T("Search")
-	supportingTextAltMobile := wx.Tu(dir.Data.Name)
+	supportingText := widget.T("Search")
+	supportingTextAltMobile := widget.Tu(dir.Data.Name)
 	if ctx.SpaceCtx().Space.IsFolderMode && dir.Data.ID != ctx.SpaceCtx().SpaceRootDir().ID {
-		supportingText = wx.Tf("Search in «%s»", dir.Data.Name)
+		supportingText = widget.Tf("Search in «%s»", dir.Data.Name)
 	}
 
-	return &wx.AppBar{
+	return &widget.AppBar{
 		Leading:          leadingButton,
 		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
-		Title:            wx.Tu(dir.Data.Name),
+		Title:            widget.Tu(dir.Data.Name),
 		// Actions:          actions,
-		Search: &wx.Search{
-			Widget: wx.Widget[wx.Search]{
+		Search: &widget.Search{
+			Widget: widget.Widget[widget.Search]{
 				ID: "search",
 			},
 			Name:                    "SearchQuery",
 			Value:                   state.searchQueryRaw,
 			SupportingText:          supportingText,
 			SupportingTextAltMobile: supportingTextAltMobile,
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxOn: event.SearchQueryUpdated.HxOnWithQueryParam("input", "q"),
 			},
 		},
@@ -552,10 +554,10 @@ func (qq *ListDirPartial) filters(
 	ctx ctxx.Context,
 	listDirState *ListDirPartialState,
 	currentDirID string,
-) []wx.IWidget {
+) []widget.IWidget {
 	// TODO show only if there are dirs or files in result? would require to check complete query,
 	//		not just first 25 results...
-	chips := []wx.IWidget{
+	chips := []widget.IWidget{
 		qq.filterDocumentTypeBtn(ctx, listDirState, currentDirID),
 		qq.filterPropertiesBtn(ctx, listDirState, currentDirID),
 		// TODO open on hover
@@ -564,13 +566,13 @@ func (qq *ListDirPartial) filters(
 
 	// TODO show only if filter is active
 	chips = append(chips,
-		&wx.AssistChip{
+		&widget.AssistChip{
 			// TODO choose another styling, that it is not as prominent as the others
-			Label: wx.Tf("Reset"), // just Reset because it also resets search
-			HTMXAttrs: wx.HTMXAttrs{
+			Label: widget.Tf("Reset"), // just Reset because it also resets search
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, currentDirID), // TODO or pass in href?
 				HxHeaders: autil.ResetStateHeader(),
-				HxOn:      event.CloseSideSheet.HxOn("click"),
+				HxOn:      events.CloseSideSheet.HxOn("click"),
 			},
 			LeadingIcon: "restart_alt", // TODO
 		},
@@ -583,15 +585,15 @@ func (qq *ListDirPartial) filterTagsBtn(
 	ctx ctxx.Context,
 	listDirState *ListDirPartialState,
 	currentDirID string,
-) *wx.Container {
-	chipState := wx.AssistChipStateDefault
+) *widget.Container {
+	chipState := widget.AssistChipStateDefault
 	if len(listDirState.ListFilterTagsPartialState.CheckedTagIDs) > 0 {
-		chipState = wx.AssistChipStateHighlighted
+		chipState = widget.AssistChipStateHighlighted
 	}
 
 	hxTrigger := ""
 	hxPost := qq.actions.TagsFilterDialogPartial.Endpoint()
-	var hxOn *wx.HxOn
+	var hxOn *widget.HxOn
 	if listDirState.ActiveSideSheet == qq.actions.TagsFilterDialogPartial.ID() { // is open
 		if !ctx.VisitorCtx().IsHTMXRequest {
 			hxTrigger = "load" // leads to strange issues if done on htmx requests
@@ -603,40 +605,40 @@ func (qq *ListDirPartial) filterTagsBtn(
 			Handler: "document.querySelectorAll('.js-side-sheet-dialog').forEach(elem => elem.closeSideSheet())",
 		}*/
 		// hxOn = event.CloseSideSheet.UnsafeHxOnWithQueryParamAndValue("click", "side_sheet", "")
-		hxOn = event.CloseSideSheet.HxOn("click")
+		hxOn = events.CloseSideSheet.HxOn("click")
 	} else { // closed
 		/*hxOn = &wx.HxOn{
 			Event:   "click",
 			Handler: "document.querySelectorAll('.js-side-sheet-dialog').forEach(elem => elem.toggleCustom())",
 		}*/
 		// hxOn = event.SideSheetToggled.UnsafeHxOnWithQueryParamAndValue("click", "side_sheet", qq.actions.TagsFilterDialogPartial.ID())
-		hxOn = event.SideSheetToggled.HxOn("click")
+		hxOn = events.SideSheetToggled.HxOn("click")
 	}
 
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: "filterTagsBtn",
 		},
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data(currentDirID, "")),
 			HxTarget: "#filterTagsBtn",
 			HxSwap:   "outerHTML",
 			HxTrigger: strings.Join([]string{
 				event.FilterTagsChanged.Handler(),
-				event.SideSheetToggled.Handler(),
+				events.SideSheetToggled.Handler(),
 			}, ", "),
 		},
-		Child: &wx.AssistChip{
+		Child: &widget.AssistChip{
 			IsActive:    listDirState.ActiveSideSheet == qq.actions.TagsFilterDialogPartial.ID(),
-			Label:       wx.Tf("Tags"),
+			Label:       widget.Tf("Tags"),
 			LeadingIcon: "label",
-			Badge: &wx.Badge{
+			Badge: &widget.Badge{
 				IsInline: true,
 				Value:    len(listDirState.ListFilterTagsPartialState.CheckedTagIDs),
 			},
 			State: chipState,
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxTrigger:     hxTrigger,
 				HxPost:        hxPost,
 				HxVals:        util.JSON(qq.actions.TagsFilterDialogPartial.Data(currentDirID)),
@@ -651,53 +653,53 @@ func (qq *ListDirPartial) filterPropertiesBtn(
 	ctx ctxx.Context,
 	listDirState *ListDirPartialState,
 	currentDirID string,
-) *wx.Container {
+) *widget.Container {
 	// Count the number of active property filters
 	activeFilterCount := len(listDirState.PropertyValues)
 
-	chipState := wx.AssistChipStateDefault
+	chipState := widget.AssistChipStateDefault
 	if activeFilterCount > 0 {
-		chipState = wx.AssistChipStateHighlighted
+		chipState = widget.AssistChipStateHighlighted
 	}
 
 	hxTrigger := ""
 	hxPost := qq.actions.PropertiesFilterDialogPartial.Endpoint()
-	var hxOn *wx.HxOn
+	var hxOn *widget.HxOn
 	if listDirState.ActiveSideSheet == qq.actions.PropertiesFilterDialogPartial.ID() { // is open
 		if !ctx.VisitorCtx().IsHTMXRequest {
 			hxTrigger = "load" // leads to strange issues if done on htmx requests
 		} else {
 			hxPost = ""
 		}
-		hxOn = event.CloseSideSheet.HxOn("click")
+		hxOn = events.CloseSideSheet.HxOn("click")
 	} else { // closed
-		hxOn = event.SideSheetToggled.HxOn("click")
+		hxOn = events.SideSheetToggled.HxOn("click")
 	}
 
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: "filterPropertiesBtn",
 		},
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data(currentDirID, "")),
 			HxTarget: "#filterPropertiesBtn",
 			HxSwap:   "outerHTML",
 			HxTrigger: strings.Join([]string{
 				event.PropertyFilterChanged.Handler(),
-				event.SideSheetToggled.Handler(),
+				events.SideSheetToggled.Handler(),
 			}, ", "),
 		},
-		Child: &wx.AssistChip{
+		Child: &widget.AssistChip{
 			IsActive:    listDirState.ActiveSideSheet == qq.actions.PropertiesFilterDialogPartial.ID(),
-			Label:       wx.Tf("Fields"),
+			Label:       widget.Tf("Fields"),
 			LeadingIcon: "tune", // tune or assignment
-			Badge: &wx.Badge{
+			Badge: &widget.Badge{
 				IsInline: true,
 				Value:    activeFilterCount,
 			},
 			State: chipState,
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxTrigger:     hxTrigger,
 				HxPost:        hxPost,
 				HxVals:        util.JSON(qq.actions.PropertiesFilterDialogPartial.Data(currentDirID)),
@@ -712,33 +714,33 @@ func (qq *ListDirPartial) filterDocumentTypeBtn(
 	ctx ctxx.Context,
 	listDirState *ListDirPartialState,
 	currentDirID string,
-) *wx.Container {
+) *widget.Container {
 	// TODO open on hover
 
-	chipState := wx.AssistChipStateDefault
+	chipState := widget.AssistChipStateDefault
 	if listDirState.DocumentTypeID != 0 {
-		chipState = wx.AssistChipStateHighlighted
+		chipState = widget.AssistChipStateHighlighted
 	}
 
 	hxTrigger := ""
 	hxPost := qq.actions.DocumentTypeFilterDialogPartial.Endpoint()
-	var hxOn *wx.HxOn
+	var hxOn *widget.HxOn
 	if listDirState.ActiveSideSheet == qq.actions.DocumentTypeFilterDialogPartial.ID() { // is open
 		if !ctx.VisitorCtx().IsHTMXRequest {
 			hxTrigger = "load" // leads to strange issues if done on htmx requests
 		} else {
 			hxPost = ""
 		}
-		hxOn = event.CloseSideSheet.HxOn("click")
+		hxOn = events.CloseSideSheet.HxOn("click")
 	} else { // closed
-		hxOn = event.SideSheetToggled.HxOn("click")
+		hxOn = events.SideSheetToggled.HxOn("click")
 	}
 
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: "filterDocumentTypeBtn",
 		},
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data(currentDirID, "")),
 			HxTarget: "#filterDocumentTypeBtn",
@@ -748,12 +750,12 @@ func (qq *ListDirPartial) filterDocumentTypeBtn(
 				event.FilterTagsChanged.Handler(),
 				event.DocumentTypeFilterChanged.Handler(),
 				event.PropertyFilterChanged.Handler(),
-				event.SideSheetToggled.Handler(),
+				events.SideSheetToggled.Handler(),
 			}, ", "),
 		},
-		Child: &wx.AssistChip{
+		Child: &widget.AssistChip{
 			IsActive:    listDirState.ActiveSideSheet == qq.actions.DocumentTypeFilterDialogPartial.ID(),
-			Label:       wx.Tf("Document type"),
+			Label:       widget.Tf("Document type"),
 			LeadingIcon: "category",
 			State:       chipState,
 			/*TODO add back
@@ -761,7 +763,7 @@ func (qq *ListDirPartial) filterDocumentTypeBtn(
 				IsInline: true,
 				// Value:    len(listDirState.CheckedTagIDs),
 			},*/
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxTrigger:     hxTrigger,
 				HxPost:        hxPost,
 				HxVals:        util.JSON(qq.actions.DocumentTypeFilterDialogPartial.Data(currentDirID)),

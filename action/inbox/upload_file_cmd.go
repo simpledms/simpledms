@@ -9,17 +9,17 @@ import (
 	"path/filepath"
 
 	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	"github.com/simpledms/simpledms/core/util/e"
+	"github.com/simpledms/simpledms/core/util/fileutil"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/core/util/txx"
+	"github.com/simpledms/simpledms/core/util/uploadx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/fileutil"
-	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/txx"
-	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type uploadPrepareResult struct {
@@ -47,7 +47,7 @@ func NewUploadFileCmd(infra *common.Infra, actions *Actions) *UploadFileCmd {
 	formHelper := autil.NewFormHelper[UploadFileCmdData](
 		infra,
 		config,
-		wx.T("Upload file"),
+		widget.T("Upload file"),
 	)
 	formHelper.SetIsMultipartFormData(true)
 	return &UploadFileCmd{
@@ -63,7 +63,7 @@ func (qq *UploadFileCmd) Data() *UploadFileCmdData {
 	return &UploadFileCmdData{}
 }
 
-func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *UploadFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	nilableUploadLimitBytes, err := qq.infra.FileSystem().NilableEffectiveUploadSizeLimitBytes(ctx)
 	if err != nil {
 		return err
@@ -143,6 +143,6 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		rw,
 		ctx,
 		qq.actions.InboxPage.WidgetHandler(rw, req, ctx, prep.file.PublicID.String()),
-		wx.NewSnackbarf("«%s» uploaded.", prep.file.Name),
+		widget.NewSnackbarf("«%s» uploaded.", prep.file.Name),
 	)
 }
