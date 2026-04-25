@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entmain/tenant"
+	"github.com/simpledms/simpledms/core/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/core/model/common/tenantrole"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entmain/tenant"
-	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 )
 
 // TenantAccountAssignmentCreate is the builder for creating a TenantAccountAssignment entity.

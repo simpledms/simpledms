@@ -3,9 +3,9 @@ package managetenantusers
 import (
 	"log"
 
-	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/core/db/entmain/tenantaccountassignment"
 
-	autil "github.com/simpledms/simpledms/action/util"
+	autil "github.com/simpledms/simpledms/core/action/util"
 	"github.com/simpledms/simpledms/core/common"
 	"github.com/simpledms/simpledms/core/model/common/tenantrole"
 	"github.com/simpledms/simpledms/core/ui/uix/events"

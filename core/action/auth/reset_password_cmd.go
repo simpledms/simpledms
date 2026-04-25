@@ -4,11 +4,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entx"
 
-	autil "github.com/simpledms/simpledms/action/util"
+	autil "github.com/simpledms/simpledms/core/action/util"
 	"github.com/simpledms/simpledms/core/common"
 	account3 "github.com/simpledms/simpledms/core/model/account"
 	"github.com/simpledms/simpledms/core/model/mailer"

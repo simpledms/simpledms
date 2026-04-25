@@ -5,7 +5,7 @@ package privacy
 import (
 	"context"
 
-	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain"
 
 	"entgo.io/ent/entql"
 	"entgo.io/ent/privacy"

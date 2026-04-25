@@ -10,10 +10,10 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entmain/temporaryfile"
+	"github.com/simpledms/simpledms/core/db/entx"
 	"github.com/simpledms/simpledms/core/model/common/storagetype"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
-	"github.com/simpledms/simpledms/db/entx"
 )
 
 // TemporaryFile is the model entity for the TemporaryFile schema.

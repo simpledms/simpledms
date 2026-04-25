@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
+	"github.com/simpledms/simpledms/core/db/entmain/passkeycredential"
 
-	autil "github.com/simpledms/simpledms/action/util"
+	autil "github.com/simpledms/simpledms/core/action/util"
 	"github.com/simpledms/simpledms/core/common"
 	"github.com/simpledms/simpledms/core/model/account"
 	"github.com/simpledms/simpledms/core/ui/uix/events"

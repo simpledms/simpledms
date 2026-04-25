@@ -10,11 +10,11 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entmain/tenant"
+	"github.com/simpledms/simpledms/core/db/entx"
 	"github.com/simpledms/simpledms/core/model/common/country"
 	"github.com/simpledms/simpledms/core/model/common/plan"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entmain/tenant"
-	"github.com/simpledms/simpledms/db/entx"
 )
 
 // Tenant is the model entity for the Tenant schema.

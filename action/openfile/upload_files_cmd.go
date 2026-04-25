@@ -9,7 +9,7 @@ import (
 
 	gonanoid "github.com/matoous/go-nanoid"
 
-	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain"
 
 	"github.com/simpledms/simpledms/core/common"
 	wx "github.com/simpledms/simpledms/core/ui/widget"

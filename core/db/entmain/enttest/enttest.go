@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain"
 	// required by schema hooks.
-	_ "github.com/simpledms/simpledms/db/entmain/runtime"
+	_ "github.com/simpledms/simpledms/core/db/entmain/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/simpledms/simpledms/db/entmain/migrate"
+	"github.com/simpledms/simpledms/core/db/entmain/migrate"
 )
 
 type (

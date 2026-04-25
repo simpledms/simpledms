@@ -19,6 +19,10 @@ func newTimingDriver(driver dialect.Driver) *timingDriver {
 	}
 }
 
+func NewTimingDriver(driver dialect.Driver) dialect.Driver {
+	return newTimingDriver(driver)
+}
+
 func (qq *timingDriver) Exec(ctx context.Context, query string, args, v any) error {
 	if !queryTimingLogger.IsEnabled() {
 		return qq.driver.Exec(ctx, query, args, v)

@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/simpledms/simpledms/db/entmain/predicate"
-	"github.com/simpledms/simpledms/db/entmain/session"
+	"github.com/simpledms/simpledms/core/db/entmain/predicate"
+	"github.com/simpledms/simpledms/core/db/entmain/session"
 )
 
 // SessionDelete is the builder for deleting a Session entity.

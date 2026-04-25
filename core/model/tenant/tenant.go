@@ -17,11 +17,11 @@ import (
 	migratex "github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
-	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/core/db/entx"
 
-	sqlx2 "github.com/simpledms/simpledms/core/db/sqlx"
+	coresqlx "github.com/simpledms/simpledms/core/db/sqlx"
 	accountm "github.com/simpledms/simpledms/core/model/account"
 	"github.com/simpledms/simpledms/core/model/common/tenantrole"
 	"github.com/simpledms/simpledms/core/pathx"
@@ -112,8 +112,8 @@ func (qq *Tenant) tenantDataSourceURL(metaPath string, shouldCreateDirs bool) (s
 		return "", "", err
 	}
 
-	return fmt.Sprintf("file:%s?%s", tenantDBPath, sqlx2.SQLiteQueryParamsReadOnly),
-		fmt.Sprintf("file:%s?%s", tenantDBPath, sqlx2.SQLiteQueryParamsReadWrite),
+	return fmt.Sprintf("file:%s?%s", tenantDBPath, coresqlx.SQLiteQueryParamsReadOnly),
+		fmt.Sprintf("file:%s?%s", tenantDBPath, coresqlx.SQLiteQueryParamsReadWrite),
 		nil
 }
 

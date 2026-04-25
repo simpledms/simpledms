@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain"
 )
 
 // The AccountFunc type is an adapter to allow the use of ordinary

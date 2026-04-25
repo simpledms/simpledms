@@ -1,7 +1,7 @@
 package spaces
 
 import (
-	autil "github.com/simpledms/simpledms/action/util"
+	autil "github.com/simpledms/simpledms/core/action/util"
 
 	acommon "github.com/simpledms/simpledms/core/action/common"
 	"github.com/simpledms/simpledms/core/common"

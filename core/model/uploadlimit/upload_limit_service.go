@@ -4,14 +4,14 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/simpledms/simpledms/core/db/entmain"
+	tenantquery "github.com/simpledms/simpledms/core/db/entmain/tenant"
+	"github.com/simpledms/simpledms/core/db/entx"
 	"github.com/simpledms/simpledms/core/model/common/mainrole"
 	"github.com/simpledms/simpledms/core/model/systemconfig"
 	tenantmodel "github.com/simpledms/simpledms/core/model/tenant"
 	"github.com/simpledms/simpledms/core/util/e"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
-	tenantquery "github.com/simpledms/simpledms/db/entmain/tenant"
-	"github.com/simpledms/simpledms/db/entx"
 )
 
 type UploadLimitService struct{}

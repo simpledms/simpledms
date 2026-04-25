@@ -11,7 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	autil "github.com/simpledms/simpledms/action/util"
+	autil "github.com/simpledms/simpledms/core/action/util"
 
 	common2 "github.com/simpledms/simpledms/core/action/common"
 	"github.com/simpledms/simpledms/core/common"

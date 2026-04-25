@@ -17,15 +17,14 @@ import (
 	"github.com/marcobeierer/structs"
 	"github.com/mattn/go-sqlite3"
 
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/session"
-	"github.com/simpledms/simpledms/db/entmain/tenant"
-	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
-	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain/session"
+	"github.com/simpledms/simpledms/core/db/entmain/tenant"
+	"github.com/simpledms/simpledms/core/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/core/db/entx"
 
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/core/common"
-	ctxx2 "github.com/simpledms/simpledms/core/ctxx"
 	"github.com/simpledms/simpledms/core/db/sqlx"
 	"github.com/simpledms/simpledms/core/model/account"
 	"github.com/simpledms/simpledms/core/model/common/mainrole"
@@ -37,6 +36,7 @@ import (
 	"github.com/simpledms/simpledms/core/util/e"
 	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/i18n"
@@ -107,6 +107,14 @@ func NewRouter(
 	router.allowSetupSessionPath(route.Dashboard())
 
 	return router
+}
+
+func (qq *Router) Infra() *common.Infra {
+	return qq.infra
+}
+
+func (qq *Router) WrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc {
+	return qq.wrapTx(handlerFn, isReadOnly)
 }
 
 func (qq *Router) RegisterPage(pattern string, handlerFn handlerFn) {

@@ -8,9 +8,9 @@ import (
 	"entgo.io/ent/privacy"
 	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/simpledms/simpledms/db/entmain"
-	entmaintest "github.com/simpledms/simpledms/db/entmain/enttest"
-	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/core/db/entmain"
+	entmaintest "github.com/simpledms/simpledms/core/db/entmain/enttest"
+	"github.com/simpledms/simpledms/core/db/entx"
 
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	sqlx2 "github.com/simpledms/simpledms/core/db/sqlx"

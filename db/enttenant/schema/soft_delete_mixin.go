@@ -8,9 +8,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
+	"github.com/simpledms/simpledms/core/db/entx"
 	"github.com/simpledms/simpledms/db/enttenant/hook"
 	"github.com/simpledms/simpledms/db/enttenant/intercept"
-	"github.com/simpledms/simpledms/db/entx"
 )
 
 // IMPORTANT

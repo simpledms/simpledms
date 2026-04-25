@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	autil "github.com/simpledms/simpledms/action/util"
+	autil "github.com/simpledms/simpledms/core/action/util"
 	"github.com/simpledms/simpledms/core/common"
 	uploadlimitmodel "github.com/simpledms/simpledms/core/model/uploadlimit"
 	"github.com/simpledms/simpledms/core/ui/util"

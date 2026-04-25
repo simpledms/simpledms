@@ -6,6 +6,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/simpledms/simpledms/core/db/entx"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
@@ -21,7 +22,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/db/entx"
 
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"

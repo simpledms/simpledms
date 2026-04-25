@@ -7,14 +7,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/simpledms/simpledms/db/entmain"
-	mainaccount "github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
-	maintenant "github.com/simpledms/simpledms/db/entmain/tenant"
-	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/core/db/entmain"
+	mainaccount "github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entmain/passkeycredential"
+	maintenant "github.com/simpledms/simpledms/core/db/entmain/tenant"
+	"github.com/simpledms/simpledms/core/db/entmain/tenantaccountassignment"
 
 	"github.com/simpledms/simpledms/core/common"
-	ctxx2 "github.com/simpledms/simpledms/core/ctxx"
 	account2 "github.com/simpledms/simpledms/core/model/account"
 	"github.com/simpledms/simpledms/core/model/common/mainrole"
 	"github.com/simpledms/simpledms/core/model/tenant"
@@ -27,6 +26,7 @@ import (
 	"github.com/simpledms/simpledms/core/util/fileutil"
 	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
@@ -765,7 +765,7 @@ func (qq *DashboardCardsPartial) manageUsersBtn(ctx ctxx.Context, tenantx *entma
 		Label:     widget.T("Manage users"),
 		StyleType: widget.ButtonStyleTypeElevated,
 		HTMXAttrs: widget.HTMXAttrs{
-			HxGet: route2.ManageUsersOfTenant(tenantx.PublicID.String()),
+			HxGet: route.ManageUsersOfTenant(tenantx.PublicID.String()),
 		},
 	}, true
 }

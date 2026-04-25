@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entmain/temporaryfile"
+	"github.com/simpledms/simpledms/core/db/entx"
 	"github.com/simpledms/simpledms/core/model/common/storagetype"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
-	"github.com/simpledms/simpledms/db/entx"
 )
 
 // TemporaryFileCreate is the builder for creating a TemporaryFile entity.

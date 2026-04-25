@@ -14,7 +14,7 @@ import (
 
 	"filippo.io/age"
 
-	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
+	migratemain "github.com/simpledms/simpledms/core/db/entmain/migrate"
 
 	"github.com/simpledms/simpledms/core/db/sqlx"
 	ui2 "github.com/simpledms/simpledms/core/ui"

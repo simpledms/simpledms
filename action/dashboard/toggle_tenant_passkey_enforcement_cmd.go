@@ -3,12 +3,12 @@ package dashboard
 import (
 	"net/http"
 
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/tenant"
-	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
-	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain/tenant"
+	"github.com/simpledms/simpledms/core/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/core/db/entx"
 
-	autil "github.com/simpledms/simpledms/action/util"
+	autil "github.com/simpledms/simpledms/core/action/util"
 	"github.com/simpledms/simpledms/core/common"
 	account2 "github.com/simpledms/simpledms/core/model/account"
 	tenant2 "github.com/simpledms/simpledms/core/model/tenant"

@@ -23,11 +23,11 @@ import (
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"golang.org/x/crypto/acme/autocert"
 
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/migrate"
-	"github.com/simpledms/simpledms/db/entmain/systemconfig"
-	"github.com/simpledms/simpledms/db/entmain/tenant"
-	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain/migrate"
+	"github.com/simpledms/simpledms/core/db/entmain/systemconfig"
+	"github.com/simpledms/simpledms/core/db/entmain/tenant"
+	"github.com/simpledms/simpledms/core/db/entx"
 
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/action/download"
@@ -35,7 +35,6 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	common2 "github.com/simpledms/simpledms/core/common"
-	"github.com/simpledms/simpledms/core/ctxx"
 	"github.com/simpledms/simpledms/core/db/sqlx"
 	appmodel "github.com/simpledms/simpledms/core/model/app"
 	"github.com/simpledms/simpledms/core/model/common/country"
@@ -54,6 +53,7 @@ import (
 	"github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/core/util/ocrutil"
 	"github.com/simpledms/simpledms/core/util/recoverx"
+	"github.com/simpledms/simpledms/ctxx"
 	migrate2 "github.com/simpledms/simpledms/db/enttenant/migrate"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/i18n"
@@ -280,7 +280,7 @@ func (qq *Server) Start() error {
 // TODO way to long, needs refactoring
 func (qq *Server) Prepare() (*PreparedServer, error) {
 	// TODO close all clients
-	mainDB := dbMigrationsMainDB(qq.devMode, qq.metaPath, qq.migrationsMainFS)
+	mainDB := server2.DBMigrationsMainDB(qq.devMode, qq.metaPath, qq.migrationsMainFS)
 	ctx := context.Background()
 	overrideDBConfig := os.Getenv("SIMPLEDMS_OVERRIDE_DB_CONFIG") == "true"
 
@@ -802,7 +802,7 @@ func (qq *Server) registerCoreRoutes(
 		if req.Method == "GET" && req.URL.Path == "/" {
 			// router.wrapTx(pages.Browse.Handler)(rw, req)
 			// router.wrapTx(actions.Spaces.SpacesPage.Handler)(rw, req)
-			router.wrapTx(actions.Auth.SignInPage.Handler, true)(rw, req)
+			router.WrapTx(actions.Auth.SignInPage.Handler, true)(rw, req)
 			return
 		}
 		rw.WriteHeader(http.StatusNotFound)
@@ -836,7 +836,7 @@ func (qq *Server) registerCoreRoutes(
 
 	router.RegisterPage(route2.PropertiesRoute(), actions.Property.PropertiesPage.Handler)
 	router.RegisterPage(route2.ManageUsersOfSpaceRoute(), actions.ManageSpaceUsers.ManageUsersOfSpacePage.Handler)
-	router.RegisterPage(route2.ManageUsersOfTenantRoute(), actions.ManageTenantUsers.ManageUsersOfTenantPage.Handler)
+	router.RegisterPage(route.ManageUsersOfTenantRoute(), actions.ManageTenantUsers.ManageUsersOfTenantPage.Handler)
 
 	router.RegisterPage(route2.SelectSpaceRoute(false), actions.OpenFile.SelectSpacePage.Handler)
 	router.RegisterPage(route2.SelectSpaceRoute(true), actions.OpenFile.SelectSpacePage.Handler)

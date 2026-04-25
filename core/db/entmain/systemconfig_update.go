@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entmain/predicate"
-	"github.com/simpledms/simpledms/db/entmain/systemconfig"
-	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entmain/predicate"
+	"github.com/simpledms/simpledms/core/db/entmain/systemconfig"
+	"github.com/simpledms/simpledms/core/db/entx"
 )
 
 // SystemConfigUpdate is the builder for updating SystemConfig entities.

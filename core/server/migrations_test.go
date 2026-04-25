@@ -8,7 +8,8 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
+	migratemain "github.com/simpledms/simpledms/core/db/entmain/migrate"
+	_ "github.com/simpledms/simpledms/core/db/entmain/runtime"
 
 	"github.com/simpledms/simpledms/core/db/sqlx"
 )

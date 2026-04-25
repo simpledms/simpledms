@@ -12,12 +12,16 @@ import (
 	migrate2 "github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 
-	"github.com/simpledms/simpledms/db/entmain/migrate"
+	"github.com/simpledms/simpledms/core/db/entmain/migrate"
 
 	"github.com/simpledms/simpledms/core/db/sqlx"
 )
 
 // caller has to close db
+func DBMigrationsMainDB(isDevMode bool, metaPath string, migrationsMainFS fs.FS) *sqlx.MainDB {
+	return dbMigrationsMainDB(isDevMode, metaPath, migrationsMainFS)
+}
+
 func dbMigrationsMainDB(isDevMode bool, metaPath string, migrationsMainFS fs.FS) *sqlx.MainDB {
 	mainDBPath, err := securejoin.SecureJoin(metaPath, "main.sqlite3")
 	if err != nil {

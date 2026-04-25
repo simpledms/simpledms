@@ -5,7 +5,6 @@ package ctxx
 import (
 	"context"
 
-	ctxx2 "github.com/simpledms/simpledms/core/ctxx"
 	"github.com/simpledms/simpledms/core/model/common/tenantrole"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
@@ -19,7 +18,7 @@ type SpaceContext struct {
 	// ResponseWriter httpx.ResponseWriter
 	// Request        *httpx.Request
 	// Infra        *common.Infra // TODO is this a good idea?
-	*ctxx2.TenantContext
+	*TenantContext
 	// context.Context
 	// MainTx       *entmain.Tx
 	// Account      *entmain.Account // modelmain.Account would be better, but leads to circular dependency
@@ -33,7 +32,7 @@ type SpaceContext struct {
 }
 
 func NewSpaceContext(
-	tenantContext *ctxx2.TenantContext,
+	tenantContext *TenantContext,
 	space *enttenant.Space,
 ) *SpaceContext {
 	spaceCtx := &SpaceContext{

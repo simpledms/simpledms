@@ -1,8 +1,8 @@
 package session
 
 import (
+	"github.com/simpledms/simpledms/core/db/entmain/session"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain/session"
 )
 
 type SessionService struct{}

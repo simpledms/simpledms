@@ -2,4 +2,4 @@
 
 package entmain
 
-// The schema-stitching logic is generated in github.com/simpledms/simpledms/db/entmain/runtime/runtime.go
+// The schema-stitching logic is generated in github.com/simpledms/simpledms/core/db/entmain/runtime/runtime.go

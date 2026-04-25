@@ -11,11 +11,11 @@ import (
 
 	"filippo.io/age"
 
+	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entx"
 	"github.com/simpledms/simpledms/core/util/e"
 	"github.com/simpledms/simpledms/core/util/ocrutil"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/encryptor"
 )
 

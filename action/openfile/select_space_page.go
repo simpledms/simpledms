@@ -3,7 +3,7 @@ package openfile
 import (
 	"log"
 
-	autil "github.com/simpledms/simpledms/action/util"
+	autil "github.com/simpledms/simpledms/core/action/util"
 
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	acommon "github.com/simpledms/simpledms/core/action/common"

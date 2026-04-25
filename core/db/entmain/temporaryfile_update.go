@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entmain/predicate"
+	"github.com/simpledms/simpledms/core/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/core/model/common/storagetype"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entmain/predicate"
-	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 )
 
 // TemporaryFileUpdate is the builder for updating TemporaryFile entities.

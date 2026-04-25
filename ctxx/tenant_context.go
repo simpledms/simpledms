@@ -5,16 +5,15 @@ package ctxx
 import (
 	"context"
 
-	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain"
 
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/sqlx"
 )
 
 type TenantContext struct {
-	*ctxx2.MainContext
+	*MainContext
 	// context.Context
 	// MainTx      *entmain.Tx
 	// Account     *entmain.Account // modelmain.Account would be better, but leads to circular dependency
@@ -29,7 +28,7 @@ type TenantContext struct {
 }
 
 func NewTenantContext(
-	mainContext *ctxx2.MainContext,
+	mainContext *MainContext,
 	tenantTx *enttenant.Tx,
 	tenant *entmain.Tenant,
 	isReadOnly bool,
@@ -49,7 +48,7 @@ func NewTenantContext(
 		User:        userx,
 		isReadOnly:  isReadOnly,
 	}
-	tenantCtx.Context = context.WithValue(mainContext.Context, ctxx2.tenantCtxKey, tenantCtx)
+	tenantCtx.Context = context.WithValue(mainContext.Context, tenantCtxKey, tenantCtx)
 	return tenantCtx
 }
 
@@ -65,7 +64,7 @@ func (qq *TenantContext) IsReadOnlyTx() bool {
 	return qq.isReadOnly
 }
 
-func (qq *TenantContext) SpaceCtx() *ctxx2.SpaceContext {
+func (qq *TenantContext) SpaceCtx() *SpaceContext {
 	panic("context not available")
 }
 

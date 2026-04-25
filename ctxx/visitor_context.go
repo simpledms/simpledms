@@ -9,9 +9,8 @@ import (
 
 	"golang.org/x/text/language"
 
-	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain"
 
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/i18n"
 )
 
@@ -78,7 +77,7 @@ func NewVisitorContext(
 		Location:                 location,
 		CommercialLicenseEnabled: commercialLicenseEnabled,
 	}
-	visitorCtx.Context = context.WithValue(ctx, ctxx2.visitorCtxKey, visitorCtx)
+	visitorCtx.Context = context.WithValue(ctx, visitorCtxKey, visitorCtx)
 	return visitorCtx
 }
 
@@ -86,7 +85,7 @@ func (qq *VisitorContext) VisitorCtx() *VisitorContext {
 	return qq
 }
 
-func (qq *VisitorContext) MainCtx() *ctxx2.MainContext {
+func (qq *VisitorContext) MainCtx() *MainContext {
 	panic("context not available")
 }
 
@@ -94,7 +93,7 @@ func (qq *VisitorContext) TenantCtx() *TenantContext {
 	panic("context not available")
 }
 
-func (qq *VisitorContext) SpaceCtx() *ctxx2.SpaceContext {
+func (qq *VisitorContext) SpaceCtx() *SpaceContext {
 	panic("context not available")
 }
 

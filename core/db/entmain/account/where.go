@@ -8,10 +8,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 
+	"github.com/simpledms/simpledms/core/db/entmain/predicate"
+	"github.com/simpledms/simpledms/core/db/entx"
 	"github.com/simpledms/simpledms/core/model/common/language"
 	"github.com/simpledms/simpledms/core/model/common/mainrole"
-	"github.com/simpledms/simpledms/db/entmain/predicate"
-	"github.com/simpledms/simpledms/db/entx"
 )
 
 // ID filters vertices based on their ID field.

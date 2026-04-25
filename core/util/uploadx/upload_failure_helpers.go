@@ -4,10 +4,10 @@ import (
 	"log"
 	"time"
 
+	"github.com/simpledms/simpledms/core/db/entmain"
+	entmainschema "github.com/simpledms/simpledms/core/db/entmain/schema"
 	"github.com/simpledms/simpledms/core/util/txx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
-	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"

@@ -2,13 +2,15 @@ package server
 
 import (
 	"context"
+	"io/fs"
 	"log"
 
-	"github.com/simpledms/simpledms/db/entmain/tenant"
+	"github.com/simpledms/simpledms/core/db/entmain/tenant"
 
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/core/db/sqlx"
 	tenant2 "github.com/simpledms/simpledms/core/model/tenant"
+	server2 "github.com/simpledms/simpledms/core/server"
 )
 
 /*
@@ -111,6 +113,10 @@ func sqliteTableHasColumn(
 	return rows.Next(), rows.Err()
 }
 */
+
+func dbMigrationsMainDB(isDevMode bool, metaPath string, migrationsMainFS fs.FS) *sqlx.MainDB {
+	return server2.DBMigrationsMainDB(isDevMode, metaPath, migrationsMainFS)
+}
 
 func dbMigrationsTenantDBs(mainDB *sqlx.MainDB, isDevMode bool, metaPath string) *tenantdbs.TenantDBs {
 	// TODO Where query shouldn't be necessary because of mixin, but it seems it is...

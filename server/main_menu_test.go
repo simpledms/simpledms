@@ -5,15 +5,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entx"
 
-	ctxx2 "github.com/simpledms/simpledms/core/ctxx"
 	"github.com/simpledms/simpledms/core/model/common/country"
 	"github.com/simpledms/simpledms/core/model/common/plan"
 	"github.com/simpledms/simpledms/core/model/common/tenantrole"
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 

@@ -3,7 +3,7 @@ package auth
 import (
 	"net/http"
 
-	autil "github.com/simpledms/simpledms/action/util"
+	autil "github.com/simpledms/simpledms/core/action/util"
 	"github.com/simpledms/simpledms/core/common"
 	"github.com/simpledms/simpledms/core/model/account"
 	"github.com/simpledms/simpledms/core/ui/uix/events"

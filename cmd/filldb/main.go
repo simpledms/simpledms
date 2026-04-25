@@ -15,11 +15,11 @@ import (
 	securejoin "github.com/cyphar/filepath-securejoin"
 	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/simpledms/simpledms/db/entmain"
-	mainprivacy "github.com/simpledms/simpledms/db/entmain/privacy"
-	_ "github.com/simpledms/simpledms/db/entmain/runtime"
-	tenantpred "github.com/simpledms/simpledms/db/entmain/tenant"
-	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/core/db/entmain"
+	mainprivacy "github.com/simpledms/simpledms/core/db/entmain/privacy"
+	_ "github.com/simpledms/simpledms/core/db/entmain/runtime"
+	tenantpred "github.com/simpledms/simpledms/core/db/entmain/tenant"
+	"github.com/simpledms/simpledms/core/db/entx"
 
 	sqlx2 "github.com/simpledms/simpledms/core/db/sqlx"
 	tenantm "github.com/simpledms/simpledms/core/model/tenant"

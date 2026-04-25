@@ -1,11 +1,11 @@
 package tenantmembership
 
 import (
+	"github.com/simpledms/simpledms/core/db/entmain"
 	account2 "github.com/simpledms/simpledms/core/model/account"
 	"github.com/simpledms/simpledms/core/model/common/mainrole"
 	"github.com/simpledms/simpledms/core/model/tenantaccess"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
 )
 
 type RemoveAccountFromTenantResult struct {

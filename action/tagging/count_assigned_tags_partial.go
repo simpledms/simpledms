@@ -3,7 +3,7 @@ package tagging
 import (
 	"fmt"
 
-	autil "github.com/simpledms/simpledms/action/util"
+	autil "github.com/simpledms/simpledms/core/action/util"
 	"github.com/simpledms/simpledms/core/common"
 	"github.com/simpledms/simpledms/core/ui/uix/events"
 	"github.com/simpledms/simpledms/core/ui/util"

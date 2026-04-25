@@ -1,8 +1,8 @@
 package tenantmembership
 
 import (
+	"github.com/simpledms/simpledms/core/db/entmain"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
 )
 
 type TenantMembership struct {

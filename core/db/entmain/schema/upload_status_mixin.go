@@ -5,8 +5,8 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/simpledms/simpledms/db/entmain/intercept"
-	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/core/db/entmain/intercept"
+	"github.com/simpledms/simpledms/core/db/entx"
 )
 
 // IMPORTANT

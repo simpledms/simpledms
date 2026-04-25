@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"slices"
 
-	autil "github.com/simpledms/simpledms/action/util"
+	autil "github.com/simpledms/simpledms/core/action/util"
 	"github.com/simpledms/simpledms/core/common"
 	"github.com/simpledms/simpledms/core/ui/renderable"
 	"github.com/simpledms/simpledms/core/ui/util"

@@ -8,7 +8,7 @@ import (
 
 	"entgo.io/ent/privacy"
 
-	"github.com/simpledms/simpledms/db/entmain/session"
+	"github.com/simpledms/simpledms/core/db/entmain/session"
 )
 
 func (qq *Scheduler) cleanupSessions() {

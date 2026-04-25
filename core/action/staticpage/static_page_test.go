@@ -11,13 +11,12 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/simpledms/simpledms/db/entmain/enttest"
-	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/core/db/entmain/enttest"
+	"github.com/simpledms/simpledms/core/db/entx"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	common2 "github.com/simpledms/simpledms/core/common"
-	ctxx2 "github.com/simpledms/simpledms/core/ctxx"
 	appmodel "github.com/simpledms/simpledms/core/model/app"
 	"github.com/simpledms/simpledms/core/model/common/language"
 	"github.com/simpledms/simpledms/core/model/common/mainrole"
@@ -28,6 +27,7 @@ import (
 	"github.com/simpledms/simpledms/core/util/e"
 	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 )

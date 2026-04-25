@@ -56,7 +56,7 @@ func (qq *PreparedServer) Router() *server2.Router {
 // Infra returns the initialized infrastructure so wrappers can build actions
 // that depend on renderer, config, and other runtime services.
 func (qq *PreparedServer) Infra() *common.Infra {
-	return qq.router.infra
+	return qq.router.Infra()
 }
 
 // Start starts background services and begins listening for HTTP requests.

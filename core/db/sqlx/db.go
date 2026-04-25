@@ -26,6 +26,10 @@ func newDB[T client[T, U], U any](readOnlyConn, readWriteConn T, readWriteDataSo
 	}
 }
 
+func NewDB[T client[T, U], U any](readOnlyConn, readWriteConn T, readWriteDataSourceURL string) *DB[T, U] {
+	return newDB(readOnlyConn, readWriteConn, readWriteDataSourceURL)
+}
+
 func (qq *DB[T, U]) ReadWriteDataSourceURL() string {
 	return qq.readWriteDataSourceURL
 }

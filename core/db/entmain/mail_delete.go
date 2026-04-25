@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/simpledms/simpledms/db/entmain/mail"
-	"github.com/simpledms/simpledms/db/entmain/predicate"
+	"github.com/simpledms/simpledms/core/db/entmain/mail"
+	"github.com/simpledms/simpledms/core/db/entmain/predicate"
 )
 
 // MailDelete is the builder for deleting a Mail entity.

@@ -7,12 +7,12 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 
-	sqlx2 "github.com/simpledms/simpledms/core/db/sqlx"
+	coresqlx "github.com/simpledms/simpledms/core/db/sqlx"
 	"github.com/simpledms/simpledms/db/enttenant"
 )
 
 type TenantDB struct {
-	*sqlx2.DB[*enttenant.Client, *enttenant.Tx]
+	*coresqlx.DB[*enttenant.Client, *enttenant.Tx]
 }
 
 func NewTenantDB(readOnlyDataSourceURL, readWriteDataSourceURL string) *TenantDB {
@@ -25,7 +25,7 @@ func NewTenantDB(readOnlyDataSourceURL, readWriteDataSourceURL string) *TenantDB
 	// TODO related to number of cpus? runtime.NumCPU
 	//		if in doubt, set it low to prevent out of memory issue?
 	readOnlyDrv.DB().SetMaxOpenConns(runtime.NumCPU()) // TODO enough?
-	readOnlyConn := enttenant.NewClient(enttenant.Driver(sqlx2.newTimingDriver(readOnlyDrv)))
+	readOnlyConn := enttenant.NewClient(enttenant.Driver(coresqlx.NewTimingDriver(readOnlyDrv)))
 
 	// read write
 	readWriteDrv, err := sql.Open(dialect.SQLite, readWriteDataSourceURL)
@@ -34,9 +34,9 @@ func NewTenantDB(readOnlyDataSourceURL, readWriteDataSourceURL string) *TenantDB
 	}
 	readWriteDrv.DB().SetMaxIdleConns(0)
 	readWriteDrv.DB().SetMaxOpenConns(1)
-	readWriteConn := enttenant.NewClient(enttenant.Driver(sqlx2.newTimingDriver(readWriteDrv)))
+	readWriteConn := enttenant.NewClient(enttenant.Driver(coresqlx.NewTimingDriver(readWriteDrv)))
 
 	return &TenantDB{
-		DB: sqlx2.newDB(readOnlyConn, readWriteConn, readWriteDataSourceURL),
+		DB: coresqlx.NewDB(readOnlyConn, readWriteConn, readWriteDataSourceURL),
 	}
 }

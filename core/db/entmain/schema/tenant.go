@@ -6,9 +6,9 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
+	"github.com/simpledms/simpledms/core/db/entx"
 	"github.com/simpledms/simpledms/core/model/common/country"
 	"github.com/simpledms/simpledms/core/model/common/plan"
-	"github.com/simpledms/simpledms/db/entx"
 )
 
 // Tenant holds the schema definition for the Tenant entity.

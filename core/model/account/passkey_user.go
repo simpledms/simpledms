@@ -3,7 +3,7 @@ package account
 import (
 	"github.com/go-webauthn/webauthn/webauthn"
 
-	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain"
 )
 
 type passkeyUser struct {

@@ -3,7 +3,7 @@ package systemconfig
 import (
 	"testing"
 
-	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain"
 )
 
 func TestSystemConfigWebAuthnRPIDDerivesFromPublicOrigin(t *testing.T) {

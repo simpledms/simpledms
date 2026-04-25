@@ -1,16 +1,12 @@
 package ctxx
 
-import (
-	"context"
-
-	ctxx2 "github.com/simpledms/simpledms/core/ctxx"
-)
+import "context"
 
 type Context interface {
 	context.Context
-	VisitorCtx() *ctxx2.VisitorContext
+	VisitorCtx() *VisitorContext
 	MainCtx() *MainContext
-	TenantCtx() *ctxx2.TenantContext
+	TenantCtx() *TenantContext
 	SpaceCtx() *SpaceContext
 
 	IsVisitorCtx() bool
@@ -30,16 +26,16 @@ var (
 // Necessary in case ctx gets wrapped with value by another library; in this case, SpaceCtx is
 // no longer accessible directly, just via Value() method
 // TODO or Space?
-func VisitorCtx(ctx context.Context) (*ctxx2.VisitorContext, bool) {
-	val, ok := ctx.Value(visitorCtxKey).(*ctxx2.VisitorContext)
+func VisitorCtx(ctx context.Context) (*VisitorContext, bool) {
+	val, ok := ctx.Value(visitorCtxKey).(*VisitorContext)
 	return val, ok
 }
 func MainCtx(ctx context.Context) (*MainContext, bool) {
 	val, ok := ctx.Value(mainCtxKey).(*MainContext)
 	return val, ok
 }
-func TenantCtx(ctx context.Context) (*ctxx2.TenantContext, bool) {
-	val, ok := ctx.Value(tenantCtxKey).(*ctxx2.TenantContext)
+func TenantCtx(ctx context.Context) (*TenantContext, bool) {
+	val, ok := ctx.Value(tenantCtxKey).(*TenantContext)
 	return val, ok
 }
 func SpaceCtx(ctx context.Context) (*SpaceContext, bool) {
@@ -48,14 +44,14 @@ func SpaceCtx(ctx context.Context) (*SpaceContext, bool) {
 }
 
 // TODO or SpaceX
-func VisitorCtxX(ctx context.Context) *ctxx2.VisitorContext {
-	return ctx.Value(visitorCtxKey).(*ctxx2.VisitorContext)
+func VisitorCtxX(ctx context.Context) *VisitorContext {
+	return ctx.Value(visitorCtxKey).(*VisitorContext)
 }
 func MainCtxX(ctx context.Context) *MainContext {
 	return ctx.Value(mainCtxKey).(*MainContext)
 }
-func TenantCtxX(ctx context.Context) *ctxx2.TenantContext {
-	return ctx.Value(tenantCtxKey).(*ctxx2.TenantContext)
+func TenantCtxX(ctx context.Context) *TenantContext {
+	return ctx.Value(tenantCtxKey).(*TenantContext)
 }
 func SpaceCtxX(ctx context.Context) *SpaceContext {
 	return ctx.Value(spaceCtxKey).(*SpaceContext)

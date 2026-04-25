@@ -4,6 +4,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/simpledms/simpledms/core/db/entx"
 	"github.com/simpledms/simpledms/core/model/account"
 	"github.com/simpledms/simpledms/core/model/common/country"
 	"github.com/simpledms/simpledms/core/model/common/language"
@@ -13,7 +14,6 @@ import (
 	"github.com/simpledms/simpledms/core/model/mailer"
 	"github.com/simpledms/simpledms/core/util/timex"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entx"
 )
 
 type SignUpService struct{}

@@ -7,31 +7,30 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain"
 
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	ctxx2 "github.com/simpledms/simpledms/core/ctxx"
-	sqlx2 "github.com/simpledms/simpledms/core/db/sqlx"
+	coresqlx "github.com/simpledms/simpledms/core/db/sqlx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
 )
 
 type MainContext struct {
-	*ctxx2.VisitorContext
+	*VisitorContext
 	Account *entmain.Account // modelmain.Account would be better, but leads to circular dependency
 	// should never be exposed directly;
 	// unsafe because must be used with care
-	unsafeMainDB    *sqlx2.MainDB
+	unsafeMainDB    *coresqlx.MainDB
 	unsafeTenantDBs *tenantdbs.TenantDBs
 	isReadOnly      bool
 }
 
 func NewMainContext(
-	ctx *ctxx2.VisitorContext,
+	ctx *VisitorContext,
 	account *entmain.Account,
 	i18nx *i18n.I18n,
-	mainDB *sqlx2.MainDB,
+	mainDB *coresqlx.MainDB,
 	tenantDBs *tenantdbs.TenantDBs,
 	isReadOnly bool,
 ) *MainContext {
@@ -50,7 +49,7 @@ func NewMainContext(
 	return mainCtx
 }
 
-func (qq *MainContext) UnsafeMainDB() *sqlx2.MainDB {
+func (qq *MainContext) UnsafeMainDB() *coresqlx.MainDB {
 	return qq.unsafeMainDB
 }
 
@@ -89,7 +88,7 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() (map[*entmain.Tenant][]*e
 		}
 
 		// necessary for permissions
-		tenantCtx := ctxx2.NewTenantContext(qq, tenantTx, tenantx, true)
+		tenantCtx := NewTenantContext(qq, tenantTx, tenantx, true)
 
 		// spaces = append(spaces, tenantDB.Space.Query().AllX(ctx)...)
 		spacesx, err := tenantDB.ReadOnlyConn.Space.Query().All(tenantCtx)
@@ -128,7 +127,7 @@ func (qq *MainContext) IsReadOnlyTx() bool {
 	return qq.isReadOnly
 }
 
-func (qq *MainContext) TenantCtx() *ctxx2.TenantContext {
+func (qq *MainContext) TenantCtx() *TenantContext {
 	panic("context not available")
 }
 

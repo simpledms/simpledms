@@ -10,19 +10,19 @@ import (
 	"testing"
 	"time"
 
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	entmainschema "github.com/simpledms/simpledms/core/db/entmain/schema"
+	"github.com/simpledms/simpledms/core/db/entmain/session"
+	"github.com/simpledms/simpledms/core/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/core/db/entx"
 	"github.com/simpledms/simpledms/core/model/common/language"
 	"github.com/simpledms/simpledms/core/model/common/tenantrole"
 	"github.com/simpledms/simpledms/core/ui/uix/events"
+	"github.com/simpledms/simpledms/core/ui/uix/route"
 	"github.com/simpledms/simpledms/core/util/accountutil"
 	"github.com/simpledms/simpledms/core/util/cookiex"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
-	"github.com/simpledms/simpledms/db/entmain/session"
-	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
 func TestSignInCmdRejectsUserWithoutActiveTenantAssignment(t *testing.T) {
