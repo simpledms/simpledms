@@ -12,8 +12,8 @@ import (
 
 	// necessary to prevent circular dependencies when interceptors, hooks or privacy policies
 	// are used; not tested, just taken from ent docs
-	_ "github.com/simpledms/simpledms/core/db/entmain/runtime"
-	coreui "github.com/simpledms/simpledms/core/ui"
+	_ "github.com/marcobeierer/go-core/db/entmain/runtime"
+	coreui "github.com/marcobeierer/go-core/ui"
 	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
 	"github.com/simpledms/simpledms/server"
 	"github.com/simpledms/simpledms/ui/uix"

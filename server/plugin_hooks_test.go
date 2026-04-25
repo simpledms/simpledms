@@ -5,15 +5,15 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/simpledms/simpledms/core/db/entmain/account"
-	"github.com/simpledms/simpledms/core/db/entx"
+	"github.com/marcobeierer/go-core/db/entmain/account"
+	"github.com/marcobeierer/go-core/db/entx"
 
-	"github.com/simpledms/simpledms/core/model/common/country"
-	"github.com/simpledms/simpledms/core/model/common/language"
-	signupmodel "github.com/simpledms/simpledms/core/model/signup"
-	"github.com/simpledms/simpledms/core/pluginx"
-	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/ctxx"
+	ctxx2 "github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/model/common/country"
+	"github.com/marcobeierer/go-core/model/common/language"
+	signupmodel "github.com/marcobeierer/go-core/model/signup"
+	"github.com/marcobeierer/go-core/pluginx"
 )
 
 type captureSignUpPlugin struct {

@@ -9,16 +9,16 @@ import (
 
 	gonanoid "github.com/matoous/go-nanoid"
 
-	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/marcobeierer/go-core/db/entmain"
 
-	"github.com/simpledms/simpledms/core/common"
-	wx "github.com/simpledms/simpledms/core/ui/widget"
-	"github.com/simpledms/simpledms/core/util/actionx"
-	"github.com/simpledms/simpledms/core/util/e"
-	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
-	"github.com/simpledms/simpledms/core/util/txx"
-	"github.com/simpledms/simpledms/core/util/uploadx"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/common"
+	"github.com/marcobeierer/go-core/ctxx"
+	wx "github.com/marcobeierer/go-core/ui/widget"
+	"github.com/marcobeierer/go-core/util/actionx"
+	"github.com/marcobeierer/go-core/util/e"
+	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/marcobeierer/go-core/util/txx"
+	"github.com/marcobeierer/go-core/util/uploadx"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )

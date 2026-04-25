@@ -10,11 +10,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/marcobeierer/go-core/db/entmain"
 
-	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
-	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/ctxx"
+	ctxx2 "github.com/marcobeierer/go-core/ctxx"
+	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"

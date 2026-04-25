@@ -1,10 +1,10 @@
 package managetags
 
 import (
-	"github.com/simpledms/simpledms/core/ui/util"
-	"github.com/simpledms/simpledms/core/ui/widget"
-	"github.com/simpledms/simpledms/core/util/actionx"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/ui/util"
+	"github.com/marcobeierer/go-core/ui/widget"
+	"github.com/marcobeierer/go-core/util/actionx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"

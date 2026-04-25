@@ -7,8 +7,8 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	"github.com/simpledms/simpledms/core/model/common/storagetype"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/model/common/storagetype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"

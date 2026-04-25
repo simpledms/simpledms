@@ -6,15 +6,15 @@ import (
 	"log"
 	"strings"
 
-	autil "github.com/simpledms/simpledms/core/action/util"
+	autil "github.com/marcobeierer/go-core/action/util"
 
-	acommon "github.com/simpledms/simpledms/core/action/common"
-	"github.com/simpledms/simpledms/core/common"
-	temporaryfilemodel "github.com/simpledms/simpledms/core/model/temporaryfile"
-	"github.com/simpledms/simpledms/core/ui/renderable"
-	"github.com/simpledms/simpledms/core/ui/widget"
-	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
-	"github.com/simpledms/simpledms/ctxx"
+	acommon "github.com/marcobeierer/go-core/action/common"
+	"github.com/marcobeierer/go-core/common"
+	"github.com/marcobeierer/go-core/ctxx"
+	temporaryfilemodel "github.com/marcobeierer/go-core/model/temporaryfile"
+	"github.com/marcobeierer/go-core/ui/renderable"
+	"github.com/marcobeierer/go-core/ui/widget"
+	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 

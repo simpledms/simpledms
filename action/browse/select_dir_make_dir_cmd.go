@@ -3,13 +3,13 @@ package browse
 import (
 	"log"
 
+	autil "github.com/marcobeierer/go-core/action/util"
+	"github.com/marcobeierer/go-core/common"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/ui/widget"
+	"github.com/marcobeierer/go-core/util/actionx"
+	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	acommon "github.com/simpledms/simpledms/action/common"
-	autil "github.com/simpledms/simpledms/core/action/util"
-	"github.com/simpledms/simpledms/core/common"
-	"github.com/simpledms/simpledms/core/ui/widget"
-	"github.com/simpledms/simpledms/core/util/actionx"
-	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
-	"github.com/simpledms/simpledms/ctxx"
 )
 
 type SelectDirMakeDirCmdData struct {

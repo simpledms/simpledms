@@ -1,12 +1,12 @@
 package trash
 
 import (
-	"github.com/simpledms/simpledms/core/common"
-	"github.com/simpledms/simpledms/core/ui/renderable"
-	partial2 "github.com/simpledms/simpledms/core/ui/uix/partial"
-	"github.com/simpledms/simpledms/core/ui/widget"
-	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/common"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/ui/renderable"
+	partial2 "github.com/marcobeierer/go-core/ui/uix/partial"
+	"github.com/marcobeierer/go-core/ui/widget"
+	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	partial "github.com/simpledms/simpledms/ui/uix/partial"
 )
 

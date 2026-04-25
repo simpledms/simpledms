@@ -10,9 +10,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/iancoleman/strcase"
 
-	"github.com/simpledms/simpledms/core/model/common/fieldtype"
-	"github.com/simpledms/simpledms/core/util/e"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/model/common/fieldtype"
+	"github.com/marcobeierer/go-core/util/e"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"

@@ -7,12 +7,12 @@ import (
 
 	"entgo.io/ent/privacy"
 
-	"github.com/simpledms/simpledms/core/db/entmain/account"
-	"github.com/simpledms/simpledms/core/db/entmain/tenantaccountassignment"
-	"github.com/simpledms/simpledms/core/model/common/plan"
-	"github.com/simpledms/simpledms/core/util/e"
-	"github.com/simpledms/simpledms/core/util/fileutil"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/db/entmain/account"
+	"github.com/marcobeierer/go-core/db/entmain/tenantaccountassignment"
+	"github.com/marcobeierer/go-core/model/common/plan"
+	"github.com/marcobeierer/go-core/util/e"
+	"github.com/marcobeierer/go-core/util/fileutil"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 )

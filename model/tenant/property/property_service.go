@@ -1,8 +1,8 @@
 package property
 
 import (
-	"github.com/simpledms/simpledms/core/model/common/fieldtype"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/model/common/fieldtype"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 )

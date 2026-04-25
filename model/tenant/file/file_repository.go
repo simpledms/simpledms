@@ -1,6 +1,6 @@
 package file
 
-import "github.com/simpledms/simpledms/ctxx"
+import "github.com/marcobeierer/go-core/ctxx"
 
 type FileRepository interface {
 	GetX(ctx ctxx.Context, id string) *File

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	enttenantprivacy "github.com/simpledms/simpledms/db/enttenant/privacy"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"

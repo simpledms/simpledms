@@ -1,6 +1,12 @@
 package action
 
 import (
+	"github.com/marcobeierer/go-core/action/admin"
+	"github.com/marcobeierer/go-core/action/auth"
+	acommon "github.com/marcobeierer/go-core/action/common"
+	"github.com/marcobeierer/go-core/action/managetenantusers"
+	"github.com/marcobeierer/go-core/action/staticpage"
+	"github.com/marcobeierer/go-core/common"
 	"github.com/simpledms/simpledms/action/browse"
 	"github.com/simpledms/simpledms/action/dashboard"
 	"github.com/simpledms/simpledms/action/documenttype"
@@ -13,12 +19,6 @@ import (
 	"github.com/simpledms/simpledms/action/tagging"
 	"github.com/simpledms/simpledms/action/trash"
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	"github.com/simpledms/simpledms/core/action/admin"
-	"github.com/simpledms/simpledms/core/action/auth"
-	acommon "github.com/simpledms/simpledms/core/action/common"
-	"github.com/simpledms/simpledms/core/action/managetenantusers"
-	"github.com/simpledms/simpledms/core/action/staticpage"
-	"github.com/simpledms/simpledms/core/common"
 )
 
 // value of actions tag seems not important, just that not empty...

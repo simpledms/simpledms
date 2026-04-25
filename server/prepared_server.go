@@ -8,11 +8,11 @@ import (
 
 	"golang.org/x/crypto/acme/autocert"
 
+	"github.com/marcobeierer/go-core/common"
+	sqlx2 "github.com/marcobeierer/go-core/db/sqlx"
+	systemconfigmodel "github.com/marcobeierer/go-core/model/systemconfig"
+	server2 "github.com/marcobeierer/go-core/server"
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	"github.com/simpledms/simpledms/core/common"
-	sqlx2 "github.com/simpledms/simpledms/core/db/sqlx"
-	systemconfigmodel "github.com/simpledms/simpledms/core/model/systemconfig"
-	server2 "github.com/simpledms/simpledms/core/server"
 	"github.com/simpledms/simpledms/db/sqlx"
 )
 

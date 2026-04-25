@@ -1,14 +1,14 @@
 package spaces
 
 import (
-	"github.com/simpledms/simpledms/core/db/entx"
+	"github.com/marcobeierer/go-core/db/entx"
 
-	autil "github.com/simpledms/simpledms/core/action/util"
-	"github.com/simpledms/simpledms/core/common"
-	"github.com/simpledms/simpledms/core/ui/widget"
-	"github.com/simpledms/simpledms/core/util/actionx"
-	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
-	"github.com/simpledms/simpledms/ctxx"
+	autil "github.com/marcobeierer/go-core/action/util"
+	"github.com/marcobeierer/go-core/common"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/ui/widget"
+	"github.com/marcobeierer/go-core/util/actionx"
+	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"

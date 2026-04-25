@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"strings"
 
-	autil "github.com/simpledms/simpledms/core/action/util"
-	temporaryfilemodel "github.com/simpledms/simpledms/core/model/temporaryfile"
-	wx "github.com/simpledms/simpledms/core/ui/widget"
-	"github.com/simpledms/simpledms/core/util/actionx"
-	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
-	"github.com/simpledms/simpledms/ctxx"
+	autil "github.com/marcobeierer/go-core/action/util"
+	"github.com/marcobeierer/go-core/ctxx"
+	temporaryfilemodel "github.com/marcobeierer/go-core/model/temporaryfile"
+	wx "github.com/marcobeierer/go-core/ui/widget"
+	"github.com/marcobeierer/go-core/util/actionx"
+	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 

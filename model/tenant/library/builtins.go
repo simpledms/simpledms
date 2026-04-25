@@ -1,8 +1,8 @@
 package library
 
 import (
-	"github.com/simpledms/simpledms/core/model/common/fieldtype"
-	wx "github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/marcobeierer/go-core/model/common/fieldtype"
+	wx "github.com/marcobeierer/go-core/ui/widget"
 	"github.com/simpledms/simpledms/model/tenant/common/attributetype"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 )

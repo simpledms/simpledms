@@ -3,7 +3,7 @@ package route
 import (
 	"fmt"
 
-	route2 "github.com/simpledms/simpledms/core/ui/uix/route"
+	route2 "github.com/marcobeierer/go-core/ui/uix/route"
 )
 
 /*

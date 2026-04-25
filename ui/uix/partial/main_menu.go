@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/simpledms/simpledms/core/common"
-	account2 "github.com/simpledms/simpledms/core/model/account"
-	"github.com/simpledms/simpledms/core/ui/uix/route"
-	"github.com/simpledms/simpledms/core/ui/widget"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/common"
+	"github.com/marcobeierer/go-core/ctxx"
+	account2 "github.com/marcobeierer/go-core/model/account"
+	"github.com/marcobeierer/go-core/ui/uix/route"
+	"github.com/marcobeierer/go-core/ui/widget"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 )
 

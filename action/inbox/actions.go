@@ -1,9 +1,9 @@
 package inbox
 
 import (
+	acommon "github.com/marcobeierer/go-core/action/common"
+	"github.com/marcobeierer/go-core/common"
 	"github.com/simpledms/simpledms/action/browse"
-	acommon "github.com/simpledms/simpledms/core/action/common"
-	"github.com/simpledms/simpledms/core/common"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 

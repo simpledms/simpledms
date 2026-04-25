@@ -1,13 +1,13 @@
 package inbox
 
 import (
-	"github.com/simpledms/simpledms/core/common"
-	"github.com/simpledms/simpledms/core/ui/renderable"
-	"github.com/simpledms/simpledms/core/ui/uix/partial"
-	"github.com/simpledms/simpledms/core/ui/util"
-	"github.com/simpledms/simpledms/core/ui/widget"
-	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/common"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/ui/renderable"
+	"github.com/marcobeierer/go-core/ui/uix/partial"
+	"github.com/marcobeierer/go-core/ui/util"
+	"github.com/marcobeierer/go-core/ui/widget"
+	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 

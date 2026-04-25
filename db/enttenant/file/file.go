@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/simpledms/simpledms/core/db/entx"
+	"github.com/marcobeierer/go-core/db/entx"
 )
 
 const (

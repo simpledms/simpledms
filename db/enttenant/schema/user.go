@@ -5,8 +5,8 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	"github.com/simpledms/simpledms/core/db/entx"
-	"github.com/simpledms/simpledms/core/model/common/tenantrole"
+	"github.com/marcobeierer/go-core/db/entx"
+	"github.com/marcobeierer/go-core/model/common/tenantrole"
 )
 
 // TODO rename to Account? User seems better for the moment...

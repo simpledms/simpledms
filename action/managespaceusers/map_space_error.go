@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/simpledms/simpledms/core/util/e"
+	"github.com/marcobeierer/go-core/util/e"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 )
 

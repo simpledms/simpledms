@@ -1,7 +1,7 @@
 package event
 
 import (
-	"github.com/simpledms/simpledms/core/ui/uix/events"
+	"github.com/marcobeierer/go-core/ui/uix/events"
 )
 
 const (

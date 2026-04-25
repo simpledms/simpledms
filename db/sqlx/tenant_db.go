@@ -7,7 +7,7 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 
-	coresqlx "github.com/simpledms/simpledms/core/db/sqlx"
+	coresqlx "github.com/marcobeierer/go-core/db/sqlx"
 	"github.com/simpledms/simpledms/db/enttenant"
 )
 

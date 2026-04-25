@@ -3,21 +3,21 @@ package dashboard
 import (
 	"net/http"
 
-	"github.com/simpledms/simpledms/core/db/entmain"
-	"github.com/simpledms/simpledms/core/db/entmain/tenant"
-	"github.com/simpledms/simpledms/core/db/entmain/tenantaccountassignment"
-	"github.com/simpledms/simpledms/core/db/entx"
+	"github.com/marcobeierer/go-core/db/entmain"
+	"github.com/marcobeierer/go-core/db/entmain/tenant"
+	"github.com/marcobeierer/go-core/db/entmain/tenantaccountassignment"
+	"github.com/marcobeierer/go-core/db/entx"
 
-	autil "github.com/simpledms/simpledms/core/action/util"
-	"github.com/simpledms/simpledms/core/common"
-	account2 "github.com/simpledms/simpledms/core/model/account"
-	tenant2 "github.com/simpledms/simpledms/core/model/tenant"
-	"github.com/simpledms/simpledms/core/ui/uix/events"
-	wx "github.com/simpledms/simpledms/core/ui/widget"
-	"github.com/simpledms/simpledms/core/util/actionx"
-	"github.com/simpledms/simpledms/core/util/e"
-	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
-	"github.com/simpledms/simpledms/ctxx"
+	autil "github.com/marcobeierer/go-core/action/util"
+	"github.com/marcobeierer/go-core/common"
+	"github.com/marcobeierer/go-core/ctxx"
+	account2 "github.com/marcobeierer/go-core/model/account"
+	tenant2 "github.com/marcobeierer/go-core/model/tenant"
+	"github.com/marcobeierer/go-core/ui/uix/events"
+	wx "github.com/marcobeierer/go-core/ui/widget"
+	"github.com/marcobeierer/go-core/util/actionx"
+	"github.com/marcobeierer/go-core/util/e"
+	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 )
 
 type ToggleTenantPasskeyEnforcementCmdData struct {

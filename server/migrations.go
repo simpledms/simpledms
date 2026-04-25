@@ -5,12 +5,12 @@ import (
 	"io/fs"
 	"log"
 
-	"github.com/simpledms/simpledms/core/db/entmain/tenant"
+	"github.com/marcobeierer/go-core/db/entmain/tenant"
 
+	"github.com/marcobeierer/go-core/db/sqlx"
+	tenant2 "github.com/marcobeierer/go-core/model/tenant"
+	server2 "github.com/marcobeierer/go-core/server"
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	"github.com/simpledms/simpledms/core/db/sqlx"
-	tenant2 "github.com/simpledms/simpledms/core/model/tenant"
-	server2 "github.com/simpledms/simpledms/core/server"
 )
 
 /*

@@ -3,7 +3,7 @@ package storedfile
 import (
 	securejoin "github.com/cyphar/filepath-securejoin"
 
-	"github.com/simpledms/simpledms/core/util/fileutil"
+	"github.com/marcobeierer/go-core/util/fileutil"
 	"github.com/simpledms/simpledms/db/enttenant"
 )
 

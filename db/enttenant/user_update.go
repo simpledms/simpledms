@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
-	"github.com/simpledms/simpledms/core/db/entx"
-	"github.com/simpledms/simpledms/core/model/common/tenantrole"
+	"github.com/marcobeierer/go-core/db/entx"
+	"github.com/marcobeierer/go-core/model/common/tenantrole"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"

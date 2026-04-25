@@ -5,10 +5,10 @@ import (
 	"math"
 	"net/http"
 
-	"github.com/simpledms/simpledms/core/model/common/fieldtype"
-	"github.com/simpledms/simpledms/core/ui/widget"
-	"github.com/simpledms/simpledms/core/util/e"
-	"github.com/simpledms/simpledms/core/util/timex"
+	"github.com/marcobeierer/go-core/model/common/fieldtype"
+	"github.com/marcobeierer/go-core/ui/widget"
+	"github.com/marcobeierer/go-core/util/e"
+	"github.com/marcobeierer/go-core/util/timex"
 	"github.com/simpledms/simpledms/db/enttenant"
 )
 

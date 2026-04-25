@@ -1,7 +1,7 @@
 package schema
 
 import (
-	"github.com/simpledms/simpledms/core/db/entx"
+	"github.com/marcobeierer/go-core/db/entx"
 )
 
 type CommonMixin struct {

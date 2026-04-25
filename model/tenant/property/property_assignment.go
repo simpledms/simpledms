@@ -3,8 +3,8 @@ package property
 import (
 	"fmt"
 
-	"github.com/simpledms/simpledms/core/model/common/fieldtype"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/model/common/fieldtype"
 	"github.com/simpledms/simpledms/db/enttenant"
 )
 

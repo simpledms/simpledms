@@ -7,8 +7,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/simpledms/simpledms/core/util/e"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/util/e"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/schema"

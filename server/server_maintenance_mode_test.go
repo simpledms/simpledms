@@ -14,11 +14,11 @@ import (
 
 	"filippo.io/age"
 
-	migratemain "github.com/simpledms/simpledms/core/db/entmain/migrate"
+	migratemain "github.com/marcobeierer/go-core/db/entmain/migrate"
+	"github.com/marcobeierer/go-core/encryptor"
 
-	"github.com/simpledms/simpledms/core/db/sqlx"
-	ui2 "github.com/simpledms/simpledms/core/ui"
-	"github.com/simpledms/simpledms/encryptor"
+	"github.com/marcobeierer/go-core/db/sqlx"
+	ui2 "github.com/marcobeierer/go-core/ui"
 	"github.com/simpledms/simpledms/i18n"
 )
 

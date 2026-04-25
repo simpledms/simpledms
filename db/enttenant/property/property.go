@@ -9,7 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 
-	"github.com/simpledms/simpledms/core/model/common/fieldtype"
+	"github.com/marcobeierer/go-core/model/common/fieldtype"
 )
 
 const (

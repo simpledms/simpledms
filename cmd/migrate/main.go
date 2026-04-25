@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql/schema"
 	_ "github.com/mattn/go-sqlite3"
 
-	migratemain "github.com/simpledms/simpledms/core/db/entmain/migrate"
+	migratemain "github.com/marcobeierer/go-core/db/entmain/migrate"
 
-	"github.com/simpledms/simpledms/core/db/sqlx"
+	"github.com/marcobeierer/go-core/db/sqlx"
 	migratetenant "github.com/simpledms/simpledms/db/enttenant/migrate"
 )
 

@@ -1,8 +1,8 @@
 package trash
 
 import (
+	"github.com/marcobeierer/go-core/common"
 	"github.com/simpledms/simpledms/action/browse"
-	"github.com/simpledms/simpledms/core/common"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 

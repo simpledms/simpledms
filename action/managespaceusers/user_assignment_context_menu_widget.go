@@ -1,9 +1,9 @@
 package managespaceusers
 
 import (
-	"github.com/simpledms/simpledms/core/ui/util"
-	"github.com/simpledms/simpledms/core/ui/widget"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/ui/util"
+	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
 )

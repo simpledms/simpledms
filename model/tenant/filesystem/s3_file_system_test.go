@@ -10,14 +10,14 @@ import (
 	"filippo.io/age"
 	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/simpledms/simpledms/core/db/entmain"
-	"github.com/simpledms/simpledms/core/db/entmain/enttest"
-	"github.com/simpledms/simpledms/core/db/entx"
+	"github.com/marcobeierer/go-core/db/entmain"
+	"github.com/marcobeierer/go-core/db/entmain/enttest"
+	"github.com/marcobeierer/go-core/db/entx"
+	"github.com/marcobeierer/go-core/encryptor"
 
-	"github.com/simpledms/simpledms/core/util/e"
-	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/encryptor"
+	"github.com/marcobeierer/go-core/ctxx"
+	ctxx2 "github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/util/e"
 )
 
 func TestS3FileSystemEnsureUploadSizeLimitWithGlobalLimit(t *testing.T) {
