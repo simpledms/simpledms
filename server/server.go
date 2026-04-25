@@ -41,7 +41,7 @@ import (
 	systemconfigmodel "github.com/marcobeierer/go-core/model/systemconfig"
 	tenant2 "github.com/marcobeierer/go-core/model/tenant"
 	"github.com/marcobeierer/go-core/pluginx"
-	"github.com/marcobeierer/go-core/scheduler"
+	corescheduler "github.com/marcobeierer/go-core/scheduler"
 	server2 "github.com/marcobeierer/go-core/server"
 	ui2 "github.com/marcobeierer/go-core/ui"
 	"github.com/marcobeierer/go-core/ui/uix/partial"
@@ -58,6 +58,7 @@ import (
 	migrate2 "github.com/simpledms/simpledms/db/enttenant/migrate"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
+	simpledmsscheduler "github.com/simpledms/simpledms/scheduler"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 )
 
@@ -918,7 +919,13 @@ func (qq *Server) startScheduler(
 		tikaClientNilable = tika.NewDefaultClient(rawSystemConfig.OcrTikaURL)
 	}
 
-	schedulerx := scheduler.NewScheduler(
+	coreScheduler := corescheduler.NewScheduler(
+		mainDB,
+		tenantDBs,
+	)
+	coreScheduler.Run(qq.devMode, qq.metaPath, qq.migrationsTenantFS)
+
+	scheduler := simpledmsscheduler.NewScheduler(
 		infra,
 		mainDB,
 		tenantDBs,
@@ -926,7 +933,7 @@ func (qq *Server) startScheduler(
 		systemConfig.S3().S3BucketName,
 		tikaClientNilable,
 	)
-	schedulerx.Run(qq.devMode, qq.metaPath, qq.migrationsTenantFS)
+	scheduler.Run()
 }
 
 func (qq *Server) initNilableMinioClient(config *appmodel.S3Config) *minio.Client {
