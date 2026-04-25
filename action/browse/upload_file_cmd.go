@@ -6,19 +6,19 @@ import (
 	"net/http"
 	"path/filepath"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	"github.com/simpledms/simpledms/core/util/e"
+	"github.com/simpledms/simpledms/core/util/fileutil"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/core/util/txx"
+	"github.com/simpledms/simpledms/core/util/uploadx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/fileutil"
-	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/txx"
-	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type UploadFileCmdData struct {
@@ -50,7 +50,7 @@ func NewUploadFileCmd(
 	formHelper := autil.NewFormHelper[UploadFileCmdData](
 		infra,
 		config,
-		wx.T("Upload file"),
+		widget.T("Upload file"),
 		// "#fileList",
 	)
 	formHelper.SetIsMultipartFormData(true)
@@ -73,7 +73,7 @@ func (qq *UploadFileCmd) Data(parentDirID string, filename string, addToInbox bo
 }
 
 // very similar to UploadFileVersionCmd
-func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *UploadFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	nilableUploadLimitBytes, err := qq.infra.FileSystem().NilableEffectiveUploadSizeLimitBytes(ctx)
 	if err != nil {
 		return err
@@ -163,7 +163,7 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("«%s» uploaded.", prep.filex.Name))
+	rw.AddRenderables(widget.NewSnackbarf("«%s» uploaded.", prep.filex.Name))
 	// TODO does triggering event have an effect? request comes from uppy and isn't a HTMX request...
 	rw.Header().Add("HX-Trigger", event.FileUploaded.String())
 

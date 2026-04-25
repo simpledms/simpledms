@@ -5,7 +5,8 @@ package ctxx
 import (
 	"context"
 
-	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain"
+
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/sqlx"

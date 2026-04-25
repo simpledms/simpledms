@@ -1,15 +1,15 @@
 package tagging
 
 import (
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type ListSubTagsPartialData struct {
@@ -39,7 +39,7 @@ func (qq *ListSubTagsPartial) Data(superTagID int64) *ListSubTagsPartialData {
 	}
 }
 
-func (qq *ListSubTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *ListSubTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[ListSubTagsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -60,26 +60,26 @@ func (qq *ListSubTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 	return nil
 }
 
-func (qq *ListSubTagsPartial) Widget(subTagsWithParent []*enttenant.Tag) *wx.List {
-	var listItems []*wx.ListItem
+func (qq *ListSubTagsPartial) Widget(subTagsWithParent []*enttenant.Tag) *widget.List {
+	var listItems []*widget.ListItem
 
 	for _, subTag := range subTagsWithParent {
-		headline := wx.T(subTag.Name)
-		var supportingText *wx.Text
+		headline := widget.T(subTag.Name)
+		var supportingText *widget.Text
 		if subTag.Edges.Group != nil {
 			// headline = NewTextf("%s: %s", tagx.Edges.Parent.Name, headline.Data)
-			supportingText = wx.Tf("Group «%s»", subTag.Edges.Group.Name)
+			supportingText = widget.Tf("Group «%s»", subTag.Edges.Group.Name)
 		}
 		listItems = append(
-			listItems, &wx.ListItem{
-				Leading:        wx.NewIcon("label"),
+			listItems, &widget.ListItem{
+				Leading:        widget.NewIcon("label"),
 				Headline:       headline,
 				SupportingText: supportingText,
 			},
 		)
 	}
 
-	return &wx.List{
+	return &widget.List{
 		Children: listItems,
 	}
 }

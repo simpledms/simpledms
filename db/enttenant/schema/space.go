@@ -8,13 +8,14 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+
+	"github.com/simpledms/simpledms/core/db/entx"
+	"github.com/simpledms/simpledms/core/model/common/tenantrole"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/privacy"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 )
 
 type Space struct {

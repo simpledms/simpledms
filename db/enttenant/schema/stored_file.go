@@ -6,12 +6,13 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+
+	"github.com/simpledms/simpledms/core/model/common/storagetype"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/privacy"
-	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
 // similar to entmain.TemporaryFile

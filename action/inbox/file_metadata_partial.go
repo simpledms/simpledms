@@ -4,14 +4,14 @@ package inbox
 
 import (
 	"github.com/simpledms/simpledms/action/browse"
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/core/util/ocrutil"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/ocrutil"
 )
 
 type FileMetadataPartialData struct {
@@ -44,7 +44,7 @@ func (qq *FileMetadataPartial) Data(fileID string) *FileMetadataPartialData {
 	}
 }
 
-func (qq *FileMetadataPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FileMetadataPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileMetadataPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -52,7 +52,7 @@ func (qq *FileMetadataPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 
 	// TODO is there a way to implement this conditional, only when reload
 	//  	button is used? May not be relevant in all cases
-	rw.AddRenderables(wx.NewSnackbarf("Reloaded metadata"))
+	rw.AddRenderables(widget.NewSnackbarf("Reloaded metadata"))
 
 	return qq.infra.Renderer().Render(
 		rw,
@@ -64,7 +64,7 @@ func (qq *FileMetadataPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 func (qq *FileMetadataPartial) Widget(
 	ctx ctxx.Context,
 	data *FileMetadataPartialData,
-) *wx.ScrollableContent {
+) *widget.ScrollableContent {
 	// TODO datum; as special field or value tag?
 	// 		value tag allows the user to define multiple date types (Eingangsdatum, Erstellungsdatum, etc.)
 
@@ -78,15 +78,15 @@ func (qq *FileMetadataPartial) Widget(
 
 	// how to sort files in browse if no primary filename? value tag?
 
-	var children []wx.IWidget
+	var children []widget.IWidget
 
 	// TODO above or below FileAttributes? Must remove MarginY
 	// 		on scrollable content if below
 	children = append(children,
-		&wx.Button{
-			Label:     wx.T("Mark as done"),
-			StyleType: wx.ButtonStyleTypeElevated,
-			HTMXAttrs: wx.HTMXAttrs{
+		&widget.Button{
+			Label:     widget.T("Mark as done"),
+			StyleType: widget.ButtonStyleTypeElevated,
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost: qq.actions.MarkAsDoneCmd.Endpoint(),
 				HxVals: util.JSON(qq.actions.MarkAsDoneCmd.Data(data.FileID)),
 				HxHeaders: autil.QueryHeader(
@@ -105,15 +105,15 @@ func (qq *FileMetadataPartial) Widget(
 	// TODO also loaded in qq.actions.Browse.FileAttributesPartial.Widget
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 
-	var nilableBottomAppBar *wx.BottomAppBar
+	var nilableBottomAppBar *widget.BottomAppBar
 
 	if message := qq.nilableOCRStatusMessage(filex.HasOCRSuccess(ctx), filex.Size(ctx)); message != nil {
-		nilableBottomAppBar = &wx.BottomAppBar{
-			Actions: []wx.IWidget{
-				&wx.IconButton{
+		nilableBottomAppBar = &widget.BottomAppBar{
+			Actions: []widget.IWidget{
+				&widget.IconButton{
 					Icon:    "refresh",
-					Tooltip: wx.T("Reload metadata"),
-					HTMXAttrs: wx.HTMXAttrs{
+					Tooltip: widget.T("Reload metadata"),
+					HTMXAttrs: widget.HTMXAttrs{
 						HxPost:   qq.Endpoint(),
 						HxVals:   util.JSON(data),
 						HxTarget: "#" + qq.MetadataTabContentID(),
@@ -121,15 +121,15 @@ func (qq *FileMetadataPartial) Widget(
 					},
 				},
 			},
-			Children: wx.NewBody(
-				wx.BodyTypeSm,
+			Children: widget.NewBody(
+				widget.BodyTypeSm,
 				message,
 			),
 		}
 	}
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.MetadataTabContentID(),
 		},
 		// GapY:     true,
@@ -144,14 +144,14 @@ func (qq *FileMetadataPartial) MetadataTabContentID() string {
 	return "metadataTabContent"
 }
 
-func (qq *FileMetadataPartial) nilableOCRStatusMessage(hasOCRSuccess bool, fileSize int64) *wx.Text {
+func (qq *FileMetadataPartial) nilableOCRStatusMessage(hasOCRSuccess bool, fileSize int64) *widget.Text {
 	if hasOCRSuccess {
 		return nil
 	}
 
 	if ocrutil.IsFileTooLarge(fileSize) {
-		return wx.T("Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.")
+		return widget.T("Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.")
 	}
 
-	return wx.T("Text recognition (OCR) is not ready yet, suggestions are based on the filename only.")
+	return widget.T("Text recognition (OCR) is not ready yet, suggestions are based on the filename only.")
 }

@@ -5,11 +5,11 @@ package ctxx
 import (
 	"context"
 
+	"github.com/simpledms/simpledms/core/model/common/tenantrole"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
-	"github.com/simpledms/simpledms/model/main/common/spacerole"
-	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
 )
 
 // having TTx in Context allows for easier replacement of ent with jet later

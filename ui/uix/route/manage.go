@@ -2,6 +2,8 @@ package route
 
 import (
 	"fmt"
+
+	route2 "github.com/simpledms/simpledms/core/ui/uix/route"
 )
 
 func ManageDocumentTypesRoute() string {
@@ -35,7 +37,7 @@ func ManageTags(tenantID, spaceID string) string {
 }
 
 func ManageTagsWithState(state any) func(string, string) string {
-	return RootWithState(ManageTags, state)
+	return route2.RootWithState(ManageTags, state)
 }
 
 /*

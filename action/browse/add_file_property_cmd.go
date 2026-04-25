@@ -3,18 +3,19 @@ package browse
 import (
 	"entgo.io/ent/dialect/sql"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/uix/events"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	actionx2 "github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/property"
-	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type AddFilePropertyCmdData struct {
@@ -24,11 +25,11 @@ type AddFilePropertyCmdData struct {
 type AddFilePropertyCmd struct {
 	infra   *common.Infra
 	actions *Actions
-	*actionx.Config
+	*actionx2.Config
 }
 
 func NewAddFilePropertyCmd(infra *common.Infra, actions *Actions) *AddFilePropertyCmd {
-	config := actionx.NewConfig(
+	config := actionx2.NewConfig(
 		actions.Route("add-file-property-cmd"),
 		false,
 	)
@@ -45,15 +46,15 @@ func (qq *AddFilePropertyCmd) Data(fileID string) *AddFilePropertyCmdData {
 	}
 }
 
-func (qq *AddFilePropertyCmd) ModalLinkAttrs(data *AddFilePropertyCmdData, hxTargetForm string) wx.HTMXAttrs {
-	return wx.HTMXAttrs{
-		HxPost:        qq.FormEndpointWithParams(actionx.ResponseWrapperDialog, hxTargetForm),
+func (qq *AddFilePropertyCmd) ModalLinkAttrs(data *AddFilePropertyCmdData, hxTargetForm string) widget.HTMXAttrs {
+	return widget.HTMXAttrs{
+		HxPost:        qq.FormEndpointWithParams(actionx2.ResponseWrapperDialog, hxTargetForm),
 		HxVals:        util.JSON(data),
 		LoadInPopover: true,
 	}
 }
 
-func (qq *AddFilePropertyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *AddFilePropertyCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[AddFilePropertyCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -62,8 +63,8 @@ func (qq *AddFilePropertyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 }
 
 func (qq *AddFilePropertyCmd) FormHandler(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 ) error {
 	data, err := autil.FormDataX[AddFilePropertyCmdData](rw, req, ctx, true)
@@ -74,21 +75,21 @@ func (qq *AddFilePropertyCmd) FormHandler(
 	wrapper := req.URL.Query().Get("wrapper")
 
 	return qq.infra.Renderer().Render(rw, ctx,
-		qq.Form(ctx, data, actionx.ResponseWrapper(wrapper)),
+		qq.Form(ctx, data, actionx2.ResponseWrapper(wrapper)),
 	)
 }
 
 func (qq *AddFilePropertyCmd) Form(
 	ctx ctxx.Context,
 	data *AddFilePropertyCmdData,
-	wrapper actionx.ResponseWrapper,
+	wrapper actionx2.ResponseWrapper,
 ) renderable.Renderable {
 	return autil.WrapWidgetWithID(
-		wx.T("Add field"),
+		widget.T("Add field"),
 		nil,
 		qq.listContent(ctx, data),
 		wrapper,
-		wx.DialogLayoutStable,
+		widget.DialogLayoutStable,
 		qq.popoverID(),
 		"",
 	)
@@ -121,29 +122,29 @@ func (qq *AddFilePropertyCmd) listContent(ctx ctxx.Context, data *AddFilePropert
 		Order(property.ByName()).
 		AllX(ctx)
 
-	var child wx.IWidget
+	var child widget.IWidget
 
 	if len(properties) == 0 {
-		child = &wx.EmptyState{
-			Headline: wx.T("No unassigned fields available."),
-			Actions: []wx.IWidget{
-				&wx.Button{
-					Label: wx.T("Manage fields"),
-					Icon:  wx.NewIcon("tune"),
-					HTMXAttrs: wx.HTMXAttrs{
+		child = &widget.EmptyState{
+			Headline: widget.T("No unassigned fields available."),
+			Actions: []widget.IWidget{
+				&widget.Button{
+					Label: widget.T("Manage fields"),
+					Icon:  widget.NewIcon("tune"),
+					HTMXAttrs: widget.HTMXAttrs{
 						HxGet: route.ManageProperties(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
-						HxOn:  event.CloseDialog.HxOn("click"),
+						HxOn:  events.CloseDialog.HxOn("click"),
 					},
 				},
 			},
 		}
 	} else {
-		var listItems []*wx.ListItem
+		var listItems []*widget.ListItem
 		for _, propertyx := range properties {
-			listItems = append(listItems, &wx.ListItem{
-				Headline:       wx.Tu(propertyx.Name),
-				SupportingText: wx.Tu(propertyx.Type.String()),
-				Leading:        wx.NewIcon("tune"),
+			listItems = append(listItems, &widget.ListItem{
+				Headline:       widget.Tu(propertyx.Name),
+				SupportingText: widget.Tu(propertyx.Type.String()),
+				Leading:        widget.NewIcon("tune"),
 				HTMXAttrs: qq.actions.AddFilePropertyValueDialog.ModalLinkAttrs(
 					qq.actions.AddFilePropertyValueDialog.Data(data.FileID, propertyx.ID),
 					"",
@@ -151,17 +152,17 @@ func (qq *AddFilePropertyCmd) listContent(ctx ctxx.Context, data *AddFilePropert
 			})
 		}
 
-		child = &wx.List{
+		child = &widget.List{
 			Children: listItems,
 		}
 	}
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.listID(),
 		},
-		HTMXAttrs: wx.HTMXAttrs{
-			HxTrigger: event.HxTrigger(event.FilePropertyUpdated),
+		HTMXAttrs: widget.HTMXAttrs{
+			HxTrigger: events.HxTrigger(event.FilePropertyUpdated),
 			HxPost:    qq.Endpoint(),
 			HxVals:    util.JSON(data),
 			HxTarget:  "#" + qq.listID(),

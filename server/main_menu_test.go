@@ -5,14 +5,16 @@ import (
 	"testing"
 	"time"
 
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entx"
+
+	"github.com/simpledms/simpledms/core/model/common/country"
+	"github.com/simpledms/simpledms/core/model/common/plan"
+	"github.com/simpledms/simpledms/core/model/common/tenantrole"
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/main/common/country"
-	"github.com/simpledms/simpledms/model/main/common/plan"
-	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 func TestMainMenuShowsOnlySetupEntriesWhenPasskeyEnrollmentRequired(t *testing.T) {
@@ -53,7 +55,7 @@ func TestMainMenuShowsOnlySetupEntriesWhenPasskeyEnrollmentRequired(t *testing.T
 
 	accountInTx := mainTx.Account.Query().Where(account.Email(entx.NewCIText(email))).OnlyX(context.Background())
 
-	visitorCtx := ctxx.NewVisitorContext(
+	visitorCtx := ctxx2.NewVisitorContext(
 		context.Background(),
 		mainTx,
 		harness.i18n,

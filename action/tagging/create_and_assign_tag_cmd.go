@@ -3,16 +3,16 @@ package tagging
 import (
 	"log"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type CreateAndAssignTagCmdData struct {
@@ -42,7 +42,7 @@ func NewCreateAndAssignTagCmd(
 		FormHelper: autil.NewFormHelper[CreateAndAssignTagCmdData](
 			infra,
 			config,
-			wx.T("Create and assign tag"),
+			widget.T("Create and assign tag"),
 			// "#tagAssignmentList",
 		),
 	}
@@ -57,7 +57,7 @@ func (qq *CreateAndAssignTagCmd) Data(fileID string, parentTagID int64) *CreateA
 	}
 }
 
-func (qq *CreateAndAssignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *CreateAndAssignTagCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := qq.FormHelper.MapFormData(rw, req, ctx)
 	if err != nil {
 		return err
@@ -104,7 +104,7 @@ func (qq *CreateAndAssignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 		//  	may break other places
 		// rw.Header().Set("HX-Retarget", "#"+listItem.ID)
 
-		rw.AddRenderables(wx.NewSnackbarf("«%s» created and assigned.", tagx.Name))
+		rw.AddRenderables(widget.NewSnackbarf("«%s» created and assigned.", tagx.Name))
 
 		return qq.infra.Renderer().Render(
 			rw,
@@ -113,7 +113,7 @@ func (qq *CreateAndAssignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 		)
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("«%s» created and assigned.", tagx.Name))
+	rw.AddRenderables(widget.NewSnackbarf("«%s» created and assigned.", tagx.Name))
 
 	return qq.infra.Renderer().Render(rw, ctx,
 		qq.actions.AssignedTags.Edit.ListView(

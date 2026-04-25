@@ -5,18 +5,18 @@ import (
 	"slices"
 	"strings"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/model/common/fieldtype"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
-	"github.com/simpledms/simpledms/model/main/common/fieldtype"
-	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type PropertyFilterValue struct {
@@ -61,7 +61,7 @@ func (qq *ListFilterPropertiesPartial) Data(currentDirID string, documentTypeID 
 	}
 }
 
-func (qq *ListFilterPropertiesPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *ListFilterPropertiesPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[ListFilterPropertiesPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -96,13 +96,13 @@ func (qq *ListFilterPropertiesPartial) Widget(
 	}
 
 	if len(propertiesx) == 0 {
-		return &wx.EmptyState{
-			Headline: wx.T("No fields available yet."),
-			Actions: []wx.IWidget{
-				&wx.Button{
-					Icon:  wx.NewIcon("tune"),
-					Label: wx.T("Manage fields"),
-					HTMXAttrs: wx.HTMXAttrs{
+		return &widget.EmptyState{
+			Headline: widget.T("No fields available yet."),
+			Actions: []widget.IWidget{
+				&widget.Button{
+					Icon:  widget.NewIcon("tune"),
+					Label: widget.T("Manage fields"),
+					HTMXAttrs: widget.HTMXAttrs{
 						HxGet: route.ManageProperties(
 							ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID,
 						),
@@ -112,20 +112,20 @@ func (qq *ListFilterPropertiesPartial) Widget(
 		}
 	}
 
-	var chips []*wx.FilterChip
-	var filters []wx.IWidget
+	var chips []*widget.FilterChip
+	var filters []widget.IWidget
 
-	var children []wx.IWidget
+	var children []widget.IWidget
 
 	for _, propertyx := range propertiesx {
 		isChecked := slices.ContainsFunc(state.PropertyValues, func(value PropertyFilterValue) bool {
 			return value.PropertyID == propertyx.ID
 		})
 
-		chips = append(chips, &wx.FilterChip{
-			Label:     wx.Tu(propertyx.Name),
+		chips = append(chips, &widget.FilterChip{
+			Label:     widget.Tu(propertyx.Name),
 			IsChecked: isChecked,
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    qq.actions.TogglePropertyFilterCmd.Endpoint(),
 				HxVals:    util.JSON(qq.actions.TogglePropertyFilterCmd.Data(data.CurrentDirID, propertyx.ID)),
 				HxTrigger: "click",
@@ -143,7 +143,7 @@ func (qq *ListFilterPropertiesPartial) Widget(
 		}
 	}
 
-	children = append(children, &wx.Container{
+	children = append(children, &widget.Container{
 		Child: chips,
 	})
 	if len(filters) > 0 {
@@ -151,22 +151,22 @@ func (qq *ListFilterPropertiesPartial) Widget(
 	}
 
 	if len(children) == 0 {
-		children = append(children, wx.T("No fields available."))
+		children = append(children, widget.T("No fields available."))
 	}
 
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: qq.id(),
 		},
 		GapY: true,
-		Child: &wx.Column{
-			GapYSize: wx.Gap4,
+		Child: &widget.Column{
+			GapYSize: widget.Gap4,
 			Children: children,
 		},
 	}
 }
 
-func (qq *ListFilterPropertiesPartial) filter(state *ListDirPartialState, propertyx *enttenant.Property, currentDirID string) wx.IWidget {
+func (qq *ListFilterPropertiesPartial) filter(state *ListDirPartialState, propertyx *enttenant.Property, currentDirID string) widget.IWidget {
 	valueIndex := slices.IndexFunc(state.PropertiesFilterState.PropertyValues, func(value PropertyFilterValue) bool {
 		return value.PropertyID == propertyx.ID
 	})
@@ -190,7 +190,7 @@ func (qq *ListFilterPropertiesPartial) filter(state *ListDirPartialState, proper
 	case fieldtype.Checkbox:
 		return qq.renderCheckboxFilter(propertyx, value, currentDirID)
 	default:
-		return &wx.View{}
+		return &widget.View{}
 	}
 }
 
@@ -217,15 +217,15 @@ var (
 	checkboxOperatorValueIsNotChecked = operatorValue("is_not_checked")
 )
 
-func (qq *ListFilterPropertiesPartial) renderTextFilter(propertyx *enttenant.Property, value PropertyFilterValue, currentDirID string) wx.IWidget {
+func (qq *ListFilterPropertiesPartial) renderTextFilter(propertyx *enttenant.Property, value PropertyFilterValue, currentDirID string) widget.IWidget {
 	if value.Operator == "" {
 		value.Operator = textOperatorValueContains.String()
 	}
 
 	containerID := autil.GenerateID(propertyx.Name)
 
-	attrsFn := func(trigger string) wx.HTMXAttrs {
-		return wx.HTMXAttrs{
+	attrsFn := func(trigger string) widget.HTMXAttrs {
+		return widget.HTMXAttrs{
 			HxPost:    qq.actions.UpdatePropertyFilterCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.UpdatePropertyFilterCmd.Data(currentDirID, propertyx.ID)),
 			HxSwap:    "none",
@@ -235,26 +235,26 @@ func (qq *ListFilterPropertiesPartial) renderTextFilter(propertyx *enttenant.Pro
 	}
 
 	// TODO as filter chips or select field in same line as text field?
-	operators := []*wx.FilterChip{
+	operators := []*widget.FilterChip{
 		{
-			Type:      wx.FilterChipTypeRadio,
-			Label:     wx.T("Contains"),
+			Type:      widget.FilterChipTypeRadio,
+			Label:     widget.T("Contains"),
 			Name:      "Operator",
 			Value:     textOperatorValueContains.String(),
 			IsChecked: textOperatorValueContains.Equals(value.Operator),
 			HTMXAttrs: attrsFn("change"),
 		},
 		{
-			Type:      wx.FilterChipTypeRadio,
-			Label:     wx.T("Starts with"),
+			Type:      widget.FilterChipTypeRadio,
+			Label:     widget.T("Starts with"),
 			Name:      "Operator",
 			Value:     textOperatorValueStartsWith.String(),
 			IsChecked: textOperatorValueStartsWith.Equals(value.Operator),
 			HTMXAttrs: attrsFn("change"),
 		},
 		{
-			Type:      wx.FilterChipTypeRadio,
-			Label:     wx.T("Equals"),
+			Type:      widget.FilterChipTypeRadio,
+			Label:     widget.T("Equals"),
 			Name:      "Operator",
 			Value:     operatorValueEquals.String(),
 			IsChecked: operatorValueEquals.Equals(value.Operator),
@@ -263,37 +263,37 @@ func (qq *ListFilterPropertiesPartial) renderTextFilter(propertyx *enttenant.Pro
 		// TODO `doesn't contain`, etc.
 	}
 
-	field := &wx.TextField{
+	field := &widget.TextField{
 		// `change` more reliable in modal, triggers also on modal close, input doesn't trigger
 		// if modal gets closed before delay; input necessary for use as sidebar when change
 		// should get applied directly
 		HTMXAttrs:    attrsFn("change, input delay:1000ms"),
-		Label:        wx.Tu(propertyx.Name),
+		Label:        widget.Tu(propertyx.Name),
 		Name:         "Value",
 		Type:         "text",
 		DefaultValue: value.Value,
 	}
 
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: containerID,
 		},
-		Child: []wx.IWidget{
+		Child: []widget.IWidget{
 			field,
 			operators,
 		},
 	}
 }
 
-func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *enttenant.Property, value PropertyFilterValue, currentDirID string) wx.IWidget {
+func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *enttenant.Property, value PropertyFilterValue, currentDirID string) widget.IWidget {
 	if value.Operator == "" {
 		value.Operator = operatorValueEquals.String()
 	}
 
 	containerID := autil.GenerateID(propertyx.Name)
 
-	attrsFn := func(trigger string) wx.HTMXAttrs {
-		return wx.HTMXAttrs{
+	attrsFn := func(trigger string) widget.HTMXAttrs {
+		return widget.HTMXAttrs{
 			HxPost:    qq.actions.UpdatePropertyFilterCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.UpdatePropertyFilterCmd.Data(currentDirID, propertyx.ID)),
 			HxSwap:    "none",
@@ -301,7 +301,7 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 			HxTrigger: trigger,
 		}
 	}
-	attrsFnRefresh := func(trigger string) wx.HTMXAttrs {
+	attrsFnRefresh := func(trigger string) widget.HTMXAttrs {
 		attrs := attrsFn(trigger)
 		attrs.HxTarget = "#" + qq.id()
 		attrs.HxSwap = "outerHTML"
@@ -327,7 +327,7 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 		panic(fmt.Errorf("unsupported property type: %s", propertyx.Type))
 	}
 
-	var field wx.IWidget
+	var field widget.IWidget
 	if propertyx.Type == fieldtype.Date && operatorValueBetween.Equals(value.Operator) {
 		startValue := ""
 		endValue := ""
@@ -338,18 +338,18 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 				endValue = parts[1]
 			}
 		}
-		field = &wx.Row{
-			Children: []wx.IWidget{
-				&wx.TextField{
+		field = &widget.Row{
+			Children: []widget.IWidget{
+				&widget.TextField{
 					HTMXAttrs:    attrsFn("change"),
-					Label:        wx.Tu("Start"),
+					Label:        widget.Tu("Start"),
 					Name:         "ValueStart",
 					Type:         fieldType,
 					DefaultValue: startValue,
 				},
-				&wx.TextField{
+				&widget.TextField{
 					HTMXAttrs:    attrsFn("change"),
-					Label:        wx.Tu("End"),
+					Label:        widget.Tu("End"),
 					Name:         "ValueEnd",
 					Type:         fieldType,
 					DefaultValue: endValue,
@@ -357,9 +357,9 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 			},
 		}
 	} else {
-		field = &wx.TextField{
+		field = &widget.TextField{
 			HTMXAttrs:    attrsFn("change, input delay:1000ms"),
-			Label:        wx.Tu(propertyx.Name),
+			Label:        widget.Tu(propertyx.Name),
 			Name:         "Value",
 			Type:         fieldType,
 			Step:         fieldStep,
@@ -367,38 +367,38 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 		}
 	}
 
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: containerID,
 		},
-		Child: []wx.IWidget{
+		Child: []widget.IWidget{
 			field,
 			operators,
 		},
 	}
 }
 
-func (qq *ListFilterPropertiesPartial) operatorRadioGroup(value PropertyFilterValue, attrsFn func(string) wx.HTMXAttrs, includeBetween bool) wx.IWidget {
-	operators := []*wx.FilterChip{
+func (qq *ListFilterPropertiesPartial) operatorRadioGroup(value PropertyFilterValue, attrsFn func(string) widget.HTMXAttrs, includeBetween bool) widget.IWidget {
+	operators := []*widget.FilterChip{
 		{
-			Type:      wx.FilterChipTypeRadio,
-			Label:     wx.T("Equals"),
+			Type:      widget.FilterChipTypeRadio,
+			Label:     widget.T("Equals"),
 			Name:      "Operator",
 			Value:     operatorValueEquals.String(),
 			IsChecked: operatorValueEquals.Equals(value.Operator),
 			HTMXAttrs: attrsFn("change"),
 		},
 		{
-			Type:      wx.FilterChipTypeRadio,
-			Label:     wx.T("Greater than"),
+			Type:      widget.FilterChipTypeRadio,
+			Label:     widget.T("Greater than"),
 			Name:      "Operator",
 			Value:     operatorValueGreaterThan.String(),
 			IsChecked: operatorValueGreaterThan.Equals(value.Operator),
 			HTMXAttrs: attrsFn("change"),
 		},
 		{
-			Type:      wx.FilterChipTypeRadio,
-			Label:     wx.T("Less than"),
+			Type:      widget.FilterChipTypeRadio,
+			Label:     widget.T("Less than"),
 			Name:      "Operator",
 			Value:     operatorValueLessThan.String(),
 			IsChecked: operatorValueLessThan.Equals(value.Operator),
@@ -407,9 +407,9 @@ func (qq *ListFilterPropertiesPartial) operatorRadioGroup(value PropertyFilterVa
 	}
 
 	if includeBetween {
-		operators = append(operators, &wx.FilterChip{
-			Type:      wx.FilterChipTypeRadio,
-			Label:     wx.T("Between"),
+		operators = append(operators, &widget.FilterChip{
+			Type:      widget.FilterChipTypeRadio,
+			Label:     widget.T("Between"),
 			Name:      "Operator",
 			Value:     operatorValueBetween.String(),
 			IsChecked: operatorValueBetween.Equals(value.Operator),
@@ -420,15 +420,15 @@ func (qq *ListFilterPropertiesPartial) operatorRadioGroup(value PropertyFilterVa
 	return operators
 }
 
-func (qq *ListFilterPropertiesPartial) renderCheckboxFilter(propertyx *enttenant.Property, value PropertyFilterValue, currentDirID string) wx.IWidget {
+func (qq *ListFilterPropertiesPartial) renderCheckboxFilter(propertyx *enttenant.Property, value PropertyFilterValue, currentDirID string) widget.IWidget {
 	if value.Operator == "" {
 		value.Operator = checkboxOperatorValueIsChecked.String()
 	}
 
 	containerID := autil.GenerateID(propertyx.Name)
 
-	attrsFn := func(trigger string) wx.HTMXAttrs {
-		return wx.HTMXAttrs{
+	attrsFn := func(trigger string) widget.HTMXAttrs {
+		return widget.HTMXAttrs{
 			HxPost:    qq.actions.UpdatePropertyFilterCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.UpdatePropertyFilterCmd.Data(currentDirID, propertyx.ID)),
 			HxSwap:    "none",
@@ -438,10 +438,10 @@ func (qq *ListFilterPropertiesPartial) renderCheckboxFilter(propertyx *enttenant
 	}
 
 	// TODO as filter chips or select field in same line as text field?
-	operators := []*wx.FilterChip{
+	operators := []*widget.FilterChip{
 		{
-			Type:  wx.FilterChipTypeRadio,
-			Label: wx.Tf("«%s» is checked", propertyx.Name),
+			Type:  widget.FilterChipTypeRadio,
+			Label: widget.Tf("«%s» is checked", propertyx.Name),
 			Name:  "Value",
 			// Value:     checkboxOperatorValueIsChecked.String(),
 			// IsChecked: checkboxOperatorValueIsChecked.Equals(value.Operator),
@@ -450,8 +450,8 @@ func (qq *ListFilterPropertiesPartial) renderCheckboxFilter(propertyx *enttenant
 			HTMXAttrs: attrsFn("change"),
 		},
 		{
-			Type:  wx.FilterChipTypeRadio,
-			Label: wx.Tf("«%s» is not checked", propertyx.Name),
+			Type:  widget.FilterChipTypeRadio,
+			Label: widget.Tf("«%s» is not checked", propertyx.Name),
 			Name:  "Value",
 			// Value:     checkboxOperatorValueIsNotChecked.String(),
 			// IsChecked: checkboxOperatorValueIsNotChecked.Equals(value.Operator),
@@ -469,11 +469,11 @@ func (qq *ListFilterPropertiesPartial) renderCheckboxFilter(propertyx *enttenant
 		}
 	*/
 
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: containerID,
 		},
-		Child: []wx.IWidget{
+		Child: []widget.IWidget{
 			// field,
 			operators,
 		},

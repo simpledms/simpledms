@@ -3,14 +3,15 @@ package tagging
 import (
 	"fmt"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/uix/events"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type CountAssignedTagsPartialData struct {
@@ -41,7 +42,7 @@ func (qq *CountAssignedTagsPartial) Data(fileID string) *CountAssignedTagsPartia
 	}
 }
 
-func (qq *CountAssignedTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *CountAssignedTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[CountAssignedTagsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -52,21 +53,21 @@ func (qq *CountAssignedTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.
 	return nil
 }
 
-func (qq *CountAssignedTagsPartial) Badge(ctx ctxx.Context, fileID string) *wx.Badge {
+func (qq *CountAssignedTagsPartial) Badge(ctx ctxx.Context, fileID string) *widget.Badge {
 	// soft delete filter is not applied via TagAssignment
 	filex := qq.infra.FileRepo.GetX(ctx, fileID)
 	tagsCount := filex.Data.QueryTags().CountX(ctx)
 
 	id := autil.GenerateID(fmt.Sprintf("tagsCount-%s", fileID))
-	return &wx.Badge{
-		Widget: wx.Widget[wx.Badge]{
+	return &widget.Badge{
+		Widget: widget.Widget[widget.Badge]{
 			ID: id,
 		},
 		Value:    tagsCount,
 		IsInline: true,
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.Endpoint(),
-			HxTrigger: event.HxTrigger(event.TagUpdated),
+			HxTrigger: events.HxTrigger(event.TagUpdated),
 			HxVals:    util.JSON(qq.Data(fileID)),
 			HxTarget:  "#" + id,
 			HxSwap:    "outerHTML",

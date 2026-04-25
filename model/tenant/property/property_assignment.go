@@ -3,9 +3,9 @@ package property
 import (
 	"fmt"
 
+	"github.com/simpledms/simpledms/core/model/common/fieldtype"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 )
 
 // TODO correct location?

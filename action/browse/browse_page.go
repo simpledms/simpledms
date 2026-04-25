@@ -4,18 +4,20 @@ import (
 	"log"
 	"net/http"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/db/entx"
+
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/uix/partial"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type BrowsePage struct {
@@ -31,8 +33,8 @@ func NewBrowsePage(infra *common.Infra, actions *Actions) *BrowsePage {
 }
 
 func (qq *BrowsePage) Handler(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 ) error {
 	dirIDStr := req.PathValue("dir_id")
@@ -59,7 +61,7 @@ func (qq *BrowsePage) Handler(
 	if req.Header.Get("Close-Details") != "" {
 		rw.Header().Set("HX-Retarget", "#details")
 		rw.Header().Set("HX-Reswap", "innerHTML")
-		return qq.infra.Renderer().Render(rw, ctx, &wx.View{})
+		return qq.infra.Renderer().Render(rw, ctx, &widget.View{})
 	}
 
 	browsePage, err := qq.widget(req, ctx, state, dirx)
@@ -73,8 +75,8 @@ func (qq *BrowsePage) Handler(
 }
 
 func (qq *BrowsePage) render(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 	viewx renderable.Renderable,
 ) {
@@ -84,14 +86,14 @@ func (qq *BrowsePage) render(
 	}
 
 	if renderFullPage {
-		viewx = partial2.NewBase(wx.T("Files"), viewx)
+		viewx = partial.NewBase(widget.T("Files"), viewx)
 	}
 
 	qq.infra.Renderer().RenderX(rw, ctx, viewx)
 }
 
 func (qq *BrowsePage) widget(
-	req *httpx.Request,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 	state *ListDirPartialState,
 	dir *enttenant.File,
@@ -103,11 +105,11 @@ func (qq *BrowsePage) widget(
 		"",
 	)
 
-	var fabs []*wx.FloatingActionButton
+	var fabs []*widget.FloatingActionButton
 
-	fabs = append(fabs, &wx.FloatingActionButton{
+	fabs = append(fabs, &widget.FloatingActionButton{
 		Icon: "upload_file",
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:        qq.actions.FileUploadDialogPartial.Endpoint(),
 			HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dir.PublicID.String(), false)),
 			LoadInPopover: true,
@@ -118,28 +120,28 @@ func (qq *BrowsePage) widget(
 				"#"+qq.actions.ListDirPartial.WrapperID(),
 			),
 		*/
-		Child: []wx.IWidget{
-			wx.NewIcon("upload_file"),
-			wx.T("Upload file"),
+		Child: []widget.IWidget{
+			widget.NewIcon("upload_file"),
+			widget.T("Upload file"),
 		},
 	})
 
 	if ctx.SpaceCtx().Space.IsFolderMode {
-		fabs = append(fabs, &wx.FloatingActionButton{
-			FABSize: wx.FABSizeSmall,
+		fabs = append(fabs, &widget.FloatingActionButton{
+			FABSize: widget.FABSizeSmall,
 			Icon:    "create_new_folder",
 			HTMXAttrs: qq.actions.MakeDirCmd.ModalLinkAttrs(
 				qq.actions.MakeDirCmd.Data(dir.PublicID.String(), ""),
 				"#"+qq.actions.ListDirPartial.WrapperID(),
 			),
-			Child: []wx.IWidget{
-				wx.NewIcon("create_new_folder"),
-				wx.T("Create directory"),
+			Child: []widget.IWidget{
+				widget.NewIcon("create_new_folder"),
+				widget.T("Create directory"),
 			},
 		})
 	}
 
-	mainLayout := &wx.MainLayout{
+	mainLayout := &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "browse", fabs),
 		Content:    listDetailLayout,
 	}

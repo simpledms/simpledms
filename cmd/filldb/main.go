@@ -14,17 +14,20 @@ import (
 
 	securejoin "github.com/cyphar/filepath-securejoin"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/simpledms/simpledms/db/entmain"
-	mainprivacy "github.com/simpledms/simpledms/db/entmain/privacy"
-	_ "github.com/simpledms/simpledms/db/entmain/runtime"
-	tenantpred "github.com/simpledms/simpledms/db/entmain/tenant"
+
+	"github.com/simpledms/simpledms/core/db/entmain"
+	mainprivacy "github.com/simpledms/simpledms/core/db/entmain/privacy"
+	_ "github.com/simpledms/simpledms/core/db/entmain/runtime"
+	tenantpred "github.com/simpledms/simpledms/core/db/entmain/tenant"
+	"github.com/simpledms/simpledms/core/db/entx"
+
+	sqlx2 "github.com/simpledms/simpledms/core/db/sqlx"
+	tenantm "github.com/simpledms/simpledms/core/model/tenant"
+	"github.com/simpledms/simpledms/core/pathx"
+	"github.com/simpledms/simpledms/core/util"
 	tenantprivacy "github.com/simpledms/simpledms/db/enttenant/privacy"
 	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
-	tenantm "github.com/simpledms/simpledms/model/main/tenant"
-	"github.com/simpledms/simpledms/pathx"
-	"github.com/simpledms/simpledms/util"
 )
 
 func main() {
@@ -97,16 +100,16 @@ func main() {
 	log.Printf("browse URL path: /org/%s/space/%s/browse/", tenantx.PublicID.String(), spacePublicID)
 }
 
-func openMainDB(metaPath string) *sqlx.MainDB {
+func openMainDB(metaPath string) *sqlx2.MainDB {
 	mainDBPath, err := securejoin.SecureJoin(metaPath, "main.sqlite3")
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	return sqlx.NewMainDB(mainDBPath)
+	return sqlx2.NewMainDB(mainDBPath)
 }
 
-func resolveTenant(mainDB *sqlx.MainDB, tenantPublicID string) *entmain.Tenant {
+func resolveTenant(mainDB *sqlx2.MainDB, tenantPublicID string) *entmain.Tenant {
 	ctx := mainprivacy.DecisionContext(context.Background(), mainprivacy.Allow)
 
 	if tenantPublicID != "" {
@@ -233,7 +236,7 @@ func openTenantSQLDB(metaPath, tenantPublicID string) *sql.DB {
 		log.Fatalln(err)
 	}
 
-	dataSourceURL := fmt.Sprintf("file:%s?%s", tenantDBPath, sqlx.SQLiteQueryParamsReadWrite)
+	dataSourceURL := fmt.Sprintf("file:%s?%s", tenantDBPath, sqlx2.SQLiteQueryParamsReadWrite)
 	sqlDB, err := sql.Open("sqlite3", dataSourceURL)
 	if err != nil {
 		log.Fatalln(err)

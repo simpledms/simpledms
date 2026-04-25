@@ -9,7 +9,8 @@ import (
 
 	"golang.org/x/text/language"
 
-	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain"
+
 	"github.com/simpledms/simpledms/i18n"
 )
 

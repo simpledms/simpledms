@@ -6,19 +6,19 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	actionx2 "github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FilesListPartialData struct {
@@ -35,7 +35,7 @@ type FilesListPartialState struct {
 type FilesListPartial struct {
 	infra   *common.Infra
 	actions *Actions
-	*actionx.Config
+	*actionx2.Config
 }
 
 func NewListFilesPartial(
@@ -45,7 +45,7 @@ func NewListFilesPartial(
 	return &FilesListPartial{
 		infra:   infra,
 		actions: actions,
-		Config: actionx.NewConfig(
+		Config: actionx2.NewConfig(
 			actions.Route("files-list-partial"),
 			true,
 		),
@@ -66,8 +66,8 @@ func (qq *FilesListPartial) FileListID() string {
 	return "fileList"
 }
 func (qq *FilesListPartial) Handler(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 ) error {
 	data, err := autil.FormData[FilesListPartialData](rw, req, ctx)
@@ -101,11 +101,11 @@ func (qq *FilesListPartial) Handler(
 }
 
 func (qq *FilesListPartial) WidgetHandler(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 	selectedFileID string,
-) *wx.ListDetailLayout {
+) *widget.ListDetailLayout {
 	state := autil.StateX[InboxPageState](rw, req)
 
 	return qq.Widget(
@@ -122,16 +122,16 @@ func (qq *FilesListPartial) Widget(
 	ctx ctxx.Context,
 	state *InboxPageState,
 	selectedFileID string,
-) *wx.ListDetailLayout {
-	var children []wx.IWidget
-	var appBar *wx.AppBar
+) *widget.ListDetailLayout {
+	var children []widget.IWidget
+	var appBar *widget.AppBar
 
 	if selectedFileID == "" {
 		appBar = qq.appBar(ctx, state)
 	} else {
-		appBar = &wx.AppBar{
-			Title:   wx.T("Inbox"),
-			Leading: wx.NewIcon("inbox"),
+		appBar = &widget.AppBar{
+			Title:   widget.T("Inbox"),
+			Leading: widget.NewIcon("inbox"),
 		}
 	}
 
@@ -143,13 +143,13 @@ func (qq *FilesListPartial) Widget(
 		),
 	)
 
-	list := &wx.Column{
-		Widget: wx.Widget[wx.Column]{
+	list := &widget.Column{
+		Widget: widget.Widget[widget.Column]{
 			ID: qq.WrapperID(),
 		},
-		GapYSize: wx.Gap2,
-		HTMXAttrs: wx.HTMXAttrs{
-			HxPost:   qq.EndpointWithParams(actionx.ResponseWrapperNone, ""),
+		GapYSize: widget.Gap2,
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:   qq.EndpointWithParams(actionx2.ResponseWrapperNone, ""),
 			HxVals:   util.JSON(qq.Data(selectedFileID)), // overrides form fields, must be added via HxInclude
 			HxTarget: "#innerContent",                    // not just fileList because of sortBy selection
 			HxSwap:   "innerHTML",
@@ -162,7 +162,7 @@ func (qq *FilesListPartial) Widget(
 		},
 		Children: children,
 	}
-	return &wx.ListDetailLayout{
+	return &widget.ListDetailLayout{
 		AppBar: appBar,
 		List:   list,
 	}
@@ -173,7 +173,7 @@ func (qq *FilesListPartial) filesList(
 	state *InboxPageState,
 	data *FilesListPartialData,
 ) renderable.Renderable {
-	var fileListItems []wx.IWidget
+	var fileListItems []widget.IWidget
 
 	searchResultQuery := qq.filesQuery(ctx, state)
 	// TODO .Limit(25) // needs hint if enabled
@@ -193,19 +193,19 @@ func (qq *FilesListPartial) filesList(
 		))
 	}
 
-	var content wx.IWidget
-	content = &wx.List{
+	var content widget.IWidget
+	content = &widget.List{
 		Children: fileListItems,
 	}
 
 	if len(fileListItems) == 0 {
-		content = &wx.EmptyState{
-			Icon:     wx.NewIcon("description"),
-			Headline: wx.T("No files available yet."),
+		content = &widget.EmptyState{
+			Icon:     widget.NewIcon("description"),
+			Headline: widget.T("No files available yet."),
 			// Description: NewText("There are no directories or files available yet, you can create"),
-			Actions: []wx.IWidget{
-				&wx.Link{
-					HTMXAttrs: wx.HTMXAttrs{
+			Actions: []widget.IWidget{
+				&widget.Link{
+					HTMXAttrs: widget.HTMXAttrs{
 						HxPost: qq.actions.Browse.FileUploadDialogPartial.Endpoint(),
 						HxVals: util.JSON(qq.actions.Browse.FileUploadDialogPartial.Data(
 							ctx.SpaceCtx().SpaceRootDir().PublicID.String(),
@@ -213,24 +213,24 @@ func (qq *FilesListPartial) filesList(
 						)),
 						LoadInPopover: true,
 					},
-					Child: &wx.Button{
-						Icon:  wx.NewIcon("upload_file"),
-						Label: wx.T("Upload file"),
+					Child: &widget.Button{
+						Icon:  widget.NewIcon("upload_file"),
+						Label: widget.T("Upload file"),
 					},
 				},
 			},
 		}
 	}
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.FileListID(),
 		},
 		Children: content,
 		// must be on ScrollableContent and not directly on wx.List because otherwise page breaks
 		// if a search has no results and empty state is rendered without HTMXAttrs
-		HTMXAttrs: wx.HTMXAttrs{
-			HxPost:   qq.EndpointWithParams(actionx.ResponseWrapperNone, "#"+qq.FileListID()),
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:   qq.EndpointWithParams(actionx2.ResponseWrapperNone, "#"+qq.FileListID()),
 			HxVals:   util.JSON(data), // overrides form fields, must be added via HxInclude
 			HxTarget: "#" + qq.FileListID(),
 			HxSwap:   "outerHTML",
@@ -305,26 +305,26 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 	return searchResultQuery
 }
 
-func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.AppBar {
-	return &wx.AppBar{
-		Leading:          wx.NewIcon("inbox"),
+func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *widget.AppBar {
+	return &widget.AppBar{
+		Leading:          widget.NewIcon("inbox"),
 		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
-		Title:            wx.T("Inbox"),
-		Actions: []wx.IWidget{
-			&wx.IconButton{
+		Title:            widget.T("Inbox"),
+		Actions: []widget.IWidget{
+			&widget.IconButton{
 				Icon:     "sort",
-				Tooltip:  wx.T("Sort files"),
+				Tooltip:  widget.T("Sort files"),
 				Children: NewSortListContextMenuWidget(qq.actions).Widget(ctx, &state.FilesListPartialState),
 			},
 		},
-		Search: &wx.Search{
-			Widget: wx.Widget[wx.Search]{
+		Search: &widget.Search{
+			Widget: widget.Widget[widget.Search]{
 				ID: "search",
 			},
 			Name:           "SearchQuery",
 			Value:          state.SearchQuery,
-			SupportingText: wx.Tf("Search in «Inbox»"),
-			HTMXAttrs: wx.HTMXAttrs{
+			SupportingText: widget.Tf("Search in «Inbox»"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxOn: event.SearchQueryUpdated.HxOnWithQueryParam("input", "q"),
 			},
 		},

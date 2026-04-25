@@ -1,6 +1,10 @@
 package route
 
-import "fmt"
+import (
+	"fmt"
+
+	route2 "github.com/simpledms/simpledms/core/ui/uix/route"
+)
 
 func TrashRoute() string {
 	return "GET /org/{tenant_id}/space/{space_id}/trash/"
@@ -27,7 +31,7 @@ func TrashFile(tenantID, spaceID, fileID string) string {
 }
 
 func TrashFileWithState(data any) func(string, string, string) string {
-	return WithState(TrashFile, data)
+	return route2.WithState(TrashFile, data)
 }
 
 func TrashDownload(tenantID, spaceID, fileID string) string {

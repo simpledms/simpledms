@@ -1,9 +1,9 @@
 package dashboard
 
 import (
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type PasskeyContextMenuWidget struct {
@@ -16,12 +16,12 @@ func NewPasskeyContextMenuWidget(actions *Actions) *PasskeyContextMenuWidget {
 	}
 }
 
-func (qq *PasskeyContextMenuWidget) Widget(ctx ctxx.Context, passkeyID string, passkeyName string) *wx.Menu {
-	return &wx.Menu{
-		Items: []*wx.MenuItem{
+func (qq *PasskeyContextMenuWidget) Widget(ctx ctxx.Context, passkeyID string, passkeyName string) *widget.Menu {
+	return &widget.Menu{
+		Items: []*widget.MenuItem{
 			{
 				LeadingIcon: "edit",
-				Label:       wx.T("Rename"),
+				Label:       widget.T("Rename"),
 				HTMXAttrs: qq.actions.AuthActions.RenamePasskeyCmd.ModalLinkAttrs(
 					qq.actions.AuthActions.RenamePasskeyCmd.Data(passkeyID, passkeyName),
 					"",
@@ -32,11 +32,11 @@ func (qq *PasskeyContextMenuWidget) Widget(ctx ctxx.Context, passkeyID string, p
 			},
 			{
 				LeadingIcon: "delete",
-				Label:       wx.T("Remove"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Label:       widget.T("Remove"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:    qq.actions.AuthActions.DeletePasskeyCmd.Endpoint(),
 					HxVals:    util.JSON(qq.actions.AuthActions.DeletePasskeyCmd.Data(passkeyID)),
-					HxConfirm: wx.T("Are you sure?").String(ctx),
+					HxConfirm: widget.T("Are you sure?").String(ctx),
 					HxSwap:    "none",
 				},
 			},

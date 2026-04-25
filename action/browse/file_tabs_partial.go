@@ -6,15 +6,15 @@ import (
 	"log"
 	"strings"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileTabsPartialData struct {
@@ -49,7 +49,7 @@ func (qq *FileTabsPartial) Data(currentDirID, fileID, activeTab string) *FileTab
 	}
 }
 
-func (qq *FileTabsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FileTabsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileTabsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -76,7 +76,7 @@ func (qq *FileTabsPartial) Widget(
 	state *FilePreviewPartialState,
 	dirID string,
 	fileID string,
-) *wx.TabBar {
+) *widget.TabBar {
 	var activeTabContent renderable.Renderable
 
 	activeTab := strings.ToLower(state.ActiveTab)
@@ -125,16 +125,16 @@ func (qq *FileTabsPartial) Widget(
 	}
 
 	tabsID := autil.GenerateID("showFileTabs")
-	return &wx.TabBar{
-		Widget: wx.Widget[wx.TabBar]{
+	return &widget.TabBar{
+		Widget: widget.Widget[widget.TabBar]{
 			ID: tabsID,
 		},
 		ActiveTab: activeTab,
 		IsFlowing: true,
-		Tabs: []*wx.Tab{
+		Tabs: []*widget.Tab{
 			{
-				Label: wx.T("Metadata"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Label: widget.T("Metadata"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:   qq.Endpoint(),
 					HxVals:   util.JSON(qq.Data(dirID, fileID, "metadata")),
 					HxTarget: "#" + tabsID,
@@ -143,9 +143,9 @@ func (qq *FileTabsPartial) Widget(
 				IncreasedHeight: true,
 			},
 			{
-				Label: wx.T("Tags"),
+				Label: widget.T("Tags"),
 				Badge: qq.actions.Tagging.AssignedTags.Count.Badge(ctx, fileID),
-				HTMXAttrs: wx.HTMXAttrs{
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:   qq.Endpoint(),
 					HxVals:   util.JSON(qq.Data(dirID, fileID, "tags")),
 					HxTarget: "#" + tabsID,
@@ -154,8 +154,8 @@ func (qq *FileTabsPartial) Widget(
 				IncreasedHeight: true,
 			},
 			{
-				Label: wx.T("Fields"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Label: widget.T("Fields"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:   qq.Endpoint(),
 					HxVals:   util.JSON(qq.Data(dirID, fileID, "fields")),
 					HxTarget: "#" + tabsID,
@@ -164,8 +164,8 @@ func (qq *FileTabsPartial) Widget(
 				IncreasedHeight: true,
 			},
 			{
-				Label: wx.T("Info"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Label: widget.T("Info"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:   qq.Endpoint(),
 					HxVals:   util.JSON(qq.Data(dirID, fileID, "info")),
 					HxTarget: "#" + tabsID,
@@ -174,8 +174,8 @@ func (qq *FileTabsPartial) Widget(
 				IncreasedHeight: true,
 			},
 			{
-				Label: wx.T("Versions"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Label: widget.T("Versions"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:   qq.Endpoint(),
 					HxVals:   util.JSON(qq.Data(dirID, fileID, "versions")),
 					HxTarget: "#" + tabsID,

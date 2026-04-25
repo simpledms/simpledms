@@ -5,13 +5,15 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entx"
+
+	"github.com/simpledms/simpledms/core/model/common/country"
+	"github.com/simpledms/simpledms/core/model/common/language"
+	signupmodel "github.com/simpledms/simpledms/core/model/signup"
+	"github.com/simpledms/simpledms/core/pluginx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/main/common/country"
-	"github.com/simpledms/simpledms/model/main/common/language"
-	signupmodel "github.com/simpledms/simpledms/model/main/signup"
-	"github.com/simpledms/simpledms/pluginx"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 )
 
 type captureSignUpPlugin struct {
@@ -94,7 +96,7 @@ func executeSignUpFlow(t *testing.T, harness *actionTestHarness, email string) e
 		t.Fatalf("start main tx: %v", err)
 	}
 
-	ctx := ctxx.NewVisitorContext(
+	ctx := ctxx2.NewVisitorContext(
 		context.Background(),
 		mainTx,
 		harness.i18n,

@@ -10,12 +10,14 @@ import (
 	"filippo.io/age"
 	_ "github.com/mattn/go-sqlite3"
 
+	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain/enttest"
+	"github.com/simpledms/simpledms/core/db/entx"
+
+	"github.com/simpledms/simpledms/core/util/e"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/enttest"
-	"github.com/simpledms/simpledms/db/entx"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/encryptor"
-	"github.com/simpledms/simpledms/util/e"
 )
 
 func TestS3FileSystemEnsureUploadSizeLimitWithGlobalLimit(t *testing.T) {
@@ -39,7 +41,7 @@ func TestS3FileSystemEnsureUploadSizeLimitWithTenantOverride(t *testing.T) {
 	defer cleanup()
 
 	overrideMib := int64(1)
-	tenantCtx := &ctxx.TenantContext{
+	tenantCtx := &ctxx2.TenantContext{
 		MainContext: mainCtx,
 		Tenant: &entmain.Tenant{
 			MaxUploadSizeMibOverride: &overrideMib,
@@ -55,7 +57,7 @@ func TestS3FileSystemEnsureUploadSizeLimitWithUnlimitedTenantOverride(t *testing
 	defer cleanup()
 
 	overrideMib := int64(0)
-	tenantCtx := &ctxx.TenantContext{
+	tenantCtx := &ctxx2.TenantContext{
 		MainContext: mainCtx,
 		Tenant: &entmain.Tenant{
 			MaxUploadSizeMibOverride: &overrideMib,
@@ -112,7 +114,7 @@ func newS3FileSystemMainContext(t *testing.T, globalLimitMib int64) (*S3FileSyst
 	}
 
 	mainCtx := &ctxx.MainContext{
-		VisitorContext: &ctxx.VisitorContext{
+		VisitorContext: &ctxx2.VisitorContext{
 			Context: context.Background(),
 			MainTx:  mainTx,
 		},

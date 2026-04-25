@@ -4,13 +4,13 @@ import (
 	"os"
 	"strings"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type AssignmentDirectoryListItemPartialData struct {
@@ -42,7 +42,7 @@ func (qq *AssignmentDirectoryListItemPartial) Data(destDirID, fileID int64) *Ass
 	}
 }
 
-func (qq *AssignmentDirectoryListItemPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *AssignmentDirectoryListItemPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[AssignmentDirectoryListItemPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -63,20 +63,20 @@ func (qq *AssignmentDirectoryListItemPartial) Widget(
 	destDir *enttenant.File,
 	fileToAssign *enttenant.File,
 	destParentFullPath string,
-) *wx.ListItem {
+) *widget.ListItem {
 	if destParentFullPath == "" {
 		// if ID is used instead of ParentID, lastElem must be removed in next step (filepath.Dir)
 		destParentFullPath = qq.infra.FileSystem().FileTree().FullPathByFileIDX(ctx, destDir.ParentID)
 	}
-	breadcrumbElems := []string{wx.T("Home").String(ctx)}
+	breadcrumbElems := []string{widget.T("Home").String(ctx)}
 	if destParentFullPath != "" {
 		breadcrumbElems = append(breadcrumbElems, strings.Split(destParentFullPath, string(os.PathSeparator))...)
 	}
 	supportingText := strings.Join(breadcrumbElems, " » ")
 
-	return &wx.ListItem{
-		Headline:       wx.Tf(destDir.Name),
-		SupportingText: wx.Tu(supportingText),
+	return &widget.ListItem{
+		Headline:       widget.Tf(destDir.Name),
+		SupportingText: widget.Tu(supportingText),
 		HTMXAttrs: qq.actions.AssignFileCmd.ModalLinkAttrs(
 			qq.actions.AssignFileCmd.Data(destDir.PublicID.String(), fileToAssign.PublicID.String(), fileToAssign.Name),
 			"#innerContent",

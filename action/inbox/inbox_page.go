@@ -6,14 +6,15 @@ import (
 	"log"
 	"time"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/db/entmain/temporaryfile"
+
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 // TODO necessary?
@@ -51,7 +52,7 @@ func (qq *InboxPage) Data() *InboxPageData {
 
 // used in Query, for example MarkAsDoneCmd
 // TODO refactor, legacy code
-func (qq *InboxPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *InboxPage) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	state := autil.StateX[InboxPageState](rw, req)
 
 	selectedFileID := ""
@@ -81,11 +82,11 @@ func (qq *InboxPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 // TODO with and without selection together?
 // TODO not nice that url params are already read from URL and passed in in addition to req, could be confusing
 func (qq *InboxPage) WidgetHandler(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 	selectedFileID string,
-) *wx.ListDetailLayout {
+) *widget.ListDetailLayout {
 	// TODO handle selection
 	// TODO use in MoveFileCmd / AssignFileCmd, initial render
 
@@ -123,7 +124,7 @@ func (qq *InboxPage) WidgetHandler(
 	return qq.Widget(ctx, state, selectedFileID)
 }
 
-func (qq *InboxPage) Widget(ctx ctxx.Context, state *InboxPageState, selectedFileID string) *wx.ListDetailLayout {
+func (qq *InboxPage) Widget(ctx ctxx.Context, state *InboxPageState, selectedFileID string) *widget.ListDetailLayout {
 	listDetailLayout := qq.actions.ListFilesPartial.Widget(
 		ctx,
 		state,
@@ -138,7 +139,7 @@ func (qq *InboxPage) Widget(ctx ctxx.Context, state *InboxPageState, selectedFil
 	return listDetailLayout
 }
 
-func (qq *InboxPage) processTemporaryFiles(rw httpx.ResponseWriter, ctx ctxx.Context, state *InboxPageState) error {
+func (qq *InboxPage) processTemporaryFiles(rw httpx2.ResponseWriter, ctx ctxx.Context, state *InboxPageState) error {
 	tmpFiles := ctx.MainCtx().Account.QueryTemporaryFiles().Where(
 		temporaryfile.UploadToken(state.UploadToken),
 		temporaryfile.ConvertedToStoredFileAtIsNil(),
@@ -146,7 +147,7 @@ func (qq *InboxPage) processTemporaryFiles(rw httpx.ResponseWriter, ctx ctxx.Con
 	).AllX(ctx)
 
 	if len(tmpFiles) == 0 {
-		rw.AddRenderables(wx.NewSnackbarf("No new files found."))
+		rw.AddRenderables(widget.NewSnackbarf("No new files found."))
 		return nil
 	}
 
@@ -163,6 +164,6 @@ func (qq *InboxPage) processTemporaryFiles(rw httpx.ResponseWriter, ctx ctxx.Con
 		}
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("Files uploaded successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("Files uploaded successfully."))
 	return nil
 }

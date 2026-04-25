@@ -1,24 +1,24 @@
 package action
 
 import (
-	"github.com/simpledms/simpledms/action/admin"
-	"github.com/simpledms/simpledms/action/auth"
 	"github.com/simpledms/simpledms/action/browse"
-	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/action/dashboard"
 	"github.com/simpledms/simpledms/action/documenttype"
 	"github.com/simpledms/simpledms/action/inbox"
 	"github.com/simpledms/simpledms/action/managespaceusers"
 	"github.com/simpledms/simpledms/action/managetags"
-	"github.com/simpledms/simpledms/action/managetenantusers"
 	"github.com/simpledms/simpledms/action/openfile"
 	"github.com/simpledms/simpledms/action/property"
 	"github.com/simpledms/simpledms/action/spaces"
-	"github.com/simpledms/simpledms/action/staticpage"
 	"github.com/simpledms/simpledms/action/tagging"
 	"github.com/simpledms/simpledms/action/trash"
-	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	"github.com/simpledms/simpledms/core/action/admin"
+	"github.com/simpledms/simpledms/core/action/auth"
+	acommon "github.com/simpledms/simpledms/core/action/common"
+	"github.com/simpledms/simpledms/core/action/managetenantusers"
+	"github.com/simpledms/simpledms/core/action/staticpage"
+	"github.com/simpledms/simpledms/core/common"
 )
 
 // value of actions tag seems not important, just that not empty...

@@ -1,10 +1,10 @@
 package openfile
 
 import (
-	acommon "github.com/simpledms/simpledms/action/common"
-	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	temporaryfilemodel "github.com/simpledms/simpledms/model/main/temporaryfile"
+	acommon "github.com/simpledms/simpledms/core/action/common"
+	"github.com/simpledms/simpledms/core/common"
+	temporaryfilemodel "github.com/simpledms/simpledms/core/model/temporaryfile"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 

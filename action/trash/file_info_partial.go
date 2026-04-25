@@ -1,15 +1,15 @@
 package trash
 
 import (
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/core/util/timex"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/timex"
 )
 
 type FileInfoPartialData struct {
@@ -40,7 +40,7 @@ func (qq *FileInfoPartial) Data(fileID string) *FileInfoPartialData {
 	}
 }
 
-func (qq *FileInfoPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FileInfoPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileInfoPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -53,70 +53,70 @@ func (qq *FileInfoPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 	)
 }
 
-func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *wx.ScrollableContent {
+func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *widget.ScrollableContent {
 	ctxWithDeleted := schema.SkipSoftDelete(ctx)
 	filem := qq.infra.FileRepo.GetWithDeletedX(ctx, data.FileID)
 	currentVersion := filem.CurrentVersion(ctxWithDeleted)
 
-	ocrSucceededAt := wx.Tu("-")
+	ocrSucceededAt := widget.Tu("-")
 	if filem.Data.OcrSuccessAt != nil && !filem.Data.OcrSuccessAt.IsZero() {
-		ocrSucceededAt = wx.Tu(timex.NewDateTime(*filem.Data.OcrSuccessAt).String(ctx.MainCtx().LanguageBCP47))
+		ocrSucceededAt = widget.Tu(timex.NewDateTime(*filem.Data.OcrSuccessAt).String(ctx.MainCtx().LanguageBCP47))
 	}
 
-	sha256 := wx.Tu("-")
+	sha256 := widget.Tu("-")
 	if currentVersion.Data.Sha256 != "" {
-		sha256 = wx.Tu(currentVersion.Data.Sha256)
+		sha256 = widget.Tu(currentVersion.Data.Sha256)
 	}
 
-	items := []*wx.ListItem{
+	items := []*widget.ListItem{
 		{
-			Headline:       wx.T("File size"),
-			SupportingText: wx.Tu(currentVersion.SizeString()),
+			Headline:       widget.T("File size"),
+			SupportingText: widget.Tu(currentVersion.SizeString()),
 		},
 		{
-			Headline:       wx.T("MIME type"),
-			SupportingText: wx.Tu(currentVersion.Data.MimeType),
+			Headline:       widget.T("MIME type"),
+			SupportingText: widget.Tu(currentVersion.Data.MimeType),
 		},
 		{
-			Headline:       wx.T("SHA-256 hash"),
+			Headline:       widget.T("SHA-256 hash"),
 			SupportingText: sha256,
 		},
 		{
-			Headline:       wx.T("Original filename"),
-			SupportingText: wx.Tu(currentVersion.Data.Filename),
+			Headline:       widget.T("Original filename"),
+			SupportingText: widget.Tu(currentVersion.Data.Filename),
 		},
 	}
 
 	if parentName := qq.parentName(ctx, filem.Data.ParentID); parentName != "" {
-		items = append(items, &wx.ListItem{
-			Headline:       wx.T("Parent folder"),
-			SupportingText: wx.Tu(parentName),
+		items = append(items, &widget.ListItem{
+			Headline:       widget.T("Parent folder"),
+			SupportingText: widget.Tu(parentName),
 		})
 	}
 
-	items = append(items, &wx.ListItem{
-		Headline:       wx.T("Uploaded at"),
-		SupportingText: wx.Tu(timex.NewDateTime(filem.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
+	items = append(items, &widget.ListItem{
+		Headline:       widget.T("Uploaded at"),
+		SupportingText: widget.Tu(timex.NewDateTime(filem.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
 	})
-	items = append(items, &wx.ListItem{
-		Headline:       wx.T("OCR succeeded at"),
+	items = append(items, &widget.ListItem{
+		Headline:       widget.T("OCR succeeded at"),
 		SupportingText: ocrSucceededAt,
 	})
 
 	if !filem.Data.DeletedAt.IsZero() {
-		items = append(items, &wx.ListItem{
-			Headline:       wx.T("Deleted at"),
-			SupportingText: wx.T(timex.NewDateTime(filem.Data.DeletedAt).String(ctx.MainCtx().LanguageBCP47)),
+		items = append(items, &widget.ListItem{
+			Headline:       widget.T("Deleted at"),
+			SupportingText: widget.T(timex.NewDateTime(filem.Data.DeletedAt).String(ctx.MainCtx().LanguageBCP47)),
 		})
 	}
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: "trashFileInfo",
 		},
 		GapY: true,
-		Children: &wx.List{
-			Widget: wx.Widget[wx.List]{
+		Children: &widget.List{
+			Widget: widget.Widget[widget.List]{
 				ID: "trashFileInfoList",
 			},
 			Children: items,

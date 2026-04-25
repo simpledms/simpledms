@@ -5,10 +5,10 @@ import (
 	"html/template"
 	"strings"
 
+	"github.com/simpledms/simpledms/core/ui/widget"
+	timex2 "github.com/simpledms/simpledms/core/util/timex"
 	"github.com/simpledms/simpledms/ctxx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/timex"
 )
 
 type DateSuggestionsWidget struct {
@@ -33,7 +33,7 @@ func (qq *DateSuggestionsWidget) suggestionsID() string {
 	return fmt.Sprintf("file-property-date-suggestions-%d", qq.propertyID)
 }
 
-func (qq *DateSuggestionsWidget) suggestionsFromFile() []timex.Date {
+func (qq *DateSuggestionsWidget) suggestionsFromFile() []timex2.Date {
 	content := strings.TrimSpace(qq.filex.Data.Name)
 	if qq.filex.Data.OcrContent != "" {
 		if content == "" {
@@ -43,18 +43,18 @@ func (qq *DateSuggestionsWidget) suggestionsFromFile() []timex.Date {
 		}
 	}
 
-	return timex.SuggestDatesFromText(content)
+	return timex2.SuggestDatesFromText(content)
 }
 
-func (qq *DateSuggestionsWidget) suggestionChips(ctx ctxx.Context, suggestions []timex.Date) []wx.IWidget {
-	chips := make([]wx.IWidget, 0, len(suggestions))
+func (qq *DateSuggestionsWidget) suggestionChips(ctx ctxx.Context, suggestions []timex2.Date) []widget.IWidget {
+	chips := make([]widget.IWidget, 0, len(suggestions))
 	for _, suggestion := range suggestions {
 		label := suggestion.String(ctx.MainCtx().LanguageBCP47)
-		chips = append(chips, &wx.AssistChip{
-			Label:       wx.Tu(label),
+		chips = append(chips, &widget.AssistChip{
+			Label:       widget.Tu(label),
 			LeadingIcon: "event",
-			HTMXAttrs: wx.HTMXAttrs{
-				HxOn: &wx.HxOn{
+			HTMXAttrs: widget.HTMXAttrs{
+				HxOn: &widget.HxOn{
 					Event: "click",
 					Handler: template.JS(fmt.Sprintf(
 						"const el = document.getElementById('%s'); if (el) { el.value='%s'; el.dispatchEvent(new Event('change', { bubbles:true })); }",
@@ -71,8 +71,8 @@ func (qq *DateSuggestionsWidget) suggestionChips(ctx ctxx.Context, suggestions [
 	return chips
 }
 
-func (qq *DateSuggestionsWidget) Widget(ctx ctxx.Context, showSuggestions bool, swapOOB string) *wx.Container {
-	var child wx.IWidget
+func (qq *DateSuggestionsWidget) Widget(ctx ctxx.Context, showSuggestions bool, swapOOB string) *widget.Container {
+	var child widget.IWidget
 	if showSuggestions {
 		suggestions := qq.suggestionsFromFile()
 		if len(suggestions) > 0 {
@@ -80,11 +80,11 @@ func (qq *DateSuggestionsWidget) Widget(ctx ctxx.Context, showSuggestions bool, 
 		}
 	}
 
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: qq.suggestionsID(),
 		},
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxSwapOOB: swapOOB,
 		},
 		Gap:   true,

@@ -9,26 +9,28 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	_ "github.com/simpledms/simpledms/core/db/entmain/runtime"
+	"github.com/simpledms/simpledms/core/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/core/db/entx"
+
 	"github.com/simpledms/simpledms/action"
+	"github.com/simpledms/simpledms/core/model/common/country"
+	"github.com/simpledms/simpledms/core/model/common/language"
+	"github.com/simpledms/simpledms/core/model/common/tenantrole"
+	signupmodel "github.com/simpledms/simpledms/core/model/signup"
+	tenant2 "github.com/simpledms/simpledms/core/model/tenant"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	_ "github.com/simpledms/simpledms/db/entmain/runtime"
-	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/migrate"
 	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
 	"github.com/simpledms/simpledms/db/enttenant/space"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/model/main/common/country"
-	"github.com/simpledms/simpledms/model/main/common/language"
-	"github.com/simpledms/simpledms/model/main/common/tenantrole"
-	signupmodel "github.com/simpledms/simpledms/model/main/signup"
-	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestSignUpCmdCreatesTenantAndAccount(t *testing.T) {
@@ -54,7 +56,7 @@ func TestEditSpaceCmdUpdatesSpaceAndRootDir(t *testing.T) {
 	accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
 	tenantDB := initTenantDB(t, harness, tenantx)
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 		spaceName := "Operations"
 		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -73,8 +75,8 @@ func TestEditSpaceCmdUpdatesSpaceAndRootDir(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 		err := harness.actions.Spaces.EditSpaceCmd.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
+			httpx2.NewResponseWriter(rr),
+			httpx2.NewRequest(req),
 			tenantCtx,
 		)
 		if err != nil {
@@ -117,7 +119,7 @@ func signUpAccount(t testing.TB, harness *actionTestHarness, email string) (*ent
 		t.Fatalf("start main tx: %v", err)
 	}
 
-	ctx := ctxx.NewVisitorContext(
+	ctx := ctxx2.NewVisitorContext(
 		context.Background(),
 		mainTx,
 		harness.i18n,
@@ -185,7 +187,7 @@ func newTenantContext(
 	accountx *entmain.Account,
 	tenantx *entmain.Tenant,
 	tenantDB *sqlx.TenantDB,
-) (*entmain.Tx, *enttenant.Tx, *ctxx.TenantContext) {
+) (*entmain.Tx, *enttenant.Tx, *ctxx2.TenantContext) {
 	t.Helper()
 
 	mainTx, err := harness.mainDB.ReadWriteConn.Tx(context.Background())
@@ -193,7 +195,7 @@ func newTenantContext(
 		t.Fatalf("start main tx: %v", err)
 	}
 
-	visitorCtx := ctxx.NewVisitorContext(
+	visitorCtx := ctxx2.NewVisitorContext(
 		context.Background(),
 		mainTx,
 		harness.i18n,
@@ -211,12 +213,12 @@ func newTenantContext(
 		t.Fatalf("start tenant tx: %v", err)
 	}
 
-	tenantCtx := ctxx.NewTenantContext(mainCtx, tenantTx, tenantx, false)
+	tenantCtx := ctxx2.NewTenantContext(mainCtx, tenantTx, tenantx, false)
 
 	return mainTx, tenantTx, tenantCtx
 }
 
-func createSpaceViaCmd(t testing.TB, actions *action.Actions, tenantCtx *ctxx.TenantContext, name string) {
+func createSpaceViaCmd(t testing.TB, actions *action.Actions, tenantCtx *ctxx2.TenantContext, name string) {
 	t.Helper()
 
 	form := url.Values{}
@@ -229,8 +231,8 @@ func createSpaceViaCmd(t testing.TB, actions *action.Actions, tenantCtx *ctxx.Te
 
 	rr := httptest.NewRecorder()
 	err := actions.Spaces.CreateSpaceCmd.Handler(
-		httpx.NewResponseWriter(rr),
-		httpx.NewRequest(req),
+		httpx2.NewResponseWriter(rr),
+		httpx2.NewRequest(req),
 		tenantCtx,
 	)
 	if err != nil {

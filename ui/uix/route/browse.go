@@ -2,6 +2,8 @@ package route
 
 import (
 	"fmt"
+
+	route2 "github.com/simpledms/simpledms/core/ui/uix/route"
 )
 
 func BrowseRoute(withPath bool) string {
@@ -41,17 +43,17 @@ func BrowseFile(tenantID, spaceID, dirID, fileID string) string {
 
 // don't use this for links, just to set URL in browser
 func BrowseFileWithState(data any) func(string, string, string, string) string {
-	return WithState2(BrowseFile, data)
+	return route2.WithState2(BrowseFile, data)
 }
 
 // don't use this for links, just to set URL in browser
 func BrowseWithState(data any) func(string, string, string) string {
 	// FIXME safety?
-	return WithState(Browse, data)
+	return route2.WithState(Browse, data)
 }
 
 func BrowseRootWithState(data any) func(string, string) string {
-	return RootWithState(BrowseRoot, data)
+	return route2.RootWithState(BrowseRoot, data)
 }
 
 /*

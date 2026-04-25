@@ -3,16 +3,17 @@ package openfile
 import (
 	"log"
 
-	acommon "github.com/simpledms/simpledms/action/common"
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	acommon "github.com/simpledms/simpledms/core/action/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type SelectSpacePageState struct {
@@ -41,7 +42,7 @@ func NewSelectSpacePage(
 	}
 }
 
-func (qq *SelectSpacePage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *SelectSpacePage) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	state := autil.StateX[SelectSpacePageState](rw, req)
 
 	token := req.PathValue("upload_token")
@@ -60,18 +61,18 @@ func (qq *SelectSpacePage) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 }
 
 func (qq *SelectSpacePage) WaitWidget(ctx ctxx.Context, uploadToken string, state *SelectSpacePageState) renderable.Renderable {
-	fabs := []*wx.FloatingActionButton{}
+	fabs := []*widget.FloatingActionButton{}
 
 	// TODO make clear if nothing happens, if there are no files...
-	return &wx.MainLayout{
+	return &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "upload", fabs),
-		Content: &wx.ListDetailLayout{ // TODO implement a FullPageLayout instead
+		Content: &widget.ListDetailLayout{ // TODO implement a FullPageLayout instead
 			AppBar: qq.appBar(ctx),
-			List: []wx.IWidget{
-				&wx.EmptyState{
-					Icon:        wx.NewIcon("upload"),
-					Headline:    wx.T("Uploading files, please wait a moment."),
-					Description: wx.T("The page will be refreshed automatically once the upload is finished."),
+			List: []widget.IWidget{
+				&widget.EmptyState{
+					Icon:        widget.NewIcon("upload"),
+					Headline:    widget.T("Uploading files, please wait a moment."),
+					Description: widget.T("The page will be refreshed automatically once the upload is finished."),
 				},
 			},
 		},
@@ -88,7 +89,7 @@ func (qq *SelectSpacePage) Widget(
 
 	// TODO autoselect space if just one?
 
-	var spaceItems []*wx.ListItem
+	var spaceItems []*widget.ListItem
 
 	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
 	if err != nil {
@@ -98,17 +99,17 @@ func (qq *SelectSpacePage) Widget(
 	// TODO ordner?
 	for tenantx, spaces := range spacesByTenant {
 		if len(spaces) == 0 {
-			spaceItems = append(spaceItems, &wx.ListItem{
-				Type:           wx.ListItemTypeHelper,
-				Headline:       wx.T("No spaces yet."),
-				SupportingText: wx.T("Please try again once you created a space or were invited to join one."),
+			spaceItems = append(spaceItems, &widget.ListItem{
+				Type:           widget.ListItemTypeHelper,
+				Headline:       widget.T("No spaces yet."),
+				SupportingText: widget.T("Please try again once you created a space or were invited to join one."),
 			})
 		} else {
 			for _, spacex := range spaces {
-				spaceItems = append(spaceItems, &wx.ListItem{
-					Headline:       wx.Tu(spacex.Name),
-					SupportingText: wx.Tu(tenantx.Name),
-					HTMXAttrs: wx.HTMXAttrs{
+				spaceItems = append(spaceItems, &widget.ListItem{
+					Headline:       widget.Tu(spacex.Name),
+					SupportingText: widget.Tu(tenantx.Name),
+					HTMXAttrs: widget.HTMXAttrs{
 						// redirecting to inbox instead of using a custom action like SelectSpace because
 						// this way we get the security check for space and tenant for free and don't have
 						// to be very careful in the custom action
@@ -125,13 +126,13 @@ func (qq *SelectSpacePage) Widget(
 		}
 	}
 
-	var fabs []*wx.FloatingActionButton
+	var fabs []*widget.FloatingActionButton
 
-	mainLayout := &wx.MainLayout{
+	mainLayout := &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "upload", fabs),
-		Content: &wx.ListDetailLayout{
+		Content: &widget.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
-			List: &wx.List{
+			List: &widget.List{
 				Children: spaceItems,
 			},
 		},
@@ -140,15 +141,15 @@ func (qq *SelectSpacePage) Widget(
 	return mainLayout, nil
 }
 
-func (qq *SelectSpacePage) appBar(ctx ctxx.Context) *wx.AppBar {
-	return &wx.AppBar{
-		Leading: &wx.Icon{
+func (qq *SelectSpacePage) appBar(ctx ctxx.Context) *widget.AppBar {
+	return &widget.AppBar{
+		Leading: &widget.Icon{
 			Name: "upload", // TODO hub or upload?
 		},
 		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
-		Title: &wx.AppBarTitle{
-			Text: wx.T("Select space"),
+		Title: &widget.AppBarTitle{
+			Text: widget.T("Select space"),
 		},
-		Actions: []wx.IWidget{},
+		Actions: []widget.IWidget{},
 	}
 }

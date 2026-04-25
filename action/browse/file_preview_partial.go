@@ -4,17 +4,18 @@ import (
 	"log"
 	"net/http"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/uix/events"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FilePreviewPartialData struct {
@@ -51,7 +52,7 @@ func (qq *FilePreviewPartial) Data(currentDirID, fileID string) *FilePreviewPart
 	}
 }
 
-func (qq *FilePreviewPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FilePreviewPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FilePreviewPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -78,7 +79,7 @@ func (qq *FilePreviewPartial) Widget(
 	state *FilePreviewPartialState,
 	dirx *filemodel.File,
 	filex *filemodel.File,
-) (*wx.DetailsWithSheet, error) {
+) (*widget.DetailsWithSheet, error) {
 	// TODO action.ShowFileData or primitive types?
 	//		is partial bound to action?
 	//
@@ -99,8 +100,8 @@ func (qq *FilePreviewPartial) Widget(
 
 	fileURL := route2.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String())
 
-	return &wx.DetailsWithSheet{
-		HTMXAttrs: wx.HTMXAttrs{
+	return &widget.DetailsWithSheet{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxTrigger: event.FileUploaded.Handler(),
 			HxPost:    qq.Endpoint(),
 			HxVals:    util.JSON(qq.Data(dirx.Data.PublicID.String(), filex.Data.PublicID.String())),
@@ -110,13 +111,13 @@ func (qq *FilePreviewPartial) Widget(
 		AppBar: qq.appBar(
 			ctx,
 			dirx.Data.PublicID.String(),
-			wx.Tu(filex.FilenameInApp(ctx, true)),
+			widget.Tu(filex.FilenameInApp(ctx, true)),
 			filex,
 			filex.Filename(ctx),
 		),
-		Child: &wx.Column{
-			Children: []wx.IWidget{
-				&wx.FilePreview{
+		Child: &widget.Column{
+			Children: []widget.IWidget{
+				&widget.FilePreview{
 					FileURL:  fileURL,
 					Filename: filex.Filename(ctx),
 					MimeType: filex.CurrentVersion(ctx).Data.MimeType,
@@ -134,42 +135,42 @@ func (qq *FilePreviewPartial) Widget(
 func (qq *FilePreviewPartial) appBar(
 	ctx ctxx.Context,
 	dirID string,
-	title *wx.Text,
+	title *widget.Text,
 	filex *filemodel.File,
 	filename string,
-) *wx.AppBar {
+) *widget.AppBar {
 	downloadURL := route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String())
 
-	return &wx.AppBar{
-		Leading: &wx.IconButton{
+	return &widget.AppBar{
+		Leading: &widget.IconButton{
 			Icon:    "close",
-			Tooltip: wx.T("Close preview"),
+			Tooltip: widget.T("Close preview"),
 			// TODO use link instead?
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet:     route2.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, dirID),
-				HxOn:      event.DetailsClosed.HxOn("click"),
+				HxOn:      events.DetailsClosed.HxOn("click"),
 				HxHeaders: autil.CloseDetailsHeader(),
 			},
 		},
-		Title: &wx.AppBarTitle{
+		Title: &widget.AppBarTitle{
 			Text: title,
 		},
-		Actions: []wx.IWidget{
-			&wx.IconButton{
+		Actions: []widget.IWidget{
+			&widget.IconButton{
 				// TODO other icon if already open or hide...
 				Icon:    "description", // right_panel_open, clarify, tune, description, info, ...?
-				Tooltip: wx.T("Show details"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Tooltip: widget.T("Show details"),
+				HTMXAttrs: widget.HTMXAttrs{
 					DialogID: qq.actions.FileDetailsSideSheetPartial.ID(),
 				},
 			},
-			&wx.Link{
+			&widget.Link{
 				Href:      downloadURL,
 				IsNoColor: true,
 				Filename:  filename,
-				Child: &wx.IconButton{
+				Child: &widget.IconButton{
 					Icon:    "download",
-					Tooltip: wx.T("Download"),
+					Tooltip: widget.T("Download"),
 				},
 			},
 			/*

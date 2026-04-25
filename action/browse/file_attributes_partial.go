@@ -5,24 +5,26 @@ import (
 	"log"
 
 	"entgo.io/ent/dialect/sql"
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/model/common/fieldtype"
+	"github.com/simpledms/simpledms/core/ui/uix/events"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/model/main/common/attributetype"
-	"github.com/simpledms/simpledms/model/main/common/fieldtype"
+	"github.com/simpledms/simpledms/model/tenant/common/attributetype"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileAttributesPartialData struct {
@@ -55,7 +57,7 @@ func (qq *FileAttributesPartial) Data(fileID string) *FileAttributesPartialData 
 	}
 }
 
-func (qq *FileAttributesPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FileAttributesPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileAttributesPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -71,9 +73,9 @@ func (qq *FileAttributesPartial) Handler(rw httpx.ResponseWriter, req *httpx.Req
 func (qq *FileAttributesPartial) Widget(
 	ctx ctxx.Context,
 	data *FileAttributesPartialData,
-) *wx.ScrollableContent {
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+) *widget.ScrollableContent {
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.FileAttributesID(),
 		},
 		GapY:     true,
@@ -85,7 +87,7 @@ func (qq *FileAttributesPartial) Widget(
 func (qq *FileAttributesPartial) Content(
 	ctx ctxx.Context,
 	data *FileAttributesPartialData,
-) wx.IWidget {
+) widget.IWidget {
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 
 	suggestedDocumentTypes := ctx.SpaceCtx().Space.QueryDocumentTypes().
@@ -129,13 +131,13 @@ func (qq *FileAttributesPartial) Content(
 		AllX(ctx)
 
 	if len(documentTypes) == 0 && len(suggestedDocumentTypes) == 0 {
-		return &wx.EmptyState{
-			Headline: wx.T("No document types available yet."),
-			Actions: []wx.IWidget{
-				&wx.Button{
-					Icon:  wx.NewIcon("category"),
-					Label: wx.T("Manage document types"),
-					HTMXAttrs: wx.HTMXAttrs{
+		return &widget.EmptyState{
+			Headline: widget.T("No document types available yet."),
+			Actions: []widget.IWidget{
+				&widget.Button{
+					Icon:  widget.NewIcon("category"),
+					Label: widget.T("Manage document types"),
+					HTMXAttrs: widget.HTMXAttrs{
 						HxGet: route.ManageDocumentTypes(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
 					},
 				},
@@ -143,8 +145,8 @@ func (qq *FileAttributesPartial) Content(
 		}
 	}
 
-	var documentTypeChips []*wx.FilterChip
-	var attributeBlocks []*wx.Column
+	var documentTypeChips []*widget.FilterChip
+	var attributeBlocks []*widget.Column
 
 	tagAssignmentsMap := make(map[int64]bool)
 	for _, tagAssignment := range filex.Data.QueryTagAssignment().AllX(ctx) {
@@ -176,26 +178,26 @@ func (qq *FileAttributesPartial) Content(
 		)
 	}
 
-	return []wx.IWidget{
-		&wx.Column{
-			GapYSize:         wx.Gap2,
+	return []widget.IWidget{
+		&widget.Column{
+			GapYSize:         widget.Gap2,
 			NoOverflowHidden: true,
 			AutoHeight:       true,
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				// TODO only reload affected tag group
 				// TODO only update if ID is identical
-				HxTrigger: event.HxTrigger(event.TagUpdated),
+				HxTrigger: events.HxTrigger(event.TagUpdated),
 				HxPost:    qq.Endpoint(),
 				HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String())),
 				HxTarget:  "#" + qq.FileAttributesID(),
 				HxSwap:    "outerHTML",
 			},
-			Children: []wx.IWidget{
-				&wx.Label{
-					Text: wx.T("Document type"),
-					Type: wx.LabelTypeLg,
+			Children: []widget.IWidget{
+				&widget.Label{
+					Text: widget.T("Document type"),
+					Type: widget.LabelTypeLg,
 				},
-				&wx.Container{
+				&widget.Container{
 					Gap:   true,
 					Child: documentTypeChips,
 				},
@@ -212,10 +214,10 @@ func (qq *FileAttributesPartial) documentTypeBadge(
 	filex *filemodel.File,
 	documentType *enttenant.DocumentType,
 	isSuggested bool,
-	documentTypeChips []*wx.FilterChip,
+	documentTypeChips []*widget.FilterChip,
 	tagAssignmentsMap map[int64]bool,
-	attributeBlocks []*wx.Column,
-) ([]*wx.FilterChip, []*wx.Column) {
+	attributeBlocks []*widget.Column,
+) ([]*widget.FilterChip, []*widget.Column) {
 	// if selected, just show selected one, if nothing selected, show all
 	if filex.Data.DocumentTypeID == 0 || filex.Data.DocumentTypeID == documentType.ID {
 		trailingIcon := ""
@@ -224,12 +226,12 @@ func (qq *FileAttributesPartial) documentTypeBadge(
 		}
 		// TODO make it a InputChip instead of adding a `close` TrailingIcon?
 		//		or at least make Icon and IconButton?
-		documentTypeChips = append(documentTypeChips, &wx.FilterChip{
-			Label:        wx.Tu(documentType.Name),
+		documentTypeChips = append(documentTypeChips, &widget.FilterChip{
+			Label:        widget.Tu(documentType.Name),
 			IsChecked:    documentType.ID == filex.Data.DocumentTypeID,
 			IsSuggestion: isSuggested,
 			TrailingIcon: trailingIcon,
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.actions.SelectDocumentTypePartial.Endpoint(),
 				HxVals:   util.JSON(qq.actions.SelectDocumentTypePartial.Data(data.FileID, documentType.ID)),
 				HxTarget: "#" + qq.FileAttributesID(),
@@ -246,7 +248,7 @@ func (qq *FileAttributesPartial) documentTypeBadge(
 		// TODO ordering
 		attributes := documentType.QueryAttributes().WithProperty().AllX(ctx)
 		for _, attributex := range attributes {
-			var block *wx.Column
+			var block *widget.Column
 			switch attributex.Type {
 			case attributetype.Field:
 				block = qq.propertyAttributeBlock(ctx, filex, attributex)
@@ -270,9 +272,9 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 	ctx ctxx.Context,
 	filex *filemodel.File,
 	attributex *enttenant.Attribute,
-) *wx.Column {
-	htmxAttrsFn := func(hxTrigger string) wx.HTMXAttrs {
-		return wx.HTMXAttrs{
+) *widget.Column {
+	htmxAttrsFn := func(hxTrigger string) widget.HTMXAttrs {
+		return widget.HTMXAttrs{
 			HxTrigger: hxTrigger,
 			HxPost:    qq.actions.SetFilePropertyCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.SetFilePropertyCmd.Data(filex.Data.PublicID.String(), attributex.Edges.Property.ID)),
@@ -292,11 +294,11 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 	field, found := fieldByProperty(attributex.Edges.Property, nilableAssignment, htmxAttrsFn)
 	if !found {
 		log.Println("unknown property type: ", attributex.Edges.Property.Type)
-		return &wx.Column{}
+		return &widget.Column{}
 	}
 
-	children := []wx.IWidget{
-		&wx.Container{
+	children := []widget.IWidget{
+		&widget.Container{
 			Child: field,
 			Gap:   true,
 		},
@@ -307,7 +309,7 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 		if nilableAssignment != nil && !nilableAssignment.DateValue.IsZero() {
 			hasDateValue = true
 		}
-		fieldID := field.(wx.IWidgetWithID).GetID()
+		fieldID := field.(widget.IWidgetWithID).GetID()
 		dateSuggestionsWidget := NewDateSuggestionsWidget(filex, fieldID, attributex.Edges.Property.ID)
 		children = append(children, dateSuggestionsWidget.Widget(
 			ctx,
@@ -316,8 +318,8 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 		))
 	}
 
-	return &wx.Column{
-		GapYSize:         wx.Gap2,
+	return &widget.Column{
+		GapYSize:         widget.Gap2,
 		NoOverflowHidden: true,
 		AutoHeight:       true,
 		Children:         children,
@@ -329,7 +331,7 @@ func (qq *FileAttributesPartial) tagGroupAttributeBlock(
 	tagAssignmentsMap map[int64]bool,
 	filex *filemodel.File,
 	attributex *enttenant.Attribute,
-) *wx.Column {
+) *widget.Column {
 	suggestedTags := ctx.SpaceCtx().Space.QueryTags().
 		Order(tag.ByName()).
 		Where(
@@ -369,9 +371,9 @@ func (qq *FileAttributesPartial) tagGroupAttributeBlock(
 		Where(tag.GroupID(attributex.TagID), tag.IDNotIn(suggestedTagIDs...)).
 		AllX(ctx)
 
-	var chips []wx.IWidget
+	var chips []widget.IWidget
 
-	chips = append(chips, &wx.AssistChip{
+	chips = append(chips, &widget.AssistChip{
 		// Label:        wx.T("Add"),
 		LeadingIcon: "add",
 		HTMXAttrs: qq.actions.Tagging.AssignedTags.CreateAndAssignTagCmd.ModalLinkAttrs(
@@ -389,16 +391,16 @@ func (qq *FileAttributesPartial) tagGroupAttributeBlock(
 
 	// attributeBlockID := fmt.Sprintf("attributeBlock-%d", attributex.ID)
 
-	return &wx.Column{
-		GapYSize:         wx.Gap2,
+	return &widget.Column{
+		GapYSize:         widget.Gap2,
 		NoOverflowHidden: true,
 		AutoHeight:       true,
-		Children: []wx.IWidget{
-			&wx.Label{
-				Text: wx.Tu(attributex.Name),
-				Type: wx.LabelTypeLg,
+		Children: []widget.IWidget{
+			&widget.Label{
+				Text: widget.Tu(attributex.Name),
+				Type: widget.LabelTypeLg,
 			},
-			&wx.Container{
+			&widget.Container{
 				Child: chips,
 				Gap:   true,
 			},
@@ -408,22 +410,22 @@ func (qq *FileAttributesPartial) tagGroupAttributeBlock(
 
 func (qq *FileAttributesPartial) tagBadge(
 	tagx *enttenant.Tag,
-	chips []wx.IWidget,
+	chips []widget.IWidget,
 	tagAssignmentsMap map[int64]bool,
 	filex *filemodel.File,
 	isSuggested bool,
-) []wx.IWidget {
+) []widget.IWidget {
 	icon := "label"
 	if tagx.Type == tagtype.Super {
 		icon = "label_important"
 	}
-	chips = append(chips, &wx.FilterChip{
-		Label:        wx.Tu(tagx.Name),
+	chips = append(chips, &widget.FilterChip{
+		Label:        widget.Tu(tagx.Name),
 		LeadingIcon:  icon,
 		Value:        fmt.Sprintf("%d", tagx.ID),
 		IsChecked:    tagAssignmentsMap[tagx.ID],
 		IsSuggestion: isSuggested,
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.actions.Tagging.ToggleFileTagCmd.Endpoint(),
 			HxVals: util.JSON(qq.actions.Tagging.ToggleFileTagCmd.Data(filex.Data.ID, tagx.ID)),
 			HxSwap: "none",

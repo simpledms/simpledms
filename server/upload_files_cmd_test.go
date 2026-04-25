@@ -10,13 +10,13 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entmain/temporaryfile"
+	"github.com/simpledms/simpledms/core/db/entx"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestUploadFilesCmdCreatesTemporaryFilesAndRedirects(t *testing.T) {
@@ -39,8 +39,8 @@ func TestUploadFilesCmdCreatesTemporaryFilesAndRedirects(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			err := harness.actions.OpenFile.UploadFilesCmd.Handler(
-				httpx.NewResponseWriter(rr),
-				httpx.NewRequest(req),
+				httpx2.NewResponseWriter(rr),
+				httpx2.NewRequest(req),
 				mainCtx,
 			)
 			if err != nil {
@@ -95,8 +95,8 @@ func TestUploadFilesCmdRejectsNonMultipartRequests(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			handlerErr = harness.actions.OpenFile.UploadFilesCmd.Handler(
-				httpx.NewResponseWriter(rr),
-				httpx.NewRequest(req),
+				httpx2.NewResponseWriter(rr),
+				httpx2.NewRequest(req),
 				mainCtx,
 			)
 			if handlerErr == nil {

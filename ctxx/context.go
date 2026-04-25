@@ -1,8 +1,6 @@
 package ctxx
 
-import (
-	"context"
-)
+import "context"
 
 type Context interface {
 	context.Context

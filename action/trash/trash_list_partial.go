@@ -2,19 +2,21 @@ package trash
 
 import (
 	"entgo.io/ent/dialect/sql"
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/uix/events"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
-	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type TrashListPartialData struct {
@@ -46,7 +48,7 @@ func (qq *TrashListPartial) ListID() string {
 	return "trashList"
 }
 
-func (qq *TrashListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *TrashListPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[TrashListPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -71,32 +73,32 @@ func (qq *TrashListPartial) Widget(ctx ctxx.Context, data *TrashListPartialData)
 		Order(file.ByDeletedAt(sql.OrderDesc())).
 		AllX(ctxWithDeleted)
 
-	var listItems []wx.IWidget
+	var listItems []widget.IWidget
 	for _, filex := range deletedFiles {
 		isSelected := data != nil && filex.PublicID.String() == data.SelectedFileID
 		listItems = append(listItems, qq.listItem(ctx, filex, isSelected))
 	}
 
-	var content wx.IWidget
-	content = &wx.List{
+	var content widget.IWidget
+	content = &widget.List{
 		Children: listItems,
 	}
 
 	if len(listItems) == 0 {
-		content = &wx.EmptyState{
-			Icon:     wx.NewIcon("delete"),
-			Headline: wx.T("Trash is empty."),
+		content = &widget.EmptyState{
+			Icon:     widget.NewIcon("delete"),
+			Headline: widget.T("Trash is empty."),
 		}
 	}
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.ListID(),
 		},
 		Children: content,
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.Endpoint(),
-			HxTrigger: event.HxTrigger(
+			HxTrigger: events.HxTrigger(
 				event.FileRestored,
 			),
 			HxTarget: "#" + qq.ListID(),
@@ -105,33 +107,33 @@ func (qq *TrashListPartial) Widget(ctx ctxx.Context, data *TrashListPartialData)
 	}
 }
 
-func (qq *TrashListPartial) listItem(ctx ctxx.Context, filex *enttenant.File, isSelected bool) *wx.ListItem {
-	icon := wx.NewIcon("description")
-	headline := wx.Tu(filex.Name)
+func (qq *TrashListPartial) listItem(ctx ctxx.Context, filex *enttenant.File, isSelected bool) *widget.ListItem {
+	icon := widget.NewIcon("description")
+	headline := widget.Tu(filex.Name)
 
 	if filex.IsDirectory {
-		icon = wx.NewIcon("folder")
+		icon = widget.NewIcon("folder")
 	} else {
 		filem := filemodel.NewFile(filex)
-		headline = wx.Tu(filem.FilenameInApp(ctx, false))
+		headline = widget.Tu(filem.FilenameInApp(ctx, false))
 	}
 
-	var deletedAt *wx.Text
+	var deletedAt *widget.Text
 	if filex.DeletedAt.IsZero() {
 		if filex.IsDirectory {
-			deletedAt = wx.T("Folder deleted")
+			deletedAt = widget.T("Folder deleted")
 		} else {
-			deletedAt = wx.T("Deleted")
+			deletedAt = widget.T("Deleted")
 		}
 	} else {
 		if filex.IsDirectory {
-			deletedAt = wx.Tf("Folder deleted on %s", filex.DeletedAt.Format("02 Jan 2006"))
+			deletedAt = widget.Tf("Folder deleted on %s", filex.DeletedAt.Format("02 Jan 2006"))
 		} else {
-			deletedAt = wx.Tf("Deleted on %s", filex.DeletedAt.Format("02 Jan 2006"))
+			deletedAt = widget.Tf("Deleted on %s", filex.DeletedAt.Format("02 Jan 2006"))
 		}
 	}
 
-	item := &wx.ListItem{
+	item := &widget.ListItem{
 		RadioGroupName: "trashListRadioGroup",
 		RadioValue:     filex.PublicID.String(),
 		Leading:        icon.SmallPadding(),
@@ -142,7 +144,7 @@ func (qq *TrashListPartial) listItem(ctx ctxx.Context, filex *enttenant.File, is
 
 	if !filex.IsDirectory {
 		item.ContextMenu = qq.actions.TrashContextMenuWidget.Widget(ctx, filex)
-		item.HTMXAttrs = wx.HTMXAttrs{
+		item.HTMXAttrs = widget.HTMXAttrs{
 			HxTarget:  "#details",
 			HxSwap:    "outerHTML",
 			HxGet:     route.TrashFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID.String()),

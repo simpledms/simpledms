@@ -3,16 +3,16 @@ package managespaceusers
 import (
 	"net/http"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type UnassignUserFromSpaceCmdData struct {
@@ -35,7 +35,7 @@ func NewUnassignUserFromSpaceCmd(infra *common.Infra, actions *Actions) *Unassig
 		actions:         actions,
 		spaceRepository: spacemodel.NewEntSpaceRepository(),
 		Config:          config,
-		FormHelper:      autil.NewFormHelper[UnassignUserFromSpaceCmdData](infra, config, wx.T("Unassign user from space")),
+		FormHelper:      autil.NewFormHelper[UnassignUserFromSpaceCmdData](infra, config, widget.T("Unassign user from space")),
 	}
 }
 
@@ -45,7 +45,7 @@ func (qq *UnassignUserFromSpaceCmd) Data(userAssignmentID int64) *UnassignUserFr
 	}
 }
 
-func (qq *UnassignUserFromSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *UnassignUserFromSpaceCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[UnassignUserFromSpaceCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func (qq *UnassignUserFromSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 		return mapSpaceError(err)
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("User unassigned from space successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("User unassigned from space successfully."))
 	rw.Header().Set("HX-Trigger", event.UserUnassignedFromSpace.String())
 
 	return nil

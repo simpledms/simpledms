@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"strings"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type ListItemAssignedTagsPartialData struct {
@@ -44,7 +44,7 @@ func (qq *ListItemAssignedTagsPartial) Data(tagID int64) *ListItemAssignedTagsPa
 	}
 }
 
-func (qq *ListItemAssignedTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *ListItemAssignedTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[ListItemAssignedTagsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -66,21 +66,21 @@ func (qq *ListItemAssignedTagsPartial) Handler(rw httpx.ResponseWriter, req *htt
 	return nil
 }
 
-func (qq *ListItemAssignedTagsPartial) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *wx.ListItem {
-	headline := wx.Tu(tagx.Name)
-	var supportingText *wx.Text
+func (qq *ListItemAssignedTagsPartial) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *widget.ListItem {
+	headline := widget.Tu(tagx.Name)
+	var supportingText *widget.Text
 	if tagx.Edges.Group != nil {
 		// headline = NewTextf("%s: %s", tagx.Edges.Parent.Name, headline.Data)
-		supportingText = wx.Tf("Group «%s»", tagx.Edges.Group.Name)
+		supportingText = widget.Tf("Group «%s»", tagx.Edges.Group.Name)
 	}
 
-	icon := wx.NewIcon("label")
-	var htmxAttrs wx.HTMXAttrs
+	icon := widget.NewIcon("label")
+	var htmxAttrs widget.HTMXAttrs
 	listItemID := autil.GenerateID(fmt.Sprintf("ListAssignedTagsPartial-%d-", tagx.ID))
 
 	if tagx.Type == tagtype.Super {
-		icon = wx.NewIcon("label_important")
-		supportingText = wx.T("Super tag")
+		icon = widget.NewIcon("label_important")
+		supportingText = widget.T("Super tag")
 
 		if len(tagx.Edges.SubTags) > 0 {
 			var tagNames []string
@@ -88,10 +88,10 @@ func (qq *ListItemAssignedTagsPartial) Widget(ctx ctxx.Context, tagx *enttenant.
 				tagNames = append(tagNames, subTag.Name)
 			}
 			// TODO add group to tags if it makes sense
-			supportingText = wx.Tf("Composed of %s", strings.Join(tagNames, ", "))
+			supportingText = widget.Tf("Composed of %s", strings.Join(tagNames, ", "))
 		}
 
-		htmxAttrs = wx.HTMXAttrs{
+		htmxAttrs = widget.HTMXAttrs{
 			HxTrigger: event.SuperTagUpdated.Handler(tagx.ID),
 			HxPost:    qq.actions.AssignedTags.ListItem.Endpoint(),
 			HxVals:    util.JSON(qq.actions.AssignedTags.ListItem.Data(tagx.ID)),
@@ -100,8 +100,8 @@ func (qq *ListItemAssignedTagsPartial) Widget(ctx ctxx.Context, tagx *enttenant.
 		}
 	}
 
-	return &wx.ListItem{
-		Widget: wx.Widget[wx.ListItem]{
+	return &widget.ListItem{
+		Widget: widget.Widget[widget.ListItem]{
 			ID: listItemID,
 		},
 		HTMXAttrs:      htmxAttrs,

@@ -8,17 +8,19 @@ import (
 	"time"
 
 	gonanoid "github.com/matoous/go-nanoid"
-	"github.com/simpledms/simpledms/common"
+
+	"github.com/simpledms/simpledms/core/db/entmain"
+
+	"github.com/simpledms/simpledms/core/common"
+	wx "github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/core/util/txx"
+	"github.com/simpledms/simpledms/core/util/uploadx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/txx"
-	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type UploadFilesCmdState struct {
@@ -51,7 +53,7 @@ func (qq *UploadFilesCmd) Data() *UploadFilesCmdData {
 	return &UploadFilesCmdData{}
 }
 
-func (qq *UploadFilesCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *UploadFilesCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	// don't use autil.FormData to parse form, would load all files into memory, we use
 	// multipart reader instead
 
@@ -78,7 +80,7 @@ func (qq *UploadFilesCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 }
 
 // FIXME limit number of files?
-func (qq *UploadFilesCmd) processSharedFiles(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) (string, error) {
+func (qq *UploadFilesCmd) processSharedFiles(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) (string, error) {
 	reader, err := req.MultipartReader()
 	if err != nil {
 		log.Println(err)

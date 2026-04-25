@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"log"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	actionx2 "github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileVersionFromInboxDialogData struct {
@@ -26,11 +26,11 @@ type FileVersionFromInboxDialogFormData struct {
 type FileVersionFromInboxDialog struct {
 	infra   *common.Infra
 	actions *Actions
-	*actionx.Config
+	*actionx2.Config
 }
 
 func NewFileVersionFromInboxDialog(infra *common.Infra, actions *Actions) *FileVersionFromInboxDialog {
-	config := actionx.NewConfig(actions.Route("file-version-from-inbox-dialog"), true)
+	config := actionx2.NewConfig(actions.Route("file-version-from-inbox-dialog"), true)
 	return &FileVersionFromInboxDialog{
 		infra:   infra,
 		actions: actions,
@@ -46,7 +46,7 @@ func (qq *FileVersionFromInboxDialog) Data(targetFileID, sourceFileID, searchQue
 	}
 }
 
-func (qq *FileVersionFromInboxDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FileVersionFromInboxDialog) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileVersionFromInboxDialogData](rw, req, ctx)
 	if err != nil {
 		log.Println(err)
@@ -69,26 +69,26 @@ func (qq *FileVersionFromInboxDialog) Widget(
 	ctx ctxx.Context,
 	data *FileVersionFromInboxDialogData,
 	files []*enttenant.File,
-) *wx.Dialog {
-	var formChildren []wx.IWidget
+) *widget.Dialog {
+	var formChildren []widget.IWidget
 
 	formChildren = append(formChildren,
-		&wx.Checkbox{
+		&widget.Checkbox{
 			Name:       "ConfirmWarning",
-			Label:      wx.T("I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged."),
+			Label:      widget.T("I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged."),
 			IsRequired: true,
 		},
 	)
 
 	formChildren = append(formChildren,
-		wx.NewFormFields(ctx, &FileVersionFromInboxDialogFormData{
+		widget.NewFormFields(ctx, &FileVersionFromInboxDialogFormData{
 			TargetFileID: data.TargetFileID,
 		}),
-		&wx.Search{
-			Widget: wx.Widget[wx.Search]{
+		&widget.Search{
+			Widget: widget.Widget[widget.Search]{
 				ID: qq.searchID(),
 			},
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    qq.actions.FileVersionFromInboxListPartial.Endpoint(),
 				HxTarget:  "#" + qq.listID(),
 				HxSelect:  "#" + qq.listID(),
@@ -98,19 +98,19 @@ func (qq *FileVersionFromInboxDialog) Widget(
 			},
 			Name:           "SearchQuery",
 			Value:          data.SearchQuery,
-			SupportingText: wx.T("Search inbox files"),
+			SupportingText: widget.T("Search inbox files"),
 			Autofocus:      true,
 		},
 		qq.actions.FileVersionFromInboxListPartial.listWrapper(ctx, data, files),
 	)
 
-	content := &wx.Container{
+	content := &widget.Container{
 		GapY: true,
-		Child: &wx.Form{
-			Widget: wx.Widget[wx.Form]{
+		Child: &widget.Form{
+			Widget: widget.Widget[widget.Form]{
 				ID: qq.formID(),
 			},
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost: qq.actions.FileVersionFromInboxCmd.Endpoint(),
 				HxSwap: "none",
 			},
@@ -119,14 +119,14 @@ func (qq *FileVersionFromInboxDialog) Widget(
 	}
 
 	return autil.WrapWidgetWithID(
-		wx.T("Add new version from inbox"),
-		wx.T("Add"),
+		widget.T("Add new version from inbox"),
+		widget.T("Add"),
 		content,
-		actionx.ResponseWrapperDialog,
-		wx.DialogLayoutStable,
+		actionx2.ResponseWrapperDialog,
+		widget.DialogLayoutStable,
 		qq.dialogID(),
 		qq.formID(),
-	).(*wx.Dialog)
+	).(*widget.Dialog)
 }
 
 func (qq *FileVersionFromInboxDialog) dialogID() string {

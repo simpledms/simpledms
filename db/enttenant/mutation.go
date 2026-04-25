@@ -11,6 +11,12 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+
+	"github.com/simpledms/simpledms/core/db/entx"
+	"github.com/simpledms/simpledms/core/model/common/fieldtype"
+	"github.com/simpledms/simpledms/core/model/common/storagetype"
+	"github.com/simpledms/simpledms/core/model/common/tenantrole"
+	"github.com/simpledms/simpledms/core/util/timex"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
@@ -24,14 +30,9 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/main/common/attributetype"
-	"github.com/simpledms/simpledms/model/main/common/fieldtype"
-	"github.com/simpledms/simpledms/model/main/common/spacerole"
-	"github.com/simpledms/simpledms/model/main/common/storagetype"
-	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/model/tenant/common/attributetype"
+	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
-	"github.com/simpledms/simpledms/util/timex"
 )
 
 const (

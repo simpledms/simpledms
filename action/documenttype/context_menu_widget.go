@@ -1,10 +1,10 @@
 package documenttype
 
 import (
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type ContextMenuWidgetData struct {
@@ -22,10 +22,10 @@ func NewContextMenuWidget(actions *Actions) *ContextMenuWidget {
 	}
 }
 
-func (qq *ContextMenuWidget) Widget(ctx ctxx.Context, documentType *enttenant.DocumentType) *wx.Menu {
-	renameItem := &wx.MenuItem{
+func (qq *ContextMenuWidget) Widget(ctx ctxx.Context, documentType *enttenant.DocumentType) *widget.Menu {
+	renameItem := &widget.MenuItem{
 		TrailingIcon: "edit", // TODO
-		Label:        wx.T("Rename"),
+		Label:        widget.T("Rename"),
 		HTMXAttrs: qq.actions.RenameCmd.ModalLinkAttrs(
 			qq.actions.RenameCmd.Data(documentType.ID, documentType.Name),
 			"",
@@ -33,20 +33,20 @@ func (qq *ContextMenuWidget) Widget(ctx ctxx.Context, documentType *enttenant.Do
 		),
 	}
 
-	deleteItem := &wx.MenuItem{
+	deleteItem := &widget.MenuItem{
 		TrailingIcon: "delete",
-		Label:        wx.T("Delete"),
-		HTMXAttrs: wx.HTMXAttrs{
+		Label:        widget.T("Delete"),
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.actions.DeleteCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.DeleteCmd.Data(documentType.ID)),
-			HxConfirm: wx.T("Are you sure?").String(ctx),
+			HxConfirm: widget.T("Are you sure?").String(ctx),
 			HxSwap:    "none",
 			// HxTarget:  "#" + qq.actions.ListDir.WrapperID(),
 		},
 	}
 
-	return &wx.Menu{
-		Items: []*wx.MenuItem{
+	return &widget.Menu{
+		Items: []*widget.MenuItem{
 			renameItem,
 			{
 				IsDivider: true,

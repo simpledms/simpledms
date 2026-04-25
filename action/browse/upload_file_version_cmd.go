@@ -6,18 +6,18 @@ import (
 	"net/http"
 	"path/filepath"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	wx "github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	"github.com/simpledms/simpledms/core/util/e"
+	"github.com/simpledms/simpledms/core/util/fileutil"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/core/util/txx"
+	"github.com/simpledms/simpledms/core/util/uploadx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/fileutil"
-	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/txx"
-	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type UploadFileVersionCmdData struct {
@@ -55,7 +55,7 @@ func (qq *UploadFileVersionCmd) Data(fileID string) *UploadFileVersionCmdData {
 }
 
 // very similar to UploadFileCmd
-func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *UploadFileVersionCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	nilableUploadLimitBytes, err := qq.infra.FileSystem().NilableEffectiveUploadSizeLimitBytes(ctx)
 	if err != nil {
 		return err

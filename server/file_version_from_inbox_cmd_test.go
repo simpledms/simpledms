@@ -12,16 +12,19 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
+	"github.com/simpledms/simpledms/core/db/entmain"
+
+	"github.com/simpledms/simpledms/core/ui/uix/events"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestFileVersionFromInboxCmd_MergesVersionAndDeletesSource(t *testing.T) {
@@ -32,7 +35,7 @@ func TestFileVersionFromInboxCmd_MergesVersionAndDeletesSource(t *testing.T) {
 		tenantDB := initTenantDB(t, harness, tenantx)
 		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 			spaceName := "Inbox Merge Space"
 			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -77,7 +80,7 @@ func TestFileVersionFromInboxCmd_MergesVersionAndDeletesSource(t *testing.T) {
 				event.FileUploaded.String(),
 				event.FileUpdated.String(),
 				event.FileDeleted.String(),
-				event.CloseDialog.String(),
+				events.CloseDialog.String(),
 			)
 			if got := rr.Header().Get("HX-Trigger"); got != expectedTrigger {
 				return fmt.Errorf("expected HX-Trigger %q, got %q", expectedTrigger, got)
@@ -129,7 +132,7 @@ func TestFileVersionFromInboxCmd_RejectsSameSourceAndTarget(t *testing.T) {
 		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
 		var handlerErr error
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 			spaceName := "Inbox Merge Same File Space"
 			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -185,7 +188,7 @@ func TestFileVersionFromInboxCmd_RejectsSourceOutsideInbox(t *testing.T) {
 		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
 		var handlerErr error
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 			spaceName := "Inbox Merge Outside Inbox Space"
 			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -250,7 +253,7 @@ func TestFileVersionFromInboxCmd_RejectsSourceWithoutVersion(t *testing.T) {
 		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
 		var handlerErr error
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 			spaceName := "Inbox Merge No Version Space"
 			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -339,8 +342,8 @@ func runFileVersionFromInboxCmd(
 
 	rr := httptest.NewRecorder()
 	err := harness.actions.Browse.FileVersionFromInboxCmd.Handler(
-		httpx.NewResponseWriter(rr),
-		httpx.NewRequest(req),
+		httpx2.NewResponseWriter(rr),
+		httpx2.NewRequest(req),
 		spaceCtx,
 	)
 

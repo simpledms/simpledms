@@ -9,16 +9,17 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entx"
+
+	"github.com/simpledms/simpledms/core/model/common/tenantrole"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/space"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/model/main/common/tenantrole"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestSpaceCreatePermissions(t *testing.T) {
@@ -61,8 +62,8 @@ func TestSpaceCreatePermissions(t *testing.T) {
 
 				rr := httptest.NewRecorder()
 				err := harness.actions.Spaces.CreateSpaceCmd.Handler(
-					httpx.NewResponseWriter(rr),
-					httpx.NewRequest(req),
+					httpx2.NewResponseWriter(rr),
+					httpx2.NewRequest(req),
 					tenantCtx,
 				)
 				if err != nil {
@@ -132,8 +133,8 @@ func TestSpaceDeletePermissions(t *testing.T) {
 
 				rr := httptest.NewRecorder()
 				err := harness.actions.Spaces.DeleteSpaceCmd.Handler(
-					httpx.NewResponseWriter(rr),
-					httpx.NewRequest(req),
+					httpx2.NewResponseWriter(rr),
+					httpx2.NewRequest(req),
 					tenantCtx,
 				)
 				if err != nil {

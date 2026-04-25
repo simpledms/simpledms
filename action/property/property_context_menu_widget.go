@@ -1,10 +1,10 @@
 package property
 
 import (
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type PropertyContextMenuWidget struct {
@@ -17,10 +17,10 @@ func NewPropertyContextMenuWidget(actions *Actions) *PropertyContextMenuWidget {
 	}
 }
 
-func (qq *PropertyContextMenuWidget) Widget(ctx ctxx.Context, propertyx *enttenant.Property) *wx.Menu {
-	renameItem := &wx.MenuItem{
+func (qq *PropertyContextMenuWidget) Widget(ctx ctxx.Context, propertyx *enttenant.Property) *widget.Menu {
+	renameItem := &widget.MenuItem{
 		TrailingIcon: "edit",
-		Label:        wx.T("Edit"),
+		Label:        widget.T("Edit"),
 		HTMXAttrs: qq.actions.EditPropertyCmd.ModalLinkAttrs(
 			qq.actions.EditPropertyCmd.Data(
 				propertyx.ID,
@@ -31,17 +31,17 @@ func (qq *PropertyContextMenuWidget) Widget(ctx ctxx.Context, propertyx *enttena
 		),
 	}
 
-	deleteItem := &wx.MenuItem{
+	deleteItem := &widget.MenuItem{
 		TrailingIcon: "delete",
-		Label:        wx.T("Delete"),
-		HTMXAttrs: wx.HTMXAttrs{
+		Label:        widget.T("Delete"),
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.actions.DeletePropertyCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.DeletePropertyCmd.Data(propertyx.ID)),
-			HxConfirm: wx.T("Are you sure?").String(ctx),
+			HxConfirm: widget.T("Are you sure?").String(ctx),
 		},
 	}
 
-	menuItems := []*wx.MenuItem{
+	menuItems := []*widget.MenuItem{
 		renameItem,
 		{
 			IsDivider: true,
@@ -49,7 +49,7 @@ func (qq *PropertyContextMenuWidget) Widget(ctx ctxx.Context, propertyx *enttena
 		deleteItem,
 	}
 
-	return &wx.Menu{
+	return &widget.Menu{
 		Items: menuItems,
 	}
 

@@ -8,19 +8,21 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	"github.com/simpledms/simpledms/core/db/entx"
+
+	"github.com/simpledms/simpledms/core/model/common/country"
+	"github.com/simpledms/simpledms/core/model/common/language"
+	"github.com/simpledms/simpledms/core/model/common/plan"
+	signupmodel "github.com/simpledms/simpledms/core/model/signup"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/account"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/main/common/country"
-	"github.com/simpledms/simpledms/model/main/common/language"
-	"github.com/simpledms/simpledms/model/main/common/plan"
-	signupmodel "github.com/simpledms/simpledms/model/main/signup"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 const testTenantQuotaTrialBytes int64 = 1 * 1024 * 1024 * 1024
@@ -52,7 +54,7 @@ func TestUploadFileCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 				var rootDirID int64
 				var spaceID int64
 
-				err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(mainTx *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+				err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(mainTx *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 					mainTx.Tenant.UpdateOneID(tenantCtx.Tenant.ID).
 						SetPlan(tt.plan).
 						ExecX(tenantCtx)
@@ -119,8 +121,8 @@ func TestUploadFileCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 
 				rr := httptest.NewRecorder()
 				handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-					httpx.NewResponseWriter(rr),
-					httpx.NewRequest(req),
+					httpx2.NewResponseWriter(rr),
+					httpx2.NewRequest(req),
 					spaceCtx,
 				)
 				if handlerErr == nil {
@@ -139,7 +141,7 @@ func TestUploadFileCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 					)
 				}
 
-				err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+				err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 					spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
 					spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
 
@@ -173,7 +175,7 @@ func TestUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(t *testing.T
 		var rootDirID int64
 		var spaceID int64
 
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(mainTx *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(mainTx *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 			mainTx.Tenant.UpdateOneID(tenantCtx.Tenant.ID).
 				SetPlan(plan.Pro).
 				ExecX(tenantCtx)
@@ -244,8 +246,8 @@ func TestUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(t *testing.T
 
 		rr := httptest.NewRecorder()
 		handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
+			httpx2.NewResponseWriter(rr),
+			httpx2.NewRequest(req),
 			spaceCtx,
 		)
 		if handlerErr == nil {
@@ -260,7 +262,7 @@ func TestUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(t *testing.T
 			t.Fatalf("expected status %d, got %d", http.StatusRequestEntityTooLarge, httpErr.StatusCode())
 		}
 
-		err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+		err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 			spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
 			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
 
@@ -293,7 +295,7 @@ func TestUploadFileCmdSkipsTenantStorageLimitWhenSaaSDisabled(t *testing.T) {
 		var rootDirID int64
 		var spaceID int64
 
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 			spaceName := "Quota Bypass Space"
 			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -354,15 +356,15 @@ func TestUploadFileCmdSkipsTenantStorageLimitWhenSaaSDisabled(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 		handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
+			httpx2.NewResponseWriter(rr),
+			httpx2.NewRequest(req),
 			spaceCtx,
 		)
 		if handlerErr != nil {
 			t.Fatalf("expected upload success in non-saas mode, got %v", handlerErr)
 		}
 
-		err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+		err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
 			spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
 			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
 
@@ -394,7 +396,7 @@ func signUpAccountWithoutSaaSGating(
 		t.Fatalf("start main tx: %v", err)
 	}
 
-	ctx := ctxx.NewVisitorContext(
+	ctx := ctxx2.NewVisitorContext(
 		context.Background(),
 		mainTx,
 		harness.i18n,

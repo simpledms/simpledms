@@ -1,15 +1,15 @@
 package inbox
 
 import (
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/uix/partial"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
-	"github.com/simpledms/simpledms/ui/uix/partial"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FilePartialData struct {
@@ -44,7 +44,7 @@ func (qq *FilePartial) Data(fileID string) *FilePartialData {
 	}
 }
 
-func (qq *FilePartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *FilePartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FilePartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -64,7 +64,7 @@ func (qq *FilePartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	)
 }
 
-func (qq *FilePartial) WidgetHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context, filex *filemodel.File) *wx.DetailsWithSheet {
+func (qq *FilePartial) WidgetHandler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context, filex *filemodel.File) *widget.DetailsWithSheet {
 	state := autil.StateX[InboxPageState](rw, req)
 	return qq.Widget(ctx, state, filex)
 }
@@ -73,53 +73,53 @@ func (qq *FilePartial) Widget(
 	ctx ctxx.Context,
 	state *InboxPageState,
 	filex *filemodel.File,
-) *wx.DetailsWithSheet {
+) *widget.DetailsWithSheet {
 	fileTabsPartial := qq.actions.FileTabsPartial.Widget(
 		ctx,
 		state,
 		filex.Data.PublicID.String(),
 		filex,
 	)
-	return &wx.DetailsWithSheet{
+	return &widget.DetailsWithSheet{
 		AppBar: partial.NewFullscreenDialogAppBar(
-			wx.Tuf("%s", filex.Data.Name),
+			widget.Tuf("%s", filex.Data.Name),
 			route2.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
-			[]wx.IWidget{
-				&wx.IconButton{
+			[]widget.IWidget{
+				&widget.IconButton{
 					// TODO other icon if already open or hide...
 					Icon:    "description", // right_panel_open, clarify, tune, description, info, ...?
-					Tooltip: wx.T("Show details"),
-					HTMXAttrs: wx.HTMXAttrs{
+					Tooltip: widget.T("Show details"),
+					HTMXAttrs: widget.HTMXAttrs{
 						DialogID: qq.SideSheetID(),
 					},
 				},
-				&wx.Link{
+				&widget.Link{
 					Href:      route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
 					IsNoColor: true,
 					Filename:  filex.Filename(ctx),
-					Child: &wx.IconButton{
+					Child: &widget.IconButton{
 						Icon:    "download",
-						Tooltip: wx.T("Download"),
+						Tooltip: widget.T("Download"),
 					},
 				},
 			},
 		),
-		Child: &wx.Column{
-			Children: &wx.FilePreview{
+		Child: &widget.Column{
+			Children: &widget.FilePreview{
 				FileURL:  route2.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
 				Filename: filex.Data.Name,
 				MimeType: filex.CurrentVersion(ctx).Data.MimeType,
 			},
 		},
-		SideSheet: &wx.Dialog{
-			Widget: wx.Widget[wx.Dialog]{
+		SideSheet: &widget.Dialog{
+			Widget: widget.Widget[widget.Dialog]{
 				ID: qq.SideSheetID(),
 			},
-			Headline:                        wx.T("Details"),
+			Headline:                        widget.T("Details"),
 			IsOpenOnLoadOnExtraLargeScreens: true,
 			// allows for quick back and forth on mobile devices
 			KeepInDOMOnClose: true,
-			Layout:           wx.DialogLayoutSideSheet,
+			Layout:           widget.DialogLayoutSideSheet,
 			Child:            fileTabsPartial,
 		},
 	}

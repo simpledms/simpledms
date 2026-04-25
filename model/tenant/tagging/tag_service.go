@@ -3,10 +3,10 @@ package tagging
 import (
 	"net/http"
 
+	"github.com/simpledms/simpledms/core/util/e"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
-	"github.com/simpledms/simpledms/util/e"
 )
 
 type TagService struct {

@@ -1,6 +1,6 @@
 import * as esbuild from "esbuild";
 
-const outdir = "ui/uix/web/assets/vendor";
+const outdir = "core/ui/web/assets/vendor";
 
 // run with `node ./install.deps.mjs`
 esbuild

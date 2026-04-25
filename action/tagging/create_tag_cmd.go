@@ -3,16 +3,16 @@ package tagging
 import (
 	"log"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type CreateTagCmdData struct {
@@ -50,7 +50,7 @@ func NewCreateTagCmd(
 		FormHelper: autil.NewFormHelper[CreateTagCmdData](
 			infra,
 			config,
-			wx.T("Create tag"),
+			widget.T("Create tag"),
 			// "TODO", // TODO
 		),
 	}
@@ -62,7 +62,7 @@ func (qq *CreateTagCmd) Data(groupTagID int64) *CreateTagCmdData {
 	}
 }
 
-func (qq *CreateTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *CreateTagCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[CreateTagCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -76,7 +76,7 @@ func (qq *CreateTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.TagCreated.String())
-	rw.AddRenderables(wx.NewSnackbarf("Tag «%s» created.", tagx.Name))
+	rw.AddRenderables(widget.NewSnackbarf("Tag «%s» created.", tagx.Name))
 
 	return nil
 }

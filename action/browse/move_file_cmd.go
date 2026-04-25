@@ -4,17 +4,18 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/simpledms/simpledms/core/db/entx"
+
 	acommon "github.com/simpledms/simpledms/action/common"
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type MoveFileCmd struct {
@@ -35,7 +36,7 @@ func NewMoveFileCmd(infra *common.Infra, actions *Actions) *MoveFileCmd {
 	}
 }
 
-func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *MoveFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	if !ctx.SpaceCtx().Space.IsFolderMode {
 		return e.NewHTTPErrorf(http.StatusMethodNotAllowed, "Only allowed in folder mode.")
 	}
@@ -57,11 +58,11 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	}
 
 	// show the appropriate link if either file or directory was moved
-	var action *wx.Link
+	var action *widget.Link
 	if fileWithParent.Data.IsDirectory {
-		action = &wx.Link{
+		action = &widget.Link{
 			Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithParent.Data.PublicID.String()),
-			Child: wx.T("Open directory"), // TODO Go to, or Open?
+			Child: widget.T("Open directory"), // TODO Go to, or Open?
 		}
 	} else {
 		parent, err := fileWithParent.Parent(ctx)
@@ -70,9 +71,9 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 			return err
 		}
 
-		action = &wx.Link{
+		action = &widget.Link{
 			Href:  route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, parent.Data.PublicID.String(), fileWithParent.Data.PublicID.String()),
-			Child: wx.T("Open file"), // TODO Go to, or Open?
+			Child: widget.T("Open file"), // TODO Go to, or Open?
 		}
 	}
 
@@ -96,6 +97,6 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 			dirIDStr,
 			"",
 		),
-		wx.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
+		widget.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
 	)
 }

@@ -4,17 +4,17 @@ import (
 	"net/http"
 	"slices"
 
+	"github.com/simpledms/simpledms/core/model/common/fieldtype"
+	wx "github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/e"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/model/main/common/attributetype"
-	"github.com/simpledms/simpledms/model/main/common/fieldtype"
+	"github.com/simpledms/simpledms/model/tenant/common/attributetype"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/e"
 )
 
 type Service struct{}

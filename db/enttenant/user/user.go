@@ -9,8 +9,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+
+	"github.com/simpledms/simpledms/core/db/entx"
+	"github.com/simpledms/simpledms/core/model/common/tenantrole"
 )
 
 const (

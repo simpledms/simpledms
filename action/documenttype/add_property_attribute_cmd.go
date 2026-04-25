@@ -3,15 +3,15 @@ package documenttype
 import (
 	"fmt"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	actionx2 "github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
-	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type AddPropertyAttributeCmdData struct {
@@ -28,19 +28,19 @@ type AddPropertyAttributeCmdFormData struct {
 type AddPropertyAttributeCmd struct {
 	infra   *common.Infra
 	Actions *Actions
-	*actionx.Config
+	*actionx2.Config
 	*autil.FormHelper[AddPropertyAttributeCmdData]
 }
 
 func NewAddPropertyAttributeCmd(infra *common.Infra, actions *Actions) *AddPropertyAttributeCmd {
-	config := actionx.NewConfig(
+	config := actionx2.NewConfig(
 		actions.Route("add-property-cmd"),
 		false,
 	)
 	formHelper := autil.NewFormHelper[AddPropertyAttributeCmdData](
 		infra,
 		config,
-		wx.T("Add field"),
+		widget.T("Add field"),
 	)
 	return &AddPropertyAttributeCmd{
 		infra:      infra,
@@ -56,7 +56,7 @@ func (qq *AddPropertyAttributeCmd) Data(documentTypeID int64) *AddPropertyAttrib
 	}
 }
 
-func (qq *AddPropertyAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *AddPropertyAttributeCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[AddPropertyAttributeCmdFormData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -84,13 +84,13 @@ func (qq *AddPropertyAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		wx.NewSnackbarf("Attribute «%s» added.", propertyx.Name),
+		widget.NewSnackbarf("Attribute «%s» added.", propertyx.Name),
 	)
 }
 
 func (qq *AddPropertyAttributeCmd) FormHandler(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 ) error {
 	data, err := autil.FormDataX[AddPropertyAttributeCmdFormData](rw, req, ctx, true)
@@ -107,7 +107,7 @@ func (qq *AddPropertyAttributeCmd) FormHandler(
 		qq.Form(
 			ctx,
 			data,
-			actionx.ResponseWrapper(wrapper),
+			actionx2.ResponseWrapper(wrapper),
 			hxTarget,
 		),
 	)
@@ -116,23 +116,23 @@ func (qq *AddPropertyAttributeCmd) FormHandler(
 func (qq *AddPropertyAttributeCmd) Form(
 	ctx ctxx.Context,
 	data *AddPropertyAttributeCmdFormData,
-	wrapper actionx.ResponseWrapper,
+	wrapper actionx2.ResponseWrapper,
 	hxTarget string,
 ) renderable.Renderable {
-	form := &wx.Form{
-		Widget: wx.Widget[wx.Form]{
+	form := &widget.Form{
+		Widget: widget.Widget[widget.Form]{
 			ID: qq.formID(),
 		},
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxTarget: hxTarget,
 			HxSwap:   "outerHTML",
 		},
-		Children: []wx.IWidget{
-			&wx.Container{
+		Children: []widget.IWidget{
+			&widget.Container{
 				GapY: true,
-				Child: []wx.IWidget{
-					wx.NewFormFields(ctx, data),
+				Child: []widget.IWidget{
+					widget.NewFormFields(ctx, data),
 					qq.propertyList(ctx, hxTarget),
 				},
 			},
@@ -140,11 +140,11 @@ func (qq *AddPropertyAttributeCmd) Form(
 	}
 
 	return autil.WrapWidgetWithID(
-		wx.T("Add field attribute"),
-		wx.T("Save"),
+		widget.T("Add field attribute"),
+		widget.T("Save"),
 		form,
 		wrapper,
-		wx.DialogLayoutStable,
+		widget.DialogLayoutStable,
 		qq.popoverID(),
 		qq.formID(),
 	)
@@ -159,14 +159,14 @@ func (qq *AddPropertyAttributeCmd) formID() string {
 	return "addPropertyAttributeForm"
 }
 
-func (qq *AddPropertyAttributeCmd) propertyList(ctx ctxx.Context, hxTarget string) wx.IWidget {
+func (qq *AddPropertyAttributeCmd) propertyList(ctx ctxx.Context, hxTarget string) widget.IWidget {
 	propertyListItems := qq.propertyListItems(ctx, hxTarget)
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.propertyListID(),
 		},
-		Children: &wx.List{
+		Children: &widget.List{
 			Children: propertyListItems,
 		},
 	}
@@ -179,25 +179,25 @@ func (qq *AddPropertyAttributeCmd) propertyListID() string {
 func (qq *AddPropertyAttributeCmd) propertyListItems(ctx ctxx.Context, target string) interface{} {
 	// TODO implement pagination
 
-	var items []*wx.ListItem
+	var items []*widget.ListItem
 
 	properties := ctx.SpaceCtx().Space.QueryProperties().AllX(ctx)
 
 	if len(properties) == 0 {
-		items = append(items, &wx.ListItem{
-			Headline:       wx.T("No fields available yet."),
-			SupportingText: wx.T("Please create a field first."), // TODO link
+		items = append(items, &widget.ListItem{
+			Headline:       widget.T("No fields available yet."),
+			SupportingText: widget.T("Please create a field first."), // TODO link
 		})
 		return items
 	}
 
 	for _, propertyx := range properties {
-		items = append(items, &wx.ListItem{
+		items = append(items, &widget.ListItem{
 			RadioGroupName: "PropertyID",
 			RadioValue:     fmt.Sprintf("%d", propertyx.ID),
-			Headline:       wx.Tu(propertyx.Name),
-			SupportingText: wx.T(propertyx.Type.String()),
-			Leading:        wx.NewIcon("tune"),
+			Headline:       widget.Tu(propertyx.Name),
+			SupportingText: widget.T(propertyx.Type.String()),
+			Leading:        widget.NewIcon("tune"),
 		})
 	}
 

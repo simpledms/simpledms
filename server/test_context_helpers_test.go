@@ -4,8 +4,10 @@ import (
 	"context"
 	"testing"
 
+	"github.com/simpledms/simpledms/core/db/entmain"
+
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
 )
@@ -16,7 +18,7 @@ func withTenantContext(
 	accountx *entmain.Account,
 	tenantx *entmain.Tenant,
 	tenantDB *sqlx.TenantDB,
-	fn func(mainTx *entmain.Tx, tenantTx *enttenant.Tx, tenantCtx *ctxx.TenantContext) error,
+	fn func(mainTx *entmain.Tx, tenantTx *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error,
 ) error {
 	t.Helper()
 
@@ -66,7 +68,7 @@ func withMainContext(
 		_ = mainTx.Rollback()
 	}()
 
-	visitorCtx := ctxx.NewVisitorContext(
+	visitorCtx := ctxx2.NewVisitorContext(
 		context.Background(),
 		mainTx,
 		harness.i18n,

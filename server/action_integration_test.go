@@ -19,41 +19,44 @@ import (
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 
+	"github.com/simpledms/simpledms/core/db/entmain"
+	"github.com/simpledms/simpledms/core/db/entmain/account"
+	migratemain "github.com/simpledms/simpledms/core/db/entmain/migrate"
+	"github.com/simpledms/simpledms/core/db/entmain/passkeycredential"
+	_ "github.com/simpledms/simpledms/core/db/entmain/runtime"
+	"github.com/simpledms/simpledms/core/db/entmain/session"
+	"github.com/simpledms/simpledms/core/db/entx"
+
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/db/entmain/account"
-	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
-	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
-	_ "github.com/simpledms/simpledms/db/entmain/runtime"
-	"github.com/simpledms/simpledms/db/entmain/session"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/db/sqlx"
+	common2 "github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/db/sqlx"
+	appmodel "github.com/simpledms/simpledms/core/model/app"
+	"github.com/simpledms/simpledms/core/model/common/country"
+	"github.com/simpledms/simpledms/core/model/common/language"
+	"github.com/simpledms/simpledms/core/model/common/mainrole"
+	"github.com/simpledms/simpledms/core/model/common/plan"
+	"github.com/simpledms/simpledms/core/model/common/tenantrole"
+	systemconfigmodel "github.com/simpledms/simpledms/core/model/systemconfig"
+	"github.com/simpledms/simpledms/core/pathx"
+	"github.com/simpledms/simpledms/core/pluginx"
+	server2 "github.com/simpledms/simpledms/core/server"
+	ui2 "github.com/simpledms/simpledms/core/ui"
+	"github.com/simpledms/simpledms/core/ui/uix/route"
+	"github.com/simpledms/simpledms/core/util/accountutil"
+	"github.com/simpledms/simpledms/core/util/cookiex"
 	"github.com/simpledms/simpledms/i18n"
-	appmodel "github.com/simpledms/simpledms/model/main/app"
-	"github.com/simpledms/simpledms/model/main/common/country"
-	"github.com/simpledms/simpledms/model/main/common/language"
-	"github.com/simpledms/simpledms/model/main/common/mainrole"
-	"github.com/simpledms/simpledms/model/main/common/plan"
-	"github.com/simpledms/simpledms/model/main/common/tenantrole"
-	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
-	"github.com/simpledms/simpledms/pathx"
-	"github.com/simpledms/simpledms/pluginx"
-	"github.com/simpledms/simpledms/ui"
-	"github.com/simpledms/simpledms/ui/uix/route"
-	"github.com/simpledms/simpledms/util/accountutil"
-	"github.com/simpledms/simpledms/util/cookiex"
 )
 
 type actionTestHarness struct {
 	tb        testing.TB
 	mainDB    *sqlx.MainDB
 	tenantDBs *tenantdbs.TenantDBs
-	infra     *common.Infra
+	infra     *common2.Infra
 	actions   *action.Actions
-	router    *Router
+	router    *server2.Router
 	metaPath  string
 	i18n      *i18n.I18n
 }
@@ -136,13 +139,13 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 	systemConfig := initSystemConfig(t, mainDB, isSaaSModeEnabled, publicOrigin, webauthnRPID, webauthnRPName)
 
 	templates := template.New("app")
-	templates.Funcs(ui.TemplateFuncMap(templates))
-	templates, err = templates.ParseFS(ui.WidgetFS, "widget/*.gohtml")
+	templates.Funcs(ui2.TemplateFuncMap(templates))
+	templates, err = templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	renderer := ui.NewRenderer(templates)
+	renderer := ui2.NewRenderer(templates)
 	i18nx := i18n.NewI18n()
 
 	fileSystem := filesystem.NewFileSystem(metaPath)
@@ -163,18 +166,17 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 		)
 	}
 
-	infra := common.NewInfra(
+	infra := common2.NewInfra(
 		renderer,
 		metaPath,
 		s3FileSystem,
-		common.NewFactory(),
 		common.NewFileRepository(),
 		pluginx.NewRegistry(),
 		systemConfig,
 	)
 
 	tenantDBs := tenantdbs.NewTenantDBs()
-	router := NewRouter(mainDB, tenantDBs, infra, true, metaPath, i18nx)
+	router := server2.NewRouter(mainDB, tenantDBs, infra, true, metaPath, i18nx)
 	actions := action.NewActions(infra, tenantDBs, true)
 	router.RegisterActions(actions)
 

@@ -4,11 +4,11 @@ import (
 	"net/http"
 
 	commonaction "github.com/simpledms/simpledms/action/common"
-	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type Download struct {
@@ -22,8 +22,8 @@ func NewDownload(infra *common.Infra) *Download {
 }
 
 func (qq *Download) Handler(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 ) error {
 	fileIDStr := req.PathValue("file_id")

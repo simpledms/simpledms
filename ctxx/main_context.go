@@ -7,8 +7,10 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/simpledms/simpledms/core/db/entmain"
+
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	"github.com/simpledms/simpledms/db/entmain"
+	coresqlx "github.com/simpledms/simpledms/core/db/sqlx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
@@ -19,7 +21,7 @@ type MainContext struct {
 	Account *entmain.Account // modelmain.Account would be better, but leads to circular dependency
 	// should never be exposed directly;
 	// unsafe because must be used with care
-	unsafeMainDB    *sqlx.MainDB
+	unsafeMainDB    *coresqlx.MainDB
 	unsafeTenantDBs *tenantdbs.TenantDBs
 	isReadOnly      bool
 }
@@ -28,7 +30,7 @@ func NewMainContext(
 	ctx *VisitorContext,
 	account *entmain.Account,
 	i18nx *i18n.I18n,
-	mainDB *sqlx.MainDB,
+	mainDB *coresqlx.MainDB,
 	tenantDBs *tenantdbs.TenantDBs,
 	isReadOnly bool,
 ) *MainContext {
@@ -47,7 +49,7 @@ func NewMainContext(
 	return mainCtx
 }
 
-func (qq *MainContext) UnsafeMainDB() *sqlx.MainDB {
+func (qq *MainContext) UnsafeMainDB() *coresqlx.MainDB {
 	return qq.unsafeMainDB
 }
 

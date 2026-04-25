@@ -5,19 +5,19 @@ import (
 	"net/http"
 	"strings"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/model/common/fieldtype"
+	wx "github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
+	"github.com/simpledms/simpledms/core/util/timex"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/property"
-	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/timex"
 )
 
 type AddFilePropertyValueCmdData struct {
@@ -60,8 +60,8 @@ func (qq *AddFilePropertyValueCmd) Data(fileID string, propertyID int64) *AddFil
 }
 
 func (qq *AddFilePropertyValueCmd) Handler(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 ) error {
 	data, err := autil.FormData[AddFilePropertyValueCmdFormData](rw, req, ctx)
@@ -113,7 +113,7 @@ func (qq *AddFilePropertyValueCmd) Handler(
 }
 
 func (qq *AddFilePropertyValueCmd) validateValue(
-	req *httpx.Request,
+	req *httpx2.Request,
 	propertyType fieldtype.FieldType,
 	data *AddFilePropertyValueCmdFormData,
 ) error {

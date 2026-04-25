@@ -4,16 +4,17 @@ import (
 	"log"
 	"net/http"
 
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/renderable"
+	"github.com/simpledms/simpledms/core/ui/uix/partial"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/e"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
-	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 // TODO rename to BrowseFile?
@@ -30,8 +31,8 @@ func NewBrowseWithSelectionPage(infra *common.Infra, actions *Actions) *BrowseWi
 }
 
 func (qq *BrowseWithSelectionPage) Handler(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 ) error {
 	dirIDStr := req.PathValue("dir_id")
@@ -60,8 +61,8 @@ func (qq *BrowseWithSelectionPage) Handler(
 }
 
 func (qq *BrowseWithSelectionPage) render(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 	viewx renderable.Renderable,
 ) {
@@ -71,15 +72,15 @@ func (qq *BrowseWithSelectionPage) render(
 	}
 
 	if renderFullPage {
-		viewx = partial2.NewBase(wx.T("Files"), viewx)
+		viewx = partial.NewBase(widget.T("Files"), viewx)
 	}
 
 	qq.infra.Renderer().RenderX(rw, ctx, viewx)
 }
 
 func (qq *BrowseWithSelectionPage) widget(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
+	rw httpx2.ResponseWriter,
+	req *httpx2.Request,
 	ctx ctxx.Context,
 	state *FilePreviewPartialState,
 	dirx *filemodel.File,
@@ -109,32 +110,32 @@ func (qq *BrowseWithSelectionPage) widget(
 	)
 	listDetailsLayout.Detail = filePreview
 
-	fabs := []*wx.FloatingActionButton{
+	fabs := []*widget.FloatingActionButton{
 		{
 			Icon: "upload_file",
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:        qq.actions.FileUploadDialogPartial.Endpoint(),
 				HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dirx.Data.PublicID.String(), false)),
 				LoadInPopover: true,
 			},
-			Child: []wx.IWidget{
-				wx.NewIcon("upload_file"),
-				wx.T("Upload file"),
+			Child: []widget.IWidget{
+				widget.NewIcon("upload_file"),
+				widget.T("Upload file"),
 			},
 		},
 	}
 
 	if ctx.SpaceCtx().Space.IsFolderMode {
-		fabs = append(fabs, &wx.FloatingActionButton{
-			FABSize: wx.FABSizeSmall,
+		fabs = append(fabs, &widget.FloatingActionButton{
+			FABSize: widget.FABSizeSmall,
 			Icon:    "create_new_folder",
 			HTMXAttrs: qq.actions.MakeDirCmd.ModalLinkAttrs(
 				qq.actions.MakeDirCmd.Data(dirx.Data.PublicID.String(), ""),
 				"#"+qq.actions.ListDirPartial.WrapperID(),
 			),
-			Child: []wx.IWidget{
-				wx.NewIcon("create_new_folder"),
-				wx.T("Create directory"),
+			Child: []widget.IWidget{
+				widget.NewIcon("create_new_folder"),
+				widget.T("Create directory"),
 			},
 		})
 	}
@@ -147,7 +148,7 @@ func (qq *BrowseWithSelectionPage) widget(
 		)
 	*/
 
-	mainLayout := &wx.MainLayout{
+	mainLayout := &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "browse", fabs),
 		Content:    listDetailsLayout,
 		// SideSheet:  fileDetailsSideSheet,

@@ -1,14 +1,14 @@
 package tagging
 
 import (
-	autil "github.com/simpledms/simpledms/action/util"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/ui/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
-	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
 )
 
 // TODO move to partial package?
@@ -26,24 +26,24 @@ func NewTagContextMenuWidget(actions *Actions) *TagContextMenuWidget {
 }
 
 // TODO should also work without file
-func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, fileID string, tagx *enttenant.Tag) *wx.Menu {
-	deleteLink := &wx.MenuItem{
+func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, fileID string, tagx *enttenant.Tag) *widget.Menu {
+	deleteLink := &widget.MenuItem{
 		LeadingIcon: "delete",
-		Label:       wx.T("Delete"),
-		HTMXAttrs: wx.HTMXAttrs{
+		Label:       widget.T("Delete"),
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.actions.DeleteTagCmd.Endpoint(),
 			HxVals: util.JSON(qq.actions.DeleteTagCmd.Data(tagx.ID)),
 			// HxTarget:  "#" + qq.actions.AssignedTags.EditListItem.listItemID(fileID, tagx.ID),
-			HxConfirm: wx.T("Are you sure? This action will delete the tag entirely and not just unassign it from the current file!").String(ctx),
+			HxConfirm: widget.T("Are you sure? This action will delete the tag entirely and not just unassign it from the current file!").String(ctx),
 		},
 	}
 
 	// TODO handle Deletion for groups...
 
-	menuItems := []*wx.MenuItem{
+	menuItems := []*widget.MenuItem{
 		{
 			LeadingIcon: "edit",
-			Label:       wx.T("Edit"),
+			Label:       widget.T("Edit"),
 			HTMXAttrs: qq.actions.EditTagCmd.ModalLinkAttrs(
 				qq.actions.EditTagCmd.Data(tagx.ID, tagx.Name),
 				"#"+qq.actions.AssignedTags.EditListItem.listItemID(fileID, tagx.ID),
@@ -68,10 +68,10 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, fileID string, tagx *en
 		*/
 	}
 	if tagx.Type == tagtype.Super {
-		assignSubTagsLink := &wx.MenuItem{
-			Label:       wx.T("Assign tags"), // TODO or Sub-tags? sounds bad in german
+		assignSubTagsLink := &widget.MenuItem{
+			Label:       widget.T("Assign tags"), // TODO or Sub-tags? sounds bad in german
 			LeadingIcon: "label",
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:        qq.actions.SubTags.Edit.EndpointWithParams(actionx.ResponseWrapperDialog, ""),
 				HxVals:        util.JSON(qq.actions.SubTags.Edit.Data(tagx.ID, false)),
 				LoadInPopover: true,
@@ -105,9 +105,9 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, fileID string, tagx *en
 		if groupCount > 0 {
 			menuItems = append(
 				menuItems,
-				&wx.MenuItem{
+				&widget.MenuItem{
 					LeadingIcon: "move_item",
-					Label:       wx.T("Move to group"),
+					Label:       widget.T("Move to group"),
 					HTMXAttrs: qq.actions.MoveTagToGroupCmd.ModalLinkAttrs(
 						qq.actions.MoveTagToGroupCmd.Data(tagx.ID, 0),
 						"#"+qq.actions.AssignedTags.Edit.hxTargetID(),
@@ -125,12 +125,12 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, fileID string, tagx *en
 
 	menuItems = append(
 		menuItems,
-		&wx.MenuItem{
+		&widget.MenuItem{
 			IsDivider: true,
 		},
 		deleteLink,
 	)
-	return &wx.Menu{
+	return &widget.Menu{
 		Items: menuItems,
 	}
 }

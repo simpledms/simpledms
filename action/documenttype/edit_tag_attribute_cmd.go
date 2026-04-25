@@ -1,14 +1,14 @@
 package documenttype
 
 import (
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type EditTagAttributeCmdData struct {
@@ -33,7 +33,7 @@ func NewEditTagAttributeCmd(infra *common.Infra, actions *Actions) *EditTagAttri
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[EditTagAttributeCmdData](infra, config, wx.T("Edit tag attribute")),
+		FormHelper: autil.NewFormHelper[EditTagAttributeCmdData](infra, config, widget.T("Edit tag attribute")),
 	}
 }
 
@@ -45,7 +45,7 @@ func (qq *EditTagAttributeCmd) Data(id int64, newName string, isNameGiving bool)
 	}
 }
 
-func (qq *EditTagAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *EditTagAttributeCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[EditTagAttributeCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ func (qq *EditTagAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 	}
 
 	rw.Header().Set("HX-Trigger", event.DocumentTypeAttributeUpdated.String())
-	rw.AddRenderables(wx.NewSnackbarf("Attribute «%s» updated.", data.NewName))
+	rw.AddRenderables(widget.NewSnackbarf("Attribute «%s» updated.", data.NewName))
 
 	return nil
 }

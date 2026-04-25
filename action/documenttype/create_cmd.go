@@ -3,14 +3,14 @@ package documenttype
 // package action
 
 import (
-	autil "github.com/simpledms/simpledms/action/util"
-	"github.com/simpledms/simpledms/common"
+	autil "github.com/simpledms/simpledms/core/action/util"
+	"github.com/simpledms/simpledms/core/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/core/util/actionx"
+	httpx2 "github.com/simpledms/simpledms/core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
 	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type CreateCmdData struct {
@@ -32,7 +32,7 @@ func NewCreateCmd(infra *common.Infra, actions *Actions) *CreateCmd {
 	formHelper := autil.NewFormHelper[CreateCmdData](
 		infra,
 		config,
-		wx.T("Add document type"),
+		widget.T("Add document type"),
 	)
 	return &CreateCmd{
 		infra:      infra,
@@ -48,7 +48,7 @@ func (qq *CreateCmd) Data(name string) *CreateCmdData {
 	}
 }
 
-func (qq *CreateCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+func (qq *CreateCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[CreateCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -72,6 +72,6 @@ func (qq *CreateCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		wx.NewSnackbarf("Document type created."),
+		widget.NewSnackbarf("Document type created."),
 	)
 }

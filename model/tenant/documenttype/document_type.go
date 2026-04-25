@@ -3,15 +3,15 @@ package documenttype
 import (
 	"net/http"
 
+	"github.com/simpledms/simpledms/core/util/e"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	documenttypequery "github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/model/main/common/attributetype"
+	"github.com/simpledms/simpledms/model/tenant/common/attributetype"
 	"github.com/simpledms/simpledms/model/tenant/library"
-	"github.com/simpledms/simpledms/util/e"
 )
 
 type DocumentType struct {
