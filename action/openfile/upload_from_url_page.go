@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	autil "github.com/marcobeierer/go-core/action/util"
+	"github.com/marcobeierer/go-core/ui/uix/partial"
 
 	acommon "github.com/marcobeierer/go-core/action/common"
 	"github.com/marcobeierer/go-core/common"
@@ -15,7 +16,6 @@ import (
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 type UploadFromURLPageState struct {
@@ -63,7 +63,7 @@ func (qq *UploadFromURLPage) Widget(ctx ctxx.Context, rawURL string) renderable.
 	}
 
 	return &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "upload", nil),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "upload", nil),
 		Content: &widget.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List: []widget.IWidget{
@@ -92,7 +92,7 @@ func (qq *UploadFromURLPage) appBar(ctx ctxx.Context) *widget.AppBar {
 		Leading: &widget.Icon{
 			Name: "upload",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title: &widget.AppBarTitle{
 			Text: widget.T("Import URL"),
 		},

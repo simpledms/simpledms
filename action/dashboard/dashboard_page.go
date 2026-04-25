@@ -8,9 +8,9 @@ import (
 	"github.com/marcobeierer/go-core/ctxx"
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/uix/events"
+	"github.com/marcobeierer/go-core/ui/uix/partial"
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 type DashboardPage struct {
@@ -54,7 +54,7 @@ func (qq *DashboardPage) Widget(ctx ctxx.Context) (renderable.Renderable, error)
 
 	mainLayout := &widget.MainLayout{
 		// MainCtx is necessary when navigating back from space, otherwise all menu items are rendered
-		Navigation: partial2.NewNavigationRail(ctx.MainCtx(), qq.infra, "dashboard", fabs),
+		Navigation: partial.NewNavigationRail(ctx.MainCtx(), qq.infra, "dashboard", fabs),
 		Content: &widget.DefaultLayout{
 			AppBar:        qq.appBar(ctx),
 			Content:       dashboardCardsContent,
@@ -70,7 +70,7 @@ func (qq *DashboardPage) appBar(ctx ctxx.Context) *widget.AppBar {
 		Leading: &widget.Icon{
 			Name: "dashboard",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title: &widget.AppBarTitle{
 			Text: widget.T("Dashboard"),
 		},

@@ -8,7 +8,6 @@ import (
 	"github.com/marcobeierer/go-core/ui/util"
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 type InboxRootPage struct {
@@ -51,7 +50,7 @@ func (qq *InboxRootPage) Handler(
 
 	var viewx renderable.Renderable
 	viewx = &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
 		Content:    qq.actions.InboxPage.WidgetHandler(rw, req, ctx, ""),
 	}
 

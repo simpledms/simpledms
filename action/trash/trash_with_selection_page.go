@@ -16,7 +16,6 @@ import (
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
-	"github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
@@ -97,7 +96,7 @@ func (qq *TrashWithSelectionPage) widget(
 	}
 
 	mainLayout := &widget.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, qq.infra, "trash", nil),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "trash", nil),
 		Content:    listDetailLayout,
 	}
 	return mainLayout, nil
@@ -106,7 +105,7 @@ func (qq *TrashWithSelectionPage) widget(
 func (qq *TrashWithSelectionPage) appBar(ctx ctxx.Context) *widget.AppBar {
 	return &widget.AppBar{
 		Leading:          widget.NewIcon("delete"),
-		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
 		Title:            widget.T("Trash"),
 	}
 }

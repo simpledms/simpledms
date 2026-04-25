@@ -12,7 +12,6 @@ import (
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/model/tenant/library"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 // TODO via settings or prefix with manage
@@ -80,7 +79,7 @@ func (qq *ManageDocumentTypesPage) Handler(
 	id64 := int64(id)
 
 	viewx = &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "document-types", fabs),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "document-types", fabs),
 		Content:    qq.actions.DocumentTypePage.WidgetHandler(rw, req, ctx, id64),
 	}
 

@@ -16,7 +16,6 @@ import (
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 type InboxWithSelectionPage struct {
@@ -114,7 +113,7 @@ func (qq *InboxWithSelectionPage) Handler(
 
 	var viewx renderable.Renderable
 	viewx = &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
 		Content:    content, // TODO pass in filex?
 	}
 

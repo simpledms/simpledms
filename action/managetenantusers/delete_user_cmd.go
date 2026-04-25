@@ -1,0 +1,75 @@
+package managetenantusers
+
+import (
+	"net/http"
+
+	autil "github.com/marcobeierer/go-core/action/util"
+	"github.com/marcobeierer/go-core/common"
+	"github.com/marcobeierer/go-core/ctxx"
+	"github.com/marcobeierer/go-core/model/common/tenantrole"
+	tenantusermodel "github.com/marcobeierer/go-core/model/tenantuser"
+	"github.com/marcobeierer/go-core/ui/uix/events"
+	wx "github.com/marcobeierer/go-core/ui/widget"
+	"github.com/marcobeierer/go-core/util/actionx"
+	"github.com/marcobeierer/go-core/util/e"
+	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+)
+
+type DeleteUserCmdData struct {
+	UserID string `validate:"required"`
+}
+
+type DeleteUserCmd struct {
+	infra   *common.Infra
+	actions *Actions
+	*actionx.Config
+}
+
+func NewDeleteUserCmd(infra *common.Infra, actions *Actions) *DeleteUserCmd {
+	config := actionx.NewConfig(actions.Route("delete-user-cmd"), false)
+	return &DeleteUserCmd{
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+	}
+}
+
+func (qq *DeleteUserCmd) Data(userID string) *DeleteUserCmdData {
+	return &DeleteUserCmdData{
+		UserID: userID,
+	}
+}
+
+func (qq *DeleteUserCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+	if !ctx.IsTenantCtx() {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "You are not allowed to delete users. No organization selected.")
+	}
+	if ctx.TenantCtx().User.Role != tenantrole.Owner {
+		return e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to delete users because you are not the owner.")
+	}
+
+	data, err := autil.FormData[DeleteUserCmdData](rw, req, ctx)
+	if err != nil {
+		return err
+	}
+
+	result, err := tenantusermodel.Delete(
+		ctx,
+		ctx.TenantCtx().Tenant.ID,
+		data.UserID,
+		ctx.MainCtx().Account.ID,
+		ctx.TenantCtx().User.ID,
+	)
+	if err != nil {
+		return err
+	}
+
+	if result.IsOwningTenantAssignment {
+		rw.AddRenderables(wx.NewSnackbarf("User removed from organization and account deleted globally."))
+	} else {
+		rw.AddRenderables(wx.NewSnackbarf("User removed from organization."))
+	}
+	rw.Header().Set("HX-Trigger", events.UserDeleted.String())
+
+	return nil
+}

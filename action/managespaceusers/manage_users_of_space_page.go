@@ -2,6 +2,7 @@ package managespaceusers
 
 import (
 	autil "github.com/marcobeierer/go-core/action/util"
+	"github.com/marcobeierer/go-core/ui/uix/partial"
 
 	acommon "github.com/marcobeierer/go-core/action/common"
 	"github.com/marcobeierer/go-core/common"
@@ -9,7 +10,6 @@ import (
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 type ManageUsersOfSpacePageState struct {
@@ -56,7 +56,7 @@ func (qq *ManageUsersOfSpacePage) Widget(
 	*/
 
 	return &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "manage-users", nil),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "manage-users", nil),
 		Content: &widget.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
 			Content: qq.actions.UsersOfSpaceListPartial.Widget(ctx, &state.UsersOfSpaceListPartialState),
@@ -69,7 +69,7 @@ func (qq *ManageUsersOfSpacePage) appBar(ctx ctxx.Context) *widget.AppBar {
 		Leading: &widget.Icon{
 			Name: "person",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title: &widget.AppBarTitle{
 			Text: widget.Tf("Users «%s»", ctx.SpaceCtx().Space.Name),
 		},

@@ -7,7 +7,6 @@ import (
 	partial2 "github.com/marcobeierer/go-core/ui/uix/partial"
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
-	partial "github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 type TrashRootPage struct {
@@ -38,7 +37,7 @@ func (qq *TrashRootPage) Handler(
 
 func (qq *TrashRootPage) widget(ctx ctxx.Context) renderable.Renderable {
 	mainLayout := &widget.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, qq.infra, "trash", nil),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "trash", nil),
 		Content: &widget.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List:   qq.actions.TrashListPartial.Widget(ctx, qq.actions.TrashListPartial.Data("")),
@@ -50,7 +49,7 @@ func (qq *TrashRootPage) widget(ctx ctxx.Context) renderable.Renderable {
 func (qq *TrashRootPage) appBar(ctx ctxx.Context) *widget.AppBar {
 	return &widget.AppBar{
 		Leading:          widget.NewIcon("delete"),
-		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
 		Title:            widget.T("Trash"),
 	}
 }

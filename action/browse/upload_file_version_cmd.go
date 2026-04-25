@@ -15,9 +15,9 @@ import (
 	"github.com/marcobeierer/go-core/util/fileutil"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/marcobeierer/go-core/util/txx"
-	"github.com/marcobeierer/go-core/util/uploadx"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type UploadFileVersionCmdData struct {

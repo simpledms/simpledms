@@ -5,9 +5,9 @@ import (
 	"github.com/marcobeierer/go-core/common"
 	"github.com/marcobeierer/go-core/ctxx"
 	"github.com/marcobeierer/go-core/ui/renderable"
+	"github.com/marcobeierer/go-core/ui/uix/partial"
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 type PropertiesPage struct {
@@ -55,7 +55,7 @@ func (qq *PropertiesPage) Widget(
 	)
 
 	mainLayout := &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "fields", fabs),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "fields", fabs),
 		Content: &widget.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List:   children,
@@ -69,7 +69,7 @@ func (qq *PropertiesPage) appBar(ctx ctxx.Context) *widget.AppBar {
 		Leading: &widget.Icon{
 			Name: "tune",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title: &widget.AppBarTitle{
 			Text: widget.T("Fields"),
 		},

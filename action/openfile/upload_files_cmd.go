@@ -18,9 +18,9 @@ import (
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/marcobeierer/go-core/util/txx"
-	"github.com/marcobeierer/go-core/util/uploadx"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type UploadFilesCmdState struct {

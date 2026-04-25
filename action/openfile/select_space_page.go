@@ -4,6 +4,7 @@ import (
 	"log"
 
 	autil "github.com/marcobeierer/go-core/action/util"
+	"github.com/marcobeierer/go-core/ui/uix/partial"
 
 	acommon "github.com/marcobeierer/go-core/action/common"
 	"github.com/marcobeierer/go-core/common"
@@ -12,7 +13,6 @@ import (
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
@@ -65,7 +65,7 @@ func (qq *SelectSpacePage) WaitWidget(ctx ctxx.Context, uploadToken string, stat
 
 	// TODO make clear if nothing happens, if there are no files...
 	return &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "upload", fabs),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "upload", fabs),
 		Content: &widget.ListDetailLayout{ // TODO implement a FullPageLayout instead
 			AppBar: qq.appBar(ctx),
 			List: []widget.IWidget{
@@ -129,7 +129,7 @@ func (qq *SelectSpacePage) Widget(
 	var fabs []*widget.FloatingActionButton
 
 	mainLayout := &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "upload", fabs),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "upload", fabs),
 		Content: &widget.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List: &widget.List{
@@ -146,7 +146,7 @@ func (qq *SelectSpacePage) appBar(ctx ctxx.Context) *widget.AppBar {
 		Leading: &widget.Icon{
 			Name: "upload", // TODO hub or upload?
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title: &widget.AppBarTitle{
 			Text: widget.T("Select space"),
 		},

@@ -2,13 +2,13 @@ package managetags
 
 import (
 	autil "github.com/marcobeierer/go-core/action/util"
+	"github.com/marcobeierer/go-core/ui/uix/partial"
 
 	acommon "github.com/marcobeierer/go-core/action/common"
 	"github.com/marcobeierer/go-core/common"
 	"github.com/marcobeierer/go-core/ctxx"
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 type ManageTagsPageState struct {
@@ -63,7 +63,7 @@ func (qq *ManageTagsPage) Widget(
 	}
 
 	return &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "tags", fabs),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "tags", fabs),
 		Content: &widget.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
 			Content: qq.actions.TagListPartial.Widget(ctx, qq.actions.TagListPartial.Data(0), &state.TagListPartialState),
@@ -76,7 +76,7 @@ func (qq *ManageTagsPage) appBar(ctx ctxx.Context) *widget.AppBar {
 		Leading: &widget.Icon{
 			Name: "label",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title: &widget.AppBarTitle{
 			Text: widget.T("Tags"),
 		},

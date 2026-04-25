@@ -2,6 +2,7 @@ package spaces
 
 import (
 	autil "github.com/marcobeierer/go-core/action/util"
+	"github.com/marcobeierer/go-core/ui/uix/partial"
 
 	acommon "github.com/marcobeierer/go-core/action/common"
 	"github.com/marcobeierer/go-core/common"
@@ -10,7 +11,6 @@ import (
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 type SpacesPageData struct {
@@ -62,7 +62,7 @@ func (qq *SpacesPage) Widget(ctx ctxx.Context, state *SpacesPageState) renderabl
 	}
 
 	return &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "spaces", fabs),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "spaces", fabs),
 		Content: &widget.DefaultLayout{
 			AppBar: qq.appBar(ctx),
 			Content: qq.actions.SpaceCardsPartial.Widget(
@@ -77,7 +77,7 @@ func (qq *SpacesPage) appBar(ctx ctxx.Context) *widget.AppBar {
 		Leading: &widget.Icon{
 			Name: "hub",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title: &widget.AppBarTitle{
 			Text: widget.Tuf("%s «%s»", widget.T("Spaces").String(ctx), ctx.TenantCtx().Tenant.Name),
 		},

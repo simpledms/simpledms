@@ -17,7 +17,6 @@ import (
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 type BrowsePage struct {
@@ -142,7 +141,7 @@ func (qq *BrowsePage) widget(
 	}
 
 	mainLayout := &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "browse", fabs),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "browse", fabs),
 		Content:    listDetailLayout,
 	}
 	return mainLayout, nil

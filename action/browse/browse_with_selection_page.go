@@ -14,7 +14,6 @@ import (
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 // TODO rename to BrowseFile?
@@ -149,7 +148,7 @@ func (qq *BrowseWithSelectionPage) widget(
 	*/
 
 	mainLayout := &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "browse", fabs),
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "browse", fabs),
 		Content:    listDetailsLayout,
 		// SideSheet:  fileDetailsSideSheet,
 	}

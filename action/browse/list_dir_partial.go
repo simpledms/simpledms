@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/marcobeierer/go-core/db/entx"
+	"github.com/marcobeierer/go-core/ui/uix/partial"
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
@@ -27,7 +28,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	"github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
