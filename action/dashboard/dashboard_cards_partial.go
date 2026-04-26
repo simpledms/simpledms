@@ -117,10 +117,23 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 		})
 	}
 
-	spacesByTenant, err := ctx.AppCtx().ReadOnlyAccountSpacesByTenant()
-	if err != nil {
-		log.Println(err)
-		return nil, err
+	spacesByTenant := make(map[*entmain.Tenant][]*enttenant.Space)
+	if ctx.IsAppCtx() {
+		spacesByTenant, err = ctx.AppCtx().ReadOnlyAccountSpacesByTenant()
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+	} else {
+		tenants, err := ctx.MainCtx().Account.QueryTenants().All(ctx)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+
+		for _, tenantx := range tenants {
+			spacesByTenant[tenantx] = nil
+		}
 	}
 
 	for tenantx, spaces := range spacesByTenant {
@@ -409,6 +422,10 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 }
 
 func (qq *DashboardCardsPartial) nilableQuotaUsageCard(ctx ctxx.Context, tenantx *entmain.Tenant) *widget.Card {
+	if !ctx.IsAppCtx() {
+		return nil
+	}
+
 	tenantm := tenant.NewTenant(tenantx)
 	if !tenantm.IsInitialized() {
 		return nil
