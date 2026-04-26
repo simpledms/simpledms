@@ -39,6 +39,7 @@ func WithTenantWriteSpaceTx[T any](ctx *ctxx.SpaceContext, fn func(ctx2 *ctxx.Sp
 		ctx.TenantCtx(),
 		writeTx,
 		false,
+		ctx.AppCtx().UnsafeTenantDBs(),
 	)
 	writeSpace := writeTx.Space.GetX(writeTenantCtx, ctx.SpaceCtx().Space.ID)
 	writeSpaceCtx := ctxx.NewSpaceContext(writeTenantCtx, writeSpace)

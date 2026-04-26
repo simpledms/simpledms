@@ -440,7 +440,12 @@ func (qq *DashboardCardsPartial) tenantStorageUsageLabel(ctx ctxx.Context, tenan
 		return widget.T("Unavailable").String(ctx)
 	}
 
-	tenantCtx := ctxx.NewAppContext(ctx.TenantCtx(), tenantTx, true, qq.uns)
+	tenantCtx := ctxx.NewAppContext(
+		ctx.TenantCtx(),
+		tenantTx,
+		true,
+		ctx.AppCtx().UnsafeTenantDBs(),
+	)
 	usedBytes, limitBytes, err := qq.infra.FileSystem().TenantUsageBytes(tenantCtx)
 	if err != nil {
 		log.Println("failed to query storage usage for tenant", tenantx.ID, err)

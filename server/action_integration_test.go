@@ -27,6 +27,7 @@ import (
 	"github.com/marcobeierer/go-core/db/entmain/session"
 	"github.com/marcobeierer/go-core/db/entx"
 
+	coreaction "github.com/marcobeierer/go-core/action"
 	common2 "github.com/marcobeierer/go-core/common"
 	"github.com/marcobeierer/go-core/db/sqlx"
 	appmodel "github.com/marcobeierer/go-core/model/app"
@@ -47,6 +48,7 @@ import (
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
+	route2 "github.com/simpledms/simpledms/ui/uix/route"
 )
 
 type actionTestHarness struct {
@@ -175,9 +177,15 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 	)
 
 	tenantDBs := tenantdbs.NewTenantDBs()
-	router := server2.NewRouter(mainDB, tenantDBs, infra, true, metaPath, i18nx)
-	actions := action.NewActions(infra, tenantDBs, true)
-	router.RegisterActions(actions)
+	router := server2.NewRouter(mainDB, infra, i18nx)
+	contextExtender := NewContextExtender(tenantDBs, true, metaPath)
+	router.SetContextExtender(contextExtender)
+	router.SetErrorMapper(contextExtender)
+	router.SetTenantHomeRoute(route2.SpacesRoot)
+	coreActions := coreaction.NewActions(infra)
+	router.RegisterCoreRoutes(coreActions)
+	actions := action.NewActions(infra, tenantDBs, true, coreActions)
+	RegisterActions(router, actions)
 
 	err = infra.PluginRegistry().RegisterActions(router)
 	if err != nil {

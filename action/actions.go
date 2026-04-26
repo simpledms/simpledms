@@ -1,10 +1,7 @@
 package action
 
 import (
-	"github.com/marcobeierer/go-core/action/admin"
-	"github.com/marcobeierer/go-core/action/auth"
-	acommon "github.com/marcobeierer/go-core/action/common"
-	"github.com/marcobeierer/go-core/action/staticpage"
+	coreaction "github.com/marcobeierer/go-core/action"
 	"github.com/marcobeierer/go-core/common"
 	"github.com/simpledms/simpledms/action/browse"
 	"github.com/simpledms/simpledms/action/dashboard"
@@ -29,47 +26,47 @@ type Actions struct {
 	Browse    *browse.Actions    `actions:"browse"`
 	Tagging   *tagging.Actions   `actions:"tagging"`
 	Inbox     *inbox.Actions     `actions:"inbox"`
-	Common    *acommon.Actions   `actions:"common"`
 	// Find         *findq.Actions        `actions:"find"`
 	DocumentType      *documenttype.Actions      `actions:"documentType"`
 	Spaces            *spaces.Actions            `actions:"spaces"`
-	Auth              *auth.Actions              `actions:"auth"`
 	Property          *property.Actions          `actions:"property"`
 	OpenFile          *openfile.Actions          `actions:"openFile"`
-	Admin             *admin.Actions             `actions:"admin"`
 	ManageTags        *managetags.Actions        `actions:"manageTags"`
 	ManageTenantUsers *managetenantusers.Actions `actions:"manageTenantUsers"`
 	ManageSpaceUsers  *managespaceusers.Actions  `actions:"manageSpaceUsers"`
-	StaticPage        *staticpage.Actions        `actions:"staticPage"`
 	Trash             *trash.Actions             `actions:"trash"`
 }
 
-func NewActions(infra *common.Infra, tenantDBs *tenantdbs.TenantDBs, isDevMode bool) *Actions {
-	commonActions := acommon.NewActions(infra)
+func NewActions(
+	infra *common.Infra,
+	tenantDBs *tenantdbs.TenantDBs,
+	isDevMode bool,
+	coreActions *coreaction.Actions,
+) *Actions {
+	commonActions := coreActions.Common
 	taggingActions := tagging.NewActions(infra, commonActions)
 	browseActions := browse.NewActions(infra, commonActions, taggingActions)
 	documentTypeActions := documenttype.NewActions(infra, commonActions)
 	spacesActions := spaces.NewActions(infra)
-	authActions := auth.NewActions(infra)
-	adminActions := admin.NewActions(infra)
 	trashActions := trash.NewActions(infra, browseActions)
 
 	return &Actions{
-		Dashboard:         dashboard.NewActions(infra, commonActions, authActions, adminActions),
+		Dashboard: dashboard.NewActions(
+			infra,
+			commonActions,
+			coreActions.Auth,
+			coreActions.Admin,
+		),
 		Browse:            browseActions,
 		Tagging:           taggingActions,
 		Inbox:             inbox.NewActions(infra, commonActions, browseActions),
-		Common:            commonActions,
 		DocumentType:      documentTypeActions,
 		Spaces:            spacesActions,
-		Auth:              authActions,
 		Property:          property.NewActions(infra),
 		OpenFile:          openfile.NewActions(infra, commonActions, tenantDBs, isDevMode),
-		Admin:             adminActions,
 		ManageTags:        managetags.NewActions(infra, commonActions, taggingActions),
 		ManageTenantUsers: managetenantusers.NewActions(infra),
 		ManageSpaceUsers:  managespaceusers.NewActions(infra),
-		StaticPage:        staticpage.NewActions(infra),
 		Trash:             trashActions,
 	}
 }

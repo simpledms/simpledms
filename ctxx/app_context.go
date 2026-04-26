@@ -29,9 +29,31 @@ func NewAppContext(
 	isReadOnly bool,
 	unsafeTenantDBs *tenantdbs.TenantDBs,
 ) *AppContext {
-	userx := tenantTx.User.Query().
+	appCtx, err := NewAppContextWithError(
+		tenantContext,
+		tenantTx,
+		isReadOnly,
+		unsafeTenantDBs,
+	)
+	if err != nil {
+		panic(err)
+	}
+	return appCtx
+}
+
+func NewAppContextWithError(
+	tenantContext *ctxx2.TenantContext,
+	tenantTx *enttenant.Tx,
+	isReadOnly bool,
+	unsafeTenantDBs *tenantdbs.TenantDBs,
+) (*AppContext, error) {
+	userx, err := tenantTx.User.Query().
 		Where(user.AccountID(tenantContext.Account.ID)).
-		OnlyX(tenantContext)
+		Only(tenantContext)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
 	appCtx := &AppContext{
 		TenantContext:   tenantContext,
@@ -41,7 +63,7 @@ func NewAppContext(
 		unsafeTenantDBs: unsafeTenantDBs,
 	}
 	appCtx.Context = context.WithValue(tenantContext.Context, appCtxKey, appCtx)
-	return appCtx
+	return appCtx, nil
 }
 
 func (qq *AppContext) AppCtx() *AppContext {

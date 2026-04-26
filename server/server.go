@@ -23,6 +23,7 @@ import (
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"golang.org/x/crypto/acme/autocert"
 
+	ctxx2 "github.com/marcobeierer/go-core/ctxx"
 	"github.com/marcobeierer/go-core/db/entmain"
 	"github.com/marcobeierer/go-core/db/entmain/migrate"
 	"github.com/marcobeierer/go-core/db/entmain/systemconfig"
@@ -30,6 +31,7 @@ import (
 	"github.com/marcobeierer/go-core/db/entx"
 	"github.com/marcobeierer/go-core/encryptor"
 
+	coreaction "github.com/marcobeierer/go-core/action"
 	common2 "github.com/marcobeierer/go-core/common"
 	"github.com/marcobeierer/go-core/db/sqlx"
 	appmodel "github.com/marcobeierer/go-core/model/app"
@@ -53,7 +55,6 @@ import (
 	trashaction "github.com/simpledms/simpledms/action/trash"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	"github.com/simpledms/simpledms/ctxx"
 	migrate2 "github.com/simpledms/simpledms/db/enttenant/migrate"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
@@ -177,7 +178,7 @@ func newMaintenanceModeHandler(
 			}
 		}()
 
-		visitorCtx := ctxx.NewVisitorContext(
+		visitorCtx := ctxx2.NewVisitorContext(
 			req.Context(),
 			mainTx,
 			i18nx,
@@ -304,12 +305,18 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	tenantDBs := dbMigrationsTenantDBs(mainDB, qq.devMode, qq.metaPath)
 
 	infra, minioClient := qq.newInfra(renderer, systemConfig)
-	router := server2.NewRouter(mainDB, tenantDBs, infra, qq.devMode, qq.metaPath, i18nx)
-	actions := action.NewActions(infra, tenantDBs, qq.devMode)
+	router := server2.NewRouter(mainDB, infra, i18nx)
+	contextExtender := NewContextExtender(tenantDBs, qq.devMode, qq.metaPath)
+	router.SetContextExtender(contextExtender)
+	router.SetErrorMapper(contextExtender)
+	router.SetTenantHomeRoute(route2.SpacesRoot)
+	coreActions := coreaction.NewActions(infra)
+	router.RegisterCoreRoutes(coreActions)
+	actions := action.NewActions(infra, tenantDBs, qq.devMode, coreActions)
 	downloadHandler := download.NewDownload(infra)
 	trashDownloadHandler := trashaction.NewDownload(infra)
 
-	qq.registerCoreRoutes(router, actions, downloadHandler, trashDownloadHandler)
+	qq.registerSimpleDMSRoutes(router, actions, downloadHandler, trashDownloadHandler)
 
 	err := infra.PluginRegistry().RegisterActions(router)
 	if err != nil {
@@ -794,7 +801,7 @@ func (qq *Server) newInfra(renderer *ui2.Renderer, systemConfig *systemconfigmod
 	return infra, minioClient
 }
 
-func (qq *Server) registerCoreRoutes(
+func (qq *Server) registerSimpleDMSRoutes(
 	router *server2.Router,
 	actions *action.Actions,
 	downloadHandler *download.Download,
@@ -805,58 +812,46 @@ func (qq *Server) registerCoreRoutes(
 	// use GET for all read requests and POST for all write requests?
 	// restful for default CRUD on main resource? falls apart quickly, see AddConsumption
 
-	// workaround to prevent route conflict between `GET /` and `/webdav/`
-	router.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
-		if req.Method == "GET" && req.URL.Path == "/" {
-			// router.wrapTx(pages.Browse.Handler)(rw, req)
-			// router.wrapTx(actions.Spaces.SpacesPage.Handler)(rw, req)
-			router.WrapTx(actions.Auth.SignInPage.Handler, true)(rw, req)
-			return
-		}
-		rw.WriteHeader(http.StatusNotFound)
-	})
-
 	// TODO find a better way to handle paths
 	// TODO in TTx or not necessary because read only?
-	router.RegisterPage(route.DashboardRoute(), actions.Dashboard.DashboardPage.Handler)
-	router.RegisterPage(route.StaticPageRoute(), actions.StaticPage.StaticPage.Handler)
+	router.RegisterPage(route.DashboardRoute(), AdaptHandler(actions.Dashboard.DashboardPage.Handler))
 
-	router.RegisterPage(route2.BrowseRoute(false), actions.Browse.BrowsePage.Handler)
-	router.RegisterPage(route2.BrowseRoute(true), actions.Browse.BrowsePage.Handler)
-	router.RegisterPage(route2.BrowseRouteWithSelection(), actions.Browse.BrowseWithSelectionPage.Handler)
+	router.RegisterPage(route2.BrowseRoute(false), AdaptHandler(actions.Browse.BrowsePage.Handler))
+	router.RegisterPage(route2.BrowseRoute(true), AdaptHandler(actions.Browse.BrowsePage.Handler))
+	router.RegisterPage(route2.BrowseRouteWithSelection(), AdaptHandler(actions.Browse.BrowseWithSelectionPage.Handler))
 	// router.RegisterPage(route.BrowseRouteWithSelection(false), pages.BrowseWithSelection.Handler)
 
-	router.RegisterPage(route2.InboxRoute(false, false), actions.Inbox.InboxRootPage.Handler)
-	router.RegisterPage(route2.InboxRoute(true, false), actions.Inbox.InboxWithSelectionPage.Handler)
+	router.RegisterPage(route2.InboxRoute(false, false), AdaptHandler(actions.Inbox.InboxRootPage.Handler))
+	router.RegisterPage(route2.InboxRoute(true, false), AdaptHandler(actions.Inbox.InboxWithSelectionPage.Handler))
 	// for use with PWA share target
 	// router.RegisterPage(route.InboxRoute(false, true), pages.Inbox.Handler)
 
-	router.RegisterPage(route2.TrashRoute(), actions.Trash.TrashRootPage.Handler)
-	router.RegisterPage(route2.TrashRouteWithSelection(), actions.Trash.TrashWithSelectionPage.Handler)
+	router.RegisterPage(route2.TrashRoute(), AdaptHandler(actions.Trash.TrashRootPage.Handler))
+	router.RegisterPage(route2.TrashRouteWithSelection(), AdaptHandler(actions.Trash.TrashWithSelectionPage.Handler))
 
-	router.RegisterPage(route2.SpacesRoute(), actions.Spaces.SpacesPage.Handler)
+	router.RegisterPage(route2.SpacesRoute(), AdaptHandler(actions.Spaces.SpacesPage.Handler))
 
-	router.RegisterPage(route2.ManageDocumentTypesRoute(), actions.DocumentType.ManageDocumentTypesPage.Handler)
-	router.RegisterPage(route2.ManageDocumentTypesRouteWithSelection(), actions.DocumentType.ManageDocumentTypesPage.Handler)
+	router.RegisterPage(route2.ManageDocumentTypesRoute(), AdaptHandler(actions.DocumentType.ManageDocumentTypesPage.Handler))
+	router.RegisterPage(route2.ManageDocumentTypesRouteWithSelection(), AdaptHandler(actions.DocumentType.ManageDocumentTypesPage.Handler))
 
-	router.RegisterPage(route2.ManageTagsRoute(), actions.ManageTags.ManageTagsPage.Handler)
+	router.RegisterPage(route2.ManageTagsRoute(), AdaptHandler(actions.ManageTags.ManageTagsPage.Handler))
 	// router.RegisterPage(route.ManageTagsRouteWithSelection(), actions.Tagging.ManageTagsPage.Handler)
 
-	router.RegisterPage(route2.PropertiesRoute(), actions.Property.PropertiesPage.Handler)
-	router.RegisterPage(route2.ManageUsersOfSpaceRoute(), actions.ManageSpaceUsers.ManageUsersOfSpacePage.Handler)
-	router.RegisterPage(route.ManageUsersOfTenantRoute(), actions.ManageTenantUsers.ManageUsersOfTenantPage.Handler)
+	router.RegisterPage(route2.PropertiesRoute(), AdaptHandler(actions.Property.PropertiesPage.Handler))
+	router.RegisterPage(route2.ManageUsersOfSpaceRoute(), AdaptHandler(actions.ManageSpaceUsers.ManageUsersOfSpacePage.Handler))
+	router.RegisterPage(route.ManageUsersOfTenantRoute(), AdaptHandler(actions.ManageTenantUsers.ManageUsersOfTenantPage.Handler))
 
-	router.RegisterPage(route2.SelectSpaceRoute(false), actions.OpenFile.SelectSpacePage.Handler)
-	router.RegisterPage(route2.SelectSpaceRoute(true), actions.OpenFile.SelectSpacePage.Handler)
-	router.RegisterPage(route2.FromURLRoute(), actions.OpenFile.UploadFromURLPage.Handler)
+	router.RegisterPage(route2.SelectSpaceRoute(false), AdaptHandler(actions.OpenFile.SelectSpacePage.Handler))
+	router.RegisterPage(route2.SelectSpaceRoute(true), AdaptHandler(actions.OpenFile.SelectSpacePage.Handler))
+	router.RegisterPage(route2.FromURLRoute(), AdaptHandler(actions.OpenFile.UploadFromURLPage.Handler))
 
 	// router.RegisterPage(route.FindRoute(false), actions.Find.Page.Handler)
 	// router.RegisterPage(route.FindRoute(true), actions.Find.PageWithSelection.Handler)
 
-	router.RegisterPage(route2.DownloadRoute(), downloadHandler.Handler)
-	router.RegisterPage(route2.TrashDownloadRoute(), trashDownloadHandler.Handler)
+	router.RegisterPage(route2.DownloadRoute(), AdaptHandler(downloadHandler.Handler))
+	router.RegisterPage(route2.TrashDownloadRoute(), AdaptHandler(trashDownloadHandler.Handler))
 
-	router.RegisterActions(actions)
+	RegisterActions(router, actions)
 }
 
 func (qq *Server) migrateTenantDatabases(ctx context.Context, mainDB *sqlx.MainDB, tenantDBs *tenantdbs.TenantDBs) {
@@ -1004,7 +999,7 @@ func (qq *Server) initInitialUser(
 		}
 	}()
 
-	visitorCtx := ctxx.NewVisitorContext(
+	visitorCtx := ctxx2.NewVisitorContext(
 		ctx,
 		createInitialUserTx,
 		i18n.NewI18n(),

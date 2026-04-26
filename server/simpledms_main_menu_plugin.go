@@ -3,8 +3,8 @@ package server
 import (
 	"log"
 
-	"github.com/marcobeierer/go-core/ctxx"
 	"github.com/marcobeierer/go-core/ui/widget"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
@@ -19,11 +19,11 @@ func (qq *SimpleDMSMainMenuPlugin) Name() string {
 }
 
 func (qq *SimpleDMSMainMenuPlugin) ExtendMenuItems(
-	ctx ctxx.Context,
+	ctx ctxx2.Context,
 	items []*widget.MenuItem,
 ) []*widget.MenuItem {
 	if ctx.IsMainCtx() {
-		spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+		spacesByTenant, err := ctx.AppCtx().ReadOnlyAccountSpacesByTenant()
 		if err != nil {
 			log.Println(err)
 		} else {

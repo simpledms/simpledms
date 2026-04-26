@@ -8,11 +8,11 @@ import (
 
 	acommon "github.com/marcobeierer/go-core/action/common"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
@@ -91,7 +91,7 @@ func (qq *SelectSpacePage) Widget(
 
 	var spaceItems []*widget.ListItem
 
-	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.AppCtx().ReadOnlyAccountSpacesByTenant()
 	if err != nil {
 		return nil, err
 	}
