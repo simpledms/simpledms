@@ -43,6 +43,8 @@ func NewActions(
 	isDevMode bool,
 	coreActions *coreaction.Actions,
 ) *Actions {
+	registerFormDecoderSetup()
+
 	commonActions := coreActions.Common
 	taggingActions := tagging.NewActions(infra, commonActions)
 	browseActions := browse.NewActions(infra, commonActions, taggingActions)
