@@ -8,8 +8,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/marcobeierer/go-core/common"
 	"github.com/marcobeierer/go-core/ui/widget"
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"

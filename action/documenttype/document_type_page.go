@@ -4,12 +4,12 @@ package documenttype
 
 import (
 	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
-	"github.com/marcobeierer/go-core/ui/uix/partial"
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
+	"github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 type DocumentTypePageState struct {

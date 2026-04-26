@@ -2,7 +2,6 @@ package action
 
 import (
 	coreaction "github.com/marcobeierer/go-core/action"
-	"github.com/marcobeierer/go-core/common"
 	"github.com/simpledms/simpledms/action/browse"
 	"github.com/simpledms/simpledms/action/dashboard"
 	"github.com/simpledms/simpledms/action/documenttype"
@@ -15,6 +14,7 @@ import (
 	"github.com/simpledms/simpledms/action/spaces"
 	"github.com/simpledms/simpledms/action/tagging"
 	"github.com/simpledms/simpledms/action/trash"
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 )
 

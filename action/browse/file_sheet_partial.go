@@ -3,9 +3,9 @@ package browse
 import (
 	"context"
 
-	"github.com/marcobeierer/go-core/common"
 	wx "github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/db/enttenant"
 )
 

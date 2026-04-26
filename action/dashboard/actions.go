@@ -4,8 +4,8 @@ import (
 	"github.com/marcobeierer/go-core/action/admin"
 	"github.com/marcobeierer/go-core/action/auth"
 	acommon "github.com/marcobeierer/go-core/action/common"
-	"github.com/marcobeierer/go-core/common"
 	"github.com/marcobeierer/go-core/ui/uix/route"
+	"github.com/simpledms/simpledms/common"
 )
 
 type Actions struct {

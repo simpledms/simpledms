@@ -1,16 +1,16 @@
 package partial
 
 import (
-	"github.com/marcobeierer/go-core/common"
-	"github.com/marcobeierer/go-core/ui/uix/partial"
+	corectxx "github.com/marcobeierer/go-core/ctxx"
 	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/common"
+	simpledmsctxx "github.com/simpledms/simpledms/ctxx"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 )
 
 // fab must be injected because it differs on each page...
 // TODO has duplicate code with core.NavigationRail
-func NewNavigationRail(ctx ctxx.Context, infra *common.Infra, active string, fabs []*widget.FloatingActionButton) *widget.NavigationRail {
+func NewNavigationRail(ctx corectxx.Context, infra *common.Infra, active string, fabs []*widget.FloatingActionButton) *widget.NavigationRail {
 	var destinations []*widget.NavigationDestination
 	isMetadataRail := active == "document-types" || active == "tags" || active == "fields"
 	/*
@@ -34,50 +34,51 @@ func NewNavigationRail(ctx ctxx.Context, infra *common.Infra, active string, fab
 		})
 	}
 
-	if ctx.IsSpaceCtx() {
+	spaceCtx, isSimpleDMSSpaceCtx := ctx.(simpledmsctxx.Context)
+	if isSimpleDMSSpaceCtx && spaceCtx.IsSpaceCtx() {
 		if isMetadataRail {
 			destinations = append(destinations, &widget.NavigationDestination{
 				Label:    widget.T("Files").String(ctx),
 				Icon:     "folder_open",
 				IsActive: false,
-				Href:     route2.BrowseRoot(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
+				Href:     route2.BrowseRoot(spaceCtx.SpaceCtx().TenantID, spaceCtx.SpaceCtx().SpaceID),
 			})
 			destinations = append(destinations, &widget.NavigationDestination{
 				Label:    widget.T("Document types").String(ctx),
 				Icon:     "category",
 				IsActive: active == "document-types",
-				Href:     route2.ManageDocumentTypes(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
+				Href:     route2.ManageDocumentTypes(spaceCtx.SpaceCtx().TenantID, spaceCtx.SpaceCtx().SpaceID),
 			})
 			destinations = append(destinations, &widget.NavigationDestination{
 				Label:    widget.T("Tags").String(ctx),
 				Icon:     "label",
 				IsActive: active == "tags",
-				Href:     route2.ManageTags(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
+				Href:     route2.ManageTags(spaceCtx.SpaceCtx().TenantID, spaceCtx.SpaceCtx().SpaceID),
 			})
 			destinations = append(destinations, &widget.NavigationDestination{
 				Label:    widget.T("Fields").String(ctx),
 				Icon:     "tune",
 				IsActive: active == "fields",
-				Href:     route2.ManageProperties(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
+				Href:     route2.ManageProperties(spaceCtx.SpaceCtx().TenantID, spaceCtx.SpaceCtx().SpaceID),
 			})
 		} else {
 			destinations = append(destinations, &widget.NavigationDestination{
 				Label:    widget.T("Files").String(ctx), // TODO Files or Browse?
 				Icon:     "folder_open",
 				IsActive: active == "browse",
-				Href:     route2.BrowseRoot(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
+				Href:     route2.BrowseRoot(spaceCtx.SpaceCtx().TenantID, spaceCtx.SpaceCtx().SpaceID),
 			})
 			destinations = append(destinations, &widget.NavigationDestination{
 				Label:    widget.T("Inbox").String(ctx),
 				Icon:     "inbox",
 				IsActive: active == "inbox",
-				Href:     route2.InboxRoot(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
+				Href:     route2.InboxRoot(spaceCtx.SpaceCtx().TenantID, spaceCtx.SpaceCtx().SpaceID),
 			})
 			destinations = append(destinations, &widget.NavigationDestination{
 				Label:    widget.T("Metadata").String(ctx),
 				Icon:     "database",
 				IsActive: active == "document-types",
-				Href:     route2.ManageDocumentTypes(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
+				Href:     route2.ManageDocumentTypes(spaceCtx.SpaceCtx().TenantID, spaceCtx.SpaceCtx().SpaceID),
 			})
 		}
 		/*
@@ -109,7 +110,7 @@ func NewNavigationRail(ctx ctxx.Context, infra *common.Infra, active string, fab
 	*/
 
 	return &widget.NavigationRail{
-		MenuBtn: partial.NewMainMenu(ctx, infra),
+		MenuBtn: NewMainMenu(ctx, infra),
 		// must be after main block, otherwise margin is added on top
 		// and z-index: 1 is necessary on fab
 		FABs:         fabs,

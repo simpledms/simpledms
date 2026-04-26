@@ -1,7 +1,7 @@
 package managespaceusers
 
 import (
-	"github.com/marcobeierer/go-core/common"
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 

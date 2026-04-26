@@ -32,7 +32,6 @@ import (
 	"github.com/marcobeierer/go-core/encryptor"
 
 	coreaction "github.com/marcobeierer/go-core/action"
-	common2 "github.com/marcobeierer/go-core/common"
 	"github.com/marcobeierer/go-core/db/sqlx"
 	appmodel "github.com/marcobeierer/go-core/model/app"
 	"github.com/marcobeierer/go-core/model/common/country"
@@ -44,7 +43,6 @@ import (
 	corescheduler "github.com/marcobeierer/go-core/scheduler"
 	server2 "github.com/marcobeierer/go-core/server"
 	ui2 "github.com/marcobeierer/go-core/ui"
-	"github.com/marcobeierer/go-core/ui/uix/partial"
 	"github.com/marcobeierer/go-core/ui/uix/route"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/httpx"
@@ -53,12 +51,13 @@ import (
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/action/download"
 	trashaction "github.com/simpledms/simpledms/action/trash"
-	"github.com/simpledms/simpledms/common"
+	dmscommon "github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	migrate2 "github.com/simpledms/simpledms/db/enttenant/migrate"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	simpledmsscheduler "github.com/simpledms/simpledms/scheduler"
+	"github.com/simpledms/simpledms/ui/uix/partial"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 )
 
@@ -306,12 +305,12 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	tenantDBMigrator := newTenantDBMigrator(qq.devMode, qq.migrationsTenantFS)
 
 	infra, minioClient := qq.newInfra(renderer, systemConfig)
-	router := server2.NewRouter(mainDB, infra, i18nx)
+	router := server2.NewRouter(mainDB, infra.CoreInfra(), i18nx)
 	contextExtender := NewContextExtender(tenantDBs, qq.devMode, qq.metaPath)
 	router.SetContextExtender(contextExtender)
 	router.SetErrorMapper(contextExtender)
 	router.SetTenantHomeRoute(route2.SpacesRoot)
-	coreActions := coreaction.NewActions(infra)
+	coreActions := coreaction.NewActions(infra.CoreInfra())
 	router.RegisterCoreRoutes(coreActions)
 	actions := action.NewActions(infra, tenantDBs, qq.devMode, coreActions)
 	downloadHandler := download.NewDownload(infra)
@@ -370,6 +369,7 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		server:          qq,
 		mainDB:          mainDB,
 		tenantDBs:       tenantDBs,
+		infra:           infra,
 		router:          router,
 		handler:         handlerChain,
 		systemConfig:    systemConfig,
@@ -757,9 +757,9 @@ func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.Main
 	return systemConfigx, systemConfig
 }
 
-func (qq *Server) newInfra(renderer *ui2.Renderer, systemConfig *systemconfigmodel.SystemConfig) (*common2.Infra, *minio.Client) {
+func (qq *Server) newInfra(renderer *ui2.Renderer, systemConfig *systemconfigmodel.SystemConfig) (*dmscommon.Infra, *minio.Client) {
 	// storagePath := common.StoragePath(metaPath)
-	fileRepo := common.NewFileRepository()
+	fileRepo := dmscommon.NewFileRepository()
 	minioClient := qq.initNilableMinioClient(systemConfig.S3())
 	fileSystem := filesystem.NewFileSystem(qq.metaPath)
 
@@ -784,7 +784,7 @@ func (qq *Server) newInfra(renderer *ui2.Renderer, systemConfig *systemconfigmod
 		disableFileEncryption = disableFileEncryptionx
 	}
 
-	infra := common2.NewInfra(
+	infra := dmscommon.NewInfra(
 		renderer,
 		qq.metaPath,
 		filesystem.NewS3FileSystem(
@@ -907,7 +907,7 @@ END WARNING
 }
 
 func (qq *Server) startScheduler(
-	infra *common2.Infra,
+	infra *dmscommon.Infra,
 	mainDB *sqlx.MainDB,
 	tenantDBs *tenantdbs.TenantDBs,
 	minioClient *minio.Client,

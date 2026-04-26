@@ -28,7 +28,6 @@ import (
 	"github.com/marcobeierer/go-core/db/entx"
 
 	coreaction "github.com/marcobeierer/go-core/action"
-	common2 "github.com/marcobeierer/go-core/common"
 	"github.com/marcobeierer/go-core/db/sqlx"
 	appmodel "github.com/marcobeierer/go-core/model/app"
 	"github.com/marcobeierer/go-core/model/common/country"
@@ -44,7 +43,7 @@ import (
 	"github.com/marcobeierer/go-core/util/accountutil"
 	"github.com/marcobeierer/go-core/util/cookiex"
 	"github.com/simpledms/simpledms/action"
-	"github.com/simpledms/simpledms/common"
+	dmscommon "github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
@@ -55,7 +54,7 @@ type actionTestHarness struct {
 	tb        testing.TB
 	mainDB    *sqlx.MainDB
 	tenantDBs *tenantdbs.TenantDBs
-	infra     *common2.Infra
+	infra     *dmscommon.Infra
 	actions   *action.Actions
 	router    *server2.Router
 	metaPath  string
@@ -167,22 +166,22 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 		)
 	}
 
-	infra := common2.NewInfra(
+	infra := dmscommon.NewInfra(
 		renderer,
 		metaPath,
 		s3FileSystem,
-		common.NewFileRepository(),
+		dmscommon.NewFileRepository(),
 		newDefaultPluginRegistry(),
 		systemConfig,
 	)
 
 	tenantDBs := tenantdbs.NewTenantDBs()
-	router := server2.NewRouter(mainDB, infra, i18nx)
+	router := server2.NewRouter(mainDB, infra.CoreInfra(), i18nx)
 	contextExtender := NewContextExtender(tenantDBs, true, metaPath)
 	router.SetContextExtender(contextExtender)
 	router.SetErrorMapper(contextExtender)
 	router.SetTenantHomeRoute(route2.SpacesRoot)
-	coreActions := coreaction.NewActions(infra)
+	coreActions := coreaction.NewActions(infra.CoreInfra())
 	router.RegisterCoreRoutes(coreActions)
 	actions := action.NewActions(infra, tenantDBs, true, coreActions)
 	RegisterActions(router, actions)

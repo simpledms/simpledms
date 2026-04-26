@@ -8,10 +8,10 @@ import (
 
 	"golang.org/x/crypto/acme/autocert"
 
-	"github.com/marcobeierer/go-core/common"
 	sqlx2 "github.com/marcobeierer/go-core/db/sqlx"
 	systemconfigmodel "github.com/marcobeierer/go-core/model/systemconfig"
 	server2 "github.com/marcobeierer/go-core/server"
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/sqlx"
 )
@@ -20,6 +20,7 @@ type PreparedServer struct {
 	server          *Server
 	mainDB          *sqlx2.MainDB
 	tenantDBs       *tenantdbs.TenantDBs
+	infra           *common.Infra
 	router          *server2.Router
 	handler         http.Handler
 	systemConfig    *systemconfigmodel.SystemConfig
@@ -56,7 +57,7 @@ func (qq *PreparedServer) Router() *server2.Router {
 // Infra returns the initialized infrastructure so wrappers can build actions
 // that depend on renderer, config, and other runtime services.
 func (qq *PreparedServer) Infra() *common.Infra {
-	return qq.router.Infra()
+	return qq.infra
 }
 
 // Start starts background services and begins listening for HTTP requests.

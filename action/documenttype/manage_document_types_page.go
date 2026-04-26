@@ -4,14 +4,14 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/uix/partial"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/tenant/library"
+	"github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 // TODO via settings or prefix with manage

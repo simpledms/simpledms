@@ -7,13 +7,13 @@ import (
 	"strings"
 
 	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/uix/partial"
+	"github.com/simpledms/simpledms/ui/uix/partial"
 
 	acommon "github.com/marcobeierer/go-core/action/common"
-	"github.com/marcobeierer/go-core/common"
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	temporaryfilemodel "github.com/simpledms/simpledms/model/tenant/temporaryfile"
 )

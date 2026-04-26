@@ -4,8 +4,8 @@ import (
 	"github.com/marcobeierer/go-tika"
 	"github.com/minio/minio-go/v7"
 
-	"github.com/marcobeierer/go-core/common"
 	"github.com/marcobeierer/go-core/db/sqlx"
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 )
 

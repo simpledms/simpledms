@@ -2,7 +2,7 @@ package tagging
 
 import (
 	acommon "github.com/marcobeierer/go-core/action/common"
-	"github.com/marcobeierer/go-core/common"
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 

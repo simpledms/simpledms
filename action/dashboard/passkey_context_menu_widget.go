@@ -1,9 +1,9 @@
 package dashboard
 
 import (
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/util"
 	"github.com/marcobeierer/go-core/ui/widget"
+	"github.com/simpledms/simpledms/ctxx"
 )
 
 type PasskeyContextMenuWidget struct {

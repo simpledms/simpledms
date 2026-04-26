@@ -1,8 +1,8 @@
 package dashboard
 
 import (
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/widget"
+	"github.com/simpledms/simpledms/ctxx"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 )
 
