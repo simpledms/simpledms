@@ -16,7 +16,6 @@ import (
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/sqlx"
@@ -183,7 +182,7 @@ func TestUploadFilesCmdRejectsWhenGlobalUploadLimitExceeded(t *testing.T) {
 			OnlyX(context.Background())
 
 		var handlerErr error
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
 			req := newSharedUploadRequest(t, map[string]string{
 				"too-large.txt": strings.Repeat("x", 2*1024*1024),
 			})
@@ -230,7 +229,7 @@ func setupUploadTestSpace(
 	var parentDirID string
 	var spaceID int64
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 		spaceName := "Upload Limit Space"
 		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 

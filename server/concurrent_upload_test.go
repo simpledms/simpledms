@@ -12,9 +12,9 @@ import (
 
 	"github.com/marcobeierer/go-core/db/entmain"
 
+	ctxx2 "github.com/marcobeierer/go-core/ctxx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
@@ -142,7 +142,7 @@ func newTenantContextForUpload(
 	accountx *entmain.Account,
 	tenantx *entmain.Tenant,
 	tenantDB *sqlx.TenantDB,
-) (*entmain.Tx, *enttenant.Tx, *ctxx2.TenantContext, error) {
+) (*entmain.Tx, *enttenant.Tx, *ctxx.AppContext, error) {
 	mainTx, err := harness.mainDB.ReadOnlyConn.Tx(context.Background())
 	if err != nil {
 		return nil, nil, nil, err
@@ -158,7 +158,7 @@ func newTenantContextForUpload(
 		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
-	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs, true)
+	mainCtx := ctxx2.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, true)
 
 	tenantTx, err := tenantDB.ReadOnlyConn.Tx(context.Background())
 	if err != nil {
@@ -166,7 +166,8 @@ func newTenantContextForUpload(
 		return nil, nil, nil, err
 	}
 
-	tenantCtx := ctxx2.NewTenantContext(mainCtx, tenantTx, tenantx, true)
+	tenantCtxCore := ctxx2.NewTenantContext(mainCtx, tenantx)
+	tenantCtx := ctxx.NewAppContext(tenantCtxCore, tenantTx, true, harness.tenantDBs)
 	return mainTx, tenantTx, tenantCtx, nil
 }
 

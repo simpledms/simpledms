@@ -8,12 +8,11 @@ import (
 	"github.com/marcobeierer/go-core/db/entmain/account"
 	"github.com/marcobeierer/go-core/db/entx"
 
+	ctxx2 "github.com/marcobeierer/go-core/ctxx"
 	"github.com/marcobeierer/go-core/model/common/country"
 	"github.com/marcobeierer/go-core/model/common/language"
 	signupmodel "github.com/marcobeierer/go-core/model/signup"
 	"github.com/marcobeierer/go-core/pluginx"
-	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 )
 
 type captureSignUpPlugin struct {
@@ -26,7 +25,7 @@ func (qq *captureSignUpPlugin) Name() string {
 	return "capture-sign-up"
 }
 
-func (qq *captureSignUpPlugin) OnSignUp(_ ctxx.Context, event pluginx.SignUpEvent) error {
+func (qq *captureSignUpPlugin) OnSignUp(_ ctxx2.Context, event pluginx.SignUpEvent) error {
 	qq.calls++
 	qq.last = event
 	return qq.err

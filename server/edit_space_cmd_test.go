@@ -22,9 +22,9 @@ import (
 	tenant2 "github.com/marcobeierer/go-core/model/tenant"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 
+	ctxx2 "github.com/marcobeierer/go-core/ctxx"
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/migrate"
@@ -57,7 +57,7 @@ func TestEditSpaceCmdUpdatesSpaceAndRootDir(t *testing.T) {
 	accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
 	tenantDB := initTenantDB(t, harness, tenantx)
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 		spaceName := "Operations"
 		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -197,7 +197,7 @@ func newTenantContext(
 	accountx *entmain.Account,
 	tenantx *entmain.Tenant,
 	tenantDB *sqlx.TenantDB,
-) (*entmain.Tx, *enttenant.Tx, *ctxx2.TenantContext) {
+) (*entmain.Tx, *enttenant.Tx, *ctxx.AppContext) {
 	t.Helper()
 
 	mainTx, err := harness.mainDB.ReadWriteConn.Tx(context.Background())
@@ -215,7 +215,7 @@ func newTenantContext(
 		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
-	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs, false)
+	mainCtx := ctxx2.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, false)
 
 	tenantTx, err := tenantDB.ReadWriteConn.Tx(context.Background())
 	if err != nil {
@@ -223,12 +223,13 @@ func newTenantContext(
 		t.Fatalf("start tenant tx: %v", err)
 	}
 
-	tenantCtx := ctxx2.NewTenantContext(mainCtx, tenantTx, tenantx, false)
+	tenantCtxCore := ctxx2.NewTenantContext(mainCtx, tenantx)
+	tenantCtx := ctxx.NewAppContext(tenantCtxCore, tenantTx, false, harness.tenantDBs)
 
 	return mainTx, tenantTx, tenantCtx
 }
 
-func createSpaceViaCmd(t testing.TB, actions *action.Actions, tenantCtx *ctxx2.TenantContext, name string) {
+func createSpaceViaCmd(t testing.TB, actions *action.Actions, tenantCtx *ctxx.AppContext, name string) {
 	t.Helper()
 
 	form := url.Values{}

@@ -37,7 +37,7 @@ func TestUploadFromURLCmdCreatesTemporaryFileAndRedirects(t *testing.T) {
 		)
 
 		var location string
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
 			data := url.Values{}
 			data.Set("url", "https://example.com/from-url.txt")
 
@@ -105,7 +105,7 @@ func TestUploadFromURLCmdUsesHXRedirectForHTMXRequests(t *testing.T) {
 			},
 		)
 
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
 			data := url.Values{}
 			data.Set("url", "https://example.com/from-url.txt")
 
@@ -151,7 +151,7 @@ func TestUploadFromURLCmdRejectsMissingURL(t *testing.T) {
 		OnlyX(context.Background())
 
 	var handlerErr error
-	err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+	err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
 		req := httptest.NewRequest(http.MethodPost, "/-/open-file/upload-from-url-cmd", strings.NewReader(""))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
@@ -197,7 +197,7 @@ func TestUploadFromURLCmdAllowsLocalhostURLInDevMode(t *testing.T) {
 			OnlyX(context.Background())
 
 		var location string
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
 			data := url.Values{}
 			data.Set("url", testServer.URL+"/private.txt")
 

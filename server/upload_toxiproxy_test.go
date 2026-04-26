@@ -267,7 +267,7 @@ func TestUploadFilesCmdFailsWhenS3Unavailable(t *testing.T) {
 			OnlyX(context.Background())
 
 		var handlerErr error
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
 			req := newSharedUploadRequest(t, map[string]string{
 				"first.txt": "hello",
 			})

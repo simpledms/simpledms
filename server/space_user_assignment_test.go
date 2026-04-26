@@ -15,7 +15,6 @@ import (
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
@@ -31,7 +30,7 @@ func TestSpaceUser_AssignUserToSpaceCmd_RejectsDuplicateAssignment(t *testing.T)
 	tenantDB := initTenantDB(t, harness, tenantx)
 
 	var handlerErr error
-	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 		memberUser := ensureTenantUserForAccount(t, tenantCtx, memberAccount, tenantrole.User)
 
 		spaceName := "Manage Users Duplicate Space"
@@ -74,7 +73,7 @@ func TestSpaceUser_UnassignUserFromSpaceCmd_RejectsSelfUnassignment(t *testing.T
 	tenantDB := initTenantDB(t, harness, tenantx)
 
 	var handlerErr error
-	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 		spaceName := "Manage Users Self Unassign Space"
 		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -119,7 +118,7 @@ func TestSpaceUser_AssignUserToSpaceCmd_RequiresOwnerRole(t *testing.T) {
 	var spacePublicID string
 	var candidatePublicID string
 
-	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 		memberUser := ensureTenantUserForAccount(t, tenantCtx, memberAccount, tenantrole.User)
 		candidateUser := ensureTenantUserForAccount(t, tenantCtx, candidateAccount, tenantrole.User)
 
@@ -147,7 +146,7 @@ func TestSpaceUser_AssignUserToSpaceCmd_RequiresOwnerRole(t *testing.T) {
 	}
 
 	var handlerErr error
-	err = withTenantContext(t, harness, memberAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+	err = withTenantContext(t, harness, memberAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 		spacex := tenantCtx.TTx.Space.Query().Where(space.PublicID(entx.NewCIText(spacePublicID))).OnlyX(tenantCtx)
 		spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
 
@@ -224,7 +223,7 @@ func runUnassignUserFromSpaceCmd(
 
 func ensureTenantUserForAccount(
 	t testing.TB,
-	tenantCtx *ctxx2.TenantContext,
+	tenantCtx *ctxx.AppContext,
 	accountx *entmain.Account,
 	role tenantrole.TenantRole,
 ) *enttenant.User {

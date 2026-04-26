@@ -9,12 +9,11 @@ import (
 	"github.com/marcobeierer/go-core/db/entx"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 
+	ctxx2 "github.com/marcobeierer/go-core/ctxx"
 	"github.com/marcobeierer/go-core/model/common/country"
 	"github.com/marcobeierer/go-core/model/common/plan"
 	"github.com/marcobeierer/go-core/model/common/tenantrole"
 	wx "github.com/marcobeierer/go-core/ui/widget"
-	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 )
 
 func TestMainMenuShowsOnlySetupEntriesWhenPasskeyEnrollmentRequired(t *testing.T) {
@@ -65,7 +64,7 @@ func TestMainMenuShowsOnlySetupEntriesWhenPasskeyEnrollmentRequired(t *testing.T
 		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
-	mainCtx := ctxx.NewMainContext(visitorCtx, accountInTx, harness.i18n, harness.mainDB, harness.tenantDBs, true)
+	mainCtx := ctxx2.NewMainContext(visitorCtx, accountInTx, harness.i18n, harness.mainDB, true)
 
 	mainMenu := partial2.NewMainMenu(mainCtx, harness.infra)
 	menu, ok := mainMenu.Children.(*wx.Menu)

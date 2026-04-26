@@ -51,7 +51,7 @@ func TestSpaceCreatePermissions(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			spaceName := fmt.Sprintf("Create Space %s", tc.name)
 
-			err := withTenantContext(t, harness, tc.accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+			err := withTenantContext(t, harness, tc.accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 				form := url.Values{}
 				form.Set("Name", spaceName)
 				form.Set("Description", "Test description")
@@ -124,7 +124,7 @@ func TestSpaceDeletePermissions(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			spaceID, spaceEntityID := createSpaceForDelete(t, harness, tenantx, tenantDB, ownerAccount, tc.name)
 
-			err := withTenantContext(t, harness, tc.accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+			err := withTenantContext(t, harness, tc.accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 				form := url.Values{}
 				form.Set("SpaceID", spaceID)
 

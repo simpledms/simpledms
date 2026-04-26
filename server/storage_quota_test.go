@@ -12,6 +12,7 @@ import (
 	"github.com/marcobeierer/go-core/db/entmain/account"
 	"github.com/marcobeierer/go-core/db/entx"
 
+	ctxx2 "github.com/marcobeierer/go-core/ctxx"
 	"github.com/marcobeierer/go-core/model/common/country"
 	"github.com/marcobeierer/go-core/model/common/language"
 	"github.com/marcobeierer/go-core/model/common/plan"
@@ -19,7 +20,6 @@ import (
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
@@ -54,7 +54,7 @@ func TestUploadFileCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 				var rootDirID int64
 				var spaceID int64
 
-				err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(mainTx *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+				err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(mainTx *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 					mainTx.Tenant.UpdateOneID(tenantCtx.Tenant.ID).
 						SetPlan(tt.plan).
 						ExecX(tenantCtx)
@@ -141,7 +141,7 @@ func TestUploadFileCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 					)
 				}
 
-				err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+				err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 					spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
 					spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
 
@@ -175,7 +175,7 @@ func TestUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(t *testing.T
 		var rootDirID int64
 		var spaceID int64
 
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(mainTx *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(mainTx *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 			mainTx.Tenant.UpdateOneID(tenantCtx.Tenant.ID).
 				SetPlan(plan.Pro).
 				ExecX(tenantCtx)
@@ -262,7 +262,7 @@ func TestUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(t *testing.T
 			t.Fatalf("expected status %d, got %d", http.StatusRequestEntityTooLarge, httpErr.StatusCode())
 		}
 
-		err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+		err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 			spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
 			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
 
@@ -295,7 +295,7 @@ func TestUploadFileCmdSkipsTenantStorageLimitWhenSaaSDisabled(t *testing.T) {
 		var rootDirID int64
 		var spaceID int64
 
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 			spaceName := "Quota Bypass Space"
 			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -364,7 +364,7 @@ func TestUploadFileCmdSkipsTenantStorageLimitWhenSaaSDisabled(t *testing.T) {
 			t.Fatalf("expected upload success in non-saas mode, got %v", handlerErr)
 		}
 
-		err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+		err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 			spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
 			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
 

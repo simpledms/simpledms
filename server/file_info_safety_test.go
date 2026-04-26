@@ -18,7 +18,6 @@ import (
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	browseaction "github.com/simpledms/simpledms/action/browse"
 	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
@@ -33,7 +32,7 @@ func TestFileSystemMakeDirAllIfNotExists_IdempotentAndFileCollision(t *testing.T
 	tenantDB := initTenantDB(t, harness, tenantx)
 	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 		createSpaceViaCmd(t, harness.actions, tenantCtx, "FileInfo Safety Mkdir")
 
 		spacex := tenantCtx.TTx.Space.Query().Where(space.Name("FileInfo Safety Mkdir")).OnlyX(tenantCtx)
@@ -102,7 +101,7 @@ func TestFileSystemMoveRejectsMovingDirectoryIntoDescendant(t *testing.T) {
 	tenantDB := initTenantDB(t, harness, tenantx)
 	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 		createSpaceViaCmd(t, harness.actions, tenantCtx, "FileInfo Safety Move")
 
 		spacex := tenantCtx.TTx.Space.Query().Where(space.Name("FileInfo Safety Move")).OnlyX(tenantCtx)
@@ -150,7 +149,7 @@ func TestBrowseListDirPartialRecursiveSearchIsScopedToCurrentDirectory(t *testin
 	tenantDB := initTenantDB(t, harness, tenantx)
 	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 		createSpaceViaCmd(t, harness.actions, tenantCtx, "FileInfo Safety Browse Recursive")
 
 		spacex := tenantCtx.TTx.Space.Query().Where(space.Name("FileInfo Safety Browse Recursive")).OnlyX(tenantCtx)
@@ -218,7 +217,7 @@ func TestBrowseListDirPartialWidgetBuildsFolderBreadcrumbs(t *testing.T) {
 	var spaceID int64
 	var dirBetaPublicID string
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
 		createSpaceViaCmd(t, harness.actions, tenantCtx, "FileInfo Safety Breadcrumbs")
 
 		spacex := tenantCtx.TTx.Space.Query().Where(space.Name("FileInfo Safety Breadcrumbs")).OnlyX(tenantCtx)

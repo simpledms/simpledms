@@ -31,7 +31,7 @@ func TestUploadFilesCmdCreatesTemporaryFilesAndRedirects(t *testing.T) {
 			OnlyX(context.Background())
 
 		var location string
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
 			req := newSharedUploadRequest(t, map[string]string{
 				"first.txt":  "hello",
 				"second.txt": "world",
@@ -89,7 +89,7 @@ func TestUploadFilesCmdRejectsNonMultipartRequests(t *testing.T) {
 			OnlyX(context.Background())
 
 		var handlerErr error
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
 			req := httptest.NewRequest(http.MethodPost, "/-/open-file/upload-files-cmd", strings.NewReader("plain"))
 			req.Header.Set("Content-Type", "text/plain")
 

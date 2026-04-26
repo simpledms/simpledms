@@ -6,8 +6,8 @@ import (
 
 	"github.com/marcobeierer/go-core/db/entmain"
 
+	ctxx2 "github.com/marcobeierer/go-core/ctxx"
 	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
 )
@@ -18,7 +18,7 @@ func withTenantContext(
 	accountx *entmain.Account,
 	tenantx *entmain.Tenant,
 	tenantDB *sqlx.TenantDB,
-	fn func(mainTx *entmain.Tx, tenantTx *enttenant.Tx, tenantCtx *ctxx2.TenantContext) error,
+	fn func(mainTx *entmain.Tx, tenantTx *enttenant.Tx, tenantCtx *ctxx.AppContext) error,
 ) error {
 	t.Helper()
 
@@ -51,7 +51,7 @@ func withMainContext(
 	t *testing.T,
 	harness *actionTestHarness,
 	accountx *entmain.Account,
-	fn func(mainTx *entmain.Tx, mainCtx *ctxx.MainContext) error,
+	fn func(mainTx *entmain.Tx, mainCtx ctxx.Context) error,
 ) error {
 	t.Helper()
 
@@ -78,7 +78,8 @@ func withMainContext(
 		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
-	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs, false)
+	mainCtxCore := ctxx2.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, false)
+	mainCtx := ctxx.WrapContext(mainCtxCore)
 
 	if err := fn(mainTx, mainCtx); err != nil {
 		return err
