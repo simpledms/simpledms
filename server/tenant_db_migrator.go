@@ -12,6 +12,7 @@ import (
 	migratex "github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 
+	tenantmodel "github.com/marcobeierer/go-core/model/tenant"
 	"github.com/simpledms/simpledms/db/enttenant/migrate"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/sqlx"
@@ -100,6 +101,37 @@ func (qq *tenantDBMigrator) execute(tenantDB *sqlx.TenantDB) error {
 	}
 
 	return nil
+}
+
+func (qq *tenantDBMigrator) initialize(config tenantmodel.TenantDBInitConfig) (tenantmodel.TenantDB, error) {
+	ctx := context.Background()
+	tenantDB := openSimpleDMSTenantDBFromConfig(config.OpenConfig)
+	simpleDMSTenantDB, err := asSimpleDMSTenantDB(tenantDB)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	if err := qq.execute(simpleDMSTenantDB); err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	for _, account := range config.Accounts {
+		_, err := simpleDMSTenantDB.ReadWriteConn.User.Create().
+			SetAccountID(account.AccountID).
+			SetRole(account.Role).
+			SetEmail(account.Email).
+			SetFirstName(account.FirstName).
+			SetLastName(account.LastName).
+			Save(ctx)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+	}
+
+	return tenantDB, nil
 }
 
 func (qq *tenantDBMigrator) migrateTenant(tenantDB *sqlx.TenantDB) error {

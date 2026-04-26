@@ -125,7 +125,7 @@ func dbMigrationsTenantDBs(mainDB *sqlx.MainDB, isDevMode bool, metaPath string)
 
 	for _, tenant := range tenants {
 		tenantm := tenant2.NewTenant(tenant)
-		tenantClient, err := tenantm.OpenDB(isDevMode, metaPath)
+		tenantClient, err := openSimpleDMSTenantDB(tenantm, isDevMode, metaPath)
 		if err != nil {
 			log.Println(err)
 			// TODO continue or fail?

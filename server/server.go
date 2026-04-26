@@ -922,9 +922,21 @@ func (qq *Server) startScheduler(
 
 	coreScheduler := corescheduler.NewScheduler(
 		mainDB,
-		tenantDBs,
+		func(tenantID int64, tenantDB tenant2.TenantDB) error {
+			simpleDMSTenantDB, err := asSimpleDMSTenantDB(tenantDB)
+			if err != nil {
+				return err
+			}
+
+			tenantDBs.Store(tenantID, simpleDMSTenantDB)
+			return nil
+		},
 	)
-	coreScheduler.Run(qq.devMode, qq.metaPath, tenantDBMigrator.execute)
+	coreScheduler.Run(
+		qq.devMode,
+		qq.metaPath,
+		tenantDBMigrator.initialize,
+	)
 
 	scheduler := simpledmsscheduler.NewScheduler(
 		infra,

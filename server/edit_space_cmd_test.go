@@ -170,9 +170,17 @@ func initTenantDB(t testing.TB, harness *actionTestHarness, tenantx *entmain.Ten
 
 	tenantm := tenant2.NewTenant(tenantx)
 	tenantDBMigrator := newTenantDBMigrator(true, migrationsTenantFS)
-	tenantDB, err := tenantm.Init(true, harness.metaPath, tenantDBMigrator.execute)
+	tenantDBx, err := tenantm.Init(
+		true,
+		harness.metaPath,
+		tenantDBMigrator.initialize,
+	)
 	if err != nil {
 		t.Fatalf("init tenant db: %v", err)
+	}
+	tenantDB, err := asSimpleDMSTenantDB(tenantDBx)
+	if err != nil {
+		t.Fatalf("tenant db type: %v", err)
 	}
 	harness.tenantDBs.Store(tenantx.ID, tenantDB)
 

@@ -154,9 +154,24 @@ func resolveTenant(mainDB *sqlx2.MainDB, tenantPublicID string) *entmain.Tenant 
 }
 
 func openTenantDB(tenantx *entmain.Tenant, metaPath string) *sqlx.TenantDB {
-	tenantDB, err := tenantm.NewTenant(tenantx).OpenDB(false, metaPath)
+	tenantDBx, err := tenantm.NewTenant(tenantx).OpenDB(
+		false,
+		metaPath,
+		func(config tenantm.TenantDBOpenConfig) (tenantm.TenantDB, error) {
+			tenantDB := sqlx.NewTenantDB(config.ReadOnlyDataSourceURL, config.ReadWriteDataSourceURL)
+			if config.DevMode {
+				tenantDB.Debug()
+			}
+
+			return tenantDB, nil
+		},
+	)
 	if err != nil {
 		log.Fatalln(err)
+	}
+	tenantDB, ok := tenantDBx.(*sqlx.TenantDB)
+	if !ok {
+		log.Fatalf("unexpected tenant db type %T", tenantDBx)
 	}
 
 	return tenantDB

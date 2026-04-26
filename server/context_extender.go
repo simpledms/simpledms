@@ -50,7 +50,7 @@ func (qq *ContextExtender) ExtendContext(
 		tenantm := tenantmodel.NewTenant(input.Tenant)
 
 		var err error
-		tenantClient, err = tenantm.OpenDB(qq.devMode, qq.metaPath)
+		tenantClient, err = openSimpleDMSTenantDB(tenantm, qq.devMode, qq.metaPath)
 		if err != nil {
 			log.Println(err)
 			return input.CurrentCtx, nil, err
