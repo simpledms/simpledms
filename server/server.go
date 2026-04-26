@@ -303,6 +303,7 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 
 	rawSystemConfig, systemConfig := qq.loadRuntimeSystemConfig(ctx, mainDB)
 	tenantDBs := dbMigrationsTenantDBs(mainDB, qq.devMode, qq.metaPath)
+	tenantDBMigrator := newTenantDBMigrator(qq.devMode, qq.migrationsTenantFS)
 
 	infra, minioClient := qq.newInfra(renderer, systemConfig)
 	router := server2.NewRouter(mainDB, infra, i18nx)
@@ -352,8 +353,8 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		})
 	*/
 
-	qq.migrateTenantDatabases(ctx, mainDB, tenantDBs)
-	qq.startScheduler(infra, mainDB, tenantDBs, minioClient, systemConfig, rawSystemConfig)
+	qq.migrateTenantDatabases(ctx, mainDB, tenantDBs, tenantDBMigrator)
+	qq.startScheduler(infra, mainDB, tenantDBs, minioClient, systemConfig, rawSystemConfig, tenantDBMigrator)
 
 	handlerChain := handlers.CompressHandler(
 		handlers.RecoveryHandler(
@@ -854,7 +855,12 @@ func (qq *Server) registerSimpleDMSRoutes(
 	RegisterActions(router, actions)
 }
 
-func (qq *Server) migrateTenantDatabases(ctx context.Context, mainDB *sqlx.MainDB, tenantDBs *tenantdbs.TenantDBs) {
+func (qq *Server) migrateTenantDatabases(
+	ctx context.Context,
+	mainDB *sqlx.MainDB,
+	tenantDBs *tenantdbs.TenantDBs,
+	tenantDBMigrator *tenantDBMigrator,
+) {
 	tenantsInMaintenanceMode := mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.MaintenanceModeEnabledAtNotNil()).CountX(ctx)
 	if tenantsInMaintenanceMode > 0 {
 		// TODO abort??
@@ -889,7 +895,7 @@ END WARNING
 			continue
 		}
 
-		err := tenantm.ExecuteDBMigrations(qq.devMode, qq.metaPath, qq.migrationsTenantFS, tenantDB)
+		err := tenantDBMigrator.execute(tenantDB)
 		if err != nil {
 			// TODO make this more robust, maybe continue and deactivate tenant till restart or fixed
 			log.Println(err, "; tenant is in maintenance mode now, must be fixed manually")
@@ -907,6 +913,7 @@ func (qq *Server) startScheduler(
 	minioClient *minio.Client,
 	systemConfig *systemconfigmodel.SystemConfig,
 	rawSystemConfig *entmain.SystemConfig,
+	tenantDBMigrator *tenantDBMigrator,
 ) {
 	var tikaClientNilable *tika.Client
 	if rawSystemConfig.OcrTikaURL != "" {
@@ -917,7 +924,7 @@ func (qq *Server) startScheduler(
 		mainDB,
 		tenantDBs,
 	)
-	coreScheduler.Run(qq.devMode, qq.metaPath, qq.migrationsTenantFS)
+	coreScheduler.Run(qq.devMode, qq.metaPath, tenantDBMigrator.execute)
 
 	scheduler := simpledmsscheduler.NewScheduler(
 		infra,

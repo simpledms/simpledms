@@ -15,15 +15,16 @@ import (
 	"github.com/marcobeierer/go-core/db/entmain/tenantaccountassignment"
 	"github.com/marcobeierer/go-core/db/entx"
 
-	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/model/common/country"
 	"github.com/marcobeierer/go-core/model/common/language"
 	"github.com/marcobeierer/go-core/model/common/tenantrole"
 	signupmodel "github.com/marcobeierer/go-core/model/signup"
 	tenant2 "github.com/marcobeierer/go-core/model/tenant"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+
 	"github.com/simpledms/simpledms/action"
+	"github.com/simpledms/simpledms/ctxx"
+	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/migrate"
@@ -168,7 +169,8 @@ func initTenantDB(t testing.TB, harness *actionTestHarness, tenantx *entmain.Ten
 	}
 
 	tenantm := tenant2.NewTenant(tenantx)
-	tenantDB, err := tenantm.Init(true, harness.metaPath, migrationsTenantFS)
+	tenantDBMigrator := newTenantDBMigrator(true, migrationsTenantFS)
+	tenantDB, err := tenantm.Init(true, harness.metaPath, tenantDBMigrator.execute)
 	if err != nil {
 		t.Fatalf("init tenant db: %v", err)
 	}
