@@ -141,7 +141,7 @@ func (qq *Dir) mkdir(ctx *ctxx.Context, relPath string, perm os.FileMode) error 
 	relPath = filepath.Clean(relPath)
 
 	// check if already exists
-	exists := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(relPath)).ExistX(ctx)
+	exists := ctx.AppCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(relPath)).ExistX(ctx)
 	if exists {
 		// TODO correct
 		return os.ErrExist
@@ -157,7 +157,7 @@ func (qq *Dir) mkdir(ctx *ctxx.Context, relPath string, perm os.FileMode) error 
 	toCreate := strings.TrimPrefix(relPath, parentPath+"/")
 
 	// TODO set modified_at?
-	_ = ctx.TenantCtx().TTx.File.Create().
+	_ = ctx.AppCtx().TTx.File.Create().
 		SetName(toCreate).
 		SetIsDirectory(true).
 		SetIndexedAt(time.Now()). // TODO correct?
@@ -186,7 +186,7 @@ func (qq *Dir) openFile(ctx *ctxx.Context, relPath string, flags int, perm os.Fi
 
 	// check if already exists
 	// TODO panics some times
-	exists := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(relPath)).ExistX(ctx)
+	exists := ctx.AppCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(relPath)).ExistX(ctx)
 	if exists {
 		// FIXME update mod time and size if opened for writing
 		return qq.dir.OpenFile(ctx, relPath, flags, perm)
@@ -198,7 +198,7 @@ func (qq *Dir) openFile(ctx *ctxx.Context, relPath string, flags int, perm os.Fi
 	}
 
 	filename := filepath.Base(relPath)
-	file := ctx.TenantCtx().TTx.File.Create().
+	file := ctx.AppCtx().TTx.File.Create().
 		SetName(filename).
 		SetIsDirectory(false).   // TODO can this also be used for directory creation?
 		SetIndexedAt(time.Now()) // TODO correct?
@@ -219,7 +219,7 @@ func (qq *Dir) openFile(ctx *ctxx.Context, relPath string, flags int, perm os.Fi
 func (qq *Dir) removeAll(ctx *ctxx.Context, relPath string) error {
 	relPath = filepath.Clean(relPath)
 
-	fileInfo, err := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(relPath)).Only(ctx)
+	fileInfo, err := ctx.AppCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(relPath)).Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return os.ErrNotExist
@@ -229,7 +229,7 @@ func (qq *Dir) removeAll(ctx *ctxx.Context, relPath string) error {
 	}
 
 	// FIXME move file to trash // impl in model
-	ctx.TenantCtx().TTx.File.DeleteOneID(fileInfo.FileID).ExecX(ctx)
+	ctx.AppCtx().TTx.File.DeleteOneID(fileInfo.FileID).ExecX(ctx)
 
 	return qq.dir.RemoveAll(ctx, relPath)
 }
@@ -244,8 +244,8 @@ func (qq *Dir) rename(ctx *ctxx.Context, oldRelPath, newRelPath string) error {
 	newParentDir := filepath.Dir(newRelPath)
 	newName := filepath.Base(newRelPath)
 
-	oldFileInfo := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(oldRelPath)).OnlyX(ctx)
-	oldFile := ctx.TenantCtx().TTx.File.GetX(ctx, oldFileInfo.FileID)
+	oldFileInfo := ctx.AppCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(oldRelPath)).OnlyX(ctx)
+	oldFile := ctx.AppCtx().TTx.File.GetX(ctx, oldFileInfo.FileID)
 
 	if newParentDir == oldParentDir { // change name
 		// TODO set modified date?
@@ -255,21 +255,21 @@ func (qq *Dir) rename(ctx *ctxx.Context, oldRelPath, newRelPath string) error {
 	}
 
 	// handle overwrite
-	nullableFileDestInfo, err := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(newRelPath)).Only(ctx)
+	nullableFileDestInfo, err := ctx.AppCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(newRelPath)).Only(ctx)
 	if err != nil && !ent.IsNotFound(err) { // isNotFound is normal path
 		log.Println(err)
 		return os.ErrInvalid // TODO okay?
 	}
 	if nullableFileDestInfo != nil { // found
 		// FIXME move file to trash // impl in model
-		ctx.TenantCtx().TTx.File.DeleteOneID(nullableFileDestInfo.FileID).ExecX(ctx)
+		ctx.AppCtx().TTx.File.DeleteOneID(nullableFileDestInfo.FileID).ExecX(ctx)
 
 		// fileDest := qq.infra.DB().File.GetX(ctx, nullableFileDestInfo.FileID)
 		// fileDest.Update().SetDeletedAt(time.Now()).SaveX(ctx)
 	}
 
 	// TODO is it save to assume newParent is a directory? probably because we use filepath.Dir()
-	newParent := ctx.TenantCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(newParentDir)).OnlyX(ctx)
+	newParent := ctx.AppCtx().TTx.FileInfo.Query().Where(fileinfo.FullPath(newParentDir)).OnlyX(ctx)
 	oldFile.Update().SetName(newName).SetParentID(newParent.FileID).SaveX(ctx)
 
 	return qq.dir.Rename(ctx, oldRelPath, newRelPath)

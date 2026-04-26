@@ -3,12 +3,12 @@ package property
 import (
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/uix/events"
 	"github.com/marcobeierer/go-core/ui/util"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/event"
 )
 
@@ -54,7 +54,7 @@ func (qq *PropertyListPartial) Handler(
 }
 
 func (qq *PropertyListPartial) Widget(ctx ctxx.Context, data *PropertyListPartialData) *widget.List {
-	properties := ctx.TenantCtx().TTx.Property.Query().AllX(ctx)
+	properties := ctx.AppCtx().TTx.Property.Query().AllX(ctx)
 
 	var items []*widget.ListItem
 

@@ -14,8 +14,6 @@ import (
 	"github.com/marcobeierer/go-core/db/entmain/tenantaccountassignment"
 
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
-	ctxx2 "github.com/simpledms/simpledms/ctxx"
 	account2 "github.com/marcobeierer/go-core/model/account"
 	"github.com/marcobeierer/go-core/model/common/mainrole"
 	"github.com/marcobeierer/go-core/model/tenant"
@@ -27,6 +25,7 @@ import (
 	actionx2 "github.com/marcobeierer/go-core/util/actionx"
 	"github.com/marcobeierer/go-core/util/fileutil"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
@@ -118,7 +117,7 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 		})
 	}
 
-	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.AppCtx().ReadOnlyAccountSpacesByTenant()
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -429,7 +428,7 @@ func (qq *DashboardCardsPartial) nilableQuotaUsageCard(ctx ctxx.Context, tenantx
 }
 
 func (qq *DashboardCardsPartial) tenantStorageUsageLabel(ctx ctxx.Context, tenantx *entmain.Tenant) string {
-	tenantDB, ok := ctx.MainCtx().UnsafeTenantDB(tenantx.ID)
+	tenantDB, ok := ctx.AppCtx().UnsafeTenantDB(tenantx.ID)
 	if !ok {
 		log.Println("tenant db not found, tenant id was", tenantx.ID)
 		return widget.T("Unavailable").String(ctx)
@@ -441,7 +440,7 @@ func (qq *DashboardCardsPartial) tenantStorageUsageLabel(ctx ctxx.Context, tenan
 		return widget.T("Unavailable").String(ctx)
 	}
 
-	tenantCtx := ctxx2.NewTenantContext(ctx.MainCtx(), tenantTx, tenantx, true)
+	tenantCtx := ctxx.NewAppContext(ctx.TenantCtx(), tenantTx, true, qq.uns)
 	usedBytes, limitBytes, err := qq.infra.FileSystem().TenantUsageBytes(tenantCtx)
 	if err != nil {
 		log.Println("failed to query storage usage for tenant", tenantx.ID, err)
@@ -464,7 +463,7 @@ func (qq *DashboardCardsPartial) tenantStorageUsageLabel(ctx ctxx.Context, tenan
 
 func (qq *DashboardCardsPartial) spaceCard(ctx ctxx.Context, spacex *enttenant.Space, tenant *entmain.Tenant) *widget.Card {
 	var contextMenu *widget.Menu
-	// if ctx.TenantCtx().User.Role == tenantrole.Owner {
+	// if ctx.AppCtx().User.Role == tenantrole.Owner {
 	contextMenu = NewSpaceContextMenuWidget(qq.actions).Widget(ctx, tenant.PublicID.String(), spacex.PublicID.String())
 	// }
 

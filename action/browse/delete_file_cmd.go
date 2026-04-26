@@ -9,11 +9,11 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	wx "github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/ui/uix/event"
 )
@@ -56,7 +56,7 @@ func (qq *DeleteFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, 
 	}
 
 	filex := ctx.SpaceCtx().Space.QueryFiles().WithChildren().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
-	// fileInfo := ctx.TenantCtx().TTx.FileInfoPartial.Query().Where(fileinfo.PublicFileID(data.FileID)).OnlyX(ctx)
+	// fileInfo := ctx.AppCtx().TTx.FileInfoPartial.Query().Where(fileinfo.PublicFileID(data.FileID)).OnlyX(ctx)
 
 	// only delete empry dirs, otherwise we have to iterate recursively over all files... also risky for user
 	// and harder to undo

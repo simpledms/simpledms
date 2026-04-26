@@ -6,13 +6,13 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/uix/events"
 	"github.com/marcobeierer/go-core/ui/util"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
@@ -60,7 +60,7 @@ func (qq *FilePreviewPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Requ
 	state := autil.StateX[FilePreviewPartialState](rw, req)
 	rw.Header().Set("HX-Push-Url", route2.BrowseFileWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, data.CurrentDirID, data.FileID))
 
-	// filex := ctx.TenantCtx().TTx.File.GetX(ctx, data.FileID)
+	// filex := ctx.AppCtx().TTx.File.GetX(ctx, data.FileID)
 	dirx := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 

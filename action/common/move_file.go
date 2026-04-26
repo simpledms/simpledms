@@ -15,13 +15,13 @@ import (
 
 	common2 "github.com/marcobeierer/go-core/action/common"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/util"
 	"github.com/marcobeierer/go-core/ui/widget"
 	actionx2 "github.com/marcobeierer/go-core/util/actionx"
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
@@ -277,7 +277,7 @@ func (qq *MoveFile) formFilesListItems(
 			QueryChildren().
 			Where(file.IsDirectory(true))
 	} else {
-		childDirsQuery = ctx.TenantCtx().TTx.File.Query().
+		childDirsQuery = ctx.AppCtx().TTx.File.Query().
 			Where(
 				file.NameContains(searchQuery),
 				file.IsDirectory(true),

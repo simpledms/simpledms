@@ -6,11 +6,11 @@ import (
 
 	acommon "github.com/marcobeierer/go-core/action/common"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/model/common/tenantrole"
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/widget"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 )
 
 type SpacesPageData struct {
@@ -45,7 +45,7 @@ func (qq *SpacesPage) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx
 func (qq *SpacesPage) Widget(ctx ctxx.Context, state *SpacesPageState) renderable.Renderable {
 	fabs := []*widget.FloatingActionButton{}
 
-	if ctx.TenantCtx().User.Role == tenantrole.Owner {
+	if ctx.AppCtx().User.Role == tenantrole.Owner {
 		fabs = append(fabs,
 			&widget.FloatingActionButton{
 				Icon: "add",

@@ -5,12 +5,12 @@ package documenttype
 import (
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/uix/events"
 	"github.com/marcobeierer/go-core/ui/util"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/model/tenant/common/attributetype"
 	"github.com/simpledms/simpledms/ui/uix/event"
@@ -58,7 +58,7 @@ func (qq *AttributesPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Reque
 }
 
 func (qq *AttributesPartial) Widget(ctx ctxx.Context, data *AttributesPartialData) *widget.List {
-	attributes := ctx.TenantCtx().TTx.Attribute.
+	attributes := ctx.AppCtx().TTx.Attribute.
 		Query().
 		WithTag().
 		WithProperty().

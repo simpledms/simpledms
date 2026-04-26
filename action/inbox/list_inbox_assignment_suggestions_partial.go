@@ -9,8 +9,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/widget"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 )
@@ -65,7 +65,7 @@ var regexpLowerAlphaNum = regexp.MustCompile("[^a-z0-9àèìòùáéíóúýâê
 
 func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID int64) *widget.List {
 	// TODO
-	fileToAssign := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
+	fileToAssign := ctx.AppCtx().TTx.File.GetX(ctx, fileID)
 
 	filename := filepath.Clean(fileToAssign.Name)
 	// remove file extension
@@ -102,7 +102,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 		problem with this approach is that I could not figure out quickly how to access `rank`
 		and matching against database also seemed not to work; also seemed noticabily slow...
 		maybe because file_searches.file_id is not indexed...
-		files := ctx.TenantCtx().TTx.File.Query().
+		files := ctx.AppCtx().TTx.File.Query().
 			Where(
 				file.IsDirectory(true),
 				func(qs *sql.Selector) {
@@ -125,7 +125,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 	/*
 		fileIDs := []int64{}
 
-		res := ctx.TenantCtx().TTx.FileSearch.Query().
+		res := ctx.AppCtx().TTx.FileSearch.Query().
 			Select(filesearch.FieldFileID).
 			Where(
 				filesearch.IsDirectory(true),
@@ -138,7 +138,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 
 	*/
 
-	destDirs := ctx.TenantCtx().TTx.File.Query().
+	destDirs := ctx.AppCtx().TTx.File.Query().
 		WithChildren().
 		Where(
 			file.IsDirectory(true),

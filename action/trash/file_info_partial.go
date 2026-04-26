@@ -3,11 +3,11 @@ package trash
 import (
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/marcobeierer/go-core/util/timex"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 )
@@ -129,7 +129,7 @@ func (qq *FileInfoPartial) parentName(ctx ctxx.Context, parentID int64) string {
 	if parentID == 0 {
 		return ""
 	}
-	parent, err := ctx.TenantCtx().TTx.File.Query().
+	parent, err := ctx.AppCtx().TTx.File.Query().
 		Where(file.ID(parentID), file.IsDirectory(true)).
 		Only(ctx)
 	if err != nil || parent == nil {

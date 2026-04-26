@@ -6,12 +6,12 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/util"
 	"github.com/marcobeierer/go-core/ui/widget"
 	actionx2 "github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/route"
@@ -83,7 +83,7 @@ func (qq *ListFilterTagsPartial) Widget(
 	// TODO is this faster than old solution?
 	// TODO can be simplified when edges work on resolvedTagAssignment
 	fileInfoView := sql.Table(fileinfo.Table)
-	tagsInScope := ctx.TenantCtx().TTx.Tag.Query().
+	tagsInScope := ctx.AppCtx().TTx.Tag.Query().
 		Where(func(qss *sql.Selector) {
 			resolvedTagAssignmentView := sql.Table(resolvedtagassignment.Table)
 			qss.Where(

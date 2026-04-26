@@ -1,10 +1,10 @@
 package managetenantusers
 
 import (
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/model/common/tenantrole"
 	"github.com/marcobeierer/go-core/ui/util"
 	"github.com/marcobeierer/go-core/ui/widget"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 )
 
@@ -23,7 +23,7 @@ func (qq *UserContextMenuWidget) Widget(
 	userx *enttenant.User,
 	isOwningTenantAssignment bool,
 ) *widget.Menu {
-	if ctx.TenantCtx().User.Role != tenantrole.Owner {
+	if ctx.AppCtx().User.Role != tenantrole.Owner {
 		return nil
 	}
 	if userx.AccountID == ctx.MainCtx().Account.ID {

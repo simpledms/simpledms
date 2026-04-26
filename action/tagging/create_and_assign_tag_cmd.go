@@ -5,10 +5,10 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
@@ -87,7 +87,7 @@ func (qq *CreateAndAssignTagCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.R
 	}
 
 	if data.GroupTagID > 0 {
-		parentTag := ctx.TenantCtx().TTx.Tag.
+		parentTag := ctx.AppCtx().TTx.Tag.
 			Query().
 			Where(tag.ID(data.GroupTagID)).
 			WithChildren().

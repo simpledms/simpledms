@@ -5,15 +5,15 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/model/common/language"
 	"github.com/marcobeierer/go-core/model/common/tenantrole"
-	tenantusermodel "github.com/marcobeierer/go-core/model/tenantuser"
 	"github.com/marcobeierer/go-core/ui/uix/events"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
+	tenantusermodel "github.com/simpledms/simpledms/model/tenant/tenantuser"
 )
 
 type CreateUserCmdData struct {
@@ -65,7 +65,7 @@ func (qq *CreateUserCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, 
 	if !ctx.IsTenantCtx() {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "You are not allowed to create users. No tenant selected.")
 	}
-	if ctx.TenantCtx().User.Role != tenantrole.Owner {
+	if ctx.AppCtx().User.Role != tenantrole.Owner {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "You are not allowed to create users because you are not the owner.")
 	}
 

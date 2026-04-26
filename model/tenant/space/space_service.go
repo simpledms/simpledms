@@ -18,7 +18,7 @@ func Create(
 ) (*enttenant.Space, error) {
 	isDefault := false
 
-	spacex, err := ctx.TenantCtx().TTx.Space.Create().
+	spacex, err := ctx.AppCtx().TTx.Space.Create().
 		SetName(name).
 		SetDescription(description).
 		SetIsFolderMode(true).
@@ -27,13 +27,13 @@ func Create(
 		return nil, err
 	}
 
-	spaceCtx := ctxx.NewSpaceContext(ctx.TenantCtx(), spacex)
+	spaceCtx := ctxx.NewSpaceContext(ctx.AppCtx(), spacex)
 
 	if addMeAsSpaceOwner {
-		_, err = ctx.TenantCtx().TTx.SpaceUserAssignment.
+		_, err = ctx.AppCtx().TTx.SpaceUserAssignment.
 			Create().
 			SetSpaceID(spacex.ID).
-			SetUserID(ctx.TenantCtx().User.ID).
+			SetUserID(ctx.AppCtx().User.ID).
 			SetRole(spacerole.Owner).
 			SetIsDefault(isDefault).
 			Save(spaceCtx)
@@ -42,7 +42,7 @@ func Create(
 		}
 	}
 
-	_, err = ctx.TenantCtx().TTx.File.Create().
+	_, err = ctx.AppCtx().TTx.File.Create().
 		SetName(name).
 		SetIsDirectory(true).
 		SetIndexedAt(time.Now()).

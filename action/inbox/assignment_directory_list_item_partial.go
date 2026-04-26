@@ -6,10 +6,10 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 )
 
@@ -48,8 +48,8 @@ func (qq *AssignmentDirectoryListItemPartial) Handler(rw httpx2.ResponseWriter, 
 		return err
 	}
 
-	destDir := ctx.TenantCtx().TTx.File.GetX(ctx, data.DestDirID)
-	filex := ctx.TenantCtx().TTx.File.GetX(ctx, data.FileID)
+	destDir := ctx.AppCtx().TTx.File.GetX(ctx, data.DestDirID)
+	filex := ctx.AppCtx().TTx.File.GetX(ctx, data.FileID)
 
 	return qq.infra.Renderer().Render(
 		rw,

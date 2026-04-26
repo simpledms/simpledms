@@ -7,11 +7,11 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/ui/uix/event"
@@ -74,7 +74,7 @@ func (qq *RestoreFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request,
 
 	parentExists := false
 	if filex.ParentID != 0 {
-		parentExists = ctx.TenantCtx().TTx.File.Query().
+		parentExists = ctx.AppCtx().TTx.File.Query().
 			Where(
 				file.ID(filex.ParentID),
 				file.SpaceID(ctx.SpaceCtx().Space.ID),

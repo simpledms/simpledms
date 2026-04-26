@@ -8,8 +8,8 @@ import (
 	"github.com/marcobeierer/go-core/db/entx"
 
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/util/sqlutil"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
@@ -70,7 +70,7 @@ func (qq *ListDirFileQueryService) Query(
 	}
 
 	// TODO sort by relevance
-	searchResultQuery := ctx.TenantCtx().TTx.File.Query().
+	searchResultQuery := ctx.AppCtx().TTx.File.Query().
 		WithParent().
 		WithChildren(). // necessary to count children
 		Where(func(qs *sql.Selector) {

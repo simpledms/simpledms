@@ -10,11 +10,11 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/util"
 	"github.com/marcobeierer/go-core/ui/widget"
 	actionx2 "github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
@@ -61,7 +61,7 @@ func (qq *EditSubTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Requ
 		return err
 	}
 
-	superTag := ctx.TenantCtx().TTx.Tag.
+	superTag := ctx.AppCtx().TTx.Tag.
 		Query().
 		Where(tag.ID(data.TagID)).
 		OnlyX(ctx)
@@ -113,7 +113,7 @@ func (qq *EditSubTagsPartial) assignableListItems(
 	ctx ctxx.Context,
 	superTag *enttenant.Tag,
 ) []*widget.ListItem {
-	assignableTags := ctx.TenantCtx().TTx.
+	assignableTags := ctx.AppCtx().TTx.
 		Tag.Query().
 		Where(
 			tag.Not(tag.HasGroup()),
@@ -161,7 +161,7 @@ func (qq *EditSubTagsPartial) isCheckedFn(
 ) func(subTagID int64) bool {
 	// always loads all sub tags, not optimal, but should be acceptable,
 	// because there is just a small number...
-	subTags := ctx.TenantCtx().TTx.
+	subTags := ctx.AppCtx().TTx.
 		Tag.
 		QuerySubTags(superTag).
 		AllX(ctx)

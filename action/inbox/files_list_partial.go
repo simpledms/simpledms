@@ -8,13 +8,13 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/uix/partial"
 	"github.com/marcobeierer/go-core/ui/util"
 	"github.com/marcobeierer/go-core/ui/widget"
 	actionx2 "github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/ui/uix/event"
@@ -252,7 +252,7 @@ func (qq *FilesListPartial) filesList(
 
 // LIMIT must be applied by caller
 func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) *enttenant.FileQuery {
-	searchResultQuery := ctx.TenantCtx().TTx.File.Query().
+	searchResultQuery := ctx.AppCtx().TTx.File.Query().
 		WithParent().
 		WithChildren() // necessary to count children
 	/*Where(func(qs *sql.Selector) {

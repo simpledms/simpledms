@@ -8,12 +8,12 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	acommon "github.com/simpledms/simpledms/action/common"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
@@ -46,9 +46,9 @@ func (qq *MoveFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ct
 		return err
 	}
 
-	// destDir := ctx.TenantCtx().TTx.File.GetX(ctx, data.CurrentDirID)
+	// destDir := ctx.AppCtx().TTx.File.GetX(ctx, data.CurrentDirID)
 	destDir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
-	fileWithParentx := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
+	fileWithParentx := ctx.AppCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
 	fileWithParent := qq.infra.FileRepo.GetXX(fileWithParentx)
 
 	fileWithParent, err = qq.infra.FileSystem().Move(ctx, destDir, fileWithParent, data.Filename, data.NewDirName)

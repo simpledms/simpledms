@@ -17,7 +17,7 @@ func NewEntTagRepository() *EntTagRepository {
 }
 
 func (qq *EntTagRepository) AssignTagToFile(ctx ctxx.Context, fileID int64, tagID int64, spaceID int64) error {
-	_, err := ctx.TenantCtx().TTx.TagAssignment.Create().
+	_, err := ctx.AppCtx().TTx.TagAssignment.Create().
 		SetFileID(fileID).
 		SetTagID(tagID).
 		SetSpaceID(spaceID).
@@ -27,7 +27,7 @@ func (qq *EntTagRepository) AssignTagToFile(ctx ctxx.Context, fileID int64, tagI
 }
 
 func (qq *EntTagRepository) UnassignTagFromFile(ctx ctxx.Context, fileID int64, tagID int64) error {
-	_, err := ctx.TenantCtx().TTx.TagAssignment.Delete().
+	_, err := ctx.AppCtx().TTx.TagAssignment.Delete().
 		Where(tagassignment.FileID(fileID), tagassignment.TagID(tagID)).
 		Exec(ctx)
 
@@ -40,7 +40,7 @@ func (qq *EntTagRepository) UnassignTagFromFileInSpace(
 	tagID int64,
 	spaceID int64,
 ) error {
-	_, err := ctx.TenantCtx().TTx.TagAssignment.Delete().
+	_, err := ctx.AppCtx().TTx.TagAssignment.Delete().
 		Where(
 			tagassignment.FileID(fileID),
 			tagassignment.TagID(tagID),
@@ -52,7 +52,7 @@ func (qq *EntTagRepository) UnassignTagFromFileInSpace(
 }
 
 func (qq *EntTagRepository) SubTagWithChildren(ctx ctxx.Context, subTagID int64) (*enttenant.Tag, error) {
-	return ctx.TenantCtx().TTx.Tag.Query().
+	return ctx.AppCtx().TTx.Tag.Query().
 		WithChildren(func(query *enttenant.TagQuery) {
 			query.Order(tag.ByName())
 			query.Where(tag.TypeNEQ(tagtype.Super))
@@ -68,7 +68,7 @@ func (qq *EntTagRepository) CreateTag(
 	name string,
 	typex tagtype.TagType,
 ) (*enttenant.Tag, error) {
-	tagCreate := ctx.TenantCtx().TTx.Tag.Create().
+	tagCreate := ctx.AppCtx().TTx.Tag.Create().
 		SetName(name).
 		SetType(typex).
 		SetSpaceID(spaceID)
@@ -81,23 +81,23 @@ func (qq *EntTagRepository) CreateTag(
 }
 
 func (qq *EntTagRepository) UpdateTagName(ctx ctxx.Context, tagID int64, name string) (*enttenant.Tag, error) {
-	return ctx.TenantCtx().TTx.Tag.UpdateOneID(tagID).SetName(name).Save(ctx)
+	return ctx.AppCtx().TTx.Tag.UpdateOneID(tagID).SetName(name).Save(ctx)
 }
 
 func (qq *EntTagRepository) DeleteTag(ctx ctxx.Context, tagID int64) error {
-	return ctx.TenantCtx().TTx.Tag.DeleteOneID(tagID).Exec(ctx)
+	return ctx.AppCtx().TTx.Tag.DeleteOneID(tagID).Exec(ctx)
 }
 
 func (qq *EntTagRepository) TagByID(ctx ctxx.Context, tagID int64) (*enttenant.Tag, error) {
-	return ctx.TenantCtx().TTx.Tag.Get(ctx, tagID)
+	return ctx.AppCtx().TTx.Tag.Get(ctx, tagID)
 }
 
 func (qq *EntTagRepository) FileByID(ctx ctxx.Context, fileID int64) (*enttenant.File, error) {
-	return ctx.TenantCtx().TTx.File.Get(ctx, fileID)
+	return ctx.AppCtx().TTx.File.Get(ctx, fileID)
 }
 
 func (qq *EntTagRepository) FileHasTagAssignment(ctx ctxx.Context, fileID int64, tagID int64) (bool, error) {
-	return ctx.TenantCtx().TTx.TagAssignment.Query().
+	return ctx.AppCtx().TTx.TagAssignment.Query().
 		Where(
 			tagassignment.FileID(fileID),
 			tagassignment.TagID(tagID),
@@ -106,31 +106,31 @@ func (qq *EntTagRepository) FileHasTagAssignment(ctx ctxx.Context, fileID int64,
 }
 
 func (qq *EntTagRepository) ClearTagGroup(ctx ctxx.Context, tagID int64) error {
-	_, err := ctx.TenantCtx().TTx.Tag.UpdateOneID(tagID).ClearGroupID().Save(ctx)
+	_, err := ctx.AppCtx().TTx.Tag.UpdateOneID(tagID).ClearGroupID().Save(ctx)
 
 	return err
 }
 
 func (qq *EntTagRepository) SetTagGroup(ctx ctxx.Context, tagID int64, groupTagID int64) error {
-	_, err := ctx.TenantCtx().TTx.Tag.UpdateOneID(tagID).SetGroupID(groupTagID).Save(ctx)
+	_, err := ctx.AppCtx().TTx.Tag.UpdateOneID(tagID).SetGroupID(groupTagID).Save(ctx)
 
 	return err
 }
 
 func (qq *EntTagRepository) AddSubTag(ctx ctxx.Context, superTagID int64, subTagID int64) (*enttenant.Tag, error) {
-	return ctx.TenantCtx().TTx.Tag.
+	return ctx.AppCtx().TTx.Tag.
 		UpdateOneID(superTagID).
 		AddSubTagIDs(subTagID).
 		Save(ctx)
 }
 
 func (qq *EntTagRepository) RemoveSubTag(ctx ctxx.Context, superTagID int64, subTagID int64) (*enttenant.Tag, error) {
-	return ctx.TenantCtx().TTx.Tag.
+	return ctx.AppCtx().TTx.Tag.
 		UpdateOneID(superTagID).
 		RemoveSubTagIDs(subTagID).
 		Save(ctx)
 }
 
 func (qq *EntTagRepository) GroupTags(ctx ctxx.Context) ([]*enttenant.Tag, error) {
-	return ctx.TenantCtx().TTx.Tag.Query().Where(tag.TypeEQ(tagtype.Group)).All(ctx)
+	return ctx.AppCtx().TTx.Tag.Query().Where(tag.TypeEQ(tagtype.Group)).All(ctx)
 }

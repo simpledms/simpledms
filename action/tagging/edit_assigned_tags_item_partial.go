@@ -10,11 +10,11 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/util"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
@@ -57,7 +57,7 @@ func (qq *EditAssignedTagsItemPartial) Handler(rw httpx2.ResponseWriter, req *ht
 		return err
 	}
 
-	tagx := ctx.TenantCtx().TTx.
+	tagx := ctx.AppCtx().TTx.
 		Tag.Query().
 		WithSubTags(func(query *enttenant.TagQuery) {
 			query.Order(tag.ByName())
@@ -82,7 +82,7 @@ func (qq *EditAssignedTagsItemPartial) listItemID(fileID string, tagID int64) st
 func (qq *EditAssignedTagsItemPartial) IsCheckedFn(ctx ctxx.Context, fileID string) func(tagID int64) bool {
 	// always loads all assigned tags, not optimal, but should be acceptable,
 	// because there is just a small number...
-	assignedTags := ctx.TenantCtx().TTx.
+	assignedTags := ctx.AppCtx().TTx.
 		File.Query().
 		Where(file.PublicID(entx.NewCIText(fileID))).
 		QueryTags().

@@ -5,10 +5,10 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
@@ -51,7 +51,7 @@ func (qq *EditSpaceCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, c
 		return err
 	}
 
-	spacex, err := ctx.TenantCtx().TTx.Space.Query().
+	spacex, err := ctx.AppCtx().TTx.Space.Query().
 		Where(space.PublicID(entx.NewCIText(data.SpaceID))).
 		Only(ctx)
 	if err != nil {

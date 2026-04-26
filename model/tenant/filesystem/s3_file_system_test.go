@@ -10,14 +10,15 @@ import (
 	"filippo.io/age"
 	_ "github.com/mattn/go-sqlite3"
 
+	ctxx3 "github.com/marcobeierer/go-core/ctxx"
 	"github.com/marcobeierer/go-core/db/entmain"
 	"github.com/marcobeierer/go-core/db/entmain/enttest"
 	"github.com/marcobeierer/go-core/db/entx"
 	"github.com/marcobeierer/go-core/encryptor"
 
+	"github.com/marcobeierer/go-core/util/e"
 	"github.com/simpledms/simpledms/ctxx"
 	ctxx2 "github.com/simpledms/simpledms/ctxx"
-	"github.com/marcobeierer/go-core/util/e"
 )
 
 func TestS3FileSystemEnsureUploadSizeLimitWithGlobalLimit(t *testing.T) {
@@ -114,7 +115,7 @@ func newS3FileSystemMainContext(t *testing.T, globalLimitMib int64) (*S3FileSyst
 	}
 
 	mainCtx := &ctxx.MainContext{
-		VisitorContext: &ctxx2.VisitorContext{
+		VisitorContext: &ctxx3.VisitorContext{
 			Context: context.Background(),
 			MainTx:  mainTx,
 		},

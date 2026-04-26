@@ -9,7 +9,6 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/uix/events"
 	"github.com/marcobeierer/go-core/ui/util"
@@ -17,6 +16,7 @@ import (
 	actionx2 "github.com/marcobeierer/go-core/util/actionx"
 	"github.com/marcobeierer/go-core/util/e"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
@@ -83,7 +83,7 @@ func (qq *ListAssignedTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2
 }
 
 func (qq *ListAssignedTagsPartial) tags(ctx ctxx.Context, data *ListAssignedTagsPartialData) []*enttenant.Tag {
-	return ctx.TenantCtx().TTx.File.Query().
+	return ctx.AppCtx().TTx.File.Query().
 		Where(file.PublicID(entx.NewCIText(data.FileID))).
 		QueryTags().
 		WithGroup().

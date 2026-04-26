@@ -35,9 +35,9 @@ func (qq *Space) Edit(ctx ctxx.Context, name string, description string) error {
 	}
 	qq.Data = spacex
 
-	spaceCtx := ctxx.NewSpaceContext(ctx.TenantCtx(), spacex)
+	spaceCtx := ctxx.NewSpaceContext(ctx.AppCtx(), spacex)
 
-	err = ctx.TenantCtx().TTx.File.Update().
+	err = ctx.AppCtx().TTx.File.Update().
 		SetName(name).
 		Where(
 			file.SpaceID(spacex.ID),

@@ -13,7 +13,6 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/model/common/fieldtype"
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/uix/events"
@@ -22,6 +21,7 @@ import (
 	actionx2 "github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/marcobeierer/go-core/util/timex"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
@@ -123,7 +123,7 @@ func (qq *ListDirPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request,
 	if hxTarget == "#"+qq.FileListID() {
 		// rw.Header().Set("HX-Replace-Url", route.BrowseWithState(state)(data.CurrentDirID))
 
-		// dir := ctx.TenantCtx().TTx.File.GetX(ctx, data.CurrentDirID)
+		// dir := ctx.AppCtx().TTx.File.GetX(ctx, data.CurrentDirID)
 		dir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
 		return qq.infra.Renderer().Render(
 			rw,
@@ -228,8 +228,8 @@ func (qq *ListDirPartial) Widget(
 	fileID string,
 	selectedFileID string,
 ) *widget.ListDetailLayout {
-	// dir := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
-	dirWithParentx := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(fileID))).OnlyX(ctx)
+	// dir := ctx.AppCtx().TTx.File.GetX(ctx, fileID)
+	dirWithParentx := ctx.AppCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(fileID))).OnlyX(ctx)
 	dirWithParent := qq.infra.FileRepo.GetXX(dirWithParentx)
 
 	if dirWithParent.Data.IsDirectory == false {

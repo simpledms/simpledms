@@ -17,7 +17,6 @@ import (
 	securejoin "github.com/cyphar/filepath-securejoin"
 	"github.com/minio/minio-go/v7"
 
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/db/entmain"
 	entmainschema "github.com/marcobeierer/go-core/db/entmain/schema"
 	"github.com/marcobeierer/go-core/db/entmain/systemconfig"
@@ -29,6 +28,7 @@ import (
 	"github.com/marcobeierer/go-core/util/filenamex"
 	"github.com/marcobeierer/go-core/util/fileutil"
 	"github.com/marcobeierer/go-core/util/recoverx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
@@ -225,7 +225,7 @@ func (qq *S3FileSystem) PrepareFileUpload(
 		return nil, nil, err
 	}
 
-	filex := ctx.TenantCtx().TTx.File.Create().
+	filex := ctx.AppCtx().TTx.File.Create().
 		SetName(meta.originalFilename).
 		SetIsDirectory(false).
 		SetIndexedAt(time.Now()).
@@ -259,7 +259,7 @@ func (qq *S3FileSystem) PrepareFileVersionUpload(
 		return nil, err
 	}
 
-	filex := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
+	filex := ctx.AppCtx().TTx.File.GetX(ctx, fileID)
 	if filex.IsDirectory {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
 	}
@@ -311,7 +311,7 @@ func (qq *S3FileSystem) createStoredFileForPreparedUpload(
 	meta *uploadMetadata,
 ) (*enttenant.StoredFile, *PreparedUpload, error) {
 	finalStoragePrefix := pathx.S3StoragePrefix(ctx.TenantCtx().TenantID)
-	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
+	storedFilex := ctx.AppCtx().TTx.StoredFile.Create().
 		SetFilename(meta.originalFilename).
 		SetSizeInStorage(0).
 		SetStorageType(storagetype.S3).
@@ -422,7 +422,7 @@ func (qq *S3FileSystem) FinalizePreparedUpload(
 	}
 
 	ctxWithIncomplete := enttenantschema.WithUnfinishedUploads(ctx)
-	storedFilex := ctx.TenantCtx().TTx.StoredFile.GetX(ctxWithIncomplete, prepared.StoredFileID)
+	storedFilex := ctx.AppCtx().TTx.StoredFile.GetX(ctxWithIncomplete, prepared.StoredFileID)
 	storedFilex = storedFilex.Update().
 		SetSize(fileSize).
 		SetSizeInStorage(fileInfo.Size).
@@ -841,7 +841,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 	}
 
 	// create db entries
-	filex := ctx.TenantCtx().TTx.File.Create().
+	filex := ctx.AppCtx().TTx.File.Create().
 		SetName(tmpFile.Filename). // TODO okay?
 		SetIsDirectory(false).
 		SetIndexedAt(time.Now()).
@@ -862,7 +862,7 @@ func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
 	storedFilePublicID := util.NewPublicID()
 	storageFilename := storedFilePublicID + fileExtension + ".gz.age"
 
-	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
+	storedFilex := ctx.AppCtx().TTx.StoredFile.Create().
 		// SetPublicID(entx.NewCIText(storedFilePublicID)).
 		SetFilename(tmpFile.Filename).
 		SetSize(tmpFile.Size).                   // fileInfo.Size is gzipped size
@@ -1011,7 +1011,7 @@ func (qq *S3FileSystem) PersistTemporaryTenantFile(
 }
 
 func (qq *S3FileSystem) addFileVersion(ctx ctxx.Context, filex *enttenant.File, storedFilex *enttenant.StoredFile) error {
-	latestVersion, err := ctx.TenantCtx().TTx.FileVersion.Query().
+	latestVersion, err := ctx.AppCtx().TTx.FileVersion.Query().
 		Where(fileversion.FileID(filex.ID)).
 		Order(fileversion.ByVersionNumber(sql.OrderDesc())).
 		First(ctx)
@@ -1023,7 +1023,7 @@ func (qq *S3FileSystem) addFileVersion(ctx ctxx.Context, filex *enttenant.File, 
 	if err == nil {
 		versionNumber = latestVersion.VersionNumber + 1
 	}
-	ctx.TenantCtx().TTx.FileVersion.Create().
+	ctx.AppCtx().TTx.FileVersion.Create().
 		SetFileID(filex.ID).
 		SetStoredFileID(storedFilex.ID).
 		SetVersionNumber(versionNumber).

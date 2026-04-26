@@ -17,7 +17,7 @@ func NewAttribute(data *enttenant.Attribute) *Attribute {
 }
 
 func QueryAttributeByID(ctx ctxx.Context, attributeID int64) (*Attribute, error) {
-	attributex, err := ctx.TenantCtx().TTx.Attribute.Query().
+	attributex, err := ctx.AppCtx().TTx.Attribute.Query().
 		Where(attribute.ID(attributeID)).
 		Only(ctx)
 	if err != nil {
@@ -28,7 +28,7 @@ func QueryAttributeByID(ctx ctxx.Context, attributeID int64) (*Attribute, error)
 }
 
 func (qq *Attribute) SetIsNameGiving(ctx ctxx.Context, isNameGiving bool) error {
-	attributex, err := ctx.TenantCtx().TTx.Attribute.UpdateOneID(qq.Data.ID).
+	attributex, err := ctx.AppCtx().TTx.Attribute.UpdateOneID(qq.Data.ID).
 		SetIsNameGiving(isNameGiving).
 		Save(ctx)
 	if err != nil {
@@ -41,7 +41,7 @@ func (qq *Attribute) SetIsNameGiving(ctx ctxx.Context, isNameGiving bool) error 
 }
 
 func (qq *Attribute) RenameAndSetIsNameGiving(ctx ctxx.Context, newName string, isNameGiving bool) error {
-	attributex, err := ctx.TenantCtx().TTx.Attribute.UpdateOneID(qq.Data.ID).
+	attributex, err := ctx.AppCtx().TTx.Attribute.UpdateOneID(qq.Data.ID).
 		SetName(newName).
 		SetIsNameGiving(isNameGiving).
 		Save(ctx)
@@ -55,5 +55,5 @@ func (qq *Attribute) RenameAndSetIsNameGiving(ctx ctxx.Context, newName string, 
 }
 
 func (qq *Attribute) Delete(ctx ctxx.Context) error {
-	return ctx.TenantCtx().TTx.Attribute.DeleteOneID(qq.Data.ID).Exec(ctx)
+	return ctx.AppCtx().TTx.Attribute.DeleteOneID(qq.Data.ID).Exec(ctx)
 }

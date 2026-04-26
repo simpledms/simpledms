@@ -4,12 +4,12 @@ import (
 	"strings"
 
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/model/common/tenantrole"
 	"github.com/marcobeierer/go-core/ui/renderable"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
@@ -66,7 +66,7 @@ func (qq *SpaceCardsPartial) Widget(
 	// data *SpacesCardsData,
 	// state *SpaceCardsPartialState,
 ) renderable.Renderable {
-	spaces := ctx.TenantCtx().TTx.Space.Query().
+	spaces := ctx.AppCtx().TTx.Space.Query().
 		/*WithSpaceAssignment(func(query *ent.SpaceAssignmentQuery) {
 			query.Where(spaceassignment.IsRootDir(true))
 		}).*/
@@ -93,7 +93,7 @@ func (qq *SpaceCardsPartial) Widget(
 	if len(spaces) == 0 {
 		var actions []widget.IWidget
 
-		if ctx.TenantCtx().User.Role == tenantrole.Owner {
+		if ctx.AppCtx().User.Role == tenantrole.Owner {
 			actions = append(actions,
 				qq.actions.CreateSpaceDialog.ModalLink(
 					qq.actions.CreateSpaceDialog.Data("", ""),

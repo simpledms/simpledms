@@ -7,12 +7,12 @@ import (
 
 	autil "github.com/marcobeierer/go-core/action/util"
 	"github.com/marcobeierer/go-core/common"
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/model/common/tenantrole"
 	"github.com/marcobeierer/go-core/ui/uix/events"
 	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/marcobeierer/go-core/util/actionx"
 	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	usermodel "github.com/simpledms/simpledms/model/tenant/user"
 )
@@ -56,7 +56,7 @@ func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState)
 	})
 
 	// TODO filtered by tenant?
-	users := ctx.TenantCtx().TTx.User.Query().Order(user.ByLastName(), user.ByFirstName()).AllX(ctx)
+	users := ctx.AppCtx().TTx.User.Query().Order(user.ByLastName(), user.ByFirstName()).AllX(ctx)
 
 	accountIDs := make([]int64, 0, len(users))
 	for _, userx := range users {

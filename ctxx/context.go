@@ -6,57 +6,32 @@ import (
 	corectxx "github.com/marcobeierer/go-core/ctxx"
 )
 
-type VisitorContext = corectxx.VisitorContext
-type MainContext = corectxx.MainContext
-type TenantContext = corectxx.TenantContext
-type SpaceContext = corectxx.SpaceContext
-
 // Context is the SimpleDMS request context with main, tenant, and space layers.
 type Context interface {
 	corectxx.Context
-	MainCtx() *MainContext
-	TenantCtx() *TenantContext
 	SpaceCtx() *SpaceContext
-
-	IsVisitorCtx() bool
-	IsMainCtx() bool
-	IsTenantCtx() bool
+	AppCtx() *AppContext
 	IsSpaceCtx() bool
+	IsAppCtx() bool
 }
 
+var (
+	spaceCtxKey = "space_ctx"
+	appCtxKey   = "app_ctx"
+)
+
+/*
 var NewVisitorContext = corectxx.NewVisitorContext
 var NewMainContext = corectxx.NewMainContext
 var NewTenantContext = corectxx.NewTenantContext
-var NewSpaceContext = corectxx.NewSpaceContext
+*/
 
-func VisitorCtx(ctx context.Context) (*VisitorContext, bool) {
-	return corectxx.VisitorCtx(ctx)
-}
-
-func MainCtx(ctx context.Context) (*MainContext, bool) {
-	return corectxx.MainCtx(ctx)
-}
-
-func TenantCtx(ctx context.Context) (*TenantContext, bool) {
-	return corectxx.TenantCtx(ctx)
+func AppCtx(ctx context.Context) (*AppContext, bool) {
+	val, ok := ctx.Value(appCtxKey).(*AppContext)
+	return val, ok
 }
 
 func SpaceCtx(ctx context.Context) (*SpaceContext, bool) {
-	return corectxx.SpaceCtx(ctx)
-}
-
-func VisitorCtxX(ctx context.Context) *VisitorContext {
-	return corectxx.VisitorCtxX(ctx)
-}
-
-func MainCtxX(ctx context.Context) *MainContext {
-	return corectxx.MainCtxX(ctx)
-}
-
-func TenantCtxX(ctx context.Context) *TenantContext {
-	return corectxx.TenantCtxX(ctx)
-}
-
-func SpaceCtxX(ctx context.Context) *SpaceContext {
-	return corectxx.SpaceCtxX(ctx)
+	val, ok := ctx.Value(spaceCtxKey).(*SpaceContext)
+	return val, ok
 }

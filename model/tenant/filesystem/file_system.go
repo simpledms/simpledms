@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/simpledms/simpledms/ctxx"
 	"github.com/marcobeierer/go-core/db/entx"
 	"github.com/marcobeierer/go-core/util/e"
 	"github.com/marcobeierer/go-core/util/filenamex"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
@@ -56,7 +56,7 @@ func (qq *FileSystem) MakeDirAllIfNotExists(ctx ctxx.Context, currentParentDir *
 			continue
 		}
 
-		newCurrentDirx, err := ctx.TenantCtx().TTx.File.Query().
+		newCurrentDirx, err := ctx.AppCtx().TTx.File.Query().
 			Where(
 				file.SpaceID(ctx.SpaceCtx().Space.ID),
 				file.ParentID(currentParentDir.ID),
@@ -102,8 +102,8 @@ func (qq *FileSystem) MakeDir(ctx ctxx.Context, parentDirID string, newDirName s
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "The provided filename is not allowed.")
 	}
 
-	// parentDir := ctx.TenantCtx().TTx.File.GetX(ctx, parentDirID)
-	parentDir := ctx.TenantCtx().TTx.File.Query().Where(file.PublicID(entx.NewCIText(parentDirID))).OnlyX(ctx)
+	// parentDir := ctx.AppCtx().TTx.File.GetX(ctx, parentDirID)
+	parentDir := ctx.AppCtx().TTx.File.Query().Where(file.PublicID(entx.NewCIText(parentDirID))).OnlyX(ctx)
 
 	// FIXME case sensitivy
 	if parentDir.QueryChildren().Where(file.Name(newDirName)).ExistX(ctx) {
@@ -112,7 +112,7 @@ func (qq *FileSystem) MakeDir(ctx ctxx.Context, parentDirID string, newDirName s
 	}
 
 	// FIXME handle transaction or let indexer handle such situations?
-	filex := ctx.TenantCtx().TTx.File.Create().
+	filex := ctx.AppCtx().TTx.File.Create().
 		SetName(newDirName).
 		SetIsDirectory(true).
 		SetIndexedAt(time.Now()).
@@ -268,7 +268,7 @@ func (qq *FileSystem) AddFile(
 	}
 
 	// FIXME handle transaction or let indexer handle such situations?
-	filex := ctx.TenantCtx().TTx.File.Create().
+	filex := ctx.AppCtx().TTx.File.Create().
 		SetName(filename).
 		SetIsDirectory(false).
 		SetIndexedAt(time.Now()).
@@ -320,7 +320,7 @@ func (qq *FileSystem) AddFile(
 		return nil, err
 	}
 
-	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
+	storedFilex := ctx.AppCtx().TTx.StoredFile.Create().
 		SetFilename(filename).
 		SetSize(fileInfo.Size()).          // only okay as long as it doesn't get gzipped
 		SetSizeInStorage(fileInfo.Size()). // no gzipped used

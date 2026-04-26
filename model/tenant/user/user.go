@@ -48,7 +48,7 @@ func (qq *User) NameSecondLine() string {
 func (qq *User) Delete(ctx ctxx.Context, deletedBy int64) error {
 	ctxWithPrivacyOverride := enttenantprivacy.DecisionContext(ctx, enttenantprivacy.Allow)
 
-	_, err := ctx.TenantCtx().TTx.SpaceUserAssignment.Delete().
+	_, err := ctx.AppCtx().TTx.SpaceUserAssignment.Delete().
 		Where(spaceuserassignment.UserID(qq.Data.ID)).
 		Exec(ctxWithPrivacyOverride)
 	if err != nil {
