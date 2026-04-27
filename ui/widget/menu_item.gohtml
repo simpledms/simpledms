@@ -1,0 +1,59 @@
+{{- define "menuItem" }}
+	<div
+			id="{{ .GetID }}"
+			class=" h-12 text-on-surface cursor-pointer {{ if .IsDisabled }}text-on-surface text-opacity-[0.38]{{ end }}"
+            {{ template "HTMXAttrs" .HTMXAttrs }}
+	>
+        {{ if ne .DownloadLinkURL "" }}
+		<a
+				class="block h-12"
+				href="{{ .DownloadLinkURL }}"
+				filename="{{ .DownloadLinkFilename }}"
+				hx-boost="false"
+		>
+            {{ end }}
+			<div class="state-layer-on-surface flex items-center px-3 gap-x-3">
+                {{- with .LeadingIcon }}
+					<i class="material-symbols-outlined text-on-surface-variant">{{ . }}</i>
+                {{ end }}
+				<span class="label-lg flex-grow text-left hover:text-on-surface">{{ render .GetContext .Label }}</span>
+                {{ with .GetTrailingIcon }}
+					<i class="material-symbols-outlined text-on-surface-variant">{{ . }}</i>
+                {{ end }}
+                {{ .TrailingText }}
+			</div>
+            {{ if ne .DownloadLinkURL "" }}
+		</a>
+        {{ end }}
+	</div>
+	<script defer>
+		(function () {
+			let elem = document.getElementById('{{ .GetID }}')
+			elem.addEventListener('click', function (e) {
+                {{/* necessary for stacked links, like in search or on list items, to prevent
+                     that parent list item is triggered/clicked */}}
+				e.stopPropagation();
+			})
+		})()
+	</script>
+{{ end }}
+
+{{- define "MenuItem" }}
+	{{ if .IsDivider }}
+		{{ render .GetContext .GetDivider }}
+	{{ else if .IsTypeRadio }}
+		<label>
+			<input
+					type="radio"
+					name="{{ .RadioGroupName }}"
+					value="{{ .RadioValue }}"
+					id="radio-{{ .GetID }}"
+					{{ if .IsSelected }}checked{{ end }}
+					class="hidden"
+			/>
+			{{ template "menuItem" . }}
+		</label>
+	{{ else }}
+		{{ template "menuItem" . }}
+	{{ end }}
+{{ end }}

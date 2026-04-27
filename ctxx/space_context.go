@@ -5,11 +5,11 @@ package ctxx
 import (
 	"context"
 
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
-	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 )
 
 // having TTx in Context allows for easier replacement of ent with jet later
@@ -18,7 +18,7 @@ type SpaceContext struct {
 	// ResponseWriter httpx.ResponseWriter
 	// Request        *httpx.Request
 	// Infra        *common.Infra // TODO is this a good idea?
-	*AppContext
+	*TenantContext
 	// context.Context
 	// MainTx       *entmain.Tx
 	// Account      *entmain.Account // modelmain.Account would be better, but leads to circular dependency
@@ -32,16 +32,16 @@ type SpaceContext struct {
 }
 
 func NewSpaceContext(
-	appContext *AppContext,
+	tenantContext *TenantContext,
 	space *enttenant.Space,
 ) *SpaceContext {
 	spaceCtx := &SpaceContext{
 		// TenantContext: NewTenantContext(ctx, mainTx, tenantTx, account, tenant, metaPath),
-		AppContext: appContext,
-		SpaceID:    space.PublicID.String(),
-		Space:      space,
+		TenantContext: tenantContext,
+		SpaceID:       space.PublicID.String(),
+		Space:         space,
 	}
-	spaceCtx.Context = context.WithValue(appContext.Context, spaceCtxKey, spaceCtx)
+	spaceCtx.Context = context.WithValue(tenantContext.Context, spaceCtxKey, spaceCtx)
 	return spaceCtx
 }
 

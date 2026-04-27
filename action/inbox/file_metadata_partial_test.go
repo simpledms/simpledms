@@ -3,7 +3,7 @@ package inbox
 import (
 	"testing"
 
-	"github.com/marcobeierer/go-core/util/ocrutil"
+	"github.com/simpledms/simpledms/util/ocrutil"
 )
 
 func TestOcrStatusMessageReturnsNilWhenOCRSucceeded(t *testing.T) {

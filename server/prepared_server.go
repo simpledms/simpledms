@@ -6,28 +6,24 @@ import (
 	"log"
 	"net/http"
 
-	"golang.org/x/crypto/acme/autocert"
-
-	sqlx2 "github.com/marcobeierer/go-core/db/sqlx"
-	systemconfigmodel "github.com/marcobeierer/go-core/model/systemconfig"
-	server2 "github.com/marcobeierer/go-core/server"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/sqlx"
+	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 type PreparedServer struct {
 	server          *Server
-	mainDB          *sqlx2.MainDB
+	mainDB          *sqlx.MainDB
 	tenantDBs       *tenantdbs.TenantDBs
-	infra           *common.Infra
-	router          *server2.Router
+	router          *Router
 	handler         http.Handler
 	systemConfig    *systemconfigmodel.SystemConfig
 	autocertManager *autocert.Manager
 }
 
-func closePreparedResources(mainDB *sqlx2.MainDB, tenantDBs *tenantdbs.TenantDBs) {
+func closePreparedResources(mainDB *sqlx.MainDB, tenantDBs *tenantdbs.TenantDBs) {
 	// FIXME is it okay to keep all databases open all the time?
 
 	if mainDB != nil {
@@ -50,14 +46,14 @@ func closePreparedResources(mainDB *sqlx2.MainDB, tenantDBs *tenantdbs.TenantDBs
 
 // Router returns the prepared router so callers can register custom handlers
 // before the server starts listening.
-func (qq *PreparedServer) Router() *server2.Router {
+func (qq *PreparedServer) Router() *Router {
 	return qq.router
 }
 
 // Infra returns the initialized infrastructure so wrappers can build actions
 // that depend on renderer, config, and other runtime services.
 func (qq *PreparedServer) Infra() *common.Infra {
-	return qq.infra
+	return qq.router.infra
 }
 
 // Start starts background services and begins listening for HTTP requests.

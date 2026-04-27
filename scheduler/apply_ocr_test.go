@@ -6,15 +6,14 @@ import (
 	"time"
 
 	"entgo.io/ent/privacy"
-
-	"github.com/marcobeierer/go-core/db/sqlx"
-	"github.com/marcobeierer/go-core/model/common/country"
-	"github.com/marcobeierer/go-core/model/common/plan"
-	"github.com/marcobeierer/go-core/model/common/storagetype"
-	"github.com/marcobeierer/go-core/util/ocrutil"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/db/sqlx"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/plan"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
+	"github.com/simpledms/simpledms/util/ocrutil"
 )
 
 func TestApplyOCROneFileSkipsTooLargeFile(t *testing.T) {

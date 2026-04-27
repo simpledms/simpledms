@@ -1,15 +1,15 @@
 package property
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/model/common/fieldtype"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type CreatePropertyCmdData struct {
@@ -37,7 +37,7 @@ func NewCreatePropertyCmd(infra *common.Infra, actions *Actions) *CreateProperty
 	formHelper := autil.NewFormHelper[CreatePropertyCmdData](
 		infra,
 		config,
-		widget.T("Add field"),
+		wx.T("Add field"),
 	)
 	return &CreatePropertyCmd{
 		infra:      infra,
@@ -53,7 +53,7 @@ func (qq *CreatePropertyCmd) Data(name string) *CreatePropertyCmdData {
 	}
 }
 
-func (qq *CreatePropertyCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *CreatePropertyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[CreatePropertyCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -75,6 +75,6 @@ func (qq *CreatePropertyCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Reque
 
 	return qq.infra.Renderer().Render(
 		rw, ctx,
-		widget.NewSnackbarf("Field «%s» created.", data.Name),
+		wx.NewSnackbarf("Field «%s» created.", data.Name),
 	)
 }

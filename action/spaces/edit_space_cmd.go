@@ -1,17 +1,16 @@
 package spaces
 
 import (
-	"github.com/marcobeierer/go-core/db/entx"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/entx"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type EditSpaceCmdData struct {
@@ -33,7 +32,7 @@ func NewRenameSpace(infra *common.Infra, actions *Actions) *EditSpaceCmd {
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[EditSpaceCmdData](infra, config, widget.T("Edit space")),
+		FormHelper: autil.NewFormHelper[EditSpaceCmdData](infra, config, wx.T("Edit space")),
 	}
 }
 
@@ -45,13 +44,13 @@ func (qq *EditSpaceCmd) Data(spaceID string, name, description string) *EditSpac
 	}
 }
 
-func (qq *EditSpaceCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *EditSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[EditSpaceCmdData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
 
-	spacex, err := ctx.AppCtx().TTx.Space.Query().
+	spacex, err := ctx.TenantCtx().TTx.Space.Query().
 		Where(space.PublicID(entx.NewCIText(data.SpaceID))).
 		Only(ctx)
 	if err != nil {
@@ -64,7 +63,7 @@ func (qq *EditSpaceCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, c
 	}
 
 	rw.Header().Set("HX-Trigger", event.SpaceUpdated.String())
-	rw.AddRenderables(widget.NewSnackbarf("Changes saved."))
+	rw.AddRenderables(wx.NewSnackbarf("Changes saved."))
 
 	return nil
 }

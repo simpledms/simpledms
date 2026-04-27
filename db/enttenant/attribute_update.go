@@ -10,13 +10,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/model/tenant/common/attributetype"
+	"github.com/simpledms/simpledms/model/main/common/attributetype"
 )
 
 // AttributeUpdate is the builder for updating Attribute entities.

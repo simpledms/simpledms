@@ -3,14 +3,14 @@ package tagging
 // package action
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	wx "github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type ToggleFileTagCmdData struct {
@@ -44,7 +44,7 @@ func (qq *ToggleFileTagCmd) Data(fileID int64, tagID int64) *ToggleFileTagCmdDat
 	}
 }
 
-func (qq *ToggleFileTagCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *ToggleFileTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[ToggleFileTagCmdData](rw, req, ctx)
 	if err != nil {
 		return err

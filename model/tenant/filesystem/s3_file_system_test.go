@@ -10,26 +10,24 @@ import (
 	"filippo.io/age"
 	_ "github.com/mattn/go-sqlite3"
 
-	corectxx "github.com/marcobeierer/go-core/ctxx"
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entmain/enttest"
-	"github.com/marcobeierer/go-core/db/entx"
-	"github.com/marcobeierer/go-core/encryptor"
-
-	"github.com/marcobeierer/go-core/util/e"
-	appctxx "github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/enttest"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/encryptor"
+	"github.com/simpledms/simpledms/util/e"
 )
 
 func TestS3FileSystemEnsureUploadSizeLimitWithGlobalLimit(t *testing.T) {
 	fileSystemx, mainCtx, cleanup := newS3FileSystemMainContext(t, 1)
 	defer cleanup()
 
-	err := fileSystemx.EnsureUploadSizeLimit(appctxx.WrapContext(mainCtx), bytesPerMiB)
+	err := fileSystemx.EnsureUploadSizeLimit(mainCtx, bytesPerMiB)
 	if err != nil {
 		t.Fatalf("expected no error at exact limit, got %v", err)
 	}
 
-	err = fileSystemx.EnsureUploadSizeLimit(appctxx.WrapContext(mainCtx), 2*bytesPerMiB)
+	err = fileSystemx.EnsureUploadSizeLimit(mainCtx, 2*bytesPerMiB)
 	httpErr := requireHTTPErrorStatus(t, err, http.StatusRequestEntityTooLarge)
 	if !strings.Contains(httpErr.Message(), "Maximum allowed size") {
 		t.Fatalf("expected max size message, got %q", httpErr.Message())
@@ -41,14 +39,14 @@ func TestS3FileSystemEnsureUploadSizeLimitWithTenantOverride(t *testing.T) {
 	defer cleanup()
 
 	overrideMib := int64(1)
-	tenantCtx := &corectxx.TenantContext{
+	tenantCtx := &ctxx.TenantContext{
 		MainContext: mainCtx,
 		Tenant: &entmain.Tenant{
 			MaxUploadSizeMibOverride: &overrideMib,
 		},
 	}
 
-	err := fileSystemx.EnsureUploadSizeLimit(appctxx.WrapContext(tenantCtx), 2*bytesPerMiB)
+	err := fileSystemx.EnsureUploadSizeLimit(tenantCtx, 2*bytesPerMiB)
 	_ = requireHTTPErrorStatus(t, err, http.StatusRequestEntityTooLarge)
 }
 
@@ -57,14 +55,14 @@ func TestS3FileSystemEnsureUploadSizeLimitWithUnlimitedTenantOverride(t *testing
 	defer cleanup()
 
 	overrideMib := int64(0)
-	tenantCtx := &corectxx.TenantContext{
+	tenantCtx := &ctxx.TenantContext{
 		MainContext: mainCtx,
 		Tenant: &entmain.Tenant{
 			MaxUploadSizeMibOverride: &overrideMib,
 		},
 	}
 
-	err := fileSystemx.EnsureUploadSizeLimit(appctxx.WrapContext(tenantCtx), 2*bytesPerMiB)
+	err := fileSystemx.EnsureUploadSizeLimit(tenantCtx, 2*bytesPerMiB)
 	if err != nil {
 		t.Fatalf("expected no error for unlimited tenant override, got %v", err)
 	}
@@ -80,7 +78,7 @@ func TestS3FileSystemUploadTooLargeErrorWithoutMaximum(t *testing.T) {
 	}
 }
 
-func newS3FileSystemMainContext(t *testing.T, globalLimitMib int64) (*S3FileSystem, *corectxx.MainContext, func()) {
+func newS3FileSystemMainContext(t *testing.T, globalLimitMib int64) (*S3FileSystem, *ctxx.MainContext, func()) {
 	t.Helper()
 
 	oldIdentity := encryptor.NilableX25519MainIdentity
@@ -113,8 +111,8 @@ func newS3FileSystemMainContext(t *testing.T, globalLimitMib int64) (*S3FileSyst
 		t.Fatalf("start main transaction: %v", err)
 	}
 
-	mainCtx := &corectxx.MainContext{
-		VisitorContext: &corectxx.VisitorContext{
+	mainCtx := &ctxx.MainContext{
+		VisitorContext: &ctxx.VisitorContext{
 			Context: context.Background(),
 			MainTx:  mainTx,
 		},

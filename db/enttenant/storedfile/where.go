@@ -7,9 +7,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-
-	"github.com/marcobeierer/go-core/model/common/storagetype"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
 // ID filters vertices based on their ID field.

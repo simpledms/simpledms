@@ -1,0 +1,41 @@
+{{- define "Tab" }}
+	<a
+			{{/* basis-0 flex-grow ensures all tabs have the same width */}}
+            class="
+            	flex flex-grow
+				{{ if .IsFlowing }}justify-center{{ else }}w-full basis-0{{ end }}
+				{{ if .IsActive }}text-primary{{ else }}text-on-surface-variant{{ end }}
+            	{{ .GetClass }}
+			"
+			href="#" {{/* necessary for pointer mouse icon, is there a better solution? */}}
+
+			{{ template "HTMXAttrs" .HTMXAttrs }}
+	>
+		<div class="{{ if .IsActive }}state-layer-primary{{ else }}state-layer-on-surface{{ end }}
+			{{ .GetClass }}
+            flex w-full flex-col items-center
+            {{/* necessary to prevent jumping when active indicator is shown (has w-16) */}}
+            {{ if .IsFlowing }}min-w-16{{ end }}
+			">
+			{{ if ne .Icon "" }}
+				<i class="w-6 h-6 material-symbols-outlined
+				">{{ .Icon }}</i>
+			{{ end }}
+
+            {{/* mt-1 to center same way as other items */}}
+			<div class="flex flex-row flex-grow items-center justify-center gap-x-1.5
+					{{ if .IsFlowing }}px-3{{ end }}
+					{{ if .IsActive }}mt-1{{ end }}">
+				<span class="title-sm h-5 flex-grow flex items-center
+				">
+					{{ render .GetContext .Label }}
+				</span>
+					{{ render .GetContext .Badge }}
+			</div>
+
+			{{ if .IsActive }}
+				<div class="bg-primary w-16 max-w-full rounded-t-xs h-1"></div>
+			{{ end }}
+		</div>
+	</a>
+{{ end }}

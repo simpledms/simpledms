@@ -8,13 +8,12 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/model/tenant/common/attributetype"
+	"github.com/simpledms/simpledms/model/main/common/attributetype"
 )
 
 // Attribute is the model entity for the Attribute schema.

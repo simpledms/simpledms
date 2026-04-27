@@ -5,15 +5,14 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/marcobeierer/go-core/db/entx"
-
-	"github.com/marcobeierer/go-core/util/sqlutil"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/util/sqlutil"
 )
 
 type listDirApplyPropertyFilterFunc func(
@@ -70,7 +69,7 @@ func (qq *ListDirFileQueryService) Query(
 	}
 
 	// TODO sort by relevance
-	searchResultQuery := ctx.AppCtx().TTx.File.Query().
+	searchResultQuery := ctx.TenantCtx().TTx.File.Query().
 		WithParent().
 		WithChildren(). // necessary to count children
 		Where(func(qs *sql.Selector) {

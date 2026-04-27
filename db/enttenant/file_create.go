@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/marcobeierer/go-core/db/entx"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
@@ -21,6 +20,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	"github.com/simpledms/simpledms/db/entx"
 )
 
 // FileCreate is the builder for creating a File entity.

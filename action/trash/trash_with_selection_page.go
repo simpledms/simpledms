@@ -4,19 +4,19 @@ import (
 	"log"
 	"net/http"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/ui/renderable"
+	"github.com/simpledms/simpledms/ui/uix/event"
+	"github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type TrashWithSelectionPage struct {
@@ -32,8 +32,8 @@ func NewTrashWithSelectionPage(infra *common.Infra, actions *Actions) *TrashWith
 }
 
 func (qq *TrashWithSelectionPage) Handler(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
 	fileIDStr := req.PathValue("file_id")
@@ -61,21 +61,21 @@ func (qq *TrashWithSelectionPage) Handler(
 }
 
 func (qq *TrashWithSelectionPage) render(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 	viewx renderable.Renderable,
 ) {
 	if req.Header.Get("HX-Request") == "" {
-		viewx = partial2.NewBase(widget.T("Trash"), viewx)
+		viewx = partial.NewBase(wx.T("Trash"), viewx)
 	}
 
 	qq.infra.Renderer().RenderX(rw, ctx, viewx)
 }
 
 func (qq *TrashWithSelectionPage) widget(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 	state *FileTabsPartialState,
 	filex *filemodel.File,
@@ -89,24 +89,24 @@ func (qq *TrashWithSelectionPage) widget(
 		return filePreview, nil
 	}
 
-	listDetailLayout := &widget.ListDetailLayout{
+	listDetailLayout := &wx.ListDetailLayout{
 		AppBar: qq.appBar(ctx),
 		List:   qq.actions.TrashListPartial.Widget(ctx, qq.actions.TrashListPartial.Data(filex.Data.PublicID.String())),
 		Detail: filePreview,
 	}
 
-	mainLayout := &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "trash", nil),
+	mainLayout := &wx.MainLayout{
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "trash", nil),
 		Content:    listDetailLayout,
 	}
 	return mainLayout, nil
 }
 
-func (qq *TrashWithSelectionPage) appBar(ctx ctxx.Context) *widget.AppBar {
-	return &widget.AppBar{
-		Leading:          widget.NewIcon("delete"),
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
-		Title:            widget.T("Trash"),
+func (qq *TrashWithSelectionPage) appBar(ctx ctxx.Context) *wx.AppBar {
+	return &wx.AppBar{
+		Leading:          wx.NewIcon("delete"),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
+		Title:            wx.T("Trash"),
 	}
 }
 
@@ -114,10 +114,10 @@ func (qq *TrashWithSelectionPage) filePreview(
 	ctx ctxx.Context,
 	state *FileTabsPartialState,
 	filex *filemodel.File,
-) (*widget.DetailsWithSheet, error) {
-	title := widget.T("Preview")
+) (*wx.DetailsWithSheet, error) {
+	title := wx.T("Preview")
 	if ctx.SpaceCtx().Space.IsFolderMode {
-		title = widget.Tu(filex.Data.Name)
+		title = wx.Tu(filex.Data.Name)
 	}
 
 	fileDetailsSideSheet := qq.actions.FileDetailsSideSheetPartial.Widget(
@@ -127,11 +127,11 @@ func (qq *TrashWithSelectionPage) filePreview(
 	)
 
 	ctxWithDeleted := schema.SkipSoftDelete(ctx)
-	return &widget.DetailsWithSheet{
+	return &wx.DetailsWithSheet{
 		AppBar: qq.previewAppBar(ctx, title, filex),
-		Child: &widget.Column{
-			Children: []widget.IWidget{
-				&widget.FilePreview{
+		Child: &wx.Column{
+			Children: []wx.IWidget{
+				&wx.FilePreview{
 					FileURL:  route.TrashDownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
 					Filename: filex.Filename(ctx),
 					MimeType: filex.CurrentVersion(ctxWithDeleted).Data.MimeType,
@@ -142,44 +142,44 @@ func (qq *TrashWithSelectionPage) filePreview(
 	}, nil
 }
 
-func (qq *TrashWithSelectionPage) previewAppBar(ctx ctxx.Context, title *widget.Text, filex *filemodel.File) *widget.AppBar {
-	return &widget.AppBar{
-		Leading: &widget.IconButton{
+func (qq *TrashWithSelectionPage) previewAppBar(ctx ctxx.Context, title *wx.Text, filex *filemodel.File) *wx.AppBar {
+	return &wx.AppBar{
+		Leading: &wx.IconButton{
 			Icon:    "close",
-			Tooltip: widget.T("Close preview"),
-			HTMXAttrs: widget.HTMXAttrs{
+			Tooltip: wx.T("Close preview"),
+			HTMXAttrs: wx.HTMXAttrs{
 				HxGet:     route.TrashRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
-				HxOn:      events.DetailsClosed.HxOn("click"),
+				HxOn:      event.DetailsClosed.HxOn("click"),
 				HxHeaders: autil.CloseDetailsHeader(),
 			},
 		},
-		Title: &widget.AppBarTitle{
+		Title: &wx.AppBarTitle{
 			Text: title,
 		},
-		Actions: []widget.IWidget{
-			&widget.IconButton{
+		Actions: []wx.IWidget{
+			&wx.IconButton{
 				Icon:    "description",
-				Tooltip: widget.T("Show details"),
-				HTMXAttrs: widget.HTMXAttrs{
+				Tooltip: wx.T("Show details"),
+				HTMXAttrs: wx.HTMXAttrs{
 					DialogID: qq.actions.FileDetailsSideSheetPartial.ID(),
 				},
 			},
-			&widget.IconButton{
+			&wx.IconButton{
 				Icon:    "restore_from_trash",
-				Tooltip: widget.T("Restore"),
-				HTMXAttrs: widget.HTMXAttrs{
+				Tooltip: wx.T("Restore"),
+				HTMXAttrs: wx.HTMXAttrs{
 					HxPost:    qq.actions.RestoreFileCmd.Endpoint(),
 					HxVals:    util.JSON(qq.actions.RestoreFileCmd.DataWithOptions(filex.Data.PublicID.String())),
-					HxConfirm: widget.T("Are you sure?").String(ctx),
+					HxConfirm: wx.T("Are you sure?").String(ctx),
 				},
 			},
-			&widget.Link{
+			&wx.Link{
 				Href:      route.TrashDownload(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
 				IsNoColor: true,
 				Filename:  filex.Filename(ctx),
-				Child: &widget.IconButton{
+				Child: &wx.IconButton{
 					Icon:    "download",
-					Tooltip: widget.T("Download"),
+					Tooltip: wx.T("Download"),
 				},
 			},
 		},

@@ -10,19 +10,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/marcobeierer/go-core/db/entmain/account"
-	entmainschema "github.com/marcobeierer/go-core/db/entmain/schema"
-	"github.com/marcobeierer/go-core/db/entmain/session"
-	"github.com/marcobeierer/go-core/db/entmain/tenantaccountassignment"
-	"github.com/marcobeierer/go-core/db/entx"
-	"github.com/marcobeierer/go-core/model/common/language"
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/uix/route"
-	"github.com/marcobeierer/go-core/util/accountutil"
-	"github.com/marcobeierer/go-core/util/cookiex"
+	"github.com/simpledms/simpledms/db/entmain/account"
+	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
+	"github.com/simpledms/simpledms/db/entmain/session"
+	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/ui/uix/event"
+	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/util/accountutil"
+	"github.com/simpledms/simpledms/util/cookiex"
 )
 
 func TestSignInCmdRejectsUserWithoutActiveTenantAssignment(t *testing.T) {
@@ -110,8 +110,8 @@ func TestDeleteUserCmdOwningTenantDeletesAccountGlobally(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Fatalf("expected status %d, got %d", http.StatusOK, rr.Code)
 	}
-	if trigger := rr.Header().Get("HX-Trigger"); trigger != events.UserDeleted.String() {
-		t.Fatalf("expected HX-Trigger %q, got %q", events.UserDeleted.String(), trigger)
+	if trigger := rr.Header().Get("HX-Trigger"); trigger != event.UserDeleted.String() {
+		t.Fatalf("expected HX-Trigger %q, got %q", event.UserDeleted.String(), trigger)
 	}
 
 	memberAccountAfter := harness.mainDB.ReadWriteConn.Account.Query().

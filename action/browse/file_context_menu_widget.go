@@ -1,11 +1,11 @@
 package browse
 
 import (
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type FileContextMenuWidget struct {
@@ -18,16 +18,16 @@ func NewFileContextMenuWidget(actions *Actions) *FileContextMenuWidget {
 	}
 }
 
-func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File) *widget.Menu {
+func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File) *wx.Menu {
 	filem := filemodel.NewFile(filex)
-	var menuItems []*widget.MenuItem
+	var menuItems []*wx.MenuItem
 
 	// TODO `select` menu item for multiselection?
 
 	menuItems = append(menuItems,
-		&widget.MenuItem{
+		&wx.MenuItem{
 			TrailingIcon: "edit", // TODO
-			Label:        widget.T("Rename"),
+			Label:        wx.T("Rename"),
 			HTMXAttrs: qq.actions.RenameFileCmd.ModalLinkAttrs(
 				qq.actions.RenameFileCmd.Data(filex.PublicID.String(), filex.Name),
 				"#"+qq.actions.ListDirPartial.WrapperID(),
@@ -37,9 +37,9 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 
 	if ctx.SpaceCtx().Space.IsFolderMode {
 		menuItems = append(menuItems,
-			&widget.MenuItem{
+			&wx.MenuItem{
 				TrailingIcon: "drive_file_move",
-				Label:        widget.T("Move"),
+				Label:        wx.T("Move"),
 				HTMXAttrs: qq.actions.MoveFileCmd.ModalLinkAttrs(
 					qq.actions.MoveFileCmd.Data(filex.PublicID.String(), ""),
 					"#"+qq.actions.ListDirPartial.WrapperID(),
@@ -49,25 +49,25 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 	}
 
 	menuItems = append(menuItems,
-		&widget.MenuItem{
+		&wx.MenuItem{
 			IsDivider: true,
 		},
-		&widget.MenuItem{
+		&wx.MenuItem{
 			TrailingIcon: "delete",
-			Label:        widget.T("Delete"),
-			HTMXAttrs: widget.HTMXAttrs{
+			Label:        wx.T("Delete"),
+			HTMXAttrs: wx.HTMXAttrs{
 				HxPost:    qq.actions.DeleteFileCmd.Endpoint(),
 				HxVals:    util.JSON(qq.actions.DeleteFileCmd.Data(filex.PublicID.String())),
 				HxTarget:  "#" + qq.actions.ListDirPartial.WrapperID(),
-				HxConfirm: widget.T("Are you sure?").String(ctx),
+				HxConfirm: wx.T("Are you sure?").String(ctx),
 			},
 		},
 	)
 
 	if filem.IsZIPArchive(ctx) {
-		menuItems = append(menuItems, &widget.MenuItem{
+		menuItems = append(menuItems, &wx.MenuItem{
 			TrailingIcon: "Unarchive",
-			Label:        widget.T("Unzip archive"),
+			Label:        wx.T("Unzip archive"),
 			HTMXAttrs: qq.actions.UnzipArchiveCmd.ModalLinkAttrs(
 				qq.actions.UnzipArchiveCmd.Data(filem.Data.PublicID.String(), false),
 				"",
@@ -75,7 +75,7 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 		})
 	}
 
-	return &widget.Menu{
+	return &wx.Menu{
 		Items: menuItems,
 	}
 }

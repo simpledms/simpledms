@@ -1,11 +1,11 @@
 package dashboard
 
 import (
-	"github.com/marcobeierer/go-core/action/admin"
-	"github.com/marcobeierer/go-core/action/auth"
-	acommon "github.com/marcobeierer/go-core/action/common"
-	"github.com/marcobeierer/go-core/ui/uix/route"
+	"github.com/simpledms/simpledms/action/admin"
+	"github.com/simpledms/simpledms/action/auth"
+	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
 type Actions struct {

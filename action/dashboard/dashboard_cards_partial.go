@@ -7,28 +7,26 @@ import (
 	"strings"
 	"time"
 
-	"github.com/marcobeierer/go-core/db/entmain"
-	mainaccount "github.com/marcobeierer/go-core/db/entmain/account"
-	"github.com/marcobeierer/go-core/db/entmain/passkeycredential"
-	maintenant "github.com/marcobeierer/go-core/db/entmain/tenant"
-	"github.com/marcobeierer/go-core/db/entmain/tenantaccountassignment"
-
-	account2 "github.com/marcobeierer/go-core/model/account"
-	"github.com/marcobeierer/go-core/model/common/mainrole"
-	"github.com/marcobeierer/go-core/model/tenant"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/uix/route"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	actionx2 "github.com/marcobeierer/go-core/util/actionx"
-	"github.com/marcobeierer/go-core/util/fileutil"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	mainaccount "github.com/simpledms/simpledms/db/entmain/account"
+	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
+	maintenant "github.com/simpledms/simpledms/db/entmain/tenant"
+	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
+	"github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	"github.com/simpledms/simpledms/model/main/tenant"
+	"github.com/simpledms/simpledms/ui/renderable"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/fileutil"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type DashboardCardsPartialData struct {
@@ -37,11 +35,11 @@ type DashboardCardsPartialData struct {
 type DashboardCardsPartial struct {
 	infra   *common.Infra
 	actions *Actions
-	*actionx2.Config
+	*actionx.Config
 }
 
 func NewDashboardCardsPartial(infra *common.Infra, actions *Actions) *DashboardCardsPartial {
-	config := actionx2.NewConfig(
+	config := actionx.NewConfig(
 		actions.Route("dashboard-cards-partial"),
 		true,
 	).EnableSetupSessionAccess()
@@ -56,7 +54,7 @@ func (qq *DashboardCardsPartial) Data() *DashboardCardsPartialData {
 	return &DashboardCardsPartialData{}
 }
 
-func (qq *DashboardCardsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *DashboardCardsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	widget, err := qq.Widget(ctx)
 	if err != nil {
 		log.Println(err)
@@ -74,18 +72,18 @@ func (qq *DashboardCardsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.R
 // most important card should always be in front, for example `set password` if not set yet
 // or `manage spaces` if no space exists yet
 func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
-	var grids []*widget.Grid
+	var grids []*wx.Grid
 
-	var openTaskCards []*widget.Card
-	var accountCards []*widget.Card
-	var systemCards []*widget.Card
-	var systemFooterBtns []*widget.Button
+	var openTaskCards []*wx.Card
+	var accountCards []*wx.Card
+	var systemCards []*wx.Card
+	var systemFooterBtns []*wx.Button
 
-	accountm := account2.NewAccount(ctx.MainCtx().Account)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	passkeyPolicy, err := accountm.PasskeyPolicy(ctx)
 	if err != nil {
 		log.Println(err)
-		passkeyPolicy = account2.NewPasskeyPolicy(false, false, false)
+		passkeyPolicy = account.NewPasskeyPolicy(false, false, false)
 	}
 	isTenantPasskeyEnrollmentRequired := passkeyPolicy.IsTenantPasskeyEnrollmentRequired()
 
@@ -111,34 +109,21 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 	}
 
 	if len(openTaskCards) > 0 {
-		grids = append(grids, &widget.Grid{
-			Heading:  widget.H(widget.HeadingTypeTitleMd, widget.T("Open tasks")),
+		grids = append(grids, &wx.Grid{
+			Heading:  wx.H(wx.HeadingTypeTitleMd, wx.T("Open tasks")),
 			Children: openTaskCards,
 		})
 	}
 
-	spacesByTenant := make(map[*entmain.Tenant][]*enttenant.Space)
-	if ctx.IsAppCtx() {
-		spacesByTenant, err = ctx.AppCtx().ReadOnlyAccountSpacesByTenant()
-		if err != nil {
-			log.Println(err)
-			return nil, err
-		}
-	} else {
-		tenants, err := ctx.MainCtx().Account.QueryTenants().All(ctx)
-		if err != nil {
-			log.Println(err)
-			return nil, err
-		}
-
-		for _, tenantx := range tenants {
-			spacesByTenant[tenantx] = nil
-		}
+	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	if err != nil {
+		log.Println(err)
+		return nil, err
 	}
 
 	for tenantx, spaces := range spacesByTenant {
-		var tenantCards []*widget.Card
-		var tenantHeaderBtns []widget.IWidget
+		var tenantCards []*wx.Card
+		var tenantHeaderBtns []wx.IWidget
 
 		if tenantCard := qq.nilableTenantCard(ctx, tenantx); tenantCard != nil {
 			tenantCards = append(tenantCards, tenantCard)
@@ -171,9 +156,9 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 			tenantCards = append(tenantCards, qq.spaceCard(ctx, spacex, tenantx))
 		}
 
-		grids = append(grids, &widget.Grid{
-			Heading: widget.Hf(widget.HeadingTypeTitleMd, "Organization «%s»", tenantx.Name),
-			Footer: &widget.Row{
+		grids = append(grids, &wx.Grid{
+			Heading: wx.Hf(wx.HeadingTypeTitleMd, "Organization «%s»", tenantx.Name),
+			Footer: &wx.Row{
 				Wrap:     true,
 				Children: tenantHeaderBtns,
 			},
@@ -181,7 +166,7 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 		})
 	}
 
-	var accountCardsBtns []*widget.Button
+	var accountCardsBtns []*wx.Button
 
 	if accountm.HasPassword() && !accountm.HasTemporaryPassword() && len(passkeyCredentials) == 0 {
 		accountCardsBtns = append(accountCardsBtns, qq.changePasswordBtn(ctx))
@@ -191,13 +176,13 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 	}
 
 	if len(passkeyCredentials) == 0 {
-		accountCards = append(accountCards, &widget.Card{
-			Style:          widget.CardStyleFilled,
-			Headline:       widget.H(widget.HeadingTypeTitleLg, widget.T("No passkeys registered")),
-			Subhead:        widget.T("Passkeys"),
-			SupportingText: widget.T("Register a passkey to enable passwordless sign in."),
-			Actions: []*widget.Button{
-				qq.registerPasskeyBtn(ctx, widget.ButtonStyleTypeTonal),
+		accountCards = append(accountCards, &wx.Card{
+			Style:          wx.CardStyleFilled,
+			Headline:       wx.H(wx.HeadingTypeTitleLg, wx.T("No passkeys registered")),
+			Subhead:        wx.T("Passkeys"),
+			SupportingText: wx.T("Register a passkey to enable passwordless sign in."),
+			Actions: []*wx.Button{
+				qq.registerPasskeyBtn(ctx, wx.ButtonStyleTypeTonal),
 			},
 		})
 	} else {
@@ -209,79 +194,79 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 		}
 
 		if len(passkeyCredentials) == 1 {
-			accountCards = append(accountCards, &widget.Card{
-				Style:          widget.CardStyleFilled,
-				Headline:       widget.H(widget.HeadingTypeTitleLg, widget.T("Add a backup passkey")),
-				Subhead:        widget.T("Passkey recommendation"),
-				SupportingText: widget.T("Set up a second passkey on another device as backup in case one device is lost."),
+			accountCards = append(accountCards, &wx.Card{
+				Style:          wx.CardStyleFilled,
+				Headline:       wx.H(wx.HeadingTypeTitleLg, wx.T("Add a backup passkey")),
+				Subhead:        wx.T("Passkey recommendation"),
+				SupportingText: wx.T("Set up a second passkey on another device as backup in case one device is lost."),
 				HTMXAttrs:      qq.registerPasskeyHTMXAttrs(),
 			})
 		}
 
-		accountCardsBtns = append(accountCardsBtns, qq.registerPasskeyBtn(ctx, widget.ButtonStyleTypeElevated))
+		accountCardsBtns = append(accountCardsBtns, qq.registerPasskeyBtn(ctx, wx.ButtonStyleTypeElevated))
 	}
 
 	if len(passkeyCredentials) > 0 {
 		accountCardsBtns = append(
 			accountCardsBtns,
-			&widget.Button{
-				Label:     widget.T("Regenerate backup codes"),
-				StyleType: widget.ButtonStyleTypeElevated,
-				HTMXAttrs: widget.HTMXAttrs{
+			&wx.Button{
+				Label:     wx.T("Regenerate backup codes"),
+				StyleType: wx.ButtonStyleTypeElevated,
+				HTMXAttrs: wx.HTMXAttrs{
 					HxPost:    qq.actions.AuthActions.RegeneratePasskeyCodesCmd.Endpoint(),
 					HxVals:    util.JSON(qq.actions.AuthActions.RegeneratePasskeyCodesCmd.Data()),
-					HxConfirm: widget.T("Regenerate backup codes? Existing codes will stop working.").String(ctx),
+					HxConfirm: wx.T("Regenerate backup codes? Existing codes will stop working.").String(ctx),
 					HxSwap:    "none",
 				},
 			},
 		)
 	}
 
-	accountHeading := widget.Tf("Account «%s»", ctx.MainCtx().Account.Email.String())
+	accountHeading := wx.Tf("Account «%s»", ctx.MainCtx().Account.Email.String())
 	if owningTenantName, ok := qq.owningTenantName(ctx); ok {
-		accountHeading = widget.Tf(
+		accountHeading = wx.Tf(
 			"Account «%s», owned by «%s»",
 			ctx.MainCtx().Account.Email.String(),
 			owningTenantName,
 		)
 	}
 
-	grids = append(grids, &widget.Grid{
+	grids = append(grids, &wx.Grid{
 		// TODO show Name and email?
-		Heading:  widget.H(widget.HeadingTypeTitleMd, accountHeading),
+		Heading:  wx.H(wx.HeadingTypeTitleMd, accountHeading),
 		Children: accountCards,
-		Footer: &widget.Row{
+		Footer: &wx.Row{
 			Wrap:     true,
 			Children: accountCardsBtns,
 		},
 	})
 
 	if len(systemCards) > 0 {
-		grids = append(grids, &widget.Grid{
-			Heading:  widget.H(widget.HeadingTypeTitleMd, widget.T("System")), // TODO admin, system or app?
+		grids = append(grids, &wx.Grid{
+			Heading:  wx.H(wx.HeadingTypeTitleMd, wx.T("System")), // TODO admin, system or app?
 			Children: systemCards,
-			Footer: &widget.Row{
+			Footer: &wx.Row{
 				Wrap:     true,
 				Children: systemFooterBtns,
 			},
 		})
 	}
 
-	return &widget.Container{
-		Widget: widget.Widget[widget.Container]{
+	return &wx.Container{
+		Widget: wx.Widget[wx.Container]{
 			ID: qq.id(),
 		},
 		GapY: true,
-		HTMXAttrs: widget.HTMXAttrs{
-			HxTrigger: events.HxTrigger(
-				events.InitialPasswordSet,
-				events.TemporaryPasswordCleared,
-				events.PasswordChanged, // necessary for "Active temporary password" card
-				events.AppInitialized,
-				events.AppUnlocked,
-				events.AppPassphraseChanged,
-				events.UploadLimitUpdated,
-				events.AccountUpdated, // refresh from when opening again and update language
+		HTMXAttrs: wx.HTMXAttrs{
+			HxTrigger: event.HxTrigger(
+				event.InitialPasswordSet,
+				event.TemporaryPasswordCleared,
+				event.PasswordChanged, // necessary for "Active temporary password" card
+				event.AppInitialized,
+				event.AppUnlocked,
+				event.AppPassphraseChanged,
+				event.UploadLimitUpdated,
+				event.AccountUpdated, // refresh from when opening again and update language
 			),
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data()),
@@ -299,30 +284,30 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 	}*/
 }
 
-func (qq *DashboardCardsPartial) setupRequiredWidget(ctx ctxx.Context) *widget.Container {
-	grids := []*widget.Grid{{
-		Heading: widget.H(widget.HeadingTypeTitleMd, widget.Tf("Account «%s»", ctx.MainCtx().Account.Email.String())),
-		Children: []*widget.Card{
+func (qq *DashboardCardsPartial) setupRequiredWidget(ctx ctxx.Context) *wx.Container {
+	grids := []*wx.Grid{{
+		Heading: wx.H(wx.HeadingTypeTitleMd, wx.Tf("Account «%s»", ctx.MainCtx().Account.Email.String())),
+		Children: []*wx.Card{
 			{
-				Style:          widget.CardStyleFilled,
-				Headline:       widget.H(widget.HeadingTypeTitleLg, widget.T("Passkey setup required")),
-				Subhead:        widget.T("Passkeys"),
-				SupportingText: widget.T("Your organization requires passkey sign-in. Register a passkey to continue."),
-				Actions: []*widget.Button{
-					qq.registerPasskeyBtn(ctx, widget.ButtonStyleTypeTonal),
+				Style:          wx.CardStyleFilled,
+				Headline:       wx.H(wx.HeadingTypeTitleLg, wx.T("Passkey setup required")),
+				Subhead:        wx.T("Passkeys"),
+				SupportingText: wx.T("Your organization requires passkey sign-in. Register a passkey to continue."),
+				Actions: []*wx.Button{
+					qq.registerPasskeyBtn(ctx, wx.ButtonStyleTypeTonal),
 				},
 			},
 		},
 	}}
 
-	return &widget.Container{
-		Widget: widget.Widget[widget.Container]{
+	return &wx.Container{
+		Widget: wx.Widget[wx.Container]{
 			ID: qq.id(),
 		},
 		GapY: true,
-		HTMXAttrs: widget.HTMXAttrs{
-			HxTrigger: events.HxTrigger(
-				events.AccountUpdated,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxTrigger: event.HxTrigger(
+				event.AccountUpdated,
 			),
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data()),
@@ -334,26 +319,26 @@ func (qq *DashboardCardsPartial) setupRequiredWidget(ctx ctxx.Context) *widget.C
 	}
 }
 
-func (qq *DashboardCardsPartial) recoveryCodesLeftCard(ctx ctxx.Context, recoveryCodesCount int) *widget.Card {
-	return &widget.Card{
-		Style:    widget.CardStyleFilled,
-		Headline: widget.H(widget.HeadingTypeTitleLg, widget.Tf("%d backup codes left", recoveryCodesCount)),
-		Subhead:  widget.T("Passkeys"),
+func (qq *DashboardCardsPartial) recoveryCodesLeftCard(ctx ctxx.Context, recoveryCodesCount int) *wx.Card {
+	return &wx.Card{
+		Style:    wx.CardStyleFilled,
+		Headline: wx.H(wx.HeadingTypeTitleLg, wx.Tf("%d backup codes left", recoveryCodesCount)),
+		Subhead:  wx.T("Passkeys"),
 	}
 }
 
-func (qq *DashboardCardsPartial) registerPasskeyBtn(ctx ctxx.Context, styleType widget.ButtonStyleType) *widget.Button {
-	return &widget.Button{
-		Label:     widget.T("Register passkey"),
+func (qq *DashboardCardsPartial) registerPasskeyBtn(ctx ctxx.Context, styleType wx.ButtonStyleType) *wx.Button {
+	return &wx.Button{
+		Label:     wx.T("Register passkey"),
 		StyleType: styleType,
 		HTMXAttrs: qq.registerPasskeyHTMXAttrs(),
 	}
 }
 
-func (qq *DashboardCardsPartial) registerPasskeyHTMXAttrs() widget.HTMXAttrs {
-	return widget.HTMXAttrs{
+func (qq *DashboardCardsPartial) registerPasskeyHTMXAttrs() wx.HTMXAttrs {
+	return wx.HTMXAttrs{
 		HxPost: qq.actions.AuthActions.PasskeyRegisterDialog.EndpointWithParams(
-			actionx2.ResponseWrapperDialog,
+			actionx.ResponseWrapperDialog,
 			"",
 		),
 		HxVals:        util.JSON(qq.actions.AuthActions.PasskeyRegisterDialog.Data()),
@@ -361,14 +346,14 @@ func (qq *DashboardCardsPartial) registerPasskeyHTMXAttrs() widget.HTMXAttrs {
 	}
 }
 
-func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *entmain.Tenant) *widget.Card {
-	var actions []*widget.Button
+func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *entmain.Tenant) *wx.Card {
+	var actions []*wx.Button
 
 	tenantm := tenant.NewTenant(tenantx)
 
-	var headline *widget.Heading
-	var subhead *widget.Text
-	var supportingText *widget.Text
+	var headline *wx.Heading
+	var subhead *wx.Text
+	var supportingText *wx.Text
 
 	if tenantm.IsInitialized() {
 		if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
@@ -376,10 +361,10 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 		}
 
 		// TODO add role info
-		headline = widget.H(widget.HeadingTypeTitleLg, widget.Tu(tenantx.Plan.String()))
-		subhead = widget.T("Subscription")
+		headline = wx.H(wx.HeadingTypeTitleLg, wx.Tu(tenantx.Plan.String()))
+		subhead = wx.T("Subscription")
 
-		accountm := account2.NewAccount(ctx.MainCtx().Account)
+		accountm := account.NewAccount(ctx.MainCtx().Account)
 		if tenantm.IsOwner(accountm) {
 			// TODO
 			/*actions = append(actions, &wx.Button{
@@ -396,23 +381,23 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 			},
 		})*/
 	} else {
-		headline = widget.H(widget.HeadingTypeTitleLg, widget.T("Not initialized"))
-		subhead = widget.T("Please wait")
-		supportingText = widget.T("The organization is not initialized yet, please wait until the initialization is complete.")
+		headline = wx.H(wx.HeadingTypeTitleLg, wx.T("Not initialized"))
+		subhead = wx.T("Please wait")
+		supportingText = wx.T("The organization is not initialized yet, please wait until the initialization is complete.")
 
-		actions = append(actions, &widget.Button{
-			Label:     widget.T("Refresh"),
-			StyleType: widget.ButtonStyleTypeOutlined,
-			HTMXAttrs: widget.HTMXAttrs{
+		actions = append(actions, &wx.Button{
+			Label:     wx.T("Refresh"),
+			StyleType: wx.ButtonStyleTypeOutlined,
+			HTMXAttrs: wx.HTMXAttrs{
 				// TODO show snackbar that user knows something has happened
 				// 		maybe just add timestamp to description?
-				HxGet: route.Dashboard(),
+				HxGet: route2.Dashboard(),
 			},
 		})
 	}
 
-	return &widget.Card{
-		Style:    widget.CardStyleFilled,
+	return &wx.Card{
+		Style:    wx.CardStyleFilled,
 		Headline: headline,
 		// Headline: wx.H(wx.HeadingTypeTitleLg, wx.Tu(tenantx.Name)),
 		Subhead:        subhead,
@@ -421,11 +406,7 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 	}
 }
 
-func (qq *DashboardCardsPartial) nilableQuotaUsageCard(ctx ctxx.Context, tenantx *entmain.Tenant) *widget.Card {
-	if !ctx.IsAppCtx() {
-		return nil
-	}
-
+func (qq *DashboardCardsPartial) nilableQuotaUsageCard(ctx ctxx.Context, tenantx *entmain.Tenant) *wx.Card {
 	tenantm := tenant.NewTenant(tenantx)
 	if !tenantm.IsInitialized() {
 		return nil
@@ -437,39 +418,34 @@ func (qq *DashboardCardsPartial) nilableQuotaUsageCard(ctx ctxx.Context, tenantx
 
 	quotaUsageLabel := qq.tenantStorageUsageLabel(ctx, tenantx)
 
-	return &widget.Card{
-		Style:    widget.CardStyleFilled,
-		Headline: widget.H(widget.HeadingTypeTitleLg, widget.Tu(quotaUsageLabel)),
-		Subhead:  widget.T("Quota usage"),
+	return &wx.Card{
+		Style:    wx.CardStyleFilled,
+		Headline: wx.H(wx.HeadingTypeTitleLg, wx.Tu(quotaUsageLabel)),
+		Subhead:  wx.T("Quota usage"),
 	}
 }
 
 func (qq *DashboardCardsPartial) tenantStorageUsageLabel(ctx ctxx.Context, tenantx *entmain.Tenant) string {
-	tenantDB, ok := ctx.AppCtx().UnsafeTenantDB(tenantx.ID)
+	tenantDB, ok := ctx.MainCtx().UnsafeTenantDB(tenantx.ID)
 	if !ok {
 		log.Println("tenant db not found, tenant id was", tenantx.ID)
-		return widget.T("Unavailable").String(ctx)
+		return wx.T("Unavailable").String(ctx)
 	}
 
 	tenantTx, err := tenantDB.ReadOnlyConn.Tx(ctx)
 	if err != nil {
 		log.Println("failed to start transaction for tenant", tenantx.ID, err)
-		return widget.T("Unavailable").String(ctx)
+		return wx.T("Unavailable").String(ctx)
 	}
 
-	tenantCtx := ctxx.NewAppContext(
-		ctx.TenantCtx(),
-		tenantTx,
-		true,
-		ctx.AppCtx().UnsafeTenantDBs(),
-	)
+	tenantCtx := ctxx.NewTenantContext(ctx.MainCtx(), tenantTx, tenantx, true)
 	usedBytes, limitBytes, err := qq.infra.FileSystem().TenantUsageBytes(tenantCtx)
 	if err != nil {
 		log.Println("failed to query storage usage for tenant", tenantx.ID, err)
 		if rollbackErr := tenantTx.Rollback(); rollbackErr != nil {
 			log.Println("failed to rollback transaction for tenant", tenantx.ID, rollbackErr)
 		}
-		return widget.T("Unavailable").String(ctx)
+		return wx.T("Unavailable").String(ctx)
 	}
 
 	if err := tenantTx.Commit(); err != nil {
@@ -477,30 +453,30 @@ func (qq *DashboardCardsPartial) tenantStorageUsageLabel(ctx ctxx.Context, tenan
 		if rollbackErr := tenantTx.Rollback(); rollbackErr != nil {
 			log.Println("failed to rollback transaction for tenant", tenantx.ID, rollbackErr)
 		}
-		return widget.T("Unavailable").String(ctx)
+		return wx.T("Unavailable").String(ctx)
 	}
 
 	return fmt.Sprintf("%s of %s", fileutil.FormatSize(usedBytes), fileutil.FormatSize(limitBytes))
 }
 
-func (qq *DashboardCardsPartial) spaceCard(ctx ctxx.Context, spacex *enttenant.Space, tenant *entmain.Tenant) *widget.Card {
-	var contextMenu *widget.Menu
-	// if ctx.AppCtx().User.Role == tenantrole.Owner {
+func (qq *DashboardCardsPartial) spaceCard(ctx ctxx.Context, spacex *enttenant.Space, tenant *entmain.Tenant) *wx.Card {
+	var contextMenu *wx.Menu
+	// if ctx.TenantCtx().User.Role == tenantrole.Owner {
 	contextMenu = NewSpaceContextMenuWidget(qq.actions).Widget(ctx, tenant.PublicID.String(), spacex.PublicID.String())
 	// }
 
-	return &widget.Card{
-		Style:    widget.CardStyleFilled,
-		Headline: widget.H(widget.HeadingTypeTitleLg, widget.Tu(spacex.Name)),
-		Subhead:  widget.T("Space"),
+	return &wx.Card{
+		Style:    wx.CardStyleFilled,
+		Headline: wx.H(wx.HeadingTypeTitleLg, wx.Tu(spacex.Name)),
+		Subhead:  wx.T("Space"),
 		// SupportingText: wx.Tf("Organization: %s", tenant.Name),
 		ContextMenu: contextMenu,
 		// SupportingText: wx.Tu(spacex.Description), // TODO tenant
-		Actions: []*widget.Button{
+		Actions: []*wx.Button{
 			{
-				Label:     widget.T("Select"), // TODO Browse, Open, Switch or activate? or Select?
-				StyleType: widget.ButtonStyleTypeTonal,
-				HTMXAttrs: widget.HTMXAttrs{
+				Label:     wx.T("Select"), // TODO Browse, Open, Switch or activate? or Select?
+				StyleType: wx.ButtonStyleTypeTonal,
+				HTMXAttrs: wx.HTMXAttrs{
 					HxGet: route2.BrowseRoot(tenant.PublicID.String(), spacex.PublicID.String()),
 				},
 			},
@@ -517,10 +493,10 @@ func (qq *DashboardCardsPartial) spaceCard(ctx ctxx.Context, spacex *enttenant.S
 	}
 }*/
 
-func (qq *DashboardCardsPartial) changePasswordBtn(ctx ctxx.Context) *widget.Button {
-	return &widget.Button{
-		Label:     widget.T("Change password"),
-		StyleType: widget.ButtonStyleTypeElevated,
+func (qq *DashboardCardsPartial) changePasswordBtn(ctx ctxx.Context) *wx.Button {
+	return &wx.Button{
+		Label:     wx.T("Change password"),
+		StyleType: wx.ButtonStyleTypeElevated,
 		HTMXAttrs: qq.actions.AuthActions.ChangePasswordCmd.ModalLinkAttrs(
 			qq.actions.AuthActions.ChangePasswordCmd.Data("", "", ""),
 			"",
@@ -575,17 +551,17 @@ func (qq *DashboardCardsPartial) id() string {
 	return "dashboardCards"
 }
 
-func (qq *DashboardCardsPartial) setPasswordCard(ctx ctxx.Context) *widget.Card {
+func (qq *DashboardCardsPartial) setPasswordCard(ctx ctxx.Context) *wx.Card {
 	// TODO highlight important cards
-	return &widget.Card{
-		Style:          widget.CardStyleFilled,
-		Headline:       widget.H(widget.HeadingTypeTitleLg, widget.T("No password set")),
-		Subhead:        widget.T("Account"),
-		SupportingText: widget.T("You've logged in with a temporary password. Please set a password to secure your account and use the app."),
-		Actions: []*widget.Button{
+	return &wx.Card{
+		Style:          wx.CardStyleFilled,
+		Headline:       wx.H(wx.HeadingTypeTitleLg, wx.T("No password set")),
+		Subhead:        wx.T("Account"),
+		SupportingText: wx.T("You've logged in with a temporary password. Please set a password to secure your account and use the app."),
+		Actions: []*wx.Button{
 			{
-				Label:     widget.T("Set password now"),
-				StyleType: widget.ButtonStyleTypeTonal,
+				Label:     wx.T("Set password now"),
+				StyleType: wx.ButtonStyleTypeTonal,
 				HTMXAttrs: qq.actions.AuthActions.SetInitialPasswordCmd.ModalLinkAttrs(
 					qq.actions.AuthActions.SetInitialPasswordCmd.Data("", ""),
 					"",
@@ -607,10 +583,10 @@ func (qq *DashboardCardsPartial) editAccountCard(ctx ctxx.Context) *wx.Card {
 }
 */
 
-func (qq *DashboardCardsPartial) editAccountBtn(ctx ctxx.Context) (*widget.Button, bool) {
-	return &widget.Button{
-		Label:     widget.T("Edit account"),
-		StyleType: widget.ButtonStyleTypeElevated,
+func (qq *DashboardCardsPartial) editAccountBtn(ctx ctxx.Context) (*wx.Button, bool) {
+	return &wx.Button{
+		Label:     wx.T("Edit account"),
+		StyleType: wx.ButtonStyleTypeElevated,
 		HTMXAttrs: qq.actions.AuthActions.EditAccountCmd.ModalLinkAttrs(
 			qq.actions.AuthActions.EditAccountCmd.Data(
 				ctx.MainCtx().Account.PublicID.String(),
@@ -622,25 +598,25 @@ func (qq *DashboardCardsPartial) editAccountBtn(ctx ctxx.Context) (*widget.Butto
 	}, true
 }
 
-func (qq *DashboardCardsPartial) clearTemporaryPasswordCard(ctx ctxx.Context) *widget.Card {
-	return &widget.Card{
-		Style:          widget.CardStyleFilled,
-		Headline:       widget.H(widget.HeadingTypeTitleLg, widget.T("Active temporary password")),
-		Subhead:        widget.T("Account"),
-		SupportingText: widget.T("Your account has an active temporary password. Please change your password or clear the temporary password as soon as possible to secure your account."),
-		Actions: []*widget.Button{
+func (qq *DashboardCardsPartial) clearTemporaryPasswordCard(ctx ctxx.Context) *wx.Card {
+	return &wx.Card{
+		Style:          wx.CardStyleFilled,
+		Headline:       wx.H(wx.HeadingTypeTitleLg, wx.T("Active temporary password")),
+		Subhead:        wx.T("Account"),
+		SupportingText: wx.T("Your account has an active temporary password. Please change your password or clear the temporary password as soon as possible to secure your account."),
+		Actions: []*wx.Button{
 			{
-				Label:     widget.T("Change password"),
-				StyleType: widget.ButtonStyleTypeTonal,
+				Label:     wx.T("Change password"),
+				StyleType: wx.ButtonStyleTypeTonal,
 				HTMXAttrs: qq.actions.AuthActions.ChangePasswordCmd.ModalLinkAttrs(
 					qq.actions.AuthActions.ChangePasswordCmd.Data("", "", ""),
 					"",
 				),
 			},
 			{
-				Label:     widget.T("Clear temporary password"),
-				StyleType: widget.ButtonStyleTypeOutlined,
-				HTMXAttrs: widget.HTMXAttrs{
+				Label:     wx.T("Clear temporary password"),
+				StyleType: wx.ButtonStyleTypeOutlined,
+				HTMXAttrs: wx.HTMXAttrs{
 					HxPost: qq.actions.AuthActions.ClearTemporaryPasswordCmd.Endpoint(),
 					HxVals: util.JSON(qq.actions.AuthActions.ClearTemporaryPasswordCmd.Data()),
 				},
@@ -649,7 +625,7 @@ func (qq *DashboardCardsPartial) clearTemporaryPasswordCard(ctx ctxx.Context) *w
 	}
 }
 
-func (qq *DashboardCardsPartial) manageSpacesCard(ctx ctxx.Context, tenantx *entmain.Tenant, spacesCount int) (*widget.Card, bool) {
+func (qq *DashboardCardsPartial) manageSpacesCard(ctx ctxx.Context, tenantx *entmain.Tenant, spacesCount int) (*wx.Card, bool) {
 	if spacesCount > 0 {
 		return nil, false
 	}
@@ -659,34 +635,34 @@ func (qq *DashboardCardsPartial) manageSpacesCard(ctx ctxx.Context, tenantx *ent
 		return nil, false
 	}
 
-	accountm := account2.NewAccount(ctx.MainCtx().Account)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if !tenantm.IsOwner(accountm) {
-		return &widget.Card{
-			Style:          widget.CardStyleFilled,
-			Headline:       widget.H(widget.HeadingTypeTitleLg, widget.T("No space available yet")),
-			Subhead:        widget.T("Space"),
-			SupportingText: widget.Tf("You have no permission to access any space of this organization."),
+		return &wx.Card{
+			Style:          wx.CardStyleFilled,
+			Headline:       wx.H(wx.HeadingTypeTitleLg, wx.T("No space available yet")),
+			Subhead:        wx.T("Space"),
+			SupportingText: wx.Tf("You have no permission to access any space of this organization."),
 		}, true
 	}
 
-	return &widget.Card{
-		Style:          widget.CardStyleFilled,
-		Headline:       widget.H(widget.HeadingTypeTitleLg, widget.T("No space available yet")),
-		Subhead:        widget.T("Space"),
-		SupportingText: widget.Tf("Please create one to get started."),
-		Actions: []*widget.Button{{
-			Label:     widget.T("Manage spaces"),
-			StyleType: widget.ButtonStyleTypeTonal,
-			HTMXAttrs: widget.HTMXAttrs{
+	return &wx.Card{
+		Style:          wx.CardStyleFilled,
+		Headline:       wx.H(wx.HeadingTypeTitleLg, wx.T("No space available yet")),
+		Subhead:        wx.T("Space"),
+		SupportingText: wx.Tf("Please create one to get started."),
+		Actions: []*wx.Button{{
+			Label:     wx.T("Manage spaces"),
+			StyleType: wx.ButtonStyleTypeTonal,
+			HTMXAttrs: wx.HTMXAttrs{
 				HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
 			},
 		}},
 	}, true
 }
 
-func (qq *DashboardCardsPartial) passkeyEnforcementBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*widget.Button, bool) {
+func (qq *DashboardCardsPartial) passkeyEnforcementBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
 	tenantm := tenant.NewTenant(tenantx)
-	accountm := account2.NewAccount(ctx.MainCtx().Account)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if !tenantm.IsOwner(accountm) {
 		return nil, false
 	}
@@ -694,17 +670,17 @@ func (qq *DashboardCardsPartial) passkeyEnforcementBtn(ctx ctxx.Context, tenantx
 		return nil, false
 	}
 
-	buttonLabel := widget.T("Enable passkey enforcement")
-	confirmText := widget.T("Enable passkey enforcement for this organization? Members will need passkeys to sign in.")
+	buttonLabel := wx.T("Enable passkey enforcement")
+	confirmText := wx.T("Enable passkey enforcement for this organization? Members will need passkeys to sign in.")
 	if tenantx.PasskeyAuthEnforced {
-		buttonLabel = widget.T("Disable passkey enforcement")
-		confirmText = widget.T("Disable passkey enforcement for this organization? Members can use passwords again if allowed.")
+		buttonLabel = wx.T("Disable passkey enforcement")
+		confirmText = wx.T("Disable passkey enforcement for this organization? Members can use passwords again if allowed.")
 	}
 
-	return &widget.Button{
+	return &wx.Button{
 		Label:     buttonLabel,
-		StyleType: widget.ButtonStyleTypeElevated,
-		HTMXAttrs: widget.HTMXAttrs{
+		StyleType: wx.ButtonStyleTypeElevated,
+		HTMXAttrs: wx.HTMXAttrs{
 			HxPost: qq.actions.ToggleTenantPasskeyEnforcementCmd.Endpoint(),
 			HxVals: util.JSON(
 				qq.actions.ToggleTenantPasskeyEnforcementCmd.Data(
@@ -718,27 +694,27 @@ func (qq *DashboardCardsPartial) passkeyEnforcementBtn(ctx ctxx.Context, tenantx
 	}, true
 }
 
-func (qq *DashboardCardsPartial) manageSpacesBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*widget.Button, bool) {
+func (qq *DashboardCardsPartial) manageSpacesBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
 	tenantm := tenant.NewTenant(tenantx)
-	accountm := account2.NewAccount(ctx.MainCtx().Account)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if !tenantm.IsOwner(accountm) {
 		return nil, false
 	}
 	if !tenantm.IsInitialized() {
 		return nil, false
 	}
-	return &widget.Button{
-		Label:     widget.T("Manage spaces"),
-		StyleType: widget.ButtonStyleTypeElevated,
-		HTMXAttrs: widget.HTMXAttrs{
+	return &wx.Button{
+		Label:     wx.T("Manage spaces"),
+		StyleType: wx.ButtonStyleTypeElevated,
+		HTMXAttrs: wx.HTMXAttrs{
 			HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
 		},
 	}, true
 }
 
-func (qq *DashboardCardsPartial) manageUsersCard(ctx ctxx.Context, tenantDB *sqlx.TenantDB, tenantx *entmain.Tenant) (*widget.Card, bool) {
+func (qq *DashboardCardsPartial) manageUsersCard(ctx ctxx.Context, tenantDB *sqlx.TenantDB, tenantx *entmain.Tenant) (*wx.Card, bool) {
 	tenantm := tenant.NewTenant(tenantx)
-	accountm := account2.NewAccount(ctx.MainCtx().Account)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if !tenantm.IsOwner(accountm) {
 		return nil, false
 	}
@@ -753,9 +729,9 @@ func (qq *DashboardCardsPartial) manageUsersCard(ctx ctxx.Context, tenantDB *sql
 	}
 
 	// headline := wx.H(wx.HeadingTypeTitleLg, wx.T("Manage users"))
-	supportingText := widget.Tf("%d users", usersCount)
+	supportingText := wx.Tf("%d users", usersCount)
 	if usersCount == 1 {
-		supportingText = widget.Tf("1 user")
+		supportingText = wx.Tf("1 user")
 	}
 
 	btn, ok := qq.manageUsersBtn(ctx, tenantx)
@@ -763,18 +739,18 @@ func (qq *DashboardCardsPartial) manageUsersCard(ctx ctxx.Context, tenantDB *sql
 		return nil, false
 	}
 
-	return &widget.Card{
-		Style:    widget.CardStyleFilled,
-		Headline: widget.H(widget.HeadingTypeTitleLg, supportingText),
+	return &wx.Card{
+		Style:    wx.CardStyleFilled,
+		Headline: wx.H(wx.HeadingTypeTitleLg, supportingText),
 		// Subhead:        wx.T("Organization"),
 		// Subhead: supportingText,
-		Actions: []*widget.Button{btn},
+		Actions: []*wx.Button{btn},
 	}, true
 }
 
-func (qq *DashboardCardsPartial) manageUsersBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*widget.Button, bool) {
+func (qq *DashboardCardsPartial) manageUsersBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
 	tenantm := tenant.NewTenant(tenantx)
-	accountm := account2.NewAccount(ctx.MainCtx().Account)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if !tenantm.IsOwner(accountm) {
 		return nil, false
 	}
@@ -782,16 +758,16 @@ func (qq *DashboardCardsPartial) manageUsersBtn(ctx ctxx.Context, tenantx *entma
 		return nil, false
 	}
 
-	return &widget.Button{
-		Label:     widget.T("Manage users"),
-		StyleType: widget.ButtonStyleTypeElevated,
-		HTMXAttrs: widget.HTMXAttrs{
-			HxGet: route.ManageUsersOfTenant(tenantx.PublicID.String()),
+	return &wx.Button{
+		Label:     wx.T("Manage users"),
+		StyleType: wx.ButtonStyleTypeElevated,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxGet: route2.ManageUsersOfTenant(tenantx.PublicID.String()),
 		},
 	}, true
 }
 
-func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*widget.Button, bool) {
+func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
 	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
 		return nil, false
 	}
@@ -802,7 +778,7 @@ func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entm
 	}
 
 	tenantm := tenant.NewTenant(tenantx)
-	accountm := account2.NewAccount(ctx.MainCtx().Account)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if !tenantm.IsOwner(accountm) {
 		return nil, false
 	}
@@ -810,13 +786,13 @@ func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entm
 		return nil, false
 	}
 
-	return &widget.Button{
-		Label:     widget.T("Delete organization"),
-		StyleType: widget.ButtonStyleTypeElevated,
-		HTMXAttrs: widget.HTMXAttrs{
+	return &wx.Button{
+		Label:     wx.T("Delete organization"),
+		StyleType: wx.ButtonStyleTypeElevated,
+		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:    deleteTenantCmdEndpoint,
 			HxVals:    util.JSON(map[string]any{"TenantID": tenantx.PublicID.String()}),
-			HxConfirm: widget.T("Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.").String(ctx),
+			HxConfirm: wx.T("Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.").String(ctx),
 		},
 	}, true
 }
@@ -824,7 +800,7 @@ func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entm
 func (qq *DashboardCardsPartial) downloadTenantBackupLink(
 	ctx ctxx.Context,
 	tenantx *entmain.Tenant,
-) (*widget.Link, bool) {
+) (*wx.Link, bool) {
 	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
 		return nil, false
 	}
@@ -835,7 +811,7 @@ func (qq *DashboardCardsPartial) downloadTenantBackupLink(
 	}
 
 	tenantm := tenant.NewTenant(tenantx)
-	accountm := account2.NewAccount(ctx.MainCtx().Account)
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if !tenantm.IsOwner(accountm) {
 		return nil, false
 	}
@@ -845,39 +821,39 @@ func (qq *DashboardCardsPartial) downloadTenantBackupLink(
 
 	filename := "tenant-backup-" + tenantx.PublicID.String() + ".zip"
 
-	return &widget.Link{
+	return &wx.Link{
 		Href:     endpoint + "?tenant_id=" + url.QueryEscape(tenantx.PublicID.String()),
 		Filename: filename,
-		Child: &widget.Button{
-			Label:     widget.T("Download backup"),
-			StyleType: widget.ButtonStyleTypeElevated,
+		Child: &wx.Button{
+			Label:     wx.T("Download backup"),
+			StyleType: wx.ButtonStyleTypeElevated,
 		},
 	}, true
 }
 
-func (qq *DashboardCardsPartial) appStatusCard(ctx ctxx.Context) *widget.Card {
-	var actions []*widget.Button
-	supportingText := widget.T("The app is unlocked and not protected by a passphrase.")
+func (qq *DashboardCardsPartial) appStatusCard(ctx ctxx.Context) *wx.Card {
+	var actions []*wx.Button
+	supportingText := wx.T("The app is unlocked and not protected by a passphrase.")
 
 	if qq.infra.SystemConfig().IsAppLocked() {
-		actions = append(actions, &widget.Button{
-			Label:     widget.T("Unlock app"),
-			StyleType: widget.ButtonStyleTypeTonal,
+		actions = append(actions, &wx.Button{
+			Label:     wx.T("Unlock app"),
+			StyleType: wx.ButtonStyleTypeTonal,
 			HTMXAttrs: qq.actions.AdminActions.UnlockAppCmd.ModalLinkAttrs(
 				qq.actions.AdminActions.UnlockAppCmd.Data(), ""),
 		})
-		supportingText = widget.T("The app is locked.")
+		supportingText = wx.T("The app is locked.")
 	} else {
-		label := widget.T("Set passphrase")
-		styleType := widget.ButtonStyleTypeTonal
+		label := wx.T("Set passphrase")
+		styleType := wx.ButtonStyleTypeTonal
 
 		if qq.infra.SystemConfig().IsIdentityEncryptedWithPassphrase() {
-			supportingText = widget.T("The app is unlocked and protected by a passphrase.")
-			label = widget.T("Change passphrase")
-			styleType = widget.ButtonStyleTypeOutlined
+			supportingText = wx.T("The app is unlocked and protected by a passphrase.")
+			label = wx.T("Change passphrase")
+			styleType = wx.ButtonStyleTypeOutlined
 		}
 
-		actions = append(actions, &widget.Button{
+		actions = append(actions, &wx.Button{
 			Label:     label,
 			StyleType: styleType,
 			HTMXAttrs: qq.actions.AdminActions.ChangePassphraseCmd.ModalLinkAttrs(
@@ -885,18 +861,18 @@ func (qq *DashboardCardsPartial) appStatusCard(ctx ctxx.Context) *widget.Card {
 		})
 
 		if qq.infra.SystemConfig().IsIdentityEncryptedWithPassphrase() {
-			actions = append(actions, &widget.Button{
-				Label:     widget.T("Remove passphrase"),
-				StyleType: widget.ButtonStyleTypeOutlined,
+			actions = append(actions, &wx.Button{
+				Label:     wx.T("Remove passphrase"),
+				StyleType: wx.ButtonStyleTypeOutlined,
 				HTMXAttrs: qq.actions.AdminActions.RemovePassphraseCmd.ModalLinkAttrs(
 					qq.actions.AdminActions.RemovePassphraseCmd.Data(), ""),
 			})
 		}
 	}
 
-	return &widget.Card{
-		Style:    widget.CardStyleFilled,
-		Headline: widget.H(widget.HeadingTypeTitleLg, widget.T("App status")),
+	return &wx.Card{
+		Style:    wx.CardStyleFilled,
+		Headline: wx.H(wx.HeadingTypeTitleLg, wx.T("App status")),
 		// Subhead:        wx.T("Admin"),
 		SupportingText: supportingText,
 		Actions:        actions,
@@ -907,30 +883,30 @@ func (qq *DashboardCardsPartial) appStatusCard(ctx ctxx.Context) *widget.Card {
 func (qq *DashboardCardsPartial) passkeyCredentialCard(
 	ctx ctxx.Context,
 	credentialx *entmain.PasskeyCredential,
-) *widget.Card {
-	supportingText := widget.Tf("Created on %s", credentialx.CreatedAt.Format("2006-01-02 15:04"))
+) *wx.Card {
+	supportingText := wx.Tf("Created on %s", credentialx.CreatedAt.Format("2006-01-02 15:04"))
 	if credentialx.LastUsedAt != nil {
-		supportingText = widget.Tf("Last used on %s", credentialx.LastUsedAt.Format("2006-01-02 15:04"))
+		supportingText = wx.Tf("Last used on %s", credentialx.LastUsedAt.Format("2006-01-02 15:04"))
 	}
 
 	credentialName := strings.TrimSpace(credentialx.Name)
 	if credentialName == "" {
-		credentialName = widget.T("Passkey").String(ctx)
+		credentialName = wx.T("Passkey").String(ctx)
 	}
 
-	return &widget.Card{
-		Style:          widget.CardStyleFilled,
-		Headline:       widget.H(widget.HeadingTypeTitleLg, widget.Tu(credentialName)),
-		Subhead:        widget.T("Passkey"),
+	return &wx.Card{
+		Style:          wx.CardStyleFilled,
+		Headline:       wx.H(wx.HeadingTypeTitleLg, wx.Tu(credentialName)),
+		Subhead:        wx.T("Passkey"),
 		SupportingText: supportingText,
 		ContextMenu:    NewPasskeyContextMenuWidget(qq.actions).Widget(ctx, credentialx.PublicID.String(), credentialName),
 	}
 }
 
-func (qq *DashboardCardsPartial) manageUploadLimitBtn(ctx ctxx.Context) *widget.Button {
-	return &widget.Button{
-		Label:     widget.T("Manage upload limit"),
-		StyleType: widget.ButtonStyleTypeElevated,
+func (qq *DashboardCardsPartial) manageUploadLimitBtn(ctx ctxx.Context) *wx.Button {
+	return &wx.Button{
+		Label:     wx.T("Manage upload limit"),
+		StyleType: wx.ButtonStyleTypeElevated,
 		HTMXAttrs: qq.actions.AdminActions.SetGlobalUploadLimitForm.ModalLinkAttrs(
 			qq.actions.AdminActions.SetGlobalUploadLimitForm.Data(),
 			"",

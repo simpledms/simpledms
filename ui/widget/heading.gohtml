@@ -1,0 +1,4 @@
+{{- define "Heading" }}
+	{{/* TODO should not always be h3 */}}
+	<h3 class="{{ .Type }} text-on-surface">{{ render .GetContext .Text }}</h3>
+{{ end }}

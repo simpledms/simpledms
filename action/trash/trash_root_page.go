@@ -1,12 +1,12 @@
 package trash
 
 import (
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/widget"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/ui/renderable"
+	partial "github.com/simpledms/simpledms/ui/uix/partial"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type TrashRootPage struct {
@@ -22,23 +22,23 @@ func NewTrashRootPage(infra *common.Infra, actions *Actions) *TrashRootPage {
 }
 
 func (qq *TrashRootPage) Handler(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
 	viewx := qq.widget(ctx)
 
 	if req.Header.Get("HX-Request") == "" {
-		viewx = partial2.NewBase(widget.T("Trash"), viewx)
+		viewx = partial.NewBase(wx.T("Trash"), viewx)
 	}
 
 	return qq.infra.Renderer().Render(rw, ctx, viewx)
 }
 
 func (qq *TrashRootPage) widget(ctx ctxx.Context) renderable.Renderable {
-	mainLayout := &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "trash", nil),
-		Content: &widget.ListDetailLayout{
+	mainLayout := &wx.MainLayout{
+		Navigation: partial.NewNavigationRail(ctx, qq.infra, "trash", nil),
+		Content: &wx.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List:   qq.actions.TrashListPartial.Widget(ctx, qq.actions.TrashListPartial.Data("")),
 		},
@@ -46,10 +46,10 @@ func (qq *TrashRootPage) widget(ctx ctxx.Context) renderable.Renderable {
 	return mainLayout
 }
 
-func (qq *TrashRootPage) appBar(ctx ctxx.Context) *widget.AppBar {
-	return &widget.AppBar{
-		Leading:          widget.NewIcon("delete"),
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
-		Title:            widget.T("Trash"),
+func (qq *TrashRootPage) appBar(ctx ctxx.Context) *wx.AppBar {
+	return &wx.AppBar{
+		Leading:          wx.NewIcon("delete"),
+		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
+		Title:            wx.T("Trash"),
 	}
 }

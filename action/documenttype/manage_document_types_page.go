@@ -4,14 +4,14 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/tenant/library"
-	"github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/ui/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 // TODO via settings or prefix with manage
@@ -28,40 +28,40 @@ func NewManageDocumentTypesPage(infra *common.Infra, actions *Actions) *ManageDo
 }
 
 func (qq *ManageDocumentTypesPage) Handler(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
 	var viewx renderable.Renderable
 
-	fabs := []*widget.FloatingActionButton{
+	fabs := []*wx.FloatingActionButton{
 		{
 			Icon:    "add",
-			Tooltip: widget.T("Add document type"),
+			Tooltip: wx.T("Add document type"),
 			HTMXAttrs: qq.actions.CreateCmd.ModalLinkAttrs(
 				qq.actions.CreateCmd.Data(""),
 				"",
 			),
-			Child: []widget.IWidget{
-				widget.NewIcon("add"),
-				widget.T("Add document type"),
+			Child: []wx.IWidget{
+				wx.NewIcon("add"),
+				wx.T("Add document type"),
 			},
 		},
 	}
 
 	service := library.NewService()
 	if !service.SpaceHasMetadata(ctx) {
-		fabs = append(fabs, &widget.FloatingActionButton{
+		fabs = append(fabs, &wx.FloatingActionButton{
 			Icon:    "download",
-			Tooltip: widget.T("Import from library"),
-			FABSize: widget.FABSizeSmall,
+			Tooltip: wx.T("Import from library"),
+			FABSize: wx.FABSizeSmall,
 			HTMXAttrs: qq.actions.ImportFromLibraryDialog.ModalLinkAttrs(
 				qq.actions.ImportFromLibraryDialog.Data(),
 				"",
 			),
-			Child: []widget.IWidget{
-				widget.NewIcon("download"),
-				widget.T("Import from library"),
+			Child: []wx.IWidget{
+				wx.NewIcon("download"),
+				wx.T("Import from library"),
 			},
 		})
 	}
@@ -78,8 +78,8 @@ func (qq *ManageDocumentTypesPage) Handler(
 	// TODO is this safe? should be on 64 bit system
 	id64 := int64(id)
 
-	viewx = &widget.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, qq.infra, "document-types", fabs),
+	viewx = &wx.MainLayout{
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "document-types", fabs),
 		Content:    qq.actions.DocumentTypePage.WidgetHandler(rw, req, ctx, id64),
 	}
 
@@ -89,7 +89,7 @@ func (qq *ManageDocumentTypesPage) Handler(
 	}
 
 	if renderFullPage {
-		viewx = partial.NewBase(widget.T("Manage document types"), viewx)
+		viewx = partial2.NewBase(wx.T("Manage document types"), viewx)
 	}
 
 	return qq.infra.Renderer().Render(rw, ctx, viewx)

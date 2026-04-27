@@ -1,12 +1,12 @@
 package browse
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type DocumentTypeFilterDialogData struct {
@@ -37,7 +37,7 @@ func (qq *DocumentTypeFilterDialog) Data(currentDirID string) *DocumentTypeFilte
 	}
 }
 
-func (qq *DocumentTypeFilterDialog) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *DocumentTypeFilterDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[DocumentTypeFilterDialogData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -51,14 +51,14 @@ func (qq *DocumentTypeFilterDialog) Handler(rw httpx2.ResponseWriter, req *httpx
 	)
 }
 
-func (qq *DocumentTypeFilterDialog) Widget(ctx ctxx.Context, data *DocumentTypeFilterDialogData, listDirState *ListDirPartialState) *widget.Dialog {
-	return &widget.Dialog{
-		Widget: widget.Widget[widget.Dialog]{
+func (qq *DocumentTypeFilterDialog) Widget(ctx ctxx.Context, data *DocumentTypeFilterDialogData, listDirState *ListDirPartialState) *wx.Dialog {
+	return &wx.Dialog{
+		Widget: wx.Widget[wx.Dialog]{
 			ID: qq.ID(),
 		},
-		Headline:     widget.T("Document type | Filter"),
+		Headline:     wx.T("Document type | Filter"),
 		IsOpenOnLoad: true,
-		Layout:       widget.DialogLayoutSideSheet,
+		Layout:       wx.DialogLayoutSideSheet,
 		Child: qq.actions.DocumentTypeFilterPartial.Widget(
 			ctx,
 			qq.actions.DocumentTypeFilterPartial.Data(data.CurrentDirID),

@@ -2,8 +2,6 @@ package route
 
 import (
 	"fmt"
-
-	route2 "github.com/marcobeierer/go-core/ui/uix/route"
 )
 
 func ManageDocumentTypesRoute() string {
@@ -37,7 +35,7 @@ func ManageTags(tenantID, spaceID string) string {
 }
 
 func ManageTagsWithState(state any) func(string, string) string {
-	return route2.RootWithState(ManageTags, state)
+	return RootWithState(ManageTags, state)
 }
 
 /*

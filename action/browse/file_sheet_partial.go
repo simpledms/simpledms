@@ -3,10 +3,10 @@ package browse
 import (
 	"context"
 
-	wx "github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/db/enttenant"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
 )
 
 type FileSheetPartialData struct {

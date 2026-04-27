@@ -1,16 +1,15 @@
 package spaces
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/simpledms/simpledms/ui/uix/partial"
-
-	acommon "github.com/marcobeierer/go-core/action/common"
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/widget"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	acommon "github.com/simpledms/simpledms/action/common"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/ui/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type SpacesPageData struct {
@@ -37,21 +36,21 @@ func (qq *SpacesPage) Data() *SpacesPageData {
 	return &SpacesPageData{}
 }
 
-func (qq *SpacesPage) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *SpacesPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	state := autil.StateX[SpacesPageState](rw, req)
 	return qq.Render(rw, req, ctx, qq.infra, "Spaces", qq.Widget(ctx, state))
 }
 
 func (qq *SpacesPage) Widget(ctx ctxx.Context, state *SpacesPageState) renderable.Renderable {
-	fabs := []*widget.FloatingActionButton{}
+	fabs := []*wx.FloatingActionButton{}
 
-	if ctx.AppCtx().User.Role == tenantrole.Owner {
+	if ctx.TenantCtx().User.Role == tenantrole.Owner {
 		fabs = append(fabs,
-			&widget.FloatingActionButton{
+			&wx.FloatingActionButton{
 				Icon: "add",
-				Child: []widget.IWidget{
-					widget.NewIcon("add"),
-					widget.T("Create space"),
+				Child: []wx.IWidget{
+					wx.NewIcon("add"),
+					wx.T("Create space"),
 				},
 				HTMXAttrs: qq.actions.CreateSpaceDialog.ModalLinkAttrs(
 					qq.actions.CreateSpaceDialog.Data("", ""),
@@ -61,9 +60,9 @@ func (qq *SpacesPage) Widget(ctx ctxx.Context, state *SpacesPageState) renderabl
 		)
 	}
 
-	return &widget.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, qq.infra, "spaces", fabs),
-		Content: &widget.DefaultLayout{
+	return &wx.MainLayout{
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "spaces", fabs),
+		Content: &wx.DefaultLayout{
 			AppBar: qq.appBar(ctx),
 			Content: qq.actions.SpaceCardsPartial.Widget(
 				ctx,
@@ -72,16 +71,16 @@ func (qq *SpacesPage) Widget(ctx ctxx.Context, state *SpacesPageState) renderabl
 	}
 }
 
-func (qq *SpacesPage) appBar(ctx ctxx.Context) *widget.AppBar {
-	return &widget.AppBar{
-		Leading: &widget.Icon{
+func (qq *SpacesPage) appBar(ctx ctxx.Context) *wx.AppBar {
+	return &wx.AppBar{
+		Leading: &wx.Icon{
 			Name: "hub",
 		},
-		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
-		Title: &widget.AppBarTitle{
-			Text: widget.Tuf("%s «%s»", widget.T("Spaces").String(ctx), ctx.TenantCtx().Tenant.Name),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		Title: &wx.AppBarTitle{
+			Text: wx.Tuf("%s «%s»", wx.T("Spaces").String(ctx), ctx.TenantCtx().Tenant.Name),
 		},
-		Actions: []widget.IWidget{
+		Actions: []wx.IWidget{
 			/*&wx.IconButton{
 				Icon: "more_vert",
 				Children: &wx.Menu{

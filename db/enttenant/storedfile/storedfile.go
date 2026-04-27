@@ -9,8 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-
-	"github.com/marcobeierer/go-core/model/common/storagetype"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
 const (

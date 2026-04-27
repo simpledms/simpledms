@@ -9,16 +9,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entmain/account"
-	"github.com/marcobeierer/go-core/db/entx"
-
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestUploadFileCmdRejectsWhenGlobalUploadLimitExceeded(t *testing.T) {
@@ -52,8 +51,8 @@ func TestUploadFileCmdRejectsWhenGlobalUploadLimitExceeded(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 		handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-			httpx2.NewResponseWriter(rr),
-			httpx2.NewRequest(req),
+			httpx.NewResponseWriter(rr),
+			httpx.NewRequest(req),
 			spaceCtx,
 		)
 		if handlerErr == nil {
@@ -104,8 +103,8 @@ func TestUploadFileCmdRejectsWhenTenantUploadLimitOverrideIsLower(t *testing.T) 
 
 		rr := httptest.NewRecorder()
 		handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-			httpx2.NewResponseWriter(rr),
-			httpx2.NewRequest(req),
+			httpx.NewResponseWriter(rr),
+			httpx.NewRequest(req),
 			spaceCtx,
 		)
 		if handlerErr == nil {
@@ -156,8 +155,8 @@ func TestUploadFileCmdAllowsUnlimitedTenantOverride(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 		handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-			httpx2.NewResponseWriter(rr),
-			httpx2.NewRequest(req),
+			httpx.NewResponseWriter(rr),
+			httpx.NewRequest(req),
 			spaceCtx,
 		)
 		if handlerErr != nil {
@@ -182,15 +181,15 @@ func TestUploadFilesCmdRejectsWhenGlobalUploadLimitExceeded(t *testing.T) {
 			OnlyX(context.Background())
 
 		var handlerErr error
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
 			req := newSharedUploadRequest(t, map[string]string{
 				"too-large.txt": strings.Repeat("x", 2*1024*1024),
 			})
 
 			rr := httptest.NewRecorder()
 			handlerErr = harness.actions.OpenFile.UploadFilesCmd.Handler(
-				httpx2.NewResponseWriter(rr),
-				httpx2.NewRequest(req),
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
 				mainCtx,
 			)
 			return nil
@@ -229,7 +228,7 @@ func setupUploadTestSpace(
 	var parentDirID string
 	var spaceID int64
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
 		spaceName := "Upload Limit Space"
 		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 

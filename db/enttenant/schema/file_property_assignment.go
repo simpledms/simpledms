@@ -5,7 +5,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	"github.com/marcobeierer/go-core/util/timex"
+	"github.com/simpledms/simpledms/util/timex"
 )
 
 type FilePropertyAssignment struct {

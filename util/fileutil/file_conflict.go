@@ -3,9 +3,9 @@ package fileutil
 import (
 	"net/http"
 
-	"github.com/marcobeierer/go-core/util/e"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/util/e"
 )
 
 func EnsureFileDoesNotExist(ctx ctxx.Context, filename string, parentDirID int64, isInInbox bool) error {

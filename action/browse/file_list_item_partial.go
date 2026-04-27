@@ -5,18 +5,17 @@ import (
 	"os"
 	"strings"
 
-	"github.com/marcobeierer/go-core/db/entx"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/entx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileListItemPartialData struct {
@@ -48,13 +47,13 @@ func (qq *FileListItemPartial) Data(currentDirID, fileID string) *FileListItemPa
 	}
 }
 
-func (qq *FileListItemPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *FileListItemPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileListItemPartialData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
 
-	filex := ctx.AppCtx().TTx.File.Query().WithChildren().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
+	filex := ctx.TenantCtx().TTx.File.Query().WithChildren().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
 
 	qq.infra.Renderer().RenderX(
 		rw,
@@ -77,7 +76,7 @@ func (qq *FileListItemPartial) Widget(
 	isSelected bool,
 	// hideContextMenu bool,
 	showBreadcrumbs bool,
-) *widget.ListItem {
+) *wx.ListItem {
 	if filex.IsDirectory {
 		return qq.DirectoryListItem(ctx, currentDirID, filex, parentFullPath, showBreadcrumbs)
 	}
@@ -91,7 +90,7 @@ func (qq *FileListItemPartial) DirectoryListItem(
 	fileWithChildren *enttenant.File,
 	parentFullPath string, // only necessary with breadcrumbs
 	showBreadcrumbs bool,
-) *widget.ListItem {
+) *wx.ListItem {
 	supportingText := ""
 	if showBreadcrumbs {
 		if parentFullPath == "" {
@@ -115,22 +114,22 @@ func (qq *FileListItemPartial) DirectoryListItem(
 		supportingText = qq.supportingTextDirectory(fileWithChildren, supportingText)
 	}
 
-	icon := widget.NewIcon("folder")
-	headline := widget.T(fileWithChildren.Name)
+	icon := wx.NewIcon("folder")
+	headline := wx.T(fileWithChildren.Name)
 
 	// check if root dir
 	if fileWithChildren.ParentID == 0 {
-		icon = widget.NewIcon("home")
+		icon = wx.NewIcon("home")
 	}
 
-	return &widget.ListItem{
+	return &wx.ListItem{
 		RadioGroupName: "fileListRadioGroup",
 		// BackgroundColor: "beige",
 		Leading:        icon.SmallPadding(),
 		Headline:       headline,
-		SupportingText: widget.Tu(supportingText),
+		SupportingText: wx.Tu(supportingText),
 		ContextMenu:    NewFileContextMenuWidget(qq.actions).Widget(ctx, fileWithChildren),
-		HTMXAttrs: widget.HTMXAttrs{
+		HTMXAttrs: wx.HTMXAttrs{
 			HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID.String()),
 			HxHeaders: autil.ResetStateHeader(), // necessary to close side sheet
 			HxSwap: fmt.Sprintf(
@@ -184,8 +183,8 @@ func (qq *FileListItemPartial) fileListItem(
 	isSelected bool,
 	// hideContextMenu bool,
 	showBreadcrumbs bool,
-) *widget.ListItem {
-	htmxAttrs := widget.HTMXAttrs{
+) *wx.ListItem {
+	htmxAttrs := wx.HTMXAttrs{
 		HxTarget: "#details",
 		HxSwap:   "outerHTML",
 		// dirID and not fileWithChildren.ID so that it works nicely with `recursive` filter
@@ -221,15 +220,15 @@ func (qq *FileListItemPartial) fileListItem(
 	}
 
 	withDocumentType := hasBreadcrumbs
-	headline := widget.Tu(filexx.FilenameInApp(ctx, withDocumentType))
+	headline := wx.Tu(filexx.FilenameInApp(ctx, withDocumentType))
 
-	return &widget.ListItem{
+	return &wx.ListItem{
 		RadioGroupName: "fileListRadioGroup",
 		// BackgroundColor: "aliceblue",
-		Leading:        widget.NewIcon("description").SmallPadding(),
+		Leading:        wx.NewIcon("description").SmallPadding(),
 		ContextMenu:    NewFileContextMenuWidget(qq.actions).Widget(ctx, fileWithChildren),
 		Headline:       headline,
-		SupportingText: widget.Tu(supportingText),
+		SupportingText: wx.Tu(supportingText),
 		HTMXAttrs:      htmxAttrs,
 		IsSelected:     isSelected,
 	}

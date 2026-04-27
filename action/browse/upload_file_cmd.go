@@ -6,17 +6,17 @@ import (
 	"net/http"
 	"path/filepath"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/fileutil"
+	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/txx"
 	"github.com/simpledms/simpledms/util/uploadx"
 )
@@ -50,7 +50,7 @@ func NewUploadFileCmd(
 	formHelper := autil.NewFormHelper[UploadFileCmdData](
 		infra,
 		config,
-		widget.T("Upload file"),
+		wx.T("Upload file"),
 		// "#fileList",
 	)
 	formHelper.SetIsMultipartFormData(true)
@@ -73,7 +73,7 @@ func (qq *UploadFileCmd) Data(parentDirID string, filename string, addToInbox bo
 }
 
 // very similar to UploadFileVersionCmd
-func (qq *UploadFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	nilableUploadLimitBytes, err := qq.infra.FileSystem().NilableEffectiveUploadSizeLimitBytes(ctx)
 	if err != nil {
 		return err
@@ -163,7 +163,7 @@ func (qq *UploadFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, 
 		return err
 	}
 
-	rw.AddRenderables(widget.NewSnackbarf("«%s» uploaded.", prep.filex.Name))
+	rw.AddRenderables(wx.NewSnackbarf("«%s» uploaded.", prep.filex.Name))
 	// TODO does triggering event have an effect? request comes from uppy and isn't a HTMX request...
 	rw.Header().Add("HX-Trigger", event.FileUploaded.String())
 

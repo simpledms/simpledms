@@ -14,20 +14,17 @@ import (
 
 	securejoin "github.com/cyphar/filepath-securejoin"
 	_ "github.com/mattn/go-sqlite3"
-
-	"github.com/marcobeierer/go-core/db/entmain"
-	mainprivacy "github.com/marcobeierer/go-core/db/entmain/privacy"
-	_ "github.com/marcobeierer/go-core/db/entmain/runtime"
-	tenantpred "github.com/marcobeierer/go-core/db/entmain/tenant"
-	"github.com/marcobeierer/go-core/db/entx"
-
-	sqlx2 "github.com/marcobeierer/go-core/db/sqlx"
-	tenantm "github.com/marcobeierer/go-core/model/tenant"
-	"github.com/marcobeierer/go-core/pathx"
-	"github.com/marcobeierer/go-core/util"
+	"github.com/simpledms/simpledms/db/entmain"
+	mainprivacy "github.com/simpledms/simpledms/db/entmain/privacy"
+	_ "github.com/simpledms/simpledms/db/entmain/runtime"
+	tenantpred "github.com/simpledms/simpledms/db/entmain/tenant"
 	tenantprivacy "github.com/simpledms/simpledms/db/enttenant/privacy"
 	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
+	tenantm "github.com/simpledms/simpledms/model/main/tenant"
+	"github.com/simpledms/simpledms/pathx"
+	"github.com/simpledms/simpledms/util"
 )
 
 func main() {
@@ -100,16 +97,16 @@ func main() {
 	log.Printf("browse URL path: /org/%s/space/%s/browse/", tenantx.PublicID.String(), spacePublicID)
 }
 
-func openMainDB(metaPath string) *sqlx2.MainDB {
+func openMainDB(metaPath string) *sqlx.MainDB {
 	mainDBPath, err := securejoin.SecureJoin(metaPath, "main.sqlite3")
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	return sqlx2.NewMainDB(mainDBPath)
+	return sqlx.NewMainDB(mainDBPath)
 }
 
-func resolveTenant(mainDB *sqlx2.MainDB, tenantPublicID string) *entmain.Tenant {
+func resolveTenant(mainDB *sqlx.MainDB, tenantPublicID string) *entmain.Tenant {
 	ctx := mainprivacy.DecisionContext(context.Background(), mainprivacy.Allow)
 
 	if tenantPublicID != "" {
@@ -154,24 +151,9 @@ func resolveTenant(mainDB *sqlx2.MainDB, tenantPublicID string) *entmain.Tenant 
 }
 
 func openTenantDB(tenantx *entmain.Tenant, metaPath string) *sqlx.TenantDB {
-	tenantDBx, err := tenantm.NewTenant(tenantx).OpenDB(
-		false,
-		metaPath,
-		func(config tenantm.TenantDBOpenConfig) (tenantm.TenantDB, error) {
-			tenantDB := sqlx.NewTenantDB(config.ReadOnlyDataSourceURL, config.ReadWriteDataSourceURL)
-			if config.DevMode {
-				tenantDB.Debug()
-			}
-
-			return tenantDB, nil
-		},
-	)
+	tenantDB, err := tenantm.NewTenant(tenantx).OpenDB(false, metaPath)
 	if err != nil {
 		log.Fatalln(err)
-	}
-	tenantDB, ok := tenantDBx.(*sqlx.TenantDB)
-	if !ok {
-		log.Fatalf("unexpected tenant db type %T", tenantDBx)
 	}
 
 	return tenantDB
@@ -251,7 +233,7 @@ func openTenantSQLDB(metaPath, tenantPublicID string) *sql.DB {
 		log.Fatalln(err)
 	}
 
-	dataSourceURL := fmt.Sprintf("file:%s?%s", tenantDBPath, sqlx2.SQLiteQueryParamsReadWrite)
+	dataSourceURL := fmt.Sprintf("file:%s?%s", tenantDBPath, sqlx.SQLiteQueryParamsReadWrite)
 	sqlDB, err := sql.Open("sqlite3", dataSourceURL)
 	if err != nil {
 		log.Fatalln(err)

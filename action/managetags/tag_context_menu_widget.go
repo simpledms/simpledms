@@ -1,13 +1,13 @@
 package managetags
 
 import (
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
 )
 
 // TODO move to partial package?
@@ -25,23 +25,23 @@ func NewTagContextMenuWidget(actions *Actions) *TagContextMenuWidget {
 }
 
 // TODO should also work without file
-func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *widget.Menu {
-	deleteLink := &widget.MenuItem{
+func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *wx.Menu {
+	deleteLink := &wx.MenuItem{
 		LeadingIcon: "delete",
-		Label:       widget.T("Delete"),
-		HTMXAttrs: widget.HTMXAttrs{
+		Label:       wx.T("Delete"),
+		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:    qq.actions.Tagging.DeleteTagCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.Tagging.DeleteTagCmd.Data(tagx.ID)),
-			HxConfirm: widget.T("Are you sure? This action will delete the tag and unassign it from all files!").String(ctx),
+			HxConfirm: wx.T("Are you sure? This action will delete the tag and unassign it from all files!").String(ctx),
 		},
 	}
 
 	// TODO handle Deletion for groups...
 
-	menuItems := []*widget.MenuItem{
+	menuItems := []*wx.MenuItem{
 		{
 			LeadingIcon: "edit",
-			Label:       widget.T("Edit"),
+			Label:       wx.T("Edit"),
 			HTMXAttrs: qq.actions.Tagging.EditTagCmd.ModalLinkAttrs(
 				qq.actions.Tagging.EditTagCmd.Data(tagx.ID, tagx.Name),
 				"",
@@ -60,10 +60,10 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *w
 		*/
 	}
 	if tagx.Type == tagtype.Super {
-		assignSubTagsLink := &widget.MenuItem{
-			Label:       widget.T("Assign tags"), // TODO or Sub-tags? sounds bad in german
+		assignSubTagsLink := &wx.MenuItem{
+			Label:       wx.T("Assign tags"), // TODO or Sub-tags? sounds bad in german
 			LeadingIcon: "label",
-			HTMXAttrs: widget.HTMXAttrs{
+			HTMXAttrs: wx.HTMXAttrs{
 				HxPost:        qq.actions.Tagging.SubTags.Edit.EndpointWithParams(actionx.ResponseWrapperDialog, ""),
 				HxVals:        util.JSON(qq.actions.Tagging.SubTags.Edit.Data(tagx.ID, false)),
 				LoadInPopover: true,
@@ -97,9 +97,9 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *w
 		if groupCount > 0 {
 			menuItems = append(
 				menuItems,
-				&widget.MenuItem{
+				&wx.MenuItem{
 					LeadingIcon: "move_item",
-					Label:       widget.T("Move to group"),
+					Label:       wx.T("Move to group"),
 					HTMXAttrs: qq.actions.Tagging.MoveTagToGroupCmd.ModalLinkAttrs(
 						qq.actions.Tagging.MoveTagToGroupCmd.Data(tagx.ID, 0),
 						"",
@@ -110,13 +110,13 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *w
 	}
 	menuItems = append(
 		menuItems,
-		&widget.MenuItem{
+		&wx.MenuItem{
 			IsDivider: true,
 		},
 		deleteLink, // TODO also if group?
 	)
 
-	return &widget.Menu{
+	return &wx.Menu{
 		Items: menuItems,
 	}
 }

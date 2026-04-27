@@ -5,14 +5,14 @@ package inbox
 import (
 	"log"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	actionx2 "github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type AssignFileCmdData struct {
@@ -24,16 +24,16 @@ type AssignFileCmdData struct {
 type AssignFileCmd struct {
 	infra   *common.Infra
 	actions *Actions
-	*actionx2.Config
+	*actionx.Config
 	*autil.FormHelper[AssignFileCmdData]
 }
 
 func NewAssignFileCmd(infra *common.Infra, actions *Actions) *AssignFileCmd {
-	config := actionx2.NewConfig(
+	config := actionx.NewConfig(
 		actions.Route("assign-file-cmd"),
 		false,
 	)
-	formHelper := autil.NewFormHelper[AssignFileCmdData](infra, config, widget.T("Assign file"))
+	formHelper := autil.NewFormHelper[AssignFileCmdData](infra, config, wx.T("Assign file"))
 	return &AssignFileCmd{
 		infra:      infra,
 		actions:    actions,
@@ -50,7 +50,7 @@ func (qq *AssignFileCmd) Data(destDirID, fileID, filename string) *AssignFileCmd
 	}
 }
 
-func (qq *AssignFileCmd) FormHandler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *AssignFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[AssignFileCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -60,26 +60,26 @@ func (qq *AssignFileCmd) FormHandler(rw httpx2.ResponseWriter, req *httpx2.Reque
 	hxTarget := req.URL.Query().Get("hx-target")
 
 	formID := "assignFileForm"
-	container := &widget.Container{
+	container := &wx.Container{
 		GapY: true,
-		Child: []widget.IWidget{
-			&widget.Container{
-				Child: []widget.IWidget{
-					widget.NewLabel(widget.LabelTypeMd, widget.T("Original filename")),
-					widget.NewBody(widget.BodyTypeSm, widget.Tu(data.Filename)),
+		Child: []wx.IWidget{
+			&wx.Container{
+				Child: []wx.IWidget{
+					wx.NewLabel(wx.LabelTypeMd, wx.T("Original filename")),
+					wx.NewBody(wx.BodyTypeSm, wx.Tu(data.Filename)),
 				},
 			},
-			&widget.Form{
-				Widget: widget.Widget[widget.Form]{
+			&wx.Form{
+				Widget: wx.Widget[wx.Form]{
 					ID: formID,
 				},
-				HTMXAttrs: widget.HTMXAttrs{
+				HTMXAttrs: wx.HTMXAttrs{
 					HxPost:   qq.Endpoint(),
 					HxTarget: hxTarget,
 					HxSwap:   "outerHTML",
 				},
-				Children: []widget.IWidget{
-					widget.NewFormFields(ctx, data),
+				Children: []wx.IWidget{
+					wx.NewFormFields(ctx, data),
 				},
 			},
 		},
@@ -87,11 +87,11 @@ func (qq *AssignFileCmd) FormHandler(rw httpx2.ResponseWriter, req *httpx2.Reque
 
 	qq.infra.Renderer().RenderX(rw, ctx,
 		autil.WrapWidgetWithID(
-			widget.T("Assign file"),
-			widget.T("Save"),
+			wx.T("Assign file"),
+			wx.T("Save"),
 			container,
-			actionx2.ResponseWrapper(wrapper),
-			widget.DialogLayoutDefault,
+			actionx.ResponseWrapper(wrapper),
+			wx.DialogLayoutDefault,
 			"",
 			formID,
 		),
@@ -99,7 +99,7 @@ func (qq *AssignFileCmd) FormHandler(rw httpx2.ResponseWriter, req *httpx2.Reque
 	return nil
 }
 
-func (qq *AssignFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *AssignFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[AssignFileCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -120,18 +120,18 @@ func (qq *AssignFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, 
 	// TODO snackbar not shown; modal not closed
 	// rw.Header().Set("HX-Location", route.InboxRoot())
 
-	action := &widget.Link{
+	action := &wx.Link{
 		Href: route.BrowseFile(
 			ctx.TenantCtx().TenantID,
 			ctx.SpaceCtx().SpaceID,
 			filex.Parent(ctx).Data.PublicID.String(),
 			filex.Data.PublicID.String(),
 		),
-		Child: widget.T("Open file"),
+		Child: wx.T("Open file"),
 	}
 
 	rw.AddRenderables(
-		widget.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
+		wx.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
 	)
 	rw.Header().Set("HX-Trigger", event.FileMoved.String())
 	// TODO not nice because logic to reload list and close details is implemented by handling FileMoved event

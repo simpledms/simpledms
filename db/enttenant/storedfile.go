@@ -9,10 +9,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-
-	"github.com/marcobeierer/go-core/model/common/storagetype"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
 // StoredFile is the model entity for the StoredFile schema.

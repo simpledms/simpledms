@@ -1,9 +1,9 @@
 package dashboard
 
 import (
-	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
+	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type SpaceContextMenuWidget struct {
@@ -16,14 +16,14 @@ func NewSpaceContextMenuWidget(actions *Actions) *SpaceContextMenuWidget {
 	}
 }
 
-func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, tenantID, spaceID string) *widget.Menu {
-	return &widget.Menu{
+func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, tenantID, spaceID string) *wx.Menu {
+	return &wx.Menu{
 		// near duplicate in MainMenu and space.SpaceContextMenuWidget
-		Items: []*widget.MenuItem{
+		Items: []*wx.MenuItem{
 			{
 				LeadingIcon: "edit",
-				Label:       widget.T("Edit in «Spaces» view"),
-				HTMXAttrs: widget.HTMXAttrs{
+				Label:       wx.T("Edit in «Spaces» view"),
+				HTMXAttrs: wx.HTMXAttrs{
 					HxGet: route2.SpacesRoot(tenantID),
 				},
 			},
@@ -32,29 +32,29 @@ func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, tenantID, spaceID str
 			},
 			{
 				LeadingIcon: "category", // TODO category or description?
-				Label:       widget.T("Document types"),
-				HTMXAttrs: widget.HTMXAttrs{
+				Label:       wx.T("Document types"),
+				HTMXAttrs: wx.HTMXAttrs{
 					HxGet: route2.ManageDocumentTypes(tenantID, spaceID),
 				},
 			},
 			{
 				LeadingIcon: "label",
-				Label:       widget.T("Tags"),
-				HTMXAttrs: widget.HTMXAttrs{
+				Label:       wx.T("Tags"),
+				HTMXAttrs: wx.HTMXAttrs{
 					HxGet: route2.ManageTags(tenantID, spaceID),
 				},
 			},
 			{
 				LeadingIcon: "tune", // tune or assignment
-				Label:       widget.T("Fields"),
-				HTMXAttrs: widget.HTMXAttrs{
+				Label:       wx.T("Fields"),
+				HTMXAttrs: wx.HTMXAttrs{
 					HxGet: route2.ManageProperties(tenantID, spaceID),
 				},
 			},
 			{
 				LeadingIcon: "person",
-				Label:       widget.T("Users"),
-				HTMXAttrs: widget.HTMXAttrs{
+				Label:       wx.T("Users"),
+				HTMXAttrs: wx.HTMXAttrs{
 					HxGet: route2.ManageUsersOfSpace(tenantID, spaceID),
 				},
 			},

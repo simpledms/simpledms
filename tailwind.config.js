@@ -4,12 +4,12 @@ const plugin = require('tailwindcss/plugin');
 
 module.exports = {
 	content: [
-		//'../../core/ui/widget/**/*.gohtml',
-		//'../../core/ui/widget/**/*.go',
-		'./core/action/staticpage/content/*.md',
-		'./core/action/staticpage/*.go', // styles are in markdown_renderer.go
-		'./core/ui/widget/**/*.gohtml',
-		'./core/ui/widget/**/*.go'
+		//'../../ui/widget/**/*.gohtml',
+		//'../../ui/widget/**/*.go',
+		'./action/staticpage/content/*.md',
+		'./action/staticpage/*.go', // styles are in markdown_renderer.go
+		'./ui/widget/**/*.gohtml',
+		'./ui/widget/**/*.go'
 	],
 	theme: {
 		// based on https://github.com/material-foundation/material-tokens/tree/main/css

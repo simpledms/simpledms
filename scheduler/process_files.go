@@ -9,15 +9,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/privacy"
 	"github.com/minio/minio-go/v7"
-
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entmain/temporaryfile"
-	"github.com/marcobeierer/go-core/db/entmain/tenant"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
+	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/sqlx"
+	temporaryfilemodel "github.com/simpledms/simpledms/model/main/temporaryfile"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
-	temporaryfilemodel "github.com/simpledms/simpledms/model/tenant/temporaryfile"
 )
 
 func (qq *Scheduler) processFiles() {

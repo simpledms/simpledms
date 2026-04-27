@@ -3,18 +3,17 @@ package managetenantusers
 import (
 	"log"
 
-	"github.com/marcobeierer/go-core/db/entmain/tenantaccountassignment"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	usermodel "github.com/simpledms/simpledms/model/tenant/user"
+	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type UserListPartialState struct{}
@@ -33,18 +32,18 @@ func NewUserListPartial(infra *common.Infra, actions *Actions) *UserListPartial 
 	}
 }
 
-func (qq *UserListPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *UserListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	state := autil.StateX[UserListPartialState](rw, req)
 	return qq.infra.Renderer().Render(rw, ctx, qq.Widget(ctx, state))
 }
 
-func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState) *widget.List {
-	var listItems []*widget.ListItem
+func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState) *wx.List {
+	var listItems []*wx.ListItem
 
-	listItems = append(listItems, &widget.ListItem{
-		Headline: widget.T("Add a new user"), // TODO Create or add? system or real world perspective?
-		Leading:  widget.NewIcon("add"),
-		Type:     widget.ListItemTypeHelper,
+	listItems = append(listItems, &wx.ListItem{
+		Headline: wx.T("Add a new user"), // TODO Create or add? system or real world perspective?
+		Leading:  wx.NewIcon("add"),
+		Type:     wx.ListItemTypeHelper,
 		HTMXAttrs: qq.actions.CreateUserCmd.ModalLinkAttrs(
 			qq.actions.CreateUserCmd.Data(
 				tenantrole.User,
@@ -56,7 +55,7 @@ func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState)
 	})
 
 	// TODO filtered by tenant?
-	users := ctx.AppCtx().TTx.User.Query().Order(user.ByLastName(), user.ByFirstName()).AllX(ctx)
+	users := ctx.TenantCtx().TTx.User.Query().Order(user.ByLastName(), user.ByFirstName()).AllX(ctx)
 
 	accountIDs := make([]int64, 0, len(users))
 	for _, userx := range users {
@@ -84,21 +83,21 @@ func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState)
 		userm := usermodel.NewUser(userx)
 		isOwningTenantAssignment := isOwningTenantByAccountID[userx.AccountID]
 
-		leading := widget.NewIcon("person")
+		leading := wx.NewIcon("person")
 		if userx.Role == tenantrole.Owner {
 			// TODO add tooltip...
-			leading = widget.NewIcon("manage_accounts")
+			leading = wx.NewIcon("manage_accounts")
 		}
 
-		ownershipText := widget.T("Member account")
+		ownershipText := wx.T("Member account")
 		if isOwningTenantAssignment {
-			ownershipText = widget.T("Owned account")
+			ownershipText = wx.T("Owned account")
 		}
 
-		listItems = append(listItems, &widget.ListItem{
+		listItems = append(listItems, &wx.ListItem{
 			Leading:        leading,
-			Headline:       widget.Tu(userm.Name()),
-			SupportingText: widget.Tf("%s - %s", widget.Tu(userm.NameSecondLine()), ownershipText),
+			Headline:       wx.Tu(userm.Name()),
+			SupportingText: wx.Tf("%s - %s", wx.Tu(userm.NameSecondLine()), ownershipText),
 			ContextMenu: NewUserContextMenuWidget(qq.actions).Widget(
 				ctx,
 				userx,
@@ -107,15 +106,15 @@ func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState)
 		})
 	}
 
-	return &widget.List{
-		Widget: widget.Widget[widget.List]{
+	return &wx.List{
+		Widget: wx.Widget[wx.List]{
 			ID: qq.id(),
 		},
-		HTMXAttrs: widget.HTMXAttrs{
-			HxTrigger: events.HxTrigger(
-				events.UserCreated,
-				events.UserUpdated,
-				events.UserDeleted,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxTrigger: event.HxTrigger(
+				event.UserCreated,
+				event.UserUpdated,
+				event.UserDeleted,
 			),
 			HxPost:   qq.Endpoint(),
 			HxTarget: "#" + qq.id(),

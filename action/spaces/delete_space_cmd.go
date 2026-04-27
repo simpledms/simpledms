@@ -1,17 +1,16 @@
 package spaces
 
 import (
-	"github.com/marcobeierer/go-core/db/entx"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	wx "github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/entx"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type DeleteSpaceCmdData struct {
@@ -39,20 +38,20 @@ func (qq *DeleteSpaceCmd) Data(spaceID string) *DeleteSpaceCmdData {
 	}
 }
 
-func (qq *DeleteSpaceCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *DeleteSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[DeleteSpaceCmdData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
 
-	spacex, err := ctx.AppCtx().TTx.Space.Query().
+	spacex, err := ctx.TenantCtx().TTx.Space.Query().
 		Where(space.PublicID(entx.NewCIText(data.SpaceID))).
 		Only(ctx)
 	if err != nil {
 		return err
 	}
 
-	err = spacemodel.NewSpace(spacex).Delete(ctx, ctx.AppCtx().User)
+	err = spacemodel.NewSpace(spacex).Delete(ctx, ctx.TenantCtx().User)
 	if err != nil {
 		return err
 	}

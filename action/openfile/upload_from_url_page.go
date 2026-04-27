@@ -6,16 +6,15 @@ import (
 	"log"
 	"strings"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/simpledms/simpledms/ui/uix/partial"
-
-	acommon "github.com/marcobeierer/go-core/action/common"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/widget"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	acommon "github.com/simpledms/simpledms/action/common"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	temporaryfilemodel "github.com/simpledms/simpledms/model/tenant/temporaryfile"
+	temporaryfilemodel "github.com/simpledms/simpledms/model/main/temporaryfile"
+	"github.com/simpledms/simpledms/ui/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type UploadFromURLPageState struct {
@@ -41,7 +40,7 @@ func NewUploadFromURLPage(
 	}
 }
 
-func (qq *UploadFromURLPage) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *UploadFromURLPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	state := autil.StateX[UploadFromURLPageState](rw, req)
 
 	rawURL := strings.TrimSpace(state.URL)
@@ -62,20 +61,20 @@ func (qq *UploadFromURLPage) Widget(ctx ctxx.Context, rawURL string) renderable.
 		vals = []byte("{}")
 	}
 
-	return &widget.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, qq.infra, "upload", nil),
-		Content: &widget.ListDetailLayout{
+	return &wx.MainLayout{
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "upload", nil),
+		Content: &wx.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
-			List: []widget.IWidget{
-				&widget.EmptyState{
-					Icon:        widget.NewIcon("upload"),
-					Headline:    widget.T("Import file from URL"),
-					Description: widget.Tuf("URL: %s", rawURL),
-					Actions: []widget.IWidget{
-						&widget.Button{
-							Label:     widget.T("Download and continue"),
-							StyleType: widget.ButtonStyleTypeTonal,
-							HTMXAttrs: widget.HTMXAttrs{
+			List: []wx.IWidget{
+				&wx.EmptyState{
+					Icon:        wx.NewIcon("upload"),
+					Headline:    wx.T("Import file from URL"),
+					Description: wx.Tuf("URL: %s", rawURL),
+					Actions: []wx.IWidget{
+						&wx.Button{
+							Label:     wx.T("Download and continue"),
+							StyleType: wx.ButtonStyleTypeTonal,
+							HTMXAttrs: wx.HTMXAttrs{
 								HxPost: qq.actions.UploadFromURLCmd.Endpoint(),
 								HxVals: template.JS(vals),
 							},
@@ -87,15 +86,15 @@ func (qq *UploadFromURLPage) Widget(ctx ctxx.Context, rawURL string) renderable.
 	}
 }
 
-func (qq *UploadFromURLPage) appBar(ctx ctxx.Context) *widget.AppBar {
-	return &widget.AppBar{
-		Leading: &widget.Icon{
+func (qq *UploadFromURLPage) appBar(ctx ctxx.Context) *wx.AppBar {
+	return &wx.AppBar{
+		Leading: &wx.Icon{
 			Name: "upload",
 		},
-		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
-		Title: &widget.AppBarTitle{
-			Text: widget.T("Import URL"),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		Title: &wx.AppBarTitle{
+			Text: wx.T("Import URL"),
 		},
-		Actions: []widget.IWidget{},
+		Actions: []wx.IWidget{},
 	}
 }

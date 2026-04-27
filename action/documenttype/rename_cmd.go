@@ -1,14 +1,14 @@
 package documenttype
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type RenameCmdData struct {
@@ -32,7 +32,7 @@ func NewRenameCmd(infra *common.Infra, actions *Actions) *RenameCmd {
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[RenameCmdData](infra, config, widget.T("RenameCmd document type")),
+		FormHelper: autil.NewFormHelper[RenameCmdData](infra, config, wx.T("RenameCmd document type")),
 	}
 }
 
@@ -44,8 +44,8 @@ func (qq *RenameCmd) Data(id int64, newName string) *RenameCmdData {
 }
 
 func (qq *RenameCmd) Handler(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
 	data, err := autil.FormData[RenameCmdData](rw, req, ctx)
@@ -64,7 +64,7 @@ func (qq *RenameCmd) Handler(
 	}
 
 	rw.Header().Set("HX-Trigger", event.DocumentTypeUpdated.String())
-	rw.AddRenderables(widget.NewSnackbarf("Document type renamed to «%s».", data.NewName))
+	rw.AddRenderables(wx.NewSnackbarf("Document type renamed to «%s».", data.NewName))
 
 	return nil
 }

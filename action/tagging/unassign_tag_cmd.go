@@ -4,14 +4,14 @@ import (
 	"log"
 	"strings"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	wx "github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type UnassignTagCmdData struct {
@@ -44,7 +44,7 @@ func (qq *UnassignTagCmd) Data(fileID string, tagID int64) *UnassignTagCmdData {
 	}
 }
 
-func (qq *UnassignTagCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *UnassignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[UnassignTagCmdData](rw, req, ctx)
 	if err != nil {
 		return err

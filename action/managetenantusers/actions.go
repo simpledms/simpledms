@@ -1,8 +1,8 @@
 package managetenantusers
 
 import (
-	"github.com/marcobeierer/go-core/ui/uix/route"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
 type Actions struct {

@@ -1,13 +1,13 @@
 package inbox
 
 import (
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/ui/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type InboxRootPage struct {
@@ -26,14 +26,14 @@ func NewInboxRootPage(infra *common.Infra, actions *Actions) *InboxRootPage {
 }
 
 func (qq *InboxRootPage) Handler(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
-	fabs := []*widget.FloatingActionButton{
+	fabs := []*wx.FloatingActionButton{
 		{
 			Icon: "upload_file",
-			HTMXAttrs: widget.HTMXAttrs{
+			HTMXAttrs: wx.HTMXAttrs{
 				HxPost: qq.actions.Browse.FileUploadDialogPartial.Endpoint(),
 				HxVals: util.JSON(qq.actions.Browse.FileUploadDialogPartial.Data(
 					ctx.SpaceCtx().SpaceRootDir().PublicID.String(),
@@ -41,16 +41,16 @@ func (qq *InboxRootPage) Handler(
 				)),
 				LoadInPopover: true,
 			},
-			Child: []widget.IWidget{
-				widget.NewIcon("upload_file"),
-				widget.T("Upload file"),
+			Child: []wx.IWidget{
+				wx.NewIcon("upload_file"),
+				wx.T("Upload file"),
 			},
 		},
 	}
 
 	var viewx renderable.Renderable
-	viewx = &widget.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
+	viewx = &wx.MainLayout{
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
 		Content:    qq.actions.InboxPage.WidgetHandler(rw, req, ctx, ""),
 	}
 
@@ -60,7 +60,7 @@ func (qq *InboxRootPage) Handler(
 	}
 
 	if renderFullPage {
-		viewx = partial.NewBase(widget.T("Inbox"), viewx)
+		viewx = partial2.NewBase(wx.T("Inbox"), viewx)
 	}
 
 	return qq.infra.Renderer().Render(rw, ctx, viewx)

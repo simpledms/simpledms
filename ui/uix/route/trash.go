@@ -1,10 +1,6 @@
 package route
 
-import (
-	"fmt"
-
-	route2 "github.com/marcobeierer/go-core/ui/uix/route"
-)
+import "fmt"
 
 func TrashRoute() string {
 	return "GET /org/{tenant_id}/space/{space_id}/trash/"
@@ -31,7 +27,7 @@ func TrashFile(tenantID, spaceID, fileID string) string {
 }
 
 func TrashFileWithState(data any) func(string, string, string) string {
-	return route2.WithState(TrashFile, data)
+	return WithState(TrashFile, data)
 }
 
 func TrashDownload(tenantID, spaceID, fileID string) string {

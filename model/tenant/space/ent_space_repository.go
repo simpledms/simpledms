@@ -1,12 +1,12 @@
 package space
 
 import (
-	"github.com/marcobeierer/go-core/db/entx"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
 )
 
 type EntSpaceRepository struct{}
@@ -63,7 +63,7 @@ func (qq *EntSpaceRepository) DeleteUserAssignment(ctx ctxx.Context, assignmentI
 }
 
 func (qq *EntSpaceRepository) UnassignedUsers(ctx ctxx.Context, spaceID int64) ([]*enttenant.User, error) {
-	return ctx.AppCtx().TTx.User.Query().
+	return ctx.TenantCtx().TTx.User.Query().
 		WithSpaceAssignment().
 		Where(user.Not(user.HasSpaceAssignmentWith(spaceuserassignment.SpaceID(spaceID)))).
 		All(ctx)

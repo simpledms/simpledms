@@ -6,7 +6,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
 )
 
 type Space struct {
@@ -35,9 +35,9 @@ func (qq *Space) Edit(ctx ctxx.Context, name string, description string) error {
 	}
 	qq.Data = spacex
 
-	spaceCtx := ctxx.NewSpaceContext(ctx.AppCtx(), spacex)
+	spaceCtx := ctxx.NewSpaceContext(ctx.TenantCtx(), spacex)
 
-	err = ctx.AppCtx().TTx.File.Update().
+	err = ctx.TenantCtx().TTx.File.Update().
 		SetName(name).
 		Where(
 			file.SpaceID(spacex.ID),

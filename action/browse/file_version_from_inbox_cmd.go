@@ -5,16 +5,15 @@ import (
 	"log"
 	"net/http"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	wx "github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileVersionFromInboxFormData struct {
@@ -53,7 +52,7 @@ func (qq *FileVersionFromInboxCmd) Data(targetFileID, sourceFileID string) *File
 	}
 }
 
-func (qq *FileVersionFromInboxCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *FileVersionFromInboxCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileVersionFromInboxCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -85,7 +84,7 @@ func (qq *FileVersionFromInboxCmd) Handler(rw httpx2.ResponseWriter, req *httpx2
 		wx.NewSnackbarf("Added new version from inbox."),
 	)
 
-	rw.Header().Set("HX-Trigger", fmt.Sprintf("%s, %s, %s, %s", event.FileUploaded.String(), event.FileUpdated.String(), event.FileDeleted.String(), events.CloseDialog.String()))
+	rw.Header().Set("HX-Trigger", fmt.Sprintf("%s, %s, %s, %s", event.FileUploaded.String(), event.FileUpdated.String(), event.FileDeleted.String(), event.CloseDialog.String()))
 
 	return nil
 }

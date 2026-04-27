@@ -5,23 +5,21 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/marcobeierer/go-core/db/entx"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	actionx2 "github.com/marcobeierer/go-core/util/actionx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/tenant/tagging"
+	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type ListAssignedTagsPartialData struct {
@@ -36,14 +34,14 @@ type ListAssignedTagsPartialData struct {
 type ListAssignedTagsPartial struct {
 	infra   *common.Infra
 	actions *Actions
-	*actionx2.Config
+	*actionx.Config
 }
 
 func NewListAssignedTagsPartial(infra *common.Infra, actions *Actions) *ListAssignedTagsPartial {
 	return &ListAssignedTagsPartial{
 		infra,
 		actions,
-		actionx2.NewConfig(
+		actionx.NewConfig(
 			actions.Route("list-assigned-tags-partial"),
 			true,
 		),
@@ -56,7 +54,7 @@ func (qq *ListAssignedTagsPartial) Data(fileID string) *ListAssignedTagsPartialD
 	}
 }
 
-func (qq *ListAssignedTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *ListAssignedTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[ListAssignedTagsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -83,7 +81,7 @@ func (qq *ListAssignedTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2
 }
 
 func (qq *ListAssignedTagsPartial) tags(ctx ctxx.Context, data *ListAssignedTagsPartialData) []*enttenant.Tag {
-	return ctx.AppCtx().TTx.File.Query().
+	return ctx.TenantCtx().TTx.File.Query().
 		Where(file.PublicID(entx.NewCIText(data.FileID))).
 		QueryTags().
 		WithGroup().
@@ -98,7 +96,7 @@ func (qq *ListAssignedTagsPartial) tags(ctx ctxx.Context, data *ListAssignedTags
 func (qq *ListAssignedTagsPartial) ListView(
 	ctx ctxx.Context,
 	data *ListAssignedTagsPartialData,
-) *widget.ScrollableContent {
+) *wx.ScrollableContent {
 	tags := qq.tags(ctx, data)
 	if len(tags) == 0 {
 		return qq.actions.AssignedTags.Edit.ListView(
@@ -114,8 +112,8 @@ func (qq *ListAssignedTagsPartial) List(
 	fileID string,
 	tags []*enttenant.Tag,
 	hxTarget string,
-) *widget.ScrollableContent {
-	var listItems []*widget.ListItem
+) *wx.ScrollableContent {
+	var listItems []*wx.ListItem
 
 	// TODO edit Attribute?
 
@@ -123,13 +121,13 @@ func (qq *ListAssignedTagsPartial) List(
 		listItems = append(listItems, qq.actions.AssignedTags.ListItem.Widget(ctx, tagx))
 	}
 
-	bottomAppBar := &widget.BottomAppBar{
-		Actions: []widget.IWidget{
-			&widget.IconButton{
+	bottomAppBar := &wx.BottomAppBar{
+		Actions: []wx.IWidget{
+			&wx.IconButton{
 				Icon:    "edit_square",
-				Tooltip: widget.T("Edit assigned tags"),
-				HTMXAttrs: widget.HTMXAttrs{
-					HxPost: qq.actions.AssignedTags.Edit.EndpointWithParams(actionx2.ResponseWrapperNone, hxTarget),
+				Tooltip: wx.T("Edit assigned tags"),
+				HTMXAttrs: wx.HTMXAttrs{
+					HxPost: qq.actions.AssignedTags.Edit.EndpointWithParams(actionx.ResponseWrapperNone, hxTarget),
 					HxVals: util.JSON(qq.actions.AssignedTags.Edit.Data(fileID, 0)),
 					// TODO is this a good idea? or try to select closest tab?
 					HxTarget: hxTarget,
@@ -139,11 +137,11 @@ func (qq *ListAssignedTagsPartial) List(
 		},
 	}
 
-	return &widget.ScrollableContent{
-		Widget: widget.Widget[widget.ScrollableContent]{
+	return &wx.ScrollableContent{
+		Widget: wx.Widget[wx.ScrollableContent]{
 			ID: qq.actions.AssignedTags.Edit.hxTargetID(),
 		},
-		Children: &widget.List{
+		Children: &wx.List{
 			Children: listItems,
 		},
 		BottomAppBar: bottomAppBar,
@@ -154,19 +152,19 @@ func (qq *ListAssignedTagsPartial) Chips(
 	ctx context.Context,
 	data *ListAssignedTagsPartialData,
 	tags []*enttenant.Tag,
-) *widget.Container {
-	var bottomSheetChildren []widget.IWidget
+) *wx.Container {
+	var bottomSheetChildren []wx.IWidget
 	for _, tagx := range tags {
 		chipID := autil.GenerateID("tag-chip")
 
-		bottomSheetChildren = append(bottomSheetChildren, &widget.Chip{
-			Widget: widget.Widget[widget.Chip]{
+		bottomSheetChildren = append(bottomSheetChildren, &wx.Chip{
+			Widget: wx.Widget[wx.Chip]{
 				ID: chipID,
 			},
-			Label: widget.T(tagging.NewTag(tagx).String()),
-			Trailing: (&widget.Button{
-				Icon: widget.NewIcon("close"),
-				HTMXAttrs: widget.HTMXAttrs{
+			Label: wx.T(tagging.NewTag(tagx).String()),
+			Trailing: (&wx.Button{
+				Icon: wx.NewIcon("close"),
+				HTMXAttrs: wx.HTMXAttrs{
 					HxPost:   qq.actions.AssignedTags.UnassignTagCmd.Endpoint(),
 					HxVals:   util.JSON(qq.actions.AssignedTags.UnassignTagCmd.Data(data.FileID, tagx.ID)),
 					HxTarget: "#" + chipID,
@@ -192,13 +190,13 @@ func (qq *ListAssignedTagsPartial) Chips(
 	*/
 
 	id := autil.GenerateID("assignedTagsList")
-	return &widget.Container{
-		Widget: widget.Widget[widget.Container]{
+	return &wx.Container{
+		Widget: wx.Widget[wx.Container]{
 			ID: id,
 		},
-		HTMXAttrs: widget.HTMXAttrs{
+		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:    qq.Config.Endpoint(),
-			HxTrigger: events.HxTrigger(event.TagUpdated),
+			HxTrigger: event.HxTrigger(event.TagUpdated),
 			HxVals:    util.JSON(data),
 			HxTarget:  "#" + id,
 		},

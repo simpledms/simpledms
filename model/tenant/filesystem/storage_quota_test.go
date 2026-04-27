@@ -4,7 +4,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/marcobeierer/go-core/model/common/plan"
+	"github.com/simpledms/simpledms/model/main/common/plan"
 )
 
 func TestStorageQuotaSkipsValidationWhenSaaSDisabled(t *testing.T) {

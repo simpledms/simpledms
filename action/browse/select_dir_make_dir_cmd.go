@@ -3,13 +3,13 @@ package browse
 import (
 	"log"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	acommon "github.com/simpledms/simpledms/action/common"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type SelectDirMakeDirCmdData struct {
@@ -41,7 +41,7 @@ func NewSelectDirMakeDirCmd(
 		autil.NewFormHelper[SelectDirMakeDirCmdData](
 			infra,
 			config,
-			widget.T("Create directory"),
+			wx.T("Create directory"),
 			// "#fileList",
 		),
 	}
@@ -54,7 +54,7 @@ func (qq *SelectDirMakeDirCmd) Data(moveFileData *acommon.MoveFileData, dirName 
 	}
 }
 
-func (qq *SelectDirMakeDirCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *SelectDirMakeDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[SelectDirMakeDirCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -75,6 +75,6 @@ func (qq *SelectDirMakeDirCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Req
 	// TODO return list partial / may depend on context...
 	return qq.infra.Renderer().Render(rw, ctx,
 		// qq.actions.MoveFileCmd.Form(ctx, data.MoveFileCmdData, actionx.ResponseWrapperDialog, "#fileList"),
-		widget.NewSnackbarf("«%s» created.", filex.Data.Name),
+		wx.NewSnackbarf("«%s» created.", filex.Data.Name),
 	)
 }

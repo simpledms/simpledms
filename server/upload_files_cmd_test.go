@@ -10,13 +10,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entmain/account"
-	"github.com/marcobeierer/go-core/db/entmain/temporaryfile"
-	"github.com/marcobeierer/go-core/db/entx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/account"
+	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestUploadFilesCmdCreatesTemporaryFilesAndRedirects(t *testing.T) {
@@ -31,7 +31,7 @@ func TestUploadFilesCmdCreatesTemporaryFilesAndRedirects(t *testing.T) {
 			OnlyX(context.Background())
 
 		var location string
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
 			req := newSharedUploadRequest(t, map[string]string{
 				"first.txt":  "hello",
 				"second.txt": "world",
@@ -39,8 +39,8 @@ func TestUploadFilesCmdCreatesTemporaryFilesAndRedirects(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			err := harness.actions.OpenFile.UploadFilesCmd.Handler(
-				httpx2.NewResponseWriter(rr),
-				httpx2.NewRequest(req),
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
 				mainCtx,
 			)
 			if err != nil {
@@ -89,14 +89,14 @@ func TestUploadFilesCmdRejectsNonMultipartRequests(t *testing.T) {
 			OnlyX(context.Background())
 
 		var handlerErr error
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
 			req := httptest.NewRequest(http.MethodPost, "/-/open-file/upload-files-cmd", strings.NewReader("plain"))
 			req.Header.Set("Content-Type", "text/plain")
 
 			rr := httptest.NewRecorder()
 			handlerErr = harness.actions.OpenFile.UploadFilesCmd.Handler(
-				httpx2.NewResponseWriter(rr),
-				httpx2.NewRequest(req),
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
 				mainCtx,
 			)
 			if handlerErr == nil {

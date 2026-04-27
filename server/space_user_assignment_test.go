@@ -8,18 +8,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entx"
-
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestSpaceUser_AssignUserToSpaceCmd_RejectsDuplicateAssignment(t *testing.T) {
@@ -30,7 +29,7 @@ func TestSpaceUser_AssignUserToSpaceCmd_RejectsDuplicateAssignment(t *testing.T)
 	tenantDB := initTenantDB(t, harness, tenantx)
 
 	var handlerErr error
-	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
+	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
 		memberUser := ensureTenantUserForAccount(t, tenantCtx, memberAccount, tenantrole.User)
 
 		spaceName := "Manage Users Duplicate Space"
@@ -73,7 +72,7 @@ func TestSpaceUser_UnassignUserFromSpaceCmd_RejectsSelfUnassignment(t *testing.T
 	tenantDB := initTenantDB(t, harness, tenantx)
 
 	var handlerErr error
-	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
+	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
 		spaceName := "Manage Users Self Unassign Space"
 		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -118,7 +117,7 @@ func TestSpaceUser_AssignUserToSpaceCmd_RequiresOwnerRole(t *testing.T) {
 	var spacePublicID string
 	var candidatePublicID string
 
-	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
+	err := withTenantContext(t, harness, ownerAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
 		memberUser := ensureTenantUserForAccount(t, tenantCtx, memberAccount, tenantrole.User)
 		candidateUser := ensureTenantUserForAccount(t, tenantCtx, candidateAccount, tenantrole.User)
 
@@ -146,7 +145,7 @@ func TestSpaceUser_AssignUserToSpaceCmd_RequiresOwnerRole(t *testing.T) {
 	}
 
 	var handlerErr error
-	err = withTenantContext(t, harness, memberAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
+	err = withTenantContext(t, harness, memberAccount, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
 		spacex := tenantCtx.TTx.Space.Query().Where(space.PublicID(entx.NewCIText(spacePublicID))).OnlyX(tenantCtx)
 		spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
 
@@ -188,8 +187,8 @@ func runAssignUserToSpaceCmd(
 
 	rr := httptest.NewRecorder()
 	err := harness.actions.ManageSpaceUsers.AssignUserToSpaceCmd.Handler(
-		httpx2.NewResponseWriter(rr),
-		httpx2.NewRequest(req),
+		httpx.NewResponseWriter(rr),
+		httpx.NewRequest(req),
 		spaceCtx,
 	)
 
@@ -213,8 +212,8 @@ func runUnassignUserFromSpaceCmd(
 
 	rr := httptest.NewRecorder()
 	err := harness.actions.ManageSpaceUsers.UnassignUserFromSpaceCmd.Handler(
-		httpx2.NewResponseWriter(rr),
-		httpx2.NewRequest(req),
+		httpx.NewResponseWriter(rr),
+		httpx.NewRequest(req),
 		spaceCtx,
 	)
 
@@ -223,7 +222,7 @@ func runUnassignUserFromSpaceCmd(
 
 func ensureTenantUserForAccount(
 	t testing.TB,
-	tenantCtx *ctxx.AppContext,
+	tenantCtx *ctxx.TenantContext,
 	accountx *entmain.Account,
 	role tenantrole.TenantRole,
 ) *enttenant.User {

@@ -1,13 +1,13 @@
 package trash
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileTagsPartialData struct {
@@ -35,7 +35,7 @@ func (qq *FileTagsPartial) Data(fileID string) *FileTagsPartialData {
 	return &FileTagsPartialData{FileID: fileID}
 }
 
-func (qq *FileTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *FileTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileTagsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -48,7 +48,7 @@ func (qq *FileTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request
 	)
 }
 
-func (qq *FileTagsPartial) Widget(ctx ctxx.Context, data *FileTagsPartialData) *widget.ScrollableContent {
+func (qq *FileTagsPartial) Widget(ctx ctxx.Context, data *FileTagsPartialData) *wx.ScrollableContent {
 	filex := qq.infra.FileRepo.GetWithDeletedX(ctx, data.FileID)
 	assignedTags := filex.Data.QueryTags().
 		WithGroup().
@@ -56,39 +56,39 @@ func (qq *FileTagsPartial) Widget(ctx ctxx.Context, data *FileTagsPartialData) *
 		AllX(ctx)
 
 	if len(assignedTags) == 0 {
-		return &widget.ScrollableContent{
-			Widget: widget.Widget[widget.ScrollableContent]{
+		return &wx.ScrollableContent{
+			Widget: wx.Widget[wx.ScrollableContent]{
 				ID: "trashFileTags",
 			},
-			Children: &widget.EmptyState{
-				Icon:     widget.NewIcon("label"),
-				Headline: widget.T("No tags assigned."),
+			Children: &wx.EmptyState{
+				Icon:     wx.NewIcon("label"),
+				Headline: wx.T("No tags assigned."),
 			},
 			MarginY: true,
 		}
 	}
 
-	var items []*widget.ListItem
+	var items []*wx.ListItem
 	for _, tagx := range assignedTags {
 		supporting := ""
 		if tagx.Edges.Group != nil {
 			supporting = tagx.Edges.Group.Name
 		}
-		item := &widget.ListItem{
-			Headline: widget.Tu(tagx.Name),
+		item := &wx.ListItem{
+			Headline: wx.Tu(tagx.Name),
 		}
 		if supporting != "" {
-			item.SupportingText = widget.Tu(supporting)
+			item.SupportingText = wx.Tu(supporting)
 		}
 		items = append(items, item)
 	}
 
-	return &widget.ScrollableContent{
-		Widget: widget.Widget[widget.ScrollableContent]{
+	return &wx.ScrollableContent{
+		Widget: wx.Widget[wx.ScrollableContent]{
 			ID: "trashFileTags",
 		},
 		GapY: true,
-		Children: &widget.List{
+		Children: &wx.List{
 			Children: items,
 		},
 		MarginY: true,

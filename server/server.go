@@ -21,44 +21,39 @@ import (
 	"github.com/marcobeierer/go-tika"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	"golang.org/x/crypto/acme/autocert"
-
-	ctxx2 "github.com/marcobeierer/go-core/ctxx"
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entmain/migrate"
-	"github.com/marcobeierer/go-core/db/entmain/systemconfig"
-	"github.com/marcobeierer/go-core/db/entmain/tenant"
-	"github.com/marcobeierer/go-core/db/entx"
-	"github.com/marcobeierer/go-core/encryptor"
-
-	coreaction "github.com/marcobeierer/go-core/action"
-	"github.com/marcobeierer/go-core/db/sqlx"
-	appmodel "github.com/marcobeierer/go-core/model/app"
-	"github.com/marcobeierer/go-core/model/common/country"
-	"github.com/marcobeierer/go-core/model/common/language"
-	"github.com/marcobeierer/go-core/model/common/mainrole"
-	signupmodel "github.com/marcobeierer/go-core/model/signup"
-	systemconfigmodel "github.com/marcobeierer/go-core/model/systemconfig"
-	tenant2 "github.com/marcobeierer/go-core/model/tenant"
-	corescheduler "github.com/marcobeierer/go-core/scheduler"
-	server2 "github.com/marcobeierer/go-core/server"
-	ui2 "github.com/marcobeierer/go-core/ui"
-	"github.com/marcobeierer/go-core/ui/uix/route"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/httpx"
-	"github.com/marcobeierer/go-core/util/ocrutil"
-	"github.com/marcobeierer/go-core/util/recoverx"
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/action/download"
 	trashaction "github.com/simpledms/simpledms/action/trash"
-	dmscommon "github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/migrate"
+	"github.com/simpledms/simpledms/db/entmain/systemconfig"
+	"github.com/simpledms/simpledms/db/entmain/tenant"
 	migrate2 "github.com/simpledms/simpledms/db/enttenant/migrate"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/db/sqlx"
+	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/i18n"
+	appmodel "github.com/simpledms/simpledms/model/main/app"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	signupmodel "github.com/simpledms/simpledms/model/main/signup"
+	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
+	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
-	simpledmsscheduler "github.com/simpledms/simpledms/scheduler"
+	"github.com/simpledms/simpledms/pluginx"
+	"github.com/simpledms/simpledms/scheduler"
+	"github.com/simpledms/simpledms/ui"
 	"github.com/simpledms/simpledms/ui/uix/partial"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/ocrutil"
+	"github.com/simpledms/simpledms/util/recoverx"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 // TODO move to own package in cmd?
@@ -66,8 +61,7 @@ type Server struct {
 	metaPath                 string
 	devMode                  bool
 	unsafePort               int // unsafe because it can be 0, use qq.port()
-	coreAssetsFS             fs.FS
-	simpleDMSAssetsFS        fs.FS
+	assetsFS                 fs.FS
 	migrationsMainFS         fs.FS
 	migrationsTenantFS       fs.FS
 	isSaaSModeEnabled        bool
@@ -99,24 +93,19 @@ func resolveListenMode(useAutocert bool, tlsCertFilepath, tlsPrivateKeyFilepath 
 
 func newMaintenanceModeHandler(
 	mainDB *sqlx.MainDB,
-	coreAssetsFS fs.FS,
-	simpleDMSAssetsFS fs.FS,
+	assetsFS fs.FS,
 	devMode bool,
 	i18nx *i18n.I18n,
-	renderer *ui2.Renderer,
+	renderer *ui.Renderer,
 	encryptedIdentity []byte,
 	commercialLicenseEnabled bool,
 	shutdownFn func(context.Context) error,
 ) http.Handler {
 	mux := http.NewServeMux()
-	pwaManifestHandler := NewPWAManifestHandler(simpleDMSAssetsFS, devMode)
+	pwaManifestHandler := NewPWAManifestHandler(assetsFS, devMode)
 
-	mux.HandleFunc("GET /assets/simpledms/manifest.json", pwaManifestHandler.Handler)
-	mux.Handle(
-		"GET /assets/simpledms/",
-		http.StripPrefix("/assets/simpledms/", http.FileServer(http.FS(simpleDMSAssetsFS))),
-	)
-	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(coreAssetsFS))))
+	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
+	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assetsFS))))
 
 	mux.HandleFunc("/-/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
 		defer req.Body.Close()
@@ -177,7 +166,7 @@ func newMaintenanceModeHandler(
 			}
 		}()
 
-		visitorCtx := ctxx2.NewVisitorContext(
+		visitorCtx := ctxx.NewVisitorContext(
 			req.Context(),
 			mainTx,
 			i18nx,
@@ -190,17 +179,17 @@ func newMaintenanceModeHandler(
 			commercialLicenseEnabled,
 		)
 
-		titlex := widget.Tuf("%s | SimpleDMS", widget.T("Maintenance mode").String(visitorCtx))
+		titlex := wx.Tuf("%s | SimpleDMS", wx.T("Maintenance mode").String(visitorCtx))
 		viewx := partial.NewBase(
 			titlex,
-			&widget.MainLayout{
-				Content: &widget.NarrowLayout{
-					Content: &widget.Column{
-						GapYSize:         widget.Gap4,
+			&wx.MainLayout{
+				Content: &wx.NarrowLayout{
+					Content: &wx.Column{
+						GapYSize:         wx.Gap4,
 						NoOverflowHidden: true,
-						Children: []widget.IWidget{
-							widget.H(widget.HeadingTypeHeadlineMd, titlex),
-							widget.T("Maintenance mode is enabled. Please wait until the app is ready again.").SetWrap(),
+						Children: []wx.IWidget{
+							wx.H(wx.HeadingTypeHeadlineMd, titlex),
+							wx.T("Maintenance mode is enabled. Please wait until the app is ready again.").SetWrap(),
 							// wx.T("This page automatically refreshes every 60 seconds.").SetWrap(),
 						},
 					},
@@ -227,8 +216,7 @@ func NewServer(
 	metaPath string,
 	devMode bool,
 	unsafePort int,
-	coreAssetsFS fs.FS,
-	simpleDMSAssetsFS fs.FS,
+	assetsFS fs.FS,
 	isSaaSModeEnabled bool,
 	commercialLicenseEnabled bool,
 ) *Server {
@@ -264,8 +252,7 @@ func NewServer(
 		metaPath:                 metaPath,
 		devMode:                  devMode,
 		unsafePort:               unsafePort,
-		coreAssetsFS:             coreAssetsFS,
-		simpleDMSAssetsFS:        simpleDMSAssetsFS,
+		assetsFS:                 assetsFS,
 		migrationsMainFS:         migrationsMainFS,
 		migrationsTenantFS:       migrationsTenantFS,
 		isSaaSModeEnabled:        isSaaSModeEnabled,
@@ -288,7 +275,7 @@ func (qq *Server) Start() error {
 // TODO way to long, needs refactoring
 func (qq *Server) Prepare() (*PreparedServer, error) {
 	// TODO close all clients
-	mainDB := server2.DBMigrationsMainDB(qq.devMode, qq.metaPath, qq.migrationsMainFS)
+	mainDB := dbMigrationsMainDB(qq.devMode, qq.metaPath, qq.migrationsMainFS)
 	ctx := context.Background()
 	overrideDBConfig := os.Getenv("SIMPLEDMS_OVERRIDE_DB_CONFIG") == "true"
 
@@ -302,21 +289,14 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 
 	rawSystemConfig, systemConfig := qq.loadRuntimeSystemConfig(ctx, mainDB)
 	tenantDBs := dbMigrationsTenantDBs(mainDB, qq.devMode, qq.metaPath)
-	tenantDBMigrator := newTenantDBMigrator(qq.devMode, qq.migrationsTenantFS)
 
 	infra, minioClient := qq.newInfra(renderer, systemConfig)
-	router := server2.NewRouter(mainDB, infra.CoreInfra(), i18nx)
-	contextExtender := NewContextExtender(tenantDBs, qq.devMode, qq.metaPath)
-	router.SetContextExtender(contextExtender)
-	router.SetErrorMapper(contextExtender)
-	router.SetTenantHomeRoute(route2.SpacesRoot)
-	coreActions := coreaction.NewActions(infra.CoreInfra())
-	router.RegisterCoreRoutes(coreActions)
-	actions := action.NewActions(infra, tenantDBs, qq.devMode, coreActions)
+	router := NewRouter(mainDB, tenantDBs, infra, qq.devMode, qq.metaPath, i18nx)
+	actions := action.NewActions(infra, tenantDBs, qq.devMode)
 	downloadHandler := download.NewDownload(infra)
 	trashDownloadHandler := trashaction.NewDownload(infra)
 
-	qq.registerSimpleDMSRoutes(router, actions, downloadHandler, trashDownloadHandler)
+	qq.registerCoreRoutes(router, actions, downloadHandler, trashDownloadHandler)
 
 	err := infra.PluginRegistry().RegisterActions(router)
 	if err != nil {
@@ -325,17 +305,13 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		return nil, err
 	}
 
-	pwaManifestHandler := NewPWAManifestHandler(qq.simpleDMSAssetsFS, qq.devMode)
-	router.HandleFunc("GET /assets/simpledms/manifest.json", pwaManifestHandler.Handler)
-	router.Handle(
-		"GET /assets/simpledms/",
-		http.StripPrefix("/assets/simpledms/", http.FileServer(http.FS(qq.simpleDMSAssetsFS))),
-	)
+	pwaManifestHandler := NewPWAManifestHandler(qq.assetsFS, qq.devMode)
+	router.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
 	// router.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./webapp/assets"))))
 	// slash suffix is necessary to match all paths with the prefix
 	router.Handle(
 		"GET /assets/",
-		http.StripPrefix("/assets/", http.FileServer(http.FS(qq.coreAssetsFS))),
+		http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))),
 	)
 
 	/*
@@ -352,8 +328,8 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		})
 	*/
 
-	qq.migrateTenantDatabases(ctx, mainDB, tenantDBs, tenantDBMigrator)
-	qq.startScheduler(infra, mainDB, tenantDBs, minioClient, systemConfig, rawSystemConfig, tenantDBMigrator)
+	qq.migrateTenantDatabases(ctx, mainDB, tenantDBs)
+	qq.startScheduler(infra, mainDB, tenantDBs, minioClient, systemConfig, rawSystemConfig)
 
 	handlerChain := handlers.CompressHandler(
 		handlers.RecoveryHandler(
@@ -369,7 +345,6 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		server:          qq,
 		mainDB:          mainDB,
 		tenantDBs:       tenantDBs,
-		infra:           infra,
 		router:          router,
 		handler:         handlerChain,
 		systemConfig:    systemConfig,
@@ -497,22 +472,22 @@ func (qq *Server) initializeInitialUserIfRequired(ctx context.Context, mainDB *s
 	}
 }
 
-func (qq *Server) newRendererAndI18n() (*ui2.Renderer, *i18n.I18n) {
+func (qq *Server) newRendererAndI18n() (*ui.Renderer, *i18n.I18n) {
 	// TODO are there any naming conflicts?
 	templates := template.New("app")
-	templates.Funcs(ui2.TemplateFuncMap(templates))
+	templates.Funcs(ui.TemplateFuncMap(templates))
 
-	templatesx, err := templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
+	templatesx, err := templates.ParseFS(ui.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	/*assetsFS, err := fs.Sub(qq.simpleDMSAssetsFS, "ui/web/assets")
+	/*assetsFS, err := fs.Sub(qq.assetsFS, "ui/web/assets")
 	if err != nil {
 		log.Fatal(err)
 	}*/
 
-	return ui2.NewRenderer(templatesx), i18n.NewI18n()
+	return ui.NewRenderer(templatesx), i18n.NewI18n()
 }
 
 func (qq *Server) loadBootstrapSystemConfig(ctx context.Context, mainDB *sqlx.MainDB) *entmain.SystemConfig {
@@ -561,7 +536,7 @@ func (qq *Server) startAutocertIfRequired(systemConfigx *entmain.SystemConfig) (
 func (qq *Server) ensureMainIdentity(
 	mainDB *sqlx.MainDB,
 	i18nx *i18n.I18n,
-	renderer *ui2.Renderer,
+	renderer *ui.Renderer,
 	systemConfigx *entmain.SystemConfig,
 	useAutocert bool,
 	manager *autocert.Manager,
@@ -577,8 +552,7 @@ func (qq *Server) ensureMainIdentity(
 
 		maintenanceMux := newMaintenanceModeHandler(
 			mainDB,
-			qq.coreAssetsFS,
-			qq.simpleDMSAssetsFS,
+			qq.assetsFS,
 			qq.devMode,
 			i18nx,
 			renderer,
@@ -757,9 +731,13 @@ func (qq *Server) loadRuntimeSystemConfig(ctx context.Context, mainDB *sqlx.Main
 	return systemConfigx, systemConfig
 }
 
-func (qq *Server) newInfra(renderer *ui2.Renderer, systemConfig *systemconfigmodel.SystemConfig) (*dmscommon.Infra, *minio.Client) {
+func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *systemconfigmodel.SystemConfig) (*common.Infra, *minio.Client) {
+	factory := common.NewFactory(
+	// client.FileInfo.Query().Where(fileinfo.FullPath(common.InboxPath(metaPath))).OnlyX(context.Background()),
+	// client.FileInfo.Query().Where(fileinfo.FullPath(common.StoragePath(metaPath))).OnlyX(context.Background()),
+	)
 	// storagePath := common.StoragePath(metaPath)
-	fileRepo := dmscommon.NewFileRepository()
+	fileRepo := common.NewFileRepository()
 	minioClient := qq.initNilableMinioClient(systemConfig.S3())
 	fileSystem := filesystem.NewFileSystem(qq.metaPath)
 
@@ -784,7 +762,7 @@ func (qq *Server) newInfra(renderer *ui2.Renderer, systemConfig *systemconfigmod
 		disableFileEncryption = disableFileEncryptionx
 	}
 
-	infra := dmscommon.NewInfra(
+	infra := common.NewInfra(
 		renderer,
 		qq.metaPath,
 		filesystem.NewS3FileSystem(
@@ -794,16 +772,17 @@ func (qq *Server) newInfra(renderer *ui2.Renderer, systemConfig *systemconfigmod
 			disableFileEncryption,
 			filesystem.NewStorageQuota(qq.isSaaSModeEnabled),
 		),
+		factory,
 		fileRepo,
-		newDefaultPluginRegistry(),
+		pluginx.NewRegistry(),
 		systemConfig,
 	)
 
 	return infra, minioClient
 }
 
-func (qq *Server) registerSimpleDMSRoutes(
-	router *server2.Router,
+func (qq *Server) registerCoreRoutes(
+	router *Router,
 	actions *action.Actions,
 	downloadHandler *download.Download,
 	trashDownloadHandler *trashaction.Download,
@@ -813,54 +792,61 @@ func (qq *Server) registerSimpleDMSRoutes(
 	// use GET for all read requests and POST for all write requests?
 	// restful for default CRUD on main resource? falls apart quickly, see AddConsumption
 
+	// workaround to prevent route conflict between `GET /` and `/webdav/`
+	router.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+		if req.Method == "GET" && req.URL.Path == "/" {
+			// router.wrapTx(pages.Browse.Handler)(rw, req)
+			// router.wrapTx(actions.Spaces.SpacesPage.Handler)(rw, req)
+			router.wrapTx(actions.Auth.SignInPage.Handler, true)(rw, req)
+			return
+		}
+		rw.WriteHeader(http.StatusNotFound)
+	})
+
 	// TODO find a better way to handle paths
 	// TODO in TTx or not necessary because read only?
-	router.RegisterPage(route.DashboardRoute(), AdaptHandler(actions.Dashboard.DashboardPage.Handler))
+	router.RegisterPage(route2.DashboardRoute(), actions.Dashboard.DashboardPage.Handler)
+	router.RegisterPage(route2.StaticPageRoute(), actions.StaticPage.StaticPage.Handler)
 
-	router.RegisterPage(route2.BrowseRoute(false), AdaptHandler(actions.Browse.BrowsePage.Handler))
-	router.RegisterPage(route2.BrowseRoute(true), AdaptHandler(actions.Browse.BrowsePage.Handler))
-	router.RegisterPage(route2.BrowseRouteWithSelection(), AdaptHandler(actions.Browse.BrowseWithSelectionPage.Handler))
+	router.RegisterPage(route2.BrowseRoute(false), actions.Browse.BrowsePage.Handler)
+	router.RegisterPage(route2.BrowseRoute(true), actions.Browse.BrowsePage.Handler)
+	router.RegisterPage(route2.BrowseRouteWithSelection(), actions.Browse.BrowseWithSelectionPage.Handler)
 	// router.RegisterPage(route.BrowseRouteWithSelection(false), pages.BrowseWithSelection.Handler)
 
-	router.RegisterPage(route2.InboxRoute(false, false), AdaptHandler(actions.Inbox.InboxRootPage.Handler))
-	router.RegisterPage(route2.InboxRoute(true, false), AdaptHandler(actions.Inbox.InboxWithSelectionPage.Handler))
+	router.RegisterPage(route2.InboxRoute(false, false), actions.Inbox.InboxRootPage.Handler)
+	router.RegisterPage(route2.InboxRoute(true, false), actions.Inbox.InboxWithSelectionPage.Handler)
 	// for use with PWA share target
 	// router.RegisterPage(route.InboxRoute(false, true), pages.Inbox.Handler)
 
-	router.RegisterPage(route2.TrashRoute(), AdaptHandler(actions.Trash.TrashRootPage.Handler))
-	router.RegisterPage(route2.TrashRouteWithSelection(), AdaptHandler(actions.Trash.TrashWithSelectionPage.Handler))
+	router.RegisterPage(route2.TrashRoute(), actions.Trash.TrashRootPage.Handler)
+	router.RegisterPage(route2.TrashRouteWithSelection(), actions.Trash.TrashWithSelectionPage.Handler)
 
-	router.RegisterPage(route2.SpacesRoute(), AdaptHandler(actions.Spaces.SpacesPage.Handler))
+	router.RegisterPage(route2.SpacesRoute(), actions.Spaces.SpacesPage.Handler)
 
-	router.RegisterPage(route2.ManageDocumentTypesRoute(), AdaptHandler(actions.DocumentType.ManageDocumentTypesPage.Handler))
-	router.RegisterPage(route2.ManageDocumentTypesRouteWithSelection(), AdaptHandler(actions.DocumentType.ManageDocumentTypesPage.Handler))
+	router.RegisterPage(route2.ManageDocumentTypesRoute(), actions.DocumentType.ManageDocumentTypesPage.Handler)
+	router.RegisterPage(route2.ManageDocumentTypesRouteWithSelection(), actions.DocumentType.ManageDocumentTypesPage.Handler)
 
-	router.RegisterPage(route2.ManageTagsRoute(), AdaptHandler(actions.ManageTags.ManageTagsPage.Handler))
+	router.RegisterPage(route2.ManageTagsRoute(), actions.ManageTags.ManageTagsPage.Handler)
 	// router.RegisterPage(route.ManageTagsRouteWithSelection(), actions.Tagging.ManageTagsPage.Handler)
 
-	router.RegisterPage(route2.PropertiesRoute(), AdaptHandler(actions.Property.PropertiesPage.Handler))
-	router.RegisterPage(route2.ManageUsersOfSpaceRoute(), AdaptHandler(actions.ManageSpaceUsers.ManageUsersOfSpacePage.Handler))
-	router.RegisterPage(route.ManageUsersOfTenantRoute(), AdaptHandler(actions.ManageTenantUsers.ManageUsersOfTenantPage.Handler))
+	router.RegisterPage(route2.PropertiesRoute(), actions.Property.PropertiesPage.Handler)
+	router.RegisterPage(route2.ManageUsersOfSpaceRoute(), actions.ManageSpaceUsers.ManageUsersOfSpacePage.Handler)
+	router.RegisterPage(route2.ManageUsersOfTenantRoute(), actions.ManageTenantUsers.ManageUsersOfTenantPage.Handler)
 
-	router.RegisterPage(route2.SelectSpaceRoute(false), AdaptHandler(actions.OpenFile.SelectSpacePage.Handler))
-	router.RegisterPage(route2.SelectSpaceRoute(true), AdaptHandler(actions.OpenFile.SelectSpacePage.Handler))
-	router.RegisterPage(route2.FromURLRoute(), AdaptHandler(actions.OpenFile.UploadFromURLPage.Handler))
+	router.RegisterPage(route2.SelectSpaceRoute(false), actions.OpenFile.SelectSpacePage.Handler)
+	router.RegisterPage(route2.SelectSpaceRoute(true), actions.OpenFile.SelectSpacePage.Handler)
+	router.RegisterPage(route2.FromURLRoute(), actions.OpenFile.UploadFromURLPage.Handler)
 
 	// router.RegisterPage(route.FindRoute(false), actions.Find.Page.Handler)
 	// router.RegisterPage(route.FindRoute(true), actions.Find.PageWithSelection.Handler)
 
-	router.RegisterPage(route2.DownloadRoute(), AdaptHandler(downloadHandler.Handler))
-	router.RegisterPage(route2.TrashDownloadRoute(), AdaptHandler(trashDownloadHandler.Handler))
+	router.RegisterPage(route2.DownloadRoute(), downloadHandler.Handler)
+	router.RegisterPage(route2.TrashDownloadRoute(), trashDownloadHandler.Handler)
 
-	RegisterActions(router, actions)
+	router.RegisterActions(actions)
 }
 
-func (qq *Server) migrateTenantDatabases(
-	ctx context.Context,
-	mainDB *sqlx.MainDB,
-	tenantDBs *tenantdbs.TenantDBs,
-	tenantDBMigrator *tenantDBMigrator,
-) {
+func (qq *Server) migrateTenantDatabases(ctx context.Context, mainDB *sqlx.MainDB, tenantDBs *tenantdbs.TenantDBs) {
 	tenantsInMaintenanceMode := mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.MaintenanceModeEnabledAtNotNil()).CountX(ctx)
 	if tenantsInMaintenanceMode > 0 {
 		// TODO abort??
@@ -895,7 +881,7 @@ END WARNING
 			continue
 		}
 
-		err := tenantDBMigrator.execute(tenantDB)
+		err := tenantm.ExecuteDBMigrations(qq.devMode, qq.metaPath, qq.migrationsTenantFS, tenantDB)
 		if err != nil {
 			// TODO make this more robust, maybe continue and deactivate tenant till restart or fixed
 			log.Println(err, "; tenant is in maintenance mode now, must be fixed manually")
@@ -907,38 +893,19 @@ END WARNING
 }
 
 func (qq *Server) startScheduler(
-	infra *dmscommon.Infra,
+	infra *common.Infra,
 	mainDB *sqlx.MainDB,
 	tenantDBs *tenantdbs.TenantDBs,
 	minioClient *minio.Client,
 	systemConfig *systemconfigmodel.SystemConfig,
 	rawSystemConfig *entmain.SystemConfig,
-	tenantDBMigrator *tenantDBMigrator,
 ) {
 	var tikaClientNilable *tika.Client
 	if rawSystemConfig.OcrTikaURL != "" {
 		tikaClientNilable = tika.NewDefaultClient(rawSystemConfig.OcrTikaURL)
 	}
 
-	coreScheduler := corescheduler.NewScheduler(
-		mainDB,
-		func(tenantID int64, tenantDB tenant2.TenantDB) error {
-			simpleDMSTenantDB, err := asSimpleDMSTenantDB(tenantDB)
-			if err != nil {
-				return err
-			}
-
-			tenantDBs.Store(tenantID, simpleDMSTenantDB)
-			return nil
-		},
-	)
-	coreScheduler.Run(
-		qq.devMode,
-		qq.metaPath,
-		tenantDBMigrator.initialize,
-	)
-
-	scheduler := simpledmsscheduler.NewScheduler(
+	schedulerx := scheduler.NewScheduler(
 		infra,
 		mainDB,
 		tenantDBs,
@@ -946,7 +913,7 @@ func (qq *Server) startScheduler(
 		systemConfig.S3().S3BucketName,
 		tikaClientNilable,
 	)
-	scheduler.Run()
+	schedulerx.Run(qq.devMode, qq.metaPath, qq.migrationsTenantFS)
 }
 
 func (qq *Server) initNilableMinioClient(config *appmodel.S3Config) *minio.Client {
@@ -1018,7 +985,7 @@ func (qq *Server) initInitialUser(
 		}
 	}()
 
-	visitorCtx := ctxx2.NewVisitorContext(
+	visitorCtx := ctxx.NewVisitorContext(
 		ctx,
 		createInitialUserTx,
 		i18n.NewI18n(),

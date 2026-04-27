@@ -4,17 +4,17 @@ import (
 	"maps"
 	"slices"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	actionx2 "github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
+	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type ListFilterTagsPartialData struct {
@@ -30,14 +30,14 @@ type ListFilterTagsPartialState struct {
 type ListFilterTagsPartial struct {
 	infra   *common.Infra
 	actions *Actions
-	*actionx2.Config
+	*actionx.Config
 }
 
 func NewListFilterTagsPartial(infra *common.Infra, actions *Actions) *ListFilterTagsPartial {
 	return &ListFilterTagsPartial{
 		infra:   infra,
 		actions: actions,
-		Config: actionx2.NewConfig(
+		Config: actionx.NewConfig(
 			actions.Route("list-filter-tags-partial"),
 			true,
 		),
@@ -50,7 +50,7 @@ func (qq *ListFilterTagsPartial) Data(currentDirID string) *ListFilterTagsPartia
 	}
 }
 
-func (qq *ListFilterTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *ListFilterTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[ListFilterTagsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -61,11 +61,11 @@ func (qq *ListFilterTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.R
 		rw,
 		ctx,
 		autil.WrapWidget(
-			widget.T("Tags | Filter"),
+			wx.T("Tags | Filter"),
 			nil,
 			qq.Widget(ctx, data.CurrentDirID, state.CheckedTagIDs),
-			actionx2.ResponseWrapperDialog,
-			widget.DialogLayoutDefault,
+			actionx.ResponseWrapperDialog,
+			wx.DialogLayoutDefault,
 		),
 	)
 }
@@ -83,7 +83,7 @@ func (qq *ListFilterTagsPartial) Widget(
 	// TODO is this faster than old solution?
 	// TODO can be simplified when edges work on resolvedTagAssignment
 	fileInfoView := sql.Table(fileinfo.Table)
-	tagsInScope := ctx.AppCtx().TTx.Tag.Query().
+	tagsInScope := ctx.TenantCtx().TTx.Tag.Query().
 		Where(func(qss *sql.Selector) {
 			resolvedTagAssignmentView := sql.Table(resolvedtagassignment.Table)
 			qss.Where(
@@ -116,13 +116,13 @@ func (qq *ListFilterTagsPartial) Widget(
 		AllX(ctx)
 
 	if len(tagsInScope) == 0 {
-		return &widget.EmptyState{
-			Headline: widget.T("No tags available yet."),
-			Actions: []widget.IWidget{
-				&widget.Button{
-					Icon:  widget.NewIcon("label"),
-					Label: widget.T("Manage tags"),
-					HTMXAttrs: widget.HTMXAttrs{
+		return &wx.EmptyState{
+			Headline: wx.T("No tags available yet."),
+			Actions: []wx.IWidget{
+				&wx.Button{
+					Icon:  wx.NewIcon("label"),
+					Label: wx.T("Manage tags"),
+					HTMXAttrs: wx.HTMXAttrs{
 						HxGet: route.ManageTags(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
 					},
 				},
@@ -131,8 +131,8 @@ func (qq *ListFilterTagsPartial) Widget(
 	}
 
 	// var chips []*Chip
-	var chips []*widget.FilterChip
-	groups := map[string][]*widget.FilterChip{}
+	var chips []*wx.FilterChip
+	groups := map[string][]*wx.FilterChip{}
 
 	for _, tagx := range tagsInScope {
 		icon := "label"
@@ -141,11 +141,11 @@ func (qq *ListFilterTagsPartial) Widget(
 		}
 
 		// TODO indicate if a composed tag, by color?
-		chip := &widget.FilterChip{
-			Label:       widget.Tf(tagx.Name),
+		chip := &wx.FilterChip{
+			Label:       wx.Tf(tagx.Name),
 			LeadingIcon: icon,
 			IsChecked:   slices.Contains(checkedTagIDs, int(tagx.ID)), // TODO cast okay?
-			HTMXAttrs: widget.HTMXAttrs{
+			HTMXAttrs: wx.HTMXAttrs{
 				HxPost: qq.actions.ToggleTagFilterCmd.Endpoint(),
 				HxVals: util.JSON(qq.actions.ToggleTagFilterCmd.Data(currentDirID, tagx.ID)),
 				HxSwap: "none",
@@ -156,7 +156,7 @@ func (qq *ListFilterTagsPartial) Widget(
 			groupName := tagx.Edges.Group.Name
 			groupChips, found := groups[groupName]
 			if !found {
-				groupChips = []*widget.FilterChip{}
+				groupChips = []*wx.FilterChip{}
 			}
 			groupChips = append(groupChips, chip)
 			groups[groupName] = groupChips
@@ -165,8 +165,8 @@ func (qq *ListFilterTagsPartial) Widget(
 		}
 	}
 
-	children := []widget.IWidget{
-		&widget.Container{
+	children := []wx.IWidget{
+		&wx.Container{
 			Child: chips,
 		},
 	}
@@ -174,16 +174,16 @@ func (qq *ListFilterTagsPartial) Widget(
 	for _, groupKey := range slices.Sorted(maps.Keys(groups)) {
 		groupChips := groups[groupKey]
 
-		children = append(children, &widget.Container{
-			Child: []widget.IWidget{
-				widget.H(widget.HeadingTypeTitleMd, widget.Tu(groupKey)),
+		children = append(children, &wx.Container{
+			Child: []wx.IWidget{
+				wx.H(wx.HeadingTypeTitleMd, wx.Tu(groupKey)),
 				groupChips,
 			},
 		})
 	}
 
-	return &widget.Container{
-		Widget: widget.Widget[widget.Container]{
+	return &wx.Container{
+		Widget: wx.Widget[wx.Container]{
 			ID: "filterTags",
 		},
 		// HTMXAttrs: wx.HTMXAttrs{

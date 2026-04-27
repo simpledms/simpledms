@@ -1,14 +1,14 @@
 package property
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type EditPropertyCmdData struct {
@@ -32,7 +32,7 @@ func NewEditPropertyCmd(infra *common.Infra, actions *Actions) *EditPropertyCmd 
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[EditPropertyCmdData](infra, config, widget.T("Edit field")),
+		FormHelper: autil.NewFormHelper[EditPropertyCmdData](infra, config, wx.T("Edit field")),
 	}
 }
 
@@ -44,7 +44,7 @@ func (qq *EditPropertyCmd) Data(propertyID int64, name string, unit string) *Edi
 	}
 }
 
-func (qq *EditPropertyCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *EditPropertyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[EditPropertyCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ func (qq *EditPropertyCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request
 	}
 
 	rw.Header().Set("HX-Trigger", event.PropertyUpdated.String())
-	rw.AddRenderables(widget.NewSnackbarf("Field updated."))
+	rw.AddRenderables(wx.NewSnackbarf("Field updated."))
 
 	return nil
 }

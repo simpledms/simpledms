@@ -1,0 +1,7 @@
+{{- define "ChipBar" }}
+	<div id="{{ .GetID }}" class="
+		flex group-has-[.js-detail-content>div]/list-detail:opacity-75
+		overflow-scroll hide-scrollbar gap-x-2 min-h-7 mx-1 md:mx-0 mt-2">
+		{{ render .GetContext .Children }}
+	</div>
+{{ end }}

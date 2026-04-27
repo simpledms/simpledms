@@ -7,20 +7,17 @@ import (
 
 	"entgo.io/ent/privacy"
 	_ "github.com/mattn/go-sqlite3"
-
-	"github.com/marcobeierer/go-core/db/entmain"
-	entmaintest "github.com/marcobeierer/go-core/db/entmain/enttest"
-	"github.com/marcobeierer/go-core/db/entx"
-
-	sqlx2 "github.com/marcobeierer/go-core/db/sqlx"
-	"github.com/marcobeierer/go-core/model/common/language"
-	"github.com/marcobeierer/go-core/model/common/mainrole"
-	"github.com/marcobeierer/go-core/model/common/storagetype"
-	"github.com/marcobeierer/go-core/util/accountutil"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	"github.com/simpledms/simpledms/db/entmain"
+	entmaintest "github.com/simpledms/simpledms/db/entmain/enttest"
 	"github.com/simpledms/simpledms/db/enttenant"
 	enttenanttest "github.com/simpledms/simpledms/db/enttenant/enttest"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
+	"github.com/simpledms/simpledms/util/accountutil"
 )
 
 func TestDeleteProcessedTempFilesDeletesOnlyAfterGracePeriod(t *testing.T) {
@@ -166,7 +163,7 @@ func TestDeleteTempAccountFilesDeletesOnlyExpiredUnconvertedFiles(t *testing.T) 
 	}
 }
 
-func newTestMainDB(t *testing.T) *sqlx2.MainDB {
+func newTestMainDB(t *testing.T) *sqlx.MainDB {
 	t.Helper()
 
 	client := entmaintest.Open(t, "sqlite3", "file:scheduler-main-test?mode=memory&cache=shared&_fk=1")
@@ -176,8 +173,8 @@ func newTestMainDB(t *testing.T) *sqlx2.MainDB {
 		}
 	})
 
-	return &sqlx2.MainDB{
-		DB: &sqlx2.DB[*entmain.Client, *entmain.Tx]{
+	return &sqlx.MainDB{
+		DB: &sqlx.DB[*entmain.Client, *entmain.Tx]{
 			ReadOnlyConn:  client,
 			ReadWriteConn: client,
 		},
@@ -195,14 +192,14 @@ func newTestTenantDB(t *testing.T) *sqlx.TenantDB {
 	})
 
 	return &sqlx.TenantDB{
-		DB: &sqlx2.DB[*enttenant.Client, *enttenant.Tx]{
+		DB: &sqlx.DB[*enttenant.Client, *enttenant.Tx]{
 			ReadOnlyConn:  client,
 			ReadWriteConn: client,
 		},
 	}
 }
 
-func createTestAccount(t *testing.T, mainDB *sqlx2.MainDB) *entmain.Account {
+func createTestAccount(t *testing.T, mainDB *sqlx.MainDB) *entmain.Account {
 	t.Helper()
 
 	salt, ok := accountutil.RandomSalt()

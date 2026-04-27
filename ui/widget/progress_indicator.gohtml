@@ -1,0 +1,67 @@
+{{/* gotype:github.com/simpledms/simpledms/ui/widget.ProgressIndicator */}}
+{{/* mainly implemented by Junie */}}
+{{- define "ProgressIndicator" }}
+    {{ if .IsLinear }}
+        <div id="{{ .GetID }}" class="js-progress-indicator htmx-indicator overflow-hidden
+            {{ if .IsFixedLayout }}w-full fixed{{ else }}w-auto md:mx-5{{ end }}
+            {{ if .IsSmall }}h-1{{ else if .IsLarge }}h-3{{ else }}h-2{{ end }}
+            rounded-full bg-surface-container-highest">
+            {{ if .IsIndeterminate }}
+                {{/* Indeterminate Linear Progress Indicator */}}
+                <div class="h-full {{ .GetColorClass }} animate-indeterminate-linear-progress"
+                     role="progressbar"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     aria-valuenow="0"
+                     aria-label="Loading...">
+                </div>
+            {{ else }}
+                {{/* Determinate Linear Progress Indicator */}}
+                <div class="h-full {{ .GetColorClass }} transition-all duration-300 ease-in-out"
+                     style="width: {{ .GetValue }}%"
+                     role="progressbar"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     aria-valuenow="{{ .GetValue }}"
+                     aria-label="{{ .GetValue }}% complete">
+                </div>
+            {{ end }}
+        </div>
+    {{ else }}
+        <div id="{{ .GetID }}" class="js-progress-indicator htmx-indicator relative
+            {{ if .IsSmall }}w-16 h-16{{ else if .IsLarge }}w-24 h-24{{ else }}w-20 h-20{{ end }}">
+            {{ if .IsIndeterminate }}
+                {{/* Indeterminate Circular Progress Indicator */}}
+                <svg class="animate-spin" viewBox="0 0 24 24" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Loading...">
+                    <circle class="opacity-25 stroke-surface-container-highest" cx="12" cy="12" r="10" stroke-width="4" fill="none"></circle>
+                    <path class="opacity-75 {{ if eq .Color "" }}stroke-primary{{ else }}stroke-{{ .Color }}{{ end }}"
+                          stroke-linecap="round"
+                          stroke-width="4"
+                          fill="none"
+                          d="M 12 2 A 10 10 0 0 1 20.5 7.5">
+                    </path>
+                </svg>
+            {{ else }}
+                {{/* Determinate Circular Progress Indicator */}}
+                <svg viewBox="0 0 24 24" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ .GetValue }}" aria-label="{{ .GetValue }}% complete">
+                    {{/* Background circle */}}
+                    <circle class="stroke-surface-container-highest" cx="12" cy="12" r="10" stroke-width="4" fill="none"></circle>
+                    
+                    {{/* Progress circle - using stroke-dasharray and stroke-dashoffset to show progress */}}
+                    {{ $circumference := 62.83 }} {{/* 2 * π * 10 (radius) */}}
+                    {{ $offset := mul (sub 100 .GetValue) 0.6283 }} {{/* (100 - value) * (circumference / 100) */}}
+                    <circle class="{{ if eq .Color "" }}stroke-primary{{ else }}stroke-{{ .Color }}{{ end }}"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke-width="4"
+                            fill="none"
+                            stroke-dasharray="{{ $circumference }}"
+                            stroke-dashoffset="{{ $offset }}"
+                            transform="rotate(-90 12 12)">
+                    </circle>
+                </svg>
+            {{ end }}
+        </div>
+    {{ end }}
+{{ end }}

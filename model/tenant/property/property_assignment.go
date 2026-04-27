@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/marcobeierer/go-core/model/common/fieldtype"
 	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 )
 
 // TODO correct location?

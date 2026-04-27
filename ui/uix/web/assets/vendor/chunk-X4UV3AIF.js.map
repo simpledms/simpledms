@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../node_modules/@uppy/utils/lib/getFileTypeExtension.js"],
+  "sourcesContent": ["const mimeToExtensions = {\n    __proto__: null,\n    'audio/mp3': 'mp3',\n    'audio/mp4': 'mp4',\n    'audio/ogg': 'ogg',\n    'audio/webm': 'webm',\n    'image/gif': 'gif',\n    'image/heic': 'heic',\n    'image/heif': 'heif',\n    'image/jpeg': 'jpg',\n    'image/webp': 'webp',\n    'image/png': 'png',\n    'image/svg+xml': 'svg',\n    'video/mp4': 'mp4',\n    'video/ogg': 'ogv',\n    'video/quicktime': 'mov',\n    'video/webm': 'webm',\n    'video/x-matroska': 'mkv',\n    'video/x-msvideo': 'avi',\n};\nexport default function getFileTypeExtension(mimeType) {\n    // Remove the ; bit in 'video/x-matroska;codecs=avc1'\n    ;\n    [mimeType] = mimeType.split(';', 1);\n    return mimeToExtensions[mimeType] || null;\n}\n"],
+  "mappings": "AAAA,IAAMA,EAAmB,CACrB,UAAW,KACX,YAAa,MACb,YAAa,MACb,YAAa,MACb,aAAc,OACd,YAAa,MACb,aAAc,OACd,aAAc,OACd,aAAc,MACd,aAAc,OACd,YAAa,MACb,gBAAiB,MACjB,YAAa,MACb,YAAa,MACb,kBAAmB,MACnB,aAAc,OACd,mBAAoB,MACpB,kBAAmB,KACvB,EACe,SAARC,EAAsCC,EAAU,CAGnD,OAACA,CAAQ,EAAIA,EAAS,MAAM,IAAK,CAAC,EAC3BF,EAAiBE,CAAQ,GAAK,IACzC",
+  "names": ["mimeToExtensions", "getFileTypeExtension", "mimeType"]
+}

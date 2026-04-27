@@ -1,12 +1,12 @@
 package browse
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	wx "github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type SelectDocumentTypeCmdData struct {
@@ -39,7 +39,7 @@ func (qq *SelectDocumentTypeCmd) Data(fileID string, documentTypeID int64) *Sele
 	}
 }
 
-func (qq *SelectDocumentTypeCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *SelectDocumentTypeCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[SelectDocumentTypeCmdData](rw, req, ctx)
 	if err != nil {
 		return err

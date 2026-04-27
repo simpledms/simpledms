@@ -9,17 +9,16 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/iancoleman/strcase"
-
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/marcobeierer/go-core/model/common/fieldtype"
-	"github.com/marcobeierer/go-core/util/e"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	mproperty "github.com/simpledms/simpledms/model/tenant/property"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
+	"github.com/simpledms/simpledms/util/e"
 )
 
 type File struct {

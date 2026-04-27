@@ -3,21 +3,20 @@ package dashboard
 import (
 	"net/http"
 
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entmain/tenant"
-	"github.com/marcobeierer/go-core/db/entmain/tenantaccountassignment"
-	"github.com/marcobeierer/go-core/db/entx"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	account2 "github.com/marcobeierer/go-core/model/account"
-	tenant2 "github.com/marcobeierer/go-core/model/tenant"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	wx "github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/tenant"
+	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/db/entx"
+	account2 "github.com/simpledms/simpledms/model/main/account"
+	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
+	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type ToggleTenantPasskeyEnforcementCmdData struct {
@@ -54,8 +53,8 @@ func (qq *ToggleTenantPasskeyEnforcementCmd) Data(
 }
 
 func (qq *ToggleTenantPasskeyEnforcementCmd) Handler(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
 	mainCtx, err := qq.actions.AuthActions.RequireMainCtx(ctx, "You must be logged in to manage organizations.")
@@ -94,7 +93,7 @@ func (qq *ToggleTenantPasskeyEnforcementCmd) Handler(
 		SetPasskeyAuthEnforced(data.EnforcePasskeys).
 		SaveX(mainCtx)
 
-	rw.Header().Set("HX-Trigger", events.AccountUpdated.String())
+	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
 	if data.EnforcePasskeys {
 		rw.AddRenderables(wx.NewSnackbarf("Passkey enforcement enabled for organization."))
 	} else {

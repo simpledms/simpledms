@@ -5,19 +5,18 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
-	"github.com/marcobeierer/go-core/util/timex"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
+	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/timex"
 )
 
 type FileVersionsPartialData struct {
@@ -48,7 +47,7 @@ func (qq *FileVersionsPartial) Data(fileID string) *FileVersionsPartialData {
 	}
 }
 
-func (qq *FileVersionsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *FileVersionsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileVersionsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -68,14 +67,14 @@ func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartia
 		WithStoredFile().
 		AllX(ctx)
 
-	var listItems []*widget.ListItem
+	var listItems []*wx.ListItem
 	if len(versions) == 0 {
 		// should never happen in current system where a file always has one underlying
 		// stored file
-		listItems = append(listItems, &widget.ListItem{
-			Headline:       widget.T("No versions available yet."),
-			SupportingText: widget.T("Upload a new version to get started."),
-			Type:           widget.ListItemTypeHelper,
+		listItems = append(listItems, &wx.ListItem{
+			Headline:       wx.T("No versions available yet."),
+			SupportingText: wx.T("Upload a new version to get started."),
+			Type:           wx.ListItemTypeHelper,
 		})
 	} else {
 		for _, versionx := range versions {
@@ -90,11 +89,11 @@ func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartia
 				supportingParts = append(supportingParts, versionm.Data.MimeType)
 			}
 
-			listItem := &widget.ListItem{
-				Headline:       widget.Tu(timex.NewDateTime(versionm.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
-				SupportingText: widget.Tu(strings.Join(supportingParts, " - ")),
+			listItem := &wx.ListItem{
+				Headline:       wx.Tu(timex.NewDateTime(versionm.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
+				SupportingText: wx.Tu(strings.Join(supportingParts, " - ")),
 			}
-			listItem.HTMXAttrs = widget.HTMXAttrs{
+			listItem.HTMXAttrs = wx.HTMXAttrs{
 				HxPost:        qq.actions.FileVersionPreviewDialogPartial.Endpoint(),
 				HxVals:        util.JSON(qq.actions.FileVersionPreviewDialogPartial.Data(data.FileID, fmt.Sprintf("%d", versionx.VersionNumber))),
 				LoadInPopover: true,
@@ -104,42 +103,42 @@ func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartia
 		}
 	}
 
-	return &widget.Column{
-		Widget: widget.Widget[widget.Column]{
+	return &wx.Column{
+		Widget: wx.Widget[wx.Column]{
 			ID: qq.ID(),
 		},
-		GapYSize: widget.Gap4,
-		MarginY:  widget.Margin4,
-		HTMXAttrs: widget.HTMXAttrs{
+		GapYSize: wx.Gap4,
+		MarginY:  wx.Margin4,
+		HTMXAttrs: wx.HTMXAttrs{
 			HxTrigger: event.FileUploaded.Handler(),
 			HxPost:    qq.Endpoint(),
 			HxVals:    util.JSON(qq.Data(data.FileID)),
 			HxTarget:  "#" + qq.ID(),
 			HxSwap:    "outerHTML",
 		},
-		Children: []widget.IWidget{
-			&widget.Column{
+		Children: []wx.IWidget{
+			&wx.Column{
 				AutoHeight: true,
-				GapYSize:   widget.Gap2,
+				GapYSize:   wx.Gap2,
 				// necessary that column doesn't get shrunk when available space is tight
 				// (version lists grows)
 				NoOverflowHidden: true,
-				Children: []widget.IWidget{
-					&widget.Button{
-						Icon:      widget.NewIcon("upload_file"),
-						Label:     widget.T("Add new version"),
-						StyleType: widget.ButtonStyleTypeElevated,
-						HTMXAttrs: widget.HTMXAttrs{
+				Children: []wx.IWidget{
+					&wx.Button{
+						Icon:      wx.NewIcon("upload_file"),
+						Label:     wx.T("Add new version"),
+						StyleType: wx.ButtonStyleTypeElevated,
+						HTMXAttrs: wx.HTMXAttrs{
 							HxPost:        qq.actions.FileVersionUploadDialogPartial.Endpoint(),
 							HxVals:        util.JSON(qq.actions.FileVersionUploadDialogPartial.Data(data.FileID)),
 							LoadInPopover: true,
 						},
 					},
-					&widget.Button{
-						Icon:      widget.NewIcon("merge"),
-						Label:     widget.T("Add new version from inbox"),
-						StyleType: widget.ButtonStyleTypeElevated,
-						HTMXAttrs: widget.HTMXAttrs{
+					&wx.Button{
+						Icon:      wx.NewIcon("merge"),
+						Label:     wx.T("Add new version from inbox"),
+						StyleType: wx.ButtonStyleTypeElevated,
+						HTMXAttrs: wx.HTMXAttrs{
 							HxPost:        qq.actions.FileVersionFromInboxDialog.Endpoint(),
 							HxVals:        util.JSON(qq.actions.FileVersionFromInboxDialog.Data(data.FileID, "", "")),
 							LoadInPopover: true,
@@ -147,8 +146,8 @@ func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartia
 					},
 				},
 			},
-			&widget.ScrollableContent{
-				Children: &widget.List{
+			&wx.ScrollableContent{
+				Children: &wx.List{
 					Children: listItems,
 				},
 			},

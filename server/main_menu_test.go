@@ -5,15 +5,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/marcobeierer/go-core/db/entmain/account"
-	"github.com/marcobeierer/go-core/db/entx"
+	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain/account"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/plan"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-
-	ctxx2 "github.com/marcobeierer/go-core/ctxx"
-	"github.com/marcobeierer/go-core/model/common/country"
-	"github.com/marcobeierer/go-core/model/common/plan"
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
-	wx "github.com/marcobeierer/go-core/ui/widget"
+	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 func TestMainMenuShowsOnlySetupEntriesWhenPasskeyEnrollmentRequired(t *testing.T) {
@@ -54,7 +53,7 @@ func TestMainMenuShowsOnlySetupEntriesWhenPasskeyEnrollmentRequired(t *testing.T
 
 	accountInTx := mainTx.Account.Query().Where(account.Email(entx.NewCIText(email))).OnlyX(context.Background())
 
-	visitorCtx := ctxx2.NewVisitorContext(
+	visitorCtx := ctxx.NewVisitorContext(
 		context.Background(),
 		mainTx,
 		harness.i18n,
@@ -64,7 +63,7 @@ func TestMainMenuShowsOnlySetupEntriesWhenPasskeyEnrollmentRequired(t *testing.T
 		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
-	mainCtx := ctxx2.NewMainContext(visitorCtx, accountInTx, harness.i18n, harness.mainDB, true)
+	mainCtx := ctxx.NewMainContext(visitorCtx, accountInTx, harness.i18n, harness.mainDB, harness.tenantDBs, true)
 
 	mainMenu := partial2.NewMainMenu(mainCtx, harness.infra)
 	menu, ok := mainMenu.Children.(*wx.Menu)

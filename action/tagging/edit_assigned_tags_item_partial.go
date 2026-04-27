@@ -6,20 +6,19 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/marcobeierer/go-core/db/entx"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type EditAssignedTagsItemPartialData struct {
@@ -51,13 +50,13 @@ func (qq *EditAssignedTagsItemPartial) Data(fileID string, tagID int64) *EditAss
 	}
 }
 
-func (qq *EditAssignedTagsItemPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *EditAssignedTagsItemPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[EditAssignedTagsItemPartialData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
 
-	tagx := ctx.AppCtx().TTx.
+	tagx := ctx.TenantCtx().TTx.
 		Tag.Query().
 		WithSubTags(func(query *enttenant.TagQuery) {
 			query.Order(tag.ByName())
@@ -82,7 +81,7 @@ func (qq *EditAssignedTagsItemPartial) listItemID(fileID string, tagID int64) st
 func (qq *EditAssignedTagsItemPartial) IsCheckedFn(ctx ctxx.Context, fileID string) func(tagID int64) bool {
 	// always loads all assigned tags, not optimal, but should be acceptable,
 	// because there is just a small number...
-	assignedTags := ctx.AppCtx().TTx.
+	assignedTags := ctx.TenantCtx().TTx.
 		File.Query().
 		Where(file.PublicID(entx.NewCIText(fileID))).
 		QueryTags().
@@ -102,7 +101,7 @@ func (qq *EditAssignedTagsItemPartial) ListItem(
 	ctx ctxx.Context,
 	fileID string,
 	tagx *enttenant.Tag,
-) *widget.ListItem {
+) *wx.ListItem {
 	listItem := qq.listItem(ctx, fileID, tagx, qq.IsCheckedFn(ctx, fileID))
 	if tagx.Type == tagtype.Group {
 		// if used as response/target
@@ -117,7 +116,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 	fileID string,
 	tagx *enttenant.Tag,
 	isCheckedFn func(tagID int64) bool,
-) *widget.ListItem {
+) *wx.ListItem {
 	var hxPost string
 	var hxVals template.JS
 	if isCheckedFn(tagx.ID) {
@@ -130,19 +129,19 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 
 	id := qq.listItemID(fileID, tagx.ID)
 
-	var icon *widget.Icon
+	var icon *wx.Icon
 	var supportingText string
-	var trailing widget.IWidget
+	var trailing wx.IWidget
 	var isCollapsible bool
-	var htmxAttrs widget.HTMXAttrs
+	var htmxAttrs wx.HTMXAttrs
 
-	var childItems []widget.IWidget
+	var childItems []wx.IWidget
 
 	if tagx.Type == tagtype.Group {
 		// TODO find something betteer
 		// folder_special
 		// note_stack
-		icon = widget.NewIcon("folder_special")
+		icon = wx.NewIcon("folder_special")
 
 		if tagx.Edges.Children == nil {
 			// TODO is there a better way to do this?
@@ -170,12 +169,12 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 			childTagsStr,
 			selectedStr,
 		)
-		trailing = widget.NewIcon("keyboard_arrow_down")
+		trailing = wx.NewIcon("keyboard_arrow_down")
 
-		childItems = append(childItems, &widget.ListItem{
-			Type:     widget.ListItemTypeHelper,
-			Leading:  widget.NewIcon("new_label"),
-			Headline: widget.T("Create new tag"), // group not possible
+		childItems = append(childItems, &wx.ListItem{
+			Type:     wx.ListItemTypeHelper,
+			Leading:  wx.NewIcon("new_label"),
+			Headline: wx.T("Create new tag"), // group not possible
 			HTMXAttrs: qq.actions.AssignedTags.CreateAndAssignTagCmd.ModalLinkAttrs(
 				qq.actions.AssignedTags.CreateAndAssignTagCmd.Data(fileID, tagx.ID),
 				"#"+qq.listItemID(fileID, tagx.ID),
@@ -194,7 +193,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 
 		isCollapsible = true
 	} else if tagx.Type == tagtype.Super {
-		icon = widget.NewIcon("label_important")
+		icon = wx.NewIcon("label_important")
 
 		supportingText = "Super tag"
 
@@ -212,7 +211,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 			supportingText = fmt.Sprintf("Composed of %s", strings.Join(tagNames, ", "))
 		}
 
-		htmxAttrs = widget.HTMXAttrs{
+		htmxAttrs = wx.HTMXAttrs{
 			HxTrigger: event.SuperTagUpdated.Handler(tagx.ID),
 			HxPost:    qq.actions.AssignedTags.EditListItem.Endpoint(),
 			HxVals:    util.JSON(qq.actions.AssignedTags.EditListItem.Data(fileID, tagx.ID)),
@@ -220,8 +219,8 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 			HxSwap:    "outerHTML",
 		}
 
-		trailing = &widget.Checkbox{
-			HTMXAttrs: widget.HTMXAttrs{
+		trailing = &wx.Checkbox{
+			HTMXAttrs: wx.HTMXAttrs{
 				HxPost:    hxPost,
 				HxTrigger: "change",
 				HxVals:    hxVals,
@@ -231,9 +230,9 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 			IsChecked: isCheckedFn(tagx.ID),
 		}
 	} else {
-		icon = widget.NewIcon("label")
-		trailing = &widget.Checkbox{
-			HTMXAttrs: widget.HTMXAttrs{
+		icon = wx.NewIcon("label")
+		trailing = &wx.Checkbox{
+			HTMXAttrs: wx.HTMXAttrs{
 				HxPost:    hxPost,
 				HxTrigger: "change",
 				HxVals:    hxVals,
@@ -249,7 +248,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 		//		results in a small gap because if margin
 		//
 		// impl on refactoring on 27.10.24, nur sure if correct, would solve comment above
-		htmxAttrs = widget.HTMXAttrs{
+		htmxAttrs = wx.HTMXAttrs{
 			HxPost:   hxPost,
 			HxVals:   hxVals,
 			HxTarget: "#" + id,
@@ -257,14 +256,14 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 		}
 	}
 
-	return &widget.ListItem{
-		Widget: widget.Widget[widget.ListItem]{
+	return &wx.ListItem{
+		Widget: wx.Widget[wx.ListItem]{
 			ID: id,
 		},
 		HTMXAttrs:      htmxAttrs,
 		Leading:        icon,
-		Headline:       widget.T(tagx.Name),
-		SupportingText: widget.Tu(supportingText),
+		Headline:       wx.T(tagx.Name),
+		SupportingText: wx.Tu(supportingText),
 		Trailing:       trailing,
 		IsCollapsible:  isCollapsible,
 		ContextMenu:    NewTagContextMenuWidget(qq.actions).Widget(ctx, fileID, tagx),

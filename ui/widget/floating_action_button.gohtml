@@ -1,0 +1,36 @@
+{{- /*gotype: github.com/simpledms/simpledms/ui/widget.FloatingActionButton */ -}}
+{{- define "FloatingActionButton" }}
+	<button
+			title="{{ render .GetContext .Tooltip }}"
+			class="
+			{{ if .IsPrimary }}bg-primary-container text-on-primary-container {{ end }}
+			{{ if .IsSecondary }}bg-secondary-container text-on-secondary-container{{ end }}
+			{{ if .IsTertiary }}bg-tertiary-container text-on-primary-container{{ end }}
+			{{ if .IsSmall }}h-10 w-10 rounded-md{{ end }}
+			{{ if .IsNormal }}h-14 w-14 rounded-lg{{ end }}
+			{{ if .IsLarge }}h-24 w-24 rounded-xl{{ end }}
+			drop-shadow md:drop-shadow-none
+			"
+			{{/*style="position: fixed; bottom: 105px; right: 25px; border: 2px solid #000; box-shadow: 3px 3px 0 #000"*/}}
+			popovertarget="{{ .ID }}"
+			{{ template "HTMXAttrs" .HTMXAttrs }}
+	>
+		<div class="flex
+			{{ if .IsPrimary }}state-layer-on-primary-container{{ end }}
+			{{ if .IsSecondary }}state-layer-on-secondary-container{{ end }}
+			{{ if .IsTertiary }}state-layer-on-tertiary-container{{ end }}
+		">
+			<i class="
+				material-symbols-outlined m-auto
+			">{{ .Icon }}</i>
+		</div>
+	</button>
+		{{/*
+	<div
+			class="fab-rail"
+			id="{{ .ID }}"
+		 	popover>
+        {{ render .GetContext .Child }}
+	</div>
+		*/}}
+{{ end }}
