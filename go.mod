@@ -34,11 +34,11 @@ require (
 	github.com/minio/minio-go/v7 v7.0.99
 	github.com/puzpuzpuz/xsync/v4 v4.4.0
 	github.com/wneessen/go-mail v0.7.2
-	github.com/yuin/goldmark v1.7.16
-	golang.org/x/crypto v0.48.0
-	golang.org/x/net v0.51.0
-	golang.org/x/term v0.40.0
-	golang.org/x/text v0.34.0
+	github.com/yuin/goldmark v1.7.17
+	golang.org/x/crypto v0.49.0
+	golang.org/x/net v0.52.0
+	golang.org/x/term v0.41.0
+	golang.org/x/text v0.35.0
 )
 
 require (
@@ -68,7 +68,7 @@ require (
 	github.com/go-webauthn/x v0.2.1 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gohugoio/hashstructure v0.6.0 // indirect
-	github.com/gohugoio/hugo v0.155.3 // indirect
+	github.com/gohugoio/hugo v0.159.2 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/go-tpm v0.9.8 // indirect
@@ -89,16 +89,16 @@ require (
 	github.com/rs/xid v1.6.0 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
-	github.com/tdewolff/parse/v2 v2.8.5 // indirect
+	github.com/tdewolff/parse/v2 v2.8.11 // indirect
 	github.com/tinylib/msgp v1.6.3 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/zclconf/go-cty v1.17.0 // indirect
 	github.com/zclconf/go-cty-yaml v1.2.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/mod v0.33.0 // indirect
-	golang.org/x/sync v0.19.0 // indirect
-	golang.org/x/sys v0.41.0 // indirect
-	golang.org/x/tools v0.42.0 // indirect
+	golang.org/x/mod v0.34.0 // indirect
+	golang.org/x/sync v0.20.0 // indirect
+	golang.org/x/sys v0.42.0 // indirect
+	golang.org/x/tools v0.43.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
