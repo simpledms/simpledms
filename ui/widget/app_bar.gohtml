@@ -1,0 +1,68 @@
+{{/* gotype:github.com/simpledms/simpledms/ui/widget.AppBar */}}
+{{- define "AppBar" }}
+    {{/* TODO on scroll, apply container fill */}}
+	<header class="js-app-bar sticky top-0 {{/*md:top-2 exp:top-3 */}}">
+        {{ template "appBar" .}}
+	</header>
+	{{ render .GetContext .GetProgressIndicator }}
+{{ end }}
+
+{{- define "appBar" }}
+	{{ $ctx := .GetContext }}
+
+	{{- if .GetSearch }}
+		<nav class="flex items-center h-14 text-on-surface gap-x-4 px-2 md:px-4 exp:px-8
+			exp:grid exp:grid-cols-3 group-has-[.js-detail-content>div]/list-detail:flex"
+		>
+			<div class="hidden exp:flex items-center gap-x-4">
+                {{ with .Leading }}
+                    {{/* must be outside of title because of overflow-hidden */}}
+                    {{ render $ctx . }}
+                {{ end }}
+				<div class="overflow-hidden flex-grow flex">
+					<div class="title-lg overflow-hidden overflow-ellipsis whitespace-nowrap">
+                        {{ render $ctx .Title }}
+					</div>
+				</div>
+			</div>
+			<div class="flex group-has-[.js-detail-content>div]/list-detail:hidden flex-grow center-aligned">
+				<div class="w-full max-w-full">
+					{{ render $ctx .GetSearch }}
+				</div>
+			</div>
+			<div class="exp:flex group-has-[.js-detail-content>div]/list-detail:hidden exp:justify-self-end items-center">
+                {{ with .Actions }}
+					<div class="text-on-surface-variant">
+                        {{ render $ctx . }}
+					</div>
+                {{ end }}
+			</div>
+		</nav>
+	{{- else }}
+		<nav class="flex items-center h-14 text-on-surface gap-x-4 px-6 md:px-8">
+            {{ if .Leading }}
+				<div class="flex center-aligned {{ if .LeadingAltMobile }}hidden md:flex{{ end }}">
+                    {{/* must be outside of title because of overflow-hidden */}}
+                    {{ render $ctx .Leading }}
+				</div>
+            {{ end }}
+            {{ with .LeadingAltMobile }}
+				<div class="md:hidden flex center-aligned">
+                    {{ render $ctx . }}
+				</div>
+            {{ end }}
+			<div class="flex flex-grow items-center overflow-hidden">
+				<div class="title-lg overflow-hidden overflow-ellipsis whitespace-nowrap">
+                    {{ render $ctx .Title }}
+				</div>
+			</div>
+			<div class="flex items-center">
+                {{ with .Actions }}
+					<div class="flex text-on-surface-variant gap-x-4">
+                        {{ render $ctx . }}
+					</div>
+                {{ end }}
+			</div>
+		</nav>
+	{{- end }}
+{{ end }}

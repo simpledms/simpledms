@@ -1,14 +1,14 @@
 package tagging
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type EditTagCmdData struct {
@@ -36,7 +36,7 @@ func NewEditTagCmd(
 		FormHelper: autil.NewFormHelper[EditTagCmdData](
 			infra,
 			config,
-			widget.T("Edit tag"),
+			wx.T("Edit tag"),
 			// "",
 		),
 	}
@@ -49,7 +49,7 @@ func (qq *EditTagCmd) Data(tagID int64, name string) *EditTagCmdData {
 	}
 }
 
-func (qq *EditTagCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *EditTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := qq.MapFormData(rw, req, ctx)
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ func (qq *EditTagCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx
 
 	rw.Header().Set("HX-Trigger", event.TagUpdated.String())
 	rw.Header().Set("HX-Reswap", "none")
-	rw.AddRenderables(widget.NewSnackbarf("«%s» updated.", tagx.Name))
+	rw.AddRenderables(wx.NewSnackbarf("«%s» updated.", tagx.Name))
 
 	return nil
 }

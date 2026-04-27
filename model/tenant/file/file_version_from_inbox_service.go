@@ -7,11 +7,11 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/marcobeierer/go-core/util/e"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
+	"github.com/simpledms/simpledms/util/e"
 )
 
 type FileVersionFromInboxService struct{}
@@ -74,7 +74,7 @@ func (qq *FileVersionFromInboxService) MergeFromInbox(
 		versionNumber = latestVersion.VersionNumber + 1
 	}
 
-	ctx.AppCtx().TTx.FileVersion.Create().
+	ctx.TenantCtx().TTx.FileVersion.Create().
 		SetFileID(targetFile.ID).
 		SetStoredFileID(sourceVersion.Edges.StoredFile.ID).
 		SetVersionNumber(versionNumber).
@@ -100,14 +100,14 @@ func (qq *FileVersionFromInboxService) MergeFromInbox(
 	if !sourceFile.IsInInbox {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Source file is not in inbox.")
 	}
-	_, err = ctx.AppCtx().TTx.FileVersion.Delete().Where(fileversion.FileID(sourceFile.ID)).Exec(ctx)
+	_, err = ctx.TenantCtx().TTx.FileVersion.Delete().Where(fileversion.FileID(sourceFile.ID)).Exec(ctx)
 	if err != nil {
 		log.Println(err)
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not remove source versions.")
 	}
 
 	ctxWithDeleted := schema.SkipSoftDelete(ctx)
-	err = ctx.AppCtx().TTx.File.DeleteOneID(sourceFile.ID).Exec(ctxWithDeleted)
+	err = ctx.TenantCtx().TTx.File.DeleteOneID(sourceFile.ID).Exec(ctxWithDeleted)
 	if err != nil {
 		log.Println(err)
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not delete source file.")

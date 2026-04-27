@@ -4,16 +4,15 @@ import (
 	"fmt"
 
 	"entgo.io/ent/dialect/sql"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
-	"github.com/marcobeierer/go-core/util/timex"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/timex"
 )
 
 type FileInfoPartialData struct {
@@ -44,7 +43,7 @@ func (qq *FileInfoPartial) Data(fileID string) *FileInfoPartialData {
 	}
 }
 
-func (qq *FileInfoPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *FileInfoPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileInfoPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -57,48 +56,48 @@ func (qq *FileInfoPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request
 	)
 }
 
-func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *widget.ScrollableContent {
+func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *wx.ScrollableContent {
 	filem := qq.infra.FileRepo.GetX(ctx, data.FileID) // TODO inject?
 	currentVersion := filem.CurrentVersion(ctx)
 
-	ocrSucceededAt := widget.Tu("-")
+	ocrSucceededAt := wx.Tu("-")
 	if filem.Data.OcrSuccessAt != nil && !filem.Data.OcrSuccessAt.IsZero() {
-		ocrSucceededAt = widget.Tu(timex.NewDateTime(*filem.Data.OcrSuccessAt).String(ctx.MainCtx().LanguageBCP47))
+		ocrSucceededAt = wx.Tu(timex.NewDateTime(*filem.Data.OcrSuccessAt).String(ctx.MainCtx().LanguageBCP47))
 	}
 
-	sha256 := widget.Tu("-")
+	sha256 := wx.Tu("-")
 	if currentVersion.Data.Sha256 != "" {
-		sha256 = widget.Tu(currentVersion.Data.Sha256)
+		sha256 = wx.Tu(currentVersion.Data.Sha256)
 	}
 
-	items := []*widget.ListItem{
+	items := []*wx.ListItem{
 		{
-			Headline:       widget.T("File size"),
-			SupportingText: widget.Tu(currentVersion.SizeString()),
+			Headline:       wx.T("File size"),
+			SupportingText: wx.Tu(currentVersion.SizeString()),
 		},
 		{
-			Headline:       widget.T("MIME type"),
-			SupportingText: widget.Tu(currentVersion.Data.MimeType),
+			Headline:       wx.T("MIME type"),
+			SupportingText: wx.Tu(currentVersion.Data.MimeType),
 		},
 		{
-			Headline:       widget.T("SHA-256 hash"),
+			Headline:       wx.T("SHA-256 hash"),
 			SupportingText: sha256,
 		},
 		{
-			Headline:       widget.T("Original filename"),
-			SupportingText: widget.Tu(currentVersion.Data.Filename),
+			Headline:       wx.T("Original filename"),
+			SupportingText: wx.Tu(currentVersion.Data.Filename),
 		},
 		{
-			Headline:       widget.T("Uploaded at"),
-			SupportingText: widget.Tu(timex.NewDateTime(filem.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
+			Headline:       wx.T("Uploaded at"),
+			SupportingText: wx.Tu(timex.NewDateTime(filem.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
 		},
 		{
-			Headline:       widget.T("Version"),
+			Headline:       wx.T("Version"),
 			SupportingText: qq.versionLabel(ctx, filem),
 		},
 		{
-			Headline:       widget.T("Current version uploaded at"),
-			SupportingText: widget.Tu(timex.NewDateTime(currentVersion.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
+			Headline:       wx.T("Current version uploaded at"),
+			SupportingText: wx.Tu(timex.NewDateTime(currentVersion.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
 		},
 		/*
 			{
@@ -107,7 +106,7 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 			},
 		*/
 		{
-			Headline:       widget.T("OCR succeeded at"), // TODO naming
+			Headline:       wx.T("OCR succeeded at"), // TODO naming
 			SupportingText: ocrSucceededAt,
 		},
 		// TODO collapsable OCR content
@@ -117,10 +116,10 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 
 	if !filem.Data.DeletedAt.IsZero() {
 		// order is good, because oriented on lifecycle
-		items = append(items, []*widget.ListItem{
+		items = append(items, []*wx.ListItem{
 			{
-				Headline:       widget.T("Deleted at"),
-				SupportingText: widget.T(timex.NewDateTime(filem.Data.DeletedAt).String(ctx.MainCtx().LanguageBCP47)),
+				Headline:       wx.T("Deleted at"),
+				SupportingText: wx.T(timex.NewDateTime(filem.Data.DeletedAt).String(ctx.MainCtx().LanguageBCP47)),
 			},
 			/* TODO
 			{
@@ -132,13 +131,13 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 
 	}
 
-	return &widget.ScrollableContent{
-		Widget: widget.Widget[widget.ScrollableContent]{
+	return &wx.ScrollableContent{
+		Widget: wx.Widget[wx.ScrollableContent]{
 			ID: qq.ID(),
 		},
 		GapY: true,
-		Children: &widget.List{
-			Widget: widget.Widget[widget.List]{
+		Children: &wx.List{
+			Widget: wx.Widget[wx.List]{
 				ID: "fileInfoList",
 			},
 			Children: items,
@@ -147,9 +146,9 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 	}
 }
 
-func (qq *FileInfoPartial) versionLabel(ctx ctxx.Context, filem *filemodel.File) *widget.Text {
+func (qq *FileInfoPartial) versionLabel(ctx ctxx.Context, filem *filemodel.File) *wx.Text {
 	versionData := filem.Data.QueryFileVersions().Order(fileversion.ByVersionNumber(sql.OrderDesc())).FirstX(ctx)
-	return widget.Tu(fmt.Sprintf("%d", versionData.VersionNumber))
+	return wx.Tu(fmt.Sprintf("%d", versionData.VersionNumber))
 }
 
 func (qq *FileInfoPartial) ID() string {

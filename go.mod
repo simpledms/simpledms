@@ -1,6 +1,6 @@
 module github.com/simpledms/simpledms
 
-go 1.26.2
+go 1.25.0
 
 // TODO add ent and maybe atlas
 tool (
@@ -11,8 +11,6 @@ tool (
 	github.com/marcobeierer/enumer
 	golang.org/x/text/cmd/gotext
 )
-
-replace github.com/marcobeierer/go-core => ./core
 
 require (
 	ariga.io/atlas v1.1.0
@@ -80,7 +78,6 @@ require (
 	github.com/klauspost/crc32 v1.3.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/marcobeierer/enumer v0.0.0-20250424083623-3196a84fb274 // indirect
-	github.com/marcobeierer/go-core v0.0.0-20260425152811-d04227d8db48 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/minio/crc64nvme v1.1.1 // indirect

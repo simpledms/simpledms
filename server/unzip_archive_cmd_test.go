@@ -11,17 +11,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entx"
-
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestUnzipArchiveCmdExtractsFilesAndDeletesArchive(t *testing.T) {
@@ -32,7 +31,7 @@ func TestUnzipArchiveCmdExtractsFilesAndDeletesArchive(t *testing.T) {
 		tenantDB := initTenantDB(t, harness, tenantx)
 		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
+		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
 			spaceName := "Archive Space"
 			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -75,8 +74,8 @@ func TestUnzipArchiveCmdExtractsFilesAndDeletesArchive(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			err = harness.actions.Browse.UnzipArchiveCmd.Handler(
-				httpx2.NewResponseWriter(rr),
-				httpx2.NewRequest(req),
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
 				spaceCtx,
 			)
 			if err != nil {
@@ -129,7 +128,7 @@ func TestUnzipArchiveCmdRejectsNonZipFile(t *testing.T) {
 		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
 		var handlerErr error
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
+		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
 			spaceName := "Non Zip Space"
 			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -171,8 +170,8 @@ func TestUnzipArchiveCmdRejectsNonZipFile(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			handlerErr = harness.actions.Browse.UnzipArchiveCmd.Handler(
-				httpx2.NewResponseWriter(rr),
-				httpx2.NewRequest(req),
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
 				spaceCtx,
 			)
 			if handlerErr == nil {
@@ -203,7 +202,7 @@ func TestUnzipArchiveCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 		tenantDB := initTenantDB(t, harness, tenantx)
 		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
+		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
 			spaceName := "Quota Unzip Space"
 			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -250,8 +249,8 @@ func TestUnzipArchiveCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			handlerErr := harness.actions.Browse.UnzipArchiveCmd.Handler(
-				httpx2.NewResponseWriter(rr),
-				httpx2.NewRequest(req),
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
 				spaceCtx,
 			)
 			if handlerErr == nil {

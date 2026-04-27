@@ -9,17 +9,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entmain/account"
-	"github.com/marcobeierer/go-core/db/entx"
-
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestSpaceCreatePermissions(t *testing.T) {
@@ -51,7 +50,7 @@ func TestSpaceCreatePermissions(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			spaceName := fmt.Sprintf("Create Space %s", tc.name)
 
-			err := withTenantContext(t, harness, tc.accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
+			err := withTenantContext(t, harness, tc.accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
 				form := url.Values{}
 				form.Set("Name", spaceName)
 				form.Set("Description", "Test description")
@@ -62,8 +61,8 @@ func TestSpaceCreatePermissions(t *testing.T) {
 
 				rr := httptest.NewRecorder()
 				err := harness.actions.Spaces.CreateSpaceCmd.Handler(
-					httpx2.NewResponseWriter(rr),
-					httpx2.NewRequest(req),
+					httpx.NewResponseWriter(rr),
+					httpx.NewRequest(req),
 					tenantCtx,
 				)
 				if err != nil {
@@ -124,7 +123,7 @@ func TestSpaceDeletePermissions(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			spaceID, spaceEntityID := createSpaceForDelete(t, harness, tenantx, tenantDB, ownerAccount, tc.name)
 
-			err := withTenantContext(t, harness, tc.accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
+			err := withTenantContext(t, harness, tc.accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
 				form := url.Values{}
 				form.Set("SpaceID", spaceID)
 
@@ -133,8 +132,8 @@ func TestSpaceDeletePermissions(t *testing.T) {
 
 				rr := httptest.NewRecorder()
 				err := harness.actions.Spaces.DeleteSpaceCmd.Handler(
-					httpx2.NewResponseWriter(rr),
-					httpx2.NewRequest(req),
+					httpx.NewResponseWriter(rr),
+					httpx.NewRequest(req),
 					tenantCtx,
 				)
 				if err != nil {

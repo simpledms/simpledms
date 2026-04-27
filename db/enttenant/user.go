@@ -9,10 +9,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-
-	"github.com/marcobeierer/go-core/db/entx"
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 )
 
 // User is the model entity for the User schema.

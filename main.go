@@ -12,8 +12,7 @@ import (
 
 	// necessary to prevent circular dependencies when interceptors, hooks or privacy policies
 	// are used; not tested, just taken from ent docs
-	_ "github.com/marcobeierer/go-core/db/entmain/runtime"
-	coreui "github.com/marcobeierer/go-core/ui"
+	_ "github.com/simpledms/simpledms/db/entmain/runtime"
 	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
 	"github.com/simpledms/simpledms/server"
 	"github.com/simpledms/simpledms/ui/uix"
@@ -26,8 +25,8 @@ import (
 // if generation fails because of errors in the generated files (caused by a merge), delete alll files in entmain or enttenant except:
 // ent.go, the folder internal and the schema folder, and then run the command below manually (not via go generate)
 //
-//go:generate ent generate ./db/enttenant/schema/ --target ./db/enttenant --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./core/db/enttmpl
-//go:generate ent generate ./core/db/entmain/schema/ --target ./core/db/entmain/ --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./core/db/enttmpl
+//go:generate ent generate ./db/enttenant/schema/ --target ./db/enttenant --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./db/enttmpl
+//go:generate ent generate ./db/entmain/schema/ --target ./db/entmain/ --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery --template ./db/enttmpl
 func main() {
 	log.SetFlags(log.LstdFlags | log.Llongfile)
 
@@ -49,11 +48,7 @@ func main() {
 		}
 	}
 
-	coreAssetsFS, err := coreui.NewAssetsFS()
-	if err != nil {
-		log.Fatalln(err)
-	}
-	simpleDMSAssetsFS, err := uix.NewAssetsFS()
+	assetsFS, err := uix.NewAssetsFS()
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -62,8 +57,7 @@ func main() {
 		metaPath,
 		devMode,
 		port,
-		coreAssetsFS,
-		simpleDMSAssetsFS,
+		assetsFS,
 		false,
 		false,
 	)

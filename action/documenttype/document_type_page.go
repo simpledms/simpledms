@@ -3,13 +3,13 @@ package documenttype
 // package action
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/partial"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type DocumentTypePageState struct {
@@ -28,11 +28,11 @@ func NewDocumentTypePage(infra *common.Infra, actions *Actions) *DocumentTypePag
 }
 
 func (qq *DocumentTypePage) WidgetHandler(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 	selectedTypeID int64,
-) *widget.ListDetailLayout {
+) *wx.ListDetailLayout {
 	state := autil.StateX[DocumentTypePageState](rw, req)
 
 	return qq.Widget(ctx, state, selectedTypeID)
@@ -42,8 +42,8 @@ func (qq *DocumentTypePage) Widget(
 	ctx ctxx.Context,
 	state *DocumentTypePageState,
 	selectedTypeID int64,
-) *widget.ListDetailLayout {
-	var nullableDetail *widget.DetailsWithSheet
+) *wx.ListDetailLayout {
+	var nullableDetail *wx.DetailsWithSheet
 
 	if selectedTypeID != 0 {
 		documentTypex := ctx.SpaceCtx().Space.QueryDocumentTypes().Where(documenttype.ID(selectedTypeID)).OnlyX(ctx)
@@ -54,10 +54,10 @@ func (qq *DocumentTypePage) Widget(
 		}*/
 	}
 
-	return &widget.ListDetailLayout{
+	return &wx.ListDetailLayout{
 		AppBar: qq.appBar(ctx),
-		List: &widget.Column{
-			Children: []widget.IWidget{
+		List: &wx.Column{
+			Children: []wx.IWidget{
 				qq.actions.ListDocumentTypesPartial.Widget(
 					ctx,
 					selectedTypeID,
@@ -68,15 +68,15 @@ func (qq *DocumentTypePage) Widget(
 	}
 }
 
-func (qq *DocumentTypePage) appBar(ctx ctxx.Context) *widget.AppBar {
-	return &widget.AppBar{
-		Leading: &widget.Icon{
+func (qq *DocumentTypePage) appBar(ctx ctxx.Context) *wx.AppBar {
+	return &wx.AppBar{
+		Leading: &wx.Icon{
 			Name: "category",
 		},
 		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
-		Title: &widget.AppBarTitle{
-			Text: widget.T("Document types"),
+		Title: &wx.AppBarTitle{
+			Text: wx.T("Document types"),
 		},
-		Actions: []widget.IWidget{},
+		Actions: []wx.IWidget{},
 	}
 }

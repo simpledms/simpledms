@@ -8,14 +8,13 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-
-	"github.com/marcobeierer/go-core/db/entx"
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/privacy"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 )
 
 type Space struct {
@@ -81,7 +80,7 @@ func (Space) Policy() ent.Policy {
 		WhereHasUserAssignmentWith(...predicate.SpaceUserAssignment)
 	}
 	mutationPrivacyFn := privacy.FilterFunc(func(untypedCtx context.Context, filterx privacy.Filter) error {
-		ctx, ok := ctxx.AppCtx(untypedCtx)
+		ctx, ok := ctxx.TenantCtx(untypedCtx)
 		if !ok {
 			return privacy.Denyf("unexpected context type %T", untypedCtx)
 		}
@@ -94,7 +93,7 @@ func (Space) Policy() ent.Policy {
 	})
 
 	queryPrivacyFn := privacy.FilterFunc(func(untypedCtx context.Context, filterx privacy.Filter) error {
-		ctx, ok := ctxx.AppCtx(untypedCtx)
+		ctx, ok := ctxx.TenantCtx(untypedCtx)
 		if !ok {
 			return privacy.Denyf("unexpected context type %T", untypedCtx)
 		}

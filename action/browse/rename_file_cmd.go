@@ -5,13 +5,13 @@ package browse
 import (
 	"log"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	actionx2 "github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type RenameFileCmdData struct {
@@ -22,12 +22,12 @@ type RenameFileCmdData struct {
 type RenameFileCmd struct {
 	infra   *common.Infra
 	actions *Actions
-	*actionx2.Config
+	*actionx.Config
 	*autil.FormHelper[RenameFileCmdData]
 }
 
 func NewRenameFileCmd(infra *common.Infra, actions *Actions) *RenameFileCmd {
-	config := actionx2.NewConfig(
+	config := actionx.NewConfig(
 		actions.Route("rename-file-cmd"),
 		false,
 	)
@@ -35,7 +35,7 @@ func NewRenameFileCmd(infra *common.Infra, actions *Actions) *RenameFileCmd {
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[RenameFileCmdData](infra, config, widget.T("Rename file")),
+		FormHelper: autil.NewFormHelper[RenameFileCmdData](infra, config, wx.T("Rename file")),
 	}
 }
 
@@ -46,7 +46,7 @@ func (qq *RenameFileCmd) Data(fileID, newFilename string) *RenameFileCmdData {
 	}
 }
 
-func (qq *RenameFileCmd) FormHandler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *RenameFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[RenameFileCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -55,23 +55,23 @@ func (qq *RenameFileCmd) FormHandler(rw httpx2.ResponseWriter, req *httpx2.Reque
 	wrapper := req.URL.Query().Get("wrapper")
 	hxTarget := req.URL.Query().Get("hx-target")
 
-	form := &widget.Form{
-		HTMXAttrs: widget.HTMXAttrs{
+	form := &wx.Form{
+		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxTarget: hxTarget,
 			HxSwap:   "outerHTML",
 		},
-		Children: []widget.IWidget{
-			widget.NewFormFields(ctx, data),
+		Children: []wx.IWidget{
+			wx.NewFormFields(ctx, data),
 		},
 	}
-	container := &widget.Container{
+	container := &wx.Container{
 		GapY: true,
-		Child: []widget.IWidget{
-			&widget.Container{
-				Child: []widget.IWidget{
-					widget.NewLabel(widget.LabelTypeMd, widget.T("Original filename")),
-					widget.NewBody(widget.BodyTypeSm, widget.Tu(data.NewFilename)),
+		Child: []wx.IWidget{
+			&wx.Container{
+				Child: []wx.IWidget{
+					wx.NewLabel(wx.LabelTypeMd, wx.T("Original filename")),
+					wx.NewBody(wx.BodyTypeSm, wx.Tu(data.NewFilename)),
 				},
 			},
 			form,
@@ -80,11 +80,11 @@ func (qq *RenameFileCmd) FormHandler(rw httpx2.ResponseWriter, req *httpx2.Reque
 
 	qq.infra.Renderer().RenderX(rw, ctx,
 		autil.WrapWidgetWithID(
-			widget.T("Rename file"),
-			widget.T("Save"),
+			wx.T("Rename file"),
+			wx.T("Save"),
 			container,
-			actionx2.ResponseWrapper(wrapper),
-			widget.DialogLayoutDefault,
+			actionx.ResponseWrapper(wrapper),
+			wx.DialogLayoutDefault,
 			"",
 			form.GetID(),
 		),
@@ -92,7 +92,7 @@ func (qq *RenameFileCmd) FormHandler(rw httpx2.ResponseWriter, req *httpx2.Reque
 	return nil
 }
 
-func (qq *RenameFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *RenameFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[RenameFileCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -105,7 +105,7 @@ func (qq *RenameFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, 
 		return err
 	}
 
-	rw.AddRenderables(widget.NewSnackbarf("Renamed to «%s»", filex.Data.Name))
+	rw.AddRenderables(wx.NewSnackbarf("Renamed to «%s»", filex.Data.Name))
 	rw.Header().Add("HX-Trigger", event.FileUpdated.String())
 
 	return nil

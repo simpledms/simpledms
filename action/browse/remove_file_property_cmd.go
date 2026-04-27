@@ -1,15 +1,15 @@
 package browse
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	wx "github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type RemoveFilePropertyCmdData struct {
@@ -43,8 +43,8 @@ func (qq *RemoveFilePropertyCmd) Data(fileID string, propertyID int64) *RemoveFi
 }
 
 func (qq *RemoveFilePropertyCmd) Handler(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
 	data, err := autil.FormData[RemoveFilePropertyCmdData](rw, req, ctx)

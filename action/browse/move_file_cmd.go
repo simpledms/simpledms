@@ -4,18 +4,17 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/marcobeierer/go-core/db/entx"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	acommon "github.com/simpledms/simpledms/action/common"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type MoveFileCmd struct {
@@ -36,7 +35,7 @@ func NewMoveFileCmd(infra *common.Infra, actions *Actions) *MoveFileCmd {
 	}
 }
 
-func (qq *MoveFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	if !ctx.SpaceCtx().Space.IsFolderMode {
 		return e.NewHTTPErrorf(http.StatusMethodNotAllowed, "Only allowed in folder mode.")
 	}
@@ -46,9 +45,9 @@ func (qq *MoveFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ct
 		return err
 	}
 
-	// destDir := ctx.AppCtx().TTx.File.GetX(ctx, data.CurrentDirID)
+	// destDir := ctx.TenantCtx().TTx.File.GetX(ctx, data.CurrentDirID)
 	destDir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
-	fileWithParentx := ctx.AppCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
+	fileWithParentx := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
 	fileWithParent := qq.infra.FileRepo.GetXX(fileWithParentx)
 
 	fileWithParent, err = qq.infra.FileSystem().Move(ctx, destDir, fileWithParent, data.Filename, data.NewDirName)
@@ -58,11 +57,11 @@ func (qq *MoveFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ct
 	}
 
 	// show the appropriate link if either file or directory was moved
-	var action *widget.Link
+	var action *wx.Link
 	if fileWithParent.Data.IsDirectory {
-		action = &widget.Link{
+		action = &wx.Link{
 			Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithParent.Data.PublicID.String()),
-			Child: widget.T("Open directory"), // TODO Go to, or Open?
+			Child: wx.T("Open directory"), // TODO Go to, or Open?
 		}
 	} else {
 		parent, err := fileWithParent.Parent(ctx)
@@ -71,9 +70,9 @@ func (qq *MoveFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ct
 			return err
 		}
 
-		action = &widget.Link{
+		action = &wx.Link{
 			Href:  route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, parent.Data.PublicID.String(), fileWithParent.Data.PublicID.String()),
-			Child: widget.T("Open file"), // TODO Go to, or Open?
+			Child: wx.T("Open file"), // TODO Go to, or Open?
 		}
 	}
 
@@ -97,6 +96,6 @@ func (qq *MoveFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ct
 			dirIDStr,
 			"",
 		),
-		widget.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
+		wx.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
 	)
 }

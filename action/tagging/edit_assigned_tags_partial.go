@@ -1,17 +1,17 @@
 package tagging
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	actionx2 "github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
+	"github.com/simpledms/simpledms/ui/renderable"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type EditAssignedTagsPartialData struct {
@@ -22,11 +22,11 @@ type EditAssignedTagsPartialData struct {
 type EditAssignedTagsPartial struct {
 	infra   *common.Infra
 	actions *Actions
-	*actionx2.Config
+	*actionx.Config
 }
 
 func NewEditAssignedTagsPartial(infra *common.Infra, actions *Actions) *EditAssignedTagsPartial {
-	config := actionx2.NewConfig(
+	config := actionx.NewConfig(
 		actions.Route("edit-assigned-tags-partial"),
 		true, // TODO true or false?
 	)
@@ -44,7 +44,7 @@ func (qq *EditAssignedTagsPartial) Data(fileID string, parentTagID int64) *EditA
 	}
 }
 
-func (qq *EditAssignedTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *EditAssignedTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	// TODO do prep if necessary... (filter selects, etc.)
 	// TODO set default value, for example for current
 
@@ -59,14 +59,14 @@ func (qq *EditAssignedTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		qq.Form(ctx, data, actionx2.ResponseWrapper(wrapper)),
+		qq.Form(ctx, data, actionx.ResponseWrapper(wrapper)),
 	)
 }
 
 func (qq *EditAssignedTagsPartial) Form(
 	ctx ctxx.Context,
 	data *EditAssignedTagsPartialData,
-	wrapper actionx2.ResponseWrapper,
+	wrapper actionx.ResponseWrapper,
 ) renderable.Renderable {
 	// TODO readd header
 
@@ -75,15 +75,15 @@ func (qq *EditAssignedTagsPartial) Form(
 
 func (qq *EditAssignedTagsPartial) bottomAppBar(
 	data *EditAssignedTagsPartialData,
-) *widget.BottomAppBar {
+) *wx.BottomAppBar {
 	hxTarget := "#" + qq.hxTargetID()
-	return &widget.BottomAppBar{
-		Actions: []widget.IWidget{
-			&widget.IconButton{
+	return &wx.BottomAppBar{
+		Actions: []wx.IWidget{
+			&wx.IconButton{
 				Icon:    "list_alt",
-				Tooltip: widget.T("Show assigned tags"),
-				HTMXAttrs: widget.HTMXAttrs{
-					HxPost: qq.actions.AssignedTags.List.EndpointWithParams(actionx2.ResponseWrapperNone, hxTarget),
+				Tooltip: wx.T("Show assigned tags"),
+				HTMXAttrs: wx.HTMXAttrs{
+					HxPost: qq.actions.AssignedTags.List.EndpointWithParams(actionx.ResponseWrapperNone, hxTarget),
 					HxVals: util.JSON(qq.actions.AssignedTags.List.Data(data.FileID)),
 					// TODO is this a good idea? or try to select closest tab?
 					HxTarget: hxTarget,
@@ -98,7 +98,7 @@ func (qq *EditAssignedTagsPartial) bottomAppBar(
 func (qq *EditAssignedTagsPartial) ListView(
 	ctx ctxx.Context,
 	data *EditAssignedTagsPartialData,
-) *widget.ScrollableContent {
+) *wx.ScrollableContent {
 	// duplicate in qq.Form
 	isLoadingPartial := data.ParentTagID > 0
 
@@ -120,23 +120,23 @@ func (qq *EditAssignedTagsPartial) ListView(
 	allTags := allTagsQuery.AllX(ctx)
 
 	// TODO is there a better way than working with 3 groups?
-	var allListItems []widget.IWidget
-	var tagListItems []widget.IWidget
-	var groupListItems []widget.IWidget
+	var allListItems []wx.IWidget
+	var tagListItems []wx.IWidget
+	var groupListItems []wx.IWidget
 
 	if !isLoadingPartial {
 		// TODO or as FAB? would be more consistent with rest of application
 		//		but less consistent with adding tags to group
 		allListItems = append(allListItems,
 			// TODO segment into two list items?
-			&widget.ListItem{
+			&wx.ListItem{
 				HTMXAttrs: qq.actions.AssignedTags.CreateAndAssignTagCmd.ModalLinkAttrs(
 					qq.actions.AssignedTags.CreateAndAssignTagCmd.Data(data.FileID, 0),
 					"#"+qq.hxTargetID(),
 				),
-				Leading:  widget.NewIcon("new_label"),
-				Headline: widget.T("Create new tag or group"),
-				Type:     widget.ListItemTypeHelper,
+				Leading:  wx.NewIcon("new_label"),
+				Headline: wx.T("Create new tag or group"),
+				Type:     wx.ListItemTypeHelper,
 			},
 		)
 	}
@@ -156,38 +156,38 @@ func (qq *EditAssignedTagsPartial) ListView(
 	allListItems = append(allListItems, tagListItems...)
 
 	if isLoadingPartial {
-		return &widget.ScrollableContent{
+		return &wx.ScrollableContent{
 			Children: allListItems,
 		}
 	}
 
 	if len(allListItems) == 1 { // check if only create list item is added
-		return &widget.ScrollableContent{
-			Widget: widget.Widget[widget.ScrollableContent]{
+		return &wx.ScrollableContent{
+			Widget: wx.Widget[wx.ScrollableContent]{
 				ID: qq.hxTargetID(), // important because used as target
 			},
 			MarginY: true,
-			Children: &widget.EmptyState{
+			Children: &wx.EmptyState{
 				// Icon:     wx.NewIcon("label"),
-				Headline: widget.T("No tags available yet."),
+				Headline: wx.T("No tags available yet."),
 				// Description: NewText("There are no directories or files available yet, you can create"),
-				Actions: []widget.IWidget{
+				Actions: []wx.IWidget{
 					qq.actions.AssignedTags.CreateAndAssignTagCmd.ModalLink(
 						qq.actions.AssignedTags.CreateAndAssignTagCmd.Data(data.FileID, 0),
-						[]widget.IWidget{
-							&widget.Button{
-								Icon:  widget.NewIcon("folder_special"),
-								Label: widget.T("Create new group"),
+						[]wx.IWidget{
+							&wx.Button{
+								Icon:  wx.NewIcon("folder_special"),
+								Label: wx.T("Create new group"),
 							},
 						},
 						"#"+qq.hxTargetID(),
 					),
 					qq.actions.AssignedTags.CreateAndAssignTagCmd.ModalLink(
 						qq.actions.AssignedTags.CreateAndAssignTagCmd.Data(data.FileID, 0),
-						[]widget.IWidget{
-							&widget.Button{
-								Icon:  widget.NewIcon("new_label"),
-								Label: widget.T("Create new tag"),
+						[]wx.IWidget{
+							&wx.Button{
+								Icon:  wx.NewIcon("new_label"),
+								Label: wx.T("Create new tag"),
 							},
 						},
 						"#"+qq.hxTargetID(),
@@ -197,11 +197,11 @@ func (qq *EditAssignedTagsPartial) ListView(
 		}
 	}
 
-	return &widget.ScrollableContent{
-		Widget: widget.Widget[widget.ScrollableContent]{
+	return &wx.ScrollableContent{
+		Widget: wx.Widget[wx.ScrollableContent]{
 			ID: qq.hxTargetID(),
 		},
-		Children: &widget.List{
+		Children: &wx.List{
 			Children: allListItems,
 		},
 		BottomAppBar: qq.bottomAppBar(data),

@@ -1,15 +1,14 @@
 package property
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type PropertyListPartialData struct {
@@ -38,8 +37,8 @@ func (qq *PropertyListPartial) Data() *PropertyListPartialData {
 }
 
 func (qq *PropertyListPartial) Handler(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
 	data, err := autil.FormData[PropertyListPartialData](rw, req, ctx)
@@ -53,15 +52,15 @@ func (qq *PropertyListPartial) Handler(
 	)
 }
 
-func (qq *PropertyListPartial) Widget(ctx ctxx.Context, data *PropertyListPartialData) *widget.List {
-	properties := ctx.AppCtx().TTx.Property.Query().AllX(ctx)
+func (qq *PropertyListPartial) Widget(ctx ctxx.Context, data *PropertyListPartialData) *wx.List {
+	properties := ctx.TenantCtx().TTx.Property.Query().AllX(ctx)
 
-	var items []*widget.ListItem
+	var items []*wx.ListItem
 
-	items = append(items, &widget.ListItem{
-		Headline: widget.T("Add field"),
-		Type:     widget.ListItemTypeHelper,
-		Leading:  widget.NewIcon("add"),
+	items = append(items, &wx.ListItem{
+		Headline: wx.T("Add field"),
+		Type:     wx.ListItemTypeHelper,
+		Leading:  wx.NewIcon("add"),
 		HTMXAttrs: qq.actions.CreatePropertyCmd.ModalLinkAttrs(
 			qq.actions.CreatePropertyCmd.Data(""),
 			"",
@@ -69,10 +68,10 @@ func (qq *PropertyListPartial) Widget(ctx ctxx.Context, data *PropertyListPartia
 	})
 
 	for _, propertyx := range properties {
-		items = append(items, &widget.ListItem{
-			Headline:       widget.Tu(propertyx.Name),
-			SupportingText: widget.T(propertyx.Type.String()),
-			Leading:        widget.NewIcon("list_alt"),
+		items = append(items, &wx.ListItem{
+			Headline:       wx.Tu(propertyx.Name),
+			SupportingText: wx.T(propertyx.Type.String()),
+			Leading:        wx.NewIcon("list_alt"),
 			ContextMenu:    NewPropertyContextMenuWidget(qq.actions).Widget(ctx, propertyx),
 			/*Trailing: &wx.IconButton{
 				Icon: "more_vert",
@@ -81,13 +80,13 @@ func (qq *PropertyListPartial) Widget(ctx ctxx.Context, data *PropertyListPartia
 		})
 	}
 
-	return &widget.List{
-		Widget: widget.Widget[widget.List]{
+	return &wx.List{
+		Widget: wx.Widget[wx.List]{
 			ID: qq.id(),
 		},
 		Children: items,
-		HTMXAttrs: widget.HTMXAttrs{
-			HxTrigger: events.HxTrigger(
+		HTMXAttrs: wx.HTMXAttrs{
+			HxTrigger: event.HxTrigger(
 				event.PropertyCreated,
 				event.PropertyUpdated,
 				event.PropertyDeleted,

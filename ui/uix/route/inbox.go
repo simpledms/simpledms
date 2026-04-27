@@ -2,8 +2,6 @@ package route
 
 import (
 	"fmt"
-
-	route2 "github.com/marcobeierer/go-core/ui/uix/route"
 )
 
 func InboxRoute(withPath bool, post bool) string {
@@ -29,7 +27,7 @@ func InboxRoot(tenantID, spaceID string) string {
 
 // don't use this for links, just to set URL in browser
 func InboxRootWithState(state any) func(string, string) string {
-	return route2.RootWithState(InboxRoot, state)
+	return RootWithState(InboxRoot, state)
 }
 
 // TODO impl query support
@@ -39,5 +37,5 @@ func Inbox(tenantID, spaceID, fileID string) string {
 
 // don't use this for links, just to set URL in browser
 func InboxWithState(data any) func(string, string, string) string {
-	return route2.WithState(Inbox, data)
+	return WithState(Inbox, data)
 }

@@ -9,7 +9,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/marcobeierer/go-core/db/entx"
+	"github.com/simpledms/simpledms/db/entx"
 )
 
 // File holds the schema definition for the File entity.

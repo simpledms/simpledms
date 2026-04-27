@@ -14,22 +14,20 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-
-	"github.com/marcobeierer/go-core/model/common/storagetype"
-	server2 "github.com/marcobeierer/go-core/server"
-	"github.com/marcobeierer/go-core/util/cookiex"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/util/cookiex"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type listingBenchmarkFixture struct {
 	actions         *action.Actions
-	router          *server2.Router
+	router          *Router
 	spaceCtx        *ctxx.SpaceContext
 	spaceID         int64
 	tenantPublicID  string
@@ -346,8 +344,8 @@ func runInboxListEvent(fixture *listingBenchmarkFixture, searchQuery string) (in
 
 	rr := httptest.NewRecorder()
 	err := fixture.actions.Inbox.ListFilesPartial.Handler(
-		httpx2.NewResponseWriter(rr),
-		httpx2.NewRequest(req),
+		httpx.NewResponseWriter(rr),
+		httpx.NewRequest(req),
 		fixture.spaceCtx,
 	)
 	if err != nil {
@@ -375,8 +373,8 @@ func runBrowseListEvent(fixture *listingBenchmarkFixture) (int, error) {
 
 	rr := httptest.NewRecorder()
 	err := fixture.actions.Browse.ListDirPartial.Handler(
-		httpx2.NewResponseWriter(rr),
-		httpx2.NewRequest(req),
+		httpx.NewResponseWriter(rr),
+		httpx.NewRequest(req),
 		fixture.spaceCtx,
 	)
 	if err != nil {

@@ -3,14 +3,14 @@ package documenttype
 // package action
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type CreateCmdData struct {
@@ -32,7 +32,7 @@ func NewCreateCmd(infra *common.Infra, actions *Actions) *CreateCmd {
 	formHelper := autil.NewFormHelper[CreateCmdData](
 		infra,
 		config,
-		widget.T("Add document type"),
+		wx.T("Add document type"),
 	)
 	return &CreateCmd{
 		infra:      infra,
@@ -48,7 +48,7 @@ func (qq *CreateCmd) Data(name string) *CreateCmdData {
 	}
 }
 
-func (qq *CreateCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *CreateCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[CreateCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -72,6 +72,6 @@ func (qq *CreateCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx 
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		widget.NewSnackbarf("Document type created."),
+		wx.NewSnackbarf("Document type created."),
 	)
 }

@@ -1,0 +1,2 @@
+var e={__proto__:null,"audio/mp3":"mp3","audio/mp4":"mp4","audio/ogg":"ogg","audio/webm":"webm","image/gif":"gif","image/heic":"heic","image/heif":"heif","image/jpeg":"jpg","image/png":"png","image/svg+xml":"svg","video/mp4":"mp4","video/ogg":"ogv","video/quicktime":"mov","video/webm":"webm","video/x-matroska":"mkv","video/x-msvideo":"avi"};function o(i){return[i]=i.split(";",1),e[i]||null}export{o as a};
+//# sourceMappingURL=chunk-YCWZY6JB.js.map

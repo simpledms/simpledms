@@ -4,17 +4,17 @@ import (
 	"net/http"
 	"slices"
 
-	"github.com/marcobeierer/go-core/model/common/fieldtype"
-	wx "github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/e"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/model/tenant/common/attributetype"
+	"github.com/simpledms/simpledms/model/main/common/attributetype"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/e"
 )
 
 type Service struct{}
@@ -182,7 +182,7 @@ func (qq *Service) ensureSpaceTag(ctx ctxx.Context, name string, tagType tagtype
 		return nil, err
 	}
 
-	create := ctx.AppCtx().TTx.Tag.Create().
+	create := ctx.TenantCtx().TTx.Tag.Create().
 		SetName(name).
 		SetType(tagType).
 		SetSpaceID(ctx.SpaceCtx().Space.ID)
@@ -213,7 +213,7 @@ func (qq *Service) ensureSpaceField(ctx ctxx.Context, name string, fieldType fie
 	if !enttenant.IsNotFound(err) {
 		return nil, err
 	}
-	return ctx.AppCtx().TTx.Property.Create().
+	return ctx.TenantCtx().TTx.Property.Create().
 		SetName(name).
 		SetType(fieldType).
 		SetUnit(unit).
@@ -231,7 +231,7 @@ func (qq *Service) ensureSpaceDocumentType(ctx ctxx.Context, name string, icon s
 	if !enttenant.IsNotFound(err) {
 		return nil, err
 	}
-	create := ctx.AppCtx().TTx.DocumentType.Create().
+	create := ctx.TenantCtx().TTx.DocumentType.Create().
 		SetName(name).
 		SetSpaceID(ctx.SpaceCtx().Space.ID)
 	if icon != "" {
@@ -250,7 +250,7 @@ func (qq *Service) ensureSpaceTagAttribute(ctx ctxx.Context, documentTypeID int6
 	if exists {
 		return nil
 	}
-	create := ctx.AppCtx().TTx.Attribute.Create().
+	create := ctx.TenantCtx().TTx.Attribute.Create().
 		SetDocumentTypeID(documentTypeID).
 		SetTagID(tagID).
 		SetType(attributetype.Tag).
@@ -274,7 +274,7 @@ func (qq *Service) ensureSpaceFieldAttribute(ctx ctxx.Context, documentTypeID in
 	if exists {
 		return nil
 	}
-	_, err := ctx.AppCtx().TTx.Attribute.Create().
+	_, err := ctx.TenantCtx().TTx.Attribute.Create().
 		SetDocumentTypeID(documentTypeID).
 		SetPropertyID(fieldID).
 		SetType(attributetype.Field).

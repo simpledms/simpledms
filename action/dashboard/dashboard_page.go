@@ -3,14 +3,14 @@ package dashboard
 import (
 	"log"
 
-	acommon "github.com/marcobeierer/go-core/action/common"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/widget"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/ui/renderable"
+	"github.com/simpledms/simpledms/ui/uix/event"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type DashboardPage struct {
@@ -26,7 +26,7 @@ func NewDashboardPage(infra *common.Infra, actions *Actions) *DashboardPage {
 	}
 }
 
-func (qq *DashboardPage) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *DashboardPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	widget, err := qq.Widget(ctx)
 	if err != nil {
 		return err
@@ -36,26 +36,26 @@ func (qq *DashboardPage) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, 
 }
 
 func (qq *DashboardPage) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
-	fabs := []*widget.FloatingActionButton{}
+	fabs := []*wx.FloatingActionButton{}
 	dashboardCardsWidget, err := qq.actions.DashboardCardsPartial.Widget(ctx)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	dashboardCardsContent := &widget.Container{
-		HTMXAttrs: widget.HTMXAttrs{
+	dashboardCardsContent := &wx.Container{
+		HTMXAttrs: wx.HTMXAttrs{
 			HxGet:     "/",
-			HxTrigger: events.HxTrigger(events.AccountDeleted),
+			HxTrigger: event.HxTrigger(event.AccountDeleted),
 			HxTarget:  "#content",
 		},
 		Child: dashboardCardsWidget,
 	}
 
-	mainLayout := &widget.MainLayout{
+	mainLayout := &wx.MainLayout{
 		// MainCtx is necessary when navigating back from space, otherwise all menu items are rendered
-		Navigation: partial.NewNavigationRail(ctx.MainCtx(), qq.infra, "dashboard", fabs),
-		Content: &widget.DefaultLayout{
+		Navigation: partial2.NewNavigationRail(ctx.MainCtx(), qq.infra, "dashboard", fabs),
+		Content: &wx.DefaultLayout{
 			AppBar:        qq.appBar(ctx),
 			Content:       dashboardCardsContent,
 			WithPoweredBy: false,
@@ -65,16 +65,16 @@ func (qq *DashboardPage) Widget(ctx ctxx.Context) (renderable.Renderable, error)
 	return mainLayout, nil
 }
 
-func (qq *DashboardPage) appBar(ctx ctxx.Context) *widget.AppBar {
-	return &widget.AppBar{
-		Leading: &widget.Icon{
+func (qq *DashboardPage) appBar(ctx ctxx.Context) *wx.AppBar {
+	return &wx.AppBar{
+		Leading: &wx.Icon{
 			Name: "dashboard",
 		},
-		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
-		Title: &widget.AppBarTitle{
-			Text: widget.T("Dashboard"),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		Title: &wx.AppBarTitle{
+			Text: wx.T("Dashboard"),
 		},
-		Actions: []widget.IWidget{
+		Actions: []wx.IWidget{
 			/*&wx.IconButton{
 				Icon: "more_vert",
 				Children: &wx.Menu{

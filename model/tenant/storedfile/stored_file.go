@@ -3,8 +3,8 @@ package storedfile
 import (
 	securejoin "github.com/cyphar/filepath-securejoin"
 
-	"github.com/marcobeierer/go-core/util/fileutil"
 	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/util/fileutil"
 )
 
 type StoredFile struct {

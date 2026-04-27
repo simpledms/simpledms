@@ -1,15 +1,15 @@
 package tagging
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type ListSubTagsPartialData struct {
@@ -39,13 +39,13 @@ func (qq *ListSubTagsPartial) Data(superTagID int64) *ListSubTagsPartialData {
 	}
 }
 
-func (qq *ListSubTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *ListSubTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[ListSubTagsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
 
-	subTags := ctx.AppCtx().TTx.Tag.
+	subTags := ctx.TenantCtx().TTx.Tag.
 		GetX(ctx, data.SuperTagID).
 		QuerySubTags().
 		WithGroup().
@@ -60,26 +60,26 @@ func (qq *ListSubTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Requ
 	return nil
 }
 
-func (qq *ListSubTagsPartial) Widget(subTagsWithParent []*enttenant.Tag) *widget.List {
-	var listItems []*widget.ListItem
+func (qq *ListSubTagsPartial) Widget(subTagsWithParent []*enttenant.Tag) *wx.List {
+	var listItems []*wx.ListItem
 
 	for _, subTag := range subTagsWithParent {
-		headline := widget.T(subTag.Name)
-		var supportingText *widget.Text
+		headline := wx.T(subTag.Name)
+		var supportingText *wx.Text
 		if subTag.Edges.Group != nil {
 			// headline = NewTextf("%s: %s", tagx.Edges.Parent.Name, headline.Data)
-			supportingText = widget.Tf("Group «%s»", subTag.Edges.Group.Name)
+			supportingText = wx.Tf("Group «%s»", subTag.Edges.Group.Name)
 		}
 		listItems = append(
-			listItems, &widget.ListItem{
-				Leading:        widget.NewIcon("label"),
+			listItems, &wx.ListItem{
+				Leading:        wx.NewIcon("label"),
 				Headline:       headline,
 				SupportingText: supportingText,
 			},
 		)
 	}
 
-	return &widget.List{
+	return &wx.List{
 		Children: listItems,
 	}
 }

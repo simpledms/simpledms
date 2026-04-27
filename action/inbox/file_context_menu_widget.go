@@ -1,10 +1,10 @@
 package inbox
 
 import (
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type FileContextMenuWidget struct {
@@ -17,14 +17,14 @@ func NewFileContextMenuWidget(actions *Actions) *FileContextMenuWidget {
 	}
 }
 
-func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File) *widget.Menu {
+func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File) *wx.Menu {
 	// filem := filemodel.NewFile(filex)
-	var menuItems []*widget.MenuItem
+	var menuItems []*wx.MenuItem
 
 	menuItems = append(menuItems,
-		&widget.MenuItem{
+		&wx.MenuItem{
 			TrailingIcon: "edit", // TODO
-			Label:        widget.T("Rename"),
+			Label:        wx.T("Rename"),
 			HTMXAttrs: qq.actions.Browse.RenameFileCmd.ModalLinkAttrs(
 				qq.actions.Browse.RenameFileCmd.Data(filex.PublicID.String(), filex.Name),
 				"",
@@ -34,17 +34,17 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 	)
 
 	menuItems = append(menuItems,
-		&widget.MenuItem{
+		&wx.MenuItem{
 			IsDivider: true,
 		},
-		&widget.MenuItem{
+		&wx.MenuItem{
 			TrailingIcon: "delete",
-			Label:        widget.T("Delete"),
-			HTMXAttrs: widget.HTMXAttrs{
+			Label:        wx.T("Delete"),
+			HTMXAttrs: wx.HTMXAttrs{
 				HxPost: qq.actions.Browse.DeleteFileCmd.Endpoint(),
 				HxVals: util.JSON(qq.actions.Browse.DeleteFileCmd.Data(filex.PublicID.String())),
 				// HxTarget:  "#" + qq.actions.ListDir.WrapperID(),
-				HxConfirm: widget.T("Are you sure?").String(ctx),
+				HxConfirm: wx.T("Are you sure?").String(ctx),
 			},
 		},
 	)
@@ -62,7 +62,7 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 	}
 	*/
 
-	return &widget.Menu{
+	return &wx.Menu{
 		Items: menuItems,
 	}
 }

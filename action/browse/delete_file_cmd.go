@@ -5,17 +5,16 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/marcobeierer/go-core/db/entx"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	wx "github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type DeleteFileData struct {
@@ -49,14 +48,14 @@ func (qq *DeleteFileCmd) Data(fileID string) *DeleteFileData {
 	}
 }
 
-func (qq *DeleteFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *DeleteFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[DeleteFileData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
 
 	filex := ctx.SpaceCtx().Space.QueryFiles().WithChildren().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
-	// fileInfo := ctx.AppCtx().TTx.FileInfoPartial.Query().Where(fileinfo.PublicFileID(data.FileID)).OnlyX(ctx)
+	// fileInfo := ctx.TenantCtx().TTx.FileInfoPartial.Query().Where(fileinfo.PublicFileID(data.FileID)).OnlyX(ctx)
 
 	// only delete empry dirs, otherwise we have to iterate recursively over all files... also risky for user
 	// and harder to undo

@@ -14,12 +14,11 @@ import (
 
 	"filippo.io/age"
 
-	migratemain "github.com/marcobeierer/go-core/db/entmain/migrate"
-	"github.com/marcobeierer/go-core/encryptor"
-
-	"github.com/marcobeierer/go-core/db/sqlx"
-	ui2 "github.com/marcobeierer/go-core/ui"
+	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
+	"github.com/simpledms/simpledms/db/sqlx"
+	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/i18n"
+	"github.com/simpledms/simpledms/ui"
 )
 
 func TestMaintenanceRootReturnsServiceUnavailable(t *testing.T) {
@@ -31,7 +30,6 @@ func TestMaintenanceRootReturnsServiceUnavailable(t *testing.T) {
 
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
-		os.DirFS(t.TempDir()),
 		os.DirFS(t.TempDir()),
 		false,
 		deps.i18n,
@@ -66,7 +64,6 @@ func TestMaintenanceUnlockCmdInvalidJSONReturnsBadRequest(t *testing.T) {
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
 		os.DirFS(t.TempDir()),
-		os.DirFS(t.TempDir()),
 		false,
 		deps.i18n,
 		deps.renderer,
@@ -98,7 +95,6 @@ func TestMaintenanceUnlockCmdEmptyPassphraseReturnsBadRequest(t *testing.T) {
 
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
-		os.DirFS(t.TempDir()),
 		os.DirFS(t.TempDir()),
 		false,
 		deps.i18n,
@@ -134,7 +130,6 @@ func TestMaintenanceUnlockCmdInvalidPassphraseReturnsBadRequest(t *testing.T) {
 
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
-		os.DirFS(t.TempDir()),
 		os.DirFS(t.TempDir()),
 		false,
 		deps.i18n,
@@ -174,7 +169,6 @@ func TestMaintenanceUnlockCmdValidPassphraseSetsIdentityAndCallsShutdown(t *test
 
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
-		os.DirFS(t.TempDir()),
 		os.DirFS(t.TempDir()),
 		false,
 		deps.i18n,
@@ -249,7 +243,7 @@ func mustEncryptIdentityWithPassphrase(t *testing.T, passphrase string) []byte {
 
 type maintenanceTestDependencies struct {
 	mainDB   *sqlx.MainDB
-	renderer *ui2.Renderer
+	renderer *ui.Renderer
 	i18n     *i18n.I18n
 }
 
@@ -272,15 +266,15 @@ func newMaintenanceTestDependencies(t *testing.T) *maintenanceTestDependencies {
 	_ = initSystemConfig(t, mainDB, true, "", "", "")
 
 	tpl := template.New("app")
-	tpl.Funcs(ui2.TemplateFuncMap(tpl))
-	tpl, err = tpl.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
+	tpl.Funcs(ui.TemplateFuncMap(tpl))
+	tpl, err = tpl.ParseFS(ui.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		t.Fatalf("parse templates: %v", err)
 	}
 
 	return &maintenanceTestDependencies{
 		mainDB:   mainDB,
-		renderer: ui2.NewRenderer(tpl),
+		renderer: ui.NewRenderer(tpl),
 		i18n:     i18n.NewI18n(),
 	}
 }

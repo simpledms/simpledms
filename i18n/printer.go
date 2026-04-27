@@ -1,8 +1,16 @@
 package i18n
 
 import (
-	corei18n "github.com/marcobeierer/go-core/i18n"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
-// Printer is the shared core localized printer.
-type Printer = corei18n.Printer
+// TODO impl a wrapper around message.Printer to record to database
+type Printer struct {
+	*message.Printer
+}
+
+func newPrinter(languagex language.Tag) *Printer {
+	qq := message.NewPrinter(languagex)
+	return &Printer{qq}
+}

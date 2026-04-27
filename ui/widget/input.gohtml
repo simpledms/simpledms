@@ -1,0 +1,15 @@
+{{- define "Input" }}
+	<div class="bg-surface-container-highest rounded-xs px-4 py-2 min-h-14">
+		{{ render .GetContext .LeadingIcon }}
+		<input
+				type="{{ .GetType }}"
+				name="{{ .Name }}"
+				placeholder="{{ .Placeholder }}"
+				{{ if .HasAutofocus }}autofocus{{ end }}
+				class="text-on-surface body-lg placeholder-on-surface-variant"
+				step="{{ .Step }}"
+			{{ template "HTMXAttrs" .HTMXAttrs }}>
+		{{/*<label>{{ render .GetContext .Label }}</label>*/}}
+		{{ render .GetContext .TrailingIcon }}
+	</div>
+{{ end }}

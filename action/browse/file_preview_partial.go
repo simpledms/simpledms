@@ -4,18 +4,17 @@ import (
 	"log"
 	"net/http"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FilePreviewPartialData struct {
@@ -52,7 +51,7 @@ func (qq *FilePreviewPartial) Data(currentDirID, fileID string) *FilePreviewPart
 	}
 }
 
-func (qq *FilePreviewPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *FilePreviewPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FilePreviewPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -60,7 +59,7 @@ func (qq *FilePreviewPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Requ
 	state := autil.StateX[FilePreviewPartialState](rw, req)
 	rw.Header().Set("HX-Push-Url", route2.BrowseFileWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, data.CurrentDirID, data.FileID))
 
-	// filex := ctx.AppCtx().TTx.File.GetX(ctx, data.FileID)
+	// filex := ctx.TenantCtx().TTx.File.GetX(ctx, data.FileID)
 	dirx := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 
@@ -79,7 +78,7 @@ func (qq *FilePreviewPartial) Widget(
 	state *FilePreviewPartialState,
 	dirx *filemodel.File,
 	filex *filemodel.File,
-) (*widget.DetailsWithSheet, error) {
+) (*wx.DetailsWithSheet, error) {
 	// TODO action.ShowFileData or primitive types?
 	//		is partial bound to action?
 	//
@@ -100,8 +99,8 @@ func (qq *FilePreviewPartial) Widget(
 
 	fileURL := route2.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String())
 
-	return &widget.DetailsWithSheet{
-		HTMXAttrs: widget.HTMXAttrs{
+	return &wx.DetailsWithSheet{
+		HTMXAttrs: wx.HTMXAttrs{
 			HxTrigger: event.FileUploaded.Handler(),
 			HxPost:    qq.Endpoint(),
 			HxVals:    util.JSON(qq.Data(dirx.Data.PublicID.String(), filex.Data.PublicID.String())),
@@ -111,13 +110,13 @@ func (qq *FilePreviewPartial) Widget(
 		AppBar: qq.appBar(
 			ctx,
 			dirx.Data.PublicID.String(),
-			widget.Tu(filex.FilenameInApp(ctx, true)),
+			wx.Tu(filex.FilenameInApp(ctx, true)),
 			filex,
 			filex.Filename(ctx),
 		),
-		Child: &widget.Column{
-			Children: []widget.IWidget{
-				&widget.FilePreview{
+		Child: &wx.Column{
+			Children: []wx.IWidget{
+				&wx.FilePreview{
 					FileURL:  fileURL,
 					Filename: filex.Filename(ctx),
 					MimeType: filex.CurrentVersion(ctx).Data.MimeType,
@@ -135,42 +134,42 @@ func (qq *FilePreviewPartial) Widget(
 func (qq *FilePreviewPartial) appBar(
 	ctx ctxx.Context,
 	dirID string,
-	title *widget.Text,
+	title *wx.Text,
 	filex *filemodel.File,
 	filename string,
-) *widget.AppBar {
+) *wx.AppBar {
 	downloadURL := route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String())
 
-	return &widget.AppBar{
-		Leading: &widget.IconButton{
+	return &wx.AppBar{
+		Leading: &wx.IconButton{
 			Icon:    "close",
-			Tooltip: widget.T("Close preview"),
+			Tooltip: wx.T("Close preview"),
 			// TODO use link instead?
-			HTMXAttrs: widget.HTMXAttrs{
+			HTMXAttrs: wx.HTMXAttrs{
 				HxGet:     route2.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, dirID),
-				HxOn:      events.DetailsClosed.HxOn("click"),
+				HxOn:      event.DetailsClosed.HxOn("click"),
 				HxHeaders: autil.CloseDetailsHeader(),
 			},
 		},
-		Title: &widget.AppBarTitle{
+		Title: &wx.AppBarTitle{
 			Text: title,
 		},
-		Actions: []widget.IWidget{
-			&widget.IconButton{
+		Actions: []wx.IWidget{
+			&wx.IconButton{
 				// TODO other icon if already open or hide...
 				Icon:    "description", // right_panel_open, clarify, tune, description, info, ...?
-				Tooltip: widget.T("Show details"),
-				HTMXAttrs: widget.HTMXAttrs{
+				Tooltip: wx.T("Show details"),
+				HTMXAttrs: wx.HTMXAttrs{
 					DialogID: qq.actions.FileDetailsSideSheetPartial.ID(),
 				},
 			},
-			&widget.Link{
+			&wx.Link{
 				Href:      downloadURL,
 				IsNoColor: true,
 				Filename:  filename,
-				Child: &widget.IconButton{
+				Child: &wx.IconButton{
 					Icon:    "download",
-					Tooltip: widget.T("Download"),
+					Tooltip: wx.T("Download"),
 				},
 			},
 			/*

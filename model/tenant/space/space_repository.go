@@ -3,7 +3,7 @@ package space
 import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
 )
 
 type SpaceRepository interface {

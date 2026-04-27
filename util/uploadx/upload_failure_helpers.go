@@ -4,19 +4,18 @@ import (
 	"log"
 	"time"
 
-	"github.com/marcobeierer/go-core/db/entmain"
-	entmainschema "github.com/marcobeierer/go-core/db/entmain/schema"
-	"github.com/marcobeierer/go-core/util/txx"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
-	txx2 "github.com/simpledms/simpledms/util/txx"
+	"github.com/simpledms/simpledms/util/txx"
 )
 
 func MarkStoredFileUploadFailed(ctx *ctxx.SpaceContext, storedFileID int64) {
-	_, err := txx2.WithTenantWriteSpaceTx(ctx, func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+	_, err := txx.WithTenantWriteSpaceTx(ctx, func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
 		ctxWithIncomplete := enttenantschema.WithUnfinishedUploads(writeCtx)
 		err := writeCtx.TTx.StoredFile.
 			UpdateOneID(storedFileID).
@@ -33,7 +32,7 @@ func DeleteFailedUploadFile(ctx *ctxx.SpaceContext, fileID int64) {
 	if fileID == 0 {
 		return
 	}
-	_, err := txx2.WithTenantWriteSpaceTx(ctx, func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+	_, err := txx.WithTenantWriteSpaceTx(ctx, func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
 		ctxWithDeleted := enttenantschema.SkipSoftDelete(writeCtx)
 		_, err := writeCtx.TTx.FileVersion.
 			Delete().

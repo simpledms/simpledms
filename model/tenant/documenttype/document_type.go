@@ -3,15 +3,15 @@ package documenttype
 import (
 	"net/http"
 
-	"github.com/marcobeierer/go-core/util/e"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	documenttypequery "github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
-	"github.com/simpledms/simpledms/model/tenant/common/attributetype"
+	"github.com/simpledms/simpledms/model/main/common/attributetype"
 	"github.com/simpledms/simpledms/model/tenant/library"
+	"github.com/simpledms/simpledms/util/e"
 )
 
 type DocumentType struct {
@@ -46,7 +46,7 @@ func QueryByID(
 	spaceID int64,
 	documentTypeID int64,
 ) (*DocumentType, error) {
-	documentTypex, err := ctx.AppCtx().TTx.DocumentType.Query().
+	documentTypex, err := ctx.TenantCtx().TTx.DocumentType.Query().
 		Where(
 			documenttypequery.ID(documentTypeID),
 			documenttypequery.SpaceID(spaceID),
@@ -60,7 +60,7 @@ func QueryByID(
 }
 
 func (qq *DocumentType) Rename(ctx ctxx.Context, newName string) error {
-	documentTypex, err := ctx.AppCtx().TTx.DocumentType.
+	documentTypex, err := ctx.TenantCtx().TTx.DocumentType.
 		UpdateOneID(qq.Data.ID).
 		Where(documenttypequery.SpaceID(qq.Data.SpaceID)).
 		SetName(newName).
@@ -75,7 +75,7 @@ func (qq *DocumentType) Rename(ctx ctxx.Context, newName string) error {
 }
 
 func (qq *DocumentType) Delete(ctx ctxx.Context) error {
-	return ctx.AppCtx().TTx.DocumentType.
+	return ctx.TenantCtx().TTx.DocumentType.
 		DeleteOneID(qq.Data.ID).
 		Where(documenttypequery.SpaceID(qq.Data.SpaceID)).
 		Exec(ctx)
@@ -123,7 +123,7 @@ func (qq *DocumentType) CreateTagAttribute(
 		)
 	}
 
-	return ctx.AppCtx().TTx.Attribute.Create().
+	return ctx.TenantCtx().TTx.Attribute.Create().
 		SetName(name).
 		SetTagID(tagID).
 		SetType(attributetype.Tag).
@@ -161,7 +161,7 @@ func (qq *DocumentType) CreatePropertyAttribute(
 		)
 	}
 
-	return ctx.AppCtx().TTx.Attribute.Create().
+	return ctx.TenantCtx().TTx.Attribute.Create().
 		SetType(attributetype.Field).
 		SetDocumentTypeID(qq.Data.ID).
 		SetPropertyID(propertyID).

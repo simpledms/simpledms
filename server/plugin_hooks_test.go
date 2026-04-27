@@ -5,14 +5,13 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/marcobeierer/go-core/db/entmain/account"
-	"github.com/marcobeierer/go-core/db/entx"
-
-	ctxx2 "github.com/marcobeierer/go-core/ctxx"
-	"github.com/marcobeierer/go-core/model/common/country"
-	"github.com/marcobeierer/go-core/model/common/language"
-	signupmodel "github.com/marcobeierer/go-core/model/signup"
-	"github.com/marcobeierer/go-core/pluginx"
+	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain/account"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	signupmodel "github.com/simpledms/simpledms/model/main/signup"
+	"github.com/simpledms/simpledms/pluginx"
 )
 
 type captureSignUpPlugin struct {
@@ -25,7 +24,7 @@ func (qq *captureSignUpPlugin) Name() string {
 	return "capture-sign-up"
 }
 
-func (qq *captureSignUpPlugin) OnSignUp(_ ctxx2.Context, event pluginx.SignUpEvent) error {
+func (qq *captureSignUpPlugin) OnSignUp(_ ctxx.Context, event pluginx.SignUpEvent) error {
 	qq.calls++
 	qq.last = event
 	return qq.err
@@ -95,7 +94,7 @@ func executeSignUpFlow(t *testing.T, harness *actionTestHarness, email string) e
 		t.Fatalf("start main tx: %v", err)
 	}
 
-	ctx := ctxx2.NewVisitorContext(
+	ctx := ctxx.NewVisitorContext(
 		context.Background(),
 		mainTx,
 		harness.i18n,

@@ -1,0 +1,9 @@
+{{- define "List" }}
+    <div id="{{ .GetID }}"
+         class="js-list py-2 flex flex-col gap-y-1"
+         role="list"
+         {{ template "HTMXAttrs" .HTMXAttrs }}
+    >
+        {{ render .GetContext .Children }}
+    </div>
+{{ end }}

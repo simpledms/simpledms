@@ -3,17 +3,16 @@ package documenttype
 // package action
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
-	"github.com/simpledms/simpledms/model/tenant/common/attributetype"
+	"github.com/simpledms/simpledms/model/main/common/attributetype"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type AttributesPartialData struct {
@@ -44,7 +43,7 @@ func (qq *AttributesPartial) Data(documentTypeID int64) *AttributesPartialData {
 	}
 }
 
-func (qq *AttributesPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *AttributesPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[AttributesPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -57,28 +56,28 @@ func (qq *AttributesPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Reque
 	)
 }
 
-func (qq *AttributesPartial) Widget(ctx ctxx.Context, data *AttributesPartialData) *widget.List {
-	attributes := ctx.AppCtx().TTx.Attribute.
+func (qq *AttributesPartial) Widget(ctx ctxx.Context, data *AttributesPartialData) *wx.List {
+	attributes := ctx.TenantCtx().TTx.Attribute.
 		Query().
 		WithTag().
 		WithProperty().
 		Where(attribute.DocumentTypeID(data.DocumentTypeID)).
 		AllX(ctx)
-	var items []*widget.ListItem
+	var items []*wx.ListItem
 
-	items = append(items, &widget.ListItem{
-		Headline: widget.T("Add field attribute"),
-		Type:     widget.ListItemTypeHelper,
-		Leading:  widget.NewIcon("add"),
+	items = append(items, &wx.ListItem{
+		Headline: wx.T("Add field attribute"),
+		Type:     wx.ListItemTypeHelper,
+		Leading:  wx.NewIcon("add"),
 		HTMXAttrs: qq.actions.AddPropertyAttributeCmd.ModalLinkAttrs(
 			qq.actions.AddPropertyAttributeCmd.Data(data.DocumentTypeID),
 			"",
 		),
 	})
-	items = append(items, &widget.ListItem{
-		Headline: widget.T("Add list attribute (tag group)"),
-		Type:     widget.ListItemTypeHelper,
-		Leading:  widget.NewIcon("add"),
+	items = append(items, &wx.ListItem{
+		Headline: wx.T("Add list attribute (tag group)"),
+		Type:     wx.ListItemTypeHelper,
+		Leading:  wx.NewIcon("add"),
 		HTMXAttrs: qq.actions.CreateAttributeCmd.ModalLinkAttrs(
 			qq.actions.CreateAttributeCmd.Data(data.DocumentTypeID),
 			"",
@@ -87,25 +86,25 @@ func (qq *AttributesPartial) Widget(ctx ctxx.Context, data *AttributesPartialDat
 
 	for _, attributex := range attributes {
 		if attributex.Type == attributetype.Field {
-			supportingText := widget.T(attributex.Edges.Property.Type.String())
+			supportingText := wx.T(attributex.Edges.Property.Type.String())
 			if attributex.IsNameGiving {
-				supportingText = widget.Tuf("%s, %s", supportingText.String(ctx), widget.T("name-giving").String(ctx))
+				supportingText = wx.Tuf("%s, %s", supportingText.String(ctx), wx.T("name-giving").String(ctx))
 			}
-			items = append(items, &widget.ListItem{
-				Headline:       widget.Tu(attributex.Edges.Property.Name),
+			items = append(items, &wx.ListItem{
+				Headline:       wx.Tu(attributex.Edges.Property.Name),
 				SupportingText: supportingText,
-				Leading:        widget.NewIcon("list_alt"), // TODO okay?
+				Leading:        wx.NewIcon("list_alt"), // TODO okay?
 				ContextMenu:    NewAttributeContextMenuWidget(qq.actions).Widget(ctx, attributex),
 			})
 		} else if attributex.Type == attributetype.Tag {
-			supportingText := widget.Tu(attributex.Edges.Tag.Name)
+			supportingText := wx.Tu(attributex.Edges.Tag.Name)
 			if attributex.IsNameGiving {
-				supportingText = widget.Tuf("%s, %s", supportingText.String(ctx), widget.T("name-giving").String(ctx))
+				supportingText = wx.Tuf("%s, %s", supportingText.String(ctx), wx.T("name-giving").String(ctx))
 			}
-			items = append(items, &widget.ListItem{
-				Headline:       widget.Tu(attributex.Name),
+			items = append(items, &wx.ListItem{
+				Headline:       wx.Tu(attributex.Name),
 				SupportingText: supportingText,
-				Leading:        widget.NewIcon("list_alt"), // TODO okay?
+				Leading:        wx.NewIcon("list_alt"), // TODO okay?
 				ContextMenu:    NewAttributeContextMenuWidget(qq.actions).Widget(ctx, attributex),
 			})
 		} else {
@@ -114,13 +113,13 @@ func (qq *AttributesPartial) Widget(ctx ctxx.Context, data *AttributesPartialDat
 		}
 	}
 
-	return &widget.List{
-		Widget: widget.Widget[widget.List]{
+	return &wx.List{
+		Widget: wx.Widget[wx.List]{
 			ID: qq.listID(),
 		},
 		Children: items,
-		HTMXAttrs: widget.HTMXAttrs{
-			HxTrigger: events.HxTrigger(
+		HTMXAttrs: wx.HTMXAttrs{
+			HxTrigger: event.HxTrigger(
 				event.DocumentTypeAttributeCreated,
 				event.DocumentTypeAttributeUpdated,
 				event.DocumentTypeAttributeDeleted,

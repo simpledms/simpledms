@@ -5,7 +5,7 @@ import (
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
 	"github.com/simpledms/simpledms/model/tenant/library"
 )
 
@@ -18,7 +18,7 @@ func Create(
 ) (*enttenant.Space, error) {
 	isDefault := false
 
-	spacex, err := ctx.AppCtx().TTx.Space.Create().
+	spacex, err := ctx.TenantCtx().TTx.Space.Create().
 		SetName(name).
 		SetDescription(description).
 		SetIsFolderMode(true).
@@ -27,13 +27,13 @@ func Create(
 		return nil, err
 	}
 
-	spaceCtx := ctxx.NewSpaceContext(ctx.AppCtx(), spacex)
+	spaceCtx := ctxx.NewSpaceContext(ctx.TenantCtx(), spacex)
 
 	if addMeAsSpaceOwner {
-		_, err = ctx.AppCtx().TTx.SpaceUserAssignment.
+		_, err = ctx.TenantCtx().TTx.SpaceUserAssignment.
 			Create().
 			SetSpaceID(spacex.ID).
-			SetUserID(ctx.AppCtx().User.ID).
+			SetUserID(ctx.TenantCtx().User.ID).
 			SetRole(spacerole.Owner).
 			SetIsDefault(isDefault).
 			Save(spaceCtx)
@@ -42,7 +42,7 @@ func Create(
 		}
 	}
 
-	_, err = ctx.AppCtx().TTx.File.Create().
+	_, err = ctx.TenantCtx().TTx.File.Create().
 		SetName(name).
 		SetIsDirectory(true).
 		SetIndexedAt(time.Now()).

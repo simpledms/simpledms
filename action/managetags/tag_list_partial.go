@@ -4,18 +4,17 @@ import (
 	"fmt"
 	"slices"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type TagListPartialData struct {
@@ -42,7 +41,7 @@ func NewTagListPartial(infra *common.Infra, actions *Actions) *TagListPartial {
 	}
 }
 
-func (qq *TagListPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *TagListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[TagListPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -58,7 +57,7 @@ func (qq *TagListPartial) Data(parentTagID int64) *TagListPartialData {
 	}
 }
 
-func (qq *TagListPartial) Widget(ctx ctxx.Context, data *TagListPartialData, state *TagListPartialState) *widget.List {
+func (qq *TagListPartial) Widget(ctx ctxx.Context, data *TagListPartialData, state *TagListPartialState) *wx.List {
 	// duplicate in EditAssignedTags.ListView
 	// TODO is this necessary? children are eagerly loaded... maybe just necessary in EditAssignedTags
 	//		because of checkboxes?
@@ -81,19 +80,19 @@ func (qq *TagListPartial) Widget(ctx ctxx.Context, data *TagListPartialData, sta
 	}
 	tags := tagsQuery.AllX(ctx)
 
-	var allListItems []*widget.ListItem
-	var tagListItems []*widget.ListItem
-	var groupListItems []*widget.ListItem
+	var allListItems []*wx.ListItem
+	var tagListItems []*wx.ListItem
+	var groupListItems []*wx.ListItem
 
 	if !isLoadingPartial {
 		// TODO or as FAB? would be more consistent with rest of application
 		//		but less consistent with adding tags to group
 		allListItems = append(allListItems,
 			// TODO segment into two list items?
-			&widget.ListItem{
-				Headline: widget.T("Create new tag or group"),
-				Leading:  widget.NewIcon("new_label"),
-				Type:     widget.ListItemTypeHelper,
+			&wx.ListItem{
+				Headline: wx.T("Create new tag or group"),
+				Leading:  wx.NewIcon("new_label"),
+				Type:     wx.ListItemTypeHelper,
 				HTMXAttrs: qq.actions.Tagging.CreateTagCmd.ModalLinkAttrs(
 					qq.actions.Tagging.CreateTagCmd.Data(0), ""),
 			},
@@ -113,24 +112,24 @@ func (qq *TagListPartial) Widget(ctx ctxx.Context, data *TagListPartialData, sta
 	allListItems = append(allListItems, tagListItems...)
 
 	if isLoadingPartial {
-		return &widget.List{
+		return &wx.List{
 			Children: allListItems,
 		}
 	}
 
 	// TODO empty state? or just add a list item?
 
-	return &widget.List{
-		Widget: widget.Widget[widget.List]{
+	return &wx.List{
+		Widget: wx.Widget[wx.List]{
 			ID: qq.id(),
 		},
-		HTMXAttrs: widget.HTMXAttrs{
+		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxTarget: "#tagList",
 			HxSwap:   "outerHTML",
 			// TODO currently loads all tags always, but could be limited to a tag group
 			//		if a child tag is created
-			HxTrigger: events.HxTrigger(
+			HxTrigger: event.HxTrigger(
 				event.TagCreated,
 				event.TagUpdated,
 				event.TagDeleted,
@@ -145,31 +144,31 @@ func (qq *TagListPartial) listItem(
 	ctx ctxx.Context,
 	state *TagListPartialState,
 	tagx *enttenant.Tag,
-) *widget.ListItem {
-	var icon *widget.Icon
-	var supportingText *widget.Text
-	var trailing widget.IWidget
+) *wx.ListItem {
+	var icon *wx.Icon
+	var supportingText *wx.Text
+	var trailing wx.IWidget
 	// var radioGroupName string
 	var isCollapsible bool
 	var isOpen bool
-	var childItems []widget.IWidget
-	var htmxAttrs widget.HTMXAttrs
+	var childItems []wx.IWidget
+	var htmxAttrs wx.HTMXAttrs
 
 	if tagx.Type == tagtype.Group {
-		icon = widget.NewIcon("folder_special")
+		icon = wx.NewIcon("folder_special")
 		// TODO prefetch or via view?
 		childCount := tagx.QueryChildren().CountX(ctx)
 
-		childTagsStr := widget.Tf("Group, %d tag", childCount)
+		childTagsStr := wx.Tf("Group, %d tag", childCount)
 		if childCount > 1 || childCount == 0 {
-			childTagsStr = widget.Tf("Group, %d tags", childCount)
+			childTagsStr = wx.Tf("Group, %d tags", childCount)
 		}
 		supportingText = childTagsStr
 		// radioGroupName = qq.id() + "RadioGroup"
-		childItems = append(childItems, &widget.ListItem{
-			Type:     widget.ListItemTypeHelper,
-			Leading:  widget.NewIcon("new_label"),
-			Headline: widget.T("Create new tag"), // group not possible
+		childItems = append(childItems, &wx.ListItem{
+			Type:     wx.ListItemTypeHelper,
+			Leading:  wx.NewIcon("new_label"),
+			Headline: wx.T("Create new tag"), // group not possible
 			HTMXAttrs: qq.actions.Tagging.CreateTagCmd.ModalLinkAttrs(
 				qq.actions.Tagging.CreateTagCmd.Data(tagx.ID),
 				"",
@@ -190,7 +189,7 @@ func (qq *TagListPartial) listItem(
 			}
 			// necessary for replacing close/open icon indicator and for workaround
 			// for a idiomorph issue where the old request is still fired if not overwriten
-			htmxAttrs = widget.HTMXAttrs{
+			htmxAttrs = wx.HTMXAttrs{
 				HxPost:   qq.actions.ToggleTagGroupCmd.Endpoint(),
 				HxVals:   util.JSON(qq.actions.ToggleTagGroupCmd.Data(tagx.ID)),
 				HxTarget: "#" + qq.listItemID(tagx.ID),
@@ -201,9 +200,9 @@ func (qq *TagListPartial) listItem(
 					fmt.Sprintf("%d", tagx.ID),
 				),*/
 			}
-			trailing = widget.NewIcon("keyboard_arrow_up")
+			trailing = wx.NewIcon("keyboard_arrow_up")
 		} else {
-			htmxAttrs = widget.HTMXAttrs{
+			htmxAttrs = wx.HTMXAttrs{
 				// just replace because eagerly loaded
 				// HxPost:    route.ManageTagsWithState(state)(ctx.SpaceCtx().TenantID, ctx.SpaceCtx().SpaceID),
 				HxPost:   qq.actions.ToggleTagGroupCmd.Endpoint(),
@@ -211,22 +210,22 @@ func (qq *TagListPartial) listItem(
 				HxTarget: "#" + qq.listItemID(tagx.ID),
 				HxSwap:   "outerHTML",
 			}
-			trailing = widget.NewIcon("keyboard_arrow_down")
+			trailing = wx.NewIcon("keyboard_arrow_down")
 		}
 	} else if tagx.Type == tagtype.Super {
-		icon = widget.NewIcon("label_important")
+		icon = wx.NewIcon("label_important")
 
-		supportingText = widget.T("Super tag")
+		supportingText = wx.T("Super tag")
 		// TODO show number of subTags?
 
 		// trailing = wx.NewIcon("keyboard_arrow_right")
 		// radioGroupName = qq.id() + "RadioGroup"
 	} else {
-		icon = widget.NewIcon("label")
+		icon = wx.NewIcon("label")
 	}
 
-	return &widget.ListItem{
-		Widget: widget.Widget[widget.ListItem]{
+	return &wx.ListItem{
+		Widget: wx.Widget[wx.ListItem]{
 			ID: qq.listItemID(tagx.ID),
 		},
 		HTMXAttrs: htmxAttrs,
@@ -238,7 +237,7 @@ func (qq *TagListPartial) listItem(
 			HxGet:    route.ManageTag(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, tagx.ID),
 		},*/
 		Leading:        icon,
-		Headline:       widget.Tu(tagx.Name),
+		Headline:       wx.Tu(tagx.Name),
 		SupportingText: supportingText,
 		Trailing:       trailing,
 		ContextMenu:    NewTagContextMenuWidget(qq.actions).Widget(ctx, tagx),

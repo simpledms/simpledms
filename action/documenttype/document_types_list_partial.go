@@ -3,18 +3,17 @@ package documenttype
 // package action
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
+	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type DocumentTypesListPartialData struct {
@@ -41,7 +40,7 @@ func (qq *DocumentTypesListPartial) Data() *DocumentTypesListPartialData {
 	return &DocumentTypesListPartialData{}
 }
 
-func (qq *DocumentTypesListPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *DocumentTypesListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	_, err := autil.FormData[DocumentTypesListPartialData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -56,7 +55,7 @@ func (qq *DocumentTypesListPartial) Handler(rw httpx2.ResponseWriter, req *httpx
 
 func (qq *DocumentTypesListPartial) Widget(ctx ctxx.Context, selectedTypeID int64) renderable.Renderable {
 	types := ctx.SpaceCtx().Space.QueryDocumentTypes().Order(documenttype.ByName()).AllX(ctx)
-	var items []*widget.ListItem
+	var items []*wx.ListItem
 
 	id := "documentTypesList"
 
@@ -73,10 +72,10 @@ func (qq *DocumentTypesListPartial) Widget(ctx ctxx.Context, selectedTypeID int6
 		}
 	*/
 
-	items = append(items, &widget.ListItem{
-		Headline: widget.T("Add document type"),
-		Type:     widget.ListItemTypeHelper,
-		Leading:  widget.NewIcon("add"),
+	items = append(items, &wx.ListItem{
+		Headline: wx.T("Add document type"),
+		Type:     wx.ListItemTypeHelper,
+		Leading:  wx.NewIcon("add"),
 		HTMXAttrs: qq.actions.CreateCmd.ModalLinkAttrs(
 			qq.actions.CreateCmd.Data(""),
 			"",
@@ -87,13 +86,13 @@ func (qq *DocumentTypesListPartial) Widget(ctx ctxx.Context, selectedTypeID int6
 		items = append(items, qq.ListItem(ctx, typex, typex.ID == selectedTypeID))
 	}
 
-	return &widget.List{
-		Widget: widget.Widget[widget.List]{
+	return &wx.List{
+		Widget: wx.Widget[wx.List]{
 			ID: id,
 		},
-		HTMXAttrs: widget.HTMXAttrs{
+		HTMXAttrs: wx.HTMXAttrs{
 			HxPost: qq.Endpoint(),
-			HxTrigger: events.HxTrigger(
+			HxTrigger: event.HxTrigger(
 				event.DocumentTypeCreated,
 				event.DocumentTypeUpdated,
 				event.DocumentTypeDeleted,
@@ -106,19 +105,19 @@ func (qq *DocumentTypesListPartial) Widget(ctx ctxx.Context, selectedTypeID int6
 	}
 }
 
-func (qq *DocumentTypesListPartial) ListItem(ctx ctxx.Context, typex *enttenant.DocumentType, isSelected bool) *widget.ListItem {
+func (qq *DocumentTypesListPartial) ListItem(ctx ctxx.Context, typex *enttenant.DocumentType, isSelected bool) *wx.ListItem {
 	icon := "category"
 	if typex.Icon != "" {
 		icon = typex.Icon
 	}
-	return &widget.ListItem{
-		Widget: widget.Widget[widget.ListItem]{},
-		HTMXAttrs: widget.HTMXAttrs{
+	return &wx.ListItem{
+		Widget: wx.Widget[wx.ListItem]{},
+		HTMXAttrs: wx.HTMXAttrs{
 			HxGet: route.ManageDocumentTypesWithSelection(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, typex.ID),
 		},
 		RadioGroupName: "documentTypes",
-		Leading:        widget.NewIcon(icon),
-		Headline:       widget.Tu(typex.Name),
+		Leading:        wx.NewIcon(icon),
+		Headline:       wx.Tu(typex.Name),
 		IsSelected:     isSelected,
 		ContextMenu:    NewContextMenuWidget(qq.actions).Widget(ctx, typex),
 	}

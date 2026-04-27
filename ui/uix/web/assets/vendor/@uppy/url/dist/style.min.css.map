@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../../../node_modules/@uppy/url/dist/style.min.css"],
+  "sourcesContent": [".uppy-Url{align-items:center;display:flex;flex:1;flex-direction:column;height:100%;justify-content:center;width:100%}[data-uppy-theme=dark] .uppy-Url{background-color:#1f1f1f}.uppy-Url-input{margin-bottom:15px;max-width:650px;width:90%}.uppy-size--md .uppy-Url-input{margin-bottom:20px}.uppy-Url-importButton{padding:13px 25px}.uppy-size--md .uppy-Url-importButton{padding:13px 30px}"],
+  "mappings": "AAAA,CAAC,SAAS,YAAY,OAAO,QAAQ,KAAK,KAAK,EAAE,eAAe,OAAO,OAAO,KAAK,gBAAgB,OAAO,MAAM,IAAI,CAAC,CAAC,sBAAsB,CAA3I,SAAqJ,iBAAiB,OAAO,CAAC,CAAC,eAAe,cAAc,KAAK,UAAU,MAAM,MAAM,GAAG,CAAC,CAAC,cAAc,CAA3E,eAA2F,cAAc,IAAI,CAAC,CAAC,sBAA/R,QAA6T,KAAK,IAAI,CAAC,CAA1F,cAAyG,CAAvD,sBAA/R,QAAqX,KAAK,IAAI",
+  "names": []
+}

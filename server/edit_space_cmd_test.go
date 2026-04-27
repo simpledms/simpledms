@@ -9,29 +9,26 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entmain/account"
-	_ "github.com/marcobeierer/go-core/db/entmain/runtime"
-	"github.com/marcobeierer/go-core/db/entmain/tenantaccountassignment"
-	"github.com/marcobeierer/go-core/db/entx"
-
-	"github.com/marcobeierer/go-core/model/common/country"
-	"github.com/marcobeierer/go-core/model/common/language"
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
-	signupmodel "github.com/marcobeierer/go-core/model/signup"
-	tenant2 "github.com/marcobeierer/go-core/model/tenant"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
-
-	ctxx2 "github.com/marcobeierer/go-core/ctxx"
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/account"
+	_ "github.com/simpledms/simpledms/db/entmain/runtime"
+	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/migrate"
 	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
 	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	signupmodel "github.com/simpledms/simpledms/model/main/signup"
+	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestSignUpCmdCreatesTenantAndAccount(t *testing.T) {
@@ -57,7 +54,7 @@ func TestEditSpaceCmdUpdatesSpaceAndRootDir(t *testing.T) {
 	accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
 	tenantDB := initTenantDB(t, harness, tenantx)
 
-	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.AppContext) error {
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
 		spaceName := "Operations"
 		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
 
@@ -76,8 +73,8 @@ func TestEditSpaceCmdUpdatesSpaceAndRootDir(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 		err := harness.actions.Spaces.EditSpaceCmd.Handler(
-			httpx2.NewResponseWriter(rr),
-			httpx2.NewRequest(req),
+			httpx.NewResponseWriter(rr),
+			httpx.NewRequest(req),
 			tenantCtx,
 		)
 		if err != nil {
@@ -120,7 +117,7 @@ func signUpAccount(t testing.TB, harness *actionTestHarness, email string) (*ent
 		t.Fatalf("start main tx: %v", err)
 	}
 
-	ctx := ctxx2.NewVisitorContext(
+	ctx := ctxx.NewVisitorContext(
 		context.Background(),
 		mainTx,
 		harness.i18n,
@@ -169,18 +166,9 @@ func initTenantDB(t testing.TB, harness *actionTestHarness, tenantx *entmain.Ten
 	}
 
 	tenantm := tenant2.NewTenant(tenantx)
-	tenantDBMigrator := newTenantDBMigrator(true, migrationsTenantFS)
-	tenantDBx, err := tenantm.Init(
-		true,
-		harness.metaPath,
-		tenantDBMigrator.initialize,
-	)
+	tenantDB, err := tenantm.Init(true, harness.metaPath, migrationsTenantFS)
 	if err != nil {
 		t.Fatalf("init tenant db: %v", err)
-	}
-	tenantDB, err := asSimpleDMSTenantDB(tenantDBx)
-	if err != nil {
-		t.Fatalf("tenant db type: %v", err)
 	}
 	harness.tenantDBs.Store(tenantx.ID, tenantDB)
 
@@ -197,7 +185,7 @@ func newTenantContext(
 	accountx *entmain.Account,
 	tenantx *entmain.Tenant,
 	tenantDB *sqlx.TenantDB,
-) (*entmain.Tx, *enttenant.Tx, *ctxx.AppContext) {
+) (*entmain.Tx, *enttenant.Tx, *ctxx.TenantContext) {
 	t.Helper()
 
 	mainTx, err := harness.mainDB.ReadWriteConn.Tx(context.Background())
@@ -205,7 +193,7 @@ func newTenantContext(
 		t.Fatalf("start main tx: %v", err)
 	}
 
-	visitorCtx := ctxx2.NewVisitorContext(
+	visitorCtx := ctxx.NewVisitorContext(
 		context.Background(),
 		mainTx,
 		harness.i18n,
@@ -215,7 +203,7 @@ func newTenantContext(
 		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
-	mainCtx := ctxx2.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, false)
+	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs, false)
 
 	tenantTx, err := tenantDB.ReadWriteConn.Tx(context.Background())
 	if err != nil {
@@ -223,13 +211,12 @@ func newTenantContext(
 		t.Fatalf("start tenant tx: %v", err)
 	}
 
-	tenantCtxCore := ctxx2.NewTenantContext(mainCtx, tenantx)
-	tenantCtx := ctxx.NewAppContext(tenantCtxCore, tenantTx, false, harness.tenantDBs)
+	tenantCtx := ctxx.NewTenantContext(mainCtx, tenantTx, tenantx, false)
 
 	return mainTx, tenantTx, tenantCtx
 }
 
-func createSpaceViaCmd(t testing.TB, actions *action.Actions, tenantCtx *ctxx.AppContext, name string) {
+func createSpaceViaCmd(t testing.TB, actions *action.Actions, tenantCtx *ctxx.TenantContext, name string) {
 	t.Helper()
 
 	form := url.Values{}
@@ -242,8 +229,8 @@ func createSpaceViaCmd(t testing.TB, actions *action.Actions, tenantCtx *ctxx.Ap
 
 	rr := httptest.NewRecorder()
 	err := actions.Spaces.CreateSpaceCmd.Handler(
-		httpx2.NewResponseWriter(rr),
-		httpx2.NewRequest(req),
+		httpx.NewResponseWriter(rr),
+		httpx.NewRequest(req),
 		tenantCtx,
 	)
 	if err != nil {

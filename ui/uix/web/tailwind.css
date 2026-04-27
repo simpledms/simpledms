@@ -1,0 +1,579 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	/* material-symbols-outlined-regular - latin */
+	/*
+	 	downloaded directly from https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1
+		FILL did not work from webfonts helper
+	*/
+	@font-face {
+		font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+		font-family: 'Material Symbols Outlined';
+		font-style: normal;
+		font-weight: 400;
+		src: url('./fonts/material-symbols-outlined.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+	}
+	.material-symbols-outlined {
+		font-family: 'Material Symbols Outlined';
+		font-weight: normal;
+		font-style: normal;
+		font-size: 24px;
+		line-height: 1;
+		letter-spacing: normal;
+		text-transform: none;
+		display: inline-block;
+		white-space: nowrap;
+		word-wrap: normal;
+		direction: ltr;
+		-webkit-font-feature-settings: 'liga';
+		-webkit-font-smoothing: antialiased;
+	}
+	/* noto-sans-regular - latin_latin-ext */
+	@font-face {
+		font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+		font-family: 'Noto Sans';
+		font-style: normal;
+		font-weight: 400;
+		src: url('./fonts/noto-sans-v39-latin_latin-ext-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+	}
+	/* noto-sans-500 - latin_latin-ext */
+	@font-face {
+		font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+		font-family: 'Noto Sans';
+		font-style: normal;
+		font-weight: 500;
+		src: url('./fonts/noto-sans-v39-latin_latin-ext-500.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+	}
+	/* noto-sans-700 - latin_latin-ext */
+	@font-face {
+		font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+		font-family: 'Noto Sans';
+		font-style: normal;
+		font-weight: 700;
+		src: url('./fonts/noto-sans-v39-latin_latin-ext-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+	}
+	/* montserrat-regular - latin_latin-ext */
+	@font-face {
+		font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+		font-family: 'Montserrat';
+		font-style: normal;
+		font-weight: 400;
+		src: url('./fonts/montserrat-v29-latin_latin-ext-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+	}
+	/* montserrat-500 - latin_latin-ext */
+	@font-face {
+		font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+		font-family: 'Montserrat';
+		font-style: normal;
+		font-weight: 500;
+		src: url('./fonts/montserrat-v29-latin_latin-ext-500.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+	}
+
+	/* applies to all view transitions, see
+	https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API/Using
+
+	must be enabled globally via htmx or per swap */
+	::view-transition-group(root) {
+		/* slower durations than 0.1s make app feel slow, faster seems to create rendering artefacts similar
+		 to when view transitions are disabled; however, 0 prevents some artifacts (for example when switching
+		  between browse and inbox) that exists without view transitions */
+		animation-duration: 0.05s;
+	}
+
+	input {
+		@apply bg-transparent;
+
+		&:focus-visible {
+			/* was a problem when clicking inside search field and modal opens */
+			outline: none;
+		}
+	}
+
+	[popover] {
+		@apply p-0;
+	}
+
+	::-webkit-scrollbar {
+		@apply w-1.5 h-1.5
+	}
+	::-webkit-scrollbar-track {}
+	::-webkit-scrollbar-thumb {
+		@apply bg-outline/60;
+		@apply rounded-full;
+	}
+	::-webkit-scrollbar-thumb:hover {}
+
+	.hide-scrollbar {
+		scrollbar-width: none;
+	}
+
+	/*
+	dialog:-internal-dialog-in-top-layer {
+		max-width: 100dvw;
+		max-height: 100dvh;
+	}
+	 */
+
+	/* not working, probably a selector
+	i {
+		@apply material-symbols-outlined;
+	}
+	 */
+
+	/* copied from material theme builder download and removed `rgb()` wrapper;
+	necessary for alpha channel to work when defining in tailwind config */
+	:root {
+		/*
+		--md-sys-color-primary: 0 76 62;
+		--md-sys-color-surface-tint: 0 107 88;
+		--md-sys-color-on-primary: 255 255 255;
+		--md-sys-color-primary-container: 0 132 109;
+		--md-sys-color-on-primary-container: 255 255 255;
+		--md-sys-color-secondary: 132 10 69;
+		--md-sys-color-on-secondary: 255 255 255;
+		--md-sys-color-secondary-container: 191 63 114;
+		--md-sys-color-on-secondary-container: 255 255 255;
+		--md-sys-color-tertiary: 78 65 37;
+		--md-sys-color-on-tertiary: 255 255 255;
+		--md-sys-color-tertiary-container: 130 115 82;
+		--md-sys-color-on-tertiary-container: 255 255 255;
+		--md-sys-color-error: 140 0 9;
+		--md-sys-color-on-error: 255 255 255;
+		--md-sys-color-error-container: 218 52 46;
+		--md-sys-color-on-error-container: 255 255 255;
+		--md-sys-color-background: 243 251 246;
+		--md-sys-color-on-background: 22 29 27;
+		--md-sys-color-surface: 252 248 248;
+		--md-sys-color-on-surface: 28 27 27;
+		--md-sys-color-surface-variant: 214 230 223;
+		--md-sys-color-on-surface-variant: 55 70 65;
+		--md-sys-color-outline: 83 98 93;
+		--md-sys-color-outline-variant: 111 126 120;
+		--md-sys-color-shadow: 0 0 0;
+		--md-sys-color-scrim: 0 0 0;
+		--md-sys-color-inverse-surface: 49 48 48;
+		--md-sys-color-inverse-on-surface: 244 240 239;
+		--md-sys-color-inverse-primary: 46 223 186;
+		--md-sys-color-primary-fixed: 0 132 109;
+		--md-sys-color-on-primary-fixed: 255 255 255;
+		--md-sys-color-primary-fixed-dim: 0 104 85;
+		--md-sys-color-on-primary-fixed-variant: 255 255 255;
+		--md-sys-color-secondary-fixed: 198 69 120;
+		--md-sys-color-on-secondary-fixed: 255 255 255;
+		--md-sys-color-secondary-fixed-dim: 166 43 95;
+		--md-sys-color-on-secondary-fixed-variant: 255 255 255;
+		--md-sys-color-tertiary-fixed: 130 115 82;
+		--md-sys-color-on-tertiary-fixed: 255 255 255;
+		--md-sys-color-tertiary-fixed-dim: 104 90 60;
+		--md-sys-color-on-tertiary-fixed-variant: 255 255 255;
+		--md-sys-color-surface-dim: 221 217 217;
+		--md-sys-color-surface-bright: 252 248 248;
+		--md-sys-color-surface-container-lowest: 255 255 255;
+		--md-sys-color-surface-container-low: 246 243 242;
+		--md-sys-color-surface-container: 241 237 236;
+		--md-sys-color-surface-container-high: 235 231 231;
+		--md-sys-color-surface-container-highest: 229 226 225;
+		--md-extended-color-beige-color: 67 68 50;
+		--md-extended-color-beige-on-color: 255 255 255;
+		--md-extended-color-beige-color-container: 117 118 98;
+		--md-extended-color-beige-on-color-container: 255 255 255;
+		--md-extended-color-aliceblue-color: 60 68 73;
+		--md-extended-color-aliceblue-on-color: 255 255 255;
+		--md-extended-color-aliceblue-color-container: 109 118 124;
+		--md-extended-color-aliceblue-on-color-container: 255 255 255;
+		 */
+
+		--md-sys-color-primary: 0 76 70;
+		--md-sys-color-surface-tint: 0 106 98;
+		--md-sys-color-on-primary: 255 255 255;
+		--md-sys-color-primary-container: 0 131 121;
+		--md-sys-color-on-primary-container: 255 255 255;
+		--md-sys-color-secondary: 0 74 85;
+		--md-sys-color-on-secondary: 255 255 255;
+		--md-sys-color-secondary-container: 0 128 146;
+		--md-sys-color-on-secondary-container: 255 255 255;
+		--md-sys-color-tertiary: 0 77 57;
+		--md-sys-color-on-tertiary: 255 255 255;
+		--md-sys-color-tertiary-container: 0 133 100;
+		--md-sys-color-on-tertiary-container: 255 255 255;
+		--md-sys-color-error: 140 0 9;
+		--md-sys-color-on-error: 255 255 255;
+		--md-sys-color-error-container: 218 52 46;
+		--md-sys-color-on-error-container: 255 255 255;
+		--md-sys-color-background: 245 250 248;
+		--md-sys-color-on-background: 23 29 28;
+		--md-sys-color-surface: 252 248 248;
+		--md-sys-color-on-surface: 28 27 27;
+		--md-sys-color-surface-variant: 222 227 231;
+		--md-sys-color-on-surface-variant: 62 68 71;
+		--md-sys-color-outline: 90 96 99;
+		--md-sys-color-outline-variant: 118 123 127;
+		--md-sys-color-shadow: 0 0 0;
+		--md-sys-color-scrim: 0 0 0;
+		--md-sys-color-inverse-surface: 49 48 48;
+		--md-sys-color-inverse-on-surface: 244 240 239;
+		--md-sys-color-inverse-primary: 106 216 204;
+		--md-sys-color-primary-fixed: 0 131 121;
+		--md-sys-color-on-primary-fixed: 255 255 255;
+		--md-sys-color-primary-fixed-dim: 0 104 96;
+		--md-sys-color-on-primary-fixed-variant: 255 255 255;
+		--md-sys-color-secondary-fixed: 0 128 146;
+		--md-sys-color-on-secondary-fixed: 255 255 255;
+		--md-sys-color-secondary-fixed-dim: 0 102 116;
+		--md-sys-color-on-secondary-fixed-variant: 255 255 255;
+		--md-sys-color-tertiary-fixed: 0 133 100;
+		--md-sys-color-on-tertiary-fixed: 255 255 255;
+		--md-sys-color-tertiary-fixed-dim: 0 105 78;
+		--md-sys-color-on-tertiary-fixed-variant: 255 255 255;
+		--md-sys-color-surface-dim: 221 217 217;
+		--md-sys-color-surface-bright: 252 248 248;
+		--md-sys-color-surface-container-lowest: 255 255 255;
+		--md-sys-color-surface-container-low: 246 243 242;
+		--md-sys-color-surface-container: 241 237 236;
+		--md-sys-color-surface-container-high: 235 231 231;
+		--md-sys-color-surface-container-highest: 229 226 225;
+	}
+	@media (prefers-color-scheme: dark) {
+		:root {
+			/*
+			--md-sys-color-primary: 88 250 212;
+			--md-sys-color-surface-tint: 46 223 186;
+			--md-sys-color-on-primary: 0 48 38;
+			--md-sys-color-primary-container: 0 207 172;
+			--md-sys-color-on-primary-container: 0 0 0;
+			--md-sys-color-secondary: 255 183 204;
+			--md-sys-color-on-secondary: 53 0 23;
+			--md-sys-color-secondary-container: 234 97 148;
+			--md-sys-color-on-secondary-container: 0 0 0;
+			--md-sys-color-tertiary: 255 255 255;
+			--md-sys-color-on-tertiary: 58 47 20;
+			--md-sys-color-tertiary-container: 230 210 172;
+			--md-sys-color-on-tertiary-container: 40 30 5;
+			--md-sys-color-error: 255 186 177;
+			--md-sys-color-on-error: 55 0 1;
+			--md-sys-color-error-container: 255 84 73;
+			--md-sys-color-on-error-container: 0 0 0;
+			--md-sys-color-background: 13 21 18;
+			--md-sys-color-on-background: 220 228 224;
+			--md-sys-color-surface: 20 19 19;
+			--md-sys-color-on-surface: 254 250 249;
+			--md-sys-color-surface-variant: 59 74 69;
+			--md-sys-color-on-surface-variant: 190 206 199;
+			--md-sys-color-outline: 151 166 160;
+			--md-sys-color-outline-variant: 119 134 128;
+			--md-sys-color-shadow: 0 0 0;
+			--md-sys-color-scrim: 0 0 0;
+			--md-sys-color-inverse-surface: 229 226 225;
+			--md-sys-color-inverse-on-surface: 42 42 42;
+			--md-sys-color-inverse-primary: 0 82 67;
+			--md-sys-color-primary-fixed: 89 252 214;
+			--md-sys-color-on-primary-fixed: 0 21 15;
+			--md-sys-color-primary-fixed-dim: 46 223 186;
+			--md-sys-color-on-primary-fixed-variant: 0 62 50;
+			--md-sys-color-secondary-fixed: 255 217 226;
+			--md-sys-color-on-secondary-fixed: 43 0 18;
+			--md-sys-color-secondary-fixed-dim: 255 177 200;
+			--md-sys-color-on-secondary-fixed-variant: 111 0 56;
+			--md-sys-color-tertiary-fixed: 245 224 185;
+			--md-sys-color-on-tertiary-fixed: 24 16 0;
+			--md-sys-color-tertiary-fixed-dim: 216 196 159;
+			--md-sys-color-on-tertiary-fixed-variant: 65 53 25;
+			--md-sys-color-surface-dim: 20 19 19;
+			--md-sys-color-surface-bright: 58 57 57;
+			--md-sys-color-surface-container-lowest: 14 14 14;
+			--md-sys-color-surface-container-low: 28 27 27;
+			--md-sys-color-surface-container: 32 31 31;
+			--md-sys-color-surface-container-high: 42 42 42;
+			--md-sys-color-surface-container-highest: 53 52 52;
+			--md-extended-color-beige-color: 255 255 255;
+			--md-extended-color-beige-on-color: 48 50 33;
+			--md-extended-color-beige-color-container: 214 214 190;
+			--md-extended-color-beige-on-color-container: 31 33 17;
+			--md-extended-color-aliceblue-color: 255 255 255;
+			--md-extended-color-aliceblue-on-color: 41 49 55;
+			--md-extended-color-aliceblue-color-container: 205 213 220;
+			--md-extended-color-aliceblue-on-color-container: 25 32 37;
+			 */
+
+			--md-sys-color-primary: 110 221 208;
+			--md-sys-color-surface-tint: 106 216 204;
+			--md-sys-color-on-primary: 0 26 24;
+			--md-sys-color-primary-container: 37 161 150;
+			--md-sys-color-on-primary-container: 0 0 0;
+			--md-sys-color-secondary: 112 222 244;
+			--md-sys-color-on-secondary: 0 30 36;
+			--md-sys-color-secondary-container: 62 181 201;
+			--md-sys-color-on-secondary-container: 0 0 0;
+			--md-sys-color-tertiary: 117 222 183;
+			--md-sys-color-on-tertiary: 0 27 18;
+			--md-sys-color-tertiary-container: 58 167 132;
+			--md-sys-color-on-tertiary-container: 0 0 0;
+			--md-sys-color-error: 255 186 177;
+			--md-sys-color-on-error: 55 0 1;
+			--md-sys-color-error-container: 255 84 73;
+			--md-sys-color-on-error-container: 0 0 0;
+			--md-sys-color-background: 15 20 20;
+			--md-sys-color-on-background: 222 228 226;
+			--md-sys-color-surface: 20 19 19;
+			--md-sys-color-on-surface: 254 250 249;
+			--md-sys-color-surface-variant: 66 72 75;
+			--md-sys-color-on-surface-variant: 198 203 207;
+			--md-sys-color-outline: 158 164 167;
+			--md-sys-color-outline-variant: 126 132 136;
+			--md-sys-color-shadow: 0 0 0;
+			--md-sys-color-scrim: 0 0 0;
+			--md-sys-color-inverse-surface: 229 226 225;
+			--md-sys-color-inverse-on-surface: 42 42 42;
+			--md-sys-color-inverse-primary: 0 81 75;
+			--md-sys-color-primary-fixed: 135 245 232;
+			--md-sys-color-on-primary-fixed: 0 21 18;
+			--md-sys-color-primary-fixed-dim: 106 216 204;
+			--md-sys-color-on-primary-fixed-variant: 0 62 57;
+			--md-sys-color-secondary-fixed: 162 238 255;
+			--md-sys-color-on-secondary-fixed: 0 20 24;
+			--md-sys-color-secondary-fixed-dim: 102 214 235;
+			--md-sys-color-on-secondary-fixed-variant: 0 60 69;
+			--md-sys-color-tertiary-fixed: 142 246 206;
+			--md-sys-color-on-tertiary-fixed: 0 21 13;
+			--md-sys-color-tertiary-fixed-dim: 113 218 179;
+			--md-sys-color-on-tertiary-fixed-variant: 0 63 45;
+			--md-sys-color-surface-dim: 20 19 19;
+			--md-sys-color-surface-bright: 58 57 57;
+			--md-sys-color-surface-container-lowest: 14 14 14;
+			--md-sys-color-surface-container-low: 28 27 27;
+			--md-sys-color-surface-container: 32 31 31;
+			--md-sys-color-surface-container-high: 42 42 42;
+			--md-sys-color-surface-container-highest: 53 52 52;
+		}
+	}
+
+	input:-webkit-autofill::first-line,
+	input:-webkit-autofill,
+	input:-webkit-autofill:hover,
+	input:-webkit-autofill:focus,
+	textarea:-webkit-autofill::first-line,
+	textarea:-webkit-autofill,
+	textarea:-webkit-autofill:hover,
+	textarea:-webkit-autofill:focus,
+	select:-webkit-autofill::first-line,
+	select:-webkit-autofill,
+	select:-webkit-autofill:hover,
+	select:-webkit-autofill:focus {
+		-webkit-box-shadow: 0 0 0px 1000px rgb(var(--md-sys-color-surface-container-lowest)) inset !important;
+		box-shadow: 0 0 0 1000px rgb(var(--md-sys-color-surface-container-lowest)) inset !important; /* necessary? */
+		-webkit-text-fill-color: rgb(var(--md-sys-color-on-surface)) !important;
+		@apply font-sans; /* does this have any effect? */
+		/* font-size doesn't work, workaround mit zoom is not nice */
+		/* TODO transition or animation? */
+	}
+}
+
+@layer components {
+	/* used for popovers */
+	.active {
+		display: block;
+	}
+
+	.label-sm {
+		font-size: 0.6875rem;
+		font-weight: 500;
+		line-height: 1rem;
+		letter-spacing: 0.03125rem;
+	}
+	.label-md {
+		font-size: 0.75rem;
+		font-weight: 500;
+		line-height: 1rem;
+		letter-spacing: 0.03125rem;
+	}
+	.label-lg {
+		font-size: 0.875rem;
+		font-weight: 500;
+		line-height: 1.25rem;
+		letter-spacing: 0.00625rem;
+	}
+	.label-prominent {
+		font-weight: 700;
+	}
+
+	.body-sm {
+		font-size: 0.75rem;
+		font-weight: 400;
+		line-height: 1rem;
+		letter-spacing: 0.025rem;
+	}
+	.body-md {
+		font-size: 0.875rem;
+		font-weight: 400;
+		line-height: 1.25rem;
+		letter-spacing: 0.015625rem;
+	}
+	.body-lg {
+		font-size: 1rem;
+		font-weight: 400;
+		line-height: 1.5rem;
+		letter-spacing: 0.03125rem;
+	}
+
+	/* font-weight was increased (or not) from 400 (title-lg) and 500 (title-sm / title-md) for Montserrat */
+	.title-sm {
+		font-family: 'Montserrat', sans-serif;
+		font-size: 0.875rem;
+		font-weight: 500;
+		line-height: 1.25rem;
+		letter-spacing: 0.00625rem;
+	}
+	.title-md {
+		font-family: 'Montserrat', sans-serif;
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: 1.5rem;
+		letter-spacing: 0.009375rem;
+	}
+	.title-lg {
+		font-family: 'Montserrat', sans-serif;
+		font-size: 1.375rem;
+		font-weight: 500;
+		line-height: 1.75rem;
+		letter-spacing: 0;
+	}
+
+	/* font-weight was increased from 400 for Montserrat */
+	.headline-sm {
+		font-family: 'Montserrat', sans-serif;
+		font-size: 1.5rem;
+		font-weight: 500;
+		line-height: 2rem;
+		letter-spacing: 0;
+	}
+	.headline-md {
+		font-family: 'Montserrat', sans-serif;
+		font-size: 1.75rem;
+		font-weight: 500;
+		line-height: 2.25rem;
+		letter-spacing: 0;
+	}
+	.headline-lg {
+		font-family: 'Montserrat', sans-serif;
+		font-size: 2rem;
+		font-weight: 500;
+		line-height: 2.5rem;
+		letter-spacing: 0;
+	}
+
+	/* font-weight was increased from 400 for Montserrat */
+	.display-sm {
+		font-family: 'Montserrat', sans-serif;
+		font-size: 2.12rem;
+		font-weight: 500;
+		line-height: 2.75rem;
+		letter-spacing: 0;
+	}
+	.display-md {
+		font-family: 'Montserrat', sans-serif;
+		font-size: 2.8125rem;
+		font-weight: 500;
+		line-height: 3.25rem;
+		letter-spacing: 0;
+	}
+	.display-lg {
+		font-family: 'Montserrat', sans-serif;
+		font-size: 3.5625rem;
+		font-weight: 500;
+		line-height: 4rem;
+		letter-spacing: -0.015625rem;
+	}
+
+	/* TODO components or utilities? are that many necessary? */
+	.icon-base {
+		font-size: 1.5rem;
+	}
+	.icon-lg {
+		font-size: 2rem;
+	}
+	/*.icon-md {
+		font-size: 1.25rem;
+	}*/
+	.icon-sm {
+		font-size: 1.125rem;
+	}
+	/*.icon-xs {
+		font-size: 1rem;
+	}*/
+
+	/* https://m3.material.io/foundations/interaction/states/state-layers */
+	/*
+	.state-layer {
+		// this did work:
+		@apply [display:inherit] h-[inherit] w-[inherit] rounded-[inherit];
+	}
+*/
+
+	/* virtual state layer */
+	/*
+	.v-state-layer {
+		&:hover {
+			@apply !bg-opacity-8 dark:!bg-opacity-92;
+		}
+		&:focus, &:active {
+			@apply !bg-opacity-10 dark:!bg-opacity-90;
+		}
+	}
+
+	 */
+	/* used when base color is dark (has nothing to to with dark mode) */
+	/*
+	.v-state-layer-dark {
+		&:hover {
+			@apply !bg-opacity-92;
+		}
+		&:focus, &:active {
+			@apply !bg-opacity-90;
+		}
+	}
+
+	 */
+}
+
+/* hover:, etc get generated for utilities */
+@layer utilities {
+	.fill {
+		font-variation-settings: 'FILL' 1;
+	}
+
+	/* deprecated, see: https://m3.material.io/blog/tone-based-surface-color-m3 */
+	/*
+	.elevation-0 {
+		@apply brightness-100;
+	}
+	.elevation-1 {
+		@apply brightness-95 dark:brightness-105;
+	}
+	.elevation-2 {
+		@apply brightness-90 dark:brightness-110;
+	}
+	.elevation-3 {
+		@apply brightness-85 dark:brightness-115;
+	}
+	.elevation-4 {
+		@apply brightness-80 dark:brightness-120;
+	}
+	.elevation-5 {
+		@apply brightness-75 dark:brightness-125;
+	}
+	 */
+
+	/* name matches material spec */
+	.center-aligned {
+		@apply justify-center items-center
+	}
+
+
+	/*
+	.content-auto {
+		content-visibility: auto;
+	}
+	 */
+}

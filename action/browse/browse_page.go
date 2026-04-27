@@ -4,19 +4,18 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/marcobeierer/go-core/db/entx"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/ui/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type BrowsePage struct {
@@ -32,8 +31,8 @@ func NewBrowsePage(infra *common.Infra, actions *Actions) *BrowsePage {
 }
 
 func (qq *BrowsePage) Handler(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
 	dirIDStr := req.PathValue("dir_id")
@@ -60,7 +59,7 @@ func (qq *BrowsePage) Handler(
 	if req.Header.Get("Close-Details") != "" {
 		rw.Header().Set("HX-Retarget", "#details")
 		rw.Header().Set("HX-Reswap", "innerHTML")
-		return qq.infra.Renderer().Render(rw, ctx, &widget.View{})
+		return qq.infra.Renderer().Render(rw, ctx, &wx.View{})
 	}
 
 	browsePage, err := qq.widget(req, ctx, state, dirx)
@@ -74,8 +73,8 @@ func (qq *BrowsePage) Handler(
 }
 
 func (qq *BrowsePage) render(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 	viewx renderable.Renderable,
 ) {
@@ -85,14 +84,14 @@ func (qq *BrowsePage) render(
 	}
 
 	if renderFullPage {
-		viewx = partial.NewBase(widget.T("Files"), viewx)
+		viewx = partial2.NewBase(wx.T("Files"), viewx)
 	}
 
 	qq.infra.Renderer().RenderX(rw, ctx, viewx)
 }
 
 func (qq *BrowsePage) widget(
-	req *httpx2.Request,
+	req *httpx.Request,
 	ctx ctxx.Context,
 	state *ListDirPartialState,
 	dir *enttenant.File,
@@ -104,11 +103,11 @@ func (qq *BrowsePage) widget(
 		"",
 	)
 
-	var fabs []*widget.FloatingActionButton
+	var fabs []*wx.FloatingActionButton
 
-	fabs = append(fabs, &widget.FloatingActionButton{
+	fabs = append(fabs, &wx.FloatingActionButton{
 		Icon: "upload_file",
-		HTMXAttrs: widget.HTMXAttrs{
+		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:        qq.actions.FileUploadDialogPartial.Endpoint(),
 			HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dir.PublicID.String(), false)),
 			LoadInPopover: true,
@@ -119,29 +118,29 @@ func (qq *BrowsePage) widget(
 				"#"+qq.actions.ListDirPartial.WrapperID(),
 			),
 		*/
-		Child: []widget.IWidget{
-			widget.NewIcon("upload_file"),
-			widget.T("Upload file"),
+		Child: []wx.IWidget{
+			wx.NewIcon("upload_file"),
+			wx.T("Upload file"),
 		},
 	})
 
 	if ctx.SpaceCtx().Space.IsFolderMode {
-		fabs = append(fabs, &widget.FloatingActionButton{
-			FABSize: widget.FABSizeSmall,
+		fabs = append(fabs, &wx.FloatingActionButton{
+			FABSize: wx.FABSizeSmall,
 			Icon:    "create_new_folder",
 			HTMXAttrs: qq.actions.MakeDirCmd.ModalLinkAttrs(
 				qq.actions.MakeDirCmd.Data(dir.PublicID.String(), ""),
 				"#"+qq.actions.ListDirPartial.WrapperID(),
 			),
-			Child: []widget.IWidget{
-				widget.NewIcon("create_new_folder"),
-				widget.T("Create directory"),
+			Child: []wx.IWidget{
+				wx.NewIcon("create_new_folder"),
+				wx.T("Create directory"),
 			},
 		})
 	}
 
-	mainLayout := &widget.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, qq.infra, "browse", fabs),
+	mainLayout := &wx.MainLayout{
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "browse", fabs),
 		Content:    listDetailLayout,
 	}
 	return mainLayout, nil

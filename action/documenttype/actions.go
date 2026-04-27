@@ -1,7 +1,7 @@
 package documenttype
 
 import (
-	acommon "github.com/marcobeierer/go-core/action/common"
+	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )

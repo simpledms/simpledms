@@ -12,15 +12,14 @@ import (
 	"entgo.io/ent/privacy"
 	"filippo.io/age"
 	"github.com/marcobeierer/go-tika"
-
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entmain/tenant"
-	"github.com/marcobeierer/go-core/util/ocrutil"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/sqlx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
+	"github.com/simpledms/simpledms/util/ocrutil"
 )
 
 func (qq *Scheduler) applyOCR() {

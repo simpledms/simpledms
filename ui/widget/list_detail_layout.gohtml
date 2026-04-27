@@ -1,0 +1,37 @@
+{{/* gotype:github.com/simpledms/simpledms/ui/widget.ListDetailLayout */}}
+{{- define "ListDetailLayout" }}
+	<div id="{{ .GetID }}" class="group/list-detail flex flex-row h-full
+		md:mx-0 md:mb-2 md:mt-3
+		exp:gap-x-4 exp:h-[calc(100dvh-0.75rem)]"
+	>
+		<div class="@container/list w-full
+			group-has-[.js-detail-content>div]/list-detail:hidden
+			group-has-[.js-detail-content>div]/list-detail:lg:block
+			max-w-screen-lg
+			group-has-[.js-detail-content>div]/list-detail:lg:max-w-xs
+			group-has-[.js-detail-content>div]/list-detail:xl:max-w-md
+			flex flex-col
+			overflow-y-hidden"
+		>
+            {{ render .GetContext .AppBar }}
+			<div class="h-full overflow-y-scroll pl-2 pr-1 md:pl-4 md:pr-3">
+                {{ render .GetContext .List }}
+			</div>
+		</div>
+        {{ render .GetContext .GetDetail }}
+	</div>
+		<script defer>
+			(function() {
+				// best place without using global event listener;
+				let listDetail = document.getElementById('{{ .GetID }}');
+				listDetail.addEventListener('detailsClosed', (e) => {
+					// unchecks list items on detailsClosed if they are of type Radio,
+					// for example file list
+					listDetail.querySelectorAll('.js-list .js-list-item input:checked').forEach((elem) => {
+						elem.checked = false;
+					})
+				})
+
+			})();
+		</script>
+{{ end }}

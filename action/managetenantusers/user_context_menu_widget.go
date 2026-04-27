@@ -1,11 +1,11 @@
 package managetenantusers
 
 import (
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type UserContextMenuWidget struct {
@@ -22,25 +22,25 @@ func (qq *UserContextMenuWidget) Widget(
 	ctx ctxx.Context,
 	userx *enttenant.User,
 	isOwningTenantAssignment bool,
-) *widget.Menu {
-	if ctx.AppCtx().User.Role != tenantrole.Owner {
+) *wx.Menu {
+	if ctx.TenantCtx().User.Role != tenantrole.Owner {
 		return nil
 	}
 	if userx.AccountID == ctx.MainCtx().Account.ID {
 		return nil
 	}
 
-	hxConfirm := widget.T("Are you sure? This user will be removed from this organization only.").String(ctx)
+	hxConfirm := wx.T("Are you sure? This user will be removed from this organization only.").String(ctx)
 	if isOwningTenantAssignment {
-		hxConfirm = widget.T("Are you sure? This user will be removed from this organization and the account will be deleted globally.").String(ctx)
+		hxConfirm = wx.T("Are you sure? This user will be removed from this organization and the account will be deleted globally.").String(ctx)
 	}
 
-	return &widget.Menu{
-		Items: []*widget.MenuItem{
+	return &wx.Menu{
+		Items: []*wx.MenuItem{
 			{
 				LeadingIcon: "delete",
-				Label:       widget.T("Delete"),
-				HTMXAttrs: widget.HTMXAttrs{
+				Label:       wx.T("Delete"),
+				HTMXAttrs: wx.HTMXAttrs{
 					HxPost:    qq.actions.DeleteUserCmd.Endpoint(),
 					HxVals:    util.JSON(qq.actions.DeleteUserCmd.Data(userx.PublicID.String())),
 					HxConfirm: hxConfirm,

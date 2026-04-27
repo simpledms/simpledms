@@ -1,0 +1,1 @@
+was copied from https://github.com/marcobeierer/go-commons/timex on 21.03.2025

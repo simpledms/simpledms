@@ -1,11 +1,11 @@
 package managespaceusers
 
 import (
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type UserAssignmentContextMenuWidget struct {
@@ -18,14 +18,14 @@ func NewUserAssignmentContextMenuWidget(actions *Actions) *UserAssignmentContext
 	}
 }
 
-func (qq *UserAssignmentContextMenuWidget) Widget(ctx ctxx.Context, userAssignment *enttenant.SpaceUserAssignment) *widget.Menu {
-	var items []*widget.MenuItem
+func (qq *UserAssignmentContextMenuWidget) Widget(ctx ctxx.Context, userAssignment *enttenant.SpaceUserAssignment) *wx.Menu {
+	var items []*wx.MenuItem
 
 	if ctx.SpaceCtx().UserRoleInSpace() == spacerole.Owner {
-		items = append(items, &widget.MenuItem{
+		items = append(items, &wx.MenuItem{
 			LeadingIcon: "delete",
-			Label:       widget.T("Unassign"),
-			HTMXAttrs: widget.HTMXAttrs{
+			Label:       wx.T("Unassign"),
+			HTMXAttrs: wx.HTMXAttrs{
 				HxPost: qq.actions.UnassignUserFromSpaceCmd.Endpoint(),
 				HxVals: util.JSON(qq.actions.UnassignUserFromSpaceCmd.Data(userAssignment.ID)),
 			},
@@ -36,7 +36,7 @@ func (qq *UserAssignmentContextMenuWidget) Widget(ctx ctxx.Context, userAssignme
 		return nil
 	}
 
-	return &widget.Menu{
+	return &wx.Menu{
 		Items: items,
 	}
 }

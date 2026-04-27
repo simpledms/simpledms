@@ -1,12 +1,12 @@
 package browse
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type PropertiesFilterDialogData struct {
@@ -37,7 +37,7 @@ func (qq *PropertiesFilterDialog) Data(currentDirID string) *PropertiesFilterDia
 	}
 }
 
-func (qq *PropertiesFilterDialog) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *PropertiesFilterDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[PropertiesFilterDialogData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -55,14 +55,14 @@ func (qq *PropertiesFilterDialog) Widget(
 	ctx ctxx.Context,
 	data *PropertiesFilterDialogData,
 	listDirState *ListDirPartialState,
-) *widget.Dialog {
-	return &widget.Dialog{
-		Widget: widget.Widget[widget.Dialog]{
+) *wx.Dialog {
+	return &wx.Dialog{
+		Widget: wx.Widget[wx.Dialog]{
 			ID: qq.ID(),
 		},
-		Headline:     widget.T("Fields | Filter"),
+		Headline:     wx.T("Fields | Filter"),
 		IsOpenOnLoad: true,
-		Layout:       widget.DialogLayoutSideSheet,
+		Layout:       wx.DialogLayoutSideSheet,
 		Child: qq.actions.ListFilterPropertiesPartial.Widget(
 			ctx,
 			qq.actions.ListFilterPropertiesPartial.Data(data.CurrentDirID, 0),

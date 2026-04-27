@@ -6,15 +6,14 @@ import (
 	"time"
 
 	"entgo.io/ent/privacy"
-
-	"github.com/marcobeierer/go-core/db/entmain/account"
-	"github.com/marcobeierer/go-core/db/entmain/tenantaccountassignment"
-	"github.com/marcobeierer/go-core/model/common/plan"
-	"github.com/marcobeierer/go-core/util/e"
-	"github.com/marcobeierer/go-core/util/fileutil"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain/account"
+	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
+	"github.com/simpledms/simpledms/model/main/common/plan"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/fileutil"
 )
 
 const tenantQuotaTrialBytes int64 = 1 * 1024 * 1024 * 1024
@@ -134,7 +133,7 @@ func (qq *StorageQuota) currentUsedTenantStorageBytes(ctx ctxx.Context) (int64, 
 
 	rows := make([]tenantUsedStorageRow, 0, 1)
 	ctxWithPrivacyBypass := privacy.DecisionContext(ctx, privacy.Allow)
-	err := ctx.AppCtx().TTx.StoredFile.Query().
+	err := ctx.TenantCtx().TTx.StoredFile.Query().
 		// Legacy files created before upload status tracking have no upload timestamps.
 		Where(storedfile.Or(
 			storedfile.UploadSucceededAtNotNil(),

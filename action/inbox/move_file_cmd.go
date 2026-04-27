@@ -4,16 +4,16 @@ import (
 	"log"
 	"net/http"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	acommon "github.com/simpledms/simpledms/action/common"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type MoveFileCmd struct {
@@ -34,7 +34,7 @@ func NewMoveFileCmd(infra *common.Infra, actions *Actions) *MoveFileCmd {
 	}
 }
 
-func (qq *MoveFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	if !ctx.SpaceCtx().Space.IsFolderMode {
 		return e.NewHTTPErrorf(http.StatusMethodNotAllowed, "Only allowed in folder mode.")
 	}
@@ -61,18 +61,18 @@ func (qq *MoveFileCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ct
 
 	filex.Data.Update().SetIsInInbox(false).SaveX(ctx)
 
-	action := &widget.Link{
+	action := &wx.Link{
 		Href: route.BrowseFile(
 			ctx.TenantCtx().TenantID,
 			ctx.SpaceCtx().SpaceID,
 			filex.Parent(ctx).Data.PublicID.String(),
 			filex.Data.PublicID.String(),
 		),
-		Child: widget.T("Open file"),
+		Child: wx.T("Open file"),
 	}
 
 	rw.AddRenderables(
-		widget.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
+		wx.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
 	)
 
 	rw.Header().Set("HX-Trigger", event.FileMoved.String())

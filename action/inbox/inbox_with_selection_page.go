@@ -4,18 +4,17 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/marcobeierer/go-core/db/entx"
-
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/ui/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type InboxWithSelectionPage struct {
@@ -34,8 +33,8 @@ func NewInboxWithSelectionPage(infra *common.Infra, actions *Actions) *InboxWith
 }
 
 func (qq *InboxWithSelectionPage) Handler(
-	rw httpx2.ResponseWriter,
-	req *httpx2.Request,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
 	// TODO handle direct access
@@ -93,10 +92,10 @@ func (qq *InboxWithSelectionPage) Handler(
 		)
 	}
 
-	fabs := []*widget.FloatingActionButton{
+	fabs := []*wx.FloatingActionButton{
 		{
 			Icon: "upload_file",
-			HTMXAttrs: widget.HTMXAttrs{
+			HTMXAttrs: wx.HTMXAttrs{
 				HxPost: qq.actions.Browse.FileUploadDialogPartial.Endpoint(),
 				HxVals: util.JSON(qq.actions.Browse.FileUploadDialogPartial.Data(
 					ctx.SpaceCtx().SpaceRootDir().PublicID.String(),
@@ -104,16 +103,16 @@ func (qq *InboxWithSelectionPage) Handler(
 				)),
 				LoadInPopover: true,
 			},
-			Child: []widget.IWidget{
-				widget.NewIcon("upload_file"),
-				widget.T("Upload file"),
+			Child: []wx.IWidget{
+				wx.NewIcon("upload_file"),
+				wx.T("Upload file"),
 			},
 		},
 	}
 
 	var viewx renderable.Renderable
-	viewx = &widget.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
+	viewx = &wx.MainLayout{
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
 		Content:    content, // TODO pass in filex?
 	}
 
@@ -123,7 +122,7 @@ func (qq *InboxWithSelectionPage) Handler(
 	}
 
 	if renderFullPage {
-		viewx = partial.NewBase(widget.T("Inbox"), viewx)
+		viewx = partial2.NewBase(wx.T("Inbox"), viewx)
 	}
 
 	return qq.infra.Renderer().Render(

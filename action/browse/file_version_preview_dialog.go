@@ -4,17 +4,17 @@ import (
 	"net/http"
 	"strconv"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileVersionPreviewDialogData struct {
@@ -44,7 +44,7 @@ func (qq *FileVersionPreviewDialog) Data(fileID, versionNumber string) *FileVers
 	}
 }
 
-func (qq *FileVersionPreviewDialog) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileVersionPreviewDialogData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -82,24 +82,24 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx2.ResponseWriter, req *httpx
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		&widget.Dialog{
-			Layout:   widget.DialogLayoutStable,
-			Width:    widget.DialogWidthWide,
-			Headline: widget.T("Version preview"),
-			HeaderActions: []widget.IWidget{
-				&widget.Link{
+		&wx.Dialog{
+			Layout:   wx.DialogLayoutStable,
+			Width:    wx.DialogWidthWide,
+			Headline: wx.T("Version preview"),
+			HeaderActions: []wx.IWidget{
+				&wx.Link{
 					Href:      downloadURL,
 					IsNoColor: true,
 					Filename:  filename,
-					Child: &widget.Button{
-						Icon:      widget.NewIcon("download"),
-						Label:     widget.T("Download"),
-						StyleType: widget.ButtonStyleTypeText,
+					Child: &wx.Button{
+						Icon:      wx.NewIcon("download"),
+						Label:     wx.T("Download"),
+						StyleType: wx.ButtonStyleTypeText,
 					},
 				},
 			},
 			IsOpenOnLoad: true,
-			Child: &widget.FilePreview{
+			Child: &wx.FilePreview{
 				FileURL:  route.DownloadInlineWithVersion(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String(), data.VersionNumber),
 				Filename: filename,
 				MimeType: versionm.Data.MimeType,

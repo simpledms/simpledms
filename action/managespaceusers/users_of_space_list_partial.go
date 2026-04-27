@@ -1,19 +1,18 @@
 package managespaceusers
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/model/tenant/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
 	usermodel "github.com/simpledms/simpledms/model/tenant/user"
+	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type UsersOfSpaceListPartialState struct {
@@ -33,19 +32,19 @@ func NewUsersOfSpaceListPartial(infra *common.Infra, actions *Actions) *UsersOfS
 	}
 }
 
-func (qq *UsersOfSpaceListPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *UsersOfSpaceListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	state := autil.StateX[UsersOfSpaceListPartialState](rw, req)
 	return qq.infra.Renderer().Render(rw, ctx, qq.Widget(ctx, state))
 }
 
 func (qq *UsersOfSpaceListPartial) Widget(ctx ctxx.Context, state *UsersOfSpaceListPartialState) renderable.Renderable {
-	var listItems []*widget.ListItem
+	var listItems []*wx.ListItem
 
 	if ctx.SpaceCtx().UserRoleInSpace() == spacerole.Owner {
-		listItems = append(listItems, &widget.ListItem{
-			Headline: widget.T("Assign a user"), // TODO Create or add? system or real world perspective?
-			Leading:  widget.NewIcon("add"),
-			Type:     widget.ListItemTypeHelper,
+		listItems = append(listItems, &wx.ListItem{
+			Headline: wx.T("Assign a user"), // TODO Create or add? system or real world perspective?
+			Leading:  wx.NewIcon("add"),
+			Type:     wx.ListItemTypeHelper,
 			HTMXAttrs: qq.actions.AssignUserToSpaceCmd.ModalLinkAttrs(
 				qq.actions.AssignUserToSpaceCmd.Data(), ""),
 		})
@@ -61,26 +60,26 @@ func (qq *UsersOfSpaceListPartial) Widget(ctx ctxx.Context, state *UsersOfSpaceL
 		AllX(ctx)
 
 	for _, assignment := range spaceAssignments {
-		leading := widget.NewIcon("person")
+		leading := wx.NewIcon("person")
 		if assignment.Role == spacerole.Owner {
 			// TODO add tooltip...
-			leading = widget.NewIcon("manage_accounts")
+			leading = wx.NewIcon("manage_accounts")
 		}
 		userm := usermodel.NewUser(assignment.Edges.User)
-		listItems = append(listItems, &widget.ListItem{
+		listItems = append(listItems, &wx.ListItem{
 			Leading:        leading,
-			Headline:       widget.Tu(userm.Name()),
-			SupportingText: widget.Tu(userm.NameSecondLine()),
+			Headline:       wx.Tu(userm.Name()),
+			SupportingText: wx.Tu(userm.NameSecondLine()),
 			ContextMenu:    NewUserAssignmentContextMenuWidget(qq.actions).Widget(ctx, assignment),
 		})
 	}
 
-	return &widget.List{
-		Widget: widget.Widget[widget.List]{
+	return &wx.List{
+		Widget: wx.Widget[wx.List]{
 			ID: qq.id(),
 		},
-		HTMXAttrs: widget.HTMXAttrs{
-			HxTrigger: events.HxTrigger(
+		HTMXAttrs: wx.HTMXAttrs{
+			HxTrigger: event.HxTrigger(
 				event.UserAssignedToSpace,
 				event.UserUnassignedFromSpace,
 			),

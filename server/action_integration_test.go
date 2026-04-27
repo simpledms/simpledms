@@ -19,44 +19,41 @@ import (
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entmain/account"
-	migratemain "github.com/marcobeierer/go-core/db/entmain/migrate"
-	"github.com/marcobeierer/go-core/db/entmain/passkeycredential"
-	_ "github.com/marcobeierer/go-core/db/entmain/runtime"
-	"github.com/marcobeierer/go-core/db/entmain/session"
-	"github.com/marcobeierer/go-core/db/entx"
-
-	coreaction "github.com/marcobeierer/go-core/action"
-	"github.com/marcobeierer/go-core/db/sqlx"
-	appmodel "github.com/marcobeierer/go-core/model/app"
-	"github.com/marcobeierer/go-core/model/common/country"
-	"github.com/marcobeierer/go-core/model/common/language"
-	"github.com/marcobeierer/go-core/model/common/mainrole"
-	"github.com/marcobeierer/go-core/model/common/plan"
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
-	systemconfigmodel "github.com/marcobeierer/go-core/model/systemconfig"
-	"github.com/marcobeierer/go-core/pathx"
-	server2 "github.com/marcobeierer/go-core/server"
-	ui2 "github.com/marcobeierer/go-core/ui"
-	"github.com/marcobeierer/go-core/ui/uix/route"
-	"github.com/marcobeierer/go-core/util/accountutil"
-	"github.com/marcobeierer/go-core/util/cookiex"
 	"github.com/simpledms/simpledms/action"
-	dmscommon "github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/account"
+	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
+	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
+	_ "github.com/simpledms/simpledms/db/entmain/runtime"
+	"github.com/simpledms/simpledms/db/entmain/session"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
+	appmodel "github.com/simpledms/simpledms/model/main/app"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	"github.com/simpledms/simpledms/model/main/common/plan"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
-	route2 "github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/pathx"
+	"github.com/simpledms/simpledms/pluginx"
+	"github.com/simpledms/simpledms/ui"
+	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/util/accountutil"
+	"github.com/simpledms/simpledms/util/cookiex"
 )
 
 type actionTestHarness struct {
 	tb        testing.TB
 	mainDB    *sqlx.MainDB
 	tenantDBs *tenantdbs.TenantDBs
-	infra     *dmscommon.Infra
+	infra     *common.Infra
 	actions   *action.Actions
-	router    *server2.Router
+	router    *Router
 	metaPath  string
 	i18n      *i18n.I18n
 }
@@ -139,13 +136,13 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 	systemConfig := initSystemConfig(t, mainDB, isSaaSModeEnabled, publicOrigin, webauthnRPID, webauthnRPName)
 
 	templates := template.New("app")
-	templates.Funcs(ui2.TemplateFuncMap(templates))
-	templates, err = templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
+	templates.Funcs(ui.TemplateFuncMap(templates))
+	templates, err = templates.ParseFS(ui.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	renderer := ui2.NewRenderer(templates)
+	renderer := ui.NewRenderer(templates)
 	i18nx := i18n.NewI18n()
 
 	fileSystem := filesystem.NewFileSystem(metaPath)
@@ -166,25 +163,20 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 		)
 	}
 
-	infra := dmscommon.NewInfra(
+	infra := common.NewInfra(
 		renderer,
 		metaPath,
 		s3FileSystem,
-		dmscommon.NewFileRepository(),
-		newDefaultPluginRegistry(),
+		common.NewFactory(),
+		common.NewFileRepository(),
+		pluginx.NewRegistry(),
 		systemConfig,
 	)
 
 	tenantDBs := tenantdbs.NewTenantDBs()
-	router := server2.NewRouter(mainDB, infra.CoreInfra(), i18nx)
-	contextExtender := NewContextExtender(tenantDBs, true, metaPath)
-	router.SetContextExtender(contextExtender)
-	router.SetErrorMapper(contextExtender)
-	router.SetTenantHomeRoute(route2.SpacesRoot)
-	coreActions := coreaction.NewActions(infra.CoreInfra())
-	router.RegisterCoreRoutes(coreActions)
-	actions := action.NewActions(infra, tenantDBs, true, coreActions)
-	RegisterActions(router, actions)
+	router := NewRouter(mainDB, tenantDBs, infra, true, metaPath, i18nx)
+	actions := action.NewActions(infra, tenantDBs, true)
+	router.RegisterActions(actions)
 
 	err = infra.PluginRegistry().RegisterActions(router)
 	if err != nil {

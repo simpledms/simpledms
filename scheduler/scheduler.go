@@ -1,14 +1,17 @@
 package scheduler
 
 import (
+	"io/fs"
+
 	"github.com/marcobeierer/go-tika"
 	"github.com/minio/minio-go/v7"
 
-	"github.com/marcobeierer/go-core/db/sqlx"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	"github.com/simpledms/simpledms/db/sqlx"
 )
 
+// TODO rename to Runner?
 type Scheduler struct {
 	infra             *common.Infra
 	mainDB            *sqlx.MainDB
@@ -36,7 +39,33 @@ func NewScheduler(
 	}
 }
 
-func (qq *Scheduler) Run() {
+func (qq *Scheduler) Run(devMode bool, metaPath string, migrationsTenantFS fs.FS) {
+	// IMPORTANT
+	// recover must be implement independent of loop, otherwise an error in tenant loop
+	// might stop mail loop, maybe in middle of execution
+
+	// TODO use transactions instead of db directly?
+
+	/*
+		ctx := context.Background()
+		if qq.mainDB.SystemConfig.Query().Where(systemconfig.InitializedAtNotNil()).CountX(ctx) == 0 {
+			log.Println("App not initialized yet, scheduler not started")
+			return
+		}
+	*/
+
+	go func() {
+		qq.initializeTenants(devMode, metaPath, migrationsTenantFS)
+	}()
+
+	go func() {
+		qq.sendMails()
+	}()
+
+	go func() {
+		qq.cleanupSessions()
+	}()
+
 	go func() {
 		qq.processFiles()
 	}()

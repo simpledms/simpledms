@@ -1,0 +1,29 @@
+{{- define "WakeLockSwitch" }}
+<mdui-switch
+		id="wakeLockSwitch"
+		unchecked-icon="lock"
+		checked-icon="lock_open_right"
+></mdui-switch>
+
+<script defer type="text/javascript">
+	// necessary to prevent issues when switch gets replaced with ajax call
+	if (_wakeLockOnChange == null) {
+		_wakeLockOnChange = document.querySelector('#wakeLockSwitch').addEventListener('change', (e) => {
+			if (e.target.checked) {
+				requestWakeLock();
+			} else {
+				releaseWakeLock();
+			}
+		});
+	}
+
+	// set initial state if necessary
+	if (_wakeLock !== null) {
+		document.querySelector('#wakeLockSwitch').checked = true;
+	}
+
+	if (!('wakeLock' in navigator)) {
+		document.querySelector('#wakeLockSwitch').style.display = 'none';
+	}
+</script>
+{{ end }}

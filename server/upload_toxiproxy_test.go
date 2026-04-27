@@ -9,15 +9,15 @@ import (
 
 	toxiproxy "github.com/Shopify/toxiproxy/client"
 
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entmain/account"
-	"github.com/marcobeierer/go-core/db/entmain/temporaryfile"
-	"github.com/marcobeierer/go-core/db/entx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/account"
+	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestConcurrentUploadFileCmdWithSlowS3(t *testing.T) {
@@ -95,8 +95,8 @@ func TestConcurrentUploadFileCmdWithSlowS3(t *testing.T) {
 
 				rr := httptest.NewRecorder()
 				err = harness.actions.Browse.UploadFileCmd.Handler(
-					httpx2.NewResponseWriter(rr),
-					httpx2.NewRequest(req),
+					httpx.NewResponseWriter(rr),
+					httpx.NewRequest(req),
 					spaceCtx,
 				)
 				if err != nil {
@@ -204,8 +204,8 @@ func TestUploadFileCmdFailsWhenS3Unavailable(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 		handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-			httpx2.NewResponseWriter(rr),
-			httpx2.NewRequest(req),
+			httpx.NewResponseWriter(rr),
+			httpx.NewRequest(req),
 			spaceCtx,
 		)
 		if handlerErr == nil {
@@ -267,15 +267,15 @@ func TestUploadFilesCmdFailsWhenS3Unavailable(t *testing.T) {
 			OnlyX(context.Background())
 
 		var handlerErr error
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
 			req := newSharedUploadRequest(t, map[string]string{
 				"first.txt": "hello",
 			})
 
 			rr := httptest.NewRecorder()
 			handlerErr = harness.actions.OpenFile.UploadFilesCmd.Handler(
-				httpx2.NewResponseWriter(rr),
-				httpx2.NewRequest(req),
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
 				mainCtx,
 			)
 			if handlerErr == nil {

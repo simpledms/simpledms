@@ -9,11 +9,11 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/marcobeierer/go-core/db/entx"
-	"github.com/marcobeierer/go-core/util/e"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/util/e"
 )
 
 type FileTree struct{}
@@ -37,7 +37,7 @@ func (qq *FileTree) PathFilesByFileID(ctx ctxx.Context, fileID int64) ([]*entten
 		}
 		seenFileIDs[currentFileID] = struct{}{}
 
-		currentFile, err := ctx.AppCtx().TTx.File.Query().
+		currentFile, err := ctx.TenantCtx().TTx.File.Query().
 			Select(
 				file.FieldID,
 				file.FieldParentID,
@@ -94,7 +94,7 @@ func (qq *FileTree) FullPathByFileIDX(ctx ctxx.Context, fileID int64) string {
 }
 
 func (qq *FileTree) FullPathByPublicID(ctx ctxx.Context, filePublicID string) (string, error) {
-	filex, err := ctx.AppCtx().TTx.File.Query().
+	filex, err := ctx.TenantCtx().TTx.File.Query().
 		Select(file.FieldID).
 		Where(
 			file.PublicID(entx.NewCIText(filePublicID)),
@@ -145,7 +145,7 @@ func (qq *FileTree) FullPathsByFileID(ctx ctxx.Context, fileIDs []int64) (map[in
 		batch := slices.Clone(pendingFileIDs)
 		pendingFileIDs = []int64{}
 
-		batchFiles, err := ctx.AppCtx().TTx.File.Query().
+		batchFiles, err := ctx.TenantCtx().TTx.File.Query().
 			Select(
 				file.FieldID,
 				file.FieldParentID,
@@ -239,7 +239,7 @@ func (qq *FileTree) IsDescendantOf(ctx ctxx.Context, fileID, ancestorFileID int6
 		}
 		seenFileIDs[currentFileID] = struct{}{}
 
-		currentFile, err := ctx.AppCtx().TTx.File.Query().
+		currentFile, err := ctx.TenantCtx().TTx.File.Query().
 			Select(
 				file.FieldID,
 				file.FieldParentID,

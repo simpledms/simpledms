@@ -1,0 +1,158 @@
+{{- /*
+NOTE
+boolean attributes like hidden, disabled or required need no special handling,
+`disabled=""` is fine to set the attribute to true, see
+https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes
+
+TODO
+to much logic in form.gohtml
+	fields should render itself, thus one template per field?
+*/}}
+{{- define "formAttributes" }}
+    {{- $field := .field }}
+    {{- range $name, $value := $field.Attributes }}
+		{{- if eq $value "" }}
+            {{ $name | unsafeAttr }}
+		{{ end }}
+        {{ $name | unsafeAttr }}="{{ $value }}"
+    {{- end }}
+    {{ if (has "required" $field.Validation) }}required{{ end }}
+{{- end }}
+
+{{- define "formAttributesWithoutRequired" }}
+    {{- $field := .field }}
+    {{- range $name, $value := $field.Attributes }}
+        {{- if eq $value "" }}
+            {{ $name | unsafeAttr }}
+        {{ end }}
+        {{ $name | unsafeAttr }}="{{ $value }}"
+    {{- end }}
+{{- end }}
+
+{{- /* should be used for all input-x elements because type on wrapper elements affects styling
+ applied by tailwind forms plugin */}}
+{{- define "formAttributesWithoutType" }}
+    {{- $field := .field }}
+    {{- range $name, $value := $field.Attributes }}
+        {{- if ne $name "type" }}
+            {{- if eq $value "" }}
+                {{ $name | unsafeAttr }}
+            {{ end }}
+            {{ $name | unsafeAttr }}="{{ $value }}"
+        {{- end }}
+    {{- end }}
+    {{- if (has "required" $field.Validation) }}required{{ end }}
+{{- end }}
+
+{{- define "FormFields" }}
+    {{- /* gotype: github.com/simpledms/simpledms/ui/widget.FormFields */ -}}
+	{{ $ctx := .GetContext }}
+	{{- range $index, $field := .Elements }}
+		{{- /* TODO: use `tr` function instead */}}
+		{{- $fieldName := list "**" $field.Name "**" | join "" }}
+		{{- $fieldName = tr $ctx $field.Name }}
+
+		{{- $fieldNameAttr := index $field.Attributes "name" }}
+        {{- $attrType := index $field.Attributes "type" }}
+
+		{{- if eq $field.Element "fieldset" }}
+			{{- if not (has "required" $field.Validation) }}
+				<div>
+				<div class="">
+					<span class="">{{ $fieldName }}</span>
+					<span class="">Optional</span>
+				</div>
+				<details
+				id="details{{ $field.Name }}"
+				ontoggle="this.querySelector(':scope > fieldset').disabled = !this.querySelector(':scope > fieldset').disabled"
+				class="">
+				<summary class="">{{ tr $ctx "Open / close" }}</summary>
+				<p class="">{{ tr $ctx "Collapsed sections don't get saved." }}</p>
+			{{- end }}
+
+			<fieldset
+			class=""
+			{{ if not (has "required" $field.Validation) }}disabled{{ end }}
+			{{- template "formAttributesWithoutRequired" dict "field" $field }}
+			>
+			{{- if ne $field.Type "0" | and (has "required" $field.Validation)  }}
+				<legend class="">{{ $fieldName }}</legend>
+			{{- end }}
+		{{ else if eq $field.Element "/fieldset" }}
+			</fieldset>
+
+			{{- if not (has "required" $field.Validation) }}
+				</details>
+				</div>
+			{{- end }}
+		{{ else if eq $attrType "hidden" }}
+            {{- /* hidden attribute is workaround for spacing with tailwind (space-y-5) */}}
+			<input
+					value="{{ $field.DefaultValue }}"
+					hidden
+                    {{- template "formAttributes" dict "field" $field -}}
+			/>
+		{{ else if ne $field.Widget nil }}
+			{{ render $ctx $field.Widget }}
+		{{ else }}
+			{{/* offset is used to prevent that outline is cut off with overflow:scroll, for example in forms;
+			mt-1.5 is necessary to show label fully if moved up and overflow:scroll is used
+			*/}}
+			{{/* !!! IMPORTANT duplicated in TextField !!! */}}
+			<div class="rounded-xs px-4 py-2 min-h-14 outline outline-1 outline-outline -outline-offset-1 flex items-center
+				focus-within:outline-primary focus-within:outline-2 focus-within:-outline-offset-2
+				hover:border-on-surface mt-1.5 w-full
+				">
+				<label class="relative w-full">
+					{{- if eq $field.Element "input" }}
+						{{/* no longer supported, uses Widget */}}
+					{{- else if eq $field.Element "textarea" }}
+						<textarea
+								class=""
+							{{- template "formAttributes" dict "field" $field }}
+							rows="6"
+						></textarea>
+					{{- else if eq $field.Element "select" }}
+						<select
+								class="appearance-none bg-surface outline-none w-full text-on-surface placeholder-on-surface-variant body-lg"
+								{{- template "formAttributes" dict "field" $field }}
+								type="{{ $field.Type }}"{{/* or $attrType? */}}
+						>
+							{{ range $option := $field.Children }}
+								<option value="{{ index $option.Attributes "value" }}" {{ if index $option.Attributes "selected" }}selected{{ end }}>{{ $option.Name }}</option>
+							{{ end }}
+						</select>
+					{{- else if eq $attrType "autocomplete" }}
+						<input placeholder="FIXME" type="text" id="{{ $field.Element }}-{{ $field.Type }}-input"  />
+						<datalist
+								id="{{ $field.Element }}-{{ $field.Type }}"
+								type="{{ $field.Element }}"
+						>
+						</datalist>
+					{{- else }}
+						{{/* was always `select`, but hidden input might be better default, hower still shows label... so not that useful at all */}}
+					{{ end }}
+					{{/* must be after input for `peer` to work; placeholder trick/workaround is used to style when a
+					value is set */}}
+                    {{/* !!! IMPORTANT duplicated in TextField !!! */}}
+					<span class="absolute -left-1 px-1 -top-6 body-sm bg-surface
+					cursor-default transition-all text-primary
+					{{ if $field.LeadingIcon }}peer-placeholder-shown:left-10{{ end }}
+					peer-placeholder-shown:top-0 peer-placeholder-shown:px-0 peer-placeholder-shown:body-lg
+					peer-placeholder-shown:cursor-text peer-placeholder-shown:bg-transparent
+					peer-placeholder-shown:text-on-surface-variant
+
+					peer-focus:-top-6 peer-focus:px-1 peer-focus:-left-1 peer-focus:bg-surface
+					md:peer-focus:bg-surface-container-lowest peer-focus:cursor-default
+					peer-focus:body-sm peer-focus:text-primary
+
+					peer-autofill:-top-6 peer-autofill:px-1 peer-autofill:-left-1 peer-autofill:bg-surface
+					md:peer-autofill:bg-surface-container-lowest peer-autofill:cursor-default
+					peer-autofill:body-sm peer-autofill:text-primary
+					">{{ $fieldName }}</span>
+                    {{/* !!! IMPORTANT duplicated in TextField !!! */}}
+				</label>
+			</div>
+		{{- end }}
+	{{- end }}
+{{- end }}

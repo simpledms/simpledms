@@ -1,11 +1,11 @@
 package browse
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type ChangeDirCmdData struct {
@@ -36,7 +36,7 @@ func (qq *ChangeDirCmd) Data(dirID string) *ChangeDirCmdData {
 	}
 }
 
-func (qq *ChangeDirCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *ChangeDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[ChangeDirCmdData](rw, req, ctx)
 	if err != nil {
 		return err

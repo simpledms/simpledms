@@ -1,15 +1,14 @@
 package managespaceusers
 
 import (
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/simpledms/simpledms/ui/uix/partial"
-
-	acommon "github.com/marcobeierer/go-core/action/common"
-	"github.com/marcobeierer/go-core/ui/renderable"
-	"github.com/marcobeierer/go-core/ui/widget"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	acommon "github.com/simpledms/simpledms/action/common"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ui/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type ManageUsersOfSpacePageState struct {
@@ -29,7 +28,7 @@ func NewManageUsersOfSpace(infra *common.Infra, actions *Actions) *ManageUsersOf
 	}
 }
 
-func (qq *ManageUsersOfSpacePage) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *ManageUsersOfSpacePage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	state := autil.StateX[ManageUsersOfSpacePageState](rw, req)
 	return qq.Render(rw, req, ctx, qq.infra, "Manage users", qq.Widget(ctx, state))
 }
@@ -55,25 +54,25 @@ func (qq *ManageUsersOfSpacePage) Widget(
 
 	*/
 
-	return &widget.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx, qq.infra, "manage-users", nil),
-		Content: &widget.DefaultLayout{
+	return &wx.MainLayout{
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "manage-users", nil),
+		Content: &wx.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
 			Content: qq.actions.UsersOfSpaceListPartial.Widget(ctx, &state.UsersOfSpaceListPartialState),
 		},
 	}
 }
 
-func (qq *ManageUsersOfSpacePage) appBar(ctx ctxx.Context) *widget.AppBar {
-	return &widget.AppBar{
-		Leading: &widget.Icon{
+func (qq *ManageUsersOfSpacePage) appBar(ctx ctxx.Context) *wx.AppBar {
+	return &wx.AppBar{
+		Leading: &wx.Icon{
 			Name: "person",
 		},
-		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
-		Title: &widget.AppBarTitle{
-			Text: widget.Tf("Users «%s»", ctx.SpaceCtx().Space.Name),
+		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		Title: &wx.AppBarTitle{
+			Text: wx.Tf("Users «%s»", ctx.SpaceCtx().Space.Name),
 		},
-		Actions: []widget.IWidget{
+		Actions: []wx.IWidget{
 			/*&wx.IconButton{
 				Icon: "more_vert",
 				Children: &wx.Menu{

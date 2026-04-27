@@ -1,10 +1,10 @@
 package documenttype
 
 import (
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type ContextMenuWidgetData struct {
@@ -22,10 +22,10 @@ func NewContextMenuWidget(actions *Actions) *ContextMenuWidget {
 	}
 }
 
-func (qq *ContextMenuWidget) Widget(ctx ctxx.Context, documentType *enttenant.DocumentType) *widget.Menu {
-	renameItem := &widget.MenuItem{
+func (qq *ContextMenuWidget) Widget(ctx ctxx.Context, documentType *enttenant.DocumentType) *wx.Menu {
+	renameItem := &wx.MenuItem{
 		TrailingIcon: "edit", // TODO
-		Label:        widget.T("Rename"),
+		Label:        wx.T("Rename"),
 		HTMXAttrs: qq.actions.RenameCmd.ModalLinkAttrs(
 			qq.actions.RenameCmd.Data(documentType.ID, documentType.Name),
 			"",
@@ -33,20 +33,20 @@ func (qq *ContextMenuWidget) Widget(ctx ctxx.Context, documentType *enttenant.Do
 		),
 	}
 
-	deleteItem := &widget.MenuItem{
+	deleteItem := &wx.MenuItem{
 		TrailingIcon: "delete",
-		Label:        widget.T("Delete"),
-		HTMXAttrs: widget.HTMXAttrs{
+		Label:        wx.T("Delete"),
+		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:    qq.actions.DeleteCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.DeleteCmd.Data(documentType.ID)),
-			HxConfirm: widget.T("Are you sure?").String(ctx),
+			HxConfirm: wx.T("Are you sure?").String(ctx),
 			HxSwap:    "none",
 			// HxTarget:  "#" + qq.actions.ListDir.WrapperID(),
 		},
 	}
 
-	return &widget.Menu{
-		Items: []*widget.MenuItem{
+	return &wx.Menu{
+		Items: []*wx.MenuItem{
 			renameItem,
 			{
 				IsDivider: true,

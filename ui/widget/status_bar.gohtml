@@ -1,0 +1,10 @@
+{{- define "StatusBar" }}
+	<div class="px-3 py-2.5 mx-2 md:px-3 md:mx-0
+		label-md text-on-surface-variant
+		flex items-center gap-x-2
+		bg-surface-container-low md:bg-transparent
+		rounded-sm
+		">
+		{{ render .GetContext .Child }}
+	</div>
+{{ end }}

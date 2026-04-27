@@ -1,10 +1,10 @@
 package openfile
 
 import (
-	acommon "github.com/marcobeierer/go-core/action/common"
+	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
-	temporaryfilemodel "github.com/simpledms/simpledms/model/tenant/temporaryfile"
+	temporaryfilemodel "github.com/simpledms/simpledms/model/main/temporaryfile"
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 

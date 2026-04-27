@@ -8,11 +8,11 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/marcobeierer/go-core/ui/widget"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
+	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type ListInboxAssignmentSuggestionsPartialData struct {
@@ -63,9 +63,9 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Handler(rw httpx.ResponseWriter
 // last was used for list below
 var regexpLowerAlphaNum = regexp.MustCompile("[^a-z0-9àèìòùáéíóúýâêîôûãñõäëïöüÿåæœçðø¿¡ß]+")
 
-func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID int64) *widget.List {
+func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID int64) *wx.List {
 	// TODO
-	fileToAssign := ctx.AppCtx().TTx.File.GetX(ctx, fileID)
+	fileToAssign := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
 
 	filename := filepath.Clean(fileToAssign.Name)
 	// remove file extension
@@ -102,7 +102,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 		problem with this approach is that I could not figure out quickly how to access `rank`
 		and matching against database also seemed not to work; also seemed noticabily slow...
 		maybe because file_searches.file_id is not indexed...
-		files := ctx.AppCtx().TTx.File.Query().
+		files := ctx.TenantCtx().TTx.File.Query().
 			Where(
 				file.IsDirectory(true),
 				func(qs *sql.Selector) {
@@ -125,7 +125,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 	/*
 		fileIDs := []int64{}
 
-		res := ctx.AppCtx().TTx.FileSearch.Query().
+		res := ctx.TenantCtx().TTx.FileSearch.Query().
 			Select(filesearch.FieldFileID).
 			Where(
 				filesearch.IsDirectory(true),
@@ -138,7 +138,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 
 	*/
 
-	destDirs := ctx.AppCtx().TTx.File.Query().
+	destDirs := ctx.TenantCtx().TTx.File.Query().
 		WithChildren().
 		Where(
 			file.IsDirectory(true),
@@ -170,7 +170,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 	destDirParentIDs = slices.Compact(destDirParentIDs)
 	destDirParentFullPaths := qq.infra.FileSystem().FileTree().FullPathsByFileIDX(ctx, destDirParentIDs)
 
-	var items []*widget.ListItem
+	var items []*wx.ListItem
 
 	for _, destDir := range destDirs {
 		// TODO context menu: Open / Browse (for pasting)
@@ -185,7 +185,7 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 		))
 	}
 
-	return &widget.List{
+	return &wx.List{
 		Children: items,
 	}
 

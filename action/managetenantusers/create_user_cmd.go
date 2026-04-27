@@ -3,17 +3,17 @@ package managetenantusers
 import (
 	"net/http"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/model/common/language"
-	"github.com/marcobeierer/go-core/model/common/tenantrole"
-	"github.com/marcobeierer/go-core/ui/uix/events"
-	"github.com/marcobeierer/go-core/ui/widget"
-	"github.com/marcobeierer/go-core/util/actionx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	tenantusermodel "github.com/simpledms/simpledms/model/tenant/tenantuser"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	tenantusermodel "github.com/simpledms/simpledms/model/main/tenantuser"
+	"github.com/simpledms/simpledms/ui/uix/event"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type CreateUserCmdData struct {
@@ -38,7 +38,7 @@ func NewCreateUserCmd(infra *common.Infra, actions *Actions) *CreateUserCmd {
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[CreateUserCmdData](infra, config, widget.T("Create user")),
+		FormHelper: autil.NewFormHelper[CreateUserCmdData](infra, config, wx.T("Create user")),
 	}
 }
 
@@ -56,7 +56,7 @@ func (qq *CreateUserCmd) Data(
 	}
 }
 
-func (qq *CreateUserCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *CreateUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[CreateUserCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -65,7 +65,7 @@ func (qq *CreateUserCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, 
 	if !ctx.IsTenantCtx() {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "You are not allowed to create users. No tenant selected.")
 	}
-	if ctx.AppCtx().User.Role != tenantrole.Owner {
+	if ctx.TenantCtx().User.Role != tenantrole.Owner {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "You are not allowed to create users because you are not the owner.")
 	}
 
@@ -83,12 +83,12 @@ func (qq *CreateUserCmd) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, 
 	}
 
 	if data.Role == tenantrole.Owner {
-		rw.AddRenderables(widget.NewSnackbarf("Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration."))
+		rw.AddRenderables(wx.NewSnackbarf("Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration."))
 	} else {
-		rw.AddRenderables(widget.NewSnackbarf("Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space."))
+		rw.AddRenderables(wx.NewSnackbarf("Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space."))
 	}
 
-	rw.Header().Set("HX-Trigger", events.UserCreated.String())
+	rw.Header().Set("HX-Trigger", event.UserCreated.String())
 
 	return nil
 }

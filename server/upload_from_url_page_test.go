@@ -10,13 +10,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/marcobeierer/go-core/db/entmain"
-	"github.com/marcobeierer/go-core/db/entmain/account"
-	"github.com/marcobeierer/go-core/db/entmain/temporaryfile"
-	"github.com/marcobeierer/go-core/db/entx"
-	"github.com/marcobeierer/go-core/util/e"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/account"
+	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 func TestUploadFromURLCmdCreatesTemporaryFileAndRedirects(t *testing.T) {
@@ -37,7 +37,7 @@ func TestUploadFromURLCmdCreatesTemporaryFileAndRedirects(t *testing.T) {
 		)
 
 		var location string
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
 			data := url.Values{}
 			data.Set("url", "https://example.com/from-url.txt")
 
@@ -46,8 +46,8 @@ func TestUploadFromURLCmdCreatesTemporaryFileAndRedirects(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			err := harness.actions.OpenFile.UploadFromURLCmd.Handler(
-				httpx2.NewResponseWriter(rr),
-				httpx2.NewRequest(req),
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
 				mainCtx,
 			)
 			if err != nil {
@@ -105,7 +105,7 @@ func TestUploadFromURLCmdUsesHXRedirectForHTMXRequests(t *testing.T) {
 			},
 		)
 
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
 			data := url.Values{}
 			data.Set("url", "https://example.com/from-url.txt")
 
@@ -115,8 +115,8 @@ func TestUploadFromURLCmdUsesHXRedirectForHTMXRequests(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			err := harness.actions.OpenFile.UploadFromURLCmd.Handler(
-				httpx2.NewResponseWriter(rr),
-				httpx2.NewRequest(req),
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
 				mainCtx,
 			)
 			if err != nil {
@@ -151,14 +151,14 @@ func TestUploadFromURLCmdRejectsMissingURL(t *testing.T) {
 		OnlyX(context.Background())
 
 	var handlerErr error
-	err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
+	err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
 		req := httptest.NewRequest(http.MethodPost, "/-/open-file/upload-from-url-cmd", strings.NewReader(""))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 		rr := httptest.NewRecorder()
 		handlerErr = harness.actions.OpenFile.UploadFromURLCmd.Handler(
-			httpx2.NewResponseWriter(rr),
-			httpx2.NewRequest(req),
+			httpx.NewResponseWriter(rr),
+			httpx.NewRequest(req),
 			mainCtx,
 		)
 		if handlerErr == nil {
@@ -197,7 +197,7 @@ func TestUploadFromURLCmdAllowsLocalhostURLInDevMode(t *testing.T) {
 			OnlyX(context.Background())
 
 		var location string
-		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx ctxx.Context) error {
+		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
 			data := url.Values{}
 			data.Set("url", testServer.URL+"/private.txt")
 
@@ -206,8 +206,8 @@ func TestUploadFromURLCmdAllowsLocalhostURLInDevMode(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			err := harness.actions.OpenFile.UploadFromURLCmd.Handler(
-				httpx2.NewResponseWriter(rr),
-				httpx2.NewRequest(req),
+				httpx.NewResponseWriter(rr),
+				httpx.NewRequest(req),
 				mainCtx,
 			)
 			if err != nil {

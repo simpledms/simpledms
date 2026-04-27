@@ -7,17 +7,16 @@ import (
 	"slices"
 
 	"github.com/google/uuid"
-
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	actionx2 "github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
+	"github.com/simpledms/simpledms/ui/util"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type EditSubTagsPartialData struct {
@@ -31,7 +30,7 @@ type EditSubTagsPartialData struct {
 type EditSubTagsPartial struct {
 	infra   *common.Infra
 	actions *Actions
-	*actionx2.Config
+	*actionx.Config
 }
 
 func NewEditSubTagsPartial(
@@ -41,7 +40,7 @@ func NewEditSubTagsPartial(
 	return &EditSubTagsPartial{
 		infra:   infra,
 		actions: actions,
-		Config: actionx2.NewConfig(
+		Config: actionx.NewConfig(
 			actions.Route("edit-sub-tags-partial"),
 			true, // TODO is this correct?
 		),
@@ -55,13 +54,13 @@ func (qq *EditSubTagsPartial) Data(tagID int64, onlyAssigned bool) *EditSubTagsP
 	}
 }
 
-func (qq *EditSubTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *EditSubTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[EditSubTagsPartialData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
 
-	superTag := ctx.AppCtx().TTx.Tag.
+	superTag := ctx.TenantCtx().TTx.Tag.
 		Query().
 		Where(tag.ID(data.TagID)).
 		OnlyX(ctx)
@@ -71,7 +70,7 @@ func (qq *EditSubTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Requ
 	assignableListItems := qq.assignableListItems(ctx, superTag)
 	// assignedSubTagsListView := qq.actions.SubTags.List.Widget(subTags)
 
-	list := &widget.List{
+	list := &wx.List{
 		Children: assignableListItems,
 	}
 
@@ -96,14 +95,14 @@ func (qq *EditSubTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Requ
 		ctx,
 		autil.WrapWidget(
 			// TODO indicate that composed tag, is there a subheader?
-			widget.Tf(
+			wx.Tf(
 				"Tags of «%s»", // of or for?
 				superTag.Name,
 			),
 			nil,
 			list,
-			actionx2.ResponseWrapper(wrapper),
-			widget.DialogLayoutStable,
+			actionx.ResponseWrapper(wrapper),
+			wx.DialogLayoutStable,
 		),
 	)
 	return nil
@@ -112,8 +111,8 @@ func (qq *EditSubTagsPartial) Handler(rw httpx2.ResponseWriter, req *httpx2.Requ
 func (qq *EditSubTagsPartial) assignableListItems(
 	ctx ctxx.Context,
 	superTag *enttenant.Tag,
-) []*widget.ListItem {
-	assignableTags := ctx.AppCtx().TTx.
+) []*wx.ListItem {
+	assignableTags := ctx.TenantCtx().TTx.
 		Tag.Query().
 		Where(
 			tag.Not(tag.HasGroup()),
@@ -128,9 +127,9 @@ func (qq *EditSubTagsPartial) assignableListItems(
 		).
 		AllX(ctx)
 
-	var allListItems []*widget.ListItem
-	var tagListItems []*widget.ListItem
-	var groupListItems []*widget.ListItem
+	var allListItems []*wx.ListItem
+	var tagListItems []*wx.ListItem
+	var groupListItems []*wx.ListItem
 
 	isCheckedFn := qq.isCheckedFn(ctx, superTag)
 	for _, assignableTag := range assignableTags {
@@ -161,7 +160,7 @@ func (qq *EditSubTagsPartial) isCheckedFn(
 ) func(subTagID int64) bool {
 	// always loads all sub tags, not optimal, but should be acceptable,
 	// because there is just a small number...
-	subTags := ctx.AppCtx().TTx.
+	subTags := ctx.TenantCtx().TTx.
 		Tag.
 		QuerySubTags(superTag).
 		AllX(ctx)
@@ -179,7 +178,7 @@ func (qq *EditSubTagsPartial) ListItem(
 	ctx ctxx.Context,
 	superTag *enttenant.Tag,
 	subTagWithChildren *enttenant.Tag,
-) *widget.ListItem {
+) *wx.ListItem {
 	return qq.listItem(
 		ctx,
 		superTag,
@@ -196,7 +195,7 @@ func (qq *EditSubTagsPartial) listItem(
 	superTag *enttenant.Tag,
 	subTagWithChildren *enttenant.Tag,
 	isCheckedFn func(tagID int64) bool,
-) *widget.ListItem {
+) *wx.ListItem {
 	var hxPost string
 	var hxVals template.JS
 	if isCheckedFn(subTagWithChildren.ID) {
@@ -212,18 +211,18 @@ func (qq *EditSubTagsPartial) listItem(
 		subTagWithChildren.ID,
 	)
 
-	var icon *widget.Icon
+	var icon *wx.Icon
 	var supportingText string
-	var trailing widget.IWidget
+	var trailing wx.IWidget
 	var isCollapsible bool
 
-	var childItems []widget.IWidget
+	var childItems []wx.IWidget
 
 	if subTagWithChildren.Type == tagtype.Group {
 		// TODO find something betteer
 		// folder_special
 		// note_stack
-		icon = widget.NewIcon("folder_special")
+		icon = wx.NewIcon("folder_special")
 
 		childTagsStr := fmt.Sprintf(
 			"%d child tag",
@@ -252,7 +251,7 @@ func (qq *EditSubTagsPartial) listItem(
 			childTagsStr,
 			selectedStr,
 		)
-		trailing = widget.NewIcon("keyboard_arrow_down")
+		trailing = wx.NewIcon("keyboard_arrow_down")
 
 		// children are eagerly loaded
 		for _, childTag := range subTagWithChildren.Edges.Children {
@@ -270,9 +269,9 @@ func (qq *EditSubTagsPartial) listItem(
 
 		isCollapsible = true
 	} else {
-		icon = widget.NewIcon("label")
-		trailing = &widget.Checkbox{
-			HTMXAttrs: widget.HTMXAttrs{
+		icon = wx.NewIcon("label")
+		trailing = &wx.Checkbox{
+			HTMXAttrs: wx.HTMXAttrs{
 				HxPost:    hxPost,
 				HxTrigger: "change",
 				HxVals:    hxVals,
@@ -283,14 +282,14 @@ func (qq *EditSubTagsPartial) listItem(
 		}
 	}
 
-	htmxAttrs := widget.HTMXAttrs{}
+	htmxAttrs := wx.HTMXAttrs{}
 
 	if subTagWithChildren.Type == tagtype.Simple {
 		// TODO should link complete listItem, not content and trailing separatly,
 		//		results in a small gap because if margin
 		//
 		// impl on refactoring on 27.10.24, nur sure if correct, would solve comment above
-		htmxAttrs = widget.HTMXAttrs{
+		htmxAttrs = wx.HTMXAttrs{
 			HxPost:   hxPost,
 			HxVals:   hxVals,
 			HxTarget: "#" + id,
@@ -298,14 +297,14 @@ func (qq *EditSubTagsPartial) listItem(
 		}
 	}
 
-	return &widget.ListItem{
-		Widget: widget.Widget[widget.ListItem]{
+	return &wx.ListItem{
+		Widget: wx.Widget[wx.ListItem]{
 			ID: id,
 		},
 		HTMXAttrs:      htmxAttrs, // TODO or ContentOnly?
 		Leading:        icon,
-		Headline:       widget.T(subTagWithChildren.Name),
-		SupportingText: widget.Tu(supportingText),
+		Headline:       wx.T(subTagWithChildren.Name),
+		SupportingText: wx.Tu(supportingText),
 		Trailing:       trailing,
 		IsCollapsible:  isCollapsible,
 		Child:          childItems,

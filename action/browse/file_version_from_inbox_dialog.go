@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"log"
 
-	autil "github.com/marcobeierer/go-core/action/util"
-	"github.com/marcobeierer/go-core/ui/widget"
-	actionx2 "github.com/marcobeierer/go-core/util/actionx"
-	httpx2 "github.com/marcobeierer/go-core/util/httpx"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
+	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type FileVersionFromInboxDialogData struct {
@@ -26,11 +26,11 @@ type FileVersionFromInboxDialogFormData struct {
 type FileVersionFromInboxDialog struct {
 	infra   *common.Infra
 	actions *Actions
-	*actionx2.Config
+	*actionx.Config
 }
 
 func NewFileVersionFromInboxDialog(infra *common.Infra, actions *Actions) *FileVersionFromInboxDialog {
-	config := actionx2.NewConfig(actions.Route("file-version-from-inbox-dialog"), true)
+	config := actionx.NewConfig(actions.Route("file-version-from-inbox-dialog"), true)
 	return &FileVersionFromInboxDialog{
 		infra:   infra,
 		actions: actions,
@@ -46,7 +46,7 @@ func (qq *FileVersionFromInboxDialog) Data(targetFileID, sourceFileID, searchQue
 	}
 }
 
-func (qq *FileVersionFromInboxDialog) Handler(rw httpx2.ResponseWriter, req *httpx2.Request, ctx ctxx.Context) error {
+func (qq *FileVersionFromInboxDialog) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	data, err := autil.FormData[FileVersionFromInboxDialogData](rw, req, ctx)
 	if err != nil {
 		log.Println(err)
@@ -69,26 +69,26 @@ func (qq *FileVersionFromInboxDialog) Widget(
 	ctx ctxx.Context,
 	data *FileVersionFromInboxDialogData,
 	files []*enttenant.File,
-) *widget.Dialog {
-	var formChildren []widget.IWidget
+) *wx.Dialog {
+	var formChildren []wx.IWidget
 
 	formChildren = append(formChildren,
-		&widget.Checkbox{
+		&wx.Checkbox{
 			Name:       "ConfirmWarning",
-			Label:      widget.T("I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged."),
+			Label:      wx.T("I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged."),
 			IsRequired: true,
 		},
 	)
 
 	formChildren = append(formChildren,
-		widget.NewFormFields(ctx, &FileVersionFromInboxDialogFormData{
+		wx.NewFormFields(ctx, &FileVersionFromInboxDialogFormData{
 			TargetFileID: data.TargetFileID,
 		}),
-		&widget.Search{
-			Widget: widget.Widget[widget.Search]{
+		&wx.Search{
+			Widget: wx.Widget[wx.Search]{
 				ID: qq.searchID(),
 			},
-			HTMXAttrs: widget.HTMXAttrs{
+			HTMXAttrs: wx.HTMXAttrs{
 				HxPost:    qq.actions.FileVersionFromInboxListPartial.Endpoint(),
 				HxTarget:  "#" + qq.listID(),
 				HxSelect:  "#" + qq.listID(),
@@ -98,19 +98,19 @@ func (qq *FileVersionFromInboxDialog) Widget(
 			},
 			Name:           "SearchQuery",
 			Value:          data.SearchQuery,
-			SupportingText: widget.T("Search inbox files"),
+			SupportingText: wx.T("Search inbox files"),
 			Autofocus:      true,
 		},
 		qq.actions.FileVersionFromInboxListPartial.listWrapper(ctx, data, files),
 	)
 
-	content := &widget.Container{
+	content := &wx.Container{
 		GapY: true,
-		Child: &widget.Form{
-			Widget: widget.Widget[widget.Form]{
+		Child: &wx.Form{
+			Widget: wx.Widget[wx.Form]{
 				ID: qq.formID(),
 			},
-			HTMXAttrs: widget.HTMXAttrs{
+			HTMXAttrs: wx.HTMXAttrs{
 				HxPost: qq.actions.FileVersionFromInboxCmd.Endpoint(),
 				HxSwap: "none",
 			},
@@ -119,14 +119,14 @@ func (qq *FileVersionFromInboxDialog) Widget(
 	}
 
 	return autil.WrapWidgetWithID(
-		widget.T("Add new version from inbox"),
-		widget.T("Add"),
+		wx.T("Add new version from inbox"),
+		wx.T("Add"),
 		content,
-		actionx2.ResponseWrapperDialog,
-		widget.DialogLayoutStable,
+		actionx.ResponseWrapperDialog,
+		wx.DialogLayoutStable,
 		qq.dialogID(),
 		qq.formID(),
-	).(*widget.Dialog)
+	).(*wx.Dialog)
 }
 
 func (qq *FileVersionFromInboxDialog) dialogID() string {
