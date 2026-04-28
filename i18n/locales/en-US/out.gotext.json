@@ -707,6 +707,129 @@
             "fuzzy": true
         },
         {
+            "id": "Duplicate check is still being prepared for this file.",
+            "message": "Duplicate check is still being prepared for this file.",
+            "translation": "Duplicate check is still being prepared for this file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No duplicates found.",
+            "message": "No duplicates found.",
+            "translation": "No duplicates found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Duplicates found",
+            "message": "Duplicates found",
+            "translation": "Duplicates found",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "This file already exists in the following {Matches} locations:",
+            "message": "This file already exists in the following {Matches} locations:",
+            "translation": "This file already exists in the following {Matches} locations:",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Matches",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "len(result.Matches)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Space: {SpaceName}",
+            "message": "Space: {SpaceName}",
+            "translation": "Space: {SpaceName}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "SpaceName",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(match.SpaceName)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Folder: {ParentDirName}",
+            "message": "Folder: {ParentDirName}",
+            "translation": "Folder: {ParentDirName}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ParentDirName",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(match.ParentDirName)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Uploaded {LanguageBCP47}",
+            "message": "Uploaded {LanguageBCP47}",
+            "translation": "Uploaded {LanguageBCP47}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "timex.NewDateTime(match.UploadedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Current version {VersionNumber}",
+            "message": "Current version {VersionNumber}",
+            "translation": "Current version {VersionNumber}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "VersionNumber",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "match.VersionNumber"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Version {VersionNumber}",
+            "message": "Version {VersionNumber}",
+            "translation": "Version {VersionNumber}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "VersionNumber",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "match.VersionNumber"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "Move",
             "message": "Move",
             "translation": "Move",
@@ -884,6 +1007,20 @@
             "fuzzy": true
         },
         {
+            "id": "Duplicates",
+            "message": "Duplicates",
+            "translation": "Duplicates",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not load duplicates.",
+            "message": "Could not load duplicates.",
+            "translation": "Could not load duplicates.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "File upload",
             "message": "File upload",
             "translation": "File upload",
@@ -908,90 +1045,6 @@
             "id": "Added new version from inbox.",
             "message": "Added new version from inbox.",
             "translation": "Added new version from inbox.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Source and target must be different files.",
-            "message": "Source and target must be different files.",
-            "translation": "Source and target must be different files.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "File does not belong to current space.",
-            "message": "File does not belong to current space.",
-            "translation": "File does not belong to current space.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Cannot merge directories.",
-            "message": "Cannot merge directories.",
-            "translation": "Cannot merge directories.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file is deleted.",
-            "message": "Source file is deleted.",
-            "translation": "Source file is deleted.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file has no versions.",
-            "message": "Source file has no versions.",
-            "translation": "Source file has no versions.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not read source version.",
-            "message": "Could not read source version.",
-            "translation": "Could not read source version.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file has no stored file.",
-            "message": "Source file has no stored file.",
-            "translation": "Source file has no stored file.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not read target versions.",
-            "message": "Could not read target versions.",
-            "translation": "Could not read target versions.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not update target file.",
-            "message": "Could not update target file.",
-            "translation": "Could not update target file.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file is not in inbox.",
-            "message": "Source file is not in inbox.",
-            "translation": "Source file is not in inbox.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not remove source versions.",
-            "message": "Could not remove source versions.",
-            "translation": "Could not remove source versions.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not delete source file.",
-            "message": "Could not delete source file.",
-            "translation": "Could not delete source file.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2363,16 +2416,23 @@
             "fuzzy": true
         },
         {
-            "id": "Mark as done",
-            "message": "Mark as done",
-            "translation": "Mark as done",
+            "id": "Reload metadata",
+            "message": "Reload metadata",
+            "translation": "Reload metadata",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Reload metadata",
-            "message": "Reload metadata",
-            "translation": "Reload metadata",
+            "id": "Delete from inbox",
+            "message": "Delete from inbox",
+            "translation": "Delete from inbox",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Mark as done",
+            "message": "Mark as done",
+            "translation": "Mark as done",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2520,6 +2580,20 @@
             "fuzzy": true
         },
         {
+            "id": "Could not load users.",
+            "message": "Could not load users.",
+            "translation": "Could not load users.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Please reload the page and try again.",
+            "message": "Please reload the page and try again.",
+            "translation": "Please reload the page and try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "No unassigned users available.",
             "message": "No unassigned users available.",
             "translation": "No unassigned users available.",
@@ -2549,6 +2623,20 @@
                     "expr": "ctx.SpaceCtx().Space.Name"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "User is already assigned to this space.",
+            "message": "User is already assigned to this space.",
+            "translation": "User is already assigned to this space.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot unassign yourself from a space.",
+            "message": "You cannot unassign yourself from a space.",
+            "translation": "You cannot unassign yourself from a space.",
+            "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
@@ -3505,13 +3593,6 @@
             "fuzzy": true
         },
         {
-            "id": "Accepted",
-            "message": "Accepted",
-            "translation": "Accepted",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Active tab",
             "message": "Active tab",
             "translation": "Active tab",
@@ -4030,13 +4111,6 @@
             "fuzzy": true
         },
         {
-            "id": "Pending",
-            "message": "Pending",
-            "translation": "Pending",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Poland",
             "message": "Poland",
             "translation": "Poland",
@@ -4054,13 +4128,6 @@
             "id": "Pro",
             "message": "Pro",
             "translation": "Pro",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Rejected",
-            "message": "Rejected",
-            "translation": "Rejected",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4925,6 +4992,90 @@
             "fuzzy": true
         },
         {
+            "id": "Source and target must be different files.",
+            "message": "Source and target must be different files.",
+            "translation": "Source and target must be different files.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File does not belong to current space.",
+            "message": "File does not belong to current space.",
+            "translation": "File does not belong to current space.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Cannot merge directories.",
+            "message": "Cannot merge directories.",
+            "translation": "Cannot merge directories.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file is deleted.",
+            "message": "Source file is deleted.",
+            "translation": "Source file is deleted.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file has no versions.",
+            "message": "Source file has no versions.",
+            "translation": "Source file has no versions.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not read source version.",
+            "message": "Could not read source version.",
+            "translation": "Could not read source version.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file has no stored file.",
+            "message": "Source file has no stored file.",
+            "translation": "Source file has no stored file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not read target versions.",
+            "message": "Could not read target versions.",
+            "translation": "Could not read target versions.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not update target file.",
+            "message": "Could not update target file.",
+            "translation": "Could not update target file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file is not in inbox.",
+            "message": "Source file is not in inbox.",
+            "translation": "Source file is not in inbox.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not remove source versions.",
+            "message": "Could not remove source versions.",
+            "translation": "Could not remove source versions.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not delete source file.",
+            "message": "Could not delete source file.",
+            "translation": "Could not delete source file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Folder mode is not enabled.",
             "message": "Folder mode is not enabled.",
             "translation": "Folder mode is not enabled.",
@@ -5709,6 +5860,13 @@
             "fuzzy": true
         },
         {
+            "id": "Rejected",
+            "message": "Rejected",
+            "translation": "Rejected",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Expense status",
             "message": "Expense status",
             "translation": "Expense status",
@@ -5726,20 +5884,6 @@
             "id": "Person",
             "message": "Person",
             "translation": "Person",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "User is already assigned to this space.",
-            "message": "User is already assigned to this space.",
-            "translation": "User is already assigned to this space.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "You cannot unassign yourself from a space.",
-            "message": "You cannot unassign yourself from a space.",
-            "translation": "You cannot unassign yourself from a space.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5842,9 +5986,9 @@
             "fuzzy": true
         },
         {
-            "id": "Maintenance mode is enabled. Please wait until the app ready again.",
-            "message": "Maintenance mode is enabled. Please wait until the app ready again.",
-            "translation": "Maintenance mode is enabled. Please wait until the app ready again.",
+            "id": "Maintenance mode is enabled. Please wait until the app is ready again.",
+            "message": "Maintenance mode is enabled. Please wait until the app is ready again.",
+            "translation": "Maintenance mode is enabled. Please wait until the app is ready again.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

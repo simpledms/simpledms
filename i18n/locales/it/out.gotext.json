@@ -426,12 +426,16 @@
         {
             "id": "Too many password reset requests. Please try again shortly.",
             "message": "Too many password reset requests. Please try again shortly.",
-            "translation": ""
+            "translation": "Troppe richieste di reimpostazione della password. Riprova tra poco.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "If an account with this email exists, a new temporary password was sent.",
             "message": "If an account with this email exists, a new temporary password was sent.",
-            "translation": ""
+            "translation": "Se esiste un account con questa email, è stata inviata una nuova password temporanea.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Set password",
@@ -450,7 +454,9 @@
         {
             "id": "Too many sign-in attempts. Please try again shortly.",
             "message": "Too many sign-in attempts. Please try again shortly.",
-            "translation": ""
+            "translation": "Troppi tentativi di accesso. Riprova tra poco.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Invalid credentials. Please try again.",
@@ -701,6 +707,129 @@
             "fuzzy": true
         },
         {
+            "id": "Duplicate check is still being prepared for this file.",
+            "message": "Duplicate check is still being prepared for this file.",
+            "translation": "Il controllo dei duplicati è ancora in preparazione per questo file.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No duplicates found.",
+            "message": "No duplicates found.",
+            "translation": "Nessun duplicato trovato.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Duplicates found",
+            "message": "Duplicates found",
+            "translation": "Duplicati trovati",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "This file already exists in the following {Matches} locations:",
+            "message": "This file already exists in the following {Matches} locations:",
+            "translation": "Questo file esiste già nelle seguenti {Matches} posizioni:",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "Matches",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "len(result.Matches)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Space: {SpaceName}",
+            "message": "Space: {SpaceName}",
+            "translation": "Space: {SpaceName}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "SpaceName",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(match.SpaceName)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Folder: {ParentDirName}",
+            "message": "Folder: {ParentDirName}",
+            "translation": "Cartella: {ParentDirName}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "ParentDirName",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(match.ParentDirName)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Uploaded {LanguageBCP47}",
+            "message": "Uploaded {LanguageBCP47}",
+            "translation": "Caricato il {LanguageBCP47}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "timex.NewDateTime(match.UploadedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Current version {VersionNumber}",
+            "message": "Current version {VersionNumber}",
+            "translation": "Versione corrente {VersionNumber}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "VersionNumber",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "match.VersionNumber"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Version {VersionNumber}",
+            "message": "Version {VersionNumber}",
+            "translation": "Versione {VersionNumber}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "VersionNumber",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "match.VersionNumber"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "Move",
             "message": "Move",
             "translation": "Sposta",
@@ -878,6 +1007,20 @@
             "fuzzy": true
         },
         {
+            "id": "Duplicates",
+            "message": "Duplicates",
+            "translation": "Duplicati",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not load duplicates.",
+            "message": "Could not load duplicates.",
+            "translation": "Impossibile caricare i duplicati.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "File upload",
             "message": "File upload",
             "translation": "Caricamento file",
@@ -902,90 +1045,6 @@
             "id": "Added new version from inbox.",
             "message": "Added new version from inbox.",
             "translation": "Aggiunta nuova versione dall'Inbox.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Source and target must be different files.",
-            "message": "Source and target must be different files.",
-            "translation": "Sorgente e destinazione devono essere file diversi.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "File does not belong to current space.",
-            "message": "File does not belong to current space.",
-            "translation": "Il file non appartiene allo Space corrente.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Cannot merge directories.",
-            "message": "Cannot merge directories.",
-            "translation": "Impossibile unire le directory.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file is deleted.",
-            "message": "Source file is deleted.",
-            "translation": "Il file sorgente è eliminato.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file has no versions.",
-            "message": "Source file has no versions.",
-            "translation": "Il file sorgente non ha versioni.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not read source version.",
-            "message": "Could not read source version.",
-            "translation": "Impossibile leggere la versione sorgente.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file has no stored file.",
-            "message": "Source file has no stored file.",
-            "translation": "Il file sorgente non ha un file archiviato.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not read target versions.",
-            "message": "Could not read target versions.",
-            "translation": "Impossibile leggere le versioni di destinazione.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not update target file.",
-            "message": "Could not update target file.",
-            "translation": "Impossibile aggiornare il file di destinazione.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file is not in inbox.",
-            "message": "Source file is not in inbox.",
-            "translation": "Il file sorgente non è in Inbox.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not remove source versions.",
-            "message": "Could not remove source versions.",
-            "translation": "Impossibile rimuovere le versioni sorgente.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not delete source file.",
-            "message": "Could not delete source file.",
-            "translation": "Impossibile eliminare il file sorgente.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1783,7 +1842,9 @@
         {
             "id": "Quota usage",
             "message": "Quota usage",
-            "translation": ""
+            "translation": "Utilizzo quota",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Unavailable",
@@ -1953,7 +2014,9 @@
         {
             "id": "Download backup",
             "message": "Download backup",
-            "translation": ""
+            "translation": "Scarica backup",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "The app is unlocked and not protected by a passphrase.",
@@ -1993,7 +2056,8 @@
         {
             "id": "Created on {Format2006_01_02_1504}",
             "message": "Created on {Format2006_01_02_1504}",
-            "translation": "",
+            "translation": "Creato il {Format2006_01_02_1504}",
+            "translatorComment": "Translated from English by Codex",
             "placeholders": [
                 {
                     "id": "Format2006_01_02_1504",
@@ -2003,12 +2067,14 @@
                     "argNum": 1,
                     "expr": "credentialx.CreatedAt.Format(\"2006-01-02 15:04\")"
                 }
-            ]
+            ],
+            "fuzzy": true
         },
         {
             "id": "Last used on {Format2006_01_02_1504}",
             "message": "Last used on {Format2006_01_02_1504}",
-            "translation": "",
+            "translation": "Ultimo utilizzo il {Format2006_01_02_1504}",
+            "translatorComment": "Translated from English by Codex",
             "placeholders": [
                 {
                     "id": "Format2006_01_02_1504",
@@ -2018,7 +2084,8 @@
                     "argNum": 1,
                     "expr": "credentialx.LastUsedAt.Format(\"2006-01-02 15:04\")"
                 }
-            ]
+            ],
+            "fuzzy": true
         },
         {
             "id": "Passkey",
@@ -2072,7 +2139,9 @@
         {
             "id": "Organization not found.",
             "message": "Organization not found.",
-            "translation": ""
+            "translation": "Organizzazione non trovata.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Only owners can change passkey enforcement.",
@@ -2347,16 +2416,23 @@
             "fuzzy": true
         },
         {
-            "id": "Mark as done",
-            "message": "Mark as done",
-            "translation": "Segna come completato",
+            "id": "Reload metadata",
+            "message": "Reload metadata",
+            "translation": "Ricarica metadati",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
-            "id": "Reload metadata",
-            "message": "Reload metadata",
-            "translation": "Ricarica metadati",
+            "id": "Delete from inbox",
+            "message": "Delete from inbox",
+            "translation": "Elimina da Inbox",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Mark as done",
+            "message": "Mark as done",
+            "translation": "Segna come completato",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2504,6 +2580,16 @@
             "fuzzy": true
         },
         {
+            "id": "Could not load users.",
+            "message": "Could not load users.",
+            "translation": ""
+        },
+        {
+            "id": "Please reload the page and try again.",
+            "message": "Please reload the page and try again.",
+            "translation": ""
+        },
+        {
             "id": "No unassigned users available.",
             "message": "No unassigned users available.",
             "translation": "Nessun utente non assegnato disponibile.",
@@ -2533,6 +2619,20 @@
                     "expr": "ctx.SpaceCtx().Space.Name"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "User is already assigned to this space.",
+            "message": "User is already assigned to this space.",
+            "translation": "L'utente è già assegnato a questo Space.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot unassign yourself from a space.",
+            "message": "You cannot unassign yourself from a space.",
+            "translation": "Non puoi rimuovere la tua assegnazione da uno Space.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -2846,22 +2946,30 @@
         {
             "id": "File uploaded, please select a space.",
             "message": "File uploaded, please select a space.",
-            "translation": ""
+            "translation": "File caricato, seleziona uno Space.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Import URL",
             "message": "Import URL",
-            "translation": ""
+            "translation": "Importa URL",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Import file from URL",
             "message": "Import file from URL",
-            "translation": ""
+            "translation": "Importa file da URL",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Download and continue",
             "message": "Download and continue",
-            "translation": ""
+            "translation": "Scarica e continua",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Field «{Name}» created.",
@@ -3420,7 +3528,9 @@
         {
             "id": "Upload is too large.",
             "message": "Upload is too large.",
-            "translation": ""
+            "translation": "Il caricamento è troppo grande.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "cannot parse file",
@@ -3475,13 +3585,6 @@
             "id": "Cannot decode url query.",
             "message": "Cannot decode url query.",
             "translation": "Impossibile decodificare la query url.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Accepted",
-            "message": "Accepted",
-            "translation": "Accettato",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3789,7 +3892,9 @@
         {
             "id": "Is unlimited",
             "message": "Is unlimited",
-            "translation": ""
+            "translation": "È illimitato",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Italian",
@@ -3878,7 +3983,9 @@
         {
             "id": "Max upload size mib",
             "message": "Max upload size mib",
-            "translation": ""
+            "translation": "Dimensione massima caricamento MiB",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Money",
@@ -4000,13 +4107,6 @@
             "fuzzy": true
         },
         {
-            "id": "Pending",
-            "message": "Pending",
-            "translation": "In sospeso",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Poland",
             "message": "Poland",
             "translation": "Polonia",
@@ -4024,13 +4124,6 @@
             "id": "Pro",
             "message": "Pro",
             "translation": "Pro",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Rejected",
-            "message": "Rejected",
-            "translation": "Rifiutato",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -4163,7 +4256,9 @@
         {
             "id": "Token",
             "message": "Token",
-            "translation": ""
+            "translation": "Token",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Trial",
@@ -4182,7 +4277,9 @@
         {
             "id": "Url",
             "message": "Url",
-            "translation": ""
+            "translation": "URL",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Unit",
@@ -4362,7 +4459,9 @@
         {
             "id": "Password must be at least twelve characters long.",
             "message": "Password must be at least twelve characters long.",
-            "translation": ""
+            "translation": "La password deve contenere almeno dodici caratteri.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Passwords do not match.",
@@ -4563,7 +4662,9 @@
         {
             "id": "Open sign in page",
             "message": "Open sign in page",
-            "translation": ""
+            "translation": "Apri pagina di accesso",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "SimpleDMS Password Reset",
@@ -4680,57 +4781,79 @@
         {
             "id": "Max upload size must be greater than or equal to 0.",
             "message": "Max upload size must be greater than or equal to 0.",
-            "translation": ""
+            "translation": "La dimensione massima del caricamento deve essere maggiore o uguale a 0.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Could not download file from URL.",
             "message": "Could not download file from URL.",
-            "translation": ""
+            "translation": "Impossibile scaricare il file dall'URL.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Processing of downloaded file failed.",
             "message": "Processing of downloaded file failed.",
-            "translation": ""
+            "translation": "L'elaborazione del file scaricato non è riuscita.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Invalid URL.",
             "message": "Invalid URL.",
-            "translation": ""
+            "translation": "URL non valido.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Could not determine filename.",
             "message": "Could not determine filename.",
-            "translation": ""
+            "translation": "Impossibile determinare il nome file.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "URL is required.",
             "message": "URL is required.",
-            "translation": ""
+            "translation": "URL obbligatorio.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Only HTTP and HTTPS URLs are allowed.",
             "message": "Only HTTP and HTTPS URLs are allowed.",
-            "translation": ""
+            "translation": "Sono consentiti solo URL HTTP e HTTPS.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "URL credentials are not allowed.",
             "message": "URL credentials are not allowed.",
-            "translation": ""
+            "translation": "Le credenziali nell'URL non sono consentite.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Local URLs are not allowed.",
             "message": "Local URLs are not allowed.",
-            "translation": ""
+            "translation": "Gli URL locali non sono consentiti.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Target host is not allowed.",
             "message": "Target host is not allowed.",
-            "translation": ""
+            "translation": "L'host di destinazione non è consentito.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Too many redirects.",
             "message": "Too many redirects.",
-            "translation": ""
+            "translation": "Troppi reindirizzamenti.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "App not unlocked yet. Please try again later.",
@@ -4770,37 +4893,51 @@
         {
             "id": "Max upload size must be greater than or equal to 0 MiB.",
             "message": "Max upload size must be greater than or equal to 0 MiB.",
-            "translation": ""
+            "translation": "La dimensione massima del caricamento deve essere maggiore o uguale a 0 MiB.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Max upload size is too large.",
             "message": "Max upload size is too large.",
-            "translation": ""
+            "translation": "La dimensione massima del caricamento è troppo grande.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
             "message": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
-            "translation": ""
+            "translation": "La dimensione massima del caricamento deve essere maggiore di 0 MiB quando «Illimitato» è disattivato.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Tenant is required.",
             "message": "Tenant is required.",
-            "translation": ""
+            "translation": "Il tenant è obbligatorio.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Tenant not found.",
             "message": "Tenant not found.",
-            "translation": ""
+            "translation": "Tenant non trovato.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "You must be logged in to manage upload limits.",
             "message": "You must be logged in to manage upload limits.",
-            "translation": ""
+            "translation": "Devi essere autenticato per gestire i limiti di caricamento.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "You must be an admin to manage upload limits.",
             "message": "You must be an admin to manage upload limits.",
-            "translation": ""
+            "translation": "Devi essere amministratore per gestire i limiti di caricamento.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Please select at least one document type.",
@@ -4847,6 +4984,90 @@
             "id": "file has no parent",
             "message": "file has no parent",
             "translation": "il file non ha una cartella superiore",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Source and target must be different files.",
+            "message": "Source and target must be different files.",
+            "translation": "Sorgente e destinazione devono essere file diversi.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File does not belong to current space.",
+            "message": "File does not belong to current space.",
+            "translation": "Il file non appartiene allo Space corrente.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Cannot merge directories.",
+            "message": "Cannot merge directories.",
+            "translation": "Impossibile unire le directory.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file is deleted.",
+            "message": "Source file is deleted.",
+            "translation": "Il file sorgente è eliminato.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file has no versions.",
+            "message": "Source file has no versions.",
+            "translation": "Il file sorgente non ha versioni.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not read source version.",
+            "message": "Could not read source version.",
+            "translation": "Impossibile leggere la versione sorgente.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file has no stored file.",
+            "message": "Source file has no stored file.",
+            "translation": "Il file sorgente non ha un file archiviato.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not read target versions.",
+            "message": "Could not read target versions.",
+            "translation": "Impossibile leggere le versioni di destinazione.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not update target file.",
+            "message": "Could not update target file.",
+            "translation": "Impossibile aggiornare il file di destinazione.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file is not in inbox.",
+            "message": "Source file is not in inbox.",
+            "translation": "Il file sorgente non è in Inbox.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not remove source versions.",
+            "message": "Could not remove source versions.",
+            "translation": "Impossibile rimuovere le versioni sorgente.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not delete source file.",
+            "message": "Could not delete source file.",
+            "translation": "Impossibile eliminare il file sorgente.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -5028,12 +5249,15 @@
         {
             "id": "Could not verify upload size limit.",
             "message": "Could not verify upload size limit.",
-            "translation": ""
+            "translation": "Impossibile verificare il limite di dimensione del caricamento.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Upload is too large. Maximum allowed size is {FormatSizemaxUploadSizeBytes}.",
             "message": "Upload is too large. Maximum allowed size is {FormatSizemaxUploadSizeBytes}.",
-            "translation": "",
+            "translation": "Il caricamento è troppo grande. La dimensione massima consentita è {FormatSizemaxUploadSizeBytes}.",
+            "translatorComment": "Translated from English by Codex",
             "placeholders": [
                 {
                     "id": "FormatSizemaxUploadSizeBytes",
@@ -5043,7 +5267,8 @@
                     "argNum": 1,
                     "expr": "fileutil.FormatSize(maxUploadSizeBytes)"
                 }
-            ]
+            ],
+            "fuzzy": true
         },
         {
             "id": "Could not verify storage limit.",
@@ -5631,6 +5856,13 @@
             "fuzzy": true
         },
         {
+            "id": "Rejected",
+            "message": "Rejected",
+            "translation": "Rifiutato",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Expense status",
             "message": "Expense status",
             "translation": "Stato spese",
@@ -5648,20 +5880,6 @@
             "id": "Person",
             "message": "Person",
             "translation": "Persona",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "User is already assigned to this space.",
-            "message": "User is already assigned to this space.",
-            "translation": "L'utente è già assegnato a questo Space.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "You cannot unassign yourself from a space.",
-            "message": "You cannot unassign yourself from a space.",
-            "translation": "Non puoi rimuovere la tua assegnazione da uno Space.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -5764,8 +5982,8 @@
             "fuzzy": true
         },
         {
-            "id": "Maintenance mode is enabled. Please wait until the app ready again.",
-            "message": "Maintenance mode is enabled. Please wait until the app ready again.",
+            "id": "Maintenance mode is enabled. Please wait until the app is ready again.",
+            "message": "Maintenance mode is enabled. Please wait until the app is ready again.",
             "translation": "La modalità manutenzione è attivata. Attendere fino a quando l'applicazione sarà nuovamente pronta.",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true

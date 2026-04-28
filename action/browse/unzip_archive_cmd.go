@@ -11,7 +11,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/minio/minio-go/v7"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
@@ -32,8 +31,7 @@ type unzipPreparedEntry struct {
 	zipFile  *zip.File
 	prepared *filesystem.PreparedUpload
 	fileID   int64
-	fileInfo *minio.UploadInfo
-	fileSize int64
+	result   *filesystem.PreparedUploadResult
 }
 
 type UnzipArchiveCmdData struct {
@@ -236,7 +234,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 			break
 		}
 
-		fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+		uploadResult, err := qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 			ctx,
 			fileToSave,
 			entry.prepared,
@@ -249,15 +247,14 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 			break
 		}
 
-		entry.fileInfo = fileInfo
-		entry.fileSize = fileSize
+		entry.result = uploadResult
 	}
 
 	if hasErr {
 		rw.AddRenderables(wx.NewSnackbarf("Could not extract all files from archive.").SetIsError(true))
 
 		for _, entry := range preparedEntries {
-			cleanup := entry.fileInfo != nil
+			cleanup := entry.result != nil
 			uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), entry.prepared, nil, cleanup)
 		}
 
@@ -291,10 +288,10 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 			}
 
 			for _, entry := range preparedEntries {
-				if entry.fileInfo == nil {
+				if entry.result == nil {
 					return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not extract all files from archive.")
 				}
-				err := qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, entry.prepared, entry.fileInfo, entry.fileSize)
+				err := qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, entry.prepared, entry.result)
 				if err != nil {
 					return nil, err
 				}
@@ -304,7 +301,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		if err != nil {
 			log.Println(err)
 			for _, entry := range preparedEntries {
-				cleanup := entry.fileInfo != nil
+				cleanup := entry.result != nil
 				uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), entry.prepared, nil, cleanup)
 			}
 			hasErr = true
@@ -356,14 +353,14 @@ func (qq *UnzipArchiveCmd) unzipArchiveTotalUncompressedSize(zipFiles []*zip.Fil
 func (qq *UnzipArchiveCmd) unzipPreparedEntriesTotalUploadedSize(preparedEntries []*unzipPreparedEntry) (int64, error) {
 	var total int64
 	for _, entry := range preparedEntries {
-		if entry.fileSize < 0 {
+		if entry.result == nil || entry.result.FileSize < 0 {
 			return 0, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify archive size.")
 		}
-		if total > math.MaxInt64-entry.fileSize {
+		if total > math.MaxInt64-entry.result.FileSize {
 			return 0, e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Archive is too large.")
 		}
 
-		total += entry.fileSize
+		total += entry.result.FileSize
 	}
 
 	return total, nil

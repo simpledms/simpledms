@@ -1,17 +1,30 @@
 {{/* gotype:github.com/simpledms/simpledms/ui/widget.TabBar */}}
 {{- define "TabBar" }}
 	<div id="{{ .GetID }}" class="flex flex-col flex-grow max-h-full overflow-y-hidden">
-		<div
-				class="
-		flex flex-row flex-shrink-0
-		overflow-x-scroll
-		border-b border-outline-variant
-		hide-scrollbar
-		{{ if .IsFlowing }}{{ end }}
-		{{ .GetClass }}">
-            {{ render .GetContext .GetTabs }}
+		<div class="flex-shrink-0 overflow-x-auto {{ .GetClass }}">
+			<div class="flex flex-row min-w-max border-b border-outline-variant
+				{{ if .IsFlowing }}{{ end }}">
+                {{ render .GetContext .GetTabs }}
+			</div>
 		</div>
 
         {{ render .GetContext .ActiveTabContent }}
 	</div>
+	<script defer>
+		(function() {
+			const tabBar = document.getElementById('{{ .GetID }}');
+			if (!tabBar) {
+				return;
+			}
+
+			const activeTab = tabBar.querySelector('.js-active-tab');
+			if (!activeTab) {
+				return;
+			}
+
+			requestAnimationFrame(() => {
+				activeTab.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+			});
+		})();
+	</script>
 {{ end }}

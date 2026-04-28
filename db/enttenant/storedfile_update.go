@@ -187,6 +187,26 @@ func (_u *StoredFileUpdate) ClearSha256() *StoredFileUpdate {
 	return _u
 }
 
+// SetContentSha256 sets the "content_sha256" field.
+func (_u *StoredFileUpdate) SetContentSha256(v string) *StoredFileUpdate {
+	_u.mutation.SetContentSha256(v)
+	return _u
+}
+
+// SetNillableContentSha256 sets the "content_sha256" field if the given value is not nil.
+func (_u *StoredFileUpdate) SetNillableContentSha256(v *string) *StoredFileUpdate {
+	if v != nil {
+		_u.SetContentSha256(*v)
+	}
+	return _u
+}
+
+// ClearContentSha256 clears the value of the "content_sha256" field.
+func (_u *StoredFileUpdate) ClearContentSha256() *StoredFileUpdate {
+	_u.mutation.ClearContentSha256()
+	return _u
+}
+
 // SetMimeType sets the "mime_type" field.
 func (_u *StoredFileUpdate) SetMimeType(v string) *StoredFileUpdate {
 	_u.mutation.SetMimeType(v)
@@ -551,6 +571,12 @@ func (_u *StoredFileUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.Sha256Cleared() {
 		_spec.ClearField(storedfile.FieldSha256, field.TypeString)
 	}
+	if value, ok := _u.mutation.ContentSha256(); ok {
+		_spec.SetField(storedfile.FieldContentSha256, field.TypeString, value)
+	}
+	if _u.mutation.ContentSha256Cleared() {
+		_spec.ClearField(storedfile.FieldContentSha256, field.TypeString)
+	}
 	if value, ok := _u.mutation.MimeType(); ok {
 		_spec.SetField(storedfile.FieldMimeType, field.TypeString, value)
 	}
@@ -894,6 +920,26 @@ func (_u *StoredFileUpdateOne) SetNillableSha256(v *string) *StoredFileUpdateOne
 // ClearSha256 clears the value of the "sha256" field.
 func (_u *StoredFileUpdateOne) ClearSha256() *StoredFileUpdateOne {
 	_u.mutation.ClearSha256()
+	return _u
+}
+
+// SetContentSha256 sets the "content_sha256" field.
+func (_u *StoredFileUpdateOne) SetContentSha256(v string) *StoredFileUpdateOne {
+	_u.mutation.SetContentSha256(v)
+	return _u
+}
+
+// SetNillableContentSha256 sets the "content_sha256" field if the given value is not nil.
+func (_u *StoredFileUpdateOne) SetNillableContentSha256(v *string) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetContentSha256(*v)
+	}
+	return _u
+}
+
+// ClearContentSha256 clears the value of the "content_sha256" field.
+func (_u *StoredFileUpdateOne) ClearContentSha256() *StoredFileUpdateOne {
+	_u.mutation.ClearContentSha256()
 	return _u
 }
 
@@ -1290,6 +1336,12 @@ func (_u *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile, 
 	}
 	if _u.mutation.Sha256Cleared() {
 		_spec.ClearField(storedfile.FieldSha256, field.TypeString)
+	}
+	if value, ok := _u.mutation.ContentSha256(); ok {
+		_spec.SetField(storedfile.FieldContentSha256, field.TypeString, value)
+	}
+	if _u.mutation.ContentSha256Cleared() {
+		_spec.ClearField(storedfile.FieldContentSha256, field.TypeString)
 	}
 	if value, ok := _u.mutation.MimeType(); ok {
 		_spec.SetField(storedfile.FieldMimeType, field.TypeString, value)

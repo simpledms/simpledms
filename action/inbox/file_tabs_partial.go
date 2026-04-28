@@ -3,6 +3,7 @@ package inbox
 // package action
 
 import (
+	"log"
 	"strings"
 
 	autil "github.com/simpledms/simpledms/action/util"
@@ -70,12 +71,13 @@ func (qq *FileTabsPartial) Widget(
 	nullableFile *filemodel.File,
 ) *wx.TabBar {
 	var activeTabContent *wx.ScrollableContent
-	tabsID := autil.GenerateID("showFileTabs")
+	tabsID := qq.ID()
 	activeTab := strings.ToLower(state.ActiveTab)
 
 	if nullableFile == nil {
 		nullableFile = qq.infra.FileRepo.GetX(ctx, fileID)
 	}
+	duplicateTabContent, hasDuplicates := qq.nilableDuplicateTabContent(ctx, fileID)
 
 	switch activeTab {
 	case "", "metadata":
@@ -122,6 +124,16 @@ func (qq *FileTabsPartial) Widget(
 			ctx,
 			qq.actions.Browse.FileInfoPartial.Data(fileID),
 		)
+	case "duplicates":
+		if hasDuplicates {
+			activeTabContent = duplicateTabContent
+		} else {
+			activeTab = ""
+			activeTabContent = qq.actions.FileMetadataPartial.Widget(
+				ctx,
+				qq.actions.FileMetadataPartial.Data(fileID),
+			)
+		}
 	}
 
 	var tabs []*wx.Tab
@@ -184,6 +196,18 @@ func (qq *FileTabsPartial) Widget(
 			IncreasedHeight: true,
 		},
 	}...)
+	if hasDuplicates {
+		tabs = append(tabs, &wx.Tab{
+			Label: wx.T("Duplicates"),
+			HTMXAttrs: wx.HTMXAttrs{
+				HxPost:   qq.Endpoint(),
+				HxVals:   util.JSON(qq.Data(fileID, "duplicates")),
+				HxTarget: "#" + tabsID,
+				HxSwap:   "outerHTML",
+			},
+			IncreasedHeight: true,
+		})
+	}
 
 	return &wx.TabBar{
 		Widget: wx.Widget[wx.TabBar]{
@@ -194,4 +218,37 @@ func (qq *FileTabsPartial) Widget(
 		Tabs:             tabs,
 		ActiveTabContent: activeTabContent,
 	}
+}
+
+func (qq *FileTabsPartial) nilableDuplicateTabContent(
+	ctx ctxx.Context,
+	fileID string,
+) (*wx.ScrollableContent, bool) {
+	content, _, hasDuplicates, err := qq.actions.Browse.DuplicateMatchesPartial.WidgetWithStatus(
+		ctx,
+		qq.actions.Browse.DuplicateMatchesPartial.Data(fileID),
+	)
+	if err != nil {
+		log.Println(err)
+		return &wx.ScrollableContent{
+			MarginY:  true,
+			Children: wx.NewBody(wx.BodyTypeSm, wx.T("Could not load duplicates.")),
+		}, true
+	}
+	if hasDuplicates {
+		content.Children = &wx.Column{
+			GapYSize:   wx.Gap4,
+			AutoHeight: true,
+			Children: []wx.IWidget{
+				qq.actions.FileMetadataPartial.deleteFromInboxButton(ctx, fileID),
+				content.Children,
+			},
+		}
+	}
+
+	return content, hasDuplicates
+}
+
+func (qq *FileTabsPartial) ID() string {
+	return "inboxFileTabs"
 }

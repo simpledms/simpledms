@@ -250,6 +250,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			storedfile.FieldSize:                       {Type: field.TypeInt64, Column: storedfile.FieldSize},
 			storedfile.FieldSizeInStorage:              {Type: field.TypeInt64, Column: storedfile.FieldSizeInStorage},
 			storedfile.FieldSha256:                     {Type: field.TypeString, Column: storedfile.FieldSha256},
+			storedfile.FieldContentSha256:              {Type: field.TypeString, Column: storedfile.FieldContentSha256},
 			storedfile.FieldMimeType:                   {Type: field.TypeString, Column: storedfile.FieldMimeType},
 			storedfile.FieldStorageType:                {Type: field.TypeEnum, Column: storedfile.FieldStorageType},
 			storedfile.FieldBucketName:                 {Type: field.TypeString, Column: storedfile.FieldBucketName},
@@ -2355,6 +2356,11 @@ func (f *StoredFileFilter) WhereSizeInStorage(p entql.Int64P) {
 // WhereSha256 applies the entql string predicate on the sha256 field.
 func (f *StoredFileFilter) WhereSha256(p entql.StringP) {
 	f.Where(p.Field(storedfile.FieldSha256))
+}
+
+// WhereContentSha256 applies the entql string predicate on the content_sha256 field.
+func (f *StoredFileFilter) WhereContentSha256(p entql.StringP) {
+	f.Where(p.Field(storedfile.FieldContentSha256))
 }
 
 // WhereMimeType applies the entql string predicate on the mime_type field.

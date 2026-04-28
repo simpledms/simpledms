@@ -73,7 +73,7 @@ func TestUploadFileCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 					}
 
 					seedFileContent := []byte("seed")
-					fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+					uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 						spaceCtx,
 						bytes.NewReader(seedFileContent),
 						prepared,
@@ -83,7 +83,7 @@ func TestUploadFileCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 						return fmt.Errorf("upload seed file: %w", err)
 					}
 
-					err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+					err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
 					if err != nil {
 						return fmt.Errorf("finalize seed file: %w", err)
 					}
@@ -194,7 +194,7 @@ func TestUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(t *testing.T
 			}
 
 			seedFileContent := []byte("seed")
-			fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+			uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 				spaceCtx,
 				bytes.NewReader(seedFileContent),
 				prepared,
@@ -204,7 +204,7 @@ func TestUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(t *testing.T
 				return fmt.Errorf("upload seed file: %w", err)
 			}
 
-			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
 			if err != nil {
 				return fmt.Errorf("finalize seed file: %w", err)
 			}
@@ -310,7 +310,7 @@ func TestUploadFileCmdSkipsTenantStorageLimitWhenSaaSDisabled(t *testing.T) {
 			}
 
 			seedFileContent := []byte("seed")
-			fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+			uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 				spaceCtx,
 				bytes.NewReader(seedFileContent),
 				prepared,
@@ -320,7 +320,7 @@ func TestUploadFileCmdSkipsTenantStorageLimitWhenSaaSDisabled(t *testing.T) {
 				return fmt.Errorf("upload seed file: %w", err)
 			}
 
-			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
 			if err != nil {
 				return fmt.Errorf("finalize seed file: %w", err)
 			}

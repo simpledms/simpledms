@@ -462,6 +462,7 @@ var (
 		{Name: "size", Type: field.TypeInt64, Nullable: true},
 		{Name: "size_in_storage", Type: field.TypeInt64},
 		{Name: "sha256", Type: field.TypeString, Nullable: true},
+		{Name: "content_sha256", Type: field.TypeString, Nullable: true},
 		{Name: "mime_type", Type: field.TypeString, Nullable: true},
 		{Name: "storage_type", Type: field.TypeEnum, Enums: []string{"Unknown", "Local", "S3"}},
 		{Name: "bucket_name", Type: field.TypeString, Nullable: true},
@@ -482,15 +483,22 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "stored_files_users_creator",
-				Columns:    []*schema.Column{StoredFilesColumns[19]},
+				Columns:    []*schema.Column{StoredFilesColumns[20]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "stored_files_users_updater",
-				Columns:    []*schema.Column{StoredFilesColumns[20]},
+				Columns:    []*schema.Column{StoredFilesColumns[21]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "storedfile_content_sha256",
+				Unique:  false,
+				Columns: []*schema.Column{StoredFilesColumns[10]},
 			},
 		},
 	}

@@ -110,7 +110,7 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		return err
 	}
 
-	fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+	uploadResult, err := qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 		ctx,
 		uploadedFile,
 		prep,
@@ -122,7 +122,7 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 	}
 
 	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep, fileInfo, fileSize)
+		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep, uploadResult)
 	})
 	if err != nil {
 		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep, err, false)
