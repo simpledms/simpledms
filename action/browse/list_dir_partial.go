@@ -52,6 +52,7 @@ type ListDirPartialState struct {
 	// used in JS, thus don't change URL and as param name below
 	// TODO multiple?
 	ActiveSideSheet string `url:"side_sheet,omitempty"`
+	SortBy          string `url:"sort_by,omitempty"` // TODO enum
 
 	// TODO does offset belong to state? in url, but not really state...
 	// Offset int `url:"offset,omitempty"`
@@ -238,6 +239,10 @@ func (qq *ListDirPartial) Widget(
 	var children []wx.IWidget
 
 	children = append(children,
+		qq.sortUpdateTrigger(dirWithParent.Data.PublicID.String(), selectedFileID),
+	)
+
+	children = append(children,
 		qq.tagsAndOptions(ctx, state, dirWithParent),
 	)
 
@@ -315,6 +320,21 @@ func (qq *ListDirPartial) Widget(
 		},
 		AppBar: qq.appBar(ctx, state, dirWithParent),
 		List:   list,
+	}
+}
+
+func (qq *ListDirPartial) sortUpdateTrigger(currentDirID, selectedFileID string) *wx.Container {
+	return &wx.Container{
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost:   qq.EndpointWithParams(actionx.ResponseWrapperNone, ""),
+			HxVals:   util.JSON(qq.Data(currentDirID, selectedFileID)),
+			HxTarget: "#innerContent",
+			HxSwap:   "innerHTML",
+			HxTrigger: event.SortByUpdated.HandlerWithModifier(
+				"delay:100ms",
+			),
+		},
+		Child: &wx.View{},
 	}
 }
 
@@ -532,7 +552,13 @@ func (qq *ListDirPartial) appBar(
 		Leading:          leadingButton,
 		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title:            wx.Tu(dir.Data.Name),
-		// Actions:          actions,
+		Actions: []wx.IWidget{
+			&wx.IconButton{
+				Icon:     "sort",
+				Tooltip:  wx.T("Sort files"),
+				Children: NewSortListContextMenuWidget().Widget(ctx, state),
+			},
+		},
 		Search: &wx.Search{
 			Widget: wx.Widget[wx.Search]{
 				ID: "search",
