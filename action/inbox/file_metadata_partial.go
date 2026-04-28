@@ -3,10 +3,13 @@ package inbox
 // package action
 
 import (
+	"log"
+
 	"github.com/simpledms/simpledms/action/browse"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -79,23 +82,16 @@ func (qq *FileMetadataPartial) Widget(
 	// how to sort files in browse if no primary filename? value tag?
 
 	var children []wx.IWidget
-
+	_, duplicateStatusMessage, hasDuplicates, err := qq.actions.Browse.DuplicateMatchesPartial.WidgetWithStatus(
+		ctx,
+		qq.actions.Browse.DuplicateMatchesPartial.Data(data.FileID),
+	)
+	if err != nil {
+		log.Println(err)
+	}
 	// TODO above or below FileAttributes? Must remove MarginY
 	// 		on scrollable content if below
-	children = append(children,
-		&wx.Button{
-			Label:     wx.T("Mark as done"),
-			StyleType: wx.ButtonStyleTypeElevated,
-			HTMXAttrs: wx.HTMXAttrs{
-				HxPost: qq.actions.MarkAsDoneCmd.Endpoint(),
-				HxVals: util.JSON(qq.actions.MarkAsDoneCmd.Data(data.FileID)),
-				HxHeaders: autil.QueryHeader(
-					qq.actions.InboxPage.Endpoint(),
-					qq.actions.InboxPage.Data(),
-				),
-			},
-		},
-	)
+	children = append(children, qq.markAsDoneButton(data.FileID))
 
 	children = append(children, qq.actions.Browse.FileAttributesPartial.Widget(
 		ctx,
@@ -105,9 +101,17 @@ func (qq *FileMetadataPartial) Widget(
 	// TODO also loaded in qq.actions.Browse.FileAttributesPartial.Widget
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 
-	var nilableBottomAppBar *wx.BottomAppBar
+	statusMessages := qq.statusMessages(
+		ctx,
+		data.FileID,
+		filex.HasOCRSuccess(ctx),
+		filex.Size(ctx),
+		duplicateStatusMessage,
+		hasDuplicates,
+	)
 
-	if message := qq.nilableOCRStatusMessage(filex.HasOCRSuccess(ctx), filex.Size(ctx)); message != nil {
+	var nilableBottomAppBar *wx.BottomAppBar
+	if len(statusMessages) > 0 {
 		nilableBottomAppBar = &wx.BottomAppBar{
 			Actions: []wx.IWidget{
 				&wx.IconButton{
@@ -121,10 +125,7 @@ func (qq *FileMetadataPartial) Widget(
 					},
 				},
 			},
-			Children: wx.NewBody(
-				wx.BodyTypeSm,
-				message,
-			),
+			Children: qq.statusMessageWidget(statusMessages),
 		}
 	}
 
@@ -144,6 +145,33 @@ func (qq *FileMetadataPartial) MetadataTabContentID() string {
 	return "metadataTabContent"
 }
 
+func (qq *FileMetadataPartial) deleteFromInboxButton(ctx ctxx.Context, fileID string) *wx.Button {
+	return &wx.Button{
+		Label:     wx.T("Delete from inbox"),
+		StyleType: wx.ButtonStyleTypeElevated,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost:    qq.actions.Browse.DeleteFileCmd.Endpoint(),
+			HxVals:    util.JSON(qq.actions.Browse.DeleteFileCmd.Data(fileID)),
+			HxConfirm: wx.T("Are you sure?").String(ctx),
+		},
+	}
+}
+
+func (qq *FileMetadataPartial) markAsDoneButton(fileID string) *wx.Button {
+	return &wx.Button{
+		Label:     wx.T("Mark as done"),
+		StyleType: wx.ButtonStyleTypeElevated,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost: qq.actions.MarkAsDoneCmd.Endpoint(),
+			HxVals: util.JSON(qq.actions.MarkAsDoneCmd.Data(fileID)),
+			HxHeaders: autil.QueryHeader(
+				qq.actions.InboxPage.Endpoint(),
+				qq.actions.InboxPage.Data(),
+			),
+		},
+	}
+}
+
 func (qq *FileMetadataPartial) nilableOCRStatusMessage(hasOCRSuccess bool, fileSize int64) *wx.Text {
 	if hasOCRSuccess {
 		return nil
@@ -154,4 +182,66 @@ func (qq *FileMetadataPartial) nilableOCRStatusMessage(hasOCRSuccess bool, fileS
 	}
 
 	return wx.T("Text recognition (OCR) is not ready yet, suggestions are based on the filename only.")
+}
+
+func (qq *FileMetadataPartial) statusMessages(
+	ctx ctxx.Context,
+	fileID string,
+	hasOCRSuccess bool,
+	fileSize int64,
+	duplicateStatusMessage *wx.Text,
+	hasDuplicates bool,
+) []wx.IWidget {
+	var messages []wx.IWidget
+	if ocrStatusMessage := qq.nilableOCRStatusMessage(hasOCRSuccess, fileSize); ocrStatusMessage != nil {
+		messages = append(messages, wx.NewBody(wx.BodyTypeSm, ocrStatusMessage))
+	}
+	if duplicateStatusMessage != nil {
+		messages = append(messages, wx.NewBody(wx.BodyTypeSm, duplicateStatusMessage))
+	}
+	if hasDuplicates {
+		messages = append(messages, qq.duplicatesFoundLink(ctx, fileID))
+	}
+
+	return messages
+}
+
+func (qq *FileMetadataPartial) statusMessageWidget(messages []wx.IWidget) wx.IWidget {
+	if len(messages) == 1 {
+		return messages[0]
+	}
+
+	return &wx.Column{
+		GapYSize:   wx.Gap1,
+		AutoHeight: true,
+		Children:   messages,
+	}
+}
+
+func (qq *FileMetadataPartial) duplicatesFoundLink(ctx ctxx.Context, fileID string) *wx.Link {
+	linkText := wx.T("Duplicates found").SetWrap()
+	linkText.IsSmall = true
+	state := &InboxPageState{
+		FilesListPartialState: FilesListPartialState{
+			ActiveSideSheet: qq.actions.FilePartial.SideSheetID(),
+		},
+		FilePartialState: FilePartialState{
+			ActiveTab: "duplicates",
+		},
+	}
+	targetURL := route.InboxWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileID)
+
+	return &wx.Link{
+		Href:  targetURL,
+		Child: linkText,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost: qq.actions.FileTabsPartial.Endpoint(),
+			HxVals: util.JSON(qq.actions.FileTabsPartial.Data(
+				fileID,
+				"duplicates",
+			)),
+			HxTarget: "#" + qq.actions.FileTabsPartial.ID(),
+			HxSwap:   "outerHTML",
+		},
+	}
 }

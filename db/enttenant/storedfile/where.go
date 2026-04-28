@@ -111,6 +111,11 @@ func Sha256(v string) predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldEQ(FieldSha256, v))
 }
 
+// ContentSha256 applies equality check predicate on the "content_sha256" field. It's identical to ContentSha256EQ.
+func ContentSha256(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldContentSha256, v))
+}
+
 // MimeType applies equality check predicate on the "mime_type" field. It's identical to MimeTypeEQ.
 func MimeType(v string) predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldEQ(FieldMimeType, v))
@@ -669,6 +674,81 @@ func Sha256EqualFold(v string) predicate.StoredFile {
 // Sha256ContainsFold applies the ContainsFold predicate on the "sha256" field.
 func Sha256ContainsFold(v string) predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldContainsFold(FieldSha256, v))
+}
+
+// ContentSha256EQ applies the EQ predicate on the "content_sha256" field.
+func ContentSha256EQ(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldContentSha256, v))
+}
+
+// ContentSha256NEQ applies the NEQ predicate on the "content_sha256" field.
+func ContentSha256NEQ(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNEQ(FieldContentSha256, v))
+}
+
+// ContentSha256In applies the In predicate on the "content_sha256" field.
+func ContentSha256In(vs ...string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIn(FieldContentSha256, vs...))
+}
+
+// ContentSha256NotIn applies the NotIn predicate on the "content_sha256" field.
+func ContentSha256NotIn(vs ...string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotIn(FieldContentSha256, vs...))
+}
+
+// ContentSha256GT applies the GT predicate on the "content_sha256" field.
+func ContentSha256GT(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGT(FieldContentSha256, v))
+}
+
+// ContentSha256GTE applies the GTE predicate on the "content_sha256" field.
+func ContentSha256GTE(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGTE(FieldContentSha256, v))
+}
+
+// ContentSha256LT applies the LT predicate on the "content_sha256" field.
+func ContentSha256LT(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLT(FieldContentSha256, v))
+}
+
+// ContentSha256LTE applies the LTE predicate on the "content_sha256" field.
+func ContentSha256LTE(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLTE(FieldContentSha256, v))
+}
+
+// ContentSha256Contains applies the Contains predicate on the "content_sha256" field.
+func ContentSha256Contains(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldContains(FieldContentSha256, v))
+}
+
+// ContentSha256HasPrefix applies the HasPrefix predicate on the "content_sha256" field.
+func ContentSha256HasPrefix(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldHasPrefix(FieldContentSha256, v))
+}
+
+// ContentSha256HasSuffix applies the HasSuffix predicate on the "content_sha256" field.
+func ContentSha256HasSuffix(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldHasSuffix(FieldContentSha256, v))
+}
+
+// ContentSha256IsNil applies the IsNil predicate on the "content_sha256" field.
+func ContentSha256IsNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIsNull(FieldContentSha256))
+}
+
+// ContentSha256NotNil applies the NotNil predicate on the "content_sha256" field.
+func ContentSha256NotNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotNull(FieldContentSha256))
+}
+
+// ContentSha256EqualFold applies the EqualFold predicate on the "content_sha256" field.
+func ContentSha256EqualFold(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEqualFold(FieldContentSha256, v))
+}
+
+// ContentSha256ContainsFold applies the ContainsFold predicate on the "content_sha256" field.
+func ContentSha256ContainsFold(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldContainsFold(FieldContentSha256, v))
 }
 
 // MimeTypeEQ applies the EQ predicate on the "mime_type" field.

@@ -368,7 +368,7 @@ func uploadSpaceFile(
 		t.Fatalf("prepare file upload: %v", err)
 	}
 
-	fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+	uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 		spaceCtx,
 		bytes.NewReader(content),
 		prepared,
@@ -378,7 +378,7 @@ func uploadSpaceFile(
 		t.Fatalf("upload file: %v", err)
 	}
 
-	err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+	err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
 	if err != nil {
 		t.Fatalf("finalize file upload: %v", err)
 	}

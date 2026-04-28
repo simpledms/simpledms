@@ -3,6 +3,8 @@ package filesystem
 import (
 	"compress/gzip"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"log"
@@ -35,6 +37,11 @@ import (
 	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/recoverx"
 )
+
+type savedFileResult struct {
+	fileSize      int64
+	contentSHA256 string
+}
 
 type S3FileSystem struct {
 	*FileSystem
@@ -199,7 +206,7 @@ func (qq *S3FileSystem) UnsafeUploadBlobToStorageLocation(
 	storagePath string,
 	storageFilename string,
 ) error {
-	_, _, _, err := qq.saveFile(
+	_, _, _, _, err := qq.saveFile(
 		ctx,
 		x25519Identity,
 		fileToSave,
@@ -363,15 +370,15 @@ func (qq *S3FileSystem) UploadPreparedFileWithExpectedSize(
 	fileToSave io.Reader,
 	prepared *PreparedUpload,
 	expectedUploadedBytes int64,
-) (*minio.UploadInfo, int64, error) {
+) (*PreparedUploadResult, error) {
 	nilableUploadLimitBytes, err := qq.NilableEffectiveUploadSizeLimitBytes(ctx)
 	if err != nil {
 		log.Println(err)
-		return nil, 0, err
+		return nil, err
 	}
 
 	if nilableUploadLimitBytes != nil && expectedUploadedBytes > *nilableUploadLimitBytes {
-		return nil, 0, qq.uploadTooLargeError(*nilableUploadLimitBytes)
+		return nil, qq.uploadTooLargeError(*nilableUploadLimitBytes)
 	}
 
 	limitedFileToSave := fileToSave
@@ -386,11 +393,11 @@ func (qq *S3FileSystem) UploadPreparedFileWithExpectedSize(
 	if expectedUploadedBytes > 0 && ctx.IsTenantCtx() {
 		err := qq.EnsureTenantStorageLimit(ctx, expectedUploadedBytes)
 		if err != nil {
-			return nil, 0, err
+			return nil, err
 		}
 	}
 
-	fileInfo, fileSize, err := qq.uploadPreparedFileWithParams(
+	fileInfo, fileSize, contentSHA256, err := qq.uploadPreparedFileWithParams(
 		ctx,
 		limitedFileToSave,
 		prepared.OriginalFilename,
@@ -400,23 +407,26 @@ func (qq *S3FileSystem) UploadPreparedFileWithExpectedSize(
 	)
 	if err != nil {
 		log.Println(err)
-		return nil, 0, err
+		return nil, err
 	}
 
 	if nilableUploadLimitBytes != nil && fileSize > *nilableUploadLimitBytes {
-		return nil, 0, qq.uploadTooLargeError(*nilableUploadLimitBytes)
+		return nil, qq.uploadTooLargeError(*nilableUploadLimitBytes)
 	}
 
-	return fileInfo, fileSize, nil
+	return &PreparedUploadResult{
+		FileInfo:      fileInfo,
+		FileSize:      fileSize,
+		ContentSHA256: contentSHA256,
+	}, nil
 }
 
 func (qq *S3FileSystem) FinalizePreparedUpload(
 	ctx ctxx.Context,
 	prepared *PreparedUpload,
-	fileInfo *minio.UploadInfo,
-	fileSize int64,
+	result *PreparedUploadResult,
 ) error {
-	err := qq.EnsureTenantStorageLimit(ctx, fileSize)
+	err := qq.EnsureTenantStorageLimit(ctx, result.FileSize)
 	if err != nil {
 		return err
 	}
@@ -424,9 +434,10 @@ func (qq *S3FileSystem) FinalizePreparedUpload(
 	ctxWithIncomplete := enttenantschema.WithUnfinishedUploads(ctx)
 	storedFilex := ctx.TenantCtx().TTx.StoredFile.GetX(ctxWithIncomplete, prepared.StoredFileID)
 	storedFilex = storedFilex.Update().
-		SetSize(fileSize).
-		SetSizeInStorage(fileInfo.Size).
-		SetSha256(fileInfo.ChecksumSHA256).
+		SetSize(result.FileSize).
+		SetSizeInStorage(result.FileInfo.Size).
+		SetSha256(result.FileInfo.ChecksumSHA256).
+		SetContentSha256(result.ContentSHA256).
 		SetUploadSucceededAt(time.Now()).
 		SaveX(ctxWithIncomplete)
 
@@ -479,11 +490,11 @@ func (qq *S3FileSystem) saveFile(
 	originalFilename string,
 	storageFilenameWithoutExt string,
 	storagePrefix string,
-) (*minio.UploadInfo, string, int64, error) {
+) (*minio.UploadInfo, string, int64, string, error) {
 	originalFilename = filepath.Clean(originalFilename)
 	if !filenamex.IsAllowed(originalFilename) {
 		log.Println("invalid filename")
-		return nil, "", 0, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
+		return nil, "", 0, "", e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
 	}
 
 	fileExtension := filepath.Ext(originalFilename)
@@ -505,11 +516,11 @@ func (qq *S3FileSystem) saveFile(
 	objectName, err := securejoin.SecureJoin(storagePrefix, storageFilename)
 	if err != nil {
 		log.Println(err)
-		return nil, "", 0, err
+		return nil, "", 0, "", err
 	}
 
 	if qq.bucketName == "" {
-		return nil, "", 0, e.NewHTTPErrorf(http.StatusInternalServerError, "Bucket name is empty.")
+		return nil, "", 0, "", e.NewHTTPErrorf(http.StatusInternalServerError, "Bucket name is empty.")
 	}
 
 	// database contraints should verify that each file just exists once, but this just
@@ -518,7 +529,7 @@ func (qq *S3FileSystem) saveFile(
 	_, err = qq.client.StatObject(ctx, qq.bucketName, objectName, minio.StatObjectOptions{})
 	if err == nil {
 		log.Printf("filename already exists, should never happen, objectName was %s", objectName)
-		return nil, "", 0, e.NewHTTPErrorf(http.StatusInternalServerError, "Filename already exists.")
+		return nil, "", 0, "", e.NewHTTPErrorf(http.StatusInternalServerError, "Filename already exists.")
 	}
 
 	// can maybe be further optimized by using a pipe for each step, but separating
@@ -526,15 +537,16 @@ func (qq *S3FileSystem) saveFile(
 	// benefit, see also:
 	// https://chatgpt.com/c/67f29855-e4ac-8000-9305-a5b63137e799
 	pipeReader, pipeWriter := io.Pipe()
+	resultCh := make(chan savedFileResult, 1)
 	defer func() {
 		err := pipeReader.Close()
 		if err != nil {
 			log.Println(err)
 		}
 	}()
-	var fileSize int64
 	go func() {
 		defer recoverx.Recover("saveFile")
+		hasher := sha256.New()
 
 		var gzipInputWriter io.Writer
 		gzipInputWriter = pipeWriter
@@ -566,7 +578,7 @@ func (qq *S3FileSystem) saveFile(
 
 		gzipWriter := gzip.NewWriter(gzipInputWriter)
 
-		fileSize, err = io.Copy(gzipWriter, fileToSave)
+		fileSize, err := io.Copy(gzipWriter, io.TeeReader(fileToSave, hasher))
 		if err != nil {
 			log.Println(err)
 
@@ -605,6 +617,11 @@ func (qq *S3FileSystem) saveFile(
 		err = pipeWriter.Close()
 		if err != nil {
 			log.Println(err)
+		}
+
+		resultCh <- savedFileResult{
+			fileSize:      fileSize,
+			contentSHA256: hex.EncodeToString(hasher.Sum(nil)),
 		}
 	}()
 
@@ -653,14 +670,16 @@ func (qq *S3FileSystem) saveFile(
 	})
 	if err != nil {
 		log.Println(err)
-		return nil, "", 0, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not save file.")
+		return nil, "", 0, "", e.NewHTTPErrorf(http.StatusInternalServerError, "Could not save file.")
 	}
 
 	// log.Println("debug: 002b")
 
 	// TODO verify checksum?
 
-	return &fileInfo, storageFilename, fileSize, nil
+	result := <-resultCh
+
+	return &fileInfo, storageFilename, result.fileSize, result.contentSHA256, nil
 }
 
 type progressWriter struct {
@@ -747,7 +766,7 @@ func (qq *S3FileSystem) UploadPreparedTemporaryAccountFile(
 		limitedFileToSave = io.LimitReader(fileToSave, limitedBytes)
 	}
 
-	fileInfo, fileSize, err := qq.uploadPreparedFileWithParams(
+	fileInfo, fileSize, _, err := qq.uploadPreparedFileWithParams(
 		ctx,
 		limitedFileToSave,
 		prepared.OriginalFilename,
@@ -773,14 +792,14 @@ func (qq *S3FileSystem) uploadPreparedFileWithParams(
 	storageFilenameWithoutExt string,
 	storagePath string,
 	expectedStorageFilename string,
-) (*minio.UploadInfo, int64, error) {
+) (*minio.UploadInfo, int64, string, error) {
 	x25519Identity, err := qq.x25519Identity(ctx, storagePath)
 	if err != nil {
 		log.Println(err)
-		return nil, 0, err
+		return nil, 0, "", err
 	}
 
-	fileInfo, storageFilename, fileSize, err := qq.saveFile(
+	fileInfo, storageFilename, fileSize, contentSHA256, err := qq.saveFile(
 		ctx,
 		x25519Identity,
 		fileToSave,
@@ -790,15 +809,15 @@ func (qq *S3FileSystem) uploadPreparedFileWithParams(
 	)
 	if err != nil {
 		log.Println(err)
-		return nil, 0, err
+		return nil, 0, "", err
 	}
 
 	if storageFilename != expectedStorageFilename {
 		log.Println("storage filename mismatch", storageFilename, expectedStorageFilename)
-		return nil, 0, e.NewHTTPErrorf(http.StatusInternalServerError, "Storage filename mismatch.")
+		return nil, 0, "", e.NewHTTPErrorf(http.StatusInternalServerError, "Storage filename mismatch.")
 	}
 
-	return fileInfo, fileSize, nil
+	return fileInfo, fileSize, contentSHA256, nil
 }
 
 func (qq *S3FileSystem) FinalizePreparedTemporaryAccountUpload(
@@ -978,7 +997,7 @@ func (qq *S3FileSystem) PersistTemporaryTenantFile(
 
 		// fileSize should be identical because file didn't change
 		// TODO verify that the same?
-		fileInfo, _, _, err := qq.saveFile(
+		fileInfo, _, _, contentSHA256, err := qq.saveFile(
 			ctx,
 			tenantX25519Identity,
 			tmpFile,
@@ -994,6 +1013,7 @@ func (qq *S3FileSystem) PersistTemporaryTenantFile(
 		filex = filex.Update().
 			SetSizeInStorage(fileInfo.Size).
 			SetSha256(fileInfo.ChecksumSHA256).
+			SetContentSha256(contentSHA256).
 			SaveX(ctx)
 	} else {
 		err = e.NewHTTPErrorf(http.StatusInternalServerError, "Could not copy temporary file.")

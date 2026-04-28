@@ -28,6 +28,7 @@ type ListItem struct {
 	Leading        IWidget
 	Headline       IWidget // can also be a link
 	SupportingText *Text
+	Href           string
 
 	// Icon           string // TODO or Text or Icon?
 	// EndIcon        string // TODO or Text or Icon?

@@ -162,6 +162,20 @@ func (_c *StoredFileCreate) SetNillableSha256(v *string) *StoredFileCreate {
 	return _c
 }
 
+// SetContentSha256 sets the "content_sha256" field.
+func (_c *StoredFileCreate) SetContentSha256(v string) *StoredFileCreate {
+	_c.mutation.SetContentSha256(v)
+	return _c
+}
+
+// SetNillableContentSha256 sets the "content_sha256" field if the given value is not nil.
+func (_c *StoredFileCreate) SetNillableContentSha256(v *string) *StoredFileCreate {
+	if v != nil {
+		_c.SetContentSha256(*v)
+	}
+	return _c
+}
+
 // SetMimeType sets the "mime_type" field.
 func (_c *StoredFileCreate) SetMimeType(v string) *StoredFileCreate {
 	_c.mutation.SetMimeType(v)
@@ -484,6 +498,10 @@ func (_c *StoredFileCreate) createSpec() (*StoredFile, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Sha256(); ok {
 		_spec.SetField(storedfile.FieldSha256, field.TypeString, value)
 		_node.Sha256 = value
+	}
+	if value, ok := _c.mutation.ContentSha256(); ok {
+		_spec.SetField(storedfile.FieldContentSha256, field.TypeString, value)
+		_node.ContentSha256 = value
 	}
 	if value, ok := _c.mutation.MimeType(); ok {
 		_spec.SetField(storedfile.FieldMimeType, field.TypeString, value)

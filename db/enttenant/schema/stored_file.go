@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
@@ -33,6 +34,7 @@ func (StoredFile) Fields() []ent.Field {
 		field.Int64("size_in_storage"), // often gzipped
 
 		field.String("sha256").Optional(),
+		field.String("content_sha256").Optional(),
 		field.String("mime_type").Optional(), // was media_type
 
 		field.Enum("storage_type").GoType(storagetype.Unknown),
@@ -62,6 +64,12 @@ func (StoredFile) Edges() []ent.Edge {
 		// Field("file_id").
 		// Unique().
 		// Required(),
+	}
+}
+
+func (StoredFile) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("content_sha256"),
 	}
 }
 

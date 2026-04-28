@@ -517,6 +517,111 @@
             "translation": ""
         },
         {
+            "id": "Duplicate check is still being prepared for this file.",
+            "message": "Duplicate check is still being prepared for this file.",
+            "translation": ""
+        },
+        {
+            "id": "No duplicates found.",
+            "message": "No duplicates found.",
+            "translation": ""
+        },
+        {
+            "id": "Duplicates found",
+            "message": "Duplicates found",
+            "translation": ""
+        },
+        {
+            "id": "This file already exists in the following {Matches} locations:",
+            "message": "This file already exists in the following {Matches} locations:",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Matches",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "len(result.Matches)"
+                }
+            ]
+        },
+        {
+            "id": "Space: {SpaceName}",
+            "message": "Space: {SpaceName}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "SpaceName",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(match.SpaceName)"
+                }
+            ]
+        },
+        {
+            "id": "Folder: {ParentDirName}",
+            "message": "Folder: {ParentDirName}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "ParentDirName",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(match.ParentDirName)"
+                }
+            ]
+        },
+        {
+            "id": "Uploaded {LanguageBCP47}",
+            "message": "Uploaded {LanguageBCP47}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "timex.NewDateTime(match.UploadedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ]
+        },
+        {
+            "id": "Current version {VersionNumber}",
+            "message": "Current version {VersionNumber}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "VersionNumber",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "match.VersionNumber"
+                }
+            ]
+        },
+        {
+            "id": "Version {VersionNumber}",
+            "message": "Version {VersionNumber}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "VersionNumber",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "match.VersionNumber"
+                }
+            ]
+        },
+        {
             "id": "Move",
             "message": "Move",
             "translation": ""
@@ -644,6 +749,16 @@
             "translation": ""
         },
         {
+            "id": "Duplicates",
+            "message": "Duplicates",
+            "translation": ""
+        },
+        {
+            "id": "Could not load duplicates.",
+            "message": "Could not load duplicates.",
+            "translation": ""
+        },
+        {
             "id": "File upload",
             "message": "File upload",
             "translation": ""
@@ -661,66 +776,6 @@
         {
             "id": "Added new version from inbox.",
             "message": "Added new version from inbox.",
-            "translation": ""
-        },
-        {
-            "id": "Source and target must be different files.",
-            "message": "Source and target must be different files.",
-            "translation": ""
-        },
-        {
-            "id": "File does not belong to current space.",
-            "message": "File does not belong to current space.",
-            "translation": ""
-        },
-        {
-            "id": "Cannot merge directories.",
-            "message": "Cannot merge directories.",
-            "translation": ""
-        },
-        {
-            "id": "Source file is deleted.",
-            "message": "Source file is deleted.",
-            "translation": ""
-        },
-        {
-            "id": "Source file has no versions.",
-            "message": "Source file has no versions.",
-            "translation": ""
-        },
-        {
-            "id": "Could not read source version.",
-            "message": "Could not read source version.",
-            "translation": ""
-        },
-        {
-            "id": "Source file has no stored file.",
-            "message": "Source file has no stored file.",
-            "translation": ""
-        },
-        {
-            "id": "Could not read target versions.",
-            "message": "Could not read target versions.",
-            "translation": ""
-        },
-        {
-            "id": "Could not update target file.",
-            "message": "Could not update target file.",
-            "translation": ""
-        },
-        {
-            "id": "Source file is not in inbox.",
-            "message": "Source file is not in inbox.",
-            "translation": ""
-        },
-        {
-            "id": "Could not remove source versions.",
-            "message": "Could not remove source versions.",
-            "translation": ""
-        },
-        {
-            "id": "Could not delete source file.",
-            "message": "Could not delete source file.",
             "translation": ""
         },
         {
@@ -1767,13 +1822,18 @@
             "translation": ""
         },
         {
-            "id": "Mark as done",
-            "message": "Mark as done",
+            "id": "Reload metadata",
+            "message": "Reload metadata",
             "translation": ""
         },
         {
-            "id": "Reload metadata",
-            "message": "Reload metadata",
+            "id": "Delete from inbox",
+            "message": "Delete from inbox",
+            "translation": ""
+        },
+        {
+            "id": "Mark as done",
+            "message": "Mark as done",
             "translation": ""
         },
         {
@@ -1882,6 +1942,16 @@
             "translation": ""
         },
         {
+            "id": "Could not load users.",
+            "message": "Could not load users.",
+            "translation": ""
+        },
+        {
+            "id": "Please reload the page and try again.",
+            "message": "Please reload the page and try again.",
+            "translation": ""
+        },
+        {
             "id": "No unassigned users available.",
             "message": "No unassigned users available.",
             "translation": ""
@@ -1906,6 +1976,16 @@
                     "expr": "ctx.SpaceCtx().Space.Name"
                 }
             ]
+        },
+        {
+            "id": "User is already assigned to this space.",
+            "message": "User is already assigned to this space.",
+            "translation": ""
+        },
+        {
+            "id": "You cannot unassign yourself from a space.",
+            "message": "You cannot unassign yourself from a space.",
+            "translation": ""
         },
         {
             "id": "Unassign user from space",
@@ -2647,11 +2727,6 @@
             "translation": ""
         },
         {
-            "id": "Accepted",
-            "message": "Accepted",
-            "translation": ""
-        },
-        {
             "id": "Active tab",
             "message": "Active tab",
             "translation": ""
@@ -3022,11 +3097,6 @@
             "translation": ""
         },
         {
-            "id": "Pending",
-            "message": "Pending",
-            "translation": ""
-        },
-        {
             "id": "Poland",
             "message": "Poland",
             "translation": ""
@@ -3039,11 +3109,6 @@
         {
             "id": "Pro",
             "message": "Pro",
-            "translation": ""
-        },
-        {
-            "id": "Rejected",
-            "message": "Rejected",
             "translation": ""
         },
         {
@@ -3675,6 +3740,66 @@
             "translation": ""
         },
         {
+            "id": "Source and target must be different files.",
+            "message": "Source and target must be different files.",
+            "translation": ""
+        },
+        {
+            "id": "File does not belong to current space.",
+            "message": "File does not belong to current space.",
+            "translation": ""
+        },
+        {
+            "id": "Cannot merge directories.",
+            "message": "Cannot merge directories.",
+            "translation": ""
+        },
+        {
+            "id": "Source file is deleted.",
+            "message": "Source file is deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Source file has no versions.",
+            "message": "Source file has no versions.",
+            "translation": ""
+        },
+        {
+            "id": "Could not read source version.",
+            "message": "Could not read source version.",
+            "translation": ""
+        },
+        {
+            "id": "Source file has no stored file.",
+            "message": "Source file has no stored file.",
+            "translation": ""
+        },
+        {
+            "id": "Could not read target versions.",
+            "message": "Could not read target versions.",
+            "translation": ""
+        },
+        {
+            "id": "Could not update target file.",
+            "message": "Could not update target file.",
+            "translation": ""
+        },
+        {
+            "id": "Source file is not in inbox.",
+            "message": "Source file is not in inbox.",
+            "translation": ""
+        },
+        {
+            "id": "Could not remove source versions.",
+            "message": "Could not remove source versions.",
+            "translation": ""
+        },
+        {
+            "id": "Could not delete source file.",
+            "message": "Could not delete source file.",
+            "translation": ""
+        },
+        {
             "id": "Folder mode is not enabled.",
             "message": "Folder mode is not enabled.",
             "translation": ""
@@ -4243,6 +4368,11 @@
             "translation": ""
         },
         {
+            "id": "Rejected",
+            "message": "Rejected",
+            "translation": ""
+        },
+        {
             "id": "Expense status",
             "message": "Expense status",
             "translation": ""
@@ -4255,16 +4385,6 @@
         {
             "id": "Person",
             "message": "Person",
-            "translation": ""
-        },
-        {
-            "id": "User is already assigned to this space.",
-            "message": "User is already assigned to this space.",
-            "translation": ""
-        },
-        {
-            "id": "You cannot unassign yourself from a space.",
-            "message": "You cannot unassign yourself from a space.",
             "translation": ""
         },
         {
@@ -4338,9 +4458,9 @@
             "translation": "Maintenance mode"
         },
         {
-            "id": "Maintenance mode is enabled. Please wait until the app ready again.",
-            "message": "Maintenance mode is enabled. Please wait until the app ready again.",
-            "translation": "Maintenance mode is enabled. Please wait until the app ready again."
+            "id": "Maintenance mode is enabled. Please wait until the app is ready again.",
+            "message": "Maintenance mode is enabled. Please wait until the app is ready again.",
+            "translation": "Maintenance mode is enabled. Please wait until the app is ready again."
         },
         {
             "id": "Close",

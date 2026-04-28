@@ -1,11 +1,12 @@
 {{- define "Tab" }}
 	<a
 			{{/* basis-0 flex-grow ensures all tabs have the same width */}}
-            class="
-            	flex flex-grow
+			class="
+			 	flex flex-grow
 				{{ if .IsFlowing }}justify-center{{ else }}w-full basis-0{{ end }}
 				{{ if .IsActive }}text-primary{{ else }}text-on-surface-variant{{ end }}
-            	{{ .GetClass }}
+				{{ if .IsActive }}js-active-tab{{ end }}
+			 	{{ .GetClass }}
 			"
 			href="#" {{/* necessary for pointer mouse icon, is there a better solution? */}}
 

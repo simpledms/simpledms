@@ -36,6 +36,7 @@ type Actions struct {
 	FileAttributesPartial      *FileAttributesPartial
 	FileVersionsPartial        *FileVersionsPartial
 	FileInfoPartial            *FileInfoPartial
+	DuplicateMatchesPartial    *DuplicateMatchesPartial
 	FilePropertiesPartial      *FilePropertiesPartial
 	AddFilePropertyCmd         *AddFilePropertyCmd
 	AddFilePropertyValueDialog *AddFilePropertyValueDialog
@@ -102,6 +103,7 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		FileAttributesPartial:      NewFileAttributesPartial(infra, actions),
 		FileVersionsPartial:        NewFileVersionsPartial(infra, actions),
 		FileInfoPartial:            NewFileInfoPartial(infra, actions),
+		DuplicateMatchesPartial:    NewDuplicateMatchesPartial(infra, actions),
 		FilePropertiesPartial:      NewFilePropertiesPartial(infra, actions),
 		AddFilePropertyCmd:         NewAddFilePropertyCmd(infra, actions),
 		AddFilePropertyValueDialog: NewAddFilePropertyValueDialog(infra, actions),

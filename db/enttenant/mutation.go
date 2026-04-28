@@ -9009,6 +9009,7 @@ type StoredFileMutation struct {
 	size_in_storage                *int64
 	addsize_in_storage             *int64
 	sha256                         *string
+	content_sha256                 *string
 	mime_type                      *string
 	storage_type                   *storagetype.StorageType
 	bucket_name                    *string
@@ -9666,6 +9667,55 @@ func (m *StoredFileMutation) ResetSha256() {
 	delete(m.clearedFields, storedfile.FieldSha256)
 }
 
+// SetContentSha256 sets the "content_sha256" field.
+func (m *StoredFileMutation) SetContentSha256(s string) {
+	m.content_sha256 = &s
+}
+
+// ContentSha256 returns the value of the "content_sha256" field in the mutation.
+func (m *StoredFileMutation) ContentSha256() (r string, exists bool) {
+	v := m.content_sha256
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContentSha256 returns the old "content_sha256" field's value of the StoredFile entity.
+// If the StoredFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StoredFileMutation) OldContentSha256(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContentSha256 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContentSha256 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContentSha256: %w", err)
+	}
+	return oldValue.ContentSha256, nil
+}
+
+// ClearContentSha256 clears the value of the "content_sha256" field.
+func (m *StoredFileMutation) ClearContentSha256() {
+	m.content_sha256 = nil
+	m.clearedFields[storedfile.FieldContentSha256] = struct{}{}
+}
+
+// ContentSha256Cleared returns if the "content_sha256" field was cleared in this mutation.
+func (m *StoredFileMutation) ContentSha256Cleared() bool {
+	_, ok := m.clearedFields[storedfile.FieldContentSha256]
+	return ok
+}
+
+// ResetContentSha256 resets all changes to the "content_sha256" field.
+func (m *StoredFileMutation) ResetContentSha256() {
+	m.content_sha256 = nil
+	delete(m.clearedFields, storedfile.FieldContentSha256)
+}
+
 // SetMimeType sets the "mime_type" field.
 func (m *StoredFileMutation) SetMimeType(s string) {
 	m.mime_type = &s
@@ -10264,7 +10314,7 @@ func (m *StoredFileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *StoredFileMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 21)
 	if m.created_at != nil {
 		fields = append(fields, storedfile.FieldCreatedAt)
 	}
@@ -10297,6 +10347,9 @@ func (m *StoredFileMutation) Fields() []string {
 	}
 	if m.sha256 != nil {
 		fields = append(fields, storedfile.FieldSha256)
+	}
+	if m.content_sha256 != nil {
+		fields = append(fields, storedfile.FieldContentSha256)
 	}
 	if m.mime_type != nil {
 		fields = append(fields, storedfile.FieldMimeType)
@@ -10355,6 +10408,8 @@ func (m *StoredFileMutation) Field(name string) (ent.Value, bool) {
 		return m.SizeInStorage()
 	case storedfile.FieldSha256:
 		return m.Sha256()
+	case storedfile.FieldContentSha256:
+		return m.ContentSha256()
 	case storedfile.FieldMimeType:
 		return m.MimeType()
 	case storedfile.FieldStorageType:
@@ -10404,6 +10459,8 @@ func (m *StoredFileMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldSizeInStorage(ctx)
 	case storedfile.FieldSha256:
 		return m.OldSha256(ctx)
+	case storedfile.FieldContentSha256:
+		return m.OldContentSha256(ctx)
 	case storedfile.FieldMimeType:
 		return m.OldMimeType(ctx)
 	case storedfile.FieldStorageType:
@@ -10507,6 +10564,13 @@ func (m *StoredFileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSha256(v)
+		return nil
+	case storedfile.FieldContentSha256:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContentSha256(v)
 		return nil
 	case storedfile.FieldMimeType:
 		v, ok := value.(string)
@@ -10649,6 +10713,9 @@ func (m *StoredFileMutation) ClearedFields() []string {
 	if m.FieldCleared(storedfile.FieldSha256) {
 		fields = append(fields, storedfile.FieldSha256)
 	}
+	if m.FieldCleared(storedfile.FieldContentSha256) {
+		fields = append(fields, storedfile.FieldContentSha256)
+	}
 	if m.FieldCleared(storedfile.FieldMimeType) {
 		fields = append(fields, storedfile.FieldMimeType)
 	}
@@ -10695,6 +10762,9 @@ func (m *StoredFileMutation) ClearField(name string) error {
 		return nil
 	case storedfile.FieldSha256:
 		m.ClearSha256()
+		return nil
+	case storedfile.FieldContentSha256:
+		m.ClearContentSha256()
 		return nil
 	case storedfile.FieldMimeType:
 		m.ClearMimeType()
@@ -10748,6 +10818,9 @@ func (m *StoredFileMutation) ResetField(name string) error {
 		return nil
 	case storedfile.FieldSha256:
 		m.ResetSha256()
+		return nil
+	case storedfile.FieldContentSha256:
+		m.ResetContentSha256()
 		return nil
 	case storedfile.FieldMimeType:
 		m.ResetMimeType()

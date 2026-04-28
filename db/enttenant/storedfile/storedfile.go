@@ -39,6 +39,8 @@ const (
 	FieldSizeInStorage = "size_in_storage"
 	// FieldSha256 holds the string denoting the sha256 field in the database.
 	FieldSha256 = "sha256"
+	// FieldContentSha256 holds the string denoting the content_sha256 field in the database.
+	FieldContentSha256 = "content_sha256"
 	// FieldMimeType holds the string denoting the mime_type field in the database.
 	FieldMimeType = "mime_type"
 	// FieldStorageType holds the string denoting the storage_type field in the database.
@@ -109,6 +111,7 @@ var Columns = []string{
 	FieldSize,
 	FieldSizeInStorage,
 	FieldSha256,
+	FieldContentSha256,
 	FieldMimeType,
 	FieldStorageType,
 	FieldBucketName,
@@ -226,6 +229,11 @@ func BySizeInStorage(opts ...sql.OrderTermOption) OrderOption {
 // BySha256 orders the results by the sha256 field.
 func BySha256(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSha256, opts...).ToFunc()
+}
+
+// ByContentSha256 orders the results by the content_sha256 field.
+func ByContentSha256(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContentSha256, opts...).ToFunc()
 }
 
 // ByMimeType orders the results by the mime_type field.

@@ -41,6 +41,8 @@ type StoredFile struct {
 	SizeInStorage int64 `json:"size_in_storage,omitempty"`
 	// Sha256 holds the value of the "sha256" field.
 	Sha256 string `json:"sha256,omitempty"`
+	// ContentSha256 holds the value of the "content_sha256" field.
+	ContentSha256 string `json:"content_sha256,omitempty"`
 	// MimeType holds the value of the "mime_type" field.
 	MimeType string `json:"mime_type,omitempty"`
 	// StorageType holds the value of the "storage_type" field.
@@ -127,7 +129,7 @@ func (*StoredFile) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case storedfile.FieldID, storedfile.FieldCreatedBy, storedfile.FieldUpdatedBy, storedfile.FieldSize, storedfile.FieldSizeInStorage:
 			values[i] = new(sql.NullInt64)
-		case storedfile.FieldFilename, storedfile.FieldSha256, storedfile.FieldMimeType, storedfile.FieldBucketName, storedfile.FieldStoragePath, storedfile.FieldStorageFilename, storedfile.FieldTemporaryStoragePath, storedfile.FieldTemporaryStorageFilename:
+		case storedfile.FieldFilename, storedfile.FieldSha256, storedfile.FieldContentSha256, storedfile.FieldMimeType, storedfile.FieldBucketName, storedfile.FieldStoragePath, storedfile.FieldStorageFilename, storedfile.FieldTemporaryStoragePath, storedfile.FieldTemporaryStorageFilename:
 			values[i] = new(sql.NullString)
 		case storedfile.FieldCreatedAt, storedfile.FieldUpdatedAt, storedfile.FieldUploadStartedAt, storedfile.FieldUploadFailedAt, storedfile.FieldUploadSucceededAt, storedfile.FieldCopiedToFinalDestinationAt, storedfile.FieldDeletedTemporaryFileAt:
 			values[i] = new(sql.NullTime)
@@ -221,6 +223,12 @@ func (_m *StoredFile) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field sha256", values[i])
 			} else if value.Valid {
 				_m.Sha256 = value.String
+			}
+		case storedfile.FieldContentSha256:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field content_sha256", values[i])
+			} else if value.Valid {
+				_m.ContentSha256 = value.String
 			}
 		case storedfile.FieldMimeType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -370,6 +378,9 @@ func (_m *StoredFile) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sha256=")
 	builder.WriteString(_m.Sha256)
+	builder.WriteString(", ")
+	builder.WriteString("content_sha256=")
+	builder.WriteString(_m.ContentSha256)
 	builder.WriteString(", ")
 	builder.WriteString("mime_type=")
 	builder.WriteString(_m.MimeType)

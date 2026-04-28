@@ -65,9 +65,9 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 		ocrSucceededAt = wx.Tu(timex.NewDateTime(*filem.Data.OcrSuccessAt).String(ctx.MainCtx().LanguageBCP47))
 	}
 
-	sha256 := wx.Tu("-")
-	if currentVersion.Data.Sha256 != "" {
-		sha256 = wx.Tu(currentVersion.Data.Sha256)
+	contentSHA256 := wx.Tu("-")
+	if currentVersion.Data.ContentSha256 != "" {
+		contentSHA256 = wx.Tu(currentVersion.Data.ContentSha256)
 	}
 
 	items := []*wx.ListItem{
@@ -81,7 +81,7 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 		},
 		{
 			Headline:       wx.T("SHA-256 hash"),
-			SupportingText: sha256,
+			SupportingText: contentSHA256,
 		},
 		{
 			Headline:       wx.T("Original filename"),

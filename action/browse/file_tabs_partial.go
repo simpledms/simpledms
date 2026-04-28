@@ -80,6 +80,7 @@ func (qq *FileTabsPartial) Widget(
 	var activeTabContent renderable.Renderable
 
 	activeTab := strings.ToLower(state.ActiveTab)
+	duplicateTabContent, hasDuplicates := qq.nilableDuplicateTabContent(ctx, fileID)
 
 	switch activeTab {
 	case "metadata", "":
@@ -110,6 +111,16 @@ func (qq *FileTabsPartial) Widget(
 			ctx,
 			qq.actions.FileVersionsPartial.Data(fileID),
 		)
+	case "duplicates":
+		if hasDuplicates {
+			activeTabContent = duplicateTabContent
+		} else {
+			activeTab = ""
+			activeTabContent = qq.actions.FileAttributesPartial.Widget(
+				ctx,
+				qq.actions.FileAttributesPartial.Data(fileID),
+			)
+		}
 	default:
 		log.Println("tab name not supported, was", activeTab)
 
@@ -124,66 +135,103 @@ func (qq *FileTabsPartial) Widget(
 		)
 	}
 
-	tabsID := autil.GenerateID("showFileTabs")
+	tabsID := qq.ID()
+	tabs := []*wx.Tab{
+		{
+			Label: wx.T("Metadata"),
+			HTMXAttrs: wx.HTMXAttrs{
+				HxPost:   qq.Endpoint(),
+				HxVals:   util.JSON(qq.Data(dirID, fileID, "metadata")),
+				HxTarget: "#" + tabsID,
+				HxSwap:   "outerHTML",
+			},
+			IncreasedHeight: true,
+		},
+		{
+			Label: wx.T("Tags"),
+			Badge: qq.actions.Tagging.AssignedTags.Count.Badge(ctx, fileID),
+			HTMXAttrs: wx.HTMXAttrs{
+				HxPost:   qq.Endpoint(),
+				HxVals:   util.JSON(qq.Data(dirID, fileID, "tags")),
+				HxTarget: "#" + tabsID,
+				HxSwap:   "outerHTML",
+			},
+			IncreasedHeight: true,
+		},
+		{
+			Label: wx.T("Fields"),
+			HTMXAttrs: wx.HTMXAttrs{
+				HxPost:   qq.Endpoint(),
+				HxVals:   util.JSON(qq.Data(dirID, fileID, "fields")),
+				HxTarget: "#" + tabsID,
+				HxSwap:   "outerHTML",
+			},
+			IncreasedHeight: true,
+		},
+		{
+			Label: wx.T("Info"),
+			HTMXAttrs: wx.HTMXAttrs{
+				HxPost:   qq.Endpoint(),
+				HxVals:   util.JSON(qq.Data(dirID, fileID, "info")),
+				HxTarget: "#" + tabsID,
+				HxSwap:   "outerHTML",
+			},
+			IncreasedHeight: true,
+		},
+		{
+			Label: wx.T("Versions"),
+			HTMXAttrs: wx.HTMXAttrs{
+				HxPost:   qq.Endpoint(),
+				HxVals:   util.JSON(qq.Data(dirID, fileID, "versions")),
+				HxTarget: "#" + tabsID,
+				HxSwap:   "outerHTML",
+			},
+			IncreasedHeight: true,
+		},
+	}
+	if hasDuplicates {
+		tabs = append(tabs, &wx.Tab{
+			Label: wx.T("Duplicates"),
+			HTMXAttrs: wx.HTMXAttrs{
+				HxPost:   qq.Endpoint(),
+				HxVals:   util.JSON(qq.Data(dirID, fileID, "duplicates")),
+				HxTarget: "#" + tabsID,
+				HxSwap:   "outerHTML",
+			},
+			IncreasedHeight: true,
+		})
+	}
+
 	return &wx.TabBar{
 		Widget: wx.Widget[wx.TabBar]{
 			ID: tabsID,
 		},
-		ActiveTab: activeTab,
-		IsFlowing: true,
-		Tabs: []*wx.Tab{
-			{
-				Label: wx.T("Metadata"),
-				HTMXAttrs: wx.HTMXAttrs{
-					HxPost:   qq.Endpoint(),
-					HxVals:   util.JSON(qq.Data(dirID, fileID, "metadata")),
-					HxTarget: "#" + tabsID,
-					HxSwap:   "outerHTML",
-				},
-				IncreasedHeight: true,
-			},
-			{
-				Label: wx.T("Tags"),
-				Badge: qq.actions.Tagging.AssignedTags.Count.Badge(ctx, fileID),
-				HTMXAttrs: wx.HTMXAttrs{
-					HxPost:   qq.Endpoint(),
-					HxVals:   util.JSON(qq.Data(dirID, fileID, "tags")),
-					HxTarget: "#" + tabsID,
-					HxSwap:   "outerHTML",
-				},
-				IncreasedHeight: true,
-			},
-			{
-				Label: wx.T("Fields"),
-				HTMXAttrs: wx.HTMXAttrs{
-					HxPost:   qq.Endpoint(),
-					HxVals:   util.JSON(qq.Data(dirID, fileID, "fields")),
-					HxTarget: "#" + tabsID,
-					HxSwap:   "outerHTML",
-				},
-				IncreasedHeight: true,
-			},
-			{
-				Label: wx.T("Info"),
-				HTMXAttrs: wx.HTMXAttrs{
-					HxPost:   qq.Endpoint(),
-					HxVals:   util.JSON(qq.Data(dirID, fileID, "info")),
-					HxTarget: "#" + tabsID,
-					HxSwap:   "outerHTML",
-				},
-				IncreasedHeight: true,
-			},
-			{
-				Label: wx.T("Versions"),
-				HTMXAttrs: wx.HTMXAttrs{
-					HxPost:   qq.Endpoint(),
-					HxVals:   util.JSON(qq.Data(dirID, fileID, "versions")),
-					HxTarget: "#" + tabsID,
-					HxSwap:   "outerHTML",
-				},
-				IncreasedHeight: true,
-			},
-		},
+		ActiveTab:        activeTab,
+		IsFlowing:        true,
+		Tabs:             tabs,
 		ActiveTabContent: activeTabContent,
 	}
+}
+
+func (qq *FileTabsPartial) nilableDuplicateTabContent(
+	ctx ctxx.Context,
+	fileID string,
+) (*wx.ScrollableContent, bool) {
+	content, _, hasDuplicates, err := qq.actions.DuplicateMatchesPartial.WidgetWithStatus(
+		ctx,
+		qq.actions.DuplicateMatchesPartial.Data(fileID),
+	)
+	if err != nil {
+		log.Println(err)
+		return &wx.ScrollableContent{
+			MarginY:  true,
+			Children: wx.NewBody(wx.BodyTypeSm, wx.T("Could not load duplicates.")),
+		}, true
+	}
+
+	return content, hasDuplicates
+}
+
+func (qq *FileTabsPartial) ID() string {
+	return "browseFileTabs"
 }

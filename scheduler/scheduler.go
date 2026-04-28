@@ -73,4 +73,8 @@ func (qq *Scheduler) Run(devMode bool, metaPath string, migrationsTenantFS fs.FS
 	go func() {
 		qq.applyOCR()
 	}()
+
+	go func() {
+		qq.backfillContentHashes()
+	}()
 }
