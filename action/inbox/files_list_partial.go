@@ -32,6 +32,10 @@ type FilesListPartialState struct {
 	SortBy          string `url:"sort_by,omitempty"` // TODO enum
 }
 
+func (qq *FilesListPartialState) isSortedByDate() bool {
+	return qq.SortBy == "" || qq.SortBy == "newestFirst" || qq.SortBy == "oldestFirst"
+}
+
 type FilesListPartial struct {
 	infra   *common.Infra
 	actions *Actions
@@ -191,6 +195,7 @@ func (qq *FilesListPartial) filesList(
 			route.Inbox,
 			child,
 			child.PublicID.String() == data.SelectedFileID,
+			state.FilesListPartialState.isSortedByDate(),
 		))
 	}
 

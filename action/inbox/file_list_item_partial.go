@@ -12,6 +12,7 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/timex"
 )
 
 type FileListItemPartialData struct {
@@ -47,13 +48,17 @@ func (qq *FileListItemPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 		return err
 	}
 
-	filex := ctx.TenantCtx().TTx.File.Query().WithChildren().Where(file.ID(data.FileID)).OnlyX(ctx)
+	filex := ctx.TenantCtx().TTx.File.Query().
+		WithChildren().
+		Where(file.ID(data.FileID)).
+		OnlyX(ctx)
+	state := autil.StateX[InboxPageState](rw, req)
 
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
 		// TODO is hrefFn correct?
-		qq.Widget(ctx, route.Inbox, filex, false), // TODO isSelected via state or data?
+		qq.Widget(ctx, route.Inbox, filex, false, state.FilesListPartialState.isSortedByDate()),
 	)
 }
 
@@ -65,6 +70,7 @@ func (qq *FileListItemPartial) Widget(
 	// listState *ListFilesPartialState,
 	fileWithChildren *enttenant.File,
 	isSelected bool,
+	showUploadDate bool,
 ) *wx.ListItem {
 	/*trailing := &IconButton{
 		Icon:     "more_vert",
@@ -72,22 +78,29 @@ func (qq *FileListItemPartial) Widget(
 	}*/
 
 	htmxAttrs := wx.HTMXAttrs{
-		HxTarget:  "#details",
-		HxSwap:    "outerHTML",
-		HxGet:     hrefFn(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID.String()),
+		HxTarget: "#details",
+		HxSwap:   "outerHTML",
+		HxGet: hrefFn(
+			ctx.TenantCtx().TenantID,
+			ctx.SpaceCtx().SpaceID,
+			fileWithChildren.PublicID.String(),
+		),
 		HxHeaders: autil.PreserveStateHeader(),
+	}
+	var supportingText *wx.Text
+	if showUploadDate {
+		supportingText = wx.Tf(
+			"Uploaded %s",
+			timex.NewDateTime(fileWithChildren.CreatedAt).String(ctx.MainCtx().LanguageBCP47),
+		)
 	}
 
 	return &wx.ListItem{
 		RadioGroupName: "fileListRadioGroup",
 		Leading:        wx.NewIcon("description").SmallPadding(),
 		Headline:       wx.T(fileWithChildren.Name),
-		/*SupportingText: wx.Tf(
-			"%s, %s",
-			qq.infra.FileRepo.GetXX(fileWithChildren).CurrentVersion(ctx).SizeString(),
-			fileWithChildren.ModifiedAt.Format("02. January 06"),
-		),*/
-		HTMXAttrs: htmxAttrs,
+		SupportingText: supportingText,
+		HTMXAttrs:      htmxAttrs,
 		// Trailing:   trailing,
 		IsSelected:  isSelected,
 		ContextMenu: NewFileContextMenuWidget(qq.actions).Widget(ctx, fileWithChildren),

@@ -16,6 +16,7 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/timex"
 )
 
 type FileListItemPartialData struct {
@@ -53,12 +54,24 @@ func (qq *FileListItemPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 		return err
 	}
 
-	filex := ctx.TenantCtx().TTx.File.Query().WithChildren().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
+	filex := ctx.TenantCtx().TTx.File.Query().
+		WithChildren().
+		Where(file.PublicID(entx.NewCIText(data.FileID))).
+		OnlyX(ctx)
+	state := autil.StateX[ListDirPartialState](rw, req)
 
 	qq.infra.Renderer().RenderX(
 		rw,
 		ctx,
-		qq.Widget(ctx, data.CurrentDirID, filex, "", false, false), // TODO is selected? and hide context menu
+		qq.Widget(
+			ctx,
+			data.CurrentDirID,
+			filex,
+			"",
+			false,
+			false,
+			state.isSortedByDate(),
+		), // TODO is selected? and hide context menu
 	)
 	return nil
 }
@@ -76,11 +89,27 @@ func (qq *FileListItemPartial) Widget(
 	isSelected bool,
 	// hideContextMenu bool,
 	showBreadcrumbs bool,
+	showUploadDate bool,
 ) *wx.ListItem {
 	if filex.IsDirectory {
-		return qq.DirectoryListItem(ctx, currentDirID, filex, parentFullPath, showBreadcrumbs)
+		return qq.DirectoryListItem(
+			ctx,
+			currentDirID,
+			filex,
+			parentFullPath,
+			showBreadcrumbs,
+			showUploadDate,
+		)
 	}
-	return qq.fileListItem(ctx, currentDirID, filex, parentFullPath, isSelected, showBreadcrumbs)
+	return qq.fileListItem(
+		ctx,
+		currentDirID,
+		filex,
+		parentFullPath,
+		isSelected,
+		showBreadcrumbs,
+		showUploadDate,
+	)
 }
 
 // TODO make private again
@@ -90,8 +119,10 @@ func (qq *FileListItemPartial) DirectoryListItem(
 	fileWithChildren *enttenant.File,
 	parentFullPath string, // only necessary with breadcrumbs
 	showBreadcrumbs bool,
+	showCreationDate bool,
 ) *wx.ListItem {
 	supportingText := ""
+	hasBreadcrumbs := false
 	if showBreadcrumbs {
 		if parentFullPath == "" {
 			// if ID is used instead of ParentID, lastElem must be removed in next step (filepath.Dir)
@@ -100,7 +131,12 @@ func (qq *FileListItemPartial) DirectoryListItem(
 
 		currentDirPath := qq.infra.FileSystem().FileTree().FullPathByPublicIDX(ctx, currentDirID)
 		if parentFullPath == currentDirPath {
-			supportingText = qq.supportingTextDirectory(fileWithChildren, supportingText)
+			supportingText = qq.supportingTextDirectory(
+				ctx,
+				fileWithChildren,
+				supportingText,
+				showCreationDate,
+			)
 		} else {
 			parentFullPath = strings.TrimPrefix(parentFullPath, currentDirPath+string(os.PathSeparator))
 
@@ -109,9 +145,21 @@ func (qq *FileListItemPartial) DirectoryListItem(
 				breadcrumbElems = append(breadcrumbElems, strings.Split(parentFullPath, string(os.PathSeparator))...)
 			}
 			supportingText = strings.Join(breadcrumbElems, " » ")
+			hasBreadcrumbs = true
 		}
 	} else {
-		supportingText = qq.supportingTextDirectory(fileWithChildren, supportingText)
+		supportingText = qq.supportingTextDirectory(
+			ctx,
+			fileWithChildren,
+			supportingText,
+			showCreationDate,
+		)
+	}
+	if hasBreadcrumbs && showCreationDate {
+		supportingText = strings.Join(
+			[]string{qq.createdDateText(ctx, fileWithChildren), supportingText},
+			" - ",
+		)
 	}
 
 	icon := wx.NewIcon("folder")
@@ -145,7 +193,12 @@ func (qq *FileListItemPartial) DirectoryListItem(
 	}
 }
 
-func (qq *FileListItemPartial) supportingTextDirectory(fileWithChildren *enttenant.File, supportingText string) string {
+func (qq *FileListItemPartial) supportingTextDirectory(
+	ctx ctxx.Context,
+	fileWithChildren *enttenant.File,
+	supportingText string,
+	showCreationDate bool,
+) string {
 	// TODO is this faster than queries above? probably
 	var dirCount, fileCount int64
 	for _, childOfChild := range fileWithChildren.Edges.Children {
@@ -157,17 +210,25 @@ func (qq *FileListItemPartial) supportingTextDirectory(fileWithChildren *enttena
 	}
 
 	var supportingTextArr []string
+	if showCreationDate {
+		supportingTextArr = append(supportingTextArr, qq.createdDateText(ctx, fileWithChildren))
+	}
+	hasChildren := false
 	if dirCount > 1 {
 		supportingTextArr = append(supportingTextArr, fmt.Sprintf("%d directories", dirCount))
+		hasChildren = true
 	} else if dirCount == 1 {
 		supportingTextArr = append(supportingTextArr, fmt.Sprintf("%d directory", dirCount))
+		hasChildren = true
 	}
 	if fileCount > 1 {
 		supportingTextArr = append(supportingTextArr, fmt.Sprintf("%d files", fileCount))
+		hasChildren = true
 	} else if fileCount == 1 {
 		supportingTextArr = append(supportingTextArr, fmt.Sprintf("%d file", fileCount))
+		hasChildren = true
 	}
-	if len(supportingTextArr) == 0 {
+	if !hasChildren {
 		supportingTextArr = append(supportingTextArr, "Empty directory")
 	}
 
@@ -183,12 +244,18 @@ func (qq *FileListItemPartial) fileListItem(
 	isSelected bool,
 	// hideContextMenu bool,
 	showBreadcrumbs bool,
+	showUploadDate bool,
 ) *wx.ListItem {
 	htmxAttrs := wx.HTMXAttrs{
 		HxTarget: "#details",
 		HxSwap:   "outerHTML",
 		// dirID and not fileWithChildren.ID so that it works nicely with `recursive` filter
-		HxGet:     route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, currentDirID, fileWithChildren.PublicID.String()),
+		HxGet: route.BrowseFile(
+			ctx.TenantCtx().TenantID,
+			ctx.SpaceCtx().SpaceID,
+			currentDirID,
+			fileWithChildren.PublicID.String(),
+		),
 		HxHeaders: autil.PreserveStateHeader(),
 	}
 
@@ -204,7 +271,7 @@ func (qq *FileListItemPartial) fileListItem(
 
 		currentDirPath := qq.infra.FileSystem().FileTree().FullPathByPublicIDX(ctx, currentDirID)
 		if parentFullPath == currentDirPath {
-			supportingText = qq.supportingTextFile(ctx, filexx, supportingText)
+			supportingText = qq.supportingTextFile(ctx, filexx, supportingText, showUploadDate)
 		} else {
 			parentFullPath = strings.TrimPrefix(parentFullPath, currentDirPath+string(os.PathSeparator))
 
@@ -216,7 +283,13 @@ func (qq *FileListItemPartial) fileListItem(
 			hasBreadcrumbs = true
 		}
 	} else {
-		supportingText = qq.supportingTextFile(ctx, filexx, supportingText)
+		supportingText = qq.supportingTextFile(ctx, filexx, supportingText, showUploadDate)
+	}
+	if hasBreadcrumbs && showUploadDate {
+		supportingText = strings.Join(
+			[]string{supportingText, qq.uploadDateText(ctx, filexx)},
+			" - ",
+		)
 	}
 
 	withDocumentType := hasBreadcrumbs
@@ -234,13 +307,39 @@ func (qq *FileListItemPartial) fileListItem(
 	}
 }
 
-func (qq *FileListItemPartial) supportingTextFile(ctx ctxx.Context, filexx *filemodel.File, supportingText string) string {
+func (qq *FileListItemPartial) supportingTextFile(
+	ctx ctxx.Context,
+	filexx *filemodel.File,
+	supportingText string,
+	showUploadDate bool,
+) string {
+	var parts []string
+	if showUploadDate {
+		parts = append(parts, qq.uploadDateText(ctx, filexx))
+	}
 	if filexx.Data.DocumentTypeID != 0 {
 		documentTypex, err := filexx.Data.Edges.DocumentTypeOrErr()
 		if err != nil {
 			documentTypex = filexx.Data.QueryDocumentType().OnlyX(ctx)
 		}
-		supportingText = documentTypex.Name
+		parts = append(parts, documentTypex.Name)
+	}
+	if len(parts) > 0 {
+		supportingText = strings.Join(parts, " - ")
 	}
 	return supportingText
+}
+
+func (qq *FileListItemPartial) uploadDateText(ctx ctxx.Context, filexx *filemodel.File) string {
+	return wx.Tf(
+		"Uploaded %s",
+		timex.NewDateTime(filexx.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47),
+	).String(ctx)
+}
+
+func (qq *FileListItemPartial) createdDateText(ctx ctxx.Context, filex *enttenant.File) string {
+	return wx.Tf(
+		"Created %s",
+		timex.NewDateTime(filex.CreatedAt).String(ctx.MainCtx().LanguageBCP47),
+	).String(ctx)
 }

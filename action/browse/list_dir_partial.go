@@ -66,6 +66,10 @@ type ListDirPartialState struct {
 	// ViewType viewtype.ViewType
 }
 
+func (qq *ListDirPartialState) isSortedByDate() bool {
+	return qq.SortBy == "newestFirst" || qq.SortBy == "oldestFirst"
+}
+
 type ListDirPartial struct {
 	infra            *common.Infra
 	actions          *Actions
@@ -463,6 +467,7 @@ func (qq *ListDirPartial) filesListItems(
 			child,
 			fullPath,
 			state.IsRecursive,
+			state.isSortedByDate(),
 		))
 	}
 	for _, child := range children {
@@ -483,6 +488,7 @@ func (qq *ListDirPartial) filesListItems(
 			child.PublicID.String() == data.SelectedFileID,
 			// data.SelectedFileID != 0,
 			state.IsRecursive && ctx.SpaceCtx().Space.IsFolderMode,
+			state.isSortedByDate(),
 		))
 	}
 
