@@ -52,8 +52,7 @@
 				class="@container/list-item state-layer-on-surface
 					min-h-14 flex gap-x-4 flex-row items-center
 					{{ if ne .SupportingText nil }}h-[4.5rem]{{ end }}
-					{{ if .HTMXAttrs.IsLink | or (ne .Href "") }}cursor-pointer{{ else if .ContextMenu }}cursor-context-menu{{ end }}"
-                {{ if ne .Href "" }}onclick="window.location.href='{{ .Href }}'"{{ end }}
+					{{ if .HTMXAttrs.IsLink }}cursor-pointer{{ else if .ContextMenu }}cursor-context-menu{{ end }}"
 				{{ template "HTMXAttrs" .HTMXAttrs }}
 				{{/* if .HTMXAttrs.IsLink }}role="link"{{ end */}}
 		>

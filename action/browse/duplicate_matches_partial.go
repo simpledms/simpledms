@@ -137,17 +137,17 @@ func (qq *DuplicateMatchesPartial) matchListItem(
 	ctx ctxx.Context,
 	match *filemodel.DuplicateMatch,
 ) *wx.ListItem {
-	href := route.BrowseFile(
-		match.TenantPublicID,
-		match.SpacePublicID,
-		match.ParentDirPublicID,
-		match.FilePublicID,
-	)
-
 	return &wx.ListItem{
-		Href:           href,
 		Headline:       wx.Tu(match.FileName),
 		SupportingText: qq.matchSupportingText(ctx, match),
+		HTMXAttrs: wx.HTMXAttrs{
+			HxGet: route.BrowseFile(
+				match.TenantPublicID,
+				match.SpacePublicID,
+				match.ParentDirPublicID,
+				match.FilePublicID,
+			),
+		},
 	}
 }
 
