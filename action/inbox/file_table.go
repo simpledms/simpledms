@@ -75,6 +75,9 @@ func (qq *FilesListPartial) fileTableColumns(
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnName) {
 		columns = append(columns, &wx.TableColumn{Label: wx.T("Name")})
 	}
+	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnOriginalFilename) {
+		columns = append(columns, &wx.TableColumn{Label: wx.T("Original filename")})
+	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnDocumentType) {
 		columns = append(columns, &wx.TableColumn{Label: wx.T("Type")})
 	}
@@ -110,36 +113,54 @@ func (qq *FilesListPartial) fileTableRow(
 	columnData *fileTableColumnData,
 ) *wx.TableRow {
 	cells := []*wx.TableCell{}
+	hasData := false
+	addCell := func(value string) {
+		if strings.TrimSpace(value) != "" {
+			hasData = true
+		}
+		cells = append(cells, &wx.TableCell{Child: wx.Tu(value)})
+	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnName) {
 		cells = append(cells, &wx.TableCell{Child: qq.fileTableNameCell(filex)})
+		hasData = true
+	}
+	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnOriginalFilename) {
+		addCell(filex.Name)
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnDocumentType) {
-		cells = append(cells, &wx.TableCell{Child: wx.Tu(columnData.documentTypes[filex.DocumentTypeID])})
+		addCell(columnData.documentTypes[filex.DocumentTypeID])
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnMetadata) {
-		cells = append(cells, &wx.TableCell{Child: wx.Tu(columnData.metadata[filex.ID])})
+		addCell(columnData.metadata[filex.ID])
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnDate) {
-		cells = append(cells, &wx.TableCell{Child: wx.Tu(timex.NewDateTime(filex.CreatedAt).String(ctx.MainCtx().LanguageBCP47))})
+		addCell(timex.NewDateTime(filex.CreatedAt).String(ctx.MainCtx().LanguageBCP47))
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnSize) {
-		cells = append(cells, &wx.TableCell{Child: wx.Tu(columnData.sizes[filex.ID])})
+		addCell(columnData.sizes[filex.ID])
 	}
 	if spaceColumns.ShowTags {
-		cells = append(cells, &wx.TableCell{Child: wx.Tu(strings.Join(columnData.tags[filex.ID], ", "))})
+		addCell(strings.Join(columnData.tags[filex.ID], ", "))
 	}
 	for _, propertyx := range propertyColumns {
-		cells = append(cells, &wx.TableCell{Child: wx.Tu(columnData.properties[filex.ID][propertyx.ID])})
+		addCell(columnData.properties[filex.ID][propertyx.ID])
 	}
 	for _, tagGroup := range tagGroupColumns {
-		cells = append(cells, &wx.TableCell{Child: wx.Tu(strings.Join(columnData.tagGroups[filex.ID][tagGroup.ID], ", "))})
+		addCell(strings.Join(columnData.tagGroups[filex.ID][tagGroup.ID], ", "))
+	}
+	if len(cells) > 0 && !hasData {
+		cells = []*wx.TableCell{{
+			Child:   wx.T("No data available."),
+			ColSpan: len(cells),
+		}}
 	}
 
 	return &wx.TableRow{
-		HTMXAttrs:   qq.fileTableRowHTMXAttrs(ctx, filex),
-		Cells:       cells,
-		ContextMenu: NewFileContextMenuWidget(qq.actions).Widget(ctx, filex),
-		IsSelected:  filex.PublicID.String() == data.SelectedFileID,
+		HTMXAttrs:    qq.fileTableRowHTMXAttrs(ctx, filex),
+		Cells:        cells,
+		ContextMenu:  NewFileContextMenuWidget(qq.actions).Widget(ctx, filex),
+		IsSelected:   filex.PublicID.String() == data.SelectedFileID,
+		IsSelectable: true,
 	}
 }
 

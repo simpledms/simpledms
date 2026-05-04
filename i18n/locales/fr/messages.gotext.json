@@ -3066,6 +3066,13 @@
             "fuzzy": true
         },
         {
+            "id": "No data available.",
+            "message": "No data available.",
+            "translation": "Aucune donnée disponible.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "No files available yet.",
             "message": "No files available yet.",
             "translation": "Aucun fichier disponible pour le moment.",

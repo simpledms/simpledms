@@ -1,5 +1,6 @@
 package widget
 
 type TableCell struct {
-	Child IWidget
+	Child   IWidget
+	ColSpan int
 }

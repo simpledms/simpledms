@@ -16,15 +16,41 @@
 				{{ render .GetContext .Rows }}
 			</tbody>
 		</table>
+		<script>
+			window.simpledmsClearSelectedTableRows = function(container) {
+				if (!container) {
+					return;
+				}
+				container.querySelectorAll('.js-table-row-selected').forEach((row) => {
+					row.classList.remove(
+						'js-table-row-selected',
+						'bg-secondary-container',
+						'text-on-secondary-container'
+					);
+					row.classList.add('state-layer-on-surface', 'text-on-surface');
+				});
+			};
+			window.simpledmsSelectTableRow = function(row) {
+				window.simpledmsClearSelectedTableRows(row.closest('tbody'));
+				row.classList.remove('state-layer-on-surface', 'text-on-surface');
+				row.classList.add(
+					'js-table-row-selected',
+					'bg-secondary-container',
+					'text-on-secondary-container'
+				);
+			};
+		</script>
 	</div>
 {{ end }}
 
 {{- define "TableRow" }}
 	<tr id="{{ .GetID }}"
-		class="group/table-row h-11 state-layer-on-surface {{ if .IsSelected }}bg-secondary-container text-on-secondary-container{{ else }}text-on-surface{{ end }} {{ if .HTMXAttrs.IsLink }}cursor-pointer{{ else if .ContextMenu }}cursor-context-menu{{ end }}"
+		class="js-table-row group/table-row h-11 {{ if .IsSelected }}js-table-row-selected bg-secondary-container text-on-secondary-container{{ else }}state-layer-on-surface text-on-surface{{ end }} {{ if .HTMXAttrs.IsLink }}cursor-pointer{{ else if .ContextMenu }}cursor-context-menu{{ end }}"
+		{{ if .IsSelectable }}onclick="window.simpledmsSelectTableRow(this)"{{ end }}
 		{{ template "HTMXAttrs" .HTMXAttrs }}>
 		{{ range $index, $cell := .Cells }}
-			<td class="body-sm max-w-80 whitespace-nowrap overflow-hidden text-ellipsis px-3 py-2 border-b border-outline-variant">
+			<td class="body-sm max-w-80 whitespace-nowrap overflow-hidden text-ellipsis px-3 py-2 border-b border-outline-variant"
+				{{ if gt $cell.ColSpan 0 }}colspan="{{ $cell.ColSpan }}"{{ end }}>
 				{{ if eq $index 0 }}{{ render $.GetContext $.ContextMenu }}{{ end }}
 				{{ render $.GetContext $cell.Child }}
 			</td>

@@ -1001,6 +1001,13 @@
             "fuzzy": true
         },
         {
+            "id": "Metadata",
+            "message": "Metadata",
+            "translation": "Metadaten",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
             "id": "Date",
             "message": "Date",
             "translation": "Datum",
@@ -1022,6 +1029,13 @@
             "fuzzy": true
         },
         {
+            "id": "No data available.",
+            "message": "No data available.",
+            "translation": "Keine Daten verfügbar.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Yes",
             "message": "Yes",
             "translation": ""
@@ -1030,13 +1044,6 @@
             "id": "No",
             "message": "No",
             "translation": ""
-        },
-        {
-            "id": "Metadata",
-            "message": "Metadata",
-            "translation": "Metadaten",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
         },
         {
             "id": "Info",
@@ -1716,6 +1723,13 @@
             "fuzzy": true
         },
         {
+            "id": "Account",
+            "message": "Account",
+            "translation": "Konto",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
             "id": "Open tasks",
             "message": "Open tasks",
             "translation": "Offene Aufgaben",
@@ -1944,13 +1958,6 @@
             "id": "No password set",
             "message": "No password set",
             "translation": "Kein Passwort gesetzt",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Account",
-            "message": "Account",
-            "translation": "Konto",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -2199,6 +2206,13 @@
             "message": "Users",
             "translation": "Benutzer",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be an admin to access system settings.",
+            "message": "You must be an admin to access system settings.",
+            "translation": "Du musst Admin sein, um auf Systemeinstellungen zuzugreifen.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -6047,6 +6061,13 @@
             "id": "About SimpleDMS",
             "message": "About SimpleDMS",
             "translation": "Über SimpleDMS",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenants",
+            "message": "Tenants",
+            "translation": "Tenants",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

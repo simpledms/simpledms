@@ -4,7 +4,8 @@ type TableRow struct {
 	Widget[TableRow]
 	HTMXAttrs
 
-	Cells       []*TableCell
-	ContextMenu *Menu
-	IsSelected  bool
+	Cells        []*TableCell
+	ContextMenu  *Menu
+	IsSelected   bool
+	IsSelectable bool
 }

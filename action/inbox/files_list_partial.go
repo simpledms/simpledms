@@ -378,6 +378,7 @@ func (qq *FilesListPartial) fileListViewMenu(
 		label  *wx.Text
 	}{
 		{filelistpreference.FileListColumnName, wx.T("Name")},
+		{filelistpreference.FileListColumnOriginalFilename, wx.T("Original filename")},
 		{filelistpreference.FileListColumnDocumentType, wx.T("Type")},
 		{filelistpreference.FileListColumnMetadata, wx.T("Metadata")},
 		{filelistpreference.FileListColumnDate, wx.T("Date")},

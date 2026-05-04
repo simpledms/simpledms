@@ -759,6 +759,11 @@
             "translation": ""
         },
         {
+            "id": "Metadata",
+            "message": "Metadata",
+            "translation": ""
+        },
+        {
             "id": "Date",
             "message": "Date",
             "translation": ""
@@ -774,6 +779,11 @@
             "translation": ""
         },
         {
+            "id": "No data available.",
+            "message": "No data available.",
+            "translation": ""
+        },
+        {
             "id": "Yes",
             "message": "Yes",
             "translation": ""
@@ -781,11 +791,6 @@
         {
             "id": "No",
             "message": "No",
-            "translation": ""
-        },
-        {
-            "id": "Metadata",
-            "message": "Metadata",
             "translation": ""
         },
         {
@@ -1316,6 +1321,11 @@
             "translation": ""
         },
         {
+            "id": "Account",
+            "message": "Account",
+            "translation": ""
+        },
+        {
             "id": "Open tasks",
             "message": "Open tasks",
             "translation": ""
@@ -1493,11 +1503,6 @@
         {
             "id": "No password set",
             "message": "No password set",
-            "translation": ""
-        },
-        {
-            "id": "Account",
-            "message": "Account",
             "translation": ""
         },
         {
@@ -1683,6 +1688,11 @@
         {
             "id": "Users",
             "message": "Users",
+            "translation": ""
+        },
+        {
+            "id": "You must be an admin to access system settings.",
+            "message": "You must be an admin to access system settings.",
             "translation": ""
         },
         {
@@ -4550,6 +4560,11 @@
         {
             "id": "About SimpleDMS",
             "message": "About SimpleDMS",
+            "translation": ""
+        },
+        {
+            "id": "Tenants",
+            "message": "Tenants",
             "translation": ""
         },
         {

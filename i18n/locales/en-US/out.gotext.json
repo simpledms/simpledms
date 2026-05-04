@@ -1017,6 +1017,13 @@
             "fuzzy": true
         },
         {
+            "id": "Metadata",
+            "message": "Metadata",
+            "translation": "Metadata",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Date",
             "message": "Date",
             "translation": "Date",
@@ -1038,6 +1045,13 @@
             "fuzzy": true
         },
         {
+            "id": "No data available.",
+            "message": "No data available.",
+            "translation": "No data available.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Yes",
             "message": "Yes",
             "translation": "Yes",
@@ -1048,13 +1062,6 @@
             "id": "No",
             "message": "No",
             "translation": "No",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Metadata",
-            "message": "Metadata",
-            "translation": "Metadata",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1752,6 +1759,13 @@
             "fuzzy": true
         },
         {
+            "id": "Account",
+            "message": "Account",
+            "translation": "Account",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Open tasks",
             "message": "Open tasks",
             "translation": "Open tasks",
@@ -1980,13 +1994,6 @@
             "id": "No password set",
             "message": "No password set",
             "translation": "No password set",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Account",
-            "message": "Account",
-            "translation": "Account",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2234,6 +2241,13 @@
             "id": "Users",
             "message": "Users",
             "translation": "Users",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be an admin to access system settings.",
+            "message": "You must be an admin to access system settings.",
+            "translation": "You must be an admin to access system settings.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6111,6 +6125,13 @@
             "id": "About SimpleDMS",
             "message": "About SimpleDMS",
             "translation": "About SimpleDMS",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenants",
+            "message": "Tenants",
+            "translation": "Tenants",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

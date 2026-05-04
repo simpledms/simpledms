@@ -39,6 +39,10 @@ func TestFileListPreferencesToggleColumns(t *testing.T) {
 	if !preferences.HasBuiltInColumn(FileListColumnSize) {
 		t.Fatal("expected size column to be enabled")
 	}
+	preferences.ToggleBuiltInColumn(FileListColumnOriginalFilename)
+	if !preferences.HasBuiltInColumn(FileListColumnOriginalFilename) {
+		t.Fatal("expected original filename column to be enabled")
+	}
 }
 
 func TestFileListPreferencesSpaceColumns(t *testing.T) {
