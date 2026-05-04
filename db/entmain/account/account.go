@@ -12,6 +12,7 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	"github.com/simpledms/simpledms/model/main/filelistpreference"
 )
 
 const (
@@ -41,6 +42,8 @@ const (
 	FieldLastName = "last_name"
 	// FieldLanguage holds the string denoting the language field in the database.
 	FieldLanguage = "language"
+	// FieldFileListPreferences holds the string denoting the file_list_preferences field in the database.
+	FieldFileListPreferences = "file_list_preferences"
 	// FieldSubscribedToNewsletterAt holds the string denoting the subscribed_to_newsletter_at field in the database.
 	FieldSubscribedToNewsletterAt = "subscribed_to_newsletter_at"
 	// FieldPasswordSalt holds the string denoting the password_salt field in the database.
@@ -141,6 +144,7 @@ var Columns = []string{
 	FieldFirstName,
 	FieldLastName,
 	FieldLanguage,
+	FieldFileListPreferences,
 	FieldSubscribedToNewsletterAt,
 	FieldPasswordSalt,
 	FieldPasswordHash,
@@ -191,6 +195,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultPublicID holds the default value on creation for the "public_id" field.
 	DefaultPublicID func() entx.CIText
+	// DefaultFileListPreferences holds the default value on creation for the "file_list_preferences" field.
+	DefaultFileListPreferences filelistpreference.FileListPreferences
 	// DefaultPasswordSalt holds the default value on creation for the "password_salt" field.
 	DefaultPasswordSalt string
 	// DefaultPasswordHash holds the default value on creation for the "password_hash" field.

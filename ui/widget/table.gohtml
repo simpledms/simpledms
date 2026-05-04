@@ -1,0 +1,36 @@
+{{- define "Table" }}
+	<div id="{{ .GetID }}"
+		 class="{{ if .HideOnMobile }}hidden md:block{{ end }} overflow-x-auto px-2 py-2"
+		 {{ template "HTMXAttrs" .HTMXAttrs }}>
+		<table class="w-full min-w-max border-separate border-spacing-0 text-left">
+			<thead>
+				<tr class="label-md text-on-surface-variant">
+					{{ range .Columns }}
+						<th class="sticky top-0 bg-surface-container-low px-3 py-2 font-medium border-b border-outline-variant">
+							{{ render $.GetContext .Label }}
+						</th>
+					{{ end }}
+				</tr>
+			</thead>
+			<tbody>
+				{{ render .GetContext .Rows }}
+			</tbody>
+		</table>
+	</div>
+{{ end }}
+
+{{- define "TableRow" }}
+	<tr id="{{ .GetID }}"
+		class="group/table-row h-11 state-layer-on-surface {{ if .IsSelected }}bg-secondary-container text-on-secondary-container{{ else }}text-on-surface{{ end }} {{ if .HTMXAttrs.IsLink }}cursor-pointer{{ else if .ContextMenu }}cursor-context-menu{{ end }}"
+		{{ template "HTMXAttrs" .HTMXAttrs }}>
+		{{ range $index, $cell := .Cells }}
+			<td class="body-sm max-w-80 whitespace-nowrap overflow-hidden text-ellipsis px-3 py-2 border-b border-outline-variant">
+				{{ if eq $index 0 }}{{ render $.GetContext $.ContextMenu }}{{ end }}
+				{{ render $.GetContext $cell.Child }}
+			</td>
+		{{ end }}
+	</tr>
+	{{ if .ContextMenu }}
+		{{ template "contextMenuScript" . }}
+	{{ end }}
+{{ end }}

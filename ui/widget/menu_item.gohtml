@@ -53,6 +53,18 @@
 			/>
 			{{ template "menuItem" . }}
 		</label>
+	{{ else if .IsTypeCheckbox }}
+		<label>
+			<input
+					type="checkbox"
+					name="{{ .CheckboxName }}"
+					value="{{ .CheckboxValue }}"
+					id="checkbox-{{ .GetID }}"
+					{{ if .IsChecked }}checked{{ end }}
+					class="hidden"
+			/>
+			{{ template "menuItem" . }}
+		</label>
 	{{ else }}
 		{{ template "menuItem" . }}
 	{{ end }}

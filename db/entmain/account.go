@@ -14,6 +14,7 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	"github.com/simpledms/simpledms/model/main/filelistpreference"
 )
 
 // Account is the model entity for the Account schema.
@@ -43,6 +44,8 @@ type Account struct {
 	LastName string `json:"last_name,omitempty"`
 	// Language holds the value of the "language" field.
 	Language language.Language `json:"language,omitempty"`
+	// FileListPreferences holds the value of the "file_list_preferences" field.
+	FileListPreferences filelistpreference.FileListPreferences `json:"file_list_preferences,omitempty"`
 	// SubscribedToNewsletterAt holds the value of the "subscribed_to_newsletter_at" field.
 	SubscribedToNewsletterAt *time.Time `json:"subscribed_to_newsletter_at,omitempty"`
 	// PasswordSalt holds the value of the "password_salt" field.
@@ -157,7 +160,7 @@ func (*Account) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case account.FieldTwoFactorAuthRecoveryCodeHashes, account.FieldPasskeyRecoveryCodeHashes:
+		case account.FieldFileListPreferences, account.FieldTwoFactorAuthRecoveryCodeHashes, account.FieldPasskeyRecoveryCodeHashes:
 			values[i] = new([]byte)
 		case account.FieldPublicID, account.FieldEmail:
 			values[i] = new(entx.CIText)
@@ -259,6 +262,14 @@ func (_m *Account) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field language", values[i])
 			} else if value != nil {
 				_m.Language = *value
+			}
+		case account.FieldFileListPreferences:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field file_list_preferences", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.FileListPreferences); err != nil {
+					return fmt.Errorf("unmarshal field file_list_preferences: %w", err)
+				}
 			}
 		case account.FieldSubscribedToNewsletterAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -453,6 +464,9 @@ func (_m *Account) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("language=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Language))
+	builder.WriteString(", ")
+	builder.WriteString("file_list_preferences=")
+	builder.WriteString(fmt.Sprintf("%v", _m.FileListPreferences))
 	builder.WriteString(", ")
 	if v := _m.SubscribedToNewsletterAt; v != nil {
 		builder.WriteString("subscribed_to_newsletter_at=")

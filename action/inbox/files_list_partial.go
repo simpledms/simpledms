@@ -1,16 +1,23 @@
 package inbox
 
 import (
+	"html/template"
 	"log"
+	"strconv"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
 
+	"github.com/simpledms/simpledms/action/browse"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/property"
+	"github.com/simpledms/simpledms/db/enttenant/tag"
+	"github.com/simpledms/simpledms/model/main/filelistpreference"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/partial"
@@ -183,6 +190,7 @@ func (qq *FilesListPartial) filesList(
 	searchResultQuery := qq.filesQuery(ctx, state)
 	// TODO .Limit(25) // needs hint if enabled
 	children := searchResultQuery.AllX(ctx)
+	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
 
 	for _, child := range children {
 		if child.IsDirectory {
@@ -202,6 +210,17 @@ func (qq *FilesListPartial) filesList(
 	var content wx.IWidget
 	content = &wx.List{
 		Children: fileListItems,
+	}
+	if preferences.IsTable() && len(fileListItems) > 0 {
+		content = &wx.View{
+			Children: []wx.IWidget{
+				&wx.List{
+					Children:      fileListItems,
+					HideOnDesktop: true,
+				},
+				qq.fileTable(ctx, data, children, preferences),
+			},
+		}
 	}
 
 	if len(fileListItems) == 0 {
@@ -317,6 +336,7 @@ func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.
 		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
 		Title:            wx.T("Inbox"),
 		Actions: []wx.IWidget{
+			qq.fileListViewButton(ctx),
 			&wx.IconButton{
 				Icon:     "sort",
 				Tooltip:  wx.T("Sort files"),
@@ -334,5 +354,187 @@ func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.
 				HxOn: event.SearchQueryUpdated.HxOnWithQueryParam("input", "q"),
 			},
 		},
+	}
+}
+
+func (qq *FilesListPartial) fileListViewButton(ctx ctxx.Context) *wx.IconButton {
+	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
+	return &wx.IconButton{
+		Icon:    "view_agenda",
+		Tooltip: wx.T("Change file list view"),
+		Children: qq.fileListViewMenu(
+			ctx,
+			preferences,
+			autil.QueryHeader(qq.Endpoint(), qq.Data("")),
+		),
+	}
+}
+
+func (qq *FilesListPartial) fileListViewMenu(
+	ctx ctxx.Context,
+	preferences *filelistpreference.FileListPreferences,
+	hxHeaders template.JS,
+) *wx.Menu {
+	items := []*wx.MenuItem{
+		qq.fileListViewMenuItem(wx.T("List"), "list", preferences.ViewMode == filelistpreference.FileListViewModeList, hxHeaders),
+		qq.fileListViewMenuItem(wx.T("Table"), "table", preferences.ViewMode == filelistpreference.FileListViewModeTable, hxHeaders),
+		&wx.MenuItem{IsDivider: true},
+	}
+
+	for _, column := range []struct {
+		column filelistpreference.FileListColumn
+		label  *wx.Text
+	}{
+		{filelistpreference.FileListColumnName, wx.T("Name")},
+		{filelistpreference.FileListColumnDocumentType, wx.T("Type")},
+		{filelistpreference.FileListColumnMetadata, wx.T("Metadata")},
+		{filelistpreference.FileListColumnDate, wx.T("Date")},
+		{filelistpreference.FileListColumnSize, wx.T("Size")},
+	} {
+		items = append(items, qq.fileListColumnMenuItem(
+			column.label,
+			column.column.String(),
+			preferences.HasBuiltInColumn(column.column),
+			hxHeaders,
+		))
+	}
+
+	spaceColumns := preferences.SpaceColumnsFor(ctx.SpaceCtx().SpaceID)
+	showTags := !spaceColumns.ShowTags
+	items = append(items, qq.fileListTagsMenuItem(wx.T("Tags"), showTags, spaceColumns.ShowTags, hxHeaders))
+
+	tagGroups := ctx.SpaceCtx().Space.QueryTags().
+		Where(tag.TypeEQ(tagtype.Group)).
+		Order(tag.ByName()).
+		AllX(ctx)
+	if len(tagGroups) > 0 {
+		items = append(items, &wx.MenuItem{IsDivider: true})
+	}
+	for _, tagGroup := range tagGroups {
+		items = append(items, qq.fileListTagGroupMenuItem(
+			wx.Tu(tagGroup.Name),
+			tagGroup.ID,
+			spaceColumns.HasTagGroupID(tagGroup.ID),
+			hxHeaders,
+		))
+	}
+
+	properties := ctx.SpaceCtx().TTx.Property.Query().Order(property.ByName()).AllX(ctx)
+	if len(properties) > 0 {
+		items = append(items, &wx.MenuItem{IsDivider: true})
+	}
+	for _, propertyx := range properties {
+		items = append(items, qq.fileListPropertyMenuItem(
+			wx.Tu(propertyx.Name),
+			propertyx.ID,
+			spaceColumns.HasPropertyID(propertyx.ID),
+			hxHeaders,
+		))
+	}
+
+	return &wx.Menu{
+		Widget: wx.Widget[wx.Menu]{
+			ID: "inboxFileListViewMenu",
+		},
+		Position: wx.PositionLeft,
+		Items:    items,
+	}
+}
+
+func (qq *FilesListPartial) fileListViewMenuItem(
+	label *wx.Text,
+	viewMode string,
+	isSelected bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
+	data.ViewMode = viewMode
+	return &wx.MenuItem{
+		Label:          label,
+		RadioGroupName: "FileListViewMode",
+		RadioValue:     viewMode,
+		IsSelected:     isSelected,
+		HTMXAttrs:      qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *FilesListPartial) fileListColumnMenuItem(
+	label *wx.Text,
+	column string,
+	isChecked bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
+	data.BuiltInColumn = column
+	return &wx.MenuItem{
+		Label:         label,
+		CheckboxName:  "FileListColumn",
+		CheckboxValue: column,
+		IsChecked:     isChecked,
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *FilesListPartial) fileListTagsMenuItem(
+	label *wx.Text,
+	showTags bool,
+	isChecked bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
+	data.ShowTags = &showTags
+	return &wx.MenuItem{
+		Label:         label,
+		CheckboxName:  "FileListTags",
+		CheckboxValue: "tags",
+		IsChecked:     isChecked,
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *FilesListPartial) fileListPropertyMenuItem(
+	label *wx.Text,
+	propertyID int64,
+	isChecked bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
+	data.PropertyID = propertyID
+	return &wx.MenuItem{
+		Label:         label,
+		CheckboxName:  "FileListProperty",
+		CheckboxValue: strconv.FormatInt(propertyID, 10),
+		IsChecked:     isChecked,
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *FilesListPartial) fileListTagGroupMenuItem(
+	label *wx.Text,
+	tagGroupID int64,
+	isChecked bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
+	data.TagGroupID = tagGroupID
+	return &wx.MenuItem{
+		Label:         label,
+		CheckboxName:  "FileListTagGroup",
+		CheckboxValue: strconv.FormatInt(tagGroupID, 10),
+		IsChecked:     isChecked,
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *FilesListPartial) fileListPreferencesMenuItemAttrs(
+	data *browse.UpdateFileListPreferencesCmdData,
+	hxHeaders template.JS,
+) wx.HTMXAttrs {
+	return wx.HTMXAttrs{
+		HxPost:    qq.actions.Browse.UpdateFileListPreferencesCmd.Endpoint(),
+		HxVals:    util.JSON(data),
+		HxHeaders: hxHeaders,
+		HxTarget:  "#innerContent",
+		HxSwap:    "innerHTML",
 	}
 }

@@ -20,6 +20,7 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	"github.com/simpledms/simpledms/model/main/filelistpreference"
 )
 
 // AccountCreate is the builder for creating a Account entity.
@@ -148,6 +149,20 @@ func (_c *AccountCreate) SetLastName(v string) *AccountCreate {
 // SetLanguage sets the "language" field.
 func (_c *AccountCreate) SetLanguage(v language.Language) *AccountCreate {
 	_c.mutation.SetLanguage(v)
+	return _c
+}
+
+// SetFileListPreferences sets the "file_list_preferences" field.
+func (_c *AccountCreate) SetFileListPreferences(v filelistpreference.FileListPreferences) *AccountCreate {
+	_c.mutation.SetFileListPreferences(v)
+	return _c
+}
+
+// SetNillableFileListPreferences sets the "file_list_preferences" field if the given value is not nil.
+func (_c *AccountCreate) SetNillableFileListPreferences(v *filelistpreference.FileListPreferences) *AccountCreate {
+	if v != nil {
+		_c.SetFileListPreferences(*v)
+	}
 	return _c
 }
 
@@ -491,6 +506,10 @@ func (_c *AccountCreate) defaults() error {
 		v := account.DefaultPublicID()
 		_c.mutation.SetPublicID(v)
 	}
+	if _, ok := _c.mutation.FileListPreferences(); !ok {
+		v := account.DefaultFileListPreferences
+		_c.mutation.SetFileListPreferences(v)
+	}
 	if _, ok := _c.mutation.PasswordSalt(); !ok {
 		v := account.DefaultPasswordSalt
 		_c.mutation.SetPasswordSalt(v)
@@ -573,6 +592,9 @@ func (_c *AccountCreate) check() error {
 		if err := account.LanguageValidator(v); err != nil {
 			return &ValidationError{Name: "language", err: fmt.Errorf(`entmain: validator failed for field "Account.language": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.FileListPreferences(); !ok {
+		return &ValidationError{Name: "file_list_preferences", err: errors.New(`entmain: missing required field "Account.file_list_preferences"`)}
 	}
 	if _, ok := _c.mutation.PasswordSalt(); !ok {
 		return &ValidationError{Name: "password_salt", err: errors.New(`entmain: missing required field "Account.password_salt"`)}
@@ -690,6 +712,10 @@ func (_c *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Language(); ok {
 		_spec.SetField(account.FieldLanguage, field.TypeEnum, value)
 		_node.Language = value
+	}
+	if value, ok := _c.mutation.FileListPreferences(); ok {
+		_spec.SetField(account.FieldFileListPreferences, field.TypeJSON, value)
+		_node.FileListPreferences = value
 	}
 	if value, ok := _c.mutation.SubscribedToNewsletterAt(); ok {
 		_spec.SetField(account.FieldSubscribedToNewsletterAt, field.TypeTime, value)

@@ -23,6 +23,7 @@ var (
 		{Name: "first_name", Type: field.TypeString},
 		{Name: "last_name", Type: field.TypeString},
 		{Name: "language", Type: field.TypeEnum, Enums: []string{"Unknown", "German", "English"}},
+		{Name: "file_list_preferences", Type: field.TypeJSON, Default: "{}"},
 		{Name: "subscribed_to_newsletter_at", Type: field.TypeTime, Nullable: true},
 		{Name: "password_salt", Type: field.TypeString, Default: ""},
 		{Name: "password_hash", Type: field.TypeString, Default: ""},

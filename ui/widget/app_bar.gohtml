@@ -30,9 +30,9 @@
 					{{ render $ctx .GetSearch }}
 				</div>
 			</div>
-			<div class="exp:flex group-has-[.js-detail-content>div]/list-detail:hidden exp:justify-self-end items-center">
+			<div class="flex group-has-[.js-detail-content>div]/list-detail:hidden exp:justify-self-end items-center">
                 {{ with .Actions }}
-					<div class="text-on-surface-variant">
+					<div class="flex items-center gap-x-4 text-on-surface-variant">
                         {{ render $ctx . }}
 					</div>
                 {{ end }}

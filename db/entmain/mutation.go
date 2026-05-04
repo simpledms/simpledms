@@ -28,6 +28,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/plan"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/model/main/filelistpreference"
 )
 
 const (
@@ -70,6 +71,7 @@ type AccountMutation struct {
 	first_name                                 *string
 	last_name                                  *string
 	language                                   *language.Language
+	file_list_preferences                      *filelistpreference.FileListPreferences
 	subscribed_to_newsletter_at                *time.Time
 	password_salt                              *string
 	password_hash                              *string
@@ -724,6 +726,42 @@ func (m *AccountMutation) OldLanguage(ctx context.Context) (v language.Language,
 // ResetLanguage resets all changes to the "language" field.
 func (m *AccountMutation) ResetLanguage() {
 	m.language = nil
+}
+
+// SetFileListPreferences sets the "file_list_preferences" field.
+func (m *AccountMutation) SetFileListPreferences(flp filelistpreference.FileListPreferences) {
+	m.file_list_preferences = &flp
+}
+
+// FileListPreferences returns the value of the "file_list_preferences" field in the mutation.
+func (m *AccountMutation) FileListPreferences() (r filelistpreference.FileListPreferences, exists bool) {
+	v := m.file_list_preferences
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFileListPreferences returns the old "file_list_preferences" field's value of the Account entity.
+// If the Account object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AccountMutation) OldFileListPreferences(ctx context.Context) (v filelistpreference.FileListPreferences, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFileListPreferences is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFileListPreferences requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFileListPreferences: %w", err)
+	}
+	return oldValue.FileListPreferences, nil
+}
+
+// ResetFileListPreferences resets all changes to the "file_list_preferences" field.
+func (m *AccountMutation) ResetFileListPreferences() {
+	m.file_list_preferences = nil
 }
 
 // SetSubscribedToNewsletterAt sets the "subscribed_to_newsletter_at" field.
@@ -1693,7 +1731,7 @@ func (m *AccountMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AccountMutation) Fields() []string {
-	fields := make([]string, 0, 26)
+	fields := make([]string, 0, 27)
 	if m.created_at != nil {
 		fields = append(fields, account.FieldCreatedAt)
 	}
@@ -1726,6 +1764,9 @@ func (m *AccountMutation) Fields() []string {
 	}
 	if m.language != nil {
 		fields = append(fields, account.FieldLanguage)
+	}
+	if m.file_list_preferences != nil {
+		fields = append(fields, account.FieldFileListPreferences)
 	}
 	if m.subscribed_to_newsletter_at != nil {
 		fields = append(fields, account.FieldSubscribedToNewsletterAt)
@@ -1802,6 +1843,8 @@ func (m *AccountMutation) Field(name string) (ent.Value, bool) {
 		return m.LastName()
 	case account.FieldLanguage:
 		return m.Language()
+	case account.FieldFileListPreferences:
+		return m.FileListPreferences()
 	case account.FieldSubscribedToNewsletterAt:
 		return m.SubscribedToNewsletterAt()
 	case account.FieldPasswordSalt:
@@ -1863,6 +1906,8 @@ func (m *AccountMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldLastName(ctx)
 	case account.FieldLanguage:
 		return m.OldLanguage(ctx)
+	case account.FieldFileListPreferences:
+		return m.OldFileListPreferences(ctx)
 	case account.FieldSubscribedToNewsletterAt:
 		return m.OldSubscribedToNewsletterAt(ctx)
 	case account.FieldPasswordSalt:
@@ -1978,6 +2023,13 @@ func (m *AccountMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLanguage(v)
+		return nil
+	case account.FieldFileListPreferences:
+		v, ok := value.(filelistpreference.FileListPreferences)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFileListPreferences(v)
 		return nil
 	case account.FieldSubscribedToNewsletterAt:
 		v, ok := value.(time.Time)
@@ -2249,6 +2301,9 @@ func (m *AccountMutation) ResetField(name string) error {
 		return nil
 	case account.FieldLanguage:
 		m.ResetLanguage()
+		return nil
+	case account.FieldFileListPreferences:
+		m.ResetFileListPreferences()
 		return nil
 	case account.FieldSubscribedToNewsletterAt:
 		m.ResetSubscribedToNewsletterAt()

@@ -22,6 +22,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/model/main/filelistpreference"
 )
 
 // named Account to differantiate from User in enttenant
@@ -40,6 +41,9 @@ func (Account) Fields() []ent.Field {
 		field.String("first_name"), // TODO call_name or nickname?
 		field.String("last_name"),
 		field.Enum("language").GoType(language.Unknown),
+		field.JSON("file_list_preferences", filelistpreference.FileListPreferences{}).
+			Default(filelistpreference.DefaultFileListPreferences()).
+			Annotations(entsql.Default("{}")),
 		// TODO phone_number?
 
 		field.Time("subscribed_to_newsletter_at").Nillable().Optional(),

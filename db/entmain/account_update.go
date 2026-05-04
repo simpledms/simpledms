@@ -23,6 +23,7 @@ import (
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	"github.com/simpledms/simpledms/model/main/filelistpreference"
 )
 
 // AccountUpdate is the builder for updating Account entities.
@@ -185,6 +186,20 @@ func (_u *AccountUpdate) SetLanguage(v language.Language) *AccountUpdate {
 func (_u *AccountUpdate) SetNillableLanguage(v *language.Language) *AccountUpdate {
 	if v != nil {
 		_u.SetLanguage(*v)
+	}
+	return _u
+}
+
+// SetFileListPreferences sets the "file_list_preferences" field.
+func (_u *AccountUpdate) SetFileListPreferences(v filelistpreference.FileListPreferences) *AccountUpdate {
+	_u.mutation.SetFileListPreferences(v)
+	return _u
+}
+
+// SetNillableFileListPreferences sets the "file_list_preferences" field if the given value is not nil.
+func (_u *AccountUpdate) SetNillableFileListPreferences(v *filelistpreference.FileListPreferences) *AccountUpdate {
+	if v != nil {
+		_u.SetFileListPreferences(*v)
 	}
 	return _u
 }
@@ -754,6 +769,9 @@ func (_u *AccountUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.Language(); ok {
 		_spec.SetField(account.FieldLanguage, field.TypeEnum, value)
 	}
+	if value, ok := _u.mutation.FileListPreferences(); ok {
+		_spec.SetField(account.FieldFileListPreferences, field.TypeJSON, value)
+	}
 	if value, ok := _u.mutation.SubscribedToNewsletterAt(); ok {
 		_spec.SetField(account.FieldSubscribedToNewsletterAt, field.TypeTime, value)
 	}
@@ -1268,6 +1286,20 @@ func (_u *AccountUpdateOne) SetLanguage(v language.Language) *AccountUpdateOne {
 func (_u *AccountUpdateOne) SetNillableLanguage(v *language.Language) *AccountUpdateOne {
 	if v != nil {
 		_u.SetLanguage(*v)
+	}
+	return _u
+}
+
+// SetFileListPreferences sets the "file_list_preferences" field.
+func (_u *AccountUpdateOne) SetFileListPreferences(v filelistpreference.FileListPreferences) *AccountUpdateOne {
+	_u.mutation.SetFileListPreferences(v)
+	return _u
+}
+
+// SetNillableFileListPreferences sets the "file_list_preferences" field if the given value is not nil.
+func (_u *AccountUpdateOne) SetNillableFileListPreferences(v *filelistpreference.FileListPreferences) *AccountUpdateOne {
+	if v != nil {
+		_u.SetFileListPreferences(*v)
 	}
 	return _u
 }
@@ -1866,6 +1898,9 @@ func (_u *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err er
 	}
 	if value, ok := _u.mutation.Language(); ok {
 		_spec.SetField(account.FieldLanguage, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.FileListPreferences(); ok {
+		_spec.SetField(account.FieldFileListPreferences, field.TypeJSON, value)
 	}
 	if value, ok := _u.mutation.SubscribedToNewsletterAt(); ok {
 		_spec.SetField(account.FieldSubscribedToNewsletterAt, field.TypeTime, value)

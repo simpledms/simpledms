@@ -49,7 +49,8 @@ type Actions struct {
 	RenameFileCmd *RenameFileCmd
 	MoveFileCmd   *MoveFileCmd
 
-	FileListItemPartial *FileListItemPartial
+	FileListItemPartial          *FileListItemPartial
+	UpdateFileListPreferencesCmd *UpdateFileListPreferencesCmd
 
 	// SearchList *SearchList
 
@@ -115,7 +116,8 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		RenameFileCmd: NewRenameFileCmd(infra, actions),
 		MoveFileCmd:   NewMoveFileCmd(infra, actions),
 
-		FileListItemPartial: NewFileListItemPartial(infra, actions),
+		FileListItemPartial:          NewFileListItemPartial(infra, actions),
+		UpdateFileListPreferencesCmd: NewUpdateFileListPreferencesCmd(infra, actions),
 
 		// SearchList: NewSearchList(infra, actions),
 

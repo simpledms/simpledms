@@ -915,6 +915,21 @@
             "translation": "Gelöscht um"
         },
         {
+            "id": "Created {LanguageBCP47}",
+            "message": "Created {LanguageBCP47}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "timex.NewDateTime(filex.CreatedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ]
+        },
+        {
             "id": "rendering failed",
             "message": "rendering failed",
             "translation": "Rendering fehlgeschlagen",
@@ -965,9 +980,37 @@
             "fuzzy": true
         },
         {
-            "id": "Metadata",
-            "message": "Metadata",
-            "translation": "Metadaten",
+            "id": "Loading more...",
+            "message": "Loading more...",
+            "translation": "Lade mehr...",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Name",
+            "message": "Name",
+            "translation": "Name",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Type",
+            "message": "Type",
+            "translation": "Typ",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Date",
+            "message": "Date",
+            "translation": "Datum",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Size",
+            "message": "Size",
+            "translation": "Grösse",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -975,6 +1018,23 @@
             "id": "Tags",
             "message": "Tags",
             "translation": "Tags",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Yes",
+            "message": "Yes",
+            "translation": ""
+        },
+        {
+            "id": "No",
+            "message": "No",
+            "translation": ""
+        },
+        {
+            "id": "Metadata",
+            "message": "Metadata",
+            "translation": "Metadaten",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -1161,13 +1221,6 @@
             "fuzzy": true
         },
         {
-            "id": "Loading more...",
-            "message": "Loading more...",
-            "translation": "Lade mehr...",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "Back to parent folder",
             "message": "Back to parent folder",
             "translation": "Zurück zum übergeordneten Ordner",
@@ -1197,6 +1250,28 @@
                 }
             ],
             "fuzzy": true
+        },
+        {
+            "id": "Sort files",
+            "message": "Sort files",
+            "translation": "Dateien sortieren",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Change file list view",
+            "message": "Change file list view",
+            "translation": ""
+        },
+        {
+            "id": "List",
+            "message": "List",
+            "translation": ""
+        },
+        {
+            "id": "Table",
+            "message": "Table",
+            "translation": ""
         },
         {
             "id": "No fields available yet.",
@@ -1427,6 +1502,21 @@
             "translation": "Dokumenttyp ausgewählt.",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
+        },
+        {
+            "id": "Newest first",
+            "message": "Newest first",
+            "translation": "Neueste zuerst"
+        },
+        {
+            "id": "Oldest first",
+            "message": "Oldest first",
+            "translation": "Älteste zuerst"
+        },
+        {
+            "id": "Sort by name",
+            "message": "Sort by name",
+            "translation": "Sortieren nach Name"
         },
         {
             "id": "Not a ZIP archive.",
@@ -2453,13 +2543,6 @@
             "translatorComment": "Translated from English by Junie"
         },
         {
-            "id": "Sort files",
-            "message": "Sort files",
-            "translation": "Dateien sortieren",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Search in «Inbox»",
             "message": "Search in «Inbox»",
             "translation": "In «Inbox» suchen",
@@ -2510,21 +2593,6 @@
                 }
             ],
             "fuzzy": true
-        },
-        {
-            "id": "Newest first",
-            "message": "Newest first",
-            "translation": "Neueste zuerst"
-        },
-        {
-            "id": "Oldest first",
-            "message": "Oldest first",
-            "translation": "Älteste zuerst"
-        },
-        {
-            "id": "Sort by name",
-            "message": "Sort by name",
-            "translation": "Sortieren nach Name"
         },
         {
             "id": "Assign user to space",
@@ -3355,13 +3423,6 @@
             "fuzzy": true
         },
         {
-            "id": "Name",
-            "message": "Name",
-            "translation": "Name",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "Notes",
             "message": "Notes",
             "translation": "Notizen",
@@ -3613,6 +3674,11 @@
             "fuzzy": true
         },
         {
+            "id": "Built in column",
+            "message": "Built in column",
+            "translation": ""
+        },
+        {
             "id": "Bulgaria",
             "message": "Bulgaria",
             "translation": "Bulgarien",
@@ -3693,13 +3759,6 @@
             "message": "Czech republic",
             "translation": "Tschechien",
             "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Date",
-            "message": "Date",
-            "translation": "Datum",
-            "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
         {
@@ -4128,6 +4187,11 @@
             "fuzzy": true
         },
         {
+            "id": "Show tags",
+            "message": "Show tags",
+            "translation": ""
+        },
+        {
             "id": "Simple",
             "message": "Simple",
             "translation": "Einfach",
@@ -4238,13 +4302,6 @@
             "fuzzy": true
         },
         {
-            "id": "Type",
-            "message": "Type",
-            "translation": "Typ",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "Url",
             "message": "Url",
             "translation": "URL",
@@ -4292,6 +4349,21 @@
             "translation": "Versionsnummer",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "View mode",
+            "message": "View mode",
+            "translation": ""
+        },
+        {
+            "id": "Properties",
+            "message": "Properties",
+            "translation": ""
+        },
+        {
+            "id": "Sizes",
+            "message": "Sizes",
+            "translation": ""
         },
         {
             "id": "Sign up",

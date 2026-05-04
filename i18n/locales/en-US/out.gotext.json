@@ -929,6 +929,23 @@
             "fuzzy": true
         },
         {
+            "id": "Created {LanguageBCP47}",
+            "message": "Created {LanguageBCP47}",
+            "translation": "Created {LanguageBCP47}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "timex.NewDateTime(filex.CreatedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "rendering failed",
             "message": "rendering failed",
             "translation": "rendering failed",
@@ -979,9 +996,37 @@
             "fuzzy": true
         },
         {
-            "id": "Metadata",
-            "message": "Metadata",
-            "translation": "Metadata",
+            "id": "Loading more...",
+            "message": "Loading more...",
+            "translation": "Loading more...",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Name",
+            "message": "Name",
+            "translation": "Name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Type",
+            "message": "Type",
+            "translation": "Type",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Date",
+            "message": "Date",
+            "translation": "Date",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Size",
+            "message": "Size",
+            "translation": "Size",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -989,6 +1034,27 @@
             "id": "Tags",
             "message": "Tags",
             "translation": "Tags",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Yes",
+            "message": "Yes",
+            "translation": "Yes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No",
+            "message": "No",
+            "translation": "No",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Metadata",
+            "message": "Metadata",
+            "translation": "Metadata",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1175,13 +1241,6 @@
             "fuzzy": true
         },
         {
-            "id": "Loading more...",
-            "message": "Loading more...",
-            "translation": "Loading more...",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Back to parent folder",
             "message": "Back to parent folder",
             "translation": "Back to parent folder",
@@ -1210,6 +1269,34 @@
                     "expr": "dir.Data.Name"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "Sort files",
+            "message": "Sort files",
+            "translation": "Sort files",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Change file list view",
+            "message": "Change file list view",
+            "translation": "Change file list view",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "List",
+            "message": "List",
+            "translation": "List",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Table",
+            "message": "Table",
+            "translation": "Table",
+            "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
@@ -1439,6 +1526,27 @@
             "id": "Document type selected.",
             "message": "Document type selected.",
             "translation": "Document type selected.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Newest first",
+            "message": "Newest first",
+            "translation": "Newest first",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Oldest first",
+            "message": "Oldest first",
+            "translation": "Oldest first",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sort by name",
+            "message": "Sort by name",
+            "translation": "Sort by name",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2472,13 +2580,6 @@
             "fuzzy": true
         },
         {
-            "id": "Sort files",
-            "message": "Sort files",
-            "translation": "Sort files",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Search in «Inbox»",
             "message": "Search in «Inbox»",
             "translation": "Search in «Inbox»",
@@ -2528,27 +2629,6 @@
                     "expr": "filex.Data.Name"
                 }
             ],
-            "fuzzy": true
-        },
-        {
-            "id": "Newest first",
-            "message": "Newest first",
-            "translation": "Newest first",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Oldest first",
-            "message": "Oldest first",
-            "translation": "Oldest first",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Sort by name",
-            "message": "Sort by name",
-            "translation": "Sort by name",
-            "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
@@ -3384,13 +3464,6 @@
             "fuzzy": true
         },
         {
-            "id": "Name",
-            "message": "Name",
-            "translation": "Name",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Notes",
             "message": "Notes",
             "translation": "Notes",
@@ -3642,6 +3715,13 @@
             "fuzzy": true
         },
         {
+            "id": "Built in column",
+            "message": "Built in column",
+            "translation": "Built in column",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Bulgaria",
             "message": "Bulgaria",
             "translation": "Bulgaria",
@@ -3722,13 +3802,6 @@
             "id": "Czech republic",
             "message": "Czech republic",
             "translation": "Czech republic",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Date",
-            "message": "Date",
-            "translation": "Date",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4160,6 +4233,13 @@
             "fuzzy": true
         },
         {
+            "id": "Show tags",
+            "message": "Show tags",
+            "translation": "Show tags",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Simple",
             "message": "Simple",
             "translation": "Simple",
@@ -4272,13 +4352,6 @@
             "fuzzy": true
         },
         {
-            "id": "Type",
-            "message": "Type",
-            "translation": "Type",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Url",
             "message": "Url",
             "translation": "Url",
@@ -4324,6 +4397,27 @@
             "id": "Version number",
             "message": "Version number",
             "translation": "Version number",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "View mode",
+            "message": "View mode",
+            "translation": "View mode",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Properties",
+            "message": "Properties",
+            "translation": "Properties",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Sizes",
+            "message": "Sizes",
+            "translation": "Sizes",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

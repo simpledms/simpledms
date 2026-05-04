@@ -17,6 +17,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/filelistpreference"
 
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"
@@ -61,56 +62,60 @@ func init() {
 	accountDescPublicID := accountMixinFields2[0].Descriptor()
 	// account.DefaultPublicID holds the default value on creation for the public_id field.
 	account.DefaultPublicID = accountDescPublicID.Default.(func() entx.CIText)
+	// accountDescFileListPreferences is the schema descriptor for file_list_preferences field.
+	accountDescFileListPreferences := accountFields[5].Descriptor()
+	// account.DefaultFileListPreferences holds the default value on creation for the file_list_preferences field.
+	account.DefaultFileListPreferences = accountDescFileListPreferences.Default.(filelistpreference.FileListPreferences)
 	// accountDescPasswordSalt is the schema descriptor for password_salt field.
-	accountDescPasswordSalt := accountFields[6].Descriptor()
+	accountDescPasswordSalt := accountFields[7].Descriptor()
 	// account.DefaultPasswordSalt holds the default value on creation for the password_salt field.
 	account.DefaultPasswordSalt = accountDescPasswordSalt.Default.(string)
 	// accountDescPasswordHash is the schema descriptor for password_hash field.
-	accountDescPasswordHash := accountFields[7].Descriptor()
+	accountDescPasswordHash := accountFields[8].Descriptor()
 	// account.DefaultPasswordHash holds the default value on creation for the password_hash field.
 	account.DefaultPasswordHash = accountDescPasswordHash.Default.(string)
 	// accountDescTemporaryPasswordSalt is the schema descriptor for temporary_password_salt field.
-	accountDescTemporaryPasswordSalt := accountFields[8].Descriptor()
+	accountDescTemporaryPasswordSalt := accountFields[9].Descriptor()
 	// account.DefaultTemporaryPasswordSalt holds the default value on creation for the temporary_password_salt field.
 	account.DefaultTemporaryPasswordSalt = accountDescTemporaryPasswordSalt.Default.(string)
 	// accountDescTemporaryPasswordHash is the schema descriptor for temporary_password_hash field.
-	accountDescTemporaryPasswordHash := accountFields[9].Descriptor()
+	accountDescTemporaryPasswordHash := accountFields[10].Descriptor()
 	// account.DefaultTemporaryPasswordHash holds the default value on creation for the temporary_password_hash field.
 	account.DefaultTemporaryPasswordHash = accountDescTemporaryPasswordHash.Default.(string)
 	// accountDescTemporaryPasswordExpiresAt is the schema descriptor for temporary_password_expires_at field.
-	accountDescTemporaryPasswordExpiresAt := accountFields[10].Descriptor()
+	accountDescTemporaryPasswordExpiresAt := accountFields[11].Descriptor()
 	// account.DefaultTemporaryPasswordExpiresAt holds the default value on creation for the temporary_password_expires_at field.
 	account.DefaultTemporaryPasswordExpiresAt = accountDescTemporaryPasswordExpiresAt.Default.(time.Time)
 	// accountDescTemporaryTwoFactorAuthKeyEncrypted is the schema descriptor for temporary_two_factor_auth_key_encrypted field.
-	accountDescTemporaryTwoFactorAuthKeyEncrypted := accountFields[11].Descriptor()
+	accountDescTemporaryTwoFactorAuthKeyEncrypted := accountFields[12].Descriptor()
 	// account.DefaultTemporaryTwoFactorAuthKeyEncrypted holds the default value on creation for the temporary_two_factor_auth_key_encrypted field.
 	account.DefaultTemporaryTwoFactorAuthKeyEncrypted = accountDescTemporaryTwoFactorAuthKeyEncrypted.Default.(string)
 	// accountDescTwoFactoryAuthKeyEncrypted is the schema descriptor for two_factory_auth_key_encrypted field.
-	accountDescTwoFactoryAuthKeyEncrypted := accountFields[12].Descriptor()
+	accountDescTwoFactoryAuthKeyEncrypted := accountFields[13].Descriptor()
 	// account.DefaultTwoFactoryAuthKeyEncrypted holds the default value on creation for the two_factory_auth_key_encrypted field.
 	account.DefaultTwoFactoryAuthKeyEncrypted = accountDescTwoFactoryAuthKeyEncrypted.Default.(string)
 	// accountDescTwoFactorAuthRecoveryCodeSalt is the schema descriptor for two_factor_auth_recovery_code_salt field.
-	accountDescTwoFactorAuthRecoveryCodeSalt := accountFields[13].Descriptor()
+	accountDescTwoFactorAuthRecoveryCodeSalt := accountFields[14].Descriptor()
 	// account.DefaultTwoFactorAuthRecoveryCodeSalt holds the default value on creation for the two_factor_auth_recovery_code_salt field.
 	account.DefaultTwoFactorAuthRecoveryCodeSalt = accountDescTwoFactorAuthRecoveryCodeSalt.Default.(string)
 	// accountDescTwoFactorAuthRecoveryCodeHashes is the schema descriptor for two_factor_auth_recovery_code_hashes field.
-	accountDescTwoFactorAuthRecoveryCodeHashes := accountFields[14].Descriptor()
+	accountDescTwoFactorAuthRecoveryCodeHashes := accountFields[15].Descriptor()
 	// account.DefaultTwoFactorAuthRecoveryCodeHashes holds the default value on creation for the two_factor_auth_recovery_code_hashes field.
 	account.DefaultTwoFactorAuthRecoveryCodeHashes = accountDescTwoFactorAuthRecoveryCodeHashes.Default.([]string)
 	// accountDescLastLoginAttemptAt is the schema descriptor for last_login_attempt_at field.
-	accountDescLastLoginAttemptAt := accountFields[15].Descriptor()
+	accountDescLastLoginAttemptAt := accountFields[16].Descriptor()
 	// account.DefaultLastLoginAttemptAt holds the default value on creation for the last_login_attempt_at field.
 	account.DefaultLastLoginAttemptAt = accountDescLastLoginAttemptAt.Default.(time.Time)
 	// accountDescPasskeyLoginEnabled is the schema descriptor for passkey_login_enabled field.
-	accountDescPasskeyLoginEnabled := accountFields[16].Descriptor()
+	accountDescPasskeyLoginEnabled := accountFields[17].Descriptor()
 	// account.DefaultPasskeyLoginEnabled holds the default value on creation for the passkey_login_enabled field.
 	account.DefaultPasskeyLoginEnabled = accountDescPasskeyLoginEnabled.Default.(bool)
 	// accountDescPasskeyRecoveryCodeSalt is the schema descriptor for passkey_recovery_code_salt field.
-	accountDescPasskeyRecoveryCodeSalt := accountFields[17].Descriptor()
+	accountDescPasskeyRecoveryCodeSalt := accountFields[18].Descriptor()
 	// account.DefaultPasskeyRecoveryCodeSalt holds the default value on creation for the passkey_recovery_code_salt field.
 	account.DefaultPasskeyRecoveryCodeSalt = accountDescPasskeyRecoveryCodeSalt.Default.(string)
 	// accountDescPasskeyRecoveryCodeHashes is the schema descriptor for passkey_recovery_code_hashes field.
-	accountDescPasskeyRecoveryCodeHashes := accountFields[18].Descriptor()
+	accountDescPasskeyRecoveryCodeHashes := accountFields[19].Descriptor()
 	// account.DefaultPasskeyRecoveryCodeHashes holds the default value on creation for the passkey_recovery_code_hashes field.
 	account.DefaultPasskeyRecoveryCodeHashes = accountDescPasskeyRecoveryCodeHashes.Default.([]string)
 	mailMixin := schema.Mail{}.Mixin()

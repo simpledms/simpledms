@@ -693,6 +693,21 @@
             "translation": ""
         },
         {
+            "id": "Created {LanguageBCP47}",
+            "message": "Created {LanguageBCP47}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "timex.NewDateTime(filex.CreatedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ]
+        },
+        {
             "id": "rendering failed",
             "message": "rendering failed",
             "translation": ""
@@ -729,13 +744,48 @@
             "translation": ""
         },
         {
-            "id": "Metadata",
-            "message": "Metadata",
+            "id": "Loading more...",
+            "message": "Loading more...",
+            "translation": ""
+        },
+        {
+            "id": "Name",
+            "message": "Name",
+            "translation": ""
+        },
+        {
+            "id": "Type",
+            "message": "Type",
+            "translation": ""
+        },
+        {
+            "id": "Date",
+            "message": "Date",
+            "translation": ""
+        },
+        {
+            "id": "Size",
+            "message": "Size",
             "translation": ""
         },
         {
             "id": "Tags",
             "message": "Tags",
+            "translation": ""
+        },
+        {
+            "id": "Yes",
+            "message": "Yes",
+            "translation": ""
+        },
+        {
+            "id": "No",
+            "message": "No",
+            "translation": ""
+        },
+        {
+            "id": "Metadata",
+            "message": "Metadata",
             "translation": ""
         },
         {
@@ -869,11 +919,6 @@
             "translation": ""
         },
         {
-            "id": "Loading more...",
-            "message": "Loading more...",
-            "translation": ""
-        },
-        {
             "id": "Back to parent folder",
             "message": "Back to parent folder",
             "translation": ""
@@ -897,6 +942,26 @@
                     "expr": "dir.Data.Name"
                 }
             ]
+        },
+        {
+            "id": "Sort files",
+            "message": "Sort files",
+            "translation": ""
+        },
+        {
+            "id": "Change file list view",
+            "message": "Change file list view",
+            "translation": ""
+        },
+        {
+            "id": "List",
+            "message": "List",
+            "translation": ""
+        },
+        {
+            "id": "Table",
+            "message": "Table",
+            "translation": ""
         },
         {
             "id": "No fields available yet.",
@@ -1078,6 +1143,21 @@
         {
             "id": "Document type selected.",
             "message": "Document type selected.",
+            "translation": ""
+        },
+        {
+            "id": "Newest first",
+            "message": "Newest first",
+            "translation": ""
+        },
+        {
+            "id": "Oldest first",
+            "message": "Oldest first",
+            "translation": ""
+        },
+        {
+            "id": "Sort by name",
+            "message": "Sort by name",
             "translation": ""
         },
         {
@@ -1862,11 +1942,6 @@
             "translation": ""
         },
         {
-            "id": "Sort files",
-            "message": "Sort files",
-            "translation": ""
-        },
-        {
             "id": "Search in «Inbox»",
             "message": "Search in «Inbox»",
             "translation": ""
@@ -1905,21 +1980,6 @@
                     "expr": "filex.Data.Name"
                 }
             ]
-        },
-        {
-            "id": "Newest first",
-            "message": "Newest first",
-            "translation": ""
-        },
-        {
-            "id": "Oldest first",
-            "message": "Oldest first",
-            "translation": ""
-        },
-        {
-            "id": "Sort by name",
-            "message": "Sort by name",
-            "translation": ""
         },
         {
             "id": "Assign user to space",
@@ -2572,11 +2632,6 @@
             "translation": ""
         },
         {
-            "id": "Name",
-            "message": "Name",
-            "translation": ""
-        },
-        {
             "id": "Notes",
             "message": "Notes",
             "translation": ""
@@ -2762,6 +2817,11 @@
             "translation": ""
         },
         {
+            "id": "Built in column",
+            "message": "Built in column",
+            "translation": ""
+        },
+        {
             "id": "Bulgaria",
             "message": "Bulgaria",
             "translation": ""
@@ -2819,11 +2879,6 @@
         {
             "id": "Czech republic",
             "message": "Czech republic",
-            "translation": ""
-        },
-        {
-            "id": "Date",
-            "message": "Date",
             "translation": ""
         },
         {
@@ -3132,6 +3187,11 @@
             "translation": ""
         },
         {
+            "id": "Show tags",
+            "message": "Show tags",
+            "translation": ""
+        },
+        {
             "id": "Simple",
             "message": "Simple",
             "translation": ""
@@ -3212,11 +3272,6 @@
             "translation": ""
         },
         {
-            "id": "Type",
-            "message": "Type",
-            "translation": ""
-        },
-        {
             "id": "Url",
             "message": "Url",
             "translation": ""
@@ -3249,6 +3304,21 @@
         {
             "id": "Version number",
             "message": "Version number",
+            "translation": ""
+        },
+        {
+            "id": "View mode",
+            "message": "View mode",
+            "translation": ""
+        },
+        {
+            "id": "Properties",
+            "message": "Properties",
+            "translation": ""
+        },
+        {
+            "id": "Sizes",
+            "message": "Sizes",
             "translation": ""
         },
         {

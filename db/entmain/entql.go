@@ -45,6 +45,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			account.FieldFirstName:                          {Type: field.TypeString, Column: account.FieldFirstName},
 			account.FieldLastName:                           {Type: field.TypeString, Column: account.FieldLastName},
 			account.FieldLanguage:                           {Type: field.TypeEnum, Column: account.FieldLanguage},
+			account.FieldFileListPreferences:                {Type: field.TypeJSON, Column: account.FieldFileListPreferences},
 			account.FieldSubscribedToNewsletterAt:           {Type: field.TypeTime, Column: account.FieldSubscribedToNewsletterAt},
 			account.FieldPasswordSalt:                       {Type: field.TypeString, Column: account.FieldPasswordSalt},
 			account.FieldPasswordHash:                       {Type: field.TypeString, Column: account.FieldPasswordHash},
@@ -739,6 +740,11 @@ func (f *AccountFilter) WhereLastName(p entql.StringP) {
 // WhereLanguage applies the entql string predicate on the language field.
 func (f *AccountFilter) WhereLanguage(p entql.StringP) {
 	f.Where(p.Field(account.FieldLanguage))
+}
+
+// WhereFileListPreferences applies the entql json.RawMessage predicate on the file_list_preferences field.
+func (f *AccountFilter) WhereFileListPreferences(p entql.BytesP) {
+	f.Where(p.Field(account.FieldFileListPreferences))
 }
 
 // WhereSubscribedToNewsletterAt applies the entql time.Time predicate on the subscribed_to_newsletter_at field.

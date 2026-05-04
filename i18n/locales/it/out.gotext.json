@@ -929,6 +929,21 @@
             "fuzzy": true
         },
         {
+            "id": "Created {LanguageBCP47}",
+            "message": "Created {LanguageBCP47}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "timex.NewDateTime(filex.CreatedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ]
+        },
+        {
             "id": "rendering failed",
             "message": "rendering failed",
             "translation": "rendering fallito",
@@ -979,17 +994,60 @@
             "fuzzy": true
         },
         {
-            "id": "Metadata",
-            "message": "Metadata",
-            "translation": "Metadati",
+            "id": "Loading more...",
+            "message": "Loading more...",
+            "translation": "Caricamento in corso...",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Name",
+            "message": "Name",
+            "translation": "Nome",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "Type",
+            "message": "Type",
+            "translation": "Tipo",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Date",
+            "message": "Date",
+            "translation": "Data",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Size",
+            "message": "Size",
+            "translation": ""
         },
         {
             "id": "Tags",
             "message": "Tags",
             "translation": "Etichette",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Yes",
+            "message": "Yes",
+            "translation": ""
+        },
+        {
+            "id": "No",
+            "message": "No",
+            "translation": ""
+        },
+        {
+            "id": "Metadata",
+            "message": "Metadata",
+            "translation": "Metadati",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -1175,13 +1233,6 @@
             "fuzzy": true
         },
         {
-            "id": "Loading more...",
-            "message": "Loading more...",
-            "translation": "Caricamento in corso...",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "Back to parent folder",
             "message": "Back to parent folder",
             "translation": "Torna alla cartella superiore",
@@ -1211,6 +1262,28 @@
                 }
             ],
             "fuzzy": true
+        },
+        {
+            "id": "Sort files",
+            "message": "Sort files",
+            "translation": "Ordina file",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Change file list view",
+            "message": "Change file list view",
+            "translation": ""
+        },
+        {
+            "id": "List",
+            "message": "List",
+            "translation": ""
+        },
+        {
+            "id": "Table",
+            "message": "Table",
+            "translation": ""
         },
         {
             "id": "No fields available yet.",
@@ -1439,6 +1512,27 @@
             "id": "Document type selected.",
             "message": "Document type selected.",
             "translation": "Tipo documento selezionato.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Newest first",
+            "message": "Newest first",
+            "translation": "Più recenti prima",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Oldest first",
+            "message": "Oldest first",
+            "translation": "Più vecchi prima",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sort by name",
+            "message": "Sort by name",
+            "translation": "Ordina per nome",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2472,13 +2566,6 @@
             "fuzzy": true
         },
         {
-            "id": "Sort files",
-            "message": "Sort files",
-            "translation": "Ordina file",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Search in «Inbox»",
             "message": "Search in «Inbox»",
             "translation": "Cerca in «Inbox»",
@@ -2528,27 +2615,6 @@
                     "expr": "filex.Data.Name"
                 }
             ],
-            "fuzzy": true
-        },
-        {
-            "id": "Newest first",
-            "message": "Newest first",
-            "translation": "Più recenti prima",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Oldest first",
-            "message": "Oldest first",
-            "translation": "Più vecchi prima",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Sort by name",
-            "message": "Sort by name",
-            "translation": "Ordina per nome",
-            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -3380,13 +3446,6 @@
             "fuzzy": true
         },
         {
-            "id": "Name",
-            "message": "Name",
-            "translation": "Nome",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Notes",
             "message": "Notes",
             "translation": "Note",
@@ -3638,6 +3697,11 @@
             "fuzzy": true
         },
         {
+            "id": "Built in column",
+            "message": "Built in column",
+            "translation": ""
+        },
+        {
             "id": "Bulgaria",
             "message": "Bulgaria",
             "translation": "Bulgaria",
@@ -3718,13 +3782,6 @@
             "id": "Czech republic",
             "message": "Czech republic",
             "translation": "Repubblica Ceca",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Date",
-            "message": "Date",
-            "translation": "Data",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -4156,6 +4213,11 @@
             "fuzzy": true
         },
         {
+            "id": "Show tags",
+            "message": "Show tags",
+            "translation": ""
+        },
+        {
             "id": "Simple",
             "message": "Simple",
             "translation": "Semplice",
@@ -4268,13 +4330,6 @@
             "fuzzy": true
         },
         {
-            "id": "Type",
-            "message": "Type",
-            "translation": "Tipo",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Url",
             "message": "Url",
             "translation": "URL",
@@ -4322,6 +4377,21 @@
             "translation": "Numero versione",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "View mode",
+            "message": "View mode",
+            "translation": ""
+        },
+        {
+            "id": "Properties",
+            "message": "Properties",
+            "translation": ""
+        },
+        {
+            "id": "Sizes",
+            "message": "Sizes",
+            "translation": ""
         },
         {
             "id": "Sign up",
