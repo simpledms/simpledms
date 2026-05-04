@@ -419,15 +419,7 @@ func (qq *ListDirPartial) filesList(
 		Children: fileListItems,
 	}
 	if preferences.IsTable() && len(fileListItems) > 0 {
-		content = &wx.View{
-			Children: []wx.IWidget{
-				&wx.List{
-					Children:      fileListItems,
-					HideOnDesktop: true,
-				},
-				qq.fileTable(ctx, state, data, offset, queryResult, preferences),
-			},
-		}
+		content = qq.fileTable(ctx, state, data, offset, queryResult, preferences)
 	}
 
 	if len(fileListItems) == 0 {

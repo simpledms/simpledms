@@ -14,7 +14,7 @@ an account-wide preference.
 - View mode is a per-user preference.
 - View mode is account-wide across tenants and spaces.
 - The URL must stay clean; toggling the view saves the preference silently.
-- Table mode falls back to the existing list experience on mobile/narrow screens.
+- Table mode is available on mobile/narrow screens when the user chooses it.
 - Row click, selection, context menu, and actions should behave like the current list rows.
 - Table columns are configurable.
 - Default table columns are `Name`, `Type`, `Date`, and `Size`.
@@ -114,8 +114,8 @@ For Inbox:
 
 For mobile:
 
-- Render table only at desktop breakpoints, for example using Tailwind responsive classes.
-- Render the current `wx.List` presentation for mobile even when table mode is selected.
+- Render table mode when selected, even on narrow screens.
+- Rely on horizontal scrolling when configured columns do not fit.
 
 ## Table Components
 
@@ -185,7 +185,7 @@ current Space before rendering.
 - Unknown view mode falls back to list.
 - No selected columns falls back to default table columns.
 - Deleted or inaccessible metadata fields are ignored.
-- Table mode on mobile renders the list fallback.
+- Table mode on mobile may require horizontal scrolling.
 - Preference save failures should surface through the existing HTTP error/snackbar flow.
 
 ## Tests
@@ -214,7 +214,7 @@ Adjust package-specific commands if tests are added in different packages.
 2. Add preference update command and app bar menu controls.
 3. Add table rendering for built-in columns in Files and Inbox.
 4. Add configurable `Tags` and metadata columns with batched data loading.
-5. Add responsive mobile fallback and polish dense table styling.
+5. Add responsive horizontal scrolling and polish dense table styling.
 6. Add tests and run generation/build verification.
 
 ## Rejected Alternatives

@@ -1,0 +1,54 @@
+# File List Table Invariants
+
+- Files and Inbox both support the same `list` and `table` view modes.
+- The existing `ListItem` list remains available and must keep working.
+- Table mode is an optional user preference, not a replacement for list mode.
+- Table mode is available on mobile and narrow screens when the user chooses it.
+- Table mode uses horizontal scrolling on narrow screens when columns do not fit.
+- The view mode toggle appears in the top app bar near the sort button.
+- The sort and view buttons are rendered next to each other, not stacked.
+- View mode changes are saved silently.
+- View mode changes do not add query parameters to the current URL.
+- View mode is an account-wide preference across all tenants and Spaces.
+- Space-specific column choices are stored inside the account preference by Space public ID.
+- Metadata field column selections are Space-specific.
+- Tag group column selections are Space-specific.
+- Built-in table column selections are account-wide.
+- The default table columns are `Name`, `Type`, `Metadata`, `Date`, and `Size`.
+- `Name`, `Type`, `Metadata`, `Date`, and `Size` are built-in columns.
+- Built-in columns are represented by stable string identifiers in the preference model.
+- The preference is persisted as typed JSON on `Account.file_list_preferences`.
+- `Account.file_list_preferences` must have a SQLite-safe SQL default so existing account rows can migrate.
+- The preference value object lives outside `model/main/account` to avoid an ent schema import cycle.
+- Invalid preference values are normalized to safe defaults.
+- Unknown built-in columns are ignored during normalization.
+- If all built-in columns are removed or invalid, default built-in columns are restored.
+- Invalid, deleted, or inaccessible metadata field IDs are ignored at render time.
+- Invalid, deleted, inaccessible, or non-group tag IDs are ignored at render time.
+- Preference updates validate Space-owned property IDs against the current Space.
+- Preference updates validate tag group IDs against the current Space and `tagtype.Group`.
+- Preference updates must not let saved column IDs bypass Space access checks.
+- Files and Inbox use the same persisted preference model.
+- Files and Inbox may use separate rendering code, but the visible column semantics should remain aligned.
+- Table rows preserve the current list row click behavior.
+- File rows open the file details target just like list rows.
+- Directory rows in Files navigate like list directory rows.
+- Row selection state is preserved in table mode.
+- Row context menus are preserved in table mode.
+- The existing load-more behavior in Files is preserved in list mode.
+- Optional table data should be batch-loaded for visible rows.
+- Table rendering must avoid row-by-row queries for sizes, tags, tag groups, and metadata field assignments.
+- `Size` shows the latest/current stored file size for files and is empty for directories.
+- `Type` shows the assigned document type name and is empty when no document type is assigned.
+- `Tags` shows all assigned tags as a comma-separated value.
+- A selected tag group column shows assigned child tags from that group as a comma-separated value.
+- A selected metadata field column shows the file's assignment value for that field.
+- The built-in `Metadata` column summarizes all values belonging to the file's assigned document type.
+- The `Metadata` column includes values for all enabled attributes defined on the assigned document type.
+- The `Metadata` column includes field attributes and tag-group attributes.
+- The `Metadata` column renders values as `Label: value` pairs.
+- Empty or missing metadata attribute values are skipped in the `Metadata` column.
+- User-provided values such as file names, property names, tag names, and tag group names are not translated.
+- Fixed UI labels such as `List`, `Table`, `Metadata`, `Size`, and `Tags` are translated.
+- View and column menu actions may close the menu unless a dedicated, tested interaction preserves it.
+- If preserving an open menu breaks HTMX refresh behavior, prefer the stable full refresh behavior.

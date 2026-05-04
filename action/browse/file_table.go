@@ -69,9 +69,8 @@ func (qq *ListDirPartial) fileTable(
 	}
 
 	return &wx.Table{
-		Columns:      columns,
-		Rows:         rows,
-		HideOnMobile: true,
+		Columns: columns,
+		Rows:    rows,
 	}
 }
 
