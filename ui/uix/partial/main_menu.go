@@ -7,6 +7,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
@@ -60,9 +61,26 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 				},
 			},
 			{
-				IsDivider: true,
-			}}...,
+				LeadingIcon: "account_circle",
+				Label:       wx.T("Account"),
+				HTMXAttrs: wx.HTMXAttrs{
+					HxGet: route2.Account(),
+				},
+			},
+		}...,
 		)
+		if accountm.Data.Role == mainrole.Admin {
+			items = append(items, &wx.MenuItem{
+				LeadingIcon: "settings",
+				Label:       wx.T("System"),
+				HTMXAttrs: wx.HTMXAttrs{
+					HxGet: route2.System(),
+				},
+			})
+		}
+		items = append(items, &wx.MenuItem{
+			IsDivider: true,
+		})
 
 		spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
 		if err != nil {

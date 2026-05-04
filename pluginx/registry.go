@@ -54,6 +54,20 @@ func (qq *Registry) ExtendMenuItems(ctx ctxx.Context, items []*wx.MenuItem) []*w
 	return items
 }
 
+func (qq *Registry) ExtendNavigationDestinations(
+	ctx ctxx.Context,
+	destinations []*wx.NavigationDestination,
+) []*wx.NavigationDestination {
+	for _, plugin := range qq.Plugins() {
+		hook, ok := plugin.(ExtendNavigationDestinationsHook)
+		if !ok {
+			continue
+		}
+		destinations = hook.ExtendNavigationDestinations(ctx, destinations)
+	}
+	return destinations
+}
+
 func (qq *Registry) EmitSignUp(ctx ctxx.Context, event SignUpEvent) error {
 	for _, plugin := range qq.Plugins() {
 		hook, ok := plugin.(OnSignUpHook)

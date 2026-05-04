@@ -22,6 +22,7 @@ import (
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
@@ -43,6 +44,7 @@ import (
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/ui"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/accountutil"
 	"github.com/simpledms/simpledms/util/cookiex"
 )
@@ -2251,7 +2253,7 @@ func TestPasskeyRecoverySignInCmdAcceptsRegeneratedRecoveryCode(t *testing.T) {
 	}
 }
 
-func TestDashboardCardsPartialShowsRemainingRecoveryCodesCount(t *testing.T) {
+func TestAccountCardsPartialShowsRemainingRecoveryCodesCount(t *testing.T) {
 	harness := newActionTestHarness(t)
 
 	email := "recovery-count@example.com"
@@ -2273,7 +2275,7 @@ func TestDashboardCardsPartialShowsRemainingRecoveryCodesCount(t *testing.T) {
 
 	sessionCookie := signInAndGetSessionCookie(t, harness, email, password)
 
-	req := httptest.NewRequest(http.MethodPost, "/-/dashboard/dashboard-cards-partial", nil)
+	req := httptest.NewRequest(http.MethodPost, "/-/dashboard/account-cards-partial", nil)
 	req.AddCookie(sessionCookie)
 	req.Header.Set("HX-Request", "true")
 
@@ -2286,8 +2288,155 @@ func TestDashboardCardsPartialShowsRemainingRecoveryCodesCount(t *testing.T) {
 
 	body := rr.Body.String()
 	if !strings.Contains(body, "7 backup codes left") {
-		t.Fatalf("expected dashboard to include remaining backup codes count, body was: %s", body)
+		t.Fatalf("expected account page to include remaining backup codes count, body was: %s", body)
 	}
+}
+
+func TestDashboardAccountSystemSplitPages(t *testing.T) {
+	harness := newActionTestHarness(t)
+	registerDashboardSplitPageRoutes(harness)
+
+	email := "dashboard-split@example.com"
+	password := "supersecret"
+	createAccount(t, harness.mainDB, email, password)
+	accountx := harness.mainDB.ReadWriteConn.Account.Query().
+		Where(account.Email(entx.NewCIText(email))).
+		OnlyX(context.Background())
+	tenantx := createTenantWithPasskeyPolicy(t, harness.mainDB, "Dashboard Split Tenant", false, true)
+	assignAccountToTenant(t, harness.mainDB, tenantx.ID, accountx.ID, tenantrole.Owner, true)
+	initTenantDB(t, harness, tenantx)
+
+	sessionCookie := signInAndGetSessionCookie(t, harness, email, password)
+
+	dashboardReq := httptest.NewRequest(http.MethodPost, "/-/dashboard/dashboard-cards-partial", nil)
+	dashboardReq.AddCookie(sessionCookie)
+	dashboardReq.Header.Set("HX-Request", "true")
+	dashboardRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(dashboardRR, dashboardReq)
+
+	if dashboardRR.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, dashboardRR.Code)
+	}
+	if strings.Contains(dashboardRR.Body.String(), "No passkeys registered") {
+		t.Fatalf("expected dashboard not to include account passkey cards, body was: %s", dashboardRR.Body.String())
+	}
+	if !strings.Contains(dashboardRR.Body.String(), "Organization") {
+		t.Fatalf("expected dashboard to include organisation sections, body was: %s", dashboardRR.Body.String())
+	}
+
+	accountReq := httptest.NewRequest(http.MethodPost, "/-/dashboard/account-cards-partial", nil)
+	accountReq.AddCookie(sessionCookie)
+	accountReq.Header.Set("HX-Request", "true")
+	accountRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(accountRR, accountReq)
+
+	if accountRR.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, accountRR.Code)
+	}
+	if !strings.Contains(accountRR.Body.String(), "No passkeys registered") {
+		t.Fatalf("expected account page to include passkey cards, body was: %s", accountRR.Body.String())
+	}
+
+	systemReq := httptest.NewRequest(http.MethodGet, route.System(), nil)
+	systemReq.AddCookie(sessionCookie)
+	systemRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(systemRR, systemReq)
+
+	if systemRR.Code != http.StatusForbidden {
+		t.Fatalf("expected status %d, got %d", http.StatusForbidden, systemRR.Code)
+	}
+}
+
+func TestSystemPageAndNavigationRenderForAdmin(t *testing.T) {
+	harness := newActionTestHarness(t)
+	registerDashboardSplitPageRoutes(harness)
+
+	email := "dashboard-admin@example.com"
+	password := "supersecret"
+	createAccountWithRole(t, harness.mainDB, email, password, mainrole.Admin)
+
+	sessionCookie := signInAndGetSessionCookie(t, harness, email, password)
+
+	dashboardReq := httptest.NewRequest(http.MethodGet, route.Dashboard(), nil)
+	dashboardReq.AddCookie(sessionCookie)
+	dashboardRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(dashboardRR, dashboardReq)
+
+	if dashboardRR.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, dashboardRR.Code)
+	}
+	if !strings.Contains(dashboardRR.Body.String(), "settings") {
+		t.Fatalf("expected dashboard navigation to include system, body was: %s", dashboardRR.Body.String())
+	}
+
+	systemReq := httptest.NewRequest(http.MethodGet, route.System(), nil)
+	systemReq.AddCookie(sessionCookie)
+	systemRR := httptest.NewRecorder()
+	harness.router.ServeHTTP(systemRR, systemReq)
+
+	if systemRR.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, systemRR.Code)
+	}
+	if !strings.Contains(systemRR.Body.String(), "App status") {
+		t.Fatalf("expected system page to include app status, body was: %s", systemRR.Body.String())
+	}
+}
+
+type testTenantsNavigationPlugin struct{}
+
+func (qq *testTenantsNavigationPlugin) Name() string {
+	return "test-tenants-navigation"
+}
+
+func (qq *testTenantsNavigationPlugin) ExtendNavigationDestinations(
+	_ ctxx.Context,
+	destinations []*wx.NavigationDestination,
+) []*wx.NavigationDestination {
+	return append(destinations, &wx.NavigationDestination{
+		Label: "Tenants",
+		Icon:  "apartment",
+		Href:  "/tenants/",
+		HTMXAttrs: wx.HTMXAttrs{
+			HxGet: "/tenants/",
+		},
+	})
+}
+
+var _ pluginx.Plugin = (*testTenantsNavigationPlugin)(nil)
+var _ pluginx.ExtendNavigationDestinationsHook = (*testTenantsNavigationPlugin)(nil)
+
+func TestTenantsNavigationDestinationRendersForAdminPlugin(t *testing.T) {
+	harness := newActionTestHarness(t)
+	registerDashboardSplitPageRoutes(harness)
+	plugin := &testTenantsNavigationPlugin{}
+	harness.infra.PluginRegistry().SetPlugins(plugin)
+	t.Cleanup(func() {
+		harness.infra.PluginRegistry().SetPlugins()
+	})
+
+	email := "tenants-navigation-admin@example.com"
+	password := "supersecret"
+	createAccountWithRole(t, harness.mainDB, email, password, mainrole.Admin)
+
+	sessionCookie := signInAndGetSessionCookie(t, harness, email, password)
+	req := httptest.NewRequest(http.MethodGet, route.Dashboard(), nil)
+	req.AddCookie(sessionCookie)
+
+	rr := httptest.NewRecorder()
+	harness.router.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, rr.Code)
+	}
+	if !strings.Contains(rr.Body.String(), "Tenants") {
+		t.Fatalf("expected dashboard navigation to include tenants, body was: %s", rr.Body.String())
+	}
+}
+
+func registerDashboardSplitPageRoutes(harness *actionTestHarness) {
+	harness.router.RegisterPage(route.DashboardRoute(), harness.actions.Dashboard.DashboardPage.Handler)
+	harness.router.RegisterPage(route.AccountRoute(), harness.actions.Dashboard.AccountPage.Handler)
+	harness.router.RegisterPage(route.SystemRoute(), harness.actions.Dashboard.SystemPage.Handler)
 }
 
 func TestPasskeyRecoveryCodesDialogConsumesToken(t *testing.T) {

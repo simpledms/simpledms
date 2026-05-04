@@ -806,6 +806,8 @@ func (qq *Server) registerCoreRoutes(
 	// TODO find a better way to handle paths
 	// TODO in TTx or not necessary because read only?
 	router.RegisterPage(route2.DashboardRoute(), actions.Dashboard.DashboardPage.Handler)
+	router.RegisterPage(route2.AccountRoute(), actions.Dashboard.AccountPage.Handler)
+	router.RegisterPage(route2.SystemRoute(), actions.Dashboard.SystemPage.Handler)
 	router.RegisterPage(route2.StaticPageRoute(), actions.StaticPage.StaticPage.Handler)
 
 	router.RegisterPage(route2.BrowseRoute(false), actions.Browse.BrowsePage.Handler)

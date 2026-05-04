@@ -72,33 +72,49 @@ func (qq *DashboardCardsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Req
 // most important card should always be in front, for example `set password` if not set yet
 // or `manage spaces` if no space exists yet
 func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
-	var grids []*wx.Grid
-
-	var openTaskCards []*wx.Card
-	var accountCards []*wx.Card
-	var systemCards []*wx.Card
-	var systemFooterBtns []*wx.Button
-
 	accountm := account.NewAccount(ctx.MainCtx().Account)
 	passkeyPolicy, err := accountm.PasskeyPolicy(ctx)
 	if err != nil {
 		log.Println(err)
 		passkeyPolicy = account.NewPasskeyPolicy(false, false, false)
 	}
-	isTenantPasskeyEnrollmentRequired := passkeyPolicy.IsTenantPasskeyEnrollmentRequired()
-
-	if isTenantPasskeyEnrollmentRequired {
+	if passkeyPolicy.IsTenantPasskeyEnrollmentRequired() {
 		return qq.setupRequiredWidget(ctx), nil
 	}
 
-	passkeyCredentials := ctx.MainCtx().MainTx.PasskeyCredential.Query().
-		Where(passkeycredential.AccountID(ctx.MainCtx().Account.ID)).
-		AllX(ctx)
-
-	if accountm.Data.Role == mainrole.Admin {
-		systemCards = append(systemCards, qq.appStatusCard(ctx))
-		systemFooterBtns = append(systemFooterBtns, qq.manageUploadLimitBtn(ctx))
+	grids, err := qq.DashboardGrids(ctx)
+	if err != nil {
+		return nil, err
 	}
+
+	return &wx.Container{
+		Widget: wx.Widget[wx.Container]{
+			ID: qq.id(),
+		},
+		GapY: true,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxTrigger: event.HxTrigger(
+				event.InitialPasswordSet,
+				event.TemporaryPasswordCleared,
+				event.PasswordChanged,
+				event.AccountUpdated,
+			),
+			HxPost:   qq.Endpoint(),
+			HxVals:   util.JSON(qq.Data()),
+			HxTarget: "#" + qq.id(),
+			HxSelect: "#" + qq.id(),
+			HxSwap:   "outerHTML",
+		},
+		Child: grids,
+	}, nil
+}
+
+func (qq *DashboardCardsPartial) DashboardGrids(ctx ctxx.Context) ([]*wx.Grid, error) {
+	var grids []*wx.Grid
+
+	var openTaskCards []*wx.Card
+
+	accountm := account.NewAccount(ctx.MainCtx().Account)
 	if accountm.HasPassword() {
 		// only if main password is already set
 		if accountm.HasTemporaryPassword() {
@@ -123,7 +139,7 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 
 	for tenantx, spaces := range spacesByTenant {
 		var tenantCards []*wx.Card
-		var tenantHeaderBtns []wx.IWidget
+		var tenantActionBtns []wx.IWidget
 
 		if tenantCard := qq.nilableTenantCard(ctx, tenantx); tenantCard != nil {
 			tenantCards = append(tenantCards, tenantCard)
@@ -133,24 +149,24 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 		}
 
 		if btn, ok := qq.passkeyEnforcementBtn(ctx, tenantx); ok {
-			tenantHeaderBtns = append(tenantHeaderBtns, btn)
+			tenantActionBtns = append(tenantActionBtns, btn)
 		}
 
 		if btn, ok := qq.manageUsersBtn(ctx, tenantx); ok {
-			tenantHeaderBtns = append(tenantHeaderBtns, btn)
+			tenantActionBtns = append(tenantActionBtns, btn)
 		}
 
 		if manageSpacesCard, ok := qq.manageSpacesCard(ctx, tenantx, len(spaces)); ok {
 			tenantCards = append(tenantCards, manageSpacesCard)
 		}
 		if btn, ok := qq.manageSpacesBtn(ctx, tenantx); ok {
-			tenantHeaderBtns = append(tenantHeaderBtns, btn)
+			tenantActionBtns = append(tenantActionBtns, btn)
 		}
 		if btn, ok := qq.deleteTenantBtn(ctx, tenantx); ok {
-			tenantHeaderBtns = append(tenantHeaderBtns, btn)
+			tenantActionBtns = append(tenantActionBtns, btn)
 		}
 		if link, ok := qq.downloadTenantBackupLink(ctx, tenantx); ok {
-			tenantHeaderBtns = append(tenantHeaderBtns, link)
+			tenantActionBtns = append(tenantActionBtns, link)
 		}
 		for _, spacex := range spaces {
 			tenantCards = append(tenantCards, qq.spaceCard(ctx, spacex, tenantx))
@@ -158,15 +174,24 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 
 		grids = append(grids, &wx.Grid{
 			Heading: wx.Hf(wx.HeadingTypeTitleMd, "Organization «%s»", tenantx.Name),
-			Footer: &wx.Row{
+			Actions: &wx.Row{
 				Wrap:     true,
-				Children: tenantHeaderBtns,
+				Children: tenantActionBtns,
 			},
 			Children: tenantCards,
 		})
 	}
 
+	return grids, nil
+}
+
+func (qq *DashboardCardsPartial) AccountGrids(ctx ctxx.Context) ([]*wx.Grid, error) {
+	var accountCards []*wx.Card
 	var accountCardsBtns []*wx.Button
+	accountm := account.NewAccount(ctx.MainCtx().Account)
+	passkeyCredentials := ctx.MainCtx().MainTx.PasskeyCredential.Query().
+		Where(passkeycredential.AccountID(ctx.MainCtx().Account.ID)).
+		AllX(ctx)
 
 	if accountm.HasPassword() && !accountm.HasTemporaryPassword() && len(passkeyCredentials) == 0 {
 		accountCardsBtns = append(accountCardsBtns, qq.changePasswordBtn(ctx))
@@ -231,57 +256,32 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 		)
 	}
 
-	grids = append(grids, &wx.Grid{
+	return []*wx.Grid{{
 		// TODO show Name and email?
 		Heading:  wx.H(wx.HeadingTypeTitleMd, accountHeading),
 		Children: accountCards,
-		Footer: &wx.Row{
+		Actions: &wx.Row{
 			Wrap:     true,
 			Children: accountCardsBtns,
 		},
-	})
+	}}, nil
+}
 
-	if len(systemCards) > 0 {
-		grids = append(grids, &wx.Grid{
-			Heading:  wx.H(wx.HeadingTypeTitleMd, wx.T("System")), // TODO admin, system or app?
-			Children: systemCards,
-			Footer: &wx.Row{
-				Wrap:     true,
-				Children: systemFooterBtns,
-			},
-		})
+func (qq *DashboardCardsPartial) SystemGrids(ctx ctxx.Context) []*wx.Grid {
+	if ctx.MainCtx().Account.Role != mainrole.Admin {
+		return []*wx.Grid{}
 	}
 
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
-			ID: qq.id(),
+	return []*wx.Grid{{
+		Heading:  wx.H(wx.HeadingTypeTitleMd, wx.T("System")), // TODO admin, system or app?
+		Children: []*wx.Card{qq.appStatusCard(ctx)},
+		Actions: &wx.Row{
+			Wrap: true,
+			Children: []*wx.Button{
+				qq.manageUploadLimitBtn(ctx),
+			},
 		},
-		GapY: true,
-		HTMXAttrs: wx.HTMXAttrs{
-			HxTrigger: event.HxTrigger(
-				event.InitialPasswordSet,
-				event.TemporaryPasswordCleared,
-				event.PasswordChanged, // necessary for "Active temporary password" card
-				event.AppInitialized,
-				event.AppUnlocked,
-				event.AppPassphraseChanged,
-				event.UploadLimitUpdated,
-				event.AccountUpdated, // refresh from when opening again and update language
-			),
-			HxPost:   qq.Endpoint(),
-			HxVals:   util.JSON(qq.Data()),
-			HxTarget: "#" + qq.id(),
-			HxSelect: "#" + qq.id(),
-			HxSwap:   "outerHTML",
-		},
-		Child: grids,
-		// HTMXAttrs: htmxAttrs,
-	}, nil
-
-	/*return &wx.ScrollableContent{
-		PaddingX: true,
-		Children: grid,
-	}*/
+	}}
 }
 
 func (qq *DashboardCardsPartial) setupRequiredWidget(ctx ctxx.Context) *wx.Container {

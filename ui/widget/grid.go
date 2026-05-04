@@ -19,6 +19,7 @@ type Grid struct {
 	// Rows    int
 
 	Heading  *Heading
+	Actions  IWidget
 	Children IWidget
 	Footer   IWidget // TODO good name?
 }

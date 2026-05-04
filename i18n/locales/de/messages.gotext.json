@@ -4993,6 +4993,13 @@
             "fuzzy": true
         },
         {
+            "id": "Tenants",
+            "message": "Tenants",
+            "translation": "Tenants",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "TODO",
             "message": "TODO",
             "translation": "TODO",
@@ -7079,6 +7086,13 @@
             "id": "You must be logged in to manage upload limits.",
             "message": "You must be logged in to manage upload limits.",
             "translation": "Du musst angemeldet sein, um Upload-Limits zu verwalten.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be an admin to access system settings.",
+            "message": "You must be an admin to access system settings.",
+            "translation": "Du musst Admin sein, um auf Systemeinstellungen zuzugreifen.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

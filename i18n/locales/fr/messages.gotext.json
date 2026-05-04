@@ -4708,6 +4708,13 @@
             "fuzzy": true
         },
         {
+            "id": "Tenants",
+            "message": "Tenants",
+            "translation": "Tenants",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Tag",
             "message": "Tag",
             "translation": "Tag",
@@ -7387,6 +7394,13 @@
             "id": "You must be logged in to manage upload limits.",
             "message": "You must be logged in to manage upload limits.",
             "translation": "Vous devez être connecté pour gérer les limites de téléversement.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be an admin to access system settings.",
+            "message": "You must be an admin to access system settings.",
+            "translation": "Vous devez être administrateur pour accéder aux paramètres système.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

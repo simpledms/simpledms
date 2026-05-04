@@ -3,6 +3,7 @@ package partial
 import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
@@ -30,6 +31,41 @@ func NewNavigationRail(ctx ctxx.Context, infra *common.Infra, active string, fab
 			IsActive: active == "sign-in",
 			Href:     "/",
 		})
+	}
+
+	if ctx.IsMainCtx() && !ctx.IsTenantCtx() && !ctx.IsSpaceCtx() {
+		destinations = append(destinations, &wx.NavigationDestination{
+			Label:    wx.T("Dashboard").String(ctx),
+			Icon:     "dashboard",
+			IsActive: active == "dashboard",
+			Href:     route2.Dashboard(),
+			HTMXAttrs: wx.HTMXAttrs{
+				HxGet: route2.Dashboard(),
+			},
+		})
+		destinations = append(destinations, &wx.NavigationDestination{
+			Label:    wx.T("Account").String(ctx),
+			Icon:     "account_circle",
+			IsActive: active == "account",
+			Href:     route2.Account(),
+			HTMXAttrs: wx.HTMXAttrs{
+				HxGet: route2.Account(),
+			},
+		})
+
+		if ctx.MainCtx().Account.Role == mainrole.Admin {
+			destinations = append(destinations, &wx.NavigationDestination{
+				Label:    wx.T("System").String(ctx),
+				Icon:     "settings",
+				IsActive: active == "system",
+				Href:     route2.System(),
+				HTMXAttrs: wx.HTMXAttrs{
+					HxGet: route2.System(),
+				},
+			})
+			destinations = infra.PluginRegistry().ExtendNavigationDestinations(ctx, destinations)
+			destinations = appendTenantsDestinationFromMenuItems(ctx, infra, active, destinations)
+		}
 	}
 
 	if ctx.IsSpaceCtx() {
@@ -113,4 +149,30 @@ func NewNavigationRail(ctx ctxx.Context, infra *common.Infra, active string, fab
 		FABs:         fabs,
 		Destinations: destinations,
 	}
+}
+
+func appendTenantsDestinationFromMenuItems(
+	ctx ctxx.Context,
+	infra *common.Infra,
+	active string,
+	destinations []*wx.NavigationDestination,
+) []*wx.NavigationDestination {
+	for _, item := range infra.PluginRegistry().ExtendMenuItems(ctx, nil) {
+		if item.IsDivider || item.Label == nil {
+			continue
+		}
+		label := item.Label.String(ctx)
+		if label != "Tenants" && label != "Manage tenants" {
+			continue
+		}
+
+		return append(destinations, &wx.NavigationDestination{
+			Label:     wx.T("Tenants").String(ctx),
+			Icon:      "apartment",
+			IsActive:  active == "tenants",
+			HTMXAttrs: item.HTMXAttrs,
+		})
+	}
+
+	return destinations
 }
