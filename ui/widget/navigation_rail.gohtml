@@ -33,7 +33,7 @@
 			flex gap-x-2 justify-evenly flex-grow
 			md:flex-col md:gap-y-3 md:justify-normal md:items-center
 			{{/* pt-1 to make it work without custom value for mt */}}
-			{{ if gt (len .FABs) 1 }}md:mt-2{{ else }}md:mt-14 md:pt-1{{ end }}">
+			{{ if eq (len .FABs) 0 }}md:mt-28 md:pt-1{{ else if gt (len .FABs) 1 }}md:mt-2{{ else }}md:mt-14 md:pt-1{{ end }}">
             {{ render .GetContext .Destinations }}
 		</div>
 	</nav>
