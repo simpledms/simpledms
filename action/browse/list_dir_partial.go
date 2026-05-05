@@ -672,8 +672,18 @@ func (qq *ListDirPartial) fileListViewMenu(
 			preferences.ViewMode == filelistpreference.FileListViewModeTable,
 			hxHeaders,
 		),
-		&wx.MenuItem{IsDivider: true},
 	}
+	if !preferences.IsTable() {
+		return &wx.Menu{
+			Widget: wx.Widget[wx.Menu]{
+				ID: "fileListViewMenu",
+			},
+			Position: wx.PositionLeft,
+			Items:    items,
+		}
+	}
+
+	items = append(items, &wx.MenuItem{IsDivider: true})
 
 	for _, column := range []struct {
 		column filelistpreference.FileListColumn

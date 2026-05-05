@@ -370,8 +370,18 @@ func (qq *FilesListPartial) fileListViewMenu(
 	items := []*wx.MenuItem{
 		qq.fileListViewMenuItem(wx.T("List"), "list", preferences.ViewMode == filelistpreference.FileListViewModeList, hxHeaders),
 		qq.fileListViewMenuItem(wx.T("Table"), "table", preferences.ViewMode == filelistpreference.FileListViewModeTable, hxHeaders),
-		&wx.MenuItem{IsDivider: true},
 	}
+	if !preferences.IsTable() {
+		return &wx.Menu{
+			Widget: wx.Widget[wx.Menu]{
+				ID: "inboxFileListViewMenu",
+			},
+			Position: wx.PositionLeft,
+			Items:    items,
+		}
+	}
+
+	items = append(items, &wx.MenuItem{IsDivider: true})
 
 	for _, column := range []struct {
 		column filelistpreference.FileListColumn
