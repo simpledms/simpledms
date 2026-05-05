@@ -8,10 +8,19 @@ func TestFileListPreferencesDefaults(t *testing.T) {
 	if preferences.ViewMode != FileListViewModeList {
 		t.Fatalf("expected list view mode, got %q", preferences.ViewMode)
 	}
-	for _, column := range DefaultFileListColumns() {
+	expectedDefaultColumns := []FileListColumn{
+		FileListColumnName,
+		FileListColumnDocumentType,
+		FileListColumnDate,
+		FileListColumnSize,
+	}
+	for _, column := range expectedDefaultColumns {
 		if !preferences.HasBuiltInColumn(column) {
 			t.Fatalf("expected default column %q", column)
 		}
+	}
+	if preferences.HasBuiltInColumn(FileListColumnMetadata) {
+		t.Fatal("expected metadata column to be disabled by default")
 	}
 }
 

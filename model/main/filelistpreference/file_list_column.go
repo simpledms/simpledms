@@ -15,7 +15,6 @@ func DefaultFileListColumns() []FileListColumn {
 	return []FileListColumn{
 		FileListColumnName,
 		FileListColumnDocumentType,
-		FileListColumnMetadata,
 		FileListColumnDate,
 		FileListColumnSize,
 	}
