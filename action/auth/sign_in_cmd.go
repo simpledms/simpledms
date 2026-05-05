@@ -149,23 +149,5 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 
 	rw.Header().Set("HX-Redirect", route.Dashboard())
 
-	// TODO redirect or just render content
-	// TODO redirect seems not to work
-	//
-	// duplicate code in Router
-	/*
-		tenantx, err := accountx.
-			QueryTenantAssignment().
-			Where(tenantaccountassignment.IsDefault(true)).
-			QueryTenant().
-			Where(tenant.InitializedAtNotNil()).
-			Only(ctx)
-		if err != nil {
-			rw.Header().Set("HX-Redirect", route.Dashboard())
-		} else {
-			rw.Header().Set("HX-Redirect", route.SpacesRoot(tenantx.PublicID.String()))
-		}
-	*/
-
 	return nil
 }

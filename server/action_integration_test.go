@@ -531,6 +531,43 @@ func TestSignInCmdSetsSessionAndRedirect(t *testing.T) {
 	}
 }
 
+func TestAuthenticatedRootRedirectsToDashboard(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	email := "root-redirect@example.com"
+	password := "supersecret"
+	createAccount(t, harness.mainDB, email, password)
+
+	accountx := harness.mainDB.ReadWriteConn.Account.Query().
+		Where(account.Email(entx.NewCIText(email))).
+		OnlyX(context.Background())
+	tenantx := createTenantWithPasskeyPolicy(t, harness.mainDB, "Root Redirect Tenant", false, true)
+	assignAccountToTenant(t, harness.mainDB, tenantx.ID, accountx.ID, tenantrole.Owner, true)
+
+	sessionCookie := signInAndGetSessionCookie(t, harness, email, password)
+	harness.router.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+		if req.Method == http.MethodGet && req.URL.Path == "/" {
+			harness.router.wrapTx(harness.actions.Auth.SignInPage.Handler, true)(rw, req)
+			return
+		}
+
+		rw.WriteHeader(http.StatusNotFound)
+	})
+
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	req.AddCookie(sessionCookie)
+
+	rr := httptest.NewRecorder()
+	harness.router.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusSeeOther {
+		t.Fatalf("expected status %d, got %d", http.StatusSeeOther, rr.Code)
+	}
+	if location := rr.Header().Get("Location"); location != route.Dashboard() {
+		t.Fatalf("expected redirect location %q, got %q", route.Dashboard(), location)
+	}
+}
+
 func TestSignInCmdRejectsWrongPassword(t *testing.T) {
 	harness := newActionTestHarness(t)
 

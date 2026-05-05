@@ -12,6 +12,7 @@
   - when encryption is disabled
 - [x] when a metadata text fields gets updated (currently a 1000ms delay is implemented) the field loses focus. It must keep the focus to not interrupt the user.
 - [ ] clicking twice on the "Tags" tab in the Browse view details renders the "Create new tag or group" button twice, one is not functional.
+- [ ] if passkey auth fails, there is raw html in the snackbar
 
 ## UX
 

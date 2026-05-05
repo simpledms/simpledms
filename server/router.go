@@ -23,7 +23,6 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
-	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
@@ -594,19 +593,7 @@ func (qq *Router) context(
 	}
 	if req.URL.Path == "/" || req.URL.Path == "/register/" {
 		// authenticated, but accessing login page
-
-		// duplicate code in SignIn
-		tenantx, err := accountm.Data.
-			QueryTenantAssignment().
-			Where(tenantaccountassignment.IsDefault(true)).
-			QueryTenant().
-			Where(tenant.InitializedAtNotNil()).
-			Only(visitorCtx)
-		if err != nil {
-			http.Redirect(rw, req.Request, route2.Dashboard(), http.StatusSeeOther) // 302 or 303?
-		} else {
-			http.Redirect(rw, req.Request, route2.SpacesRoot(tenantx.PublicID.String()), http.StatusSeeOther) // 302 or 303?
-		}
+		http.Redirect(rw, req.Request, route2.Dashboard(), http.StatusSeeOther)
 		return visitorCtx, nil, true, nil
 	}
 
