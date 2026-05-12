@@ -14,7 +14,7 @@
 		<nav class="flex items-center h-14 text-on-surface gap-x-4 px-2 md:px-4 exp:px-8
 			exp:grid exp:grid-cols-3 group-has-[.js-detail-content>div]/list-detail:flex"
 		>
-			<div class="hidden exp:flex items-center gap-x-4">
+			<div class="hidden exp:flex items-center gap-x-4 max-w-full">
                 {{ with .Leading }}
                     {{/* must be outside of title because of overflow-hidden */}}
                     {{ render $ctx . }}
