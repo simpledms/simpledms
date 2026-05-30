@@ -134,6 +134,10 @@ func TestStaticPageHandlerRendersAbout(t *testing.T) {
 	if !strings.Contains(body, "list-disc ml-6 my-3") {
 		t.Fatalf("expected response to contain rendered markdown classes, got: %s", body)
 	}
+
+	if !strings.Contains(body, "body-lg text-on-surface max-w-3xl w-full pb-8 pl-4") {
+		t.Fatalf("expected response to contain static page left padding, got: %s", body)
+	}
 }
 
 func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
