@@ -22,8 +22,19 @@ type NavigationRailItem struct {
 
 	IsSubheader         bool
 	IsDisabled          bool
+	IsCollapsedOnly     bool
+	IsExpandedOnly      bool
 	IsCollapsible       bool
 	IsExpandedByDefault bool
+}
+
+// NewNavigationRailLabel returns a non-clickable label for expanded rail sections.
+func NewNavigationRailLabel(key string, label string) *NavigationRailItem {
+	return &NavigationRailItem{
+		Key:         key,
+		Label:       label,
+		IsSubheader: true,
+	}
 }
 
 func NewNavigationRailItemFromDestination(destination *NavigationDestination) *NavigationRailItem {

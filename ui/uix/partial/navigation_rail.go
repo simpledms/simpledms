@@ -475,13 +475,12 @@ func systemNavigationRailItem(ctx ctxx.Context) *wx.NavigationRailItem {
 }
 
 func signInNavigationRailItem(ctx ctxx.Context) *wx.NavigationRailItem {
-	return &wx.NavigationRailItem{
-		Key:   "sign-in",
-		Value: "sign-in",
-		Label: wx.T("Sign in [subject]").String(ctx),
-		Icon:  "login",
-		Href:  "/",
-	}
+	return pageNavigationRailItem(
+		"sign-in",
+		wx.T("Sign in [subject]").String(ctx),
+		"login",
+		"/",
+	)
 }
 
 func signOutNavigationRailItem(ctx ctxx.Context) *wx.NavigationRailItem {
@@ -506,11 +505,7 @@ func aboutNavigationRailItem(ctx ctxx.Context) *wx.NavigationRailItem {
 }
 
 func navigationRailSubheader(key string, label string) *wx.NavigationRailItem {
-	return &wx.NavigationRailItem{
-		Key:         key,
-		Label:       label,
-		IsSubheader: true,
-	}
+	return wx.NewNavigationRailLabel(key, label)
 }
 
 func pageNavigationRailItem(key string, label string, icon string, href string) *wx.NavigationRailItem {

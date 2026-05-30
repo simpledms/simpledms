@@ -37,6 +37,18 @@ func (qq *NavigationRail) CollapsedItems() []*NavigationRailItem {
 	return qq.limitedItems(MaxCollapsedNavigationRailItems)
 }
 
+func (qq *NavigationRail) ExpandedItems() []*NavigationRailItem {
+	items := qq.GetItems()
+	expandedItems := make([]*NavigationRailItem, 0, len(items))
+	for _, item := range items {
+		if item == nil || item.IsCollapsedOnly {
+			continue
+		}
+		expandedItems = append(expandedItems, item)
+	}
+	return expandedItems
+}
+
 func (qq *NavigationRail) CompactNavigationItems() []*NavigationRailItem {
 	if len(qq.CompactItems) > 0 {
 		return qq.CompactItems
@@ -47,7 +59,7 @@ func (qq *NavigationRail) CompactNavigationItems() []*NavigationRailItem {
 func (qq *NavigationRail) limitedItems(limit int) []*NavigationRailItem {
 	items := make([]*NavigationRailItem, 0, limit)
 	for _, item := range qq.GetItems() {
-		if item == nil || item.IsGroup() || item.IsSubheader {
+		if item == nil || item.IsGroup() || item.IsSubheader || item.IsExpandedOnly {
 			continue
 		}
 		items = append(items, item)
