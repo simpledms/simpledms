@@ -3117,6 +3117,11 @@
             "translation": ""
         },
         {
+            "id": "None",
+            "message": "None",
+            "translation": ""
+        },
+        {
             "id": "Norway",
             "message": "Norway",
             "translation": ""
@@ -3174,6 +3179,11 @@
         {
             "id": "Pro",
             "message": "Pro",
+            "translation": ""
+        },
+        {
+            "id": "Reader",
+            "message": "Reader",
             "translation": ""
         },
         {
@@ -3319,6 +3329,11 @@
         {
             "id": "View mode",
             "message": "View mode",
+            "translation": ""
+        },
+        {
+            "id": "Writer",
+            "message": "Writer",
             "translation": ""
         },
         {
@@ -4563,8 +4578,13 @@
             "translation": ""
         },
         {
-            "id": "Tenants",
-            "message": "Tenants",
+            "id": "Misc",
+            "message": "Misc",
+            "translation": ""
+        },
+        {
+            "id": "Manage space",
+            "message": "Manage space",
             "translation": ""
         },
         {

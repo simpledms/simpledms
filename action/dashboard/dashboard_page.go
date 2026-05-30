@@ -70,7 +70,7 @@ func (qq *DashboardPage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "dashboard",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title: &wx.AppBarTitle{
 			Text: wx.T("Dashboard"),
 		},

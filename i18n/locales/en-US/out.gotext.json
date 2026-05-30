@@ -4135,6 +4135,13 @@
             "fuzzy": true
         },
         {
+            "id": "None",
+            "message": "None",
+            "translation": "None",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Norway",
             "message": "Norway",
             "translation": "Norway",
@@ -4215,6 +4222,13 @@
             "id": "Pro",
             "message": "Pro",
             "translation": "Pro",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Reader",
+            "message": "Reader",
+            "translation": "Reader",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4418,6 +4432,13 @@
             "id": "View mode",
             "message": "View mode",
             "translation": "View mode",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Writer",
+            "message": "Writer",
+            "translation": "Writer",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6129,9 +6150,16 @@
             "fuzzy": true
         },
         {
-            "id": "Tenants",
-            "message": "Tenants",
-            "translation": "Tenants",
+            "id": "Misc",
+            "message": "Misc",
+            "translation": "Misc",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage space",
+            "message": "Manage space",
+            "translation": "Manage space",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

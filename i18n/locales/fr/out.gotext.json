@@ -4115,6 +4115,11 @@
             "fuzzy": true
         },
         {
+            "id": "None",
+            "message": "None",
+            "translation": ""
+        },
+        {
             "id": "Norway",
             "message": "Norway",
             "translation": "Norvège",
@@ -4197,6 +4202,11 @@
             "translation": "Pro",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "Reader",
+            "message": "Reader",
+            "translation": ""
         },
         {
             "id": "Role",
@@ -4395,6 +4405,11 @@
         {
             "id": "View mode",
             "message": "View mode",
+            "translation": ""
+        },
+        {
+            "id": "Writer",
+            "message": "Writer",
             "translation": ""
         },
         {
@@ -6101,9 +6116,16 @@
             "fuzzy": true
         },
         {
-            "id": "Tenants",
-            "message": "Tenants",
-            "translation": "Tenants",
+            "id": "Misc",
+            "message": "Misc",
+            "translation": "Divers",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage space",
+            "message": "Manage space",
+            "translation": "Gérer le Space",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

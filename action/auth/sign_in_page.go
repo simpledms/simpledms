@@ -103,7 +103,7 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 func (qq *SignInPage) appBar(ctx ctxx.Context) *wx.AppBar {
 	return &wx.AppBar{
 		Leading:          &wx.Icon{Name: "folder_open"},
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title:            &wx.AppBarTitle{Text: wx.Tu("SimpleDMS")},
 		Actions:          []wx.IWidget{},
 	}

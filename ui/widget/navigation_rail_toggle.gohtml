@@ -1,0 +1,16 @@
+{{- define "NavigationRailToggle" }}
+	<div id="{{ .GetID }}" class="-m-3 flex center-aligned">
+		<button
+			type="button"
+			class="js-navigation-rail-toggle flex center-aligned size-12 rounded-full cursor-pointer"
+			aria-label="{{ render .GetContext .GetTooltip }}"
+			aria-controls="{{ .GetTargetID }}"
+			aria-expanded="false"
+			data-navigation-rail-target="{{ .GetTargetID }}"
+		>
+			<div class="state-layer-on-surface-variant flex center-aligned !size-10">
+				<i class="js-navigation-rail-toggle-icon size-6 material-symbols-outlined">menu</i>
+			</div>
+		</button>
+	</div>
+{{ end }}

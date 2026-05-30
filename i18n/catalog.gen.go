@@ -79,8 +79,8 @@ var messageKeyToIndex = map[string]int{
 	"Add to inbox":                   438,
 	"Added new version from inbox.":  140,
 	"Admin":                          439,
-	"After registration, printable backup codes will be shown once. Save them before closing.":           779,
-	"After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.": 780,
+	"After registration, printable backup codes will be shown once. Save them before closing.":           780,
+	"After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.": 781,
 	"All passkeys were removed.":                    29,
 	"App already initialized.":                      576,
 	"App initialized.":                              6,
@@ -110,13 +110,13 @@ var messageKeyToIndex = map[string]int{
 	"Attribute «%s» created.":                 284,
 	"Attribute «%s» updated.":                 295,
 	"Austria":                                 440,
-	"Auth cookie already set.":                795,
+	"Auth cookie already set.":                796,
 	"Back to parent folder":                   159,
 	"Backup code":                             441,
 	"Belgium":                                 442,
 	"Between":                                 170,
 	"Bucket name is empty.":                   657,
-	"Built in column":                         808,
+	"Built in column":                         809,
 	"Bulgaria":                                443,
 	"Cannot add a tag group as child.":        751,
 	"Cannot decode url query.":                435,
@@ -126,7 +126,7 @@ var messageKeyToIndex = map[string]int{
 	"Cannot upload versions for directories.": 206,
 	"Cannot validate form.":                   431,
 	"Change":                                  24,
-	"Change file list view":                   803,
+	"Change file list view":                   804,
 	"Change passphrase":                       0,
 	"Change password":                         23,
 	"Changes saved.":                          381,
@@ -136,9 +136,9 @@ var messageKeyToIndex = map[string]int{
 	"Client":                                  738,
 	"Close":                                   766,
 	"Close details":                           291,
-	"Close dialog":                            774,
+	"Close dialog":                            775,
 	"Close preview":                           119,
-	"Codes":                                   788,
+	"Codes":                                   789,
 	"Complete":                                725,
 	"Composed of %s":                          402,
 	"Confirm new passphrase":                  446,
@@ -152,9 +152,9 @@ var messageKeyToIndex = map[string]int{
 	"Contract type":                           698,
 	"Cookie set but empty.":                   763,
 	"Cookie set but not valid.":               762,
-	"Copy codes":                              794,
+	"Copy codes":                              795,
 	"Could not convert id to integer.":        302,
-	"Could not copy backup codes automatically.": 791,
+	"Could not copy backup codes automatically.": 792,
 	"Could not copy temporary file.":             663,
 	"Could not create directory structure.":      194,
 	"Could not delete source file.":              638,
@@ -162,13 +162,13 @@ var messageKeyToIndex = map[string]int{
 	"Could not download file from URL.":          601,
 	"Could not extract all files from archive.":  195,
 	"Could not generate backup codes.":           552,
-	"Could not generate session id.":             796,
+	"Could not generate session id.":             797,
 	"Could not get object name.":                 652,
 	"Could not get x25519 identity.":             660,
 	"Could not initialize passkey service.":      572,
 	"Could not load duplicates.":                 136,
 	"Could not load path of file.":               651,
-	"Could not load users.":                      806,
+	"Could not load users.":                      807,
 	"Could not open ZIP archive.":                191,
 	"Could not open file.":                       653,
 	"Could not parse url.":                       758,
@@ -176,10 +176,10 @@ var messageKeyToIndex = map[string]int{
 	"Could not read cookie.":                     761,
 	"Could not read source version.":             632,
 	"Could not read target versions.":            634,
-	"Could not regenerate backup codes.":         773,
+	"Could not regenerate backup codes.":         774,
 	"Could not remove source versions.":          637,
 	"Could not save file.":                       659,
-	"Could not start transaction.":               799,
+	"Could not start transaction.":               800,
 	"Could not unzip the archive.":               192,
 	"Could not update target file.":              635,
 	"Could not verify archive size.":             198,
@@ -195,7 +195,7 @@ var messageKeyToIndex = map[string]int{
 	"Create space":                               377,
 	"Create tag":                                 391,
 	"Create user":                                344,
-	"Created %s":                                 800,
+	"Created %s":                                 801,
 	"Created at":                                 411,
 	"Created on %s":                              263,
 	"Croatia":                                    450,
@@ -314,10 +314,10 @@ var messageKeyToIndex = map[string]int{
 	"Free 30-day trial, no credit card required.": 541,
 	"French":    469,
 	"Fulfilled": 708,
-	"Generated": 785,
+	"Generated": 786,
 	"German":    470,
 	"Germany":   471,
-	"Give this passkey an optional name so you can recognize it later.": 778,
+	"Give this passkey an optional name so you can recognize it later.": 779,
 	"Global upload limit updated to %s.":                                10,
 	"Greater than":                                                      168,
 	"Greece":                                                            472,
@@ -332,13 +332,13 @@ var messageKeyToIndex = map[string]int{
 	"IT":      718,
 	"Iceland": 475,
 	"If an account with this email exists, a new temporary password was sent.":              57,
-	"If you lose these codes and your passkey, account recovery may no longer be possible.": 783,
+	"If you lose these codes and your passkey, account recovery may no longer be possible.": 784,
 	"Import":               298,
 	"Import URL":           369,
 	"Import file from URL": 370,
 	"Import from library":  297,
 	"Import is only available for empty spaces.": 299,
-	"Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.": 782,
+	"Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.": 783,
 	"Imprint":                                547,
 	"In progress":                            724,
 	"Inbox":                                  314,
@@ -367,7 +367,7 @@ var messageKeyToIndex = map[string]int{
 	"It expires at":                          579,
 	"Italian":                                479,
 	"Italy":                                  480,
-	"Keep these backup codes in a secure place.": 786,
+	"Keep these backup codes in a secure place.": 787,
 	"Language":                    481,
 	"Last name":                   482,
 	"Last used on %s":             264,
@@ -376,7 +376,7 @@ var messageKeyToIndex = map[string]int{
 	"Less than":                   169,
 	"Library template keys":       485,
 	"Liechtenstein":               486,
-	"List":                        804,
+	"List":                        805,
 	"Lithuania":                   487,
 	"Loading more...":             125,
 	"Local":                       488,
@@ -390,6 +390,7 @@ var messageKeyToIndex = map[string]int{
 	"Malta":                         490,
 	"Manage document types":         90,
 	"Manage fields":                 74,
+	"Manage space":                  771,
 	"Manage spaces":                 247,
 	"Manage tags":                   175,
 	"Manage upload limit":           266,
@@ -410,6 +411,7 @@ var messageKeyToIndex = map[string]int{
 	"Meeting type":                         740,
 	"Member account":                       357,
 	"Metadata":                             128,
+	"Misc":                                 770,
 	"Missing passkey rp id configuration.": 571,
 	"Modified at":                          412,
 	"Money":                                492,
@@ -436,8 +438,8 @@ var messageKeyToIndex = map[string]int{
 	"New password must be different from current password.": 557,
 	"New version uploaded for «%s».":                        207,
 	"Newest first":                                          187,
-	"No":                                                    802,
-	"No backup codes were returned.":                        771,
+	"No":                                                    803,
+	"No backup codes were returned.":                        772,
 	"No data available.":                                    132,
 	"No dir id provided.":                                   83,
 	"No document types available yet.":                      89,
@@ -467,6 +469,7 @@ var messageKeyToIndex = map[string]int{
 	"No unassigned fields available.":                       73,
 	"No unassigned users available.":                        325,
 	"No versions available yet.":                            154,
+	"None":                                                  810,
 	"Norway":                                                500,
 	"Not a ZIP archive.":                                    190,
 	"Not initialized":                                       231,
@@ -515,7 +518,7 @@ var messageKeyToIndex = map[string]int{
 	"Passkey enforcement disabled for organization.":                          276,
 	"Passkey enforcement enabled for organization.":                           275,
 	"Passkey login is not enabled for this account.":                          562,
-	"Passkey name (optional)":                                                 781,
+	"Passkey name (optional)":                                                 782,
 	"Passkey name is required.":                                               52,
 	"Passkey not found.":                                                      568,
 	"Passkey recommendation":                                                  220,
@@ -548,7 +551,7 @@ var messageKeyToIndex = map[string]int{
 	"Please create one to get started.":                                      246,
 	"Please log in and change your password as soon as possible.":            586,
 	"Please register a passkey to continue.":                                 759,
-	"Please reload the page and try again.":                                  807,
+	"Please reload the page and try again.":                                  808,
 	"Please select at least one document type.":                              623,
 	"Please try again once you created a space or were invited to join one.": 364,
 	"Please wait":                           232,
@@ -559,8 +562,8 @@ var messageKeyToIndex = map[string]int{
 	"Policy status":                         714,
 	"Portugal":                              510,
 	"Preview":                               426,
-	"Print codes":                           793,
-	"Print dialog opened.":                  789,
+	"Print codes":                           794,
+	"Print dialog opened.":                  790,
 	"Privacy policy":                        548,
 	"Pro":                                   511,
 	"Processing of downloaded file failed.": 602,
@@ -569,11 +572,12 @@ var messageKeyToIndex = map[string]int{
 	"Project name":                          722,
 	"Project status":                        727,
 	"Project type":                          728,
-	"Properties":                            811,
+	"Properties":                            815,
 	"Purchase Order":                        702,
 	"Purchase order status":                 709,
 	"Quota usage":                           235,
 	"Read-only request context required.":   202,
+	"Reader":                                811,
 	"Receipt":                               679,
 	"Receipt category":                      683,
 	"Receipt date":                          680,
@@ -626,7 +630,7 @@ var messageKeyToIndex = map[string]int{
 	"Set up a second passkey on another device as backup in case one device is lost.": 221,
 	"Show assigned tags": 394,
 	"Show details":       120,
-	"Show tags":          809,
+	"Show tags":          812,
 	"Sign in":            42,
 	"Sign in [subject]":  67,
 	"Sign in only works over HTTPS or on localhost.": 66,
@@ -637,10 +641,10 @@ var messageKeyToIndex = map[string]int{
 	"Sign up [subject]":                              540,
 	"Simple":                                         516,
 	"SimpleDMS Password Reset":                       588,
-	"SimpleDMS backup codes":                         784,
+	"SimpleDMS backup codes":                         785,
 	"SimpleDMS password reset":                       583,
 	"Size":                                           130,
-	"Sizes":                                          812,
+	"Sizes":                                          816,
 	"Slovakia":                                       517,
 	"Slovenia":                                       518,
 	"Software":                                       687,
@@ -673,7 +677,7 @@ var messageKeyToIndex = map[string]int{
 	"Subscription":            230,
 	"Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.": 347,
 	"Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space.":        348,
-	"Suggestion":                    775,
+	"Suggestion":                    776,
 	"Suggestions based on filename": 313,
 	"Super":                         521,
 	"Super tag":                     341,
@@ -682,7 +686,7 @@ var messageKeyToIndex = map[string]int{
 	"Sweden":                        523,
 	"Switzerland":                   524,
 	"System":                        226,
-	"Table":                         805,
+	"Table":                         806,
 	"Tag":                           525,
 	"Tag group ID is required.":     342,
 	"Tag group «%s» is already added to this document type.": 624,
@@ -700,12 +704,11 @@ var messageKeyToIndex = map[string]int{
 	"Temporary password cleared successfully.":            31,
 	"Temporary password expired.":                         553,
 	"Temporary session":                                   527,
-	"Tenant database not found.":                          798,
+	"Tenant database not found.":                          799,
 	"Tenant is required.":                                 619,
 	"Tenant not found.":                                   620,
 	"Tenant not initialized yet. Please try again later.": 612,
 	"Tenant upload limit updated to %s.":                  16,
-	"Tenants":                                             770,
 	"Terminated":                                          696,
 	"Terms of service":                                    549,
 	"Text":                                                528,
@@ -716,16 +719,16 @@ var messageKeyToIndex = map[string]int{
 	"The app is unlocked and not protected by a passphrase.":                                     258,
 	"The app is unlocked and protected by a passphrase.":                                         261,
 	"The backup codes are no longer available. Please generate a new set.":                       39,
-	"The backup codes were copied to clipboard.":                                                 790,
-	"The backup codes were downloaded.":                                                          792,
-	"The backup codes were regenerated.":                                                         772,
+	"The backup codes were copied to clipboard.":                                                 791,
+	"The backup codes were downloaded.":                                                          793,
+	"The backup codes were regenerated.":                                                         773,
 	"The organization is not initialized yet, please wait until the initialization is complete.": 233,
 	"The original parent folder is missing. Restored to Inbox.":                                  416,
 	"The page will be refreshed automatically once the upload is finished.":                      362,
 	"The provided filename is not allowed.":                                                      641,
 	"The requested page could not be loaded.":                                                    387,
 	"The requested page was not found.":                                                          386,
-	"These codes are shown only once.":                                                           787,
+	"These codes are shown only once.":                                                           788,
 	"This file already exists in the following %d locations:":                                    98,
 	"This is an automated message, please do not reply.":                                         584,
 	"Title": 734,
@@ -782,10 +785,11 @@ var messageKeyToIndex = map[string]int{
 	"Version number":       538,
 	"Version preview":      152,
 	"Versions":             134,
-	"View mode":            810,
+	"View mode":            813,
 	"Welcome to SimpleDMS": 581,
-	"Yes":                  801,
-	"You are not allowed to access the requested resource.":                                                     797,
+	"Writer":               814,
+	"Yes":                  802,
+	"You are not allowed to access the requested resource.":                                                     798,
 	"You are not allowed to access this tenant.":                                                                760,
 	"You are not allowed to assign users to spaces because you aren't the owner.":                               323,
 	"You are not allowed to create users because you are not the owner.":                                        346,
@@ -836,9 +840,9 @@ var messageKeyToIndex = map[string]int{
 	"layout not supported":                                                        399,
 	"missing version number":                                                      149,
 	"name-giving":                                                                 282,
-	"optional":                                                                    776,
+	"optional":                                                                    777,
 	"rendering failed":                                                            118,
-	"required":                                                                    777,
+	"required":                                                                    778,
 	"unlimited":                                                                   9,
 	"version not found":                                                           151,
 	"«%s» assigned.":                                                              388,
@@ -857,7 +861,7 @@ var messageKeyToIndex = map[string]int{
 	"«%s» uploaded.":                                                              204,
 }
 
-var deIndex = []uint32{ // 814 elements
+var deIndex = []uint32{ // 818 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000013, 0x00000047, 0x0000007e,
 	0x00000094, 0x000000a7, 0x000000cb, 0x000000de,
@@ -1075,22 +1079,23 @@ var deIndex = []uint32{ // 814 elements
 	0x000056f1, 0x0000572f, 0x00005753, 0x00005777,
 	0x00005792, 0x000057a0, 0x000057ed, 0x000057f8,
 	// Entry 300 - 31F
-	0x0000580b, 0x00005815, 0x00005825, 0x0000582d,
-	0x0000585a, 0x00005881, 0x000058b2, 0x000058c4,
-	0x000058ce, 0x000058d7, 0x000058e4, 0x00005934,
-	0x0000599e, 0x00005a1d, 0x00005a35, 0x00005ac0,
-	0x00005b37, 0x00005b4e, 0x00005b57, 0x00005b8d,
-	0x00005bb6, 0x00005bbc, 0x00005bd9, 0x00005c10,
-	0x00005c47, 0x00005c70, 0x00005c7e, 0x00005c8d,
-	0x00005caa, 0x00005cd4, 0x00005d0e, 0x00005d31,
+	0x0000580b, 0x00005815, 0x00005825, 0x0000582f,
+	0x0000583f, 0x0000586c, 0x00005893, 0x000058c4,
+	0x000058d6, 0x000058e0, 0x000058e9, 0x000058f6,
+	0x00005946, 0x000059b0, 0x00005a2f, 0x00005a47,
+	0x00005ad2, 0x00005b49, 0x00005b60, 0x00005b69,
+	0x00005b9f, 0x00005bc8, 0x00005bce, 0x00005beb,
+	0x00005c22, 0x00005c59, 0x00005c82, 0x00005c90,
+	0x00005c9f, 0x00005cbc, 0x00005ce6, 0x00005d20,
 	// Entry 320 - 33F
-	0x00005d5c, 0x00005d5c, 0x00005d5c, 0x00005d5c,
-	0x00005d5c, 0x00005d5c, 0x00005d5c, 0x00005d5c,
-	0x00005d5c, 0x00005d5c, 0x00005d5c, 0x00005d5c,
-	0x00005d5c, 0x00005d5c,
-} // Size: 3280 bytes
+	0x00005d43, 0x00005d6e, 0x00005d6e, 0x00005d6e,
+	0x00005d6e, 0x00005d6e, 0x00005d6e, 0x00005d6e,
+	0x00005d6e, 0x00005d6e, 0x00005d6e, 0x00005d6e,
+	0x00005d6e, 0x00005d6e, 0x00005d6e, 0x00005d6e,
+	0x00005d6e, 0x00005d6e,
+} // Size: 3296 bytes
 
-const deData string = "" + // Size: 23900 bytes
+const deData string = "" + // Size: 23918 bytes
 	"\x02Passphrase ändern\x02Du musst eingeloggt sein, um die App zu entsper" +
 	"ren.\x02Du musst Administrator sein, um die App zu entsperren.\x02Passph" +
 	"rase geändert.\x02App initialisieren\x02Passphrasen stimmen nicht überei" +
@@ -1432,29 +1437,29 @@ const deData string = "" + // Size: 23900 bytes
 	"n.\x02Cookie konnte nicht gelesen werden.\x02Cookie gesetzt, aber nicht " +
 	"gültig.\x02Cookie gesetzt, aber leer.\x02Wartungsmodus\x02Der Wartungsmo" +
 	"dus ist aktiviert. Bitte warte, bis die App wieder bereit ist.\x02Schlie" +
-	"ssen\x02Hauptmenü öffnen\x02Ausloggen\x02Über SimpleDMS\x02Tenants\x02Es" +
-	" wurden keine Backup-Codes zurückgegeben.\x02Die Backup-Codes wurden neu" +
-	" generiert.\x02Backup-Codes konnten nicht neu generiert werden.\x02Dialo" +
-	"g schliessen\x02Vorschlag\x02optional\x02erforderlich\x02Gib diesem Pass" +
-	"key einen optionalen Namen, damit du ihn später wiedererkennst.\x02Nach " +
-	"der Registrierung werden druckbare Backup-Codes einmal angezeigt. Speich" +
-	"ere sie, bevor du schliesst.\x02Nach der Einrichtung ist die Passwort-An" +
-	"meldung für dieses Konto deaktiviert. Verwende stattdessen Passkeys und " +
-	"Backup-Codes.\x02Passkey-Name (optional)\x02Wichtig: Diese Backup-Codes " +
-	"werden nur einmal angezeigt. Speichere, drucke oder lade sie jetzt herun" +
-	"ter, bevor du diesen Dialog schliesst.\x02Wenn du diese Codes und deinen" +
-	" Passkey verlierst, ist eine Kontowiederherstellung möglicherweise nicht" +
-	" mehr möglich.\x02SimpleDMS Backup-Codes\x02Erstellt\x02Bewahre diese Ba" +
-	"ckup-Codes an einem sicheren Ort auf.\x02Diese Codes werden nur einmal a" +
-	"ngezeigt.\x02Codes\x02Druckdialog wurde geöffnet.\x02Die Backup-Codes wu" +
-	"rden in die Zwischenablage kopiert.\x02Backup-Codes konnten nicht automa" +
-	"tisch kopiert werden.\x02Die Backup-Codes wurden heruntergeladen.\x02Cod" +
-	"es drucken\x02Codes kopieren\x02Auth-Cookie bereits gesetzt.\x02Session-" +
-	"ID konnte nicht generiert werden.\x02Du darfst nicht auf die angefordert" +
-	"e Ressource zugreifen.\x02Mandantendatenbank nicht gefunden.\x02Transakt" +
-	"ion konnte nicht gestartet werden."
+	"ssen\x02Hauptmenü öffnen\x02Ausloggen\x02Über SimpleDMS\x02Sonstiges\x02" +
+	"Space verwalten\x02Es wurden keine Backup-Codes zurückgegeben.\x02Die Ba" +
+	"ckup-Codes wurden neu generiert.\x02Backup-Codes konnten nicht neu gener" +
+	"iert werden.\x02Dialog schliessen\x02Vorschlag\x02optional\x02erforderli" +
+	"ch\x02Gib diesem Passkey einen optionalen Namen, damit du ihn später wie" +
+	"dererkennst.\x02Nach der Registrierung werden druckbare Backup-Codes ein" +
+	"mal angezeigt. Speichere sie, bevor du schliesst.\x02Nach der Einrichtun" +
+	"g ist die Passwort-Anmeldung für dieses Konto deaktiviert. Verwende stat" +
+	"tdessen Passkeys und Backup-Codes.\x02Passkey-Name (optional)\x02Wichtig" +
+	": Diese Backup-Codes werden nur einmal angezeigt. Speichere, drucke oder" +
+	" lade sie jetzt herunter, bevor du diesen Dialog schliesst.\x02Wenn du d" +
+	"iese Codes und deinen Passkey verlierst, ist eine Kontowiederherstellung" +
+	" möglicherweise nicht mehr möglich.\x02SimpleDMS Backup-Codes\x02Erstell" +
+	"t\x02Bewahre diese Backup-Codes an einem sicheren Ort auf.\x02Diese Code" +
+	"s werden nur einmal angezeigt.\x02Codes\x02Druckdialog wurde geöffnet." +
+	"\x02Die Backup-Codes wurden in die Zwischenablage kopiert.\x02Backup-Cod" +
+	"es konnten nicht automatisch kopiert werden.\x02Die Backup-Codes wurden " +
+	"heruntergeladen.\x02Codes drucken\x02Codes kopieren\x02Auth-Cookie berei" +
+	"ts gesetzt.\x02Session-ID konnte nicht generiert werden.\x02Du darfst ni" +
+	"cht auf die angeforderte Ressource zugreifen.\x02Mandantendatenbank nich" +
+	"t gefunden.\x02Transaktion konnte nicht gestartet werden."
 
-var enIndex = []uint32{ // 814 elements
+var enIndex = []uint32{ // 818 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000012, 0x0000003b, 0x00000063,
 	0x00000077, 0x00000080, 0x0000009a, 0x000000ab,
@@ -1684,8 +1689,9 @@ var enIndex = []uint32{ // 814 elements
 	0x00000432, 0x00000432, 0x00000432, 0x00000432,
 	0x00000432, 0x00000432, 0x00000432, 0x00000432,
 	0x00000432, 0x00000432, 0x00000432, 0x00000432,
+	0x00000432, 0x00000432, 0x00000432, 0x00000432,
 	0x00000432, 0x00000432,
-} // Size: 3280 bytes
+} // Size: 3296 bytes
 
 const enData string = "" + // Size: 1074 bytes
 	"\x02Change passphrase\x02You must be logged in to unlock the app.\x02You" +
@@ -1706,7 +1712,7 @@ const enData string = "" + // Size: 1074 bytes
 	" not valid.\x02Cookie set but empty.\x02Maintenance mode\x02Maintenance " +
 	"mode is enabled. Please wait until the app is ready again."
 
-var en_USIndex = []uint32{ // 814 elements
+var en_USIndex = []uint32{ // 818 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000012, 0x0000003b, 0x00000063,
 	0x00000077, 0x00000080, 0x0000009a, 0x000000ab,
@@ -1924,22 +1930,23 @@ var en_USIndex = []uint32{ // 814 elements
 	0x000046d5, 0x00004700, 0x00004717, 0x00004731,
 	0x00004747, 0x00004758, 0x0000479f, 0x000047a5,
 	// Entry 300 - 31F
-	0x000047b4, 0x000047bd, 0x000047cd, 0x000047d5,
-	0x000047f4, 0x00004817, 0x0000483a, 0x00004847,
-	0x00004852, 0x0000485b, 0x00004864, 0x000048a6,
-	0x000048ff, 0x00004962, 0x0000497a, 0x000049eb,
-	0x00004a41, 0x00004a58, 0x00004a62, 0x00004a8d,
-	0x00004aae, 0x00004ab4, 0x00004ac9, 0x00004af4,
-	0x00004b1f, 0x00004b41, 0x00004b4d, 0x00004b58,
-	0x00004b71, 0x00004b90, 0x00004bc6, 0x00004be1,
+	0x000047b4, 0x000047bd, 0x000047cd, 0x000047d2,
+	0x000047df, 0x000047fe, 0x00004821, 0x00004844,
+	0x00004851, 0x0000485c, 0x00004865, 0x0000486e,
+	0x000048b0, 0x00004909, 0x0000496c, 0x00004984,
+	0x000049f5, 0x00004a4b, 0x00004a62, 0x00004a6c,
+	0x00004a97, 0x00004ab8, 0x00004abe, 0x00004ad3,
+	0x00004afe, 0x00004b29, 0x00004b4b, 0x00004b57,
+	0x00004b62, 0x00004b7b, 0x00004b9a, 0x00004bd0,
 	// Entry 320 - 33F
-	0x00004bfe, 0x00004c0c, 0x00004c10, 0x00004c13,
-	0x00004c29, 0x00004c2e, 0x00004c34, 0x00004c4a,
-	0x00004c70, 0x00004c80, 0x00004c8a, 0x00004c94,
-	0x00004c9f, 0x00004ca5,
-} // Size: 3280 bytes
+	0x00004beb, 0x00004c08, 0x00004c16, 0x00004c1a,
+	0x00004c1d, 0x00004c33, 0x00004c38, 0x00004c3e,
+	0x00004c54, 0x00004c7a, 0x00004c8a, 0x00004c8f,
+	0x00004c96, 0x00004ca0, 0x00004caa, 0x00004cb1,
+	0x00004cbc, 0x00004cc2,
+} // Size: 3296 bytes
 
-const en_USData string = "" + // Size: 19621 bytes
+const en_USData string = "" + // Size: 19650 bytes
 	"\x02Change passphrase\x02You must be logged in to unlock the app.\x02You" +
 	" must be an admin to unlock the app.\x02Passphrase changed.\x02Init app" +
 	"\x02Passphrases do not match.\x02App initialized.\x02Remove passphrase" +
@@ -2227,28 +2234,29 @@ const en_USData string = "" + // Size: 19621 bytes
 	"wed to access this tenant.\x02Could not read cookie.\x02Cookie set but n" +
 	"ot valid.\x02Cookie set but empty.\x02Maintenance mode\x02Maintenance mo" +
 	"de is enabled. Please wait until the app is ready again.\x02Close\x02Ope" +
-	"n main menu\x02Sign out\x02About SimpleDMS\x02Tenants\x02No backup codes" +
-	" were returned.\x02The backup codes were regenerated.\x02Could not regen" +
-	"erate backup codes.\x02Close dialog\x02Suggestion\x02optional\x02require" +
-	"d\x02Give this passkey an optional name so you can recognize it later." +
-	"\x02After registration, printable backup codes will be shown once. Save " +
-	"them before closing.\x02After setup, password sign-in is disabled for th" +
-	"is account. Use passkeys and backup codes instead.\x02Passkey name (opti" +
-	"onal)\x02Important: these backup codes are shown only once. Save, print," +
-	" or download them now before closing this dialog.\x02If you lose these c" +
-	"odes and your passkey, account recovery may no longer be possible.\x02Si" +
-	"mpleDMS backup codes\x02Generated\x02Keep these backup codes in a secure" +
-	" place.\x02These codes are shown only once.\x02Codes\x02Print dialog ope" +
-	"ned.\x02The backup codes were copied to clipboard.\x02Could not copy bac" +
-	"kup codes automatically.\x02The backup codes were downloaded.\x02Print c" +
-	"odes\x02Copy codes\x02Auth cookie already set.\x02Could not generate ses" +
-	"sion id.\x02You are not allowed to access the requested resource.\x02Ten" +
-	"ant database not found.\x02Could not start transaction.\x02Created %[1]s" +
-	"\x02Yes\x02No\x02Change file list view\x02List\x02Table\x02Could not loa" +
-	"d users.\x02Please reload the page and try again.\x02Built in column\x02" +
-	"Show tags\x02View mode\x02Properties\x02Sizes"
+	"n main menu\x02Sign out\x02About SimpleDMS\x02Misc\x02Manage space\x02No" +
+	" backup codes were returned.\x02The backup codes were regenerated.\x02Co" +
+	"uld not regenerate backup codes.\x02Close dialog\x02Suggestion\x02option" +
+	"al\x02required\x02Give this passkey an optional name so you can recogniz" +
+	"e it later.\x02After registration, printable backup codes will be shown " +
+	"once. Save them before closing.\x02After setup, password sign-in is disa" +
+	"bled for this account. Use passkeys and backup codes instead.\x02Passkey" +
+	" name (optional)\x02Important: these backup codes are shown only once. S" +
+	"ave, print, or download them now before closing this dialog.\x02If you l" +
+	"ose these codes and your passkey, account recovery may no longer be poss" +
+	"ible.\x02SimpleDMS backup codes\x02Generated\x02Keep these backup codes " +
+	"in a secure place.\x02These codes are shown only once.\x02Codes\x02Print" +
+	" dialog opened.\x02The backup codes were copied to clipboard.\x02Could n" +
+	"ot copy backup codes automatically.\x02The backup codes were downloaded." +
+	"\x02Print codes\x02Copy codes\x02Auth cookie already set.\x02Could not g" +
+	"enerate session id.\x02You are not allowed to access the requested resou" +
+	"rce.\x02Tenant database not found.\x02Could not start transaction.\x02Cr" +
+	"eated %[1]s\x02Yes\x02No\x02Change file list view\x02List\x02Table\x02Co" +
+	"uld not load users.\x02Please reload the page and try again.\x02Built in" +
+	" column\x02None\x02Reader\x02Show tags\x02View mode\x02Writer\x02Propert" +
+	"ies\x02Sizes"
 
-var frIndex = []uint32{ // 814 elements
+var frIndex = []uint32{ // 818 elements
 	// Entry 0 - 1F
 	0x00000000, 0x0000001b, 0x00000059, 0x0000009c,
 	0x000000b7, 0x000000d1, 0x000000fd, 0x00000117,
@@ -2466,22 +2474,23 @@ var frIndex = []uint32{ // 814 elements
 	0x00005edf, 0x00005f17, 0x00005f35, 0x00005f55,
 	0x00005f6f, 0x00005f80, 0x00005fea, 0x00005ff1,
 	// Entry 300 - 31F
-	0x0000600a, 0x00006017, 0x0000602e, 0x00006036,
-	0x0000605e, 0x00006088, 0x000060b5, 0x000060d2,
-	0x000060dd, 0x000060e7, 0x000060ee, 0x00006133,
-	0x000061a9, 0x0000623f, 0x0000625e, 0x00006301,
-	0x0000636b, 0x00006386, 0x00006390, 0x000063c1,
-	0x000063f2, 0x000063f8, 0x0000642a, 0x00006465,
-	0x000064a4, 0x000064cf, 0x000064e2, 0x000064f3,
-	0x0000651d, 0x0000654b, 0x0000658d, 0x000065b5,
+	0x0000600a, 0x00006017, 0x0000602e, 0x00006035,
+	0x00006045, 0x0000606d, 0x00006097, 0x000060c4,
+	0x000060e1, 0x000060ec, 0x000060f6, 0x000060fd,
+	0x00006142, 0x000061b8, 0x0000624e, 0x0000626d,
+	0x00006310, 0x0000637a, 0x00006395, 0x0000639f,
+	0x000063d0, 0x00006401, 0x00006407, 0x00006439,
+	0x00006474, 0x000064b3, 0x000064de, 0x000064f1,
+	0x00006502, 0x0000652c, 0x0000655a, 0x0000659c,
 	// Entry 320 - 33F
-	0x000065dd, 0x000065dd, 0x000065dd, 0x000065dd,
-	0x000065dd, 0x000065dd, 0x000065dd, 0x000065dd,
-	0x000065dd, 0x000065dd, 0x000065dd, 0x000065dd,
-	0x000065dd, 0x000065dd,
-} // Size: 3280 bytes
+	0x000065c4, 0x000065ec, 0x000065ec, 0x000065ec,
+	0x000065ec, 0x000065ec, 0x000065ec, 0x000065ec,
+	0x000065ec, 0x000065ec, 0x000065ec, 0x000065ec,
+	0x000065ec, 0x000065ec, 0x000065ec, 0x000065ec,
+	0x000065ec, 0x000065ec,
+} // Size: 3296 bytes
 
-const frData string = "" + // Size: 26077 bytes
+const frData string = "" + // Size: 26092 bytes
 	"\x02Changer la phrase secrète\x02Vous devez être connecté pour déverroui" +
 	"ller l'application.\x02Vous devez être administrateur pour déverrouiller" +
 	" l'application.\x02Phrase secrète modifiée.\x02Initialiser l'application" +
@@ -2845,29 +2854,30 @@ const frData string = "" + // Size: 26077 bytes
 	"alide.\x02Cookie défini mais vide.\x02Mode maintenance\x02Le mode mainte" +
 	"nance est activé. Veuillez patienter jusqu'à ce que l'application soit à" +
 	" nouveau prête.\x02Fermer\x02Ouvrir le menu principal\x02Déconnexion\x02" +
-	"À propos de SimpleDMS\x02Tenants\x02Aucun code Backup n’a été renvoyé." +
-	"\x02Les codes Backup ont été régénérés.\x02Impossible de régénérer les c" +
-	"odes Backup.\x02Fermer la boîte de dialogue\x02Suggestion\x02optionnel" +
-	"\x02requis\x02Donnez a ce Passkey un nom facultatif pour le reconnaitre " +
-	"plus tard.\x02Après l’inscription, des codes Backup imprimables seront a" +
-	"ffichés une seule fois. Enregistre-les avant de fermer.\x02Après la conf" +
-	"iguration, la connexion par mot de passe est désactivée pour ce compte. " +
-	"Utilise plutôt les clés d’accès et les codes de secours.\x02Nom de la Pa" +
-	"sskey (facultatif)\x02Important : ces codes de secours ne sont affichés " +
-	"qu’une seule fois. Enregistre-les, imprime-les ou télécharge-les mainten" +
-	"ant avant de fermer cette fenêtre.\x02Si tu perds ces codes et ta clé d’" +
-	"accès, la récupération du compte pourrait ne plus être possible.\x02Code" +
-	"s de secours SimpleDMS\x02Généré\x02Garde ces codes de secours dans un e" +
-	"ndroit sûr.\x02Ces codes ne sont affichés qu’une seule fois.\x02Codes" +
-	"\x02La boîte de dialogue d’impression est ouverte.\x02Les codes Backup o" +
-	"nt été copiés dans le presse-papiers.\x02Les codes Backup n’ont pas pu ê" +
-	"tre copiés automatiquement.\x02Les codes Backup ont été téléchargés.\x02" +
-	"Imprimer les codes\x02Copier les codes\x02Cookie d'authentification déjà" +
-	" défini.\x02Impossible de générer la valeur de session.\x02Vous n'êtes p" +
-	"as autorisé à accéder à la ressource demandée.\x02Base de données du ten" +
-	"ant introuvable.\x02Impossible de démarrer la transaction."
+	"À propos de SimpleDMS\x02Divers\x02Gérer le Space\x02Aucun code Backup " +
+	"n’a été renvoyé.\x02Les codes Backup ont été régénérés.\x02Impossible de" +
+	" régénérer les codes Backup.\x02Fermer la boîte de dialogue\x02Suggestio" +
+	"n\x02optionnel\x02requis\x02Donnez a ce Passkey un nom facultatif pour l" +
+	"e reconnaitre plus tard.\x02Après l’inscription, des codes Backup imprim" +
+	"ables seront affichés une seule fois. Enregistre-les avant de fermer." +
+	"\x02Après la configuration, la connexion par mot de passe est désactivée" +
+	" pour ce compte. Utilise plutôt les clés d’accès et les codes de secours" +
+	".\x02Nom de la Passkey (facultatif)\x02Important : ces codes de secours " +
+	"ne sont affichés qu’une seule fois. Enregistre-les, imprime-les ou téléc" +
+	"harge-les maintenant avant de fermer cette fenêtre.\x02Si tu perds ces c" +
+	"odes et ta clé d’accès, la récupération du compte pourrait ne plus être " +
+	"possible.\x02Codes de secours SimpleDMS\x02Généré\x02Garde ces codes de " +
+	"secours dans un endroit sûr.\x02Ces codes ne sont affichés qu’une seule " +
+	"fois.\x02Codes\x02La boîte de dialogue d’impression est ouverte.\x02Les " +
+	"codes Backup ont été copiés dans le presse-papiers.\x02Les codes Backup " +
+	"n’ont pas pu être copiés automatiquement.\x02Les codes Backup ont été té" +
+	"léchargés.\x02Imprimer les codes\x02Copier les codes\x02Cookie d'authent" +
+	"ification déjà défini.\x02Impossible de générer la valeur de session." +
+	"\x02Vous n'êtes pas autorisé à accéder à la ressource demandée.\x02Base " +
+	"de données du tenant introuvable.\x02Impossible de démarrer la transacti" +
+	"on."
 
-var itIndex = []uint32{ // 814 elements
+var itIndex = []uint32{ // 818 elements
 	// Entry 0 - 1F
 	0x00000000, 0x00000012, 0x00000044, 0x00000080,
 	0x00000097, 0x000000a7, 0x000000c8, 0x000000e4,
@@ -3085,22 +3095,23 @@ var itIndex = []uint32{ // 814 elements
 	0x00005498, 0x000054c9, 0x000054e8, 0x00005508,
 	0x00005523, 0x0000553a, 0x000055a1, 0x000055a8,
 	// Entry 300 - 31F
-	0x000055bd, 0x000055c9, 0x000055e3, 0x000055eb,
-	0x00005618, 0x0000563f, 0x00005667, 0x00005677,
-	0x00005684, 0x0000568e, 0x0000569b, 0x000056e9,
-	0x00005755, 0x000057ce, 0x000057ef, 0x00005884,
-	0x000058ea, 0x00005905, 0x0000590e, 0x00005943,
-	0x00005972, 0x00005979, 0x00005994, 0x000059c6,
-	0x000059fb, 0x00005a21, 0x00005a2f, 0x00005a3c,
-	0x00005a65, 0x00005a94, 0x00005acc, 0x00005aed,
+	0x000055bd, 0x000055c9, 0x000055e3, 0x000055e9,
+	0x000055f8, 0x00005625, 0x0000564c, 0x00005674,
+	0x00005684, 0x00005691, 0x0000569b, 0x000056a8,
+	0x000056f6, 0x00005762, 0x000057db, 0x000057fc,
+	0x00005891, 0x000058f7, 0x00005912, 0x0000591b,
+	0x00005950, 0x0000597f, 0x00005986, 0x000059a1,
+	0x000059d3, 0x00005a08, 0x00005a2e, 0x00005a3c,
+	0x00005a49, 0x00005a72, 0x00005aa1, 0x00005ad9,
 	// Entry 320 - 33F
-	0x00005b11, 0x00005b11, 0x00005b11, 0x00005b11,
-	0x00005b11, 0x00005b11, 0x00005b11, 0x00005b11,
-	0x00005b11, 0x00005b11, 0x00005b11, 0x00005b11,
-	0x00005b11, 0x00005b11,
-} // Size: 3280 bytes
+	0x00005afa, 0x00005b1e, 0x00005b1e, 0x00005b1e,
+	0x00005b1e, 0x00005b1e, 0x00005b1e, 0x00005b1e,
+	0x00005b1e, 0x00005b1e, 0x00005b1e, 0x00005b1e,
+	0x00005b1e, 0x00005b1e, 0x00005b1e, 0x00005b1e,
+	0x00005b1e, 0x00005b1e,
+} // Size: 3296 bytes
 
-const itData string = "" + // Size: 23313 bytes
+const itData string = "" + // Size: 23326 bytes
 	"\x02Cambia passphrase\x02Devi essere loggato per sbloccare l'applicazion" +
 	"e.\x02Devi essere un amministratore per sbloccare l'applicazione.\x02Pas" +
 	"sphrase modificata.\x02Inizializza app\x02Le passphrase non corrispondon" +
@@ -3436,25 +3447,25 @@ const itData string = "" + // Size: 23313 bytes
 	" impostato ma vuoto.\x02Modalità manutenzione\x02La modalità manutenzion" +
 	"e è attivata. Attendere fino a quando l'applicazione sarà nuovamente pro" +
 	"nta.\x02Chiudi\x02Apri menu principale\x02Disconnetti\x02Informazioni su" +
-	" SimpleDMS\x02Tenants\x02Non è stato restituito alcun codice Backup.\x02" +
-	"I codici Backup sono stati rigenerati.\x02Impossibile rigenerare i codic" +
-	"i Backup.\x02Chiudi finestra\x02Suggerimento\x02opzionale\x02obbligatori" +
-	"o\x02Dai a questo Passkey un nome facoltativo cosi potrai riconoscerlo i" +
-	"n seguito.\x02Dopo la registrazione verranno mostrati una sola volta cod" +
-	"ici Backup stampabili. Salvali prima di chiudere.\x02Dopo la configurazi" +
-	"one, l'accesso con password è disattivato per questo account. Usa invece" +
-	" passkey e codici di backup.\x02Nome della Passkey (facoltativo)\x02Impo" +
-	"rtante: questi codici di backup vengono mostrati una sola volta. Salvali" +
-	", stampali o scaricali ora prima di chiudere questa finestra di dialogo." +
-	"\x02Se perdi questi codici e la tua passkey, il recupero dell'account po" +
-	"trebbe non essere più possibile.\x02Codici di backup SimpleDMS\x02Genera" +
-	"to\x02Conserva questi codici di backup in un luogo sicuro.\x02Questi cod" +
-	"ici vengono mostrati una sola volta.\x02Codici\x02Finestra di stampa ape" +
-	"rta.\x02I codici Backup sono stati copiati negli appunti.\x02Impossibile" +
-	" copiare automaticamente i codici Backup.\x02I codici Backup sono stati " +
-	"scaricati.\x02Stampa codici\x02Copia codici\x02Cookie di autenticazione " +
-	"già impostato.\x02Impossibile generare il valore della sessione.\x02Non " +
-	"sei autorizzato ad accedere alla risorsa richiesta.\x02Database del tena" +
-	"nt non trovato.\x02Impossibile avviare la transazione."
+	" SimpleDMS\x02Altro\x02Gestisci Space\x02Non è stato restituito alcun co" +
+	"dice Backup.\x02I codici Backup sono stati rigenerati.\x02Impossibile ri" +
+	"generare i codici Backup.\x02Chiudi finestra\x02Suggerimento\x02opzional" +
+	"e\x02obbligatorio\x02Dai a questo Passkey un nome facoltativo cosi potra" +
+	"i riconoscerlo in seguito.\x02Dopo la registrazione verranno mostrati un" +
+	"a sola volta codici Backup stampabili. Salvali prima di chiudere.\x02Dop" +
+	"o la configurazione, l'accesso con password è disattivato per questo acc" +
+	"ount. Usa invece passkey e codici di backup.\x02Nome della Passkey (faco" +
+	"ltativo)\x02Importante: questi codici di backup vengono mostrati una sol" +
+	"a volta. Salvali, stampali o scaricali ora prima di chiudere questa fine" +
+	"stra di dialogo.\x02Se perdi questi codici e la tua passkey, il recupero" +
+	" dell'account potrebbe non essere più possibile.\x02Codici di backup Sim" +
+	"pleDMS\x02Generato\x02Conserva questi codici di backup in un luogo sicur" +
+	"o.\x02Questi codici vengono mostrati una sola volta.\x02Codici\x02Finest" +
+	"ra di stampa aperta.\x02I codici Backup sono stati copiati negli appunti" +
+	".\x02Impossibile copiare automaticamente i codici Backup.\x02I codici Ba" +
+	"ckup sono stati scaricati.\x02Stampa codici\x02Copia codici\x02Cookie di" +
+	" autenticazione già impostato.\x02Impossibile generare il valore della s" +
+	"essione.\x02Non sei autorizzato ad accedere alla risorsa richiesta.\x02D" +
+	"atabase del tenant non trovato.\x02Impossibile avviare la transazione."
 
-	// Total table size 110385 bytes (107KiB); checksum: AB99CB6A
+	// Total table size 110540 bytes (107KiB); checksum: B89797CB

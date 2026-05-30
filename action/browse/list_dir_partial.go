@@ -612,7 +612,7 @@ func (qq *ListDirPartial) appBar(
 
 	return &wx.AppBar{
 		Leading:          leadingButton,
-		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial.NewNavigationRailToggle(),
 		Title:            wx.Tu(dir.Data.Name),
 		Actions: []wx.IWidget{
 			qq.fileListViewButton(ctx, dir.Data.PublicID.String(), selectedFileID),

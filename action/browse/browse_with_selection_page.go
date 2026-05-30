@@ -127,6 +127,7 @@ func (qq *BrowseWithSelectionPage) widget(
 	if ctx.SpaceCtx().Space.IsFolderMode {
 		fabs = append(fabs, &wx.FloatingActionButton{
 			FABSize: wx.FABSizeSmall,
+			FABType: wx.FABTypeSecondary,
 			Icon:    "create_new_folder",
 			HTMXAttrs: qq.actions.MakeDirCmd.ModalLinkAttrs(
 				qq.actions.MakeDirCmd.Data(dirx.Data.PublicID.String(), ""),

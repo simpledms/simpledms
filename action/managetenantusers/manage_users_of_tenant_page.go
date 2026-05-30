@@ -52,7 +52,12 @@ func (qq *ManageUsersOfTenantPage) Widget(ctx ctxx.Context, state *ManageUsersOf
 	}
 
 	return &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "manage-users", fabs),
+		Navigation: partial2.NewNavigationRail(
+			ctx,
+			qq.infra,
+			partial2.TenantUsersNavigationRailValue(ctx.TenantCtx().TenantID),
+			fabs,
+		),
 		Content: &wx.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
 			Content: qq.actions.UserListPartial.Widget(ctx, &state.UserListPartialState),
@@ -65,7 +70,7 @@ func (qq *ManageUsersOfTenantPage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "person",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title: &wx.AppBarTitle{
 			Text: wx.Tf("Users «%s»", ctx.TenantCtx().Tenant.Name),
 		},

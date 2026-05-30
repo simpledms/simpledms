@@ -12,6 +12,10 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
+// NewMainMenu renders the legacy popup navigation menu.
+//
+// Deprecated: standard app navigation uses NewNavigationRailToggle and the
+// expanded Material 3 Expressive navigation rail.
 func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 	var items []*wx.MenuItem
 

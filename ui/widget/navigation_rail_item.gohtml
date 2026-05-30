@@ -1,0 +1,114 @@
+{{- /*gotype: github.com/simpledms/simpledms/ui/widget.NavigationRailItem */ -}}
+
+{{- define "NavigationRailItemCollapsedContent" }}
+	<div class="relative rounded-full w-14 h-8 {{ if .IsActive }}bg-secondary-container{{ end }}">
+		<div class="state-layer-on-surface flex">
+			<span class="relative size-6 flex center-aligned m-auto">
+				<i class="material-symbols-outlined
+					{{- if .IsActive }} fill text-on-secondary-container{{ else }} text-on-surface-variant hfa:text-on-surface{{ end }}"
+				>{{ .Icon }}</i>
+				{{ if .HasSmallBadge }}
+					<span class="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-error" aria-hidden="true"></span>
+				{{ end }}
+			</span>
+		</div>
+	</div>
+	<span class="label-md md:w-20 hyphens-auto
+		{{ if .IsActive }}text-on-surface-variant font-bold{{ else }}text-on-surface-variant group-hover/navdest:text-on-surface group-focus/navdest:text-on-surface group-active/navdest:text-on-surface{{ end }}"
+	>{{ .Label }}</span>
+{{ end }}
+
+{{- define "NavigationRailItemCollapsed" }}
+	{{ if .ShouldRenderAnchor }}
+		<a id="{{ .GetDOMID }}" class="navigationDestination group/navdest flex flex-col gap-y-1 text-center h-14 md:min-h-16 md:h-16 center-aligned" href="{{ .GetHref }}" aria-label="{{ .GetAriaLabel }}" {{ if .IsActive }}aria-current="page"{{ end }} {{ template "HTMXAttrs" .HTMXAttrs }}>
+			{{ template "NavigationRailItemCollapsedContent" . }}
+		</a>
+	{{ else if .HasNavigation }}
+		<button type="button" id="{{ .GetDOMID }}" class="navigationDestination group/navdest flex flex-col gap-y-1 text-center h-14 md:min-h-16 md:h-16 center-aligned" aria-label="{{ .GetAriaLabel }}" {{ if .IsActive }}aria-current="page"{{ end }} {{ template "HTMXAttrs" .HTMXAttrs }}>
+			{{ template "NavigationRailItemCollapsedContent" . }}
+		</button>
+	{{ else }}
+		<div id="{{ .GetDOMID }}" class="navigationDestination group/navdest flex flex-col gap-y-1 text-center h-14 md:min-h-16 md:h-16 center-aligned {{ if .IsDisabled }}text-on-surface opacity-[0.38]{{ end }}" aria-label="{{ .GetAriaLabel }}" {{ if .IsDisabled }}aria-disabled="true"{{ end }}>
+			{{ template "NavigationRailItemCollapsedContent" . }}
+		</div>
+	{{ end }}
+{{ end }}
+
+{{- define "NavigationRailItemExpandedLeafContent" }}
+	<div class="h-14 w-fit max-w-full rounded-full
+		{{ if .IsActive }}bg-secondary-container text-on-secondary-container{{ else }}text-on-surface-variant{{ end }}">
+		<div class="{{ if .IsActive }}state-layer-on-secondary-container{{ else }}state-layer-on-surface{{ end }} flex items-center px-4 gap-x-3">
+			<span class="relative size-6 flex center-aligned">
+				<i class="material-symbols-outlined {{ if .IsActive }}fill text-on-secondary-container{{ else }}text-on-surface-variant{{ end }}">{{ .Icon }}</i>
+				{{ if .HasSmallBadge }}
+					<span class="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-error" aria-hidden="true"></span>
+				{{ end }}
+			</span>
+			<span class="label-lg text-left {{ if .IsActive }}text-on-secondary-container{{ else }}text-on-surface{{ end }}">{{ .Label }}</span>
+		</div>
+	</div>
+{{ end }}
+
+{{- define "NavigationRailItemExpandedLeaf" }}
+	{{ if .ShouldRenderAnchor }}
+		<a id="{{ .GetDOMID }}" class="group/navdest block rounded-full {{ if .IsDisabled }}opacity-[0.38]{{ end }}" href="{{ .GetHref }}" aria-label="{{ .GetAriaLabel }}" {{ if .IsActive }}aria-current="page"{{ end }} {{ template "HTMXAttrs" .HTMXAttrs }}>
+			{{ template "NavigationRailItemExpandedLeafContent" . }}
+		</a>
+	{{ else if .HasNavigation }}
+		<button type="button" id="{{ .GetDOMID }}" class="group/navdest block w-full rounded-full text-left {{ if .IsDisabled }}opacity-[0.38]{{ end }}" aria-label="{{ .GetAriaLabel }}" {{ if .IsActive }}aria-current="page"{{ end }} {{ template "HTMXAttrs" .HTMXAttrs }}>
+			{{ template "NavigationRailItemExpandedLeafContent" . }}
+		</button>
+	{{ else }}
+		<div id="{{ .GetDOMID }}" class="group/navdest block rounded-full {{ if .IsDisabled }}opacity-[0.38]{{ end }}" aria-label="{{ .GetAriaLabel }}" {{ if .IsDisabled }}aria-disabled="true"{{ end }}>
+			{{ template "NavigationRailItemExpandedLeafContent" . }}
+		</div>
+	{{ end }}
+{{ end }}
+
+{{- define "NavigationRailItemExpandedGroup" }}
+	<div id="{{ .GetDOMID }}" class="js-navigation-rail-group group/navigation-rail-group flex flex-col gap-y-1" data-navigation-rail-group data-navigation-rail-group-key="{{ .GetKey }}" data-collapsed="{{ if .IsCollapsedByDefault }}true{{ else }}false{{ end }}">
+		{{ if .IsCollapsible }}
+			<button type="button" class="js-navigation-rail-group-toggle block w-full rounded-full text-left" aria-expanded="{{ .GetDefaultAriaExpanded }}" aria-controls="{{ .GetDOMID }}-children">
+				<div class="h-14 w-full rounded-full">
+					<div class="state-layer-on-surface flex items-center px-4 gap-x-3">
+						<i class="material-symbols-outlined {{ if .IsActiveInTree }}text-secondary{{ end }}">{{ .Icon }}</i>
+						<span class="label-lg flex-grow {{ if .IsActiveInTree }}text-secondary{{ else }}text-on-surface{{ end }}">{{ .Label }}</span>
+						<i class="js-navigation-rail-group-icon material-symbols-outlined text-on-surface-variant">{{ if .IsCollapsedByDefault }}keyboard_arrow_down{{ else }}keyboard_arrow_up{{ end }}</i>
+					</div>
+				</div>
+			</button>
+		{{ else }}
+			<div class="h-14 w-full rounded-full">
+				<div class="state-layer-on-surface flex items-center px-4 gap-x-3">
+					<i class="material-symbols-outlined {{ if .IsActiveInTree }}text-secondary{{ end }}">{{ .Icon }}</i>
+					<span class="label-lg flex-grow {{ if .IsActiveInTree }}text-secondary{{ else }}text-on-surface{{ end }}">{{ .Label }}</span>
+				</div>
+			</div>
+		{{ end }}
+		<div id="{{ .GetDOMID }}-children" class="js-navigation-rail-group-items flex flex-col gap-y-1 ml-4 group-data-[collapsed=true]/navigation-rail-group:hidden">
+			{{ range .Children }}
+				{{ template "NavigationRailItemExpanded" . }}
+			{{ end }}
+		</div>
+	</div>
+{{ end }}
+
+{{- define "NavigationRailItemExpandedSubheader" }}
+	<div id="{{ .GetDOMID }}" class="px-4 pt-4 pb-2 label-md text-on-surface-variant" role="heading" aria-level="2">
+		{{ .Label }}
+	</div>
+{{ end }}
+
+{{- define "NavigationRailItemExpanded" }}
+	{{ if .IsSubheader }}
+		{{ template "NavigationRailItemExpandedSubheader" . }}
+	{{ else if .IsGroup }}
+		{{ template "NavigationRailItemExpandedGroup" . }}
+	{{ else }}
+		{{ template "NavigationRailItemExpandedLeaf" . }}
+	{{ end }}
+{{ end }}
+
+{{- define "NavigationRailItem" }}
+	{{ template "NavigationRailItemExpanded" . }}
+{{ end }}

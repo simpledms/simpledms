@@ -27,6 +27,45 @@ type FloatingActionButton struct {
 	Child   IWidget
 }
 
+func (qq *FloatingActionButton) GetTooltip() string {
+	if qq.Tooltip != nil {
+		return qq.textString(qq.Tooltip)
+	}
+	return qq.GetLabel()
+}
+
+func (qq *FloatingActionButton) GetLabel() string {
+	if qq.Tooltip != nil {
+		return qq.textString(qq.Tooltip)
+	}
+	return qq.childLabel(qq.Child)
+}
+
+func (qq *FloatingActionButton) childLabel(child IWidget) string {
+	switch childx := child.(type) {
+	case nil:
+		return ""
+	case *Text:
+		return qq.textString(childx)
+	case []IWidget:
+		for _, item := range childx {
+			label := qq.childLabel(item)
+			if label != "" {
+				return label
+			}
+		}
+	}
+	return ""
+}
+
+func (qq *FloatingActionButton) textString(text *Text) string {
+	ctx := qq.GetContext()
+	if ctx == nil {
+		return text.StringUntranslated()
+	}
+	return text.String(ctx)
+}
+
 func (qq *FloatingActionButton) SetSize(size FABSize) *FloatingActionButton {
 	qq.FABSize = size
 	return qq
