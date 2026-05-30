@@ -108,7 +108,7 @@ func (qq *StaticPage) appBar(ctx ctxx.Context, definition StaticPageDefinition) 
 		Leading: &wx.Icon{
 			Name: iconName,
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title: &wx.AppBarTitle{
 			Text: wx.T(definition.AppBarTitle),
 		},

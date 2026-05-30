@@ -33,8 +33,19 @@
 			 md:bg-surface-container-lowest
 			 {{/* IMPORTANT if lg: is changed, media query in JS of this widget must be changed too */}}
 			 {{ if .IsSideSheetLayout }}
-				lg:my-0 lg:mr-0 lg:border-0 lg:border-l 2xl:border-l-0 lg:rounded-none lg:drop-shadow-none lg:fixed
-				lg:top-0 lg:max-h-full 2xl:bg-surface 2xl:right-auto 2xl:left-[1390px] 2xl:transition-none
+					lg:my-0 lg:mr-0 lg:border-0 lg:border-l lg:rounded-none lg:drop-shadow-none lg:fixed
+					lg:top-0 lg:right-0 lg:max-h-full
+					lg:max-w-[min(35rem,calc(100vw_-_var(--simpledms-navigation-rail-width,0px)))]
+					min-[1950px]:[body:not(:has(.js-navigation-rail.navigation-rail-expanded))_&]:right-auto
+					min-[1950px]:[body:not(:has(.js-navigation-rail.navigation-rail-expanded))_&]:left-[min(calc(var(--simpledms-navigation-rail-width,80px)_+_1310px),calc(100vw_-_35rem))]
+					min-[1950px]:[body:not(:has(.js-navigation-rail.navigation-rail-expanded))_&]:border-l-0
+					min-[1950px]:[body:not(:has(.js-navigation-rail.navigation-rail-expanded))_&]:bg-surface
+					min-[1950px]:[body:not(:has(.js-navigation-rail.navigation-rail-expanded))_&]:transition-none
+					min-[2230px]:[body:has(.js-navigation-rail.navigation-rail-expanded)_&]:right-auto
+					min-[2230px]:[body:has(.js-navigation-rail.navigation-rail-expanded)_&]:left-[min(calc(var(--simpledms-navigation-rail-width,80px)_+_1310px),calc(100vw_-_35rem))]
+					min-[2230px]:[body:has(.js-navigation-rail.navigation-rail-expanded)_&]:border-l-0
+					min-[2230px]:[body:has(.js-navigation-rail.navigation-rail-expanded)_&]:bg-surface
+					min-[2230px]:[body:has(.js-navigation-rail.navigation-rail-expanded)_&]:transition-none
 				{{/* 2xl:mt-1 is necessary for progress indicator to not be hidden behind */}}
 				2xl:mt-1
 			{{ end }}

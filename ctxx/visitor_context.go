@@ -21,6 +21,8 @@ type VisitorContext struct {
 	Printer       *i18n.Printer
 	IsHTMXRequest bool
 	IsTWA         bool
+	// IsTemporarySession is true for setup sessions that have restricted navigation.
+	IsTemporarySession bool
 	// IsAppLocked   bool
 	LanguageBCP47 string // used in widgets
 	Location      *time.Location

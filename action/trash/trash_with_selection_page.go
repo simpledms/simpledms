@@ -105,7 +105,7 @@ func (qq *TrashWithSelectionPage) widget(
 func (qq *TrashWithSelectionPage) appBar(ctx ctxx.Context) *wx.AppBar {
 	return &wx.AppBar{
 		Leading:          wx.NewIcon("delete"),
-		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial.NewNavigationRailToggle(),
 		Title:            wx.T("Trash"),
 	}
 }

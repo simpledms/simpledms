@@ -15,7 +15,6 @@ import (
 	maintenant "github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/model/main/tenant"
@@ -148,19 +147,8 @@ func (qq *DashboardCardsPartial) DashboardGrids(ctx ctxx.Context) ([]*wx.Grid, e
 			tenantCards = append(tenantCards, quotaUsageCard)
 		}
 
-		if btn, ok := qq.passkeyEnforcementBtn(ctx, tenantx); ok {
-			tenantActionBtns = append(tenantActionBtns, btn)
-		}
-
-		if btn, ok := qq.manageUsersBtn(ctx, tenantx); ok {
-			tenantActionBtns = append(tenantActionBtns, btn)
-		}
-
 		if manageSpacesCard, ok := qq.manageSpacesCard(ctx, tenantx, len(spaces)); ok {
 			tenantCards = append(tenantCards, manageSpacesCard)
-		}
-		if btn, ok := qq.manageSpacesBtn(ctx, tenantx); ok {
-			tenantActionBtns = append(tenantActionBtns, btn)
 		}
 		if btn, ok := qq.deleteTenantBtn(ctx, tenantx); ok {
 			tenantActionBtns = append(tenantActionBtns, btn)
@@ -172,12 +160,17 @@ func (qq *DashboardCardsPartial) DashboardGrids(ctx ctxx.Context) ([]*wx.Grid, e
 			tenantCards = append(tenantCards, qq.spaceCard(ctx, spacex, tenantx))
 		}
 
-		grids = append(grids, &wx.Grid{
-			Heading: wx.Hf(wx.HeadingTypeTitleMd, "Organization «%s»", tenantx.Name),
-			Actions: &wx.Row{
+		var actions wx.IWidget
+		if len(tenantActionBtns) > 0 {
+			actions = &wx.Row{
 				Wrap:     true,
 				Children: tenantActionBtns,
-			},
+			}
+		}
+
+		grids = append(grids, &wx.Grid{
+			Heading:  wx.Hf(wx.HeadingTypeTitleMd, "Organization «%s»", tenantx.Name),
+			Actions:  actions,
 			Children: tenantCards,
 		})
 	}
@@ -657,113 +650,6 @@ func (qq *DashboardCardsPartial) manageSpacesCard(ctx ctxx.Context, tenantx *ent
 				HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
 			},
 		}},
-	}, true
-}
-
-func (qq *DashboardCardsPartial) passkeyEnforcementBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
-	tenantm := tenant.NewTenant(tenantx)
-	accountm := account.NewAccount(ctx.MainCtx().Account)
-	if !tenantm.IsOwner(accountm) {
-		return nil, false
-	}
-	if !tenantm.IsInitialized() {
-		return nil, false
-	}
-
-	buttonLabel := wx.T("Enable passkey enforcement")
-	confirmText := wx.T("Enable passkey enforcement for this organization? Members will need passkeys to sign in.")
-	if tenantx.PasskeyAuthEnforced {
-		buttonLabel = wx.T("Disable passkey enforcement")
-		confirmText = wx.T("Disable passkey enforcement for this organization? Members can use passwords again if allowed.")
-	}
-
-	return &wx.Button{
-		Label:     buttonLabel,
-		StyleType: wx.ButtonStyleTypeElevated,
-		HTMXAttrs: wx.HTMXAttrs{
-			HxPost: qq.actions.ToggleTenantPasskeyEnforcementCmd.Endpoint(),
-			HxVals: util.JSON(
-				qq.actions.ToggleTenantPasskeyEnforcementCmd.Data(
-					tenantx.PublicID.String(),
-					!tenantx.PasskeyAuthEnforced,
-				),
-			),
-			HxConfirm: confirmText.String(ctx),
-			HxSwap:    "none",
-		},
-	}, true
-}
-
-func (qq *DashboardCardsPartial) manageSpacesBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
-	tenantm := tenant.NewTenant(tenantx)
-	accountm := account.NewAccount(ctx.MainCtx().Account)
-	if !tenantm.IsOwner(accountm) {
-		return nil, false
-	}
-	if !tenantm.IsInitialized() {
-		return nil, false
-	}
-	return &wx.Button{
-		Label:     wx.T("Manage spaces"),
-		StyleType: wx.ButtonStyleTypeElevated,
-		HTMXAttrs: wx.HTMXAttrs{
-			HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
-		},
-	}, true
-}
-
-func (qq *DashboardCardsPartial) manageUsersCard(ctx ctxx.Context, tenantDB *sqlx.TenantDB, tenantx *entmain.Tenant) (*wx.Card, bool) {
-	tenantm := tenant.NewTenant(tenantx)
-	accountm := account.NewAccount(ctx.MainCtx().Account)
-	if !tenantm.IsOwner(accountm) {
-		return nil, false
-	}
-	if !tenantm.IsInitialized() {
-		return nil, false
-	}
-
-	usersCount, err := tenantDB.ReadOnlyConn.User.Query().Count(ctx)
-	if err != nil && !enttenant.IsNotFound(err) {
-		log.Println("failed to query users of tenant", tenantx.ID, err)
-		return nil, false
-	}
-
-	// headline := wx.H(wx.HeadingTypeTitleLg, wx.T("Manage users"))
-	supportingText := wx.Tf("%d users", usersCount)
-	if usersCount == 1 {
-		supportingText = wx.Tf("1 user")
-	}
-
-	btn, ok := qq.manageUsersBtn(ctx, tenantx)
-	if !ok {
-		return nil, false
-	}
-
-	return &wx.Card{
-		Style:    wx.CardStyleFilled,
-		Headline: wx.H(wx.HeadingTypeTitleLg, supportingText),
-		// Subhead:        wx.T("Organization"),
-		// Subhead: supportingText,
-		Actions: []*wx.Button{btn},
-	}, true
-}
-
-func (qq *DashboardCardsPartial) manageUsersBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
-	tenantm := tenant.NewTenant(tenantx)
-	accountm := account.NewAccount(ctx.MainCtx().Account)
-	if !tenantm.IsOwner(accountm) {
-		return nil, false
-	}
-	if !tenantm.IsInitialized() {
-		return nil, false
-	}
-
-	return &wx.Button{
-		Label:     wx.T("Manage users"),
-		StyleType: wx.ButtonStyleTypeElevated,
-		HTMXAttrs: wx.HTMXAttrs{
-			HxGet: route2.ManageUsersOfTenant(tenantx.PublicID.String()),
-		},
 	}, true
 }
 

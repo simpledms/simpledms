@@ -68,6 +68,20 @@ func (qq *Registry) ExtendNavigationDestinations(
 	return destinations
 }
 
+func (qq *Registry) ExtendNavigationRailItems(
+	ctx ctxx.Context,
+	items []*wx.NavigationRailItem,
+) []*wx.NavigationRailItem {
+	for _, plugin := range qq.Plugins() {
+		hook, ok := plugin.(ExtendNavigationRailItemsHook)
+		if !ok {
+			continue
+		}
+		items = hook.ExtendNavigationRailItems(ctx, items)
+	}
+	return items
+}
+
 func (qq *Registry) EmitSignUp(ctx ctxx.Context, event SignUpEvent) error {
 	for _, plugin := range qq.Plugins() {
 		hook, ok := plugin.(OnSignUpHook)

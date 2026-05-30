@@ -58,6 +58,27 @@
             "fuzzy": true
         },
         {
+            "id": "Organizations",
+            "message": "Organizations",
+            "translation": "Organizzazioni",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Settings",
+            "message": "Settings",
+            "translation": "Impostazioni",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Spaces by Organization",
+            "message": "Spaces by Organization",
+            "translation": "Spaces per organizzazione",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "1. A visible menu item labeled «About SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be present in the main menu of the program linking to the attribution page described below.",
             "message": "1. A visible menu item labeled «About SimpleDMS», «Legal», «License Information», «About», or an equivalent term must be present in the main menu of the program linking to the attribution page described below.",
             "translation": "1. Nel menu principale del programma deve essere presente una voce di menu visibile etichettata «About SimpleDMS», «Legal», «License Information», «About» o un termine equivalente, che rimandi alla pagina di attribuzione descritta sotto.",
@@ -2708,6 +2729,13 @@
             "fuzzy": true
         },
         {
+            "id": "Manage space",
+            "message": "Manage space",
+            "translation": "Gestisci Space",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Manage tags",
             "message": "Manage tags",
             "translation": "Gestisci Tag",
@@ -2791,6 +2819,13 @@
             "id": "Metadata",
             "message": "Metadata",
             "translation": "Metadati",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Misc",
+            "message": "Misc",
+            "translation": "Altro",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

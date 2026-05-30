@@ -49,7 +49,7 @@ func (qq *TrashRootPage) widget(ctx ctxx.Context) renderable.Renderable {
 func (qq *TrashRootPage) appBar(ctx ctxx.Context) *wx.AppBar {
 	return &wx.AppBar{
 		Leading:          wx.NewIcon("delete"),
-		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial.NewNavigationRailToggle(),
 		Title:            wx.T("Trash"),
 	}
 }

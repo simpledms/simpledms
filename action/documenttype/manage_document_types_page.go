@@ -55,6 +55,7 @@ func (qq *ManageDocumentTypesPage) Handler(
 			Icon:    "download",
 			Tooltip: wx.T("Import from library"),
 			FABSize: wx.FABSizeSmall,
+			FABType: wx.FABTypeSecondary,
 			HTMXAttrs: qq.actions.ImportFromLibraryDialog.ModalLinkAttrs(
 				qq.actions.ImportFromLibraryDialog.Data(),
 				"",

@@ -552,6 +552,7 @@ func (qq *Router) context(
 	isReadOnly bool,
 ) (ctxx.Context, *enttenant.Tx, bool, error) {
 	accountm, isAuthenticated, isTemporarySession, err := qq.authenticateAccount(rw, req, mainTx)
+	visitorCtx.IsTemporarySession = isTemporarySession
 	if err != nil {
 		log.Println(err)
 		if errors.Is(err, ErrSessionNotFound) {

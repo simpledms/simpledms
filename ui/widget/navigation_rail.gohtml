@@ -1,40 +1,101 @@
 {{- define "NavigationRail" }}
 	<nav id="navigationRailAndBar"
+		 aria-label="{{ tr .GetContext "Primary navigation" }}"
+		 data-navigation-rail-storage-key="simpledms.navigationRail.expanded"
 		 class="
-		 flex
+		 js-navigation-rail navigation-rail group/navigation-rail
+		 flex md:bg-surface-container md:transition-[width,min-width] md:duration-[160ms] md:ease-in
 		 mt-4 md:mt-0
 		 w-full h-20 md:w-20 md:min-w-20 md:h-full
 		 pt-3 pb-4
 		 {{/* gap-y was gap-y-12 before added menu icon on top */}}
-		 md:justify-normal md:items-center md:flex-col md:gap-y-6 md:px-3
-
-		 {{/*
-		 spec:
-		 bg-surface-container md:bg-transparent
-
-		 before 11.02.2026:
-		 bg-surface-tint bg-opacity-8
-		 outline-outline-variant outline-1 outline
-		 */}}
+			 md:justify-normal md:items-center md:flex-col md:gap-y-3
+		 data-[expanded=true]:fixed data-[expanded=true]:inset-0 data-[expanded=true]:z-50
+		 data-[expanded=true]:mt-0 data-[expanded=true]:h-dvh data-[expanded=true]:w-screen
+		 data-[expanded=true]:flex-row data-[expanded=true]:pt-0 data-[expanded=true]:pb-0
+		 md:data-[expanded=true]:relative md:data-[expanded=true]:inset-auto md:data-[expanded=true]:z-auto
+		 md:data-[expanded=true]:h-full md:data-[expanded=true]:w-[360px] md:data-[expanded=true]:min-w-[360px]
+		 md:data-[expanded=true]:flex-col md:data-[expanded=true]:items-stretch
+		 md:data-[expanded=true]:pt-3 md:data-[expanded=true]:pb-4
 		 "
-		 {{/* TODO use surface variant instead of tint? */}}
-		 {{/* style="background: #f0fdf9; outline: 2px solid rgb(0, 128, 146)" */}}
+		 {{ template "HTMXAttrs" .HTMXAttrs }}
 	>
-		<div class="hidden md:flex md:items-center md:mt-4">
-            {{ render .GetContext .MenuBtn }}
+		<div class="js-navigation-rail-scrim hidden group-data-[expanded=true]/navigation-rail:fixed group-data-[expanded=true]/navigation-rail:inset-0 group-data-[expanded=true]/navigation-rail:block group-data-[expanded=true]/navigation-rail:bg-scrim/32 md:group-data-[expanded=true]/navigation-rail:hidden" aria-hidden="true"></div>
+		<div class="js-navigation-rail-panel flex w-full h-full group-data-[expanded=true]/navigation-rail:relative group-data-[expanded=true]/navigation-rail:z-[1] group-data-[expanded=true]/navigation-rail:max-w-full group-data-[expanded=true]/navigation-rail:w-[min(360px,calc(100vw-32px))] group-data-[expanded=true]/navigation-rail:flex-col group-data-[expanded=true]/navigation-rail:bg-surface-container group-data-[expanded=true]/navigation-rail:p-[12px_12px_16px] md:contents md:group-data-[expanded=true]/navigation-rail:contents md:group-data-[expanded=true]/navigation-rail:w-auto md:group-data-[expanded=true]/navigation-rail:max-w-none md:group-data-[expanded=true]/navigation-rail:p-0">
+		<div class="js-navigation-rail-header hidden items-center justify-between gap-x-2 mt-1 px-1 group-data-[expanded=true]/navigation-rail:flex group-data-[expanded=true]/navigation-rail:flex-none md:flex md:self-start md:w-20 md:min-w-20 md:justify-center md:px-0 md:mt-1">
+			<button
+				type="button"
+				class="js-navigation-rail-toggle flex center-aligned size-12 rounded-full cursor-pointer"
+				aria-label="{{ tr .GetContext "Open main menu" }}"
+				aria-controls="navigationRailAndBar"
+				aria-expanded="false"
+			>
+				<div class="state-layer-on-surface-variant flex center-aligned !size-10">
+					<i class="js-navigation-rail-toggle-icon size-6 material-symbols-outlined">menu</i>
+				</div>
+			</button>
 		</div>
 		<div class="
+			js-navigation-rail-collapsed
+			js-navigation-rail-fab-slot
 			flex items-center
 			fixed bottom-24 right-4 flex-col-reverse gap-y-4
-			md:relative md:flex-col md:bottom-0 md:right-0 md:gap-y-3">
-        	{{ render .GetContext .FABs }}
+			group-data-[expanded=true]/navigation-rail:hidden
+			md:relative md:flex-col md:bottom-0 md:right-0 md:gap-y-3 md:self-start md:w-20 md:min-w-20 md:h-[108px] md:min-h-[108px] md:overflow-visible"
+			id="navigationRailAction">
+			{{ if .Action }}
+				{{ render .GetContext .Action }}
+			{{ else }}
+				{{ render .GetContext .FABs }}
+			{{ end }}
 		</div>
 		<div class="
-			flex gap-x-2 justify-evenly flex-grow
-			md:flex-col md:gap-y-3 md:justify-normal md:items-center
-			{{/* pt-1 to make it work without custom value for mt */}}
-			{{ if eq (len .FABs) 0 }}md:mt-28 md:pt-1{{ else if gt (len .FABs) 1 }}md:mt-2{{ else }}md:mt-14 md:pt-1{{ end }}">
-            {{ render .GetContext .Destinations }}
+			js-navigation-rail-expanded js-navigation-rail-fab-slot hidden
+			group-data-[expanded=true]/navigation-rail:flex group-data-[expanded=true]/navigation-rail:flex-col group-data-[expanded=true]/navigation-rail:items-start group-data-[expanded=true]/navigation-rail:gap-y-3
+			md:px-3 md:mt-0 md:w-full md:h-[108px] md:min-h-[108px] md:overflow-visible"
+			id="navigationRailActionExpanded">
+			{{ if .ActionExpanded }}
+				{{ render .GetContext .ActionExpanded }}
+			{{ else }}
+				{{ range .FABs }}
+					{{ template "ExtendedFloatingActionButton" . }}
+				{{ end }}
+			{{ end }}
+		</div>
+		<div class="
+			js-navigation-rail-collapsed
+			flex gap-x-2 justify-evenly flex-grow group-data-[expanded=true]/navigation-rail:hidden md:hidden">
+			{{ range .CompactNavigationItems }}
+				{{ template "NavigationRailItemCollapsed" . }}
+			{{ end }}
+		</div>
+		<div class="
+			js-navigation-rail-collapsed
+			hidden md:flex md:flex-col md:gap-y-1 md:justify-normal md:items-center md:mt-2 md:self-start md:w-20 md:min-w-20 group-data-[expanded=true]/navigation-rail:hidden">
+			{{ range .CollapsedItems }}
+				{{ template "NavigationRailItemCollapsed" . }}
+			{{ end }}
+		</div>
+		<div class="
+			js-navigation-rail-expanded hidden group-data-[expanded=true]/navigation-rail:flex group-data-[expanded=true]/navigation-rail:flex-col
+			md:gap-y-3 md:flex-grow md:min-h-0
+			mt-6 md:px-3 md:mt-3">
+			<div class="flex min-h-0 flex-col gap-y-1 overflow-y-auto">
+				{{ range .GetItems }}
+					{{ template "NavigationRailItemExpanded" . }}
+				{{ end }}
+				{{ range .TopItems }}
+					{{ template "NavigationRailItemExpanded" . }}
+				{{ end }}
+				{{ if .FooterItems }}
+					<div class="flex flex-col gap-y-1 pt-3">
+						{{ range .FooterItems }}
+							{{ template "NavigationRailItemExpanded" . }}
+						{{ end }}
+					</div>
+				{{ end }}
+			</div>
+		</div>
 		</div>
 	</nav>
 {{ end }}
