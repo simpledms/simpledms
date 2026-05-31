@@ -25,6 +25,22 @@
 					</div>
 				</div>
 			</div>
+			{{ with .LeadingAltMobile }}
+				<div class="flex md:hidden center-aligned group-has-[.js-detail-content>div]/list-detail:hidden">
+                    {{ render $ctx . }}
+				</div>
+			{{ else }}
+                {{ with .Leading }}
+					<div class="flex md:hidden center-aligned group-has-[.js-detail-content>div]/list-detail:hidden">
+                        {{ render $ctx . }}
+					</div>
+                {{ end }}
+			{{ end }}
+            {{ with .Leading }}
+				<div class="hidden md:flex exp:hidden center-aligned group-has-[.js-detail-content>div]/list-detail:hidden">
+                    {{ render $ctx . }}
+				</div>
+            {{ end }}
 			<div class="flex group-has-[.js-detail-content>div]/list-detail:hidden min-w-0 flex-grow center-aligned">
 				<div class="min-w-0 w-full max-w-full">
 					{{ render $ctx .GetSearch }}

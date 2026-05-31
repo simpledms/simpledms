@@ -27,25 +27,6 @@ func (qq *AppBar) GetProgressIndicator() *ProgressIndicator {
 }
 
 func (qq *AppBar) GetSearch() *Search {
-	if qq.Search == nil {
-		return qq.Search
-	}
-	if qq.Search.LeadingIconButton == nil {
-		qq.Search.LeadingIconButton = qq.Leading
-		qq.Search.LeadingIconButtonAltMobile = qq.LeadingAltMobile
-		// qq.Leading = nil // if not reset, prevents rendering of menus...
-	}
-	// TODO find a better solution, maybe add PrimaryAction?
-	//
-	// disabled on 26.07.2025 because of conflicts when a button with context menu
-	// is rendered twice (in search bar and next to search bar). New layout (rendering
-	// all actions next to search bar) is according to material 3 expressive
-	/*if qq.Search.TrailingIconButton == nil && len(qq.Actions) > 0 {
-		lastAction := qq.Actions[len(qq.Actions)-1]
-		if lastActionBtn, ok := lastAction.(*IconButton); ok {
-			qq.Search.TrailingIconButton = lastActionBtn
-		}
-	}*/
 	return qq.Search
 }
 
