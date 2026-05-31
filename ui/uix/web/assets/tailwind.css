@@ -1645,6 +1645,10 @@ input:-webkit-autofill::first-line,
   width: 100%;
 }
 
+.min-w-0 {
+  min-width: 0px;
+}
+
 .min-w-10 {
   min-width: 2.5rem;
 }
@@ -3500,10 +3504,6 @@ input:-webkit-autofill::first-line,
 
   .md\:max-w-md {
     max-width: 28rem;
-  }
-
-  .md\:flex-grow {
-    flex-grow: 1;
   }
 
   .md\:grid-cols-2 {
