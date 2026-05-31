@@ -38,7 +38,7 @@ RUN CGO_ENABLED=1 go build -v -tags "sqlite_fts5 sqlite_json sqlite_foreign_keys
 FROM debian:bookworm-slim
 
 RUN apt update
-RUN apt upgrade
+RUN apt upgrade -y
 # libicu-dev is required for sqlite_icu during build and when running
 RUN apt install -y ca-certificates libicu-dev
 RUN update-ca-certificates
