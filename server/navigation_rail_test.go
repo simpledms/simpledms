@@ -287,8 +287,14 @@ func TestNavigationRailPluginHooksAndLegacyDestinations(t *testing.T) {
 	_, mainCtx, rollback := newNavigationRailMainContext(t, harness, "rail-plugin@example.com")
 	defer rollback()
 
-	rail := partial2.NewNavigationRail(mainCtx, harness.infra, "dashboard", nil)
+	rail := partial2.NewNavigationRail(mainCtx, harness.infra, "menu-plugin", nil)
 	assertNavigationRailLabelsContain(t, rail.GetItems(), "Legacy Plugin", "Rail Plugin")
+	topItemsWant := []string{"Organizations", "Menu Plugin"}
+	if got := navigationRailLabels(rail.TopItems); !reflect.DeepEqual(got, topItemsWant) {
+		t.Fatalf("expected top item labels %v, got %v", topItemsWant, got)
+	}
+	assertNavigationRailItemActive(t, rail.TopItems, "Menu Plugin")
+	assertNavigationRailLabelsContain(t, rail.FooterItems, "Footer Plugin")
 }
 
 type navigationRailTestPlugin struct{}
@@ -319,6 +325,34 @@ func (navigationRailTestPlugin) ExtendNavigationRailItems(
 		Label: "Rail Plugin",
 		Icon:  "extension",
 		Href:  "/rail-plugin/",
+	})
+}
+
+func (navigationRailTestPlugin) ExtendMenuItems(
+	ctx ctxx.Context,
+	items []*wx.MenuItem,
+) []*wx.MenuItem {
+	return append(items, &wx.MenuItem{
+		LeadingIcon: "extension",
+		Label:       wx.T("Menu Plugin"),
+		RadioValue:  "menu-plugin",
+		HTMXAttrs: wx.HTMXAttrs{
+			HxGet: "/menu-plugin/",
+		},
+	})
+}
+
+func (navigationRailTestPlugin) ExtendNavigationRailFooterItems(
+	ctx ctxx.Context,
+	items []*wx.NavigationRailItem,
+	active string,
+) []*wx.NavigationRailItem {
+	return append(items, &wx.NavigationRailItem{
+		Key:   "footer-plugin",
+		Value: "footer-plugin",
+		Label: "Footer Plugin",
+		Icon:  "extension",
+		Href:  "/footer-plugin/",
 	})
 }
 

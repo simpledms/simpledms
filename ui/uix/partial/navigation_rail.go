@@ -40,7 +40,7 @@ func NewNavigationRail(
 		rail.CompactItems = spaceCompactNavigationRailItems(ctx, active)
 	}
 	rail.TopItems = expandedNavigationRailItems(ctx, infra)
-	rail.FooterItems = footerNavigationRailItems(ctx)
+	rail.FooterItems = footerNavigationRailItems(ctx, infra, active)
 	rail.SetActiveValue(active)
 
 	return rail
@@ -97,16 +97,23 @@ func expandedNavigationRailItems(ctx ctxx.Context, infra *common.Infra) []*wx.Na
 	if ctx.IsMainCtx() {
 		if ctx.IsSpaceCtx() {
 			items = append(items, currentTenantSpaceNavigationRailItems(ctx)...)
+			items = append(items, pluginMenuNavigationRailItems(ctx, infra)...)
 		} else {
-			items = append(items, accountTenantNavigationRailItems(ctx)...)
+			items = append(
+				items,
+				accountTenantNavigationRailItems(ctx, pluginMenuNavigationRailItems(ctx, infra))...,
+			)
 		}
-		items = append(items, pluginMenuNavigationRailItems(ctx, infra)...)
 	}
 
 	return items
 }
 
-func footerNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRailItem {
+func footerNavigationRailItems(
+	ctx ctxx.Context,
+	infra *common.Infra,
+	active string,
+) []*wx.NavigationRailItem {
 	var items []*wx.NavigationRailItem
 
 	if ctx.IsMainCtx() {
@@ -116,10 +123,17 @@ func footerNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRailItem {
 		items = append(items, aboutNavigationRailItem(ctx))
 	}
 	if ctx.IsMainCtx() && len(items) > 0 {
-		items = append([]*wx.NavigationRailItem{navigationRailSubheader("misc", wx.T("Misc").String(ctx))}, items...)
+		items = append(
+			[]*wx.NavigationRailItem{navigationRailSubheader("misc", wx.T("Misc").String(ctx))},
+			items...,
+		)
 	}
 
-	return items
+	return infra.PluginRegistry().ExtendNavigationRailFooterItems(
+		ctx,
+		items,
+		active,
+	)
 }
 
 func mainNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRailItem {
@@ -322,16 +336,19 @@ func isCurrentSpaceTenant(ctx ctxx.Context, tenantx *entmain.Tenant) bool {
 	return ctx.IsSpaceCtx() && tenantx.PublicID.String() == ctx.SpaceCtx().TenantID
 }
 
-func accountTenantNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRailItem {
+func accountTenantNavigationRailItems(
+	ctx ctxx.Context,
+	leadingItems []*wx.NavigationRailItem,
+) []*wx.NavigationRailItem {
+	items := append([]*wx.NavigationRailItem{}, leadingItems...)
 	tenants, err := ctx.MainCtx().Account.QueryTenants().
 		Order(maintenant.ByName()).
 		All(ctx)
 	if err != nil {
 		log.Println(err)
-		return []*wx.NavigationRailItem{}
+		return accountTenantNavigationRailSection(ctx, items)
 	}
 
-	var items []*wx.NavigationRailItem
 	for _, tenantx := range tenants {
 		tenantID := tenantx.PublicID.String()
 		children := tenantNavigationRailChildren(ctx, tenantx)
@@ -349,6 +366,13 @@ func accountTenantNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRailItem
 		})
 	}
 
+	return accountTenantNavigationRailSection(ctx, items)
+}
+
+func accountTenantNavigationRailSection(
+	ctx ctxx.Context,
+	items []*wx.NavigationRailItem,
+) []*wx.NavigationRailItem {
 	if len(items) == 0 {
 		return items
 	}
@@ -435,10 +459,14 @@ func pluginMenuNavigationRailItems(
 		if label == "" {
 			continue
 		}
+		value := "plugin-menu-" + label
+		if item.RadioValue != "" {
+			value = item.RadioValue
+		}
 		items = append(items, &wx.NavigationRailItem{
 			HTMXAttrs:  item.HTMXAttrs,
-			Key:        "plugin-menu-" + label,
-			Value:      "plugin-menu-" + label,
+			Key:        value,
+			Value:      value,
 			Label:      label,
 			Icon:       item.LeadingIcon,
 			IsDisabled: item.IsDisabled,
