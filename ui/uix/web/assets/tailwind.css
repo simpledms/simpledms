@@ -1388,6 +1388,10 @@ input:-webkit-autofill::first-line,
   margin-bottom: 1rem;
 }
 
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
 .ml-10 {
   margin-left: 2.5rem;
 }
@@ -2182,6 +2186,11 @@ input:-webkit-autofill::first-line,
 
 .p-4 {
   padding: 1rem;
+}
+
+.px-0 {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .px-1 {
@@ -3335,8 +3344,8 @@ input:-webkit-autofill::first-line,
   background-color: rgb(var(--md-sys-color-surface-container) / var(--tw-bg-opacity, 1));
 }
 
-.group\/navigation-rail[data-expanded="true"] .group-data-\[expanded\=true\]\/navigation-rail\:p-\[12px_12px_16px\] {
-  padding: 12px 12px 16px;
+.group\/navigation-rail[data-expanded="true"] .group-data-\[expanded\=true\]\/navigation-rail\:p-\[0_12px_16px_8px\] {
+  padding: 0 12px 16px 8px;
 }
 
 @container list-item (min-width: 48rem) {
@@ -3396,8 +3405,8 @@ input:-webkit-autofill::first-line,
     margin-bottom: 0.5rem;
   }
 
-  .md\:ml-2 {
-    margin-left: 0.5rem;
+  .md\:ml-0 {
+    margin-left: 0px;
   }
 
   .md\:mt-0 {
@@ -3853,15 +3862,6 @@ input:-webkit-autofill::first-line,
 
   .exp\:p-0 {
     padding: 0px;
-  }
-
-  .exp\:px-8 {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-
-  .exp\:pl-14 {
-    padding-left: 3.5rem;
   }
 
   .exp\:pr-2 {

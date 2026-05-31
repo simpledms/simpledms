@@ -45,14 +45,14 @@
 		{{ if .IsPrimary }}bg-primary-container text-on-primary-container {{ end }}
 		{{ if .IsSecondary }}bg-secondary-container text-on-secondary-container{{ end }}
 		{{ if .IsTertiary }}bg-tertiary-container text-on-tertiary-container{{ end }}
-		{{ if .IsSmall }}h-10 min-w-10 rounded-md md:ml-2{{ else }}h-14 min-w-20 rounded-lg{{ end }}
+		{{ if .IsSmall }}h-10 min-w-10 rounded-md{{ else }}h-14 min-w-20 rounded-lg{{ end }}
 		w-fit max-w-full drop-shadow md:drop-shadow-none overflow-hidden
 		"
 		{{ if .ID }}popovertarget="{{ .ID }}"{{ end }}
 		{{ template "HTMXAttrs" .HTMXAttrs }}
 	>
 		<div class="flex items-center
-			{{ if .IsSmall }}gap-x-2 pl-2 pr-3{{ else }}gap-x-3 pl-4 pr-6{{ end }}
+			{{ if .IsSmall }}gap-x-2 pl-4 pr-3{{ else }}gap-x-3 pl-4 pr-6{{ end }}
 			{{ if .IsPrimary }}state-layer-on-primary-container{{ end }}
 			{{ if .IsSecondary }}state-layer-on-secondary-container{{ end }}
 			{{ if .IsTertiary }}state-layer-on-tertiary-container{{ end }}
