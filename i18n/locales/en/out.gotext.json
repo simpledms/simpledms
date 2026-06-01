@@ -1546,51 +1546,6 @@
             "translation": ""
         },
         {
-            "id": "Enable passkey enforcement",
-            "message": "Enable passkey enforcement",
-            "translation": ""
-        },
-        {
-            "id": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
-            "message": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
-            "translation": ""
-        },
-        {
-            "id": "Disable passkey enforcement",
-            "message": "Disable passkey enforcement",
-            "translation": ""
-        },
-        {
-            "id": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
-            "message": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
-            "translation": ""
-        },
-        {
-            "id": "{UsersCount} users",
-            "message": "{UsersCount} users",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "UsersCount",
-                    "string": "%[1]d",
-                    "type": "int",
-                    "underlyingType": "int",
-                    "argNum": 1,
-                    "expr": "usersCount"
-                }
-            ]
-        },
-        {
-            "id": "1 user",
-            "message": "1 user",
-            "translation": ""
-        },
-        {
-            "id": "Manage users",
-            "message": "Manage users",
-            "translation": ""
-        },
-        {
             "id": "Delete organization",
             "message": "Delete organization",
             "translation": ""
@@ -1673,6 +1628,31 @@
         {
             "id": "Dashboard",
             "message": "Dashboard",
+            "translation": ""
+        },
+        {
+            "id": "Settings",
+            "message": "Settings",
+            "translation": ""
+        },
+        {
+            "id": "Enable passkey enforcement",
+            "message": "Enable passkey enforcement",
+            "translation": ""
+        },
+        {
+            "id": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "message": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "translation": ""
+        },
+        {
+            "id": "Disable passkey enforcement",
+            "message": "Disable passkey enforcement",
+            "translation": ""
+        },
+        {
+            "id": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "message": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
             "translation": ""
         },
         {
@@ -2031,6 +2011,11 @@
             "message": "Please create a user in the organization user management first.",
             "translation": "",
             "comment": "TODO link"
+        },
+        {
+            "id": "Manage users",
+            "message": "Manage users",
+            "translation": ""
         },
         {
             "id": "Users «{Name}»",
@@ -4585,6 +4570,16 @@
         {
             "id": "Manage space",
             "message": "Manage space",
+            "translation": ""
+        },
+        {
+            "id": "Spaces by Organization",
+            "message": "Spaces by Organization",
+            "translation": ""
+        },
+        {
+            "id": "Organizations",
+            "message": "Organizations",
             "translation": ""
         },
         {

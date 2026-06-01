@@ -931,7 +931,8 @@
         {
             "id": "Created {LanguageBCP47}",
             "message": "Created {LanguageBCP47}",
-            "translation": "",
+            "translation": "Creato il {LanguageBCP47}",
+            "translatorComment": "Translated from English by Codex",
             "placeholders": [
                 {
                     "id": "LanguageBCP47",
@@ -941,7 +942,8 @@
                     "argNum": 1,
                     "expr": "timex.NewDateTime(filex.CreatedAt).String(ctx.MainCtx().LanguageBCP47)"
                 }
-            ]
+            ],
+            "fuzzy": true
         },
         {
             "id": "rendering failed",
@@ -1031,7 +1033,9 @@
         {
             "id": "Size",
             "message": "Size",
-            "translation": ""
+            "translation": "Dimensione",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Tags",
@@ -1050,12 +1054,16 @@
         {
             "id": "Yes",
             "message": "Yes",
-            "translation": ""
+            "translation": "Sì",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "No",
             "message": "No",
-            "translation": ""
+            "translation": "No",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Info",
@@ -1280,17 +1288,23 @@
         {
             "id": "Change file list view",
             "message": "Change file list view",
-            "translation": ""
+            "translation": "Cambia visualizzazione elenco file",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "List",
             "message": "List",
-            "translation": ""
+            "translation": "Elenco",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Table",
             "message": "Table",
-            "translation": ""
+            "translation": "Tabella",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "No fields available yet.",
@@ -2040,65 +2054,6 @@
             "fuzzy": true
         },
         {
-            "id": "Enable passkey enforcement",
-            "message": "Enable passkey enforcement",
-            "translation": "Attiva obbligo Passkey",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
-            "message": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
-            "translation": "Attivare l’obbligo Passkey per questa organizzazione? I membri dovranno usare Passkeys per accedere.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Disable passkey enforcement",
-            "message": "Disable passkey enforcement",
-            "translation": "Disattiva obbligo Passkey",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
-            "message": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
-            "translation": "Disattivare l’obbligo Passkey per questa organizzazione? I membri potranno di nuovo usare password, se consentito.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "{UsersCount} users",
-            "message": "{UsersCount} users",
-            "translation": "{UsersCount} utenti",
-            "translatorComment": "Translated from English by Codex",
-            "placeholders": [
-                {
-                    "id": "UsersCount",
-                    "string": "%[1]d",
-                    "type": "int",
-                    "underlyingType": "int",
-                    "argNum": 1,
-                    "expr": "usersCount"
-                }
-            ],
-            "fuzzy": true
-        },
-        {
-            "id": "1 user",
-            "message": "1 user",
-            "translation": "1 utente",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Manage users",
-            "message": "Manage users",
-            "translation": "Gestisci utenti",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Delete organization",
             "message": "Delete organization",
             "translation": "Elimina organizzazione",
@@ -2206,6 +2161,41 @@
             "id": "Dashboard",
             "message": "Dashboard",
             "translation": "Dashboard",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Settings",
+            "message": "Settings",
+            "translation": "Impostazioni",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Enable passkey enforcement",
+            "message": "Enable passkey enforcement",
+            "translation": "Attiva obbligo Passkey",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "message": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "translation": "Attivare l’obbligo Passkey per questa organizzazione? I membri dovranno usare Passkeys per accedere.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Disable passkey enforcement",
+            "message": "Disable passkey enforcement",
+            "translation": "Disattiva obbligo Passkey",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "message": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "translation": "Disattivare l’obbligo Passkey per questa organizzazione? I membri potranno di nuovo usare password, se consentito.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2662,12 +2652,16 @@
         {
             "id": "Could not load users.",
             "message": "Could not load users.",
-            "translation": ""
+            "translation": "Impossibile caricare gli utenti.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Please reload the page and try again.",
             "message": "Please reload the page and try again.",
-            "translation": ""
+            "translation": "Ricarica la pagina e riprova.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "No unassigned users available.",
@@ -2681,6 +2675,13 @@
             "message": "Please create a user in the organization user management first.",
             "translation": "Crea prima un utente nella gestione utenti dell'organizzazione.",
             "comment": "TODO link",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage users",
+            "message": "Manage users",
+            "translation": "Gestisci utenti",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3713,7 +3714,9 @@
         {
             "id": "Built in column",
             "message": "Built in column",
-            "translation": ""
+            "translation": "Colonna integrata",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Bulgaria",
@@ -4117,7 +4120,9 @@
         {
             "id": "None",
             "message": "None",
-            "translation": ""
+            "translation": "Nessuno",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Norway",
@@ -4206,7 +4211,9 @@
         {
             "id": "Reader",
             "message": "Reader",
-            "translation": ""
+            "translation": "Lettore",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Role",
@@ -4239,7 +4246,9 @@
         {
             "id": "Show tags",
             "message": "Show tags",
-            "translation": ""
+            "translation": "Mostra i Tag",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Simple",
@@ -4405,22 +4414,30 @@
         {
             "id": "View mode",
             "message": "View mode",
-            "translation": ""
+            "translation": "Modalità di visualizzazione",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Writer",
             "message": "Writer",
-            "translation": ""
+            "translation": "Scrittore",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Properties",
             "message": "Properties",
-            "translation": ""
+            "translation": "Proprietà",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Sizes",
             "message": "Sizes",
-            "translation": ""
+            "translation": "Dimensioni",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Sign up",
@@ -6126,6 +6143,20 @@
             "id": "Manage space",
             "message": "Manage space",
             "translation": "Gestisci Space",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Spaces by Organization",
+            "message": "Spaces by Organization",
+            "translation": "Spaces per organizzazione",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Organizations",
+            "message": "Organizations",
+            "translation": "Organizzazioni",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

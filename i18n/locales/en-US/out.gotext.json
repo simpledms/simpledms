@@ -2054,65 +2054,6 @@
             "fuzzy": true
         },
         {
-            "id": "Enable passkey enforcement",
-            "message": "Enable passkey enforcement",
-            "translation": "Enable passkey enforcement",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
-            "message": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
-            "translation": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Disable passkey enforcement",
-            "message": "Disable passkey enforcement",
-            "translation": "Disable passkey enforcement",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
-            "message": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
-            "translation": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "{UsersCount} users",
-            "message": "{UsersCount} users",
-            "translation": "{UsersCount} users",
-            "translatorComment": "Copied from source.",
-            "placeholders": [
-                {
-                    "id": "UsersCount",
-                    "string": "%[1]d",
-                    "type": "int",
-                    "underlyingType": "int",
-                    "argNum": 1,
-                    "expr": "usersCount"
-                }
-            ],
-            "fuzzy": true
-        },
-        {
-            "id": "1 user",
-            "message": "1 user",
-            "translation": "1 user",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Manage users",
-            "message": "Manage users",
-            "translation": "Manage users",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Delete organization",
             "message": "Delete organization",
             "translation": "Delete organization",
@@ -2220,6 +2161,41 @@
             "id": "Dashboard",
             "message": "Dashboard",
             "translation": "Dashboard",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Settings",
+            "message": "Settings",
+            "translation": "Settings",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Enable passkey enforcement",
+            "message": "Enable passkey enforcement",
+            "translation": "Enable passkey enforcement",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "message": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "translation": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Disable passkey enforcement",
+            "message": "Disable passkey enforcement",
+            "translation": "Disable passkey enforcement",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "message": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "translation": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2699,6 +2675,13 @@
             "message": "Please create a user in the organization user management first.",
             "translation": "Please create a user in the organization user management first.",
             "comment": "TODO link",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage users",
+            "message": "Manage users",
+            "translation": "Manage users",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6160,6 +6143,20 @@
             "id": "Manage space",
             "message": "Manage space",
             "translation": "Manage space",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Spaces by Organization",
+            "message": "Spaces by Organization",
+            "translation": "Spaces by Organization",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Organizations",
+            "message": "Organizations",
+            "translation": "Organizations",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

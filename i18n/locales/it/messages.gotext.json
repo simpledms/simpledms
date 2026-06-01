@@ -7468,6 +7468,125 @@
             "translation": "Il caricamento è troppo grande. La dimensione massima consentita è {FormatSizemaxUploadSizeBytes}.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "Created {LanguageBCP47}",
+            "message": "Created {LanguageBCP47}",
+            "translation": "Creato il {LanguageBCP47}",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Size",
+            "message": "Size",
+            "translation": "Dimensione",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Yes",
+            "message": "Yes",
+            "translation": "Sì",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No",
+            "message": "No",
+            "translation": "No",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Change file list view",
+            "message": "Change file list view",
+            "translation": "Cambia visualizzazione elenco file",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "List",
+            "message": "List",
+            "translation": "Elenco",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Table",
+            "message": "Table",
+            "translation": "Tabella",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not load users.",
+            "message": "Could not load users.",
+            "translation": "Impossibile caricare gli utenti.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Please reload the page and try again.",
+            "message": "Please reload the page and try again.",
+            "translation": "Ricarica la pagina e riprova.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Built in column",
+            "message": "Built in column",
+            "translation": "Colonna integrata",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "None",
+            "message": "None",
+            "translation": "Nessuno",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Reader",
+            "message": "Reader",
+            "translation": "Lettore",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Show tags",
+            "message": "Show tags",
+            "translation": "Mostra i Tag",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "View mode",
+            "message": "View mode",
+            "translation": "Modalità di visualizzazione",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Writer",
+            "message": "Writer",
+            "translation": "Scrittore",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Properties",
+            "message": "Properties",
+            "translation": "Proprietà",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sizes",
+            "message": "Sizes",
+            "translation": "Dimensioni",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         }
     ]
 }

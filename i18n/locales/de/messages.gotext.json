@@ -7158,6 +7158,118 @@
             "translation": "Upload ist zu gross. Die maximal erlaubte Grösse ist {FormatSizemaxUploadSizeBytes}.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "Created {LanguageBCP47}",
+            "message": "Created {LanguageBCP47}",
+            "translation": "Erstellt {LanguageBCP47}",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Yes",
+            "message": "Yes",
+            "translation": "Ja",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No",
+            "message": "No",
+            "translation": "Nein",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Change file list view",
+            "message": "Change file list view",
+            "translation": "Dateilistenansicht ändern",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "List",
+            "message": "List",
+            "translation": "Liste",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Table",
+            "message": "Table",
+            "translation": "Tabelle",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not load users.",
+            "message": "Could not load users.",
+            "translation": "Benutzer konnten nicht geladen werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Please reload the page and try again.",
+            "message": "Please reload the page and try again.",
+            "translation": "Bitte lade die Seite neu und versuche es erneut.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Built in column",
+            "message": "Built in column",
+            "translation": "Integrierte Spalte",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "None",
+            "message": "None",
+            "translation": "Keine",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Reader",
+            "message": "Reader",
+            "translation": "Leser",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Show tags",
+            "message": "Show tags",
+            "translation": "Tags anzeigen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "View mode",
+            "message": "View mode",
+            "translation": "Ansichtsmodus",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Writer",
+            "message": "Writer",
+            "translation": "Schreiber",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Properties",
+            "message": "Properties",
+            "translation": "Eigenschaften",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sizes",
+            "message": "Sizes",
+            "translation": "Grössen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         }
     ]
 }
