@@ -121,21 +121,54 @@ func (qq *FileListItemPartial) DirectoryListItem(
 	showBreadcrumbs bool,
 	showCreationDate bool,
 ) *wx.ListItem {
+	var dirCount, fileCount int64
+	for _, childOfChild := range fileWithChildren.Edges.Children {
+		if childOfChild.IsDirectory {
+			dirCount++
+		} else {
+			fileCount++
+		}
+	}
+
+	return qq.DirectoryListItemWithCounts(
+		ctx,
+		currentDirID,
+		fileWithChildren,
+		parentFullPath,
+		showBreadcrumbs,
+		showCreationDate,
+		dirCount,
+		fileCount,
+	)
+}
+
+func (qq *FileListItemPartial) DirectoryListItemWithCounts(
+	ctx ctxx.Context,
+	currentDirID string,
+	filex *enttenant.File,
+	parentFullPath string,
+	showBreadcrumbs bool,
+	showCreationDate bool,
+	dirCount int64,
+	fileCount int64,
+) *wx.ListItem {
 	supportingText := ""
 	hasBreadcrumbs := false
 	if showBreadcrumbs {
 		if parentFullPath == "" {
 			// if ID is used instead of ParentID, lastElem must be removed in next step (filepath.Dir)
-			parentFullPath = qq.infra.FileSystem().FileTree().FullPathByFileIDX(ctx, fileWithChildren.ParentID)
+			parentFullPath = qq.infra.FileSystem().FileTree().FullPathByFileIDX(ctx, filex.ParentID)
 		}
 
 		currentDirPath := qq.infra.FileSystem().FileTree().FullPathByPublicIDX(ctx, currentDirID)
 		if parentFullPath == currentDirPath {
 			supportingText = qq.supportingTextDirectory(
 				ctx,
-				fileWithChildren,
+				filex,
 				supportingText,
 				showCreationDate,
+				dirCount,
+				fileCount,
 			)
 		} else {
 			parentFullPath = strings.TrimPrefix(parentFullPath, currentDirPath+string(os.PathSeparator))
@@ -150,23 +183,25 @@ func (qq *FileListItemPartial) DirectoryListItem(
 	} else {
 		supportingText = qq.supportingTextDirectory(
 			ctx,
-			fileWithChildren,
+			filex,
 			supportingText,
 			showCreationDate,
+			dirCount,
+			fileCount,
 		)
 	}
 	if hasBreadcrumbs && showCreationDate {
 		supportingText = strings.Join(
-			[]string{qq.createdDateText(ctx, fileWithChildren), supportingText},
+			[]string{qq.createdDateText(ctx, filex), supportingText},
 			" - ",
 		)
 	}
 
 	icon := wx.NewIcon("folder")
-	headline := wx.T(fileWithChildren.Name)
+	headline := wx.T(filex.Name)
 
 	// check if root dir
-	if fileWithChildren.ParentID == 0 {
+	if filex.ParentID == 0 {
 		icon = wx.NewIcon("home")
 	}
 
@@ -176,9 +211,9 @@ func (qq *FileListItemPartial) DirectoryListItem(
 		Leading:        icon.SmallPadding(),
 		Headline:       headline,
 		SupportingText: wx.Tu(supportingText),
-		ContextMenu:    NewFileContextMenuWidget(qq.actions).Widget(ctx, fileWithChildren),
+		ContextMenu:    NewFileContextMenuWidget(qq.actions).Widget(ctx, filex),
 		HTMXAttrs: wx.HTMXAttrs{
-			HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithChildren.PublicID.String()),
+			HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID.String()),
 			HxHeaders: autil.ResetStateHeader(), // necessary to close side sheet
 			HxSwap: fmt.Sprintf(
 				// duplicate in ListDirPartial
@@ -195,23 +230,15 @@ func (qq *FileListItemPartial) DirectoryListItem(
 
 func (qq *FileListItemPartial) supportingTextDirectory(
 	ctx ctxx.Context,
-	fileWithChildren *enttenant.File,
+	filex *enttenant.File,
 	supportingText string,
 	showCreationDate bool,
+	dirCount int64,
+	fileCount int64,
 ) string {
-	// TODO is this faster than queries above? probably
-	var dirCount, fileCount int64
-	for _, childOfChild := range fileWithChildren.Edges.Children {
-		if childOfChild.IsDirectory {
-			dirCount++
-		} else {
-			fileCount++
-		}
-	}
-
 	var supportingTextArr []string
 	if showCreationDate {
-		supportingTextArr = append(supportingTextArr, qq.createdDateText(ctx, fileWithChildren))
+		supportingTextArr = append(supportingTextArr, qq.createdDateText(ctx, filex))
 	}
 	hasChildren := false
 	if dirCount > 1 {

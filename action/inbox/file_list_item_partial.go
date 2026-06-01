@@ -49,7 +49,6 @@ func (qq *FileListItemPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 	}
 
 	filex := ctx.TenantCtx().TTx.File.Query().
-		WithChildren().
 		Where(file.ID(data.FileID)).
 		OnlyX(ctx)
 	state := autil.StateX[InboxPageState](rw, req)

@@ -1570,8 +1570,12 @@ func TestToggleTenantPasskeyEnforcementCmdRejectsNonOwner(t *testing.T) {
 	}
 }
 
-func TestDashboardCardsPartialShowsPasskeyEnforcementButtonWithConfirm(t *testing.T) {
+func TestOrganizationSettingsPageShowsPasskeyEnforcementButtonWithConfirm(t *testing.T) {
 	harness := newActionTestHarness(t)
+	harness.router.RegisterPage(
+		route.OrganizationSettingsRoute(),
+		harness.actions.Dashboard.OrganizationSettingsPage.Handler,
+	)
 
 	email := "tenant-owner-passkey-button@example.com"
 	password := "supersecret"
@@ -1586,10 +1590,13 @@ func TestDashboardCardsPartialShowsPasskeyEnforcementButtonWithConfirm(t *testin
 
 	sessionCookie := signInAndGetSessionCookie(t, harness, email, password)
 
-	fetchCards := func() string {
-		req := httptest.NewRequest(http.MethodPost, "/-/dashboard/dashboard-cards-partial", nil)
+	fetchSettingsPage := func() string {
+		req := httptest.NewRequest(
+			http.MethodGet,
+			route.OrganizationSettings(tenantx.PublicID.String()),
+			nil,
+		)
 		req.AddCookie(sessionCookie)
-		req.Header.Set("HX-Request", "true")
 
 		rr := httptest.NewRecorder()
 		harness.router.ServeHTTP(rr, req)
@@ -1601,7 +1608,7 @@ func TestDashboardCardsPartialShowsPasskeyEnforcementButtonWithConfirm(t *testin
 		return rr.Body.String()
 	}
 
-	bodyDisabled := fetchCards()
+	bodyDisabled := fetchSettingsPage()
 	if !strings.Contains(bodyDisabled, "Enable passkey enforcement") {
 		t.Fatalf("expected enable passkey enforcement button, body was: %s", bodyDisabled)
 	}
@@ -1639,7 +1646,7 @@ func TestDashboardCardsPartialShowsPasskeyEnforcementButtonWithConfirm(t *testin
 		SetName("Browser Passkey").
 		SaveX(context.Background())
 
-	bodyEnabled := fetchCards()
+	bodyEnabled := fetchSettingsPage()
 	if !strings.Contains(bodyEnabled, "Disable passkey enforcement") {
 		t.Fatalf("expected disable passkey enforcement button, body was: %s", bodyEnabled)
 	}

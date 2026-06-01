@@ -1,6 +1,7 @@
 package browse
 
 import (
+	"log"
 	"slices"
 
 	"entgo.io/ent/dialect/sql"
@@ -25,7 +26,13 @@ type ListDirFileQueryResult struct {
 	CurrentDir           *enttenant.File
 	Children             []*enttenant.File
 	HasMore              bool
+	ChildCounts          map[int64]fileChildCounts
 	ChildParentFullPaths map[int64]string
+}
+
+type fileChildCounts struct {
+	DirectoryCount int64
+	FileCount      int64
 }
 
 type ListDirFileQueryService struct {
@@ -70,8 +77,6 @@ func (qq *ListDirFileQueryService) Query(
 
 	// TODO sort by relevance
 	searchResultQuery := ctx.TenantCtx().TTx.File.Query().
-		WithParent().
-		WithChildren(). // necessary to count children
 		Where(func(qs *sql.Selector) {
 			// subquery to select all files in search scope
 			if !state.IsRecursive {
@@ -171,6 +176,7 @@ func (qq *ListDirFileQueryService) Query(
 		// conditional necessary to prevent out of bounce access
 		children = children[:pageSize]
 	}
+	childCounts := qq.childCountsByDirectoryID(ctx, children)
 
 	// get parent directory full paths for breadcrumbs...
 	var childParentFullPaths map[int64]string
@@ -188,8 +194,56 @@ func (qq *ListDirFileQueryService) Query(
 		CurrentDir:           currentDir,
 		Children:             children,
 		HasMore:              hasMore,
+		ChildCounts:          childCounts,
 		ChildParentFullPaths: childParentFullPaths,
 	}
+}
+
+func (qq *ListDirFileQueryService) childCountsByDirectoryID(
+	ctx ctxx.Context,
+	files []*enttenant.File,
+) map[int64]fileChildCounts {
+	dirIDs := make([]int64, 0, len(files))
+	for _, filex := range files {
+		if filex.IsDirectory {
+			dirIDs = append(dirIDs, filex.ID)
+		}
+	}
+	if len(dirIDs) == 0 {
+		return map[int64]fileChildCounts{}
+	}
+
+	var rows []struct {
+		ParentID    int64 `json:"parent_id"`
+		IsDirectory bool  `json:"is_directory"`
+		Count       int64 `json:"count"`
+	}
+	err := ctx.TenantCtx().TTx.File.Query().
+		Where(
+			file.SpaceID(ctx.SpaceCtx().Space.ID),
+			file.ParentIDIn(dirIDs...),
+			file.IsInInbox(false),
+		).
+		GroupBy(file.FieldParentID, file.FieldIsDirectory).
+		Aggregate(enttenant.As(enttenant.Count(), "count")).
+		Scan(ctx, &rows)
+	if err != nil {
+		log.Println(err)
+		panic(err)
+	}
+
+	countsByDirID := make(map[int64]fileChildCounts, len(dirIDs))
+	for _, row := range rows {
+		counts := countsByDirID[row.ParentID]
+		if row.IsDirectory {
+			counts.DirectoryCount = row.Count
+		} else {
+			counts.FileCount = row.Count
+		}
+		countsByDirID[row.ParentID] = counts
+	}
+
+	return countsByDirID
 }
 
 func (qq *ListDirFileQueryService) descendantScopePredicate(

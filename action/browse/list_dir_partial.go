@@ -516,13 +516,16 @@ func (qq *ListDirPartial) filesListItemsFromQueryResult(
 			fullPath = childParentFullPaths[child.ParentID]
 		}
 
-		fileListItems = append(fileListItems, qq.actions.FileListItemPartial.DirectoryListItem(
+		childCounts := queryResult.ChildCounts[child.ID]
+		fileListItems = append(fileListItems, qq.actions.FileListItemPartial.DirectoryListItemWithCounts(
 			ctx,
 			currentDir.PublicID.String(),
 			child,
 			fullPath,
 			state.IsRecursive,
 			state.isSortedByDate(),
+			childCounts.DirectoryCount,
+			childCounts.FileCount,
 		))
 	}
 	for _, child := range children {

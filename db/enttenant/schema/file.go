@@ -108,6 +108,38 @@ func (File) Indexes() []ent.Index {
 		index.Fields("is_directory"),
 		index.Fields("is_in_inbox"),
 		index.Fields("space_id", "parent_id"),
+		index.
+			Fields("space_id", "parent_id", "is_directory", "name").
+			StorageKey("file_browse_name").
+			Annotations(
+				entsql.DescColumns("is_directory"),
+				entsql.IndexWhere("`deleted_at` is null and `is_in_inbox` = false"),
+			),
+		index.
+			Fields("space_id", "parent_id", "is_directory", "created_at", "name").
+			StorageKey("file_browse_created").
+			Annotations(
+				entsql.DescColumns("is_directory", "created_at"),
+				entsql.IndexWhere("`deleted_at` is null and `is_in_inbox` = false"),
+			),
+		index.
+			Fields("space_id", "parent_id", "is_directory", "created_at", "name").
+			StorageKey("file_browse_created_oldest").
+			Annotations(
+				entsql.DescColumns("is_directory"),
+				entsql.IndexWhere("`deleted_at` is null and `is_in_inbox` = false"),
+			),
+		index.
+			Fields("space_id", "is_directory", "created_at").
+			StorageKey("file_inbox_created").
+			Annotations(
+				entsql.DescColumns("created_at"),
+				entsql.IndexWhere("`deleted_at` is null and `is_in_inbox` = true"),
+			),
+		index.
+			Fields("space_id", "is_directory", "name").
+			StorageKey("file_inbox_name").
+			Annotations(entsql.IndexWhere("`deleted_at` is null and `is_in_inbox` = true")),
 	}
 }
 

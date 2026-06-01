@@ -221,6 +221,60 @@ var (
 				Unique:  false,
 				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21]},
 			},
+			{
+				Name:    "file_browse_name",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[6], FilesColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[6].Name: true,
+					},
+					Where: "`deleted_at` is null and `is_in_inbox` = false",
+				},
+			},
+			{
+				Name:    "file_browse_created",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[6], FilesColumns[3], FilesColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[3].Name: true,
+
+						FilesColumns[6].Name: true,
+					},
+					Where: "`deleted_at` is null and `is_in_inbox` = false",
+				},
+			},
+			{
+				Name:    "file_browse_created_oldest",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[6], FilesColumns[3], FilesColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[6].Name: true,
+					},
+					Where: "`deleted_at` is null and `is_in_inbox` = false",
+				},
+			},
+			{
+				Name:    "file_inbox_created",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[6], FilesColumns[3]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[3].Name: true,
+					},
+					Where: "`deleted_at` is null and `is_in_inbox` = true",
+				},
+			},
+			{
+				Name:    "file_inbox_name",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[6], FilesColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`deleted_at` is null and `is_in_inbox` = true",
+				},
+			},
 		},
 	}
 	// FilePropertyAssignmentsColumns holds the columns for the "file_property_assignments" table.

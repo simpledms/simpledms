@@ -14,6 +14,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/main/filelistpreference"
@@ -26,6 +27,7 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/sqlutil"
 )
 
 type FilesListPartialData struct {
@@ -107,8 +109,49 @@ func (qq *FilesListPartial) Handler(
 			),
 		)
 	}
+	if req.Header.Get("Hx-Target") == "inboxLoadMore" {
+		offset, err := offsetFromRequest(req)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+
+		children, hasMore := qq.filesPage(ctx, state, offset)
+		return qq.infra.Renderer().Render(
+			rw,
+			ctx,
+			&wx.View{
+				Children: qq.filesListItemsFromFiles(ctx, state, data, offset, children, hasMore),
+			},
+		)
+	}
+	if req.Header.Get("Hx-Target") == "inboxLoadMoreTable" {
+		offset, err := offsetFromRequest(req)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+
+		children, hasMore := qq.filesPage(ctx, state, offset)
+		preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
+		return qq.infra.Renderer().Render(
+			rw,
+			ctx,
+			&wx.View{
+				Children: qq.fileTable(ctx, data, offset, children, hasMore, preferences).Rows,
+			},
+		)
+	}
 
 	return qq.infra.Renderer().Render(rw, ctx, qq.Widget(ctx, state, data.SelectedFileID))
+}
+
+func offsetFromRequest(req *httpx.Request) (int, error) {
+	offsetStr := req.URL.Query().Get("offset")
+	if offsetStr == "" {
+		return 0, nil
+	}
+	return strconv.Atoi(offsetStr)
 }
 
 func (qq *FilesListPartial) WidgetHandler(
@@ -185,37 +228,19 @@ func (qq *FilesListPartial) filesList(
 	state *InboxPageState,
 	data *FilesListPartialData,
 ) renderable.Renderable {
-	var fileListItems []wx.IWidget
-
-	searchResultQuery := qq.filesQuery(ctx, state)
-	// TODO .Limit(25) // needs hint if enabled
-	children := searchResultQuery.AllX(ctx)
+	children, hasMore := qq.filesPage(ctx, state, 0)
 	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
-
-	for _, child := range children {
-		if child.IsDirectory {
-			continue
-		}
-
-		fileListItems = append(fileListItems, qq.actions.FileListItemPartial.Widget(
-			ctx,
-			// route.InboxWithState(state),
-			route.Inbox,
-			child,
-			child.PublicID.String() == data.SelectedFileID,
-			state.FilesListPartialState.isSortedByDate(),
-		))
-	}
+	fileListItems := qq.filesListItemsFromFiles(ctx, state, data, 0, children, hasMore)
 
 	var content wx.IWidget
 	content = &wx.List{
 		Children: fileListItems,
 	}
-	if preferences.IsTable() && len(fileListItems) > 0 {
-		content = qq.fileTable(ctx, data, children, preferences)
+	if preferences.IsTable() && len(children) > 0 {
+		content = qq.fileTable(ctx, data, 0, children, hasMore, preferences)
 	}
 
-	if len(fileListItems) == 0 {
+	if len(children) == 0 {
 		content = &wx.EmptyState{
 			Icon:     wx.NewIcon("description"),
 			Headline: wx.T("No files available yet."),
@@ -267,11 +292,69 @@ func (qq *FilesListPartial) filesList(
 	}
 }
 
+func (qq *FilesListPartial) pageSize() int {
+	return 50
+}
+
+func (qq *FilesListPartial) filesPage(
+	ctx ctxx.Context,
+	state *InboxPageState,
+	offset int,
+) ([]*enttenant.File, bool) {
+	children := qq.filesQuery(ctx, state).
+		Offset(offset).
+		Limit(qq.pageSize() + 1).
+		AllX(ctx)
+	hasMore := len(children) > qq.pageSize()
+	if hasMore {
+		children = children[:qq.pageSize()]
+	}
+	return children, hasMore
+}
+
+func (qq *FilesListPartial) filesListItemsFromFiles(
+	ctx ctxx.Context,
+	state *InboxPageState,
+	data *FilesListPartialData,
+	offset int,
+	children []*enttenant.File,
+	hasMore bool,
+) []wx.IWidget {
+	fileListItems := make([]wx.IWidget, 0, len(children)+1)
+	for _, child := range children {
+		fileListItems = append(fileListItems, qq.actions.FileListItemPartial.Widget(
+			ctx,
+			// route.InboxWithState(state),
+			route.Inbox,
+			child,
+			child.PublicID.String() == data.SelectedFileID,
+			state.FilesListPartialState.isSortedByDate(),
+		))
+	}
+
+	if hasMore {
+		fileListItems = append(fileListItems, &wx.ListItem{
+			Widget: wx.Widget[wx.ListItem]{
+				ID: "inboxLoadMore",
+			},
+			Headline: wx.T("Loading more..."),
+			HTMXAttrs: wx.HTMXAttrs{
+				HxPost:    qq.Endpoint() + "?offset=" + strconv.Itoa(offset+qq.pageSize()),
+				HxVals:    util.JSON(data),
+				HxTrigger: "intersect once",
+				HxTarget:  "#inboxLoadMore",
+				HxSwap:    "outerHTML",
+				HxInclude: "#search,#sortBy",
+			},
+		})
+	}
+
+	return fileListItems
+}
+
 // LIMIT must be applied by caller
 func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) *enttenant.FileQuery {
-	searchResultQuery := ctx.TenantCtx().TTx.File.Query().
-		WithParent().
-		WithChildren() // necessary to count children
+	searchResultQuery := ctx.TenantCtx().TTx.File.Query()
 	/*Where(func(qs *sql.Selector) {
 		// subquery to select all files in search scope
 		fileInfoView := sql.Table(fileinfo.Table)
@@ -291,18 +374,32 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 	searchResultQuery = searchResultQuery.Where(
 		file.SpaceID(ctx.SpaceCtx().Space.ID),
 		file.IsInInbox(true),
+		file.IsDirectory(false),
 		/*file.HasSpaceAssignmentWith(
 			spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID),
 			spacefileassignment.IsInInbox(true),
 		),*/
 	)
 
-	if state.SearchQuery != "" {
-		// TODO necessary if not full text search? probably not
-		// searchQuerySanitized := sqlutil.FTSSafeAndQuery(state.SearchQuery, 300)
-
+	searchQuery := sqlutil.FTSSafeAndQuery(state.SearchQuery, 300)
+	if searchQuery != "" {
 		searchResultQuery = searchResultQuery.Where(
-			file.NameContains(state.SearchQuery),
+			func(qs *sql.Selector) {
+				fileSearchTable := sql.Table(filesearch.Table)
+
+				qs.Where(
+					sql.In(qs.C(file.FieldID),
+						sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
+							Where(
+								sql.And(
+									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
+									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+								),
+							).
+							OrderBy(fileSearchTable.C(filesearch.FieldRank)),
+					),
+				)
+			},
 		)
 	}
 

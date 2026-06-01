@@ -18,11 +18,13 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/sqlutil"
 )
 
 type listingBenchmarkFixture struct {
@@ -456,25 +458,38 @@ func reportEventTime(b *testing.B) {
 
 func inboxListingQuery(spaceCtx *ctxx.SpaceContext, spaceID int64, searchQuery string) ([]*enttenant.File, error) {
 	query := spaceCtx.TTx.File.Query().
-		WithParent().
-		WithChildren().
 		Where(
 			file.SpaceID(spaceID),
 			file.IsInInbox(true),
+			file.IsDirectory(false),
 		).
 		Order(file.ByCreatedAt(sql.OrderDesc()))
 
+	searchQuery = sqlutil.FTSSafeAndQuery(searchQuery, 300)
 	if searchQuery != "" {
-		query = query.Where(file.NameContains(searchQuery))
+		query = query.Where(func(qs *sql.Selector) {
+			fileSearchTable := sql.Table(filesearch.Table)
+
+			qs.Where(
+				sql.In(qs.C(file.FieldID),
+					sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
+						Where(
+							sql.And(
+								sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
+								sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+							),
+						).
+						OrderBy(fileSearchTable.C(filesearch.FieldRank)),
+				),
+			)
+		})
 	}
 
-	return query.All(spaceCtx)
+	return query.Limit(51).All(spaceCtx)
 }
 
 func browseListingQuery(spaceCtx *ctxx.SpaceContext, spaceID int64, rootDirID int64) ([]*enttenant.File, error) {
 	return spaceCtx.TTx.File.Query().
-		WithParent().
-		WithChildren().
 		Where(
 			file.ParentID(rootDirID),
 			file.SpaceID(spaceID),

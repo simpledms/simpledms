@@ -22,6 +22,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/filelistpreference"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/timex"
@@ -30,7 +31,9 @@ import (
 func (qq *FilesListPartial) fileTable(
 	ctx ctxx.Context,
 	data *FilesListPartialData,
+	offset int,
 	files []*enttenant.File,
+	hasMore bool,
 	preferences *filelistpreference.FileListPreferences,
 ) *wx.Table {
 	spaceColumns := preferences.SpaceColumnsFor(ctx.SpaceCtx().SpaceID)
@@ -58,10 +61,42 @@ func (qq *FilesListPartial) fileTable(
 			columnData,
 		))
 	}
+	if hasMore {
+		rows = append(rows, qq.fileTableLoadMoreRow(data, offset, len(columns)))
+	}
 
 	return &wx.Table{
 		Columns: columns,
 		Rows:    rows,
+	}
+}
+
+func (qq *FilesListPartial) fileTableLoadMoreRow(
+	data *FilesListPartialData,
+	offset int,
+	columnCount int,
+) *wx.TableRow {
+	cells := make([]*wx.TableCell, 0, columnCount)
+	for qi := 0; qi < columnCount; qi++ {
+		child := wx.Tu("")
+		if qi == 0 {
+			child = wx.T("Loading more...")
+		}
+		cells = append(cells, &wx.TableCell{Child: child})
+	}
+	return &wx.TableRow{
+		Widget: wx.Widget[wx.TableRow]{
+			ID: "inboxLoadMoreTable",
+		},
+		Cells: cells,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost:    qq.Endpoint() + "?offset=" + fmt.Sprintf("%d", offset+qq.pageSize()),
+			HxVals:    util.JSON(data),
+			HxTrigger: "intersect once",
+			HxTarget:  "#inboxLoadMoreTable",
+			HxSwap:    "outerHTML",
+			HxInclude: "#search,#sortBy",
+		},
 	}
 }
 
