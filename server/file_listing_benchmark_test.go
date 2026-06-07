@@ -560,10 +560,11 @@ func inboxListingQuery(spaceCtx *ctxx.SpaceContext, spaceID int64, searchQuery s
 						Where(
 							sql.And(
 								sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
-								sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+								sql.EQ(fileSearchTable.C(file.FieldSpaceID), spaceID),
+								sql.EQ(fileSearchTable.C(file.FieldIsDirectory), false),
+								sql.EQ(fileSearchTable.C(file.FieldIsInInbox), true),
 							),
-						).
-						OrderBy(fileSearchTable.C(filesearch.FieldRank)),
+						),
 				),
 			)
 		})

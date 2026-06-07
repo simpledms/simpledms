@@ -645,6 +645,11 @@ var (
 				Columns: []*schema.Column{TagAssignmentsColumns[1]},
 			},
 			{
+				Name:    "tagassignment_tag_id",
+				Unique:  false,
+				Columns: []*schema.Column{TagAssignmentsColumns[2]},
+			},
+			{
 				Name:    "tagassignment_file_id_tag_id",
 				Unique:  true,
 				Columns: []*schema.Column{TagAssignmentsColumns[3], TagAssignmentsColumns[2]},

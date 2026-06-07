@@ -393,10 +393,11 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 							Where(
 								sql.And(
 									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
-									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+									sql.EQ(fileSearchTable.C(file.FieldSpaceID), ctx.SpaceCtx().Space.ID),
+									sql.EQ(fileSearchTable.C(file.FieldIsDirectory), false),
+									sql.EQ(fileSearchTable.C(file.FieldIsInInbox), true),
 								),
-							).
-							OrderBy(fileSearchTable.C(filesearch.FieldRank)),
+							),
 					),
 				)
 			},
