@@ -8,6 +8,7 @@
 				{{- /* outline or border? */}}
 				{{ if .IsStyleOutlined }}bg-surface outline-outline-variant outline outline-1 -outline-offset-1{{ end }}
 				{{ if .IsStyleFilled }}bg-surface-container{{ end }}{{/* spec is -highest */}}
+				{{ if .IsLink }}hover:cursor-pointer{{ end }}
 				{{ if .ContextMenu }}cursor-context-menu{{ end }}
 			"
 	>

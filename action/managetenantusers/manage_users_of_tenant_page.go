@@ -5,7 +5,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -52,7 +52,12 @@ func (qq *ManageUsersOfTenantPage) Widget(ctx ctxx.Context, state *ManageUsersOf
 	}
 
 	return &wx.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "manage-users", fabs),
+		Navigation: partial2.NewNavigationRail(
+			ctx,
+			qq.infra,
+			partial2.TenantUsersNavigationRailValue(ctx.TenantCtx().TenantID),
+			fabs,
+		),
 		Content: &wx.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
 			Content: qq.actions.UserListPartial.Widget(ctx, &state.UserListPartialState),
@@ -65,7 +70,7 @@ func (qq *ManageUsersOfTenantPage) appBar(ctx ctxx.Context) *wx.AppBar {
 		Leading: &wx.Icon{
 			Name: "person",
 		},
-		LeadingAltMobile: partial2.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title: &wx.AppBarTitle{
 			Text: wx.Tf("Users «%s»", ctx.TenantCtx().Tenant.Name),
 		},

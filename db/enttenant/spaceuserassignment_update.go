@@ -14,7 +14,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/model/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
 )
 
 // SpaceUserAssignmentUpdate is the builder for updating SpaceUserAssignment entities.

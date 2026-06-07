@@ -2,18 +2,22 @@ package browse
 
 import (
 	"log"
+	"math"
 	"net/http"
 	"path/filepath"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/filesystem"
+	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/txx"
+	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type UploadFileVersionCmdData struct {
@@ -52,6 +56,19 @@ func (qq *UploadFileVersionCmd) Data(fileID string) *UploadFileVersionCmdData {
 
 // very similar to UploadFileCmd
 func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	nilableUploadLimitBytes, err := qq.infra.FileSystem().NilableEffectiveUploadSizeLimitBytes(ctx)
+	if err != nil {
+		return err
+	}
+	if nilableUploadLimitBytes != nil {
+		bodyLimitBytes := *nilableUploadLimitBytes
+		const multipartOverheadBytes int64 = 1 * 1024 * 1024
+		if bodyLimitBytes < math.MaxInt64-multipartOverheadBytes {
+			bodyLimitBytes += multipartOverheadBytes
+		}
+		req.Request.Body = http.MaxBytesReader(rw, req.Request.Body, bodyLimitBytes)
+	}
+
 	data, err := autil.FormData[UploadFileVersionCmdData](rw, req, ctx)
 	if err != nil {
 		return err
@@ -78,11 +95,11 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 	if filex.Data.IsDirectory {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
 	}
-	if err := autil.EnsureFileDoesNotExist(ctx, filename, filex.Data.ParentID, filex.Data.IsInInbox); err != nil {
+	if err := fileutil.EnsureFileDoesNotExist(ctx, filename, filex.Data.ParentID, filex.Data.IsInInbox); err != nil {
 		return err
 	}
 
-	prep, err := autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*filesystem.PreparedUpload, error) {
+	prep, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*filesystem.PreparedUpload, error) {
 		return qq.infra.FileSystem().PrepareFileVersionUpload(
 			writeCtx,
 			filename,
@@ -93,22 +110,22 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		return err
 	}
 
-	fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+	uploadResult, err := qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 		ctx,
 		uploadedFile,
 		prep,
 		uploadedFileHeader.Size,
 	)
 	if err != nil {
-		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep, err, true)
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep, err, true)
 		return err
 	}
 
-	_, err = autil.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep, fileInfo, fileSize)
+	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep, uploadResult)
 	})
 	if err != nil {
-		autil.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep, err, false)
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep, err, false)
 		return err
 	}
 

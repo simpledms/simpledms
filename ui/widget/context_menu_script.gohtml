@@ -42,10 +42,13 @@
 						e.preventDefault();
 						e.stopImmediatePropagation(); // necessary for left click
 					} else {
+						let isAnchorClick = e.target.closest('a[href]') !== null;
+						if (!isAnchorClick) {
 						// added on 18 April 2025 to prevent closing a wrapping <details> element when
 						// selecting an item from the context menu; was necessary in manage tags for editing tag groups;
 						// not sure if it has side effects
-						e.preventDefault();
+							e.preventDefault();
+						}
 					}
 
 					// also on click inside contextMenu, otherwise menu stays open in
@@ -73,4 +76,3 @@
 		})()
 	</script>
 {{- end }}
-

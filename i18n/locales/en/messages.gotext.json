@@ -9,9 +9,9 @@
 			"fuzzy": true
 		},
 		{
-			"id": "Maintenance mode is enabled. Please wait until the app ready again.",
-			"message": "Maintenance mode is enabled. Please wait until the app ready again.",
-			"translation": "Maintenance mode is enabled. Please wait until the app ready again.",
+			"id": "Maintenance mode is enabled. Please wait until the app is ready again.",
+			"message": "Maintenance mode is enabled. Please wait until the app is ready again.",
+			"translation": "Maintenance mode is enabled. Please wait until the app is ready again.",
 			"translatorComment": "",
 			"fuzzy": true
 		},
@@ -310,9 +310,9 @@
 			"fuzzy": true
 		},
 		{
-			"id": "Registration successful, please check your email for your password.",
-			"message": "Registration successful, please check your email for your password.",
-			"translation": "Registration successful, please check your email for your password.",
+			"id": "Registration successful, please check your emails for your password.",
+			"message": "Registration successful, please check your emails for your password.",
+			"translation": "Registration successful, please check your emails for your password.",
 			"translatorComment": "",
 			"fuzzy": true
 		},

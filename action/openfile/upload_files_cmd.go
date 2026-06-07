@@ -1,23 +1,24 @@
 package openfile
 
 import (
+	"errors"
 	"io"
 	"log"
 	"net/http"
 	"time"
 
 	gonanoid "github.com/matoous/go-nanoid"
-
-	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
-	"github.com/simpledms/simpledms/model/filesystem"
+	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/txx"
+	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 type UploadFilesCmdState struct {
@@ -60,6 +61,12 @@ func (qq *UploadFilesCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	uploadToken, err := qq.processSharedFiles(rw, req, ctx)
 	if err != nil {
 		log.Println(err)
+
+		var httpErr *e.HTTPError
+		if errors.As(err, &httpErr) {
+			return err
+		}
+
 		return e.NewHTTPErrorf(http.StatusInternalServerError, "Processing of shared files failed.")
 	}
 
@@ -70,7 +77,6 @@ func (qq *UploadFilesCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	return nil
 }
 
-// FIXME check file size
 // FIXME limit number of files?
 func (qq *UploadFilesCmd) processSharedFiles(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) (string, error) {
 	reader, err := req.MultipartReader()
@@ -111,7 +117,7 @@ func (qq *UploadFilesCmd) processSharedFiles(rw httpx.ResponseWriter, req *httpx
 		// TODO to long? user has 15 minutes to select a space
 		expiresAt := time.Now().Add(15 * time.Minute)
 
-		prepared, err := autil.WithMainWriteTx(ctx, func(writeTx *entmain.Tx) (*filesystem.PreparedAccountUpload, error) {
+		prepared, err := txx.WithMainWriteTx(ctx, func(writeTx *entmain.Tx) (*filesystem.PreparedAccountUpload, error) {
 			return qq.infra.FileSystem().PrepareTemporaryAccountUpload(
 				ctx,
 				writeTx,
@@ -129,15 +135,15 @@ func (qq *UploadFilesCmd) processSharedFiles(rw httpx.ResponseWriter, req *httpx
 		fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedTemporaryAccountFile(ctx, part, prepared)
 		_ = part.Close()
 		if err != nil {
-			autil.HandleTemporaryFileUploadFailure(ctx, qq.infra.FileSystem(), prepared, err, true)
+			uploadx.HandleTemporaryFileUploadFailure(ctx, qq.infra.FileSystem(), prepared, err, true)
 			return "", err
 		}
 
-		_, err = autil.WithMainWriteTx(ctx, func(writeTx *entmain.Tx) (*struct{}, error) {
+		_, err = txx.WithMainWriteTx(ctx, func(writeTx *entmain.Tx) (*struct{}, error) {
 			return nil, qq.infra.FileSystem().FinalizePreparedTemporaryAccountUpload(ctx, writeTx, prepared, fileInfo, fileSize)
 		})
 		if err != nil {
-			autil.HandleTemporaryFileUploadFailure(ctx, qq.infra.FileSystem(), prepared, err, false)
+			uploadx.HandleTemporaryFileUploadFailure(ctx, qq.infra.FileSystem(), prepared, err, false)
 			return "", err
 		}
 	}

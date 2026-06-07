@@ -6,7 +6,7 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/library"
+	"github.com/simpledms/simpledms/model/tenant/library"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -55,6 +55,7 @@ func (qq *ManageDocumentTypesPage) Handler(
 			Icon:    "download",
 			Tooltip: wx.T("Import from library"),
 			FABSize: wx.FABSizeSmall,
+			FABType: wx.FABTypeSecondary,
 			HTMXAttrs: qq.actions.ImportFromLibraryDialog.ModalLinkAttrs(
 				qq.actions.ImportFromLibraryDialog.Data(),
 				"",

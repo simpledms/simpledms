@@ -16,6 +16,14 @@ func SelectSpaceRoute(withUploadToken bool) string {
 	return "GET /open-file/select-space/"
 }
 
+func FromURLRoute() string {
+	return "GET /open-file/from-url"
+}
+
+func FromURL() string {
+	return "/open-file/from-url"
+}
+
 func SelectSpace(tokenURL string) string {
 	return fmt.Sprintf("/open-file/select-space/%s", tokenURL)
 }

@@ -33,6 +33,18 @@ func (f MailFunc) Mutate(ctx context.Context, m entmain.Mutation) (entmain.Value
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *entmain.MailMutation", m)
 }
 
+// The PasskeyCredentialFunc type is an adapter to allow the use of ordinary
+// function as PasskeyCredential mutator.
+type PasskeyCredentialFunc func(context.Context, *entmain.PasskeyCredentialMutation) (entmain.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PasskeyCredentialFunc) Mutate(ctx context.Context, m entmain.Mutation) (entmain.Value, error) {
+	if mv, ok := m.(*entmain.PasskeyCredentialMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *entmain.PasskeyCredentialMutation", m)
+}
+
 // The SessionFunc type is an adapter to allow the use of ordinary
 // function as Session mutator.
 type SessionFunc func(context.Context, *entmain.SessionMutation) (entmain.Value, error)
@@ -91,6 +103,18 @@ func (f TenantAccountAssignmentFunc) Mutate(ctx context.Context, m entmain.Mutat
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *entmain.TenantAccountAssignmentMutation", m)
+}
+
+// The WebAuthnChallengeFunc type is an adapter to allow the use of ordinary
+// function as WebAuthnChallenge mutator.
+type WebAuthnChallengeFunc func(context.Context, *entmain.WebAuthnChallengeMutation) (entmain.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WebAuthnChallengeFunc) Mutate(ctx context.Context, m entmain.Mutation) (entmain.Value, error) {
+	if mv, ok := m.(*entmain.WebAuthnChallengeMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *entmain.WebAuthnChallengeMutation", m)
 }
 
 // Condition is a hook condition function.

@@ -1,0 +1,49 @@
+# Duplicate Detection Invariants
+
+- A duplicate means byte-identical original uploaded content.
+- Duplicate detection uses `StoredFile.content_sha256`, not the existing storage/object `sha256`.
+- `content_sha256` represents canonical uploaded content bytes before compression, encryption, or storage transformation.
+- Uploads compute `content_sha256` during upload streaming.
+- Existing files get `content_sha256` only through the scheduler backfill.
+- There is no CLI, admin, or manual backfill command for this feature.
+- Duplicate detection searches historic file versions, not only current versions.
+- Duplicate detection searches only within the current tenant/organization.
+- Duplicate detection never searches across tenants.
+- Duplicate results include only Spaces the current user can access.
+- Duplicate results exclude inaccessible Spaces even if the hash matches.
+- Duplicate results exclude deleted files.
+- Duplicate results exclude directories.
+- Duplicate results exclude the source file's own versions.
+- Duplicate results are not capped in the UI.
+- A duplicate result must include enough routing data to open the matched file in Browse.
+- Duplicate match links use the matched file's parent folder so Browse opens the correct location.
+- Duplicate list items show the parent folder when the matched file is not in the Space root.
+- User-provided names such as file names, folder names, and Space names are not translated.
+- Fixed UI labels in duplicate text are translated, including `Space`, `Folder`, `Uploaded`, `Current version`, and `Version`.
+- Browse and Inbox share the same duplicate match content implementation.
+- The `Duplicates` tab appears only when duplicates exist.
+- The `Duplicates` tab is the last tab.
+- If `tab=duplicates` is stale and no duplicates exist, the UI falls back to metadata.
+- Inbox metadata does not list duplicate locations inline.
+- Inbox metadata shows a `Duplicate check is still being prepared for this file.` status when the content hash is missing.
+- Inbox metadata shows a small `Duplicates found` link when duplicates exist.
+- Clicking `Duplicates found` updates only the side-sheet/tab content, not the file preview/details area.
+- The Inbox duplicate tab includes a `Delete from inbox` action when duplicates exist.
+- `Delete from inbox` reuses the existing Browse delete command.
+- `Delete from inbox` is shown at the top of the duplicate tab.
+- `Delete from inbox` uses the same elevated button style as `Mark as done`.
+- `Delete from inbox` has no icon.
+- There is a larger gap between `Delete from inbox` and the duplicate content.
+- Duplicate list items are whole-row clickable.
+- Duplicate list items have no icon.
+- Duplicate list items use normal/default content sizing.
+- File info shows `content_sha256` under the existing label `SHA-256 hash`.
+- File info does not show the old storage/object `sha256` for duplicate detection.
+- Tab bars are horizontally scrollable only when needed.
+- Tab bar scrollbar appears below the tab border.
+- The selected tab auto-scrolls into view after render/swap.
+- Renderer inputs must not be nil renderables; use empty widgets when needed.
+- Backfill runs conservatively with throttling to avoid production impact.
+- Backfill applies tenant privacy bypass internally only for its controlled maintenance flow.
+- Duplicate lookup may widen file/version queries internally only after collecting accessible Space IDs.
+- Duplicate UI errors are logged and shown as friendly fallback content where applicable.

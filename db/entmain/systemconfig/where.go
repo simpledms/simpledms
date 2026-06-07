@@ -176,6 +176,11 @@ func OcrMaxFileSizeMib(v int64) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldEQ(FieldOcrMaxFileSizeMib, v))
 }
 
+// MaxUploadSizeMib applies equality check predicate on the "max_upload_size_mib" field. It's identical to MaxUploadSizeMibEQ.
+func MaxUploadSizeMib(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldMaxUploadSizeMib, v))
+}
+
 // InitializedAt applies equality check predicate on the "initialized_at" field. It's identical to InitializedAtEQ.
 func InitializedAt(v time.Time) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldEQ(FieldInitializedAt, v))
@@ -1229,6 +1234,46 @@ func OcrMaxFileSizeMibLT(v int64) predicate.SystemConfig {
 // OcrMaxFileSizeMibLTE applies the LTE predicate on the "ocr_max_file_size_mib" field.
 func OcrMaxFileSizeMibLTE(v int64) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldLTE(FieldOcrMaxFileSizeMib, v))
+}
+
+// MaxUploadSizeMibEQ applies the EQ predicate on the "max_upload_size_mib" field.
+func MaxUploadSizeMibEQ(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldMaxUploadSizeMib, v))
+}
+
+// MaxUploadSizeMibNEQ applies the NEQ predicate on the "max_upload_size_mib" field.
+func MaxUploadSizeMibNEQ(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNEQ(FieldMaxUploadSizeMib, v))
+}
+
+// MaxUploadSizeMibIn applies the In predicate on the "max_upload_size_mib" field.
+func MaxUploadSizeMibIn(vs ...int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldIn(FieldMaxUploadSizeMib, vs...))
+}
+
+// MaxUploadSizeMibNotIn applies the NotIn predicate on the "max_upload_size_mib" field.
+func MaxUploadSizeMibNotIn(vs ...int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNotIn(FieldMaxUploadSizeMib, vs...))
+}
+
+// MaxUploadSizeMibGT applies the GT predicate on the "max_upload_size_mib" field.
+func MaxUploadSizeMibGT(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldGT(FieldMaxUploadSizeMib, v))
+}
+
+// MaxUploadSizeMibGTE applies the GTE predicate on the "max_upload_size_mib" field.
+func MaxUploadSizeMibGTE(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldGTE(FieldMaxUploadSizeMib, v))
+}
+
+// MaxUploadSizeMibLT applies the LT predicate on the "max_upload_size_mib" field.
+func MaxUploadSizeMibLT(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldLT(FieldMaxUploadSizeMib, v))
+}
+
+// MaxUploadSizeMibLTE applies the LTE predicate on the "max_upload_size_mib" field.
+func MaxUploadSizeMibLTE(v int64) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldLTE(FieldMaxUploadSizeMib, v))
 }
 
 // InitializedAtEQ applies the EQ predicate on the "initialized_at" field.

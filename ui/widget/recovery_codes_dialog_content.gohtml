@@ -1,0 +1,174 @@
+{{- define "RecoveryCodesDialogContent" }}
+	<div class="flex flex-col gap-y-4 pb-4">
+		{{ render .GetContext .ImportantNoticeParagraph }}
+		{{ render .GetContext .RiskNoticeParagraph }}
+		{{ render .GetContext .CodesTextArea }}
+		{{ render .GetContext .MessagesDataAttributes }}
+	</div>
+	<script defer>
+		(function() {
+			const textarea = document.getElementById('{{ .TextareaID }}');
+			const printButton = document.getElementById('{{ .PrintButtonID }}');
+			const copyButton = document.getElementById('{{ .CopyButtonID }}');
+			const downloadButton = document.getElementById('{{ .DownloadButtonID }}');
+			const messages = document.getElementById('{{ .StatusID }}-messages');
+			const dialog = textarea ? textarea.closest('dialog') : null;
+			const accountName = '{{ .AccountName }}';
+			let downloadURL = null;
+
+			if (!textarea || !printButton || !copyButton || !downloadButton || !messages || !dialog) {
+				return;
+			}
+
+			const backupCodesTitle = messages.dataset.backupCodesTitle || "{{ render .GetContext .BackupCodesTitle }}";
+			const accountLabel = messages.dataset.accountLabel || "{{ render .GetContext .AccountLabel }}";
+			const generatedLabel = messages.dataset.generatedLabel || "{{ render .GetContext .GeneratedLabel }}";
+			const keepSecureNotice = messages.dataset.keepSecureNotice || "{{ render .GetContext .KeepSecureNotice }}";
+			const shownOnceNotice = messages.dataset.shownOnceNotice || "{{ render .GetContext .ShownOnceNotice }}";
+			const codesHeading = messages.dataset.codesHeading || "{{ render .GetContext .CodesHeading }}";
+			const printOpenedMessage = messages.dataset.printOpenedMessage || "{{ render .GetContext .PrintOpenedMessage }}";
+			const copiedMessage = messages.dataset.copiedMessage || "{{ render .GetContext .CopiedMessage }}";
+			const copyFailedMessage = messages.dataset.copyFailedMessage || "{{ render .GetContext .CopyFailedMessage }}";
+			const downloadedMessage = messages.dataset.downloadedMessage || "{{ render .GetContext .DownloadedMessage }}";
+
+			const codesText = textarea.value;
+
+			function revokeDownloadURL() {
+				if (downloadURL) {
+					URL.revokeObjectURL(downloadURL);
+					downloadURL = null;
+				}
+			}
+
+			function escapeHtml(text) {
+				return text
+					.replace(/&/g, '&amp;')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;');
+			}
+
+			function buildContextInfo() {
+				const lines = [
+					backupCodesTitle,
+					'',
+				];
+
+				if (accountName && accountName.trim().length > 0) {
+					lines.push(accountLabel + ': ' + accountName.trim());
+				}
+
+				lines.push(generatedLabel + ': ' + new Date().toLocaleString());
+				lines.push(keepSecureNotice);
+				lines.push(shownOnceNotice);
+
+				return lines.join('\n');
+			}
+
+			function buildExportText() {
+				const details = [];
+				if (accountName && accountName.trim().length > 0) {
+					details.push(accountLabel + ': ' + accountName.trim());
+				}
+				details.push(generatedLabel + ': ' + new Date().toLocaleString());
+				details.push(keepSecureNotice);
+				details.push(shownOnceNotice);
+
+				return [
+					backupCodesTitle,
+					'',
+					...details,
+					'',
+					codesHeading + ':',
+					'',
+					codesText.trim(),
+					'',
+				].join('\n');
+			}
+
+			function buildPrintDocumentHTML() {
+				return [
+					'<!doctype html>',
+					'<html><head><meta charset="utf-8"><title>' + escapeHtml(backupCodesTitle) + '</title></head><body>',
+					'<h1>' + escapeHtml(backupCodesTitle) + '</h1>',
+					'<pre style="font-family: monospace; font-size: 14px; line-height: 1.6;">' + escapeHtml(buildContextInfo()) + '</pre>',
+					'<pre style="font-family: monospace; font-size: 14px; line-height: 1.6;">' + escapeHtml(codesText.trim()) + '</pre>',
+					'</body></html>',
+				].join('');
+			}
+
+			async function copyToClipboard(text) {
+				if (navigator.clipboard && window.isSecureContext) {
+					await navigator.clipboard.writeText(text);
+					return;
+				}
+
+				const fallbackTextarea = document.createElement('textarea');
+				fallbackTextarea.value = text;
+				fallbackTextarea.setAttribute('readonly', 'readonly');
+				fallbackTextarea.style.position = 'fixed';
+				fallbackTextarea.style.opacity = '0';
+				document.body.appendChild(fallbackTextarea);
+				fallbackTextarea.select();
+				document.execCommand('copy');
+				fallbackTextarea.remove();
+			}
+
+			function notify(message) {
+				if (window.simpledmsShowClientSnackbar) {
+					window.simpledmsShowClientSnackbar(message);
+				}
+			}
+
+			printButton.addEventListener('click', function() {
+				const iframe = document.createElement('iframe');
+				iframe.style.position = 'fixed';
+				iframe.style.width = '0';
+				iframe.style.height = '0';
+				iframe.style.border = '0';
+				iframe.style.opacity = '0';
+				iframe.onload = function() {
+					if (iframe.contentWindow) {
+						iframe.contentWindow.focus();
+						iframe.contentWindow.print();
+					}
+					setTimeout(function() {
+						iframe.remove();
+					}, 1000);
+				};
+				iframe.srcdoc = buildPrintDocumentHTML();
+				document.body.appendChild(iframe);
+				notify(printOpenedMessage);
+			});
+
+			copyButton.addEventListener('click', async function() {
+				try {
+					await copyToClipboard(codesText);
+					notify(copiedMessage);
+				} catch (err) {
+					notify(copyFailedMessage);
+				}
+			});
+
+			downloadButton.addEventListener('click', function() {
+				revokeDownloadURL();
+				downloadURL = URL.createObjectURL(new Blob([buildExportText()], {
+					type: 'text/plain;charset=utf-8',
+				}));
+
+				const link = document.createElement('a');
+				link.href = downloadURL;
+				link.download = 'simpledms-passkey-backup-codes.txt';
+				document.body.appendChild(link);
+				link.click();
+				link.remove();
+				notify(downloadedMessage);
+			});
+
+			dialog.addEventListener('close', function() {
+				revokeDownloadURL();
+			}, {
+				once: true,
+			});
+		})();
+	</script>
+{{ end }}

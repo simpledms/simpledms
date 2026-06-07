@@ -15,10 +15,10 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/common/country"
-	"github.com/simpledms/simpledms/model/common/language"
-	"github.com/simpledms/simpledms/model/common/plan"
-	"github.com/simpledms/simpledms/model/modelmain"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/plan"
+	signupmodel "github.com/simpledms/simpledms/model/main/signup"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -73,7 +73,7 @@ func TestUploadFileCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 					}
 
 					seedFileContent := []byte("seed")
-					fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+					uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 						spaceCtx,
 						bytes.NewReader(seedFileContent),
 						prepared,
@@ -83,7 +83,7 @@ func TestUploadFileCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 						return fmt.Errorf("upload seed file: %w", err)
 					}
 
-					err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+					err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
 					if err != nil {
 						return fmt.Errorf("finalize seed file: %w", err)
 					}
@@ -194,7 +194,7 @@ func TestUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(t *testing.T
 			}
 
 			seedFileContent := []byte("seed")
-			fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+			uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 				spaceCtx,
 				bytes.NewReader(seedFileContent),
 				prepared,
@@ -204,7 +204,7 @@ func TestUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(t *testing.T
 				return fmt.Errorf("upload seed file: %w", err)
 			}
 
-			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
 			if err != nil {
 				return fmt.Errorf("finalize seed file: %w", err)
 			}
@@ -310,7 +310,7 @@ func TestUploadFileCmdSkipsTenantStorageLimitWhenSaaSDisabled(t *testing.T) {
 			}
 
 			seedFileContent := []byte("seed")
-			fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+			uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 				spaceCtx,
 				bytes.NewReader(seedFileContent),
 				prepared,
@@ -320,7 +320,7 @@ func TestUploadFileCmdSkipsTenantStorageLimitWhenSaaSDisabled(t *testing.T) {
 				return fmt.Errorf("upload seed file: %w", err)
 			}
 
-			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
 			if err != nil {
 				return fmt.Errorf("finalize seed file: %w", err)
 			}
@@ -401,10 +401,11 @@ func signUpAccountWithoutSaaSGating(
 		"",
 		"",
 		true,
+		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
 
-	_, err = modelmain.NewSignUpService().SignUp(
+	_, err = signupmodel.NewSignUpService().SignUp(
 		ctx,
 		email,
 		"Quota Tenant",
@@ -414,6 +415,7 @@ func signUpAccountWithoutSaaSGating(
 		language.English,
 		false,
 		true,
+		"",
 	)
 	if err != nil {
 		_ = mainTx.Rollback()

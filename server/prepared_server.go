@@ -6,12 +6,11 @@ import (
 	"log"
 	"net/http"
 
-	"golang.org/x/crypto/acme/autocert"
-
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/model/modelmain"
+	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 type PreparedServer struct {
@@ -20,7 +19,7 @@ type PreparedServer struct {
 	tenantDBs       *tenantdbs.TenantDBs
 	router          *Router
 	handler         http.Handler
-	systemConfig    *modelmain.SystemConfig
+	systemConfig    *systemconfigmodel.SystemConfig
 	autocertManager *autocert.Manager
 }
 

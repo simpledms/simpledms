@@ -17,11 +17,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/systemconfig"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
 
 	stdsql "database/sql"
 )
@@ -35,6 +37,8 @@ type Client struct {
 	Account *AccountClient
 	// Mail is the client for interacting with the Mail builders.
 	Mail *MailClient
+	// PasskeyCredential is the client for interacting with the PasskeyCredential builders.
+	PasskeyCredential *PasskeyCredentialClient
 	// Session is the client for interacting with the Session builders.
 	Session *SessionClient
 	// SystemConfig is the client for interacting with the SystemConfig builders.
@@ -45,6 +49,8 @@ type Client struct {
 	Tenant *TenantClient
 	// TenantAccountAssignment is the client for interacting with the TenantAccountAssignment builders.
 	TenantAccountAssignment *TenantAccountAssignmentClient
+	// WebAuthnChallenge is the client for interacting with the WebAuthnChallenge builders.
+	WebAuthnChallenge *WebAuthnChallengeClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -58,11 +64,13 @@ func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.Account = NewAccountClient(c.config)
 	c.Mail = NewMailClient(c.config)
+	c.PasskeyCredential = NewPasskeyCredentialClient(c.config)
 	c.Session = NewSessionClient(c.config)
 	c.SystemConfig = NewSystemConfigClient(c.config)
 	c.TemporaryFile = NewTemporaryFileClient(c.config)
 	c.Tenant = NewTenantClient(c.config)
 	c.TenantAccountAssignment = NewTenantAccountAssignmentClient(c.config)
+	c.WebAuthnChallenge = NewWebAuthnChallengeClient(c.config)
 }
 
 type (
@@ -157,11 +165,13 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		config:                  cfg,
 		Account:                 NewAccountClient(cfg),
 		Mail:                    NewMailClient(cfg),
+		PasskeyCredential:       NewPasskeyCredentialClient(cfg),
 		Session:                 NewSessionClient(cfg),
 		SystemConfig:            NewSystemConfigClient(cfg),
 		TemporaryFile:           NewTemporaryFileClient(cfg),
 		Tenant:                  NewTenantClient(cfg),
 		TenantAccountAssignment: NewTenantAccountAssignmentClient(cfg),
+		WebAuthnChallenge:       NewWebAuthnChallengeClient(cfg),
 	}, nil
 }
 
@@ -183,11 +193,13 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		config:                  cfg,
 		Account:                 NewAccountClient(cfg),
 		Mail:                    NewMailClient(cfg),
+		PasskeyCredential:       NewPasskeyCredentialClient(cfg),
 		Session:                 NewSessionClient(cfg),
 		SystemConfig:            NewSystemConfigClient(cfg),
 		TemporaryFile:           NewTemporaryFileClient(cfg),
 		Tenant:                  NewTenantClient(cfg),
 		TenantAccountAssignment: NewTenantAccountAssignmentClient(cfg),
+		WebAuthnChallenge:       NewWebAuthnChallengeClient(cfg),
 	}, nil
 }
 
@@ -217,8 +229,8 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Account, c.Mail, c.Session, c.SystemConfig, c.TemporaryFile, c.Tenant,
-		c.TenantAccountAssignment,
+		c.Account, c.Mail, c.PasskeyCredential, c.Session, c.SystemConfig,
+		c.TemporaryFile, c.Tenant, c.TenantAccountAssignment, c.WebAuthnChallenge,
 	} {
 		n.Use(hooks...)
 	}
@@ -228,8 +240,8 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Account, c.Mail, c.Session, c.SystemConfig, c.TemporaryFile, c.Tenant,
-		c.TenantAccountAssignment,
+		c.Account, c.Mail, c.PasskeyCredential, c.Session, c.SystemConfig,
+		c.TemporaryFile, c.Tenant, c.TenantAccountAssignment, c.WebAuthnChallenge,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -242,6 +254,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Account.mutate(ctx, m)
 	case *MailMutation:
 		return c.Mail.mutate(ctx, m)
+	case *PasskeyCredentialMutation:
+		return c.PasskeyCredential.mutate(ctx, m)
 	case *SessionMutation:
 		return c.Session.mutate(ctx, m)
 	case *SystemConfigMutation:
@@ -252,6 +266,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Tenant.mutate(ctx, m)
 	case *TenantAccountAssignmentMutation:
 		return c.TenantAccountAssignment.mutate(ctx, m)
+	case *WebAuthnChallengeMutation:
+		return c.WebAuthnChallenge.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("entmain: unknown mutation type %T", m)
 	}
@@ -374,6 +390,38 @@ func (c *AccountClient) QueryTenants(_m *Account) *TenantQuery {
 			sqlgraph.From(account.Table, account.FieldID, id),
 			sqlgraph.To(tenant.Table, tenant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, account.TenantsTable, account.TenantsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPasskeyCredentials queries the passkey_credentials edge of a Account.
+func (c *AccountClient) QueryPasskeyCredentials(_m *Account) *PasskeyCredentialQuery {
+	query := (&PasskeyCredentialClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(account.Table, account.FieldID, id),
+			sqlgraph.To(passkeycredential.Table, passkeycredential.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, account.PasskeyCredentialsTable, account.PasskeyCredentialsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWebauthnChallenges queries the webauthn_challenges edge of a Account.
+func (c *AccountClient) QueryWebauthnChallenges(_m *Account) *WebAuthnChallengeQuery {
+	query := (&WebAuthnChallengeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(account.Table, account.FieldID, id),
+			sqlgraph.To(webauthnchallenge.Table, webauthnchallenge.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, account.WebauthnChallengesTable, account.WebauthnChallengesColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -634,6 +682,187 @@ func (c *MailClient) mutate(ctx context.Context, m *MailMutation) (Value, error)
 		return (&MailDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("entmain: unknown Mail mutation op: %q", m.Op())
+	}
+}
+
+// PasskeyCredentialClient is a client for the PasskeyCredential schema.
+type PasskeyCredentialClient struct {
+	config
+}
+
+// NewPasskeyCredentialClient returns a client for the PasskeyCredential from the given config.
+func NewPasskeyCredentialClient(c config) *PasskeyCredentialClient {
+	return &PasskeyCredentialClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `passkeycredential.Hooks(f(g(h())))`.
+func (c *PasskeyCredentialClient) Use(hooks ...Hook) {
+	c.hooks.PasskeyCredential = append(c.hooks.PasskeyCredential, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `passkeycredential.Intercept(f(g(h())))`.
+func (c *PasskeyCredentialClient) Intercept(interceptors ...Interceptor) {
+	c.inters.PasskeyCredential = append(c.inters.PasskeyCredential, interceptors...)
+}
+
+// Create returns a builder for creating a PasskeyCredential entity.
+func (c *PasskeyCredentialClient) Create() *PasskeyCredentialCreate {
+	mutation := newPasskeyCredentialMutation(c.config, OpCreate)
+	return &PasskeyCredentialCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of PasskeyCredential entities.
+func (c *PasskeyCredentialClient) CreateBulk(builders ...*PasskeyCredentialCreate) *PasskeyCredentialCreateBulk {
+	return &PasskeyCredentialCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PasskeyCredentialClient) MapCreateBulk(slice any, setFunc func(*PasskeyCredentialCreate, int)) *PasskeyCredentialCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PasskeyCredentialCreateBulk{err: fmt.Errorf("calling to PasskeyCredentialClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PasskeyCredentialCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PasskeyCredentialCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for PasskeyCredential.
+func (c *PasskeyCredentialClient) Update() *PasskeyCredentialUpdate {
+	mutation := newPasskeyCredentialMutation(c.config, OpUpdate)
+	return &PasskeyCredentialUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PasskeyCredentialClient) UpdateOne(_m *PasskeyCredential) *PasskeyCredentialUpdateOne {
+	mutation := newPasskeyCredentialMutation(c.config, OpUpdateOne, withPasskeyCredential(_m))
+	return &PasskeyCredentialUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PasskeyCredentialClient) UpdateOneID(id int64) *PasskeyCredentialUpdateOne {
+	mutation := newPasskeyCredentialMutation(c.config, OpUpdateOne, withPasskeyCredentialID(id))
+	return &PasskeyCredentialUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for PasskeyCredential.
+func (c *PasskeyCredentialClient) Delete() *PasskeyCredentialDelete {
+	mutation := newPasskeyCredentialMutation(c.config, OpDelete)
+	return &PasskeyCredentialDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PasskeyCredentialClient) DeleteOne(_m *PasskeyCredential) *PasskeyCredentialDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PasskeyCredentialClient) DeleteOneID(id int64) *PasskeyCredentialDeleteOne {
+	builder := c.Delete().Where(passkeycredential.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PasskeyCredentialDeleteOne{builder}
+}
+
+// Query returns a query builder for PasskeyCredential.
+func (c *PasskeyCredentialClient) Query() *PasskeyCredentialQuery {
+	return &PasskeyCredentialQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePasskeyCredential},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a PasskeyCredential entity by its id.
+func (c *PasskeyCredentialClient) Get(ctx context.Context, id int64) (*PasskeyCredential, error) {
+	return c.Query().Where(passkeycredential.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PasskeyCredentialClient) GetX(ctx context.Context, id int64) *PasskeyCredential {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryCreator queries the creator edge of a PasskeyCredential.
+func (c *PasskeyCredentialClient) QueryCreator(_m *PasskeyCredential) *AccountQuery {
+	query := (&AccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(passkeycredential.Table, passkeycredential.FieldID, id),
+			sqlgraph.To(account.Table, account.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, passkeycredential.CreatorTable, passkeycredential.CreatorColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdater queries the updater edge of a PasskeyCredential.
+func (c *PasskeyCredentialClient) QueryUpdater(_m *PasskeyCredential) *AccountQuery {
+	query := (&AccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(passkeycredential.Table, passkeycredential.FieldID, id),
+			sqlgraph.To(account.Table, account.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, passkeycredential.UpdaterTable, passkeycredential.UpdaterColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAccount queries the account edge of a PasskeyCredential.
+func (c *PasskeyCredentialClient) QueryAccount(_m *PasskeyCredential) *AccountQuery {
+	query := (&AccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(passkeycredential.Table, passkeycredential.FieldID, id),
+			sqlgraph.To(account.Table, account.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, passkeycredential.AccountTable, passkeycredential.AccountColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PasskeyCredentialClient) Hooks() []Hook {
+	return c.hooks.PasskeyCredential
+}
+
+// Interceptors returns the client interceptors.
+func (c *PasskeyCredentialClient) Interceptors() []Interceptor {
+	return c.inters.PasskeyCredential
+}
+
+func (c *PasskeyCredentialClient) mutate(ctx context.Context, m *PasskeyCredentialMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PasskeyCredentialCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PasskeyCredentialUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PasskeyCredentialUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PasskeyCredentialDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("entmain: unknown PasskeyCredential mutation op: %q", m.Op())
 	}
 }
 
@@ -1562,15 +1791,164 @@ func (c *TenantAccountAssignmentClient) mutate(ctx context.Context, m *TenantAcc
 	}
 }
 
+// WebAuthnChallengeClient is a client for the WebAuthnChallenge schema.
+type WebAuthnChallengeClient struct {
+	config
+}
+
+// NewWebAuthnChallengeClient returns a client for the WebAuthnChallenge from the given config.
+func NewWebAuthnChallengeClient(c config) *WebAuthnChallengeClient {
+	return &WebAuthnChallengeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `webauthnchallenge.Hooks(f(g(h())))`.
+func (c *WebAuthnChallengeClient) Use(hooks ...Hook) {
+	c.hooks.WebAuthnChallenge = append(c.hooks.WebAuthnChallenge, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `webauthnchallenge.Intercept(f(g(h())))`.
+func (c *WebAuthnChallengeClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WebAuthnChallenge = append(c.inters.WebAuthnChallenge, interceptors...)
+}
+
+// Create returns a builder for creating a WebAuthnChallenge entity.
+func (c *WebAuthnChallengeClient) Create() *WebAuthnChallengeCreate {
+	mutation := newWebAuthnChallengeMutation(c.config, OpCreate)
+	return &WebAuthnChallengeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WebAuthnChallenge entities.
+func (c *WebAuthnChallengeClient) CreateBulk(builders ...*WebAuthnChallengeCreate) *WebAuthnChallengeCreateBulk {
+	return &WebAuthnChallengeCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WebAuthnChallengeClient) MapCreateBulk(slice any, setFunc func(*WebAuthnChallengeCreate, int)) *WebAuthnChallengeCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WebAuthnChallengeCreateBulk{err: fmt.Errorf("calling to WebAuthnChallengeClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WebAuthnChallengeCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WebAuthnChallengeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WebAuthnChallenge.
+func (c *WebAuthnChallengeClient) Update() *WebAuthnChallengeUpdate {
+	mutation := newWebAuthnChallengeMutation(c.config, OpUpdate)
+	return &WebAuthnChallengeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WebAuthnChallengeClient) UpdateOne(_m *WebAuthnChallenge) *WebAuthnChallengeUpdateOne {
+	mutation := newWebAuthnChallengeMutation(c.config, OpUpdateOne, withWebAuthnChallenge(_m))
+	return &WebAuthnChallengeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WebAuthnChallengeClient) UpdateOneID(id int64) *WebAuthnChallengeUpdateOne {
+	mutation := newWebAuthnChallengeMutation(c.config, OpUpdateOne, withWebAuthnChallengeID(id))
+	return &WebAuthnChallengeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WebAuthnChallenge.
+func (c *WebAuthnChallengeClient) Delete() *WebAuthnChallengeDelete {
+	mutation := newWebAuthnChallengeMutation(c.config, OpDelete)
+	return &WebAuthnChallengeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WebAuthnChallengeClient) DeleteOne(_m *WebAuthnChallenge) *WebAuthnChallengeDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WebAuthnChallengeClient) DeleteOneID(id int64) *WebAuthnChallengeDeleteOne {
+	builder := c.Delete().Where(webauthnchallenge.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WebAuthnChallengeDeleteOne{builder}
+}
+
+// Query returns a query builder for WebAuthnChallenge.
+func (c *WebAuthnChallengeClient) Query() *WebAuthnChallengeQuery {
+	return &WebAuthnChallengeQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWebAuthnChallenge},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WebAuthnChallenge entity by its id.
+func (c *WebAuthnChallengeClient) Get(ctx context.Context, id int64) (*WebAuthnChallenge, error) {
+	return c.Query().Where(webauthnchallenge.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WebAuthnChallengeClient) GetX(ctx context.Context, id int64) *WebAuthnChallenge {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryAccount queries the account edge of a WebAuthnChallenge.
+func (c *WebAuthnChallengeClient) QueryAccount(_m *WebAuthnChallenge) *AccountQuery {
+	query := (&AccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(webauthnchallenge.Table, webauthnchallenge.FieldID, id),
+			sqlgraph.To(account.Table, account.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, webauthnchallenge.AccountTable, webauthnchallenge.AccountColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WebAuthnChallengeClient) Hooks() []Hook {
+	return c.hooks.WebAuthnChallenge
+}
+
+// Interceptors returns the client interceptors.
+func (c *WebAuthnChallengeClient) Interceptors() []Interceptor {
+	return c.inters.WebAuthnChallenge
+}
+
+func (c *WebAuthnChallengeClient) mutate(ctx context.Context, m *WebAuthnChallengeMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WebAuthnChallengeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WebAuthnChallengeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WebAuthnChallengeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WebAuthnChallengeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("entmain: unknown WebAuthnChallenge mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Account, Mail, Session, SystemConfig, TemporaryFile, Tenant,
-		TenantAccountAssignment []ent.Hook
+		Account, Mail, PasskeyCredential, Session, SystemConfig, TemporaryFile, Tenant,
+		TenantAccountAssignment, WebAuthnChallenge []ent.Hook
 	}
 	inters struct {
-		Account, Mail, Session, SystemConfig, TemporaryFile, Tenant,
-		TenantAccountAssignment []ent.Interceptor
+		Account, Mail, PasskeyCredential, Session, SystemConfig, TemporaryFile, Tenant,
+		TenantAccountAssignment, WebAuthnChallenge []ent.Interceptor
 	}
 )
 

@@ -23,6 +23,10 @@ type MenuItem struct {
 	RadioValue     string
 	IsSelected     bool
 
+	CheckboxName  string
+	CheckboxValue string
+	IsChecked     bool
+
 	divider *Divider
 }
 
@@ -37,12 +41,19 @@ func (qq *MenuItem) IsTypeRadio() bool {
 	return qq.RadioGroupName != ""
 }
 
+func (qq *MenuItem) IsTypeCheckbox() bool {
+	return qq.CheckboxName != ""
+}
+
 func (qq *MenuItem) GetTrailingIcon() string {
 	if qq.TrailingIcon != "" {
 		return qq.TrailingIcon
 	}
 	// TODO not optimal if not applied if trailing icon is set...
 	if qq.IsSelected {
+		return "check"
+	}
+	if qq.IsChecked {
 		return "check"
 	}
 	return ""

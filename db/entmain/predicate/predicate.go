@@ -12,6 +12,9 @@ type Account func(*sql.Selector)
 // Mail is the predicate function for mail builders.
 type Mail func(*sql.Selector)
 
+// PasskeyCredential is the predicate function for passkeycredential builders.
+type PasskeyCredential func(*sql.Selector)
+
 // Session is the predicate function for session builders.
 type Session func(*sql.Selector)
 
@@ -26,3 +29,6 @@ type Tenant func(*sql.Selector)
 
 // TenantAccountAssignment is the predicate function for tenantaccountassignment builders.
 type TenantAccountAssignment func(*sql.Selector)
+
+// WebAuthnChallenge is the predicate function for webauthnchallenge builders.
+type WebAuthnChallenge func(*sql.Selector)

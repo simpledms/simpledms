@@ -1,28 +1,28 @@
 {{- /*gotype: github.com/simpledms/simpledms/ui/widget.FloatingActionButton */ -}}
 {{- define "FloatingActionButton" }}
+	{{- $tooltip := .GetTooltip -}}
 	<button
-			title="{{ render .GetContext .Tooltip }}"
+			type="button"
+			{{ if $tooltip }}title="{{ $tooltip }}"{{ end }}
 			class="
 			{{ if .IsPrimary }}bg-primary-container text-on-primary-container {{ end }}
 			{{ if .IsSecondary }}bg-secondary-container text-on-secondary-container{{ end }}
-			{{ if .IsTertiary }}bg-tertiary-container text-on-primary-container{{ end }}
+			{{ if .IsTertiary }}bg-tertiary-container text-on-tertiary-container{{ end }}
 			{{ if .IsSmall }}h-10 w-10 rounded-md{{ end }}
 			{{ if .IsNormal }}h-14 w-14 rounded-lg{{ end }}
 			{{ if .IsLarge }}h-24 w-24 rounded-xl{{ end }}
-			drop-shadow md:drop-shadow-none
+			drop-shadow md:drop-shadow-none flex center-aligned overflow-hidden
 			"
 			{{/*style="position: fixed; bottom: 105px; right: 25px; border: 2px solid #000; box-shadow: 3px 3px 0 #000"*/}}
-			popovertarget="{{ .ID }}"
+			{{ if .ID }}popovertarget="{{ .ID }}"{{ end }}
 			{{ template "HTMXAttrs" .HTMXAttrs }}
 	>
-		<div class="flex
+		<div class="flex center-aligned
 			{{ if .IsPrimary }}state-layer-on-primary-container{{ end }}
 			{{ if .IsSecondary }}state-layer-on-secondary-container{{ end }}
 			{{ if .IsTertiary }}state-layer-on-tertiary-container{{ end }}
 		">
-			<i class="
-				material-symbols-outlined m-auto
-			">{{ .Icon }}</i>
+			<i class="material-symbols-outlined">{{ .Icon }}</i>
 		</div>
 	</button>
 		{{/*
@@ -33,4 +33,34 @@
         {{ render .GetContext .Child }}
 	</div>
 		*/}}
+{{ end }}
+
+{{- define "ExtendedFloatingActionButton" }}
+	{{- $tooltip := .GetTooltip -}}
+	{{- $label := .GetLabel -}}
+	<button
+		type="button"
+		{{ if $tooltip }}title="{{ $tooltip }}"{{ end }}
+		class="
+		{{ if .IsPrimary }}bg-primary-container text-on-primary-container {{ end }}
+		{{ if .IsSecondary }}bg-secondary-container text-on-secondary-container{{ end }}
+		{{ if .IsTertiary }}bg-tertiary-container text-on-tertiary-container{{ end }}
+		{{ if .IsSmall }}h-10 min-w-10 rounded-md{{ else }}h-14 min-w-20 rounded-lg{{ end }}
+		w-fit max-w-full drop-shadow md:drop-shadow-none overflow-hidden
+		"
+		{{ if .ID }}popovertarget="{{ .ID }}"{{ end }}
+		{{ template "HTMXAttrs" .HTMXAttrs }}
+	>
+		<div class="flex items-center
+			{{ if .IsSmall }}gap-x-2 pl-4 pr-3{{ else }}gap-x-3 pl-4 pr-6{{ end }}
+			{{ if .IsPrimary }}state-layer-on-primary-container{{ end }}
+			{{ if .IsSecondary }}state-layer-on-secondary-container{{ end }}
+			{{ if .IsTertiary }}state-layer-on-tertiary-container{{ end }}
+		">
+			<i class="material-symbols-outlined">{{ .Icon }}</i>
+			{{ if $label }}
+				<span class="label-lg truncate">{{ $label }}</span>
+			{{ end }}
+		</div>
+	</button>
 {{ end }}

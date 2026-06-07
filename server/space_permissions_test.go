@@ -17,7 +17,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 

@@ -2,17 +2,16 @@ package tagging
 
 import (
 	"log"
-	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/model/tagging/tagtype"
+	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -83,22 +82,11 @@ func (qq *CreateTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 }
 
 func (qq *CreateTagCmd) execute(ctx ctxx.Context, data *CreateTagCmdData) (*enttenant.Tag, error) {
-	// TODO prevent in form
-	if data.GroupTagID != 0 && data.Type == tagtype.Group {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot add a tag group as child.")
-	}
-
-	tagCreate := ctx.TenantCtx().TTx.Tag.Create().
-		SetName(data.Name).
-		SetType(data.Type).
-		SetSpaceID(ctx.SpaceCtx().Space.ID)
-	// SetIsGroup(data.IsGroup).
-	// SetIsComposed(data.IsComposed)
-
-	if data.GroupTagID != 0 {
-		tagCreate.SetGroupID(data.GroupTagID)
-	}
-
-	tag := tagCreate.SaveX(ctx)
-	return tag, nil
+	return taggingmodel.NewTagService().Create(
+		ctx,
+		ctx.SpaceCtx().Space.ID,
+		data.GroupTagID,
+		data.Name,
+		data.Type,
+	)
 }

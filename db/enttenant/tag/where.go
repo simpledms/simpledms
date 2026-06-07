@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
-	"github.com/simpledms/simpledms/model/tagging/tagtype"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 )
 
 // ID filters vertices based on their ID field.

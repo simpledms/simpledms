@@ -14,13 +14,16 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/predicate"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/common/language"
-	"github.com/simpledms/simpledms/model/common/mainrole"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	"github.com/simpledms/simpledms/model/main/filelistpreference"
 )
 
 // AccountUpdate is the builder for updating Account entities.
@@ -183,6 +186,20 @@ func (_u *AccountUpdate) SetLanguage(v language.Language) *AccountUpdate {
 func (_u *AccountUpdate) SetNillableLanguage(v *language.Language) *AccountUpdate {
 	if v != nil {
 		_u.SetLanguage(*v)
+	}
+	return _u
+}
+
+// SetFileListPreferences sets the "file_list_preferences" field.
+func (_u *AccountUpdate) SetFileListPreferences(v filelistpreference.FileListPreferences) *AccountUpdate {
+	_u.mutation.SetFileListPreferences(v)
+	return _u
+}
+
+// SetNillableFileListPreferences sets the "file_list_preferences" field if the given value is not nil.
+func (_u *AccountUpdate) SetNillableFileListPreferences(v *filelistpreference.FileListPreferences) *AccountUpdate {
+	if v != nil {
+		_u.SetFileListPreferences(*v)
 	}
 	return _u
 }
@@ -357,6 +374,46 @@ func (_u *AccountUpdate) ClearLastLoginAttemptAt() *AccountUpdate {
 	return _u
 }
 
+// SetPasskeyLoginEnabled sets the "passkey_login_enabled" field.
+func (_u *AccountUpdate) SetPasskeyLoginEnabled(v bool) *AccountUpdate {
+	_u.mutation.SetPasskeyLoginEnabled(v)
+	return _u
+}
+
+// SetNillablePasskeyLoginEnabled sets the "passkey_login_enabled" field if the given value is not nil.
+func (_u *AccountUpdate) SetNillablePasskeyLoginEnabled(v *bool) *AccountUpdate {
+	if v != nil {
+		_u.SetPasskeyLoginEnabled(*v)
+	}
+	return _u
+}
+
+// SetPasskeyRecoveryCodeSalt sets the "passkey_recovery_code_salt" field.
+func (_u *AccountUpdate) SetPasskeyRecoveryCodeSalt(v string) *AccountUpdate {
+	_u.mutation.SetPasskeyRecoveryCodeSalt(v)
+	return _u
+}
+
+// SetNillablePasskeyRecoveryCodeSalt sets the "passkey_recovery_code_salt" field if the given value is not nil.
+func (_u *AccountUpdate) SetNillablePasskeyRecoveryCodeSalt(v *string) *AccountUpdate {
+	if v != nil {
+		_u.SetPasskeyRecoveryCodeSalt(*v)
+	}
+	return _u
+}
+
+// SetPasskeyRecoveryCodeHashes sets the "passkey_recovery_code_hashes" field.
+func (_u *AccountUpdate) SetPasskeyRecoveryCodeHashes(v []string) *AccountUpdate {
+	_u.mutation.SetPasskeyRecoveryCodeHashes(v)
+	return _u
+}
+
+// AppendPasskeyRecoveryCodeHashes appends value to the "passkey_recovery_code_hashes" field.
+func (_u *AccountUpdate) AppendPasskeyRecoveryCodeHashes(v []string) *AccountUpdate {
+	_u.mutation.AppendPasskeyRecoveryCodeHashes(v)
+	return _u
+}
+
 // SetRole sets the "role" field.
 func (_u *AccountUpdate) SetRole(v mainrole.MainRole) *AccountUpdate {
 	_u.mutation.SetRole(v)
@@ -384,6 +441,36 @@ func (_u *AccountUpdate) AddTenants(v ...*Tenant) *AccountUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddTenantIDs(ids...)
+}
+
+// AddPasskeyCredentialIDs adds the "passkey_credentials" edge to the PasskeyCredential entity by IDs.
+func (_u *AccountUpdate) AddPasskeyCredentialIDs(ids ...int64) *AccountUpdate {
+	_u.mutation.AddPasskeyCredentialIDs(ids...)
+	return _u
+}
+
+// AddPasskeyCredentials adds the "passkey_credentials" edges to the PasskeyCredential entity.
+func (_u *AccountUpdate) AddPasskeyCredentials(v ...*PasskeyCredential) *AccountUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPasskeyCredentialIDs(ids...)
+}
+
+// AddWebauthnChallengeIDs adds the "webauthn_challenges" edge to the WebAuthnChallenge entity by IDs.
+func (_u *AccountUpdate) AddWebauthnChallengeIDs(ids ...int64) *AccountUpdate {
+	_u.mutation.AddWebauthnChallengeIDs(ids...)
+	return _u
+}
+
+// AddWebauthnChallenges adds the "webauthn_challenges" edges to the WebAuthnChallenge entity.
+func (_u *AccountUpdate) AddWebauthnChallenges(v ...*WebAuthnChallenge) *AccountUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWebauthnChallengeIDs(ids...)
 }
 
 // AddReceivedMailIDs adds the "received_mails" edge to the Mail entity by IDs.
@@ -455,6 +542,48 @@ func (_u *AccountUpdate) RemoveTenants(v ...*Tenant) *AccountUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTenantIDs(ids...)
+}
+
+// ClearPasskeyCredentials clears all "passkey_credentials" edges to the PasskeyCredential entity.
+func (_u *AccountUpdate) ClearPasskeyCredentials() *AccountUpdate {
+	_u.mutation.ClearPasskeyCredentials()
+	return _u
+}
+
+// RemovePasskeyCredentialIDs removes the "passkey_credentials" edge to PasskeyCredential entities by IDs.
+func (_u *AccountUpdate) RemovePasskeyCredentialIDs(ids ...int64) *AccountUpdate {
+	_u.mutation.RemovePasskeyCredentialIDs(ids...)
+	return _u
+}
+
+// RemovePasskeyCredentials removes "passkey_credentials" edges to PasskeyCredential entities.
+func (_u *AccountUpdate) RemovePasskeyCredentials(v ...*PasskeyCredential) *AccountUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePasskeyCredentialIDs(ids...)
+}
+
+// ClearWebauthnChallenges clears all "webauthn_challenges" edges to the WebAuthnChallenge entity.
+func (_u *AccountUpdate) ClearWebauthnChallenges() *AccountUpdate {
+	_u.mutation.ClearWebauthnChallenges()
+	return _u
+}
+
+// RemoveWebauthnChallengeIDs removes the "webauthn_challenges" edge to WebAuthnChallenge entities by IDs.
+func (_u *AccountUpdate) RemoveWebauthnChallengeIDs(ids ...int64) *AccountUpdate {
+	_u.mutation.RemoveWebauthnChallengeIDs(ids...)
+	return _u
+}
+
+// RemoveWebauthnChallenges removes "webauthn_challenges" edges to WebAuthnChallenge entities.
+func (_u *AccountUpdate) RemoveWebauthnChallenges(v ...*WebAuthnChallenge) *AccountUpdate {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWebauthnChallengeIDs(ids...)
 }
 
 // ClearReceivedMails clears all "received_mails" edges to the Mail entity.
@@ -640,6 +769,9 @@ func (_u *AccountUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.Language(); ok {
 		_spec.SetField(account.FieldLanguage, field.TypeEnum, value)
 	}
+	if value, ok := _u.mutation.FileListPreferences(); ok {
+		_spec.SetField(account.FieldFileListPreferences, field.TypeJSON, value)
+	}
 	if value, ok := _u.mutation.SubscribedToNewsletterAt(); ok {
 		_spec.SetField(account.FieldSubscribedToNewsletterAt, field.TypeTime, value)
 	}
@@ -686,6 +818,20 @@ func (_u *AccountUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.LastLoginAttemptAtCleared() {
 		_spec.ClearField(account.FieldLastLoginAttemptAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.PasskeyLoginEnabled(); ok {
+		_spec.SetField(account.FieldPasskeyLoginEnabled, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.PasskeyRecoveryCodeSalt(); ok {
+		_spec.SetField(account.FieldPasskeyRecoveryCodeSalt, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.PasskeyRecoveryCodeHashes(); ok {
+		_spec.SetField(account.FieldPasskeyRecoveryCodeHashes, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedPasskeyRecoveryCodeHashes(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, account.FieldPasskeyRecoveryCodeHashes, value)
+		})
 	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(account.FieldRole, field.TypeEnum, value)
@@ -745,6 +891,96 @@ func (_u *AccountUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PasskeyCredentialsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.PasskeyCredentialsTable,
+			Columns: []string{account.PasskeyCredentialsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(passkeycredential.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPasskeyCredentialsIDs(); len(nodes) > 0 && !_u.mutation.PasskeyCredentialsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.PasskeyCredentialsTable,
+			Columns: []string{account.PasskeyCredentialsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(passkeycredential.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PasskeyCredentialsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.PasskeyCredentialsTable,
+			Columns: []string{account.PasskeyCredentialsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(passkeycredential.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WebauthnChallengesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.WebauthnChallengesTable,
+			Columns: []string{account.WebauthnChallengesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(webauthnchallenge.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWebauthnChallengesIDs(); len(nodes) > 0 && !_u.mutation.WebauthnChallengesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.WebauthnChallengesTable,
+			Columns: []string{account.WebauthnChallengesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(webauthnchallenge.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WebauthnChallengesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.WebauthnChallengesTable,
+			Columns: []string{account.WebauthnChallengesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(webauthnchallenge.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.ReceivedMailsCleared() {
@@ -1054,6 +1290,20 @@ func (_u *AccountUpdateOne) SetNillableLanguage(v *language.Language) *AccountUp
 	return _u
 }
 
+// SetFileListPreferences sets the "file_list_preferences" field.
+func (_u *AccountUpdateOne) SetFileListPreferences(v filelistpreference.FileListPreferences) *AccountUpdateOne {
+	_u.mutation.SetFileListPreferences(v)
+	return _u
+}
+
+// SetNillableFileListPreferences sets the "file_list_preferences" field if the given value is not nil.
+func (_u *AccountUpdateOne) SetNillableFileListPreferences(v *filelistpreference.FileListPreferences) *AccountUpdateOne {
+	if v != nil {
+		_u.SetFileListPreferences(*v)
+	}
+	return _u
+}
+
 // SetSubscribedToNewsletterAt sets the "subscribed_to_newsletter_at" field.
 func (_u *AccountUpdateOne) SetSubscribedToNewsletterAt(v time.Time) *AccountUpdateOne {
 	_u.mutation.SetSubscribedToNewsletterAt(v)
@@ -1224,6 +1474,46 @@ func (_u *AccountUpdateOne) ClearLastLoginAttemptAt() *AccountUpdateOne {
 	return _u
 }
 
+// SetPasskeyLoginEnabled sets the "passkey_login_enabled" field.
+func (_u *AccountUpdateOne) SetPasskeyLoginEnabled(v bool) *AccountUpdateOne {
+	_u.mutation.SetPasskeyLoginEnabled(v)
+	return _u
+}
+
+// SetNillablePasskeyLoginEnabled sets the "passkey_login_enabled" field if the given value is not nil.
+func (_u *AccountUpdateOne) SetNillablePasskeyLoginEnabled(v *bool) *AccountUpdateOne {
+	if v != nil {
+		_u.SetPasskeyLoginEnabled(*v)
+	}
+	return _u
+}
+
+// SetPasskeyRecoveryCodeSalt sets the "passkey_recovery_code_salt" field.
+func (_u *AccountUpdateOne) SetPasskeyRecoveryCodeSalt(v string) *AccountUpdateOne {
+	_u.mutation.SetPasskeyRecoveryCodeSalt(v)
+	return _u
+}
+
+// SetNillablePasskeyRecoveryCodeSalt sets the "passkey_recovery_code_salt" field if the given value is not nil.
+func (_u *AccountUpdateOne) SetNillablePasskeyRecoveryCodeSalt(v *string) *AccountUpdateOne {
+	if v != nil {
+		_u.SetPasskeyRecoveryCodeSalt(*v)
+	}
+	return _u
+}
+
+// SetPasskeyRecoveryCodeHashes sets the "passkey_recovery_code_hashes" field.
+func (_u *AccountUpdateOne) SetPasskeyRecoveryCodeHashes(v []string) *AccountUpdateOne {
+	_u.mutation.SetPasskeyRecoveryCodeHashes(v)
+	return _u
+}
+
+// AppendPasskeyRecoveryCodeHashes appends value to the "passkey_recovery_code_hashes" field.
+func (_u *AccountUpdateOne) AppendPasskeyRecoveryCodeHashes(v []string) *AccountUpdateOne {
+	_u.mutation.AppendPasskeyRecoveryCodeHashes(v)
+	return _u
+}
+
 // SetRole sets the "role" field.
 func (_u *AccountUpdateOne) SetRole(v mainrole.MainRole) *AccountUpdateOne {
 	_u.mutation.SetRole(v)
@@ -1251,6 +1541,36 @@ func (_u *AccountUpdateOne) AddTenants(v ...*Tenant) *AccountUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddTenantIDs(ids...)
+}
+
+// AddPasskeyCredentialIDs adds the "passkey_credentials" edge to the PasskeyCredential entity by IDs.
+func (_u *AccountUpdateOne) AddPasskeyCredentialIDs(ids ...int64) *AccountUpdateOne {
+	_u.mutation.AddPasskeyCredentialIDs(ids...)
+	return _u
+}
+
+// AddPasskeyCredentials adds the "passkey_credentials" edges to the PasskeyCredential entity.
+func (_u *AccountUpdateOne) AddPasskeyCredentials(v ...*PasskeyCredential) *AccountUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPasskeyCredentialIDs(ids...)
+}
+
+// AddWebauthnChallengeIDs adds the "webauthn_challenges" edge to the WebAuthnChallenge entity by IDs.
+func (_u *AccountUpdateOne) AddWebauthnChallengeIDs(ids ...int64) *AccountUpdateOne {
+	_u.mutation.AddWebauthnChallengeIDs(ids...)
+	return _u
+}
+
+// AddWebauthnChallenges adds the "webauthn_challenges" edges to the WebAuthnChallenge entity.
+func (_u *AccountUpdateOne) AddWebauthnChallenges(v ...*WebAuthnChallenge) *AccountUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWebauthnChallengeIDs(ids...)
 }
 
 // AddReceivedMailIDs adds the "received_mails" edge to the Mail entity by IDs.
@@ -1322,6 +1642,48 @@ func (_u *AccountUpdateOne) RemoveTenants(v ...*Tenant) *AccountUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTenantIDs(ids...)
+}
+
+// ClearPasskeyCredentials clears all "passkey_credentials" edges to the PasskeyCredential entity.
+func (_u *AccountUpdateOne) ClearPasskeyCredentials() *AccountUpdateOne {
+	_u.mutation.ClearPasskeyCredentials()
+	return _u
+}
+
+// RemovePasskeyCredentialIDs removes the "passkey_credentials" edge to PasskeyCredential entities by IDs.
+func (_u *AccountUpdateOne) RemovePasskeyCredentialIDs(ids ...int64) *AccountUpdateOne {
+	_u.mutation.RemovePasskeyCredentialIDs(ids...)
+	return _u
+}
+
+// RemovePasskeyCredentials removes "passkey_credentials" edges to PasskeyCredential entities.
+func (_u *AccountUpdateOne) RemovePasskeyCredentials(v ...*PasskeyCredential) *AccountUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePasskeyCredentialIDs(ids...)
+}
+
+// ClearWebauthnChallenges clears all "webauthn_challenges" edges to the WebAuthnChallenge entity.
+func (_u *AccountUpdateOne) ClearWebauthnChallenges() *AccountUpdateOne {
+	_u.mutation.ClearWebauthnChallenges()
+	return _u
+}
+
+// RemoveWebauthnChallengeIDs removes the "webauthn_challenges" edge to WebAuthnChallenge entities by IDs.
+func (_u *AccountUpdateOne) RemoveWebauthnChallengeIDs(ids ...int64) *AccountUpdateOne {
+	_u.mutation.RemoveWebauthnChallengeIDs(ids...)
+	return _u
+}
+
+// RemoveWebauthnChallenges removes "webauthn_challenges" edges to WebAuthnChallenge entities.
+func (_u *AccountUpdateOne) RemoveWebauthnChallenges(v ...*WebAuthnChallenge) *AccountUpdateOne {
+	ids := make([]int64, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWebauthnChallengeIDs(ids...)
 }
 
 // ClearReceivedMails clears all "received_mails" edges to the Mail entity.
@@ -1537,6 +1899,9 @@ func (_u *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err er
 	if value, ok := _u.mutation.Language(); ok {
 		_spec.SetField(account.FieldLanguage, field.TypeEnum, value)
 	}
+	if value, ok := _u.mutation.FileListPreferences(); ok {
+		_spec.SetField(account.FieldFileListPreferences, field.TypeJSON, value)
+	}
 	if value, ok := _u.mutation.SubscribedToNewsletterAt(); ok {
 		_spec.SetField(account.FieldSubscribedToNewsletterAt, field.TypeTime, value)
 	}
@@ -1583,6 +1948,20 @@ func (_u *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err er
 	}
 	if _u.mutation.LastLoginAttemptAtCleared() {
 		_spec.ClearField(account.FieldLastLoginAttemptAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.PasskeyLoginEnabled(); ok {
+		_spec.SetField(account.FieldPasskeyLoginEnabled, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.PasskeyRecoveryCodeSalt(); ok {
+		_spec.SetField(account.FieldPasskeyRecoveryCodeSalt, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.PasskeyRecoveryCodeHashes(); ok {
+		_spec.SetField(account.FieldPasskeyRecoveryCodeHashes, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedPasskeyRecoveryCodeHashes(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, account.FieldPasskeyRecoveryCodeHashes, value)
+		})
 	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(account.FieldRole, field.TypeEnum, value)
@@ -1642,6 +2021,96 @@ func (_u *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err er
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PasskeyCredentialsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.PasskeyCredentialsTable,
+			Columns: []string{account.PasskeyCredentialsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(passkeycredential.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPasskeyCredentialsIDs(); len(nodes) > 0 && !_u.mutation.PasskeyCredentialsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.PasskeyCredentialsTable,
+			Columns: []string{account.PasskeyCredentialsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(passkeycredential.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PasskeyCredentialsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.PasskeyCredentialsTable,
+			Columns: []string{account.PasskeyCredentialsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(passkeycredential.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WebauthnChallengesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.WebauthnChallengesTable,
+			Columns: []string{account.WebauthnChallengesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(webauthnchallenge.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWebauthnChallengesIDs(); len(nodes) > 0 && !_u.mutation.WebauthnChallengesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.WebauthnChallengesTable,
+			Columns: []string{account.WebauthnChallengesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(webauthnchallenge.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WebauthnChallengesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   account.WebauthnChallengesTable,
+			Columns: []string{account.WebauthnChallengesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(webauthnchallenge.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.ReceivedMailsCleared() {

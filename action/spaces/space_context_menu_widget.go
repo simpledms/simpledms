@@ -2,7 +2,7 @@ package spaces
 
 import (
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model"
+	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -18,7 +18,7 @@ func NewSpaceContextMenuWidget(actions *Actions) *SpaceContextMenuWidget {
 	}
 }
 
-func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, spacem *model.Space) *wx.Menu {
+func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, spacem *spacemodel.Space) *wx.Menu {
 	renameItem := &wx.MenuItem{
 		LeadingIcon: "edit",
 		Label:       wx.T("Edit"),

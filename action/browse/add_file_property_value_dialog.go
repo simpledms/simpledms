@@ -7,7 +7,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/property"
-	"github.com/simpledms/simpledms/model/common/fieldtype"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"

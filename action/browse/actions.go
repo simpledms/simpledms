@@ -36,6 +36,7 @@ type Actions struct {
 	FileAttributesPartial      *FileAttributesPartial
 	FileVersionsPartial        *FileVersionsPartial
 	FileInfoPartial            *FileInfoPartial
+	DuplicateMatchesPartial    *DuplicateMatchesPartial
 	FilePropertiesPartial      *FilePropertiesPartial
 	AddFilePropertyCmd         *AddFilePropertyCmd
 	AddFilePropertyValueDialog *AddFilePropertyValueDialog
@@ -48,7 +49,8 @@ type Actions struct {
 	RenameFileCmd *RenameFileCmd
 	MoveFileCmd   *MoveFileCmd
 
-	FileListItemPartial *FileListItemPartial
+	FileListItemPartial          *FileListItemPartial
+	UpdateFileListPreferencesCmd *UpdateFileListPreferencesCmd
 
 	// SearchList *SearchList
 
@@ -102,6 +104,7 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		FileAttributesPartial:      NewFileAttributesPartial(infra, actions),
 		FileVersionsPartial:        NewFileVersionsPartial(infra, actions),
 		FileInfoPartial:            NewFileInfoPartial(infra, actions),
+		DuplicateMatchesPartial:    NewDuplicateMatchesPartial(infra, actions),
 		FilePropertiesPartial:      NewFilePropertiesPartial(infra, actions),
 		AddFilePropertyCmd:         NewAddFilePropertyCmd(infra, actions),
 		AddFilePropertyValueDialog: NewAddFilePropertyValueDialog(infra, actions),
@@ -113,7 +116,8 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		RenameFileCmd: NewRenameFileCmd(infra, actions),
 		MoveFileCmd:   NewMoveFileCmd(infra, actions),
 
-		FileListItemPartial: NewFileListItemPartial(infra, actions),
+		FileListItemPartial:          NewFileListItemPartial(infra, actions),
+		UpdateFileListPreferencesCmd: NewUpdateFileListPreferencesCmd(infra, actions),
 
 		// SearchList: NewSearchList(infra, actions),
 

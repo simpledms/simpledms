@@ -6,7 +6,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 )
 
 type FileRepository struct{}
@@ -15,17 +15,17 @@ func NewFileRepository() *FileRepository {
 	return &FileRepository{}
 }
 
-func (qq *FileRepository) GetWithParentX(ctx ctxx.Context, id string) *model.FileWithParent {
+func (qq *FileRepository) GetWithParentX(ctx ctxx.Context, id string) *filemodel.FileWithParent {
 	filex := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicIDEQ(entx.NewCIText(id))).OnlyX(ctx)
 
 	if filex.ParentID == 0 {
 		panic("parent id is 0")
 	}
 
-	return model.NewFileWithParent(model.NewFile(filex))
+	return filemodel.NewFileWithParent(filemodel.NewFile(filex))
 }
 
-func (qq *FileRepository) GetX(ctx ctxx.Context, id string) *model.File {
+func (qq *FileRepository) GetX(ctx ctxx.Context, id string) *filemodel.File {
 	/*
 		stmt := dd.SELECT(dt.Files.AllColumns).
 			FROM(dt.Files).
@@ -40,22 +40,22 @@ func (qq *FileRepository) GetX(ctx ctxx.Context, id string) *model.File {
 
 	// filex := ctx.TenantCtx().TTx.File.GetX(ctx, id)
 	filex := ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicIDEQ(entx.NewCIText(id))).OnlyX(ctx)
-	return model.NewFile(filex)
+	return filemodel.NewFile(filex)
 }
 
-func (qq *FileRepository) GetWithDeletedX(ctx ctxx.Context, id string) *model.File {
+func (qq *FileRepository) GetWithDeletedX(ctx ctxx.Context, id string) *filemodel.File {
 	ctxWithDeleted := schema.SkipSoftDelete(ctx)
 	filex := ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicIDEQ(entx.NewCIText(id))).OnlyX(ctxWithDeleted)
-	return model.NewFile(filex)
+	return filemodel.NewFile(filex)
 }
 
 // Deprecated: just a workaround for legacy code
-func (qq *FileRepository) GetXX(filex *enttenant.File) *model.File {
-	return model.NewFile(filex)
+func (qq *FileRepository) GetXX(filex *enttenant.File) *filemodel.File {
+	return filemodel.NewFile(filex)
 }
 
 /*
-func (qq *FileRepo) Save(ctx *ctxx.Context, filex *model.File) error {
+func (qq *FileRepo) Save(ctx *ctxx.Context, filex *filemodel.File) error {
 	updateStmt := dt.Files.UPDATE(dt.Files.MutableColumns).
 		MODEL(filex.Data).
 		WHERE(dt.Files.ID.EQ(dd.Int32(filex.Data.ID)))

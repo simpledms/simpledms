@@ -12,7 +12,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/common/storagetype"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
 // TemporaryFile is the model entity for the TemporaryFile schema.

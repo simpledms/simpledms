@@ -7,7 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -54,12 +54,10 @@ func (qq *UnassignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 
-	ctx.TenantCtx().TTx.TagAssignment.
-		Delete().
-		Where(tagassignment.FileID(filex.Data.ID), tagassignment.TagID(data.TagID)).
-		ExecX(ctx)
-
-	tag := ctx.TenantCtx().TTx.Tag.GetX(ctx, data.TagID)
+	tag, err := taggingmodel.NewTagService().UnassignFromFile(ctx, filex.Data.ID, data.TagID)
+	if err != nil {
+		return err
+	}
 
 	if hxTarget == qq.actions.AssignedTags.EditListItem.listItemID(data.FileID, data.TagID) {
 		// must be set before writing to rw

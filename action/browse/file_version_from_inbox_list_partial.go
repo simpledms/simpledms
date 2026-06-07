@@ -10,10 +10,12 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/sqlutil"
 )
 
 type FileVersionFromInboxListPartial struct {
@@ -62,8 +64,24 @@ func (qq *FileVersionFromInboxListPartial) listFiles(ctx ctxx.Context, data *Fil
 			file.DeletedAtIsNil(),
 		)
 
-	if data.SearchQuery != "" {
-		query = query.Where(file.NameContains(data.SearchQuery))
+	searchQuery := sqlutil.FTSSafeAndQuery(data.SearchQuery, 300)
+	if searchQuery != "" {
+		query = query.Where(func(qs *sql.Selector) {
+			fileSearchTable := sql.Table(filesearch.Table)
+
+			qs.Where(
+				sql.In(qs.C(file.FieldID),
+					sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
+						Where(
+							sql.And(
+								sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
+								sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+							),
+						).
+						OrderBy(fileSearchTable.C(filesearch.FieldRank)),
+				),
+			)
+		})
 	}
 
 	query = query.Order(file.ByName(sql.OrderAsc()))

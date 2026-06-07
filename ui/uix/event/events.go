@@ -20,6 +20,7 @@ const (
 	// TagMovedToGroup    EventWithID = "tagMovedToGroup"
 
 	AccountUpdated Event = "accountUpdated"
+	AccountDeleted Event = "accountDeleted"
 
 	FilterTagsChanged            Event = "filterTagsChanged"
 	DocumentTypeFilterChanged    Event = "documentTypeFilterChanged"
@@ -68,6 +69,7 @@ const (
 	AppUnlocked          Event = "appUnlocked"
 	AppInitialized       Event = "appInitialized"
 	AppPassphraseChanged Event = "appPassphraseChanged"
+	UploadLimitUpdated   Event = "uploadLimitUpdated"
 
 	UserCreated Event = "userCreated"
 	UserUpdated Event = "userUpdated"

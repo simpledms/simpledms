@@ -9,7 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/simpledms/simpledms/model/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
 )
 
 const (

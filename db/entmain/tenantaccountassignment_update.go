@@ -15,7 +15,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/predicate"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 )
 
 // TenantAccountAssignmentUpdate is the builder for updating TenantAccountAssignment entities.
@@ -110,6 +110,20 @@ func (_u *TenantAccountAssignmentUpdate) SetIsDefault(v bool) *TenantAccountAssi
 func (_u *TenantAccountAssignmentUpdate) SetNillableIsDefault(v *bool) *TenantAccountAssignmentUpdate {
 	if v != nil {
 		_u.SetIsDefault(*v)
+	}
+	return _u
+}
+
+// SetIsOwningTenant sets the "is_owning_tenant" field.
+func (_u *TenantAccountAssignmentUpdate) SetIsOwningTenant(v bool) *TenantAccountAssignmentUpdate {
+	_u.mutation.SetIsOwningTenant(v)
+	return _u
+}
+
+// SetNillableIsOwningTenant sets the "is_owning_tenant" field if the given value is not nil.
+func (_u *TenantAccountAssignmentUpdate) SetNillableIsOwningTenant(v *bool) *TenantAccountAssignmentUpdate {
+	if v != nil {
+		_u.SetIsOwningTenant(*v)
 	}
 	return _u
 }
@@ -278,6 +292,9 @@ func (_u *TenantAccountAssignmentUpdate) sqlSave(ctx context.Context) (_node int
 	}
 	if value, ok := _u.mutation.IsDefault(); ok {
 		_spec.SetField(tenantaccountassignment.FieldIsDefault, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IsOwningTenant(); ok {
+		_spec.SetField(tenantaccountassignment.FieldIsOwningTenant, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(tenantaccountassignment.FieldRole, field.TypeEnum, value)
@@ -479,6 +496,20 @@ func (_u *TenantAccountAssignmentUpdateOne) SetNillableIsDefault(v *bool) *Tenan
 	return _u
 }
 
+// SetIsOwningTenant sets the "is_owning_tenant" field.
+func (_u *TenantAccountAssignmentUpdateOne) SetIsOwningTenant(v bool) *TenantAccountAssignmentUpdateOne {
+	_u.mutation.SetIsOwningTenant(v)
+	return _u
+}
+
+// SetNillableIsOwningTenant sets the "is_owning_tenant" field if the given value is not nil.
+func (_u *TenantAccountAssignmentUpdateOne) SetNillableIsOwningTenant(v *bool) *TenantAccountAssignmentUpdateOne {
+	if v != nil {
+		_u.SetIsOwningTenant(*v)
+	}
+	return _u
+}
+
 // SetRole sets the "role" field.
 func (_u *TenantAccountAssignmentUpdateOne) SetRole(v tenantrole.TenantRole) *TenantAccountAssignmentUpdateOne {
 	_u.mutation.SetRole(v)
@@ -673,6 +704,9 @@ func (_u *TenantAccountAssignmentUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if value, ok := _u.mutation.IsDefault(); ok {
 		_spec.SetField(tenantaccountassignment.FieldIsDefault, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IsOwningTenant(); ok {
+		_spec.SetField(tenantaccountassignment.FieldIsOwningTenant, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(tenantaccountassignment.FieldRole, field.TypeEnum, value)

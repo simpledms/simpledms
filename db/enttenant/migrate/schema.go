@@ -221,6 +221,60 @@ var (
 				Unique:  false,
 				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21]},
 			},
+			{
+				Name:    "file_browse_name",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[6], FilesColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[6].Name: true,
+					},
+					Where: "`deleted_at` is null and `is_in_inbox` = false",
+				},
+			},
+			{
+				Name:    "file_browse_created",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[6], FilesColumns[3], FilesColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[3].Name: true,
+
+						FilesColumns[6].Name: true,
+					},
+					Where: "`deleted_at` is null and `is_in_inbox` = false",
+				},
+			},
+			{
+				Name:    "file_browse_created_oldest",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[6], FilesColumns[3], FilesColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[6].Name: true,
+					},
+					Where: "`deleted_at` is null and `is_in_inbox` = false",
+				},
+			},
+			{
+				Name:    "file_inbox_created",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[6], FilesColumns[3]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[3].Name: true,
+					},
+					Where: "`deleted_at` is null and `is_in_inbox` = true",
+				},
+			},
+			{
+				Name:    "file_inbox_name",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[6], FilesColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`deleted_at` is null and `is_in_inbox` = true",
+				},
+			},
 		},
 	}
 	// FilePropertyAssignmentsColumns holds the columns for the "file_property_assignments" table.
@@ -462,6 +516,7 @@ var (
 		{Name: "size", Type: field.TypeInt64, Nullable: true},
 		{Name: "size_in_storage", Type: field.TypeInt64},
 		{Name: "sha256", Type: field.TypeString, Nullable: true},
+		{Name: "content_sha256", Type: field.TypeString, Nullable: true},
 		{Name: "mime_type", Type: field.TypeString, Nullable: true},
 		{Name: "storage_type", Type: field.TypeEnum, Enums: []string{"Unknown", "Local", "S3"}},
 		{Name: "bucket_name", Type: field.TypeString, Nullable: true},
@@ -482,15 +537,22 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "stored_files_users_creator",
-				Columns:    []*schema.Column{StoredFilesColumns[19]},
+				Columns:    []*schema.Column{StoredFilesColumns[20]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "stored_files_users_updater",
-				Columns:    []*schema.Column{StoredFilesColumns[20]},
+				Columns:    []*schema.Column{StoredFilesColumns[21]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "storedfile_content_sha256",
+				Unique:  false,
+				Columns: []*schema.Column{StoredFilesColumns[10]},
 			},
 		},
 	}

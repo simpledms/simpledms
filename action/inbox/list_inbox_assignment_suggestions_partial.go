@@ -139,7 +139,6 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 	*/
 
 	destDirs := ctx.TenantCtx().TTx.File.Query().
-		WithChildren().
 		Where(
 			file.IsDirectory(true),
 			func(qs *sql.Selector) {

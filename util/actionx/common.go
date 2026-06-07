@@ -7,10 +7,11 @@ import (
 )
 
 type Config struct {
-	endpoint         string
-	method           string
-	isReadOnly       bool
-	usesSeparatedCmd bool // TODO reference to cmd instead?
+	endpoint            string
+	method              string
+	isReadOnly          bool
+	allowInSetupSession bool
+	usesSeparatedCmd    bool // TODO reference to cmd instead?
 	// some actions open their own write transactions and should avoid long-lived
 	// request transactions
 	useManualTxManagement bool
@@ -66,6 +67,15 @@ func (qq *Config) IsReadOnly() bool {
 
 func (qq *Config) UseManualTxManagement() bool {
 	return qq.useManualTxManagement
+}
+
+func (qq *Config) AllowInSetupSession() bool {
+	return qq.allowInSetupSession
+}
+
+func (qq *Config) EnableSetupSessionAccess() *Config {
+	qq.allowInSetupSession = true
+	return qq
 }
 
 func (qq *Config) EnableManualTxManagement() *Config {

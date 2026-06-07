@@ -5,9 +5,8 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/common/storagetype"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
 // similar to enttenant.StoredFile

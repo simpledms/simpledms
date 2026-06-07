@@ -1,0 +1,44 @@
+package filelistpreference
+
+type FileListColumn string
+
+const (
+	FileListColumnName             FileListColumn = "name"
+	FileListColumnOriginalFilename FileListColumn = "original_filename"
+	FileListColumnDocumentType     FileListColumn = "document_type"
+	FileListColumnMetadata         FileListColumn = "metadata"
+	FileListColumnDate             FileListColumn = "date"
+	FileListColumnSize             FileListColumn = "size"
+)
+
+func DefaultFileListColumns() []FileListColumn {
+	return []FileListColumn{
+		FileListColumnName,
+		FileListColumnDocumentType,
+		FileListColumnDate,
+		FileListColumnSize,
+	}
+}
+
+func FileListColumnString(value string) (FileListColumn, bool) {
+	column := FileListColumn(value)
+	return column, column.IsValid()
+}
+
+func (qq FileListColumn) IsValid() bool {
+	switch qq {
+	case FileListColumnName,
+		FileListColumnOriginalFilename,
+		FileListColumnDocumentType,
+		FileListColumnMetadata,
+		FileListColumnDate,
+		FileListColumnSize:
+		return true
+	default:
+		return false
+	}
+}
+
+func (qq FileListColumn) String() string {
+	return string(qq)
+}

@@ -153,6 +153,7 @@ func newTenantContextForUpload(
 		"",
 		"",
 		true,
+		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
 	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs, true)

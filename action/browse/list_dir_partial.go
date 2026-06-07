@@ -2,13 +2,12 @@ package browse
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"math"
 	"slices"
 	"strconv"
 	"strings"
-
-	"entgo.io/ent/dialect/sql"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -16,14 +15,13 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
-	"github.com/simpledms/simpledms/db/enttenant/filesearch"
-	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/property"
-	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
-	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model"
-	"github.com/simpledms/simpledms/model/common/fieldtype"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
+	"github.com/simpledms/simpledms/model/main/filelistpreference"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/partial"
@@ -32,7 +30,6 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/sqlutil"
 	"github.com/simpledms/simpledms/util/timex"
 )
 
@@ -59,6 +56,7 @@ type ListDirPartialState struct {
 	// used in JS, thus don't change URL and as param name below
 	// TODO multiple?
 	ActiveSideSheet string `url:"side_sheet,omitempty"`
+	SortBy          string `url:"sort_by,omitempty"` // TODO enum
 
 	// TODO does offset belong to state? in url, but not really state...
 	// Offset int `url:"offset,omitempty"`
@@ -72,9 +70,14 @@ type ListDirPartialState struct {
 	// ViewType viewtype.ViewType
 }
 
+func (qq *ListDirPartialState) isSortedByDate() bool {
+	return qq.SortBy == "newestFirst" || qq.SortBy == "oldestFirst"
+}
+
 type ListDirPartial struct {
-	infra   *common.Infra
-	actions *Actions
+	infra            *common.Infra
+	actions          *Actions
+	fileQueryService *ListDirFileQueryService
 	*actionx.Config
 }
 
@@ -83,8 +86,9 @@ func NewListDirPartial(
 	actions *Actions,
 ) *ListDirPartial {
 	return &ListDirPartial{
-		infra:   infra,
-		actions: actions,
+		infra:            infra,
+		actions:          actions,
+		fileQueryService: NewListDirFileQueryService(infra),
 		Config: actionx.NewConfig(
 			actions.Route("list-dir-partial"),
 			true,
@@ -192,6 +196,35 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 			},
 		)
 	}
+	if req.Header.Get("Hx-Target") == "listDirLoadMoreTable" {
+		state = autil.StateX[ListDirPartialState](rw, req)
+		offset := 0
+		offsetStr := req.URL.Query().Get("offset")
+		if offsetStr != "" {
+			offset, err = strconv.Atoi(offsetStr)
+			if err != nil {
+				log.Println(err)
+				return err
+			}
+		}
+
+		queryResult := qq.fileQueryService.Query(
+			ctx,
+			state,
+			data,
+			offset,
+			qq.pageSize(),
+			qq.applyPropertyFilter,
+		)
+		preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
+		return qq.infra.Renderer().Render(
+			rw,
+			ctx,
+			&wx.View{
+				Children: qq.fileTable(ctx, state, data, offset, queryResult, preferences).Rows,
+			},
+		)
+	}
 
 	return qq.infra.Renderer().Render(
 		rw,
@@ -241,6 +274,10 @@ func (qq *ListDirPartial) Widget(
 	}
 
 	var children []wx.IWidget
+
+	children = append(children,
+		qq.sortUpdateTrigger(dirWithParent.Data.PublicID.String(), selectedFileID),
+	)
 
 	children = append(children,
 		qq.tagsAndOptions(ctx, state, dirWithParent),
@@ -318,12 +355,27 @@ func (qq *ListDirPartial) Widget(
 		Widget: wx.Widget[wx.ListDetailLayout]{
 			ID: qq.WrapperID(),
 		},
-		AppBar: qq.appBar(ctx, state, dirWithParent),
+		AppBar: qq.appBar(ctx, state, dirWithParent, selectedFileID),
 		List:   list,
 	}
 }
 
-func (qq *ListDirPartial) tagsAndOptions(ctx ctxx.Context, state *ListDirPartialState, dir *model.File) *wx.ChipBar {
+func (qq *ListDirPartial) sortUpdateTrigger(currentDirID, selectedFileID string) *wx.Container {
+	return &wx.Container{
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost:   qq.EndpointWithParams(actionx.ResponseWrapperNone, ""),
+			HxVals:   util.JSON(qq.Data(currentDirID, selectedFileID)),
+			HxTarget: "#innerContent",
+			HxSwap:   "innerHTML",
+			HxTrigger: event.SortByUpdated.HandlerWithModifier(
+				"delay:100ms",
+			),
+		},
+		Child: &wx.View{},
+	}
+}
+
+func (qq *ListDirPartial) tagsAndOptions(ctx ctxx.Context, state *ListDirPartialState, dir *filemodel.File) *wx.ChipBar {
 	// TODO most used tags within folder, order alphabetically or by use?
 
 	// childDirCount := dir.Data.QueryChildren().Where(file.IsDirectory(true)).CountX(ctx)
@@ -347,15 +399,27 @@ func (qq *ListDirPartial) pageSize() int {
 func (qq *ListDirPartial) filesList(
 	ctx ctxx.Context,
 	state *ListDirPartialState,
-	dir *model.File,
+	dir *filemodel.File,
 	data *ListDirPartialData,
 	offset int,
 ) renderable.Renderable {
-	fileListItems := qq.filesListItems(ctx, state, data, offset)
+	queryResult := qq.fileQueryService.Query(
+		ctx,
+		state,
+		data,
+		offset,
+		qq.pageSize(),
+		qq.applyPropertyFilter,
+	)
+	fileListItems := qq.filesListItemsFromQueryResult(ctx, state, data, offset, queryResult)
+	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
 
 	var content wx.IWidget
 	content = &wx.List{
 		Children: fileListItems,
+	}
+	if preferences.IsTable() && len(fileListItems) > 0 {
+		content = qq.fileTable(ctx, state, data, offset, queryResult, preferences)
 	}
 
 	if len(fileListItems) == 0 {
@@ -417,141 +481,30 @@ func (qq *ListDirPartial) filesListItems(
 	data *ListDirPartialData,
 	offset int,
 ) []wx.IWidget {
-	// necessary to prevent putting escaped search query into search query field on re-rendering
-	state.searchQueryRaw = state.SearchQuery
-	// FIXME should be automatically applied on parsing state
-	state.SearchQuery = sqlutil.FTSSafeAndQuery(state.SearchQuery, 300)
+	queryResult := qq.fileQueryService.Query(
+		ctx,
+		state,
+		data,
+		offset,
+		qq.pageSize(),
+		qq.applyPropertyFilter,
+	)
+	return qq.filesListItemsFromQueryResult(ctx, state, data, offset, queryResult)
+}
 
-	// TODO find a better solution; not really robust
-	if ctx.SpaceCtx().Space.IsFolderMode && state.DocumentTypeID == 0 && len(state.CheckedTagIDs) == 0 && state.SearchQuery == "" {
-		state.IsRecursive = false
-		state.HideDirectories = false
-	} else {
-		state.IsRecursive = true
-		// state.HideDirectories = true
-	}
-	// children := dir.QueryChildren().Order(file.ByName()).WithChildren().AllX(ctx)
-
-	var currentDir *enttenant.File
-	if data.CurrentDirID == "" {
-		currentDir = ctx.SpaceCtx().SpaceRootDir()
-		data.CurrentDirID = currentDir.PublicID.String()
-	}
-	if currentDir == nil {
-		currentDir = ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicID(entx.NewCIText(data.CurrentDirID))).OnlyX(ctx)
-	}
-
-	// copied from Search...
-	var tagAssignmentPredicates []predicate.TagAssignment
-	for _, tagID := range state.ListFilterTagsPartialState.CheckedTagIDs {
-		tagAssignmentPredicates = append(tagAssignmentPredicates, tagassignment.TagID(int64(tagID)))
-	}
-
-	// TODO sort by relevance
-	searchResultQuery := ctx.TenantCtx().TTx.File.Query().
-		WithParent().
-		WithChildren(). // necessary to count children
-		Where(func(qs *sql.Selector) {
-			// subquery to select all files in search scope
-			if !state.IsRecursive {
-				qs.Where(sql.EQ(qs.C(file.FieldParentID), currentDir.ID))
-			} else {
-				qs.Where(qq.descendantScopePredicate(qs.C(file.FieldID), currentDir.ID, ctx.SpaceCtx().Space.ID))
-			}
-
-			if len(state.ListFilterTagsPartialState.CheckedTagIDs) > 0 {
-				resolvedTagAssignmentTable := sql.Table(resolvedtagassignment.Table)
-				qs.Where(
-					sql.Exists(
-						sql.Select(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldFileID)).
-							From(resolvedTagAssignmentTable).
-							Where(
-								sql.And(
-									// stange behavior if sql.EQ is used instead of sql.ColumnsEQ:
-									// executing the query from debugger manually would work, but not via
-									// ent because column name (files.id) is passed in as argument for the
-									// prepared statement
-									sql.ColumnsEQ(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldFileID), qs.C(file.FieldID)),
-									sql.InInts(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldTagID), state.ListFilterTagsPartialState.CheckedTagIDs...),
-								),
-							).
-							GroupBy(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldFileID)).
-							Having(sql.EQ(sql.Count(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldFileID)), len(state.ListFilterTagsPartialState.CheckedTagIDs))),
-					),
-				)
-			}
-		})
-
-	searchResultQuery = searchResultQuery.Where(file.IsInInbox(false))
-
-	// searchResultQuery = searchResultQuery.Where(file.HasSpaceAssignmentWith(spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID)))
-	searchResultQuery = searchResultQuery.Where(file.SpaceID(ctx.SpaceCtx().Space.ID))
-
-	if state.DocumentTypeID != 0 {
-		searchResultQuery = searchResultQuery.Where(file.DocumentTypeID(state.DocumentTypeID))
-	}
-
-	if state.SearchQuery != "" {
-		/*
-			searchResultQuery = searchResultQuery.Where(
-				file.NameContains(state.SearchQuery),
-			) // TODO .Limit(25) // needs hint if enabled
-		*/
-
-		// TODO give filename a higher priority?
-		searchResultQuery = searchResultQuery.Where(
-			func(qs *sql.Selector) {
-				fileSearchTable := sql.Table(filesearch.Table)
-
-				qs.Where(
-					sql.In(qs.C(file.FieldID),
-						sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
-							Where(
-								sql.And(
-									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), state.SearchQuery),
-									sql.EQ(fileSearchTable.C(file.FieldSpaceID), ctx.SpaceCtx().Space.ID),
-									sql.EQ(fileSearchTable.C(file.FieldIsInInbox), false),
-								),
-							),
-					),
-				)
-			},
-		)
-	}
-
-	searchResultQuery = searchResultQuery.Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName())
-
+func (qq *ListDirPartial) filesListItemsFromQueryResult(
+	ctx ctxx.Context,
+	state *ListDirPartialState,
+	data *ListDirPartialData,
+	offset int,
+	queryResult *ListDirFileQueryResult,
+) []wx.IWidget {
 	var fileListItems []wx.IWidget
 
-	if state.HideDirectories && state.HideFiles {
-		// do nothing // TODO find a better solution (radio button?)
-		searchResultQuery = searchResultQuery.Where(file.And(file.IsDirectory(false), file.IsDirectory(true)))
-	} else if state.HideDirectories {
-		searchResultQuery = searchResultQuery.Where(file.IsDirectory(false))
-	} else if state.HideFiles {
-		searchResultQuery = searchResultQuery.Where(file.IsDirectory(true))
-	}
-
-	searchResultQuery = qq.applyPropertyFilter(ctx, searchResultQuery, state)
-
-	children := searchResultQuery.Offset(offset).Limit(qq.pageSize() + 1).AllX(ctx)
-	hasMore := len(children) > qq.pageSize()
-	if hasMore {
-		// conditional necessary to prevent out of bounce access
-		children = children[:qq.pageSize()]
-	}
-
-	// get parent directory full paths for breadcrumbs...
-	var childParentFullPaths map[int64]string
-	if state.IsRecursive {
-		var childParentIDs []int64
-		for _, child := range children {
-			childParentIDs = append(childParentIDs, child.ParentID)
-		}
-		slices.Sort(childParentIDs) // necessary for compact to work?
-		childParentIDs = slices.Compact(childParentIDs)
-		childParentFullPaths = qq.infra.FileSystem().FileTree().FullPathsByFileIDX(ctx, childParentIDs)
-	}
+	currentDir := queryResult.CurrentDir
+	children := queryResult.Children
+	hasMore := queryResult.HasMore
+	childParentFullPaths := queryResult.ChildParentFullPaths
 
 	for _, child := range children {
 		if !child.IsDirectory {
@@ -563,12 +516,16 @@ func (qq *ListDirPartial) filesListItems(
 			fullPath = childParentFullPaths[child.ParentID]
 		}
 
-		fileListItems = append(fileListItems, qq.actions.FileListItemPartial.DirectoryListItem(
+		childCounts := queryResult.ChildCounts[child.ID]
+		fileListItems = append(fileListItems, qq.actions.FileListItemPartial.DirectoryListItemWithCounts(
 			ctx,
 			currentDir.PublicID.String(),
 			child,
 			fullPath,
 			state.IsRecursive,
+			state.isSortedByDate(),
+			childCounts.DirectoryCount,
+			childCounts.FileCount,
 		))
 	}
 	for _, child := range children {
@@ -589,6 +546,7 @@ func (qq *ListDirPartial) filesListItems(
 			child.PublicID.String() == data.SelectedFileID,
 			// data.SelectedFileID != 0,
 			state.IsRecursive && ctx.SpaceCtx().Space.IsFolderMode,
+			state.isSortedByDate(),
 		))
 	}
 
@@ -610,14 +568,11 @@ func (qq *ListDirPartial) filesListItems(
 	return fileListItems
 }
 
-func (qq *ListDirPartial) descendantScopePredicate(fileColumn string, rootID, spaceID int64) *sql.Predicate {
-	return sql.In(fileColumn, qq.infra.FileSystem().FileTree().DescendantIDsSubQuery(rootID, spaceID))
-}
-
 func (qq *ListDirPartial) appBar(
 	ctx ctxx.Context,
 	state *ListDirPartialState,
-	dir *model.File,
+	dir *filemodel.File,
+	selectedFileID string,
 ) *wx.AppBar {
 	var leadingButton wx.IWidget
 
@@ -660,9 +615,16 @@ func (qq *ListDirPartial) appBar(
 
 	return &wx.AppBar{
 		Leading:          leadingButton,
-		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial.NewNavigationRailToggle(),
 		Title:            wx.Tu(dir.Data.Name),
-		// Actions:          actions,
+		Actions: []wx.IWidget{
+			qq.fileListViewButton(ctx, dir.Data.PublicID.String(), selectedFileID),
+			&wx.IconButton{
+				Icon:     "sort",
+				Tooltip:  wx.T("Sort files"),
+				Children: NewSortListContextMenuWidget().Widget(ctx, state),
+			},
+		},
 		Search: &wx.Search{
 			Widget: wx.Widget[wx.Search]{
 				ID: "search",
@@ -675,6 +637,213 @@ func (qq *ListDirPartial) appBar(
 				HxOn: event.SearchQueryUpdated.HxOnWithQueryParam("input", "q"),
 			},
 		},
+	}
+}
+
+func (qq *ListDirPartial) fileListViewButton(
+	ctx ctxx.Context,
+	currentDirID string,
+	selectedFileID string,
+) *wx.IconButton {
+	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
+	return &wx.IconButton{
+		Icon:    "view_agenda",
+		Tooltip: wx.T("Change file list view"),
+		Children: qq.fileListViewMenu(
+			ctx,
+			preferences,
+			autil.QueryHeader(qq.Endpoint(), qq.Data(currentDirID, selectedFileID)),
+		),
+	}
+}
+
+func (qq *ListDirPartial) fileListViewMenu(
+	ctx ctxx.Context,
+	preferences *filelistpreference.FileListPreferences,
+	hxHeaders template.JS,
+) *wx.Menu {
+	items := []*wx.MenuItem{
+		qq.fileListViewMenuItem(
+			wx.T("List"),
+			"list",
+			preferences.ViewMode == filelistpreference.FileListViewModeList,
+			hxHeaders,
+		),
+		qq.fileListViewMenuItem(
+			wx.T("Table"),
+			"table",
+			preferences.ViewMode == filelistpreference.FileListViewModeTable,
+			hxHeaders,
+		),
+	}
+	if !preferences.IsTable() {
+		return &wx.Menu{
+			Widget: wx.Widget[wx.Menu]{
+				ID: "fileListViewMenu",
+			},
+			Position: wx.PositionLeft,
+			Items:    items,
+		}
+	}
+
+	items = append(items, &wx.MenuItem{IsDivider: true})
+
+	for _, column := range []struct {
+		column filelistpreference.FileListColumn
+		label  *wx.Text
+	}{
+		{filelistpreference.FileListColumnName, wx.T("Name")},
+		{filelistpreference.FileListColumnOriginalFilename, wx.T("Original filename")},
+		{filelistpreference.FileListColumnDocumentType, wx.T("Type")},
+		{filelistpreference.FileListColumnMetadata, wx.T("Metadata")},
+		{filelistpreference.FileListColumnDate, wx.T("Date")},
+		{filelistpreference.FileListColumnSize, wx.T("Size")},
+	} {
+		items = append(items, qq.fileListColumnMenuItem(
+			column.label,
+			column.column.String(),
+			preferences.HasBuiltInColumn(column.column),
+			hxHeaders,
+		))
+	}
+
+	spaceColumns := preferences.SpaceColumnsFor(ctx.SpaceCtx().SpaceID)
+	showTags := !spaceColumns.ShowTags
+	items = append(items, qq.fileListTagsMenuItem(wx.T("Tags"), showTags, spaceColumns.ShowTags, hxHeaders))
+
+	tagGroups := ctx.SpaceCtx().Space.QueryTags().
+		Where(tag.TypeEQ(tagtype.Group)).
+		Order(tag.ByName()).
+		AllX(ctx)
+	if len(tagGroups) > 0 {
+		items = append(items, &wx.MenuItem{IsDivider: true})
+	}
+	for _, tagGroup := range tagGroups {
+		items = append(items, qq.fileListTagGroupMenuItem(
+			wx.Tu(tagGroup.Name),
+			tagGroup.ID,
+			spaceColumns.HasTagGroupID(tagGroup.ID),
+			hxHeaders,
+		))
+	}
+
+	properties := ctx.SpaceCtx().TTx.Property.Query().Order(property.ByName()).AllX(ctx)
+	if len(properties) > 0 {
+		items = append(items, &wx.MenuItem{IsDivider: true})
+	}
+	for _, propertyx := range properties {
+		items = append(items, qq.fileListPropertyMenuItem(
+			wx.Tu(propertyx.Name),
+			propertyx.ID,
+			spaceColumns.HasPropertyID(propertyx.ID),
+			hxHeaders,
+		))
+	}
+
+	return &wx.Menu{
+		Widget: wx.Widget[wx.Menu]{
+			ID: "fileListViewMenu",
+		},
+		Position: wx.PositionLeft,
+		Items:    items,
+	}
+}
+
+func (qq *ListDirPartial) fileListViewMenuItem(
+	label *wx.Text,
+	viewMode string,
+	isSelected bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.UpdateFileListPreferencesCmd.Data()
+	data.ViewMode = viewMode
+	return &wx.MenuItem{
+		Label:          label,
+		RadioGroupName: "FileListViewMode",
+		RadioValue:     viewMode,
+		IsSelected:     isSelected,
+		HTMXAttrs:      qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *ListDirPartial) fileListColumnMenuItem(
+	label *wx.Text,
+	column string,
+	isChecked bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.UpdateFileListPreferencesCmd.Data()
+	data.BuiltInColumn = column
+	return &wx.MenuItem{
+		Label:         label,
+		CheckboxName:  "FileListColumn",
+		CheckboxValue: column,
+		IsChecked:     isChecked,
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *ListDirPartial) fileListTagsMenuItem(
+	label *wx.Text,
+	showTags bool,
+	isChecked bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.UpdateFileListPreferencesCmd.Data()
+	data.ShowTags = &showTags
+	return &wx.MenuItem{
+		Label:         label,
+		CheckboxName:  "FileListTags",
+		CheckboxValue: "tags",
+		IsChecked:     isChecked,
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *ListDirPartial) fileListPropertyMenuItem(
+	label *wx.Text,
+	propertyID int64,
+	isChecked bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.UpdateFileListPreferencesCmd.Data()
+	data.PropertyID = propertyID
+	return &wx.MenuItem{
+		Label:         label,
+		CheckboxName:  "FileListProperty",
+		CheckboxValue: strconv.FormatInt(propertyID, 10),
+		IsChecked:     isChecked,
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *ListDirPartial) fileListTagGroupMenuItem(
+	label *wx.Text,
+	tagGroupID int64,
+	isChecked bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.UpdateFileListPreferencesCmd.Data()
+	data.TagGroupID = tagGroupID
+	return &wx.MenuItem{
+		Label:         label,
+		CheckboxName:  "FileListTagGroup",
+		CheckboxValue: strconv.FormatInt(tagGroupID, 10),
+		IsChecked:     isChecked,
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *ListDirPartial) fileListPreferencesMenuItemAttrs(
+	data *UpdateFileListPreferencesCmdData,
+	hxHeaders template.JS,
+) wx.HTMXAttrs {
+	return wx.HTMXAttrs{
+		HxPost:    qq.actions.UpdateFileListPreferencesCmd.Endpoint(),
+		HxVals:    util.JSON(data),
+		HxHeaders: hxHeaders,
+		HxTarget:  "#innerContent",
+		HxSwap:    "innerHTML",
 	}
 }
 

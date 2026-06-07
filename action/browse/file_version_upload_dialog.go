@@ -39,6 +39,16 @@ func (qq *FileVersionUploadDialog) Handler(rw httpx.ResponseWriter, req *httpx.R
 	if err != nil {
 		return err
 	}
+
+	maxUploadSizeBytes := int64(0)
+	nilableUploadLimitBytes, err := qq.infra.FileSystem().NilableEffectiveUploadSizeLimitBytes(ctx)
+	if err != nil {
+		return err
+	}
+	if nilableUploadLimitBytes != nil {
+		maxUploadSizeBytes = *nilableUploadLimitBytes
+	}
+
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
@@ -47,8 +57,9 @@ func (qq *FileVersionUploadDialog) Handler(rw httpx.ResponseWriter, req *httpx.R
 			Headline:     wx.T("Upload new version"),
 			IsOpenOnLoad: true,
 			Child: &wx.FileUpload{
-				Endpoint: qq.actions.UploadFileVersionCmd.Endpoint(),
-				FileID:   data.FileID,
+				Endpoint:           qq.actions.UploadFileVersionCmd.Endpoint(),
+				FileID:             data.FileID,
+				MaxUploadSizeBytes: maxUploadSizeBytes,
 			},
 		},
 	)

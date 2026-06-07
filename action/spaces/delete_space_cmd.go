@@ -1,14 +1,12 @@
 package spaces
 
 import (
-	"log"
-	"time"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
+	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -46,14 +44,15 @@ func (qq *DeleteSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		return err
 	}
 
-	// assumes it is on spaces screen, not dashboard
-	err = ctx.TenantCtx().TTx.Space.Update().
-		SetDeletedAt(time.Now()).
-		SetDeleter(ctx.TenantCtx().User).
+	spacex, err := ctx.TenantCtx().TTx.Space.Query().
 		Where(space.PublicID(entx.NewCIText(data.SpaceID))).
-		Exec(ctx)
+		Only(ctx)
 	if err != nil {
-		log.Println(err)
+		return err
+	}
+
+	err = spacemodel.NewSpace(spacex).Delete(ctx, ctx.TenantCtx().User)
+	if err != nil {
 		return err
 	}
 

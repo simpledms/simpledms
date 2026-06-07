@@ -7,7 +7,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/modelmain"
+	appmodel "github.com/simpledms/simpledms/model/main/app"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -20,10 +20,10 @@ type InitAppCmdData struct {
 	ConfirmPassphrase string `validate:"required" form_attr_type:"password"`
 	// TODO option to provide identity?
 
-	modelmain.S3Config
-	modelmain.TLSConfig
-	modelmain.MailerConfig
-	modelmain.OCRConfig
+	appmodel.S3Config
+	appmodel.TLSConfig
+	appmodel.MailerConfig
+	appmodel.OCRConfig
 }
 
 type InitAppCmd struct {
@@ -57,7 +57,7 @@ func (qq *InitAppCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Passphrases do not match.")
 	}
 
-	err = modelmain.InitApp(
+	err = appmodel.InitApp(
 		ctx,
 		data.Passphrase,
 		false,

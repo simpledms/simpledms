@@ -20,11 +20,8 @@
 						{{ render .GetContext .AppBar }}
 				</div>
             {{ end }}
-			<div class="flex justify-center md:center-aligned flex-grow">
-				<div class="max-w-md w-full px-6 md:px-8 py-6 md:py-8
-					md:rounded-xl
-					overflow-y-scroll
-				">
+			<div class="flex justify-center flex-grow overflow-y-scroll">
+				<div class="my-auto max-w-md w-full px-6 md:px-8 py-6 md:py-8 md:rounded-xl">
                     {{ render .GetContext .Content }}
 				</div>
 			</div>

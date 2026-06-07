@@ -13,22 +13,22 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
+	_ "github.com/simpledms/simpledms/db/entmain/runtime"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/migrate"
+	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/model/common/country"
-	"github.com/simpledms/simpledms/model/common/language"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
-	tenant2 "github.com/simpledms/simpledms/model/tenant"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	signupmodel "github.com/simpledms/simpledms/model/main/signup"
+	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/httpx"
-
-	_ "github.com/simpledms/simpledms/db/entmain/runtime"
-	_ "github.com/simpledms/simpledms/db/enttenant/runtime"
 )
 
 func TestSignUpCmdCreatesTenantAndAccount(t *testing.T) {
@@ -124,29 +124,25 @@ func signUpAccount(t testing.TB, harness *actionTestHarness, email string) (*ent
 		"",
 		"",
 		true,
+		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
 
-	form := url.Values{}
-	form.Set("Email", email)
-	form.Set("FirstName", "Test")
-	form.Set("LastName", "User")
-	form.Set("Country", country.Switzerland.String())
-	form.Set("Language", language.English.String())
-	form.Set("SubscribeToNewsletter", "false")
-
-	req := httptest.NewRequest(http.MethodPost, "/-/auth/sign-up-cmd", strings.NewReader(form.Encode()))
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-	rr := httptest.NewRecorder()
-	err = harness.actions.Auth.SignUpCmd.Handler(
-		httpx.NewResponseWriter(rr),
-		httpx.NewRequest(req),
+	_, err = signupmodel.NewSignUpService().SignUp(
 		ctx,
+		email,
+		"Test User",
+		"Test",
+		"User",
+		country.Switzerland,
+		language.English,
+		false,
+		true,
+		"",
 	)
 	if err != nil {
 		_ = mainTx.Rollback()
-		t.Fatalf("sign up command: %v", err)
+		t.Fatalf("sign up service: %v", err)
 	}
 
 	if err := mainTx.Commit(); err != nil {
@@ -204,6 +200,7 @@ func newTenantContext(
 		"",
 		"",
 		true,
+		false,
 		harness.infra.SystemConfig().CommercialLicenseEnabled(),
 	)
 	mainCtx := ctxx.NewMainContext(visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs, false)

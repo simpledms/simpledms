@@ -50,7 +50,7 @@ func TestUnzipArchiveCmdExtractsFilesAndDeletesArchive(t *testing.T) {
 				return fmt.Errorf("prepare zip file: %w", err)
 			}
 
-			fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+			uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 				spaceCtx,
 				bytes.NewReader(zipData),
 				prepared,
@@ -60,7 +60,7 @@ func TestUnzipArchiveCmdExtractsFilesAndDeletesArchive(t *testing.T) {
 				return fmt.Errorf("upload zip file: %w", err)
 			}
 
-			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
 			if err != nil {
 				return fmt.Errorf("finalize zip file: %w", err)
 			}
@@ -147,7 +147,7 @@ func TestUnzipArchiveCmdRejectsNonZipFile(t *testing.T) {
 			}
 
 			nonZipContent := []byte("not a zip")
-			fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+			uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 				spaceCtx,
 				bytes.NewReader(nonZipContent),
 				prepared,
@@ -157,7 +157,7 @@ func TestUnzipArchiveCmdRejectsNonZipFile(t *testing.T) {
 				return fmt.Errorf("upload file: %w", err)
 			}
 
-			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
 			if err != nil {
 				return fmt.Errorf("finalize file: %w", err)
 			}
@@ -221,7 +221,7 @@ func TestUnzipArchiveCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 				return fmt.Errorf("prepare zip file: %w", err)
 			}
 
-			fileInfo, fileSize, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+			uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
 				spaceCtx,
 				bytes.NewReader(zipData),
 				prepared,
@@ -231,7 +231,7 @@ func TestUnzipArchiveCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 				return fmt.Errorf("upload zip file: %w", err)
 			}
 
-			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, fileInfo, fileSize)
+			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
 			if err != nil {
 				return fmt.Errorf("finalize zip file: %w", err)
 			}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -22,14 +23,15 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
-	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
-	"github.com/simpledms/simpledms/model/account"
-	tenant2 "github.com/simpledms/simpledms/model/tenant"
+	"github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
+	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
+	tenantaccessmodel "github.com/simpledms/simpledms/model/main/tenantaccess"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/cookiex"
@@ -37,16 +39,20 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type handlerFn func(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error
-type Actionable interface {
-	Route() string
-	Endpoint() string
-	FormRoute() string
-	IsReadOnly() bool
-	UseManualTxManagement() bool
-	// Handler(httpx.ResponseWriter, *httpx.Request, *ent.Tx) error
-	Handler(httpx.ResponseWriter, *httpx.Request, ctxx.Context) error
-}
+type (
+	handlerFn  func(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error
+	Actionable interface {
+		Route() string
+		Endpoint() string
+		FormRoute() string
+		IsReadOnly() bool
+		UseManualTxManagement() bool
+		AllowInSetupSession() bool
+		// Handler(httpx.ResponseWriter, *httpx.Request, *ent.Tx) error
+		Handler(httpx.ResponseWriter, *httpx.Request, ctxx.Context) error
+	}
+)
+
 type FormActionable interface {
 	// not always implemented
 	//
@@ -55,20 +61,23 @@ type FormActionable interface {
 	FormHandler(httpx.ResponseWriter, *httpx.Request, ctxx.Context) error
 }
 
-var tenantIDRegex = regexp.MustCompile(`/org/(?P<id>[a-z0-9]+)`)
-var spaceIDRegex = regexp.MustCompile(`/space/(?P<id>[a-z0-9]+)`)
+var (
+	tenantIDRegex = regexp.MustCompile(`/org/(?P<id>[a-z0-9]+)`)
+	spaceIDRegex  = regexp.MustCompile(`/space/(?P<id>[a-z0-9]+)`)
+)
 
 type Router struct {
 	*http.ServeMux
 	mainDB *sqlx.MainDB
 	// TODO if performance problems are observed, dbs can be closed when not needed for some time
 	//		should be implementable with go-cache
-	tenantDBs  *tenantdbs.TenantDBs
-	infra      *common.Infra
-	handlerMap map[string]Actionable
-	devMode    bool
-	metaPath   string
-	i18n       *i18n.I18n
+	tenantDBs                *tenantdbs.TenantDBs
+	infra                    *common.Infra
+	handlerMap               map[string]Actionable
+	setupSessionAllowedPaths map[string]bool
+	devMode                  bool
+	metaPath                 string
+	i18n                     *i18n.I18n
 }
 
 func NewRouter(
@@ -79,16 +88,21 @@ func NewRouter(
 	metaPath string,
 	i18n *i18n.I18n,
 ) *Router {
-	return &Router{
-		ServeMux:   http.NewServeMux(),
-		mainDB:     mainDB,
-		tenantDBs:  tenantDBs,
-		infra:      infra,
-		handlerMap: map[string]Actionable{},
-		devMode:    devMode,
-		metaPath:   metaPath,
-		i18n:       i18n,
+	router := &Router{
+		ServeMux:                 http.NewServeMux(),
+		mainDB:                   mainDB,
+		tenantDBs:                tenantDBs,
+		infra:                    infra,
+		handlerMap:               map[string]Actionable{},
+		setupSessionAllowedPaths: map[string]bool{},
+		devMode:                  devMode,
+		metaPath:                 metaPath,
+		i18n:                     i18n,
 	}
+
+	router.allowSetupSessionPath(route2.Dashboard())
+
+	return router
 }
 
 func (qq *Router) RegisterPage(pattern string, handlerFn handlerFn) {
@@ -119,6 +133,12 @@ func (qq *Router) RegisterAction(
 
 	// TODO route or endpoint? does method (POST OR GET) matter? currently not, maybe later?
 	qq.handlerMap[action.Endpoint()] = action
+	if action.AllowInSetupSession() {
+		qq.allowSetupSessionPath(action.Endpoint())
+		if action.FormRoute() != "" {
+			qq.allowSetupSessionPath(setupSessionPathFromRoute(action.FormRoute()))
+		}
+	}
 
 	if actionWithForm, ok := action.(FormActionable); ok {
 		if action.FormRoute() == "" {
@@ -209,12 +229,22 @@ func (qq *Router) wrapCommand(handlerFn handlerFn) handlerFn {
 // TODO is this the best place?
 func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc {
 	return func(rw http.ResponseWriter, req *http.Request) {
+		/*
+			//redirect doesn't make sense, should be resposibility of admin to configure domains correctly
+			if redirectURL, shouldRedirect := qq.canonicalRedirectURL(req); shouldRedirect {
+				http.Redirect(rw, req, redirectURL, http.StatusTemporaryRedirect)
+				return
+			}
+		*/
+
+		requestIsReadOnly := isReadOnly
+
 		// workaround for `open with` function // TODO find a better solution
 		if strings.Contains(req.URL.Path, "/inbox/") && req.URL.Query().Has("upload_token") {
-			isReadOnly = false
+			requestIsReadOnly = false
 		}
 
-		mainTx, err := qq.mainDB.Tx(req.Context(), isReadOnly)
+		mainTx, err := qq.mainDB.Tx(req.Context(), requestIsReadOnly)
 		if err != nil {
 			log.Println(err)
 			rw.WriteHeader(http.StatusInternalServerError)
@@ -229,6 +259,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 		acceptLanguage := req.Header.Get("Accept-Language")
 		clientTimezone := req.Header.Get("X-Client-Timezone") // set for all HTMX requests
 		isHTMXRequest := req.Header.Get("HX-Request") != ""
+		isTWA := isTWARequest(req)
 		visitorCtx := ctxx.NewVisitorContext(
 			req.Context(),
 			mainTx,
@@ -236,6 +267,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 			acceptLanguage,
 			clientTimezone,
 			isHTMXRequest,
+			isTWA,
 			qq.infra.SystemConfig().CommercialLicenseEnabled(),
 		)
 
@@ -257,13 +289,21 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 		}()
 
 		// FIXME is nilableTenantTx assigned to var defined above?
-		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, isReadOnly)
+		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, requestIsReadOnly)
 		if err != nil {
 			log.Println(err)
 			qq.handleError(rwx, visitorCtx, err, mainTx, nilableTenantTx)
 			return
 		}
 		if isRedirected {
+			if err := mainTx.Rollback(); err != nil {
+				log.Println(err)
+			}
+			if nilableTenantTx != nil {
+				if err := nilableTenantTx.Rollback(); err != nil {
+					log.Println(err)
+				}
+			}
 			return
 		}
 
@@ -300,6 +340,20 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 	}
 }
 
+func isTWARequest(req *http.Request) bool {
+	if req == nil {
+		return false
+	}
+
+	headerValue := strings.ToLower(strings.TrimSpace(req.Header.Get("X-Is-TWA")))
+	if headerValue == "true" || headerValue == "1" {
+		return true
+	}
+
+	referer := strings.ToLower(strings.TrimSpace(req.Header.Get("Referer")))
+	return strings.HasPrefix(referer, "android-app://")
+}
+
 func (qq *Router) logRecoveredPanic(req *http.Request, recovered any) {
 	if req == nil {
 		log.Printf("recovered panic with nil request; panic_type=%T panic=%v stack=%s", recovered, recovered, debug.Stack())
@@ -320,6 +374,57 @@ func (qq *Router) logRecoveredPanic(req *http.Request, recovered any) {
 	)
 
 	log.Println("trying to recover and rollback transaction")
+}
+
+func (qq *Router) canonicalRedirectURL(req *http.Request) (string, bool) {
+	if !qq.shouldEnforceCanonicalHost(req.URL.Path) {
+		return "", false
+	}
+
+	publicOrigin := qq.infra.SystemConfig().PublicOrigin()
+	if publicOrigin == "" {
+		return "", false
+	}
+
+	publicOriginURL, err := url.Parse(publicOrigin)
+	if err != nil {
+		log.Println(err)
+		return "", false
+	}
+
+	targetHost := strings.ToLower(publicOriginURL.Hostname())
+	if targetHost == "" {
+		return "", false
+	}
+
+	requestHost := strings.ToLower(req.Host)
+	if host, _, errSplit := net.SplitHostPort(requestHost); errSplit == nil {
+		requestHost = host
+	}
+
+	if requestHost == targetHost {
+		return "", false
+	}
+
+	targetURL := *publicOriginURL
+	targetURL.Path = req.URL.Path
+	targetURL.RawPath = req.URL.RawPath
+	targetURL.RawQuery = req.URL.RawQuery
+	targetURL.Fragment = ""
+
+	return targetURL.String(), true
+}
+
+func (qq *Router) shouldEnforceCanonicalHost(path string) bool {
+	if path == "/" {
+		return true
+	}
+
+	if strings.HasPrefix(path, "/-/auth/") {
+		return true
+	}
+
+	return false
 }
 
 func (qq *Router) handleError(
@@ -446,7 +551,8 @@ func (qq *Router) context(
 	visitorCtx *ctxx.VisitorContext,
 	isReadOnly bool,
 ) (ctxx.Context, *enttenant.Tx, bool, error) {
-	accountm, isAuthenticated, err := qq.authenticateAccount(rw, req, mainTx)
+	accountm, isAuthenticated, isTemporarySession, err := qq.authenticateAccount(rw, req, mainTx)
+	visitorCtx.IsTemporarySession = isTemporarySession
 	if err != nil {
 		log.Println(err)
 		if errors.Is(err, ErrSessionNotFound) {
@@ -460,6 +566,7 @@ func (qq *Router) context(
 		// FIXME should be dynamicly generated list (by declaration)...
 		if slices.Contains([]string{
 			"/",
+			"/register/",
 			"/pages/about/",
 			"/pages/imprint/",
 			"/pages/privacy-policy/",
@@ -469,6 +576,10 @@ func (qq *Router) context(
 			"/-/auth/sign-up-cmd",
 			"/-/auth/sign-up-cmd-form",
 			"/-/auth/sign-in-cmd",
+			"/-/auth/passkey-sign-in-begin-cmd",
+			"/-/auth/passkey-sign-in-finish-cmd",
+			"/-/auth/passkey-recovery-sign-in-cmd",
+			"/-/auth/passkey-recovery-sign-in-cmd-form",
 		}, req.URL.Path) {
 			return visitorCtx, nil, false, nil
 		} else {
@@ -481,21 +592,9 @@ func (qq *Router) context(
 			return visitorCtx, nil, true, nil
 		}
 	}
-	if req.URL.Path == "/" {
+	if req.URL.Path == "/" || req.URL.Path == "/register/" {
 		// authenticated, but accessing login page
-
-		// duplicate code in SignIn
-		tenantx, err := accountm.Data.
-			QueryTenantAssignment().
-			Where(tenantaccountassignment.IsDefault(true)).
-			QueryTenant().
-			Where(tenant.InitializedAtNotNil()).
-			Only(visitorCtx)
-		if err != nil {
-			http.Redirect(rw, req.Request, route2.Dashboard(), http.StatusSeeOther) // 302 or 303?
-		} else {
-			http.Redirect(rw, req.Request, route2.SpacesRoot(tenantx.PublicID.String()), http.StatusSeeOther) // 302 or 303?
-		}
+		http.Redirect(rw, req.Request, route2.Dashboard(), http.StatusSeeOther)
 		return visitorCtx, nil, true, nil
 	}
 
@@ -530,6 +629,25 @@ func (qq *Router) context(
 	}
 
 	mainCtx := ctxx.NewMainContext(visitorCtx, accountm.Data, qq.i18n, qq.mainDB, qq.tenantDBs, isReadOnly)
+	if isTemporarySession {
+		passkeyPolicy, err := accountm.PasskeyPolicy(mainCtx)
+		if err != nil {
+			log.Println(err)
+			return mainCtx, nil, false, err
+		}
+		isTenantPasskeyEnrollmentRequired := passkeyPolicy.IsTenantPasskeyEnrollmentRequired()
+
+		if isTenantPasskeyEnrollmentRequired && !qq.isSetupSessionPathAllowed(req.URL.Path) {
+			if req.Header.Get("HX-Request") != "" {
+				rw.Header().Set("HX-Redirect", route2.Dashboard())
+				return mainCtx, nil, true, nil
+			}
+
+			rw.AddRenderables(wx.NewSnackbarf("Please register a passkey to continue."))
+			http.Redirect(rw, req.Request, route2.Dashboard(), http.StatusSeeOther)
+			return mainCtx, nil, true, nil
+		}
+	}
 	if tenantID == "" { // spaceID doesn't have to be checked, can only be set if Tenant is set
 		return mainCtx, nil, false, nil
 	}
@@ -599,28 +717,58 @@ func (qq *Router) context(
 	return spaceCtx, tenantTx, false, nil
 }
 
+func (qq *Router) isSetupSessionPathAllowed(path string) bool {
+	return qq.setupSessionAllowedPaths[normalizeSetupSessionPath(path)]
+}
+
+func (qq *Router) allowSetupSessionPath(path string) {
+	qq.setupSessionAllowedPaths[normalizeSetupSessionPath(path)] = true
+}
+
+func setupSessionPathFromRoute(route string) string {
+	parts := strings.SplitN(route, " ", 2)
+	if len(parts) == 2 {
+		return parts[1]
+	}
+
+	return route
+}
+
+func normalizeSetupSessionPath(path string) string {
+	trimmedPath := strings.TrimSpace(path)
+	if trimmedPath == "" || trimmedPath == "/" {
+		return "/"
+	}
+
+	return strings.TrimSuffix(trimmedPath, "/")
+}
+
 var ErrSessionNotFound = errors.New("session not found")
 
-func (qq *Router) authenticateAccount(rw httpx.ResponseWriter, req *httpx.Request, mainTx *entmain.Tx) (*account.Account, bool, error) {
+func (qq *Router) authenticateAccount(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	mainTx *entmain.Tx,
+) (*account.Account, bool, bool, error) {
 	// reads only the value, all other fields have zero value
 	// this is the correct behavior, as only the name and value are send via HTTP
 	cookie, err := req.Cookie(cookiex.SessionCookieName())
 	if err != nil {
 		if errors.Is(err, http.ErrNoCookie) {
-			return nil, false, nil
+			return nil, false, false, nil
 		}
-		return nil, false, e.NewHTTPErrorf(http.StatusBadRequest, "Could not read cookie.")
+		return nil, false, false, e.NewHTTPErrorf(http.StatusBadRequest, "Could not read cookie.")
 	}
 
 	// doesn't do much because we only read the value...
 	if err = cookie.Valid(); err != nil {
 		cookiex.InvalidateSessionCookie(rw, qq.infra.SystemConfig().AllowInsecureCookies())
 		mainTx.Session.Delete().Where(session.Value(cookie.Value)).ExecX(req.Context())
-		return nil, false, e.NewHTTPErrorf(http.StatusBadRequest, "Cookie set but not valid.")
+		return nil, false, false, e.NewHTTPErrorf(http.StatusBadRequest, "Cookie set but not valid.")
 	}
 	if cookie.Value == "" {
 		// not sure if also checked with cookie.Valid()
-		return nil, false, e.NewHTTPErrorf(http.StatusBadRequest, "Cookie set but empty.")
+		return nil, false, false, e.NewHTTPErrorf(http.StatusBadRequest, "Cookie set but empty.")
 	}
 
 	sessionx, err := mainTx.Session.
@@ -628,8 +776,14 @@ func (qq *Router) authenticateAccount(rw httpx.ResponseWriter, req *httpx.Reques
 		Where(
 			session.Value(cookie.Value),
 			session.Or(
-				session.IsTemporarySession(true),
-				session.ExpiresAtGT(time.Now()),
+				session.And(
+					session.IsTemporarySession(true),
+					session.DeletableAtGT(time.Now()),
+				),
+				session.And(
+					session.IsTemporarySession(false),
+					session.ExpiresAtGT(time.Now()),
+				),
 			),
 		).
 		Only(req.Context())
@@ -642,11 +796,34 @@ func (qq *Router) authenticateAccount(rw httpx.ResponseWriter, req *httpx.Reques
 		// no need to delete in db, because wasn't found...
 
 		// TODO show message to user
-		return nil, false, ErrSessionNotFound
+		return nil, false, false, ErrSessionNotFound
 	}
 
 	accountx := sessionx.QueryAccount().OnlyX(req.Context())
 	accountm := account.NewAccount(accountx)
+
+	// TODO is this efficient enough to do on every request? or is there a better way to invalidate sessions
+	//		on tenant deletion?
+	if qq.infra.SystemConfig().IsSaaSModeEnabled() && accountx.Role == mainrole.User {
+		hasActiveTenantAssignment, err := tenantaccessmodel.NewTenantAccessService().HasActiveTenantAssignment(
+			req.Context(),
+			mainTx,
+			accountx.ID,
+		)
+		if err != nil {
+			log.Println(err)
+			return nil, false, false, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify organization access.")
+		}
+
+		if !hasActiveTenantAssignment {
+			cookiex.InvalidateSessionCookie(
+				rw,
+				qq.infra.SystemConfig().AllowInsecureCookies(),
+			)
+			mainTx.Session.Delete().Where(session.AccountID(accountx.ID)).ExecX(req.Context())
+			return nil, false, false, ErrSessionNotFound
+		}
+	}
 
 	cookie, isRenewed := cookiex.RenewSessionCookie(
 		rw,
@@ -663,7 +840,7 @@ func (qq *Router) authenticateAccount(rw httpx.ResponseWriter, req *httpx.Reques
 			ExecX(req.Context())
 	}
 
-	return accountm, true, nil
+	return accountm, true, sessionx.IsTemporarySession, nil
 }
 
 /*

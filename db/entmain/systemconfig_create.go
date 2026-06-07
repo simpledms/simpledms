@@ -276,6 +276,20 @@ func (_c *SystemConfigCreate) SetNillableOcrMaxFileSizeMib(v *int64) *SystemConf
 	return _c
 }
 
+// SetMaxUploadSizeMib sets the "max_upload_size_mib" field.
+func (_c *SystemConfigCreate) SetMaxUploadSizeMib(v int64) *SystemConfigCreate {
+	_c.mutation.SetMaxUploadSizeMib(v)
+	return _c
+}
+
+// SetNillableMaxUploadSizeMib sets the "max_upload_size_mib" field if the given value is not nil.
+func (_c *SystemConfigCreate) SetNillableMaxUploadSizeMib(v *int64) *SystemConfigCreate {
+	if v != nil {
+		_c.SetMaxUploadSizeMib(*v)
+	}
+	return _c
+}
+
 // SetInitializedAt sets the "initialized_at" field.
 func (_c *SystemConfigCreate) SetInitializedAt(v time.Time) *SystemConfigCreate {
 	_c.mutation.SetInitializedAt(v)
@@ -413,6 +427,10 @@ func (_c *SystemConfigCreate) defaults() {
 		v := systemconfig.DefaultOcrMaxFileSizeMib
 		_c.mutation.SetOcrMaxFileSizeMib(v)
 	}
+	if _, ok := _c.mutation.MaxUploadSizeMib(); !ok {
+		v := systemconfig.DefaultMaxUploadSizeMib
+		_c.mutation.SetMaxUploadSizeMib(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -482,6 +500,9 @@ func (_c *SystemConfigCreate) check() error {
 	}
 	if _, ok := _c.mutation.OcrMaxFileSizeMib(); !ok {
 		return &ValidationError{Name: "ocr_max_file_size_mib", err: errors.New(`entmain: missing required field "SystemConfig.ocr_max_file_size_mib"`)}
+	}
+	if _, ok := _c.mutation.MaxUploadSizeMib(); !ok {
+		return &ValidationError{Name: "max_upload_size_mib", err: errors.New(`entmain: missing required field "SystemConfig.max_upload_size_mib"`)}
 	}
 	return nil
 }
@@ -606,6 +627,10 @@ func (_c *SystemConfigCreate) createSpec() (*SystemConfig, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.OcrMaxFileSizeMib(); ok {
 		_spec.SetField(systemconfig.FieldOcrMaxFileSizeMib, field.TypeInt64, value)
 		_node.OcrMaxFileSizeMib = value
+	}
+	if value, ok := _c.mutation.MaxUploadSizeMib(); ok {
+		_spec.SetField(systemconfig.FieldMaxUploadSizeMib, field.TypeInt64, value)
+		_node.MaxUploadSizeMib = value
 	}
 	if value, ok := _c.mutation.InitializedAt(); ok {
 		_spec.SetField(systemconfig.FieldInitializedAt, field.TypeTime, value)

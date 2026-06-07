@@ -13,7 +13,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/space"
-	"github.com/simpledms/simpledms/model/common/fieldtype"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 )
 
 // PropertyCreate is the builder for creating a Property entity.

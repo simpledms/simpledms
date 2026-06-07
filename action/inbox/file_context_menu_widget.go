@@ -18,7 +18,7 @@ func NewFileContextMenuWidget(actions *Actions) *FileContextMenuWidget {
 }
 
 func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File) *wx.Menu {
-	// filem := model.NewFile(filex)
+	// filem := filemodel.NewFile(filex)
 	var menuItems []*wx.MenuItem
 
 	menuItems = append(menuItems,

@@ -10,12 +10,14 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/predicate"
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/systemconfig"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
 )
 
 // The Query interface represents an operation that queries a graph.
@@ -126,6 +128,33 @@ func (f TraverseMail) Traverse(ctx context.Context, q entmain.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *entmain.MailQuery", q)
+}
+
+// The PasskeyCredentialFunc type is an adapter to allow the use of ordinary function as a Querier.
+type PasskeyCredentialFunc func(context.Context, *entmain.PasskeyCredentialQuery) (entmain.Value, error)
+
+// Query calls f(ctx, q).
+func (f PasskeyCredentialFunc) Query(ctx context.Context, q entmain.Query) (entmain.Value, error) {
+	if q, ok := q.(*entmain.PasskeyCredentialQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *entmain.PasskeyCredentialQuery", q)
+}
+
+// The TraversePasskeyCredential type is an adapter to allow the use of ordinary function as Traverser.
+type TraversePasskeyCredential func(context.Context, *entmain.PasskeyCredentialQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraversePasskeyCredential) Intercept(next entmain.Querier) entmain.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraversePasskeyCredential) Traverse(ctx context.Context, q entmain.Query) error {
+	if q, ok := q.(*entmain.PasskeyCredentialQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *entmain.PasskeyCredentialQuery", q)
 }
 
 // The SessionFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -263,6 +292,33 @@ func (f TraverseTenantAccountAssignment) Traverse(ctx context.Context, q entmain
 	return fmt.Errorf("unexpected query type %T. expect *entmain.TenantAccountAssignmentQuery", q)
 }
 
+// The WebAuthnChallengeFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WebAuthnChallengeFunc func(context.Context, *entmain.WebAuthnChallengeQuery) (entmain.Value, error)
+
+// Query calls f(ctx, q).
+func (f WebAuthnChallengeFunc) Query(ctx context.Context, q entmain.Query) (entmain.Value, error) {
+	if q, ok := q.(*entmain.WebAuthnChallengeQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *entmain.WebAuthnChallengeQuery", q)
+}
+
+// The TraverseWebAuthnChallenge type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWebAuthnChallenge func(context.Context, *entmain.WebAuthnChallengeQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWebAuthnChallenge) Intercept(next entmain.Querier) entmain.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWebAuthnChallenge) Traverse(ctx context.Context, q entmain.Query) error {
+	if q, ok := q.(*entmain.WebAuthnChallengeQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *entmain.WebAuthnChallengeQuery", q)
+}
+
 // NewQuery returns the generic Query interface for the given typed query.
 func NewQuery(q entmain.Query) (Query, error) {
 	switch q := q.(type) {
@@ -270,6 +326,8 @@ func NewQuery(q entmain.Query) (Query, error) {
 		return &query[*entmain.AccountQuery, predicate.Account, account.OrderOption]{typ: entmain.TypeAccount, tq: q}, nil
 	case *entmain.MailQuery:
 		return &query[*entmain.MailQuery, predicate.Mail, mail.OrderOption]{typ: entmain.TypeMail, tq: q}, nil
+	case *entmain.PasskeyCredentialQuery:
+		return &query[*entmain.PasskeyCredentialQuery, predicate.PasskeyCredential, passkeycredential.OrderOption]{typ: entmain.TypePasskeyCredential, tq: q}, nil
 	case *entmain.SessionQuery:
 		return &query[*entmain.SessionQuery, predicate.Session, session.OrderOption]{typ: entmain.TypeSession, tq: q}, nil
 	case *entmain.SystemConfigQuery:
@@ -280,6 +338,8 @@ func NewQuery(q entmain.Query) (Query, error) {
 		return &query[*entmain.TenantQuery, predicate.Tenant, tenant.OrderOption]{typ: entmain.TypeTenant, tq: q}, nil
 	case *entmain.TenantAccountAssignmentQuery:
 		return &query[*entmain.TenantAccountAssignmentQuery, predicate.TenantAccountAssignment, tenantaccountassignment.OrderOption]{typ: entmain.TypeTenantAccountAssignment, tq: q}, nil
+	case *entmain.WebAuthnChallengeQuery:
+		return &query[*entmain.WebAuthnChallengeQuery, predicate.WebAuthnChallenge, webauthnchallenge.OrderOption]{typ: entmain.TypeWebAuthnChallenge, tq: q}, nil
 	default:
 		return nil, fmt.Errorf("unknown query type %T", q)
 	}

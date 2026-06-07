@@ -14,11 +14,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/systemconfig"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
+	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -81,11 +83,13 @@ func checkColumn(t, c string) error {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			account.Table:                 account.ValidColumn,
 			mail.Table:                    mail.ValidColumn,
+			passkeycredential.Table:       passkeycredential.ValidColumn,
 			session.Table:                 session.ValidColumn,
 			systemconfig.Table:            systemconfig.ValidColumn,
 			temporaryfile.Table:           temporaryfile.ValidColumn,
 			tenant.Table:                  tenant.ValidColumn,
 			tenantaccountassignment.Table: tenantaccountassignment.ValidColumn,
+			webauthnchallenge.Table:       webauthnchallenge.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

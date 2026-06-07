@@ -65,6 +65,96 @@
             "fuzzy": true
         },
         {
+            "id": "unlimited",
+            "message": "unlimited",
+            "translation": "illimité",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Global upload limit updated to {UploadLimitLabel}.",
+            "message": "Global upload limit updated to {UploadLimitLabel}.",
+            "translation": "La limite d'envoi globale a été mise à jour à {UploadLimitLabel}.",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "UploadLimitLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "uploadLimitLabel"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Save",
+            "message": "Save",
+            "translation": "Enregistrer",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unlimited",
+            "message": "Unlimited",
+            "translation": "Illimité",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size (MiB)",
+            "message": "Max upload size (MiB)",
+            "translation": "Taille maximale d'envoi (MiB)",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Set global upload limit",
+            "message": "Set global upload limit",
+            "translation": "Définir la limite d'envoi globale",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "global default",
+            "message": "global default",
+            "translation": "valeur globale par défaut",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant upload limit updated to {UploadLimitLabel}.",
+            "message": "Tenant upload limit updated to {UploadLimitLabel}.",
+            "translation": "La limite d'envoi de l'organisation a été mise à jour à {UploadLimitLabel}.",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "UploadLimitLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "uploadLimitLabel"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Use global default",
+            "message": "Use global default",
+            "translation": "Utiliser la valeur globale par défaut",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Set tenant upload limit",
+            "message": "Set tenant upload limit",
+            "translation": "Définir la limite d'envoi de l'organisation",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Unlock app",
             "message": "Unlock app",
             "translation": "Déverrouiller l'application",
@@ -76,6 +166,20 @@
             "message": "App unlocked.",
             "translation": "Application déverrouillée.",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to perform this action.",
+            "message": "You must be logged in to perform this action.",
+            "translation": "Tu dois être connecté pour effectuer cette action.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Only admins and supporters can run assisted passkey recovery.",
+            "message": "Only admins and supporters can run assisted passkey recovery.",
+            "translation": "Seuls les admins et les supporters peuvent executer la recuperation assistee de Passkey.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -107,6 +211,27 @@
             "fuzzy": true
         },
         {
+            "id": "You must be logged in to manage passkeys.",
+            "message": "You must be logged in to manage passkeys.",
+            "translation": "Vous devez etre connecte pour gerer les Passkeys.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkeys cannot be removed because a tenant requires passkey login.",
+            "message": "Passkeys cannot be removed because a tenant requires passkey login.",
+            "translation": "Les Passkeys ne peuvent pas etre supprimes, car une organisation exige la connexion avec Passkey.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "All passkeys were removed.",
+            "message": "All passkeys were removed.",
+            "translation": "Toutes les Passkeys ont ete supprimees.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Clear temporary password",
             "message": "Clear temporary password",
             "translation": "Effacer le mot de passe temporaire",
@@ -121,17 +246,17 @@
             "fuzzy": true
         },
         {
-            "id": "You are not allowed to delete this account.",
-            "message": "You are not allowed to delete this account.",
-            "translation": "Vous n'êtes pas autorisé à supprimer ce compte.",
-            "translatorComment": "Translated from English by Junie",
+            "id": "A tenant requires passkey login, so at least one passkey must remain.",
+            "message": "A tenant requires passkey login, so at least one passkey must remain.",
+            "translation": "Une organisation exige la connexion avec Passkey, donc au moins un Passkey doit rester.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
-            "id": "Account deleted.",
-            "message": "Account deleted.",
-            "translation": "Compte supprimé.",
-            "translatorComment": "Translated from English by Junie",
+            "id": "Passkey removed.",
+            "message": "Passkey removed.",
+            "translation": "Passkey supprimee.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -156,6 +281,135 @@
             "fuzzy": true
         },
         {
+            "id": "Invalid request payload.",
+            "message": "Invalid request payload.",
+            "translation": "Charge utile de la requête non valide.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to view backup codes.",
+            "message": "You must be logged in to view backup codes.",
+            "translation": "Tu dois être connecté pour voir les codes Backup.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes are no longer available. Please generate a new set.",
+            "message": "The backup codes are no longer available. Please generate a new set.",
+            "translation": "Les codes Backup ne sont plus disponibles. Veuillez en générer un nouvel ensemble.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey backup codes",
+            "message": "Passkey backup codes",
+            "translation": "Codes Backup Passkey",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign in with backup code",
+            "message": "Sign in with backup code",
+            "translation": "Se connecter avec un code Backup",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign in",
+            "message": "Sign in",
+            "translation": "Se connecter",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
+            "message": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
+            "translation": "Connexion réussie. Il reste {RecoveryCodesCount} codes Backup.",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "RecoveryCodesCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "recoveryCodesCount"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to register a passkey.",
+            "message": "You must be logged in to register a passkey.",
+            "translation": "Vous devez etre connecte pour enregistrer un Passkey.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Register passkey",
+            "message": "Register passkey",
+            "translation": "Enregistrer une Passkey",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid passkey registration payload.",
+            "message": "Invalid passkey registration payload.",
+            "translation": "Charge utile d enregistrement Passkey invalide.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Too many passkey requests. Please try again shortly.",
+            "message": "Too many passkey requests. Please try again shortly.",
+            "translation": "Trop de requetes Passkey. Veuillez reessayer dans un instant.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid passkey response payload.",
+            "message": "Invalid passkey response payload.",
+            "translation": "Charge utile de reponse Passkey invalide.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to manage backup codes.",
+            "message": "You must be logged in to manage backup codes.",
+            "translation": "Tu dois être connecté pour gérer les codes Backup.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Rename passkey",
+            "message": "Rename passkey",
+            "translation": "Renommer la Passkey",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Rename",
+            "message": "Rename",
+            "translation": "Renommer",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey name is required.",
+            "message": "Passkey name is required.",
+            "translation": "Le nom de la Passkey est requis.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey renamed.",
+            "message": "Passkey renamed.",
+            "translation": "Passkey renommee.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Reset password",
             "message": "Reset password",
             "translation": "Réinitialiser le mot de passe",
@@ -170,17 +424,17 @@
             "fuzzy": true
         },
         {
-            "id": "Account not found.",
-            "message": "Account not found.",
-            "translation": "Compte non trouvé.",
-            "translatorComment": "Translated from English by Junie",
+            "id": "Too many password reset requests. Please try again shortly.",
+            "message": "Too many password reset requests. Please try again shortly.",
+            "translation": "Trop de demandes de réinitialisation de mot de passe. Veuillez réessayer dans un instant.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
-            "id": "A new temporary password was sent to your email address.",
-            "message": "A new temporary password was sent to your email address.",
-            "translation": "Un nouveau mot de passe temporaire a été envoyé à votre adresse e-mail.",
-            "translatorComment": "Translated from English by Junie",
+            "id": "If an account with this email exists, a new temporary password was sent.",
+            "message": "If an account with this email exists, a new temporary password was sent.",
+            "translation": "Si un compte avec cet e-mail existe, un nouveau mot de passe temporaire a été envoyé.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -198,24 +452,10 @@
             "fuzzy": true
         },
         {
-            "id": "Sign in",
-            "message": "Sign in",
-            "translation": "Se connecter",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Found no account for this email address.",
-            "message": "Found no account for this email address.",
-            "translation": "Aucun compte trouvé pour cette adresse e-mail.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Sign up now.",
-            "message": "Sign up now.",
-            "translation": "Inscrivez-vous maintenant.",
-            "translatorComment": "Translated from English by Junie",
+            "id": "Too many sign-in attempts. Please try again shortly.",
+            "message": "Too many sign-in attempts. Please try again shortly.",
+            "translation": "Trop de tentatives de connexion. Veuillez réessayer dans un instant.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -223,6 +463,27 @@
             "message": "Invalid credentials. Please try again.",
             "translation": "Identifiants invalides. Veuillez réessayer.",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not verify organization access.",
+            "message": "Could not verify organization access.",
+            "translation": "Impossible de vérifier l'accès à l'organisation.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Your organization is no longer active. Please contact support.",
+            "message": "Your organization is no longer active. Please contact support.",
+            "translation": "Votre organisation n'est plus active. Veuillez contacter le support.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey setup is required by your organization. Register a passkey now.",
+            "message": "Passkey setup is required by your organization. Register a passkey now.",
+            "translation": "Votre organisation exige la configuration d un Passkey. Enregistrez un Passkey maintenant.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -247,6 +508,13 @@
             "fuzzy": true
         },
         {
+            "id": "Sign in with passkey",
+            "message": "Sign in with passkey",
+            "translation": "Se connecter avec Passkey",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Forgot password?",
             "message": "Forgot password?",
             "translation": "Mot de passe oublié ?",
@@ -254,44 +522,16 @@
             "fuzzy": true
         },
         {
-            "id": "Don't have an account? Sign up.",
-            "message": "Don't have an account? Sign up.",
-            "translation": "Vous n'avez pas de compte ? Inscrivez-vous.",
-            "translatorComment": "Translated from English by Junie",
+            "id": "Use backup code",
+            "message": "Use backup code",
+            "translation": "Utiliser un code Backup",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Invalid session cookie.",
             "message": "Invalid session cookie.",
             "translation": "Cookie de session invalide.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Sign up [subject]",
-            "message": "Sign up [subject]",
-            "translation": "Inscription",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Sign up",
-            "message": "Sign up",
-            "translation": "S'inscrire",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Sign up is disabled.",
-            "message": "Sign up is disabled.",
-            "translation": "L'inscription est désactivée.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Registration successful, please check your email for your password.",
-            "message": "Registration successful, please check your email for your password.",
-            "translation": "Inscription réussie, veuillez vérifier votre e-mail pour votre mot de passe.",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -348,13 +588,6 @@
             "fuzzy": true
         },
         {
-            "id": "Save",
-            "message": "Save",
-            "translation": "Enregistrer",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "file is not a directory",
             "message": "file is not a directory",
             "translation": "le fichier n'est pas un répertoire",
@@ -371,7 +604,9 @@
         {
             "id": "Files",
             "message": "Files",
-            "translation": ""
+            "translation": "Fichiers",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Upload file",
@@ -472,10 +707,126 @@
             "fuzzy": true
         },
         {
-            "id": "Rename",
-            "message": "Rename",
-            "translation": "Renommer",
-            "translatorComment": "Translated from English by Junie",
+            "id": "Duplicate check is still being prepared for this file.",
+            "message": "Duplicate check is still being prepared for this file.",
+            "translation": "La vérification des doublons est encore en préparation pour ce fichier.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No duplicates found.",
+            "message": "No duplicates found.",
+            "translation": "Aucun doublon trouvé.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Duplicates found",
+            "message": "Duplicates found",
+            "translation": "Doublons trouvés",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "This file already exists in the following {Matches} locations:",
+            "message": "This file already exists in the following {Matches} locations:",
+            "translation": "Ce fichier existe déjà aux {Matches} emplacements suivants :",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "Matches",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "len(result.Matches)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Space: {SpaceName}",
+            "message": "Space: {SpaceName}",
+            "translation": "Space: {SpaceName}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "SpaceName",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(match.SpaceName)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Folder: {ParentDirName}",
+            "message": "Folder: {ParentDirName}",
+            "translation": "Dossier : {ParentDirName}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "ParentDirName",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(match.ParentDirName)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Uploaded {LanguageBCP47}",
+            "message": "Uploaded {LanguageBCP47}",
+            "translation": "Téléversé le {LanguageBCP47}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "timex.NewDateTime(match.UploadedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Current version {VersionNumber}",
+            "message": "Current version {VersionNumber}",
+            "translation": "Version actuelle {VersionNumber}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "VersionNumber",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "match.VersionNumber"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Version {VersionNumber}",
+            "message": "Version {VersionNumber}",
+            "translation": "Version {VersionNumber}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "VersionNumber",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "match.VersionNumber"
+                }
+            ],
             "fuzzy": true
         },
         {
@@ -578,6 +929,23 @@
             "fuzzy": true
         },
         {
+            "id": "Created {LanguageBCP47}",
+            "message": "Created {LanguageBCP47}",
+            "translation": "Créé le {LanguageBCP47}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "timex.NewDateTime(filex.CreatedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "rendering failed",
             "message": "rendering failed",
             "translation": "échec du rendu",
@@ -628,6 +996,27 @@
             "fuzzy": true
         },
         {
+            "id": "Loading more...",
+            "message": "Loading more...",
+            "translation": "Chargement en cours...",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Name",
+            "message": "Name",
+            "translation": "Nom",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Type",
+            "message": "Type",
+            "translation": "Type",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Metadata",
             "message": "Metadata",
             "translation": "Métadonnées",
@@ -635,9 +1024,44 @@
             "fuzzy": true
         },
         {
+            "id": "Date",
+            "message": "Date",
+            "translation": "Date",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Size",
+            "message": "Size",
+            "translation": "Taille",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Tags",
             "message": "Tags",
             "translation": "Tags",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No data available.",
+            "message": "No data available.",
+            "translation": "Aucune donnée disponible.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Yes",
+            "message": "Yes",
+            "translation": "Oui",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No",
+            "message": "No",
+            "translation": "Non",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -652,6 +1076,20 @@
             "id": "Versions",
             "message": "Versions",
             "translation": "Versions",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Duplicates",
+            "message": "Duplicates",
+            "translation": "Doublons",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not load duplicates.",
+            "message": "Could not load duplicates.",
+            "translation": "Impossible de charger les doublons.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -680,90 +1118,6 @@
             "id": "Added new version from inbox.",
             "message": "Added new version from inbox.",
             "translation": "Nouvelle version ajoutée depuis l'Inbox.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Source and target must be different files.",
-            "message": "Source and target must be different files.",
-            "translation": "Les fichiers source et cible doivent être différents.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "File does not belong to current space.",
-            "message": "File does not belong to current space.",
-            "translation": "Le fichier n'appartient pas à l'Space actuel.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Cannot merge directories.",
-            "message": "Cannot merge directories.",
-            "translation": "Impossible de fusionner les répertoires.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file is deleted.",
-            "message": "Source file is deleted.",
-            "translation": "Le fichier source est supprimé.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file has no versions.",
-            "message": "Source file has no versions.",
-            "translation": "Le fichier source n'a pas de versions.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not read source version.",
-            "message": "Could not read source version.",
-            "translation": "Impossible de lire la version source.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file has no stored file.",
-            "message": "Source file has no stored file.",
-            "translation": "Le fichier source n'a pas de fichier stocké.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not read target versions.",
-            "message": "Could not read target versions.",
-            "translation": "Impossible de lire les versions cibles.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not update target file.",
-            "message": "Could not update target file.",
-            "translation": "Impossible de mettre à jour le fichier cible.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file is not in inbox.",
-            "message": "Source file is not in inbox.",
-            "translation": "Le fichier source n'est pas dans l'Inbox.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not remove source versions.",
-            "message": "Could not remove source versions.",
-            "translation": "Impossible de supprimer les versions source.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not delete source file.",
-            "message": "Could not delete source file.",
-            "translation": "Impossible de supprimer le fichier source.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -894,13 +1248,6 @@
             "fuzzy": true
         },
         {
-            "id": "Loading more...",
-            "message": "Loading more...",
-            "translation": "Chargement en cours...",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "Back to parent folder",
             "message": "Back to parent folder",
             "translation": "Retour au dossier parent",
@@ -929,6 +1276,34 @@
                     "expr": "dir.Data.Name"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "Sort files",
+            "message": "Sort files",
+            "translation": "Trier les fichiers",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Change file list view",
+            "message": "Change file list view",
+            "translation": "Changer l'affichage de la liste des fichiers",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "List",
+            "message": "List",
+            "translation": "Liste",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Table",
+            "message": "Table",
+            "translation": "Tableau",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -1162,6 +1537,27 @@
             "fuzzy": true
         },
         {
+            "id": "Newest first",
+            "message": "Newest first",
+            "translation": "Le plus récent d'abord",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Oldest first",
+            "message": "Oldest first",
+            "translation": "Le plus ancien d'abord",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sort by name",
+            "message": "Sort by name",
+            "translation": "Trier par nom",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Not a ZIP archive.",
             "message": "Not a ZIP archive.",
             "translation": "Ce n'est pas une archive ZIP.",
@@ -1213,12 +1609,16 @@
         {
             "id": "Archive is too large.",
             "message": "Archive is too large.",
-            "translation": ""
+            "translation": "L'archive est trop volumineuse.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Could not verify archive size.",
             "message": "Could not verify archive size.",
-            "translation": ""
+            "translation": "Impossible de vérifier la taille de l'archive.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "End date is before the start date.",
@@ -1254,7 +1654,9 @@
         {
             "id": "Read-only request context required.",
             "message": "Read-only request context required.",
-            "translation": ""
+            "translation": "Contexte de requête en lecture seule requis.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "could not read file",
@@ -1357,6 +1759,13 @@
             "fuzzy": true
         },
         {
+            "id": "Account",
+            "message": "Account",
+            "translation": "Compte",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Open tasks",
             "message": "Open tasks",
             "translation": "Ouvrir les tâches",
@@ -1381,6 +1790,62 @@
             "fuzzy": true
         },
         {
+            "id": "No passkeys registered",
+            "message": "No passkeys registered",
+            "translation": "Aucune Passkey enregistree",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkeys",
+            "message": "Passkeys",
+            "translation": "Passkeys",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Register a passkey to enable passwordless sign in.",
+            "message": "Register a passkey to enable passwordless sign in.",
+            "translation": "Enregistrez un Passkey pour activer la connexion sans mot de passe.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Add a backup passkey",
+            "message": "Add a backup passkey",
+            "translation": "Ajoute une clé d’accès de secours",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey recommendation",
+            "message": "Passkey recommendation",
+            "translation": "Recommandation de clé d’accès",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Set up a second passkey on another device as backup in case one device is lost.",
+            "message": "Set up a second passkey on another device as backup in case one device is lost.",
+            "translation": "Configure une deuxième clé d’accès sur un autre appareil comme secours en cas de perte d’un appareil.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Regenerate backup codes",
+            "message": "Regenerate backup codes",
+            "translation": "Régénérer les codes Backup",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Regenerate backup codes? Existing codes will stop working.",
+            "message": "Regenerate backup codes? Existing codes will stop working.",
+            "translation": "Régénérer les codes Backup ? Les codes existants cesseront de fonctionner.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Account «{String}»",
             "message": "Account «{String}»",
             "translation": "Compte «{String}»",
@@ -1398,11 +1863,67 @@
             "fuzzy": true
         },
         {
+            "id": "Account «{String}», owned by «{OwningTenantName}»",
+            "message": "Account «{String}», owned by «{OwningTenantName}»",
+            "translation": "Compte «{String}», appartenant à «{OwningTenantName}»",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "String",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "ctx.MainCtx().Account.Email.String()"
+                },
+                {
+                    "id": "OwningTenantName",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "owningTenantName"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "System",
             "message": "System",
             "translation": "Système",
             "comment": "TODO admin, system or app?",
             "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey setup required",
+            "message": "Passkey setup required",
+            "translation": "Configuration Passkey requise",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Your organization requires passkey sign-in. Register a passkey to continue.",
+            "message": "Your organization requires passkey sign-in. Register a passkey to continue.",
+            "translation": "Votre organisation exige la connexion avec Passkey. Enregistrez un Passkey pour continuer.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "{RecoveryCodesCount} backup codes left",
+            "message": "{RecoveryCodesCount} backup codes left",
+            "translation": "Il reste {RecoveryCodesCount} codes Backup",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "RecoveryCodesCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "recoveryCodesCount"
+                }
+            ],
             "fuzzy": true
         },
         {
@@ -1441,6 +1962,20 @@
             "fuzzy": true
         },
         {
+            "id": "Quota usage",
+            "message": "Quota usage",
+            "translation": "Utilisation du quota",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unavailable",
+            "message": "Unavailable",
+            "translation": "Indisponible",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Space",
             "message": "Space",
             "translation": "Space",
@@ -1456,23 +1991,9 @@
             "fuzzy": true
         },
         {
-            "id": "Delete account",
-            "message": "Delete account",
-            "translation": "Supprimer le compte",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "No password set",
             "message": "No password set",
             "translation": "Aucun mot de passe défini",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Account",
-            "message": "Account",
-            "translation": "Compte",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1533,33 +2054,23 @@
             "fuzzy": true
         },
         {
-            "id": "{UsersCount} users",
-            "message": "{UsersCount} users",
-            "translation": "{UsersCount} utilisateurs",
-            "translatorComment": "Translated from English by Codex",
-            "placeholders": [
-                {
-                    "id": "UsersCount",
-                    "string": "%[1]d",
-                    "type": "int",
-                    "underlyingType": "int",
-                    "argNum": 1,
-                    "expr": "usersCount"
-                }
-            ],
-            "fuzzy": true
-        },
-        {
-            "id": "1 user",
-            "message": "1 user",
-            "translation": "1 utilisateur",
+            "id": "Delete organization",
+            "message": "Delete organization",
+            "translation": "Supprimer l'organisation",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
-            "id": "Manage users",
-            "message": "Manage users",
-            "translation": "Gérer les utilisateurs",
+            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "translation": "Êtes-vous sûr ? Cette organisation sera supprimée. Tous les comptes appartenant à cette organisation seront supprimés globalement.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Download backup",
+            "message": "Download backup",
+            "translation": "Télécharger la sauvegarde",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1599,9 +2110,92 @@
             "fuzzy": true
         },
         {
+            "id": "Created on {Format2006_01_02_1504}",
+            "message": "Created on {Format2006_01_02_1504}",
+            "translation": "Créé le {Format2006_01_02_1504}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "Format2006_01_02_1504",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "credentialx.CreatedAt.Format(\"2006-01-02 15:04\")"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Last used on {Format2006_01_02_1504}",
+            "message": "Last used on {Format2006_01_02_1504}",
+            "translation": "Dernière utilisation le {Format2006_01_02_1504}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "Format2006_01_02_1504",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "credentialx.LastUsedAt.Format(\"2006-01-02 15:04\")"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey",
+            "message": "Passkey",
+            "translation": "Passkey",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage upload limit",
+            "message": "Manage upload limit",
+            "translation": "Gérer la limite d'envoi",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Dashboard",
             "message": "Dashboard",
             "translation": "Tableau de bord",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Settings",
+            "message": "Settings",
+            "translation": "Paramètres",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Enable passkey enforcement",
+            "message": "Enable passkey enforcement",
+            "translation": "Activer l application des Passkeys",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "message": "Enable passkey enforcement for this organization? Members will need passkeys to sign in.",
+            "translation": "Activer l’application des Passkeys pour cette organisation ? Les membres devront utiliser des Passkeys pour se connecter.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Disable passkey enforcement",
+            "message": "Disable passkey enforcement",
+            "translation": "Desactiver l application des Passkeys",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "message": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "translation": "Désactiver l’application des Passkeys pour cette organisation ? Les membres pourront à nouveau utiliser des mots de passe si autorisé.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1627,20 +2221,45 @@
             "fuzzy": true
         },
         {
-            "id": "Field «{Name}» is already added to this document type.",
-            "message": "Field «{Name}» is already added to this document type.",
-            "translation": "Le champ «{Name}» est déjà ajouté à ce type de document.",
+            "id": "You must be an admin to access system settings.",
+            "message": "You must be an admin to access system settings.",
+            "translation": "Vous devez être administrateur pour accéder aux paramètres système.",
             "translatorComment": "Translated from English by Codex",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "propertyx.Name"
-                }
-            ],
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to manage organizations.",
+            "message": "You must be logged in to manage organizations.",
+            "translation": "Tu dois être connecté pour gérer les organisations.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Organization not found.",
+            "message": "Organization not found.",
+            "translation": "Organisation introuvable.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Only owners can change passkey enforcement.",
+            "message": "Only owners can change passkey enforcement.",
+            "translation": "Seuls les proprietaires peuvent modifier l application des Passkeys.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey enforcement enabled for organization.",
+            "message": "Passkey enforcement enabled for organization.",
+            "translation": "Application des Passkeys activee pour l organisation.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey enforcement disabled for organization.",
+            "message": "Passkey enforcement disabled for organization.",
+            "translation": "Application des Passkeys desactivee pour l organisation.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -1701,23 +2320,6 @@
             "message": "Add attribute",
             "translation": "Ajouter un attribut",
             "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Tag group «{Name}» is already added to this document type.",
-            "message": "Tag group «{Name}» is already added to this document type.",
-            "translation": "Le groupe d'Tags «{Name}» est déjà ajouté à ce type de document.",
-            "translatorComment": "Translated from English by Codex",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "tagx.Name"
-                }
-            ],
             "fuzzy": true
         },
         {
@@ -1825,20 +2427,6 @@
             "fuzzy": true
         },
         {
-            "id": "Import is only available for empty spaces.",
-            "message": "Import is only available for empty spaces.",
-            "translation": "L'importation est disponible uniquement pour les Spaces vides.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Please select at least one document type.",
-            "message": "Please select at least one document type.",
-            "translation": "Veuillez sélectionner au moins un type de document.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Document types imported.",
             "message": "Document types imported.",
             "translation": "Types de documents importés.",
@@ -1856,6 +2444,13 @@
             "id": "Import",
             "message": "Import",
             "translation": "Importer",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Import is only available for empty spaces.",
+            "message": "Import is only available for empty spaces.",
+            "translation": "L'importation est disponible uniquement pour les Spaces vides.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1919,13 +2514,6 @@
             "fuzzy": true
         },
         {
-            "id": "Mark as done",
-            "message": "Mark as done",
-            "translation": "Marquer comme terminé",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Reload metadata",
             "message": "Reload metadata",
             "translation": "Recharger les métadonnées",
@@ -1933,9 +2521,25 @@
             "fuzzy": true
         },
         {
+            "id": "Delete from inbox",
+            "message": "Delete from inbox",
+            "translation": "Supprimer de Inbox",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Mark as done",
+            "message": "Mark as done",
+            "translation": "Marquer comme terminé",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.",
             "message": "Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.",
-            "translation": ""
+            "translation": "La reconnaissance de texte (OCR) ne peut pas être appliquée car le fichier est trop volumineux, les suggestions sont basées uniquement sur le nom du fichier.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Text recognition (OCR) is not ready yet, suggestions are based on the filename only.",
@@ -1966,13 +2570,6 @@
             "fuzzy": true
         },
         {
-            "id": "Sort files",
-            "message": "Sort files",
-            "translation": "Trier les fichiers",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Search in «Inbox»",
             "message": "Search in «Inbox»",
             "translation": "Rechercher dans «Boîte de réception»",
@@ -1996,7 +2593,9 @@
         {
             "id": "File not found.",
             "message": "File not found.",
-            "translation": ""
+            "translation": "Fichier introuvable.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "File is not in inbox.",
@@ -2023,27 +2622,6 @@
             "fuzzy": true
         },
         {
-            "id": "Newest first",
-            "message": "Newest first",
-            "translation": "Le plus récent d'abord",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Oldest first",
-            "message": "Oldest first",
-            "translation": "Le plus ancien d'abord",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Sort by name",
-            "message": "Sort by name",
-            "translation": "Trier par nom",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Assign user to space",
             "message": "Assign user to space",
             "translation": "Attribuer un utilisateur à l'Space",
@@ -2065,16 +2643,23 @@
             "fuzzy": true
         },
         {
-            "id": "User is already assigned to this space.",
-            "message": "User is already assigned to this space.",
-            "translation": "L'utilisateur est déjà attribué à cet Space.",
+            "id": "User assigned to space successfully.",
+            "message": "User assigned to space successfully.",
+            "translation": "Utilisateur attribué à l'Space avec succès.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
-            "id": "User assigned to space successfully.",
-            "message": "User assigned to space successfully.",
-            "translation": "Utilisateur attribué à l'Space avec succès.",
+            "id": "Could not load users.",
+            "message": "Could not load users.",
+            "translation": "Impossible de charger les utilisateurs.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Please reload the page and try again.",
+            "message": "Please reload the page and try again.",
+            "translation": "Veuillez recharger la page et réessayer.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2090,6 +2675,13 @@
             "message": "Please create a user in the organization user management first.",
             "translation": "Veuillez d'abord créer un utilisateur dans la gestion des utilisateurs de l'organisation.",
             "comment": "TODO link",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage users",
+            "message": "Manage users",
+            "translation": "Gérer les utilisateurs",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2111,9 +2703,9 @@
             "fuzzy": true
         },
         {
-            "id": "Unassign user from space",
-            "message": "Unassign user from space",
-            "translation": "Désattribuer l'utilisateur de l'Space",
+            "id": "User is already assigned to this space.",
+            "message": "User is already assigned to this space.",
+            "translation": "L'utilisateur est déjà attribué à cet Space.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2121,6 +2713,13 @@
             "id": "You cannot unassign yourself from a space.",
             "message": "You cannot unassign yourself from a space.",
             "translation": "Vous ne pouvez pas vous désattribuer d'un Space.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unassign user from space",
+            "message": "Unassign user from space",
+            "translation": "Désattribuer l'utilisateur de l'Space",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2260,13 +2859,6 @@
             "fuzzy": true
         },
         {
-            "id": "A user with this email address already exists, please contact support if you want to add this user anyway.",
-            "message": "A user with this email address already exists, please contact support if you want to add this user anyway.",
-            "translation": "Un utilisateur avec cette adresse e-mail existe déjà, veuillez contacter l'assistance si vous souhaitez tout de même ajouter cet utilisateur.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.",
             "message": "Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.",
             "translation": "Le nouvel utilisateur a été créé avec succès. Le mot de passe a été envoyé à l'utilisateur par e-mail. Un propriétaire peut accéder à tous les Spaces sans configuration supplémentaire.",
@@ -2281,9 +2873,51 @@
             "fuzzy": true
         },
         {
+            "id": "You are not allowed to delete users. No organization selected.",
+            "message": "You are not allowed to delete users. No organization selected.",
+            "translation": "Vous n'êtes pas autorisé à supprimer des utilisateurs. Aucune organisation sélectionnée.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to delete users because you are not the owner.",
+            "message": "You are not allowed to delete users because you are not the owner.",
+            "translation": "Vous n'êtes pas autorisé à supprimer des utilisateurs parce que vous n'êtes pas propriétaire.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "User removed from organization and account deleted globally.",
+            "message": "User removed from organization and account deleted globally.",
+            "translation": "Utilisateur retiré de l'organisation et compte supprimé globalement.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "User removed from organization.",
+            "message": "User removed from organization.",
+            "translation": "Utilisateur retiré de l'organisation.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Manage users of tenant",
             "message": "Manage users of tenant",
             "translation": "Gérer les utilisateurs du locataire",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization only.",
+            "message": "Are you sure? This user will be removed from this organization only.",
+            "translation": "Êtes-vous sûr ? Cet utilisateur sera retiré uniquement de cette organisation.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
+            "message": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
+            "translation": "Êtes-vous sûr ? Cet utilisateur sera retiré de cette organisation et le compte sera supprimé globalement.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2293,6 +2927,45 @@
             "translation": "Ajouter un nouvel utilisateur",
             "comment": "TODO Create or add? system or real world perspective?",
             "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Member account",
+            "message": "Member account",
+            "translation": "Compte membre",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Owned account",
+            "message": "Owned account",
+            "translation": "Compte propriétaire",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "{NameSecondLine} - {OwnershipText}",
+            "message": "{NameSecondLine} - {OwnershipText}",
+            "translation": "{NameSecondLine} - {OwnershipText}",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "NameSecondLine",
+                    "string": "%[1]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 1,
+                    "expr": "wx.Tu(userm.NameSecondLine())"
+                },
+                {
+                    "id": "OwnershipText",
+                    "string": "%[2]s",
+                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "argNum": 2,
+                    "expr": "ownershipText"
+                }
+            ],
             "fuzzy": true
         },
         {
@@ -2348,6 +3021,34 @@
             "id": "Files uploaded, please select a space.",
             "message": "Files uploaded, please select a space.",
             "translation": "Fichiers téléversés, veuillez sélectionner un Space.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File uploaded, please select a space.",
+            "message": "File uploaded, please select a space.",
+            "translation": "Fichier téléversé, veuillez sélectionner un Space.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Import URL",
+            "message": "Import URL",
+            "translation": "Importer une URL",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Import file from URL",
+            "message": "Import file from URL",
+            "translation": "Importer un fichier depuis une URL",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Download and continue",
+            "message": "Download and continue",
+            "translation": "Télécharger et continuer",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2490,12 +3191,16 @@
         {
             "id": "The requested page was not found.",
             "message": "The requested page was not found.",
-            "translation": ""
+            "translation": "La page demandée est introuvable.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "The requested page could not be loaded.",
             "message": "The requested page could not be loaded.",
-            "translation": ""
+            "translation": "La page demandée n'a pas pu être chargée.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "«{Name}» assigned.",
@@ -2562,13 +3267,6 @@
                     "expr": "tagx.Name"
                 }
             ],
-            "fuzzy": true
-        },
-        {
-            "id": "Cannot add a tag group as child.",
-            "message": "Cannot add a tag group as child.",
-            "translation": "Impossible d'ajouter un groupe d'Tags comme enfant.",
-            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -2763,13 +3461,6 @@
             "fuzzy": true
         },
         {
-            "id": "Name",
-            "message": "Name",
-            "translation": "Nom",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Notes",
             "message": "Notes",
             "translation": "Notes",
@@ -2909,6 +3600,13 @@
             "fuzzy": true
         },
         {
+            "id": "Upload is too large.",
+            "message": "Upload is too large.",
+            "translation": "Le téléversement est trop volumineux.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "cannot parse file",
             "message": "cannot parse file",
             "translation": "impossible d'analyser le fichier",
@@ -2965,37 +3663,6 @@
             "fuzzy": true
         },
         {
-            "id": "Tenant database not found.",
-            "message": "Tenant database not found.",
-            "translation": ""
-        },
-        {
-            "id": "Could not start transaction.",
-            "message": "Could not start transaction.",
-            "translation": ""
-        },
-        {
-            "id": "Could not save file.",
-            "message": "Could not save file.",
-            "translation": "Impossible d'enregistrer le fichier.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "File already exists.",
-            "message": "File already exists.",
-            "translation": "Le fichier existe déjà.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Accepted",
-            "message": "Accepted",
-            "translation": "Accepté",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Active tab",
             "message": "Active tab",
             "translation": "Onglet actif",
@@ -3027,6 +3694,34 @@
             "id": "Austria",
             "message": "Austria",
             "translation": "Autriche",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Backup code",
+            "message": "Backup code",
+            "translation": "Code Backup",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Belgium",
+            "message": "Belgium",
+            "translation": "Belgique",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Built in column",
+            "message": "Built in column",
+            "translation": "Colonne intégrée",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Bulgaria",
+            "message": "Bulgaria",
+            "translation": "Bulgarie",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3073,9 +3768,9 @@
             "fuzzy": true
         },
         {
-            "id": "Country",
-            "message": "Country",
-            "translation": "Pays",
+            "id": "Croatia",
+            "message": "Croatia",
+            "translation": "Croatie",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3094,9 +3789,16 @@
             "fuzzy": true
         },
         {
-            "id": "Date",
-            "message": "Date",
-            "translation": "Date",
+            "id": "Cyprus",
+            "message": "Cyprus",
+            "translation": "Chypre",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Czech republic",
+            "message": "Czech republic",
+            "translation": "République tchèque",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3111,6 +3813,13 @@
             "id": "Delete on success",
             "message": "Delete on success",
             "translation": "Supprimer en cas de succès",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Denmark",
+            "message": "Denmark",
+            "translation": "Danemark",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3143,6 +3852,13 @@
             "fuzzy": true
         },
         {
+            "id": "Estonia",
+            "message": "Estonia",
+            "translation": "Estonie",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Field",
             "message": "Field",
             "translation": "Champ",
@@ -3164,9 +3880,23 @@
             "fuzzy": true
         },
         {
+            "id": "Finland",
+            "message": "Finland",
+            "translation": "Finlande",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "First name",
             "message": "First name",
             "translation": "Prénom",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "France",
+            "message": "France",
+            "translation": "France",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3192,9 +3922,37 @@
             "fuzzy": true
         },
         {
+            "id": "Greece",
+            "message": "Greece",
+            "translation": "Grèce",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Group",
             "message": "Group",
             "translation": "Groupe",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Hungary",
+            "message": "Hungary",
+            "translation": "Hongrie",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Iceland",
+            "message": "Iceland",
+            "translation": "Islande",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Ireland",
+            "message": "Ireland",
+            "translation": "Irlande",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3206,9 +3964,23 @@
             "fuzzy": true
         },
         {
+            "id": "Is unlimited",
+            "message": "Is unlimited",
+            "translation": "Est illimité",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Italian",
             "message": "Italian",
             "translation": "Italien",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Italy",
+            "message": "Italy",
+            "translation": "Italie",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3227,6 +3999,13 @@
             "fuzzy": true
         },
         {
+            "id": "Latvia",
+            "message": "Latvia",
+            "translation": "Lettonie",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Layout",
             "message": "Layout",
             "translation": "Disposition",
@@ -3241,9 +4020,44 @@
             "fuzzy": true
         },
         {
+            "id": "Liechtenstein",
+            "message": "Liechtenstein",
+            "translation": "Liechtenstein",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Lithuania",
+            "message": "Lithuania",
+            "translation": "Lituanie",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Local",
             "message": "Local",
             "translation": "Local",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Luxembourg",
+            "message": "Luxembourg",
+            "translation": "Luxembourg",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Malta",
+            "message": "Malta",
+            "translation": "Malte",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size mib",
+            "message": "Max upload size mib",
+            "translation": "Taille max du téléversement MiB",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3258,6 +4072,13 @@
             "id": "Money value",
             "message": "Money value",
             "translation": "Valeur monétaire",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Netherlands",
+            "message": "Netherlands",
+            "translation": "Pays-Bas",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3297,6 +4118,20 @@
             "fuzzy": true
         },
         {
+            "id": "None",
+            "message": "None",
+            "translation": "Aucun",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Norway",
+            "message": "Norway",
+            "translation": "Norvège",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Number",
             "message": "Number",
             "translation": "Nombre",
@@ -3325,9 +4160,9 @@
             "fuzzy": true
         },
         {
-            "id": "Organization name",
-            "message": "Organization name",
-            "translation": "Nom de l'organisation",
+            "id": "Other",
+            "message": "Other",
+            "translation": "Autre",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3353,21 +4188,30 @@
             "fuzzy": true
         },
         {
-            "id": "Pending",
-            "message": "Pending",
-            "translation": "En attente",
+            "id": "Poland",
+            "message": "Poland",
+            "translation": "Pologne",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Portugal",
+            "message": "Portugal",
+            "translation": "Portugal",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
             "id": "Pro",
             "message": "Pro",
-            "translation": ""
+            "translation": "Pro",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
-            "id": "Rejected",
-            "message": "Rejected",
-            "translation": "Rejeté",
+            "id": "Reader",
+            "message": "Reader",
+            "translation": "Lecteur",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3375,6 +4219,13 @@
             "id": "Role",
             "message": "Role",
             "translation": "Rôle",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Romania",
+            "message": "Romania",
+            "translation": "Roumanie",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3393,9 +4244,37 @@
             "fuzzy": true
         },
         {
+            "id": "Show tags",
+            "message": "Show tags",
+            "translation": "Afficher les Tags",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Simple",
             "message": "Simple",
             "translation": "Simple",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Slovakia",
+            "message": "Slovakia",
+            "translation": "Slovaquie",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Slovenia",
+            "message": "Slovenia",
+            "translation": "Slovénie",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Spain",
+            "message": "Spain",
+            "translation": "Espagne",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3417,6 +4296,13 @@
             "id": "Supporter",
             "message": "Supporter",
             "translation": "Supporter",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sweden",
+            "message": "Sweden",
+            "translation": "Suède",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3463,14 +4349,23 @@
             "fuzzy": true
         },
         {
-            "id": "Trial",
-            "message": "Trial",
-            "translation": ""
+            "id": "Token",
+            "message": "Token",
+            "translation": "Jeton",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
-            "id": "Type",
-            "message": "Type",
-            "translation": "Type",
+            "id": "Trial",
+            "message": "Trial",
+            "translation": "Essai",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Url",
+            "message": "Url",
+            "translation": "URL",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3480,11 +4375,6 @@
             "translation": "Unité",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
-        },
-        {
-            "id": "Unlimited",
-            "message": "Unlimited",
-            "translation": ""
         },
         {
             "id": "User",
@@ -3522,6 +4412,90 @@
             "fuzzy": true
         },
         {
+            "id": "View mode",
+            "message": "View mode",
+            "translation": "Mode d'affichage",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Writer",
+            "message": "Writer",
+            "translation": "Rédacteur",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Properties",
+            "message": "Properties",
+            "translation": "Propriétés",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sizes",
+            "message": "Sizes",
+            "translation": "Tailles",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign up",
+            "message": "Sign up",
+            "translation": "S'inscrire",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Sign up [subject]",
+            "message": "Sign up [subject]",
+            "translation": "Inscription",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Free 30-day trial, no credit card required.",
+            "message": "Free 30-day trial, no credit card required.",
+            "translation": "Essai gratuit de 30 jours, sans carte de crédit requise.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Organization name",
+            "message": "Organization name",
+            "translation": "Nom de l'organisation",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Country",
+            "message": "Country",
+            "translation": "Pays",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Accept terms of service",
+            "message": "Accept terms of service",
+            "translation": "Accepter les conditions d'utilisation",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Accept privacy policy",
+            "message": "Accept privacy policy",
+            "translation": "Accepter la politique de confidentialité",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Registration successful, please check your emails for your password.",
+            "message": "Registration successful, please check your emails for your password.",
+            "translation": "Inscription réussie, veuillez vérifier vos e-mails pour votre mot de passe.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Imprint",
             "message": "Imprint",
             "translation": "Mentions légales",
@@ -3543,9 +4517,9 @@
             "fuzzy": true
         },
         {
-            "id": "file has no parent",
-            "message": "file has no parent",
-            "translation": "le fichier n'a pas de parent",
+            "id": "Passkey sign-in is required for this account.",
+            "message": "Passkey sign-in is required for this account.",
+            "translation": "La connexion avec Passkey est requise pour ce compte.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3557,9 +4531,9 @@
             "fuzzy": true
         },
         {
-            "id": "2FA code was provided, but 2FA is not enabled for this account.",
-            "message": "2FA code was provided, but 2FA is not enabled for this account.",
-            "translation": "Un code 2FA a été fourni, mais la 2FA n'est pas activée pour ce compte.",
+            "id": "Could not generate backup codes.",
+            "message": "Could not generate backup codes.",
+            "translation": "Impossible de générer les codes Backup.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3599,9 +4573,9 @@
             "fuzzy": true
         },
         {
-            "id": "Password must be at least eight characters long.",
-            "message": "Password must be at least eight characters long.",
-            "translation": "Le mot de passe doit comporter au moins huit caractères.",
+            "id": "Password must be at least twelve characters long.",
+            "message": "Password must be at least twelve characters long.",
+            "translation": "Le mot de passe doit contenir au moins douze caractères.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3609,6 +4583,607 @@
             "id": "Passwords do not match.",
             "message": "Passwords do not match.",
             "translation": "Les mots de passe ne correspondent pas.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid passkey sign-in.",
+            "message": "Invalid passkey sign-in.",
+            "translation": "Connexion Passkey invalide.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey sign-in failed.",
+            "message": "Passkey sign-in failed.",
+            "translation": "Echec de la connexion avec Passkey.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey login is not enabled for this account.",
+            "message": "Passkey login is not enabled for this account.",
+            "translation": "La connexion avec Passkey n est pas activee pour ce compte.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey registration failed.",
+            "message": "Passkey registration failed.",
+            "translation": "Echec de l enregistrement de la Passkey.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You need at least one passkey before creating backup codes.",
+            "message": "You need at least one passkey before creating backup codes.",
+            "translation": "Tu as besoin d’au moins un passkey avant de créer des codes Backup.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid backup sign-in credentials.",
+            "message": "Invalid backup sign-in credentials.",
+            "translation": "Identifiants de connexion Backup invalides.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Too many backup sign-in attempts. Please try again in 10 seconds.",
+            "message": "Too many backup sign-in attempts. Please try again in 10 seconds.",
+            "translation": "Trop de tentatives de connexion Backup. Réessaie dans 10 secondes.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Target account has no passkeys configured.",
+            "message": "Target account has no passkeys configured.",
+            "translation": "Le compte cible n a aucune Passkey configuree.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey not found.",
+            "message": "Passkey not found.",
+            "translation": "Passkey introuvable.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Account not found.",
+            "message": "Account not found.",
+            "translation": "Compte non trouvé.",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid passkey origin configuration.",
+            "message": "Invalid passkey origin configuration.",
+            "translation": "Configuration d origine Passkey invalide.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Missing passkey rp id configuration.",
+            "message": "Missing passkey rp id configuration.",
+            "translation": "Configuration de l ID RP Passkey manquante.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not initialize passkey service.",
+            "message": "Could not initialize passkey service.",
+            "translation": "Impossible d initialiser le service Passkey.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey challenge is invalid or expired.",
+            "message": "Passkey challenge is invalid or expired.",
+            "translation": "Le challenge Passkey est invalide ou expire.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unknown passkey credential.",
+            "message": "Unknown passkey credential.",
+            "translation": "Identifiant Passkey inconnu.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey account not found.",
+            "message": "Passkey account not found.",
+            "translation": "Compte Passkey introuvable.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "App already initialized.",
+            "message": "App already initialized.",
+            "translation": "L'application est déjà initialisée.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passphrase is required.",
+            "message": "Passphrase is required.",
+            "translation": "La phrase secrète est requise.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Your temporary password is",
+            "message": "Your temporary password is",
+            "translation": "Votre mot de passe temporaire est",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "It expires at",
+            "message": "It expires at",
+            "translation": "Expire le",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Note",
+            "message": "Note",
+            "translation": "Note",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Welcome to SimpleDMS",
+            "message": "Welcome to SimpleDMS",
+            "translation": "Bienvenue sur SimpleDMS",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "02-01-2006 at 15:04 o'clock",
+            "message": "02-01-2006 at 15:04 o'clock",
+            "translation": "02-01-2006 à 15:04",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "SimpleDMS password reset",
+            "message": "SimpleDMS password reset",
+            "translation": "Réinitialisation du mot de passe SimpleDMS",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "This is an automated message, please do not reply.",
+            "message": "This is an automated message, please do not reply.",
+            "translation": "Ceci est un message automatisé, veuillez ne pas répondre.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Your account has been created successfully.",
+            "message": "Your account has been created successfully.",
+            "translation": "Votre compte a été créé avec succès.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Please log in and change your password as soon as possible.",
+            "message": "Please log in and change your password as soon as possible.",
+            "translation": "Veuillez vous connecter et changer votre mot de passe dès que possible.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Open sign in page",
+            "message": "Open sign in page",
+            "translation": "Ouvrir la page de connexion",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "SimpleDMS Password Reset",
+            "message": "SimpleDMS Password Reset",
+            "translation": "Réinitialisation du mot de passe SimpleDMS",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "A password reset has been requested for your account.",
+            "message": "A password reset has been requested for your account.",
+            "translation": "Une réinitialisation du mot de passe a été demandée pour votre compte.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Your old password will still work until you change it.",
+            "message": "Your old password will still work until you change it.",
+            "translation": "Votre ancien mot de passe fonctionnera encore jusqu'à ce que vous le changiez.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "«{Name}» invited you to the tenant «{Name_1}».",
+            "message": "«{Name}» invited you to the tenant «{Name_1}».",
+            "translation": "«{Name}» vous a invité au locataire «{Name_1}».",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "accountm.Name()"
+                },
+                {
+                    "id": "Name_1",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "tenant.NewTenant(ctx.TenantCtx().Tenant).Name()"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "«{Name}» invited you.",
+            "message": "«{Name}» invited you.",
+            "translation": "«{Name}» vous a invité.",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "accountm.Name()"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "App is already unlocked.",
+            "message": "App is already unlocked.",
+            "translation": "L'application est déjà déverrouillée.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid passphrase.",
+            "message": "Invalid passphrase.",
+            "translation": "Phrase secrète invalide.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "App is not encrypted with passphrase.",
+            "message": "App is not encrypted with passphrase.",
+            "translation": "L'application n'est pas chiffrée avec une phrase secrète.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No passphrase set.",
+            "message": "No passphrase set.",
+            "translation": "Aucune phrase secrète définie.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "New passphrase is required.",
+            "message": "New passphrase is required.",
+            "translation": "La nouvelle phrase secrète est requise.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "New passphrase does not match confirmation.",
+            "message": "New passphrase does not match confirmation.",
+            "translation": "La nouvelle phrase secrète ne correspond pas à la confirmation.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Old passphrase is required.",
+            "message": "Old passphrase is required.",
+            "translation": "L'ancienne phrase secrète est requise.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size must be greater than or equal to 0.",
+            "message": "Max upload size must be greater than or equal to 0.",
+            "translation": "La taille max du téléversement doit être supérieure ou égale à 0.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not download file from URL.",
+            "message": "Could not download file from URL.",
+            "translation": "Impossible de télécharger le fichier depuis l’URL.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Processing of downloaded file failed.",
+            "message": "Processing of downloaded file failed.",
+            "translation": "Le traitement du fichier téléchargé a échoué.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid URL.",
+            "message": "Invalid URL.",
+            "translation": "URL invalide.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not determine filename.",
+            "message": "Could not determine filename.",
+            "translation": "Impossible de déterminer le nom du fichier.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "URL is required.",
+            "message": "URL is required.",
+            "translation": "L’URL est obligatoire.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Only HTTP and HTTPS URLs are allowed.",
+            "message": "Only HTTP and HTTPS URLs are allowed.",
+            "translation": "Seules les URL HTTP et HTTPS sont autorisées.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "URL credentials are not allowed.",
+            "message": "URL credentials are not allowed.",
+            "translation": "Les identifiants dans l’URL ne sont pas autorisés.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Local URLs are not allowed.",
+            "message": "Local URLs are not allowed.",
+            "translation": "Les URL locales ne sont pas autorisées.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Target host is not allowed.",
+            "message": "Target host is not allowed.",
+            "translation": "L’hôte cible n’est pas autorisé.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Too many redirects.",
+            "message": "Too many redirects.",
+            "translation": "Trop de redirections.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "App not unlocked yet. Please try again later.",
+            "message": "App not unlocked yet. Please try again later.",
+            "translation": "L'application n'est pas encore déverrouillée. Veuillez réessayer plus tard.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant not initialized yet. Please try again later.",
+            "message": "Tenant not initialized yet. Please try again later.",
+            "translation": "Le locataire n'est pas encore initialisé. Veuillez réessayer plus tard.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Error opening tenant database. Please try again later.",
+            "message": "Error opening tenant database. Please try again later.",
+            "translation": "Erreur lors de l'ouverture de la base de données du locataire. Veuillez réessayer plus tard.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "A user with this email address already exists, please contact support if you want to add this user anyway.",
+            "message": "A user with this email address already exists, please contact support if you want to add this user anyway.",
+            "translation": "Un utilisateur avec cette adresse e-mail existe déjà, veuillez contacter l'assistance si vous souhaitez tout de même ajouter cet utilisateur.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot delete your own user in organization management.",
+            "message": "You cannot delete your own user in organization management.",
+            "translation": "Vous ne pouvez pas supprimer votre propre utilisateur dans la gestion de l'organisation.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size must be greater than or equal to 0 MiB.",
+            "message": "Max upload size must be greater than or equal to 0 MiB.",
+            "translation": "La taille max du téléversement doit être supérieure ou égale à 0 MiB.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size is too large.",
+            "message": "Max upload size is too large.",
+            "translation": "La taille max du téléversement est trop grande.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
+            "message": "Max upload size must be greater than 0 MiB when unlimited is disabled.",
+            "translation": "La taille max du téléversement doit être supérieure à 0 MiB lorsque « Illimité » est désactivé.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant is required.",
+            "message": "Tenant is required.",
+            "translation": "Le locataire est obligatoire.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant not found.",
+            "message": "Tenant not found.",
+            "translation": "Locataire introuvable.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be logged in to manage upload limits.",
+            "message": "You must be logged in to manage upload limits.",
+            "translation": "Vous devez être connecté pour gérer les limites de téléversement.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You must be an admin to manage upload limits.",
+            "message": "You must be an admin to manage upload limits.",
+            "translation": "Vous devez être administrateur pour gérer les limites de téléversement.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Please select at least one document type.",
+            "message": "Please select at least one document type.",
+            "translation": "Veuillez sélectionner au moins un type de document.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Tag group «{Name}» is already added to this document type.",
+            "message": "Tag group «{Name}» is already added to this document type.",
+            "translation": "Le groupe d'Tags «{Name}» est déjà ajouté à ce type de document.",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "tagx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Field «{Name}» is already added to this document type.",
+            "message": "Field «{Name}» is already added to this document type.",
+            "translation": "Le champ «{Name}» est déjà ajouté à ce type de document.",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "propertyx.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "file has no parent",
+            "message": "file has no parent",
+            "translation": "le fichier n'a pas de parent",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Source and target must be different files.",
+            "message": "Source and target must be different files.",
+            "translation": "Les fichiers source et cible doivent être différents.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File does not belong to current space.",
+            "message": "File does not belong to current space.",
+            "translation": "Le fichier n'appartient pas à l'Space actuel.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Cannot merge directories.",
+            "message": "Cannot merge directories.",
+            "translation": "Impossible de fusionner les répertoires.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file is deleted.",
+            "message": "Source file is deleted.",
+            "translation": "Le fichier source est supprimé.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file has no versions.",
+            "message": "Source file has no versions.",
+            "translation": "Le fichier source n'a pas de versions.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not read source version.",
+            "message": "Could not read source version.",
+            "translation": "Impossible de lire la version source.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file has no stored file.",
+            "message": "Source file has no stored file.",
+            "translation": "Le fichier source n'a pas de fichier stocké.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not read target versions.",
+            "message": "Could not read target versions.",
+            "translation": "Impossible de lire les versions cibles.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not update target file.",
+            "message": "Could not update target file.",
+            "translation": "Impossible de mettre à jour le fichier cible.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Source file is not in inbox.",
+            "message": "Source file is not in inbox.",
+            "translation": "Le fichier source n'est pas dans l'Inbox.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not remove source versions.",
+            "message": "Could not remove source versions.",
+            "translation": "Impossible de supprimer les versions source.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not delete source file.",
+            "message": "Could not delete source file.",
+            "translation": "Impossible de supprimer le fichier source.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3692,12 +5267,16 @@
         {
             "id": "Detected cycle in directory tree.",
             "message": "Detected cycle in directory tree.",
-            "translation": ""
+            "translation": "Cycle détecté dans l'arborescence des répertoires.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Could not load path of file.",
             "message": "Could not load path of file.",
-            "translation": ""
+            "translation": "Impossible de charger le chemin du fichier.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Could not get object name.",
@@ -3728,6 +5307,13 @@
             "fuzzy": true
         },
         {
+            "id": "File already exists.",
+            "message": "File already exists.",
+            "translation": "Le fichier existe déjà.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Bucket name is empty.",
             "message": "Bucket name is empty.",
             "translation": "Le nom du bucket est vide.",
@@ -3742,6 +5328,13 @@
             "fuzzy": true
         },
         {
+            "id": "Could not save file.",
+            "message": "Could not save file.",
+            "translation": "Impossible d'enregistrer le fichier.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Could not get x25519 identity.",
             "message": "Could not get x25519 identity.",
             "translation": "Impossible d'obtenir l'identité x25519.",
@@ -3751,7 +5344,9 @@
         {
             "id": "Storage filename mismatch.",
             "message": "Storage filename mismatch.",
-            "translation": ""
+            "translation": "Le nom de fichier de stockage ne correspond pas.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "App not unlocked yet.",
@@ -3768,14 +5363,41 @@
             "fuzzy": true
         },
         {
+            "id": "Could not verify upload size limit.",
+            "message": "Could not verify upload size limit.",
+            "translation": "Impossible de vérifier la limite de taille de téléversement.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Upload is too large. Maximum allowed size is {FormatSizemaxUploadSizeBytes}.",
+            "message": "Upload is too large. Maximum allowed size is {FormatSizemaxUploadSizeBytes}.",
+            "translation": "Le téléversement est trop volumineux. La taille maximale autorisée est {FormatSizemaxUploadSizeBytes}.",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "FormatSizemaxUploadSizeBytes",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "fileutil.FormatSize(maxUploadSizeBytes)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "Could not verify storage limit.",
             "message": "Could not verify storage limit.",
-            "translation": ""
+            "translation": "Impossible de vérifier la limite de stockage.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
         },
         {
             "id": "Storage limit reached for this organization. Used: {FormatSizeusedBytes} of {FormatSizelimitBytes}.",
             "message": "Storage limit reached for this organization. Used: {FormatSizeusedBytes} of {FormatSizelimitBytes}.",
-            "translation": "",
+            "translation": "Limite de stockage atteinte pour cette organisation. Utilisé : {FormatSizeusedBytes} sur {FormatSizelimitBytes}.",
+            "translatorComment": "Translated from English by Codex",
             "placeholders": [
                 {
                     "id": "FormatSizeusedBytes",
@@ -3793,7 +5415,8 @@
                     "argNum": 2,
                     "expr": "fileutil.FormatSize(limitBytes)"
                 }
-            ]
+            ],
+            "fuzzy": true
         },
         {
             "id": "Invoice",
@@ -3932,13 +5555,6 @@
             "id": "Software",
             "message": "Software",
             "translation": "Logiciel",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Other",
-            "message": "Other",
-            "translation": "Autre",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -4356,6 +5972,13 @@
             "fuzzy": true
         },
         {
+            "id": "Rejected",
+            "message": "Rejected",
+            "translation": "Rejeté",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Expense status",
             "message": "Expense status",
             "translation": "Statut des frais",
@@ -4377,212 +6000,9 @@
             "fuzzy": true
         },
         {
-            "id": "Your temporary password is",
-            "message": "Your temporary password is",
-            "translation": "Votre mot de passe temporaire est",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "It expires at",
-            "message": "It expires at",
-            "translation": "Expire le",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Note",
-            "message": "Note",
-            "translation": "Note",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Welcome to SimpleDMS",
-            "message": "Welcome to SimpleDMS",
-            "translation": "Bienvenue sur SimpleDMS",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "02-01-2006 at 15:04 o'clock",
-            "message": "02-01-2006 at 15:04 o'clock",
-            "translation": "02-01-2006 à 15:04",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "SimpleDMS password reset",
-            "message": "SimpleDMS password reset",
-            "translation": "Réinitialisation du mot de passe SimpleDMS",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "This is an automated message, please do not reply.",
-            "message": "This is an automated message, please do not reply.",
-            "translation": "Ceci est un message automatisé, veuillez ne pas répondre.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Your account has been created successfully.",
-            "message": "Your account has been created successfully.",
-            "translation": "Votre compte a été créé avec succès.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Please log in and change your password as soon as possible.",
-            "message": "Please log in and change your password as soon as possible.",
-            "translation": "Veuillez vous connecter et changer votre mot de passe dès que possible.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "SimpleDMS Password Reset",
-            "message": "SimpleDMS Password Reset",
-            "translation": "Réinitialisation du mot de passe SimpleDMS",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "A password reset has been requested for your account.",
-            "message": "A password reset has been requested for your account.",
-            "translation": "Une réinitialisation du mot de passe a été demandée pour votre compte.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Your old password will still work until you change it.",
-            "message": "Your old password will still work until you change it.",
-            "translation": "Votre ancien mot de passe fonctionnera encore jusqu'à ce que vous le changiez.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "«{Name}» invited you to the tenant «{Name_1}».",
-            "message": "«{Name}» invited you to the tenant «{Name_1}».",
-            "translation": "«{Name}» vous a invité au locataire «{Name_1}».",
-            "translatorComment": "Translated from English by Codex",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "accountm.Name()"
-                },
-                {
-                    "id": "Name_1",
-                    "string": "%[2]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 2,
-                    "expr": "tenant.NewTenant(ctx.TenantCtx().Tenant).Name()"
-                }
-            ],
-            "fuzzy": true
-        },
-        {
-            "id": "«{Name}» invited you.",
-            "message": "«{Name}» invited you.",
-            "translation": "«{Name}» vous a invité.",
-            "translatorComment": "Translated from English by Codex",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "accountm.Name()"
-                }
-            ],
-            "fuzzy": true
-        },
-        {
-            "id": "App already initialized.",
-            "message": "App already initialized.",
-            "translation": "L'application est déjà initialisée.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Passphrase is required.",
-            "message": "Passphrase is required.",
-            "translation": "La phrase secrète est requise.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "App is already unlocked.",
-            "message": "App is already unlocked.",
-            "translation": "L'application est déjà déverrouillée.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Invalid passphrase.",
-            "message": "Invalid passphrase.",
-            "translation": "Phrase secrète invalide.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "App is not encrypted with passphrase.",
-            "message": "App is not encrypted with passphrase.",
-            "translation": "L'application n'est pas chiffrée avec une phrase secrète.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "No passphrase set.",
-            "message": "No passphrase set.",
-            "translation": "Aucune phrase secrète définie.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "New passphrase is required.",
-            "message": "New passphrase is required.",
-            "translation": "La nouvelle phrase secrète est requise.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "New passphrase does not match confirmation.",
-            "message": "New passphrase does not match confirmation.",
-            "translation": "La nouvelle phrase secrète ne correspond pas à la confirmation.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Old passphrase is required.",
-            "message": "Old passphrase is required.",
-            "translation": "L'ancienne phrase secrète est requise.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "App not unlocked yet. Please try again later.",
-            "message": "App not unlocked yet. Please try again later.",
-            "translation": "L'application n'est pas encore déverrouillée. Veuillez réessayer plus tard.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Tenant not initialized yet. Please try again later.",
-            "message": "Tenant not initialized yet. Please try again later.",
-            "translation": "Le locataire n'est pas encore initialisé. Veuillez réessayer plus tard.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Error opening tenant database. Please try again later.",
-            "message": "Error opening tenant database. Please try again later.",
-            "translation": "Erreur lors de l'ouverture de la base de données du locataire. Veuillez réessayer plus tard.",
+            "id": "Cannot add a tag group as child.",
+            "message": "Cannot add a tag group as child.",
+            "translation": "Impossible d'ajouter un groupe d'Tags comme enfant.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -4636,6 +6056,13 @@
             "fuzzy": true
         },
         {
+            "id": "Please register a passkey to continue.",
+            "message": "Please register a passkey to continue.",
+            "translation": "Veuillez enregistrer un Passkey pour continuer.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "You are not allowed to access this tenant.",
             "message": "You are not allowed to access this tenant.",
             "translation": "Vous n'êtes pas autorisé à accéder à ce locataire.",
@@ -4671,8 +6098,8 @@
             "fuzzy": true
         },
         {
-            "id": "Maintenance mode is enabled. Please wait until the app ready again.",
-            "message": "Maintenance mode is enabled. Please wait until the app ready again.",
+            "id": "Maintenance mode is enabled. Please wait until the app is ready again.",
+            "message": "Maintenance mode is enabled. Please wait until the app is ready again.",
             "translation": "Le mode maintenance est activé. Veuillez patienter jusqu'à ce que l'application soit à nouveau prête.",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
@@ -4682,6 +6109,13 @@
             "message": "Close",
             "translation": "Fermer",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Open main menu",
+            "message": "Open main menu",
+            "translation": "Ouvrir le menu principal",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -4699,9 +6133,51 @@
             "fuzzy": true
         },
         {
-            "id": "Open main menu",
-            "message": "Open main menu",
-            "translation": "Ouvrir le menu principal",
+            "id": "Misc",
+            "message": "Misc",
+            "translation": "Divers",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Manage space",
+            "message": "Manage space",
+            "translation": "Gérer le Space",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Spaces by Organization",
+            "message": "Spaces by Organization",
+            "translation": "Spaces par organisation",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Organizations",
+            "message": "Organizations",
+            "translation": "Organisations",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No backup codes were returned.",
+            "message": "No backup codes were returned.",
+            "translation": "Aucun code Backup n’a été renvoyé.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes were regenerated.",
+            "message": "The backup codes were regenerated.",
+            "translation": "Les codes Backup ont été régénérés.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not regenerate backup codes.",
+            "message": "Could not regenerate backup codes.",
+            "translation": "Impossible de régénérer les codes Backup.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -4735,6 +6211,125 @@
             "fuzzy": true
         },
         {
+            "id": "Give this passkey an optional name so you can recognize it later.",
+            "message": "Give this passkey an optional name so you can recognize it later.",
+            "translation": "Donnez a ce Passkey un nom facultatif pour le reconnaitre plus tard.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "message": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "translation": "Après l’inscription, des codes Backup imprimables seront affichés une seule fois. Enregistre-les avant de fermer.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "message": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "translation": "Après la configuration, la connexion par mot de passe est désactivée pour ce compte. Utilise plutôt les clés d’accès et les codes de secours.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey name (optional)",
+            "message": "Passkey name (optional)",
+            "translation": "Nom de la Passkey (facultatif)",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "message": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "translation": "Important : ces codes de secours ne sont affichés qu’une seule fois. Enregistre-les, imprime-les ou télécharge-les maintenant avant de fermer cette fenêtre.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "message": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "translation": "Si tu perds ces codes et ta clé d’accès, la récupération du compte pourrait ne plus être possible.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "SimpleDMS backup codes",
+            "message": "SimpleDMS backup codes",
+            "translation": "Codes de secours SimpleDMS",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Generated",
+            "message": "Generated",
+            "translation": "Généré",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Keep these backup codes in a secure place.",
+            "message": "Keep these backup codes in a secure place.",
+            "translation": "Garde ces codes de secours dans un endroit sûr.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "These codes are shown only once.",
+            "message": "These codes are shown only once.",
+            "translation": "Ces codes ne sont affichés qu’une seule fois.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Codes",
+            "message": "Codes",
+            "translation": "Codes",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Print dialog opened.",
+            "message": "Print dialog opened.",
+            "translation": "La boîte de dialogue d’impression est ouverte.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes were copied to clipboard.",
+            "message": "The backup codes were copied to clipboard.",
+            "translation": "Les codes Backup ont été copiés dans le presse-papiers.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not copy backup codes automatically.",
+            "message": "Could not copy backup codes automatically.",
+            "translation": "Les codes Backup n’ont pas pu être copiés automatiquement.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes were downloaded.",
+            "message": "The backup codes were downloaded.",
+            "translation": "Les codes Backup ont été téléchargés.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Print codes",
+            "message": "Print codes",
+            "translation": "Imprimer les codes",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Copy codes",
+            "message": "Copy codes",
+            "translation": "Copier les codes",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Auth cookie already set.",
             "message": "Auth cookie already set.",
             "translation": "Cookie d'authentification déjà défini.",
@@ -4753,6 +6348,20 @@
             "message": "You are not allowed to access the requested resource.",
             "translation": "Vous n'êtes pas autorisé à accéder à la ressource demandée.",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant database not found.",
+            "message": "Tenant database not found.",
+            "translation": "Base de données du tenant introuvable.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not start transaction.",
+            "message": "Could not start transaction.",
+            "translation": "Impossible de démarrer la transaction.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         }
     ]

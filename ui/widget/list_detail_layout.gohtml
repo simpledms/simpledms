@@ -30,6 +30,9 @@
 					listDetail.querySelectorAll('.js-list .js-list-item input:checked').forEach((elem) => {
 						elem.checked = false;
 					})
+					if (window.simpledmsClearSelectedTableRows) {
+						window.simpledmsClearSelectedTableRows(listDetail);
+					}
 				})
 
 			})();

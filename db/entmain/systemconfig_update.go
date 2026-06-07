@@ -346,6 +346,27 @@ func (_u *SystemConfigUpdate) AddOcrMaxFileSizeMib(v int64) *SystemConfigUpdate 
 	return _u
 }
 
+// SetMaxUploadSizeMib sets the "max_upload_size_mib" field.
+func (_u *SystemConfigUpdate) SetMaxUploadSizeMib(v int64) *SystemConfigUpdate {
+	_u.mutation.ResetMaxUploadSizeMib()
+	_u.mutation.SetMaxUploadSizeMib(v)
+	return _u
+}
+
+// SetNillableMaxUploadSizeMib sets the "max_upload_size_mib" field if the given value is not nil.
+func (_u *SystemConfigUpdate) SetNillableMaxUploadSizeMib(v *int64) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetMaxUploadSizeMib(*v)
+	}
+	return _u
+}
+
+// AddMaxUploadSizeMib adds value to the "max_upload_size_mib" field.
+func (_u *SystemConfigUpdate) AddMaxUploadSizeMib(v int64) *SystemConfigUpdate {
+	_u.mutation.AddMaxUploadSizeMib(v)
+	return _u
+}
+
 // SetInitializedAt sets the "initialized_at" field.
 func (_u *SystemConfigUpdate) SetInitializedAt(v time.Time) *SystemConfigUpdate {
 	_u.mutation.SetInitializedAt(v)
@@ -526,6 +547,12 @@ func (_u *SystemConfigUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if value, ok := _u.mutation.AddedOcrMaxFileSizeMib(); ok {
 		_spec.AddField(systemconfig.FieldOcrMaxFileSizeMib, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.MaxUploadSizeMib(); ok {
+		_spec.SetField(systemconfig.FieldMaxUploadSizeMib, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedMaxUploadSizeMib(); ok {
+		_spec.AddField(systemconfig.FieldMaxUploadSizeMib, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.InitializedAt(); ok {
 		_spec.SetField(systemconfig.FieldInitializedAt, field.TypeTime, value)
@@ -898,6 +925,27 @@ func (_u *SystemConfigUpdateOne) AddOcrMaxFileSizeMib(v int64) *SystemConfigUpda
 	return _u
 }
 
+// SetMaxUploadSizeMib sets the "max_upload_size_mib" field.
+func (_u *SystemConfigUpdateOne) SetMaxUploadSizeMib(v int64) *SystemConfigUpdateOne {
+	_u.mutation.ResetMaxUploadSizeMib()
+	_u.mutation.SetMaxUploadSizeMib(v)
+	return _u
+}
+
+// SetNillableMaxUploadSizeMib sets the "max_upload_size_mib" field if the given value is not nil.
+func (_u *SystemConfigUpdateOne) SetNillableMaxUploadSizeMib(v *int64) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetMaxUploadSizeMib(*v)
+	}
+	return _u
+}
+
+// AddMaxUploadSizeMib adds value to the "max_upload_size_mib" field.
+func (_u *SystemConfigUpdateOne) AddMaxUploadSizeMib(v int64) *SystemConfigUpdateOne {
+	_u.mutation.AddMaxUploadSizeMib(v)
+	return _u
+}
+
 // SetInitializedAt sets the "initialized_at" field.
 func (_u *SystemConfigUpdateOne) SetInitializedAt(v time.Time) *SystemConfigUpdateOne {
 	_u.mutation.SetInitializedAt(v)
@@ -1108,6 +1156,12 @@ func (_u *SystemConfigUpdateOne) sqlSave(ctx context.Context) (_node *SystemConf
 	}
 	if value, ok := _u.mutation.AddedOcrMaxFileSizeMib(); ok {
 		_spec.AddField(systemconfig.FieldOcrMaxFileSizeMib, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.MaxUploadSizeMib(); ok {
+		_spec.SetField(systemconfig.FieldMaxUploadSizeMib, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedMaxUploadSizeMib(); ok {
+		_spec.AddField(systemconfig.FieldMaxUploadSizeMib, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.InitializedAt(); ok {
 		_spec.SetField(systemconfig.FieldInitializedAt, field.TypeTime, value)

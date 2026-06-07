@@ -13,7 +13,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
-	"github.com/simpledms/simpledms/model/tagging/tagtype"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 )
 
 // TagCreate is the builder for creating a Tag entity.

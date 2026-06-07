@@ -4,12 +4,11 @@ import (
 	"fmt"
 
 	"entgo.io/ent/dialect/sql"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
-	"github.com/simpledms/simpledms/model"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -66,9 +65,9 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 		ocrSucceededAt = wx.Tu(timex.NewDateTime(*filem.Data.OcrSuccessAt).String(ctx.MainCtx().LanguageBCP47))
 	}
 
-	sha256 := wx.Tu("-")
-	if currentVersion.Data.Sha256 != "" {
-		sha256 = wx.Tu(currentVersion.Data.Sha256)
+	contentSHA256 := wx.Tu("-")
+	if currentVersion.Data.ContentSha256 != "" {
+		contentSHA256 = wx.Tu(currentVersion.Data.ContentSha256)
 	}
 
 	items := []*wx.ListItem{
@@ -82,7 +81,7 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 		},
 		{
 			Headline:       wx.T("SHA-256 hash"),
-			SupportingText: sha256,
+			SupportingText: contentSHA256,
 		},
 		{
 			Headline:       wx.T("Original filename"),
@@ -147,7 +146,7 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 	}
 }
 
-func (qq *FileInfoPartial) versionLabel(ctx ctxx.Context, filem *model.File) *wx.Text {
+func (qq *FileInfoPartial) versionLabel(ctx ctxx.Context, filem *filemodel.File) *wx.Text {
 	versionData := filem.Data.QueryFileVersions().Order(fileversion.ByVersionNumber(sql.OrderDesc())).FirstX(ctx)
 	return wx.Tu(fmt.Sprintf("%d", versionData.VersionNumber))
 }

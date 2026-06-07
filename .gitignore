@@ -15,3 +15,4 @@ test-results/
 .playwright/
 .playwright-cli/
 e2e/.auth/
+.agent-handoffs

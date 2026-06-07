@@ -44,7 +44,7 @@ type Actions struct {
 	Trash             *trash.Actions             `actions:"trash"`
 }
 
-func NewActions(infra *common.Infra, tenantDBs *tenantdbs.TenantDBs) *Actions {
+func NewActions(infra *common.Infra, tenantDBs *tenantdbs.TenantDBs, isDevMode bool) *Actions {
 	commonActions := acommon.NewActions(infra)
 	taggingActions := tagging.NewActions(infra, commonActions)
 	browseActions := browse.NewActions(infra, commonActions, taggingActions)
@@ -64,7 +64,7 @@ func NewActions(infra *common.Infra, tenantDBs *tenantdbs.TenantDBs) *Actions {
 		Spaces:            spacesActions,
 		Auth:              authActions,
 		Property:          property.NewActions(infra),
-		OpenFile:          openfile.NewActions(infra, commonActions, tenantDBs),
+		OpenFile:          openfile.NewActions(infra, commonActions, tenantDBs, isDevMode),
 		Admin:             adminActions,
 		ManageTags:        managetags.NewActions(infra, commonActions, taggingActions),
 		ManageTenantUsers: managetenantusers.NewActions(infra),

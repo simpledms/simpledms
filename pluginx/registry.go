@@ -54,6 +54,49 @@ func (qq *Registry) ExtendMenuItems(ctx ctxx.Context, items []*wx.MenuItem) []*w
 	return items
 }
 
+func (qq *Registry) ExtendNavigationDestinations(
+	ctx ctxx.Context,
+	destinations []*wx.NavigationDestination,
+) []*wx.NavigationDestination {
+	for _, plugin := range qq.Plugins() {
+		hook, ok := plugin.(ExtendNavigationDestinationsHook)
+		if !ok {
+			continue
+		}
+		destinations = hook.ExtendNavigationDestinations(ctx, destinations)
+	}
+	return destinations
+}
+
+func (qq *Registry) ExtendNavigationRailItems(
+	ctx ctxx.Context,
+	items []*wx.NavigationRailItem,
+) []*wx.NavigationRailItem {
+	for _, plugin := range qq.Plugins() {
+		hook, ok := plugin.(ExtendNavigationRailItemsHook)
+		if !ok {
+			continue
+		}
+		items = hook.ExtendNavigationRailItems(ctx, items)
+	}
+	return items
+}
+
+func (qq *Registry) ExtendNavigationRailFooterItems(
+	ctx ctxx.Context,
+	items []*wx.NavigationRailItem,
+	active string,
+) []*wx.NavigationRailItem {
+	for _, plugin := range qq.Plugins() {
+		hook, ok := plugin.(ExtendNavigationRailFooterItemsHook)
+		if !ok {
+			continue
+		}
+		items = hook.ExtendNavigationRailFooterItems(ctx, items, active)
+	}
+	return items
+}
+
 func (qq *Registry) EmitSignUp(ctx ctxx.Context, event SignUpEvent) error {
 	for _, plugin := range qq.Plugins() {
 		hook, ok := plugin.(OnSignUpHook)

@@ -4,6 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -54,11 +55,10 @@ func (qq *EditTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 		return err
 	}
 
-	tagx := ctx.TenantCtx().TTx.
-		Tag.
-		UpdateOneID(data.TagID).
-		SetName(data.Name).
-		SaveX(ctx)
+	tagx, err := taggingmodel.NewTagService().Edit(ctx, data.TagID, data.Name)
+	if err != nil {
+		return err
+	}
 
 	rw.Header().Set("HX-Trigger", event.TagUpdated.String())
 	rw.Header().Set("HX-Reswap", "none")

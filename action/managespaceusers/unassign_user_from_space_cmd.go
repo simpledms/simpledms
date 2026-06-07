@@ -6,8 +6,8 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
-	"github.com/simpledms/simpledms/model/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -21,8 +21,9 @@ type UnassignUserFromSpaceCmdData struct {
 }
 
 type UnassignUserFromSpaceCmd struct {
-	infra   *common.Infra
-	actions *Actions
+	infra           *common.Infra
+	actions         *Actions
+	spaceRepository spacemodel.SpaceRepository
 	*actionx.Config
 	*autil.FormHelper[UnassignUserFromSpaceCmdData]
 }
@@ -30,10 +31,11 @@ type UnassignUserFromSpaceCmd struct {
 func NewUnassignUserFromSpaceCmd(infra *common.Infra, actions *Actions) *UnassignUserFromSpaceCmd {
 	config := actionx.NewConfig(actions.Route("unassign-user-from-space-cmd"), false)
 	return &UnassignUserFromSpaceCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[UnassignUserFromSpaceCmdData](infra, config, wx.T("Unassign user from space")),
+		infra:           infra,
+		actions:         actions,
+		spaceRepository: spacemodel.NewEntSpaceRepository(),
+		Config:          config,
+		FormHelper:      autil.NewFormHelper[UnassignUserFromSpaceCmdData](infra, config, wx.T("Unassign user from space")),
 	}
 }
 
@@ -62,12 +64,14 @@ func (qq *UnassignUserFromSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 		)
 	}
 
-	assignment := ctx.SpaceCtx().Space.QueryUserAssignment().Where(spaceuserassignment.ID(data.UserAssignmentID)).OnlyX(ctx)
-	if assignment.UserID == ctx.SpaceCtx().User.ID {
-		return e.NewHTTPErrorf(http.StatusForbidden, "You cannot unassign yourself from a space.")
+	err = spacemodel.NewSpaceWithRepository(ctx.SpaceCtx().Space, qq.spaceRepository).UnassignUser(
+		ctx,
+		data.UserAssignmentID,
+		ctx.SpaceCtx().User.ID,
+	)
+	if err != nil {
+		return mapSpaceError(err)
 	}
-
-	ctx.SpaceCtx().TTx.SpaceUserAssignment.DeleteOneID(data.UserAssignmentID).ExecX(ctx)
 
 	rw.AddRenderables(wx.NewSnackbarf("User unassigned from space successfully."))
 	rw.Header().Set("HX-Trigger", event.UserUnassignedFromSpace.String())

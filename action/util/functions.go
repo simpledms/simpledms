@@ -11,16 +11,14 @@ import (
 
 	"github.com/go-playground/form"
 	"github.com/go-playground/validator/v10"
-
 	"github.com/google/uuid"
-
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/model/common/country"
-	"github.com/simpledms/simpledms/model/common/fieldtype"
-	"github.com/simpledms/simpledms/model/common/language"
-	"github.com/simpledms/simpledms/model/common/spacerole"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
-	"github.com/simpledms/simpledms/model/tagging/tagtype"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/util"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -158,6 +156,12 @@ func FormDataX[T any](
 		err := req.ParseMultipartForm(50 * 1024)
 		if err != nil {
 			log.Println(err)
+
+			var maxBytesErr *http.MaxBytesError
+			if errors.As(err, &maxBytesErr) {
+				return data, e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Upload is too large.")
+			}
+
 			return data, e.NewHTTPErrorf(http.StatusBadRequest, "cannot parse file")
 		}
 	} else {

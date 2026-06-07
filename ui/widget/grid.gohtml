@@ -5,6 +5,9 @@
 		{{ if .Heading }}
 			<div class="px-4">{{ render .GetContext .Heading }}</div>
 		{{ end }}
+		{{ if .Actions }}
+			<div>{{ render .GetContext .Actions }}</div>
+		{{ end }}
 		{{ if .Children }}
 			<div class="grid {{ .GetColumnsClass }} gap-4 px-2 md:px-0 py-0 md:py-2">
 				{{ render .GetContext .Children }}

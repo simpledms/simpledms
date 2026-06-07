@@ -4,6 +4,7 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -51,14 +52,15 @@ func (qq *AssignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 
-	assignment := ctx.TenantCtx().TTx.TagAssignment.Create().
-		SetFileID(filex.Data.ID).
-		SetTagID(data.TagID).
-		SetSpaceID(ctx.SpaceCtx().Space.ID).
-		// SetIsInherited(false).
-		SaveX(ctx)
-
-	tag := assignment.QueryTag().OnlyX(ctx)
+	tag, err := taggingmodel.NewTagService().AssignToFile(
+		ctx,
+		filex.Data.ID,
+		data.TagID,
+		ctx.SpaceCtx().Space.ID,
+	)
+	if err != nil {
+		return err
+	}
 
 	// must be set before writing to rw
 	rw.Header().Set("HX-Trigger", event.TagUpdated.String())

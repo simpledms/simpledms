@@ -59,10 +59,43 @@
 
 			// TODO external buttons
 			// TODO progress bar on top?
+			const restrictions = {};
+			if ({{ .MaxUploadSizeBytes }} > 0) {
+				restrictions.maxFileSize = {{ .MaxUploadSizeBytes }};
+			}
+
+			// Upload endpoints currently use the main HTML error renderer via snackbar.
+			// Try JSON first for future compatibility, then extract the snackbar text from HTML.
+			const parseUploadErrorMessage = (responseText) => {
+				if (!responseText) {
+					return '';
+				}
+
+				try {
+					const responseData = JSON.parse(responseText);
+					if (typeof responseData.error === 'string' && responseData.error.trim() !== '') {
+						return responseData.error.trim();
+					}
+					if (typeof responseData.message === 'string' && responseData.message.trim() !== '') {
+						return responseData.message.trim();
+					}
+				} catch (_error) {
+					// Not JSON, continue with HTML parsing.
+				}
+
+				const doc = new DOMParser().parseFromString(responseText, 'text/html');
+				const snackbarMessageElement = doc.querySelector('.js-snackbar .body-md');
+				if (!snackbarMessageElement || !snackbarMessageElement.textContent) {
+					return '';
+				}
+
+				return snackbarMessageElement.textContent.trim();
+			};
+
 			let uppy = new Uppy({
 				locale: locale,
 				autoProceed: true, // automatically start upload on selection
-				// TODO restrictions
+				restrictions: restrictions,
 			})
 			uppy.use(Dashboard, {
 				inline: true,
@@ -79,7 +112,7 @@
 				endpoint: '{{ .GetEndpoint }}',
 				fieldName: 'File',
 				limit: 5, // default value is 5
-				headers: { // TODO use htmx.ajax() instead?
+				headers: { // TODO use htmx.ajax() instead? if so, don't forget to handle timeouts
 					// necessary for creating context
 					'HX-Current-URL': location.href, // FIXME is this okay?
 					'HX-Request': 'true',
@@ -91,6 +124,21 @@
 					};
 				},
 				onAfterResponse: (xhr, retryCount) => {
+					// In the bundled @uppy/xhr-upload version, non-2xx responses become a generic
+					// network/upload error unless we throw here with a specific message.
+					if (xhr.status < 200 || xhr.status >= 300) {
+						const errorMessage = parseUploadErrorMessage(xhr.responseText);
+						if (errorMessage !== '') {
+							throw new Error(errorMessage);
+						}
+
+						if (xhr.statusText) {
+							throw new Error(xhr.statusText);
+						}
+
+						throw new Error('Upload failed.');
+					}
+
 					// TODO process snackbar
 					//console.log(xhr)
 					//htmx.process(xhr)
@@ -106,6 +154,24 @@
 					// uppy limits to max 3 retries, also if we always return true
 					return false;
 				}
+			}).on('upload-error', (file, error, response) => {
+				let errorMessage = '';
+				if (error && typeof error.message === 'string') {
+					errorMessage = error.message.trim();
+				}
+
+				if (errorMessage === '' && response && typeof response.responseText === 'string') {
+					errorMessage = parseUploadErrorMessage(response.responseText);
+				}
+
+				if (errorMessage === '') {
+					return;
+				}
+
+				// Keep feedback inside Uppy (not global snackbar): replace the generic informer
+				// text with the parsed backend message.
+				uppy.hideInfo();
+				uppy.info(errorMessage, 'error', 10000);
 			}).on('file-added', (file) => {
 				uppy.setFileMeta(file.id, {
 					{{- if .FileID }}

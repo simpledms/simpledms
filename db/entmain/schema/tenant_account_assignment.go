@@ -6,8 +6,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-
-	"github.com/simpledms/simpledms/model/common/tenantrole"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 )
 
 type TenantAccountAssignment struct {
@@ -25,6 +24,7 @@ func (TenantAccountAssignment) Fields() []ent.Field {
 		// - for shared target api and
 		// - open with
 		field.Bool("is_default").Default(false),
+		field.Bool("is_owning_tenant").Default(false),
 		field.Enum("role").GoType(tenantrole.User),
 		// can be used to invite a supporter
 		field.Time("expires_at").Optional().Nillable(), // TODO impl filter similar to deleted at
@@ -54,6 +54,10 @@ func (TenantAccountAssignment) Indexes() []ent.Index {
 		index.
 			Fields("account_id", "is_default").
 			Annotations(entsql.IndexWhere("`is_default` = true")).
+			Unique(),
+		index.
+			Fields("account_id", "is_owning_tenant").
+			Annotations(entsql.IndexWhere("`is_owning_tenant` = true")).
 			Unique(),
 	}
 }

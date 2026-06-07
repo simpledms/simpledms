@@ -2,16 +2,15 @@ package managespaceusers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
-	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model"
-	"github.com/simpledms/simpledms/model/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
+	usermodel "github.com/simpledms/simpledms/model/tenant/user"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
@@ -31,8 +30,9 @@ type AssignUserToSpaceCmdFormData struct {
 }
 
 type AssignUserToSpaceCmd struct {
-	infra   *common.Infra
-	actions *Actions
+	infra           *common.Infra
+	actions         *Actions
+	spaceRepository spacemodel.SpaceRepository
 	*actionx.Config
 	*autil.FormHelper[AssignUserToSpaceCmdData]
 }
@@ -40,10 +40,11 @@ type AssignUserToSpaceCmd struct {
 func NewAssignUserToSpaceCmd(infra *common.Infra, actions *Actions) *AssignUserToSpaceCmd {
 	config := actionx.NewConfig(actions.Route("assign-user-to-space-cmd"), false)
 	return &AssignUserToSpaceCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[AssignUserToSpaceCmdData](infra, config, wx.T("Assign user to space")),
+		infra:           infra,
+		actions:         actions,
+		spaceRepository: spacemodel.NewEntSpaceRepository(),
+		Config:          config,
+		FormHelper:      autil.NewFormHelper[AssignUserToSpaceCmdData](infra, config, wx.T("Assign user to space")),
 	}
 }
 
@@ -64,18 +65,11 @@ func (qq *AssignUserToSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		return e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to assign users to spaces because you aren't the owner.")
 	}
 
-	userx := ctx.SpaceCtx().TTx.User.Query().Where(user.PublicID(entx.NewCIText(data.UserID))).OnlyX(ctx)
-	if ctx.SpaceCtx().Space.QueryUserAssignment().Where(
-		spaceuserassignment.UserID(userx.ID),
-	).ExistX(ctx) {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "User is already assigned to this space.")
+	err = spacemodel.NewSpaceWithRepository(ctx.SpaceCtx().Space, qq.spaceRepository).
+		AssignUser(ctx, data.UserID, data.Role)
+	if err != nil {
+		return mapSpaceError(err)
 	}
-
-	ctx.SpaceCtx().TTx.SpaceUserAssignment.Create().
-		SetSpace(ctx.SpaceCtx().Space).
-		SetUserID(userx.ID).
-		SetRole(data.Role).
-		SaveX(ctx)
 
 	// TODO send message to user via Chat?
 	rw.AddRenderables(wx.NewSnackbarf("User assigned to space successfully."))
@@ -174,9 +168,16 @@ func (qq *AssignUserToSpaceCmd) userListItems(ctx ctxx.Context) interface{} {
 
 	var items []*wx.ListItem
 
-	unassignedUsers := ctx.TenantCtx().TTx.User.Query().WithSpaceAssignment().
-		Where(user.Not(user.HasSpaceAssignmentWith(spaceuserassignment.SpaceID(ctx.SpaceCtx().Space.ID)))).
-		AllX(ctx)
+	unassignedUsers, err := qq.spaceRepository.UnassignedUsers(ctx, ctx.SpaceCtx().Space.ID)
+	if err != nil {
+		log.Println(err)
+		return []*wx.ListItem{
+			{
+				Headline:       wx.T("Could not load users."),
+				SupportingText: wx.T("Please reload the page and try again."),
+			},
+		}
+	}
 
 	if len(unassignedUsers) == 0 {
 		items = append(items, &wx.ListItem{
@@ -187,7 +188,7 @@ func (qq *AssignUserToSpaceCmd) userListItems(ctx ctxx.Context) interface{} {
 	}
 
 	for _, unassignedUser := range unassignedUsers {
-		userm := model.NewUser(unassignedUser)
+		userm := usermodel.NewUser(unassignedUser)
 		items = append(items, &wx.ListItem{
 			RadioGroupName: "UserID",
 			RadioValue:     fmt.Sprintf("%s", unassignedUser.PublicID),

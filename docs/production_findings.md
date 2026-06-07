@@ -1,0 +1,27 @@
+# Production Findings
+
+## Bugs
+
+- [ ] Inbox: when a preview is opened on mobile and closed again, list position is not preserved
+- [ ] height of multi-line tag groups in filters is not correct; probably set NoOverflowHidden
+- [ ] when opening a second file with the PWA on Desktop, it doesn't upload the file. The first one works fine.
+- [ ] if an open file is deleted in Browse view, details are not closed...
+- [ ] http: superfluous response.WriteHeader call from github.com/gorilla/handlers.(*compressResponseWriter).WriteHeader (compress.go:26)
+  - when encryption is disabled
+- [ ] clicking twice on the "Tags" tab in the Browse view details renders the "Create new tag or group" button twice, one is not functional.
+- [ ] if passkey auth fails, there is raw html in the snackbar
+
+## UX
+
+- [ ] show login email address and app url on print for backup codes
+- [ ] add sort in Files view
+- [ ] On tag creation, tag type "Simple" should be preselected.
+- [ ] Add a loading indicator when file preview is loading
+- [ ] list should be hidden before sidebar overlay on smaller screens
+
+## Technical
+
+- [ ] partial package
+ 	- rename to widget? or move to common
+  		- suffix widget?
+- [ ] PWA: set theme_color and background

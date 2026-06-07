@@ -8,8 +8,8 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
-	"github.com/simpledms/simpledms/model/common/spacerole"
-	"github.com/simpledms/simpledms/model/common/tenantrole"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 )
 
 // having TTx in Context allows for easier replacement of ent with jet later
@@ -27,7 +27,7 @@ type SpaceContext struct {
 	// Tenant       *entmain.Tenant  // see Account
 	// StoragePath  string           // TODO belongs to context?
 	SpaceID             string           // Unsafe because only set for Get requests via router..., not for commands
-	Space               *enttenant.Space // TODO rename to NilableSpace?; model.Space?
+	Space               *enttenant.Space // TODO rename to NilableSpace?; spacemodel.Space?
 	nilableSpaceRootDir *enttenant.File  // TODO is ID enough? read on demand... but query is necessary anyway...
 }
 

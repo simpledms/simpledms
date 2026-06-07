@@ -1,16 +1,24 @@
 package inbox
 
 import (
+	"html/template"
 	"log"
+	"strconv"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
 
+	"github.com/simpledms/simpledms/action/browse"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/filesearch"
+	"github.com/simpledms/simpledms/db/enttenant/property"
+	"github.com/simpledms/simpledms/db/enttenant/tag"
+	"github.com/simpledms/simpledms/model/main/filelistpreference"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/partial"
@@ -19,6 +27,7 @@ import (
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/sqlutil"
 )
 
 type FilesListPartialData struct {
@@ -30,6 +39,10 @@ type FilesListPartialState struct {
 	// used in JS, thus don't change URL and as param name below
 	ActiveSideSheet string `url:"side_sheet,omitempty"`
 	SortBy          string `url:"sort_by,omitempty"` // TODO enum
+}
+
+func (qq *FilesListPartialState) isSortedByDate() bool {
+	return qq.SortBy == "" || qq.SortBy == "newestFirst" || qq.SortBy == "oldestFirst"
 }
 
 type FilesListPartial struct {
@@ -96,8 +109,49 @@ func (qq *FilesListPartial) Handler(
 			),
 		)
 	}
+	if req.Header.Get("Hx-Target") == "inboxLoadMore" {
+		offset, err := offsetFromRequest(req)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+
+		children, hasMore := qq.filesPage(ctx, state, offset)
+		return qq.infra.Renderer().Render(
+			rw,
+			ctx,
+			&wx.View{
+				Children: qq.filesListItemsFromFiles(ctx, state, data, offset, children, hasMore),
+			},
+		)
+	}
+	if req.Header.Get("Hx-Target") == "inboxLoadMoreTable" {
+		offset, err := offsetFromRequest(req)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+
+		children, hasMore := qq.filesPage(ctx, state, offset)
+		preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
+		return qq.infra.Renderer().Render(
+			rw,
+			ctx,
+			&wx.View{
+				Children: qq.fileTable(ctx, data, offset, children, hasMore, preferences).Rows,
+			},
+		)
+	}
 
 	return qq.infra.Renderer().Render(rw, ctx, qq.Widget(ctx, state, data.SelectedFileID))
+}
+
+func offsetFromRequest(req *httpx.Request) (int, error) {
+	offsetStr := req.URL.Query().Get("offset")
+	if offsetStr == "" {
+		return 0, nil
+	}
+	return strconv.Atoi(offsetStr)
 }
 
 func (qq *FilesListPartial) WidgetHandler(
@@ -157,6 +211,7 @@ func (qq *FilesListPartial) Widget(
 				// see comment on HTMXAttrs on ScrollableContent (FileList)
 				event.SortByUpdated.HandlerWithModifier("delay:100ms"), // TODO delay necessary?
 				event.FileMoved.Handler(),                              // because it also has to close details
+				event.FileDeleted.Handler(),                            // because it also has to close details
 			}, ", "),
 			HxInclude: "#search,#sortBy",
 		},
@@ -173,32 +228,19 @@ func (qq *FilesListPartial) filesList(
 	state *InboxPageState,
 	data *FilesListPartialData,
 ) renderable.Renderable {
-	var fileListItems []wx.IWidget
-
-	searchResultQuery := qq.filesQuery(ctx, state)
-	// TODO .Limit(25) // needs hint if enabled
-	children := searchResultQuery.AllX(ctx)
-
-	for _, child := range children {
-		if child.IsDirectory {
-			continue
-		}
-
-		fileListItems = append(fileListItems, qq.actions.FileListItemPartial.Widget(
-			ctx,
-			// route.InboxWithState(state),
-			route.Inbox,
-			child,
-			child.PublicID.String() == data.SelectedFileID,
-		))
-	}
+	children, hasMore := qq.filesPage(ctx, state, 0)
+	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
+	fileListItems := qq.filesListItemsFromFiles(ctx, state, data, 0, children, hasMore)
 
 	var content wx.IWidget
 	content = &wx.List{
 		Children: fileListItems,
 	}
+	if preferences.IsTable() && len(children) > 0 {
+		content = qq.fileTable(ctx, data, 0, children, hasMore, preferences)
+	}
 
-	if len(fileListItems) == 0 {
+	if len(children) == 0 {
 		content = &wx.EmptyState{
 			Icon:     wx.NewIcon("description"),
 			Headline: wx.T("No files available yet."),
@@ -250,11 +292,69 @@ func (qq *FilesListPartial) filesList(
 	}
 }
 
+func (qq *FilesListPartial) pageSize() int {
+	return 50
+}
+
+func (qq *FilesListPartial) filesPage(
+	ctx ctxx.Context,
+	state *InboxPageState,
+	offset int,
+) ([]*enttenant.File, bool) {
+	children := qq.filesQuery(ctx, state).
+		Offset(offset).
+		Limit(qq.pageSize() + 1).
+		AllX(ctx)
+	hasMore := len(children) > qq.pageSize()
+	if hasMore {
+		children = children[:qq.pageSize()]
+	}
+	return children, hasMore
+}
+
+func (qq *FilesListPartial) filesListItemsFromFiles(
+	ctx ctxx.Context,
+	state *InboxPageState,
+	data *FilesListPartialData,
+	offset int,
+	children []*enttenant.File,
+	hasMore bool,
+) []wx.IWidget {
+	fileListItems := make([]wx.IWidget, 0, len(children)+1)
+	for _, child := range children {
+		fileListItems = append(fileListItems, qq.actions.FileListItemPartial.Widget(
+			ctx,
+			// route.InboxWithState(state),
+			route.Inbox,
+			child,
+			child.PublicID.String() == data.SelectedFileID,
+			state.FilesListPartialState.isSortedByDate(),
+		))
+	}
+
+	if hasMore {
+		fileListItems = append(fileListItems, &wx.ListItem{
+			Widget: wx.Widget[wx.ListItem]{
+				ID: "inboxLoadMore",
+			},
+			Headline: wx.T("Loading more..."),
+			HTMXAttrs: wx.HTMXAttrs{
+				HxPost:    qq.Endpoint() + "?offset=" + strconv.Itoa(offset+qq.pageSize()),
+				HxVals:    util.JSON(data),
+				HxTrigger: "intersect once",
+				HxTarget:  "#inboxLoadMore",
+				HxSwap:    "outerHTML",
+				HxInclude: "#search,#sortBy",
+			},
+		})
+	}
+
+	return fileListItems
+}
+
 // LIMIT must be applied by caller
 func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) *enttenant.FileQuery {
-	searchResultQuery := ctx.TenantCtx().TTx.File.Query().
-		WithParent().
-		WithChildren() // necessary to count children
+	searchResultQuery := ctx.TenantCtx().TTx.File.Query()
 	/*Where(func(qs *sql.Selector) {
 		// subquery to select all files in search scope
 		fileInfoView := sql.Table(fileinfo.Table)
@@ -274,18 +374,32 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 	searchResultQuery = searchResultQuery.Where(
 		file.SpaceID(ctx.SpaceCtx().Space.ID),
 		file.IsInInbox(true),
+		file.IsDirectory(false),
 		/*file.HasSpaceAssignmentWith(
 			spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID),
 			spacefileassignment.IsInInbox(true),
 		),*/
 	)
 
-	if state.SearchQuery != "" {
-		// TODO necessary if not full text search? probably not
-		// searchQuerySanitized := sqlutil.FTSSafeAndQuery(state.SearchQuery, 300)
-
+	searchQuery := sqlutil.FTSSafeAndQuery(state.SearchQuery, 300)
+	if searchQuery != "" {
 		searchResultQuery = searchResultQuery.Where(
-			file.NameContains(state.SearchQuery),
+			func(qs *sql.Selector) {
+				fileSearchTable := sql.Table(filesearch.Table)
+
+				qs.Where(
+					sql.In(qs.C(file.FieldID),
+						sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
+							Where(
+								sql.And(
+									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
+									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+								),
+							).
+							OrderBy(fileSearchTable.C(filesearch.FieldRank)),
+					),
+				)
+			},
 		)
 	}
 
@@ -308,9 +422,10 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.AppBar {
 	return &wx.AppBar{
 		Leading:          wx.NewIcon("inbox"),
-		LeadingAltMobile: partial.NewMainMenu(ctx, qq.infra),
+		LeadingAltMobile: partial.NewNavigationRailToggle(),
 		Title:            wx.T("Inbox"),
 		Actions: []wx.IWidget{
+			qq.fileListViewButton(ctx),
 			&wx.IconButton{
 				Icon:     "sort",
 				Tooltip:  wx.T("Sort files"),
@@ -328,5 +443,198 @@ func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.
 				HxOn: event.SearchQueryUpdated.HxOnWithQueryParam("input", "q"),
 			},
 		},
+	}
+}
+
+func (qq *FilesListPartial) fileListViewButton(ctx ctxx.Context) *wx.IconButton {
+	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
+	return &wx.IconButton{
+		Icon:    "view_agenda",
+		Tooltip: wx.T("Change file list view"),
+		Children: qq.fileListViewMenu(
+			ctx,
+			preferences,
+			autil.QueryHeader(qq.Endpoint(), qq.Data("")),
+		),
+	}
+}
+
+func (qq *FilesListPartial) fileListViewMenu(
+	ctx ctxx.Context,
+	preferences *filelistpreference.FileListPreferences,
+	hxHeaders template.JS,
+) *wx.Menu {
+	items := []*wx.MenuItem{
+		qq.fileListViewMenuItem(wx.T("List"), "list", preferences.ViewMode == filelistpreference.FileListViewModeList, hxHeaders),
+		qq.fileListViewMenuItem(wx.T("Table"), "table", preferences.ViewMode == filelistpreference.FileListViewModeTable, hxHeaders),
+	}
+	if !preferences.IsTable() {
+		return &wx.Menu{
+			Widget: wx.Widget[wx.Menu]{
+				ID: "inboxFileListViewMenu",
+			},
+			Position: wx.PositionLeft,
+			Items:    items,
+		}
+	}
+
+	items = append(items, &wx.MenuItem{IsDivider: true})
+
+	for _, column := range []struct {
+		column filelistpreference.FileListColumn
+		label  *wx.Text
+	}{
+		{filelistpreference.FileListColumnName, wx.T("Name")},
+		{filelistpreference.FileListColumnOriginalFilename, wx.T("Original filename")},
+		{filelistpreference.FileListColumnDocumentType, wx.T("Type")},
+		{filelistpreference.FileListColumnMetadata, wx.T("Metadata")},
+		{filelistpreference.FileListColumnDate, wx.T("Date")},
+		{filelistpreference.FileListColumnSize, wx.T("Size")},
+	} {
+		items = append(items, qq.fileListColumnMenuItem(
+			column.label,
+			column.column.String(),
+			preferences.HasBuiltInColumn(column.column),
+			hxHeaders,
+		))
+	}
+
+	spaceColumns := preferences.SpaceColumnsFor(ctx.SpaceCtx().SpaceID)
+	showTags := !spaceColumns.ShowTags
+	items = append(items, qq.fileListTagsMenuItem(wx.T("Tags"), showTags, spaceColumns.ShowTags, hxHeaders))
+
+	tagGroups := ctx.SpaceCtx().Space.QueryTags().
+		Where(tag.TypeEQ(tagtype.Group)).
+		Order(tag.ByName()).
+		AllX(ctx)
+	if len(tagGroups) > 0 {
+		items = append(items, &wx.MenuItem{IsDivider: true})
+	}
+	for _, tagGroup := range tagGroups {
+		items = append(items, qq.fileListTagGroupMenuItem(
+			wx.Tu(tagGroup.Name),
+			tagGroup.ID,
+			spaceColumns.HasTagGroupID(tagGroup.ID),
+			hxHeaders,
+		))
+	}
+
+	properties := ctx.SpaceCtx().TTx.Property.Query().Order(property.ByName()).AllX(ctx)
+	if len(properties) > 0 {
+		items = append(items, &wx.MenuItem{IsDivider: true})
+	}
+	for _, propertyx := range properties {
+		items = append(items, qq.fileListPropertyMenuItem(
+			wx.Tu(propertyx.Name),
+			propertyx.ID,
+			spaceColumns.HasPropertyID(propertyx.ID),
+			hxHeaders,
+		))
+	}
+
+	return &wx.Menu{
+		Widget: wx.Widget[wx.Menu]{
+			ID: "inboxFileListViewMenu",
+		},
+		Position: wx.PositionLeft,
+		Items:    items,
+	}
+}
+
+func (qq *FilesListPartial) fileListViewMenuItem(
+	label *wx.Text,
+	viewMode string,
+	isSelected bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
+	data.ViewMode = viewMode
+	return &wx.MenuItem{
+		Label:          label,
+		RadioGroupName: "FileListViewMode",
+		RadioValue:     viewMode,
+		IsSelected:     isSelected,
+		HTMXAttrs:      qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *FilesListPartial) fileListColumnMenuItem(
+	label *wx.Text,
+	column string,
+	isChecked bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
+	data.BuiltInColumn = column
+	return &wx.MenuItem{
+		Label:         label,
+		CheckboxName:  "FileListColumn",
+		CheckboxValue: column,
+		IsChecked:     isChecked,
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *FilesListPartial) fileListTagsMenuItem(
+	label *wx.Text,
+	showTags bool,
+	isChecked bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
+	data.ShowTags = &showTags
+	return &wx.MenuItem{
+		Label:         label,
+		CheckboxName:  "FileListTags",
+		CheckboxValue: "tags",
+		IsChecked:     isChecked,
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *FilesListPartial) fileListPropertyMenuItem(
+	label *wx.Text,
+	propertyID int64,
+	isChecked bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
+	data.PropertyID = propertyID
+	return &wx.MenuItem{
+		Label:         label,
+		CheckboxName:  "FileListProperty",
+		CheckboxValue: strconv.FormatInt(propertyID, 10),
+		IsChecked:     isChecked,
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *FilesListPartial) fileListTagGroupMenuItem(
+	label *wx.Text,
+	tagGroupID int64,
+	isChecked bool,
+	hxHeaders template.JS,
+) *wx.MenuItem {
+	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
+	data.TagGroupID = tagGroupID
+	return &wx.MenuItem{
+		Label:         label,
+		CheckboxName:  "FileListTagGroup",
+		CheckboxValue: strconv.FormatInt(tagGroupID, 10),
+		IsChecked:     isChecked,
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+	}
+}
+
+func (qq *FilesListPartial) fileListPreferencesMenuItemAttrs(
+	data *browse.UpdateFileListPreferencesCmdData,
+	hxHeaders template.JS,
+) wx.HTMXAttrs {
+	return wx.HTMXAttrs{
+		HxPost:    qq.actions.Browse.UpdateFileListPreferencesCmd.Endpoint(),
+		HxVals:    util.JSON(data),
+		HxHeaders: hxHeaders,
+		HxTarget:  "#innerContent",
+		HxSwap:    "innerHTML",
 	}
 }

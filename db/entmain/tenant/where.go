@@ -9,8 +9,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/entmain/predicate"
 	"github.com/simpledms/simpledms/db/entx"
-	"github.com/simpledms/simpledms/model/common/country"
-	"github.com/simpledms/simpledms/model/common/plan"
+	"github.com/simpledms/simpledms/model/main/common/country"
+	"github.com/simpledms/simpledms/model/main/common/plan"
 )
 
 // ID filters vertices based on their ID field.
@@ -151,6 +151,16 @@ func PrivacyPolicyAccepted(v time.Time) predicate.Tenant {
 // TwoFactorAuthEnforced applies equality check predicate on the "two_factor_auth_enforced" field. It's identical to TwoFactorAuthEnforcedEQ.
 func TwoFactorAuthEnforced(v bool) predicate.Tenant {
 	return predicate.Tenant(sql.FieldEQ(FieldTwoFactorAuthEnforced, v))
+}
+
+// PasskeyAuthEnforced applies equality check predicate on the "passkey_auth_enforced" field. It's identical to PasskeyAuthEnforcedEQ.
+func PasskeyAuthEnforced(v bool) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldPasskeyAuthEnforced, v))
+}
+
+// MaxUploadSizeMibOverride applies equality check predicate on the "max_upload_size_mib_override" field. It's identical to MaxUploadSizeMibOverrideEQ.
+func MaxUploadSizeMibOverride(v int64) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldMaxUploadSizeMibOverride, v))
 }
 
 // X25519IdentityEncrypted applies equality check predicate on the "x25519_identity_encrypted" field. It's identical to X25519IdentityEncryptedEQ.
@@ -1171,6 +1181,66 @@ func TwoFactorAuthEnforcedEQ(v bool) predicate.Tenant {
 // TwoFactorAuthEnforcedNEQ applies the NEQ predicate on the "two_factor_auth_enforced" field.
 func TwoFactorAuthEnforcedNEQ(v bool) predicate.Tenant {
 	return predicate.Tenant(sql.FieldNEQ(FieldTwoFactorAuthEnforced, v))
+}
+
+// PasskeyAuthEnforcedEQ applies the EQ predicate on the "passkey_auth_enforced" field.
+func PasskeyAuthEnforcedEQ(v bool) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldPasskeyAuthEnforced, v))
+}
+
+// PasskeyAuthEnforcedNEQ applies the NEQ predicate on the "passkey_auth_enforced" field.
+func PasskeyAuthEnforcedNEQ(v bool) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNEQ(FieldPasskeyAuthEnforced, v))
+}
+
+// MaxUploadSizeMibOverrideEQ applies the EQ predicate on the "max_upload_size_mib_override" field.
+func MaxUploadSizeMibOverrideEQ(v int64) predicate.Tenant {
+	return predicate.Tenant(sql.FieldEQ(FieldMaxUploadSizeMibOverride, v))
+}
+
+// MaxUploadSizeMibOverrideNEQ applies the NEQ predicate on the "max_upload_size_mib_override" field.
+func MaxUploadSizeMibOverrideNEQ(v int64) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNEQ(FieldMaxUploadSizeMibOverride, v))
+}
+
+// MaxUploadSizeMibOverrideIn applies the In predicate on the "max_upload_size_mib_override" field.
+func MaxUploadSizeMibOverrideIn(vs ...int64) predicate.Tenant {
+	return predicate.Tenant(sql.FieldIn(FieldMaxUploadSizeMibOverride, vs...))
+}
+
+// MaxUploadSizeMibOverrideNotIn applies the NotIn predicate on the "max_upload_size_mib_override" field.
+func MaxUploadSizeMibOverrideNotIn(vs ...int64) predicate.Tenant {
+	return predicate.Tenant(sql.FieldNotIn(FieldMaxUploadSizeMibOverride, vs...))
+}
+
+// MaxUploadSizeMibOverrideGT applies the GT predicate on the "max_upload_size_mib_override" field.
+func MaxUploadSizeMibOverrideGT(v int64) predicate.Tenant {
+	return predicate.Tenant(sql.FieldGT(FieldMaxUploadSizeMibOverride, v))
+}
+
+// MaxUploadSizeMibOverrideGTE applies the GTE predicate on the "max_upload_size_mib_override" field.
+func MaxUploadSizeMibOverrideGTE(v int64) predicate.Tenant {
+	return predicate.Tenant(sql.FieldGTE(FieldMaxUploadSizeMibOverride, v))
+}
+
+// MaxUploadSizeMibOverrideLT applies the LT predicate on the "max_upload_size_mib_override" field.
+func MaxUploadSizeMibOverrideLT(v int64) predicate.Tenant {
+	return predicate.Tenant(sql.FieldLT(FieldMaxUploadSizeMibOverride, v))
+}
+
+// MaxUploadSizeMibOverrideLTE applies the LTE predicate on the "max_upload_size_mib_override" field.
+func MaxUploadSizeMibOverrideLTE(v int64) predicate.Tenant {
+	return predicate.Tenant(sql.FieldLTE(FieldMaxUploadSizeMibOverride, v))
+}
+
+// MaxUploadSizeMibOverrideIsNil applies the IsNil predicate on the "max_upload_size_mib_override" field.
+func MaxUploadSizeMibOverrideIsNil() predicate.Tenant {
+	return predicate.Tenant(sql.FieldIsNull(FieldMaxUploadSizeMibOverride))
+}
+
+// MaxUploadSizeMibOverrideNotNil applies the NotNil predicate on the "max_upload_size_mib_override" field.
+func MaxUploadSizeMibOverrideNotNil() predicate.Tenant {
+	return predicate.Tenant(sql.FieldNotNull(FieldMaxUploadSizeMibOverride))
 }
 
 // X25519IdentityEncryptedEQ applies the EQ predicate on the "x25519_identity_encrypted" field.
