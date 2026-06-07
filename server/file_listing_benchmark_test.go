@@ -597,18 +597,19 @@ func browseFTSListingQuery(
 							Where(
 								sql.And(
 									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
-									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+									sql.EQ(fileSearchTable.C(file.FieldSpaceID), spaceID),
+									sql.EQ(fileSearchTable.C(file.FieldIsInInbox), false),
 								),
-							).
-							OrderBy(fileSearchTable.C(filesearch.FieldRank)),
+							),
 					),
 				)
 			},
 		)
 	}
 
+	query = query.Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName())
+
 	return query.
-		Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName()).
 		Limit(51).
 		All(spaceCtx)
 }

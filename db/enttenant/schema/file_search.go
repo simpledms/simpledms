@@ -19,19 +19,33 @@ DROP TRIGGER IF EXISTS files_ad;
 DROP TRIGGER IF EXISTS files_au;
 --CREATE VIRTUAL TABLE file_searches USING fts5(file_id UNINDEXED, filename, is_directory UNINDEXED);
 --INSERT INTO file_searches SELECT id,name, is_directory FROM files;
-CREATE VIRTUAL TABLE file_searches USING fts5(name, ocr_content, content='files', content_rowid='id');
+CREATE VIRTUAL TABLE file_searches USING fts5(
+  space_id UNINDEXED,
+  is_directory UNINDEXED,
+  is_in_inbox UNINDEXED,
+  name,
+  ocr_content,
+  content='files',
+  content_rowid='id',
+  prefix='2 3 4',
+  tokenize='porter unicode61'
+);
 INSERT INTO file_searches(file_searches) VALUES ('rebuild'); -- sync index
 
 -- Triggers to keep the FTS index up to date.
 CREATE TRIGGER files_ai AFTER INSERT ON files BEGIN
-  INSERT INTO file_searches(rowid, name, ocr_content) VALUES (new.id, new.name, new.ocr_content);
+  INSERT INTO file_searches(rowid, space_id, is_directory, is_in_inbox, name, ocr_content)
+  VALUES (new.id, new.space_id, new.is_directory, new.is_in_inbox, new.name, new.ocr_content);
 END;
 CREATE TRIGGER files_ad AFTER DELETE ON files BEGIN
-  INSERT INTO file_searches(file_searches, rowid, name, ocr_content) VALUES('delete', old.id, old.name, old.ocr_content);
+  INSERT INTO file_searches(file_searches, rowid, space_id, is_directory, is_in_inbox, name, ocr_content)
+  VALUES('delete', old.id, old.space_id, old.is_directory, old.is_in_inbox, old.name, old.ocr_content);
 END;
 CREATE TRIGGER files_au AFTER UPDATE ON files BEGIN
-  INSERT INTO file_searches(file_searches, rowid, name, ocr_content) VALUES('delete', old.id, old.name, old.ocr_content);
-  INSERT INTO file_searches(rowid, name, ocr_content) VALUES (new.id, new.name, new.ocr_content);
+  INSERT INTO file_searches(file_searches, rowid, space_id, is_directory, is_in_inbox, name, ocr_content)
+  VALUES('delete', old.id, old.space_id, old.is_directory, old.is_in_inbox, old.name, old.ocr_content);
+  INSERT INTO file_searches(rowid, space_id, is_directory, is_in_inbox, name, ocr_content)
+  VALUES (new.id, new.space_id, new.is_directory, new.is_in_inbox, new.name, new.ocr_content);
 END;
 `
 }

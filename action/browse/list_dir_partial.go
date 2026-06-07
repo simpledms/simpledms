@@ -499,7 +499,7 @@ func (qq *ListDirPartial) filesListItems(
 		*/
 
 		// TODO give filename a higher priority?
-		searchResultQuery.Where(
+		searchResultQuery = searchResultQuery.Where(
 			func(qs *sql.Selector) {
 				fileSearchTable := sql.Table(filesearch.Table)
 
@@ -509,17 +509,16 @@ func (qq *ListDirPartial) filesListItems(
 							Where(
 								sql.And(
 									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), state.SearchQuery),
-									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+									sql.EQ(fileSearchTable.C(file.FieldSpaceID), ctx.SpaceCtx().Space.ID),
+									sql.EQ(fileSearchTable.C(file.FieldIsInInbox), false),
 								),
-							).
-							OrderBy(fileSearchTable.C(filesearch.FieldRank)),
+							),
 					),
 				)
 			},
 		)
 	}
 
-	// TODO use filesearch view instead and order by rank?
 	searchResultQuery = searchResultQuery.Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName())
 
 	var fileListItems []wx.IWidget

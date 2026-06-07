@@ -109,7 +109,6 @@ func (qq *FileAttributesPartial) Content(
 									// fileSearchTable.C(filesearch.FieldFileSearches),
 									// `'"' || replace(`+qs.C(documenttype.FieldName)+`, '"', '""') || '"'`,
 									// ),
-									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0), // TODO what is a good threshold?
 								),
 							),
 					),
@@ -348,7 +347,6 @@ func (qq *FileAttributesPartial) tagGroupAttributeBlock(
 										fileSearchTable.C(filesearch.FieldFileSearches)+" MATCH "+
 											`'"' || replace(`+qs.C(tag.FieldName)+`, '"', '""') || '"'`,
 									),
-									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
 								),
 							),
 					),
