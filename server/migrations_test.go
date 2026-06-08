@@ -8,6 +8,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
+	"github.com/simpledms/simpledms/common/tenantdbs"
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
 	"github.com/simpledms/simpledms/db/sqlx"
 )
@@ -135,6 +136,49 @@ func TestNormalizeMainDBBeforeDevSchemaCreateHandlesNullPasskeyRecoveryCodes(t *
 	}
 	if len(accountx.PasskeyRecoveryCodeHashes) != 0 {
 		t.Fatalf("expected empty passkey recovery code hashes, got %d", len(accountx.PasskeyRecoveryCodeHashes))
+	}
+}
+
+func TestMigrateTenantDatabasesDoesNotLeaveMissingTenantDBsInMaintenanceMode(t *testing.T) {
+	metaPath := t.TempDir()
+	migrationsMainFS, err := migratemain.NewMigrationsMainFS()
+	if err != nil {
+		t.Fatalf("new migrations fs: %v", err)
+	}
+
+	mainDB := dbMigrationsMainDB(true, metaPath, migrationsMainFS)
+	t.Cleanup(func() {
+		if err := mainDB.Close(); err != nil {
+			t.Fatalf("close main db: %v", err)
+		}
+	})
+
+	initializedTenant := createTenantWithPasskeyPolicy(
+		t,
+		mainDB,
+		"Initialized Tenant",
+		false,
+		true,
+	)
+	uninitializedTenant := createTenantWithPasskeyPolicy(
+		t,
+		mainDB,
+		"Uninitialized Tenant",
+		false,
+		false,
+	)
+
+	serverx := &Server{}
+	serverx.migrateTenantDatabases(context.Background(), mainDB, tenantdbs.NewTenantDBs())
+
+	initializedTenant = mainDB.ReadWriteConn.Tenant.GetX(context.Background(), initializedTenant.ID)
+	if initializedTenant.MaintenanceModeEnabledAt != nil {
+		t.Fatal("expected initialized tenant with missing DB to stay out of maintenance mode")
+	}
+
+	uninitializedTenant = mainDB.ReadWriteConn.Tenant.GetX(context.Background(), uninitializedTenant.ID)
+	if uninitializedTenant.MaintenanceModeEnabledAt != nil {
+		t.Fatal("expected uninitialized tenant to stay out of maintenance mode")
 	}
 }
 

@@ -194,7 +194,10 @@ func sqliteTableHasColumn(
 
 func dbMigrationsTenantDBs(mainDB *sqlx.MainDB, isDevMode bool, metaPath string) *tenantdbs.TenantDBs {
 	// TODO Where query shouldn't be necessary because of mixin, but it seems it is...
-	tenants := mainDB.ReadWriteConn.Tenant.Query().Where(tenant.DeletedAtIsNil()).AllX(context.Background())
+	tenants := mainDB.ReadWriteConn.Tenant.Query().Where(
+		tenant.DeletedAtIsNil(),
+		tenant.InitializedAtNotNil(),
+	).AllX(context.Background())
 	tenantDBs := tenantdbs.NewTenantDBs()
 
 	for _, tenant := range tenants {

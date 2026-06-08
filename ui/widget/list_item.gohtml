@@ -1,8 +1,9 @@
 {{- /*gotype: github.com/simpledms/simpledms/ui/widget.ListItem */}}
 {{- define "listItem" }}
-    {{- if .IsTypeRadio }}
+	{{- if .IsTypeRadio }}
 		<label for="radio-{{ .GetID }}"
-			   class="@container/list-item group/list-item state-layer-on-surface min-h-14 flex gap-x-4 flex-row items-center
+			   class="@container/list-item group/list-item rounded-[inherit]
+					state-layer-on-surface min-h-14 flex gap-x-4 flex-row items-center
 					has-[:checked]:bg-secondary-container
 					{{/* group-has filter because supporting text is hidden if no item is selected and
 					 	height must only applied if no two lines... should be refactored to
@@ -47,9 +48,9 @@
 			</div>
 		</label>
         {{ render .GetContext .ContextMenu }}
-    {{- else }}
+	{{- else }}
 		<div
-				class="@container/list-item state-layer-on-surface
+				class="@container/list-item rounded-[inherit] state-layer-on-surface
 					min-h-14 flex gap-x-4 flex-row items-center
 					{{ if ne .SupportingText nil }}h-[4.5rem]{{ end }}
 					{{ if .HTMXAttrs.IsLink }}cursor-pointer{{ else if .ContextMenu }}cursor-context-menu{{ end }}"
@@ -89,12 +90,13 @@
 {{ end }}
 
 {{- define "ListItem" }}
-    {{- if .IsCollapsible }}
+	{{- if .IsCollapsible }}
 		<div id="{{ .GetID }}" role="listitem"
 			 class="js-list-item"
+			 {{ if .IsSelected }}data-selected="true"{{ end }}
 		>
-			<details {{ if .IsOpen }}open{{ end }}>
-				<summary class="list-none cursor-pointer rounded-lg">
+			<details class="rounded-[inherit]" {{ if .IsOpen }}open{{ end }}>
+				<summary class="list-none cursor-pointer rounded-[inherit]">
                     {{ template "listItem" . }}
 				</summary>
 				<div class="ml-10">
@@ -109,9 +111,10 @@
     {{- else }}
 		<div id="{{ .GetID }}"
 			 class="js-list-item
-				{{ if .IsSelected | and (not .IsTypeRadio) }}bg-secondary-container{{ end }}
-				rounded-lg {{ .GetClass }}"
+				{{ if .IsSelected | and (not .IsTypeRadio) }}!bg-secondary-container{{ end }}
+				{{ .GetClass }}"
 			 role="listitem"
+			 {{ if .IsSelected }}data-selected="true"{{ end }}
 		>
             {{ template "listItem" . }}
 

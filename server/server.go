@@ -850,7 +850,11 @@ func (qq *Server) registerCoreRoutes(
 }
 
 func (qq *Server) migrateTenantDatabases(ctx context.Context, mainDB *sqlx.MainDB, tenantDBs *tenantdbs.TenantDBs) {
-	tenantsInMaintenanceMode := mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.MaintenanceModeEnabledAtNotNil()).CountX(ctx)
+	tenantsInMaintenanceMode := mainDB.ReadOnlyConn.Tenant.Query().Where(
+		tenant.DeletedAtIsNil(),
+		tenant.InitializedAtNotNil(),
+		tenant.MaintenanceModeEnabledAtNotNil(),
+	).CountX(ctx)
 	if tenantsInMaintenanceMode > 0 {
 		// TODO abort??
 		msg := `
@@ -868,21 +872,22 @@ END WARNING
 	}
 
 	// migrate all existing tenants to the newest db version
-	tenantsToMigrate := mainDB.ReadWriteConn.Tenant.Query().Where(tenant.MaintenanceModeEnabledAtIsNil()).AllX(ctx)
-	// FIXME enable only if migration is required... version can be read with migx.Version()
-	mainDB.ReadWriteConn.Tenant.Update().
-		SetMaintenanceModeEnabledAt(time.Now()).
-		Where(tenant.MaintenanceModeEnabledAtIsNil()).
-		ExecX(ctx)
+	tenantsToMigrate := mainDB.ReadWriteConn.Tenant.Query().Where(
+		tenant.DeletedAtIsNil(),
+		tenant.InitializedAtNotNil(),
+		tenant.MaintenanceModeEnabledAtIsNil(),
+	).AllX(ctx)
 
 	for _, tenantx := range tenantsToMigrate {
 		tenantm := tenant2.NewTenant(tenantx)
 		tenantDB, found := tenantDBs.Load(tenantm.Data.ID)
 		if !found {
-			// could happen if initialization fails; retries initialization automatically,
-			log.Println("tenant DB not found, could happen if initialization fails")
+			log.Println("tenant DB not found, skipping tenant database migration")
 			continue
 		}
+
+		// FIXME enable only if migration is required... version can be read with migx.Version()
+		tenantx.Update().SetMaintenanceModeEnabledAt(time.Now()).ExecX(ctx)
 
 		err := tenantm.ExecuteDBMigrations(qq.devMode, qq.metaPath, qq.migrationsTenantFS, tenantDB)
 		if err != nil {
