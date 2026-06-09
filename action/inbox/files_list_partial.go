@@ -276,6 +276,7 @@ func (qq *FilesListPartial) filesList(
 			HxVals:   util.JSON(data), // overrides form fields, must be added via HxInclude
 			HxTarget: "#" + qq.FileListID(),
 			HxSwap:   "outerHTML",
+			HxSync:   "this:replace",
 			HxTrigger: strings.Join([]string{
 				// SortByUpdated is handled separately because it has to update sortby
 				// context menu and the files list; sortby context menu is part of appbar and thus

@@ -93,6 +93,7 @@ func (qq *FileVersionFromInboxDialog) Widget(
 				HxTarget:  "#" + qq.listID(),
 				HxSelect:  "#" + qq.listID(),
 				HxSwap:    "outerHTML",
+				HxSync:    "this:replace",
 				HxTrigger: fmt.Sprintf("input from:#%s delay:150ms", qq.searchID()),
 				HxInclude: "#" + qq.searchID() + ", #" + qq.formID(),
 			},

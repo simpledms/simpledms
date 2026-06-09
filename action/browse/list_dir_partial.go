@@ -336,6 +336,7 @@ func (qq *ListDirPartial) Widget(
 			HxVals:   util.JSON(qq.Data(dirWithParent.Data.PublicID.String(), selectedFileID)), // overrides form fields, must be added via HxInclude
 			HxTarget: "#" + qq.FileListID(),
 			HxSwap:   "outerHTML",
+			HxSync:   "this:replace",
 			HxTrigger: strings.Join([]string{
 				event.FilterTagsChanged.Handler(),
 				event.DocumentTypeFilterChanged.Handler(),

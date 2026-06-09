@@ -25,6 +25,7 @@ type HTMXAttrs struct {
 	HxTarget     string
 	HxSelect     string
 	HxSwap       string
+	HxSync       string
 	HxSwapOOB    string
 	HxConfirm    string
 	HxInclude    string
@@ -148,6 +149,10 @@ func (qq HTMXAttrs) GetHxSwap() string {
 	}
 
 	return qq.HxSwap
+}
+
+func (qq HTMXAttrs) GetHxSync() string {
+	return qq.HxSync
 }
 
 func (qq HTMXAttrs) GetHxPushURL() string {
