@@ -21,6 +21,8 @@ import (
 	"github.com/marcobeierer/go-tika"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
+	"golang.org/x/crypto/acme/autocert"
+
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/action/download"
 	trashaction "github.com/simpledms/simpledms/action/trash"
@@ -53,7 +55,6 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/ocrutil"
 	"github.com/simpledms/simpledms/util/recoverx"
-	"golang.org/x/crypto/acme/autocert"
 )
 
 // TODO move to own package in cmd?

@@ -40,7 +40,8 @@ func NewContentHashBackfillService(fileSystem *S3FileSystem) *ContentHashBackfil
 
 func (qq *ContentHashBackfillService) RunTenant(
 	ctx context.Context,
-	tenantClient *enttenant.Client,
+	readOnlyTenantClient *enttenant.Client,
+	readWriteTenantClient *enttenant.Client,
 	tenantIdentity *age.X25519Identity,
 	config ContentHashBackfillConfig,
 ) (*ContentHashBackfillResult, error) {
@@ -50,7 +51,7 @@ func (qq *ContentHashBackfillService) RunTenant(
 		config.MaxFilesPerRun = 1
 	}
 
-	files, err := tenantClient.StoredFile.Query().
+	files, err := readOnlyTenantClient.StoredFile.Query().
 		Where(
 			storedfile.ContentSha256IsNil(),
 			storedfile.UploadSucceededAtNotNil(),
@@ -80,7 +81,7 @@ func (qq *ContentHashBackfillService) RunTenant(
 			continue
 		}
 
-		err = tenantClient.StoredFile.Update().
+		err = readWriteTenantClient.StoredFile.Update().
 			Where(
 				storedfile.ID(filex.ID),
 				storedfile.ContentSha256IsNil(),

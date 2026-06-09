@@ -73,7 +73,12 @@ func TestDeleteProcessedTempFilesDeletesOnlyAfterGracePeriod(t *testing.T) {
 	}
 
 	deletionThreshold := time.Now().Add(-5 * time.Minute)
-	filesToDelete := qq.processedTempFilesToDelete(ctx, tenantDB, deletionThreshold)
+	filesToDelete := qq.processedTempFilesToDelete(
+		ctx,
+		tenantDB,
+		deletionThreshold,
+		defaultSchedulerBatchSize,
+	)
 
 	if len(filesToDelete) != 1 {
 		t.Fatalf("expected 1 stored file to be eligible for temp deletion, got %d", len(filesToDelete))
@@ -144,7 +149,7 @@ func TestDeleteTempAccountFilesDeletesOnlyExpiredUnconvertedFiles(t *testing.T) 
 		mainDB: mainDB,
 	}
 
-	filesToDelete := qq.tempAccountFilesToDelete(ctx, time.Now())
+	filesToDelete := qq.tempAccountFilesToDelete(ctx, time.Now(), defaultSchedulerBatchSize)
 	if len(filesToDelete) != 1 {
 		t.Fatalf("expected 1 temporary file to be eligible for deletion, got %d", len(filesToDelete))
 	}

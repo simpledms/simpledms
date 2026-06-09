@@ -11,6 +11,8 @@ import (
 	"github.com/simpledms/simpledms/db/sqlx"
 )
 
+const defaultSchedulerBatchSize = 100
+
 // TODO rename to Runner?
 type Scheduler struct {
 	infra             *common.Infra

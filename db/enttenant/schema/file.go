@@ -140,6 +140,12 @@ func (File) Indexes() []ent.Index {
 			Fields("space_id", "is_directory", "name").
 			StorageKey("file_inbox_name").
 			Annotations(entsql.IndexWhere("`deleted_at` is null and `is_in_inbox` = true")),
+		index.
+			Fields("ocr_last_tried_at", "id").
+			StorageKey("file_ocr_pending").
+			Annotations(entsql.IndexWhere(
+				"`ocr_success_at` is null and `ocr_retry_count` < 3 and `is_directory` = false",
+			)),
 	}
 }
 

@@ -4,8 +4,10 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 )
 
 type Mail struct {
@@ -35,6 +37,15 @@ func (Mail) Edges() []ent.Edge {
 			Unique().
 			Required().
 			Field("receiver_id"),
+	}
+}
+
+func (Mail) Indexes() []ent.Index {
+	return []ent.Index{
+		index.
+			Fields("last_tried_at", "id").
+			StorageKey("mail_pending").
+			Annotations(entsql.IndexWhere("`sent_at` is null and `retry_count` < 3")),
 	}
 }
 

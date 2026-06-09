@@ -76,6 +76,7 @@ func (qq *Scheduler) backfillContentHashesOnce(
 
 		result, err := service.RunTenant(
 			ctx,
+			tenantDB.ReadOnlyConn,
 			tenantDB.ReadWriteConn,
 			tenantx.X25519IdentityEncrypted.Identity(),
 			config,

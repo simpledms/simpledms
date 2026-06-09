@@ -87,7 +87,7 @@ func (qq *Scheduler) sendMails() {
 		ctx := context.Background()
 		ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
-		mails := qq.mainDB.ReadWriteConn.Mail.
+		mails := qq.mainDB.ReadOnlyConn.Mail.
 			Query().
 			Where(
 				mail.SentAtIsNil(),
@@ -95,10 +95,18 @@ func (qq *Scheduler) sendMails() {
 				mail.RetryCountLT(3),
 			).
 			Order(mail.ByLastTriedAt(sql.OrderDesc())).
+			Limit(defaultSchedulerBatchSize).
 			AllX(ctx)
 
 		for _, mailx := range mails {
-			mailx.Update().SetLastTriedAt(time.Now()).AddRetryCount(1).SaveX(ctx)
+			err = qq.mainDB.ReadWriteConn.Mail.UpdateOneID(mailx.ID).
+				SetLastTriedAt(time.Now()).
+				AddRetryCount(1).
+				Exec(ctx)
+			if err != nil {
+				log.Println(err)
+				continue
+			}
 
 			message := mailer.NewMsg()
 
@@ -131,7 +139,13 @@ func (qq *Scheduler) sendMails() {
 				continue
 			}
 
-			mailx.Update().SetSentAt(time.Now()).SaveX(ctx)
+			err = qq.mainDB.ReadWriteConn.Mail.UpdateOneID(mailx.ID).
+				SetSentAt(time.Now()).
+				Exec(ctx)
+			if err != nil {
+				log.Println(err)
+				continue
+			}
 		}
 
 		time.Sleep(15 * time.Second)

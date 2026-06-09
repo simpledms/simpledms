@@ -96,6 +96,16 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "mail_pending",
+				Unique:  false,
+				Columns: []*schema.Column{MailsColumns[7], MailsColumns[0]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`sent_at` is null and `retry_count` < 3",
+				},
+			},
+		},
 	}
 	// PasskeyCredentialsColumns holds the columns for the "passkey_credentials" table.
 	PasskeyCredentialsColumns = []*schema.Column{
@@ -283,6 +293,14 @@ var (
 				Name:    "temporaryfile_upload_token",
 				Unique:  false,
 				Columns: []*schema.Column{TemporaryFilesColumns[17]},
+			},
+			{
+				Name:    "temporaryfile_delete_pending",
+				Unique:  false,
+				Columns: []*schema.Column{TemporaryFilesColumns[19], TemporaryFilesColumns[0]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`converted_to_stored_file_at` is null and `deleted_at` is null",
+				},
 			},
 		},
 	}

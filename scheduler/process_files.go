@@ -56,15 +56,28 @@ func (qq *Scheduler) copyTempFilesToFinalDest(ctx context.Context) {
 		// these columns... a transaction (especially if all are read at once) could block the
 		// database to long and the user might not be able to write to the db...
 
-		filesToCopy := tenantDB.ReadWriteConn.StoredFile.Query().Where(
-			storedfile.CopiedToFinalDestinationAtIsNil(),
-			storedfile.DeletedTemporaryFileAtIsNil(), // not necessary, just for safety
-		).AllX(ctx)
+		filesToCopy := tenantDB.ReadOnlyConn.StoredFile.Query().
+			Where(
+				storedfile.CopiedToFinalDestinationAtIsNil(),
+				storedfile.DeletedTemporaryFileAtIsNil(), // not necessary, just for safety
+			).
+			Order(storedfile.ByID(sql.OrderAsc())).
+			Limit(defaultSchedulerBatchSize).
+			AllX(ctx)
 
-		tenantx := qq.mainDB.ReadWriteConn.Tenant.Query().Where(tenant.ID(tenantID)).OnlyX(ctx)
+		tenantx := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).OnlyX(ctx)
 
-		for _, fileToCopy := range filesToCopy {
-			err := qq.infra.FileSystem().PersistTemporaryTenantFile(
+		for _, fileToCopyCandidate := range filesToCopy {
+			fileToCopy, err := tenantDB.ReadWriteConn.StoredFile.Get(ctx, fileToCopyCandidate.ID)
+			if err != nil {
+				if enttenant.IsNotFound(err) {
+					continue
+				}
+				log.Println(err)
+				return true // continue
+			}
+
+			err = qq.infra.FileSystem().PersistTemporaryTenantFile(
 				ctx,
 				tenantx.X25519IdentityEncrypted.Identity(),
 				fileToCopy,
@@ -86,7 +99,12 @@ func (qq *Scheduler) deleteProcessedTempFiles(ctx context.Context) {
 	deletionThreshold := time.Now().Add(-5 * time.Minute)
 
 	qq.tenantDBs.Range(func(tenantID int64, tenantDB *sqlx.TenantDB) bool {
-		filesToDelete := qq.processedTempFilesToDelete(ctx, tenantDB, deletionThreshold)
+		filesToDelete := qq.processedTempFilesToDelete(
+			ctx,
+			tenantDB,
+			deletionThreshold,
+			defaultSchedulerBatchSize,
+		)
 
 		for _, fileToDelete := range filesToDelete {
 			filem := storedfilemodel.NewStoredFile(fileToDelete)
@@ -114,7 +132,9 @@ func (qq *Scheduler) deleteProcessedTempFiles(ctx context.Context) {
 				return true // continue
 			}
 
-			err = fileToDelete.Update().SetDeletedTemporaryFileAt(time.Now()).Exec(ctx)
+			err = tenantDB.ReadWriteConn.StoredFile.UpdateOneID(fileToDelete.ID).
+				SetDeletedTemporaryFileAt(time.Now()).
+				Exec(ctx)
 			if err != nil {
 				log.Println(err, "we have an orphan db entry now")
 				return true // continue
@@ -129,15 +149,23 @@ func (qq *Scheduler) processedTempFilesToDelete(
 	ctx context.Context,
 	tenantDB *sqlx.TenantDB,
 	deletionThreshold time.Time,
+	maxFilesPerRun int,
 ) []*enttenant.StoredFile {
-	return tenantDB.ReadWriteConn.StoredFile.Query().Where(
-		storedfile.CopiedToFinalDestinationAtLT(deletionThreshold), // already copied with safety margin
-		storedfile.DeletedTemporaryFileAtIsNil(),                   // not deleted yet
-	).AllX(ctx)
+	return tenantDB.ReadOnlyConn.StoredFile.Query().
+		Where(
+			storedfile.CopiedToFinalDestinationAtLT(deletionThreshold), // already copied with safety margin
+			storedfile.DeletedTemporaryFileAtIsNil(),                   // not deleted yet
+		).
+		Order(
+			storedfile.ByCopiedToFinalDestinationAt(sql.OrderAsc()),
+			storedfile.ByID(sql.OrderAsc()),
+		).
+		Limit(maxFilesPerRun).
+		AllX(ctx)
 }
 
 func (qq *Scheduler) deleteTempAccountFiles(ctx context.Context) {
-	expiredTmpFiles := qq.tempAccountFilesToDelete(ctx, time.Now())
+	expiredTmpFiles := qq.tempAccountFilesToDelete(ctx, time.Now(), defaultSchedulerBatchSize)
 
 	for _, tmpFile := range expiredTmpFiles {
 		tmpFilem := temporaryfilemodel.NewTemporaryFile(tmpFile)
@@ -165,7 +193,9 @@ func (qq *Scheduler) deleteTempAccountFiles(ctx context.Context) {
 			continue
 		}
 
-		err = tmpFile.Update().SetDeletedAt(time.Now()).Exec(ctx)
+		err = qq.mainDB.ReadWriteConn.TemporaryFile.UpdateOneID(tmpFile.ID).
+			SetDeletedAt(time.Now()).
+			Exec(ctx)
 		if err != nil {
 			log.Println(err, "we have an orphan db entry now")
 			continue
@@ -177,14 +207,17 @@ func (qq *Scheduler) deleteTempAccountFiles(ctx context.Context) {
 func (qq *Scheduler) tempAccountFilesToDelete(
 	ctx context.Context,
 	now time.Time,
+	maxFilesPerRun int,
 ) []*entmain.TemporaryFile {
-	return qq.mainDB.ReadWriteConn.TemporaryFile.
+	return qq.mainDB.ReadOnlyConn.TemporaryFile.
 		Query().
 		Where(
 			// if not nil, file deletion is handled by procedures for stored files
 			temporaryfile.ConvertedToStoredFileAtIsNil(),
 			temporaryfile.ExpiresAtLT(now), // TODO is nil ignored?
+			temporaryfile.DeletedAtIsNil(),
 		).
 		Order(temporaryfile.ByCreatedAt(sql.OrderDesc())).
+		Limit(maxFilesPerRun).
 		AllX(ctx)
 }

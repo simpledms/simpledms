@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -59,6 +60,12 @@ func (TemporaryFile) Edges() []ent.Edge {
 func (TemporaryFile) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("upload_token"),
+		index.
+			Fields("expires_at", "id").
+			StorageKey("temporaryfile_delete_pending").
+			Annotations(entsql.IndexWhere(
+				"`converted_to_stored_file_at` is null and `deleted_at` is null",
+			)),
 	}
 }
 
