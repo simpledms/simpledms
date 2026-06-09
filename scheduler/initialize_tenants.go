@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/privacy"
+	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 )
@@ -33,13 +34,23 @@ func (qq *Scheduler) initializeTenants(devMode bool, metaPath string, migrations
 		ctx := context.Background()
 		ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
-		tenants := qq.mainDB.ReadWriteConn.Tenant.
+		tenants := qq.mainDB.ReadOnlyConn.Tenant.
 			Query().
 			Where(tenant.InitializedAtIsNil()).
 			Order(tenant.ByCreatedAt(sql.OrderDesc())).
+			Limit(defaultSchedulerBatchSize).
 			AllX(ctx)
 
-		for _, tenantx := range tenants {
+		for _, tenantCandidate := range tenants {
+			tenantx, err := qq.mainDB.ReadWriteConn.Tenant.Get(ctx, tenantCandidate.ID)
+			if err != nil {
+				if entmain.IsNotFound(err) {
+					continue
+				}
+				log.Println(err)
+				continue
+			}
+
 			tenantm := tenant2.NewTenant(tenantx)
 
 			// TODO implement more robust error handling with pause between retries

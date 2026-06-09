@@ -275,6 +275,14 @@ var (
 					Where: "`deleted_at` is null and `is_in_inbox` = true",
 				},
 			},
+			{
+				Name:    "file_ocr_pending",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[16], FilesColumns[0]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`ocr_success_at` is null and `ocr_retry_count` < 3 and `is_directory` = false",
+				},
+			},
 		},
 	}
 	// FilePropertyAssignmentsColumns holds the columns for the "file_property_assignments" table.
@@ -554,6 +562,30 @@ var (
 				Unique:  false,
 				Columns: []*schema.Column{StoredFilesColumns[10]},
 			},
+			{
+				Name:    "storedfile_content_hash_pending",
+				Unique:  false,
+				Columns: []*schema.Column{StoredFilesColumns[0]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`content_sha256` is null and `upload_succeeded_at` is not null and `copied_to_final_destination_at` is not null",
+				},
+			},
+			{
+				Name:    "storedfile_copy_pending",
+				Unique:  false,
+				Columns: []*schema.Column{StoredFilesColumns[18], StoredFilesColumns[0]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`copied_to_final_destination_at` is null and `deleted_temporary_file_at` is null",
+				},
+			},
+			{
+				Name:    "storedfile_temp_delete_pending",
+				Unique:  false,
+				Columns: []*schema.Column{StoredFilesColumns[18], StoredFilesColumns[0]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`copied_to_final_destination_at` is not null and `deleted_temporary_file_at` is null",
+				},
+			},
 		},
 	}
 	// TagsColumns holds the columns for the "tags" table.
@@ -643,6 +675,11 @@ var (
 				Name:    "tagassignment_space_id",
 				Unique:  false,
 				Columns: []*schema.Column{TagAssignmentsColumns[1]},
+			},
+			{
+				Name:    "tagassignment_tag_id",
+				Unique:  false,
+				Columns: []*schema.Column{TagAssignmentsColumns[2]},
 			},
 			{
 				Name:    "tagassignment_file_id_tag_id",

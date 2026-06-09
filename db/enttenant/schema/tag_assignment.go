@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 )
 
 // TagAssignment holds the schema definition for the TagAssignment entity.
@@ -54,7 +55,9 @@ func (TagAssignment) Edges() []ent.Edge {
 }
 
 func (TagAssignment) Indexes() []ent.Index {
-	return []ent.Index{}
+	return []ent.Index{
+		index.Fields("tag_id"),
+	}
 }
 
 func (TagAssignment) Mixin() []ent.Mixin {

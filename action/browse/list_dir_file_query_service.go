@@ -129,10 +129,10 @@ func (qq *ListDirFileQueryService) Query(
 							Where(
 								sql.And(
 									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), state.SearchQuery),
-									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+									sql.EQ(fileSearchTable.C(file.FieldSpaceID), ctx.SpaceCtx().Space.ID),
+									sql.EQ(fileSearchTable.C(file.FieldIsInInbox), false),
 								),
-							).
-							OrderBy(fileSearchTable.C(filesearch.FieldRank)),
+							),
 					),
 				)
 			},

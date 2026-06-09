@@ -56,8 +56,21 @@ Run cross-space listing benchmark:
 go test ./server -run '^$' -bench '^BenchmarkFileListingAcrossTenSpaces$' -benchmem
 ```
 
+Run browse FTS benchmark matrix:
+
+```bash
+go test ./server -run '^$' -bench '^BenchmarkBrowseFTSQuery$' -benchmem
+```
+
+Run one browse FTS sub-benchmark quickly (smoke check):
+
+```bash
+go test ./server -run '^$' -bench 'BenchmarkBrowseFTSQuery/single_space_1000$' -benchmem -benchtime=1x
+```
+
 Optional profiling:
 
 ```bash
 go test ./server -run '^$' -bench '^BenchmarkFileListing$' -benchmem -cpuprofile cpu.out -memprofile mem.out
+go test ./server -run '^$' -bench '^BenchmarkBrowseFTSQuery$' -benchmem -cpuprofile cpu.out -memprofile mem.out
 ```

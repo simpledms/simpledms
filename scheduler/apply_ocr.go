@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/privacy"
 	"filippo.io/age"
 	"github.com/marcobeierer/go-tika"
+
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
@@ -74,7 +75,7 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 		// TODO transaction? if so, make sure OCRRetryCount gets increased
 		// TODO ensure that only files at final destination get processed;
 		//		are inbox files at final destination?
-		filesToProcess := tenantDB.ReadWriteConn.File.
+		filesToProcess := tenantDB.ReadOnlyConn.File.
 			Query().
 			Where(
 				file.OcrSuccessAtIsNil(),
@@ -88,6 +89,7 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 				file.IsDirectory(false),
 			).
 			Order(file.ByID(entsql.OrderAsc())).
+			Limit(defaultSchedulerBatchSize).
 			AllX(ctx)
 
 		for _, fileToProcess := range filesToProcess {
@@ -96,12 +98,16 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 			if err != nil {
 				log.Println(err)
 
-				fileToProcess.Update().
+				err = tenantDB.ReadWriteConn.File.UpdateOneID(fileToProcess.ID).
 					SetOcrRetryCount(fileToProcess.OcrRetryCount + 1).
 					SetOcrLastTriedAt(time.Now()).
-					ExecX(ctx)
+					Exec(ctx)
+				if err != nil {
+					log.Println(err)
+					// TODO continue or not
+					return true
+				}
 
-				// TODO continue or not
 				return true
 			}
 			if fileNotReady {
@@ -110,22 +116,28 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 			if fileTooLarge {
 				// TODO find a more expressive solution to store in database
 				//		that file is to large
-				fileToProcess.Update().
+				err = tenantDB.ReadWriteConn.File.UpdateOneID(fileToProcess.ID).
 					SetOcrContent("").
 					SetOcrRetryCount(3).
 					SetOcrLastTriedAt(time.Now()).
-					ExecX(ctx)
+					Exec(ctx)
+				if err != nil {
+					log.Println(err)
+				}
 
 				continue
 			}
 
 			// FIXME start transaction?
-			fileToProcess.Update().
+			err = tenantDB.ReadWriteConn.File.UpdateOneID(fileToProcess.ID).
 				SetOcrRetryCount(0).
 				SetOcrLastTriedAt(time.Time{}).
 				SetOcrSuccessAt(time.Now()).
 				SetOcrContent(content).
-				SaveX(ctx)
+				Exec(ctx)
+			if err != nil {
+				log.Println(err)
+			}
 		}
 
 		return true

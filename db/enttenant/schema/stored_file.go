@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -70,6 +71,26 @@ func (StoredFile) Edges() []ent.Edge {
 func (StoredFile) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("content_sha256"),
+		index.
+			Fields("id").
+			StorageKey("storedfile_content_hash_pending").
+			Annotations(entsql.IndexWhere(
+				"`content_sha256` is null and " +
+					"`upload_succeeded_at` is not null and " +
+					"`copied_to_final_destination_at` is not null",
+			)),
+		index.
+			Fields("copied_to_final_destination_at", "id").
+			StorageKey("storedfile_copy_pending").
+			Annotations(entsql.IndexWhere(
+				"`copied_to_final_destination_at` is null and `deleted_temporary_file_at` is null",
+			)),
+		index.
+			Fields("copied_to_final_destination_at", "id").
+			StorageKey("storedfile_temp_delete_pending").
+			Annotations(entsql.IndexWhere(
+				"`copied_to_final_destination_at` is not null and `deleted_temporary_file_at` is null",
+			)),
 	}
 }
 

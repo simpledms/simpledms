@@ -150,7 +150,9 @@ func (qq *ListInboxAssignmentSuggestionsPartial) Widget(ctx ctxx.Context, fileID
 							Where(
 								sql.And(
 									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
-									sql.LT(fileSearchTable.C(filesearch.FieldRank), 0),
+									sql.EQ(fileSearchTable.C(file.FieldSpaceID), ctx.SpaceCtx().Space.ID),
+									sql.EQ(fileSearchTable.C(file.FieldIsDirectory), true),
+									sql.EQ(fileSearchTable.C(file.FieldIsInInbox), false),
 								),
 							).
 							OrderBy(fileSearchTable.C(filesearch.FieldRank)),
