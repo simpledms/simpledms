@@ -15,11 +15,46 @@ import (
 	"filippo.io/age"
 
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
+	"github.com/simpledms/simpledms/db/entmain/systemconfig"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/i18n"
 	"github.com/simpledms/simpledms/ui"
 )
+
+func TestInitializeMainConfigOverrideDBConfigDoesNotReadEncryptedFieldsBeforeUnlock(t *testing.T) {
+	deps := newMaintenanceTestDependencies(t)
+
+	t.Setenv("SIMPLEDMS_INITIAL_ACCOUNT_EMAIL", "")
+	t.Setenv("SIMPLEDMS_INITIAL_TENANT_NAME", "")
+	t.Setenv("SIMPLEDMS_TLS_ENABLE_AUTOCERT", "false")
+	t.Setenv("SIMPLEDMS_TLS_CERT_FILEPATH", "/tmp/simpledms-cert.pem")
+	t.Setenv("SIMPLEDMS_TLS_PRIVATE_KEY_FILEPATH", "/tmp/simpledms-key.pem")
+	t.Setenv("SIMPLEDMS_TLS_AUTOCERT_EMAIL", "")
+	t.Setenv("SIMPLEDMS_TLS_AUTOCERT_HOSTS", "")
+
+	defer func() {
+		encryptor.NilableX25519MainIdentity = nil
+	}()
+	encryptor.NilableX25519MainIdentity = nil
+
+	serverx := &Server{}
+	serverx.initializeMainConfig(context.Background(), deps.mainDB, true)
+
+	configx := deps.mainDB.ReadOnlyConn.SystemConfig.Query().
+		Select(
+			systemconfig.FieldTLSCertFilepath,
+			systemconfig.FieldTLSPrivateKeyFilepath,
+		).
+		FirstX(context.Background())
+
+	if configx.TLSCertFilepath != "/tmp/simpledms-cert.pem" {
+		t.Fatalf("expected TLS cert path to be overridden, got %q", configx.TLSCertFilepath)
+	}
+	if configx.TLSPrivateKeyFilepath != "/tmp/simpledms-key.pem" {
+		t.Fatalf("expected TLS key path to be overridden, got %q", configx.TLSPrivateKeyFilepath)
+	}
+}
 
 func TestMaintenanceRootReturnsServiceUnavailable(t *testing.T) {
 	deps := newMaintenanceTestDependencies(t)

@@ -21,6 +21,8 @@ import (
 	"github.com/marcobeierer/go-tika"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
+	"golang.org/x/crypto/acme/autocert"
+
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/action/download"
 	trashaction "github.com/simpledms/simpledms/action/trash"
@@ -53,7 +55,6 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/ocrutil"
 	"github.com/simpledms/simpledms/util/recoverx"
-	"golang.org/x/crypto/acme/autocert"
 )
 
 // TODO move to own package in cmd?
@@ -421,9 +422,15 @@ func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB,
 		// only TLS is overridden here because all encrypted fields can just
 		// be overridden when encryptor.NilableX25519MainIdentity is set;
 		// TLS config is read before that is the case
+		//
+		// it is necessary to read just FirstID() and not First() because
+		// the latter would read the complete row and try to decrypt all
+		// decrypted values. this would fail/panic.
 		// END IMPORTANT
 
-		updateQuery := mainDB.ReadWriteConn.SystemConfig.Query().FirstX(ctx).Update()
+		systemConfigID := mainDB.ReadWriteConn.SystemConfig.Query().FirstIDX(ctx)
+		updateQuery := mainDB.ReadWriteConn.SystemConfig.Update().
+			Where(systemconfig.ID(systemConfigID))
 
 		if val, set := os.LookupEnv("SIMPLEDMS_TLS_ENABLE_AUTOCERT"); set {
 			updateQuery.SetTLSEnableAutocert(val == "true")
