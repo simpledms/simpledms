@@ -1,6 +1,17 @@
 {{- define "List" }}
     <div id="{{ .GetID }}"
-         class="js-list py-2 flex flex-col gap-y-1 {{ if .HideOnDesktop }}md:hidden{{ end }}"
+         class="js-list flex flex-col py-2
+                 [&>*]:overflow-hidden [&>*]:rounded-xs
+                [&>*:first-child]:rounded-t-lg [&>*:last-child]:rounded-b-lg
+                [&>*:only-child]:rounded-lg
+                [&>*:hover]:!rounded-md [&>*:focus-within]:!rounded-lg
+                [&>*:active]:!rounded-lg [&>*:has(:checked)]:!rounded-lg
+                [&>*:focus-within:hover]:!rounded-lg [&>*:active:hover]:!rounded-lg
+                [&>*:has(:checked):hover]:!rounded-lg
+                [&>*[data-selected=true]]:!rounded-lg
+                [&>*[data-selected=true]:hover]:!rounded-lg
+                {{ if .IsStyleStandard }}gap-y-0 [&>*]:bg-transparent{{ else }}gap-y-0.5 [&>*]:bg-surface-bright{{ end }}
+                {{ if .HideOnDesktop }}md:hidden{{ end }}"
          role="list"
          {{ template "HTMXAttrs" .HTMXAttrs }}
     >

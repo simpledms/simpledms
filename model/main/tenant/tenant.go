@@ -308,6 +308,7 @@ func (qq *Tenant) initDB(
 	qq.Data.Update().
 		SetInitializedAt(time.Now()).
 		SetX25519IdentityEncrypted(entx.NewEncryptedX25519Identity(tenantIdentity)).
+		ClearMaintenanceModeEnabledAt().
 		SaveX(ctx)
 
 	// create users in tenant db
