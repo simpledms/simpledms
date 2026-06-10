@@ -1,0 +1,14 @@
+goos: linux
+goarch: amd64
+pkg: github.com/simpledms/simpledms/server
+cpu: AMD Ryzen 9 5950X 16-Core Processor            
+BenchmarkFileListing/inbox_100000/query-32   	       1	    278544 ns/op	         0.2785 ms/event	   76280 B/op	     525 allocs/op
+BenchmarkFileListing/inbox_100000/handler-32 	       1	   1212560 ns/op	         1.213 ms/event	  566448 B/op	    4989 allocs/op
+BenchmarkFileListing/inbox_100000/router-32  	       1	   2600084 ns/op	         2.600 ms/event	  562200 B/op	    5285 allocs/op
+BenchmarkFileListing/browse_100000/query-32  	       1	    556439 ns/op	         0.5564 ms/event	  124424 B/op	    2441 allocs/op
+BenchmarkFileListing/browse_100000/handler-32         	       1	  24316643 ns/op	        24.32 ms/event	 9580464 B/op	  129662 allocs/op
+BenchmarkFileListing/browse_100000/router-32          	       1	  26231066 ns/op	        26.23 ms/event	 9684856 B/op	  130493 allocs/op
+BenchmarkBrowseFTSQuery/single_space_100000-32        	       1	    288445 ns/op	         0.2884 ms/event	   52216 B/op	    1119 allocs/op
+BenchmarkBrowseFTSQuery/ten_spaces_100000-32          	       1	    364317 ns/op	         0.3643 ms/event	   52216 B/op	    1119 allocs/op
+PASS
+ok  	github.com/simpledms/simpledms/server	13.278s

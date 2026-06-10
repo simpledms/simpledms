@@ -276,6 +276,53 @@ var (
 				},
 			},
 			{
+				Name:    "file_browse_name_fast",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[11], FilesColumns[1], FilesColumns[6], FilesColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[6].Name: true,
+					},
+				},
+			},
+			{
+				Name:    "file_browse_created_fast",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[11], FilesColumns[1], FilesColumns[6], FilesColumns[3], FilesColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[3].Name: true,
+
+						FilesColumns[6].Name: true,
+					},
+				},
+			},
+			{
+				Name:    "file_browse_created_oldest_fast",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[11], FilesColumns[1], FilesColumns[6], FilesColumns[3], FilesColumns[5]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[6].Name: true,
+					},
+				},
+			},
+			{
+				Name:    "file_inbox_created_fast",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[11], FilesColumns[6], FilesColumns[1], FilesColumns[3]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[3].Name: true,
+					},
+				},
+			},
+			{
+				Name:    "file_inbox_name_fast",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[20], FilesColumns[11], FilesColumns[6], FilesColumns[1], FilesColumns[5]},
+			},
+			{
 				Name:    "file_ocr_pending",
 				Unique:  false,
 				Columns: []*schema.Column{FilesColumns[16], FilesColumns[0]},

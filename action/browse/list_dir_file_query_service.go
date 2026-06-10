@@ -8,9 +8,9 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entquery"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/util/sqlutil"
@@ -108,7 +108,11 @@ func (qq *ListDirFileQueryService) Query(
 			}
 		})
 
-	searchResultQuery = searchResultQuery.Where(file.IsInInbox(false))
+	if state.SearchQuery != "" {
+		searchResultQuery = searchResultQuery.Where(file.IsInInbox(false))
+	} else {
+		searchResultQuery = searchResultQuery.Where(entquery.FileIsInInbox(false))
+	}
 
 	// searchResultQuery = searchResultQuery.Where(file.HasSpaceAssignmentWith(spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID)))
 	searchResultQuery = searchResultQuery.Where(file.SpaceID(ctx.SpaceCtx().Space.ID))
@@ -121,42 +125,35 @@ func (qq *ListDirFileQueryService) Query(
 		// TODO give filename a higher priority?
 		searchResultQuery.Where(
 			func(qs *sql.Selector) {
-				fileSearchTable := sql.Table(filesearch.Table)
-
-				qs.Where(
-					sql.In(qs.C(file.FieldID),
-						sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
-							Where(
-								sql.And(
-									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), state.SearchQuery),
-									sql.EQ(fileSearchTable.C(file.FieldSpaceID), ctx.SpaceCtx().Space.ID),
-									sql.EQ(fileSearchTable.C(file.FieldIsInInbox), false),
-								),
-							),
-					),
+				entquery.ApplyFileSearchCandidateFilter(
+					qs,
+					state.SearchQuery,
+					ctx.SpaceCtx().Space.ID,
+					false,
 				)
 			},
 		)
 	}
 
-	// TODO use filesearch view instead and order by rank?
-	switch state.SortBy {
-	case "newestFirst":
-		searchResultQuery = searchResultQuery.Order(
-			file.ByIsDirectory(sql.OrderDesc()),
-			file.ByCreatedAt(sql.OrderDesc()),
-			file.ByName(),
-		)
-	case "oldestFirst":
-		searchResultQuery = searchResultQuery.Order(
-			file.ByIsDirectory(sql.OrderDesc()),
-			file.ByCreatedAt(),
-			file.ByName(),
-		)
-	case "name":
-		fallthrough
-	default:
-		searchResultQuery = searchResultQuery.Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName())
+	if state.SearchQuery == "" {
+		switch state.SortBy {
+		case "newestFirst":
+			searchResultQuery = searchResultQuery.Order(
+				file.ByIsDirectory(sql.OrderDesc()),
+				file.ByCreatedAt(sql.OrderDesc()),
+				file.ByName(),
+			)
+		case "oldestFirst":
+			searchResultQuery = searchResultQuery.Order(
+				file.ByIsDirectory(sql.OrderDesc()),
+				file.ByCreatedAt(),
+				file.ByName(),
+			)
+		case "name":
+			fallthrough
+		default:
+			searchResultQuery = searchResultQuery.Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName())
+		}
 	}
 
 	if state.HideDirectories && state.HideFiles {

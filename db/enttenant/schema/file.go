@@ -141,6 +141,33 @@ func (File) Indexes() []ent.Index {
 			StorageKey("file_inbox_name").
 			Annotations(entsql.IndexWhere("`deleted_at` is null and `is_in_inbox` = true")),
 		index.
+			Fields("space_id", "parent_id", "is_in_inbox", "deleted_at", "is_directory", "name").
+			StorageKey("file_browse_name_fast").
+			Annotations(
+				entsql.DescColumns("is_directory"),
+			),
+		index.
+			Fields("space_id", "parent_id", "is_in_inbox", "deleted_at", "is_directory", "created_at", "name").
+			StorageKey("file_browse_created_fast").
+			Annotations(
+				entsql.DescColumns("is_directory", "created_at"),
+			),
+		index.
+			Fields("space_id", "parent_id", "is_in_inbox", "deleted_at", "is_directory", "created_at", "name").
+			StorageKey("file_browse_created_oldest_fast").
+			Annotations(
+				entsql.DescColumns("is_directory"),
+			),
+		index.
+			Fields("space_id", "is_in_inbox", "is_directory", "deleted_at", "created_at").
+			StorageKey("file_inbox_created_fast").
+			Annotations(
+				entsql.DescColumns("created_at"),
+			),
+		index.
+			Fields("space_id", "is_in_inbox", "is_directory", "deleted_at", "name").
+			StorageKey("file_inbox_name_fast"),
+		index.
 			Fields("ocr_last_tried_at", "id").
 			StorageKey("file_ocr_pending").
 			Annotations(entsql.IndexWhere(

@@ -12,9 +12,9 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entquery"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/main/filelistpreference"
@@ -356,6 +356,7 @@ func (qq *FilesListPartial) filesListItemsFromFiles(
 // LIMIT must be applied by caller
 func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) *enttenant.FileQuery {
 	searchResultQuery := ctx.TenantCtx().TTx.File.Query()
+	searchQuery := sqlutil.FTSSafeAndQuery(state.SearchQuery, 300)
 	/*Where(func(qs *sql.Selector) {
 		// subquery to select all files in search scope
 		fileInfoView := sql.Table(fileinfo.Table)
@@ -372,49 +373,53 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 		)
 	})*/
 
-	searchResultQuery = searchResultQuery.Where(
-		file.SpaceID(ctx.SpaceCtx().Space.ID),
-		file.IsInInbox(true),
-		file.IsDirectory(false),
-		/*file.HasSpaceAssignmentWith(
-			spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID),
-			spacefileassignment.IsInInbox(true),
-		),*/
-	)
+	if searchQuery != "" {
+		searchResultQuery = searchResultQuery.Where(
+			file.SpaceID(ctx.SpaceCtx().Space.ID),
+			file.IsInInbox(true),
+			file.IsDirectory(false),
+			/*file.HasSpaceAssignmentWith(
+				spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID),
+				spacefileassignment.IsInInbox(true),
+			),*/
+		)
+	} else {
+		searchResultQuery = searchResultQuery.Where(
+			file.SpaceID(ctx.SpaceCtx().Space.ID),
+			entquery.FileIsInInbox(true),
+			entquery.FileIsDirectory(false),
+			/*file.HasSpaceAssignmentWith(
+				spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID),
+				spacefileassignment.IsInInbox(true),
+			),*/
+		)
+	}
 
-	searchQuery := sqlutil.FTSSafeAndQuery(state.SearchQuery, 300)
 	if searchQuery != "" {
 		searchResultQuery = searchResultQuery.Where(
 			func(qs *sql.Selector) {
-				fileSearchTable := sql.Table(filesearch.Table)
-
-				qs.Where(
-					sql.In(qs.C(file.FieldID),
-						sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
-							Where(
-								sql.And(
-									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
-									sql.EQ(fileSearchTable.C(file.FieldSpaceID), ctx.SpaceCtx().Space.ID),
-									sql.EQ(fileSearchTable.C(file.FieldIsDirectory), false),
-									sql.EQ(fileSearchTable.C(file.FieldIsInInbox), true),
-								),
-							),
-					),
+				entquery.ApplyFileSearchCandidateFilterWithDirectory(
+					qs,
+					searchQuery,
+					ctx.SpaceCtx().Space.ID,
+					true,
+					false,
 				)
 			},
 		)
 	}
 
-	// TODO use filesearch view instead and order by rank?
-	switch state.SortBy {
-	case "name":
-		searchResultQuery = searchResultQuery.Order(file.ByName())
-	case "oldestFirst":
-		searchResultQuery = searchResultQuery.Order(file.ByCreatedAt())
-	case "newestFirst":
-		fallthrough
-	default:
-		searchResultQuery = searchResultQuery.Order(file.ByCreatedAt(sql.OrderDesc()))
+	if searchQuery == "" {
+		switch state.SortBy {
+		case "name":
+			searchResultQuery = searchResultQuery.Order(file.ByName())
+		case "oldestFirst":
+			searchResultQuery = searchResultQuery.Order(file.ByCreatedAt())
+		case "newestFirst":
+			fallthrough
+		default:
+			searchResultQuery = searchResultQuery.Order(file.ByCreatedAt(sql.OrderDesc()))
+		}
 	}
 	// searchResultQuery = searchResultQuery.Order(file.ByName())
 
