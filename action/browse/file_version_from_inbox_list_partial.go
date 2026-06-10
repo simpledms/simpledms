@@ -8,9 +8,9 @@ import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entquery"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -56,36 +56,32 @@ func (qq *FileVersionFromInboxListPartial) listFiles(ctx ctxx.Context, data *Fil
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Target file is required.")
 	}
 
+	searchQuery := sqlutil.FTSSafeAndQuery(data.SearchQuery, 300)
 	query := ctx.TenantCtx().TTx.File.Query().
 		Where(
 			file.SpaceID(ctx.SpaceCtx().Space.ID),
-			file.IsInInbox(true),
-			file.IsDirectory(false),
 			file.DeletedAtIsNil(),
 		)
-
-	searchQuery := sqlutil.FTSSafeAndQuery(data.SearchQuery, 300)
 	if searchQuery != "" {
-		query = query.Where(func(qs *sql.Selector) {
-			fileSearchTable := sql.Table(filesearch.Table)
-
-			qs.Where(
-				sql.In(qs.C(file.FieldID),
-					sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
-						Where(
-							sql.And(
-								sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
-								sql.EQ(fileSearchTable.C(file.FieldSpaceID), ctx.SpaceCtx().Space.ID),
-								sql.EQ(fileSearchTable.C(file.FieldIsDirectory), false),
-								sql.EQ(fileSearchTable.C(file.FieldIsInInbox), true),
-							),
-						),
-				),
-			)
-		})
+		query = query.Where(file.IsInInbox(true), file.IsDirectory(false))
+	} else {
+		query = query.Where(entquery.FileIsInInbox(true), entquery.FileIsDirectory(false))
 	}
 
-	query = query.Order(file.ByName(sql.OrderAsc()))
+	if searchQuery != "" {
+		query = query.Where(func(qs *sql.Selector) {
+			entquery.ApplyFileSearchCandidateFilterWithDirectory(
+				qs,
+				searchQuery,
+				ctx.SpaceCtx().Space.ID,
+				true,
+				false,
+			)
+		})
+		query = query.Limit(51)
+	} else {
+		query = query.Order(file.ByName(sql.OrderAsc()))
+	}
 
 	return query.All(ctx)
 }

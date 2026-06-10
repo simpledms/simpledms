@@ -16,9 +16,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entquery"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 	"github.com/simpledms/simpledms/ui/uix/route"
@@ -541,33 +541,29 @@ func reportEventTime(b *testing.B) {
 }
 
 func inboxListingQuery(spaceCtx *ctxx.SpaceContext, spaceID int64, searchQuery string) ([]*enttenant.File, error) {
+	searchQuery = sqlutil.FTSSafeAndQuery(searchQuery, 300)
 	query := spaceCtx.TTx.File.Query().
 		Where(
 			file.SpaceID(spaceID),
-			file.IsInInbox(true),
-			file.IsDirectory(false),
-		).
-		Order(file.ByCreatedAt(sql.OrderDesc()))
+		)
+	if searchQuery != "" {
+		query = query.Where(file.IsInInbox(true), file.IsDirectory(false))
+	} else {
+		query = query.Where(entquery.FileIsInInbox(true), entquery.FileIsDirectory(false))
+	}
 
-	searchQuery = sqlutil.FTSSafeAndQuery(searchQuery, 300)
 	if searchQuery != "" {
 		query = query.Where(func(qs *sql.Selector) {
-			fileSearchTable := sql.Table(filesearch.Table)
-
-			qs.Where(
-				sql.In(qs.C(file.FieldID),
-					sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
-						Where(
-							sql.And(
-								sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
-								sql.EQ(fileSearchTable.C(file.FieldSpaceID), spaceID),
-								sql.EQ(fileSearchTable.C(file.FieldIsDirectory), false),
-								sql.EQ(fileSearchTable.C(file.FieldIsInInbox), true),
-							),
-						),
-				),
+			entquery.ApplyFileSearchCandidateFilterWithDirectory(
+				qs,
+				searchQuery,
+				spaceID,
+				true,
+				false,
 			)
 		})
+	} else {
+		query = query.Order(file.ByCreatedAt(sql.OrderDesc()))
 	}
 
 	return query.Limit(51).All(spaceCtx)
@@ -578,7 +574,7 @@ func browseListingQuery(spaceCtx *ctxx.SpaceContext, spaceID int64, rootDirID in
 		Where(
 			file.ParentID(rootDirID),
 			file.SpaceID(spaceID),
-			file.IsInInbox(false),
+			entquery.FileIsInInbox(false),
 		).
 		Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName()).
 		Limit(51).
@@ -595,32 +591,22 @@ func browseFTSListingQuery(
 		WithChildren().
 		Where(
 			file.SpaceID(spaceID),
-			file.IsInInbox(false),
 		)
+	if searchQuery != "" {
+		query = query.Where(file.IsInInbox(false))
+	} else {
+		query = query.Where(entquery.FileIsInInbox(false))
+	}
 
 	if searchQuery != "" {
 		query = query.Where(
 			func(qs *sql.Selector) {
-				fileSearchTable := sql.Table(filesearch.Table)
-
-				qs.Where(
-					sql.In(
-						qs.C(file.FieldID),
-						sql.Select(fileSearchTable.C(filesearch.FieldRowid)).From(fileSearchTable).
-							Where(
-								sql.And(
-									sql.EQ(fileSearchTable.C(filesearch.FieldFileSearches), searchQuery),
-									sql.EQ(fileSearchTable.C(file.FieldSpaceID), spaceID),
-									sql.EQ(fileSearchTable.C(file.FieldIsInInbox), false),
-								),
-							),
-					),
-				)
+				entquery.ApplyFileSearchCandidateFilter(qs, searchQuery, spaceID, false)
 			},
 		)
+	} else {
+		query = query.Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName())
 	}
-
-	query = query.Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName())
 
 	return query.
 		Limit(51).

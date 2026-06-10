@@ -1,0 +1,16 @@
+go test ./server -run '^$' -bench '^(BenchmarkFileListing|BenchmarkBrowseFTSQuery)$/.*_1000000$' -benchmem -benchtime=1x
+
+goos: linux
+goarch: amd64
+pkg: github.com/simpledms/simpledms/server
+cpu: AMD Ryzen 9 5950X 16-Core Processor            
+BenchmarkFileListing/inbox_1000000/query-32   	       1	    350916 ns/op	         0.3509 ms/event	   36384 B/op	     529 allocs/op
+BenchmarkFileListing/inbox_1000000/handler-32 	       1	   1185240 ns/op	         1.185 ms/event	  565648 B/op	    4999 allocs/op
+BenchmarkFileListing/inbox_1000000/router-32  	       1	   2148116 ns/op	         2.148 ms/event	  501248 B/op	    5282 allocs/op
+BenchmarkFileListing/browse_1000000/query-32  	       1	 165150282 ns/op	       165.2 ms/event	  124360 B/op	    2441 allocs/op
+BenchmarkFileListing/browse_1000000/handler-32         	       1	 184494930 ns/op	       184.5 ms/event	 9531872 B/op	  129517 allocs/op
+BenchmarkFileListing/browse_1000000/router-32          	       1	 182870062 ns/op	       182.9 ms/event	 9689400 B/op	  130455 allocs/op
+BenchmarkBrowseFTSQuery/single_space_1000000-32        	       1	    325396 ns/op	         0.3254 ms/event	   52808 B/op	    1145 allocs/op
+BenchmarkBrowseFTSQuery/ten_spaces_1000000-32          	       1	    437648 ns/op	         0.4376 ms/event	   52824 B/op	    1146 allocs/op
+PASS
+ok  	github.com/simpledms/simpledms/server	125.164s
