@@ -329,26 +329,6 @@ func (qq *ListDirPartial) Widget(
 
 	list := &wx.Column{
 		GapYSize: wx.Gap2,
-		HTMXAttrs: wx.HTMXAttrs{
-			HxPost: qq.EndpointWithParams(actionx.ResponseWrapperNone, "#"+qq.FileListID()),
-			// HxPost:    qq.EndpointWithState(state, actionx.ResponseWrapperNone, "#"+qq.WrapperID()),
-			// state is necessary because tags are not rendered if modal is closed
-			HxVals:   util.JSON(qq.Data(dirWithParent.Data.PublicID.String(), selectedFileID)), // overrides form fields, must be added via HxInclude
-			HxTarget: "#" + qq.FileListID(),
-			HxSwap:   "outerHTML",
-			HxSync:   "this:replace",
-			HxTrigger: strings.Join([]string{
-				event.FilterTagsChanged.Handler(),
-				event.DocumentTypeFilterChanged.Handler(),
-				event.PropertyFilterChanged.Handler(),
-				event.FolderModeToggled.Handler(),
-				event.SearchQueryUpdated.HandlerWithModifier("delay:100ms"),
-				event.FileUploaded.Handler(),
-				event.ZIPArchiveUnzipped.Handler(),
-				event.FileUpdated.Handler(),
-				event.FileDeleted.Handler(),
-			}, ", "),
-		},
 		Children: children,
 	}
 
@@ -472,6 +452,26 @@ func (qq *ListDirPartial) filesList(
 			ID: qq.FileListID(),
 		},
 		Children: content,
+		HTMXAttrs: wx.HTMXAttrs{
+			HxPost: qq.EndpointWithParams(actionx.ResponseWrapperNone, "#"+qq.FileListID()),
+			// HxPost:    qq.EndpointWithState(state, actionx.ResponseWrapperNone, "#"+qq.WrapperID()),
+			// state is necessary because tags are not rendered if modal is closed
+			HxVals:   util.JSON(data), // overrides form fields, must be added via HxInclude
+			HxTarget: "#" + qq.FileListID(),
+			HxSwap:   "outerHTML",
+			HxSync:   "this:replace",
+			HxTrigger: strings.Join([]string{
+				event.FilterTagsChanged.Handler(),
+				event.DocumentTypeFilterChanged.Handler(),
+				event.PropertyFilterChanged.Handler(),
+				event.FolderModeToggled.Handler(),
+				event.SearchQueryUpdated.HandlerWithModifier("delay:100ms"),
+				event.FileUploaded.Handler(),
+				event.ZIPArchiveUnzipped.Handler(),
+				event.FileUpdated.Handler(),
+				event.FileDeleted.Handler(),
+			}, ", "),
+		},
 	}
 
 }
