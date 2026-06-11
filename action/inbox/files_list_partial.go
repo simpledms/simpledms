@@ -409,17 +409,15 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 		)
 	}
 
-	if searchQuery == "" {
-		switch state.SortBy {
-		case "name":
-			searchResultQuery = searchResultQuery.Order(file.ByName())
-		case "oldestFirst":
-			searchResultQuery = searchResultQuery.Order(file.ByCreatedAt())
-		case "newestFirst":
-			fallthrough
-		default:
-			searchResultQuery = searchResultQuery.Order(file.ByCreatedAt(sql.OrderDesc()))
-		}
+	switch state.SortBy {
+	case "name":
+		searchResultQuery = searchResultQuery.Order(file.ByName())
+	case "oldestFirst":
+		searchResultQuery = searchResultQuery.Order(file.ByCreatedAt())
+	case "newestFirst":
+		fallthrough
+	default:
+		searchResultQuery = searchResultQuery.Order(file.ByCreatedAt(sql.OrderDesc()))
 	}
 	// searchResultQuery = searchResultQuery.Order(file.ByName())
 

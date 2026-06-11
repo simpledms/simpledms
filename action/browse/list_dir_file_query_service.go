@@ -135,25 +135,23 @@ func (qq *ListDirFileQueryService) Query(
 		)
 	}
 
-	if state.SearchQuery == "" {
-		switch state.SortBy {
-		case "newestFirst":
-			searchResultQuery = searchResultQuery.Order(
-				file.ByIsDirectory(sql.OrderDesc()),
-				file.ByCreatedAt(sql.OrderDesc()),
-				file.ByName(),
-			)
-		case "oldestFirst":
-			searchResultQuery = searchResultQuery.Order(
-				file.ByIsDirectory(sql.OrderDesc()),
-				file.ByCreatedAt(),
-				file.ByName(),
-			)
-		case "name":
-			fallthrough
-		default:
-			searchResultQuery = searchResultQuery.Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName())
-		}
+	switch state.SortBy {
+	case "newestFirst":
+		searchResultQuery = searchResultQuery.Order(
+			file.ByIsDirectory(sql.OrderDesc()),
+			file.ByCreatedAt(sql.OrderDesc()),
+			file.ByName(),
+		)
+	case "oldestFirst":
+		searchResultQuery = searchResultQuery.Order(
+			file.ByIsDirectory(sql.OrderDesc()),
+			file.ByCreatedAt(),
+			file.ByName(),
+		)
+	case "name":
+		fallthrough
+	default:
+		searchResultQuery = searchResultQuery.Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName())
 	}
 
 	if state.HideDirectories && state.HideFiles {
