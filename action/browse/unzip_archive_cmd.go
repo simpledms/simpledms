@@ -2,7 +2,6 @@ package browse
 
 import (
 	"archive/zip"
-	"fmt"
 	"io"
 	"log"
 	"math"
@@ -18,7 +17,6 @@ import (
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	wx "github.com/simpledms/simpledms/ui/widget"
-	"github.com/simpledms/simpledms/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/fileutil"
@@ -95,17 +93,18 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		}
 	}()
 
-	tmpFilePath := fmt.Sprintf(
-		"%s/simpledms-unzip-%s-%s-%s.zip",
-		os.TempDir(),
-		ctx.SpaceCtx().TenantID,
-		ctx.SpaceCtx().SpaceID,
-		util.NewPublicID(), // storedFile.Data.PublicID,
-	)
-	tmpFile, err := os.OpenFile(tmpFilePath, os.O_RDWR|os.O_CREATE, 0600)
+	tmpDirPath, err := os.MkdirTemp("", "simpledms-unzip-")
 	if err != nil {
-		// TODO if already exists, let user know that unzip is in progress
 		log.Println(err)
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not unzip the archive.")
+	}
+
+	tmpFile, err := os.CreateTemp(tmpDirPath, "archive-*.zip")
+	if err != nil {
+		log.Println(err)
+		if removeErr := os.RemoveAll(tmpDirPath); removeErr != nil {
+			log.Println(removeErr)
+		}
 		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not unzip the archive.")
 	}
 	defer func() {
@@ -113,7 +112,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		if err != nil {
 			log.Println(err)
 		}
-		err = os.Remove(tmpFile.Name())
+		err = os.RemoveAll(tmpDirPath)
 		if err != nil {
 			log.Println(err)
 		}
