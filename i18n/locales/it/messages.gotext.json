@@ -826,6 +826,13 @@
             "fuzzy": true
         },
         {
+            "id": "Best match",
+            "message": "Best match",
+            "translation": "Migliore corrispondenza",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Between",
             "message": "Between",
             "translation": "Tra",

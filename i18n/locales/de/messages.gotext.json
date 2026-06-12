@@ -885,6 +885,13 @@
             "fuzzy": true
         },
         {
+            "id": "Best match",
+            "message": "Best match",
+            "translation": "Beste Übereinstimmung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Between",
             "message": "Between",
             "translation": "Zwischen",

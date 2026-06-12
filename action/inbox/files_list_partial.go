@@ -34,6 +34,13 @@ type FilesListPartialData struct {
 	SelectedFileID string
 }
 
+const (
+	sortByNewestFirst = "newestFirst"
+	sortByOldestFirst = "oldestFirst"
+	sortByName        = "name"
+	sortByRank        = "rank"
+)
+
 type FilesListPartialState struct {
 	SearchQuery string `url:"q,omitempty"`
 	// used in JS, thus don't change URL and as param name below
@@ -42,7 +49,17 @@ type FilesListPartialState struct {
 }
 
 func (qq *FilesListPartialState) isSortedByDate() bool {
-	return qq.SortBy == "" || qq.SortBy == "newestFirst" || qq.SortBy == "oldestFirst"
+	return qq.SortBy == "" || qq.SortBy == sortByNewestFirst || qq.SortBy == sortByOldestFirst
+}
+
+func (qq *FilesListPartialState) hasActiveSearch() bool {
+	return sqlutil.FTSSafeAndQuery(qq.SearchQuery, 300) != ""
+}
+
+func (qq *FilesListPartialState) normalizeSortBy() {
+	if qq.SortBy == sortByRank && !qq.hasActiveSearch() {
+		qq.SortBy = ""
+	}
 }
 
 type FilesListPartial struct {
@@ -89,24 +106,27 @@ func (qq *FilesListPartial) Handler(
 		return err
 	}
 
-	// necessary because when filterChip is clicked, the info is send as form
-	state, err := autil.FormData[InboxPageState](rw, req, ctx)
-	if err != nil {
-		return err
-	}
+	state := autil.StateX[InboxPageState](rw, req)
+	state.FilesListPartialState.normalizeSortBy()
 
 	hxTarget := req.URL.Query().Get("hx-target")
 	if hxTarget == "#"+qq.FileListID() {
 		rw.Header().Set("HX-Replace-Url", route.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID))
+		fileList := qq.filesList(
+			ctx,
+			state,
+			data,
+		)
 
 		return qq.infra.Renderer().Render(
 			rw,
 			ctx,
-			qq.filesList(
-				ctx,
-				state,
-				data,
-			),
+			&wx.View{
+				Children: []wx.IWidget{
+					fileList,
+					qq.sortMenuButton(ctx, &state.FilesListPartialState, true),
+				},
+			},
 		)
 	}
 	if req.Header.Get("Hx-Target") == "inboxLoadMore" {
@@ -177,6 +197,8 @@ func (qq *FilesListPartial) Widget(
 	state *InboxPageState,
 	selectedFileID string,
 ) *wx.ListDetailLayout {
+	state.FilesListPartialState.normalizeSortBy()
+
 	var children []wx.IWidget
 	var appBar *wx.AppBar
 
@@ -355,6 +377,8 @@ func (qq *FilesListPartial) filesListItemsFromFiles(
 
 // LIMIT must be applied by caller
 func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) *enttenant.FileQuery {
+	state.FilesListPartialState.normalizeSortBy()
+
 	searchResultQuery := ctx.TenantCtx().TTx.File.Query()
 	searchQuery := sqlutil.FTSSafeAndQuery(state.SearchQuery, 300)
 	/*Where(func(qs *sql.Selector) {
@@ -410,11 +434,21 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 	}
 
 	switch state.SortBy {
-	case "name":
+	case sortByRank:
+		searchResultQuery = searchResultQuery.Order(
+			entquery.OrderFileSearchRankWithDirectory(
+				searchQuery,
+				ctx.SpaceCtx().Space.ID,
+				true,
+				false,
+			),
+			file.ByCreatedAt(sql.OrderDesc()),
+		)
+	case sortByName:
 		searchResultQuery = searchResultQuery.Order(file.ByName())
-	case "oldestFirst":
+	case sortByOldestFirst:
 		searchResultQuery = searchResultQuery.Order(file.ByCreatedAt())
-	case "newestFirst":
+	case sortByNewestFirst:
 		fallthrough
 	default:
 		searchResultQuery = searchResultQuery.Order(file.ByCreatedAt(sql.OrderDesc()))
@@ -431,11 +465,7 @@ func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.
 		Title:            wx.T("Inbox"),
 		Actions: []wx.IWidget{
 			qq.fileListViewButton(ctx),
-			&wx.IconButton{
-				Icon:     "sort",
-				Tooltip:  wx.T("Sort files"),
-				Children: NewSortListContextMenuWidget(qq.actions).Widget(ctx, &state.FilesListPartialState),
-			},
+			qq.sortMenuButton(ctx, &state.FilesListPartialState, false),
 		},
 		Search: &wx.Search{
 			Widget: wx.Widget[wx.Search]{
@@ -445,8 +475,33 @@ func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.
 			Value:          state.SearchQuery,
 			SupportingText: wx.Tf("Search in «Inbox»"),
 			HTMXAttrs: wx.HTMXAttrs{
-				HxOn: event.SearchQueryUpdated.HxOnWithQueryParam("input", "q"),
+				HxOn: event.SearchQueryUpdated.HxOnWithSearchQueryParamAndRankSortReset("input", "q"),
 			},
+		},
+	}
+}
+
+func (qq *FilesListPartial) sortMenuButton(
+	ctx ctxx.Context,
+	state *FilesListPartialState,
+	isOOB bool,
+) *wx.Container {
+	swapOOB := ""
+	if isOOB {
+		swapOOB = "outerHTML"
+	}
+
+	return &wx.Container{
+		Widget: wx.Widget[wx.Container]{
+			ID: "inboxSortFilesButton",
+		},
+		HTMXAttrs: wx.HTMXAttrs{
+			HxSwapOOB: swapOOB,
+		},
+		Child: &wx.IconButton{
+			Icon:     "sort",
+			Tooltip:  wx.T("Sort files"),
+			Children: NewSortListContextMenuWidget(qq.actions).Widget(ctx, state),
 		},
 	}
 }

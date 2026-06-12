@@ -57,6 +57,7 @@ func (qq *ListDirFileQueryService) Query(
 	state.searchQueryRaw = state.SearchQuery
 	// FIXME should be automatically applied on parsing state
 	state.SearchQuery = sqlutil.FTSSafeAndQuery(state.SearchQuery, 300)
+	state.normalizeSortBy()
 
 	// TODO find a better solution; not really robust
 	if ctx.SpaceCtx().Space.IsFolderMode && state.DocumentTypeID == 0 && len(state.CheckedTagIDs) == 0 && state.SearchQuery == "" {
@@ -136,19 +137,29 @@ func (qq *ListDirFileQueryService) Query(
 	}
 
 	switch state.SortBy {
-	case "newestFirst":
+	case sortByRank:
+		searchResultQuery = searchResultQuery.Order(
+			entquery.OrderFileSearchRank(
+				state.SearchQuery,
+				ctx.SpaceCtx().Space.ID,
+				false,
+			),
+			file.ByIsDirectory(sql.OrderDesc()),
+			file.ByName(),
+		)
+	case sortByNewestFirst:
 		searchResultQuery = searchResultQuery.Order(
 			file.ByIsDirectory(sql.OrderDesc()),
 			file.ByCreatedAt(sql.OrderDesc()),
 			file.ByName(),
 		)
-	case "oldestFirst":
+	case sortByOldestFirst:
 		searchResultQuery = searchResultQuery.Order(
 			file.ByIsDirectory(sql.OrderDesc()),
 			file.ByCreatedAt(),
 			file.ByName(),
 		)
-	case "name":
+	case sortByName:
 		fallthrough
 	default:
 		searchResultQuery = searchResultQuery.Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName())

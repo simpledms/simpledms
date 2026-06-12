@@ -217,6 +217,20 @@
 				return _setQueryParamValue(paramName, paramValue);
 			}
 
+			function _setSearchQueryParamAndResetRankSort(event, queryParamName, sortParamName) {
+				const searchParams = new URLSearchParams(window.location.search);
+				if (event.target.value === '') {
+					searchParams.delete(queryParamName);
+
+					if (searchParams.get(sortParamName) === 'rank') {
+						searchParams.delete(sortParamName);
+					}
+				} else {
+					searchParams.set(queryParamName, event.target.value);
+				}
+				_updateURL(searchParams);
+			}
+
 			function _appendQueryParamSliceValue(paramName, paramValue) {
 				const searchParams = new URLSearchParams(window.location.search);
 				searchParams.append(paramName, paramValue);

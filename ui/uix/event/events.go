@@ -144,6 +144,19 @@ func (qq Event) HxOnWithQueryParam(event string, paramName string) *wx.HxOn {
 	}
 }
 
+func (qq Event) HxOnWithSearchQueryParamAndRankSortReset(event string, paramName string) *wx.HxOn {
+	return &wx.HxOn{
+		Event: event,
+		Handler: template.JS(
+			fmt.Sprintf(
+				"_setSearchQueryParamAndResetRankSort(event, '%s', 'sort_by'); this.dispatchEvent(new CustomEvent('%s', { bubbles: true }))",
+				paramName,
+				qq.String(),
+			),
+		),
+	}
+}
+
 // IMPORTANT be careful with value because of XSS
 func (qq Event) UnsafeHxOnWithQueryParamAndValue(event string, paramName string, paramValue string) *wx.HxOn {
 	return &wx.HxOn{

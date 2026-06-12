@@ -38,6 +38,13 @@ type ListDirPartialData struct {
 	SelectedFileID string
 }
 
+const (
+	sortByNewestFirst = "newestFirst"
+	sortByOldestFirst = "oldestFirst"
+	sortByName        = "name"
+	sortByRank        = "rank"
+)
+
 type ListDirPartialState struct {
 	ListFilterTagsPartialState
 	DocumentTypeFilterPartialState
@@ -71,7 +78,17 @@ type ListDirPartialState struct {
 }
 
 func (qq *ListDirPartialState) isSortedByDate() bool {
-	return qq.SortBy == "newestFirst" || qq.SortBy == "oldestFirst"
+	return qq.SortBy == sortByNewestFirst || qq.SortBy == sortByOldestFirst
+}
+
+func (qq *ListDirPartialState) hasActiveSearch() bool {
+	return qq.SearchQuery != ""
+}
+
+func (qq *ListDirPartialState) normalizeSortBy() {
+	if qq.SortBy == sortByRank && !qq.hasActiveSearch() {
+		qq.SortBy = ""
+	}
 }
 
 type ListDirPartial struct {
@@ -132,16 +149,23 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 
 		// dir := ctx.TenantCtx().TTx.File.GetX(ctx, data.CurrentDirID)
 		dir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
+		fileList := qq.filesList(
+			ctx,
+			state,
+			dir,
+			data,
+			0,
+		)
+
 		return qq.infra.Renderer().Render(
 			rw,
 			ctx,
-			qq.filesList(
-				ctx,
-				state,
-				dir,
-				data,
-				0,
-			),
+			&wx.View{
+				Children: []wx.IWidget{
+					fileList,
+					qq.sortMenuButton(ctx, state, true),
+				},
+			},
 		)
 	}
 
@@ -620,11 +644,7 @@ func (qq *ListDirPartial) appBar(
 		Title:            wx.Tu(dir.Data.Name),
 		Actions: []wx.IWidget{
 			qq.fileListViewButton(ctx, dir.Data.PublicID.String(), selectedFileID),
-			&wx.IconButton{
-				Icon:     "sort",
-				Tooltip:  wx.T("Sort files"),
-				Children: NewSortListContextMenuWidget().Widget(ctx, state),
-			},
+			qq.sortMenuButton(ctx, state, false),
 		},
 		Search: &wx.Search{
 			Widget: wx.Widget[wx.Search]{
@@ -635,8 +655,33 @@ func (qq *ListDirPartial) appBar(
 			SupportingText:          supportingText,
 			SupportingTextAltMobile: supportingTextAltMobile,
 			HTMXAttrs: wx.HTMXAttrs{
-				HxOn: event.SearchQueryUpdated.HxOnWithQueryParam("input", "q"),
+				HxOn: event.SearchQueryUpdated.HxOnWithSearchQueryParamAndRankSortReset("input", "q"),
 			},
+		},
+	}
+}
+
+func (qq *ListDirPartial) sortMenuButton(
+	ctx ctxx.Context,
+	state *ListDirPartialState,
+	isOOB bool,
+) *wx.Container {
+	swapOOB := ""
+	if isOOB {
+		swapOOB = "outerHTML"
+	}
+
+	return &wx.Container{
+		Widget: wx.Widget[wx.Container]{
+			ID: "browseSortFilesButton",
+		},
+		HTMXAttrs: wx.HTMXAttrs{
+			HxSwapOOB: swapOOB,
+		},
+		Child: &wx.IconButton{
+			Icon:     "sort",
+			Tooltip:  wx.T("Sort files"),
+			Children: NewSortListContextMenuWidget().Widget(ctx, state),
 		},
 	}
 }
