@@ -89,11 +89,12 @@ func (qq *FilesListPartial) Data(selectedFileID string) *FilesListPartialData {
 }
 
 func (qq *FilesListPartial) WrapperID() string {
-	return "listDirWrapper"
+	// Keep this distinct from Browse IDs because morph navigation can retain HTMX listeners.
+	return "inboxListWrapper"
 }
 
 func (qq *FilesListPartial) FileListID() string {
-	return "fileList"
+	return "inboxFileList"
 }
 func (qq *FilesListPartial) Handler(
 	rw httpx.ResponseWriter,
