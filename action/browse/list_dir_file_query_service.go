@@ -82,6 +82,9 @@ func (qq *ListDirFileQueryService) Query(
 			// subquery to select all files in search scope
 			if !state.IsRecursive {
 				qs.Where(sql.EQ(qs.C(file.FieldParentID), currentDir.ID))
+			} else if currentDir.IsRootDir {
+				// Root recursive scope already spans the whole space; avoid walking every descendant.
+				qs.Where(sql.NEQ(qs.C(file.FieldID), currentDir.ID))
 			} else {
 				qs.Where(qq.descendantScopePredicate(qs.C(file.FieldID), currentDir.ID, ctx.SpaceCtx().Space.ID))
 			}

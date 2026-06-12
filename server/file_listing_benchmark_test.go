@@ -48,6 +48,11 @@ func browseFTSBenchmarkSearchQuery() string {
 	return sqlutil.FTSSafeAndQuery(inboxEventSearchQuery(), 300)
 }
 
+func browseRecursiveBenchmarkSearchQuery() string {
+	// Punctuation bypasses the FTS candidate limiter and exposes filename-prefix search scaling.
+	return "benchmark-file*"
+}
+
 func BenchmarkFileListing(b *testing.B) {
 	originalLogOutput := log.Writer()
 	log.SetOutput(io.Discard)
@@ -109,10 +114,10 @@ func BenchmarkFileListing(b *testing.B) {
 				benchmarkBrowseListingQuery(b, fixture, expectedRowCount)
 			})
 			b.Run("handler", func(b *testing.B) {
-				benchmarkBrowseListingHandler(b, fixture, expectedRowCount)
+				benchmarkBrowseListingHandler(b, fixture, expectedRowCount, "")
 			})
 			b.Run("router", func(b *testing.B) {
-				benchmarkBrowseListingRouter(b, fixture, expectedRowCount)
+				benchmarkBrowseListingRouter(b, fixture, expectedRowCount, "")
 			})
 		})
 	}
@@ -181,10 +186,10 @@ func BenchmarkFileListingAcrossTenSpaces(b *testing.B) {
 				benchmarkBrowseListingQuery(b, fixture, expectedRowCount)
 			})
 			b.Run("handler", func(b *testing.B) {
-				benchmarkBrowseListingHandler(b, fixture, expectedRowCount)
+				benchmarkBrowseListingHandler(b, fixture, expectedRowCount, "")
 			})
 			b.Run("router", func(b *testing.B) {
-				benchmarkBrowseListingRouter(b, fixture, expectedRowCount)
+				benchmarkBrowseListingRouter(b, fixture, expectedRowCount, "")
 			})
 		})
 	}
@@ -241,6 +246,35 @@ func BenchmarkBrowseFTSQuery(b *testing.B) {
 			}
 
 			benchmarkBrowseFTSQuery(b, fixture, searchQuery, expectedRowCount)
+		})
+	}
+}
+
+func BenchmarkBrowseRecursiveSearchListing(b *testing.B) {
+	originalLogOutput := log.Writer()
+	log.SetOutput(io.Discard)
+	b.Cleanup(func() {
+		log.SetOutput(originalLogOutput)
+	})
+
+	fileCounts := []int{0, 1000, 5000, 10000, 100000, 1000000}
+	searchQuery := browseRecursiveBenchmarkSearchQuery()
+
+	for _, fileCount := range fileCounts {
+		fileCount := fileCount
+
+		b.Run(fmt.Sprintf("single_space_%d", fileCount), func(b *testing.B) {
+			fixture := newListingBenchmarkFixture(b, fileCount, false)
+			defer fixture.cleanup()
+
+			assertBrowseSearchResult(b, fixture, searchQuery, fileCount > 0)
+
+			b.Run("handler", func(b *testing.B) {
+				benchmarkBrowseListingHandler(b, fixture, fileCount, searchQuery)
+			})
+			b.Run("router", func(b *testing.B) {
+				benchmarkBrowseListingRouter(b, fixture, fileCount, searchQuery)
+			})
 		})
 	}
 }
@@ -339,14 +373,19 @@ func benchmarkInboxListingHandler(b *testing.B, fixture *listingBenchmarkFixture
 	reportEventTime(b)
 }
 
-func benchmarkBrowseListingHandler(b *testing.B, fixture *listingBenchmarkFixture, expectedRowCount int) {
+func benchmarkBrowseListingHandler(
+	b *testing.B,
+	fixture *listingBenchmarkFixture,
+	expectedRowCount int,
+	searchQuery string,
+) {
 	b.Helper()
 	b.ReportAllocs()
 
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		listEventSize, err := runBrowseListEvent(fixture)
+		listEventSize, err := runBrowseListEvent(fixture, searchQuery)
 		if err != nil {
 			b.Fatalf("browse list event failed: %v", err)
 		}
@@ -390,14 +429,19 @@ func benchmarkInboxListingRouter(b *testing.B, fixture *listingBenchmarkFixture,
 	reportEventTime(b)
 }
 
-func benchmarkBrowseListingRouter(b *testing.B, fixture *listingBenchmarkFixture, expectedRowCount int) {
+func benchmarkBrowseListingRouter(
+	b *testing.B,
+	fixture *listingBenchmarkFixture,
+	expectedRowCount int,
+	searchQuery string,
+) {
 	b.Helper()
 	b.ReportAllocs()
 
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		listEventSize, err := runBrowseListEventViaRouter(fixture)
+		listEventSize, err := runBrowseListEventViaRouter(fixture, searchQuery)
 		if err != nil {
 			b.Fatalf("browse list event via router failed: %v", err)
 		}
@@ -444,7 +488,19 @@ func runInboxListEvent(fixture *listingBenchmarkFixture, searchQuery string) (in
 	return rr.Body.Len(), nil
 }
 
-func runBrowseListEvent(fixture *listingBenchmarkFixture) (int, error) {
+func runBrowseListEvent(fixture *listingBenchmarkFixture, searchQuery string) (int, error) {
+	rr, err := runBrowseListEventRecorder(fixture, searchQuery)
+	if err != nil {
+		return 0, err
+	}
+
+	return rr.Body.Len(), nil
+}
+
+func runBrowseListEventRecorder(
+	fixture *listingBenchmarkFixture,
+	searchQuery string,
+) (*httptest.ResponseRecorder, error) {
 	form := url.Values{}
 	form.Set("CurrentDirID", fixture.rootDirPublicID)
 	form.Set("SelectedFileID", "")
@@ -456,6 +512,7 @@ func runBrowseListEvent(fixture *listingBenchmarkFixture) (int, error) {
 	)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("HX-Request", "true")
+	req.Header.Set("HX-Current-URL", browseCurrentURL(fixture, searchQuery))
 
 	rr := httptest.NewRecorder()
 	err := fixture.actions.Browse.ListDirPartial.Handler(
@@ -464,13 +521,13 @@ func runBrowseListEvent(fixture *listingBenchmarkFixture) (int, error) {
 		fixture.spaceCtx,
 	)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	if rr.Code != http.StatusOK {
-		return 0, fmt.Errorf("unexpected status code: %d", rr.Code)
+		return nil, fmt.Errorf("unexpected status code: %d", rr.Code)
 	}
 
-	return rr.Body.Len(), nil
+	return rr, nil
 }
 
 func runInboxListEventViaRouter(fixture *listingBenchmarkFixture, searchQuery string) (int, error) {
@@ -502,7 +559,7 @@ func runInboxListEventViaRouter(fixture *listingBenchmarkFixture, searchQuery st
 	return rr.Body.Len(), nil
 }
 
-func runBrowseListEventViaRouter(fixture *listingBenchmarkFixture) (int, error) {
+func runBrowseListEventViaRouter(fixture *listingBenchmarkFixture, searchQuery string) (int, error) {
 	form := url.Values{}
 	form.Set("CurrentDirID", fixture.rootDirPublicID)
 	form.Set("SelectedFileID", "")
@@ -514,7 +571,7 @@ func runBrowseListEventViaRouter(fixture *listingBenchmarkFixture) (int, error) 
 	)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("HX-Request", "true")
-	req.Header.Set("HX-Current-URL", route.Browse(fixture.tenantPublicID, fixture.spacePublicID, fixture.rootDirPublicID))
+	req.Header.Set("HX-Current-URL", browseCurrentURL(fixture, searchQuery))
 	req.AddCookie(&http.Cookie{
 		Name:  cookiex.SessionCookieName(),
 		Value: fixture.sessionValue,
@@ -527,6 +584,43 @@ func runBrowseListEventViaRouter(fixture *listingBenchmarkFixture) (int, error) 
 	}
 
 	return rr.Body.Len(), nil
+}
+
+func browseCurrentURL(fixture *listingBenchmarkFixture, searchQuery string) string {
+	currentURL := route.Browse(
+		fixture.tenantPublicID,
+		fixture.spacePublicID,
+		fixture.rootDirPublicID,
+	)
+	if searchQuery == "" {
+		return currentURL
+	}
+
+	values := url.Values{}
+	values.Set("q", searchQuery)
+	return currentURL + "?" + values.Encode()
+}
+
+func assertBrowseSearchResult(
+	b *testing.B,
+	fixture *listingBenchmarkFixture,
+	searchQuery string,
+	shouldFindResult bool,
+) {
+	b.Helper()
+
+	rr, err := runBrowseListEventRecorder(fixture, searchQuery)
+	if err != nil {
+		b.Fatalf("initial recursive browse search failed: %v", err)
+	}
+
+	body := rr.Body.String()
+	if shouldFindResult && !strings.Contains(body, "benchmark-file-") {
+		b.Fatal("expected recursive browse search result body to include benchmark files")
+	}
+	if !shouldFindResult && strings.Contains(body, "benchmark-file-") {
+		b.Fatal("expected empty recursive browse search result body")
+	}
 }
 
 func reportEventTime(b *testing.B) {
