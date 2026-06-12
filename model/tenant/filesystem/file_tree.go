@@ -295,6 +295,44 @@ func (qq *FileTree) DescendantIDsSubQuery(rootID, spaceID int64) *sql.Selector {
 		Prefix(withDescendants)
 }
 
+// RecursiveDirectoryScopeIDsSubQuery returns all directory IDs that can contain
+// recursive browse results.
+func (qq *FileTree) RecursiveDirectoryScopeIDsSubQuery(rootID, spaceID int64) *sql.Selector {
+	filesTable := sql.Table(file.Table)
+	recursiveFilesTable := sql.Table(file.Table).As("f")
+	recursiveScopeDirsTable := sql.Table("scope_dirs").As("d")
+	scopeDirsTable := sql.Table("scope_dirs")
+
+	anchor := sql.Select(filesTable.C(file.FieldID)).
+		From(filesTable).
+		Where(
+			sql.And(
+				sql.EQ(filesTable.C(file.FieldID), rootID),
+				sql.EQ(filesTable.C(file.FieldSpaceID), spaceID),
+				sql.EQ(filesTable.C(file.FieldIsDirectory), 1),
+				sql.IsNull(filesTable.C(file.FieldDeletedAt)),
+			),
+		)
+
+	recursive := sql.Select(recursiveFilesTable.C(file.FieldID)).
+		From(recursiveFilesTable).
+		Join(recursiveScopeDirsTable).
+		On(recursiveFilesTable.C(file.FieldParentID), recursiveScopeDirsTable.C("id")).
+		Where(
+			sql.And(
+				sql.EQ(recursiveFilesTable.C(file.FieldSpaceID), spaceID),
+				sql.EQ(recursiveFilesTable.C(file.FieldIsDirectory), 1),
+				sql.IsNull(recursiveFilesTable.C(file.FieldDeletedAt)),
+			),
+		)
+
+	withScopeDirs := sql.WithRecursive("scope_dirs", "id").As(anchor.UnionAll(recursive))
+
+	return sql.Select(scopeDirsTable.C("id")).
+		From(scopeDirsTable).
+		Prefix(withScopeDirs)
+}
+
 func (qq *FileTree) fullPathFromPathFiles(pathFiles []*enttenant.File) string {
 	if len(pathFiles) <= 1 {
 		return ""

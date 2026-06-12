@@ -86,7 +86,11 @@ func (qq *ListDirFileQueryService) Query(
 				// Root recursive scope already spans the whole space; avoid walking every descendant.
 				qs.Where(sql.NEQ(qs.C(file.FieldID), currentDir.ID))
 			} else {
-				qs.Where(qq.descendantScopePredicate(qs.C(file.FieldID), currentDir.ID, ctx.SpaceCtx().Space.ID))
+				qs.Where(qq.recursiveDirectoryScopePredicate(
+					qs.C(file.FieldParentID),
+					currentDir.ID,
+					ctx.SpaceCtx().Space.ID,
+				))
 			}
 
 			if len(state.ListFilterTagsPartialState.CheckedTagIDs) > 0 {
@@ -255,10 +259,13 @@ func (qq *ListDirFileQueryService) childCountsByDirectoryID(
 	return countsByDirID
 }
 
-func (qq *ListDirFileQueryService) descendantScopePredicate(
-	fileColumn string,
+func (qq *ListDirFileQueryService) recursiveDirectoryScopePredicate(
+	parentColumn string,
 	rootID int64,
 	spaceID int64,
 ) *sql.Predicate {
-	return sql.In(fileColumn, qq.infra.FileSystem().FileTree().DescendantIDsSubQuery(rootID, spaceID))
+	return sql.In(
+		parentColumn,
+		qq.infra.FileSystem().FileTree().RecursiveDirectoryScopeIDsSubQuery(rootID, spaceID),
+	)
 }
