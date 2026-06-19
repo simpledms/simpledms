@@ -2,7 +2,6 @@ package sqlx
 
 import (
 	"log"
-	"runtime"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
@@ -21,9 +20,7 @@ func NewTenantDB(readOnlyDataSourceURL, readWriteDataSourceURL string) *TenantDB
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}
 	readOnlyDrv.DB().SetMaxIdleConns(0)
-	// TODO related to number of cpus? runtime.NumCPU
-	//		if in doubt, set it low to prevent out of memory issue?
-	readOnlyDrv.DB().SetMaxOpenConns(runtime.NumCPU()) // TODO enough?
+	readOnlyDrv.DB().SetMaxOpenConns(readOnlyMaxOpenConns()) // TODO enough?
 	readOnlyConn := enttenant.NewClient(enttenant.Driver(newTimingDriver(readOnlyDrv)))
 
 	// read write

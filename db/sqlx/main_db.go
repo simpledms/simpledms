@@ -3,7 +3,6 @@ package sqlx
 import (
 	"fmt"
 	"log"
-	"runtime"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
@@ -23,7 +22,7 @@ func NewMainDB(dbPath string) *MainDB {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}
 	readOnlyDrv.DB().SetMaxIdleConns(0)
-	readOnlyDrv.DB().SetMaxOpenConns(runtime.NumCPU()) // TODO enough?
+	readOnlyDrv.DB().SetMaxOpenConns(readOnlyMaxOpenConns()) // TODO enough?
 	readOnlyConn := entmain.NewClient(entmain.Driver(newTimingDriver(readOnlyDrv)))
 
 	// read write
