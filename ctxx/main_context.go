@@ -89,7 +89,7 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() (map[*entmain.Tenant][]*e
 		tenantCtx := NewTenantContext(qq, tenantTx, tenantx, true)
 
 		// spaces = append(spaces, tenantDB.Space.Query().AllX(ctx)...)
-		spacesx, err := tenantDB.ReadOnlyConn.Space.Query().All(tenantCtx)
+		spacesx, err := tenantTx.Space.Query().All(tenantCtx)
 		if err != nil && !enttenant.IsNotFound(err) {
 			log.Println("failed to query spaces for tenant", tenantx.ID, err)
 			qq.rollbackTenantTx(tenantTx, tenantx.ID)

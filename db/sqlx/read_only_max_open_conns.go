@@ -22,5 +22,14 @@ func readOnlyMaxOpenConns() int {
 		return parsedValue
 	}
 
-	return runtime.NumCPU()
+	numCPU := runtime.NumCPU()
+	if numCPU < 2 {
+		// 2 is a good minimum even for 1 CPU thread because it reduces the risk of a deadlock,
+		// for example if the scheduler is running.
+		//
+		// only for production/dev use because env value is just used for testing
+		// and it should be possible to simulate just one reader
+		return 2
+	}
+	return numCPU
 }
