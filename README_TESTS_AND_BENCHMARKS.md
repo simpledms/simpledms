@@ -33,6 +33,16 @@ Disable test cache:
 go test ./server -count=1
 ```
 
+## Go linting
+
+Run golangci-lint with the same version used by CI:
+
+```bash
+go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.12.2 run ./...
+```
+
+The current configuration reports issues introduced after the merge base with `origin/main`.
+
 ## E2E tests
 
 ```bash

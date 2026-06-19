@@ -1,0 +1,25 @@
+name: 'GolangCI-Lint'
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  golangci-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.25'
+
+      - uses: golangci/golangci-lint-action@v9.2.1
+        with:
+          version: v2.12.2
+          args: ./...

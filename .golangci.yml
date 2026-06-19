@@ -1,0 +1,15 @@
+version: "2"
+
+run:
+  go: "1.25"
+  modules-download-mode: readonly
+  relative-path-mode: gomod
+  timeout: 5m
+
+linters:
+  default: standard
+  exclusions:
+    generated: lax
+
+issues:
+  new-from-merge-base: origin/main
