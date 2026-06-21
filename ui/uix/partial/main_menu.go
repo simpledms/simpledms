@@ -1,7 +1,6 @@
 package partial
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/simpledms/simpledms/common"
@@ -86,25 +85,25 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 			IsDivider: true,
 		})
 
-		spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+		spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant(ctx)
 		if err != nil {
 			// TODO returning an error would probably be better...
 			log.Println(err)
 		} else {
-			for tenantx, spaces := range spacesByTenant {
+			for _, tenantSpaces := range spacesByTenant {
 				items = append(items, &wx.MenuItem{
 					LeadingIcon: "hub",
 					// TODO or `all spaces` or `manage spaces`? `|` or «»
-					Label: wx.Tuf("%s «%s»", wx.T("Spaces").String(ctx), tenantx.Name),
+					Label: wx.Tuf("%s «%s»", wx.T("Spaces").String(ctx), tenantSpaces.TenantName),
 					HTMXAttrs: wx.HTMXAttrs{
-						HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
+						HxGet: route2.SpacesRoot(tenantSpaces.TenantPublicID),
 					},
 				})
 				// TODO add Label with Tenant name
-				for _, spacex := range spaces {
+				for _, spacex := range tenantSpaces.Spaces {
 					// trailingIcon := ""
 					leadingIcon := "check_box_outline_blank"
-					isCurrent := ctx.IsSpaceCtx() && ctx.SpaceCtx().SpaceID == spacex.PublicID.String()
+					isCurrent := ctx.IsSpaceCtx() && ctx.SpaceCtx().SpaceID == spacex.PublicID
 					if isCurrent {
 						// trailingIcon = "check"
 						leadingIcon = "check_box"
@@ -113,9 +112,9 @@ func NewMainMenu(ctx ctxx.Context, infra *common.Infra) *wx.IconButton {
 						LeadingIcon: leadingIcon,
 						// TrailingIcon: trailingIcon,
 						// TODO tenant name as label or supporting text or tooltip?
-						Label: wx.Tu(fmt.Sprintf("%s", spacex.Name)),
+						Label: wx.Tu(spacex.Name),
 						HTMXAttrs: wx.HTMXAttrs{
-							HxGet: route2.BrowseRoot(tenantx.PublicID.String(), spacex.PublicID.String()),
+							HxGet: route2.BrowseRoot(tenantSpaces.TenantPublicID, spacex.PublicID),
 						},
 					})
 				}

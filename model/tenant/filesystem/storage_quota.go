@@ -31,12 +31,28 @@ func NewStorageQuota(isSaaSModeEnabled bool) *StorageQuota {
 }
 
 func (qq *StorageQuota) TenantUsageBytes(ctx ctxx.Context) (int64, int64, error) {
-	limitBytes, err := qq.tenantStorageLimitBytes(ctx)
+	tenantCtx := ctx.TenantCtx()
+	return qq.TenantUsageBytesForTenant(
+		ctx,
+		tenantCtx.TTx,
+		tenantCtx.Tenant.ID,
+		tenantCtx.Tenant.Plan,
+	)
+}
+
+// TenantUsageBytesForTenant returns the current storage usage and storage limit for a tenant.
+func (qq *StorageQuota) TenantUsageBytesForTenant(
+	ctx ctxx.Context,
+	tenantTx *enttenant.Tx,
+	tenantID int64,
+	tenantPlan plan.Plan,
+) (int64, int64, error) {
+	limitBytes, err := qq.tenantStorageLimitBytes(ctx, tenantID, tenantPlan)
 	if err != nil {
 		return 0, 0, err
 	}
 
-	usedBytes, err := qq.currentUsedTenantStorageBytes(ctx)
+	usedBytes, err := qq.currentUsedTenantStorageBytes(ctx, tenantTx)
 	if err != nil {
 		return 0, 0, err
 	}
@@ -69,13 +85,16 @@ func (qq *StorageQuota) EnsureTenantStorageLimit(ctx ctxx.Context, incomingUploa
 	return nil
 }
 
-func (qq *StorageQuota) tenantStorageLimitBytes(ctx ctxx.Context) (int64, error) {
-	tenantPlan := ctx.TenantCtx().Tenant.Plan
+func (qq *StorageQuota) tenantStorageLimitBytes(
+	ctx ctxx.Context,
+	tenantID int64,
+	tenantPlan plan.Plan,
+) (int64, error) {
 	if !qq.planNeedsActiveUserCount(tenantPlan) {
 		return qq.LimitBytesForPlan(tenantPlan, 0), nil
 	}
 
-	activeUserCount, err := qq.activeTenantUserCount(ctx)
+	activeUserCount, err := qq.activeTenantUserCount(ctx, tenantID)
 	if err != nil {
 		return 0, err
 	}
@@ -83,10 +102,10 @@ func (qq *StorageQuota) tenantStorageLimitBytes(ctx ctxx.Context) (int64, error)
 	return qq.LimitBytesForPlan(tenantPlan, activeUserCount), nil
 }
 
-func (qq *StorageQuota) activeTenantUserCount(ctx ctxx.Context) (int, error) {
+func (qq *StorageQuota) activeTenantUserCount(ctx ctxx.Context, tenantID int64) (int, error) {
 	activeUserCount, err := ctx.MainCtx().MainTx.TenantAccountAssignment.Query().
 		Where(
-			tenantaccountassignment.TenantID(ctx.TenantCtx().Tenant.ID),
+			tenantaccountassignment.TenantID(tenantID),
 			tenantaccountassignment.Or(
 				tenantaccountassignment.ExpiresAtIsNil(),
 				tenantaccountassignment.ExpiresAtGT(time.Now()),
@@ -126,14 +145,17 @@ func (qq *StorageQuota) LimitBytesForPlan(tenantPlan plan.Plan, activeUserCount 
 	return int64(activeUserCount) * tenantQuotaProPerUserBytes
 }
 
-func (qq *StorageQuota) currentUsedTenantStorageBytes(ctx ctxx.Context) (int64, error) {
+func (qq *StorageQuota) currentUsedTenantStorageBytes(
+	ctx ctxx.Context,
+	tenantTx *enttenant.Tx,
+) (int64, error) {
 	type tenantUsedStorageRow struct {
 		TenantUsedBytes *int64 `json:"tenant_used_bytes"`
 	}
 
 	rows := make([]tenantUsedStorageRow, 0, 1)
 	ctxWithPrivacyBypass := privacy.DecisionContext(ctx, privacy.Allow)
-	err := ctx.TenantCtx().TTx.StoredFile.Query().
+	err := tenantTx.StoredFile.Query().
 		// Legacy files created before upload status tracking have no upload timestamps.
 		Where(storedfile.Or(
 			storedfile.UploadSucceededAtNotNil(),

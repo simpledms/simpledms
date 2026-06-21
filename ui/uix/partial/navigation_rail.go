@@ -273,23 +273,19 @@ func tenantPasskeyEnrollmentNavigationRailItems(ctx ctxx.Context) []*wx.Navigati
 }
 
 func currentTenantSpaceNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRailItem {
-	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant(ctx)
 	if err != nil {
 		log.Println(err)
 		return []*wx.NavigationRailItem{}
 	}
 
-	tenants := make([]*entmain.Tenant, 0, len(spacesByTenant))
-	for tenantx := range spacesByTenant {
-		tenants = append(tenants, tenantx)
-	}
-	sort.Slice(tenants, func(i, j int) bool {
-		return tenants[i].Name < tenants[j].Name
+	sort.Slice(spacesByTenant, func(i, j int) bool {
+		return spacesByTenant[i].TenantName < spacesByTenant[j].TenantName
 	})
 
 	var items []*wx.NavigationRailItem
-	for _, tenantx := range tenants {
-		spaces := spacesByTenant[tenantx]
+	for _, tenantSpaces := range spacesByTenant {
+		spaces := tenantSpaces.Spaces
 		if len(spaces) == 0 {
 			continue
 		}
@@ -299,7 +295,7 @@ func currentTenantSpaceNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRai
 
 		children := make([]*wx.NavigationRailItem, 0, len(spaces))
 		for _, spacex := range spaces {
-			spaceID := spacex.PublicID.String()
+			spaceID := spacex.PublicID
 			icon := "check_box_outline_blank"
 			if ctx.IsSpaceCtx() && ctx.SpaceCtx().SpaceID == spaceID {
 				icon = "check_box"
@@ -309,17 +305,17 @@ func currentTenantSpaceNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRai
 				SpaceNavigationRailValue(spaceID),
 				wx.Tu(spacex.Name).String(ctx),
 				icon,
-				route2.BrowseRoot(tenantx.PublicID.String(), spaceID),
+				route2.BrowseRoot(tenantSpaces.TenantPublicID, spaceID),
 			))
 		}
 
 		items = append(items, &wx.NavigationRailItem{
-			Key:                 "tenant-spaces-" + tenantx.PublicID.String(),
-			Label:               wx.Tu(tenantx.Name).String(ctx),
+			Key:                 "tenant-spaces-" + tenantSpaces.TenantPublicID,
+			Label:               wx.Tu(tenantSpaces.TenantName).String(ctx),
 			Icon:                "business",
 			Children:            children,
 			IsCollapsible:       true,
-			IsExpandedByDefault: isCurrentSpaceTenant(ctx, tenantx),
+			IsExpandedByDefault: isCurrentSpaceTenant(ctx, tenantSpaces.TenantPublicID),
 		})
 	}
 	if len(items) == 0 {
@@ -332,8 +328,8 @@ func currentTenantSpaceNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRai
 	)
 }
 
-func isCurrentSpaceTenant(ctx ctxx.Context, tenantx *entmain.Tenant) bool {
-	return ctx.IsSpaceCtx() && tenantx.PublicID.String() == ctx.SpaceCtx().TenantID
+func isCurrentSpaceTenant(ctx ctxx.Context, tenantPublicID string) bool {
+	return ctx.IsSpaceCtx() && tenantPublicID == ctx.SpaceCtx().TenantID
 }
 
 func accountTenantNavigationRailItems(

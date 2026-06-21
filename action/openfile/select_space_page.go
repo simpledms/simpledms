@@ -90,24 +90,24 @@ func (qq *SelectSpacePage) Widget(
 
 	var spaceItems []*wx.ListItem
 
-	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	// TODO ordner?
-	for tenantx, spaces := range spacesByTenant {
-		if len(spaces) == 0 {
+	for _, tenantSpaces := range spacesByTenant {
+		if len(tenantSpaces.Spaces) == 0 {
 			spaceItems = append(spaceItems, &wx.ListItem{
 				Type:           wx.ListItemTypeHelper,
 				Headline:       wx.T("No spaces yet."),
 				SupportingText: wx.T("Please try again once you created a space or were invited to join one."),
 			})
 		} else {
-			for _, spacex := range spaces {
+			for _, spacex := range tenantSpaces.Spaces {
 				spaceItems = append(spaceItems, &wx.ListItem{
 					Headline:       wx.Tu(spacex.Name),
-					SupportingText: wx.Tu(tenantx.Name),
+					SupportingText: wx.Tu(tenantSpaces.TenantName),
 					HTMXAttrs: wx.HTMXAttrs{
 						// redirecting to inbox instead of using a custom action like SelectSpace because
 						// this way we get the security check for space and tenant for free and don't have
@@ -118,7 +118,7 @@ func (qq *SelectSpacePage) Widget(
 							UploadToken string `url:"upload_token"`
 						}{
 							UploadToken: uploadToken,
-						})(tenantx.PublicID.String(), spacex.PublicID.String()),
+						})(tenantSpaces.TenantPublicID, spacex.PublicID),
 					},
 				})
 			}

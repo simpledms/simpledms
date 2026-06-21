@@ -14,10 +14,8 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	maintenant "github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
-	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
-	"github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
@@ -130,34 +128,34 @@ func (qq *DashboardCardsPartial) DashboardGrids(ctx ctxx.Context) ([]*wx.Grid, e
 		})
 	}
 
-	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant(ctx)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	for tenantx, spaces := range spacesByTenant {
+	for _, tenantSpaces := range spacesByTenant {
 		var tenantCards []*wx.Card
 		var tenantActionBtns []wx.IWidget
 
-		if tenantCard := qq.nilableTenantCard(ctx, tenantx); tenantCard != nil {
+		if tenantCard := qq.nilableTenantCard(ctx, tenantSpaces); tenantCard != nil {
 			tenantCards = append(tenantCards, tenantCard)
 		}
-		if quotaUsageCard := qq.nilableQuotaUsageCard(ctx, tenantx); quotaUsageCard != nil {
+		if quotaUsageCard := qq.nilableQuotaUsageCard(ctx, tenantSpaces); quotaUsageCard != nil {
 			tenantCards = append(tenantCards, quotaUsageCard)
 		}
 
-		if manageSpacesCard, ok := qq.manageSpacesCard(ctx, tenantx, len(spaces)); ok {
+		if manageSpacesCard, ok := qq.manageSpacesCard(ctx, tenantSpaces); ok {
 			tenantCards = append(tenantCards, manageSpacesCard)
 		}
-		if btn, ok := qq.deleteTenantBtn(ctx, tenantx); ok {
+		if btn, ok := qq.deleteTenantBtn(ctx, tenantSpaces); ok {
 			tenantActionBtns = append(tenantActionBtns, btn)
 		}
-		if link, ok := qq.downloadTenantBackupLink(ctx, tenantx); ok {
+		if link, ok := qq.downloadTenantBackupLink(ctx, tenantSpaces); ok {
 			tenantActionBtns = append(tenantActionBtns, link)
 		}
-		for _, spacex := range spaces {
-			tenantCards = append(tenantCards, qq.spaceCard(ctx, spacex, tenantx))
+		for _, spacex := range tenantSpaces.Spaces {
+			tenantCards = append(tenantCards, qq.spaceCard(ctx, spacex, tenantSpaces))
 		}
 
 		var actions wx.IWidget
@@ -169,7 +167,7 @@ func (qq *DashboardCardsPartial) DashboardGrids(ctx ctxx.Context) ([]*wx.Grid, e
 		}
 
 		grids = append(grids, &wx.Grid{
-			Heading:  wx.Hf(wx.HeadingTypeTitleMd, "Organization «%s»", tenantx.Name),
+			Heading:  wx.Hf(wx.HeadingTypeTitleMd, "Organization «%s»", tenantSpaces.TenantName),
 			Actions:  actions,
 			Children: tenantCards,
 		})
@@ -339,26 +337,26 @@ func (qq *DashboardCardsPartial) registerPasskeyHTMXAttrs() wx.HTMXAttrs {
 	}
 }
 
-func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *entmain.Tenant) *wx.Card {
+func (qq *DashboardCardsPartial) nilableTenantCard(
+	ctx ctxx.Context,
+	tenantSpaces ctxx.AccountTenantSpaces,
+) *wx.Card {
 	var actions []*wx.Button
-
-	tenantm := tenant.NewTenant(tenantx)
 
 	var headline *wx.Heading
 	var subhead *wx.Text
 	var supportingText *wx.Text
 
-	if tenantm.IsInitialized() {
+	if tenantSpaces.IsTenantInitialized {
 		if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
 			return nil
 		}
 
 		// TODO add role info
-		headline = wx.H(wx.HeadingTypeTitleLg, wx.Tu(tenantx.Plan.String()))
+		headline = wx.H(wx.HeadingTypeTitleLg, wx.Tu(tenantSpaces.TenantPlan.String()))
 		subhead = wx.T("Subscription")
 
-		accountm := account.NewAccount(ctx.MainCtx().Account)
-		if tenantm.IsOwner(accountm) {
+		if tenantSpaces.IsTenantOwner {
 			// TODO
 			/*actions = append(actions, &wx.Button{
 				Label:     wx.T("Change plan"),
@@ -370,7 +368,7 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 			Label:     wx.T("Spaces"),
 			StyleType: wx.ButtonStyleTypeTonal,
 			HTMXAttrs: wx.HTMXAttrs{
-				HxGet: route.SpacesRoot(tenantx.PublicID.String()),
+				HxGet: route.SpacesRoot(tenantSpaces.TenantPublicID),
 			},
 		})*/
 	} else {
@@ -399,9 +397,11 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 	}
 }
 
-func (qq *DashboardCardsPartial) nilableQuotaUsageCard(ctx ctxx.Context, tenantx *entmain.Tenant) *wx.Card {
-	tenantm := tenant.NewTenant(tenantx)
-	if !tenantm.IsInitialized() {
+func (qq *DashboardCardsPartial) nilableQuotaUsageCard(
+	ctx ctxx.Context,
+	tenantSpaces ctxx.AccountTenantSpaces,
+) *wx.Card {
+	if !tenantSpaces.IsTenantInitialized {
 		return nil
 	}
 
@@ -409,7 +409,7 @@ func (qq *DashboardCardsPartial) nilableQuotaUsageCard(ctx ctxx.Context, tenantx
 		return nil
 	}
 
-	quotaUsageLabel := qq.tenantStorageUsageLabel(ctx, tenantx)
+	quotaUsageLabel := qq.tenantStorageUsageLabel(ctx, tenantSpaces)
 
 	return &wx.Card{
 		Style:    wx.CardStyleFilled,
@@ -418,33 +418,41 @@ func (qq *DashboardCardsPartial) nilableQuotaUsageCard(ctx ctxx.Context, tenantx
 	}
 }
 
-func (qq *DashboardCardsPartial) tenantStorageUsageLabel(ctx ctxx.Context, tenantx *entmain.Tenant) string {
-	tenantDB, ok := ctx.MainCtx().UnsafeTenantDB(tenantx.ID)
+func (qq *DashboardCardsPartial) tenantStorageUsageLabel(
+	ctx ctxx.Context,
+	tenantSpaces ctxx.AccountTenantSpaces,
+) string {
+	tenantDB, ok := ctx.MainCtx().UnsafeTenantDB(tenantSpaces.TenantID)
 	if !ok {
-		log.Println("tenant db not found, tenant id was", tenantx.ID)
+		log.Println("tenant db not found, tenant id was", tenantSpaces.TenantID)
 		return wx.T("Unavailable").String(ctx)
 	}
 
 	tenantTx, err := tenantDB.ReadOnlyConn.Tx(ctx)
 	if err != nil {
-		log.Println("failed to start transaction for tenant", tenantx.ID, err)
+		log.Println("failed to start transaction for tenant", tenantSpaces.TenantID, err)
 		return wx.T("Unavailable").String(ctx)
 	}
 
-	tenantCtx := ctxx.NewTenantContext(ctx.MainCtx(), tenantTx, tenantx, true)
-	usedBytes, limitBytes, err := qq.infra.FileSystem().TenantUsageBytes(tenantCtx)
+	usedBytes, limitBytes, err := qq.infra.FileSystem().StorageQuota().TenantUsageBytesForTenant(
+		ctx,
+		tenantTx,
+		tenantSpaces.TenantID,
+		tenantSpaces.TenantPlan,
+	)
 	if err != nil {
-		log.Println("failed to query storage usage for tenant", tenantx.ID, err)
-		if rollbackErr := tenantTx.Rollback(); rollbackErr != nil {
-			log.Println("failed to rollback transaction for tenant", tenantx.ID, rollbackErr)
+		log.Println("failed to query storage usage for tenant", tenantSpaces.TenantID, err)
+		rollbackErr := tenantTx.Rollback()
+		if rollbackErr != nil {
+			log.Println("failed to rollback transaction for tenant", tenantSpaces.TenantID, rollbackErr)
 		}
 		return wx.T("Unavailable").String(ctx)
 	}
 
 	if err := tenantTx.Commit(); err != nil {
-		log.Println("failed to commit transaction for tenant", tenantx.ID, err)
+		log.Println("failed to commit transaction for tenant", tenantSpaces.TenantID, err)
 		if rollbackErr := tenantTx.Rollback(); rollbackErr != nil {
-			log.Println("failed to rollback transaction for tenant", tenantx.ID, rollbackErr)
+			log.Println("failed to rollback transaction for tenant", tenantSpaces.TenantID, rollbackErr)
 		}
 		return wx.T("Unavailable").String(ctx)
 	}
@@ -452,10 +460,18 @@ func (qq *DashboardCardsPartial) tenantStorageUsageLabel(ctx ctxx.Context, tenan
 	return fmt.Sprintf("%s of %s", fileutil.FormatSize(usedBytes), fileutil.FormatSize(limitBytes))
 }
 
-func (qq *DashboardCardsPartial) spaceCard(ctx ctxx.Context, spacex *enttenant.Space, tenant *entmain.Tenant) *wx.Card {
+func (qq *DashboardCardsPartial) spaceCard(
+	ctx ctxx.Context,
+	spacex ctxx.AccountSpace,
+	tenantSpaces ctxx.AccountTenantSpaces,
+) *wx.Card {
 	var contextMenu *wx.Menu
 	// if ctx.TenantCtx().User.Role == tenantrole.Owner {
-	contextMenu = NewSpaceContextMenuWidget(qq.actions).Widget(ctx, tenant.PublicID.String(), spacex.PublicID.String())
+	contextMenu = NewSpaceContextMenuWidget(qq.actions).Widget(
+		ctx,
+		tenantSpaces.TenantPublicID,
+		spacex.PublicID,
+	)
 	// }
 
 	return &wx.Card{
@@ -470,7 +486,7 @@ func (qq *DashboardCardsPartial) spaceCard(ctx ctxx.Context, spacex *enttenant.S
 				Label:     wx.T("Select"), // TODO Browse, Open, Switch or activate? or Select?
 				StyleType: wx.ButtonStyleTypeTonal,
 				HTMXAttrs: wx.HTMXAttrs{
-					HxGet: route2.BrowseRoot(tenant.PublicID.String(), spacex.PublicID.String()),
+					HxGet: route2.BrowseRoot(tenantSpaces.TenantPublicID, spacex.PublicID),
 				},
 			},
 		},
@@ -618,18 +634,19 @@ func (qq *DashboardCardsPartial) clearTemporaryPasswordCard(ctx ctxx.Context) *w
 	}
 }
 
-func (qq *DashboardCardsPartial) manageSpacesCard(ctx ctxx.Context, tenantx *entmain.Tenant, spacesCount int) (*wx.Card, bool) {
-	if spacesCount > 0 {
+func (qq *DashboardCardsPartial) manageSpacesCard(
+	ctx ctxx.Context,
+	tenantSpaces ctxx.AccountTenantSpaces,
+) (*wx.Card, bool) {
+	if len(tenantSpaces.Spaces) > 0 {
 		return nil, false
 	}
 
-	tenantm := tenant.NewTenant(tenantx)
-	if !tenantm.IsInitialized() {
+	if !tenantSpaces.IsTenantInitialized {
 		return nil, false
 	}
 
-	accountm := account.NewAccount(ctx.MainCtx().Account)
-	if !tenantm.IsOwner(accountm) {
+	if !tenantSpaces.IsTenantOwner {
 		return &wx.Card{
 			Style:          wx.CardStyleFilled,
 			Headline:       wx.H(wx.HeadingTypeTitleLg, wx.T("No space available yet")),
@@ -647,13 +664,16 @@ func (qq *DashboardCardsPartial) manageSpacesCard(ctx ctxx.Context, tenantx *ent
 			Label:     wx.T("Manage spaces"),
 			StyleType: wx.ButtonStyleTypeTonal,
 			HTMXAttrs: wx.HTMXAttrs{
-				HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
+				HxGet: route2.SpacesRoot(tenantSpaces.TenantPublicID),
 			},
 		}},
 	}, true
 }
 
-func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*wx.Button, bool) {
+func (qq *DashboardCardsPartial) deleteTenantBtn(
+	ctx ctxx.Context,
+	tenantSpaces ctxx.AccountTenantSpaces,
+) (*wx.Button, bool) {
 	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
 		return nil, false
 	}
@@ -663,12 +683,10 @@ func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entm
 		return nil, false
 	}
 
-	tenantm := tenant.NewTenant(tenantx)
-	accountm := account.NewAccount(ctx.MainCtx().Account)
-	if !tenantm.IsOwner(accountm) {
+	if !tenantSpaces.IsTenantOwner {
 		return nil, false
 	}
-	if !tenantm.IsInitialized() {
+	if !tenantSpaces.IsTenantInitialized {
 		return nil, false
 	}
 
@@ -677,7 +695,7 @@ func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entm
 		StyleType: wx.ButtonStyleTypeElevated,
 		HTMXAttrs: wx.HTMXAttrs{
 			HxPost:    deleteTenantCmdEndpoint,
-			HxVals:    util.JSON(map[string]any{"TenantID": tenantx.PublicID.String()}),
+			HxVals:    util.JSON(map[string]any{"TenantID": tenantSpaces.TenantPublicID}),
 			HxConfirm: wx.T("Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.").String(ctx),
 		},
 	}, true
@@ -685,7 +703,7 @@ func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entm
 
 func (qq *DashboardCardsPartial) downloadTenantBackupLink(
 	ctx ctxx.Context,
-	tenantx *entmain.Tenant,
+	tenantSpaces ctxx.AccountTenantSpaces,
 ) (*wx.Link, bool) {
 	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
 		return nil, false
@@ -696,19 +714,17 @@ func (qq *DashboardCardsPartial) downloadTenantBackupLink(
 		return nil, false
 	}
 
-	tenantm := tenant.NewTenant(tenantx)
-	accountm := account.NewAccount(ctx.MainCtx().Account)
-	if !tenantm.IsOwner(accountm) {
+	if !tenantSpaces.IsTenantOwner {
 		return nil, false
 	}
-	if !tenantm.IsInitialized() {
+	if !tenantSpaces.IsTenantInitialized {
 		return nil, false
 	}
 
-	filename := "tenant-backup-" + tenantx.PublicID.String() + ".zip"
+	filename := "tenant-backup-" + tenantSpaces.TenantPublicID + ".zip"
 
 	return &wx.Link{
-		Href:     endpoint + "?tenant_id=" + url.QueryEscape(tenantx.PublicID.String()),
+		Href:     endpoint + "?tenant_id=" + url.QueryEscape(tenantSpaces.TenantPublicID),
 		Filename: filename,
 		Child: &wx.Button{
 			Label:     wx.T("Download backup"),

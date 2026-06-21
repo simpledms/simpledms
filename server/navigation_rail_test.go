@@ -24,21 +24,21 @@ func TestNavigationRailShowsMainDestinations(t *testing.T) {
 
 	createAccountWithRole(t, harness.mainDB, "rail-user@example.com", "supersecret", mainrole.User)
 	_, userCtx, userRollback := newNavigationRailMainContext(t, harness, "rail-user@example.com")
-	defer userRollback()
 
 	userRail := partial2.NewNavigationRail(userCtx, harness.infra, "dashboard", nil)
 	assertNavigationRailLabelsContain(t, userRail.GetItems(), "Dashboard", "Account")
 	assertNavigationRailLabelsExclude(t, userRail.GetItems(), "System", "Users")
 	assertNavigationRailLabelsContain(t, userRail.FooterItems, "Misc", "Sign out", "About SimpleDMS")
 	assertNavigationRailItemActive(t, userRail.GetItems(), "Dashboard")
+	userRollback()
 
 	createAccountWithRole(t, harness.mainDB, "rail-admin@example.com", "supersecret", mainrole.Admin)
 	_, adminCtx, adminRollback := newNavigationRailMainContext(t, harness, "rail-admin@example.com")
-	defer adminRollback()
 
 	adminRail := partial2.NewNavigationRail(adminCtx, harness.infra, "system", nil)
 	assertNavigationRailLabelsContain(t, adminRail.GetItems(), "Dashboard", "Account", "System")
 	assertNavigationRailItemActive(t, adminRail.GetItems(), "System")
+	adminRollback()
 }
 
 func TestNavigationRailShowsTenantUserDestinationAndSections(t *testing.T) {
@@ -52,7 +52,6 @@ func TestNavigationRailShowsTenantUserDestinationAndSections(t *testing.T) {
 		harness,
 		"rail-tenant-owner@example.com",
 	)
-	defer ownerRollback()
 
 	ownerRail := partial2.NewNavigationRail(ownerCtx, harness.infra, "dashboard", nil)
 	assertNavigationRailLabelsExclude(t, ownerRail.GetItems(), "Users")
@@ -86,6 +85,7 @@ func TestNavigationRailShowsTenantUserDestinationAndSections(t *testing.T) {
 		nil,
 	)
 	assertNavigationRailItemActiveRecursive(t, activeSettingsRail.TopItems, "Settings")
+	ownerRollback()
 
 	createAccount(t, harness.mainDB, "rail-tenant-user@example.com", "supersecret")
 	nonOwnerAccount := harness.mainDB.ReadWriteConn.Account.Query().

@@ -9,9 +9,11 @@ import (
 
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 )
 
 type MainContext struct {
@@ -59,19 +61,22 @@ func (qq *MainContext) UnsafeTenantDBs() *tenantdbs.TenantDBs {
 	return qq.unsafeTenantDBs
 }
 
+// ReadOnlyAccountSpacesByTenant returns detached DTOs because it opens and closes tenant read
+// transactions internally. Returning ent entities would leave callers with objects tied to a
+// committed transaction, which can fail later if code triggers additional ent queries through them.
 // TODO cache?
-func (qq *MainContext) ReadOnlyAccountSpacesByTenant() (map[*entmain.Tenant][]*enttenant.Space, error) {
-	var spacesByTenant = make(map[*entmain.Tenant][]*enttenant.Space)
+func (qq *MainContext) ReadOnlyAccountSpacesByTenant(ctx Context) ([]AccountTenantSpaces, error) {
+	var spacesByTenant []AccountTenantSpaces
 
 	// similar code in DashboardCards
-	tenants, err := qq.Account.QueryTenants().All(qq)
+	tenants, err := qq.Account.QueryTenants().All(ctx)
 	if err != nil {
 		log.Println(err)
 		return nil, fmt.Errorf("failed to query tenants for account %d: %w", qq.Account.ID, err)
 	}
 
 	for _, tenantx := range tenants {
-		var spaces []*enttenant.Space
+		var spaces []AccountSpace
 
 		tenantDB, ok := qq.unsafeTenantDBs.Load(tenantx.ID)
 		if !ok {
@@ -79,7 +84,7 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() (map[*entmain.Tenant][]*e
 			continue
 		}
 
-		tenantTx, err := tenantDB.ReadOnlyConn.Tx(qq)
+		tenantTx, err := tenantDB.ReadOnlyConn.Tx(ctx)
 		if err != nil {
 			log.Println("failed to start transaction for tenant", tenantx.ID, err)
 			continue
@@ -95,17 +100,38 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() (map[*entmain.Tenant][]*e
 			qq.rollbackTenantTx(tenantTx, tenantx.ID)
 			continue
 		}
-		spaces = append(spaces, spacesx...)
+		for _, spacex := range spacesx {
+			spaces = append(spaces, NewAccountSpace(
+				spacex.ID,
+				spacex.PublicID.String(),
+				spacex.Name,
+			))
+		}
 
-		// TODO not sure if necessary... may could also just use db directly or rollback if faster?
-		// TODO is it a problem that spaces get used in calling function after the tx is committed?
 		if err := tenantTx.Commit(); err != nil {
 			log.Println("failed to commit transaction for tenant", tenantx.ID, err)
 			qq.rollbackTenantTx(tenantTx, tenantx.ID)
 			continue
 		}
 
-		spacesByTenant[tenantx] = spaces
+		isTenantOwner, err := tenantx.QueryAccountAssignment().Where(
+			tenantaccountassignment.AccountID(qq.Account.ID),
+			tenantaccountassignment.RoleEQ(tenantrole.Owner),
+		).Exist(ctx)
+		if err != nil {
+			log.Println("failed to query tenant ownership", tenantx.ID, qq.Account.ID, err)
+			return nil, fmt.Errorf("failed to query tenant ownership: %w", err)
+		}
+
+		spacesByTenant = append(spacesByTenant, NewAccountTenantSpaces(
+			tenantx.ID,
+			tenantx.PublicID.String(),
+			tenantx.Name,
+			tenantx.Plan,
+			tenantx.InitializedAt != nil && !tenantx.InitializedAt.IsZero(),
+			isTenantOwner,
+			spaces,
+		))
 	}
 
 	return spacesByTenant, nil
