@@ -16,6 +16,29 @@ func NewMailer() *Mailer {
 	return &Mailer{}
 }
 
+func (qq *Mailer) TenantRegistered(
+	ctx ctxx.Context,
+	adminx *entmain.Account,
+	tenantName, accountEmail string,
+) {
+	subject := wx.T("New tenant registration").String(ctx)
+	template := EmailTemplate{
+		Title:   subject,
+		Heading: subject,
+		Content: []ContentBlock{
+			TextBlock{Text: wx.Tuf("The tenant «%s» was registered by %s.", tenantName, accountEmail).String(ctx)},
+		},
+		Footer: wx.T("This is an automated message, please do not reply.").String(ctx),
+	}
+
+	ctx.VisitorCtx().MainTx.Mail.Create().
+		SetSubject(subject).
+		SetBody(template.RenderPlainText(ctx)).
+		SetHTMLBody(template.RenderHTML(ctx)).
+		SetReceiver(adminx).
+		SaveX(ctx)
+}
+
 func (qq *Mailer) SignUp(
 	ctx ctxx.Context,
 	accountx *entmain.Account,
