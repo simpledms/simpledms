@@ -4,6 +4,8 @@ import (
 	"log"
 	"time"
 
+	"entgo.io/ent/privacy"
+
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/account"
@@ -76,7 +78,9 @@ func (qq *SignUpService) SignUp(
 	// Tenant.User is created in tenant initialization
 
 	accountm := account.NewAccount(accountx)
-	password, expiresAt, err := accountm.GenerateTemporaryPassword(ctx)
+	// The new account is not visible to the authenticated admin under account privacy rules when a tenant is created from the manageTenant screen
+	ctxWithPrivacyBypass := privacy.DecisionContext(ctx, privacy.Allow)
+	password, expiresAt, err := accountm.GenerateTemporaryPassword(ctxWithPrivacyBypass)
 	if err != nil {
 		log.Println(err)
 		return nil, err

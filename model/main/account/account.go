@@ -388,7 +388,7 @@ func (qq *Account) isTemporaryPasswordValid(password string) (bool, error) {
 	return passwordHash == qq.Data.TemporaryPasswordHash, nil
 }
 
-func (qq *Account) GenerateTemporaryPassword(ctx ctxx.Context) (string, time.Time, error) {
+func (qq *Account) GenerateTemporaryPassword(ctx context.Context) (string, time.Time, error) {
 	password, err := gonanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_", 16)
 	if err != nil {
 		log.Println(err)
