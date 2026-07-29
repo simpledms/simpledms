@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -279,11 +280,25 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 				// cannot use errors.As because r is `any` not `error`
 				// TODO added on 2 April 2025, not sure if it makes sense...
 				if err, isErr := r.(error); isErr {
-					qq.handleError(rwx, visitorCtx, err, mainTx, nilableTenantTx)
+					qq.handleError(
+						rwx,
+						reqx,
+						visitorCtx,
+						err,
+						mainTx,
+						nilableTenantTx,
+					)
 					return
 				}
 
-				qq.handleError(rwx, visitorCtx, fmt.Errorf("Internal error, please contact support."), mainTx, nilableTenantTx)
+				qq.handleError(
+					rwx,
+					reqx,
+					visitorCtx,
+					fmt.Errorf("Internal error, please contact support."),
+					mainTx,
+					nilableTenantTx,
+				)
 				return
 			}
 		}()
@@ -292,7 +307,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, requestIsReadOnly)
 		if err != nil {
 			log.Println(err)
-			qq.handleError(rwx, visitorCtx, err, mainTx, nilableTenantTx)
+			qq.handleError(rwx, reqx, visitorCtx, err, mainTx, nilableTenantTx)
 			return
 		}
 		if isRedirected {
@@ -310,7 +325,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 		err = handlerFn(rwx, reqx, ctx)
 		if err != nil {
 			log.Println(err)
-			qq.handleError(rwx, ctx, err, mainTx, nilableTenantTx)
+			qq.handleError(rwx, reqx, ctx, err, mainTx, nilableTenantTx)
 			return
 		}
 
@@ -429,6 +444,7 @@ func (qq *Router) shouldEnforceCanonicalHost(path string) bool {
 
 func (qq *Router) handleError(
 	rw httpx.ResponseWriter,
+	req *httpx.Request,
 	ctx ctxx.Context,
 	err error,
 	mainTx *entmain.Tx,
@@ -514,7 +530,29 @@ func (qq *Router) handleError(
 		}
 	}
 
-	if isHTTPErr {
+	shouldRenderError := true
+	if strings.Contains(req.Header.Get("Accept"), "application/json") {
+		statusCode := http.StatusInternalServerError
+		message := "Something went wrong. Please try again."
+		if isHTTPErr {
+			statusCode = httpErr.StatusCode()
+			message = httpErr.Message()
+		} else {
+			log.Println(err)
+		}
+
+		data, err := json.Marshal(struct {
+			Message string `json:"message"`
+		}{
+			Message: message,
+		})
+		if err != nil {
+			log.Println(err)
+		}
+		rw.Header().Set("Content-Type", "application/json")
+		rw.WriteData(data, statusCode)
+		shouldRenderError = false
+	} else if isHTTPErr {
 		rw.WriteHeader(httpErr.StatusCode())
 		rw.AddRenderables(httpErr.Snackbar())
 	} else {
@@ -523,11 +561,13 @@ func (qq *Router) handleError(
 		rw.AddRenderables(wx.NewSnackbarf("Something went wrong. Please try again.").SetIsError(true))
 	}
 
-	// render error messages in snackbars, no RenderX because of rollback
-	err = qq.infra.Renderer().Render(rw, ctx)
-	if err != nil {
-		log.Println(err)
-		// no return, rollback is important
+	if shouldRenderError {
+		// render error messages in snackbars, no RenderX because of rollback
+		err = qq.infra.Renderer().Render(rw, ctx)
+		if err != nil {
+			log.Println(err)
+			// no return, rollback is important
+		}
 	}
 
 	if err := mainTx.Rollback(); err != nil {

@@ -923,6 +923,7 @@ func TestPasskeySignInFinishCmdRejectsInvalidCredential(t *testing.T) {
 		strings.NewReader(fmt.Sprintf(`{"challengeId":%q,"credential":{}}`, beginPayload.ChallengeID)),
 	)
 	finishReq.Header.Set("Content-Type", "application/json")
+	finishReq.Header.Set("Accept", "application/json")
 	finishReq.Header.Set("HX-Request", "true")
 
 	finishRR := httptest.NewRecorder()
@@ -930,6 +931,18 @@ func TestPasskeySignInFinishCmdRejectsInvalidCredential(t *testing.T) {
 
 	if finishRR.Code != http.StatusUnauthorized {
 		t.Fatalf("expected status %d, got %d", http.StatusUnauthorized, finishRR.Code)
+	}
+	if contentType := finishRR.Header().Get("Content-Type"); contentType != "application/json" {
+		t.Fatalf("expected JSON content type, got %q", contentType)
+	}
+	var errorPayload struct {
+		Message string `json:"message"`
+	}
+	if err := json.Unmarshal(finishRR.Body.Bytes(), &errorPayload); err != nil {
+		t.Fatalf("expected valid JSON error response: %v", err)
+	}
+	if errorPayload.Message != "Invalid passkey sign-in." {
+		t.Fatalf("expected invalid passkey error, got %q", errorPayload.Message)
 	}
 
 	replayReq := httptest.NewRequest(
