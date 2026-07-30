@@ -11,8 +11,11 @@ const (
 
 type Menu struct {
 	Widget[Menu]
-	Position Position
-	Items    []*MenuItem
+	Position           Position
+	Items              []*MenuItem
+	EmptyLabel         *Text
+	MatchesAnchorWidth bool
+	IsAutoPopover      bool
 }
 
 // top
