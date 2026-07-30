@@ -27,17 +27,21 @@ func TestNavigationRailShowsMainDestinations(t *testing.T) {
 	defer userRollback()
 
 	userRail := partial2.NewNavigationRail(userCtx, harness.infra, "dashboard", nil)
-	assertNavigationRailLabelsContain(t, userRail.GetItems(), "Dashboard", "Account")
+	assertNavigationRailLabelsContain(t, userRail.GetItems(), "Account")
+	assertNavigationRailLabelsExclude(t, userRail.GetItems(), "Dashboard")
+	if userRail.ExpandedSelector == nil {
+		t.Fatal("expected dashboard space selector")
+	}
 	assertNavigationRailLabelsExclude(t, userRail.GetItems(), "System", "Users")
 	assertNavigationRailLabelsContain(t, userRail.FooterItems, "Misc", "Sign out", "About SimpleDMS")
-	assertNavigationRailItemActive(t, userRail.GetItems(), "Dashboard")
 
 	createAccountWithRole(t, harness.mainDB, "rail-admin@example.com", "supersecret", mainrole.Admin)
 	_, adminCtx, adminRollback := newNavigationRailMainContext(t, harness, "rail-admin@example.com")
 	defer adminRollback()
 
 	adminRail := partial2.NewNavigationRail(adminCtx, harness.infra, "system", nil)
-	assertNavigationRailLabelsContain(t, adminRail.GetItems(), "Dashboard", "Account", "System")
+	assertNavigationRailLabelsContain(t, adminRail.GetItems(), "Account", "System")
+	assertNavigationRailLabelsExclude(t, adminRail.GetItems(), "Dashboard")
 	assertNavigationRailItemActive(t, adminRail.GetItems(), "System")
 }
 
@@ -70,7 +74,7 @@ func TestNavigationRailShowsTenantUserDestinationAndSections(t *testing.T) {
 		partial2.TenantUsersNavigationRailValue(tenantx.PublicID.String()),
 		nil,
 	)
-	assertNavigationRailLabelsContain(t, activeOwnerRail.GetItems(), "Dashboard", "Account")
+	assertNavigationRailLabelsContain(t, activeOwnerRail.GetItems(), "Account")
 	assertNavigationRailItemActiveRecursive(t, activeOwnerRail.TopItems, "Users")
 	activeSpacesRail := partial2.NewNavigationRail(
 		ownerCtx,
@@ -161,6 +165,10 @@ func TestNavigationRailShowsSpaceDestinations(t *testing.T) {
 		harness.tenantDBs,
 		true,
 	)
+	dashboardRail := partial2.NewNavigationRail(mainCtx, harness.infra, "dashboard", nil)
+	if dashboardRail.ExpandedSelector == nil {
+		t.Fatal("expected dashboard selector when spaces are available")
+	}
 	tenantTx, err = tenantDB.ReadOnlyConn.Tx(context.Background())
 	if err != nil {
 		t.Fatalf("start tenant tx: %v", err)
@@ -175,7 +183,7 @@ func TestNavigationRailShowsSpaceDestinations(t *testing.T) {
 		partial2.SpacesNavigationRailValue(tenantx.PublicID.String()),
 		nil,
 	)
-	tenantRailWant := []string{"Dashboard", "Account"}
+	tenantRailWant := []string{"Account"}
 	if got := navigationRailLabels(tenantRail.GetItems()); !reflect.DeepEqual(got, tenantRailWant) {
 		t.Fatalf("expected tenant rail labels without space %v, got %v", tenantRailWant, got)
 	}
@@ -201,11 +209,13 @@ func TestNavigationRailShowsSpaceDestinations(t *testing.T) {
 		t.Fatalf("expected space rail labels %v, got %v", want, got)
 	}
 	assertNavigationRailLabelsExclude(t, rail.TopItems, "Account", "Users", "System")
-	assertNavigationRailLabelsContain(t, rail.TopItems, "Home", "Dashboard", "Spaces by Organization", tenantx.Name)
-	assertNavigationRailLabelsContainRecursive(t, rail.TopItems, "Docs", "Projects")
+	assertNavigationRailLabelsExclude(t, rail.TopItems, "Home", "Dashboard")
+	assertNavigationRailLabelsExclude(t, rail.TopItems, "Spaces by Organization", tenantx.Name)
+	selector, ok := rail.ExpandedSelector.(*wx.Combobox)
+	if !ok || selector.Input.Placeholder != "Docs" || len(selector.Menu.Items) != 4 {
+		t.Fatalf("expected expanded selector for Docs with two spaces, got %#v", rail.ExpandedSelector)
+	}
 	assertNavigationRailLabelsExcludeRecursive(t, rail.TopItems, "Users", "Settings")
-	assertNavigationRailItemInactiveRecursive(t, rail.TopItems, "Docs")
-	assertNavigationRailItemIconRecursive(t, rail.TopItems, "Docs", "check_box")
 
 	want = []string{"Files", "Inbox", "Trash", "Document types", "Tags", "Fields", "Users"}
 	if got := navigationRailLabels(rail.CollapsedItems()); !reflect.DeepEqual(got, want) {
@@ -263,7 +273,7 @@ func TestNavigationRailShowsOnlySetupEntriesWhenPasskeyEnrollmentRequired(t *tes
 	defer rollback()
 
 	normalRail := partial2.NewNavigationRail(mainCtx, harness.infra, "dashboard", nil)
-	assertNavigationRailLabelsContain(t, normalRail.GetItems(), "Dashboard", "Account")
+	assertNavigationRailLabelsContain(t, normalRail.GetItems(), "Account")
 
 	mainCtx.VisitorCtx().IsTemporarySession = true
 	rail := partial2.NewNavigationRail(mainCtx, harness.infra, "dashboard", nil)

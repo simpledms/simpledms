@@ -8,15 +8,16 @@ const (
 type NavigationRail struct {
 	Widget[NavigationRail]
 	HTMXAttrs
-	MenuBtn        *IconButton
-	FABs           []*FloatingActionButton
-	Action         IWidget
-	ActionExpanded IWidget
-	CompactItems   []*NavigationRailItem
-	TopItems       []*NavigationRailItem
-	Items          []*NavigationRailItem
-	FooterItems    []*NavigationRailItem
-	Destinations   []*NavigationDestination
+	MenuBtn          *IconButton
+	FABs             []*FloatingActionButton
+	Action           IWidget
+	ActionExpanded   IWidget
+	ExpandedSelector IWidget
+	CompactItems     []*NavigationRailItem
+	TopItems         []*NavigationRailItem
+	Items            []*NavigationRailItem
+	FooterItems      []*NavigationRailItem
+	Destinations     []*NavigationDestination
 
 	activeValue string
 }

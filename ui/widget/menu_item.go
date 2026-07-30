@@ -12,8 +12,9 @@ type MenuItem struct {
 
 	// just for convienience, items on Menu can be of type []*MenuItem
 	// TODO can also be implicit if everything else is empty
-	IsDivider  bool
-	IsDisabled bool
+	IsDivider   bool
+	IsSubheader bool
+	IsDisabled  bool
 
 	// cannot be used together with HTMXAttrs
 	DownloadLinkURL      string

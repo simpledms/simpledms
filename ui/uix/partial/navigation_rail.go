@@ -39,6 +39,9 @@ func NewNavigationRail(
 	if ctx.IsSpaceCtx() {
 		rail.CompactItems = spaceCompactNavigationRailItems(ctx, active)
 	}
+	if ctx.IsMainCtx() {
+		rail.ExpandedSelector = spaceCombobox(ctx, active)
+	}
 	rail.TopItems = expandedNavigationRailItems(ctx, infra)
 	rail.FooterItems = footerNavigationRailItems(ctx, infra, active)
 	rail.SetActiveValue(active)
@@ -88,15 +91,16 @@ func expandedNavigationRailItems(ctx ctxx.Context, infra *common.Infra) []*wx.Na
 	var items []*wx.NavigationRailItem
 
 	if ctx.IsMainCtx() && ctx.IsSpaceCtx() {
-		items = append(items, navigationRailSubheader("home", wx.T("Home").String(ctx)))
-		items = append(items, mainNavigationRailItems(ctx)...)
-		items = appendNavigationDestinationItems(ctx, infra, items)
-		items = infra.PluginRegistry().ExtendNavigationRailItems(ctx, items)
+		homeItems := appendNavigationDestinationItems(ctx, infra, nil)
+		homeItems = infra.PluginRegistry().ExtendNavigationRailItems(ctx, homeItems)
+		if len(homeItems) > 0 {
+			items = append(items, navigationRailSubheader("home", wx.T("Home").String(ctx)))
+			items = append(items, homeItems...)
+		}
 	}
 
 	if ctx.IsMainCtx() {
 		if ctx.IsSpaceCtx() {
-			items = append(items, currentTenantSpaceNavigationRailItems(ctx)...)
 			items = append(items, pluginMenuNavigationRailItems(ctx, infra)...)
 		} else {
 			items = append(
@@ -137,9 +141,7 @@ func footerNavigationRailItems(
 }
 
 func mainNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRailItem {
-	items := []*wx.NavigationRailItem{
-		dashboardNavigationRailItem(ctx),
-	}
+	var items []*wx.NavigationRailItem
 	if ctx.IsSpaceCtx() {
 		return items
 	}
@@ -272,68 +274,75 @@ func tenantPasskeyEnrollmentNavigationRailItems(ctx ctxx.Context) []*wx.Navigati
 	return []*wx.NavigationRailItem{dashboardNavigationRailItem(ctx)}
 }
 
-func currentTenantSpaceNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRailItem {
+func spaceCombobox(ctx ctxx.Context, active string) *wx.Combobox {
 	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
 	if err != nil {
 		log.Println(err)
-		return []*wx.NavigationRailItem{}
+		return nil
 	}
 
+	items := []*wx.MenuItem{
+		{
+			LeadingIcon: "dashboard",
+			Label:       wx.T("Dashboard"),
+			IsSelected:  active == "dashboard",
+			HTMXAttrs: wx.HTMXAttrs{
+				HxGet: route2.Dashboard(),
+			},
+		},
+	}
 	tenants := make([]*entmain.Tenant, 0, len(spacesByTenant))
 	for tenantx := range spacesByTenant {
 		tenants = append(tenants, tenantx)
 	}
-	sort.Slice(tenants, func(i, j int) bool {
-		return tenants[i].Name < tenants[j].Name
-	})
+	sort.Slice(tenants, func(i, j int) bool { return tenants[i].Name < tenants[j].Name })
 
-	var items []*wx.NavigationRailItem
 	for _, tenantx := range tenants {
 		spaces := spacesByTenant[tenantx]
-		if len(spaces) == 0 {
-			continue
+		sort.Slice(spaces, func(i, j int) bool { return spaces[i].Name < spaces[j].Name })
+		if len(spaces) > 0 {
+			items = append(items, &wx.MenuItem{
+				Label:       wx.Tu(tenantx.Name),
+				IsSubheader: true,
+			})
 		}
-		sort.Slice(spaces, func(i, j int) bool {
-			return spaces[i].Name < spaces[j].Name
-		})
-
-		children := make([]*wx.NavigationRailItem, 0, len(spaces))
 		for _, spacex := range spaces {
 			spaceID := spacex.PublicID.String()
-			icon := "check_box_outline_blank"
-			if ctx.IsSpaceCtx() && ctx.SpaceCtx().SpaceID == spaceID {
-				icon = "check_box"
-			}
-
-			children = append(children, pageNavigationRailItem(
-				SpaceNavigationRailValue(spaceID),
-				wx.Tu(spacex.Name).String(ctx),
-				icon,
-				route2.BrowseRoot(tenantx.PublicID.String(), spaceID),
-			))
+			items = append(items, &wx.MenuItem{
+				LeadingIcon: "workspaces",
+				Label:       wx.Tu(spacex.Name),
+				IsSelected:  ctx.IsSpaceCtx() && ctx.SpaceCtx().SpaceID == spaceID,
+				HTMXAttrs: wx.HTMXAttrs{
+					HxGet: route2.BrowseRoot(tenantx.PublicID.String(), spaceID),
+				},
+			})
 		}
-
-		items = append(items, &wx.NavigationRailItem{
-			Key:                 "tenant-spaces-" + tenantx.PublicID.String(),
-			Label:               wx.Tu(tenantx.Name).String(ctx),
-			Icon:                "business",
-			Children:            children,
-			IsCollapsible:       true,
-			IsExpandedByDefault: isCurrentSpaceTenant(ctx, tenantx),
-		})
-	}
-	if len(items) == 0 {
-		return items
 	}
 
-	return append(
-		[]*wx.NavigationRailItem{navigationRailSubheader("spaces-by-organization", wx.T("Spaces by Organization").String(ctx))},
-		items...,
-	)
-}
+	placeholder := wx.T("Select space").String(ctx)
+	var selectedIcon *wx.Icon
+	if active == "dashboard" {
+		placeholder = wx.T("Dashboard").String(ctx)
+		selectedIcon = wx.NewIcon("dashboard")
+	}
+	if ctx.IsSpaceCtx() {
+		placeholder = ctx.SpaceCtx().Space.Name
+		selectedIcon = wx.NewIcon("workspaces")
+	}
 
-func isCurrentSpaceTenant(ctx ctxx.Context, tenantx *entmain.Tenant) bool {
-	return ctx.IsSpaceCtx() && tenantx.PublicID.String() == ctx.SpaceCtx().TenantID
+	return &wx.Combobox{
+		Input: &wx.Input{
+			Placeholder:  placeholder,
+			LeadingIcon:  selectedIcon,
+			TrailingIcon: wx.NewIcon("expand_more"),
+		},
+		Menu: &wx.Menu{
+			Items:              items,
+			EmptyLabel:         wx.T("No matches found."),
+			MatchesAnchorWidth: true,
+			IsAutoPopover:      true,
+		},
+	}
 }
 
 func accountTenantNavigationRailItems(

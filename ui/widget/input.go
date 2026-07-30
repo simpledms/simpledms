@@ -12,6 +12,8 @@ type Input struct {
 	Name         string
 	Type         string // TODO enum
 	Placeholder  string
+	Value        string
+	IsReadOnly   bool
 	HasAutofocus bool
 
 	Step string // for numbers
