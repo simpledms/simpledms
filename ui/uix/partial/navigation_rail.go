@@ -320,10 +320,9 @@ func spaceCombobox(ctx ctxx.Context, active string) *wx.Combobox {
 	}
 
 	placeholder := wx.T("Dashboard").String(ctx) + " / " + wx.T("Select space").String(ctx)
-	var selectedIcon *wx.Icon
+	selectedIcon := wx.NewIcon("dashboard")
 	if active == "dashboard" {
 		placeholder = wx.T("Dashboard").String(ctx)
-		selectedIcon = wx.NewIcon("dashboard")
 	}
 	if ctx.IsSpaceCtx() {
 		placeholder = ctx.SpaceCtx().Space.Name
@@ -371,7 +370,6 @@ func accountTenantNavigationRailItems(
 			Icon:                "business",
 			Children:            children,
 			IsCollapsible:       true,
-			IsExpandedByDefault: true,
 		})
 	}
 
