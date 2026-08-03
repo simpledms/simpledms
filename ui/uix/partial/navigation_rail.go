@@ -319,7 +319,7 @@ func spaceCombobox(ctx ctxx.Context, active string) *wx.Combobox {
 		}
 	}
 
-	placeholder := wx.T("Select space").String(ctx)
+	placeholder := wx.T("Dashboard").String(ctx) + " / " + wx.T("Select space").String(ctx)
 	var selectedIcon *wx.Icon
 	if active == "dashboard" {
 		placeholder = wx.T("Dashboard").String(ctx)

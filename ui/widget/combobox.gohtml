@@ -1,12 +1,10 @@
 {{- /* gotype: github.com/simpledms/simpledms/ui/widget.Combobox */ -}}
 {{- define "Combobox" }}
 	<sds-combobox id="{{ .GetID }}" class="block w-full
-		[&>menu]:rounded-xl [&>menu]:p-1
-		[&_[data-menu-option]]:overflow-hidden [&_[data-menu-option]]:rounded-lg
 		[&_[data-selected=true]]:bg-secondary-container
 		[&_[data-selected=true]_i]:text-on-secondary-container
 		[&_[data-selected=true]_span]:text-on-secondary-container">
-		<div class="js-combobox-trigger group/combobox flex min-h-14 cursor-text items-center gap-x-3 rounded-full bg-surface-container-highest px-4
+		<div class="js-combobox-trigger group/combobox flex min-h-14 cursor-pointer items-center gap-x-3 rounded-full bg-surface-container-highest px-4
 				text-on-surface transition-colors duration-200 hover:bg-surface-container-high
 				focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-primary"
 				 style="anchor-name: --{{ .GetPopoverTarget }}">
@@ -23,7 +21,7 @@
 					role="combobox" aria-haspopup="menu" aria-expanded="false"
 					aria-controls="{{ .GetPopoverTarget }}" autocomplete="off"
 					data-selected-value="{{ .Input.Value }}"
-					class="js-input min-w-0 w-full bg-transparent label-lg text-on-surface
+					class="js-input min-w-0 w-full cursor-pointer bg-transparent label-lg text-on-surface
 						placeholder-on-surface-variant focus:outline-none"
                     >
 			</label>
@@ -47,6 +45,7 @@
 				let menuSubheaders = menu.querySelectorAll('[data-menu-subheader]');
 				let emptyState = menu.querySelector('[data-menu-empty]');
 				let activeIndex = -1;
+				let wasOpenOnPointerDown = false;
 				input.addEventListener('keydown', function(e) {
 					if (e.key !== 'Escape' || !menu.matches(':popover-open')) return;
 					e.preventDefault();
@@ -75,7 +74,16 @@
 					items[activeIndex].scrollIntoView({ block: 'nearest' });
 				}
 
+				input.addEventListener('pointerdown', function() {
+					wasOpenOnPointerDown = menu.matches(':popover-open');
+				})
 				trigger.addEventListener('click', function() {
+					if (wasOpenOnPointerDown) {
+						wasOpenOnPointerDown = false;
+						if (menu.matches(':popover-open')) menu.hidePopover();
+						input.blur();
+						return;
+					}
 					input.focus();
 					if (!menu.matches(':popover-open')) menu.showPopover();
 				})
