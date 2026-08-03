@@ -1,6 +1,6 @@
 # must match debian version below for libicu-dev compatibility
 # during build and runtime
-FROM golang:1.25-bookworm AS build-env
+FROM golang:1.26-bookworm AS build-env
 
 # build must be run with `docker build --ssh default .`
 # to make use of `--mount=type=ssh` below
