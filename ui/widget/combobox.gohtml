@@ -129,6 +129,10 @@
 
 				menu.addEventListener('toggle', (e) => {
 					input.setAttribute('aria-expanded', e.newState === 'open');
+					if (e.newState === 'open') {
+						let availableHeight = window.innerHeight - trigger.getBoundingClientRect().bottom;
+						menu.style.maxHeight = Math.max(0, availableHeight) + 'px';
+					}
 					if (e.newState !== 'open') {
 						if (document.activeElement === input) input.blur();
 						input.value = input.dataset.selectedValue;
