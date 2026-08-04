@@ -1,3 +1,4 @@
+{{- /* gotype: github.com/simpledms/simpledms/ui/widget.Table */ -}}
 {{- define "Table" }}
 	<div id="{{ .GetID }}"
 		 class="overflow-x-auto px-2 py-2"
@@ -44,6 +45,7 @@
 {{ end }}
 
 {{- define "TableRow" }}
+    {{- /* gotype: github.com/simpledms/simpledms/ui/widget.TableRow */ -}}
 	<tr id="{{ .GetID }}"
 		class="js-table-row group/table-row h-11 {{ if .IsSelected }}js-table-row-selected bg-secondary-container text-on-secondary-container{{ else }}state-layer-on-surface text-on-surface{{ end }} {{ if .HTMXAttrs.IsLink }}cursor-pointer{{ else if .ContextMenu }}cursor-context-menu{{ end }}"
 		{{ if .IsSelectable }}onclick="window.simpledmsSelectTableRow(this)"{{ end }}
