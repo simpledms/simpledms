@@ -6,6 +6,7 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
@@ -14,7 +15,6 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	tenantaccessmodel "github.com/simpledms/simpledms/model/main/tenantaccess"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -49,7 +49,7 @@ func NewSignInCmd(
 		actions:            actions,
 		requestRateLimiter: requestRateLimiter,
 		Config:             config,
-		FormHelper:         autil.NewFormHelper[SignInCmdData](infra, config, wx.T("Sign in")),
+		FormHelper:         autil.NewFormHelper[SignInCmdData](infra, config, widget.T("Sign in")),
 	}
 }
 
@@ -89,7 +89,7 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 	accountx, err := ctx.VisitorCtx().MainTx.Account.Query().Where(account.Email(entx.NewCIText(data.Email))).Only(ctx)
 	if err != nil {
 		if entmain.IsNotFound(err) {
-			rw.AddRenderables(wx.NewSnackbarf("Invalid credentials. Please try again."))
+			rw.AddRenderables(widget.NewSnackbarf("Invalid credentials. Please try again."))
 			return nil
 		}
 		log.Println(err)
@@ -105,7 +105,7 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 
 	isValid, err := accountm.AuthWithPasskeyPolicy(ctx, data.Password, passkeyPolicy)
 	if !isValid {
-		rw.AddRenderables(wx.NewSnackbarf("Invalid credentials. Please try again."))
+		rw.AddRenderables(widget.NewSnackbarf("Invalid credentials. Please try again."))
 		return err
 	}
 
@@ -123,7 +123,7 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 		if !hasActiveTenantAssignment {
 			return e.NewHTTPErrorWithSnackbar(
 				http.StatusForbidden,
-				wx.NewSnackbarf("Your organization is no longer active. Please contact support."),
+				widget.NewSnackbarf("Your organization is no longer active. Please contact support."),
 			)
 		}
 	}
@@ -142,9 +142,9 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 	}
 
 	if isTenantPasskeyEnrollmentRequired {
-		rw.AddRenderables(wx.NewSnackbarf("Passkey setup is required by your organization. Register a passkey now."))
+		rw.AddRenderables(widget.NewSnackbarf("Passkey setup is required by your organization. Register a passkey now."))
 	} else {
-		rw.AddRenderables(wx.NewSnackbarf("Logged in successfully."))
+		rw.AddRenderables(widget.NewSnackbarf("Logged in successfully."))
 	}
 
 	rw.Header().Set("HX-Redirect", route.Dashboard())

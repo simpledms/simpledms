@@ -10,9 +10,9 @@ import (
 
 	sprig "github.com/go-task/slim-sprig/v3"
 
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 func TemplateFuncMap(templates *template.Template) template.FuncMap {

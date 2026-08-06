@@ -3,10 +3,10 @@ package auth
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	account2 "github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -39,8 +39,8 @@ func NewPasskeyRecoverySignInCmd(
 		FormHelper: autil.NewFormHelperX[PasskeyRecoverySignInCmdData](
 			infra,
 			config,
-			wx.T("Sign in with backup code"),
-			wx.T("Sign in"),
+			widget.T("Sign in with backup code"),
+			widget.T("Sign in"),
 		),
 	}
 }
@@ -85,7 +85,7 @@ func (qq *PasskeyRecoverySignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 	}
 
 	recoveryCodesCount := len(updatedAccountx.PasskeyRecoveryCodeHashes)
-	rw.AddRenderables(wx.NewSnackbarf("Logged in successfully. %d backup codes left.", recoveryCodesCount))
+	rw.AddRenderables(widget.NewSnackbarf("Logged in successfully. %d backup codes left.", recoveryCodesCount))
 	rw.Header().Set("HX-Redirect", route.Dashboard())
 
 	return nil

@@ -5,12 +5,12 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -42,7 +42,7 @@ func NewCreateAndAssignTagCmd(
 		FormHelper: autil.NewFormHelper[CreateAndAssignTagCmdData](
 			infra,
 			config,
-			wx.T("Create and assign tag"),
+			widget.T("Create and assign tag"),
 			// "#tagAssignmentList",
 		),
 	}
@@ -104,7 +104,7 @@ func (qq *CreateAndAssignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 		//  	may break other places
 		// rw.Header().Set("HX-Retarget", "#"+listItem.ID)
 
-		rw.AddRenderables(wx.NewSnackbarf("«%s» created and assigned.", tagx.Name))
+		rw.AddRenderables(widget.NewSnackbarf("«%s» created and assigned.", tagx.Name))
 
 		return qq.infra.Renderer().Render(
 			rw,
@@ -113,7 +113,7 @@ func (qq *CreateAndAssignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 		)
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("«%s» created and assigned.", tagx.Name))
+	rw.AddRenderables(widget.NewSnackbarf("«%s» created and assigned.", tagx.Name))
 
 	return qq.infra.Renderer().Render(rw, ctx,
 		qq.actions.AssignedTags.Edit.ListView(

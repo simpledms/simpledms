@@ -70,7 +70,7 @@
 ## Widgets And Templates
 
 - [x] Decide whether to add a `wx.Grid` above-cards action slot or use a local wrapper.
-- [x] If extending `wx.Grid`, add the field in `ui/widget/grid.go`.
+- [x] If extending `wx.Grid`, add the field in `../../core/ui/widget/grid.go`.
 - [x] If extending `wx.Grid`, render the action slot between heading and card grid in `grid.gohtml`.
 - [x] Keep existing `Footer` behavior unchanged for other grids.
 - [x] Use existing `wx.Row`, `wx.Button`, and `wx.Link` widgets for action rows.

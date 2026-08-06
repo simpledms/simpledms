@@ -12,6 +12,8 @@ import (
 	"github.com/go-playground/form"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
+
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/common/country"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
@@ -21,7 +23,6 @@ import (
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -249,7 +250,7 @@ func FormDataX[T any](
 				// return nil, e.NewHTTPErrorf(http.StatusBadRequest, errMessage)
 			}
 
-			return nil, e.NewHTTPErrorf(http.StatusBadRequest, wx.T("Form validation failed.").String(ctx))
+			return nil, e.NewHTTPErrorf(http.StatusBadRequest, widget.T("Form validation failed.").String(ctx))
 		}
 	}
 
@@ -284,7 +285,7 @@ func State[T any](rw httpx.ResponseWriter, req *httpx.Request) (*T, error) {
 		// reset button; without this check, the message is also shown when the state is reset indirectly,
 		// for example by switching folders; not 100 percent sure if this works in all use cases...
 		if req.Header.Get("Hx-Trigger") != "" {
-			rw.AddRenderables(wx.NewSnackbarf("Filters successfully reset."))
+			rw.AddRenderables(widget.NewSnackbarf("Filters successfully reset."))
 		}
 		return data, nil
 	}
@@ -363,27 +364,27 @@ func GenerateID(title string) string {
 }
 
 func WrapWidget(
-	headline *wx.Text,
-	submitLabel *wx.Text,
+	headline *widget.Text,
+	submitLabel *widget.Text,
 	form renderable.Renderable,
 	wrapper actionx.ResponseWrapper,
-	dialogLayout wx.DialogLayout,
+	dialogLayout widget.DialogLayout,
 ) renderable.Renderable {
 	return WrapWidgetWithID(headline, submitLabel, form, wrapper, dialogLayout, "", "")
 }
 
 func WrapWidgetWithID(
-	headline *wx.Text,
-	submitLabel *wx.Text,
+	headline *widget.Text,
+	submitLabel *widget.Text,
 	form renderable.Renderable,
 	wrapper actionx.ResponseWrapper,
-	dialogLayout wx.DialogLayout,
+	dialogLayout widget.DialogLayout,
 	id string,
 	formID string,
 ) renderable.Renderable {
 	if wrapper == actionx.ResponseWrapperDialog {
-		return &wx.Dialog{
-			Widget: wx.Widget[wx.Dialog]{
+		return &widget.Dialog{
+			Widget: widget.Widget[widget.Dialog]{
 				ID: id,
 			},
 			Headline:     headline,

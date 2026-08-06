@@ -6,10 +6,10 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	uploadlimitmodel "github.com/simpledms/simpledms/model/main/uploadlimit"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -65,8 +65,8 @@ func (qq *SetTenantUploadLimitOverrideForm) Data(
 	return data
 }
 
-func (qq *SetTenantUploadLimitOverrideForm) ModalLinkAttrs(data *SetTenantUploadLimitOverrideCmdData, hxTargetForm string) wx.HTMXAttrs {
-	return wx.HTMXAttrs{
+func (qq *SetTenantUploadLimitOverrideForm) ModalLinkAttrs(data *SetTenantUploadLimitOverrideCmdData, hxTargetForm string) widget.HTMXAttrs {
+	return widget.HTMXAttrs{
 		HxPost:        qq.FormEndpointWithParams(actionx.ResponseWrapperDialog, hxTargetForm),
 		HxVals:        util.JSON(data),
 		LoadInPopover: true,
@@ -90,9 +90,9 @@ func (qq *SetTenantUploadLimitOverrideForm) FormHandler(rw httpx.ResponseWriter,
 		hxSwap = "none"
 	}
 
-	var nilableFormSubmitLabel *wx.Text
+	var nilableFormSubmitLabel *widget.Text
 	if wrapper == actionx.ResponseWrapperNone {
-		nilableFormSubmitLabel = wx.T("Save")
+		nilableFormSubmitLabel = widget.T("Save")
 	}
 
 	refreshTarget := "closest form"
@@ -100,7 +100,7 @@ func (qq *SetTenantUploadLimitOverrideForm) FormHandler(rw httpx.ResponseWriter,
 		refreshTarget = "closest dialog"
 	}
 
-	refreshFormAttrs := wx.HTMXAttrs{
+	refreshFormAttrs := widget.HTMXAttrs{
 		HxPost:    qq.FormEndpointWithParams(wrapper, hxTarget),
 		HxTrigger: "change",
 		HxInclude: "closest form",
@@ -108,41 +108,41 @@ func (qq *SetTenantUploadLimitOverrideForm) FormHandler(rw httpx.ResponseWriter,
 		HxSwap:    "outerHTML",
 	}
 
-	form := &wx.Form{
-		HTMXAttrs: wx.HTMXAttrs{
+	form := &widget.Form{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.actions.SetTenantUploadLimitOverrideCmd.Endpoint(),
 			HxTarget: hxTarget,
 			HxSwap:   hxSwap,
 		},
 		SubmitLabel: nilableFormSubmitLabel,
-		Children: []wx.IWidget{
-			&wx.Container{
+		Children: []widget.IWidget{
+			&widget.Container{
 				GapY: true,
-				Child: []wx.IWidget{
-					&wx.TextField{
+				Child: []widget.IWidget{
+					&widget.TextField{
 						Name:         "TenantID",
 						Type:         "hidden",
 						DefaultValue: data.TenantID,
 					},
-					&wx.Checkbox{
+					&widget.Checkbox{
 						HTMXAttrs: refreshFormAttrs,
-						Label:     wx.T("Use global default"),
+						Label:     widget.T("Use global default"),
 						Name:      "UseGlobalDefault",
 						Value:     "true",
 						IsChecked: data.UseGlobalDefault,
 					},
-					&wx.Checkbox{
+					&widget.Checkbox{
 						HTMXAttrs: refreshFormAttrs,
-						Label:     wx.T("Unlimited"),
+						Label:     widget.T("Unlimited"),
 						Name:      "IsUnlimited",
 						Value:     "true",
 						IsChecked: data.IsUnlimited,
 					},
-					&wx.TextField{
-						Widget: wx.Widget[wx.TextField]{
+					&widget.TextField{
+						Widget: widget.Widget[widget.TextField]{
 							ID: "tenantUploadLimitMaxUploadSizeMib",
 						},
-						Label:        wx.T("Max upload size (MiB)"),
+						Label:        widget.T("Max upload size (MiB)"),
 						Name:         "MaxUploadSizeMib",
 						Type:         "number",
 						Step:         "1",
@@ -156,11 +156,11 @@ func (qq *SetTenantUploadLimitOverrideForm) FormHandler(rw httpx.ResponseWriter,
 
 	qq.infra.Renderer().RenderX(rw, ctx,
 		autil.WrapWidget(
-			wx.T("Set tenant upload limit"),
-			wx.T("Save"),
+			widget.T("Set tenant upload limit"),
+			widget.T("Save"),
 			form,
 			wrapper,
-			wx.DialogLayoutDefault,
+			widget.DialogLayoutDefault,
 		),
 	)
 

@@ -3,9 +3,9 @@ package mailer
 import (
 	"time"
 
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 // TODO good location?

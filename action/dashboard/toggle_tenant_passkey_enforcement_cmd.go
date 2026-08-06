@@ -5,6 +5,7 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
@@ -13,7 +14,6 @@ import (
 	account2 "github.com/simpledms/simpledms/model/main/account"
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"

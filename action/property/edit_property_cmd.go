@@ -3,10 +3,10 @@ package property
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -32,7 +32,7 @@ func NewEditPropertyCmd(infra *common.Infra, actions *Actions) *EditPropertyCmd 
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[EditPropertyCmdData](infra, config, wx.T("Edit field")),
+		FormHelper: autil.NewFormHelper[EditPropertyCmdData](infra, config, widget.T("Edit field")),
 	}
 }
 
@@ -62,7 +62,7 @@ func (qq *EditPropertyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 	}
 
 	rw.Header().Set("HX-Trigger", event.PropertyUpdated.String())
-	rw.AddRenderables(wx.NewSnackbarf("Field updated."))
+	rw.AddRenderables(widget.NewSnackbarf("Field updated."))
 
 	return nil
 }

@@ -3,8 +3,8 @@ package pluginx
 import (
 	"sync"
 
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type Registry struct {
@@ -42,7 +42,7 @@ func (qq *Registry) RegisterActions(reg Registrar) error {
 }
 
 // TODO add Position argument and call multiple times for different positions?
-func (qq *Registry) ExtendMenuItems(ctx ctxx.Context, items []*wx.MenuItem) []*wx.MenuItem {
+func (qq *Registry) ExtendMenuItems(ctx ctxx.Context, items []*widget.MenuItem) []*widget.MenuItem {
 	for _, plugin := range qq.Plugins() {
 		hook, ok := plugin.(ExtendMenuItemsHook)
 		if !ok {
@@ -56,8 +56,8 @@ func (qq *Registry) ExtendMenuItems(ctx ctxx.Context, items []*wx.MenuItem) []*w
 
 func (qq *Registry) ExtendNavigationDestinations(
 	ctx ctxx.Context,
-	destinations []*wx.NavigationDestination,
-) []*wx.NavigationDestination {
+	destinations []*widget.NavigationDestination,
+) []*widget.NavigationDestination {
 	for _, plugin := range qq.Plugins() {
 		hook, ok := plugin.(ExtendNavigationDestinationsHook)
 		if !ok {
@@ -70,8 +70,8 @@ func (qq *Registry) ExtendNavigationDestinations(
 
 func (qq *Registry) ExtendNavigationRailItems(
 	ctx ctxx.Context,
-	items []*wx.NavigationRailItem,
-) []*wx.NavigationRailItem {
+	items []*widget.NavigationRailItem,
+) []*widget.NavigationRailItem {
 	for _, plugin := range qq.Plugins() {
 		hook, ok := plugin.(ExtendNavigationRailItemsHook)
 		if !ok {
@@ -84,9 +84,9 @@ func (qq *Registry) ExtendNavigationRailItems(
 
 func (qq *Registry) ExtendNavigationRailFooterItems(
 	ctx ctxx.Context,
-	items []*wx.NavigationRailItem,
+	items []*widget.NavigationRailItem,
 	active string,
-) []*wx.NavigationRailItem {
+) []*widget.NavigationRailItem {
 	for _, plugin := range qq.Plugins() {
 		hook, ok := plugin.(ExtendNavigationRailFooterItemsHook)
 		if !ok {

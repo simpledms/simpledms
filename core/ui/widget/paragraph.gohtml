@@ -1,0 +1,4 @@
+{{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.Paragraph */ -}}
+{{- define "Paragraph" }}
+	<p id="{{ .GetID }}" class="{{ if .Class }}{{ .Class }}{{ else }}body-md text-on-surface{{ end }}">{{ render .GetContext .Text }}</p>
+{{ end }}

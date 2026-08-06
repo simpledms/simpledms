@@ -5,12 +5,12 @@ import (
 	"net/http"
 
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -57,12 +57,12 @@ func (qq *SystemCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable, e
 
 	grids := qq.actions.DashboardCardsPartial.SystemGrids(ctx)
 
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: qq.id(),
 		},
 		GapY: true,
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxTrigger: event.HxTrigger(
 				event.AppInitialized,
 				event.AppUnlocked,

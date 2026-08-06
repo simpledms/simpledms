@@ -5,8 +5,8 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/timex"
@@ -50,13 +50,13 @@ func (qq *FileMetadataPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 	)
 }
 
-func (qq *FileMetadataPartial) Widget(ctx ctxx.Context, data *FileMetadataPartialData) *wx.ScrollableContent {
+func (qq *FileMetadataPartial) Widget(ctx ctxx.Context, data *FileMetadataPartialData) *widget.ScrollableContent {
 	filex := qq.infra.FileRepo.GetWithDeletedX(ctx, data.FileID)
 
-	items := []*wx.ListItem{
+	items := []*widget.ListItem{
 		{
-			Headline:       wx.T("Name"),
-			SupportingText: wx.Tu(filex.Data.Name),
+			Headline:       widget.T("Name"),
+			SupportingText: widget.Tu(filex.Data.Name),
 		},
 	}
 
@@ -67,15 +67,15 @@ func (qq *FileMetadataPartial) Widget(ctx ctxx.Context, data *FileMetadataPartia
 			docTypeName = docType.Name
 		}
 	}
-	items = append(items, &wx.ListItem{
-		Headline:       wx.T("Document type"),
-		SupportingText: wx.Tu(docTypeName),
+	items = append(items, &widget.ListItem{
+		Headline:       widget.T("Document type"),
+		SupportingText: widget.Tu(docTypeName),
 	})
 
 	if filex.Data.Notes != "" {
-		items = append(items, &wx.ListItem{
-			Headline:       wx.T("Notes"),
-			SupportingText: wx.Tu(filex.Data.Notes),
+		items = append(items, &widget.ListItem{
+			Headline:       widget.T("Notes"),
+			SupportingText: widget.Tu(filex.Data.Notes),
 		})
 	}
 
@@ -83,9 +83,9 @@ func (qq *FileMetadataPartial) Widget(ctx ctxx.Context, data *FileMetadataPartia
 		if timeValue.IsZero() {
 			return
 		}
-		items = append(items, &wx.ListItem{
-			Headline:       wx.T(label),
-			SupportingText: wx.Tu(timex.NewDateTime(timeValue).String(ctx.MainCtx().LanguageBCP47)),
+		items = append(items, &widget.ListItem{
+			Headline:       widget.T(label),
+			SupportingText: widget.Tu(timex.NewDateTime(timeValue).String(ctx.MainCtx().LanguageBCP47)),
 		})
 	}
 
@@ -97,12 +97,12 @@ func (qq *FileMetadataPartial) Widget(ctx ctxx.Context, data *FileMetadataPartia
 		appendTime("Deleted at", filex.Data.DeletedAt)
 	}
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: "trashFileMetadata",
 		},
 		GapY: true,
-		Children: &wx.List{
+		Children: &widget.List{
 			Children: items,
 		},
 		MarginY: true,

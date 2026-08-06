@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"strings"
 
-	wx "github.com/simpledms/simpledms/ui/widget"
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 )
 
 type EventWithID string

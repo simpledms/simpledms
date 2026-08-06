@@ -22,6 +22,8 @@ import (
 	"github.com/simpledms/simpledms/action"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	ui2 "github.com/simpledms/simpledms/core/ui"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
@@ -44,7 +46,6 @@ import (
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/ui"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/accountutil"
 	"github.com/simpledms/simpledms/util/cookiex"
 )
@@ -139,7 +140,7 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 
 	templates := template.New("app")
 	templates.Funcs(ui.TemplateFuncMap(templates))
-	templates, err = templates.ParseFS(ui.WidgetFS, "widget/*.gohtml")
+	templates, err = templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2447,13 +2448,13 @@ func (qq *testTenantsNavigationPlugin) Name() string {
 
 func (qq *testTenantsNavigationPlugin) ExtendNavigationDestinations(
 	_ ctxx.Context,
-	destinations []*wx.NavigationDestination,
-) []*wx.NavigationDestination {
-	return append(destinations, &wx.NavigationDestination{
+	destinations []*widget.NavigationDestination,
+) []*widget.NavigationDestination {
+	return append(destinations, &widget.NavigationDestination{
 		Label: "Tenants",
 		Icon:  "apartment",
 		Href:  "/tenants/",
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxGet: "/tenants/",
 		},
 	})

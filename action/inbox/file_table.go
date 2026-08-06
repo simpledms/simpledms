@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	autil "github.com/simpledms/simpledms/action/util"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
@@ -23,7 +24,6 @@ import (
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/timex"
 )
@@ -35,7 +35,7 @@ func (qq *FilesListPartial) fileTable(
 	files []*enttenant.File,
 	hasMore bool,
 	preferences *filelistpreference.FileListPreferences,
-) *wx.Table {
+) *widget.Table {
 	spaceColumns := preferences.SpaceColumnsFor(ctx.SpaceCtx().SpaceID)
 	propertyColumns := qq.fileTablePropertyColumns(ctx, spaceColumns.PropertyIDs)
 	tagGroupColumns := qq.fileTableTagGroupColumns(ctx, spaceColumns.TagGroupIDs)
@@ -48,7 +48,7 @@ func (qq *FilesListPartial) fileTable(
 		tagGroupColumns,
 	)
 	columns := qq.fileTableColumns(preferences, spaceColumns, propertyColumns, tagGroupColumns)
-	rows := make([]*wx.TableRow, 0, len(files))
+	rows := make([]*widget.TableRow, 0, len(files))
 	for _, filex := range files {
 		rows = append(rows, qq.fileTableRow(
 			ctx,
@@ -65,7 +65,7 @@ func (qq *FilesListPartial) fileTable(
 		rows = append(rows, qq.fileTableLoadMoreRow(data, offset, len(columns)))
 	}
 
-	return &wx.Table{
+	return &widget.Table{
 		Columns: columns,
 		Rows:    rows,
 	}
@@ -75,21 +75,21 @@ func (qq *FilesListPartial) fileTableLoadMoreRow(
 	data *FilesListPartialData,
 	offset int,
 	columnCount int,
-) *wx.TableRow {
-	cells := make([]*wx.TableCell, 0, columnCount)
+) *widget.TableRow {
+	cells := make([]*widget.TableCell, 0, columnCount)
 	for qi := 0; qi < columnCount; qi++ {
-		child := wx.Tu("")
+		child := widget.Tu("")
 		if qi == 0 {
-			child = wx.T("Loading more...")
+			child = widget.T("Loading more...")
 		}
-		cells = append(cells, &wx.TableCell{Child: child})
+		cells = append(cells, &widget.TableCell{Child: child})
 	}
-	return &wx.TableRow{
-		Widget: wx.Widget[wx.TableRow]{
+	return &widget.TableRow{
+		Widget: widget.Widget[widget.TableRow]{
 			ID: "inboxLoadMoreTable",
 		},
 		Cells: cells,
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.Endpoint() + "?offset=" + fmt.Sprintf("%d", offset+qq.pageSize()),
 			HxVals:    util.JSON(data),
 			HxTrigger: "intersect once",
@@ -105,34 +105,34 @@ func (qq *FilesListPartial) fileTableColumns(
 	spaceColumns *filelistpreference.SpaceFileListColumns,
 	propertyColumns []*enttenant.Property,
 	tagGroupColumns []*enttenant.Tag,
-) []*wx.TableColumn {
-	columns := []*wx.TableColumn{}
+) []*widget.TableColumn {
+	columns := []*widget.TableColumn{}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnName) {
-		columns = append(columns, &wx.TableColumn{Label: wx.T("Name")})
+		columns = append(columns, &widget.TableColumn{Label: widget.T("Name")})
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnOriginalFilename) {
-		columns = append(columns, &wx.TableColumn{Label: wx.T("Original filename")})
+		columns = append(columns, &widget.TableColumn{Label: widget.T("Original filename")})
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnDocumentType) {
-		columns = append(columns, &wx.TableColumn{Label: wx.T("Type")})
+		columns = append(columns, &widget.TableColumn{Label: widget.T("Type")})
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnMetadata) {
-		columns = append(columns, &wx.TableColumn{Label: wx.T("Metadata")})
+		columns = append(columns, &widget.TableColumn{Label: widget.T("Metadata")})
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnDate) {
-		columns = append(columns, &wx.TableColumn{Label: wx.T("Date")})
+		columns = append(columns, &widget.TableColumn{Label: widget.T("Date")})
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnSize) {
-		columns = append(columns, &wx.TableColumn{Label: wx.T("Size")})
+		columns = append(columns, &widget.TableColumn{Label: widget.T("Size")})
 	}
 	if spaceColumns.ShowTags {
-		columns = append(columns, &wx.TableColumn{Label: wx.T("Tags")})
+		columns = append(columns, &widget.TableColumn{Label: widget.T("Tags")})
 	}
 	for _, propertyx := range propertyColumns {
-		columns = append(columns, &wx.TableColumn{Label: wx.Tu(propertyx.Name)})
+		columns = append(columns, &widget.TableColumn{Label: widget.Tu(propertyx.Name)})
 	}
 	for _, tagGroup := range tagGroupColumns {
-		columns = append(columns, &wx.TableColumn{Label: wx.Tu(tagGroup.Name)})
+		columns = append(columns, &widget.TableColumn{Label: widget.Tu(tagGroup.Name)})
 	}
 	return columns
 }
@@ -146,17 +146,17 @@ func (qq *FilesListPartial) fileTableRow(
 	propertyColumns []*enttenant.Property,
 	tagGroupColumns []*enttenant.Tag,
 	columnData *fileTableColumnData,
-) *wx.TableRow {
-	cells := []*wx.TableCell{}
+) *widget.TableRow {
+	cells := []*widget.TableCell{}
 	hasData := false
 	addCell := func(value string) {
 		if strings.TrimSpace(value) != "" {
 			hasData = true
 		}
-		cells = append(cells, &wx.TableCell{Child: wx.Tu(value)})
+		cells = append(cells, &widget.TableCell{Child: widget.Tu(value)})
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnName) {
-		cells = append(cells, &wx.TableCell{Child: qq.fileTableNameCell(filex)})
+		cells = append(cells, &widget.TableCell{Child: qq.fileTableNameCell(filex)})
 		hasData = true
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnOriginalFilename) {
@@ -184,13 +184,13 @@ func (qq *FilesListPartial) fileTableRow(
 		addCell(strings.Join(columnData.tagGroups[filex.ID][tagGroup.ID], ", "))
 	}
 	if len(cells) > 0 && !hasData {
-		cells = []*wx.TableCell{{
-			Child:   wx.T("No data available."),
+		cells = []*widget.TableCell{{
+			Child:   widget.T("No data available."),
 			ColSpan: len(cells),
 		}}
 	}
 
-	return &wx.TableRow{
+	return &widget.TableRow{
 		HTMXAttrs:    qq.fileTableRowHTMXAttrs(ctx, filex),
 		Cells:        cells,
 		ContextMenu:  NewFileContextMenuWidget(qq.actions).Widget(ctx, filex),
@@ -199,17 +199,17 @@ func (qq *FilesListPartial) fileTableRow(
 	}
 }
 
-func (qq *FilesListPartial) fileTableNameCell(filex *enttenant.File) wx.IWidget {
-	return &wx.Row{
-		Children: []wx.IWidget{
-			wx.NewIcon("description"),
-			wx.Tu(filex.Name),
+func (qq *FilesListPartial) fileTableNameCell(filex *enttenant.File) widget.IWidget {
+	return &widget.Row{
+		Children: []widget.IWidget{
+			widget.NewIcon("description"),
+			widget.Tu(filex.Name),
 		},
 	}
 }
 
-func (qq *FilesListPartial) fileTableRowHTMXAttrs(ctx ctxx.Context, filex *enttenant.File) wx.HTMXAttrs {
-	return wx.HTMXAttrs{
+func (qq *FilesListPartial) fileTableRowHTMXAttrs(ctx ctxx.Context, filex *enttenant.File) widget.HTMXAttrs {
+	return widget.HTMXAttrs{
 		HxTarget: "#details",
 		HxSwap:   "outerHTML",
 		HxGet: route.Inbox(
@@ -565,9 +565,9 @@ func fileTablePropertyValue(ctx ctxx.Context, assignment *enttenant.FileProperty
 		return assignment.DateValue.String(ctx.MainCtx().LanguageBCP47)
 	case fieldtype.Checkbox:
 		if assignment.BoolValue {
-			return wx.T("Yes").String(ctx)
+			return widget.T("Yes").String(ctx)
 		}
-		return wx.T("No").String(ctx)
+		return widget.T("No").String(ctx)
 	default:
 		return ""
 	}

@@ -5,11 +5,11 @@ import (
 	"strconv"
 
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/tenant/library"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -34,35 +34,35 @@ func (qq *ManageDocumentTypesPage) Handler(
 ) error {
 	var viewx renderable.Renderable
 
-	fabs := []*wx.FloatingActionButton{
+	fabs := []*widget.FloatingActionButton{
 		{
 			Icon:    "add",
-			Tooltip: wx.T("Add document type"),
+			Tooltip: widget.T("Add document type"),
 			HTMXAttrs: qq.actions.CreateCmd.ModalLinkAttrs(
 				qq.actions.CreateCmd.Data(""),
 				"",
 			),
-			Child: []wx.IWidget{
-				wx.NewIcon("add"),
-				wx.T("Add document type"),
+			Child: []widget.IWidget{
+				widget.NewIcon("add"),
+				widget.T("Add document type"),
 			},
 		},
 	}
 
 	service := library.NewService()
 	if !service.SpaceHasMetadata(ctx) {
-		fabs = append(fabs, &wx.FloatingActionButton{
+		fabs = append(fabs, &widget.FloatingActionButton{
 			Icon:    "download",
-			Tooltip: wx.T("Import from library"),
-			FABSize: wx.FABSizeSmall,
-			FABType: wx.FABTypeSecondary,
+			Tooltip: widget.T("Import from library"),
+			FABSize: widget.FABSizeSmall,
+			FABType: widget.FABTypeSecondary,
 			HTMXAttrs: qq.actions.ImportFromLibraryDialog.ModalLinkAttrs(
 				qq.actions.ImportFromLibraryDialog.Data(),
 				"",
 			),
-			Child: []wx.IWidget{
-				wx.NewIcon("download"),
-				wx.T("Import from library"),
+			Child: []widget.IWidget{
+				widget.NewIcon("download"),
+				widget.T("Import from library"),
 			},
 		})
 	}
@@ -79,7 +79,7 @@ func (qq *ManageDocumentTypesPage) Handler(
 	// TODO is this safe? should be on 64 bit system
 	id64 := int64(id)
 
-	viewx = &wx.MainLayout{
+	viewx = &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "document-types", fabs),
 		Content:    qq.actions.DocumentTypePage.WidgetHandler(rw, req, ctx, id64),
 	}
@@ -90,7 +90,7 @@ func (qq *ManageDocumentTypesPage) Handler(
 	}
 
 	if renderFullPage {
-		viewx = partial2.NewBase(wx.T("Manage document types"), viewx)
+		viewx = partial2.NewBase(widget.T("Manage document types"), viewx)
 	}
 
 	return qq.infra.Renderer().Render(rw, ctx, viewx)

@@ -10,10 +10,10 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/fileutil"
@@ -47,7 +47,7 @@ func NewUploadFileCmd(infra *common.Infra, actions *Actions) *UploadFileCmd {
 	formHelper := autil.NewFormHelper[UploadFileCmdData](
 		infra,
 		config,
-		wx.T("Upload file"),
+		widget.T("Upload file"),
 	)
 	formHelper.SetIsMultipartFormData(true)
 	return &UploadFileCmd{
@@ -143,6 +143,6 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		rw,
 		ctx,
 		qq.actions.InboxPage.WidgetHandler(rw, req, ctx, prep.file.PublicID.String()),
-		wx.NewSnackbarf("«%s» uploaded.", prep.file.Name),
+		widget.NewSnackbarf("«%s» uploaded.", prep.file.Name),
 	)
 }

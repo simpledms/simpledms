@@ -5,11 +5,11 @@ import (
 
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -36,15 +36,15 @@ func (qq *DashboardPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 }
 
 func (qq *DashboardPage) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
-	fabs := []*wx.FloatingActionButton{}
+	fabs := []*widget.FloatingActionButton{}
 	dashboardCardsWidget, err := qq.actions.DashboardCardsPartial.Widget(ctx)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	dashboardCardsContent := &wx.Container{
-		HTMXAttrs: wx.HTMXAttrs{
+	dashboardCardsContent := &widget.Container{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxGet:     "/",
 			HxTrigger: event.HxTrigger(event.AccountDeleted),
 			HxTarget:  "#content",
@@ -52,10 +52,10 @@ func (qq *DashboardPage) Widget(ctx ctxx.Context) (renderable.Renderable, error)
 		Child: dashboardCardsWidget,
 	}
 
-	mainLayout := &wx.MainLayout{
+	mainLayout := &widget.MainLayout{
 		// MainCtx is necessary when navigating back from space, otherwise all menu items are rendered
 		Navigation: partial2.NewNavigationRail(ctx.MainCtx(), qq.infra, "dashboard", fabs),
-		Content: &wx.DefaultLayout{
+		Content: &widget.DefaultLayout{
 			AppBar:        qq.appBar(ctx),
 			Content:       dashboardCardsContent,
 			WithPoweredBy: false,
@@ -65,16 +65,16 @@ func (qq *DashboardPage) Widget(ctx ctxx.Context) (renderable.Renderable, error)
 	return mainLayout, nil
 }
 
-func (qq *DashboardPage) appBar(ctx ctxx.Context) *wx.AppBar {
-	return &wx.AppBar{
-		Leading: &wx.Icon{
+func (qq *DashboardPage) appBar(ctx ctxx.Context) *widget.AppBar {
+	return &widget.AppBar{
+		Leading: &widget.Icon{
 			Name: "dashboard",
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
-		Title: &wx.AppBarTitle{
-			Text: wx.T("Dashboard"),
+		Title: &widget.AppBarTitle{
+			Text: widget.T("Dashboard"),
 		},
-		Actions: []wx.IWidget{
+		Actions: []widget.IWidget{
 			/*&wx.IconButton{
 				Icon: "more_vert",
 				Children: &wx.Menu{

@@ -7,9 +7,9 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -35,7 +35,7 @@ func NewRenameFileCmd(infra *common.Infra, actions *Actions) *RenameFileCmd {
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[RenameFileCmdData](infra, config, wx.T("Rename file")),
+		FormHelper: autil.NewFormHelper[RenameFileCmdData](infra, config, widget.T("Rename file")),
 	}
 }
 
@@ -55,23 +55,23 @@ func (qq *RenameFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request
 	wrapper := req.URL.Query().Get("wrapper")
 	hxTarget := req.URL.Query().Get("hx-target")
 
-	form := &wx.Form{
-		HTMXAttrs: wx.HTMXAttrs{
+	form := &widget.Form{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxTarget: hxTarget,
 			HxSwap:   "outerHTML",
 		},
-		Children: []wx.IWidget{
-			wx.NewFormFields(ctx, data),
+		Children: []widget.IWidget{
+			widget.NewFormFields(ctx, data),
 		},
 	}
-	container := &wx.Container{
+	container := &widget.Container{
 		GapY: true,
-		Child: []wx.IWidget{
-			&wx.Container{
-				Child: []wx.IWidget{
-					wx.NewLabel(wx.LabelTypeMd, wx.T("Original filename")),
-					wx.NewBody(wx.BodyTypeSm, wx.Tu(data.NewFilename)),
+		Child: []widget.IWidget{
+			&widget.Container{
+				Child: []widget.IWidget{
+					widget.NewLabel(widget.LabelTypeMd, widget.T("Original filename")),
+					widget.NewBody(widget.BodyTypeSm, widget.Tu(data.NewFilename)),
 				},
 			},
 			form,
@@ -80,11 +80,11 @@ func (qq *RenameFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request
 
 	qq.infra.Renderer().RenderX(rw, ctx,
 		autil.WrapWidgetWithID(
-			wx.T("Rename file"),
-			wx.T("Save"),
+			widget.T("Rename file"),
+			widget.T("Save"),
 			container,
 			actionx.ResponseWrapper(wrapper),
-			wx.DialogLayoutDefault,
+			widget.DialogLayoutDefault,
 			"",
 			form.GetID(),
 		),
@@ -105,7 +105,7 @@ func (qq *RenameFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("Renamed to «%s»", filex.Data.Name))
+	rw.AddRenderables(widget.NewSnackbarf("Renamed to «%s»", filex.Data.Name))
 	rw.Header().Add("HX-Trigger", event.FileUpdated.String())
 
 	return nil

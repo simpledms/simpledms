@@ -48,10 +48,10 @@ Key guidance applied to this plan:
 
 ## Current SimpleDMS Context
 
-- `ui/widget/list.go` is a minimal container with children and HTMX attributes.
-- `ui/widget/list.gohtml` renders a `role="list"` flex column with fixed padding
+- `../../core/ui/widget/list.go` is a minimal container with children and HTMX attributes.
+- `../../core/ui/widget/list.gohtml` renders a `role="list"` flex column with fixed padding
   and a `gap-y-1` baseline spacing.
-- `ui/widget/list_item.gohtml` renders `role="listitem"` wrappers and keeps HTMX
+- `../../core/ui/widget/list_item.gohtml` renders `role="listitem"` wrappers and keeps HTMX
   activation, radio handling, selected state, context menus, and collapsible
   children inside the item template.
 - Existing call sites construct `&wx.List{...}` directly, so the default behavior

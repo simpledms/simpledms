@@ -9,7 +9,7 @@ import (
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 
-	wx "github.com/simpledms/simpledms/ui/widget"
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 )
 
 var (

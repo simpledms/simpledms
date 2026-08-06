@@ -5,11 +5,11 @@ package inbox
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/timex"
@@ -70,13 +70,13 @@ func (qq *FileListItemPartial) Widget(
 	fileWithChildren *enttenant.File,
 	isSelected bool,
 	showUploadDate bool,
-) *wx.ListItem {
+) *widget.ListItem {
 	/*trailing := &IconButton{
 		Icon:     "more_vert",
 		Children: NewFileContextMenuWidget(qq.actions).Widget(fileWithChildren),
 	}*/
 
-	htmxAttrs := wx.HTMXAttrs{
+	htmxAttrs := widget.HTMXAttrs{
 		HxTarget: "#details",
 		HxSwap:   "outerHTML",
 		HxGet: hrefFn(
@@ -86,18 +86,18 @@ func (qq *FileListItemPartial) Widget(
 		),
 		HxHeaders: autil.PreserveStateHeader(),
 	}
-	var supportingText *wx.Text
+	var supportingText *widget.Text
 	if showUploadDate {
-		supportingText = wx.Tf(
+		supportingText = widget.Tf(
 			"Uploaded %s",
 			timex.NewDateTime(fileWithChildren.CreatedAt).String(ctx.MainCtx().LanguageBCP47),
 		)
 	}
 
-	return &wx.ListItem{
+	return &widget.ListItem{
 		RadioGroupName: "fileListRadioGroup",
-		Leading:        wx.NewIcon("description").SmallPadding(),
-		Headline:       wx.T(fileWithChildren.Name),
+		Leading:        widget.NewIcon("description").SmallPadding(),
+		Headline:       widget.T(fileWithChildren.Name),
 		SupportingText: supportingText,
 		HTMXAttrs:      htmxAttrs,
 		// Trailing:   trailing,

@@ -8,11 +8,11 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -69,8 +69,8 @@ func (qq *FileTabsPartial) Widget(
 	state *InboxPageState,
 	fileID string,
 	nullableFile *filemodel.File,
-) *wx.TabBar {
-	var activeTabContent *wx.ScrollableContent
+) *widget.TabBar {
+	var activeTabContent *widget.ScrollableContent
 	tabsID := qq.ID()
 	activeTab := strings.ToLower(state.ActiveTab)
 
@@ -87,13 +87,13 @@ func (qq *FileTabsPartial) Widget(
 		)
 	case "move":
 		if ctx.SpaceCtx().Space.IsFolderMode {
-			activeTabContent = &wx.ScrollableContent{
+			activeTabContent = &widget.ScrollableContent{
 				MarginY: true,
 				GapY:    true,
-				Children: []wx.IWidget{
-					&wx.ListItem{
-						Headline: wx.T("Select destination manually"),
-						Type:     wx.ListItemTypeHelper,
+				Children: []widget.IWidget{
+					&widget.ListItem{
+						Headline: widget.T("Select destination manually"),
+						Type:     widget.ListItemTypeHelper,
 						HTMXAttrs: qq.actions.MoveFileCmd.ModalLinkAttrs(
 							qq.actions.MoveFileCmd.Data(nullableFile.Data.PublicID.String(), ""),
 							"#innerContent",
@@ -102,7 +102,7 @@ func (qq *FileTabsPartial) Widget(
 							qq.actions.InboxPage.Data(),
 						)),*/
 					},
-					wx.H(wx.HeadingTypeTitleMd, wx.T("Suggestions based on filename")),
+					widget.H(widget.HeadingTypeTitleMd, widget.T("Suggestions based on filename")),
 					qq.actions.ListInboxAssignmentSuggestionsPartial.Widget(ctx, nullableFile.Data.ID),
 				},
 			}
@@ -136,11 +136,11 @@ func (qq *FileTabsPartial) Widget(
 		}
 	}
 
-	var tabs []*wx.Tab
+	var tabs []*widget.Tab
 
-	tabs = append(tabs, &wx.Tab{
-		Label: wx.T("Metadata"),
-		HTMXAttrs: wx.HTMXAttrs{
+	tabs = append(tabs, &widget.Tab{
+		Label: widget.T("Metadata"),
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data(fileID, "")),
 			HxTarget: "#" + tabsID,
@@ -151,9 +151,9 @@ func (qq *FileTabsPartial) Widget(
 	)
 
 	if ctx.SpaceCtx().Space.IsFolderMode {
-		tabs = append(tabs, &wx.Tab{
-			Label: wx.T("Move"),
-			HTMXAttrs: wx.HTMXAttrs{
+		tabs = append(tabs, &widget.Tab{
+			Label: widget.T("Move"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(fileID, "move")),
 				HxTarget: "#" + tabsID,
@@ -163,11 +163,11 @@ func (qq *FileTabsPartial) Widget(
 		})
 	}
 
-	tabs = append(tabs, []*wx.Tab{
+	tabs = append(tabs, []*widget.Tab{
 		{
-			Label: wx.T("Tags"),
+			Label: widget.T("Tags"),
 			Badge: qq.actions.Browse.Tagging.AssignedTags.Count.Badge(ctx, fileID),
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(fileID, "tags")),
 				HxTarget: "#" + tabsID,
@@ -176,8 +176,8 @@ func (qq *FileTabsPartial) Widget(
 			IncreasedHeight: true,
 		},
 		{
-			Label: wx.T("Fields"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Label: widget.T("Fields"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(fileID, "fields")),
 				HxTarget: "#" + tabsID,
@@ -186,8 +186,8 @@ func (qq *FileTabsPartial) Widget(
 			IncreasedHeight: true,
 		},
 		{
-			Label: wx.T("Info"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Label: widget.T("Info"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(fileID, "info")),
 				HxTarget: "#" + tabsID,
@@ -197,9 +197,9 @@ func (qq *FileTabsPartial) Widget(
 		},
 	}...)
 	if hasDuplicates {
-		tabs = append(tabs, &wx.Tab{
-			Label: wx.T("Duplicates"),
-			HTMXAttrs: wx.HTMXAttrs{
+		tabs = append(tabs, &widget.Tab{
+			Label: widget.T("Duplicates"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(fileID, "duplicates")),
 				HxTarget: "#" + tabsID,
@@ -209,8 +209,8 @@ func (qq *FileTabsPartial) Widget(
 		})
 	}
 
-	return &wx.TabBar{
-		Widget: wx.Widget[wx.TabBar]{
+	return &widget.TabBar{
+		Widget: widget.Widget[widget.TabBar]{
 			ID: tabsID,
 		},
 		ActiveTab:        activeTab,
@@ -223,23 +223,23 @@ func (qq *FileTabsPartial) Widget(
 func (qq *FileTabsPartial) nilableDuplicateTabContent(
 	ctx ctxx.Context,
 	fileID string,
-) (*wx.ScrollableContent, bool) {
+) (*widget.ScrollableContent, bool) {
 	content, _, hasDuplicates, err := qq.actions.Browse.DuplicateMatchesPartial.WidgetWithStatus(
 		ctx,
 		qq.actions.Browse.DuplicateMatchesPartial.Data(fileID),
 	)
 	if err != nil {
 		log.Println(err)
-		return &wx.ScrollableContent{
+		return &widget.ScrollableContent{
 			MarginY:  true,
-			Children: wx.NewBody(wx.BodyTypeSm, wx.T("Could not load duplicates.")),
+			Children: widget.NewBody(widget.BodyTypeSm, widget.T("Could not load duplicates.")),
 		}, true
 	}
 	if hasDuplicates {
-		content.Children = &wx.Column{
-			GapYSize:   wx.Gap4,
+		content.Children = &widget.Column{
+			GapYSize:   widget.Gap4,
 			AutoHeight: true,
-			Children: []wx.IWidget{
+			Children: []widget.IWidget{
 				qq.actions.FileMetadataPartial.deleteFromInboxButton(ctx, fileID),
 				content.Children,
 			},

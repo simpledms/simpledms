@@ -1,43 +1,43 @@
 package partial
 
 import (
-	wx "github.com/simpledms/simpledms/ui/widget"
+	"github.com/simpledms/simpledms/core/ui/widget"
 )
 
 // TODO widget or block?
-func NewFullscreenPopoverDialogAppBar(title string, closePopoverTarget string, submitBtnLabel string) *wx.AppBar {
-	var actions []wx.IWidget
+func NewFullscreenPopoverDialogAppBar(title string, closePopoverTarget string, submitBtnLabel string) *widget.AppBar {
+	var actions []widget.IWidget
 	if submitBtnLabel != "" {
-		actions = append(actions, &wx.Button{
+		actions = append(actions, &widget.Button{
 			Type:  "submit",
-			Label: wx.T(submitBtnLabel),
+			Label: widget.T(submitBtnLabel),
 		})
 	}
 
-	return &wx.AppBar{
-		Leading: &wx.IconButton{
+	return &widget.AppBar{
+		Leading: &widget.IconButton{
 			Icon:                "close",
-			Tooltip:             wx.T("Close"),
+			Tooltip:             widget.T("Close"),
 			PopoverTarget:       closePopoverTarget,
 			PopoverTargetAction: "hide",
 		},
-		Title: &wx.AppBarTitle{
-			Text: wx.T(title), // TODO add filename
+		Title: &widget.AppBarTitle{
+			Text: widget.T(title), // TODO add filename
 		},
 		Actions: actions,
 	}
 }
 
-func NewFullscreenDialogAppBar(title *wx.Text, closeButtonHref string, actions []wx.IWidget) *wx.AppBar {
-	return &wx.AppBar{
-		Leading: &wx.IconButton{
+func NewFullscreenDialogAppBar(title *widget.Text, closeButtonHref string, actions []widget.IWidget) *widget.AppBar {
+	return &widget.AppBar{
+		Leading: &widget.IconButton{
 			Icon:    "close",
-			Tooltip: wx.T("Close"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Tooltip: widget.T("Close"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet: closeButtonHref,
 			},
 		},
-		Title: &wx.AppBarTitle{
+		Title: &widget.AppBarTitle{
 			Text: title,
 		},
 		Actions: actions,

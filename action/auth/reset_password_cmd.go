@@ -6,13 +6,13 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entx"
 	account2 "github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/mailer"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -44,8 +44,8 @@ func NewResetPasswordCmd(
 		FormHelper: autil.NewFormHelperX[ResetPasswordCmdData](
 			infra,
 			config,
-			wx.T("Reset password"),
-			wx.T("Reset"),
+			widget.T("Reset password"),
+			widget.T("Reset"),
 		),
 	}
 }
@@ -85,7 +85,7 @@ func (qq *ResetPasswordCmd) Handler(
 			"Too many password reset requests. Please try again shortly.",
 		)
 	}
-	confirmationSnackbar := wx.NewSnackbarf(
+	confirmationSnackbar := widget.NewSnackbarf(
 		"If an account with this email exists, a new temporary password was sent.",
 	)
 

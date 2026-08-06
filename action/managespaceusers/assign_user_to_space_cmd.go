@@ -7,13 +7,13 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/common/spacerole"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	usermodel "github.com/simpledms/simpledms/model/tenant/user"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -44,7 +44,7 @@ func NewAssignUserToSpaceCmd(infra *common.Infra, actions *Actions) *AssignUserT
 		actions:         actions,
 		spaceRepository: spacemodel.NewEntSpaceRepository(),
 		Config:          config,
-		FormHelper:      autil.NewFormHelper[AssignUserToSpaceCmdData](infra, config, wx.T("Assign user to space")),
+		FormHelper:      autil.NewFormHelper[AssignUserToSpaceCmdData](infra, config, widget.T("Assign user to space")),
 	}
 }
 
@@ -72,7 +72,7 @@ func (qq *AssignUserToSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 	}
 
 	// TODO send message to user via Chat?
-	rw.AddRenderables(wx.NewSnackbarf("User assigned to space successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("User assigned to space successfully."))
 	rw.Header().Set("HX-Trigger", event.UserAssignedToSpace.String())
 
 	return nil
@@ -107,20 +107,20 @@ func (qq *AssignUserToSpaceCmd) Form(
 		data.Role = spacerole.User
 	}
 
-	form := &wx.Form{
-		Widget: wx.Widget[wx.Form]{
+	form := &widget.Form{
+		Widget: widget.Widget[widget.Form]{
 			ID: qq.formID(),
 		},
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxTarget: hxTarget,
 			HxSwap:   "outerHTML",
 		},
-		Children: []wx.IWidget{
-			&wx.Container{
+		Children: []widget.IWidget{
+			&widget.Container{
 				GapY: true,
-				Child: []wx.IWidget{
-					wx.NewFormFields(ctx, data),
+				Child: []widget.IWidget{
+					widget.NewFormFields(ctx, data),
 					qq.userList(ctx),
 				},
 			},
@@ -128,11 +128,11 @@ func (qq *AssignUserToSpaceCmd) Form(
 	}
 
 	return autil.WrapWidgetWithID(
-		wx.T("Assign user to space"),
-		wx.T("Save"),
+		widget.T("Assign user to space"),
+		widget.T("Save"),
 		form,
 		wrapper,
-		wx.DialogLayoutStable,
+		widget.DialogLayoutStable,
 		qq.popoverID(),
 		qq.formID(),
 	)
@@ -146,14 +146,14 @@ func (qq *AssignUserToSpaceCmd) formID() string {
 	return "assignUserToSpaceForm"
 }
 
-func (qq *AssignUserToSpaceCmd) userList(ctx ctxx.Context) wx.IWidget {
+func (qq *AssignUserToSpaceCmd) userList(ctx ctxx.Context) widget.IWidget {
 	listItems := qq.userListItems(ctx)
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.userListID(),
 		},
-		Children: &wx.List{
+		Children: &widget.List{
 			Children: listItems,
 		},
 	}
@@ -166,35 +166,35 @@ func (qq *AssignUserToSpaceCmd) userListID() string {
 func (qq *AssignUserToSpaceCmd) userListItems(ctx ctxx.Context) interface{} {
 	// TODO implement pagination?
 
-	var items []*wx.ListItem
+	var items []*widget.ListItem
 
 	unassignedUsers, err := qq.spaceRepository.UnassignedUsers(ctx, ctx.SpaceCtx().Space.ID)
 	if err != nil {
 		log.Println(err)
-		return []*wx.ListItem{
+		return []*widget.ListItem{
 			{
-				Headline:       wx.T("Could not load users."),
-				SupportingText: wx.T("Please reload the page and try again."),
+				Headline:       widget.T("Could not load users."),
+				SupportingText: widget.T("Please reload the page and try again."),
 			},
 		}
 	}
 
 	if len(unassignedUsers) == 0 {
-		items = append(items, &wx.ListItem{
-			Headline:       wx.T("No unassigned users available."),
-			SupportingText: wx.T("Please create a user in the organization user management first."), // TODO link
+		items = append(items, &widget.ListItem{
+			Headline:       widget.T("No unassigned users available."),
+			SupportingText: widget.T("Please create a user in the organization user management first."), // TODO link
 		})
 		return items
 	}
 
 	for _, unassignedUser := range unassignedUsers {
 		userm := usermodel.NewUser(unassignedUser)
-		items = append(items, &wx.ListItem{
+		items = append(items, &widget.ListItem{
 			RadioGroupName: "UserID",
 			RadioValue:     fmt.Sprintf("%s", unassignedUser.PublicID),
-			Headline:       wx.Tu(userm.Name()),
-			SupportingText: wx.Tu(userm.NameSecondLine()),
-			Leading:        wx.NewIcon("person"),
+			Headline:       widget.Tu(userm.Name()),
+			SupportingText: widget.Tu(userm.NameSecondLine()),
+			Leading:        widget.NewIcon("person"),
 		})
 	}
 

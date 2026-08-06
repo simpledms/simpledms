@@ -5,10 +5,10 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -52,19 +52,19 @@ func (qq *CountAssignedTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.
 	return nil
 }
 
-func (qq *CountAssignedTagsPartial) Badge(ctx ctxx.Context, fileID string) *wx.Badge {
+func (qq *CountAssignedTagsPartial) Badge(ctx ctxx.Context, fileID string) *widget.Badge {
 	// soft delete filter is not applied via TagAssignment
 	filex := qq.infra.FileRepo.GetX(ctx, fileID)
 	tagsCount := filex.Data.QueryTags().CountX(ctx)
 
 	id := autil.GenerateID(fmt.Sprintf("tagsCount-%s", fileID))
-	return &wx.Badge{
-		Widget: wx.Widget[wx.Badge]{
+	return &widget.Badge{
+		Widget: widget.Widget[widget.Badge]{
 			ID: id,
 		},
 		Value:    tagsCount,
 		IsInline: true,
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.Endpoint(),
 			HxTrigger: event.HxTrigger(event.TagUpdated),
 			HxVals:    util.JSON(qq.Data(fileID)),

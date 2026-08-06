@@ -5,10 +5,10 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -29,7 +29,7 @@ func NewClearTemporaryPasswordCmd(infra *common.Infra, actions *Actions) *ClearT
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[ClearTemporaryPasswordCmdData](infra, config, wx.T("Clear temporary password")),
+		FormHelper: autil.NewFormHelper[ClearTemporaryPasswordCmdData](infra, config, widget.T("Clear temporary password")),
 	}
 }
 
@@ -49,6 +49,6 @@ func (qq *ClearTemporaryPasswordCmd) Handler(rw httpx.ResponseWriter, req *httpx
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.TemporaryPasswordCleared.String())
 
-	rw.AddRenderables(wx.NewSnackbarf("Temporary password cleared successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("Temporary password cleared successfully."))
 	return nil
 }

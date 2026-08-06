@@ -5,9 +5,9 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -40,7 +40,7 @@ func NewMakeDirCmd(
 		autil.NewFormHelper[MakeDirCmdData](
 			infra,
 			config,
-			wx.T("Create directory"),
+			widget.T("Create directory"),
 			// "#fileList",
 		),
 	}
@@ -77,9 +77,9 @@ func (qq *MakeDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 			data.ParentDirID,
 			"",
 		),
-		wx.NewSnackbarf("«%s» created.", filex.Data.Name).WithAction(&wx.Link{
+		widget.NewSnackbarf("«%s» created.", filex.Data.Name).WithAction(&widget.Link{
 			Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
-			Child: wx.T("Open directory"), // TODO Go to, open, show?
+			Child: widget.T("Open directory"), // TODO Go to, open, show?
 		}),
 	)
 	return nil

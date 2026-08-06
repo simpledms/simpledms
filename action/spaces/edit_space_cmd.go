@@ -3,12 +3,12 @@ package spaces
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
 	spacemodel "github.com/simpledms/simpledms/model/tenant/space"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -32,7 +32,7 @@ func NewRenameSpace(infra *common.Infra, actions *Actions) *EditSpaceCmd {
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[EditSpaceCmdData](infra, config, wx.T("Edit space")),
+		FormHelper: autil.NewFormHelper[EditSpaceCmdData](infra, config, widget.T("Edit space")),
 	}
 }
 
@@ -63,7 +63,7 @@ func (qq *EditSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 	}
 
 	rw.Header().Set("HX-Trigger", event.SpaceUpdated.String())
-	rw.AddRenderables(wx.NewSnackbarf("Changes saved."))
+	rw.AddRenderables(widget.NewSnackbarf("Changes saved."))
 
 	return nil
 }

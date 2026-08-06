@@ -2,10 +2,10 @@ package trash
 
 import (
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial "github.com/simpledms/simpledms/ui/uix/partial"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -29,16 +29,16 @@ func (qq *TrashRootPage) Handler(
 	viewx := qq.widget(ctx)
 
 	if req.Header.Get("HX-Request") == "" {
-		viewx = partial.NewBase(wx.T("Trash"), viewx)
+		viewx = partial.NewBase(widget.T("Trash"), viewx)
 	}
 
 	return qq.infra.Renderer().Render(rw, ctx, viewx)
 }
 
 func (qq *TrashRootPage) widget(ctx ctxx.Context) renderable.Renderable {
-	mainLayout := &wx.MainLayout{
+	mainLayout := &widget.MainLayout{
 		Navigation: partial.NewNavigationRail(ctx, qq.infra, "trash", nil),
-		Content: &wx.ListDetailLayout{
+		Content: &widget.ListDetailLayout{
 			AppBar: qq.appBar(ctx),
 			List:   qq.actions.TrashListPartial.Widget(ctx, qq.actions.TrashListPartial.Data("")),
 		},
@@ -46,10 +46,10 @@ func (qq *TrashRootPage) widget(ctx ctxx.Context) renderable.Renderable {
 	return mainLayout
 }
 
-func (qq *TrashRootPage) appBar(ctx ctxx.Context) *wx.AppBar {
-	return &wx.AppBar{
-		Leading:          wx.NewIcon("delete"),
+func (qq *TrashRootPage) appBar(ctx ctxx.Context) *widget.AppBar {
+	return &widget.AppBar{
+		Leading:          widget.NewIcon("delete"),
 		LeadingAltMobile: partial.NewNavigationRailToggle(),
-		Title:            wx.T("Trash"),
+		Title:            widget.T("Trash"),
 	}
 }

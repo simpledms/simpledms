@@ -1,19 +1,21 @@
 package partial
 
-import wx "github.com/simpledms/simpledms/ui/widget"
+import (
+	"github.com/simpledms/simpledms/core/ui/widget"
+)
 
 type Basex struct {
 }
 
-func NewBase(title *wx.Text, child wx.IWidget) *wx.Base {
-	return &wx.Base{
+func NewBase(title *widget.Text, child widget.IWidget) *widget.Base {
+	return &widget.Base{
 		Title: title,
-		Content: []wx.IWidget{
+		Content: []widget.IWidget{
 			child,
 		},
-		Children: []wx.IWidget{
-			&wx.Container{
-				Widget: wx.Widget[wx.Container]{
+		Children: []widget.IWidget{
+			&widget.Container{
+				Widget: widget.Widget[widget.Container]{
 					ID: "popovers",
 				},
 			},

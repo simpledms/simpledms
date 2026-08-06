@@ -7,10 +7,10 @@ import (
 	acommon "github.com/simpledms/simpledms/action/common"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -61,18 +61,18 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 
 	filex.Data.Update().SetIsInInbox(false).SaveX(ctx)
 
-	action := &wx.Link{
+	action := &widget.Link{
 		Href: route.BrowseFile(
 			ctx.TenantCtx().TenantID,
 			ctx.SpaceCtx().SpaceID,
 			filex.Parent(ctx).Data.PublicID.String(),
 			filex.Data.PublicID.String(),
 		),
-		Child: wx.T("Open file"),
+		Child: widget.T("Open file"),
 	}
 
 	rw.AddRenderables(
-		wx.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
+		widget.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
 	)
 
 	rw.Header().Set("HX-Trigger", event.FileMoved.String())

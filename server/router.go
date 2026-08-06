@@ -20,6 +20,7 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/session"
@@ -34,7 +35,6 @@ import (
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 	tenantaccessmodel "github.com/simpledms/simpledms/model/main/tenantaccess"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"

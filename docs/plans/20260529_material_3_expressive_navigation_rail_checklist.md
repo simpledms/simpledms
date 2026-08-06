@@ -25,7 +25,7 @@
 
 ## Rail Templates
 
-- [x] Update `ui/widget/navigation_rail.gohtml` to render collapsed and expanded
+- [x] Update `../../core/ui/widget/navigation_rail.gohtml` to render collapsed and expanded
   regions separately.
 - [x] Render a compact modal scrim only when the rail is expanded below `md`.
 - [x] Render the collapsed compact rail as the default closed mobile state.
@@ -52,7 +52,7 @@
 ## Rail Runtime
 
 - [x] Add `ui/uix/web/assets/navigation_rail.js`.
-- [x] Include the runtime from `ui/widget/base.gohtml`.
+- [x] Include the runtime from `../../core/ui/widget/base.gohtml`.
 - [x] Use SimpleDMS storage keys such as `simpledms.navigationRail.expanded`.
 - [x] Use the SimpleDMS `md=600px` breakpoint in runtime media queries.
 - [x] Keep mobile expanded state non-persistent.
@@ -117,9 +117,9 @@
 - [x] Set rail width property to `0px` on compact screens.
 - [x] Set rail width property to `80px` for collapsed `md+` rail.
 - [x] Set rail width property to expanded rail width for expanded `md+` rail.
-- [x] Review `ui/widget/main_layout.gohtml` and `ui/widget/narrow_layout.gohtml`
+- [x] Review `../../core/ui/widget/main_layout.gohtml` and `../../core/ui/widget/narrow_layout.gohtml`
   with expanded `md+` rail.
-- [x] Adjust `ui/widget/dialog.gohtml` side-sheet positioning to account for
+- [x] Adjust `../../core/ui/widget/dialog.gohtml` side-sheet positioning to account for
   expanded rail width on large screens.
 - [x] Remove or replace hard-coded side-sheet coordinates that break with the
   expanded rail.

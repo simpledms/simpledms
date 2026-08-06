@@ -5,12 +5,12 @@ package documenttype
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -63,10 +63,10 @@ func (qq *DetailsPartial) Widget(
 	ctx ctxx.Context,
 	state *DocumentTypePageState,
 	documentTypex *enttenant.DocumentType,
-) *wx.DetailsWithSheet {
-	return &wx.DetailsWithSheet{
+) *widget.DetailsWithSheet {
+	return &widget.DetailsWithSheet{
 		AppBar: qq.appBar(ctx, documentTypex),
-		Child: []wx.IWidget{
+		Child: []widget.IWidget{
 			qq.actions.Properties.Widget(ctx, &AttributesPartialData{
 				DocumentTypeID: documentTypex.ID,
 			}),
@@ -74,22 +74,22 @@ func (qq *DetailsPartial) Widget(
 	}
 }
 
-func (qq *DetailsPartial) appBar(ctx ctxx.Context, documentTypex *enttenant.DocumentType) *wx.AppBar {
-	return &wx.AppBar{
-		Leading: &wx.IconButton{
+func (qq *DetailsPartial) appBar(ctx ctxx.Context, documentTypex *enttenant.DocumentType) *widget.AppBar {
+	return &widget.AppBar{
+		Leading: &widget.IconButton{
 			Icon:    "close",
-			Tooltip: wx.T("Close details"),
+			Tooltip: widget.T("Close details"),
 			// TODO use link instead?
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet:     route.ManageDocumentTypes(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
 				HxOn:      event.DetailsClosed.HxOn("click"),
 				HxHeaders: autil.CloseDetailsHeader(),
 			},
 		},
-		Title: &wx.AppBarTitle{
-			Text: wx.Tu(documentTypex.Name),
+		Title: &widget.AppBarTitle{
+			Text: widget.Tu(documentTypex.Name),
 		},
-		Actions: []wx.IWidget{
+		Actions: []widget.IWidget{
 			/*&wx.IconButton{
 				Icon: "more_vert",
 				Children: &wx.Menu{

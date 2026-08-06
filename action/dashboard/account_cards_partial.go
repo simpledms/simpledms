@@ -4,11 +4,11 @@ import (
 	"log"
 
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -53,12 +53,12 @@ func (qq *AccountCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable, 
 		return nil, err
 	}
 
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: qq.id(),
 		},
 		GapY: true,
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxTrigger: event.HxTrigger(
 				event.InitialPasswordSet,
 				event.TemporaryPasswordCleared,

@@ -3,6 +3,7 @@ package dashboard
 import (
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	accountmodel "github.com/simpledms/simpledms/model/main/account"
@@ -12,7 +13,6 @@ import (
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -43,21 +43,21 @@ func (qq *OrganizationSettingsPage) Handler(
 func (qq *OrganizationSettingsPage) Widget(ctx ctxx.Context) renderable.Renderable {
 	tenantID := ctx.TenantCtx().TenantID
 
-	return &wx.MainLayout{
+	return &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(
 			ctx,
 			qq.infra,
 			partial2.TenantSettingsNavigationRailValue(tenantID),
 			nil,
 		),
-		Content: &wx.DefaultLayout{
+		Content: &widget.DefaultLayout{
 			AppBar: qq.appBar(ctx),
-			Content: &wx.Container{
-				Widget: wx.Widget[wx.Container]{
+			Content: &widget.Container{
+				Widget: widget.Widget[widget.Container]{
 					ID: "organizationSettings",
 				},
 				GapY: true,
-				HTMXAttrs: wx.HTMXAttrs{
+				HTMXAttrs: widget.HTMXAttrs{
 					HxGet:     route2.OrganizationSettings(tenantID),
 					HxTrigger: event.HxTrigger(event.AccountUpdated),
 					HxTarget:  "#content",
@@ -68,30 +68,30 @@ func (qq *OrganizationSettingsPage) Widget(ctx ctxx.Context) renderable.Renderab
 	}
 }
 
-func (qq *OrganizationSettingsPage) appBar(ctx ctxx.Context) *wx.AppBar {
-	return &wx.AppBar{
-		Leading: &wx.Icon{
+func (qq *OrganizationSettingsPage) appBar(ctx ctxx.Context) *widget.AppBar {
+	return &widget.AppBar{
+		Leading: &widget.Icon{
 			Name: "settings",
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
-		Title: &wx.AppBarTitle{
-			Text: wx.Tuf("%s «%s»", wx.T("Settings").String(ctx), ctx.TenantCtx().Tenant.Name),
+		Title: &widget.AppBarTitle{
+			Text: widget.Tuf("%s «%s»", widget.T("Settings").String(ctx), ctx.TenantCtx().Tenant.Name),
 		},
 	}
 }
 
-func (qq *OrganizationSettingsPage) content(ctx ctxx.Context) wx.IWidget {
+func (qq *OrganizationSettingsPage) content(ctx ctxx.Context) widget.IWidget {
 	button, ok := qq.passkeyEnforcementBtn(ctx, ctx.TenantCtx().Tenant)
 	if !ok {
-		return []*wx.Grid{}
+		return []*widget.Grid{}
 	}
 
-	return []*wx.Grid{{
-		Heading: wx.H(wx.HeadingTypeTitleMd, wx.T("Passkeys")),
-		Children: []*wx.Card{{
-			Style:    wx.CardStyleFilled,
-			Headline: wx.H(wx.HeadingTypeTitleLg, wx.T("Passkeys")),
-			Actions:  []*wx.Button{button},
+	return []*widget.Grid{{
+		Heading: widget.H(widget.HeadingTypeTitleMd, widget.T("Passkeys")),
+		Children: []*widget.Card{{
+			Style:    widget.CardStyleFilled,
+			Headline: widget.H(widget.HeadingTypeTitleLg, widget.T("Passkeys")),
+			Actions:  []*widget.Button{button},
 		}},
 	}}
 }
@@ -99,7 +99,7 @@ func (qq *OrganizationSettingsPage) content(ctx ctxx.Context) wx.IWidget {
 func (qq *OrganizationSettingsPage) passkeyEnforcementBtn(
 	ctx ctxx.Context,
 	tenantx *entmain.Tenant,
-) (*wx.Button, bool) {
+) (*widget.Button, bool) {
 	tenantm := tenantmodel.NewTenant(tenantx)
 	accountm := accountmodel.NewAccount(ctx.MainCtx().Account)
 	if !tenantm.IsOwner(accountm) {
@@ -109,17 +109,17 @@ func (qq *OrganizationSettingsPage) passkeyEnforcementBtn(
 		return nil, false
 	}
 
-	buttonLabel := wx.T("Enable passkey enforcement")
-	confirmText := wx.T("Enable passkey enforcement for this organization? Members will need passkeys to sign in.")
+	buttonLabel := widget.T("Enable passkey enforcement")
+	confirmText := widget.T("Enable passkey enforcement for this organization? Members will need passkeys to sign in.")
 	if tenantx.PasskeyAuthEnforced {
-		buttonLabel = wx.T("Disable passkey enforcement")
-		confirmText = wx.T("Disable passkey enforcement for this organization? Members can use passwords again if allowed.")
+		buttonLabel = widget.T("Disable passkey enforcement")
+		confirmText = widget.T("Disable passkey enforcement for this organization? Members can use passwords again if allowed.")
 	}
 
-	return &wx.Button{
+	return &widget.Button{
 		Label:     buttonLabel,
-		StyleType: wx.ButtonStyleTypeElevated,
-		HTMXAttrs: wx.HTMXAttrs{
+		StyleType: widget.ButtonStyleTypeElevated,
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.actions.ToggleTenantPasskeyEnforcementCmd.Endpoint(),
 			HxVals: util.JSON(
 				qq.actions.ToggleTenantPasskeyEnforcementCmd.Data(

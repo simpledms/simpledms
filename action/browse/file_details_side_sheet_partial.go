@@ -3,8 +3,8 @@ package browse
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -54,22 +54,22 @@ func (qq *FileDetailsSideSheetPartial) Widget(
 	ctx ctxx.Context,
 	data *FileDetailsSideSheetPartialData,
 	state *FilePreviewPartialState,
-) *wx.Dialog {
+) *widget.Dialog {
 	// if listDirState.OpenDialog == qq.ID() {
 	// TODO remove state from URL
 	// return &wx.View{}
 	// }
 
-	return &wx.Dialog{
-		Widget: wx.Widget[wx.Dialog]{
+	return &widget.Dialog{
+		Widget: widget.Widget[widget.Dialog]{
 			ID: qq.ID(),
 		},
-		Headline:                        wx.T("Details"),
+		Headline:                        widget.T("Details"),
 		IsOpenOnLoadOnExtraLargeScreens: true,
 		// allows for quick back and forth on mobile devices
 		KeepInDOMOnClose: true,
 		IsOpenOnLoad:     state.ActiveSideSheet == qq.ID(),
-		Layout:           wx.DialogLayoutSideSheet,
+		Layout:           widget.DialogLayoutSideSheet,
 		Child: qq.actions.FileTabsPartial.Widget(
 			ctx,
 			state,

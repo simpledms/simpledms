@@ -3,10 +3,10 @@ package documenttype
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/tenant/library"
 	"github.com/simpledms/simpledms/ui/renderable"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -27,7 +27,7 @@ func NewImportFromLibraryDialog(infra *common.Infra, actions *Actions) *ImportFr
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelperX[ImportFromLibraryCmdData](infra, config, wx.T("Import from library"), wx.T("Import")),
+		FormHelper: autil.NewFormHelperX[ImportFromLibraryCmdData](infra, config, widget.T("Import from library"), widget.T("Import")),
 	}
 }
 
@@ -56,55 +56,55 @@ func (qq *ImportFromLibraryDialog) Form(
 	service := library.NewService()
 	if service.SpaceHasMetadata(ctx) {
 		return autil.WrapWidget(
-			wx.T("Import from library"),
-			wx.T("Import"),
-			wx.T("Import is only available for empty spaces."),
+			widget.T("Import from library"),
+			widget.T("Import"),
+			widget.T("Import is only available for empty spaces."),
 			wrapper,
-			wx.DialogLayoutDefault,
+			widget.DialogLayoutDefault,
 		)
 	}
 
 	templates := library.BuiltinTemplates()
 
-	form := &wx.Form{
-		HTMXAttrs: wx.HTMXAttrs{
+	form := &widget.Form{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.actions.ImportFromLibraryCmd.Endpoint(),
 			HxTarget: hxTarget,
 			HxSwap:   "outerHTML",
 		},
-		Children: []wx.IWidget{
-			&wx.Container{
+		Children: []widget.IWidget{
+			&widget.Container{
 				GapY: true,
-				Child: []wx.IWidget{
+				Child: []widget.IWidget{
 					qq.libraryTemplateSelection(ctx, templates),
 				},
 			},
 		},
 	}
 
-	return autil.WrapWidget(wx.T("Import from library"), wx.T("Import"), form, wrapper, wx.DialogLayoutDefault)
+	return autil.WrapWidget(widget.T("Import from library"), widget.T("Import"), form, wrapper, widget.DialogLayoutDefault)
 }
 
-func (qq *ImportFromLibraryDialog) libraryTemplateSelection(ctx ctxx.Context, templates []library.BuiltinTemplate) wx.IWidget {
+func (qq *ImportFromLibraryDialog) libraryTemplateSelection(ctx ctxx.Context, templates []library.BuiltinTemplate) widget.IWidget {
 	if len(templates) == 0 {
-		return &wx.EmptyState{
-			Headline: wx.T("No library document types available yet."),
+		return &widget.EmptyState{
+			Headline: widget.T("No library document types available yet."),
 		}
 	}
 
-	var items []wx.IWidget
-	items = append(items, wx.P("Select document types to import:"))
+	var items []widget.IWidget
+	items = append(items, widget.P("Select document types to import:"))
 
 	for _, template := range templates {
-		label := wx.T(template.Name).String(ctx)
-		items = append(items, &wx.Checkbox{
-			Label: wx.Tu(label),
+		label := widget.T(template.Name).String(ctx)
+		items = append(items, &widget.Checkbox{
+			Label: widget.Tu(label),
 			Name:  "library_template_keys",
 			Value: template.Key,
 		})
 	}
 
-	return &wx.Container{
+	return &widget.Container{
 		GapY:  true,
 		Child: items,
 	}

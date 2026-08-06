@@ -7,6 +7,7 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
@@ -16,7 +17,6 @@ import (
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -96,7 +96,7 @@ func (qq *ListAssignedTagsPartial) tags(ctx ctxx.Context, data *ListAssignedTags
 func (qq *ListAssignedTagsPartial) ListView(
 	ctx ctxx.Context,
 	data *ListAssignedTagsPartialData,
-) *wx.ScrollableContent {
+) *widget.ScrollableContent {
 	tags := qq.tags(ctx, data)
 	if len(tags) == 0 {
 		return qq.actions.AssignedTags.Edit.ListView(
@@ -112,8 +112,8 @@ func (qq *ListAssignedTagsPartial) List(
 	fileID string,
 	tags []*enttenant.Tag,
 	hxTarget string,
-) *wx.ScrollableContent {
-	var listItems []*wx.ListItem
+) *widget.ScrollableContent {
+	var listItems []*widget.ListItem
 
 	// TODO edit Attribute?
 
@@ -121,12 +121,12 @@ func (qq *ListAssignedTagsPartial) List(
 		listItems = append(listItems, qq.actions.AssignedTags.ListItem.Widget(ctx, tagx))
 	}
 
-	bottomAppBar := &wx.BottomAppBar{
-		Actions: []wx.IWidget{
-			&wx.IconButton{
+	bottomAppBar := &widget.BottomAppBar{
+		Actions: []widget.IWidget{
+			&widget.IconButton{
 				Icon:    "edit_square",
-				Tooltip: wx.T("Edit assigned tags"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Tooltip: widget.T("Edit assigned tags"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost: qq.actions.AssignedTags.Edit.EndpointWithParams(actionx.ResponseWrapperNone, hxTarget),
 					HxVals: util.JSON(qq.actions.AssignedTags.Edit.Data(fileID, 0)),
 					// TODO is this a good idea? or try to select closest tab?
@@ -137,11 +137,11 @@ func (qq *ListAssignedTagsPartial) List(
 		},
 	}
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.actions.AssignedTags.Edit.hxTargetID(),
 		},
-		Children: &wx.List{
+		Children: &widget.List{
 			Children: listItems,
 		},
 		BottomAppBar: bottomAppBar,
@@ -152,19 +152,19 @@ func (qq *ListAssignedTagsPartial) Chips(
 	ctx context.Context,
 	data *ListAssignedTagsPartialData,
 	tags []*enttenant.Tag,
-) *wx.Container {
-	var bottomSheetChildren []wx.IWidget
+) *widget.Container {
+	var bottomSheetChildren []widget.IWidget
 	for _, tagx := range tags {
 		chipID := autil.GenerateID("tag-chip")
 
-		bottomSheetChildren = append(bottomSheetChildren, &wx.Chip{
-			Widget: wx.Widget[wx.Chip]{
+		bottomSheetChildren = append(bottomSheetChildren, &widget.Chip{
+			Widget: widget.Widget[widget.Chip]{
 				ID: chipID,
 			},
-			Label: wx.T(tagging.NewTag(tagx).String()),
-			Trailing: (&wx.Button{
-				Icon: wx.NewIcon("close"),
-				HTMXAttrs: wx.HTMXAttrs{
+			Label: widget.T(tagging.NewTag(tagx).String()),
+			Trailing: (&widget.Button{
+				Icon: widget.NewIcon("close"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:   qq.actions.AssignedTags.UnassignTagCmd.Endpoint(),
 					HxVals:   util.JSON(qq.actions.AssignedTags.UnassignTagCmd.Data(data.FileID, tagx.ID)),
 					HxTarget: "#" + chipID,
@@ -190,11 +190,11 @@ func (qq *ListAssignedTagsPartial) Chips(
 	*/
 
 	id := autil.GenerateID("assignedTagsList")
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: id,
 		},
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.Config.Endpoint(),
 			HxTrigger: event.HxTrigger(event.TagUpdated),
 			HxVals:    util.JSON(data),

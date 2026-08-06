@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/simpledms/simpledms/common"
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	account2 "github.com/simpledms/simpledms/model/main/account"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"

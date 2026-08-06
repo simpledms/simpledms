@@ -11,6 +11,7 @@ import (
 	"github.com/simpledms/simpledms/action/browse"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entquery"
 	"github.com/simpledms/simpledms/db/enttenant"
@@ -24,7 +25,6 @@ import (
 	"github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/sqlutil"
@@ -122,8 +122,8 @@ func (qq *FilesListPartial) Handler(
 		return qq.infra.Renderer().Render(
 			rw,
 			ctx,
-			&wx.View{
-				Children: []wx.IWidget{
+			&widget.View{
+				Children: []widget.IWidget{
 					fileList,
 					qq.sortMenuButton(ctx, &state.FilesListPartialState, true),
 				},
@@ -141,7 +141,7 @@ func (qq *FilesListPartial) Handler(
 		return qq.infra.Renderer().Render(
 			rw,
 			ctx,
-			&wx.View{
+			&widget.View{
 				Children: qq.filesListItemsFromFiles(ctx, state, data, offset, children, hasMore),
 			},
 		)
@@ -158,7 +158,7 @@ func (qq *FilesListPartial) Handler(
 		return qq.infra.Renderer().Render(
 			rw,
 			ctx,
-			&wx.View{
+			&widget.View{
 				Children: qq.fileTable(ctx, data, offset, children, hasMore, preferences).Rows,
 			},
 		)
@@ -180,7 +180,7 @@ func (qq *FilesListPartial) WidgetHandler(
 	req *httpx.Request,
 	ctx ctxx.Context,
 	selectedFileID string,
-) *wx.ListDetailLayout {
+) *widget.ListDetailLayout {
 	state := autil.StateX[InboxPageState](rw, req)
 
 	return qq.Widget(
@@ -197,18 +197,18 @@ func (qq *FilesListPartial) Widget(
 	ctx ctxx.Context,
 	state *InboxPageState,
 	selectedFileID string,
-) *wx.ListDetailLayout {
+) *widget.ListDetailLayout {
 	state.FilesListPartialState.normalizeSortBy()
 
-	var children []wx.IWidget
-	var appBar *wx.AppBar
+	var children []widget.IWidget
+	var appBar *widget.AppBar
 
 	if selectedFileID == "" {
 		appBar = qq.appBar(ctx, state)
 	} else {
-		appBar = &wx.AppBar{
-			Title:   wx.T("Inbox"),
-			Leading: wx.NewIcon("inbox"),
+		appBar = &widget.AppBar{
+			Title:   widget.T("Inbox"),
+			Leading: widget.NewIcon("inbox"),
 		}
 	}
 
@@ -220,12 +220,12 @@ func (qq *FilesListPartial) Widget(
 		),
 	)
 
-	list := &wx.Column{
-		Widget: wx.Widget[wx.Column]{
+	list := &widget.Column{
+		Widget: widget.Widget[widget.Column]{
 			ID: qq.WrapperID(),
 		},
-		GapYSize: wx.Gap2,
-		HTMXAttrs: wx.HTMXAttrs{
+		GapYSize: widget.Gap2,
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.EndpointWithParams(actionx.ResponseWrapperNone, ""),
 			HxVals:   util.JSON(qq.Data(selectedFileID)), // overrides form fields, must be added via HxInclude
 			HxTarget: "#innerContent",                    // not just fileList because of sortBy selection
@@ -240,7 +240,7 @@ func (qq *FilesListPartial) Widget(
 		},
 		Children: children,
 	}
-	return &wx.ListDetailLayout{
+	return &widget.ListDetailLayout{
 		AppBar: appBar,
 		List:   list,
 	}
@@ -255,8 +255,8 @@ func (qq *FilesListPartial) filesList(
 	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
 	fileListItems := qq.filesListItemsFromFiles(ctx, state, data, 0, children, hasMore)
 
-	var content wx.IWidget
-	content = &wx.List{
+	var content widget.IWidget
+	content = &widget.List{
 		Children: fileListItems,
 	}
 	if preferences.IsTable() && len(children) > 0 {
@@ -264,13 +264,13 @@ func (qq *FilesListPartial) filesList(
 	}
 
 	if len(children) == 0 {
-		content = &wx.EmptyState{
-			Icon:     wx.NewIcon("description"),
-			Headline: wx.T("No files available yet."),
+		content = &widget.EmptyState{
+			Icon:     widget.NewIcon("description"),
+			Headline: widget.T("No files available yet."),
 			// Description: NewText("There are no directories or files available yet, you can create"),
-			Actions: []wx.IWidget{
-				&wx.Link{
-					HTMXAttrs: wx.HTMXAttrs{
+			Actions: []widget.IWidget{
+				&widget.Link{
+					HTMXAttrs: widget.HTMXAttrs{
 						HxPost: qq.actions.Browse.FileUploadDialogPartial.Endpoint(),
 						HxVals: util.JSON(qq.actions.Browse.FileUploadDialogPartial.Data(
 							ctx.SpaceCtx().SpaceRootDir().PublicID.String(),
@@ -278,23 +278,23 @@ func (qq *FilesListPartial) filesList(
 						)),
 						LoadInPopover: true,
 					},
-					Child: &wx.Button{
-						Icon:  wx.NewIcon("upload_file"),
-						Label: wx.T("Upload file"),
+					Child: &widget.Button{
+						Icon:  widget.NewIcon("upload_file"),
+						Label: widget.T("Upload file"),
 					},
 				},
 			},
 		}
 	}
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.FileListID(),
 		},
 		Children: content,
 		// must be on ScrollableContent and not directly on wx.List because otherwise page breaks
 		// if a search has no results and empty state is rendered without HTMXAttrs
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.EndpointWithParams(actionx.ResponseWrapperNone, "#"+qq.FileListID()),
 			HxVals:   util.JSON(data), // overrides form fields, must be added via HxInclude
 			HxTarget: "#" + qq.FileListID(),
@@ -343,8 +343,8 @@ func (qq *FilesListPartial) filesListItemsFromFiles(
 	offset int,
 	children []*enttenant.File,
 	hasMore bool,
-) []wx.IWidget {
-	fileListItems := make([]wx.IWidget, 0, len(children)+1)
+) []widget.IWidget {
+	fileListItems := make([]widget.IWidget, 0, len(children)+1)
 	for _, child := range children {
 		fileListItems = append(fileListItems, qq.actions.FileListItemPartial.Widget(
 			ctx,
@@ -357,12 +357,12 @@ func (qq *FilesListPartial) filesListItemsFromFiles(
 	}
 
 	if hasMore {
-		fileListItems = append(fileListItems, &wx.ListItem{
-			Widget: wx.Widget[wx.ListItem]{
+		fileListItems = append(fileListItems, &widget.ListItem{
+			Widget: widget.Widget[widget.ListItem]{
 				ID: "inboxLoadMore",
 			},
-			Headline: wx.T("Loading more..."),
-			HTMXAttrs: wx.HTMXAttrs{
+			Headline: widget.T("Loading more..."),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    qq.Endpoint() + "?offset=" + strconv.Itoa(offset+qq.pageSize()),
 				HxVals:    util.JSON(data),
 				HxTrigger: "intersect once",
@@ -459,23 +459,23 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 	return searchResultQuery
 }
 
-func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wx.AppBar {
-	return &wx.AppBar{
-		Leading:          wx.NewIcon("inbox"),
+func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *widget.AppBar {
+	return &widget.AppBar{
+		Leading:          widget.NewIcon("inbox"),
 		LeadingAltMobile: partial.NewNavigationRailToggle(),
-		Title:            wx.T("Inbox"),
-		Actions: []wx.IWidget{
+		Title:            widget.T("Inbox"),
+		Actions: []widget.IWidget{
 			qq.fileListViewButton(ctx),
 			qq.sortMenuButton(ctx, &state.FilesListPartialState, false),
 		},
-		Search: &wx.Search{
-			Widget: wx.Widget[wx.Search]{
+		Search: &widget.Search{
+			Widget: widget.Widget[widget.Search]{
 				ID: "search",
 			},
 			Name:           "SearchQuery",
 			Value:          state.SearchQuery,
-			SupportingText: wx.Tf("Search in «Inbox»"),
-			HTMXAttrs: wx.HTMXAttrs{
+			SupportingText: widget.Tf("Search in «Inbox»"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxOn: event.SearchQueryUpdated.HxOnWithSearchQueryParamAndRankSortReset("input", "q"),
 			},
 		},
@@ -486,32 +486,32 @@ func (qq *FilesListPartial) sortMenuButton(
 	ctx ctxx.Context,
 	state *FilesListPartialState,
 	isOOB bool,
-) *wx.Container {
+) *widget.Container {
 	swapOOB := ""
 	if isOOB {
 		swapOOB = "outerHTML"
 	}
 
-	return &wx.Container{
-		Widget: wx.Widget[wx.Container]{
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
 			ID: "inboxSortFilesButton",
 		},
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxSwapOOB: swapOOB,
 		},
-		Child: &wx.IconButton{
+		Child: &widget.IconButton{
 			Icon:     "sort",
-			Tooltip:  wx.T("Sort files"),
+			Tooltip:  widget.T("Sort files"),
 			Children: NewSortListContextMenuWidget(qq.actions).Widget(ctx, state),
 		},
 	}
 }
 
-func (qq *FilesListPartial) fileListViewButton(ctx ctxx.Context) *wx.IconButton {
+func (qq *FilesListPartial) fileListViewButton(ctx ctxx.Context) *widget.IconButton {
 	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
-	return &wx.IconButton{
+	return &widget.IconButton{
 		Icon:    "view_agenda",
-		Tooltip: wx.T("Change file list view"),
+		Tooltip: widget.T("Change file list view"),
 		Children: qq.fileListViewMenu(
 			ctx,
 			preferences,
@@ -524,33 +524,33 @@ func (qq *FilesListPartial) fileListViewMenu(
 	ctx ctxx.Context,
 	preferences *filelistpreference.FileListPreferences,
 	hxHeaders template.JS,
-) *wx.Menu {
-	items := []*wx.MenuItem{
-		qq.fileListViewMenuItem(wx.T("List"), "list", preferences.ViewMode == filelistpreference.FileListViewModeList, hxHeaders),
-		qq.fileListViewMenuItem(wx.T("Table"), "table", preferences.ViewMode == filelistpreference.FileListViewModeTable, hxHeaders),
+) *widget.Menu {
+	items := []*widget.MenuItem{
+		qq.fileListViewMenuItem(widget.T("List"), "list", preferences.ViewMode == filelistpreference.FileListViewModeList, hxHeaders),
+		qq.fileListViewMenuItem(widget.T("Table"), "table", preferences.ViewMode == filelistpreference.FileListViewModeTable, hxHeaders),
 	}
 	if !preferences.IsTable() {
-		return &wx.Menu{
-			Widget: wx.Widget[wx.Menu]{
+		return &widget.Menu{
+			Widget: widget.Widget[widget.Menu]{
 				ID: "inboxFileListViewMenu",
 			},
-			Position: wx.PositionLeft,
+			Position: widget.PositionLeft,
 			Items:    items,
 		}
 	}
 
-	items = append(items, &wx.MenuItem{IsDivider: true})
+	items = append(items, &widget.MenuItem{IsDivider: true})
 
 	for _, column := range []struct {
 		column filelistpreference.FileListColumn
-		label  *wx.Text
+		label  *widget.Text
 	}{
-		{filelistpreference.FileListColumnName, wx.T("Name")},
-		{filelistpreference.FileListColumnOriginalFilename, wx.T("Original filename")},
-		{filelistpreference.FileListColumnDocumentType, wx.T("Type")},
-		{filelistpreference.FileListColumnMetadata, wx.T("Metadata")},
-		{filelistpreference.FileListColumnDate, wx.T("Date")},
-		{filelistpreference.FileListColumnSize, wx.T("Size")},
+		{filelistpreference.FileListColumnName, widget.T("Name")},
+		{filelistpreference.FileListColumnOriginalFilename, widget.T("Original filename")},
+		{filelistpreference.FileListColumnDocumentType, widget.T("Type")},
+		{filelistpreference.FileListColumnMetadata, widget.T("Metadata")},
+		{filelistpreference.FileListColumnDate, widget.T("Date")},
+		{filelistpreference.FileListColumnSize, widget.T("Size")},
 	} {
 		items = append(items, qq.fileListColumnMenuItem(
 			column.label,
@@ -562,18 +562,18 @@ func (qq *FilesListPartial) fileListViewMenu(
 
 	spaceColumns := preferences.SpaceColumnsFor(ctx.SpaceCtx().SpaceID)
 	showTags := !spaceColumns.ShowTags
-	items = append(items, qq.fileListTagsMenuItem(wx.T("Tags"), showTags, spaceColumns.ShowTags, hxHeaders))
+	items = append(items, qq.fileListTagsMenuItem(widget.T("Tags"), showTags, spaceColumns.ShowTags, hxHeaders))
 
 	tagGroups := ctx.SpaceCtx().Space.QueryTags().
 		Where(tag.TypeEQ(tagtype.Group)).
 		Order(tag.ByName()).
 		AllX(ctx)
 	if len(tagGroups) > 0 {
-		items = append(items, &wx.MenuItem{IsDivider: true})
+		items = append(items, &widget.MenuItem{IsDivider: true})
 	}
 	for _, tagGroup := range tagGroups {
 		items = append(items, qq.fileListTagGroupMenuItem(
-			wx.Tu(tagGroup.Name),
+			widget.Tu(tagGroup.Name),
 			tagGroup.ID,
 			spaceColumns.HasTagGroupID(tagGroup.ID),
 			hxHeaders,
@@ -582,35 +582,35 @@ func (qq *FilesListPartial) fileListViewMenu(
 
 	properties := ctx.SpaceCtx().TTx.Property.Query().Order(property.ByName()).AllX(ctx)
 	if len(properties) > 0 {
-		items = append(items, &wx.MenuItem{IsDivider: true})
+		items = append(items, &widget.MenuItem{IsDivider: true})
 	}
 	for _, propertyx := range properties {
 		items = append(items, qq.fileListPropertyMenuItem(
-			wx.Tu(propertyx.Name),
+			widget.Tu(propertyx.Name),
 			propertyx.ID,
 			spaceColumns.HasPropertyID(propertyx.ID),
 			hxHeaders,
 		))
 	}
 
-	return &wx.Menu{
-		Widget: wx.Widget[wx.Menu]{
+	return &widget.Menu{
+		Widget: widget.Widget[widget.Menu]{
 			ID: "inboxFileListViewMenu",
 		},
-		Position: wx.PositionLeft,
+		Position: widget.PositionLeft,
 		Items:    items,
 	}
 }
 
 func (qq *FilesListPartial) fileListViewMenuItem(
-	label *wx.Text,
+	label *widget.Text,
 	viewMode string,
 	isSelected bool,
 	hxHeaders template.JS,
-) *wx.MenuItem {
+) *widget.MenuItem {
 	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
 	data.ViewMode = viewMode
-	return &wx.MenuItem{
+	return &widget.MenuItem{
 		Label:          label,
 		RadioGroupName: "FileListViewMode",
 		RadioValue:     viewMode,
@@ -620,14 +620,14 @@ func (qq *FilesListPartial) fileListViewMenuItem(
 }
 
 func (qq *FilesListPartial) fileListColumnMenuItem(
-	label *wx.Text,
+	label *widget.Text,
 	column string,
 	isChecked bool,
 	hxHeaders template.JS,
-) *wx.MenuItem {
+) *widget.MenuItem {
 	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
 	data.BuiltInColumn = column
-	return &wx.MenuItem{
+	return &widget.MenuItem{
 		Label:         label,
 		CheckboxName:  "FileListColumn",
 		CheckboxValue: column,
@@ -637,14 +637,14 @@ func (qq *FilesListPartial) fileListColumnMenuItem(
 }
 
 func (qq *FilesListPartial) fileListTagsMenuItem(
-	label *wx.Text,
+	label *widget.Text,
 	showTags bool,
 	isChecked bool,
 	hxHeaders template.JS,
-) *wx.MenuItem {
+) *widget.MenuItem {
 	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
 	data.ShowTags = &showTags
-	return &wx.MenuItem{
+	return &widget.MenuItem{
 		Label:         label,
 		CheckboxName:  "FileListTags",
 		CheckboxValue: "tags",
@@ -654,14 +654,14 @@ func (qq *FilesListPartial) fileListTagsMenuItem(
 }
 
 func (qq *FilesListPartial) fileListPropertyMenuItem(
-	label *wx.Text,
+	label *widget.Text,
 	propertyID int64,
 	isChecked bool,
 	hxHeaders template.JS,
-) *wx.MenuItem {
+) *widget.MenuItem {
 	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
 	data.PropertyID = propertyID
-	return &wx.MenuItem{
+	return &widget.MenuItem{
 		Label:         label,
 		CheckboxName:  "FileListProperty",
 		CheckboxValue: strconv.FormatInt(propertyID, 10),
@@ -671,14 +671,14 @@ func (qq *FilesListPartial) fileListPropertyMenuItem(
 }
 
 func (qq *FilesListPartial) fileListTagGroupMenuItem(
-	label *wx.Text,
+	label *widget.Text,
 	tagGroupID int64,
 	isChecked bool,
 	hxHeaders template.JS,
-) *wx.MenuItem {
+) *widget.MenuItem {
 	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
 	data.TagGroupID = tagGroupID
-	return &wx.MenuItem{
+	return &widget.MenuItem{
 		Label:         label,
 		CheckboxName:  "FileListTagGroup",
 		CheckboxValue: strconv.FormatInt(tagGroupID, 10),
@@ -690,8 +690,8 @@ func (qq *FilesListPartial) fileListTagGroupMenuItem(
 func (qq *FilesListPartial) fileListPreferencesMenuItemAttrs(
 	data *browse.UpdateFileListPreferencesCmdData,
 	hxHeaders template.JS,
-) wx.HTMXAttrs {
-	return wx.HTMXAttrs{
+) widget.HTMXAttrs {
+	return widget.HTMXAttrs{
 		HxPost:    qq.actions.Browse.UpdateFileListPreferencesCmd.Endpoint(),
 		HxVals:    util.JSON(data),
 		HxHeaders: hxHeaders,

@@ -5,12 +5,12 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -40,8 +40,8 @@ func (qq *AddFilePropertyValueDialog) Data(fileID string, propertyID int64) *Add
 	}
 }
 
-func (qq *AddFilePropertyValueDialog) ModalLinkAttrs(data *AddFilePropertyValueCmdData, hxTargetForm string) wx.HTMXAttrs {
-	return wx.HTMXAttrs{
+func (qq *AddFilePropertyValueDialog) ModalLinkAttrs(data *AddFilePropertyValueCmdData, hxTargetForm string) widget.HTMXAttrs {
+	return widget.HTMXAttrs{
 		HxPost:        qq.FormEndpointWithParams(actionx.ResponseWrapperDialog, hxTargetForm),
 		HxVals:        util.JSON(data),
 		LoadInPopover: true,
@@ -80,60 +80,60 @@ func (qq *AddFilePropertyValueDialog) Form(
 ) renderable.Renderable {
 	propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
 
-	var valueField wx.IWidget
+	var valueField widget.IWidget
 
 	switch propertyx.Type {
 	case fieldtype.Text:
-		valueField = &wx.TextField{
-			Label: wx.Tu(propertyx.Name),
+		valueField = &widget.TextField{
+			Label: widget.Tu(propertyx.Name),
 			Name:  "TextValue",
 			Type:  "text",
 		}
 	case fieldtype.Number:
-		valueField = &wx.TextField{
-			Label: wx.Tu(propertyx.Name),
+		valueField = &widget.TextField{
+			Label: widget.Tu(propertyx.Name),
 			Name:  "NumberValue",
 			Type:  "number",
 		}
 	case fieldtype.Money:
-		valueField = &wx.TextField{
-			Label: wx.Tu(propertyx.Name),
+		valueField = &widget.TextField{
+			Label: widget.Tu(propertyx.Name),
 			Name:  "MoneyValue",
 			Type:  "number",
 			Step:  "0.01",
 		}
 	case fieldtype.Date:
-		valueField = &wx.TextField{
-			Label: wx.Tu(propertyx.Name),
+		valueField = &widget.TextField{
+			Label: widget.Tu(propertyx.Name),
 			Name:  "DateValue",
 			Type:  "date",
 		}
 	case fieldtype.Checkbox:
-		valueField = &wx.Checkbox{
-			Label: wx.Tu(propertyx.Name),
+		valueField = &widget.Checkbox{
+			Label: widget.Tu(propertyx.Name),
 			Name:  "CheckboxValue",
 		}
 	default:
-		valueField = wx.T("Unsupported field type.")
+		valueField = widget.T("Unsupported field type.")
 	}
 
-	form := &wx.Form{
-		Widget: wx.Widget[wx.Form]{
+	form := &widget.Form{
+		Widget: widget.Widget[widget.Form]{
 			ID: qq.formID(),
 		},
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.actions.AddFilePropertyValueCmd.Endpoint(),
 		},
-		Children: []wx.IWidget{
-			&wx.Container{
+		Children: []widget.IWidget{
+			&widget.Container{
 				GapY: true,
-				Child: []wx.IWidget{
-					&wx.TextField{
+				Child: []widget.IWidget{
+					&widget.TextField{
 						Name:         "FileID",
 						Type:         "hidden",
 						DefaultValue: data.FileID,
 					},
-					&wx.TextField{
+					&widget.TextField{
 						Name:         "PropertyID",
 						Type:         "hidden",
 						DefaultValue: fmt.Sprintf("%d", data.PropertyID),
@@ -145,11 +145,11 @@ func (qq *AddFilePropertyValueDialog) Form(
 	}
 
 	return autil.WrapWidgetWithID(
-		wx.T("Add field"),
-		wx.T("Save"),
+		widget.T("Add field"),
+		widget.T("Save"),
 		form,
 		wrapper,
-		wx.DialogLayoutStable,
+		widget.DialogLayoutStable,
 		qq.popoverID(),
 		qq.formID(),
 	)

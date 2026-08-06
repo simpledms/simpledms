@@ -8,10 +8,10 @@ import (
 
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -73,23 +73,23 @@ func (qq *StaticPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 		req,
 		ctx,
 		qq.infra,
-		wx.T(definition.PageTitle).String(ctx),
+		widget.T(definition.PageTitle).String(ctx),
 		qq.Widget(ctx, definition, htmlContent),
 	)
 }
 
 func (qq *StaticPage) Widget(ctx ctxx.Context, definition StaticPageDefinition, htmlContent template.HTML) renderable.Renderable {
-	var fabs []*wx.FloatingActionButton
+	var fabs []*widget.FloatingActionButton
 
-	mainLayout := &wx.MainLayout{
+	mainLayout := &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, definition.Slug, fabs),
-		Content: &wx.DefaultLayout{
+		Content: &widget.DefaultLayout{
 			AppBar: qq.appBar(ctx, definition),
-			Content: &wx.Column{
-				GapYSize:         wx.Gap4,
+			Content: &widget.Column{
+				GapYSize:         widget.Gap4,
 				NoOverflowHidden: true,
-				Children: []wx.IWidget{
-					&wx.MarkdownContent{HTML: htmlContent},
+				Children: []widget.IWidget{
+					&widget.MarkdownContent{HTML: htmlContent},
 				},
 			},
 		},
@@ -98,21 +98,21 @@ func (qq *StaticPage) Widget(ctx ctxx.Context, definition StaticPageDefinition, 
 	return mainLayout
 }
 
-func (qq *StaticPage) appBar(ctx ctxx.Context, definition StaticPageDefinition) *wx.AppBar {
+func (qq *StaticPage) appBar(ctx ctxx.Context, definition StaticPageDefinition) *widget.AppBar {
 	iconName := definition.IconName
 	if iconName == "" {
 		iconName = "description"
 	}
 
-	return &wx.AppBar{
-		Leading: &wx.Icon{
+	return &widget.AppBar{
+		Leading: &widget.Icon{
 			Name: iconName,
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
-		Title: &wx.AppBarTitle{
-			Text: wx.T(definition.AppBarTitle),
+		Title: &widget.AppBarTitle{
+			Text: widget.T(definition.AppBarTitle),
 		},
-		Actions: []wx.IWidget{},
+		Actions: []widget.IWidget{},
 	}
 }
 

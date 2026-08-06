@@ -271,7 +271,7 @@ Likely files to touch:
 - `ui/uix/route/dashboard.go`
 - `ui/uix/partial/navigation_rail.go`
 - `ui/uix/partial/main_menu.go`, only if shared destination helpers are useful
-- `ui/widget/grid.go` and `ui/widget/grid.gohtml`, if adding an above-cards action slot
+- `../../core/ui/widget/grid.go` and `../../core/ui/widget/grid.gohtml`, if adding an above-cards action slot
 - `pluginx/*`, if a navigation rail extension hook is needed for the existing Tenants page
 - `server/server.go`
 - `server/action_integration_test.go`

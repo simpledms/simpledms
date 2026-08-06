@@ -3,10 +3,10 @@ package tagging
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -36,7 +36,7 @@ func NewEditTagCmd(
 		FormHelper: autil.NewFormHelper[EditTagCmdData](
 			infra,
 			config,
-			wx.T("Edit tag"),
+			widget.T("Edit tag"),
 			// "",
 		),
 	}
@@ -62,7 +62,7 @@ func (qq *EditTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 
 	rw.Header().Set("HX-Trigger", event.TagUpdated.String())
 	rw.Header().Set("HX-Reswap", "none")
-	rw.AddRenderables(wx.NewSnackbarf("«%s» updated.", tagx.Name))
+	rw.AddRenderables(widget.NewSnackbarf("«%s» updated.", tagx.Name))
 
 	return nil
 }

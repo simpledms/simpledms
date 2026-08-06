@@ -6,13 +6,13 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -41,7 +41,7 @@ func NewEditAccountCmd(infra *common.Infra, actions *Actions) *EditAccountCmd {
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[EditAccountCmdData](infra, config, wx.T("Edit account")),
+		FormHelper: autil.NewFormHelper[EditAccountCmdData](infra, config, widget.T("Edit account")),
 	}
 }
 
@@ -79,7 +79,7 @@ func (qq *EditAccountCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	}
 	accountx = query.SaveX(ctx)
 
-	rw.AddRenderables(wx.NewSnackbarf("Account updated."))
+	rw.AddRenderables(widget.NewSnackbarf("Account updated."))
 	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
 
 	return nil

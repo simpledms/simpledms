@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
@@ -16,7 +17,6 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/plan"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 func TestNavigationRailShowsMainDestinations(t *testing.T) {
@@ -211,7 +211,7 @@ func TestNavigationRailShowsSpaceDestinations(t *testing.T) {
 	assertNavigationRailLabelsExclude(t, rail.TopItems, "Account", "Users", "System")
 	assertNavigationRailLabelsExclude(t, rail.TopItems, "Home", "Dashboard")
 	assertNavigationRailLabelsExclude(t, rail.TopItems, "Spaces by Organization", tenantx.Name)
-	selector, ok := rail.ExpandedSelector.(*wx.Combobox)
+	selector, ok := rail.ExpandedSelector.(*widget.Combobox)
 	if !ok || selector.Input.Placeholder != "Docs" || len(selector.Menu.Items) != 4 {
 		t.Fatalf("expected expanded selector for Docs with two spaces, got %#v", rail.ExpandedSelector)
 	}
@@ -315,9 +315,9 @@ func (navigationRailTestPlugin) Name() string {
 
 func (navigationRailTestPlugin) ExtendNavigationDestinations(
 	ctx ctxx.Context,
-	destinations []*wx.NavigationDestination,
-) []*wx.NavigationDestination {
-	return append(destinations, &wx.NavigationDestination{
+	destinations []*widget.NavigationDestination,
+) []*widget.NavigationDestination {
+	return append(destinations, &widget.NavigationDestination{
 		Value: "legacy-plugin",
 		Label: "Legacy Plugin",
 		Icon:  "extension",
@@ -327,9 +327,9 @@ func (navigationRailTestPlugin) ExtendNavigationDestinations(
 
 func (navigationRailTestPlugin) ExtendNavigationRailItems(
 	ctx ctxx.Context,
-	items []*wx.NavigationRailItem,
-) []*wx.NavigationRailItem {
-	return append(items, &wx.NavigationRailItem{
+	items []*widget.NavigationRailItem,
+) []*widget.NavigationRailItem {
+	return append(items, &widget.NavigationRailItem{
 		Key:   "rail-plugin",
 		Value: "rail-plugin",
 		Label: "Rail Plugin",
@@ -340,13 +340,13 @@ func (navigationRailTestPlugin) ExtendNavigationRailItems(
 
 func (navigationRailTestPlugin) ExtendMenuItems(
 	ctx ctxx.Context,
-	items []*wx.MenuItem,
-) []*wx.MenuItem {
-	return append(items, &wx.MenuItem{
+	items []*widget.MenuItem,
+) []*widget.MenuItem {
+	return append(items, &widget.MenuItem{
 		LeadingIcon: "extension",
-		Label:       wx.T("Menu Plugin"),
+		Label:       widget.T("Menu Plugin"),
 		RadioValue:  "menu-plugin",
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxGet: "/menu-plugin/",
 		},
 	})
@@ -354,10 +354,10 @@ func (navigationRailTestPlugin) ExtendMenuItems(
 
 func (navigationRailTestPlugin) ExtendNavigationRailFooterItems(
 	ctx ctxx.Context,
-	items []*wx.NavigationRailItem,
+	items []*widget.NavigationRailItem,
 	active string,
-) []*wx.NavigationRailItem {
-	return append(items, &wx.NavigationRailItem{
+) []*widget.NavigationRailItem {
+	return append(items, &widget.NavigationRailItem{
 		Key:   "footer-plugin",
 		Value: "footer-plugin",
 		Label: "Footer Plugin",
@@ -405,7 +405,7 @@ func newNavigationRailMainContext(
 	}
 }
 
-func navigationRailLabels(items []*wx.NavigationRailItem) []string {
+func navigationRailLabels(items []*widget.NavigationRailItem) []string {
 	labels := make([]string, 0, len(items))
 	for _, item := range items {
 		if item == nil || item.Label == "" {
@@ -416,7 +416,7 @@ func navigationRailLabels(items []*wx.NavigationRailItem) []string {
 	return labels
 }
 
-func navigationRailLabelsRecursive(items []*wx.NavigationRailItem) []string {
+func navigationRailLabelsRecursive(items []*widget.NavigationRailItem) []string {
 	labels := make([]string, 0, len(items))
 	for _, item := range items {
 		if item == nil {
@@ -432,7 +432,7 @@ func navigationRailLabelsRecursive(items []*wx.NavigationRailItem) []string {
 
 func assertNavigationRailLabelsContain(
 	t testing.TB,
-	items []*wx.NavigationRailItem,
+	items []*widget.NavigationRailItem,
 	wantLabels ...string,
 ) {
 	t.Helper()
@@ -446,7 +446,7 @@ func assertNavigationRailLabelsContain(
 
 func assertNavigationRailLabelsExclude(
 	t testing.TB,
-	items []*wx.NavigationRailItem,
+	items []*widget.NavigationRailItem,
 	wantExcludedLabels ...string,
 ) {
 	t.Helper()
@@ -460,7 +460,7 @@ func assertNavigationRailLabelsExclude(
 
 func assertNavigationRailLabelsContainRecursive(
 	t testing.TB,
-	items []*wx.NavigationRailItem,
+	items []*widget.NavigationRailItem,
 	wantLabels ...string,
 ) {
 	t.Helper()
@@ -474,7 +474,7 @@ func assertNavigationRailLabelsContainRecursive(
 
 func assertNavigationRailLabelsExcludeRecursive(
 	t testing.TB,
-	items []*wx.NavigationRailItem,
+	items []*widget.NavigationRailItem,
 	wantExcludedLabels ...string,
 ) {
 	t.Helper()
@@ -488,7 +488,7 @@ func assertNavigationRailLabelsExcludeRecursive(
 
 func assertNavigationRailItemActive(
 	t testing.TB,
-	items []*wx.NavigationRailItem,
+	items []*widget.NavigationRailItem,
 	activeLabel string,
 ) {
 	t.Helper()
@@ -510,7 +510,7 @@ func assertNavigationRailItemActive(
 
 func assertNavigationRailItemActiveRecursive(
 	t testing.TB,
-	items []*wx.NavigationRailItem,
+	items []*widget.NavigationRailItem,
 	activeLabel string,
 ) {
 	t.Helper()
@@ -526,7 +526,7 @@ func assertNavigationRailItemActiveRecursive(
 
 func assertNavigationRailItemInactiveRecursive(
 	t testing.TB,
-	items []*wx.NavigationRailItem,
+	items []*widget.NavigationRailItem,
 	label string,
 ) {
 	t.Helper()
@@ -545,7 +545,7 @@ func assertNavigationRailItemInactiveRecursive(
 
 func assertNavigationRailItemIconRecursive(
 	t testing.TB,
-	items []*wx.NavigationRailItem,
+	items []*widget.NavigationRailItem,
 	label string,
 	wantIcon string,
 ) {
@@ -563,7 +563,7 @@ func assertNavigationRailItemIconRecursive(
 	}
 }
 
-func navigationRailItemActiveRecursive(items []*wx.NavigationRailItem, activeLabel string) bool {
+func navigationRailItemActiveRecursive(items []*widget.NavigationRailItem, activeLabel string) bool {
 	for _, item := range items {
 		if item == nil {
 			continue
@@ -579,9 +579,9 @@ func navigationRailItemActiveRecursive(items []*wx.NavigationRailItem, activeLab
 }
 
 func nilableNavigationRailItemRecursive(
-	items []*wx.NavigationRailItem,
+	items []*widget.NavigationRailItem,
 	label string,
-) *wx.NavigationRailItem {
+) *widget.NavigationRailItem {
 	for _, item := range items {
 		if item == nil {
 			continue

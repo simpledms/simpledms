@@ -6,9 +6,9 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -63,20 +63,20 @@ func (qq *AssignmentDirectoryListItemPartial) Widget(
 	destDir *enttenant.File,
 	fileToAssign *enttenant.File,
 	destParentFullPath string,
-) *wx.ListItem {
+) *widget.ListItem {
 	if destParentFullPath == "" {
 		// if ID is used instead of ParentID, lastElem must be removed in next step (filepath.Dir)
 		destParentFullPath = qq.infra.FileSystem().FileTree().FullPathByFileIDX(ctx, destDir.ParentID)
 	}
-	breadcrumbElems := []string{wx.T("Home").String(ctx)}
+	breadcrumbElems := []string{widget.T("Home").String(ctx)}
 	if destParentFullPath != "" {
 		breadcrumbElems = append(breadcrumbElems, strings.Split(destParentFullPath, string(os.PathSeparator))...)
 	}
 	supportingText := strings.Join(breadcrumbElems, " » ")
 
-	return &wx.ListItem{
-		Headline:       wx.Tf(destDir.Name),
-		SupportingText: wx.Tu(supportingText),
+	return &widget.ListItem{
+		Headline:       widget.Tf(destDir.Name),
+		SupportingText: widget.Tu(supportingText),
 		HTMXAttrs: qq.actions.AssignFileCmd.ModalLinkAttrs(
 			qq.actions.AssignFileCmd.Data(destDir.PublicID.String(), fileToAssign.PublicID.String(), fileToAssign.Name),
 			"#innerContent",

@@ -6,10 +6,10 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	appmodel "github.com/simpledms/simpledms/model/main/app"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -39,7 +39,7 @@ func NewInitAppCmd(infra *common.Infra, actions *Actions) *InitAppCmd {
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[InitAppCmdData](infra, config, wx.T("Init app")),
+		FormHelper: autil.NewFormHelper[InitAppCmdData](infra, config, widget.T("Init app")),
 	}
 }
 
@@ -72,7 +72,7 @@ func (qq *InitAppCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 	}
 
 	rw.Header().Set("HX-Trigger", event.AppInitialized.String())
-	rw.AddRenderables(wx.NewSnackbarf("App initialized."))
+	rw.AddRenderables(widget.NewSnackbarf("App initialized."))
 
 	return nil
 }

@@ -6,11 +6,11 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -34,7 +34,7 @@ func NewUnlockAppCmd(infra *common.Infra, actions *Actions) *UnlockAppCmd {
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[UnlockAppCmdData](infra, config, wx.T("Unlock app")),
+		FormHelper: autil.NewFormHelper[UnlockAppCmdData](infra, config, widget.T("Unlock app")),
 	}
 }
 
@@ -65,7 +65,7 @@ func (qq *UnlockAppCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 	encryptor.NilableX25519MainIdentity = qq.infra.SystemConfig().NilableX25519Identity()
 
 	rw.Header().Set("HX-Trigger", event.AppUnlocked.String())
-	rw.AddRenderables(wx.NewSnackbarf("App unlocked."))
+	rw.AddRenderables(widget.NewSnackbarf("App unlocked."))
 
 	return nil
 }

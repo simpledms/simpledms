@@ -14,6 +14,7 @@ import (
 
 	"filippo.io/age"
 
+	ui2 "github.com/simpledms/simpledms/core/ui"
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
 	"github.com/simpledms/simpledms/db/entmain/systemconfig"
 	"github.com/simpledms/simpledms/db/sqlx"
@@ -302,7 +303,7 @@ func newMaintenanceTestDependencies(t *testing.T) *maintenanceTestDependencies {
 
 	tpl := template.New("app")
 	tpl.Funcs(ui.TemplateFuncMap(tpl))
-	tpl, err = tpl.ParseFS(ui.WidgetFS, "widget/*.gohtml")
+	tpl, err = tpl.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		t.Fatalf("parse templates: %v", err)
 	}

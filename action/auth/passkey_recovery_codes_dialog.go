@@ -6,9 +6,9 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	account2 "github.com/simpledms/simpledms/model/main/account"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -73,19 +73,19 @@ func (qq *PasskeyRecoveryCodesDialog) Handler(
 	return qq.infra.Renderer().Render(rw, ctx, qq.Widget(recoveryCodesText, qq.accountDisplayName(mainCtx)))
 }
 
-func (qq *PasskeyRecoveryCodesDialog) Widget(recoveryCodesText string, accountName string) *wx.Dialog {
-	content := &wx.RecoveryCodesDialogContent{
+func (qq *PasskeyRecoveryCodesDialog) Widget(recoveryCodesText string, accountName string) *widget.Dialog {
+	content := &widget.RecoveryCodesDialogContent{
 		CodesText:   strings.TrimSpace(recoveryCodesText),
 		AccountName: strings.TrimSpace(accountName),
 	}
 
-	return &wx.Dialog{
-		Widget: wx.Widget[wx.Dialog]{
+	return &widget.Dialog{
+		Widget: widget.Widget[widget.Dialog]{
 			ID: passkeyRecoveryCodesDialogID,
 		},
-		Headline:     wx.T("Passkey backup codes"),
+		Headline:     widget.T("Passkey backup codes"),
 		IsOpenOnLoad: true,
-		FooterActions: []wx.IWidget{
+		FooterActions: []widget.IWidget{
 			content.PrintButton(),
 			content.CopyButton(),
 			content.DownloadButton(),

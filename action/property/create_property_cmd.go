@@ -3,11 +3,11 @@ package property
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -37,7 +37,7 @@ func NewCreatePropertyCmd(infra *common.Infra, actions *Actions) *CreateProperty
 	formHelper := autil.NewFormHelper[CreatePropertyCmdData](
 		infra,
 		config,
-		wx.T("Add field"),
+		widget.T("Add field"),
 	)
 	return &CreatePropertyCmd{
 		infra:      infra,
@@ -75,6 +75,6 @@ func (qq *CreatePropertyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request
 
 	return qq.infra.Renderer().Render(
 		rw, ctx,
-		wx.NewSnackbarf("Field «%s» created.", data.Name),
+		widget.NewSnackbarf("Field «%s» created.", data.Name),
 	)
 }

@@ -17,7 +17,7 @@ JavaScript runs.
 Why: Navigation must remain available during slow script loading, failed script
 loading, and first paint.
 
-Enforced in: `ui/widget/navigation_rail.gohtml`, `ui/widget/navigation_rail.go`,
+Enforced in: `../../core/ui/widget/navigation_rail.gohtml`, `../../core/ui/widget/navigation_rail.go`,
 and no server-rendered `navigation-rail-expanded` default state.
 
 Verified by: Rendering checks and manual loading with JavaScript disabled or
@@ -31,7 +31,7 @@ default closed mobile navigation surface.
 Why: The requested mobile behavior keeps the current collapsed rail as the
 default and uses expanded rail as the menu replacement.
 
-Enforced in: Compact selectors in `ui/widget/navigation_rail.gohtml` and the
+Enforced in: Compact selectors in `../../core/ui/widget/navigation_rail.gohtml` and the
 navigation rail runtime.
 
 Verified by: Compact viewport browser checks after reload and HTMX navigation.
@@ -332,7 +332,7 @@ hard-coded positions that become wrong when the rail expands.
 Why: Expanded navigation changes available content width and the content start
 edge.
 
-Enforced in: `ui/widget/dialog.gohtml`, `ui/widget/main_layout.gohtml`, and any
+Enforced in: `../../core/ui/widget/dialog.gohtml`, `../../core/ui/widget/main_layout.gohtml`, and any
 side-sheet positioning styles that use the rail width custom property.
 
 Verified by: Manual browse/details/filter side-sheet checks with collapsed and
@@ -383,10 +383,10 @@ destinations.
 - `docs/plans/20260529_material_3_expressive_navigation_rail_checklist.md`
 - `ui/uix/partial/navigation_rail.go`
 - `ui/uix/partial/main_menu.go`
-- `ui/widget/navigation_rail.go`
-- `ui/widget/navigation_rail.gohtml`
-- `ui/widget/navigation_destination.go`
-- `ui/widget/navigation_destination.gohtml`
-- `ui/widget/app_bar.go`
-- `ui/widget/app_bar.gohtml`
-- `ui/widget/dialog.gohtml`
+- `../../core/ui/widget/navigation_rail.go`
+- `../../core/ui/widget/navigation_rail.gohtml`
+- `../../core/ui/widget/navigation_destination.go`
+- `../../core/ui/widget/navigation_destination.gohtml`
+- `../../core/ui/widget/app_bar.go`
+- `../../core/ui/widget/app_bar.gohtml`
+- `../../core/ui/widget/dialog.gohtml`

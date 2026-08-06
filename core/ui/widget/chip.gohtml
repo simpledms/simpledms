@@ -1,0 +1,13 @@
+{{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.Chip */ -}}
+{{- define "Chip" }}
+	<span id="{{ .GetID }}" class=""
+		  	name="{{ .GetName }}"
+		  	role="{{ .GetRole }}"
+			{{ template "HTMXAttrs" .HTMXAttrs }}
+			aria-checked="true"
+	>
+		{{ render .GetContext .Leading }}
+		{{ render .GetContext .Label }}
+        {{ render .GetContext .Trailing }}
+	</span>
+{{ end }}
