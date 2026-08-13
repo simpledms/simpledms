@@ -27,7 +27,7 @@ treatment, not list semantics or interaction behavior.
 
 Why: The Material spec defines standard and segmented as visual choices.
 
-Enforced in: `ui/widget/list.gohtml` and `ui/widget/list_item.gohtml` through
+Enforced in: `../../core/ui/widget/list.gohtml` and `../../core/ui/widget/list_item.gohtml` through
 direct Tailwind classes and template conditionals.
 
 ### Position-Aware Item Shape

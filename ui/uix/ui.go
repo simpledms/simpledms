@@ -4,7 +4,7 @@ import (
 	"html/template"
 
 	"github.com/simpledms/simpledms/action"
-	wx "github.com/simpledms/simpledms/ui/widget"
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 )
 
 type UI struct {

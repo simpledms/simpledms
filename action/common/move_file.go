@@ -10,15 +10,16 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
+
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -57,7 +58,7 @@ func NewMoveFile(infra *common.Infra, actions *Actions, config *actionx.Config) 
 		FormHelper: autil.NewFormHelper[MoveFileData](
 			infra,
 			config,
-			wx.T("Move file"),
+			widget.T("Move file"),
 		),
 	}
 }
@@ -128,7 +129,7 @@ func (qq *MoveFile) FormHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 				return err
 			}
 		}
-		return qq.infra.Renderer().Render(rw, ctx, &wx.View{
+		return qq.infra.Renderer().Render(rw, ctx, &widget.View{
 			Children: qq.formFilesListItems(
 				ctx,
 				currentDir,
@@ -172,37 +173,37 @@ func (qq *MoveFile) Form(
 	hxTargetForm string,
 	searchQuery string,
 ) renderable.Renderable {
-	form := &wx.Form{
-		Widget: wx.Widget[wx.Form]{
+	form := &widget.Form{
+		Widget: widget.Widget[widget.Form]{
 			ID: qq.formID(),
 		},
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxTarget: hxTargetForm,
 			HxSwap:   "outerHTML",
 		},
-		Children: []wx.IWidget{
-			&wx.Container{
+		Children: []widget.IWidget{
+			&widget.Container{
 				GapY: true,
-				Child: []wx.IWidget{
-					wx.NewFormFields(ctx, data),
-					&wx.Container{
-						Child: []wx.IWidget{
-							wx.NewLabel(wx.LabelTypeMd, wx.T("Original filename")),
-							wx.NewBody(wx.BodyTypeSm, wx.Tu(filex.Data.Name)),
+				Child: []widget.IWidget{
+					widget.NewFormFields(ctx, data),
+					&widget.Container{
+						Child: []widget.IWidget{
+							widget.NewLabel(widget.LabelTypeMd, widget.T("Original filename")),
+							widget.NewBody(widget.BodyTypeSm, widget.Tu(filex.Data.Name)),
 						},
 					},
 				},
 			},
 		},
 	}
-	container := &wx.View{
-		Children: []wx.IWidget{
-			&wx.Search{
-				Widget: wx.Widget[wx.Search]{
+	container := &widget.View{
+		Children: []widget.IWidget{
+			&widget.Search{
+				Widget: widget.Widget[widget.Search]{
 					ID: "moveSearch",
 				},
-				HTMXAttrs: wx.HTMXAttrs{
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:    qq.FormEndpoint(),
 					HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String(), currentDir.Data.PublicID.String())),
 					HxTarget:  "#" + qq.filesListID(),
@@ -212,7 +213,7 @@ func (qq *MoveFile) Form(
 				},
 				Name:           "SearchQuery",
 				Value:          searchQuery,
-				SupportingText: wx.Tf("Search in «%s»", currentDir.Data.Name),
+				SupportingText: widget.Tf("Search in «%s»", currentDir.Data.Name),
 				Autofocus:      true,
 			},
 			qq.formFilesList(ctx, currentDir, filex, hxTargetForm, "", 0), // TODO
@@ -224,11 +225,11 @@ func (qq *MoveFile) Form(
 
 	return autil.WrapWidgetWithID(
 		// fmt.Sprintf("Move «%s» from «%s» to «%s»", filex.Name, fileParentName, currentDir.Name),
-		wx.Tf("Move file to «%s»", currentDir.Data.Name),
-		wx.T("Save"),
+		widget.Tf("Move file to «%s»", currentDir.Data.Name),
+		widget.T("Save"),
 		container,
 		wrapper,
-		wx.DialogLayoutStable,
+		widget.DialogLayoutStable,
 		qq.popoverID(),
 		qq.formID(),
 	)
@@ -245,14 +246,14 @@ func (qq *MoveFile) formFilesList(
 	hxTargetForm string,
 	searchQuery string,
 	offset int,
-) *wx.ScrollableContent {
+) *widget.ScrollableContent {
 	fileListItems := qq.formFilesListItems(ctx, currentDir, filex, hxTargetForm, searchQuery, offset)
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.filesListID(),
 		},
-		Children: &wx.List{
+		Children: &widget.List{
 			Children: fileListItems,
 		},
 	}
@@ -265,7 +266,7 @@ func (qq *MoveFile) formFilesListItems(
 	hxTargetForm string,
 	searchQuery string,
 	offset int,
-) []wx.IWidget {
+) []widget.IWidget {
 	// TODO process searchQuery and add breadcrumbs if search is used
 
 	var childDirsQuery *enttenant.FileQuery
@@ -293,7 +294,7 @@ func (qq *MoveFile) formFilesListItems(
 		childDirs = childDirs[:qq.pageSize()]
 	}
 
-	var fileListItems []wx.IWidget
+	var fileListItems []widget.IWidget
 
 	// TODO selectDir command with custom action...
 
@@ -307,11 +308,11 @@ func (qq *MoveFile) formFilesListItems(
 			panic(err) // FIXME panic or okay?
 		}
 		fileListItems = append(fileListItems,
-			&wx.ListItem{
-				Leading:  wx.NewIcon("arrow_upward"),
-				Headline: wx.T("Directory up"),
-				Type:     wx.ListItemTypeHelper,
-				HTMXAttrs: wx.HTMXAttrs{
+			&widget.ListItem{
+				Leading:  widget.NewIcon("arrow_upward"),
+				Headline: widget.T("Directory up"),
+				Type:     widget.ListItemTypeHelper,
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:    qq.FormEndpointWithParams(actionx.ResponseWrapperDialog, hxTargetForm),
 					HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String(), parentDir.Data.PublicID.String())),
 					HxTarget:  "#" + qq.popoverID() + " .js-dialog-content",
@@ -346,7 +347,7 @@ func (qq *MoveFile) formFilesListItems(
 		if searchQuery != "" {
 			fullPath, found := childDirParentFullPaths[childDir.ParentID]
 			if found {
-				breadcrumbElems := []string{wx.T("Home").String(ctx)}
+				breadcrumbElems := []string{widget.T("Home").String(ctx)}
 				if fullPath != "" {
 					breadcrumbElems = append(breadcrumbElems, strings.Split(fullPath, string(os.PathSeparator))...)
 				}
@@ -355,12 +356,12 @@ func (qq *MoveFile) formFilesListItems(
 		}
 
 		fileListItems = append(fileListItems,
-			&wx.ListItem{
+			&widget.ListItem{
 				// BackgroundColor: "beige",
-				Leading:        wx.NewIcon("folder").SmallPadding().HorizontalPadding(),
-				Headline:       wx.T(childDir.Name),
-				SupportingText: wx.Tu(supportingText),
-				HTMXAttrs: wx.HTMXAttrs{
+				Leading:        widget.NewIcon("folder").SmallPadding().HorizontalPadding(),
+				Headline:       widget.T(childDir.Name),
+				SupportingText: widget.Tu(supportingText),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:    qq.FormEndpointWithParams(actionx.ResponseWrapperDialog, hxTargetForm),
 					HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String(), childDir.PublicID.String())),
 					HxTarget:  "#" + qq.popoverID() + " .js-dialog-content",
@@ -373,12 +374,12 @@ func (qq *MoveFile) formFilesListItems(
 	}
 
 	if hasMore {
-		fileListItems = append(fileListItems, &wx.ListItem{
-			Widget: wx.Widget[wx.ListItem]{
+		fileListItems = append(fileListItems, &widget.ListItem{
+			Widget: widget.Widget[widget.ListItem]{
 				ID: "moveFileLoadMore",
 			},
-			Headline: wx.T("Loading more..."),
-			HTMXAttrs: wx.HTMXAttrs{
+			Headline: widget.T("Loading more..."),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    qq.FormEndpoint() + "?offset=" + strconv.Itoa(offset+qq.pageSize()), // FIXME
 				HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String(), currentDir.Data.PublicID.String())),
 				HxTrigger: "intersect once",

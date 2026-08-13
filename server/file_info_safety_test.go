@@ -12,6 +12,7 @@ import (
 	"time"
 
 	browseaction "github.com/simpledms/simpledms/action/browse"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/enttenant"
@@ -19,7 +20,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -253,19 +253,19 @@ func TestBrowseListDirPartialWidgetBuildsFolderBreadcrumbs(t *testing.T) {
 		"",
 	)
 
-	listColumn, ok := layout.List.(*wx.Column)
+	listColumn, ok := layout.List.(*widget.Column)
 	if !ok {
 		t.Fatalf("expected list to be *wx.Column, got %T", layout.List)
 	}
 
-	listChildren, ok := listColumn.Children.([]wx.IWidget)
+	listChildren, ok := listColumn.Children.([]widget.IWidget)
 	if !ok {
 		t.Fatalf("expected list children to be []wx.IWidget, got %T", listColumn.Children)
 	}
 
-	var statusBar *wx.StatusBar
+	var statusBar *widget.StatusBar
 	for _, child := range listChildren {
-		statusBarCandidate, isStatusBar := child.(*wx.StatusBar)
+		statusBarCandidate, isStatusBar := child.(*widget.StatusBar)
 		if isStatusBar {
 			statusBar = statusBarCandidate
 			break
@@ -275,7 +275,7 @@ func TestBrowseListDirPartialWidgetBuildsFolderBreadcrumbs(t *testing.T) {
 		t.Fatal("expected breadcrumbs status bar")
 	}
 
-	breadcrumbWidgets, ok := statusBar.Child.([]wx.IWidget)
+	breadcrumbWidgets, ok := statusBar.Child.([]widget.IWidget)
 	if !ok {
 		t.Fatalf("expected breadcrumbs to be []wx.IWidget, got %T", statusBar.Child)
 	}
@@ -285,11 +285,11 @@ func TestBrowseListDirPartialWidgetBuildsFolderBreadcrumbs(t *testing.T) {
 
 	foundAlphaLink := false
 	for _, breadcrumbWidget := range breadcrumbWidgets {
-		breadcrumbLink, isLink := breadcrumbWidget.(*wx.Link)
+		breadcrumbLink, isLink := breadcrumbWidget.(*widget.Link)
 		if !isLink {
 			continue
 		}
-		breadcrumbText, isText := breadcrumbLink.Child.(*wx.Text)
+		breadcrumbText, isText := breadcrumbLink.Child.(*widget.Text)
 		if isText && breadcrumbText.String(spaceCtx) == "alpha" {
 			foundAlphaLink = true
 			break
@@ -299,7 +299,7 @@ func TestBrowseListDirPartialWidgetBuildsFolderBreadcrumbs(t *testing.T) {
 		t.Fatal("expected breadcrumb link for alpha directory")
 	}
 
-	lastBreadcrumbText, ok := breadcrumbWidgets[len(breadcrumbWidgets)-1].(*wx.Text)
+	lastBreadcrumbText, ok := breadcrumbWidgets[len(breadcrumbWidgets)-1].(*widget.Text)
 	if !ok {
 		t.Fatalf("expected last breadcrumb element to be text, got %T", breadcrumbWidgets[len(breadcrumbWidgets)-1])
 	}

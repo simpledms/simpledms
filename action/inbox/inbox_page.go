@@ -8,10 +8,10 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -85,7 +85,7 @@ func (qq *InboxPage) WidgetHandler(
 	req *httpx.Request,
 	ctx ctxx.Context,
 	selectedFileID string,
-) *wx.ListDetailLayout {
+) *widget.ListDetailLayout {
 	// TODO handle selection
 	// TODO use in MoveFileCmd / AssignFileCmd, initial render
 
@@ -123,7 +123,7 @@ func (qq *InboxPage) WidgetHandler(
 	return qq.Widget(ctx, state, selectedFileID)
 }
 
-func (qq *InboxPage) Widget(ctx ctxx.Context, state *InboxPageState, selectedFileID string) *wx.ListDetailLayout {
+func (qq *InboxPage) Widget(ctx ctxx.Context, state *InboxPageState, selectedFileID string) *widget.ListDetailLayout {
 	listDetailLayout := qq.actions.ListFilesPartial.Widget(
 		ctx,
 		state,
@@ -146,7 +146,7 @@ func (qq *InboxPage) processTemporaryFiles(rw httpx.ResponseWriter, ctx ctxx.Con
 	).AllX(ctx)
 
 	if len(tmpFiles) == 0 {
-		rw.AddRenderables(wx.NewSnackbarf("No new files found."))
+		rw.AddRenderables(widget.NewSnackbarf("No new files found."))
 		return nil
 	}
 
@@ -163,6 +163,6 @@ func (qq *InboxPage) processTemporaryFiles(rw httpx.ResponseWriter, ctx ctxx.Con
 		}
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("Files uploaded successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("Files uploaded successfully."))
 	return nil
 }

@@ -8,11 +8,11 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/fileutil"
@@ -50,7 +50,7 @@ func NewUploadFileCmd(
 	formHelper := autil.NewFormHelper[UploadFileCmdData](
 		infra,
 		config,
-		wx.T("Upload file"),
+		widget.T("Upload file"),
 		// "#fileList",
 	)
 	formHelper.SetIsMultipartFormData(true)
@@ -163,7 +163,7 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("«%s» uploaded.", prep.filex.Name))
+	rw.AddRenderables(widget.NewSnackbarf("«%s» uploaded.", prep.filex.Name))
 	// TODO does triggering event have an effect? request comes from uppy and isn't a HTMX request...
 	rw.Header().Add("HX-Trigger", event.FileUploaded.String())
 

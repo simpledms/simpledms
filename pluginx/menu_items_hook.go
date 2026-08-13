@@ -1,8 +1,8 @@
 package pluginx
 
 import (
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type ExtendMenuItemsHook interface {

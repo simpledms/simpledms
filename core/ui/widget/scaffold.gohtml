@@ -1,0 +1,10 @@
+{{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.Scaffold */ -}}
+{{- define "Scaffold" }}
+	<div id="full_layout" style="height: 100%">
+        {{ render .GetContext .AppBar }}
+		{{ render .GetContext .Drawer }}
+		<main class="">
+			{{ render .GetContext .Body }}
+		</main>
+	</div>
+{{ end }}

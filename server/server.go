@@ -28,6 +28,8 @@ import (
 	trashaction "github.com/simpledms/simpledms/action/trash"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	ui2 "github.com/simpledms/simpledms/core/ui"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/migrate"
@@ -51,7 +53,6 @@ import (
 	"github.com/simpledms/simpledms/ui"
 	"github.com/simpledms/simpledms/ui/uix/partial"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/ocrutil"
 	"github.com/simpledms/simpledms/util/recoverx"
@@ -180,17 +181,17 @@ func newMaintenanceModeHandler(
 			commercialLicenseEnabled,
 		)
 
-		titlex := wx.Tuf("%s | SimpleDMS", wx.T("Maintenance mode").String(visitorCtx))
+		titlex := widget.Tuf("%s | SimpleDMS", widget.T("Maintenance mode").String(visitorCtx))
 		viewx := partial.NewBase(
 			titlex,
-			&wx.MainLayout{
-				Content: &wx.NarrowLayout{
-					Content: &wx.Column{
-						GapYSize:         wx.Gap4,
+			&widget.MainLayout{
+				Content: &widget.NarrowLayout{
+					Content: &widget.Column{
+						GapYSize:         widget.Gap4,
 						NoOverflowHidden: true,
-						Children: []wx.IWidget{
-							wx.H(wx.HeadingTypeHeadlineMd, titlex),
-							wx.T("Maintenance mode is enabled. Please wait until the app is ready again.").SetWrap(),
+						Children: []widget.IWidget{
+							widget.H(widget.HeadingTypeHeadlineMd, titlex),
+							widget.T("Maintenance mode is enabled. Please wait until the app is ready again.").SetWrap(),
 							// wx.T("This page automatically refreshes every 60 seconds.").SetWrap(),
 						},
 					},
@@ -484,7 +485,7 @@ func (qq *Server) newRendererAndI18n() (*ui.Renderer, *i18n.I18n) {
 	templates := template.New("app")
 	templates.Funcs(ui.TemplateFuncMap(templates))
 
-	templatesx, err := templates.ParseFS(ui.WidgetFS, "widget/*.gohtml")
+	templatesx, err := templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -3,8 +3,8 @@ package browse
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -55,14 +55,14 @@ func (qq *PropertiesFilterDialog) Widget(
 	ctx ctxx.Context,
 	data *PropertiesFilterDialogData,
 	listDirState *ListDirPartialState,
-) *wx.Dialog {
-	return &wx.Dialog{
-		Widget: wx.Widget[wx.Dialog]{
+) *widget.Dialog {
+	return &widget.Dialog{
+		Widget: widget.Widget[widget.Dialog]{
 			ID: qq.ID(),
 		},
-		Headline:     wx.T("Fields | Filter"),
+		Headline:     widget.T("Fields | Filter"),
 		IsOpenOnLoad: true,
-		Layout:       wx.DialogLayoutSideSheet,
+		Layout:       widget.DialogLayoutSideSheet,
 		Child: qq.actions.ListFilterPropertiesPartial.Widget(
 			ctx,
 			qq.actions.ListFilterPropertiesPartial.Data(data.CurrentDirID, 0),

@@ -3,8 +3,8 @@ package mailer
 import (
 	"fmt"
 
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 // ContentBlock represents a block of content in the email

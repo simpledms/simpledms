@@ -6,8 +6,8 @@ import (
 	acommon "github.com/simpledms/simpledms/action/common"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -41,7 +41,7 @@ func NewSelectDirMakeDirCmd(
 		autil.NewFormHelper[SelectDirMakeDirCmdData](
 			infra,
 			config,
-			wx.T("Create directory"),
+			widget.T("Create directory"),
 			// "#fileList",
 		),
 	}
@@ -75,6 +75,6 @@ func (qq *SelectDirMakeDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 	// TODO return list partial / may depend on context...
 	return qq.infra.Renderer().Render(rw, ctx,
 		// qq.actions.MoveFileCmd.Form(ctx, data.MoveFileCmdData, actionx.ResponseWrapperDialog, "#fileList"),
-		wx.NewSnackbarf("«%s» created.", filex.Data.Name),
+		widget.NewSnackbarf("«%s» created.", filex.Data.Name),
 	)
 }

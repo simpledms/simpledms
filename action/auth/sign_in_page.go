@@ -6,9 +6,9 @@ import (
 
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -36,7 +36,7 @@ func (qq *SignInPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 	}
 	isSafeRequest := hostname == "localhost" || req.TLS != nil
 	if !isSafeRequest && !qq.infra.SystemConfig().AllowInsecureCookies() {
-		rw.AddRenderables(wx.NewSnackbarf("Sign in only works over HTTPS or on localhost.").
+		rw.AddRenderables(widget.NewSnackbarf("Sign in only works over HTTPS or on localhost.").
 			SetIsError(true).
 			SetCustomAutoDismissTimeoutInMs(100000),
 		)
@@ -45,25 +45,25 @@ func (qq *SignInPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 	return qq.Render(rw, req, ctx, qq.infra, "Sign in", qq.Widget(ctx))
 }
 
-func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
+func (qq *SignInPage) Widget(ctx ctxx.Context) *widget.NarrowLayout {
 	// TODO link impressum
 
-	var children []wx.IWidget
+	var children []widget.IWidget
 
 	children = append(children,
-		wx.H(wx.HeadingTypeHeadlineMd, wx.Tuf("%s", wx.T("Sign in [subject]").String(ctx))),
+		widget.H(widget.HeadingTypeHeadlineMd, widget.Tuf("%s", widget.T("Sign in [subject]").String(ctx))),
 		qq.actions.SignInCmd.Form(
 			ctx,
 			qq.actions.SignInCmd.Data("", ""),
 			actionx.ResponseWrapperNone,
-			wx.T("Sign in"),
+			widget.T("Sign in"),
 			"",
 		),
-		&wx.Button{
-			Label:     wx.T("Sign in with passkey"),
-			StyleType: wx.ButtonStyleTypeElevated,
-			HTMXAttrs: wx.HTMXAttrs{
-				HxOn: &wx.HxOn{
+		&widget.Button{
+			Label:     widget.T("Sign in with passkey"),
+			StyleType: widget.ButtonStyleTypeElevated,
+			HTMXAttrs: widget.HTMXAttrs{
+				HxOn: &widget.HxOn{
 					Event:   "click",
 					Handler: template.JS("window.simpledmsPasskeySignIn(event)"),
 				},
@@ -71,23 +71,23 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 		},
 		qq.actions.ResetPasswordCmd.ModalLink(
 			qq.actions.ResetPasswordCmd.Data(""),
-			wx.T("Forgot password?"),
+			widget.T("Forgot password?"),
 			"",
 		),
 		qq.actions.PasskeyRecoverySignInCmd.ModalLink(
 			qq.actions.PasskeyRecoverySignInCmd.Data("", ""),
-			wx.T("Use backup code"),
+			widget.T("Use backup code"),
 			"",
 		),
 	)
 
-	column := &wx.Column{
-		GapYSize:         wx.Gap4,
+	column := &widget.Column{
+		GapYSize:         widget.Gap4,
 		NoOverflowHidden: true,
 		Children:         children,
 	}
 
-	return &wx.NarrowLayout{
+	return &widget.NarrowLayout{
 		Content: column,
 		AppBar:  qq.appBar(ctx),
 		Navigation: partial2.NewNavigationRail(
@@ -100,11 +100,11 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *wx.NarrowLayout {
 	}
 }
 
-func (qq *SignInPage) appBar(ctx ctxx.Context) *wx.AppBar {
-	return &wx.AppBar{
-		Leading:          &wx.Icon{Name: "folder_open"},
+func (qq *SignInPage) appBar(ctx ctxx.Context) *widget.AppBar {
+	return &widget.AppBar{
+		Leading:          &widget.Icon{Name: "folder_open"},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
-		Title:            &wx.AppBarTitle{Text: wx.Tu("SimpleDMS")},
-		Actions:          []wx.IWidget{},
+		Title:            &widget.AppBarTitle{Text: widget.Tu("SimpleDMS")},
+		Actions:          []widget.IWidget{},
 	}
 }

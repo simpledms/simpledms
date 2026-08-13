@@ -6,12 +6,12 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -71,7 +71,7 @@ func (qq *BrowseWithSelectionPage) render(
 	}
 
 	if renderFullPage {
-		viewx = partial2.NewBase(wx.T("Files"), viewx)
+		viewx = partial2.NewBase(widget.T("Files"), viewx)
 	}
 
 	qq.infra.Renderer().RenderX(rw, ctx, viewx)
@@ -109,33 +109,33 @@ func (qq *BrowseWithSelectionPage) widget(
 	)
 	listDetailsLayout.Detail = filePreview
 
-	fabs := []*wx.FloatingActionButton{
+	fabs := []*widget.FloatingActionButton{
 		{
 			Icon: "upload_file",
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:        qq.actions.FileUploadDialogPartial.Endpoint(),
 				HxVals:        util.JSON(qq.actions.FileUploadDialogPartial.Data(dirx.Data.PublicID.String(), false)),
 				LoadInPopover: true,
 			},
-			Child: []wx.IWidget{
-				wx.NewIcon("upload_file"),
-				wx.T("Upload file"),
+			Child: []widget.IWidget{
+				widget.NewIcon("upload_file"),
+				widget.T("Upload file"),
 			},
 		},
 	}
 
 	if ctx.SpaceCtx().Space.IsFolderMode {
-		fabs = append(fabs, &wx.FloatingActionButton{
-			FABSize: wx.FABSizeSmall,
-			FABType: wx.FABTypeSecondary,
+		fabs = append(fabs, &widget.FloatingActionButton{
+			FABSize: widget.FABSizeSmall,
+			FABType: widget.FABTypeSecondary,
 			Icon:    "create_new_folder",
 			HTMXAttrs: qq.actions.MakeDirCmd.ModalLinkAttrs(
 				qq.actions.MakeDirCmd.Data(dirx.Data.PublicID.String(), ""),
 				"#"+qq.actions.ListDirPartial.WrapperID(),
 			),
-			Child: []wx.IWidget{
-				wx.NewIcon("create_new_folder"),
-				wx.T("Create directory"),
+			Child: []widget.IWidget{
+				widget.NewIcon("create_new_folder"),
+				widget.T("Create directory"),
 			},
 		})
 	}
@@ -148,7 +148,7 @@ func (qq *BrowseWithSelectionPage) widget(
 		)
 	*/
 
-	mainLayout := &wx.MainLayout{
+	mainLayout := &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "browse", fabs),
 		Content:    listDetailsLayout,
 		// SideSheet:  fileDetailsSideSheet,

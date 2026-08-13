@@ -8,9 +8,9 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -67,13 +67,13 @@ func (qq *MarkAsDoneCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	// assignment = assignment.Update().SetIsInInbox(false).SaveX(ctx)
 
 	// FIXME not correct, should not be opened in parent dir, but flat
-	action := &wx.Link{
+	action := &widget.Link{
 		Href:  route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Parent(ctx).Data.PublicID.String(), filex.Data.PublicID.String()),
-		Child: wx.T("Open file"),
+		Child: widget.T("Open file"),
 	}
 
 	rw.AddRenderables(
-		wx.NewSnackbarf("Marked file «%s» as done.", filex.Data.Name).WithAction(action),
+		widget.NewSnackbarf("Marked file «%s» as done.", filex.Data.Name).WithAction(action),
 	)
 
 	return nil

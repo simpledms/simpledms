@@ -753,8 +753,8 @@
                 {
                     "id": "SpaceName",
                     "string": "%[1]s",
-                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
-                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 1,
                     "expr": "wx.Tu(match.SpaceName)"
                 }
@@ -770,8 +770,8 @@
                 {
                     "id": "ParentDirName",
                     "string": "%[1]s",
-                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
-                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 1,
                     "expr": "wx.Tu(match.ParentDirName)"
                 }
@@ -2952,16 +2952,16 @@
                 {
                     "id": "NameSecondLine",
                     "string": "%[1]s",
-                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
-                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 1,
                     "expr": "wx.Tu(userm.NameSecondLine())"
                 },
                 {
                     "id": "OwnershipText",
                     "string": "%[2]s",
-                    "type": "*github.com/simpledms/simpledms/ui/widget.Text",
-                    "underlyingType": "*github.com/simpledms/simpledms/ui/widget.Text",
+                    "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
+                    "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 2,
                     "expr": "ownershipText"
                 }

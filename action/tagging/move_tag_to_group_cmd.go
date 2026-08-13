@@ -5,11 +5,11 @@ package tagging
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -38,7 +38,7 @@ func NewMoveTagToGroupCmd(infra *common.Infra, actions *Actions) *MoveTagToGroup
 		FormHelper: autil.NewFormHelper[MoveTagToGroupCmdData](
 			infra,
 			config,
-			wx.T("Move tag to group"),
+			widget.T("Move tag to group"),
 		),
 	}
 }
@@ -56,7 +56,7 @@ func (qq *MoveTagToGroupCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request
 		return err
 	}
 
-	var snackbar *wx.Snackbar
+	var snackbar *widget.Snackbar
 
 	isDeselected, groupTag, err := taggingmodel.NewTagService().MoveToGroup(ctx, data.TagID, data.GroupTagID)
 	if err != nil {
@@ -64,9 +64,9 @@ func (qq *MoveTagToGroupCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request
 	}
 
 	if isDeselected {
-		snackbar = wx.NewSnackbarf("Deselected group.")
+		snackbar = widget.NewSnackbarf("Deselected group.")
 	} else {
-		snackbar = wx.NewSnackbarf("Moved to group «%s».", groupTag.Name)
+		snackbar = widget.NewSnackbarf("Moved to group «%s».", groupTag.Name)
 	}
 
 	// TODO group ID or tag ID?
@@ -100,13 +100,13 @@ func (qq *MoveTagToGroupCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Req
 
 	hxTarget := req.URL.Query().Get("hx-target")
 
-	var listItems []*wx.ListItem
+	var listItems []*widget.ListItem
 
 	if tag.GroupID > 0 {
-		listItems = append(listItems, &wx.ListItem{
-			Headline: wx.T("Deselect group"),
-			Type:     wx.ListItemTypeHelper,
-			HTMXAttrs: wx.HTMXAttrs{
+		listItems = append(listItems, &widget.ListItem{
+			Headline: widget.T("Deselect group"),
+			Type:     widget.ListItemTypeHelper,
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(data.TagID, 0)),
 				HxOn:     event.CloseDialog.HxOn("click"),
@@ -119,10 +119,10 @@ func (qq *MoveTagToGroupCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Req
 		if groupTag.ID == tag.GroupID {
 			continue
 		}
-		listItems = append(listItems, &wx.ListItem{
-			Headline: wx.Tu(groupTag.Name),
+		listItems = append(listItems, &widget.ListItem{
+			Headline: widget.Tu(groupTag.Name),
 
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(data.TagID, groupTag.ID)),
 				HxOn:     event.CloseDialog.HxOn("click"),
@@ -135,13 +135,13 @@ func (qq *MoveTagToGroupCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Req
 		rw,
 		ctx,
 		autil.WrapWidget(
-			wx.T("Move tag to group"),
+			widget.T("Move tag to group"),
 			nil,
-			&wx.List{
+			&widget.List{
 				Children: listItems,
 			},
 			actionx.ResponseWrapperDialog,
-			wx.DialogLayoutDefault,
+			widget.DialogLayoutDefault,
 		),
 	)
 }

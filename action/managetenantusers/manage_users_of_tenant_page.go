@@ -4,11 +4,11 @@ import (
 	acommon "github.com/simpledms/simpledms/action/common"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -37,12 +37,12 @@ func (qq *ManageUsersOfTenantPage) Handler(rw httpx.ResponseWriter, req *httpx.R
 }
 
 func (qq *ManageUsersOfTenantPage) Widget(ctx ctxx.Context, state *ManageUsersOfTenantPageState) renderable.Renderable {
-	fabs := []*wx.FloatingActionButton{
+	fabs := []*widget.FloatingActionButton{
 		{
 			Icon: "add",
-			Child: []wx.IWidget{
-				wx.NewIcon("add"),
-				wx.T("Create user"),
+			Child: []widget.IWidget{
+				widget.NewIcon("add"),
+				widget.T("Create user"),
 			},
 			HTMXAttrs: qq.actions.CreateUserCmd.ModalLinkAttrs(
 				qq.actions.CreateUserCmd.Data(tenantrole.User, "", "", "", ctx.MainCtx().Account.Language),
@@ -51,30 +51,30 @@ func (qq *ManageUsersOfTenantPage) Widget(ctx ctxx.Context, state *ManageUsersOf
 		},
 	}
 
-	return &wx.MainLayout{
+	return &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(
 			ctx,
 			qq.infra,
 			partial2.TenantUsersNavigationRailValue(ctx.TenantCtx().TenantID),
 			fabs,
 		),
-		Content: &wx.DefaultLayout{
+		Content: &widget.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
 			Content: qq.actions.UserListPartial.Widget(ctx, &state.UserListPartialState),
 		},
 	}
 }
 
-func (qq *ManageUsersOfTenantPage) appBar(ctx ctxx.Context) *wx.AppBar {
-	return &wx.AppBar{
-		Leading: &wx.Icon{
+func (qq *ManageUsersOfTenantPage) appBar(ctx ctxx.Context) *widget.AppBar {
+	return &widget.AppBar{
+		Leading: &widget.Icon{
 			Name: "person",
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
-		Title: &wx.AppBarTitle{
-			Text: wx.Tf("Users «%s»", ctx.TenantCtx().Tenant.Name),
+		Title: &widget.AppBarTitle{
+			Text: widget.Tf("Users «%s»", ctx.TenantCtx().Tenant.Name),
 		},
-		Actions: []wx.IWidget{
+		Actions: []widget.IWidget{
 			/*&wx.IconButton{
 				Icon: "more_vert",
 				Children: &wx.Menu{

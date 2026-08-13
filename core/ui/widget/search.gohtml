@@ -1,0 +1,60 @@
+{{/* gotype:github.com/simpledms/simpledms/core/ui/widget.Search */}}
+{{- define "Search" }}
+	{{ $ctx := .GetContext }}
+	<div id="{{ .GetID }}" class="min-w-0 h-12 relative rounded-full bg-surface-container mx-1 exp:mx-0
+		focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-secondary
+		{{ .GetClass }}"
+        >
+		<div class="state-layer-on-surface flex min-w-0 items-center"
+			 {{/*role="Link"*/}}
+                {{ template "HTMXAttrs" .HTMXAttrs }}
+		>
+			<div class="absolute left-3 exp:left-4 text-on-surface-variant">
+                {{- with .LeadingIconButton }}
+					<div class="hidden md:flex exp:hidden center-aligned">
+                        {{ render $ctx . }}
+					</div>
+                {{- end }}
+                {{- with .LeadingIconButtonAltMobile }}
+					<div class="flex md:hidden center-aligned">
+                        {{ render $ctx . }}
+					</div>
+                {{- else }}
+					<div class="flex md:hidden center-aligned">
+						<i class="material-symbols-outlined">search</i>
+					</div>
+                {{- end }}
+				<div class="{{ if .LeadingIconButton }}hidden exp:flex{{ else }}hidden md:flex{{ end }} center-aligned">
+					<i class="material-symbols-outlined">search</i>
+				</div>
+			</div>
+
+			<input class="min-w-0 flex-grow px-4 h-full body-lg text-on-surface placeholder-on-surface-variant
+				pl-14
+				{{ if .TrailingIconButton }}pr-14 exp:pr-2{{ end }}
+				{{ if .SupportingTextAltMobile }}hidden exp:block{{ end }}
+				"
+				   name="{{ .Name }}"
+				   value="{{ .Value }}"
+				   type="search" placeholder="{{ render .GetContext .SupportingText }}"
+                   {{ if .Autofocus }}autofocus{{ end }}
+			>
+			{{ if .SupportingTextAltMobile }}
+				<input class="exp:hidden min-w-0 flex-grow px-4 h-full body-lg text-on-surface placeholder-on-surface-variant
+				pl-14
+				{{ if .TrailingIconButton }}pr-14 exp:pr-2{{ end }}
+				"
+					   name="{{ .Name }}"
+					   value="{{ .Value }}"
+					   type="search" placeholder="{{ render .GetContext .SupportingTextAltMobile }}"
+                       {{ if .Autofocus }}autofocus{{ end }}
+				>
+			{{ end }}
+			{{- with .TrailingIconButton }}
+				<div class="absolute right-3 exp:right-4 text-on-surface-variant exp:hidden">
+					{{ render $ctx . }}
+				</div>
+			{{- end }}
+		</div>
+	</div>
+{{ end }}

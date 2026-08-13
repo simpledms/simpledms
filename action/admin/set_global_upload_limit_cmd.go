@@ -5,10 +5,10 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	uploadlimitmodel "github.com/simpledms/simpledms/model/main/uploadlimit"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -52,10 +52,10 @@ func (qq *SetGlobalUploadLimitCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 		return err
 	}
 
-	uploadLimitLabel := uploadLimit.LabelWithUnlimited(wx.T("unlimited").String(ctx))
+	uploadLimitLabel := uploadLimit.LabelWithUnlimited(widget.T("unlimited").String(ctx))
 
 	rw.Header().Set("HX-Trigger", event.UploadLimitUpdated.String())
-	rw.AddRenderables(wx.NewSnackbarf("Global upload limit updated to %s.", uploadLimitLabel))
+	rw.AddRenderables(widget.NewSnackbarf("Global upload limit updated to %s.", uploadLimitLabel))
 
 	return nil
 }

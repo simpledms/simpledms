@@ -3,8 +3,8 @@ package browse
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -51,14 +51,14 @@ func (qq *DocumentTypeFilterDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 	)
 }
 
-func (qq *DocumentTypeFilterDialog) Widget(ctx ctxx.Context, data *DocumentTypeFilterDialogData, listDirState *ListDirPartialState) *wx.Dialog {
-	return &wx.Dialog{
-		Widget: wx.Widget[wx.Dialog]{
+func (qq *DocumentTypeFilterDialog) Widget(ctx ctxx.Context, data *DocumentTypeFilterDialogData, listDirState *ListDirPartialState) *widget.Dialog {
+	return &widget.Dialog{
+		Widget: widget.Widget[widget.Dialog]{
 			ID: qq.ID(),
 		},
-		Headline:     wx.T("Document type | Filter"),
+		Headline:     widget.T("Document type | Filter"),
 		IsOpenOnLoad: true,
-		Layout:       wx.DialogLayoutSideSheet,
+		Layout:       widget.DialogLayoutSideSheet,
 		Child: qq.actions.DocumentTypeFilterPartial.Widget(
 			ctx,
 			qq.actions.DocumentTypeFilterPartial.Data(data.CurrentDirID),

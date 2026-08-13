@@ -5,10 +5,10 @@ import (
 
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -35,16 +35,16 @@ func (qq *AccountPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 }
 
 func (qq *AccountPage) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
-	fabs := []*wx.FloatingActionButton{}
+	fabs := []*widget.FloatingActionButton{}
 	accountCardsWidget, err := qq.actions.AccountCardsPartial.Widget(ctx)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	return &wx.MainLayout{
+	return &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx.MainCtx(), qq.infra, "account", fabs),
-		Content: &wx.DefaultLayout{
+		Content: &widget.DefaultLayout{
 			AppBar:        qq.appBar(ctx),
 			Content:       accountCardsWidget,
 			WithPoweredBy: false,
@@ -52,14 +52,14 @@ func (qq *AccountPage) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
 	}, nil
 }
 
-func (qq *AccountPage) appBar(ctx ctxx.Context) *wx.AppBar {
-	return &wx.AppBar{
-		Leading: &wx.Icon{
+func (qq *AccountPage) appBar(ctx ctxx.Context) *widget.AppBar {
+	return &widget.AppBar{
+		Leading: &widget.Icon{
 			Name: "account_circle",
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
-		Title: &wx.AppBarTitle{
-			Text: wx.T("Account"),
+		Title: &widget.AppBarTitle{
+			Text: widget.T("Account"),
 		},
 	}
 }

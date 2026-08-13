@@ -12,11 +12,11 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/fileutil"
@@ -54,7 +54,7 @@ func NewUnzipArchiveCmd(infra *common.Infra, actions *Actions) *UnzipArchiveCmd 
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[UnzipArchiveCmdData](infra, config, wx.T("Unzip archive")),
+		FormHelper: autil.NewFormHelper[UnzipArchiveCmdData](infra, config, widget.T("Unzip archive")),
 	}
 }
 
@@ -250,7 +250,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 	}
 
 	if hasErr {
-		rw.AddRenderables(wx.NewSnackbarf("Could not extract all files from archive.").SetIsError(true))
+		rw.AddRenderables(widget.NewSnackbarf("Could not extract all files from archive.").SetIsError(true))
 
 		for _, entry := range preparedEntries {
 			cleanup := entry.result != nil
@@ -324,7 +324,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 
 	rw.Header().Set("HX-Trigger", event.ZIPArchiveUnzipped.String())
 	if !hasErr {
-		rw.AddRenderables(wx.NewSnackbarf("Archive unzipped."))
+		rw.AddRenderables(widget.NewSnackbarf("Archive unzipped."))
 	}
 
 	return nil

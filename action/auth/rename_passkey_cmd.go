@@ -6,10 +6,10 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	account2 "github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -42,8 +42,8 @@ func NewRenamePasskeyCmd(
 		FormHelper: autil.NewFormHelperX[RenamePasskeyCmdData](
 			infra,
 			config,
-			wx.T("Rename passkey"),
-			wx.T("Rename"),
+			widget.T("Rename passkey"),
+			widget.T("Rename"),
 		),
 	}
 }
@@ -78,7 +78,7 @@ func (qq *RenamePasskeyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 
 	credentialx.Update().SetName(name).SaveX(mainCtx)
 
-	rw.AddRenderables(wx.NewSnackbarf("Passkey renamed."))
+	rw.AddRenderables(widget.NewSnackbarf("Passkey renamed."))
 	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
 
 	return nil

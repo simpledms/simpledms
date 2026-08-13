@@ -5,13 +5,13 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	usermodel "github.com/simpledms/simpledms/model/tenant/user"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -37,13 +37,13 @@ func (qq *UserListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 	return qq.infra.Renderer().Render(rw, ctx, qq.Widget(ctx, state))
 }
 
-func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState) *wx.List {
-	var listItems []*wx.ListItem
+func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState) *widget.List {
+	var listItems []*widget.ListItem
 
-	listItems = append(listItems, &wx.ListItem{
-		Headline: wx.T("Add a new user"), // TODO Create or add? system or real world perspective?
-		Leading:  wx.NewIcon("add"),
-		Type:     wx.ListItemTypeHelper,
+	listItems = append(listItems, &widget.ListItem{
+		Headline: widget.T("Add a new user"), // TODO Create or add? system or real world perspective?
+		Leading:  widget.NewIcon("add"),
+		Type:     widget.ListItemTypeHelper,
 		HTMXAttrs: qq.actions.CreateUserCmd.ModalLinkAttrs(
 			qq.actions.CreateUserCmd.Data(
 				tenantrole.User,
@@ -83,21 +83,21 @@ func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState)
 		userm := usermodel.NewUser(userx)
 		isOwningTenantAssignment := isOwningTenantByAccountID[userx.AccountID]
 
-		leading := wx.NewIcon("person")
+		leading := widget.NewIcon("person")
 		if userx.Role == tenantrole.Owner {
 			// TODO add tooltip...
-			leading = wx.NewIcon("manage_accounts")
+			leading = widget.NewIcon("manage_accounts")
 		}
 
-		ownershipText := wx.T("Member account")
+		ownershipText := widget.T("Member account")
 		if isOwningTenantAssignment {
-			ownershipText = wx.T("Owned account")
+			ownershipText = widget.T("Owned account")
 		}
 
-		listItems = append(listItems, &wx.ListItem{
+		listItems = append(listItems, &widget.ListItem{
 			Leading:        leading,
-			Headline:       wx.Tu(userm.Name()),
-			SupportingText: wx.Tf("%s - %s", wx.Tu(userm.NameSecondLine()), ownershipText),
+			Headline:       widget.Tu(userm.Name()),
+			SupportingText: widget.Tf("%s - %s", widget.Tu(userm.NameSecondLine()), ownershipText),
 			ContextMenu: NewUserContextMenuWidget(qq.actions).Widget(
 				ctx,
 				userx,
@@ -106,11 +106,11 @@ func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState)
 		})
 	}
 
-	return &wx.List{
-		Widget: wx.Widget[wx.List]{
+	return &widget.List{
+		Widget: widget.Widget[widget.List]{
 			ID: qq.id(),
 		},
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxTrigger: event.HxTrigger(
 				event.UserCreated,
 				event.UserUpdated,

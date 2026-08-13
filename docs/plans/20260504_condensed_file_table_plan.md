@@ -119,7 +119,7 @@ For mobile:
 
 ## Table Components
 
-Prefer adding small reusable widgets under `ui/widget` only if they stay generic and simple:
+Prefer adding small reusable widgets under `../../core/ui/widget` only if they stay generic and simple:
 
 - `Table`
 - `TableHeader`

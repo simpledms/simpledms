@@ -1,6 +1,241 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@config '../../../tailwind.config.js';
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility active {
+  /* used for popovers */
+  display: block;
+}
+
+@utility label-sm {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1rem;
+  letter-spacing: 0.03125rem;
+}
+
+@utility label-md {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1rem;
+  letter-spacing: 0.03125rem;
+}
+
+@utility label-lg {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  letter-spacing: 0.00625rem;
+}
+
+@utility label-prominent {
+  font-weight: 700;
+}
+
+@utility body-sm {
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1rem;
+  letter-spacing: 0.025rem;
+}
+
+@utility body-md {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.015625rem;
+}
+
+@utility body-lg {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  letter-spacing: 0.03125rem;
+}
+
+@utility title-sm {
+  /* font-weight was increased (or not) from 400 (title-lg) and 500 (title-sm / title-md) for Montserrat */
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  letter-spacing: 0.00625rem;
+}
+
+@utility title-md {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  letter-spacing: 0.009375rem;
+}
+
+@utility title-lg {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+  letter-spacing: 0;
+}
+
+@utility headline-sm {
+  /* font-weight was increased from 400 for Montserrat */
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 2rem;
+  letter-spacing: 0;
+}
+
+@utility headline-md {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 500;
+  line-height: 2.25rem;
+  letter-spacing: 0;
+}
+
+@utility headline-lg {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 2.5rem;
+  letter-spacing: 0;
+}
+
+@utility display-sm {
+  /* font-weight was increased from 400 for Montserrat */
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.12rem;
+  font-weight: 500;
+  line-height: 2.75rem;
+  letter-spacing: 0;
+}
+
+@utility display-md {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.8125rem;
+  font-weight: 500;
+  line-height: 3.25rem;
+  letter-spacing: 0;
+}
+
+@utility display-lg {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3.5625rem;
+  font-weight: 500;
+  line-height: 4rem;
+  letter-spacing: -0.015625rem;
+}
+
+@utility icon-base {
+  /* TODO components or utilities? are that many necessary? */
+  font-size: 1.5rem;
+}
+
+@utility icon-lg {
+  font-size: 2rem;
+}
+
+@utility icon-sm {
+  /*.icon-md {
+		font-size: 1.25rem;
+	}*/
+  font-size: 1.125rem;
+  /*.icon-xs {
+		font-size: 1rem;
+	}*/
+
+  /* https://m3.material.io/foundations/interaction/states/state-layers */
+  /*
+	.state-layer {
+		// this did work:
+		@apply [display:inherit] h-[inherit] w-[inherit] rounded-[inherit];
+	}
+*/
+
+  /* virtual state layer */
+  /*
+	.v-state-layer {
+		&:hover {
+			@apply !bg-opacity-8 dark:!bg-opacity-92;
+		}
+		&:focus, &:active {
+			@apply !bg-opacity-10 dark:!bg-opacity-90;
+		}
+	}
+
+	 */
+  /* used when base color is dark (has nothing to to with dark mode) */
+  /*
+	.v-state-layer-dark {
+		&:hover {
+			@apply !bg-opacity-92;
+		}
+		&:focus, &:active {
+			@apply !bg-opacity-90;
+		}
+	}
+
+	 */
+}
+
+/* hover:, etc get generated for utilities */
+
+@utility fill {
+  font-variation-settings: 'FILL' 1;
+}
+
+@utility center-aligned {
+  /* deprecated, see: https://m3.material.io/blog/tone-based-surface-color-m3 */
+  /*
+	.elevation-0 {
+		@apply brightness-100;
+	}
+	.elevation-1 {
+		@apply brightness-95 dark:brightness-105;
+	}
+	.elevation-2 {
+		@apply brightness-90 dark:brightness-110;
+	}
+	.elevation-3 {
+		@apply brightness-85 dark:brightness-115;
+	}
+	.elevation-4 {
+		@apply brightness-80 dark:brightness-120;
+	}
+	.elevation-5 {
+		@apply brightness-75 dark:brightness-125;
+	}
+	 */
+
+  /* name matches material spec */
+  @apply justify-center items-center;
+
+  /*
+	.content-auto {
+		content-visibility: auto;
+	}
+	 */
+}
 
 @layer base {
 	/* material-symbols-outlined-regular - latin */
@@ -368,212 +603,4 @@
 		/* font-size doesn't work, workaround mit zoom is not nice */
 		/* TODO transition or animation? */
 	}
-}
-
-@layer components {
-	/* used for popovers */
-	.active {
-		display: block;
-	}
-
-	.label-sm {
-		font-size: 0.6875rem;
-		font-weight: 500;
-		line-height: 1rem;
-		letter-spacing: 0.03125rem;
-	}
-	.label-md {
-		font-size: 0.75rem;
-		font-weight: 500;
-		line-height: 1rem;
-		letter-spacing: 0.03125rem;
-	}
-	.label-lg {
-		font-size: 0.875rem;
-		font-weight: 500;
-		line-height: 1.25rem;
-		letter-spacing: 0.00625rem;
-	}
-	.label-prominent {
-		font-weight: 700;
-	}
-
-	.body-sm {
-		font-size: 0.75rem;
-		font-weight: 400;
-		line-height: 1rem;
-		letter-spacing: 0.025rem;
-	}
-	.body-md {
-		font-size: 0.875rem;
-		font-weight: 400;
-		line-height: 1.25rem;
-		letter-spacing: 0.015625rem;
-	}
-	.body-lg {
-		font-size: 1rem;
-		font-weight: 400;
-		line-height: 1.5rem;
-		letter-spacing: 0.03125rem;
-	}
-
-	/* font-weight was increased (or not) from 400 (title-lg) and 500 (title-sm / title-md) for Montserrat */
-	.title-sm {
-		font-family: 'Montserrat', sans-serif;
-		font-size: 0.875rem;
-		font-weight: 500;
-		line-height: 1.25rem;
-		letter-spacing: 0.00625rem;
-	}
-	.title-md {
-		font-family: 'Montserrat', sans-serif;
-		font-size: 1rem;
-		font-weight: 500;
-		line-height: 1.5rem;
-		letter-spacing: 0.009375rem;
-	}
-	.title-lg {
-		font-family: 'Montserrat', sans-serif;
-		font-size: 1.375rem;
-		font-weight: 500;
-		line-height: 1.75rem;
-		letter-spacing: 0;
-	}
-
-	/* font-weight was increased from 400 for Montserrat */
-	.headline-sm {
-		font-family: 'Montserrat', sans-serif;
-		font-size: 1.5rem;
-		font-weight: 500;
-		line-height: 2rem;
-		letter-spacing: 0;
-	}
-	.headline-md {
-		font-family: 'Montserrat', sans-serif;
-		font-size: 1.75rem;
-		font-weight: 500;
-		line-height: 2.25rem;
-		letter-spacing: 0;
-	}
-	.headline-lg {
-		font-family: 'Montserrat', sans-serif;
-		font-size: 2rem;
-		font-weight: 500;
-		line-height: 2.5rem;
-		letter-spacing: 0;
-	}
-
-	/* font-weight was increased from 400 for Montserrat */
-	.display-sm {
-		font-family: 'Montserrat', sans-serif;
-		font-size: 2.12rem;
-		font-weight: 500;
-		line-height: 2.75rem;
-		letter-spacing: 0;
-	}
-	.display-md {
-		font-family: 'Montserrat', sans-serif;
-		font-size: 2.8125rem;
-		font-weight: 500;
-		line-height: 3.25rem;
-		letter-spacing: 0;
-	}
-	.display-lg {
-		font-family: 'Montserrat', sans-serif;
-		font-size: 3.5625rem;
-		font-weight: 500;
-		line-height: 4rem;
-		letter-spacing: -0.015625rem;
-	}
-
-	/* TODO components or utilities? are that many necessary? */
-	.icon-base {
-		font-size: 1.5rem;
-	}
-	.icon-lg {
-		font-size: 2rem;
-	}
-	/*.icon-md {
-		font-size: 1.25rem;
-	}*/
-	.icon-sm {
-		font-size: 1.125rem;
-	}
-	/*.icon-xs {
-		font-size: 1rem;
-	}*/
-
-	/* https://m3.material.io/foundations/interaction/states/state-layers */
-	/*
-	.state-layer {
-		// this did work:
-		@apply [display:inherit] h-[inherit] w-[inherit] rounded-[inherit];
-	}
-*/
-
-	/* virtual state layer */
-	/*
-	.v-state-layer {
-		&:hover {
-			@apply !bg-opacity-8 dark:!bg-opacity-92;
-		}
-		&:focus, &:active {
-			@apply !bg-opacity-10 dark:!bg-opacity-90;
-		}
-	}
-
-	 */
-	/* used when base color is dark (has nothing to to with dark mode) */
-	/*
-	.v-state-layer-dark {
-		&:hover {
-			@apply !bg-opacity-92;
-		}
-		&:focus, &:active {
-			@apply !bg-opacity-90;
-		}
-	}
-
-	 */
-}
-
-/* hover:, etc get generated for utilities */
-@layer utilities {
-	.fill {
-		font-variation-settings: 'FILL' 1;
-	}
-
-	/* deprecated, see: https://m3.material.io/blog/tone-based-surface-color-m3 */
-	/*
-	.elevation-0 {
-		@apply brightness-100;
-	}
-	.elevation-1 {
-		@apply brightness-95 dark:brightness-105;
-	}
-	.elevation-2 {
-		@apply brightness-90 dark:brightness-110;
-	}
-	.elevation-3 {
-		@apply brightness-85 dark:brightness-115;
-	}
-	.elevation-4 {
-		@apply brightness-80 dark:brightness-120;
-	}
-	.elevation-5 {
-		@apply brightness-75 dark:brightness-125;
-	}
-	 */
-
-	/* name matches material spec */
-	.center-aligned {
-		@apply justify-center items-center
-	}
-
-
-	/*
-	.content-auto {
-		content-visibility: auto;
-	}
-	 */
 }

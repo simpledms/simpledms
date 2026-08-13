@@ -8,10 +8,10 @@ import (
 	"github.com/simpledms/simpledms/action/browse"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/ocrutil"
@@ -55,7 +55,7 @@ func (qq *FileMetadataPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 
 	// TODO is there a way to implement this conditional, only when reload
 	//  	button is used? May not be relevant in all cases
-	rw.AddRenderables(wx.NewSnackbarf("Reloaded metadata"))
+	rw.AddRenderables(widget.NewSnackbarf("Reloaded metadata"))
 
 	return qq.infra.Renderer().Render(
 		rw,
@@ -67,7 +67,7 @@ func (qq *FileMetadataPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 func (qq *FileMetadataPartial) Widget(
 	ctx ctxx.Context,
 	data *FileMetadataPartialData,
-) *wx.ScrollableContent {
+) *widget.ScrollableContent {
 	// TODO datum; as special field or value tag?
 	// 		value tag allows the user to define multiple date types (Eingangsdatum, Erstellungsdatum, etc.)
 
@@ -81,7 +81,7 @@ func (qq *FileMetadataPartial) Widget(
 
 	// how to sort files in browse if no primary filename? value tag?
 
-	var children []wx.IWidget
+	var children []widget.IWidget
 	_, duplicateStatusMessage, hasDuplicates, err := qq.actions.Browse.DuplicateMatchesPartial.WidgetWithStatus(
 		ctx,
 		qq.actions.Browse.DuplicateMatchesPartial.Data(data.FileID),
@@ -110,14 +110,14 @@ func (qq *FileMetadataPartial) Widget(
 		hasDuplicates,
 	)
 
-	var nilableBottomAppBar *wx.BottomAppBar
+	var nilableBottomAppBar *widget.BottomAppBar
 	if len(statusMessages) > 0 {
-		nilableBottomAppBar = &wx.BottomAppBar{
-			Actions: []wx.IWidget{
-				&wx.IconButton{
+		nilableBottomAppBar = &widget.BottomAppBar{
+			Actions: []widget.IWidget{
+				&widget.IconButton{
 					Icon:    "refresh",
-					Tooltip: wx.T("Reload metadata"),
-					HTMXAttrs: wx.HTMXAttrs{
+					Tooltip: widget.T("Reload metadata"),
+					HTMXAttrs: widget.HTMXAttrs{
 						HxPost:   qq.Endpoint(),
 						HxVals:   util.JSON(data),
 						HxTarget: "#" + qq.MetadataTabContentID(),
@@ -129,8 +129,8 @@ func (qq *FileMetadataPartial) Widget(
 		}
 	}
 
-	return &wx.ScrollableContent{
-		Widget: wx.Widget[wx.ScrollableContent]{
+	return &widget.ScrollableContent{
+		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.MetadataTabContentID(),
 		},
 		// GapY:     true,
@@ -145,23 +145,23 @@ func (qq *FileMetadataPartial) MetadataTabContentID() string {
 	return "metadataTabContent"
 }
 
-func (qq *FileMetadataPartial) deleteFromInboxButton(ctx ctxx.Context, fileID string) *wx.Button {
-	return &wx.Button{
-		Label:     wx.T("Delete from inbox"),
-		StyleType: wx.ButtonStyleTypeElevated,
-		HTMXAttrs: wx.HTMXAttrs{
+func (qq *FileMetadataPartial) deleteFromInboxButton(ctx ctxx.Context, fileID string) *widget.Button {
+	return &widget.Button{
+		Label:     widget.T("Delete from inbox"),
+		StyleType: widget.ButtonStyleTypeElevated,
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.actions.Browse.DeleteFileCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.Browse.DeleteFileCmd.Data(fileID)),
-			HxConfirm: wx.T("Are you sure?").String(ctx),
+			HxConfirm: widget.T("Are you sure?").String(ctx),
 		},
 	}
 }
 
-func (qq *FileMetadataPartial) markAsDoneButton(fileID string) *wx.Button {
-	return &wx.Button{
-		Label:     wx.T("Mark as done"),
-		StyleType: wx.ButtonStyleTypeElevated,
-		HTMXAttrs: wx.HTMXAttrs{
+func (qq *FileMetadataPartial) markAsDoneButton(fileID string) *widget.Button {
+	return &widget.Button{
+		Label:     widget.T("Mark as done"),
+		StyleType: widget.ButtonStyleTypeElevated,
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.actions.MarkAsDoneCmd.Endpoint(),
 			HxVals: util.JSON(qq.actions.MarkAsDoneCmd.Data(fileID)),
 			HxHeaders: autil.QueryHeader(
@@ -172,16 +172,16 @@ func (qq *FileMetadataPartial) markAsDoneButton(fileID string) *wx.Button {
 	}
 }
 
-func (qq *FileMetadataPartial) nilableOCRStatusMessage(hasOCRSuccess bool, fileSize int64) *wx.Text {
+func (qq *FileMetadataPartial) nilableOCRStatusMessage(hasOCRSuccess bool, fileSize int64) *widget.Text {
 	if hasOCRSuccess {
 		return nil
 	}
 
 	if ocrutil.IsFileTooLarge(fileSize) {
-		return wx.T("Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.")
+		return widget.T("Text recognition (OCR) cannot be applied because the file is too large, suggestions are based on the filename only.")
 	}
 
-	return wx.T("Text recognition (OCR) is not ready yet, suggestions are based on the filename only.")
+	return widget.T("Text recognition (OCR) is not ready yet, suggestions are based on the filename only.")
 }
 
 func (qq *FileMetadataPartial) statusMessages(
@@ -189,15 +189,15 @@ func (qq *FileMetadataPartial) statusMessages(
 	fileID string,
 	hasOCRSuccess bool,
 	fileSize int64,
-	duplicateStatusMessage *wx.Text,
+	duplicateStatusMessage *widget.Text,
 	hasDuplicates bool,
-) []wx.IWidget {
-	var messages []wx.IWidget
+) []widget.IWidget {
+	var messages []widget.IWidget
 	if ocrStatusMessage := qq.nilableOCRStatusMessage(hasOCRSuccess, fileSize); ocrStatusMessage != nil {
-		messages = append(messages, wx.NewBody(wx.BodyTypeSm, ocrStatusMessage))
+		messages = append(messages, widget.NewBody(widget.BodyTypeSm, ocrStatusMessage))
 	}
 	if duplicateStatusMessage != nil {
-		messages = append(messages, wx.NewBody(wx.BodyTypeSm, duplicateStatusMessage))
+		messages = append(messages, widget.NewBody(widget.BodyTypeSm, duplicateStatusMessage))
 	}
 	if hasDuplicates {
 		messages = append(messages, qq.duplicatesFoundLink(ctx, fileID))
@@ -206,20 +206,20 @@ func (qq *FileMetadataPartial) statusMessages(
 	return messages
 }
 
-func (qq *FileMetadataPartial) statusMessageWidget(messages []wx.IWidget) wx.IWidget {
+func (qq *FileMetadataPartial) statusMessageWidget(messages []widget.IWidget) widget.IWidget {
 	if len(messages) == 1 {
 		return messages[0]
 	}
 
-	return &wx.Column{
-		GapYSize:   wx.Gap1,
+	return &widget.Column{
+		GapYSize:   widget.Gap1,
 		AutoHeight: true,
 		Children:   messages,
 	}
 }
 
-func (qq *FileMetadataPartial) duplicatesFoundLink(ctx ctxx.Context, fileID string) *wx.Link {
-	linkText := wx.T("Duplicates found").SetWrap()
+func (qq *FileMetadataPartial) duplicatesFoundLink(ctx ctxx.Context, fileID string) *widget.Link {
+	linkText := widget.T("Duplicates found").SetWrap()
 	linkText.IsSmall = true
 	state := &InboxPageState{
 		FilesListPartialState: FilesListPartialState{
@@ -231,10 +231,10 @@ func (qq *FileMetadataPartial) duplicatesFoundLink(ctx ctxx.Context, fileID stri
 	}
 	targetURL := route.InboxWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileID)
 
-	return &wx.Link{
+	return &widget.Link{
 		Href:  targetURL,
 		Child: linkText,
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.actions.FileTabsPartial.Endpoint(),
 			HxVals: util.JSON(qq.actions.FileTabsPartial.Data(
 				fileID,

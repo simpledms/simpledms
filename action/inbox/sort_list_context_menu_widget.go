@@ -1,9 +1,9 @@
 package inbox
 
 import (
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type SortListContextMenuWidget struct {
@@ -16,17 +16,17 @@ func NewSortListContextMenuWidget(actions *Actions) *SortListContextMenuWidget {
 	}
 }
 
-func (qq *SortListContextMenuWidget) Widget(ctx ctxx.Context, state *FilesListPartialState) *wx.Menu {
-	var items []*wx.MenuItem
+func (qq *SortListContextMenuWidget) Widget(ctx ctxx.Context, state *FilesListPartialState) *widget.Menu {
+	var items []*widget.MenuItem
 	if state.hasActiveSearch() {
 		items = append(
 			items,
-			&wx.MenuItem{
-				Label:          wx.T("Best match"),
+			&widget.MenuItem{
+				Label:          widget.T("Best match"),
 				RadioGroupName: "SortBy",
 				RadioValue:     sortByRank,
 				IsSelected:     state.SortBy == sortByRank,
-				HTMXAttrs: wx.HTMXAttrs{
+				HTMXAttrs: widget.HTMXAttrs{
 					HxOn: event.SortByUpdated.UnsafeHxOnWithQueryParamAndValue(
 						"click",
 						"sort_by",
@@ -34,40 +34,40 @@ func (qq *SortListContextMenuWidget) Widget(ctx ctxx.Context, state *FilesListPa
 					),
 				},
 			},
-			&wx.MenuItem{IsDivider: true},
+			&widget.MenuItem{IsDivider: true},
 		)
 	}
 
 	items = append(items,
 		qq.sortMenuItem(
-			wx.T("Newest first"),
+			widget.T("Newest first"),
 			sortByNewestFirst,
 			state.SortBy == sortByNewestFirst || state.SortBy == "",
 		),
-		qq.sortMenuItem(wx.T("Oldest first"), sortByOldestFirst, state.SortBy == sortByOldestFirst),
-		qq.sortMenuItem(wx.T("Sort by name"), sortByName, state.SortBy == sortByName),
+		qq.sortMenuItem(widget.T("Oldest first"), sortByOldestFirst, state.SortBy == sortByOldestFirst),
+		qq.sortMenuItem(widget.T("Sort by name"), sortByName, state.SortBy == sortByName),
 	)
 
-	return &wx.Menu{
-		Widget: wx.Widget[wx.Menu]{
+	return &widget.Menu{
+		Widget: widget.Widget[widget.Menu]{
 			ID: "sortBy",
 		},
-		Position: wx.PositionLeft,
+		Position: widget.PositionLeft,
 		Items:    items,
 	}
 }
 
 func (qq *SortListContextMenuWidget) sortMenuItem(
-	label *wx.Text,
+	label *widget.Text,
 	sortBy string,
 	isSelected bool,
-) *wx.MenuItem {
-	return &wx.MenuItem{
+) *widget.MenuItem {
+	return &widget.MenuItem{
 		Label:          label,
 		RadioGroupName: "SortBy",
 		RadioValue:     sortBy,
 		IsSelected:     isSelected,
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxOn: event.SortByUpdated.UnsafeHxOnWithQueryParamAndValue(
 				"click",
 				"sort_by",

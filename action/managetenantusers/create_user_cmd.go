@@ -5,12 +5,12 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	tenantusermodel "github.com/simpledms/simpledms/model/main/tenantuser"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -38,7 +38,7 @@ func NewCreateUserCmd(infra *common.Infra, actions *Actions) *CreateUserCmd {
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[CreateUserCmdData](infra, config, wx.T("Create user")),
+		FormHelper: autil.NewFormHelper[CreateUserCmdData](infra, config, widget.T("Create user")),
 	}
 }
 
@@ -83,9 +83,9 @@ func (qq *CreateUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	}
 
 	if data.Role == tenantrole.Owner {
-		rw.AddRenderables(wx.NewSnackbarf("Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration."))
+		rw.AddRenderables(widget.NewSnackbarf("Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration."))
 	} else {
-		rw.AddRenderables(wx.NewSnackbarf("Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space."))
+		rw.AddRenderables(widget.NewSnackbarf("Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space."))
 	}
 
 	rw.Header().Set("HX-Trigger", event.UserCreated.String())

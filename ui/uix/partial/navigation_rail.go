@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	maintenant "github.com/simpledms/simpledms/db/entmain/tenant"
@@ -12,7 +13,6 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	tenantmodel "github.com/simpledms/simpledms/model/main/tenant"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 // fab must be injected because it differs on each page...
@@ -20,9 +20,9 @@ func NewNavigationRail(
 	ctx ctxx.Context,
 	infra *common.Infra,
 	active string,
-	fabs []*wx.FloatingActionButton,
-) *wx.NavigationRail {
-	rail := &wx.NavigationRail{
+	fabs []*widget.FloatingActionButton,
+) *widget.NavigationRail {
+	rail := &widget.NavigationRail{
 		// must be after main block, otherwise margin is added on top
 		// and z-index: 1 is necessary on fab
 		FABs: fabs,
@@ -49,8 +49,8 @@ func NewNavigationRail(
 	return rail
 }
 
-func NewNavigationRailToggle() *wx.NavigationRailToggle {
-	return &wx.NavigationRailToggle{}
+func NewNavigationRailToggle() *widget.NavigationRailToggle {
+	return &widget.NavigationRailToggle{}
 }
 
 // SpacesNavigationRailValue returns the active value for a tenant Spaces overview item.
@@ -73,9 +73,9 @@ func TenantSettingsNavigationRailValue(tenantID string) string {
 	return "tenant-settings-" + tenantID
 }
 
-func primaryNavigationRailItems(ctx ctxx.Context, infra *common.Infra) []*wx.NavigationRailItem {
+func primaryNavigationRailItems(ctx ctxx.Context, infra *common.Infra) []*widget.NavigationRailItem {
 	if !ctx.IsMainCtx() {
-		return []*wx.NavigationRailItem{signInNavigationRailItem(ctx)}
+		return []*widget.NavigationRailItem{signInNavigationRailItem(ctx)}
 	}
 
 	if ctx.IsSpaceCtx() {
@@ -87,14 +87,14 @@ func primaryNavigationRailItems(ctx ctxx.Context, infra *common.Infra) []*wx.Nav
 	return infra.PluginRegistry().ExtendNavigationRailItems(ctx, items)
 }
 
-func expandedNavigationRailItems(ctx ctxx.Context, infra *common.Infra) []*wx.NavigationRailItem {
-	var items []*wx.NavigationRailItem
+func expandedNavigationRailItems(ctx ctxx.Context, infra *common.Infra) []*widget.NavigationRailItem {
+	var items []*widget.NavigationRailItem
 
 	if ctx.IsMainCtx() && ctx.IsSpaceCtx() {
 		homeItems := appendNavigationDestinationItems(ctx, infra, nil)
 		homeItems = infra.PluginRegistry().ExtendNavigationRailItems(ctx, homeItems)
 		if len(homeItems) > 0 {
-			items = append(items, navigationRailSubheader("home", wx.T("Home").String(ctx)))
+			items = append(items, navigationRailSubheader("home", widget.T("Home").String(ctx)))
 			items = append(items, homeItems...)
 		}
 	}
@@ -117,8 +117,8 @@ func footerNavigationRailItems(
 	ctx ctxx.Context,
 	infra *common.Infra,
 	active string,
-) []*wx.NavigationRailItem {
-	var items []*wx.NavigationRailItem
+) []*widget.NavigationRailItem {
+	var items []*widget.NavigationRailItem
 
 	if ctx.IsMainCtx() {
 		items = append(items, signOutNavigationRailItem(ctx))
@@ -128,7 +128,7 @@ func footerNavigationRailItems(
 	}
 	if ctx.IsMainCtx() && len(items) > 0 {
 		items = append(
-			[]*wx.NavigationRailItem{navigationRailSubheader("misc", wx.T("Misc").String(ctx))},
+			[]*widget.NavigationRailItem{navigationRailSubheader("misc", widget.T("Misc").String(ctx))},
 			items...,
 		)
 	}
@@ -140,8 +140,8 @@ func footerNavigationRailItems(
 	)
 }
 
-func mainNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRailItem {
-	var items []*wx.NavigationRailItem
+func mainNavigationRailItems(ctx ctxx.Context) []*widget.NavigationRailItem {
+	var items []*widget.NavigationRailItem
 	if ctx.IsSpaceCtx() {
 		return items
 	}
@@ -154,112 +154,112 @@ func mainNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRailItem {
 	return items
 }
 
-func spaceNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRailItem {
+func spaceNavigationRailItems(ctx ctxx.Context) []*widget.NavigationRailItem {
 	tenantID := ctx.SpaceCtx().TenantID
 	spaceID := ctx.SpaceCtx().SpaceID
 
-	return []*wx.NavigationRailItem{
+	return []*widget.NavigationRailItem{
 		pageNavigationRailItem(
 			"browse",
-			wx.T("Files").String(ctx),
+			widget.T("Files").String(ctx),
 			"folder_open",
 			route2.BrowseRoot(tenantID, spaceID),
 		),
 		pageNavigationRailItem(
 			"inbox",
-			wx.T("Inbox").String(ctx),
+			widget.T("Inbox").String(ctx),
 			"inbox",
 			route2.InboxRoot(tenantID, spaceID),
 		),
 		pageNavigationRailItem(
 			"trash",
-			wx.T("Trash").String(ctx),
+			widget.T("Trash").String(ctx),
 			"delete",
 			route2.TrashRoot(tenantID, spaceID),
 		),
-		navigationRailSubheader("manage", wx.T("Manage space").String(ctx)),
+		navigationRailSubheader("manage", widget.T("Manage space").String(ctx)),
 		pageNavigationRailItem(
 			"document-types",
-			wx.T("Document types").String(ctx),
+			widget.T("Document types").String(ctx),
 			"category",
 			route2.ManageDocumentTypes(tenantID, spaceID),
 		),
 		pageNavigationRailItem(
 			"tags",
-			wx.T("Tags").String(ctx),
+			widget.T("Tags").String(ctx),
 			"label",
 			route2.ManageTags(tenantID, spaceID),
 		),
 		pageNavigationRailItem(
 			"fields",
-			wx.T("Fields").String(ctx),
+			widget.T("Fields").String(ctx),
 			"tune",
 			route2.ManageProperties(tenantID, spaceID),
 		),
 		pageNavigationRailItem(
 			"manage-users",
-			wx.T("Users").String(ctx),
+			widget.T("Users").String(ctx),
 			"person",
 			route2.ManageUsersOfSpace(tenantID, spaceID),
 		),
 	}
 }
 
-func spaceCompactNavigationRailItems(ctx ctxx.Context, active string) []*wx.NavigationRailItem {
+func spaceCompactNavigationRailItems(ctx ctxx.Context, active string) []*widget.NavigationRailItem {
 	tenantID := ctx.SpaceCtx().TenantID
 	spaceID := ctx.SpaceCtx().SpaceID
 
 	if isMetadataNavigationRailActive(active) {
-		return []*wx.NavigationRailItem{
+		return []*widget.NavigationRailItem{
 			pageNavigationRailItem(
 				"browse",
-				wx.T("Files").String(ctx),
+				widget.T("Files").String(ctx),
 				"folder_open",
 				route2.BrowseRoot(tenantID, spaceID),
 			),
 			pageNavigationRailItem(
 				"document-types",
-				wx.T("Document types").String(ctx),
+				widget.T("Document types").String(ctx),
 				"category",
 				route2.ManageDocumentTypes(tenantID, spaceID),
 			),
 			pageNavigationRailItem(
 				"tags",
-				wx.T("Tags").String(ctx),
+				widget.T("Tags").String(ctx),
 				"label",
 				route2.ManageTags(tenantID, spaceID),
 			),
 			pageNavigationRailItem(
 				"fields",
-				wx.T("Fields").String(ctx),
+				widget.T("Fields").String(ctx),
 				"tune",
 				route2.ManageProperties(tenantID, spaceID),
 			),
 		}
 	}
 
-	return []*wx.NavigationRailItem{
+	return []*widget.NavigationRailItem{
 		pageNavigationRailItem(
 			"browse",
-			wx.T("Files").String(ctx),
+			widget.T("Files").String(ctx),
 			"folder_open",
 			route2.BrowseRoot(tenantID, spaceID),
 		),
 		pageNavigationRailItem(
 			"inbox",
-			wx.T("Inbox").String(ctx),
+			widget.T("Inbox").String(ctx),
 			"inbox",
 			route2.InboxRoot(tenantID, spaceID),
 		),
 		pageNavigationRailItem(
 			"trash",
-			wx.T("Trash").String(ctx),
+			widget.T("Trash").String(ctx),
 			"delete",
 			route2.TrashRoot(tenantID, spaceID),
 		),
 		pageNavigationRailItem(
 			"metadata",
-			wx.T("Metadata").String(ctx),
+			widget.T("Metadata").String(ctx),
 			"database",
 			route2.ManageDocumentTypes(tenantID, spaceID),
 		),
@@ -270,23 +270,23 @@ func isMetadataNavigationRailActive(active string) bool {
 	return active == "document-types" || active == "tags" || active == "fields"
 }
 
-func tenantPasskeyEnrollmentNavigationRailItems(ctx ctxx.Context) []*wx.NavigationRailItem {
-	return []*wx.NavigationRailItem{dashboardNavigationRailItem(ctx)}
+func tenantPasskeyEnrollmentNavigationRailItems(ctx ctxx.Context) []*widget.NavigationRailItem {
+	return []*widget.NavigationRailItem{dashboardNavigationRailItem(ctx)}
 }
 
-func spaceCombobox(ctx ctxx.Context, active string) *wx.Combobox {
+func spaceCombobox(ctx ctxx.Context, active string) *widget.Combobox {
 	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
 	if err != nil {
 		log.Println(err)
 		return nil
 	}
 
-	items := []*wx.MenuItem{
+	items := []*widget.MenuItem{
 		{
 			LeadingIcon: "dashboard",
-			Label:       wx.T("Dashboard"),
+			Label:       widget.T("Dashboard"),
 			IsSelected:  active == "dashboard",
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet: route2.Dashboard(),
 			},
 		},
@@ -301,43 +301,43 @@ func spaceCombobox(ctx ctxx.Context, active string) *wx.Combobox {
 		spaces := spacesByTenant[tenantx]
 		sort.Slice(spaces, func(i, j int) bool { return spaces[i].Name < spaces[j].Name })
 		if len(spaces) > 0 {
-			items = append(items, &wx.MenuItem{
-				Label:       wx.Tu(tenantx.Name),
+			items = append(items, &widget.MenuItem{
+				Label:       widget.Tu(tenantx.Name),
 				IsSubheader: true,
 			})
 		}
 		for _, spacex := range spaces {
 			spaceID := spacex.PublicID.String()
-			items = append(items, &wx.MenuItem{
+			items = append(items, &widget.MenuItem{
 				LeadingIcon: "workspaces",
-				Label:       wx.Tu(spacex.Name),
+				Label:       widget.Tu(spacex.Name),
 				IsSelected:  ctx.IsSpaceCtx() && ctx.SpaceCtx().SpaceID == spaceID,
-				HTMXAttrs: wx.HTMXAttrs{
+				HTMXAttrs: widget.HTMXAttrs{
 					HxGet: route2.BrowseRoot(tenantx.PublicID.String(), spaceID),
 				},
 			})
 		}
 	}
 
-	placeholder := wx.T("Dashboard").String(ctx) + " / " + wx.T("Select space").String(ctx)
-	selectedIcon := wx.NewIcon("dashboard")
+	placeholder := widget.T("Dashboard").String(ctx) + " / " + widget.T("Select space").String(ctx)
+	selectedIcon := widget.NewIcon("dashboard")
 	if active == "dashboard" {
-		placeholder = wx.T("Dashboard").String(ctx)
+		placeholder = widget.T("Dashboard").String(ctx)
 	}
 	if ctx.IsSpaceCtx() {
 		placeholder = ctx.SpaceCtx().Space.Name
-		selectedIcon = wx.NewIcon("workspaces")
+		selectedIcon = widget.NewIcon("workspaces")
 	}
 
-	return &wx.Combobox{
-		Input: &wx.Input{
+	return &widget.Combobox{
+		Input: &widget.Input{
 			Placeholder:  placeholder,
 			LeadingIcon:  selectedIcon,
-			TrailingIcon: wx.NewIcon("expand_more"),
+			TrailingIcon: widget.NewIcon("expand_more"),
 		},
-		Menu: &wx.Menu{
+		Menu: &widget.Menu{
 			Items:              items,
-			EmptyLabel:         wx.T("No matches found."),
+			EmptyLabel:         widget.T("No matches found."),
 			MatchesAnchorWidth: true,
 			IsAutoPopover:      true,
 		},
@@ -346,9 +346,9 @@ func spaceCombobox(ctx ctxx.Context, active string) *wx.Combobox {
 
 func accountTenantNavigationRailItems(
 	ctx ctxx.Context,
-	leadingItems []*wx.NavigationRailItem,
-) []*wx.NavigationRailItem {
-	items := append([]*wx.NavigationRailItem{}, leadingItems...)
+	leadingItems []*widget.NavigationRailItem,
+) []*widget.NavigationRailItem {
+	items := append([]*widget.NavigationRailItem{}, leadingItems...)
 	tenants, err := ctx.MainCtx().Account.QueryTenants().
 		Order(maintenant.ByName()).
 		All(ctx)
@@ -364,12 +364,12 @@ func accountTenantNavigationRailItems(
 			continue
 		}
 
-		items = append(items, &wx.NavigationRailItem{
-			Key:                 "tenant-" + tenantID,
-			Label:               wx.Tu(tenantx.Name).String(ctx),
-			Icon:                "business",
-			Children:            children,
-			IsCollapsible:       true,
+		items = append(items, &widget.NavigationRailItem{
+			Key:           "tenant-" + tenantID,
+			Label:         widget.Tu(tenantx.Name).String(ctx),
+			Icon:          "business",
+			Children:      children,
+			IsCollapsible: true,
 		})
 	}
 
@@ -378,14 +378,14 @@ func accountTenantNavigationRailItems(
 
 func accountTenantNavigationRailSection(
 	ctx ctxx.Context,
-	items []*wx.NavigationRailItem,
-) []*wx.NavigationRailItem {
+	items []*widget.NavigationRailItem,
+) []*widget.NavigationRailItem {
 	if len(items) == 0 {
 		return items
 	}
 
 	return append(
-		[]*wx.NavigationRailItem{navigationRailSubheader("organizations", wx.T("Organizations").String(ctx))},
+		[]*widget.NavigationRailItem{navigationRailSubheader("organizations", widget.T("Organizations").String(ctx))},
 		items...,
 	)
 }
@@ -393,21 +393,21 @@ func accountTenantNavigationRailSection(
 func tenantNavigationRailChildren(
 	ctx ctxx.Context,
 	tenantx *entmain.Tenant,
-) []*wx.NavigationRailItem {
+) []*widget.NavigationRailItem {
 	if tenantx == nil {
-		return []*wx.NavigationRailItem{}
+		return []*widget.NavigationRailItem{}
 	}
 
 	tenantID := tenantx.PublicID.String()
 	tenantm := tenantmodel.NewTenant(tenantx)
 	if !tenantm.IsInitialized() {
-		return []*wx.NavigationRailItem{}
+		return []*widget.NavigationRailItem{}
 	}
 
-	items := []*wx.NavigationRailItem{
+	items := []*widget.NavigationRailItem{
 		pageNavigationRailItem(
 			SpacesNavigationRailValue(tenantID),
-			wx.T("Spaces").String(ctx),
+			widget.T("Spaces").String(ctx),
 			"hub",
 			route2.SpacesRoot(tenantID),
 		),
@@ -417,13 +417,13 @@ func tenantNavigationRailChildren(
 			items,
 			pageNavigationRailItem(
 				TenantUsersNavigationRailValue(tenantID),
-				wx.T("Users").String(ctx),
+				widget.T("Users").String(ctx),
 				"person",
 				route2.ManageUsersOfTenant(tenantID),
 			),
 			pageNavigationRailItem(
 				TenantSettingsNavigationRailValue(tenantID),
-				wx.T("Settings").String(ctx),
+				widget.T("Settings").String(ctx),
 				"settings",
 				route2.OrganizationSettings(tenantID),
 			),
@@ -445,10 +445,10 @@ func canManageTenantUsers(ctx ctxx.Context, tenantx *entmain.Tenant) bool {
 func appendNavigationDestinationItems(
 	ctx ctxx.Context,
 	infra *common.Infra,
-	items []*wx.NavigationRailItem,
-) []*wx.NavigationRailItem {
+	items []*widget.NavigationRailItem,
+) []*widget.NavigationRailItem {
 	for _, destination := range infra.PluginRegistry().ExtendNavigationDestinations(ctx, nil) {
-		items = append(items, wx.NewNavigationRailItemFromDestination(destination))
+		items = append(items, widget.NewNavigationRailItemFromDestination(destination))
 	}
 	return items
 }
@@ -456,8 +456,8 @@ func appendNavigationDestinationItems(
 func pluginMenuNavigationRailItems(
 	ctx ctxx.Context,
 	infra *common.Infra,
-) []*wx.NavigationRailItem {
-	var items []*wx.NavigationRailItem
+) []*widget.NavigationRailItem {
+	var items []*widget.NavigationRailItem
 	for _, item := range infra.PluginRegistry().ExtendMenuItems(ctx, nil) {
 		if item == nil || item.IsDivider || item.Label == nil || item.DownloadLinkURL != "" {
 			continue
@@ -470,7 +470,7 @@ func pluginMenuNavigationRailItems(
 		if item.RadioValue != "" {
 			value = item.RadioValue
 		}
-		items = append(items, &wx.NavigationRailItem{
+		items = append(items, &widget.NavigationRailItem{
 			HTMXAttrs:  item.HTMXAttrs,
 			Key:        value,
 			Value:      value,
@@ -482,74 +482,74 @@ func pluginMenuNavigationRailItems(
 	return items
 }
 
-func dashboardNavigationRailItem(ctx ctxx.Context) *wx.NavigationRailItem {
+func dashboardNavigationRailItem(ctx ctxx.Context) *widget.NavigationRailItem {
 	return pageNavigationRailItem(
 		"dashboard",
-		wx.T("Dashboard").String(ctx),
+		widget.T("Dashboard").String(ctx),
 		"dashboard",
 		route2.Dashboard(),
 	)
 }
 
-func accountNavigationRailItem(ctx ctxx.Context) *wx.NavigationRailItem {
+func accountNavigationRailItem(ctx ctxx.Context) *widget.NavigationRailItem {
 	return pageNavigationRailItem(
 		"account",
-		wx.T("Account").String(ctx),
+		widget.T("Account").String(ctx),
 		"account_circle",
 		route2.Account(),
 	)
 }
 
-func systemNavigationRailItem(ctx ctxx.Context) *wx.NavigationRailItem {
+func systemNavigationRailItem(ctx ctxx.Context) *widget.NavigationRailItem {
 	return pageNavigationRailItem(
 		"system",
-		wx.T("System").String(ctx),
+		widget.T("System").String(ctx),
 		"settings",
 		route2.System(),
 	)
 }
 
-func signInNavigationRailItem(ctx ctxx.Context) *wx.NavigationRailItem {
+func signInNavigationRailItem(ctx ctxx.Context) *widget.NavigationRailItem {
 	return pageNavigationRailItem(
 		"sign-in",
-		wx.T("Sign in [subject]").String(ctx),
+		widget.T("Sign in [subject]").String(ctx),
 		"login",
 		"/",
 	)
 }
 
-func signOutNavigationRailItem(ctx ctxx.Context) *wx.NavigationRailItem {
-	return &wx.NavigationRailItem{
+func signOutNavigationRailItem(ctx ctxx.Context) *widget.NavigationRailItem {
+	return &widget.NavigationRailItem{
 		Key:   "sign-out",
 		Value: "sign-out",
-		Label: wx.T("Sign out").String(ctx),
+		Label: widget.T("Sign out").String(ctx),
 		Icon:  "logout",
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: route2.SignOutCmd(),
 		},
 	}
 }
 
-func aboutNavigationRailItem(ctx ctxx.Context) *wx.NavigationRailItem {
+func aboutNavigationRailItem(ctx ctxx.Context) *widget.NavigationRailItem {
 	return pageNavigationRailItem(
 		"about",
-		wx.T("About SimpleDMS").String(ctx),
+		widget.T("About SimpleDMS").String(ctx),
 		"info",
 		route2.AboutPage(),
 	)
 }
 
-func navigationRailSubheader(key string, label string) *wx.NavigationRailItem {
-	return wx.NewNavigationRailLabel(key, label)
+func navigationRailSubheader(key string, label string) *widget.NavigationRailItem {
+	return widget.NewNavigationRailLabel(key, label)
 }
 
-func pageNavigationRailItem(key string, label string, icon string, href string) *wx.NavigationRailItem {
-	return &wx.NavigationRailItem{
+func pageNavigationRailItem(key string, label string, icon string, href string) *widget.NavigationRailItem {
+	return &widget.NavigationRailItem{
 		Key:   key,
 		Value: key,
 		Label: label,
 		Icon:  icon,
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxGet: href,
 		},
 	}

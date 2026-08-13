@@ -6,11 +6,11 @@ import (
 
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -42,16 +42,16 @@ func (qq *SystemPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 }
 
 func (qq *SystemPage) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
-	fabs := []*wx.FloatingActionButton{}
+	fabs := []*widget.FloatingActionButton{}
 	systemCardsWidget, err := qq.actions.SystemCardsPartial.Widget(ctx)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	return &wx.MainLayout{
+	return &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx.MainCtx(), qq.infra, "system", fabs),
-		Content: &wx.DefaultLayout{
+		Content: &widget.DefaultLayout{
 			AppBar:        qq.appBar(ctx),
 			Content:       systemCardsWidget,
 			WithPoweredBy: false,
@@ -59,14 +59,14 @@ func (qq *SystemPage) Widget(ctx ctxx.Context) (renderable.Renderable, error) {
 	}, nil
 }
 
-func (qq *SystemPage) appBar(ctx ctxx.Context) *wx.AppBar {
-	return &wx.AppBar{
-		Leading: &wx.Icon{
+func (qq *SystemPage) appBar(ctx ctxx.Context) *widget.AppBar {
+	return &widget.AppBar{
+		Leading: &widget.Icon{
 			Name: "settings",
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
-		Title: &wx.AppBarTitle{
-			Text: wx.T("System"),
+		Title: &widget.AppBarTitle{
+			Text: widget.T("System"),
 		},
 	}
 }

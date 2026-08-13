@@ -3,8 +3,8 @@ package browse
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -52,11 +52,11 @@ func (qq *FileVersionUploadDialog) Handler(rw httpx.ResponseWriter, req *httpx.R
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		&wx.Dialog{
-			Layout:       wx.DialogLayoutStable,
-			Headline:     wx.T("Upload new version"),
+		&widget.Dialog{
+			Layout:       widget.DialogLayoutStable,
+			Headline:     widget.T("Upload new version"),
 			IsOpenOnLoad: true,
-			Child: &wx.FileUpload{
+			Child: &widget.FileUpload{
 				Endpoint:           qq.actions.UploadFileVersionCmd.Endpoint(),
 				FileID:             data.FileID,
 				MaxUploadSizeBytes: maxUploadSizeBytes,

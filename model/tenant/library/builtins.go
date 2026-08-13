@@ -1,10 +1,10 @@
 package library
 
 import (
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/model/main/common/attributetype"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 type BuiltinTemplate struct {

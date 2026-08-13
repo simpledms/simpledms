@@ -6,6 +6,7 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
@@ -14,7 +15,6 @@ import (
 	"github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -67,7 +67,7 @@ func (qq *TrashWithSelectionPage) render(
 	viewx renderable.Renderable,
 ) {
 	if req.Header.Get("HX-Request") == "" {
-		viewx = partial.NewBase(wx.T("Trash"), viewx)
+		viewx = partial.NewBase(widget.T("Trash"), viewx)
 	}
 
 	qq.infra.Renderer().RenderX(rw, ctx, viewx)
@@ -89,24 +89,24 @@ func (qq *TrashWithSelectionPage) widget(
 		return filePreview, nil
 	}
 
-	listDetailLayout := &wx.ListDetailLayout{
+	listDetailLayout := &widget.ListDetailLayout{
 		AppBar: qq.appBar(ctx),
 		List:   qq.actions.TrashListPartial.Widget(ctx, qq.actions.TrashListPartial.Data(filex.Data.PublicID.String())),
 		Detail: filePreview,
 	}
 
-	mainLayout := &wx.MainLayout{
+	mainLayout := &widget.MainLayout{
 		Navigation: partial.NewNavigationRail(ctx, qq.infra, "trash", nil),
 		Content:    listDetailLayout,
 	}
 	return mainLayout, nil
 }
 
-func (qq *TrashWithSelectionPage) appBar(ctx ctxx.Context) *wx.AppBar {
-	return &wx.AppBar{
-		Leading:          wx.NewIcon("delete"),
+func (qq *TrashWithSelectionPage) appBar(ctx ctxx.Context) *widget.AppBar {
+	return &widget.AppBar{
+		Leading:          widget.NewIcon("delete"),
 		LeadingAltMobile: partial.NewNavigationRailToggle(),
-		Title:            wx.T("Trash"),
+		Title:            widget.T("Trash"),
 	}
 }
 
@@ -114,10 +114,10 @@ func (qq *TrashWithSelectionPage) filePreview(
 	ctx ctxx.Context,
 	state *FileTabsPartialState,
 	filex *filemodel.File,
-) (*wx.DetailsWithSheet, error) {
-	title := wx.T("Preview")
+) (*widget.DetailsWithSheet, error) {
+	title := widget.T("Preview")
 	if ctx.SpaceCtx().Space.IsFolderMode {
-		title = wx.Tu(filex.Data.Name)
+		title = widget.Tu(filex.Data.Name)
 	}
 
 	fileDetailsSideSheet := qq.actions.FileDetailsSideSheetPartial.Widget(
@@ -127,11 +127,11 @@ func (qq *TrashWithSelectionPage) filePreview(
 	)
 
 	ctxWithDeleted := schema.SkipSoftDelete(ctx)
-	return &wx.DetailsWithSheet{
+	return &widget.DetailsWithSheet{
 		AppBar: qq.previewAppBar(ctx, title, filex),
-		Child: &wx.Column{
-			Children: []wx.IWidget{
-				&wx.FilePreview{
+		Child: &widget.Column{
+			Children: []widget.IWidget{
+				&widget.FilePreview{
 					FileURL:  route.TrashDownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
 					Filename: filex.Filename(ctx),
 					MimeType: filex.CurrentVersion(ctxWithDeleted).Data.MimeType,
@@ -142,44 +142,44 @@ func (qq *TrashWithSelectionPage) filePreview(
 	}, nil
 }
 
-func (qq *TrashWithSelectionPage) previewAppBar(ctx ctxx.Context, title *wx.Text, filex *filemodel.File) *wx.AppBar {
-	return &wx.AppBar{
-		Leading: &wx.IconButton{
+func (qq *TrashWithSelectionPage) previewAppBar(ctx ctxx.Context, title *widget.Text, filex *filemodel.File) *widget.AppBar {
+	return &widget.AppBar{
+		Leading: &widget.IconButton{
 			Icon:    "close",
-			Tooltip: wx.T("Close preview"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Tooltip: widget.T("Close preview"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxGet:     route.TrashRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
 				HxOn:      event.DetailsClosed.HxOn("click"),
 				HxHeaders: autil.CloseDetailsHeader(),
 			},
 		},
-		Title: &wx.AppBarTitle{
+		Title: &widget.AppBarTitle{
 			Text: title,
 		},
-		Actions: []wx.IWidget{
-			&wx.IconButton{
+		Actions: []widget.IWidget{
+			&widget.IconButton{
 				Icon:    "description",
-				Tooltip: wx.T("Show details"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Tooltip: widget.T("Show details"),
+				HTMXAttrs: widget.HTMXAttrs{
 					DialogID: qq.actions.FileDetailsSideSheetPartial.ID(),
 				},
 			},
-			&wx.IconButton{
+			&widget.IconButton{
 				Icon:    "restore_from_trash",
-				Tooltip: wx.T("Restore"),
-				HTMXAttrs: wx.HTMXAttrs{
+				Tooltip: widget.T("Restore"),
+				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:    qq.actions.RestoreFileCmd.Endpoint(),
 					HxVals:    util.JSON(qq.actions.RestoreFileCmd.DataWithOptions(filex.Data.PublicID.String())),
-					HxConfirm: wx.T("Are you sure?").String(ctx),
+					HxConfirm: widget.T("Are you sure?").String(ctx),
 				},
 			},
-			&wx.Link{
+			&widget.Link{
 				Href:      route.TrashDownload(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
 				IsNoColor: true,
 				Filename:  filex.Filename(ctx),
-				Child: &wx.IconButton{
+				Child: &widget.IconButton{
 					Icon:    "download",
-					Tooltip: wx.T("Download"),
+					Tooltip: widget.T("Download"),
 				},
 			},
 		},

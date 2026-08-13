@@ -1,0 +1,9 @@
+{{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.ContentBlock */ -}}
+{{- define "ContentBlock" }}
+	<div>
+        {{ with .Headline }}
+			<h3 class="title-md text-on-surface">{{ . }}</h3>
+        {{ end }}
+        {{ render .GetContext .Child }}
+	</div>
+{{ end }}

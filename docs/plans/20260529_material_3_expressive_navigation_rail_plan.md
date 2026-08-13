@@ -52,9 +52,9 @@ mobile modal menu replacement.
 
 - `ui/uix/partial/navigation_rail.go` builds the current rail as a flat slice of
   `wx.NavigationDestination`.
-- `ui/widget/navigation_rail.gohtml` renders a bottom-style compact rail and a
+- `../../core/ui/widget/navigation_rail.gohtml` renders a bottom-style compact rail and a
   baseline side rail on `md+` screens.
-- `ui/widget/navigation_destination.gohtml` only supports leaf destinations and
+- `../../core/ui/widget/navigation_destination.gohtml` only supports leaf destinations and
   cannot model expanded-only sections, groups, subheaders, badges, disabled
   destinations, or footer destinations.
 - `ui/uix/partial/main_menu.go` contains destinations that are not all present in
@@ -70,11 +70,11 @@ mobile modal menu replacement.
   medium from `600px`, expanded from `840px`, large from `1200px`, and
   extra-large from `1600px`.
 - Side sheets are currently dialog-based and use fixed positioning on `lg+` in
-  `ui/widget/dialog.gohtml`. The hard-coded `2xl:left-[1390px]` positioning must
+  `../../core/ui/widget/dialog.gohtml`. The hard-coded `2xl:left-[1390px]` positioning must
   be reviewed because an expanded standard rail changes the content start edge
   and available viewport width.
 - SimpleDMS currently has no dedicated navigation-rail runtime asset. Base assets
-  are loaded through `ui/widget/base.gohtml` from `ui/uix/web/assets`.
+  are loaded through `../../core/ui/widget/base.gohtml` from `ui/uix/web/assets`.
 
 ## Erdikon Reference
 
@@ -265,7 +265,7 @@ Implementation should:
   expanded rail width for expanded `md+`.
 - Use that property when positioning large-screen side sheets if they are fixed
   to the viewport.
-- Review `ui/widget/dialog.gohtml` side-sheet classes, especially `lg:fixed`,
+- Review `../../core/ui/widget/dialog.gohtml` side-sheet classes, especially `lg:fixed`,
   `2xl:left-[1390px]`, and `2xl:right-auto`.
 - Preserve current modal/fullscreen side-sheet behavior below `lg`.
 - Manually verify browse details, file details, tag filters, property filters,
@@ -291,7 +291,7 @@ the exception.
 1. Add `NavigationRailItem`, `NavigationRailToggle`, collapsed/expanded rail
    template support, and a compatibility conversion from `NavigationDestination`.
 2. Add a small `navigation_rail.js` runtime asset and include it from
-   `ui/widget/base.gohtml`.
+   `../../core/ui/widget/base.gohtml`.
 3. Rebuild `partial.NewNavigationRail` around item helpers and destination groups,
    preserving current policy gates and adding all main-menu-only destinations.
 4. Rework metadata navigation so `Document types`, `Tags`, and `Fields` are direct

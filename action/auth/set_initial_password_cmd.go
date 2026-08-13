@@ -6,10 +6,10 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -33,7 +33,7 @@ func NewSetInitialPasswordCmd(infra *common.Infra, actions *Actions) *SetInitial
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[SetInitialPasswordCmdData](infra, config, wx.T("Set password")),
+		FormHelper: autil.NewFormHelper[SetInitialPasswordCmdData](infra, config, widget.T("Set password")),
 	}
 }
 
@@ -68,6 +68,6 @@ func (qq *SetInitialPasswordCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.InitialPasswordSet.String())
 
-	rw.AddRenderables(wx.NewSnackbarf("Initial password set successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("Initial password set successfully."))
 	return nil
 }

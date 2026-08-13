@@ -6,10 +6,10 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -32,7 +32,7 @@ func NewRemovePassphraseCmd(infra *common.Infra, actions *Actions) *RemovePassph
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[RemovePassphraseCmdData](infra, config, wx.T("Remove passphrase")),
+		FormHelper: autil.NewFormHelper[RemovePassphraseCmdData](infra, config, widget.T("Remove passphrase")),
 	}
 }
 
@@ -63,7 +63,7 @@ func (qq *RemovePassphraseCmd) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 	}
 
 	rw.Header().Set("HX-Trigger", event.AppPassphraseChanged.String())
-	rw.AddRenderables(wx.NewSnackbarf("Passphrase removed."))
+	rw.AddRenderables(widget.NewSnackbarf("Passphrase removed."))
 
 	return nil
 }

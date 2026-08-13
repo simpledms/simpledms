@@ -2,8 +2,8 @@ package auth
 
 import (
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -45,19 +45,19 @@ func (qq *PasskeyRegisterDialog) Handler(
 	return qq.infra.Renderer().Render(rw, ctx, qq.Widget())
 }
 
-func (qq *PasskeyRegisterDialog) Widget() *wx.Dialog {
-	content := &wx.PasskeyRegisterDialogContent{
-		Widget: wx.Widget[wx.PasskeyRegisterDialogContent]{
+func (qq *PasskeyRegisterDialog) Widget() *widget.Dialog {
+	content := &widget.PasskeyRegisterDialogContent{
+		Widget: widget.Widget[widget.PasskeyRegisterDialogContent]{
 			ID: passkeyRegisterDialogContentID,
 		},
 		DialogID: passkeyRegisterDialogID,
 	}
 
-	return &wx.Dialog{
-		Widget: wx.Widget[wx.Dialog]{
+	return &widget.Dialog{
+		Widget: widget.Widget[widget.Dialog]{
 			ID: passkeyRegisterDialogID,
 		},
-		Headline:     wx.T("Register passkey"),
+		Headline:     widget.T("Register passkey"),
 		SubmitLabel:  content.SubmitLabel(),
 		FormID:       content.FormID(),
 		IsOpenOnLoad: true,

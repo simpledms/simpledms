@@ -8,11 +8,11 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -76,7 +76,7 @@ func (qq *FileTabsPartial) Widget(
 	state *FilePreviewPartialState,
 	dirID string,
 	fileID string,
-) *wx.TabBar {
+) *widget.TabBar {
 	var activeTabContent renderable.Renderable
 
 	activeTab := strings.ToLower(state.ActiveTab)
@@ -136,10 +136,10 @@ func (qq *FileTabsPartial) Widget(
 	}
 
 	tabsID := qq.ID()
-	tabs := []*wx.Tab{
+	tabs := []*widget.Tab{
 		{
-			Label: wx.T("Metadata"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Label: widget.T("Metadata"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(dirID, fileID, "metadata")),
 				HxTarget: "#" + tabsID,
@@ -148,9 +148,9 @@ func (qq *FileTabsPartial) Widget(
 			IncreasedHeight: true,
 		},
 		{
-			Label: wx.T("Tags"),
+			Label: widget.T("Tags"),
 			Badge: qq.actions.Tagging.AssignedTags.Count.Badge(ctx, fileID),
-			HTMXAttrs: wx.HTMXAttrs{
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(dirID, fileID, "tags")),
 				HxTarget: "#" + tabsID,
@@ -159,8 +159,8 @@ func (qq *FileTabsPartial) Widget(
 			IncreasedHeight: true,
 		},
 		{
-			Label: wx.T("Fields"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Label: widget.T("Fields"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(dirID, fileID, "fields")),
 				HxTarget: "#" + tabsID,
@@ -169,8 +169,8 @@ func (qq *FileTabsPartial) Widget(
 			IncreasedHeight: true,
 		},
 		{
-			Label: wx.T("Info"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Label: widget.T("Info"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(dirID, fileID, "info")),
 				HxTarget: "#" + tabsID,
@@ -179,8 +179,8 @@ func (qq *FileTabsPartial) Widget(
 			IncreasedHeight: true,
 		},
 		{
-			Label: wx.T("Versions"),
-			HTMXAttrs: wx.HTMXAttrs{
+			Label: widget.T("Versions"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(dirID, fileID, "versions")),
 				HxTarget: "#" + tabsID,
@@ -190,9 +190,9 @@ func (qq *FileTabsPartial) Widget(
 		},
 	}
 	if hasDuplicates {
-		tabs = append(tabs, &wx.Tab{
-			Label: wx.T("Duplicates"),
-			HTMXAttrs: wx.HTMXAttrs{
+		tabs = append(tabs, &widget.Tab{
+			Label: widget.T("Duplicates"),
+			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(dirID, fileID, "duplicates")),
 				HxTarget: "#" + tabsID,
@@ -202,8 +202,8 @@ func (qq *FileTabsPartial) Widget(
 		})
 	}
 
-	return &wx.TabBar{
-		Widget: wx.Widget[wx.TabBar]{
+	return &widget.TabBar{
+		Widget: widget.Widget[widget.TabBar]{
 			ID: tabsID,
 		},
 		ActiveTab:        activeTab,
@@ -216,16 +216,16 @@ func (qq *FileTabsPartial) Widget(
 func (qq *FileTabsPartial) nilableDuplicateTabContent(
 	ctx ctxx.Context,
 	fileID string,
-) (*wx.ScrollableContent, bool) {
+) (*widget.ScrollableContent, bool) {
 	content, _, hasDuplicates, err := qq.actions.DuplicateMatchesPartial.WidgetWithStatus(
 		ctx,
 		qq.actions.DuplicateMatchesPartial.Data(fileID),
 	)
 	if err != nil {
 		log.Println(err)
-		return &wx.ScrollableContent{
+		return &widget.ScrollableContent{
 			MarginY:  true,
-			Children: wx.NewBody(wx.BodyTypeSm, wx.T("Could not load duplicates.")),
+			Children: widget.NewBody(widget.BodyTypeSm, widget.T("Could not load duplicates.")),
 		}, true
 	}
 

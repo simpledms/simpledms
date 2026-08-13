@@ -6,12 +6,12 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -82,24 +82,24 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		&wx.Dialog{
-			Layout:   wx.DialogLayoutStable,
-			Width:    wx.DialogWidthWide,
-			Headline: wx.T("Version preview"),
-			HeaderActions: []wx.IWidget{
-				&wx.Link{
+		&widget.Dialog{
+			Layout:   widget.DialogLayoutStable,
+			Width:    widget.DialogWidthWide,
+			Headline: widget.T("Version preview"),
+			HeaderActions: []widget.IWidget{
+				&widget.Link{
 					Href:      downloadURL,
 					IsNoColor: true,
 					Filename:  filename,
-					Child: &wx.Button{
-						Icon:      wx.NewIcon("download"),
-						Label:     wx.T("Download"),
-						StyleType: wx.ButtonStyleTypeText,
+					Child: &widget.Button{
+						Icon:      widget.NewIcon("download"),
+						Label:     widget.T("Download"),
+						StyleType: widget.ButtonStyleTypeText,
 					},
 				},
 			},
 			IsOpenOnLoad: true,
-			Child: &wx.FilePreview{
+			Child: &widget.FilePreview{
 				FileURL:  route.DownloadInlineWithVersion(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String(), data.VersionNumber),
 				Filename: filename,
 				MimeType: versionm.Data.MimeType,

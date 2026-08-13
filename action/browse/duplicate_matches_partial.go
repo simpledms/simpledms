@@ -6,11 +6,11 @@ import (
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/route"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -65,7 +65,7 @@ func (qq *DuplicateMatchesPartial) Handler(
 func (qq *DuplicateMatchesPartial) Widget(
 	ctx ctxx.Context,
 	data *DuplicateMatchesPartialData,
-) (*wx.ScrollableContent, error) {
+) (*widget.ScrollableContent, error) {
 	widget, _, _, err := qq.WidgetWithStatus(ctx, data)
 	return widget, err
 }
@@ -73,13 +73,13 @@ func (qq *DuplicateMatchesPartial) Widget(
 func (qq *DuplicateMatchesPartial) WidgetWithStatus(
 	ctx ctxx.Context,
 	data *DuplicateMatchesPartialData,
-) (*wx.ScrollableContent, *wx.Text, bool, error) {
+) (*widget.ScrollableContent, *widget.Text, bool, error) {
 	content, statusMessage, hasDuplicates, err := qq.contentWithStatus(ctx, data)
 	if err != nil {
 		return nil, nil, false, err
 	}
 
-	return &wx.ScrollableContent{
+	return &widget.ScrollableContent{
 		MarginY:  true,
 		FlexCol:  true,
 		Children: content,
@@ -89,7 +89,7 @@ func (qq *DuplicateMatchesPartial) WidgetWithStatus(
 func (qq *DuplicateMatchesPartial) contentWithStatus(
 	ctx ctxx.Context,
 	data *DuplicateMatchesPartialData,
-) (renderable.Renderable, *wx.Text, bool, error) {
+) (renderable.Renderable, *widget.Text, bool, error) {
 	result, err := qq.service.FindDuplicates(ctx, data.FileID)
 	if err != nil {
 		log.Println(err)
@@ -97,36 +97,36 @@ func (qq *DuplicateMatchesPartial) contentWithStatus(
 	}
 
 	if !result.HasContentHash {
-		return wx.NewBody(
-			wx.BodyTypeMd,
-			wx.T("Duplicate check is still being prepared for this file."),
-		), wx.T("Duplicate check is still being prepared for this file."), false, nil
+		return widget.NewBody(
+			widget.BodyTypeMd,
+			widget.T("Duplicate check is still being prepared for this file."),
+		), widget.T("Duplicate check is still being prepared for this file."), false, nil
 	}
 	if len(result.Matches) == 0 {
-		return wx.NewBody(wx.BodyTypeMd, wx.T("No duplicates found.")), nil, false, nil
+		return widget.NewBody(widget.BodyTypeMd, widget.T("No duplicates found.")), nil, false, nil
 	}
 
-	listItems := make([]wx.IWidget, 0, len(result.Matches))
+	listItems := make([]widget.IWidget, 0, len(result.Matches))
 	for _, match := range result.Matches {
 		listItems = append(listItems, qq.matchListItem(ctx, match))
 	}
 
-	return &wx.Column{
-		GapYSize:   wx.Gap2,
+	return &widget.Column{
+		GapYSize:   widget.Gap2,
 		AutoHeight: true,
-		Children: []wx.IWidget{
-			&wx.Label{
-				Text: wx.T("Duplicates found"),
-				Type: wx.LabelTypeLg,
+		Children: []widget.IWidget{
+			&widget.Label{
+				Text: widget.T("Duplicates found"),
+				Type: widget.LabelTypeLg,
 			},
-			wx.NewBody(
-				wx.BodyTypeMd,
-				wx.Tf(
+			widget.NewBody(
+				widget.BodyTypeMd,
+				widget.Tf(
 					"This file already exists in the following %d locations:",
 					len(result.Matches),
 				),
 			),
-			&wx.List{
+			&widget.List{
 				Children: listItems,
 			},
 		},
@@ -136,11 +136,11 @@ func (qq *DuplicateMatchesPartial) contentWithStatus(
 func (qq *DuplicateMatchesPartial) matchListItem(
 	ctx ctxx.Context,
 	match *filemodel.DuplicateMatch,
-) *wx.ListItem {
-	return &wx.ListItem{
-		Headline:       wx.Tu(match.FileName),
+) *widget.ListItem {
+	return &widget.ListItem{
+		Headline:       widget.Tu(match.FileName),
 		SupportingText: qq.matchSupportingText(ctx, match),
-		HTMXAttrs: wx.HTMXAttrs{
+		HTMXAttrs: widget.HTMXAttrs{
 			HxGet: route.BrowseFile(
 				match.TenantPublicID,
 				match.SpacePublicID,
@@ -154,29 +154,29 @@ func (qq *DuplicateMatchesPartial) matchListItem(
 func (qq *DuplicateMatchesPartial) matchSupportingText(
 	ctx ctxx.Context,
 	match *filemodel.DuplicateMatch,
-) *wx.Text {
+) *widget.Text {
 	parts := []string{
-		wx.Tf("Space: %s", wx.Tu(match.SpaceName)).String(ctx),
+		widget.Tf("Space: %s", widget.Tu(match.SpaceName)).String(ctx),
 	}
 	if !match.ParentDirIsRoot {
-		parts = append(parts, wx.Tf("Folder: %s", wx.Tu(match.ParentDirName)).String(ctx))
+		parts = append(parts, widget.Tf("Folder: %s", widget.Tu(match.ParentDirName)).String(ctx))
 	}
 	parts = append(
 		parts,
 		qq.versionLabel(ctx, match),
-		wx.Tf(
+		widget.Tf(
 			"Uploaded %s",
 			timex.NewDateTime(match.UploadedAt).String(ctx.MainCtx().LanguageBCP47),
 		).String(ctx),
 		fileutil.FormatSize(match.Size),
 	)
 
-	return wx.Tu(strings.Join(parts, " - "))
+	return widget.Tu(strings.Join(parts, " - "))
 }
 
 func (qq *DuplicateMatchesPartial) versionLabel(ctx ctxx.Context, match *filemodel.DuplicateMatch) string {
 	if match.IsCurrentVersion {
-		return wx.Tf("Current version %d", match.VersionNumber).String(ctx)
+		return widget.Tf("Current version %d", match.VersionNumber).String(ctx)
 	}
-	return wx.Tf("Version %d", match.VersionNumber).String(ctx)
+	return widget.Tf("Version %d", match.VersionNumber).String(ctx)
 }

@@ -5,10 +5,10 @@ package documenttype
 import (
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	wx "github.com/simpledms/simpledms/ui/widget"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -32,7 +32,7 @@ func NewCreateCmd(infra *common.Infra, actions *Actions) *CreateCmd {
 	formHelper := autil.NewFormHelper[CreateCmdData](
 		infra,
 		config,
-		wx.T("Add document type"),
+		widget.T("Add document type"),
 	)
 	return &CreateCmd{
 		infra:      infra,
@@ -72,6 +72,6 @@ func (qq *CreateCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		wx.NewSnackbarf("Document type created."),
+		widget.NewSnackbarf("Document type created."),
 	)
 }

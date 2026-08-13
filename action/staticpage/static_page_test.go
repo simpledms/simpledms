@@ -10,8 +10,10 @@ import (
 	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
+
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
+	ui2 "github.com/simpledms/simpledms/core/ui"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain/enttest"
 	"github.com/simpledms/simpledms/db/entx"
@@ -180,7 +182,7 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 	templates := template.New("app")
 	templates.Funcs(ui.TemplateFuncMap(templates))
 
-	parsedTemplates, err := templates.ParseFS(ui.WidgetFS, "widget/*.gohtml")
+	parsedTemplates, err := templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		t.Fatalf("parse templates: %v", err)
 	}

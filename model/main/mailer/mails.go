@@ -1,10 +1,10 @@
 package mailer
 
 import (
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/tenant"
-	wx "github.com/simpledms/simpledms/ui/widget"
 )
 
 // CreateSignUpTemplate creates a template for the signup email
