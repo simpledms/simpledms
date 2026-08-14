@@ -1,6 +1,6 @@
 {{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.Combobox */ -}}
 {{- define "Combobox" }}
-	<sds-combobox id="{{ .GetID }}" class="block w-full
+	<sds-combobox id="{{ .GetID }}" class="block w-fit max-w-full
 		[&_[data-selected=true]]:bg-secondary-container
 		[&_[data-selected=true]_i]:text-on-secondary-container
 		[&_[data-selected=true]_span]:text-on-secondary-container">
@@ -23,6 +23,7 @@
 					data-selected-value="{{ .Input.Value }}"
 					class="js-input min-w-0 w-full cursor-pointer bg-transparent label-lg text-on-surface
 						placeholder-on-surface-variant focus:outline-none"
+					style="field-sizing: content;"
                     >
 			</label>
 			<div class="pointer-events-none flex size-10 shrink-0 items-center justify-center rounded-full
@@ -74,7 +75,7 @@
 					items[activeIndex].scrollIntoView({ block: 'nearest' });
 				}
 
-				input.addEventListener('pointerdown', function() {
+				trigger.addEventListener('pointerdown', function() {
 					wasOpenOnPointerDown = menu.matches(':popover-open');
 				})
 				trigger.addEventListener('click', function() {

@@ -336,10 +336,9 @@ func spaceCombobox(ctx ctxx.Context, active string) *widget.Combobox {
 			TrailingIcon: widget.NewIcon("expand_more"),
 		},
 		Menu: &widget.Menu{
-			Items:              items,
-			EmptyLabel:         widget.T("No matches found."),
-			MatchesAnchorWidth: true,
-			IsAutoPopover:      true,
+			Items:         items,
+			EmptyLabel:    widget.T("No matches found."),
+			IsAutoPopover: true,
 		},
 	}
 }
