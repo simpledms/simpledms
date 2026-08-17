@@ -17,6 +17,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
+	enttenantpreviewconversion "github.com/simpledms/simpledms/db/enttenant/previewconversion"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
@@ -30,6 +31,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/spacerole"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/model/tenant/previewconversion"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/util/timex"
 )
@@ -49,6 +51,7 @@ const (
 	TypeFilePropertyAssignment = "FilePropertyAssignment"
 	TypeFileSearch             = "FileSearch"
 	TypeFileVersion            = "FileVersion"
+	TypePreviewConversion      = "PreviewConversion"
 	TypeProperty               = "Property"
 	TypeResolvedTagAssignment  = "ResolvedTagAssignment"
 	TypeSpace                  = "Space"
@@ -5994,6 +5997,1342 @@ func (m *FileVersionMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown FileVersion edge %s", name)
+}
+
+// PreviewConversionMutation represents an operation that mutates the PreviewConversion nodes in the graph.
+type PreviewConversionMutation struct {
+	config
+	op                    Op
+	typ                   string
+	id                    *int
+	created_at            *time.Time
+	updated_at            *time.Time
+	status                *previewconversion.Status
+	retry_count           *int
+	addretry_count        *int
+	last_attempted_at     *time.Time
+	next_attempt_at       *time.Time
+	processing_started_at *time.Time
+	failure_category      *string
+	clearedFields         map[string]struct{}
+	creator               *int64
+	clearedcreator        bool
+	updater               *int64
+	clearedupdater        bool
+	source                *int64
+	clearedsource         bool
+	preview               *int64
+	clearedpreview        bool
+	done                  bool
+	oldValue              func(context.Context) (*PreviewConversion, error)
+	predicates            []predicate.PreviewConversion
+}
+
+var _ ent.Mutation = (*PreviewConversionMutation)(nil)
+
+// previewconversionOption allows management of the mutation configuration using functional options.
+type previewconversionOption func(*PreviewConversionMutation)
+
+// newPreviewConversionMutation creates new mutation for the PreviewConversion entity.
+func newPreviewConversionMutation(c config, op Op, opts ...previewconversionOption) *PreviewConversionMutation {
+	m := &PreviewConversionMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePreviewConversion,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPreviewConversionID sets the ID field of the mutation.
+func withPreviewConversionID(id int) previewconversionOption {
+	return func(m *PreviewConversionMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *PreviewConversion
+		)
+		m.oldValue = func(ctx context.Context) (*PreviewConversion, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().PreviewConversion.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPreviewConversion sets the old PreviewConversion of the mutation.
+func withPreviewConversion(node *PreviewConversion) previewconversionOption {
+	return func(m *PreviewConversionMutation) {
+		m.oldValue = func(context.Context) (*PreviewConversion, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PreviewConversionMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PreviewConversionMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("enttenant: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PreviewConversionMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PreviewConversionMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().PreviewConversion.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PreviewConversionMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PreviewConversionMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the PreviewConversion entity.
+// If the PreviewConversion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PreviewConversionMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PreviewConversionMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *PreviewConversionMutation) SetCreatedBy(i int64) {
+	m.creator = &i
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *PreviewConversionMutation) CreatedBy() (r int64, exists bool) {
+	v := m.creator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the PreviewConversion entity.
+// If the PreviewConversion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PreviewConversionMutation) OldCreatedBy(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *PreviewConversionMutation) ClearCreatedBy() {
+	m.creator = nil
+	m.clearedFields[enttenantpreviewconversion.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *PreviewConversionMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[enttenantpreviewconversion.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *PreviewConversionMutation) ResetCreatedBy() {
+	m.creator = nil
+	delete(m.clearedFields, enttenantpreviewconversion.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PreviewConversionMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PreviewConversionMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the PreviewConversion entity.
+// If the PreviewConversion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PreviewConversionMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PreviewConversionMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *PreviewConversionMutation) SetUpdatedBy(i int64) {
+	m.updater = &i
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *PreviewConversionMutation) UpdatedBy() (r int64, exists bool) {
+	v := m.updater
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the PreviewConversion entity.
+// If the PreviewConversion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PreviewConversionMutation) OldUpdatedBy(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *PreviewConversionMutation) ClearUpdatedBy() {
+	m.updater = nil
+	m.clearedFields[enttenantpreviewconversion.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *PreviewConversionMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[enttenantpreviewconversion.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *PreviewConversionMutation) ResetUpdatedBy() {
+	m.updater = nil
+	delete(m.clearedFields, enttenantpreviewconversion.FieldUpdatedBy)
+}
+
+// SetSourceStoredFileID sets the "source_stored_file_id" field.
+func (m *PreviewConversionMutation) SetSourceStoredFileID(i int64) {
+	m.source = &i
+}
+
+// SourceStoredFileID returns the value of the "source_stored_file_id" field in the mutation.
+func (m *PreviewConversionMutation) SourceStoredFileID() (r int64, exists bool) {
+	v := m.source
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceStoredFileID returns the old "source_stored_file_id" field's value of the PreviewConversion entity.
+// If the PreviewConversion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PreviewConversionMutation) OldSourceStoredFileID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceStoredFileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceStoredFileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceStoredFileID: %w", err)
+	}
+	return oldValue.SourceStoredFileID, nil
+}
+
+// ResetSourceStoredFileID resets all changes to the "source_stored_file_id" field.
+func (m *PreviewConversionMutation) ResetSourceStoredFileID() {
+	m.source = nil
+}
+
+// SetPreviewStoredFileID sets the "preview_stored_file_id" field.
+func (m *PreviewConversionMutation) SetPreviewStoredFileID(i int64) {
+	m.preview = &i
+}
+
+// PreviewStoredFileID returns the value of the "preview_stored_file_id" field in the mutation.
+func (m *PreviewConversionMutation) PreviewStoredFileID() (r int64, exists bool) {
+	v := m.preview
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPreviewStoredFileID returns the old "preview_stored_file_id" field's value of the PreviewConversion entity.
+// If the PreviewConversion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PreviewConversionMutation) OldPreviewStoredFileID(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPreviewStoredFileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPreviewStoredFileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPreviewStoredFileID: %w", err)
+	}
+	return oldValue.PreviewStoredFileID, nil
+}
+
+// ClearPreviewStoredFileID clears the value of the "preview_stored_file_id" field.
+func (m *PreviewConversionMutation) ClearPreviewStoredFileID() {
+	m.preview = nil
+	m.clearedFields[enttenantpreviewconversion.FieldPreviewStoredFileID] = struct{}{}
+}
+
+// PreviewStoredFileIDCleared returns if the "preview_stored_file_id" field was cleared in this mutation.
+func (m *PreviewConversionMutation) PreviewStoredFileIDCleared() bool {
+	_, ok := m.clearedFields[enttenantpreviewconversion.FieldPreviewStoredFileID]
+	return ok
+}
+
+// ResetPreviewStoredFileID resets all changes to the "preview_stored_file_id" field.
+func (m *PreviewConversionMutation) ResetPreviewStoredFileID() {
+	m.preview = nil
+	delete(m.clearedFields, enttenantpreviewconversion.FieldPreviewStoredFileID)
+}
+
+// SetStatus sets the "status" field.
+func (m *PreviewConversionMutation) SetStatus(pr previewconversion.Status) {
+	m.status = &pr
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *PreviewConversionMutation) Status() (r previewconversion.Status, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the PreviewConversion entity.
+// If the PreviewConversion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PreviewConversionMutation) OldStatus(ctx context.Context) (v previewconversion.Status, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *PreviewConversionMutation) ResetStatus() {
+	m.status = nil
+}
+
+// SetRetryCount sets the "retry_count" field.
+func (m *PreviewConversionMutation) SetRetryCount(i int) {
+	m.retry_count = &i
+	m.addretry_count = nil
+}
+
+// RetryCount returns the value of the "retry_count" field in the mutation.
+func (m *PreviewConversionMutation) RetryCount() (r int, exists bool) {
+	v := m.retry_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRetryCount returns the old "retry_count" field's value of the PreviewConversion entity.
+// If the PreviewConversion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PreviewConversionMutation) OldRetryCount(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRetryCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRetryCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRetryCount: %w", err)
+	}
+	return oldValue.RetryCount, nil
+}
+
+// AddRetryCount adds i to the "retry_count" field.
+func (m *PreviewConversionMutation) AddRetryCount(i int) {
+	if m.addretry_count != nil {
+		*m.addretry_count += i
+	} else {
+		m.addretry_count = &i
+	}
+}
+
+// AddedRetryCount returns the value that was added to the "retry_count" field in this mutation.
+func (m *PreviewConversionMutation) AddedRetryCount() (r int, exists bool) {
+	v := m.addretry_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetRetryCount resets all changes to the "retry_count" field.
+func (m *PreviewConversionMutation) ResetRetryCount() {
+	m.retry_count = nil
+	m.addretry_count = nil
+}
+
+// SetLastAttemptedAt sets the "last_attempted_at" field.
+func (m *PreviewConversionMutation) SetLastAttemptedAt(t time.Time) {
+	m.last_attempted_at = &t
+}
+
+// LastAttemptedAt returns the value of the "last_attempted_at" field in the mutation.
+func (m *PreviewConversionMutation) LastAttemptedAt() (r time.Time, exists bool) {
+	v := m.last_attempted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLastAttemptedAt returns the old "last_attempted_at" field's value of the PreviewConversion entity.
+// If the PreviewConversion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PreviewConversionMutation) OldLastAttemptedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLastAttemptedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLastAttemptedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLastAttemptedAt: %w", err)
+	}
+	return oldValue.LastAttemptedAt, nil
+}
+
+// ClearLastAttemptedAt clears the value of the "last_attempted_at" field.
+func (m *PreviewConversionMutation) ClearLastAttemptedAt() {
+	m.last_attempted_at = nil
+	m.clearedFields[enttenantpreviewconversion.FieldLastAttemptedAt] = struct{}{}
+}
+
+// LastAttemptedAtCleared returns if the "last_attempted_at" field was cleared in this mutation.
+func (m *PreviewConversionMutation) LastAttemptedAtCleared() bool {
+	_, ok := m.clearedFields[enttenantpreviewconversion.FieldLastAttemptedAt]
+	return ok
+}
+
+// ResetLastAttemptedAt resets all changes to the "last_attempted_at" field.
+func (m *PreviewConversionMutation) ResetLastAttemptedAt() {
+	m.last_attempted_at = nil
+	delete(m.clearedFields, enttenantpreviewconversion.FieldLastAttemptedAt)
+}
+
+// SetNextAttemptAt sets the "next_attempt_at" field.
+func (m *PreviewConversionMutation) SetNextAttemptAt(t time.Time) {
+	m.next_attempt_at = &t
+}
+
+// NextAttemptAt returns the value of the "next_attempt_at" field in the mutation.
+func (m *PreviewConversionMutation) NextAttemptAt() (r time.Time, exists bool) {
+	v := m.next_attempt_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNextAttemptAt returns the old "next_attempt_at" field's value of the PreviewConversion entity.
+// If the PreviewConversion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PreviewConversionMutation) OldNextAttemptAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNextAttemptAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNextAttemptAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNextAttemptAt: %w", err)
+	}
+	return oldValue.NextAttemptAt, nil
+}
+
+// ClearNextAttemptAt clears the value of the "next_attempt_at" field.
+func (m *PreviewConversionMutation) ClearNextAttemptAt() {
+	m.next_attempt_at = nil
+	m.clearedFields[enttenantpreviewconversion.FieldNextAttemptAt] = struct{}{}
+}
+
+// NextAttemptAtCleared returns if the "next_attempt_at" field was cleared in this mutation.
+func (m *PreviewConversionMutation) NextAttemptAtCleared() bool {
+	_, ok := m.clearedFields[enttenantpreviewconversion.FieldNextAttemptAt]
+	return ok
+}
+
+// ResetNextAttemptAt resets all changes to the "next_attempt_at" field.
+func (m *PreviewConversionMutation) ResetNextAttemptAt() {
+	m.next_attempt_at = nil
+	delete(m.clearedFields, enttenantpreviewconversion.FieldNextAttemptAt)
+}
+
+// SetProcessingStartedAt sets the "processing_started_at" field.
+func (m *PreviewConversionMutation) SetProcessingStartedAt(t time.Time) {
+	m.processing_started_at = &t
+}
+
+// ProcessingStartedAt returns the value of the "processing_started_at" field in the mutation.
+func (m *PreviewConversionMutation) ProcessingStartedAt() (r time.Time, exists bool) {
+	v := m.processing_started_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProcessingStartedAt returns the old "processing_started_at" field's value of the PreviewConversion entity.
+// If the PreviewConversion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PreviewConversionMutation) OldProcessingStartedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProcessingStartedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProcessingStartedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProcessingStartedAt: %w", err)
+	}
+	return oldValue.ProcessingStartedAt, nil
+}
+
+// ClearProcessingStartedAt clears the value of the "processing_started_at" field.
+func (m *PreviewConversionMutation) ClearProcessingStartedAt() {
+	m.processing_started_at = nil
+	m.clearedFields[enttenantpreviewconversion.FieldProcessingStartedAt] = struct{}{}
+}
+
+// ProcessingStartedAtCleared returns if the "processing_started_at" field was cleared in this mutation.
+func (m *PreviewConversionMutation) ProcessingStartedAtCleared() bool {
+	_, ok := m.clearedFields[enttenantpreviewconversion.FieldProcessingStartedAt]
+	return ok
+}
+
+// ResetProcessingStartedAt resets all changes to the "processing_started_at" field.
+func (m *PreviewConversionMutation) ResetProcessingStartedAt() {
+	m.processing_started_at = nil
+	delete(m.clearedFields, enttenantpreviewconversion.FieldProcessingStartedAt)
+}
+
+// SetFailureCategory sets the "failure_category" field.
+func (m *PreviewConversionMutation) SetFailureCategory(s string) {
+	m.failure_category = &s
+}
+
+// FailureCategory returns the value of the "failure_category" field in the mutation.
+func (m *PreviewConversionMutation) FailureCategory() (r string, exists bool) {
+	v := m.failure_category
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFailureCategory returns the old "failure_category" field's value of the PreviewConversion entity.
+// If the PreviewConversion object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PreviewConversionMutation) OldFailureCategory(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFailureCategory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFailureCategory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFailureCategory: %w", err)
+	}
+	return oldValue.FailureCategory, nil
+}
+
+// ClearFailureCategory clears the value of the "failure_category" field.
+func (m *PreviewConversionMutation) ClearFailureCategory() {
+	m.failure_category = nil
+	m.clearedFields[enttenantpreviewconversion.FieldFailureCategory] = struct{}{}
+}
+
+// FailureCategoryCleared returns if the "failure_category" field was cleared in this mutation.
+func (m *PreviewConversionMutation) FailureCategoryCleared() bool {
+	_, ok := m.clearedFields[enttenantpreviewconversion.FieldFailureCategory]
+	return ok
+}
+
+// ResetFailureCategory resets all changes to the "failure_category" field.
+func (m *PreviewConversionMutation) ResetFailureCategory() {
+	m.failure_category = nil
+	delete(m.clearedFields, enttenantpreviewconversion.FieldFailureCategory)
+}
+
+// SetCreatorID sets the "creator" edge to the User entity by id.
+func (m *PreviewConversionMutation) SetCreatorID(id int64) {
+	m.creator = &id
+}
+
+// ClearCreator clears the "creator" edge to the User entity.
+func (m *PreviewConversionMutation) ClearCreator() {
+	m.clearedcreator = true
+	m.clearedFields[enttenantpreviewconversion.FieldCreatedBy] = struct{}{}
+}
+
+// CreatorCleared reports if the "creator" edge to the User entity was cleared.
+func (m *PreviewConversionMutation) CreatorCleared() bool {
+	return m.CreatedByCleared() || m.clearedcreator
+}
+
+// CreatorID returns the "creator" edge ID in the mutation.
+func (m *PreviewConversionMutation) CreatorID() (id int64, exists bool) {
+	if m.creator != nil {
+		return *m.creator, true
+	}
+	return
+}
+
+// CreatorIDs returns the "creator" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CreatorID instead. It exists only for internal usage by the builders.
+func (m *PreviewConversionMutation) CreatorIDs() (ids []int64) {
+	if id := m.creator; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCreator resets all changes to the "creator" edge.
+func (m *PreviewConversionMutation) ResetCreator() {
+	m.creator = nil
+	m.clearedcreator = false
+}
+
+// SetUpdaterID sets the "updater" edge to the User entity by id.
+func (m *PreviewConversionMutation) SetUpdaterID(id int64) {
+	m.updater = &id
+}
+
+// ClearUpdater clears the "updater" edge to the User entity.
+func (m *PreviewConversionMutation) ClearUpdater() {
+	m.clearedupdater = true
+	m.clearedFields[enttenantpreviewconversion.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdaterCleared reports if the "updater" edge to the User entity was cleared.
+func (m *PreviewConversionMutation) UpdaterCleared() bool {
+	return m.UpdatedByCleared() || m.clearedupdater
+}
+
+// UpdaterID returns the "updater" edge ID in the mutation.
+func (m *PreviewConversionMutation) UpdaterID() (id int64, exists bool) {
+	if m.updater != nil {
+		return *m.updater, true
+	}
+	return
+}
+
+// UpdaterIDs returns the "updater" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// UpdaterID instead. It exists only for internal usage by the builders.
+func (m *PreviewConversionMutation) UpdaterIDs() (ids []int64) {
+	if id := m.updater; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetUpdater resets all changes to the "updater" edge.
+func (m *PreviewConversionMutation) ResetUpdater() {
+	m.updater = nil
+	m.clearedupdater = false
+}
+
+// SetSourceID sets the "source" edge to the StoredFile entity by id.
+func (m *PreviewConversionMutation) SetSourceID(id int64) {
+	m.source = &id
+}
+
+// ClearSource clears the "source" edge to the StoredFile entity.
+func (m *PreviewConversionMutation) ClearSource() {
+	m.clearedsource = true
+	m.clearedFields[enttenantpreviewconversion.FieldSourceStoredFileID] = struct{}{}
+}
+
+// SourceCleared reports if the "source" edge to the StoredFile entity was cleared.
+func (m *PreviewConversionMutation) SourceCleared() bool {
+	return m.clearedsource
+}
+
+// SourceID returns the "source" edge ID in the mutation.
+func (m *PreviewConversionMutation) SourceID() (id int64, exists bool) {
+	if m.source != nil {
+		return *m.source, true
+	}
+	return
+}
+
+// SourceIDs returns the "source" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// SourceID instead. It exists only for internal usage by the builders.
+func (m *PreviewConversionMutation) SourceIDs() (ids []int64) {
+	if id := m.source; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetSource resets all changes to the "source" edge.
+func (m *PreviewConversionMutation) ResetSource() {
+	m.source = nil
+	m.clearedsource = false
+}
+
+// SetPreviewID sets the "preview" edge to the StoredFile entity by id.
+func (m *PreviewConversionMutation) SetPreviewID(id int64) {
+	m.preview = &id
+}
+
+// ClearPreview clears the "preview" edge to the StoredFile entity.
+func (m *PreviewConversionMutation) ClearPreview() {
+	m.clearedpreview = true
+	m.clearedFields[enttenantpreviewconversion.FieldPreviewStoredFileID] = struct{}{}
+}
+
+// PreviewCleared reports if the "preview" edge to the StoredFile entity was cleared.
+func (m *PreviewConversionMutation) PreviewCleared() bool {
+	return m.PreviewStoredFileIDCleared() || m.clearedpreview
+}
+
+// PreviewID returns the "preview" edge ID in the mutation.
+func (m *PreviewConversionMutation) PreviewID() (id int64, exists bool) {
+	if m.preview != nil {
+		return *m.preview, true
+	}
+	return
+}
+
+// PreviewIDs returns the "preview" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// PreviewID instead. It exists only for internal usage by the builders.
+func (m *PreviewConversionMutation) PreviewIDs() (ids []int64) {
+	if id := m.preview; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetPreview resets all changes to the "preview" edge.
+func (m *PreviewConversionMutation) ResetPreview() {
+	m.preview = nil
+	m.clearedpreview = false
+}
+
+// Where appends a list predicates to the PreviewConversionMutation builder.
+func (m *PreviewConversionMutation) Where(ps ...predicate.PreviewConversion) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PreviewConversionMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PreviewConversionMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.PreviewConversion, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PreviewConversionMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PreviewConversionMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (PreviewConversion).
+func (m *PreviewConversionMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PreviewConversionMutation) Fields() []string {
+	fields := make([]string, 0, 12)
+	if m.created_at != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldCreatedAt)
+	}
+	if m.creator != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldUpdatedAt)
+	}
+	if m.updater != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldUpdatedBy)
+	}
+	if m.source != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldSourceStoredFileID)
+	}
+	if m.preview != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldPreviewStoredFileID)
+	}
+	if m.status != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldStatus)
+	}
+	if m.retry_count != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldRetryCount)
+	}
+	if m.last_attempted_at != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldLastAttemptedAt)
+	}
+	if m.next_attempt_at != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldNextAttemptAt)
+	}
+	if m.processing_started_at != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldProcessingStartedAt)
+	}
+	if m.failure_category != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldFailureCategory)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PreviewConversionMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case enttenantpreviewconversion.FieldCreatedAt:
+		return m.CreatedAt()
+	case enttenantpreviewconversion.FieldCreatedBy:
+		return m.CreatedBy()
+	case enttenantpreviewconversion.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case enttenantpreviewconversion.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case enttenantpreviewconversion.FieldSourceStoredFileID:
+		return m.SourceStoredFileID()
+	case enttenantpreviewconversion.FieldPreviewStoredFileID:
+		return m.PreviewStoredFileID()
+	case enttenantpreviewconversion.FieldStatus:
+		return m.Status()
+	case enttenantpreviewconversion.FieldRetryCount:
+		return m.RetryCount()
+	case enttenantpreviewconversion.FieldLastAttemptedAt:
+		return m.LastAttemptedAt()
+	case enttenantpreviewconversion.FieldNextAttemptAt:
+		return m.NextAttemptAt()
+	case enttenantpreviewconversion.FieldProcessingStartedAt:
+		return m.ProcessingStartedAt()
+	case enttenantpreviewconversion.FieldFailureCategory:
+		return m.FailureCategory()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PreviewConversionMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case enttenantpreviewconversion.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case enttenantpreviewconversion.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case enttenantpreviewconversion.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case enttenantpreviewconversion.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case enttenantpreviewconversion.FieldSourceStoredFileID:
+		return m.OldSourceStoredFileID(ctx)
+	case enttenantpreviewconversion.FieldPreviewStoredFileID:
+		return m.OldPreviewStoredFileID(ctx)
+	case enttenantpreviewconversion.FieldStatus:
+		return m.OldStatus(ctx)
+	case enttenantpreviewconversion.FieldRetryCount:
+		return m.OldRetryCount(ctx)
+	case enttenantpreviewconversion.FieldLastAttemptedAt:
+		return m.OldLastAttemptedAt(ctx)
+	case enttenantpreviewconversion.FieldNextAttemptAt:
+		return m.OldNextAttemptAt(ctx)
+	case enttenantpreviewconversion.FieldProcessingStartedAt:
+		return m.OldProcessingStartedAt(ctx)
+	case enttenantpreviewconversion.FieldFailureCategory:
+		return m.OldFailureCategory(ctx)
+	}
+	return nil, fmt.Errorf("unknown PreviewConversion field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PreviewConversionMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case enttenantpreviewconversion.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case enttenantpreviewconversion.FieldCreatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case enttenantpreviewconversion.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case enttenantpreviewconversion.FieldUpdatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case enttenantpreviewconversion.FieldSourceStoredFileID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceStoredFileID(v)
+		return nil
+	case enttenantpreviewconversion.FieldPreviewStoredFileID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPreviewStoredFileID(v)
+		return nil
+	case enttenantpreviewconversion.FieldStatus:
+		v, ok := value.(previewconversion.Status)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case enttenantpreviewconversion.FieldRetryCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRetryCount(v)
+		return nil
+	case enttenantpreviewconversion.FieldLastAttemptedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLastAttemptedAt(v)
+		return nil
+	case enttenantpreviewconversion.FieldNextAttemptAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNextAttemptAt(v)
+		return nil
+	case enttenantpreviewconversion.FieldProcessingStartedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProcessingStartedAt(v)
+		return nil
+	case enttenantpreviewconversion.FieldFailureCategory:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFailureCategory(v)
+		return nil
+	}
+	return fmt.Errorf("unknown PreviewConversion field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PreviewConversionMutation) AddedFields() []string {
+	var fields []string
+	if m.addretry_count != nil {
+		fields = append(fields, enttenantpreviewconversion.FieldRetryCount)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PreviewConversionMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case enttenantpreviewconversion.FieldRetryCount:
+		return m.AddedRetryCount()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PreviewConversionMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case enttenantpreviewconversion.FieldRetryCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRetryCount(v)
+		return nil
+	}
+	return fmt.Errorf("unknown PreviewConversion numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PreviewConversionMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(enttenantpreviewconversion.FieldCreatedBy) {
+		fields = append(fields, enttenantpreviewconversion.FieldCreatedBy)
+	}
+	if m.FieldCleared(enttenantpreviewconversion.FieldUpdatedBy) {
+		fields = append(fields, enttenantpreviewconversion.FieldUpdatedBy)
+	}
+	if m.FieldCleared(enttenantpreviewconversion.FieldPreviewStoredFileID) {
+		fields = append(fields, enttenantpreviewconversion.FieldPreviewStoredFileID)
+	}
+	if m.FieldCleared(enttenantpreviewconversion.FieldLastAttemptedAt) {
+		fields = append(fields, enttenantpreviewconversion.FieldLastAttemptedAt)
+	}
+	if m.FieldCleared(enttenantpreviewconversion.FieldNextAttemptAt) {
+		fields = append(fields, enttenantpreviewconversion.FieldNextAttemptAt)
+	}
+	if m.FieldCleared(enttenantpreviewconversion.FieldProcessingStartedAt) {
+		fields = append(fields, enttenantpreviewconversion.FieldProcessingStartedAt)
+	}
+	if m.FieldCleared(enttenantpreviewconversion.FieldFailureCategory) {
+		fields = append(fields, enttenantpreviewconversion.FieldFailureCategory)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PreviewConversionMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PreviewConversionMutation) ClearField(name string) error {
+	switch name {
+	case enttenantpreviewconversion.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case enttenantpreviewconversion.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case enttenantpreviewconversion.FieldPreviewStoredFileID:
+		m.ClearPreviewStoredFileID()
+		return nil
+	case enttenantpreviewconversion.FieldLastAttemptedAt:
+		m.ClearLastAttemptedAt()
+		return nil
+	case enttenantpreviewconversion.FieldNextAttemptAt:
+		m.ClearNextAttemptAt()
+		return nil
+	case enttenantpreviewconversion.FieldProcessingStartedAt:
+		m.ClearProcessingStartedAt()
+		return nil
+	case enttenantpreviewconversion.FieldFailureCategory:
+		m.ClearFailureCategory()
+		return nil
+	}
+	return fmt.Errorf("unknown PreviewConversion nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PreviewConversionMutation) ResetField(name string) error {
+	switch name {
+	case enttenantpreviewconversion.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case enttenantpreviewconversion.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case enttenantpreviewconversion.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case enttenantpreviewconversion.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case enttenantpreviewconversion.FieldSourceStoredFileID:
+		m.ResetSourceStoredFileID()
+		return nil
+	case enttenantpreviewconversion.FieldPreviewStoredFileID:
+		m.ResetPreviewStoredFileID()
+		return nil
+	case enttenantpreviewconversion.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case enttenantpreviewconversion.FieldRetryCount:
+		m.ResetRetryCount()
+		return nil
+	case enttenantpreviewconversion.FieldLastAttemptedAt:
+		m.ResetLastAttemptedAt()
+		return nil
+	case enttenantpreviewconversion.FieldNextAttemptAt:
+		m.ResetNextAttemptAt()
+		return nil
+	case enttenantpreviewconversion.FieldProcessingStartedAt:
+		m.ResetProcessingStartedAt()
+		return nil
+	case enttenantpreviewconversion.FieldFailureCategory:
+		m.ResetFailureCategory()
+		return nil
+	}
+	return fmt.Errorf("unknown PreviewConversion field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PreviewConversionMutation) AddedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.creator != nil {
+		edges = append(edges, enttenantpreviewconversion.EdgeCreator)
+	}
+	if m.updater != nil {
+		edges = append(edges, enttenantpreviewconversion.EdgeUpdater)
+	}
+	if m.source != nil {
+		edges = append(edges, enttenantpreviewconversion.EdgeSource)
+	}
+	if m.preview != nil {
+		edges = append(edges, enttenantpreviewconversion.EdgePreview)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PreviewConversionMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case enttenantpreviewconversion.EdgeCreator:
+		if id := m.creator; id != nil {
+			return []ent.Value{*id}
+		}
+	case enttenantpreviewconversion.EdgeUpdater:
+		if id := m.updater; id != nil {
+			return []ent.Value{*id}
+		}
+	case enttenantpreviewconversion.EdgeSource:
+		if id := m.source; id != nil {
+			return []ent.Value{*id}
+		}
+	case enttenantpreviewconversion.EdgePreview:
+		if id := m.preview; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PreviewConversionMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 4)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PreviewConversionMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PreviewConversionMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.clearedcreator {
+		edges = append(edges, enttenantpreviewconversion.EdgeCreator)
+	}
+	if m.clearedupdater {
+		edges = append(edges, enttenantpreviewconversion.EdgeUpdater)
+	}
+	if m.clearedsource {
+		edges = append(edges, enttenantpreviewconversion.EdgeSource)
+	}
+	if m.clearedpreview {
+		edges = append(edges, enttenantpreviewconversion.EdgePreview)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PreviewConversionMutation) EdgeCleared(name string) bool {
+	switch name {
+	case enttenantpreviewconversion.EdgeCreator:
+		return m.clearedcreator
+	case enttenantpreviewconversion.EdgeUpdater:
+		return m.clearedupdater
+	case enttenantpreviewconversion.EdgeSource:
+		return m.clearedsource
+	case enttenantpreviewconversion.EdgePreview:
+		return m.clearedpreview
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PreviewConversionMutation) ClearEdge(name string) error {
+	switch name {
+	case enttenantpreviewconversion.EdgeCreator:
+		m.ClearCreator()
+		return nil
+	case enttenantpreviewconversion.EdgeUpdater:
+		m.ClearUpdater()
+		return nil
+	case enttenantpreviewconversion.EdgeSource:
+		m.ClearSource()
+		return nil
+	case enttenantpreviewconversion.EdgePreview:
+		m.ClearPreview()
+		return nil
+	}
+	return fmt.Errorf("unknown PreviewConversion unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PreviewConversionMutation) ResetEdge(name string) error {
+	switch name {
+	case enttenantpreviewconversion.EdgeCreator:
+		m.ResetCreator()
+		return nil
+	case enttenantpreviewconversion.EdgeUpdater:
+		m.ResetUpdater()
+		return nil
+	case enttenantpreviewconversion.EdgeSource:
+		m.ResetSource()
+		return nil
+	case enttenantpreviewconversion.EdgePreview:
+		m.ResetPreview()
+		return nil
+	}
+	return fmt.Errorf("unknown PreviewConversion edge %s", name)
 }
 
 // PropertyMutation represents an operation that mutates the Property nodes in the graph.

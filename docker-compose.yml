@@ -23,6 +23,17 @@ services:
             #- ./tika-config.xml:/tika-config.xml
         restart: unless-stopped
 
+    gotenberg:
+        image: gotenberg/gotenberg:8
+        command:
+            - "gotenberg"
+            - "--chromium-deny-private-ips=true"
+            - "--libreoffice-deny-private-ips=true"
+            - "--api-disable-download-from=true"
+        ports:
+            - "3000:3000"
+        restart: unless-stopped
+
     # TODO not in production
     mailpit:
         image: axllent/mailpit

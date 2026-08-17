@@ -756,7 +756,7 @@
                     "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 1,
-                    "expr": "wx.Tu(match.SpaceName)"
+                    "expr": "widget.Tu(match.SpaceName)"
                 }
             ],
             "fuzzy": true
@@ -773,7 +773,7 @@
                     "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 1,
-                    "expr": "wx.Tu(match.ParentDirName)"
+                    "expr": "widget.Tu(match.ParentDirName)"
                 }
             ],
             "fuzzy": true
@@ -946,16 +946,72 @@
             "fuzzy": true
         },
         {
-            "id": "rendering failed",
-            "message": "rendering failed",
-            "translation": "rendering failed",
+            "id": "Preview",
+            "message": "Preview",
+            "translation": "Preview",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Close preview",
-            "message": "Close preview",
-            "translation": "Close preview",
+            "id": "Original",
+            "message": "Original",
+            "translation": "Original",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Download PDF",
+            "message": "Download PDF",
+            "translation": "Download PDF",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview could not be generated.",
+            "message": "PDF preview could not be generated.",
+            "translation": "PDF preview could not be generated.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Retry PDF generation",
+            "message": "Retry PDF generation",
+            "translation": "Retry PDF generation",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Download",
+            "message": "Download",
+            "translation": "Download",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview is unavailable because Gotenberg is not configured.",
+            "message": "PDF preview is unavailable because Gotenberg is not configured.",
+            "translation": "PDF preview is unavailable because Gotenberg is not configured.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview is being generated. Please wait a moment; the page will refresh automatically.",
+            "message": "PDF preview is being generated. Please wait a moment; the page will refresh automatically.",
+            "translation": "PDF preview is being generated. Please wait a moment; the page will refresh automatically.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview is not available.",
+            "message": "PDF preview is not available.",
+            "translation": "PDF preview is not available.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "rendering failed",
+            "message": "rendering failed",
+            "translation": "rendering failed",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -967,10 +1023,16 @@
             "fuzzy": true
         },
         {
-            "id": "Download",
-            "message": "Download",
-            "translation": "Download",
-            "comment": "\u0026wx.IconButton{\n\t\t\t\t\tIcon: \"more_vert\",\n\t\t\t\t\tChildren: \u0026wx.Menu{\n\t\t\t\t\t\tItems: []*wx.MenuItem{\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\tLeadingIcon:          \"download\",\n\t\t\t\t\t\t\t\tLabel:                wx.T(\"Download\"),\n\t\t\t\t\t\t\t\tDownloadLinkURL:      route.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),\n\t\t\t\t\t\t\t\tDownloadLinkFilename: filex.Filename(ctx),\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t},",
+            "id": "Close preview",
+            "message": "Close preview",
+            "translation": "Close preview",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "version not found",
+            "message": "version not found",
+            "translation": "version not found",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1188,13 +1250,6 @@
             "id": "invalid version number",
             "message": "invalid version number",
             "translation": "invalid version number",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "version not found",
-            "message": "version not found",
-            "translation": "version not found",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1523,6 +1578,34 @@
             "fuzzy": true
         },
         {
+            "id": "PDF preview conversion is not configured",
+            "message": "PDF preview conversion is not configured",
+            "translation": "PDF preview conversion is not configured",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview is not available",
+            "message": "PDF preview is not available",
+            "translation": "PDF preview is not available",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview is not ready to retry",
+            "message": "PDF preview is not ready to retry",
+            "translation": "PDF preview is not ready to retry",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview generation queued.",
+            "message": "PDF preview generation queued.",
+            "translation": "PDF preview generation queued.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Document type deselected.",
             "message": "Document type deselected.",
             "translation": "Document type deselected.",
@@ -1533,6 +1616,13 @@
             "id": "Document type selected.",
             "message": "Document type selected.",
             "translation": "Document type selected.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Best match",
+            "message": "Best match",
+            "translation": "Best match",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2500,6 +2590,20 @@
             "fuzzy": true
         },
         {
+            "id": "cannot preview directories",
+            "message": "cannot preview directories",
+            "translation": "cannot preview directories",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "original source preview is only available for HTML files",
+            "message": "original source preview is only available for HTML files",
+            "translation": "original source preview is only available for HTML files",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Assign file",
             "message": "Assign file",
             "translation": "Assign file",
@@ -2955,7 +3059,7 @@
                     "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 1,
-                    "expr": "wx.Tu(userm.NameSecondLine())"
+                    "expr": "widget.Tu(userm.NameSecondLine())"
                 },
                 {
                     "id": "OwnershipText",
@@ -3161,7 +3265,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "wx.Tu(spacex.Name).String(ctx)"
+                    "expr": "widget.Tu(spacex.Name).String(ctx)"
                 },
                 {
                     "id": "Stringctx_1",
@@ -3169,7 +3273,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 2,
-                    "expr": "wx.T(\"active\").String(ctx)"
+                    "expr": "widget.T(\"active\").String(ctx)"
                 }
             ],
             "fuzzy": true
@@ -3593,13 +3697,6 @@
             "fuzzy": true
         },
         {
-            "id": "Preview",
-            "message": "Preview",
-            "translation": "Preview",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Upload is too large.",
             "message": "Upload is too large.",
             "translation": "Upload is too large.",
@@ -3659,6 +3756,189 @@
             "id": "Cannot decode url query.",
             "message": "Cannot decode url query.",
             "translation": "Cannot decode url query.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No backup codes were returned.",
+            "message": "No backup codes were returned.",
+            "translation": "No backup codes were returned.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes were regenerated.",
+            "message": "The backup codes were regenerated.",
+            "translation": "The backup codes were regenerated.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not regenerate backup codes.",
+            "message": "Could not regenerate backup codes.",
+            "translation": "Could not regenerate backup codes.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Close dialog",
+            "message": "Close dialog",
+            "translation": "Close dialog",
+            "comment": "PopoverTarget:       qq.ID,\nPopoverTargetAction: \"hide\",",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Close",
+            "message": "Close",
+            "translation": "Close",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Suggestion",
+            "message": "Suggestion",
+            "translation": "Suggestion",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "optional",
+            "message": "optional",
+            "translation": "optional",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "required",
+            "message": "required",
+            "translation": "required",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Open main menu",
+            "message": "Open main menu",
+            "translation": "Open main menu",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Give this passkey an optional name so you can recognize it later.",
+            "message": "Give this passkey an optional name so you can recognize it later.",
+            "translation": "Give this passkey an optional name so you can recognize it later.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "message": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "translation": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "message": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "translation": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey name (optional)",
+            "message": "Passkey name (optional)",
+            "translation": "Passkey name (optional)",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "message": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "translation": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "message": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "translation": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "SimpleDMS backup codes",
+            "message": "SimpleDMS backup codes",
+            "translation": "SimpleDMS backup codes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Generated",
+            "message": "Generated",
+            "translation": "Generated",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Keep these backup codes in a secure place.",
+            "message": "Keep these backup codes in a secure place.",
+            "translation": "Keep these backup codes in a secure place.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "These codes are shown only once.",
+            "message": "These codes are shown only once.",
+            "translation": "These codes are shown only once.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Codes",
+            "message": "Codes",
+            "translation": "Codes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Print dialog opened.",
+            "message": "Print dialog opened.",
+            "translation": "Print dialog opened.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes were copied to clipboard.",
+            "message": "The backup codes were copied to clipboard.",
+            "translation": "The backup codes were copied to clipboard.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not copy backup codes automatically.",
+            "message": "Could not copy backup codes automatically.",
+            "translation": "Could not copy backup codes automatically.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes were downloaded.",
+            "message": "The backup codes were downloaded.",
+            "translation": "The backup codes were downloaded.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Print codes",
+            "message": "Print codes",
+            "translation": "Print codes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Copy codes",
+            "message": "Copy codes",
+            "translation": "Copy codes",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4202,9 +4482,23 @@
             "fuzzy": true
         },
         {
+            "id": "Preview tab",
+            "message": "Preview tab",
+            "translation": "Preview tab",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Pro",
             "message": "Pro",
             "translation": "Pro",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Push url",
+            "message": "Push url",
+            "translation": "Push url",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4734,6 +5028,20 @@
             "fuzzy": true
         },
         {
+            "id": "New tenant registration",
+            "message": "New tenant registration",
+            "translation": "New tenant registration",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "This is an automated message, please do not reply.",
+            "message": "This is an automated message, please do not reply.",
+            "translation": "This is an automated message, please do not reply.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Welcome to SimpleDMS",
             "message": "Welcome to SimpleDMS",
             "translation": "Welcome to SimpleDMS",
@@ -4751,13 +5059,6 @@
             "id": "SimpleDMS password reset",
             "message": "SimpleDMS password reset",
             "translation": "SimpleDMS password reset",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "This is an automated message, please do not reply.",
-            "message": "This is an automated message, please do not reply.",
-            "translation": "This is an automated message, please do not reply.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6105,34 +6406,6 @@
             "fuzzy": true
         },
         {
-            "id": "Close",
-            "message": "Close",
-            "translation": "Close",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Open main menu",
-            "message": "Open main menu",
-            "translation": "Open main menu",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Sign out",
-            "message": "Sign out",
-            "translation": "Sign out",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "About SimpleDMS",
-            "message": "About SimpleDMS",
-            "translation": "About SimpleDMS",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Misc",
             "message": "Misc",
             "translation": "Misc",
@@ -6147,13 +6420,6 @@
             "fuzzy": true
         },
         {
-            "id": "Spaces by Organization",
-            "message": "Spaces by Organization",
-            "translation": "Spaces by Organization",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Organizations",
             "message": "Organizations",
             "translation": "Organizations",
@@ -6161,171 +6427,16 @@
             "fuzzy": true
         },
         {
-            "id": "No backup codes were returned.",
-            "message": "No backup codes were returned.",
-            "translation": "No backup codes were returned.",
+            "id": "Sign out",
+            "message": "Sign out",
+            "translation": "Sign out",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "The backup codes were regenerated.",
-            "message": "The backup codes were regenerated.",
-            "translation": "The backup codes were regenerated.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not regenerate backup codes.",
-            "message": "Could not regenerate backup codes.",
-            "translation": "Could not regenerate backup codes.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Close dialog",
-            "message": "Close dialog",
-            "translation": "Close dialog",
-            "comment": "PopoverTarget:       qq.ID,\nPopoverTargetAction: \"hide\",",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Suggestion",
-            "message": "Suggestion",
-            "translation": "Suggestion",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "optional",
-            "message": "optional",
-            "translation": "optional",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "required",
-            "message": "required",
-            "translation": "required",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Give this passkey an optional name so you can recognize it later.",
-            "message": "Give this passkey an optional name so you can recognize it later.",
-            "translation": "Give this passkey an optional name so you can recognize it later.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "After registration, printable backup codes will be shown once. Save them before closing.",
-            "message": "After registration, printable backup codes will be shown once. Save them before closing.",
-            "translation": "After registration, printable backup codes will be shown once. Save them before closing.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
-            "message": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
-            "translation": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Passkey name (optional)",
-            "message": "Passkey name (optional)",
-            "translation": "Passkey name (optional)",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
-            "message": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
-            "translation": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "If you lose these codes and your passkey, account recovery may no longer be possible.",
-            "message": "If you lose these codes and your passkey, account recovery may no longer be possible.",
-            "translation": "If you lose these codes and your passkey, account recovery may no longer be possible.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "SimpleDMS backup codes",
-            "message": "SimpleDMS backup codes",
-            "translation": "SimpleDMS backup codes",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Generated",
-            "message": "Generated",
-            "translation": "Generated",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Keep these backup codes in a secure place.",
-            "message": "Keep these backup codes in a secure place.",
-            "translation": "Keep these backup codes in a secure place.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "These codes are shown only once.",
-            "message": "These codes are shown only once.",
-            "translation": "These codes are shown only once.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Codes",
-            "message": "Codes",
-            "translation": "Codes",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Print dialog opened.",
-            "message": "Print dialog opened.",
-            "translation": "Print dialog opened.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "The backup codes were copied to clipboard.",
-            "message": "The backup codes were copied to clipboard.",
-            "translation": "The backup codes were copied to clipboard.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not copy backup codes automatically.",
-            "message": "Could not copy backup codes automatically.",
-            "translation": "Could not copy backup codes automatically.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "The backup codes were downloaded.",
-            "message": "The backup codes were downloaded.",
-            "translation": "The backup codes were downloaded.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Print codes",
-            "message": "Print codes",
-            "translation": "Print codes",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Copy codes",
-            "message": "Copy codes",
-            "translation": "Copy codes",
+            "id": "About SimpleDMS",
+            "message": "About SimpleDMS",
+            "translation": "About SimpleDMS",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

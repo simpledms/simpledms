@@ -70,11 +70,15 @@ func (qq *InboxPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 	// TODO necessary?
 	rw.Header().Set("HX-Retarget", "#innerContent")
 	rw.Header().Set("HX-Reswap", "innerHTML")
+	view, err := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, selectedFileID)
+	if err != nil {
+		return err
+	}
 
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		qq.actions.InboxPage.WidgetHandler(rw, req, ctx, selectedFileID),
+		view,
 	)
 }
 
@@ -85,7 +89,7 @@ func (qq *InboxPage) WidgetHandler(
 	req *httpx.Request,
 	ctx ctxx.Context,
 	selectedFileID string,
-) *widget.ListDetailLayout {
+) (*widget.ListDetailLayout, error) {
 	// TODO handle selection
 	// TODO use in MoveFileCmd / AssignFileCmd, initial render
 
@@ -123,7 +127,11 @@ func (qq *InboxPage) WidgetHandler(
 	return qq.Widget(ctx, state, selectedFileID)
 }
 
-func (qq *InboxPage) Widget(ctx ctxx.Context, state *InboxPageState, selectedFileID string) *widget.ListDetailLayout {
+func (qq *InboxPage) Widget(
+	ctx ctxx.Context,
+	state *InboxPageState,
+	selectedFileID string,
+) (*widget.ListDetailLayout, error) {
 	listDetailLayout := qq.actions.ListFilesPartial.Widget(
 		ctx,
 		state,
@@ -132,10 +140,14 @@ func (qq *InboxPage) Widget(ctx ctxx.Context, state *InboxPageState, selectedFil
 
 	if selectedFileID != "" {
 		filex := qq.infra.FileRepo.GetX(ctx, selectedFileID)
-		listDetailLayout.Detail = qq.actions.FilePartial.Widget(ctx, state, filex)
+		detail, err := qq.actions.FilePartial.Widget(ctx, state, filex)
+		if err != nil {
+			return nil, err
+		}
+		listDetailLayout.Detail = detail
 	}
 
-	return listDetailLayout
+	return listDetailLayout, nil
 }
 
 func (qq *InboxPage) processTemporaryFiles(rw httpx.ResponseWriter, ctx ctxx.Context, state *InboxPageState) error {

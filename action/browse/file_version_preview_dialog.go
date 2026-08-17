@@ -10,8 +10,6 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
-	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
-	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -20,6 +18,7 @@ import (
 type FileVersionPreviewDialogData struct {
 	FileID        string
 	VersionNumber string
+	PreviewTab    string
 }
 
 type FileVersionPreviewDialog struct {
@@ -37,10 +36,15 @@ func NewFileVersionPreviewDialog(infra *common.Infra, actions *Actions) *FileVer
 	}
 }
 
-func (qq *FileVersionPreviewDialog) Data(fileID, versionNumber string) *FileVersionPreviewDialogData {
+func (qq *FileVersionPreviewDialog) Data(fileID, versionNumber string, previewTab ...string) *FileVersionPreviewDialogData {
+	activeTab := ""
+	if len(previewTab) > 0 {
+		activeTab = previewTab[0]
+	}
 	return &FileVersionPreviewDialogData{
 		FileID:        fileID,
 		VersionNumber: versionNumber,
+		PreviewTab:    activeTab,
 	}
 }
 
@@ -72,38 +76,47 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 	}
 
 	storedFile := versionx.Edges.StoredFile
-	versionm := storedfilemodel.NewStoredFile(storedFile)
-	filename := filex.Data.Name
-	if versionm.Data.Filename != "" {
-		filename = versionm.Data.Filename
+	preview, hasPreviewTabs, err := qq.actions.FilePreviewPartial.PreviewWidget(
+		ctx,
+		filex,
+		storedFile,
+		data.VersionNumber,
+		"",
+		data.PreviewTab,
+	)
+	if err != nil {
+		return err
 	}
-	downloadURL := route.DownloadWithVersion(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String(), data.VersionNumber)
+	var headerActions []widget.IWidget
+	if !hasPreviewTabs {
+		filename := storedFile.Filename
+		if filename == "" {
+			filename = filex.Data.Name
+		}
+		headerActions = []widget.IWidget{
+			&widget.Link{
+				Href:      qq.actions.FilePreviewPartial.originalDownloadURL(ctx, filex, data.VersionNumber),
+				IsNoColor: true,
+				Filename:  filename,
+				Child: &widget.Button{
+					Icon:      widget.NewIcon("download"),
+					Label:     widget.T("Download"),
+					StyleType: widget.ButtonStyleTypeText,
+				},
+			},
+		}
+	}
 
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
 		&widget.Dialog{
-			Layout:   widget.DialogLayoutStable,
-			Width:    widget.DialogWidthWide,
-			Headline: widget.T("Version preview"),
-			HeaderActions: []widget.IWidget{
-				&widget.Link{
-					Href:      downloadURL,
-					IsNoColor: true,
-					Filename:  filename,
-					Child: &widget.Button{
-						Icon:      widget.NewIcon("download"),
-						Label:     widget.T("Download"),
-						StyleType: widget.ButtonStyleTypeText,
-					},
-				},
-			},
-			IsOpenOnLoad: true,
-			Child: &widget.FilePreview{
-				FileURL:  route.DownloadInlineWithVersion(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String(), data.VersionNumber),
-				Filename: filename,
-				MimeType: versionm.Data.MimeType,
-			},
+			Layout:        widget.DialogLayoutStable,
+			Width:         widget.DialogWidthWide,
+			Headline:      widget.T("Version preview"),
+			HeaderActions: headerActions,
+			IsOpenOnLoad:  true,
+			Child:         preview,
 		},
 	)
 }

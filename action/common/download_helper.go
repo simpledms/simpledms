@@ -34,12 +34,6 @@ func StreamDownload(
 	}
 	defer f.Close()
 
-	_, err = io.Copy(rw, f)
-	if err != nil {
-		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "")
-	}
-
 	if req.URL.Query().Get("inline") == "1" {
 		rw.Header().Set("Content-Disposition", "inline")
 	} else {
@@ -54,5 +48,11 @@ func StreamDownload(
 	rw.Header().Set("Content-Type", mimeType)
 
 	rw.WriteHeader(http.StatusOK)
+	_, err = io.Copy(rw, f)
+	if err != nil {
+		log.Println(err)
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "")
+	}
+
 	return nil
 }

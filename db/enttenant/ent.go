@@ -18,6 +18,8 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
+
+	enttenantpreviewconversion "github.com/simpledms/simpledms/db/enttenant/previewconversion"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/space"
@@ -86,20 +88,21 @@ var (
 func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			attribute.Table:              attribute.ValidColumn,
-			documenttype.Table:           documenttype.ValidColumn,
-			file.Table:                   file.ValidColumn,
-			filepropertyassignment.Table: filepropertyassignment.ValidColumn,
-			filesearch.Table:             filesearch.ValidColumn,
-			fileversion.Table:            fileversion.ValidColumn,
-			property.Table:               property.ValidColumn,
-			resolvedtagassignment.Table:  resolvedtagassignment.ValidColumn,
-			space.Table:                  space.ValidColumn,
-			spaceuserassignment.Table:    spaceuserassignment.ValidColumn,
-			storedfile.Table:             storedfile.ValidColumn,
-			tag.Table:                    tag.ValidColumn,
-			tagassignment.Table:          tagassignment.ValidColumn,
-			user.Table:                   user.ValidColumn,
+			attribute.Table:                  attribute.ValidColumn,
+			documenttype.Table:               documenttype.ValidColumn,
+			file.Table:                       file.ValidColumn,
+			filepropertyassignment.Table:     filepropertyassignment.ValidColumn,
+			filesearch.Table:                 filesearch.ValidColumn,
+			fileversion.Table:                fileversion.ValidColumn,
+			enttenantpreviewconversion.Table: enttenantpreviewconversion.ValidColumn,
+			property.Table:                   property.ValidColumn,
+			resolvedtagassignment.Table:      resolvedtagassignment.ValidColumn,
+			space.Table:                      space.ValidColumn,
+			spaceuserassignment.Table:        spaceuserassignment.ValidColumn,
+			storedfile.Table:                 storedfile.ValidColumn,
+			tag.Table:                        tag.ValidColumn,
+			tagassignment.Table:              tagassignment.ValidColumn,
+			user.Table:                       user.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

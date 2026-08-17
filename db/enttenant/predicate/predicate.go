@@ -24,6 +24,9 @@ type FileSearch func(*sql.Selector)
 // FileVersion is the predicate function for fileversion builders.
 type FileVersion func(*sql.Selector)
 
+// PreviewConversion is the predicate function for enttenantpreviewconversion builders.
+type PreviewConversion func(*sql.Selector)
+
 // Property is the predicate function for property builders.
 type Property func(*sql.Selector)
 

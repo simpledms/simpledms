@@ -20,6 +20,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
+	enttenantpreviewconversion "github.com/simpledms/simpledms/db/enttenant/previewconversion"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
@@ -48,6 +49,8 @@ type Client struct {
 	FileSearch *FileSearchClient
 	// FileVersion is the client for interacting with the FileVersion builders.
 	FileVersion *FileVersionClient
+	// PreviewConversion is the client for interacting with the PreviewConversion builders.
+	PreviewConversion *PreviewConversionClient
 	// Property is the client for interacting with the Property builders.
 	Property *PropertyClient
 	// ResolvedTagAssignment is the client for interacting with the ResolvedTagAssignment builders.
@@ -81,6 +84,7 @@ func (c *Client) init() {
 	c.FilePropertyAssignment = NewFilePropertyAssignmentClient(c.config)
 	c.FileSearch = NewFileSearchClient(c.config)
 	c.FileVersion = NewFileVersionClient(c.config)
+	c.PreviewConversion = NewPreviewConversionClient(c.config)
 	c.Property = NewPropertyClient(c.config)
 	c.ResolvedTagAssignment = NewResolvedTagAssignmentClient(c.config)
 	c.Space = NewSpaceClient(c.config)
@@ -187,6 +191,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		FilePropertyAssignment: NewFilePropertyAssignmentClient(cfg),
 		FileSearch:             NewFileSearchClient(cfg),
 		FileVersion:            NewFileVersionClient(cfg),
+		PreviewConversion:      NewPreviewConversionClient(cfg),
 		Property:               NewPropertyClient(cfg),
 		ResolvedTagAssignment:  NewResolvedTagAssignmentClient(cfg),
 		Space:                  NewSpaceClient(cfg),
@@ -220,6 +225,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		FilePropertyAssignment: NewFilePropertyAssignmentClient(cfg),
 		FileSearch:             NewFileSearchClient(cfg),
 		FileVersion:            NewFileVersionClient(cfg),
+		PreviewConversion:      NewPreviewConversionClient(cfg),
 		Property:               NewPropertyClient(cfg),
 		ResolvedTagAssignment:  NewResolvedTagAssignmentClient(cfg),
 		Space:                  NewSpaceClient(cfg),
@@ -258,8 +264,8 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Attribute, c.DocumentType, c.File, c.FilePropertyAssignment, c.FileVersion,
-		c.Property, c.Space, c.SpaceUserAssignment, c.StoredFile, c.Tag,
-		c.TagAssignment, c.User,
+		c.PreviewConversion, c.Property, c.Space, c.SpaceUserAssignment, c.StoredFile,
+		c.Tag, c.TagAssignment, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -270,8 +276,8 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Attribute, c.DocumentType, c.File, c.FilePropertyAssignment, c.FileSearch,
-		c.FileVersion, c.Property, c.ResolvedTagAssignment, c.Space,
-		c.SpaceUserAssignment, c.StoredFile, c.Tag, c.TagAssignment, c.User,
+		c.FileVersion, c.PreviewConversion, c.Property, c.ResolvedTagAssignment,
+		c.Space, c.SpaceUserAssignment, c.StoredFile, c.Tag, c.TagAssignment, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -290,6 +296,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.FilePropertyAssignment.mutate(ctx, m)
 	case *FileVersionMutation:
 		return c.FileVersion.mutate(ctx, m)
+	case *PreviewConversionMutation:
+		return c.PreviewConversion.mutate(ctx, m)
 	case *PropertyMutation:
 		return c.Property.mutate(ctx, m)
 	case *SpaceMutation:
@@ -1390,6 +1398,204 @@ func (c *FileVersionClient) mutate(ctx context.Context, m *FileVersionMutation) 
 		return (&FileVersionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("enttenant: unknown FileVersion mutation op: %q", m.Op())
+	}
+}
+
+// PreviewConversionClient is a client for the PreviewConversion schema.
+type PreviewConversionClient struct {
+	config
+}
+
+// NewPreviewConversionClient returns a client for the PreviewConversion from the given config.
+func NewPreviewConversionClient(c config) *PreviewConversionClient {
+	return &PreviewConversionClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `enttenantpreviewconversion.Hooks(f(g(h())))`.
+func (c *PreviewConversionClient) Use(hooks ...Hook) {
+	c.hooks.PreviewConversion = append(c.hooks.PreviewConversion, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `enttenantpreviewconversion.Intercept(f(g(h())))`.
+func (c *PreviewConversionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.PreviewConversion = append(c.inters.PreviewConversion, interceptors...)
+}
+
+// Create returns a builder for creating a PreviewConversion entity.
+func (c *PreviewConversionClient) Create() *PreviewConversionCreate {
+	mutation := newPreviewConversionMutation(c.config, OpCreate)
+	return &PreviewConversionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of PreviewConversion entities.
+func (c *PreviewConversionClient) CreateBulk(builders ...*PreviewConversionCreate) *PreviewConversionCreateBulk {
+	return &PreviewConversionCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PreviewConversionClient) MapCreateBulk(slice any, setFunc func(*PreviewConversionCreate, int)) *PreviewConversionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PreviewConversionCreateBulk{err: fmt.Errorf("calling to PreviewConversionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PreviewConversionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PreviewConversionCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for PreviewConversion.
+func (c *PreviewConversionClient) Update() *PreviewConversionUpdate {
+	mutation := newPreviewConversionMutation(c.config, OpUpdate)
+	return &PreviewConversionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PreviewConversionClient) UpdateOne(_m *PreviewConversion) *PreviewConversionUpdateOne {
+	mutation := newPreviewConversionMutation(c.config, OpUpdateOne, withPreviewConversion(_m))
+	return &PreviewConversionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PreviewConversionClient) UpdateOneID(id int) *PreviewConversionUpdateOne {
+	mutation := newPreviewConversionMutation(c.config, OpUpdateOne, withPreviewConversionID(id))
+	return &PreviewConversionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for PreviewConversion.
+func (c *PreviewConversionClient) Delete() *PreviewConversionDelete {
+	mutation := newPreviewConversionMutation(c.config, OpDelete)
+	return &PreviewConversionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PreviewConversionClient) DeleteOne(_m *PreviewConversion) *PreviewConversionDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PreviewConversionClient) DeleteOneID(id int) *PreviewConversionDeleteOne {
+	builder := c.Delete().Where(enttenantpreviewconversion.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PreviewConversionDeleteOne{builder}
+}
+
+// Query returns a query builder for PreviewConversion.
+func (c *PreviewConversionClient) Query() *PreviewConversionQuery {
+	return &PreviewConversionQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePreviewConversion},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a PreviewConversion entity by its id.
+func (c *PreviewConversionClient) Get(ctx context.Context, id int) (*PreviewConversion, error) {
+	return c.Query().Where(enttenantpreviewconversion.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PreviewConversionClient) GetX(ctx context.Context, id int) *PreviewConversion {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryCreator queries the creator edge of a PreviewConversion.
+func (c *PreviewConversionClient) QueryCreator(_m *PreviewConversion) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(enttenantpreviewconversion.Table, enttenantpreviewconversion.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, enttenantpreviewconversion.CreatorTable, enttenantpreviewconversion.CreatorColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdater queries the updater edge of a PreviewConversion.
+func (c *PreviewConversionClient) QueryUpdater(_m *PreviewConversion) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(enttenantpreviewconversion.Table, enttenantpreviewconversion.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, enttenantpreviewconversion.UpdaterTable, enttenantpreviewconversion.UpdaterColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySource queries the source edge of a PreviewConversion.
+func (c *PreviewConversionClient) QuerySource(_m *PreviewConversion) *StoredFileQuery {
+	query := (&StoredFileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(enttenantpreviewconversion.Table, enttenantpreviewconversion.FieldID, id),
+			sqlgraph.To(storedfile.Table, storedfile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, enttenantpreviewconversion.SourceTable, enttenantpreviewconversion.SourceColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPreview queries the preview edge of a PreviewConversion.
+func (c *PreviewConversionClient) QueryPreview(_m *PreviewConversion) *StoredFileQuery {
+	query := (&StoredFileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(enttenantpreviewconversion.Table, enttenantpreviewconversion.FieldID, id),
+			sqlgraph.To(storedfile.Table, storedfile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, enttenantpreviewconversion.PreviewTable, enttenantpreviewconversion.PreviewColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PreviewConversionClient) Hooks() []Hook {
+	hooks := c.hooks.PreviewConversion
+	return append(hooks[:len(hooks):len(hooks)], enttenantpreviewconversion.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *PreviewConversionClient) Interceptors() []Interceptor {
+	return c.inters.PreviewConversion
+}
+
+func (c *PreviewConversionClient) mutate(ctx context.Context, m *PreviewConversionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PreviewConversionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PreviewConversionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PreviewConversionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PreviewConversionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("enttenant: unknown PreviewConversion mutation op: %q", m.Op())
 	}
 }
 
@@ -2847,13 +3053,14 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Attribute, DocumentType, File, FilePropertyAssignment, FileVersion, Property,
-		Space, SpaceUserAssignment, StoredFile, Tag, TagAssignment, User []ent.Hook
+		Attribute, DocumentType, File, FilePropertyAssignment, FileVersion,
+		PreviewConversion, Property, Space, SpaceUserAssignment, StoredFile, Tag,
+		TagAssignment, User []ent.Hook
 	}
 	inters struct {
 		Attribute, DocumentType, File, FilePropertyAssignment, FileSearch, FileVersion,
-		Property, ResolvedTagAssignment, Space, SpaceUserAssignment, StoredFile, Tag,
-		TagAssignment, User []ent.Interceptor
+		PreviewConversion, Property, ResolvedTagAssignment, Space, SpaceUserAssignment,
+		StoredFile, Tag, TagAssignment, User []ent.Interceptor
 	}
 )
 

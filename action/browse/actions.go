@@ -27,6 +27,8 @@ type Actions struct {
 	// SelectDirPartial *SelectDirActions `actions:"select-dir"`
 
 	FilePreviewPartial          *FilePreviewPartial
+	FilePreviewStatusPartial    *FilePreviewStatusPartial
+	RetryPDFPreviewCmd          *RetryPDFPreviewCmd
 	FileDetailsSideSheetPartial *FileDetailsSideSheetPartial
 	FileTabsPartial             *FileTabsPartial
 	FileSheetPartial            *FileSheetPartial
@@ -95,6 +97,8 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		// },
 
 		FilePreviewPartial:          NewFilePreviewPartial(infra, actions),
+		FilePreviewStatusPartial:    NewFilePreviewStatusPartial(infra, actions),
+		RetryPDFPreviewCmd:          NewRetryPDFPreviewCmd(infra, actions),
 		FileDetailsSideSheetPartial: NewFileDetailsSideSheetPartial(infra, actions),
 		FileTabsPartial:             NewFileTabsPartial(infra, actions),
 		FileSheetPartial:            NewFileSheetPartial(infra, actions),

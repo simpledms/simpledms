@@ -10,6 +10,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
+	enttenantpreviewconversion "github.com/simpledms/simpledms/db/enttenant/previewconversion"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/space"
@@ -27,7 +28,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 14)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 15)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   attribute.Table,
@@ -159,6 +160,31 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[6] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   enttenantpreviewconversion.Table,
+			Columns: enttenantpreviewconversion.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeInt,
+				Column: enttenantpreviewconversion.FieldID,
+			},
+		},
+		Type: "PreviewConversion",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			enttenantpreviewconversion.FieldCreatedAt:           {Type: field.TypeTime, Column: enttenantpreviewconversion.FieldCreatedAt},
+			enttenantpreviewconversion.FieldCreatedBy:           {Type: field.TypeInt64, Column: enttenantpreviewconversion.FieldCreatedBy},
+			enttenantpreviewconversion.FieldUpdatedAt:           {Type: field.TypeTime, Column: enttenantpreviewconversion.FieldUpdatedAt},
+			enttenantpreviewconversion.FieldUpdatedBy:           {Type: field.TypeInt64, Column: enttenantpreviewconversion.FieldUpdatedBy},
+			enttenantpreviewconversion.FieldSourceStoredFileID:  {Type: field.TypeInt64, Column: enttenantpreviewconversion.FieldSourceStoredFileID},
+			enttenantpreviewconversion.FieldPreviewStoredFileID: {Type: field.TypeInt64, Column: enttenantpreviewconversion.FieldPreviewStoredFileID},
+			enttenantpreviewconversion.FieldStatus:              {Type: field.TypeEnum, Column: enttenantpreviewconversion.FieldStatus},
+			enttenantpreviewconversion.FieldRetryCount:          {Type: field.TypeInt, Column: enttenantpreviewconversion.FieldRetryCount},
+			enttenantpreviewconversion.FieldLastAttemptedAt:     {Type: field.TypeTime, Column: enttenantpreviewconversion.FieldLastAttemptedAt},
+			enttenantpreviewconversion.FieldNextAttemptAt:       {Type: field.TypeTime, Column: enttenantpreviewconversion.FieldNextAttemptAt},
+			enttenantpreviewconversion.FieldProcessingStartedAt: {Type: field.TypeTime, Column: enttenantpreviewconversion.FieldProcessingStartedAt},
+			enttenantpreviewconversion.FieldFailureCategory:     {Type: field.TypeString, Column: enttenantpreviewconversion.FieldFailureCategory},
+		},
+	}
+	graph.Nodes[7] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   property.Table,
 			Columns: property.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -174,7 +200,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			property.FieldUnit:    {Type: field.TypeString, Column: property.FieldUnit},
 		},
 	}
-	graph.Nodes[7] = &sqlgraph.Node{
+	graph.Nodes[8] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:       resolvedtagassignment.Table,
 			Columns:     resolvedtagassignment.Columns,
@@ -187,7 +213,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			resolvedtagassignment.FieldSpaceID: {Type: field.TypeInt64, Column: resolvedtagassignment.FieldSpaceID},
 		},
 	}
-	graph.Nodes[8] = &sqlgraph.Node{
+	graph.Nodes[9] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   space.Table,
 			Columns: space.Columns,
@@ -207,7 +233,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			space.FieldIsFolderMode: {Type: field.TypeBool, Column: space.FieldIsFolderMode},
 		},
 	}
-	graph.Nodes[9] = &sqlgraph.Node{
+	graph.Nodes[10] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   spaceuserassignment.Table,
 			Columns: spaceuserassignment.Columns,
@@ -228,7 +254,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			spaceuserassignment.FieldIsDefault: {Type: field.TypeBool, Column: spaceuserassignment.FieldIsDefault},
 		},
 	}
-	graph.Nodes[10] = &sqlgraph.Node{
+	graph.Nodes[11] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   storedfile.Table,
 			Columns: storedfile.Columns,
@@ -262,7 +288,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			storedfile.FieldDeletedTemporaryFileAt:     {Type: field.TypeTime, Column: storedfile.FieldDeletedTemporaryFileAt},
 		},
 	}
-	graph.Nodes[11] = &sqlgraph.Node{
+	graph.Nodes[12] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tag.Table,
 			Columns: tag.Columns,
@@ -281,7 +307,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tag.FieldGroupID: {Type: field.TypeInt64, Column: tag.FieldGroupID},
 		},
 	}
-	graph.Nodes[12] = &sqlgraph.Node{
+	graph.Nodes[13] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tagassignment.Table,
 			Columns: tagassignment.Columns,
@@ -297,7 +323,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tagassignment.FieldTagID:   {Type: field.TypeInt64, Column: tagassignment.FieldTagID},
 		},
 	}
-	graph.Nodes[13] = &sqlgraph.Node{
+	graph.Nodes[14] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -610,6 +636,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"FileVersion",
+		"StoredFile",
+	)
+	graph.MustAddE(
+		"creator",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   enttenantpreviewconversion.CreatorTable,
+			Columns: []string{enttenantpreviewconversion.CreatorColumn},
+			Bidi:    false,
+		},
+		"PreviewConversion",
+		"User",
+	)
+	graph.MustAddE(
+		"updater",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   enttenantpreviewconversion.UpdaterTable,
+			Columns: []string{enttenantpreviewconversion.UpdaterColumn},
+			Bidi:    false,
+		},
+		"PreviewConversion",
+		"User",
+	)
+	graph.MustAddE(
+		"source",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   enttenantpreviewconversion.SourceTable,
+			Columns: []string{enttenantpreviewconversion.SourceColumn},
+			Bidi:    false,
+		},
+		"PreviewConversion",
+		"StoredFile",
+	)
+	graph.MustAddE(
+		"preview",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   enttenantpreviewconversion.PreviewTable,
+			Columns: []string{enttenantpreviewconversion.PreviewColumn},
+			Bidi:    false,
+		},
+		"PreviewConversion",
 		"StoredFile",
 	)
 	graph.MustAddE(
@@ -1813,6 +1887,162 @@ func (f *FileVersionFilter) WhereHasStoredFileWith(preds ...predicate.StoredFile
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *PreviewConversionQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the PreviewConversionQuery builder.
+func (_q *PreviewConversionQuery) Filter() *PreviewConversionFilter {
+	return &PreviewConversionFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *PreviewConversionMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the PreviewConversionMutation builder.
+func (m *PreviewConversionMutation) Filter() *PreviewConversionFilter {
+	return &PreviewConversionFilter{config: m.config, predicateAdder: m}
+}
+
+// PreviewConversionFilter provides a generic filtering capability at runtime for PreviewConversionQuery.
+type PreviewConversionFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *PreviewConversionFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql int predicate on the id field.
+func (f *PreviewConversionFilter) WhereID(p entql.IntP) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *PreviewConversionFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldCreatedAt))
+}
+
+// WhereCreatedBy applies the entql int64 predicate on the created_by field.
+func (f *PreviewConversionFilter) WhereCreatedBy(p entql.Int64P) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldCreatedBy))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *PreviewConversionFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldUpdatedAt))
+}
+
+// WhereUpdatedBy applies the entql int64 predicate on the updated_by field.
+func (f *PreviewConversionFilter) WhereUpdatedBy(p entql.Int64P) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldUpdatedBy))
+}
+
+// WhereSourceStoredFileID applies the entql int64 predicate on the source_stored_file_id field.
+func (f *PreviewConversionFilter) WhereSourceStoredFileID(p entql.Int64P) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldSourceStoredFileID))
+}
+
+// WherePreviewStoredFileID applies the entql int64 predicate on the preview_stored_file_id field.
+func (f *PreviewConversionFilter) WherePreviewStoredFileID(p entql.Int64P) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldPreviewStoredFileID))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *PreviewConversionFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldStatus))
+}
+
+// WhereRetryCount applies the entql int predicate on the retry_count field.
+func (f *PreviewConversionFilter) WhereRetryCount(p entql.IntP) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldRetryCount))
+}
+
+// WhereLastAttemptedAt applies the entql time.Time predicate on the last_attempted_at field.
+func (f *PreviewConversionFilter) WhereLastAttemptedAt(p entql.TimeP) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldLastAttemptedAt))
+}
+
+// WhereNextAttemptAt applies the entql time.Time predicate on the next_attempt_at field.
+func (f *PreviewConversionFilter) WhereNextAttemptAt(p entql.TimeP) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldNextAttemptAt))
+}
+
+// WhereProcessingStartedAt applies the entql time.Time predicate on the processing_started_at field.
+func (f *PreviewConversionFilter) WhereProcessingStartedAt(p entql.TimeP) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldProcessingStartedAt))
+}
+
+// WhereFailureCategory applies the entql string predicate on the failure_category field.
+func (f *PreviewConversionFilter) WhereFailureCategory(p entql.StringP) {
+	f.Where(p.Field(enttenantpreviewconversion.FieldFailureCategory))
+}
+
+// WhereHasCreator applies a predicate to check if query has an edge creator.
+func (f *PreviewConversionFilter) WhereHasCreator() {
+	f.Where(entql.HasEdge("creator"))
+}
+
+// WhereHasCreatorWith applies a predicate to check if query has an edge creator with a given conditions (other predicates).
+func (f *PreviewConversionFilter) WhereHasCreatorWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("creator", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdater applies a predicate to check if query has an edge updater.
+func (f *PreviewConversionFilter) WhereHasUpdater() {
+	f.Where(entql.HasEdge("updater"))
+}
+
+// WhereHasUpdaterWith applies a predicate to check if query has an edge updater with a given conditions (other predicates).
+func (f *PreviewConversionFilter) WhereHasUpdaterWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updater", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSource applies a predicate to check if query has an edge source.
+func (f *PreviewConversionFilter) WhereHasSource() {
+	f.Where(entql.HasEdge("source"))
+}
+
+// WhereHasSourceWith applies a predicate to check if query has an edge source with a given conditions (other predicates).
+func (f *PreviewConversionFilter) WhereHasSourceWith(preds ...predicate.StoredFile) {
+	f.Where(entql.HasEdgeWith("source", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPreview applies a predicate to check if query has an edge preview.
+func (f *PreviewConversionFilter) WhereHasPreview() {
+	f.Where(entql.HasEdge("preview"))
+}
+
+// WhereHasPreviewWith applies a predicate to check if query has an edge preview with a given conditions (other predicates).
+func (f *PreviewConversionFilter) WhereHasPreviewWith(preds ...predicate.StoredFile) {
+	f.Where(entql.HasEdgeWith("preview", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *PropertyQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -1841,7 +2071,7 @@ type PropertyFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PropertyFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1933,7 +2163,7 @@ type ResolvedTagAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ResolvedTagAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1983,7 +2213,7 @@ type SpaceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SpaceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[9].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2156,7 +2386,7 @@ type SpaceUserAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SpaceUserAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[9].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[10].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2292,7 +2522,7 @@ type StoredFileFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *StoredFileFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[10].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[11].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2493,7 +2723,7 @@ type TagFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TagFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[11].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[12].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2661,7 +2891,7 @@ type TagAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TagAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[12].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[13].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2758,7 +2988,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[13].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[14].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

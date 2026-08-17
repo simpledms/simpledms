@@ -69,6 +69,18 @@ func (f FileVersionFunc) Mutate(ctx context.Context, m enttenant.Mutation) (entt
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *enttenant.FileVersionMutation", m)
 }
 
+// The PreviewConversionFunc type is an adapter to allow the use of ordinary
+// function as PreviewConversion mutator.
+type PreviewConversionFunc func(context.Context, *enttenant.PreviewConversionMutation) (enttenant.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PreviewConversionFunc) Mutate(ctx context.Context, m enttenant.Mutation) (enttenant.Value, error) {
+	if mv, ok := m.(*enttenant.PreviewConversionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *enttenant.PreviewConversionMutation", m)
+}
+
 // The PropertyFunc type is an adapter to allow the use of ordinary
 // function as Property mutator.
 type PropertyFunc func(context.Context, *enttenant.PropertyMutation) (enttenant.Value, error)

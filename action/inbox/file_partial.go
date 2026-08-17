@@ -24,7 +24,8 @@ type FilePartial struct {
 
 type FilePartialState struct {
 	// ListFilesPartialState
-	ActiveTab string `url:"tab,omitempty"`
+	ActiveTab  string `url:"tab,omitempty"`
+	PreviewTab string `url:"preview_tab,omitempty"`
 }
 
 func NewFilePartial(infra *common.Infra, actions *Actions) *FilePartial {
@@ -57,14 +58,24 @@ func (qq *FilePartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 
+	view, err := qq.Widget(ctx, state, filex)
+	if err != nil {
+		return err
+	}
+
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		qq.Widget(ctx, state, filex),
+		view,
 	)
 }
 
-func (qq *FilePartial) WidgetHandler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context, filex *filemodel.File) *widget.DetailsWithSheet {
+func (qq *FilePartial) WidgetHandler(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
+	filex *filemodel.File,
+) (*widget.DetailsWithSheet, error) {
 	state := autil.StateX[InboxPageState](rw, req)
 	return qq.Widget(ctx, state, filex)
 }
@@ -73,43 +84,57 @@ func (qq *FilePartial) Widget(
 	ctx ctxx.Context,
 	state *InboxPageState,
 	filex *filemodel.File,
-) *widget.DetailsWithSheet {
+) (*widget.DetailsWithSheet, error) {
 	fileTabsPartial := qq.actions.FileTabsPartial.Widget(
 		ctx,
 		state,
 		filex.Data.PublicID.String(),
 		filex,
 	)
+	preview, hasPreviewTabs, err := qq.actions.Browse.FilePreviewPartial.PreviewWidget(
+		ctx,
+		filex,
+		filex.CurrentVersion(ctx).Data,
+		"",
+		"",
+		state.PreviewTab,
+	)
+	if err != nil {
+		return nil, err
+	}
+	appBarActions := []widget.IWidget{
+		&widget.IconButton{
+			// TODO other icon if already open or hide...
+			Icon:    "description", // right_panel_open, clarify, tune, description, info, ...?
+			Tooltip: widget.T("Show details"),
+			HTMXAttrs: widget.HTMXAttrs{
+				DialogID: qq.SideSheetID(),
+			},
+		},
+	}
+	if !hasPreviewTabs {
+		appBarActions = append(appBarActions, &widget.Link{
+			Href: route2.Download(
+				ctx.TenantCtx().TenantID,
+				ctx.SpaceCtx().SpaceID,
+				filex.Data.PublicID.String(),
+			),
+			IsNoColor: true,
+			Filename:  filex.Filename(ctx),
+			Child: &widget.IconButton{
+				Icon:    "download",
+				Tooltip: widget.T("Download"),
+			},
+		})
+	}
 	return &widget.DetailsWithSheet{
 		AppBar: partial.NewFullscreenDialogAppBar(
 			widget.Tuf("%s", filex.Data.Name),
 			route2.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
-			[]widget.IWidget{
-				&widget.IconButton{
-					// TODO other icon if already open or hide...
-					Icon:    "description", // right_panel_open, clarify, tune, description, info, ...?
-					Tooltip: widget.T("Show details"),
-					HTMXAttrs: widget.HTMXAttrs{
-						DialogID: qq.SideSheetID(),
-					},
-				},
-				&widget.Link{
-					Href:      route2.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
-					IsNoColor: true,
-					Filename:  filex.Filename(ctx),
-					Child: &widget.IconButton{
-						Icon:    "download",
-						Tooltip: widget.T("Download"),
-					},
-				},
-			},
+			appBarActions,
 		),
 		Child: &widget.Column{
-			Children: &widget.FilePreview{
-				FileURL:  route2.DownloadInline(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
-				Filename: filex.Data.Name,
-				MimeType: filex.CurrentVersion(ctx).Data.MimeType,
-			},
+			Children: preview,
 		},
 		SideSheet: &widget.Dialog{
 			Widget: widget.Widget[widget.Dialog]{
@@ -122,7 +147,7 @@ func (qq *FilePartial) Widget(
 			Layout:           widget.DialogLayoutSideSheet,
 			Child:            fileTabsPartial,
 		},
-	}
+	}, nil
 }
 
 func (qq *FilePartial) SideSheetID() string {

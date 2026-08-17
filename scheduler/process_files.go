@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/privacy"
 	"github.com/minio/minio-go/v7"
+
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
@@ -56,8 +57,10 @@ func (qq *Scheduler) copyTempFilesToFinalDest(ctx context.Context) {
 		// these columns... a transaction (especially if all are read at once) could block the
 		// database to long and the user might not be able to write to the db...
 
+		// Prioritize recent uploads so stale or orphaned rows cannot delay current work.
 		filesToCopy := tenantDB.ReadOnlyConn.StoredFile.Query().
 			Where(
+				storedfile.UploadSucceededAtNotNil(),
 				storedfile.CopiedToFinalDestinationAtIsNil(),
 				storedfile.DeletedTemporaryFileAtIsNil(), // not necessary, just for safety
 			).
@@ -74,7 +77,7 @@ func (qq *Scheduler) copyTempFilesToFinalDest(ctx context.Context) {
 					continue
 				}
 				log.Println(err)
-				return true // continue
+				continue
 			}
 
 			err = qq.infra.FileSystem().PersistTemporaryTenantFile(
@@ -84,7 +87,7 @@ func (qq *Scheduler) copyTempFilesToFinalDest(ctx context.Context) {
 			)
 			if err != nil {
 				log.Println(err)
-				return true // continue
+				continue
 			}
 		}
 

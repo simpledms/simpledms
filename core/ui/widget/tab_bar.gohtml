@@ -2,7 +2,7 @@
 {{- define "TabBar" }}
 	<div id="{{ .GetID }}" class="flex flex-col flex-grow max-h-full overflow-y-hidden">
 		<div class="flex-shrink-0 overflow-x-auto {{ .GetClass }}">
-			<div class="flex flex-row min-w-max border-b border-outline-variant
+			<div role="tablist" class="flex flex-row min-w-max border-b border-outline-variant
 				{{ if .IsFlowing }}{{ end }}">
                 {{ render .GetContext .GetTabs }}
 			</div>

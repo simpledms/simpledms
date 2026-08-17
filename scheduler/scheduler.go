@@ -9,18 +9,20 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/sqlx"
+	"github.com/simpledms/simpledms/internal/gotenberg"
 )
 
 const defaultSchedulerBatchSize = 100
 
 // TODO rename to Runner?
 type Scheduler struct {
-	infra             *common.Infra
-	mainDB            *sqlx.MainDB
-	tenantDBs         *tenantdbs.TenantDBs
-	s3Client          *minio.Client
-	bucketName        string
-	tikaClientNilable *tika.Client
+	infra                  *common.Infra
+	mainDB                 *sqlx.MainDB
+	tenantDBs              *tenantdbs.TenantDBs
+	s3Client               *minio.Client
+	bucketName             string
+	tikaClientNilable      *tika.Client
+	gotenbergClientNilable *gotenberg.GotenbergClient
 }
 
 func NewScheduler(
@@ -30,14 +32,16 @@ func NewScheduler(
 	s3Client *minio.Client,
 	bucketName string,
 	tikaClient *tika.Client,
+	gotenbergClient *gotenberg.GotenbergClient,
 ) *Scheduler {
 	return &Scheduler{
-		infra:             infra,
-		mainDB:            mainDB,
-		tenantDBs:         tenantDBs,
-		s3Client:          s3Client,
-		bucketName:        bucketName,
-		tikaClientNilable: tikaClient,
+		infra:                  infra,
+		mainDB:                 mainDB,
+		tenantDBs:              tenantDBs,
+		s3Client:               s3Client,
+		bucketName:             bucketName,
+		tikaClientNilable:      tikaClient,
+		gotenbergClientNilable: gotenbergClient,
 	}
 }
 
@@ -79,4 +83,10 @@ func (qq *Scheduler) Run(devMode bool, metaPath string, migrationsTenantFS fs.FS
 	go func() {
 		qq.backfillContentHashes()
 	}()
+
+	if qq.gotenbergClientNilable != nil {
+		go func() {
+			qq.convertPreviews()
+		}()
+	}
 }

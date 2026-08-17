@@ -5,8 +5,8 @@ type ScrollableContent struct {
 	Widget[ScrollableContent]
 	HTMXAttrs
 
-	Children     IWidget
-	BottomAppBar *BottomAppBar
+	Children IWidget
+	Toolbar  *Toolbar
 
 	// padding, not margin, so that scrollbar is outside
 	PaddingX bool // not used as of 13 April 2025

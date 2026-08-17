@@ -26,6 +26,8 @@ type Tx struct {
 	FileSearch *FileSearchClient
 	// FileVersion is the client for interacting with the FileVersion builders.
 	FileVersion *FileVersionClient
+	// PreviewConversion is the client for interacting with the PreviewConversion builders.
+	PreviewConversion *PreviewConversionClient
 	// Property is the client for interacting with the Property builders.
 	Property *PropertyClient
 	// ResolvedTagAssignment is the client for interacting with the ResolvedTagAssignment builders.
@@ -179,6 +181,7 @@ func (tx *Tx) init() {
 	tx.FilePropertyAssignment = NewFilePropertyAssignmentClient(tx.config)
 	tx.FileSearch = NewFileSearchClient(tx.config)
 	tx.FileVersion = NewFileVersionClient(tx.config)
+	tx.PreviewConversion = NewPreviewConversionClient(tx.config)
 	tx.Property = NewPropertyClient(tx.config)
 	tx.ResolvedTagAssignment = NewResolvedTagAssignmentClient(tx.config)
 	tx.Space = NewSpaceClient(tx.config)

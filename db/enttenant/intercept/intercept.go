@@ -15,6 +15,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
+	enttenantpreviewconversion "github.com/simpledms/simpledms/db/enttenant/previewconversion"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/space"
@@ -241,6 +242,33 @@ func (f TraverseFileVersion) Traverse(ctx context.Context, q enttenant.Query) er
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *enttenant.FileVersionQuery", q)
+}
+
+// The PreviewConversionFunc type is an adapter to allow the use of ordinary function as a Querier.
+type PreviewConversionFunc func(context.Context, *enttenant.PreviewConversionQuery) (enttenant.Value, error)
+
+// Query calls f(ctx, q).
+func (f PreviewConversionFunc) Query(ctx context.Context, q enttenant.Query) (enttenant.Value, error) {
+	if q, ok := q.(*enttenant.PreviewConversionQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *enttenant.PreviewConversionQuery", q)
+}
+
+// The TraversePreviewConversion type is an adapter to allow the use of ordinary function as Traverser.
+type TraversePreviewConversion func(context.Context, *enttenant.PreviewConversionQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraversePreviewConversion) Intercept(next enttenant.Querier) enttenant.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraversePreviewConversion) Traverse(ctx context.Context, q enttenant.Query) error {
+	if q, ok := q.(*enttenant.PreviewConversionQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *enttenant.PreviewConversionQuery", q)
 }
 
 // The PropertyFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -474,6 +502,8 @@ func NewQuery(q enttenant.Query) (Query, error) {
 		return &query[*enttenant.FileSearchQuery, predicate.FileSearch, filesearch.OrderOption]{typ: enttenant.TypeFileSearch, tq: q}, nil
 	case *enttenant.FileVersionQuery:
 		return &query[*enttenant.FileVersionQuery, predicate.FileVersion, fileversion.OrderOption]{typ: enttenant.TypeFileVersion, tq: q}, nil
+	case *enttenant.PreviewConversionQuery:
+		return &query[*enttenant.PreviewConversionQuery, predicate.PreviewConversion, enttenantpreviewconversion.OrderOption]{typ: enttenant.TypePreviewConversion, tq: q}, nil
 	case *enttenant.PropertyQuery:
 		return &query[*enttenant.PropertyQuery, predicate.Property, property.OrderOption]{typ: enttenant.TypeProperty, tq: q}, nil
 	case *enttenant.ResolvedTagAssignmentQuery:

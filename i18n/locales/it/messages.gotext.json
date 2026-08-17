@@ -7307,7 +7307,63 @@
             "translation": "Token",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
-        },
+		},
+		{
+			"id": "Original",
+			"message": "Original",
+			"translation": "Originale",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF",
+			"message": "PDF",
+			"translation": "PDF",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Download PDF",
+			"message": "Download PDF",
+			"translation": "Scarica PDF",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Retry PDF generation",
+			"message": "Retry PDF generation",
+			"translation": "Riprova a generare il PDF",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview is being generated. Please wait a moment; the page will refresh automatically.",
+			"message": "PDF preview is being generated. Please wait a moment; the page will refresh automatically.",
+			"translation": "L’anteprima PDF è in fase di generazione. Attendi un momento; la pagina si aggiornerà automaticamente.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview is unavailable because Gotenberg is not configured.",
+			"message": "PDF preview is unavailable because Gotenberg is not configured.",
+			"translation": "L’anteprima PDF non è disponibile perché Gotenberg non è configurato.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview could not be generated.",
+			"message": "PDF preview could not be generated.",
+			"translation": "Non è stato possibile generare l’anteprima PDF.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview is not available.",
+			"message": "PDF preview is not available.",
+			"translation": "L’anteprima PDF non è disponibile.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
         {
             "id": "Url",
             "message": "Url",
@@ -7594,6 +7650,48 @@
             "translation": "Dimensioni",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
-        }
+		},
+		{
+			"id": "PDF preview conversion is not configured",
+			"message": "PDF preview conversion is not configured",
+			"translation": "La conversione dell’anteprima PDF non è configurata",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview is not available",
+			"message": "PDF preview is not available",
+			"translation": "L’anteprima PDF non è disponibile",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview is not ready to retry",
+			"message": "PDF preview is not ready to retry",
+			"translation": "L’anteprima PDF non è pronta per essere riprovata",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview generation queued.",
+			"message": "PDF preview generation queued.",
+			"translation": "La generazione dell’anteprima PDF è stata accodata.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "cannot preview directories",
+			"message": "cannot preview directories",
+			"translation": "Non è possibile visualizzare in anteprima le directory",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "original source preview is only available for HTML files",
+			"message": "original source preview is only available for HTML files",
+			"translation": "L’anteprima della sorgente originale è disponibile solo per i file HTML",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		}
     ]
 }

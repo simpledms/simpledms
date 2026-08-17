@@ -138,11 +138,15 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 
 	rw.Header().Set("HX-Retarget", "#innerContent")
 	rw.Header().Set("HX-Reswap", "innerHTML")
+	view, err := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, prep.file.PublicID.String())
+	if err != nil {
+		return err
+	}
 
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		qq.actions.InboxPage.WidgetHandler(rw, req, ctx, prep.file.PublicID.String()),
+		view,
 		widget.NewSnackbarf("«%s» uploaded.", prep.file.Name),
 	)
 }

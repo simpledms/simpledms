@@ -12,6 +12,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
+	enttenantpreviewconversion "github.com/simpledms/simpledms/db/enttenant/previewconversion"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
@@ -163,6 +164,34 @@ func init() {
 	fileversionDescVersionNumber := fileversionFields[3].Descriptor()
 	// fileversion.DefaultVersionNumber holds the default value on creation for the version_number field.
 	fileversion.DefaultVersionNumber = fileversionDescVersionNumber.Default.(int)
+	enttenantpreviewconversionMixin := schema.PreviewConversion{}.Mixin()
+	enttenantpreviewconversion.Policy = privacy.NewPolicies(schema.PreviewConversion{})
+	enttenantpreviewconversion.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := enttenantpreviewconversion.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	enttenantpreviewconversionMixinFields0 := enttenantpreviewconversionMixin[0].Fields()
+	_ = enttenantpreviewconversionMixinFields0
+	enttenantpreviewconversionFields := schema.PreviewConversion{}.Fields()
+	_ = enttenantpreviewconversionFields
+	// enttenantpreviewconversionDescCreatedAt is the schema descriptor for created_at field.
+	enttenantpreviewconversionDescCreatedAt := enttenantpreviewconversionMixinFields0[0].Descriptor()
+	// enttenantpreviewconversion.DefaultCreatedAt holds the default value on creation for the created_at field.
+	enttenantpreviewconversion.DefaultCreatedAt = enttenantpreviewconversionDescCreatedAt.Default.(func() time.Time)
+	// enttenantpreviewconversionDescUpdatedAt is the schema descriptor for updated_at field.
+	enttenantpreviewconversionDescUpdatedAt := enttenantpreviewconversionMixinFields0[2].Descriptor()
+	// enttenantpreviewconversion.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	enttenantpreviewconversion.DefaultUpdatedAt = enttenantpreviewconversionDescUpdatedAt.Default.(func() time.Time)
+	// enttenantpreviewconversion.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	enttenantpreviewconversion.UpdateDefaultUpdatedAt = enttenantpreviewconversionDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// enttenantpreviewconversionDescRetryCount is the schema descriptor for retry_count field.
+	enttenantpreviewconversionDescRetryCount := enttenantpreviewconversionFields[3].Descriptor()
+	// enttenantpreviewconversion.DefaultRetryCount holds the default value on creation for the retry_count field.
+	enttenantpreviewconversion.DefaultRetryCount = enttenantpreviewconversionDescRetryCount.Default.(int)
 	propertyMixin := schema.Property{}.Mixin()
 	property.Policy = privacy.NewPolicies(propertyMixin[0], schema.Property{})
 	property.Hooks[0] = func(next ent.Mutator) ent.Mutator {

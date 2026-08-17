@@ -40,6 +40,7 @@ import (
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/i18n"
+	"github.com/simpledms/simpledms/internal/gotenberg"
 	appmodel "github.com/simpledms/simpledms/model/main/app"
 	"github.com/simpledms/simpledms/model/main/common/country"
 	"github.com/simpledms/simpledms/model/main/common/language"
@@ -296,9 +297,10 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	router := NewRouter(mainDB, tenantDBs, infra, qq.devMode, qq.metaPath, i18nx)
 	actions := action.NewActions(infra, tenantDBs, qq.devMode)
 	downloadHandler := download.NewDownload(infra)
+	previewDownloadHandler := download.NewPreview(infra)
 	trashDownloadHandler := trashaction.NewDownload(infra)
 
-	qq.registerCoreRoutes(router, actions, downloadHandler, trashDownloadHandler)
+	qq.registerCoreRoutes(router, actions, downloadHandler, previewDownloadHandler, trashDownloadHandler)
 
 	err := infra.PluginRegistry().RegisterActions(router)
 	if err != nil {
@@ -793,6 +795,7 @@ func (qq *Server) registerCoreRoutes(
 	router *Router,
 	actions *action.Actions,
 	downloadHandler *download.Download,
+	previewDownloadHandler *download.Preview,
 	trashDownloadHandler *trashaction.Download,
 ) {
 	// concept:
@@ -852,6 +855,9 @@ func (qq *Server) registerCoreRoutes(
 	// router.RegisterPage(route.FindRoute(true), actions.Find.PageWithSelection.Handler)
 
 	router.RegisterPage(route2.DownloadRoute(), downloadHandler.Handler)
+	router.RegisterPage(route2.PreviewPDFRoute(), previewDownloadHandler.PDFInlineHandler)
+	router.RegisterPage(route2.PreviewPDFDownloadRoute(), previewDownloadHandler.PDFDownloadHandler)
+	router.RegisterPage(route2.OriginalSourceRoute(), previewDownloadHandler.OriginalSourceHandler)
 	router.RegisterPage(route2.TrashDownloadRoute(), trashDownloadHandler.Handler)
 
 	router.RegisterActions(actions)
@@ -921,6 +927,19 @@ func (qq *Server) startScheduler(
 		tikaClientNilable = tika.NewDefaultClient(rawSystemConfig.OcrTikaURL)
 	}
 
+	var gotenbergClientNilable *gotenberg.GotenbergClient
+	var err error
+	gotenbergURL := strings.TrimSpace(os.Getenv("SIMPLEDMS_GOTENBERG_URL"))
+	if gotenbergURL == "" {
+		log.Println("SIMPLEDMS_GOTENBERG_URL is not configured; PDF preview conversion disabled")
+	} else {
+		gotenbergClientNilable, err = gotenberg.NewGotenbergClient(gotenbergURL)
+		if err != nil {
+			log.Println(err, "; PDF preview conversion disabled")
+			gotenbergClientNilable = nil
+		}
+	}
+
 	schedulerx := scheduler.NewScheduler(
 		infra,
 		mainDB,
@@ -928,6 +947,7 @@ func (qq *Server) startScheduler(
 		minioClient,
 		systemConfig.S3().S3BucketName,
 		tikaClientNilable,
+		gotenbergClientNilable,
 	)
 	schedulerx.Run(qq.devMode, qq.metaPath, qq.migrationsTenantFS)
 }

@@ -9,7 +9,8 @@ type FilePreview struct {
 	FileURL  string
 	Filename string
 	// Base64Data template.HTMLAttr
-	MimeType string
+	MimeType         string
+	HideDownloadLink bool
 }
 
 // not in use as of 2024.10.01 because of switch to FileURL instead of Base64 encoded data
