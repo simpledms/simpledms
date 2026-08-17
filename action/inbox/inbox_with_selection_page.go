@@ -82,7 +82,10 @@ func (qq *InboxWithSelectionPage) Handler(
 	}
 	*/
 
-	content := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, filex.PublicID.String())
+	content, err := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, filex.PublicID.String())
+	if err != nil {
+		return err
+	}
 	if req.Header.Get("HX-Target") == "details" {
 		return qq.infra.Renderer().Render(
 			rw,

@@ -48,10 +48,15 @@ func (qq *InboxRootPage) Handler(
 		},
 	}
 
+	content, err := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, "")
+	if err != nil {
+		return err
+	}
+
 	var viewx renderable.Renderable
 	viewx = &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
-		Content:    qq.actions.InboxPage.WidgetHandler(rw, req, ctx, ""),
+		Content:    content,
 	}
 
 	renderFullPage := false

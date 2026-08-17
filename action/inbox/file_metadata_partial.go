@@ -110,23 +110,22 @@ func (qq *FileMetadataPartial) Widget(
 		hasDuplicates,
 	)
 
-	var nilableBottomAppBar *widget.BottomAppBar
+	var nilableToolbar *widget.Toolbar
 	if len(statusMessages) > 0 {
-		nilableBottomAppBar = &widget.BottomAppBar{
-			Actions: []widget.IWidget{
-				&widget.IconButton{
-					Icon:    "refresh",
-					Tooltip: widget.T("Reload metadata"),
-					HTMXAttrs: widget.HTMXAttrs{
-						HxPost:   qq.Endpoint(),
-						HxVals:   util.JSON(data),
-						HxTarget: "#" + qq.MetadataTabContentID(),
-						HxSwap:   "outerHTML",
-					},
+		nilableToolbar = widget.NewToolbar(
+			widget.T("Reload metadata").String(ctx),
+			&widget.IconButton{
+				Icon:    "refresh",
+				Tooltip: widget.T("Reload metadata"),
+				HTMXAttrs: widget.HTMXAttrs{
+					HxPost:   qq.Endpoint(),
+					HxVals:   util.JSON(data),
+					HxTarget: "#" + qq.MetadataTabContentID(),
+					HxSwap:   "outerHTML",
 				},
 			},
-			Children: qq.statusMessageWidget(statusMessages),
-		}
+			qq.statusMessageWidget(statusMessages),
+		)
 	}
 
 	return &widget.ScrollableContent{
@@ -134,10 +133,10 @@ func (qq *FileMetadataPartial) Widget(
 			ID: qq.MetadataTabContentID(),
 		},
 		// GapY:     true,
-		Children:     children,
-		MarginY:      true,
-		FlexCol:      true,
-		BottomAppBar: nilableBottomAppBar,
+		Children: children,
+		MarginY:  true,
+		FlexCol:  true,
+		Toolbar:  nilableToolbar,
 	}
 }
 

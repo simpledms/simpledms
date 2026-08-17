@@ -75,21 +75,6 @@ func (qq *EditSubTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 		Children: assignableListItems,
 	}
 
-	/*
-		bottomAppBar := &BottomAppBar{
-			Actions: []IWidget{
-				&Button{
-					Icon: NewIcon("toggle_on"),
-					HTMXAttrs: HTMXAttrs{
-						HxPost:   qq.EndpointWithParams(actionx.ResponseWrapperNone, ""),
-						HxVals:   util.JSON(qq.Data(data.TagID, !data.OnlyAssigned)),
-						HxTarget: "#" + list.GetID(),
-					},
-				},
-			},
-		}
-	*/
-
 	wrapper := req.URL.Query().Get("wrapper")
 	qq.infra.Renderer().RenderX(
 		rw,

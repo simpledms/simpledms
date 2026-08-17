@@ -73,25 +73,25 @@ func (qq *EditAssignedTagsPartial) Form(
 	return qq.ListView(ctx, data)
 }
 
-func (qq *EditAssignedTagsPartial) bottomAppBar(
+func (qq *EditAssignedTagsPartial) toolbar(
+	ctx ctxx.Context,
 	data *EditAssignedTagsPartialData,
-) *widget.BottomAppBar {
+) *widget.Toolbar {
 	hxTarget := "#" + qq.hxTargetID()
-	return &widget.BottomAppBar{
-		Actions: []widget.IWidget{
-			&widget.IconButton{
-				Icon:    "list_alt",
-				Tooltip: widget.T("Show assigned tags"),
-				HTMXAttrs: widget.HTMXAttrs{
-					HxPost: qq.actions.AssignedTags.List.EndpointWithParams(actionx.ResponseWrapperNone, hxTarget),
-					HxVals: util.JSON(qq.actions.AssignedTags.List.Data(data.FileID)),
-					// TODO is this a good idea? or try to select closest tab?
-					HxTarget: hxTarget,
-					HxSwap:   "outerHTML",
-				},
+	return widget.NewToolbar(
+		widget.T("Show assigned tags").String(ctx),
+		&widget.IconButton{
+			Icon:    "list_alt",
+			Tooltip: widget.T("Show assigned tags"),
+			HTMXAttrs: widget.HTMXAttrs{
+				HxPost: qq.actions.AssignedTags.List.EndpointWithParams(actionx.ResponseWrapperNone, hxTarget),
+				HxVals: util.JSON(qq.actions.AssignedTags.List.Data(data.FileID)),
+				// TODO is this a good idea? or try to select closest tab?
+				HxTarget: hxTarget,
+				HxSwap:   "outerHTML",
 			},
 		},
-	}
+	)
 }
 
 // TODO rename to Widget?
@@ -204,7 +204,7 @@ func (qq *EditAssignedTagsPartial) ListView(
 		Children: &widget.List{
 			Children: allListItems,
 		},
-		BottomAppBar: qq.bottomAppBar(data),
+		Toolbar: qq.toolbar(ctx, data),
 	}
 }
 

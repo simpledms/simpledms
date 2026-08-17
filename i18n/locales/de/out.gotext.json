@@ -754,7 +754,7 @@
                     "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 1,
-                    "expr": "wx.Tu(match.SpaceName)"
+                    "expr": "widget.Tu(match.SpaceName)"
                 }
             ],
             "fuzzy": true
@@ -771,7 +771,7 @@
                     "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 1,
-                    "expr": "wx.Tu(match.ParentDirName)"
+                    "expr": "widget.Tu(match.ParentDirName)"
                 }
             ],
             "fuzzy": true
@@ -932,17 +932,73 @@
             "fuzzy": true
         },
         {
-            "id": "rendering failed",
-            "message": "rendering failed",
-            "translation": "Rendering fehlgeschlagen",
+            "id": "Preview",
+            "message": "Preview",
+            "translation": "Vorschau",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
         {
-            "id": "Close preview",
-            "message": "Close preview",
-            "translation": "Vorschau schliessen",
-            "translatorComment": "Translated from English by Codex",
+            "id": "Original",
+            "message": "Original",
+            "translation": "Original",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "Download PDF",
+            "message": "Download PDF",
+            "translation": "PDF herunterladen",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview could not be generated.",
+            "message": "PDF preview could not be generated.",
+            "translation": "Die PDF-Vorschau konnte nicht erstellt werden.",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "Retry PDF generation",
+            "message": "Retry PDF generation",
+            "translation": "PDF-Vorschau erneut erstellen",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "Download",
+            "message": "Download",
+            "translation": "Herunterladen",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview is unavailable because Gotenberg is not configured.",
+            "message": "PDF preview is unavailable because Gotenberg is not configured.",
+            "translation": "Die PDF-Vorschau ist nicht verfügbar, weil Gotenberg nicht konfiguriert ist.",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview is being generated. Please wait a moment; the page will refresh automatically.",
+            "message": "PDF preview is being generated. Please wait a moment; the page will refresh automatically.",
+            "translation": "Die PDF-Vorschau wird erstellt. Bitte warte einen Moment; die Seite wird automatisch aktualisiert.",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview is not available.",
+            "message": "PDF preview is not available.",
+            "translation": "Die PDF-Vorschau ist nicht verfügbar.",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "rendering failed",
+            "message": "rendering failed",
+            "translation": "Rendering fehlgeschlagen",
+            "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
         {
@@ -953,11 +1009,17 @@
             "fuzzy": true
         },
         {
-            "id": "Download",
-            "message": "Download",
-            "translation": "Herunterladen",
-            "comment": "\u0026wx.IconButton{\n\t\t\t\t\tIcon: \"more_vert\",\n\t\t\t\t\tChildren: \u0026wx.Menu{\n\t\t\t\t\t\tItems: []*wx.MenuItem{\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\tLeadingIcon:          \"download\",\n\t\t\t\t\t\t\t\tLabel:                wx.T(\"Download\"),\n\t\t\t\t\t\t\t\tDownloadLinkURL:      route.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),\n\t\t\t\t\t\t\t\tDownloadLinkFilename: filex.Filename(ctx),\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t},",
-            "translatorComment": "Translated from English by Junie",
+            "id": "Close preview",
+            "message": "Close preview",
+            "translation": "Vorschau schliessen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "version not found",
+            "message": "version not found",
+            "translation": "Version nicht gefunden",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -1174,13 +1236,6 @@
             "id": "invalid version number",
             "message": "invalid version number",
             "translation": "ungültige Versionsnummer",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "version not found",
-            "message": "version not found",
-            "translation": "Version nicht gefunden",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -1509,6 +1564,34 @@
             "fuzzy": true
         },
         {
+            "id": "PDF preview conversion is not configured",
+            "message": "PDF preview conversion is not configured",
+            "translation": "Die PDF-Vorschau-Konvertierung ist nicht konfiguriert",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview is not available",
+            "message": "PDF preview is not available",
+            "translation": "Die PDF-Vorschau ist nicht verfügbar",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview is not ready to retry",
+            "message": "PDF preview is not ready to retry",
+            "translation": "Die PDF-Vorschau ist noch nicht für einen neuen Versuch bereit",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "PDF preview generation queued.",
+            "message": "PDF preview generation queued.",
+            "translation": "Die PDF-Vorschau-Erstellung wurde in die Warteschlange eingereiht.",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
             "id": "Document type deselected.",
             "message": "Document type deselected.",
             "translation": "Dokumenttyp abgewählt.",
@@ -1520,6 +1603,13 @@
             "message": "Document type selected.",
             "translation": "Dokumenttyp ausgewählt.",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Best match",
+            "message": "Best match",
+            "translation": "Beste Übereinstimmung",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -2476,6 +2566,20 @@
             "fuzzy": true
         },
         {
+            "id": "cannot preview directories",
+            "message": "cannot preview directories",
+            "translation": "Verzeichnisse können nicht als Vorschau angezeigt werden",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "original source preview is only available for HTML files",
+            "message": "original source preview is only available for HTML files",
+            "translation": "Die Vorschau der Originalquelle ist nur für HTML-Dateien verfügbar",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
             "id": "Assign file",
             "message": "Assign file",
             "translation": "Datei zuweisen",
@@ -2930,7 +3034,7 @@
                     "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 1,
-                    "expr": "wx.Tu(userm.NameSecondLine())"
+                    "expr": "widget.Tu(userm.NameSecondLine())"
                 },
                 {
                     "id": "OwnershipText",
@@ -3136,7 +3240,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "wx.Tu(spacex.Name).String(ctx)"
+                    "expr": "widget.Tu(spacex.Name).String(ctx)"
                 },
                 {
                     "id": "Stringctx_1",
@@ -3144,7 +3248,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 2,
-                    "expr": "wx.T(\"active\").String(ctx)"
+                    "expr": "widget.T(\"active\").String(ctx)"
                 }
             ],
             "fuzzy": true
@@ -3568,13 +3672,6 @@
             "fuzzy": true
         },
         {
-            "id": "Preview",
-            "message": "Preview",
-            "translation": "Vorschau",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "Upload is too large.",
             "message": "Upload is too large.",
             "translation": "Upload ist zu gross.",
@@ -3635,6 +3732,189 @@
             "message": "Cannot decode url query.",
             "translation": "URL-Abfrage kann nicht dekodiert werden.",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "No backup codes were returned.",
+            "message": "No backup codes were returned.",
+            "translation": "Es wurden keine Backup-Codes zurückgegeben.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes were regenerated.",
+            "message": "The backup codes were regenerated.",
+            "translation": "Die Backup-Codes wurden neu generiert.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not regenerate backup codes.",
+            "message": "Could not regenerate backup codes.",
+            "translation": "Backup-Codes konnten nicht neu generiert werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Close dialog",
+            "message": "Close dialog",
+            "translation": "Dialog schliessen",
+            "comment": "PopoverTarget:       qq.ID,\nPopoverTargetAction: \"hide\",",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Close",
+            "message": "Close",
+            "translation": "Schliessen",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Suggestion",
+            "message": "Suggestion",
+            "translation": "Vorschlag",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "optional",
+            "message": "optional",
+            "translation": "optional",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "required",
+            "message": "required",
+            "translation": "erforderlich",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Open main menu",
+            "message": "Open main menu",
+            "translation": "Hauptmenü öffnen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Give this passkey an optional name so you can recognize it later.",
+            "message": "Give this passkey an optional name so you can recognize it later.",
+            "translation": "Gib diesem Passkey einen optionalen Namen, damit du ihn später wiedererkennst.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "message": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "translation": "Nach der Registrierung werden druckbare Backup-Codes einmal angezeigt. Speichere sie, bevor du schliesst.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "message": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "translation": "Nach der Einrichtung ist die Passwort-Anmeldung für dieses Konto deaktiviert. Verwende stattdessen Passkeys und Backup-Codes.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey name (optional)",
+            "message": "Passkey name (optional)",
+            "translation": "Passkey-Name (optional)",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "message": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "translation": "Wichtig: Diese Backup-Codes werden nur einmal angezeigt. Speichere, drucke oder lade sie jetzt herunter, bevor du diesen Dialog schliesst.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "message": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "translation": "Wenn du diese Codes und deinen Passkey verlierst, ist eine Kontowiederherstellung möglicherweise nicht mehr möglich.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "SimpleDMS backup codes",
+            "message": "SimpleDMS backup codes",
+            "translation": "SimpleDMS Backup-Codes",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Generated",
+            "message": "Generated",
+            "translation": "Erstellt",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Keep these backup codes in a secure place.",
+            "message": "Keep these backup codes in a secure place.",
+            "translation": "Bewahre diese Backup-Codes an einem sicheren Ort auf.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "These codes are shown only once.",
+            "message": "These codes are shown only once.",
+            "translation": "Diese Codes werden nur einmal angezeigt.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Codes",
+            "message": "Codes",
+            "translation": "Codes",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Print dialog opened.",
+            "message": "Print dialog opened.",
+            "translation": "Druckdialog wurde geöffnet.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes were copied to clipboard.",
+            "message": "The backup codes were copied to clipboard.",
+            "translation": "Die Backup-Codes wurden in die Zwischenablage kopiert.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not copy backup codes automatically.",
+            "message": "Could not copy backup codes automatically.",
+            "translation": "Backup-Codes konnten nicht automatisch kopiert werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "The backup codes were downloaded.",
+            "message": "The backup codes were downloaded.",
+            "translation": "Die Backup-Codes wurden heruntergeladen.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Print codes",
+            "message": "Print codes",
+            "translation": "Codes drucken",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Copy codes",
+            "message": "Copy codes",
+            "translation": "Codes kopieren",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -4174,11 +4454,21 @@
             "fuzzy": true
         },
         {
+            "id": "Preview tab",
+            "message": "Preview tab",
+            "translation": ""
+        },
+        {
             "id": "Pro",
             "message": "Pro",
             "translation": "Pro",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "Push url",
+            "message": "Push url",
+            "translation": ""
         },
         {
             "id": "Reader",
@@ -4698,6 +4988,18 @@
             "translation": "Bemerkung"
         },
         {
+            "id": "New tenant registration",
+            "message": "New tenant registration",
+            "translation": ""
+        },
+        {
+            "id": "This is an automated message, please do not reply.",
+            "message": "This is an automated message, please do not reply.",
+            "translation": "Dies ist eine automatisierte Nachricht, bitte antworte nicht darauf.",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
             "id": "Welcome to SimpleDMS",
             "message": "Welcome to SimpleDMS",
             "translation": "Willkommen bei SimpleDMS",
@@ -4715,13 +5017,6 @@
             "id": "SimpleDMS password reset",
             "message": "SimpleDMS password reset",
             "translation": "SimpleDMS Passwort zurücksetzen",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "This is an automated message, please do not reply.",
-            "message": "This is an automated message, please do not reply.",
-            "translation": "Dies ist eine automatisierte Nachricht, bitte antworte nicht darauf.",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -6067,34 +6362,6 @@
             "fuzzy": true
         },
         {
-            "id": "Close",
-            "message": "Close",
-            "translation": "Schliessen",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Open main menu",
-            "message": "Open main menu",
-            "translation": "Hauptmenü öffnen",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Sign out",
-            "message": "Sign out",
-            "translation": "Ausloggen",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "About SimpleDMS",
-            "message": "About SimpleDMS",
-            "translation": "Über SimpleDMS",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Misc",
             "message": "Misc",
             "translation": "Sonstiges",
@@ -6109,13 +6376,6 @@
             "fuzzy": true
         },
         {
-            "id": "Spaces by Organization",
-            "message": "Spaces by Organization",
-            "translation": "Spaces nach Organisation",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Organizations",
             "message": "Organizations",
             "translation": "Organisationen",
@@ -6123,171 +6383,16 @@
             "fuzzy": true
         },
         {
-            "id": "No backup codes were returned.",
-            "message": "No backup codes were returned.",
-            "translation": "Es wurden keine Backup-Codes zurückgegeben.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "The backup codes were regenerated.",
-            "message": "The backup codes were regenerated.",
-            "translation": "Die Backup-Codes wurden neu generiert.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not regenerate backup codes.",
-            "message": "Could not regenerate backup codes.",
-            "translation": "Backup-Codes konnten nicht neu generiert werden.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Close dialog",
-            "message": "Close dialog",
-            "translation": "Dialog schliessen",
-            "comment": "PopoverTarget:       qq.ID,\nPopoverTargetAction: \"hide\",",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Suggestion",
-            "message": "Suggestion",
-            "translation": "Vorschlag",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "optional",
-            "message": "optional",
-            "translation": "optional",
+            "id": "Sign out",
+            "message": "Sign out",
+            "translation": "Ausloggen",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
         {
-            "id": "required",
-            "message": "required",
-            "translation": "erforderlich",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Give this passkey an optional name so you can recognize it later.",
-            "message": "Give this passkey an optional name so you can recognize it later.",
-            "translation": "Gib diesem Passkey einen optionalen Namen, damit du ihn später wiedererkennst.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "After registration, printable backup codes will be shown once. Save them before closing.",
-            "message": "After registration, printable backup codes will be shown once. Save them before closing.",
-            "translation": "Nach der Registrierung werden druckbare Backup-Codes einmal angezeigt. Speichere sie, bevor du schliesst.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
-            "message": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
-            "translation": "Nach der Einrichtung ist die Passwort-Anmeldung für dieses Konto deaktiviert. Verwende stattdessen Passkeys und Backup-Codes.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Passkey name (optional)",
-            "message": "Passkey name (optional)",
-            "translation": "Passkey-Name (optional)",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
-            "message": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
-            "translation": "Wichtig: Diese Backup-Codes werden nur einmal angezeigt. Speichere, drucke oder lade sie jetzt herunter, bevor du diesen Dialog schliesst.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "If you lose these codes and your passkey, account recovery may no longer be possible.",
-            "message": "If you lose these codes and your passkey, account recovery may no longer be possible.",
-            "translation": "Wenn du diese Codes und deinen Passkey verlierst, ist eine Kontowiederherstellung möglicherweise nicht mehr möglich.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "SimpleDMS backup codes",
-            "message": "SimpleDMS backup codes",
-            "translation": "SimpleDMS Backup-Codes",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Generated",
-            "message": "Generated",
-            "translation": "Erstellt",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Keep these backup codes in a secure place.",
-            "message": "Keep these backup codes in a secure place.",
-            "translation": "Bewahre diese Backup-Codes an einem sicheren Ort auf.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "These codes are shown only once.",
-            "message": "These codes are shown only once.",
-            "translation": "Diese Codes werden nur einmal angezeigt.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Codes",
-            "message": "Codes",
-            "translation": "Codes",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Print dialog opened.",
-            "message": "Print dialog opened.",
-            "translation": "Druckdialog wurde geöffnet.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "The backup codes were copied to clipboard.",
-            "message": "The backup codes were copied to clipboard.",
-            "translation": "Die Backup-Codes wurden in die Zwischenablage kopiert.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Could not copy backup codes automatically.",
-            "message": "Could not copy backup codes automatically.",
-            "translation": "Backup-Codes konnten nicht automatisch kopiert werden.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "The backup codes were downloaded.",
-            "message": "The backup codes were downloaded.",
-            "translation": "Die Backup-Codes wurden heruntergeladen.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Print codes",
-            "message": "Print codes",
-            "translation": "Codes drucken",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Copy codes",
-            "message": "Copy codes",
-            "translation": "Codes kopieren",
+            "id": "About SimpleDMS",
+            "message": "About SimpleDMS",
+            "translation": "Über SimpleDMS",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

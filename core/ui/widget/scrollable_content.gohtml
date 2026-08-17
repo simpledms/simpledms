@@ -12,8 +12,8 @@
 			{{ if .MarginY }}my-4{{ end }}">
             {{ render .GetContext .Children }}
 		</div>
-        {{ with .BottomAppBar }}
-            {{ render $ctx . }}
-        {{ end }}
+		{{ with .Toolbar }}
+			{{ render $ctx . }}
+		{{ end }}
 	</div>
 {{ end }}

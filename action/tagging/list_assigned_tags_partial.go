@@ -121,21 +121,20 @@ func (qq *ListAssignedTagsPartial) List(
 		listItems = append(listItems, qq.actions.AssignedTags.ListItem.Widget(ctx, tagx))
 	}
 
-	bottomAppBar := &widget.BottomAppBar{
-		Actions: []widget.IWidget{
-			&widget.IconButton{
-				Icon:    "edit_square",
-				Tooltip: widget.T("Edit assigned tags"),
-				HTMXAttrs: widget.HTMXAttrs{
-					HxPost: qq.actions.AssignedTags.Edit.EndpointWithParams(actionx.ResponseWrapperNone, hxTarget),
-					HxVals: util.JSON(qq.actions.AssignedTags.Edit.Data(fileID, 0)),
-					// TODO is this a good idea? or try to select closest tab?
-					HxTarget: hxTarget,
-					HxSwap:   "outerHTML",
-				},
+	toolbar := widget.NewToolbar(
+		widget.T("Edit assigned tags").String(ctx),
+		&widget.IconButton{
+			Icon:    "edit_square",
+			Tooltip: widget.T("Edit assigned tags"),
+			HTMXAttrs: widget.HTMXAttrs{
+				HxPost: qq.actions.AssignedTags.Edit.EndpointWithParams(actionx.ResponseWrapperNone, hxTarget),
+				HxVals: util.JSON(qq.actions.AssignedTags.Edit.Data(fileID, 0)),
+				// TODO is this a good idea? or try to select closest tab?
+				HxTarget: hxTarget,
+				HxSwap:   "outerHTML",
 			},
 		},
-	}
+	)
 
 	return &widget.ScrollableContent{
 		Widget: widget.Widget[widget.ScrollableContent]{
@@ -144,7 +143,7 @@ func (qq *ListAssignedTagsPartial) List(
 		Children: &widget.List{
 			Children: listItems,
 		},
-		BottomAppBar: bottomAppBar,
+		Toolbar: toolbar,
 	}
 }
 

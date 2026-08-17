@@ -426,6 +426,66 @@ var (
 			},
 		},
 	}
+	// PreviewConversionsColumns holds the columns for the "preview_conversions" table.
+	PreviewConversionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"Pending", "Processing", "Ready", "Failed"}},
+		{Name: "retry_count", Type: field.TypeInt, Default: 0},
+		{Name: "last_attempted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "next_attempt_at", Type: field.TypeTime, Nullable: true},
+		{Name: "processing_started_at", Type: field.TypeTime, Nullable: true},
+		{Name: "failure_category", Type: field.TypeString, Nullable: true},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "source_stored_file_id", Type: field.TypeInt64},
+		{Name: "preview_stored_file_id", Type: field.TypeInt64, Nullable: true},
+	}
+	// PreviewConversionsTable holds the schema information for the "preview_conversions" table.
+	PreviewConversionsTable = &schema.Table{
+		Name:       "preview_conversions",
+		Columns:    PreviewConversionsColumns,
+		PrimaryKey: []*schema.Column{PreviewConversionsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "preview_conversions_users_creator",
+				Columns:    []*schema.Column{PreviewConversionsColumns[9]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "preview_conversions_users_updater",
+				Columns:    []*schema.Column{PreviewConversionsColumns[10]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "preview_conversions_stored_files_source",
+				Columns:    []*schema.Column{PreviewConversionsColumns[11]},
+				RefColumns: []*schema.Column{StoredFilesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "preview_conversions_stored_files_preview",
+				Columns:    []*schema.Column{PreviewConversionsColumns[12]},
+				RefColumns: []*schema.Column{StoredFilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "previewconversion_source_stored_file_id",
+				Unique:  true,
+				Columns: []*schema.Column{PreviewConversionsColumns[11]},
+			},
+			{
+				Name:    "previewconversion_status_next_attempt_at_id",
+				Unique:  false,
+				Columns: []*schema.Column{PreviewConversionsColumns[3], PreviewConversionsColumns[6], PreviewConversionsColumns[0]},
+			},
+		},
+	}
 	// PropertiesColumns holds the columns for the "properties" table.
 	PropertiesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
@@ -791,6 +851,7 @@ var (
 		FilesTable,
 		FilePropertyAssignmentsTable,
 		FileVersionsTable,
+		PreviewConversionsTable,
 		PropertiesTable,
 		SpacesTable,
 		SpaceUserAssignmentsTable,
@@ -819,6 +880,10 @@ func init() {
 	FilePropertyAssignmentsTable.ForeignKeys[2].RefTable = PropertiesTable
 	FileVersionsTable.ForeignKeys[0].RefTable = FilesTable
 	FileVersionsTable.ForeignKeys[1].RefTable = StoredFilesTable
+	PreviewConversionsTable.ForeignKeys[0].RefTable = UsersTable
+	PreviewConversionsTable.ForeignKeys[1].RefTable = UsersTable
+	PreviewConversionsTable.ForeignKeys[2].RefTable = StoredFilesTable
+	PreviewConversionsTable.ForeignKeys[3].RefTable = StoredFilesTable
 	PropertiesTable.ForeignKeys[0].RefTable = SpacesTable
 	SpacesTable.ForeignKeys[0].RefTable = UsersTable
 	SpaceUserAssignmentsTable.ForeignKeys[0].RefTable = SpacesTable

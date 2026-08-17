@@ -477,6 +477,69 @@ func (qq *S3FileSystem) RemoveTemporaryObject(ctx context.Context, storagePath s
 	return nil
 }
 
+func (qq *S3FileSystem) SaveDerivedPDF(
+	ctx context.Context,
+	tenantPublicID string,
+	tenantX25519Identity *age.X25519Identity,
+	pdf io.Reader,
+	filename string,
+) (*minio.UploadInfo, string, int64, string, error) {
+	storageFilenameWithoutExt := util.NewPublicID()
+	temporaryStoragePath := pathx.S3TemporaryStoragePrefix(tenantPublicID)
+	if temporaryStoragePath == "" {
+		return nil, "", 0, "", e.NewHTTPErrorf(http.StatusInternalServerError, "Storage path is empty.")
+	}
+
+	fileInfo, storageFilename, fileSize, contentSHA256, err := qq.saveFile(
+		ctx,
+		tenantX25519Identity,
+		pdf,
+		filename,
+		storageFilenameWithoutExt,
+		temporaryStoragePath,
+	)
+	if err != nil {
+		storageFilename = qq.storageFilename(filename, storageFilenameWithoutExt)
+		if cleanupErr := qq.RemoveTemporaryObject(ctx, temporaryStoragePath, storageFilename); cleanupErr != nil {
+			log.Println(cleanupErr)
+		}
+	}
+	return fileInfo, storageFilename, fileSize, contentSHA256, err
+}
+
+func (qq *S3FileSystem) RemoveTenantStoredFileObjects(
+	ctx context.Context,
+	filex *enttenant.StoredFile,
+) error {
+	filem := storedfilemodel.NewStoredFile(filex)
+	objectNames := make([]string, 0, 2)
+	finalObjectName, err := filem.UnsafeFinalObjectNameWithPrefix()
+	if err != nil {
+		return err
+	}
+	objectNames = append(objectNames, finalObjectName)
+	temporaryObjectName, err := filem.UnsafeTempObjectNameWithPrefix()
+	if err != nil {
+		return err
+	}
+	if temporaryObjectName != finalObjectName {
+		objectNames = append(objectNames, temporaryObjectName)
+	}
+
+	for _, objectName := range objectNames {
+		err = qq.client.RemoveObject(ctx, qq.bucketName, objectName, minio.RemoveObjectOptions{})
+		if err == nil {
+			continue
+		}
+		minioErr := minio.ToErrorResponse(err)
+		if minioErr.Code == "NoSuchKey" {
+			continue
+		}
+		return err
+	}
+	return nil
+}
+
 func (qq *S3FileSystem) storageFilename(originalFilename, storageFilenameWithoutExt string) string {
 	fileExtension := filepath.Ext(originalFilename)
 	return storageFilenameWithoutExt + fileExtension + ".gz.age"
@@ -941,8 +1004,8 @@ func (qq *S3FileSystem) PersistTemporaryTenantFile(
 	// check if dest file exists, likely indicates that file was already moved, but writing to database failed
 	_, err = qq.client.StatObject(ctx, qq.bucketName, destObjectName, minio.StatObjectOptions{})
 	if err == nil {
-		log.Printf("dest file already exists, skipping, needs manual cleanup, tmpObjectName: %s, destObjectName: %s", tmpObjectName, destObjectName)
-		return err
+		log.Printf("dest file already exists, marking stored file as copied, tmpObjectName: %s, destObjectName: %s", tmpObjectName, destObjectName)
+		return filex.Update().SetCopiedToFinalDestinationAt(time.Now()).Exec(ctx)
 	}
 	minioErr := minio.ToErrorResponse(err)
 	if minioErr.Code != "NoSuchKey" { // TODO can this be made more type safe?

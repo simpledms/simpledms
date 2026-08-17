@@ -1,0 +1,37 @@
+{{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.Toolbar */ -}}
+{{- define "Toolbar" }}
+	{{/*
+		hx-swap-oob selector selects deepest div with class `toolbar`, thus the
+		one that has no child with class `toolbar`;
+		if not found, then body is used if it has no child with class
+
+		necessary because toolbar is specific to currently open screen
+
+		also used in snackbar
+
+		TODO as of 04 Sept 24 it could match two popovers because showFilePopover is no child of
+		     div#popovers, it's a child of #content
+		<div class="toolbar" hx-swap-oob="outerHTML:div.toolbar:not(:has(div.toolbar)),body:not(:has(div.toolbar))">
+	*/}}
+	<div
+		id="{{ .GetID }}"
+		role="toolbar"
+		aria-label="{{ .Label }}"
+		aria-orientation="{{ if .IsVertical }}vertical{{ else }}horizontal{{ end }}"
+		class="flex items-center
+			{{ if .IsFloating }}
+				p-2 gap-4 rounded-full drop-shadow
+				{{ if .IsVertical }}flex-col w-16{{ else }}flex-row h-16 w-fit{{ end }}
+			{{ else }}
+				w-full min-h-20 h-20 py-3 px-4 gap-x-3 justify-between
+				exp:min-h-12 exp:h-12 exp:rounded-b-lg
+			{{ end }}
+			{{ if .IsVibrant }}
+				bg-primary-container text-on-primary-container
+			{{ else }}
+				bg-surface-container text-on-surface
+			{{ end }}"
+	>
+		{{ render .GetContext .Children }}
+	</div>
+{{ end }}

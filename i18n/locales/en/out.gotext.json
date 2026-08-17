@@ -557,7 +557,7 @@
                     "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 1,
-                    "expr": "wx.Tu(match.SpaceName)"
+                    "expr": "widget.Tu(match.SpaceName)"
                 }
             ]
         },
@@ -572,7 +572,7 @@
                     "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 1,
-                    "expr": "wx.Tu(match.ParentDirName)"
+                    "expr": "widget.Tu(match.ParentDirName)"
                 }
             ]
         },
@@ -708,13 +708,53 @@
             ]
         },
         {
-            "id": "rendering failed",
-            "message": "rendering failed",
+            "id": "Preview",
+            "message": "Preview",
             "translation": ""
         },
         {
-            "id": "Close preview",
-            "message": "Close preview",
+            "id": "Original",
+            "message": "Original",
+            "translation": "Original"
+        },
+        {
+            "id": "Download PDF",
+            "message": "Download PDF",
+            "translation": "Download PDF"
+        },
+        {
+            "id": "PDF preview could not be generated.",
+            "message": "PDF preview could not be generated.",
+            "translation": "PDF preview could not be generated."
+        },
+        {
+            "id": "Retry PDF generation",
+            "message": "Retry PDF generation",
+            "translation": "Retry PDF generation"
+        },
+        {
+            "id": "Download",
+            "message": "Download",
+            "translation": ""
+        },
+        {
+            "id": "PDF preview is unavailable because Gotenberg is not configured.",
+            "message": "PDF preview is unavailable because Gotenberg is not configured.",
+            "translation": "PDF preview is unavailable because Gotenberg is not configured."
+        },
+        {
+            "id": "PDF preview is being generated. Please wait a moment; the page will refresh automatically.",
+            "message": "PDF preview is being generated. Please wait a moment; the page will refresh automatically.",
+            "translation": "PDF preview is being generated. Please wait a moment; the page will refresh automatically."
+        },
+        {
+            "id": "PDF preview is not available.",
+            "message": "PDF preview is not available.",
+            "translation": "PDF preview is not available."
+        },
+        {
+            "id": "rendering failed",
+            "message": "rendering failed",
             "translation": ""
         },
         {
@@ -723,10 +763,14 @@
             "translation": ""
         },
         {
-            "id": "Download",
-            "message": "Download",
-            "translation": "",
-            "comment": "\u0026wx.IconButton{\n\t\t\t\t\tIcon: \"more_vert\",\n\t\t\t\t\tChildren: \u0026wx.Menu{\n\t\t\t\t\t\tItems: []*wx.MenuItem{\n\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\tLeadingIcon:          \"download\",\n\t\t\t\t\t\t\t\tLabel:                wx.T(\"Download\"),\n\t\t\t\t\t\t\t\tDownloadLinkURL:      route.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),\n\t\t\t\t\t\t\t\tDownloadLinkFilename: filex.Filename(ctx),\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t},"
+            "id": "Close preview",
+            "message": "Close preview",
+            "translation": ""
+        },
+        {
+            "id": "version not found",
+            "message": "version not found",
+            "translation": ""
         },
         {
             "id": "No fields assigned yet.",
@@ -881,11 +925,6 @@
         {
             "id": "invalid version number",
             "message": "invalid version number",
-            "translation": ""
-        },
-        {
-            "id": "version not found",
-            "message": "version not found",
             "translation": ""
         },
         {
@@ -1141,6 +1180,26 @@
             ]
         },
         {
+            "id": "PDF preview conversion is not configured",
+            "message": "PDF preview conversion is not configured",
+            "translation": "PDF preview conversion is not configured"
+        },
+        {
+            "id": "PDF preview is not available",
+            "message": "PDF preview is not available",
+            "translation": "PDF preview is not available"
+        },
+        {
+            "id": "PDF preview is not ready to retry",
+            "message": "PDF preview is not ready to retry",
+            "translation": "PDF preview is not ready to retry"
+        },
+        {
+            "id": "PDF preview generation queued.",
+            "message": "PDF preview generation queued.",
+            "translation": "PDF preview generation queued."
+        },
+        {
             "id": "Document type deselected.",
             "message": "Document type deselected.",
             "translation": ""
@@ -1148,6 +1207,11 @@
         {
             "id": "Document type selected.",
             "message": "Document type selected.",
+            "translation": ""
+        },
+        {
+            "id": "Best match",
+            "message": "Best match",
             "translation": ""
         },
         {
@@ -1882,6 +1946,16 @@
             ]
         },
         {
+            "id": "cannot preview directories",
+            "message": "cannot preview directories",
+            "translation": "cannot preview directories"
+        },
+        {
+            "id": "original source preview is only available for HTML files",
+            "message": "original source preview is only available for HTML files",
+            "translation": "original source preview is only available for HTML files"
+        },
+        {
             "id": "Assign file",
             "message": "Assign file",
             "translation": ""
@@ -2222,7 +2296,7 @@
                     "type": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "underlyingType": "*github.com/simpledms/simpledms/core/ui/widget.Text",
                     "argNum": 1,
-                    "expr": "wx.Tu(userm.NameSecondLine())"
+                    "expr": "widget.Tu(userm.NameSecondLine())"
                 },
                 {
                     "id": "OwnershipText",
@@ -2380,7 +2454,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "wx.Tu(spacex.Name).String(ctx)"
+                    "expr": "widget.Tu(spacex.Name).String(ctx)"
                 },
                 {
                     "id": "Stringctx_1",
@@ -2388,7 +2462,7 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 2,
-                    "expr": "wx.T(\"active\").String(ctx)"
+                    "expr": "widget.T(\"active\").String(ctx)"
                 }
             ]
         },
@@ -2727,11 +2801,6 @@
             "translation": ""
         },
         {
-            "id": "Preview",
-            "message": "Preview",
-            "translation": ""
-        },
-        {
             "id": "Upload is too large.",
             "message": "Upload is too large.",
             "translation": ""
@@ -2774,6 +2843,137 @@
         {
             "id": "Cannot decode url query.",
             "message": "Cannot decode url query.",
+            "translation": ""
+        },
+        {
+            "id": "No backup codes were returned.",
+            "message": "No backup codes were returned.",
+            "translation": ""
+        },
+        {
+            "id": "The backup codes were regenerated.",
+            "message": "The backup codes were regenerated.",
+            "translation": ""
+        },
+        {
+            "id": "Could not regenerate backup codes.",
+            "message": "Could not regenerate backup codes.",
+            "translation": ""
+        },
+        {
+            "id": "Close dialog",
+            "message": "Close dialog",
+            "translation": "",
+            "comment": "PopoverTarget:       qq.ID,\nPopoverTargetAction: \"hide\","
+        },
+        {
+            "id": "Close",
+            "message": "Close",
+            "translation": ""
+        },
+        {
+            "id": "Suggestion",
+            "message": "Suggestion",
+            "translation": ""
+        },
+        {
+            "id": "optional",
+            "message": "optional",
+            "translation": ""
+        },
+        {
+            "id": "required",
+            "message": "required",
+            "translation": ""
+        },
+        {
+            "id": "Open main menu",
+            "message": "Open main menu",
+            "translation": ""
+        },
+        {
+            "id": "Give this passkey an optional name so you can recognize it later.",
+            "message": "Give this passkey an optional name so you can recognize it later.",
+            "translation": ""
+        },
+        {
+            "id": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "message": "After registration, printable backup codes will be shown once. Save them before closing.",
+            "translation": ""
+        },
+        {
+            "id": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "message": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey name (optional)",
+            "message": "Passkey name (optional)",
+            "translation": ""
+        },
+        {
+            "id": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "message": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
+            "translation": ""
+        },
+        {
+            "id": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "message": "If you lose these codes and your passkey, account recovery may no longer be possible.",
+            "translation": ""
+        },
+        {
+            "id": "SimpleDMS backup codes",
+            "message": "SimpleDMS backup codes",
+            "translation": ""
+        },
+        {
+            "id": "Generated",
+            "message": "Generated",
+            "translation": ""
+        },
+        {
+            "id": "Keep these backup codes in a secure place.",
+            "message": "Keep these backup codes in a secure place.",
+            "translation": ""
+        },
+        {
+            "id": "These codes are shown only once.",
+            "message": "These codes are shown only once.",
+            "translation": ""
+        },
+        {
+            "id": "Codes",
+            "message": "Codes",
+            "translation": ""
+        },
+        {
+            "id": "Print dialog opened.",
+            "message": "Print dialog opened.",
+            "translation": ""
+        },
+        {
+            "id": "The backup codes were copied to clipboard.",
+            "message": "The backup codes were copied to clipboard.",
+            "translation": ""
+        },
+        {
+            "id": "Could not copy backup codes automatically.",
+            "message": "Could not copy backup codes automatically.",
+            "translation": ""
+        },
+        {
+            "id": "The backup codes were downloaded.",
+            "message": "The backup codes were downloaded.",
+            "translation": ""
+        },
+        {
+            "id": "Print codes",
+            "message": "Print codes",
+            "translation": ""
+        },
+        {
+            "id": "Copy codes",
+            "message": "Copy codes",
             "translation": ""
         },
         {
@@ -3162,8 +3362,18 @@
             "translation": ""
         },
         {
+            "id": "Preview tab",
+            "message": "Preview tab",
+            "translation": ""
+        },
+        {
             "id": "Pro",
             "message": "Pro",
+            "translation": ""
+        },
+        {
+            "id": "Push url",
+            "message": "Push url",
             "translation": ""
         },
         {
@@ -3542,6 +3752,16 @@
             "translation": ""
         },
         {
+            "id": "New tenant registration",
+            "message": "New tenant registration",
+            "translation": ""
+        },
+        {
+            "id": "This is an automated message, please do not reply.",
+            "message": "This is an automated message, please do not reply.",
+            "translation": ""
+        },
+        {
             "id": "Welcome to SimpleDMS",
             "message": "Welcome to SimpleDMS",
             "translation": ""
@@ -3554,11 +3774,6 @@
         {
             "id": "SimpleDMS password reset",
             "message": "SimpleDMS password reset",
-            "translation": ""
-        },
-        {
-            "id": "This is an automated message, please do not reply.",
-            "message": "This is an automated message, please do not reply.",
             "translation": ""
         },
         {
@@ -4543,26 +4758,6 @@
             "translation": "Maintenance mode is enabled. Please wait until the app is ready again."
         },
         {
-            "id": "Close",
-            "message": "Close",
-            "translation": ""
-        },
-        {
-            "id": "Open main menu",
-            "message": "Open main menu",
-            "translation": ""
-        },
-        {
-            "id": "Sign out",
-            "message": "Sign out",
-            "translation": ""
-        },
-        {
-            "id": "About SimpleDMS",
-            "message": "About SimpleDMS",
-            "translation": ""
-        },
-        {
             "id": "Misc",
             "message": "Misc",
             "translation": ""
@@ -4573,134 +4768,18 @@
             "translation": ""
         },
         {
-            "id": "Spaces by Organization",
-            "message": "Spaces by Organization",
-            "translation": ""
-        },
-        {
             "id": "Organizations",
             "message": "Organizations",
             "translation": ""
         },
         {
-            "id": "No backup codes were returned.",
-            "message": "No backup codes were returned.",
+            "id": "Sign out",
+            "message": "Sign out",
             "translation": ""
         },
         {
-            "id": "The backup codes were regenerated.",
-            "message": "The backup codes were regenerated.",
-            "translation": ""
-        },
-        {
-            "id": "Could not regenerate backup codes.",
-            "message": "Could not regenerate backup codes.",
-            "translation": ""
-        },
-        {
-            "id": "Close dialog",
-            "message": "Close dialog",
-            "translation": "",
-            "comment": "PopoverTarget:       qq.ID,\nPopoverTargetAction: \"hide\","
-        },
-        {
-            "id": "Suggestion",
-            "message": "Suggestion",
-            "translation": ""
-        },
-        {
-            "id": "optional",
-            "message": "optional",
-            "translation": ""
-        },
-        {
-            "id": "required",
-            "message": "required",
-            "translation": ""
-        },
-        {
-            "id": "Give this passkey an optional name so you can recognize it later.",
-            "message": "Give this passkey an optional name so you can recognize it later.",
-            "translation": ""
-        },
-        {
-            "id": "After registration, printable backup codes will be shown once. Save them before closing.",
-            "message": "After registration, printable backup codes will be shown once. Save them before closing.",
-            "translation": ""
-        },
-        {
-            "id": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
-            "message": "After setup, password sign-in is disabled for this account. Use passkeys and backup codes instead.",
-            "translation": ""
-        },
-        {
-            "id": "Passkey name (optional)",
-            "message": "Passkey name (optional)",
-            "translation": ""
-        },
-        {
-            "id": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
-            "message": "Important: these backup codes are shown only once. Save, print, or download them now before closing this dialog.",
-            "translation": ""
-        },
-        {
-            "id": "If you lose these codes and your passkey, account recovery may no longer be possible.",
-            "message": "If you lose these codes and your passkey, account recovery may no longer be possible.",
-            "translation": ""
-        },
-        {
-            "id": "SimpleDMS backup codes",
-            "message": "SimpleDMS backup codes",
-            "translation": ""
-        },
-        {
-            "id": "Generated",
-            "message": "Generated",
-            "translation": ""
-        },
-        {
-            "id": "Keep these backup codes in a secure place.",
-            "message": "Keep these backup codes in a secure place.",
-            "translation": ""
-        },
-        {
-            "id": "These codes are shown only once.",
-            "message": "These codes are shown only once.",
-            "translation": ""
-        },
-        {
-            "id": "Codes",
-            "message": "Codes",
-            "translation": ""
-        },
-        {
-            "id": "Print dialog opened.",
-            "message": "Print dialog opened.",
-            "translation": ""
-        },
-        {
-            "id": "The backup codes were copied to clipboard.",
-            "message": "The backup codes were copied to clipboard.",
-            "translation": ""
-        },
-        {
-            "id": "Could not copy backup codes automatically.",
-            "message": "Could not copy backup codes automatically.",
-            "translation": ""
-        },
-        {
-            "id": "The backup codes were downloaded.",
-            "message": "The backup codes were downloaded.",
-            "translation": ""
-        },
-        {
-            "id": "Print codes",
-            "message": "Print codes",
-            "translation": ""
-        },
-        {
-            "id": "Copy codes",
-            "message": "Copy codes",
+            "id": "About SimpleDMS",
+            "message": "About SimpleDMS",
             "translation": ""
         },
         {

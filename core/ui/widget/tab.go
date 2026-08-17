@@ -8,10 +8,11 @@ type Tab struct {
 	Widget[Tab]
 	HTMXAttrs
 
-	Icon     string
-	Label    *Text
-	Badge    *Badge
-	IsActive bool
+	Icon       string
+	Label      *Text
+	Badge      *Badge
+	IsActive   bool
+	IsDisabled bool
 
 	IsFlowing bool // TODO find a better name; IsFloating?
 

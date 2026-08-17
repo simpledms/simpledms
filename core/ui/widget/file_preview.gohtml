@@ -15,7 +15,7 @@
 			   class="">
 			<source src="{{ .FileURL }}" type="{{ .MimeType }}">
 			<p>Your browser doesn't support previewing video files.</p>
-            {{ template "downloadLink" . }}
+			{{ if not .HideDownloadLink }}{{ template "downloadLink" . }}{{ end }}
 		</video>
 	{{- else if .IsAudio }}
 		<audio controls
@@ -23,14 +23,14 @@
 		>
 			<source src="{{ .FileURL }}" type="{{ .MimeType }}">
 			<p>Your browser doesn't support previewing audio files.</p>
-            {{ template "downloadLink" . }}
+			{{ if not .HideDownloadLink }}{{ template "downloadLink" . }}{{ end }}
 		</audio>
     {{- else if .IsArchive }}
 		<p>Archives cannot be previewed at the moment, please download the file to inspect it.</p>
-		{{ template "downloadLink" . }}
+		{{ if not .HideDownloadLink }}{{ template "downloadLink" . }}{{ end }}
     {{- else if .IsBinary}}
 		<p>Binary files cannot be previewed, please download the file to execute it.</p>
-        {{ template "downloadLink" . }}
+		{{ if not .HideDownloadLink }}{{ template "downloadLink" . }}{{ end }}
 	{{- else if .IsPreviewable }}
 		<object
 				class="w-full h-full"
@@ -98,11 +98,11 @@
 			{{- else }}
 				{{/* TODO fallback to <embed>? */}}
 				<p>Cannot preview the file, please download the file to view it.</p>
-            	{{ template "downloadLink" . }}
+				{{ if not .HideDownloadLink }}{{ template "downloadLink" . }}{{ end }}
 			{{- end }}
 		</object>
 	{{- else }}
 		<p>File cannot be previewed, please download the file to view it.</p>
-        {{ template "downloadLink" . }}
+		{{ if not .HideDownloadLink }}{{ template "downloadLink" . }}{{ end }}
 	{{- end }}
 {{ end }}

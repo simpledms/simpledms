@@ -11,6 +11,8 @@ services:
         condition: service_started
       tika:
         condition: service_started
+      gotenberg:
+        condition: service_healthy
     restart: unless-stopped
     # if you run SimpleDMS locally, you probably want to use other ports
     ports:
@@ -18,10 +20,26 @@ services:
       - 443:443
     volumes:
       - simpledms_data:/srv
+    environment:
+      SIMPLEDMS_GOTENBERG_URL: http://gotenberg:3000
 
   tika:
     image: apache/tika:latest-full
     restart: unless-stopped
+
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    command:
+      - "gotenberg"
+      - "--chromium-deny-private-ips=true"
+      - "--libreoffice-deny-private-ips=true"
+      - "--api-disable-download-from=true"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
 
   # versity gateway is only necessary if you don't have S3 storage yet and want to store
   # the files in a Docker volume (this example) or on your file system

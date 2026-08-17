@@ -7,11 +7,15 @@
 				{{ if .IsFlowing }}justify-center{{ else }}w-full basis-0{{ end }}
 				{{ if .IsActive }}text-primary{{ else }}text-on-surface-variant{{ end }}
 				{{ if .IsActive }}js-active-tab{{ end }}
+				{{ if .IsDisabled }}opacity-[0.38]{{ end }}
 			 	{{ .GetClass }}
 			"
-			href="#" {{/* necessary for pointer mouse icon, is there a better solution? */}}
+			{{ if not .IsDisabled }}href="#" {{/* necessary for pointer mouse icon, is there a better solution? */}}{{ end }}
+			role="tab"
+			aria-selected="{{ .IsActive }}"
+			{{ if .IsDisabled }}aria-disabled="true" tabindex="-1"{{ end }}
 
-			{{ template "HTMXAttrs" .HTMXAttrs }}
+			{{ if not .IsDisabled }}{{ template "HTMXAttrs" .HTMXAttrs }}{{ end }}
 	>
 		<div class="{{ if .IsActive }}state-layer-primary{{ else }}state-layer-on-surface{{ end }}
 			{{ .GetClass }}

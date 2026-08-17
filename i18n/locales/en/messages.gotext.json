@@ -343,6 +343,104 @@
 			"translation": "No tag groups available.",
 			"translatorComment": "",
 			"fuzzy": true
+		},
+		{
+			"id": "Original",
+			"message": "Original",
+			"translation": "Original",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF",
+			"message": "PDF",
+			"translation": "PDF",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Download PDF",
+			"message": "Download PDF",
+			"translation": "Download PDF",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "Retry PDF generation",
+			"message": "Retry PDF generation",
+			"translation": "Retry PDF generation",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview is being generated. Please wait a moment; the page will refresh automatically.",
+			"message": "PDF preview is being generated. Please wait a moment; the page will refresh automatically.",
+			"translation": "PDF preview is being generated. Please wait a moment; the page will refresh automatically.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview is unavailable because Gotenberg is not configured.",
+			"message": "PDF preview is unavailable because Gotenberg is not configured.",
+			"translation": "PDF preview is unavailable because Gotenberg is not configured.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview could not be generated.",
+			"message": "PDF preview could not be generated.",
+			"translation": "PDF preview could not be generated.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview is not available.",
+			"message": "PDF preview is not available.",
+			"translation": "PDF preview is not available.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview conversion is not configured",
+			"message": "PDF preview conversion is not configured",
+			"translation": "PDF preview conversion is not configured",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview is not available",
+			"message": "PDF preview is not available",
+			"translation": "PDF preview is not available",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview is not ready to retry",
+			"message": "PDF preview is not ready to retry",
+			"translation": "PDF preview is not ready to retry",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "PDF preview generation queued.",
+			"message": "PDF preview generation queued.",
+			"translation": "PDF preview generation queued.",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "cannot preview directories",
+			"message": "cannot preview directories",
+			"translation": "cannot preview directories",
+			"translatorComment": "",
+			"fuzzy": true
+		},
+		{
+			"id": "original source preview is only available for HTML files",
+			"message": "original source preview is only available for HTML files",
+			"translation": "original source preview is only available for HTML files",
+			"translatorComment": "",
+			"fuzzy": true
 		}
 	]
 }

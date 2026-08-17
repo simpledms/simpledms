@@ -24,7 +24,7 @@ async function globalSetup(config: FullConfig) {
 		await page.goto(baseURL);
 		await page.getByRole("textbox", { name: "Email" }).fill(email);
 		await page.getByRole("textbox", { name: "Password" }).fill(password);
-		await page.getByRole("button", { name: "Sign in" }).click();
+		await page.getByRole("button", { name: "Sign in", exact: true }).click();
 
 		const reachedDashboard = await page
 			.waitForURL(/\/dashboard\/$/, { timeout: 5_000 })
