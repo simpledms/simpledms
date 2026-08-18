@@ -52,11 +52,10 @@ func Classify(mimeType, filename string, isDirectory bool) (*Classification, boo
 		return nil, false
 	}
 
-	family, inputExtension := familyForExtension(extension)
-	fromMIME := false
-	if family == "" {
-		family, inputExtension = familyForMIME(normalizedMIME)
-		fromMIME = true
+	family, inputExtension := familyForMIME(normalizedMIME)
+	fromMIME := family != ""
+	if family == "" && isAmbiguousMIME(normalizedMIME) {
+		family, inputExtension = familyForExtension(extension)
 	}
 	if family == "" {
 		return nil, false
@@ -84,6 +83,10 @@ func Classify(mimeType, filename string, isDirectory bool) (*Classification, boo
 		inputFilename,
 		PreviewFilename(filename),
 	), true
+}
+
+func isAmbiguousMIME(mimeType string) bool {
+	return mimeType == "" || mimeType == "application/octet-stream" || mimeType == "text/plain"
 }
 
 func PreviewFilename(filename string) string {

@@ -43,6 +43,9 @@ func TestClassifyExcludedSources(t *testing.T) {
 		{mimeType: "application/pdf", filename: "already.pdf"},
 		{mimeType: "image/png", filename: "image.png"},
 		{mimeType: "application/zip", filename: "archive.zip"},
+		{mimeType: "application/zip", filename: "spreadsheet.ods"},
+		{mimeType: "application/x-zip-compressed", filename: "spreadsheet.ods"},
+		{mimeType: "image/png", filename: "document.docx"},
 		{mimeType: "text/html", filename: "folder", isDirectory: true},
 	} {
 		if classification, eligible := Classify(test.mimeType, test.filename, test.isDirectory); eligible || classification != nil {
