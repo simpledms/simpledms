@@ -42,6 +42,8 @@ type Tx struct {
 	Tag *TagClient
 	// TagAssignment is the client for interacting with the TagAssignment builders.
 	TagAssignment *TagAssignmentClient
+	// TenantDataMigration is the client for interacting with the TenantDataMigration builders.
+	TenantDataMigration *TenantDataMigrationClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 
@@ -189,6 +191,7 @@ func (tx *Tx) init() {
 	tx.StoredFile = NewStoredFileClient(tx.config)
 	tx.Tag = NewTagClient(tx.config)
 	tx.TagAssignment = NewTagAssignmentClient(tx.config)
+	tx.TenantDataMigration = NewTenantDataMigrationClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }
 

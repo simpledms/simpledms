@@ -153,6 +153,18 @@ func (f TagAssignmentFunc) Mutate(ctx context.Context, m enttenant.Mutation) (en
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *enttenant.TagAssignmentMutation", m)
 }
 
+// The TenantDataMigrationFunc type is an adapter to allow the use of ordinary
+// function as TenantDataMigration mutator.
+type TenantDataMigrationFunc func(context.Context, *enttenant.TenantDataMigrationMutation) (enttenant.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TenantDataMigrationFunc) Mutate(ctx context.Context, m enttenant.Mutation) (enttenant.Value, error) {
+	if mv, ok := m.(*enttenant.TenantDataMigrationMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *enttenant.TenantDataMigrationMutation", m)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary
 // function as User mutator.
 type UserFunc func(context.Context, *enttenant.UserMutation) (enttenant.Value, error)

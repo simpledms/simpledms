@@ -27,6 +27,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 
 	stdsql "database/sql"
@@ -65,6 +66,8 @@ type Client struct {
 	Tag *TagClient
 	// TagAssignment is the client for interacting with the TagAssignment builders.
 	TagAssignment *TagAssignmentClient
+	// TenantDataMigration is the client for interacting with the TenantDataMigration builders.
+	TenantDataMigration *TenantDataMigrationClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -92,6 +95,7 @@ func (c *Client) init() {
 	c.StoredFile = NewStoredFileClient(c.config)
 	c.Tag = NewTagClient(c.config)
 	c.TagAssignment = NewTagAssignmentClient(c.config)
+	c.TenantDataMigration = NewTenantDataMigrationClient(c.config)
 	c.User = NewUserClient(c.config)
 }
 
@@ -199,6 +203,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		StoredFile:             NewStoredFileClient(cfg),
 		Tag:                    NewTagClient(cfg),
 		TagAssignment:          NewTagAssignmentClient(cfg),
+		TenantDataMigration:    NewTenantDataMigrationClient(cfg),
 		User:                   NewUserClient(cfg),
 	}, nil
 }
@@ -233,6 +238,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		StoredFile:             NewStoredFileClient(cfg),
 		Tag:                    NewTagClient(cfg),
 		TagAssignment:          NewTagAssignmentClient(cfg),
+		TenantDataMigration:    NewTenantDataMigrationClient(cfg),
 		User:                   NewUserClient(cfg),
 	}, nil
 }
@@ -265,7 +271,7 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Attribute, c.DocumentType, c.File, c.FilePropertyAssignment, c.FileVersion,
 		c.PreviewConversion, c.Property, c.Space, c.SpaceUserAssignment, c.StoredFile,
-		c.Tag, c.TagAssignment, c.User,
+		c.Tag, c.TagAssignment, c.TenantDataMigration, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -277,7 +283,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Attribute, c.DocumentType, c.File, c.FilePropertyAssignment, c.FileSearch,
 		c.FileVersion, c.PreviewConversion, c.Property, c.ResolvedTagAssignment,
-		c.Space, c.SpaceUserAssignment, c.StoredFile, c.Tag, c.TagAssignment, c.User,
+		c.Space, c.SpaceUserAssignment, c.StoredFile, c.Tag, c.TagAssignment,
+		c.TenantDataMigration, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -310,6 +317,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Tag.mutate(ctx, m)
 	case *TagAssignmentMutation:
 		return c.TagAssignment.mutate(ctx, m)
+	case *TenantDataMigrationMutation:
+		return c.TenantDataMigration.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
 	default:
@@ -2883,6 +2892,139 @@ func (c *TagAssignmentClient) mutate(ctx context.Context, m *TagAssignmentMutati
 	}
 }
 
+// TenantDataMigrationClient is a client for the TenantDataMigration schema.
+type TenantDataMigrationClient struct {
+	config
+}
+
+// NewTenantDataMigrationClient returns a client for the TenantDataMigration from the given config.
+func NewTenantDataMigrationClient(c config) *TenantDataMigrationClient {
+	return &TenantDataMigrationClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `tenantdatamigration.Hooks(f(g(h())))`.
+func (c *TenantDataMigrationClient) Use(hooks ...Hook) {
+	c.hooks.TenantDataMigration = append(c.hooks.TenantDataMigration, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `tenantdatamigration.Intercept(f(g(h())))`.
+func (c *TenantDataMigrationClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TenantDataMigration = append(c.inters.TenantDataMigration, interceptors...)
+}
+
+// Create returns a builder for creating a TenantDataMigration entity.
+func (c *TenantDataMigrationClient) Create() *TenantDataMigrationCreate {
+	mutation := newTenantDataMigrationMutation(c.config, OpCreate)
+	return &TenantDataMigrationCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TenantDataMigration entities.
+func (c *TenantDataMigrationClient) CreateBulk(builders ...*TenantDataMigrationCreate) *TenantDataMigrationCreateBulk {
+	return &TenantDataMigrationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TenantDataMigrationClient) MapCreateBulk(slice any, setFunc func(*TenantDataMigrationCreate, int)) *TenantDataMigrationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TenantDataMigrationCreateBulk{err: fmt.Errorf("calling to TenantDataMigrationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TenantDataMigrationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TenantDataMigrationCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TenantDataMigration.
+func (c *TenantDataMigrationClient) Update() *TenantDataMigrationUpdate {
+	mutation := newTenantDataMigrationMutation(c.config, OpUpdate)
+	return &TenantDataMigrationUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TenantDataMigrationClient) UpdateOne(_m *TenantDataMigration) *TenantDataMigrationUpdateOne {
+	mutation := newTenantDataMigrationMutation(c.config, OpUpdateOne, withTenantDataMigration(_m))
+	return &TenantDataMigrationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TenantDataMigrationClient) UpdateOneID(id int) *TenantDataMigrationUpdateOne {
+	mutation := newTenantDataMigrationMutation(c.config, OpUpdateOne, withTenantDataMigrationID(id))
+	return &TenantDataMigrationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TenantDataMigration.
+func (c *TenantDataMigrationClient) Delete() *TenantDataMigrationDelete {
+	mutation := newTenantDataMigrationMutation(c.config, OpDelete)
+	return &TenantDataMigrationDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TenantDataMigrationClient) DeleteOne(_m *TenantDataMigration) *TenantDataMigrationDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TenantDataMigrationClient) DeleteOneID(id int) *TenantDataMigrationDeleteOne {
+	builder := c.Delete().Where(tenantdatamigration.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TenantDataMigrationDeleteOne{builder}
+}
+
+// Query returns a query builder for TenantDataMigration.
+func (c *TenantDataMigrationClient) Query() *TenantDataMigrationQuery {
+	return &TenantDataMigrationQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTenantDataMigration},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TenantDataMigration entity by its id.
+func (c *TenantDataMigrationClient) Get(ctx context.Context, id int) (*TenantDataMigration, error) {
+	return c.Query().Where(tenantdatamigration.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TenantDataMigrationClient) GetX(ctx context.Context, id int) *TenantDataMigration {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TenantDataMigrationClient) Hooks() []Hook {
+	return c.hooks.TenantDataMigration
+}
+
+// Interceptors returns the client interceptors.
+func (c *TenantDataMigrationClient) Interceptors() []Interceptor {
+	return c.inters.TenantDataMigration
+}
+
+func (c *TenantDataMigrationClient) mutate(ctx context.Context, m *TenantDataMigrationMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TenantDataMigrationCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TenantDataMigrationUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TenantDataMigrationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TenantDataMigrationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("enttenant: unknown TenantDataMigration mutation op: %q", m.Op())
+	}
+}
+
 // UserClient is a client for the User schema.
 type UserClient struct {
 	config
@@ -3055,12 +3197,12 @@ type (
 	hooks struct {
 		Attribute, DocumentType, File, FilePropertyAssignment, FileVersion,
 		PreviewConversion, Property, Space, SpaceUserAssignment, StoredFile, Tag,
-		TagAssignment, User []ent.Hook
+		TagAssignment, TenantDataMigration, User []ent.Hook
 	}
 	inters struct {
 		Attribute, DocumentType, File, FilePropertyAssignment, FileSearch, FileVersion,
 		PreviewConversion, Property, ResolvedTagAssignment, Space, SpaceUserAssignment,
-		StoredFile, Tag, TagAssignment, User []ent.Interceptor
+		StoredFile, Tag, TagAssignment, TenantDataMigration, User []ent.Interceptor
 	}
 )
 

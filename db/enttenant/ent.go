@@ -18,7 +18,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
-
 	enttenantpreviewconversion "github.com/simpledms/simpledms/db/enttenant/previewconversion"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
@@ -27,6 +26,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 )
 
@@ -102,6 +102,7 @@ func checkColumn(t, c string) error {
 			storedfile.Table:                 storedfile.ValidColumn,
 			tag.Table:                        tag.ValidColumn,
 			tagassignment.Table:              tagassignment.ValidColumn,
+			tenantdatamigration.Table:        tenantdatamigration.ValidColumn,
 			user.Table:                       user.ValidColumn,
 		})
 	})

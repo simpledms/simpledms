@@ -24,6 +24,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/attributetype"
@@ -59,6 +60,7 @@ const (
 	TypeStoredFile             = "StoredFile"
 	TypeTag                    = "Tag"
 	TypeTagAssignment          = "TagAssignment"
+	TypeTenantDataMigration    = "TenantDataMigration"
 	TypeUser                   = "User"
 )
 
@@ -14107,6 +14109,1004 @@ func (m *TagAssignmentMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown TagAssignment edge %s", name)
+}
+
+// TenantDataMigrationMutation represents an operation that mutates the TenantDataMigration nodes in the graph.
+type TenantDataMigrationMutation struct {
+	config
+	op                Op
+	typ               string
+	id                *int
+	key               *string
+	cursor            *int64
+	addcursor         *int64
+	first_started_at  *time.Time
+	completed_at      *time.Time
+	last_attempted_at *time.Time
+	failed_at         *time.Time
+	last_error        *string
+	retry_count       *int
+	addretry_count    *int
+	lease_token       *string
+	lease_expires_at  *time.Time
+	clearedFields     map[string]struct{}
+	done              bool
+	oldValue          func(context.Context) (*TenantDataMigration, error)
+	predicates        []predicate.TenantDataMigration
+}
+
+var _ ent.Mutation = (*TenantDataMigrationMutation)(nil)
+
+// tenantdatamigrationOption allows management of the mutation configuration using functional options.
+type tenantdatamigrationOption func(*TenantDataMigrationMutation)
+
+// newTenantDataMigrationMutation creates new mutation for the TenantDataMigration entity.
+func newTenantDataMigrationMutation(c config, op Op, opts ...tenantdatamigrationOption) *TenantDataMigrationMutation {
+	m := &TenantDataMigrationMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeTenantDataMigration,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withTenantDataMigrationID sets the ID field of the mutation.
+func withTenantDataMigrationID(id int) tenantdatamigrationOption {
+	return func(m *TenantDataMigrationMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *TenantDataMigration
+		)
+		m.oldValue = func(ctx context.Context) (*TenantDataMigration, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().TenantDataMigration.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withTenantDataMigration sets the old TenantDataMigration of the mutation.
+func withTenantDataMigration(node *TenantDataMigration) tenantdatamigrationOption {
+	return func(m *TenantDataMigrationMutation) {
+		m.oldValue = func(context.Context) (*TenantDataMigration, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m TenantDataMigrationMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m TenantDataMigrationMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("enttenant: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *TenantDataMigrationMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *TenantDataMigrationMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().TenantDataMigration.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetKey sets the "key" field.
+func (m *TenantDataMigrationMutation) SetKey(s string) {
+	m.key = &s
+}
+
+// Key returns the value of the "key" field in the mutation.
+func (m *TenantDataMigrationMutation) Key() (r string, exists bool) {
+	v := m.key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldKey returns the old "key" field's value of the TenantDataMigration entity.
+// If the TenantDataMigration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantDataMigrationMutation) OldKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldKey: %w", err)
+	}
+	return oldValue.Key, nil
+}
+
+// ResetKey resets all changes to the "key" field.
+func (m *TenantDataMigrationMutation) ResetKey() {
+	m.key = nil
+}
+
+// SetCursor sets the "cursor" field.
+func (m *TenantDataMigrationMutation) SetCursor(i int64) {
+	m.cursor = &i
+	m.addcursor = nil
+}
+
+// Cursor returns the value of the "cursor" field in the mutation.
+func (m *TenantDataMigrationMutation) Cursor() (r int64, exists bool) {
+	v := m.cursor
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCursor returns the old "cursor" field's value of the TenantDataMigration entity.
+// If the TenantDataMigration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantDataMigrationMutation) OldCursor(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCursor is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCursor requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCursor: %w", err)
+	}
+	return oldValue.Cursor, nil
+}
+
+// AddCursor adds i to the "cursor" field.
+func (m *TenantDataMigrationMutation) AddCursor(i int64) {
+	if m.addcursor != nil {
+		*m.addcursor += i
+	} else {
+		m.addcursor = &i
+	}
+}
+
+// AddedCursor returns the value that was added to the "cursor" field in this mutation.
+func (m *TenantDataMigrationMutation) AddedCursor() (r int64, exists bool) {
+	v := m.addcursor
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCursor resets all changes to the "cursor" field.
+func (m *TenantDataMigrationMutation) ResetCursor() {
+	m.cursor = nil
+	m.addcursor = nil
+}
+
+// SetFirstStartedAt sets the "first_started_at" field.
+func (m *TenantDataMigrationMutation) SetFirstStartedAt(t time.Time) {
+	m.first_started_at = &t
+}
+
+// FirstStartedAt returns the value of the "first_started_at" field in the mutation.
+func (m *TenantDataMigrationMutation) FirstStartedAt() (r time.Time, exists bool) {
+	v := m.first_started_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFirstStartedAt returns the old "first_started_at" field's value of the TenantDataMigration entity.
+// If the TenantDataMigration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantDataMigrationMutation) OldFirstStartedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFirstStartedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFirstStartedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFirstStartedAt: %w", err)
+	}
+	return oldValue.FirstStartedAt, nil
+}
+
+// ResetFirstStartedAt resets all changes to the "first_started_at" field.
+func (m *TenantDataMigrationMutation) ResetFirstStartedAt() {
+	m.first_started_at = nil
+}
+
+// SetCompletedAt sets the "completed_at" field.
+func (m *TenantDataMigrationMutation) SetCompletedAt(t time.Time) {
+	m.completed_at = &t
+}
+
+// CompletedAt returns the value of the "completed_at" field in the mutation.
+func (m *TenantDataMigrationMutation) CompletedAt() (r time.Time, exists bool) {
+	v := m.completed_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCompletedAt returns the old "completed_at" field's value of the TenantDataMigration entity.
+// If the TenantDataMigration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantDataMigrationMutation) OldCompletedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCompletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCompletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCompletedAt: %w", err)
+	}
+	return oldValue.CompletedAt, nil
+}
+
+// ClearCompletedAt clears the value of the "completed_at" field.
+func (m *TenantDataMigrationMutation) ClearCompletedAt() {
+	m.completed_at = nil
+	m.clearedFields[tenantdatamigration.FieldCompletedAt] = struct{}{}
+}
+
+// CompletedAtCleared returns if the "completed_at" field was cleared in this mutation.
+func (m *TenantDataMigrationMutation) CompletedAtCleared() bool {
+	_, ok := m.clearedFields[tenantdatamigration.FieldCompletedAt]
+	return ok
+}
+
+// ResetCompletedAt resets all changes to the "completed_at" field.
+func (m *TenantDataMigrationMutation) ResetCompletedAt() {
+	m.completed_at = nil
+	delete(m.clearedFields, tenantdatamigration.FieldCompletedAt)
+}
+
+// SetLastAttemptedAt sets the "last_attempted_at" field.
+func (m *TenantDataMigrationMutation) SetLastAttemptedAt(t time.Time) {
+	m.last_attempted_at = &t
+}
+
+// LastAttemptedAt returns the value of the "last_attempted_at" field in the mutation.
+func (m *TenantDataMigrationMutation) LastAttemptedAt() (r time.Time, exists bool) {
+	v := m.last_attempted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLastAttemptedAt returns the old "last_attempted_at" field's value of the TenantDataMigration entity.
+// If the TenantDataMigration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantDataMigrationMutation) OldLastAttemptedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLastAttemptedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLastAttemptedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLastAttemptedAt: %w", err)
+	}
+	return oldValue.LastAttemptedAt, nil
+}
+
+// ClearLastAttemptedAt clears the value of the "last_attempted_at" field.
+func (m *TenantDataMigrationMutation) ClearLastAttemptedAt() {
+	m.last_attempted_at = nil
+	m.clearedFields[tenantdatamigration.FieldLastAttemptedAt] = struct{}{}
+}
+
+// LastAttemptedAtCleared returns if the "last_attempted_at" field was cleared in this mutation.
+func (m *TenantDataMigrationMutation) LastAttemptedAtCleared() bool {
+	_, ok := m.clearedFields[tenantdatamigration.FieldLastAttemptedAt]
+	return ok
+}
+
+// ResetLastAttemptedAt resets all changes to the "last_attempted_at" field.
+func (m *TenantDataMigrationMutation) ResetLastAttemptedAt() {
+	m.last_attempted_at = nil
+	delete(m.clearedFields, tenantdatamigration.FieldLastAttemptedAt)
+}
+
+// SetFailedAt sets the "failed_at" field.
+func (m *TenantDataMigrationMutation) SetFailedAt(t time.Time) {
+	m.failed_at = &t
+}
+
+// FailedAt returns the value of the "failed_at" field in the mutation.
+func (m *TenantDataMigrationMutation) FailedAt() (r time.Time, exists bool) {
+	v := m.failed_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFailedAt returns the old "failed_at" field's value of the TenantDataMigration entity.
+// If the TenantDataMigration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantDataMigrationMutation) OldFailedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFailedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFailedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFailedAt: %w", err)
+	}
+	return oldValue.FailedAt, nil
+}
+
+// ClearFailedAt clears the value of the "failed_at" field.
+func (m *TenantDataMigrationMutation) ClearFailedAt() {
+	m.failed_at = nil
+	m.clearedFields[tenantdatamigration.FieldFailedAt] = struct{}{}
+}
+
+// FailedAtCleared returns if the "failed_at" field was cleared in this mutation.
+func (m *TenantDataMigrationMutation) FailedAtCleared() bool {
+	_, ok := m.clearedFields[tenantdatamigration.FieldFailedAt]
+	return ok
+}
+
+// ResetFailedAt resets all changes to the "failed_at" field.
+func (m *TenantDataMigrationMutation) ResetFailedAt() {
+	m.failed_at = nil
+	delete(m.clearedFields, tenantdatamigration.FieldFailedAt)
+}
+
+// SetLastError sets the "last_error" field.
+func (m *TenantDataMigrationMutation) SetLastError(s string) {
+	m.last_error = &s
+}
+
+// LastError returns the value of the "last_error" field in the mutation.
+func (m *TenantDataMigrationMutation) LastError() (r string, exists bool) {
+	v := m.last_error
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLastError returns the old "last_error" field's value of the TenantDataMigration entity.
+// If the TenantDataMigration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantDataMigrationMutation) OldLastError(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLastError is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLastError requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLastError: %w", err)
+	}
+	return oldValue.LastError, nil
+}
+
+// ClearLastError clears the value of the "last_error" field.
+func (m *TenantDataMigrationMutation) ClearLastError() {
+	m.last_error = nil
+	m.clearedFields[tenantdatamigration.FieldLastError] = struct{}{}
+}
+
+// LastErrorCleared returns if the "last_error" field was cleared in this mutation.
+func (m *TenantDataMigrationMutation) LastErrorCleared() bool {
+	_, ok := m.clearedFields[tenantdatamigration.FieldLastError]
+	return ok
+}
+
+// ResetLastError resets all changes to the "last_error" field.
+func (m *TenantDataMigrationMutation) ResetLastError() {
+	m.last_error = nil
+	delete(m.clearedFields, tenantdatamigration.FieldLastError)
+}
+
+// SetRetryCount sets the "retry_count" field.
+func (m *TenantDataMigrationMutation) SetRetryCount(i int) {
+	m.retry_count = &i
+	m.addretry_count = nil
+}
+
+// RetryCount returns the value of the "retry_count" field in the mutation.
+func (m *TenantDataMigrationMutation) RetryCount() (r int, exists bool) {
+	v := m.retry_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRetryCount returns the old "retry_count" field's value of the TenantDataMigration entity.
+// If the TenantDataMigration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantDataMigrationMutation) OldRetryCount(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRetryCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRetryCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRetryCount: %w", err)
+	}
+	return oldValue.RetryCount, nil
+}
+
+// AddRetryCount adds i to the "retry_count" field.
+func (m *TenantDataMigrationMutation) AddRetryCount(i int) {
+	if m.addretry_count != nil {
+		*m.addretry_count += i
+	} else {
+		m.addretry_count = &i
+	}
+}
+
+// AddedRetryCount returns the value that was added to the "retry_count" field in this mutation.
+func (m *TenantDataMigrationMutation) AddedRetryCount() (r int, exists bool) {
+	v := m.addretry_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetRetryCount resets all changes to the "retry_count" field.
+func (m *TenantDataMigrationMutation) ResetRetryCount() {
+	m.retry_count = nil
+	m.addretry_count = nil
+}
+
+// SetLeaseToken sets the "lease_token" field.
+func (m *TenantDataMigrationMutation) SetLeaseToken(s string) {
+	m.lease_token = &s
+}
+
+// LeaseToken returns the value of the "lease_token" field in the mutation.
+func (m *TenantDataMigrationMutation) LeaseToken() (r string, exists bool) {
+	v := m.lease_token
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLeaseToken returns the old "lease_token" field's value of the TenantDataMigration entity.
+// If the TenantDataMigration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantDataMigrationMutation) OldLeaseToken(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLeaseToken is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLeaseToken requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLeaseToken: %w", err)
+	}
+	return oldValue.LeaseToken, nil
+}
+
+// ClearLeaseToken clears the value of the "lease_token" field.
+func (m *TenantDataMigrationMutation) ClearLeaseToken() {
+	m.lease_token = nil
+	m.clearedFields[tenantdatamigration.FieldLeaseToken] = struct{}{}
+}
+
+// LeaseTokenCleared returns if the "lease_token" field was cleared in this mutation.
+func (m *TenantDataMigrationMutation) LeaseTokenCleared() bool {
+	_, ok := m.clearedFields[tenantdatamigration.FieldLeaseToken]
+	return ok
+}
+
+// ResetLeaseToken resets all changes to the "lease_token" field.
+func (m *TenantDataMigrationMutation) ResetLeaseToken() {
+	m.lease_token = nil
+	delete(m.clearedFields, tenantdatamigration.FieldLeaseToken)
+}
+
+// SetLeaseExpiresAt sets the "lease_expires_at" field.
+func (m *TenantDataMigrationMutation) SetLeaseExpiresAt(t time.Time) {
+	m.lease_expires_at = &t
+}
+
+// LeaseExpiresAt returns the value of the "lease_expires_at" field in the mutation.
+func (m *TenantDataMigrationMutation) LeaseExpiresAt() (r time.Time, exists bool) {
+	v := m.lease_expires_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLeaseExpiresAt returns the old "lease_expires_at" field's value of the TenantDataMigration entity.
+// If the TenantDataMigration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TenantDataMigrationMutation) OldLeaseExpiresAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLeaseExpiresAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLeaseExpiresAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLeaseExpiresAt: %w", err)
+	}
+	return oldValue.LeaseExpiresAt, nil
+}
+
+// ClearLeaseExpiresAt clears the value of the "lease_expires_at" field.
+func (m *TenantDataMigrationMutation) ClearLeaseExpiresAt() {
+	m.lease_expires_at = nil
+	m.clearedFields[tenantdatamigration.FieldLeaseExpiresAt] = struct{}{}
+}
+
+// LeaseExpiresAtCleared returns if the "lease_expires_at" field was cleared in this mutation.
+func (m *TenantDataMigrationMutation) LeaseExpiresAtCleared() bool {
+	_, ok := m.clearedFields[tenantdatamigration.FieldLeaseExpiresAt]
+	return ok
+}
+
+// ResetLeaseExpiresAt resets all changes to the "lease_expires_at" field.
+func (m *TenantDataMigrationMutation) ResetLeaseExpiresAt() {
+	m.lease_expires_at = nil
+	delete(m.clearedFields, tenantdatamigration.FieldLeaseExpiresAt)
+}
+
+// Where appends a list predicates to the TenantDataMigrationMutation builder.
+func (m *TenantDataMigrationMutation) Where(ps ...predicate.TenantDataMigration) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the TenantDataMigrationMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *TenantDataMigrationMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.TenantDataMigration, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *TenantDataMigrationMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *TenantDataMigrationMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (TenantDataMigration).
+func (m *TenantDataMigrationMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *TenantDataMigrationMutation) Fields() []string {
+	fields := make([]string, 0, 10)
+	if m.key != nil {
+		fields = append(fields, tenantdatamigration.FieldKey)
+	}
+	if m.cursor != nil {
+		fields = append(fields, tenantdatamigration.FieldCursor)
+	}
+	if m.first_started_at != nil {
+		fields = append(fields, tenantdatamigration.FieldFirstStartedAt)
+	}
+	if m.completed_at != nil {
+		fields = append(fields, tenantdatamigration.FieldCompletedAt)
+	}
+	if m.last_attempted_at != nil {
+		fields = append(fields, tenantdatamigration.FieldLastAttemptedAt)
+	}
+	if m.failed_at != nil {
+		fields = append(fields, tenantdatamigration.FieldFailedAt)
+	}
+	if m.last_error != nil {
+		fields = append(fields, tenantdatamigration.FieldLastError)
+	}
+	if m.retry_count != nil {
+		fields = append(fields, tenantdatamigration.FieldRetryCount)
+	}
+	if m.lease_token != nil {
+		fields = append(fields, tenantdatamigration.FieldLeaseToken)
+	}
+	if m.lease_expires_at != nil {
+		fields = append(fields, tenantdatamigration.FieldLeaseExpiresAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *TenantDataMigrationMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case tenantdatamigration.FieldKey:
+		return m.Key()
+	case tenantdatamigration.FieldCursor:
+		return m.Cursor()
+	case tenantdatamigration.FieldFirstStartedAt:
+		return m.FirstStartedAt()
+	case tenantdatamigration.FieldCompletedAt:
+		return m.CompletedAt()
+	case tenantdatamigration.FieldLastAttemptedAt:
+		return m.LastAttemptedAt()
+	case tenantdatamigration.FieldFailedAt:
+		return m.FailedAt()
+	case tenantdatamigration.FieldLastError:
+		return m.LastError()
+	case tenantdatamigration.FieldRetryCount:
+		return m.RetryCount()
+	case tenantdatamigration.FieldLeaseToken:
+		return m.LeaseToken()
+	case tenantdatamigration.FieldLeaseExpiresAt:
+		return m.LeaseExpiresAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *TenantDataMigrationMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case tenantdatamigration.FieldKey:
+		return m.OldKey(ctx)
+	case tenantdatamigration.FieldCursor:
+		return m.OldCursor(ctx)
+	case tenantdatamigration.FieldFirstStartedAt:
+		return m.OldFirstStartedAt(ctx)
+	case tenantdatamigration.FieldCompletedAt:
+		return m.OldCompletedAt(ctx)
+	case tenantdatamigration.FieldLastAttemptedAt:
+		return m.OldLastAttemptedAt(ctx)
+	case tenantdatamigration.FieldFailedAt:
+		return m.OldFailedAt(ctx)
+	case tenantdatamigration.FieldLastError:
+		return m.OldLastError(ctx)
+	case tenantdatamigration.FieldRetryCount:
+		return m.OldRetryCount(ctx)
+	case tenantdatamigration.FieldLeaseToken:
+		return m.OldLeaseToken(ctx)
+	case tenantdatamigration.FieldLeaseExpiresAt:
+		return m.OldLeaseExpiresAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown TenantDataMigration field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TenantDataMigrationMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case tenantdatamigration.FieldKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetKey(v)
+		return nil
+	case tenantdatamigration.FieldCursor:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCursor(v)
+		return nil
+	case tenantdatamigration.FieldFirstStartedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFirstStartedAt(v)
+		return nil
+	case tenantdatamigration.FieldCompletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCompletedAt(v)
+		return nil
+	case tenantdatamigration.FieldLastAttemptedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLastAttemptedAt(v)
+		return nil
+	case tenantdatamigration.FieldFailedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFailedAt(v)
+		return nil
+	case tenantdatamigration.FieldLastError:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLastError(v)
+		return nil
+	case tenantdatamigration.FieldRetryCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRetryCount(v)
+		return nil
+	case tenantdatamigration.FieldLeaseToken:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLeaseToken(v)
+		return nil
+	case tenantdatamigration.FieldLeaseExpiresAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLeaseExpiresAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown TenantDataMigration field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *TenantDataMigrationMutation) AddedFields() []string {
+	var fields []string
+	if m.addcursor != nil {
+		fields = append(fields, tenantdatamigration.FieldCursor)
+	}
+	if m.addretry_count != nil {
+		fields = append(fields, tenantdatamigration.FieldRetryCount)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *TenantDataMigrationMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case tenantdatamigration.FieldCursor:
+		return m.AddedCursor()
+	case tenantdatamigration.FieldRetryCount:
+		return m.AddedRetryCount()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TenantDataMigrationMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case tenantdatamigration.FieldCursor:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCursor(v)
+		return nil
+	case tenantdatamigration.FieldRetryCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRetryCount(v)
+		return nil
+	}
+	return fmt.Errorf("unknown TenantDataMigration numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *TenantDataMigrationMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(tenantdatamigration.FieldCompletedAt) {
+		fields = append(fields, tenantdatamigration.FieldCompletedAt)
+	}
+	if m.FieldCleared(tenantdatamigration.FieldLastAttemptedAt) {
+		fields = append(fields, tenantdatamigration.FieldLastAttemptedAt)
+	}
+	if m.FieldCleared(tenantdatamigration.FieldFailedAt) {
+		fields = append(fields, tenantdatamigration.FieldFailedAt)
+	}
+	if m.FieldCleared(tenantdatamigration.FieldLastError) {
+		fields = append(fields, tenantdatamigration.FieldLastError)
+	}
+	if m.FieldCleared(tenantdatamigration.FieldLeaseToken) {
+		fields = append(fields, tenantdatamigration.FieldLeaseToken)
+	}
+	if m.FieldCleared(tenantdatamigration.FieldLeaseExpiresAt) {
+		fields = append(fields, tenantdatamigration.FieldLeaseExpiresAt)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *TenantDataMigrationMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *TenantDataMigrationMutation) ClearField(name string) error {
+	switch name {
+	case tenantdatamigration.FieldCompletedAt:
+		m.ClearCompletedAt()
+		return nil
+	case tenantdatamigration.FieldLastAttemptedAt:
+		m.ClearLastAttemptedAt()
+		return nil
+	case tenantdatamigration.FieldFailedAt:
+		m.ClearFailedAt()
+		return nil
+	case tenantdatamigration.FieldLastError:
+		m.ClearLastError()
+		return nil
+	case tenantdatamigration.FieldLeaseToken:
+		m.ClearLeaseToken()
+		return nil
+	case tenantdatamigration.FieldLeaseExpiresAt:
+		m.ClearLeaseExpiresAt()
+		return nil
+	}
+	return fmt.Errorf("unknown TenantDataMigration nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *TenantDataMigrationMutation) ResetField(name string) error {
+	switch name {
+	case tenantdatamigration.FieldKey:
+		m.ResetKey()
+		return nil
+	case tenantdatamigration.FieldCursor:
+		m.ResetCursor()
+		return nil
+	case tenantdatamigration.FieldFirstStartedAt:
+		m.ResetFirstStartedAt()
+		return nil
+	case tenantdatamigration.FieldCompletedAt:
+		m.ResetCompletedAt()
+		return nil
+	case tenantdatamigration.FieldLastAttemptedAt:
+		m.ResetLastAttemptedAt()
+		return nil
+	case tenantdatamigration.FieldFailedAt:
+		m.ResetFailedAt()
+		return nil
+	case tenantdatamigration.FieldLastError:
+		m.ResetLastError()
+		return nil
+	case tenantdatamigration.FieldRetryCount:
+		m.ResetRetryCount()
+		return nil
+	case tenantdatamigration.FieldLeaseToken:
+		m.ResetLeaseToken()
+		return nil
+	case tenantdatamigration.FieldLeaseExpiresAt:
+		m.ResetLeaseExpiresAt()
+		return nil
+	}
+	return fmt.Errorf("unknown TenantDataMigration field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *TenantDataMigrationMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *TenantDataMigrationMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *TenantDataMigrationMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *TenantDataMigrationMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *TenantDataMigrationMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *TenantDataMigrationMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *TenantDataMigrationMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown TenantDataMigration unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *TenantDataMigrationMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown TenantDataMigration edge %s", name)
 }
 
 // UserMutation represents an operation that mutates the User nodes in the graph.

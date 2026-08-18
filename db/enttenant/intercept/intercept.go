@@ -23,6 +23,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 )
 
@@ -460,6 +461,33 @@ func (f TraverseTagAssignment) Traverse(ctx context.Context, q enttenant.Query) 
 	return fmt.Errorf("unexpected query type %T. expect *enttenant.TagAssignmentQuery", q)
 }
 
+// The TenantDataMigrationFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TenantDataMigrationFunc func(context.Context, *enttenant.TenantDataMigrationQuery) (enttenant.Value, error)
+
+// Query calls f(ctx, q).
+func (f TenantDataMigrationFunc) Query(ctx context.Context, q enttenant.Query) (enttenant.Value, error) {
+	if q, ok := q.(*enttenant.TenantDataMigrationQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *enttenant.TenantDataMigrationQuery", q)
+}
+
+// The TraverseTenantDataMigration type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTenantDataMigration func(context.Context, *enttenant.TenantDataMigrationQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTenantDataMigration) Intercept(next enttenant.Querier) enttenant.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTenantDataMigration) Traverse(ctx context.Context, q enttenant.Query) error {
+	if q, ok := q.(*enttenant.TenantDataMigrationQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *enttenant.TenantDataMigrationQuery", q)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary function as a Querier.
 type UserFunc func(context.Context, *enttenant.UserQuery) (enttenant.Value, error)
 
@@ -518,6 +546,8 @@ func NewQuery(q enttenant.Query) (Query, error) {
 		return &query[*enttenant.TagQuery, predicate.Tag, tag.OrderOption]{typ: enttenant.TypeTag, tq: q}, nil
 	case *enttenant.TagAssignmentQuery:
 		return &query[*enttenant.TagAssignmentQuery, predicate.TagAssignment, tagassignment.OrderOption]{typ: enttenant.TypeTagAssignment, tq: q}, nil
+	case *enttenant.TenantDataMigrationQuery:
+		return &query[*enttenant.TenantDataMigrationQuery, predicate.TenantDataMigration, tenantdatamigration.OrderOption]{typ: enttenant.TypeTenantDataMigration, tq: q}, nil
 	case *enttenant.UserQuery:
 		return &query[*enttenant.UserQuery, predicate.User, user.OrderOption]{typ: enttenant.TypeUser, tq: q}, nil
 	default:

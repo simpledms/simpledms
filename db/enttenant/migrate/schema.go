@@ -795,6 +795,33 @@ var (
 			},
 		},
 	}
+	// TenantDataMigrationsColumns holds the columns for the "tenant_data_migrations" table.
+	TenantDataMigrationsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "key", Type: field.TypeString},
+		{Name: "cursor", Type: field.TypeInt64, Default: 0},
+		{Name: "first_started_at", Type: field.TypeTime},
+		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "last_attempted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "failed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "last_error", Type: field.TypeString, Nullable: true},
+		{Name: "retry_count", Type: field.TypeInt, Default: 0},
+		{Name: "lease_token", Type: field.TypeString, Nullable: true},
+		{Name: "lease_expires_at", Type: field.TypeTime, Nullable: true},
+	}
+	// TenantDataMigrationsTable holds the schema information for the "tenant_data_migrations" table.
+	TenantDataMigrationsTable = &schema.Table{
+		Name:       "tenant_data_migrations",
+		Columns:    TenantDataMigrationsColumns,
+		PrimaryKey: []*schema.Column{TenantDataMigrationsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "tenantdatamigration_key",
+				Unique:  true,
+				Columns: []*schema.Column{TenantDataMigrationsColumns[1]},
+			},
+		},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
@@ -858,6 +885,7 @@ var (
 		StoredFilesTable,
 		TagsTable,
 		TagAssignmentsTable,
+		TenantDataMigrationsTable,
 		UsersTable,
 		TagSubTagsTable,
 	}

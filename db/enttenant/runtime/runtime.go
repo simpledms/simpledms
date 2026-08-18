@@ -21,6 +21,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
 
@@ -324,6 +325,20 @@ func init() {
 			return next.Mutate(ctx, m)
 		})
 	}
+	tenantdatamigrationFields := schema.TenantDataMigration{}.Fields()
+	_ = tenantdatamigrationFields
+	// tenantdatamigrationDescKey is the schema descriptor for key field.
+	tenantdatamigrationDescKey := tenantdatamigrationFields[0].Descriptor()
+	// tenantdatamigration.KeyValidator is a validator for the "key" field. It is called by the builders before save.
+	tenantdatamigration.KeyValidator = tenantdatamigrationDescKey.Validators[0].(func(string) error)
+	// tenantdatamigrationDescCursor is the schema descriptor for cursor field.
+	tenantdatamigrationDescCursor := tenantdatamigrationFields[1].Descriptor()
+	// tenantdatamigration.DefaultCursor holds the default value on creation for the cursor field.
+	tenantdatamigration.DefaultCursor = tenantdatamigrationDescCursor.Default.(int64)
+	// tenantdatamigrationDescRetryCount is the schema descriptor for retry_count field.
+	tenantdatamigrationDescRetryCount := tenantdatamigrationFields[7].Descriptor()
+	// tenantdatamigration.DefaultRetryCount holds the default value on creation for the retry_count field.
+	tenantdatamigration.DefaultRetryCount = tenantdatamigrationDescRetryCount.Default.(int)
 	userMixin := schema.User{}.Mixin()
 	userMixinHooks1 := userMixin[1].Hooks()
 	user.Hooks[0] = userMixinHooks1[0]

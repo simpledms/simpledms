@@ -423,6 +423,30 @@ func (f TagAssignmentMutationRuleFunc) EvalMutation(ctx context.Context, m entte
 	return Denyf("enttenant/privacy: unexpected mutation type %T, expect *enttenant.TagAssignmentMutation", m)
 }
 
+// The TenantDataMigrationQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TenantDataMigrationQueryRuleFunc func(context.Context, *enttenant.TenantDataMigrationQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TenantDataMigrationQueryRuleFunc) EvalQuery(ctx context.Context, q enttenant.Query) error {
+	if q, ok := q.(*enttenant.TenantDataMigrationQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("enttenant/privacy: unexpected query type %T, expect *enttenant.TenantDataMigrationQuery", q)
+}
+
+// The TenantDataMigrationMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TenantDataMigrationMutationRuleFunc func(context.Context, *enttenant.TenantDataMigrationMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TenantDataMigrationMutationRuleFunc) EvalMutation(ctx context.Context, m enttenant.Mutation) error {
+	if m, ok := m.(*enttenant.TenantDataMigrationMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("enttenant/privacy: unexpected mutation type %T, expect *enttenant.TenantDataMigrationMutation", m)
+}
+
 // The UserQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type UserQueryRuleFunc func(context.Context, *enttenant.UserQuery) error
@@ -510,6 +534,8 @@ func queryFilter(q enttenant.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *enttenant.TagAssignmentQuery:
 		return q.Filter(), nil
+	case *enttenant.TenantDataMigrationQuery:
+		return q.Filter(), nil
 	case *enttenant.UserQuery:
 		return q.Filter(), nil
 	default:
@@ -542,6 +568,8 @@ func mutationFilter(m enttenant.Mutation) (Filter, error) {
 	case *enttenant.TagMutation:
 		return m.Filter(), nil
 	case *enttenant.TagAssignmentMutation:
+		return m.Filter(), nil
+	case *enttenant.TenantDataMigrationMutation:
 		return m.Filter(), nil
 	case *enttenant.UserMutation:
 		return m.Filter(), nil

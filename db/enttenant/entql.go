@@ -18,6 +18,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 
 	"entgo.io/ent/dialect/sql"
@@ -28,7 +29,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 15)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 16)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   attribute.Table,
@@ -324,6 +325,29 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 	}
 	graph.Nodes[14] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   tenantdatamigration.Table,
+			Columns: tenantdatamigration.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeInt,
+				Column: tenantdatamigration.FieldID,
+			},
+		},
+		Type: "TenantDataMigration",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			tenantdatamigration.FieldKey:             {Type: field.TypeString, Column: tenantdatamigration.FieldKey},
+			tenantdatamigration.FieldCursor:          {Type: field.TypeInt64, Column: tenantdatamigration.FieldCursor},
+			tenantdatamigration.FieldFirstStartedAt:  {Type: field.TypeTime, Column: tenantdatamigration.FieldFirstStartedAt},
+			tenantdatamigration.FieldCompletedAt:     {Type: field.TypeTime, Column: tenantdatamigration.FieldCompletedAt},
+			tenantdatamigration.FieldLastAttemptedAt: {Type: field.TypeTime, Column: tenantdatamigration.FieldLastAttemptedAt},
+			tenantdatamigration.FieldFailedAt:        {Type: field.TypeTime, Column: tenantdatamigration.FieldFailedAt},
+			tenantdatamigration.FieldLastError:       {Type: field.TypeString, Column: tenantdatamigration.FieldLastError},
+			tenantdatamigration.FieldRetryCount:      {Type: field.TypeInt, Column: tenantdatamigration.FieldRetryCount},
+			tenantdatamigration.FieldLeaseToken:      {Type: field.TypeString, Column: tenantdatamigration.FieldLeaseToken},
+			tenantdatamigration.FieldLeaseExpiresAt:  {Type: field.TypeTime, Column: tenantdatamigration.FieldLeaseExpiresAt},
+		},
+	}
+	graph.Nodes[15] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -2960,6 +2984,96 @@ func (f *TagAssignmentFilter) WhereHasFileWith(preds ...predicate.File) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *TenantDataMigrationQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TenantDataMigrationQuery builder.
+func (_q *TenantDataMigrationQuery) Filter() *TenantDataMigrationFilter {
+	return &TenantDataMigrationFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TenantDataMigrationMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TenantDataMigrationMutation builder.
+func (m *TenantDataMigrationMutation) Filter() *TenantDataMigrationFilter {
+	return &TenantDataMigrationFilter{config: m.config, predicateAdder: m}
+}
+
+// TenantDataMigrationFilter provides a generic filtering capability at runtime for TenantDataMigrationQuery.
+type TenantDataMigrationFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TenantDataMigrationFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[14].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql int predicate on the id field.
+func (f *TenantDataMigrationFilter) WhereID(p entql.IntP) {
+	f.Where(p.Field(tenantdatamigration.FieldID))
+}
+
+// WhereKey applies the entql string predicate on the key field.
+func (f *TenantDataMigrationFilter) WhereKey(p entql.StringP) {
+	f.Where(p.Field(tenantdatamigration.FieldKey))
+}
+
+// WhereCursor applies the entql int64 predicate on the cursor field.
+func (f *TenantDataMigrationFilter) WhereCursor(p entql.Int64P) {
+	f.Where(p.Field(tenantdatamigration.FieldCursor))
+}
+
+// WhereFirstStartedAt applies the entql time.Time predicate on the first_started_at field.
+func (f *TenantDataMigrationFilter) WhereFirstStartedAt(p entql.TimeP) {
+	f.Where(p.Field(tenantdatamigration.FieldFirstStartedAt))
+}
+
+// WhereCompletedAt applies the entql time.Time predicate on the completed_at field.
+func (f *TenantDataMigrationFilter) WhereCompletedAt(p entql.TimeP) {
+	f.Where(p.Field(tenantdatamigration.FieldCompletedAt))
+}
+
+// WhereLastAttemptedAt applies the entql time.Time predicate on the last_attempted_at field.
+func (f *TenantDataMigrationFilter) WhereLastAttemptedAt(p entql.TimeP) {
+	f.Where(p.Field(tenantdatamigration.FieldLastAttemptedAt))
+}
+
+// WhereFailedAt applies the entql time.Time predicate on the failed_at field.
+func (f *TenantDataMigrationFilter) WhereFailedAt(p entql.TimeP) {
+	f.Where(p.Field(tenantdatamigration.FieldFailedAt))
+}
+
+// WhereLastError applies the entql string predicate on the last_error field.
+func (f *TenantDataMigrationFilter) WhereLastError(p entql.StringP) {
+	f.Where(p.Field(tenantdatamigration.FieldLastError))
+}
+
+// WhereRetryCount applies the entql int predicate on the retry_count field.
+func (f *TenantDataMigrationFilter) WhereRetryCount(p entql.IntP) {
+	f.Where(p.Field(tenantdatamigration.FieldRetryCount))
+}
+
+// WhereLeaseToken applies the entql string predicate on the lease_token field.
+func (f *TenantDataMigrationFilter) WhereLeaseToken(p entql.StringP) {
+	f.Where(p.Field(tenantdatamigration.FieldLeaseToken))
+}
+
+// WhereLeaseExpiresAt applies the entql time.Time predicate on the lease_expires_at field.
+func (f *TenantDataMigrationFilter) WhereLeaseExpiresAt(p entql.TimeP) {
+	f.Where(p.Field(tenantdatamigration.FieldLeaseExpiresAt))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *UserQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -2988,7 +3102,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[14].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[15].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

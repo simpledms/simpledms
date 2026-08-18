@@ -86,6 +86,10 @@ func (qq *Scheduler) Run(devMode bool, metaPath string, migrationsTenantFS fs.FS
 		qq.backfillContentHashes()
 	}()
 
+	go func() {
+		qq.runTenantDataMigrations()
+	}()
+
 	if qq.gotenbergClientNilable != nil {
 		go func() {
 			qq.convertPreviews()

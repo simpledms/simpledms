@@ -48,5 +48,8 @@ type Tag func(*sql.Selector)
 // TagAssignment is the predicate function for tagassignment builders.
 type TagAssignment func(*sql.Selector)
 
+// TenantDataMigration is the predicate function for tenantdatamigration builders.
+type TenantDataMigration func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

@@ -37,7 +37,6 @@ func (StoredFile) Fields() []ent.Field {
 		field.String("sha256").Optional(),
 		field.String("content_sha256").Optional(),
 		field.String("mime_type").Optional(), // was media_type
-		field.Time("mime_type_redetected_at").Optional().Nillable(),
 
 		field.Enum("storage_type").GoType(storagetype.Unknown),
 		field.String("bucket_name").Optional(),
