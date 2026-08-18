@@ -98,6 +98,63 @@ func TestDeleteProcessedTempFilesDeletesOnlyAfterGracePeriod(t *testing.T) {
 	}
 }
 
+func TestDiscoverPreviewConversionsIncludesLegacyFinalFiles(t *testing.T) {
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	tenantDB := newTestTenantDB(t)
+	space := tenantDB.ReadWriteConn.Space.Create().
+		SetID(1).
+		SetName("Test Space").
+		SaveX(ctx)
+
+	filex := tenantDB.ReadWriteConn.File.Create().
+		SetSpaceID(space.ID).
+		SetName("legacy.html").
+		SetIsDirectory(false).
+		SetIndexedAt(time.Now()).
+		SaveX(ctx)
+
+	storedFile := tenantDB.ReadWriteConn.StoredFile.Create().
+		SetFilename("legacy.html").
+		SetSize(10).
+		SetSizeInStorage(10).
+		SetMimeType("text/html").
+		SetStorageType(storagetype.S3).
+		SetStoragePath("tenant/final").
+		SetStorageFilename("legacy.html").
+		SetTemporaryStoragePath("tenant/tmp").
+		SetTemporaryStorageFilename("legacy.html").
+		SetCopiedToFinalDestinationAt(time.Now()).
+		SaveX(ctx)
+
+	_, err := tenantDB.ReadWriteConn.ExecContext(
+		ctx,
+		"UPDATE stored_files SET upload_started_at = NULL, upload_succeeded_at = NULL WHERE id = ?",
+		storedFile.ID,
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = tenantDB.ReadWriteConn.FileVersion.Create().
+		SetFileID(filex.ID).
+		SetStoredFileID(storedFile.ID).
+		SetVersionNumber(1).
+		Save(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	(&Scheduler{}).discoverPreviewConversions(ctx, tenantDB)
+
+	conversion, err := tenantDB.ReadOnlyConn.PreviewConversion.Query().Only(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if conversion.SourceStoredFileID != storedFile.ID {
+		t.Fatalf("expected conversion for stored file %d, got %d", storedFile.ID, conversion.SourceStoredFileID)
+	}
+}
+
 func TestDeleteTempAccountFilesDeletesOnlyExpiredUnconvertedFiles(t *testing.T) {
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
 	mainDB := newTestMainDB(t)

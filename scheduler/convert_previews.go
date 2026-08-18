@@ -80,9 +80,9 @@ func (qq *Scheduler) discoverPreviewConversions(ctx context.Context, tenantDB *s
 		return
 	}
 
+	// Final storage is the readiness marker; legacy files have no upload status timestamps.
 	sourceQuery := tenantDB.ReadOnlyConn.StoredFile.Query().
 		Where(
-			storedfile.UploadSucceededAtNotNil(),
 			storedfile.CopiedToFinalDestinationAtNotNil(),
 			storedfile.HasFilesWith(file.IsDirectory(false), file.DeletedAtIsNil()),
 		)
