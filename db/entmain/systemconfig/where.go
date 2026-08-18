@@ -171,6 +171,11 @@ func OcrTikaURL(v string) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldEQ(FieldOcrTikaURL, v))
 }
 
+// GotenbergURL applies equality check predicate on the "gotenberg_url" field. It's identical to GotenbergURLEQ.
+func GotenbergURL(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldGotenbergURL, v))
+}
+
 // OcrMaxFileSizeMib applies equality check predicate on the "ocr_max_file_size_mib" field. It's identical to OcrMaxFileSizeMibEQ.
 func OcrMaxFileSizeMib(v int64) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldEQ(FieldOcrMaxFileSizeMib, v))
@@ -1194,6 +1199,71 @@ func OcrTikaURLEqualFold(v string) predicate.SystemConfig {
 // OcrTikaURLContainsFold applies the ContainsFold predicate on the "ocr_tika_url" field.
 func OcrTikaURLContainsFold(v string) predicate.SystemConfig {
 	return predicate.SystemConfig(sql.FieldContainsFold(FieldOcrTikaURL, v))
+}
+
+// GotenbergURLEQ applies the EQ predicate on the "gotenberg_url" field.
+func GotenbergURLEQ(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEQ(FieldGotenbergURL, v))
+}
+
+// GotenbergURLNEQ applies the NEQ predicate on the "gotenberg_url" field.
+func GotenbergURLNEQ(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNEQ(FieldGotenbergURL, v))
+}
+
+// GotenbergURLIn applies the In predicate on the "gotenberg_url" field.
+func GotenbergURLIn(vs ...string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldIn(FieldGotenbergURL, vs...))
+}
+
+// GotenbergURLNotIn applies the NotIn predicate on the "gotenberg_url" field.
+func GotenbergURLNotIn(vs ...string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldNotIn(FieldGotenbergURL, vs...))
+}
+
+// GotenbergURLGT applies the GT predicate on the "gotenberg_url" field.
+func GotenbergURLGT(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldGT(FieldGotenbergURL, v))
+}
+
+// GotenbergURLGTE applies the GTE predicate on the "gotenberg_url" field.
+func GotenbergURLGTE(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldGTE(FieldGotenbergURL, v))
+}
+
+// GotenbergURLLT applies the LT predicate on the "gotenberg_url" field.
+func GotenbergURLLT(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldLT(FieldGotenbergURL, v))
+}
+
+// GotenbergURLLTE applies the LTE predicate on the "gotenberg_url" field.
+func GotenbergURLLTE(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldLTE(FieldGotenbergURL, v))
+}
+
+// GotenbergURLContains applies the Contains predicate on the "gotenberg_url" field.
+func GotenbergURLContains(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldContains(FieldGotenbergURL, v))
+}
+
+// GotenbergURLHasPrefix applies the HasPrefix predicate on the "gotenberg_url" field.
+func GotenbergURLHasPrefix(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldHasPrefix(FieldGotenbergURL, v))
+}
+
+// GotenbergURLHasSuffix applies the HasSuffix predicate on the "gotenberg_url" field.
+func GotenbergURLHasSuffix(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldHasSuffix(FieldGotenbergURL, v))
+}
+
+// GotenbergURLEqualFold applies the EqualFold predicate on the "gotenberg_url" field.
+func GotenbergURLEqualFold(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldEqualFold(FieldGotenbergURL, v))
+}
+
+// GotenbergURLContainsFold applies the ContainsFold predicate on the "gotenberg_url" field.
+func GotenbergURLContainsFold(v string) predicate.SystemConfig {
+	return predicate.SystemConfig(sql.FieldContainsFold(FieldGotenbergURL, v))
 }
 
 // OcrMaxFileSizeMibEQ applies the EQ predicate on the "ocr_max_file_size_mib" field.

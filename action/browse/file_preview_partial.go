@@ -3,7 +3,6 @@ package browse
 import (
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 
@@ -74,7 +73,7 @@ func (qq *FilePreviewPartial) PreviewWidget(
 		}, false, nil
 	}
 
-	configured := gotenberg.IsValidGotenbergURL(os.Getenv("SIMPLEDMS_GOTENBERG_URL"))
+	configured := gotenberg.IsValidGotenbergURL(qq.infra.SystemConfig().GotenbergURL())
 	conversion, preview, err := qq.previewConversion(ctx, source.ID)
 	if err != nil {
 		return nil, true, err

@@ -270,6 +270,10 @@ func (qq *SystemConfig) MaxUploadSizeBytes() int64 {
 	return qq.data.MaxUploadSizeMib * bytesPerMiB
 }
 
+func (qq *SystemConfig) GotenbergURL() string {
+	return qq.data.GotenbergURL
+}
+
 func (qq *SystemConfig) SetMaxUploadSizeMib(ctx ctxx.Context, maxUploadSizeMib int64) error {
 	if maxUploadSizeMib < 0 {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Max upload size must be greater than or equal to 0.")

@@ -165,6 +165,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemconfig.FieldMailerInsecureSkipVerify:          {Type: field.TypeBool, Column: systemconfig.FieldMailerInsecureSkipVerify},
 			systemconfig.FieldMailerUseImplicitSslTLS:           {Type: field.TypeBool, Column: systemconfig.FieldMailerUseImplicitSslTLS},
 			systemconfig.FieldOcrTikaURL:                        {Type: field.TypeString, Column: systemconfig.FieldOcrTikaURL},
+			systemconfig.FieldGotenbergURL:                      {Type: field.TypeString, Column: systemconfig.FieldGotenbergURL},
 			systemconfig.FieldOcrMaxFileSizeMib:                 {Type: field.TypeInt64, Column: systemconfig.FieldOcrMaxFileSizeMib},
 			systemconfig.FieldMaxUploadSizeMib:                  {Type: field.TypeInt64, Column: systemconfig.FieldMaxUploadSizeMib},
 			systemconfig.FieldInitializedAt:                     {Type: field.TypeTime, Column: systemconfig.FieldInitializedAt},
@@ -1422,6 +1423,11 @@ func (f *SystemConfigFilter) WhereMailerUseImplicitSslTLS(p entql.BoolP) {
 // WhereOcrTikaURL applies the entql string predicate on the ocr_tika_url field.
 func (f *SystemConfigFilter) WhereOcrTikaURL(p entql.StringP) {
 	f.Where(p.Field(systemconfig.FieldOcrTikaURL))
+}
+
+// WhereGotenbergURL applies the entql string predicate on the gotenberg_url field.
+func (f *SystemConfigFilter) WhereGotenbergURL(p entql.StringP) {
+	f.Where(p.Field(systemconfig.FieldGotenbergURL))
 }
 
 // WhereOcrMaxFileSizeMib applies the entql int64 predicate on the ocr_max_file_size_mib field.

@@ -33,8 +33,8 @@ model. It does not create a second user-visible document version.
 - Retry transient failures automatically three times, then provide a Retry
   action to any user who can view the source file.
 - Show friendly user-facing errors and keep detailed converter errors in logs.
-- If `SIMPLEDMS_GOTENBERG_URL` is not defined, log a warning and disable
-  conversion without preventing normal application use.
+- If the stored Gotenberg URL is empty, log a warning and disable conversion
+  without preventing normal application use.
 - Add Gotenberg to both development and sample Docker Compose files.
 
 ## Ubiquitous Language
@@ -338,8 +338,10 @@ Behavior:
   conversion.
 - An invalid URL logs an error and disables conversion without stopping the
   application.
-- The value is read from the environment at application startup. It is not
-  stored in tenant data or exposed in the UI.
+- The value is stored in the main system configuration. The environment value is
+  used when initializing the app and when database configuration overrides are
+  explicitly enabled; runtime consumers read only the stored value. It is not
+  stored in tenant data.
 
 Compose requirements:
 

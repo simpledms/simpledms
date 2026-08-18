@@ -49,6 +49,7 @@ type TLSConfig struct {
 
 type OCRConfig struct {
 	TikaURL        string // optional, can also be used without OCR
+	GotenbergURL   string // optional, disables PDF preview conversion when empty
 	MaxFileSizeMiB int64
 }
 
@@ -172,6 +173,7 @@ func InitAppWithoutCustomContext(
 		SetMailerUseImplicitSslTLS(mailerConfig.MailerUseImplicitSSLTLS).
 		// ocr
 		SetOcrTikaURL(ocrConfig.TikaURL).
+		SetGotenbergURL(ocrConfig.GotenbergURL).
 		SetOcrMaxFileSizeMib(maxFileSizeMiB).
 		// other
 		SetInitializedAt(time.Now()).

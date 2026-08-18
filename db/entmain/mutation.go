@@ -5523,6 +5523,7 @@ type SystemConfigMutation struct {
 	mailer_insecure_skip_verify           *bool
 	mailer_use_implicit_ssl_tls           *bool
 	ocr_tika_url                          *string
+	gotenberg_url                         *string
 	ocr_max_file_size_mib                 *int64
 	addocr_max_file_size_mib              *int64
 	max_upload_size_mib                   *int64
@@ -6580,6 +6581,42 @@ func (m *SystemConfigMutation) ResetOcrTikaURL() {
 	m.ocr_tika_url = nil
 }
 
+// SetGotenbergURL sets the "gotenberg_url" field.
+func (m *SystemConfigMutation) SetGotenbergURL(s string) {
+	m.gotenberg_url = &s
+}
+
+// GotenbergURL returns the value of the "gotenberg_url" field in the mutation.
+func (m *SystemConfigMutation) GotenbergURL() (r string, exists bool) {
+	v := m.gotenberg_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGotenbergURL returns the old "gotenberg_url" field's value of the SystemConfig entity.
+// If the SystemConfig object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemConfigMutation) OldGotenbergURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGotenbergURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGotenbergURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGotenbergURL: %w", err)
+	}
+	return oldValue.GotenbergURL, nil
+}
+
+// ResetGotenbergURL resets all changes to the "gotenberg_url" field.
+func (m *SystemConfigMutation) ResetGotenbergURL() {
+	m.gotenberg_url = nil
+}
+
 // SetOcrMaxFileSizeMib sets the "ocr_max_file_size_mib" field.
 func (m *SystemConfigMutation) SetOcrMaxFileSizeMib(i int64) {
 	m.ocr_max_file_size_mib = &i
@@ -6855,7 +6892,7 @@ func (m *SystemConfigMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SystemConfigMutation) Fields() []string {
-	fields := make([]string, 0, 27)
+	fields := make([]string, 0, 28)
 	if m.created_at != nil {
 		fields = append(fields, systemconfig.FieldCreatedAt)
 	}
@@ -6928,6 +6965,9 @@ func (m *SystemConfigMutation) Fields() []string {
 	if m.ocr_tika_url != nil {
 		fields = append(fields, systemconfig.FieldOcrTikaURL)
 	}
+	if m.gotenberg_url != nil {
+		fields = append(fields, systemconfig.FieldGotenbergURL)
+	}
 	if m.ocr_max_file_size_mib != nil {
 		fields = append(fields, systemconfig.FieldOcrMaxFileSizeMib)
 	}
@@ -6993,6 +7033,8 @@ func (m *SystemConfigMutation) Field(name string) (ent.Value, bool) {
 		return m.MailerUseImplicitSslTLS()
 	case systemconfig.FieldOcrTikaURL:
 		return m.OcrTikaURL()
+	case systemconfig.FieldGotenbergURL:
+		return m.GotenbergURL()
 	case systemconfig.FieldOcrMaxFileSizeMib:
 		return m.OcrMaxFileSizeMib()
 	case systemconfig.FieldMaxUploadSizeMib:
@@ -7056,6 +7098,8 @@ func (m *SystemConfigMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldMailerUseImplicitSslTLS(ctx)
 	case systemconfig.FieldOcrTikaURL:
 		return m.OldOcrTikaURL(ctx)
+	case systemconfig.FieldGotenbergURL:
+		return m.OldGotenbergURL(ctx)
 	case systemconfig.FieldOcrMaxFileSizeMib:
 		return m.OldOcrMaxFileSizeMib(ctx)
 	case systemconfig.FieldMaxUploadSizeMib:
@@ -7238,6 +7282,13 @@ func (m *SystemConfigMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetOcrTikaURL(v)
+		return nil
+	case systemconfig.FieldGotenbergURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGotenbergURL(v)
 		return nil
 	case systemconfig.FieldOcrMaxFileSizeMib:
 		v, ok := value.(int64)
@@ -7446,6 +7497,9 @@ func (m *SystemConfigMutation) ResetField(name string) error {
 		return nil
 	case systemconfig.FieldOcrTikaURL:
 		m.ResetOcrTikaURL()
+		return nil
+	case systemconfig.FieldGotenbergURL:
+		m.ResetGotenbergURL()
 		return nil
 	case systemconfig.FieldOcrMaxFileSizeMib:
 		m.ResetOcrMaxFileSizeMib()

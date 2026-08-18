@@ -405,6 +405,7 @@ func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB,
 			},
 			appmodel.OCRConfig{
 				TikaURL:        os.Getenv("SIMPLEDMS_OCR_TIKA_URL"),
+				GotenbergURL:   os.Getenv("SIMPLEDMS_GOTENBERG_URL"),
 				MaxFileSizeMiB: ocrutil.MaxFileSizeMiB(),
 			},
 		)
@@ -682,6 +683,9 @@ func (qq *Server) applyOverrideDBConfigAfterIdentity(ctx context.Context, mainDB
 	if val, set := os.LookupEnv("SIMPLEDMS_OCR_TIKA_URL"); set {
 		updateQuery.SetOcrTikaURL(val)
 	}
+	if val, set := os.LookupEnv("SIMPLEDMS_GOTENBERG_URL"); set {
+		updateQuery.SetGotenbergURL(val)
+	}
 
 	if val, set := os.LookupEnv("SIMPLEDMS_UPLOAD_MAX_FILE_SIZE_MIB"); set {
 		maxUploadSizeMib, err := strconv.ParseInt(val, 10, 64)
@@ -929,9 +933,9 @@ func (qq *Server) startScheduler(
 
 	var gotenbergClientNilable *gotenberg.GotenbergClient
 	var err error
-	gotenbergURL := strings.TrimSpace(os.Getenv("SIMPLEDMS_GOTENBERG_URL"))
+	gotenbergURL := strings.TrimSpace(rawSystemConfig.GotenbergURL)
 	if gotenbergURL == "" {
-		log.Println("SIMPLEDMS_GOTENBERG_URL is not configured; PDF preview conversion disabled")
+		log.Println("Gotenberg URL is not configured; PDF preview conversion disabled")
 	} else {
 		gotenbergClientNilable, err = gotenberg.NewGotenbergClient(gotenbergURL)
 		if err != nil {

@@ -196,7 +196,7 @@ Enforced in: classifier and scheduler discovery.
 
 ### Missing Configuration Is Runtime Disabled
 
-Rule: An empty or invalid `SIMPLEDMS_GOTENBERG_URL` disables conversion and logs
+Rule: An empty or invalid stored Gotenberg URL disables conversion and logs
 a warning or error, but does not mark source uploads failed.
 
 Why: Configuration availability is an application deployment condition, not a
@@ -531,7 +531,7 @@ Enforced in: file cleanup workflow and object/row cleanup tests.
 
 ### Optional Configuration
 
-Rule: Empty or invalid `SIMPLEDMS_GOTENBERG_URL` logs a warning/error and
+Rule: An empty or invalid stored Gotenberg URL logs a warning/error and
 disables conversion without application startup failure.
 
 Why: Deployments may intentionally run without the optional service.

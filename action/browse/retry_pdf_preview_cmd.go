@@ -2,8 +2,6 @@ package browse
 
 import (
 	"net/http"
-	"os"
-	"strings"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -55,7 +53,7 @@ func (qq *RetryPDFPreviewCmd) Handler(
 	if err != nil {
 		return err
 	}
-	if !gotenberg.IsValidGotenbergURL(strings.TrimSpace(os.Getenv("SIMPLEDMS_GOTENBERG_URL"))) {
+	if !gotenberg.IsValidGotenbergURL(qq.infra.SystemConfig().GotenbergURL()) {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "PDF preview conversion is not configured")
 	}
 

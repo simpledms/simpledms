@@ -325,6 +325,20 @@ func (_u *SystemConfigUpdate) SetNillableOcrTikaURL(v *string) *SystemConfigUpda
 	return _u
 }
 
+// SetGotenbergURL sets the "gotenberg_url" field.
+func (_u *SystemConfigUpdate) SetGotenbergURL(v string) *SystemConfigUpdate {
+	_u.mutation.SetGotenbergURL(v)
+	return _u
+}
+
+// SetNillableGotenbergURL sets the "gotenberg_url" field if the given value is not nil.
+func (_u *SystemConfigUpdate) SetNillableGotenbergURL(v *string) *SystemConfigUpdate {
+	if v != nil {
+		_u.SetGotenbergURL(*v)
+	}
+	return _u
+}
+
 // SetOcrMaxFileSizeMib sets the "ocr_max_file_size_mib" field.
 func (_u *SystemConfigUpdate) SetOcrMaxFileSizeMib(v int64) *SystemConfigUpdate {
 	_u.mutation.ResetOcrMaxFileSizeMib()
@@ -541,6 +555,9 @@ func (_u *SystemConfigUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if value, ok := _u.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.GotenbergURL(); ok {
+		_spec.SetField(systemconfig.FieldGotenbergURL, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.OcrMaxFileSizeMib(); ok {
 		_spec.SetField(systemconfig.FieldOcrMaxFileSizeMib, field.TypeInt64, value)
@@ -904,6 +921,20 @@ func (_u *SystemConfigUpdateOne) SetNillableOcrTikaURL(v *string) *SystemConfigU
 	return _u
 }
 
+// SetGotenbergURL sets the "gotenberg_url" field.
+func (_u *SystemConfigUpdateOne) SetGotenbergURL(v string) *SystemConfigUpdateOne {
+	_u.mutation.SetGotenbergURL(v)
+	return _u
+}
+
+// SetNillableGotenbergURL sets the "gotenberg_url" field if the given value is not nil.
+func (_u *SystemConfigUpdateOne) SetNillableGotenbergURL(v *string) *SystemConfigUpdateOne {
+	if v != nil {
+		_u.SetGotenbergURL(*v)
+	}
+	return _u
+}
+
 // SetOcrMaxFileSizeMib sets the "ocr_max_file_size_mib" field.
 func (_u *SystemConfigUpdateOne) SetOcrMaxFileSizeMib(v int64) *SystemConfigUpdateOne {
 	_u.mutation.ResetOcrMaxFileSizeMib()
@@ -1150,6 +1181,9 @@ func (_u *SystemConfigUpdateOne) sqlSave(ctx context.Context) (_node *SystemConf
 	}
 	if value, ok := _u.mutation.OcrTikaURL(); ok {
 		_spec.SetField(systemconfig.FieldOcrTikaURL, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.GotenbergURL(); ok {
+		_spec.SetField(systemconfig.FieldGotenbergURL, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.OcrMaxFileSizeMib(); ok {
 		_spec.SetField(systemconfig.FieldOcrMaxFileSizeMib, field.TypeInt64, value)
