@@ -4,6 +4,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"context"
+	"errors"
 	"io"
 	"testing"
 	"time"
@@ -35,6 +36,7 @@ func TestZIPMIMERedetectionMigrationProcessesLegacyFiles(t *testing.T) {
 	firstStart := time.Date(2026, time.August, 18, 12, 0, 0, 0, time.UTC)
 	ods := createZIPMigrationFile(t, ctx, client, "sheet.ods", firstStart.Add(-time.Hour))
 	archive := createZIPMigrationFile(t, ctx, client, "archive.zip", firstStart.Add(-time.Minute))
+	missing := createZIPMigrationFile(t, ctx, client, "missing.zip", firstStart.Add(-time.Minute))
 	skipped := createZIPMigrationFile(t, ctx, client, "new.ods", firstStart)
 	contents := map[int64][]byte{
 		ods.ID:     zipMigrationContent(t, map[string]string{"mimetype": "application/vnd.oasis.opendocument.spreadsheet"}),
@@ -46,6 +48,9 @@ func TestZIPMIMERedetectionMigrationProcessesLegacyFiles(t *testing.T) {
 		_ *age.X25519Identity,
 		filex *storedfilemodel.StoredFile,
 	) (io.ReadCloser, error) {
+		if filex.Data.ID == missing.ID {
+			return nil, errors.New("The specified key does not exist.")
+		}
 		openCount++
 		return io.NopCloser(bytes.NewReader(contents[filex.Data.ID])), nil
 	}, nil)
@@ -60,15 +65,16 @@ func TestZIPMIMERedetectionMigrationProcessesLegacyFiles(t *testing.T) {
 	}
 	ods = client.StoredFile.GetX(ctx, ods.ID)
 	archive = client.StoredFile.GetX(ctx, archive.ID)
+	missing = client.StoredFile.GetX(ctx, missing.ID)
 	skipped = client.StoredFile.GetX(ctx, skipped.ID)
 	if ods.MimeType != "application/vnd.oasis.opendocument.spreadsheet" {
 		t.Fatalf("ODS MIME = %q", ods.MimeType)
 	}
-	if archive.MimeType != "application/zip" || skipped.MimeType != "application/zip" {
+	if archive.MimeType != "application/zip" || missing.MimeType != "application/zip" || skipped.MimeType != "application/zip" {
 		t.Fatal("genuine or post-cutoff ZIP was changed")
 	}
 	state := client.TenantDataMigration.Query().OnlyX(ctx)
-	if state.CompletedAt == nil || !state.FirstStartedAt.Equal(firstStart) || state.Cursor != archive.ID {
+	if state.CompletedAt == nil || !state.FirstStartedAt.Equal(firstStart) || state.Cursor != missing.ID {
 		t.Fatalf("unexpected migration state: %#v", state)
 	}
 }

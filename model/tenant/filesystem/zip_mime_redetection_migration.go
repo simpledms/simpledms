@@ -3,6 +3,8 @@ package filesystem
 import (
 	"context"
 	"io"
+	"log"
+	"strings"
 
 	"entgo.io/ent/dialect/sql"
 	"filippo.io/age"
@@ -60,33 +62,55 @@ func (qq *ZIPMIMERedetectionMigration) RunBatch(
 		return tenantdatamigration.NewBatchResult(state.Cursor, true, nil), nil
 	}
 
-	mimeTypes := make([]string, len(filex))
-	for i, storedFilex := range filex {
+	updates := make([]mimeTypeUpdate, 0, len(filex))
+	for _, storedFilex := range filex {
 		openedFile, err := qq.openFile(ctx, qq.identity, storedfilemodel.NewStoredFile(storedFilex))
 		if err != nil {
+			if isMissingS3ObjectError(err) {
+				log.Printf("skipping missing stored file %d", storedFilex.ID)
+				continue
+			}
 			return nil, err
 		}
 		mimeType, detectErr := detectMIME(openedFile)
 		closeErr := openedFile.Close()
 		if detectErr != nil {
+			if isMissingS3ObjectError(detectErr) {
+				log.Printf("skipping missing stored file %d", storedFilex.ID)
+				continue
+			}
 			return nil, detectErr
 		}
 		if closeErr != nil {
+			if isMissingS3ObjectError(closeErr) {
+				log.Printf("skipping missing stored file %d", storedFilex.ID)
+				continue
+			}
 			return nil, closeErr
 		}
-		mimeTypes[i] = mimeType
+		updates = append(updates, mimeTypeUpdate{storedFileID: storedFilex.ID, mimeType: mimeType})
 	}
 
 	return tenantdatamigration.NewBatchResult(
 		filex[len(filex)-1].ID,
 		true,
 		func(ctx context.Context, tx *enttenant.Tx) error {
-			for i, storedFilex := range filex {
-				if err := tx.StoredFile.UpdateOneID(storedFilex.ID).SetMimeType(mimeTypes[i]).Exec(ctx); err != nil {
+			for _, update := range updates {
+				if err := tx.StoredFile.UpdateOneID(update.storedFileID).SetMimeType(update.mimeType).Exec(ctx); err != nil {
 					return err
 				}
 			}
 			return nil
 		},
 	), nil
+}
+
+type mimeTypeUpdate struct {
+	storedFileID int64
+	mimeType     string
+}
+
+func isMissingS3ObjectError(err error) bool {
+	// age exposes MinIO's NoSuchKey response only as text while reading the object stream.
+	return strings.Contains(err.Error(), "The specified key does not exist.")
 }
