@@ -1,8 +1,10 @@
 package scheduler
 
 import (
+	"context"
 	"io/fs"
 
+	"entgo.io/ent/privacy"
 	"github.com/marcobeierer/go-tika"
 	"github.com/minio/minio-go/v7"
 
@@ -10,6 +12,7 @@ import (
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/internal/gotenberg"
+	"github.com/simpledms/simpledms/model/tenant/tenantdatamigration"
 )
 
 const defaultSchedulerBatchSize = 100
@@ -62,6 +65,11 @@ func (qq *Scheduler) Run(devMode bool, metaPath string, migrationsTenantFS fs.FS
 		}
 	*/
 
+	qq.runTenantDataMigrationsOnce(
+		privacy.DecisionContext(context.Background(), privacy.Allow),
+		tenantdatamigration.NewRunner(),
+	)
+
 	go func() {
 		qq.initializeTenants(devMode, metaPath, migrationsTenantFS)
 	}()
@@ -84,10 +92,6 @@ func (qq *Scheduler) Run(devMode bool, metaPath string, migrationsTenantFS fs.FS
 
 	go func() {
 		qq.backfillContentHashes()
-	}()
-
-	go func() {
-		qq.runTenantDataMigrations()
 	}()
 
 	if qq.gotenbergClientNilable != nil {

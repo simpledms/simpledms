@@ -3,10 +3,6 @@ package scheduler
 import (
 	"context"
 	"log"
-	"runtime/debug"
-	"time"
-
-	"entgo.io/ent/privacy"
 
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
@@ -14,23 +10,6 @@ import (
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/model/tenant/tenantdatamigration"
 )
-
-func (qq *Scheduler) runTenantDataMigrations() {
-	defer func() {
-		if recovered := recover(); recovered != nil {
-			log.Printf("%v: %s", recovered, debug.Stack())
-			time.Sleep(time.Minute)
-			qq.runTenantDataMigrations()
-		}
-	}()
-
-	runner := tenantdatamigration.NewRunner()
-	for {
-		ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
-		qq.runTenantDataMigrationsOnce(ctx, runner)
-		time.Sleep(30 * time.Second)
-	}
-}
 
 func (qq *Scheduler) runTenantDataMigrationsOnce(ctx context.Context, runner *tenantdatamigration.Runner) {
 	qq.tenantDBs.Range(func(tenantID int64, tenantDB *sqlx.TenantDB) bool {

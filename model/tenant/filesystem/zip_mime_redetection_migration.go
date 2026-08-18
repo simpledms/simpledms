@@ -14,7 +14,7 @@ import (
 	"github.com/simpledms/simpledms/model/tenant/tenantdatamigration"
 )
 
-const ZIPMIMERedetectionMigrationKey = "zip-mime-redetection-v1"
+const ZIPMIMERedetectionMigrationKey = "zip-mime-redetection-v2"
 
 type ZIPMIMERedetectionMigration struct {
 	openFile func(context.Context, *age.X25519Identity, *storedfilemodel.StoredFile) (io.ReadCloser, error)
@@ -49,36 +49,44 @@ func (qq *ZIPMIMERedetectionMigration) RunBatch(
 			storedfile.IDGT(state.Cursor),
 			storedfile.MimeTypeEQ("application/zip"),
 			storedfile.CreatedAtLT(state.FirstStartedAt),
-			storedfile.UploadSucceededAtNotNil(),
 			storedfile.CopiedToFinalDestinationAtNotNil(),
 		).
 		Order(storedfile.ByID(sql.OrderAsc())).
-		First(ctx)
-	if enttenant.IsNotFound(err) {
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if len(filex) == 0 {
 		return tenantdatamigration.NewBatchResult(state.Cursor, true, nil), nil
 	}
-	if err != nil {
-		return nil, err
-	}
 
-	openedFile, err := qq.openFile(ctx, qq.identity, storedfilemodel.NewStoredFile(filex))
-	if err != nil {
-		return nil, err
-	}
-	mimeType, detectErr := detectMIME(openedFile)
-	closeErr := openedFile.Close()
-	if detectErr != nil {
-		return nil, detectErr
-	}
-	if closeErr != nil {
-		return nil, closeErr
+	mimeTypes := make([]string, len(filex))
+	for i, storedFilex := range filex {
+		openedFile, err := qq.openFile(ctx, qq.identity, storedfilemodel.NewStoredFile(storedFilex))
+		if err != nil {
+			return nil, err
+		}
+		mimeType, detectErr := detectMIME(openedFile)
+		closeErr := openedFile.Close()
+		if detectErr != nil {
+			return nil, detectErr
+		}
+		if closeErr != nil {
+			return nil, closeErr
+		}
+		mimeTypes[i] = mimeType
 	}
 
 	return tenantdatamigration.NewBatchResult(
-		filex.ID,
-		false,
+		filex[len(filex)-1].ID,
+		true,
 		func(ctx context.Context, tx *enttenant.Tx) error {
-			return tx.StoredFile.UpdateOneID(filex.ID).SetMimeType(mimeType).Exec(ctx)
+			for i, storedFilex := range filex {
+				if err := tx.StoredFile.UpdateOneID(storedFilex.ID).SetMimeType(mimeTypes[i]).Exec(ctx); err != nil {
+					return err
+				}
+			}
+			return nil
 		},
 	), nil
 }

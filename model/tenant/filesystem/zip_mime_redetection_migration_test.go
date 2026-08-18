@@ -14,13 +14,14 @@ import (
 
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/enttest"
+	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/model/tenant/tenantdatamigration"
 )
 
-func TestZIPMIMERedetectionMigrationUsesFirstStartAndRunsOnce(t *testing.T) {
+func TestZIPMIMERedetectionMigrationProcessesLegacyFiles(t *testing.T) {
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
 	client := enttest.Open(t, "sqlite3", "file:zip-migration?mode=memory&cache=shared&_fk=1")
 	defer func() {
@@ -50,10 +51,9 @@ func TestZIPMIMERedetectionMigrationUsesFirstStartAndRunsOnce(t *testing.T) {
 	}, nil)
 	runner := tenantdatamigration.NewRunnerWithClock(func() time.Time { return firstStart })
 
-	for range 4 {
-		if _, err := runner.Run(ctx, tenantDB, migration); err != nil {
-			t.Fatal(err)
-		}
+	completed, err := runner.Run(ctx, tenantDB, migration)
+	if err != nil || !completed {
+		t.Fatalf("completed=%t, err=%v", completed, err)
 	}
 	if openCount != 2 {
 		t.Fatalf("opened files %d times, want 2", openCount)
@@ -82,7 +82,7 @@ func createZIPMigrationFile(
 ) *enttenant.StoredFile {
 	t.Helper()
 	now := time.Now()
-	return client.StoredFile.Create().
+	filex := client.StoredFile.Create().
 		SetCreatedAt(createdAt).
 		SetFilename(filename).
 		SetSize(10).
@@ -93,9 +93,12 @@ func createZIPMigrationFile(
 		SetStorageFilename(filename).
 		SetTemporaryStoragePath("tenant/tmp").
 		SetTemporaryStorageFilename(filename).
-		SetUploadSucceededAt(now).
 		SetCopiedToFinalDestinationAt(now).
 		SaveX(ctx)
+	client.StoredFile.UpdateOneID(filex.ID).
+		ClearUploadStartedAt().
+		ExecX(enttenantschema.WithUnfinishedUploads(ctx))
+	return filex
 }
 
 func zipMigrationContent(t *testing.T, entries map[string]string) []byte {
