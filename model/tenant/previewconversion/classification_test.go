@@ -12,6 +12,7 @@ func TestClassifyEligibleSources(t *testing.T) {
 	}{
 		{name: "html extension", mimeType: "application/octet-stream", filename: "Report.HTML", wantFamily: FamilyHTML, wantInput: "index.html"},
 		{name: "markdown mime", mimeType: "text/markdown; charset=utf-8", filename: "README", wantFamily: FamilyMarkdown, wantInput: "source.md"},
+		{name: "markdown detected as text", mimeType: "text/plain; charset=utf-8", filename: "README.md", wantFamily: FamilyMarkdown, wantInput: "source.md"},
 		{name: "office extension", mimeType: "application/octet-stream", filename: "budget.XLSX", wantFamily: FamilyOffice, wantInput: "budget.XLSX"},
 		{name: "office mime", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", filename: "document", wantFamily: FamilyOffice, wantInput: "document.docx"},
 		{name: "mime wins unknown extension", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", filename: "document.bin", wantFamily: FamilyOffice, wantInput: "document.docx"},

@@ -2,21 +2,23 @@ package scheduler
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 
-	"entgo.io/ent/privacy"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/entmain"
 	entmaintest "github.com/simpledms/simpledms/db/entmain/enttest"
 	"github.com/simpledms/simpledms/db/enttenant"
 	enttenanttest "github.com/simpledms/simpledms/db/enttenant/enttest"
+	privacy "github.com/simpledms/simpledms/db/enttenant/privacy"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/model/main/common/language"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
+	previewmodel "github.com/simpledms/simpledms/model/tenant/previewconversion"
 	"github.com/simpledms/simpledms/util/accountutil"
 )
 
@@ -153,6 +155,148 @@ func TestDiscoverPreviewConversionsIncludesLegacyFinalFiles(t *testing.T) {
 	if conversion.SourceStoredFileID != storedFile.ID {
 		t.Fatalf("expected conversion for stored file %d, got %d", storedFile.ID, conversion.SourceStoredFileID)
 	}
+}
+
+func TestDiscoverPreviewConversionsSkipsPastIneligibleBatch(t *testing.T) {
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	tenantDB := newTestTenantDB(t)
+	space := tenantDB.ReadWriteConn.Space.Create().SetID(1).SetName("Test Space").SaveX(ctx)
+	filex := tenantDB.ReadWriteConn.File.Create().
+		SetSpaceID(space.ID).
+		SetName("versions").
+		SetIsDirectory(false).
+		SetIndexedAt(time.Now()).
+		SaveX(ctx)
+
+	for i := range defaultSchedulerBatchSize {
+		createPreviewVersion(t, ctx, tenantDB, filex.ID, i+1, fmt.Sprintf("image-%d.png", i), "image/png")
+	}
+	eligible := createPreviewVersion(
+		t,
+		ctx,
+		tenantDB,
+		filex.ID,
+		defaultSchedulerBatchSize+1,
+		"README.md",
+		"text/plain; charset=utf-8",
+	)
+	if _, isEligible := previewmodel.Classify(eligible.MimeType, eligible.Filename, false); !isEligible {
+		t.Fatal("test source should be eligible")
+	}
+	scheduler := &Scheduler{}
+	scheduler.discoverPreviewConversions(ctx, tenantDB)
+	scheduler.discoverPreviewConversions(ctx, tenantDB)
+
+	conversion := tenantDB.ReadOnlyConn.PreviewConversion.Query().OnlyX(ctx)
+	if conversion.SourceStoredFileID != eligible.ID {
+		t.Fatalf("conversion source = %d, want %d", conversion.SourceStoredFileID, eligible.ID)
+	}
+}
+
+func TestRecoverInvalidReadyPreviewConversions(t *testing.T) {
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	tenantDB := newTestTenantDB(t)
+	space := tenantDB.ReadWriteConn.Space.Create().SetID(1).SetName("Test Space").SaveX(ctx)
+	source := createPreviewSource(t, ctx, tenantDB, space.ID, "README.md", "text/markdown")
+
+	t.Run("missing artifact is queued again", func(t *testing.T) {
+		conversion := tenantDB.ReadWriteConn.PreviewConversion.Create().
+			SetSourceID(source.ID).
+			SetStatus(previewmodel.Ready).
+			SetRetryCount(3).
+			SetLastAttemptedAt(time.Now()).
+			SaveX(ctx)
+
+		(&Scheduler{}).recoverInvalidReadyPreviewConversions(ctx, tenantDB)
+
+		conversion = tenantDB.ReadOnlyConn.PreviewConversion.GetX(ctx, conversion.ID)
+		if conversion.Status != previewmodel.Pending || conversion.PreviewStoredFileID != nil || conversion.RetryCount != 0 {
+			t.Fatalf("invalid ready conversion was not queued again: %#v", conversion)
+		}
+		tenantDB.ReadWriteConn.PreviewConversion.DeleteOneID(conversion.ID).ExecX(ctx)
+	})
+
+	t.Run("non-final artifact returns to processing", func(t *testing.T) {
+		preview := tenantDB.ReadWriteConn.StoredFile.Create().
+			SetFilename("README.pdf").
+			SetSize(10).
+			SetSizeInStorage(10).
+			SetMimeType("application/pdf").
+			SetStorageType(storagetype.S3).
+			SetStoragePath("tenant/final").
+			SetStorageFilename("README.pdf").
+			SetTemporaryStoragePath("tenant/tmp").
+			SetTemporaryStorageFilename("README.pdf").
+			SetUploadSucceededAt(time.Now()).
+			SaveX(ctx)
+		conversion := tenantDB.ReadWriteConn.PreviewConversion.Create().
+			SetSourceID(source.ID).
+			SetPreviewID(preview.ID).
+			SetStatus(previewmodel.Ready).
+			SaveX(ctx)
+		if conversion.PreviewStoredFileID == nil {
+			t.Fatal("preview conversion was created without its artifact")
+		}
+		if _, err := tenantDB.ReadOnlyConn.StoredFile.Get(ctx, preview.ID); err != nil {
+			t.Fatalf("preview artifact is not readable: %v", err)
+		}
+
+		(&Scheduler{}).recoverInvalidReadyPreviewConversions(ctx, tenantDB)
+
+		conversion = tenantDB.ReadOnlyConn.PreviewConversion.GetX(ctx, conversion.ID)
+		if conversion.Status != previewmodel.Processing || conversion.PreviewStoredFileID == nil || conversion.ProcessingStartedAt == nil {
+			t.Fatalf("invalid ready conversion did not return to processing: %#v", conversion)
+		}
+	})
+}
+
+func createPreviewSource(
+	t *testing.T,
+	ctx context.Context,
+	tenantDB *sqlx.TenantDB,
+	spaceID int64,
+	filename string,
+	mimeType string,
+) *enttenant.StoredFile {
+	t.Helper()
+	filex := tenantDB.ReadWriteConn.File.Create().
+		SetSpaceID(spaceID).
+		SetName(filename).
+		SetIsDirectory(false).
+		SetIndexedAt(time.Now()).
+		SaveX(ctx)
+	return createPreviewVersion(t, ctx, tenantDB, filex.ID, 1, filename, mimeType)
+}
+
+func createPreviewVersion(
+	t *testing.T,
+	ctx context.Context,
+	tenantDB *sqlx.TenantDB,
+	fileID int64,
+	versionNumber int,
+	filename string,
+	mimeType string,
+) *enttenant.StoredFile {
+	t.Helper()
+	storedFile := tenantDB.ReadWriteConn.StoredFile.Create().
+		SetFilename(filename).
+		SetSize(10).
+		SetSizeInStorage(10).
+		SetMimeType(mimeType).
+		SetStorageType(storagetype.S3).
+		SetStoragePath("tenant/final").
+		SetStorageFilename(filename).
+		SetTemporaryStoragePath("tenant/tmp").
+		SetTemporaryStorageFilename(filename).
+		SetUploadSucceededAt(time.Now()).
+		SetCopiedToFinalDestinationAt(time.Now()).
+		SaveX(ctx)
+	tenantDB.ReadWriteConn.FileVersion.Create().
+		SetFileID(fileID).
+		SetStoredFileID(storedFile.ID).
+		SetVersionNumber(versionNumber).
+		SaveX(ctx)
+	return storedFile
 }
 
 func TestDeleteTempAccountFilesDeletesOnlyExpiredUnconvertedFiles(t *testing.T) {

@@ -64,6 +64,7 @@ func (qq *Scheduler) convertPreviewsOnce(ctx context.Context) {
 
 		qq.discoverPreviewConversions(ctx, tenantDB)
 		qq.reconcilePreviewConversions(ctx, tenantDB, tenantx.X25519IdentityEncrypted.Identity())
+		qq.recoverInvalidReadyPreviewConversions(ctx, tenantDB)
 		qq.recoverStalePreviewClaims(ctx, tenantDB)
 		qq.cleanupOrphanedPreviewConversions(ctx, tenantDB)
 		qq.processDuePreviewConversions(ctx, tenantDB, tenantx)
@@ -72,27 +73,39 @@ func (qq *Scheduler) convertPreviewsOnce(ctx context.Context) {
 }
 
 func (qq *Scheduler) discoverPreviewConversions(ctx context.Context, tenantDB *sqlx.TenantDB) {
-	var convertedSourceIDs []int64
-	if err := tenantDB.ReadOnlyConn.PreviewConversion.Query().
-		Select(previewconversion.FieldSourceStoredFileID).
-		Scan(ctx, &convertedSourceIDs); err != nil {
-		log.Println(err)
-		return
+	if qq.previewDiscoveryCursor == nil {
+		qq.previewDiscoveryCursor = make(map[*sqlx.TenantDB]int64)
 	}
-
 	// Final storage is the readiness marker; legacy files have no upload status timestamps.
 	sourceQuery := tenantDB.ReadOnlyConn.StoredFile.Query().
 		Where(
 			storedfile.CopiedToFinalDestinationAtNotNil(),
-			storedfile.HasFilesWith(file.IsDirectory(false), file.DeletedAtIsNil()),
+			storedfile.HasFileVersionsWith(
+				fileversion.HasFileWith(file.IsDirectory(false), file.DeletedAtIsNil()),
+			),
+			func(selector *entsql.Selector) {
+				conversionTable := entsql.Table(previewconversion.Table)
+				selector.Where(
+					entsql.NotIn(
+						selector.C(storedfile.FieldID),
+						entsql.Select(conversionTable.C(previewconversion.FieldSourceStoredFileID)).
+							From(conversionTable),
+					),
+				)
+			},
 		)
-	if len(convertedSourceIDs) > 0 {
-		sourceQuery.Where(storedfile.Not(storedfile.IDIn(convertedSourceIDs...)))
+	if cursor := qq.previewDiscoveryCursor[tenantDB]; cursor != 0 {
+		sourceQuery.Where(storedfile.IDGT(cursor))
 	}
 	sources := sourceQuery.
 		Order(storedfile.ByID(entsql.OrderAsc())).
 		Limit(defaultSchedulerBatchSize).
 		AllX(ctx)
+	if len(sources) == 0 {
+		delete(qq.previewDiscoveryCursor, tenantDB)
+		return
+	}
+	qq.previewDiscoveryCursor[tenantDB] = sources[len(sources)-1].ID
 
 	for _, source := range sources {
 		if _, eligible := previewmodel.Classify(source.MimeType, source.Filename, false); !eligible {
@@ -145,6 +158,53 @@ func (qq *Scheduler) reconcilePreviewConversions(
 			ClearFailureCategory().
 			Exec(ctx)
 		if err != nil {
+			log.Println(err)
+		}
+	}
+}
+
+func (qq *Scheduler) recoverInvalidReadyPreviewConversions(ctx context.Context, tenantDB *sqlx.TenantDB) {
+	conversions := tenantDB.ReadOnlyConn.PreviewConversion.Query().
+		Where(
+			previewconversion.StatusEQ(previewmodel.Ready),
+			previewconversion.Or(
+				previewconversion.PreviewStoredFileIDIsNil(),
+				previewconversion.Not(previewconversion.HasPreview()),
+				previewconversion.HasPreviewWith(storedfile.CopiedToFinalDestinationAtIsNil()),
+			),
+		).
+		Limit(defaultSchedulerBatchSize).
+		AllX(ctx)
+
+	for _, conversion := range conversions {
+		var preview *enttenant.StoredFile
+		if conversion.PreviewStoredFileID != nil {
+			var err error
+			previewCtx := tenantprivacy.DecisionContext(ctx, tenantprivacy.Allow)
+			preview, err = tenantDB.ReadOnlyConn.StoredFile.Get(previewCtx, *conversion.PreviewStoredFileID)
+			if err != nil && !enttenant.IsNotFound(err) {
+				log.Println(err)
+				continue
+			}
+		}
+		if preview != nil && preview.CopiedToFinalDestinationAt != nil {
+			continue
+		}
+
+		update := tenantDB.ReadWriteConn.PreviewConversion.UpdateOneID(conversion.ID).
+			ClearNextAttemptAt().
+			ClearFailureCategory()
+		if preview == nil {
+			update.ClearPreviewStoredFileID().
+				SetStatus(previewmodel.Pending).
+				SetRetryCount(0).
+				ClearLastAttemptedAt().
+				ClearProcessingStartedAt()
+		} else {
+			update.SetStatus(previewmodel.Processing).
+				SetProcessingStartedAt(time.Now())
+		}
+		if err := update.Exec(ctx); err != nil {
 			log.Println(err)
 		}
 	}

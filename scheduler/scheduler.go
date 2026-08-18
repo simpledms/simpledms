@@ -23,6 +23,7 @@ type Scheduler struct {
 	bucketName             string
 	tikaClientNilable      *tika.Client
 	gotenbergClientNilable *gotenberg.GotenbergClient
+	previewDiscoveryCursor map[*sqlx.TenantDB]int64
 }
 
 func NewScheduler(
@@ -42,6 +43,7 @@ func NewScheduler(
 		bucketName:             bucketName,
 		tikaClientNilable:      tikaClient,
 		gotenbergClientNilable: gotenbergClient,
+		previewDiscoveryCursor: make(map[*sqlx.TenantDB]int64),
 	}
 }
 

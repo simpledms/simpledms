@@ -79,6 +79,13 @@ func (qq *FilePreviewPartial) PreviewWidget(
 		return nil, true, err
 	}
 	ready := conversion != nil && conversion.Status == previewmodel.Ready && preview != nil && preview.CopiedToFinalDestinationAt != nil
+	if !canShowPreviewTabs(configured, source.CopiedToFinalDestinationAt != nil, ready) {
+		return &widget.FilePreview{
+			FileURL:  qq.originalInlineURL(ctx, filex, versionNumber),
+			Filename: source.Filename,
+			MimeType: source.MimeType,
+		}, false, nil
+	}
 	pending := configured && !ready && (conversion == nil || conversion.Status == previewmodel.Pending || conversion.Status == previewmodel.Processing)
 	failed := configured && conversion != nil && conversion.Status == previewmodel.Failed
 
@@ -233,6 +240,10 @@ func (qq *FilePreviewPartial) PreviewWidget(
 			ActiveTabContent: content,
 		},
 	}, true, nil
+}
+
+func canShowPreviewTabs(configured, sourceFinal, ready bool) bool {
+	return sourceFinal && (configured || ready)
 }
 
 func (qq *FilePreviewPartial) previewConversion(
