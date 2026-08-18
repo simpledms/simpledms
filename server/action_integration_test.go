@@ -1586,6 +1586,8 @@ func TestToggleTenantPasskeyEnforcementCmdRejectsNonOwner(t *testing.T) {
 
 func TestOrganizationSettingsPageShowsPasskeyEnforcementButtonWithConfirm(t *testing.T) {
 	harness := newActionTestHarness(t)
+	harness.infra.SetManageTenantsDeleteTenantCmdEndpoint("/-/manage-tenants/delete")
+	harness.infra.SetManageTenantsDownloadBackupEndpoint("/-/manage-tenants/download-backup")
 	harness.router.RegisterPage(
 		route.OrganizationSettingsRoute(),
 		harness.actions.Dashboard.OrganizationSettingsPage.Handler,
@@ -1623,6 +1625,12 @@ func TestOrganizationSettingsPageShowsPasskeyEnforcementButtonWithConfirm(t *tes
 	}
 
 	bodyDisabled := fetchSettingsPage()
+	if !strings.Contains(bodyDisabled, "Delete organization") {
+		t.Fatalf("expected delete organization button, body was: %s", bodyDisabled)
+	}
+	if !strings.Contains(bodyDisabled, "Download backup") {
+		t.Fatalf("expected download backup button, body was: %s", bodyDisabled)
+	}
 	if !strings.Contains(bodyDisabled, "Enable passkey enforcement") {
 		t.Fatalf("expected enable passkey enforcement button, body was: %s", bodyDisabled)
 	}

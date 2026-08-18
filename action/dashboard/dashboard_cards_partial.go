@@ -3,7 +3,6 @@ package dashboard
 import (
 	"fmt"
 	"log"
-	"net/url"
 	"strings"
 	"time"
 
@@ -138,7 +137,6 @@ func (qq *DashboardCardsPartial) DashboardGrids(ctx ctxx.Context) ([]*widget.Gri
 
 	for tenantx, spaces := range spacesByTenant {
 		var tenantCards []*widget.Card
-		var tenantActionBtns []widget.IWidget
 
 		if tenantCard := qq.nilableTenantCard(ctx, tenantx); tenantCard != nil {
 			tenantCards = append(tenantCards, tenantCard)
@@ -150,27 +148,12 @@ func (qq *DashboardCardsPartial) DashboardGrids(ctx ctxx.Context) ([]*widget.Gri
 		if manageSpacesCard, ok := qq.manageSpacesCard(ctx, tenantx, len(spaces)); ok {
 			tenantCards = append(tenantCards, manageSpacesCard)
 		}
-		if btn, ok := qq.deleteTenantBtn(ctx, tenantx); ok {
-			tenantActionBtns = append(tenantActionBtns, btn)
-		}
-		if link, ok := qq.downloadTenantBackupLink(ctx, tenantx); ok {
-			tenantActionBtns = append(tenantActionBtns, link)
-		}
 		for _, spacex := range spaces {
 			tenantCards = append(tenantCards, qq.spaceCard(ctx, spacex, tenantx))
 		}
 
-		var actions widget.IWidget
-		if len(tenantActionBtns) > 0 {
-			actions = &widget.Row{
-				Wrap:     true,
-				Children: tenantActionBtns,
-			}
-		}
-
 		grids = append(grids, &widget.Grid{
 			Heading:  widget.Hf(widget.HeadingTypeTitleMd, "Organization «%s»", tenantx.Name),
-			Actions:  actions,
 			Children: tenantCards,
 		})
 	}
@@ -650,70 +633,6 @@ func (qq *DashboardCardsPartial) manageSpacesCard(ctx ctxx.Context, tenantx *ent
 				HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
 			},
 		}},
-	}, true
-}
-
-func (qq *DashboardCardsPartial) deleteTenantBtn(ctx ctxx.Context, tenantx *entmain.Tenant) (*widget.Button, bool) {
-	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
-		return nil, false
-	}
-
-	deleteTenantCmdEndpoint := qq.infra.ManageTenantsDeleteTenantCmdEndpoint()
-	if deleteTenantCmdEndpoint == "" {
-		return nil, false
-	}
-
-	tenantm := tenant.NewTenant(tenantx)
-	accountm := account.NewAccount(ctx.MainCtx().Account)
-	if !tenantm.IsOwner(accountm) {
-		return nil, false
-	}
-	if !tenantm.IsInitialized() {
-		return nil, false
-	}
-
-	return &widget.Button{
-		Label:     widget.T("Delete organization"),
-		StyleType: widget.ButtonStyleTypeElevated,
-		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:    deleteTenantCmdEndpoint,
-			HxVals:    util.JSON(map[string]any{"TenantID": tenantx.PublicID.String()}),
-			HxConfirm: widget.T("Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.").String(ctx),
-		},
-	}, true
-}
-
-func (qq *DashboardCardsPartial) downloadTenantBackupLink(
-	ctx ctxx.Context,
-	tenantx *entmain.Tenant,
-) (*widget.Link, bool) {
-	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
-		return nil, false
-	}
-
-	endpoint := qq.infra.ManageTenantsDownloadBackupEndpoint()
-	if endpoint == "" {
-		return nil, false
-	}
-
-	tenantm := tenant.NewTenant(tenantx)
-	accountm := account.NewAccount(ctx.MainCtx().Account)
-	if !tenantm.IsOwner(accountm) {
-		return nil, false
-	}
-	if !tenantm.IsInitialized() {
-		return nil, false
-	}
-
-	filename := "tenant-backup-" + tenantx.PublicID.String() + ".zip"
-
-	return &widget.Link{
-		Href:     endpoint + "?tenant_id=" + url.QueryEscape(tenantx.PublicID.String()),
-		Filename: filename,
-		Child: &widget.Button{
-			Label:     widget.T("Download backup"),
-			StyleType: widget.ButtonStyleTypeElevated,
-		},
 	}, true
 }
 

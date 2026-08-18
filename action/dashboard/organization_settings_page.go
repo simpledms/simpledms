@@ -1,6 +1,8 @@
 package dashboard
 
 import (
+	"net/url"
+
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
@@ -81,19 +83,38 @@ func (qq *OrganizationSettingsPage) appBar(ctx ctxx.Context) *widget.AppBar {
 }
 
 func (qq *OrganizationSettingsPage) content(ctx ctxx.Context) widget.IWidget {
-	button, ok := qq.passkeyEnforcementBtn(ctx, ctx.TenantCtx().Tenant)
-	if !ok {
-		return []*widget.Grid{}
+	var grids []*widget.Grid
+	tenantx := ctx.TenantCtx().Tenant
+
+	if button, ok := qq.passkeyEnforcementBtn(ctx, tenantx); ok {
+		grids = append(grids, &widget.Grid{
+			Heading: widget.H(widget.HeadingTypeTitleMd, widget.T("Passkeys")),
+			Children: []*widget.Card{{
+				Style:    widget.CardStyleFilled,
+				Headline: widget.H(widget.HeadingTypeTitleLg, widget.T("Passkeys")),
+				Actions:  []*widget.Button{button},
+			}},
+		})
 	}
 
-	return []*widget.Grid{{
-		Heading: widget.H(widget.HeadingTypeTitleMd, widget.T("Passkeys")),
-		Children: []*widget.Card{{
-			Style:    widget.CardStyleFilled,
-			Headline: widget.H(widget.HeadingTypeTitleLg, widget.T("Passkeys")),
-			Actions:  []*widget.Button{button},
-		}},
-	}}
+	var actions []widget.IWidget
+	if button, ok := qq.deleteTenantBtn(ctx, tenantx); ok {
+		actions = append(actions, button)
+	}
+	if button, ok := qq.downloadTenantBackupLink(ctx, tenantx); ok {
+		actions = append(actions, button)
+	}
+	if len(actions) > 0 {
+		grids = append(grids, &widget.Grid{
+			Heading: widget.H(widget.HeadingTypeTitleMd, widget.T("Organization")),
+			Actions: &widget.Row{
+				Wrap:     true,
+				Children: actions,
+			},
+		})
+	}
+
+	return grids
 }
 
 func (qq *OrganizationSettingsPage) passkeyEnforcementBtn(
@@ -129,6 +150,65 @@ func (qq *OrganizationSettingsPage) passkeyEnforcementBtn(
 			),
 			HxConfirm: confirmText.String(ctx),
 			HxSwap:    "none",
+		},
+	}, true
+}
+
+func (qq *OrganizationSettingsPage) deleteTenantBtn(
+	ctx ctxx.Context,
+	tenantx *entmain.Tenant,
+) (*widget.Button, bool) {
+	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
+		return nil, false
+	}
+
+	endpoint := qq.infra.ManageTenantsDeleteTenantCmdEndpoint()
+	if endpoint == "" {
+		return nil, false
+	}
+
+	tenantm := tenantmodel.NewTenant(tenantx)
+	accountm := accountmodel.NewAccount(ctx.MainCtx().Account)
+	if !tenantm.IsOwner(accountm) || !tenantm.IsInitialized() {
+		return nil, false
+	}
+
+	return &widget.Button{
+		Label:     widget.T("Delete organization"),
+		StyleType: widget.ButtonStyleTypeElevated,
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:    endpoint,
+			HxVals:    util.JSON(map[string]any{"TenantID": tenantx.PublicID.String()}),
+			HxConfirm: widget.T("Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.").String(ctx),
+		},
+	}, true
+}
+
+func (qq *OrganizationSettingsPage) downloadTenantBackupLink(
+	ctx ctxx.Context,
+	tenantx *entmain.Tenant,
+) (*widget.Link, bool) {
+	if !qq.infra.SystemConfig().IsSaaSModeEnabled() {
+		return nil, false
+	}
+
+	endpoint := qq.infra.ManageTenantsDownloadBackupEndpoint()
+	if endpoint == "" {
+		return nil, false
+	}
+
+	tenantm := tenantmodel.NewTenant(tenantx)
+	accountm := accountmodel.NewAccount(ctx.MainCtx().Account)
+	if !tenantm.IsOwner(accountm) || !tenantm.IsInitialized() {
+		return nil, false
+	}
+
+	return &widget.Link{
+		Href:     endpoint + "?tenant_id=" + url.QueryEscape(tenantx.PublicID.String()),
+		Filename: "tenant-backup-" + tenantx.PublicID.String() + ".zip",
+		Child: &widget.Button{
+			Label:     widget.T("Download backup"),
+			StyleType: widget.ButtonStyleTypeElevated,
 		},
 	}, true
 }
