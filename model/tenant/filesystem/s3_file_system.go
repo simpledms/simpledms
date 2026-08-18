@@ -1134,29 +1134,12 @@ func (qq *S3FileSystem) UpdateMimeType(ctx ctxx.Context, force bool, filex *stor
 	}
 	defer obj.Close()
 
-	buf := make([]byte, 512)
-	n, err := obj.Read(buf)
-	if err != nil && err != io.EOF {
-		log.Println(err)
-		return "", e.NewHTTPErrorf(http.StatusInternalServerError, "")
-	}
-
-	// seems to be necessary to remove zero values which can cause false detection; not verified
-	// by me, see:
-	// https://gist.github.com/rayrutjes/db9b9ea8e02255d62ce2?permalink_comment_id=3418419#gistcomment-3418419
-	buf = buf[:n]
-
-	mimeType := http.DetectContentType(buf)
-	filex.Data = filex.Data.Update().SetMimeType(mimeType).SaveX(ctx)
-
-	/*  TODO necessary if closed directly? pipeReader doesn't implement Seeker
-	// after probing mimetype
-	_, err = obj.Seek(0, 0)
+	mimeType, err := detectMIME(obj)
 	if err != nil {
 		log.Println(err)
 		return "", e.NewHTTPErrorf(http.StatusInternalServerError, "")
 	}
-	*/
+	filex.Data = filex.Data.Update().SetMimeType(mimeType).SaveX(ctx)
 
 	return mimeType, nil
 }
