@@ -22,7 +22,9 @@
 					<div>{{ render .GetContext .Headline }}</div>
 				</div>
                 {{ with .SupportingText }}
-					<div class="body-lg text-on-surface-variant">{{ render $ctx . }}</div>
+					{{ with render $ctx . }}
+						<div class="body-lg text-on-surface-variant">{{ . }}</div>
+					{{ end }}
                 {{ end }}
 				{{ with .Content }}
 					<div>{{ render $ctx . }}</div>
