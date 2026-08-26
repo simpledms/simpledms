@@ -16,7 +16,8 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/sqlx"
-	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/util/cookiex"
 )
 
 func TestConcurrentUploadFileCmd(t *testing.T) {
@@ -45,6 +46,12 @@ func TestConcurrentUploadFileCmd(t *testing.T) {
 		if err := tenantTx.Commit(); err != nil {
 			t.Fatalf("commit tenant tx: %v", err)
 		}
+		sessionValue := createSessionForAccountForRulesTest(t, harness, accountx.ID)
+		currentURL := route.Browse(
+			tenantx.PublicID.String(),
+			spacex.PublicID.String(),
+			parentDirID,
+		)
 
 		const uploadCount = 15
 		var wg sync.WaitGroup
@@ -56,51 +63,26 @@ func TestConcurrentUploadFileCmd(t *testing.T) {
 			go func() {
 				defer wg.Done()
 
-				mainTx, tenantTx, tenantCtx, err := newTenantContextForUpload(harness, accountx, tenantx, tenantDB)
-				if err != nil {
-					errCh <- err
-					return
-				}
-
-				committed := false
-				defer func() {
-					if committed {
-						return
-					}
-					_ = tenantTx.Rollback()
-					_ = mainTx.Rollback()
-				}()
-
-				spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
-				spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-
 				filename := fmt.Sprintf("concurrent-%d.txt", i)
 				req, err := newUploadRequest(parentDirID, filename, []byte("hello"))
 				if err != nil {
 					errCh <- err
 					return
 				}
+				req.Header.Set("HX-Request", "true")
+				req.Header.Set("HX-Current-URL", currentURL)
+				req.AddCookie(&http.Cookie{
+					Name:  cookiex.SessionCookieName(),
+					Value: sessionValue,
+				})
 
 				rr := httptest.NewRecorder()
-				err = harness.actions.Browse.UploadFileCmd.Handler(
-					httpx.NewResponseWriter(rr),
-					httpx.NewRequest(req),
-					spaceCtx,
-				)
-				if err != nil {
-					errCh <- err
+				harness.router.ServeHTTP(rr, req)
+				if rr.Code != http.StatusOK {
+					errCh <- fmt.Errorf("upload %q returned %d: %s", filename, rr.Code, rr.Body.String())
 					return
 				}
 
-				if err := mainTx.Commit(); err != nil {
-					errCh <- err
-					return
-				}
-				if err := tenantTx.Commit(); err != nil {
-					errCh <- err
-					return
-				}
-				committed = true
 				errCh <- nil
 			}()
 		}
