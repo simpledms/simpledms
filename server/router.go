@@ -3,7 +3,6 @@ package server
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"log"
 	"net"
@@ -308,7 +307,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 					rwx,
 					reqx,
 					visitorCtx,
-					fmt.Errorf("Internal error, please contact support."),
+					errors.New("internal error, please contact support"),
 					mainTx,
 					nilableTenantTx,
 				)
@@ -397,7 +396,7 @@ func (qq *Router) wrapManualTx(handlerFn handlerFn) http.HandlerFunc {
 				qq.logRecoveredPanic(reqx.Request, r)
 				err, ok := r.(error)
 				if !ok {
-					err = fmt.Errorf("Internal error, please contact support.")
+					err = errors.New("internal error, please contact support")
 				}
 				if transactionsOpen {
 					qq.handleError(rwx, reqx, visitorCtx, err, mainTx, nilableTenantTx)

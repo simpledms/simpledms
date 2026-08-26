@@ -142,7 +142,7 @@ func (qq *FilesListPartial) Handler(
 
 	state := autil.StateX[InboxPageState](rw, req)
 	state.FilesListPartialState.normalizeSortBy()
-	if _, err := state.FilesListPartialState.sources(); err != nil {
+	if _, err := state.sources(); err != nil {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid source filter.")
 	}
 
@@ -458,7 +458,7 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 		)
 	}
 
-	sources, err := state.FilesListPartialState.sources()
+	sources, err := state.sources()
 	if err != nil {
 		log.Println(err)
 	} else if len(sources) > 0 {

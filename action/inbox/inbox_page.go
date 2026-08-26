@@ -56,7 +56,7 @@ func (qq *InboxPage) Data() *InboxPageData {
 // TODO refactor, legacy code
 func (qq *InboxPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	state := autil.StateX[InboxPageState](rw, req)
-	if _, err := state.FilesListPartialState.sources(); err != nil {
+	if _, err := state.sources(); err != nil {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid source filter.")
 	}
 	if state.UploadToken != "" {
@@ -120,7 +120,7 @@ func (qq *InboxPage) WidgetHandler(
 	// TODO use in MoveFileCmd / AssignFileCmd, initial render
 
 	state := autil.StateX[InboxPageState](rw, req)
-	if _, err := state.FilesListPartialState.sources(); err != nil {
+	if _, err := state.sources(); err != nil {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid source filter.")
 	}
 

@@ -289,8 +289,8 @@ func TestCreateWebDAVCredentialCmdUsesAuthorizedTenantContext(t *testing.T) {
 	if len(items) != 2 || items[0].Type != widget.ListItemTypeHelper {
 		t.Fatalf("expected one add row followed by one credential, got %#v", items)
 	}
-	if !strings.Contains(string(items[0].HTMXAttrs.HxVals), archiveSpacePublicID) {
-		t.Fatalf("expected add row to preselect its Space, got %s", items[0].HTMXAttrs.HxVals)
+	if !strings.Contains(string(items[0].HxVals), archiveSpacePublicID) {
+		t.Fatalf("expected add row to preselect its Space, got %s", items[0].HxVals)
 	}
 	menuButton, ok := items[1].Trailing.(*widget.IconButton)
 	if !ok || menuButton.Icon != "more_vert" {
@@ -335,7 +335,7 @@ func TestCreateWebDAVCredentialCmdUsesAuthorizedTenantContext(t *testing.T) {
 		t.Fatalf("expected active-only side-sheet filter by default, got %#v", filterChips)
 	}
 	if !strings.Contains(
-		string(filterChips[1].HTMXAttrs.HxOn.Handler),
+		string(filterChips[1].HxOn.Handler),
 		"credential_status', 'active",
 	) {
 		t.Fatal("expected selecting revoked to preserve the implicit active filter")

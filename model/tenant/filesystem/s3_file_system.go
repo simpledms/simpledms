@@ -1396,21 +1396,26 @@ func (qq *S3FileSystem) persistTemporaryAccountFile(
 	if err != nil {
 		return nil, err
 	}
+	defer func() {
+		if conversionDone {
+			return
+		}
+		if err := qq.cleanupClaimedAccountConversion(ctx, storedFilex, claimToken); err != nil {
+			log.Println(err)
+		}
+	}()
 
 	accountObjectName, err := securejoin.SecureJoin(tmpFile.StoragePath, tmpFile.StorageFilename)
 	if err != nil {
-		qq.cleanupClaimedAccountConversion(ctx, storedFilex, claimToken)
 		return nil, err
 	}
 	if err := qq.verifyObjectStrict(ctx, accountObjectName, tmpFile.SizeInStorage, nilableString(tmpFile.StorageCrc32c)); err != nil {
 		log.Println(err)
-		qq.cleanupClaimedAccountConversion(ctx, storedFilex, claimToken)
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify staged file.")
 	}
 
 	mainX25519Identity := encryptor.NilableX25519MainIdentity
 	if mainX25519Identity == nil {
-		qq.cleanupClaimedAccountConversion(ctx, storedFilex, claimToken)
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "App not unlocked yet.")
 	}
 
@@ -1422,7 +1427,6 @@ func (qq *S3FileSystem) persistTemporaryAccountFile(
 	plaintext, err := qq.UnsafeOpenFile(ctx, mainX25519Identity, storedfilemodel.NewStoredFile(accountFile))
 	if err != nil {
 		log.Println(err)
-		qq.cleanupClaimedAccountConversion(ctx, storedFilex, claimToken)
 		return nil, err
 	}
 	defer func() {
@@ -1444,15 +1448,12 @@ func (qq *S3FileSystem) persistTemporaryAccountFile(
 	)
 	if err != nil {
 		log.Println(err)
-		qq.cleanupClaimedAccountConversion(ctx, storedFilex, claimToken)
 		return nil, err
 	}
 	if storageFilename != storedFilex.TemporaryStorageFilename {
-		qq.cleanupClaimedAccountConversion(ctx, storedFilex, claimToken)
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Storage filename mismatch.")
 	}
 	if result.fileSize != tmpFile.Size || result.contentSHA256 != tmpFile.ContentSha256 {
-		qq.cleanupClaimedAccountConversion(ctx, storedFilex, claimToken)
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Staged file integrity mismatch.")
 	}
 
@@ -1468,7 +1469,6 @@ func (qq *S3FileSystem) persistTemporaryAccountFile(
 	)
 	if err != nil {
 		log.Println(err)
-		qq.cleanupClaimedAccountConversion(ctx, storedFilex, claimToken)
 		return nil, err
 	}
 
