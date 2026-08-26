@@ -64,7 +64,6 @@ test.describe("users and spaces management", () => {
 		const spaceName = `E2E Space ${uniqueSuffix()}`;
 
 		await goToSpaces(page);
-		const selectCountBefore = await page.getByRole("link", { name: "Select" }).count();
 		await openCreateSpaceDialog(page);
 		await page.getByRole("textbox", { name: "Name" }).fill(spaceName);
 		await page.getByRole("checkbox", { name: "Add me as space owner" }).check();
@@ -73,19 +72,11 @@ test.describe("users and spaces management", () => {
 		await page.getByRole("button", { name: "Save" }).click();
 
 		await expect(page.getByRole("heading", { name: spaceName })).toBeVisible();
-		await expect(page.getByRole("link", { name: "Select" })).toHaveCount(selectCountBefore + 1);
 		await expect(page.getByRole("heading", { name: "No spaces available yet." })).toHaveCount(0);
-		const headings = page.getByRole("heading", { level: 3 });
-		let headingIndex = -1;
-		for (let i = 0; i < (await headings.count()); i++) {
-			const text = (await headings.nth(i).innerText()).trim();
-			if (text === spaceName) {
-				headingIndex = i;
-				break;
-			}
-		}
-		expect(headingIndex).toBeGreaterThanOrEqual(0);
-		await page.getByRole("link", { name: "Select" }).nth(headingIndex).click();
+		await page
+			.getByRole("link")
+			.filter({ has: page.getByRole("heading", { name: spaceName, exact: true }) })
+			.click();
 		await expect(page).toHaveURL(/\/space\/[^/]+\/browse\/$/);
 		await page.goto(page.url().replace(/\/browse\/$/, "/document-types/"));
 
@@ -96,15 +87,20 @@ test.describe("users and spaces management", () => {
 	});
 
 	test("allows creating a space with owner toggle off", async ({ page }) => {
+		const spaceName = `No-owner ${uniqueSuffix()}`;
+
 		await goToSpaces(page);
-		const selectCountBefore = await page.getByRole("link", { name: "Select" }).count();
 		await openCreateSpaceDialog(page);
-		await page.getByRole("textbox", { name: "Name" }).fill(`No-owner ${uniqueSuffix()}`);
+		await page.getByRole("textbox", { name: "Name" }).fill(spaceName);
 		const ownerToggle = page.getByRole("checkbox", { name: "Add me as space owner" });
 		await ownerToggle.uncheck();
 		await expect(ownerToggle).not.toBeChecked();
 		await page.getByRole("button", { name: "Save" }).click();
 
-		await expect(page.getByRole("link", { name: "Select" })).toHaveCount(selectCountBefore + 1);
+		await expect(
+			page
+				.getByRole("link")
+				.filter({ has: page.getByRole("heading", { name: spaceName, exact: true }) }),
+		).toHaveCount(1);
 	});
 });
