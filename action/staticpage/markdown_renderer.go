@@ -111,7 +111,7 @@ func (qq *MarkdownRenderer) styleMarkdown(raw string) (string, error) {
 				break
 			}
 
-			qq.appendAttr(node, "class", "body-sm px-1 py-[2px] rounded bg-surface-container-high")
+			qq.appendAttr(node, "class", "body-sm px-1 py-[2px] rounded-xs bg-surface-container-high")
 		case "blockquote":
 			qq.appendAttr(node, "class", "text-on-surface my-3 py-1 pl-4 border-l-4 border-outline-variant")
 		case "hr":

@@ -1,7 +1,7 @@
 {{/* gotype:github.com/simpledms/simpledms/core/ui/widget.TabBar */}}
 {{- define "TabBar" }}
-	<div id="{{ .GetID }}" class="flex flex-col flex-grow max-h-full overflow-y-hidden">
-		<div class="flex-shrink-0 overflow-x-auto {{ .GetClass }}">
+	<div id="{{ .GetID }}" class="flex flex-col grow max-h-full overflow-y-hidden">
+		<div class="shrink-0 overflow-x-auto {{ .GetClass }}">
 			<div role="tablist" class="flex flex-row min-w-max border-b border-outline-variant
 				{{ if .IsFlowing }}{{ end }}">
                 {{ render .GetContext .GetTabs }}

@@ -11,11 +11,11 @@
 		*/}}
 	<div class="flex flex-col-reverse md:flex-row h-svh">
         {{ render .GetContext .Navigation }}
-		<div id="innerContent" class="flex-grow overflow-hidden">
+		<div id="innerContent" class="grow overflow-hidden">
             {{ render .GetContext .Content }}
 		</div>
 		{{ with .Sheet }}
-			<div class="lg:flex-grow hidden lg:block">
+			<div class="lg:grow hidden lg:block">
 				{{ render $ctx . }}
 			</div>
 		{{ end }}

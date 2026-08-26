@@ -28,7 +28,6 @@
 		 	md:transition-all
 		 	overflow-hidden
 			 bg-surface text-on-surface w-full max-w-full h-svh max-h-svh
-			 {{/* backdrop:backdrop-blur-sm backdrop:backdrop-brightness-75 backdrop:backdrop-grayscale backdrop:backdrop-contrast-50 */}}
 			 md:drop-shadow md:border-2 md:border-outline-variant
 			 md:bg-surface-container-lowest
 			 {{/* IMPORTANT if lg: is changed, media query in JS of this widget must be changed too */}}
@@ -49,7 +48,6 @@
 				{{/* 2xl:mt-1 is necessary for progress indicator to not be hidden behind */}}
 				2xl:mt-1
 			{{ end }}
-			{{/* backdrop:bg-surface-variant */}}
 			 md:max-h-[calc(100dvh-3rem)] md:rounded-xl
 			 md:min-w-[17.5rem]
 			 {{/*
@@ -83,7 +81,7 @@
 					<div class="js-dialog-close {{ if .IsDefaultLayout }}md:hidden{{ end }}">
 						{{ render .GetContext .GetCloseIconButton }}
 					</div>
-					<h2 class="flex-grow md:headline-sm title-lg truncate">
+					<h2 class="grow md:headline-sm title-lg truncate">
 						{{ render .GetContext .Headline }}
 					</h2>
 					{{ if .HeaderActions }}

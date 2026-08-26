@@ -19,7 +19,8 @@
 					{{- if .IsActive }}
 						fill text-on-secondary-container
 					{{- else }}
-						text-on-surface-variant hfa:text-on-surface
+						text-on-surface-variant group-hover/navdest:text-on-surface
+						group-focus/navdest:text-on-surface group-active/navdest:text-on-surface
 					{{- end }}
 				">{{ .Icon }}</i>
 			</div>

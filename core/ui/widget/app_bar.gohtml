@@ -1,7 +1,7 @@
 {{/* gotype:github.com/simpledms/simpledms/core/ui/widget.AppBar */}}
 {{- define "AppBar" }}
     {{/* TODO on scroll, apply container fill */}}
-	<header class="js-app-bar sticky top-0 {{/*md:top-2 exp:top-3 */}}">
+	<header class="js-app-bar sticky top-0">
         {{ template "appBar" .}}
 	</header>
 	{{ render .GetContext .GetProgressIndicator }}
@@ -19,8 +19,8 @@
                     {{/* must be outside of title because of overflow-hidden */}}
                     {{ render $ctx . }}
                 {{ end }}
-				<div class="overflow-hidden flex-grow flex">
-					<div class="title-lg overflow-hidden overflow-ellipsis whitespace-nowrap">
+				<div class="overflow-hidden grow flex">
+					<div class="title-lg overflow-hidden text-ellipsis whitespace-nowrap">
                         {{ render $ctx .Title }}
 					</div>
 				</div>
@@ -41,7 +41,7 @@
                     {{ render $ctx . }}
 				</div>
             {{ end }}
-			<div class="flex group-has-[.js-detail-content>div]/list-detail:hidden min-w-0 flex-grow center-aligned">
+			<div class="flex group-has-[.js-detail-content>div]/list-detail:hidden min-w-0 grow center-aligned">
 				<div class="min-w-0 w-full max-w-full">
 					{{ render $ctx .GetSearch }}
 				</div>
@@ -67,8 +67,8 @@
                     {{ render $ctx . }}
 				</div>
             {{ end }}
-			<div class="flex min-w-0 flex-grow items-center overflow-hidden">
-				<div class="title-lg overflow-hidden overflow-ellipsis whitespace-nowrap">
+			<div class="flex min-w-0 grow items-center overflow-hidden">
+				<div class="title-lg overflow-hidden text-ellipsis whitespace-nowrap">
                     {{ render $ctx .Title }}
 				</div>
 			</div>

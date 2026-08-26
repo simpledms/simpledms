@@ -3,14 +3,6 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const plugin = require('tailwindcss/plugin');
 
 module.exports = {
-	content: [
-		//'../../ui/widget/**/*.gohtml',
-		//'../../ui/widget/**/*.go',
-		'./action/staticpage/content/*.md',
-		'./action/staticpage/*.go', // styles are in markdown_renderer.go
-		'./ui/widget/**/*.gohtml',
-		'./ui/widget/**/*.go'
-	],
 	theme: {
 		// based on https://github.com/material-foundation/material-tokens/tree/main/css
 		// conversion from px to rem is based on root font-size of 16px
@@ -167,14 +159,6 @@ module.exports = {
 		}),
 		 */
 		require('@tailwindcss/typography'),
-		require('@tailwindcss/container-queries'),
-		plugin(function({ addVariant }) {
-			// TODO add focus-within? not sure if it can have side effects
-			addVariant('fa', ['&:focus', '&:active'])
-			addVariant('hfa', ['&:hover', '&:focus', '&:active'])
-			addVariant('group-fa', ['&:group-focus', '&:group-active'])
-			addVariant('group-hfa', ['&:group-hover', '&:group-focus', '&:group-active'])
-		}),
 		plugin(function({ matchUtilities, theme }) {
 			matchUtilities({
 				'state-layer': (value) => ({
@@ -184,10 +168,11 @@ module.exports = {
 					'border-radius': 'inherit',
 					'overflow': 'auto', // TODO good?
 					// not sure if good idea to have normal and group together, thus group always applied
-					'&:hover, .group:hover &': {
-						// TODO maybe there is a nicer way? just important that `var(--xyz)` is used
-						// 		in final version to have it replaceable
-						backgroundColor: value.replace(/<alpha-value>/g, '0.08'),
+					'@media (hover: hover)': {
+						'&:hover, .group:hover &': {
+							// Keep the variable replaceable in the generated CSS.
+							backgroundColor: value.replace(/<alpha-value>/g, '0.08'),
+						},
 					},
 					// .group:focus-within is not tested as of 18.03.25
 					'&:focus, &:focus-within, .group:focus &, .group:focus-within &': {

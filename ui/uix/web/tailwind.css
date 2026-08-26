@@ -1,4 +1,9 @@
-@import 'tailwindcss';
+@import 'tailwindcss' source(none);
+
+@source '../../../action';
+@source '../../../core/ui/widget';
+@source './assets/snackbar_runtime.js';
+@source not inline('container');
 
 @config '../../../tailwind.config.js';
 

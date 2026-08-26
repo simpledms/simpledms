@@ -31,7 +31,7 @@
 				aria-controls="navigationRailAndBar"
 				aria-expanded="false"
 			>
-				<div class="state-layer-on-surface-variant flex center-aligned !size-10">
+				<div class="state-layer-on-surface-variant flex center-aligned size-10!">
 					<i class="js-navigation-rail-toggle-icon size-6 material-symbols-outlined">menu</i>
 				</div>
 			</button>
@@ -65,7 +65,7 @@
 		</div>
 		<div class="
 			js-navigation-rail-collapsed
-			flex gap-x-2 justify-evenly flex-grow group-data-[expanded=true]/navigation-rail:hidden md:hidden">
+			flex gap-x-2 justify-evenly grow group-data-[expanded=true]/navigation-rail:hidden md:hidden">
 			{{ range .CompactNavigationItems }}
 				{{ template "NavigationRailItemCollapsed" . }}
 			{{ end }}
@@ -79,7 +79,7 @@
 		</div>
 		<div class="
 			js-navigation-rail-expanded hidden group-data-[expanded=true]/navigation-rail:flex group-data-[expanded=true]/navigation-rail:flex-col
-			flex-grow min-h-0 md:gap-y-3
+			grow min-h-0 md:gap-y-3
 			mt-3 md:px-3 md:mt-3">
 			<div class="flex min-h-0 flex-col gap-y-1 overflow-y-auto">
 				{{ if .ExpandedSelector }}

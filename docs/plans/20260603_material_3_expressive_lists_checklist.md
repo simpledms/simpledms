@@ -54,7 +54,7 @@
 ## Verification Commands
 
 - [x] Run `gofmt -w` on changed Go files.
-- [x] Run `npx tailwindcss -i ui/uix/web/tailwind.css -o ui/uix/web/assets/tailwind.css`.
+- [x] Run `npm run build:css`.
 - [x] Run a focused Go test/build command.
 - [x] Run `go test ./...`.
 - [x] Run `git diff --check`.

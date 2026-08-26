@@ -6,7 +6,7 @@
                 {{ template "HTMXAttrs" .HTMXAttrs }}
 		>
 			<div class="{{ if not .IsStateInherited }}state-layer-on-surface has-[:checked]:state-layer-primary has-[:invalid]:state-layer-error{{ end }}
-			!size-10 flex center-aligned">
+			size-10! flex center-aligned">
 				<input
 						id="{{ .GetID }}-checkbox" {{/* used for label */}}
                         {{/* appearance-none gets rid of white background */}}
@@ -41,4 +41,3 @@
 		</script>
 	</div>
 {{ end }}
-

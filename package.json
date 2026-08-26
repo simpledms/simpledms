@@ -5,6 +5,7 @@
   "license": "",
   "description": "",
   "scripts": {
+    "build:css": "tailwindcss -i ui/uix/web/tailwind.css -o ui/uix/web/assets/tailwind.css",
     "install-modules": "node ./install.deps.mjs",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui"
@@ -12,7 +13,7 @@
   "devDependencies": {
     "@playwright/cli": "^0.1.0",
     "@playwright/test": "^1.52.0",
-    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/cli": "^4.3.3",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "esbuild": "^0.28.1",

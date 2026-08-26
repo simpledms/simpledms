@@ -109,8 +109,7 @@ Key guidance applied to this plan:
 - Rebuild Tailwind with:
 
 ```bash
-npx tailwindcss -i ui/uix/web/tailwind.css \
-	-o ui/uix/web/assets/tailwind.css
+npm run build:css
 ```
 - Run `go test ./ui/widget` if the package has tests; otherwise run a focused Go
   test/build command that covers template compilation.

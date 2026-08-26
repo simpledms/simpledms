@@ -14,8 +14,8 @@
 	>
         {{ render .GetContext .AppBar }}
 
-		{{/* flex-grow added on 19 April 2025, not sure if it has side effects */}}
-		<div class="js-detail-content overflow-y-scroll pl-2 pr-1 md:pl-4 md:pr-3 flex-grow">
+		{{/* grow added on 19 April 2025, not sure if it has side effects */}}
+		<div class="js-detail-content overflow-y-scroll pl-2 pr-1 md:pl-4 md:pr-3 grow">
             {{ render .GetContext .Child }}
 		</div>
 

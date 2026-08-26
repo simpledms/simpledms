@@ -13,14 +13,14 @@
 		">
         {{ render .GetContext .Navigation }}
 		<div id="innerContent" class="
-			 flex flex-col flex-grow overflow-hidden
+			 flex flex-col grow overflow-hidden
 		">
             {{ if .AppBar }}
-				<div class="flex-shrink md:mt-3">
+				<div class="shrink md:mt-3">
 						{{ render .GetContext .AppBar }}
 				</div>
             {{ end }}
-			<div class="flex justify-center flex-grow overflow-y-scroll">
+			<div class="flex justify-center grow overflow-y-scroll">
 				<div class="my-auto max-w-md w-full px-6 md:px-8 py-6 md:py-8 md:rounded-xl">
                     {{ render .GetContext .Content }}
 				</div>

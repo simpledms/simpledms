@@ -11,7 +11,7 @@
 			{{ with .Input.LeadingIcon }}
 				<span class="flex size-6 shrink-0 center-aligned text-on-surface-variant">{{ render $.GetContext . }}</span>
 			{{ end }}
-			<label class="relative flex min-w-0 flex-grow cursor-pointer">
+			<label class="relative flex min-w-0 grow cursor-pointer">
 			<input
 					type="{{ .Input.GetType }}"
 					name="{{ .Input.Name }}"
@@ -22,7 +22,7 @@
 					aria-controls="{{ .GetPopoverTarget }}" autocomplete="off"
 					data-selected-value="{{ .Input.Value }}"
 					class="js-input min-w-0 w-full cursor-pointer bg-transparent label-lg text-on-surface
-						placeholder-on-surface-variant focus:outline-none"
+						placeholder-on-surface-variant focus:outline-hidden"
 					style="field-sizing: content;"
                     >
 			</label>

@@ -19,7 +19,7 @@
 					value="{{ .RadioValue }}"
 					id="radio-{{ .GetID }}"
                     {{ if .IsSelected }}checked{{ end }} />
-			<div class="flex flex-grow gap-x-4 overflow-hidden items-center px-4 py-4
+			<div class="flex grow gap-x-4 overflow-hidden items-center px-4 py-4
 				{{ if ne .ContextMenu nil }}select-none exp:select-auto{{ end }}"
                     {{/* cannot be on <label> because request then fires twice, has something to do with radio input */}}
                     {{ template "HTMXAttrs" .HTMXAttrs }}
@@ -27,10 +27,8 @@
 				<div class="flex group-has-[:checked]/list-item:text-on-secondary-container text-on-surface-variant">
                     {{ render .GetContext .Leading }}
 				</div>
-				<div class="flex-grow flex items-start flex-col overflow-x-hidden
-					{{/*@3xl/list-item:grid @3xl/list-item:grid-cols-2 @3xl/list-item:gap-x-4 @3xl/list-item:items-center @3xl/list-item:justify-items-start*/}}
-				">
-					<h6 class="body-lg whitespace-nowrap overflow-hidden overflow-ellipsis max-w-full
+				<div class="grow flex items-start flex-col overflow-x-hidden">
+					<h6 class="body-lg whitespace-nowrap overflow-hidden text-ellipsis max-w-full
 						group-has-[:checked]/list-item:text-on-secondary-container text-on-surface"
 					>
                         {{ render .GetContext .Headline }}
@@ -57,18 +55,16 @@
 				{{ template "HTMXAttrs" .HTMXAttrs }}
 				{{/* if .HTMXAttrs.IsLink }}role="link"{{ end */}}
 		>
-			<div class="flex flex-grow gap-x-4 overflow-hidden items-center px-4 py-4 {{ if ne .ContextMenu nil }}select-none exp:select-auto{{ end }}"
+			<div class="flex grow gap-x-4 overflow-hidden items-center px-4 py-4 {{ if ne .ContextMenu nil }}select-none exp:select-auto{{ end }}"
 			>
 				<div class="flex {{ if .IsSelected }}text-on-secondary-container{{ else if .IsTypeHelper }}text-secondary{{ else }}text-on-surface-variant{{ end }}">
                     {{ render .GetContext .Leading }}
 				</div>
-				<div class="flex-grow flex items-start flex-col overflow-x-hidden
-					{{/*@3xl/list-item:grid @3xl/list-item:grid-cols-2 @3xl/list-item:gap-x-4 @3xl/list-item:items-center @3xl/list-item:justify-items-start*/}}
-				">
+				<div class="grow flex items-start flex-col overflow-x-hidden">
                     {{ if .HTMXAttrs.IsPageLink }}
 					<a class="js-semantic-link max-w-full" href="{{ .HTMXAttrs.GetHxGet }}">
                         {{ end }}
-						<h6 class="body-lg whitespace-nowrap overflow-hidden overflow-ellipsis max-w-full
+						<h6 class="body-lg whitespace-nowrap overflow-hidden text-ellipsis max-w-full
 						{{ if .IsSelected }}text-on-secondary-container{{ else if .IsTypeHelper }}text-on-surface-variant{{ else }}text-on-surface{{ end }}">
                             {{ render .GetContext .Headline }}
 						</h6>
@@ -111,7 +107,7 @@
     {{- else }}
 		<div id="{{ .GetID }}"
 			 class="js-list-item
-				{{ if .IsSelected | and (not .IsTypeRadio) }}!bg-secondary-container{{ end }}
+				{{ if .IsSelected | and (not .IsTypeRadio) }}bg-secondary-container!{{ end }}
 				{{ .GetClass }}"
 			 role="listitem"
 			 {{ if .IsSelected }}data-selected="true"{{ end }}

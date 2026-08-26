@@ -114,7 +114,7 @@ to much logic in form.gohtml
 						></textarea>
 					{{- else if eq $field.Element "select" }}
 						<select
-								class="appearance-none bg-surface outline-none w-full text-on-surface placeholder-on-surface-variant body-lg"
+								class="appearance-none bg-surface outline-hidden w-full text-on-surface placeholder-on-surface-variant body-lg"
 								{{- template "formAttributes" dict "field" $field }}
 								type="{{ $field.Type }}"{{/* or $attrType? */}}
 						>

@@ -1,9 +1,9 @@
 {{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.Tab */ -}}
 {{- define "Tab" }}
 	<a
-			{{/* basis-0 flex-grow ensures all tabs have the same width */}}
+			{{/* basis-0 grow ensures all tabs have the same width */}}
 			class="
-			 	flex flex-grow
+				flex grow
 				{{ if .IsFlowing }}justify-center{{ else }}w-full basis-0{{ end }}
 				{{ if .IsActive }}text-primary{{ else }}text-on-surface-variant{{ end }}
 				{{ if .IsActive }}js-active-tab{{ end }}
@@ -29,10 +29,10 @@
 			{{ end }}
 
             {{/* mt-1 to center same way as other items */}}
-			<div class="flex flex-row flex-grow items-center justify-center gap-x-1.5
+			<div class="flex flex-row grow items-center justify-center gap-x-1.5
 					{{ if .IsFlowing }}px-3{{ end }}
 					{{ if .IsActive }}mt-1{{ end }}">
-				<span class="title-sm h-5 flex-grow flex items-center
+				<span class="title-sm h-5 grow flex items-center
 				">
 					{{ render .GetContext .Label }}
 				</span>
