@@ -74,7 +74,6 @@ const (
 	UploadLimitUpdated   Event = "uploadLimitUpdated"
 
 	UserCreated Event = "userCreated"
-	UserUpdated Event = "userUpdated"
 	UserDeleted Event = "userDeleted"
 
 	UserAssignedToSpace     Event = "userAssignedToSpace"

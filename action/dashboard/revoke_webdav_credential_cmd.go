@@ -70,7 +70,7 @@ func (qq *RevokeWebDAVCredentialCmd) Handler(
 		return err
 	}
 
-	rw.Header().Set("HX-Trigger", event.AccountUpdated.String()+", "+event.UserUpdated.String())
+	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
 	rw.AddRenderables(widget.NewSnackbarf("WebDAV credential revoked."))
 	return nil
 }
