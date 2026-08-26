@@ -78,7 +78,6 @@ func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState)
 			}
 		}
 	}
-
 	for _, userx := range users {
 		userm := usermodel.NewUser(userx)
 		isOwningTenantAssignment := isOwningTenantByAccountID[userx.AccountID]
@@ -113,7 +112,6 @@ func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState)
 		HTMXAttrs: widget.HTMXAttrs{
 			HxTrigger: event.HxTrigger(
 				event.UserCreated,
-				event.UserUpdated,
 				event.UserDeleted,
 			),
 			HxPost:   qq.Endpoint(),

@@ -445,18 +445,15 @@ func (qq *DashboardCardsPartial) spaceCard(ctx ctxx.Context, spacex *enttenant.S
 		Style:    widget.CardStyleFilled,
 		Headline: widget.H(widget.HeadingTypeTitleLg, widget.Tu(spacex.Name)),
 		Subhead:  widget.T("Space"),
+		HTMXAttrs: widget.HTMXAttrs{
+			HxGet: route2.BrowseRoot(
+				tenant.PublicID.String(),
+				spacex.PublicID.String(),
+			),
+		},
 		// SupportingText: wx.Tf("Organization: %s", tenant.Name),
 		ContextMenu: contextMenu,
 		// SupportingText: wx.Tu(spacex.Description), // TODO tenant
-		Actions: []*widget.Button{
-			{
-				Label:     widget.T("Select"), // TODO Browse, Open, Switch or activate? or Select?
-				StyleType: widget.ButtonStyleTypeTonal,
-				HTMXAttrs: widget.HTMXAttrs{
-					HxGet: route2.BrowseRoot(tenant.PublicID.String(), spacex.PublicID.String()),
-				},
-			},
-		},
 	}
 }
 

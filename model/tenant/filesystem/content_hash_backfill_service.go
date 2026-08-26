@@ -17,17 +17,6 @@ import (
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 )
 
-type ContentHashBackfillConfig struct {
-	MaxFilesPerRun int
-	MaxBytesPerRun int64
-	MaxDuration    time.Duration
-}
-
-type ContentHashBackfillResult struct {
-	ProcessedFiles int
-	ProcessedBytes int64
-}
-
 type ContentHashBackfillService struct {
 	fileSystem *S3FileSystem
 }

@@ -225,9 +225,16 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 		SetPasswordSalt(salt).
 		SetPasswordHash(passwordHash).
 		SaveX(ctx)
+	mainTx, err := client.Tx(ctx)
+	if err != nil {
+		t.Fatalf("begin render tx: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = mainTx.Rollback()
+	})
 
 	i18nx := i18n.NewI18n()
-	visitorCtx := ctxx.NewVisitorContext(ctx, nil, i18nx, "", "UTC", true, false, false)
+	visitorCtx := ctxx.NewVisitorContext(ctx, mainTx, i18nx, "", "UTC", true, false, false)
 	mainCtx := ctxx.NewMainContext(visitorCtx, account, i18nx, nil, tenantdbs.NewTenantDBs(), true)
 
 	return page, mainCtx

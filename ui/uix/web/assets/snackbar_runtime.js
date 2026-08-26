@@ -101,4 +101,36 @@
 
 		return window.simpledmsMountSnackbar(wrapper, opts.autoDismissTimeoutInMs || 5000);
 	};
+
+	async function copyTextToClipboard(value) {
+		if (navigator.clipboard && window.isSecureContext) {
+			try {
+				await navigator.clipboard.writeText(value);
+				return;
+			} catch (err) {
+				// Fall back to execCommand below.
+			}
+		}
+
+		var textarea = document.createElement("textarea");
+		textarea.value = value;
+		textarea.setAttribute("readonly", "readonly");
+		textarea.style.position = "fixed";
+		textarea.style.opacity = "0";
+		document.body.appendChild(textarea);
+		textarea.select();
+		var copied = document.execCommand("copy");
+		textarea.remove();
+		if (!copied) {
+			throw new Error("copy failed");
+		}
+	}
+
+	window.simpledmsCopyTextToClipboard = function(value, copiedMessage, failedMessage) {
+		copyTextToClipboard(value).then(function() {
+			window.simpledmsShowClientSnackbar(copiedMessage);
+		}).catch(function() {
+			window.simpledmsShowClientSnackbar(failedMessage);
+		});
+	};
 })();

@@ -739,6 +739,7 @@ func (qq *ListDirPartial) fileListViewMenu(
 		label  *widget.Text
 	}{
 		{filelistpreference.FileListColumnName, widget.T("Name")},
+		{filelistpreference.FileListColumnSource, widget.T("Source")},
 		{filelistpreference.FileListColumnOriginalFilename, widget.T("Original filename")},
 		{filelistpreference.FileListColumnDocumentType, widget.T("Type")},
 		{filelistpreference.FileListColumnMetadata, widget.T("Metadata")},

@@ -100,20 +100,6 @@ func (_u *TenantUpdate) ClearDeletedAt() *TenantUpdate {
 	return _u
 }
 
-// SetPublicID sets the "public_id" field.
-func (_u *TenantUpdate) SetPublicID(v entx.CIText) *TenantUpdate {
-	_u.mutation.SetPublicID(v)
-	return _u
-}
-
-// SetNillablePublicID sets the "public_id" field if the given value is not nil.
-func (_u *TenantUpdate) SetNillablePublicID(v *entx.CIText) *TenantUpdate {
-	if v != nil {
-		_u.SetPublicID(*v)
-	}
-	return _u
-}
-
 // SetName sets the "name" field.
 func (_u *TenantUpdate) SetName(v string) *TenantUpdate {
 	_u.mutation.SetName(v)
@@ -622,9 +608,6 @@ func (_u *TenantUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(tenant.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.PublicID(); ok {
-		_spec.SetField(tenant.FieldPublicID, field.TypeString, value)
-	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(tenant.FieldName, field.TypeString, value)
 	}
@@ -942,20 +925,6 @@ func (_u *TenantUpdateOne) SetNillableDeletedAt(v *time.Time) *TenantUpdateOne {
 // ClearDeletedAt clears the value of the "deleted_at" field.
 func (_u *TenantUpdateOne) ClearDeletedAt() *TenantUpdateOne {
 	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetPublicID sets the "public_id" field.
-func (_u *TenantUpdateOne) SetPublicID(v entx.CIText) *TenantUpdateOne {
-	_u.mutation.SetPublicID(v)
-	return _u
-}
-
-// SetNillablePublicID sets the "public_id" field if the given value is not nil.
-func (_u *TenantUpdateOne) SetNillablePublicID(v *entx.CIText) *TenantUpdateOne {
-	if v != nil {
-		_u.SetPublicID(*v)
-	}
 	return _u
 }
 
@@ -1496,9 +1465,6 @@ func (_u *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err erro
 	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(tenant.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.PublicID(); ok {
-		_spec.SetField(tenant.FieldPublicID, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(tenant.FieldName, field.TypeString, value)

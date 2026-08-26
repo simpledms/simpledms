@@ -19,6 +19,7 @@ type Actions struct {
 	ListFilesPartial    *FilesListPartial
 	FileListItemPartial *FileListItemPartial
 	FileMetadataPartial *FileMetadataPartial
+	SourceFilterDialog  *SourceFilterDialog
 
 	ListInboxAssignmentSuggestionsPartial *ListInboxAssignmentSuggestionsPartial
 	AssignmentDirectoryListItemPartial    *AssignmentDirectoryListItemPartial
@@ -52,6 +53,7 @@ func NewActions(
 
 		ListFilesPartial:                      NewListFilesPartial(infra, actions),
 		FileListItemPartial:                   NewFileListItemPartial(infra, actions),
+		SourceFilterDialog:                    NewSourceFilterDialog(infra, actions),
 		ListInboxAssignmentSuggestionsPartial: NewListInboxAssignmentSuggestionsPartial(infra, actions),
 		AssignmentDirectoryListItemPartial:    NewAssignmentDirectoryListItemPartial(infra, actions),
 		AssignFileCmd:                         NewAssignFileCmd(infra, actions),

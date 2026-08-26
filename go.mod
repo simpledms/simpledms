@@ -1,6 +1,6 @@
 module github.com/simpledms/simpledms
 
-go 1.26.0
+go 1.26.4
 
 // TODO add ent and maybe atlas
 tool (
@@ -13,7 +13,7 @@ tool (
 )
 
 require (
-	ariga.io/atlas v1.2.2
+	ariga.io/atlas v1.3.0
 	entgo.io/ent v0.14.6
 	filippo.io/age v1.3.1
 	github.com/Shopify/toxiproxy v2.1.4+incompatible

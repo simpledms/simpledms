@@ -21,6 +21,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
+	"github.com/simpledms/simpledms/db/entmain/webdavcredential"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -90,6 +91,7 @@ func checkColumn(t, c string) error {
 			tenant.Table:                  tenant.ValidColumn,
 			tenantaccountassignment.Table: tenantaccountassignment.ValidColumn,
 			webauthnchallenge.Table:       webauthnchallenge.ValidColumn,
+			webdavcredential.Table:        webdavcredential.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

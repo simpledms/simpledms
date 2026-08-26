@@ -117,6 +117,26 @@ func (_u *TemporaryFileUpdate) ClearUploadStartedAt() *TemporaryFileUpdate {
 	return _u
 }
 
+// SetUploadLastProgressAt sets the "upload_last_progress_at" field.
+func (_u *TemporaryFileUpdate) SetUploadLastProgressAt(v time.Time) *TemporaryFileUpdate {
+	_u.mutation.SetUploadLastProgressAt(v)
+	return _u
+}
+
+// SetNillableUploadLastProgressAt sets the "upload_last_progress_at" field if the given value is not nil.
+func (_u *TemporaryFileUpdate) SetNillableUploadLastProgressAt(v *time.Time) *TemporaryFileUpdate {
+	if v != nil {
+		_u.SetUploadLastProgressAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadLastProgressAt clears the value of the "upload_last_progress_at" field.
+func (_u *TemporaryFileUpdate) ClearUploadLastProgressAt() *TemporaryFileUpdate {
+	_u.mutation.ClearUploadLastProgressAt()
+	return _u
+}
+
 // SetUploadFailedAt sets the "upload_failed_at" field.
 func (_u *TemporaryFileUpdate) SetUploadFailedAt(v time.Time) *TemporaryFileUpdate {
 	_u.mutation.SetUploadFailedAt(v)
@@ -222,6 +242,46 @@ func (_u *TemporaryFileUpdate) SetNillableSha256(v *string) *TemporaryFileUpdate
 // ClearSha256 clears the value of the "sha256" field.
 func (_u *TemporaryFileUpdate) ClearSha256() *TemporaryFileUpdate {
 	_u.mutation.ClearSha256()
+	return _u
+}
+
+// SetContentSha256 sets the "content_sha256" field.
+func (_u *TemporaryFileUpdate) SetContentSha256(v string) *TemporaryFileUpdate {
+	_u.mutation.SetContentSha256(v)
+	return _u
+}
+
+// SetNillableContentSha256 sets the "content_sha256" field if the given value is not nil.
+func (_u *TemporaryFileUpdate) SetNillableContentSha256(v *string) *TemporaryFileUpdate {
+	if v != nil {
+		_u.SetContentSha256(*v)
+	}
+	return _u
+}
+
+// ClearContentSha256 clears the value of the "content_sha256" field.
+func (_u *TemporaryFileUpdate) ClearContentSha256() *TemporaryFileUpdate {
+	_u.mutation.ClearContentSha256()
+	return _u
+}
+
+// SetStorageCrc32c sets the "storage_crc32c" field.
+func (_u *TemporaryFileUpdate) SetStorageCrc32c(v string) *TemporaryFileUpdate {
+	_u.mutation.SetStorageCrc32c(v)
+	return _u
+}
+
+// SetNillableStorageCrc32c sets the "storage_crc32c" field if the given value is not nil.
+func (_u *TemporaryFileUpdate) SetNillableStorageCrc32c(v *string) *TemporaryFileUpdate {
+	if v != nil {
+		_u.SetStorageCrc32c(*v)
+	}
+	return _u
+}
+
+// ClearStorageCrc32c clears the value of the "storage_crc32c" field.
+func (_u *TemporaryFileUpdate) ClearStorageCrc32c() *TemporaryFileUpdate {
+	_u.mutation.ClearStorageCrc32c()
 	return _u
 }
 
@@ -338,6 +398,73 @@ func (_u *TemporaryFileUpdate) SetNillableConvertedToStoredFileAt(v *time.Time) 
 // ClearConvertedToStoredFileAt clears the value of the "converted_to_stored_file_at" field.
 func (_u *TemporaryFileUpdate) ClearConvertedToStoredFileAt() *TemporaryFileUpdate {
 	_u.mutation.ClearConvertedToStoredFileAt()
+	return _u
+}
+
+// SetPersistenceClaimToken sets the "persistence_claim_token" field.
+func (_u *TemporaryFileUpdate) SetPersistenceClaimToken(v string) *TemporaryFileUpdate {
+	_u.mutation.SetPersistenceClaimToken(v)
+	return _u
+}
+
+// SetNillablePersistenceClaimToken sets the "persistence_claim_token" field if the given value is not nil.
+func (_u *TemporaryFileUpdate) SetNillablePersistenceClaimToken(v *string) *TemporaryFileUpdate {
+	if v != nil {
+		_u.SetPersistenceClaimToken(*v)
+	}
+	return _u
+}
+
+// ClearPersistenceClaimToken clears the value of the "persistence_claim_token" field.
+func (_u *TemporaryFileUpdate) ClearPersistenceClaimToken() *TemporaryFileUpdate {
+	_u.mutation.ClearPersistenceClaimToken()
+	return _u
+}
+
+// SetPersistenceTenantID sets the "persistence_tenant_id" field.
+func (_u *TemporaryFileUpdate) SetPersistenceTenantID(v int64) *TemporaryFileUpdate {
+	_u.mutation.ResetPersistenceTenantID()
+	_u.mutation.SetPersistenceTenantID(v)
+	return _u
+}
+
+// SetNillablePersistenceTenantID sets the "persistence_tenant_id" field if the given value is not nil.
+func (_u *TemporaryFileUpdate) SetNillablePersistenceTenantID(v *int64) *TemporaryFileUpdate {
+	if v != nil {
+		_u.SetPersistenceTenantID(*v)
+	}
+	return _u
+}
+
+// AddPersistenceTenantID adds value to the "persistence_tenant_id" field.
+func (_u *TemporaryFileUpdate) AddPersistenceTenantID(v int64) *TemporaryFileUpdate {
+	_u.mutation.AddPersistenceTenantID(v)
+	return _u
+}
+
+// ClearPersistenceTenantID clears the value of the "persistence_tenant_id" field.
+func (_u *TemporaryFileUpdate) ClearPersistenceTenantID() *TemporaryFileUpdate {
+	_u.mutation.ClearPersistenceTenantID()
+	return _u
+}
+
+// SetPersistenceLastProgressAt sets the "persistence_last_progress_at" field.
+func (_u *TemporaryFileUpdate) SetPersistenceLastProgressAt(v time.Time) *TemporaryFileUpdate {
+	_u.mutation.SetPersistenceLastProgressAt(v)
+	return _u
+}
+
+// SetNillablePersistenceLastProgressAt sets the "persistence_last_progress_at" field if the given value is not nil.
+func (_u *TemporaryFileUpdate) SetNillablePersistenceLastProgressAt(v *time.Time) *TemporaryFileUpdate {
+	if v != nil {
+		_u.SetPersistenceLastProgressAt(*v)
+	}
+	return _u
+}
+
+// ClearPersistenceLastProgressAt clears the value of the "persistence_last_progress_at" field.
+func (_u *TemporaryFileUpdate) ClearPersistenceLastProgressAt() *TemporaryFileUpdate {
+	_u.mutation.ClearPersistenceLastProgressAt()
 	return _u
 }
 
@@ -504,6 +631,12 @@ func (_u *TemporaryFileUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.UploadStartedAtCleared() {
 		_spec.ClearField(temporaryfile.FieldUploadStartedAt, field.TypeTime)
 	}
+	if value, ok := _u.mutation.UploadLastProgressAt(); ok {
+		_spec.SetField(temporaryfile.FieldUploadLastProgressAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadLastProgressAtCleared() {
+		_spec.ClearField(temporaryfile.FieldUploadLastProgressAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UploadFailedAt(); ok {
 		_spec.SetField(temporaryfile.FieldUploadFailedAt, field.TypeTime, value)
 	}
@@ -537,6 +670,18 @@ func (_u *TemporaryFileUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.Sha256Cleared() {
 		_spec.ClearField(temporaryfile.FieldSha256, field.TypeString)
 	}
+	if value, ok := _u.mutation.ContentSha256(); ok {
+		_spec.SetField(temporaryfile.FieldContentSha256, field.TypeString, value)
+	}
+	if _u.mutation.ContentSha256Cleared() {
+		_spec.ClearField(temporaryfile.FieldContentSha256, field.TypeString)
+	}
+	if value, ok := _u.mutation.StorageCrc32c(); ok {
+		_spec.SetField(temporaryfile.FieldStorageCrc32c, field.TypeString, value)
+	}
+	if _u.mutation.StorageCrc32cCleared() {
+		_spec.ClearField(temporaryfile.FieldStorageCrc32c, field.TypeString)
+	}
 	if value, ok := _u.mutation.MimeType(); ok {
 		_spec.SetField(temporaryfile.FieldMimeType, field.TypeString, value)
 	}
@@ -566,6 +711,27 @@ func (_u *TemporaryFileUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.ConvertedToStoredFileAtCleared() {
 		_spec.ClearField(temporaryfile.FieldConvertedToStoredFileAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.PersistenceClaimToken(); ok {
+		_spec.SetField(temporaryfile.FieldPersistenceClaimToken, field.TypeString, value)
+	}
+	if _u.mutation.PersistenceClaimTokenCleared() {
+		_spec.ClearField(temporaryfile.FieldPersistenceClaimToken, field.TypeString)
+	}
+	if value, ok := _u.mutation.PersistenceTenantID(); ok {
+		_spec.SetField(temporaryfile.FieldPersistenceTenantID, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedPersistenceTenantID(); ok {
+		_spec.AddField(temporaryfile.FieldPersistenceTenantID, field.TypeInt64, value)
+	}
+	if _u.mutation.PersistenceTenantIDCleared() {
+		_spec.ClearField(temporaryfile.FieldPersistenceTenantID, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.PersistenceLastProgressAt(); ok {
+		_spec.SetField(temporaryfile.FieldPersistenceLastProgressAt, field.TypeTime, value)
+	}
+	if _u.mutation.PersistenceLastProgressAtCleared() {
+		_spec.ClearField(temporaryfile.FieldPersistenceLastProgressAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(temporaryfile.FieldExpiresAt, field.TypeTime, value)
@@ -739,6 +905,26 @@ func (_u *TemporaryFileUpdateOne) ClearUploadStartedAt() *TemporaryFileUpdateOne
 	return _u
 }
 
+// SetUploadLastProgressAt sets the "upload_last_progress_at" field.
+func (_u *TemporaryFileUpdateOne) SetUploadLastProgressAt(v time.Time) *TemporaryFileUpdateOne {
+	_u.mutation.SetUploadLastProgressAt(v)
+	return _u
+}
+
+// SetNillableUploadLastProgressAt sets the "upload_last_progress_at" field if the given value is not nil.
+func (_u *TemporaryFileUpdateOne) SetNillableUploadLastProgressAt(v *time.Time) *TemporaryFileUpdateOne {
+	if v != nil {
+		_u.SetUploadLastProgressAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadLastProgressAt clears the value of the "upload_last_progress_at" field.
+func (_u *TemporaryFileUpdateOne) ClearUploadLastProgressAt() *TemporaryFileUpdateOne {
+	_u.mutation.ClearUploadLastProgressAt()
+	return _u
+}
+
 // SetUploadFailedAt sets the "upload_failed_at" field.
 func (_u *TemporaryFileUpdateOne) SetUploadFailedAt(v time.Time) *TemporaryFileUpdateOne {
 	_u.mutation.SetUploadFailedAt(v)
@@ -844,6 +1030,46 @@ func (_u *TemporaryFileUpdateOne) SetNillableSha256(v *string) *TemporaryFileUpd
 // ClearSha256 clears the value of the "sha256" field.
 func (_u *TemporaryFileUpdateOne) ClearSha256() *TemporaryFileUpdateOne {
 	_u.mutation.ClearSha256()
+	return _u
+}
+
+// SetContentSha256 sets the "content_sha256" field.
+func (_u *TemporaryFileUpdateOne) SetContentSha256(v string) *TemporaryFileUpdateOne {
+	_u.mutation.SetContentSha256(v)
+	return _u
+}
+
+// SetNillableContentSha256 sets the "content_sha256" field if the given value is not nil.
+func (_u *TemporaryFileUpdateOne) SetNillableContentSha256(v *string) *TemporaryFileUpdateOne {
+	if v != nil {
+		_u.SetContentSha256(*v)
+	}
+	return _u
+}
+
+// ClearContentSha256 clears the value of the "content_sha256" field.
+func (_u *TemporaryFileUpdateOne) ClearContentSha256() *TemporaryFileUpdateOne {
+	_u.mutation.ClearContentSha256()
+	return _u
+}
+
+// SetStorageCrc32c sets the "storage_crc32c" field.
+func (_u *TemporaryFileUpdateOne) SetStorageCrc32c(v string) *TemporaryFileUpdateOne {
+	_u.mutation.SetStorageCrc32c(v)
+	return _u
+}
+
+// SetNillableStorageCrc32c sets the "storage_crc32c" field if the given value is not nil.
+func (_u *TemporaryFileUpdateOne) SetNillableStorageCrc32c(v *string) *TemporaryFileUpdateOne {
+	if v != nil {
+		_u.SetStorageCrc32c(*v)
+	}
+	return _u
+}
+
+// ClearStorageCrc32c clears the value of the "storage_crc32c" field.
+func (_u *TemporaryFileUpdateOne) ClearStorageCrc32c() *TemporaryFileUpdateOne {
+	_u.mutation.ClearStorageCrc32c()
 	return _u
 }
 
@@ -960,6 +1186,73 @@ func (_u *TemporaryFileUpdateOne) SetNillableConvertedToStoredFileAt(v *time.Tim
 // ClearConvertedToStoredFileAt clears the value of the "converted_to_stored_file_at" field.
 func (_u *TemporaryFileUpdateOne) ClearConvertedToStoredFileAt() *TemporaryFileUpdateOne {
 	_u.mutation.ClearConvertedToStoredFileAt()
+	return _u
+}
+
+// SetPersistenceClaimToken sets the "persistence_claim_token" field.
+func (_u *TemporaryFileUpdateOne) SetPersistenceClaimToken(v string) *TemporaryFileUpdateOne {
+	_u.mutation.SetPersistenceClaimToken(v)
+	return _u
+}
+
+// SetNillablePersistenceClaimToken sets the "persistence_claim_token" field if the given value is not nil.
+func (_u *TemporaryFileUpdateOne) SetNillablePersistenceClaimToken(v *string) *TemporaryFileUpdateOne {
+	if v != nil {
+		_u.SetPersistenceClaimToken(*v)
+	}
+	return _u
+}
+
+// ClearPersistenceClaimToken clears the value of the "persistence_claim_token" field.
+func (_u *TemporaryFileUpdateOne) ClearPersistenceClaimToken() *TemporaryFileUpdateOne {
+	_u.mutation.ClearPersistenceClaimToken()
+	return _u
+}
+
+// SetPersistenceTenantID sets the "persistence_tenant_id" field.
+func (_u *TemporaryFileUpdateOne) SetPersistenceTenantID(v int64) *TemporaryFileUpdateOne {
+	_u.mutation.ResetPersistenceTenantID()
+	_u.mutation.SetPersistenceTenantID(v)
+	return _u
+}
+
+// SetNillablePersistenceTenantID sets the "persistence_tenant_id" field if the given value is not nil.
+func (_u *TemporaryFileUpdateOne) SetNillablePersistenceTenantID(v *int64) *TemporaryFileUpdateOne {
+	if v != nil {
+		_u.SetPersistenceTenantID(*v)
+	}
+	return _u
+}
+
+// AddPersistenceTenantID adds value to the "persistence_tenant_id" field.
+func (_u *TemporaryFileUpdateOne) AddPersistenceTenantID(v int64) *TemporaryFileUpdateOne {
+	_u.mutation.AddPersistenceTenantID(v)
+	return _u
+}
+
+// ClearPersistenceTenantID clears the value of the "persistence_tenant_id" field.
+func (_u *TemporaryFileUpdateOne) ClearPersistenceTenantID() *TemporaryFileUpdateOne {
+	_u.mutation.ClearPersistenceTenantID()
+	return _u
+}
+
+// SetPersistenceLastProgressAt sets the "persistence_last_progress_at" field.
+func (_u *TemporaryFileUpdateOne) SetPersistenceLastProgressAt(v time.Time) *TemporaryFileUpdateOne {
+	_u.mutation.SetPersistenceLastProgressAt(v)
+	return _u
+}
+
+// SetNillablePersistenceLastProgressAt sets the "persistence_last_progress_at" field if the given value is not nil.
+func (_u *TemporaryFileUpdateOne) SetNillablePersistenceLastProgressAt(v *time.Time) *TemporaryFileUpdateOne {
+	if v != nil {
+		_u.SetPersistenceLastProgressAt(*v)
+	}
+	return _u
+}
+
+// ClearPersistenceLastProgressAt clears the value of the "persistence_last_progress_at" field.
+func (_u *TemporaryFileUpdateOne) ClearPersistenceLastProgressAt() *TemporaryFileUpdateOne {
+	_u.mutation.ClearPersistenceLastProgressAt()
 	return _u
 }
 
@@ -1156,6 +1449,12 @@ func (_u *TemporaryFileUpdateOne) sqlSave(ctx context.Context) (_node *Temporary
 	if _u.mutation.UploadStartedAtCleared() {
 		_spec.ClearField(temporaryfile.FieldUploadStartedAt, field.TypeTime)
 	}
+	if value, ok := _u.mutation.UploadLastProgressAt(); ok {
+		_spec.SetField(temporaryfile.FieldUploadLastProgressAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadLastProgressAtCleared() {
+		_spec.ClearField(temporaryfile.FieldUploadLastProgressAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UploadFailedAt(); ok {
 		_spec.SetField(temporaryfile.FieldUploadFailedAt, field.TypeTime, value)
 	}
@@ -1189,6 +1488,18 @@ func (_u *TemporaryFileUpdateOne) sqlSave(ctx context.Context) (_node *Temporary
 	if _u.mutation.Sha256Cleared() {
 		_spec.ClearField(temporaryfile.FieldSha256, field.TypeString)
 	}
+	if value, ok := _u.mutation.ContentSha256(); ok {
+		_spec.SetField(temporaryfile.FieldContentSha256, field.TypeString, value)
+	}
+	if _u.mutation.ContentSha256Cleared() {
+		_spec.ClearField(temporaryfile.FieldContentSha256, field.TypeString)
+	}
+	if value, ok := _u.mutation.StorageCrc32c(); ok {
+		_spec.SetField(temporaryfile.FieldStorageCrc32c, field.TypeString, value)
+	}
+	if _u.mutation.StorageCrc32cCleared() {
+		_spec.ClearField(temporaryfile.FieldStorageCrc32c, field.TypeString)
+	}
 	if value, ok := _u.mutation.MimeType(); ok {
 		_spec.SetField(temporaryfile.FieldMimeType, field.TypeString, value)
 	}
@@ -1218,6 +1529,27 @@ func (_u *TemporaryFileUpdateOne) sqlSave(ctx context.Context) (_node *Temporary
 	}
 	if _u.mutation.ConvertedToStoredFileAtCleared() {
 		_spec.ClearField(temporaryfile.FieldConvertedToStoredFileAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.PersistenceClaimToken(); ok {
+		_spec.SetField(temporaryfile.FieldPersistenceClaimToken, field.TypeString, value)
+	}
+	if _u.mutation.PersistenceClaimTokenCleared() {
+		_spec.ClearField(temporaryfile.FieldPersistenceClaimToken, field.TypeString)
+	}
+	if value, ok := _u.mutation.PersistenceTenantID(); ok {
+		_spec.SetField(temporaryfile.FieldPersistenceTenantID, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedPersistenceTenantID(); ok {
+		_spec.AddField(temporaryfile.FieldPersistenceTenantID, field.TypeInt64, value)
+	}
+	if _u.mutation.PersistenceTenantIDCleared() {
+		_spec.ClearField(temporaryfile.FieldPersistenceTenantID, field.TypeInt64)
+	}
+	if value, ok := _u.mutation.PersistenceLastProgressAt(); ok {
+		_spec.SetField(temporaryfile.FieldPersistenceLastProgressAt, field.TypeTime, value)
+	}
+	if _u.mutation.PersistenceLastProgressAtCleared() {
+		_spec.ClearField(temporaryfile.FieldPersistenceLastProgressAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(temporaryfile.FieldExpiresAt, field.TypeTime, value)

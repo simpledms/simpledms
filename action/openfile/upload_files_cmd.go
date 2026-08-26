@@ -133,7 +133,7 @@ func (qq *UploadFilesCmd) processSharedFiles(rw httpx.ResponseWriter, req *httpx
 			return "", err
 		}
 
-		fileInfo, fileSize, err := qq.infra.FileSystem().UploadPreparedTemporaryAccountFile(ctx, part, prepared)
+		uploadResult, err := qq.infra.FileSystem().UploadPreparedTemporaryAccountFile(ctx, part, prepared)
 		_ = part.Close()
 		if err != nil {
 			uploadx.HandleTemporaryFileUploadFailure(ctx, qq.infra.FileSystem(), prepared, err, true)
@@ -141,10 +141,10 @@ func (qq *UploadFilesCmd) processSharedFiles(rw httpx.ResponseWriter, req *httpx
 		}
 
 		_, err = txx.WithMainWriteTx(ctx, func(writeTx *entmain.Tx) (*struct{}, error) {
-			return nil, qq.infra.FileSystem().FinalizePreparedTemporaryAccountUpload(ctx, writeTx, prepared, fileInfo, fileSize)
+			return nil, qq.infra.FileSystem().FinalizePreparedTemporaryAccountUpload(ctx, writeTx, prepared, uploadResult)
 		})
 		if err != nil {
-			uploadx.HandleTemporaryFileUploadFailure(ctx, qq.infra.FileSystem(), prepared, err, false)
+			uploadx.HandleTemporaryFileUploadFailure(ctx, qq.infra.FileSystem(), prepared, err, true)
 			return "", err
 		}
 	}

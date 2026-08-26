@@ -327,6 +327,30 @@ func (f WebAuthnChallengeMutationRuleFunc) EvalMutation(ctx context.Context, m e
 	return Denyf("entmain/privacy: unexpected mutation type %T, expect *entmain.WebAuthnChallengeMutation", m)
 }
 
+// The WebDAVCredentialQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type WebDAVCredentialQueryRuleFunc func(context.Context, *entmain.WebDAVCredentialQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f WebDAVCredentialQueryRuleFunc) EvalQuery(ctx context.Context, q entmain.Query) error {
+	if q, ok := q.(*entmain.WebDAVCredentialQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("entmain/privacy: unexpected query type %T, expect *entmain.WebDAVCredentialQuery", q)
+}
+
+// The WebDAVCredentialMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type WebDAVCredentialMutationRuleFunc func(context.Context, *entmain.WebDAVCredentialMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f WebDAVCredentialMutationRuleFunc) EvalMutation(ctx context.Context, m entmain.Mutation) error {
+	if m, ok := m.(*entmain.WebDAVCredentialMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("entmain/privacy: unexpected mutation type %T, expect *entmain.WebDAVCredentialMutation", m)
+}
+
 type (
 	// Filter is the interface that wraps the Where function
 	// for filtering nodes in queries and mutations.
@@ -380,6 +404,8 @@ func queryFilter(q entmain.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *entmain.WebAuthnChallengeQuery:
 		return q.Filter(), nil
+	case *entmain.WebDAVCredentialQuery:
+		return q.Filter(), nil
 	default:
 		return nil, Denyf("entmain/privacy: unexpected query type %T for query filter", q)
 	}
@@ -404,6 +430,8 @@ func mutationFilter(m entmain.Mutation) (Filter, error) {
 	case *entmain.TenantAccountAssignmentMutation:
 		return m.Filter(), nil
 	case *entmain.WebAuthnChallengeMutation:
+		return m.Filter(), nil
+	case *entmain.WebDAVCredentialMutation:
 		return m.Filter(), nil
 	default:
 		return nil, Denyf("entmain/privacy: unexpected mutation type %T for mutation filter", m)

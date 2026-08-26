@@ -3,9 +3,16 @@
 	<a
 			href="{{ .Href }}"
 			class="inline-flex items-center {{ if not .IsNoColor }}text-tertiary{{ end }}
-				leading-none {{ if .IsText }}hover:underline{{ end }} {{ .GetClass }}"
+				leading-none {{ if .IsText }}hover:underline{{ end }} {{ if .IsCopyable }}break-all{{ end }} {{ .GetClass }}"
+			{{ if .WrapAnywhere }}style="white-space: normal; overflow-wrap: anywhere; word-break: break-all;"{{ end }}
+			{{ if .IsCopyable }}
+				data-copy-value="{{ .CopyValue }}"
+				data-copied-message="{{ render .GetContext .CopiedMessage }}"
+				data-copy-failed-message="{{ render .GetContext .CopyFailedMessage }}"
+				title="{{ render .GetContext .CopyTooltip }}"
+			{{ end }}
 			{{- if .SubmitForm | or (ne .PopoverTarget "" ) | or (ne .Href "") }}
-				onclick="{{ if .SubmitForm }}this.closest('form').submit(); return false;{{ end }} {{ if ne .PopoverTarget "" }}document.getElementById('{{ .PopoverTarget }}').showPopover();{{ end }} {{ if ne .Href "" | and (not .IsDownload) }}document.querySelectorAll('[popover]').forEach((popover)=> popover.hidePopover()){{ end }}"
+				onclick="{{ if .IsCopyable }}event.preventDefault(); window.simpledmsCopyTextToClipboard(this.dataset.copyValue || '', this.dataset.copiedMessage || '', this.dataset.copyFailedMessage || '');{{ end }} {{ if .SubmitForm }}this.closest('form').submit(); return false;{{ end }} {{ if ne .PopoverTarget "" }}document.getElementById('{{ .PopoverTarget }}').showPopover();{{ end }} {{ if ne .Href "" | and (not .IsDownload) }}document.querySelectorAll('[popover]').forEach((popover)=> popover.hidePopover()){{ end }}"
 			{{ end }}
 			{{- if .IsDownload }}
 				hx-boost="false"

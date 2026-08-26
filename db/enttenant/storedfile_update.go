@@ -79,6 +79,26 @@ func (_u *StoredFileUpdate) ClearUploadStartedAt() *StoredFileUpdate {
 	return _u
 }
 
+// SetUploadLastProgressAt sets the "upload_last_progress_at" field.
+func (_u *StoredFileUpdate) SetUploadLastProgressAt(v time.Time) *StoredFileUpdate {
+	_u.mutation.SetUploadLastProgressAt(v)
+	return _u
+}
+
+// SetNillableUploadLastProgressAt sets the "upload_last_progress_at" field if the given value is not nil.
+func (_u *StoredFileUpdate) SetNillableUploadLastProgressAt(v *time.Time) *StoredFileUpdate {
+	if v != nil {
+		_u.SetUploadLastProgressAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadLastProgressAt clears the value of the "upload_last_progress_at" field.
+func (_u *StoredFileUpdate) ClearUploadLastProgressAt() *StoredFileUpdate {
+	_u.mutation.ClearUploadLastProgressAt()
+	return _u
+}
+
 // SetUploadFailedAt sets the "upload_failed_at" field.
 func (_u *StoredFileUpdate) SetUploadFailedAt(v time.Time) *StoredFileUpdate {
 	_u.mutation.SetUploadFailedAt(v)
@@ -207,6 +227,26 @@ func (_u *StoredFileUpdate) ClearContentSha256() *StoredFileUpdate {
 	return _u
 }
 
+// SetStorageCrc32c sets the "storage_crc32c" field.
+func (_u *StoredFileUpdate) SetStorageCrc32c(v string) *StoredFileUpdate {
+	_u.mutation.SetStorageCrc32c(v)
+	return _u
+}
+
+// SetNillableStorageCrc32c sets the "storage_crc32c" field if the given value is not nil.
+func (_u *StoredFileUpdate) SetNillableStorageCrc32c(v *string) *StoredFileUpdate {
+	if v != nil {
+		_u.SetStorageCrc32c(*v)
+	}
+	return _u
+}
+
+// ClearStorageCrc32c clears the value of the "storage_crc32c" field.
+func (_u *StoredFileUpdate) ClearStorageCrc32c() *StoredFileUpdate {
+	_u.mutation.ClearStorageCrc32c()
+	return _u
+}
+
 // SetMimeType sets the "mime_type" field.
 func (_u *StoredFileUpdate) SetMimeType(v string) *StoredFileUpdate {
 	_u.mutation.SetMimeType(v)
@@ -314,6 +354,26 @@ func (_u *StoredFileUpdate) SetNillableTemporaryStorageFilename(v *string) *Stor
 	if v != nil {
 		_u.SetTemporaryStorageFilename(*v)
 	}
+	return _u
+}
+
+// SetSourceConversionClaimToken sets the "source_conversion_claim_token" field.
+func (_u *StoredFileUpdate) SetSourceConversionClaimToken(v string) *StoredFileUpdate {
+	_u.mutation.SetSourceConversionClaimToken(v)
+	return _u
+}
+
+// SetNillableSourceConversionClaimToken sets the "source_conversion_claim_token" field if the given value is not nil.
+func (_u *StoredFileUpdate) SetNillableSourceConversionClaimToken(v *string) *StoredFileUpdate {
+	if v != nil {
+		_u.SetSourceConversionClaimToken(*v)
+	}
+	return _u
+}
+
+// ClearSourceConversionClaimToken clears the value of the "source_conversion_claim_token" field.
+func (_u *StoredFileUpdate) ClearSourceConversionClaimToken() *StoredFileUpdate {
+	_u.mutation.ClearSourceConversionClaimToken()
 	return _u
 }
 
@@ -538,6 +598,12 @@ func (_u *StoredFileUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.UploadStartedAtCleared() {
 		_spec.ClearField(storedfile.FieldUploadStartedAt, field.TypeTime)
 	}
+	if value, ok := _u.mutation.UploadLastProgressAt(); ok {
+		_spec.SetField(storedfile.FieldUploadLastProgressAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadLastProgressAtCleared() {
+		_spec.ClearField(storedfile.FieldUploadLastProgressAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UploadFailedAt(); ok {
 		_spec.SetField(storedfile.FieldUploadFailedAt, field.TypeTime, value)
 	}
@@ -577,6 +643,12 @@ func (_u *StoredFileUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.ContentSha256Cleared() {
 		_spec.ClearField(storedfile.FieldContentSha256, field.TypeString)
 	}
+	if value, ok := _u.mutation.StorageCrc32c(); ok {
+		_spec.SetField(storedfile.FieldStorageCrc32c, field.TypeString, value)
+	}
+	if _u.mutation.StorageCrc32cCleared() {
+		_spec.ClearField(storedfile.FieldStorageCrc32c, field.TypeString)
+	}
 	if value, ok := _u.mutation.MimeType(); ok {
 		_spec.SetField(storedfile.FieldMimeType, field.TypeString, value)
 	}
@@ -603,6 +675,15 @@ func (_u *StoredFileUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if value, ok := _u.mutation.TemporaryStorageFilename(); ok {
 		_spec.SetField(storedfile.FieldTemporaryStorageFilename, field.TypeString, value)
+	}
+	if _u.mutation.SourceTemporaryFilePublicIDCleared() {
+		_spec.ClearField(storedfile.FieldSourceTemporaryFilePublicID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceConversionClaimToken(); ok {
+		_spec.SetField(storedfile.FieldSourceConversionClaimToken, field.TypeString, value)
+	}
+	if _u.mutation.SourceConversionClaimTokenCleared() {
+		_spec.ClearField(storedfile.FieldSourceConversionClaimToken, field.TypeString)
 	}
 	if value, ok := _u.mutation.CopiedToFinalDestinationAt(); ok {
 		_spec.SetField(storedfile.FieldCopiedToFinalDestinationAt, field.TypeTime, value)
@@ -815,6 +896,26 @@ func (_u *StoredFileUpdateOne) ClearUploadStartedAt() *StoredFileUpdateOne {
 	return _u
 }
 
+// SetUploadLastProgressAt sets the "upload_last_progress_at" field.
+func (_u *StoredFileUpdateOne) SetUploadLastProgressAt(v time.Time) *StoredFileUpdateOne {
+	_u.mutation.SetUploadLastProgressAt(v)
+	return _u
+}
+
+// SetNillableUploadLastProgressAt sets the "upload_last_progress_at" field if the given value is not nil.
+func (_u *StoredFileUpdateOne) SetNillableUploadLastProgressAt(v *time.Time) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetUploadLastProgressAt(*v)
+	}
+	return _u
+}
+
+// ClearUploadLastProgressAt clears the value of the "upload_last_progress_at" field.
+func (_u *StoredFileUpdateOne) ClearUploadLastProgressAt() *StoredFileUpdateOne {
+	_u.mutation.ClearUploadLastProgressAt()
+	return _u
+}
+
 // SetUploadFailedAt sets the "upload_failed_at" field.
 func (_u *StoredFileUpdateOne) SetUploadFailedAt(v time.Time) *StoredFileUpdateOne {
 	_u.mutation.SetUploadFailedAt(v)
@@ -943,6 +1044,26 @@ func (_u *StoredFileUpdateOne) ClearContentSha256() *StoredFileUpdateOne {
 	return _u
 }
 
+// SetStorageCrc32c sets the "storage_crc32c" field.
+func (_u *StoredFileUpdateOne) SetStorageCrc32c(v string) *StoredFileUpdateOne {
+	_u.mutation.SetStorageCrc32c(v)
+	return _u
+}
+
+// SetNillableStorageCrc32c sets the "storage_crc32c" field if the given value is not nil.
+func (_u *StoredFileUpdateOne) SetNillableStorageCrc32c(v *string) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetStorageCrc32c(*v)
+	}
+	return _u
+}
+
+// ClearStorageCrc32c clears the value of the "storage_crc32c" field.
+func (_u *StoredFileUpdateOne) ClearStorageCrc32c() *StoredFileUpdateOne {
+	_u.mutation.ClearStorageCrc32c()
+	return _u
+}
+
 // SetMimeType sets the "mime_type" field.
 func (_u *StoredFileUpdateOne) SetMimeType(v string) *StoredFileUpdateOne {
 	_u.mutation.SetMimeType(v)
@@ -1050,6 +1171,26 @@ func (_u *StoredFileUpdateOne) SetNillableTemporaryStorageFilename(v *string) *S
 	if v != nil {
 		_u.SetTemporaryStorageFilename(*v)
 	}
+	return _u
+}
+
+// SetSourceConversionClaimToken sets the "source_conversion_claim_token" field.
+func (_u *StoredFileUpdateOne) SetSourceConversionClaimToken(v string) *StoredFileUpdateOne {
+	_u.mutation.SetSourceConversionClaimToken(v)
+	return _u
+}
+
+// SetNillableSourceConversionClaimToken sets the "source_conversion_claim_token" field if the given value is not nil.
+func (_u *StoredFileUpdateOne) SetNillableSourceConversionClaimToken(v *string) *StoredFileUpdateOne {
+	if v != nil {
+		_u.SetSourceConversionClaimToken(*v)
+	}
+	return _u
+}
+
+// ClearSourceConversionClaimToken clears the value of the "source_conversion_claim_token" field.
+func (_u *StoredFileUpdateOne) ClearSourceConversionClaimToken() *StoredFileUpdateOne {
+	_u.mutation.ClearSourceConversionClaimToken()
 	return _u
 }
 
@@ -1304,6 +1445,12 @@ func (_u *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile, 
 	if _u.mutation.UploadStartedAtCleared() {
 		_spec.ClearField(storedfile.FieldUploadStartedAt, field.TypeTime)
 	}
+	if value, ok := _u.mutation.UploadLastProgressAt(); ok {
+		_spec.SetField(storedfile.FieldUploadLastProgressAt, field.TypeTime, value)
+	}
+	if _u.mutation.UploadLastProgressAtCleared() {
+		_spec.ClearField(storedfile.FieldUploadLastProgressAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.UploadFailedAt(); ok {
 		_spec.SetField(storedfile.FieldUploadFailedAt, field.TypeTime, value)
 	}
@@ -1343,6 +1490,12 @@ func (_u *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile, 
 	if _u.mutation.ContentSha256Cleared() {
 		_spec.ClearField(storedfile.FieldContentSha256, field.TypeString)
 	}
+	if value, ok := _u.mutation.StorageCrc32c(); ok {
+		_spec.SetField(storedfile.FieldStorageCrc32c, field.TypeString, value)
+	}
+	if _u.mutation.StorageCrc32cCleared() {
+		_spec.ClearField(storedfile.FieldStorageCrc32c, field.TypeString)
+	}
 	if value, ok := _u.mutation.MimeType(); ok {
 		_spec.SetField(storedfile.FieldMimeType, field.TypeString, value)
 	}
@@ -1369,6 +1522,15 @@ func (_u *StoredFileUpdateOne) sqlSave(ctx context.Context) (_node *StoredFile, 
 	}
 	if value, ok := _u.mutation.TemporaryStorageFilename(); ok {
 		_spec.SetField(storedfile.FieldTemporaryStorageFilename, field.TypeString, value)
+	}
+	if _u.mutation.SourceTemporaryFilePublicIDCleared() {
+		_spec.ClearField(storedfile.FieldSourceTemporaryFilePublicID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceConversionClaimToken(); ok {
+		_spec.SetField(storedfile.FieldSourceConversionClaimToken, field.TypeString, value)
+	}
+	if _u.mutation.SourceConversionClaimTokenCleared() {
+		_spec.ClearField(storedfile.FieldSourceConversionClaimToken, field.TypeString)
 	}
 	if value, ok := _u.mutation.CopiedToFinalDestinationAt(); ok {
 		_spec.SetField(storedfile.FieldCopiedToFinalDestinationAt, field.TypeTime, value)

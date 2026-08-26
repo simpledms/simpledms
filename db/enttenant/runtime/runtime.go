@@ -23,6 +23,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	enttenantwebdavresource "github.com/simpledms/simpledms/db/enttenant/webdavresource"
 	"github.com/simpledms/simpledms/db/entx"
 
 	"entgo.io/ent"
@@ -96,8 +97,11 @@ func init() {
 		})
 	}
 	fileMixinHooks0 := fileMixin[0].Hooks()
+	fileHooks := schema.File{}.Hooks()
 
 	file.Hooks[1] = fileMixinHooks0[0]
+
+	file.Hooks[2] = fileHooks[0]
 	fileMixinInters0 := fileMixin[0].Interceptors()
 	file.Interceptors[0] = fileMixinInters0[0]
 	fileMixinFields1 := fileMixin[1].Fields()
@@ -121,23 +125,23 @@ func init() {
 	// file.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	file.UpdateDefaultUpdatedAt = fileDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// fileDescIsInInbox is the schema descriptor for is_in_inbox field.
-	fileDescIsInInbox := fileFields[9].Descriptor()
+	fileDescIsInInbox := fileFields[10].Descriptor()
 	// file.DefaultIsInInbox holds the default value on creation for the is_in_inbox field.
 	file.DefaultIsInInbox = fileDescIsInInbox.Default.(bool)
 	// fileDescIsRootDir is the schema descriptor for is_root_dir field.
-	fileDescIsRootDir := fileFields[10].Descriptor()
+	fileDescIsRootDir := fileFields[11].Descriptor()
 	// file.DefaultIsRootDir holds the default value on creation for the is_root_dir field.
 	file.DefaultIsRootDir = fileDescIsRootDir.Default.(bool)
 	// fileDescOcrContent is the schema descriptor for ocr_content field.
-	fileDescOcrContent := fileFields[11].Descriptor()
+	fileDescOcrContent := fileFields[12].Descriptor()
 	// file.DefaultOcrContent holds the default value on creation for the ocr_content field.
 	file.DefaultOcrContent = fileDescOcrContent.Default.(string)
 	// fileDescOcrRetryCount is the schema descriptor for ocr_retry_count field.
-	fileDescOcrRetryCount := fileFields[13].Descriptor()
+	fileDescOcrRetryCount := fileFields[14].Descriptor()
 	// file.DefaultOcrRetryCount holds the default value on creation for the ocr_retry_count field.
 	file.DefaultOcrRetryCount = fileDescOcrRetryCount.Default.(int)
 	// fileDescOcrLastTriedAt is the schema descriptor for ocr_last_tried_at field.
-	fileDescOcrLastTriedAt := fileFields[14].Descriptor()
+	fileDescOcrLastTriedAt := fileFields[15].Descriptor()
 	// file.DefaultOcrLastTriedAt holds the default value on creation for the ocr_last_tried_at field.
 	file.DefaultOcrLastTriedAt = fileDescOcrLastTriedAt.Default.(time.Time)
 	filepropertyassignmentMixin := schema.FilePropertyAssignment{}.Mixin()
@@ -364,6 +368,37 @@ func init() {
 	userDescPublicID := userMixinFields2[0].Descriptor()
 	// user.DefaultPublicID holds the default value on creation for the public_id field.
 	user.DefaultPublicID = userDescPublicID.Default.(func() entx.CIText)
+	enttenantwebdavresourceMixin := schema.WebDAVResource{}.Mixin()
+	enttenantwebdavresource.Policy = privacy.NewPolicies(enttenantwebdavresourceMixin[1], schema.WebDAVResource{})
+	enttenantwebdavresource.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := enttenantwebdavresource.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	enttenantwebdavresourceHooks := schema.WebDAVResource{}.Hooks()
+
+	enttenantwebdavresource.Hooks[1] = enttenantwebdavresourceHooks[0]
+	enttenantwebdavresourceMixinFields0 := enttenantwebdavresourceMixin[0].Fields()
+	_ = enttenantwebdavresourceMixinFields0
+	enttenantwebdavresourceFields := schema.WebDAVResource{}.Fields()
+	_ = enttenantwebdavresourceFields
+	// enttenantwebdavresourceDescCreatedAt is the schema descriptor for created_at field.
+	enttenantwebdavresourceDescCreatedAt := enttenantwebdavresourceMixinFields0[0].Descriptor()
+	// enttenantwebdavresource.DefaultCreatedAt holds the default value on creation for the created_at field.
+	enttenantwebdavresource.DefaultCreatedAt = enttenantwebdavresourceDescCreatedAt.Default.(func() time.Time)
+	// enttenantwebdavresourceDescUpdatedAt is the schema descriptor for updated_at field.
+	enttenantwebdavresourceDescUpdatedAt := enttenantwebdavresourceMixinFields0[2].Descriptor()
+	// enttenantwebdavresource.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	enttenantwebdavresource.DefaultUpdatedAt = enttenantwebdavresourceDescUpdatedAt.Default.(func() time.Time)
+	// enttenantwebdavresource.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	enttenantwebdavresource.UpdateDefaultUpdatedAt = enttenantwebdavresourceDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// enttenantwebdavresourceDescLastProgressAt is the schema descriptor for last_progress_at field.
+	enttenantwebdavresourceDescLastProgressAt := enttenantwebdavresourceFields[6].Descriptor()
+	// enttenantwebdavresource.DefaultLastProgressAt holds the default value on creation for the last_progress_at field.
+	enttenantwebdavresource.DefaultLastProgressAt = enttenantwebdavresourceDescLastProgressAt.Default.(func() time.Time)
 }
 
 const (

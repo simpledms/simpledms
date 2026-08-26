@@ -153,14 +153,6 @@ func (qq *SpaceCardsPartial) card(
 
 		// TODO use icon to indicate instead?
 		heading = widget.H(widget.HeadingTypeTitleLg, widget.Tf("%s (%s)", widget.Tu(spacex.Name).String(ctx), widget.T("active").String(ctx)))
-	} else {
-		actions = append(actions, &widget.Button{
-			Label:     widget.T("Select"), // TODO Switch or activate? or Select?
-			StyleType: widget.ButtonStyleTypeOutlined,
-			HTMXAttrs: widget.HTMXAttrs{
-				HxGet: route.BrowseRoot(tenantID, spacex.PublicID.String()),
-			},
-		})
 	}
 
 	var subhead *widget.Text
@@ -173,7 +165,10 @@ func (qq *SpaceCardsPartial) card(
 	return &widget.Card{
 		Style:    widget.CardStyleFilled,
 		Headline: heading,
-		Subhead:  subhead,
+		HTMXAttrs: widget.HTMXAttrs{
+			HxGet: route.BrowseRoot(tenantID, spacex.PublicID.String()),
+		},
+		Subhead: subhead,
 		// TODO Subhead:        wx.T("Show stats about user access (new manage button) and files (on view button)"),
 		SupportingText: widget.Tu(spacex.Description),
 		Actions:        actions,

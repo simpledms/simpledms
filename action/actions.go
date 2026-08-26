@@ -55,7 +55,7 @@ func NewActions(infra *common.Infra, tenantDBs *tenantdbs.TenantDBs, isDevMode b
 	trashActions := trash.NewActions(infra, browseActions)
 
 	return &Actions{
-		Dashboard:         dashboard.NewActions(infra, commonActions, authActions, adminActions),
+		Dashboard:         dashboard.NewActions(infra, tenantDBs, commonActions, authActions, adminActions),
 		Browse:            browseActions,
 		Tagging:           taggingActions,
 		Inbox:             inbox.NewActions(infra, commonActions, browseActions),

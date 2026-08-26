@@ -3,8 +3,8 @@ package inbox
 // package action
 
 import (
+	"io"
 	"log"
-	"math"
 	"net/http"
 	"path/filepath"
 
@@ -12,7 +12,6 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -24,7 +23,6 @@ import (
 
 type uploadPrepareResult struct {
 	prepared *filesystem.PreparedUpload
-	file     *enttenant.File
 }
 
 type UploadFileCmdData struct {
@@ -68,77 +66,34 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	if err != nil {
 		return err
 	}
-	if nilableUploadLimitBytes != nil {
-		bodyLimitBytes := *nilableUploadLimitBytes
-		const multipartOverheadBytes int64 = 1 * 1024 * 1024
-		if bodyLimitBytes < math.MaxInt64-multipartOverheadBytes {
-			bodyLimitBytes += multipartOverheadBytes
-		}
-		req.Request.Body = http.MaxBytesReader(rw, req.Request.Body, bodyLimitBytes)
-	}
+	uploadx.LimitMultipartBody(rw, req.Request, nilableUploadLimitBytes)
 
-	_, err = autil.FormData[UploadFileCmdData](rw, req, ctx)
+	uploadedFile, err := qq.readUploadedFile(req)
 	if err != nil {
 		return err
 	}
-
-	uploadedFile, uploadedFileHeader, err := req.FormFile("File")
-	if err != nil {
-		// TODO also triggers if no file provided
-		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "could not read file")
+	if uploadedFile == nil {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "No file provided.")
 	}
 	defer func() {
-		if err := uploadedFile.Close(); err != nil {
+		if err := uploadedFile.Closer.Close(); err != nil {
 			log.Println(err)
 		}
 	}()
 
-	filename := uploadedFileHeader.Filename
+	filename := uploadedFile.Filename
 	filename = filepath.Clean(filename)
 
-	if err := fileutil.EnsureFileDoesNotExist(ctx, filename, ctx.SpaceCtx().SpaceRootDir().ID, true); err != nil {
-		return err
-	}
-
-	prep, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
-		prepared, filex, err := qq.infra.FileSystem().PrepareFileUpload(
-			writeCtx,
-			filename,
-			ctx.SpaceCtx().SpaceRootDir().ID,
-			true,
-		)
-		if err != nil {
-			return nil, err
-		}
-		return &uploadPrepareResult{prepared: prepared, file: filex}, nil
-	})
+	prep, err := qq.prepareUpload(ctx, filename)
 	if err != nil {
 		return err
 	}
-
-	uploadResult, err := qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
-		ctx,
-		uploadedFile,
-		prep.prepared,
-		uploadedFileHeader.Size,
-	)
-	if err != nil {
-		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
+	if err := uploadPreparedFile(qq.infra, ctx, uploadedFile, prep.prepared); err != nil {
 		return err
 	}
-
-	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep.prepared, uploadResult)
-	})
-	if err != nil {
-		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, false)
-		return err
-	}
-
 	rw.Header().Set("HX-Retarget", "#innerContent")
 	rw.Header().Set("HX-Reswap", "innerHTML")
-	view, err := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, prep.file.PublicID.String())
+	view, err := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, prep.prepared.FilePublicID)
 	if err != nil {
 		return err
 	}
@@ -147,6 +102,95 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		rw,
 		ctx,
 		view,
-		widget.NewSnackbarf("«%s» uploaded.", prep.file.Name),
+		widget.NewSnackbarf("«%s» uploaded.", filename),
 	)
+}
+
+func (qq *UploadFileCmd) prepareUpload(
+	ctx ctxx.Context,
+	filename string,
+) (*uploadPrepareResult, error) {
+	return txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
+		rootDirID := writeCtx.SpaceRootDir().ID
+		if err := fileutil.EnsureFileDoesNotExist(writeCtx, filename, rootDirID, true); err != nil {
+			return nil, err
+		}
+		prepared, err := qq.infra.FileSystem().PrepareFileUpload(
+			writeCtx,
+			filename,
+			rootDirID,
+			true,
+		)
+		if err != nil {
+			return nil, err
+		}
+		return &uploadPrepareResult{prepared: prepared}, nil
+	})
+}
+
+func uploadPreparedFile(
+	infra *common.Infra,
+	ctx ctxx.Context,
+	uploadedFile *uploadx.MultipartFile,
+	prepared *filesystem.PreparedUpload,
+) error {
+	var uploadResult *filesystem.PreparedUploadResult
+	var err error
+	if uploadedFile.ExpectedBytes != nil {
+		uploadResult, err = infra.FileSystem().UploadPreparedFileWithExpectedSize(
+			ctx,
+			uploadedFile.Reader,
+			prepared,
+			*uploadedFile.ExpectedBytes,
+		)
+	} else {
+		uploadResult, err = infra.FileSystem().UploadPreparedFile(ctx, uploadedFile.Reader, prepared)
+	}
+	if err != nil {
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), infra.FileSystem(), prepared, err, true)
+		return err
+	}
+
+	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+		return nil, infra.FileSystem().FinalizePreparedUploadWithoutMime(writeCtx, prepared, uploadResult)
+	})
+	if err != nil {
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), infra.FileSystem(), prepared, err, true)
+		return err
+	}
+	if _, err := infra.FileSystem().UpdateMimeTypeAfterFinalization(
+		ctx.SpaceCtx(),
+		true,
+		prepared.StoredFileID,
+	); err != nil {
+		log.Println(err)
+	}
+	return nil
+}
+
+func (qq *UploadFileCmd) readUploadedFile(req *httpx.Request) (*uploadx.MultipartFile, error) {
+	reader, err := req.MultipartReader()
+	if err != nil {
+		return nil, err
+	}
+	var uploadedFile *uploadx.MultipartFile
+	for uploadedFile == nil {
+		part, err := reader.NextPart()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		if part.FormName() != "File" {
+			_ = part.Close()
+			continue
+		}
+		uploadedFile, err = uploadx.NewMultipartFile(part)
+		if err != nil {
+			_ = part.Close()
+			return nil, err
+		}
+	}
+	return uploadedFile, nil
 }

@@ -25,6 +25,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	enttenantwebdavresource "github.com/simpledms/simpledms/db/enttenant/webdavresource"
 )
 
 // The Query interface represents an operation that queries a graph.
@@ -515,6 +516,33 @@ func (f TraverseUser) Traverse(ctx context.Context, q enttenant.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *enttenant.UserQuery", q)
 }
 
+// The WebDAVResourceFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WebDAVResourceFunc func(context.Context, *enttenant.WebDAVResourceQuery) (enttenant.Value, error)
+
+// Query calls f(ctx, q).
+func (f WebDAVResourceFunc) Query(ctx context.Context, q enttenant.Query) (enttenant.Value, error) {
+	if q, ok := q.(*enttenant.WebDAVResourceQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *enttenant.WebDAVResourceQuery", q)
+}
+
+// The TraverseWebDAVResource type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWebDAVResource func(context.Context, *enttenant.WebDAVResourceQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWebDAVResource) Intercept(next enttenant.Querier) enttenant.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWebDAVResource) Traverse(ctx context.Context, q enttenant.Query) error {
+	if q, ok := q.(*enttenant.WebDAVResourceQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *enttenant.WebDAVResourceQuery", q)
+}
+
 // NewQuery returns the generic Query interface for the given typed query.
 func NewQuery(q enttenant.Query) (Query, error) {
 	switch q := q.(type) {
@@ -550,6 +578,8 @@ func NewQuery(q enttenant.Query) (Query, error) {
 		return &query[*enttenant.TenantDataMigrationQuery, predicate.TenantDataMigration, tenantdatamigration.OrderOption]{typ: enttenant.TypeTenantDataMigration, tq: q}, nil
 	case *enttenant.UserQuery:
 		return &query[*enttenant.UserQuery, predicate.User, user.OrderOption]{typ: enttenant.TypeUser, tq: q}, nil
+	case *enttenant.WebDAVResourceQuery:
+		return &query[*enttenant.WebDAVResourceQuery, predicate.WebDAVResource, enttenantwebdavresource.OrderOption]{typ: enttenant.TypeWebDAVResource, tq: q}, nil
 	default:
 		return nil, fmt.Errorf("unknown query type %T", q)
 	}

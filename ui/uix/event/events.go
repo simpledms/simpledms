@@ -19,8 +19,9 @@ const (
 	// use TagUpdated for the moment
 	// TagMovedToGroup    EventWithID = "tagMovedToGroup"
 
-	AccountUpdated Event = "accountUpdated"
-	AccountDeleted Event = "accountDeleted"
+	AccountUpdated                Event = "accountUpdated"
+	AccountDeleted                Event = "accountDeleted"
+	WebDAVCredentialFilterChanged Event = "webDAVCredentialFilterChanged"
 
 	FilterTagsChanged            Event = "filterTagsChanged"
 	DocumentTypeFilterChanged    Event = "documentTypeFilterChanged"
@@ -33,6 +34,7 @@ const (
 	DocumentTypeAttributeUpdated Event = "documentTypeAttributeUpdated"
 	FolderModeToggled            Event = "folderModeToggled"
 	SearchQueryUpdated           Event = "searchQueryUpdated" // TODO more generic for all inputs?
+	SourceFilterChanged          Event = "sourceFilterChanged"
 
 	PropertyFilterChanged Event = "propertyFilterChanged"
 	PropertyCreated       Event = "propertyCreated"
@@ -72,7 +74,6 @@ const (
 	UploadLimitUpdated   Event = "uploadLimitUpdated"
 
 	UserCreated Event = "userCreated"
-	UserUpdated Event = "userUpdated"
 	UserDeleted Event = "userDeleted"
 
 	UserAssignedToSpace     Event = "userAssignedToSpace"

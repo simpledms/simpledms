@@ -18,6 +18,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
+	"github.com/simpledms/simpledms/db/entmain/webdavcredential"
 )
 
 // The Query interface represents an operation that queries a graph.
@@ -319,6 +320,33 @@ func (f TraverseWebAuthnChallenge) Traverse(ctx context.Context, q entmain.Query
 	return fmt.Errorf("unexpected query type %T. expect *entmain.WebAuthnChallengeQuery", q)
 }
 
+// The WebDAVCredentialFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WebDAVCredentialFunc func(context.Context, *entmain.WebDAVCredentialQuery) (entmain.Value, error)
+
+// Query calls f(ctx, q).
+func (f WebDAVCredentialFunc) Query(ctx context.Context, q entmain.Query) (entmain.Value, error) {
+	if q, ok := q.(*entmain.WebDAVCredentialQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *entmain.WebDAVCredentialQuery", q)
+}
+
+// The TraverseWebDAVCredential type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWebDAVCredential func(context.Context, *entmain.WebDAVCredentialQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWebDAVCredential) Intercept(next entmain.Querier) entmain.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWebDAVCredential) Traverse(ctx context.Context, q entmain.Query) error {
+	if q, ok := q.(*entmain.WebDAVCredentialQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *entmain.WebDAVCredentialQuery", q)
+}
+
 // NewQuery returns the generic Query interface for the given typed query.
 func NewQuery(q entmain.Query) (Query, error) {
 	switch q := q.(type) {
@@ -340,6 +368,8 @@ func NewQuery(q entmain.Query) (Query, error) {
 		return &query[*entmain.TenantAccountAssignmentQuery, predicate.TenantAccountAssignment, tenantaccountassignment.OrderOption]{typ: entmain.TypeTenantAccountAssignment, tq: q}, nil
 	case *entmain.WebAuthnChallengeQuery:
 		return &query[*entmain.WebAuthnChallengeQuery, predicate.WebAuthnChallenge, webauthnchallenge.OrderOption]{typ: entmain.TypeWebAuthnChallenge, tq: q}, nil
+	case *entmain.WebDAVCredentialQuery:
+		return &query[*entmain.WebDAVCredentialQuery, predicate.WebDAVCredential, webdavcredential.OrderOption]{typ: entmain.TypeWebDAVCredential, tq: q}, nil
 	default:
 		return nil, fmt.Errorf("unknown query type %T", q)
 	}

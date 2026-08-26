@@ -12,6 +12,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
@@ -36,6 +37,8 @@ type TemporaryFile struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// UploadStartedAt holds the value of the "upload_started_at" field.
 	UploadStartedAt time.Time `json:"upload_started_at,omitempty"`
+	// UploadLastProgressAt holds the value of the "upload_last_progress_at" field.
+	UploadLastProgressAt *time.Time `json:"upload_last_progress_at,omitempty"`
 	// UploadFailedAt holds the value of the "upload_failed_at" field.
 	UploadFailedAt *time.Time `json:"upload_failed_at,omitempty"`
 	// UploadSucceededAt holds the value of the "upload_succeeded_at" field.
@@ -44,12 +47,18 @@ type TemporaryFile struct {
 	OwnerID int64 `json:"owner_id,omitempty"`
 	// Filename holds the value of the "filename" field.
 	Filename string `json:"filename,omitempty"`
+	// Source holds the value of the "source" field.
+	Source filesource.FileSource `json:"source,omitempty"`
 	// Size holds the value of the "size" field.
 	Size int64 `json:"size,omitempty"`
 	// SizeInStorage holds the value of the "size_in_storage" field.
 	SizeInStorage int64 `json:"size_in_storage,omitempty"`
 	// Sha256 holds the value of the "sha256" field.
 	Sha256 string `json:"sha256,omitempty"`
+	// ContentSha256 holds the value of the "content_sha256" field.
+	ContentSha256 string `json:"content_sha256,omitempty"`
+	// StorageCrc32c holds the value of the "storage_crc32c" field.
+	StorageCrc32c *string `json:"storage_crc32c,omitempty"`
 	// MimeType holds the value of the "mime_type" field.
 	MimeType string `json:"mime_type,omitempty"`
 	// StorageType holds the value of the "storage_type" field.
@@ -64,6 +73,12 @@ type TemporaryFile struct {
 	UploadToken string `json:"upload_token,omitempty"`
 	// ConvertedToStoredFileAt holds the value of the "converted_to_stored_file_at" field.
 	ConvertedToStoredFileAt *time.Time `json:"converted_to_stored_file_at,omitempty"`
+	// PersistenceClaimToken holds the value of the "persistence_claim_token" field.
+	PersistenceClaimToken *string `json:"persistence_claim_token,omitempty"`
+	// PersistenceTenantID holds the value of the "persistence_tenant_id" field.
+	PersistenceTenantID *int64 `json:"persistence_tenant_id,omitempty"`
+	// PersistenceLastProgressAt holds the value of the "persistence_last_progress_at" field.
+	PersistenceLastProgressAt *time.Time `json:"persistence_last_progress_at,omitempty"`
 	// ExpiresAt holds the value of the "expires_at" field.
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -138,11 +153,13 @@ func (*TemporaryFile) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case temporaryfile.FieldPublicID:
 			values[i] = new(entx.CIText)
-		case temporaryfile.FieldID, temporaryfile.FieldCreatedBy, temporaryfile.FieldUpdatedBy, temporaryfile.FieldDeletedBy, temporaryfile.FieldOwnerID, temporaryfile.FieldSize, temporaryfile.FieldSizeInStorage:
+		case temporaryfile.FieldSource:
+			values[i] = new(filesource.FileSource)
+		case temporaryfile.FieldID, temporaryfile.FieldCreatedBy, temporaryfile.FieldUpdatedBy, temporaryfile.FieldDeletedBy, temporaryfile.FieldOwnerID, temporaryfile.FieldSize, temporaryfile.FieldSizeInStorage, temporaryfile.FieldPersistenceTenantID:
 			values[i] = new(sql.NullInt64)
-		case temporaryfile.FieldFilename, temporaryfile.FieldSha256, temporaryfile.FieldMimeType, temporaryfile.FieldBucketName, temporaryfile.FieldStoragePath, temporaryfile.FieldStorageFilename, temporaryfile.FieldUploadToken:
+		case temporaryfile.FieldFilename, temporaryfile.FieldSha256, temporaryfile.FieldContentSha256, temporaryfile.FieldStorageCrc32c, temporaryfile.FieldMimeType, temporaryfile.FieldBucketName, temporaryfile.FieldStoragePath, temporaryfile.FieldStorageFilename, temporaryfile.FieldUploadToken, temporaryfile.FieldPersistenceClaimToken:
 			values[i] = new(sql.NullString)
-		case temporaryfile.FieldCreatedAt, temporaryfile.FieldUpdatedAt, temporaryfile.FieldDeletedAt, temporaryfile.FieldUploadStartedAt, temporaryfile.FieldUploadFailedAt, temporaryfile.FieldUploadSucceededAt, temporaryfile.FieldConvertedToStoredFileAt, temporaryfile.FieldExpiresAt:
+		case temporaryfile.FieldCreatedAt, temporaryfile.FieldUpdatedAt, temporaryfile.FieldDeletedAt, temporaryfile.FieldUploadStartedAt, temporaryfile.FieldUploadLastProgressAt, temporaryfile.FieldUploadFailedAt, temporaryfile.FieldUploadSucceededAt, temporaryfile.FieldConvertedToStoredFileAt, temporaryfile.FieldPersistenceLastProgressAt, temporaryfile.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
 		case temporaryfile.FieldStorageType:
 			values[i] = new(storagetype.StorageType)
@@ -215,6 +232,13 @@ func (_m *TemporaryFile) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.UploadStartedAt = value.Time
 			}
+		case temporaryfile.FieldUploadLastProgressAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field upload_last_progress_at", values[i])
+			} else if value.Valid {
+				_m.UploadLastProgressAt = new(time.Time)
+				*_m.UploadLastProgressAt = value.Time
+			}
 		case temporaryfile.FieldUploadFailedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field upload_failed_at", values[i])
@@ -241,6 +265,12 @@ func (_m *TemporaryFile) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Filename = value.String
 			}
+		case temporaryfile.FieldSource:
+			if value, ok := values[i].(*filesource.FileSource); !ok {
+				return fmt.Errorf("unexpected type %T for field source", values[i])
+			} else if value != nil {
+				_m.Source = *value
+			}
 		case temporaryfile.FieldSize:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field size", values[i])
@@ -258,6 +288,19 @@ func (_m *TemporaryFile) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field sha256", values[i])
 			} else if value.Valid {
 				_m.Sha256 = value.String
+			}
+		case temporaryfile.FieldContentSha256:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field content_sha256", values[i])
+			} else if value.Valid {
+				_m.ContentSha256 = value.String
+			}
+		case temporaryfile.FieldStorageCrc32c:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field storage_crc32c", values[i])
+			} else if value.Valid {
+				_m.StorageCrc32c = new(string)
+				*_m.StorageCrc32c = value.String
 			}
 		case temporaryfile.FieldMimeType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -301,6 +344,27 @@ func (_m *TemporaryFile) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ConvertedToStoredFileAt = new(time.Time)
 				*_m.ConvertedToStoredFileAt = value.Time
+			}
+		case temporaryfile.FieldPersistenceClaimToken:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field persistence_claim_token", values[i])
+			} else if value.Valid {
+				_m.PersistenceClaimToken = new(string)
+				*_m.PersistenceClaimToken = value.String
+			}
+		case temporaryfile.FieldPersistenceTenantID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field persistence_tenant_id", values[i])
+			} else if value.Valid {
+				_m.PersistenceTenantID = new(int64)
+				*_m.PersistenceTenantID = value.Int64
+			}
+		case temporaryfile.FieldPersistenceLastProgressAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field persistence_last_progress_at", values[i])
+			} else if value.Valid {
+				_m.PersistenceLastProgressAt = new(time.Time)
+				*_m.PersistenceLastProgressAt = value.Time
 			}
 		case temporaryfile.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -389,6 +453,11 @@ func (_m *TemporaryFile) String() string {
 	builder.WriteString("upload_started_at=")
 	builder.WriteString(_m.UploadStartedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	if v := _m.UploadLastProgressAt; v != nil {
+		builder.WriteString("upload_last_progress_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
 	if v := _m.UploadFailedAt; v != nil {
 		builder.WriteString("upload_failed_at=")
 		builder.WriteString(v.Format(time.ANSIC))
@@ -405,6 +474,9 @@ func (_m *TemporaryFile) String() string {
 	builder.WriteString("filename=")
 	builder.WriteString(_m.Filename)
 	builder.WriteString(", ")
+	builder.WriteString("source=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Source))
+	builder.WriteString(", ")
 	builder.WriteString("size=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Size))
 	builder.WriteString(", ")
@@ -413,6 +485,14 @@ func (_m *TemporaryFile) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sha256=")
 	builder.WriteString(_m.Sha256)
+	builder.WriteString(", ")
+	builder.WriteString("content_sha256=")
+	builder.WriteString(_m.ContentSha256)
+	builder.WriteString(", ")
+	if v := _m.StorageCrc32c; v != nil {
+		builder.WriteString("storage_crc32c=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("mime_type=")
 	builder.WriteString(_m.MimeType)
@@ -434,6 +514,21 @@ func (_m *TemporaryFile) String() string {
 	builder.WriteString(", ")
 	if v := _m.ConvertedToStoredFileAt; v != nil {
 		builder.WriteString("converted_to_stored_file_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.PersistenceClaimToken; v != nil {
+		builder.WriteString("persistence_claim_token=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.PersistenceTenantID; v != nil {
+		builder.WriteString("persistence_tenant_id=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.PersistenceLastProgressAt; v != nil {
+		builder.WriteString("persistence_last_progress_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")

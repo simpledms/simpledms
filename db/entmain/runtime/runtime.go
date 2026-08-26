@@ -16,6 +16,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
+	"github.com/simpledms/simpledms/db/entmain/webdavcredential"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/filelistpreference"
 
@@ -239,7 +240,9 @@ func init() {
 	systemconfig.DefaultMaxUploadSizeMib = systemconfigDescMaxUploadSizeMib.Default.(int64)
 	temporaryfileMixin := schema.TemporaryFile{}.Mixin()
 	temporaryfileMixinHooks2 := temporaryfileMixin[2].Hooks()
+	temporaryfileHooks := schema.TemporaryFile{}.Hooks()
 	temporaryfile.Hooks[0] = temporaryfileMixinHooks2[0]
+	temporaryfile.Hooks[1] = temporaryfileHooks[0]
 	temporaryfileMixinInters2 := temporaryfileMixin[2].Interceptors()
 	temporaryfileMixinInters3 := temporaryfileMixin[3].Interceptors()
 	temporaryfile.Interceptors[0] = temporaryfileMixinInters2[0]
@@ -368,6 +371,40 @@ func init() {
 	webauthnchallengeDescCreatedAt := webauthnchallengeFields[8].Descriptor()
 	// webauthnchallenge.DefaultCreatedAt holds the default value on creation for the created_at field.
 	webauthnchallenge.DefaultCreatedAt = webauthnchallengeDescCreatedAt.Default.(func() time.Time)
+	webdavcredentialMixin := schema.WebDAVCredential{}.Mixin()
+	webdavcredential.Policy = privacy.NewPolicies(schema.WebDAVCredential{})
+	webdavcredential.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := webdavcredential.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	webdavcredentialMixinFields0 := webdavcredentialMixin[0].Fields()
+	_ = webdavcredentialMixinFields0
+	webdavcredentialMixinFields1 := webdavcredentialMixin[1].Fields()
+	_ = webdavcredentialMixinFields1
+	webdavcredentialFields := schema.WebDAVCredential{}.Fields()
+	_ = webdavcredentialFields
+	// webdavcredentialDescCreatedAt is the schema descriptor for created_at field.
+	webdavcredentialDescCreatedAt := webdavcredentialMixinFields0[0].Descriptor()
+	// webdavcredential.DefaultCreatedAt holds the default value on creation for the created_at field.
+	webdavcredential.DefaultCreatedAt = webdavcredentialDescCreatedAt.Default.(func() time.Time)
+	// webdavcredentialDescUpdatedAt is the schema descriptor for updated_at field.
+	webdavcredentialDescUpdatedAt := webdavcredentialMixinFields0[2].Descriptor()
+	// webdavcredential.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	webdavcredential.DefaultUpdatedAt = webdavcredentialDescUpdatedAt.Default.(func() time.Time)
+	// webdavcredential.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	webdavcredential.UpdateDefaultUpdatedAt = webdavcredentialDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// webdavcredentialDescPublicID is the schema descriptor for public_id field.
+	webdavcredentialDescPublicID := webdavcredentialMixinFields1[0].Descriptor()
+	// webdavcredential.DefaultPublicID holds the default value on creation for the public_id field.
+	webdavcredential.DefaultPublicID = webdavcredentialDescPublicID.Default.(func() entx.CIText)
+	// webdavcredentialDescLabel is the schema descriptor for label field.
+	webdavcredentialDescLabel := webdavcredentialFields[4].Descriptor()
+	// webdavcredential.LabelValidator is a validator for the "label" field. It is called by the builders before save.
+	webdavcredential.LabelValidator = webdavcredentialDescLabel.Validators[0].(func(string) error)
 }
 
 const (

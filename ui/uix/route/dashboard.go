@@ -16,6 +16,14 @@ func Account() string {
 	return "/dashboard/account/"
 }
 
+func WebDAVCredentialsRoute() string {
+	return "GET /dashboard/webdav-credentials/"
+}
+
+func WebDAVCredentials() string {
+	return "/dashboard/webdav-credentials/"
+}
+
 func SystemRoute() string {
 	return "GET /dashboard/system/"
 }

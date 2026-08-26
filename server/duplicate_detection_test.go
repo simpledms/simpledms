@@ -13,9 +13,12 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/main/common/spacerole"
+	"github.com/simpledms/simpledms/model/main/common/storagetype"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
+	"github.com/simpledms/simpledms/util/uploadx"
 )
 
 func TestDuplicateDetectionFindsAccessibleSpaceAndHistoricVersion(t *testing.T) {
@@ -262,5 +265,83 @@ func uploadFileVersion(
 		AllX(spaceCtx)
 	if len(latestVersion) < 2 {
 		t.Fatalf("expected uploaded file version")
+	}
+}
+
+func TestFailedFileVersionUploadKeepsExistingFileAndVersions(t *testing.T) {
+	harness := newActionTestHarness(t)
+	accountx, tenantx := signUpAccount(t, harness, "failed-version@example.com")
+	tenantDB := initTenantDB(t, harness, tenantx)
+	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
+
+	err := withTenantContext(
+		t,
+		harness,
+		accountx,
+		tenantx,
+		tenantDB,
+		func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
+			createSpaceViaCmd(t, harness.actions, tenantCtx, "Failed Version Space")
+			spacex := tenantCtx.TTx.Space.Query().
+				Where(space.Name("Failed Version Space")).
+				OnlyX(tenantCtx)
+			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+			filex := spaceCtx.TTx.File.Create().
+				SetName("original.pdf").
+				SetSource(filesource.WebInterface).
+				SetSpaceID(spacex.ID).
+				SetParentID(spaceCtx.SpaceRootDir().ID).
+				SetIsDirectory(false).
+				SetIndexedAt(time.Now()).
+				SaveX(spaceCtx)
+			storedFilex := spaceCtx.TTx.StoredFile.Create().
+				SetFilename("original.pdf").
+				SetSize(8).
+				SetSizeInStorage(8).
+				SetStorageType(storagetype.S3).
+				SetBucketName("bucket").
+				SetStoragePath("tenant/final").
+				SetStorageFilename("original.pdf").
+				SetTemporaryStoragePath("tenant/tmp").
+				SetTemporaryStorageFilename("original.pdf").
+				SetUploadStartedAt(time.Now()).
+				SetUploadSucceededAt(time.Now()).
+				SaveX(spaceCtx)
+			spaceCtx.TTx.FileVersion.Create().
+				SetFileID(filex.ID).
+				SetStoredFileID(storedFilex.ID).
+				SetVersionNumber(1).
+				SaveX(spaceCtx)
+			versionCount := spaceCtx.TTx.FileVersion.Query().
+				Where(fileversion.FileID(filex.ID)).
+				CountX(spaceCtx)
+
+			prepared, err := harness.infra.FileSystem().PrepareFileVersionUpload(
+				spaceCtx,
+				"replacement.pdf",
+				filex.ID,
+			)
+			if err != nil {
+				return err
+			}
+			uploadx.HandleStoredFileUploadFailure(spaceCtx, harness.infra.FileSystem(), prepared, nil, false)
+
+			persistedFile, err := spaceCtx.TTx.File.Get(spaceCtx, filex.ID)
+			if err != nil {
+				return fmt.Errorf("existing file was deleted after failed version upload: %w", err)
+			}
+			if persistedFile.Name != "original.pdf" || persistedFile.Source != filesource.WebInterface {
+				return fmt.Errorf("existing file metadata changed after failed version upload: %#v", persistedFile)
+			}
+			if got := spaceCtx.TTx.FileVersion.Query().
+				Where(fileversion.FileID(filex.ID)).
+				CountX(spaceCtx); got != versionCount {
+				return fmt.Errorf("version count = %d, want %d", got, versionCount)
+			}
+			return nil
+		},
+	)
+	if err != nil {
+		t.Fatal(err)
 	}
 }

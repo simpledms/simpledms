@@ -53,3 +53,6 @@ type TenantDataMigration func(*sql.Selector)
 
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
+
+// WebDAVResource is the predicate function for enttenantwebdavresource builders.
+type WebDAVResource func(*sql.Selector)

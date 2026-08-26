@@ -3,7 +3,6 @@ package server
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"log"
 	"net"
@@ -34,6 +33,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 	tenantaccessmodel "github.com/simpledms/simpledms/model/main/tenantaccess"
+	"github.com/simpledms/simpledms/server/webdav"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
@@ -66,6 +66,8 @@ var (
 	tenantIDRegex = regexp.MustCompile(`/org/(?P<id>[a-z0-9]+)`)
 	spaceIDRegex  = regexp.MustCompile(`/space/(?P<id>[a-z0-9]+)`)
 )
+
+const unexpectedErrorMessage = "Something went wrong. Please try again."
 
 type Router struct {
 	*http.ServeMux
@@ -101,6 +103,14 @@ func NewRouter(
 		i18n:                     i18n,
 	}
 
+	router.Handle(webdav.Pattern, webdav.NewHandler(webdav.Config{
+		MainDB:    mainDB,
+		TenantDBs: tenantDBs,
+		Infra:     infra,
+		DevMode:   devMode,
+		MetaPath:  metaPath,
+		I18n:      i18n,
+	}))
 	router.allowSetupSessionPath(route2.Dashboard())
 
 	return router
@@ -130,7 +140,11 @@ func (qq *Router) RegisterAction(
 ) {
 	// wrapCommand is also necessary when readOnly because there are read only commands that
 	// just manipulate the state, for example ToggleDocumentTypeFilter
-	qq.HandleFunc(action.Route(), qq.wrapTx(qq.wrapCommand(action.Handler), action.IsReadOnly()))
+	if action.UseManualTxManagement() {
+		qq.HandleFunc(action.Route(), qq.wrapManualTx(qq.wrapCommand(action.Handler)))
+	} else {
+		qq.HandleFunc(action.Route(), qq.wrapTx(qq.wrapCommand(action.Handler), action.IsReadOnly()))
+	}
 
 	// TODO route or endpoint? does method (POST OR GET) matter? currently not, maybe later?
 	qq.handlerMap[action.Endpoint()] = action
@@ -295,7 +309,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 					rwx,
 					reqx,
 					visitorCtx,
-					fmt.Errorf("Internal error, please contact support."),
+					errors.New("internal error, please contact support"),
 					mainTx,
 					nilableTenantTx,
 				)
@@ -352,6 +366,158 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 				return
 			}
 		}
+	}
+}
+
+func (qq *Router) wrapManualTx(handlerFn handlerFn) http.HandlerFunc {
+	return func(rw http.ResponseWriter, req *http.Request) {
+		mainTx, err := qq.mainDB.Tx(req.Context(), true)
+		if err != nil {
+			log.Println(err)
+			rw.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		var nilableTenantTx *enttenant.Tx
+		rwx := httpx.NewResponseWriter(rw)
+		reqx := httpx.NewRequest(req)
+		visitorCtx := ctxx.NewVisitorContext(
+			req.Context(),
+			mainTx,
+			qq.i18n,
+			req.Header.Get("Accept-Language"),
+			req.Header.Get("X-Client-Timezone"),
+			req.Header.Get("HX-Request") != "",
+			isTWARequest(req),
+			qq.infra.SystemConfig().CommercialLicenseEnabled(),
+		)
+		transactionsOpen := true
+
+		defer func() {
+			qq.handleManualTxPanic(
+				rwx,
+				reqx,
+				visitorCtx,
+				mainTx,
+				nilableTenantTx,
+				transactionsOpen,
+				recover(),
+			)
+		}()
+
+		ctx, shouldReturn := qq.manualTxContext(
+			rwx,
+			reqx,
+			visitorCtx,
+			mainTx,
+			&nilableTenantTx,
+		)
+		if shouldReturn {
+			return
+		}
+
+		if !qq.commitManualTransactions(rwx, mainTx, nilableTenantTx) {
+			return
+		}
+		transactionsOpen = false
+
+		if err := handlerFn(rwx, reqx, ctx); err != nil {
+			log.Println(err)
+			qq.handleManualError(rwx, reqx, ctx, err)
+			return
+		}
+	}
+}
+
+func (qq *Router) manualTxContext(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	visitorCtx *ctxx.VisitorContext,
+	mainTx *entmain.Tx,
+	nilableTenantTx **enttenant.Tx,
+) (ctxx.Context, bool) {
+	ctx, tenantTx, isRedirected, err := qq.context(rw, req, mainTx, visitorCtx, true)
+	*nilableTenantTx = tenantTx
+	if err != nil {
+		log.Println(err)
+		qq.handleError(rw, req, visitorCtx, err, mainTx, tenantTx)
+		return ctx, true
+	}
+	if !isRedirected {
+		return ctx, false
+	}
+	if err := mainTx.Rollback(); err != nil {
+		log.Println(err)
+	}
+	if tenantTx != nil {
+		if err := tenantTx.Rollback(); err != nil {
+			log.Println(err)
+		}
+	}
+	return ctx, true
+}
+
+func (qq *Router) commitManualTransactions(
+	rw httpx.ResponseWriter,
+	mainTx *entmain.Tx,
+	nilableTenantTx *enttenant.Tx,
+) bool {
+	if err := mainTx.Commit(); err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		return false
+	}
+	if nilableTenantTx != nil {
+		if err := nilableTenantTx.Commit(); err != nil {
+			log.Println(err)
+			rw.WriteHeader(http.StatusInternalServerError)
+			return false
+		}
+	}
+	return true
+}
+
+func (qq *Router) handleManualTxPanic(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
+	mainTx *entmain.Tx,
+	nilableTenantTx *enttenant.Tx,
+	transactionsOpen bool,
+	recovered any,
+) {
+	if recovered == nil {
+		return
+	}
+	qq.logRecoveredPanic(req.Request, recovered)
+	err, ok := recovered.(error)
+	if !ok {
+		err = errors.New("internal error, please contact support")
+	}
+	if transactionsOpen {
+		qq.handleError(rw, req, ctx, err, mainTx, nilableTenantTx)
+		return
+	}
+	qq.handleManualError(rw, req, ctx, err)
+}
+
+func (qq *Router) handleManualError(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
+	err error,
+) {
+	var httpErr *e.HTTPError
+	if errors.As(err, &httpErr) {
+		rw.WriteHeader(httpErr.StatusCode())
+		rw.AddRenderables(httpErr.Snackbar())
+	} else {
+		log.Println(err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		rw.AddRenderables(wx.NewSnackbarf(unexpectedErrorMessage).SetIsError(true))
+	}
+	if renderErr := qq.infra.Renderer().Render(rw, ctx); renderErr != nil {
+		log.Println(renderErr)
 	}
 }
 
@@ -533,7 +699,7 @@ func (qq *Router) handleError(
 	shouldRenderError := true
 	if strings.Contains(req.Header.Get("Accept"), "application/json") {
 		statusCode := http.StatusInternalServerError
-		message := "Something went wrong. Please try again."
+		message := unexpectedErrorMessage
 		if isHTTPErr {
 			statusCode = httpErr.StatusCode()
 			message = httpErr.Message()
@@ -558,7 +724,7 @@ func (qq *Router) handleError(
 	} else {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)
-		rw.AddRenderables(wx.NewSnackbarf("Something went wrong. Please try again.").SetIsError(true))
+		rw.AddRenderables(wx.NewSnackbarf(unexpectedErrorMessage).SetIsError(true))
 	}
 
 	if shouldRenderError {

@@ -865,6 +865,13 @@
             "fuzzy": true
         },
         {
+            "id": "Source",
+            "message": "Source",
+            "translation": "Source",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "File size",
             "message": "File size",
             "translation": "File size",
@@ -1735,6 +1742,13 @@
             "fuzzy": true
         },
         {
+            "id": "Upload metadata must be sent before the file.",
+            "message": "Upload metadata must be sent before the file.",
+            "translation": "Upload metadata must be sent before the file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "No parent dir provided.",
             "message": "No parent dir provided.",
             "translation": "No parent dir provided.",
@@ -1749,34 +1763,27 @@
             "fuzzy": true
         },
         {
-            "id": "could not read file",
-            "message": "could not read file",
-            "translation": "could not read file",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "«{Name}» uploaded.",
-            "message": "«{Name}» uploaded.",
-            "translation": "«{Name}» uploaded.",
-            "translatorComment": "Copied from source.",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "prep.filex.Name"
-                }
-            ],
-            "fuzzy": true
-        },
-        {
             "id": "No file provided.",
             "message": "No file provided.",
             "translation": "No file provided.",
             "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "«{Filename}» uploaded.",
+            "message": "«{Filename}» uploaded.",
+            "translation": "«{Filename}» uploaded.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Filename",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "filename"
+                }
+            ],
             "fuzzy": true
         },
         {
@@ -1787,18 +1794,18 @@
             "fuzzy": true
         },
         {
-            "id": "New version uploaded for «{Name}».",
-            "message": "New version uploaded for «{Name}».",
-            "translation": "New version uploaded for «{Name}».",
+            "id": "New version uploaded for «{FileName}».",
+            "message": "New version uploaded for «{FileName}».",
+            "translation": "New version uploaded for «{FileName}».",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
-                    "id": "Name",
+                    "id": "FileName",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "filex.Data.Name"
+                    "expr": "prep.fileName"
                 }
             ],
             "fuzzy": true
@@ -1853,6 +1860,155 @@
             "message": "Account",
             "translation": "Account",
             "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Form validation failed.",
+            "message": "Form validation failed.",
+            "translation": "Form validation failed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV credential created.",
+            "message": "WebDAV credential created.",
+            "translation": "WebDAV credential created.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No spaces available yet.",
+            "message": "No spaces available yet.",
+            "translation": "No spaces available yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Device label",
+            "message": "Device label",
+            "translation": "Device label",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Space",
+            "message": "Space",
+            "translation": "Space",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Create",
+            "message": "Create",
+            "translation": "Create",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Create WebDAV credential",
+            "message": "Create WebDAV credential",
+            "translation": "Create WebDAV credential",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV credential created",
+            "message": "WebDAV credential created",
+            "translation": "WebDAV credential created",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Copy the secret now. It will not be shown again.",
+            "message": "Copy the secret now. It will not be shown again.",
+            "translation": "Copy the secret now. It will not be shown again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV URL",
+            "message": "WebDAV URL",
+            "translation": "WebDAV URL",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Username",
+            "message": "Username",
+            "translation": "Username",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Secret",
+            "message": "Secret",
+            "translation": "Secret",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Destination unavailable.",
+            "message": "Destination unavailable.",
+            "translation": "Destination unavailable.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot create a credential for this Space.",
+            "message": "You cannot create a credential for this Space.",
+            "translation": "You cannot create a credential for this Space.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Copy {TranslatedLabel}",
+            "message": "Copy {TranslatedLabel}",
+            "translation": "Copy {TranslatedLabel}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "TranslatedLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "translatedLabel"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "{TranslatedLabel} copied to clipboard.",
+            "message": "{TranslatedLabel} copied to clipboard.",
+            "translation": "{TranslatedLabel} copied to clipboard.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "TranslatedLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "translatedLabel"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Could not copy {TranslatedLabel}.",
+            "message": "Could not copy {TranslatedLabel}.",
+            "translation": "Could not copy {TranslatedLabel}.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "TranslatedLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "translatedLabel"
+                }
+            ],
             "fuzzy": true
         },
         {
@@ -2066,13 +2222,6 @@
             "fuzzy": true
         },
         {
-            "id": "Space",
-            "message": "Space",
-            "translation": "Space",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Select",
             "message": "Select",
             "translation": "Select",
@@ -2140,27 +2289,6 @@
             "id": "Manage spaces",
             "message": "Manage spaces",
             "translation": "Manage spaces",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Delete organization",
-            "message": "Delete organization",
-            "translation": "Delete organization",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
-            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
-            "translation": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Download backup",
-            "message": "Download backup",
-            "translation": "Download backup",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2262,6 +2390,13 @@
             "fuzzy": true
         },
         {
+            "id": "Organization",
+            "message": "Organization",
+            "translation": "Organization",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Enable passkey enforcement",
             "message": "Enable passkey enforcement",
             "translation": "Enable passkey enforcement",
@@ -2286,6 +2421,41 @@
             "id": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
             "message": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
             "translation": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete organization",
+            "message": "Delete organization",
+            "translation": "Delete organization",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "translation": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Download backup",
+            "message": "Download backup",
+            "translation": "Download backup",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to revoke this credential.",
+            "message": "You are not allowed to revoke this credential.",
+            "translation": "You are not allowed to revoke this credential.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV credential revoked.",
+            "message": "WebDAV credential revoked.",
+            "translation": "WebDAV credential revoked.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2349,6 +2519,189 @@
             "id": "Passkey enforcement disabled for organization.",
             "message": "Passkey enforcement disabled for organization.",
             "translation": "Passkey enforcement disabled for organization.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Filter WebDAV credentials",
+            "message": "Filter WebDAV credentials",
+            "translation": "Filter WebDAV credentials",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Active",
+            "message": "Active",
+            "translation": "Active",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Revoked",
+            "message": "Revoked",
+            "translation": "Revoked",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No WebDAV credentials",
+            "message": "No WebDAV credentials",
+            "translation": "No WebDAV credentials",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Create a device credential to upload files to an Inbox over WebDAV.",
+            "message": "Create a device credential to upload files to an Inbox over WebDAV.",
+            "translation": "Create a device credential to upload files to an Inbox over WebDAV.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Unavailable destination",
+            "message": "Unavailable destination",
+            "translation": "Unavailable destination",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Copy WebDAV URL",
+            "message": "Copy WebDAV URL",
+            "translation": "Copy WebDAV URL",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV URL copied to clipboard.",
+            "message": "WebDAV URL copied to clipboard.",
+            "translation": "WebDAV URL copied to clipboard.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not copy WebDAV URL.",
+            "message": "Could not copy WebDAV URL.",
+            "translation": "Could not copy WebDAV URL.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "{Stringctx} · Username: {Username} · Created: {CreatedAt}",
+            "message": "{Stringctx} · Username: {Username} · Created: {CreatedAt}",
+            "translation": "{Stringctx} · Username: {Username} · Created: {CreatedAt}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Stringctx",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "destinationLabel.String(ctx)"
+                },
+                {
+                    "id": "Username",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "credentialx.Username"
+                },
+                {
+                    "id": "CreatedAt",
+                    "string": "%[3]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 3,
+                    "expr": "formatCredentialTime(ctx, credentialx.CreatedAt)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "{Stringctx} · Username: {Username} · Last used: {LastUsedAt}",
+            "message": "{Stringctx} · Username: {Username} · Last used: {LastUsedAt}",
+            "translation": "{Stringctx} · Username: {Username} · Last used: {LastUsedAt}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Stringctx",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "destinationLabel.String(ctx)"
+                },
+                {
+                    "id": "Username",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "credentialx.Username"
+                },
+                {
+                    "id": "LastUsedAt",
+                    "string": "%[3]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 3,
+                    "expr": "formatCredentialTime(ctx, *credentialx.LastUsedAt)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "{Stringctx} · Username: {Username} · Revoked: {RevokedAt}",
+            "message": "{Stringctx} · Username: {Username} · Revoked: {RevokedAt}",
+            "translation": "{Stringctx} · Username: {Username} · Revoked: {RevokedAt}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Stringctx",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "destinationLabel.String(ctx)"
+                },
+                {
+                    "id": "Username",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "credentialx.Username"
+                },
+                {
+                    "id": "RevokedAt",
+                    "string": "%[3]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 3,
+                    "expr": "formatCredentialTime(ctx, *credentialx.RevokedAt)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Revoke",
+            "message": "Revoke",
+            "translation": "Revoke",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Revoke this WebDAV credential?",
+            "message": "Revoke this WebDAV credential?",
+            "translation": "Revoke this WebDAV credential?",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV credentials",
+            "message": "WebDAV credentials",
+            "translation": "WebDAV credentials",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2604,6 +2957,13 @@
             "fuzzy": true
         },
         {
+            "id": "could not read file",
+            "message": "could not read file",
+            "translation": "could not read file",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Assign file",
             "message": "Assign file",
             "translation": "Assign file",
@@ -2667,6 +3027,13 @@
             "fuzzy": true
         },
         {
+            "id": "Invalid source filter.",
+            "message": "Invalid source filter.",
+            "translation": "Invalid source filter.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Inbox",
             "message": "Inbox",
             "translation": "Inbox",
@@ -2677,6 +3044,13 @@
             "id": "Search in «Inbox»",
             "message": "Search in «Inbox»",
             "translation": "Search in «Inbox»",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Filter by source",
+            "message": "Filter by source",
+            "translation": "Filter by source",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2723,6 +3097,13 @@
                     "expr": "filex.Data.Name"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "Source | Filter",
+            "message": "Source | Filter",
+            "translation": "Source | Filter",
+            "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
@@ -3073,6 +3454,72 @@
             "fuzzy": true
         },
         {
+            "id": "Space: {SpaceLabel} · Username: {Username} · Created: {LanguageBCP47}",
+            "message": "Space: {SpaceLabel} · Username: {Username} · Created: {LanguageBCP47}",
+            "translation": "Space: {SpaceLabel} · Username: {Username} · Created: {LanguageBCP47}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "SpaceLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "spaceLabel"
+                },
+                {
+                    "id": "Username",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "credentialx.Username"
+                },
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[3]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 3,
+                    "expr": "timex.NewDateTime(credentialx.CreatedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Space: {SpaceLabel} · Username: {Username} · Revoked: {LanguageBCP47}",
+            "message": "Space: {SpaceLabel} · Username: {Username} · Revoked: {LanguageBCP47}",
+            "translation": "Space: {SpaceLabel} · Username: {Username} · Revoked: {LanguageBCP47}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "SpaceLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "spaceLabel"
+                },
+                {
+                    "id": "Username",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "credentialx.Username"
+                },
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[3]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 3,
+                    "expr": "timex.NewDateTime(*credentialx.RevokedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "Upload",
             "message": "Upload",
             "translation": "Upload",
@@ -3243,13 +3690,6 @@
             "id": "Changes saved.",
             "message": "Changes saved.",
             "translation": "Changes saved.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "No spaces available yet.",
-            "message": "No spaces available yet.",
-            "translation": "No spaces available yet.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3697,6 +4137,48 @@
             "fuzzy": true
         },
         {
+            "id": "Web upload",
+            "message": "Web upload",
+            "translation": "Web upload",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Open with",
+            "message": "Open with",
+            "translation": "Open with",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "URL import",
+            "message": "URL import",
+            "translation": "URL import",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV",
+            "message": "WebDAV",
+            "translation": "WebDAV",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "System extraction",
+            "message": "System extraction",
+            "translation": "System extraction",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Unknown",
+            "message": "Unknown",
+            "translation": "Unknown",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Upload is too large.",
             "message": "Upload is too large.",
             "translation": "Upload is too large.",
@@ -3728,13 +4210,6 @@
             "id": "Cannot validate form.",
             "message": "Cannot validate form.",
             "translation": "Cannot validate form.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Form validation failed.",
-            "message": "Form validation failed.",
-            "translation": "Form validation failed.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4048,6 +4523,13 @@
             "fuzzy": true
         },
         {
+            "id": "Credential status values",
+            "message": "Credential status values",
+            "translation": "Credential status values",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Croatia",
             "message": "Croatia",
             "translation": "Croatia",
@@ -4107,6 +4589,13 @@
             "id": "Description",
             "message": "Description",
             "translation": "Description",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Destination",
+            "message": "Destination",
+            "translation": "Destination",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4261,6 +4750,13 @@
             "id": "Italy",
             "message": "Italy",
             "translation": "Italy",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Label",
+            "message": "Label",
+            "translation": "Label",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5357,6 +5853,27 @@
             "fuzzy": true
         },
         {
+            "id": "Credential label is required.",
+            "message": "Credential label is required.",
+            "translation": "Credential label is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not create credential.",
+            "message": "Could not create credential.",
+            "translation": "Could not create credential.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Credential not found.",
+            "message": "Credential not found.",
+            "translation": "Credential not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Please select at least one document type.",
             "message": "Please select at least one document type.",
             "translation": "Please select at least one document type.",
@@ -5615,9 +6132,37 @@
             "fuzzy": true
         },
         {
+            "id": "Upload is empty.",
+            "message": "Upload is empty.",
+            "translation": "Upload is empty.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Upload size mismatch.",
+            "message": "Upload size mismatch.",
+            "translation": "Upload size mismatch.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Upload is no longer active.",
+            "message": "Upload is no longer active.",
+            "translation": "Upload is no longer active.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Bucket name is empty.",
             "message": "Bucket name is empty.",
             "translation": "Bucket name is empty.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not save file.",
+            "message": "Could not save file.",
+            "translation": "Could not save file.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5629,9 +6174,16 @@
             "fuzzy": true
         },
         {
-            "id": "Could not save file.",
-            "message": "Could not save file.",
-            "translation": "Could not save file.",
+            "id": "Malformed upload body.",
+            "message": "Malformed upload body.",
+            "translation": "Malformed upload body.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not verify stored file.",
+            "message": "Could not verify stored file.",
+            "translation": "Could not verify stored file.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5650,9 +6202,51 @@
             "fuzzy": true
         },
         {
+            "id": "Could not claim uploaded file.",
+            "message": "Could not claim uploaded file.",
+            "translation": "Could not claim uploaded file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not verify staged file.",
+            "message": "Could not verify staged file.",
+            "translation": "Could not verify staged file.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "App not unlocked yet.",
             "message": "App not unlocked yet.",
             "translation": "App not unlocked yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Staged file integrity mismatch.",
+            "message": "Staged file integrity mismatch.",
+            "translation": "Staged file integrity mismatch.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Uploaded file is already being processed.",
+            "message": "Uploaded file is already being processed.",
+            "translation": "Uploaded file is already being processed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tenant database not found.",
+            "message": "Tenant database not found.",
+            "translation": "Tenant database not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Uploaded file processing was taken over.",
+            "message": "Uploaded file processing was taken over.",
+            "translation": "Uploaded file processing was taken over.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5790,13 +6384,6 @@
             "fuzzy": true
         },
         {
-            "id": "Organization",
-            "message": "Organization",
-            "translation": "Organization",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Receipt",
             "message": "Receipt",
             "translation": "Receipt",
@@ -5898,13 +6485,6 @@
             "id": "Draft",
             "message": "Draft",
             "translation": "Draft",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Active",
-            "message": "Active",
-            "translation": "Active",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6308,6 +6888,13 @@
             "fuzzy": true
         },
         {
+            "id": "Something went wrong. Please try again.",
+            "message": "Something went wrong. Please try again.",
+            "translation": "Something went wrong. Please try again.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "A similar entity already exists.",
             "message": "A similar entity already exists.",
             "translation": "A similar entity already exists.",
@@ -6332,13 +6919,6 @@
             "id": "Data validation failed.",
             "message": "Data validation failed.",
             "translation": "Data validation failed.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Something went wrong. Please try again.",
-            "message": "Something went wrong. Please try again.",
-            "translation": "Something went wrong. Please try again.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6462,16 +7042,23 @@
             "fuzzy": true
         },
         {
-            "id": "Tenant database not found.",
-            "message": "Tenant database not found.",
-            "translation": "Tenant database not found.",
+            "id": "Could not start transaction.",
+            "message": "Could not start transaction.",
+            "translation": "Could not start transaction.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Could not start transaction.",
-            "message": "Could not start transaction.",
-            "translation": "Could not start transaction.",
+            "id": "Could not read data.",
+            "message": "Could not read data.",
+            "translation": "Could not read data.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid upload size.",
+            "message": "Invalid upload size.",
+            "translation": "Invalid upload size.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         }

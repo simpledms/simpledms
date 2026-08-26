@@ -1,4 +1,4 @@
-h1:9puq2lC7BD5GjPaOyrv5YODj6NhuTBmHswbphFyGc9M=
+h1:BwWEKA8JwF6ljXgnU4Dknkyt44QHpMJIysaHIlZ5DYc=
 20250506173739_v1.0.0-beta.1.up.sql h1:c50kBKKvVLlOuG4Yz10TFhx1nCcZIIPQLYTnon6z6/4=
 20250508091725_v1.0.0-beta.2.up.sql h1:K4jPDMysMc7z8lvAlyOKOwD7BrcTSJJmIgWqH3amXns=
 20250509090715_v1.0.0-beta.3.up.sql h1:qCiaeXwdoKza6R4ATof/SA2pClyZm+7aOHkAepWG9wI=
@@ -15,3 +15,5 @@ h1:9puq2lC7BD5GjPaOyrv5YODj6NhuTBmHswbphFyGc9M=
 20260609184641_search_performance_indexes.up.sql h1:npq0+xU4aHYqmauopaqgGyfn4aDlHVw8HHwXXSYMMV8=
 20260814095225_gotenberg_pdf_previews.up.sql h1:AR6XxZcFtTGB+k3LyjDNzay2h3o+CA4AzbOXPc3X09Q=
 20260818131839_tenant_data_migration_ledger.up.sql h1:sKlWA0uSG5k1dLqJ4d8DcU6LY7xavReaQJ0CTNLJGfE=
+20260825082904_webdav_inbox_ingestion.up.sql h1:f9uTIWuBv8Ge7f/2g50wmV91/UoJL2//0MXQlcZpzv8=
+20260825082937_webdav_source_indexes.up.sql h1:Uj4SBdL62Hdr/Bc5O4EZ2kBl6KXjjadrxx5dA7ejsmo=

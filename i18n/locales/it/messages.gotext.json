@@ -2,6 +2,160 @@
     "language": "it",
     "messages": [
         {
+            "id": "All sources",
+            "message": "All sources",
+            "translation": "Tutte le fonti",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Copy the secret now. It will not be shown again.",
+            "message": "Copy the secret now. It will not be shown again.",
+            "translation": "Copia subito il segreto. Non verrà mostrato di nuovo.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Create WebDAV credential",
+            "message": "Create WebDAV credential",
+            "translation": "Crea credenziali WebDAV",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Create a device credential to upload files to an Inbox over WebDAV.",
+            "message": "Create a device credential to upload files to an Inbox over WebDAV.",
+            "translation": "Crea credenziali per un dispositivo per caricare file in una Inbox tramite WebDAV.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Device label",
+            "message": "Device label",
+            "translation": "Etichetta del dispositivo",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Filter by source",
+            "message": "Filter by source",
+            "translation": "Filtra per fonte",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No WebDAV credentials",
+            "message": "No WebDAV credentials",
+            "translation": "Nessuna credenziale WebDAV",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Open with",
+            "message": "Open with",
+            "translation": "Apri con",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Revoke this WebDAV credential?",
+            "message": "Revoke this WebDAV credential?",
+            "translation": "Revocare queste credenziali WebDAV?",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Secret",
+            "message": "Secret",
+            "translation": "Segreto",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Source",
+            "message": "Source",
+            "translation": "Fonte",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Source: %s",
+            "message": "Source: %s",
+            "translation": "Fonte: %s",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "System extraction",
+            "message": "System extraction",
+            "translation": "Estrazione di sistema",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "URL import",
+            "message": "URL import",
+            "translation": "Importazione URL",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unavailable destination",
+            "message": "Unavailable destination",
+            "translation": "Destinazione non disponibile",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unknown",
+            "message": "Unknown",
+            "translation": "Sconosciuta",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Web upload",
+            "message": "Web upload",
+            "translation": "Caricamento web",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV credential",
+            "message": "WebDAV credential",
+            "translation": "Credenziali WebDAV",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV credential created.",
+            "message": "WebDAV credential created.",
+            "translation": "Credenziali WebDAV create.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV credential revoked.",
+            "message": "WebDAV credential revoked.",
+            "translation": "Credenziali WebDAV revocate.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV credentials",
+            "message": "WebDAV credentials",
+            "translation": "Credenziali WebDAV",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV URL",
+            "message": "WebDAV URL",
+            "translation": "URL WebDAV",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "%d recovery codes left",
             "message": "%d recovery codes left",
             "translation": "%d codici di backup rimasti",
@@ -7692,6 +7846,92 @@
 			"translation": "L’anteprima della sorgente originale è disponibile solo per i file HTML",
 			"translatorComment": "Translated from English by Codex.",
 			"fuzzy": true
+		},
+		{
+			"id": "Filter WebDAV credentials",
+			"message": "Filter WebDAV credentials",
+			"translation": "Filtra le credenziali WebDAV",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Revoked",
+			"message": "Revoked",
+			"translation": "Revocate",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Copy WebDAV URL",
+			"message": "Copy WebDAV URL",
+			"translation": "Copia l’URL WebDAV",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "WebDAV URL copied to clipboard.",
+			"message": "WebDAV URL copied to clipboard.",
+			"translation": "L’URL WebDAV è stato copiato negli appunti.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Could not copy WebDAV URL.",
+			"message": "Could not copy WebDAV URL.",
+			"translation": "Impossibile copiare l’URL WebDAV.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Copy {TranslatedLabel}",
+			"message": "Copy {TranslatedLabel}",
+			"translation": "Copia {TranslatedLabel}",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true,
+			"placeholders": [
+				{
+					"id": "TranslatedLabel",
+					"string": "%[1]s",
+					"type": "string",
+					"underlyingType": "string",
+					"argNum": 1,
+					"expr": "translatedLabel"
+				}
+			]
+		},
+		{
+			"id": "{TranslatedLabel} copied to clipboard.",
+			"message": "{TranslatedLabel} copied to clipboard.",
+			"translation": "Copia di {TranslatedLabel} negli appunti completata.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true,
+			"placeholders": [
+				{
+					"id": "TranslatedLabel",
+					"string": "%[1]s",
+					"type": "string",
+					"underlyingType": "string",
+					"argNum": 1,
+					"expr": "translatedLabel"
+				}
+			]
+		},
+		{
+			"id": "Could not copy {TranslatedLabel}.",
+			"message": "Could not copy {TranslatedLabel}.",
+			"translation": "Impossibile copiare {TranslatedLabel}.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true,
+			"placeholders": [
+				{
+					"id": "TranslatedLabel",
+					"string": "%[1]s",
+					"type": "string",
+					"underlyingType": "string",
+					"argNum": 1,
+					"expr": "translatedLabel"
+				}
+			]
 		}
-    ]
+	]
 }

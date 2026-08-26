@@ -22,6 +22,7 @@ func (UploadStatusMixin) Fields() []ent.Field {
 	return []ent.Field{
 		// Optional() for legacy reason, old files have no upload_started_at value
 		field.Time("upload_started_at").Optional().Default(time.Now),
+		field.Time("upload_last_progress_at").Optional().Nillable(),
 		field.Time("upload_failed_at").Optional().Nillable(),
 		field.Time("upload_succeeded_at").Optional().Nillable(),
 	}

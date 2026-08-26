@@ -14,6 +14,7 @@ import (
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 )
@@ -43,6 +44,7 @@ func dbMigrationsMainDB(isDevMode bool, metaPath string, migrationsMainFS fs.FS)
 			context.Background(),
 			migratemain.WithDropIndex(true),
 			migratemain.WithDropColumn(true),
+			entx.WithFileSourceDefault(),
 		); err != nil {
 			log.Fatalf("failed creating schema resources: %v", err)
 		}

@@ -21,6 +21,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 )
 
 // FileCreate is the builder for creating a File entity.
@@ -137,6 +138,12 @@ func (_c *FileCreate) SetSpaceID(v int64) *FileCreate {
 // SetName sets the "name" field.
 func (_c *FileCreate) SetName(v string) *FileCreate {
 	_c.mutation.SetName(v)
+	return _c
+}
+
+// SetSource sets the "source" field.
+func (_c *FileCreate) SetSource(v filesource.FileSource) *FileCreate {
+	_c.mutation.SetSource(v)
 	return _c
 }
 
@@ -587,6 +594,14 @@ func (_c *FileCreate) check() error {
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`enttenant: missing required field "File.name"`)}
 	}
+	if _, ok := _c.mutation.Source(); !ok {
+		return &ValidationError{Name: "source", err: errors.New(`enttenant: missing required field "File.source"`)}
+	}
+	if v, ok := _c.mutation.Source(); ok {
+		if err := file.SourceValidator(v); err != nil {
+			return &ValidationError{Name: "source", err: fmt.Errorf(`enttenant: validator failed for field "File.source": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.IsDirectory(); !ok {
 		return &ValidationError{Name: "is_directory", err: errors.New(`enttenant: missing required field "File.is_directory"`)}
 	}
@@ -662,6 +677,10 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(file.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := _c.mutation.Source(); ok {
+		_spec.SetField(file.FieldSource, field.TypeEnum, value)
+		_node.Source = value
 	}
 	if value, ok := _c.mutation.IsDirectory(); ok {
 		_spec.SetField(file.FieldIsDirectory, field.TypeBool, value)

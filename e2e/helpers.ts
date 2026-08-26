@@ -64,19 +64,10 @@ export async function createSpaceAndSelect(page: Page, spaceName: string, docume
 	}
 	await page.getByRole("button", { name: "Save" }).click();
 	await expect(page.getByRole("heading", { name: spaceName })).toBeVisible();
-	const headings = page.getByRole("heading", { level: 3 });
-	let headingIndex = -1;
-	for (let i = 0; i < (await headings.count()); i++) {
-		const text = (await headings.nth(i).innerText()).trim();
-		if (text === spaceName) {
-			headingIndex = i;
-			break;
-		}
-	}
-	if (headingIndex < 0) {
-		throw new Error(`Could not find space card: ${spaceName}`);
-	}
-	await page.getByRole("link", { name: "Select" }).nth(headingIndex).click();
+	await page
+		.getByRole("link")
+		.filter({ has: page.getByRole("heading", { name: spaceName, exact: true }) })
+		.click();
 	await expect(page).toHaveURL(/\/space\/[^/]+\/browse\/$/);
 }
 

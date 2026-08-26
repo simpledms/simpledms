@@ -106,6 +106,6 @@ func (Tenant) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		NewCommonMixin(Tenant.Type),
 		NewSoftDeleteMixin(Tenant.Type),
-		entx.NewPublicIDMixin(false),
+		entx.NewPublicIDMixin(true),
 	}
 }

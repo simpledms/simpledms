@@ -318,20 +318,6 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))),
 	)
 
-	/*
-		// mounting also works with `/webdav`, but if `/webdav` is defined
-		// as route, it would work...
-		router.Handle("/webdav/", &webdav.Handler{
-			Prefix:     "/webdav/",
-			FileSystem: webdavx.NewDir(infra, "."),
-			LockSystem: webdav.NewMemLS(),
-			Logger: func(request *http.Request, err error) {
-				// log.Println(request)
-				// log.Println(err)
-			},
-		})
-	*/
-
 	qq.migrateTenantDatabases(ctx, mainDB, tenantDBs)
 	qq.startScheduler(infra, mainDB, tenantDBs, minioClient, systemConfig, rawSystemConfig)
 
@@ -822,6 +808,10 @@ func (qq *Server) registerCoreRoutes(
 	// TODO in TTx or not necessary because read only?
 	router.RegisterPage(route2.DashboardRoute(), actions.Dashboard.DashboardPage.Handler)
 	router.RegisterPage(route2.AccountRoute(), actions.Dashboard.AccountPage.Handler)
+	router.RegisterPage(
+		route2.WebDAVCredentialsRoute(),
+		actions.Dashboard.WebDAVCredentialsPage.Handler,
+	)
 	router.RegisterPage(route2.SystemRoute(), actions.Dashboard.SystemPage.Handler)
 	router.RegisterPage(route2.OrganizationSettingsRoute(), actions.Dashboard.OrganizationSettingsPage.Handler)
 	router.RegisterPage(route2.StaticPageRoute(), actions.StaticPage.StaticPage.Handler)
@@ -970,7 +960,8 @@ func (qq *Server) initNilableMinioClient(config *appmodel.S3Config) *minio.Clien
 				config.S3SecretAccessKey,
 				"",
 			),
-			Secure: config.S3UseSSL,
+			Secure:          config.S3UseSSL,
+			TrailingHeaders: true,
 			// TODO add region?
 		})
 	if err != nil {

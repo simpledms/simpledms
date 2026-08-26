@@ -4,6 +4,7 @@ package inbox
 
 import (
 	"log"
+	"net/http"
 	"time"
 
 	autil "github.com/simpledms/simpledms/action/util"
@@ -13,7 +14,9 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/txx"
 )
 
 // TODO necessary?
@@ -37,7 +40,7 @@ func NewInboxPage(infra *common.Infra, actions *Actions) *InboxPage {
 	config := actionx.NewConfig(
 		actions.Route("inbox-page"),
 		false,
-	)
+	).EnableManualTxManagement()
 	return &InboxPage{
 		infra:   infra,
 		actions: actions,
@@ -53,6 +56,29 @@ func (qq *InboxPage) Data() *InboxPageData {
 // TODO refactor, legacy code
 func (qq *InboxPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	state := autil.StateX[InboxPageState](rw, req)
+	if _, err := state.sources(); err != nil {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid source filter.")
+	}
+	if state.UploadToken != "" {
+		if err := qq.processTemporaryFiles(rw, ctx, state); err != nil {
+			return err
+		}
+		state.UploadToken = ""
+		rw.Header().Set("HX-Replace-Url", route.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID))
+	}
+
+	_, err := txx.WithTenantReadSpaceTx(ctx.SpaceCtx(), func(readCtx *ctxx.SpaceContext) (*struct{}, error) {
+		return nil, qq.render(rw, req, readCtx, state)
+	})
+	return err
+}
+
+func (qq *InboxPage) render(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
+	state *InboxPageState,
+) error {
 
 	selectedFileID := ""
 
@@ -70,7 +96,7 @@ func (qq *InboxPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 	// TODO necessary?
 	rw.Header().Set("HX-Retarget", "#innerContent")
 	rw.Header().Set("HX-Reswap", "innerHTML")
-	view, err := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, selectedFileID)
+	view, err := qq.Widget(ctx, state, selectedFileID)
 	if err != nil {
 		return err
 	}
@@ -94,6 +120,9 @@ func (qq *InboxPage) WidgetHandler(
 	// TODO use in MoveFileCmd / AssignFileCmd, initial render
 
 	state := autil.StateX[InboxPageState](rw, req)
+	if _, err := state.sources(); err != nil {
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid source filter.")
+	}
 
 	// in WidgetHandler because it used legacy InboxPage style where WidgetHandler is called in page.Inbox
 	if state.UploadToken != "" {
@@ -151,11 +180,12 @@ func (qq *InboxPage) Widget(
 }
 
 func (qq *InboxPage) processTemporaryFiles(rw httpx.ResponseWriter, ctx ctxx.Context, state *InboxPageState) error {
-	tmpFiles := ctx.MainCtx().Account.QueryTemporaryFiles().Where(
+	tmpFiles := ctx.MainCtx().UnsafeMainDB().ReadOnlyConn.TemporaryFile.Query().Where(
+		temporaryfile.OwnerID(ctx.MainCtx().Account.ID),
 		temporaryfile.UploadToken(state.UploadToken),
 		temporaryfile.ConvertedToStoredFileAtIsNil(),
 		temporaryfile.ExpiresAtGT(time.Now()),
-	).AllX(ctx)
+	).AllX(ctx.MainCtx())
 
 	if len(tmpFiles) == 0 {
 		rw.AddRenderables(widget.NewSnackbarf("No new files found."))
@@ -163,10 +193,16 @@ func (qq *InboxPage) processTemporaryFiles(rw httpx.ResponseWriter, ctx ctxx.Con
 	}
 
 	for _, tmpFile := range tmpFiles {
-		_, err := qq.infra.FileSystem().PreparePersistingTemporaryAccountFile(
+		prep, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{ rootID int64 }, error) {
+			return &struct{ rootID int64 }{rootID: writeCtx.SpaceRootDir().ID}, nil
+		})
+		if err != nil {
+			return err
+		}
+		_, err = qq.infra.FileSystem().PreparePersistingTemporaryAccountFile(
 			ctx,
 			tmpFile,
-			ctx.SpaceCtx().SpaceRootDir().ID,
+			prep.rootID,
 			true,
 		)
 		if err != nil {

@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
@@ -34,6 +35,8 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldUploadStartedAt holds the string denoting the upload_started_at field in the database.
 	FieldUploadStartedAt = "upload_started_at"
+	// FieldUploadLastProgressAt holds the string denoting the upload_last_progress_at field in the database.
+	FieldUploadLastProgressAt = "upload_last_progress_at"
 	// FieldUploadFailedAt holds the string denoting the upload_failed_at field in the database.
 	FieldUploadFailedAt = "upload_failed_at"
 	// FieldUploadSucceededAt holds the string denoting the upload_succeeded_at field in the database.
@@ -42,12 +45,18 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldFilename holds the string denoting the filename field in the database.
 	FieldFilename = "filename"
+	// FieldSource holds the string denoting the source field in the database.
+	FieldSource = "source"
 	// FieldSize holds the string denoting the size field in the database.
 	FieldSize = "size"
 	// FieldSizeInStorage holds the string denoting the size_in_storage field in the database.
 	FieldSizeInStorage = "size_in_storage"
 	// FieldSha256 holds the string denoting the sha256 field in the database.
 	FieldSha256 = "sha256"
+	// FieldContentSha256 holds the string denoting the content_sha256 field in the database.
+	FieldContentSha256 = "content_sha256"
+	// FieldStorageCrc32c holds the string denoting the storage_crc32c field in the database.
+	FieldStorageCrc32c = "storage_crc32c"
 	// FieldMimeType holds the string denoting the mime_type field in the database.
 	FieldMimeType = "mime_type"
 	// FieldStorageType holds the string denoting the storage_type field in the database.
@@ -62,6 +71,12 @@ const (
 	FieldUploadToken = "upload_token"
 	// FieldConvertedToStoredFileAt holds the string denoting the converted_to_stored_file_at field in the database.
 	FieldConvertedToStoredFileAt = "converted_to_stored_file_at"
+	// FieldPersistenceClaimToken holds the string denoting the persistence_claim_token field in the database.
+	FieldPersistenceClaimToken = "persistence_claim_token"
+	// FieldPersistenceTenantID holds the string denoting the persistence_tenant_id field in the database.
+	FieldPersistenceTenantID = "persistence_tenant_id"
+	// FieldPersistenceLastProgressAt holds the string denoting the persistence_last_progress_at field in the database.
+	FieldPersistenceLastProgressAt = "persistence_last_progress_at"
 	// FieldExpiresAt holds the string denoting the expires_at field in the database.
 	FieldExpiresAt = "expires_at"
 	// EdgeCreator holds the string denoting the creator edge name in mutations.
@@ -115,13 +130,17 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldDeletedAt,
 	FieldUploadStartedAt,
+	FieldUploadLastProgressAt,
 	FieldUploadFailedAt,
 	FieldUploadSucceededAt,
 	FieldOwnerID,
 	FieldFilename,
+	FieldSource,
 	FieldSize,
 	FieldSizeInStorage,
 	FieldSha256,
+	FieldContentSha256,
+	FieldStorageCrc32c,
 	FieldMimeType,
 	FieldStorageType,
 	FieldBucketName,
@@ -129,6 +148,9 @@ var Columns = []string{
 	FieldStorageFilename,
 	FieldUploadToken,
 	FieldConvertedToStoredFileAt,
+	FieldPersistenceClaimToken,
+	FieldPersistenceTenantID,
+	FieldPersistenceLastProgressAt,
 	FieldExpiresAt,
 }
 
@@ -148,7 +170,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/simpledms/simpledms/db/entmain/runtime"
 var (
-	Hooks        [1]ent.Hook
+	Hooks        [2]ent.Hook
 	Interceptors [2]ent.Interceptor
 	// DefaultPublicID holds the default value on creation for the "public_id" field.
 	DefaultPublicID func() entx.CIText
@@ -161,6 +183,16 @@ var (
 	// DefaultUploadStartedAt holds the default value on creation for the "upload_started_at" field.
 	DefaultUploadStartedAt func() time.Time
 )
+
+// SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
+func SourceValidator(s filesource.FileSource) error {
+	switch s.String() {
+	case "UnknownLegacy", "WebInterface", "PWAOSOpen", "URLImport", "WebDAV", "SystemExtraction":
+		return nil
+	default:
+		return fmt.Errorf("temporaryfile: invalid enum value for source field: %q", s)
+	}
+}
 
 // StorageTypeValidator is a validator for the "storage_type" field enum values. It is called by the builders before save.
 func StorageTypeValidator(st storagetype.StorageType) error {
@@ -220,6 +252,11 @@ func ByUploadStartedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUploadStartedAt, opts...).ToFunc()
 }
 
+// ByUploadLastProgressAt orders the results by the upload_last_progress_at field.
+func ByUploadLastProgressAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUploadLastProgressAt, opts...).ToFunc()
+}
+
 // ByUploadFailedAt orders the results by the upload_failed_at field.
 func ByUploadFailedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUploadFailedAt, opts...).ToFunc()
@@ -240,6 +277,11 @@ func ByFilename(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFilename, opts...).ToFunc()
 }
 
+// BySource orders the results by the source field.
+func BySource(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
 // BySize orders the results by the size field.
 func BySize(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSize, opts...).ToFunc()
@@ -253,6 +295,16 @@ func BySizeInStorage(opts ...sql.OrderTermOption) OrderOption {
 // BySha256 orders the results by the sha256 field.
 func BySha256(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSha256, opts...).ToFunc()
+}
+
+// ByContentSha256 orders the results by the content_sha256 field.
+func ByContentSha256(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContentSha256, opts...).ToFunc()
+}
+
+// ByStorageCrc32c orders the results by the storage_crc32c field.
+func ByStorageCrc32c(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStorageCrc32c, opts...).ToFunc()
 }
 
 // ByMimeType orders the results by the mime_type field.
@@ -288,6 +340,21 @@ func ByUploadToken(opts ...sql.OrderTermOption) OrderOption {
 // ByConvertedToStoredFileAt orders the results by the converted_to_stored_file_at field.
 func ByConvertedToStoredFileAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldConvertedToStoredFileAt, opts...).ToFunc()
+}
+
+// ByPersistenceClaimToken orders the results by the persistence_claim_token field.
+func ByPersistenceClaimToken(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPersistenceClaimToken, opts...).ToFunc()
+}
+
+// ByPersistenceTenantID orders the results by the persistence_tenant_id field.
+func ByPersistenceTenantID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPersistenceTenantID, opts...).ToFunc()
+}
+
+// ByPersistenceLastProgressAt orders the results by the persistence_last_progress_at field.
+func ByPersistenceLastProgressAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPersistenceLastProgressAt, opts...).ToFunc()
 }
 
 // ByExpiresAt orders the results by the expires_at field.

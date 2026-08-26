@@ -105,11 +105,6 @@ func (qq *ZIPMIMERedetectionMigration) RunBatch(
 	), nil
 }
 
-type mimeTypeUpdate struct {
-	storedFileID int64
-	mimeType     string
-}
-
 func isMissingS3ObjectError(err error) bool {
 	// age exposes MinIO's NoSuchKey response only as text while reading the object stream.
 	return strings.Contains(err.Error(), "The specified key does not exist.")

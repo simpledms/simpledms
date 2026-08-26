@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
@@ -81,6 +82,11 @@ func UploadStartedAt(v time.Time) predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldEQ(FieldUploadStartedAt, v))
 }
 
+// UploadLastProgressAt applies equality check predicate on the "upload_last_progress_at" field. It's identical to UploadLastProgressAtEQ.
+func UploadLastProgressAt(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldUploadLastProgressAt, v))
+}
+
 // UploadFailedAt applies equality check predicate on the "upload_failed_at" field. It's identical to UploadFailedAtEQ.
 func UploadFailedAt(v time.Time) predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldEQ(FieldUploadFailedAt, v))
@@ -116,6 +122,11 @@ func ContentSha256(v string) predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldEQ(FieldContentSha256, v))
 }
 
+// StorageCrc32c applies equality check predicate on the "storage_crc32c" field. It's identical to StorageCrc32cEQ.
+func StorageCrc32c(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldStorageCrc32c, v))
+}
+
 // MimeType applies equality check predicate on the "mime_type" field. It's identical to MimeTypeEQ.
 func MimeType(v string) predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldEQ(FieldMimeType, v))
@@ -144,6 +155,16 @@ func TemporaryStoragePath(v string) predicate.StoredFile {
 // TemporaryStorageFilename applies equality check predicate on the "temporary_storage_filename" field. It's identical to TemporaryStorageFilenameEQ.
 func TemporaryStorageFilename(v string) predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldEQ(FieldTemporaryStorageFilename, v))
+}
+
+// SourceTemporaryFilePublicID applies equality check predicate on the "source_temporary_file_public_id" field. It's identical to SourceTemporaryFilePublicIDEQ.
+func SourceTemporaryFilePublicID(v entx.CIText) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldSourceTemporaryFilePublicID, v))
+}
+
+// SourceConversionClaimToken applies equality check predicate on the "source_conversion_claim_token" field. It's identical to SourceConversionClaimTokenEQ.
+func SourceConversionClaimToken(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldSourceConversionClaimToken, v))
 }
 
 // CopiedToFinalDestinationAt applies equality check predicate on the "copied_to_final_destination_at" field. It's identical to CopiedToFinalDestinationAtEQ.
@@ -344,6 +365,56 @@ func UploadStartedAtIsNil() predicate.StoredFile {
 // UploadStartedAtNotNil applies the NotNil predicate on the "upload_started_at" field.
 func UploadStartedAtNotNil() predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldNotNull(FieldUploadStartedAt))
+}
+
+// UploadLastProgressAtEQ applies the EQ predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtEQ(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldUploadLastProgressAt, v))
+}
+
+// UploadLastProgressAtNEQ applies the NEQ predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtNEQ(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNEQ(FieldUploadLastProgressAt, v))
+}
+
+// UploadLastProgressAtIn applies the In predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtIn(vs ...time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIn(FieldUploadLastProgressAt, vs...))
+}
+
+// UploadLastProgressAtNotIn applies the NotIn predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtNotIn(vs ...time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotIn(FieldUploadLastProgressAt, vs...))
+}
+
+// UploadLastProgressAtGT applies the GT predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtGT(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGT(FieldUploadLastProgressAt, v))
+}
+
+// UploadLastProgressAtGTE applies the GTE predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtGTE(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGTE(FieldUploadLastProgressAt, v))
+}
+
+// UploadLastProgressAtLT applies the LT predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtLT(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLT(FieldUploadLastProgressAt, v))
+}
+
+// UploadLastProgressAtLTE applies the LTE predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtLTE(v time.Time) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLTE(FieldUploadLastProgressAt, v))
+}
+
+// UploadLastProgressAtIsNil applies the IsNil predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtIsNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIsNull(FieldUploadLastProgressAt))
+}
+
+// UploadLastProgressAtNotNil applies the NotNil predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtNotNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotNull(FieldUploadLastProgressAt))
 }
 
 // UploadFailedAtEQ applies the EQ predicate on the "upload_failed_at" field.
@@ -749,6 +820,81 @@ func ContentSha256EqualFold(v string) predicate.StoredFile {
 // ContentSha256ContainsFold applies the ContainsFold predicate on the "content_sha256" field.
 func ContentSha256ContainsFold(v string) predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldContainsFold(FieldContentSha256, v))
+}
+
+// StorageCrc32cEQ applies the EQ predicate on the "storage_crc32c" field.
+func StorageCrc32cEQ(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cNEQ applies the NEQ predicate on the "storage_crc32c" field.
+func StorageCrc32cNEQ(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNEQ(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cIn applies the In predicate on the "storage_crc32c" field.
+func StorageCrc32cIn(vs ...string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIn(FieldStorageCrc32c, vs...))
+}
+
+// StorageCrc32cNotIn applies the NotIn predicate on the "storage_crc32c" field.
+func StorageCrc32cNotIn(vs ...string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotIn(FieldStorageCrc32c, vs...))
+}
+
+// StorageCrc32cGT applies the GT predicate on the "storage_crc32c" field.
+func StorageCrc32cGT(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGT(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cGTE applies the GTE predicate on the "storage_crc32c" field.
+func StorageCrc32cGTE(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGTE(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cLT applies the LT predicate on the "storage_crc32c" field.
+func StorageCrc32cLT(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLT(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cLTE applies the LTE predicate on the "storage_crc32c" field.
+func StorageCrc32cLTE(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLTE(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cContains applies the Contains predicate on the "storage_crc32c" field.
+func StorageCrc32cContains(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldContains(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cHasPrefix applies the HasPrefix predicate on the "storage_crc32c" field.
+func StorageCrc32cHasPrefix(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldHasPrefix(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cHasSuffix applies the HasSuffix predicate on the "storage_crc32c" field.
+func StorageCrc32cHasSuffix(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldHasSuffix(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cIsNil applies the IsNil predicate on the "storage_crc32c" field.
+func StorageCrc32cIsNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIsNull(FieldStorageCrc32c))
+}
+
+// StorageCrc32cNotNil applies the NotNil predicate on the "storage_crc32c" field.
+func StorageCrc32cNotNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotNull(FieldStorageCrc32c))
+}
+
+// StorageCrc32cEqualFold applies the EqualFold predicate on the "storage_crc32c" field.
+func StorageCrc32cEqualFold(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEqualFold(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cContainsFold applies the ContainsFold predicate on the "storage_crc32c" field.
+func StorageCrc32cContainsFold(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldContainsFold(FieldStorageCrc32c, v))
 }
 
 // MimeTypeEQ applies the EQ predicate on the "mime_type" field.
@@ -1179,6 +1325,161 @@ func TemporaryStorageFilenameEqualFold(v string) predicate.StoredFile {
 // TemporaryStorageFilenameContainsFold applies the ContainsFold predicate on the "temporary_storage_filename" field.
 func TemporaryStorageFilenameContainsFold(v string) predicate.StoredFile {
 	return predicate.StoredFile(sql.FieldContainsFold(FieldTemporaryStorageFilename, v))
+}
+
+// SourceTemporaryFilePublicIDEQ applies the EQ predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDEQ(v entx.CIText) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldSourceTemporaryFilePublicID, v))
+}
+
+// SourceTemporaryFilePublicIDNEQ applies the NEQ predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDNEQ(v entx.CIText) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNEQ(FieldSourceTemporaryFilePublicID, v))
+}
+
+// SourceTemporaryFilePublicIDIn applies the In predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDIn(vs ...entx.CIText) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIn(FieldSourceTemporaryFilePublicID, vs...))
+}
+
+// SourceTemporaryFilePublicIDNotIn applies the NotIn predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDNotIn(vs ...entx.CIText) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotIn(FieldSourceTemporaryFilePublicID, vs...))
+}
+
+// SourceTemporaryFilePublicIDGT applies the GT predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDGT(v entx.CIText) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGT(FieldSourceTemporaryFilePublicID, v))
+}
+
+// SourceTemporaryFilePublicIDGTE applies the GTE predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDGTE(v entx.CIText) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGTE(FieldSourceTemporaryFilePublicID, v))
+}
+
+// SourceTemporaryFilePublicIDLT applies the LT predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDLT(v entx.CIText) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLT(FieldSourceTemporaryFilePublicID, v))
+}
+
+// SourceTemporaryFilePublicIDLTE applies the LTE predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDLTE(v entx.CIText) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLTE(FieldSourceTemporaryFilePublicID, v))
+}
+
+// SourceTemporaryFilePublicIDContains applies the Contains predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDContains(v entx.CIText) predicate.StoredFile {
+	vc := string(v)
+	return predicate.StoredFile(sql.FieldContains(FieldSourceTemporaryFilePublicID, vc))
+}
+
+// SourceTemporaryFilePublicIDHasPrefix applies the HasPrefix predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDHasPrefix(v entx.CIText) predicate.StoredFile {
+	vc := string(v)
+	return predicate.StoredFile(sql.FieldHasPrefix(FieldSourceTemporaryFilePublicID, vc))
+}
+
+// SourceTemporaryFilePublicIDHasSuffix applies the HasSuffix predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDHasSuffix(v entx.CIText) predicate.StoredFile {
+	vc := string(v)
+	return predicate.StoredFile(sql.FieldHasSuffix(FieldSourceTemporaryFilePublicID, vc))
+}
+
+// SourceTemporaryFilePublicIDIsNil applies the IsNil predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDIsNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIsNull(FieldSourceTemporaryFilePublicID))
+}
+
+// SourceTemporaryFilePublicIDNotNil applies the NotNil predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDNotNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotNull(FieldSourceTemporaryFilePublicID))
+}
+
+// SourceTemporaryFilePublicIDEqualFold applies the EqualFold predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDEqualFold(v entx.CIText) predicate.StoredFile {
+	vc := string(v)
+	return predicate.StoredFile(sql.FieldEqualFold(FieldSourceTemporaryFilePublicID, vc))
+}
+
+// SourceTemporaryFilePublicIDContainsFold applies the ContainsFold predicate on the "source_temporary_file_public_id" field.
+func SourceTemporaryFilePublicIDContainsFold(v entx.CIText) predicate.StoredFile {
+	vc := string(v)
+	return predicate.StoredFile(sql.FieldContainsFold(FieldSourceTemporaryFilePublicID, vc))
+}
+
+// SourceConversionClaimTokenEQ applies the EQ predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenEQ(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEQ(FieldSourceConversionClaimToken, v))
+}
+
+// SourceConversionClaimTokenNEQ applies the NEQ predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenNEQ(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNEQ(FieldSourceConversionClaimToken, v))
+}
+
+// SourceConversionClaimTokenIn applies the In predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenIn(vs ...string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIn(FieldSourceConversionClaimToken, vs...))
+}
+
+// SourceConversionClaimTokenNotIn applies the NotIn predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenNotIn(vs ...string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotIn(FieldSourceConversionClaimToken, vs...))
+}
+
+// SourceConversionClaimTokenGT applies the GT predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenGT(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGT(FieldSourceConversionClaimToken, v))
+}
+
+// SourceConversionClaimTokenGTE applies the GTE predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenGTE(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldGTE(FieldSourceConversionClaimToken, v))
+}
+
+// SourceConversionClaimTokenLT applies the LT predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenLT(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLT(FieldSourceConversionClaimToken, v))
+}
+
+// SourceConversionClaimTokenLTE applies the LTE predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenLTE(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldLTE(FieldSourceConversionClaimToken, v))
+}
+
+// SourceConversionClaimTokenContains applies the Contains predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenContains(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldContains(FieldSourceConversionClaimToken, v))
+}
+
+// SourceConversionClaimTokenHasPrefix applies the HasPrefix predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenHasPrefix(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldHasPrefix(FieldSourceConversionClaimToken, v))
+}
+
+// SourceConversionClaimTokenHasSuffix applies the HasSuffix predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenHasSuffix(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldHasSuffix(FieldSourceConversionClaimToken, v))
+}
+
+// SourceConversionClaimTokenIsNil applies the IsNil predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenIsNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldIsNull(FieldSourceConversionClaimToken))
+}
+
+// SourceConversionClaimTokenNotNil applies the NotNil predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenNotNil() predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldNotNull(FieldSourceConversionClaimToken))
+}
+
+// SourceConversionClaimTokenEqualFold applies the EqualFold predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenEqualFold(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldEqualFold(FieldSourceConversionClaimToken, v))
+}
+
+// SourceConversionClaimTokenContainsFold applies the ContainsFold predicate on the "source_conversion_claim_token" field.
+func SourceConversionClaimTokenContainsFold(v string) predicate.StoredFile {
+	return predicate.StoredFile(sql.FieldContainsFold(FieldSourceConversionClaimToken, v))
 }
 
 // CopiedToFinalDestinationAtEQ applies the EQ predicate on the "copied_to_final_destination_at" field.

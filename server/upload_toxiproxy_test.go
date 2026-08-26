@@ -85,6 +85,15 @@ func TestConcurrentUploadFileCmdWithSlowS3(t *testing.T) {
 
 				spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
 				spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+				if err := mainTx.Commit(); err != nil {
+					errCh <- err
+					return
+				}
+				if err := tenantTx.Commit(); err != nil {
+					errCh <- err
+					return
+				}
+				committed = true
 
 				filename := fmt.Sprintf("slow-concurrent-%d.txt", i)
 				req, err := newUploadRequest(parentDirID, filename, []byte("hello"))
@@ -104,15 +113,6 @@ func TestConcurrentUploadFileCmdWithSlowS3(t *testing.T) {
 					return
 				}
 
-				if err := mainTx.Commit(); err != nil {
-					errCh <- err
-					return
-				}
-				if err := tenantTx.Commit(); err != nil {
-					errCh <- err
-					return
-				}
-				committed = true
 				errCh <- nil
 			}()
 		}

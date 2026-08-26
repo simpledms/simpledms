@@ -118,6 +118,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
+		{Name: "source", Type: field.TypeEnum, Enums: []string{"UnknownLegacy", "WebInterface", "PWAOSOpen", "URLImport", "WebDAV", "SystemExtraction"}, Default: "UnknownLegacy"},
 		{Name: "is_directory", Type: field.TypeBool},
 		{Name: "notes", Type: field.TypeString, Nullable: true},
 		{Name: "modified_at", Type: field.TypeTime, Nullable: true},
@@ -144,37 +145,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "files_users_deleter",
-				Columns:    []*schema.Column{FilesColumns[17]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "files_users_creator",
 				Columns:    []*schema.Column{FilesColumns[18]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "files_users_updater",
+				Symbol:     "files_users_creator",
 				Columns:    []*schema.Column{FilesColumns[19]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "files_spaces_space",
+				Symbol:     "files_users_updater",
 				Columns:    []*schema.Column{FilesColumns[20]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "files_spaces_space",
+				Columns:    []*schema.Column{FilesColumns[21]},
 				RefColumns: []*schema.Column{SpacesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "files_files_parent",
-				Columns:    []*schema.Column{FilesColumns[21]},
+				Columns:    []*schema.Column{FilesColumns[22]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "files_document_types_document_type",
-				Columns:    []*schema.Column{FilesColumns[22]},
+				Columns:    []*schema.Column{FilesColumns[23]},
 				RefColumns: []*schema.Column{DocumentTypesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -183,12 +184,12 @@ var (
 			{
 				Name:    "file_space_id",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[20]},
+				Columns: []*schema.Column{FilesColumns[21]},
 			},
 			{
 				Name:    "file_space_id_name_parent_id",
 				Unique:  true,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[5], FilesColumns[21]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[5], FilesColumns[22]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`deleted_at` is null and `is_in_inbox` = false",
 				},
@@ -196,7 +197,7 @@ var (
 			{
 				Name:    "file_space_id_is_root_dir",
 				Unique:  true,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[12]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`is_root_dir` = true",
 				},
@@ -204,30 +205,30 @@ var (
 			{
 				Name:    "file_parent_id",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[21]},
+				Columns: []*schema.Column{FilesColumns[22]},
 			},
 			{
 				Name:    "file_is_directory",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[6]},
+				Columns: []*schema.Column{FilesColumns[7]},
 			},
 			{
 				Name:    "file_is_in_inbox",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[11]},
+				Columns: []*schema.Column{FilesColumns[12]},
 			},
 			{
 				Name:    "file_space_id_parent_id",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22]},
 			},
 			{
 				Name:    "file_browse_name",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[6], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22], FilesColumns[7], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
-						FilesColumns[6].Name: true,
+						FilesColumns[7].Name: true,
 					},
 					Where: "`deleted_at` is null and `is_in_inbox` = false",
 				},
@@ -235,12 +236,12 @@ var (
 			{
 				Name:    "file_browse_created",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[6], FilesColumns[3], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[3].Name: true,
 
-						FilesColumns[6].Name: true,
+						FilesColumns[7].Name: true,
 					},
 					Where: "`deleted_at` is null and `is_in_inbox` = false",
 				},
@@ -248,10 +249,10 @@ var (
 			{
 				Name:    "file_browse_created_oldest",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[6], FilesColumns[3], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
-						FilesColumns[6].Name: true,
+						FilesColumns[7].Name: true,
 					},
 					Where: "`deleted_at` is null and `is_in_inbox` = false",
 				},
@@ -259,7 +260,7 @@ var (
 			{
 				Name:    "file_inbox_created",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[6], FilesColumns[3]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[7], FilesColumns[3]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[3].Name: true,
@@ -270,7 +271,7 @@ var (
 			{
 				Name:    "file_inbox_name",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[6], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[7], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`deleted_at` is null and `is_in_inbox` = true",
 				},
@@ -278,39 +279,39 @@ var (
 			{
 				Name:    "file_browse_name_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[11], FilesColumns[1], FilesColumns[6], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
-						FilesColumns[6].Name: true,
+						FilesColumns[7].Name: true,
 					},
 				},
 			},
 			{
 				Name:    "file_browse_created_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[11], FilesColumns[1], FilesColumns[6], FilesColumns[3], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[3].Name: true,
 
-						FilesColumns[6].Name: true,
+						FilesColumns[7].Name: true,
 					},
 				},
 			},
 			{
 				Name:    "file_browse_created_oldest_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[21], FilesColumns[11], FilesColumns[1], FilesColumns[6], FilesColumns[3], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[22], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[3], FilesColumns[5]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
-						FilesColumns[6].Name: true,
+						FilesColumns[7].Name: true,
 					},
 				},
 			},
 			{
 				Name:    "file_inbox_created_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[11], FilesColumns[6], FilesColumns[1], FilesColumns[3]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[12], FilesColumns[7], FilesColumns[1], FilesColumns[3]},
 				Annotation: &entsql.IndexAnnotation{
 					DescColumns: map[string]bool{
 						FilesColumns[3].Name: true,
@@ -320,12 +321,32 @@ var (
 			{
 				Name:    "file_inbox_name_fast",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[20], FilesColumns[11], FilesColumns[6], FilesColumns[1], FilesColumns[5]},
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[12], FilesColumns[7], FilesColumns[1], FilesColumns[5]},
+			},
+			{
+				Name:    "file_inbox_source_created_fast",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[6], FilesColumns[3]},
+				Annotation: &entsql.IndexAnnotation{
+					DescColumns: map[string]bool{
+						FilesColumns[3].Name: true,
+					},
+				},
+			},
+			{
+				Name:    "file_inbox_source_created_oldest_fast",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[6], FilesColumns[3]},
+			},
+			{
+				Name:    "file_inbox_source_name_fast",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[21], FilesColumns[12], FilesColumns[1], FilesColumns[7], FilesColumns[6], FilesColumns[5]},
 			},
 			{
 				Name:    "file_ocr_pending",
 				Unique:  false,
-				Columns: []*schema.Column{FilesColumns[16], FilesColumns[0]},
+				Columns: []*schema.Column{FilesColumns[17], FilesColumns[0]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`ocr_success_at` is null and `ocr_retry_count` < 3 and `is_directory` = false",
 				},
@@ -625,6 +646,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "upload_started_at", Type: field.TypeTime, Nullable: true},
+		{Name: "upload_last_progress_at", Type: field.TypeTime, Nullable: true},
 		{Name: "upload_failed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "upload_succeeded_at", Type: field.TypeTime, Nullable: true},
 		{Name: "filename", Type: field.TypeString},
@@ -632,6 +654,7 @@ var (
 		{Name: "size_in_storage", Type: field.TypeInt64},
 		{Name: "sha256", Type: field.TypeString, Nullable: true},
 		{Name: "content_sha256", Type: field.TypeString, Nullable: true},
+		{Name: "storage_crc32c", Type: field.TypeString, Nullable: true},
 		{Name: "mime_type", Type: field.TypeString, Nullable: true},
 		{Name: "storage_type", Type: field.TypeEnum, Enums: []string{"Unknown", "Local", "S3"}},
 		{Name: "bucket_name", Type: field.TypeString, Nullable: true},
@@ -639,6 +662,8 @@ var (
 		{Name: "storage_filename", Type: field.TypeString},
 		{Name: "temporary_storage_path", Type: field.TypeString},
 		{Name: "temporary_storage_filename", Type: field.TypeString},
+		{Name: "source_temporary_file_public_id", Type: field.TypeString, Nullable: true},
+		{Name: "source_conversion_claim_token", Type: field.TypeString, Nullable: true},
 		{Name: "copied_to_final_destination_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_temporary_file_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
@@ -652,13 +677,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "stored_files_users_creator",
-				Columns:    []*schema.Column{StoredFilesColumns[20]},
+				Columns:    []*schema.Column{StoredFilesColumns[24]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "stored_files_users_updater",
-				Columns:    []*schema.Column{StoredFilesColumns[21]},
+				Columns:    []*schema.Column{StoredFilesColumns[25]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -667,7 +692,7 @@ var (
 			{
 				Name:    "storedfile_content_sha256",
 				Unique:  false,
-				Columns: []*schema.Column{StoredFilesColumns[10]},
+				Columns: []*schema.Column{StoredFilesColumns[11]},
 			},
 			{
 				Name:    "storedfile_content_hash_pending",
@@ -680,7 +705,7 @@ var (
 			{
 				Name:    "storedfile_copy_pending",
 				Unique:  false,
-				Columns: []*schema.Column{StoredFilesColumns[18], StoredFilesColumns[0]},
+				Columns: []*schema.Column{StoredFilesColumns[22], StoredFilesColumns[0]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`copied_to_final_destination_at` is null and `deleted_temporary_file_at` is null",
 				},
@@ -688,9 +713,17 @@ var (
 			{
 				Name:    "storedfile_temp_delete_pending",
 				Unique:  false,
-				Columns: []*schema.Column{StoredFilesColumns[18], StoredFilesColumns[0]},
+				Columns: []*schema.Column{StoredFilesColumns[22], StoredFilesColumns[0]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`copied_to_final_destination_at` is not null and `deleted_temporary_file_at` is null",
+				},
+			},
+			{
+				Name:    "storedfile_source_temporary_file",
+				Unique:  true,
+				Columns: []*schema.Column{StoredFilesColumns[20]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`source_temporary_file_public_id` is not null",
 				},
 			},
 		},
@@ -846,6 +879,90 @@ var (
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 	}
+	// WebDavResourcesColumns holds the columns for the "web_dav_resources" table.
+	WebDavResourcesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "credential_public_id", Type: field.TypeString},
+		{Name: "dav_path", Type: field.TypeString},
+		{Name: "state", Type: field.TypeEnum, Enums: []string{"Uploading", "Active", "CleanupPending"}, Default: "Uploading"},
+		{Name: "last_progress_at", Type: field.TypeTime},
+		{Name: "finalized_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "space_id", Type: field.TypeInt64},
+		{Name: "file_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "stored_file_id", Type: field.TypeInt64, Nullable: true},
+	}
+	// WebDavResourcesTable holds the schema information for the "web_dav_resources" table.
+	WebDavResourcesTable = &schema.Table{
+		Name:       "web_dav_resources",
+		Columns:    WebDavResourcesColumns,
+		PrimaryKey: []*schema.Column{WebDavResourcesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "web_dav_resources_users_creator",
+				Columns:    []*schema.Column{WebDavResourcesColumns[8]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "web_dav_resources_users_updater",
+				Columns:    []*schema.Column{WebDavResourcesColumns[9]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "web_dav_resources_spaces_space",
+				Columns:    []*schema.Column{WebDavResourcesColumns[10]},
+				RefColumns: []*schema.Column{SpacesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "web_dav_resources_files_file",
+				Columns:    []*schema.Column{WebDavResourcesColumns[11]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "web_dav_resources_stored_files_stored_file",
+				Columns:    []*schema.Column{WebDavResourcesColumns[12]},
+				RefColumns: []*schema.Column{StoredFilesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "webdavresource_space_id",
+				Unique:  false,
+				Columns: []*schema.Column{WebDavResourcesColumns[10]},
+			},
+			{
+				Name:    "webdavresource_active_path",
+				Unique:  true,
+				Columns: []*schema.Column{WebDavResourcesColumns[3], WebDavResourcesColumns[10], WebDavResourcesColumns[4]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "`state` in ('Uploading', 'Active')",
+				},
+			},
+			{
+				Name:    "webdavresource_state_last_progress_at_id",
+				Unique:  false,
+				Columns: []*schema.Column{WebDavResourcesColumns[5], WebDavResourcesColumns[6], WebDavResourcesColumns[0]},
+			},
+			{
+				Name:    "webdavresource_file_id",
+				Unique:  false,
+				Columns: []*schema.Column{WebDavResourcesColumns[11]},
+			},
+			{
+				Name:    "webdavresource_stored_file_id",
+				Unique:  false,
+				Columns: []*schema.Column{WebDavResourcesColumns[12]},
+			},
+		},
+	}
 	// TagSubTagsColumns holds the columns for the "tag_sub_tags" table.
 	TagSubTagsColumns = []*schema.Column{
 		{Name: "tag_id", Type: field.TypeInt64},
@@ -887,6 +1004,7 @@ var (
 		TagAssignmentsTable,
 		TenantDataMigrationsTable,
 		UsersTable,
+		WebDavResourcesTable,
 		TagSubTagsTable,
 	}
 )
@@ -925,6 +1043,11 @@ func init() {
 	TagAssignmentsTable.ForeignKeys[0].RefTable = SpacesTable
 	TagAssignmentsTable.ForeignKeys[1].RefTable = TagsTable
 	TagAssignmentsTable.ForeignKeys[2].RefTable = FilesTable
+	WebDavResourcesTable.ForeignKeys[0].RefTable = UsersTable
+	WebDavResourcesTable.ForeignKeys[1].RefTable = UsersTable
+	WebDavResourcesTable.ForeignKeys[2].RefTable = SpacesTable
+	WebDavResourcesTable.ForeignKeys[3].RefTable = FilesTable
+	WebDavResourcesTable.ForeignKeys[4].RefTable = StoredFilesTable
 	TagSubTagsTable.ForeignKeys[0].RefTable = TagsTable
 	TagSubTagsTable.ForeignKeys[1].RefTable = TagsTable
 }

@@ -13,6 +13,7 @@ import (
 
 	migratemain "github.com/simpledms/simpledms/db/entmain/migrate"
 	migratetenant "github.com/simpledms/simpledms/db/enttenant/migrate"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 )
 
@@ -47,6 +48,10 @@ func main() {
 		schema.WithDialect(dialect.SQLite),          // Ent dialect to use
 		schema.WithDropIndex(true),
 		schema.WithDropColumn(true),
+		// Ent v0.14.6 emits files.source's enum default as a raw expression.
+		// Normalize it to a literal so Atlas uses ALTER TABLE ADD COLUMN instead of
+		// rebuilding the entire SQLite table.
+		entx.WithFileSourceDefault(),
 		// important that disabled when GolangMigrateDir is used:
 		// schema.WithFormatter(atlas.DefaultFormatter),
 	}
@@ -71,6 +76,10 @@ func main() {
 		schema.WithDialect(dialect.SQLite),          // Ent dialect to use
 		schema.WithDropIndex(true),
 		schema.WithDropColumn(true),
+		// Ent v0.14.6 emits temporary_files.source's enum default as a raw expression.
+		// Normalize it to a literal so Atlas uses ALTER TABLE ADD COLUMN instead of
+		// rebuilding the entire SQLite table.
+		entx.WithFileSourceDefault(),
 		// important that disabled when GolangMigrateDir is used:
 		// schema.WithFormatter(atlas.DefaultFormatter),
 	}

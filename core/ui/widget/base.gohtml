@@ -326,10 +326,10 @@
 
 			document.addEventListener('htmx:beforeRequest', function(e) {
 				// does close side sheet on navigation to another page;
-				// page nav is always boosted;
+				// page nav is usually boosted, but explicit hx-get navigation rail links are not;
 				// must be verified if this has any side effects and if boosted is used for non-page navigation
 				// somewhere
-				if (e.detail.requestConfig.boosted) {
+				if (e.detail.requestConfig.boosted || e.detail.elt.closest('.js-navigation-rail')) {
 					this.dispatchEvent(new CustomEvent('closeSideSheet', { bubbles: true }))
 				}
 			})

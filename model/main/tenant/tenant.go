@@ -201,6 +201,7 @@ func (qq *Tenant) ExecuteDBMigrations(
 			ctx,
 			migrate.WithDropIndex(true),
 			migrate.WithDropColumn(true),
+			entx.WithFileSourceDefault(),
 		); err != nil {
 			// fatal only in dev mode
 			log.Fatalf("failed creating schema resources: %v", err)

@@ -20,6 +20,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	enttenantwebdavresource "github.com/simpledms/simpledms/db/enttenant/webdavresource"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -29,7 +30,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 16)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 17)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   attribute.Table,
@@ -91,6 +92,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldUpdatedBy:           {Type: field.TypeInt64, Column: file.FieldUpdatedBy},
 			file.FieldSpaceID:             {Type: field.TypeInt64, Column: file.FieldSpaceID},
 			file.FieldName:                {Type: field.TypeString, Column: file.FieldName},
+			file.FieldSource:              {Type: field.TypeEnum, Column: file.FieldSource},
 			file.FieldIsDirectory:         {Type: field.TypeBool, Column: file.FieldIsDirectory},
 			file.FieldNotes:               {Type: field.TypeString, Column: file.FieldNotes},
 			file.FieldModifiedAt:          {Type: field.TypeTime, Column: file.FieldModifiedAt},
@@ -266,27 +268,31 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "StoredFile",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			storedfile.FieldCreatedAt:                  {Type: field.TypeTime, Column: storedfile.FieldCreatedAt},
-			storedfile.FieldCreatedBy:                  {Type: field.TypeInt64, Column: storedfile.FieldCreatedBy},
-			storedfile.FieldUpdatedAt:                  {Type: field.TypeTime, Column: storedfile.FieldUpdatedAt},
-			storedfile.FieldUpdatedBy:                  {Type: field.TypeInt64, Column: storedfile.FieldUpdatedBy},
-			storedfile.FieldUploadStartedAt:            {Type: field.TypeTime, Column: storedfile.FieldUploadStartedAt},
-			storedfile.FieldUploadFailedAt:             {Type: field.TypeTime, Column: storedfile.FieldUploadFailedAt},
-			storedfile.FieldUploadSucceededAt:          {Type: field.TypeTime, Column: storedfile.FieldUploadSucceededAt},
-			storedfile.FieldFilename:                   {Type: field.TypeString, Column: storedfile.FieldFilename},
-			storedfile.FieldSize:                       {Type: field.TypeInt64, Column: storedfile.FieldSize},
-			storedfile.FieldSizeInStorage:              {Type: field.TypeInt64, Column: storedfile.FieldSizeInStorage},
-			storedfile.FieldSha256:                     {Type: field.TypeString, Column: storedfile.FieldSha256},
-			storedfile.FieldContentSha256:              {Type: field.TypeString, Column: storedfile.FieldContentSha256},
-			storedfile.FieldMimeType:                   {Type: field.TypeString, Column: storedfile.FieldMimeType},
-			storedfile.FieldStorageType:                {Type: field.TypeEnum, Column: storedfile.FieldStorageType},
-			storedfile.FieldBucketName:                 {Type: field.TypeString, Column: storedfile.FieldBucketName},
-			storedfile.FieldStoragePath:                {Type: field.TypeString, Column: storedfile.FieldStoragePath},
-			storedfile.FieldStorageFilename:            {Type: field.TypeString, Column: storedfile.FieldStorageFilename},
-			storedfile.FieldTemporaryStoragePath:       {Type: field.TypeString, Column: storedfile.FieldTemporaryStoragePath},
-			storedfile.FieldTemporaryStorageFilename:   {Type: field.TypeString, Column: storedfile.FieldTemporaryStorageFilename},
-			storedfile.FieldCopiedToFinalDestinationAt: {Type: field.TypeTime, Column: storedfile.FieldCopiedToFinalDestinationAt},
-			storedfile.FieldDeletedTemporaryFileAt:     {Type: field.TypeTime, Column: storedfile.FieldDeletedTemporaryFileAt},
+			storedfile.FieldCreatedAt:                   {Type: field.TypeTime, Column: storedfile.FieldCreatedAt},
+			storedfile.FieldCreatedBy:                   {Type: field.TypeInt64, Column: storedfile.FieldCreatedBy},
+			storedfile.FieldUpdatedAt:                   {Type: field.TypeTime, Column: storedfile.FieldUpdatedAt},
+			storedfile.FieldUpdatedBy:                   {Type: field.TypeInt64, Column: storedfile.FieldUpdatedBy},
+			storedfile.FieldUploadStartedAt:             {Type: field.TypeTime, Column: storedfile.FieldUploadStartedAt},
+			storedfile.FieldUploadLastProgressAt:        {Type: field.TypeTime, Column: storedfile.FieldUploadLastProgressAt},
+			storedfile.FieldUploadFailedAt:              {Type: field.TypeTime, Column: storedfile.FieldUploadFailedAt},
+			storedfile.FieldUploadSucceededAt:           {Type: field.TypeTime, Column: storedfile.FieldUploadSucceededAt},
+			storedfile.FieldFilename:                    {Type: field.TypeString, Column: storedfile.FieldFilename},
+			storedfile.FieldSize:                        {Type: field.TypeInt64, Column: storedfile.FieldSize},
+			storedfile.FieldSizeInStorage:               {Type: field.TypeInt64, Column: storedfile.FieldSizeInStorage},
+			storedfile.FieldSha256:                      {Type: field.TypeString, Column: storedfile.FieldSha256},
+			storedfile.FieldContentSha256:               {Type: field.TypeString, Column: storedfile.FieldContentSha256},
+			storedfile.FieldStorageCrc32c:               {Type: field.TypeString, Column: storedfile.FieldStorageCrc32c},
+			storedfile.FieldMimeType:                    {Type: field.TypeString, Column: storedfile.FieldMimeType},
+			storedfile.FieldStorageType:                 {Type: field.TypeEnum, Column: storedfile.FieldStorageType},
+			storedfile.FieldBucketName:                  {Type: field.TypeString, Column: storedfile.FieldBucketName},
+			storedfile.FieldStoragePath:                 {Type: field.TypeString, Column: storedfile.FieldStoragePath},
+			storedfile.FieldStorageFilename:             {Type: field.TypeString, Column: storedfile.FieldStorageFilename},
+			storedfile.FieldTemporaryStoragePath:        {Type: field.TypeString, Column: storedfile.FieldTemporaryStoragePath},
+			storedfile.FieldTemporaryStorageFilename:    {Type: field.TypeString, Column: storedfile.FieldTemporaryStorageFilename},
+			storedfile.FieldSourceTemporaryFilePublicID: {Type: field.TypeString, Column: storedfile.FieldSourceTemporaryFilePublicID},
+			storedfile.FieldSourceConversionClaimToken:  {Type: field.TypeString, Column: storedfile.FieldSourceConversionClaimToken},
+			storedfile.FieldCopiedToFinalDestinationAt:  {Type: field.TypeTime, Column: storedfile.FieldCopiedToFinalDestinationAt},
+			storedfile.FieldDeletedTemporaryFileAt:      {Type: field.TypeTime, Column: storedfile.FieldDeletedTemporaryFileAt},
 		},
 	}
 	graph.Nodes[12] = &sqlgraph.Node{
@@ -372,6 +378,31 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldLastName:    {Type: field.TypeString, Column: user.FieldLastName},
 			user.FieldAvatar:      {Type: field.TypeString, Column: user.FieldAvatar},
 			user.FieldDescription: {Type: field.TypeString, Column: user.FieldDescription},
+		},
+	}
+	graph.Nodes[16] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   enttenantwebdavresource.Table,
+			Columns: enttenantwebdavresource.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeInt64,
+				Column: enttenantwebdavresource.FieldID,
+			},
+		},
+		Type: "WebDAVResource",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			enttenantwebdavresource.FieldCreatedAt:          {Type: field.TypeTime, Column: enttenantwebdavresource.FieldCreatedAt},
+			enttenantwebdavresource.FieldCreatedBy:          {Type: field.TypeInt64, Column: enttenantwebdavresource.FieldCreatedBy},
+			enttenantwebdavresource.FieldUpdatedAt:          {Type: field.TypeTime, Column: enttenantwebdavresource.FieldUpdatedAt},
+			enttenantwebdavresource.FieldUpdatedBy:          {Type: field.TypeInt64, Column: enttenantwebdavresource.FieldUpdatedBy},
+			enttenantwebdavresource.FieldSpaceID:            {Type: field.TypeInt64, Column: enttenantwebdavresource.FieldSpaceID},
+			enttenantwebdavresource.FieldCredentialPublicID: {Type: field.TypeString, Column: enttenantwebdavresource.FieldCredentialPublicID},
+			enttenantwebdavresource.FieldFileID:             {Type: field.TypeInt64, Column: enttenantwebdavresource.FieldFileID},
+			enttenantwebdavresource.FieldStoredFileID:       {Type: field.TypeInt64, Column: enttenantwebdavresource.FieldStoredFileID},
+			enttenantwebdavresource.FieldDavPath:            {Type: field.TypeString, Column: enttenantwebdavresource.FieldDavPath},
+			enttenantwebdavresource.FieldState:              {Type: field.TypeEnum, Column: enttenantwebdavresource.FieldState},
+			enttenantwebdavresource.FieldLastProgressAt:     {Type: field.TypeTime, Column: enttenantwebdavresource.FieldLastProgressAt},
+			enttenantwebdavresource.FieldFinalizedAt:        {Type: field.TypeTime, Column: enttenantwebdavresource.FieldFinalizedAt},
 		},
 	}
 	graph.MustAddE(
@@ -1070,6 +1101,66 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 		"SpaceUserAssignment",
 	)
+	graph.MustAddE(
+		"creator",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   enttenantwebdavresource.CreatorTable,
+			Columns: []string{enttenantwebdavresource.CreatorColumn},
+			Bidi:    false,
+		},
+		"WebDAVResource",
+		"User",
+	)
+	graph.MustAddE(
+		"updater",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   enttenantwebdavresource.UpdaterTable,
+			Columns: []string{enttenantwebdavresource.UpdaterColumn},
+			Bidi:    false,
+		},
+		"WebDAVResource",
+		"User",
+	)
+	graph.MustAddE(
+		"space",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   enttenantwebdavresource.SpaceTable,
+			Columns: []string{enttenantwebdavresource.SpaceColumn},
+			Bidi:    false,
+		},
+		"WebDAVResource",
+		"Space",
+	)
+	graph.MustAddE(
+		"file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   enttenantwebdavresource.FileTable,
+			Columns: []string{enttenantwebdavresource.FileColumn},
+			Bidi:    false,
+		},
+		"WebDAVResource",
+		"File",
+	)
+	graph.MustAddE(
+		"stored_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   enttenantwebdavresource.StoredFileTable,
+			Columns: []string{enttenantwebdavresource.StoredFileColumn},
+			Bidi:    false,
+		},
+		"WebDAVResource",
+		"StoredFile",
+	)
 	return graph
 }()
 
@@ -1401,6 +1492,11 @@ func (f *FileFilter) WhereSpaceID(p entql.Int64P) {
 // WhereName applies the entql string predicate on the name field.
 func (f *FileFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(file.FieldName))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *FileFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(file.FieldSource))
 }
 
 // WhereIsDirectory applies the entql bool predicate on the is_directory field.
@@ -2582,6 +2678,11 @@ func (f *StoredFileFilter) WhereUploadStartedAt(p entql.TimeP) {
 	f.Where(p.Field(storedfile.FieldUploadStartedAt))
 }
 
+// WhereUploadLastProgressAt applies the entql time.Time predicate on the upload_last_progress_at field.
+func (f *StoredFileFilter) WhereUploadLastProgressAt(p entql.TimeP) {
+	f.Where(p.Field(storedfile.FieldUploadLastProgressAt))
+}
+
 // WhereUploadFailedAt applies the entql time.Time predicate on the upload_failed_at field.
 func (f *StoredFileFilter) WhereUploadFailedAt(p entql.TimeP) {
 	f.Where(p.Field(storedfile.FieldUploadFailedAt))
@@ -2617,6 +2718,11 @@ func (f *StoredFileFilter) WhereContentSha256(p entql.StringP) {
 	f.Where(p.Field(storedfile.FieldContentSha256))
 }
 
+// WhereStorageCrc32c applies the entql string predicate on the storage_crc32c field.
+func (f *StoredFileFilter) WhereStorageCrc32c(p entql.StringP) {
+	f.Where(p.Field(storedfile.FieldStorageCrc32c))
+}
+
 // WhereMimeType applies the entql string predicate on the mime_type field.
 func (f *StoredFileFilter) WhereMimeType(p entql.StringP) {
 	f.Where(p.Field(storedfile.FieldMimeType))
@@ -2650,6 +2756,16 @@ func (f *StoredFileFilter) WhereTemporaryStoragePath(p entql.StringP) {
 // WhereTemporaryStorageFilename applies the entql string predicate on the temporary_storage_filename field.
 func (f *StoredFileFilter) WhereTemporaryStorageFilename(p entql.StringP) {
 	f.Where(p.Field(storedfile.FieldTemporaryStorageFilename))
+}
+
+// WhereSourceTemporaryFilePublicID applies the entql string predicate on the source_temporary_file_public_id field.
+func (f *StoredFileFilter) WhereSourceTemporaryFilePublicID(p entql.StringP) {
+	f.Where(p.Field(storedfile.FieldSourceTemporaryFilePublicID))
+}
+
+// WhereSourceConversionClaimToken applies the entql string predicate on the source_conversion_claim_token field.
+func (f *StoredFileFilter) WhereSourceConversionClaimToken(p entql.StringP) {
+	f.Where(p.Field(storedfile.FieldSourceConversionClaimToken))
 }
 
 // WhereCopiedToFinalDestinationAt applies the entql time.Time predicate on the copied_to_final_destination_at field.
@@ -3205,6 +3321,176 @@ func (f *UserFilter) WhereHasSpaceAssignment() {
 // WhereHasSpaceAssignmentWith applies a predicate to check if query has an edge space_assignment with a given conditions (other predicates).
 func (f *UserFilter) WhereHasSpaceAssignmentWith(preds ...predicate.SpaceUserAssignment) {
 	f.Where(entql.HasEdgeWith("space_assignment", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *WebDAVResourceQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the WebDAVResourceQuery builder.
+func (_q *WebDAVResourceQuery) Filter() *WebDAVResourceFilter {
+	return &WebDAVResourceFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *WebDAVResourceMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the WebDAVResourceMutation builder.
+func (m *WebDAVResourceMutation) Filter() *WebDAVResourceFilter {
+	return &WebDAVResourceFilter{config: m.config, predicateAdder: m}
+}
+
+// WebDAVResourceFilter provides a generic filtering capability at runtime for WebDAVResourceQuery.
+type WebDAVResourceFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *WebDAVResourceFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[16].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql int64 predicate on the id field.
+func (f *WebDAVResourceFilter) WhereID(p entql.Int64P) {
+	f.Where(p.Field(enttenantwebdavresource.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *WebDAVResourceFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(enttenantwebdavresource.FieldCreatedAt))
+}
+
+// WhereCreatedBy applies the entql int64 predicate on the created_by field.
+func (f *WebDAVResourceFilter) WhereCreatedBy(p entql.Int64P) {
+	f.Where(p.Field(enttenantwebdavresource.FieldCreatedBy))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *WebDAVResourceFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(enttenantwebdavresource.FieldUpdatedAt))
+}
+
+// WhereUpdatedBy applies the entql int64 predicate on the updated_by field.
+func (f *WebDAVResourceFilter) WhereUpdatedBy(p entql.Int64P) {
+	f.Where(p.Field(enttenantwebdavresource.FieldUpdatedBy))
+}
+
+// WhereSpaceID applies the entql int64 predicate on the space_id field.
+func (f *WebDAVResourceFilter) WhereSpaceID(p entql.Int64P) {
+	f.Where(p.Field(enttenantwebdavresource.FieldSpaceID))
+}
+
+// WhereCredentialPublicID applies the entql string predicate on the credential_public_id field.
+func (f *WebDAVResourceFilter) WhereCredentialPublicID(p entql.StringP) {
+	f.Where(p.Field(enttenantwebdavresource.FieldCredentialPublicID))
+}
+
+// WhereFileID applies the entql int64 predicate on the file_id field.
+func (f *WebDAVResourceFilter) WhereFileID(p entql.Int64P) {
+	f.Where(p.Field(enttenantwebdavresource.FieldFileID))
+}
+
+// WhereStoredFileID applies the entql int64 predicate on the stored_file_id field.
+func (f *WebDAVResourceFilter) WhereStoredFileID(p entql.Int64P) {
+	f.Where(p.Field(enttenantwebdavresource.FieldStoredFileID))
+}
+
+// WhereDavPath applies the entql string predicate on the dav_path field.
+func (f *WebDAVResourceFilter) WhereDavPath(p entql.StringP) {
+	f.Where(p.Field(enttenantwebdavresource.FieldDavPath))
+}
+
+// WhereState applies the entql string predicate on the state field.
+func (f *WebDAVResourceFilter) WhereState(p entql.StringP) {
+	f.Where(p.Field(enttenantwebdavresource.FieldState))
+}
+
+// WhereLastProgressAt applies the entql time.Time predicate on the last_progress_at field.
+func (f *WebDAVResourceFilter) WhereLastProgressAt(p entql.TimeP) {
+	f.Where(p.Field(enttenantwebdavresource.FieldLastProgressAt))
+}
+
+// WhereFinalizedAt applies the entql time.Time predicate on the finalized_at field.
+func (f *WebDAVResourceFilter) WhereFinalizedAt(p entql.TimeP) {
+	f.Where(p.Field(enttenantwebdavresource.FieldFinalizedAt))
+}
+
+// WhereHasCreator applies a predicate to check if query has an edge creator.
+func (f *WebDAVResourceFilter) WhereHasCreator() {
+	f.Where(entql.HasEdge("creator"))
+}
+
+// WhereHasCreatorWith applies a predicate to check if query has an edge creator with a given conditions (other predicates).
+func (f *WebDAVResourceFilter) WhereHasCreatorWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("creator", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUpdater applies a predicate to check if query has an edge updater.
+func (f *WebDAVResourceFilter) WhereHasUpdater() {
+	f.Where(entql.HasEdge("updater"))
+}
+
+// WhereHasUpdaterWith applies a predicate to check if query has an edge updater with a given conditions (other predicates).
+func (f *WebDAVResourceFilter) WhereHasUpdaterWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("updater", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSpace applies a predicate to check if query has an edge space.
+func (f *WebDAVResourceFilter) WhereHasSpace() {
+	f.Where(entql.HasEdge("space"))
+}
+
+// WhereHasSpaceWith applies a predicate to check if query has an edge space with a given conditions (other predicates).
+func (f *WebDAVResourceFilter) WhereHasSpaceWith(preds ...predicate.Space) {
+	f.Where(entql.HasEdgeWith("space", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFile applies a predicate to check if query has an edge file.
+func (f *WebDAVResourceFilter) WhereHasFile() {
+	f.Where(entql.HasEdge("file"))
+}
+
+// WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
+func (f *WebDAVResourceFilter) WhereHasFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasStoredFile applies a predicate to check if query has an edge stored_file.
+func (f *WebDAVResourceFilter) WhereHasStoredFile() {
+	f.Where(entql.HasEdge("stored_file"))
+}
+
+// WhereHasStoredFileWith applies a predicate to check if query has an edge stored_file with a given conditions (other predicates).
+func (f *WebDAVResourceFilter) WhereHasStoredFileWith(preds ...predicate.StoredFile) {
+	f.Where(entql.HasEdgeWith("stored_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

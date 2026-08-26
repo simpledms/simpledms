@@ -110,6 +110,9 @@ func (qq *FilesListPartial) fileTableColumns(
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnName) {
 		columns = append(columns, &widget.TableColumn{Label: widget.T("Name")})
 	}
+	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnSource) {
+		columns = append(columns, &widget.TableColumn{Label: widget.T("Source")})
+	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnOriginalFilename) {
 		columns = append(columns, &widget.TableColumn{Label: widget.T("Original filename")})
 	}
@@ -157,6 +160,10 @@ func (qq *FilesListPartial) fileTableRow(
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnName) {
 		cells = append(cells, &widget.TableCell{Child: qq.fileTableNameCell(filex)})
+		hasData = true
+	}
+	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnSource) {
+		cells = append(cells, &widget.TableCell{Child: autil.FileSourceLabel(filex.Source)})
 		hasData = true
 	}
 	if preferences.HasBuiltInColumn(filelistpreference.FileListColumnOriginalFilename) {

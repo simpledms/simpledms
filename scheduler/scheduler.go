@@ -3,6 +3,7 @@ package scheduler
 import (
 	"context"
 	"io/fs"
+	"time"
 
 	"entgo.io/ent/privacy"
 	"github.com/marcobeierer/go-tika"
@@ -27,6 +28,7 @@ type Scheduler struct {
 	tikaClientNilable      *tika.Client
 	gotenbergClientNilable *gotenberg.GotenbergClient
 	previewDiscoveryCursor map[*sqlx.TenantDB]int64
+	lastOrphanObjectScan   time.Time
 }
 
 func NewScheduler(

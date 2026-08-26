@@ -8,11 +8,13 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/privacy"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
@@ -36,6 +38,7 @@ func (StoredFile) Fields() []ent.Field {
 
 		field.String("sha256").Optional(),
 		field.String("content_sha256").Optional(),
+		field.String("storage_crc32c").Optional().Nillable(),
 		field.String("mime_type").Optional(), // was media_type
 
 		field.Enum("storage_type").GoType(storagetype.Unknown),
@@ -49,6 +52,12 @@ func (StoredFile) Fields() []ent.Field {
 		// destination by a scheduler. this is done to make cleanup easier if a transaction fails
 		field.String("temporary_storage_path"),
 		field.String("temporary_storage_filename"),
+		field.String("source_temporary_file_public_id").
+			GoType(entx.CIText("")).
+			Optional().
+			Nillable().
+			Immutable(),
+		field.String("source_conversion_claim_token").Optional().Nillable(),
 
 		field.Time("copied_to_final_destination_at").Optional().Nillable(),
 		field.Time("deleted_temporary_file_at").Optional().Nillable(),
@@ -91,6 +100,11 @@ func (StoredFile) Indexes() []ent.Index {
 			Annotations(entsql.IndexWhere(
 				"`copied_to_final_destination_at` is not null and `deleted_temporary_file_at` is null",
 			)),
+		index.
+			Fields("source_temporary_file_public_id").
+			StorageKey("storedfile_source_temporary_file").
+			Annotations(entsql.IndexWhere("`source_temporary_file_public_id` is not null")).
+			Unique(),
 	}
 }
 

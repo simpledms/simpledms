@@ -2,7 +2,9 @@ package filesystem
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
@@ -75,6 +77,31 @@ func TestS3FileSystemUploadTooLargeErrorWithoutMaximum(t *testing.T) {
 	httpErr := requireHTTPErrorStatus(t, err, http.StatusRequestEntityTooLarge)
 	if httpErr.Message() != "Upload is too large." {
 		t.Fatalf("unexpected message: %q", httpErr.Message())
+	}
+}
+
+func TestMaxBytesReaderAcceptsExactLimitAndRejectsFirstExtraByte(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		body    string
+		max     int64
+		want    string
+		wantErr error
+	}{
+		{name: "below", body: "ab", max: 3, want: "ab"},
+		{name: "exact", body: "abc", max: 3, want: "abc"},
+		{name: "over", body: "abcd", max: 3, want: "abc", wantErr: errUploadTooLarge},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			reader := &maxBytesReader{r: strings.NewReader(tc.body), max: tc.max}
+			got, err := io.ReadAll(reader)
+			if string(got) != tc.want {
+				t.Fatalf("expected %q, got %q", tc.want, string(got))
+			}
+			if !errors.Is(err, tc.wantErr) {
+				t.Fatalf("expected error %v, got %v", tc.wantErr, err)
+			}
+		})
 	}
 }
 
