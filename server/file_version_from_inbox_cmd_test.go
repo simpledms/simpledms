@@ -358,7 +358,7 @@ func uploadSpaceFile(
 ) *enttenant.File {
 	t.Helper()
 
-	prepared, filex, err := harness.infra.FileSystem().PrepareFileUpload(
+	prepared, err := harness.infra.FileSystem().PrepareFileUpload(
 		spaceCtx,
 		filename,
 		parentDirID,
@@ -383,7 +383,7 @@ func uploadSpaceFile(
 		t.Fatalf("finalize file upload: %v", err)
 	}
 
-	return filex
+	return spaceCtx.TTx.File.GetX(spaceCtx, prepared.FileID)
 }
 
 func latestFileVersion(spaceCtx *ctxx.SpaceContext, fileID int64) *enttenant.FileVersion {

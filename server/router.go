@@ -34,6 +34,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 	tenantaccessmodel "github.com/simpledms/simpledms/model/main/tenantaccess"
+	"github.com/simpledms/simpledms/server/webdav"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
@@ -101,6 +102,14 @@ func NewRouter(
 		i18n:                     i18n,
 	}
 
+	router.Handle(webdav.Pattern, webdav.NewHandler(webdav.Config{
+		MainDB:    mainDB,
+		TenantDBs: tenantDBs,
+		Infra:     infra,
+		DevMode:   devMode,
+		MetaPath:  metaPath,
+		I18n:      i18n,
+	}))
 	router.allowSetupSessionPath(route2.Dashboard())
 
 	return router
@@ -130,7 +139,11 @@ func (qq *Router) RegisterAction(
 ) {
 	// wrapCommand is also necessary when readOnly because there are read only commands that
 	// just manipulate the state, for example ToggleDocumentTypeFilter
-	qq.HandleFunc(action.Route(), qq.wrapTx(qq.wrapCommand(action.Handler), action.IsReadOnly()))
+	if action.UseManualTxManagement() {
+		qq.HandleFunc(action.Route(), qq.wrapManualTx(qq.wrapCommand(action.Handler)))
+	} else {
+		qq.HandleFunc(action.Route(), qq.wrapTx(qq.wrapCommand(action.Handler), action.IsReadOnly()))
+	}
 
 	// TODO route or endpoint? does method (POST OR GET) matter? currently not, maybe later?
 	qq.handlerMap[action.Endpoint()] = action
@@ -352,6 +365,105 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 				return
 			}
 		}
+	}
+}
+
+func (qq *Router) wrapManualTx(handlerFn handlerFn) http.HandlerFunc {
+	return func(rw http.ResponseWriter, req *http.Request) {
+		mainTx, err := qq.mainDB.Tx(req.Context(), true)
+		if err != nil {
+			log.Println(err)
+			rw.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		var nilableTenantTx *enttenant.Tx
+		rwx := httpx.NewResponseWriter(rw)
+		reqx := httpx.NewRequest(req)
+		visitorCtx := ctxx.NewVisitorContext(
+			req.Context(),
+			mainTx,
+			qq.i18n,
+			req.Header.Get("Accept-Language"),
+			req.Header.Get("X-Client-Timezone"),
+			req.Header.Get("HX-Request") != "",
+			isTWARequest(req),
+			qq.infra.SystemConfig().CommercialLicenseEnabled(),
+		)
+		transactionsOpen := true
+
+		defer func() {
+			if r := recover(); r != nil {
+				qq.logRecoveredPanic(reqx.Request, r)
+				err, ok := r.(error)
+				if !ok {
+					err = fmt.Errorf("Internal error, please contact support.")
+				}
+				if transactionsOpen {
+					qq.handleError(rwx, reqx, visitorCtx, err, mainTx, nilableTenantTx)
+					return
+				}
+				qq.handleManualError(rwx, reqx, visitorCtx, err)
+			}
+		}()
+
+		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, true)
+		if err != nil {
+			log.Println(err)
+			qq.handleError(rwx, reqx, visitorCtx, err, mainTx, nilableTenantTx)
+			return
+		}
+		if isRedirected {
+			if err := mainTx.Rollback(); err != nil {
+				log.Println(err)
+			}
+			if nilableTenantTx != nil {
+				if err := nilableTenantTx.Rollback(); err != nil {
+					log.Println(err)
+				}
+			}
+			return
+		}
+
+		if err := mainTx.Commit(); err != nil {
+			log.Println(err)
+			rwx.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		if nilableTenantTx != nil {
+			if err := nilableTenantTx.Commit(); err != nil {
+				log.Println(err)
+				rwx.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+		}
+		transactionsOpen = false
+
+		if err := handlerFn(rwx, reqx, ctx); err != nil {
+			log.Println(err)
+			qq.handleManualError(rwx, reqx, ctx, err)
+			return
+		}
+	}
+}
+
+func (qq *Router) handleManualError(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
+	err error,
+) {
+	var httpErr *e.HTTPError
+	if errors.As(err, &httpErr) {
+		rw.WriteHeader(httpErr.StatusCode())
+		rw.AddRenderables(httpErr.Snackbar())
+	} else {
+		log.Println(err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		rw.AddRenderables(wx.NewSnackbarf("Something went wrong. Please try again.").SetIsError(true))
+	}
+	if renderErr := qq.infra.Renderer().Render(rw, ctx); renderErr != nil {
+		log.Println(renderErr)
 	}
 }
 

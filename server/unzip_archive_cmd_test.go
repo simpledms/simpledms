@@ -40,7 +40,7 @@ func TestUnzipArchiveCmdExtractsFilesAndDeletesArchive(t *testing.T) {
 			rootDir := spaceCtx.SpaceRootDir()
 
 			zipData := createZipArchive(t)
-			prepared, zipFile, err := harness.infra.FileSystem().PrepareFileUpload(
+			prepared, err := harness.infra.FileSystem().PrepareFileUpload(
 				spaceCtx,
 				"archive.zip",
 				rootDir.ID,
@@ -66,7 +66,7 @@ func TestUnzipArchiveCmdExtractsFilesAndDeletesArchive(t *testing.T) {
 			}
 
 			form := url.Values{}
-			form.Set("FileID", zipFile.PublicID.String())
+			form.Set("FileID", prepared.FilePublicID)
 			form.Set("DeleteOnSuccess", "true")
 
 			req := httptest.NewRequest(http.MethodPost, "/-/browse/unzip-archive-cmd", strings.NewReader(form.Encode()))
@@ -105,7 +105,7 @@ func TestUnzipArchiveCmdExtractsFilesAndDeletesArchive(t *testing.T) {
 			).OnlyX(spaceCtx)
 
 			zipRecord := spaceCtx.TTx.File.Query().Where(
-				file.PublicIDEQ(entx.NewCIText(zipFile.PublicID.String())),
+				file.PublicIDEQ(entx.NewCIText(prepared.FilePublicID)),
 			).OnlyX(schema.SkipSoftDelete(spaceCtx))
 			if zipRecord.DeletedAt.IsZero() {
 				return fmt.Errorf("expected zip archive to be marked deleted")
@@ -136,7 +136,7 @@ func TestUnzipArchiveCmdRejectsNonZipFile(t *testing.T) {
 			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
 			rootDir := spaceCtx.SpaceRootDir()
 
-			prepared, filex, err := harness.infra.FileSystem().PrepareFileUpload(
+			prepared, err := harness.infra.FileSystem().PrepareFileUpload(
 				spaceCtx,
 				"notes.txt",
 				rootDir.ID,
@@ -163,7 +163,7 @@ func TestUnzipArchiveCmdRejectsNonZipFile(t *testing.T) {
 			}
 
 			form := url.Values{}
-			form.Set("FileID", filex.PublicID.String())
+			form.Set("FileID", prepared.FilePublicID)
 
 			req := httptest.NewRequest(http.MethodPost, "/-/browse/unzip-archive-cmd", strings.NewReader(form.Encode()))
 			req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -211,7 +211,7 @@ func TestUnzipArchiveCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 			rootDir := spaceCtx.SpaceRootDir()
 
 			zipData := createZipArchive(t)
-			prepared, zipFile, err := harness.infra.FileSystem().PrepareFileUpload(
+			prepared, err := harness.infra.FileSystem().PrepareFileUpload(
 				spaceCtx,
 				"archive.zip",
 				rootDir.ID,
@@ -241,7 +241,7 @@ func TestUnzipArchiveCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 				ExecX(spaceCtx)
 
 			form := url.Values{}
-			form.Set("FileID", zipFile.PublicID.String())
+			form.Set("FileID", prepared.FilePublicID)
 			form.Set("DeleteOnSuccess", "true")
 
 			req := httptest.NewRequest(http.MethodPost, "/-/browse/unzip-archive-cmd", strings.NewReader(form.Encode()))
@@ -282,7 +282,7 @@ func TestUnzipArchiveCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 				return fmt.Errorf("expected no extracted directories, got %d", docsDirCount)
 			}
 
-			zipRecord := spaceCtx.TTx.File.GetX(spaceCtx, zipFile.ID)
+			zipRecord := spaceCtx.TTx.File.GetX(spaceCtx, prepared.FileID)
 			if !zipRecord.DeletedAt.IsZero() {
 				return fmt.Errorf("expected zip archive to remain undeleted")
 			}

@@ -1,16 +1,16 @@
 package browse
 
 import (
+	"io"
 	"log"
-	"math"
 	"net/http"
 	"path/filepath"
+	"strings"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -78,18 +78,60 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	if err != nil {
 		return err
 	}
-	if nilableUploadLimitBytes != nil {
-		bodyLimitBytes := *nilableUploadLimitBytes
-		const multipartOverheadBytes int64 = 1 * 1024 * 1024
-		if bodyLimitBytes < math.MaxInt64-multipartOverheadBytes {
-			bodyLimitBytes += multipartOverheadBytes
-		}
-		req.Request.Body = http.MaxBytesReader(rw, req.Request.Body, bodyLimitBytes)
-	}
+	uploadx.LimitMultipartBody(rw, req.Request, nilableUploadLimitBytes)
 
-	data, err := autil.FormData[UploadFileCmdData](rw, req, ctx)
+	reader, err := req.MultipartReader()
 	if err != nil {
 		return err
+	}
+	data := &UploadFileCmdData{}
+	var uploadedFile *uploadx.MultipartFile
+
+	for uploadedFile == nil {
+		part, err := reader.NextPart()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
+
+		switch part.FormName() {
+		case "ParentDirID":
+			value, err := io.ReadAll(io.LimitReader(part, 1024))
+			_ = part.Close()
+			if err != nil {
+				return err
+			}
+			data.ParentDirID = string(value)
+		case "Filename":
+			value, err := io.ReadAll(io.LimitReader(part, 4096))
+			_ = part.Close()
+			if err != nil {
+				return err
+			}
+			data.Filename = string(value)
+		case "AddToInbox":
+			value, err := io.ReadAll(io.LimitReader(part, 16))
+			_ = part.Close()
+			if err != nil {
+				return err
+			}
+			val := strings.TrimSpace(string(value))
+			data.AddToInbox = val == "on" || val == "true" || val == "1"
+		case "File":
+			if data.ParentDirID == "" {
+				_ = part.Close()
+				return e.NewHTTPErrorf(http.StatusBadRequest, "Upload metadata must be sent before the file.")
+			}
+			uploadedFile, err = uploadx.NewMultipartFile(part)
+			if err != nil {
+				_ = part.Close()
+				return err
+			}
+		default:
+			_ = part.Close()
+		}
 	}
 
 	if data.ParentDirID == "" {
@@ -99,37 +141,31 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return e.NewHTTPErrorf(http.StatusInternalServerError, "Read-only request context required.")
 	}
 
-	uploadedFile, uploadedFileHeader, err := req.FormFile("File")
-	if err != nil {
-		// TODO also triggers if no file provided
-		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "could not read file")
+	if uploadedFile == nil {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "No file provided.")
 	}
 	defer func() {
-		if err := uploadedFile.Close(); err != nil {
+		if err := uploadedFile.Closer.Close(); err != nil {
 			log.Println(err)
 		}
 	}()
 
-	filename := uploadedFileHeader.Filename
+	filename := uploadedFile.Filename
 	if data.Filename != "" {
 		filename = data.Filename
 	}
 	filename = filepath.Clean(filename)
 
-	parentDir := qq.infra.FileRepo.GetX(ctx, data.ParentDirID)
-
-	if err := fileutil.EnsureFileDoesNotExist(ctx, filename, parentDir.Data.ID, data.AddToInbox); err != nil {
-		return err
-	}
-
 	type uploadPrepareResult struct {
 		prepared *filesystem.PreparedUpload
-		filex    *enttenant.File
 	}
 
 	prep, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
-		prepared, filex, err := qq.infra.FileSystem().PrepareFileUpload(
+		parentDir := qq.infra.FileRepo.GetX(writeCtx, data.ParentDirID)
+		if err := fileutil.EnsureFileDoesNotExist(writeCtx, filename, parentDir.Data.ID, data.AddToInbox); err != nil {
+			return nil, err
+		}
+		prepared, err := qq.infra.FileSystem().PrepareFileUpload(
 			writeCtx,
 			filename,
 			parentDir.Data.ID,
@@ -138,32 +174,44 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		if err != nil {
 			return nil, err
 		}
-		return &uploadPrepareResult{prepared: prepared, filex: filex}, nil
+		return &uploadPrepareResult{prepared: prepared}, nil
 	})
 	if err != nil {
 		return err
 	}
 
-	uploadResult, err := qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
-		ctx,
-		uploadedFile,
-		prep.prepared,
-		uploadedFileHeader.Size,
-	)
+	var uploadResult *filesystem.PreparedUploadResult
+	if uploadedFile.ExpectedBytes != nil {
+		uploadResult, err = qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+			ctx,
+			uploadedFile.Reader,
+			prep.prepared,
+			*uploadedFile.ExpectedBytes,
+		)
+	} else {
+		uploadResult, err = qq.infra.FileSystem().UploadPreparedFile(ctx, uploadedFile.Reader, prep.prepared)
+	}
 	if err != nil {
 		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
 		return err
 	}
 
 	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, prep.prepared, uploadResult)
+		return nil, qq.infra.FileSystem().FinalizePreparedUploadWithoutMime(writeCtx, prep.prepared, uploadResult)
 	})
 	if err != nil {
-		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, false)
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
 		return err
 	}
+	if _, err := qq.infra.FileSystem().UpdateMimeTypeAfterFinalization(
+		ctx.SpaceCtx(),
+		true,
+		prep.prepared.StoredFileID,
+	); err != nil {
+		log.Println(err)
+	}
 
-	rw.AddRenderables(widget.NewSnackbarf("«%s» uploaded.", prep.filex.Name))
+	rw.AddRenderables(widget.NewSnackbarf("«%s» uploaded.", filename))
 	// TODO does triggering event have an effect? request comes from uppy and isn't a HTMX request...
 	rw.Header().Add("HX-Trigger", event.FileUploaded.String())
 

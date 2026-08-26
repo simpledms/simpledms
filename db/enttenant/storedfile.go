@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
@@ -29,6 +30,8 @@ type StoredFile struct {
 	UpdatedBy int64 `json:"updated_by,omitempty"`
 	// UploadStartedAt holds the value of the "upload_started_at" field.
 	UploadStartedAt time.Time `json:"upload_started_at,omitempty"`
+	// UploadLastProgressAt holds the value of the "upload_last_progress_at" field.
+	UploadLastProgressAt *time.Time `json:"upload_last_progress_at,omitempty"`
 	// UploadFailedAt holds the value of the "upload_failed_at" field.
 	UploadFailedAt *time.Time `json:"upload_failed_at,omitempty"`
 	// UploadSucceededAt holds the value of the "upload_succeeded_at" field.
@@ -43,6 +46,8 @@ type StoredFile struct {
 	Sha256 string `json:"sha256,omitempty"`
 	// ContentSha256 holds the value of the "content_sha256" field.
 	ContentSha256 string `json:"content_sha256,omitempty"`
+	// StorageCrc32c holds the value of the "storage_crc32c" field.
+	StorageCrc32c *string `json:"storage_crc32c,omitempty"`
 	// MimeType holds the value of the "mime_type" field.
 	MimeType string `json:"mime_type,omitempty"`
 	// StorageType holds the value of the "storage_type" field.
@@ -57,6 +62,10 @@ type StoredFile struct {
 	TemporaryStoragePath string `json:"temporary_storage_path,omitempty"`
 	// TemporaryStorageFilename holds the value of the "temporary_storage_filename" field.
 	TemporaryStorageFilename string `json:"temporary_storage_filename,omitempty"`
+	// SourceTemporaryFilePublicID holds the value of the "source_temporary_file_public_id" field.
+	SourceTemporaryFilePublicID *entx.CIText `json:"source_temporary_file_public_id,omitempty"`
+	// SourceConversionClaimToken holds the value of the "source_conversion_claim_token" field.
+	SourceConversionClaimToken *string `json:"source_conversion_claim_token,omitempty"`
 	// CopiedToFinalDestinationAt holds the value of the "copied_to_final_destination_at" field.
 	CopiedToFinalDestinationAt *time.Time `json:"copied_to_final_destination_at,omitempty"`
 	// DeletedTemporaryFileAt holds the value of the "deleted_temporary_file_at" field.
@@ -127,11 +136,13 @@ func (*StoredFile) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case storedfile.FieldSourceTemporaryFilePublicID:
+			values[i] = &sql.NullScanner{S: new(entx.CIText)}
 		case storedfile.FieldID, storedfile.FieldCreatedBy, storedfile.FieldUpdatedBy, storedfile.FieldSize, storedfile.FieldSizeInStorage:
 			values[i] = new(sql.NullInt64)
-		case storedfile.FieldFilename, storedfile.FieldSha256, storedfile.FieldContentSha256, storedfile.FieldMimeType, storedfile.FieldBucketName, storedfile.FieldStoragePath, storedfile.FieldStorageFilename, storedfile.FieldTemporaryStoragePath, storedfile.FieldTemporaryStorageFilename:
+		case storedfile.FieldFilename, storedfile.FieldSha256, storedfile.FieldContentSha256, storedfile.FieldStorageCrc32c, storedfile.FieldMimeType, storedfile.FieldBucketName, storedfile.FieldStoragePath, storedfile.FieldStorageFilename, storedfile.FieldTemporaryStoragePath, storedfile.FieldTemporaryStorageFilename, storedfile.FieldSourceConversionClaimToken:
 			values[i] = new(sql.NullString)
-		case storedfile.FieldCreatedAt, storedfile.FieldUpdatedAt, storedfile.FieldUploadStartedAt, storedfile.FieldUploadFailedAt, storedfile.FieldUploadSucceededAt, storedfile.FieldCopiedToFinalDestinationAt, storedfile.FieldDeletedTemporaryFileAt:
+		case storedfile.FieldCreatedAt, storedfile.FieldUpdatedAt, storedfile.FieldUploadStartedAt, storedfile.FieldUploadLastProgressAt, storedfile.FieldUploadFailedAt, storedfile.FieldUploadSucceededAt, storedfile.FieldCopiedToFinalDestinationAt, storedfile.FieldDeletedTemporaryFileAt:
 			values[i] = new(sql.NullTime)
 		case storedfile.FieldStorageType:
 			values[i] = new(storagetype.StorageType)
@@ -186,6 +197,13 @@ func (_m *StoredFile) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.UploadStartedAt = value.Time
 			}
+		case storedfile.FieldUploadLastProgressAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field upload_last_progress_at", values[i])
+			} else if value.Valid {
+				_m.UploadLastProgressAt = new(time.Time)
+				*_m.UploadLastProgressAt = value.Time
+			}
 		case storedfile.FieldUploadFailedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field upload_failed_at", values[i])
@@ -230,6 +248,13 @@ func (_m *StoredFile) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ContentSha256 = value.String
 			}
+		case storedfile.FieldStorageCrc32c:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field storage_crc32c", values[i])
+			} else if value.Valid {
+				_m.StorageCrc32c = new(string)
+				*_m.StorageCrc32c = value.String
+			}
 		case storedfile.FieldMimeType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mime_type", values[i])
@@ -271,6 +296,20 @@ func (_m *StoredFile) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field temporary_storage_filename", values[i])
 			} else if value.Valid {
 				_m.TemporaryStorageFilename = value.String
+			}
+		case storedfile.FieldSourceTemporaryFilePublicID:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field source_temporary_file_public_id", values[i])
+			} else if value.Valid {
+				_m.SourceTemporaryFilePublicID = new(entx.CIText)
+				*_m.SourceTemporaryFilePublicID = *value.S.(*entx.CIText)
+			}
+		case storedfile.FieldSourceConversionClaimToken:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_conversion_claim_token", values[i])
+			} else if value.Valid {
+				_m.SourceConversionClaimToken = new(string)
+				*_m.SourceConversionClaimToken = value.String
 			}
 		case storedfile.FieldCopiedToFinalDestinationAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -357,6 +396,11 @@ func (_m *StoredFile) String() string {
 	builder.WriteString("upload_started_at=")
 	builder.WriteString(_m.UploadStartedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	if v := _m.UploadLastProgressAt; v != nil {
+		builder.WriteString("upload_last_progress_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
 	if v := _m.UploadFailedAt; v != nil {
 		builder.WriteString("upload_failed_at=")
 		builder.WriteString(v.Format(time.ANSIC))
@@ -382,6 +426,11 @@ func (_m *StoredFile) String() string {
 	builder.WriteString("content_sha256=")
 	builder.WriteString(_m.ContentSha256)
 	builder.WriteString(", ")
+	if v := _m.StorageCrc32c; v != nil {
+		builder.WriteString("storage_crc32c=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("mime_type=")
 	builder.WriteString(_m.MimeType)
 	builder.WriteString(", ")
@@ -402,6 +451,16 @@ func (_m *StoredFile) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("temporary_storage_filename=")
 	builder.WriteString(_m.TemporaryStorageFilename)
+	builder.WriteString(", ")
+	if v := _m.SourceTemporaryFilePublicID; v != nil {
+		builder.WriteString("source_temporary_file_public_id=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.SourceConversionClaimToken; v != nil {
+		builder.WriteString("source_conversion_claim_token=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	if v := _m.CopiedToFinalDestinationAt; v != nil {
 		builder.WriteString("copied_to_final_destination_at=")

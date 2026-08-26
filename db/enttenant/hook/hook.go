@@ -177,6 +177,18 @@ func (f UserFunc) Mutate(ctx context.Context, m enttenant.Mutation) (enttenant.V
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *enttenant.UserMutation", m)
 }
 
+// The WebDAVResourceFunc type is an adapter to allow the use of ordinary
+// function as WebDAVResource mutator.
+type WebDAVResourceFunc func(context.Context, *enttenant.WebDAVResourceMutation) (enttenant.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WebDAVResourceFunc) Mutate(ctx context.Context, m enttenant.Mutation) (enttenant.Value, error) {
+	if mv, ok := m.(*enttenant.WebDAVResourceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *enttenant.WebDAVResourceMutation", m)
+}
+
 // Condition is a hook condition function.
 type Condition func(context.Context, enttenant.Mutation) bool
 

@@ -9,6 +9,7 @@ import (
 	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
+	tenantprivacy "github.com/simpledms/simpledms/db/enttenant/privacy"
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/util/txx"
@@ -16,7 +17,10 @@ import (
 
 func MarkStoredFileUploadFailed(ctx *ctxx.SpaceContext, storedFileID int64) {
 	_, err := txx.WithTenantWriteSpaceTx(ctx, func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		ctxWithIncomplete := enttenantschema.WithUnfinishedUploads(writeCtx)
+		ctxWithIncomplete := tenantprivacy.DecisionContext(
+			enttenantschema.WithUnfinishedUploads(writeCtx),
+			tenantprivacy.Allow,
+		)
 		err := writeCtx.TTx.StoredFile.
 			UpdateOneID(storedFileID).
 			SetUploadFailedAt(time.Now()).
@@ -85,7 +89,9 @@ func HandleStoredFileUploadFailure(
 		}
 	}
 	MarkStoredFileUploadFailed(ctx, prepared.StoredFileID)
-	DeleteFailedUploadFile(ctx, prepared.FileID)
+	if prepared.IsNewFile {
+		DeleteFailedUploadFile(ctx, prepared.FileID)
+	}
 }
 
 func HandleTemporaryFileUploadFailure(

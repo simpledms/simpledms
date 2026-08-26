@@ -14,6 +14,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 )
 
 // File is the model entity for the File schema.
@@ -39,6 +40,8 @@ type File struct {
 	SpaceID int64 `json:"space_id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Source holds the value of the "source" field.
+	Source filesource.FileSource `json:"source,omitempty"`
 	// IsDirectory holds the value of the "is_directory" field.
 	IsDirectory bool `json:"is_directory,omitempty"`
 	// Notes holds the value of the "notes" field.
@@ -240,6 +243,8 @@ func (*File) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case file.FieldPublicID:
 			values[i] = new(entx.CIText)
+		case file.FieldSource:
+			values[i] = new(filesource.FileSource)
 		case file.FieldIsDirectory, file.FieldIsInInbox, file.FieldIsRootDir:
 			values[i] = new(sql.NullBool)
 		case file.FieldID, file.FieldDeletedBy, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldSpaceID, file.FieldParentID, file.FieldDocumentTypeID, file.FieldOcrRetryCount:
@@ -322,6 +327,12 @@ func (_m *File) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				_m.Name = value.String
+			}
+		case file.FieldSource:
+			if value, ok := values[i].(*filesource.FileSource); !ok {
+				return fmt.Errorf("unexpected type %T for field source", values[i])
+			} else if value != nil {
+				_m.Source = *value
 			}
 		case file.FieldIsDirectory:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -531,6 +542,9 @@ func (_m *File) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	builder.WriteString("source=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Source))
 	builder.WriteString(", ")
 	builder.WriteString("is_directory=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IsDirectory))

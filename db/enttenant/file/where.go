@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 )
 
 // ID filters vertices based on their ID field.
@@ -539,6 +540,26 @@ func NameEqualFold(v string) predicate.File {
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.File {
 	return predicate.File(sql.FieldContainsFold(FieldName, v))
+}
+
+// SourceEQ applies the EQ predicate on the "source" field.
+func SourceEQ(v filesource.FileSource) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldSource, v))
+}
+
+// SourceNEQ applies the NEQ predicate on the "source" field.
+func SourceNEQ(v filesource.FileSource) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldSource, v))
+}
+
+// SourceIn applies the In predicate on the "source" field.
+func SourceIn(vs ...filesource.FileSource) predicate.File {
+	return predicate.File(sql.FieldIn(FieldSource, vs...))
+}
+
+// SourceNotIn applies the NotIn predicate on the "source" field.
+func SourceNotIn(vs ...filesource.FileSource) predicate.File {
+	return predicate.File(sql.FieldNotIn(FieldSource, vs...))
 }
 
 // IsDirectoryEQ applies the EQ predicate on the "is_directory" field.

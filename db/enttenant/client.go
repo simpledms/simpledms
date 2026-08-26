@@ -29,6 +29,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	enttenantwebdavresource "github.com/simpledms/simpledms/db/enttenant/webdavresource"
 
 	stdsql "database/sql"
 )
@@ -70,6 +71,8 @@ type Client struct {
 	TenantDataMigration *TenantDataMigrationClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// WebDAVResource is the client for interacting with the WebDAVResource builders.
+	WebDAVResource *WebDAVResourceClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -97,6 +100,7 @@ func (c *Client) init() {
 	c.TagAssignment = NewTagAssignmentClient(c.config)
 	c.TenantDataMigration = NewTenantDataMigrationClient(c.config)
 	c.User = NewUserClient(c.config)
+	c.WebDAVResource = NewWebDAVResourceClient(c.config)
 }
 
 type (
@@ -205,6 +209,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		TagAssignment:          NewTagAssignmentClient(cfg),
 		TenantDataMigration:    NewTenantDataMigrationClient(cfg),
 		User:                   NewUserClient(cfg),
+		WebDAVResource:         NewWebDAVResourceClient(cfg),
 	}, nil
 }
 
@@ -240,6 +245,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		TagAssignment:          NewTagAssignmentClient(cfg),
 		TenantDataMigration:    NewTenantDataMigrationClient(cfg),
 		User:                   NewUserClient(cfg),
+		WebDAVResource:         NewWebDAVResourceClient(cfg),
 	}, nil
 }
 
@@ -271,7 +277,7 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Attribute, c.DocumentType, c.File, c.FilePropertyAssignment, c.FileVersion,
 		c.PreviewConversion, c.Property, c.Space, c.SpaceUserAssignment, c.StoredFile,
-		c.Tag, c.TagAssignment, c.TenantDataMigration, c.User,
+		c.Tag, c.TagAssignment, c.TenantDataMigration, c.User, c.WebDAVResource,
 	} {
 		n.Use(hooks...)
 	}
@@ -284,7 +290,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Attribute, c.DocumentType, c.File, c.FilePropertyAssignment, c.FileSearch,
 		c.FileVersion, c.PreviewConversion, c.Property, c.ResolvedTagAssignment,
 		c.Space, c.SpaceUserAssignment, c.StoredFile, c.Tag, c.TagAssignment,
-		c.TenantDataMigration, c.User,
+		c.TenantDataMigration, c.User, c.WebDAVResource,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -321,6 +327,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.TenantDataMigration.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
+	case *WebDAVResourceMutation:
+		return c.WebDAVResource.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("enttenant: unknown mutation type %T", m)
 	}
@@ -3192,17 +3200,232 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 	}
 }
 
+// WebDAVResourceClient is a client for the WebDAVResource schema.
+type WebDAVResourceClient struct {
+	config
+}
+
+// NewWebDAVResourceClient returns a client for the WebDAVResource from the given config.
+func NewWebDAVResourceClient(c config) *WebDAVResourceClient {
+	return &WebDAVResourceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `enttenantwebdavresource.Hooks(f(g(h())))`.
+func (c *WebDAVResourceClient) Use(hooks ...Hook) {
+	c.hooks.WebDAVResource = append(c.hooks.WebDAVResource, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `enttenantwebdavresource.Intercept(f(g(h())))`.
+func (c *WebDAVResourceClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WebDAVResource = append(c.inters.WebDAVResource, interceptors...)
+}
+
+// Create returns a builder for creating a WebDAVResource entity.
+func (c *WebDAVResourceClient) Create() *WebDAVResourceCreate {
+	mutation := newWebDAVResourceMutation(c.config, OpCreate)
+	return &WebDAVResourceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WebDAVResource entities.
+func (c *WebDAVResourceClient) CreateBulk(builders ...*WebDAVResourceCreate) *WebDAVResourceCreateBulk {
+	return &WebDAVResourceCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WebDAVResourceClient) MapCreateBulk(slice any, setFunc func(*WebDAVResourceCreate, int)) *WebDAVResourceCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WebDAVResourceCreateBulk{err: fmt.Errorf("calling to WebDAVResourceClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WebDAVResourceCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WebDAVResourceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WebDAVResource.
+func (c *WebDAVResourceClient) Update() *WebDAVResourceUpdate {
+	mutation := newWebDAVResourceMutation(c.config, OpUpdate)
+	return &WebDAVResourceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WebDAVResourceClient) UpdateOne(_m *WebDAVResource) *WebDAVResourceUpdateOne {
+	mutation := newWebDAVResourceMutation(c.config, OpUpdateOne, withWebDAVResource(_m))
+	return &WebDAVResourceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WebDAVResourceClient) UpdateOneID(id int64) *WebDAVResourceUpdateOne {
+	mutation := newWebDAVResourceMutation(c.config, OpUpdateOne, withWebDAVResourceID(id))
+	return &WebDAVResourceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WebDAVResource.
+func (c *WebDAVResourceClient) Delete() *WebDAVResourceDelete {
+	mutation := newWebDAVResourceMutation(c.config, OpDelete)
+	return &WebDAVResourceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WebDAVResourceClient) DeleteOne(_m *WebDAVResource) *WebDAVResourceDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WebDAVResourceClient) DeleteOneID(id int64) *WebDAVResourceDeleteOne {
+	builder := c.Delete().Where(enttenantwebdavresource.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WebDAVResourceDeleteOne{builder}
+}
+
+// Query returns a query builder for WebDAVResource.
+func (c *WebDAVResourceClient) Query() *WebDAVResourceQuery {
+	return &WebDAVResourceQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWebDAVResource},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WebDAVResource entity by its id.
+func (c *WebDAVResourceClient) Get(ctx context.Context, id int64) (*WebDAVResource, error) {
+	return c.Query().Where(enttenantwebdavresource.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WebDAVResourceClient) GetX(ctx context.Context, id int64) *WebDAVResource {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryCreator queries the creator edge of a WebDAVResource.
+func (c *WebDAVResourceClient) QueryCreator(_m *WebDAVResource) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(enttenantwebdavresource.Table, enttenantwebdavresource.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, enttenantwebdavresource.CreatorTable, enttenantwebdavresource.CreatorColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdater queries the updater edge of a WebDAVResource.
+func (c *WebDAVResourceClient) QueryUpdater(_m *WebDAVResource) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(enttenantwebdavresource.Table, enttenantwebdavresource.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, enttenantwebdavresource.UpdaterTable, enttenantwebdavresource.UpdaterColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySpace queries the space edge of a WebDAVResource.
+func (c *WebDAVResourceClient) QuerySpace(_m *WebDAVResource) *SpaceQuery {
+	query := (&SpaceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(enttenantwebdavresource.Table, enttenantwebdavresource.FieldID, id),
+			sqlgraph.To(space.Table, space.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, enttenantwebdavresource.SpaceTable, enttenantwebdavresource.SpaceColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFile queries the file edge of a WebDAVResource.
+func (c *WebDAVResourceClient) QueryFile(_m *WebDAVResource) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(enttenantwebdavresource.Table, enttenantwebdavresource.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, enttenantwebdavresource.FileTable, enttenantwebdavresource.FileColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStoredFile queries the stored_file edge of a WebDAVResource.
+func (c *WebDAVResourceClient) QueryStoredFile(_m *WebDAVResource) *StoredFileQuery {
+	query := (&StoredFileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(enttenantwebdavresource.Table, enttenantwebdavresource.FieldID, id),
+			sqlgraph.To(storedfile.Table, storedfile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, enttenantwebdavresource.StoredFileTable, enttenantwebdavresource.StoredFileColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WebDAVResourceClient) Hooks() []Hook {
+	hooks := c.hooks.WebDAVResource
+	return append(hooks[:len(hooks):len(hooks)], enttenantwebdavresource.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WebDAVResourceClient) Interceptors() []Interceptor {
+	return c.inters.WebDAVResource
+}
+
+func (c *WebDAVResourceClient) mutate(ctx context.Context, m *WebDAVResourceMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WebDAVResourceCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WebDAVResourceUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WebDAVResourceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WebDAVResourceDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("enttenant: unknown WebDAVResource mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
 		Attribute, DocumentType, File, FilePropertyAssignment, FileVersion,
 		PreviewConversion, Property, Space, SpaceUserAssignment, StoredFile, Tag,
-		TagAssignment, TenantDataMigration, User []ent.Hook
+		TagAssignment, TenantDataMigration, User, WebDAVResource []ent.Hook
 	}
 	inters struct {
 		Attribute, DocumentType, File, FilePropertyAssignment, FileSearch, FileVersion,
 		PreviewConversion, Property, ResolvedTagAssignment, Space, SpaceUserAssignment,
-		StoredFile, Tag, TagAssignment, TenantDataMigration, User []ent.Interceptor
+		StoredFile, Tag, TagAssignment, TenantDataMigration, User,
+		WebDAVResource []ent.Interceptor
 	}
 )
 

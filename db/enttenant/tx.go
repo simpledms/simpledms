@@ -46,6 +46,8 @@ type Tx struct {
 	TenantDataMigration *TenantDataMigrationClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// WebDAVResource is the client for interacting with the WebDAVResource builders.
+	WebDAVResource *WebDAVResourceClient
 
 	// lazily loaded.
 	client     *Client
@@ -193,6 +195,7 @@ func (tx *Tx) init() {
 	tx.TagAssignment = NewTagAssignmentClient(tx.config)
 	tx.TenantDataMigration = NewTenantDataMigrationClient(tx.config)
 	tx.User = NewUserClient(tx.config)
+	tx.WebDAVResource = NewWebDAVResourceClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

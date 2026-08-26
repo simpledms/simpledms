@@ -647,6 +647,11 @@
             "translation": ""
         },
         {
+            "id": "Source",
+            "message": "Source",
+            "translation": ""
+        },
+        {
             "id": "File size",
             "message": "File size",
             "translation": ""
@@ -1295,6 +1300,11 @@
             ]
         },
         {
+            "id": "Upload metadata must be sent before the file.",
+            "message": "Upload metadata must be sent before the file.",
+            "translation": ""
+        },
+        {
             "id": "No parent dir provided.",
             "message": "No parent dir provided.",
             "translation": ""
@@ -1305,29 +1315,24 @@
             "translation": ""
         },
         {
-            "id": "could not read file",
-            "message": "could not read file",
+            "id": "No file provided.",
+            "message": "No file provided.",
             "translation": ""
         },
         {
-            "id": "«{Name}» uploaded.",
-            "message": "«{Name}» uploaded.",
+            "id": "«{Filename}» uploaded.",
+            "message": "«{Filename}» uploaded.",
             "translation": "",
             "placeholders": [
                 {
-                    "id": "Name",
+                    "id": "Filename",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "prep.filex.Name"
+                    "expr": "filename"
                 }
             ]
-        },
-        {
-            "id": "No file provided.",
-            "message": "No file provided.",
-            "translation": ""
         },
         {
             "id": "Cannot upload versions for directories.",
@@ -1335,17 +1340,17 @@
             "translation": ""
         },
         {
-            "id": "New version uploaded for «{Name}».",
-            "message": "New version uploaded for «{Name}».",
+            "id": "New version uploaded for «{FileName}».",
+            "message": "New version uploaded for «{FileName}».",
             "translation": "",
             "placeholders": [
                 {
-                    "id": "Name",
+                    "id": "FileName",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "filex.Data.Name"
+                    "expr": "prep.fileName"
                 }
             ]
         },
@@ -1388,6 +1393,121 @@
             "id": "Account",
             "message": "Account",
             "translation": ""
+        },
+        {
+            "id": "Form validation failed.",
+            "message": "Form validation failed.",
+            "translation": ""
+        },
+        {
+            "id": "WebDAV credential created.",
+            "message": "WebDAV credential created.",
+            "translation": ""
+        },
+        {
+            "id": "No spaces available yet.",
+            "message": "No spaces available yet.",
+            "translation": ""
+        },
+        {
+            "id": "Device label",
+            "message": "Device label",
+            "translation": ""
+        },
+        {
+            "id": "Space",
+            "message": "Space",
+            "translation": ""
+        },
+        {
+            "id": "Create",
+            "message": "Create",
+            "translation": ""
+        },
+        {
+            "id": "Create WebDAV credential",
+            "message": "Create WebDAV credential",
+            "translation": ""
+        },
+        {
+            "id": "WebDAV credential created",
+            "message": "WebDAV credential created",
+            "translation": ""
+        },
+        {
+            "id": "Copy the secret now. It will not be shown again.",
+            "message": "Copy the secret now. It will not be shown again.",
+            "translation": ""
+        },
+        {
+            "id": "WebDAV URL",
+            "message": "WebDAV URL",
+            "translation": ""
+        },
+        {
+            "id": "Username",
+            "message": "Username",
+            "translation": ""
+        },
+        {
+            "id": "Secret",
+            "message": "Secret",
+            "translation": ""
+        },
+        {
+            "id": "Destination unavailable.",
+            "message": "Destination unavailable.",
+            "translation": ""
+        },
+        {
+            "id": "You cannot create a credential for this Space.",
+            "message": "You cannot create a credential for this Space.",
+            "translation": ""
+        },
+        {
+            "id": "Copy {TranslatedLabel}",
+            "message": "Copy {TranslatedLabel}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "TranslatedLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "translatedLabel"
+                }
+            ]
+        },
+        {
+            "id": "{TranslatedLabel} copied to clipboard.",
+            "message": "{TranslatedLabel} copied to clipboard.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "TranslatedLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "translatedLabel"
+                }
+            ]
+        },
+        {
+            "id": "Could not copy {TranslatedLabel}.",
+            "message": "Could not copy {TranslatedLabel}.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "TranslatedLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "translatedLabel"
+                }
+            ]
         },
         {
             "id": "Open tasks",
@@ -1554,11 +1674,6 @@
             "translation": ""
         },
         {
-            "id": "Space",
-            "message": "Space",
-            "translation": ""
-        },
-        {
             "id": "Select",
             "message": "Select",
             "translation": "",
@@ -1607,21 +1722,6 @@
         {
             "id": "Manage spaces",
             "message": "Manage spaces",
-            "translation": ""
-        },
-        {
-            "id": "Delete organization",
-            "message": "Delete organization",
-            "translation": ""
-        },
-        {
-            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
-            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
-            "translation": ""
-        },
-        {
-            "id": "Download backup",
-            "message": "Download backup",
             "translation": ""
         },
         {
@@ -1700,6 +1800,11 @@
             "translation": ""
         },
         {
+            "id": "Organization",
+            "message": "Organization",
+            "translation": ""
+        },
+        {
             "id": "Enable passkey enforcement",
             "message": "Enable passkey enforcement",
             "translation": ""
@@ -1717,6 +1822,31 @@
         {
             "id": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
             "message": "Disable passkey enforcement for this organization? Members can use passwords again if allowed.",
+            "translation": ""
+        },
+        {
+            "id": "Delete organization",
+            "message": "Delete organization",
+            "translation": ""
+        },
+        {
+            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "translation": ""
+        },
+        {
+            "id": "Download backup",
+            "message": "Download backup",
+            "translation": ""
+        },
+        {
+            "id": "You are not allowed to revoke this credential.",
+            "message": "You are not allowed to revoke this credential.",
+            "translation": ""
+        },
+        {
+            "id": "WebDAV credential revoked.",
+            "message": "WebDAV credential revoked.",
             "translation": ""
         },
         {
@@ -1762,6 +1892,159 @@
         {
             "id": "Passkey enforcement disabled for organization.",
             "message": "Passkey enforcement disabled for organization.",
+            "translation": ""
+        },
+        {
+            "id": "Filter WebDAV credentials",
+            "message": "Filter WebDAV credentials",
+            "translation": ""
+        },
+        {
+            "id": "Active",
+            "message": "Active",
+            "translation": ""
+        },
+        {
+            "id": "Revoked",
+            "message": "Revoked",
+            "translation": ""
+        },
+        {
+            "id": "No WebDAV credentials",
+            "message": "No WebDAV credentials",
+            "translation": ""
+        },
+        {
+            "id": "Create a device credential to upload files to an Inbox over WebDAV.",
+            "message": "Create a device credential to upload files to an Inbox over WebDAV.",
+            "translation": ""
+        },
+        {
+            "id": "Unavailable destination",
+            "message": "Unavailable destination",
+            "translation": ""
+        },
+        {
+            "id": "Copy WebDAV URL",
+            "message": "Copy WebDAV URL",
+            "translation": ""
+        },
+        {
+            "id": "WebDAV URL copied to clipboard.",
+            "message": "WebDAV URL copied to clipboard.",
+            "translation": ""
+        },
+        {
+            "id": "Could not copy WebDAV URL.",
+            "message": "Could not copy WebDAV URL.",
+            "translation": ""
+        },
+        {
+            "id": "{Stringctx} · Username: {Username} · Created: {CreatedAt}",
+            "message": "{Stringctx} · Username: {Username} · Created: {CreatedAt}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Stringctx",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "destinationLabel.String(ctx)"
+                },
+                {
+                    "id": "Username",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "credentialx.Username"
+                },
+                {
+                    "id": "CreatedAt",
+                    "string": "%[3]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 3,
+                    "expr": "formatCredentialTime(ctx, credentialx.CreatedAt)"
+                }
+            ]
+        },
+        {
+            "id": "{Stringctx} · Username: {Username} · Last used: {LastUsedAt}",
+            "message": "{Stringctx} · Username: {Username} · Last used: {LastUsedAt}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Stringctx",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "destinationLabel.String(ctx)"
+                },
+                {
+                    "id": "Username",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "credentialx.Username"
+                },
+                {
+                    "id": "LastUsedAt",
+                    "string": "%[3]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 3,
+                    "expr": "formatCredentialTime(ctx, *credentialx.LastUsedAt)"
+                }
+            ]
+        },
+        {
+            "id": "{Stringctx} · Username: {Username} · Revoked: {RevokedAt}",
+            "message": "{Stringctx} · Username: {Username} · Revoked: {RevokedAt}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Stringctx",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "destinationLabel.String(ctx)"
+                },
+                {
+                    "id": "Username",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "credentialx.Username"
+                },
+                {
+                    "id": "RevokedAt",
+                    "string": "%[3]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 3,
+                    "expr": "formatCredentialTime(ctx, *credentialx.RevokedAt)"
+                }
+            ]
+        },
+        {
+            "id": "Revoke",
+            "message": "Revoke",
+            "translation": ""
+        },
+        {
+            "id": "Revoke this WebDAV credential?",
+            "message": "Revoke this WebDAV credential?",
+            "translation": ""
+        },
+        {
+            "id": "WebDAV credentials",
+            "message": "WebDAV credentials",
             "translation": ""
         },
         {
@@ -1956,6 +2239,11 @@
             "translation": "original source preview is only available for HTML files"
         },
         {
+            "id": "could not read file",
+            "message": "could not read file",
+            "translation": ""
+        },
+        {
             "id": "Assign file",
             "message": "Assign file",
             "translation": ""
@@ -2001,6 +2289,11 @@
             "translation": ""
         },
         {
+            "id": "Invalid source filter.",
+            "message": "Invalid source filter.",
+            "translation": ""
+        },
+        {
             "id": "Inbox",
             "message": "Inbox",
             "translation": ""
@@ -2008,6 +2301,11 @@
         {
             "id": "Search in «Inbox»",
             "message": "Search in «Inbox»",
+            "translation": ""
+        },
+        {
+            "id": "Filter by source",
+            "message": "Filter by source",
             "translation": ""
         },
         {
@@ -2044,6 +2342,11 @@
                     "expr": "filex.Data.Name"
                 }
             ]
+        },
+        {
+            "id": "Source | Filter",
+            "message": "Source | Filter",
+            "translation": ""
         },
         {
             "id": "Assign user to space",
@@ -2309,6 +2612,68 @@
             ]
         },
         {
+            "id": "Space: {SpaceLabel} · Username: {Username} · Created: {LanguageBCP47}",
+            "message": "Space: {SpaceLabel} · Username: {Username} · Created: {LanguageBCP47}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "SpaceLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "spaceLabel"
+                },
+                {
+                    "id": "Username",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "credentialx.Username"
+                },
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[3]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 3,
+                    "expr": "timex.NewDateTime(credentialx.CreatedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ]
+        },
+        {
+            "id": "Space: {SpaceLabel} · Username: {Username} · Revoked: {LanguageBCP47}",
+            "message": "Space: {SpaceLabel} · Username: {Username} · Revoked: {LanguageBCP47}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "SpaceLabel",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "spaceLabel"
+                },
+                {
+                    "id": "Username",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "credentialx.Username"
+                },
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[3]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 3,
+                    "expr": "timex.NewDateTime(*credentialx.RevokedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ]
+        },
+        {
             "id": "Upload",
             "message": "Upload",
             "translation": ""
@@ -2436,11 +2801,6 @@
         {
             "id": "Changes saved.",
             "message": "Changes saved.",
-            "translation": ""
-        },
-        {
-            "id": "No spaces available yet.",
-            "message": "No spaces available yet.",
             "translation": ""
         },
         {
@@ -2801,6 +3161,36 @@
             "translation": ""
         },
         {
+            "id": "Web upload",
+            "message": "Web upload",
+            "translation": ""
+        },
+        {
+            "id": "Open with",
+            "message": "Open with",
+            "translation": ""
+        },
+        {
+            "id": "URL import",
+            "message": "URL import",
+            "translation": ""
+        },
+        {
+            "id": "WebDAV",
+            "message": "WebDAV",
+            "translation": ""
+        },
+        {
+            "id": "System extraction",
+            "message": "System extraction",
+            "translation": ""
+        },
+        {
+            "id": "Unknown",
+            "message": "Unknown",
+            "translation": ""
+        },
+        {
             "id": "Upload is too large.",
             "message": "Upload is too large.",
             "translation": ""
@@ -2823,11 +3213,6 @@
         {
             "id": "Cannot validate form.",
             "message": "Cannot validate form.",
-            "translation": ""
-        },
-        {
-            "id": "Form validation failed.",
-            "message": "Form validation failed.",
             "translation": ""
         },
         {
@@ -3052,6 +3437,11 @@
             "translation": ""
         },
         {
+            "id": "Credential status values",
+            "message": "Credential status values",
+            "translation": ""
+        },
+        {
             "id": "Croatia",
             "message": "Croatia",
             "translation": ""
@@ -3094,6 +3484,11 @@
         {
             "id": "Description",
             "message": "Description",
+            "translation": ""
+        },
+        {
+            "id": "Destination",
+            "message": "Destination",
             "translation": ""
         },
         {
@@ -3204,6 +3599,11 @@
         {
             "id": "Italy",
             "message": "Italy",
+            "translation": ""
+        },
+        {
+            "id": "Label",
+            "message": "Label",
             "translation": ""
         },
         {
@@ -3995,6 +4395,21 @@
             "translation": ""
         },
         {
+            "id": "Credential label is required.",
+            "message": "Credential label is required.",
+            "translation": ""
+        },
+        {
+            "id": "Could not create credential.",
+            "message": "Could not create credential.",
+            "translation": ""
+        },
+        {
+            "id": "Credential not found.",
+            "message": "Credential not found.",
+            "translation": ""
+        },
+        {
             "id": "Please select at least one document type.",
             "message": "Please select at least one document type.",
             "translation": ""
@@ -4185,8 +4600,28 @@
             "translation": ""
         },
         {
+            "id": "Upload is empty.",
+            "message": "Upload is empty.",
+            "translation": ""
+        },
+        {
+            "id": "Upload size mismatch.",
+            "message": "Upload size mismatch.",
+            "translation": ""
+        },
+        {
+            "id": "Upload is no longer active.",
+            "message": "Upload is no longer active.",
+            "translation": ""
+        },
+        {
             "id": "Bucket name is empty.",
             "message": "Bucket name is empty.",
+            "translation": ""
+        },
+        {
+            "id": "Could not save file.",
+            "message": "Could not save file.",
             "translation": ""
         },
         {
@@ -4195,8 +4630,13 @@
             "translation": ""
         },
         {
-            "id": "Could not save file.",
-            "message": "Could not save file.",
+            "id": "Malformed upload body.",
+            "message": "Malformed upload body.",
+            "translation": ""
+        },
+        {
+            "id": "Could not verify stored file.",
+            "message": "Could not verify stored file.",
             "translation": ""
         },
         {
@@ -4210,8 +4650,38 @@
             "translation": ""
         },
         {
+            "id": "Could not claim uploaded file.",
+            "message": "Could not claim uploaded file.",
+            "translation": ""
+        },
+        {
+            "id": "Could not verify staged file.",
+            "message": "Could not verify staged file.",
+            "translation": ""
+        },
+        {
             "id": "App not unlocked yet.",
             "message": "App not unlocked yet.",
+            "translation": ""
+        },
+        {
+            "id": "Staged file integrity mismatch.",
+            "message": "Staged file integrity mismatch.",
+            "translation": ""
+        },
+        {
+            "id": "Uploaded file is already being processed.",
+            "message": "Uploaded file is already being processed.",
+            "translation": ""
+        },
+        {
+            "id": "Tenant database not found.",
+            "message": "Tenant database not found.",
+            "translation": ""
+        },
+        {
+            "id": "Uploaded file processing was taken over.",
+            "message": "Uploaded file processing was taken over.",
             "translation": ""
         },
         {
@@ -4318,11 +4788,6 @@
             "translation": ""
         },
         {
-            "id": "Organization",
-            "message": "Organization",
-            "translation": ""
-        },
-        {
             "id": "Receipt",
             "message": "Receipt",
             "translation": ""
@@ -4395,11 +4860,6 @@
         {
             "id": "Draft",
             "message": "Draft",
-            "translation": ""
-        },
-        {
-            "id": "Active",
-            "message": "Active",
             "translation": ""
         },
         {
@@ -4688,6 +5148,11 @@
             "translation": ""
         },
         {
+            "id": "Something went wrong. Please try again.",
+            "message": "Something went wrong. Please try again.",
+            "translation": "Something went wrong. Please try again."
+        },
+        {
             "id": "A similar entity already exists.",
             "message": "A similar entity already exists.",
             "translation": ""
@@ -4706,11 +5171,6 @@
             "id": "Data validation failed.",
             "message": "Data validation failed.",
             "translation": ""
-        },
-        {
-            "id": "Something went wrong. Please try again.",
-            "message": "Something went wrong. Please try again.",
-            "translation": "Something went wrong. Please try again."
         },
         {
             "id": "You are not signed in. Please sign in to continue.",
@@ -4798,13 +5258,18 @@
             "translation": ""
         },
         {
-            "id": "Tenant database not found.",
-            "message": "Tenant database not found.",
+            "id": "Could not start transaction.",
+            "message": "Could not start transaction.",
             "translation": ""
         },
         {
-            "id": "Could not start transaction.",
-            "message": "Could not start transaction.",
+            "id": "Could not read data.",
+            "message": "Could not read data.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid upload size.",
+            "message": "Invalid upload size.",
             "translation": ""
         }
     ]

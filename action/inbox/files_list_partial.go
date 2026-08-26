@@ -3,6 +3,7 @@ package inbox
 import (
 	"html/template"
 	"log"
+	"net/http"
 	"strconv"
 	"strings"
 
@@ -18,6 +19,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/main/filelistpreference"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/renderable"
@@ -26,6 +28,7 @@ import (
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 	"github.com/simpledms/simpledms/util/sqlutil"
 )
@@ -44,8 +47,9 @@ const (
 type FilesListPartialState struct {
 	SearchQuery string `url:"q,omitempty"`
 	// used in JS, thus don't change URL and as param name below
-	ActiveSideSheet string `url:"side_sheet,omitempty"`
-	SortBy          string `url:"sort_by,omitempty"` // TODO enum
+	ActiveSideSheet string   `url:"side_sheet,omitempty"`
+	SortBy          string   `url:"sort_by,omitempty"` // TODO enum
+	SourceValues    []string `url:"source,omitempty"`
 }
 
 func (qq *FilesListPartialState) isSortedByDate() bool {
@@ -60,6 +64,35 @@ func (qq *FilesListPartialState) normalizeSortBy() {
 	if qq.SortBy == sortByRank && !qq.hasActiveSearch() {
 		qq.SortBy = ""
 	}
+}
+
+func (qq *FilesListPartialState) sources() ([]filesource.FileSource, error) {
+	if len(qq.SourceValues) == 0 {
+		return nil, nil
+	}
+	sources := make([]filesource.FileSource, 0, len(qq.SourceValues))
+	seen := map[filesource.FileSource]bool{}
+	for _, value := range qq.SourceValues {
+		source, err := filesource.FileSourceString(value)
+		if err != nil {
+			return nil, err
+		}
+		if seen[source] {
+			continue
+		}
+		seen[source] = true
+		sources = append(sources, source)
+	}
+	return sources, nil
+}
+
+func (qq *FilesListPartialState) hasSource(source filesource.FileSource) bool {
+	for _, value := range qq.SourceValues {
+		if value == source.String() {
+			return true
+		}
+	}
+	return false
 }
 
 type FilesListPartial struct {
@@ -109,6 +142,9 @@ func (qq *FilesListPartial) Handler(
 
 	state := autil.StateX[InboxPageState](rw, req)
 	state.FilesListPartialState.normalizeSortBy()
+	if _, err := state.FilesListPartialState.sources(); err != nil {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid source filter.")
+	}
 
 	hxTarget := req.URL.Query().Get("hx-target")
 	if hxTarget == "#"+qq.FileListID() {
@@ -233,10 +269,11 @@ func (qq *FilesListPartial) Widget(
 			HxTrigger: strings.Join([]string{
 				// see comment on HTMXAttrs on ScrollableContent (FileList)
 				event.SortByUpdated.HandlerWithModifier("delay:100ms"), // TODO delay necessary?
-				event.FileMoved.Handler(),                              // because it also has to close details
-				event.FileDeleted.Handler(),                            // because it also has to close details
+				event.SourceFilterChanged.HandlerWithModifier("delay:100ms"),
+				event.FileMoved.Handler(),   // because it also has to close details
+				event.FileDeleted.Handler(), // because it also has to close details
 			}, ", "),
-			HxInclude: "#search,#sortBy",
+			HxInclude: "#search,#sortBy,#inboxSourceFilter",
 		},
 		Children: children,
 	}
@@ -306,12 +343,13 @@ func (qq *FilesListPartial) filesList(
 				// updating the app bar while using the search input leads to flickering and
 				// loss of input while typing
 				event.SearchQueryUpdated.HandlerWithModifier("delay:100ms"),
+				event.SourceFilterChanged.HandlerWithModifier("delay:100ms"),
 				event.FileUploaded.Handler(),
 				event.ZIPArchiveUnzipped.Handler(), // TODO necessary?
 				event.FileDeleted.Handler(),
 				event.FileUpdated.Handler(),
 			}, ", "),
-			HxInclude: "#search,#sortBy",
+			HxInclude: "#search,#sortBy,#inboxSourceFilter",
 		},
 	}
 }
@@ -368,7 +406,7 @@ func (qq *FilesListPartial) filesListItemsFromFiles(
 				HxTrigger: "intersect once",
 				HxTarget:  "#inboxLoadMore",
 				HxSwap:    "outerHTML",
-				HxInclude: "#search,#sortBy",
+				HxInclude: "#search,#sortBy,#inboxSourceFilter",
 			},
 		})
 	}
@@ -420,6 +458,13 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 		)
 	}
 
+	sources, err := state.FilesListPartialState.sources()
+	if err != nil {
+		log.Println(err)
+	} else if len(sources) > 0 {
+		searchResultQuery = searchResultQuery.Where(file.SourceIn(sources...))
+	}
+
 	if searchQuery != "" {
 		searchResultQuery = searchResultQuery.Where(
 			func(qs *sql.Selector) {
@@ -467,6 +512,7 @@ func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wid
 		Actions: []widget.IWidget{
 			qq.fileListViewButton(ctx),
 			qq.sortMenuButton(ctx, &state.FilesListPartialState, false),
+			qq.sourceFilterButton(),
 		},
 		Search: &widget.Search{
 			Widget: widget.Widget[widget.Search]{
@@ -503,6 +549,17 @@ func (qq *FilesListPartial) sortMenuButton(
 			Icon:     "sort",
 			Tooltip:  widget.T("Sort files"),
 			Children: NewSortListContextMenuWidget(qq.actions).Widget(ctx, state),
+		},
+	}
+}
+
+func (qq *FilesListPartial) sourceFilterButton() *widget.IconButton {
+	return &widget.IconButton{
+		Icon:    "filter_alt",
+		Tooltip: widget.T("Filter by source"),
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:        qq.actions.SourceFilterDialog.Endpoint(),
+			LoadInPopover: true,
 		},
 	}
 }
@@ -546,6 +603,7 @@ func (qq *FilesListPartial) fileListViewMenu(
 		label  *widget.Text
 	}{
 		{filelistpreference.FileListColumnName, widget.T("Name")},
+		{filelistpreference.FileListColumnSource, widget.T("Source")},
 		{filelistpreference.FileListColumnOriginalFilename, widget.T("Original filename")},
 		{filelistpreference.FileListColumnDocumentType, widget.T("Type")},
 		{filelistpreference.FileListColumnMetadata, widget.T("Metadata")},

@@ -28,6 +28,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	enttenantwebdavresource "github.com/simpledms/simpledms/db/enttenant/webdavresource"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -104,6 +105,7 @@ func checkColumn(t, c string) error {
 			tagassignment.Table:              tagassignment.ValidColumn,
 			tenantdatamigration.Table:        tenantdatamigration.ValidColumn,
 			user.Table:                       user.ValidColumn,
+			enttenantwebdavresource.Table:    enttenantwebdavresource.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

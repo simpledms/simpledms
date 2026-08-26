@@ -471,6 +471,30 @@ func (f UserMutationRuleFunc) EvalMutation(ctx context.Context, m enttenant.Muta
 	return Denyf("enttenant/privacy: unexpected mutation type %T, expect *enttenant.UserMutation", m)
 }
 
+// The WebDAVResourceQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type WebDAVResourceQueryRuleFunc func(context.Context, *enttenant.WebDAVResourceQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f WebDAVResourceQueryRuleFunc) EvalQuery(ctx context.Context, q enttenant.Query) error {
+	if q, ok := q.(*enttenant.WebDAVResourceQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("enttenant/privacy: unexpected query type %T, expect *enttenant.WebDAVResourceQuery", q)
+}
+
+// The WebDAVResourceMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type WebDAVResourceMutationRuleFunc func(context.Context, *enttenant.WebDAVResourceMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f WebDAVResourceMutationRuleFunc) EvalMutation(ctx context.Context, m enttenant.Mutation) error {
+	if m, ok := m.(*enttenant.WebDAVResourceMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("enttenant/privacy: unexpected mutation type %T, expect *enttenant.WebDAVResourceMutation", m)
+}
+
 type (
 	// Filter is the interface that wraps the Where function
 	// for filtering nodes in queries and mutations.
@@ -538,6 +562,8 @@ func queryFilter(q enttenant.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *enttenant.UserQuery:
 		return q.Filter(), nil
+	case *enttenant.WebDAVResourceQuery:
+		return q.Filter(), nil
 	default:
 		return nil, Denyf("enttenant/privacy: unexpected query type %T for query filter", q)
 	}
@@ -572,6 +598,8 @@ func mutationFilter(m enttenant.Mutation) (Filter, error) {
 	case *enttenant.TenantDataMigrationMutation:
 		return m.Filter(), nil
 	case *enttenant.UserMutation:
+		return m.Filter(), nil
+	case *enttenant.WebDAVResourceMutation:
 		return m.Filter(), nil
 	default:
 		return nil, Denyf("enttenant/privacy: unexpected mutation type %T for mutation filter", m)

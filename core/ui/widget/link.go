@@ -10,10 +10,16 @@ type Link struct {
 	SubmitForm    bool // TODO name? // not used as of Aug 16 2024
 	Child         IWidget
 	IsResponsive  bool
+	WrapAnywhere  bool
 
 	IsNoColor bool
 
 	Filename string
+
+	CopyValue         string
+	CopyTooltip       *Text
+	CopiedMessage     *Text
+	CopyFailedMessage *Text
 	// IsDownload    bool
 }
 
@@ -26,8 +32,12 @@ func (qq *Link) IsText() bool {
 	return ok
 }
 
+func (qq *Link) IsCopyable() bool {
+	return qq.CopyValue != ""
+}
+
 func (qq *Link) GetClass() string {
-	return ""
+	return qq.Classes
 	/*
 		classes := strings.Split(qq.Classes, " ")
 		if qq.IsResponsive {

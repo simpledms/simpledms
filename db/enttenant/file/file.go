@@ -3,12 +3,14 @@
 package file
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 )
 
 const (
@@ -34,6 +36,8 @@ const (
 	FieldSpaceID = "space_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldSource holds the string denoting the source field in the database.
+	FieldSource = "source"
 	// FieldIsDirectory holds the string denoting the is_directory field in the database.
 	FieldIsDirectory = "is_directory"
 	// FieldNotes holds the string denoting the notes field in the database.
@@ -181,6 +185,7 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldSpaceID,
 	FieldName,
+	FieldSource,
 	FieldIsDirectory,
 	FieldNotes,
 	FieldModifiedAt,
@@ -224,7 +229,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/simpledms/simpledms/db/enttenant/runtime"
 var (
-	Hooks        [2]ent.Hook
+	Hooks        [3]ent.Hook
 	Interceptors [1]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultPublicID holds the default value on creation for the "public_id" field.
@@ -246,6 +251,16 @@ var (
 	// DefaultOcrLastTriedAt holds the default value on creation for the "ocr_last_tried_at" field.
 	DefaultOcrLastTriedAt time.Time
 )
+
+// SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
+func SourceValidator(s filesource.FileSource) error {
+	switch s.String() {
+	case "UnknownLegacy", "WebInterface", "PWAOSOpen", "URLImport", "WebDAV", "SystemExtraction":
+		return nil
+	default:
+		return fmt.Errorf("file: invalid enum value for source field: %q", s)
+	}
+}
 
 // OrderOption defines the ordering options for the File queries.
 type OrderOption func(*sql.Selector)
@@ -298,6 +313,11 @@ func BySpaceID(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// BySource orders the results by the source field.
+func BySource(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSource, opts...).ToFunc()
 }
 
 // ByIsDirectory orders the results by the is_directory field.

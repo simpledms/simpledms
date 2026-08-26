@@ -4,6 +4,7 @@ type FileListColumn string
 
 const (
 	FileListColumnName             FileListColumn = "name"
+	FileListColumnSource           FileListColumn = "source"
 	FileListColumnOriginalFilename FileListColumn = "original_filename"
 	FileListColumnDocumentType     FileListColumn = "document_type"
 	FileListColumnMetadata         FileListColumn = "metadata"
@@ -14,6 +15,7 @@ const (
 func DefaultFileListColumns() []FileListColumn {
 	return []FileListColumn{
 		FileListColumnName,
+		FileListColumnSource,
 		FileListColumnDocumentType,
 		FileListColumnDate,
 		FileListColumnSize,
@@ -28,6 +30,7 @@ func FileListColumnString(value string) (FileListColumn, bool) {
 func (qq FileListColumn) IsValid() bool {
 	switch qq {
 	case FileListColumnName,
+		FileListColumnSource,
 		FileListColumnOriginalFilename,
 		FileListColumnDocumentType,
 		FileListColumnMetadata,

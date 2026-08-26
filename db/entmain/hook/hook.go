@@ -117,6 +117,18 @@ func (f WebAuthnChallengeFunc) Mutate(ctx context.Context, m entmain.Mutation) (
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *entmain.WebAuthnChallengeMutation", m)
 }
 
+// The WebDAVCredentialFunc type is an adapter to allow the use of ordinary
+// function as WebDAVCredential mutator.
+type WebDAVCredentialFunc func(context.Context, *entmain.WebDAVCredentialMutation) (entmain.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WebDAVCredentialFunc) Mutate(ctx context.Context, m entmain.Mutation) (entmain.Value, error) {
+	if mv, ok := m.(*entmain.WebDAVCredentialMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *entmain.WebDAVCredentialMutation", m)
+}
+
 // Condition is a hook condition function.
 type Condition func(context.Context, entmain.Mutation) bool
 

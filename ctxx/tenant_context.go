@@ -32,11 +32,21 @@ func NewTenantContext(
 	tenant *entmain.Tenant,
 	isReadOnly bool,
 ) *TenantContext {
-	tenantID := tenant.PublicID.String()
-
 	userx := tenantTx.User.Query().
 		Where(user.AccountID(mainContext.Account.ID)).
 		OnlyX(mainContext)
+
+	return NewTenantContextWithUser(mainContext, tenantTx, tenant, userx, isReadOnly)
+}
+
+func NewTenantContextWithUser(
+	mainContext *MainContext,
+	tenantTx *enttenant.Tx,
+	tenant *entmain.Tenant,
+	userx *enttenant.User,
+	isReadOnly bool,
+) *TenantContext {
+	tenantID := tenant.PublicID.String()
 
 	// TODO add a cache for database entities?
 	tenantCtx := &TenantContext{

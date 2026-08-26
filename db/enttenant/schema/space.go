@@ -70,7 +70,7 @@ func (Space) Indexes() []ent.Index {
 
 func (Space) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		entx.NewPublicIDMixin(false), // spaces can be renamed
+		entx.NewPublicIDMixin(true),
 		NewSoftDeleteMixin(Space.Type),
 	}
 }

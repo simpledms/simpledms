@@ -73,6 +73,10 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 
 	items := []*widget.ListItem{
 		{
+			Headline:       widget.T("Source"),
+			SupportingText: autil.FileSourceLabel(filem.Data.Source),
+		},
+		{
 			Headline:       widget.T("File size"),
 			SupportingText: widget.Tu(currentVersion.SizeString()),
 		},

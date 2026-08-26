@@ -27,6 +27,8 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldUploadStartedAt holds the string denoting the upload_started_at field in the database.
 	FieldUploadStartedAt = "upload_started_at"
+	// FieldUploadLastProgressAt holds the string denoting the upload_last_progress_at field in the database.
+	FieldUploadLastProgressAt = "upload_last_progress_at"
 	// FieldUploadFailedAt holds the string denoting the upload_failed_at field in the database.
 	FieldUploadFailedAt = "upload_failed_at"
 	// FieldUploadSucceededAt holds the string denoting the upload_succeeded_at field in the database.
@@ -41,6 +43,8 @@ const (
 	FieldSha256 = "sha256"
 	// FieldContentSha256 holds the string denoting the content_sha256 field in the database.
 	FieldContentSha256 = "content_sha256"
+	// FieldStorageCrc32c holds the string denoting the storage_crc32c field in the database.
+	FieldStorageCrc32c = "storage_crc32c"
 	// FieldMimeType holds the string denoting the mime_type field in the database.
 	FieldMimeType = "mime_type"
 	// FieldStorageType holds the string denoting the storage_type field in the database.
@@ -55,6 +59,10 @@ const (
 	FieldTemporaryStoragePath = "temporary_storage_path"
 	// FieldTemporaryStorageFilename holds the string denoting the temporary_storage_filename field in the database.
 	FieldTemporaryStorageFilename = "temporary_storage_filename"
+	// FieldSourceTemporaryFilePublicID holds the string denoting the source_temporary_file_public_id field in the database.
+	FieldSourceTemporaryFilePublicID = "source_temporary_file_public_id"
+	// FieldSourceConversionClaimToken holds the string denoting the source_conversion_claim_token field in the database.
+	FieldSourceConversionClaimToken = "source_conversion_claim_token"
 	// FieldCopiedToFinalDestinationAt holds the string denoting the copied_to_final_destination_at field in the database.
 	FieldCopiedToFinalDestinationAt = "copied_to_final_destination_at"
 	// FieldDeletedTemporaryFileAt holds the string denoting the deleted_temporary_file_at field in the database.
@@ -105,6 +113,7 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldUpdatedBy,
 	FieldUploadStartedAt,
+	FieldUploadLastProgressAt,
 	FieldUploadFailedAt,
 	FieldUploadSucceededAt,
 	FieldFilename,
@@ -112,6 +121,7 @@ var Columns = []string{
 	FieldSizeInStorage,
 	FieldSha256,
 	FieldContentSha256,
+	FieldStorageCrc32c,
 	FieldMimeType,
 	FieldStorageType,
 	FieldBucketName,
@@ -119,6 +129,8 @@ var Columns = []string{
 	FieldStorageFilename,
 	FieldTemporaryStoragePath,
 	FieldTemporaryStorageFilename,
+	FieldSourceTemporaryFilePublicID,
+	FieldSourceConversionClaimToken,
 	FieldCopiedToFinalDestinationAt,
 	FieldDeletedTemporaryFileAt,
 }
@@ -201,6 +213,11 @@ func ByUploadStartedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUploadStartedAt, opts...).ToFunc()
 }
 
+// ByUploadLastProgressAt orders the results by the upload_last_progress_at field.
+func ByUploadLastProgressAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUploadLastProgressAt, opts...).ToFunc()
+}
+
 // ByUploadFailedAt orders the results by the upload_failed_at field.
 func ByUploadFailedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUploadFailedAt, opts...).ToFunc()
@@ -236,6 +253,11 @@ func ByContentSha256(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContentSha256, opts...).ToFunc()
 }
 
+// ByStorageCrc32c orders the results by the storage_crc32c field.
+func ByStorageCrc32c(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStorageCrc32c, opts...).ToFunc()
+}
+
 // ByMimeType orders the results by the mime_type field.
 func ByMimeType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMimeType, opts...).ToFunc()
@@ -269,6 +291,16 @@ func ByTemporaryStoragePath(opts ...sql.OrderTermOption) OrderOption {
 // ByTemporaryStorageFilename orders the results by the temporary_storage_filename field.
 func ByTemporaryStorageFilename(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTemporaryStorageFilename, opts...).ToFunc()
+}
+
+// BySourceTemporaryFilePublicID orders the results by the source_temporary_file_public_id field.
+func BySourceTemporaryFilePublicID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceTemporaryFilePublicID, opts...).ToFunc()
+}
+
+// BySourceConversionClaimToken orders the results by the source_conversion_claim_token field.
+func BySourceConversionClaimToken(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceConversionClaimToken, opts...).ToFunc()
 }
 
 // ByCopiedToFinalDestinationAt orders the results by the copied_to_final_destination_at field.

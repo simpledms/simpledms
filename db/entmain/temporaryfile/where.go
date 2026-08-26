@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/entmain/predicate"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
@@ -97,6 +98,11 @@ func UploadStartedAt(v time.Time) predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldEQ(FieldUploadStartedAt, v))
 }
 
+// UploadLastProgressAt applies equality check predicate on the "upload_last_progress_at" field. It's identical to UploadLastProgressAtEQ.
+func UploadLastProgressAt(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldUploadLastProgressAt, v))
+}
+
 // UploadFailedAt applies equality check predicate on the "upload_failed_at" field. It's identical to UploadFailedAtEQ.
 func UploadFailedAt(v time.Time) predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldEQ(FieldUploadFailedAt, v))
@@ -132,6 +138,16 @@ func Sha256(v string) predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldEQ(FieldSha256, v))
 }
 
+// ContentSha256 applies equality check predicate on the "content_sha256" field. It's identical to ContentSha256EQ.
+func ContentSha256(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldContentSha256, v))
+}
+
+// StorageCrc32c applies equality check predicate on the "storage_crc32c" field. It's identical to StorageCrc32cEQ.
+func StorageCrc32c(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldStorageCrc32c, v))
+}
+
 // MimeType applies equality check predicate on the "mime_type" field. It's identical to MimeTypeEQ.
 func MimeType(v string) predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldEQ(FieldMimeType, v))
@@ -160,6 +176,21 @@ func UploadToken(v string) predicate.TemporaryFile {
 // ConvertedToStoredFileAt applies equality check predicate on the "converted_to_stored_file_at" field. It's identical to ConvertedToStoredFileAtEQ.
 func ConvertedToStoredFileAt(v time.Time) predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldEQ(FieldConvertedToStoredFileAt, v))
+}
+
+// PersistenceClaimToken applies equality check predicate on the "persistence_claim_token" field. It's identical to PersistenceClaimTokenEQ.
+func PersistenceClaimToken(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldPersistenceClaimToken, v))
+}
+
+// PersistenceTenantID applies equality check predicate on the "persistence_tenant_id" field. It's identical to PersistenceTenantIDEQ.
+func PersistenceTenantID(v int64) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldPersistenceTenantID, v))
+}
+
+// PersistenceLastProgressAt applies equality check predicate on the "persistence_last_progress_at" field. It's identical to PersistenceLastProgressAtEQ.
+func PersistenceLastProgressAt(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldPersistenceLastProgressAt, v))
 }
 
 // ExpiresAt applies equality check predicate on the "expires_at" field. It's identical to ExpiresAtEQ.
@@ -507,6 +538,56 @@ func UploadStartedAtNotNil() predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldNotNull(FieldUploadStartedAt))
 }
 
+// UploadLastProgressAtEQ applies the EQ predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtEQ(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldUploadLastProgressAt, v))
+}
+
+// UploadLastProgressAtNEQ applies the NEQ predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtNEQ(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNEQ(FieldUploadLastProgressAt, v))
+}
+
+// UploadLastProgressAtIn applies the In predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtIn(vs ...time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIn(FieldUploadLastProgressAt, vs...))
+}
+
+// UploadLastProgressAtNotIn applies the NotIn predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtNotIn(vs ...time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotIn(FieldUploadLastProgressAt, vs...))
+}
+
+// UploadLastProgressAtGT applies the GT predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtGT(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGT(FieldUploadLastProgressAt, v))
+}
+
+// UploadLastProgressAtGTE applies the GTE predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtGTE(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGTE(FieldUploadLastProgressAt, v))
+}
+
+// UploadLastProgressAtLT applies the LT predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtLT(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLT(FieldUploadLastProgressAt, v))
+}
+
+// UploadLastProgressAtLTE applies the LTE predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtLTE(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLTE(FieldUploadLastProgressAt, v))
+}
+
+// UploadLastProgressAtIsNil applies the IsNil predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtIsNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIsNull(FieldUploadLastProgressAt))
+}
+
+// UploadLastProgressAtNotNil applies the NotNil predicate on the "upload_last_progress_at" field.
+func UploadLastProgressAtNotNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotNull(FieldUploadLastProgressAt))
+}
+
 // UploadFailedAtEQ applies the EQ predicate on the "upload_failed_at" field.
 func UploadFailedAtEQ(v time.Time) predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldEQ(FieldUploadFailedAt, v))
@@ -692,6 +773,26 @@ func FilenameContainsFold(v string) predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldContainsFold(FieldFilename, v))
 }
 
+// SourceEQ applies the EQ predicate on the "source" field.
+func SourceEQ(v filesource.FileSource) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldSource, v))
+}
+
+// SourceNEQ applies the NEQ predicate on the "source" field.
+func SourceNEQ(v filesource.FileSource) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNEQ(FieldSource, v))
+}
+
+// SourceIn applies the In predicate on the "source" field.
+func SourceIn(vs ...filesource.FileSource) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIn(FieldSource, vs...))
+}
+
+// SourceNotIn applies the NotIn predicate on the "source" field.
+func SourceNotIn(vs ...filesource.FileSource) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotIn(FieldSource, vs...))
+}
+
 // SizeEQ applies the EQ predicate on the "size" field.
 func SizeEQ(v int64) predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldEQ(FieldSize, v))
@@ -855,6 +956,156 @@ func Sha256EqualFold(v string) predicate.TemporaryFile {
 // Sha256ContainsFold applies the ContainsFold predicate on the "sha256" field.
 func Sha256ContainsFold(v string) predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldContainsFold(FieldSha256, v))
+}
+
+// ContentSha256EQ applies the EQ predicate on the "content_sha256" field.
+func ContentSha256EQ(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldContentSha256, v))
+}
+
+// ContentSha256NEQ applies the NEQ predicate on the "content_sha256" field.
+func ContentSha256NEQ(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNEQ(FieldContentSha256, v))
+}
+
+// ContentSha256In applies the In predicate on the "content_sha256" field.
+func ContentSha256In(vs ...string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIn(FieldContentSha256, vs...))
+}
+
+// ContentSha256NotIn applies the NotIn predicate on the "content_sha256" field.
+func ContentSha256NotIn(vs ...string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotIn(FieldContentSha256, vs...))
+}
+
+// ContentSha256GT applies the GT predicate on the "content_sha256" field.
+func ContentSha256GT(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGT(FieldContentSha256, v))
+}
+
+// ContentSha256GTE applies the GTE predicate on the "content_sha256" field.
+func ContentSha256GTE(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGTE(FieldContentSha256, v))
+}
+
+// ContentSha256LT applies the LT predicate on the "content_sha256" field.
+func ContentSha256LT(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLT(FieldContentSha256, v))
+}
+
+// ContentSha256LTE applies the LTE predicate on the "content_sha256" field.
+func ContentSha256LTE(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLTE(FieldContentSha256, v))
+}
+
+// ContentSha256Contains applies the Contains predicate on the "content_sha256" field.
+func ContentSha256Contains(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldContains(FieldContentSha256, v))
+}
+
+// ContentSha256HasPrefix applies the HasPrefix predicate on the "content_sha256" field.
+func ContentSha256HasPrefix(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldHasPrefix(FieldContentSha256, v))
+}
+
+// ContentSha256HasSuffix applies the HasSuffix predicate on the "content_sha256" field.
+func ContentSha256HasSuffix(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldHasSuffix(FieldContentSha256, v))
+}
+
+// ContentSha256IsNil applies the IsNil predicate on the "content_sha256" field.
+func ContentSha256IsNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIsNull(FieldContentSha256))
+}
+
+// ContentSha256NotNil applies the NotNil predicate on the "content_sha256" field.
+func ContentSha256NotNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotNull(FieldContentSha256))
+}
+
+// ContentSha256EqualFold applies the EqualFold predicate on the "content_sha256" field.
+func ContentSha256EqualFold(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEqualFold(FieldContentSha256, v))
+}
+
+// ContentSha256ContainsFold applies the ContainsFold predicate on the "content_sha256" field.
+func ContentSha256ContainsFold(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldContainsFold(FieldContentSha256, v))
+}
+
+// StorageCrc32cEQ applies the EQ predicate on the "storage_crc32c" field.
+func StorageCrc32cEQ(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cNEQ applies the NEQ predicate on the "storage_crc32c" field.
+func StorageCrc32cNEQ(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNEQ(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cIn applies the In predicate on the "storage_crc32c" field.
+func StorageCrc32cIn(vs ...string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIn(FieldStorageCrc32c, vs...))
+}
+
+// StorageCrc32cNotIn applies the NotIn predicate on the "storage_crc32c" field.
+func StorageCrc32cNotIn(vs ...string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotIn(FieldStorageCrc32c, vs...))
+}
+
+// StorageCrc32cGT applies the GT predicate on the "storage_crc32c" field.
+func StorageCrc32cGT(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGT(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cGTE applies the GTE predicate on the "storage_crc32c" field.
+func StorageCrc32cGTE(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGTE(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cLT applies the LT predicate on the "storage_crc32c" field.
+func StorageCrc32cLT(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLT(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cLTE applies the LTE predicate on the "storage_crc32c" field.
+func StorageCrc32cLTE(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLTE(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cContains applies the Contains predicate on the "storage_crc32c" field.
+func StorageCrc32cContains(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldContains(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cHasPrefix applies the HasPrefix predicate on the "storage_crc32c" field.
+func StorageCrc32cHasPrefix(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldHasPrefix(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cHasSuffix applies the HasSuffix predicate on the "storage_crc32c" field.
+func StorageCrc32cHasSuffix(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldHasSuffix(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cIsNil applies the IsNil predicate on the "storage_crc32c" field.
+func StorageCrc32cIsNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIsNull(FieldStorageCrc32c))
+}
+
+// StorageCrc32cNotNil applies the NotNil predicate on the "storage_crc32c" field.
+func StorageCrc32cNotNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotNull(FieldStorageCrc32c))
+}
+
+// StorageCrc32cEqualFold applies the EqualFold predicate on the "storage_crc32c" field.
+func StorageCrc32cEqualFold(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEqualFold(FieldStorageCrc32c, v))
+}
+
+// StorageCrc32cContainsFold applies the ContainsFold predicate on the "storage_crc32c" field.
+func StorageCrc32cContainsFold(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldContainsFold(FieldStorageCrc32c, v))
 }
 
 // MimeTypeEQ applies the EQ predicate on the "mime_type" field.
@@ -1270,6 +1521,181 @@ func ConvertedToStoredFileAtIsNil() predicate.TemporaryFile {
 // ConvertedToStoredFileAtNotNil applies the NotNil predicate on the "converted_to_stored_file_at" field.
 func ConvertedToStoredFileAtNotNil() predicate.TemporaryFile {
 	return predicate.TemporaryFile(sql.FieldNotNull(FieldConvertedToStoredFileAt))
+}
+
+// PersistenceClaimTokenEQ applies the EQ predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenEQ(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldPersistenceClaimToken, v))
+}
+
+// PersistenceClaimTokenNEQ applies the NEQ predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenNEQ(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNEQ(FieldPersistenceClaimToken, v))
+}
+
+// PersistenceClaimTokenIn applies the In predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenIn(vs ...string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIn(FieldPersistenceClaimToken, vs...))
+}
+
+// PersistenceClaimTokenNotIn applies the NotIn predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenNotIn(vs ...string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotIn(FieldPersistenceClaimToken, vs...))
+}
+
+// PersistenceClaimTokenGT applies the GT predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenGT(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGT(FieldPersistenceClaimToken, v))
+}
+
+// PersistenceClaimTokenGTE applies the GTE predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenGTE(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGTE(FieldPersistenceClaimToken, v))
+}
+
+// PersistenceClaimTokenLT applies the LT predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenLT(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLT(FieldPersistenceClaimToken, v))
+}
+
+// PersistenceClaimTokenLTE applies the LTE predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenLTE(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLTE(FieldPersistenceClaimToken, v))
+}
+
+// PersistenceClaimTokenContains applies the Contains predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenContains(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldContains(FieldPersistenceClaimToken, v))
+}
+
+// PersistenceClaimTokenHasPrefix applies the HasPrefix predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenHasPrefix(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldHasPrefix(FieldPersistenceClaimToken, v))
+}
+
+// PersistenceClaimTokenHasSuffix applies the HasSuffix predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenHasSuffix(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldHasSuffix(FieldPersistenceClaimToken, v))
+}
+
+// PersistenceClaimTokenIsNil applies the IsNil predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenIsNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIsNull(FieldPersistenceClaimToken))
+}
+
+// PersistenceClaimTokenNotNil applies the NotNil predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenNotNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotNull(FieldPersistenceClaimToken))
+}
+
+// PersistenceClaimTokenEqualFold applies the EqualFold predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenEqualFold(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEqualFold(FieldPersistenceClaimToken, v))
+}
+
+// PersistenceClaimTokenContainsFold applies the ContainsFold predicate on the "persistence_claim_token" field.
+func PersistenceClaimTokenContainsFold(v string) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldContainsFold(FieldPersistenceClaimToken, v))
+}
+
+// PersistenceTenantIDEQ applies the EQ predicate on the "persistence_tenant_id" field.
+func PersistenceTenantIDEQ(v int64) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldPersistenceTenantID, v))
+}
+
+// PersistenceTenantIDNEQ applies the NEQ predicate on the "persistence_tenant_id" field.
+func PersistenceTenantIDNEQ(v int64) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNEQ(FieldPersistenceTenantID, v))
+}
+
+// PersistenceTenantIDIn applies the In predicate on the "persistence_tenant_id" field.
+func PersistenceTenantIDIn(vs ...int64) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIn(FieldPersistenceTenantID, vs...))
+}
+
+// PersistenceTenantIDNotIn applies the NotIn predicate on the "persistence_tenant_id" field.
+func PersistenceTenantIDNotIn(vs ...int64) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotIn(FieldPersistenceTenantID, vs...))
+}
+
+// PersistenceTenantIDGT applies the GT predicate on the "persistence_tenant_id" field.
+func PersistenceTenantIDGT(v int64) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGT(FieldPersistenceTenantID, v))
+}
+
+// PersistenceTenantIDGTE applies the GTE predicate on the "persistence_tenant_id" field.
+func PersistenceTenantIDGTE(v int64) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGTE(FieldPersistenceTenantID, v))
+}
+
+// PersistenceTenantIDLT applies the LT predicate on the "persistence_tenant_id" field.
+func PersistenceTenantIDLT(v int64) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLT(FieldPersistenceTenantID, v))
+}
+
+// PersistenceTenantIDLTE applies the LTE predicate on the "persistence_tenant_id" field.
+func PersistenceTenantIDLTE(v int64) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLTE(FieldPersistenceTenantID, v))
+}
+
+// PersistenceTenantIDIsNil applies the IsNil predicate on the "persistence_tenant_id" field.
+func PersistenceTenantIDIsNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIsNull(FieldPersistenceTenantID))
+}
+
+// PersistenceTenantIDNotNil applies the NotNil predicate on the "persistence_tenant_id" field.
+func PersistenceTenantIDNotNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotNull(FieldPersistenceTenantID))
+}
+
+// PersistenceLastProgressAtEQ applies the EQ predicate on the "persistence_last_progress_at" field.
+func PersistenceLastProgressAtEQ(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldEQ(FieldPersistenceLastProgressAt, v))
+}
+
+// PersistenceLastProgressAtNEQ applies the NEQ predicate on the "persistence_last_progress_at" field.
+func PersistenceLastProgressAtNEQ(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNEQ(FieldPersistenceLastProgressAt, v))
+}
+
+// PersistenceLastProgressAtIn applies the In predicate on the "persistence_last_progress_at" field.
+func PersistenceLastProgressAtIn(vs ...time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIn(FieldPersistenceLastProgressAt, vs...))
+}
+
+// PersistenceLastProgressAtNotIn applies the NotIn predicate on the "persistence_last_progress_at" field.
+func PersistenceLastProgressAtNotIn(vs ...time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotIn(FieldPersistenceLastProgressAt, vs...))
+}
+
+// PersistenceLastProgressAtGT applies the GT predicate on the "persistence_last_progress_at" field.
+func PersistenceLastProgressAtGT(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGT(FieldPersistenceLastProgressAt, v))
+}
+
+// PersistenceLastProgressAtGTE applies the GTE predicate on the "persistence_last_progress_at" field.
+func PersistenceLastProgressAtGTE(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldGTE(FieldPersistenceLastProgressAt, v))
+}
+
+// PersistenceLastProgressAtLT applies the LT predicate on the "persistence_last_progress_at" field.
+func PersistenceLastProgressAtLT(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLT(FieldPersistenceLastProgressAt, v))
+}
+
+// PersistenceLastProgressAtLTE applies the LTE predicate on the "persistence_last_progress_at" field.
+func PersistenceLastProgressAtLTE(v time.Time) predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldLTE(FieldPersistenceLastProgressAt, v))
+}
+
+// PersistenceLastProgressAtIsNil applies the IsNil predicate on the "persistence_last_progress_at" field.
+func PersistenceLastProgressAtIsNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldIsNull(FieldPersistenceLastProgressAt))
+}
+
+// PersistenceLastProgressAtNotNil applies the NotNil predicate on the "persistence_last_progress_at" field.
+func PersistenceLastProgressAtNotNil() predicate.TemporaryFile {
+	return predicate.TemporaryFile(sql.FieldNotNull(FieldPersistenceLastProgressAt))
 }
 
 // ExpiresAtEQ applies the EQ predicate on the "expires_at" field.

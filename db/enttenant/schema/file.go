@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"context"
 	"time"
 
 	"entgo.io/ent"
@@ -9,7 +10,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/simpledms/simpledms/db/enttenant/hook"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 )
 
 // File holds the schema definition for the File entity.
@@ -26,6 +29,10 @@ func (File) Fields() []ent.Field {
 		//		what if extension changes because new version has another file type?
 		// TODO get rid of name? and always use filename from StoredFile?
 		field.String("name"), // is filename // TODO rename to filename?
+		field.Enum("source").
+			GoType(filesource.FileSource(0)).
+			Immutable().
+			Annotations(entsql.Default(filesource.UnknownLegacy.String())),
 		field.Bool("is_directory"),
 
 		field.String("notes").Optional(), // notes because description should be reserved for AI generated content
@@ -48,6 +55,12 @@ func (File) Fields() []ent.Field {
 		// TODO ocr error message?
 
 		// field.String("crc32"), // maybe for quick checks
+	}
+}
+
+func (File) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hook.On(setDefaultFileSource(filesource.UnknownLegacy), ent.OpCreate),
 	}
 }
 
@@ -86,6 +99,24 @@ func (File) Edges() []ent.Edge {
 		// edge.From("document", Document.Type).Ref("file").Unique(),
 		// edge.From("image", Image.Type).Ref("file").Unique(),
 		// edge.From("video", Video.Type).Ref("file").Unique(),
+	}
+}
+
+func setDefaultFileSource(source filesource.FileSource) ent.Hook {
+	return func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, mutation ent.Mutation) (ent.Value, error) {
+			sourceMutation, ok := mutation.(interface {
+				Source() (filesource.FileSource, bool)
+				SetSource(filesource.FileSource)
+			})
+			if ok {
+				if _, exists := sourceMutation.Source(); !exists {
+					sourceMutation.SetSource(source)
+				}
+			}
+
+			return next.Mutate(ctx, mutation)
+		})
 	}
 }
 
@@ -167,6 +198,18 @@ func (File) Indexes() []ent.Index {
 		index.
 			Fields("space_id", "is_in_inbox", "is_directory", "deleted_at", "name").
 			StorageKey("file_inbox_name_fast"),
+		index.
+			Fields("space_id", "is_in_inbox", "deleted_at", "is_directory", "source", "created_at").
+			StorageKey("file_inbox_source_created_fast").
+			Annotations(
+				entsql.DescColumns("created_at"),
+			),
+		index.
+			Fields("space_id", "is_in_inbox", "deleted_at", "is_directory", "source", "created_at").
+			StorageKey("file_inbox_source_created_oldest_fast"),
+		index.
+			Fields("space_id", "is_in_inbox", "deleted_at", "is_directory", "source", "name").
+			StorageKey("file_inbox_source_name_fast"),
 		index.
 			Fields("ocr_last_tried_at", "id").
 			StorageKey("file_ocr_pending").

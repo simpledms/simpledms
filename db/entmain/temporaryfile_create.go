@@ -13,6 +13,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
@@ -135,6 +136,20 @@ func (_c *TemporaryFileCreate) SetNillableUploadStartedAt(v *time.Time) *Tempora
 	return _c
 }
 
+// SetUploadLastProgressAt sets the "upload_last_progress_at" field.
+func (_c *TemporaryFileCreate) SetUploadLastProgressAt(v time.Time) *TemporaryFileCreate {
+	_c.mutation.SetUploadLastProgressAt(v)
+	return _c
+}
+
+// SetNillableUploadLastProgressAt sets the "upload_last_progress_at" field if the given value is not nil.
+func (_c *TemporaryFileCreate) SetNillableUploadLastProgressAt(v *time.Time) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetUploadLastProgressAt(*v)
+	}
+	return _c
+}
+
 // SetUploadFailedAt sets the "upload_failed_at" field.
 func (_c *TemporaryFileCreate) SetUploadFailedAt(v time.Time) *TemporaryFileCreate {
 	_c.mutation.SetUploadFailedAt(v)
@@ -175,6 +190,12 @@ func (_c *TemporaryFileCreate) SetFilename(v string) *TemporaryFileCreate {
 	return _c
 }
 
+// SetSource sets the "source" field.
+func (_c *TemporaryFileCreate) SetSource(v filesource.FileSource) *TemporaryFileCreate {
+	_c.mutation.SetSource(v)
+	return _c
+}
+
 // SetSize sets the "size" field.
 func (_c *TemporaryFileCreate) SetSize(v int64) *TemporaryFileCreate {
 	_c.mutation.SetSize(v)
@@ -205,6 +226,34 @@ func (_c *TemporaryFileCreate) SetSha256(v string) *TemporaryFileCreate {
 func (_c *TemporaryFileCreate) SetNillableSha256(v *string) *TemporaryFileCreate {
 	if v != nil {
 		_c.SetSha256(*v)
+	}
+	return _c
+}
+
+// SetContentSha256 sets the "content_sha256" field.
+func (_c *TemporaryFileCreate) SetContentSha256(v string) *TemporaryFileCreate {
+	_c.mutation.SetContentSha256(v)
+	return _c
+}
+
+// SetNillableContentSha256 sets the "content_sha256" field if the given value is not nil.
+func (_c *TemporaryFileCreate) SetNillableContentSha256(v *string) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetContentSha256(*v)
+	}
+	return _c
+}
+
+// SetStorageCrc32c sets the "storage_crc32c" field.
+func (_c *TemporaryFileCreate) SetStorageCrc32c(v string) *TemporaryFileCreate {
+	_c.mutation.SetStorageCrc32c(v)
+	return _c
+}
+
+// SetNillableStorageCrc32c sets the "storage_crc32c" field if the given value is not nil.
+func (_c *TemporaryFileCreate) SetNillableStorageCrc32c(v *string) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetStorageCrc32c(*v)
 	}
 	return _c
 }
@@ -271,6 +320,48 @@ func (_c *TemporaryFileCreate) SetConvertedToStoredFileAt(v time.Time) *Temporar
 func (_c *TemporaryFileCreate) SetNillableConvertedToStoredFileAt(v *time.Time) *TemporaryFileCreate {
 	if v != nil {
 		_c.SetConvertedToStoredFileAt(*v)
+	}
+	return _c
+}
+
+// SetPersistenceClaimToken sets the "persistence_claim_token" field.
+func (_c *TemporaryFileCreate) SetPersistenceClaimToken(v string) *TemporaryFileCreate {
+	_c.mutation.SetPersistenceClaimToken(v)
+	return _c
+}
+
+// SetNillablePersistenceClaimToken sets the "persistence_claim_token" field if the given value is not nil.
+func (_c *TemporaryFileCreate) SetNillablePersistenceClaimToken(v *string) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetPersistenceClaimToken(*v)
+	}
+	return _c
+}
+
+// SetPersistenceTenantID sets the "persistence_tenant_id" field.
+func (_c *TemporaryFileCreate) SetPersistenceTenantID(v int64) *TemporaryFileCreate {
+	_c.mutation.SetPersistenceTenantID(v)
+	return _c
+}
+
+// SetNillablePersistenceTenantID sets the "persistence_tenant_id" field if the given value is not nil.
+func (_c *TemporaryFileCreate) SetNillablePersistenceTenantID(v *int64) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetPersistenceTenantID(*v)
+	}
+	return _c
+}
+
+// SetPersistenceLastProgressAt sets the "persistence_last_progress_at" field.
+func (_c *TemporaryFileCreate) SetPersistenceLastProgressAt(v time.Time) *TemporaryFileCreate {
+	_c.mutation.SetPersistenceLastProgressAt(v)
+	return _c
+}
+
+// SetNillablePersistenceLastProgressAt sets the "persistence_last_progress_at" field if the given value is not nil.
+func (_c *TemporaryFileCreate) SetNillablePersistenceLastProgressAt(v *time.Time) *TemporaryFileCreate {
+	if v != nil {
+		_c.SetPersistenceLastProgressAt(*v)
 	}
 	return _c
 }
@@ -442,6 +533,14 @@ func (_c *TemporaryFileCreate) check() error {
 	if _, ok := _c.mutation.Filename(); !ok {
 		return &ValidationError{Name: "filename", err: errors.New(`entmain: missing required field "TemporaryFile.filename"`)}
 	}
+	if _, ok := _c.mutation.Source(); !ok {
+		return &ValidationError{Name: "source", err: errors.New(`entmain: missing required field "TemporaryFile.source"`)}
+	}
+	if v, ok := _c.mutation.Source(); ok {
+		if err := temporaryfile.SourceValidator(v); err != nil {
+			return &ValidationError{Name: "source", err: fmt.Errorf(`entmain: validator failed for field "TemporaryFile.source": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.SizeInStorage(); !ok {
 		return &ValidationError{Name: "size_in_storage", err: errors.New(`entmain: missing required field "TemporaryFile.size_in_storage"`)}
 	}
@@ -517,6 +616,10 @@ func (_c *TemporaryFileCreate) createSpec() (*TemporaryFile, *sqlgraph.CreateSpe
 		_spec.SetField(temporaryfile.FieldUploadStartedAt, field.TypeTime, value)
 		_node.UploadStartedAt = value
 	}
+	if value, ok := _c.mutation.UploadLastProgressAt(); ok {
+		_spec.SetField(temporaryfile.FieldUploadLastProgressAt, field.TypeTime, value)
+		_node.UploadLastProgressAt = &value
+	}
 	if value, ok := _c.mutation.UploadFailedAt(); ok {
 		_spec.SetField(temporaryfile.FieldUploadFailedAt, field.TypeTime, value)
 		_node.UploadFailedAt = &value
@@ -529,6 +632,10 @@ func (_c *TemporaryFileCreate) createSpec() (*TemporaryFile, *sqlgraph.CreateSpe
 		_spec.SetField(temporaryfile.FieldFilename, field.TypeString, value)
 		_node.Filename = value
 	}
+	if value, ok := _c.mutation.Source(); ok {
+		_spec.SetField(temporaryfile.FieldSource, field.TypeEnum, value)
+		_node.Source = value
+	}
 	if value, ok := _c.mutation.Size(); ok {
 		_spec.SetField(temporaryfile.FieldSize, field.TypeInt64, value)
 		_node.Size = value
@@ -540,6 +647,14 @@ func (_c *TemporaryFileCreate) createSpec() (*TemporaryFile, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.Sha256(); ok {
 		_spec.SetField(temporaryfile.FieldSha256, field.TypeString, value)
 		_node.Sha256 = value
+	}
+	if value, ok := _c.mutation.ContentSha256(); ok {
+		_spec.SetField(temporaryfile.FieldContentSha256, field.TypeString, value)
+		_node.ContentSha256 = value
+	}
+	if value, ok := _c.mutation.StorageCrc32c(); ok {
+		_spec.SetField(temporaryfile.FieldStorageCrc32c, field.TypeString, value)
+		_node.StorageCrc32c = &value
 	}
 	if value, ok := _c.mutation.MimeType(); ok {
 		_spec.SetField(temporaryfile.FieldMimeType, field.TypeString, value)
@@ -568,6 +683,18 @@ func (_c *TemporaryFileCreate) createSpec() (*TemporaryFile, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.ConvertedToStoredFileAt(); ok {
 		_spec.SetField(temporaryfile.FieldConvertedToStoredFileAt, field.TypeTime, value)
 		_node.ConvertedToStoredFileAt = &value
+	}
+	if value, ok := _c.mutation.PersistenceClaimToken(); ok {
+		_spec.SetField(temporaryfile.FieldPersistenceClaimToken, field.TypeString, value)
+		_node.PersistenceClaimToken = &value
+	}
+	if value, ok := _c.mutation.PersistenceTenantID(); ok {
+		_spec.SetField(temporaryfile.FieldPersistenceTenantID, field.TypeInt64, value)
+		_node.PersistenceTenantID = &value
+	}
+	if value, ok := _c.mutation.PersistenceLastProgressAt(); ok {
+		_spec.SetField(temporaryfile.FieldPersistenceLastProgressAt, field.TypeTime, value)
+		_node.PersistenceLastProgressAt = &value
 	}
 	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(temporaryfile.FieldExpiresAt, field.TypeTime, value)

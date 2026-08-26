@@ -32,6 +32,8 @@ type Tx struct {
 	TenantAccountAssignment *TenantAccountAssignmentClient
 	// WebAuthnChallenge is the client for interacting with the WebAuthnChallenge builders.
 	WebAuthnChallenge *WebAuthnChallengeClient
+	// WebDAVCredential is the client for interacting with the WebDAVCredential builders.
+	WebDAVCredential *WebDAVCredentialClient
 
 	// lazily loaded.
 	client     *Client
@@ -172,6 +174,7 @@ func (tx *Tx) init() {
 	tx.Tenant = NewTenantClient(tx.config)
 	tx.TenantAccountAssignment = NewTenantAccountAssignmentClient(tx.config)
 	tx.WebAuthnChallenge = NewWebAuthnChallengeClient(tx.config)
+	tx.WebDAVCredential = NewWebDAVCredentialClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

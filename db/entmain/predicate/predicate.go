@@ -32,3 +32,6 @@ type TenantAccountAssignment func(*sql.Selector)
 
 // WebAuthnChallenge is the predicate function for webauthnchallenge builders.
 type WebAuthnChallenge func(*sql.Selector)
+
+// WebDAVCredential is the predicate function for webdavcredential builders.
+type WebDAVCredential func(*sql.Selector)

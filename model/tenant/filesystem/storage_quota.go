@@ -84,7 +84,11 @@ func (qq *StorageQuota) tenantStorageLimitBytes(ctx ctxx.Context) (int64, error)
 }
 
 func (qq *StorageQuota) activeTenantUserCount(ctx ctxx.Context) (int, error) {
-	activeUserCount, err := ctx.MainCtx().MainTx.TenantAccountAssignment.Query().
+	client := ctx.MainCtx().MainTx.TenantAccountAssignment
+	if mainDB := ctx.MainCtx().UnsafeMainDB(); mainDB != nil && ctx.MainCtx().IsReadOnlyTx() {
+		client = mainDB.ReadOnlyConn.TenantAccountAssignment
+	}
+	activeUserCount, err := client.Query().
 		Where(
 			tenantaccountassignment.TenantID(ctx.TenantCtx().Tenant.ID),
 			tenantaccountassignment.Or(
@@ -133,7 +137,11 @@ func (qq *StorageQuota) currentUsedTenantStorageBytes(ctx ctxx.Context) (int64, 
 
 	rows := make([]tenantUsedStorageRow, 0, 1)
 	ctxWithPrivacyBypass := privacy.DecisionContext(ctx, privacy.Allow)
-	err := ctx.TenantCtx().TTx.StoredFile.Query().
+	client := ctx.TenantCtx().TTx.StoredFile
+	if tenantDB, ok := ctx.TenantCtx().UnsafeTenantDB(); ok && ctx.TenantCtx().IsReadOnlyTx() {
+		client = tenantDB.ReadOnlyConn.StoredFile
+	}
+	err := client.Query().
 		// Legacy files created before upload status tracking have no upload timestamps.
 		Where(storedfile.Or(
 			storedfile.UploadSucceededAtNotNil(),

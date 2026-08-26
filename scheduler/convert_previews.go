@@ -348,7 +348,7 @@ func (qq *Scheduler) convertOnePreview(
 		return
 	}
 
-	fileInfo, storageFilename, fileSize, contentSHA256, err := qq.infra.FileSystem().SaveDerivedPDF(
+	fileInfo, storageFilename, fileSize, contentSHA256, storageCRC32C, err := qq.infra.FileSystem().SaveDerivedPDF(
 		ctx,
 		tenantx.PublicID.String(),
 		identity,
@@ -377,6 +377,7 @@ func (qq *Scheduler) convertOnePreview(
 		SetSizeInStorage(fileInfo.Size).
 		SetSha256(fileInfo.ChecksumSHA256).
 		SetContentSha256(contentSHA256).
+		SetStorageCrc32c(storageCRC32C).
 		SetMimeType("application/pdf").
 		SetStorageType(storagetype.S3).
 		SetBucketName(qq.bucketName).

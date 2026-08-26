@@ -88,7 +88,6 @@ func (qq *FileAttributesPartial) Content(
 	data *FileAttributesPartialData,
 ) widget.IWidget {
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
-
 	suggestedDocumentTypes := ctx.SpaceCtx().Space.QueryDocumentTypes().
 		Order(documenttype.ByName()).
 		Where(
@@ -129,7 +128,7 @@ func (qq *FileAttributesPartial) Content(
 		AllX(ctx)
 
 	if len(documentTypes) == 0 && len(suggestedDocumentTypes) == 0 {
-		return &widget.EmptyState{
+		return []widget.IWidget{&widget.EmptyState{
 			Headline: widget.T("No document types available yet."),
 			Actions: []widget.IWidget{
 				&widget.Button{
@@ -140,7 +139,7 @@ func (qq *FileAttributesPartial) Content(
 					},
 				},
 			},
-		}
+		}}
 	}
 
 	var documentTypeChips []*widget.FilterChip

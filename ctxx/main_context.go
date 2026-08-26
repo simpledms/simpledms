@@ -64,7 +64,7 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() (map[*entmain.Tenant][]*e
 	var spacesByTenant = make(map[*entmain.Tenant][]*enttenant.Space)
 
 	// similar code in DashboardCards
-	tenants, err := qq.Account.QueryTenants().All(qq)
+	tenants, err := qq.MainTx.Account.QueryTenants(qq.Account).All(qq)
 	if err != nil {
 		log.Println(err)
 		return nil, fmt.Errorf("failed to query tenants for account %d: %w", qq.Account.ID, err)

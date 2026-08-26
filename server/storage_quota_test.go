@@ -67,7 +67,7 @@ func TestUploadFileCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 					parentDirID = rootDir.PublicID.String()
 					rootDirID = rootDir.ID
 
-					prepared, _, err := harness.infra.FileSystem().PrepareFileUpload(spaceCtx, "seed.txt", rootDir.ID, false)
+					prepared, err := harness.infra.FileSystem().PrepareFileUpload(spaceCtx, "seed.txt", rootDir.ID, false)
 					if err != nil {
 						return fmt.Errorf("prepare seed upload: %w", err)
 					}
@@ -188,7 +188,7 @@ func TestUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(t *testing.T
 			parentDirID = rootDir.PublicID.String()
 			rootDirID = rootDir.ID
 
-			prepared, _, err := harness.infra.FileSystem().PrepareFileUpload(spaceCtx, "seed.txt", rootDir.ID, false)
+			prepared, err := harness.infra.FileSystem().PrepareFileUpload(spaceCtx, "seed.txt", rootDir.ID, false)
 			if err != nil {
 				return fmt.Errorf("prepare seed upload: %w", err)
 			}
@@ -304,7 +304,7 @@ func TestUploadFileCmdSkipsTenantStorageLimitWhenSaaSDisabled(t *testing.T) {
 			parentDirID = rootDir.PublicID.String()
 			rootDirID = rootDir.ID
 
-			prepared, _, err := harness.infra.FileSystem().PrepareFileUpload(spaceCtx, "seed.txt", rootDir.ID, false)
+			prepared, err := harness.infra.FileSystem().PrepareFileUpload(spaceCtx, "seed.txt", rootDir.ID, false)
 			if err != nil {
 				return fmt.Errorf("prepare seed upload: %w", err)
 			}

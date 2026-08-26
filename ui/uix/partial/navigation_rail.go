@@ -147,6 +147,7 @@ func mainNavigationRailItems(ctx ctxx.Context) []*widget.NavigationRailItem {
 	}
 
 	items = append(items, accountNavigationRailItem(ctx))
+	items = append(items, webDAVCredentialsNavigationRailItem(ctx))
 	if ctx.MainCtx().Account.Role == mainrole.Admin {
 		items = append(items, systemNavigationRailItem(ctx))
 	}
@@ -496,6 +497,15 @@ func accountNavigationRailItem(ctx ctxx.Context) *widget.NavigationRailItem {
 		widget.T("Account").String(ctx),
 		"account_circle",
 		route2.Account(),
+	)
+}
+
+func webDAVCredentialsNavigationRailItem(ctx ctxx.Context) *widget.NavigationRailItem {
+	return pageNavigationRailItem(
+		"webdav-credentials",
+		widget.T("WebDAV").String(ctx),
+		"vpn_key",
+		route2.WebDAVCredentials(),
 	)
 }
 

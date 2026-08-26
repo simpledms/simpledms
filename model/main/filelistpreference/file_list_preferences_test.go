@@ -10,6 +10,7 @@ func TestFileListPreferencesDefaults(t *testing.T) {
 	}
 	expectedDefaultColumns := []FileListColumn{
 		FileListColumnName,
+		FileListColumnSource,
 		FileListColumnDocumentType,
 		FileListColumnDate,
 		FileListColumnSize,
@@ -51,6 +52,10 @@ func TestFileListPreferencesToggleColumns(t *testing.T) {
 	preferences.ToggleBuiltInColumn(FileListColumnOriginalFilename)
 	if !preferences.HasBuiltInColumn(FileListColumnOriginalFilename) {
 		t.Fatal("expected original filename column to be enabled")
+	}
+	preferences.ToggleBuiltInColumn(FileListColumnSource)
+	if preferences.HasBuiltInColumn(FileListColumnSource) {
+		t.Fatal("expected source column to be disabled")
 	}
 }
 

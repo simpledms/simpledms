@@ -24,6 +24,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/entmain/tenantaccountassignment"
 	"github.com/simpledms/simpledms/db/entmain/webauthnchallenge"
+	"github.com/simpledms/simpledms/db/entmain/webdavcredential"
 
 	stdsql "database/sql"
 )
@@ -51,6 +52,8 @@ type Client struct {
 	TenantAccountAssignment *TenantAccountAssignmentClient
 	// WebAuthnChallenge is the client for interacting with the WebAuthnChallenge builders.
 	WebAuthnChallenge *WebAuthnChallengeClient
+	// WebDAVCredential is the client for interacting with the WebDAVCredential builders.
+	WebDAVCredential *WebDAVCredentialClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -71,6 +74,7 @@ func (c *Client) init() {
 	c.Tenant = NewTenantClient(c.config)
 	c.TenantAccountAssignment = NewTenantAccountAssignmentClient(c.config)
 	c.WebAuthnChallenge = NewWebAuthnChallengeClient(c.config)
+	c.WebDAVCredential = NewWebDAVCredentialClient(c.config)
 }
 
 type (
@@ -172,6 +176,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Tenant:                  NewTenantClient(cfg),
 		TenantAccountAssignment: NewTenantAccountAssignmentClient(cfg),
 		WebAuthnChallenge:       NewWebAuthnChallengeClient(cfg),
+		WebDAVCredential:        NewWebDAVCredentialClient(cfg),
 	}, nil
 }
 
@@ -200,6 +205,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Tenant:                  NewTenantClient(cfg),
 		TenantAccountAssignment: NewTenantAccountAssignmentClient(cfg),
 		WebAuthnChallenge:       NewWebAuthnChallengeClient(cfg),
+		WebDAVCredential:        NewWebDAVCredentialClient(cfg),
 	}, nil
 }
 
@@ -231,6 +237,7 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Account, c.Mail, c.PasskeyCredential, c.Session, c.SystemConfig,
 		c.TemporaryFile, c.Tenant, c.TenantAccountAssignment, c.WebAuthnChallenge,
+		c.WebDAVCredential,
 	} {
 		n.Use(hooks...)
 	}
@@ -242,6 +249,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Account, c.Mail, c.PasskeyCredential, c.Session, c.SystemConfig,
 		c.TemporaryFile, c.Tenant, c.TenantAccountAssignment, c.WebAuthnChallenge,
+		c.WebDAVCredential,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -268,6 +276,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.TenantAccountAssignment.mutate(ctx, m)
 	case *WebAuthnChallengeMutation:
 		return c.WebAuthnChallenge.mutate(ctx, m)
+	case *WebDAVCredentialMutation:
+		return c.WebDAVCredential.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("entmain: unknown mutation type %T", m)
 	}
@@ -1940,15 +1950,229 @@ func (c *WebAuthnChallengeClient) mutate(ctx context.Context, m *WebAuthnChallen
 	}
 }
 
+// WebDAVCredentialClient is a client for the WebDAVCredential schema.
+type WebDAVCredentialClient struct {
+	config
+}
+
+// NewWebDAVCredentialClient returns a client for the WebDAVCredential from the given config.
+func NewWebDAVCredentialClient(c config) *WebDAVCredentialClient {
+	return &WebDAVCredentialClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `webdavcredential.Hooks(f(g(h())))`.
+func (c *WebDAVCredentialClient) Use(hooks ...Hook) {
+	c.hooks.WebDAVCredential = append(c.hooks.WebDAVCredential, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `webdavcredential.Intercept(f(g(h())))`.
+func (c *WebDAVCredentialClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WebDAVCredential = append(c.inters.WebDAVCredential, interceptors...)
+}
+
+// Create returns a builder for creating a WebDAVCredential entity.
+func (c *WebDAVCredentialClient) Create() *WebDAVCredentialCreate {
+	mutation := newWebDAVCredentialMutation(c.config, OpCreate)
+	return &WebDAVCredentialCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WebDAVCredential entities.
+func (c *WebDAVCredentialClient) CreateBulk(builders ...*WebDAVCredentialCreate) *WebDAVCredentialCreateBulk {
+	return &WebDAVCredentialCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WebDAVCredentialClient) MapCreateBulk(slice any, setFunc func(*WebDAVCredentialCreate, int)) *WebDAVCredentialCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WebDAVCredentialCreateBulk{err: fmt.Errorf("calling to WebDAVCredentialClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WebDAVCredentialCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WebDAVCredentialCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WebDAVCredential.
+func (c *WebDAVCredentialClient) Update() *WebDAVCredentialUpdate {
+	mutation := newWebDAVCredentialMutation(c.config, OpUpdate)
+	return &WebDAVCredentialUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WebDAVCredentialClient) UpdateOne(_m *WebDAVCredential) *WebDAVCredentialUpdateOne {
+	mutation := newWebDAVCredentialMutation(c.config, OpUpdateOne, withWebDAVCredential(_m))
+	return &WebDAVCredentialUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WebDAVCredentialClient) UpdateOneID(id int64) *WebDAVCredentialUpdateOne {
+	mutation := newWebDAVCredentialMutation(c.config, OpUpdateOne, withWebDAVCredentialID(id))
+	return &WebDAVCredentialUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WebDAVCredential.
+func (c *WebDAVCredentialClient) Delete() *WebDAVCredentialDelete {
+	mutation := newWebDAVCredentialMutation(c.config, OpDelete)
+	return &WebDAVCredentialDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WebDAVCredentialClient) DeleteOne(_m *WebDAVCredential) *WebDAVCredentialDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WebDAVCredentialClient) DeleteOneID(id int64) *WebDAVCredentialDeleteOne {
+	builder := c.Delete().Where(webdavcredential.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WebDAVCredentialDeleteOne{builder}
+}
+
+// Query returns a query builder for WebDAVCredential.
+func (c *WebDAVCredentialClient) Query() *WebDAVCredentialQuery {
+	return &WebDAVCredentialQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWebDAVCredential},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WebDAVCredential entity by its id.
+func (c *WebDAVCredentialClient) Get(ctx context.Context, id int64) (*WebDAVCredential, error) {
+	return c.Query().Where(webdavcredential.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WebDAVCredentialClient) GetX(ctx context.Context, id int64) *WebDAVCredential {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryCreator queries the creator edge of a WebDAVCredential.
+func (c *WebDAVCredentialClient) QueryCreator(_m *WebDAVCredential) *AccountQuery {
+	query := (&AccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(webdavcredential.Table, webdavcredential.FieldID, id),
+			sqlgraph.To(account.Table, account.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, webdavcredential.CreatorTable, webdavcredential.CreatorColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUpdater queries the updater edge of a WebDAVCredential.
+func (c *WebDAVCredentialClient) QueryUpdater(_m *WebDAVCredential) *AccountQuery {
+	query := (&AccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(webdavcredential.Table, webdavcredential.FieldID, id),
+			sqlgraph.To(account.Table, account.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, webdavcredential.UpdaterTable, webdavcredential.UpdaterColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAccount queries the account edge of a WebDAVCredential.
+func (c *WebDAVCredentialClient) QueryAccount(_m *WebDAVCredential) *AccountQuery {
+	query := (&AccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(webdavcredential.Table, webdavcredential.FieldID, id),
+			sqlgraph.To(account.Table, account.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, webdavcredential.AccountTable, webdavcredential.AccountColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTenant queries the tenant edge of a WebDAVCredential.
+func (c *WebDAVCredentialClient) QueryTenant(_m *WebDAVCredential) *TenantQuery {
+	query := (&TenantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(webdavcredential.Table, webdavcredential.FieldID, id),
+			sqlgraph.To(tenant.Table, tenant.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, webdavcredential.TenantTable, webdavcredential.TenantColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRevokedByAccount queries the revoked_by_account edge of a WebDAVCredential.
+func (c *WebDAVCredentialClient) QueryRevokedByAccount(_m *WebDAVCredential) *AccountQuery {
+	query := (&AccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(webdavcredential.Table, webdavcredential.FieldID, id),
+			sqlgraph.To(account.Table, account.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, webdavcredential.RevokedByAccountTable, webdavcredential.RevokedByAccountColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WebDAVCredentialClient) Hooks() []Hook {
+	hooks := c.hooks.WebDAVCredential
+	return append(hooks[:len(hooks):len(hooks)], webdavcredential.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WebDAVCredentialClient) Interceptors() []Interceptor {
+	return c.inters.WebDAVCredential
+}
+
+func (c *WebDAVCredentialClient) mutate(ctx context.Context, m *WebDAVCredentialMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WebDAVCredentialCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WebDAVCredentialUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WebDAVCredentialUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WebDAVCredentialDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("entmain: unknown WebDAVCredential mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
 		Account, Mail, PasskeyCredential, Session, SystemConfig, TemporaryFile, Tenant,
-		TenantAccountAssignment, WebAuthnChallenge []ent.Hook
+		TenantAccountAssignment, WebAuthnChallenge, WebDAVCredential []ent.Hook
 	}
 	inters struct {
 		Account, Mail, PasskeyCredential, Session, SystemConfig, TemporaryFile, Tenant,
-		TenantAccountAssignment, WebAuthnChallenge []ent.Interceptor
+		TenantAccountAssignment, WebAuthnChallenge, WebDAVCredential []ent.Interceptor
 	}
 )
 

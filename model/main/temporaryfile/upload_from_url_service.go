@@ -18,6 +18,7 @@ import (
 	gonanoid "github.com/matoous/go-nanoid"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/filenamex"
@@ -123,30 +124,31 @@ func (qq *UploadFromURLService) processDownloadedFile(
 
 	expiresAt := time.Now().Add(15 * time.Minute)
 	prepared, err := txx.WithMainWriteTx(ctx, func(writeTx *entmain.Tx) (*filesystem.PreparedAccountUpload, error) {
-		return qq.fileSystem.PrepareTemporaryAccountUpload(
+		return qq.fileSystem.PrepareTemporaryAccountUploadWithSource(
 			ctx,
 			writeTx,
 			filename,
 			uploadToken,
 			1,
 			expiresAt,
+			filesource.URLImport,
 		)
 	})
 	if err != nil {
 		return "", err
 	}
 
-	fileInfo, fileSize, err := qq.fileSystem.UploadPreparedTemporaryAccountFile(ctx, body, prepared)
+	uploadResult, err := qq.fileSystem.UploadPreparedTemporaryAccountFile(ctx, body, prepared)
 	if err != nil {
 		uploadx.HandleTemporaryFileUploadFailure(ctx, qq.fileSystem, prepared, err, true)
 		return "", err
 	}
 
 	_, err = txx.WithMainWriteTx(ctx, func(writeTx *entmain.Tx) (*struct{}, error) {
-		return nil, qq.fileSystem.FinalizePreparedTemporaryAccountUpload(ctx, writeTx, prepared, fileInfo, fileSize)
+		return nil, qq.fileSystem.FinalizePreparedTemporaryAccountUpload(ctx, writeTx, prepared, uploadResult)
 	})
 	if err != nil {
-		uploadx.HandleTemporaryFileUploadFailure(ctx, qq.fileSystem, prepared, err, false)
+		uploadx.HandleTemporaryFileUploadFailure(ctx, qq.fileSystem, prepared, err, true)
 		return "", err
 	}
 

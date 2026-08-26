@@ -19,7 +19,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/spaceuserassignment"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/user"
-	"github.com/simpledms/simpledms/db/entx"
 )
 
 // SpaceUpdate is the builder for updating Space entities.
@@ -33,20 +32,6 @@ type SpaceUpdate struct {
 // Where appends a list predicates to the SpaceUpdate builder.
 func (_u *SpaceUpdate) Where(ps ...predicate.Space) *SpaceUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetPublicID sets the "public_id" field.
-func (_u *SpaceUpdate) SetPublicID(v entx.CIText) *SpaceUpdate {
-	_u.mutation.SetPublicID(v)
-	return _u
-}
-
-// SetNillablePublicID sets the "public_id" field if the given value is not nil.
-func (_u *SpaceUpdate) SetNillablePublicID(v *entx.CIText) *SpaceUpdate {
-	if v != nil {
-		_u.SetPublicID(*v)
-	}
 	return _u
 }
 
@@ -446,9 +431,6 @@ func (_u *SpaceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			}
 		}
 	}
-	if value, ok := _u.mutation.PublicID(); ok {
-		_spec.SetField(space.FieldPublicID, field.TypeString, value)
-	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(space.FieldDeletedAt, field.TypeTime, value)
 	}
@@ -804,20 +786,6 @@ type SpaceUpdateOne struct {
 	hooks     []Hook
 	mutation  *SpaceMutation
 	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetPublicID sets the "public_id" field.
-func (_u *SpaceUpdateOne) SetPublicID(v entx.CIText) *SpaceUpdateOne {
-	_u.mutation.SetPublicID(v)
-	return _u
-}
-
-// SetNillablePublicID sets the "public_id" field if the given value is not nil.
-func (_u *SpaceUpdateOne) SetNillablePublicID(v *entx.CIText) *SpaceUpdateOne {
-	if v != nil {
-		_u.SetPublicID(*v)
-	}
-	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
@@ -1245,9 +1213,6 @@ func (_u *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error)
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := _u.mutation.PublicID(); ok {
-		_spec.SetField(space.FieldPublicID, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.DeletedAt(); ok {
 		_spec.SetField(space.FieldDeletedAt, field.TypeTime, value)

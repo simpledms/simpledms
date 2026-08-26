@@ -239,12 +239,16 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "upload_started_at", Type: field.TypeTime, Nullable: true},
+		{Name: "upload_last_progress_at", Type: field.TypeTime, Nullable: true},
 		{Name: "upload_failed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "upload_succeeded_at", Type: field.TypeTime, Nullable: true},
 		{Name: "filename", Type: field.TypeString},
+		{Name: "source", Type: field.TypeEnum, Enums: []string{"UnknownLegacy", "WebInterface", "PWAOSOpen", "URLImport", "WebDAV", "SystemExtraction"}, Default: "UnknownLegacy"},
 		{Name: "size", Type: field.TypeInt64, Nullable: true},
 		{Name: "size_in_storage", Type: field.TypeInt64},
 		{Name: "sha256", Type: field.TypeString, Nullable: true},
+		{Name: "content_sha256", Type: field.TypeString, Nullable: true},
+		{Name: "storage_crc32c", Type: field.TypeString, Nullable: true},
 		{Name: "mime_type", Type: field.TypeString, Nullable: true},
 		{Name: "storage_type", Type: field.TypeEnum, Enums: []string{"Unknown", "Local", "S3"}},
 		{Name: "bucket_name", Type: field.TypeString, Nullable: true},
@@ -252,6 +256,9 @@ var (
 		{Name: "storage_filename", Type: field.TypeString},
 		{Name: "upload_token", Type: field.TypeString},
 		{Name: "converted_to_stored_file_at", Type: field.TypeTime, Nullable: true},
+		{Name: "persistence_claim_token", Type: field.TypeString, Nullable: true},
+		{Name: "persistence_tenant_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "persistence_last_progress_at", Type: field.TypeTime, Nullable: true},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
@@ -266,25 +273,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "temporary_files_accounts_creator",
-				Columns:    []*schema.Column{TemporaryFilesColumns[20]},
+				Columns:    []*schema.Column{TemporaryFilesColumns[27]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "temporary_files_accounts_updater",
-				Columns:    []*schema.Column{TemporaryFilesColumns[21]},
+				Columns:    []*schema.Column{TemporaryFilesColumns[28]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "temporary_files_accounts_deleter",
-				Columns:    []*schema.Column{TemporaryFilesColumns[22]},
+				Columns:    []*schema.Column{TemporaryFilesColumns[29]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "temporary_files_accounts_owner",
-				Columns:    []*schema.Column{TemporaryFilesColumns[23]},
+				Columns:    []*schema.Column{TemporaryFilesColumns[30]},
 				RefColumns: []*schema.Column{AccountsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -293,12 +300,12 @@ var (
 			{
 				Name:    "temporaryfile_upload_token",
 				Unique:  false,
-				Columns: []*schema.Column{TemporaryFilesColumns[17]},
+				Columns: []*schema.Column{TemporaryFilesColumns[21]},
 			},
 			{
 				Name:    "temporaryfile_delete_pending",
 				Unique:  false,
-				Columns: []*schema.Column{TemporaryFilesColumns[19], TemporaryFilesColumns[0]},
+				Columns: []*schema.Column{TemporaryFilesColumns[26], TemporaryFilesColumns[0]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`converted_to_stored_file_at` is null and `deleted_at` is null",
 				},
@@ -474,6 +481,80 @@ var (
 			},
 		},
 	}
+	// WebDavCredentialsColumns holds the columns for the "web_dav_credentials" table.
+	WebDavCredentialsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "public_id", Type: field.TypeString, Unique: true},
+		{Name: "space_public_id", Type: field.TypeString},
+		{Name: "label", Type: field.TypeString},
+		{Name: "username", Type: field.TypeString, Unique: true},
+		{Name: "secret_salt", Type: field.TypeString},
+		{Name: "secret_hash", Type: field.TypeString},
+		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
+		{Name: "revoked_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "updated_by", Type: field.TypeInt64, Nullable: true},
+		{Name: "account_id", Type: field.TypeInt64},
+		{Name: "tenant_id", Type: field.TypeInt64},
+		{Name: "revoked_by_account_id", Type: field.TypeInt64, Nullable: true},
+	}
+	// WebDavCredentialsTable holds the schema information for the "web_dav_credentials" table.
+	WebDavCredentialsTable = &schema.Table{
+		Name:       "web_dav_credentials",
+		Columns:    WebDavCredentialsColumns,
+		PrimaryKey: []*schema.Column{WebDavCredentialsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "web_dav_credentials_accounts_creator",
+				Columns:    []*schema.Column{WebDavCredentialsColumns[11]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "web_dav_credentials_accounts_updater",
+				Columns:    []*schema.Column{WebDavCredentialsColumns[12]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "web_dav_credentials_accounts_account",
+				Columns:    []*schema.Column{WebDavCredentialsColumns[13]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "web_dav_credentials_tenants_tenant",
+				Columns:    []*schema.Column{WebDavCredentialsColumns[14]},
+				RefColumns: []*schema.Column{TenantsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "web_dav_credentials_accounts_revoked_by_account",
+				Columns:    []*schema.Column{WebDavCredentialsColumns[15]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "webdavcredential_account_id_tenant_id_space_public_id_revoked_at",
+				Unique:  false,
+				Columns: []*schema.Column{WebDavCredentialsColumns[13], WebDavCredentialsColumns[14], WebDavCredentialsColumns[4], WebDavCredentialsColumns[10]},
+			},
+			{
+				Name:    "webdavcredential_tenant_id_account_id_revoked_at",
+				Unique:  false,
+				Columns: []*schema.Column{WebDavCredentialsColumns[14], WebDavCredentialsColumns[13], WebDavCredentialsColumns[10]},
+			},
+			{
+				Name:    "webdavcredential_tenant_id_space_public_id_label",
+				Unique:  true,
+				Columns: []*schema.Column{WebDavCredentialsColumns[14], WebDavCredentialsColumns[4], WebDavCredentialsColumns[5]},
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AccountsTable,
@@ -485,6 +566,7 @@ var (
 		TenantsTable,
 		TenantAccountAssignmentsTable,
 		WebAuthnChallengesTable,
+		WebDavCredentialsTable,
 	}
 )
 
@@ -510,4 +592,9 @@ func init() {
 	TenantAccountAssignmentsTable.ForeignKeys[2].RefTable = TenantsTable
 	TenantAccountAssignmentsTable.ForeignKeys[3].RefTable = AccountsTable
 	WebAuthnChallengesTable.ForeignKeys[0].RefTable = AccountsTable
+	WebDavCredentialsTable.ForeignKeys[0].RefTable = AccountsTable
+	WebDavCredentialsTable.ForeignKeys[1].RefTable = AccountsTable
+	WebDavCredentialsTable.ForeignKeys[2].RefTable = AccountsTable
+	WebDavCredentialsTable.ForeignKeys[3].RefTable = TenantsTable
+	WebDavCredentialsTable.ForeignKeys[4].RefTable = AccountsTable
 }

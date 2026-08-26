@@ -15,6 +15,7 @@ import (
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -28,7 +29,6 @@ import (
 type unzipPreparedEntry struct {
 	zipFile  *zip.File
 	prepared *filesystem.PreparedUpload
-	fileID   int64
 	result   *filesystem.PreparedUploadResult
 }
 
@@ -201,11 +201,12 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 				return nil, err
 			}
 
-			prepared, filex, err := qq.infra.FileSystem().PrepareFileUpload(
+			prepared, err := qq.infra.FileSystem().PrepareFileUploadWithSource(
 				writeCtx,
 				filename,
 				fileParentID,
 				false,
+				filesource.SystemExtraction,
 			)
 			if err != nil {
 				return nil, err
@@ -214,7 +215,6 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 			entries = append(entries, &unzipPreparedEntry{
 				zipFile:  zippedFile,
 				prepared: prepared,
-				fileID:   filex.ID,
 			})
 		}
 
@@ -257,24 +257,6 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 			uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), entry.prepared, nil, cleanup)
 		}
 
-		fileIDs := make([]int64, 0, len(preparedEntries))
-		for _, entry := range preparedEntries {
-			fileIDs = append(fileIDs, entry.fileID)
-		}
-		_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-			if len(fileIDs) == 0 {
-				return nil, nil
-			}
-			writeCtx.TTx.File.Update().
-				Where(file.IDIn(fileIDs...)).
-				SetDeletedAt(time.Now()).
-				SetDeleter(writeCtx.SpaceCtx().User).
-				ExecX(writeCtx)
-			return nil, nil
-		})
-		if err != nil {
-			log.Println(err)
-		}
 	} else {
 		_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
 			totalUploadedBytes, err := qq.unzipPreparedEntriesTotalUploadedSize(preparedEntries)
@@ -290,7 +272,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 				if entry.result == nil {
 					return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not extract all files from archive.")
 				}
-				err := qq.infra.FileSystem().FinalizePreparedUpload(writeCtx, entry.prepared, entry.result)
+				err := qq.infra.FileSystem().FinalizePreparedUploadWithoutMime(writeCtx, entry.prepared, entry.result)
 				if err != nil {
 					return nil, err
 				}
@@ -304,6 +286,17 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 				uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), entry.prepared, nil, cleanup)
 			}
 			hasErr = true
+		}
+		if !hasErr {
+			for _, entry := range preparedEntries {
+				if _, err := qq.infra.FileSystem().UpdateMimeTypeAfterFinalization(
+					ctx.SpaceCtx(),
+					true,
+					entry.prepared.StoredFileID,
+				); err != nil {
+					log.Println(err)
+				}
+			}
 		}
 	}
 

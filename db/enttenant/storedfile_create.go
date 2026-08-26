@@ -14,6 +14,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 )
 
@@ -90,6 +91,20 @@ func (_c *StoredFileCreate) SetUploadStartedAt(v time.Time) *StoredFileCreate {
 func (_c *StoredFileCreate) SetNillableUploadStartedAt(v *time.Time) *StoredFileCreate {
 	if v != nil {
 		_c.SetUploadStartedAt(*v)
+	}
+	return _c
+}
+
+// SetUploadLastProgressAt sets the "upload_last_progress_at" field.
+func (_c *StoredFileCreate) SetUploadLastProgressAt(v time.Time) *StoredFileCreate {
+	_c.mutation.SetUploadLastProgressAt(v)
+	return _c
+}
+
+// SetNillableUploadLastProgressAt sets the "upload_last_progress_at" field if the given value is not nil.
+func (_c *StoredFileCreate) SetNillableUploadLastProgressAt(v *time.Time) *StoredFileCreate {
+	if v != nil {
+		_c.SetUploadLastProgressAt(*v)
 	}
 	return _c
 }
@@ -176,6 +191,20 @@ func (_c *StoredFileCreate) SetNillableContentSha256(v *string) *StoredFileCreat
 	return _c
 }
 
+// SetStorageCrc32c sets the "storage_crc32c" field.
+func (_c *StoredFileCreate) SetStorageCrc32c(v string) *StoredFileCreate {
+	_c.mutation.SetStorageCrc32c(v)
+	return _c
+}
+
+// SetNillableStorageCrc32c sets the "storage_crc32c" field if the given value is not nil.
+func (_c *StoredFileCreate) SetNillableStorageCrc32c(v *string) *StoredFileCreate {
+	if v != nil {
+		_c.SetStorageCrc32c(*v)
+	}
+	return _c
+}
+
 // SetMimeType sets the "mime_type" field.
 func (_c *StoredFileCreate) SetMimeType(v string) *StoredFileCreate {
 	_c.mutation.SetMimeType(v)
@@ -231,6 +260,34 @@ func (_c *StoredFileCreate) SetTemporaryStoragePath(v string) *StoredFileCreate 
 // SetTemporaryStorageFilename sets the "temporary_storage_filename" field.
 func (_c *StoredFileCreate) SetTemporaryStorageFilename(v string) *StoredFileCreate {
 	_c.mutation.SetTemporaryStorageFilename(v)
+	return _c
+}
+
+// SetSourceTemporaryFilePublicID sets the "source_temporary_file_public_id" field.
+func (_c *StoredFileCreate) SetSourceTemporaryFilePublicID(v entx.CIText) *StoredFileCreate {
+	_c.mutation.SetSourceTemporaryFilePublicID(v)
+	return _c
+}
+
+// SetNillableSourceTemporaryFilePublicID sets the "source_temporary_file_public_id" field if the given value is not nil.
+func (_c *StoredFileCreate) SetNillableSourceTemporaryFilePublicID(v *entx.CIText) *StoredFileCreate {
+	if v != nil {
+		_c.SetSourceTemporaryFilePublicID(*v)
+	}
+	return _c
+}
+
+// SetSourceConversionClaimToken sets the "source_conversion_claim_token" field.
+func (_c *StoredFileCreate) SetSourceConversionClaimToken(v string) *StoredFileCreate {
+	_c.mutation.SetSourceConversionClaimToken(v)
+	return _c
+}
+
+// SetNillableSourceConversionClaimToken sets the "source_conversion_claim_token" field if the given value is not nil.
+func (_c *StoredFileCreate) SetNillableSourceConversionClaimToken(v *string) *StoredFileCreate {
+	if v != nil {
+		_c.SetSourceConversionClaimToken(*v)
+	}
 	return _c
 }
 
@@ -475,6 +532,10 @@ func (_c *StoredFileCreate) createSpec() (*StoredFile, *sqlgraph.CreateSpec) {
 		_spec.SetField(storedfile.FieldUploadStartedAt, field.TypeTime, value)
 		_node.UploadStartedAt = value
 	}
+	if value, ok := _c.mutation.UploadLastProgressAt(); ok {
+		_spec.SetField(storedfile.FieldUploadLastProgressAt, field.TypeTime, value)
+		_node.UploadLastProgressAt = &value
+	}
 	if value, ok := _c.mutation.UploadFailedAt(); ok {
 		_spec.SetField(storedfile.FieldUploadFailedAt, field.TypeTime, value)
 		_node.UploadFailedAt = &value
@@ -503,6 +564,10 @@ func (_c *StoredFileCreate) createSpec() (*StoredFile, *sqlgraph.CreateSpec) {
 		_spec.SetField(storedfile.FieldContentSha256, field.TypeString, value)
 		_node.ContentSha256 = value
 	}
+	if value, ok := _c.mutation.StorageCrc32c(); ok {
+		_spec.SetField(storedfile.FieldStorageCrc32c, field.TypeString, value)
+		_node.StorageCrc32c = &value
+	}
 	if value, ok := _c.mutation.MimeType(); ok {
 		_spec.SetField(storedfile.FieldMimeType, field.TypeString, value)
 		_node.MimeType = value
@@ -530,6 +595,14 @@ func (_c *StoredFileCreate) createSpec() (*StoredFile, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.TemporaryStorageFilename(); ok {
 		_spec.SetField(storedfile.FieldTemporaryStorageFilename, field.TypeString, value)
 		_node.TemporaryStorageFilename = value
+	}
+	if value, ok := _c.mutation.SourceTemporaryFilePublicID(); ok {
+		_spec.SetField(storedfile.FieldSourceTemporaryFilePublicID, field.TypeString, value)
+		_node.SourceTemporaryFilePublicID = &value
+	}
+	if value, ok := _c.mutation.SourceConversionClaimToken(); ok {
+		_spec.SetField(storedfile.FieldSourceConversionClaimToken, field.TypeString, value)
+		_node.SourceConversionClaimToken = &value
 	}
 	if value, ok := _c.mutation.CopiedToFinalDestinationAt(); ok {
 		_spec.SetField(storedfile.FieldCopiedToFinalDestinationAt, field.TypeTime, value)

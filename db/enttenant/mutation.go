@@ -26,14 +26,17 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+	enttenantwebdavresource "github.com/simpledms/simpledms/db/enttenant/webdavresource"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/attributetype"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/main/common/spacerole"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	"github.com/simpledms/simpledms/model/tenant/previewconversion"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
+	"github.com/simpledms/simpledms/model/tenant/webdavresource"
 	"github.com/simpledms/simpledms/util/timex"
 )
 
@@ -62,6 +65,7 @@ const (
 	TypeTagAssignment          = "TagAssignment"
 	TypeTenantDataMigration    = "TenantDataMigration"
 	TypeUser                   = "User"
+	TypeWebDAVResource         = "WebDAVResource"
 )
 
 // AttributeMutation represents an operation that mutates the Attribute nodes in the graph.
@@ -1841,6 +1845,7 @@ type FileMutation struct {
 	created_at                 *time.Time
 	updated_at                 *time.Time
 	name                       *string
+	source                     *filesource.FileSource
 	is_directory               *bool
 	notes                      *string
 	modified_at                *time.Time
@@ -2370,6 +2375,42 @@ func (m *FileMutation) OldName(ctx context.Context) (v string, err error) {
 // ResetName resets all changes to the "name" field.
 func (m *FileMutation) ResetName() {
 	m.name = nil
+}
+
+// SetSource sets the "source" field.
+func (m *FileMutation) SetSource(fs filesource.FileSource) {
+	m.source = &fs
+}
+
+// Source returns the value of the "source" field in the mutation.
+func (m *FileMutation) Source() (r filesource.FileSource, exists bool) {
+	v := m.source
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSource returns the old "source" field's value of the File entity.
+// If the File object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileMutation) OldSource(ctx context.Context) (v filesource.FileSource, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSource is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSource requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSource: %w", err)
+	}
+	return oldValue.Source, nil
+}
+
+// ResetSource resets all changes to the "source" field.
+func (m *FileMutation) ResetSource() {
+	m.source = nil
 }
 
 // SetIsDirectory sets the "is_directory" field.
@@ -3551,7 +3592,7 @@ func (m *FileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FileMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 23)
 	if m.deleter != nil {
 		fields = append(fields, file.FieldDeletedBy)
 	}
@@ -3578,6 +3619,9 @@ func (m *FileMutation) Fields() []string {
 	}
 	if m.name != nil {
 		fields = append(fields, file.FieldName)
+	}
+	if m.source != nil {
+		fields = append(fields, file.FieldSource)
 	}
 	if m.is_directory != nil {
 		fields = append(fields, file.FieldIsDirectory)
@@ -3644,6 +3688,8 @@ func (m *FileMutation) Field(name string) (ent.Value, bool) {
 		return m.SpaceID()
 	case file.FieldName:
 		return m.Name()
+	case file.FieldSource:
+		return m.Source()
 	case file.FieldIsDirectory:
 		return m.IsDirectory()
 	case file.FieldNotes:
@@ -3697,6 +3743,8 @@ func (m *FileMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldSpaceID(ctx)
 	case file.FieldName:
 		return m.OldName(ctx)
+	case file.FieldSource:
+		return m.OldSource(ctx)
 	case file.FieldIsDirectory:
 		return m.OldIsDirectory(ctx)
 	case file.FieldNotes:
@@ -3794,6 +3842,13 @@ func (m *FileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
+		return nil
+	case file.FieldSource:
+		v, ok := value.(filesource.FileSource)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSource(v)
 		return nil
 	case file.FieldIsDirectory:
 		v, ok := value.(bool)
@@ -4039,6 +4094,9 @@ func (m *FileMutation) ResetField(name string) error {
 		return nil
 	case file.FieldName:
 		m.ResetName()
+		return nil
+	case file.FieldSource:
+		m.ResetSource()
 		return nil
 	case file.FieldIsDirectory:
 		m.ResetIsDirectory()
@@ -10336,44 +10394,48 @@ func (m *SpaceUserAssignmentMutation) ResetEdge(name string) error {
 // StoredFileMutation represents an operation that mutates the StoredFile nodes in the graph.
 type StoredFileMutation struct {
 	config
-	op                             Op
-	typ                            string
-	id                             *int64
-	created_at                     *time.Time
-	updated_at                     *time.Time
-	upload_started_at              *time.Time
-	upload_failed_at               *time.Time
-	upload_succeeded_at            *time.Time
-	filename                       *string
-	size                           *int64
-	addsize                        *int64
-	size_in_storage                *int64
-	addsize_in_storage             *int64
-	sha256                         *string
-	content_sha256                 *string
-	mime_type                      *string
-	storage_type                   *storagetype.StorageType
-	bucket_name                    *string
-	storage_path                   *string
-	storage_filename               *string
-	temporary_storage_path         *string
-	temporary_storage_filename     *string
-	copied_to_final_destination_at *time.Time
-	deleted_temporary_file_at      *time.Time
-	clearedFields                  map[string]struct{}
-	creator                        *int64
-	clearedcreator                 bool
-	updater                        *int64
-	clearedupdater                 bool
-	files                          map[int64]struct{}
-	removedfiles                   map[int64]struct{}
-	clearedfiles                   bool
-	file_versions                  map[int64]struct{}
-	removedfile_versions           map[int64]struct{}
-	clearedfile_versions           bool
-	done                           bool
-	oldValue                       func(context.Context) (*StoredFile, error)
-	predicates                     []predicate.StoredFile
+	op                              Op
+	typ                             string
+	id                              *int64
+	created_at                      *time.Time
+	updated_at                      *time.Time
+	upload_started_at               *time.Time
+	upload_last_progress_at         *time.Time
+	upload_failed_at                *time.Time
+	upload_succeeded_at             *time.Time
+	filename                        *string
+	size                            *int64
+	addsize                         *int64
+	size_in_storage                 *int64
+	addsize_in_storage              *int64
+	sha256                          *string
+	content_sha256                  *string
+	storage_crc32c                  *string
+	mime_type                       *string
+	storage_type                    *storagetype.StorageType
+	bucket_name                     *string
+	storage_path                    *string
+	storage_filename                *string
+	temporary_storage_path          *string
+	temporary_storage_filename      *string
+	source_temporary_file_public_id *entx.CIText
+	source_conversion_claim_token   *string
+	copied_to_final_destination_at  *time.Time
+	deleted_temporary_file_at       *time.Time
+	clearedFields                   map[string]struct{}
+	creator                         *int64
+	clearedcreator                  bool
+	updater                         *int64
+	clearedupdater                  bool
+	files                           map[int64]struct{}
+	removedfiles                    map[int64]struct{}
+	clearedfiles                    bool
+	file_versions                   map[int64]struct{}
+	removedfile_versions            map[int64]struct{}
+	clearedfile_versions            bool
+	done                            bool
+	oldValue                        func(context.Context) (*StoredFile, error)
+	predicates                      []predicate.StoredFile
 }
 
 var _ ent.Mutation = (*StoredFileMutation)(nil)
@@ -10697,6 +10759,55 @@ func (m *StoredFileMutation) UploadStartedAtCleared() bool {
 func (m *StoredFileMutation) ResetUploadStartedAt() {
 	m.upload_started_at = nil
 	delete(m.clearedFields, storedfile.FieldUploadStartedAt)
+}
+
+// SetUploadLastProgressAt sets the "upload_last_progress_at" field.
+func (m *StoredFileMutation) SetUploadLastProgressAt(t time.Time) {
+	m.upload_last_progress_at = &t
+}
+
+// UploadLastProgressAt returns the value of the "upload_last_progress_at" field in the mutation.
+func (m *StoredFileMutation) UploadLastProgressAt() (r time.Time, exists bool) {
+	v := m.upload_last_progress_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUploadLastProgressAt returns the old "upload_last_progress_at" field's value of the StoredFile entity.
+// If the StoredFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StoredFileMutation) OldUploadLastProgressAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUploadLastProgressAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUploadLastProgressAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUploadLastProgressAt: %w", err)
+	}
+	return oldValue.UploadLastProgressAt, nil
+}
+
+// ClearUploadLastProgressAt clears the value of the "upload_last_progress_at" field.
+func (m *StoredFileMutation) ClearUploadLastProgressAt() {
+	m.upload_last_progress_at = nil
+	m.clearedFields[storedfile.FieldUploadLastProgressAt] = struct{}{}
+}
+
+// UploadLastProgressAtCleared returns if the "upload_last_progress_at" field was cleared in this mutation.
+func (m *StoredFileMutation) UploadLastProgressAtCleared() bool {
+	_, ok := m.clearedFields[storedfile.FieldUploadLastProgressAt]
+	return ok
+}
+
+// ResetUploadLastProgressAt resets all changes to the "upload_last_progress_at" field.
+func (m *StoredFileMutation) ResetUploadLastProgressAt() {
+	m.upload_last_progress_at = nil
+	delete(m.clearedFields, storedfile.FieldUploadLastProgressAt)
 }
 
 // SetUploadFailedAt sets the "upload_failed_at" field.
@@ -11057,6 +11168,55 @@ func (m *StoredFileMutation) ResetContentSha256() {
 	delete(m.clearedFields, storedfile.FieldContentSha256)
 }
 
+// SetStorageCrc32c sets the "storage_crc32c" field.
+func (m *StoredFileMutation) SetStorageCrc32c(s string) {
+	m.storage_crc32c = &s
+}
+
+// StorageCrc32c returns the value of the "storage_crc32c" field in the mutation.
+func (m *StoredFileMutation) StorageCrc32c() (r string, exists bool) {
+	v := m.storage_crc32c
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStorageCrc32c returns the old "storage_crc32c" field's value of the StoredFile entity.
+// If the StoredFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StoredFileMutation) OldStorageCrc32c(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStorageCrc32c is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStorageCrc32c requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStorageCrc32c: %w", err)
+	}
+	return oldValue.StorageCrc32c, nil
+}
+
+// ClearStorageCrc32c clears the value of the "storage_crc32c" field.
+func (m *StoredFileMutation) ClearStorageCrc32c() {
+	m.storage_crc32c = nil
+	m.clearedFields[storedfile.FieldStorageCrc32c] = struct{}{}
+}
+
+// StorageCrc32cCleared returns if the "storage_crc32c" field was cleared in this mutation.
+func (m *StoredFileMutation) StorageCrc32cCleared() bool {
+	_, ok := m.clearedFields[storedfile.FieldStorageCrc32c]
+	return ok
+}
+
+// ResetStorageCrc32c resets all changes to the "storage_crc32c" field.
+func (m *StoredFileMutation) ResetStorageCrc32c() {
+	m.storage_crc32c = nil
+	delete(m.clearedFields, storedfile.FieldStorageCrc32c)
+}
+
 // SetMimeType sets the "mime_type" field.
 func (m *StoredFileMutation) SetMimeType(s string) {
 	m.mime_type = &s
@@ -11333,6 +11493,104 @@ func (m *StoredFileMutation) OldTemporaryStorageFilename(ctx context.Context) (v
 // ResetTemporaryStorageFilename resets all changes to the "temporary_storage_filename" field.
 func (m *StoredFileMutation) ResetTemporaryStorageFilename() {
 	m.temporary_storage_filename = nil
+}
+
+// SetSourceTemporaryFilePublicID sets the "source_temporary_file_public_id" field.
+func (m *StoredFileMutation) SetSourceTemporaryFilePublicID(et entx.CIText) {
+	m.source_temporary_file_public_id = &et
+}
+
+// SourceTemporaryFilePublicID returns the value of the "source_temporary_file_public_id" field in the mutation.
+func (m *StoredFileMutation) SourceTemporaryFilePublicID() (r entx.CIText, exists bool) {
+	v := m.source_temporary_file_public_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceTemporaryFilePublicID returns the old "source_temporary_file_public_id" field's value of the StoredFile entity.
+// If the StoredFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StoredFileMutation) OldSourceTemporaryFilePublicID(ctx context.Context) (v *entx.CIText, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceTemporaryFilePublicID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceTemporaryFilePublicID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceTemporaryFilePublicID: %w", err)
+	}
+	return oldValue.SourceTemporaryFilePublicID, nil
+}
+
+// ClearSourceTemporaryFilePublicID clears the value of the "source_temporary_file_public_id" field.
+func (m *StoredFileMutation) ClearSourceTemporaryFilePublicID() {
+	m.source_temporary_file_public_id = nil
+	m.clearedFields[storedfile.FieldSourceTemporaryFilePublicID] = struct{}{}
+}
+
+// SourceTemporaryFilePublicIDCleared returns if the "source_temporary_file_public_id" field was cleared in this mutation.
+func (m *StoredFileMutation) SourceTemporaryFilePublicIDCleared() bool {
+	_, ok := m.clearedFields[storedfile.FieldSourceTemporaryFilePublicID]
+	return ok
+}
+
+// ResetSourceTemporaryFilePublicID resets all changes to the "source_temporary_file_public_id" field.
+func (m *StoredFileMutation) ResetSourceTemporaryFilePublicID() {
+	m.source_temporary_file_public_id = nil
+	delete(m.clearedFields, storedfile.FieldSourceTemporaryFilePublicID)
+}
+
+// SetSourceConversionClaimToken sets the "source_conversion_claim_token" field.
+func (m *StoredFileMutation) SetSourceConversionClaimToken(s string) {
+	m.source_conversion_claim_token = &s
+}
+
+// SourceConversionClaimToken returns the value of the "source_conversion_claim_token" field in the mutation.
+func (m *StoredFileMutation) SourceConversionClaimToken() (r string, exists bool) {
+	v := m.source_conversion_claim_token
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceConversionClaimToken returns the old "source_conversion_claim_token" field's value of the StoredFile entity.
+// If the StoredFile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StoredFileMutation) OldSourceConversionClaimToken(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceConversionClaimToken is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceConversionClaimToken requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceConversionClaimToken: %w", err)
+	}
+	return oldValue.SourceConversionClaimToken, nil
+}
+
+// ClearSourceConversionClaimToken clears the value of the "source_conversion_claim_token" field.
+func (m *StoredFileMutation) ClearSourceConversionClaimToken() {
+	m.source_conversion_claim_token = nil
+	m.clearedFields[storedfile.FieldSourceConversionClaimToken] = struct{}{}
+}
+
+// SourceConversionClaimTokenCleared returns if the "source_conversion_claim_token" field was cleared in this mutation.
+func (m *StoredFileMutation) SourceConversionClaimTokenCleared() bool {
+	_, ok := m.clearedFields[storedfile.FieldSourceConversionClaimToken]
+	return ok
+}
+
+// ResetSourceConversionClaimToken resets all changes to the "source_conversion_claim_token" field.
+func (m *StoredFileMutation) ResetSourceConversionClaimToken() {
+	m.source_conversion_claim_token = nil
+	delete(m.clearedFields, storedfile.FieldSourceConversionClaimToken)
 }
 
 // SetCopiedToFinalDestinationAt sets the "copied_to_final_destination_at" field.
@@ -11655,7 +11913,7 @@ func (m *StoredFileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *StoredFileMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 25)
 	if m.created_at != nil {
 		fields = append(fields, storedfile.FieldCreatedAt)
 	}
@@ -11670,6 +11928,9 @@ func (m *StoredFileMutation) Fields() []string {
 	}
 	if m.upload_started_at != nil {
 		fields = append(fields, storedfile.FieldUploadStartedAt)
+	}
+	if m.upload_last_progress_at != nil {
+		fields = append(fields, storedfile.FieldUploadLastProgressAt)
 	}
 	if m.upload_failed_at != nil {
 		fields = append(fields, storedfile.FieldUploadFailedAt)
@@ -11692,6 +11953,9 @@ func (m *StoredFileMutation) Fields() []string {
 	if m.content_sha256 != nil {
 		fields = append(fields, storedfile.FieldContentSha256)
 	}
+	if m.storage_crc32c != nil {
+		fields = append(fields, storedfile.FieldStorageCrc32c)
+	}
 	if m.mime_type != nil {
 		fields = append(fields, storedfile.FieldMimeType)
 	}
@@ -11712,6 +11976,12 @@ func (m *StoredFileMutation) Fields() []string {
 	}
 	if m.temporary_storage_filename != nil {
 		fields = append(fields, storedfile.FieldTemporaryStorageFilename)
+	}
+	if m.source_temporary_file_public_id != nil {
+		fields = append(fields, storedfile.FieldSourceTemporaryFilePublicID)
+	}
+	if m.source_conversion_claim_token != nil {
+		fields = append(fields, storedfile.FieldSourceConversionClaimToken)
 	}
 	if m.copied_to_final_destination_at != nil {
 		fields = append(fields, storedfile.FieldCopiedToFinalDestinationAt)
@@ -11737,6 +12007,8 @@ func (m *StoredFileMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedBy()
 	case storedfile.FieldUploadStartedAt:
 		return m.UploadStartedAt()
+	case storedfile.FieldUploadLastProgressAt:
+		return m.UploadLastProgressAt()
 	case storedfile.FieldUploadFailedAt:
 		return m.UploadFailedAt()
 	case storedfile.FieldUploadSucceededAt:
@@ -11751,6 +12023,8 @@ func (m *StoredFileMutation) Field(name string) (ent.Value, bool) {
 		return m.Sha256()
 	case storedfile.FieldContentSha256:
 		return m.ContentSha256()
+	case storedfile.FieldStorageCrc32c:
+		return m.StorageCrc32c()
 	case storedfile.FieldMimeType:
 		return m.MimeType()
 	case storedfile.FieldStorageType:
@@ -11765,6 +12039,10 @@ func (m *StoredFileMutation) Field(name string) (ent.Value, bool) {
 		return m.TemporaryStoragePath()
 	case storedfile.FieldTemporaryStorageFilename:
 		return m.TemporaryStorageFilename()
+	case storedfile.FieldSourceTemporaryFilePublicID:
+		return m.SourceTemporaryFilePublicID()
+	case storedfile.FieldSourceConversionClaimToken:
+		return m.SourceConversionClaimToken()
 	case storedfile.FieldCopiedToFinalDestinationAt:
 		return m.CopiedToFinalDestinationAt()
 	case storedfile.FieldDeletedTemporaryFileAt:
@@ -11788,6 +12066,8 @@ func (m *StoredFileMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldUpdatedBy(ctx)
 	case storedfile.FieldUploadStartedAt:
 		return m.OldUploadStartedAt(ctx)
+	case storedfile.FieldUploadLastProgressAt:
+		return m.OldUploadLastProgressAt(ctx)
 	case storedfile.FieldUploadFailedAt:
 		return m.OldUploadFailedAt(ctx)
 	case storedfile.FieldUploadSucceededAt:
@@ -11802,6 +12082,8 @@ func (m *StoredFileMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldSha256(ctx)
 	case storedfile.FieldContentSha256:
 		return m.OldContentSha256(ctx)
+	case storedfile.FieldStorageCrc32c:
+		return m.OldStorageCrc32c(ctx)
 	case storedfile.FieldMimeType:
 		return m.OldMimeType(ctx)
 	case storedfile.FieldStorageType:
@@ -11816,6 +12098,10 @@ func (m *StoredFileMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldTemporaryStoragePath(ctx)
 	case storedfile.FieldTemporaryStorageFilename:
 		return m.OldTemporaryStorageFilename(ctx)
+	case storedfile.FieldSourceTemporaryFilePublicID:
+		return m.OldSourceTemporaryFilePublicID(ctx)
+	case storedfile.FieldSourceConversionClaimToken:
+		return m.OldSourceConversionClaimToken(ctx)
 	case storedfile.FieldCopiedToFinalDestinationAt:
 		return m.OldCopiedToFinalDestinationAt(ctx)
 	case storedfile.FieldDeletedTemporaryFileAt:
@@ -11863,6 +12149,13 @@ func (m *StoredFileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUploadStartedAt(v)
+		return nil
+	case storedfile.FieldUploadLastProgressAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUploadLastProgressAt(v)
 		return nil
 	case storedfile.FieldUploadFailedAt:
 		v, ok := value.(time.Time)
@@ -11913,6 +12206,13 @@ func (m *StoredFileMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetContentSha256(v)
 		return nil
+	case storedfile.FieldStorageCrc32c:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStorageCrc32c(v)
+		return nil
 	case storedfile.FieldMimeType:
 		v, ok := value.(string)
 		if !ok {
@@ -11961,6 +12261,20 @@ func (m *StoredFileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTemporaryStorageFilename(v)
+		return nil
+	case storedfile.FieldSourceTemporaryFilePublicID:
+		v, ok := value.(entx.CIText)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceTemporaryFilePublicID(v)
+		return nil
+	case storedfile.FieldSourceConversionClaimToken:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceConversionClaimToken(v)
 		return nil
 	case storedfile.FieldCopiedToFinalDestinationAt:
 		v, ok := value.(time.Time)
@@ -12042,6 +12356,9 @@ func (m *StoredFileMutation) ClearedFields() []string {
 	if m.FieldCleared(storedfile.FieldUploadStartedAt) {
 		fields = append(fields, storedfile.FieldUploadStartedAt)
 	}
+	if m.FieldCleared(storedfile.FieldUploadLastProgressAt) {
+		fields = append(fields, storedfile.FieldUploadLastProgressAt)
+	}
 	if m.FieldCleared(storedfile.FieldUploadFailedAt) {
 		fields = append(fields, storedfile.FieldUploadFailedAt)
 	}
@@ -12057,11 +12374,20 @@ func (m *StoredFileMutation) ClearedFields() []string {
 	if m.FieldCleared(storedfile.FieldContentSha256) {
 		fields = append(fields, storedfile.FieldContentSha256)
 	}
+	if m.FieldCleared(storedfile.FieldStorageCrc32c) {
+		fields = append(fields, storedfile.FieldStorageCrc32c)
+	}
 	if m.FieldCleared(storedfile.FieldMimeType) {
 		fields = append(fields, storedfile.FieldMimeType)
 	}
 	if m.FieldCleared(storedfile.FieldBucketName) {
 		fields = append(fields, storedfile.FieldBucketName)
+	}
+	if m.FieldCleared(storedfile.FieldSourceTemporaryFilePublicID) {
+		fields = append(fields, storedfile.FieldSourceTemporaryFilePublicID)
+	}
+	if m.FieldCleared(storedfile.FieldSourceConversionClaimToken) {
+		fields = append(fields, storedfile.FieldSourceConversionClaimToken)
 	}
 	if m.FieldCleared(storedfile.FieldCopiedToFinalDestinationAt) {
 		fields = append(fields, storedfile.FieldCopiedToFinalDestinationAt)
@@ -12092,6 +12418,9 @@ func (m *StoredFileMutation) ClearField(name string) error {
 	case storedfile.FieldUploadStartedAt:
 		m.ClearUploadStartedAt()
 		return nil
+	case storedfile.FieldUploadLastProgressAt:
+		m.ClearUploadLastProgressAt()
+		return nil
 	case storedfile.FieldUploadFailedAt:
 		m.ClearUploadFailedAt()
 		return nil
@@ -12107,11 +12436,20 @@ func (m *StoredFileMutation) ClearField(name string) error {
 	case storedfile.FieldContentSha256:
 		m.ClearContentSha256()
 		return nil
+	case storedfile.FieldStorageCrc32c:
+		m.ClearStorageCrc32c()
+		return nil
 	case storedfile.FieldMimeType:
 		m.ClearMimeType()
 		return nil
 	case storedfile.FieldBucketName:
 		m.ClearBucketName()
+		return nil
+	case storedfile.FieldSourceTemporaryFilePublicID:
+		m.ClearSourceTemporaryFilePublicID()
+		return nil
+	case storedfile.FieldSourceConversionClaimToken:
+		m.ClearSourceConversionClaimToken()
 		return nil
 	case storedfile.FieldCopiedToFinalDestinationAt:
 		m.ClearCopiedToFinalDestinationAt()
@@ -12142,6 +12480,9 @@ func (m *StoredFileMutation) ResetField(name string) error {
 	case storedfile.FieldUploadStartedAt:
 		m.ResetUploadStartedAt()
 		return nil
+	case storedfile.FieldUploadLastProgressAt:
+		m.ResetUploadLastProgressAt()
+		return nil
 	case storedfile.FieldUploadFailedAt:
 		m.ResetUploadFailedAt()
 		return nil
@@ -12163,6 +12504,9 @@ func (m *StoredFileMutation) ResetField(name string) error {
 	case storedfile.FieldContentSha256:
 		m.ResetContentSha256()
 		return nil
+	case storedfile.FieldStorageCrc32c:
+		m.ResetStorageCrc32c()
+		return nil
 	case storedfile.FieldMimeType:
 		m.ResetMimeType()
 		return nil
@@ -12183,6 +12527,12 @@ func (m *StoredFileMutation) ResetField(name string) error {
 		return nil
 	case storedfile.FieldTemporaryStorageFilename:
 		m.ResetTemporaryStorageFilename()
+		return nil
+	case storedfile.FieldSourceTemporaryFilePublicID:
+		m.ResetSourceTemporaryFilePublicID()
+		return nil
+	case storedfile.FieldSourceConversionClaimToken:
+		m.ResetSourceConversionClaimToken()
 		return nil
 	case storedfile.FieldCopiedToFinalDestinationAt:
 		m.ResetCopiedToFinalDestinationAt()
@@ -16591,4 +16941,1295 @@ func (m *UserMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown User edge %s", name)
+}
+
+// WebDAVResourceMutation represents an operation that mutates the WebDAVResource nodes in the graph.
+type WebDAVResourceMutation struct {
+	config
+	op                   Op
+	typ                  string
+	id                   *int64
+	created_at           *time.Time
+	updated_at           *time.Time
+	credential_public_id *entx.CIText
+	dav_path             *string
+	state                *webdavresource.State
+	last_progress_at     *time.Time
+	finalized_at         *time.Time
+	clearedFields        map[string]struct{}
+	creator              *int64
+	clearedcreator       bool
+	updater              *int64
+	clearedupdater       bool
+	space                *int64
+	clearedspace         bool
+	file                 *int64
+	clearedfile          bool
+	stored_file          *int64
+	clearedstored_file   bool
+	done                 bool
+	oldValue             func(context.Context) (*WebDAVResource, error)
+	predicates           []predicate.WebDAVResource
+}
+
+var _ ent.Mutation = (*WebDAVResourceMutation)(nil)
+
+// webdavresourceOption allows management of the mutation configuration using functional options.
+type webdavresourceOption func(*WebDAVResourceMutation)
+
+// newWebDAVResourceMutation creates new mutation for the WebDAVResource entity.
+func newWebDAVResourceMutation(c config, op Op, opts ...webdavresourceOption) *WebDAVResourceMutation {
+	m := &WebDAVResourceMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeWebDAVResource,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withWebDAVResourceID sets the ID field of the mutation.
+func withWebDAVResourceID(id int64) webdavresourceOption {
+	return func(m *WebDAVResourceMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *WebDAVResource
+		)
+		m.oldValue = func(ctx context.Context) (*WebDAVResource, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().WebDAVResource.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withWebDAVResource sets the old WebDAVResource of the mutation.
+func withWebDAVResource(node *WebDAVResource) webdavresourceOption {
+	return func(m *WebDAVResourceMutation) {
+		m.oldValue = func(context.Context) (*WebDAVResource, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m WebDAVResourceMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m WebDAVResourceMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("enttenant: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of WebDAVResource entities.
+func (m *WebDAVResourceMutation) SetID(id int64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *WebDAVResourceMutation) ID() (id int64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *WebDAVResourceMutation) IDs(ctx context.Context) ([]int64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().WebDAVResource.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *WebDAVResourceMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *WebDAVResourceMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the WebDAVResource entity.
+// If the WebDAVResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WebDAVResourceMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *WebDAVResourceMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *WebDAVResourceMutation) SetCreatedBy(i int64) {
+	m.creator = &i
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *WebDAVResourceMutation) CreatedBy() (r int64, exists bool) {
+	v := m.creator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the WebDAVResource entity.
+// If the WebDAVResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WebDAVResourceMutation) OldCreatedBy(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *WebDAVResourceMutation) ClearCreatedBy() {
+	m.creator = nil
+	m.clearedFields[enttenantwebdavresource.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *WebDAVResourceMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[enttenantwebdavresource.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *WebDAVResourceMutation) ResetCreatedBy() {
+	m.creator = nil
+	delete(m.clearedFields, enttenantwebdavresource.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *WebDAVResourceMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *WebDAVResourceMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the WebDAVResource entity.
+// If the WebDAVResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WebDAVResourceMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *WebDAVResourceMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *WebDAVResourceMutation) SetUpdatedBy(i int64) {
+	m.updater = &i
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *WebDAVResourceMutation) UpdatedBy() (r int64, exists bool) {
+	v := m.updater
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the WebDAVResource entity.
+// If the WebDAVResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WebDAVResourceMutation) OldUpdatedBy(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *WebDAVResourceMutation) ClearUpdatedBy() {
+	m.updater = nil
+	m.clearedFields[enttenantwebdavresource.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *WebDAVResourceMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[enttenantwebdavresource.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *WebDAVResourceMutation) ResetUpdatedBy() {
+	m.updater = nil
+	delete(m.clearedFields, enttenantwebdavresource.FieldUpdatedBy)
+}
+
+// SetSpaceID sets the "space_id" field.
+func (m *WebDAVResourceMutation) SetSpaceID(i int64) {
+	m.space = &i
+}
+
+// SpaceID returns the value of the "space_id" field in the mutation.
+func (m *WebDAVResourceMutation) SpaceID() (r int64, exists bool) {
+	v := m.space
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSpaceID returns the old "space_id" field's value of the WebDAVResource entity.
+// If the WebDAVResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WebDAVResourceMutation) OldSpaceID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSpaceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSpaceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSpaceID: %w", err)
+	}
+	return oldValue.SpaceID, nil
+}
+
+// ResetSpaceID resets all changes to the "space_id" field.
+func (m *WebDAVResourceMutation) ResetSpaceID() {
+	m.space = nil
+}
+
+// SetCredentialPublicID sets the "credential_public_id" field.
+func (m *WebDAVResourceMutation) SetCredentialPublicID(et entx.CIText) {
+	m.credential_public_id = &et
+}
+
+// CredentialPublicID returns the value of the "credential_public_id" field in the mutation.
+func (m *WebDAVResourceMutation) CredentialPublicID() (r entx.CIText, exists bool) {
+	v := m.credential_public_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCredentialPublicID returns the old "credential_public_id" field's value of the WebDAVResource entity.
+// If the WebDAVResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WebDAVResourceMutation) OldCredentialPublicID(ctx context.Context) (v entx.CIText, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCredentialPublicID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCredentialPublicID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCredentialPublicID: %w", err)
+	}
+	return oldValue.CredentialPublicID, nil
+}
+
+// ResetCredentialPublicID resets all changes to the "credential_public_id" field.
+func (m *WebDAVResourceMutation) ResetCredentialPublicID() {
+	m.credential_public_id = nil
+}
+
+// SetFileID sets the "file_id" field.
+func (m *WebDAVResourceMutation) SetFileID(i int64) {
+	m.file = &i
+}
+
+// FileID returns the value of the "file_id" field in the mutation.
+func (m *WebDAVResourceMutation) FileID() (r int64, exists bool) {
+	v := m.file
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFileID returns the old "file_id" field's value of the WebDAVResource entity.
+// If the WebDAVResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WebDAVResourceMutation) OldFileID(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFileID: %w", err)
+	}
+	return oldValue.FileID, nil
+}
+
+// ClearFileID clears the value of the "file_id" field.
+func (m *WebDAVResourceMutation) ClearFileID() {
+	m.file = nil
+	m.clearedFields[enttenantwebdavresource.FieldFileID] = struct{}{}
+}
+
+// FileIDCleared returns if the "file_id" field was cleared in this mutation.
+func (m *WebDAVResourceMutation) FileIDCleared() bool {
+	_, ok := m.clearedFields[enttenantwebdavresource.FieldFileID]
+	return ok
+}
+
+// ResetFileID resets all changes to the "file_id" field.
+func (m *WebDAVResourceMutation) ResetFileID() {
+	m.file = nil
+	delete(m.clearedFields, enttenantwebdavresource.FieldFileID)
+}
+
+// SetStoredFileID sets the "stored_file_id" field.
+func (m *WebDAVResourceMutation) SetStoredFileID(i int64) {
+	m.stored_file = &i
+}
+
+// StoredFileID returns the value of the "stored_file_id" field in the mutation.
+func (m *WebDAVResourceMutation) StoredFileID() (r int64, exists bool) {
+	v := m.stored_file
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStoredFileID returns the old "stored_file_id" field's value of the WebDAVResource entity.
+// If the WebDAVResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WebDAVResourceMutation) OldStoredFileID(ctx context.Context) (v *int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStoredFileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStoredFileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStoredFileID: %w", err)
+	}
+	return oldValue.StoredFileID, nil
+}
+
+// ClearStoredFileID clears the value of the "stored_file_id" field.
+func (m *WebDAVResourceMutation) ClearStoredFileID() {
+	m.stored_file = nil
+	m.clearedFields[enttenantwebdavresource.FieldStoredFileID] = struct{}{}
+}
+
+// StoredFileIDCleared returns if the "stored_file_id" field was cleared in this mutation.
+func (m *WebDAVResourceMutation) StoredFileIDCleared() bool {
+	_, ok := m.clearedFields[enttenantwebdavresource.FieldStoredFileID]
+	return ok
+}
+
+// ResetStoredFileID resets all changes to the "stored_file_id" field.
+func (m *WebDAVResourceMutation) ResetStoredFileID() {
+	m.stored_file = nil
+	delete(m.clearedFields, enttenantwebdavresource.FieldStoredFileID)
+}
+
+// SetDavPath sets the "dav_path" field.
+func (m *WebDAVResourceMutation) SetDavPath(s string) {
+	m.dav_path = &s
+}
+
+// DavPath returns the value of the "dav_path" field in the mutation.
+func (m *WebDAVResourceMutation) DavPath() (r string, exists bool) {
+	v := m.dav_path
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDavPath returns the old "dav_path" field's value of the WebDAVResource entity.
+// If the WebDAVResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WebDAVResourceMutation) OldDavPath(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDavPath is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDavPath requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDavPath: %w", err)
+	}
+	return oldValue.DavPath, nil
+}
+
+// ResetDavPath resets all changes to the "dav_path" field.
+func (m *WebDAVResourceMutation) ResetDavPath() {
+	m.dav_path = nil
+}
+
+// SetState sets the "state" field.
+func (m *WebDAVResourceMutation) SetState(w webdavresource.State) {
+	m.state = &w
+}
+
+// State returns the value of the "state" field in the mutation.
+func (m *WebDAVResourceMutation) State() (r webdavresource.State, exists bool) {
+	v := m.state
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldState returns the old "state" field's value of the WebDAVResource entity.
+// If the WebDAVResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WebDAVResourceMutation) OldState(ctx context.Context) (v webdavresource.State, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldState is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldState requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldState: %w", err)
+	}
+	return oldValue.State, nil
+}
+
+// ResetState resets all changes to the "state" field.
+func (m *WebDAVResourceMutation) ResetState() {
+	m.state = nil
+}
+
+// SetLastProgressAt sets the "last_progress_at" field.
+func (m *WebDAVResourceMutation) SetLastProgressAt(t time.Time) {
+	m.last_progress_at = &t
+}
+
+// LastProgressAt returns the value of the "last_progress_at" field in the mutation.
+func (m *WebDAVResourceMutation) LastProgressAt() (r time.Time, exists bool) {
+	v := m.last_progress_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLastProgressAt returns the old "last_progress_at" field's value of the WebDAVResource entity.
+// If the WebDAVResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WebDAVResourceMutation) OldLastProgressAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLastProgressAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLastProgressAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLastProgressAt: %w", err)
+	}
+	return oldValue.LastProgressAt, nil
+}
+
+// ResetLastProgressAt resets all changes to the "last_progress_at" field.
+func (m *WebDAVResourceMutation) ResetLastProgressAt() {
+	m.last_progress_at = nil
+}
+
+// SetFinalizedAt sets the "finalized_at" field.
+func (m *WebDAVResourceMutation) SetFinalizedAt(t time.Time) {
+	m.finalized_at = &t
+}
+
+// FinalizedAt returns the value of the "finalized_at" field in the mutation.
+func (m *WebDAVResourceMutation) FinalizedAt() (r time.Time, exists bool) {
+	v := m.finalized_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFinalizedAt returns the old "finalized_at" field's value of the WebDAVResource entity.
+// If the WebDAVResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *WebDAVResourceMutation) OldFinalizedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFinalizedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFinalizedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFinalizedAt: %w", err)
+	}
+	return oldValue.FinalizedAt, nil
+}
+
+// ClearFinalizedAt clears the value of the "finalized_at" field.
+func (m *WebDAVResourceMutation) ClearFinalizedAt() {
+	m.finalized_at = nil
+	m.clearedFields[enttenantwebdavresource.FieldFinalizedAt] = struct{}{}
+}
+
+// FinalizedAtCleared returns if the "finalized_at" field was cleared in this mutation.
+func (m *WebDAVResourceMutation) FinalizedAtCleared() bool {
+	_, ok := m.clearedFields[enttenantwebdavresource.FieldFinalizedAt]
+	return ok
+}
+
+// ResetFinalizedAt resets all changes to the "finalized_at" field.
+func (m *WebDAVResourceMutation) ResetFinalizedAt() {
+	m.finalized_at = nil
+	delete(m.clearedFields, enttenantwebdavresource.FieldFinalizedAt)
+}
+
+// SetCreatorID sets the "creator" edge to the User entity by id.
+func (m *WebDAVResourceMutation) SetCreatorID(id int64) {
+	m.creator = &id
+}
+
+// ClearCreator clears the "creator" edge to the User entity.
+func (m *WebDAVResourceMutation) ClearCreator() {
+	m.clearedcreator = true
+	m.clearedFields[enttenantwebdavresource.FieldCreatedBy] = struct{}{}
+}
+
+// CreatorCleared reports if the "creator" edge to the User entity was cleared.
+func (m *WebDAVResourceMutation) CreatorCleared() bool {
+	return m.CreatedByCleared() || m.clearedcreator
+}
+
+// CreatorID returns the "creator" edge ID in the mutation.
+func (m *WebDAVResourceMutation) CreatorID() (id int64, exists bool) {
+	if m.creator != nil {
+		return *m.creator, true
+	}
+	return
+}
+
+// CreatorIDs returns the "creator" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CreatorID instead. It exists only for internal usage by the builders.
+func (m *WebDAVResourceMutation) CreatorIDs() (ids []int64) {
+	if id := m.creator; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCreator resets all changes to the "creator" edge.
+func (m *WebDAVResourceMutation) ResetCreator() {
+	m.creator = nil
+	m.clearedcreator = false
+}
+
+// SetUpdaterID sets the "updater" edge to the User entity by id.
+func (m *WebDAVResourceMutation) SetUpdaterID(id int64) {
+	m.updater = &id
+}
+
+// ClearUpdater clears the "updater" edge to the User entity.
+func (m *WebDAVResourceMutation) ClearUpdater() {
+	m.clearedupdater = true
+	m.clearedFields[enttenantwebdavresource.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdaterCleared reports if the "updater" edge to the User entity was cleared.
+func (m *WebDAVResourceMutation) UpdaterCleared() bool {
+	return m.UpdatedByCleared() || m.clearedupdater
+}
+
+// UpdaterID returns the "updater" edge ID in the mutation.
+func (m *WebDAVResourceMutation) UpdaterID() (id int64, exists bool) {
+	if m.updater != nil {
+		return *m.updater, true
+	}
+	return
+}
+
+// UpdaterIDs returns the "updater" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// UpdaterID instead. It exists only for internal usage by the builders.
+func (m *WebDAVResourceMutation) UpdaterIDs() (ids []int64) {
+	if id := m.updater; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetUpdater resets all changes to the "updater" edge.
+func (m *WebDAVResourceMutation) ResetUpdater() {
+	m.updater = nil
+	m.clearedupdater = false
+}
+
+// ClearSpace clears the "space" edge to the Space entity.
+func (m *WebDAVResourceMutation) ClearSpace() {
+	m.clearedspace = true
+	m.clearedFields[enttenantwebdavresource.FieldSpaceID] = struct{}{}
+}
+
+// SpaceCleared reports if the "space" edge to the Space entity was cleared.
+func (m *WebDAVResourceMutation) SpaceCleared() bool {
+	return m.clearedspace
+}
+
+// SpaceIDs returns the "space" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// SpaceID instead. It exists only for internal usage by the builders.
+func (m *WebDAVResourceMutation) SpaceIDs() (ids []int64) {
+	if id := m.space; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetSpace resets all changes to the "space" edge.
+func (m *WebDAVResourceMutation) ResetSpace() {
+	m.space = nil
+	m.clearedspace = false
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (m *WebDAVResourceMutation) ClearFile() {
+	m.clearedfile = true
+	m.clearedFields[enttenantwebdavresource.FieldFileID] = struct{}{}
+}
+
+// FileCleared reports if the "file" edge to the File entity was cleared.
+func (m *WebDAVResourceMutation) FileCleared() bool {
+	return m.FileIDCleared() || m.clearedfile
+}
+
+// FileIDs returns the "file" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// FileID instead. It exists only for internal usage by the builders.
+func (m *WebDAVResourceMutation) FileIDs() (ids []int64) {
+	if id := m.file; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetFile resets all changes to the "file" edge.
+func (m *WebDAVResourceMutation) ResetFile() {
+	m.file = nil
+	m.clearedfile = false
+}
+
+// ClearStoredFile clears the "stored_file" edge to the StoredFile entity.
+func (m *WebDAVResourceMutation) ClearStoredFile() {
+	m.clearedstored_file = true
+	m.clearedFields[enttenantwebdavresource.FieldStoredFileID] = struct{}{}
+}
+
+// StoredFileCleared reports if the "stored_file" edge to the StoredFile entity was cleared.
+func (m *WebDAVResourceMutation) StoredFileCleared() bool {
+	return m.StoredFileIDCleared() || m.clearedstored_file
+}
+
+// StoredFileIDs returns the "stored_file" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// StoredFileID instead. It exists only for internal usage by the builders.
+func (m *WebDAVResourceMutation) StoredFileIDs() (ids []int64) {
+	if id := m.stored_file; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetStoredFile resets all changes to the "stored_file" edge.
+func (m *WebDAVResourceMutation) ResetStoredFile() {
+	m.stored_file = nil
+	m.clearedstored_file = false
+}
+
+// Where appends a list predicates to the WebDAVResourceMutation builder.
+func (m *WebDAVResourceMutation) Where(ps ...predicate.WebDAVResource) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the WebDAVResourceMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *WebDAVResourceMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.WebDAVResource, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *WebDAVResourceMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *WebDAVResourceMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (WebDAVResource).
+func (m *WebDAVResourceMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *WebDAVResourceMutation) Fields() []string {
+	fields := make([]string, 0, 12)
+	if m.created_at != nil {
+		fields = append(fields, enttenantwebdavresource.FieldCreatedAt)
+	}
+	if m.creator != nil {
+		fields = append(fields, enttenantwebdavresource.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, enttenantwebdavresource.FieldUpdatedAt)
+	}
+	if m.updater != nil {
+		fields = append(fields, enttenantwebdavresource.FieldUpdatedBy)
+	}
+	if m.space != nil {
+		fields = append(fields, enttenantwebdavresource.FieldSpaceID)
+	}
+	if m.credential_public_id != nil {
+		fields = append(fields, enttenantwebdavresource.FieldCredentialPublicID)
+	}
+	if m.file != nil {
+		fields = append(fields, enttenantwebdavresource.FieldFileID)
+	}
+	if m.stored_file != nil {
+		fields = append(fields, enttenantwebdavresource.FieldStoredFileID)
+	}
+	if m.dav_path != nil {
+		fields = append(fields, enttenantwebdavresource.FieldDavPath)
+	}
+	if m.state != nil {
+		fields = append(fields, enttenantwebdavresource.FieldState)
+	}
+	if m.last_progress_at != nil {
+		fields = append(fields, enttenantwebdavresource.FieldLastProgressAt)
+	}
+	if m.finalized_at != nil {
+		fields = append(fields, enttenantwebdavresource.FieldFinalizedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *WebDAVResourceMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case enttenantwebdavresource.FieldCreatedAt:
+		return m.CreatedAt()
+	case enttenantwebdavresource.FieldCreatedBy:
+		return m.CreatedBy()
+	case enttenantwebdavresource.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case enttenantwebdavresource.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case enttenantwebdavresource.FieldSpaceID:
+		return m.SpaceID()
+	case enttenantwebdavresource.FieldCredentialPublicID:
+		return m.CredentialPublicID()
+	case enttenantwebdavresource.FieldFileID:
+		return m.FileID()
+	case enttenantwebdavresource.FieldStoredFileID:
+		return m.StoredFileID()
+	case enttenantwebdavresource.FieldDavPath:
+		return m.DavPath()
+	case enttenantwebdavresource.FieldState:
+		return m.State()
+	case enttenantwebdavresource.FieldLastProgressAt:
+		return m.LastProgressAt()
+	case enttenantwebdavresource.FieldFinalizedAt:
+		return m.FinalizedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *WebDAVResourceMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case enttenantwebdavresource.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case enttenantwebdavresource.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case enttenantwebdavresource.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case enttenantwebdavresource.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case enttenantwebdavresource.FieldSpaceID:
+		return m.OldSpaceID(ctx)
+	case enttenantwebdavresource.FieldCredentialPublicID:
+		return m.OldCredentialPublicID(ctx)
+	case enttenantwebdavresource.FieldFileID:
+		return m.OldFileID(ctx)
+	case enttenantwebdavresource.FieldStoredFileID:
+		return m.OldStoredFileID(ctx)
+	case enttenantwebdavresource.FieldDavPath:
+		return m.OldDavPath(ctx)
+	case enttenantwebdavresource.FieldState:
+		return m.OldState(ctx)
+	case enttenantwebdavresource.FieldLastProgressAt:
+		return m.OldLastProgressAt(ctx)
+	case enttenantwebdavresource.FieldFinalizedAt:
+		return m.OldFinalizedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown WebDAVResource field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *WebDAVResourceMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case enttenantwebdavresource.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case enttenantwebdavresource.FieldCreatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case enttenantwebdavresource.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case enttenantwebdavresource.FieldUpdatedBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case enttenantwebdavresource.FieldSpaceID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSpaceID(v)
+		return nil
+	case enttenantwebdavresource.FieldCredentialPublicID:
+		v, ok := value.(entx.CIText)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCredentialPublicID(v)
+		return nil
+	case enttenantwebdavresource.FieldFileID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFileID(v)
+		return nil
+	case enttenantwebdavresource.FieldStoredFileID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStoredFileID(v)
+		return nil
+	case enttenantwebdavresource.FieldDavPath:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDavPath(v)
+		return nil
+	case enttenantwebdavresource.FieldState:
+		v, ok := value.(webdavresource.State)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetState(v)
+		return nil
+	case enttenantwebdavresource.FieldLastProgressAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLastProgressAt(v)
+		return nil
+	case enttenantwebdavresource.FieldFinalizedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFinalizedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown WebDAVResource field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *WebDAVResourceMutation) AddedFields() []string {
+	var fields []string
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *WebDAVResourceMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *WebDAVResourceMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown WebDAVResource numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *WebDAVResourceMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(enttenantwebdavresource.FieldCreatedBy) {
+		fields = append(fields, enttenantwebdavresource.FieldCreatedBy)
+	}
+	if m.FieldCleared(enttenantwebdavresource.FieldUpdatedBy) {
+		fields = append(fields, enttenantwebdavresource.FieldUpdatedBy)
+	}
+	if m.FieldCleared(enttenantwebdavresource.FieldFileID) {
+		fields = append(fields, enttenantwebdavresource.FieldFileID)
+	}
+	if m.FieldCleared(enttenantwebdavresource.FieldStoredFileID) {
+		fields = append(fields, enttenantwebdavresource.FieldStoredFileID)
+	}
+	if m.FieldCleared(enttenantwebdavresource.FieldFinalizedAt) {
+		fields = append(fields, enttenantwebdavresource.FieldFinalizedAt)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *WebDAVResourceMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *WebDAVResourceMutation) ClearField(name string) error {
+	switch name {
+	case enttenantwebdavresource.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case enttenantwebdavresource.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case enttenantwebdavresource.FieldFileID:
+		m.ClearFileID()
+		return nil
+	case enttenantwebdavresource.FieldStoredFileID:
+		m.ClearStoredFileID()
+		return nil
+	case enttenantwebdavresource.FieldFinalizedAt:
+		m.ClearFinalizedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown WebDAVResource nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *WebDAVResourceMutation) ResetField(name string) error {
+	switch name {
+	case enttenantwebdavresource.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case enttenantwebdavresource.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case enttenantwebdavresource.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case enttenantwebdavresource.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case enttenantwebdavresource.FieldSpaceID:
+		m.ResetSpaceID()
+		return nil
+	case enttenantwebdavresource.FieldCredentialPublicID:
+		m.ResetCredentialPublicID()
+		return nil
+	case enttenantwebdavresource.FieldFileID:
+		m.ResetFileID()
+		return nil
+	case enttenantwebdavresource.FieldStoredFileID:
+		m.ResetStoredFileID()
+		return nil
+	case enttenantwebdavresource.FieldDavPath:
+		m.ResetDavPath()
+		return nil
+	case enttenantwebdavresource.FieldState:
+		m.ResetState()
+		return nil
+	case enttenantwebdavresource.FieldLastProgressAt:
+		m.ResetLastProgressAt()
+		return nil
+	case enttenantwebdavresource.FieldFinalizedAt:
+		m.ResetFinalizedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown WebDAVResource field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *WebDAVResourceMutation) AddedEdges() []string {
+	edges := make([]string, 0, 5)
+	if m.creator != nil {
+		edges = append(edges, enttenantwebdavresource.EdgeCreator)
+	}
+	if m.updater != nil {
+		edges = append(edges, enttenantwebdavresource.EdgeUpdater)
+	}
+	if m.space != nil {
+		edges = append(edges, enttenantwebdavresource.EdgeSpace)
+	}
+	if m.file != nil {
+		edges = append(edges, enttenantwebdavresource.EdgeFile)
+	}
+	if m.stored_file != nil {
+		edges = append(edges, enttenantwebdavresource.EdgeStoredFile)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *WebDAVResourceMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case enttenantwebdavresource.EdgeCreator:
+		if id := m.creator; id != nil {
+			return []ent.Value{*id}
+		}
+	case enttenantwebdavresource.EdgeUpdater:
+		if id := m.updater; id != nil {
+			return []ent.Value{*id}
+		}
+	case enttenantwebdavresource.EdgeSpace:
+		if id := m.space; id != nil {
+			return []ent.Value{*id}
+		}
+	case enttenantwebdavresource.EdgeFile:
+		if id := m.file; id != nil {
+			return []ent.Value{*id}
+		}
+	case enttenantwebdavresource.EdgeStoredFile:
+		if id := m.stored_file; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *WebDAVResourceMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 5)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *WebDAVResourceMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *WebDAVResourceMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 5)
+	if m.clearedcreator {
+		edges = append(edges, enttenantwebdavresource.EdgeCreator)
+	}
+	if m.clearedupdater {
+		edges = append(edges, enttenantwebdavresource.EdgeUpdater)
+	}
+	if m.clearedspace {
+		edges = append(edges, enttenantwebdavresource.EdgeSpace)
+	}
+	if m.clearedfile {
+		edges = append(edges, enttenantwebdavresource.EdgeFile)
+	}
+	if m.clearedstored_file {
+		edges = append(edges, enttenantwebdavresource.EdgeStoredFile)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *WebDAVResourceMutation) EdgeCleared(name string) bool {
+	switch name {
+	case enttenantwebdavresource.EdgeCreator:
+		return m.clearedcreator
+	case enttenantwebdavresource.EdgeUpdater:
+		return m.clearedupdater
+	case enttenantwebdavresource.EdgeSpace:
+		return m.clearedspace
+	case enttenantwebdavresource.EdgeFile:
+		return m.clearedfile
+	case enttenantwebdavresource.EdgeStoredFile:
+		return m.clearedstored_file
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *WebDAVResourceMutation) ClearEdge(name string) error {
+	switch name {
+	case enttenantwebdavresource.EdgeCreator:
+		m.ClearCreator()
+		return nil
+	case enttenantwebdavresource.EdgeUpdater:
+		m.ClearUpdater()
+		return nil
+	case enttenantwebdavresource.EdgeSpace:
+		m.ClearSpace()
+		return nil
+	case enttenantwebdavresource.EdgeFile:
+		m.ClearFile()
+		return nil
+	case enttenantwebdavresource.EdgeStoredFile:
+		m.ClearStoredFile()
+		return nil
+	}
+	return fmt.Errorf("unknown WebDAVResource unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *WebDAVResourceMutation) ResetEdge(name string) error {
+	switch name {
+	case enttenantwebdavresource.EdgeCreator:
+		m.ResetCreator()
+		return nil
+	case enttenantwebdavresource.EdgeUpdater:
+		m.ResetUpdater()
+		return nil
+	case enttenantwebdavresource.EdgeSpace:
+		m.ResetSpace()
+		return nil
+	case enttenantwebdavresource.EdgeFile:
+		m.ResetFile()
+		return nil
+	case enttenantwebdavresource.EdgeStoredFile:
+		m.ResetStoredFile()
+		return nil
+	}
+	return fmt.Errorf("unknown WebDAVResource edge %s", name)
 }
