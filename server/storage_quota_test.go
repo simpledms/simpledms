@@ -42,344 +42,368 @@ func TestUploadFileCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
-				harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
-
-				accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
-				tenantDB := initTenantDB(t, harness, tenantx)
-				tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
-
-				var parentDirID string
-				var rootDirID int64
-				var spaceID int64
-
-				err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(mainTx *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
-					mainTx.Tenant.UpdateOneID(tenantCtx.Tenant.ID).
-						SetPlan(tt.plan).
-						ExecX(tenantCtx)
-
-					spaceName := "Quota Space"
-					createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
-
-					spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
-					spaceID = spacex.ID
-					spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-					rootDir := spaceCtx.SpaceRootDir()
-					parentDirID = rootDir.PublicID.String()
-					rootDirID = rootDir.ID
-
-					prepared, err := harness.infra.FileSystem().PrepareFileUpload(spaceCtx, "seed.txt", rootDir.ID, false)
-					if err != nil {
-						return fmt.Errorf("prepare seed upload: %w", err)
-					}
-
-					seedFileContent := []byte("seed")
-					uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
-						spaceCtx,
-						bytes.NewReader(seedFileContent),
-						prepared,
-						int64(len(seedFileContent)),
-					)
-					if err != nil {
-						return fmt.Errorf("upload seed file: %w", err)
-					}
-
-					err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
-					if err != nil {
-						return fmt.Errorf("finalize seed file: %w", err)
-					}
-
-					spaceCtx.TTx.StoredFile.UpdateOneID(prepared.StoredFileID).
-						SetSize(tt.usedSize).
-						ExecX(spaceCtx)
-
-					return nil
-				})
-				if err != nil {
-					t.Fatalf("setup tenant content: %v", err)
-				}
-
-				tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
-
-				mainTx, tenantTx, tenantCtx, err := newTenantContextForUpload(harness, accountx, tenantx, tenantDB)
-				if err != nil {
-					t.Fatalf("new tenant context for upload: %v", err)
-				}
-				defer func() {
-					_ = tenantTx.Rollback()
-					_ = mainTx.Rollback()
-				}()
-
-				spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
-				spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-
-				req, err := newUploadRequest(parentDirID, "over-limit.txt", []byte("x"))
-				if err != nil {
-					t.Fatalf("new upload request: %v", err)
-				}
-
-				rr := httptest.NewRecorder()
-				handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-					httpx.NewResponseWriter(rr),
-					httpx.NewRequest(req),
-					spaceCtx,
+				testUploadFileCmdRejectsWhenTenantStorageLimitExceeded(
+					t,
+					disableEncryption,
+					tt.plan,
+					tt.usedSize,
 				)
-				if handlerErr == nil {
-					t.Fatal("expected quota error")
-				}
-
-				httpErr, ok := handlerErr.(*e.HTTPError)
-				if !ok {
-					t.Fatalf("expected HTTPError, got %T", handlerErr)
-				}
-				if httpErr.StatusCode() != http.StatusRequestEntityTooLarge {
-					t.Fatalf(
-						"expected status %d, got %d",
-						http.StatusRequestEntityTooLarge,
-						httpErr.StatusCode(),
-					)
-				}
-
-				err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
-					spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
-					spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-
-					fileCount := spaceCtx.TTx.File.Query().Where(
-						file.ParentID(rootDirID),
-						file.IsDirectory(false),
-					).CountX(spaceCtx)
-					if fileCount != 1 {
-						return fmt.Errorf("expected one file after rejected upload, got %d", fileCount)
-					}
-
-					return nil
-				})
-				if err != nil {
-					t.Fatalf("verify rejected upload: %v", err)
-				}
 			})
 		})
 	}
 }
 
+func testUploadFileCmdRejectsWhenTenantStorageLimitExceeded(
+	t *testing.T,
+	disableEncryption bool,
+	tenantPlan plan.Plan,
+	usedSize int64,
+) {
+	t.Helper()
+	harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
+
+	accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
+	tenantDB := initTenantDB(t, harness, tenantx)
+	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
+
+	var parentDirID string
+	var rootDirID int64
+	var spaceID int64
+
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(
+		mainTx *entmain.Tx,
+		_ *enttenant.Tx,
+		tenantCtx *ctxx.TenantContext,
+	) error {
+		mainTx.Tenant.UpdateOneID(tenantCtx.Tenant.ID).
+			SetPlan(tenantPlan).
+			ExecX(tenantCtx)
+
+		spaceName := "Quota Space"
+		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
+
+		spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
+		spaceID = spacex.ID
+		spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+		rootDir := spaceCtx.SpaceRootDir()
+		parentDirID = rootDir.PublicID.String()
+		rootDirID = rootDir.ID
+
+		return seedTenantStorageUsage(harness, spaceCtx, rootDir.ID, usedSize)
+	})
+	if err != nil {
+		t.Fatalf("setup tenant content: %v", err)
+	}
+
+	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
+	mainTx, tenantTx, tenantCtx, err := newTenantContextForUpload(
+		harness,
+		accountx,
+		tenantx,
+		tenantDB,
+	)
+	if err != nil {
+		t.Fatalf("new tenant context for upload: %v", err)
+	}
+	defer func() {
+		_ = tenantTx.Rollback()
+		_ = mainTx.Rollback()
+	}()
+
+	spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
+	spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+
+	req, err := newUploadRequest(parentDirID, "over-limit.txt", []byte("x"))
+	if err != nil {
+		t.Fatalf("new upload request: %v", err)
+	}
+
+	rr := httptest.NewRecorder()
+	handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
+		httpx.NewResponseWriter(rr),
+		httpx.NewRequest(req),
+		spaceCtx,
+	)
+	assertStorageQuotaError(t, handlerErr, "expected quota error")
+
+	err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(
+		_ *entmain.Tx,
+		_ *enttenant.Tx,
+		tenantCtx *ctxx.TenantContext,
+	) error {
+		return verifyStorageQuotaFileCount(tenantCtx, spaceID, rootDirID, 1)
+	})
+	if err != nil {
+		t.Fatalf("verify rejected upload: %v", err)
+	}
+}
+
 func TestUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(t *testing.T) {
 	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
-		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
-
-		accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
-		tenantDB := initTenantDB(t, harness, tenantx)
-		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
-
-		var parentDirID string
-		var rootDirID int64
-		var spaceID int64
-
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(mainTx *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
-			mainTx.Tenant.UpdateOneID(tenantCtx.Tenant.ID).
-				SetPlan(plan.Pro).
-				ExecX(tenantCtx)
-
-			spaceName := "Downgrade Quota Space"
-			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
-
-			spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
-			spaceID = spacex.ID
-			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-			rootDir := spaceCtx.SpaceRootDir()
-			parentDirID = rootDir.PublicID.String()
-			rootDirID = rootDir.ID
-
-			prepared, err := harness.infra.FileSystem().PrepareFileUpload(spaceCtx, "seed.txt", rootDir.ID, false)
-			if err != nil {
-				return fmt.Errorf("prepare seed upload: %w", err)
-			}
-
-			seedFileContent := []byte("seed")
-			uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
-				spaceCtx,
-				bytes.NewReader(seedFileContent),
-				prepared,
-				int64(len(seedFileContent)),
-			)
-			if err != nil {
-				return fmt.Errorf("upload seed file: %w", err)
-			}
-
-			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
-			if err != nil {
-				return fmt.Errorf("finalize seed file: %w", err)
-			}
-
-			spaceCtx.TTx.StoredFile.UpdateOneID(prepared.StoredFileID).
-				SetSize(testTenantQuotaTrialBytes + 1).
-				ExecX(spaceCtx)
-
-			mainTx.Tenant.UpdateOneID(tenantCtx.Tenant.ID).
-				SetPlan(plan.Trial).
-				ExecX(tenantCtx)
-
-			return nil
-		})
-		if err != nil {
-			t.Fatalf("setup tenant content: %v", err)
-		}
-
-		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
-
-		mainTx, tenantTx, tenantCtx, err := newTenantContextForUpload(harness, accountx, tenantx, tenantDB)
-		if err != nil {
-			t.Fatalf("new tenant context for upload: %v", err)
-		}
-		defer func() {
-			_ = tenantTx.Rollback()
-			_ = mainTx.Rollback()
-		}()
-
-		spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
-		spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-
-		req, err := newUploadRequest(parentDirID, "over-limit-after-downgrade.txt", []byte("x"))
-		if err != nil {
-			t.Fatalf("new upload request: %v", err)
-		}
-
-		rr := httptest.NewRecorder()
-		handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
-			spaceCtx,
-		)
-		if handlerErr == nil {
-			t.Fatal("expected quota error after plan downgrade")
-		}
-
-		httpErr, ok := handlerErr.(*e.HTTPError)
-		if !ok {
-			t.Fatalf("expected HTTPError, got %T", handlerErr)
-		}
-		if httpErr.StatusCode() != http.StatusRequestEntityTooLarge {
-			t.Fatalf("expected status %d, got %d", http.StatusRequestEntityTooLarge, httpErr.StatusCode())
-		}
-
-		err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
-			spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
-			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-
-			fileCount := spaceCtx.TTx.File.Query().Where(
-				file.ParentID(rootDirID),
-				file.IsDirectory(false),
-			).CountX(spaceCtx)
-			if fileCount != 1 {
-				return fmt.Errorf("expected one file after rejected upload, got %d", fileCount)
-			}
-
-			return nil
-		})
-		if err != nil {
-			t.Fatalf("verify rejected upload: %v", err)
-		}
+		testUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(t, disableEncryption)
 	})
+}
+
+func testUploadFileCmdRejectsWhenPlanDowngradeLeavesTenantOverLimit(
+	t *testing.T,
+	disableEncryption bool,
+) {
+	t.Helper()
+	harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
+
+	accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
+	tenantDB := initTenantDB(t, harness, tenantx)
+	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
+
+	var parentDirID string
+	var rootDirID int64
+	var spaceID int64
+
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(
+		mainTx *entmain.Tx,
+		_ *enttenant.Tx,
+		tenantCtx *ctxx.TenantContext,
+	) error {
+		mainTx.Tenant.UpdateOneID(tenantCtx.Tenant.ID).
+			SetPlan(plan.Pro).
+			ExecX(tenantCtx)
+
+		spaceName := "Downgrade Quota Space"
+		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
+
+		spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
+		spaceID = spacex.ID
+		spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+		rootDir := spaceCtx.SpaceRootDir()
+		parentDirID = rootDir.PublicID.String()
+		rootDirID = rootDir.ID
+
+		if err := seedTenantStorageUsage(
+			harness,
+			spaceCtx,
+			rootDir.ID,
+			testTenantQuotaTrialBytes+1,
+		); err != nil {
+			return err
+		}
+
+		mainTx.Tenant.UpdateOneID(tenantCtx.Tenant.ID).
+			SetPlan(plan.Trial).
+			ExecX(tenantCtx)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("setup tenant content: %v", err)
+	}
+
+	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
+	mainTx, tenantTx, tenantCtx, err := newTenantContextForUpload(
+		harness,
+		accountx,
+		tenantx,
+		tenantDB,
+	)
+	if err != nil {
+		t.Fatalf("new tenant context for upload: %v", err)
+	}
+	defer func() {
+		_ = tenantTx.Rollback()
+		_ = mainTx.Rollback()
+	}()
+
+	spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
+	spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+
+	req, err := newUploadRequest(parentDirID, "over-limit-after-downgrade.txt", []byte("x"))
+	if err != nil {
+		t.Fatalf("new upload request: %v", err)
+	}
+
+	rr := httptest.NewRecorder()
+	handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
+		httpx.NewResponseWriter(rr),
+		httpx.NewRequest(req),
+		spaceCtx,
+	)
+	assertStorageQuotaError(t, handlerErr, "expected quota error after plan downgrade")
+
+	err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(
+		_ *entmain.Tx,
+		_ *enttenant.Tx,
+		tenantCtx *ctxx.TenantContext,
+	) error {
+		return verifyStorageQuotaFileCount(tenantCtx, spaceID, rootDirID, 1)
+	})
+	if err != nil {
+		t.Fatalf("verify rejected upload: %v", err)
+	}
 }
 
 func TestUploadFileCmdSkipsTenantStorageLimitWhenSaaSDisabled(t *testing.T) {
 	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
-		harness := newActionTestHarnessWithSaaSAndS3(t, false)
-
-		email := fmt.Sprintf("non-saas-owner-%t@example.com", disableEncryption)
-		accountx, tenantx := signUpAccountWithoutSaaSGating(t, harness, email)
-		tenantDB := initTenantDB(t, harness, tenantx)
-		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
-
-		var parentDirID string
-		var rootDirID int64
-		var spaceID int64
-
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
-			spaceName := "Quota Bypass Space"
-			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
-
-			spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
-			spaceID = spacex.ID
-			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-			rootDir := spaceCtx.SpaceRootDir()
-			parentDirID = rootDir.PublicID.String()
-			rootDirID = rootDir.ID
-
-			prepared, err := harness.infra.FileSystem().PrepareFileUpload(spaceCtx, "seed.txt", rootDir.ID, false)
-			if err != nil {
-				return fmt.Errorf("prepare seed upload: %w", err)
-			}
-
-			seedFileContent := []byte("seed")
-			uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
-				spaceCtx,
-				bytes.NewReader(seedFileContent),
-				prepared,
-				int64(len(seedFileContent)),
-			)
-			if err != nil {
-				return fmt.Errorf("upload seed file: %w", err)
-			}
-
-			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
-			if err != nil {
-				return fmt.Errorf("finalize seed file: %w", err)
-			}
-
-			spaceCtx.TTx.StoredFile.UpdateOneID(prepared.StoredFileID).
-				SetSize(testTenantQuotaProPerUserBytes).
-				ExecX(spaceCtx)
-
-			return nil
-		})
-		if err != nil {
-			t.Fatalf("setup tenant content: %v", err)
-		}
-
-		mainTx, tenantTx, tenantCtx, err := newTenantContextForUpload(harness, accountx, tenantx, tenantDB)
-		if err != nil {
-			t.Fatalf("new tenant context for upload: %v", err)
-		}
-		defer func() {
-			_ = tenantTx.Rollback()
-			_ = mainTx.Rollback()
-		}()
-
-		spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
-		spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-
-		req, err := newUploadRequest(parentDirID, "over-limit-in-non-saas.txt", []byte("x"))
-		if err != nil {
-			t.Fatalf("new upload request: %v", err)
-		}
-
-		rr := httptest.NewRecorder()
-		handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
-			spaceCtx,
-		)
-		if handlerErr != nil {
-			t.Fatalf("expected upload success in non-saas mode, got %v", handlerErr)
-		}
-
-		err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
-			spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
-			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-
-			fileCount := spaceCtx.TTx.File.Query().Where(
-				file.ParentID(rootDirID),
-				file.IsDirectory(false),
-			).CountX(spaceCtx)
-			if fileCount != 2 {
-				return fmt.Errorf("expected two files in non-saas mode, got %d", fileCount)
-			}
-
-			return nil
-		})
-		if err != nil {
-			t.Fatalf("verify upload success in non-saas mode: %v", err)
-		}
+		testUploadFileCmdSkipsTenantStorageLimitWhenSaaSDisabled(t, disableEncryption)
 	})
+}
+
+func testUploadFileCmdSkipsTenantStorageLimitWhenSaaSDisabled(
+	t *testing.T,
+	disableEncryption bool,
+) {
+	t.Helper()
+	harness := newActionTestHarnessWithSaaSAndS3(t, false)
+
+	email := fmt.Sprintf("non-saas-owner-%t@example.com", disableEncryption)
+	accountx, tenantx := signUpAccountWithoutSaaSGating(t, harness, email)
+	tenantDB := initTenantDB(t, harness, tenantx)
+	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
+
+	var parentDirID string
+	var rootDirID int64
+	var spaceID int64
+
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(
+		_ *entmain.Tx,
+		_ *enttenant.Tx,
+		tenantCtx *ctxx.TenantContext,
+	) error {
+		spaceName := "Quota Bypass Space"
+		createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
+
+		spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
+		spaceID = spacex.ID
+		spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+		rootDir := spaceCtx.SpaceRootDir()
+		parentDirID = rootDir.PublicID.String()
+		rootDirID = rootDir.ID
+
+		return seedTenantStorageUsage(
+			harness,
+			spaceCtx,
+			rootDir.ID,
+			testTenantQuotaProPerUserBytes,
+		)
+	})
+	if err != nil {
+		t.Fatalf("setup tenant content: %v", err)
+	}
+
+	mainTx, tenantTx, tenantCtx, err := newTenantContextForUpload(
+		harness,
+		accountx,
+		tenantx,
+		tenantDB,
+	)
+	if err != nil {
+		t.Fatalf("new tenant context for upload: %v", err)
+	}
+	defer func() {
+		_ = tenantTx.Rollback()
+		_ = mainTx.Rollback()
+	}()
+
+	spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
+	spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+
+	req, err := newUploadRequest(parentDirID, "over-limit-in-non-saas.txt", []byte("x"))
+	if err != nil {
+		t.Fatalf("new upload request: %v", err)
+	}
+
+	rr := httptest.NewRecorder()
+	handlerErr := harness.actions.Browse.UploadFileCmd.Handler(
+		httpx.NewResponseWriter(rr),
+		httpx.NewRequest(req),
+		spaceCtx,
+	)
+	if handlerErr != nil {
+		t.Fatalf("expected upload success in non-saas mode, got %v", handlerErr)
+	}
+
+	err = withTenantContext(t, harness, accountx, tenantx, tenantDB, func(
+		_ *entmain.Tx,
+		_ *enttenant.Tx,
+		tenantCtx *ctxx.TenantContext,
+	) error {
+		return verifyStorageQuotaFileCount(tenantCtx, spaceID, rootDirID, 2)
+	})
+	if err != nil {
+		t.Fatalf("verify upload success in non-saas mode: %v", err)
+	}
+}
+
+func seedTenantStorageUsage(
+	harness *actionTestHarness,
+	spaceCtx *ctxx.SpaceContext,
+	rootDirID int64,
+	usedSize int64,
+) error {
+	prepared, err := harness.infra.FileSystem().PrepareFileUpload(
+		spaceCtx,
+		"seed.txt",
+		rootDirID,
+		false,
+	)
+	if err != nil {
+		return fmt.Errorf("prepare seed upload: %w", err)
+	}
+
+	seedFileContent := []byte("seed")
+	uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+		spaceCtx,
+		bytes.NewReader(seedFileContent),
+		prepared,
+		int64(len(seedFileContent)),
+	)
+	if err != nil {
+		return fmt.Errorf("upload seed file: %w", err)
+	}
+
+	err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
+	if err != nil {
+		return fmt.Errorf("finalize seed file: %w", err)
+	}
+
+	spaceCtx.TTx.StoredFile.UpdateOneID(prepared.StoredFileID).
+		SetSize(usedSize).
+		ExecX(spaceCtx)
+	return nil
+}
+
+func assertStorageQuotaError(t *testing.T, handlerErr error, message string) {
+	t.Helper()
+	if handlerErr == nil {
+		t.Fatal(message)
+	}
+
+	httpErr, ok := handlerErr.(*e.HTTPError)
+	if !ok {
+		t.Fatalf("expected HTTPError, got %T", handlerErr)
+	}
+	if httpErr.StatusCode() != http.StatusRequestEntityTooLarge {
+		t.Fatalf(
+			"expected status %d, got %d",
+			http.StatusRequestEntityTooLarge,
+			httpErr.StatusCode(),
+		)
+	}
+}
+
+func verifyStorageQuotaFileCount(
+	tenantCtx *ctxx.TenantContext,
+	spaceID int64,
+	rootDirID int64,
+	expected int,
+) error {
+	spacex := tenantCtx.TTx.Space.Query().Where(space.ID(spaceID)).OnlyX(tenantCtx)
+	spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+	fileCount := spaceCtx.TTx.File.Query().Where(
+		file.ParentID(rootDirID),
+		file.IsDirectory(false),
+	).CountX(spaceCtx)
+	if fileCount != expected {
+		return fmt.Errorf("expected %d files, got %d", expected, fileCount)
+	}
+	return nil
 }
 
 func signUpAccountWithoutSaaSGating(

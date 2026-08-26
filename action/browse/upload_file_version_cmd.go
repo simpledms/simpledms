@@ -3,6 +3,7 @@ package browse
 import (
 	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"path/filepath"
 
@@ -61,41 +62,9 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 	}
 	uploadx.LimitMultipartBody(rw, req.Request, nilableUploadLimitBytes)
 
-	reader, err := req.MultipartReader()
+	data, uploadedFile, err := qq.readUpload(req)
 	if err != nil {
 		return err
-	}
-	data := &UploadFileVersionCmdData{}
-	var uploadedFile *uploadx.MultipartFile
-	for uploadedFile == nil {
-		part, err := reader.NextPart()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return err
-		}
-		switch part.FormName() {
-		case "FileID":
-			value, err := io.ReadAll(io.LimitReader(part, 1024))
-			_ = part.Close()
-			if err != nil {
-				return err
-			}
-			data.FileID = string(value)
-		case "File":
-			if data.FileID == "" {
-				_ = part.Close()
-				return e.NewHTTPErrorf(http.StatusBadRequest, "Upload metadata must be sent before the file.")
-			}
-			uploadedFile, err = uploadx.NewMultipartFile(part)
-			if err != nil {
-				_ = part.Close()
-				return err
-			}
-		default:
-			_ = part.Close()
-		}
 	}
 
 	if data.FileID == "" {
@@ -113,17 +82,42 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 
 	filename := filepath.Clean(uploadedFile.Filename)
 
-	type uploadVersionPrepareResult struct {
+	prepared, fileName, err := qq.prepareUpload(ctx, data.FileID, filename)
+	if err != nil {
+		return err
+	}
+	if err := uploadPreparedFile(qq.infra, ctx, uploadedFile, prepared); err != nil {
+		return err
+	}
+
+	rw.AddRenderables(wx.NewSnackbarf("New version uploaded for «%s».", fileName))
+	// TODO does triggering event have an effect? request comes from uppy and isn't a HTMX request...
+	rw.Header().Add("HX-Trigger", event.FileUploaded.String())
+
+	return nil
+}
+
+func (qq *UploadFileVersionCmd) prepareUpload(
+	ctx ctxx.Context,
+	fileID string,
+	filename string,
+) (*filesystem.PreparedUpload, string, error) {
+	type prepareResult struct {
 		prepared *filesystem.PreparedUpload
 		fileName string
 	}
 
-	prep, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadVersionPrepareResult, error) {
-		filex := qq.infra.FileRepo.GetX(writeCtx, data.FileID)
+	result, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*prepareResult, error) {
+		filex := qq.infra.FileRepo.GetX(writeCtx, fileID)
 		if filex.Data.IsDirectory {
 			return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
 		}
-		if err := fileutil.EnsureFileDoesNotExist(writeCtx, filename, filex.Data.ParentID, filex.Data.IsInInbox); err != nil {
+		if err := fileutil.EnsureFileDoesNotExist(
+			writeCtx,
+			filename,
+			filex.Data.ParentID,
+			filex.Data.IsInInbox,
+		); err != nil {
 			return nil, err
 		}
 		prepared, err := qq.infra.FileSystem().PrepareFileVersionUpload(
@@ -134,46 +128,63 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 		if err != nil {
 			return nil, err
 		}
-		return &uploadVersionPrepareResult{prepared: prepared, fileName: filex.Data.Name}, nil
+		return &prepareResult{prepared: prepared, fileName: filex.Data.Name}, nil
 	})
 	if err != nil {
-		return err
+		return nil, "", err
 	}
+	return result.prepared, result.fileName, nil
+}
 
-	var uploadResult *filesystem.PreparedUploadResult
-	if uploadedFile.ExpectedBytes != nil {
-		uploadResult, err = qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
-			ctx,
-			uploadedFile.Reader,
-			prep.prepared,
-			*uploadedFile.ExpectedBytes,
-		)
-	} else {
-		uploadResult, err = qq.infra.FileSystem().UploadPreparedFile(ctx, uploadedFile.Reader, prep.prepared)
-	}
+func (qq *UploadFileVersionCmd) readUpload(
+	req *httpx.Request,
+) (*UploadFileVersionCmdData, *uploadx.MultipartFile, error) {
+	reader, err := req.MultipartReader()
 	if err != nil {
-		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
-		return err
+		return nil, nil, err
 	}
-
-	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, qq.infra.FileSystem().FinalizePreparedUploadWithoutMime(writeCtx, prep.prepared, uploadResult)
-	})
-	if err != nil {
-		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
-		return err
+	data := &UploadFileVersionCmdData{}
+	var uploadedFile *uploadx.MultipartFile
+	for uploadedFile == nil {
+		part, err := reader.NextPart()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, nil, err
+		}
+		uploadedFile, err = qq.readUploadPart(data, part)
+		if err != nil {
+			return nil, nil, err
+		}
 	}
-	if _, err := qq.infra.FileSystem().UpdateMimeTypeAfterFinalization(
-		ctx.SpaceCtx(),
-		true,
-		prep.prepared.StoredFileID,
-	); err != nil {
-		log.Println(err)
+	return data, uploadedFile, nil
+}
+
+func (qq *UploadFileVersionCmd) readUploadPart(
+	data *UploadFileVersionCmdData,
+	part *multipart.Part,
+) (*uploadx.MultipartFile, error) {
+	switch part.FormName() {
+	case "FileID":
+		value, err := readMultipartValue(part, 1024)
+		data.FileID = value
+		return nil, err
+	case "File":
+		if data.FileID == "" {
+			_ = part.Close()
+			return nil, e.NewHTTPErrorf(
+				http.StatusBadRequest,
+				"Upload metadata must be sent before the file.",
+			)
+		}
+		uploadedFile, err := uploadx.NewMultipartFile(part)
+		if err != nil {
+			_ = part.Close()
+		}
+		return uploadedFile, err
+	default:
+		_ = part.Close()
+		return nil, nil
 	}
-
-	rw.AddRenderables(wx.NewSnackbarf("New version uploaded for «%s».", prep.fileName))
-	// TODO does triggering event have an effect? request comes from uppy and isn't a HTMX request...
-	rw.Header().Add("HX-Trigger", event.FileUploaded.String())
-
-	return nil
 }

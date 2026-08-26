@@ -327,27 +327,37 @@ func (qq *Scheduler) scanOrphanTemporaryPrefix(
 			break
 		}
 		scanned++
-		if object.Err != nil {
-			log.Println(object.Err)
-			continue
-		}
-		if !objectNameUnderPrefix(object.Key, prefix) {
-			continue
-		}
-		if _, ok := liveObjects[object.Key]; ok {
-			continue
-		}
-		if object.LastModified.IsZero() || object.LastModified.After(now.Add(-orphanTemporaryObjectGrace)) {
-			continue
-		}
-		if err := qq.s3Client.RemoveObject(ctx, qq.bucketName, object.Key, minio.RemoveObjectOptions{}); err != nil {
-			minioErr := minio.ToErrorResponse(err)
-			if minioErr.Code != "NoSuchKey" {
-				log.Println(err)
-			}
-		}
+		qq.deleteOrphanTemporaryObject(ctx, object, prefix, liveObjects, now)
 	}
 	return scanned
+}
+
+func (qq *Scheduler) deleteOrphanTemporaryObject(
+	ctx context.Context,
+	object minio.ObjectInfo,
+	prefix string,
+	liveObjects map[string]struct{},
+	now time.Time,
+) {
+	if object.Err != nil {
+		log.Println(object.Err)
+		return
+	}
+	if !objectNameUnderPrefix(object.Key, prefix) {
+		return
+	}
+	if _, ok := liveObjects[object.Key]; ok {
+		return
+	}
+	if object.LastModified.IsZero() || object.LastModified.After(now.Add(-orphanTemporaryObjectGrace)) {
+		return
+	}
+	if err := qq.s3Client.RemoveObject(ctx, qq.bucketName, object.Key, minio.RemoveObjectOptions{}); err != nil {
+		minioErr := minio.ToErrorResponse(err)
+		if minioErr.Code != "NoSuchKey" {
+			log.Println(err)
+		}
+	}
 }
 
 func isKnownTemporaryPrefix(prefix string) bool {
@@ -430,31 +440,14 @@ func (qq *Scheduler) recoverStaleAccountConversion(
 	oldToken string,
 	cleanupToken string,
 ) {
-	ctxWithIncomplete := enttenantschema.WithUnfinishedUploads(ctx)
-	storedFilex, err := tenantDB.ReadOnlyConn.StoredFile.Query().
-		Where(storedfile.SourceTemporaryFilePublicID(entx.NewCIText(tmpFile.PublicID.String()))).
-		Only(ctxWithIncomplete)
-	if err != nil {
-		if enttenant.IsNotFound(err) {
-			qq.clearAccountConversionClaim(ctx, tmpFile.ID, cleanupToken)
-		} else {
-			log.Println(err)
-		}
+	storedFilex, ok := qq.staleAccountConversionStoredFile(ctx, tenantDB, tmpFile, cleanupToken)
+	if !ok {
 		return
 	}
 
+	ctxWithIncomplete := enttenantschema.WithUnfinishedUploads(ctx)
 	if storedFilex.UploadSucceededAt != nil || storedFilex.QueryFileVersions().ExistX(ctxWithIncomplete) {
-		err = qq.mainDB.ReadWriteConn.TemporaryFile.UpdateOneID(tmpFile.ID).
-			Where(temporaryfile.PersistenceClaimToken(cleanupToken)).
-			SetConvertedToStoredFileAt(time.Now()).
-			ClearPersistenceClaimToken().
-			ClearPersistenceTenantID().
-			ClearPersistenceLastProgressAt().
-			ClearExpiresAt().
-			Exec(ctx)
-		if err != nil && !entmain.IsNotFound(err) {
-			log.Println(err)
-		}
+		qq.completeRecoveredAccountConversion(ctx, tmpFile.ID, cleanupToken)
 		return
 	}
 
@@ -463,6 +456,45 @@ func (qq *Scheduler) recoverStaleAccountConversion(
 		return
 	}
 
+	qq.cleanupIncompleteAccountConversion(
+		ctx,
+		ctxWithIncomplete,
+		tenantDB,
+		storedFilex,
+		tmpFile.ID,
+		cleanupToken,
+	)
+}
+
+func (qq *Scheduler) staleAccountConversionStoredFile(
+	ctx context.Context,
+	tenantDB *sqlx.TenantDB,
+	tmpFile *entmain.TemporaryFile,
+	cleanupToken string,
+) (*enttenant.StoredFile, bool) {
+	ctxWithIncomplete := enttenantschema.WithUnfinishedUploads(ctx)
+	storedFilex, err := tenantDB.ReadOnlyConn.StoredFile.Query().
+		Where(storedfile.SourceTemporaryFilePublicID(entx.NewCIText(tmpFile.PublicID.String()))).
+		Only(ctxWithIncomplete)
+	if err == nil {
+		return storedFilex, true
+	}
+	if enttenant.IsNotFound(err) {
+		qq.clearAccountConversionClaim(ctx, tmpFile.ID, cleanupToken)
+	} else {
+		log.Println(err)
+	}
+	return nil, false
+}
+
+func (qq *Scheduler) cleanupIncompleteAccountConversion(
+	ctx context.Context,
+	ctxWithIncomplete context.Context,
+	tenantDB *sqlx.TenantDB,
+	storedFilex *enttenant.StoredFile,
+	temporaryFileID int64,
+	cleanupToken string,
+) {
 	filem := storedfilemodel.NewStoredFile(storedFilex)
 	objectName, err := filem.UnsafeTempObjectNameWithPrefix()
 	if err != nil {
@@ -485,7 +517,25 @@ func (qq *Scheduler) recoverStaleAccountConversion(
 		}
 		return
 	}
-	qq.clearAccountConversionClaim(ctx, tmpFile.ID, cleanupToken)
+	qq.clearAccountConversionClaim(ctx, temporaryFileID, cleanupToken)
+}
+
+func (qq *Scheduler) completeRecoveredAccountConversion(
+	ctx context.Context,
+	temporaryFileID int64,
+	cleanupToken string,
+) {
+	err := qq.mainDB.ReadWriteConn.TemporaryFile.UpdateOneID(temporaryFileID).
+		Where(temporaryfile.PersistenceClaimToken(cleanupToken)).
+		SetConvertedToStoredFileAt(time.Now()).
+		ClearPersistenceClaimToken().
+		ClearPersistenceTenantID().
+		ClearPersistenceLastProgressAt().
+		ClearExpiresAt().
+		Exec(ctx)
+	if err != nil && !entmain.IsNotFound(err) {
+		log.Println(err)
+	}
 }
 
 func (qq *Scheduler) clearAccountConversionClaim(ctx context.Context, temporaryFileID int64, cleanupToken string) {

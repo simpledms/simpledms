@@ -66,184 +66,305 @@ func TestCreateWebDAVCredentialCmdUsesAuthorizedTenantContext(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err = withMainContext(t, harness, accountx, func(
+	exerciseWebDAVCredentialActions(
+		t,
+		harness,
+		accountx,
+		tenantx,
+		otherTenant,
+		spacePublicID,
+		archiveSpacePublicID,
+		otherSpacePublicID,
+	)
+	assertWebDAVCredentialsPage(t, harness, email, archiveSpacePublicID)
+}
+
+func exerciseWebDAVCredentialActions(
+	t *testing.T,
+	harness *actionTestHarness,
+	accountx *entmain.Account,
+	tenantx *entmain.Tenant,
+	otherTenant *entmain.Tenant,
+	spacePublicID string,
+	archiveSpacePublicID string,
+	otherSpacePublicID string,
+) {
+	t.Helper()
+	err := withMainContext(t, harness, accountx, func(
 		mainTx *entmain.Tx,
 		mainCtx *ctxx.MainContext,
 	) error {
-		formReq := httptest.NewRequest(
-			http.MethodPost,
-			"/-/dashboard/create-webdav-credential-cmd-form?wrapper=dialog",
-			nil,
-		)
-		formRR := httptest.NewRecorder()
-		if err := harness.actions.Dashboard.CreateWebDAVCredentialCmd.FormHandler(
-			httpx.NewResponseWriter(formRR),
-			httpx.NewRequest(formReq),
-			mainCtx,
-		); err != nil {
+		if err := assertWebDAVCredentialForm(t, harness, mainCtx); err != nil {
 			return err
 		}
-		if count := strings.Count(formRR.Body.String(), `name="Destination"`); count != 2 {
-			t.Fatalf("expected two Space selector options, got %d", count)
-		}
-		formURL := "http://example.com/webdav/" + tenantx.PublicID.String() + "/" +
-			spacePublicID + "/"
-		emptyOverview, err := harness.actions.Dashboard.WebDAVCredentialListPartial.Widget(
+
+		form, credentialx, err := createWebDAVCredential(
+			t,
+			harness,
+			mainTx,
 			mainCtx,
-			httpx.NewRequest(formReq),
-			harness.actions.Dashboard.WebDAVCredentialListPartial.Data(""),
+			accountx,
+			tenantx,
+			spacePublicID,
 		)
 		if err != nil {
 			return err
 		}
-		emptyState, ok := emptyOverview.Child.(*widget.EmptyState)
-		if !ok || len(emptyState.Actions) != 0 {
-			t.Fatalf("expected empty state without an inline create action, got %#v", emptyOverview.Child)
-		}
-
-		form := url.Values{}
-		form.Set("Destination", tenantx.PublicID.String()+":"+spacePublicID)
-		form.Set("Label", "Office scanner")
-		req := httptest.NewRequest(
-			http.MethodPost,
-			"/-/dashboard/create-webdav-credential-cmd",
-			strings.NewReader(form.Encode()),
-		)
-		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		rr := httptest.NewRecorder()
-
-		if err := harness.actions.Dashboard.CreateWebDAVCredentialCmd.Handler(
-			httpx.NewResponseWriter(rr),
-			httpx.NewRequest(req),
+		if err := editAndRejectDuplicateWebDAVCredential(
+			t,
+			harness,
+			mainTx,
 			mainCtx,
+			form,
+			credentialx,
 		); err != nil {
 			return err
 		}
-		if rr.Header().Get("Cache-Control") != "no-store" {
-			t.Fatal("expected credential response to disable caching")
-		}
-		if !strings.Contains(rr.Body.String(), formURL) {
-			t.Fatalf("expected complete URL in credential dialog")
-		}
-		if count := strings.Count(rr.Body.String(), "data-copy-value"); count != 3 {
-			t.Fatalf("expected all three credential values to be copyable, got %d", count)
-		}
-		if count := strings.Count(rr.Body.String(), "overflow-wrap: anywhere"); count != 3 {
-			t.Fatalf("expected all three credential values to wrap, got %d", count)
-		}
-		credentialx := mainTx.WebDAVCredential.Query().OnlyX(mainCtx)
-		if credentialx.AccountID != accountx.ID || credentialx.TenantID != tenantx.ID ||
-			credentialx.SpacePublicID.String() != spacePublicID {
-			t.Fatal("credential was created outside the current account destination")
-		}
-		editForm := url.Values{}
-		editForm.Set("CredentialPublicID", credentialx.PublicID.String())
-		editForm.Set("DeviceLabel", "  Front desk scanner  ")
-		editReq := httptest.NewRequest(
-			http.MethodPost,
-			"/-/dashboard/edit-webdav-credential-cmd",
-			strings.NewReader(editForm.Encode()),
-		)
-		editReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		if err := harness.actions.Dashboard.EditWebDAVCredentialCmd.Handler(
-			httpx.NewResponseWriter(httptest.NewRecorder()),
-			httpx.NewRequest(editReq),
+		if err := createArchiveAndRevokeWebDAVCredential(
+			harness,
 			mainCtx,
+			form,
+			credentialx,
+			tenantx,
+			archiveSpacePublicID,
 		); err != nil {
 			return err
 		}
-		if label := mainTx.WebDAVCredential.GetX(mainCtx, credentialx.ID).Label; label != "Front desk scanner" {
-			t.Fatalf("expected edited device label, got %q", label)
-		}
-		form.Set("Label", "Front desk scanner")
-		duplicateReq := httptest.NewRequest(
-			http.MethodPost,
-			"/-/dashboard/create-webdav-credential-cmd",
-			strings.NewReader(form.Encode()),
-		)
-		duplicateReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		duplicateErr := harness.actions.Dashboard.CreateWebDAVCredentialCmd.Handler(
-			httpx.NewResponseWriter(httptest.NewRecorder()),
-			httpx.NewRequest(duplicateReq),
+		rejectInvalidWebDAVCredentialDestinations(
+			t,
+			harness,
+			mainTx,
 			mainCtx,
+			form,
+			otherTenant,
+			otherSpacePublicID,
 		)
-		var duplicateHTTPErr *e.HTTPError
-		if !errors.As(duplicateErr, &duplicateHTTPErr) ||
-			duplicateHTTPErr.StatusCode() != http.StatusBadRequest {
-			t.Fatalf("expected duplicate label in one Space to be rejected, got %v", duplicateErr)
-		}
-
-		form.Set("Destination", tenantx.PublicID.String()+":"+archiveSpacePublicID)
-		archiveReq := httptest.NewRequest(
-			http.MethodPost,
-			"/-/dashboard/create-webdav-credential-cmd",
-			strings.NewReader(form.Encode()),
-		)
-		archiveReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		if err := harness.actions.Dashboard.CreateWebDAVCredentialCmd.Handler(
-			httpx.NewResponseWriter(httptest.NewRecorder()),
-			httpx.NewRequest(archiveReq),
-			mainCtx,
-		); err != nil {
-			return err
-		}
-		revokeForm := url.Values{}
-		revokeForm.Set("CredentialPublicID", credentialx.PublicID.String())
-		revokeReq := httptest.NewRequest(
-			http.MethodPost,
-			"/-/dashboard/revoke-webdav-credential-cmd",
-			strings.NewReader(revokeForm.Encode()),
-		)
-		revokeReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		if err := harness.actions.Dashboard.RevokeWebDAVCredentialCmd.Handler(
-			httpx.NewResponseWriter(httptest.NewRecorder()),
-			httpx.NewRequest(revokeReq),
-			mainCtx,
-		); err != nil {
-			return err
-		}
-
-		form.Set("Destination", otherTenant.PublicID.String()+":"+otherSpacePublicID)
-		blockedReq := httptest.NewRequest(
-			http.MethodPost,
-			"/-/dashboard/create-webdav-credential-cmd",
-			strings.NewReader(form.Encode()),
-		)
-		blockedReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		blockedErr := harness.actions.Dashboard.CreateWebDAVCredentialCmd.Handler(
-			httpx.NewResponseWriter(httptest.NewRecorder()),
-			httpx.NewRequest(blockedReq),
-			mainCtx,
-		)
-		var httpErr *e.HTTPError
-		if !errors.As(blockedErr, &httpErr) || httpErr.StatusCode() != http.StatusForbidden {
-			t.Fatalf("expected forbidden destination error, got %v", blockedErr)
-		}
-		if count := mainTx.WebDAVCredential.Query().CountX(mainCtx); count != 2 {
-			t.Fatalf("expected two credentials after forbidden attempt, got %d", count)
-		}
-
-		form.Set("Destination", "malformed")
-		malformedReq := httptest.NewRequest(
-			http.MethodPost,
-			"/-/dashboard/create-webdav-credential-cmd",
-			strings.NewReader(form.Encode()),
-		)
-		malformedReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		malformedErr := harness.actions.Dashboard.CreateWebDAVCredentialCmd.Handler(
-			httpx.NewResponseWriter(httptest.NewRecorder()),
-			httpx.NewRequest(malformedReq),
-			mainCtx,
-		)
-		if !errors.As(malformedErr, &httpErr) || httpErr.StatusCode() != http.StatusBadRequest {
-			t.Fatalf("expected bad request for malformed destination, got %v", malformedErr)
-		}
 		return nil
 	})
 	if err != nil {
 		t.Fatalf("create WebDAV credential: %v", err)
 	}
+}
 
+func assertWebDAVCredentialForm(
+	t *testing.T,
+	harness *actionTestHarness,
+	mainCtx *ctxx.MainContext,
+) error {
+	t.Helper()
+	formReq := httptest.NewRequest(
+		http.MethodPost,
+		"/-/dashboard/create-webdav-credential-cmd-form?wrapper=dialog",
+		nil,
+	)
+	formRR := httptest.NewRecorder()
+	if err := harness.actions.Dashboard.CreateWebDAVCredentialCmd.FormHandler(
+		httpx.NewResponseWriter(formRR),
+		httpx.NewRequest(formReq),
+		mainCtx,
+	); err != nil {
+		return err
+	}
+	if count := strings.Count(formRR.Body.String(), `name="Destination"`); count != 2 {
+		t.Fatalf("expected two Space selector options, got %d", count)
+	}
+
+	emptyOverview, err := harness.actions.Dashboard.WebDAVCredentialListPartial.Widget(
+		mainCtx,
+		httpx.NewRequest(formReq),
+		harness.actions.Dashboard.WebDAVCredentialListPartial.Data(""),
+	)
+	if err != nil {
+		return err
+	}
+	emptyState, ok := emptyOverview.Child.(*widget.EmptyState)
+	if !ok || len(emptyState.Actions) != 0 {
+		t.Fatalf(
+			"expected empty state without an inline create action, got %#v",
+			emptyOverview.Child,
+		)
+	}
+	return nil
+}
+
+func createWebDAVCredential(
+	t *testing.T,
+	harness *actionTestHarness,
+	mainTx *entmain.Tx,
+	mainCtx *ctxx.MainContext,
+	accountx *entmain.Account,
+	tenantx *entmain.Tenant,
+	spacePublicID string,
+) (url.Values, *entmain.WebDAVCredential, error) {
+	t.Helper()
+	form := url.Values{}
+	form.Set("Destination", tenantx.PublicID.String()+":"+spacePublicID)
+	form.Set("Label", "Office scanner")
+	req := newWebDAVCredentialRequest("/-/dashboard/create-webdav-credential-cmd", form)
+	rr := httptest.NewRecorder()
+
+	if err := harness.actions.Dashboard.CreateWebDAVCredentialCmd.Handler(
+		httpx.NewResponseWriter(rr),
+		httpx.NewRequest(req),
+		mainCtx,
+	); err != nil {
+		return nil, nil, err
+	}
+	if rr.Header().Get("Cache-Control") != "no-store" {
+		t.Fatal("expected credential response to disable caching")
+	}
+	formURL := "http://example.com/webdav/" + tenantx.PublicID.String() + "/" +
+		spacePublicID + "/"
+	if !strings.Contains(rr.Body.String(), formURL) {
+		t.Fatal("expected complete URL in credential dialog")
+	}
+	if count := strings.Count(rr.Body.String(), "data-copy-value"); count != 3 {
+		t.Fatalf("expected all three credential values to be copyable, got %d", count)
+	}
+	if count := strings.Count(rr.Body.String(), "overflow-wrap: anywhere"); count != 3 {
+		t.Fatalf("expected all three credential values to wrap, got %d", count)
+	}
+
+	credentialx := mainTx.WebDAVCredential.Query().OnlyX(mainCtx)
+	if credentialx.AccountID != accountx.ID || credentialx.TenantID != tenantx.ID ||
+		credentialx.SpacePublicID.String() != spacePublicID {
+		t.Fatal("credential was created outside the current account destination")
+	}
+	return form, credentialx, nil
+}
+
+func editAndRejectDuplicateWebDAVCredential(
+	t *testing.T,
+	harness *actionTestHarness,
+	mainTx *entmain.Tx,
+	mainCtx *ctxx.MainContext,
+	form url.Values,
+	credentialx *entmain.WebDAVCredential,
+) error {
+	t.Helper()
+	editForm := url.Values{}
+	editForm.Set("CredentialPublicID", credentialx.PublicID.String())
+	editForm.Set("DeviceLabel", "  Front desk scanner  ")
+	editReq := newWebDAVCredentialRequest("/-/dashboard/edit-webdav-credential-cmd", editForm)
+	if err := harness.actions.Dashboard.EditWebDAVCredentialCmd.Handler(
+		httpx.NewResponseWriter(httptest.NewRecorder()),
+		httpx.NewRequest(editReq),
+		mainCtx,
+	); err != nil {
+		return err
+	}
+	if label := mainTx.WebDAVCredential.GetX(mainCtx, credentialx.ID).Label; label !=
+		"Front desk scanner" {
+		t.Fatalf("expected edited device label, got %q", label)
+	}
+
+	form.Set("Label", "Front desk scanner")
+	duplicateReq := newWebDAVCredentialRequest(
+		"/-/dashboard/create-webdav-credential-cmd",
+		form,
+	)
+	duplicateErr := harness.actions.Dashboard.CreateWebDAVCredentialCmd.Handler(
+		httpx.NewResponseWriter(httptest.NewRecorder()),
+		httpx.NewRequest(duplicateReq),
+		mainCtx,
+	)
+	var httpErr *e.HTTPError
+	if !errors.As(duplicateErr, &httpErr) || httpErr.StatusCode() != http.StatusBadRequest {
+		t.Fatalf("expected duplicate label in one Space to be rejected, got %v", duplicateErr)
+	}
+	return nil
+}
+
+func createArchiveAndRevokeWebDAVCredential(
+	harness *actionTestHarness,
+	mainCtx *ctxx.MainContext,
+	form url.Values,
+	credentialx *entmain.WebDAVCredential,
+	tenantx *entmain.Tenant,
+	archiveSpacePublicID string,
+) error {
+	form.Set("Destination", tenantx.PublicID.String()+":"+archiveSpacePublicID)
+	archiveReq := newWebDAVCredentialRequest(
+		"/-/dashboard/create-webdav-credential-cmd",
+		form,
+	)
+	if err := harness.actions.Dashboard.CreateWebDAVCredentialCmd.Handler(
+		httpx.NewResponseWriter(httptest.NewRecorder()),
+		httpx.NewRequest(archiveReq),
+		mainCtx,
+	); err != nil {
+		return err
+	}
+
+	revokeForm := url.Values{}
+	revokeForm.Set("CredentialPublicID", credentialx.PublicID.String())
+	revokeReq := newWebDAVCredentialRequest(
+		"/-/dashboard/revoke-webdav-credential-cmd",
+		revokeForm,
+	)
+	return harness.actions.Dashboard.RevokeWebDAVCredentialCmd.Handler(
+		httpx.NewResponseWriter(httptest.NewRecorder()),
+		httpx.NewRequest(revokeReq),
+		mainCtx,
+	)
+}
+
+func rejectInvalidWebDAVCredentialDestinations(
+	t *testing.T,
+	harness *actionTestHarness,
+	mainTx *entmain.Tx,
+	mainCtx *ctxx.MainContext,
+	form url.Values,
+	otherTenant *entmain.Tenant,
+	otherSpacePublicID string,
+) {
+	t.Helper()
+	form.Set("Destination", otherTenant.PublicID.String()+":"+otherSpacePublicID)
+	blockedReq := newWebDAVCredentialRequest(
+		"/-/dashboard/create-webdav-credential-cmd",
+		form,
+	)
+	blockedErr := harness.actions.Dashboard.CreateWebDAVCredentialCmd.Handler(
+		httpx.NewResponseWriter(httptest.NewRecorder()),
+		httpx.NewRequest(blockedReq),
+		mainCtx,
+	)
+	var httpErr *e.HTTPError
+	if !errors.As(blockedErr, &httpErr) || httpErr.StatusCode() != http.StatusForbidden {
+		t.Fatalf("expected forbidden destination error, got %v", blockedErr)
+	}
+	if count := mainTx.WebDAVCredential.Query().CountX(mainCtx); count != 2 {
+		t.Fatalf("expected two credentials after forbidden attempt, got %d", count)
+	}
+
+	form.Set("Destination", "malformed")
+	malformedReq := newWebDAVCredentialRequest(
+		"/-/dashboard/create-webdav-credential-cmd",
+		form,
+	)
+	malformedErr := harness.actions.Dashboard.CreateWebDAVCredentialCmd.Handler(
+		httpx.NewResponseWriter(httptest.NewRecorder()),
+		httpx.NewRequest(malformedReq),
+		mainCtx,
+	)
+	if !errors.As(malformedErr, &httpErr) || httpErr.StatusCode() != http.StatusBadRequest {
+		t.Fatalf("expected bad request for malformed destination, got %v", malformedErr)
+	}
+}
+
+func newWebDAVCredentialRequest(path string, form url.Values) *http.Request {
+	req := httptest.NewRequest(http.MethodPost, path, strings.NewReader(form.Encode()))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	return req
+}
+
+func assertWebDAVCredentialsPage(
+	t *testing.T,
+	harness *actionTestHarness,
+	email string,
+	archiveSpacePublicID string,
+) {
+	t.Helper()
 	_, mainCtx, rollback := newNavigationRailMainContext(t, harness, email)
 	defer rollback()
 	pageReq := httpx.NewRequest(httptest.NewRequest(
@@ -259,6 +380,16 @@ func TestCreateWebDAVCredentialCmdUsesAuthorizedTenantContext(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	overview := assertWebDAVPageLayout(t, page)
+	assertActiveWebDAVCredentialOverview(t, mainCtx, overview, archiveSpacePublicID)
+	assertRenderedWebDAVCredentialOverview(t, harness, mainCtx, overview)
+	assertWebDAVCredentialFilterDialog(t, harness)
+	assertFilteredWebDAVCredentialOverviews(t, harness, mainCtx, pageReq)
+}
+
+func assertWebDAVPageLayout(t *testing.T, page widget.IWidget) *widget.Container {
+	t.Helper()
 	layout := page.(*widget.MainLayout)
 	if len(layout.Navigation.FABs) != 1 {
 		t.Fatalf("expected one WebDAV credential FAB, got %d", len(layout.Navigation.FABs))
@@ -268,12 +399,30 @@ func TestCreateWebDAVCredentialCmdUsesAuthorizedTenantContext(t *testing.T) {
 		listDetail.AppBar.Actions[0].(*widget.IconButton).Icon != "filter_alt" {
 		t.Fatalf("expected filter icon in main app bar, got %#v", listDetail.AppBar.Actions)
 	}
-	overview := listDetail.List.(*widget.Container)
+	return listDetail.List.(*widget.Container)
+}
+
+func assertActiveWebDAVCredentialOverview(
+	t *testing.T,
+	mainCtx *ctxx.MainContext,
+	overview *widget.Container,
+	archiveSpacePublicID string,
+) {
+	t.Helper()
 	tabs, ok := overview.Child.(*widget.TabBar)
 	if !ok || len(tabs.Tabs) != 1 {
 		t.Fatalf("expected only the active credential Space by default, got %#v", overview.Child)
 	}
 	content := tabs.ActiveTabContent.(*widget.ScrollableContent)
+	assertWebDAVCredentialToolbar(t, content)
+	column := content.Children.(*widget.Column)
+	list := column.Children.(*widget.List)
+	items := list.Children.([]*widget.ListItem)
+	assertWebDAVCredentialItems(t, mainCtx, items, archiveSpacePublicID)
+}
+
+func assertWebDAVCredentialToolbar(t *testing.T, content *widget.ScrollableContent) {
+	t.Helper()
 	if content.Toolbar == nil || len(content.Toolbar.Children()) != 1 {
 		t.Fatalf("expected WebDAV URL toolbar, got %#v", content.Toolbar)
 	}
@@ -283,9 +432,15 @@ func TestCreateWebDAVCredentialCmdUsesAuthorizedTenantContext(t *testing.T) {
 	if !ok || urlLink.CopyValue == "" {
 		t.Fatalf("expected click-to-copy URL text link, got %#v", toolbarItems[1])
 	}
-	column := content.Children.(*widget.Column)
-	list := column.Children.(*widget.List)
-	items := list.Children.([]*widget.ListItem)
+}
+
+func assertWebDAVCredentialItems(
+	t *testing.T,
+	mainCtx *ctxx.MainContext,
+	items []*widget.ListItem,
+	archiveSpacePublicID string,
+) {
+	t.Helper()
 	if len(items) != 2 || items[0].Type != widget.ListItemTypeHelper {
 		t.Fatalf("expected one add row followed by one credential, got %#v", items)
 	}
@@ -296,17 +451,35 @@ func TestCreateWebDAVCredentialCmdUsesAuthorizedTenantContext(t *testing.T) {
 	if !ok || menuButton.Icon != "more_vert" {
 		t.Fatalf("expected credential overflow menu, got %#v", items[1].Trailing)
 	}
+	assertWebDAVCredentialMenu(t, mainCtx, items[1], menuButton)
+}
+
+func assertWebDAVCredentialMenu(
+	t *testing.T,
+	mainCtx *ctxx.MainContext,
+	item *widget.ListItem,
+	menuButton *widget.IconButton,
+) {
+	t.Helper()
 	menu := menuButton.Children.(*widget.Menu)
 	if len(menu.Items) != 3 || menu.Items[0].Label.String(mainCtx) != "Edit" ||
 		!menu.Items[1].IsDivider || menu.Items[2].Label.String(mainCtx) != "Revoke" {
 		t.Fatalf("expected edit and revoke submenu, got %#v", menu.Items)
 	}
-	if supportingText := items[1].SupportingText.String(mainCtx); !strings.HasPrefix(
-		supportingText,
-		"Username: ",
-	) || strings.Contains(supportingText, "Archive") {
+	supportingText := item.SupportingText.String(mainCtx)
+	if !strings.HasPrefix(supportingText, "Username: ") ||
+		strings.Contains(supportingText, "Archive") {
 		t.Fatalf("expected supporting text without Space, got %q", supportingText)
 	}
+}
+
+func assertRenderedWebDAVCredentialOverview(
+	t *testing.T,
+	harness *actionTestHarness,
+	mainCtx *ctxx.MainContext,
+	overview *widget.Container,
+) {
+	t.Helper()
 	pageRR := httptest.NewRecorder()
 	if err := harness.infra.Renderer().Render(
 		httpx.NewResponseWriter(pageRR),
@@ -315,17 +488,21 @@ func TestCreateWebDAVCredentialCmdUsesAuthorizedTenantContext(t *testing.T) {
 	); err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(pageRR.Body.String(), "https://app.simpledms.eu/webdav/") {
+	body := pageRR.Body.String()
+	if !strings.Contains(body, "https://app.simpledms.eu/webdav/") {
 		t.Fatal("expected active Space URL")
 	}
-	if !strings.Contains(pageRR.Body.String(), "data-copy-value") {
+	if !strings.Contains(body, "data-copy-value") {
 		t.Fatal("expected URL card to expose copy-on-click behavior")
 	}
-	if !strings.Contains(pageRR.Body.String(), "Copy WebDAV URL") ||
-		!strings.Contains(pageRR.Body.String(), "WebDAV URL copied to clipboard.") {
+	if !strings.Contains(body, "Copy WebDAV URL") ||
+		!strings.Contains(body, "WebDAV URL copied to clipboard.") {
 		t.Fatal("expected copy tooltip and snackbar feedback")
 	}
+}
 
+func assertWebDAVCredentialFilterDialog(t *testing.T, harness *actionTestHarness) {
+	t.Helper()
 	filterDialog := harness.actions.Dashboard.WebDAVCredentialFilterDialog.Widget(
 		harness.actions.Dashboard.WebDAVCredentialListPartial.Data(""),
 	)
@@ -340,14 +517,19 @@ func TestCreateWebDAVCredentialCmdUsesAuthorizedTenantContext(t *testing.T) {
 	) {
 		t.Fatal("expected selecting revoked to preserve the implicit active filter")
 	}
+}
 
+func assertFilteredWebDAVCredentialOverviews(
+	t *testing.T,
+	harness *actionTestHarness,
+	mainCtx *ctxx.MainContext,
+	pageReq *httpx.Request,
+) {
+	t.Helper()
 	revokedOverview, err := harness.actions.Dashboard.WebDAVCredentialListPartial.Widget(
 		mainCtx,
 		pageReq,
-		harness.actions.Dashboard.WebDAVCredentialListPartial.Data(
-			"",
-			"revoked",
-		),
+		harness.actions.Dashboard.WebDAVCredentialListPartial.Data("", "revoked"),
 	)
 	if err != nil {
 		t.Fatal(err)
@@ -366,11 +548,7 @@ func TestCreateWebDAVCredentialCmdUsesAuthorizedTenantContext(t *testing.T) {
 	allOverview, err := harness.actions.Dashboard.WebDAVCredentialListPartial.Widget(
 		mainCtx,
 		pageReq,
-		harness.actions.Dashboard.WebDAVCredentialListPartial.Data(
-			"",
-			"active",
-			"revoked",
-		),
+		harness.actions.Dashboard.WebDAVCredentialListPartial.Data("", "active", "revoked"),
 	)
 	if err != nil {
 		t.Fatal(err)
@@ -378,6 +556,7 @@ func TestCreateWebDAVCredentialCmdUsesAuthorizedTenantContext(t *testing.T) {
 	if tabs := allOverview.Child.(*widget.TabBar); len(tabs.Tabs) != 2 {
 		t.Fatalf("expected active and revoked credentials across two Spaces, got %d", len(tabs.Tabs))
 	}
+
 	_, err = harness.actions.Dashboard.WebDAVCredentialListPartial.Widget(
 		mainCtx,
 		pageReq,

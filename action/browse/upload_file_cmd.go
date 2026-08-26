@@ -3,6 +3,7 @@ package browse
 import (
 	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"path/filepath"
 	"strings"
@@ -80,58 +81,9 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	}
 	uploadx.LimitMultipartBody(rw, req.Request, nilableUploadLimitBytes)
 
-	reader, err := req.MultipartReader()
+	data, uploadedFile, err := qq.readUpload(req)
 	if err != nil {
 		return err
-	}
-	data := &UploadFileCmdData{}
-	var uploadedFile *uploadx.MultipartFile
-
-	for uploadedFile == nil {
-		part, err := reader.NextPart()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return err
-		}
-
-		switch part.FormName() {
-		case "ParentDirID":
-			value, err := io.ReadAll(io.LimitReader(part, 1024))
-			_ = part.Close()
-			if err != nil {
-				return err
-			}
-			data.ParentDirID = string(value)
-		case "Filename":
-			value, err := io.ReadAll(io.LimitReader(part, 4096))
-			_ = part.Close()
-			if err != nil {
-				return err
-			}
-			data.Filename = string(value)
-		case "AddToInbox":
-			value, err := io.ReadAll(io.LimitReader(part, 16))
-			_ = part.Close()
-			if err != nil {
-				return err
-			}
-			val := strings.TrimSpace(string(value))
-			data.AddToInbox = val == "on" || val == "true" || val == "1"
-		case "File":
-			if data.ParentDirID == "" {
-				_ = part.Close()
-				return e.NewHTTPErrorf(http.StatusBadRequest, "Upload metadata must be sent before the file.")
-			}
-			uploadedFile, err = uploadx.NewMultipartFile(part)
-			if err != nil {
-				_ = part.Close()
-				return err
-			}
-		default:
-			_ = part.Close()
-		}
 	}
 
 	if data.ParentDirID == "" {
@@ -156,59 +108,12 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	}
 	filename = filepath.Clean(filename)
 
-	type uploadPrepareResult struct {
-		prepared *filesystem.PreparedUpload
-	}
-
-	prep, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
-		parentDir := qq.infra.FileRepo.GetX(writeCtx, data.ParentDirID)
-		if err := fileutil.EnsureFileDoesNotExist(writeCtx, filename, parentDir.Data.ID, data.AddToInbox); err != nil {
-			return nil, err
-		}
-		prepared, err := qq.infra.FileSystem().PrepareFileUpload(
-			writeCtx,
-			filename,
-			parentDir.Data.ID,
-			data.AddToInbox,
-		)
-		if err != nil {
-			return nil, err
-		}
-		return &uploadPrepareResult{prepared: prepared}, nil
-	})
+	prepared, err := qq.prepareUpload(ctx, data, filename)
 	if err != nil {
 		return err
 	}
-
-	var uploadResult *filesystem.PreparedUploadResult
-	if uploadedFile.ExpectedBytes != nil {
-		uploadResult, err = qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
-			ctx,
-			uploadedFile.Reader,
-			prep.prepared,
-			*uploadedFile.ExpectedBytes,
-		)
-	} else {
-		uploadResult, err = qq.infra.FileSystem().UploadPreparedFile(ctx, uploadedFile.Reader, prep.prepared)
-	}
-	if err != nil {
-		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
+	if err := uploadPreparedFile(qq.infra, ctx, uploadedFile, prepared); err != nil {
 		return err
-	}
-
-	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, qq.infra.FileSystem().FinalizePreparedUploadWithoutMime(writeCtx, prep.prepared, uploadResult)
-	})
-	if err != nil {
-		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
-		return err
-	}
-	if _, err := qq.infra.FileSystem().UpdateMimeTypeAfterFinalization(
-		ctx.SpaceCtx(),
-		true,
-		prep.prepared.StoredFileID,
-	); err != nil {
-		log.Println(err)
 	}
 
 	rw.AddRenderables(widget.NewSnackbarf("«%s» uploaded.", filename))
@@ -216,4 +121,136 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	rw.Header().Add("HX-Trigger", event.FileUploaded.String())
 
 	return nil
+}
+
+func (qq *UploadFileCmd) prepareUpload(
+	ctx ctxx.Context,
+	data *UploadFileCmdData,
+	filename string,
+) (*filesystem.PreparedUpload, error) {
+	return txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*filesystem.PreparedUpload, error) {
+		parentDir := qq.infra.FileRepo.GetX(writeCtx, data.ParentDirID)
+		if err := fileutil.EnsureFileDoesNotExist(
+			writeCtx,
+			filename,
+			parentDir.Data.ID,
+			data.AddToInbox,
+		); err != nil {
+			return nil, err
+		}
+		return qq.infra.FileSystem().PrepareFileUpload(
+			writeCtx,
+			filename,
+			parentDir.Data.ID,
+			data.AddToInbox,
+		)
+	})
+}
+
+func uploadPreparedFile(
+	infra *common.Infra,
+	ctx ctxx.Context,
+	uploadedFile *uploadx.MultipartFile,
+	prepared *filesystem.PreparedUpload,
+) error {
+	var uploadResult *filesystem.PreparedUploadResult
+	var err error
+	if uploadedFile.ExpectedBytes != nil {
+		uploadResult, err = infra.FileSystem().UploadPreparedFileWithExpectedSize(
+			ctx,
+			uploadedFile.Reader,
+			prepared,
+			*uploadedFile.ExpectedBytes,
+		)
+	} else {
+		uploadResult, err = infra.FileSystem().UploadPreparedFile(ctx, uploadedFile.Reader, prepared)
+	}
+	if err != nil {
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), infra.FileSystem(), prepared, err, true)
+		return err
+	}
+
+	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+		return nil, infra.FileSystem().FinalizePreparedUploadWithoutMime(writeCtx, prepared, uploadResult)
+	})
+	if err != nil {
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), infra.FileSystem(), prepared, err, true)
+		return err
+	}
+	if _, err := infra.FileSystem().UpdateMimeTypeAfterFinalization(
+		ctx.SpaceCtx(),
+		true,
+		prepared.StoredFileID,
+	); err != nil {
+		log.Println(err)
+	}
+	return nil
+}
+
+func (qq *UploadFileCmd) readUpload(
+	req *httpx.Request,
+) (*UploadFileCmdData, *uploadx.MultipartFile, error) {
+	reader, err := req.MultipartReader()
+	if err != nil {
+		return nil, nil, err
+	}
+	data := &UploadFileCmdData{}
+	var uploadedFile *uploadx.MultipartFile
+	for uploadedFile == nil {
+		part, err := reader.NextPart()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, nil, err
+		}
+		uploadedFile, err = qq.readUploadPart(data, part)
+		if err != nil {
+			return nil, nil, err
+		}
+	}
+	return data, uploadedFile, nil
+}
+
+func (qq *UploadFileCmd) readUploadPart(
+	data *UploadFileCmdData,
+	part *multipart.Part,
+) (*uploadx.MultipartFile, error) {
+	switch part.FormName() {
+	case "ParentDirID":
+		value, err := readMultipartValue(part, 1024)
+		data.ParentDirID = value
+		return nil, err
+	case "Filename":
+		value, err := readMultipartValue(part, 4096)
+		data.Filename = value
+		return nil, err
+	case "AddToInbox":
+		value, err := readMultipartValue(part, 16)
+		value = strings.TrimSpace(value)
+		data.AddToInbox = value == "on" || value == "true" || value == "1"
+		return nil, err
+	case "File":
+		if data.ParentDirID == "" {
+			_ = part.Close()
+			return nil, e.NewHTTPErrorf(
+				http.StatusBadRequest,
+				"Upload metadata must be sent before the file.",
+			)
+		}
+		uploadedFile, err := uploadx.NewMultipartFile(part)
+		if err != nil {
+			_ = part.Close()
+		}
+		return uploadedFile, err
+	default:
+		_ = part.Close()
+		return nil, nil
+	}
+}
+
+func readMultipartValue(part *multipart.Part, maxBytes int64) (string, error) {
+	value, err := io.ReadAll(io.LimitReader(part, maxBytes))
+	_ = part.Close()
+	return string(value), err
 }

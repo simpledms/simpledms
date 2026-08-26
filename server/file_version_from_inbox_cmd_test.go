@@ -243,84 +243,113 @@ func TestFileVersionFromInboxCmd_RejectsSourceOutsideInbox(t *testing.T) {
 
 func TestFileVersionFromInboxCmd_RejectsSourceWithoutVersion(t *testing.T) {
 	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
-		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
-
-		accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
-		tenantDB := initTenantDB(t, harness, tenantx)
-		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
-
-		var handlerErr error
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
-			spaceName := "Inbox Merge No Version Space"
-			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
-
-			spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
-			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-			rootDir := spaceCtx.SpaceRootDir()
-
-			targetFile := uploadSpaceFile(
-				t,
-				harness,
-				spaceCtx,
-				rootDir.ID,
-				"target.pdf",
-				[]byte("target content"),
-				false,
-			)
-			sourceFile := uploadSpaceFile(
-				t,
-				harness,
-				spaceCtx,
-				rootDir.ID,
-				"source.pdf",
-				[]byte("source content"),
-				true,
-			)
-
-			_, err := spaceCtx.TTx.FileVersion.Delete().Where(fileversion.FileID(sourceFile.ID)).Exec(spaceCtx)
-			if err != nil {
-				return fmt.Errorf("delete source versions: %w", err)
-			}
-
-			targetVersionsBefore := spaceCtx.TTx.FileVersion.Query().Where(fileversion.FileID(targetFile.ID)).CountX(spaceCtx)
-
-			_, handlerErr = runFileVersionFromInboxCmd(
-				harness,
-				spaceCtx,
-				targetFile.PublicID.String(),
-				sourceFile.PublicID.String(),
-			)
-			if handlerErr == nil {
-				return fmt.Errorf("expected error")
-			}
-
-			targetVersionsAfter := spaceCtx.TTx.FileVersion.Query().Where(fileversion.FileID(targetFile.ID)).CountX(spaceCtx)
-			if targetVersionsAfter != targetVersionsBefore {
-				return fmt.Errorf("expected target versions to remain %d, got %d", targetVersionsBefore, targetVersionsAfter)
-			}
-
-			sourceExists := spaceCtx.TTx.File.Query().Where(file.ID(sourceFile.ID)).ExistX(schema.SkipSoftDelete(spaceCtx))
-			if !sourceExists {
-				return fmt.Errorf("expected source file to remain when merge fails")
-			}
-
-			return nil
-		})
-		if err != nil {
-			t.Fatalf("setup failed: %v", err)
-		}
-
-		httpErr, ok := handlerErr.(*e.HTTPError)
-		if !ok {
-			t.Fatalf("expected HTTPError, got %T", handlerErr)
-		}
-		if httpErr.StatusCode() != http.StatusBadRequest {
-			t.Fatalf("expected status %d, got %d", http.StatusBadRequest, httpErr.StatusCode())
-		}
-		if !strings.Contains(httpErr.Error(), "source file has no versions") {
-			t.Fatalf("expected no-version error, got %q", httpErr.Error())
-		}
+		testFileVersionFromInboxCmdRejectsSourceWithoutVersion(t, disableEncryption)
 	})
+}
+
+func testFileVersionFromInboxCmdRejectsSourceWithoutVersion(t *testing.T, disableEncryption bool) {
+	t.Helper()
+	harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
+
+	accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
+	tenantDB := initTenantDB(t, harness, tenantx)
+	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
+
+	var handlerErr error
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(
+		_ *entmain.Tx,
+		_ *enttenant.Tx,
+		tenantCtx *ctxx.TenantContext,
+	) error {
+		var err error
+		handlerErr, err = rejectInboxSourceWithoutVersion(t, harness, tenantCtx)
+		return err
+	})
+	if err != nil {
+		t.Fatalf("setup failed: %v", err)
+	}
+
+	httpErr, ok := handlerErr.(*e.HTTPError)
+	if !ok {
+		t.Fatalf("expected HTTPError, got %T", handlerErr)
+	}
+	if httpErr.StatusCode() != http.StatusBadRequest {
+		t.Fatalf("expected status %d, got %d", http.StatusBadRequest, httpErr.StatusCode())
+	}
+	if !strings.Contains(httpErr.Error(), "source file has no versions") {
+		t.Fatalf("expected no-version error, got %q", httpErr.Error())
+	}
+}
+
+func rejectInboxSourceWithoutVersion(
+	t *testing.T,
+	harness *actionTestHarness,
+	tenantCtx *ctxx.TenantContext,
+) (error, error) {
+	t.Helper()
+	spaceName := "Inbox Merge No Version Space"
+	createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
+
+	spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
+	spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+	rootDir := spaceCtx.SpaceRootDir()
+
+	targetFile := uploadSpaceFile(
+		t,
+		harness,
+		spaceCtx,
+		rootDir.ID,
+		"target.pdf",
+		[]byte("target content"),
+		false,
+	)
+	sourceFile := uploadSpaceFile(
+		t,
+		harness,
+		spaceCtx,
+		rootDir.ID,
+		"source.pdf",
+		[]byte("source content"),
+		true,
+	)
+
+	_, err := spaceCtx.TTx.FileVersion.Delete().Where(fileversion.FileID(sourceFile.ID)).Exec(spaceCtx)
+	if err != nil {
+		return nil, fmt.Errorf("delete source versions: %w", err)
+	}
+
+	targetVersionsBefore := spaceCtx.TTx.FileVersion.Query().
+		Where(fileversion.FileID(targetFile.ID)).
+		CountX(spaceCtx)
+	_, handlerErr := runFileVersionFromInboxCmd(
+		harness,
+		spaceCtx,
+		targetFile.PublicID.String(),
+		sourceFile.PublicID.String(),
+	)
+	if handlerErr == nil {
+		return nil, fmt.Errorf("expected error")
+	}
+
+	targetVersionsAfter := spaceCtx.TTx.FileVersion.Query().
+		Where(fileversion.FileID(targetFile.ID)).
+		CountX(spaceCtx)
+	if targetVersionsAfter != targetVersionsBefore {
+		return nil, fmt.Errorf(
+			"expected target versions to remain %d, got %d",
+			targetVersionsBefore,
+			targetVersionsAfter,
+		)
+	}
+
+	sourceExists := spaceCtx.TTx.File.Query().
+		Where(file.ID(sourceFile.ID)).
+		ExistX(schema.SkipSoftDelete(spaceCtx))
+	if !sourceExists {
+		return nil, fmt.Errorf("expected source file to remain when merge fails")
+	}
+
+	return handlerErr, nil
 }
 
 func runFileVersionFromInboxCmd(

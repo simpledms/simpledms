@@ -67,6 +67,8 @@ var (
 	spaceIDRegex  = regexp.MustCompile(`/space/(?P<id>[a-z0-9]+)`)
 )
 
+const unexpectedErrorMessage = "Something went wrong. Please try again."
+
 type Router struct {
 	*http.ServeMux
 	mainDB *sqlx.MainDB
@@ -392,49 +394,30 @@ func (qq *Router) wrapManualTx(handlerFn handlerFn) http.HandlerFunc {
 		transactionsOpen := true
 
 		defer func() {
-			if r := recover(); r != nil {
-				qq.logRecoveredPanic(reqx.Request, r)
-				err, ok := r.(error)
-				if !ok {
-					err = errors.New("internal error, please contact support")
-				}
-				if transactionsOpen {
-					qq.handleError(rwx, reqx, visitorCtx, err, mainTx, nilableTenantTx)
-					return
-				}
-				qq.handleManualError(rwx, reqx, visitorCtx, err)
-			}
+			qq.handleManualTxPanic(
+				rwx,
+				reqx,
+				visitorCtx,
+				mainTx,
+				nilableTenantTx,
+				transactionsOpen,
+				recover(),
+			)
 		}()
 
-		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, true)
-		if err != nil {
-			log.Println(err)
-			qq.handleError(rwx, reqx, visitorCtx, err, mainTx, nilableTenantTx)
-			return
-		}
-		if isRedirected {
-			if err := mainTx.Rollback(); err != nil {
-				log.Println(err)
-			}
-			if nilableTenantTx != nil {
-				if err := nilableTenantTx.Rollback(); err != nil {
-					log.Println(err)
-				}
-			}
+		ctx, shouldReturn := qq.manualTxContext(
+			rwx,
+			reqx,
+			visitorCtx,
+			mainTx,
+			&nilableTenantTx,
+		)
+		if shouldReturn {
 			return
 		}
 
-		if err := mainTx.Commit(); err != nil {
-			log.Println(err)
-			rwx.WriteHeader(http.StatusInternalServerError)
+		if !qq.commitManualTransactions(rwx, mainTx, nilableTenantTx) {
 			return
-		}
-		if nilableTenantTx != nil {
-			if err := nilableTenantTx.Commit(); err != nil {
-				log.Println(err)
-				rwx.WriteHeader(http.StatusInternalServerError)
-				return
-			}
 		}
 		transactionsOpen = false
 
@@ -444,6 +427,78 @@ func (qq *Router) wrapManualTx(handlerFn handlerFn) http.HandlerFunc {
 			return
 		}
 	}
+}
+
+func (qq *Router) manualTxContext(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	visitorCtx *ctxx.VisitorContext,
+	mainTx *entmain.Tx,
+	nilableTenantTx **enttenant.Tx,
+) (ctxx.Context, bool) {
+	ctx, tenantTx, isRedirected, err := qq.context(rw, req, mainTx, visitorCtx, true)
+	*nilableTenantTx = tenantTx
+	if err != nil {
+		log.Println(err)
+		qq.handleError(rw, req, visitorCtx, err, mainTx, tenantTx)
+		return ctx, true
+	}
+	if !isRedirected {
+		return ctx, false
+	}
+	if err := mainTx.Rollback(); err != nil {
+		log.Println(err)
+	}
+	if tenantTx != nil {
+		if err := tenantTx.Rollback(); err != nil {
+			log.Println(err)
+		}
+	}
+	return ctx, true
+}
+
+func (qq *Router) commitManualTransactions(
+	rw httpx.ResponseWriter,
+	mainTx *entmain.Tx,
+	nilableTenantTx *enttenant.Tx,
+) bool {
+	if err := mainTx.Commit(); err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		return false
+	}
+	if nilableTenantTx != nil {
+		if err := nilableTenantTx.Commit(); err != nil {
+			log.Println(err)
+			rw.WriteHeader(http.StatusInternalServerError)
+			return false
+		}
+	}
+	return true
+}
+
+func (qq *Router) handleManualTxPanic(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
+	mainTx *entmain.Tx,
+	nilableTenantTx *enttenant.Tx,
+	transactionsOpen bool,
+	recovered any,
+) {
+	if recovered == nil {
+		return
+	}
+	qq.logRecoveredPanic(req.Request, recovered)
+	err, ok := recovered.(error)
+	if !ok {
+		err = errors.New("internal error, please contact support")
+	}
+	if transactionsOpen {
+		qq.handleError(rw, req, ctx, err, mainTx, nilableTenantTx)
+		return
+	}
+	qq.handleManualError(rw, req, ctx, err)
 }
 
 func (qq *Router) handleManualError(
@@ -459,7 +514,7 @@ func (qq *Router) handleManualError(
 	} else {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)
-		rw.AddRenderables(wx.NewSnackbarf("Something went wrong. Please try again.").SetIsError(true))
+		rw.AddRenderables(wx.NewSnackbarf(unexpectedErrorMessage).SetIsError(true))
 	}
 	if renderErr := qq.infra.Renderer().Render(rw, ctx); renderErr != nil {
 		log.Println(renderErr)
@@ -644,7 +699,7 @@ func (qq *Router) handleError(
 	shouldRenderError := true
 	if strings.Contains(req.Header.Get("Accept"), "application/json") {
 		statusCode := http.StatusInternalServerError
-		message := "Something went wrong. Please try again."
+		message := unexpectedErrorMessage
 		if isHTTPErr {
 			statusCode = httpErr.StatusCode()
 			message = httpErr.Message()
@@ -669,7 +724,7 @@ func (qq *Router) handleError(
 	} else {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)
-		rw.AddRenderables(wx.NewSnackbarf("Something went wrong. Please try again.").SetIsError(true))
+		rw.AddRenderables(wx.NewSnackbarf(unexpectedErrorMessage).SetIsError(true))
 	}
 
 	if shouldRenderError {

@@ -10,17 +10,21 @@ import (
 func WithFileSourceDefault() schema.MigrateOption {
 	return schema.WithDiffHook(func(next schema.Differ) schema.Differ {
 		return schema.DiffFunc(func(current, desired *atlasschema.Schema) ([]atlasschema.Change, error) {
-			for _, table := range desired.Tables {
-				if table.Name != "files" && table.Name != "temporary_files" {
-					continue
-				}
-				for _, column := range table.Columns {
-					if column.Name == "source" {
-						column.Default = &atlasschema.Literal{V: "UnknownLegacy"}
-					}
-				}
-			}
+			setFileSourceDefaults(desired)
 			return next.Diff(current, desired)
 		})
 	})
+}
+
+func setFileSourceDefaults(desired *atlasschema.Schema) {
+	for _, table := range desired.Tables {
+		if table.Name != "files" && table.Name != "temporary_files" {
+			continue
+		}
+		for _, column := range table.Columns {
+			if column.Name == "source" {
+				column.Default = &atlasschema.Literal{V: "UnknownLegacy"}
+			}
+		}
+	}
 }

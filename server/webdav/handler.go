@@ -84,63 +84,15 @@ func (qq *Handler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	username, secret, ok := req.BasicAuth()
-	if !ok || username == "" || qq.limiter.blocked(req.RemoteAddr, username) {
-		writeWebDAVChallenge(rw)
-		return
-	}
-
-	credentialx, ok, err := qq.authenticateWebDAVCredential(req.Context(), username, secret)
-	if err != nil {
-		log.Println(err)
-		qq.limiter.allow(req.RemoteAddr, username)
-		writeWebDAVChallenge(rw)
-		return
-	}
-	if !ok || credentialx.RevokedAt != nil {
-		qq.limiter.allow(req.RemoteAddr, username)
-		writeWebDAVChallenge(rw)
-		return
-	}
-	if credentialx.TenantPublicID != tenantPublicID || credentialx.SpacePublicID != spacePublicID {
-		writeWebDAVText(rw, http.StatusNotFound, "Not found")
-		return
-	}
-
-	if err := qq.authorizeWebDAVRequest(req.Context(), credentialx, tenantPublicID, spacePublicID); err != nil {
-		status := http.StatusForbidden
-		if errors.Is(err, sql.ErrNoRows) || entmain.IsNotFound(err) || enttenant.IsNotFound(err) {
-			status = http.StatusForbidden
-		}
-		writeWebDAVText(rw, status, http.StatusText(status))
-		return
-	}
-	qq.credentialService.TouchLastUsed(
-		req.Context(),
-		qq.mainDB.ReadWriteConn,
-		credentialx.ID,
-		credentialx.LastUsedAt,
-	)
-
-	pathx, ok := parseWebDAVPath(req, endpointPrefix)
+	credentialx, ok := qq.authenticatedWebDAVCredential(rw, req)
 	if !ok {
-		writeWebDAVText(rw, webDAVInvalidPathStatus(req.Method), http.StatusText(webDAVInvalidPathStatus(req.Method)))
 		return
 	}
-	if req.Method == http.MethodOptions {
-		writeWebDAVOptions(rw)
+	if !qq.authorizeWebDAVEndpoint(rw, req, credentialx, tenantPublicID, spacePublicID) {
 		return
 	}
-	if (req.Method == http.MethodGet || req.Method == http.MethodHead) && pathx.isFile {
-		writeWebDAVText(rw, http.StatusNotFound, "Not found")
-		return
-	}
-	if !webDAVMethodAllowed(req.Method) {
-		writeWebDAVMethodNotAllowed(rw)
-		return
-	}
-	if err := qq.preflightWebDAVRequest(req, endpointPrefix, pathx); err != nil {
-		writeWebDAVText(rw, webDAVHTTPStatus(err), http.StatusText(webDAVHTTPStatus(err)))
+
+	if !qq.prepareWebDAVRequest(rw, req, endpointPrefix) {
 		return
 	}
 
@@ -169,6 +121,88 @@ func (qq *Handler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	recorder := newWebDAVResponseRecorder(rw)
 	handler.ServeHTTP(recorder, req)
 	recorder.flush(op)
+}
+
+func (qq *Handler) authorizeWebDAVEndpoint(
+	rw http.ResponseWriter,
+	req *http.Request,
+	credentialx *credentialmodel.AuthRecord,
+	tenantPublicID string,
+	spacePublicID string,
+) bool {
+	if credentialx.TenantPublicID != tenantPublicID || credentialx.SpacePublicID != spacePublicID {
+		writeWebDAVText(rw, http.StatusNotFound, "Not found")
+		return false
+	}
+	if err := qq.authorizeWebDAVRequest(req.Context(), credentialx, tenantPublicID, spacePublicID); err != nil {
+		status := http.StatusForbidden
+		if errors.Is(err, sql.ErrNoRows) || entmain.IsNotFound(err) || enttenant.IsNotFound(err) {
+			status = http.StatusForbidden
+		}
+		writeWebDAVText(rw, status, http.StatusText(status))
+		return false
+	}
+	qq.credentialService.TouchLastUsed(
+		req.Context(),
+		qq.mainDB.ReadWriteConn,
+		credentialx.ID,
+		credentialx.LastUsedAt,
+	)
+	return true
+}
+
+func (qq *Handler) prepareWebDAVRequest(
+	rw http.ResponseWriter,
+	req *http.Request,
+	endpointPrefix string,
+) bool {
+	pathx, ok := parseWebDAVPath(req, endpointPrefix)
+	if !ok {
+		writeWebDAVText(rw, webDAVInvalidPathStatus(req.Method), http.StatusText(webDAVInvalidPathStatus(req.Method)))
+		return false
+	}
+	if req.Method == http.MethodOptions {
+		writeWebDAVOptions(rw)
+		return false
+	}
+	if (req.Method == http.MethodGet || req.Method == http.MethodHead) && pathx.isFile {
+		writeWebDAVText(rw, http.StatusNotFound, "Not found")
+		return false
+	}
+	if !webDAVMethodAllowed(req.Method) {
+		writeWebDAVMethodNotAllowed(rw)
+		return false
+	}
+	if err := qq.preflightWebDAVRequest(req, endpointPrefix, pathx); err != nil {
+		writeWebDAVText(rw, webDAVHTTPStatus(err), http.StatusText(webDAVHTTPStatus(err)))
+		return false
+	}
+	return true
+}
+
+func (qq *Handler) authenticatedWebDAVCredential(
+	rw http.ResponseWriter,
+	req *http.Request,
+) (*credentialmodel.AuthRecord, bool) {
+	username, secret, ok := req.BasicAuth()
+	if !ok || username == "" || qq.limiter.blocked(req.RemoteAddr, username) {
+		writeWebDAVChallenge(rw)
+		return nil, false
+	}
+
+	credentialx, ok, err := qq.authenticateWebDAVCredential(req.Context(), username, secret)
+	if err != nil {
+		log.Println(err)
+		qq.limiter.allow(req.RemoteAddr, username)
+		writeWebDAVChallenge(rw)
+		return nil, false
+	}
+	if !ok || credentialx.RevokedAt != nil {
+		qq.limiter.allow(req.RemoteAddr, username)
+		writeWebDAVChallenge(rw)
+		return nil, false
+	}
+	return credentialx, true
 }
 
 func (qq *Handler) authenticateWebDAVCredential(

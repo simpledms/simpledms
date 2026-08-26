@@ -25,98 +25,120 @@ import (
 
 func TestUnzipArchiveCmdExtractsFilesAndDeletesArchive(t *testing.T) {
 	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
-		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
-
-		accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
-		tenantDB := initTenantDB(t, harness, tenantx)
-		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
-
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
-			spaceName := "Archive Space"
-			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
-
-			spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
-			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-			rootDir := spaceCtx.SpaceRootDir()
-
-			zipData := createZipArchive(t)
-			prepared, err := harness.infra.FileSystem().PrepareFileUpload(
-				spaceCtx,
-				"archive.zip",
-				rootDir.ID,
-				false,
-			)
-			if err != nil {
-				return fmt.Errorf("prepare zip file: %w", err)
-			}
-
-			uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
-				spaceCtx,
-				bytes.NewReader(zipData),
-				prepared,
-				int64(len(zipData)),
-			)
-			if err != nil {
-				return fmt.Errorf("upload zip file: %w", err)
-			}
-
-			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
-			if err != nil {
-				return fmt.Errorf("finalize zip file: %w", err)
-			}
-
-			form := url.Values{}
-			form.Set("FileID", prepared.FilePublicID)
-			form.Set("DeleteOnSuccess", "true")
-
-			req := httptest.NewRequest(http.MethodPost, "/-/browse/unzip-archive-cmd", strings.NewReader(form.Encode()))
-			req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-			rr := httptest.NewRecorder()
-			err = harness.actions.Browse.UnzipArchiveCmd.Handler(
-				httpx.NewResponseWriter(rr),
-				httpx.NewRequest(req),
-				spaceCtx,
-			)
-			if err != nil {
-				return fmt.Errorf("unzip archive command: %w", err)
-			}
-
-			if header := rr.Header().Get("HX-Trigger"); header != event.ZIPArchiveUnzipped.String() {
-				return fmt.Errorf("expected HX-Trigger %q, got %q", event.ZIPArchiveUnzipped.String(), header)
-			}
-
-			docsDir := spaceCtx.TTx.File.Query().Where(
-				file.Name("docs"),
-				file.ParentID(rootDir.ID),
-				file.IsDirectory(true),
-			).OnlyX(spaceCtx)
-
-			_ = spaceCtx.TTx.File.Query().Where(
-				file.Name("readme.txt"),
-				file.ParentID(docsDir.ID),
-				file.IsDirectory(false),
-			).OnlyX(spaceCtx)
-
-			_ = spaceCtx.TTx.File.Query().Where(
-				file.Name("notes.txt"),
-				file.ParentID(rootDir.ID),
-				file.IsDirectory(false),
-			).OnlyX(spaceCtx)
-
-			zipRecord := spaceCtx.TTx.File.Query().Where(
-				file.PublicIDEQ(entx.NewCIText(prepared.FilePublicID)),
-			).OnlyX(schema.SkipSoftDelete(spaceCtx))
-			if zipRecord.DeletedAt.IsZero() {
-				return fmt.Errorf("expected zip archive to be marked deleted")
-			}
-
-			return nil
-		})
-		if err != nil {
-			t.Fatalf("unzip archive command: %v", err)
-		}
+		testUnzipArchiveCmdExtractsFilesAndDeletesArchive(t, disableEncryption)
 	})
+}
+
+func testUnzipArchiveCmdExtractsFilesAndDeletesArchive(t *testing.T, disableEncryption bool) {
+	t.Helper()
+	harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
+
+	accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
+	tenantDB := initTenantDB(t, harness, tenantx)
+	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
+
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(
+		_ *entmain.Tx,
+		_ *enttenant.Tx,
+		tenantCtx *ctxx.TenantContext,
+	) error {
+		return unzipArchiveAndVerifyFiles(t, harness, tenantCtx)
+	})
+	if err != nil {
+		t.Fatalf("unzip archive command: %v", err)
+	}
+}
+
+func unzipArchiveAndVerifyFiles(
+	t *testing.T,
+	harness *actionTestHarness,
+	tenantCtx *ctxx.TenantContext,
+) error {
+	t.Helper()
+	spaceName := "Archive Space"
+	createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
+
+	spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
+	spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+	rootDir := spaceCtx.SpaceRootDir()
+
+	zipData := createZipArchive(t)
+	prepared, err := harness.infra.FileSystem().PrepareFileUpload(
+		spaceCtx,
+		"archive.zip",
+		rootDir.ID,
+		false,
+	)
+	if err != nil {
+		return fmt.Errorf("prepare zip file: %w", err)
+	}
+
+	uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+		spaceCtx,
+		bytes.NewReader(zipData),
+		prepared,
+		int64(len(zipData)),
+	)
+	if err != nil {
+		return fmt.Errorf("upload zip file: %w", err)
+	}
+
+	err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
+	if err != nil {
+		return fmt.Errorf("finalize zip file: %w", err)
+	}
+
+	form := url.Values{}
+	form.Set("FileID", prepared.FilePublicID)
+	form.Set("DeleteOnSuccess", "true")
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/-/browse/unzip-archive-cmd",
+		strings.NewReader(form.Encode()),
+	)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	rr := httptest.NewRecorder()
+	err = harness.actions.Browse.UnzipArchiveCmd.Handler(
+		httpx.NewResponseWriter(rr),
+		httpx.NewRequest(req),
+		spaceCtx,
+	)
+	if err != nil {
+		return fmt.Errorf("unzip archive command: %w", err)
+	}
+
+	if header := rr.Header().Get("HX-Trigger"); header != event.ZIPArchiveUnzipped.String() {
+		return fmt.Errorf("expected HX-Trigger %q, got %q", event.ZIPArchiveUnzipped.String(), header)
+	}
+
+	docsDir := spaceCtx.TTx.File.Query().Where(
+		file.Name("docs"),
+		file.ParentID(rootDir.ID),
+		file.IsDirectory(true),
+	).OnlyX(spaceCtx)
+
+	_ = spaceCtx.TTx.File.Query().Where(
+		file.Name("readme.txt"),
+		file.ParentID(docsDir.ID),
+		file.IsDirectory(false),
+	).OnlyX(spaceCtx)
+
+	_ = spaceCtx.TTx.File.Query().Where(
+		file.Name("notes.txt"),
+		file.ParentID(rootDir.ID),
+		file.IsDirectory(false),
+	).OnlyX(spaceCtx)
+
+	zipRecord := spaceCtx.TTx.File.Query().Where(
+		file.PublicIDEQ(entx.NewCIText(prepared.FilePublicID)),
+	).OnlyX(schema.SkipSoftDelete(spaceCtx))
+	if zipRecord.DeletedAt.IsZero() {
+		return fmt.Errorf("expected zip archive to be marked deleted")
+	}
+
+	return nil
 }
 
 func TestUnzipArchiveCmdRejectsNonZipFile(t *testing.T) {
@@ -196,103 +218,132 @@ func TestUnzipArchiveCmdRejectsNonZipFile(t *testing.T) {
 
 func TestUnzipArchiveCmdRejectsWhenTenantStorageLimitExceeded(t *testing.T) {
 	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
-		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
-
-		accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
-		tenantDB := initTenantDB(t, harness, tenantx)
-		tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
-
-		err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext) error {
-			spaceName := "Quota Unzip Space"
-			createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
-
-			spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
-			spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-			rootDir := spaceCtx.SpaceRootDir()
-
-			zipData := createZipArchive(t)
-			prepared, err := harness.infra.FileSystem().PrepareFileUpload(
-				spaceCtx,
-				"archive.zip",
-				rootDir.ID,
-				false,
-			)
-			if err != nil {
-				return fmt.Errorf("prepare zip file: %w", err)
-			}
-
-			uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
-				spaceCtx,
-				bytes.NewReader(zipData),
-				prepared,
-				int64(len(zipData)),
-			)
-			if err != nil {
-				return fmt.Errorf("upload zip file: %w", err)
-			}
-
-			err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
-			if err != nil {
-				return fmt.Errorf("finalize zip file: %w", err)
-			}
-
-			spaceCtx.TTx.StoredFile.UpdateOneID(prepared.StoredFileID).
-				SetSize(testTenantQuotaTrialBytes).
-				ExecX(spaceCtx)
-
-			form := url.Values{}
-			form.Set("FileID", prepared.FilePublicID)
-			form.Set("DeleteOnSuccess", "true")
-
-			req := httptest.NewRequest(http.MethodPost, "/-/browse/unzip-archive-cmd", strings.NewReader(form.Encode()))
-			req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-			rr := httptest.NewRecorder()
-			handlerErr := harness.actions.Browse.UnzipArchiveCmd.Handler(
-				httpx.NewResponseWriter(rr),
-				httpx.NewRequest(req),
-				spaceCtx,
-			)
-			if handlerErr == nil {
-				return fmt.Errorf("expected quota error")
-			}
-
-			httpErr, ok := handlerErr.(*e.HTTPError)
-			if !ok {
-				return fmt.Errorf("expected HTTPError, got %T", handlerErr)
-			}
-			if httpErr.StatusCode() != http.StatusRequestEntityTooLarge {
-				return fmt.Errorf("expected status %d, got %d", http.StatusRequestEntityTooLarge, httpErr.StatusCode())
-			}
-
-			filesInRootCount := spaceCtx.TTx.File.Query().Where(
-				file.ParentID(rootDir.ID),
-				file.IsDirectory(false),
-			).CountX(spaceCtx)
-			if filesInRootCount != 1 {
-				return fmt.Errorf("expected only archive file to remain, got %d files", filesInRootCount)
-			}
-
-			docsDirCount := spaceCtx.TTx.File.Query().Where(
-				file.Name("docs"),
-				file.ParentID(rootDir.ID),
-				file.IsDirectory(true),
-			).CountX(spaceCtx)
-			if docsDirCount != 0 {
-				return fmt.Errorf("expected no extracted directories, got %d", docsDirCount)
-			}
-
-			zipRecord := spaceCtx.TTx.File.GetX(spaceCtx, prepared.FileID)
-			if !zipRecord.DeletedAt.IsZero() {
-				return fmt.Errorf("expected zip archive to remain undeleted")
-			}
-
-			return nil
-		})
-		if err != nil {
-			t.Fatalf("unzip archive command: %v", err)
-		}
+		testUnzipArchiveCmdRejectsWhenTenantStorageLimitExceeded(t, disableEncryption)
 	})
+}
+
+func testUnzipArchiveCmdRejectsWhenTenantStorageLimitExceeded(
+	t *testing.T,
+	disableEncryption bool,
+) {
+	t.Helper()
+	harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
+
+	accountx, tenantx := signUpAccount(t, harness, "owner@example.com")
+	tenantDB := initTenantDB(t, harness, tenantx)
+	tenantx = harness.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
+
+	err := withTenantContext(t, harness, accountx, tenantx, tenantDB, func(
+		_ *entmain.Tx,
+		_ *enttenant.Tx,
+		tenantCtx *ctxx.TenantContext,
+	) error {
+		return rejectUnzipArchiveOverStorageLimit(t, harness, tenantCtx)
+	})
+	if err != nil {
+		t.Fatalf("unzip archive command: %v", err)
+	}
+}
+
+func rejectUnzipArchiveOverStorageLimit(
+	t *testing.T,
+	harness *actionTestHarness,
+	tenantCtx *ctxx.TenantContext,
+) error {
+	t.Helper()
+	spaceName := "Quota Unzip Space"
+	createSpaceViaCmd(t, harness.actions, tenantCtx, spaceName)
+
+	spacex := tenantCtx.TTx.Space.Query().Where(space.Name(spaceName)).OnlyX(tenantCtx)
+	spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
+	rootDir := spaceCtx.SpaceRootDir()
+
+	zipData := createZipArchive(t)
+	prepared, err := harness.infra.FileSystem().PrepareFileUpload(
+		spaceCtx,
+		"archive.zip",
+		rootDir.ID,
+		false,
+	)
+	if err != nil {
+		return fmt.Errorf("prepare zip file: %w", err)
+	}
+
+	uploadResult, err := harness.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+		spaceCtx,
+		bytes.NewReader(zipData),
+		prepared,
+		int64(len(zipData)),
+	)
+	if err != nil {
+		return fmt.Errorf("upload zip file: %w", err)
+	}
+
+	err = harness.infra.FileSystem().FinalizePreparedUpload(spaceCtx, prepared, uploadResult)
+	if err != nil {
+		return fmt.Errorf("finalize zip file: %w", err)
+	}
+
+	spaceCtx.TTx.StoredFile.UpdateOneID(prepared.StoredFileID).
+		SetSize(testTenantQuotaTrialBytes).
+		ExecX(spaceCtx)
+
+	form := url.Values{}
+	form.Set("FileID", prepared.FilePublicID)
+	form.Set("DeleteOnSuccess", "true")
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/-/browse/unzip-archive-cmd",
+		strings.NewReader(form.Encode()),
+	)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	rr := httptest.NewRecorder()
+	handlerErr := harness.actions.Browse.UnzipArchiveCmd.Handler(
+		httpx.NewResponseWriter(rr),
+		httpx.NewRequest(req),
+		spaceCtx,
+	)
+	if handlerErr == nil {
+		return fmt.Errorf("expected quota error")
+	}
+
+	httpErr, ok := handlerErr.(*e.HTTPError)
+	if !ok {
+		return fmt.Errorf("expected HTTPError, got %T", handlerErr)
+	}
+	if httpErr.StatusCode() != http.StatusRequestEntityTooLarge {
+		return fmt.Errorf(
+			"expected status %d, got %d",
+			http.StatusRequestEntityTooLarge,
+			httpErr.StatusCode(),
+		)
+	}
+
+	filesInRootCount := spaceCtx.TTx.File.Query().Where(
+		file.ParentID(rootDir.ID),
+		file.IsDirectory(false),
+	).CountX(spaceCtx)
+	if filesInRootCount != 1 {
+		return fmt.Errorf("expected only archive file to remain, got %d files", filesInRootCount)
+	}
+
+	docsDirCount := spaceCtx.TTx.File.Query().Where(
+		file.Name("docs"),
+		file.ParentID(rootDir.ID),
+		file.IsDirectory(true),
+	).CountX(spaceCtx)
+	if docsDirCount != 0 {
+		return fmt.Errorf("expected no extracted directories, got %d", docsDirCount)
+	}
+
+	zipRecord := spaceCtx.TTx.File.GetX(spaceCtx, prepared.FileID)
+	if !zipRecord.DeletedAt.IsZero() {
+		return fmt.Errorf("expected zip archive to remain undeleted")
+	}
+
+	return nil
 }
 
 func createZipArchive(t *testing.T) []byte {

@@ -10,6 +10,8 @@ import (
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/entmain"
+	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/model/main/webdavcredential"
@@ -205,6 +207,45 @@ func (qq *CreateWebDAVCredentialCmd) spaceContext(
 	if err != nil {
 		return nil, err
 	}
+	tenantx, spacex, err := findWebDAVCredentialDestination(
+		spacesByTenant,
+		tenantPublicID,
+		spacePublicID,
+	)
+	if err != nil {
+		return nil, err
+	}
+	tenantDB, ok := qq.tenantDBs.Load(tenantx.ID)
+	if !ok {
+		return nil, e.NewHTTPErrorf(http.StatusNotFound, "Destination unavailable.")
+	}
+	tenantTx, err := tenantDB.ReadOnlyConn.Tx(ctx)
+	if err != nil {
+		return nil, err
+	}
+	userx, err := tenantTx.User.Query().
+		Where(user.AccountID(mainCtx.Account.ID)).
+		Only(mainCtx)
+	if err != nil {
+		_ = tenantTx.Rollback()
+		return nil, err
+	}
+	tenantCtx := ctxx.NewTenantContextWithUser(mainCtx, tenantTx, tenantx, userx, true)
+	currentSpace, err := tenantTx.Space.Query().
+		Where(space.ID(spacex.ID)).
+		Only(tenantCtx)
+	if err != nil {
+		_ = tenantTx.Rollback()
+		return nil, err
+	}
+	return ctxx.NewSpaceContext(tenantCtx, currentSpace), nil
+}
+
+func findWebDAVCredentialDestination(
+	spacesByTenant map[*entmain.Tenant][]*enttenant.Space,
+	tenantPublicID string,
+	spacePublicID string,
+) (*entmain.Tenant, *enttenant.Space, error) {
 	for tenantx, spaces := range spacesByTenant {
 		if tenantx.PublicID.String() != tenantPublicID {
 			continue
@@ -213,33 +254,13 @@ func (qq *CreateWebDAVCredentialCmd) spaceContext(
 			if spacex.PublicID.String() != spacePublicID {
 				continue
 			}
-			tenantDB, ok := qq.tenantDBs.Load(tenantx.ID)
-			if !ok {
-				return nil, e.NewHTTPErrorf(http.StatusNotFound, "Destination unavailable.")
-			}
-			tenantTx, err := tenantDB.ReadOnlyConn.Tx(ctx)
-			if err != nil {
-				return nil, err
-			}
-			userx, err := tenantTx.User.Query().
-				Where(user.AccountID(mainCtx.Account.ID)).
-				Only(mainCtx)
-			if err != nil {
-				_ = tenantTx.Rollback()
-				return nil, err
-			}
-			tenantCtx := ctxx.NewTenantContextWithUser(mainCtx, tenantTx, tenantx, userx, true)
-			currentSpace, err := tenantTx.Space.Query().
-				Where(space.ID(spacex.ID)).
-				Only(tenantCtx)
-			if err != nil {
-				_ = tenantTx.Rollback()
-				return nil, err
-			}
-			return ctxx.NewSpaceContext(tenantCtx, currentSpace), nil
+			return tenantx, spacex, nil
 		}
 	}
-	return nil, e.NewHTTPErrorf(http.StatusForbidden, "You cannot create a credential for this Space.")
+	return nil, nil, e.NewHTTPErrorf(
+		http.StatusForbidden,
+		"You cannot create a credential for this Space.",
+	)
 }
 
 func credentialValue(ctx ctxx.Context, label string, value string) *widget.Column {

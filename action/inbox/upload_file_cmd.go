@@ -68,28 +68,9 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	}
 	uploadx.LimitMultipartBody(rw, req.Request, nilableUploadLimitBytes)
 
-	reader, err := req.MultipartReader()
+	uploadedFile, err := qq.readUploadedFile(req)
 	if err != nil {
 		return err
-	}
-	var uploadedFile *uploadx.MultipartFile
-	for uploadedFile == nil {
-		part, err := reader.NextPart()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return err
-		}
-		if part.FormName() != "File" {
-			_ = part.Close()
-			continue
-		}
-		uploadedFile, err = uploadx.NewMultipartFile(part)
-		if err != nil {
-			_ = part.Close()
-			return err
-		}
 	}
 	if uploadedFile == nil {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "No file provided.")
@@ -103,7 +84,33 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	filename := uploadedFile.Filename
 	filename = filepath.Clean(filename)
 
-	prep, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
+	prep, err := qq.prepareUpload(ctx, filename)
+	if err != nil {
+		return err
+	}
+	if err := uploadPreparedFile(qq.infra, ctx, uploadedFile, prep.prepared); err != nil {
+		return err
+	}
+	rw.Header().Set("HX-Retarget", "#innerContent")
+	rw.Header().Set("HX-Reswap", "innerHTML")
+	view, err := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, prep.prepared.FilePublicID)
+	if err != nil {
+		return err
+	}
+
+	return qq.infra.Renderer().Render(
+		rw,
+		ctx,
+		view,
+		widget.NewSnackbarf("«%s» uploaded.", filename),
+	)
+}
+
+func (qq *UploadFileCmd) prepareUpload(
+	ctx ctxx.Context,
+	filename string,
+) (*uploadPrepareResult, error) {
+	return txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*uploadPrepareResult, error) {
 		rootDirID := writeCtx.SpaceRootDir().ID
 		if err := fileutil.EnsureFileDoesNotExist(writeCtx, filename, rootDirID, true); err != nil {
 			return nil, err
@@ -119,51 +126,71 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		}
 		return &uploadPrepareResult{prepared: prepared}, nil
 	})
-	if err != nil {
-		return err
-	}
+}
 
+func uploadPreparedFile(
+	infra *common.Infra,
+	ctx ctxx.Context,
+	uploadedFile *uploadx.MultipartFile,
+	prepared *filesystem.PreparedUpload,
+) error {
 	var uploadResult *filesystem.PreparedUploadResult
+	var err error
 	if uploadedFile.ExpectedBytes != nil {
-		uploadResult, err = qq.infra.FileSystem().UploadPreparedFileWithExpectedSize(
+		uploadResult, err = infra.FileSystem().UploadPreparedFileWithExpectedSize(
 			ctx,
 			uploadedFile.Reader,
-			prep.prepared,
+			prepared,
 			*uploadedFile.ExpectedBytes,
 		)
 	} else {
-		uploadResult, err = qq.infra.FileSystem().UploadPreparedFile(ctx, uploadedFile.Reader, prep.prepared)
+		uploadResult, err = infra.FileSystem().UploadPreparedFile(ctx, uploadedFile.Reader, prepared)
 	}
 	if err != nil {
-		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), infra.FileSystem(), prepared, err, true)
 		return err
 	}
 
 	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, qq.infra.FileSystem().FinalizePreparedUploadWithoutMime(writeCtx, prep.prepared, uploadResult)
+		return nil, infra.FileSystem().FinalizePreparedUploadWithoutMime(writeCtx, prepared, uploadResult)
 	})
 	if err != nil {
-		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), qq.infra.FileSystem(), prep.prepared, err, true)
+		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), infra.FileSystem(), prepared, err, true)
 		return err
 	}
-	if _, err := qq.infra.FileSystem().UpdateMimeTypeAfterFinalization(
+	if _, err := infra.FileSystem().UpdateMimeTypeAfterFinalization(
 		ctx.SpaceCtx(),
 		true,
-		prep.prepared.StoredFileID,
+		prepared.StoredFileID,
 	); err != nil {
 		log.Println(err)
 	}
-	rw.Header().Set("HX-Retarget", "#innerContent")
-	rw.Header().Set("HX-Reswap", "innerHTML")
-	view, err := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, prep.prepared.FilePublicID)
-	if err != nil {
-		return err
-	}
+	return nil
+}
 
-	return qq.infra.Renderer().Render(
-		rw,
-		ctx,
-		view,
-		widget.NewSnackbarf("«%s» uploaded.", filename),
-	)
+func (qq *UploadFileCmd) readUploadedFile(req *httpx.Request) (*uploadx.MultipartFile, error) {
+	reader, err := req.MultipartReader()
+	if err != nil {
+		return nil, err
+	}
+	var uploadedFile *uploadx.MultipartFile
+	for uploadedFile == nil {
+		part, err := reader.NextPart()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		if part.FormName() != "File" {
+			_ = part.Close()
+			continue
+		}
+		uploadedFile, err = uploadx.NewMultipartFile(part)
+		if err != nil {
+			_ = part.Close()
+			return nil, err
+		}
+	}
+	return uploadedFile, nil
 }

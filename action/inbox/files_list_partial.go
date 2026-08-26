@@ -38,10 +38,12 @@ type FilesListPartialData struct {
 }
 
 const (
-	sortByNewestFirst = "newestFirst"
-	sortByOldestFirst = "oldestFirst"
-	sortByName        = "name"
-	sortByRank        = "rank"
+	htmxInputDelay         = "delay:100ms"
+	inboxListInputSelector = "#search,#sortBy,#inboxSourceFilter"
+	sortByNewestFirst      = "newestFirst"
+	sortByOldestFirst      = "oldestFirst"
+	sortByName             = "name"
+	sortByRank             = "rank"
 )
 
 type FilesListPartialState struct {
@@ -268,12 +270,12 @@ func (qq *FilesListPartial) Widget(
 			HxSwap:   "innerHTML",
 			HxTrigger: strings.Join([]string{
 				// see comment on HTMXAttrs on ScrollableContent (FileList)
-				event.SortByUpdated.HandlerWithModifier("delay:100ms"), // TODO delay necessary?
-				event.SourceFilterChanged.HandlerWithModifier("delay:100ms"),
+				event.SortByUpdated.HandlerWithModifier(htmxInputDelay), // TODO delay necessary?
+				event.SourceFilterChanged.HandlerWithModifier(htmxInputDelay),
 				event.FileMoved.Handler(),   // because it also has to close details
 				event.FileDeleted.Handler(), // because it also has to close details
 			}, ", "),
-			HxInclude: "#search,#sortBy,#inboxSourceFilter",
+			HxInclude: inboxListInputSelector,
 		},
 		Children: children,
 	}
@@ -342,14 +344,14 @@ func (qq *FilesListPartial) filesList(
 				// context menu and the files list; sortby context menu is part of appbar and thus
 				// updating the app bar while using the search input leads to flickering and
 				// loss of input while typing
-				event.SearchQueryUpdated.HandlerWithModifier("delay:100ms"),
-				event.SourceFilterChanged.HandlerWithModifier("delay:100ms"),
+				event.SearchQueryUpdated.HandlerWithModifier(htmxInputDelay),
+				event.SourceFilterChanged.HandlerWithModifier(htmxInputDelay),
 				event.FileUploaded.Handler(),
 				event.ZIPArchiveUnzipped.Handler(), // TODO necessary?
 				event.FileDeleted.Handler(),
 				event.FileUpdated.Handler(),
 			}, ", "),
-			HxInclude: "#search,#sortBy,#inboxSourceFilter",
+			HxInclude: inboxListInputSelector,
 		},
 	}
 }
@@ -406,7 +408,7 @@ func (qq *FilesListPartial) filesListItemsFromFiles(
 				HxTrigger: "intersect once",
 				HxTarget:  "#inboxLoadMore",
 				HxSwap:    "outerHTML",
-				HxInclude: "#search,#sortBy,#inboxSourceFilter",
+				HxInclude: inboxListInputSelector,
 			},
 		})
 	}

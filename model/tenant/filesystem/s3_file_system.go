@@ -34,6 +34,7 @@ import (
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
@@ -61,6 +62,12 @@ const uploadProgressInterval = 30 * time.Second
 const accountConversionTakeoverAfter = time.Hour
 
 const temporaryAccountFileExpiry = 15 * time.Minute
+
+const (
+	emptyUploadMessage            = "Upload is empty."
+	couldNotSaveFileMessage       = "Could not save file."
+	tenantDatabaseNotFoundMessage = "Tenant database not found."
+)
 
 var errUploadTooLarge = errors.New("upload is too large")
 
@@ -417,7 +424,7 @@ func (qq *S3FileSystem) UploadPreparedFileWithExpectedSize(
 	expectedUploadedBytes int64,
 ) (*PreparedUploadResult, error) {
 	if expectedUploadedBytes <= 0 {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Upload is empty.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, emptyUploadMessage)
 	}
 
 	nilableUploadLimitBytes, err := qq.NilableEffectiveUploadSizeLimitBytes(ctx)
@@ -463,7 +470,7 @@ func (qq *S3FileSystem) UploadPreparedFileWithExpectedSize(
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Upload size mismatch.")
 	}
 	if fileSize == 0 {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Upload is empty.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, emptyUploadMessage)
 	}
 
 	if nilableUploadLimitBytes != nil && fileSize > *nilableUploadLimitBytes {
@@ -513,7 +520,7 @@ func (qq *S3FileSystem) UploadPreparedFile(
 		return nil, err
 	}
 	if fileSize == 0 {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Upload is empty.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, emptyUploadMessage)
 	}
 
 	return &PreparedUploadResult{
@@ -922,7 +929,7 @@ func (qq *S3FileSystem) saveFile(
 		return nil, "", savedFileResult{}, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
 	}
 	if qq.client == nil || qq.bucketName == "" {
-		return nil, "", savedFileResult{}, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not save file.")
+		return nil, "", savedFileResult{}, e.NewHTTPErrorf(http.StatusInternalServerError, couldNotSaveFileMessage)
 	}
 
 	fileExtension := filepath.Ext(originalFilename)
@@ -1099,7 +1106,7 @@ func (qq *S3FileSystem) saveFile(
 			}
 		}
 		log.Println(err)
-		return nil, "", savedFileResult{}, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not save file.")
+		return nil, "", savedFileResult{}, e.NewHTTPErrorf(http.StatusInternalServerError, couldNotSaveFileMessage)
 	}
 	_ = pipeReader.Close()
 
@@ -1114,7 +1121,7 @@ func (qq *S3FileSystem) saveFile(
 		if isBadUploadReadError(result.err) {
 			return nil, "", result, e.NewHTTPErrorf(http.StatusBadRequest, "Malformed upload body.")
 		}
-		return nil, "", result, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not save file.")
+		return nil, "", result, e.NewHTTPErrorf(http.StatusInternalServerError, couldNotSaveFileMessage)
 	}
 
 	fileInfo.Size = result.storageSize
@@ -1247,7 +1254,7 @@ func (qq *S3FileSystem) UploadPreparedTemporaryAccountFile(
 		return nil, err
 	}
 	if fileSize == 0 {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Upload is empty.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, emptyUploadMessage)
 	}
 
 	if nilableUploadLimitBytes != nil && fileSize > *nilableUploadLimitBytes {
@@ -1523,7 +1530,7 @@ func (qq *S3FileSystem) nilableSuccessfulAccountConversion(
 	)
 	tenantDB, ok := ctx.TenantCtx().UnsafeTenantDB()
 	if !ok {
-		return nil, false, e.NewHTTPErrorf(http.StatusInternalServerError, "Tenant database not found.")
+		return nil, false, e.NewHTTPErrorf(http.StatusInternalServerError, tenantDatabaseNotFoundMessage)
 	}
 	storedFilex, err := tenantDB.ReadOnlyConn.StoredFile.Query().
 		Where(
@@ -1565,7 +1572,7 @@ func (qq *S3FileSystem) nilableUnlinkedSuccessfulAccountConversion(
 ) (*enttenant.File, bool, error) {
 	tenantDB, ok := ctx.TenantCtx().UnsafeTenantDB()
 	if !ok {
-		return nil, false, e.NewHTTPErrorf(http.StatusInternalServerError, "Tenant database not found.")
+		return nil, false, e.NewHTTPErrorf(http.StatusInternalServerError, tenantDatabaseNotFoundMessage)
 	}
 	ctxWithIncomplete := tenantprivacy.DecisionContext(
 		enttenantschema.WithUnfinishedUploads(ctx),
@@ -1643,7 +1650,7 @@ func (qq *S3FileSystem) prepareClaimedAccountConversion(
 	)
 	tenantDB, ok := ctx.TenantCtx().UnsafeTenantDB()
 	if !ok {
-		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Tenant database not found.")
+		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, tenantDatabaseNotFoundMessage)
 	}
 	storedFilex, err := tenantDB.ReadOnlyConn.StoredFile.Query().
 		Where(storedfile.SourceTemporaryFilePublicID(entx.NewCIText(tmpFile.PublicID.String()))).
@@ -1683,7 +1690,7 @@ func (qq *S3FileSystem) createClaimedAccountConversion(
 	)
 	tenantDB, ok := ctx.TenantCtx().UnsafeTenantDB()
 	if !ok {
-		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Tenant database not found.")
+		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, tenantDatabaseNotFoundMessage)
 	}
 	return tenantDB.ReadWriteConn.StoredFile.Create().
 		SetFilename(tmpFile.Filename).
@@ -1715,7 +1722,7 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversion(
 	mainDB := ctx.MainCtx().UnsafeMainDB()
 	tenantDB, ok := ctx.TenantCtx().UnsafeTenantDB()
 	if !ok {
-		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Tenant database not found.")
+		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, tenantDatabaseNotFoundMessage)
 	}
 
 	mainTx, err := mainDB.Tx(ctx, false)
@@ -1747,14 +1754,61 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversion(
 		return nil, err
 	}
 
+	filex, err := qq.finalizeClaimedAccountConversionInTenant(
+		ctx,
+		tenantDB,
+		claimedTmpFile,
+		storedFileID,
+		claimToken,
+		parentDirFileID,
+		isInInbox,
+		fileInfo,
+		result,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := mainTx.TemporaryFile.UpdateOneID(claimedTmpFile.ID).
+		Where(temporaryfile.PersistenceClaimToken(claimToken)).
+		SetConvertedToStoredFileAt(time.Now()).
+		ClearPersistenceClaimToken().
+		ClearPersistenceTenantID().
+		ClearPersistenceLastProgressAt().
+		ClearExpiresAt().
+		Exec(ctx); err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	if err := mainTx.Commit(); err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	committedMain = true
+
+	return filex, nil
+}
+
+func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
+	ctx ctxx.Context,
+	tenantDB *sqlx.TenantDB,
+	claimedTmpFile *entmain.TemporaryFile,
+	storedFileID int64,
+	claimToken string,
+	parentDirFileID int64,
+	isInInbox bool,
+	fileInfo *minio.UploadInfo,
+	result savedFileResult,
+) (*enttenant.File, error) {
 	tenantTx, err := tenantDB.Tx(ctx, false)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
-	committedTenant := false
+	committed := false
 	defer func() {
-		if !committedTenant {
+		if !committed {
 			if err := tenantTx.Rollback(); err != nil {
 				log.Println(err)
 			}
@@ -1818,25 +1872,7 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversion(
 		log.Println(err)
 		return nil, err
 	}
-	committedTenant = true
-
-	if err := mainTx.TemporaryFile.UpdateOneID(claimedTmpFile.ID).
-		Where(temporaryfile.PersistenceClaimToken(claimToken)).
-		SetConvertedToStoredFileAt(time.Now()).
-		ClearPersistenceClaimToken().
-		ClearPersistenceTenantID().
-		ClearPersistenceLastProgressAt().
-		ClearExpiresAt().
-		Exec(ctx); err != nil {
-		log.Println(err)
-		return nil, err
-	}
-
-	if err := mainTx.Commit(); err != nil {
-		log.Println(err)
-		return nil, err
-	}
-	committedMain = true
+	committed = true
 
 	return filex, nil
 }
@@ -1902,7 +1938,7 @@ func (qq *S3FileSystem) cleanupClaimedAccountConversion(
 	)
 	tenantDB, ok := ctx.TenantCtx().UnsafeTenantDB()
 	if !ok {
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "Tenant database not found.")
+		return e.NewHTTPErrorf(http.StatusInternalServerError, tenantDatabaseNotFoundMessage)
 	}
 	current, err := tenantDB.ReadOnlyConn.StoredFile.Query().
 		Where(
@@ -2102,7 +2138,7 @@ func (qq *S3FileSystem) UpdateMimeTypeAfterFinalization(
 ) (string, error) {
 	tenantDB, ok := ctx.TenantCtx().UnsafeTenantDB()
 	if !ok {
-		return "", e.NewHTTPErrorf(http.StatusInternalServerError, "Tenant database not found.")
+		return "", e.NewHTTPErrorf(http.StatusInternalServerError, tenantDatabaseNotFoundMessage)
 	}
 
 	storedFilex, err := tenantDB.ReadOnlyConn.StoredFile.Get(ctx, storedFileID)
