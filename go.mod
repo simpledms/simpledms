@@ -28,15 +28,15 @@ require (
 	github.com/marcobeierer/go-tika v1.0.1
 	github.com/marcobeierer/structs v1.0.0
 	github.com/matoous/go-nanoid v1.5.1
-	github.com/mattn/go-sqlite3 v1.14.47
-	github.com/minio/minio-go/v7 v7.2.0
+	github.com/mattn/go-sqlite3 v1.14.50
+	github.com/minio/minio-go/v7 v7.3.0
 	github.com/puzpuzpuz/xsync/v4 v4.5.0
-	github.com/wneessen/go-mail v0.7.3
-	github.com/yuin/goldmark v1.8.2
-	golang.org/x/crypto v0.53.0
-	golang.org/x/net v0.56.0
-	golang.org/x/term v0.44.0
-	golang.org/x/text v0.38.0
+	github.com/wneessen/go-mail v0.8.1
+	github.com/yuin/goldmark v1.8.5
+	golang.org/x/crypto v0.55.0
+	golang.org/x/net v0.58.0
+	golang.org/x/term v0.45.0
+	golang.org/x/text v0.41.0
 )
 
 require (
@@ -73,8 +73,8 @@ require (
 	github.com/google/go-tpm v0.9.8 // indirect
 	github.com/hashicorp/hcl/v2 v2.24.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/klauspost/compress v1.18.6 // indirect
-	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
+	github.com/klauspost/compress v1.19.2 // indirect
+	github.com/klauspost/cpuid/v2 v2.4.0 // indirect
 	github.com/klauspost/crc32 v1.3.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/marcobeierer/enumer v0.0.0-20250424083623-3196a84fb274 // indirect
@@ -103,14 +103,14 @@ require (
 	github.com/zclconf/go-cty v1.17.0 // indirect
 	github.com/zclconf/go-cty-yaml v1.2.0 // indirect
 	github.com/zeebo/xxh3 v1.1.0 // indirect
-	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/mod v0.36.0 // indirect
-	golang.org/x/sync v0.21.0 // indirect
-	golang.org/x/sys v0.46.0 // indirect
-	golang.org/x/tools v0.45.0 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
+	golang.org/x/mod v0.38.0 // indirect
+	golang.org/x/sync v0.22.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/tools v0.48.0 // indirect
 	golang.org/x/tools/go/packages/packagestest v0.1.1-deprecated // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
-	gopkg.in/ini.v1 v1.67.2 // indirect
+	gopkg.in/ini.v1 v1.67.3 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
