@@ -1300,11 +1300,6 @@
             ]
         },
         {
-            "id": "Upload metadata must be sent before the file.",
-            "message": "Upload metadata must be sent before the file.",
-            "translation": ""
-        },
-        {
             "id": "No parent dir provided.",
             "message": "No parent dir provided.",
             "translation": ""
@@ -1335,8 +1330,8 @@
             ]
         },
         {
-            "id": "Cannot upload versions for directories.",
-            "message": "Cannot upload versions for directories.",
+            "id": "Upload metadata must be sent before the file.",
+            "message": "Upload metadata must be sent before the file.",
             "translation": ""
         },
         {
@@ -1350,9 +1345,14 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "prep.fileName"
+                    "expr": "fileName"
                 }
             ]
+        },
+        {
+            "id": "Cannot upload versions for directories.",
+            "message": "Cannot upload versions for directories.",
+            "translation": ""
         },
         {
             "id": "cannot download directories",
@@ -1674,12 +1674,6 @@
             "translation": ""
         },
         {
-            "id": "Select",
-            "message": "Select",
-            "translation": "",
-            "comment": "TODO Browse, Open, Switch or activate? or Select?"
-        },
-        {
             "id": "No password set",
             "message": "No password set",
             "translation": ""
@@ -1792,6 +1786,16 @@
         {
             "id": "Dashboard",
             "message": "Dashboard",
+            "translation": ""
+        },
+        {
+            "id": "Edit",
+            "message": "Edit",
+            "translation": ""
+        },
+        {
+            "id": "Changes saved.",
+            "message": "Changes saved.",
             "translation": ""
         },
         {
@@ -1940,94 +1944,70 @@
             "translation": ""
         },
         {
-            "id": "{Stringctx} · Username: {Username} · Created: {CreatedAt}",
-            "message": "{Stringctx} · Username: {Username} · Created: {CreatedAt}",
+            "id": "Username: {Username} · Created: {CreatedAt}",
+            "message": "Username: {Username} · Created: {CreatedAt}",
             "translation": "",
             "placeholders": [
                 {
-                    "id": "Stringctx",
+                    "id": "Username",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "destinationLabel.String(ctx)"
-                },
-                {
-                    "id": "Username",
-                    "string": "%[2]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 2,
                     "expr": "credentialx.Username"
                 },
                 {
                     "id": "CreatedAt",
-                    "string": "%[3]s",
+                    "string": "%[2]s",
                     "type": "string",
                     "underlyingType": "string",
-                    "argNum": 3,
+                    "argNum": 2,
                     "expr": "formatCredentialTime(ctx, credentialx.CreatedAt)"
                 }
             ]
         },
         {
-            "id": "{Stringctx} · Username: {Username} · Last used: {LastUsedAt}",
-            "message": "{Stringctx} · Username: {Username} · Last used: {LastUsedAt}",
+            "id": "Username: {Username} · Last used: {LastUsedAt}",
+            "message": "Username: {Username} · Last used: {LastUsedAt}",
             "translation": "",
             "placeholders": [
                 {
-                    "id": "Stringctx",
+                    "id": "Username",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "destinationLabel.String(ctx)"
-                },
-                {
-                    "id": "Username",
-                    "string": "%[2]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 2,
                     "expr": "credentialx.Username"
                 },
                 {
                     "id": "LastUsedAt",
-                    "string": "%[3]s",
+                    "string": "%[2]s",
                     "type": "string",
                     "underlyingType": "string",
-                    "argNum": 3,
+                    "argNum": 2,
                     "expr": "formatCredentialTime(ctx, *credentialx.LastUsedAt)"
                 }
             ]
         },
         {
-            "id": "{Stringctx} · Username: {Username} · Revoked: {RevokedAt}",
-            "message": "{Stringctx} · Username: {Username} · Revoked: {RevokedAt}",
+            "id": "Username: {Username} · Revoked: {RevokedAt}",
+            "message": "Username: {Username} · Revoked: {RevokedAt}",
             "translation": "",
             "placeholders": [
                 {
-                    "id": "Stringctx",
+                    "id": "Username",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "destinationLabel.String(ctx)"
-                },
-                {
-                    "id": "Username",
-                    "string": "%[2]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 2,
                     "expr": "credentialx.Username"
                 },
                 {
                     "id": "RevokedAt",
-                    "string": "%[3]s",
+                    "string": "%[2]s",
                     "type": "string",
                     "underlyingType": "string",
-                    "argNum": 3,
+                    "argNum": 2,
                     "expr": "formatCredentialTime(ctx, *credentialx.RevokedAt)"
                 }
             ]
@@ -2072,11 +2052,6 @@
             "message": "Please create a field first.",
             "translation": "",
             "comment": "TODO link"
-        },
-        {
-            "id": "Edit",
-            "message": "Edit",
-            "translation": ""
         },
         {
             "id": "Add list attribute (tag group)",
@@ -2612,68 +2587,6 @@
             ]
         },
         {
-            "id": "Space: {SpaceLabel} · Username: {Username} · Created: {LanguageBCP47}",
-            "message": "Space: {SpaceLabel} · Username: {Username} · Created: {LanguageBCP47}",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "SpaceLabel",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "spaceLabel"
-                },
-                {
-                    "id": "Username",
-                    "string": "%[2]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 2,
-                    "expr": "credentialx.Username"
-                },
-                {
-                    "id": "LanguageBCP47",
-                    "string": "%[3]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 3,
-                    "expr": "timex.NewDateTime(credentialx.CreatedAt).String(ctx.MainCtx().LanguageBCP47)"
-                }
-            ]
-        },
-        {
-            "id": "Space: {SpaceLabel} · Username: {Username} · Revoked: {LanguageBCP47}",
-            "message": "Space: {SpaceLabel} · Username: {Username} · Revoked: {LanguageBCP47}",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "SpaceLabel",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "spaceLabel"
-                },
-                {
-                    "id": "Username",
-                    "string": "%[2]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 2,
-                    "expr": "credentialx.Username"
-                },
-                {
-                    "id": "LanguageBCP47",
-                    "string": "%[3]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 3,
-                    "expr": "timex.NewDateTime(*credentialx.RevokedAt).String(ctx.MainCtx().LanguageBCP47)"
-                }
-            ]
-        },
-        {
             "id": "Upload",
             "message": "Upload",
             "translation": ""
@@ -2796,11 +2709,6 @@
         {
             "id": "Edit space",
             "message": "Edit space",
-            "translation": ""
-        },
-        {
-            "id": "Changes saved.",
-            "message": "Changes saved.",
             "translation": ""
         },
         {
@@ -4410,6 +4318,11 @@
             "translation": ""
         },
         {
+            "id": "A similar entity already exists.",
+            "message": "A similar entity already exists.",
+            "translation": ""
+        },
+        {
             "id": "Please select at least one document type.",
             "message": "Please select at least one document type.",
             "translation": ""
@@ -4600,7 +4513,10 @@
             "translation": ""
         },
         {
-            "id": "Upload is empty.",
+            "id": [
+                "emptyUploadMessage",
+                "Upload is empty."
+            ],
             "message": "Upload is empty.",
             "translation": ""
         },
@@ -4620,7 +4536,10 @@
             "translation": ""
         },
         {
-            "id": "Could not save file.",
+            "id": [
+                "couldNotSaveFileMessage",
+                "Could not save file."
+            ],
             "message": "Could not save file.",
             "translation": ""
         },
@@ -4675,7 +4594,10 @@
             "translation": ""
         },
         {
-            "id": "Tenant database not found.",
+            "id": [
+                "tenantDatabaseNotFoundMessage",
+                "Tenant database not found."
+            ],
             "message": "Tenant database not found.",
             "translation": ""
         },
@@ -5148,14 +5070,12 @@
             "translation": ""
         },
         {
-            "id": "Something went wrong. Please try again.",
+            "id": [
+                "unexpectedErrorMessage",
+                "Something went wrong. Please try again."
+            ],
             "message": "Something went wrong. Please try again.",
             "translation": "Something went wrong. Please try again."
-        },
-        {
-            "id": "A similar entity already exists.",
-            "message": "A similar entity already exists.",
-            "translation": ""
         },
         {
             "id": "Cannot delete an entity still in use.",

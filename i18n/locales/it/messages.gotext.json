@@ -7932,6 +7932,272 @@
 					"expr": "translatedLabel"
 				}
 			]
+		},
+		{
+			"id": "Could not claim uploaded file.",
+			"message": "Could not claim uploaded file.",
+			"translation": "Impossibile acquisire il file caricato.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Could not create credential.",
+			"message": "Could not create credential.",
+			"translation": "Impossibile creare le credenziali.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Could not read data.",
+			"message": "Could not read data.",
+			"translation": "Impossibile leggere i dati.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Could not verify staged file.",
+			"message": "Could not verify staged file.",
+			"translation": "Impossibile verificare il file temporaneo.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Could not verify stored file.",
+			"message": "Could not verify stored file.",
+			"translation": "Impossibile verificare il file archiviato.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Create",
+			"message": "Create",
+			"translation": "Crea",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Credential label is required.",
+			"message": "Credential label is required.",
+			"translation": "L’etichetta delle credenziali è obbligatoria.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Credential not found.",
+			"message": "Credential not found.",
+			"translation": "Credenziali non trovate.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Credential status values",
+			"message": "Credential status values",
+			"translation": "Valori di stato delle credenziali",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Destination",
+			"message": "Destination",
+			"translation": "Destinazione",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Destination unavailable.",
+			"message": "Destination unavailable.",
+			"translation": "Destinazione non disponibile.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "emptyUploadMessage",
+			"message": "emptyUploadMessage",
+			"translation": "Il caricamento è vuoto.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "«{Filename}» uploaded.",
+			"message": "«{Filename}» uploaded.",
+			"translation": "«{Filename}» è stato caricato.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Invalid source filter.",
+			"message": "Invalid source filter.",
+			"translation": "Filtro origine non valido.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Invalid upload size.",
+			"message": "Invalid upload size.",
+			"translation": "Dimensione del caricamento non valida.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Label",
+			"message": "Label",
+			"translation": "Etichetta",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Malformed upload body.",
+			"message": "Malformed upload body.",
+			"translation": "Corpo del caricamento non valido.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "New tenant registration",
+			"message": "New tenant registration",
+			"translation": "Nuova registrazione dell’organizzazione",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "New version uploaded for «{FileName}».",
+			"message": "New version uploaded for «{FileName}».",
+			"translation": "Nuova versione caricata per «{FileName}».",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Preview tab",
+			"message": "Preview tab",
+			"translation": "Scheda anteprima",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Push url",
+			"message": "Push url",
+			"translation": "URL push",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Revoke",
+			"message": "Revoke",
+			"translation": "Revoca",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Source | Filter",
+			"message": "Source | Filter",
+			"translation": "Origine | Filtro",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Staged file integrity mismatch.",
+			"message": "Staged file integrity mismatch.",
+			"translation": "L’integrità del file temporaneo non corrisponde.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Uploaded file is already being processed.",
+			"message": "Uploaded file is already being processed.",
+			"translation": "Il file caricato è già in fase di elaborazione.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Uploaded file processing was taken over.",
+			"message": "Uploaded file processing was taken over.",
+			"translation": "L’elaborazione del file caricato è stata presa in carico.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Upload is empty.",
+			"message": "Upload is empty.",
+			"translation": "Il caricamento è vuoto.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Upload is no longer active.",
+			"message": "Upload is no longer active.",
+			"translation": "Il caricamento non è più attivo.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Upload metadata must be sent before the file.",
+			"message": "Upload metadata must be sent before the file.",
+			"translation": "I metadati del caricamento devono essere inviati prima del file.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Upload size mismatch.",
+			"message": "Upload size mismatch.",
+			"translation": "La dimensione del caricamento non corrisponde.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Username",
+			"message": "Username",
+			"translation": "Nome utente",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Username: {Username} · Created: {CreatedAt}",
+			"message": "Username: {Username} · Created: {CreatedAt}",
+			"translation": "Nome utente: {Username} · Creato: {CreatedAt}",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Username: {Username} · Last used: {LastUsedAt}",
+			"message": "Username: {Username} · Last used: {LastUsedAt}",
+			"translation": "Nome utente: {Username} · Ultimo utilizzo: {LastUsedAt}",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "Username: {Username} · Revoked: {RevokedAt}",
+			"message": "Username: {Username} · Revoked: {RevokedAt}",
+			"translation": "Nome utente: {Username} · Revocato: {RevokedAt}",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "WebDAV",
+			"message": "WebDAV",
+			"translation": "WebDAV",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "WebDAV credential created",
+			"message": "WebDAV credential created",
+			"translation": "Credenziali WebDAV create",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "You are not allowed to revoke this credential.",
+			"message": "You are not allowed to revoke this credential.",
+			"translation": "Non sei autorizzato a revocare queste credenziali.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
+			"id": "You cannot create a credential for this Space.",
+			"message": "You cannot create a credential for this Space.",
+			"translation": "Non puoi creare credenziali per questo Space.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
 		}
 	]
 }

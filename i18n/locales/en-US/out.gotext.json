@@ -1742,13 +1742,6 @@
             "fuzzy": true
         },
         {
-            "id": "Upload metadata must be sent before the file.",
-            "message": "Upload metadata must be sent before the file.",
-            "translation": "Upload metadata must be sent before the file.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "No parent dir provided.",
             "message": "No parent dir provided.",
             "translation": "No parent dir provided.",
@@ -1787,9 +1780,9 @@
             "fuzzy": true
         },
         {
-            "id": "Cannot upload versions for directories.",
-            "message": "Cannot upload versions for directories.",
-            "translation": "Cannot upload versions for directories.",
+            "id": "Upload metadata must be sent before the file.",
+            "message": "Upload metadata must be sent before the file.",
+            "translation": "Upload metadata must be sent before the file.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1805,9 +1798,16 @@
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "prep.fileName"
+                    "expr": "fileName"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "Cannot upload versions for directories.",
+            "message": "Cannot upload versions for directories.",
+            "translation": "Cannot upload versions for directories.",
+            "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
@@ -2222,14 +2222,6 @@
             "fuzzy": true
         },
         {
-            "id": "Select",
-            "message": "Select",
-            "translation": "Select",
-            "comment": "TODO Browse, Open, Switch or activate? or Select?",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "No password set",
             "message": "No password set",
             "translation": "No password set",
@@ -2379,6 +2371,20 @@
             "id": "Dashboard",
             "message": "Dashboard",
             "translation": "Dashboard",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit",
+            "message": "Edit",
+            "translation": "Edit",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Changes saved.",
+            "message": "Changes saved.",
+            "translation": "Changes saved.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2586,99 +2592,75 @@
             "fuzzy": true
         },
         {
-            "id": "{Stringctx} · Username: {Username} · Created: {CreatedAt}",
-            "message": "{Stringctx} · Username: {Username} · Created: {CreatedAt}",
-            "translation": "{Stringctx} · Username: {Username} · Created: {CreatedAt}",
+            "id": "Username: {Username} · Created: {CreatedAt}",
+            "message": "Username: {Username} · Created: {CreatedAt}",
+            "translation": "Username: {Username} · Created: {CreatedAt}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
-                    "id": "Stringctx",
+                    "id": "Username",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "destinationLabel.String(ctx)"
-                },
-                {
-                    "id": "Username",
-                    "string": "%[2]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 2,
                     "expr": "credentialx.Username"
                 },
                 {
                     "id": "CreatedAt",
-                    "string": "%[3]s",
+                    "string": "%[2]s",
                     "type": "string",
                     "underlyingType": "string",
-                    "argNum": 3,
+                    "argNum": 2,
                     "expr": "formatCredentialTime(ctx, credentialx.CreatedAt)"
                 }
             ],
             "fuzzy": true
         },
         {
-            "id": "{Stringctx} · Username: {Username} · Last used: {LastUsedAt}",
-            "message": "{Stringctx} · Username: {Username} · Last used: {LastUsedAt}",
-            "translation": "{Stringctx} · Username: {Username} · Last used: {LastUsedAt}",
+            "id": "Username: {Username} · Last used: {LastUsedAt}",
+            "message": "Username: {Username} · Last used: {LastUsedAt}",
+            "translation": "Username: {Username} · Last used: {LastUsedAt}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
-                    "id": "Stringctx",
+                    "id": "Username",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "destinationLabel.String(ctx)"
-                },
-                {
-                    "id": "Username",
-                    "string": "%[2]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 2,
                     "expr": "credentialx.Username"
                 },
                 {
                     "id": "LastUsedAt",
-                    "string": "%[3]s",
+                    "string": "%[2]s",
                     "type": "string",
                     "underlyingType": "string",
-                    "argNum": 3,
+                    "argNum": 2,
                     "expr": "formatCredentialTime(ctx, *credentialx.LastUsedAt)"
                 }
             ],
             "fuzzy": true
         },
         {
-            "id": "{Stringctx} · Username: {Username} · Revoked: {RevokedAt}",
-            "message": "{Stringctx} · Username: {Username} · Revoked: {RevokedAt}",
-            "translation": "{Stringctx} · Username: {Username} · Revoked: {RevokedAt}",
+            "id": "Username: {Username} · Revoked: {RevokedAt}",
+            "message": "Username: {Username} · Revoked: {RevokedAt}",
+            "translation": "Username: {Username} · Revoked: {RevokedAt}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
-                    "id": "Stringctx",
+                    "id": "Username",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "destinationLabel.String(ctx)"
-                },
-                {
-                    "id": "Username",
-                    "string": "%[2]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 2,
                     "expr": "credentialx.Username"
                 },
                 {
                     "id": "RevokedAt",
-                    "string": "%[3]s",
+                    "string": "%[2]s",
                     "type": "string",
                     "underlyingType": "string",
-                    "argNum": 3,
+                    "argNum": 2,
                     "expr": "formatCredentialTime(ctx, *credentialx.RevokedAt)"
                 }
             ],
@@ -2734,13 +2716,6 @@
             "message": "Please create a field first.",
             "translation": "Please create a field first.",
             "comment": "TODO link",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Edit",
-            "message": "Edit",
-            "translation": "Edit",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3454,72 +3429,6 @@
             "fuzzy": true
         },
         {
-            "id": "Space: {SpaceLabel} · Username: {Username} · Created: {LanguageBCP47}",
-            "message": "Space: {SpaceLabel} · Username: {Username} · Created: {LanguageBCP47}",
-            "translation": "Space: {SpaceLabel} · Username: {Username} · Created: {LanguageBCP47}",
-            "translatorComment": "Copied from source.",
-            "placeholders": [
-                {
-                    "id": "SpaceLabel",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "spaceLabel"
-                },
-                {
-                    "id": "Username",
-                    "string": "%[2]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 2,
-                    "expr": "credentialx.Username"
-                },
-                {
-                    "id": "LanguageBCP47",
-                    "string": "%[3]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 3,
-                    "expr": "timex.NewDateTime(credentialx.CreatedAt).String(ctx.MainCtx().LanguageBCP47)"
-                }
-            ],
-            "fuzzy": true
-        },
-        {
-            "id": "Space: {SpaceLabel} · Username: {Username} · Revoked: {LanguageBCP47}",
-            "message": "Space: {SpaceLabel} · Username: {Username} · Revoked: {LanguageBCP47}",
-            "translation": "Space: {SpaceLabel} · Username: {Username} · Revoked: {LanguageBCP47}",
-            "translatorComment": "Copied from source.",
-            "placeholders": [
-                {
-                    "id": "SpaceLabel",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "spaceLabel"
-                },
-                {
-                    "id": "Username",
-                    "string": "%[2]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 2,
-                    "expr": "credentialx.Username"
-                },
-                {
-                    "id": "LanguageBCP47",
-                    "string": "%[3]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 3,
-                    "expr": "timex.NewDateTime(*credentialx.RevokedAt).String(ctx.MainCtx().LanguageBCP47)"
-                }
-            ],
-            "fuzzy": true
-        },
-        {
             "id": "Upload",
             "message": "Upload",
             "translation": "Upload",
@@ -3683,13 +3592,6 @@
             "id": "Edit space",
             "message": "Edit space",
             "translation": "Edit space",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Changes saved.",
-            "message": "Changes saved.",
-            "translation": "Changes saved.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5874,6 +5776,13 @@
             "fuzzy": true
         },
         {
+            "id": "A similar entity already exists.",
+            "message": "A similar entity already exists.",
+            "translation": "A similar entity already exists.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Please select at least one document type.",
             "message": "Please select at least one document type.",
             "translation": "Please select at least one document type.",
@@ -6132,7 +6041,10 @@
             "fuzzy": true
         },
         {
-            "id": "Upload is empty.",
+            "id": [
+                "emptyUploadMessage",
+                "Upload is empty."
+            ],
             "message": "Upload is empty.",
             "translation": "Upload is empty.",
             "translatorComment": "Copied from source.",
@@ -6160,7 +6072,10 @@
             "fuzzy": true
         },
         {
-            "id": "Could not save file.",
+            "id": [
+                "couldNotSaveFileMessage",
+                "Could not save file."
+            ],
             "message": "Could not save file.",
             "translation": "Could not save file.",
             "translatorComment": "Copied from source.",
@@ -6237,7 +6152,10 @@
             "fuzzy": true
         },
         {
-            "id": "Tenant database not found.",
+            "id": [
+                "tenantDatabaseNotFoundMessage",
+                "Tenant database not found."
+            ],
             "message": "Tenant database not found.",
             "translation": "Tenant database not found.",
             "translatorComment": "Copied from source.",
@@ -6888,16 +6806,12 @@
             "fuzzy": true
         },
         {
-            "id": "Something went wrong. Please try again.",
+            "id": [
+                "unexpectedErrorMessage",
+                "Something went wrong. Please try again."
+            ],
             "message": "Something went wrong. Please try again.",
             "translation": "Something went wrong. Please try again.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "A similar entity already exists.",
-            "message": "A similar entity already exists.",
-            "translation": "A similar entity already exists.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
