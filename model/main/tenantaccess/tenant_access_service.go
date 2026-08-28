@@ -56,6 +56,23 @@ func (qq *TenantAccessService) HasActiveTenantAssignment(
 		Exist(ctx)
 }
 
+func (qq *TenantAccessService) HasActiveTenantAssignmentForTenant(
+	ctx context.Context,
+	mainTx *entmain.Tx,
+	accountID int64,
+	tenantID int64,
+) (bool, error) {
+	now := qq.now()
+
+	return mainTx.TenantAccountAssignment.Query().
+		Where(qq.activeTenantAssignmentPredicates(
+			now,
+			tenantaccountassignment.AccountID(accountID),
+			tenantaccountassignment.TenantID(tenantID),
+		)...).
+		Exist(ctx)
+}
+
 func (qq *TenantAccessService) IsActiveTenantOwner(
 	ctx *ctxx.MainContext,
 	accountID int64,

@@ -147,8 +147,8 @@ Enforced in:
 - explicit assignment-expiry checks;
 - tenant User and Space queries.
 
-Do not enforce this rule through panic-based `OnlyX` constructors or
-`Tenant.HasAccount`, which does not check assignment expiry.
+Do not enforce this rule through panic-based `OnlyX` constructors. Tenant access
+checks must use the shared active-assignment predicates, including expiry.
 
 Minimum regression tests: assignment expiry, account/tenant/user deletion, and
 Space removal return controlled denial without panic.
@@ -166,6 +166,9 @@ Enforced in:
 1. main conditional active-credential touch and authorization query;
 2. tenant conditional DAV-reservation touch and User/Space query;
 3. tenant finalization commit before main transaction release.
+
+Browser, archive, and account-temporary finalization use the same main-then-tenant
+lock order with fresh assignment, User, and Space checks.
 
 No request, URL-fetch, or S3 I/O occurs inside these transactions.
 
@@ -368,7 +371,7 @@ chunked overflow, malformed body, and cancellation.
 ### Plaintext And Stored Identity Are Separate
 
 Rule: Uploads persist plaintext count/SHA-256 and transformed count/SHA-256.
-Full-object CRC32C is also retained as an optional backend verification fast path.
+Full-object CRC32C is retained as diagnostic metadata only.
 
 Why: Plaintext hash supports document identity; transformed values verify the
 actual encrypted/compressed storage object.
@@ -380,29 +383,26 @@ fixtures in encryption-enabled and disabled modes.
 
 ### Backend Verification Is Mandatory For New Uploads
 
-Rule: Before finalization, backend StatObject size must equal the local transformed
-count. A matching backend `FULL_OBJECT` CRC32C completes verification without
-another transfer. Otherwise, the stored object is read back and its size and
-SHA-256 must equal the locally calculated transformed values.
+Rule: Before finalization, the stored object is read back. Its size and SHA-256
+must equal the locally calculated transformed values.
 
 Why: MinIO UploadInfo size is client-counted and S3-compatible providers differ in
 their checksum metadata. Application-calculated SHA-256 verifies the exact stored
 bytes independently of provider checksum behavior.
 
-Enforced in: checksum-enabled PUT, StatObject size/CRC32C fast path, and direct
-SHA-256 verification fallback.
+Enforced in: direct stored-object size and SHA-256 verification after PUT.
 
 Minimum regression tests: wrong size, unreliable backend checksum metadata,
 stored SHA-256 mismatch, multipart stream, and backend failure leave no visible
 file.
 
-Historical successful rows without stored checksums remain valid. New uploads and
-strict account-temporary conversion require a stored-object SHA-256.
+Historical successful rows without stored SHA-256 are backfilled by hashing their
+temporary object before final persistence or account conversion.
 
 ### Every Transform Error Fails Upload
 
 Rule: Source read, cancellation, gzip close, age close, pipe, goroutine, S3 PUT,
-StatObject, and verification read errors all prevent finalization.
+and verification read errors all prevent finalization.
 
 Why: An accepted object can still be incomplete when transform closure failed.
 
@@ -432,6 +432,10 @@ Rule: A TemporaryFile conversion has one compare-and-swap claim token and one
 recorded destination at a time. Takeover is allowed only after one hour without
 progress.
 
+Once a tenant result commits, the claim remains pinned to that tenant until the
+main conversion marker is repaired. A retry through another tenant cannot take
+over the staged file.
+
 Why: Concurrent Space-selection requests and restarts must not convert the same
 staged object twice.
 
@@ -459,7 +463,7 @@ decryption recomputes plaintext count/SHA-256 equal to TemporaryFile metadata.
 
 Why: Re-encryption must not silently truncate or alter the staged content.
 
-Enforced in: account-object StatObject and streaming tenant persistence.
+Enforced in: direct account-object hashing and streaming tenant persistence.
 
 Minimum regression tests: account checksum, plaintext count, or plaintext hash
 mismatch prevents tenant File creation.
@@ -482,9 +486,9 @@ success; replacement and success remain intact.
 
 ### Final Destination Is Verified Before Use
 
-Rule: Reads switch from temporary to final storage only after final destination
-size and stored-object SHA-256 match the verified temporary row. Matching
-full-object CRC32C may satisfy this check without reading the object back.
+Rule: Reads switch from temporary to final storage only after the final destination
+is read back and its size and stored-object SHA-256 match the verified temporary
+row.
 
 Why: A successful copy call or pre-existing destination does not prove byte
 identity.
@@ -505,6 +509,18 @@ Enforced in: StoredFile open selection and scheduler copy/delete order.
 
 Minimum regression tests: copy failure and restart preserve readability; repeated
 delete is idempotent.
+
+### Object Deletion Includes Retained Versions
+
+Rule: Deleting an object removes its current value, retained versions, and delete
+markers. New application-created buckets do not enable Object Lock implicitly.
+
+Why: A delete marker alone neither releases storage nor removes sensitive bytes.
+
+Enforced in: shared object deletion used by upload cleanup and scheduler cleanup.
+
+Minimum regression tests: deleting from a versioned bucket removes every version
+and delete marker; missing objects remain an idempotent success.
 
 ## DAV Aliases, Names, Retries, And MOVE
 

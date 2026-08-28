@@ -18,8 +18,8 @@ type SpaceContext struct {
 	// ResponseWriter httpx.ResponseWriter
 	// Request        *httpx.Request
 	// Infra        *common.Infra // TODO is this a good idea?
+	context.Context
 	*TenantContext
-	// context.Context
 	// MainTx       *entmain.Tx
 	// Account      *entmain.Account // modelmain.Account would be better, but leads to circular dependency
 	// TTx          *enttenant.Tx

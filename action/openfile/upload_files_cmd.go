@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"time"
 
@@ -21,6 +22,8 @@ import (
 	"github.com/simpledms/simpledms/util/txx"
 	"github.com/simpledms/simpledms/util/uploadx"
 )
+
+const maxSharedUploadFiles = 16
 
 type UploadFilesCmdState struct {
 	// Cmd string `validate:"required"`
@@ -58,10 +61,27 @@ func (qq *UploadFilesCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 
 	// state := autil.StateX[UploadFilesCmdState](rw, req)
 
+	nilableUploadLimitBytes, err := qq.infra.FileSystem().NilableEffectiveUploadSizeLimitBytes(ctx)
+	if err != nil {
+		return err
+	}
+	if nilableUploadLimitBytes != nil {
+		aggregateLimitBytes := int64(math.MaxInt64)
+		if *nilableUploadLimitBytes <= math.MaxInt64/maxSharedUploadFiles {
+			aggregateLimitBytes = *nilableUploadLimitBytes * maxSharedUploadFiles
+		}
+		uploadx.LimitMultipartBody(rw, req.Request, &aggregateLimitBytes)
+	}
+
 	// share target api on mobile
 	uploadToken, err := qq.processSharedFiles(rw, req, ctx)
 	if err != nil {
 		log.Println(err)
+
+		var maxBytesErr *http.MaxBytesError
+		if errors.As(err, &maxBytesErr) {
+			return sharedMultipartReadError(err)
+		}
 
 		var httpErr *e.HTTPError
 		if errors.As(err, &httpErr) {
@@ -78,12 +98,11 @@ func (qq *UploadFilesCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	return nil
 }
 
-// FIXME limit number of files?
 func (qq *UploadFilesCmd) processSharedFiles(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) (string, error) {
 	reader, err := req.MultipartReader()
 	if err != nil {
 		log.Println(err)
-		return "", err
+		return "", sharedMultipartReadError(err)
 	}
 
 	// just small letters for safety on case insensitive file systems
@@ -103,13 +122,17 @@ func (qq *UploadFilesCmd) processSharedFiles(rw httpx.ResponseWriter, req *httpx
 		}
 		if err != nil {
 			log.Println(err)
-			return "", err
-			// continue // TODO continue or break?
+			return "", sharedMultipartReadError(err)
 		}
 
 		if part.FormName() != "file" {
 			part.Close()
 			continue
+		}
+
+		if qi >= maxSharedUploadFiles {
+			_ = part.Close()
+			return "", e.NewHTTPErrorf(http.StatusBadRequest, "Malformed upload body.")
 		}
 
 		// don't use len(files) in case a file goes wrong and there are some incomplete leftovers...
@@ -151,4 +174,12 @@ func (qq *UploadFilesCmd) processSharedFiles(rw httpx.ResponseWriter, req *httpx
 
 	// qq.cache.Set(uploadToken, files, cache.DefaultExpiration)
 	return uploadToken, nil
+}
+
+func sharedMultipartReadError(err error) error {
+	var maxBytesErr *http.MaxBytesError
+	if errors.As(err, &maxBytesErr) {
+		return e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Upload is too large.")
+	}
+	return e.NewHTTPErrorf(http.StatusBadRequest, "Malformed upload body.")
 }

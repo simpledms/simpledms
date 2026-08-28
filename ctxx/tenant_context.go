@@ -12,8 +12,8 @@ import (
 )
 
 type TenantContext struct {
+	context.Context
 	*MainContext
-	// context.Context
 	// MainTx      *entmain.Tx
 	// Account     *entmain.Account // modelmain.Account would be better, but leads to circular dependency
 	TTx        *enttenant.Tx

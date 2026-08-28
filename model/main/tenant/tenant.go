@@ -26,6 +26,7 @@ import (
 	"github.com/simpledms/simpledms/encryptor"
 	accountm "github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
+	"github.com/simpledms/simpledms/model/main/tenantaccess"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/util/e"
 )
@@ -337,10 +338,13 @@ func (qq *Tenant) Name() string {
 	return qq.Data.Name
 }
 
-func (qq *Tenant) HasAccount(ctx ctxx.Context, accountm *accountm.Account) bool {
-	return qq.Data.QueryAccountAssignment().Where(
-		tenantaccountassignment.AccountID(accountm.Data.ID),
-	).ExistX(ctx)
+func (qq *Tenant) HasAccount(ctx ctxx.Context, accountm *accountm.Account) (bool, error) {
+	return tenantaccess.NewTenantAccessService().HasActiveTenantAssignmentForTenant(
+		ctx,
+		ctx.MainCtx().MainTx,
+		accountm.Data.ID,
+		qq.Data.ID,
+	)
 }
 
 func (qq *Tenant) AddAccountAssignment(

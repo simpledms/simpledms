@@ -155,18 +155,18 @@ func TestDuplicateDetectionDoesNotLeakInaccessibleSpaces(t *testing.T) {
 
 			sourceSpace := tenantCtx.TTx.Space.Query().Where(space.Name("Duplicate Member Source Space")).OnlyX(tenantCtx)
 			privateSpace := tenantCtx.TTx.Space.Query().Where(space.Name("Duplicate Private Space")).OnlyX(tenantCtx)
+			sourceSpaceCtx := ctxx.NewSpaceContext(tenantCtx, sourceSpace)
 
 			err := tenantCtx.TTx.SpaceUserAssignment.Create().
 				SetSpaceID(sourceSpace.ID).
 				SetUserID(memberUser.ID).
 				SetRole(spacerole.User).
-				Exec(tenantCtx)
+				Exec(sourceSpaceCtx)
 			if err != nil {
 				return fmt.Errorf("assign member to source space: %w", err)
 			}
 
 			content := []byte("private duplicate content")
-			sourceSpaceCtx := ctxx.NewSpaceContext(tenantCtx, sourceSpace)
 			sourceFile := uploadSpaceFile(
 				t,
 				harness,

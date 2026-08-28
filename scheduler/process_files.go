@@ -12,6 +12,7 @@ import (
 	"github.com/minio/minio-go/v7"
 
 	"github.com/simpledms/simpledms/db/entmain"
+	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/enttenant"
@@ -176,12 +177,8 @@ func (qq *Scheduler) cleanupStaleStoredFile(
 		return false
 	}
 	if qq.s3Client != nil && objectName != "" {
-		if err := qq.s3Client.RemoveObject(ctx, qq.bucketName, objectName, minio.RemoveObjectOptions{}); err != nil {
-			minioErr := minio.ToErrorResponse(err)
-			if minioErr.Code != "NoSuchKey" {
-				log.Println(err)
-				return false
-			}
+		if !qq.deleteTemporaryObject(ctx, objectName) {
+			return false
 		}
 	}
 	return true
@@ -352,11 +349,8 @@ func (qq *Scheduler) deleteOrphanTemporaryObject(
 	if object.LastModified.IsZero() || object.LastModified.After(now.Add(-orphanTemporaryObjectGrace)) {
 		return
 	}
-	if err := qq.s3Client.RemoveObject(ctx, qq.bucketName, object.Key, minio.RemoveObjectOptions{}); err != nil {
-		minioErr := minio.ToErrorResponse(err)
-		if minioErr.Code != "NoSuchKey" {
-			log.Println(err)
-		}
+	if !qq.deleteTemporaryObject(ctx, object.Key) {
+		return
 	}
 }
 
@@ -409,7 +403,7 @@ func (qq *Scheduler) recoverStaleAccountConversions(ctx context.Context) {
 
 		tenantDB, ok := qq.tenantDBs.Load(*updated.PersistenceTenantID)
 		if !ok {
-			qq.clearAccountConversionClaim(ctx, updated.ID, cleanupToken)
+			log.Println("tenant database not found for account conversion", *updated.PersistenceTenantID)
 			continue
 		}
 		qq.recoverStaleAccountConversion(ctx, tenantDB, updated, oldToken, cleanupToken)
@@ -452,7 +446,7 @@ func (qq *Scheduler) recoverStaleAccountConversion(
 	}
 
 	if storedFilex.SourceConversionClaimToken == nil || *storedFilex.SourceConversionClaimToken != oldToken {
-		qq.clearAccountConversionClaim(ctx, tmpFile.ID, cleanupToken)
+		log.Println("account conversion token changed while recovering", tmpFile.ID)
 		return
 	}
 
@@ -502,12 +496,8 @@ func (qq *Scheduler) cleanupIncompleteAccountConversion(
 		return
 	}
 	if qq.s3Client != nil {
-		if err := qq.s3Client.RemoveObject(ctx, qq.bucketName, objectName, minio.RemoveObjectOptions{}); err != nil {
-			minioErr := minio.ToErrorResponse(err)
-			if minioErr.Code != "NoSuchKey" {
-				log.Println(err)
-				return
-			}
+		if !qq.deleteTemporaryObject(ctx, objectName) {
+			return
 		}
 	}
 
@@ -621,20 +611,7 @@ func (qq *Scheduler) deleteProcessedTempFiles(ctx context.Context) {
 				return true // continue
 			}
 
-			_, err = qq.s3Client.StatObject(ctx, qq.bucketName, tmpObjectName, minio.StatObjectOptions{})
-			if err != nil {
-				minioErr := minio.ToErrorResponse(err)
-				if minioErr.Code == "NoSuchKey" { // TODO can this be made more type safe?
-					log.Println(err, "object does not exist, may need manual deletion of orphan db entry")
-				} else {
-					log.Println(err)
-				}
-				return true // continue
-			}
-
-			err = qq.s3Client.RemoveObject(ctx, qq.bucketName, tmpObjectName, minio.RemoveObjectOptions{})
-			if err != nil {
-				log.Println(err)
+			if !qq.deleteTemporaryObject(ctx, tmpObjectName) {
 				return true // continue
 			}
 
@@ -682,20 +659,7 @@ func (qq *Scheduler) deleteTempAccountFiles(ctx context.Context) {
 			continue
 		}
 
-		_, err = qq.s3Client.StatObject(ctx, qq.bucketName, objectName, minio.StatObjectOptions{})
-		if err != nil {
-			minioErr := minio.ToErrorResponse(err)
-			if minioErr.Code == "NoSuchKey" { // TODO can this be made more type safe?
-				log.Println(err, "object does not exist, may need manual deletion of orphan db entry")
-			} else {
-				log.Println(err)
-			}
-			continue
-		}
-
-		err = qq.s3Client.RemoveObject(ctx, qq.bucketName, objectName, minio.RemoveObjectOptions{})
-		if err != nil {
-			log.Println(err)
+		if !qq.deleteTemporaryObject(ctx, objectName) {
 			continue
 		}
 
@@ -708,6 +672,27 @@ func (qq *Scheduler) deleteTempAccountFiles(ctx context.Context) {
 		}
 	}
 
+}
+
+func (qq *Scheduler) deleteTemporaryObject(ctx context.Context, objectName string) bool {
+	if qq.infra != nil && qq.infra.FileSystem() != nil {
+		if err := qq.infra.FileSystem().RemoveObjectCompletely(ctx, objectName); err != nil {
+			log.Println(err)
+			return false
+		}
+		return true
+	}
+	if qq.s3Client == nil {
+		log.Println("S3 client not found")
+		return false
+	}
+
+	err := qq.s3Client.RemoveObject(ctx, qq.bucketName, objectName, minio.RemoveObjectOptions{})
+	if err != nil && minio.ToErrorResponse(err).Code != minio.NoSuchKey {
+		log.Println(err)
+		return false
+	}
+	return true
 }
 
 func (qq *Scheduler) tempAccountFilesToDelete(
@@ -725,5 +710,5 @@ func (qq *Scheduler) tempAccountFilesToDelete(
 		).
 		Order(temporaryfile.ByCreatedAt(sql.OrderDesc())).
 		Limit(maxFilesPerRun).
-		AllX(ctx)
+		AllX(entmainschema.WithUnfinishedUploads(ctx))
 }

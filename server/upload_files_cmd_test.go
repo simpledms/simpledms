@@ -113,8 +113,91 @@ func TestUploadFilesCmdRejectsNonMultipartRequests(t *testing.T) {
 		if !ok {
 			t.Fatalf("expected HTTPError, got %T", handlerErr)
 		}
-		if httpErr.StatusCode() != http.StatusInternalServerError {
-			t.Fatalf("expected status %d, got %d", http.StatusInternalServerError, httpErr.StatusCode())
+		if httpErr.StatusCode() != http.StatusBadRequest {
+			t.Fatalf("expected status %d, got %d", http.StatusBadRequest, httpErr.StatusCode())
+		}
+	})
+}
+
+func TestUploadFilesCmdRejectsTooManyFiles(t *testing.T) {
+	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
+		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
+		email := fmt.Sprintf("shared-count-%t@example.com", disableEncryption)
+		createAccount(t, harness.mainDB, email, "shared-secret")
+		accountx := harness.mainDB.ReadWriteConn.Account.Query().
+			Where(account.EmailEQ(entx.NewCIText(email))).
+			OnlyX(context.Background())
+
+		var handlerErr error
+		err := withMainContext(
+			t,
+			harness,
+			accountx,
+			func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+				files := make(map[string]string, 17)
+				for i := range 17 {
+					files[fmt.Sprintf("file-%d.txt", i)] = "x"
+				}
+				req := newSharedUploadRequest(t, files)
+				handlerErr = harness.actions.OpenFile.UploadFilesCmd.Handler(
+					httpx.NewResponseWriter(httptest.NewRecorder()),
+					httpx.NewRequest(req),
+					mainCtx,
+				)
+				return nil
+			},
+		)
+		if err != nil {
+			t.Fatalf("setup failed: %v", err)
+		}
+
+		httpErr, ok := handlerErr.(*e.HTTPError)
+		if !ok {
+			t.Fatalf("expected HTTPError, got %T", handlerErr)
+		}
+		if httpErr.StatusCode() != http.StatusBadRequest {
+			t.Fatalf("expected status %d, got %d", http.StatusBadRequest, httpErr.StatusCode())
+		}
+	})
+}
+
+func TestUploadFilesCmdRejectsAggregateBodyOverflow(t *testing.T) {
+	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
+		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
+		email := fmt.Sprintf("shared-aggregate-%t@example.com", disableEncryption)
+		createAccount(t, harness.mainDB, email, "shared-secret")
+		harness.mainDB.ReadWriteConn.SystemConfig.Update().
+			SetMaxUploadSizeMib(1).
+			ExecX(context.Background())
+		accountx := harness.mainDB.ReadWriteConn.Account.Query().
+			Where(account.EmailEQ(entx.NewCIText(email))).
+			OnlyX(context.Background())
+
+		var handlerErr error
+		err := withMainContext(
+			t,
+			harness,
+			accountx,
+			func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
+				req := newSharedUploadRequestWithField(t, 18*1024*1024)
+				handlerErr = harness.actions.OpenFile.UploadFilesCmd.Handler(
+					httpx.NewResponseWriter(httptest.NewRecorder()),
+					httpx.NewRequest(req),
+					mainCtx,
+				)
+				return nil
+			},
+		)
+		if err != nil {
+			t.Fatalf("setup failed: %v", err)
+		}
+
+		httpErr, ok := handlerErr.(*e.HTTPError)
+		if !ok {
+			t.Fatalf("expected HTTPError, got %T", handlerErr)
+		}
+		if httpErr.StatusCode() != http.StatusRequestEntityTooLarge {
+			t.Fatalf("expected status %d, got %d", http.StatusRequestEntityTooLarge, httpErr.StatusCode())
 		}
 	})
 }
@@ -135,6 +218,27 @@ func newSharedUploadRequest(t *testing.T, files map[string]string) *http.Request
 		}
 	}
 
+	if err := writer.Close(); err != nil {
+		t.Fatalf("close multipart writer: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/-/open-file/upload-files-cmd", &body)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	return req
+}
+
+func newSharedUploadRequestWithField(t *testing.T, size int) *http.Request {
+	t.Helper()
+
+	var body bytes.Buffer
+	writer := multipart.NewWriter(&body)
+	fieldWriter, err := writer.CreateFormField("ignored")
+	if err != nil {
+		t.Fatalf("create form field: %v", err)
+	}
+	if _, err := fieldWriter.Write(bytes.Repeat([]byte("x"), size)); err != nil {
+		t.Fatalf("write form field: %v", err)
+	}
 	if err := writer.Close(); err != nil {
 		t.Fatalf("close multipart writer: %v", err)
 	}

@@ -151,9 +151,12 @@ func uploadPreparedFile(
 		return err
 	}
 
-	_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, infra.FileSystem().FinalizePreparedUploadWithoutMime(writeCtx, prepared, uploadResult)
-	})
+	_, err = txx.WithFreshAuthorizedTenantWriteSpaceTx(
+		ctx.SpaceCtx(),
+		func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+			return nil, infra.FileSystem().FinalizePreparedUploadWithoutMime(writeCtx, prepared, uploadResult)
+		},
+	)
 	if err != nil {
 		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), infra.FileSystem(), prepared, err, true)
 		return err

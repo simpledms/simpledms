@@ -960,8 +960,7 @@ func (qq *Server) initNilableMinioClient(config *appmodel.S3Config) *minio.Clien
 				config.S3SecretAccessKey,
 				"",
 			),
-			Secure:          config.S3UseSSL,
-			TrailingHeaders: true,
+			Secure: config.S3UseSSL,
 			// TODO add region?
 		})
 	if err != nil {
@@ -980,13 +979,7 @@ func (qq *Server) initNilableMinioClient(config *appmodel.S3Config) *minio.Clien
 		return client
 	}
 
-	err = client.MakeBucket(context.Background(), config.S3BucketName, minio.MakeBucketOptions{
-		// enables retention settings for bucket and legal hold;
-		// if understood correctly, does nothing on itself
-		// https://min.io/docs/minio/linux/administration/object-management/object-retention.html#minio-object-locking-retention-modes
-		ObjectLocking: true,
-		// TODO retention?
-	})
+	err = client.MakeBucket(context.Background(), config.S3BucketName, minio.MakeBucketOptions{})
 	if err != nil {
 		log.Fatalln(err)
 	}

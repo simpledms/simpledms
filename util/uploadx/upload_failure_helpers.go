@@ -7,8 +7,6 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
-	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	tenantprivacy "github.com/simpledms/simpledms/db/enttenant/privacy"
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
@@ -25,30 +23,6 @@ func MarkStoredFileUploadFailed(ctx *ctxx.SpaceContext, storedFileID int64) {
 			UpdateOneID(storedFileID).
 			SetUploadFailedAt(time.Now()).
 			Exec(ctxWithIncomplete)
-		return nil, err
-	})
-	if err != nil {
-		log.Println(err)
-	}
-}
-
-func DeleteFailedUploadFile(ctx *ctxx.SpaceContext, fileID int64) {
-	if fileID == 0 {
-		return
-	}
-	_, err := txx.WithTenantWriteSpaceTx(ctx, func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		ctxWithDeleted := enttenantschema.SkipSoftDelete(writeCtx)
-		_, err := writeCtx.TTx.FileVersion.
-			Delete().
-			Where(fileversion.FileID(fileID)).
-			Exec(ctxWithDeleted)
-		if err != nil {
-			return nil, err
-		}
-		_, err = writeCtx.TTx.File.
-			Delete().
-			Where(file.ID(fileID)).
-			Exec(ctxWithDeleted)
 		return nil, err
 	})
 	if err != nil {
@@ -89,9 +63,6 @@ func HandleStoredFileUploadFailure(
 		}
 	}
 	MarkStoredFileUploadFailed(ctx, prepared.StoredFileID)
-	if prepared.IsNewFile {
-		DeleteFailedUploadFile(ctx, prepared.FileID)
-	}
 }
 
 func HandleTemporaryFileUploadFailure(

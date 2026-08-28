@@ -260,9 +260,8 @@ func newTestS3Config(t testing.TB) *testS3Config {
 	disableEncryption := envOrDefaultBool("SIMPLEDMS_DISABLE_FILE_ENCRYPTION", false)
 
 	client, err := minio.New(endpoint, &minio.Options{
-		Creds:           credentials.NewStaticV4(accessKey, secretKey, ""),
-		Secure:          useSSL,
-		TrailingHeaders: true,
+		Creds:  credentials.NewStaticV4(accessKey, secretKey, ""),
+		Secure: useSSL,
 	})
 	if err != nil {
 		t.Fatalf("init s3 client: %v", err)

@@ -26,6 +26,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
@@ -858,7 +859,19 @@ func (qq *Router) context(
 		return mainCtx, nil, false, nil
 	}
 
-	tenantx := mainTx.Tenant.Query().Where(tenant.PublicID(entx.NewCIText(tenantID))).OnlyX(mainCtx)
+	tenantx, err := mainTx.Tenant.Query().
+		Where(tenant.PublicID(entx.NewCIText(tenantID))).
+		Only(mainCtx)
+	if err != nil {
+		log.Println(err)
+		if entmain.IsNotFound(err) {
+			return mainCtx, nil, false, e.NewHTTPErrorf(
+				http.StatusForbidden,
+				"You are not allowed to access this tenant.",
+			)
+		}
+		return mainCtx, nil, false, err
+	}
 	tenantClient, ok := qq.tenantDBs.Load(tenantx.ID)
 	if !ok {
 		// IMPORTANT don't initialize here because this could trigger concurrency issues...
@@ -880,25 +893,63 @@ func (qq *Router) context(
 		return mainCtx, nil, false, err
 	}
 
-	// verify that account belangs to tenant
+	// verify that account belongs to tenant
 	tenantm := tenant2.NewTenant(tenantx)
 	// if !accountm.BelongsToTenant(mainCtx, tenantm) {
-	if !tenantm.HasAccount(mainCtx, accountm) {
+	hasAccount, err := tenantm.HasAccount(mainCtx, accountm)
+	if err != nil {
+		log.Println(err)
+		return mainCtx, tenantTx, false, err
+	}
+	if !hasAccount {
 		// TODO does this render?
 		// rwx.AddRenderables(wx.NewSnackbarf("You are not allowed to access this tenant."))
 		// rwx.WriteHeader(http.StatusForbidden)
-		return mainCtx, tenantTx, false, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+		return mainCtx, tenantTx, false, e.NewHTTPErrorf(
+			http.StatusForbidden,
+			"You are not allowed to access this tenant.",
+		)
 	}
 
-	tenantCtx := ctxx.NewTenantContext(mainCtx, tenantTx, tenantx, isReadOnly)
+	userx, err := tenantTx.User.Query().Where(
+		user.AccountID(accountm.Data.ID),
+		user.DeletedAtIsNil(),
+	).Only(mainCtx)
+	if err != nil {
+		log.Println(err)
+		if enttenant.IsNotFound(err) {
+			return mainCtx, tenantTx, false, e.NewHTTPErrorf(
+				http.StatusForbidden,
+				"You are not allowed to access this tenant.",
+			)
+		}
+		return mainCtx, tenantTx, false, err
+	}
+	tenantCtx := ctxx.NewTenantContextWithUser(
+		mainCtx,
+		tenantTx,
+		tenantx,
+		userx,
+		isReadOnly,
+	)
 	if spaceID == "" {
 		return tenantCtx, tenantTx, false, nil
 	}
 
-	spacex := tenantTx.Space.
+	spacex, err := tenantTx.Space.
 		Query().
 		Where(space.PublicID(entx.NewCIText(spaceID))).
-		OnlyX(tenantCtx)
+		Only(tenantCtx)
+	if err != nil {
+		log.Println(err)
+		if enttenant.IsNotFound(err) {
+			return tenantCtx, tenantTx, false, e.NewHTTPErrorf(
+				http.StatusForbidden,
+				"You are not allowed to access this space.",
+			)
+		}
+		return tenantCtx, tenantTx, false, err
+	}
 
 	// impl in enttentant.Space.Policy(); query above fails if not permission
 	/*

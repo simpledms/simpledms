@@ -3,13 +3,19 @@ package scheduler
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	"github.com/simpledms/simpledms/db/entmain"
 	entmaintest "github.com/simpledms/simpledms/db/entmain/enttest"
+	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
 	"github.com/simpledms/simpledms/db/enttenant"
 	enttenanttest "github.com/simpledms/simpledms/db/enttenant/enttest"
 	privacy "github.com/simpledms/simpledms/db/enttenant/privacy"
@@ -102,6 +108,57 @@ func TestDeleteProcessedTempFilesDeletesOnlyAfterGracePeriod(t *testing.T) {
 	alreadyDeletedFile = tenantDB.ReadWriteConn.StoredFile.GetX(ctx, alreadyDeletedFile.ID)
 	if alreadyDeletedFile.DeletedTemporaryFileAt == nil || !alreadyDeletedFile.DeletedTemporaryFileAt.Equal(alreadyDeletedAt) {
 		t.Fatal("expected already deleted file timestamp to stay unchanged")
+	}
+}
+
+func TestDeleteProcessedTempFilesMarksMissingObjectsAndAdvancesQueue(t *testing.T) {
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	tenantDB := newTestTenantDB(t)
+	tenantDBs := tenantdbs.NewTenantDBs()
+	tenantDBs.Store(1, tenantDB)
+	now := time.Now()
+	prefix := pathx.S3TemporaryStoragePrefix("tenant-public")
+
+	for i := range defaultSchedulerBatchSize + 1 {
+		filex := createStoredFileWithTempObject(
+			t,
+			ctx,
+			tenantDB,
+			prefix,
+			fmt.Sprintf("missing-%d.pdf", i),
+		)
+		filex.Update().
+			SetUploadSucceededAt(now).
+			SetCopiedToFinalDestinationAt(now.Add(-6 * time.Minute)).
+			ExecX(ctx)
+	}
+
+	scheduler := &Scheduler{
+		tenantDBs:  tenantDBs,
+		s3Client:   newMissingObjectS3Client(t),
+		bucketName: "bucket",
+	}
+	scheduler.deleteProcessedTempFiles(ctx)
+
+	remaining := scheduler.processedTempFilesToDelete(
+		ctx,
+		tenantDB,
+		now.Add(-5*time.Minute),
+		defaultSchedulerBatchSize+1,
+	)
+	if len(remaining) != 1 {
+		t.Fatalf("remaining files after first batch = %d, want 1", len(remaining))
+	}
+
+	scheduler.deleteProcessedTempFiles(ctx)
+	remaining = scheduler.processedTempFilesToDelete(
+		ctx,
+		tenantDB,
+		now.Add(-5*time.Minute),
+		defaultSchedulerBatchSize+1,
+	)
+	if len(remaining) != 0 {
+		t.Fatalf("remaining files after second batch = %d, want 0", len(remaining))
 	}
 }
 
@@ -374,6 +431,45 @@ func TestDeleteTempAccountFilesDeletesOnlyExpiredUnconvertedFiles(t *testing.T) 
 	}
 }
 
+func TestDeleteTempAccountFilesMarksMissingFailedUploadDeleted(t *testing.T) {
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	mainDB := newTestMainDB(t)
+	owner := createTestAccount(t, mainDB)
+	now := time.Now()
+	failedFile := mainDB.ReadWriteConn.TemporaryFile.Create().
+		SetOwnerID(owner.ID).
+		SetFilename("failed.pdf").
+		SetSize(0).
+		SetSizeInStorage(0).
+		SetStorageType(storagetype.S3).
+		SetStoragePath(pathx.S3TemporaryAccountStoragePrefix(owner.PublicID.String())).
+		SetStorageFilename("failed.pdf").
+		SetUploadToken("failed-token").
+		SetUploadStartedAt(now.Add(-time.Hour)).
+		SetUploadFailedAt(now.Add(-time.Hour)).
+		SetExpiresAt(now.Add(-time.Minute)).
+		SaveX(ctx)
+
+	scheduler := &Scheduler{
+		mainDB:     mainDB,
+		s3Client:   newMissingObjectS3Client(t),
+		bucketName: "bucket",
+	}
+	files := scheduler.tempAccountFilesToDelete(ctx, now, defaultSchedulerBatchSize)
+	if len(files) != 1 || files[0].ID != failedFile.ID {
+		t.Fatalf("expired failed upload was not selected: %#v", files)
+	}
+
+	scheduler.deleteTempAccountFiles(ctx)
+	failedFile = mainDB.ReadOnlyConn.TemporaryFile.GetX(
+		entmainschema.SkipSoftDelete(entmainschema.WithUnfinishedUploads(ctx)),
+		failedFile.ID,
+	)
+	if failedFile.DeletedAt.IsZero() {
+		t.Fatal("missing failed upload object was not marked deleted")
+	}
+}
+
 func TestStaleAccountConversionsOnlySelectsNoProgressForOneHour(t *testing.T) {
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
 	mainDB := newTestMainDB(t)
@@ -553,6 +649,35 @@ func TestRecoverStaleAccountConversionDoesNotCleanReplacementToken(t *testing.T)
 
 	if _, err := tenantDB.ReadOnlyConn.StoredFile.Get(enttenantschema.WithUnfinishedUploads(ctx), storedFilex.ID); err != nil {
 		t.Fatalf("replacement tenant row was cleaned by stale token: %v", err)
+	}
+	tmpFile = mainDB.ReadOnlyConn.TemporaryFile.GetX(ctx, tmpFile.ID)
+	if tmpFile.PersistenceClaimToken == nil || tmpFile.PersistenceTenantID == nil {
+		t.Fatalf("replacement tenant row lost its pinned main claim: %#v", tmpFile)
+	}
+}
+
+func TestRecoverStaleAccountConversionKeepsClaimWhenTenantDBUnavailable(t *testing.T) {
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	mainDB := newTestMainDB(t)
+	owner := createTestAccount(t, mainDB)
+	tmpFile := createClaimedTemporaryFile(
+		t,
+		ctx,
+		mainDB,
+		owner.ID,
+		"old-token",
+		time.Now().Add(-2*time.Hour),
+	)
+
+	(&Scheduler{mainDB: mainDB, tenantDBs: tenantdbs.NewTenantDBs()}).
+		recoverStaleAccountConversions(ctx)
+
+	tmpFile = mainDB.ReadOnlyConn.TemporaryFile.GetX(ctx, tmpFile.ID)
+	if tmpFile.PersistenceClaimToken == nil || tmpFile.PersistenceTenantID == nil {
+		t.Fatalf("missing tenant database released pinned conversion: %#v", tmpFile)
+	}
+	if *tmpFile.PersistenceTenantID != 42 || tmpFile.ExpiresAt != nil {
+		t.Fatalf("pinned conversion target or expiry changed: %#v", tmpFile)
 	}
 }
 
@@ -824,6 +949,24 @@ func newTestTenantDB(t *testing.T) *sqlx.TenantDB {
 			ReadWriteConn: client,
 		},
 	}
+}
+
+func newMissingObjectS3Client(t *testing.T) *minio.Client {
+	t.Helper()
+
+	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, _ *http.Request) {
+		rw.WriteHeader(http.StatusNotFound)
+	}))
+	t.Cleanup(server.Close)
+
+	client, err := minio.New(strings.TrimPrefix(server.URL, "http://"), &minio.Options{
+		Creds:  credentials.NewStaticV4("access-key", "secret-key", ""),
+		Region: "us-east-1",
+	})
+	if err != nil {
+		t.Fatalf("create S3 client: %v", err)
+	}
+	return client
 }
 
 func createTestAccount(t *testing.T, mainDB *sqlx.MainDB) *entmain.Account {

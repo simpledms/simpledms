@@ -15,6 +15,7 @@ import (
 )
 
 type MainContext struct {
+	context.Context
 	*VisitorContext
 	Account *entmain.Account // modelmain.Account would be better, but leads to circular dependency
 	// should never be exposed directly;

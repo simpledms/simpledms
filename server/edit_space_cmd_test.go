@@ -97,7 +97,7 @@ func TestEditSpaceCmdUpdatesSpaceAndRootDir(t *testing.T) {
 			file.SpaceID(spacex.ID),
 			file.IsDirectory(true),
 			file.IsRootDir(true),
-		).OnlyX(tenantCtx)
+		).OnlyX(ctxx.NewSpaceContext(tenantCtx, updatedSpace))
 		if rootDir.Name != updatedName {
 			return fmt.Errorf("expected root dir name %q, got %q", updatedName, rootDir.Name)
 		}

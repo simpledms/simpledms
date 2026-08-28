@@ -258,7 +258,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		}
 
 	} else {
-		_, err = txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+		_, err = txx.WithFreshAuthorizedTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
 			totalUploadedBytes, err := qq.unzipPreparedEntriesTotalUploadedSize(preparedEntries)
 			if err != nil {
 				return nil, err

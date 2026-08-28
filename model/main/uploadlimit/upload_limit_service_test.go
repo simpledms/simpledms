@@ -207,6 +207,7 @@ func newUploadLimitServiceTestEnv(t *testing.T, role mainrole.MainRole) *uploadL
 	}
 
 	mainCtx := &ctxx.MainContext{
+		Context: context.Background(),
 		VisitorContext: &ctxx.VisitorContext{
 			Context: context.Background(),
 			MainTx:  mainTx,

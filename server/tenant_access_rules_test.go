@@ -10,6 +10,8 @@ import (
 	"testing"
 	"time"
 
+	"entgo.io/ent/privacy"
+
 	"github.com/simpledms/simpledms/db/entmain/account"
 	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
 	"github.com/simpledms/simpledms/db/entmain/session"
@@ -58,6 +60,98 @@ func TestSignInCmdRejectsUserWithoutActiveTenantAssignment(t *testing.T) {
 		CountX(context.Background())
 	if sessionCount != 0 {
 		t.Fatalf("expected 0 sessions, got %d", sessionCount)
+	}
+}
+
+func TestRouterRejectsExpiredTargetTenantAssignmentWhenAnotherAssignmentIsActive(t *testing.T) {
+	harness := newActionTestHarness(t)
+
+	accountx, _ := signUpAccount(t, harness, "active-other-tenant@example.com")
+	_, targetTenant := signUpAccount(t, harness, "expired-target-tenant@example.com")
+	harness.mainDB.ReadWriteConn.TenantAccountAssignment.Create().
+		SetTenantID(targetTenant.ID).
+		SetAccountID(accountx.ID).
+		SetRole(tenantrole.User).
+		SetIsDefault(false).
+		SetExpiresAt(time.Now().Add(-time.Minute)).
+		SaveX(context.Background())
+	initTenantDB(t, harness, targetTenant)
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/-/manage-org-users/delete-user-cmd",
+		nil,
+	)
+	req.Header.Set("HX-Request", "true")
+	req.Header.Set("HX-Current-URL", route.ManageUsersOfTenant(targetTenant.PublicID.String()))
+	req.AddCookie(&http.Cookie{
+		Name:  cookiex.SessionCookieName(),
+		Value: createSessionForAccountForRulesTest(t, harness, accountx.ID),
+		Path:  "/",
+	})
+
+	rr := httptest.NewRecorder()
+	harness.router.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusForbidden {
+		t.Fatalf("expected status %d, got %d", http.StatusForbidden, rr.Code)
+	}
+}
+
+func TestRouterRejectsDeletedTenantUserWithoutPanic(t *testing.T) {
+	harness := newActionTestHarness(t)
+	accountx, tenantx := signUpAccount(t, harness, "deleted-tenant-user@example.com")
+	tenantDB := initTenantDB(t, harness, tenantx)
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	tenantUser := tenantDB.ReadWriteConn.User.Query().
+		Where(user.AccountID(accountx.ID)).
+		OnlyX(ctx)
+	tenantUser.Update().SetDeletedAt(time.Now()).SaveX(ctx)
+
+	req := httptest.NewRequest(http.MethodPost, "/-/manage-org-users/delete-user-cmd", nil)
+	req.Header.Set("HX-Request", "true")
+	req.Header.Set("HX-Current-URL", route.ManageUsersOfTenant(tenantx.PublicID.String()))
+	req.AddCookie(&http.Cookie{
+		Name:  cookiex.SessionCookieName(),
+		Value: createSessionForAccountForRulesTest(t, harness, accountx.ID),
+		Path:  "/",
+	})
+	rr := httptest.NewRecorder()
+	harness.router.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusForbidden {
+		t.Fatalf("expected status %d, got %d", http.StatusForbidden, rr.Code)
+	}
+}
+
+func TestRouterRejectsDeletedSpaceWithoutPanic(t *testing.T) {
+	harness := newActionTestHarness(t)
+	accountx, tenantx := signUpAccount(t, harness, "deleted-space@example.com")
+	tenantDB := initTenantDB(t, harness, tenantx)
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	spacex := tenantDB.ReadWriteConn.Space.Create().SetName("Deleted Space").SaveX(ctx)
+	spacex.Update().SetDeletedAt(time.Now()).SaveX(ctx)
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/-/manage-org-users/delete-user-cmd",
+		nil,
+	)
+	req.Header.Set("HX-Request", "true")
+	req.Header.Set(
+		"HX-Current-URL",
+		route.ManageUsersOfSpace(tenantx.PublicID.String(), spacex.PublicID.String()),
+	)
+	req.AddCookie(&http.Cookie{
+		Name:  cookiex.SessionCookieName(),
+		Value: createSessionForAccountForRulesTest(t, harness, accountx.ID),
+		Path:  "/",
+	})
+	rr := httptest.NewRecorder()
+	harness.router.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusForbidden {
+		t.Fatalf("expected status %d, got %d", http.StatusForbidden, rr.Code)
 	}
 }
 

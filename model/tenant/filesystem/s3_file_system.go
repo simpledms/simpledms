@@ -33,11 +33,13 @@ import (
 	tenantprivacy "github.com/simpledms/simpledms/db/enttenant/privacy"
 	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
+	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/encryptor"
 	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
+	"github.com/simpledms/simpledms/model/main/tenantaccess"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/util"
@@ -45,6 +47,7 @@ import (
 	"github.com/simpledms/simpledms/util/filenamex"
 	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/recoverx"
+	"github.com/simpledms/simpledms/util/txx"
 )
 
 type S3FileSystem struct {
@@ -320,7 +323,11 @@ func (qq *S3FileSystem) PrepareFileVersionUpload(
 		return nil, err
 	}
 
-	filex := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
+	filex, err := ctx.TenantCtx().TTx.File.Get(ctx, fileID)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 	if filex.IsDirectory {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
 	}
@@ -369,7 +376,7 @@ func (qq *S3FileSystem) createStoredFileForPreparedUpload(
 ) (*PreparedUpload, error) {
 	finalStoragePrefix := pathx.S3StoragePrefix(ctx.TenantCtx().TenantID)
 	now := time.Now()
-	storedFilex := ctx.TenantCtx().TTx.StoredFile.Create().
+	storedFilex, err := ctx.TenantCtx().TTx.StoredFile.Create().
 		SetFilename(meta.originalFilename).
 		SetSizeInStorage(0).
 		SetStorageType(storagetype.S3).
@@ -382,7 +389,11 @@ func (qq *S3FileSystem) createStoredFileForPreparedUpload(
 		SetTemporaryStorageFilename(meta.storageFilename).
 		SetUploadStartedAt(now).
 		SetUploadLastProgressAt(now).
-		SaveX(ctx)
+		Save(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
 	prepared := &PreparedUpload{
 		StoredFileID:              storedFilex.ID,
@@ -586,7 +597,7 @@ func (qq *S3FileSystem) finalizePreparedUploadAs(
 		}
 		return err
 	}
-	storedFilex = storedFilex.Update().
+	storedFilex, err = storedFilex.Update().
 		SetSize(result.FileSize).
 		SetSizeInStorage(result.FileInfo.Size).
 		SetSha256(result.FileInfo.ChecksumSHA256).
@@ -594,11 +605,14 @@ func (qq *S3FileSystem) finalizePreparedUploadAs(
 		SetStorageCrc32c(result.StorageCRC32C).
 		SetNillableMimeType(nilableNonEmptyString(result.MimeType)).
 		SetUploadSucceededAt(time.Now()).
-		SaveX(ctxWithIncomplete)
+		Save(ctxWithIncomplete)
+	if err != nil {
+		return err
+	}
 
 	var filex *enttenant.File
 	if prepared.FileID == 0 {
-		filex = ctx.TenantCtx().TTx.File.Create().
+		filex, err = ctx.TenantCtx().TTx.File.Create().
 			SetName(filename).
 			SetSource(prepared.Source).
 			SetIsDirectory(false).
@@ -606,15 +620,24 @@ func (qq *S3FileSystem) finalizePreparedUploadAs(
 			SetParentID(prepared.ParentDirFileID).
 			SetSpaceID(ctx.SpaceCtx().Space.ID).
 			SetIsInInbox(prepared.IsInInbox).
-			SaveX(ctx)
+			Save(ctx)
+		if err != nil {
+			return err
+		}
 		prepared.FileID = filex.ID
 	} else {
-		filex = ctx.TenantCtx().TTx.File.GetX(ctx, prepared.FileID)
+		filex, err = ctx.TenantCtx().TTx.File.Get(ctx, prepared.FileID)
+		if err != nil {
+			return err
+		}
 		if filex.IsDirectory {
 			return e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
 		}
 		if filex.Name != filename {
-			filex = filex.Update().SetName(filename).SaveX(ctx)
+			filex, err = filex.Update().SetName(filename).Save(ctx)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	prepared.FilePublicID = filex.PublicID.String()
@@ -659,17 +682,7 @@ func (qq *S3FileSystem) RemoveTemporaryObject(ctx context.Context, storagePath s
 		return err
 	}
 
-	err = qq.client.RemoveObject(ctx, qq.bucketName, objectName, minio.RemoveObjectOptions{})
-	if err != nil {
-		minioErr := minio.ToErrorResponse(err)
-		if minioErr.Code == "NoSuchKey" {
-			return nil
-		}
-		log.Println(err)
-		return err
-	}
-
-	return nil
+	return qq.RemoveObjectCompletely(ctx, objectName)
 }
 
 func (qq *S3FileSystem) SaveDerivedPDF(
@@ -723,15 +736,56 @@ func (qq *S3FileSystem) RemoveTenantStoredFileObjects(
 	}
 
 	for _, objectName := range objectNames {
-		err = qq.client.RemoveObject(ctx, qq.bucketName, objectName, minio.RemoveObjectOptions{})
-		if err == nil {
-			continue
+		if err := qq.RemoveObjectCompletely(ctx, objectName); err != nil {
+			return err
 		}
-		minioErr := minio.ToErrorResponse(err)
-		if minioErr.Code == "NoSuchKey" {
-			continue
-		}
+	}
+	return nil
+}
+
+// RemoveObjectCompletely removes the current object and retained versions when versioning is enabled.
+func (qq *S3FileSystem) RemoveObjectCompletely(ctx context.Context, objectName string) error {
+	err := qq.client.RemoveObject(ctx, qq.bucketName, objectName, minio.RemoveObjectOptions{})
+	if err != nil && minio.ToErrorResponse(err).Code != "NoSuchKey" {
 		return err
+	}
+
+	versions := make([]minio.ObjectInfo, 0, 2)
+	for object := range qq.client.ListObjects(ctx, qq.bucketName, minio.ListObjectsOptions{
+		Prefix:       objectName,
+		Recursive:    true,
+		WithVersions: true,
+	}) {
+		if object.Err != nil {
+			code := minio.ToErrorResponse(object.Err).Code
+			if code == "NotImplemented" || code == "XNotImplemented" || code == "MethodNotAllowed" {
+				return nil
+			}
+			return object.Err
+		}
+		if object.Key == objectName {
+			versions = append(versions, object)
+		}
+	}
+	for _, version := range versions {
+		if version.IsDeleteMarker {
+			continue
+		}
+		if err := qq.client.RemoveObject(ctx, qq.bucketName, objectName, minio.RemoveObjectOptions{
+			VersionID: version.VersionID,
+		}); err != nil && minio.ToErrorResponse(err).Code != "NoSuchKey" {
+			return err
+		}
+	}
+	for _, version := range versions {
+		if !version.IsDeleteMarker {
+			continue
+		}
+		if err := qq.client.RemoveObject(ctx, qq.bucketName, objectName, minio.RemoveObjectOptions{
+			VersionID: version.VersionID,
+		}); err != nil && minio.ToErrorResponse(err).Code != "NoSuchKey" {
+			return err
+		}
 	}
 	return nil
 }
@@ -786,49 +840,39 @@ func (qq *S3FileSystem) verifyObject(
 	objectName string,
 	expectedSize int64,
 	expectedSHA256 string,
-	expectedCRC32C string,
 ) error {
-	info, err := qq.client.StatObject(ctx, qq.bucketName, objectName, minio.StatObjectOptions{
-		Checksum: true,
-	})
-	if err != nil {
-		return err
-	}
-	if info.Size != expectedSize {
-		return fmt.Errorf("stored object size mismatch: got %d, want %d", info.Size, expectedSize)
-	}
-	if expectedSHA256 == "" && expectedCRC32C == "" {
-		return nil
-	}
-	if expectedCRC32C != "" && info.ChecksumMode == minio.ChecksumFullObjectMode.String() &&
-		info.ChecksumCRC32C == expectedCRC32C {
-		return nil
-	}
 	if expectedSHA256 == "" {
 		return errors.New("stored object sha256 is missing")
 	}
 
-	// S3-compatible backends differ in their checksum metadata, so verify the stored bytes.
-	object, err := qq.client.GetObject(ctx, qq.bucketName, objectName, minio.GetObjectOptions{})
+	size, actualSHA256, err := qq.objectSHA256(ctx, objectName)
 	if err != nil {
 		return err
+	}
+	if size != expectedSize {
+		return fmt.Errorf("stored object size mismatch: got %d, want %d", size, expectedSize)
+	}
+	if actualSHA256 != expectedSHA256 {
+		return fmt.Errorf("stored object sha256 mismatch")
+	}
+	return nil
+}
+
+func (qq *S3FileSystem) objectSHA256(ctx context.Context, objectName string) (int64, string, error) {
+	object, err := qq.client.GetObject(ctx, qq.bucketName, objectName, minio.GetObjectOptions{})
+	if err != nil {
+		return 0, "", err
 	}
 	hasher := sha256.New()
 	size, readErr := io.Copy(hasher, object)
 	closeErr := object.Close()
 	if readErr != nil {
-		return readErr
+		return 0, "", readErr
 	}
 	if closeErr != nil {
-		return closeErr
+		return 0, "", closeErr
 	}
-	if size != expectedSize {
-		return fmt.Errorf("stored object size mismatch: got %d, want %d", size, expectedSize)
-	}
-	if hex.EncodeToString(hasher.Sum(nil)) != expectedSHA256 {
-		return fmt.Errorf("stored object sha256 mismatch")
-	}
-	return nil
+	return size, hex.EncodeToString(hasher.Sum(nil)), nil
 }
 
 func nilableString(value *string) string {
@@ -860,7 +904,6 @@ func (qq *S3FileSystem) copyVerifiedTemporaryTenantObject(
 	destObjectName string,
 ) error {
 	expectedSHA256 := filex.Sha256
-	expectedCRC32C := nilableString(filex.StorageCrc32c)
 	_, err := qq.client.CopyObject(ctx, minio.CopyDestOptions{
 		Bucket: qq.bucketName,
 		Object: destObjectName,
@@ -869,29 +912,28 @@ func (qq *S3FileSystem) copyVerifiedTemporaryTenantObject(
 		Object: tmpObjectName,
 	})
 	if err != nil {
-		return err
+		return qq.putVerifiedTransformedObject(
+			ctx,
+			tmpObjectName,
+			destObjectName,
+			filex.SizeInStorage,
+			expectedSHA256,
+		)
 	}
 
-	verificationErr := qq.verifyObject(
-		ctx,
-		destObjectName,
-		filex.SizeInStorage,
-		expectedSHA256,
-		expectedCRC32C,
-	)
+	verificationErr := qq.verifyObject(ctx, destObjectName, filex.SizeInStorage, expectedSHA256)
 	if verificationErr == nil {
 		return nil
 	}
 	if err := qq.removeObjectIfExists(ctx, destObjectName); err != nil {
 		return errors.Join(verificationErr, err)
 	}
-	err = qq.putTransformedObjectWithChecksum(
+	err = qq.putVerifiedTransformedObject(
 		ctx,
 		tmpObjectName,
 		destObjectName,
 		filex.SizeInStorage,
 		expectedSHA256,
-		expectedCRC32C,
 	)
 	if err == nil {
 		return nil
@@ -900,20 +942,15 @@ func (qq *S3FileSystem) copyVerifiedTemporaryTenantObject(
 }
 
 func (qq *S3FileSystem) removeObjectIfExists(ctx context.Context, objectName string) error {
-	err := qq.client.RemoveObject(ctx, qq.bucketName, objectName, minio.RemoveObjectOptions{})
-	if minio.ToErrorResponse(err).Code == "NoSuchKey" {
-		return nil
-	}
-	return err
+	return qq.RemoveObjectCompletely(ctx, objectName)
 }
 
-func (qq *S3FileSystem) putTransformedObjectWithChecksum(
+func (qq *S3FileSystem) putVerifiedTransformedObject(
 	ctx context.Context,
 	sourceObjectName string,
 	destObjectName string,
 	expectedSize int64,
 	expectedSHA256 string,
-	expectedCRC32C string,
 ) error {
 	source, err := qq.client.GetObject(ctx, qq.bucketName, sourceObjectName, minio.GetObjectOptions{})
 	if err != nil {
@@ -927,13 +964,11 @@ func (qq *S3FileSystem) putTransformedObjectWithChecksum(
 
 	_, err = qq.client.PutObject(ctx, qq.bucketName, destObjectName, source, expectedSize, minio.PutObjectOptions{
 		NumThreads: 2,
-		PartSize:   8 * 1024 * 1024,
-		Checksum:   minio.ChecksumFullObjectCRC32C,
 	})
 	if err != nil {
 		return err
 	}
-	return qq.verifyObject(ctx, destObjectName, expectedSize, expectedSHA256, expectedCRC32C)
+	return qq.verifyObject(ctx, destObjectName, expectedSize, expectedSHA256)
 }
 
 func (qq *S3FileSystem) storageFilename(originalFilename, storageFilenameWithoutExt string) string {
@@ -993,6 +1028,10 @@ func (qq *S3FileSystem) saveFile(
 	if err == nil {
 		log.Printf("filename already exists, should never happen, objectName was %s", objectName)
 		return nil, "", savedFileResult{}, e.NewHTTPErrorf(http.StatusInternalServerError, "Filename already exists.")
+	}
+	if minio.ToErrorResponse(err).Code != "NoSuchKey" {
+		log.Println(err)
+		return nil, "", savedFileResult{}, e.NewHTTPErrorf(http.StatusInternalServerError, couldNotSaveFileMessage)
 	}
 
 	// can maybe be further optimized by using a pipe for each step, but separating
@@ -1096,7 +1135,6 @@ func (qq *S3FileSystem) saveFile(
 		NumThreads:            2,
 		PartSize:              8 * 1024 * 1024, // default is 16 MB with 4 workers, 5MB is minimum, reduces memory usage
 		ConcurrentStreamParts: true,
-		Checksum:              minio.ChecksumFullObjectCRC32C,
 
 		/*
 			UserMetadata:            nil,
@@ -1157,13 +1195,7 @@ func (qq *S3FileSystem) saveFile(
 	fileInfo.ChecksumCRC32C = result.storageCRC32C
 	fileInfo.ChecksumMode = minio.ChecksumFullObjectMode.String()
 
-	if err := qq.verifyObject(
-		ctx,
-		objectName,
-		result.storageSize,
-		result.storageSHA256,
-		result.storageCRC32C,
-	); err != nil {
+	if err := qq.verifyObject(ctx, objectName, result.storageSize, result.storageSHA256); err != nil {
 		log.Println(err)
 		if cleanupErr := qq.RemoveTemporaryObject(ctx, storagePrefix, storageFilename); cleanupErr != nil {
 			log.Println(cleanupErr)
@@ -1232,7 +1264,7 @@ func (qq *S3FileSystem) PrepareTemporaryAccountUploadWithSource(
 	storageFilename := qq.storageFilename(originalFilename, storageFilenameWithoutExt)
 
 	now := time.Now()
-	temporaryFile := mainTx.TemporaryFile.Create().
+	temporaryFile, err := mainTx.TemporaryFile.Create().
 		SetOwner(ctx.MainCtx().Account).
 		SetFilename(originalFilename).
 		SetSource(source).
@@ -1245,7 +1277,11 @@ func (qq *S3FileSystem) PrepareTemporaryAccountUploadWithSource(
 		SetUploadStartedAt(now).
 		SetUploadLastProgressAt(now).
 		SetExpiresAt(expiresAt).
-		SaveX(ctx)
+		Save(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
 	return &PreparedAccountUpload{
 		TemporaryFileID:           temporaryFile.ID,
@@ -1347,7 +1383,7 @@ func (qq *S3FileSystem) FinalizePreparedTemporaryAccountUpload(
 	result *PreparedUploadResult,
 ) error {
 	ctxWithIncomplete := entmainschema.WithUnfinishedUploads(ctx)
-	mainTx.TemporaryFile.
+	return mainTx.TemporaryFile.
 		UpdateOneID(prepared.TemporaryFileID).
 		SetSize(result.FileSize).
 		SetSizeInStorage(result.FileInfo.Size).
@@ -1355,9 +1391,7 @@ func (qq *S3FileSystem) FinalizePreparedTemporaryAccountUpload(
 		SetContentSha256(result.ContentSHA256).
 		SetStorageCrc32c(result.StorageCRC32C).
 		SetUploadSucceededAt(time.Now()).
-		SaveX(ctxWithIncomplete)
-
-	return nil
+		Exec(ctxWithIncomplete)
 }
 
 func (qq *S3FileSystem) PreparePersistingTemporaryAccountFile(
@@ -1428,7 +1462,7 @@ func (qq *S3FileSystem) persistTemporaryAccountFile(
 		if conversionDone {
 			return
 		}
-		if err := qq.releaseTemporaryAccountConversionClaim(ctx, tmpFile.ID, claimToken); err != nil {
+		if err := qq.releaseTemporaryAccountConversionClaim(ctx, tmpFile, claimToken); err != nil {
 			log.Println(err)
 		}
 	}()
@@ -1450,13 +1484,8 @@ func (qq *S3FileSystem) persistTemporaryAccountFile(
 	if err != nil {
 		return nil, err
 	}
-	if err := qq.verifyObjectStrict(
-		ctx,
-		accountObjectName,
-		tmpFile.SizeInStorage,
-		tmpFile.Sha256,
-		nilableString(tmpFile.StorageCrc32c),
-	); err != nil {
+	tmpFile, err = qq.verifyOrEstablishTemporaryFileSHA256(ctx, tmpFile, claimToken, accountObjectName)
+	if err != nil {
 		log.Println(err)
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify staged file.")
 	}
@@ -1500,7 +1529,8 @@ func (qq *S3FileSystem) persistTemporaryAccountFile(
 	if storageFilename != storedFilex.TemporaryStorageFilename {
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Storage filename mismatch.")
 	}
-	if result.fileSize != tmpFile.Size || result.contentSHA256 != tmpFile.ContentSha256 {
+	if result.fileSize != tmpFile.Size ||
+		(tmpFile.ContentSha256 != "" && result.contentSHA256 != tmpFile.ContentSha256) {
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Staged file integrity mismatch.")
 	}
 
@@ -1538,6 +1568,10 @@ func (qq *S3FileSystem) claimTemporaryAccountConversion(
 				temporaryfile.PersistenceClaimTokenIsNil(),
 				temporaryfile.PersistenceLastProgressAtIsNil(),
 				temporaryfile.PersistenceLastProgressAtLT(staleBefore),
+			),
+			temporaryfile.Or(
+				temporaryfile.PersistenceTenantIDIsNil(),
+				temporaryfile.PersistenceTenantID(ctx.TenantCtx().Tenant.ID),
 			),
 		).
 		SetPersistenceClaimToken(claimToken).
@@ -1633,45 +1667,38 @@ func (qq *S3FileSystem) nilableUnlinkedSuccessfulAccountConversion(
 		return nil, false, err
 	}
 
-	tenantTx, err := tenantDB.Tx(ctx, false)
-	if err != nil {
-		log.Println(err)
-		return nil, false, err
-	}
-	committed := false
-	defer func() {
-		if !committed {
-			if err := tenantTx.Rollback(); err != nil {
-				log.Println(err)
+	filex, err := txx.WithFreshAuthorizedTenantWriteSpaceTx(
+		ctx.SpaceCtx(),
+		func(writeSpaceCtx *ctxx.SpaceContext) (*enttenant.File, error) {
+			writeCtxWithIncomplete := tenantprivacy.DecisionContext(
+				enttenantschema.WithUnfinishedUploads(writeSpaceCtx),
+				tenantprivacy.Allow,
+			)
+			storedFilex, err = writeSpaceCtx.TTx.StoredFile.Get(writeCtxWithIncomplete, storedFilex.ID)
+			if err != nil {
+				return nil, err
 			}
-		}
-	}()
-
-	writeTenantCtx := ctxx.NewTenantContext(ctx.MainCtx(), tenantTx, ctx.TenantCtx().Tenant, false)
-	writeSpace := tenantTx.Space.GetX(writeTenantCtx, ctx.SpaceCtx().Space.ID)
-	writeSpaceCtx := ctxx.NewSpaceContext(writeTenantCtx, writeSpace)
-	writeCtxWithIncomplete := tenantprivacy.DecisionContext(
-		enttenantschema.WithUnfinishedUploads(writeSpaceCtx),
-		tenantprivacy.Allow,
+			filex, err := writeSpaceCtx.TTx.File.Create().
+				SetName(tmpFile.Filename).
+				SetSource(tmpFile.Source).
+				SetIsDirectory(false).
+				SetIndexedAt(time.Now()).
+				SetParentID(parentDirFileID).
+				SetSpaceID(writeSpaceCtx.Space.ID).
+				SetIsInInbox(isInInbox).
+				Save(writeSpaceCtx)
+			if err != nil {
+				return nil, err
+			}
+			if err := qq.addFileVersion(writeSpaceCtx, filex, storedFilex); err != nil {
+				return nil, err
+			}
+			return filex, nil
+		},
 	)
-	storedFilex = tenantTx.StoredFile.GetX(writeCtxWithIncomplete, storedFilex.ID)
-	filex := tenantTx.File.Create().
-		SetName(tmpFile.Filename).
-		SetSource(tmpFile.Source).
-		SetIsDirectory(false).
-		SetIndexedAt(time.Now()).
-		SetParentID(parentDirFileID).
-		SetSpaceID(writeSpace.ID).
-		SetIsInInbox(isInInbox).
-		SaveX(writeSpaceCtx)
-	if err := qq.addFileVersion(writeSpaceCtx, filex, storedFilex); err != nil {
+	if err != nil {
 		return nil, false, err
 	}
-	if err := tenantTx.Commit(); err != nil {
-		log.Println(err)
-		return nil, false, err
-	}
-	committed = true
 
 	if err := qq.markTemporaryAccountConversionDone(ctx, tmpFile.ID); err != nil {
 		return nil, false, err
@@ -1778,6 +1805,19 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversion(
 			}
 		}
 	}()
+	hasAccess, err := tenantaccess.NewTenantAccessService().HasActiveTenantAssignmentForTenant(
+		ctx,
+		mainTx,
+		ctx.MainCtx().Account.ID,
+		ctx.TenantCtx().Tenant.ID,
+	)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	if !hasAccess {
+		return nil, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+	}
 
 	claimedTmpFile, err := mainTx.TemporaryFile.Query().
 		Where(
@@ -1811,6 +1851,7 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversion(
 
 	if err := mainTx.TemporaryFile.UpdateOneID(claimedTmpFile.ID).
 		Where(temporaryfile.PersistenceClaimToken(claimToken)).
+		SetContentSha256(result.contentSHA256).
 		SetConvertedToStoredFileAt(time.Now()).
 		ClearPersistenceClaimToken().
 		ClearPersistenceTenantID().
@@ -1855,13 +1896,35 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
 		}
 	}()
 
-	writeTenantCtx := ctxx.NewTenantContext(ctx.MainCtx(), tenantTx, ctx.TenantCtx().Tenant, false)
-	writeSpace := tenantTx.Space.GetX(writeTenantCtx, ctx.SpaceCtx().Space.ID)
+	userx, err := tenantTx.User.Query().Where(
+		user.AccountID(ctx.MainCtx().Account.ID),
+		user.DeletedAtIsNil(),
+	).Only(ctx)
+	if err != nil {
+		if enttenant.IsNotFound(err) {
+			return nil, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+		}
+		return nil, err
+	}
+	writeTenantCtx := ctxx.NewTenantContextWithUser(
+		ctx.MainCtx(),
+		tenantTx,
+		ctx.TenantCtx().Tenant,
+		userx,
+		false,
+	)
+	writeSpace, err := tenantTx.Space.Get(writeTenantCtx, ctx.SpaceCtx().Space.ID)
+	if err != nil {
+		return nil, err
+	}
 	writeSpaceCtx := ctxx.NewSpaceContext(writeTenantCtx, writeSpace)
 	ctxWithIncomplete := tenantprivacy.DecisionContext(
 		enttenantschema.WithUnfinishedUploads(writeSpaceCtx),
 		tenantprivacy.Allow,
 	)
+	if err := qq.EnsureTenantStorageLimit(writeSpaceCtx, result.fileSize); err != nil {
+		return nil, err
+	}
 
 	storedFilex, err := tenantTx.StoredFile.Query().
 		Where(
@@ -1893,7 +1956,7 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
 		}
 	}
 
-	filex := tenantTx.File.Create().
+	filex, err := tenantTx.File.Create().
 		SetName(claimedTmpFile.Filename).
 		SetSource(claimedTmpFile.Source).
 		SetIsDirectory(false).
@@ -1901,7 +1964,10 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
 		SetParentID(parentDirFileID).
 		SetSpaceID(writeSpace.ID).
 		SetIsInInbox(isInInbox).
-		SaveX(writeSpaceCtx)
+		Save(writeSpaceCtx)
+	if err != nil {
+		return nil, err
+	}
 
 	if err := qq.addFileVersion(writeSpaceCtx, filex, storedFilex); err != nil {
 		log.Println(err)
@@ -1918,6 +1984,15 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
 }
 
 func (qq *S3FileSystem) markTemporaryAccountConversionDone(ctx ctxx.Context, temporaryFileID int64) error {
+	if !ctx.MainCtx().IsReadOnlyTx() {
+		return ctx.MainCtx().MainTx.TemporaryFile.UpdateOneID(temporaryFileID).
+			SetConvertedToStoredFileAt(time.Now()).
+			ClearPersistenceClaimToken().
+			ClearPersistenceTenantID().
+			ClearPersistenceLastProgressAt().
+			ClearExpiresAt().
+			Exec(ctx)
+	}
 	return ctx.MainCtx().UnsafeMainDB().ReadWriteConn.TemporaryFile.UpdateOneID(temporaryFileID).
 		SetConvertedToStoredFileAt(time.Now()).
 		ClearPersistenceClaimToken().
@@ -2003,10 +2078,30 @@ func (qq *S3FileSystem) cleanupClaimedAccountConversion(
 
 func (qq *S3FileSystem) releaseTemporaryAccountConversionClaim(
 	ctx ctxx.Context,
-	temporaryFileID int64,
+	tmpFile *entmain.TemporaryFile,
 	claimToken string,
 ) error {
-	err := ctx.MainCtx().UnsafeMainDB().ReadWriteConn.TemporaryFile.UpdateOneID(temporaryFileID).
+	tenantDB, ok := ctx.TenantCtx().UnsafeTenantDB()
+	if !ok {
+		return e.NewHTTPErrorf(http.StatusInternalServerError, tenantDatabaseNotFoundMessage)
+	}
+	ctxWithIncomplete := tenantprivacy.DecisionContext(
+		enttenantschema.WithUnfinishedUploads(ctx),
+		tenantprivacy.Allow,
+	)
+	hasSuccessfulResult, err := tenantDB.ReadOnlyConn.StoredFile.Query().Where(
+		storedfile.SourceTemporaryFilePublicID(entx.NewCIText(tmpFile.PublicID.String())),
+		storedfile.SourceConversionClaimToken(claimToken),
+		storedfile.UploadSucceededAtNotNil(),
+	).Exist(ctxWithIncomplete)
+	if err != nil {
+		return err
+	}
+	if hasSuccessfulResult {
+		return nil
+	}
+
+	err = ctx.MainCtx().UnsafeMainDB().ReadWriteConn.TemporaryFile.UpdateOneID(tmpFile.ID).
 		Where(temporaryfile.PersistenceClaimToken(claimToken)).
 		ClearPersistenceClaimToken().
 		ClearPersistenceTenantID().
@@ -2019,17 +2114,53 @@ func (qq *S3FileSystem) releaseTemporaryAccountConversionClaim(
 	return err
 }
 
-func (qq *S3FileSystem) verifyObjectStrict(
-	ctx context.Context,
+func (qq *S3FileSystem) verifyOrEstablishTemporaryFileSHA256(
+	ctx ctxx.Context,
+	tmpFile *entmain.TemporaryFile,
+	claimToken string,
 	objectName string,
-	expectedSize int64,
-	expectedSHA256 string,
-	expectedCRC32C string,
-) error {
-	if expectedSHA256 == "" {
-		return errors.New("stored object sha256 is missing")
+) (*entmain.TemporaryFile, error) {
+	if tmpFile.Sha256 != "" {
+		if err := qq.verifyObject(ctx, objectName, tmpFile.SizeInStorage, tmpFile.Sha256); err != nil {
+			return nil, err
+		}
+		return tmpFile, nil
 	}
-	return qq.verifyObject(ctx, objectName, expectedSize, expectedSHA256, expectedCRC32C)
+
+	size, storageSHA256, err := qq.objectSHA256(ctx, objectName)
+	if err != nil {
+		return nil, err
+	}
+	if size != tmpFile.SizeInStorage {
+		return nil, fmt.Errorf("stored object size mismatch: got %d, want %d", size, tmpFile.SizeInStorage)
+	}
+	return ctx.MainCtx().UnsafeMainDB().ReadWriteConn.TemporaryFile.UpdateOneID(tmpFile.ID).
+		Where(temporaryfile.PersistenceClaimToken(claimToken)).
+		SetSha256(storageSHA256).
+		Save(ctx)
+}
+
+func (qq *S3FileSystem) ensureStoredFileSHA256(
+	ctx context.Context,
+	filex *enttenant.StoredFile,
+	objectName string,
+) (*enttenant.StoredFile, error) {
+	if filex.Sha256 != "" {
+		return filex, nil
+	}
+
+	size, storageSHA256, err := qq.objectSHA256(ctx, objectName)
+	if err != nil {
+		return nil, err
+	}
+	if size != filex.SizeInStorage {
+		return nil, fmt.Errorf("stored object size mismatch: got %d, want %d", size, filex.SizeInStorage)
+	}
+	ctxWithIncomplete := tenantprivacy.DecisionContext(
+		enttenantschema.WithUnfinishedUploads(ctx),
+		tenantprivacy.Allow,
+	)
+	return filex.Update().SetSha256(storageSHA256).Save(ctxWithIncomplete)
 }
 
 func (qq *S3FileSystem) PersistTemporaryTenantFile(
@@ -2052,13 +2183,12 @@ func (qq *S3FileSystem) PersistTemporaryTenantFile(
 	}
 
 	// A verified destination means the copy succeeded before its database update.
-	if err = qq.verifyObject(
-		ctx,
-		destObjectName,
-		filex.SizeInStorage,
-		filex.Sha256,
-		nilableString(filex.StorageCrc32c),
-	); err == nil {
+	filex, err = qq.ensureStoredFileSHA256(ctx, filex, tmpObjectName)
+	if err != nil {
+		return err
+	}
+
+	if err = qq.verifyObject(ctx, destObjectName, filex.SizeInStorage, filex.Sha256); err == nil {
 		log.Printf("dest file already exists and is verified, marking stored file as copied, tmpObjectName: %s, destObjectName: %s", tmpObjectName, destObjectName)
 		return filex.Update().SetCopiedToFinalDestinationAt(time.Now()).Exec(ctx)
 	}
@@ -2114,12 +2244,15 @@ func (qq *S3FileSystem) PersistTemporaryTenantFile(
 			return err
 		}
 
-		filex = filex.Update().
+		filex, err = filex.Update().
 			SetSizeInStorage(fileInfo.Size).
 			SetSha256(fileInfo.ChecksumSHA256).
 			SetContentSha256(result.contentSHA256).
 			SetStorageCrc32c(result.storageCRC32C).
-			SaveX(ctx)
+			Save(ctx)
+		if err != nil {
+			return err
+		}
 	} else {
 		err = e.NewHTTPErrorf(http.StatusInternalServerError, "Could not copy temporary file.")
 		log.Println(err, "may need manual cleanup or missing configuration")
@@ -2148,18 +2281,22 @@ func (qq *S3FileSystem) addFileVersion(ctx ctxx.Context, filex *enttenant.File, 
 	if err == nil {
 		versionNumber = latestVersion.VersionNumber + 1
 	}
-	ctx.TenantCtx().TTx.FileVersion.Create().
+	if _, err := ctx.TenantCtx().TTx.FileVersion.Create().
 		SetFileID(filex.ID).
 		SetStoredFileID(storedFilex.ID).
 		SetVersionNumber(versionNumber).
-		SaveX(ctx)
+		Save(ctx); err != nil {
+		return err
+	}
 
-	filex.Update().
+	if err := filex.Update().
 		SetOcrContent("").
 		ClearOcrSuccessAt().
 		SetOcrRetryCount(0).
 		SetOcrLastTriedAt(time.Time{}).
-		ExecX(ctx)
+		Exec(ctx); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -2173,7 +2310,10 @@ func (qq *S3FileSystem) UpdateMimeType(ctx ctxx.Context, force bool, filex *stor
 	if err != nil {
 		return "", err
 	}
-	filex.Data = filex.Data.Update().SetMimeType(mimeType).SaveX(ctx)
+	filex.Data, err = filex.Data.Update().SetMimeType(mimeType).Save(ctx)
+	if err != nil {
+		return "", err
+	}
 
 	return mimeType, nil
 }
