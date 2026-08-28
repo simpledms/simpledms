@@ -8,6 +8,10 @@ These invariants apply to WebDAV credentials and protocol behavior, all shared
 upload sources, immutable file source, account-temporary conversion, tenant
 temporary-to-final storage, recovery, and Inbox source UI state.
 
+The storage and recovery rules are specializations of the general
+[File Storage Safety Invariants](file_storage_safety.md), which apply to every file
+ingestion and storage path.
+
 WebDAV is an intake boundary. It is not a remotely browsable or editable view of
 the SimpleDMS document model.
 
