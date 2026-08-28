@@ -2,12 +2,15 @@ package filesystem
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
+	"hash/crc32"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync/atomic"
 	"testing"
 
 	"filippo.io/age"
@@ -83,27 +86,50 @@ func TestS3FileSystemUploadTooLargeErrorWithoutMaximum(t *testing.T) {
 	}
 }
 
-func TestS3FileSystemVerifyObjectAllowsMissingChecksumMode(t *testing.T) {
-	const checksum = "crc32c"
-	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		rw.Header().Set("Content-Length", "4")
-		rw.Header().Set("Last-Modified", "Mon, 02 Jan 2006 15:04:05 GMT")
-		rw.Header().Set("X-Amz-Checksum-Crc32c", checksum)
-		rw.WriteHeader(http.StatusOK)
-	}))
-	defer server.Close()
+func TestS3FileSystemVerifyObjectFallsBackToContentsWithoutChecksumMode(t *testing.T) {
+	const contents = "data"
+	hasher := crc32.New(crc32.MakeTable(crc32.Castagnoli))
+	_, _ = io.WriteString(hasher, contents)
+	checksum := base64.StdEncoding.EncodeToString(hasher.Sum(nil))
 
-	client, err := minio.New(strings.TrimPrefix(server.URL, "http://"), &minio.Options{
-		Creds:  credentials.NewStaticV4("access-key", "secret-key", ""),
-		Region: "us-east-1",
-	})
-	if err != nil {
-		t.Fatalf("create S3 client: %v", err)
-	}
-	fileSystemx := &S3FileSystem{client: client, bucketName: "bucket"}
+	for _, tc := range []struct {
+		name     string
+		expected string
+		wantErr  bool
+	}{
+		{name: "matching contents", expected: checksum},
+		{name: "mismatching contents", expected: "wrong", wantErr: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var getRequests atomic.Int32
+			server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+				rw.Header().Set("Content-Length", "4")
+				rw.Header().Set("Last-Modified", "Mon, 02 Jan 2006 15:04:05 GMT")
+				rw.Header().Set("X-Amz-Checksum-Crc32c", "unusable")
+				if req.Method == http.MethodGet {
+					getRequests.Add(1)
+					_, _ = io.WriteString(rw, contents)
+				}
+			}))
+			defer server.Close()
 
-	if err := fileSystemx.verifyObject(context.Background(), "object", 4, checksum); err != nil {
-		t.Fatalf("verify object without checksum mode: %v", err)
+			client, err := minio.New(strings.TrimPrefix(server.URL, "http://"), &minio.Options{
+				Creds:  credentials.NewStaticV4("access-key", "secret-key", ""),
+				Region: "us-east-1",
+			})
+			if err != nil {
+				t.Fatalf("create S3 client: %v", err)
+			}
+			fileSystemx := &S3FileSystem{client: client, bucketName: "bucket"}
+
+			err = fileSystemx.verifyObject(context.Background(), "object", 4, tc.expected)
+			if (err != nil) != tc.wantErr {
+				t.Fatalf("verify object error = %v, want error %v", err, tc.wantErr)
+			}
+			if getRequests.Load() == 0 {
+				t.Fatal("expected object contents to be verified")
+			}
+		})
 	}
 }
 

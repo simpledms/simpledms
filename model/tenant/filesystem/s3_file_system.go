@@ -802,7 +802,31 @@ func (qq *S3FileSystem) verifyObject(
 	if info.ChecksumMode != "" && info.ChecksumMode != minio.ChecksumFullObjectMode.String() {
 		return fmt.Errorf("stored object checksum mode mismatch: got %q", info.ChecksumMode)
 	}
-	if info.ChecksumCRC32C != expectedCRC32C {
+	if info.ChecksumCRC32C == expectedCRC32C {
+		return nil
+	}
+	if info.ChecksumMode != "" {
+		return fmt.Errorf("stored object crc32c mismatch")
+	}
+
+	// Some S3-compatible backends omit the mode and return an unusable checksum.
+	object, err := qq.client.GetObject(ctx, qq.bucketName, objectName, minio.GetObjectOptions{})
+	if err != nil {
+		return err
+	}
+	hasher := crc32.New(crc32.MakeTable(crc32.Castagnoli))
+	size, readErr := io.Copy(hasher, object)
+	closeErr := object.Close()
+	if readErr != nil {
+		return readErr
+	}
+	if closeErr != nil {
+		return closeErr
+	}
+	if size != expectedSize {
+		return fmt.Errorf("stored object size mismatch: got %d, want %d", size, expectedSize)
+	}
+	if base64.StdEncoding.EncodeToString(hasher.Sum(nil)) != expectedCRC32C {
 		return fmt.Errorf("stored object crc32c mismatch")
 	}
 	return nil
