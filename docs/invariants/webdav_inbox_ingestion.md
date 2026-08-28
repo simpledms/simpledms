@@ -367,8 +367,8 @@ chunked overflow, malformed body, and cancellation.
 
 ### Plaintext And Stored Identity Are Separate
 
-Rule: Uploads persist plaintext count/SHA-256 and transformed
-count/SHA-256/full-object CRC32C. None substitutes for another.
+Rule: Uploads persist plaintext count/SHA-256 and transformed count/SHA-256.
+Full-object CRC32C is also retained as an optional backend verification fast path.
 
 Why: Plaintext hash supports document identity; transformed values verify the
 actual encrypted/compressed storage object.
@@ -380,25 +380,29 @@ fixtures in encryption-enabled and disabled modes.
 
 ### Backend Verification Is Mandatory For New Uploads
 
-Rule: Before finalization, checksum-enabled backend StatObject size must equal the
-local transformed count and backend `FULL_OBJECT` CRC32C must equal local CRC32C.
-Missing values or mismatch fail closed.
+Rule: Before finalization, backend StatObject size must equal the local transformed
+count. A matching backend `FULL_OBJECT` CRC32C completes verification without
+another transfer. Otherwise, the stored object is read back and its size and
+SHA-256 must equal the locally calculated transformed values.
 
-Why: MinIO UploadInfo size is client-counted and multipart SHA-256 is composite;
-neither alone verifies the stored full object.
+Why: MinIO UploadInfo size is client-counted and S3-compatible providers differ in
+their checksum metadata. Application-calculated SHA-256 verifies the exact stored
+bytes independently of provider checksum behavior.
 
-Enforced in: checksum-enabled PUT plus StatObject verification.
+Enforced in: checksum-enabled PUT, StatObject size/CRC32C fast path, and direct
+SHA-256 verification fallback.
 
-Minimum regression tests: missing size/checksum/mode, mismatches, multipart
-stream, and backend failure leave no visible file.
+Minimum regression tests: wrong size, unreliable backend checksum metadata,
+stored SHA-256 mismatch, multipart stream, and backend failure leave no visible
+file.
 
-Historical successful rows with null CRC32C remain valid; strict verification is
-required for uploads started after the schema change.
+Historical successful rows without stored checksums remain valid. New uploads and
+strict account-temporary conversion require a stored-object SHA-256.
 
 ### Every Transform Error Fails Upload
 
 Rule: Source read, cancellation, gzip close, age close, pipe, goroutine, S3 PUT,
-and StatObject errors all prevent finalization.
+StatObject, and verification read errors all prevent finalization.
 
 Why: An accepted object can still be incomplete when transform closure failed.
 
@@ -450,7 +454,7 @@ and creates no duplicate File/version/object.
 
 ### Conversion Preserves Plaintext Identity
 
-Rule: Before tenant finalization, account object size/CRC32C is verified and
+Rule: Before tenant finalization, account object size/SHA-256 is verified and
 decryption recomputes plaintext count/SHA-256 equal to TemporaryFile metadata.
 
 Why: Re-encryption must not silently truncate or alter the staged content.
@@ -479,7 +483,8 @@ success; replacement and success remain intact.
 ### Final Destination Is Verified Before Use
 
 Rule: Reads switch from temporary to final storage only after final destination
-StatObject size and full-object CRC32C match the verified temporary row.
+size and stored-object SHA-256 match the verified temporary row. Matching
+full-object CRC32C may satisfy this check without reading the object back.
 
 Why: A successful copy call or pre-existing destination does not prove byte
 identity.

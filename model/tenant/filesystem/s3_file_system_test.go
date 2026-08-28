@@ -2,10 +2,10 @@ package filesystem
 
 import (
 	"context"
-	"encoding/base64"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"fmt"
-	"hash/crc32"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -86,18 +86,17 @@ func TestS3FileSystemUploadTooLargeErrorWithoutMaximum(t *testing.T) {
 	}
 }
 
-func TestS3FileSystemVerifyObjectFallsBackToContentsWithoutChecksumMode(t *testing.T) {
+func TestS3FileSystemVerifyObjectFallsBackToSHA256(t *testing.T) {
 	const contents = "data"
-	hasher := crc32.New(crc32.MakeTable(crc32.Castagnoli))
-	_, _ = io.WriteString(hasher, contents)
-	checksum := base64.StdEncoding.EncodeToString(hasher.Sum(nil))
+	checksum := sha256.Sum256([]byte(contents))
+	storageSHA256 := hex.EncodeToString(checksum[:])
 
 	for _, tc := range []struct {
 		name     string
 		expected string
 		wantErr  bool
 	}{
-		{name: "matching contents", expected: checksum},
+		{name: "matching contents", expected: storageSHA256},
 		{name: "mismatching contents", expected: "wrong", wantErr: true},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -106,6 +105,7 @@ func TestS3FileSystemVerifyObjectFallsBackToContentsWithoutChecksumMode(t *testi
 				rw.Header().Set("Content-Length", "4")
 				rw.Header().Set("Last-Modified", "Mon, 02 Jan 2006 15:04:05 GMT")
 				rw.Header().Set("X-Amz-Checksum-Crc32c", "unusable")
+				rw.Header().Set("X-Amz-Checksum-Type", minio.ChecksumFullObjectMode.String())
 				if req.Method == http.MethodGet {
 					getRequests.Add(1)
 					_, _ = io.WriteString(rw, contents)
@@ -122,7 +122,7 @@ func TestS3FileSystemVerifyObjectFallsBackToContentsWithoutChecksumMode(t *testi
 			}
 			fileSystemx := &S3FileSystem{client: client, bucketName: "bucket"}
 
-			err = fileSystemx.verifyObject(context.Background(), "object", 4, tc.expected)
+			err = fileSystemx.verifyObject(context.Background(), "object", 4, tc.expected, "crc32c")
 			if (err != nil) != tc.wantErr {
 				t.Fatalf("verify object error = %v, want error %v", err, tc.wantErr)
 			}

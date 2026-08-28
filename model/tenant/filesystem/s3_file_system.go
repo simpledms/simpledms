@@ -785,6 +785,7 @@ func (qq *S3FileSystem) verifyObject(
 	ctx context.Context,
 	objectName string,
 	expectedSize int64,
+	expectedSHA256 string,
 	expectedCRC32C string,
 ) error {
 	info, err := qq.client.StatObject(ctx, qq.bucketName, objectName, minio.StatObjectOptions{
@@ -796,25 +797,23 @@ func (qq *S3FileSystem) verifyObject(
 	if info.Size != expectedSize {
 		return fmt.Errorf("stored object size mismatch: got %d, want %d", info.Size, expectedSize)
 	}
-	if expectedCRC32C == "" {
+	if expectedSHA256 == "" && expectedCRC32C == "" {
 		return nil
 	}
-	if info.ChecksumMode != "" && info.ChecksumMode != minio.ChecksumFullObjectMode.String() {
-		return fmt.Errorf("stored object checksum mode mismatch: got %q", info.ChecksumMode)
-	}
-	if info.ChecksumCRC32C == expectedCRC32C {
+	if expectedCRC32C != "" && info.ChecksumMode == minio.ChecksumFullObjectMode.String() &&
+		info.ChecksumCRC32C == expectedCRC32C {
 		return nil
 	}
-	if info.ChecksumMode != "" {
-		return fmt.Errorf("stored object crc32c mismatch")
+	if expectedSHA256 == "" {
+		return errors.New("stored object sha256 is missing")
 	}
 
-	// Some S3-compatible backends omit the mode and return an unusable checksum.
+	// S3-compatible backends differ in their checksum metadata, so verify the stored bytes.
 	object, err := qq.client.GetObject(ctx, qq.bucketName, objectName, minio.GetObjectOptions{})
 	if err != nil {
 		return err
 	}
-	hasher := crc32.New(crc32.MakeTable(crc32.Castagnoli))
+	hasher := sha256.New()
 	size, readErr := io.Copy(hasher, object)
 	closeErr := object.Close()
 	if readErr != nil {
@@ -826,8 +825,8 @@ func (qq *S3FileSystem) verifyObject(
 	if size != expectedSize {
 		return fmt.Errorf("stored object size mismatch: got %d, want %d", size, expectedSize)
 	}
-	if base64.StdEncoding.EncodeToString(hasher.Sum(nil)) != expectedCRC32C {
-		return fmt.Errorf("stored object crc32c mismatch")
+	if hex.EncodeToString(hasher.Sum(nil)) != expectedSHA256 {
+		return fmt.Errorf("stored object sha256 mismatch")
 	}
 	return nil
 }
@@ -860,6 +859,7 @@ func (qq *S3FileSystem) copyVerifiedTemporaryTenantObject(
 	tmpObjectName string,
 	destObjectName string,
 ) error {
+	expectedSHA256 := filex.Sha256
 	expectedCRC32C := nilableString(filex.StorageCrc32c)
 	_, err := qq.client.CopyObject(ctx, minio.CopyDestOptions{
 		Bucket: qq.bucketName,
@@ -872,22 +872,25 @@ func (qq *S3FileSystem) copyVerifiedTemporaryTenantObject(
 		return err
 	}
 
-	verificationErr := qq.verifyObject(ctx, destObjectName, filex.SizeInStorage, expectedCRC32C)
+	verificationErr := qq.verifyObject(
+		ctx,
+		destObjectName,
+		filex.SizeInStorage,
+		expectedSHA256,
+		expectedCRC32C,
+	)
 	if verificationErr == nil {
 		return nil
 	}
 	if err := qq.removeObjectIfExists(ctx, destObjectName); err != nil {
 		return errors.Join(verificationErr, err)
 	}
-	if expectedCRC32C == "" {
-		return verificationErr
-	}
-
 	err = qq.putTransformedObjectWithChecksum(
 		ctx,
 		tmpObjectName,
 		destObjectName,
 		filex.SizeInStorage,
+		expectedSHA256,
 		expectedCRC32C,
 	)
 	if err == nil {
@@ -909,6 +912,7 @@ func (qq *S3FileSystem) putTransformedObjectWithChecksum(
 	sourceObjectName string,
 	destObjectName string,
 	expectedSize int64,
+	expectedSHA256 string,
 	expectedCRC32C string,
 ) error {
 	source, err := qq.client.GetObject(ctx, qq.bucketName, sourceObjectName, minio.GetObjectOptions{})
@@ -929,7 +933,7 @@ func (qq *S3FileSystem) putTransformedObjectWithChecksum(
 	if err != nil {
 		return err
 	}
-	return qq.verifyObject(ctx, destObjectName, expectedSize, expectedCRC32C)
+	return qq.verifyObject(ctx, destObjectName, expectedSize, expectedSHA256, expectedCRC32C)
 }
 
 func (qq *S3FileSystem) storageFilename(originalFilename, storageFilenameWithoutExt string) string {
@@ -1153,7 +1157,13 @@ func (qq *S3FileSystem) saveFile(
 	fileInfo.ChecksumCRC32C = result.storageCRC32C
 	fileInfo.ChecksumMode = minio.ChecksumFullObjectMode.String()
 
-	if err := qq.verifyObject(ctx, objectName, result.storageSize, result.storageCRC32C); err != nil {
+	if err := qq.verifyObject(
+		ctx,
+		objectName,
+		result.storageSize,
+		result.storageSHA256,
+		result.storageCRC32C,
+	); err != nil {
 		log.Println(err)
 		if cleanupErr := qq.RemoveTemporaryObject(ctx, storagePrefix, storageFilename); cleanupErr != nil {
 			log.Println(cleanupErr)
@@ -1440,7 +1450,13 @@ func (qq *S3FileSystem) persistTemporaryAccountFile(
 	if err != nil {
 		return nil, err
 	}
-	if err := qq.verifyObjectStrict(ctx, accountObjectName, tmpFile.SizeInStorage, nilableString(tmpFile.StorageCrc32c)); err != nil {
+	if err := qq.verifyObjectStrict(
+		ctx,
+		accountObjectName,
+		tmpFile.SizeInStorage,
+		tmpFile.Sha256,
+		nilableString(tmpFile.StorageCrc32c),
+	); err != nil {
 		log.Println(err)
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not verify staged file.")
 	}
@@ -2007,12 +2023,13 @@ func (qq *S3FileSystem) verifyObjectStrict(
 	ctx context.Context,
 	objectName string,
 	expectedSize int64,
+	expectedSHA256 string,
 	expectedCRC32C string,
 ) error {
-	if expectedCRC32C == "" {
-		return errors.New("stored object crc32c is missing")
+	if expectedSHA256 == "" {
+		return errors.New("stored object sha256 is missing")
 	}
-	return qq.verifyObject(ctx, objectName, expectedSize, expectedCRC32C)
+	return qq.verifyObject(ctx, objectName, expectedSize, expectedSHA256, expectedCRC32C)
 }
 
 func (qq *S3FileSystem) PersistTemporaryTenantFile(
@@ -2035,7 +2052,13 @@ func (qq *S3FileSystem) PersistTemporaryTenantFile(
 	}
 
 	// A verified destination means the copy succeeded before its database update.
-	if err = qq.verifyObject(ctx, destObjectName, filex.SizeInStorage, nilableString(filex.StorageCrc32c)); err == nil {
+	if err = qq.verifyObject(
+		ctx,
+		destObjectName,
+		filex.SizeInStorage,
+		filex.Sha256,
+		nilableString(filex.StorageCrc32c),
+	); err == nil {
 		log.Printf("dest file already exists and is verified, marking stored file as copied, tmpObjectName: %s, destObjectName: %s", tmpObjectName, destObjectName)
 		return filex.Update().SetCopiedToFinalDestinationAt(time.Now()).Exec(ctx)
 	}
