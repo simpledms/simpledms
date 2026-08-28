@@ -114,7 +114,7 @@ func (qq *Handler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		LockSystem: qq.locks.forCredential(credentialx.PublicID),
 		Logger: func(_ *http.Request, err error) {
 			if err != nil && !errors.Is(err, webdav.ErrConfirmationFailed) {
-				log.Println("webdav request failed")
+				log.Println("webdav request failed:", err)
 			}
 		},
 	}

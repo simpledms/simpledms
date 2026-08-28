@@ -799,7 +799,7 @@ func (qq *S3FileSystem) verifyObject(
 	if expectedCRC32C == "" {
 		return nil
 	}
-	if info.ChecksumMode != minio.ChecksumFullObjectMode.String() {
+	if info.ChecksumMode != "" && info.ChecksumMode != minio.ChecksumFullObjectMode.String() {
 		return fmt.Errorf("stored object checksum mode mismatch: got %q", info.ChecksumMode)
 	}
 	if info.ChecksumCRC32C != expectedCRC32C {

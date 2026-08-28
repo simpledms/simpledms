@@ -6,11 +6,14 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
 	"filippo.io/age"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
@@ -77,6 +80,30 @@ func TestS3FileSystemUploadTooLargeErrorWithoutMaximum(t *testing.T) {
 	httpErr := requireHTTPErrorStatus(t, err, http.StatusRequestEntityTooLarge)
 	if httpErr.Message() != "Upload is too large." {
 		t.Fatalf("unexpected message: %q", httpErr.Message())
+	}
+}
+
+func TestS3FileSystemVerifyObjectAllowsMissingChecksumMode(t *testing.T) {
+	const checksum = "crc32c"
+	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		rw.Header().Set("Content-Length", "4")
+		rw.Header().Set("Last-Modified", "Mon, 02 Jan 2006 15:04:05 GMT")
+		rw.Header().Set("X-Amz-Checksum-Crc32c", checksum)
+		rw.WriteHeader(http.StatusOK)
+	}))
+	defer server.Close()
+
+	client, err := minio.New(strings.TrimPrefix(server.URL, "http://"), &minio.Options{
+		Creds:  credentials.NewStaticV4("access-key", "secret-key", ""),
+		Region: "us-east-1",
+	})
+	if err != nil {
+		t.Fatalf("create S3 client: %v", err)
+	}
+	fileSystemx := &S3FileSystem{client: client, bucketName: "bucket"}
+
+	if err := fileSystemx.verifyObject(context.Background(), "object", 4, checksum); err != nil {
+		t.Fatalf("verify object without checksum mode: %v", err)
 	}
 }
 
