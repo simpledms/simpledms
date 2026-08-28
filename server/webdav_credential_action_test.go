@@ -178,11 +178,12 @@ func assertWebDAVCredentialForm(
 		return err
 	}
 	emptyState, ok := emptyOverview.Child.(*widget.EmptyState)
-	if !ok || len(emptyState.Actions) != 0 {
-		t.Fatalf(
-			"expected empty state without an inline create action, got %#v",
-			emptyOverview.Child,
-		)
+	if !ok || len(emptyState.Actions) != 1 {
+		t.Fatalf("expected empty state with one create action, got %#v", emptyOverview.Child)
+	}
+	createButton, ok := emptyState.Actions[0].(*widget.Button)
+	if !ok || createButton.HxPost == "" || !createButton.LoadInPopover {
+		t.Fatalf("expected create action to open the credential form, got %#v", emptyState.Actions[0])
 	}
 	return nil
 }

@@ -97,6 +97,15 @@ func (qq *WebDAVCredentialListPartial) Widget(
 		Icon:        widget.NewIcon("vpn_key"),
 		Headline:    widget.T("No WebDAV credentials"),
 		Description: widget.T("Create a device credential to upload files to an Inbox over WebDAV."),
+		Actions: []widget.IWidget{
+			&widget.Button{
+				Icon:  widget.NewIcon("add"),
+				Label: widget.T("Create WebDAV credential"),
+				HTMXAttrs: qq.actions.CreateWebDAVCredentialCmd.ModalLinkAttrs(
+					qq.actions.CreateWebDAVCredentialCmd.Data("", ""),
+				),
+			},
+		},
 	}
 	if len(credentials) > 0 {
 		content = qq.tabbedCredentials(ctx, req, data, credentials, destinations)
