@@ -486,6 +486,10 @@ func (qq *FilePreviewPartial) appBar(
 			},
 		})
 	}
+	actions = append(actions, &widget.IconButton{
+		Icon:     "more_vert",
+		Children: NewFileContextMenuWidget(qq.actions).Widget(ctx, filex.Data),
+	})
 
 	return &widget.AppBar{
 		Leading: &widget.IconButton{
@@ -502,20 +506,5 @@ func (qq *FilePreviewPartial) appBar(
 			Text: title,
 		},
 		Actions: actions,
-		/*
-			&wx.IconButton{
-				Icon: "more_vert",
-				Children: &wx.Menu{
-					Items: []*wx.MenuItem{
-						{
-							LeadingIcon:          "download",
-							Label:                wx.T("Download"),
-							DownloadLinkURL:      route.Download(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
-							DownloadLinkFilename: filex.Filename(ctx),
-						},
-					},
-				},
-			},
-		*/
 	}
 }

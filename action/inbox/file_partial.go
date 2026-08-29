@@ -127,6 +127,10 @@ func (qq *FilePartial) Widget(
 			},
 		})
 	}
+	appBarActions = append(appBarActions, &widget.IconButton{
+		Icon:     "more_vert",
+		Children: NewFileContextMenuWidget(qq.actions).Widget(ctx, filex.Data),
+	})
 	return &widget.DetailsWithSheet{
 		AppBar: partial.NewFullscreenDialogAppBar(
 			widget.Tuf("%s", filex.Data.Name),
