@@ -9,6 +9,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -51,6 +52,7 @@ import (
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/scheduler"
+	"github.com/simpledms/simpledms/server/webdav"
 	"github.com/simpledms/simpledms/ui"
 	"github.com/simpledms/simpledms/ui/uix/partial"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
@@ -278,6 +280,18 @@ func (qq *Server) Start() error {
 // TODO way to long, needs refactoring
 func (qq *Server) Prepare() (*PreparedServer, error) {
 	// TODO close all clients
+	trustedProxies, err := webdav.ParseTrustedProxyCIDRs(
+		os.Getenv("SIMPLEDMS_TRUSTED_PROXY_CIDRS"),
+	)
+	if err != nil {
+		return nil, err
+	}
+	if err := validateTrustedProxyPublicOrigin(
+		len(trustedProxies) > 0,
+		os.Getenv("SIMPLEDMS_PUBLIC_ORIGIN"),
+	); err != nil {
+		return nil, err
+	}
 	mainDB := dbMigrationsMainDB(qq.devMode, qq.metaPath, qq.migrationsMainFS)
 	ctx := context.Background()
 	overrideDBConfig := os.Getenv("SIMPLEDMS_OVERRIDE_DB_CONFIG") == "true"
@@ -294,7 +308,15 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	tenantDBs := dbMigrationsTenantDBs(mainDB, qq.devMode, qq.metaPath)
 
 	infra, minioClient := qq.newInfra(renderer, systemConfig)
-	router := NewRouter(mainDB, tenantDBs, infra, qq.devMode, qq.metaPath, i18nx)
+	router := NewRouter(
+		mainDB,
+		tenantDBs,
+		infra,
+		qq.devMode,
+		qq.metaPath,
+		i18nx,
+		trustedProxies,
+	)
 	actions := action.NewActions(infra, tenantDBs, qq.devMode)
 	downloadHandler := download.NewDownload(infra)
 	previewDownloadHandler := download.NewPreview(infra)
@@ -302,7 +324,7 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 
 	qq.registerCoreRoutes(router, actions, downloadHandler, previewDownloadHandler, trashDownloadHandler)
 
-	err := infra.PluginRegistry().RegisterActions(router)
+	err = infra.PluginRegistry().RegisterActions(router)
 	if err != nil {
 		log.Println(err)
 		closePreparedResources(mainDB, tenantDBs)
@@ -340,6 +362,19 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 		systemConfig:    systemConfig,
 		autocertManager: manager,
 	}, nil
+}
+
+func validateTrustedProxyPublicOrigin(hasTrustedProxies bool, publicOrigin string) error {
+	if !hasTrustedProxies {
+		return nil
+	}
+	originURL, err := url.Parse(strings.TrimSpace(publicOrigin))
+	if err != nil || !strings.EqualFold(originURL.Scheme, "https") || originURL.Host == "" {
+		return fmt.Errorf(
+			"SIMPLEDMS_PUBLIC_ORIGIN must be an absolute HTTPS URL when trusted proxies are configured",
+		)
+	}
+	return nil
 }
 
 func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB, overrideDBConfig bool) {

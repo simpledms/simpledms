@@ -2,9 +2,11 @@ package server
 
 import (
 	"errors"
+	htmlstd "html"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -121,6 +123,7 @@ func exerciseWebDAVCredentialActions(
 			return err
 		}
 		if err := createArchiveAndRevokeWebDAVCredential(
+			t,
 			harness,
 			mainCtx,
 			form,
@@ -152,6 +155,13 @@ func assertWebDAVCredentialForm(
 	mainCtx *ctxx.MainContext,
 ) error {
 	t.Helper()
+	createAttrs := harness.actions.Dashboard.CreateWebDAVCredentialCmd.ModalLinkAttrs(
+		harness.actions.Dashboard.CreateWebDAVCredentialCmd.Data("", ""),
+	)
+	if strings.Contains(string(createAttrs.HxVals), "SecretLength") ||
+		strings.Contains(string(createAttrs.HxVals), "CompatibilityMode") {
+		t.Fatalf("expected optional defaults omitted from form link, got %s", createAttrs.HxVals)
+	}
 	formReq := httptest.NewRequest(
 		http.MethodPost,
 		"/-/dashboard/create-webdav-credential-cmd-form?wrapper=dialog",
@@ -167,6 +177,20 @@ func assertWebDAVCredentialForm(
 	}
 	if count := strings.Count(formRR.Body.String(), `name="Destination"`); count != 2 {
 		t.Fatalf("expected two Space selector options, got %d", count)
+	}
+	if body := formRR.Body.String(); !strings.Contains(body, `name="SecretLength"`) ||
+		!strings.Contains(body, `min="12"`) ||
+		!strings.Contains(body, `max="43"`) ||
+		!strings.Contains(body, `value="43"`) ||
+		!strings.Contains(body, `name="CompatibilityMode"`) ||
+		!strings.Contains(body, `role="switch"`) ||
+		!strings.Contains(body, `aria-labelledby="Switch-`) ||
+		!strings.Contains(body, `group-has-[:checked]/switch:block">check</i>`) ||
+		!strings.Contains(body, "Reduce the secret length only if your device limits") ||
+		!strings.Contains(body, "limited support for special characters.") ||
+		strings.Count(body, "aria-describedby=") < 2 ||
+		regexp.MustCompile(`name="CompatibilityMode"[^>]*checked`).MatchString(body) {
+		t.Fatal("expected credential generation options and supporting text")
 	}
 
 	emptyOverview, err := harness.actions.Dashboard.WebDAVCredentialListPartial.Widget(
@@ -201,6 +225,23 @@ func createWebDAVCredential(
 	form := url.Values{}
 	form.Set("Destination", tenantx.PublicID.String()+":"+spacePublicID)
 	form.Set("Label", "Office scanner")
+	for _, invalidLength := range []string{"0", "11", "44", "invalid"} {
+		form.Set("SecretLength", invalidLength)
+		invalidErr := harness.actions.Dashboard.CreateWebDAVCredentialCmd.Handler(
+			httpx.NewResponseWriter(httptest.NewRecorder()),
+			httpx.NewRequest(newWebDAVCredentialRequest(
+				"/-/dashboard/create-webdav-credential-cmd",
+				form,
+			)),
+			mainCtx,
+		)
+		var httpErr *e.HTTPError
+		if !errors.As(invalidErr, &httpErr) || httpErr.StatusCode() != http.StatusBadRequest {
+			t.Fatalf("expected secret length %q rejected, got %v", invalidLength, invalidErr)
+		}
+	}
+	form.Set("SecretLength", "20")
+	form.Set("CompatibilityMode", "true")
 	req := newWebDAVCredentialRequest("/-/dashboard/create-webdav-credential-cmd", form)
 	rr := httptest.NewRecorder()
 
@@ -224,6 +265,9 @@ func createWebDAVCredential(
 	}
 	if count := strings.Count(rr.Body.String(), "overflow-wrap: anywhere"); count != 3 {
 		t.Fatalf("expected all three credential values to wrap, got %d", count)
+	}
+	if !regexp.MustCompile(`data-copy-value="[A-Za-z0-9_-]{20}"`).MatchString(rr.Body.String()) {
+		t.Fatal("expected generated 20-character secret")
 	}
 
 	credentialx := mainTx.WebDAVCredential.Query().OnlyX(mainCtx)
@@ -277,6 +321,7 @@ func editAndRejectDuplicateWebDAVCredential(
 }
 
 func createArchiveAndRevokeWebDAVCredential(
+	t *testing.T,
 	harness *actionTestHarness,
 	mainCtx *ctxx.MainContext,
 	form url.Values,
@@ -284,18 +329,34 @@ func createArchiveAndRevokeWebDAVCredential(
 	tenantx *entmain.Tenant,
 	archiveSpacePublicID string,
 ) error {
+	t.Helper()
 	form.Set("Destination", tenantx.PublicID.String()+":"+archiveSpacePublicID)
+	form.Del("SecretLength")
+	form.Del("CompatibilityMode")
 	archiveReq := newWebDAVCredentialRequest(
 		"/-/dashboard/create-webdav-credential-cmd",
 		form,
 	)
+	archiveRR := httptest.NewRecorder()
 	if err := harness.actions.Dashboard.CreateWebDAVCredentialCmd.Handler(
-		httpx.NewResponseWriter(httptest.NewRecorder()),
+		httpx.NewResponseWriter(archiveRR),
 		httpx.NewRequest(archiveReq),
 		mainCtx,
 	); err != nil {
 		return err
 	}
+	copyValueMatches := regexp.MustCompile(`data-copy-value="([^"]*)"`).FindAllStringSubmatch(
+		archiveRR.Body.String(),
+		-1,
+	)
+	if len(copyValueMatches) != 3 {
+		t.Fatalf("expected three copyable credential values, got %d", len(copyValueMatches))
+	}
+	secret := htmlstd.UnescapeString(copyValueMatches[2][1])
+	if len(secret) != 43 || !regexp.MustCompile(`[^A-Za-z0-9]`).MatchString(secret) {
+		t.Fatalf("expected default 43-character secret with a special character, got %q", secret)
+	}
+	assertWebDAVCredentialCopyEscaping(t, harness, mainCtx)
 
 	revokeForm := url.Values{}
 	revokeForm.Set("CredentialPublicID", credentialx.PublicID.String())
@@ -308,6 +369,26 @@ func createArchiveAndRevokeWebDAVCredential(
 		httpx.NewRequest(revokeReq),
 		mainCtx,
 	)
+}
+
+func assertWebDAVCredentialCopyEscaping(
+	t *testing.T,
+	harness *actionTestHarness,
+	mainCtx *ctxx.MainContext,
+) {
+	t.Helper()
+	const value = `&<>"'`
+	rr := httptest.NewRecorder()
+	if err := harness.infra.Renderer().Render(
+		httpx.NewResponseWriter(rr),
+		mainCtx,
+		&widget.Link{Href: "#", Child: widget.Tu(value), CopyValue: value},
+	); err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(rr.Body.String(), `data-copy-value="&amp;&lt;&gt;&#34;&#39;"`) {
+		t.Fatal("expected special characters escaped in copy attribute")
+	}
 }
 
 func rejectInvalidWebDAVCredentialDestinations(

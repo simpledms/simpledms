@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/netip"
 	"net/url"
 	"regexp"
 	"runtime/debug"
@@ -91,6 +92,7 @@ func NewRouter(
 	devMode bool,
 	metaPath string,
 	i18n *i18n.I18n,
+	trustedProxies []netip.Prefix,
 ) *Router {
 	router := &Router{
 		ServeMux:                 http.NewServeMux(),
@@ -105,12 +107,13 @@ func NewRouter(
 	}
 
 	router.Handle(webdav.Pattern, webdav.NewHandler(webdav.Config{
-		MainDB:    mainDB,
-		TenantDBs: tenantDBs,
-		Infra:     infra,
-		DevMode:   devMode,
-		MetaPath:  metaPath,
-		I18n:      i18n,
+		MainDB:         mainDB,
+		TenantDBs:      tenantDBs,
+		Infra:          infra,
+		DevMode:        devMode,
+		MetaPath:       metaPath,
+		I18n:           i18n,
+		TrustedProxies: trustedProxies,
 	}))
 	router.allowSetupSessionPath(route2.Dashboard())
 

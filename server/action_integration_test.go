@@ -177,7 +177,7 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 	)
 
 	tenantDBs := tenantdbs.NewTenantDBs()
-	router := NewRouter(mainDB, tenantDBs, infra, true, metaPath, i18nx)
+	router := NewRouter(mainDB, tenantDBs, infra, true, metaPath, i18nx, nil)
 	actions := action.NewActions(infra, tenantDBs, true)
 	router.RegisterActions(actions)
 

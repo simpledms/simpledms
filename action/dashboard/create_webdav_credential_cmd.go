@@ -3,6 +3,7 @@ package dashboard
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	autil "github.com/simpledms/simpledms/action/util"
@@ -95,7 +96,17 @@ func (qq *CreateWebDAVCredentialCmd) Handler(
 		tenantPublicID,
 		spacePublicID,
 	)
-	result, err := qq.credentialx.CreateOwnerCredential(spaceCtx, data.Label, endpointURL)
+	secretLength := 0
+	if data.SecretLength != nil {
+		secretLength = *data.SecretLength
+	}
+	result, err := qq.credentialx.CreateOwnerCredential(
+		spaceCtx,
+		data.Label,
+		endpointURL,
+		secretLength,
+		data.CompatibilityMode,
+	)
 	if err != nil {
 		return err
 	}
@@ -138,6 +149,10 @@ func (qq *CreateWebDAVCredentialCmd) FormHandler(
 			Type:     widget.ListItemTypeHelper,
 		})
 	}
+	secretLength := webdavcredential.DefaultSecretLength
+	if data.SecretLength != nil {
+		secretLength = *data.SecretLength
+	}
 
 	form := &widget.Form{
 		HTMXAttrs: widget.HTMXAttrs{
@@ -153,6 +168,25 @@ func (qq *CreateWebDAVCredentialCmd) FormHandler(
 				IsRequired:   true,
 				HasAutofocus: true,
 				DefaultValue: data.Label,
+			},
+			&widget.TextField{
+				Label:          widget.T("Secret length"),
+				SupportingText: widget.T("Reduce the secret length only if your device limits the maximum password length."),
+				Name:           "SecretLength",
+				Type:           "number",
+				Step:           "1",
+				Min:            strconv.Itoa(webdavcredential.MinimumSecretLength),
+				Max:            strconv.Itoa(webdavcredential.DefaultSecretLength),
+				IsRequired:     true,
+				DefaultValue:   strconv.Itoa(secretLength),
+			},
+			&widget.Switch{
+				Label:          widget.T("Compatibility mode"),
+				SupportingText: widget.T("Uses only letters, numbers, hyphens, and underscores for devices with limited support for special characters."),
+				Name:           "CompatibilityMode",
+				Value:          "true",
+				IsChecked:      data.CompatibilityMode,
+				CheckedIcon:    widget.NewIcon("check"),
 			},
 			&widget.Label{Text: widget.T("Space"), Type: widget.LabelTypeLg},
 			&widget.ScrollableContent{

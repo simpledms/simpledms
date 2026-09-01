@@ -1415,6 +1415,26 @@
             "translation": ""
         },
         {
+            "id": "Secret length",
+            "message": "Secret length",
+            "translation": ""
+        },
+        {
+            "id": "Reduce the secret length only if your device limits the maximum password length.",
+            "message": "Reduce the secret length only if your device limits the maximum password length.",
+            "translation": ""
+        },
+        {
+            "id": "Compatibility mode",
+            "message": "Compatibility mode",
+            "translation": ""
+        },
+        {
+            "id": "Uses only letters, numbers, hyphens, and underscores for devices with limited support for special characters.",
+            "message": "Uses only letters, numbers, hyphens, and underscores for devices with limited support for special characters.",
+            "translation": ""
+        },
+        {
             "id": "Space",
             "message": "Space",
             "translation": ""
@@ -2627,6 +2647,16 @@
             "translation": ""
         },
         {
+            "id": "Malformed upload body.",
+            "message": "Malformed upload body.",
+            "translation": ""
+        },
+        {
+            "id": "Upload is too large.",
+            "message": "Upload is too large.",
+            "translation": ""
+        },
+        {
             "id": "File uploaded, please select a space.",
             "message": "File uploaded, please select a space.",
             "translation": ""
@@ -3096,11 +3126,6 @@
         {
             "id": "Unknown",
             "message": "Unknown",
-            "translation": ""
-        },
-        {
-            "id": "Upload is too large.",
-            "message": "Upload is too large.",
             "translation": ""
         },
         {
@@ -4323,6 +4348,29 @@
             "translation": ""
         },
         {
+            "id": "Secret length must be between {MinimumSecretLength} and {DefaultSecretLength} characters.",
+            "message": "Secret length must be between {MinimumSecretLength} and {DefaultSecretLength} characters.",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "MinimumSecretLength",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "MinimumSecretLength"
+                },
+                {
+                    "id": "DefaultSecretLength",
+                    "string": "%[2]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 2,
+                    "expr": "DefaultSecretLength"
+                }
+            ]
+        },
+        {
             "id": "Please select at least one document type.",
             "message": "Please select at least one document type.",
             "translation": ""
@@ -4549,11 +4597,6 @@
             "translation": ""
         },
         {
-            "id": "Malformed upload body.",
-            "message": "Malformed upload body.",
-            "translation": ""
-        },
-        {
             "id": "Could not verify stored file.",
             "message": "Could not verify stored file.",
             "translation": ""
@@ -4600,6 +4643,11 @@
             ],
             "message": "Tenant database not found.",
             "translation": ""
+        },
+        {
+            "id": "You are not allowed to access this tenant.",
+            "message": "You are not allowed to access this tenant.",
+            "translation": "You are not allowed to access this tenant."
         },
         {
             "id": "Uploaded file processing was taken over.",
@@ -5108,9 +5156,9 @@
             "translation": ""
         },
         {
-            "id": "You are not allowed to access this tenant.",
-            "message": "You are not allowed to access this tenant.",
-            "translation": "You are not allowed to access this tenant."
+            "id": "You are not allowed to access this space.",
+            "message": "You are not allowed to access this space.",
+            "translation": "You are not allowed to access this space."
         },
         {
             "id": "Could not read cookie.",
@@ -5175,6 +5223,16 @@
         {
             "id": "You are not allowed to access the requested resource.",
             "message": "You are not allowed to access the requested resource.",
+            "translation": ""
+        },
+        {
+            "id": "Space context not found.",
+            "message": "Space context not found.",
+            "translation": ""
+        },
+        {
+            "id": "Could not verify access.",
+            "message": "Could not verify access.",
             "translation": ""
         },
         {

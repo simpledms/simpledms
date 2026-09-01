@@ -11,12 +11,15 @@ type TextField struct {
 	Name         string
 	Type         string
 	Step         string
+	Min          string
+	Max          string
 	IsRequired   bool
 	IsDisabled   bool
 	HasAutofocus bool
 
-	LeadingIcon  *Icon
-	DefaultValue string
+	LeadingIcon    *Icon
+	DefaultValue   string
+	SupportingText *Text
 
 	// legacy stuff
 	// necessary in formAttributesWithoutType tmpl

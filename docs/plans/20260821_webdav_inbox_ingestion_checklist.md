@@ -166,7 +166,7 @@ Invariants: `docs/invariants/webdav_inbox_ingestion.md`
 
 - [x] Register the WebDAV boundary separately from browser-session redirects.
 - [x] Reject cleartext HTTP outside development before Basic verification.
-- [ ] Trust only direct TLS or configured trusted proxy information.
+- [x] Trust only direct TLS or configured trusted proxy information.
 - [x] Return the specified Basic challenge for missing, wrong, or revoked
   credentials.
 - [x] Add the narrow pre-context credential lookup by unique username.

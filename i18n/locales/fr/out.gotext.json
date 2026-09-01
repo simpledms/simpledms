@@ -1891,6 +1891,34 @@
             "fuzzy": true
         },
         {
+            "id": "Secret length",
+            "message": "Secret length",
+            "translation": "Longueur du secret",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Reduce the secret length only if your device limits the maximum password length.",
+            "message": "Reduce the secret length only if your device limits the maximum password length.",
+            "translation": "Réduis la longueur du secret uniquement si ton appareil limite la longueur maximale du mot de passe.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Compatibility mode",
+            "message": "Compatibility mode",
+            "translation": "Mode de compatibilité",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Uses only letters, numbers, hyphens, and underscores for devices with limited support for special characters.",
+            "message": "Uses only letters, numbers, hyphens, and underscores for devices with limited support for special characters.",
+            "translation": "Utilise uniquement des lettres, des chiffres, des traits d’union et des traits de soulignement pour les appareils avec une prise en charge limitée des caractères spéciaux.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Space",
             "message": "Space",
             "translation": "Space",
@@ -3485,6 +3513,20 @@
             "fuzzy": true
         },
         {
+            "id": "Malformed upload body.",
+            "message": "Malformed upload body.",
+            "translation": "Corps du téléversement mal formé.",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "Upload is too large.",
+            "message": "Upload is too large.",
+            "translation": "Le téléversement est trop volumineux.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "File uploaded, please select a space.",
             "message": "File uploaded, please select a space.",
             "translation": "Fichier téléversé, veuillez sélectionner un Space.",
@@ -4077,13 +4119,6 @@
             "id": "Unknown",
             "message": "Unknown",
             "translation": "Inconnu",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Upload is too large.",
-            "message": "Upload is too large.",
-            "translation": "Le téléversement est trop volumineux.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -5783,6 +5818,31 @@
             "fuzzy": true
         },
         {
+            "id": "Secret length must be between {MinimumSecretLength} and {DefaultSecretLength} characters.",
+            "message": "Secret length must be between {MinimumSecretLength} and {DefaultSecretLength} characters.",
+            "translation": "La longueur du secret doit être comprise entre {MinimumSecretLength} et {DefaultSecretLength} caractères.",
+            "translatorComment": "Translated from English by Codex",
+            "placeholders": [
+                {
+                    "id": "MinimumSecretLength",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "MinimumSecretLength"
+                },
+                {
+                    "id": "DefaultSecretLength",
+                    "string": "%[2]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 2,
+                    "expr": "DefaultSecretLength"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "Please select at least one document type.",
             "message": "Please select at least one document type.",
             "translation": "Veuillez sélectionner au moins un type de document.",
@@ -6089,13 +6149,6 @@
             "fuzzy": true
         },
         {
-            "id": "Malformed upload body.",
-            "message": "Malformed upload body.",
-            "translation": "Corps du téléversement mal formé.",
-            "translatorComment": "Translated from English by Codex.",
-            "fuzzy": true
-        },
-        {
             "id": "Could not verify stored file.",
             "message": "Could not verify stored file.",
             "translation": "Impossible de vérifier le fichier stocké.",
@@ -6159,6 +6212,13 @@
             "message": "Tenant database not found.",
             "translation": "Base de données du tenant introuvable.",
             "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to access this tenant.",
+            "message": "You are not allowed to access this tenant.",
+            "translation": "Vous n'êtes pas autorisé à accéder à ce locataire.",
+            "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
         {
@@ -6858,10 +6918,10 @@
             "fuzzy": true
         },
         {
-            "id": "You are not allowed to access this tenant.",
-            "message": "You are not allowed to access this tenant.",
-            "translation": "Vous n'êtes pas autorisé à accéder à ce locataire.",
-            "translatorComment": "Translated from English by Junie",
+            "id": "You are not allowed to access this space.",
+            "message": "You are not allowed to access this space.",
+            "translation": "Vous n'êtes pas autorisé à accéder à cet Space.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -6954,6 +7014,16 @@
             "translation": "Vous n'êtes pas autorisé à accéder à la ressource demandée.",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
+        },
+        {
+            "id": "Space context not found.",
+            "message": "Space context not found.",
+            "translation": ""
+        },
+        {
+            "id": "Could not verify access.",
+            "message": "Could not verify access.",
+            "translation": ""
         },
         {
             "id": "Could not start transaction.",

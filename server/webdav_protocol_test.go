@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"net/netip"
 	"strconv"
 	"strings"
 	"testing"
@@ -126,16 +127,53 @@ func TestWebDAVRejectsUnsafePathsAndMethods(t *testing.T) {
 
 func TestWebDAVRejectsCleartextOutsideDevBeforeAuth(t *testing.T) {
 	harness, tenantx, spacex, username, secret := newWebDAVProtocolFixture(t)
-	router := NewRouter(harness.mainDB, harness.tenantDBs, harness.infra, false, harness.metaPath, harness.i18n)
-	req := httptest.NewRequest(http.MethodOptions, webDAVTestURL(tenantx, spacex, "/"), nil)
-	req.SetBasicAuth(username, secret)
-	rr := httptest.NewRecorder()
-	router.ServeHTTP(rr, req)
-	if rr.Code != http.StatusForbidden {
-		t.Fatalf("expected cleartext forbidden, got %d", rr.Code)
+	router := NewRouter(
+		harness.mainDB,
+		harness.tenantDBs,
+		harness.infra,
+		false,
+		harness.metaPath,
+		harness.i18n,
+		[]netip.Prefix{netip.MustParsePrefix("192.0.2.10/32")},
+	)
+	cleartextReq := httptest.NewRequest(http.MethodOptions, webDAVTestURL(tenantx, spacex, "/"), nil)
+	cleartextReq.SetBasicAuth(username, secret)
+	cleartext := httptest.NewRecorder()
+	router.ServeHTTP(cleartext, cleartextReq)
+	if cleartext.Code != http.StatusForbidden {
+		t.Fatalf("expected cleartext forbidden, got %d", cleartext.Code)
 	}
-	if rr.Header().Get("WWW-Authenticate") != "" {
+	if cleartext.Header().Get("WWW-Authenticate") != "" {
 		t.Fatal("cleartext request should not get Basic challenge")
+	}
+
+	forwardedReq := httptest.NewRequest(http.MethodOptions, webDAVTestURL(tenantx, spacex, "/"), nil)
+	forwardedReq.Header.Set("X-Forwarded-Proto", "https")
+	forwardedReq.SetBasicAuth(username, secret)
+	forwardedReq.RemoteAddr = "198.51.100.10:1234"
+	forwarded := httptest.NewRecorder()
+	router.ServeHTTP(forwarded, forwardedReq)
+	if forwarded.Code != http.StatusForbidden {
+		t.Fatalf("expected untrusted forwarded request forbidden, got %d", forwarded.Code)
+	}
+
+	forwardedReq.Header.Set("X-Forwarded-Proto", "http")
+	forwardedReq.RemoteAddr = "192.0.2.10:1234"
+	forwarded = httptest.NewRecorder()
+	router.ServeHTTP(forwarded, forwardedReq)
+	if forwarded.Code != http.StatusForbidden {
+		t.Fatalf("expected trusted cleartext request forbidden, got %d", forwarded.Code)
+	}
+
+	forwardedReq.Header.Set("X-Forwarded-Proto", "https")
+	forwarded = httptest.NewRecorder()
+	router.ServeHTTP(forwarded, forwardedReq)
+	if forwarded.Code != http.StatusOK {
+		t.Fatalf(
+			"expected forwarded HTTPS request OK, got %d: %s",
+			forwarded.Code,
+			forwarded.Body.String(),
+		)
 	}
 }
 
@@ -380,7 +418,13 @@ func newWebDAVProtocolFixtureWithHarness(t *testing.T, harness *actionTestHarnes
 	createSpaceViaCmd(t, harness.actions, tenantCtx, "WebDAV Space")
 	spacex := tenantTx.Space.Query().Where(space.Name("WebDAV Space")).OnlyX(tenantCtx)
 	spaceCtx := ctxx.NewSpaceContext(tenantCtx, spacex)
-	result, err := credentialmodel.NewCredentialService().CreateOwnerCredential(spaceCtx, "Scanner", webDAVTestURL(tenantx, spacex, "/"))
+	result, err := credentialmodel.NewCredentialService().CreateOwnerCredential(
+		spaceCtx,
+		"Scanner",
+		webDAVTestURL(tenantx, spacex, "/"),
+		0,
+		false,
+	)
 	if err != nil {
 		t.Fatalf("create credential: %v", err)
 	}

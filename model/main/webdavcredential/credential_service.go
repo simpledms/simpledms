@@ -8,6 +8,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"log"
+	"math/big"
 	"net/http"
 	"strings"
 	"time"
@@ -24,6 +25,11 @@ const (
 	secretBytes   = 32
 	usernameBytes = 15
 	fakeSalt      = "webdav-fake-salt-for-missing-users"
+
+	// MinimumSecretLength is the shortest supported generated WebDAV secret.
+	MinimumSecretLength = 12
+	// DefaultSecretLength preserves the full generated WebDAV secret length.
+	DefaultSecretLength = 43
 )
 
 var fakeHash = accountutil.PasswordHash("not-the-secret", fakeSalt)
@@ -38,17 +44,19 @@ func (qq *CredentialService) CreateOwnerCredential(
 	ctx *ctxx.SpaceContext,
 	label string,
 	endpointURL string,
+	secretLength int,
+	compatibilityMode bool,
 ) (*CreateResult, error) {
 	label = strings.TrimSpace(label)
 	if label == "" {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Credential label is required.")
 	}
 
-	username, err := uniqueUsername(ctx, ctx.MainTx)
+	secret, err := randomSecret(secretLength, compatibilityMode)
 	if err != nil {
 		return nil, err
 	}
-	secret, err := randomSecret()
+	username, err := uniqueUsername(ctx, ctx.MainTx)
 	if err != nil {
 		return nil, err
 	}
@@ -259,11 +267,51 @@ func randomUsername() (string, error) {
 	return "dav_" + strings.ToLower(encoded), nil
 }
 
-func randomSecret() (string, error) {
+func randomSecret(length int, compatibilityMode bool) (string, error) {
+	if length == 0 {
+		length = DefaultSecretLength
+	}
+	if length < MinimumSecretLength || length > DefaultSecretLength {
+		return "", e.NewHTTPErrorf(
+			http.StatusBadRequest,
+			"Secret length must be between %d and %d characters.",
+			MinimumSecretLength,
+			DefaultSecretLength,
+		)
+	}
+	if !compatibilityMode {
+		return randomPrintableASCIISecret(length)
+	}
 	bytes := make([]byte, secretBytes)
 	if _, err := rand.Read(bytes); err != nil {
 		log.Println(err)
 		return "", err
 	}
-	return base64.RawURLEncoding.EncodeToString(bytes), nil
+	return base64.RawURLEncoding.EncodeToString(bytes)[:length], nil
+}
+
+func randomPrintableASCIISecret(length int) (string, error) {
+	characterLimit := big.NewInt(94)
+	for {
+		secret := make([]byte, length)
+		hasSpecialCharacter := false
+		for index := range secret {
+			characterIndex, err := rand.Int(rand.Reader, characterLimit)
+			if err != nil {
+				log.Println(err)
+				return "", err
+			}
+			secret[index] = byte(33 + characterIndex.Int64())
+			hasSpecialCharacter = hasSpecialCharacter || !isASCIIAlphaNumeric(secret[index])
+		}
+		if hasSpecialCharacter {
+			return string(secret), nil
+		}
+	}
+}
+
+func isASCIIAlphaNumeric(char byte) bool {
+	return char >= '0' && char <= '9' ||
+		char >= 'A' && char <= 'Z' ||
+		char >= 'a' && char <= 'z'
 }

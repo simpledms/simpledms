@@ -6,9 +6,14 @@ import (
 	"errors"
 	"io"
 	"log"
+	"net"
 	"net/http"
+	"net/netip"
+	"slices"
 	"strings"
 	"time"
+
+	"golang.org/x/net/webdav"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
@@ -33,7 +38,6 @@ import (
 	credentialmodel "github.com/simpledms/simpledms/model/main/webdavcredential"
 	webdavresourcemodel "github.com/simpledms/simpledms/model/tenant/webdavresource"
 	"github.com/simpledms/simpledms/util/e"
-	"golang.org/x/net/webdav"
 )
 
 const (
@@ -56,6 +60,7 @@ type Handler struct {
 	credentialService *credentialmodel.CredentialService
 	limiter           *webDAVRateLimiter
 	locks             *webDAVLockSystem
+	trustedProxies    []netip.Prefix
 }
 
 // NewHandler creates a WebDAV endpoint handler with bounded auth and lock state.
@@ -70,6 +75,7 @@ func NewHandler(config Config) *Handler {
 		credentialService: credentialmodel.NewCredentialService(),
 		limiter:           newWebDAVRateLimiter(4096),
 		locks:             newWebDAVLockSystem(),
+		trustedProxies:    config.TrustedProxies,
 	}
 }
 
@@ -185,7 +191,8 @@ func (qq *Handler) authenticatedWebDAVCredential(
 	req *http.Request,
 ) (*credentialmodel.AuthRecord, bool) {
 	username, secret, ok := req.BasicAuth()
-	if !ok || username == "" || qq.limiter.blocked(req.RemoteAddr, username) {
+	rateLimitAddr := qq.webDAVRateLimitRemoteAddr(req)
+	if !ok || username == "" || qq.limiter.blocked(rateLimitAddr, username) {
 		writeWebDAVChallenge(rw)
 		return nil, false
 	}
@@ -193,12 +200,12 @@ func (qq *Handler) authenticatedWebDAVCredential(
 	credentialx, ok, err := qq.authenticateWebDAVCredential(req.Context(), username, secret)
 	if err != nil {
 		log.Println(err)
-		qq.limiter.allow(req.RemoteAddr, username)
+		qq.limiter.allow(rateLimitAddr, username)
 		writeWebDAVChallenge(rw)
 		return nil, false
 	}
 	if !ok || credentialx.RevokedAt != nil {
-		qq.limiter.allow(req.RemoteAddr, username)
+		qq.limiter.allow(rateLimitAddr, username)
 		writeWebDAVChallenge(rw)
 		return nil, false
 	}
@@ -671,7 +678,51 @@ func webDAVMethodAllowed(method string) bool {
 }
 
 func (qq *Handler) isSecureWebDAVRequest(req *http.Request) bool {
-	return qq.devMode || req.TLS != nil
+	if qq.devMode || req.TLS != nil {
+		return true
+	}
+	if !strings.EqualFold(req.Header.Get("X-Forwarded-Proto"), "https") {
+		return false
+	}
+	return qq.isTrustedProxy(req.RemoteAddr)
+}
+
+func (qq *Handler) webDAVRateLimitRemoteAddr(req *http.Request) string {
+	if !qq.isTrustedProxy(req.RemoteAddr) {
+		return req.RemoteAddr
+	}
+	forwardedFor := strings.Split(req.Header.Get("X-Forwarded-For"), ",")
+	for _, f := range slices.Backward(forwardedFor) {
+		addr, err := netip.ParseAddr(strings.TrimSpace(f))
+		if err != nil {
+			return req.RemoteAddr
+		}
+		if !qq.isTrustedProxyAddr(addr) {
+			return addr.String()
+		}
+	}
+	return req.RemoteAddr
+}
+
+func (qq *Handler) isTrustedProxy(remoteAddr string) bool {
+	host, _, err := net.SplitHostPort(remoteAddr)
+	if err != nil {
+		return false
+	}
+	addr, err := netip.ParseAddr(host)
+	if err != nil {
+		return false
+	}
+	return qq.isTrustedProxyAddr(addr)
+}
+
+func (qq *Handler) isTrustedProxyAddr(remoteAddr netip.Addr) bool {
+	for _, prefix := range qq.trustedProxies {
+		if prefix.Contains(remoteAddr) {
+			return true
+		}
+	}
+	return false
 }
 
 func rollbackMainTx(tx *entmain.Tx, committed *bool) {

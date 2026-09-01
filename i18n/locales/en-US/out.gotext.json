@@ -1891,6 +1891,34 @@
             "fuzzy": true
         },
         {
+            "id": "Secret length",
+            "message": "Secret length",
+            "translation": "Secret length",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Reduce the secret length only if your device limits the maximum password length.",
+            "message": "Reduce the secret length only if your device limits the maximum password length.",
+            "translation": "Reduce the secret length only if your device limits the maximum password length.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Compatibility mode",
+            "message": "Compatibility mode",
+            "translation": "Compatibility mode",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Uses only letters, numbers, hyphens, and underscores for devices with limited support for special characters.",
+            "message": "Uses only letters, numbers, hyphens, and underscores for devices with limited support for special characters.",
+            "translation": "Uses only letters, numbers, hyphens, and underscores for devices with limited support for special characters.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Space",
             "message": "Space",
             "translation": "Space",
@@ -3485,6 +3513,20 @@
             "fuzzy": true
         },
         {
+            "id": "Malformed upload body.",
+            "message": "Malformed upload body.",
+            "translation": "Malformed upload body.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Upload is too large.",
+            "message": "Upload is too large.",
+            "translation": "Upload is too large.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "File uploaded, please select a space.",
             "message": "File uploaded, please select a space.",
             "translation": "File uploaded, please select a space.",
@@ -4077,13 +4119,6 @@
             "id": "Unknown",
             "message": "Unknown",
             "translation": "Unknown",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Upload is too large.",
-            "message": "Upload is too large.",
-            "translation": "Upload is too large.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5783,6 +5818,31 @@
             "fuzzy": true
         },
         {
+            "id": "Secret length must be between {MinimumSecretLength} and {DefaultSecretLength} characters.",
+            "message": "Secret length must be between {MinimumSecretLength} and {DefaultSecretLength} characters.",
+            "translation": "Secret length must be between {MinimumSecretLength} and {DefaultSecretLength} characters.",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "MinimumSecretLength",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "MinimumSecretLength"
+                },
+                {
+                    "id": "DefaultSecretLength",
+                    "string": "%[2]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 2,
+                    "expr": "DefaultSecretLength"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "Please select at least one document type.",
             "message": "Please select at least one document type.",
             "translation": "Please select at least one document type.",
@@ -6089,13 +6149,6 @@
             "fuzzy": true
         },
         {
-            "id": "Malformed upload body.",
-            "message": "Malformed upload body.",
-            "translation": "Malformed upload body.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Could not verify stored file.",
             "message": "Could not verify stored file.",
             "translation": "Could not verify stored file.",
@@ -6158,6 +6211,13 @@
             ],
             "message": "Tenant database not found.",
             "translation": "Tenant database not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to access this tenant.",
+            "message": "You are not allowed to access this tenant.",
+            "translation": "You are not allowed to access this tenant.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6858,9 +6918,9 @@
             "fuzzy": true
         },
         {
-            "id": "You are not allowed to access this tenant.",
-            "message": "You are not allowed to access this tenant.",
-            "translation": "You are not allowed to access this tenant.",
+            "id": "You are not allowed to access this space.",
+            "message": "You are not allowed to access this space.",
+            "translation": "You are not allowed to access this space.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6952,6 +7012,20 @@
             "id": "You are not allowed to access the requested resource.",
             "message": "You are not allowed to access the requested resource.",
             "translation": "You are not allowed to access the requested resource.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Space context not found.",
+            "message": "Space context not found.",
+            "translation": "Space context not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not verify access.",
+            "message": "Could not verify access.",
+            "translation": "Could not verify access.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

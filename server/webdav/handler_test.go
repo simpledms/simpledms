@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/netip"
 	"path/filepath"
 	"testing"
 	"time"
@@ -46,6 +47,45 @@ func TestWriteWebDAVTextIncludesAllowOnMethodNotAllowed(t *testing.T) {
 
 	if got := rr.Header().Get("Allow"); got != webDAVAllow {
 		t.Fatalf("expected Allow %q, got %q", webDAVAllow, got)
+	}
+}
+
+func TestWebDAVRateLimitRemoteAddrUsesOnlyTrustedForwardedChain(t *testing.T) {
+	handler := NewHandler(Config{
+		TrustedProxies: []netip.Prefix{netip.MustParsePrefix("192.0.2.0/24")},
+	})
+	for _, tc := range []struct {
+		remoteAddr   string
+		forwardedFor string
+		want         string
+	}{
+		{
+			remoteAddr:   "198.51.100.10:1234",
+			forwardedFor: "203.0.113.10",
+			want:         "198.51.100.10:1234",
+		},
+		{
+			remoteAddr:   "192.0.2.10:1234",
+			forwardedFor: "198.51.100.10",
+			want:         "198.51.100.10",
+		},
+		{
+			remoteAddr:   "192.0.2.10:1234",
+			forwardedFor: "198.51.100.10, 192.0.2.11",
+			want:         "198.51.100.10",
+		},
+		{
+			remoteAddr:   "192.0.2.10:1234",
+			forwardedFor: "198.51.100.10, invalid",
+			want:         "192.0.2.10:1234",
+		},
+	} {
+		req := httptest.NewRequest(http.MethodOptions, "/", nil)
+		req.RemoteAddr = tc.remoteAddr
+		req.Header.Set("X-Forwarded-For", tc.forwardedFor)
+		if got := handler.webDAVRateLimitRemoteAddr(req); got != tc.want {
+			t.Fatalf("remote %q, forwarded %q: expected %q, got %q", tc.remoteAddr, tc.forwardedFor, tc.want, got)
+		}
 	}
 }
 

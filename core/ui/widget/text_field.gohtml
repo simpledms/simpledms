@@ -39,6 +39,7 @@
 				mt-1.5 is necessary to show label fully if moved up and overflow:scroll is used
 				*/}}
 		{{/* !!! IMPORTANT duplicated in FormFields !!! */}}
+		<div class="w-full">
 		<div class="rounded-xs px-4 py-2 min-h-14 outline outline-1 -outline-offset-1 flex items-center mt-1.5 w-full
 					outline-outline focus-within:outline-primary focus-within:outline-2 focus-within:-outline-offset-2 hover:border-on-surface
 					has-[:disabled]:outline-on-surface/[0.12] has-[:disabled]:cursor-not-allowed">
@@ -53,6 +54,7 @@
 			<input
 					{{ template "HTMXAttrs" .HTMXAttrs }}
 					{{ if ne .GetID "" }}id="{{ .GetID }}"{{ end }}
+					{{ if .SupportingText }}aria-describedby="{{ .GetID }}-supporting-text"{{ end }}
 					name="{{ .Name }}"
 					value="{{ .DefaultValue }}"
 					type="{{ .Type }}"
@@ -65,6 +67,8 @@
 						disabled:cursor-not-allowed"
 					placeholder=" " {{/* necessary for label positioning */}}
 					{{ if .Step }}step="{{ .Step }}"{{ end }}
+					{{ if .Min }}min="{{ .Min }}"{{ end }}
+					{{ if .Max }}max="{{ .Max }}"{{ end }}
 			/>
 			{{- if eq .Type "file" }}
 				<input type="text" class="body-lg text-on-surface placeholder-on-surface-variant
@@ -94,6 +98,10 @@
 					">{{ render $ctx .Label }}</span>
             {{/* !!! IMPORTANT duplicated in FormFields !!! */}}
 			</label>
+		</div>
+		{{- with .SupportingText }}
+			<div id="{{ $.GetID }}-supporting-text" class="body-sm text-on-surface-variant px-4 pt-1">{{ render $ctx . }}</div>
+		{{- end }}
 		</div>
 	{{ end }}
 {{ end }}
