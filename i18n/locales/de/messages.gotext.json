@@ -209,6 +209,13 @@
             "fuzzy": true
         },
         {
+            "id": "WebDAV Inbox URL",
+            "message": "WebDAV Inbox URL",
+            "translation": "WebDAV-Inbox-URL",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "%d recovery codes left",
             "message": "%d recovery codes left",
             "translation": "%d Recovery-Codes verbleiben",

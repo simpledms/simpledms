@@ -260,11 +260,14 @@ func createWebDAVCredential(
 	if !strings.Contains(rr.Body.String(), formURL) {
 		t.Fatal("expected complete URL in credential dialog")
 	}
-	if count := strings.Count(rr.Body.String(), "data-copy-value"); count != 3 {
-		t.Fatalf("expected all three credential values to be copyable, got %d", count)
+	if !strings.Contains(rr.Body.String(), formURL+"Inbox/") {
+		t.Fatal("expected direct Inbox URL in credential dialog")
 	}
-	if count := strings.Count(rr.Body.String(), "overflow-wrap: anywhere"); count != 3 {
-		t.Fatalf("expected all three credential values to wrap, got %d", count)
+	if count := strings.Count(rr.Body.String(), "data-copy-value"); count != 4 {
+		t.Fatalf("expected all four credential values to be copyable, got %d", count)
+	}
+	if count := strings.Count(rr.Body.String(), "overflow-wrap: anywhere"); count != 4 {
+		t.Fatalf("expected all four credential values to wrap, got %d", count)
 	}
 	if !regexp.MustCompile(`data-copy-value="[A-Za-z0-9_-]{20}"`).MatchString(rr.Body.String()) {
 		t.Fatal("expected generated 20-character secret")
@@ -349,10 +352,10 @@ func createArchiveAndRevokeWebDAVCredential(
 		archiveRR.Body.String(),
 		-1,
 	)
-	if len(copyValueMatches) != 3 {
-		t.Fatalf("expected three copyable credential values, got %d", len(copyValueMatches))
+	if len(copyValueMatches) != 4 {
+		t.Fatalf("expected four copyable credential values, got %d", len(copyValueMatches))
 	}
-	secret := htmlstd.UnescapeString(copyValueMatches[2][1])
+	secret := htmlstd.UnescapeString(copyValueMatches[len(copyValueMatches)-1][1])
 	if len(secret) != 43 || !regexp.MustCompile(`[^A-Za-z0-9]`).MatchString(secret) {
 		t.Fatalf("expected default 43-character secret with a special character, got %q", secret)
 	}

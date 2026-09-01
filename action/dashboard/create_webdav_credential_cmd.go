@@ -224,6 +224,7 @@ func (qq *CreateWebDAVCredentialCmd) secretDialog(
 			Children: []widget.IWidget{
 				widget.T("Copy the secret now. It will not be shown again.").SetWrap(),
 				credentialValue(ctx, "WebDAV URL", result.URL),
+				credentialValue(ctx, "WebDAV Inbox URL", result.URL+"Inbox/"),
 				credentialValue(ctx, "Username", result.Username),
 				credentialValue(ctx, "Secret", result.Secret),
 			},

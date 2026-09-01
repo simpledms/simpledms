@@ -1465,6 +1465,11 @@
             "translation": ""
         },
         {
+            "id": "WebDAV Inbox URL",
+            "message": "WebDAV Inbox URL",
+            "translation": ""
+        },
+        {
             "id": "Username",
             "message": "Username",
             "translation": ""

@@ -1937,6 +1937,13 @@
             "fuzzy": true
         },
         {
+            "id": "WebDAV Inbox URL",
+            "message": "WebDAV Inbox URL",
+            "translation": "WebDAV-Inbox-URL",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Username",
             "message": "Username",
             "translation": "Benutzername",
