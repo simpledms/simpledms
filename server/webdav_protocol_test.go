@@ -94,6 +94,76 @@ func TestWebDAVStructuralPropfindHidesFiles(t *testing.T) {
 	}
 }
 
+func TestWebDAVScannerCompatibilityProbesCreateNoState(t *testing.T) {
+	harness, tenantx, spacex, username, secret := newWebDAVProtocolFixture(t)
+
+	unauthenticated := webDAVRequest(
+		t,
+		harness,
+		"",
+		"",
+		http.MethodGet,
+		webDAVTestURL(tenantx, spacex, "/Inbox"),
+		nil,
+		nil,
+	)
+	if unauthenticated.Code != http.StatusUnauthorized {
+		t.Fatalf("expected unauthenticated probe challenged, got %d", unauthenticated.Code)
+	}
+
+	for _, method := range []string{http.MethodGet, http.MethodHead} {
+		for _, path := range []string{"/", "/Inbox", "/Inbox/"} {
+			rr := webDAVRequest(
+				t,
+				harness,
+				username,
+				secret,
+				method,
+				webDAVTestURL(tenantx, spacex, path),
+				nil,
+				nil,
+			)
+			if rr.Code != http.StatusOK || rr.Body.Len() != 0 {
+				t.Fatalf("%s %s: expected empty OK, got %d: %s", method, path, rr.Code, rr.Body.String())
+			}
+		}
+	}
+
+	probe := webDAVRequest(
+		t,
+		harness,
+		username,
+		secret,
+		"PUT",
+		webDAVTestURL(tenantx, spacex, "/Inbox/scan.pdf"),
+		nil,
+		nil,
+	)
+	if probe.Code != http.StatusCreated || probe.Body.Len() != 0 {
+		t.Fatalf("expected empty PUT probe created, got %d: %s", probe.Code, probe.Body.String())
+	}
+
+	ctx := tenantprivacy.DecisionContext(
+		enttenantschema.WithUnfinishedUploads(context.Background()),
+		tenantprivacy.Allow,
+	)
+	tenantDB := mustTenantDB(t, harness, tenantx.ID)
+	if count := tenantDB.ReadOnlyConn.File.Query().
+		Where(enttenantfile.IsRootDir(false)).
+		CountX(ctx); count != 0 {
+		t.Fatalf("empty PUT probe created files: %d", count)
+	}
+	if count := tenantDB.ReadOnlyConn.FileVersion.Query().CountX(ctx); count != 0 {
+		t.Fatalf("empty PUT probe created file versions: %d", count)
+	}
+	if count := tenantDB.ReadOnlyConn.StoredFile.Query().CountX(ctx); count != 0 {
+		t.Fatalf("empty PUT probe created stored files: %d", count)
+	}
+	if count := tenantDB.ReadOnlyConn.WebDAVResource.Query().CountX(ctx); count != 0 {
+		t.Fatalf("empty PUT probe created DAV resources: %d", count)
+	}
+}
+
 func TestWebDAVRejectsUnsafePathsAndMethods(t *testing.T) {
 	harness, tenantx, spacex, username, secret := newWebDAVProtocolFixture(t)
 
@@ -104,7 +174,6 @@ func TestWebDAVRejectsUnsafePathsAndMethods(t *testing.T) {
 	}{
 		{method: "MKCOL", path: "/Inbox/new-folder", want: http.StatusMethodNotAllowed},
 		{method: http.MethodDelete, path: "/Inbox/a.pdf", want: http.StatusMethodNotAllowed},
-		{method: http.MethodHead, path: "/", want: http.StatusMethodNotAllowed},
 		{method: http.MethodGet, path: "/Inbox/a.pdf", want: http.StatusNotFound},
 		{method: http.MethodHead, path: "/Inbox/a.pdf", want: http.StatusNotFound},
 		{method: "PUT", path: "/inbox/a.pdf", want: http.StatusConflict},
@@ -213,6 +282,33 @@ func TestWebDAVLockCreatesNoRows(t *testing.T) {
 
 func TestWebDAVPutCreatesUnreadableInboxFileAndRetryConflictsBeforeRead(t *testing.T) {
 	harness, tenantx, spacex, username, secret := newWebDAVS3ProtocolFixture(t)
+
+	getProbe := webDAVRequest(
+		t,
+		harness,
+		username,
+		secret,
+		http.MethodGet,
+		webDAVTestURL(tenantx, spacex, "/Inbox"),
+		nil,
+		nil,
+	)
+	if getProbe.Code != http.StatusOK {
+		t.Fatalf("expected structural GET probe OK, got %d: %s", getProbe.Code, getProbe.Body.String())
+	}
+	emptyProbe := webDAVRequest(
+		t,
+		harness,
+		username,
+		secret,
+		"PUT",
+		webDAVTestURL(tenantx, spacex, "/Inbox/scan.pdf"),
+		nil,
+		nil,
+	)
+	if emptyProbe.Code != http.StatusCreated {
+		t.Fatalf("expected empty PUT probe created, got %d: %s", emptyProbe.Code, emptyProbe.Body.String())
+	}
 
 	rr := webDAVRequest(t, harness, username, secret, "PUT", webDAVTestURL(tenantx, spacex, "/Inbox/scan.pdf"), strings.NewReader("hello"), nil)
 	if rr.Code != http.StatusCreated {
@@ -455,6 +551,6 @@ const webDAVPropfindBody = `<?xml version="1.0"?><D:propfind xmlns:D="DAV:"><D:a
 
 const webDAVLockBody = `<?xml version="1.0"?><D:lockinfo xmlns:D="DAV:"><D:lockscope><D:exclusive/></D:lockscope><D:locktype><D:write/></D:locktype><D:owner>test</D:owner></D:lockinfo>`
 
-const webDAVAllowExpected = "OPTIONS, PROPFIND, PUT, LOCK, UNLOCK, MOVE"
+const webDAVAllowExpected = "OPTIONS, PROPFIND, GET, HEAD, PUT, LOCK, UNLOCK, MOVE"
 
 const webDAVRealmExpected = `Basic realm="SimpleDMS WebDAV", charset="UTF-8"`

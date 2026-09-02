@@ -15,10 +15,10 @@ an account-owned intake key for exactly one Space. It may create new Inbox files
 and narrowly rename a still-Inbox file uploaded by that same credential. It must
 not list, read, overwrite, edit, delete, copy, or reorganize existing files.
 
-Upload success is an integrity guarantee. It means the request stream was fully
-consumed, bounded, hashed, compressed, encrypted, written to temporary S3
-storage, verified against S3, and finalized in tenant data. Failed or interrupted
-uploads must not expose partial logical files.
+Non-empty upload success is an integrity guarantee. It means the request stream
+was fully consumed, bounded, hashed, compressed, encrypted, written to temporary
+S3 storage, verified against S3, and finalized in tenant data. Failed or
+interrupted uploads must not expose partial logical files.
 
 ## Confirmed Decisions
 
@@ -33,10 +33,10 @@ uploads must not expose partial logical files.
 - Structural discovery may reveal `/` and `/Inbox/`, but never user files.
 - Reject folders and nested uploads. Accept files only at
   `/Inbox/{singleFilename}`.
-- Allow `OPTIONS`, structural `PROPFIND`, `PUT`, `LOCK`, `UNLOCK`, and a narrow
-  `MOVE` operation.
-- Block reads, file metadata probes, deletes, copies, folder creation, property
-  edits, and all other methods.
+- Allow `OPTIONS`, structural `PROPFIND`, structural `GET` and `HEAD`, `PUT`,
+  `LOCK`, `UNLOCK`, and a narrow `MOVE` operation.
+- Block file reads and metadata probes, deletes, copies, folder creation,
+  property edits, and all other methods.
 - A `LOCK` on a missing file path must not create an empty Inbox file.
 - `MOVE` may only rename a file uploaded by the same credential while the file
   remains in Inbox. It must not change content or move the file out of Inbox.
@@ -66,7 +66,8 @@ uploads must not expose partial logical files.
   already used. Never overwrite.
 - A repeated `PUT` by the same credential to the same active DAV path returns a
   conflict while the first linked file remains in Inbox.
-- Reject zero-byte files.
+- Reject zero-byte files. Treat an authenticated, valid PUT declared as zero
+  length as a compatibility probe: return an empty `201` without creating state.
 - Accept chunked or otherwise unknown-length requests while enforcing the
   maximum size during streaming. Compare exact bytes when `Content-Length` is
   present.
@@ -239,12 +240,12 @@ Do not reveal which part failed.
 | --- | --- | --- | --- |
 | `OPTIONS` | Narrow capability response | Narrow capability response | `404` or `405` |
 | `PROPFIND` | Structural `207` response | `404` | `404` |
-| `HEAD` | `405` | `404` | `404` |
-| `PUT` | `405` | Create one Inbox file | `409` or `404` |
+| `HEAD` | Empty `200` | `404` | `404` |
+| `PUT` | `405` | Create one Inbox file, or declared-empty no-op | `409` or `404` |
 | `LOCK` | Lock only | Lock or no-op placeholder | `409` or `404` |
 | `UNLOCK` | Unlock only | Unlock only | `409` or `404` |
 | `MOVE` | `405` | Narrow same-credential rename | `409` or `404` |
-| `GET` | `405` | `404` | `404` |
+| `GET` | Empty `200` | `404` | `404` |
 | All other methods | `405` | `405` | `405` or `404` |
 
 The outer endpoint handles `OPTIONS`, because the unfiltered
@@ -253,7 +254,7 @@ The outer endpoint handles `OPTIONS`, because the unfiltered
 ```text
 DAV: 1, 2
 MS-Author-Via: DAV
-Allow: OPTIONS, PROPFIND, PUT, LOCK, UNLOCK, MOVE
+Allow: OPTIONS, PROPFIND, GET, HEAD, PUT, LOCK, UNLOCK, MOVE
 ```
 
 ### Status Mapping
@@ -266,11 +267,12 @@ Allow: OPTIONS, PROPFIND, PUT, LOCK, UNLOCK, MOVE
 | Credential does not match endpoint tenant or Space | `404 Not Found` |
 | Unsupported method | `405 Method Not Allowed` with narrow `Allow` |
 | Invalid write path, active alias conflict, or invalid MOVE | `409 Conflict` |
-| Zero bytes, known-length mismatch, or malformed request body | `400 Bad Request` |
+| Valid PUT declared as zero length | Empty `201 Created` with no persistence |
+| Unknown-length zero bytes, known-length mismatch, or malformed request body | `400 Bad Request` |
 | Known request body larger than the upload limit | `413 Request Entity Too Large` |
 | Stream grows beyond the upload limit | `413 Request Entity Too Large` |
 | Tenant quota is insufficient | `507 Insufficient Storage` |
-| Successful PUT | `201 Created` |
+| Successful non-empty PUT | `201 Created` |
 | Successful MOVE to a new alias | `201 Created` |
 | Successful UNLOCK | `204 No Content` |
 | Transform, S3, or integrity verification failure | `500 Internal Server Error` |
@@ -334,7 +336,8 @@ the body.
 
 For a known `Content-Length`:
 
-1. Reject `0` bytes.
+1. For `0` bytes, return an empty `201` without reserving an alias, creating DB
+   rows, or writing an object.
 2. Reject a value above the existing per-file maximum before streaming.
 3. Pass the expected raw size to the shared upload pipeline.
 4. Require the final raw byte count to match exactly.
@@ -345,6 +348,11 @@ For chunked or unknown length:
 2. Reject on the first byte above the maximum.
 3. Reject a final count of zero.
 4. Treat a request-body read error or malformed chunk termination as failure.
+
+The declared-empty compatibility response still requires HTTPS, Basic
+authentication, endpoint authorization, and valid flat Inbox path handling. A
+later non-empty PUT to the same path proceeds normally because the probe creates
+no DAV alias or upload state.
 
 A repeated `PUT` to the same canonical DAV path by the same credential returns
 `409` before reading the body if its linked file still exists in Inbox. If that
@@ -1224,7 +1232,7 @@ sequences without naming client products:
 11. Rejected `MKCOL`, nested PUT, DELETE, COPY, and PROPPATCH.
 12. Rejected cross-host and cross-Space MOVE destination.
 13. Process lock loss followed by successful lock reacquisition.
-14. Structural HEAD rejected and omitted from `Allow`.
+14. Structural GET/HEAD return empty `200`; file GET/HEAD remain hidden.
 15. MOVE with `Overwrite: T` never calls `RemoveAll` or changes a destination.
 16. Oversized LOCK and PROPFIND XML rejected before DAV parsing.
 
@@ -1319,13 +1327,14 @@ The feature is complete when all of the following are true:
 6. Structural discovery exposes `/Inbox/` and no user files.
 7. Existing and uploaded files cannot be listed, read, overwritten, deleted,
    copied, nested, or edited through WebDAV.
-8. A valid PUT streams without full-file disk or memory buffering.
-9. Zero-byte, oversized, truncated, canceled, transform-failed, quota-failed, and
-   S3-integrity-failed uploads leave no visible logical file.
+8. A valid non-empty PUT streams without full-file disk or memory buffering.
+9. Declared-empty DAV probes and zero-byte, oversized, truncated, canceled,
+   transform-failed, quota-failed, and S3-integrity-failed uploads leave no
+   visible logical file.
 10. Backend S3 temporary size and full-object CRC32C match local transformed
     count and CRC32C before finalization; local full SHA-256 is persisted.
-11. A successful PUT creates one Inbox file with source `webdav` only after
-    verification and commit.
+11. A successful non-empty PUT creates one Inbox file with source `webdav` only
+    after verification and commit.
 12. A repeated same-credential PUT to the active DAV path returns `409` without a
     duplicate or overwrite.
 13. Inbox filename conflicts generate concurrency-safe unique names.

@@ -43,7 +43,7 @@ import (
 const (
 	// Pattern is the WebDAV endpoint route registered on the server mux.
 	Pattern             = "/webdav/{tenant_public_id}/{space_public_id}/"
-	webDAVAllow         = "OPTIONS, PROPFIND, PUT, LOCK, UNLOCK, MOVE"
+	webDAVAllow         = "OPTIONS, PROPFIND, GET, HEAD, PUT, LOCK, UNLOCK, MOVE"
 	webDAVRealm         = `Basic realm="SimpleDMS WebDAV", charset="UTF-8"`
 	webDAVMaxXMLBytes   = 64 * 1024
 	webDAVMaxStatusBody = 64 * 1024
@@ -175,12 +175,22 @@ func (qq *Handler) prepareWebDAVRequest(
 		writeWebDAVText(rw, http.StatusNotFound, "Not found")
 		return false
 	}
+	// Extend this explicit allowlist when adding structural or dynamic DAV directories.
+	if (req.Method == http.MethodGet || req.Method == http.MethodHead) &&
+		(pathx.isRoot || pathx.isInbox) {
+		rw.WriteHeader(http.StatusOK)
+		return false
+	}
 	if !webDAVMethodAllowed(req.Method) {
 		writeWebDAVMethodNotAllowed(rw)
 		return false
 	}
 	if err := qq.preflightWebDAVRequest(req, endpointPrefix, pathx); err != nil {
 		writeWebDAVText(rw, webDAVHTTPStatus(err), http.StatusText(webDAVHTTPStatus(err)))
+		return false
+	}
+	if req.Method == http.MethodPut && pathx.isFile && req.ContentLength == 0 {
+		rw.WriteHeader(http.StatusCreated)
 		return false
 	}
 	return true
@@ -584,9 +594,6 @@ func (qq *Handler) preflightWebDAVRequest(req *http.Request, endpointPrefix stri
 		if !pathx.isFile {
 			return webDAVStatusError{status: http.StatusMethodNotAllowed, msg: "put requires file"}
 		}
-		if req.ContentLength == 0 {
-			return webDAVStatusError{status: http.StatusBadRequest, msg: "empty upload"}
-		}
 		if maxBytes := qq.infra.SystemConfig().MaxUploadSizeBytes(); maxBytes > 0 && req.ContentLength > maxBytes {
 			return webDAVStatusError{status: http.StatusRequestEntityTooLarge, msg: "upload too large"}
 		}
@@ -670,7 +677,7 @@ func webDAVInvalidPathStatus(method string) int {
 
 func webDAVMethodAllowed(method string) bool {
 	switch method {
-	case http.MethodOptions, "PROPFIND", "PUT", "LOCK", "UNLOCK", "MOVE":
+	case http.MethodOptions, http.MethodGet, http.MethodHead, "PROPFIND", "PUT", "LOCK", "UNLOCK", "MOVE":
 		return true
 	default:
 		return false

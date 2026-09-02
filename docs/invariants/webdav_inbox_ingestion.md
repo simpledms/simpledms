@@ -106,9 +106,9 @@ fails; non-owner tenant users cannot inspect another user's credentials.
 
 ### Every DAV Method Is Authenticated
 
-Rule: Every WebDAV method, including OPTIONS, PROPFIND, LOCK, and UNLOCK,
-requires Basic authentication. WebDAV never redirects to browser sign-in and
-never accepts a browser session as its credential.
+Rule: Every WebDAV method, including OPTIONS, PROPFIND, structural GET/HEAD,
+LOCK, and UNLOCK, requires Basic authentication. WebDAV never redirects to
+browser sign-in and never accepts a browser session as its credential.
 
 Why: Discovery and lock requests reveal an endpoint and consume resources, while
 browser redirects are not DAV protocol responses.
@@ -185,6 +185,7 @@ and never expose partial files.
 ### Structural Namespace Only
 
 Rule: The endpoint exposes exactly `/` and `/Inbox/` as structural collections.
+Authenticated GET and HEAD probes of either collection return an empty `200`.
 PROPFIND of Inbox never lists DMS files, newly uploaded files, or active aliases.
 
 Why: WebDAV clients need a mountable structure, but the product capability is
@@ -197,6 +198,7 @@ Minimum regression tests:
 - root depth 0 returns root only;
 - root depth 1/infinity adds Inbox only;
 - Inbox at every depth returns Inbox only;
+- structural GET/HEAD returns an empty `200`;
 - file PROPFIND returns no resource after successful PUT.
 
 ### Flat Safe Write Path
@@ -216,14 +218,13 @@ with/without extensions.
 
 ### Narrow Method Set
 
-Rule: The only accepted methods are OPTIONS, structural PROPFIND, PUT, LOCK,
-UNLOCK, and narrow MOVE. GET, HEAD, DELETE, COPY, MKCOL, PROPPATCH, POST, and
-unknown methods cannot reach file mutations or content.
+Rule: The only accepted methods are OPTIONS, structural PROPFIND, structural GET
+and HEAD, PUT, LOCK, UNLOCK, and narrow MOVE. File GET/HEAD, DELETE, COPY, MKCOL,
+PROPPATCH, POST, and unknown methods cannot reach file mutations or content.
 
 Authenticated OPTIONS returns `DAV: 1, 2`, `MS-Author-Via: DAV`, and exactly
-`Allow: OPTIONS, PROPFIND, PUT, LOCK, UNLOCK, MOVE`. Unauthenticated OPTIONS
-returns the Basic challenge. HEAD and every blocked method are omitted from
-Allow.
+`Allow: OPTIONS, PROPFIND, GET, HEAD, PUT, LOCK, UNLOCK, MOVE`. Unauthenticated
+OPTIONS returns the Basic challenge. Every blocked method is omitted from Allow.
 
 Why: Unfiltered `x/net/webdav` behavior is broader than the product contract.
 
@@ -362,15 +363,19 @@ Minimum regression tests:
 
 Rule: Every new upload contains at least one plaintext byte, never exceeds the
 existing per-file limit, and exactly matches expected bytes when a trusted size is
-known. Unknown/chunked streams are bounded while reading.
+known. An authenticated, valid PUT declared as zero length is a compatibility
+probe: it returns an empty `201` without entering the upload pipeline or creating
+state. Unknown/chunked streams are bounded while reading and reject a final count
+of zero.
 
 Why: Clean early EOF, malformed requests, and over-limit streams must not become
 successful shorter files.
 
 Enforced in: raw limit/counter before hashing/transformation.
 
-Minimum regression tests: zero, known truncation, known excess, chunked success,
-chunked overflow, malformed body, and cancellation.
+Minimum regression tests: declared-empty DAV probe with no state, unknown-length
+zero rejection, known truncation, known excess, chunked success, chunked overflow,
+malformed body, and cancellation.
 
 ### Plaintext And Stored Identity Are Separate
 

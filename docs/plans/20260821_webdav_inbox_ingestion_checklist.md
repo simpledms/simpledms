@@ -67,7 +67,7 @@ Invariants: `docs/invariants/webdav_inbox_ingestion.md`
 - [x] Fail closed if size, checksum, or checksum mode is absent or mismatched.
 - [x] Compare expected and actual plaintext bytes when expected size is known.
 - [x] Bound unknown/chunked streams at maximum plus one byte.
-- [x] Reject zero-byte uploads.
+- [x] Reject zero-byte uploads that reach the shared streaming pipeline.
 - [x] Propagate source-read and request-cancellation errors.
 - [x] Propagate gzip, age, pipe, and S3 close/write errors.
 - [x] Ensure every transform goroutine reports one terminal result and is joined.
@@ -195,11 +195,13 @@ Invariants: `docs/invariants/webdav_inbox_ingestion.md`
 - [x] Require Basic authentication for every method, including discovery.
 - [x] Implement authenticated direct `OPTIONS` with `DAV: 1, 2`.
 - [x] Add `MS-Author-Via: DAV`.
-- [x] Return exactly `Allow: OPTIONS, PROPFIND, PUT, LOCK, UNLOCK, MOVE`; omit
-  HEAD and every blocked method.
+- [x] Return exactly
+  `Allow: OPTIONS, PROPFIND, GET, HEAD, PUT, LOCK, UNLOCK, MOVE`.
 - [x] Expose only structural `/` and `/Inbox/` via PROPFIND.
+- [x] Return empty `200` for authenticated structural GET and HEAD probes.
 - [x] Return no file children from `/Inbox/` at every depth.
 - [x] Reject file PROPFIND, HEAD, and GET without revealing a resource.
+- [x] Return empty `201` for a valid declared-empty PUT without creating state.
 - [x] Use URL `path` semantics and exact `Inbox` casing.
 - [x] Reject traversal, nested paths, empty basename, trailing file slash,
   controls/NUL, decoded separators, and encoded separators.

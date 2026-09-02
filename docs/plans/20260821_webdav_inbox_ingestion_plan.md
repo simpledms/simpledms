@@ -331,11 +331,12 @@ queries. No request-body or S3 I/O occurs inside either transaction.
 An outer handler owns HTTPS/auth, body limits, method/path gating, direct
 `OPTIONS`, context injection, response recording, status remapping, and log
 redaction. Authenticated OPTIONS returns `DAV: 1, 2`, `MS-Author-Via: DAV`, and
-exactly `Allow: OPTIONS, PROPFIND, PUT, LOCK, UNLOCK, MOVE`; HEAD is omitted.
+exactly `Allow: OPTIONS, PROPFIND, GET, HEAD, PUT, LOCK, UNLOCK, MOVE`.
 
 The inner `webdav.Handler` uses a custom write-only filesystem:
 
 - synthetic `/` and `/Inbox/` directories;
+- empty `200` responses for authenticated structural GET/HEAD probes;
 - root `Readdir` returns Inbox, Inbox returns no children;
 - file Stat/Open remain hidden for PROPFIND/HEAD/GET;
 - PUT OpenFile returns a streaming upload file;
@@ -364,6 +365,11 @@ LOCK placeholders create no DMS rows, aliases, filename reservations, or objects
 Reserve the credential/path alias before reading PUT. A repeated active path for
 the same credential returns conflict before body consumption. Different
 credentials may use the same DAV path independently.
+
+A valid PUT declared as zero length is a scanner compatibility probe. Return an
+empty `201` after authorization and path validation without reserving an alias,
+creating rows, or entering the upload pipeline. A later non-empty PUT to the same
+path proceeds normally.
 
 Finalization generates an extension-aware unique DMS filename in the tenant
 transaction using the repository's existing Inbox filename case-sensitivity
