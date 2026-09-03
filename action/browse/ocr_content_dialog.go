@@ -66,10 +66,9 @@ func (qq *OCRContentDialog) Handler(
 			Headline:     widget.Tu("OCR"),
 			IsOpenOnLoad: true,
 			Child: &widget.TextArea{
-				Value: filex.Data.OcrContent,
-				Rows:  20,
-				Class: "w-full min-h-full [field-sizing:content] resize-none rounded-md border " +
-					"border-outline-variant bg-surface-container-low px-4 py-3 title-small font-mono",
+				Value:      filex.Data.OcrContent,
+				Rows:       20,
+				StyleType:  widget.TextAreaStyleTypeFullHeight,
 				IsReadonly: true,
 			},
 		},

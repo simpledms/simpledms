@@ -3,7 +3,8 @@
 	<a
 			href="{{ .Href }}"
 			class="inline-flex items-center {{ if not .IsNoColor }}text-tertiary{{ end }}
-				leading-none {{ if .IsText }}hover:underline{{ end }} {{ if .IsCopyable }}break-all{{ end }} {{ .GetClass }}"
+				leading-none {{ if .IsText }}hover:underline{{ end }} {{ if .IsCopyable }}break-all{{ end }}
+				{{ if .WrapAnywhere }}w-full min-w-0 max-w-full{{ end }}"
 			{{ if .WrapAnywhere }}style="white-space: normal; overflow-wrap: anywhere; word-break: break-all;"{{ end }}
 			{{ if .IsCopyable }}
 				data-copy-value="{{ .CopyValue }}"

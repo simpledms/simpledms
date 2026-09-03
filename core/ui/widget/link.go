@@ -5,7 +5,6 @@ type Link struct {
 	HTMXAttrs
 
 	Href          string
-	Classes       string
 	PopoverTarget string
 	SubmitForm    bool // TODO name? // not used as of Aug 16 2024
 	Child         IWidget
@@ -34,21 +33,6 @@ func (qq *Link) IsText() bool {
 
 func (qq *Link) IsCopyable() bool {
 	return qq.CopyValue != ""
-}
-
-func (qq *Link) GetClass() string {
-	return qq.Classes
-	/*
-		classes := strings.Split(qq.Classes, " ")
-		if qq.IsResponsive {
-			classes = append(classes, "responsive")
-		}
-		if _, ok := qq.Child.(Text); ok {
-			classes = append(classes, "link")
-		}
-		return strings.Join(classes, " ")
-
-	*/
 }
 
 /*func NewLink(href string) Link {

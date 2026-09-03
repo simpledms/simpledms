@@ -308,7 +308,6 @@ func credentialValue(ctx ctxx.Context, label string, value string) *widget.Colum
 			&widget.Label{Text: widget.T(label), Type: widget.LabelTypeLg},
 			&widget.Link{
 				Href:              "#",
-				Classes:           "w-full min-w-0 max-w-full",
 				Child:             widget.Tu(value).SetWrap(),
 				WrapAnywhere:      true,
 				CopyValue:         value,

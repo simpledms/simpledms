@@ -288,7 +288,7 @@ func (qq *FilePreviewPartial) previewStateMessage(configured, pending, failed bo
 
 func (qq *FilePreviewPartial) previewStatusMessage(text *widget.Text) *widget.Paragraph {
 	message := widget.NewParagraph(text)
-	message.Class = "body-lg text-on-surface p-4"
+	message.StyleType = widget.ParagraphStyleTypeStatus
 	return message
 }
 

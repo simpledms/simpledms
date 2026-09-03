@@ -58,15 +58,15 @@ func (qq *RecoveryCodesDialogContent) DownloadedMessage() *Text {
 
 func (qq *RecoveryCodesDialogContent) ImportantNoticeParagraph() *Paragraph {
 	return &Paragraph{
-		Text:  qq.ImportantNotice(),
-		Class: "body-medium text-on-surface-variant",
+		Text:      qq.ImportantNotice(),
+		StyleType: ParagraphStyleTypeSupporting,
 	}
 }
 
 func (qq *RecoveryCodesDialogContent) RiskNoticeParagraph() *Paragraph {
 	return &Paragraph{
-		Text:  qq.RiskNotice(),
-		Class: "body-small text-error",
+		Text:      qq.RiskNotice(),
+		StyleType: ParagraphStyleTypeError,
 	}
 }
 
@@ -81,8 +81,8 @@ func (qq *RecoveryCodesDialogContent) CodesTextArea() *TextArea {
 		},
 		Value:      qq.CodesText,
 		Rows:       11,
+		StyleType:  TextAreaStyleTypeCompact,
 		IsReadonly: true,
-		Class:      "w-full rounded-md border border-outline-variant bg-surface-container-low px-4 py-3 title-small font-mono",
 	}
 }
 

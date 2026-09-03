@@ -115,29 +115,3 @@ func (qq *ListItem) GetTrailing() IWidget {
 	}
 	return qq.Trailing
 }
-
-/*
-func (qq *ListItem) IsCollapsible() bool {
-	return len(qq.Children) > 0
-}
-*/
-
-/*
-func (qq *ListItem) GetContent() IWidget {
-	link, ok := qq.Content.(*Link)
-	if ok {
-		// TODO make sure that done just once...
-		// TODO is beercss specific...
-		link.Classes += "wave flex row padding max"
-		return qq.Content
-	}
-
-	return &Container{
-		Classes: []string{
-			"wave", "flex", "padding", "max",
-		},
-		Child: qq.Content,
-	}
-}
-
-*/

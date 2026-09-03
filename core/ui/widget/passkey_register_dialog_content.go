@@ -56,22 +56,22 @@ func (qq *PasskeyRegisterDialogContent) NameLabel() *Text {
 
 func (qq *PasskeyRegisterDialogContent) DescriptionParagraph() *Paragraph {
 	return &Paragraph{
-		Text:  qq.Description(),
-		Class: "body-medium text-on-surface-variant",
+		Text:      qq.Description(),
+		StyleType: ParagraphStyleTypeSupporting,
 	}
 }
 
 func (qq *PasskeyRegisterDialogContent) PasswordDisabledNoticeParagraph() *Paragraph {
 	return &Paragraph{
-		Text:  qq.PasswordDisabledNotice(),
-		Class: "body-small text-error",
+		Text:      qq.PasswordDisabledNotice(),
+		StyleType: ParagraphStyleTypeError,
 	}
 }
 
 func (qq *PasskeyRegisterDialogContent) RecoveryCodesNoticeParagraph() *Paragraph {
 	return &Paragraph{
-		Text:  qq.RecoveryCodesNotice(),
-		Class: "body-small text-on-surface-variant",
+		Text:      qq.RecoveryCodesNotice(),
+		StyleType: ParagraphStyleTypeSupportingSmall,
 	}
 }
 
@@ -80,8 +80,8 @@ func (qq *PasskeyRegisterDialogContent) ErrorParagraph() *Paragraph {
 		Widget: Widget[Paragraph]{
 			ID: qq.ErrorID(),
 		},
-		Text:  Tu(""),
-		Class: "body-small text-error min-h-5",
+		Text:      Tu(""),
+		StyleType: ParagraphStyleTypeErrorReserved,
 	}
 }
 

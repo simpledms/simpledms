@@ -15,9 +15,6 @@ type Container struct {
 	GapY      bool
 	Gap       bool
 	// FlexGrow bool
-	// Classes  []string
-
-	// TODO extract and implement Classes() on struct?
 	// HideOnMobile bool
 	// MobileOnly   bool
 
