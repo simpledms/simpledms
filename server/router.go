@@ -83,6 +83,7 @@ type Router struct {
 	devMode                  bool
 	metaPath                 string
 	i18n                     *i18n.I18n
+	trustedProxies           []netip.Prefix
 }
 
 func NewRouter(
@@ -104,6 +105,7 @@ func NewRouter(
 		devMode:                  devMode,
 		metaPath:                 metaPath,
 		i18n:                     i18n,
+		trustedProxies:           trustedProxies,
 	}
 
 	router.Handle(webdav.Pattern, webdav.NewHandler(webdav.Config{
@@ -118,6 +120,28 @@ func NewRouter(
 	router.allowSetupSessionPath(route2.Dashboard())
 
 	return router
+}
+
+func (qq *Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+	if strings.EqualFold(req.Header.Get("X-Forwarded-Proto"), "https") &&
+		qq.isTrustedProxy(req.RemoteAddr) {
+		req = req.Clone(req.Context())
+		req.URL.Scheme = "https"
+	}
+	qq.ServeMux.ServeHTTP(rw, req)
+}
+
+func (qq *Router) isTrustedProxy(remoteAddr string) bool {
+	addrPort, err := netip.ParseAddrPort(remoteAddr)
+	if err != nil {
+		return false
+	}
+	for _, prefix := range qq.trustedProxies {
+		if prefix.Contains(addrPort.Addr()) {
+			return true
+		}
+	}
+	return false
 }
 
 func (qq *Router) RegisterPage(pattern string, handlerFn handlerFn) {

@@ -3,6 +3,7 @@ package auth
 import (
 	"html/template"
 	"net"
+	"strings"
 
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
@@ -34,7 +35,8 @@ func (qq *SignInPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 		// if req.Host does not contain a port
 		hostname = host
 	}
-	isSafeRequest := hostname == "localhost" || req.TLS != nil
+	isSafeRequest := hostname == "localhost" || req.TLS != nil ||
+		strings.EqualFold(req.URL.Scheme, "https")
 	if !isSafeRequest && !qq.infra.SystemConfig().AllowInsecureCookies() {
 		rw.AddRenderables(widget.NewSnackbarf("Sign in only works over HTTPS or on localhost.").
 			SetIsError(true).
