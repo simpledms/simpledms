@@ -5,11 +5,7 @@
 			   class="@container/list-item group/list-item rounded-[inherit]
 					state-layer-on-surface min-h-14 flex gap-x-4 flex-row items-center
 					has-[:checked]:bg-secondary-container
-					{{/* group-has filter because supporting text is hidden if no item is selected and
-					 	height must only applied if no two lines... should be refactored to
-					 	make height unncessary
-					*/}}
-					{{ if ne .SupportingText nil }}group-has-[.js-detail-content>div]/list-detail:h-[4.5rem]{{ end }}
+					{{ if .HasSupportingText }}h-[4.5rem]{{ end }}
 					{{ if .HTMXAttrs.IsLink }}cursor-pointer{{ else if .ContextMenu }}cursor-context-menu{{ end }}"
 		>
 			<input
@@ -50,7 +46,7 @@
 		<div
 				class="@container/list-item rounded-[inherit] state-layer-on-surface
 					min-h-14 flex gap-x-4 flex-row items-center
-					{{ if ne .SupportingText nil }}h-[4.5rem]{{ end }}
+					{{ if .HasSupportingText }}h-[4.5rem]{{ end }}
 					{{ if .HTMXAttrs.IsLink }}cursor-pointer{{ else if .ContextMenu }}cursor-context-menu{{ end }}"
 				{{ template "HTMXAttrs" .HTMXAttrs }}
 				{{/* if .HTMXAttrs.IsLink }}role="link"{{ end */}}

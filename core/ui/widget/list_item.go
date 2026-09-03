@@ -94,6 +94,11 @@ func (qq *ListItem) IsTypeRadio() bool {
 	// return qq.Type == ListItemTypeRadio
 }
 
+// HasSupportingText reports whether the item renders as a two-line list item.
+func (qq *ListItem) HasSupportingText() bool {
+	return qq.SupportingText != nil && qq.SupportingText.String(qq.GetContext()) != ""
+}
+
 func (qq *ListItem) GetClass() string {
 	classes := []string{}
 

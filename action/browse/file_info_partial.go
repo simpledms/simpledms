@@ -62,7 +62,8 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 	currentVersion := filem.CurrentVersion(ctx)
 
 	ocrSucceededAt := widget.Tu("-")
-	if filem.Data.OcrSuccessAt != nil && !filem.Data.OcrSuccessAt.IsZero() {
+	hasOCRSuccess := filem.HasOCRSuccess(ctx)
+	if hasOCRSuccess {
 		ocrSucceededAt = widget.Tu(timex.NewDateTime(*filem.Data.OcrSuccessAt).String(ctx.MainCtx().LanguageBCP47))
 	}
 
@@ -110,11 +111,11 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 				SupportingText: wx.T(filem.Data.UpdatedBy),
 			},
 		*/
-		{
-			Headline:       widget.T("OCR succeeded at"), // TODO naming
-			SupportingText: ocrSucceededAt,
-		},
-		// TODO collapsable OCR content
+		autil.OCRInfoListItem(
+			hasOCRSuccess,
+			ocrSucceededAt,
+			qq.actions.OCRContentDialog.ModalLinkAttrs(data.FileID),
+		),
 		// TODO last editied at/by (based on version)
 		// TODO copied to final location?
 	}

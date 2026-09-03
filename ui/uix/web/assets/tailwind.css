@@ -361,6 +361,9 @@
   .table {
     display: table;
   }
+  .\[field-sizing\:content\] {
+    field-sizing: content;
+  }
   .state-layer-inverse-primary {
     height: inherit;
     width: inherit;
@@ -604,6 +607,9 @@
   .min-h-\[12rem\] {
     min-height: 12rem;
   }
+  .min-h-full {
+    min-height: 100%;
+  }
   .w-1\.5 {
     width: calc(var(--spacing) * 1.5);
   }
@@ -716,6 +722,9 @@
   }
   .cursor-pointer {
     cursor: pointer;
+  }
+  .resize-none {
+    resize: none;
   }
   .list-decimal {
     list-style-type: decimal;
@@ -1461,9 +1470,6 @@
   }
   .group-has-\[\.js-detail-content\>div\]\/list-detail\:hidden:is(:where(.group\/list-detail):has(:is(.js-detail-content > div)) *) {
     display: none;
-  }
-  .group-has-\[\.js-detail-content\>div\]\/list-detail\:h-\[4\.5rem\]:is(:where(.group\/list-detail):has(:is(.js-detail-content > div)) *) {
-    height: 4.5rem;
   }
   .group-has-\[\.js-detail-content\>div\]\/list-detail\:opacity-75:is(:where(.group\/list-detail):has(:is(.js-detail-content > div)) *) {
     opacity: 75%;

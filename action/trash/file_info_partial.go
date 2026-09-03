@@ -59,7 +59,8 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 	currentVersion := filem.CurrentVersion(ctxWithDeleted)
 
 	ocrSucceededAt := widget.Tu("-")
-	if filem.Data.OcrSuccessAt != nil && !filem.Data.OcrSuccessAt.IsZero() {
+	hasOCRSuccess := filem.HasOCRSuccess(ctx)
+	if hasOCRSuccess {
 		ocrSucceededAt = widget.Tu(timex.NewDateTime(*filem.Data.OcrSuccessAt).String(ctx.MainCtx().LanguageBCP47))
 	}
 
@@ -98,10 +99,11 @@ func (qq *FileInfoPartial) Widget(ctx ctxx.Context, data *FileInfoPartialData) *
 		Headline:       widget.T("Uploaded at"),
 		SupportingText: widget.Tu(timex.NewDateTime(filem.Data.CreatedAt).String(ctx.MainCtx().LanguageBCP47)),
 	})
-	items = append(items, &widget.ListItem{
-		Headline:       widget.T("OCR succeeded at"),
-		SupportingText: ocrSucceededAt,
-	})
+	items = append(items, autil.OCRInfoListItem(
+		hasOCRSuccess,
+		ocrSucceededAt,
+		qq.actions.Browse.OCRContentDialog.ModalLinkAttrs(data.FileID),
+	))
 
 	if !filem.Data.DeletedAt.IsZero() {
 		items = append(items, &widget.ListItem{
