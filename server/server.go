@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"filippo.io/age"
@@ -104,10 +105,11 @@ func newMaintenanceModeHandler(
 	renderer *ui.Renderer,
 	encryptedIdentity []byte,
 	commercialLicenseEnabled bool,
-	shutdownFn func(context.Context) error,
+	stopFn func(),
 ) http.Handler {
 	mux := http.NewServeMux()
 	pwaManifestHandler := NewPWAManifestHandler(assetsFS, devMode)
+	var unlockOnce sync.Once
 
 	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assetsFS))))
@@ -142,16 +144,15 @@ func newMaintenanceModeHandler(
 			return
 		}
 
-		encryptor.NilableX25519MainIdentity = identity
+		shouldStop := false
+		unlockOnce.Do(func() {
+			encryptor.NilableX25519MainIdentity = identity
+			shouldStop = true
+		})
 
-		if shutdownFn != nil {
-			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-			defer cancel()
-
-			err = shutdownFn(ctx)
-			if err != nil {
-				log.Println(err)
-			}
+		rw.WriteHeader(http.StatusOK)
+		if shouldStop && stopFn != nil {
+			go stopFn()
 		}
 	})
 
@@ -214,7 +215,26 @@ func newMaintenanceModeHandler(
 		}
 	})
 
-	return mux
+	protectedHandler := http.NewCrossOriginProtection().Handler(mux)
+	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/-/unlock-cmd" {
+			rw.Header().Set("Cache-Control", "no-store")
+			rw.Header().Set("Pragma", "no-cache")
+		}
+		protectedHandler.ServeHTTP(rw, req)
+	})
+}
+
+func stopMaintenanceModeServer(server *http.Server) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		log.Println(err)
+		if closeErr := server.Close(); closeErr != nil {
+			log.Println(closeErr)
+		}
+	}
 }
 
 func NewServer(
@@ -590,7 +610,9 @@ func (qq *Server) ensureMainIdentity(
 			renderer,
 			systemConfigx.X25519Identity,
 			qq.commercialLicenseEnabled,
-			maintenanceModeServer.Shutdown,
+			func() {
+				stopMaintenanceModeServer(&maintenanceModeServer)
+			},
 		)
 
 		handlerChain := handlers.CompressHandler(

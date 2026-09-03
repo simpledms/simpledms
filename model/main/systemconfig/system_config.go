@@ -106,7 +106,7 @@ func DecryptMainIdentity(encryptedIdentity []byte, passphrase string) (*age.X255
 	x25519Identity, err := age.ParseX25519Identity(plaintextIdentity.String())
 	if err != nil {
 		log.Println(err, "could not parse identity")
-		return nil, nil
+		return nil, err
 	}
 
 	return x25519Identity, nil
