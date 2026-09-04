@@ -8,6 +8,7 @@
     "build:css": "tailwindcss -i ui/uix/web/tailwind.css -o ui/uix/web/assets/tailwind.css",
     "install-modules": "node ./install.deps.mjs",
     "test:e2e": "playwright test",
+    "test:e2e:maintenance": "playwright test --config=playwright.maintenance.config.ts",
     "test:e2e:ui": "playwright test --ui"
   },
   "devDependencies": {

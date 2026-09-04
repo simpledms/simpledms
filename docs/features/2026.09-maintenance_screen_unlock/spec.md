@@ -61,8 +61,8 @@ infrastructure is not available before the application identity is loaded.
 2. The maintenance screen additionally shows a required password field labelled
    `Application passphrase` and an `Unlock application` action.
 3. The operator submits the passphrase without placing it in the URL.
-4. The page indicates that the unlock request is being processed and prevents
-   duplicate submissions while it is pending.
+4. The form becomes busy and prevents duplicate submissions while the request
+   is pending, without showing a separate interim status message.
 
 ### Handle An Invalid Passphrase
 

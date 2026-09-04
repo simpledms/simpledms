@@ -159,6 +159,13 @@ func newMaintenanceModeHandler(
 	// TODO recovery handler
 	// TODO status code?
 	mux.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+		isUnlockFormVisible := req.URL.Query().Has("unlock")
+		rw.Header().Set("X-SimpleDMS-Maintenance", "true")
+		if isUnlockFormVisible {
+			rw.Header().Set("Cache-Control", "no-store")
+			rw.Header().Set("Pragma", "no-cache")
+		}
+
 		mainTx, err := mainDB.Tx(req.Context(), true)
 		if err != nil {
 			log.Println(err)
@@ -186,6 +193,16 @@ func newMaintenanceModeHandler(
 		)
 
 		titlex := widget.Tuf("%s | SimpleDMS", widget.T("Maintenance mode").String(visitorCtx))
+		children := []widget.IWidget{
+			widget.H(widget.HeadingTypeHeadlineMd, titlex),
+			widget.T(
+				"Maintenance mode is enabled. Please wait until the app is ready again.",
+			).SetWrap(),
+			// wx.T("This page automatically refreshes every 60 seconds.").SetWrap(),
+		}
+		if isUnlockFormVisible {
+			children = append(children, widget.NewMaintenanceUnlockForm())
+		}
 		viewx := partial.NewBase(
 			titlex,
 			&widget.MainLayout{
@@ -193,16 +210,12 @@ func newMaintenanceModeHandler(
 					Content: &widget.Column{
 						GapYSize:         widget.Gap4,
 						NoOverflowHidden: true,
-						Children: []widget.IWidget{
-							widget.H(widget.HeadingTypeHeadlineMd, titlex),
-							widget.T("Maintenance mode is enabled. Please wait until the app is ready again.").SetWrap(),
-							// wx.T("This page automatically refreshes every 60 seconds.").SetWrap(),
-						},
+						Children:         children,
 					},
 				},
 			},
 		)
-		viewx.ShouldRefreshEvery60Seconds = true
+		viewx.ShouldRefreshEvery60Seconds = !isUnlockFormVisible
 
 		rwx := httpx.NewResponseWriter(rw)
 		rwx.WriteHeader(http.StatusServiceUnavailable) // must be before render

@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"errors"
+	"html"
 	"html/template"
 	"io"
 	"log"
@@ -21,6 +22,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -71,9 +73,91 @@ func TestInitializeMainConfigOverrideDBConfigDoesNotReadEncryptedFieldsBeforeUnl
 	}
 }
 
-func TestMaintenanceRootReturnsServiceUnavailable(t *testing.T) {
+func TestMaintenancePageUnlockFormRendering(t *testing.T) {
+	const passphrase = "render-only-sentinel-passphrase-8f27"
 	deps := newMaintenanceTestDependencies(t)
+	clearMainIdentity(t)
+	var stopCalls atomic.Int32
+	handler := newMaintenanceModeHandler(
+		deps.mainDB,
+		os.DirFS(t.TempDir()),
+		false,
+		deps.i18n,
+		deps.renderer,
+		[]byte(passphrase),
+		false,
+		func() {
+			stopCalls.Add(1)
+		},
+	)
 
+	var logs bytes.Buffer
+	previousLogWriter := log.Writer()
+	log.SetOutput(&logs)
+	t.Cleanup(func() {
+		log.SetOutput(previousLogWriter)
+	})
+
+	testCases := []struct {
+		name          string
+		url           string
+		isFormVisible bool
+	}{
+		{name: "root absent", url: "/"},
+		{name: "deep path absent", url: "/spaces/example?view=list"},
+		{name: "root presence only", url: "/?unlock", isFormVisible: true},
+		{name: "root empty", url: "/?unlock=", isFormVisible: true},
+		{name: "deep path false", url: "/spaces/example?unlock=false", isFormVisible: true},
+		{
+			name:          "deep path arbitrary",
+			url:           "/spaces/example?view=list&unlock=show-form",
+			isFormVisible: true,
+		},
+		{
+			name:          "deep path duplicate",
+			url:           "/spaces/example?unlock=false&view=list&unlock=true",
+			isFormVisible: true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			req := httptest.NewRequest(http.MethodGet, testCase.url, nil)
+			rr := httptest.NewRecorder()
+
+			handler.ServeHTTP(rr, req)
+
+			if rr.Code != http.StatusServiceUnavailable {
+				t.Fatalf("expected status %d, got %d", http.StatusServiceUnavailable, rr.Code)
+			}
+			if value := rr.Header().Get("X-SimpleDMS-Maintenance"); value != "true" {
+				t.Fatalf("expected maintenance marker, got %q", value)
+			}
+			body := rr.Body.String()
+			if !strings.Contains(body, "Maintenance mode") ||
+				!strings.Contains(body, "Maintenance mode is enabled.") {
+				t.Fatalf("expected ordinary maintenance content, body was %q", body)
+			}
+
+			assertMaintenanceFormVisibility(t, rr, testCase.isFormVisible)
+			assertStringAbsent(t, "request URL", req.URL.String(), passphrase)
+			assertStringAbsent(t, "response body", body, passphrase)
+			for name, values := range rr.Header() {
+				for _, value := range values {
+					assertStringAbsent(t, "response header "+name, value, passphrase)
+				}
+			}
+		})
+	}
+
+	if encryptor.NilableX25519MainIdentity != nil || stopCalls.Load() != 0 {
+		t.Fatal("expected reveal requests not to transition maintenance mode")
+	}
+	assertStringAbsent(t, "logs", logs.String(), passphrase)
+}
+
+func TestMaintenanceUnlockFormTranslations(t *testing.T) {
+	deps := newMaintenanceTestDependencies(t)
 	handler := newMaintenanceModeHandler(
 		deps.mainDB,
 		os.DirFS(t.TempDir()),
@@ -84,19 +168,149 @@ func TestMaintenanceRootReturnsServiceUnavailable(t *testing.T) {
 		false,
 		nil,
 	)
-	clearMainIdentity(t)
 
-	req := httptest.NewRequest(http.MethodGet, "/", nil)
-	rr := httptest.NewRecorder()
-
-	handler.ServeHTTP(rr, req)
-
-	if rr.Code != http.StatusServiceUnavailable {
-		t.Fatalf("expected status %d, got %d", http.StatusServiceUnavailable, rr.Code)
+	testCases := []struct {
+		language string
+		texts    []string
+	}{
+		{
+			language: "en",
+			texts: []string{
+				"Application passphrase",
+				"Unlock application",
+				"Passphrase is required.",
+				"Invalid passphrase.",
+				"Something went wrong. Please try again.",
+				"Application unlocked. Starting up.",
+			},
+		},
+		{
+			language: "de",
+			texts: []string{
+				"Anwendungspassphrase",
+				"Anwendung entsperren",
+				"Passphrase ist erforderlich.",
+				"Ungültige Passphrase.",
+				"Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
+				"Anwendung entsperrt. Start wird fortgesetzt.",
+			},
+		},
+		{
+			language: "fr",
+			texts: []string{
+				"Phrase secrète de l’application",
+				"Déverrouiller l’application",
+				"La phrase secrète est requise.",
+				"Phrase secrète invalide.",
+				"Une erreur s'est produite. Veuillez réessayer.",
+				"Application déverrouillée. Démarrage en cours.",
+			},
+		},
+		{
+			language: "it",
+			texts: []string{
+				"Passphrase dell’applicazione",
+				"Sblocca applicazione",
+				"La passphrase è obbligatoria.",
+				"Passphrase non valida.",
+				"Qualcosa è andato storto. Riprova per favore.",
+				"Applicazione sbloccata. Avvio in corso.",
+			},
+		},
 	}
 
-	if !strings.Contains(rr.Body.String(), "Maintenance mode") {
-		t.Fatalf("expected maintenance mode content, body was %q", rr.Body.String())
+	for _, testCase := range testCases {
+		t.Run(testCase.language, func(t *testing.T) {
+			req := httptest.NewRequest(http.MethodGet, "/deep/path?unlock=false", nil)
+			req.Header.Set("Accept-Language", testCase.language)
+			rr := httptest.NewRecorder()
+
+			handler.ServeHTTP(rr, req)
+
+			if rr.Code != http.StatusServiceUnavailable {
+				t.Fatalf("expected status %d, got %d", http.StatusServiceUnavailable, rr.Code)
+			}
+			body := html.UnescapeString(rr.Body.String())
+			for _, text := range testCase.texts {
+				if !strings.Contains(body, text) {
+					t.Errorf("expected %q translation in response", text)
+				}
+			}
+		})
+	}
+}
+
+func assertMaintenanceFormVisibility(
+	t *testing.T,
+	rr *httptest.ResponseRecorder,
+	isVisible bool,
+) {
+	t.Helper()
+	body := rr.Body.String()
+	refresh := `<meta http-equiv="refresh" content="60" />`
+	formAction := `action="/-/unlock-cmd"`
+	if !isVisible {
+		if !strings.Contains(body, refresh) {
+			t.Error("expected ordinary maintenance refresh metadata")
+		}
+		if strings.Contains(body, formAction) || strings.Contains(body, `type="password"`) {
+			t.Error("expected ordinary maintenance page without unlock form")
+		}
+		return
+	}
+
+	if strings.Contains(body, refresh) {
+		t.Error("expected revealed form without refresh metadata")
+	}
+	assertMaintenanceCommandCacheHeaders(t, rr)
+	for _, markup := range []string{
+		`method="post"`,
+		formAction,
+		`hx-boost="false"`,
+		`type="password"`,
+		`required`,
+		`role="status"`,
+		`role="alert"`,
+		`document.currentScript.previousElementSibling`,
+		`fetch("/-/unlock-cmd"`,
+		`mode: "same-origin"`,
+		`target.searchParams.delete("unlock")`,
+		`window.location.replace(target.href)`,
+		`response.headers.get("X-SimpleDMS-Maintenance")`,
+	} {
+		if !strings.Contains(body, markup) {
+			t.Errorf("expected form markup %q", markup)
+		}
+	}
+	if strings.Contains(body, "response.text()") || strings.Contains(body, "response.json()") {
+		t.Error("expected form not to display command response internals")
+	}
+	if regexp.MustCompile(`role="(?:status|alert)"[^>]*\shidden`).MatchString(body) {
+		t.Error("expected live regions to remain in the accessibility tree")
+	}
+
+	inputIDMatch := regexp.MustCompile(`id="([^"]+-passphrase)"`).FindStringSubmatch(body)
+	if len(inputIDMatch) != 2 {
+		t.Fatal("expected passphrase input id")
+	}
+	inputID := inputIDMatch[1]
+	formID := strings.TrimSuffix(inputID, "-passphrase")
+	for _, relationship := range []string{
+		`for="` + inputID + `"`,
+		`aria-describedby="` + formID + `-status ` + formID + `-error"`,
+		`id="` + formID + `-error" role="alert"`,
+		`id="` + formID + `-status" role="status"`,
+	} {
+		if !strings.Contains(body, relationship) {
+			t.Errorf("expected accessible relationship %q", relationship)
+		}
+	}
+}
+
+func assertStringAbsent(t *testing.T, surface, value, secret string) {
+	t.Helper()
+	if strings.Contains(value, secret) {
+		t.Errorf("%s exposed sentinel passphrase", surface)
 	}
 }
 

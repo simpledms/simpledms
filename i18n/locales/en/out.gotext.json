@@ -687,12 +687,6 @@
             "translation": ""
         },
         {
-            "id": "OCR succeeded at",
-            "message": "OCR succeeded at",
-            "translation": "",
-            "comment": "TODO naming"
-        },
-        {
             "id": "Deleted at",
             "message": "Deleted at",
             "translation": ""
@@ -3169,6 +3163,11 @@
             "translation": ""
         },
         {
+            "id": "OCR succeeded at",
+            "message": "OCR succeeded at",
+            "translation": ""
+        },
+        {
             "id": "No backup codes were returned.",
             "message": "No backup codes were returned.",
             "translation": ""
@@ -3207,6 +3206,36 @@
         {
             "id": "required",
             "message": "required",
+            "translation": ""
+        },
+        {
+            "id": "Application passphrase",
+            "message": "Application passphrase",
+            "translation": ""
+        },
+        {
+            "id": "Unlock application",
+            "message": "Unlock application",
+            "translation": ""
+        },
+        {
+            "id": "Passphrase is required.",
+            "message": "Passphrase is required.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid passphrase.",
+            "message": "Invalid passphrase.",
+            "translation": ""
+        },
+        {
+            "id": "Something went wrong. Please try again.",
+            "message": "Something went wrong. Please try again.",
+            "translation": "Something went wrong. Please try again."
+        },
+        {
+            "id": "Application unlocked. Starting up.",
+            "message": "Application unlocked. Starting up.",
             "translation": ""
         },
         {
@@ -4070,11 +4099,6 @@
             "translation": ""
         },
         {
-            "id": "Passphrase is required.",
-            "message": "Passphrase is required.",
-            "translation": ""
-        },
-        {
             "id": "Your temporary password is",
             "message": "Your temporary password is",
             "translation": ""
@@ -4185,11 +4209,6 @@
         {
             "id": "App is already unlocked.",
             "message": "App is already unlocked.",
-            "translation": ""
-        },
-        {
-            "id": "Invalid passphrase.",
-            "message": "Invalid passphrase.",
             "translation": ""
         },
         {
@@ -5121,14 +5140,6 @@
             "id": "Cannot add a tag group as child.",
             "message": "Cannot add a tag group as child.",
             "translation": ""
-        },
-        {
-            "id": [
-                "unexpectedErrorMessage",
-                "Something went wrong. Please try again."
-            ],
-            "message": "Something went wrong. Please try again.",
-            "translation": "Something went wrong. Please try again."
         },
         {
             "id": "Cannot delete an entity still in use.",

@@ -33,6 +33,23 @@ Example:
 E2E_ALLOW_STATE_MUTATION=1 npm run test:e2e
 ```
 
+## Maintenance unlock
+
+The maintenance suite uses its own Playwright configuration and does not run the normal sign-in
+setup. Prepare an externally running, locked instance before starting it:
+
+1. Sign in as an administrator and set a distinctive application passphrase from the System
+   dashboard.
+2. Stop SimpleDMS, then restart it so startup waits on the maintenance screen.
+3. Run the dedicated suite with the same passphrase:
+
+```bash
+E2E_MAINTENANCE_PASSPHRASE='distinctive-test-passphrase' npm run test:e2e:maintenance
+```
+
+Set `E2E_BASE_URL` if the locked instance is not available at `https://localhost:7003`. The final
+test submits the valid passphrase and unlocks the instance, so restart it before another run.
+
 ## CI
 
 GitHub Actions workflow: `.github/workflows/playwright_e2e.yml`

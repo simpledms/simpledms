@@ -8256,6 +8256,27 @@
 			"translation": "Vous ne pouvez pas créer d’identifiants pour ce Space.",
 			"translatorComment": "Translated from English by Codex.",
 			"fuzzy": true
+		},
+		{
+			"id": "Application passphrase",
+			"message": "Application passphrase",
+			"translation": "Phrase secrète de l’application",
+			"translatorComment": "Translated from English by Codex",
+			"fuzzy": true
+		},
+		{
+			"id": "Unlock application",
+			"message": "Unlock application",
+			"translation": "Déverrouiller l’application",
+			"translatorComment": "Translated from English by Codex",
+			"fuzzy": true
+		},
+		{
+			"id": "Application unlocked. Starting up.",
+			"message": "Application unlocked. Starting up.",
+			"translation": "Application déverrouillée. Démarrage en cours.",
+			"translatorComment": "Translated from English by Codex",
+			"fuzzy": true
 		}
 	]
 }

@@ -13,7 +13,7 @@ dependency.
 ## Slice Order
 
 - [x] [01 — Safe unlock core](slices/01-safe_unlock_core.md)
-- [ ] [02 — Browser maintenance unlock](slices/02-browser_maintenance_unlock.md)
+- [x] [02 — Browser maintenance unlock](slices/02-browser_maintenance_unlock.md)
 
 ## Dependencies
 

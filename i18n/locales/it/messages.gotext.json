@@ -8258,6 +8258,27 @@
 			"translation": "Non puoi creare credenziali per questo Space.",
 			"translatorComment": "Translated from English by Codex.",
 			"fuzzy": true
+		},
+		{
+			"id": "Application passphrase",
+			"message": "Application passphrase",
+			"translation": "Passphrase dell’applicazione",
+			"translatorComment": "Translated from English by Codex",
+			"fuzzy": true
+		},
+		{
+			"id": "Unlock application",
+			"message": "Unlock application",
+			"translation": "Sblocca applicazione",
+			"translatorComment": "Translated from English by Codex",
+			"fuzzy": true
+		},
+		{
+			"id": "Application unlocked. Starting up.",
+			"message": "Application unlocked. Starting up.",
+			"translation": "Applicazione sbloccata. Avvio in corso.",
+			"translatorComment": "Translated from English by Codex",
+			"fuzzy": true
 		}
 	]
 }

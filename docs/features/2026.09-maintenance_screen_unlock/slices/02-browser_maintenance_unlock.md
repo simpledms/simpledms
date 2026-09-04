@@ -38,9 +38,9 @@ Out of scope:
    keyboard submission, and a localized `Unlock application` button.
 5. Submission uses only a relative same-origin `fetch` JSON body to `/-/unlock-cmd`, not HTMX, a
    URL, redirect, or normal `FormHelper` flow.
-6. The UI blocks duplicate submission, exposes progress/startup with `role=status`, and exposes
-   localized required/invalid feedback with `role=alert`. It associates errors with the field and
-   clears the field after every failed or successful attempt.
+6. The UI blocks duplicate submission and marks the form busy without showing an interim status
+   message. It exposes startup with `role=status` and localized required/invalid feedback with
+   `role=alert`, associates errors with the field, and clears the field after every attempt.
 7. Maintenance pages carry `X-SimpleDMS-Maintenance: true`. Polling uses the marker rather than
    status because a normal route may itself return 503.
 8. After command success, the browser polls the cleaned URL through network failures and marked
@@ -64,84 +64,86 @@ The existing Base remains the page shell, but maintenance submission and polling
 
 ## Detailed Implementation Checklist
 
-- [ ] Add `MaintenanceUnlockForm` and its matching template in
+- [x] Add `MaintenanceUnlockForm` and its matching template in
   `core/ui/widget/maintenance_unlock_form.go` and
   `core/ui/widget/maintenance_unlock_form.gohtml`. Keep one struct in the snake-case Go file and
   expose only the labels, messages, IDs, and children required by this page.
-- [ ] Model the password field and submit action on existing TextField/button visual and focus
+- [x] Model the password field and submit action on existing TextField/button visual and focus
   conventions. Keep maintenance-specific accessibility and JavaScript in the focused template
   instead of expanding shared widgets.
-- [ ] Use `widget.T` for `Application passphrase`, `Unlock application`, and a concise startup
+- [x] Use `widget.T` for `Application passphrase`, `Unlock application`, and a concise startup
   status. Reuse `Passphrase is required.`, `Invalid passphrase.`, and existing generic retry text.
-- [ ] In the maintenance handler, use `req.URL.Query().Has("unlock")` and preserve current content
+- [x] In the maintenance handler, use `req.URL.Query().Has("unlock")` and preserve current content
   and status. Append the form only when present and enable 60-second refresh only when absent.
-- [ ] Set `X-SimpleDMS-Maintenance: true` on every catch-all maintenance page. Set
+- [x] Set `X-SimpleDMS-Maintenance: true` on every catch-all maintenance page. Set
   `Cache-Control: no-store` and `Pragma: no-cache` on revealed-form responses before writing 503.
-- [ ] Mark the form as not HTMX-boosted and attach its local submit handler without changing Base's
+- [x] Mark the form as not HTMX-boosted and attach its local submit handler without changing Base's
   global HTMX behavior or adding a library.
-- [ ] On submit, prevent navigation and show inline localized required feedback for empty input.
-  Disable repeat submission, expose a non-color pending state, and send the passphrase only in a
-  relative same-origin JSON POST body.
-- [ ] Map command 400 to localized invalid feedback and unexpected failures to existing generic
+- [x] On submit, prevent navigation and show inline localized required feedback for empty input.
+  Disable repeat submission, mark the form busy without an interim message, and send the
+  passphrase only in a relative same-origin JSON POST body.
+- [x] Map command 400 to localized invalid feedback and unexpected failures to existing generic
   retry feedback. Never display response internals. Re-enable retry and restore useful focus after
   failure.
-- [ ] Clear the password field after every failed or successful request. On HTTP 200, keep
+- [x] Clear the password field after every failed or successful request. On HTTP 200, keep
   submission disabled, announce startup status, and begin polling without retaining the passphrase.
-- [ ] Build the polling target from the current URL. Delete the `unlock` search parameter so every
+- [x] Build the polling target from the current URL. Delete the `unlock` search parameter so every
   value is removed, while preserving path, unrelated parameters, and fragment.
-- [ ] Poll the cleaned same-origin URL with caching disabled. Retry after network errors and marked
+- [x] Poll the cleaned same-origin URL with caching disabled. Retry after network errors and marked
   responses using one fixed short delay, no terminal timeout, and no indefinite server-side state.
-- [ ] When a response lacks the marker, call `location.replace` with the cleaned URL regardless of
+- [x] When a response lacks the marker, call `location.replace` with the cleaned URL regardless of
   status. A marker-free normal 503 therefore completes readiness.
-- [ ] Expand `server/server_maintenance_mode_test.go` with table-driven render cases for absent,
+- [x] Expand `server/server_maintenance_mode_test.go` with table-driven render cases for absent,
   empty, false, arbitrary, and duplicate `unlock` values on root and arbitrary paths.
-- [ ] Assert 503, ordinary content, form visibility, refresh behavior, marker/cache headers, labels,
+- [x] Assert 503, ordinary content, form visibility, refresh behavior, marker/cache headers, labels,
   password/required semantics, role relationships, and absence of secret-bearing values.
-- [ ] Add an `Accept-Language` table for `en`, `de`, `fr`, and `it`. Assert each localized form
+- [x] Add an `Accept-Language` table for `en`, `de`, `fr`, and `it`. Assert each localized form
   label, button, required message, invalid message, generic retry message, and startup status for
   that locale.
-- [ ] Use a distinctive sentinel in Go render tests. Capture logs and inspect request URL, response
+- [x] Use a distinctive sentinel in Go render tests. Capture logs and inspect request URL, response
   body, all response headers including `Location`, and rendered HTML/data attributes. The sentinel
   must appear nowhere in these surfaces.
-- [ ] Add source entries through normal i18n extraction. Manually edit only
+- [x] Add source entries through normal i18n extraction. Manually edit only
   `i18n/locales/de/messages.gotext.json`, `i18n/locales/fr/messages.gotext.json`, and
   `i18n/locales/it/messages.gotext.json`. Set new entries to `fuzzy: true` with a
   `Translated from English by Codex` comment.
-- [ ] Never hand-edit `out.gotext.json` or `*.gen.go`. Generate them through the repository process
+- [x] Never hand-edit `out.gotext.json` or `*.gen.go`. Generate them through the repository process
   and inspect the missing-translation output for all four maintenance languages.
-- [ ] Add `playwright.maintenance.config.ts` with no global setup, only the maintenance spec, the
+- [x] Add `playwright.maintenance.config.ts` with no global setup, only the maintenance spec, the
   existing base URL/TLS defaults, one worker, and serial execution.
-- [ ] Add a `test:e2e:maintenance` package script and a serial maintenance spec using semantic
-  locators. Cover ordinary/revealed pages, keyboard submission, localized required/invalid feedback,
-  duplicate prevention, field clearing, startup status, successful unlock, and final navigation.
-- [ ] In Playwright, use a distinctive configured sentinel as the correct passphrase and another
+- [x] Add a `test:e2e:maintenance` package script and a serial maintenance spec using semantic
+  locators. Cover required/invalid feedback in every supported language and assert exactly one
+  request during repeated submission. Cover field clearing, startup status, successful unlock, and
+  final navigation.
+- [x] In Playwright, use a distinctive configured sentinel as the correct passphrase and another
   distinctive value for failure. Observe every browser request and response. Permit each sentinel
   only in its unlock POST data and transient field input.
-- [ ] Assert sentinels are absent from request URLs/headers, response bodies/headers including
+- [x] Assert sentinels are absent from request URLs/headers, response bodies/headers including
   `Location`, rendered HTML/data attributes, and current/final URLs. Verify the field is empty after
   both attempts.
-- [ ] Establish a prior browser history entry before opening the unlock URL. After
+- [x] Establish a prior browser history entry before opening the unlock URL. After
   `location.replace`, use Back and assert the unlock-bearing URL and sentinel cannot be restored.
-- [ ] Update `e2e/README.md` with the dedicated command, required
+- [x] Update `e2e/README.md` with the dedicated command, required
   `E2E_MAINTENANCE_PASSPHRASE`, and steps to prepare and restart a passphrase-protected locked
   instance. State that the final successful test unlocks the instance.
 
 ## Verification Checklist
 
-- [ ] Run focused maintenance render/command tests for query variants, headers, secrecy, roles, and
+- [x] Run focused maintenance render/command tests for query variants, headers, secrecy, roles, and
   form semantics.
-- [ ] Run the `Accept-Language` table for English, German, French, and Italian labels/messages.
-- [ ] Run `go test -race ./server -run 'Maintenance|Unlock'`.
-- [ ] Run `go test ./...`.
-- [ ] Run `go build ./...`.
-- [ ] Run
+- [x] Run the `Accept-Language` table for English, German, French, and Italian labels/messages.
+- [x] Run `go test -race ./server -run 'Maintenance|Unlock'`.
+- [x] Run `go test ./...`.
+- [x] Run `go build ./...`.
+- [x] Run
   `go build -tags "sqlite_fts5 sqlite_json sqlite_foreign_keys sqlite_icu" ./...`.
-- [ ] Run `go vet ./...`.
-- [ ] Run `go generate ./i18n 2> /tmp/simpledms-missing-translations.txt`.
-- [ ] Inspect generated diffs and confirm no missing German, French, or Italian entries. English
-  missing-entry diagnostics may be ignored according to repository guidance.
-- [ ] Prepare the locked instance with a distinctive sentinel and run
+- [x] Run `go vet ./...`.
+- [x] Run `go generate ./i18n 2> /tmp/simpledms-missing-translations.txt`.
+- [x] Inspect generated diffs and confirm no new missing German, French, or Italian entries. The
+  existing `unexpectedErrorMessage`, `Space context not found.`, and `Could not verify access.`
+  diagnostics remain unrelated. English diagnostics may be ignored according to repository guidance.
+- [x] Prepare the locked instance with a distinctive sentinel and run
   `E2E_MAINTENANCE_PASSPHRASE=... npm run test:e2e:maintenance`.
-- [ ] Inspect Playwright network observations and browser history assertions for sentinel leakage.
-- [ ] Run `git diff --check` and confirm there are no schema, migration, dependency, dashboard,
+- [x] Inspect Playwright network observations and browser history assertions for sentinel leakage.
+- [x] Run `git diff --check` and confirm there are no schema, migration, dependency, dashboard,
   test-only production-seam, or manually edited generated-file changes.

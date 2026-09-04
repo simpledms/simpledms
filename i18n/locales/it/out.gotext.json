@@ -921,14 +921,6 @@
             "fuzzy": true
         },
         {
-            "id": "OCR succeeded at",
-            "message": "OCR succeeded at",
-            "translation": "OCR completato alle",
-            "comment": "TODO naming",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Deleted at",
             "message": "Deleted at",
             "translation": "Eliminato il",
@@ -4179,6 +4171,13 @@
             "fuzzy": true
         },
         {
+            "id": "OCR succeeded at",
+            "message": "OCR succeeded at",
+            "translation": "OCR completato alle",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "No backup codes were returned.",
             "message": "No backup codes were returned.",
             "translation": "Non è stato restituito alcun codice Backup.",
@@ -4233,6 +4232,48 @@
             "message": "required",
             "translation": "obbligatorio",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Application passphrase",
+            "message": "Application passphrase",
+            "translation": "Passphrase dell’applicazione",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unlock application",
+            "message": "Unlock application",
+            "translation": "Sblocca applicazione",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Passphrase is required.",
+            "message": "Passphrase is required.",
+            "translation": "La passphrase è obbligatoria.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid passphrase.",
+            "message": "Invalid passphrase.",
+            "translation": "Passphrase non valida.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Something went wrong. Please try again.",
+            "message": "Something went wrong. Please try again.",
+            "translation": "Qualcosa è andato storto. Riprova per favore.",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Application unlocked. Starting up.",
+            "message": "Application unlocked. Starting up.",
+            "translation": "Applicazione sbloccata. Avvio in corso.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -5440,13 +5481,6 @@
             "fuzzy": true
         },
         {
-            "id": "Passphrase is required.",
-            "message": "Passphrase is required.",
-            "translation": "La passphrase è obbligatoria.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Your temporary password is",
             "message": "Your temporary password is",
             "translation": "La tua password temporanea è",
@@ -5590,13 +5624,6 @@
             "id": "App is already unlocked.",
             "message": "App is already unlocked.",
             "translation": "L'app è già sbloccata.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Invalid passphrase.",
-            "message": "Invalid passphrase.",
-            "translation": "Passphrase non valida.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -6870,16 +6897,6 @@
             "message": "Cannot add a tag group as child.",
             "translation": "Impossibile aggiungere un gruppo di Tag come figlio.",
             "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": [
-                "unexpectedErrorMessage",
-                "Something went wrong. Please try again."
-            ],
-            "message": "Something went wrong. Please try again.",
-            "translation": "Qualcosa è andato storto. Riprova per favore.",
-            "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
         {

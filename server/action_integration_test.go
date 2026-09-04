@@ -340,7 +340,7 @@ func initSystemConfig(
 		t.Fatal(err)
 	}
 
-	systemConfigx := mainDB.ReadWriteConn.SystemConfig.Query().FirstX(ctx)
+	systemConfigx := mainDB.ReadOnlyConn.SystemConfig.Query().FirstX(ctx)
 	return systemconfigmodel.NewSystemConfig(
 		systemConfigx,
 		isSaaSModeEnabled,
@@ -529,6 +529,62 @@ func TestSignInCmdSetsSessionAndRedirect(t *testing.T) {
 	sessionCount := harness.mainDB.ReadWriteConn.Session.Query().CountX(context.Background())
 	if sessionCount != 1 {
 		t.Fatalf("expected 1 session, got %d", sessionCount)
+	}
+}
+
+func TestChangeAndRemovePassphraseUseRequestTransaction(t *testing.T) {
+	harness := newActionTestHarness(t)
+	const (
+		email      = "passphrase-admin@example.com"
+		password   = "supersecret"
+		passphrase = "application-passphrase"
+	)
+	createAccountWithRole(t, harness.mainDB, email, password, mainrole.Admin)
+	sessionCookie := signInAndGetSessionCookie(t, harness, email, password)
+
+	changeForm := url.Values{}
+	changeForm.Set("NewPassphrase", passphrase)
+	changeForm.Set("ConfirmNewPassphrase", passphrase)
+	changeReq := httptest.NewRequest(
+		http.MethodPost,
+		"/-/admin/change-passphrase-cmd",
+		strings.NewReader(changeForm.Encode()),
+	)
+	changeReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	changeReq.Header.Set("HX-Request", "true")
+	changeReq.AddCookie(sessionCookie)
+	changeRR := httptest.NewRecorder()
+
+	harness.router.ServeHTTP(changeRR, changeReq)
+
+	if changeRR.Code != http.StatusOK {
+		t.Fatalf("expected change status %d, got %d", http.StatusOK, changeRR.Code)
+	}
+	configAfterChange := harness.mainDB.ReadOnlyConn.SystemConfig.Query().FirstX(context.Background())
+	if !configAfterChange.IsIdentityEncryptedWithPassphrase {
+		t.Fatal("expected passphrase protection after changing passphrase")
+	}
+
+	removeForm := url.Values{}
+	removeForm.Set("CurrentPassphrase", passphrase)
+	removeReq := httptest.NewRequest(
+		http.MethodPost,
+		"/-/admin/remove-passphrase-cmd",
+		strings.NewReader(removeForm.Encode()),
+	)
+	removeReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	removeReq.Header.Set("HX-Request", "true")
+	removeReq.AddCookie(sessionCookie)
+	removeRR := httptest.NewRecorder()
+
+	harness.router.ServeHTTP(removeRR, removeReq)
+
+	if removeRR.Code != http.StatusOK {
+		t.Fatalf("expected remove status %d, got %d", http.StatusOK, removeRR.Code)
+	}
+	configAfterRemove := harness.mainDB.ReadOnlyConn.SystemConfig.Query().FirstX(context.Background())
+	if configAfterRemove.IsIdentityEncryptedWithPassphrase {
+		t.Fatal("expected passphrase protection to be removed")
 	}
 }
 
