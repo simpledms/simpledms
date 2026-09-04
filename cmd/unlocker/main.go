@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -32,23 +33,16 @@ func main() {
 	fmt.Println("Unlocking...")
 	fmt.Println()
 
-	jsonData := []byte(fmt.Sprintf(`{"passphrase": "%s"}`, passphrase))
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	resp, err := sendUnlockRequest(url, passphrase)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Println("error closing response body:", err)
+		}
+	}()
 
 	if resp.StatusCode != 200 {
 		log.Println("error, status code was", resp.StatusCode)
@@ -64,4 +58,23 @@ func main() {
 	}
 
 	fmt.Println("Successfully unlocked!")
+}
+
+func sendUnlockRequest(url, passphrase string) (*http.Response, error) {
+	jsonData, err := json.Marshal(struct {
+		Passphrase string `json:"passphrase"`
+	}{
+		Passphrase: passphrase,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(jsonData))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	return http.DefaultClient.Do(req)
 }

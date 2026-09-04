@@ -1,0 +1,151 @@
+{{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.MaintenanceUnlockForm */ -}}
+{{- define "MaintenanceUnlockForm" }}
+	{{- $ctx := .GetContext -}}
+	{{- $id := .GetID -}}
+	{{- $inputID := printf "%s-passphrase" $id -}}
+	{{- $statusID := printf "%s-status" $id -}}
+	{{- $errorID := printf "%s-error" $id -}}
+	<form
+		method="post"
+		action="/-/unlock-cmd"
+		hx-boost="false"
+		novalidate
+		class="flex flex-col gap-y-4"
+		data-required-message="{{ render $ctx .RequiredMessage }}"
+		data-invalid-message="{{ render $ctx .InvalidMessage }}"
+		data-failure-message="{{ render $ctx .FailureMessage }}"
+		data-rate-limit-message="{{ render $ctx .RateLimitMessage }}"
+		data-startup-message="{{ render $ctx .StartupMessage }}"
+	>
+		<div class="w-full">
+			<div class="rounded-xs px-4 py-2 min-h-14 outline outline-1 -outline-offset-1
+				flex items-center mt-1.5 w-full outline-outline focus-within:outline-primary
+				focus-within:outline-2 focus-within:-outline-offset-2 hover:border-on-surface
+				has-[:disabled]:outline-on-surface/[0.12] has-[:disabled]:cursor-not-allowed">
+				<label class="relative w-full" for="{{ $inputID }}">
+					<input
+						id="{{ $inputID }}"
+						name="passphrase"
+						type="password"
+						required
+						autocomplete="current-password"
+						aria-describedby="{{ $statusID }} {{ $errorID }}"
+						aria-invalid="false"
+						class="peer body-lg w-full text-on-surface placeholder-on-surface-variant
+							disabled:text-on-surface/[0.38] disabled:cursor-not-allowed"
+						placeholder=" "
+					/>
+					<span class="absolute -left-1 px-1 -top-6 body-sm bg-surface cursor-default
+						transition-all text-primary peer-placeholder-shown:top-0
+						peer-placeholder-shown:px-0 peer-placeholder-shown:body-lg
+						peer-placeholder-shown:cursor-text peer-placeholder-shown:bg-transparent
+						peer-placeholder-shown:text-on-surface-variant peer-focus:-top-6
+						peer-focus:px-1 peer-focus:-left-1 peer-focus:bg-surface
+						peer-focus:cursor-default peer-focus:body-sm peer-focus:text-primary">
+						{{ render $ctx .PassphraseLabel }}
+					</span>
+				</label>
+			</div>
+			<p id="{{ $errorID }}" role="alert" class="body-sm text-error px-4"></p>
+		</div>
+
+		<div class="flex flex-col">
+			<button
+				type="submit"
+				class="h-10 rounded-full bg-secondary-container drop-shadow
+					disabled:cursor-not-allowed disabled:opacity-60"
+			>
+				<span class="state-layer-on-secondary-container flex center-aligned px-6">
+					<span class="label-lg text-on-secondary-container">
+						{{ render $ctx .SubmitLabel }}
+					</span>
+				</span>
+			</button>
+			<p id="{{ $statusID }}" role="status" aria-live="polite"
+				class="body-sm text-on-surface-variant"></p>
+		</div>
+	</form>
+
+	<script>
+		(() => {
+			const form = document.currentScript.previousElementSibling;
+			const input = form.querySelector('input[name="passphrase"]');
+			const submit = form.querySelector('button[type="submit"]');
+			const status = form.querySelector('[role="status"]');
+			const error = form.querySelector('[role="alert"]');
+			const retryDelay = 500;
+
+			const showError = (message) => {
+				form.setAttribute("aria-busy", "false");
+				submit.disabled = false;
+				status.textContent = "";
+				error.textContent = message;
+				input.setAttribute("aria-invalid", "true");
+				input.focus();
+			};
+
+			const poll = async (target) => {
+				try {
+					const response = await fetch(target.href, {
+						cache: "no-store",
+						credentials: "same-origin",
+						mode: "same-origin",
+					});
+					if (response.headers.get("X-SimpleDMS-Maintenance") !== "true") {
+						window.location.replace(target.href);
+						return;
+					}
+				} catch (_) {
+					// Listener replacement can briefly make the application unavailable.
+				}
+				setTimeout(() => poll(target), retryDelay);
+			};
+
+			form.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				if (submit.disabled) {
+					return;
+				}
+
+				error.textContent = "";
+				input.setAttribute("aria-invalid", "false");
+				if (input.value === "") {
+					showError(form.dataset.requiredMessage);
+					return;
+				}
+
+				form.setAttribute("aria-busy", "true");
+				submit.disabled = true;
+
+				try {
+					const response = await fetch("/-/unlock-cmd", {
+						method: "POST",
+						headers: {"Content-Type": "application/json"},
+						credentials: "same-origin",
+						mode: "same-origin",
+						cache: "no-store",
+						body: JSON.stringify({passphrase: input.value}),
+					});
+					if (response.status === 200) {
+						form.setAttribute("aria-busy", "false");
+						status.textContent = form.dataset.startupMessage;
+						const target = new URL(window.location.href);
+						target.searchParams.delete("unlock");
+						poll(target);
+						return;
+					}
+
+					showError(response.status === 400
+						? form.dataset.invalidMessage
+						: response.status === 429
+							? form.dataset.rateLimitMessage
+							: form.dataset.failureMessage);
+				} catch (_) {
+					showError(form.dataset.failureMessage);
+				} finally {
+					input.value = "";
+				}
+			});
+		})();
+	</script>
+{{- end }}

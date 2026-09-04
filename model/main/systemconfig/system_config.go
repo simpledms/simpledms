@@ -106,7 +106,7 @@ func DecryptMainIdentity(encryptedIdentity []byte, passphrase string) (*age.X255
 	x25519Identity, err := age.ParseX25519Identity(plaintextIdentity.String())
 	if err != nil {
 		log.Println(err, "could not parse identity")
-		return nil, nil
+		return nil, err
 	}
 
 	return x25519Identity, nil
@@ -138,7 +138,7 @@ func (qq *SystemConfig) RemovePassphrase(ctx ctxx.Context, currentPassphrase str
 	// updating encryptor.X25519MainIdentity not necessary because has not changed, just
 	// got encrypted in database
 
-	qq.data = qq.data.Update().
+	qq.data = ctx.MainCtx().MainTx.SystemConfig.UpdateOneID(qq.data.ID).
 		SetIsIdentityEncryptedWithPassphrase(false).
 		SetX25519Identity([]byte(mainX25519Identity.String())).
 		SaveX(ctx)
@@ -208,7 +208,7 @@ func (qq *SystemConfig) ChangePassphrase(
 	}
 
 	identityBytes := identityCiphertext.Bytes()
-	qq.data = qq.data.Update().
+	qq.data = ctx.MainCtx().MainTx.SystemConfig.UpdateOneID(qq.data.ID).
 		SetIsIdentityEncryptedWithPassphrase(true).
 		SetX25519Identity(identityBytes).
 		SaveX(ctx)

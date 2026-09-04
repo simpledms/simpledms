@@ -9,11 +9,13 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"net/netip"
 	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"filippo.io/age"
@@ -103,11 +105,14 @@ func newMaintenanceModeHandler(
 	i18nx *i18n.I18n,
 	renderer *ui.Renderer,
 	encryptedIdentity []byte,
+	trustedProxies []netip.Prefix,
 	commercialLicenseEnabled bool,
-	shutdownFn func(context.Context) error,
+	stopFn func(),
 ) http.Handler {
 	mux := http.NewServeMux()
 	pwaManifestHandler := NewPWAManifestHandler(assetsFS, devMode)
+	unlockRateLimiter := newMaintenanceUnlockRateLimiter(trustedProxies)
+	var unlockOnce sync.Once
 
 	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assetsFS))))
@@ -133,6 +138,13 @@ func newMaintenanceModeHandler(
 			_, _ = rw.Write([]byte("Passphrase is required"))
 			return
 		}
+		retryAfter, isAllowed := unlockRateLimiter.allow(req, time.Now())
+		if !isAllowed {
+			rw.Header().Set("Retry-After", strconv.Itoa(retryAfter))
+			rw.WriteHeader(http.StatusTooManyRequests)
+			_, _ = rw.Write([]byte("Too many unlock attempts. Please try again shortly."))
+			return
+		}
 
 		identity, err := systemconfigmodel.DecryptMainIdentity(encryptedIdentity, passphrase)
 		if err != nil {
@@ -142,22 +154,28 @@ func newMaintenanceModeHandler(
 			return
 		}
 
-		encryptor.NilableX25519MainIdentity = identity
+		shouldStop := false
+		unlockOnce.Do(func() {
+			encryptor.NilableX25519MainIdentity = identity
+			shouldStop = true
+		})
 
-		if shutdownFn != nil {
-			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-			defer cancel()
-
-			err = shutdownFn(ctx)
-			if err != nil {
-				log.Println(err)
-			}
+		rw.WriteHeader(http.StatusOK)
+		if shouldStop && stopFn != nil {
+			go stopFn()
 		}
 	})
 
 	// TODO recovery handler
 	// TODO status code?
 	mux.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+		isUnlockFormVisible := req.URL.Query().Has("unlock")
+		rw.Header().Set("X-SimpleDMS-Maintenance", "true")
+		if isUnlockFormVisible {
+			rw.Header().Set("Cache-Control", "no-store")
+			rw.Header().Set("Pragma", "no-cache")
+		}
+
 		mainTx, err := mainDB.Tx(req.Context(), true)
 		if err != nil {
 			log.Println(err)
@@ -185,6 +203,16 @@ func newMaintenanceModeHandler(
 		)
 
 		titlex := widget.Tuf("%s | SimpleDMS", widget.T("Maintenance mode").String(visitorCtx))
+		children := []widget.IWidget{
+			widget.H(widget.HeadingTypeHeadlineMd, titlex),
+			widget.T(
+				"Maintenance mode is enabled. Please wait until the app is ready again.",
+			).SetWrap(),
+			// wx.T("This page automatically refreshes every 60 seconds.").SetWrap(),
+		}
+		if isUnlockFormVisible {
+			children = append(children, widget.NewMaintenanceUnlockForm())
+		}
 		viewx := partial.NewBase(
 			titlex,
 			&widget.MainLayout{
@@ -192,16 +220,12 @@ func newMaintenanceModeHandler(
 					Content: &widget.Column{
 						GapYSize:         widget.Gap4,
 						NoOverflowHidden: true,
-						Children: []widget.IWidget{
-							widget.H(widget.HeadingTypeHeadlineMd, titlex),
-							widget.T("Maintenance mode is enabled. Please wait until the app is ready again.").SetWrap(),
-							// wx.T("This page automatically refreshes every 60 seconds.").SetWrap(),
-						},
+						Children:         children,
 					},
 				},
 			},
 		)
-		viewx.ShouldRefreshEvery60Seconds = true
+		viewx.ShouldRefreshEvery60Seconds = !isUnlockFormVisible
 
 		rwx := httpx.NewResponseWriter(rw)
 		rwx.WriteHeader(http.StatusServiceUnavailable) // must be before render
@@ -214,7 +238,26 @@ func newMaintenanceModeHandler(
 		}
 	})
 
-	return mux
+	protectedHandler := http.NewCrossOriginProtection().Handler(mux)
+	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/-/unlock-cmd" {
+			rw.Header().Set("Cache-Control", "no-store")
+			rw.Header().Set("Pragma", "no-cache")
+		}
+		protectedHandler.ServeHTTP(rw, req)
+	})
+}
+
+func stopMaintenanceModeServer(server *http.Server) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		log.Println(err)
+		if closeErr := server.Close(); closeErr != nil {
+			log.Println(closeErr)
+		}
+	}
 }
 
 func NewServer(
@@ -301,7 +344,15 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	renderer, i18nx := qq.newRendererAndI18n()
 	bootstrapConfig := qq.loadBootstrapSystemConfig(ctx, mainDB)
 	manager, useAutocert := qq.startAutocertIfRequired(bootstrapConfig)
-	qq.ensureMainIdentity(mainDB, i18nx, renderer, bootstrapConfig, useAutocert, manager)
+	qq.ensureMainIdentity(
+		mainDB,
+		i18nx,
+		renderer,
+		bootstrapConfig,
+		trustedProxies,
+		useAutocert,
+		manager,
+	)
 	qq.applyOverrideDBConfigAfterIdentity(ctx, mainDB, overrideDBConfig)
 
 	rawSystemConfig, systemConfig := qq.loadRuntimeSystemConfig(ctx, mainDB)
@@ -570,6 +621,7 @@ func (qq *Server) ensureMainIdentity(
 	i18nx *i18n.I18n,
 	renderer *ui.Renderer,
 	systemConfigx *entmain.SystemConfig,
+	trustedProxies []netip.Prefix,
 	useAutocert bool,
 	manager *autocert.Manager,
 ) {
@@ -589,8 +641,11 @@ func (qq *Server) ensureMainIdentity(
 			i18nx,
 			renderer,
 			systemConfigx.X25519Identity,
+			trustedProxies,
 			qq.commercialLicenseEnabled,
-			maintenanceModeServer.Shutdown,
+			func() {
+				stopMaintenanceModeServer(&maintenanceModeServer)
+			},
 		)
 
 		handlerChain := handlers.CompressHandler(
