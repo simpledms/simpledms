@@ -498,7 +498,7 @@ func TestMaintenanceUnlockCmdConcurrentValidRequestsTransitionOnce(t *testing.T)
 			}
 		}
 
-		synctest.Sleep(time.Hour)
+		time.Sleep(time.Hour)
 		synctest.Wait()
 		if stopCalls.Load() != 1 {
 			t.Fatalf("expected one stop sequence, got %d", stopCalls.Load())
