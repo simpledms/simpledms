@@ -14,6 +14,7 @@
 		data-required-message="{{ render $ctx .RequiredMessage }}"
 		data-invalid-message="{{ render $ctx .InvalidMessage }}"
 		data-failure-message="{{ render $ctx .FailureMessage }}"
+		data-rate-limit-message="{{ render $ctx .RateLimitMessage }}"
 		data-startup-message="{{ render $ctx .StartupMessage }}"
 	>
 		<div class="w-full">
@@ -136,7 +137,9 @@
 
 					showError(response.status === 400
 						? form.dataset.invalidMessage
-						: form.dataset.failureMessage);
+						: response.status === 429
+							? form.dataset.rateLimitMessage
+							: form.dataset.failureMessage);
 				} catch (_) {
 					showError(form.dataset.failureMessage);
 				} finally {

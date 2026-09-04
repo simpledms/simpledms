@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"errors"
+	"fmt"
 	"html"
 	"html/template"
 	"io"
@@ -85,6 +86,7 @@ func TestMaintenancePageUnlockFormRendering(t *testing.T) {
 		deps.i18n,
 		deps.renderer,
 		[]byte(passphrase),
+		nil,
 		false,
 		func() {
 			stopCalls.Add(1)
@@ -165,6 +167,7 @@ func TestMaintenanceUnlockFormTranslations(t *testing.T) {
 		deps.i18n,
 		deps.renderer,
 		[]byte("irrelevant"),
+		nil,
 		false,
 		nil,
 	)
@@ -181,6 +184,7 @@ func TestMaintenanceUnlockFormTranslations(t *testing.T) {
 				"Passphrase is required.",
 				"Invalid passphrase.",
 				"Something went wrong. Please try again.",
+				"Too many unlock attempts. Please try again later.",
 				"Application unlocked. Starting up.",
 			},
 		},
@@ -192,6 +196,7 @@ func TestMaintenanceUnlockFormTranslations(t *testing.T) {
 				"Passphrase ist erforderlich.",
 				"Ungültige Passphrase.",
 				"Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
+				"Zu viele Entsperrversuche. Bitte versuche es später erneut.",
 				"Anwendung entsperrt. Start wird fortgesetzt.",
 			},
 		},
@@ -203,6 +208,7 @@ func TestMaintenanceUnlockFormTranslations(t *testing.T) {
 				"La phrase secrète est requise.",
 				"Phrase secrète invalide.",
 				"Une erreur s'est produite. Veuillez réessayer.",
+				"Trop de tentatives de déverrouillage. Veuillez réessayer plus tard.",
 				"Application déverrouillée. Démarrage en cours.",
 			},
 		},
@@ -214,6 +220,7 @@ func TestMaintenanceUnlockFormTranslations(t *testing.T) {
 				"La passphrase è obbligatoria.",
 				"Passphrase non valida.",
 				"Qualcosa è andato storto. Riprova per favore.",
+				"Troppi tentativi di sblocco. Riprova più tardi.",
 				"Applicazione sbloccata. Avvio in corso.",
 			},
 		},
@@ -381,6 +388,69 @@ func TestMaintenanceUnlockCmdInvalidRequestsDoNotTransition(t *testing.T) {
 				t.Fatal("expected invalid request not to transition maintenance mode")
 			}
 		})
+	}
+}
+
+func TestMaintenanceUnlockCmdRateLimitsAttempts(t *testing.T) {
+	const passphrase = "rate-limited-passphrase"
+	clearMainIdentity(t)
+	var stopCalls atomic.Int32
+	handler := newMaintenanceCommandHandler(
+		t,
+		mustEncryptIdentityWithPassphrase(t, passphrase),
+		func() {
+			stopCalls.Add(1)
+		},
+	)
+	for attempt := range 10 {
+		body := []byte("{")
+		if attempt%2 == 0 {
+			body = marshalUnlockRequestBody(t, "")
+		}
+		req := httptest.NewRequest(http.MethodPost, "/-/unlock-cmd", bytes.NewReader(body))
+		req.RemoteAddr = "192.0.2.10:1234"
+		rr := httptest.NewRecorder()
+		handler.ServeHTTP(rr, req)
+		if rr.Code != http.StatusBadRequest {
+			t.Fatalf("invalid request %d: expected status %d, got %d", attempt, http.StatusBadRequest, rr.Code)
+		}
+	}
+
+	for attempt := range 5 {
+		req := httptest.NewRequest(
+			http.MethodPost,
+			"/-/unlock-cmd",
+			bytes.NewReader(marshalUnlockRequestBody(t, fmt.Sprintf("wrong-%d", attempt))),
+		)
+		req.RemoteAddr = "192.0.2.10:1234"
+		rr := httptest.NewRecorder()
+		handler.ServeHTTP(rr, req)
+		if rr.Code != http.StatusBadRequest {
+			t.Fatalf("attempt %d: expected status %d, got %d", attempt, http.StatusBadRequest, rr.Code)
+		}
+	}
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/-/unlock-cmd",
+		bytes.NewReader(marshalUnlockRequestBody(t, passphrase)),
+	)
+	req.RemoteAddr = "192.0.2.10:5678"
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	assertMaintenanceCommandCacheHeaders(t, rr)
+	if rr.Code != http.StatusTooManyRequests {
+		t.Fatalf("expected status %d, got %d", http.StatusTooManyRequests, rr.Code)
+	}
+	if rr.Header().Get("Retry-After") == "" {
+		t.Fatal("expected Retry-After header")
+	}
+	if rr.Body.String() != "Too many unlock attempts. Please try again shortly." {
+		t.Fatalf("unexpected rate-limit body %q", rr.Body.String())
+	}
+	if encryptor.NilableX25519MainIdentity != nil || stopCalls.Load() != 0 {
+		t.Fatal("expected rate-limited request not to transition maintenance mode")
 	}
 }
 
@@ -751,6 +821,7 @@ func newMaintenanceCommandHandler(
 		nil,
 		nil,
 		encryptedIdentity,
+		nil,
 		false,
 		stopFn,
 	)

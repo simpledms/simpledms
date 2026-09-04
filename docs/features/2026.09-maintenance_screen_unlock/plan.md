@@ -23,8 +23,8 @@ work is required.
 
 ## Assumptions and Deferrals
 
-- Rate limiting, stricter method/content-type/body-size rules, and preferred operations
-  documentation remain deferred until the specification's open questions are resolved.
+- Stricter method/content-type/body-size rules and preferred operations documentation remain
+  deferred until the specification's open questions are resolved.
 - JavaScript is acceptable because the existing Base already requires it; no no-JavaScript unlock
   workflow is required.
 - After success, polling continues until a non-maintenance response is detected or the page closes.

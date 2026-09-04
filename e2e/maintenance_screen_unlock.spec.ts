@@ -164,6 +164,17 @@ test.describe("maintenance screen unlock", () => {
 			"rendered HTML exposed a passphrase",
 		).toBe(false);
 
+		await page.route("**/-/unlock-cmd", async (route) => {
+			await route.fulfill({ status: 429, body: "rate-limit details must stay hidden" });
+		}, { times: 1 });
+		await input.fill(wrongPassphrase);
+		await input.press("Enter");
+		await expect(alert)
+			.toHaveText("Too many unlock attempts. Please try again later.");
+		await expect(alert).not.toContainText("rate-limit details");
+		await expect(input).toHaveValue("");
+		await expect(input).toBeFocused();
+
 		let releaseInvalidRequest = () => {};
 		const invalidRequestReleased = new Promise<void>((resolve) => {
 			releaseInvalidRequest = resolve;

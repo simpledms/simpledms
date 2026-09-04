@@ -7957,6 +7957,13 @@
 			"fuzzy": true
 		},
 		{
+			"id": "Too many unlock attempts. Please try again later.",
+			"message": "Too many unlock attempts. Please try again later.",
+			"translation": "Zu viele Entsperrversuche. Bitte versuche es später erneut.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
 			"id": "Application unlocked. Starting up.",
 			"message": "Application unlocked. Starting up.",
 			"translation": "Anwendung entsperrt. Start wird fortgesetzt.",

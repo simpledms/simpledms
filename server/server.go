@@ -9,6 +9,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"net/netip"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -104,11 +105,13 @@ func newMaintenanceModeHandler(
 	i18nx *i18n.I18n,
 	renderer *ui.Renderer,
 	encryptedIdentity []byte,
+	trustedProxies []netip.Prefix,
 	commercialLicenseEnabled bool,
 	stopFn func(),
 ) http.Handler {
 	mux := http.NewServeMux()
 	pwaManifestHandler := NewPWAManifestHandler(assetsFS, devMode)
+	unlockRateLimiter := newMaintenanceUnlockRateLimiter(trustedProxies)
 	var unlockOnce sync.Once
 
 	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
@@ -133,6 +136,13 @@ func newMaintenanceModeHandler(
 		if passphrase == "" {
 			rw.WriteHeader(http.StatusBadRequest)
 			_, _ = rw.Write([]byte("Passphrase is required"))
+			return
+		}
+		retryAfter, isAllowed := unlockRateLimiter.allow(req, time.Now())
+		if !isAllowed {
+			rw.Header().Set("Retry-After", strconv.Itoa(retryAfter))
+			rw.WriteHeader(http.StatusTooManyRequests)
+			_, _ = rw.Write([]byte("Too many unlock attempts. Please try again shortly."))
 			return
 		}
 
@@ -334,7 +344,15 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	renderer, i18nx := qq.newRendererAndI18n()
 	bootstrapConfig := qq.loadBootstrapSystemConfig(ctx, mainDB)
 	manager, useAutocert := qq.startAutocertIfRequired(bootstrapConfig)
-	qq.ensureMainIdentity(mainDB, i18nx, renderer, bootstrapConfig, useAutocert, manager)
+	qq.ensureMainIdentity(
+		mainDB,
+		i18nx,
+		renderer,
+		bootstrapConfig,
+		trustedProxies,
+		useAutocert,
+		manager,
+	)
 	qq.applyOverrideDBConfigAfterIdentity(ctx, mainDB, overrideDBConfig)
 
 	rawSystemConfig, systemConfig := qq.loadRuntimeSystemConfig(ctx, mainDB)
@@ -603,6 +621,7 @@ func (qq *Server) ensureMainIdentity(
 	i18nx *i18n.I18n,
 	renderer *ui.Renderer,
 	systemConfigx *entmain.SystemConfig,
+	trustedProxies []netip.Prefix,
 	useAutocert bool,
 	manager *autocert.Manager,
 ) {
@@ -622,6 +641,7 @@ func (qq *Server) ensureMainIdentity(
 			i18nx,
 			renderer,
 			systemConfigx.X25519Identity,
+			trustedProxies,
 			qq.commercialLicenseEnabled,
 			func() {
 				stopMaintenanceModeServer(&maintenanceModeServer)

@@ -125,8 +125,7 @@ not require `?unlock`, and successful CLI-compatible requests remain HTTP 200.
 [Slice 2](slices/02-browser_maintenance_unlock.md).
 
 **Minimum regression tests:** A CLI-shaped POST without the reveal parameter succeeds, the CLI
-binary builds, and manual wrong-then-correct CLI smoke checks pass against an externally prepared
-locked instance without refactoring the interactive CLI for tests.
+binary builds, and an HTTP-boundary test proves JSON-sensitive passphrases arrive unchanged.
 
 ## 10. Credential responses are protected
 
@@ -154,3 +153,20 @@ only when the marker is absent, regardless of response status.
 **Minimum regression tests:** Assert the marker on maintenance pages. Browser tests preserve the
 cleaned target, wait through marked 503 responses, accept a marker-free 503 as normal, and verify
 replacement rather than addition of the unlock history entry.
+
+## 12. Unlock attempts are bounded
+
+**Rule:** A client address receives at most five non-empty unlock attempts per rolling minute.
+Later attempts receive HTTP 429 with `Retry-After`. The limiter trusts forwarded addresses only
+from configured trusted proxies, keeps at most 4,096 client keys, and lives only as long as the
+maintenance handler. When dedicated client state is full, previously unseen addresses share one
+overflow limit instead of evicting active histories.
+
+**Why:** Startup passphrase verification is expensive and must resist online guessing without
+allowing attacker-controlled addresses to grow process memory indefinitely.
+
+**Enforced in:** `server/maintenance_unlock_rate_limiter.go` and the maintenance command handler.
+
+**Minimum regression tests:** Cover the rolling window, client isolation, trusted forwarding,
+bounded keys, overflow limiting without active-history eviction, concurrent verification, HTTP 429
+headers, and malformed or empty requests that do not consume attempts.

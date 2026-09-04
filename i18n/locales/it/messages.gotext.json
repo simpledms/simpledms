@@ -8274,6 +8274,13 @@
 			"fuzzy": true
 		},
 		{
+			"id": "Too many unlock attempts. Please try again later.",
+			"message": "Too many unlock attempts. Please try again later.",
+			"translation": "Troppi tentativi di sblocco. Riprova più tardi.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
 			"id": "Application unlocked. Starting up.",
 			"message": "Application unlocked. Starting up.",
 			"translation": "Applicazione sbloccata. Avvio in corso.",

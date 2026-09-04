@@ -14,6 +14,7 @@ In scope:
   `model/main/systemconfig/system_config.go` and cover its model caller.
 - Harden the maintenance command and runtime handler chain in `server/server.go` without changing
   its method, content-type, body-size, URL, JSON body, or successful status contract.
+- Bound unlock attempts per client address and return HTTP 429 with `Retry-After` when limited.
 - Add focused model and server tests for secrecy, cross-origin protection, concurrency, shutdown
   failure, persisted protection, loopback listeners, and listener replacement.
 - Keep `cmd/unlocker/main.go` interactive and behavior-compatible. Do not refactor it solely to make
@@ -22,7 +23,7 @@ In scope:
 Out of scope:
 
 - Browser form rendering, translations, and browser polling, which belong to Slice 2.
-- Rate limiting and stricter request-contract rules left open by the specification.
+- Stricter request-contract rules left open by the specification.
 - Schema, Ent, migrations, account auth, tenant maintenance, and passphrase management.
 
 ## Acceptance Criteria
@@ -48,6 +49,10 @@ Out of scope:
     `IsIdentityEncryptedWithPassphrase`.
 12. CLI-shaped handler tests, `go build ./cmd/unlocker`, and manual wrong-then-correct CLI smoke
     checks pass without refactoring the interactive CLI for tests.
+13. Each client address receives at most five non-empty attempts per rolling minute. The limiter
+    has bounded state, uses a conservative shared overflow limit when full, and uses trusted
+    forwarding only for configured proxies.
+14. `cmd/unlocker` preserves JSON-sensitive passphrases in its request body.
 
 ## Dependencies
 
@@ -100,6 +105,12 @@ safe command and transition required by Slice 2.
   external ACME service from tests.
 - [x] Leave `cmd/unlocker/main.go` unchanged unless compatibility is broken. Do not extract its
   interactive input solely for automated testing.
+- [x] Add a maintenance-owned rate limiter with a one-minute rolling window, at most 4,096 client
+  keys, and trusted-proxy-aware client addresses.
+- [x] Return HTTP 429 with `Retry-After` before passphrase decryption when a client limit is
+  reached. Keep the existing no-store response policy.
+- [x] Encode the unlocker request with `json.Marshal` and verify through a real HTTP test that
+  JSON-sensitive passphrases arrive unchanged.
 
 ## Verification Checklist
 

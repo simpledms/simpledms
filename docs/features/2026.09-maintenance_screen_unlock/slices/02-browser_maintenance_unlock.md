@@ -23,8 +23,8 @@ Out of scope:
 
 - A no-JavaScript workflow, new frontend dependency, normal dashboard/sign-in changes, account
   authorization, tenant maintenance, passphrase management, or test-only production setup seams.
-- Rate limiting, stricter endpoint request contracts, and preferred operations guidance pending the
-  specification's open questions.
+- Stricter endpoint request contracts and preferred operations guidance pending the specification's
+  open questions.
 
 ## Acceptance Criteria
 
@@ -55,6 +55,7 @@ Out of scope:
     translator comments.
 12. A dedicated Playwright configuration runs only serial maintenance tests with one worker, no
     normal sign-in setup, and an externally prepared locked instance.
+13. HTTP 429 displays localized rate-limit feedback without exposing the server response body.
 
 ## Dependencies
 
@@ -85,6 +86,7 @@ The existing Base remains the page shell, but maintenance submission and polling
 - [x] Map command 400 to localized invalid feedback and unexpected failures to existing generic
   retry feedback. Never display response internals. Re-enable retry and restore useful focus after
   failure.
+- [x] Map command 429 to localized rate-limit feedback without displaying response internals.
 - [x] Clear the password field after every failed or successful request. On HTTP 200, keep
   submission disabled, announce startup status, and begin polling without retaining the passphrase.
 - [x] Build the polling target from the current URL. Delete the `unlock` search parameter so every
@@ -98,8 +100,8 @@ The existing Base remains the page shell, but maintenance submission and polling
 - [x] Assert 503, ordinary content, form visibility, refresh behavior, marker/cache headers, labels,
   password/required semantics, role relationships, and absence of secret-bearing values.
 - [x] Add an `Accept-Language` table for `en`, `de`, `fr`, and `it`. Assert each localized form
-  label, button, required message, invalid message, generic retry message, and startup status for
-  that locale.
+  label, button, required message, invalid message, rate-limit message, generic retry message, and
+  startup status for that locale.
 - [x] Use a distinctive sentinel in Go render tests. Capture logs and inspect request URL, response
   body, all response headers including `Location`, and rendered HTML/data attributes. The sentinel
   must appear nowhere in these surfaces.

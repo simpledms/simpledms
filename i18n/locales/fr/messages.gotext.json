@@ -8272,6 +8272,13 @@
 			"fuzzy": true
 		},
 		{
+			"id": "Too many unlock attempts. Please try again later.",
+			"message": "Too many unlock attempts. Please try again later.",
+			"translation": "Trop de tentatives de déverrouillage. Veuillez réessayer plus tard.",
+			"translatorComment": "Translated from English by Codex.",
+			"fuzzy": true
+		},
+		{
 			"id": "Application unlocked. Starting up.",
 			"message": "Application unlocked. Starting up.",
 			"translation": "Application déverrouillée. Démarrage en cours.",

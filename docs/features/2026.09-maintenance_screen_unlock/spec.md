@@ -123,6 +123,10 @@ infrastructure is not available before the application identity is loaded.
 6. Invalid input must produce a clear error without disclosing encrypted
    identity details or other internal errors.
 7. A failed attempt must leave the form available for another attempt.
+8. Each client address may make at most five non-empty unlock attempts in a
+   rolling one-minute window. Further attempts must return `429 Too Many
+   Requests` with a `Retry-After` header. When bounded client state is full,
+   previously unseen addresses share a conservative overflow limit.
 
 ### Successful Unlock
 
@@ -150,6 +154,8 @@ infrastructure is not available before the application identity is loaded.
 4. The feature must not require access to normal application routing,
    authenticated sessions, tenant data, or encrypted runtime configuration
    before unlock succeeds.
+5. `cmd/unlocker` must JSON-encode every valid passphrase without changing its
+   value.
 
 ### Security And Privacy
 
@@ -164,6 +170,9 @@ infrastructure is not available before the application identity is loaded.
    maintenance server, or expose whether any account exists.
 6. A successfully submitted passphrase must not be retained by the maintenance
    page after the unlock attempt completes.
+7. Rate-limit state must be bounded, scoped to the maintenance listener, and
+   keyed by a client address that never trusts forwarding headers from an
+   untrusted peer.
 
 ### Accessibility
 
@@ -220,12 +229,15 @@ infrastructure is not available before the application identity is loaded.
     and validation fails, then the form controls and user-facing error are
     localized.
 12. Given the feature is available, when an operator uses `cmd/unlocker`, then
-    the existing successful and unsuccessful CLI workflows still behave as
-    before.
-13. Given HTTP, certificate-based TLS, or automatic TLS configuration, when the
+    JSON-sensitive characters are transmitted without changing the passphrase
+    value, and existing success and failure behaviour remains.
+13. Given five non-empty attempts from one client address within one minute,
+    when another attempt is submitted, then it receives HTTP 429 and a
+    `Retry-After` header without attempting to load the identity.
+14. Given HTTP, certificate-based TLS, or automatic TLS configuration, when the
     application starts locked, then the browser unlock workflow is available on
     the same configured listener.
-14. Given an unlock attempt, when operated with only a keyboard or assistive
+15. Given an unlock attempt, when operated with only a keyboard or assistive
     technology, then the field, action, progress, and error state are usable and
     understandable.
 
@@ -268,10 +280,8 @@ infrastructure is not available before the application identity is loaded.
 
 ## Open Questions
 
-1. Should failed maintenance unlock attempts be rate-limited, and if so, what
-   retry and recovery policy should apply to both browser and CLI operators?
-2. Should the existing unlock command be restricted to `POST`, an expected
+1. Should the existing unlock command be restricted to `POST`, an expected
    content type, and a bounded request size as part of this feature, or should
    that endpoint hardening be specified separately?
-3. Should operations documentation advertise `?unlock` as the preferred
+2. Should operations documentation advertise `?unlock` as the preferred
    workflow, or retain `cmd/unlocker` as the primary documented recovery path?
