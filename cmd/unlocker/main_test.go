@@ -37,7 +37,11 @@ func TestSendUnlockRequestEscapesPassphrase(t *testing.T) {
 	if err != nil {
 		t.Fatalf("send unlock request: %v", err)
 	}
-	defer response.Body.Close()
+	defer func() {
+		if err := response.Body.Close(); err != nil {
+			t.Errorf("close response body: %v", err)
+		}
+	}()
 	if response.StatusCode != http.StatusOK {
 		t.Fatalf("expected status %d, got %d", http.StatusOK, response.StatusCode)
 	}

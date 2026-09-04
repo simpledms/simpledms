@@ -38,7 +38,11 @@ func main() {
 		log.Println(err)
 		return
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Println("error closing response body:", err)
+		}
+	}()
 
 	if resp.StatusCode != 200 {
 		log.Println("error, status code was", resp.StatusCode)
