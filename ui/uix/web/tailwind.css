@@ -27,6 +27,14 @@
   dialog {
     margin: auto;
   }
+
+  /* Tailwind v4 no longer gives buttons a pointer cursor by default. */
+  button:not(:disabled):not([aria-disabled='true']),
+  [type='button']:not(:disabled):not([aria-disabled='true']),
+  [type='submit']:not(:disabled):not([aria-disabled='true']),
+  [type='reset']:not(:disabled):not([aria-disabled='true']) {
+    cursor: pointer;
+  }
 }
 
 @utility active {

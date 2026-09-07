@@ -1760,6 +1760,9 @@
       color: color-mix(in oklab, rgb(var(--md-sys-color-on-surface) / 1) 38%, transparent);
     }
   }
+  .disabled\:opacity-60:disabled {
+    opacity: 60%;
+  }
   .has-\[\.js-detail-content\>\*\]\:flex:has(:is(.js-detail-content > *)) {
     display: flex;
   }
@@ -2408,6 +2411,9 @@
   }
   dialog {
     margin: auto;
+  }
+  button:not(:disabled):not([aria-disabled='true']), [type='button']:not(:disabled):not([aria-disabled='true']), [type='submit']:not(:disabled):not([aria-disabled='true']), [type='reset']:not(:disabled):not([aria-disabled='true']) {
+    cursor: pointer;
   }
   @font-face {
     font-display: swap;
