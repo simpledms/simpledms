@@ -38,6 +38,9 @@ type Actions struct {
 	FileAttributesPartial      *FileAttributesPartial
 	FileVersionsPartial        *FileVersionsPartial
 	FileInfoPartial            *FileInfoPartial
+	DocumentNotesPartial       *DocumentNotesPartial
+	DocumentNoteDialog         *DocumentNoteDialog
+	DocumentNoteCmd            *DocumentNoteCmd
 	OCRContentDialog           *OCRContentDialog
 	DuplicateMatchesPartial    *DuplicateMatchesPartial
 	FilePropertiesPartial      *FilePropertiesPartial
@@ -109,6 +112,9 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		FileAttributesPartial:      NewFileAttributesPartial(infra, actions),
 		FileVersionsPartial:        NewFileVersionsPartial(infra, actions),
 		FileInfoPartial:            NewFileInfoPartial(infra, actions),
+		DocumentNotesPartial:       NewDocumentNotesPartial(infra, actions),
+		DocumentNoteDialog:         NewDocumentNoteDialog(infra, actions),
+		DocumentNoteCmd:            NewDocumentNoteCmd(infra, actions),
 		OCRContentDialog:           NewOCRContentDialog(infra, actions),
 		DuplicateMatchesPartial:    NewDuplicateMatchesPartial(infra, actions),
 		FilePropertiesPartial:      NewFilePropertiesPartial(infra, actions),

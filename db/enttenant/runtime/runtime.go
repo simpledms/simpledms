@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
+	"github.com/simpledms/simpledms/db/enttenant/documentnote"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
@@ -66,6 +67,24 @@ func init() {
 	attributeDescIsRequired := attributeFields[6].Descriptor()
 	// attribute.DefaultIsRequired holds the default value on creation for the is_required field.
 	attribute.DefaultIsRequired = attributeDescIsRequired.Default.(bool)
+	documentnoteMixin := schema.DocumentNote{}.Mixin()
+	documentnote.Policy = privacy.NewPolicies(documentnoteMixin[1], schema.DocumentNote{})
+	documentnote.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := documentnote.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	documentnoteMixinFields0 := documentnoteMixin[0].Fields()
+	_ = documentnoteMixinFields0
+	documentnoteFields := schema.DocumentNote{}.Fields()
+	_ = documentnoteFields
+	// documentnoteDescPublicID is the schema descriptor for public_id field.
+	documentnoteDescPublicID := documentnoteMixinFields0[0].Descriptor()
+	// documentnote.DefaultPublicID holds the default value on creation for the public_id field.
+	documentnote.DefaultPublicID = documentnoteDescPublicID.Default.(func() entx.CIText)
 	documenttypeMixin := schema.DocumentType{}.Mixin()
 	documenttype.Policy = privacy.NewPolicies(documenttypeMixin[0], schema.DocumentType{})
 	documenttype.Hooks[0] = func(next ent.Mutator) ent.Mutator {

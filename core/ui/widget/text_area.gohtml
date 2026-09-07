@@ -1,5 +1,38 @@
 {{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.TextArea */ -}}
 {{- define "TextArea" }}
+	{{ if .Label }}
+		{{/* TextField centers a 24px line in 56px; match its 16px inset so -top-6
+			places the floating label on the outline rather than above it. */}}
+		<div class="rounded-xs px-4 py-4 min-h-14 outline outline-1 outline-outline -outline-offset-1
+			focus-within:outline-primary focus-within:outline-2 focus-within:-outline-offset-2 mt-1.5 w-full">
+			<label class="relative block w-full">
+				<textarea
+					id="{{ .GetID }}"
+					name="{{ .Name }}"
+					rows="{{ .GetRows }}"
+					class="peer block body-lg w-full text-on-surface placeholder-on-surface-variant
+						focus:outline-none
+						{{ if eq .StyleType 0 }}min-h-[12rem]{{ else if eq .StyleType 2 }}min-h-full [field-sizing:content] resize-none{{ end }}"
+					placeholder=" " {{/* necessary for floating label positioning, as in TextField */}}
+					{{ if .IsReadonly }}readonly{{ end }}
+					{{ if .HasAutofocus }}autofocus{{ end }}
+				>{{ .Value }}</textarea>
+				{{/* Must follow the textarea for the peer selectors to work. */}}
+				<span class="absolute -left-1 px-1 -top-6 body-sm bg-surface
+					cursor-default transition-all text-primary
+					peer-placeholder-shown:top-0 peer-placeholder-shown:px-0 peer-placeholder-shown:body-lg
+					peer-placeholder-shown:cursor-text peer-placeholder-shown:bg-transparent
+					peer-placeholder-shown:text-on-surface-variant
+					peer-focus:-top-6 peer-focus:px-1 peer-focus:-left-1 peer-focus:bg-surface
+					md:peer-focus:bg-surface-container-lowest peer-focus:cursor-default
+					peer-focus:body-sm peer-focus:text-primary
+					peer-autofill:-top-6 peer-autofill:px-1 peer-autofill:-left-1 peer-autofill:bg-surface
+					md:peer-autofill:bg-surface-container-lowest peer-autofill:cursor-default
+					peer-autofill:body-sm peer-autofill:text-primary
+					">{{ render .GetContext .Label }}</span>
+			</label>
+		</div>
+	{{ else }}
 	<textarea
 		id="{{ .GetID }}"
 		name="{{ .Name }}"
@@ -8,4 +41,5 @@
 		{{ if .IsReadonly }}readonly{{ end }}
 		{{ if .HasAutofocus }}autofocus{{ end }}
 	>{{ .Value }}</textarea>
+	{{ end }}
 {{ end }}

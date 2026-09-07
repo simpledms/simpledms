@@ -16,6 +16,8 @@ type Tx struct {
 	config
 	// Attribute is the client for interacting with the Attribute builders.
 	Attribute *AttributeClient
+	// DocumentNote is the client for interacting with the DocumentNote builders.
+	DocumentNote *DocumentNoteClient
 	// DocumentType is the client for interacting with the DocumentType builders.
 	DocumentType *DocumentTypeClient
 	// File is the client for interacting with the File builders.
@@ -180,6 +182,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Attribute = NewAttributeClient(tx.config)
+	tx.DocumentNote = NewDocumentNoteClient(tx.config)
 	tx.DocumentType = NewDocumentTypeClient(tx.config)
 	tx.File = NewFileClient(tx.config)
 	tx.FilePropertyAssignment = NewFilePropertyAssignmentClient(tx.config)

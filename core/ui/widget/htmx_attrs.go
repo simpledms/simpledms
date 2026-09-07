@@ -16,6 +16,7 @@ type HxOn struct {
 // but works fine with `template "HTMXAttrs" .HTMXAttrs`
 // TODO is there a better solution for this without introducing security risk?
 type HTMXAttrs struct {
+	Role         string // Overrides the implicit link role for native interactive controls.
 	HxPushURL    string
 	HxReplaceURL string
 	HxTrigger    string
@@ -27,6 +28,7 @@ type HTMXAttrs struct {
 	HxSwap       string
 	HxSync       string
 	HxSwapOOB    string
+	HxSelectOOB  string
 	HxConfirm    string
 	HxInclude    string
 	HxBoost      string // for example used for file download links to disable boosting

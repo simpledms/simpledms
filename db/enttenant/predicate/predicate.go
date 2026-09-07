@@ -9,6 +9,9 @@ import (
 // Attribute is the predicate function for attribute builders.
 type Attribute func(*sql.Selector)
 
+// DocumentNote is the predicate function for documentnote builders.
+type DocumentNote func(*sql.Selector)
+
 // DocumentType is the predicate function for documenttype builders.
 type DocumentType func(*sql.Selector)
 

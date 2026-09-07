@@ -16,6 +16,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
+	"github.com/simpledms/simpledms/db/enttenant/documentnote"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
@@ -41,6 +42,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// Attribute is the client for interacting with the Attribute builders.
 	Attribute *AttributeClient
+	// DocumentNote is the client for interacting with the DocumentNote builders.
+	DocumentNote *DocumentNoteClient
 	// DocumentType is the client for interacting with the DocumentType builders.
 	DocumentType *DocumentTypeClient
 	// File is the client for interacting with the File builders.
@@ -85,6 +88,7 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.Attribute = NewAttributeClient(c.config)
+	c.DocumentNote = NewDocumentNoteClient(c.config)
 	c.DocumentType = NewDocumentTypeClient(c.config)
 	c.File = NewFileClient(c.config)
 	c.FilePropertyAssignment = NewFilePropertyAssignmentClient(c.config)
@@ -194,6 +198,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:                    ctx,
 		config:                 cfg,
 		Attribute:              NewAttributeClient(cfg),
+		DocumentNote:           NewDocumentNoteClient(cfg),
 		DocumentType:           NewDocumentTypeClient(cfg),
 		File:                   NewFileClient(cfg),
 		FilePropertyAssignment: NewFilePropertyAssignmentClient(cfg),
@@ -230,6 +235,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ctx:                    ctx,
 		config:                 cfg,
 		Attribute:              NewAttributeClient(cfg),
+		DocumentNote:           NewDocumentNoteClient(cfg),
 		DocumentType:           NewDocumentTypeClient(cfg),
 		File:                   NewFileClient(cfg),
 		FilePropertyAssignment: NewFilePropertyAssignmentClient(cfg),
@@ -275,9 +281,10 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Attribute, c.DocumentType, c.File, c.FilePropertyAssignment, c.FileVersion,
-		c.PreviewConversion, c.Property, c.Space, c.SpaceUserAssignment, c.StoredFile,
-		c.Tag, c.TagAssignment, c.TenantDataMigration, c.User, c.WebDAVResource,
+		c.Attribute, c.DocumentNote, c.DocumentType, c.File, c.FilePropertyAssignment,
+		c.FileVersion, c.PreviewConversion, c.Property, c.Space, c.SpaceUserAssignment,
+		c.StoredFile, c.Tag, c.TagAssignment, c.TenantDataMigration, c.User,
+		c.WebDAVResource,
 	} {
 		n.Use(hooks...)
 	}
@@ -287,10 +294,10 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Attribute, c.DocumentType, c.File, c.FilePropertyAssignment, c.FileSearch,
-		c.FileVersion, c.PreviewConversion, c.Property, c.ResolvedTagAssignment,
-		c.Space, c.SpaceUserAssignment, c.StoredFile, c.Tag, c.TagAssignment,
-		c.TenantDataMigration, c.User, c.WebDAVResource,
+		c.Attribute, c.DocumentNote, c.DocumentType, c.File, c.FilePropertyAssignment,
+		c.FileSearch, c.FileVersion, c.PreviewConversion, c.Property,
+		c.ResolvedTagAssignment, c.Space, c.SpaceUserAssignment, c.StoredFile, c.Tag,
+		c.TagAssignment, c.TenantDataMigration, c.User, c.WebDAVResource,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -301,6 +308,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *AttributeMutation:
 		return c.Attribute.mutate(ctx, m)
+	case *DocumentNoteMutation:
+		return c.DocumentNote.mutate(ctx, m)
 	case *DocumentTypeMutation:
 		return c.DocumentType.mutate(ctx, m)
 	case *FileMutation:
@@ -529,6 +538,236 @@ func (c *AttributeClient) mutate(ctx context.Context, m *AttributeMutation) (Val
 		return (&AttributeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("enttenant: unknown Attribute mutation op: %q", m.Op())
+	}
+}
+
+// DocumentNoteClient is a client for the DocumentNote schema.
+type DocumentNoteClient struct {
+	config
+}
+
+// NewDocumentNoteClient returns a client for the DocumentNote from the given config.
+func NewDocumentNoteClient(c config) *DocumentNoteClient {
+	return &DocumentNoteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `documentnote.Hooks(f(g(h())))`.
+func (c *DocumentNoteClient) Use(hooks ...Hook) {
+	c.hooks.DocumentNote = append(c.hooks.DocumentNote, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `documentnote.Intercept(f(g(h())))`.
+func (c *DocumentNoteClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DocumentNote = append(c.inters.DocumentNote, interceptors...)
+}
+
+// Create returns a builder for creating a DocumentNote entity.
+func (c *DocumentNoteClient) Create() *DocumentNoteCreate {
+	mutation := newDocumentNoteMutation(c.config, OpCreate)
+	return &DocumentNoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DocumentNote entities.
+func (c *DocumentNoteClient) CreateBulk(builders ...*DocumentNoteCreate) *DocumentNoteCreateBulk {
+	return &DocumentNoteCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DocumentNoteClient) MapCreateBulk(slice any, setFunc func(*DocumentNoteCreate, int)) *DocumentNoteCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DocumentNoteCreateBulk{err: fmt.Errorf("calling to DocumentNoteClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DocumentNoteCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DocumentNoteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DocumentNote.
+func (c *DocumentNoteClient) Update() *DocumentNoteUpdate {
+	mutation := newDocumentNoteMutation(c.config, OpUpdate)
+	return &DocumentNoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DocumentNoteClient) UpdateOne(_m *DocumentNote) *DocumentNoteUpdateOne {
+	mutation := newDocumentNoteMutation(c.config, OpUpdateOne, withDocumentNote(_m))
+	return &DocumentNoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DocumentNoteClient) UpdateOneID(id int64) *DocumentNoteUpdateOne {
+	mutation := newDocumentNoteMutation(c.config, OpUpdateOne, withDocumentNoteID(id))
+	return &DocumentNoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DocumentNote.
+func (c *DocumentNoteClient) Delete() *DocumentNoteDelete {
+	mutation := newDocumentNoteMutation(c.config, OpDelete)
+	return &DocumentNoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DocumentNoteClient) DeleteOne(_m *DocumentNote) *DocumentNoteDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DocumentNoteClient) DeleteOneID(id int64) *DocumentNoteDeleteOne {
+	builder := c.Delete().Where(documentnote.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DocumentNoteDeleteOne{builder}
+}
+
+// Query returns a query builder for DocumentNote.
+func (c *DocumentNoteClient) Query() *DocumentNoteQuery {
+	return &DocumentNoteQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDocumentNote},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DocumentNote entity by its id.
+func (c *DocumentNoteClient) Get(ctx context.Context, id int64) (*DocumentNote, error) {
+	return c.Query().Where(documentnote.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DocumentNoteClient) GetX(ctx context.Context, id int64) *DocumentNote {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QuerySpace queries the space edge of a DocumentNote.
+func (c *DocumentNoteClient) QuerySpace(_m *DocumentNote) *SpaceQuery {
+	query := (&SpaceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentnote.Table, documentnote.FieldID, id),
+			sqlgraph.To(space.Table, space.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentnote.SpaceTable, documentnote.SpaceColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFile queries the file edge of a DocumentNote.
+func (c *DocumentNoteClient) QueryFile(_m *DocumentNote) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentnote.Table, documentnote.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentnote.FileTable, documentnote.FileColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAuthor queries the author edge of a DocumentNote.
+func (c *DocumentNoteClient) QueryAuthor(_m *DocumentNote) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentnote.Table, documentnote.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentnote.AuthorTable, documentnote.AuthorColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditor queries the editor edge of a DocumentNote.
+func (c *DocumentNoteClient) QueryEditor(_m *DocumentNote) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentnote.Table, documentnote.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, documentnote.EditorTable, documentnote.EditorColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReplacement queries the replacement edge of a DocumentNote.
+func (c *DocumentNoteClient) QueryReplacement(_m *DocumentNote) *DocumentNoteQuery {
+	query := (&DocumentNoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentnote.Table, documentnote.FieldID, id),
+			sqlgraph.To(documentnote.Table, documentnote.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, documentnote.ReplacementTable, documentnote.ReplacementColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPredecessor queries the predecessor edge of a DocumentNote.
+func (c *DocumentNoteClient) QueryPredecessor(_m *DocumentNote) *DocumentNoteQuery {
+	query := (&DocumentNoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentnote.Table, documentnote.FieldID, id),
+			sqlgraph.To(documentnote.Table, documentnote.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, documentnote.PredecessorTable, documentnote.PredecessorColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DocumentNoteClient) Hooks() []Hook {
+	hooks := c.hooks.DocumentNote
+	return append(hooks[:len(hooks):len(hooks)], documentnote.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DocumentNoteClient) Interceptors() []Interceptor {
+	return c.inters.DocumentNote
+}
+
+func (c *DocumentNoteClient) mutate(ctx context.Context, m *DocumentNoteMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DocumentNoteCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DocumentNoteUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DocumentNoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DocumentNoteDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("enttenant: unknown DocumentNote mutation op: %q", m.Op())
 	}
 }
 
@@ -3417,14 +3656,15 @@ func (c *WebDAVResourceClient) mutate(ctx context.Context, m *WebDAVResourceMuta
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Attribute, DocumentType, File, FilePropertyAssignment, FileVersion,
-		PreviewConversion, Property, Space, SpaceUserAssignment, StoredFile, Tag,
-		TagAssignment, TenantDataMigration, User, WebDAVResource []ent.Hook
+		Attribute, DocumentNote, DocumentType, File, FilePropertyAssignment,
+		FileVersion, PreviewConversion, Property, Space, SpaceUserAssignment,
+		StoredFile, Tag, TagAssignment, TenantDataMigration, User,
+		WebDAVResource []ent.Hook
 	}
 	inters struct {
-		Attribute, DocumentType, File, FilePropertyAssignment, FileSearch, FileVersion,
-		PreviewConversion, Property, ResolvedTagAssignment, Space, SpaceUserAssignment,
-		StoredFile, Tag, TagAssignment, TenantDataMigration, User,
+		Attribute, DocumentNote, DocumentType, File, FilePropertyAssignment, FileSearch,
+		FileVersion, PreviewConversion, Property, ResolvedTagAssignment, Space,
+		SpaceUserAssignment, StoredFile, Tag, TagAssignment, TenantDataMigration, User,
 		WebDAVResource []ent.Interceptor
 	}
 )

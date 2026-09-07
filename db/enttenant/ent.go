@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
+	"github.com/simpledms/simpledms/db/enttenant/documentnote"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
@@ -90,6 +91,7 @@ func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			attribute.Table:                  attribute.ValidColumn,
+			documentnote.Table:               documentnote.ValidColumn,
 			documenttype.Table:               documenttype.ValidColumn,
 			file.Table:                       file.ValidColumn,
 			filepropertyassignment.Table:     filepropertyassignment.ValidColumn,

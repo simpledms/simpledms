@@ -74,8 +74,9 @@ func (qq *FileVersionFromInboxDialog) Widget(
 
 	formChildren = append(formChildren,
 		&widget.Checkbox{
-			Name:       "ConfirmWarning",
-			Label:      widget.T("I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged."),
+			Name: "ConfirmWarning",
+			Label: widget.T("I understand that the inbox file's metadata (document type, tags, fields) " +
+				"will be lost when merged. Notes and their history will be preserved."),
 			IsRequired: true,
 		},
 	)

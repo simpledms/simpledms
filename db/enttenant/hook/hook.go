@@ -21,6 +21,18 @@ func (f AttributeFunc) Mutate(ctx context.Context, m enttenant.Mutation) (entten
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *enttenant.AttributeMutation", m)
 }
 
+// The DocumentNoteFunc type is an adapter to allow the use of ordinary
+// function as DocumentNote mutator.
+type DocumentNoteFunc func(context.Context, *enttenant.DocumentNoteMutation) (enttenant.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DocumentNoteFunc) Mutate(ctx context.Context, m enttenant.Mutation) (enttenant.Value, error) {
+	if mv, ok := m.(*enttenant.DocumentNoteMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *enttenant.DocumentNoteMutation", m)
+}
+
 // The DocumentTypeFunc type is an adapter to allow the use of ordinary
 // function as DocumentType mutator.
 type DocumentTypeFunc func(context.Context, *enttenant.DocumentTypeMutation) (enttenant.Value, error)

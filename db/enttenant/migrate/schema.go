@@ -80,6 +80,71 @@ var (
 			},
 		},
 	}
+	// DocumentNotesColumns holds the columns for the "document_notes" table.
+	DocumentNotesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "public_id", Type: field.TypeString, Unique: true},
+		{Name: "title", Type: field.TypeString, Nullable: true},
+		{Name: "body", Type: field.TypeString, Size: 2147483647},
+		{Name: "authored_at", Type: field.TypeTime, Nullable: true},
+		{Name: "edited_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "space_id", Type: field.TypeInt64},
+		{Name: "file_id", Type: field.TypeInt64},
+		{Name: "author_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "editor_id", Type: field.TypeInt64, Nullable: true},
+		{Name: "replaced_by_id", Type: field.TypeInt64, Unique: true, Nullable: true},
+	}
+	// DocumentNotesTable holds the schema information for the "document_notes" table.
+	DocumentNotesTable = &schema.Table{
+		Name:       "document_notes",
+		Columns:    DocumentNotesColumns,
+		PrimaryKey: []*schema.Column{DocumentNotesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "document_notes_spaces_space",
+				Columns:    []*schema.Column{DocumentNotesColumns[7]},
+				RefColumns: []*schema.Column{SpacesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "document_notes_files_file",
+				Columns:    []*schema.Column{DocumentNotesColumns[8]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "document_notes_users_author",
+				Columns:    []*schema.Column{DocumentNotesColumns[9]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "document_notes_users_editor",
+				Columns:    []*schema.Column{DocumentNotesColumns[10]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "document_notes_document_notes_predecessor",
+				Columns:    []*schema.Column{DocumentNotesColumns[11]},
+				RefColumns: []*schema.Column{DocumentNotesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "documentnote_space_id",
+				Unique:  false,
+				Columns: []*schema.Column{DocumentNotesColumns[7]},
+			},
+			{
+				Name:    "documentnote_file_id",
+				Unique:  false,
+				Columns: []*schema.Column{DocumentNotesColumns[8]},
+			},
+		},
+	}
 	// DocumentTypesColumns holds the columns for the "document_types" table.
 	DocumentTypesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
@@ -991,6 +1056,7 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AttributesTable,
+		DocumentNotesTable,
 		DocumentTypesTable,
 		FilesTable,
 		FilePropertyAssignmentsTable,
@@ -1014,6 +1080,11 @@ func init() {
 	AttributesTable.ForeignKeys[1].RefTable = TagsTable
 	AttributesTable.ForeignKeys[2].RefTable = PropertiesTable
 	AttributesTable.ForeignKeys[3].RefTable = DocumentTypesTable
+	DocumentNotesTable.ForeignKeys[0].RefTable = SpacesTable
+	DocumentNotesTable.ForeignKeys[1].RefTable = FilesTable
+	DocumentNotesTable.ForeignKeys[2].RefTable = UsersTable
+	DocumentNotesTable.ForeignKeys[3].RefTable = UsersTable
+	DocumentNotesTable.ForeignKeys[4].RefTable = DocumentNotesTable
 	DocumentTypesTable.ForeignKeys[0].RefTable = SpacesTable
 	FilesTable.ForeignKeys[0].RefTable = UsersTable
 	FilesTable.ForeignKeys[1].RefTable = UsersTable

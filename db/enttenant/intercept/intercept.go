@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
+	"github.com/simpledms/simpledms/db/enttenant/documentnote"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
@@ -109,6 +110,33 @@ func (f TraverseAttribute) Traverse(ctx context.Context, q enttenant.Query) erro
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *enttenant.AttributeQuery", q)
+}
+
+// The DocumentNoteFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DocumentNoteFunc func(context.Context, *enttenant.DocumentNoteQuery) (enttenant.Value, error)
+
+// Query calls f(ctx, q).
+func (f DocumentNoteFunc) Query(ctx context.Context, q enttenant.Query) (enttenant.Value, error) {
+	if q, ok := q.(*enttenant.DocumentNoteQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *enttenant.DocumentNoteQuery", q)
+}
+
+// The TraverseDocumentNote type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDocumentNote func(context.Context, *enttenant.DocumentNoteQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDocumentNote) Intercept(next enttenant.Querier) enttenant.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDocumentNote) Traverse(ctx context.Context, q enttenant.Query) error {
+	if q, ok := q.(*enttenant.DocumentNoteQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *enttenant.DocumentNoteQuery", q)
 }
 
 // The DocumentTypeFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -548,6 +576,8 @@ func NewQuery(q enttenant.Query) (Query, error) {
 	switch q := q.(type) {
 	case *enttenant.AttributeQuery:
 		return &query[*enttenant.AttributeQuery, predicate.Attribute, attribute.OrderOption]{typ: enttenant.TypeAttribute, tq: q}, nil
+	case *enttenant.DocumentNoteQuery:
+		return &query[*enttenant.DocumentNoteQuery, predicate.DocumentNote, documentnote.OrderOption]{typ: enttenant.TypeDocumentNote, tq: q}, nil
 	case *enttenant.DocumentTypeQuery:
 		return &query[*enttenant.DocumentTypeQuery, predicate.DocumentType, documenttype.OrderOption]{typ: enttenant.TypeDocumentType, tq: q}, nil
 	case *enttenant.FileQuery:

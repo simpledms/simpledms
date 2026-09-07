@@ -2,6 +2,176 @@
     "language": "de",
     "messages": [
         {
+            "id": "Replaced by: {ReplacementTitle}", "message": "Replaced by: {ReplacementTitle}",
+            "translation": "Ersetzt durch: {ReplacementTitle}",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Actions",
+            "message": "Actions",
+            "translation": "Aktionen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Note added.", "message": "Note added.",
+            "translation": "Notiz hinzugefügt.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Note updated.", "message": "Note updated.",
+            "translation": "Notiz aktualisiert.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Note replaced.", "message": "Note replaced.",
+            "translation": "Notiz ersetzt.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Note deleted.", "message": "Note deleted.",
+            "translation": "Notiz gelöscht.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Unsupported note operation.", "message": "Unsupported note operation.",
+            "translation": "Diese Notizaktion wird nicht unterstützt.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Notes in Trash are read-only.", "message": "Notes in Trash are read-only.",
+            "translation": "Notizen im Papierkorb sind schreibgeschützt.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Historical notes cannot be changed.", "message": "Historical notes cannot be changed.",
+            "translation": "Notizen im Verlauf können nicht geändert werden.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "You cannot change this note.", "message": "You cannot change this note.",
+            "translation": "Du kannst diese Notiz nicht ändern.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Add note", "message": "Add note", "translation": "Notiz hinzufügen",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Edit note", "message": "Edit note", "translation": "Notiz bearbeiten",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Replace note", "message": "Replace note", "translation": "Notiz ersetzen",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Replace", "message": "Replace", "translation": "Ersetzen",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Delete note", "message": "Delete note", "translation": "Notiz löschen",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Delete this note? It will remain available in the note history.",
+            "message": "Delete this note? It will remain available in the note history.",
+            "translation": "Diese Notiz löschen? Sie bleibt im Notizverlauf verfügbar.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Could not load notes.", "message": "Could not load notes.",
+            "translation": "Notizen konnten nicht geladen werden.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Show deleted and replaced notes", "message": "Show deleted and replaced notes",
+            "translation": "Gelöschte und ersetzte Notizen anzeigen",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "No notes available.", "message": "No notes available.",
+            "translation": "Keine Notizen vorhanden.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Author: Unknown", "message": "Author: Unknown", "translation": "Verfasst von: Unbekannt",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Created: Unknown", "message": "Created: Unknown", "translation": "Erstellt: Unbekannt",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Author: {Name}", "message": "Author: {Name}", "translation": "Verfasst von: {Name}",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Created: {LanguageBCP47}", "message": "Created: {LanguageBCP47}",
+            "translation": "Erstellt: {LanguageBCP47}",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Edited by {Editor}: {LanguageBCP47}", "message": "Edited by {Editor}: {LanguageBCP47}",
+            "translation": "Bearbeitet von {Editor}: {LanguageBCP47}",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Replaced", "message": "Replaced", "translation": "Ersetzt",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "View replacement note", "message": "View replacement note",
+            "translation": "Nachfolgenotiz anzeigen",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
+            "message": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
+            "translation": "Ich verstehe, dass die Metadaten der Datei aus der Inbox (Dokumenttyp, Tags, Felder) beim Zusammenführen verloren gehen. Notizen und ihr Verlauf bleiben erhalten.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Body", "message": "Body", "translation": "Text",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Operation", "message": "Operation", "translation": "Aktion",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Show history", "message": "Show history", "translation": "Verlauf anzeigen",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Note not found.", "message": "Note not found.", "translation": "Notiz nicht gefunden.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Note title must not be empty.", "message": "Note title must not be empty.",
+            "translation": "Der Notiztitel darf nicht leer sein.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Note text must not be empty.", "message": "Note text must not be empty.",
+            "translation": "Der Notiztext darf nicht leer sein.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Document not found.", "message": "Document not found.", "translation": "Dokument nicht gefunden.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "You cannot access this document's notes.", "message": "You cannot access this document's notes.",
+            "translation": "Du kannst nicht auf die Notizen dieses Dokuments zugreifen.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
+            "id": "Note has already changed. Please reload.", "message": "Note has already changed. Please reload.",
+            "translation": "Die Notiz wurde bereits geändert. Bitte lade die Seite neu.",
+            "translatorComment": "Translated from English by Codex", "fuzzy": true
+        },
+        {
             "id": "All sources",
             "message": "All sources",
             "translation": "Alle Quellen",

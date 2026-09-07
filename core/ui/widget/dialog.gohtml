@@ -81,7 +81,7 @@
 					<div class="js-dialog-close {{ if .IsDefaultLayout }}md:hidden{{ end }}">
 						{{ render .GetContext .GetCloseIconButton }}
 					</div>
-					<h2 class="grow md:headline-sm title-lg truncate">
+					<h2 id="{{ .GetID }}-headline" class="grow md:headline-sm title-lg truncate">
 						{{ render .GetContext .Headline }}
 					</h2>
 					{{ if .HeaderActions }}

@@ -12,6 +12,10 @@ type IconButton struct {
 	ReplaceURL          string
 
 	Tooltip *Text
+	// Label is an accessible name, not visible button text.
+	Label      *Text
+	IsToggle   bool
+	IsSelected bool
 
 	Children IWidget // used for menu // TODO get rid of label and icon?
 }

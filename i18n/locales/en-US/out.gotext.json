@@ -658,6 +658,285 @@
             "fuzzy": true
         },
         {
+            "id": "Note added.",
+            "message": "Note added.",
+            "translation": "Note added.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Note updated.",
+            "message": "Note updated.",
+            "translation": "Note updated.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Note replaced.",
+            "message": "Note replaced.",
+            "translation": "Note replaced.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Note deleted.",
+            "message": "Note deleted.",
+            "translation": "Note deleted.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Unsupported note operation.",
+            "message": "Unsupported note operation.",
+            "translation": "Unsupported note operation.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Note",
+            "message": "Note",
+            "translation": "Note",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Notes in Trash are read-only.",
+            "message": "Notes in Trash are read-only.",
+            "translation": "Notes in Trash are read-only.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Historical notes cannot be changed.",
+            "message": "Historical notes cannot be changed.",
+            "translation": "Historical notes cannot be changed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot change this note.",
+            "message": "You cannot change this note.",
+            "translation": "You cannot change this note.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Add note",
+            "message": "Add note",
+            "translation": "Add note",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit note",
+            "message": "Edit note",
+            "translation": "Edit note",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Replace note",
+            "message": "Replace note",
+            "translation": "Replace note",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Replace",
+            "message": "Replace",
+            "translation": "Replace",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete note",
+            "message": "Delete note",
+            "translation": "Delete note",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete",
+            "message": "Delete",
+            "translation": "Delete",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete this note? It will remain available in the note history.",
+            "message": "Delete this note? It will remain available in the note history.",
+            "translation": "Delete this note? It will remain available in the note history.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Title",
+            "message": "Title",
+            "translation": "Title",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not load notes.",
+            "message": "Could not load notes.",
+            "translation": "Could not load notes.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Show deleted and replaced notes",
+            "message": "Show deleted and replaced notes",
+            "translation": "Show deleted and replaced notes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Notes",
+            "message": "Notes",
+            "translation": "Notes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No notes available.",
+            "message": "No notes available.",
+            "translation": "No notes available.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Author: Unknown",
+            "message": "Author: Unknown",
+            "translation": "Author: Unknown",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Created: Unknown",
+            "message": "Created: Unknown",
+            "translation": "Created: Unknown",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Author: {Name}",
+            "message": "Author: {Name}",
+            "translation": "Author: {Name}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "user.NewUser(note.Edges.Author).Name()"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Created: {LanguageBCP47}",
+            "message": "Created: {LanguageBCP47}",
+            "translation": "Created: {LanguageBCP47}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "timex.NewDateTime(*note.AuthoredAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Unknown",
+            "message": "Unknown",
+            "translation": "Unknown",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Edited by {Editor}: {LanguageBCP47}",
+            "message": "Edited by {Editor}: {LanguageBCP47}",
+            "translation": "Edited by {Editor}: {LanguageBCP47}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Editor",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "editor"
+                },
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "timex.NewDateTime(*note.EditedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Deleted",
+            "message": "Deleted",
+            "translation": "Deleted",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Replaced",
+            "message": "Replaced",
+            "translation": "Replaced",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "View replacement note",
+            "message": "View replacement note",
+            "translation": "View replacement note",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Replaced by: {ReplacementTitle}",
+            "message": "Replaced by: {ReplacementTitle}",
+            "translation": "Replaced by: {ReplacementTitle}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ReplacementTitle",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "replacementTitle"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Edit",
+            "message": "Edit",
+            "translation": "Edit",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Actions",
+            "message": "Actions",
+            "translation": "Actions",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Document type | Filter",
             "message": "Document type | Filter",
             "translation": "Document type | Filter",
@@ -833,13 +1112,6 @@
             "id": "Move",
             "message": "Move",
             "translation": "Move",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Delete",
-            "message": "Delete",
-            "translation": "Delete",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1183,9 +1455,9 @@
             "fuzzy": true
         },
         {
-            "id": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged.",
-            "message": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged.",
-            "translation": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged.",
+            "id": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
+            "message": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
+            "translation": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2398,13 +2670,6 @@
             "id": "Dashboard",
             "message": "Dashboard",
             "translation": "Dashboard",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Edit",
-            "message": "Edit",
-            "translation": "Edit",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3948,13 +4213,6 @@
             "fuzzy": true
         },
         {
-            "id": "Notes",
-            "message": "Notes",
-            "translation": "Notes",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Created at",
             "message": "Created at",
             "translation": "Created at",
@@ -4021,13 +4279,6 @@
             "id": "Folder deleted",
             "message": "Folder deleted",
             "translation": "Folder deleted",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Deleted",
-            "message": "Deleted",
-            "translation": "Deleted",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4111,13 +4362,6 @@
             "id": "System extraction",
             "message": "System extraction",
             "translation": "System extraction",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Unknown",
-            "message": "Unknown",
-            "translation": "Unknown",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4455,6 +4699,13 @@
             "id": "Belgium",
             "message": "Belgium",
             "translation": "Belgium",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Body",
+            "message": "Body",
+            "translation": "Body",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4921,6 +5172,13 @@
             "fuzzy": true
         },
         {
+            "id": "Operation",
+            "message": "Operation",
+            "translation": "Operation",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Operator",
             "message": "Operator",
             "translation": "Operator",
@@ -5022,6 +5280,13 @@
             "id": "Search query",
             "message": "Search query",
             "translation": "Search query",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Show history",
+            "message": "Show history",
+            "translation": "Show history",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5502,13 +5767,6 @@
             "fuzzy": true
         },
         {
-            "id": "Note",
-            "message": "Note",
-            "translation": "Note",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "New tenant registration",
             "message": "New tenant registration",
             "translation": "New tenant registration",
@@ -5925,9 +6183,23 @@
             "fuzzy": true
         },
         {
-            "id": "file has no parent",
-            "message": "file has no parent",
-            "translation": "file has no parent",
+            "id": "Note not found.",
+            "message": "Note not found.",
+            "translation": "Note not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Note title must not be empty.",
+            "message": "Note title must not be empty.",
+            "translation": "Note title must not be empty.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Note text must not be empty.",
+            "message": "Note text must not be empty.",
+            "translation": "Note text must not be empty.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5935,6 +6207,34 @@
             "id": "Source and target must be different files.",
             "message": "Source and target must be different files.",
             "translation": "Source and target must be different files.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document not found.",
+            "message": "Document not found.",
+            "translation": "Document not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You cannot access this document's notes.",
+            "message": "You cannot access this document's notes.",
+            "translation": "You cannot access this document's notes.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Note has already changed. Please reload.",
+            "message": "Note has already changed. Please reload.",
+            "translation": "Note has already changed. Please reload.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "file has no parent",
+            "message": "file has no parent",
+            "translation": "file has no parent",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6777,13 +7077,6 @@
             "id": "Meeting date",
             "message": "Meeting date",
             "translation": "Meeting date",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Title",
-            "message": "Title",
-            "translation": "Title",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

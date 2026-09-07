@@ -28,6 +28,8 @@ type ListItem struct {
 	Leading        IWidget
 	Headline       IWidget // can also be a link
 	SupportingText *Text
+	// Content replaces Headline and SupportingText for unabridged, structured content.
+	Content IWidget
 
 	// Icon           string // TODO or Text or Icon?
 	// EndIcon        string // TODO or Text or Icon?
@@ -96,7 +98,8 @@ func (qq *ListItem) IsTypeRadio() bool {
 
 // HasSupportingText reports whether the item renders as a two-line list item.
 func (qq *ListItem) HasSupportingText() bool {
-	return qq.SupportingText != nil && qq.SupportingText.String(qq.GetContext()) != ""
+	return qq.Content == nil && qq.SupportingText != nil &&
+		qq.SupportingText.String(qq.GetContext()) != ""
 }
 
 func (qq *ListItem) GetClass() string {

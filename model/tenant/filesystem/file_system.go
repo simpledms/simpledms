@@ -142,7 +142,9 @@ func (qq *FileSystem) Move(
 	if filex.Data.ID == destDir.Data.ID {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot move directory to itself.")
 	}
-	if filex.Data.ParentID == destDir.Data.ID {
+	// Inbox files may already reference the destination folder; filing them still
+	// changes their lifecycle even when no parent change is necessary.
+	if filex.Data.ParentID == destDir.Data.ID && !filex.Data.IsInInbox {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Destination is current location.")
 	}
 

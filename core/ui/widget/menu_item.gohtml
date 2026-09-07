@@ -1,11 +1,13 @@
 {{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.MenuItem */ -}}
 {{- define "menuItem" }}
+	{{ $isAction := and .HTMXAttrs.IsLink (not .IsTypeRadio) (not .IsTypeCheckbox) }}
 	<div
 			id="{{ .GetID }}"
 			data-menu-option
 			data-selected="{{ .IsSelected }}"
+			{{ if $isAction }}tabindex="0"{{ end }}
 			{{ if .IsSelected }}aria-current="page"{{ end }}
-			class="h-12 text-on-surface cursor-pointer {{ if .IsDisabled }}text-on-surface/[0.38]{{ end }}"
+			class="w-full h-12 text-on-surface cursor-pointer {{ if .IsDisabled }}text-on-surface/[0.38]{{ end }}"
             {{ template "HTMXAttrs" .HTMXAttrs }}
 	>
 		{{ if ne .DownloadLinkURL "" }}
@@ -33,6 +35,16 @@
 	<script defer>
 		(function () {
 			let elem = document.getElementById('{{ .GetID }}')
+			{{ if $isAction }}
+			// Menus can be nested inside an IconButton; a second button would break
+			// that markup. Keep the action focusable and provide keyboard activation.
+			elem.addEventListener('keydown', function (e) {
+				if (e.target === elem && (e.key === 'Enter' || e.key === ' ')) {
+					e.preventDefault();
+					elem.click();
+				}
+			});
+			{{ end }}
 			elem.addEventListener('click', function (e) {
                 {{/* necessary for stacked links, like in search or on list items, to prevent
                      that parent list item is triggered/clicked */}}

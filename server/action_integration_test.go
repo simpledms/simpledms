@@ -45,6 +45,7 @@ import (
 	"github.com/simpledms/simpledms/pathx"
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/ui"
+	"github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/accountutil"
 	"github.com/simpledms/simpledms/util/cookiex"
@@ -141,6 +142,10 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 	templates := template.New("app")
 	templates.Funcs(ui.TemplateFuncMap(templates))
 	templates, err = templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	templates, err = templates.ParseFS(partial.TemplateFS, "*.gohtml")
 	if err != nil {
 		t.Fatal(err)
 	}

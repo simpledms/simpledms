@@ -482,6 +482,219 @@
             "translation": ""
         },
         {
+            "id": "Note added.",
+            "message": "Note added.",
+            "translation": ""
+        },
+        {
+            "id": "Note updated.",
+            "message": "Note updated.",
+            "translation": ""
+        },
+        {
+            "id": "Note replaced.",
+            "message": "Note replaced.",
+            "translation": ""
+        },
+        {
+            "id": "Note deleted.",
+            "message": "Note deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Unsupported note operation.",
+            "message": "Unsupported note operation.",
+            "translation": ""
+        },
+        {
+            "id": "Note",
+            "message": "Note",
+            "translation": ""
+        },
+        {
+            "id": "Notes in Trash are read-only.",
+            "message": "Notes in Trash are read-only.",
+            "translation": ""
+        },
+        {
+            "id": "Historical notes cannot be changed.",
+            "message": "Historical notes cannot be changed.",
+            "translation": ""
+        },
+        {
+            "id": "You cannot change this note.",
+            "message": "You cannot change this note.",
+            "translation": ""
+        },
+        {
+            "id": "Add note",
+            "message": "Add note",
+            "translation": ""
+        },
+        {
+            "id": "Edit note",
+            "message": "Edit note",
+            "translation": ""
+        },
+        {
+            "id": "Replace note",
+            "message": "Replace note",
+            "translation": ""
+        },
+        {
+            "id": "Replace",
+            "message": "Replace",
+            "translation": ""
+        },
+        {
+            "id": "Delete note",
+            "message": "Delete note",
+            "translation": ""
+        },
+        {
+            "id": "Delete",
+            "message": "Delete",
+            "translation": ""
+        },
+        {
+            "id": "Delete this note? It will remain available in the note history.",
+            "message": "Delete this note? It will remain available in the note history.",
+            "translation": ""
+        },
+        {
+            "id": "Title",
+            "message": "Title",
+            "translation": ""
+        },
+        {
+            "id": "Could not load notes.",
+            "message": "Could not load notes.",
+            "translation": ""
+        },
+        {
+            "id": "Show deleted and replaced notes",
+            "message": "Show deleted and replaced notes",
+            "translation": ""
+        },
+        {
+            "id": "Notes",
+            "message": "Notes",
+            "translation": ""
+        },
+        {
+            "id": "No notes available.",
+            "message": "No notes available.",
+            "translation": ""
+        },
+        {
+            "id": "Author: Unknown",
+            "message": "Author: Unknown",
+            "translation": ""
+        },
+        {
+            "id": "Created: Unknown",
+            "message": "Created: Unknown",
+            "translation": ""
+        },
+        {
+            "id": "Author: {Name}",
+            "message": "Author: {Name}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "user.NewUser(note.Edges.Author).Name()"
+                }
+            ]
+        },
+        {
+            "id": "Created: {LanguageBCP47}",
+            "message": "Created: {LanguageBCP47}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "timex.NewDateTime(*note.AuthoredAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ]
+        },
+        {
+            "id": "Unknown",
+            "message": "Unknown",
+            "translation": ""
+        },
+        {
+            "id": "Edited by {Editor}: {LanguageBCP47}",
+            "message": "Edited by {Editor}: {LanguageBCP47}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Editor",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "editor"
+                },
+                {
+                    "id": "LanguageBCP47",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "timex.NewDateTime(*note.EditedAt).String(ctx.MainCtx().LanguageBCP47)"
+                }
+            ]
+        },
+        {
+            "id": "Deleted",
+            "message": "Deleted",
+            "translation": ""
+        },
+        {
+            "id": "Replaced",
+            "message": "Replaced",
+            "translation": ""
+        },
+        {
+            "id": "View replacement note",
+            "message": "View replacement note",
+            "translation": ""
+        },
+        {
+            "id": "Replaced by: {ReplacementTitle}",
+            "message": "Replaced by: {ReplacementTitle}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "ReplacementTitle",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "replacementTitle"
+                }
+            ]
+        },
+        {
+            "id": "Edit",
+            "message": "Edit",
+            "translation": ""
+        },
+        {
+            "id": "Actions",
+            "message": "Actions",
+            "translation": ""
+        },
+        {
             "id": "Document type | Filter",
             "message": "Document type | Filter",
             "translation": "Document type | Filter"
@@ -624,11 +837,6 @@
         {
             "id": "Move",
             "message": "Move",
-            "translation": ""
-        },
-        {
-            "id": "Delete",
-            "message": "Delete",
             "translation": ""
         },
         {
@@ -877,8 +1085,8 @@
             "translation": ""
         },
         {
-            "id": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged.",
-            "message": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged.",
+            "id": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
+            "message": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
             "translation": ""
         },
         {
@@ -1805,11 +2013,6 @@
         {
             "id": "Dashboard",
             "message": "Dashboard",
-            "translation": ""
-        },
-        {
-            "id": "Edit",
-            "message": "Edit",
             "translation": ""
         },
         {
@@ -2998,11 +3201,6 @@
             "translation": ""
         },
         {
-            "id": "Notes",
-            "message": "Notes",
-            "translation": ""
-        },
-        {
             "id": "Created at",
             "message": "Created at",
             "translation": ""
@@ -3050,11 +3248,6 @@
         {
             "id": "Folder deleted",
             "message": "Folder deleted",
-            "translation": ""
-        },
-        {
-            "id": "Deleted",
-            "message": "Deleted",
             "translation": ""
         },
         {
@@ -3120,11 +3313,6 @@
         {
             "id": "System extraction",
             "message": "System extraction",
-            "translation": ""
-        },
-        {
-            "id": "Unknown",
-            "message": "Unknown",
             "translation": ""
         },
         {
@@ -3366,6 +3554,11 @@
         {
             "id": "Belgium",
             "message": "Belgium",
+            "translation": ""
+        },
+        {
+            "id": "Body",
+            "message": "Body",
             "translation": ""
         },
         {
@@ -3699,6 +3892,11 @@
             "translation": ""
         },
         {
+            "id": "Operation",
+            "message": "Operation",
+            "translation": ""
+        },
+        {
             "id": "Operator",
             "message": "Operator",
             "translation": ""
@@ -3771,6 +3969,11 @@
         {
             "id": "Search query",
             "message": "Search query",
+            "translation": ""
+        },
+        {
+            "id": "Show history",
+            "message": "Show history",
             "translation": ""
         },
         {
@@ -4114,11 +4317,6 @@
             "translation": ""
         },
         {
-            "id": "Note",
-            "message": "Note",
-            "translation": ""
-        },
-        {
             "id": "New tenant registration",
             "message": "New tenant registration",
             "translation": ""
@@ -4435,13 +4633,43 @@
             ]
         },
         {
-            "id": "file has no parent",
-            "message": "file has no parent",
+            "id": "Note not found.",
+            "message": "Note not found.",
+            "translation": ""
+        },
+        {
+            "id": "Note title must not be empty.",
+            "message": "Note title must not be empty.",
+            "translation": ""
+        },
+        {
+            "id": "Note text must not be empty.",
+            "message": "Note text must not be empty.",
             "translation": ""
         },
         {
             "id": "Source and target must be different files.",
             "message": "Source and target must be different files.",
+            "translation": ""
+        },
+        {
+            "id": "Document not found.",
+            "message": "Document not found.",
+            "translation": ""
+        },
+        {
+            "id": "You cannot access this document's notes.",
+            "message": "You cannot access this document's notes.",
+            "translation": ""
+        },
+        {
+            "id": "Note has already changed. Please reload.",
+            "message": "Note has already changed. Please reload.",
+            "translation": ""
+        },
+        {
+            "id": "file has no parent",
+            "message": "file has no parent",
             "translation": ""
         },
         {
@@ -5054,11 +5282,6 @@
         {
             "id": "Meeting date",
             "message": "Meeting date",
-            "translation": ""
-        },
-        {
-            "id": "Title",
-            "message": "Title",
             "translation": ""
         },
         {

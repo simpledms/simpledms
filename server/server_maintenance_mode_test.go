@@ -41,6 +41,7 @@ import (
 	"github.com/simpledms/simpledms/i18n"
 	systemconfigmodel "github.com/simpledms/simpledms/model/main/systemconfig"
 	"github.com/simpledms/simpledms/ui"
+	"github.com/simpledms/simpledms/ui/uix/partial"
 )
 
 func TestInitializeMainConfigOverrideDBConfigDoesNotReadEncryptedFieldsBeforeUnlock(t *testing.T) {
@@ -1127,6 +1128,10 @@ func newMaintenanceTestDependencies(t *testing.T) *maintenanceTestDependencies {
 	tpl, err = tpl.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		t.Fatalf("parse templates: %v", err)
+	}
+	tpl, err = tpl.ParseFS(partial.TemplateFS, "*.gohtml")
+	if err != nil {
+		t.Fatalf("parse partial templates: %v", err)
 	}
 
 	return &maintenanceTestDependencies{

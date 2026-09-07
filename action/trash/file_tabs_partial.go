@@ -74,6 +74,9 @@ func (qq *FileTabsPartial) Widget(
 	var activeTabContent widget.IWidget
 
 	switch activeTab {
+	case "notes":
+		activeTabContent = qq.actions.Browse.DocumentNotesPartial.Widget(
+			ctx, qq.actions.Browse.DocumentNotesPartial.Data(fileID))
 	case "metadata", "":
 		activeTabContent = qq.actions.FileMetadataPartial.Widget(ctx, qq.actions.FileMetadataPartial.Data(fileID))
 	case "tags":
@@ -130,6 +133,16 @@ func (qq *FileTabsPartial) Widget(
 				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:   qq.Endpoint(),
 					HxVals:   util.JSON(qq.Data(fileID, "fields")),
+					HxTarget: "#" + tabsID,
+					HxSwap:   "outerHTML",
+				},
+				IncreasedHeight: true,
+			},
+			{
+				Label: widget.T("Notes"),
+				HTMXAttrs: widget.HTMXAttrs{
+					HxPost:   qq.Endpoint(),
+					HxVals:   util.JSON(qq.Data(fileID, "notes")),
 					HxTarget: "#" + tabsID,
 					HxSwap:   "outerHTML",
 				},

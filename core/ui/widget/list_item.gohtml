@@ -20,10 +20,15 @@
                     {{/* cannot be on <label> because request then fires twice, has something to do with radio input */}}
                     {{ template "HTMXAttrs" .HTMXAttrs }}
 			>
+				{{ if .Leading }}
 				<div class="flex group-has-[:checked]/list-item:text-on-secondary-container text-on-surface-variant">
                     {{ render .GetContext .Leading }}
 				</div>
+				{{ end }}
 				<div class="grow flex items-start flex-col overflow-x-hidden">
+					{{ if .Content }}
+						{{ render .GetContext .Content }}
+					{{ else }}
 					<h6 class="body-lg whitespace-nowrap overflow-hidden text-ellipsis max-w-full
 						group-has-[:checked]/list-item:text-on-secondary-container text-on-surface"
 					>
@@ -34,6 +39,7 @@
 						group-has-[:checked]/list-item:text-on-secondary-container text-on-surface-variant">
                         {{ render .GetContext .SupportingText }}
 					</div>
+					{{ end }}
 				</div>
 				<div class="flex text-on-surface
 					group-has-[.js-detail-content>div]/list-detail:hidden group-has-[:checked]/list-item:text-primary">
@@ -53,10 +59,15 @@
 		>
 			<div class="flex grow gap-x-4 overflow-hidden items-center px-4 py-4 {{ if ne .ContextMenu nil }}select-none exp:select-auto{{ end }}"
 			>
+				{{ if .Leading }}
 				<div class="flex {{ if .IsSelected }}text-on-secondary-container{{ else if .IsTypeHelper }}text-secondary{{ else }}text-on-surface-variant{{ end }}">
                     {{ render .GetContext .Leading }}
 				</div>
+				{{ end }}
 				<div class="grow flex items-start flex-col overflow-x-hidden">
+					{{ if .Content }}
+						{{ render .GetContext .Content }}
+					{{ else }}
                     {{ if .HTMXAttrs.IsPageLink }}
 					<a class="js-semantic-link max-w-full" href="{{ .HTMXAttrs.GetHxGet }}">
                         {{ end }}
@@ -71,6 +82,7 @@
 						{{ if .IsSelected }}text-on-surface{{ else }}text-on-surface-variant{{ end }}">
                         {{ render .GetContext .SupportingText }}
 					</div>
+					{{ end }}
 				</div>
 				<div class="flex {{ if .IsSelected }}text-primary{{ else }}text-on-surface{{ end }}">
                     {{ render .GetContext .GetTrailing }}

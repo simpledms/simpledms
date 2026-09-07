@@ -100,6 +100,9 @@ func (qq *FileVersionFromInboxService) MergeFromInbox(
 	if !sourceFile.IsInInbox {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Source file is not in inbox.")
 	}
+	if _, err := NewDocumentNotes().Transfer(ctx, sourceFile, targetFile); err != nil {
+		return nil, err
+	}
 	_, err = ctx.TenantCtx().TTx.FileVersion.Delete().Where(fileversion.FileID(sourceFile.ID)).Exec(ctx)
 	if err != nil {
 		log.Println(err)

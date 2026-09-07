@@ -564,6 +564,10 @@ func (qq *Server) newRendererAndI18n() (*ui.Renderer, *i18n.I18n) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	templatesx, err = templatesx.ParseFS(partial.TemplateFS, "*.gohtml")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	/*assetsFS, err := fs.Sub(qq.assetsFS, "ui/web/assets")
 	if err != nil {

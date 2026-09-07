@@ -2,6 +2,7 @@
 
 @source '../../../action';
 @source '../../../core/ui/widget';
+@source '../partial';
 @source './assets/snackbar_runtime.js';
 @source not inline('container');
 

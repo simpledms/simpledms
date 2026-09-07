@@ -25,6 +25,7 @@ import (
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/ui"
+	"github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/util/accountutil"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -185,6 +186,10 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 	parsedTemplates, err := templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		t.Fatalf("parse templates: %v", err)
+	}
+	parsedTemplates, err = parsedTemplates.ParseFS(partial.TemplateFS, "*.gohtml")
+	if err != nil {
+		t.Fatalf("parse partial templates: %v", err)
 	}
 
 	renderer := ui.NewRenderer(parsedTemplates)

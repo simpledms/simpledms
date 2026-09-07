@@ -17,6 +17,8 @@ type TextArea struct {
 	StyleType    TextAreaStyleType
 	IsReadonly   bool
 	HasAutofocus bool
+	// Label provides a visible floating label and an accessible name.
+	Label *Text
 }
 
 func (qq *TextArea) GetRows() int {

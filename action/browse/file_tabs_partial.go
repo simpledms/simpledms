@@ -83,6 +83,9 @@ func (qq *FileTabsPartial) Widget(
 	duplicateTabContent, hasDuplicates := qq.nilableDuplicateTabContent(ctx, fileID)
 
 	switch activeTab {
+	case "notes":
+		activeTabContent = qq.actions.DocumentNotesPartial.Widget(
+			ctx, qq.actions.DocumentNotesPartial.Data(fileID))
 	case "metadata", "":
 		activeTabContent = qq.actions.FileAttributesPartial.Widget(
 			ctx,
@@ -163,6 +166,16 @@ func (qq *FileTabsPartial) Widget(
 			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(dirID, fileID, "fields")),
+				HxTarget: "#" + tabsID,
+				HxSwap:   "outerHTML",
+			},
+			IncreasedHeight: true,
+		},
+		{
+			Label: widget.T("Notes"),
+			HTMXAttrs: widget.HTMXAttrs{
+				HxPost:   qq.Endpoint(),
+				HxVals:   util.JSON(qq.Data(dirID, fileID, "notes")),
 				HxTarget: "#" + tabsID,
 				HxSwap:   "outerHTML",
 			},

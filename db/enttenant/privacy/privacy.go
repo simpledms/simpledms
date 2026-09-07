@@ -135,6 +135,30 @@ func (f AttributeMutationRuleFunc) EvalMutation(ctx context.Context, m enttenant
 	return Denyf("enttenant/privacy: unexpected mutation type %T, expect *enttenant.AttributeMutation", m)
 }
 
+// The DocumentNoteQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type DocumentNoteQueryRuleFunc func(context.Context, *enttenant.DocumentNoteQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f DocumentNoteQueryRuleFunc) EvalQuery(ctx context.Context, q enttenant.Query) error {
+	if q, ok := q.(*enttenant.DocumentNoteQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("enttenant/privacy: unexpected query type %T, expect *enttenant.DocumentNoteQuery", q)
+}
+
+// The DocumentNoteMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type DocumentNoteMutationRuleFunc func(context.Context, *enttenant.DocumentNoteMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f DocumentNoteMutationRuleFunc) EvalMutation(ctx context.Context, m enttenant.Mutation) error {
+	if m, ok := m.(*enttenant.DocumentNoteMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("enttenant/privacy: unexpected mutation type %T, expect *enttenant.DocumentNoteMutation", m)
+}
+
 // The DocumentTypeQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type DocumentTypeQueryRuleFunc func(context.Context, *enttenant.DocumentTypeQuery) error
@@ -532,6 +556,8 @@ func queryFilter(q enttenant.Query) (Filter, error) {
 	switch q := q.(type) {
 	case *enttenant.AttributeQuery:
 		return q.Filter(), nil
+	case *enttenant.DocumentNoteQuery:
+		return q.Filter(), nil
 	case *enttenant.DocumentTypeQuery:
 		return q.Filter(), nil
 	case *enttenant.FileQuery:
@@ -572,6 +598,8 @@ func queryFilter(q enttenant.Query) (Filter, error) {
 func mutationFilter(m enttenant.Mutation) (Filter, error) {
 	switch m := m.(type) {
 	case *enttenant.AttributeMutation:
+		return m.Filter(), nil
+	case *enttenant.DocumentNoteMutation:
 		return m.Filter(), nil
 	case *enttenant.DocumentTypeMutation:
 		return m.Filter(), nil

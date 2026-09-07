@@ -1,8 +1,8 @@
 {{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.Checkbox */ -}}
 {{- define "Checkbox" }}
 	{{/* wrapper is necessary for use with label only */}}
-	<div class="flex flex-row gap-x-3 items-center h-12">
-		<div id="{{ .GetID }}" class="size-12 -m-3 rounded-full flex center-aligned"
+	<div class="flex flex-row gap-x-3 items-center min-h-12">
+		<div id="{{ .GetID }}" class="size-12 shrink-0 -m-3 rounded-full flex center-aligned"
                 {{ template "HTMXAttrs" .HTMXAttrs }}
 		>
 			<div class="{{ if not .IsStateInherited }}state-layer-on-surface has-[:checked]:state-layer-primary has-[:invalid]:state-layer-error{{ end }}

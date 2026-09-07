@@ -72,13 +72,6 @@ func (qq *FileMetadataPartial) Widget(ctx ctxx.Context, data *FileMetadataPartia
 		SupportingText: widget.Tu(docTypeName),
 	})
 
-	if filex.Data.Notes != "" {
-		items = append(items, &widget.ListItem{
-			Headline:       widget.T("Notes"),
-			SupportingText: widget.Tu(filex.Data.Notes),
-		})
-	}
-
 	appendTime := func(label string, timeValue time.Time) {
 		if timeValue.IsZero() {
 			return

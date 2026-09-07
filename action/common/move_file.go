@@ -173,6 +173,9 @@ func (qq *MoveFile) Form(
 	hxTargetForm string,
 	searchQuery string,
 ) renderable.Renderable {
+	// The initial Inbox dialog resolves an empty destination to the root. Submit
+	// that resolved directory too, even if the user does not navigate elsewhere.
+	data.CurrentDirID = currentDir.Data.PublicID.String()
 	form := &widget.Form{
 		Widget: widget.Widget[widget.Form]{
 			ID: qq.formID(),

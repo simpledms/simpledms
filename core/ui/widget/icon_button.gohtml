@@ -5,6 +5,11 @@
 	<div id="{{ .GetID }}" class="-m-3" title="{{ render .GetContext .Tooltip }}">
 		{{ if .HTMXAttrs.IsPageLink }}<a{{ else }}<button{{ end }}
 				class="flex center-aligned size-12 rounded-full cursor-pointer"
+				{{ with .Label }}aria-label="{{ render $.GetContext . }}"{{ end }}
+				{{ if .IsToggle }}
+					id="{{ .GetID }}-button"
+					aria-pressed="{{ .IsSelected }}"
+				{{ end }}
 				{{ if .HTMXAttrs.IsPageLink }}
 					href="{{ .HTMXAttrs.GetHxGet }}"
 				{{ end }}
@@ -17,8 +22,9 @@
 				{{ end }}
 				{{ if ne .PopoverTargetAction "" }}popovertargetaction="{{ .PopoverTargetAction }}"{{ end }}
 		>
-			<div class="state-layer-on-surface-variant flex center-aligned size-10!">
-				<i class="size-6 material-symbols-outlined">{{ .Icon }}</i>
+			{{/* Standard icon buttons use the same color role for the icon and its state layer. */}}
+			<div class="{{ if .IsSelected }}state-layer-primary text-primary{{ else }}state-layer-on-surface-variant text-on-surface-variant{{ end }} flex center-aligned size-10!">
+				<i class="size-6 material-symbols-outlined {{ if .IsSelected }}fill{{ end }}">{{ .Icon }}</i>
 			</div>
 
 			{{ render .GetContext .Children }}

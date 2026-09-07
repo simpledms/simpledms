@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
+	"github.com/simpledms/simpledms/db/enttenant/documentnote"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
@@ -50,6 +51,7 @@ const (
 
 	// Node types.
 	TypeAttribute              = "Attribute"
+	TypeDocumentNote           = "DocumentNote"
 	TypeDocumentType           = "DocumentType"
 	TypeFile                   = "File"
 	TypeFilePropertyAssignment = "FilePropertyAssignment"
@@ -1120,6 +1122,1327 @@ func (m *AttributeMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Attribute edge %s", name)
+}
+
+// DocumentNoteMutation represents an operation that mutates the DocumentNote nodes in the graph.
+type DocumentNoteMutation struct {
+	config
+	op                 Op
+	typ                string
+	id                 *int64
+	public_id          *entx.CIText
+	title              *string
+	body               *string
+	authored_at        *time.Time
+	edited_at          *time.Time
+	deleted_at         *time.Time
+	clearedFields      map[string]struct{}
+	space              *int64
+	clearedspace       bool
+	file               *int64
+	clearedfile        bool
+	author             *int64
+	clearedauthor      bool
+	editor             *int64
+	clearededitor      bool
+	replacement        *int64
+	clearedreplacement bool
+	predecessor        *int64
+	clearedpredecessor bool
+	done               bool
+	oldValue           func(context.Context) (*DocumentNote, error)
+	predicates         []predicate.DocumentNote
+}
+
+var _ ent.Mutation = (*DocumentNoteMutation)(nil)
+
+// documentnoteOption allows management of the mutation configuration using functional options.
+type documentnoteOption func(*DocumentNoteMutation)
+
+// newDocumentNoteMutation creates new mutation for the DocumentNote entity.
+func newDocumentNoteMutation(c config, op Op, opts ...documentnoteOption) *DocumentNoteMutation {
+	m := &DocumentNoteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeDocumentNote,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withDocumentNoteID sets the ID field of the mutation.
+func withDocumentNoteID(id int64) documentnoteOption {
+	return func(m *DocumentNoteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *DocumentNote
+		)
+		m.oldValue = func(ctx context.Context) (*DocumentNote, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().DocumentNote.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withDocumentNote sets the old DocumentNote of the mutation.
+func withDocumentNote(node *DocumentNote) documentnoteOption {
+	return func(m *DocumentNoteMutation) {
+		m.oldValue = func(context.Context) (*DocumentNote, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m DocumentNoteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m DocumentNoteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("enttenant: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of DocumentNote entities.
+func (m *DocumentNoteMutation) SetID(id int64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *DocumentNoteMutation) ID() (id int64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *DocumentNoteMutation) IDs(ctx context.Context) ([]int64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().DocumentNote.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPublicID sets the "public_id" field.
+func (m *DocumentNoteMutation) SetPublicID(et entx.CIText) {
+	m.public_id = &et
+}
+
+// PublicID returns the value of the "public_id" field in the mutation.
+func (m *DocumentNoteMutation) PublicID() (r entx.CIText, exists bool) {
+	v := m.public_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPublicID returns the old "public_id" field's value of the DocumentNote entity.
+// If the DocumentNote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DocumentNoteMutation) OldPublicID(ctx context.Context) (v entx.CIText, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPublicID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPublicID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPublicID: %w", err)
+	}
+	return oldValue.PublicID, nil
+}
+
+// ResetPublicID resets all changes to the "public_id" field.
+func (m *DocumentNoteMutation) ResetPublicID() {
+	m.public_id = nil
+}
+
+// SetSpaceID sets the "space_id" field.
+func (m *DocumentNoteMutation) SetSpaceID(i int64) {
+	m.space = &i
+}
+
+// SpaceID returns the value of the "space_id" field in the mutation.
+func (m *DocumentNoteMutation) SpaceID() (r int64, exists bool) {
+	v := m.space
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSpaceID returns the old "space_id" field's value of the DocumentNote entity.
+// If the DocumentNote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DocumentNoteMutation) OldSpaceID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSpaceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSpaceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSpaceID: %w", err)
+	}
+	return oldValue.SpaceID, nil
+}
+
+// ResetSpaceID resets all changes to the "space_id" field.
+func (m *DocumentNoteMutation) ResetSpaceID() {
+	m.space = nil
+}
+
+// SetFileID sets the "file_id" field.
+func (m *DocumentNoteMutation) SetFileID(i int64) {
+	m.file = &i
+}
+
+// FileID returns the value of the "file_id" field in the mutation.
+func (m *DocumentNoteMutation) FileID() (r int64, exists bool) {
+	v := m.file
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFileID returns the old "file_id" field's value of the DocumentNote entity.
+// If the DocumentNote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DocumentNoteMutation) OldFileID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFileID: %w", err)
+	}
+	return oldValue.FileID, nil
+}
+
+// ResetFileID resets all changes to the "file_id" field.
+func (m *DocumentNoteMutation) ResetFileID() {
+	m.file = nil
+}
+
+// SetTitle sets the "title" field.
+func (m *DocumentNoteMutation) SetTitle(s string) {
+	m.title = &s
+}
+
+// Title returns the value of the "title" field in the mutation.
+func (m *DocumentNoteMutation) Title() (r string, exists bool) {
+	v := m.title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTitle returns the old "title" field's value of the DocumentNote entity.
+// If the DocumentNote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DocumentNoteMutation) OldTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTitle: %w", err)
+	}
+	return oldValue.Title, nil
+}
+
+// ClearTitle clears the value of the "title" field.
+func (m *DocumentNoteMutation) ClearTitle() {
+	m.title = nil
+	m.clearedFields[documentnote.FieldTitle] = struct{}{}
+}
+
+// TitleCleared returns if the "title" field was cleared in this mutation.
+func (m *DocumentNoteMutation) TitleCleared() bool {
+	_, ok := m.clearedFields[documentnote.FieldTitle]
+	return ok
+}
+
+// ResetTitle resets all changes to the "title" field.
+func (m *DocumentNoteMutation) ResetTitle() {
+	m.title = nil
+	delete(m.clearedFields, documentnote.FieldTitle)
+}
+
+// SetBody sets the "body" field.
+func (m *DocumentNoteMutation) SetBody(s string) {
+	m.body = &s
+}
+
+// Body returns the value of the "body" field in the mutation.
+func (m *DocumentNoteMutation) Body() (r string, exists bool) {
+	v := m.body
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBody returns the old "body" field's value of the DocumentNote entity.
+// If the DocumentNote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DocumentNoteMutation) OldBody(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBody is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBody requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBody: %w", err)
+	}
+	return oldValue.Body, nil
+}
+
+// ResetBody resets all changes to the "body" field.
+func (m *DocumentNoteMutation) ResetBody() {
+	m.body = nil
+}
+
+// SetAuthorID sets the "author_id" field.
+func (m *DocumentNoteMutation) SetAuthorID(i int64) {
+	m.author = &i
+}
+
+// AuthorID returns the value of the "author_id" field in the mutation.
+func (m *DocumentNoteMutation) AuthorID() (r int64, exists bool) {
+	v := m.author
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAuthorID returns the old "author_id" field's value of the DocumentNote entity.
+// If the DocumentNote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DocumentNoteMutation) OldAuthorID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAuthorID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAuthorID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAuthorID: %w", err)
+	}
+	return oldValue.AuthorID, nil
+}
+
+// ClearAuthorID clears the value of the "author_id" field.
+func (m *DocumentNoteMutation) ClearAuthorID() {
+	m.author = nil
+	m.clearedFields[documentnote.FieldAuthorID] = struct{}{}
+}
+
+// AuthorIDCleared returns if the "author_id" field was cleared in this mutation.
+func (m *DocumentNoteMutation) AuthorIDCleared() bool {
+	_, ok := m.clearedFields[documentnote.FieldAuthorID]
+	return ok
+}
+
+// ResetAuthorID resets all changes to the "author_id" field.
+func (m *DocumentNoteMutation) ResetAuthorID() {
+	m.author = nil
+	delete(m.clearedFields, documentnote.FieldAuthorID)
+}
+
+// SetAuthoredAt sets the "authored_at" field.
+func (m *DocumentNoteMutation) SetAuthoredAt(t time.Time) {
+	m.authored_at = &t
+}
+
+// AuthoredAt returns the value of the "authored_at" field in the mutation.
+func (m *DocumentNoteMutation) AuthoredAt() (r time.Time, exists bool) {
+	v := m.authored_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAuthoredAt returns the old "authored_at" field's value of the DocumentNote entity.
+// If the DocumentNote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DocumentNoteMutation) OldAuthoredAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAuthoredAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAuthoredAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAuthoredAt: %w", err)
+	}
+	return oldValue.AuthoredAt, nil
+}
+
+// ClearAuthoredAt clears the value of the "authored_at" field.
+func (m *DocumentNoteMutation) ClearAuthoredAt() {
+	m.authored_at = nil
+	m.clearedFields[documentnote.FieldAuthoredAt] = struct{}{}
+}
+
+// AuthoredAtCleared returns if the "authored_at" field was cleared in this mutation.
+func (m *DocumentNoteMutation) AuthoredAtCleared() bool {
+	_, ok := m.clearedFields[documentnote.FieldAuthoredAt]
+	return ok
+}
+
+// ResetAuthoredAt resets all changes to the "authored_at" field.
+func (m *DocumentNoteMutation) ResetAuthoredAt() {
+	m.authored_at = nil
+	delete(m.clearedFields, documentnote.FieldAuthoredAt)
+}
+
+// SetEditedAt sets the "edited_at" field.
+func (m *DocumentNoteMutation) SetEditedAt(t time.Time) {
+	m.edited_at = &t
+}
+
+// EditedAt returns the value of the "edited_at" field in the mutation.
+func (m *DocumentNoteMutation) EditedAt() (r time.Time, exists bool) {
+	v := m.edited_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEditedAt returns the old "edited_at" field's value of the DocumentNote entity.
+// If the DocumentNote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DocumentNoteMutation) OldEditedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEditedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEditedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEditedAt: %w", err)
+	}
+	return oldValue.EditedAt, nil
+}
+
+// ClearEditedAt clears the value of the "edited_at" field.
+func (m *DocumentNoteMutation) ClearEditedAt() {
+	m.edited_at = nil
+	m.clearedFields[documentnote.FieldEditedAt] = struct{}{}
+}
+
+// EditedAtCleared returns if the "edited_at" field was cleared in this mutation.
+func (m *DocumentNoteMutation) EditedAtCleared() bool {
+	_, ok := m.clearedFields[documentnote.FieldEditedAt]
+	return ok
+}
+
+// ResetEditedAt resets all changes to the "edited_at" field.
+func (m *DocumentNoteMutation) ResetEditedAt() {
+	m.edited_at = nil
+	delete(m.clearedFields, documentnote.FieldEditedAt)
+}
+
+// SetEditorID sets the "editor_id" field.
+func (m *DocumentNoteMutation) SetEditorID(i int64) {
+	m.editor = &i
+}
+
+// EditorID returns the value of the "editor_id" field in the mutation.
+func (m *DocumentNoteMutation) EditorID() (r int64, exists bool) {
+	v := m.editor
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEditorID returns the old "editor_id" field's value of the DocumentNote entity.
+// If the DocumentNote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DocumentNoteMutation) OldEditorID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEditorID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEditorID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEditorID: %w", err)
+	}
+	return oldValue.EditorID, nil
+}
+
+// ClearEditorID clears the value of the "editor_id" field.
+func (m *DocumentNoteMutation) ClearEditorID() {
+	m.editor = nil
+	m.clearedFields[documentnote.FieldEditorID] = struct{}{}
+}
+
+// EditorIDCleared returns if the "editor_id" field was cleared in this mutation.
+func (m *DocumentNoteMutation) EditorIDCleared() bool {
+	_, ok := m.clearedFields[documentnote.FieldEditorID]
+	return ok
+}
+
+// ResetEditorID resets all changes to the "editor_id" field.
+func (m *DocumentNoteMutation) ResetEditorID() {
+	m.editor = nil
+	delete(m.clearedFields, documentnote.FieldEditorID)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *DocumentNoteMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *DocumentNoteMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the DocumentNote entity.
+// If the DocumentNote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DocumentNoteMutation) OldDeletedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *DocumentNoteMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[documentnote.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *DocumentNoteMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[documentnote.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *DocumentNoteMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, documentnote.FieldDeletedAt)
+}
+
+// SetReplacedByID sets the "replaced_by_id" field.
+func (m *DocumentNoteMutation) SetReplacedByID(i int64) {
+	m.replacement = &i
+}
+
+// ReplacedByID returns the value of the "replaced_by_id" field in the mutation.
+func (m *DocumentNoteMutation) ReplacedByID() (r int64, exists bool) {
+	v := m.replacement
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReplacedByID returns the old "replaced_by_id" field's value of the DocumentNote entity.
+// If the DocumentNote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DocumentNoteMutation) OldReplacedByID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReplacedByID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReplacedByID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReplacedByID: %w", err)
+	}
+	return oldValue.ReplacedByID, nil
+}
+
+// ClearReplacedByID clears the value of the "replaced_by_id" field.
+func (m *DocumentNoteMutation) ClearReplacedByID() {
+	m.replacement = nil
+	m.clearedFields[documentnote.FieldReplacedByID] = struct{}{}
+}
+
+// ReplacedByIDCleared returns if the "replaced_by_id" field was cleared in this mutation.
+func (m *DocumentNoteMutation) ReplacedByIDCleared() bool {
+	_, ok := m.clearedFields[documentnote.FieldReplacedByID]
+	return ok
+}
+
+// ResetReplacedByID resets all changes to the "replaced_by_id" field.
+func (m *DocumentNoteMutation) ResetReplacedByID() {
+	m.replacement = nil
+	delete(m.clearedFields, documentnote.FieldReplacedByID)
+}
+
+// ClearSpace clears the "space" edge to the Space entity.
+func (m *DocumentNoteMutation) ClearSpace() {
+	m.clearedspace = true
+	m.clearedFields[documentnote.FieldSpaceID] = struct{}{}
+}
+
+// SpaceCleared reports if the "space" edge to the Space entity was cleared.
+func (m *DocumentNoteMutation) SpaceCleared() bool {
+	return m.clearedspace
+}
+
+// SpaceIDs returns the "space" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// SpaceID instead. It exists only for internal usage by the builders.
+func (m *DocumentNoteMutation) SpaceIDs() (ids []int64) {
+	if id := m.space; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetSpace resets all changes to the "space" edge.
+func (m *DocumentNoteMutation) ResetSpace() {
+	m.space = nil
+	m.clearedspace = false
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (m *DocumentNoteMutation) ClearFile() {
+	m.clearedfile = true
+	m.clearedFields[documentnote.FieldFileID] = struct{}{}
+}
+
+// FileCleared reports if the "file" edge to the File entity was cleared.
+func (m *DocumentNoteMutation) FileCleared() bool {
+	return m.clearedfile
+}
+
+// FileIDs returns the "file" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// FileID instead. It exists only for internal usage by the builders.
+func (m *DocumentNoteMutation) FileIDs() (ids []int64) {
+	if id := m.file; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetFile resets all changes to the "file" edge.
+func (m *DocumentNoteMutation) ResetFile() {
+	m.file = nil
+	m.clearedfile = false
+}
+
+// ClearAuthor clears the "author" edge to the User entity.
+func (m *DocumentNoteMutation) ClearAuthor() {
+	m.clearedauthor = true
+	m.clearedFields[documentnote.FieldAuthorID] = struct{}{}
+}
+
+// AuthorCleared reports if the "author" edge to the User entity was cleared.
+func (m *DocumentNoteMutation) AuthorCleared() bool {
+	return m.AuthorIDCleared() || m.clearedauthor
+}
+
+// AuthorIDs returns the "author" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AuthorID instead. It exists only for internal usage by the builders.
+func (m *DocumentNoteMutation) AuthorIDs() (ids []int64) {
+	if id := m.author; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAuthor resets all changes to the "author" edge.
+func (m *DocumentNoteMutation) ResetAuthor() {
+	m.author = nil
+	m.clearedauthor = false
+}
+
+// ClearEditor clears the "editor" edge to the User entity.
+func (m *DocumentNoteMutation) ClearEditor() {
+	m.clearededitor = true
+	m.clearedFields[documentnote.FieldEditorID] = struct{}{}
+}
+
+// EditorCleared reports if the "editor" edge to the User entity was cleared.
+func (m *DocumentNoteMutation) EditorCleared() bool {
+	return m.EditorIDCleared() || m.clearededitor
+}
+
+// EditorIDs returns the "editor" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// EditorID instead. It exists only for internal usage by the builders.
+func (m *DocumentNoteMutation) EditorIDs() (ids []int64) {
+	if id := m.editor; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetEditor resets all changes to the "editor" edge.
+func (m *DocumentNoteMutation) ResetEditor() {
+	m.editor = nil
+	m.clearededitor = false
+}
+
+// SetReplacementID sets the "replacement" edge to the DocumentNote entity by id.
+func (m *DocumentNoteMutation) SetReplacementID(id int64) {
+	m.replacement = &id
+}
+
+// ClearReplacement clears the "replacement" edge to the DocumentNote entity.
+func (m *DocumentNoteMutation) ClearReplacement() {
+	m.clearedreplacement = true
+	m.clearedFields[documentnote.FieldReplacedByID] = struct{}{}
+}
+
+// ReplacementCleared reports if the "replacement" edge to the DocumentNote entity was cleared.
+func (m *DocumentNoteMutation) ReplacementCleared() bool {
+	return m.ReplacedByIDCleared() || m.clearedreplacement
+}
+
+// ReplacementID returns the "replacement" edge ID in the mutation.
+func (m *DocumentNoteMutation) ReplacementID() (id int64, exists bool) {
+	if m.replacement != nil {
+		return *m.replacement, true
+	}
+	return
+}
+
+// ReplacementIDs returns the "replacement" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ReplacementID instead. It exists only for internal usage by the builders.
+func (m *DocumentNoteMutation) ReplacementIDs() (ids []int64) {
+	if id := m.replacement; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetReplacement resets all changes to the "replacement" edge.
+func (m *DocumentNoteMutation) ResetReplacement() {
+	m.replacement = nil
+	m.clearedreplacement = false
+}
+
+// SetPredecessorID sets the "predecessor" edge to the DocumentNote entity by id.
+func (m *DocumentNoteMutation) SetPredecessorID(id int64) {
+	m.predecessor = &id
+}
+
+// ClearPredecessor clears the "predecessor" edge to the DocumentNote entity.
+func (m *DocumentNoteMutation) ClearPredecessor() {
+	m.clearedpredecessor = true
+}
+
+// PredecessorCleared reports if the "predecessor" edge to the DocumentNote entity was cleared.
+func (m *DocumentNoteMutation) PredecessorCleared() bool {
+	return m.clearedpredecessor
+}
+
+// PredecessorID returns the "predecessor" edge ID in the mutation.
+func (m *DocumentNoteMutation) PredecessorID() (id int64, exists bool) {
+	if m.predecessor != nil {
+		return *m.predecessor, true
+	}
+	return
+}
+
+// PredecessorIDs returns the "predecessor" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// PredecessorID instead. It exists only for internal usage by the builders.
+func (m *DocumentNoteMutation) PredecessorIDs() (ids []int64) {
+	if id := m.predecessor; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetPredecessor resets all changes to the "predecessor" edge.
+func (m *DocumentNoteMutation) ResetPredecessor() {
+	m.predecessor = nil
+	m.clearedpredecessor = false
+}
+
+// Where appends a list predicates to the DocumentNoteMutation builder.
+func (m *DocumentNoteMutation) Where(ps ...predicate.DocumentNote) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the DocumentNoteMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *DocumentNoteMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.DocumentNote, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *DocumentNoteMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *DocumentNoteMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (DocumentNote).
+func (m *DocumentNoteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *DocumentNoteMutation) Fields() []string {
+	fields := make([]string, 0, 11)
+	if m.public_id != nil {
+		fields = append(fields, documentnote.FieldPublicID)
+	}
+	if m.space != nil {
+		fields = append(fields, documentnote.FieldSpaceID)
+	}
+	if m.file != nil {
+		fields = append(fields, documentnote.FieldFileID)
+	}
+	if m.title != nil {
+		fields = append(fields, documentnote.FieldTitle)
+	}
+	if m.body != nil {
+		fields = append(fields, documentnote.FieldBody)
+	}
+	if m.author != nil {
+		fields = append(fields, documentnote.FieldAuthorID)
+	}
+	if m.authored_at != nil {
+		fields = append(fields, documentnote.FieldAuthoredAt)
+	}
+	if m.edited_at != nil {
+		fields = append(fields, documentnote.FieldEditedAt)
+	}
+	if m.editor != nil {
+		fields = append(fields, documentnote.FieldEditorID)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, documentnote.FieldDeletedAt)
+	}
+	if m.replacement != nil {
+		fields = append(fields, documentnote.FieldReplacedByID)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *DocumentNoteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case documentnote.FieldPublicID:
+		return m.PublicID()
+	case documentnote.FieldSpaceID:
+		return m.SpaceID()
+	case documentnote.FieldFileID:
+		return m.FileID()
+	case documentnote.FieldTitle:
+		return m.Title()
+	case documentnote.FieldBody:
+		return m.Body()
+	case documentnote.FieldAuthorID:
+		return m.AuthorID()
+	case documentnote.FieldAuthoredAt:
+		return m.AuthoredAt()
+	case documentnote.FieldEditedAt:
+		return m.EditedAt()
+	case documentnote.FieldEditorID:
+		return m.EditorID()
+	case documentnote.FieldDeletedAt:
+		return m.DeletedAt()
+	case documentnote.FieldReplacedByID:
+		return m.ReplacedByID()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *DocumentNoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case documentnote.FieldPublicID:
+		return m.OldPublicID(ctx)
+	case documentnote.FieldSpaceID:
+		return m.OldSpaceID(ctx)
+	case documentnote.FieldFileID:
+		return m.OldFileID(ctx)
+	case documentnote.FieldTitle:
+		return m.OldTitle(ctx)
+	case documentnote.FieldBody:
+		return m.OldBody(ctx)
+	case documentnote.FieldAuthorID:
+		return m.OldAuthorID(ctx)
+	case documentnote.FieldAuthoredAt:
+		return m.OldAuthoredAt(ctx)
+	case documentnote.FieldEditedAt:
+		return m.OldEditedAt(ctx)
+	case documentnote.FieldEditorID:
+		return m.OldEditorID(ctx)
+	case documentnote.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case documentnote.FieldReplacedByID:
+		return m.OldReplacedByID(ctx)
+	}
+	return nil, fmt.Errorf("unknown DocumentNote field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *DocumentNoteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case documentnote.FieldPublicID:
+		v, ok := value.(entx.CIText)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPublicID(v)
+		return nil
+	case documentnote.FieldSpaceID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSpaceID(v)
+		return nil
+	case documentnote.FieldFileID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFileID(v)
+		return nil
+	case documentnote.FieldTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTitle(v)
+		return nil
+	case documentnote.FieldBody:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBody(v)
+		return nil
+	case documentnote.FieldAuthorID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAuthorID(v)
+		return nil
+	case documentnote.FieldAuthoredAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAuthoredAt(v)
+		return nil
+	case documentnote.FieldEditedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEditedAt(v)
+		return nil
+	case documentnote.FieldEditorID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEditorID(v)
+		return nil
+	case documentnote.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case documentnote.FieldReplacedByID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReplacedByID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown DocumentNote field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *DocumentNoteMutation) AddedFields() []string {
+	var fields []string
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *DocumentNoteMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *DocumentNoteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown DocumentNote numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *DocumentNoteMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(documentnote.FieldTitle) {
+		fields = append(fields, documentnote.FieldTitle)
+	}
+	if m.FieldCleared(documentnote.FieldAuthorID) {
+		fields = append(fields, documentnote.FieldAuthorID)
+	}
+	if m.FieldCleared(documentnote.FieldAuthoredAt) {
+		fields = append(fields, documentnote.FieldAuthoredAt)
+	}
+	if m.FieldCleared(documentnote.FieldEditedAt) {
+		fields = append(fields, documentnote.FieldEditedAt)
+	}
+	if m.FieldCleared(documentnote.FieldEditorID) {
+		fields = append(fields, documentnote.FieldEditorID)
+	}
+	if m.FieldCleared(documentnote.FieldDeletedAt) {
+		fields = append(fields, documentnote.FieldDeletedAt)
+	}
+	if m.FieldCleared(documentnote.FieldReplacedByID) {
+		fields = append(fields, documentnote.FieldReplacedByID)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *DocumentNoteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *DocumentNoteMutation) ClearField(name string) error {
+	switch name {
+	case documentnote.FieldTitle:
+		m.ClearTitle()
+		return nil
+	case documentnote.FieldAuthorID:
+		m.ClearAuthorID()
+		return nil
+	case documentnote.FieldAuthoredAt:
+		m.ClearAuthoredAt()
+		return nil
+	case documentnote.FieldEditedAt:
+		m.ClearEditedAt()
+		return nil
+	case documentnote.FieldEditorID:
+		m.ClearEditorID()
+		return nil
+	case documentnote.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case documentnote.FieldReplacedByID:
+		m.ClearReplacedByID()
+		return nil
+	}
+	return fmt.Errorf("unknown DocumentNote nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *DocumentNoteMutation) ResetField(name string) error {
+	switch name {
+	case documentnote.FieldPublicID:
+		m.ResetPublicID()
+		return nil
+	case documentnote.FieldSpaceID:
+		m.ResetSpaceID()
+		return nil
+	case documentnote.FieldFileID:
+		m.ResetFileID()
+		return nil
+	case documentnote.FieldTitle:
+		m.ResetTitle()
+		return nil
+	case documentnote.FieldBody:
+		m.ResetBody()
+		return nil
+	case documentnote.FieldAuthorID:
+		m.ResetAuthorID()
+		return nil
+	case documentnote.FieldAuthoredAt:
+		m.ResetAuthoredAt()
+		return nil
+	case documentnote.FieldEditedAt:
+		m.ResetEditedAt()
+		return nil
+	case documentnote.FieldEditorID:
+		m.ResetEditorID()
+		return nil
+	case documentnote.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case documentnote.FieldReplacedByID:
+		m.ResetReplacedByID()
+		return nil
+	}
+	return fmt.Errorf("unknown DocumentNote field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *DocumentNoteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 6)
+	if m.space != nil {
+		edges = append(edges, documentnote.EdgeSpace)
+	}
+	if m.file != nil {
+		edges = append(edges, documentnote.EdgeFile)
+	}
+	if m.author != nil {
+		edges = append(edges, documentnote.EdgeAuthor)
+	}
+	if m.editor != nil {
+		edges = append(edges, documentnote.EdgeEditor)
+	}
+	if m.replacement != nil {
+		edges = append(edges, documentnote.EdgeReplacement)
+	}
+	if m.predecessor != nil {
+		edges = append(edges, documentnote.EdgePredecessor)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *DocumentNoteMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case documentnote.EdgeSpace:
+		if id := m.space; id != nil {
+			return []ent.Value{*id}
+		}
+	case documentnote.EdgeFile:
+		if id := m.file; id != nil {
+			return []ent.Value{*id}
+		}
+	case documentnote.EdgeAuthor:
+		if id := m.author; id != nil {
+			return []ent.Value{*id}
+		}
+	case documentnote.EdgeEditor:
+		if id := m.editor; id != nil {
+			return []ent.Value{*id}
+		}
+	case documentnote.EdgeReplacement:
+		if id := m.replacement; id != nil {
+			return []ent.Value{*id}
+		}
+	case documentnote.EdgePredecessor:
+		if id := m.predecessor; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *DocumentNoteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 6)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *DocumentNoteMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *DocumentNoteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 6)
+	if m.clearedspace {
+		edges = append(edges, documentnote.EdgeSpace)
+	}
+	if m.clearedfile {
+		edges = append(edges, documentnote.EdgeFile)
+	}
+	if m.clearedauthor {
+		edges = append(edges, documentnote.EdgeAuthor)
+	}
+	if m.clearededitor {
+		edges = append(edges, documentnote.EdgeEditor)
+	}
+	if m.clearedreplacement {
+		edges = append(edges, documentnote.EdgeReplacement)
+	}
+	if m.clearedpredecessor {
+		edges = append(edges, documentnote.EdgePredecessor)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *DocumentNoteMutation) EdgeCleared(name string) bool {
+	switch name {
+	case documentnote.EdgeSpace:
+		return m.clearedspace
+	case documentnote.EdgeFile:
+		return m.clearedfile
+	case documentnote.EdgeAuthor:
+		return m.clearedauthor
+	case documentnote.EdgeEditor:
+		return m.clearededitor
+	case documentnote.EdgeReplacement:
+		return m.clearedreplacement
+	case documentnote.EdgePredecessor:
+		return m.clearedpredecessor
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *DocumentNoteMutation) ClearEdge(name string) error {
+	switch name {
+	case documentnote.EdgeSpace:
+		m.ClearSpace()
+		return nil
+	case documentnote.EdgeFile:
+		m.ClearFile()
+		return nil
+	case documentnote.EdgeAuthor:
+		m.ClearAuthor()
+		return nil
+	case documentnote.EdgeEditor:
+		m.ClearEditor()
+		return nil
+	case documentnote.EdgeReplacement:
+		m.ClearReplacement()
+		return nil
+	case documentnote.EdgePredecessor:
+		m.ClearPredecessor()
+		return nil
+	}
+	return fmt.Errorf("unknown DocumentNote unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *DocumentNoteMutation) ResetEdge(name string) error {
+	switch name {
+	case documentnote.EdgeSpace:
+		m.ResetSpace()
+		return nil
+	case documentnote.EdgeFile:
+		m.ResetFile()
+		return nil
+	case documentnote.EdgeAuthor:
+		m.ResetAuthor()
+		return nil
+	case documentnote.EdgeEditor:
+		m.ResetEditor()
+		return nil
+	case documentnote.EdgeReplacement:
+		m.ResetReplacement()
+		return nil
+	case documentnote.EdgePredecessor:
+		m.ResetPredecessor()
+		return nil
+	}
+	return fmt.Errorf("unknown DocumentNote edge %s", name)
 }
 
 // DocumentTypeMutation represents an operation that mutates the DocumentType nodes in the graph.
