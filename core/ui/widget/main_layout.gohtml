@@ -12,7 +12,10 @@
 	<div class="flex flex-col-reverse md:flex-row h-svh">
         {{ render .GetContext .Navigation }}
 		<div id="innerContent" class="grow overflow-hidden">
-            {{ render .GetContext .Content }}
+			{{ if .IsTenantInMaintenanceMode }}
+				{{ render $ctx .TenantMaintenanceWarning }}
+			{{ end }}
+			{{ render $ctx .Content }}
 		</div>
 		{{ with .Sheet }}
 			<div class="lg:grow hidden lg:block">

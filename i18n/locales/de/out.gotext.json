@@ -691,11 +691,6 @@
             "fuzzy": true
         },
         {
-            "id": "Note",
-            "message": "Note",
-            "translation": "Bemerkung"
-        },
-        {
             "id": "Notes in Trash are read-only.",
             "message": "Notes in Trash are read-only.",
             "translation": "Notizen im Papierkorb sind schreibgeschützt.",
@@ -771,6 +766,11 @@
             "translation": "Titel",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
+        },
+        {
+            "id": "Note",
+            "message": "Note",
+            "translation": "Bemerkung"
         },
         {
             "id": "Could not load notes.",
@@ -923,13 +923,6 @@
             "message": "Edit",
             "translation": "Bearbeiten",
             "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Actions",
-            "message": "Actions",
-            "translation": "Aktionen",
-            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -4452,6 +4445,13 @@
             "fuzzy": true
         },
         {
+            "id": "This organization is in maintenance mode. Some features may not work. Please contact your administrator.",
+            "message": "This organization is in maintenance mode. Some features may not work. Please contact your administrator.",
+            "translation": "Diese Organisation befindet sich im Wartungsmodus. Einige Funktionen sind möglicherweise nicht verfügbar. Bitte wende dich an deinen Administrator.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Application passphrase",
             "message": "Application passphrase",
             "translation": "Anwendungspassphrase",
@@ -4497,6 +4497,13 @@
             "id": "Application unlocked. Starting up.",
             "message": "Application unlocked. Starting up.",
             "translation": "Anwendung entsperrt. Start wird fortgesetzt.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Actions",
+            "message": "Actions",
+            "translation": "Aktionen",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

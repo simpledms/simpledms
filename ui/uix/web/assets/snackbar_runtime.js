@@ -27,6 +27,7 @@
 		var timeoutID = null;
 		var isClosed = false;
 		var dismissTimeoutInMs = typeof autoDismissTimeoutInMs === "number" ? autoDismissTimeoutInMs : 5000;
+		var snackbar = snackbarRoot.querySelector(".js-snackbar");
 
 		var closeSnackbar = function() {
 			if (isClosed) {
@@ -41,14 +42,19 @@
 			if (observer !== null) {
 				observer.disconnect();
 			}
+			if (snackbar) {
+				snackbar.remove();
+			}
 			snackbarRoot.remove();
 		};
 
 		document.addEventListener("closeAllSnackbars", closeSnackbar);
 
-		var snackbar = snackbarRoot.querySelector(".js-snackbar");
 		if (snackbar) {
 			snackbar.addEventListener("click", closeSnackbar);
+			if (typeof snackbar.showPopover === "function" && !snackbar.matches(":popover-open")) {
+				snackbar.showPopover();
+			}
 		}
 
 		observer = new IntersectionObserver(function(entries) {
@@ -63,7 +69,9 @@
 		});
 		observer.observe(snackbarRoot);
 
-		timeoutID = setTimeout(closeSnackbar, dismissTimeoutInMs);
+		if (dismissTimeoutInMs > 0) {
+			timeoutID = setTimeout(closeSnackbar, dismissTimeoutInMs);
+		}
 
 		return closeSnackbar;
 	};

@@ -693,13 +693,6 @@
             "fuzzy": true
         },
         {
-            "id": "Note",
-            "message": "Note",
-            "translation": "Note",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Notes in Trash are read-only.",
             "message": "Notes in Trash are read-only.",
             "translation": "Notes in Trash are read-only.",
@@ -773,6 +766,13 @@
             "id": "Title",
             "message": "Title",
             "translation": "Title",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Note",
+            "message": "Note",
+            "translation": "Note",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -926,13 +926,6 @@
             "id": "Edit",
             "message": "Edit",
             "translation": "Edit",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Actions",
-            "message": "Actions",
-            "translation": "Actions",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4479,6 +4472,13 @@
             "fuzzy": true
         },
         {
+            "id": "This organization is in maintenance mode. Some features may not work. Please contact your administrator.",
+            "message": "This organization is in maintenance mode. Some features may not work. Please contact your administrator.",
+            "translation": "This organization is in maintenance mode. Some features may not work. Please contact your administrator.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Application passphrase",
             "message": "Application passphrase",
             "translation": "Application passphrase",
@@ -4524,6 +4524,13 @@
             "id": "Application unlocked. Starting up.",
             "message": "Application unlocked. Starting up.",
             "translation": "Application unlocked. Starting up.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Actions",
+            "message": "Actions",
+            "translation": "Actions",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

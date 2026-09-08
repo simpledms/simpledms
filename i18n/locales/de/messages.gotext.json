@@ -2,6 +2,13 @@
     "language": "de",
     "messages": [
         {
+            "id": "This organization is in maintenance mode. Some features may not work. Please contact your administrator.",
+            "message": "This organization is in maintenance mode. Some features may not work. Please contact your administrator.",
+            "translation": "Diese Organisation befindet sich im Wartungsmodus. Einige Funktionen sind möglicherweise nicht verfügbar. Bitte wende dich an deinen Administrator.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Replaced by: {ReplacementTitle}", "message": "Replaced by: {ReplacementTitle}",
             "translation": "Ersetzt durch: {ReplacementTitle}",
             "translatorComment": "Translated from English by Codex", "fuzzy": true

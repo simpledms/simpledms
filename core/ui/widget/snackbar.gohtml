@@ -34,7 +34,8 @@
 	<div id="{{ .GetID }}" hx-swap-oob="beforeend:dialog[open]:first-child.js-dialog:not(:has(dialog[open].js-dialog)),body:not(:has(dialog[open].js-dialog))">
 		{{/* snackbar class is used as selector */}}
 		<div popover="manual" class="js-snackbar bottom-24 flex top-auto group mx-auto left-4 right-4 max-w-md
-	bg-inverse-surface drop-shadow rounded-xs p-0 hover:cursor-pointer {{ .GetClass }}">
+	bg-inverse-surface drop-shadow rounded-xs p-0 hover:cursor-pointer {{ .GetClass }}"
+			onclick="this.remove(); document.getElementById('{{ .GetID }}')?.remove();">
 			<div class="state-layer-inverse-primary flex min-h-12 max-h-[4.25rem] items-center justify-center gap-x-4 px-4">
 				<div class="text-inverse-on-surface body-md group-hover:text-inverse-primary">
 					{{ render .GetContext .SupportingText }}
@@ -48,12 +49,20 @@
 		</div>
 		<script defer>
 			(function() {
-				// Runtime is loaded from /assets/snackbar_runtime.js (included in Base).
-				if (typeof window.simpledmsMountSnackbar === 'function') {
+				const mount = function() {
+					if (typeof window.simpledmsMountSnackbar !== 'function') {
+						return;
+					}
 					window.simpledmsMountSnackbar(
 						document.getElementById('{{ .GetID }}'),
 						{{ .GetAutoDismissTimeout }},
 					);
+				};
+				// On full page loads, the deferred runtime is not available while parsing content.
+				if (typeof window.simpledmsMountSnackbar === 'function') {
+					mount();
+				} else {
+					document.addEventListener('DOMContentLoaded', mount, { once: true });
 				}
 			})()
 		</script>

@@ -22,6 +22,7 @@ type Snackbar struct {
 	// Child   IWidget // TODO or Content?
 	Action                       *Link // TODO Link or IWidget?
 	IsError                      bool
+	isAutoDismissDisabled        bool
 	customAutoDismissTimeoutInMs int64
 	// TODO Action
 	// TODO error, primary, secondary, tertiary
@@ -65,6 +66,9 @@ func (qq *Snackbar) GetClass() string {
 }
 
 func (qq *Snackbar) GetAutoDismissTimeout() int64 {
+	if qq.isAutoDismissDisabled {
+		return 0
+	}
 	if qq.customAutoDismissTimeoutInMs > 0 {
 		return qq.customAutoDismissTimeoutInMs
 	}
@@ -73,6 +77,11 @@ func (qq *Snackbar) GetAutoDismissTimeout() int64 {
 	}
 	// TODO calculate based on content length
 	return 5000
+}
+
+func (qq *Snackbar) DisableAutoDismiss() *Snackbar {
+	qq.isAutoDismissDisabled = true
+	return qq
 }
 
 func (qq *Snackbar) SetCustomAutoDismissTimeoutInMs(timeout int64) *Snackbar {

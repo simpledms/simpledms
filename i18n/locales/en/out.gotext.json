@@ -507,11 +507,6 @@
             "translation": ""
         },
         {
-            "id": "Note",
-            "message": "Note",
-            "translation": ""
-        },
-        {
             "id": "Notes in Trash are read-only.",
             "message": "Notes in Trash are read-only.",
             "translation": ""
@@ -564,6 +559,11 @@
         {
             "id": "Title",
             "message": "Title",
+            "translation": ""
+        },
+        {
+            "id": "Note",
+            "message": "Note",
             "translation": ""
         },
         {
@@ -687,11 +687,6 @@
         {
             "id": "Edit",
             "message": "Edit",
-            "translation": ""
-        },
-        {
-            "id": "Actions",
-            "message": "Actions",
             "translation": ""
         },
         {
@@ -3397,6 +3392,11 @@
             "translation": ""
         },
         {
+            "id": "This organization is in maintenance mode. Some features may not work. Please contact your administrator.",
+            "message": "This organization is in maintenance mode. Some features may not work. Please contact your administrator.",
+            "translation": ""
+        },
+        {
             "id": "Application passphrase",
             "message": "Application passphrase",
             "translation": ""
@@ -3429,6 +3429,11 @@
         {
             "id": "Application unlocked. Starting up.",
             "message": "Application unlocked. Starting up.",
+            "translation": ""
+        },
+        {
+            "id": "Actions",
+            "message": "Actions",
             "translation": ""
         },
         {

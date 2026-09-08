@@ -693,13 +693,6 @@
             "fuzzy": true
         },
         {
-            "id": "Note",
-            "message": "Note",
-            "translation": "Nota",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Notes in Trash are read-only.",
             "message": "Notes in Trash are read-only.",
             "translation": "Le note nel cestino sono di sola lettura.",
@@ -773,6 +766,13 @@
             "id": "Title",
             "message": "Title",
             "translation": "Titolo",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Note",
+            "message": "Note",
+            "translation": "Nota",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -926,13 +926,6 @@
             "id": "Edit",
             "message": "Edit",
             "translation": "Modifica",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Actions",
-            "message": "Actions",
-            "translation": "Azioni",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -4479,6 +4472,13 @@
             "fuzzy": true
         },
         {
+            "id": "This organization is in maintenance mode. Some features may not work. Please contact your administrator.",
+            "message": "This organization is in maintenance mode. Some features may not work. Please contact your administrator.",
+            "translation": "Questa organizzazione è in modalità manutenzione. Alcune funzionalità potrebbero non funzionare. Contatta il tuo amministratore.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Application passphrase",
             "message": "Application passphrase",
             "translation": "Passphrase dell’applicazione",
@@ -4524,6 +4524,13 @@
             "id": "Application unlocked. Starting up.",
             "message": "Application unlocked. Starting up.",
             "translation": "Applicazione sbloccata. Avvio in corso.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Actions",
+            "message": "Actions",
+            "translation": "Azioni",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
