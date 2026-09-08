@@ -18,6 +18,19 @@ type Menu struct {
 	IsAutoPopover      bool
 }
 
+// ContextMenuButton opens the same menu as the owning row or card's right-click gesture.
+func (qq *Menu) ContextMenuButton() *IconButton {
+	return &IconButton{
+		Widget: Widget[IconButton]{
+			ID: qq.GetID() + "-trigger",
+		},
+		Icon:          "more_vert",
+		Label:         T("Actions"),
+		Tooltip:       T("Actions"),
+		PopoverTarget: qq.GetID(),
+	}
+}
+
 // top
 func (qq *Menu) GetInsetBlockStart() string {
 	if qq.Position == PositionRight || qq.Position == PositionLeft {

@@ -2,9 +2,10 @@
 {{- define "IconButton" }}
 	{{/* wrapper is necessary to make script execution relyable on morph, without
 	 the script isn't executed on some morphed IconButton (no clear pattern on first loop) */}}
-	<div id="{{ .GetID }}" class="-m-3" title="{{ render .GetContext .Tooltip }}">
+	<div id="{{ .GetID }}" class="-m-3">
 		{{ if .HTMXAttrs.IsPageLink }}<a{{ else }}<button{{ end }}
 				class="flex center-aligned size-12 rounded-full cursor-pointer"
+				data-tooltip="{{ render .GetContext .Tooltip }}"
 				{{ with .Label }}aria-label="{{ render $.GetContext . }}"{{ end }}
 				{{ if .IsToggle }}
 					id="{{ .GetID }}-button"
@@ -16,6 +17,7 @@
 				{{/* was moved outside of else on 11.12.2024 */}}
                 {{ template "HTMXAttrs" .HTMXAttrs }}
 				{{ if ne .GetPopoverTarget "" }}
+					type="button"
 					style="anchor-name: --{{ .GetPopoverTarget }}"
 					popovertarget="{{ .GetPopoverTarget }}"
 					aria-details="{{ .GetPopoverTarget }}" {{/* accessibility for anchor popover relationship */}}

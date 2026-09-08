@@ -718,7 +718,7 @@ func TestDocumentNotesHTTPUnavailableAuthorRetainsAttribution(t *testing.T) {
 		t.Fatalf("read removed author's note: %d %s", rr.Code, rr.Body.String())
 	}
 	for _, text := range []string{
-		"Retained text after author removal", "Author: Unknown", `title="Created:`,
+		"Retained text after author removal", "Author: Unknown", `data-tooltip="Created:`,
 	} {
 		if !strings.Contains(rr.Body.String(), text) {
 			t.Fatalf("missing %q: %s", text, rr.Body.String())

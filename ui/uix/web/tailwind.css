@@ -4,6 +4,7 @@
 @source '../../../core/ui/widget';
 @source '../partial';
 @source './assets/snackbar_runtime.js';
+@source './assets/tooltip_runtime.js';
 @source not inline('container');
 
 @config '../../../tailwind.config.js';
@@ -41,6 +42,31 @@
 @utility active {
   /* used for popovers */
   display: block;
+}
+
+@utility js-tooltip-popover {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  max-width: min(20rem, calc(100vw - 1rem));
+  max-height: calc(100dvh - 1rem);
+  overflow: auto;
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  border-radius: 0.25rem;
+  background-color: rgb(var(--md-sys-color-inverse-surface));
+  color: rgb(var(--md-sys-color-inverse-on-surface));
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3), 0 4px 8px 3px rgb(0 0 0 / 0.15);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1rem;
+  letter-spacing: 0.03125rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+
+  &:not(:popover-open) {
+    display: none;
+  }
 }
 
 @utility label-sm {

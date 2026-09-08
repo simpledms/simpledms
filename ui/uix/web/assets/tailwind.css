@@ -187,6 +187,29 @@
   .visible {
     visibility: visible;
   }
+  .js-tooltip-popover {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    max-width: min(20rem, calc(100vw - 1rem));
+    max-height: calc(100dvh - 1rem);
+    overflow: auto;
+    padding: 0.25rem 0.5rem;
+    border: 0;
+    border-radius: 0.25rem;
+    background-color: rgb(var(--md-sys-color-inverse-surface));
+    color: rgb(var(--md-sys-color-inverse-on-surface));
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.3), 0 4px 8px 3px rgb(0 0 0 / 0.15);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1rem;
+    letter-spacing: 0.03125rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    &:not(:popover-open) {
+      display: none;
+    }
+  }
   .absolute {
     position: absolute;
   }
@@ -723,6 +746,9 @@
   .cursor-pointer {
     cursor: pointer;
   }
+  .resize {
+    resize: both;
+  }
   .resize-none {
     resize: none;
   }
@@ -1104,6 +1130,9 @@
   .pr-6 {
     padding-right: calc(var(--spacing) * 6);
   }
+  .pr-7 {
+    padding-right: calc(var(--spacing) * 7);
+  }
   .pr-14 {
     padding-right: calc(var(--spacing) * 14);
   }
@@ -1406,6 +1435,10 @@
   }
   .outline-secondary {
     outline-color: rgb(var(--md-sys-color-secondary) / 1);
+  }
+  .blur {
+    --tw-blur: blur(8px);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
   .drop-shadow {
     --tw-drop-shadow-size: drop-shadow(0 1px 2px var(--tw-drop-shadow-color, rgb(0 0 0 / 0.1))) drop-shadow(0 1px 1px var(--tw-drop-shadow-color, rgb(0 0 0 / 0.06)));
@@ -2318,6 +2351,46 @@
     color: rgb(var(--md-sys-color-on-secondary-container) / 1);
   }
   .\[\&_\[data-selected\=true\]_span\]\:text-on-secondary-container [data-selected=true] span {
+    color: rgb(var(--md-sys-color-on-secondary-container) / 1);
+  }
+  .\[\&_button\>div\]\:state-layer-on-secondary-container button > div {
+    height: inherit;
+    width: inherit;
+    border-radius: inherit;
+    overflow: auto;
+    @media (hover: hover) {
+      &:hover, .group:hover & {
+        background-color: rgb(var(--md-sys-color-on-secondary-container) / 0.08);
+      }
+    }
+    &:focus, &:focus-within, .group:focus &, .group:focus-within & {
+      background-color: rgb(var(--md-sys-color-on-secondary-container) / 0.10);
+    }
+    &:active, .group:active & {
+      background-color: rgb(var(--md-sys-color-on-secondary-container) / 0.10);
+    }
+  }
+  .\[\&_button\>div\]\:text-on-secondary-container button > div {
+    color: rgb(var(--md-sys-color-on-secondary-container) / 1);
+  }
+  .group-has-\[\:checked\]\/list-item\:\[\&_button\>div\]\:state-layer-on-secondary-container:is(:where(.group\/list-item):has(:is(:checked)) *) button > div {
+    height: inherit;
+    width: inherit;
+    border-radius: inherit;
+    overflow: auto;
+    @media (hover: hover) {
+      &:hover, .group:hover & {
+        background-color: rgb(var(--md-sys-color-on-secondary-container) / 0.08);
+      }
+    }
+    &:focus, &:focus-within, .group:focus &, .group:focus-within & {
+      background-color: rgb(var(--md-sys-color-on-secondary-container) / 0.10);
+    }
+    &:active, .group:active & {
+      background-color: rgb(var(--md-sys-color-on-secondary-container) / 0.10);
+    }
+  }
+  .group-has-\[\:checked\]\/list-item\:\[\&_button\>div\]\:text-on-secondary-container:is(:where(.group\/list-item):has(:is(:checked)) *) button > div {
     color: rgb(var(--md-sys-color-on-secondary-container) / 1);
   }
   .\[\&\>\*\]\:overflow-hidden > * {

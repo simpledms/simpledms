@@ -1,7 +1,8 @@
 {{- define "DocumentNoteContent" }}
-	<div {{ with .ID }}id="{{ . }}"{{ end }} class="min-w-0 w-full" {{ with .Tooltip }}title="{{ .String $.GetContext }}"{{ end }}>
+	<div {{ with .ID }}id="{{ . }}"{{ end }} class="min-w-0 w-full">
 		{{ if .IsSummary }}
-		<button type="button" class="block w-full text-left cursor-pointer">
+		<button type="button" class="block w-full text-left cursor-pointer"
+			{{ with .Tooltip }}data-tooltip="{{ .String $.GetContext }}"{{ end }}>
 			<div class="body-md text-on-surface" style="white-space: pre-wrap; overflow-wrap: anywhere">{{ render .GetContext .Title }}</div>
 			<div class="body-sm pt-1 text-on-surface-variant" style="white-space: pre-wrap; overflow-wrap: anywhere">{{ if .ReplacementReference }}<em>{{ render .GetContext .ReplacementReference }}</em>{{ else if .Status }}<em>{{ render .GetContext .Status }}</em>{{ else }}{{ .Body }}{{ end }}</div>
 		</button>

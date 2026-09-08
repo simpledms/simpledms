@@ -46,6 +46,13 @@
                     {{ render .GetContext .GetTrailing }}
 				</div>
 			</div>
+			{{ if .ContextMenu }}
+				{{/* The menu button follows the row's live radio state, not its own toggle state. */}}
+				<div class="shrink-0 pr-7
+					group-has-[:checked]/list-item:[&_button>div]:text-on-secondary-container
+					group-has-[:checked]/list-item:[&_button>div]:state-layer-on-secondary-container"
+				>{{ render .GetContext .ContextMenu.ContextMenuButton }}</div>
+			{{ end }}
 		</label>
         {{ render .GetContext .ContextMenu }}
 	{{- else }}
@@ -88,6 +95,12 @@
                     {{ render .GetContext .GetTrailing }}
 				</div>
 			</div>
+			{{ if .ContextMenu }}
+				<div class="shrink-0 pr-7 {{ if .IsSelected }}
+					[&_button>div]:text-on-secondary-container
+					[&_button>div]:state-layer-on-secondary-container{{ end }}"
+				>{{ render .GetContext .ContextMenu.ContextMenuButton }}</div>
+			{{ end }}
 		</div>
         {{ render .GetContext .ContextMenu }}
     {{- end }}

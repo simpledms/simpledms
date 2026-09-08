@@ -392,9 +392,9 @@ for (const device of [
 			await expect(entries(page).first()).toHaveAttribute("id", secondID!);
 			await saveNote(page, "Corrected first note\nStill the original entry", "Edit", first, "Decision");
 			await expectAuthor(page, first, author);
-			await expect(first.locator('[title^="Created:"]'))
-				.toHaveAttribute("title", /^Created: .+\nAuthor: /);
-			expect(await first.locator('[title^="Created:"]').getAttribute("title"))
+			await expect(first.locator('[data-tooltip^="Created:"]'))
+				.toHaveAttribute("data-tooltip", /^Created: .+\nAuthor: /);
+			expect(await first.locator('[data-tooltip^="Created:"]').getAttribute("data-tooltip"))
 				.toContain(author);
 			await expect(first).not.toContainText("Edited by");
 			const details = await openNoteDetails(page, first);

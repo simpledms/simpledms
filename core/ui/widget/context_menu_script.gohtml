@@ -15,6 +15,9 @@
 			}
 
 			let contextMenu = elem.querySelector('menu');
+			let trigger = elem.querySelector('[popovertarget="' + contextMenu.id + '"]');
+			trigger?.setAttribute('aria-haspopup', 'menu');
+			trigger?.setAttribute('aria-expanded', 'false');
 			let anchoredStyle = null;
 
 			{{/* duplicate in icon_button.tw.gohtml */}}
@@ -57,6 +60,7 @@
 			// beforetoggle is synchronous: Escape must work immediately after opening.
 			// TODO or window?
 			contextMenu.addEventListener('beforetoggle', (e) => {
+				trigger?.setAttribute('aria-expanded', String(e.newState === 'open'));
 				//isOpen = contextMenu.matches(':popover-open')
 				if (e.newState === 'open') {
 					// true means that it is executed in early `capture` phase
@@ -84,6 +88,7 @@
 				//console.log(e)
 
 				e.preventDefault();
+				e.stopPropagation();
 				// Pointer coordinates are viewport-relative, not relative to the Actions anchor.
 				// Restore the anchor styles on close for subsequent button/keyboard opening.
 				anchoredStyle = contextMenu.style.cssText;

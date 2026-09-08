@@ -3,7 +3,7 @@
 	<div
 			id="{{ .GetID }}"
 			{{ template "HTMXAttrs" .HTMXAttrs }}
-			title="{{ render .GetContext .GetTooltip }}"
+			data-tooltip="{{ render .GetContext .GetTooltip }}"
 			class="h-7 rounded-sm inline-flex
 			{{ if .IsSuggestion }}
 				 outline -outline-offset-2 outline-2 outline-secondary

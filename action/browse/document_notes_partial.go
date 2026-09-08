@@ -266,12 +266,6 @@ func (qq *DocumentNotesPartial) entry(
 			},
 		}
 		item.ContextMenu = menu
-		item.Trailing = &widget.IconButton{
-			Icon:          "more_vert",
-			Label:         widget.T("Actions"),
-			Tooltip:       widget.T("Actions"),
-			PopoverTarget: menu.ID,
-		}
 	}
 	return item
 }
