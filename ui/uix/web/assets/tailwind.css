@@ -206,9 +206,6 @@
     letter-spacing: 0.03125rem;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
-    &:not(:popover-open) {
-      display: none;
-    }
   }
   .absolute {
     position: absolute;
@@ -2498,6 +2495,13 @@
   button:not(:disabled):not([aria-disabled='true']), [type='button']:not(:disabled):not([aria-disabled='true']), [type='submit']:not(:disabled):not([aria-disabled='true']), [type='reset']:not(:disabled):not([aria-disabled='true']) {
     cursor: pointer;
   }
+}
+@layer utilities {
+  .js-tooltip-popover:not(:popover-open) {
+    display: none;
+  }
+}
+@layer base {
   @font-face {
     font-display: swap;
     font-family: 'Material Symbols Outlined';
