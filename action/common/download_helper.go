@@ -13,6 +13,7 @@ import (
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/mimetypex"
 )
 
 func StreamDownload(
@@ -44,7 +45,7 @@ func StreamDownload(
 		))
 	}
 
-	mimeType := currentVersion.Data.MimeType
+	mimeType := mimetypex.Resolve(currentVersion.Data.MimeType, currentVersion.Data.Filename)
 	rw.Header().Set("Content-Type", mimeType)
 
 	rw.WriteHeader(http.StatusOK)

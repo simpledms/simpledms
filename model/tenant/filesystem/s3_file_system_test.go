@@ -30,6 +30,8 @@ import (
 	enttenanttest "github.com/simpledms/simpledms/db/enttenant/enttest"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/encryptor"
+	"github.com/simpledms/simpledms/model/main/common/language"
+	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	"github.com/simpledms/simpledms/model/main/common/storagetype"
 	"github.com/simpledms/simpledms/util/e"
 )
@@ -93,6 +95,55 @@ func TestS3FileSystemUploadTooLargeErrorWithoutMaximum(t *testing.T) {
 	httpErr := requireHTTPErrorStatus(t, err, http.StatusRequestEntityTooLarge)
 	if httpErr.Message() != "Upload is too large." {
 		t.Fatalf("unexpected message: %q", httpErr.Message())
+	}
+}
+
+func TestFinalizePreparedTemporaryAccountUploadStoresMimeType(t *testing.T) {
+	fileSystemx, mainCtx, cleanup := newS3FileSystemMainContext(t, 10)
+	defer cleanup()
+
+	account := mainCtx.MainTx.Account.Create().
+		SetEmail(entx.NewCIText("mime-test@example.com")).
+		SetFirstName("Mime").
+		SetLastName("Test").
+		SetLanguage(language.Unknown).
+		SetRole(mainrole.User).
+		SaveX(mainCtx)
+	temporaryFile := mainCtx.MainTx.TemporaryFile.Create().
+		SetOwnerID(account.ID).
+		SetFilename("notes.txt").
+		SetSizeInStorage(0).
+		SetStorageType(storagetype.S3).
+		SetStoragePath("account/tmp").
+		SetStorageFilename("notes.txt").
+		SetUploadToken("mime-test").
+		SaveX(mainCtx)
+	prepared := &PreparedAccountUpload{
+		TemporaryFileID: temporaryFile.ID,
+	}
+	result := &PreparedUploadResult{
+		FileInfo: &minio.UploadInfo{
+			Size:           4,
+			ChecksumSHA256: "sha256",
+		},
+		FileSize:      4,
+		ContentSHA256: "content-sha256",
+		StorageCRC32C: "crc32c",
+		MimeType:      "text/plain; charset=utf-8",
+	}
+
+	if err := fileSystemx.FinalizePreparedTemporaryAccountUpload(
+		mainCtx,
+		mainCtx.MainTx,
+		prepared,
+		result,
+	); err != nil {
+		t.Fatalf("finalize temporary account upload: %v", err)
+	}
+
+	temporaryFile = mainCtx.MainTx.TemporaryFile.GetX(mainCtx, temporaryFile.ID)
+	if temporaryFile.MimeType != result.MimeType {
+		t.Fatalf("MIME type = %q, want %q", temporaryFile.MimeType, result.MimeType)
 	}
 }
 

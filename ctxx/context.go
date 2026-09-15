@@ -58,3 +58,26 @@ func TenantCtxX(ctx context.Context) *TenantContext {
 func SpaceCtxX(ctx context.Context) *SpaceContext {
 	return ctx.Value(spaceCtxKey).(*SpaceContext)
 }
+
+// WithoutCancel keeps request-scoped values and space data while allowing an
+// operation that has already started to finish after the client disconnects.
+// It does not detach existing database transactions; callers must open fresh ones.
+func WithoutCancel(ctx *SpaceContext) *SpaceContext {
+	parent := context.WithoutCancel(ctx)
+
+	visitorCtx := *ctx.VisitorCtx()
+	visitorCtx.Context = context.WithValue(parent, visitorCtxKey, &visitorCtx)
+
+	mainCtx := *ctx.MainCtx()
+	mainCtx.VisitorContext = &visitorCtx
+	mainCtx.Context = context.WithValue(visitorCtx.Context, mainCtxKey, &mainCtx)
+
+	tenantCtx := *ctx.TenantCtx()
+	tenantCtx.MainContext = &mainCtx
+	tenantCtx.Context = context.WithValue(mainCtx.Context, tenantCtxKey, &tenantCtx)
+
+	spaceCtx := *ctx
+	spaceCtx.TenantContext = &tenantCtx
+	spaceCtx.Context = context.WithValue(tenantCtx.Context, spaceCtxKey, &spaceCtx)
+	return &spaceCtx
+}

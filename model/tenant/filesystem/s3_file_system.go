@@ -1307,10 +1307,11 @@ func (qq *S3FileSystem) UploadPreparedTemporaryAccountFile(
 	if nilableUploadLimitBytes != nil {
 		limitedFileToSave = &maxBytesReader{r: fileToSave, max: *nilableUploadLimitBytes}
 	}
+	mimeReader := &mimeSniffingReader{r: limitedFileToSave}
 
 	fileInfo, fileSize, contentSHA256, storageCRC32C, err := qq.uploadPreparedFileWithParams(
 		ctx,
-		limitedFileToSave,
+		mimeReader,
 		prepared.OriginalFilename,
 		prepared.StorageFilenameWithoutExt,
 		prepared.StoragePath,
@@ -1336,6 +1337,7 @@ func (qq *S3FileSystem) UploadPreparedTemporaryAccountFile(
 		FileSize:      fileSize,
 		ContentSHA256: contentSHA256,
 		StorageCRC32C: storageCRC32C,
+		MimeType:      mimeReader.MimeType(),
 	}, nil
 }
 
@@ -1390,6 +1392,7 @@ func (qq *S3FileSystem) FinalizePreparedTemporaryAccountUpload(
 		SetSha256(result.FileInfo.ChecksumSHA256).
 		SetContentSha256(result.ContentSHA256).
 		SetStorageCrc32c(result.StorageCRC32C).
+		SetNillableMimeType(nilableNonEmptyString(result.MimeType)).
 		SetUploadSucceededAt(time.Now()).
 		Exec(ctxWithIncomplete)
 }
@@ -1948,6 +1951,7 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
 			SetSha256(fileInfo.ChecksumSHA256).
 			SetContentSha256(result.contentSHA256).
 			SetStorageCrc32c(result.storageCRC32C).
+			SetNillableMimeType(nilableNonEmptyString(claimedTmpFile.MimeType)).
 			SetUploadSucceededAt(time.Now()).
 			Save(ctxWithIncomplete)
 		if err != nil {

@@ -7,7 +7,11 @@
 		{{ render .GetContext .GetIcon }}
 		<div class="text-center">
 			<h3 class="title-lg">{{ render .GetContext .Headline }}</h3>
-			{{ with .Description }}<p>{{ render $ctx . }}</p>{{ end }}
+			{{ with .Description }}
+				<p{{ if $.WrapDescriptionAnywhere }} style="overflow-wrap: anywhere; word-break: break-word;"{{ end }}>
+					{{ render $ctx . }}
+				</p>
+			{{ end }}
 		</div>
 		<div class="text-center">
 			{{ render .GetContext .Actions }}

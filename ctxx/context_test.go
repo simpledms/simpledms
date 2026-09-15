@@ -82,3 +82,66 @@ func TestDerivedContextsKeepParentContextsUnchanged(t *testing.T) {
 		t.Fatal("derived context lost space context value")
 	}
 }
+
+func TestWithoutCancelRebuildsSpaceContextHierarchy(t *testing.T) {
+	baseKey := struct{}{}
+	base, cancel := context.WithCancel(
+		context.WithValue(context.Background(), baseKey, "base value"),
+	)
+	visitorCtx := NewVisitorContext(base, nil, i18n.NewI18n(), "", "", false, false, false)
+	mainCtx := NewMainContext(
+		visitorCtx,
+		&entmain.Account{Language: language.English},
+		i18n.NewI18n(),
+		nil,
+		nil,
+		true,
+	)
+	tenantCtx := NewTenantContextWithUser(
+		mainCtx,
+		nil,
+		&entmain.Tenant{PublicID: entx.NewCIText("tenant")},
+		&enttenant.User{},
+		true,
+	)
+	spaceCtx := NewSpaceContext(
+		tenantCtx,
+		&enttenant.Space{PublicID: entx.NewCIText("space")},
+	)
+	cancel()
+
+	detached := WithoutCancel(spaceCtx)
+	if err := detached.Err(); err != nil {
+		t.Fatalf("detached context has error: %v", err)
+	}
+	if detached.Done() != nil {
+		t.Fatal("detached context unexpectedly has a done channel")
+	}
+	if got := detached.Value(baseKey); got != "base value" {
+		t.Fatalf("expected base context value, got %v", got)
+	}
+	if detached.VisitorCtx() == visitorCtx {
+		t.Fatal("detached context kept canceled visitor context")
+	}
+	if detached.MainCtx() == mainCtx {
+		t.Fatal("detached context kept canceled main context")
+	}
+	if detached.TenantCtx() == tenantCtx {
+		t.Fatal("detached context kept canceled tenant context")
+	}
+	if detached.SpaceCtx() == spaceCtx {
+		t.Fatal("detached context kept canceled space context")
+	}
+	if got, ok := VisitorCtx(detached); !ok || got != detached.VisitorCtx() {
+		t.Fatal("detached visitor context value is inconsistent")
+	}
+	if got, ok := MainCtx(detached); !ok || got != detached.MainCtx() {
+		t.Fatal("detached main context value is inconsistent")
+	}
+	if got, ok := TenantCtx(detached); !ok || got != detached.TenantCtx() {
+		t.Fatal("detached tenant context value is inconsistent")
+	}
+	if got, ok := SpaceCtx(detached); !ok || got != detached.SpaceCtx() {
+		t.Fatal("detached space context value is inconsistent")
+	}
+}

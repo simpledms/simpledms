@@ -148,6 +148,12 @@ func (qq *Router) RegisterPage(pattern string, handlerFn handlerFn) {
 	qq.HandleFunc(pattern, qq.wrapTx(handlerFn, true))
 }
 
+// RegisterManualTxPage closes authorization transactions before invoking a page
+// that performs storage I/O and opens its own fresh rendering transaction.
+func (qq *Router) RegisterManualTxPage(pattern string, handlerFn handlerFn) {
+	qq.HandleFunc(pattern, qq.wrapManualTx(handlerFn))
+}
+
 func (qq *Router) RegisterActions(actions any) {
 	for _, field := range structs.Fields(actions) {
 		if actionx, ok := field.Value().(Actionable); ok {
@@ -281,11 +287,6 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 		*/
 
 		requestIsReadOnly := isReadOnly
-
-		// workaround for `open with` function // TODO find a better solution
-		if strings.Contains(req.URL.Path, "/inbox/") && req.URL.Query().Has("upload_token") {
-			requestIsReadOnly = false
-		}
 
 		mainTx, err := qq.mainDB.Tx(req.Context(), requestIsReadOnly)
 		if err != nil {
@@ -451,6 +452,11 @@ func (qq *Router) wrapManualTx(handlerFn handlerFn) http.HandlerFunc {
 
 		if err := handlerFn(rwx, reqx, ctx); err != nil {
 			log.Println(err)
+			// Persistence may finish after the client disconnects. Authorization
+			// transactions are already closed; there is no response left to render.
+			if requestErr := req.Context().Err(); requestErr != nil && errors.Is(err, requestErr) {
+				return
+			}
 			qq.handleManualError(rwx, reqx, ctx, err)
 			return
 		}

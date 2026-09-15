@@ -915,8 +915,8 @@ func (qq *Server) registerCoreRoutes(
 	router.RegisterPage(route2.BrowseRouteWithSelection(), actions.Browse.BrowseWithSelectionPage.Handler)
 	// router.RegisterPage(route.BrowseRouteWithSelection(false), pages.BrowseWithSelection.Handler)
 
-	router.RegisterPage(route2.InboxRoute(false, false), actions.Inbox.InboxRootPage.Handler)
-	router.RegisterPage(route2.InboxRoute(true, false), actions.Inbox.InboxWithSelectionPage.Handler)
+	router.RegisterManualTxPage(route2.InboxRoute(false, false), actions.Inbox.InboxRootPage.Handler)
+	router.RegisterManualTxPage(route2.InboxRoute(true, false), actions.Inbox.InboxWithSelectionPage.Handler)
 	// for use with PWA share target
 	// router.RegisterPage(route.InboxRoute(false, true), pages.Inbox.Handler)
 

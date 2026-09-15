@@ -15,6 +15,7 @@ import (
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/txx"
 )
 
 type InboxWithSelectionPage struct {
@@ -36,6 +37,22 @@ func (qq *InboxWithSelectionPage) Handler(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
+) error {
+	state, err := qq.actions.InboxPage.prepareState(rw, req, ctx)
+	if err != nil {
+		return err
+	}
+	_, err = txx.WithTenantReadSpaceTx(ctx.SpaceCtx(), func(readCtx *ctxx.SpaceContext) (*struct{}, error) {
+		return nil, qq.render(rw, req, readCtx, state)
+	})
+	return err
+}
+
+func (qq *InboxWithSelectionPage) render(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
+	state *InboxPageState,
 ) error {
 	// TODO handle direct access
 
@@ -82,7 +99,7 @@ func (qq *InboxWithSelectionPage) Handler(
 	}
 	*/
 
-	content, err := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, filex.PublicID.String())
+	content, err := qq.actions.InboxPage.Widget(ctx, state, filex.PublicID.String())
 	if err != nil {
 		return err
 	}

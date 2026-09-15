@@ -2,10 +2,11 @@ package widget
 
 type EmptyState struct {
 	Widget[EmptyState]
-	Icon        *Icon // TODO how to enforce `extra` size?
-	Headline    *Text
-	Description *Text // TODO must be paragraph...
-	Actions     []IWidget
+	Icon                    *Icon // TODO how to enforce `extra` size?
+	Headline                *Text
+	Description             *Text // TODO must be paragraph...
+	WrapDescriptionAnywhere bool
+	Actions                 []IWidget
 }
 
 func (qq *EmptyState) GetIcon() *Icon {

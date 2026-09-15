@@ -55,19 +55,12 @@ func (qq *InboxPage) Data() *InboxPageData {
 // used in Query, for example MarkAsDoneCmd
 // TODO refactor, legacy code
 func (qq *InboxPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	state := autil.StateX[InboxPageState](rw, req)
-	if _, err := state.sources(); err != nil {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid source filter.")
-	}
-	if state.UploadToken != "" {
-		if err := qq.processTemporaryFiles(rw, ctx, state); err != nil {
-			return err
-		}
-		state.UploadToken = ""
-		rw.Header().Set("HX-Replace-Url", route.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID))
+	state, err := qq.prepareState(rw, req, ctx)
+	if err != nil {
+		return err
 	}
 
-	_, err := txx.WithTenantReadSpaceTx(ctx.SpaceCtx(), func(readCtx *ctxx.SpaceContext) (*struct{}, error) {
+	_, err = txx.WithTenantReadSpaceTx(ctx.SpaceCtx(), func(readCtx *ctxx.SpaceContext) (*struct{}, error) {
 		return nil, qq.render(rw, req, readCtx, state)
 	})
 	return err
@@ -118,7 +111,19 @@ func (qq *InboxPage) WidgetHandler(
 ) (*widget.ListDetailLayout, error) {
 	// TODO handle selection
 	// TODO use in MoveFileCmd / AssignFileCmd, initial render
+	state, err := qq.prepareState(rw, req, ctx)
+	if err != nil {
+		return nil, err
+	}
+	return qq.Widget(ctx, state, selectedFileID)
+}
 
+// prepareState finishes staged-file conversion before any rendering snapshot is opened.
+func (qq *InboxPage) prepareState(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
+) (*InboxPageState, error) {
 	state := autil.StateX[InboxPageState](rw, req)
 	if _, err := state.sources(); err != nil {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid source filter.")
@@ -129,7 +134,10 @@ func (qq *InboxPage) WidgetHandler(
 		// must be first before the data gets read
 		err := qq.processTemporaryFiles(rw, ctx, state)
 		if err != nil {
-			panic(err)
+			return nil, err
+		}
+		if err := ctx.Err(); err != nil {
+			return nil, err
 		}
 
 		state.UploadToken = ""
@@ -153,7 +161,7 @@ func (qq *InboxPage) WidgetHandler(
 	// rw.Header().Set("HX-Retarget", "#innerContent")
 	// rw.Header().Set("HX-Reswap", "innerHTML")
 
-	return qq.Widget(ctx, state, selectedFileID)
+	return state, nil
 }
 
 func (qq *InboxPage) Widget(
@@ -180,12 +188,18 @@ func (qq *InboxPage) Widget(
 }
 
 func (qq *InboxPage) processTemporaryFiles(rw httpx.ResponseWriter, ctx ctxx.Context, state *InboxPageState) error {
-	tmpFiles := ctx.MainCtx().UnsafeMainDB().ReadOnlyConn.TemporaryFile.Query().Where(
+	ctx = ctxx.WithoutCancel(ctx.SpaceCtx())
+
+	tmpFiles, err := ctx.MainCtx().UnsafeMainDB().ReadOnlyConn.TemporaryFile.Query().Where(
 		temporaryfile.OwnerID(ctx.MainCtx().Account.ID),
 		temporaryfile.UploadToken(state.UploadToken),
 		temporaryfile.ConvertedToStoredFileAtIsNil(),
 		temporaryfile.ExpiresAtGT(time.Now()),
-	).AllX(ctx.MainCtx())
+	).All(ctx.MainCtx())
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 
 	if len(tmpFiles) == 0 {
 		rw.AddRenderables(widget.NewSnackbarf("No new files found."))

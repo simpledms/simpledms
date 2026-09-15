@@ -184,7 +184,7 @@ func TestUploadFromURLCmdAllowsLocalhostURLInDevMode(t *testing.T) {
 	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
 		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
 
-		testServer := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, _ *http.Request) {
+		testServer := httptest.NewTLSServer(http.HandlerFunc(func(rw http.ResponseWriter, _ *http.Request) {
 			_, _ = rw.Write([]byte("hello from localhost"))
 		}))
 		defer testServer.Close()

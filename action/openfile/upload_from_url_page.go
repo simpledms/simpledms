@@ -67,9 +67,10 @@ func (qq *UploadFromURLPage) Widget(ctx ctxx.Context, rawURL string) renderable.
 			AppBar: qq.appBar(ctx),
 			List: []widget.IWidget{
 				&widget.EmptyState{
-					Icon:        widget.NewIcon("upload"),
-					Headline:    widget.T("Import file from URL"),
-					Description: widget.Tuf("URL: %s", rawURL),
+					Icon:                    widget.NewIcon("upload"),
+					Headline:                widget.T("Import file from URL"),
+					Description:             widget.Tuf("URL: %s", rawURL),
+					WrapDescriptionAnywhere: true,
 					Actions: []widget.IWidget{
 						&widget.Button{
 							Label:     widget.T("Download and continue"),

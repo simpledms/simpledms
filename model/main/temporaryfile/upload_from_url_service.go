@@ -2,6 +2,7 @@ package temporaryfile
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"io"
@@ -25,6 +26,12 @@ import (
 	"github.com/simpledms/simpledms/util/txx"
 	"github.com/simpledms/simpledms/util/uploadx"
 )
+
+type roundTripperFunc func(*http.Request) (*http.Response, error)
+
+func (fn roundTripperFunc) RoundTrip(request *http.Request) (*http.Response, error) {
+	return fn(request)
+}
 
 type UploadFromURLService struct {
 	fileSystem              *filesystem.S3FileSystem
@@ -247,15 +254,17 @@ func (qq *UploadFromURLService) newHTTPClient() *http.Client {
 		KeepAlive: 30 * time.Second,
 	}
 
-	transport := &http.Transport{
-		Proxy:                 http.ProxyFromEnvironment,
-		DialContext:           qq.safeDialContext(dialer),
-		ForceAttemptHTTP2:     true,
-		MaxIdleConns:          10,
-		IdleConnTimeout:       30 * time.Second,
-		TLSHandshakeTimeout:   10 * time.Second,
-		ResponseHeaderTimeout: 15 * time.Second,
-		ExpectContinueTimeout: time.Second,
+	secureTransport := qq.newHTTPTransport(dialer, false)
+	var transport http.RoundTripper = secureTransport
+	if qq.allowLocalURLs {
+		localTransport := qq.newHTTPTransport(dialer, true)
+		transport = roundTripperFunc(func(request *http.Request) (*http.Response, error) {
+			if isLocalHost(request.URL.Hostname()) {
+				return localTransport.RoundTrip(request)
+			}
+
+			return secureTransport.RoundTrip(request)
+		})
 	}
 
 	return &http.Client{
@@ -269,6 +278,40 @@ func (qq *UploadFromURLService) newHTTPClient() *http.Client {
 			return err
 		},
 	}
+}
+
+func (qq *UploadFromURLService) newHTTPTransport(
+	dialer *net.Dialer,
+	insecureSkipVerify bool,
+) *http.Transport {
+	transport := &http.Transport{
+		Proxy:                 http.ProxyFromEnvironment,
+		DialContext:           qq.safeDialContext(dialer),
+		ForceAttemptHTTP2:     true,
+		MaxIdleConns:          10,
+		IdleConnTimeout:       30 * time.Second,
+		TLSHandshakeTimeout:   10 * time.Second,
+		ResponseHeaderTimeout: 15 * time.Second,
+		ExpectContinueTimeout: time.Second,
+	}
+
+	if insecureSkipVerify {
+		transport.TLSClientConfig = &tls.Config{ // #nosec G402 -- restricted to loopback in dev mode.
+			InsecureSkipVerify: true,
+		}
+	}
+
+	return transport
+}
+
+func isLocalHost(host string) bool {
+	host = strings.TrimSuffix(strings.ToLower(host), ".")
+	if host == "localhost" {
+		return true
+	}
+
+	addr, err := netip.ParseAddr(host)
+	return err == nil && addr.Unmap().IsLoopback()
 }
 
 func (qq *UploadFromURLService) safeDialContext(

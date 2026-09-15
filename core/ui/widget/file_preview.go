@@ -2,6 +2,8 @@ package widget
 
 import (
 	"strings"
+
+	"github.com/simpledms/simpledms/util/mimetypex"
 )
 
 type FilePreview struct {
@@ -19,7 +21,12 @@ func (qq *FilePreview) GetMimeTypeForData() string {
 	// space gets percent encoded in HTML and breaks the output,
 	// thus remove all spaces; not sure if it does any harm for type
 	// attribute, thus just in data string
-	return strings.ReplaceAll(qq.MimeType, " ", "")
+	return strings.ReplaceAll(qq.GetMimeType(), " ", "")
+}
+
+// GetMimeType returns the effective MIME type used by the preview element.
+func (qq *FilePreview) GetMimeType() string {
+	return mimetypex.Resolve(qq.MimeType, qq.Filename)
 }
 
 func (qq *FilePreview) GetFilename() string {
@@ -28,32 +35,33 @@ func (qq *FilePreview) GetFilename() string {
 }
 
 func (qq *FilePreview) IsImage() bool {
-	return strings.HasPrefix(qq.MimeType, "image/")
+	return strings.HasPrefix(qq.GetMimeType(), "image/")
 }
 
 func (qq *FilePreview) IsVideo() bool {
-	return strings.HasPrefix(qq.MimeType, "video/")
+	return strings.HasPrefix(qq.GetMimeType(), "video/")
 }
 
 func (qq *FilePreview) IsAudio() bool {
-	return strings.HasPrefix(qq.MimeType, "audio/")
+	return strings.HasPrefix(qq.GetMimeType(), "audio/")
 }
 
 func (qq *FilePreview) IsPreviewable() bool {
 	// TODO add more; for example go files
-	return strings.HasPrefix(qq.MimeType, "text/") || strings.HasPrefix(qq.MimeType, "application/pdf")
+	mimeType := qq.GetMimeType()
+	return strings.HasPrefix(mimeType, "text/") || strings.HasPrefix(mimeType, "application/pdf")
 }
 
 // TODO impl preview for archives
 func (qq *FilePreview) IsArchive() bool {
 	// TODO add more
-	return strings.HasPrefix(qq.MimeType, "application/zip")
+	return strings.HasPrefix(qq.GetMimeType(), "application/zip")
 }
 
 func (qq *FilePreview) IsBinary() bool {
-	return strings.HasPrefix(qq.MimeType, "application/octet-stream")
+	return strings.HasPrefix(qq.GetMimeType(), "application/octet-stream")
 }
 
 func (qq *FilePreview) IsPDF() bool {
-	return strings.HasPrefix(qq.MimeType, "application/pdf")
+	return strings.HasPrefix(qq.GetMimeType(), "application/pdf")
 }

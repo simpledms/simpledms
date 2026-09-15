@@ -13,7 +13,7 @@
 		<video controls
 			   class="w-full"
 			   class="">
-			<source src="{{ .FileURL }}" type="{{ .MimeType }}">
+			<source src="{{ .FileURL }}" type="{{ .GetMimeType }}">
 			<p>Your browser doesn't support previewing video files.</p>
 			{{ if not .HideDownloadLink }}{{ template "downloadLink" . }}{{ end }}
 		</video>
@@ -21,7 +21,7 @@
 		<audio controls
 			   class="w-full"
 		>
-			<source src="{{ .FileURL }}" type="{{ .MimeType }}">
+			<source src="{{ .FileURL }}" type="{{ .GetMimeType }}">
 			<p>Your browser doesn't support previewing audio files.</p>
 			{{ if not .HideDownloadLink }}{{ template "downloadLink" . }}{{ end }}
 		</audio>
@@ -34,7 +34,7 @@
 	{{- else if .IsPreviewable }}
 		<object
 				class="w-full h-full"
-				type="{{ .MimeType }}"
+				type="{{ .GetMimeType }}"
 				data="{{ .FileURL }}"
 		>
 			{{- if .IsPDF }}
