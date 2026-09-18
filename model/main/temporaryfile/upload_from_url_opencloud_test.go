@@ -43,7 +43,11 @@ func TestOpenCloudURLSourceUsesConfiguredOriginAndPassword(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer body.Close()
+	defer func() {
+		if err := body.Close(); err != nil {
+			t.Errorf("close download body: %v", err)
+		}
+	}()
 	content, err := io.ReadAll(body)
 	if err != nil {
 		t.Fatal(err)

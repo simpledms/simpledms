@@ -18,9 +18,9 @@ func (qq *HxOn) GetAttributeName() template.HTMLAttr {
 		return ""
 	}
 	for _, char := range qq.Event {
-		if !(char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z' ||
-			char >= '0' && char <= '9' || char == ':' || char == '-' ||
-			char == '_' || char == '.') {
+		if (char < 'a' || char > 'z') && (char < 'A' || char > 'Z') &&
+			(char < '0' || char > '9') && char != ':' && char != '-' &&
+			char != '_' && char != '.' {
 			return ""
 		}
 	}

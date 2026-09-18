@@ -342,7 +342,8 @@ func (qq *UploadFromURLService) validateOpenCloudURL(target *url.URL) error {
 		(origin.Path != "" && origin.Path != "/") {
 		return e.NewHTTPErrorf(http.StatusServiceUnavailable, "OpenCloud import is not configured correctly.")
 	}
-	if origin.Scheme != "https" && !(qq.allowLocalURLs && origin.Scheme == "http" && isLocalHost(origin.Hostname())) {
+	if origin.Scheme != "https" &&
+		(!qq.allowLocalURLs || origin.Scheme != "http" || !isLocalHost(origin.Hostname())) {
 		return e.NewHTTPErrorf(http.StatusServiceUnavailable, "OpenCloud import requires HTTPS.")
 	}
 	if target.Scheme != origin.Scheme || !strings.EqualFold(target.Host, origin.Host) ||
