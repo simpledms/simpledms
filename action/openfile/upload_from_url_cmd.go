@@ -18,10 +18,9 @@ import (
 )
 
 type UploadFromURLCmdData struct {
-	URL            string `form:"url" validate:"required"`
-	Source         string `form:"source"`
-	CallbackOrigin string `form:"callback_origin"`
-	PermissionID   string `form:"permission_id"`
+	URL          string `form:"url" validate:"required"`
+	Source       string `form:"source"`
+	PermissionID string `form:"permission_id"`
 }
 
 type UploadFromURLCmd struct {
@@ -38,12 +37,6 @@ func NewUploadFromURLCmd(actions *Actions, uploadFromURLService *temporaryfilemo
 	return &UploadFromURLCmd{
 		uploadFromURLService: uploadFromURLService,
 		Config:               config,
-	}
-}
-
-func (qq *UploadFromURLCmd) Data(urlx string) *UploadFromURLCmdData {
-	return &UploadFromURLCmdData{
-		URL: urlx,
 	}
 }
 

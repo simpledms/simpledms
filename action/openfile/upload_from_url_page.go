@@ -63,7 +63,9 @@ func (qq *UploadFromURLPage) Handler(rw httpx.ResponseWriter, req *httpx.Request
 	permissionID := ""
 	fileName := ""
 	filePath := ""
+	title := "Import URL"
 	if source == temporaryfilemodel.OpenCloudURLSource {
+		title = "Import file"
 		callbackOrigin, err = qq.uploadFromURLService.ValidateOpenCloudCallbackOrigin(state.CallbackOrigin)
 		if err != nil {
 			return err
@@ -85,23 +87,12 @@ func (qq *UploadFromURLPage) Handler(rw httpx.ResponseWriter, req *httpx.Request
 		}
 	}
 
-	if source == temporaryfilemodel.OpenCloudURLSource {
-		return qq.Render(
-			rw,
-			req,
-			ctx,
-			qq.infra,
-			"Import file",
-			qq.Widget(ctx, normalizedURL, source, callbackOrigin, permissionID, fileName, filePath),
-		)
-	}
-
 	return qq.Render(
 		rw,
 		req,
 		ctx,
 		qq.infra,
-		"Import URL",
+		title,
 		qq.Widget(ctx, normalizedURL, source, callbackOrigin, permissionID, fileName, filePath),
 	)
 }
@@ -116,10 +107,9 @@ func (qq *UploadFromURLPage) Widget(
 	filePath string,
 ) renderable.Renderable {
 	vals, err := json.Marshal(map[string]string{
-		"url":             rawURL,
-		"source":          source,
-		"callback_origin": callbackOrigin,
-		"permission_id":   permissionID,
+		"url":           rawURL,
+		"source":        source,
+		"permission_id": permissionID,
 	})
 	if err != nil {
 		log.Println(err)

@@ -91,10 +91,6 @@ func (qq *UploadFromURLService) SetDownloadFileForTesting(
 	}
 }
 
-func (qq *UploadFromURLService) ValidateURL(rawURL string) (string, error) {
-	return qq.ValidateURLForSource(rawURL, "")
-}
-
 func (qq *UploadFromURLService) ValidateURLForSource(rawURL string, source string) (string, error) {
 	if source != "" && source != OpenCloudURLSource {
 		return "", e.NewHTTPErrorf(http.StatusBadRequest, "Unsupported URL source.")
@@ -202,12 +198,7 @@ func (qq *UploadFromURLService) downloadFile(
 		log.Println(err)
 		return "", nil, err
 	}
-	urlx, err := url.Parse(normalizedURL)
-	if err != nil {
-		return "", nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid URL.")
-	}
-
-	request, err := http.NewRequestWithContext(ctx, http.MethodGet, urlx.String(), nil)
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, normalizedURL, nil)
 	if err != nil {
 		log.Println(err)
 		return "", nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid URL.")
@@ -246,7 +237,7 @@ func (qq *UploadFromURLService) downloadFile(
 		return "", nil, e.NewHTTPErrorf(http.StatusBadRequest, "Could not download file from URL.")
 	}
 
-	filename := qq.extractFilename(urlx, response)
+	filename := qq.extractFilename(request.URL, response)
 	if !filenamex.IsAllowed(filename) {
 		_ = response.Body.Close()
 		log.Println("invalid filename from url", filename)
