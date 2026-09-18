@@ -1,6 +1,8 @@
 package openfile
 
 import (
+	"os"
+
 	acommon "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/common/tenantdbs"
@@ -27,6 +29,8 @@ func NewActions(
 	uploadFromURLService := temporaryfilemodel.NewUploadFromURLService(
 		infra.FileSystem(),
 		isDevMode,
+		os.Getenv("SIMPLEDMS_OPENCLOUD_ORIGIN"),
+		os.Getenv("SIMPLEDMS_OPENCLOUD_PUBLIC_LINK_PASSWORD"),
 	)
 
 	// cachex := NewFileUploadCache()

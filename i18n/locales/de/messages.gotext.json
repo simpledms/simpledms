@@ -7348,6 +7348,13 @@
             "fuzzy": true
         },
         {
+            "id": "Import file",
+            "message": "Import file",
+            "translation": "Datei importieren",
+            "translatorComment": "Translated from English by OpenCode",
+            "fuzzy": true
+        },
+        {
             "id": "Import file from URL",
             "message": "Import file from URL",
             "translation": "Datei von URL importieren",

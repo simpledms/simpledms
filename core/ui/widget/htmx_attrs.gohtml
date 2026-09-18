@@ -19,7 +19,8 @@
     {{ if .HxPreserve }}hx-preserve{{ end }}
     {{ with .HxHeaders }}hx-headers="{{ . }}"{{ end }}
     {{ with .HxOn }}
-        hx-on:{{ .Event }}="{{ .Handler }}"
+        {{ $attributeName := .GetAttributeName }}
+        {{ if $attributeName }}{{ $attributeName }}="{{ .Handler }}"{{ end }}
     {{ end }}
     {{ if .Role }}role="{{ .Role }}"{{ else if .IsLink }}role="link"{{ end }}
     {{/* with .PopoverTargetID }}popovertarget="{{ . }}"{{ end */}}
