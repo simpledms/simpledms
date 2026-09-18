@@ -3801,14 +3801,10 @@
             "translation": ""
         },
         {
-            "id": "Import file",
-            "message": "Import file",
-            "translation": "Importer un fichier",
-            "translatorComment": "Translated from English by OpenCode",
-            "fuzzy": true
-        },
-        {
-            "id": "Import URL",
+            "id": [
+                "title",
+                "Import URL"
+            ],
             "message": "Import URL",
             "translation": "Importer une URL",
             "translatorComment": "Translated from English by Codex",
@@ -4751,11 +4747,6 @@
             "translation": "Bulgarie",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
-        },
-        {
-            "id": "Callback origin",
-            "message": "Callback origin",
-            "translation": ""
         },
         {
             "id": "Checkbox",
@@ -5981,6 +5972,13 @@
             "fuzzy": true
         },
         {
+            "id": "SimpleDMS could not save the imported file. Try again, or ask your administrator for help.",
+            "message": "SimpleDMS could not save the imported file. Try again, or ask your administrator for help.",
+            "translation": "SimpleDMS n'a pas pu enregistrer le fichier importé. Réessayez ou demandez de l'aide à votre équipe d'administration.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Processing of downloaded file failed.",
             "message": "Processing of downloaded file failed.",
             "translation": "Le traitement du fichier téléchargé a échoué.",
@@ -5995,9 +5993,86 @@
             "fuzzy": true
         },
         {
+            "id": "The OpenCloud file has an unsupported filename. Rename the file and start a new export.",
+            "message": "The OpenCloud file has an unsupported filename. Rename the file and start a new export.",
+            "translation": "Le nom du fichier OpenCloud n'est pas pris en charge. Renommez le fichier et lancez un nouvel export.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Could not determine filename.",
             "message": "Could not determine filename.",
             "translation": "Impossible de déterminer le nom du fichier.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "SimpleDMS could not establish a secure connection to OpenCloud. Ask your administrator for help.",
+            "message": "SimpleDMS could not establish a secure connection to OpenCloud. Ask your administrator for help.",
+            "translation": "SimpleDMS n'a pas pu établir de connexion sécurisée avec OpenCloud. Demandez de l'aide à votre équipe d'administration.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "OpenCloud took too long to respond. Try again.",
+            "message": "OpenCloud took too long to respond. Try again.",
+            "translation": "OpenCloud a mis trop de temps à répondre. Réessayez.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "SimpleDMS could not connect to OpenCloud. Try again later, or ask your administrator for help.",
+            "message": "SimpleDMS could not connect to OpenCloud. Try again later, or ask your administrator for help.",
+            "translation": "SimpleDMS n'a pas pu se connecter à OpenCloud. Réessayez plus tard ou demandez de l'aide à votre équipe d'administration.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "OpenCloud rejected the integration password. Ask your administrator to check the integration settings.",
+            "message": "OpenCloud rejected the integration password. Ask your administrator to check the integration settings.",
+            "translation": "OpenCloud a refusé le mot de passe de l'intégration. Demandez à votre équipe d'administration de vérifier les paramètres de l'intégration.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "OpenCloud does not allow this file to be downloaded. Ask the file owner or your administrator for access.",
+            "message": "OpenCloud does not allow this file to be downloaded. Ask the file owner or your administrator for access.",
+            "translation": "OpenCloud n'autorise pas le téléchargement de ce fichier. Demandez l'accès à la personne propriétaire du fichier ou à votre équipe d'administration.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "The OpenCloud link has expired or is no longer available. Start a new export from OpenCloud.",
+            "message": "The OpenCloud link has expired or is no longer available. Start a new export from OpenCloud.",
+            "translation": "Le lien OpenCloud a expiré ou n'est plus disponible. Lancez un nouvel export depuis OpenCloud.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "OpenCloud is receiving too many requests. Wait a moment and try again.",
+            "message": "OpenCloud is receiving too many requests. Wait a moment and try again.",
+            "translation": "OpenCloud reçoit trop de requêtes. Patientez un instant et réessayez.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "SimpleDMS could not download the file safely. Ask your administrator to check the integration settings.",
+            "message": "SimpleDMS could not download the file safely. Ask your administrator to check the integration settings.",
+            "translation": "SimpleDMS n'a pas pu télécharger le fichier en toute sécurité. Demandez à votre équipe d'administration de vérifier les paramètres de l'intégration.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "OpenCloud could not provide the file right now. Try again later.",
+            "message": "OpenCloud could not provide the file right now. Try again later.",
+            "translation": "OpenCloud n'a pas pu fournir le fichier pour le moment. Réessayez plus tard.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not download the file from OpenCloud. Try again, or ask your administrator for help.",
+            "message": "Could not download the file from OpenCloud. Try again, or ask your administrator for help.",
+            "translation": "Impossible de télécharger le fichier depuis OpenCloud. Réessayez ou demandez de l'aide à votre équipe d'administration.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
