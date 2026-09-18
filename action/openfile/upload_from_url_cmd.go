@@ -2,7 +2,9 @@ package openfile
 
 import (
 	"context"
+	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 	"strings"
 
@@ -16,7 +18,10 @@ import (
 )
 
 type UploadFromURLCmdData struct {
-	URL string `form:"url" validate:"required"`
+	URL            string `form:"url" validate:"required"`
+	Source         string `form:"source"`
+	CallbackOrigin string `form:"callback_origin"`
+	PermissionID   string `form:"permission_id"`
 }
 
 type UploadFromURLCmd struct {
@@ -54,14 +59,35 @@ func (qq *UploadFromURLCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 		return err
 	}
 
-	uploadToken, err := qq.uploadFromURLService.UploadFromURL(ctx, strings.TrimSpace(data.URL))
+	uploadToken, err := qq.uploadFromURLService.UploadFromURL(
+		ctx,
+		strings.TrimSpace(data.URL),
+		strings.TrimSpace(data.Source),
+	)
 	if err != nil {
+		if strings.TrimSpace(data.Source) == temporaryfilemodel.OpenCloudURLSource {
+			log.Printf(
+				"[OpenCloud import] download failed permission_id=%q error_type=%T",
+				strings.TrimSpace(data.PermissionID),
+				err,
+			)
+		}
 		return err
 	}
 
 	rw.AddRenderables(wx.NewSnackbarf("File uploaded, please select a space."))
 	if req.Header.Get("HX-Request") != "" {
-		rw.Header().Set("HX-Redirect", route.SelectSpace(uploadToken))
+		location, err := json.Marshal(map[string]string{
+			"path":   route.SelectSpace(uploadToken),
+			"target": "#innerContent",
+			"select": "#innerContent",
+			"swap":   "outerHTML",
+		})
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+		rw.Header().Set("HX-Location", string(location))
 		return nil
 	}
 

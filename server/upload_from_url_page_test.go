@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -15,6 +16,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
 	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -88,7 +90,7 @@ func TestUploadFromURLCmdCreatesTemporaryFileAndRedirects(t *testing.T) {
 	})
 }
 
-func TestUploadFromURLCmdUsesHXRedirectForHTMXRequests(t *testing.T) {
+func TestUploadFromURLCmdNavigatesOnlyInnerContentForHTMXRequests(t *testing.T) {
 	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
 		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
 
@@ -104,6 +106,13 @@ func TestUploadFromURLCmdUsesHXRedirectForHTMXRequests(t *testing.T) {
 				return "from-url.txt", io.NopCloser(strings.NewReader("hello from url")), nil
 			},
 		)
+
+		var hxLocation struct {
+			Path   string `json:"path"`
+			Target string `json:"target"`
+			Select string `json:"select"`
+			Swap   string `json:"swap"`
+		}
 
 		err := withMainContext(t, harness, accountx, func(_ *entmain.Tx, mainCtx *ctxx.MainContext) error {
 			data := url.Values{}
@@ -123,19 +132,48 @@ func TestUploadFromURLCmdUsesHXRedirectForHTMXRequests(t *testing.T) {
 				return fmt.Errorf("upload from url command: %w", err)
 			}
 
-			hxRedirect := rr.Header().Get("HX-Redirect")
-			if !strings.HasPrefix(hxRedirect, "/open-file/select-space/") {
-				return fmt.Errorf("expected HX-Redirect to select-space, got %q", hxRedirect)
+			if rr.Code != http.StatusOK {
+				return fmt.Errorf("expected status %d, got %d", http.StatusOK, rr.Code)
 			}
 
+			if rr.Header().Get("HX-Redirect") != "" {
+				return fmt.Errorf("expected no HX-Redirect header for htmx request")
+			}
 			if rr.Header().Get("Location") != "" {
 				return fmt.Errorf("expected no Location header for htmx request")
+			}
+
+			if err := json.Unmarshal([]byte(rr.Header().Get("HX-Location")), &hxLocation); err != nil {
+				return fmt.Errorf("decode HX-Location header: %w", err)
+			}
+			if hxLocation.Target != "#innerContent" || hxLocation.Select != "#innerContent" ||
+				hxLocation.Swap != "outerHTML" {
+				return fmt.Errorf("unexpected HX-Location options: %+v", hxLocation)
+			}
+			if !strings.HasPrefix(hxLocation.Path, "/open-file/select-space/") {
+				return fmt.Errorf("expected HX-Location path to select-space, got %q", hxLocation.Path)
 			}
 
 			return nil
 		})
 		if err != nil {
 			t.Fatalf("upload from url command: %v", err)
+		}
+
+		uploadToken := strings.TrimPrefix(hxLocation.Path, route.SelectSpace(""))
+		if uploadToken == "" {
+			t.Fatal("expected upload token in HX-Location path")
+		}
+
+		temporaryFiles := harness.mainDB.ReadWriteConn.TemporaryFile.Query().Where(
+			temporaryfile.OwnerID(accountx.ID),
+			temporaryfile.UploadToken(uploadToken),
+		).AllX(context.Background())
+		if len(temporaryFiles) != 1 {
+			t.Fatalf("expected 1 temporary file, got %d", len(temporaryFiles))
+		}
+		if temporaryFiles[0].Filename != "from-url.txt" {
+			t.Fatalf("expected filename %q, got %q", "from-url.txt", temporaryFiles[0].Filename)
 		}
 	})
 }

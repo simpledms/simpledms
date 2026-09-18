@@ -12,6 +12,22 @@ type HxOn struct {
 	Handler template.JS
 }
 
+// GetAttributeName returns the validated HTMX event attribute name.
+func (qq *HxOn) GetAttributeName() template.HTMLAttr {
+	if qq.Event == "" {
+		return ""
+	}
+	for _, char := range qq.Event {
+		if !(char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z' ||
+			char >= '0' && char <= '9' || char == ':' || char == '-' ||
+			char == '_' || char == '.') {
+			return ""
+		}
+	}
+	// Trust only the validated name; html/template must still escape the handler value.
+	return template.HTMLAttr("hx-on:" + qq.Event) // #nosec G203
+}
+
 // cannot be rendered via `render` function because of security checks,
 // but works fine with `template "HTMXAttrs" .HTMXAttrs`
 // TODO is there a better solution for this without introducing security risk?

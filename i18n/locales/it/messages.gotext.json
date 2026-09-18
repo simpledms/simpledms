@@ -7653,6 +7653,13 @@
             "fuzzy": true
         },
         {
+            "id": "Import file",
+            "message": "Import file",
+            "translation": "Importa file",
+            "translatorComment": "Translated from English by OpenCode",
+            "fuzzy": true
+        },
+        {
             "id": "Import file from URL",
             "message": "Import file from URL",
             "translation": "Importa file da URL",

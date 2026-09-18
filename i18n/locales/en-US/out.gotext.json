@@ -3791,6 +3791,27 @@
             "fuzzy": true
         },
         {
+            "id": "Invalid OpenCloud permission ID.",
+            "message": "Invalid OpenCloud permission ID.",
+            "translation": "Invalid OpenCloud permission ID.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid OpenCloud public link.",
+            "message": "Invalid OpenCloud public link.",
+            "translation": "Invalid OpenCloud public link.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Import file",
+            "message": "Import file",
+            "translation": "Import file",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Import URL",
             "message": "Import URL",
             "translation": "Import URL",
@@ -3801,6 +3822,13 @@
             "id": "Import file from URL",
             "message": "Import file from URL",
             "translation": "Import file from URL",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "A file shared from OpenCloud is ready to import.",
+            "message": "A file shared from OpenCloud is ready to import.",
+            "translation": "A file shared from OpenCloud is ready to import.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4727,6 +4755,13 @@
             "id": "Bulgaria",
             "message": "Bulgaria",
             "translation": "Bulgaria",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Callback origin",
+            "message": "Callback origin",
+            "translation": "Callback origin",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5942,6 +5977,13 @@
             "fuzzy": true
         },
         {
+            "id": "Unsupported URL source.",
+            "message": "Unsupported URL source.",
+            "translation": "Unsupported URL source.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Could not download file from URL.",
             "message": "Could not download file from URL.",
             "translation": "Could not download file from URL.",
@@ -6001,6 +6043,41 @@
             "id": "Target host is not allowed.",
             "message": "Target host is not allowed.",
             "translation": "Target host is not allowed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "OpenCloud import is not configured.",
+            "message": "OpenCloud import is not configured.",
+            "translation": "OpenCloud import is not configured.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "OpenCloud import is not configured correctly.",
+            "message": "OpenCloud import is not configured correctly.",
+            "translation": "OpenCloud import is not configured correctly.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "OpenCloud import requires HTTPS.",
+            "message": "OpenCloud import requires HTTPS.",
+            "translation": "OpenCloud import requires HTTPS.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "OpenCloud callback origin is required.",
+            "message": "OpenCloud callback origin is required.",
+            "translation": "OpenCloud callback origin is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid OpenCloud callback origin.",
+            "message": "Invalid OpenCloud callback origin.",
+            "translation": "Invalid OpenCloud callback origin.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

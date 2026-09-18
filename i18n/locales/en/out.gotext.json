@@ -2859,6 +2859,21 @@
             "translation": ""
         },
         {
+            "id": "Invalid OpenCloud permission ID.",
+            "message": "Invalid OpenCloud permission ID.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid OpenCloud public link.",
+            "message": "Invalid OpenCloud public link.",
+            "translation": ""
+        },
+        {
+            "id": "Import file",
+            "message": "Import file",
+            "translation": ""
+        },
+        {
             "id": "Import URL",
             "message": "Import URL",
             "translation": ""
@@ -2866,6 +2881,11 @@
         {
             "id": "Import file from URL",
             "message": "Import file from URL",
+            "translation": ""
+        },
+        {
+            "id": "A file shared from OpenCloud is ready to import.",
+            "message": "A file shared from OpenCloud is ready to import.",
             "translation": ""
         },
         {
@@ -3574,6 +3594,11 @@
         {
             "id": "Bulgaria",
             "message": "Bulgaria",
+            "translation": ""
+        },
+        {
+            "id": "Callback origin",
+            "message": "Callback origin",
             "translation": ""
         },
         {
@@ -4450,6 +4475,11 @@
             "translation": ""
         },
         {
+            "id": "Unsupported URL source.",
+            "message": "Unsupported URL source.",
+            "translation": ""
+        },
+        {
             "id": "Could not download file from URL.",
             "message": "Could not download file from URL.",
             "translation": ""
@@ -4492,6 +4522,31 @@
         {
             "id": "Target host is not allowed.",
             "message": "Target host is not allowed.",
+            "translation": ""
+        },
+        {
+            "id": "OpenCloud import is not configured.",
+            "message": "OpenCloud import is not configured.",
+            "translation": ""
+        },
+        {
+            "id": "OpenCloud import is not configured correctly.",
+            "message": "OpenCloud import is not configured correctly.",
+            "translation": ""
+        },
+        {
+            "id": "OpenCloud import requires HTTPS.",
+            "message": "OpenCloud import requires HTTPS.",
+            "translation": ""
+        },
+        {
+            "id": "OpenCloud callback origin is required.",
+            "message": "OpenCloud callback origin is required.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid OpenCloud callback origin.",
+            "message": "Invalid OpenCloud callback origin.",
             "translation": ""
         },
         {
