@@ -2869,12 +2869,10 @@
             "translation": ""
         },
         {
-            "id": "Import file",
-            "message": "Import file",
-            "translation": ""
-        },
-        {
-            "id": "Import URL",
+            "id": [
+                "title",
+                "Import URL"
+            ],
             "message": "Import URL",
             "translation": ""
         },
@@ -3594,11 +3592,6 @@
         {
             "id": "Bulgaria",
             "message": "Bulgaria",
-            "translation": ""
-        },
-        {
-            "id": "Callback origin",
-            "message": "Callback origin",
             "translation": ""
         },
         {
@@ -4485,6 +4478,11 @@
             "translation": ""
         },
         {
+            "id": "SimpleDMS could not save the imported file. Try again, or ask your administrator for help.",
+            "message": "SimpleDMS could not save the imported file. Try again, or ask your administrator for help.",
+            "translation": ""
+        },
+        {
             "id": "Processing of downloaded file failed.",
             "message": "Processing of downloaded file failed.",
             "translation": ""
@@ -4495,8 +4493,63 @@
             "translation": ""
         },
         {
+            "id": "The OpenCloud file has an unsupported filename. Rename the file and start a new export.",
+            "message": "The OpenCloud file has an unsupported filename. Rename the file and start a new export.",
+            "translation": ""
+        },
+        {
             "id": "Could not determine filename.",
             "message": "Could not determine filename.",
+            "translation": ""
+        },
+        {
+            "id": "SimpleDMS could not establish a secure connection to OpenCloud. Ask your administrator for help.",
+            "message": "SimpleDMS could not establish a secure connection to OpenCloud. Ask your administrator for help.",
+            "translation": ""
+        },
+        {
+            "id": "OpenCloud took too long to respond. Try again.",
+            "message": "OpenCloud took too long to respond. Try again.",
+            "translation": ""
+        },
+        {
+            "id": "SimpleDMS could not connect to OpenCloud. Try again later, or ask your administrator for help.",
+            "message": "SimpleDMS could not connect to OpenCloud. Try again later, or ask your administrator for help.",
+            "translation": ""
+        },
+        {
+            "id": "OpenCloud rejected the integration password. Ask your administrator to check the integration settings.",
+            "message": "OpenCloud rejected the integration password. Ask your administrator to check the integration settings.",
+            "translation": ""
+        },
+        {
+            "id": "OpenCloud does not allow this file to be downloaded. Ask the file owner or your administrator for access.",
+            "message": "OpenCloud does not allow this file to be downloaded. Ask the file owner or your administrator for access.",
+            "translation": ""
+        },
+        {
+            "id": "The OpenCloud link has expired or is no longer available. Start a new export from OpenCloud.",
+            "message": "The OpenCloud link has expired or is no longer available. Start a new export from OpenCloud.",
+            "translation": ""
+        },
+        {
+            "id": "OpenCloud is receiving too many requests. Wait a moment and try again.",
+            "message": "OpenCloud is receiving too many requests. Wait a moment and try again.",
+            "translation": ""
+        },
+        {
+            "id": "SimpleDMS could not download the file safely. Ask your administrator to check the integration settings.",
+            "message": "SimpleDMS could not download the file safely. Ask your administrator to check the integration settings.",
+            "translation": ""
+        },
+        {
+            "id": "OpenCloud could not provide the file right now. Try again later.",
+            "message": "OpenCloud could not provide the file right now. Try again later.",
+            "translation": ""
+        },
+        {
+            "id": "Could not download the file from OpenCloud. Try again, or ask your administrator for help.",
+            "message": "Could not download the file from OpenCloud. Try again, or ask your administrator for help.",
             "translation": ""
         },
         {

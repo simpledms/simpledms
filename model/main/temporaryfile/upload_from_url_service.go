@@ -138,6 +138,12 @@ func (qq *UploadFromURLService) UploadFromURL(ctx ctxx.Context, rawURL string, s
 			return "", err
 		}
 
+		if source == OpenCloudURLSource {
+			return "", e.NewHTTPErrorf(
+				http.StatusInternalServerError,
+				"SimpleDMS could not save the imported file. Try again, or ask your administrator for help.",
+			)
+		}
 		return "", e.NewHTTPErrorf(http.StatusInternalServerError, "Processing of downloaded file failed.")
 	}
 
@@ -214,10 +220,9 @@ func (qq *UploadFromURLService) downloadFile(
 	response, err := httpClient.Do(request)
 	if err != nil {
 		if source == OpenCloudURLSource {
-			logOpenCloudRequestFailure(err)
-		} else {
-			log.Println(err)
+			return "", nil, openCloudRequestError(err)
 		}
+		log.Println(err)
 
 		var httpErr *e.HTTPError
 		if errors.As(err, &httpErr) {
@@ -230,10 +235,9 @@ func (qq *UploadFromURLService) downloadFile(
 	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
 		_ = response.Body.Close()
 		if source == OpenCloudURLSource {
-			logOpenCloudResponseFailure(response)
-		} else {
-			log.Println("failed to download file from URL, status code", response.StatusCode)
+			return "", nil, openCloudResponseError(response)
 		}
+		log.Println("failed to download file from URL, status code", response.StatusCode)
 		return "", nil, e.NewHTTPErrorf(http.StatusBadRequest, "Could not download file from URL.")
 	}
 
@@ -241,31 +245,55 @@ func (qq *UploadFromURLService) downloadFile(
 	if !filenamex.IsAllowed(filename) {
 		_ = response.Body.Close()
 		log.Println("invalid filename from url", filename)
+		if source == OpenCloudURLSource {
+			return "", nil, e.NewHTTPErrorf(
+				http.StatusBadRequest,
+				"The OpenCloud file has an unsupported filename. Rename the file and start a new export.",
+			)
+		}
 		return "", nil, e.NewHTTPErrorf(http.StatusBadRequest, "Could not determine filename.")
 	}
 
 	return filename, response.Body, nil
 }
 
-func logOpenCloudRequestFailure(err error) {
+func openCloudRequestError(err error) *e.HTTPError {
 	var unknownAuthority x509.UnknownAuthorityError
 	var invalidCertificate x509.CertificateInvalidError
 	var hostnameError x509.HostnameError
 	var networkError net.Error
+	var httpErr *e.HTTPError
 
 	switch {
 	case errors.As(err, &unknownAuthority),
 		errors.As(err, &invalidCertificate),
 		errors.As(err, &hostnameError):
 		log.Println("OpenCloud public-link request failed TLS certificate verification; verify the certificate trust chain and SIMPLEDMS_OPENCLOUD_ORIGIN hostname")
+		return e.NewHTTPErrorf(
+			http.StatusBadRequest,
+			"SimpleDMS could not establish a secure connection to OpenCloud. "+
+				"Ask your administrator for help.",
+		)
 	case errors.As(err, &networkError) && networkError.Timeout():
 		log.Println("OpenCloud public-link request timed out; verify SIMPLEDMS_OPENCLOUD_ORIGIN is reachable from the SimpleDMS backend")
+		return e.NewHTTPErrorf(
+			http.StatusBadRequest,
+			"OpenCloud took too long to respond. Try again.",
+		)
+	case errors.As(err, &httpErr):
+		log.Println(httpErr)
+		return httpErr
 	default:
 		log.Println("OpenCloud public-link request failed before a response was received; verify the configured origin, network connectivity, and TLS setup")
+		return e.NewHTTPErrorf(
+			http.StatusBadRequest,
+			"SimpleDMS could not connect to OpenCloud. "+
+				"Try again later, or ask your administrator for help.",
+		)
 	}
 }
 
-func logOpenCloudResponseFailure(response *http.Response) {
+func openCloudResponseError(response *http.Response) *e.HTTPError {
 	requestID := strings.TrimSpace(response.Header.Get("X-Request-ID"))
 	if len(requestID) > 128 || strings.ContainsAny(requestID, "\r\n") {
 		requestID = ""
@@ -278,18 +306,50 @@ func logOpenCloudResponseFailure(response *http.Response) {
 	switch response.StatusCode {
 	case http.StatusUnauthorized:
 		log.Printf("OpenCloud rejected the public-link credentials (HTTP 401)%s; verify SIMPLEDMS_OPENCLOUD_PUBLIC_LINK_PASSWORD exactly matches the OpenCloud extension configuration and restart SimpleDMS after changing it", requestIDSuffix)
+		return e.NewHTTPErrorf(
+			http.StatusBadRequest,
+			"OpenCloud rejected the integration password. "+
+				"Ask your administrator to check the integration settings.",
+		)
 	case http.StatusForbidden:
 		log.Printf("OpenCloud denied the public-link download (HTTP 403)%s; verify the link is a downloadable view permission", requestIDSuffix)
+		return e.NewHTTPErrorf(
+			http.StatusBadRequest,
+			"OpenCloud does not allow this file to be downloaded. "+
+				"Ask the file owner or your administrator for access.",
+		)
 	case http.StatusNotFound, http.StatusGone:
 		log.Printf("OpenCloud public link is missing, expired, or already revoked (HTTP %d)%s; create a new export", response.StatusCode, requestIDSuffix)
+		return e.NewHTTPErrorf(
+			http.StatusBadRequest,
+			"The OpenCloud link has expired or is no longer available. Start a new export from OpenCloud.",
+		)
 	case http.StatusTooManyRequests:
 		log.Printf("OpenCloud rate-limited the public-link download (HTTP 429)%s; retry later", requestIDSuffix)
+		return e.NewHTTPErrorf(
+			http.StatusBadRequest,
+			"OpenCloud is receiving too many requests. Wait a moment and try again.",
+		)
 	default:
 		if response.StatusCode >= http.StatusMultipleChoices && response.StatusCode < http.StatusBadRequest {
 			log.Printf("OpenCloud attempted to redirect the public-link download (HTTP %d)%s; redirects are rejected to protect the shared password", response.StatusCode, requestIDSuffix)
-			return
+			return e.NewHTTPErrorf(
+				http.StatusBadRequest,
+				"SimpleDMS could not download the file safely. "+
+					"Ask your administrator to check the integration settings.",
+			)
 		}
 		log.Printf("OpenCloud public-link download failed (HTTP %d)%s", response.StatusCode, requestIDSuffix)
+		if response.StatusCode >= http.StatusInternalServerError && response.StatusCode <= 599 {
+			return e.NewHTTPErrorf(
+				http.StatusBadRequest,
+				"OpenCloud could not provide the file right now. Try again later.",
+			)
+		}
+		return e.NewHTTPErrorf(
+			http.StatusBadRequest,
+			"Could not download the file from OpenCloud. Try again, or ask your administrator for help.",
+		)
 	}
 }
 
