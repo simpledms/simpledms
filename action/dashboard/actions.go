@@ -28,6 +28,10 @@ type Actions struct {
 	CreateWebDAVCredentialCmd         *CreateWebDAVCredentialCmd
 	EditWebDAVCredentialCmd           *EditWebDAVCredentialCmd
 	RevokeWebDAVCredentialCmd         *RevokeWebDAVCredentialCmd
+	MCPCredentialsPage                *MCPCredentialsPage
+	MCPCredentialListPartial          *MCPCredentialListPartial
+	CreateMCPCredentialCmd            *CreateMCPCredentialCmd
+	RevokeMCPCredentialCmd            *RevokeMCPCredentialCmd
 }
 
 func NewActions(
@@ -57,6 +61,10 @@ func NewActions(
 		CreateWebDAVCredentialCmd:         NewCreateWebDAVCredentialCmd(infra, tenantDBs, actions),
 		EditWebDAVCredentialCmd:           NewEditWebDAVCredentialCmd(infra, actions),
 		RevokeWebDAVCredentialCmd:         NewRevokeWebDAVCredentialCmd(infra, actions),
+		MCPCredentialsPage:                NewMCPCredentialsPage(infra, actions),
+		MCPCredentialListPartial:          NewMCPCredentialListPartial(infra, actions),
+		CreateMCPCredentialCmd:            NewCreateMCPCredentialCmd(infra, actions),
+		RevokeMCPCredentialCmd:            NewRevokeMCPCredentialCmd(infra, actions),
 	}
 
 	return actions

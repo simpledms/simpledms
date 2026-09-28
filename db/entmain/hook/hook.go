@@ -21,6 +21,18 @@ func (f AccountFunc) Mutate(ctx context.Context, m entmain.Mutation) (entmain.Va
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *entmain.AccountMutation", m)
 }
 
+// The MCPCredentialFunc type is an adapter to allow the use of ordinary
+// function as MCPCredential mutator.
+type MCPCredentialFunc func(context.Context, *entmain.MCPCredentialMutation) (entmain.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MCPCredentialFunc) Mutate(ctx context.Context, m entmain.Mutation) (entmain.Value, error) {
+	if mv, ok := m.(*entmain.MCPCredentialMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *entmain.MCPCredentialMutation", m)
+}
+
 // The MailFunc type is an adapter to allow the use of ordinary
 // function as Mail mutator.
 type MailFunc func(context.Context, *entmain.MailMutation) (entmain.Value, error)

@@ -2,6 +2,146 @@
     "language": "fr",
     "messages": [
         {
+            "id": "MCP credentials",
+            "message": "MCP credentials",
+            "translation": "Identifiants MCP",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Create MCP credential",
+            "message": "Create MCP credential",
+            "translation": "Créer un identifiant MCP",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP credential created",
+            "message": "MCP credential created",
+            "translation": "Identifiant MCP créé",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP credential revoked.",
+            "message": "MCP credential revoked.",
+            "translation": "Identifiant MCP révoqué.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP URL",
+            "message": "MCP URL",
+            "translation": "URL MCP",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "A full Session is required.",
+            "message": "A full Session is required.",
+            "translation": "Une Session complète est nécessaire.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Allow writes",
+            "message": "Allow writes",
+            "translation": "Autoriser les modifications",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "This credential can access only the selected Space.",
+            "message": "This credential can access only the selected Space.",
+            "translation": "Cet identifiant permet d’accéder uniquement au Space sélectionné.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Read-only",
+            "message": "Read-only",
+            "translation": "Lecture seule",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Read/write",
+            "message": "Read/write",
+            "translation": "Lecture et écriture",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No MCP credentials",
+            "message": "No MCP credentials",
+            "translation": "Aucun identifiant MCP",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Previous",
+            "message": "Previous",
+            "translation": "Précédent",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Next",
+            "message": "Next",
+            "translation": "Suivant",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid MCP credential.",
+            "message": "Invalid MCP credential.",
+            "translation": "Identifiant MCP invalide.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid text range.",
+            "message": "Invalid text range.",
+            "translation": "Plage de texte invalide.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid sort order.",
+            "message": "Invalid sort order.",
+            "translation": "Ordre de tri invalide.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid page or search range.",
+            "message": "Invalid page or search range.",
+            "translation": "Plage de pagination ou de recherche invalide.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File ID is required.",
+            "message": "File ID is required.",
+            "translation": "L’identifiant du fichier est nécessaire.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File is a directory.",
+            "message": "File is a directory.",
+            "translation": "Le fichier est un dossier.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Offset",
+            "message": "Offset",
+            "translation": "Position de départ",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "SimpleDMS could not save the imported file. Try again, or ask your administrator for help.",
             "message": "SimpleDMS could not save the imported file. Try again, or ask your administrator for help.",
             "translation": "SimpleDMS n'a pas pu enregistrer le fichier importé. Réessayez ou demandez de l'aide à votre équipe d'administration.",

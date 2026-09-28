@@ -16,6 +16,14 @@ func Account() string {
 	return "/dashboard/account/"
 }
 
+func MCPCredentialsRoute() string {
+	return "GET /dashboard/mcp-credentials/"
+}
+
+func MCPCredentials() string {
+	return "/dashboard/mcp-credentials/"
+}
+
 func WebDAVCredentialsRoute() string {
 	return "GET /dashboard/webdav-credentials/"
 }

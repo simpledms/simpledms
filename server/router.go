@@ -19,6 +19,7 @@ import (
 	"github.com/mattn/go-sqlite3"
 
 	"github.com/simpledms/simpledms/common"
+	"github.com/simpledms/simpledms/common/execution"
 	"github.com/simpledms/simpledms/common/tenantdbs"
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
@@ -26,8 +27,6 @@ import (
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/space"
-	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/db/sqlx"
 	"github.com/simpledms/simpledms/i18n"
@@ -35,6 +34,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
 	tenantaccessmodel "github.com/simpledms/simpledms/model/main/tenantaccess"
+	"github.com/simpledms/simpledms/server/mcp"
 	"github.com/simpledms/simpledms/server/webdav"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/cookiex"
@@ -118,6 +118,14 @@ func NewRouter(
 		TrustedProxies: trustedProxies,
 	}))
 	router.allowSetupSessionPath(route2.Dashboard())
+	router.Handle("/mcp", mcp.NewHandler(mcp.Config{
+		MainDB:         mainDB,
+		TenantDBs:      tenantDBs,
+		Infra:          infra,
+		I18n:           i18n,
+		DevMode:        devMode,
+		TrustedProxies: trustedProxies,
+	}))
 
 	return router
 }
@@ -177,7 +185,13 @@ func (qq *Router) RegisterAction(
 	if action.UseManualTxManagement() {
 		qq.HandleFunc(action.Route(), qq.wrapManualTx(qq.wrapCommand(action.Handler)))
 	} else {
-		qq.HandleFunc(action.Route(), qq.wrapTx(qq.wrapCommand(action.Handler), action.IsReadOnly()))
+		buffer := false
+		if committed, ok := action.(interface{ CommitBeforeResponse() bool }); ok {
+			buffer = committed.CommitBeforeResponse()
+		}
+		qq.HandleFunc(action.Route(), qq.wrapTxResponse(
+			qq.wrapCommand(action.Handler), action.IsReadOnly(), buffer,
+		))
 	}
 
 	// TODO route or endpoint? does method (POST OR GET) matter? currently not, maybe later?
@@ -277,6 +291,12 @@ func (qq *Router) wrapCommand(handlerFn handlerFn) handlerFn {
 
 // TODO is this the best place?
 func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc {
+	return qq.wrapTxResponse(handlerFn, isReadOnly, false)
+}
+
+func (qq *Router) wrapTxResponse(
+	handlerFn handlerFn, isReadOnly, bufferResponse bool,
+) http.HandlerFunc {
 	return func(rw http.ResponseWriter, req *http.Request) {
 		/*
 			//redirect doesn't make sense, should be resposibility of admin to configure domains correctly
@@ -297,7 +317,23 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 
 		var nilableTenantTx *enttenant.Tx
 
-		rwx := httpx.NewResponseWriter(rw)
+		response := http.ResponseWriter(rw)
+		var buffered *transactionResponse
+		if bufferResponse {
+			buffered = newTransactionResponse()
+			response = buffered
+			defer func() {
+				rollbackResponseTransaction(mainTx)
+				if nilableTenantTx != nil {
+					rollbackResponseTransaction(nilableTenantTx)
+				}
+			}()
+		}
+		rwx := httpx.NewResponseWriter(response)
+		errorRW := rwx
+		if buffered != nil {
+			errorRW = httpx.NewResponseWriter(rw)
+		}
 		reqx := httpx.NewRequest(req)
 
 		acceptLanguage := req.Header.Get("Accept-Language")
@@ -324,7 +360,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 				// TODO added on 2 April 2025, not sure if it makes sense...
 				if err, isErr := r.(error); isErr {
 					qq.handleError(
-						rwx,
+						errorRW,
 						reqx,
 						visitorCtx,
 						err,
@@ -335,7 +371,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 				}
 
 				qq.handleError(
-					rwx,
+					errorRW,
 					reqx,
 					visitorCtx,
 					errors.New("internal error, please contact support"),
@@ -350,7 +386,7 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 		ctx, nilableTenantTx, isRedirected, err := qq.context(rwx, reqx, mainTx, visitorCtx, requestIsReadOnly)
 		if err != nil {
 			log.Println(err)
-			qq.handleError(rwx, reqx, visitorCtx, err, mainTx, nilableTenantTx)
+			qq.handleError(errorRW, reqx, visitorCtx, err, mainTx, nilableTenantTx)
 			return
 		}
 		if isRedirected {
@@ -362,13 +398,16 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 					log.Println(err)
 				}
 			}
+			if buffered != nil {
+				buffered.flush(rw)
+			}
 			return
 		}
 
 		err = handlerFn(rwx, reqx, ctx)
 		if err != nil {
 			log.Println(err)
-			qq.handleError(rwx, reqx, ctx, err, mainTx, nilableTenantTx)
+			qq.handleError(errorRW, reqx, ctx, err, mainTx, nilableTenantTx)
 			return
 		}
 
@@ -384,16 +423,19 @@ func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc 
 		err = mainTx.Commit()
 		if err != nil {
 			log.Println(err)
-			rwx.WriteHeader(http.StatusInternalServerError)
+			errorRW.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 		if nilableTenantTx != nil {
 			err = nilableTenantTx.Commit()
 			if err != nil {
 				log.Println(err)
-				rwx.WriteHeader(http.StatusInternalServerError)
+				errorRW.WriteHeader(http.StatusInternalServerError)
 				return
 			}
+		}
+		if buffered != nil {
+			buffered.flush(rw)
 		}
 	}
 }
@@ -926,85 +968,10 @@ func (qq *Router) context(
 		return mainCtx, nil, false, err
 	}
 
-	// verify that account belongs to tenant
-	tenantm := tenant2.NewTenant(tenantx)
-	// if !accountm.BelongsToTenant(mainCtx, tenantm) {
-	hasAccount, err := tenantm.HasAccount(mainCtx, accountm)
-	if err != nil {
-		log.Println(err)
-		return mainCtx, tenantTx, false, err
-	}
-	if !hasAccount {
-		// TODO does this render?
-		// rwx.AddRenderables(wx.NewSnackbarf("You are not allowed to access this tenant."))
-		// rwx.WriteHeader(http.StatusForbidden)
-		return mainCtx, tenantTx, false, e.NewHTTPErrorf(
-			http.StatusForbidden,
-			"You are not allowed to access this tenant.",
-		)
-	}
-
-	userx, err := tenantTx.User.Query().Where(
-		user.AccountID(accountm.Data.ID),
-		user.DeletedAtIsNil(),
-	).Only(mainCtx)
-	if err != nil {
-		log.Println(err)
-		if enttenant.IsNotFound(err) {
-			return mainCtx, tenantTx, false, e.NewHTTPErrorf(
-				http.StatusForbidden,
-				"You are not allowed to access this tenant.",
-			)
-		}
-		return mainCtx, tenantTx, false, err
-	}
-	tenantCtx := ctxx.NewTenantContextWithUser(
-		mainCtx,
-		tenantTx,
-		tenantx,
-		userx,
-		isReadOnly,
-	)
-	if spaceID == "" {
-		return tenantCtx, tenantTx, false, nil
-	}
-
-	spacex, err := tenantTx.Space.
-		Query().
-		Where(space.PublicID(entx.NewCIText(spaceID))).
-		Only(tenantCtx)
-	if err != nil {
-		log.Println(err)
-		if enttenant.IsNotFound(err) {
-			return tenantCtx, tenantTx, false, e.NewHTTPErrorf(
-				http.StatusForbidden,
-				"You are not allowed to access this space.",
-			)
-		}
-		return tenantCtx, tenantTx, false, err
-	}
-
-	// impl in enttentant.Space.Policy(); query above fails if not permission
-	/*
-		// check if user is assigned to space
-
-		isAssigned := spacex.
-			QueryUsers().
-			Where(user.AccountID(accountm.Data.ID)).
-			ExistX(tenantCtx)
-		if !isAssigned {
-			// rwx.AddRenderables(wx.NewSnackbarf("You are not allowed to access this space."))
-			// rwx.WriteHeader(http.StatusForbidden)
-			return tenantCtx, tenantTx, false, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this space.")
-		}
-	*/
-
-	spaceCtx := ctxx.NewSpaceContext(
-		tenantCtx,
-		spacex,
-	)
-
-	return spaceCtx, tenantTx, false, nil
+	// Verify tenant membership and construct the user/Space context with the same
+	// resolver used by non-browser callers. Space.Policy enforces Space access.
+	ctx, err := execution.NewScopeResolver().Resolve(mainCtx, tenantTx, tenantx, spaceID, isReadOnly)
+	return ctx, tenantTx, false, err
 }
 
 func (qq *Router) isSetupSessionPathAllowed(path string) bool {

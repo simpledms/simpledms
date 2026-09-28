@@ -2113,9 +2113,23 @@
             "fuzzy": true
         },
         {
+            "id": "MCP credentials",
+            "message": "MCP credentials",
+            "translation": "Credenziali MCP",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Account",
             "message": "Account",
             "translation": "Account",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "A full Session is required.",
+            "message": "A full Session is required.",
+            "translation": "È necessaria una Session completa.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2127,9 +2141,30 @@
             "fuzzy": true
         },
         {
-            "id": "WebDAV credential created.",
-            "message": "WebDAV credential created.",
-            "translation": "Credenziali WebDAV create.",
+            "id": "MCP credential created",
+            "message": "MCP credential created",
+            "translation": "Credenziale MCP creata",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Copy the secret now. It will not be shown again.",
+            "message": "Copy the secret now. It will not be shown again.",
+            "translation": "Copia subito il segreto. Non verrà mostrato di nuovo.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP URL",
+            "message": "MCP URL",
+            "translation": "URL MCP",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Token",
+            "message": "Token",
+            "translation": "Token",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2137,6 +2172,55 @@
             "id": "No spaces available yet.",
             "message": "No spaces available yet.",
             "translation": "Nessuno Space disponibile finora.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Create",
+            "message": "Create",
+            "translation": "Crea",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "Label",
+            "message": "Label",
+            "translation": "Etichetta",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "Allow writes",
+            "message": "Allow writes",
+            "translation": "Consenti modifiche",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "This credential can access only the selected Space.",
+            "message": "This credential can access only the selected Space.",
+            "translation": "Questa credenziale consente l’accesso solo allo Space selezionato.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Space",
+            "message": "Space",
+            "translation": "Space",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Create MCP credential",
+            "message": "Create MCP credential",
+            "translation": "Crea credenziale MCP",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "WebDAV credential created.",
+            "message": "WebDAV credential created.",
+            "translation": "Credenziali WebDAV create.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2176,20 +2260,6 @@
             "fuzzy": true
         },
         {
-            "id": "Space",
-            "message": "Space",
-            "translation": "Space",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Create",
-            "message": "Create",
-            "translation": "Crea",
-            "translatorComment": "Translated from English by Codex.",
-            "fuzzy": true
-        },
-        {
             "id": "Create WebDAV credential",
             "message": "Create WebDAV credential",
             "translation": "Crea credenziali WebDAV",
@@ -2201,13 +2271,6 @@
             "message": "WebDAV credential created",
             "translation": "Credenziali WebDAV create",
             "translatorComment": "Translated from English by Codex.",
-            "fuzzy": true
-        },
-        {
-            "id": "Copy the secret now. It will not be shown again.",
-            "message": "Copy the secret now. It will not be shown again.",
-            "translation": "Copia subito il segreto. Non verrà mostrato di nuovo.",
-            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -2674,6 +2737,55 @@
             "fuzzy": true
         },
         {
+            "id": "Read-only",
+            "message": "Read-only",
+            "translation": "Sola lettura",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Read/write",
+            "message": "Read/write",
+            "translation": "Lettura e scrittura",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Revoked",
+            "message": "Revoked",
+            "translation": "Revocate",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "Revoke",
+            "message": "Revoke",
+            "translation": "Revoca",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "No MCP credentials",
+            "message": "No MCP credentials",
+            "translation": "Nessuna credenziale MCP",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Previous",
+            "message": "Previous",
+            "translation": "Precedente",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Next",
+            "message": "Next",
+            "translation": "Successivo",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Settings",
             "message": "Settings",
             "translation": "Impostazioni",
@@ -2733,6 +2845,13 @@
             "id": "Download backup",
             "message": "Download backup",
             "translation": "Scarica backup",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP credential revoked.",
+            "message": "MCP credential revoked.",
+            "translation": "Credenziale MCP revocata.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2825,13 +2944,6 @@
             "message": "Active",
             "translation": "Attivo",
             "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Revoked",
-            "message": "Revoked",
-            "translation": "Revocate",
-            "translatorComment": "Translated from English by Codex.",
             "fuzzy": true
         },
         {
@@ -2949,13 +3061,6 @@
                     "expr": "formatCredentialTime(ctx, *credentialx.RevokedAt)"
                 }
             ],
-            "fuzzy": true
-        },
-        {
-            "id": "Revoke",
-            "message": "Revoke",
-            "translation": "Revoca",
-            "translatorComment": "Translated from English by Codex.",
             "fuzzy": true
         },
         {
@@ -4433,6 +4538,20 @@
             "fuzzy": true
         },
         {
+            "id": "You are not allowed to access this tenant.",
+            "message": "You are not allowed to access this tenant.",
+            "translation": "Non sei autorizzato ad accedere a questo tenant.",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "You are not allowed to access this space.",
+            "message": "You are not allowed to access this space.",
+            "translation": "Non sei autorizzato ad accedere a questo Space.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "No backup codes were returned.",
             "message": "No backup codes were returned.",
             "translation": "Non è stato restituito alcun codice Backup.",
@@ -5022,13 +5141,6 @@
             "fuzzy": true
         },
         {
-            "id": "Label",
-            "message": "Label",
-            "translation": "Etichetta",
-            "translatorComment": "Translated from English by Codex.",
-            "fuzzy": true
-        },
-        {
             "id": "Language",
             "message": "Language",
             "translation": "Lingua",
@@ -5186,6 +5298,13 @@
             "id": "Number value",
             "message": "Number value",
             "translation": "Valore numerico",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Offset",
+            "message": "Offset",
+            "translation": "Posizione iniziale",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -5417,13 +5536,6 @@
             "id": "Text value",
             "message": "Text value",
             "translation": "Valore testo",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Token",
-            "message": "Token",
-            "translation": "Token",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -5911,6 +6023,20 @@
             "fuzzy": true
         },
         {
+            "id": "Credential not found.",
+            "message": "Credential not found.",
+            "translation": "Credenziali non trovate.",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid MCP credential.",
+            "message": "Invalid MCP credential.",
+            "translation": "Credenziale MCP non valida.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "App is already unlocked.",
             "message": "App is already unlocked.",
             "translation": "L'app è già sbloccata.",
@@ -6242,13 +6368,6 @@
             "fuzzy": true
         },
         {
-            "id": "Credential not found.",
-            "message": "Credential not found.",
-            "translation": "Credenziali non trovate.",
-            "translatorComment": "Translated from English by Codex.",
-            "fuzzy": true
-        },
-        {
             "id": "A similar entity already exists.",
             "message": "A similar entity already exists.",
             "translation": "Esiste già un'entità simile.",
@@ -6378,6 +6497,13 @@
             "fuzzy": true
         },
         {
+            "id": "Invalid text range.",
+            "message": "Invalid text range.",
+            "translation": "Intervallo di testo non valido.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "File does not belong to current space.",
             "message": "File does not belong to current space.",
             "translation": "Il file non appartiene allo Space corrente.",
@@ -6451,6 +6577,13 @@
             "id": "Could not delete source file.",
             "message": "Could not delete source file.",
             "translation": "Impossibile eliminare il file sorgente.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid sort order.",
+            "message": "Invalid sort order.",
+            "translation": "Ordinamento non valido.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -6692,13 +6825,6 @@
             "message": "Tenant database not found.",
             "translation": "Database del tenant non trovato.",
             "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "You are not allowed to access this tenant.",
-            "message": "You are not allowed to access this tenant.",
-            "translation": "Non sei autorizzato ad accedere a questo tenant.",
-            "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
         {
@@ -7381,13 +7507,6 @@
             "fuzzy": true
         },
         {
-            "id": "You are not allowed to access this space.",
-            "message": "You are not allowed to access this space.",
-            "translation": "Non sei autorizzato ad accedere a questo Space.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Could not read cookie.",
             "message": "Could not read cookie.",
             "translation": "Impossibile leggere il cookie.",
@@ -7420,6 +7539,27 @@
             "message": "Maintenance mode is enabled. Please wait until the app is ready again.",
             "translation": "La modalità manutenzione è attivata. Attendere fino a quando l'applicazione sarà nuovamente pronta.",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid page or search range.",
+            "message": "Invalid page or search range.",
+            "translation": "Intervallo di paginazione o ricerca non valido.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File ID is required.",
+            "message": "File ID is required.",
+            "translation": "L’ID del file è necessario.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File is a directory.",
+            "message": "File is a directory.",
+            "translation": "Il file è una cartella.",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {

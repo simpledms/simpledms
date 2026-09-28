@@ -116,6 +116,10 @@ func newMaintenanceModeHandler(
 
 	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assetsFS))))
+	mux.HandleFunc("/mcp", func(rw http.ResponseWriter, _ *http.Request) {
+		rw.Header().Set("Cache-Control", "no-store")
+		rw.WriteHeader(http.StatusServiceUnavailable)
+	})
 
 	mux.HandleFunc("/-/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
 		defer req.Body.Close()
@@ -902,6 +906,7 @@ func (qq *Server) registerCoreRoutes(
 	// TODO in TTx or not necessary because read only?
 	router.RegisterPage(route2.DashboardRoute(), actions.Dashboard.DashboardPage.Handler)
 	router.RegisterPage(route2.AccountRoute(), actions.Dashboard.AccountPage.Handler)
+	router.RegisterPage(route2.MCPCredentialsRoute(), actions.Dashboard.MCPCredentialsPage.Handler)
 	router.RegisterPage(
 		route2.WebDAVCredentialsRoute(),
 		actions.Dashboard.WebDAVCredentialsPage.Handler,

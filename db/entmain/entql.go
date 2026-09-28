@@ -5,6 +5,7 @@ package entmain
 import (
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/mcpcredential"
 	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/predicate"
 	"github.com/simpledms/simpledms/db/entmain/session"
@@ -23,7 +24,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 10)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 11)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   account.Table,
@@ -66,6 +67,28 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[1] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   mcpcredential.Table,
+			Columns: mcpcredential.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeInt64,
+				Column: mcpcredential.FieldID,
+			},
+		},
+		Type: "MCPCredential",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			mcpcredential.FieldPublicID:      {Type: field.TypeString, Column: mcpcredential.FieldPublicID},
+			mcpcredential.FieldAccountID:     {Type: field.TypeInt64, Column: mcpcredential.FieldAccountID},
+			mcpcredential.FieldTenantID:      {Type: field.TypeInt64, Column: mcpcredential.FieldTenantID},
+			mcpcredential.FieldSpacePublicID: {Type: field.TypeString, Column: mcpcredential.FieldSpacePublicID},
+			mcpcredential.FieldLabel:         {Type: field.TypeString, Column: mcpcredential.FieldLabel},
+			mcpcredential.FieldIsReadOnly:    {Type: field.TypeBool, Column: mcpcredential.FieldIsReadOnly},
+			mcpcredential.FieldSecretHash:    {Type: field.TypeString, Column: mcpcredential.FieldSecretHash},
+			mcpcredential.FieldCreatedAt:     {Type: field.TypeTime, Column: mcpcredential.FieldCreatedAt},
+			mcpcredential.FieldRevokedAt:     {Type: field.TypeTime, Column: mcpcredential.FieldRevokedAt},
+		},
+	}
+	graph.Nodes[2] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   mail.Table,
 			Columns: mail.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -88,7 +111,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mail.FieldReceiverID:  {Type: field.TypeInt64, Column: mail.FieldReceiverID},
 		},
 	}
-	graph.Nodes[2] = &sqlgraph.Node{
+	graph.Nodes[3] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   passkeycredential.Table,
 			Columns: passkeycredential.Columns,
@@ -111,7 +134,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			passkeycredential.FieldLastUsedAt:     {Type: field.TypeTime, Column: passkeycredential.FieldLastUsedAt},
 		},
 	}
-	graph.Nodes[3] = &sqlgraph.Node{
+	graph.Nodes[4] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   session.Table,
 			Columns: session.Columns,
@@ -131,7 +154,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			session.FieldUpdatedAt:          {Type: field.TypeTime, Column: session.FieldUpdatedAt},
 		},
 	}
-	graph.Nodes[4] = &sqlgraph.Node{
+	graph.Nodes[5] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   systemconfig.Table,
 			Columns: systemconfig.Columns,
@@ -172,7 +195,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemconfig.FieldInitializedAt:                     {Type: field.TypeTime, Column: systemconfig.FieldInitializedAt},
 		},
 	}
-	graph.Nodes[5] = &sqlgraph.Node{
+	graph.Nodes[6] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   temporaryfile.Table,
 			Columns: temporaryfile.Columns,
@@ -215,7 +238,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			temporaryfile.FieldExpiresAt:                 {Type: field.TypeTime, Column: temporaryfile.FieldExpiresAt},
 		},
 	}
-	graph.Nodes[6] = &sqlgraph.Node{
+	graph.Nodes[7] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tenant.Table,
 			Columns: tenant.Columns,
@@ -254,7 +277,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tenant.FieldInitializedAt:            {Type: field.TypeTime, Column: tenant.FieldInitializedAt},
 		},
 	}
-	graph.Nodes[7] = &sqlgraph.Node{
+	graph.Nodes[8] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tenantaccountassignment.Table,
 			Columns: tenantaccountassignment.Columns,
@@ -278,7 +301,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tenantaccountassignment.FieldExpiresAt:       {Type: field.TypeTime, Column: tenantaccountassignment.FieldExpiresAt},
 		},
 	}
-	graph.Nodes[8] = &sqlgraph.Node{
+	graph.Nodes[9] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthnchallenge.Table,
 			Columns: webauthnchallenge.Columns,
@@ -299,7 +322,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			webauthnchallenge.FieldCreatedAt:       {Type: field.TypeTime, Column: webauthnchallenge.FieldCreatedAt},
 		},
 	}
-	graph.Nodes[9] = &sqlgraph.Node{
+	graph.Nodes[10] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webdavcredential.Table,
 			Columns: webdavcredential.Columns,
@@ -398,6 +421,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Account",
 		"TenantAccountAssignment",
+	)
+	graph.MustAddE(
+		"account",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   mcpcredential.AccountTable,
+			Columns: []string{mcpcredential.AccountColumn},
+			Bidi:    false,
+		},
+		"MCPCredential",
+		"Account",
+	)
+	graph.MustAddE(
+		"tenant",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   mcpcredential.TenantTable,
+			Columns: []string{mcpcredential.TenantColumn},
+			Bidi:    false,
+		},
+		"MCPCredential",
+		"Tenant",
 	)
 	graph.MustAddE(
 		"creator",
@@ -1004,6 +1051,119 @@ func (f *AccountFilter) WhereHasTenantAssignmentWith(preds ...predicate.TenantAc
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *MCPCredentialQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the MCPCredentialQuery builder.
+func (_q *MCPCredentialQuery) Filter() *MCPCredentialFilter {
+	return &MCPCredentialFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *MCPCredentialMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the MCPCredentialMutation builder.
+func (m *MCPCredentialMutation) Filter() *MCPCredentialFilter {
+	return &MCPCredentialFilter{config: m.config, predicateAdder: m}
+}
+
+// MCPCredentialFilter provides a generic filtering capability at runtime for MCPCredentialQuery.
+type MCPCredentialFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *MCPCredentialFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[1].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql int64 predicate on the id field.
+func (f *MCPCredentialFilter) WhereID(p entql.Int64P) {
+	f.Where(p.Field(mcpcredential.FieldID))
+}
+
+// WherePublicID applies the entql string predicate on the public_id field.
+func (f *MCPCredentialFilter) WherePublicID(p entql.StringP) {
+	f.Where(p.Field(mcpcredential.FieldPublicID))
+}
+
+// WhereAccountID applies the entql int64 predicate on the account_id field.
+func (f *MCPCredentialFilter) WhereAccountID(p entql.Int64P) {
+	f.Where(p.Field(mcpcredential.FieldAccountID))
+}
+
+// WhereTenantID applies the entql int64 predicate on the tenant_id field.
+func (f *MCPCredentialFilter) WhereTenantID(p entql.Int64P) {
+	f.Where(p.Field(mcpcredential.FieldTenantID))
+}
+
+// WhereSpacePublicID applies the entql string predicate on the space_public_id field.
+func (f *MCPCredentialFilter) WhereSpacePublicID(p entql.StringP) {
+	f.Where(p.Field(mcpcredential.FieldSpacePublicID))
+}
+
+// WhereLabel applies the entql string predicate on the label field.
+func (f *MCPCredentialFilter) WhereLabel(p entql.StringP) {
+	f.Where(p.Field(mcpcredential.FieldLabel))
+}
+
+// WhereIsReadOnly applies the entql bool predicate on the is_read_only field.
+func (f *MCPCredentialFilter) WhereIsReadOnly(p entql.BoolP) {
+	f.Where(p.Field(mcpcredential.FieldIsReadOnly))
+}
+
+// WhereSecretHash applies the entql string predicate on the secret_hash field.
+func (f *MCPCredentialFilter) WhereSecretHash(p entql.StringP) {
+	f.Where(p.Field(mcpcredential.FieldSecretHash))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *MCPCredentialFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(mcpcredential.FieldCreatedAt))
+}
+
+// WhereRevokedAt applies the entql time.Time predicate on the revoked_at field.
+func (f *MCPCredentialFilter) WhereRevokedAt(p entql.TimeP) {
+	f.Where(p.Field(mcpcredential.FieldRevokedAt))
+}
+
+// WhereHasAccount applies a predicate to check if query has an edge account.
+func (f *MCPCredentialFilter) WhereHasAccount() {
+	f.Where(entql.HasEdge("account"))
+}
+
+// WhereHasAccountWith applies a predicate to check if query has an edge account with a given conditions (other predicates).
+func (f *MCPCredentialFilter) WhereHasAccountWith(preds ...predicate.Account) {
+	f.Where(entql.HasEdgeWith("account", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTenant applies a predicate to check if query has an edge tenant.
+func (f *MCPCredentialFilter) WhereHasTenant() {
+	f.Where(entql.HasEdge("tenant"))
+}
+
+// WhereHasTenantWith applies a predicate to check if query has an edge tenant with a given conditions (other predicates).
+func (f *MCPCredentialFilter) WhereHasTenantWith(preds ...predicate.Tenant) {
+	f.Where(entql.HasEdgeWith("tenant", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *MailQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -1032,7 +1192,7 @@ type MailFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *MailFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[1].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[2].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1169,7 +1329,7 @@ type PasskeyCredentialFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PasskeyCredentialFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[2].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[3].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1301,7 +1461,7 @@ type SessionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SessionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[3].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[4].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1390,7 +1550,7 @@ type SystemConfigFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SystemConfigFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[4].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[5].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1598,7 +1758,7 @@ type TemporaryFileFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemporaryFileFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[5].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -1844,7 +2004,7 @@ type TenantFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TenantFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2084,7 +2244,7 @@ type TenantAccountAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TenantAccountAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2235,7 +2395,7 @@ type WebAuthnChallengeFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebAuthnChallengeFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[9].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -2329,7 +2489,7 @@ type WebDAVCredentialFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebDAVCredentialFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[9].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[10].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

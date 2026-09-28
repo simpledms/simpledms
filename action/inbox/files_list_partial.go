@@ -7,20 +7,17 @@ import (
 	"strconv"
 	"strings"
 
-	"entgo.io/ent/dialect/sql"
-
 	"github.com/simpledms/simpledms/action/browse"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entquery"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/main/filelistpreference"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
@@ -420,8 +417,15 @@ func (qq *FilesListPartial) filesListItemsFromFiles(
 func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) *enttenant.FileQuery {
 	state.FilesListPartialState.normalizeSortBy()
 
-	searchResultQuery := ctx.TenantCtx().TTx.File.Query()
-	searchQuery := sqlutil.FTSSafeAndQuery(state.SearchQuery, 300)
+	sort := state.SortBy
+	if sort != sortByRank && sort != sortByName && sort != sortByOldestFirst {
+		sort = sortByNewestFirst // preserve the browser's fallback for stale URL state
+	}
+	query, err := filemodel.NewInboxQuery().Query(ctx, state.SearchQuery, sort, state.SourceValues)
+	if err != nil {
+		log.Println(err)
+		panic(err) // legacy widget composition relies on Router recovery
+	}
 	/*Where(func(qs *sql.Selector) {
 		// subquery to select all files in search scope
 		fileInfoView := sql.Table(fileinfo.Table)
@@ -438,72 +442,9 @@ func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) 
 		)
 	})*/
 
-	if searchQuery != "" {
-		searchResultQuery = searchResultQuery.Where(
-			file.SpaceID(ctx.SpaceCtx().Space.ID),
-			file.IsInInbox(true),
-			file.IsDirectory(false),
-			/*file.HasSpaceAssignmentWith(
-				spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID),
-				spacefileassignment.IsInInbox(true),
-			),*/
-		)
-	} else {
-		searchResultQuery = searchResultQuery.Where(
-			file.SpaceID(ctx.SpaceCtx().Space.ID),
-			entquery.FileIsInInbox(true),
-			entquery.FileIsDirectory(false),
-			/*file.HasSpaceAssignmentWith(
-				spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID),
-				spacefileassignment.IsInInbox(true),
-			),*/
-		)
-	}
-
-	sources, err := state.sources()
-	if err != nil {
-		log.Println(err)
-	} else if len(sources) > 0 {
-		searchResultQuery = searchResultQuery.Where(file.SourceIn(sources...))
-	}
-
-	if searchQuery != "" {
-		searchResultQuery = searchResultQuery.Where(
-			func(qs *sql.Selector) {
-				entquery.ApplyFileSearchCandidateFilterWithDirectory(
-					qs,
-					searchQuery,
-					ctx.SpaceCtx().Space.ID,
-					true,
-					false,
-				)
-			},
-		)
-	}
-
-	switch state.SortBy {
-	case sortByRank:
-		searchResultQuery = searchResultQuery.Order(
-			entquery.OrderFileSearchRankWithDirectory(
-				searchQuery,
-				ctx.SpaceCtx().Space.ID,
-				true,
-				false,
-			),
-			file.ByCreatedAt(sql.OrderDesc()),
-		)
-	case sortByName:
-		searchResultQuery = searchResultQuery.Order(file.ByName())
-	case sortByOldestFirst:
-		searchResultQuery = searchResultQuery.Order(file.ByCreatedAt())
-	case sortByNewestFirst:
-		fallthrough
-	default:
-		searchResultQuery = searchResultQuery.Order(file.ByCreatedAt(sql.OrderDesc()))
-	}
 	// searchResultQuery = searchResultQuery.Order(file.ByName())
 
-	return searchResultQuery
+	return query
 }
 
 func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *widget.AppBar {

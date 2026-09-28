@@ -39,7 +39,10 @@ func (qq *FileRepository) GetX(ctx ctxx.Context, id string) *filemodel.File {
 	*/
 
 	// filex := ctx.TenantCtx().TTx.File.GetX(ctx, id)
-	filex := ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicIDEQ(entx.NewCIText(id))).OnlyX(ctx)
+	filex, err := filemodel.NewFileReader().Get(ctx, id)
+	if err != nil {
+		panic(err) // compatibility for callers using the legacy GetX contract
+	}
 	return filemodel.NewFile(filex)
 }
 

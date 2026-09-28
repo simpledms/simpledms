@@ -8,6 +8,7 @@ import (
 
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/mcpcredential"
 	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/schema"
 	"github.com/simpledms/simpledms/db/entmain/session"
@@ -119,6 +120,50 @@ func init() {
 	accountDescPasskeyRecoveryCodeHashes := accountFields[19].Descriptor()
 	// account.DefaultPasskeyRecoveryCodeHashes holds the default value on creation for the passkey_recovery_code_hashes field.
 	account.DefaultPasskeyRecoveryCodeHashes = accountDescPasskeyRecoveryCodeHashes.Default.([]string)
+	mcpcredentialMixin := schema.MCPCredential{}.Mixin()
+	mcpcredential.Policy = privacy.NewPolicies(schema.MCPCredential{})
+	mcpcredential.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := mcpcredential.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	mcpcredentialMixinFields0 := mcpcredentialMixin[0].Fields()
+	_ = mcpcredentialMixinFields0
+	mcpcredentialFields := schema.MCPCredential{}.Fields()
+	_ = mcpcredentialFields
+	// mcpcredentialDescPublicID is the schema descriptor for public_id field.
+	mcpcredentialDescPublicID := mcpcredentialMixinFields0[0].Descriptor()
+	// mcpcredential.DefaultPublicID holds the default value on creation for the public_id field.
+	mcpcredential.DefaultPublicID = mcpcredentialDescPublicID.Default.(func() entx.CIText)
+	// mcpcredentialDescLabel is the schema descriptor for label field.
+	mcpcredentialDescLabel := mcpcredentialFields[4].Descriptor()
+	// mcpcredential.LabelValidator is a validator for the "label" field. It is called by the builders before save.
+	mcpcredential.LabelValidator = func() func(string) error {
+		validators := mcpcredentialDescLabel.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(label string) error {
+			for _, fn := range fns {
+				if err := fn(label); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// mcpcredentialDescIsReadOnly is the schema descriptor for is_read_only field.
+	mcpcredentialDescIsReadOnly := mcpcredentialFields[5].Descriptor()
+	// mcpcredential.DefaultIsReadOnly holds the default value on creation for the is_read_only field.
+	mcpcredential.DefaultIsReadOnly = mcpcredentialDescIsReadOnly.Default.(bool)
+	// mcpcredentialDescCreatedAt is the schema descriptor for created_at field.
+	mcpcredentialDescCreatedAt := mcpcredentialFields[7].Descriptor()
+	// mcpcredential.DefaultCreatedAt holds the default value on creation for the created_at field.
+	mcpcredential.DefaultCreatedAt = mcpcredentialDescCreatedAt.Default.(func() time.Time)
 	mailMixin := schema.Mail{}.Mixin()
 	mailMixinFields0 := mailMixin[0].Fields()
 	_ = mailMixinFields0

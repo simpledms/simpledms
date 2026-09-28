@@ -1587,8 +1587,18 @@
             "translation": ""
         },
         {
+            "id": "MCP credentials",
+            "message": "MCP credentials",
+            "translation": ""
+        },
+        {
             "id": "Account",
             "message": "Account",
+            "translation": ""
+        },
+        {
+            "id": "A full Session is required.",
+            "message": "A full Session is required.",
             "translation": ""
         },
         {
@@ -1597,13 +1607,63 @@
             "translation": ""
         },
         {
-            "id": "WebDAV credential created.",
-            "message": "WebDAV credential created.",
+            "id": "MCP credential created",
+            "message": "MCP credential created",
+            "translation": ""
+        },
+        {
+            "id": "Copy the secret now. It will not be shown again.",
+            "message": "Copy the secret now. It will not be shown again.",
+            "translation": ""
+        },
+        {
+            "id": "MCP URL",
+            "message": "MCP URL",
+            "translation": ""
+        },
+        {
+            "id": "Token",
+            "message": "Token",
             "translation": ""
         },
         {
             "id": "No spaces available yet.",
             "message": "No spaces available yet.",
+            "translation": ""
+        },
+        {
+            "id": "Create",
+            "message": "Create",
+            "translation": ""
+        },
+        {
+            "id": "Label",
+            "message": "Label",
+            "translation": ""
+        },
+        {
+            "id": "Allow writes",
+            "message": "Allow writes",
+            "translation": ""
+        },
+        {
+            "id": "This credential can access only the selected Space.",
+            "message": "This credential can access only the selected Space.",
+            "translation": ""
+        },
+        {
+            "id": "Space",
+            "message": "Space",
+            "translation": ""
+        },
+        {
+            "id": "Create MCP credential",
+            "message": "Create MCP credential",
+            "translation": ""
+        },
+        {
+            "id": "WebDAV credential created.",
+            "message": "WebDAV credential created.",
             "translation": ""
         },
         {
@@ -1632,16 +1692,6 @@
             "translation": ""
         },
         {
-            "id": "Space",
-            "message": "Space",
-            "translation": ""
-        },
-        {
-            "id": "Create",
-            "message": "Create",
-            "translation": ""
-        },
-        {
             "id": "Create WebDAV credential",
             "message": "Create WebDAV credential",
             "translation": ""
@@ -1649,11 +1699,6 @@
         {
             "id": "WebDAV credential created",
             "message": "WebDAV credential created",
-            "translation": ""
-        },
-        {
-            "id": "Copy the secret now. It will not be shown again.",
-            "message": "Copy the secret now. It will not be shown again.",
             "translation": ""
         },
         {
@@ -2016,6 +2061,41 @@
             "translation": ""
         },
         {
+            "id": "Read-only",
+            "message": "Read-only",
+            "translation": ""
+        },
+        {
+            "id": "Read/write",
+            "message": "Read/write",
+            "translation": ""
+        },
+        {
+            "id": "Revoked",
+            "message": "Revoked",
+            "translation": ""
+        },
+        {
+            "id": "Revoke",
+            "message": "Revoke",
+            "translation": ""
+        },
+        {
+            "id": "No MCP credentials",
+            "message": "No MCP credentials",
+            "translation": ""
+        },
+        {
+            "id": "Previous",
+            "message": "Previous",
+            "translation": ""
+        },
+        {
+            "id": "Next",
+            "message": "Next",
+            "translation": ""
+        },
+        {
             "id": "Settings",
             "message": "Settings",
             "translation": ""
@@ -2058,6 +2138,11 @@
         {
             "id": "Download backup",
             "message": "Download backup",
+            "translation": ""
+        },
+        {
+            "id": "MCP credential revoked.",
+            "message": "MCP credential revoked.",
             "translation": ""
         },
         {
@@ -2123,11 +2208,6 @@
         {
             "id": "Active",
             "message": "Active",
-            "translation": ""
-        },
-        {
-            "id": "Revoked",
-            "message": "Revoked",
             "translation": ""
         },
         {
@@ -2228,11 +2308,6 @@
                     "expr": "formatCredentialTime(ctx, *credentialx.RevokedAt)"
                 }
             ]
-        },
-        {
-            "id": "Revoke",
-            "message": "Revoke",
-            "translation": ""
         },
         {
             "id": "Revoke this WebDAV credential?",
@@ -3369,6 +3444,16 @@
             "translation": ""
         },
         {
+            "id": "You are not allowed to access this tenant.",
+            "message": "You are not allowed to access this tenant.",
+            "translation": "You are not allowed to access this tenant."
+        },
+        {
+            "id": "You are not allowed to access this space.",
+            "message": "You are not allowed to access this space.",
+            "translation": "You are not allowed to access this space."
+        },
+        {
             "id": "No backup codes were returned.",
             "message": "No backup codes were returned.",
             "translation": ""
@@ -3790,11 +3875,6 @@
             "translation": ""
         },
         {
-            "id": "Label",
-            "message": "Label",
-            "translation": ""
-        },
-        {
             "id": "Language",
             "message": "Language",
             "translation": ""
@@ -3907,6 +3987,11 @@
         {
             "id": "Number value",
             "message": "Number value",
+            "translation": ""
+        },
+        {
+            "id": "Offset",
+            "message": "Offset",
             "translation": ""
         },
         {
@@ -4072,11 +4157,6 @@
         {
             "id": "Text value",
             "message": "Text value",
-            "translation": ""
-        },
-        {
-            "id": "Token",
-            "message": "Token",
             "translation": ""
         },
         {
@@ -4433,6 +4513,16 @@
             ]
         },
         {
+            "id": "Credential not found.",
+            "message": "Credential not found.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid MCP credential.",
+            "message": "Invalid MCP credential.",
+            "translation": ""
+        },
+        {
             "id": "App is already unlocked.",
             "message": "App is already unlocked.",
             "translation": ""
@@ -4678,11 +4768,6 @@
             "translation": ""
         },
         {
-            "id": "Credential not found.",
-            "message": "Credential not found.",
-            "translation": ""
-        },
-        {
             "id": "A similar entity already exists.",
             "message": "A similar entity already exists.",
             "translation": ""
@@ -4786,6 +4871,11 @@
             "translation": ""
         },
         {
+            "id": "Invalid text range.",
+            "message": "Invalid text range.",
+            "translation": ""
+        },
+        {
             "id": "File does not belong to current space.",
             "message": "File does not belong to current space.",
             "translation": ""
@@ -4838,6 +4928,11 @@
         {
             "id": "Could not delete source file.",
             "message": "Could not delete source file.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid sort order.",
+            "message": "Invalid sort order.",
             "translation": ""
         },
         {
@@ -5013,11 +5108,6 @@
             ],
             "message": "Tenant database not found.",
             "translation": ""
-        },
-        {
-            "id": "You are not allowed to access this tenant.",
-            "message": "You are not allowed to access this tenant.",
-            "translation": "You are not allowed to access this tenant."
         },
         {
             "id": "Uploaded file processing was taken over.",
@@ -5513,11 +5603,6 @@
             "translation": ""
         },
         {
-            "id": "You are not allowed to access this space.",
-            "message": "You are not allowed to access this space.",
-            "translation": "You are not allowed to access this space."
-        },
-        {
             "id": "Could not read cookie.",
             "message": "Could not read cookie.",
             "translation": "Could not read cookie."
@@ -5541,6 +5626,21 @@
             "id": "Maintenance mode is enabled. Please wait until the app is ready again.",
             "message": "Maintenance mode is enabled. Please wait until the app is ready again.",
             "translation": "Maintenance mode is enabled. Please wait until the app is ready again."
+        },
+        {
+            "id": "Invalid page or search range.",
+            "message": "Invalid page or search range.",
+            "translation": ""
+        },
+        {
+            "id": "File ID is required.",
+            "message": "File ID is required.",
+            "translation": ""
+        },
+        {
+            "id": "File is a directory.",
+            "message": "File is a directory.",
+            "translation": ""
         },
         {
             "id": "Misc",
