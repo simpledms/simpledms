@@ -21,10 +21,16 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	credentialmodel "github.com/simpledms/simpledms/model/main/mcpcredential"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
+	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/e"
 )
 
 type requestContextKey int
+
+type requestContext struct {
+	source context.Context
+	origin string
+}
 
 type Handler struct {
 	config      Config
@@ -90,7 +96,14 @@ func (qq *Handler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		rw.WriteHeader(status)
 		return
 	}
-	ctx := context.WithValue(req.Context(), requestContextKey(0), req.Context())
+	origin := qq.config.Infra.SystemConfig().AbsoluteURL("/")
+	if origin == "/" {
+		origin = scheme + "://" + req.Host
+	}
+	ctx := context.WithValue(req.Context(), requestContextKey(0), requestContext{
+		source: req.Context(),
+		origin: strings.TrimSuffix(origin, "/"),
+	})
 	qq.transport.ServeHTTP(rw, req.WithContext(ctx))
 }
 
@@ -131,7 +144,7 @@ func registerRead[I, O any](
 	server *sdk.Server,
 	handler *Handler,
 	name, description string,
-	fn func(*ctxx.SpaceContext, *entmain.MCPCredential, I) (O, error),
+	fn func(context.Context, *ctxx.SpaceContext, *entmain.MCPCredential, I) (O, error),
 ) {
 	closedWorld := false
 	sdk.AddTool(server, &sdk.Tool{
@@ -149,13 +162,13 @@ func registerRead[I, O any](
 		// Older SDK protocol paths detach cancellation; preserve the HTTP request's lifetime.
 		ctx, cancel := context.WithCancel(ctx)
 		defer cancel()
-		if source, ok := ctx.Value(requestContextKey(0)).(context.Context); ok {
-			stop := context.AfterFunc(source, cancel)
+		if request, ok := ctx.Value(requestContextKey(0)).(requestContext); ok {
+			stop := context.AfterFunc(request.source, cancel)
 			defer stop()
 		}
 		execute := func(sc *ctxx.SpaceContext, cred *entmain.MCPCredential) error {
 			var err error
-			output, err = fn(sc, cred, input)
+			output, err = fn(ctx, sc, cred, input)
 			return err
 		}
 		_, err := handler.read(ctx, bearer(req.Extra.Header), execute)
@@ -195,7 +208,7 @@ func safeError(err error) error {
 }
 
 func (qq *Handler) getSpace(
-	ctx *ctxx.SpaceContext, credential *entmain.MCPCredential, _ struct{},
+	_ context.Context, ctx *ctxx.SpaceContext, credential *entmain.MCPCredential, _ struct{},
 ) (SpaceData, error) {
 	return SpaceData{
 		TenantID:        ctx.TenantID,
@@ -210,7 +223,7 @@ func (qq *Handler) getSpace(
 }
 
 func (qq *Handler) listInbox(
-	ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input InboxInput,
+	requestCtx context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input InboxInput,
 ) (InboxData, error) {
 	result := InboxData{Files: []FileSummary{}}
 	limit := 50
@@ -225,7 +238,9 @@ func (qq *Handler) listInbox(
 	if err != nil {
 		return result, err
 	}
-	files, err := query.Select(
+	files, err := query.WithParent(func(query *enttenant.FileQuery) {
+		query.Select(file.FieldPublicID)
+	}).Select(
 		file.FieldID, file.FieldPublicID, file.FieldName, file.FieldIsDirectory,
 		file.FieldIsInInbox, file.FieldSource, file.FieldOcrSuccessAt,
 	).Offset(input.Offset).Limit(limit + 1).All(ctx)
@@ -239,14 +254,32 @@ func (qq *Handler) listInbox(
 		result.NextOffset = &next
 	}
 	for _, filex := range files {
-		result.Files = append(result.Files, qq.summary(filex))
+		result.Files = append(result.Files, qq.summary(requestCtx, ctx, filex, filex.Edges.Parent))
 	}
 	return result, nil
 }
 
-func (qq *Handler) summary(filex *enttenant.File) FileSummary {
+func (qq *Handler) summary(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	filex *enttenant.File,
+	parent *enttenant.File,
+) FileSummary {
+	path := route.Browse(ctx.TenantID, ctx.SpaceID, filex.PublicID.String())
+	if !filex.IsDirectory && parent != nil {
+		path = route.BrowseFile(
+			ctx.TenantID, ctx.SpaceID, parent.PublicID.String(), filex.PublicID.String(),
+		)
+	}
+	url := qq.config.Infra.SystemConfig().AbsoluteURL(path)
+	if url == path {
+		if request, ok := requestCtx.Value(requestContextKey(0)).(requestContext); ok {
+			url = request.origin + path
+		}
+	}
 	return FileSummary{
 		FileID:       filex.PublicID.String(),
+		URL:          url,
 		Name:         filex.Name,
 		IsDirectory:  filex.IsDirectory,
 		IsInInbox:    filex.IsInInbox,
@@ -255,16 +288,20 @@ func (qq *Handler) summary(filex *enttenant.File) FileSummary {
 	}
 }
 
-func (qq *Handler) fileData(ctx *ctxx.SpaceContext, filex *enttenant.File) (FileData, error) {
-	data := FileData{FileSummary: qq.summary(filex)}
+func (qq *Handler) fileData(
+	requestCtx context.Context, ctx *ctxx.SpaceContext, filex *enttenant.File,
+) (FileData, error) {
+	var parent *enttenant.File
 	if filex.ParentID != 0 {
-		parent, err := filex.QueryParent().Only(ctx)
+		var err error
+		parent, err = filex.QueryParent().Only(ctx)
 		if err != nil && !enttenant.IsNotFound(err) {
-			return data, err
+			return FileData{}, err
 		}
-		if parent != nil {
-			data.ParentID = parent.PublicID.String()
-		}
+	}
+	data := FileData{FileSummary: qq.summary(requestCtx, ctx, filex, parent)}
+	if parent != nil {
+		data.ParentID = parent.PublicID.String()
 	}
 	if filex.IsDirectory {
 		return data, nil
@@ -288,7 +325,7 @@ func (qq *Handler) fileData(ctx *ctxx.SpaceContext, filex *enttenant.File) (File
 }
 
 func (qq *Handler) getFile(
-	ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input FileInput,
+	requestCtx context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input FileInput,
 ) (FileData, error) {
 	if input.FileID == "" || len(input.FileID) > 100 {
 		return FileData{}, e.NewHTTPErrorf(http.StatusBadRequest, "File ID is required.")
@@ -297,11 +334,11 @@ func (qq *Handler) getFile(
 	if err != nil {
 		return FileData{}, err
 	}
-	return qq.fileData(ctx, filex)
+	return qq.fileData(requestCtx, ctx, filex)
 }
 
 func (qq *Handler) readText(
-	ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input TextInput,
+	requestCtx context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input TextInput,
 ) (TextData, error) {
 	result := TextData{FileID: input.FileID}
 	length := 12000
@@ -320,7 +357,7 @@ func (qq *Handler) readText(
 	if filex.IsDirectory {
 		return result, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
 	}
-	data, err := qq.fileData(ctx, filex)
+	data, err := qq.fileData(requestCtx, ctx, filex)
 	if err != nil {
 		return result, err
 	}

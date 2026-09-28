@@ -255,6 +255,11 @@ func (qq *Router) wrapCommand(handlerFn handlerFn) handlerFn {
 		// TODO path url?
 		endpoint := req.Header.Get("X-Query-Endpoint")
 		if endpoint == "" {
+			// A handler may already have rendered its response. Rendering an empty
+			// list would set HX-Reswap: none, discarding a commit-buffered dialog.
+			if rw.HasDataWritten() {
+				return nil
+			}
 			err = qq.infra.Renderer().Render(rw, ctx) // render Renderables
 			if err != nil {
 				log.Println(err)

@@ -54,7 +54,8 @@ common pagination fields where the architecture already defines them. Optional f
 ### `list_inbox` — read; extract
 
 - Current basis: [`inbox.FilesListPartial`][inbox-list].
-- Input: `query?`, `sort?`, `sources?`, pagination. Result: Inbox file summaries and source values.
+- Input: `query?`, `sort?`, `sources?`, pagination. Result: Inbox file summaries with canonical
+  browser URLs and source values.
 - Purpose: inspect pending documents and find imports needing classification. Reuse the current
   source enum, search, and sorting rather than the browser's URL/filter state.
 
@@ -62,8 +63,8 @@ common pagination fields where the architecture already defines them. Optional f
 
 - Current basis: [`FileInfoPartial`][file-info], [`FilePropertiesPartial`][file-properties],
   file metadata/Tag partials, and [`FileRepository`][file-repo].
-- Input: `file_id`. Result: name, parent, Inbox state, source, current version, MIME type, size,
-  content hash when present, OCR availability, and assigned metadata.
+- Input: `file_id`. Result: name, canonical browser URL, parent, Inbox state, source, current
+  version, MIME type, size, content hash when present, OCR availability, and assigned metadata.
 - Purpose: understand a document before changing it. Project an explicit DTO; omit metadata's
   internal IDs until public IDs are available. Initial lookup covers live files, including Inbox.
   Folder results must avoid methods that assume a stored file/current version exists.

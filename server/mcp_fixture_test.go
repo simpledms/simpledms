@@ -28,6 +28,7 @@ type mcpFixture struct {
 	tenant       *entmain.Tenant
 	db           *sqlx.TenantDB
 	spaceID      string
+	rootID       string
 	fileID       string
 	token        string
 	credentialID string
@@ -52,6 +53,7 @@ func newMCPFixture(t *testing.T, h *actionTestHarness, suffix string) *mcpFixtur
 		spacex := tc.TTx.Space.Query().Where(space.Name("MCP " + suffix)).OnlyX(tc)
 		f.spaceID = spacex.PublicID.String()
 		sc := ctxx.NewSpaceContext(tc, spacex)
+		f.rootID = sc.SpaceRootDir().PublicID.String()
 		for index := range 2 {
 			file := createRegularFileForTest(sc, sc.SpaceRootDir().ID,
 				fmt.Sprintf("mcp-%s-%d.txt", suffix, index)).Data.Update().

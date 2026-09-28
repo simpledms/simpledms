@@ -448,6 +448,26 @@ Slice 01 implementation, 2026-09-18:
   pending for the requested review phase. No unresolved document conflict or implementation
   blocker is known.
 
+Slice 01 token-dialog fix, 2026-09-28:
+
+- A user reported that the one-time token was not displayed. The credential handler returned the
+  token dialog, but `Router.wrapCommand` performed an empty second render. On a commit-buffered
+  response, that set `HX-Reswap: none` before headers were sent, so HTMX discarded the dialog.
+- `go test ./server -run '^TestMCPConnectionCreateResponseShowsTokenDialog$' -count=1` first
+  failed on that header. After skipping the empty render when the handler already wrote a body,
+  the same focused test passed; it checks both the swap header and token dialog content.
+- `gofmt -w server/router.go server/mcp_connection_test.go` completed. No broader Go suite,
+  Playwright/browser check, build, or manual client journey was performed. Slice 01 verification
+  checkboxes and the plan checkbox remain pending.
+
+Slice 01 document URLs, 2026-09-28:
+
+- `list_inbox` document summaries and `get_file` metadata now expose the canonical browser `url`.
+  The URL uses the configured public origin when available and otherwise the active MCP request
+  origin. Inbox listing eager-loads parent public IDs so URLs contain no internal identifiers.
+- `go test ./server -run '^TestMCPConnectionScopesReadsAndRevocation$' -count=1` passed, including
+  URL assertions for both tools. Broader slice verification remains pending.
+
 ## Operating slice 01
 
 After deploying the generated migration and rebuilt application, open Account → MCP credentials.

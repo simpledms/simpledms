@@ -24,6 +24,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
 	credentialmodel "github.com/simpledms/simpledms/model/main/mcpcredential"
+	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -63,6 +64,17 @@ func TestMCPConnectionScopesReadsAndRevocation(t *testing.T) {
 	page := callMCP(t, a, "list_inbox", map[string]any{"limit": 1, "sort": "name"})
 	if page["has_more"] != true || len(page["files"].([]any)) != 1 {
 		t.Fatalf("bad page: %v", page)
+	}
+	wantURL := server.URL + route.BrowseFile(
+		first.tenant.PublicID.String(), first.spaceID, first.rootID, first.fileID,
+	)
+	listedFile := page["files"].([]any)[0].(map[string]any)
+	if listedFile["url"] != wantURL {
+		t.Fatalf("wrong Inbox document URL: got %v, want %s", listedFile["url"], wantURL)
+	}
+	fileData := callMCP(t, a, "get_file", map[string]any{"file_id": first.fileID})
+	if fileData["url"] != wantURL {
+		t.Fatalf("wrong document URL: got %v, want %s", fileData["url"], wantURL)
 	}
 	text := callMCP(t, a, "read_file_text", map[string]any{
 		"file_id": first.fileID, "offset": 0, "length": 2,
@@ -178,6 +190,25 @@ func TestMCPConnectionCommitFailureDoesNotDiscloseToken(t *testing.T) {
 	}
 	if count := h.mainDB.ReadOnlyConn.MCPCredential.Query().CountX(queryCtx); count != before {
 		t.Fatalf("failed credential committed: before=%d after=%d", before, count)
+	}
+}
+
+func TestMCPConnectionCreateResponseShowsTokenDialog(t *testing.T) {
+	h := newActionTestHarness(t)
+	f := newMCPFixture(t, h, "token-dialog")
+	response := f.browser(h.actions.Dashboard.CreateMCPCredentialCmd.Endpoint(), url.Values{
+		"Label":       {"Visible token"},
+		"Destination": {f.tenant.PublicID.String() + ":" + f.spaceID},
+	})
+	if response.Code != http.StatusOK {
+		t.Fatalf("create credential: %d %s", response.Code, response.Body.String())
+	}
+	if response.Header().Get("HX-Reswap") == "none" {
+		t.Fatal("HTMX would discard the one-time token dialog")
+	}
+	if !strings.Contains(response.Body.String(), "MCP credential created") ||
+		!strings.Contains(response.Body.String(), "sdmcp_") {
+		t.Fatal("successful response did not include the one-time token dialog")
 	}
 }
 

@@ -16,7 +16,8 @@ subsequent tools are not yet registered.
   read-only default, empty/no-Spaces/error states, and no secret on refresh. Setup Sessions and
   attempts to manage another account's credentials fail.
 - Real Streamable HTTP exposes `get_space`, `list_inbox`, `get_file`, and `read_file_text` using
-  current access. An empty Inbox and unavailable OCR are ordinary bounded data results.
+  current access. Document summaries include their canonical browser URL. An empty Inbox and
+  unavailable OCR are ordinary bounded data results.
 - Unknown/foreign/deleted objects, invalid/revoked credentials, permission loss, invalid Origin,
   and unavailable tenants produce the specified errors without redirects or data leakage.
 - Interleaved calls from two actors/Spaces remain isolated; no request identity enters shared
@@ -43,8 +44,9 @@ subsequent tools are not yet registered.
 
 Implementation notes and generation commands are in the [single execution record][record].
 The destination picker uses a native `SelectField`: the existing list-radio input is hidden and
-cannot provide keyboard selection. No existing shared widget behaviour was changed. Checks below
-remain unperformed, including browser rendering/selector validation and actual client connection.
+cannot provide keyboard selection. A focused regression test now protects the one-time token
+response against `HX-Reswap: none`. The remaining checks below, including browser visibility
+and actual client connection, remain pending.
 
 ## Verification checklist
 
