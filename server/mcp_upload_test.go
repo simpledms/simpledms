@@ -145,7 +145,7 @@ func TestMCPUploadRechecksRevocationBeforeFinalization(t *testing.T) {
 		content := []byte("revoked during upload")
 		expectedBytes := int64(len(content))
 
-		_, err := service.Execute(
+		_, err := service.ExecuteWrite(
 			context.Background(),
 			h.mainDB,
 			h.tenantDBs,

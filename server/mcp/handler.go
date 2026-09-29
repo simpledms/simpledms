@@ -37,6 +37,7 @@ import (
 	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
+	filingmodel "github.com/simpledms/simpledms/model/tenant/filing"
 	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
@@ -77,7 +78,7 @@ func NewHandler(config Config) *Handler {
 	registerRead(
 		server, handler, "read_file_text", "Read bounded existing OCR text.", handler.readText,
 	)
-	registerWrite(
+	registerStorageWrite(
 		server, handler, "upload_file", "Upload one document into Inbox.", handler.uploadFile,
 	)
 	registerRead(server, handler, "list_tags", "List existing Tags.", handler.listTags)
@@ -101,6 +102,23 @@ func NewHandler(config Config) *Handler {
 	)
 	registerWrite(
 		server, handler, "clear_document_type", "Clear a document type.", handler.clearDocumentType,
+	)
+	registerRead(
+		server, handler, "list_directory", "List one filing directory.", handler.listDirectory,
+	)
+	registerWrite(
+		server, handler, "create_directory", "Create a filing directory.", handler.createDirectory,
+	)
+	registerWrite(
+		server, handler, "file_inbox_document", "File one Inbox document.",
+		handler.fileInboxDocument,
+	)
+	registerWrite(
+		server, handler, "mark_inbox_file_done", "Complete an Inbox document without moving it.",
+		handler.markInboxFileDone,
+	)
+	registerRead(
+		server, handler, "search_files", "Search or list filed documents.", handler.searchFiles,
 	)
 	handler.transport = sdk.NewStreamableHTTPHandler(func(*http.Request) *sdk.Server {
 		return server
@@ -134,7 +152,7 @@ func (qq *Handler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	authorize := func(*ctxx.SpaceContext, *entmain.MCPCredential) error {
 		return nil
 	}
-	_, err := qq.execute(req.Context(), bearer(req.Header), authorize)
+	_, err := qq.execute(req.Context(), bearer(req.Header), true, authorize)
 	if err != nil {
 		status := http.StatusInternalServerError
 		var httpErr *e.HTTPError
@@ -175,11 +193,19 @@ func (qq *Handler) trustedHTTPS(req *http.Request) bool {
 }
 
 func (qq *Handler) execute(
-	ctx context.Context, token string, fn func(*ctxx.SpaceContext, *entmain.MCPCredential) error,
+	ctx context.Context,
+	token string,
+	isTenantTxReadOnly bool,
+	fn func(*ctxx.SpaceContext, *entmain.MCPCredential) error,
 ) (bool, error) {
-	return qq.credentials.Execute(
-		ctx, qq.config.MainDB, qq.config.TenantDBs, qq.config.I18n,
-		qq.config.Infra.SystemConfig().CommercialLicenseEnabled(), token, fn,
+	commercial := qq.config.Infra.SystemConfig().CommercialLicenseEnabled()
+	if isTenantTxReadOnly {
+		return qq.credentials.Execute(
+			ctx, qq.config.MainDB, qq.config.TenantDBs, qq.config.I18n, commercial, token, fn,
+		)
+	}
+	return qq.credentials.ExecuteWrite(
+		ctx, qq.config.MainDB, qq.config.TenantDBs, qq.config.I18n, commercial, token, fn,
 	)
 }
 
@@ -197,7 +223,7 @@ func registerRead[I, O any](
 	name, description string,
 	fn func(context.Context, *ctxx.SpaceContext, *entmain.MCPCredential, I) (O, error),
 ) {
-	registerTool(server, handler, name, description, true, fn)
+	registerTool(server, handler, name, description, true, true, fn)
 }
 
 func registerWrite[I, O any](
@@ -206,7 +232,16 @@ func registerWrite[I, O any](
 	name, description string,
 	fn func(context.Context, *ctxx.SpaceContext, *entmain.MCPCredential, I) (O, error),
 ) {
-	registerTool(server, handler, name, description, false, fn)
+	registerTool(server, handler, name, description, false, false, fn)
+}
+
+func registerStorageWrite[I, O any](
+	server *sdk.Server,
+	handler *Handler,
+	name, description string,
+	fn func(context.Context, *ctxx.SpaceContext, *entmain.MCPCredential, I) (O, error),
+) {
+	registerTool(server, handler, name, description, false, true, fn)
 }
 
 func registerTool[I, O any](
@@ -214,6 +249,7 @@ func registerTool[I, O any](
 	handler *Handler,
 	name, description string,
 	isReadOnly bool,
+	isTenantTxReadOnly bool,
 	fn func(context.Context, *ctxx.SpaceContext, *entmain.MCPCredential, I) (O, error),
 ) {
 	closedWorld := false
@@ -246,7 +282,7 @@ func registerTool[I, O any](
 			output, err = fn(ctx, sc, cred, input)
 			return err
 		}
-		_, err := handler.execute(ctx, bearer(req.Extra.Header), execute)
+		_, err := handler.execute(ctx, bearer(req.Extra.Header), isTenantTxReadOnly, execute)
 		if err != nil {
 			var zero O
 			return nil, zero, safeError(err)
@@ -461,6 +497,235 @@ func (qq *Handler) readText(
 		}
 	}
 	return result, err
+}
+
+func (qq *Handler) listDirectory(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input DirectoryInput,
+) (DirectoryData, error) {
+	result := DirectoryData{Children: []FileSummary{}}
+	limit, err := pageLimit(input.Offset, input.Limit)
+	if err != nil {
+		return result, err
+	}
+	if len(input.DirectoryID) > 100 {
+		return result, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid directory ID.")
+	}
+	directory, children, hasMore, err := filingmodel.NewFilingService(
+		qq.config.Infra.FileSystem(),
+	).ListDirectory(ctx, input.DirectoryID, input.Offset, limit)
+	if err != nil {
+		return result, err
+	}
+	result.DirectoryID = directory.PublicID.String()
+	result.Name = directory.Name
+	if directory.ParentID != 0 {
+		parent, err := directory.QueryParent().Only(ctx)
+		if err != nil {
+			return DirectoryData{}, err
+		}
+		result.ParentID = parent.PublicID.String()
+	}
+	result.HasMore = hasMore
+	if hasMore {
+		next := input.Offset + limit
+		result.NextOffset = &next
+	}
+	for _, child := range children {
+		result.Children = append(result.Children, qq.summary(requestCtx, ctx, child, directory))
+	}
+	return result, nil
+}
+
+func (qq *Handler) createDirectory(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input CreateDirectoryInput,
+) (DirectoryMutationData, error) {
+	if input.ParentDirectoryID == "" || len(input.ParentDirectoryID) > 100 ||
+		input.Name == "" || utf8.RuneCountInString(input.Name) > 255 {
+		return DirectoryMutationData{}, e.NewHTTPErrorf(
+			http.StatusBadRequest,
+			"Parent directory ID and name are required.",
+		)
+	}
+	directory, err := filingmodel.NewFilingService(qq.config.Infra.FileSystem()).CreateDirectory(
+		ctx, input.ParentDirectoryID, input.Name,
+	)
+	if err != nil {
+		return DirectoryMutationData{}, err
+	}
+	return DirectoryMutationData{
+		DirectoryID: directory.PublicID.String(),
+		Name:        directory.Name,
+		ParentID:    input.ParentDirectoryID,
+	}, nil
+}
+
+func (qq *Handler) fileInboxDocument(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input FileInboxDocumentInput,
+) (FilingData, error) {
+	if input.FileID == "" || len(input.FileID) > 100 ||
+		input.DestinationDirectoryID == "" || len(input.DestinationDirectoryID) > 100 ||
+		utf8.RuneCountInString(input.Filename) > 255 ||
+		utf8.RuneCountInString(input.NewDirectoryName) > 255 {
+		return FilingData{}, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filing input.")
+	}
+	filex, err := filingmodel.NewFilingService(qq.config.Infra.FileSystem()).FileInboxDocument(
+		ctx,
+		input.FileID,
+		input.DestinationDirectoryID,
+		input.Filename,
+		input.NewDirectoryName,
+	)
+	if err != nil {
+		return FilingData{}, err
+	}
+	return filingProjection(ctx, filex)
+}
+
+func (qq *Handler) markInboxFileDone(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input FileInput,
+) (FilingData, error) {
+	if input.FileID == "" || len(input.FileID) > 100 {
+		return FilingData{}, e.NewHTTPErrorf(http.StatusBadRequest, "File ID is required.")
+	}
+	filex, err := filingmodel.NewFilingService(qq.config.Infra.FileSystem()).CompleteInboxFile(
+		ctx, input.FileID,
+	)
+	if err != nil {
+		return FilingData{}, err
+	}
+	return filingProjection(ctx, filex)
+}
+
+func filingProjection(ctx *ctxx.SpaceContext, filex *enttenant.File) (FilingData, error) {
+	result := FilingData{
+		FileID:    filex.PublicID.String(),
+		Name:      filex.Name,
+		IsInInbox: filex.IsInInbox,
+	}
+	if filex.ParentID == 0 {
+		return result, nil
+	}
+	parent, err := filex.QueryParent().Only(ctx)
+	if err != nil {
+		return FilingData{}, err
+	}
+	result.ParentID = parent.PublicID.String()
+	return result, nil
+}
+
+func (qq *Handler) searchFiles(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input SearchFilesInput,
+) (FileListData, error) {
+	result := FileListData{Files: []FileSummary{}}
+	limit, err := pageLimit(input.Offset, input.Limit)
+	if err != nil {
+		return result, err
+	}
+	if utf8.RuneCountInString(input.Query) > 300 || len(input.TagIDs) > 32 ||
+		len(input.DocumentTypeID) > 100 {
+		return result, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid search input.")
+	}
+	tagIDs, documentTypeID, err := resolveFiledFilters(ctx, input)
+	if err != nil {
+		return result, err
+	}
+	query, err := filemodel.NewFiledQuery().Query(
+		ctx, input.Query, input.Sort, tagIDs, documentTypeID,
+	)
+	if err != nil {
+		return result, err
+	}
+	files, err := query.WithParent(func(query *enttenant.FileQuery) {
+		query.Select(file.FieldPublicID)
+	}).Select(
+		file.FieldID,
+		file.FieldPublicID,
+		file.FieldName,
+		file.FieldIsDirectory,
+		file.FieldIsInInbox,
+		file.FieldSource,
+		file.FieldOcrSuccessAt,
+	).Offset(input.Offset).Limit(limit + 1).All(ctx)
+	if err != nil {
+		return result, err
+	}
+	result.HasMore = len(files) > limit
+	if result.HasMore {
+		files = files[:limit]
+		next := input.Offset + limit
+		result.NextOffset = &next
+	}
+	for _, filex := range files {
+		result.Files = append(result.Files, qq.summary(requestCtx, ctx, filex, filex.Edges.Parent))
+	}
+	return result, nil
+}
+
+func pageLimit(offset int, requested *int) (int, error) {
+	limit := 50
+	if requested != nil {
+		limit = *requested
+	}
+	if offset < 0 || offset > 1000000 || limit < 1 || limit > 100 {
+		return 0, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid page range.")
+	}
+	return limit, nil
+}
+
+func resolveFiledFilters(
+	ctx *ctxx.SpaceContext,
+	input SearchFilesInput,
+) ([]int64, int64, error) {
+	seen := make(map[string]struct{}, len(input.TagIDs))
+	publicIDs := make([]entx.CIText, 0, len(input.TagIDs))
+	for _, publicID := range input.TagIDs {
+		if publicID == "" || len(publicID) > 100 {
+			return nil, 0, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid Tag filter.")
+		}
+		if _, exists := seen[publicID]; exists {
+			continue
+		}
+		seen[publicID] = struct{}{}
+		publicIDs = append(publicIDs, entx.NewCIText(publicID))
+	}
+	var tagIDs []int64
+	if len(publicIDs) > 0 {
+		tags, err := ctx.Space.QueryTags().Where(tag.PublicIDIn(publicIDs...)).All(ctx)
+		if err != nil {
+			return nil, 0, err
+		}
+		if len(tags) != len(publicIDs) {
+			return nil, 0, e.NewHTTPErrorf(http.StatusNotFound, "Tag not found.")
+		}
+		for _, tagx := range tags {
+			tagIDs = append(tagIDs, tagx.ID)
+		}
+	}
+	if input.DocumentTypeID == "" {
+		return tagIDs, 0, nil
+	}
+	documentTypex, err := ctx.Space.QueryDocumentTypes().Where(
+		documenttypequery.PublicID(entx.NewCIText(input.DocumentTypeID)),
+	).Only(ctx)
+	if err != nil {
+		return nil, 0, metadataNotFound(err, "Document type not found.")
+	}
+	return tagIDs, documentTypex.ID, nil
 }
 
 func (qq *Handler) uploadFile(

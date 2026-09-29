@@ -540,6 +540,36 @@ Slice 03 implementation, 2026-09-29:
   build, vet, live client, or manual desktop/mobile journey was run. Verification checklist items
   and the plan checkbox remain pending.
 
+Slice 04 implementation, 2026-09-29:
+
+- Added `filing.FilingService` as the shared lifecycle owner for folder filing and completion
+  without a move. Inbox `MoveFileCmd`, `AssignFileCmd`, and `MarkAsDoneCmd` now use it. Only live
+  Inbox documents can complete; folder mode, scoped destinations, directory shape, filename,
+  same-parent root filing, conflicts, and child-directory creation are validated inside the same
+  tenant transaction. Existing file identity and related metadata rows are not rewritten.
+- Extracted `file.FiledQuery` from Browse's filed-query behavior. Browse and MCP now share FTS,
+  resolved-Tag AND filtering, document-type filtering, sorting, deterministic ordering, and filed
+  Space scope. Browser property-filter state remains in the adapter and outside the first MCP
+  contract.
+- Registered `list_directory`, `create_directory`, `file_inbox_document`,
+  `mark_inbox_file_done`, and `search_files`. Directory and file references are scoped public IDs;
+  lists default to 50, cap at 100, and expose deterministic offset pagination. Filed search excludes
+  Inbox documents, directories, deleted rows, and other Spaces.
+- Ordinary MCP reads retain read-only tenant transactions and ordinary mutations use the
+  read/write connection. Upload remains a write-annotated tool but keeps a read-only outer scope
+  because its established prepare/I/O/finalize workflow owns separate fresh write transactions.
+  This fixes classification and filing writes without weakening storage transaction boundaries.
+- Added `server/mcp_filing_test.go` and the desktop/mobile `@file` Playwright journey. The focused
+  `go test ./server -run '^TestMCP(Filing|MarkInbox)' -count=1 -v` passed, covering directory
+  discovery/creation, failed-operation state preservation, folder and same-parent filing,
+  classification-filtered filed search, pagination, non-folder completion, read-only denial, and
+  foreign-Space rejection. The final compile-only check passed for `model/main/mcpcredential`,
+  `model/main/tenant`, `model/tenant/file`, `model/tenant/filing`, `model/tenant/filesystem`,
+  `action/browse`, `action/inbox`, `server`, and `server/mcp`.
+- No Playwright run, broad Go suite, build, vet, concurrent-completion check, or manual MCP client
+  journey was performed. Slice verification checkboxes and every plan delivery checkbox remain
+  pending.
+
 ## Operating implemented slices
 
 After deploying the generated migration and rebuilt application, open Account → MCP credentials.
@@ -547,13 +577,14 @@ Create a label/Space-scoped credential, copy its token once, and configure a bea
 with the displayed `/mcp` URL and `Authorization: Bearer <token>`. HTTPS is required outside
 development; no OAuth discovery flow is provided by this slice.
 
-The registered tools currently cover scoped Space/Inbox inspection, bounded OCR, Inbox upload, and
-existing-metadata classification. `get_file` includes typed classification once the tenant's
-metadata public-ID backfill is complete. Inbox pages default to 50 items, cap at 100, and reject
+The registered tools currently cover scoped Space/Inbox inspection, bounded OCR, Inbox upload,
+existing-metadata classification, destination discovery/creation, folder/non-folder filing, and
+filed search. `get_file` includes typed classification once the tenant's metadata public-ID backfill
+is complete. Inbox, directory, and filed-search pages default to 50 items, cap at 100, and reject
 offsets above 1,000,000; OCR windows default to 12,000 and cap at 50,000 Unicode characters.
 Revocation from Account settings takes effect on subsequent requests, including existing SDK
-clients. Losing current account/tenant/Space access also denies reads. Classification and upload
-writes require a read/write credential.
+clients. Losing current account/tenant/Space access also denies reads. All mutation tools require a
+read/write credential.
 
 These are implementation instructions, not evidence that the deployment/client journey passed.
 

@@ -131,9 +131,10 @@ for (const device of [
 			const list = await rpc(page.request, token, "tools/list", {});
 			expect((await list.json()).result.tools.map((tool: { name: string }) => tool.name).sort())
 				.toEqual([
-					"assign_tag", "clear_document_type", "get_document_type", "get_file", "get_space",
-					"list_document_types", "list_inbox", "list_properties", "list_tags",
-					"read_file_text", "remove_file_property", "set_document_type",
+					"assign_tag", "clear_document_type", "create_directory", "file_inbox_document",
+					"get_document_type", "get_file", "get_space", "list_directory", "list_document_types",
+					"list_inbox", "list_properties", "list_tags", "mark_inbox_file_done",
+					"read_file_text", "remove_file_property", "search_files", "set_document_type",
 					"set_file_property", "unassign_tag", "upload_file",
 				]);
 			const response = await rpc(page.request, token, "tools/call", {
@@ -343,6 +344,67 @@ for (const device of [
 			expect(file.properties.some(
 				(value: { property_id: string }) => value.property_id === invoiceDate.property_id,
 			)).toBe(false);
+		});
+
+		test("@file files an Inbox document and finds it again", async ({ page }) => {
+			const spaceName = `MCP file ${uniqueSuffix()}`;
+			const inboxURL = await prepareInbox(page, spaceName);
+			await openMCPCredentials(page);
+			const form = await openCreateMCPCredential(page);
+			await form.getByRole("textbox", { name: "Client label", exact: true })
+				.fill(`Filer ${uniqueSuffix()}`);
+			await form.getByRole("switch", { name: "Allow writes" }).check();
+			await selectSpace(form, spaceName);
+			await form.getByRole("button", { name: "Create", exact: true }).click();
+			const secret = page.getByRole("dialog").filter({ hasText: "MCP credential created" });
+			const token = (await secret.getByRole("link", { name: /^sdmcp_/ }).innerText()).trim();
+			expect((await rpc(page.request, token, "initialize", {
+				protocolVersion: "2025-11-25", capabilities: {},
+				clientInfo: { name: "simpledms-e2e", version: "1" },
+			})).ok()).toBeTruthy();
+
+			const space = (await (await rpc(page.request, token, "tools/call", {
+				name: "get_space", arguments: {},
+			})).json()).result.structuredContent;
+			const inbox = (await (await rpc(page.request, token, "tools/call", {
+				name: "list_inbox", arguments: {},
+			})).json()).result.structuredContent;
+			const document = inbox.files.find(
+				(value: { name: string }) => value.name === "upload-alpha.txt",
+			);
+			const directory = (await (await rpc(page.request, token, "tools/call", {
+				name: "create_directory",
+				arguments: { parent_directory_id: space.root_directory_id, name: "Filed by MCP" },
+			})).json()).result.structuredContent;
+			const filed = (await (await rpc(page.request, token, "tools/call", {
+				name: "file_inbox_document",
+				arguments: {
+					file_id: document.file_id,
+					destination_directory_id: directory.directory_id,
+					filename: "filed-by-mcp.txt",
+				},
+			})).json()).result.structuredContent;
+			expect(filed.file_id).toBe(document.file_id);
+			expect(filed.is_in_inbox).toBe(false);
+
+			const remaining = (await (await rpc(page.request, token, "tools/call", {
+				name: "list_inbox", arguments: {},
+			})).json()).result.structuredContent.files;
+			expect(remaining.some((value: { file_id: string }) => value.file_id === document.file_id))
+				.toBe(false);
+			const search = (await (await rpc(page.request, token, "tools/call", {
+				name: "search_files", arguments: { query: "filed", sort: "rank" },
+			})).json()).result.structuredContent;
+			const found = search.files.find(
+				(value: { file_id: string }) => value.file_id === document.file_id,
+			);
+			expect(found.name).toBe("filed-by-mcp.txt");
+			await page.goto(found.url);
+			await expect(page.getByRole("heading", { name: "filed-by-mcp.txt", exact: true }))
+				.toBeVisible();
+			await page.goto(inboxURL);
+			await expect(page.getByRole("heading", { name: "filed-by-mcp.txt", exact: true }))
+				.toHaveCount(0);
 		});
 	});
 }

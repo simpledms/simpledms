@@ -47,7 +47,8 @@ func TestMCPConnectionScopesReadsAndRevocation(t *testing.T) {
 	for _, tool := range tools.Tools {
 		names = append(names, tool.Name)
 		wantReadOnly := !slices.Contains([]string{
-			"assign_tag", "clear_document_type", "remove_file_property", "set_document_type",
+			"assign_tag", "clear_document_type", "create_directory", "file_inbox_document",
+			"mark_inbox_file_done", "remove_file_property", "set_document_type",
 			"set_file_property", "unassign_tag", "upload_file",
 		}, tool.Name)
 		if tool.Annotations == nil || tool.Annotations.ReadOnlyHint != wantReadOnly {
@@ -56,10 +57,11 @@ func TestMCPConnectionScopesReadsAndRevocation(t *testing.T) {
 	}
 	slices.Sort(names)
 	if !slices.Equal(names, []string{
-		"assign_tag", "clear_document_type", "get_document_type", "get_file", "get_space",
-		"list_document_types", "list_inbox", "list_properties", "list_tags",
-		"read_file_text", "remove_file_property", "set_document_type", "set_file_property",
-		"unassign_tag", "upload_file",
+		"assign_tag", "clear_document_type", "create_directory", "file_inbox_document",
+		"get_document_type", "get_file", "get_space", "list_directory", "list_document_types",
+		"list_inbox", "list_properties", "list_tags", "mark_inbox_file_done",
+		"read_file_text", "remove_file_property", "search_files", "set_document_type",
+		"set_file_property", "unassign_tag", "upload_file",
 	}) {
 		t.Fatalf("unexpected tools: %v", names)
 	}

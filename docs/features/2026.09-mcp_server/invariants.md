@@ -1,10 +1,10 @@
 # MCP durable rules
 
-Status: slices 01–03 enforcement and tests implemented but unverified; remaining rules planned
+Status: slices 01–04 enforcement and tests implemented; verification pending
 
 Source: [specification](spec.md). Delivery: [plan](plan.md). These are the durable rules newly
-needed at the shared-command/MCP boundary. Slice 01 covers M1/M2/M3/M6; later-slice extensions
-remain planned. Existing storage rules remain in their linked owners.
+needed at the shared-command/MCP boundary. Slice 01 covers M1/M2/M3/M6, with their write and
+filing extensions implemented in slices 02–04. Existing storage rules remain in their linked owners.
 The slice checklists reference these IDs rather than define another competing contract.
 
 ## M1 — Credential authority is bounded and current

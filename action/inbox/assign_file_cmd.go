@@ -9,6 +9,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
+	filingmodel "github.com/simpledms/simpledms/model/tenant/filing"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -105,17 +106,15 @@ func (qq *AssignFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	destDir := qq.infra.FileRepo.GetX(ctx, data.DestDirID)
-	filex := qq.infra.FileRepo.GetWithParentX(ctx, data.FileID)
-
-	// FIXME see comment in MoveFileCmd
-	filex.File, err = qq.infra.FileSystem().Move(ctx, destDir, filex.File, data.Filename, "")
+	fileData, err := filingmodel.NewFilingService(qq.infra.FileSystem()).FileInboxDocument(
+		ctx, data.FileID, data.DestDirID, data.Filename, "",
+	)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
-
-	filex.Data.Update().SetIsInInbox(false).SaveX(ctx)
+	filex := qq.infra.FileRepo.GetWithParentX(ctx, fileData.PublicID.String())
+	destDir := qq.infra.FileRepo.GetX(ctx, data.DestDirID)
 
 	// TODO snackbar not shown; modal not closed
 	// rw.Header().Set("HX-Location", route.InboxRoot())

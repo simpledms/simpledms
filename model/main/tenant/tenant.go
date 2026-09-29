@@ -236,27 +236,25 @@ func (qq *Tenant) ExecuteDBMigrations(
 
 func addMetadataPublicIDColumns(ctx context.Context, tenantDB *sqlx.TenantDB) error {
 	for _, table := range []string{"document_types", "properties", "tags"} {
+		tableQuery := fmt.Sprintf(
+			"SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = '%s'",
+			table,
+		)
+		tableCount, err := sqliteCount(ctx, tenantDB, tableQuery)
+		if err != nil {
+			log.Printf("failed inspecting %s table: %v", table, err)
+			return err
+		}
+		if tableCount == 0 {
+			continue
+		}
 		query := fmt.Sprintf(
 			"SELECT COUNT(*) FROM pragma_table_info('%s') WHERE name = 'public_id'",
 			table,
 		)
-		rows, err := tenantDB.ReadWriteConn.QueryContext(ctx, query)
+		count, err := sqliteCount(ctx, tenantDB, query)
 		if err != nil {
 			log.Printf("failed inspecting %s.public_id: %v", table, err)
-			return err
-		}
-		var count int
-		if !rows.Next() {
-			_ = rows.Close()
-			return fmt.Errorf("inspecting %s.public_id returned no result", table)
-		}
-		if err := rows.Scan(&count); err != nil {
-			_ = rows.Close()
-			log.Printf("failed scanning %s.public_id schema: %v", table, err)
-			return err
-		}
-		if err := rows.Close(); err != nil {
-			log.Printf("failed closing %s schema query: %v", table, err)
 			return err
 		}
 		if count != 0 {
@@ -269,6 +267,22 @@ func addMetadataPublicIDColumns(ctx context.Context, tenantDB *sqlx.TenantDB) er
 		}
 	}
 	return nil
+}
+
+func sqliteCount(ctx context.Context, tenantDB *sqlx.TenantDB, query string) (int, error) {
+	rows, err := tenantDB.ReadWriteConn.QueryContext(ctx, query)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+	if !rows.Next() {
+		return 0, fmt.Errorf("SQLite count query returned no result")
+	}
+	var count int
+	if err := rows.Scan(&count); err != nil {
+		return 0, err
+	}
+	return count, rows.Err()
 }
 
 func (qq *Tenant) migrateTenant(migrationsTenantFS fs.FS, metaPath string) error {

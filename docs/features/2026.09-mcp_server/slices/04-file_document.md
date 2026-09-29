@@ -1,6 +1,6 @@
 # 04 — File a classified document and find it again
 
-Status: planned  
+Status: implementation complete; verification pending
 Depends on: [01](01-connect_and_inspect.md)–[03](03-classify_document.md)  
 Contract: [filing](../spec.md#filing-contract); rules M1–M5
 
@@ -26,17 +26,17 @@ first-release upload/classify/file journey.
 
 ## Implementation checklist
 
-- [ ] Extract the lifecycle rule shared by Inbox `MoveFileCmd`, `AssignFileCmd`, and
+- [x] Extract the lifecycle rule shared by Inbox `MoveFileCmd`, `AssignFileCmd`, and
   `MarkAsDoneCmd`. Reuse filesystem movement/creation; enforce the formerly inconsistent Inbox
   precondition centrally and use the ordinary shared write execution boundary.
-- [ ] Expose destination reads/creation through scoped public IDs. Preserve filename, mode,
+- [x] Expose destination reads/creation through scoped public IDs. Preserve filename, mode,
   conflict, and filesystem cycle validation instead of making a second tree implementation.
-- [ ] Extract filed-query inputs/projections from `ListDirFileQueryService`, preserving FTS,
+- [x] Extract filed-query inputs/projections from `ListDirFileQueryService`, preserving FTS,
   resolved-Tag and document-type filtering, sorting, and deterministic bounded pagination.
   Keep browser state/callbacks in the adapter and initial property-filter expansion out of scope.
-- [ ] Register the five tools and preserve existing Inbox/Browse response contracts and selection
+- [x] Register the five tools and preserve existing Inbox/Browse response contracts and selection
   refreshes. Do not treat an MCP mutation as an automatic event in another browser tab.
-- [ ] Add `server/mcp_filing_test.go`, extend relevant current filing regressions, and add `@file`
+- [x] Add `server/mcp_filing_test.go`, extend relevant current filing regressions, and add `@file`
   desktop/mobile checks with uploaded and classified fixtures from earlier slices.
 
 ## Verification checklist

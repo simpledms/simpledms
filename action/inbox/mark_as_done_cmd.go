@@ -4,15 +4,14 @@ package inbox
 
 import (
 	"log"
-	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
+	filingmodel "github.com/simpledms/simpledms/model/tenant/filing"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
-	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -54,16 +53,14 @@ func (qq *MarkAsDoneCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	filex := qq.infra.FileRepo.GetWithParentX(ctx, data.FileID)
-
-	// assignment := filex.Data.QuerySpaceAssignment().Where(spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID)).OnlyX(ctx)
-
-	if !filex.Data.IsInInbox {
-		log.Println("file not in inbox")
-		return e.NewHTTPErrorf(http.StatusBadRequest, "File must be in inbox.")
+	fileData, err := filingmodel.NewFilingService(qq.infra.FileSystem()).CompleteInboxFile(
+		ctx, data.FileID,
+	)
+	if err != nil {
+		log.Println(err)
+		return err
 	}
-
-	filex.Data.Update().SetIsInInbox(false).SaveX(ctx)
+	filex := qq.infra.FileRepo.GetWithParentX(ctx, fileData.PublicID.String())
 	// assignment = assignment.Update().SetIsInInbox(false).SaveX(ctx)
 
 	// FIXME not correct, should not be opened in parent dir, but flat

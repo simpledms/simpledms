@@ -131,6 +131,12 @@ func (qq *CredentialService) EditLabel(
 func (qq *CredentialService) Scope(
 	ctx *ctxx.MainContext, tenantID, spaceID string,
 ) (*ctxx.SpaceContext, *enttenant.Tx, error) {
+	return qq.scope(ctx, tenantID, spaceID, true)
+}
+
+func (qq *CredentialService) scope(
+	ctx *ctxx.MainContext, tenantID, spaceID string, isReadOnly bool,
+) (*ctxx.SpaceContext, *enttenant.Tx, error) {
 	if tenantID == "" || spaceID == "" {
 		return nil, nil, e.NewHTTPErrorf(http.StatusForbidden, "Destination unavailable.")
 	}
@@ -148,7 +154,7 @@ func (qq *CredentialService) Scope(
 	if !ok {
 		return nil, nil, e.NewHTTPErrorf(http.StatusServiceUnavailable, "Destination unavailable.")
 	}
-	tx, err := db.Tx(ctx, true)
+	tx, err := db.Tx(ctx, isReadOnly)
 	if err != nil {
 		log.Println(err)
 		return nil, nil, err
@@ -169,6 +175,32 @@ func (qq *CredentialService) Execute(
 	i18nx *i18n.I18n,
 	commercial bool,
 	token string,
+	fn func(*ctxx.SpaceContext, *entmain.MCPCredential) error,
+) (ok bool, err error) {
+	return qq.execute(ctx, mainDB, dbs, i18nx, commercial, token, true, fn)
+}
+
+// ExecuteWrite authenticates afresh and owns a tenant write transaction for one operation.
+func (qq *CredentialService) ExecuteWrite(
+	ctx context.Context,
+	mainDB *sqlx.MainDB,
+	dbs *tenantdbs.TenantDBs,
+	i18nx *i18n.I18n,
+	commercial bool,
+	token string,
+	fn func(*ctxx.SpaceContext, *entmain.MCPCredential) error,
+) (ok bool, err error) {
+	return qq.execute(ctx, mainDB, dbs, i18nx, commercial, token, false, fn)
+}
+
+func (qq *CredentialService) execute(
+	ctx context.Context,
+	mainDB *sqlx.MainDB,
+	dbs *tenantdbs.TenantDBs,
+	i18nx *i18n.I18n,
+	commercial bool,
+	token string,
+	isReadOnly bool,
 	fn func(*ctxx.SpaceContext, *entmain.MCPCredential) error,
 ) (ok bool, err error) {
 	mainTx, err := mainDB.Tx(ctx, true)
@@ -205,7 +237,12 @@ func (qq *CredentialService) Execute(
 		log.Println(err)
 		return false, e.NewHTTPErrorf(http.StatusForbidden, "Destination unavailable.")
 	}
-	sc, tenantTx, err := qq.Scope(mainCtx, tenantx.PublicID.String(), credential.SpacePublicID.String())
+	sc, tenantTx, err := qq.scope(
+		mainCtx,
+		tenantx.PublicID.String(),
+		credential.SpacePublicID.String(),
+		isReadOnly,
+	)
 	if err != nil {
 		return false, err
 	}

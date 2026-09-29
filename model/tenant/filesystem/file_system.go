@@ -102,17 +102,31 @@ func (qq *FileSystem) MakeDir(ctx ctxx.Context, parentDirID string, newDirName s
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "The provided filename is not allowed.")
 	}
 
-	// parentDir := ctx.TenantCtx().TTx.File.GetX(ctx, parentDirID)
-	parentDir := ctx.TenantCtx().TTx.File.Query().Where(file.PublicID(entx.NewCIText(parentDirID))).OnlyX(ctx)
+	parentDir, err := ctx.TenantCtx().TTx.File.Query().Where(
+		file.SpaceID(ctx.SpaceCtx().Space.ID),
+		file.PublicID(entx.NewCIText(parentDirID)),
+	).Only(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	if !parentDir.IsDirectory {
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Parent is not a directory.")
+	}
 
 	// FIXME case sensitivy
-	if parentDir.QueryChildren().Where(file.Name(newDirName)).ExistX(ctx) {
+	exists, err := parentDir.QueryChildren().Where(file.Name(newDirName)).Exist(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	if exists {
 		log.Println("duplicate file", newDirName)
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "A folder with this name already exists.")
 	}
 
 	// FIXME handle transaction or let indexer handle such situations?
-	filex := ctx.TenantCtx().TTx.File.Create().
+	filex, err := ctx.TenantCtx().TTx.File.Create().
 		SetName(newDirName).
 		SetIsDirectory(true).
 		SetIndexedAt(time.Now()).
@@ -120,7 +134,11 @@ func (qq *FileSystem) MakeDir(ctx ctxx.Context, parentDirID string, newDirName s
 		SetModifiedAt(time.Now()).
 		SetParentID(parentDir.ID).
 		SetSpaceID(ctx.SpaceCtx().Space.ID).
-		SaveX(ctx)
+		Save(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
 	return filemodel.NewFile(filex), nil
 }
@@ -138,6 +156,10 @@ func (qq *FileSystem) Move(
 
 	if !destDir.Data.IsDirectory {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Destination is not a directory.")
+	}
+	if newFilename != "" &&
+		(filepath.Clean(newFilename) != newFilename || !filenamex.IsAllowed(newFilename)) {
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
 	}
 	if filex.Data.ID == destDir.Data.ID {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot move directory to itself.")
@@ -182,7 +204,11 @@ func (qq *FileSystem) Move(
 
 	// returns new pointer, thus must be returned to caller
 	// TODO not very nice solution
-	filexx := fileUpdate.SaveX(ctx)
+	filexx, err := fileUpdate.Save(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 	filex = filemodel.NewFile(filexx)
 
 	// FIXME is overwrite automatically prevented by unique constraint? impl test
