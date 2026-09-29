@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 )
 
@@ -18,6 +19,8 @@ const (
 	FieldID = "id"
 	// FieldSpaceID holds the string denoting the space_id field in the database.
 	FieldSpaceID = "space_id"
+	// FieldPublicID holds the string denoting the public_id field in the database.
+	FieldPublicID = "public_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldType holds the string denoting the type field in the database.
@@ -57,6 +60,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldSpaceID,
+	FieldPublicID,
 	FieldName,
 	FieldType,
 	FieldUnit,
@@ -86,6 +90,8 @@ func ValidColumn(column string) bool {
 var (
 	Hooks  [1]ent.Hook
 	Policy ent.Policy
+	// DefaultPublicID holds the default value on creation for the "public_id" field.
+	DefaultPublicID func() entx.CIText
 	// DefaultUnit holds the default value on creation for the "unit" field.
 	DefaultUnit string
 )
@@ -111,6 +117,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // BySpaceID orders the results by the space_id field.
 func BySpaceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSpaceID, opts...).ToFunc()
+}
+
+// ByPublicID orders the results by the public_id field.
+func ByPublicID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPublicID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

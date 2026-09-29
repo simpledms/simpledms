@@ -18,6 +18,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/sqlx"
+	"github.com/simpledms/simpledms/model/tenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/cookiex"
 )
@@ -78,6 +79,12 @@ func newMCPFixtureWithMode(
 		return nil
 	}); err != nil {
 		t.Fatal(err)
+	}
+	runner := tenantdatamigration.NewRunner()
+	for _, migration := range tenantdatamigration.NewMetadataPublicIDMigrations() {
+		if completed, err := runner.RunToCompletion(context.Background(), db, migration); err != nil || !completed {
+			t.Fatalf("metadata public ID migration completed=%t, err=%v", completed, err)
+		}
 	}
 	data := url.Values{
 		"Label":       {"MCP " + suffix},

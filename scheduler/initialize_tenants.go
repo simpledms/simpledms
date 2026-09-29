@@ -12,6 +12,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	tenant2 "github.com/simpledms/simpledms/model/main/tenant"
+	"github.com/simpledms/simpledms/model/tenant/tenantdatamigration"
 )
 
 func (qq *Scheduler) initializeTenants(devMode bool, metaPath string, migrationsTenantFS fs.FS) {
@@ -61,6 +62,7 @@ func (qq *Scheduler) initializeTenants(devMode bool, metaPath string, migrations
 			}
 
 			qq.tenantDBs.Store(tenantm.Data.ID, tenantDB)
+			qq.runTenantDataMigrations(ctx, tenantdatamigration.NewRunner(), tenantDB, tenantm.Data)
 		}
 
 		// TODO what is a good interval? user shouldn't have to wait before he/she can login...

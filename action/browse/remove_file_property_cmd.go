@@ -5,8 +5,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
-	"github.com/simpledms/simpledms/db/enttenant/property"
+	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -53,13 +52,12 @@ func (qq *RemoveFilePropertyCmd) Handler(
 	}
 
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
-	propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
-
-	ctx.SpaceCtx().TTx.FilePropertyAssignment.Delete().
-		Where(
-			filepropertyassignment.FileID(filex.Data.ID),
-			filepropertyassignment.PropertyID(data.PropertyID),
-		).ExecX(ctx)
+	propertyx, _, err := propertymodel.NewFilePropertyAssignmentService().Remove(
+		ctx, filex.Data.ID, data.PropertyID,
+	)
+	if err != nil {
+		return err
+	}
 
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.FilePropertyUpdated.String())

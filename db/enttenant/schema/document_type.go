@@ -4,6 +4,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+
+	"github.com/simpledms/simpledms/db/entx"
 )
 
 type DocumentType struct {
@@ -32,6 +34,6 @@ func (DocumentType) Edges() []ent.Edge {
 func (DocumentType) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		NewSpaceMixin(),
-		// entcommon.NewPublicIDMixin(true),
+		entx.NewBackfillablePublicIDMixin(),
 	}
 }

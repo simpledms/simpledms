@@ -2451,6 +2451,7 @@ type DocumentTypeMutation struct {
 	op                Op
 	typ               string
 	id                *int64
+	public_id         *entx.CIText
 	name              *string
 	icon              *string
 	is_protected      *bool
@@ -2604,6 +2605,55 @@ func (m *DocumentTypeMutation) OldSpaceID(ctx context.Context) (v int64, err err
 // ResetSpaceID resets all changes to the "space_id" field.
 func (m *DocumentTypeMutation) ResetSpaceID() {
 	m.space = nil
+}
+
+// SetPublicID sets the "public_id" field.
+func (m *DocumentTypeMutation) SetPublicID(et entx.CIText) {
+	m.public_id = &et
+}
+
+// PublicID returns the value of the "public_id" field in the mutation.
+func (m *DocumentTypeMutation) PublicID() (r entx.CIText, exists bool) {
+	v := m.public_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPublicID returns the old "public_id" field's value of the DocumentType entity.
+// If the DocumentType object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DocumentTypeMutation) OldPublicID(ctx context.Context) (v entx.CIText, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPublicID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPublicID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPublicID: %w", err)
+	}
+	return oldValue.PublicID, nil
+}
+
+// ClearPublicID clears the value of the "public_id" field.
+func (m *DocumentTypeMutation) ClearPublicID() {
+	m.public_id = nil
+	m.clearedFields[documenttype.FieldPublicID] = struct{}{}
+}
+
+// PublicIDCleared returns if the "public_id" field was cleared in this mutation.
+func (m *DocumentTypeMutation) PublicIDCleared() bool {
+	_, ok := m.clearedFields[documenttype.FieldPublicID]
+	return ok
+}
+
+// ResetPublicID resets all changes to the "public_id" field.
+func (m *DocumentTypeMutation) ResetPublicID() {
+	m.public_id = nil
+	delete(m.clearedFields, documenttype.FieldPublicID)
 }
 
 // SetName sets the "name" field.
@@ -2878,9 +2928,12 @@ func (m *DocumentTypeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DocumentTypeMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 6)
 	if m.space != nil {
 		fields = append(fields, documenttype.FieldSpaceID)
+	}
+	if m.public_id != nil {
+		fields = append(fields, documenttype.FieldPublicID)
 	}
 	if m.name != nil {
 		fields = append(fields, documenttype.FieldName)
@@ -2904,6 +2957,8 @@ func (m *DocumentTypeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case documenttype.FieldSpaceID:
 		return m.SpaceID()
+	case documenttype.FieldPublicID:
+		return m.PublicID()
 	case documenttype.FieldName:
 		return m.Name()
 	case documenttype.FieldIcon:
@@ -2923,6 +2978,8 @@ func (m *DocumentTypeMutation) OldField(ctx context.Context, name string) (ent.V
 	switch name {
 	case documenttype.FieldSpaceID:
 		return m.OldSpaceID(ctx)
+	case documenttype.FieldPublicID:
+		return m.OldPublicID(ctx)
 	case documenttype.FieldName:
 		return m.OldName(ctx)
 	case documenttype.FieldIcon:
@@ -2946,6 +3003,13 @@ func (m *DocumentTypeMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSpaceID(v)
+		return nil
+	case documenttype.FieldPublicID:
+		v, ok := value.(entx.CIText)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPublicID(v)
 		return nil
 	case documenttype.FieldName:
 		v, ok := value.(string)
@@ -3008,6 +3072,9 @@ func (m *DocumentTypeMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *DocumentTypeMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(documenttype.FieldPublicID) {
+		fields = append(fields, documenttype.FieldPublicID)
+	}
 	if m.FieldCleared(documenttype.FieldIcon) {
 		fields = append(fields, documenttype.FieldIcon)
 	}
@@ -3025,6 +3092,9 @@ func (m *DocumentTypeMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *DocumentTypeMutation) ClearField(name string) error {
 	switch name {
+	case documenttype.FieldPublicID:
+		m.ClearPublicID()
+		return nil
 	case documenttype.FieldIcon:
 		m.ClearIcon()
 		return nil
@@ -3038,6 +3108,9 @@ func (m *DocumentTypeMutation) ResetField(name string) error {
 	switch name {
 	case documenttype.FieldSpaceID:
 		m.ResetSpaceID()
+		return nil
+	case documenttype.FieldPublicID:
+		m.ResetPublicID()
 		return nil
 	case documenttype.FieldName:
 		m.ResetName()
@@ -8724,6 +8797,7 @@ type PropertyMutation struct {
 	op                      Op
 	typ                     string
 	id                      *int64
+	public_id               *entx.CIText
 	name                    *string
 	_type                   *fieldtype.FieldType
 	unit                    *string
@@ -8879,6 +8953,55 @@ func (m *PropertyMutation) OldSpaceID(ctx context.Context) (v int64, err error) 
 // ResetSpaceID resets all changes to the "space_id" field.
 func (m *PropertyMutation) ResetSpaceID() {
 	m.space = nil
+}
+
+// SetPublicID sets the "public_id" field.
+func (m *PropertyMutation) SetPublicID(et entx.CIText) {
+	m.public_id = &et
+}
+
+// PublicID returns the value of the "public_id" field in the mutation.
+func (m *PropertyMutation) PublicID() (r entx.CIText, exists bool) {
+	v := m.public_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPublicID returns the old "public_id" field's value of the Property entity.
+// If the Property object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PropertyMutation) OldPublicID(ctx context.Context) (v entx.CIText, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPublicID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPublicID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPublicID: %w", err)
+	}
+	return oldValue.PublicID, nil
+}
+
+// ClearPublicID clears the value of the "public_id" field.
+func (m *PropertyMutation) ClearPublicID() {
+	m.public_id = nil
+	m.clearedFields[property.FieldPublicID] = struct{}{}
+}
+
+// PublicIDCleared returns if the "public_id" field was cleared in this mutation.
+func (m *PropertyMutation) PublicIDCleared() bool {
+	_, ok := m.clearedFields[property.FieldPublicID]
+	return ok
+}
+
+// ResetPublicID resets all changes to the "public_id" field.
+func (m *PropertyMutation) ResetPublicID() {
+	m.public_id = nil
+	delete(m.clearedFields, property.FieldPublicID)
 }
 
 // SetName sets the "name" field.
@@ -9158,9 +9281,12 @@ func (m *PropertyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PropertyMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.space != nil {
 		fields = append(fields, property.FieldSpaceID)
+	}
+	if m.public_id != nil {
+		fields = append(fields, property.FieldPublicID)
 	}
 	if m.name != nil {
 		fields = append(fields, property.FieldName)
@@ -9181,6 +9307,8 @@ func (m *PropertyMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case property.FieldSpaceID:
 		return m.SpaceID()
+	case property.FieldPublicID:
+		return m.PublicID()
 	case property.FieldName:
 		return m.Name()
 	case property.FieldType:
@@ -9198,6 +9326,8 @@ func (m *PropertyMutation) OldField(ctx context.Context, name string) (ent.Value
 	switch name {
 	case property.FieldSpaceID:
 		return m.OldSpaceID(ctx)
+	case property.FieldPublicID:
+		return m.OldPublicID(ctx)
 	case property.FieldName:
 		return m.OldName(ctx)
 	case property.FieldType:
@@ -9219,6 +9349,13 @@ func (m *PropertyMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSpaceID(v)
+		return nil
+	case property.FieldPublicID:
+		v, ok := value.(entx.CIText)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPublicID(v)
 		return nil
 	case property.FieldName:
 		v, ok := value.(string)
@@ -9273,7 +9410,11 @@ func (m *PropertyMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *PropertyMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(property.FieldPublicID) {
+		fields = append(fields, property.FieldPublicID)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -9286,6 +9427,11 @@ func (m *PropertyMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *PropertyMutation) ClearField(name string) error {
+	switch name {
+	case property.FieldPublicID:
+		m.ClearPublicID()
+		return nil
+	}
 	return fmt.Errorf("unknown Property nullable field %s", name)
 }
 
@@ -9295,6 +9441,9 @@ func (m *PropertyMutation) ResetField(name string) error {
 	switch name {
 	case property.FieldSpaceID:
 		m.ResetSpaceID()
+		return nil
+	case property.FieldPublicID:
+		m.ResetPublicID()
 		return nil
 	case property.FieldName:
 		m.ResetName()
@@ -14019,6 +14168,7 @@ type TagMutation struct {
 	op                    Op
 	typ                   string
 	id                    *int64
+	public_id             *entx.CIText
 	name                  *string
 	color                 *string
 	icon                  *string
@@ -14186,6 +14336,55 @@ func (m *TagMutation) OldSpaceID(ctx context.Context) (v int64, err error) {
 // ResetSpaceID resets all changes to the "space_id" field.
 func (m *TagMutation) ResetSpaceID() {
 	m.space = nil
+}
+
+// SetPublicID sets the "public_id" field.
+func (m *TagMutation) SetPublicID(et entx.CIText) {
+	m.public_id = &et
+}
+
+// PublicID returns the value of the "public_id" field in the mutation.
+func (m *TagMutation) PublicID() (r entx.CIText, exists bool) {
+	v := m.public_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPublicID returns the old "public_id" field's value of the Tag entity.
+// If the Tag object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TagMutation) OldPublicID(ctx context.Context) (v entx.CIText, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPublicID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPublicID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPublicID: %w", err)
+	}
+	return oldValue.PublicID, nil
+}
+
+// ClearPublicID clears the value of the "public_id" field.
+func (m *TagMutation) ClearPublicID() {
+	m.public_id = nil
+	m.clearedFields[tag.FieldPublicID] = struct{}{}
+}
+
+// PublicIDCleared returns if the "public_id" field was cleared in this mutation.
+func (m *TagMutation) PublicIDCleared() bool {
+	_, ok := m.clearedFields[tag.FieldPublicID]
+	return ok
+}
+
+// ResetPublicID resets all changes to the "public_id" field.
+func (m *TagMutation) ResetPublicID() {
+	m.public_id = nil
+	delete(m.clearedFields, tag.FieldPublicID)
 }
 
 // SetName sets the "name" field.
@@ -14765,9 +14964,12 @@ func (m *TagMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TagMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.space != nil {
 		fields = append(fields, tag.FieldSpaceID)
+	}
+	if m.public_id != nil {
+		fields = append(fields, tag.FieldPublicID)
 	}
 	if m.name != nil {
 		fields = append(fields, tag.FieldName)
@@ -14794,6 +14996,8 @@ func (m *TagMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case tag.FieldSpaceID:
 		return m.SpaceID()
+	case tag.FieldPublicID:
+		return m.PublicID()
 	case tag.FieldName:
 		return m.Name()
 	case tag.FieldColor:
@@ -14815,6 +15019,8 @@ func (m *TagMutation) OldField(ctx context.Context, name string) (ent.Value, err
 	switch name {
 	case tag.FieldSpaceID:
 		return m.OldSpaceID(ctx)
+	case tag.FieldPublicID:
+		return m.OldPublicID(ctx)
 	case tag.FieldName:
 		return m.OldName(ctx)
 	case tag.FieldColor:
@@ -14840,6 +15046,13 @@ func (m *TagMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSpaceID(v)
+		return nil
+	case tag.FieldPublicID:
+		v, ok := value.(entx.CIText)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPublicID(v)
 		return nil
 	case tag.FieldName:
 		v, ok := value.(string)
@@ -14909,6 +15122,9 @@ func (m *TagMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *TagMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(tag.FieldPublicID) {
+		fields = append(fields, tag.FieldPublicID)
+	}
 	if m.FieldCleared(tag.FieldColor) {
 		fields = append(fields, tag.FieldColor)
 	}
@@ -14932,6 +15148,9 @@ func (m *TagMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *TagMutation) ClearField(name string) error {
 	switch name {
+	case tag.FieldPublicID:
+		m.ClearPublicID()
+		return nil
 	case tag.FieldColor:
 		m.ClearColor()
 		return nil
@@ -14951,6 +15170,9 @@ func (m *TagMutation) ResetField(name string) error {
 	switch name {
 	case tag.FieldSpaceID:
 		m.ResetSpaceID()
+		return nil
+	case tag.FieldPublicID:
+		m.ResetPublicID()
 		return nil
 	case tag.FieldName:
 		m.ResetName()

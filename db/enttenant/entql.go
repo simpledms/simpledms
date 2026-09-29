@@ -91,6 +91,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 		Type: "DocumentType",
 		Fields: map[string]*sqlgraph.FieldSpec{
 			documenttype.FieldSpaceID:     {Type: field.TypeInt64, Column: documenttype.FieldSpaceID},
+			documenttype.FieldPublicID:    {Type: field.TypeString, Column: documenttype.FieldPublicID},
 			documenttype.FieldName:        {Type: field.TypeString, Column: documenttype.FieldName},
 			documenttype.FieldIcon:        {Type: field.TypeString, Column: documenttype.FieldIcon},
 			documenttype.FieldIsProtected: {Type: field.TypeBool, Column: documenttype.FieldIsProtected},
@@ -222,10 +223,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Property",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			property.FieldSpaceID: {Type: field.TypeInt64, Column: property.FieldSpaceID},
-			property.FieldName:    {Type: field.TypeString, Column: property.FieldName},
-			property.FieldType:    {Type: field.TypeEnum, Column: property.FieldType},
-			property.FieldUnit:    {Type: field.TypeString, Column: property.FieldUnit},
+			property.FieldSpaceID:  {Type: field.TypeInt64, Column: property.FieldSpaceID},
+			property.FieldPublicID: {Type: field.TypeString, Column: property.FieldPublicID},
+			property.FieldName:     {Type: field.TypeString, Column: property.FieldName},
+			property.FieldType:     {Type: field.TypeEnum, Column: property.FieldType},
+			property.FieldUnit:     {Type: field.TypeString, Column: property.FieldUnit},
 		},
 	}
 	graph.Nodes[9] = &sqlgraph.Node{
@@ -331,12 +333,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Tag",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			tag.FieldSpaceID: {Type: field.TypeInt64, Column: tag.FieldSpaceID},
-			tag.FieldName:    {Type: field.TypeString, Column: tag.FieldName},
-			tag.FieldColor:   {Type: field.TypeString, Column: tag.FieldColor},
-			tag.FieldIcon:    {Type: field.TypeString, Column: tag.FieldIcon},
-			tag.FieldType:    {Type: field.TypeEnum, Column: tag.FieldType},
-			tag.FieldGroupID: {Type: field.TypeInt64, Column: tag.FieldGroupID},
+			tag.FieldSpaceID:  {Type: field.TypeInt64, Column: tag.FieldSpaceID},
+			tag.FieldPublicID: {Type: field.TypeString, Column: tag.FieldPublicID},
+			tag.FieldName:     {Type: field.TypeString, Column: tag.FieldName},
+			tag.FieldColor:    {Type: field.TypeString, Column: tag.FieldColor},
+			tag.FieldIcon:     {Type: field.TypeString, Column: tag.FieldIcon},
+			tag.FieldType:     {Type: field.TypeEnum, Column: tag.FieldType},
+			tag.FieldGroupID:  {Type: field.TypeInt64, Column: tag.FieldGroupID},
 		},
 	}
 	graph.Nodes[14] = &sqlgraph.Node{
@@ -1637,6 +1640,11 @@ func (f *DocumentTypeFilter) WhereSpaceID(p entql.Int64P) {
 	f.Where(p.Field(documenttype.FieldSpaceID))
 }
 
+// WherePublicID applies the entql string predicate on the public_id field.
+func (f *DocumentTypeFilter) WherePublicID(p entql.StringP) {
+	f.Where(p.Field(documenttype.FieldPublicID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *DocumentTypeFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(documenttype.FieldName))
@@ -2483,6 +2491,11 @@ func (f *PropertyFilter) WhereSpaceID(p entql.Int64P) {
 	f.Where(p.Field(property.FieldSpaceID))
 }
 
+// WherePublicID applies the entql string predicate on the public_id field.
+func (f *PropertyFilter) WherePublicID(p entql.StringP) {
+	f.Where(p.Field(property.FieldPublicID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *PropertyFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(property.FieldName))
@@ -3153,6 +3166,11 @@ func (f *TagFilter) WhereID(p entql.Int64P) {
 // WhereSpaceID applies the entql int64 predicate on the space_id field.
 func (f *TagFilter) WhereSpaceID(p entql.Int64P) {
 	f.Where(p.Field(tag.FieldSpaceID))
+}
+
+// WherePublicID applies the entql string predicate on the public_id field.
+func (f *TagFilter) WherePublicID(p entql.StringP) {
+	f.Where(p.Field(tag.FieldPublicID))
 }
 
 // WhereName applies the entql string predicate on the name field.

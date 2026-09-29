@@ -1,7 +1,6 @@
 package browse
 
 import (
-	"log"
 	"net/http"
 	"strings"
 
@@ -9,10 +8,9 @@ import (
 	"github.com/simpledms/simpledms/common"
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
+	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -76,33 +74,14 @@ func (qq *AddFilePropertyValueCmd) Handler(
 		return err
 	}
 
-	nilableAssignment, err := ctx.SpaceCtx().TTx.FilePropertyAssignment.Query().
-		Where(
-			filepropertyassignment.PropertyID(data.PropertyID),
-			filepropertyassignment.FileID(filex.Data.ID),
-		).Only(ctx)
-	if err != nil && !enttenant.IsNotFound(err) {
-		log.Println(err)
+	value, err := filePropertyValue(propertyx.Type, filePropertyValuesFromAdd(data))
+	if err != nil {
 		return err
 	}
-
-	if enttenant.IsNotFound(err) {
-		query := ctx.SpaceCtx().TTx.FilePropertyAssignment.Create().
-			SetSpaceID(ctx.SpaceCtx().Space.ID).
-			SetFileID(filex.Data.ID).
-			SetPropertyID(data.PropertyID)
-		if err := applyPropertyValuesToCreate(query, propertyx.Type, filePropertyValuesFromAdd(data)); err != nil {
-			return err
-		}
-
-		query.ExecX(ctx)
-	} else {
-		query := nilableAssignment.Update()
-		if err := applyPropertyValuesToUpdate(query, propertyx.Type, filePropertyValuesFromAdd(data)); err != nil {
-			return err
-		}
-
-		query.SaveX(ctx)
+	if _, _, err := propertymodel.NewFilePropertyAssignmentService().Set(
+		ctx, filex.Data.ID, data.PropertyID, value,
+	); err != nil {
+		return err
 	}
 
 	rw.Header().Set("HX-Reswap", "none")

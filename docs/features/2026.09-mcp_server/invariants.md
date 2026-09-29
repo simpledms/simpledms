@@ -1,6 +1,6 @@
 # MCP durable rules
 
-Status: slices 01–02 enforcement and tests implemented but unverified; remaining rules planned
+Status: slices 01–03 enforcement and tests implemented but unverified; remaining rules planned
 
 Source: [specification](spec.md). Delivery: [plan](plan.md). These are the durable rules newly
 needed at the shared-command/MCP boundary. Slice 01 covers M1/M2/M3/M6; later-slice extensions

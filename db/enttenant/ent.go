@@ -19,6 +19,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/filesearch"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
+
 	enttenantpreviewconversion "github.com/simpledms/simpledms/db/enttenant/previewconversion"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
@@ -29,6 +30,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
 	"github.com/simpledms/simpledms/db/enttenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/db/enttenant/user"
+
 	enttenantwebdavresource "github.com/simpledms/simpledms/db/enttenant/webdavresource"
 )
 

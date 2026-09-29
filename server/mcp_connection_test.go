@@ -46,14 +46,20 @@ func TestMCPConnectionScopesReadsAndRevocation(t *testing.T) {
 	var names []string
 	for _, tool := range tools.Tools {
 		names = append(names, tool.Name)
-		wantReadOnly := tool.Name != "upload_file"
+		wantReadOnly := !slices.Contains([]string{
+			"assign_tag", "clear_document_type", "remove_file_property", "set_document_type",
+			"set_file_property", "unassign_tag", "upload_file",
+		}, tool.Name)
 		if tool.Annotations == nil || tool.Annotations.ReadOnlyHint != wantReadOnly {
 			t.Errorf("wrong read-only annotation: %s", tool.Name)
 		}
 	}
 	slices.Sort(names)
 	if !slices.Equal(names, []string{
-		"get_file", "get_space", "list_inbox", "read_file_text", "upload_file",
+		"assign_tag", "clear_document_type", "get_document_type", "get_file", "get_space",
+		"list_document_types", "list_inbox", "list_properties", "list_tags",
+		"read_file_text", "remove_file_property", "set_document_type", "set_file_property",
+		"unassign_tag", "upload_file",
 	}) {
 		t.Fatalf("unexpected tools: %v", names)
 	}

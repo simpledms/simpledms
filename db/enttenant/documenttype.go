@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/entx"
 )
 
 // DocumentType is the model entity for the DocumentType schema.
@@ -19,6 +20,8 @@ type DocumentType struct {
 	ID int64 `json:"id,omitempty"`
 	// SpaceID holds the value of the "space_id" field.
 	SpaceID int64 `json:"space_id,omitempty"`
+	// PublicID holds the value of the "public_id" field.
+	PublicID entx.CIText `json:"public_id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Icon holds the value of the "icon" field.
@@ -69,6 +72,8 @@ func (*DocumentType) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case documenttype.FieldPublicID:
+			values[i] = new(entx.CIText)
 		case documenttype.FieldIsProtected, documenttype.FieldIsDisabled:
 			values[i] = new(sql.NullBool)
 		case documenttype.FieldID, documenttype.FieldSpaceID:
@@ -101,6 +106,12 @@ func (_m *DocumentType) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
 				_m.SpaceID = value.Int64
+			}
+		case documenttype.FieldPublicID:
+			if value, ok := values[i].(*entx.CIText); !ok {
+				return fmt.Errorf("unexpected type %T for field public_id", values[i])
+			} else if value != nil {
+				_m.PublicID = *value
 			}
 		case documenttype.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -174,6 +185,9 @@ func (_m *DocumentType) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("space_id=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
+	builder.WriteString(", ")
+	builder.WriteString("public_id=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PublicID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

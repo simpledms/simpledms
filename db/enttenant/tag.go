@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 )
 
@@ -20,6 +21,8 @@ type Tag struct {
 	ID int64 `json:"id,omitempty"`
 	// SpaceID holds the value of the "space_id" field.
 	SpaceID int64 `json:"space_id,omitempty"`
+	// PublicID holds the value of the "public_id" field.
+	PublicID entx.CIText `json:"public_id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Color holds the value of the "color" field.
@@ -129,6 +132,8 @@ func (*Tag) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case tag.FieldPublicID:
+			values[i] = new(entx.CIText)
 		case tag.FieldID, tag.FieldSpaceID, tag.FieldGroupID:
 			values[i] = new(sql.NullInt64)
 		case tag.FieldName, tag.FieldColor, tag.FieldIcon:
@@ -161,6 +166,12 @@ func (_m *Tag) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field space_id", values[i])
 			} else if value.Valid {
 				_m.SpaceID = value.Int64
+			}
+		case tag.FieldPublicID:
+			if value, ok := values[i].(*entx.CIText); !ok {
+				return fmt.Errorf("unexpected type %T for field public_id", values[i])
+			} else if value != nil {
+				_m.PublicID = *value
 			}
 		case tag.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -265,6 +276,9 @@ func (_m *Tag) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("space_id=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SpaceID))
+	builder.WriteString(", ")
+	builder.WriteString("public_id=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PublicID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

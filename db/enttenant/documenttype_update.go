@@ -185,6 +185,9 @@ func (_u *DocumentTypeUpdate) sqlSave(ctx context.Context) (_node int, err error
 			}
 		}
 	}
+	if _u.mutation.PublicIDCleared() {
+		_spec.ClearField(documenttype.FieldPublicID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(documenttype.FieldName, field.TypeString, value)
 	}
@@ -452,6 +455,9 @@ func (_u *DocumentTypeUpdateOne) sqlSave(ctx context.Context) (_node *DocumentTy
 				ps[i](selector)
 			}
 		}
+	}
+	if _u.mutation.PublicIDCleared() {
+		_spec.ClearField(documenttype.FieldPublicID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(documenttype.FieldName, field.TypeString, value)

@@ -6,6 +6,8 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 )
 
@@ -100,7 +102,6 @@ func (Tag) Indexes() []ent.Index {
 func (Tag) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		NewSpaceMixin(),
-		// TODO necessary or not?
-		// entcommon.NewPublicIDMixin(true),
+		entx.NewBackfillablePublicIDMixin(),
 	}
 }

@@ -11,7 +11,10 @@ import (
 	"github.com/simpledms/simpledms/model/tenant/tenantdatamigration"
 )
 
-func (qq *Scheduler) runTenantDataMigrationsOnce(ctx context.Context, runner *tenantdatamigration.Runner) {
+func (qq *Scheduler) runTenantDataMigrationsOnce(
+	ctx context.Context,
+	runner *tenantdatamigration.Runner,
+) {
 	qq.tenantDBs.Range(func(tenantID int64, tenantDB *sqlx.TenantDB) bool {
 		tenantx, err := qq.mainDB.ReadOnlyConn.Tenant.Query().Where(tenant.ID(tenantID)).Only(ctx)
 		if err != nil {
@@ -23,22 +26,32 @@ func (qq *Scheduler) runTenantDataMigrationsOnce(ctx context.Context, runner *te
 			return true
 		}
 
-		migrations := []tenantdatamigration.Migration{
-			filesystem.NewZIPMIMERedetectionMigration(
-				qq.infra.FileSystem(),
-				tenantx.X25519IdentityEncrypted.Identity(),
-			),
-		}
-		for _, migration := range migrations {
-			completed, err := runner.Run(ctx, tenantDB, migration)
-			if err != nil {
-				log.Printf("tenant %d data migration %q failed: %v", tenantID, migration.Key(), err)
-				continue
-			}
-			if completed {
-				log.Printf("tenant %d data migration %q completed", tenantID, migration.Key())
-			}
-		}
+		qq.runTenantDataMigrations(ctx, runner, tenantDB, tenantx)
 		return true
 	})
+}
+
+func (qq *Scheduler) runTenantDataMigrations(
+	ctx context.Context,
+	runner *tenantdatamigration.Runner,
+	tenantDB *sqlx.TenantDB,
+	tenantx *entmain.Tenant,
+) {
+	migrations := append(
+		tenantdatamigration.NewMetadataPublicIDMigrations(),
+		filesystem.NewZIPMIMERedetectionMigration(
+			qq.infra.FileSystem(),
+			tenantx.X25519IdentityEncrypted.Identity(),
+		),
+	)
+	for _, migration := range migrations {
+		completed, err := runner.RunToCompletion(ctx, tenantDB, migration)
+		if err != nil {
+			log.Printf("tenant %d data migration %q failed: %v", tenantx.ID, migration.Key(), err)
+			continue
+		}
+		if completed {
+			log.Printf("tenant %d data migration %q completed", tenantx.ID, migration.Key())
+		}
+	}
 }

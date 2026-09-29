@@ -198,6 +198,10 @@ func (qq *Tenant) ExecuteDBMigrations(
 		//
 		// if auto migration fails because of foreign key constraint violation,
 		// just create migration scripts and execute them manually
+		if err := addMetadataPublicIDColumns(ctx, tenantDB); err != nil {
+			log.Fatalf("failed creating schema columns: %v", err)
+			return err
+		}
 		if err := tenantDB.ReadWriteConn.Schema.Create(
 			ctx,
 			migrate.WithDropIndex(true),
@@ -227,6 +231,43 @@ func (qq *Tenant) ExecuteDBMigrations(
 		}
 	}
 
+	return nil
+}
+
+func addMetadataPublicIDColumns(ctx context.Context, tenantDB *sqlx.TenantDB) error {
+	for _, table := range []string{"document_types", "properties", "tags"} {
+		query := fmt.Sprintf(
+			"SELECT COUNT(*) FROM pragma_table_info('%s') WHERE name = 'public_id'",
+			table,
+		)
+		rows, err := tenantDB.ReadWriteConn.QueryContext(ctx, query)
+		if err != nil {
+			log.Printf("failed inspecting %s.public_id: %v", table, err)
+			return err
+		}
+		var count int
+		if !rows.Next() {
+			_ = rows.Close()
+			return fmt.Errorf("inspecting %s.public_id returned no result", table)
+		}
+		if err := rows.Scan(&count); err != nil {
+			_ = rows.Close()
+			log.Printf("failed scanning %s.public_id schema: %v", table, err)
+			return err
+		}
+		if err := rows.Close(); err != nil {
+			log.Printf("failed closing %s schema query: %v", table, err)
+			return err
+		}
+		if count != 0 {
+			continue
+		}
+		query = fmt.Sprintf("ALTER TABLE `%s` ADD COLUMN `public_id` text NULL", table)
+		if _, err := tenantDB.ReadWriteConn.ExecContext(ctx, query); err != nil {
+			log.Printf("failed adding %s.public_id: %v", table, err)
+			return err
+		}
+	}
 	return nil
 }
 

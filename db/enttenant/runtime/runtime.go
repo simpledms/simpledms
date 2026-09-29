@@ -95,8 +95,14 @@ func init() {
 			return next.Mutate(ctx, m)
 		})
 	}
+	documenttypeMixinFields1 := documenttypeMixin[1].Fields()
+	_ = documenttypeMixinFields1
 	documenttypeFields := schema.DocumentType{}.Fields()
 	_ = documenttypeFields
+	// documenttypeDescPublicID is the schema descriptor for public_id field.
+	documenttypeDescPublicID := documenttypeMixinFields1[0].Descriptor()
+	// documenttype.DefaultPublicID holds the default value on creation for the public_id field.
+	documenttype.DefaultPublicID = documenttypeDescPublicID.Default.(func() entx.CIText)
 	// documenttypeDescIsProtected is the schema descriptor for is_protected field.
 	documenttypeDescIsProtected := documenttypeFields[3].Descriptor()
 	// documenttype.DefaultIsProtected holds the default value on creation for the is_protected field.
@@ -226,8 +232,14 @@ func init() {
 			return next.Mutate(ctx, m)
 		})
 	}
+	propertyMixinFields1 := propertyMixin[1].Fields()
+	_ = propertyMixinFields1
 	propertyFields := schema.Property{}.Fields()
 	_ = propertyFields
+	// propertyDescPublicID is the schema descriptor for public_id field.
+	propertyDescPublicID := propertyMixinFields1[0].Descriptor()
+	// property.DefaultPublicID holds the default value on creation for the public_id field.
+	property.DefaultPublicID = propertyDescPublicID.Default.(func() entx.CIText)
 	// propertyDescUnit is the schema descriptor for unit field.
 	propertyDescUnit := propertyFields[3].Descriptor()
 	// property.DefaultUnit holds the default value on creation for the unit field.
@@ -338,6 +350,14 @@ func init() {
 			return next.Mutate(ctx, m)
 		})
 	}
+	tagMixinFields1 := tagMixin[1].Fields()
+	_ = tagMixinFields1
+	tagFields := schema.Tag{}.Fields()
+	_ = tagFields
+	// tagDescPublicID is the schema descriptor for public_id field.
+	tagDescPublicID := tagMixinFields1[0].Descriptor()
+	// tag.DefaultPublicID holds the default value on creation for the public_id field.
+	tag.DefaultPublicID = tagDescPublicID.Default.(func() entx.CIText)
 	tagassignmentMixin := schema.TagAssignment{}.Mixin()
 	tagassignment.Policy = privacy.NewPolicies(tagassignmentMixin[0], schema.TagAssignment{})
 	tagassignment.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -421,6 +441,6 @@ func init() {
 }
 
 const (
-	Version = "v0.14.5"                                         // Version of ent codegen.
-	Sum     = "h1:Rj2WOYJtCkWyFo6a+5wB3EfBRP0rnx1fMk6gGA0UUe4=" // Sum of ent codegen.
+	Version = "v0.14.6"                                         // Version of ent codegen.
+	Sum     = "h1:/f2696BpwuWAEEG6PVGWflg6+Inrpq4pRWuNlWz/Skk=" // Sum of ent codegen.
 )

@@ -8,7 +8,7 @@ async function openNavigation(page: Page) {
 	if (await menu.getAttribute("aria-expanded") !== "true") await menu.click();
 }
 
-async function prepareInbox(page: Page, spaceName: string) {
+async function prepareInbox(page: Page, spaceName: string, documentTypes: string[] = []) {
 	await page.goto("/dashboard/");
 	await openNavigation(page);
 	const spaces = page.getByRole("link", { name: "Spaces", exact: true }).first();
@@ -19,6 +19,9 @@ async function prepareInbox(page: Page, spaceName: string) {
 	await page.getByRole("link", { name: /Create space|^add$/ }).first().click();
 	await page.getByRole("textbox", { name: "Name", exact: true }).fill(spaceName);
 	await page.getByRole("checkbox", { name: "Add me as space owner" }).check();
+	for (const documentType of documentTypes) {
+		await page.getByRole("checkbox", { name: documentType, exact: true }).check();
+	}
 	await page.getByRole("button", { name: "Save", exact: true }).click();
 	await page.getByRole("heading", { name: spaceName, exact: true }).click();
 	await expect(page).toHaveURL(/\/browse\/$/);
@@ -37,6 +40,16 @@ async function prepareInbox(page: Page, spaceName: string) {
 	await dialog.getByRole("button", { name: /Cancel|Close|^close$/ }).last().click();
 	await expect(page.getByRole("heading", { name: "upload-alpha.txt", exact: true })).toBeVisible();
 	return inboxURL;
+}
+
+async function createField(page: Page, inboxURL: string, name: string, type: string) {
+	await page.goto(inboxURL.replace(/\/inbox\/$/, "/fields/"));
+	await page.getByRole("link", { name: /Add field|^add$/ }).first().click();
+	const dialog = page.getByRole("dialog").filter({ hasText: "Add field" });
+	await dialog.getByRole("textbox", { name: "Name", exact: true }).fill(name);
+	await dialog.getByRole("combobox", { name: "Type", exact: true }).selectOption({ label: type });
+	await dialog.getByRole("button", { name: "Save", exact: true }).click();
+	await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
 }
 
 async function openMCPCredentials(page: Page) {
@@ -117,7 +130,12 @@ for (const device of [
 			expect(init.ok()).toBeTruthy();
 			const list = await rpc(page.request, token, "tools/list", {});
 			expect((await list.json()).result.tools.map((tool: { name: string }) => tool.name).sort())
-				.toEqual(["get_file", "get_space", "list_inbox", "read_file_text", "upload_file"]);
+				.toEqual([
+					"assign_tag", "clear_document_type", "get_document_type", "get_file", "get_space",
+					"list_document_types", "list_inbox", "list_properties", "list_tags",
+					"read_file_text", "remove_file_property", "set_document_type",
+					"set_file_property", "unassign_tag", "upload_file",
+				]);
 			const response = await rpc(page.request, token, "tools/call", {
 				name: "list_inbox", arguments: { limit: 10 },
 			});
@@ -204,6 +222,127 @@ for (const device of [
 			await page.getByRole("link", { name: "Download", exact: true }).first().click();
 			const download = await downloadPromise;
 			expect((await readFile((await download.path())!)).toString()).toBe(content);
+		});
+
+		test("@classify applies metadata and reflects browser corrections", async ({ page }) => {
+			const spaceName = `MCP classify ${uniqueSuffix()}`;
+			const inboxURL = await prepareInbox(page, spaceName, ["Invoice"]);
+			const numberName = `MCP number ${uniqueSuffix()}`;
+			const checkboxName = `MCP checkbox ${uniqueSuffix()}`;
+			await createField(page, inboxURL, numberName, "Number");
+			await createField(page, inboxURL, checkboxName, "Checkbox");
+			await openMCPCredentials(page);
+			const form = await openCreateMCPCredential(page);
+			await form.getByRole("textbox", { name: "Client label", exact: true })
+				.fill(`Classifier ${uniqueSuffix()}`);
+			await form.getByRole("switch", { name: "Allow writes" }).check();
+			await selectSpace(form, spaceName);
+			await form.getByRole("button", { name: "Create", exact: true }).click();
+			const secret = page.getByRole("dialog").filter({ hasText: "MCP credential created" });
+			const token = (await secret.getByRole("link", { name: /^sdmcp_/ }).innerText()).trim();
+			expect((await rpc(page.request, token, "initialize", {
+				protocolVersion: "2025-11-25", capabilities: {},
+				clientInfo: { name: "simpledms-e2e", version: "1" },
+			})).ok()).toBeTruthy();
+
+			const filename = `classified-${uniqueSuffix()}.txt`;
+			const uploaded = (await (await rpc(page.request, token, "tools/call", {
+				name: "upload_file",
+				arguments: {
+					filename,
+					content_base64: Buffer.from("Classify through MCP\n").toString("base64"),
+				},
+			})).json()).result.structuredContent;
+			const documentTypes = (await (await rpc(page.request, token, "tools/call", {
+				name: "list_document_types", arguments: {},
+			})).json()).result.structuredContent.document_types;
+			const invoice = documentTypes.find((value: { name: string }) => value.name === "Invoice");
+			const tags = (await (await rpc(page.request, token, "tools/call", {
+				name: "list_tags", arguments: {},
+			})).json()).result.structuredContent.tags;
+			const open = tags.find((value: { name: string }) => value.name === "Open");
+			const properties = (await (await rpc(page.request, token, "tools/call", {
+				name: "list_properties", arguments: {},
+			})).json()).result.structuredContent.properties;
+			const invoiceNumber = properties.find(
+				(value: { name: string }) => value.name === "Invoice number",
+			);
+			const invoiceDate = properties.find(
+				(value: { name: string }) => value.name === "Invoice date",
+			);
+			const number = properties.find((value: { name: string }) => value.name === numberName);
+			const checkbox = properties.find((value: { name: string }) => value.name === checkboxName);
+
+			for (const call of [
+				{ name: "set_document_type", arguments: {
+					file_id: uploaded.file_id, document_type_id: invoice.document_type_id,
+				} },
+				{ name: "assign_tag", arguments: { file_id: uploaded.file_id, tag_id: open.tag_id } },
+				{ name: "set_file_property", arguments: {
+					file_id: uploaded.file_id, property_id: invoiceNumber.property_id, text_value: "MCP-1",
+				} },
+				{ name: "set_file_property", arguments: {
+					file_id: uploaded.file_id, property_id: invoiceDate.property_id,
+					date_value: "2026-09-29",
+				} },
+				{ name: "set_file_property", arguments: {
+					file_id: uploaded.file_id, property_id: number.property_id, number_value: 0,
+				} },
+				{ name: "set_file_property", arguments: {
+					file_id: uploaded.file_id, property_id: checkbox.property_id, checkbox_value: false,
+				} },
+			]) {
+				const response = await rpc(page.request, token, "tools/call", call);
+				expect((await response.json()).result.isError).not.toBe(true);
+			}
+			// Repeating desired-state writes must not toggle the type or duplicate the Tag.
+			await rpc(page.request, token, "tools/call", {
+				name: "set_document_type", arguments: {
+					file_id: uploaded.file_id, document_type_id: invoice.document_type_id,
+				},
+			});
+			await rpc(page.request, token, "tools/call", {
+				name: "assign_tag", arguments: { file_id: uploaded.file_id, tag_id: open.tag_id },
+			});
+
+			await page.goto(uploaded.url);
+			await page.getByRole("button", { name: "description" }).click();
+			await expect(page.getByText("Invoice", { exact: true }).first()).toBeVisible();
+			await expect(page.getByText("Open", { exact: true }).first()).toBeVisible();
+			const reference = page.getByRole("textbox", { name: "Invoice number", exact: true });
+			await expect(reference).toHaveValue("MCP-1");
+			await reference.fill("MCP-2");
+			await reference.press("Tab");
+			const numberField = page.getByRole("spinbutton", { name: numberName, exact: true });
+			await expect(numberField).toHaveValue("0");
+			await numberField.fill("7");
+			await numberField.press("Tab");
+			const checkboxField = page.getByRole("checkbox", { name: checkboxName, exact: true });
+			await expect(checkboxField).not.toBeChecked();
+			await checkboxField.check();
+			const date = page.getByLabel("Invoice date", { exact: true });
+			await date.fill("");
+			await date.press("Tab");
+			await expect(page.getByText(/saved\.|removed\./).last()).toBeVisible();
+
+			const file = (await (await rpc(page.request, token, "tools/call", {
+				name: "get_file", arguments: { file_id: uploaded.file_id },
+			})).json()).result.structuredContent;
+			expect(file.document_type.document_type_id).toBe(invoice.document_type_id);
+			expect(file.direct_tags.filter((value: { tag_id: string }) => value.tag_id === open.tag_id))
+				.toHaveLength(1);
+			expect(file.properties.find(
+				(value: { property_id: string }) => value.property_id === invoiceNumber.property_id,
+			).text_value).toBe("MCP-2");
+			expect(file.properties.find(
+				(value: { property_id: string }) => value.property_id === number.property_id,
+			).number_value).toBe(7);
+			expect(file.properties.find(
+				(value: { property_id: string }) => value.property_id === checkbox.property_id,
+			).checkbox_value).toBe(true);
+			expect(file.properties.some(
+				(value: { property_id: string }) => value.property_id === invoiceDate.property_id,
+			)).toBe(false);
 		});
 	});
 }

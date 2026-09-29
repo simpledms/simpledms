@@ -20,15 +20,31 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/enttenant"
+	"github.com/simpledms/simpledms/db/enttenant/attribute"
+	documenttypequery "github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
+	"github.com/simpledms/simpledms/db/enttenant/property"
+	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
+	"github.com/simpledms/simpledms/db/enttenant/tag"
+	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	"github.com/simpledms/simpledms/db/entx"
+	"github.com/simpledms/simpledms/model/main/common/attributetype"
+	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	"github.com/simpledms/simpledms/model/main/common/filesource"
 	credentialmodel "github.com/simpledms/simpledms/model/main/mcpcredential"
+	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
+	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
+	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
+	"github.com/simpledms/simpledms/model/tenant/tenantdatamigration"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/filenamex"
+	"github.com/simpledms/simpledms/util/timex"
 )
 
 type requestContextKey int
@@ -58,8 +74,34 @@ func NewHandler(config Config) *Handler {
 	registerRead(server, handler, "get_space", "Identify the authorized Space.", handler.getSpace)
 	registerRead(server, handler, "list_inbox", "List or search Inbox documents.", handler.listInbox)
 	registerRead(server, handler, "get_file", "Read a live file's metadata.", handler.getFile)
-	registerRead(server, handler, "read_file_text", "Read bounded existing OCR text.", handler.readText)
-	registerWrite(server, handler, "upload_file", "Upload one document into Inbox.", handler.uploadFile)
+	registerRead(
+		server, handler, "read_file_text", "Read bounded existing OCR text.", handler.readText,
+	)
+	registerWrite(
+		server, handler, "upload_file", "Upload one document into Inbox.", handler.uploadFile,
+	)
+	registerRead(server, handler, "list_tags", "List existing Tags.", handler.listTags)
+	registerRead(server, handler, "list_properties", "List existing fields.", handler.listProperties)
+	registerRead(
+		server, handler, "list_document_types", "List document types.", handler.listDocumentTypes,
+	)
+	registerRead(
+		server, handler, "get_document_type", "Read a document type.", handler.getDocumentType,
+	)
+	registerWrite(server, handler, "assign_tag", "Assign a Tag to a document.", handler.assignTag)
+	registerWrite(server, handler, "unassign_tag", "Unassign a direct Tag.", handler.unassignTag)
+	registerWrite(
+		server, handler, "set_file_property", "Set a typed field value.", handler.setFileProperty,
+	)
+	registerWrite(
+		server, handler, "remove_file_property", "Remove a field value.", handler.removeFileProperty,
+	)
+	registerWrite(
+		server, handler, "set_document_type", "Set a document type.", handler.setDocumentType,
+	)
+	registerWrite(
+		server, handler, "clear_document_type", "Clear a document type.", handler.clearDocumentType,
+	)
 	handler.transport = sdk.NewStreamableHTTPHandler(func(*http.Request) *sdk.Server {
 		return server
 	}, &sdk.StreamableHTTPOptions{
@@ -185,7 +227,9 @@ func registerTool[I, O any](
 	}, func(ctx context.Context, req *sdk.CallToolRequest, input I) (*sdk.CallToolResult, O, error) {
 		var output O
 		if req.Extra == nil {
-			return nil, output, safeError(e.NewHTTPErrorf(http.StatusUnauthorized, "Invalid MCP credential."))
+			return nil, output, safeError(e.NewHTTPErrorf(
+				http.StatusUnauthorized, "Invalid MCP credential.",
+			))
 		}
 		// Older SDK protocol paths detach cancellation; preserve the HTTP request's lifetime.
 		ctx, cancel := context.WithCancel(ctx)
@@ -349,6 +393,9 @@ func (qq *Handler) fileData(
 	if filex.IsDirectory {
 		return data, nil
 	}
+	if err := qq.addClassification(ctx, filex, &data); err != nil {
+		return FileData{}, err
+	}
 	version, err := filex.QueryFileVersions().Order(
 		fileversion.ByVersionNumber(sql.OrderDesc()),
 	).WithStoredFile().First(ctx)
@@ -485,4 +532,696 @@ func (qq *Handler) uploadFile(
 		Size:      ingested.Size,
 		IsInInbox: ingested.IsInInbox,
 	}, nil
+}
+
+func metadataPage(input MetadataListInput) (int, error) {
+	limit := 50
+	if input.Limit != nil {
+		limit = *input.Limit
+	}
+	if limit < 1 || limit > 100 || input.Offset < 0 || input.Offset > 1000000 {
+		return 0, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid page range.")
+	}
+	return limit, nil
+}
+
+func requireMetadataPublicIDs(ctx *ctxx.SpaceContext) error {
+	ready, err := tenantdatamigration.MetadataPublicIDsReady(ctx, ctx.TTx.Client())
+	if err != nil {
+		return err
+	}
+	if !ready {
+		return e.NewHTTPErrorf(http.StatusServiceUnavailable, "Metadata upgrade is still in progress.")
+	}
+	return nil
+}
+
+func (qq *Handler) listTags(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input TagListInput,
+) (TagListData, error) {
+	result := TagListData{Tags: []TagData{}}
+	if err := requireMetadataPublicIDs(ctx); err != nil {
+		return result, err
+	}
+	limit, err := metadataPage(input.MetadataListInput)
+	if err != nil {
+		return result, err
+	}
+	query := ctx.Space.QueryTags().WithGroup().WithSubTags()
+	if input.GroupID != "" {
+		group, err := ctx.Space.QueryTags().Where(
+			tag.PublicID(entx.NewCIText(input.GroupID)),
+			tag.TypeEQ(tagtype.Group),
+		).Only(ctx)
+		if err != nil {
+			return result, metadataNotFound(err, "Tag group not found.")
+		}
+		query.Where(tag.GroupID(group.ID))
+	}
+	tags, err := query.Order(tag.ByName()).Offset(input.Offset).Limit(limit + 1).All(ctx)
+	if err != nil {
+		return result, err
+	}
+	result.HasMore = len(tags) > limit
+	if result.HasMore {
+		tags = tags[:limit]
+		next := input.Offset + limit
+		result.NextOffset = &next
+	}
+	for _, tagx := range tags {
+		data, err := tagProjection(tagx)
+		if err != nil {
+			return result, err
+		}
+		result.Tags = append(result.Tags, data)
+	}
+	return result, nil
+}
+
+func (qq *Handler) listProperties(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input MetadataListInput,
+) (PropertyListData, error) {
+	result := PropertyListData{Properties: []PropertyData{}}
+	if err := requireMetadataPublicIDs(ctx); err != nil {
+		return result, err
+	}
+	limit, err := metadataPage(input)
+	if err != nil {
+		return result, err
+	}
+	properties, err := ctx.Space.QueryProperties().Order(property.ByName()).
+		Offset(input.Offset).Limit(limit + 1).All(ctx)
+	if err != nil {
+		return result, err
+	}
+	result.HasMore = len(properties) > limit
+	if result.HasMore {
+		properties = properties[:limit]
+		next := input.Offset + limit
+		result.NextOffset = &next
+	}
+	for _, propertyx := range properties {
+		data, err := propertyProjection(propertyx)
+		if err != nil {
+			return result, err
+		}
+		result.Properties = append(result.Properties, data)
+	}
+	return result, nil
+}
+
+func (qq *Handler) listDocumentTypes(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input MetadataListInput,
+) (DocumentTypeListData, error) {
+	result := DocumentTypeListData{DocumentTypes: []DocumentTypeSummary{}}
+	if err := requireMetadataPublicIDs(ctx); err != nil {
+		return result, err
+	}
+	limit, err := metadataPage(input)
+	if err != nil {
+		return result, err
+	}
+	documentTypes, err := ctx.Space.QueryDocumentTypes().Order(documenttypequery.ByName()).
+		Offset(input.Offset).Limit(limit + 1).All(ctx)
+	if err != nil {
+		return result, err
+	}
+	result.HasMore = len(documentTypes) > limit
+	if result.HasMore {
+		documentTypes = documentTypes[:limit]
+		next := input.Offset + limit
+		result.NextOffset = &next
+	}
+	for _, documentTypex := range documentTypes {
+		data, err := documentTypeProjection(documentTypex)
+		if err != nil {
+			return result, err
+		}
+		result.DocumentTypes = append(result.DocumentTypes, data)
+	}
+	return result, nil
+}
+
+func (qq *Handler) getDocumentType(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input DocumentTypeInput,
+) (DocumentTypeData, error) {
+	if err := requireMetadataPublicIDs(ctx); err != nil {
+		return DocumentTypeData{}, err
+	}
+	if input.DocumentTypeID == "" || len(input.DocumentTypeID) > 100 {
+		return DocumentTypeData{}, e.NewHTTPErrorf(http.StatusBadRequest, "Document type ID is required.")
+	}
+	documentTypex, err := ctx.Space.QueryDocumentTypes().Where(
+		documenttypequery.PublicID(entx.NewCIText(input.DocumentTypeID)),
+	).WithAttributes(func(query *enttenant.AttributeQuery) {
+		query.WithTag().WithProperty().Order(attribute.ByID())
+	}).Only(ctx)
+	if err != nil {
+		return DocumentTypeData{}, metadataNotFound(err, "Document type not found.")
+	}
+	summary, err := documentTypeProjection(documentTypex)
+	if err != nil {
+		return DocumentTypeData{}, err
+	}
+	result := DocumentTypeData{
+		DocumentTypeSummary: summary,
+		Attributes:          []DocumentTypeAttributeData{},
+	}
+	for _, attributex := range documentTypex.Edges.Attributes {
+		data := DocumentTypeAttributeData{
+			Type:         attributex.Type.String(),
+			Name:         attributex.Name,
+			IsNameGiving: attributex.IsNameGiving,
+			IsProtected:  attributex.IsProtected,
+			IsDisabled:   attributex.IsDisabled,
+			IsRequired:   attributex.IsRequired,
+		}
+		if attributex.Type == attributetype.Tag && attributex.Edges.Tag != nil {
+			data.TagID, err = metadataPublicID(attributex.Edges.Tag.PublicID)
+			if err != nil {
+				return DocumentTypeData{}, err
+			}
+		}
+		if attributex.Type == attributetype.Field && attributex.Edges.Property != nil {
+			data.PropertyID, err = metadataPublicID(attributex.Edges.Property.PublicID)
+			if err != nil {
+				return DocumentTypeData{}, err
+			}
+		}
+		result.Attributes = append(result.Attributes, data)
+	}
+	return result, nil
+}
+
+func tagProjection(tagx *enttenant.Tag) (TagData, error) {
+	tagID, err := metadataPublicID(tagx.PublicID)
+	if err != nil {
+		return TagData{}, err
+	}
+	data := TagData{
+		TagID:     tagID,
+		Name:      tagx.Name,
+		Type:      tagx.Type.String(),
+		SubTagIDs: []string{},
+	}
+	if tagx.Edges.Group != nil {
+		data.GroupID, err = metadataPublicID(tagx.Edges.Group.PublicID)
+		if err != nil {
+			return TagData{}, err
+		}
+	}
+	for _, subTag := range tagx.Edges.SubTags {
+		subTagID, err := metadataPublicID(subTag.PublicID)
+		if err != nil {
+			return TagData{}, err
+		}
+		data.SubTagIDs = append(data.SubTagIDs, subTagID)
+	}
+	return data, nil
+}
+
+func propertyProjection(propertyx *enttenant.Property) (PropertyData, error) {
+	propertyID, err := metadataPublicID(propertyx.PublicID)
+	if err != nil {
+		return PropertyData{}, err
+	}
+	return PropertyData{
+		PropertyID: propertyID,
+		Name:       propertyx.Name,
+		Type:       propertyx.Type.String(),
+		Unit:       propertyx.Unit,
+	}, nil
+}
+
+func documentTypeProjection(documentTypex *enttenant.DocumentType) (DocumentTypeSummary, error) {
+	documentTypeID, err := metadataPublicID(documentTypex.PublicID)
+	if err != nil {
+		return DocumentTypeSummary{}, err
+	}
+	return DocumentTypeSummary{
+		DocumentTypeID: documentTypeID,
+		Name:           documentTypex.Name,
+		IsProtected:    documentTypex.IsProtected,
+		IsDisabled:     documentTypex.IsDisabled,
+	}, nil
+}
+
+func metadataPublicID(publicID entx.CIText) (string, error) {
+	value := publicID.String()
+	if value == "" {
+		return "", e.NewHTTPErrorf(
+			http.StatusServiceUnavailable, "Metadata identifiers are unavailable.",
+		)
+	}
+	return value, nil
+}
+
+func metadataNotFound(err error, message string) error {
+	if enttenant.IsNotFound(err) {
+		return e.NewHTTPErrorf(http.StatusNotFound, message)
+	}
+	return err
+}
+
+func (qq *Handler) assignTag(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input FileTagInput,
+) (TagAssignmentData, error) {
+	filex, tagx, err := resolveFileAndTag(ctx, input)
+	if err != nil {
+		return TagAssignmentData{}, err
+	}
+	if _, err := taggingmodel.NewTagService().AssignToFile(
+		ctx, filex.ID, tagx.ID, ctx.Space.ID,
+	); err != nil {
+		return TagAssignmentData{}, err
+	}
+	return tagAssignmentProjection(ctx, filex, tagx)
+}
+
+func (qq *Handler) unassignTag(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input FileTagInput,
+) (TagAssignmentData, error) {
+	filex, tagx, err := resolveFileAndTag(ctx, input)
+	if err != nil {
+		return TagAssignmentData{}, err
+	}
+	if _, err := taggingmodel.NewTagService().UnassignFromFile(ctx, filex.ID, tagx.ID); err != nil {
+		return TagAssignmentData{}, err
+	}
+	return tagAssignmentProjection(ctx, filex, tagx)
+}
+
+func resolveFileAndTag(
+	ctx *ctxx.SpaceContext,
+	input FileTagInput,
+) (*enttenant.File, *enttenant.Tag, error) {
+	if err := requireMetadataPublicIDs(ctx); err != nil {
+		return nil, nil, err
+	}
+	if input.FileID == "" || len(input.FileID) > 100 || input.TagID == "" || len(input.TagID) > 100 {
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File ID and Tag ID are required.")
+	}
+	filex, err := filemodel.NewFileReader().Get(ctx, input.FileID)
+	if err != nil {
+		return nil, nil, err
+	}
+	if filex.IsDirectory {
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+	}
+	tagx, err := ctx.Space.QueryTags().Where(tag.PublicID(entx.NewCIText(input.TagID))).Only(ctx)
+	if err != nil {
+		return nil, nil, metadataNotFound(err, "Tag not found.")
+	}
+	return filex, tagx, nil
+}
+
+func tagAssignmentProjection(
+	ctx *ctxx.SpaceContext,
+	filex *enttenant.File,
+	tagx *enttenant.Tag,
+) (TagAssignmentData, error) {
+	tagID, err := metadataPublicID(tagx.PublicID)
+	if err != nil {
+		return TagAssignmentData{}, err
+	}
+	direct, err := ctx.TTx.TagAssignment.Query().Where(
+		tagassignment.FileID(filex.ID),
+		tagassignment.TagID(tagx.ID),
+		tagassignment.SpaceID(ctx.Space.ID),
+	).Exist(ctx)
+	if err != nil {
+		return TagAssignmentData{}, err
+	}
+	resolved, err := ctx.TTx.ResolvedTagAssignment.Query().Where(
+		resolvedtagassignment.FileID(filex.ID),
+		resolvedtagassignment.TagID(tagx.ID),
+		resolvedtagassignment.SpaceID(ctx.Space.ID),
+	).Exist(ctx)
+	return TagAssignmentData{
+		FileID:           filex.PublicID.String(),
+		TagID:            tagID,
+		DirectlyAssigned: direct,
+		Resolved:         resolved,
+	}, err
+}
+
+func (qq *Handler) setFileProperty(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input SetFilePropertyInput,
+) (FilePropertyMutationData, error) {
+	filex, propertyx, err := resolveFileAndProperty(
+		ctx, input.FileID, input.PropertyID,
+	)
+	if err != nil {
+		return FilePropertyMutationData{}, err
+	}
+	value, err := propertyValueFromInput(propertyx.Type, input)
+	if err != nil {
+		return FilePropertyMutationData{}, err
+	}
+	_, assignment, err := propertymodel.NewFilePropertyAssignmentService().Set(
+		ctx, filex.ID, propertyx.ID, value,
+	)
+	if err != nil {
+		return FilePropertyMutationData{}, err
+	}
+	projection, err := filePropertyProjection(propertyx, assignment)
+	if err != nil {
+		return FilePropertyMutationData{}, err
+	}
+	return FilePropertyMutationData{
+		FileID:   filex.PublicID.String(),
+		Property: projection,
+		Assigned: true,
+	}, nil
+}
+
+func (qq *Handler) removeFileProperty(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input FilePropertyInput,
+) (FilePropertyMutationData, error) {
+	filex, propertyx, err := resolveFileAndProperty(ctx, input.FileID, input.PropertyID)
+	if err != nil {
+		return FilePropertyMutationData{}, err
+	}
+	_, _, err = propertymodel.NewFilePropertyAssignmentService().Remove(
+		ctx, filex.ID, propertyx.ID,
+	)
+	if err != nil {
+		return FilePropertyMutationData{}, err
+	}
+	projection, err := filePropertyProjection(propertyx, nil)
+	if err != nil {
+		return FilePropertyMutationData{}, err
+	}
+	return FilePropertyMutationData{
+		FileID:   filex.PublicID.String(),
+		Property: projection,
+		Assigned: false,
+	}, nil
+}
+
+func resolveFileAndProperty(
+	ctx *ctxx.SpaceContext,
+	fileID string,
+	propertyID string,
+) (*enttenant.File, *enttenant.Property, error) {
+	if err := requireMetadataPublicIDs(ctx); err != nil {
+		return nil, nil, err
+	}
+	if fileID == "" || len(fileID) > 100 || propertyID == "" || len(propertyID) > 100 {
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File ID and field ID are required.")
+	}
+	filex, err := filemodel.NewFileReader().Get(ctx, fileID)
+	if err != nil {
+		return nil, nil, err
+	}
+	if filex.IsDirectory {
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+	}
+	propertyx, err := ctx.Space.QueryProperties().Where(
+		property.PublicID(entx.NewCIText(propertyID)),
+	).Only(ctx)
+	if err != nil {
+		return nil, nil, metadataNotFound(err, "Field not found.")
+	}
+	return filex, propertyx, nil
+}
+
+func propertyValueFromInput(
+	propertyType fieldtype.FieldType,
+	input SetFilePropertyInput,
+) (propertymodel.FilePropertyValue, error) {
+	provided := 0
+	for _, exists := range []bool{
+		input.TextValue != nil,
+		input.NumberValue != nil,
+		input.MoneyMinorUnits != nil,
+		input.DateValue != nil,
+		input.CheckboxValue != nil,
+	} {
+		if exists {
+			provided++
+		}
+	}
+	if provided != 1 {
+		return propertymodel.FilePropertyValue{}, e.NewHTTPErrorf(
+			http.StatusBadRequest, "Exactly one typed value is required.",
+		)
+	}
+	switch propertyType {
+	case fieldtype.Text:
+		if input.TextValue != nil {
+			return propertymodel.NewTextFilePropertyValue(*input.TextValue), nil
+		}
+	case fieldtype.Number:
+		if input.NumberValue != nil {
+			return propertymodel.NewNumberFilePropertyValue(*input.NumberValue)
+		}
+	case fieldtype.Money:
+		if input.MoneyMinorUnits != nil {
+			return propertymodel.NewMoneyFilePropertyValue(*input.MoneyMinorUnits)
+		}
+	case fieldtype.Date:
+		if input.DateValue != nil {
+			date, err := timex.ParseDate(*input.DateValue)
+			if err != nil {
+				return propertymodel.FilePropertyValue{}, e.NewHTTPErrorf(
+					http.StatusBadRequest, "Date must use YYYY-MM-DD.",
+				)
+			}
+			return propertymodel.NewDateFilePropertyValue(date)
+		}
+	case fieldtype.Checkbox:
+		if input.CheckboxValue != nil {
+			return propertymodel.NewCheckboxFilePropertyValue(*input.CheckboxValue), nil
+		}
+	default:
+		return propertymodel.FilePropertyValue{}, e.NewHTTPErrorf(
+			http.StatusBadRequest, "Unsupported field type.",
+		)
+	}
+	return propertymodel.FilePropertyValue{}, e.NewHTTPErrorf(
+		http.StatusBadRequest, "Value does not match the field type.",
+	)
+}
+
+func (qq *Handler) setDocumentType(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input SetDocumentTypeInput,
+) (DocumentTypeAssignmentData, error) {
+	filex, documentTypex, err := resolveFileAndDocumentType(
+		ctx, input.FileID, input.DocumentTypeID,
+	)
+	if err != nil {
+		return DocumentTypeAssignmentData{}, err
+	}
+	if _, err := documenttypemodel.NewAssignmentService().Set(
+		ctx, filex.ID, documentTypex.ID,
+	); err != nil {
+		return DocumentTypeAssignmentData{}, err
+	}
+	projection, err := documentTypeProjection(documentTypex)
+	if err != nil {
+		return DocumentTypeAssignmentData{}, err
+	}
+	return DocumentTypeAssignmentData{
+		FileID:       filex.PublicID.String(),
+		DocumentType: &projection,
+	}, nil
+}
+
+func (qq *Handler) clearDocumentType(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input FileInput,
+) (DocumentTypeAssignmentData, error) {
+	if err := requireMetadataPublicIDs(ctx); err != nil {
+		return DocumentTypeAssignmentData{}, err
+	}
+	if input.FileID == "" || len(input.FileID) > 100 {
+		return DocumentTypeAssignmentData{}, e.NewHTTPErrorf(
+			http.StatusBadRequest, "File ID is required.",
+		)
+	}
+	filex, err := filemodel.NewFileReader().Get(ctx, input.FileID)
+	if err != nil {
+		return DocumentTypeAssignmentData{}, err
+	}
+	if filex.IsDirectory {
+		return DocumentTypeAssignmentData{}, e.NewHTTPErrorf(
+			http.StatusBadRequest, "File is a directory.",
+		)
+	}
+	if _, err := documenttypemodel.NewAssignmentService().Clear(ctx, filex.ID); err != nil {
+		return DocumentTypeAssignmentData{}, err
+	}
+	return DocumentTypeAssignmentData{FileID: filex.PublicID.String()}, nil
+}
+
+func resolveFileAndDocumentType(
+	ctx *ctxx.SpaceContext,
+	fileID string,
+	documentTypeID string,
+) (*enttenant.File, *enttenant.DocumentType, error) {
+	if err := requireMetadataPublicIDs(ctx); err != nil {
+		return nil, nil, err
+	}
+	if fileID == "" || len(fileID) > 100 || documentTypeID == "" || len(documentTypeID) > 100 {
+		return nil, nil, e.NewHTTPErrorf(
+			http.StatusBadRequest, "File ID and document type ID are required.",
+		)
+	}
+	filex, err := filemodel.NewFileReader().Get(ctx, fileID)
+	if err != nil {
+		return nil, nil, err
+	}
+	if filex.IsDirectory {
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+	}
+	documentTypex, err := ctx.Space.QueryDocumentTypes().Where(
+		documenttypequery.PublicID(entx.NewCIText(documentTypeID)),
+	).Only(ctx)
+	if err != nil {
+		return nil, nil, metadataNotFound(err, "Document type not found.")
+	}
+	return filex, documentTypex, nil
+}
+
+func (qq *Handler) addClassification(
+	ctx *ctxx.SpaceContext,
+	filex *enttenant.File,
+	data *FileData,
+) error {
+	if err := requireMetadataPublicIDs(ctx); err != nil {
+		return err
+	}
+	data.DirectTags = []TagData{}
+	data.ResolvedTags = []TagData{}
+	data.Properties = []FilePropertyData{}
+	if filex.DocumentTypeID != 0 {
+		documentTypex, err := ctx.Space.QueryDocumentTypes().Where(
+			documenttypequery.ID(filex.DocumentTypeID),
+		).Only(ctx)
+		if err != nil {
+			return err
+		}
+		projection, err := documentTypeProjection(documentTypex)
+		if err != nil {
+			return err
+		}
+		data.DocumentType = &projection
+	}
+	directTags, err := filex.QueryTags().WithGroup().WithSubTags().Order(tag.ByName()).All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, tagx := range directTags {
+		projection, err := tagProjection(tagx)
+		if err != nil {
+			return err
+		}
+		data.DirectTags = append(data.DirectTags, projection)
+	}
+	var resolvedIDs []int64
+	err = ctx.TTx.ResolvedTagAssignment.Query().Where(
+		resolvedtagassignment.FileID(filex.ID),
+		resolvedtagassignment.SpaceID(ctx.Space.ID),
+	).Select(resolvedtagassignment.FieldTagID).Scan(ctx, &resolvedIDs)
+	if err != nil {
+		return err
+	}
+	if len(resolvedIDs) > 0 {
+		resolvedTags, err := ctx.Space.QueryTags().Where(tag.IDIn(resolvedIDs...)).
+			WithGroup().WithSubTags().Order(tag.ByName()).All(ctx)
+		if err != nil {
+			return err
+		}
+		for _, tagx := range resolvedTags {
+			projection, err := tagProjection(tagx)
+			if err != nil {
+				return err
+			}
+			data.ResolvedTags = append(data.ResolvedTags, projection)
+		}
+	}
+	assignments, err := ctx.TTx.FilePropertyAssignment.Query().Where(
+		filepropertyassignment.FileID(filex.ID),
+		filepropertyassignment.SpaceID(ctx.Space.ID),
+	).WithProperty().All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, assignment := range assignments {
+		if assignment.Edges.Property != nil {
+			projection, err := filePropertyProjection(assignment.Edges.Property, assignment)
+			if err != nil {
+				return err
+			}
+			data.Properties = append(data.Properties, projection)
+		}
+	}
+	return nil
+}
+
+func filePropertyProjection(
+	propertyx *enttenant.Property,
+	assignment *enttenant.FilePropertyAssignment,
+) (FilePropertyData, error) {
+	propertyID, err := metadataPublicID(propertyx.PublicID)
+	if err != nil {
+		return FilePropertyData{}, err
+	}
+	data := FilePropertyData{
+		PropertyID: propertyID,
+		Name:       propertyx.Name,
+		Type:       propertyx.Type.String(),
+		Unit:       propertyx.Unit,
+	}
+	if assignment == nil {
+		return data, nil
+	}
+	switch propertyx.Type {
+	case fieldtype.Text:
+		value := assignment.TextValue
+		data.TextValue = &value
+	case fieldtype.Number:
+		value := int64(assignment.NumberValue)
+		data.NumberValue = &value
+	case fieldtype.Money:
+		value := int64(assignment.NumberValue)
+		data.MoneyMinorUnits = &value
+	case fieldtype.Date:
+		value := assignment.DateValue.Format("2006-01-02")
+		data.DateValue = &value
+	case fieldtype.Checkbox:
+		value := assignment.BoolValue
+		data.CheckboxValue = &value
+	}
+	return data, nil
 }

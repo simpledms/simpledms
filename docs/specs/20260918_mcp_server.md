@@ -496,19 +496,64 @@ Slice 02 implementation, 2026-09-29:
   checks, browser checks, build, vet, or manual MCP client journey were run. Slice 02 verification
   items and the plan checkbox remain pending.
 
-## Operating slice 01
+Slice 03 implementation, 2026-09-29:
+
+- Added optional, immutable, application-defaulted public IDs for Tag, Property, and DocumentType.
+  Generated migration `20260929123641_metadata_public_ids` contains only three additive nullable
+  columns; generated migration `20260929123746_metadata_public_id_indexes` contains only their
+  three unique indexes. Neither migration rebuilds, copies, or drops an existing table, and no
+  attribute public ID was added. MCP projections reject empty identifiers even after ledger
+  completion. The rollout mixin remains nullable only for additive SQLite compatibility and is
+  explicitly scheduled for replacement by the required mixin in a future non-rebuilding schema
+  tightening.
+- Added three bounded tenant data migrations with independent cursors and ledger completion. They
+  initialize only missing IDs in batches of 100, preserve IDs created during an upgrade, resume
+  after interruption, and run both for existing and newly initialized tenants. Metadata tools are
+  unavailable until all three ledger entries complete.
+- Strengthened Tag assignment/unassignment as desired-state operations, rejecting Group Tags and
+  preserving direct versus resolved results. Added explicit document-type set/clear operations and
+  retained the browser's toggle as an adapter. Extracted typed field upsert/removal into the
+  property model; MCP validates exactly one matching value, safe integers, minor money units, and
+  ISO dates while browser decimal/date-presence handling stays at its adapter.
+- Registered the ten classification tools: `list_tags`, `list_properties`, `list_document_types`,
+  `get_document_type`, `assign_tag`, `unassign_tag`, `set_file_property`,
+  `remove_file_property`, `set_document_type`, and `clear_document_type`. Definition and file
+  projections contain public IDs only; `get_file` now reports document type, direct/resolved Tags,
+  and typed assigned values.
+- Existing Browse property handlers and document-type selection now call the shared model
+  operations. Added SQLite-backed migration and MCP cross-transport test coverage plus the shared
+  desktop/mobile `@classify` Playwright journey. The journey imports Invoice metadata through the
+  create-Space UI, creates Number/Checkbox fields through browser controls, uploads/classifies over
+  MCP, corrects values in the browser, and reads the corrections back over MCP.
+- Generation/formatting commands executed: the repository's `go generate .` invocation failed
+  under the active Go 1.27 toolchain with Ent's `package "context" without types` loader error.
+  The pinned tool succeeded through `go tool ent generate ./db/enttenant/schema/ --target
+  ./db/enttenant --feature intercept,entql,privacy,schema/snapshot,sql/versioned-migration,sql/modifier,sql/execquery
+  --template ./db/enttmpl`; `go run ./cmd/migrate metadata_public_ids` and
+  `go run ./cmd/migrate metadata_public_id_indexes` generated the staged migrations. The command's
+  unrelated pre-existing main WebDAV index drift was excluded. `gofmt` ran over all changed Go
+  files.
+- Two compile-only diagnostics passed: `go test ./server ./model/tenant/... ./scheduler -run '^$'`
+  and `go test ./server ./model/tenant/tenantdatamigration ./action/browse
+  ./model/tenant/property ./model/tenant/documenttype ./model/tenant/tagging -run '^$'`. These did
+  not execute runtime tests. No focused classification test, migration execution test, Playwright,
+  build, vet, live client, or manual desktop/mobile journey was run. Verification checklist items
+  and the plan checkbox remain pending.
+
+## Operating implemented slices
 
 After deploying the generated migration and rebuilt application, open Account → MCP credentials.
 Create a label/Space-scoped credential, copy its token once, and configure a bearer-capable client
 with the displayed `/mcp` URL and `Authorization: Bearer <token>`. HTTPS is required outside
 development; no OAuth discovery flow is provided by this slice.
 
-The registered tools are `get_space`, `list_inbox`, `get_file`, and `read_file_text`. Only the
-basic file projection is available until classification is delivered. Inbox pages default to 50
-items, cap at 100, and reject offsets above 1,000,000; OCR windows default to 12,000 and cap at
-50,000 Unicode characters. Revocation from Account settings takes effect on subsequent requests,
-including existing SDK clients. Losing current account/tenant/Space access also denies reads.
-Read/write mode can be selected for a credential, but this slice registers no mutation tools.
+The registered tools currently cover scoped Space/Inbox inspection, bounded OCR, Inbox upload, and
+existing-metadata classification. `get_file` includes typed classification once the tenant's
+metadata public-ID backfill is complete. Inbox pages default to 50 items, cap at 100, and reject
+offsets above 1,000,000; OCR windows default to 12,000 and cap at 50,000 Unicode characters.
+Revocation from Account settings takes effect on subsequent requests, including existing SDK
+clients. Losing current account/tenant/Space access also denies reads. Classification and upload
+writes require a read/write credential.
 
 These are implementation instructions, not evidence that the deployment/client journey passed.
 

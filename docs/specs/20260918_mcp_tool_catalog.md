@@ -3,10 +3,10 @@
 Date: 2026-09-18  
 Status: proposed
 
-This catalog maps useful MCP operations to current code. Slices 01–02 now register `get_space`,
-`list_inbox`, `get_file`, `read_file_text`, and `upload_file`; those implementations are awaiting
-verification. Other entries remain proposed. Read operations are included because an agent needs
-to discover files and metadata before issuing commands.
+This catalog maps useful MCP operations to current code. Slices 01–03 now register the connection,
+Inbox, upload, and classification tools through `clear_document_type`; those implementations are
+awaiting verification. Filing and later entries remain proposed. Read operations are included
+because an agent needs to discover files and metadata before issuing commands.
 
 See the [architecture proposal](20260918_mcp_server.md) for shared execution, authentication,
 public IDs, bounded results, error handling, and the single

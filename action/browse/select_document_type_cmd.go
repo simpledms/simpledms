@@ -5,6 +5,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
+	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -46,11 +47,15 @@ func (qq *SelectDocumentTypeCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 	}
 
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
-	if filex.Data.DocumentTypeID == data.DocumentTypeID {
-		filex.Data.Update().ClearDocumentTypeID().SaveX(ctx)
+	isSelected, _, err := documenttypemodel.NewAssignmentService().Toggle(
+		ctx, filex.Data.ID, data.DocumentTypeID,
+	)
+	if err != nil {
+		return err
+	}
+	if !isSelected {
 		rw.AddRenderables(wx.NewSnackbarf("Document type deselected."))
 	} else {
-		filex.Data.Update().SetDocumentTypeID(data.DocumentTypeID).SaveX(ctx)
 		rw.AddRenderables(wx.NewSnackbarf("Document type selected."))
 	}
 

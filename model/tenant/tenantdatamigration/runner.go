@@ -38,24 +38,46 @@ func (qq *Runner) Run(
 	tenantDB *sqlx.TenantDB,
 	migration Migration,
 ) (bool, error) {
+	completed, _, err := qq.run(ctx, tenantDB, migration)
+	return completed, err
+}
+
+func (qq *Runner) RunToCompletion(
+	ctx context.Context,
+	tenantDB *sqlx.TenantDB,
+	migration Migration,
+) (bool, error) {
+	for {
+		completed, claimed, err := qq.run(ctx, tenantDB, migration)
+		if err != nil || completed || !claimed {
+			return completed, err
+		}
+	}
+}
+
+func (qq *Runner) run(
+	ctx context.Context,
+	tenantDB *sqlx.TenantDB,
+	migration Migration,
+) (bool, bool, error) {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 	state, leaseToken, claimed, err := qq.claim(ctx, tenantDB, migration.Key())
 	if err != nil || !claimed {
-		return false, err
+		return false, claimed, err
 	}
 
 	result, err := migration.RunBatch(ctx, tenantDB, state)
 	if err != nil {
 		qq.fail(ctx, tenantDB, state.ID, leaseToken, err)
-		return false, err
+		return false, true, err
 	}
 	if err := qq.commit(ctx, tenantDB, state.ID, leaseToken, result); err != nil {
 		if !errors.Is(err, ErrLostLease) {
 			qq.fail(ctx, tenantDB, state.ID, leaseToken, err)
 		}
-		return false, err
+		return false, true, err
 	}
-	return result.Completed, nil
+	return result.Completed, true, nil
 }
 
 func (qq *Runner) claim(

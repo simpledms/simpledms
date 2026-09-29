@@ -61,12 +61,28 @@ func (qq *TagService) AssignToFile(
 	tagID int64,
 	spaceID int64,
 ) (*enttenant.Tag, error) {
-	err := qq.repository.AssignTagToFile(ctx, fileID, tagID, spaceID)
+	filex, err := qq.repository.FileByID(ctx, fileID)
 	if err != nil {
 		return nil, err
 	}
-
-	return qq.repository.TagByID(ctx, tagID)
+	tagx, err := qq.repository.TagByID(ctx, tagID)
+	if err != nil {
+		return nil, err
+	}
+	if filex.SpaceID != spaceID || tagx.SpaceID != spaceID {
+		return nil, e.NewHTTPErrorf(http.StatusNotFound, "File or Tag not found.")
+	}
+	if tagx.Type == tagtype.Group {
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Tag groups cannot be assigned.")
+	}
+	assigned, err := qq.repository.FileHasTagAssignment(ctx, fileID, tagID)
+	if err != nil || assigned {
+		return tagx, err
+	}
+	if err := qq.repository.AssignTagToFile(ctx, fileID, tagID, spaceID); err != nil {
+		return nil, err
+	}
+	return tagx, nil
 }
 
 func (qq *TagService) UnassignFromFile(
@@ -74,12 +90,23 @@ func (qq *TagService) UnassignFromFile(
 	fileID int64,
 	tagID int64,
 ) (*enttenant.Tag, error) {
-	err := qq.repository.UnassignTagFromFile(ctx, fileID, tagID)
+	filex, err := qq.repository.FileByID(ctx, fileID)
 	if err != nil {
 		return nil, err
 	}
-
-	return qq.repository.TagByID(ctx, tagID)
+	tagx, err := qq.repository.TagByID(ctx, tagID)
+	if err != nil {
+		return nil, err
+	}
+	if filex.SpaceID != ctx.SpaceCtx().Space.ID || tagx.SpaceID != ctx.SpaceCtx().Space.ID {
+		return nil, e.NewHTTPErrorf(http.StatusNotFound, "File or Tag not found.")
+	}
+	if err := qq.repository.UnassignTagFromFileInSpace(
+		ctx, fileID, tagID, ctx.SpaceCtx().Space.ID,
+	); err != nil {
+		return nil, err
+	}
+	return tagx, nil
 }
 
 func (qq *TagService) ToggleFileTag(

@@ -1,6 +1,6 @@
 # 03 — Classify a document with existing metadata
 
-Status: planned  
+Status: implementation complete; verification pending
 Depends on: [01](01-connect_and_inspect.md), [02](02-upload_to_inbox.md)  
 Contract: [classification](../spec.md#classification-contract); rules M1–M4
 
@@ -25,21 +25,24 @@ removes typed fields. Browser Inbox/Browse metadata and `get_file` show the same
 
 ## Implementation checklist
 
-- [ ] Add public-ID generation and uniqueness for Tag, Property, and DocumentType with generated
+- [x] Add public-ID generation and uniqueness for Tag, Property, and DocumentType with generated
   additive migrations. Stage field/index work per repository rules; no attribute-ID migration.
-- [ ] Implement bounded, restart-safe backfill through the existing tenant data-migration path.
+- [x] Implement bounded, restart-safe backfill through the existing tenant data-migration path.
   Account for populated tables, creation during upgrade, uniqueness conflicts, and completion
   before exposing metadata operations for that tenant. A creation default is not a backfill.
   Protect assigned public IDs from subsequent changes without blocking initialize-only backfill.
-- [ ] Extract definition reads into explicit bounded projections, with inline type attributes
+  Keep the rollout columns nullable for additive SQLite upgrades, reject empty IDs at every MCP
+  projection boundary, and replace the rollout mixin with the required public-ID mixin in a future
+  schema-tightening migration that does not rebuild existing tables.
+- [x] Extract definition reads into explicit bounded projections, with inline type attributes
   referencing Tag/property public IDs. Extend `get_file` with typed assigned metadata.
-- [ ] Put desired-state Tag assignment and document-type set/clear behaviour in existing models.
+- [x] Put desired-state Tag assignment and document-type set/clear behaviour in existing models.
   Resolve file and metadata together under the Space context, then call repository operations.
-- [ ] Extract property assignment/update/removal from Browse handlers and `functions.go` into
+- [x] Extract property assignment/update/removal from Browse handlers and `functions.go` into
   model behaviour. Normalize browser decimals/presence and MCP typed fields at their adapters.
-- [ ] Have existing HTMX actions and tools use these model operations. Add write execution and
+- [x] Have existing HTMX actions and tools use these model operations. Add write execution and
   commit-before-feedback handling where consumed; preserve browser partial/target contracts.
-- [ ] Add migration and cross-transport tests plus `@classify` desktop/mobile checks in the shared
+- [x] Add migration and cross-transport tests plus `@classify` desktop/mobile checks in the shared
   MCP workflow suite. Use browser metadata setup/import rather than MCP definition-management tools.
 
 ## Verification checklist

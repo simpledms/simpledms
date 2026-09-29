@@ -208,6 +208,9 @@ func (_u *PropertyUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			}
 		}
 	}
+	if _u.mutation.PublicIDCleared() {
+		_spec.ClearField(property.FieldPublicID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(property.FieldName, field.TypeString, value)
 	}
@@ -535,6 +538,9 @@ func (_u *PropertyUpdateOne) sqlSave(ctx context.Context) (_node *Property, err 
 				ps[i](selector)
 			}
 		}
+	}
+	if _u.mutation.PublicIDCleared() {
+		_spec.ClearField(property.FieldPublicID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(property.FieldName, field.TypeString, value)
