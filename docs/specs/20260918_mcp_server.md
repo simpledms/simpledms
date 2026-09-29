@@ -619,6 +619,16 @@ All-slice review and fixes, 2026-09-29:
   not complete those multi-case checklist entries. Completed items are checked in their slices;
   all four plan delivery boxes remain open.
 
+Same-tenant cross-Space regression, 2026-09-29:
+
+- Added `TestMCPBearerCredentialCannotCrossSpaces` in
+  `server/mcp_space_isolation_test.go`. One account has access to both Spaces in one tenant;
+  a B-scoped credential provides a positive control while the A-scoped credential must reject
+  B's file, metadata, and destination IDs. Listings/search expose A's documents and definitions
+  only, and rejected reads/writes leave both Spaces' document and directory state unchanged.
+- `go test ./server -run '^TestMCPBearerCredentialCannotCrossSpaces$' -count=1 -timeout 60s`
+  passed. No production code changed, and broader checks were not repeated.
+
 ## Operating implemented slices
 
 After deploying the generated migration and rebuilt application, open Account → MCP credentials.
