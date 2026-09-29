@@ -10,69 +10,69 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type WebDAVCredentialFilterDialog struct {
+type MCPCredentialFilterDialog struct {
 	infra *common.Infra
 	*actionx.Config
 }
 
-func NewWebDAVCredentialFilterDialog(
+func NewMCPCredentialFilterDialog(
 	infra *common.Infra,
 	actions *Actions,
-) *WebDAVCredentialFilterDialog {
-	return &WebDAVCredentialFilterDialog{
+) *MCPCredentialFilterDialog {
+	return &MCPCredentialFilterDialog{
 		infra: infra,
 		Config: actionx.NewConfig(
-			actions.Route("webdav-credential-filter-dialog"),
+			actions.Route("mcp-credential-filter-dialog"),
 			true,
 		),
 	}
 }
 
-func (qq *WebDAVCredentialFilterDialog) Handler(
+func (qq *MCPCredentialFilterDialog) Handler(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
-	state := autil.StateX[WebDAVCredentialListPartialData](rw, req)
+	state := autil.StateX[MCPCredentialListPartialData](rw, req)
 	if _, _, err := state.statusFilter(); err != nil {
 		return err
 	}
 	return qq.infra.Renderer().Render(rw, ctx, qq.Widget(state))
 }
 
-func (qq *WebDAVCredentialFilterDialog) Widget(
-	state *WebDAVCredentialListPartialData,
+func (qq *MCPCredentialFilterDialog) Widget(
+	state *MCPCredentialListPartialData,
 ) *widget.Dialog {
 	showActive, showRevoked, _ := state.statusFilter()
 	return &widget.Dialog{
 		Widget: widget.Widget[widget.Dialog]{
 			ID: qq.ID(),
 		},
-		Headline:     widget.T("Filter WebDAV credentials"),
+		Headline:     widget.T("Filter MCP credentials"),
 		IsOpenOnLoad: true,
 		Layout:       widget.DialogLayoutSideSheet,
 		Child: &widget.Container{
 			Widget: widget.Widget[widget.Container]{
-				ID: "webDAVCredentialStatusFilter",
+				ID: "mcpCredentialStatusFilter",
 			},
 			Child: []*widget.FilterChip{
 				newCredentialStatusFilterChip(
 					widget.T("Active"),
 					credentialStatusActive,
 					showActive,
-					event.WebDAVCredentialFilterChanged,
+					event.MCPCredentialFilterChanged,
 				),
 				newCredentialStatusFilterChip(
 					widget.T("Revoked"),
 					credentialStatusRevoked,
 					showRevoked,
-					event.WebDAVCredentialFilterChanged,
+					event.MCPCredentialFilterChanged,
 				),
 			},
 		},
 	}
 }
 
-func (qq *WebDAVCredentialFilterDialog) ID() string {
-	return "webDAVCredentialFilterDialog"
+func (qq *MCPCredentialFilterDialog) ID() string {
+	return "mcpCredentialFilterDialog"
 }

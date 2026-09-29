@@ -22,6 +22,7 @@ const (
 	AccountUpdated                Event = "accountUpdated"
 	AccountDeleted                Event = "accountDeleted"
 	WebDAVCredentialFilterChanged Event = "webDAVCredentialFilterChanged"
+	MCPCredentialFilterChanged    Event = "mcpCredentialFilterChanged"
 
 	FilterTagsChanged            Event = "filterTagsChanged"
 	DocumentTypeFilterChanged    Event = "documentTypeFilterChanged"

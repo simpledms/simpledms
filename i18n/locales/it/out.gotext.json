@@ -2113,13 +2113,6 @@
             "fuzzy": true
         },
         {
-            "id": "MCP credentials",
-            "message": "MCP credentials",
-            "translation": "Credenziali MCP",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Account",
             "message": "Account",
             "translation": "Account",
@@ -2137,6 +2130,62 @@
             "id": "Form validation failed.",
             "message": "Form validation failed.",
             "translation": "Convalida del modulo non riuscita.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP credential created.",
+            "message": "MCP credential created.",
+            "translation": "Credenziale MCP creata.",
+            "translatorComment": "Translated from English by Claude.",
+            "fuzzy": true
+        },
+        {
+            "id": "No spaces available yet.",
+            "message": "No spaces available yet.",
+            "translation": "Nessuno Space disponibile finora.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Client label",
+            "message": "Client label",
+            "translation": "Etichetta del client",
+            "translatorComment": "Translated from English by Claude.",
+            "fuzzy": true
+        },
+        {
+            "id": "Allow writes",
+            "message": "Allow writes",
+            "translation": "Consenti modifiche",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Without writes, the MCP client can only read documents.",
+            "message": "Without writes, the MCP client can only read documents.",
+            "translation": "Senza modifiche, il client MCP può solo leggere i documenti.",
+            "translatorComment": "Translated from English by Claude.",
+            "fuzzy": true
+        },
+        {
+            "id": "Space",
+            "message": "Space",
+            "translation": "Space",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Create",
+            "message": "Create",
+            "translation": "Crea",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "Create MCP credential",
+            "message": "Create MCP credential",
+            "translation": "Crea credenziale MCP",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2165,55 +2214,6 @@
             "id": "Token",
             "message": "Token",
             "translation": "Token",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "No spaces available yet.",
-            "message": "No spaces available yet.",
-            "translation": "Nessuno Space disponibile finora.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Create",
-            "message": "Create",
-            "translation": "Crea",
-            "translatorComment": "Translated from English by Codex.",
-            "fuzzy": true
-        },
-        {
-            "id": "Label",
-            "message": "Label",
-            "translation": "Etichetta",
-            "translatorComment": "Translated from English by Codex.",
-            "fuzzy": true
-        },
-        {
-            "id": "Allow writes",
-            "message": "Allow writes",
-            "translation": "Consenti modifiche",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "This credential can access only the selected Space.",
-            "message": "This credential can access only the selected Space.",
-            "translation": "Questa credenziale consente l’accesso solo allo Space selezionato.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Space",
-            "message": "Space",
-            "translation": "Space",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Create MCP credential",
-            "message": "Create MCP credential",
-            "translation": "Crea credenziale MCP",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2364,6 +2364,13 @@
                     "expr": "translatedLabel"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "Unavailable destination",
+            "message": "Unavailable destination",
+            "translation": "Destinazione non disponibile",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -2737,6 +2744,62 @@
             "fuzzy": true
         },
         {
+            "id": "Filter MCP credentials",
+            "message": "Filter MCP credentials",
+            "translation": "Filtra le credenziali MCP",
+            "translatorComment": "Translated from English by Claude.",
+            "fuzzy": true
+        },
+        {
+            "id": "Active",
+            "message": "Active",
+            "translation": "Attivo",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Revoked",
+            "message": "Revoked",
+            "translation": "Revocate",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
+            "id": "No MCP credentials",
+            "message": "No MCP credentials",
+            "translation": "Nessuna credenziale MCP",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Create a credential to connect an MCP client to a Space.",
+            "message": "Create a credential to connect an MCP client to a Space.",
+            "translation": "Crea credenziali per collegare un client MCP a uno Space.",
+            "translatorComment": "Translated from English by Claude.",
+            "fuzzy": true
+        },
+        {
+            "id": "Copy MCP URL",
+            "message": "Copy MCP URL",
+            "translation": "Copia l’URL MCP",
+            "translatorComment": "Translated from English by Claude.",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP URL copied to clipboard.",
+            "message": "MCP URL copied to clipboard.",
+            "translation": "L’URL MCP è stato copiato negli appunti.",
+            "translatorComment": "Translated from English by Claude.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not copy MCP URL.",
+            "message": "Could not copy MCP URL.",
+            "translation": "Impossibile copiare l’URL MCP.",
+            "translatorComment": "Translated from English by Claude.",
+            "fuzzy": true
+        },
+        {
             "id": "Read-only",
             "message": "Read-only",
             "translation": "Sola lettura",
@@ -2751,10 +2814,60 @@
             "fuzzy": true
         },
         {
-            "id": "Revoked",
-            "message": "Revoked",
-            "translation": "Revocate",
-            "translatorComment": "Translated from English by Codex.",
+            "id": "{Mode} · Created: {CreatedAt}",
+            "message": "{Mode} · Created: {CreatedAt}",
+            "translation": "{Mode} · Creato: {CreatedAt}",
+            "translatorComment": "Translated from English by Claude.",
+            "placeholders": [
+                {
+                    "id": "Mode",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "mode"
+                },
+                {
+                    "id": "CreatedAt",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "formatCredentialTime(ctx, credentialx.CreatedAt)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "{Mode} · Revoked: {RevokedAt}",
+            "message": "{Mode} · Revoked: {RevokedAt}",
+            "translation": "{Mode} · Revocato: {RevokedAt}",
+            "translatorComment": "Translated from English by Claude.",
+            "placeholders": [
+                {
+                    "id": "Mode",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "mode"
+                },
+                {
+                    "id": "RevokedAt",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "formatCredentialTime(ctx, *credentialx.RevokedAt)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Actions",
+            "message": "Actions",
+            "translation": "Azioni",
+            "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
         {
@@ -2765,23 +2878,16 @@
             "fuzzy": true
         },
         {
-            "id": "No MCP credentials",
-            "message": "No MCP credentials",
-            "translation": "Nessuna credenziale MCP",
-            "translatorComment": "Translated from English by Codex",
+            "id": "Revoke this MCP credential?",
+            "message": "Revoke this MCP credential?",
+            "translation": "Revocare questa credenziale MCP?",
+            "translatorComment": "Translated from English by Claude.",
             "fuzzy": true
         },
         {
-            "id": "Previous",
-            "message": "Previous",
-            "translation": "Precedente",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Next",
-            "message": "Next",
-            "translation": "Successivo",
+            "id": "MCP credentials",
+            "message": "MCP credentials",
+            "translation": "Credenziali MCP",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2940,13 +3046,6 @@
             "fuzzy": true
         },
         {
-            "id": "Active",
-            "message": "Active",
-            "translation": "Attivo",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "No WebDAV credentials",
             "message": "No WebDAV credentials",
             "translation": "Nessuna credenziale WebDAV",
@@ -2957,13 +3056,6 @@
             "id": "Create a device credential to upload files to an Inbox over WebDAV.",
             "message": "Create a device credential to upload files to an Inbox over WebDAV.",
             "translation": "Crea credenziali per un dispositivo per caricare file in una Inbox tramite WebDAV.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Unavailable destination",
-            "message": "Unavailable destination",
-            "translation": "Destinazione non disponibile",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -4665,13 +4757,6 @@
             "fuzzy": true
         },
         {
-            "id": "Actions",
-            "message": "Actions",
-            "translation": "Azioni",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
             "id": "Open main menu",
             "message": "Open main menu",
             "translation": "Apri menu principale",
@@ -5141,6 +5226,13 @@
             "fuzzy": true
         },
         {
+            "id": "Label",
+            "message": "Label",
+            "translation": "Etichetta",
+            "translatorComment": "Translated from English by Codex.",
+            "fuzzy": true
+        },
+        {
             "id": "Language",
             "message": "Language",
             "translation": "Lingua",
@@ -5298,13 +5390,6 @@
             "id": "Number value",
             "message": "Number value",
             "translation": "Valore numerico",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Offset",
-            "message": "Offset",
-            "translation": "Posizione iniziale",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -6028,6 +6113,11 @@
             "translation": "Credenziali non trovate.",
             "translatorComment": "Translated from English by Codex.",
             "fuzzy": true
+        },
+        {
+            "id": "MCP credential cannot write.",
+            "message": "MCP credential cannot write.",
+            "translation": ""
         },
         {
             "id": "Invalid MCP credential.",
@@ -7563,6 +7653,11 @@
             "fuzzy": true
         },
         {
+            "id": "Invalid base64 content.",
+            "message": "Invalid base64 content.",
+            "translation": ""
+        },
+        {
             "id": "Misc",
             "message": "Misc",
             "translation": "Altro",
@@ -7581,6 +7676,13 @@
             "message": "Organizations",
             "translation": "Organizzazioni",
             "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP",
+            "message": "MCP",
+            "translation": "MCP",
+            "translatorComment": "Translated from English by Claude.",
             "fuzzy": true
         },
         {

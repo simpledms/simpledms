@@ -99,10 +99,19 @@ func newMCPFixtureWithMode(
 }
 
 func (qq *mcpFixture) browser(endpoint string, data url.Values) *httptest.ResponseRecorder {
+	return qq.browserAt(route.MCPCredentials(), endpoint, data)
+}
+
+// browserAt sends the request as if issued from currentURL, which carries page state such as filters.
+func (qq *mcpFixture) browserAt(
+	currentURL string,
+	endpoint string,
+	data url.Values,
+) *httptest.ResponseRecorder {
 	req := httptest.NewRequest(http.MethodPost, endpoint, strings.NewReader(data.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("HX-Request", "true")
-	req.Header.Set("HX-Current-URL", route.MCPCredentials())
+	req.Header.Set("HX-Current-URL", currentURL)
 	req.AddCookie(&http.Cookie{Name: cookiex.SessionCookieName(), Value: qq.session})
 	rr := httptest.NewRecorder()
 	qq.h.router.ServeHTTP(rr, req)

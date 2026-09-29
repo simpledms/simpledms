@@ -1,4 +1,4 @@
-import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
+import { expect, test, type APIRequestContext, type Locator, type Page } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
 import { fixturePath, uniqueSuffix } from "./helpers";
@@ -16,7 +16,7 @@ async function prepareInbox(page: Page, spaceName: string) {
 		await page.getByRole("button", { name: /^business / }).first().click();
 	}
 	await spaces.click();
-	await page.getByRole("link", { name: /Create space|^add$/ }).click();
+	await page.getByRole("link", { name: /Create space|^add$/ }).first().click();
 	await page.getByRole("textbox", { name: "Name", exact: true }).fill(spaceName);
 	await page.getByRole("checkbox", { name: "Add me as space owner" }).check();
 	await page.getByRole("button", { name: "Save", exact: true }).click();
@@ -37,6 +37,34 @@ async function prepareInbox(page: Page, spaceName: string) {
 	await dialog.getByRole("button", { name: /Cancel|Close|^close$/ }).last().click();
 	await expect(page.getByRole("heading", { name: "upload-alpha.txt", exact: true })).toBeVisible();
 	return inboxURL;
+}
+
+async function openMCPCredentials(page: Page) {
+	await page.goto("/dashboard/");
+	await openNavigation(page);
+	await page.getByRole("link", { name: "MCP", exact: true }).first().click();
+	await expect(page).toHaveURL(/\/mcp-credentials\/$/);
+}
+
+async function openCreateMCPCredential(page: Page) {
+	await page.getByRole("button", { name: /Create MCP credential/ })
+		.or(page.getByRole("link", { name: /Create MCP credential/ }))
+		.filter({ visible: true }).first().click();
+	return page.getByRole("dialog").filter({ hasText: "Create MCP credential" });
+}
+
+// Space radios are visually hidden inputs inside list item labels, so select via the label.
+async function selectSpace(form: Locator, spaceName: string) {
+	const space = form.locator("label").filter({ hasText: spaceName });
+	await space.click();
+	await expect(space.locator("input[type=radio]")).toBeChecked();
+}
+
+async function openCredentialAction(page: Page, label: string, action: string) {
+	await page.locator("#mcpCredentials").getByRole("listitem").filter({ hasText: label })
+		.getByRole("button", { name: "Actions" }).click();
+	await page.getByRole("menu").filter({ visible: true })
+		.getByRole("link", { name: action, exact: true }).click();
 }
 
 async function rpc(
@@ -68,18 +96,11 @@ for (const device of [
 			const spaceName = `MCP ${uniqueSuffix()}`;
 			const inboxURL = await prepareInbox(page, spaceName);
 			const label = `Client ${uniqueSuffix()}`;
-			await page.goto("/dashboard/account/");
-			await page.getByRole("link", { name: /MCP credentials/ }).click();
-			await expect(page).toHaveURL(/\/mcp-credentials\/$/);
-			await page.getByRole("button", { name: /Create MCP credential/ }).click();
-			const form = page.getByRole("dialog").filter({ hasText: "Create MCP credential" });
-			await expect(form.getByRole("checkbox", { name: "Allow writes" })).not.toBeChecked();
-			await form.getByRole("textbox", { name: "Label", exact: true }).fill(label);
-			const destination = form.getByRole("combobox", { name: "Space", exact: true });
-			const option = destination.locator("option").filter({ hasText: spaceName });
-			await destination.selectOption((await option.getAttribute("value"))!);
-			await destination.focus();
-			await expect(destination).toBeFocused();
+			await openMCPCredentials(page);
+			const form = await openCreateMCPCredential(page);
+			await expect(form.getByRole("switch", { name: "Allow writes" })).not.toBeChecked();
+			await form.getByRole("textbox", { name: "Client label", exact: true }).fill(label);
+			await selectSpace(form, spaceName);
 			await form.getByRole("button", { name: "Create", exact: true }).click();
 			const secret = page.getByRole("dialog").filter({ hasText: "MCP credential created" });
 			const tokenLink = secret.getByRole("link", { name: /^sdmcp_/ });
@@ -106,10 +127,30 @@ for (const device of [
 				.toContain("upload-alpha.txt");
 			await page.reload();
 			await expect(page.getByText(token, { exact: true })).toHaveCount(0);
+			// Credentials are grouped in one tab per Space.
+			await page.getByRole("tab", { name: new RegExp(spaceName) }).click();
+			const renamed = `${label} renamed`;
+			await openCredentialAction(page, label, "edit Edit");
+			const edit = page.getByRole("dialog").filter({ hasText: "Client label" });
+			await edit.getByRole("textbox", { name: "Client label", exact: true }).fill(renamed);
+			await edit.getByRole("button", { name: "Save", exact: true }).click();
+			await expect(edit).toBeHidden();
 			const credential = page.locator("#mcpCredentials").getByRole("listitem")
-				.filter({ hasText: label });
-			await credential.getByRole("button", { name: "Revoke", exact: true }).click();
-			await expect(credential.getByText("Revoked", { exact: true })).toBeVisible();
+				.filter({ hasText: renamed });
+			await expect(credential).toBeVisible();
+			expect((await rpc(page.request, token, "tools/list", {})).ok()).toBeTruthy();
+			page.once("dialog", (dialog) => dialog.accept());
+			await openCredentialAction(page, renamed, "block Revoke");
+			// Revoked credentials are hidden by the default active-only filter.
+			await expect(credential).toHaveCount(0);
+			await page.getByRole("button", { name: "Filter MCP credentials" }).click();
+			const filter = page.getByRole("dialog").filter({ hasText: "Filter MCP credentials" });
+			await filter.getByText("Revoked", { exact: true }).click();
+			await expect(page).toHaveURL(/credential_status=revoked/);
+			// The side sheet covers the tabs on mobile.
+			await filter.getByRole("button", { name: "close", exact: true }).click();
+			await page.getByRole("tab", { name: new RegExp(spaceName) }).click();
+			await expect(credential.getByText(/Revoked:/)).toBeVisible();
 			expect((await rpc(page.request, token, "tools/list", {})).status()).toBe(401);
 			await page.goto(inboxURL);
 			await expect(page.getByRole("heading", { name: "upload-alpha.txt", exact: true }))
@@ -119,16 +160,12 @@ for (const device of [
 		test("@upload sends MCP bytes and opens them in Inbox", async ({ page }) => {
 			const spaceName = `MCP upload ${uniqueSuffix()}`;
 			const inboxURL = await prepareInbox(page, spaceName);
-			await page.goto("/dashboard/account/");
-			await page.getByRole("link", { name: /MCP credentials/ }).click();
-			await page.getByRole("button", { name: /Create MCP credential/ }).click();
-			const form = page.getByRole("dialog").filter({ hasText: "Create MCP credential" });
-			await form.getByRole("textbox", { name: "Label", exact: true })
+			await openMCPCredentials(page);
+			const form = await openCreateMCPCredential(page);
+			await form.getByRole("textbox", { name: "Client label", exact: true })
 				.fill(`Uploader ${uniqueSuffix()}`);
-			await form.getByRole("checkbox", { name: "Allow writes" }).check();
-			const destination = form.getByRole("combobox", { name: "Space", exact: true });
-			const option = destination.locator("option").filter({ hasText: spaceName });
-			await destination.selectOption((await option.getAttribute("value"))!);
+			await form.getByRole("switch", { name: "Allow writes" }).check();
+			await selectSpace(form, spaceName);
 			await form.getByRole("button", { name: "Create", exact: true }).click();
 			const secret = page.getByRole("dialog").filter({ hasText: "MCP credential created" });
 			const token = (await secret.getByRole("link", { name: /^sdmcp_/ }).innerText()).trim();

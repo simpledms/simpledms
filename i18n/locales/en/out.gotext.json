@@ -1587,11 +1587,6 @@
             "translation": ""
         },
         {
-            "id": "MCP credentials",
-            "message": "MCP credentials",
-            "translation": ""
-        },
-        {
             "id": "Account",
             "message": "Account",
             "translation": ""
@@ -1604,6 +1599,46 @@
         {
             "id": "Form validation failed.",
             "message": "Form validation failed.",
+            "translation": ""
+        },
+        {
+            "id": "MCP credential created.",
+            "message": "MCP credential created.",
+            "translation": ""
+        },
+        {
+            "id": "No spaces available yet.",
+            "message": "No spaces available yet.",
+            "translation": ""
+        },
+        {
+            "id": "Client label",
+            "message": "Client label",
+            "translation": ""
+        },
+        {
+            "id": "Allow writes",
+            "message": "Allow writes",
+            "translation": ""
+        },
+        {
+            "id": "Without writes, the MCP client can only read documents.",
+            "message": "Without writes, the MCP client can only read documents.",
+            "translation": ""
+        },
+        {
+            "id": "Space",
+            "message": "Space",
+            "translation": ""
+        },
+        {
+            "id": "Create",
+            "message": "Create",
+            "translation": ""
+        },
+        {
+            "id": "Create MCP credential",
+            "message": "Create MCP credential",
             "translation": ""
         },
         {
@@ -1624,41 +1659,6 @@
         {
             "id": "Token",
             "message": "Token",
-            "translation": ""
-        },
-        {
-            "id": "No spaces available yet.",
-            "message": "No spaces available yet.",
-            "translation": ""
-        },
-        {
-            "id": "Create",
-            "message": "Create",
-            "translation": ""
-        },
-        {
-            "id": "Label",
-            "message": "Label",
-            "translation": ""
-        },
-        {
-            "id": "Allow writes",
-            "message": "Allow writes",
-            "translation": ""
-        },
-        {
-            "id": "This credential can access only the selected Space.",
-            "message": "This credential can access only the selected Space.",
-            "translation": ""
-        },
-        {
-            "id": "Space",
-            "message": "Space",
-            "translation": ""
-        },
-        {
-            "id": "Create MCP credential",
-            "message": "Create MCP credential",
             "translation": ""
         },
         {
@@ -1775,6 +1775,11 @@
                     "expr": "translatedLabel"
                 }
             ]
+        },
+        {
+            "id": "Unavailable destination",
+            "message": "Unavailable destination",
+            "translation": ""
         },
         {
             "id": "Open tasks",
@@ -2061,6 +2066,46 @@
             "translation": ""
         },
         {
+            "id": "Filter MCP credentials",
+            "message": "Filter MCP credentials",
+            "translation": ""
+        },
+        {
+            "id": "Active",
+            "message": "Active",
+            "translation": ""
+        },
+        {
+            "id": "Revoked",
+            "message": "Revoked",
+            "translation": ""
+        },
+        {
+            "id": "No MCP credentials",
+            "message": "No MCP credentials",
+            "translation": ""
+        },
+        {
+            "id": "Create a credential to connect an MCP client to a Space.",
+            "message": "Create a credential to connect an MCP client to a Space.",
+            "translation": ""
+        },
+        {
+            "id": "Copy MCP URL",
+            "message": "Copy MCP URL",
+            "translation": ""
+        },
+        {
+            "id": "MCP URL copied to clipboard.",
+            "message": "MCP URL copied to clipboard.",
+            "translation": ""
+        },
+        {
+            "id": "Could not copy MCP URL.",
+            "message": "Could not copy MCP URL.",
+            "translation": ""
+        },
+        {
             "id": "Read-only",
             "message": "Read-only",
             "translation": ""
@@ -2071,8 +2116,54 @@
             "translation": ""
         },
         {
-            "id": "Revoked",
-            "message": "Revoked",
+            "id": "{Mode} · Created: {CreatedAt}",
+            "message": "{Mode} · Created: {CreatedAt}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Mode",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "mode"
+                },
+                {
+                    "id": "CreatedAt",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "formatCredentialTime(ctx, credentialx.CreatedAt)"
+                }
+            ]
+        },
+        {
+            "id": "{Mode} · Revoked: {RevokedAt}",
+            "message": "{Mode} · Revoked: {RevokedAt}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Mode",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "mode"
+                },
+                {
+                    "id": "RevokedAt",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "formatCredentialTime(ctx, *credentialx.RevokedAt)"
+                }
+            ]
+        },
+        {
+            "id": "Actions",
+            "message": "Actions",
             "translation": ""
         },
         {
@@ -2081,18 +2172,13 @@
             "translation": ""
         },
         {
-            "id": "No MCP credentials",
-            "message": "No MCP credentials",
+            "id": "Revoke this MCP credential?",
+            "message": "Revoke this MCP credential?",
             "translation": ""
         },
         {
-            "id": "Previous",
-            "message": "Previous",
-            "translation": ""
-        },
-        {
-            "id": "Next",
-            "message": "Next",
+            "id": "MCP credentials",
+            "message": "MCP credentials",
             "translation": ""
         },
         {
@@ -2206,11 +2292,6 @@
             "translation": ""
         },
         {
-            "id": "Active",
-            "message": "Active",
-            "translation": ""
-        },
-        {
             "id": "No WebDAV credentials",
             "message": "No WebDAV credentials",
             "translation": ""
@@ -2218,11 +2299,6 @@
         {
             "id": "Create a device credential to upload files to an Inbox over WebDAV.",
             "message": "Create a device credential to upload files to an Inbox over WebDAV.",
-            "translation": ""
-        },
-        {
-            "id": "Unavailable destination",
-            "message": "Unavailable destination",
             "translation": ""
         },
         {
@@ -3535,11 +3611,6 @@
             "translation": ""
         },
         {
-            "id": "Actions",
-            "message": "Actions",
-            "translation": ""
-        },
-        {
             "id": "Open main menu",
             "message": "Open main menu",
             "translation": ""
@@ -3875,6 +3946,11 @@
             "translation": ""
         },
         {
+            "id": "Label",
+            "message": "Label",
+            "translation": ""
+        },
+        {
             "id": "Language",
             "message": "Language",
             "translation": ""
@@ -3987,11 +4063,6 @@
         {
             "id": "Number value",
             "message": "Number value",
-            "translation": ""
-        },
-        {
-            "id": "Offset",
-            "message": "Offset",
             "translation": ""
         },
         {
@@ -4515,6 +4586,11 @@
         {
             "id": "Credential not found.",
             "message": "Credential not found.",
+            "translation": ""
+        },
+        {
+            "id": "MCP credential cannot write.",
+            "message": "MCP credential cannot write.",
             "translation": ""
         },
         {
@@ -5643,6 +5719,11 @@
             "translation": ""
         },
         {
+            "id": "Invalid base64 content.",
+            "message": "Invalid base64 content.",
+            "translation": ""
+        },
+        {
             "id": "Misc",
             "message": "Misc",
             "translation": ""
@@ -5655,6 +5736,11 @@
         {
             "id": "Organizations",
             "message": "Organizations",
+            "translation": ""
+        },
+        {
+            "id": "MCP",
+            "message": "MCP",
             "translation": ""
         },
         {

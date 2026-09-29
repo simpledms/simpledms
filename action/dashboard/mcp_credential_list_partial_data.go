@@ -1,10 +1,10 @@
 package dashboard
 
-type WebDAVCredentialListPartialData struct {
+type MCPCredentialListPartialData struct {
 	Destination            string
 	CredentialStatusValues []string `url:"credential_status,omitempty"`
 }
 
-func (qq *WebDAVCredentialListPartialData) statusFilter() (bool, bool, error) {
+func (qq *MCPCredentialListPartialData) statusFilter() (bool, bool, error) {
 	return parseCredentialStatusFilter(qq.CredentialStatusValues)
 }

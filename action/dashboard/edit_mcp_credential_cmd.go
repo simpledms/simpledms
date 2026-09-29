@@ -14,31 +14,43 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
-type RevokeMCPCredentialCmd struct {
+type EditMCPCredentialCmd struct {
 	infra       *common.Infra
 	actions     *Actions
 	credentialx *mcpcredential.CredentialService
 	*actionx.Config
+	*autil.FormHelper[EditMCPCredentialCmdData]
 }
 
-func NewRevokeMCPCredentialCmd(infra *common.Infra, actions *Actions) *RevokeMCPCredentialCmd {
-	config := actionx.NewConfig(actions.Route("revoke-mcp-credential-cmd"), false).
-		EnableCommittedResponse()
-	return &RevokeMCPCredentialCmd{
+func NewEditMCPCredentialCmd(
+	infra *common.Infra,
+	actions *Actions,
+) *EditMCPCredentialCmd {
+	config := actionx.NewConfig(actions.Route("edit-mcp-credential-cmd"), false)
+	return &EditMCPCredentialCmd{
 		infra:       infra,
 		actions:     actions,
 		credentialx: mcpcredential.NewCredentialService(),
 		Config:      config,
+		FormHelper: autil.NewFormHelper[EditMCPCredentialCmdData](
+			infra,
+			config,
+			widget.T("Edit"),
+		),
 	}
 }
 
-func (qq *RevokeMCPCredentialCmd) Data(credentialPublicID string) *RevokeMCPCredentialCmdData {
-	return &RevokeMCPCredentialCmdData{
+func (qq *EditMCPCredentialCmd) Data(
+	credentialPublicID string,
+	clientLabel string,
+) *EditMCPCredentialCmdData {
+	return &EditMCPCredentialCmdData{
 		CredentialPublicID: credentialPublicID,
+		ClientLabel:        clientLabel,
 	}
 }
 
-func (qq *RevokeMCPCredentialCmd) Handler(
+func (qq *EditMCPCredentialCmd) Handler(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
@@ -46,16 +58,19 @@ func (qq *RevokeMCPCredentialCmd) Handler(
 	if ctx.VisitorCtx().IsTemporarySession {
 		return e.NewHTTPErrorf(http.StatusForbidden, "A full Session is required.")
 	}
-	data, err := autil.FormData[RevokeMCPCredentialCmdData](rw, req, ctx)
+	data, err := autil.FormData[EditMCPCredentialCmdData](rw, req, ctx)
 	if err != nil {
 		return err
 	}
-	if _, err := qq.credentialx.Revoke(ctx.MainCtx(), data.CredentialPublicID); err != nil {
+	if err := qq.credentialx.EditLabel(
+		ctx.MainCtx(),
+		data.CredentialPublicID,
+		data.ClientLabel,
+	); err != nil {
 		return err
 	}
 
-	rw.Header().Set("Cache-Control", "no-store")
 	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
-	rw.AddRenderables(widget.NewSnackbarf("MCP credential revoked."))
+	rw.AddRenderables(widget.NewSnackbarf("Changes saved."))
 	return nil
 }

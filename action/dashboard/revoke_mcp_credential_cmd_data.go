@@ -1,5 +1,5 @@
 package dashboard
 
 type RevokeMCPCredentialCmdData struct {
-	CredentialID string `validate:"required"`
+	CredentialPublicID string `validate:"required"`
 }

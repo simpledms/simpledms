@@ -876,6 +876,9 @@
   .gap-4 {
     gap: calc(var(--spacing) * 4);
   }
+  .gap-x-1 {
+    column-gap: var(--spacing);
+  }
   .gap-x-1\.5 {
     column-gap: calc(var(--spacing) * 1.5);
   }
@@ -1780,6 +1783,16 @@
       outline: 2px solid transparent;
       outline-offset: 2px;
     }
+  }
+  .focus\:outline-2:focus {
+    outline-style: var(--tw-outline-style);
+    outline-width: 2px;
+  }
+  .focus\:-outline-offset-2:focus {
+    outline-offset: calc(2px * -1);
+  }
+  .focus\:outline-primary:focus {
+    outline-color: rgb(var(--md-sys-color-primary) / 1);
   }
   .focus\:outline-none:focus {
     --tw-outline-style: none;

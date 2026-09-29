@@ -26,7 +26,7 @@ func (MCPCredential) Fields() []ent.Field {
 		field.Int64("account_id").Immutable(),
 		field.Int64("tenant_id").Immutable(),
 		field.String("space_public_id").GoType(entx.CIText("")).Immutable(),
-		field.String("label").NotEmpty().MaxLen(100).Immutable(),
+		field.String("label").NotEmpty().MaxLen(100),
 		field.Bool("is_read_only").Default(true).Immutable(),
 		field.String("secret_hash").Sensitive().Immutable(),
 		field.Time("created_at").Default(time.Now).Immutable(),

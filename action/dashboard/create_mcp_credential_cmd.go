@@ -2,6 +2,7 @@ package dashboard
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -11,29 +12,51 @@ import (
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/mcpcredential"
-	"github.com/simpledms/simpledms/ui/renderable"
+	"github.com/simpledms/simpledms/model/main/systemconfig"
+	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
 type CreateMCPCredentialCmd struct {
-	infra   *common.Infra
-	service *mcpcredential.CredentialService
+	infra       *common.Infra
+	actions     *Actions
+	credentialx *mcpcredential.CredentialService
 	*actionx.Config
 }
 
 func NewCreateMCPCredentialCmd(infra *common.Infra, actions *Actions) *CreateMCPCredentialCmd {
+	config := actionx.NewConfig(actions.Route("create-mcp-credential-cmd"), false).
+		EnableCommittedResponse()
 	return &CreateMCPCredentialCmd{
-		infra:   infra,
-		service: mcpcredential.NewCredentialService(),
-		Config: actionx.NewConfig(actions.Route("create-mcp-credential-cmd"), false).
-			EnableCommittedResponse(),
+		infra:       infra,
+		actions:     actions,
+		credentialx: mcpcredential.NewCredentialService(),
+		Config:      config,
+	}
+}
+
+func (qq *CreateMCPCredentialCmd) Data(destination string) *CreateMCPCredentialCmdData {
+	return &CreateMCPCredentialCmdData{
+		Destination: destination,
+	}
+}
+
+func (qq *CreateMCPCredentialCmd) ModalLinkAttrs(
+	data *CreateMCPCredentialCmdData,
+) widget.HTMXAttrs {
+	return widget.HTMXAttrs{
+		HxPost:        qq.FormEndpointWithParams(actionx.ResponseWrapperDialog, "closest dialog"),
+		HxVals:        util.JSON(data),
+		LoadInPopover: true,
 	}
 }
 
 func (qq *CreateMCPCredentialCmd) Handler(
-	rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
 ) error {
 	if ctx.VisitorCtx().IsTemporarySession {
 		return e.NewHTTPErrorf(http.StatusForbidden, "A full Session is required.")
@@ -42,44 +65,64 @@ func (qq *CreateMCPCredentialCmd) Handler(
 	if err != nil {
 		return err
 	}
-	tenantID, spaceID, ok := strings.Cut(data.Destination, ":")
+	tenantPublicID, spacePublicID, ok := strings.Cut(data.Destination, ":")
 	if !ok {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Form validation failed.")
 	}
-	token, err := qq.service.Create(ctx.MainCtx(), tenantID, spaceID, data.Label, !data.AllowWrites)
+	token, err := qq.credentialx.Create(
+		ctx.MainCtx(),
+		tenantPublicID,
+		spacePublicID,
+		data.Label,
+		!data.AllowWrites,
+	)
 	if err != nil {
 		return err
 	}
-	endpoint := qq.infra.SystemConfig().AbsoluteURL("/mcp")
-	if endpoint == "/mcp" {
-		scheme := "http"
-		if req.TLS != nil || req.URL.Scheme == "https" {
-			scheme = "https"
-		}
-		endpoint = scheme + "://" + req.Host + "/mcp"
+
+	overview, err := qq.createdCredentialOverview(rw, req, ctx, data.Destination)
+	if err != nil {
+		return err
 	}
+
 	rw.Header().Set("Cache-Control", "no-store")
-	rw.Header().Set("HX-Trigger", "mcpCredentialsChanged")
-	return qq.infra.Renderer().Render(rw, ctx, &widget.Dialog{
-		Headline:     widget.T("MCP credential created"),
-		SubmitLabel:  nil,
-		IsOpenOnLoad: true,
-		Layout:       widget.DialogLayoutDefault,
-		Child: &widget.Column{
-			GapYSize:         widget.Gap3,
-			AutoHeight:       true,
-			NoOverflowHidden: true,
-			Children: []widget.IWidget{
-				widget.T("Copy the secret now. It will not be shown again.").SetWrap(),
-				credentialValue(ctx, "MCP URL", endpoint),
-				credentialValue(ctx, "Token", token),
-			},
+	rw.AddRenderables(widget.NewSnackbarf("MCP credential created."))
+	return qq.infra.Renderer().Render(rw, ctx, &widget.View{
+		Children: []widget.IWidget{
+			qq.secretDialog(ctx, req, token),
+			overview,
 		},
 	})
 }
 
+// createdCredentialOverview refreshes the credential list out-of-band with the tab of the new
+// credential's Space selected. AccountUpdated is not triggered instead because HX-Trigger
+// events fire before the swap, so its refresh would race and restore the previous tab.
+func (qq *CreateMCPCredentialCmd) createdCredentialOverview(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
+	destinationValue string,
+) (*widget.Container, error) {
+	destinationKey, err := webDAVCredentialDestinationKeyByValue(ctx, destinationValue)
+	if err != nil {
+		return nil, err
+	}
+	state := autil.StateX[MCPCredentialListPartialData](rw, req)
+	return qq.actions.MCPCredentialListPartial.WidgetOOB(
+		ctx,
+		req,
+		qq.actions.MCPCredentialListPartial.Data(
+			destinationKey,
+			state.CredentialStatusValues...,
+		),
+	)
+}
+
 func (qq *CreateMCPCredentialCmd) FormHandler(
-	rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
 ) error {
 	if ctx.VisitorCtx().IsTemporarySession {
 		return e.NewHTTPErrorf(http.StatusForbidden, "A full Session is required.")
@@ -92,56 +135,94 @@ func (qq *CreateMCPCredentialCmd) FormHandler(
 	if err != nil {
 		return err
 	}
-	var options []*widget.SelectOption
-	for _, destination := range destinations {
-		options = append(options, &widget.SelectOption{
-			Value: destination.value(),
-			Label: widget.Tu(destination.label),
+	destinationItems := make([]*widget.ListItem, 0, len(destinations))
+	for index, destination := range destinations {
+		destinationItems = append(destinationItems, &widget.ListItem{
+			RadioGroupName: "Destination",
+			RadioValue:     destination.value(),
+			IsSelected: data.Destination == destination.value() ||
+				(data.Destination == "" && index == 0),
+			Headline:       widget.Tu(destination.spaceName),
+			SupportingText: widget.Tu(destination.tenantName),
+			Leading:        widget.NewIcon("folder_open"),
 		})
 	}
-	var content renderable.Renderable = &widget.EmptyState{Headline: widget.T("No spaces available yet.")}
-	submit := widget.T("Create")
-	if len(options) == 0 {
-		submit = nil
-	} else {
-		content = &widget.Form{
-			HTMXAttrs: widget.HTMXAttrs{
-				HxPost:   qq.Endpoint(),
-				HxTarget: "closest dialog",
-				HxSwap:   "outerHTML",
+	if len(destinationItems) == 0 {
+		destinationItems = append(destinationItems, &widget.ListItem{
+			Headline: widget.T("No spaces available yet."),
+			Type:     widget.ListItemTypeHelper,
+		})
+	}
+
+	form := &widget.Form{
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:   qq.Endpoint(),
+			HxTarget: "closest dialog",
+			HxSwap:   "outerHTML",
+		},
+		Children: []widget.IWidget{
+			&widget.TextField{
+				Label:        widget.T("Client label"),
+				Name:         "Label",
+				Type:         "text",
+				IsRequired:   true,
+				HasAutofocus: true,
+				DefaultValue: data.Label,
 			},
-			Children: []widget.IWidget{
-				&widget.TextField{
-					Label:        widget.T("Label"),
-					Name:         "Label",
-					Type:         "text",
-					IsRequired:   true,
-					HasAutofocus: true,
-					DefaultValue: data.Label,
-				},
-				&widget.Checkbox{
-					Label:     widget.T("Allow writes"),
-					Name:      "AllowWrites",
-					IsChecked: data.AllowWrites,
-				},
-				widget.T("This credential can access only the selected Space.").SetWrap(),
-				&widget.SelectField{
-					Label:        widget.T("Space"),
-					Name:         "Destination",
-					DefaultValue: data.Destination,
-					Options:      options,
-					IsRequired:   true,
-				},
+			&widget.Switch{
+				Label:          widget.T("Allow writes"),
+				SupportingText: widget.T("Without writes, the MCP client can only read documents."),
+				Name:           "AllowWrites",
+				Value:          "true",
+				IsChecked:      data.AllowWrites,
+				CheckedIcon:    widget.NewIcon("check"),
 			},
-		}
+			&widget.Label{Text: widget.T("Space"), Type: widget.LabelTypeLg},
+			&widget.ScrollableContent{
+				Children: &widget.List{Children: destinationItems},
+			},
+		},
+	}
+
+	submitLabel := widget.T("Create")
+	if len(destinations) == 0 {
+		submitLabel = nil
 	}
 	rw.Header().Set("Cache-Control", "no-store")
 	return qq.infra.Renderer().Render(rw, ctx, autil.WrapWidget(
-		widget.T("Create MCP credential"), submit, content,
-		actionx.ResponseWrapperDialog, widget.DialogLayoutStable,
+		widget.T("Create MCP credential"),
+		submitLabel,
+		form,
+		actionx.ResponseWrapper(req.URL.Query().Get("wrapper")),
+		widget.DialogLayoutStable,
 	))
 }
 
+func (qq *CreateMCPCredentialCmd) secretDialog(
+	ctx ctxx.Context,
+	req *httpx.Request,
+	token string,
+) *widget.Dialog {
+	return &widget.Dialog{
+		Headline:     widget.T("MCP credential created"),
+		SubmitLabel:  nil,
+		IsOpenOnLoad: true,
+		Layout:       widget.DialogLayoutDefault,
+		Child: &widget.Column{
+			GapYSize:         widget.Gap3,
+			NoOverflowHidden: true,
+			AutoHeight:       true,
+			Children: []widget.IWidget{
+				widget.T("Copy the secret now. It will not be shown again.").SetWrap(),
+				credentialValue(ctx, "MCP URL", mcpCredentialURL(qq.infra.SystemConfig(), req)),
+				credentialValue(ctx, "Token", token),
+			},
+		},
+	}
+}
+
+// destinations lists only Spaces for which a credential can currently be created, for example
+// excluding tenants in maintenance mode.
 func (qq *CreateMCPCredentialCmd) destinations(
 	ctx ctxx.Context,
 ) ([]*webDAVCredentialDestination, error) {
@@ -151,7 +232,11 @@ func (qq *CreateMCPCredentialCmd) destinations(
 	}
 	active := make([]*webDAVCredentialDestination, 0, len(destinations))
 	for _, destination := range destinations {
-		_, tx, err := qq.service.Scope(ctx.MainCtx(), destination.tenantPublicID, destination.spacePublicID)
+		_, tx, err := qq.credentialx.Scope(
+			ctx.MainCtx(),
+			destination.tenantPublicID,
+			destination.spacePublicID,
+		)
 		if err != nil {
 			var httpErr *e.HTTPError
 			if errors.As(err, &httpErr) && (httpErr.StatusCode() == http.StatusForbidden ||
@@ -168,4 +253,19 @@ func (qq *CreateMCPCredentialCmd) destinations(
 		active = append(active, destination)
 	}
 	return active, nil
+}
+
+func mcpCredentialURL(config *systemconfig.SystemConfig, req *httpx.Request) string {
+	path := "/mcp"
+	if absoluteURL := config.AbsoluteURL(path); absoluteURL != path {
+		return absoluteURL
+	}
+	if req == nil || req.Host == "" {
+		return path
+	}
+	scheme := "https"
+	if req.TLS == nil {
+		scheme = "http"
+	}
+	return fmt.Sprintf("%s://%s%s", scheme, req.Host, path)
 }

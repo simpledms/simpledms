@@ -30,7 +30,9 @@ type Actions struct {
 	RevokeWebDAVCredentialCmd         *RevokeWebDAVCredentialCmd
 	MCPCredentialsPage                *MCPCredentialsPage
 	MCPCredentialListPartial          *MCPCredentialListPartial
+	MCPCredentialFilterDialog         *MCPCredentialFilterDialog
 	CreateMCPCredentialCmd            *CreateMCPCredentialCmd
+	EditMCPCredentialCmd              *EditMCPCredentialCmd
 	RevokeMCPCredentialCmd            *RevokeMCPCredentialCmd
 }
 
@@ -63,7 +65,9 @@ func NewActions(
 		RevokeWebDAVCredentialCmd:         NewRevokeWebDAVCredentialCmd(infra, actions),
 		MCPCredentialsPage:                NewMCPCredentialsPage(infra, actions),
 		MCPCredentialListPartial:          NewMCPCredentialListPartial(infra, actions),
+		MCPCredentialFilterDialog:         NewMCPCredentialFilterDialog(infra, actions),
 		CreateMCPCredentialCmd:            NewCreateMCPCredentialCmd(infra, actions),
+		EditMCPCredentialCmd:              NewEditMCPCredentialCmd(infra, actions),
 		RevokeMCPCredentialCmd:            NewRevokeMCPCredentialCmd(infra, actions),
 	}
 

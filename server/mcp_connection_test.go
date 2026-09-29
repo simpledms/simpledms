@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"regexp"
 	"slices"
 	"strings"
 	"testing"
@@ -107,12 +109,12 @@ func TestMCPConnectionScopesReadsAndRevocation(t *testing.T) {
 		t.Fatalf("credential list disclosed secret or failed: %d", listed.Code)
 	}
 	foreignRevoke := second.browser(h.actions.Dashboard.RevokeMCPCredentialCmd.Endpoint(),
-		url.Values{"CredentialID": {first.credentialID}})
+		url.Values{"CredentialPublicID": {first.credentialID}})
 	if foreignRevoke.Code != http.StatusNotFound {
 		t.Fatalf("foreign revoke status: %d", foreignRevoke.Code)
 	}
 	revoked := first.browser(h.actions.Dashboard.RevokeMCPCredentialCmd.Endpoint(),
-		url.Values{"CredentialID": {first.credentialID}})
+		url.Values{"CredentialPublicID": {first.credentialID}})
 	if revoked.Code != http.StatusOK {
 		t.Fatalf("revoke: %d %s", revoked.Code, revoked.Body.String())
 	}
@@ -312,7 +314,7 @@ func TestMCPConnectionCredentialFormAndValidation(t *testing.T) {
 	h := newActionTestHarness(t)
 	f := newMCPFixture(t, h, "form")
 	form := f.browser(h.actions.Dashboard.CreateMCPCredentialCmd.FormEndpoint(), nil)
-	if form.Code != http.StatusOK || !strings.Contains(form.Body.String(), `<select`) ||
+	if form.Code != http.StatusOK || !strings.Contains(form.Body.String(), `type="radio"`) ||
 		!strings.Contains(form.Body.String(), `name="Destination"`) ||
 		!strings.Contains(form.Body.String(), "MCP form") {
 		t.Fatalf("credential form missing accessible destination: %d %s", form.Code, form.Body.String())
@@ -337,6 +339,195 @@ func TestMCPConnectionCredentialFormAndValidation(t *testing.T) {
 		strings.Contains(response.Body.String(), `name="Destination"`) {
 		t.Fatalf("no-Space form: %d %s", response.Code, response.Body.String())
 	}
+}
+
+func TestMCPCredentialStatusFilter(t *testing.T) {
+	h := newActionTestHarness(t)
+	f := newMCPFixture(t, h, "filter")
+	listEndpoint := h.actions.Dashboard.MCPCredentialListPartial.Endpoint()
+	revokedURL := route.MCPCredentials() + "?credential_status=revoked"
+
+	active := f.browser(listEndpoint, nil)
+	if active.Code != http.StatusOK || !strings.Contains(active.Body.String(), f.credentialID) {
+		t.Fatalf("default filter must list active credential: %d", active.Code)
+	}
+	revokedBefore := f.browserAt(revokedURL, listEndpoint, nil)
+	if revokedBefore.Code != http.StatusOK ||
+		!strings.Contains(revokedBefore.Body.String(), "No MCP credentials") {
+		t.Fatalf("revoked filter must not list active credential: %d", revokedBefore.Code)
+	}
+
+	revoke := f.browser(h.actions.Dashboard.RevokeMCPCredentialCmd.Endpoint(),
+		url.Values{"CredentialPublicID": {f.credentialID}})
+	if revoke.Code != http.StatusOK {
+		t.Fatalf("revoke: %d %s", revoke.Code, revoke.Body.String())
+	}
+	activeAfter := f.browser(listEndpoint, nil)
+	if !strings.Contains(activeAfter.Body.String(), "No MCP credentials") {
+		t.Fatal("default filter must hide revoked credential")
+	}
+	revokedAfter := f.browserAt(revokedURL, listEndpoint, nil)
+	if !strings.Contains(revokedAfter.Body.String(), "Revoked:") ||
+		strings.Contains(revokedAfter.Body.String(), f.credentialID) {
+		t.Fatal("revoked filter must list revoked credential without revoke action")
+	}
+
+	if isMCPFilterButtonSelected(t, active.Body.String()) ||
+		!isMCPFilterButtonSelected(t, revokedAfter.Body.String()) {
+		t.Fatal("filter button must indicate only non-default filters")
+	}
+
+	invalid := f.browserAt(route.MCPCredentials()+"?credential_status=unknown", listEndpoint, nil)
+	if invalid.Code != http.StatusBadRequest {
+		t.Fatalf("invalid status filter: %d", invalid.Code)
+	}
+	dialog := f.browserAt(revokedURL, h.actions.Dashboard.MCPCredentialFilterDialog.Endpoint(), nil)
+	if dialog.Code != http.StatusOK || !strings.Contains(dialog.Body.String(), "credential_status") {
+		t.Fatalf("filter dialog: %d", dialog.Code)
+	}
+}
+
+func TestMCPCredentialEditLabel(t *testing.T) {
+	h := newActionTestHarness(t)
+	f := newMCPFixture(t, h, "edit")
+	other := newMCPFixture(t, h, "edit-other")
+	editEndpoint := h.actions.Dashboard.EditMCPCredentialCmd.Endpoint()
+
+	foreign := other.browser(editEndpoint, url.Values{
+		"CredentialPublicID": {f.credentialID},
+		"ClientLabel":        {"Hijacked"},
+	})
+	if foreign.Code != http.StatusNotFound {
+		t.Fatalf("foreign edit status: %d", foreign.Code)
+	}
+	tooLong := f.browser(editEndpoint, url.Values{
+		"CredentialPublicID": {f.credentialID},
+		"ClientLabel":        {strings.Repeat("x", 101)},
+	})
+	if tooLong.Code != http.StatusBadRequest {
+		t.Fatalf("too long label status: %d", tooLong.Code)
+	}
+	edited := f.browser(editEndpoint, url.Values{
+		"CredentialPublicID": {f.credentialID},
+		"ClientLabel":        {"  Renamed client  "},
+	})
+	if edited.Code != http.StatusOK {
+		t.Fatalf("edit: %d %s", edited.Code, edited.Body.String())
+	}
+	credential := h.mainDB.ReadOnlyConn.MCPCredential.Query().Where(
+		mcpcredential.PublicID(entx.NewCIText(f.credentialID)),
+	).OnlyX(privacy.DecisionContext(context.Background(), privacy.Allow))
+	if credential.Label != "Renamed client" {
+		t.Fatalf("label not updated: %q", credential.Label)
+	}
+	list := f.browser(h.actions.Dashboard.MCPCredentialListPartial.Endpoint(), nil)
+	if !strings.Contains(list.Body.String(), "Renamed client") {
+		t.Fatal("list does not show edited label")
+	}
+	// Renaming must not affect the credential's authority.
+	server := httptest.NewServer(h.router)
+	t.Cleanup(server.Close)
+	callMCP(t, f.connect(t, server.URL+"/mcp"), "get_space", map[string]any{})
+}
+
+func TestMCPCredentialListTabs(t *testing.T) {
+	h := newActionTestHarness(t)
+	f := newMCPFixture(t, h, "tabs")
+	listEndpoint := h.actions.Dashboard.MCPCredentialListPartial.Endpoint()
+
+	list := f.browser(listEndpoint, url.Values{
+		"Destination": {fmt.Sprintf("%d:%s", f.tenant.ID, f.spaceID)},
+	})
+	body := list.Body.String()
+	if list.Code != http.StatusOK || !strings.Contains(body, `role="tab"`) ||
+		!strings.Contains(body, "MCP tabs") || !strings.Contains(body, f.credentialID) {
+		t.Fatalf("expected Space tab with credential: %d %s", list.Code, body)
+	}
+	if !strings.Contains(body, "Create MCP credential") {
+		t.Fatal("accessible Space tab must offer credential creation")
+	}
+
+	// Credentials of Spaces the account can no longer access stay manageable.
+	if err := withTenantContext(t, h, f.account, f.tenant, f.db, func(
+		_ *entmain.Tx, _ *enttenant.Tx, tc *ctxx.TenantContext,
+	) error {
+		return tc.TTx.Space.Update().Where(space.PublicID(entx.NewCIText(f.spaceID))).
+			SetDeletedAt(time.Now()).Exec(tc)
+	}); err != nil {
+		t.Fatal(err)
+	}
+	unavailableResponse := f.browser(listEndpoint, nil)
+	unavailable := unavailableResponse.Body.String()
+	if !strings.Contains(unavailable, "Unavailable destination") ||
+		!strings.Contains(unavailable, f.credentialID) ||
+		strings.Contains(unavailable, "Create MCP credential") {
+		t.Fatalf("expected unavailable destination tab without create action: %s", unavailable)
+	}
+}
+
+func TestMCPCredentialCreateSelectsSpaceTab(t *testing.T) {
+	h := newActionTestHarness(t)
+	f := newMCPFixture(t, h, "select")
+	var otherSpaceID string
+	if err := withTenantContext(t, h, f.account, f.tenant, f.db, func(
+		_ *entmain.Tx, _ *enttenant.Tx, tc *ctxx.TenantContext,
+	) error {
+		// Sorts after the fixture Space, so its tab is not selected by default.
+		createSpaceViaCmd(t, h.actions, tc, "Zulu archive")
+		otherSpaceID = tc.TTx.Space.Query().Where(space.Name("Zulu archive")).OnlyX(tc).
+			PublicID.String()
+		return nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if label := activeTabLabel(t, f.browser(
+		h.actions.Dashboard.MCPCredentialListPartial.Endpoint(), nil,
+	).Body.String()); strings.Contains(label, "Zulu archive") {
+		t.Fatalf("precondition: other Space tab must not be selected, got %q", label)
+	}
+
+	created := f.browser(h.actions.Dashboard.CreateMCPCredentialCmd.Endpoint(), url.Values{
+		"Label":       {"Archive client"},
+		"Destination": {f.tenant.PublicID.String() + ":" + otherSpaceID},
+	})
+	body := created.Body.String()
+	_, overview, hasOverview := strings.Cut(body, `id="mcpCredentials"`)
+	if created.Code != http.StatusOK || !hasOverview ||
+		!strings.Contains(overview, `hx-swap-oob="outerHTML"`) {
+		t.Fatalf("expected out-of-band credential list: %d %s", created.Code, body)
+	}
+	if label := activeTabLabel(t, overview); !strings.Contains(label, "Zulu archive") {
+		t.Fatalf("expected new credential's Space tab to be selected, got %q", label)
+	}
+	if !strings.Contains(overview, "Archive client") {
+		t.Fatal("expected new credential in the selected tab")
+	}
+	if created.Header().Get("HX-Trigger") != "" {
+		t.Fatal("list refresh via HX-Trigger would race with the out-of-band tab selection")
+	}
+}
+
+// activeTabLabel returns the text of the selected tab in rendered HTML.
+func activeTabLabel(t *testing.T, body string) string {
+	t.Helper()
+	_, tab, found := strings.Cut(body, `aria-selected="true"`)
+	if !found {
+		t.Fatalf("no selected tab in: %s", body)
+	}
+	tab, _, _ = strings.Cut(tab, "</a>")
+	tab = regexp.MustCompile(`<[^>]*>`).ReplaceAllString(tab[strings.Index(tab, ">")+1:], "")
+	return strings.TrimSpace(tab)
+}
+
+// isMCPFilterButtonSelected inspects the out-of-band filter button in a list response.
+func isMCPFilterButtonSelected(t *testing.T, body string) bool {
+	t.Helper()
+	_, button, found := strings.Cut(body, `id="mcpCredentialFilterButton"`)
+	button, _, _ = strings.Cut(button, "</button>")
+	if !found || !strings.Contains(button, `hx-swap-oob="outerHTML"`) {
+		t.Fatalf("missing out-of-band filter button: %s", body)
+	}
+	return strings.Contains(button, "material-symbols-outlined fill")
 }
 
 func callMCP(t *testing.T, client *sdk.ClientSession, name string, arguments map[string]any) map[string]any {

@@ -29,6 +29,20 @@ func (_u *MCPCredentialUpdate) Where(ps ...predicate.MCPCredential) *MCPCredenti
 	return _u
 }
 
+// SetLabel sets the "label" field.
+func (_u *MCPCredentialUpdate) SetLabel(v string) *MCPCredentialUpdate {
+	_u.mutation.SetLabel(v)
+	return _u
+}
+
+// SetNillableLabel sets the "label" field if the given value is not nil.
+func (_u *MCPCredentialUpdate) SetNillableLabel(v *string) *MCPCredentialUpdate {
+	if v != nil {
+		_u.SetLabel(*v)
+	}
+	return _u
+}
+
 // SetRevokedAt sets the "revoked_at" field.
 func (_u *MCPCredentialUpdate) SetRevokedAt(v time.Time) *MCPCredentialUpdate {
 	_u.mutation.SetRevokedAt(v)
@@ -83,6 +97,11 @@ func (_u *MCPCredentialUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *MCPCredentialUpdate) check() error {
+	if v, ok := _u.mutation.Label(); ok {
+		if err := mcpcredential.LabelValidator(v); err != nil {
+			return &ValidationError{Name: "label", err: fmt.Errorf(`entmain: validator failed for field "MCPCredential.label": %w`, err)}
+		}
+	}
 	if _u.mutation.AccountCleared() && len(_u.mutation.AccountIDs()) > 0 {
 		return errors.New(`entmain: clearing a required unique edge "MCPCredential.account"`)
 	}
@@ -110,6 +129,9 @@ func (_u *MCPCredentialUpdate) sqlSave(ctx context.Context) (_node int, err erro
 			}
 		}
 	}
+	if value, ok := _u.mutation.Label(); ok {
+		_spec.SetField(mcpcredential.FieldLabel, field.TypeString, value)
+	}
 	if value, ok := _u.mutation.RevokedAt(); ok {
 		_spec.SetField(mcpcredential.FieldRevokedAt, field.TypeTime, value)
 	}
@@ -136,6 +158,20 @@ type MCPCredentialUpdateOne struct {
 	hooks     []Hook
 	mutation  *MCPCredentialMutation
 	modifiers []func(*sql.UpdateBuilder)
+}
+
+// SetLabel sets the "label" field.
+func (_u *MCPCredentialUpdateOne) SetLabel(v string) *MCPCredentialUpdateOne {
+	_u.mutation.SetLabel(v)
+	return _u
+}
+
+// SetNillableLabel sets the "label" field if the given value is not nil.
+func (_u *MCPCredentialUpdateOne) SetNillableLabel(v *string) *MCPCredentialUpdateOne {
+	if v != nil {
+		_u.SetLabel(*v)
+	}
+	return _u
 }
 
 // SetRevokedAt sets the "revoked_at" field.
@@ -205,6 +241,11 @@ func (_u *MCPCredentialUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *MCPCredentialUpdateOne) check() error {
+	if v, ok := _u.mutation.Label(); ok {
+		if err := mcpcredential.LabelValidator(v); err != nil {
+			return &ValidationError{Name: "label", err: fmt.Errorf(`entmain: validator failed for field "MCPCredential.label": %w`, err)}
+		}
+	}
 	if _u.mutation.AccountCleared() && len(_u.mutation.AccountIDs()) > 0 {
 		return errors.New(`entmain: clearing a required unique edge "MCPCredential.account"`)
 	}
@@ -248,6 +289,9 @@ func (_u *MCPCredentialUpdateOne) sqlSave(ctx context.Context) (_node *MCPCreden
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Label(); ok {
+		_spec.SetField(mcpcredential.FieldLabel, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.RevokedAt(); ok {
 		_spec.SetField(mcpcredential.FieldRevokedAt, field.TypeTime, value)

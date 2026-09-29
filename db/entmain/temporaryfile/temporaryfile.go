@@ -187,7 +187,7 @@ var (
 // SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
 func SourceValidator(s filesource.FileSource) error {
 	switch s.String() {
-	case "UnknownLegacy", "WebInterface", "PWAOSOpen", "URLImport", "WebDAV", "SystemExtraction":
+	case "UnknownLegacy", "WebInterface", "PWAOSOpen", "URLImport", "WebDAV", "SystemExtraction", "MCP":
 		return nil
 	default:
 		return fmt.Errorf("temporaryfile: invalid enum value for source field: %q", s)

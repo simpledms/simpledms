@@ -16,7 +16,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/model/main/webdavcredential"
-	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -111,10 +110,43 @@ func (qq *CreateWebDAVCredentialCmd) Handler(
 		return err
 	}
 
+	overview, err := qq.createdCredentialOverview(rw, req, ctx, data.Destination)
+	if err != nil {
+		return err
+	}
+
 	rw.Header().Set("Cache-Control", "no-store")
-	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
 	rw.AddRenderables(widget.NewSnackbarf("WebDAV credential created."))
-	return qq.infra.Renderer().Render(rw, ctx, qq.secretDialog(ctx, result))
+	return qq.infra.Renderer().Render(rw, ctx, &widget.View{
+		Children: []widget.IWidget{
+			qq.secretDialog(ctx, result),
+			overview,
+		},
+	})
+}
+
+// createdCredentialOverview refreshes the credential list out-of-band with the tab of the new
+// credential's Space selected. AccountUpdated is not triggered instead because HX-Trigger
+// events fire before the swap, so its refresh would race and restore the previous tab.
+func (qq *CreateWebDAVCredentialCmd) createdCredentialOverview(
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
+	destinationValue string,
+) (*widget.Container, error) {
+	destinationKey, err := webDAVCredentialDestinationKeyByValue(ctx, destinationValue)
+	if err != nil {
+		return nil, err
+	}
+	state := autil.StateX[WebDAVCredentialListPartialData](rw, req)
+	return qq.actions.WebDAVCredentialListPartial.WidgetOOB(
+		ctx,
+		req,
+		qq.actions.WebDAVCredentialListPartial.Data(
+			destinationKey,
+			state.CredentialStatusValues...,
+		),
+	)
 }
 
 func (qq *CreateWebDAVCredentialCmd) FormHandler(

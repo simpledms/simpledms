@@ -8,7 +8,6 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -54,14 +53,6 @@ func (qq *AccountCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable, 
 		return nil, err
 	}
 
-	children := []widget.IWidget{grids}
-	if !ctx.VisitorCtx().IsTemporarySession {
-		children = append(children, &widget.Button{
-			Label:     widget.T("MCP credentials"),
-			Icon:      widget.NewIcon("vpn_key"),
-			HTMXAttrs: widget.HTMXAttrs{HxGet: route.MCPCredentials()},
-		})
-	}
 	return &widget.Container{
 		Widget: widget.Widget[widget.Container]{
 			ID: qq.id(),
@@ -80,7 +71,7 @@ func (qq *AccountCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable, 
 			HxSelect: "#" + qq.id(),
 			HxSwap:   "outerHTML",
 		},
-		Child: children,
+		Child: grids,
 	}, nil
 }
 

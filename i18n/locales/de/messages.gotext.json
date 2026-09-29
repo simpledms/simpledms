@@ -8377,6 +8377,90 @@
 			"translation": "Anwendung entsperrt. Start wird fortgesetzt.",
 			"translatorComment": "Translated from English by Codex",
 			"fuzzy": true
+		},
+		{
+			"id": "MCP",
+			"message": "MCP",
+			"translation": "MCP",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Client label",
+			"message": "Client label",
+			"translation": "Client-Bezeichnung",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Copy MCP URL",
+			"message": "Copy MCP URL",
+			"translation": "MCP-URL kopieren",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "MCP URL copied to clipboard.",
+			"message": "MCP URL copied to clipboard.",
+			"translation": "MCP-URL wurde in die Zwischenablage kopiert.",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Could not copy MCP URL.",
+			"message": "Could not copy MCP URL.",
+			"translation": "MCP-URL konnte nicht kopiert werden.",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Create a credential to connect an MCP client to a Space.",
+			"message": "Create a credential to connect an MCP client to a Space.",
+			"translation": "Erstelle Zugangsdaten, um einen MCP-Client mit einem Space zu verbinden.",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "MCP credential created.",
+			"message": "MCP credential created.",
+			"translation": "MCP-Zugang erstellt.",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Revoke this MCP credential?",
+			"message": "Revoke this MCP credential?",
+			"translation": "Diesen MCP-Zugang widerrufen?",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Without writes, the MCP client can only read documents.",
+			"message": "Without writes, the MCP client can only read documents.",
+			"translation": "Ohne Schreibzugriff kann der MCP-Client Dokumente nur lesen.",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "{Mode} · Created: {CreatedAt}",
+			"message": "{Mode} · Created: {CreatedAt}",
+			"translation": "{Mode} · Erstellt: {CreatedAt}",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "{Mode} · Revoked: {RevokedAt}",
+			"message": "{Mode} · Revoked: {RevokedAt}",
+			"translation": "{Mode} · Widerrufen: {RevokedAt}",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Filter MCP credentials",
+			"message": "Filter MCP credentials",
+			"translation": "MCP-Zugangsdaten filtern",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
 		}
 	]
 }

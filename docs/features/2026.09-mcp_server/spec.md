@@ -46,7 +46,7 @@ are in the catalog; the more specific contracts below override its earlier explo
 
 ### Connect and inspect
 
-Account settings provide a credential list plus create/revoke actions. Creation collects a label,
+Account settings provide a credential list plus create/edit-label/revoke actions. Creation collects a label,
 an accessible Space, and a mode, defaulting to read-only. Display `/mcp` and the generated token
 once with copy controls; list/reload views contain metadata only. No-accessible-Spaces, empty-list,
 validation, and revoked states must be usable on desktop and mobile. Creation is unavailable in

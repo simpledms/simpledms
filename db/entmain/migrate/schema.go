@@ -283,7 +283,7 @@ var (
 		{Name: "upload_failed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "upload_succeeded_at", Type: field.TypeTime, Nullable: true},
 		{Name: "filename", Type: field.TypeString},
-		{Name: "source", Type: field.TypeEnum, Enums: []string{"UnknownLegacy", "WebInterface", "PWAOSOpen", "URLImport", "WebDAV", "SystemExtraction"}, Default: "UnknownLegacy"},
+		{Name: "source", Type: field.TypeEnum, Enums: []string{"UnknownLegacy", "WebInterface", "PWAOSOpen", "URLImport", "WebDAV", "SystemExtraction", "MCP"}, Default: "UnknownLegacy"},
 		{Name: "size", Type: field.TypeInt64, Nullable: true},
 		{Name: "size_in_storage", Type: field.TypeInt64},
 		{Name: "sha256", Type: field.TypeString, Nullable: true},

@@ -1,12 +1,15 @@
 package dashboard
 
 import (
+	"log"
+
 	acommon "github.com/simpledms/simpledms/action/common"
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/ui/uix/partial"
-	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/ui/renderable"
+	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -24,39 +27,78 @@ func NewMCPCredentialsPage(infra *common.Infra, actions *Actions) *MCPCredential
 }
 
 func (qq *MCPCredentialsPage) Handler(
-	rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context,
+	rw httpx.ResponseWriter,
+	req *httpx.Request,
+	ctx ctxx.Context,
 ) error {
-	list, err := qq.actions.MCPCredentialListPartial.Widget(ctx, 0)
+	state := autil.StateX[MCPCredentialListPartialData](rw, req)
+	page, err := qq.Widget(ctx, req, state)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	rw.Header().Set("Cache-Control", "no-store")
-	return qq.Render(rw, req, ctx, qq.infra, "MCP credentials", &widget.MainLayout{
-		Navigation: partial.NewNavigationRail(ctx.MainCtx(), qq.infra, "account", nil),
-		Content: &widget.DefaultLayout{
-			AppBar: &widget.AppBar{
-				Title:            &widget.AppBarTitle{Text: widget.T("MCP credentials")},
-				Leading:          widget.NewIcon("vpn_key"),
-				LeadingAltMobile: partial.NewNavigationRailToggle(),
-			},
-			Content: &widget.Column{
-				GapYSize: widget.Gap3,
-				Children: []widget.IWidget{
-					&widget.Button{
-						Label:     widget.T("Create MCP credential"),
-						Icon:      widget.NewIcon("add"),
-						StyleType: widget.ButtonStyleTypeFilled,
-						HTMXAttrs: widget.HTMXAttrs{
-							Role: "button",
-							HxPost: qq.actions.CreateMCPCredentialCmd.FormEndpointWithParams(
-								actionx.ResponseWrapperDialog, "closest dialog",
-							),
-							LoadInPopover: true,
-						},
-					},
-					list,
-				},
-			},
+	return qq.Render(rw, req, ctx, qq.infra, "MCP credentials", page)
+}
+
+func (qq *MCPCredentialsPage) Widget(
+	ctx ctxx.Context,
+	req *httpx.Request,
+	data *MCPCredentialListPartialData,
+) (renderable.Renderable, error) {
+	overview, err := qq.actions.MCPCredentialListPartial.Widget(
+		ctx,
+		req,
+		qq.actions.MCPCredentialListPartial.Data("", data.CredentialStatusValues...),
+	)
+	if err != nil {
+		return nil, err
+	}
+	fabs := []*widget.FloatingActionButton{{
+		Icon: "add",
+		Child: []widget.IWidget{
+			widget.NewIcon("add"),
+			widget.T("Create MCP credential"),
 		},
-	})
+		HTMXAttrs: qq.actions.CreateMCPCredentialCmd.ModalLinkAttrs(
+			qq.actions.CreateMCPCredentialCmd.Data(""),
+		),
+	}}
+
+	return &widget.MainLayout{
+		Navigation: partial2.NewNavigationRail(
+			ctx.MainCtx(),
+			qq.infra,
+			"mcp-credentials",
+			fabs,
+		),
+		Content: &widget.ListDetailLayout{
+			AppBar: qq.appBar(data),
+			List:   overview,
+		},
+	}, nil
+}
+
+func (qq *MCPCredentialsPage) appBar(data *MCPCredentialListPartialData) *widget.AppBar {
+	return &widget.AppBar{
+		Leading:          widget.NewIcon("smart_toy"),
+		LeadingAltMobile: partial2.NewNavigationRailToggle(),
+		Title: &widget.AppBarTitle{
+			Text: widget.T("MCP credentials"),
+		},
+		Actions: []widget.IWidget{qq.filterButton(data, false)},
+	}
+}
+
+func (qq *MCPCredentialsPage) filterButton(
+	data *MCPCredentialListPartialData,
+	isOOB bool,
+) *widget.Container {
+	return newCredentialFilterButton(
+		"mcpCredentialFilterButton",
+		widget.T("Filter MCP credentials"),
+		qq.actions.MCPCredentialFilterDialog.Endpoint(),
+		data.CredentialStatusValues,
+		isOOB,
+	)
 }

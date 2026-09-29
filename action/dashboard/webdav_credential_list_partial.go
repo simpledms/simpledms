@@ -2,8 +2,6 @@ package dashboard
 
 import (
 	"log"
-	"sort"
-	"strconv"
 	"strings"
 	"time"
 
@@ -63,7 +61,28 @@ func (qq *WebDAVCredentialListPartial) Handler(
 		log.Println(err)
 		return err
 	}
-	return qq.infra.Renderer().Render(rw, ctx, overview)
+	return qq.infra.Renderer().Render(rw, ctx, &widget.View{
+		Children: []widget.IWidget{
+			overview,
+			// keeps the filter indicator in the app bar in sync with the applied filter
+			qq.actions.WebDAVCredentialsPage.filterButton(data, true),
+		},
+	})
+}
+
+// WidgetOOB renders the list for an out-of-band swap, for example to select the tab of a
+// newly created credential from a command response.
+func (qq *WebDAVCredentialListPartial) WidgetOOB(
+	ctx ctxx.Context,
+	req *httpx.Request,
+	data *WebDAVCredentialListPartialData,
+) (*widget.Container, error) {
+	overview, err := qq.Widget(ctx, req, data)
+	if err != nil {
+		return nil, err
+	}
+	overview.HxSwapOOB = "outerHTML"
+	return overview, nil
 }
 
 func (qq *WebDAVCredentialListPartial) Widget(
@@ -138,74 +157,36 @@ func (qq *WebDAVCredentialListPartial) tabbedCredentials(
 	destinations []*webDAVCredentialDestination,
 ) *widget.TabBar {
 	credentialsByDestination := make(map[string][]*entmain.WebDAVCredential)
+	usedKeys := make(map[string]bool)
 	for _, credentialx := range credentials {
 		key := webDAVCredentialDestinationKey(
 			credentialx.TenantID,
 			credentialx.SpacePublicID.String(),
 		)
 		credentialsByDestination[key] = append(credentialsByDestination[key], credentialx)
+		usedKeys[key] = true
 	}
 
-	destinationsByKey := make(map[string]*webDAVCredentialDestination, len(destinations))
-	var keys []string
-	for _, destination := range destinations {
-		key := destination.key()
-		destinationsByKey[key] = destination
-		if len(credentialsByDestination[key]) > 0 {
-			keys = append(keys, key)
-		}
-	}
-	var unavailableKeys []string
-	for key := range credentialsByDestination {
-		if destinationsByKey[key] == nil {
-			unavailableKeys = append(unavailableKeys, key)
-		}
-	}
-	sort.Strings(unavailableKeys)
-	keys = append(keys, unavailableKeys...)
-
-	labelsByKey := make(map[string]string, len(keys))
-	unavailableIndex := 1
-	for _, key := range keys {
-		if destination := destinationsByKey[key]; destination != nil {
-			labelsByKey[key] = destination.label
-			continue
-		}
-		labelsByKey[key] = widget.T("Unavailable destination").String(ctx)
-		if len(unavailableKeys) > 1 {
-			labelsByKey[key] += " " + strconv.Itoa(unavailableIndex)
-		}
-		unavailableIndex++
-	}
-
-	activeKey := data.Destination
-	if len(credentialsByDestination[activeKey]) == 0 {
-		activeKey = keys[0]
-	}
-	tabs := make([]*widget.Tab, 0, len(keys))
-	for _, key := range keys {
-		tabs = append(tabs, &widget.Tab{
-			Label: widget.Tu(labelsByKey[key]),
-			HTMXAttrs: widget.HTMXAttrs{
+	tabs := newCredentialDestinationTabs(ctx, destinations, usedKeys)
+	activeKey := tabs.ActiveKey(data.Destination)
+	destination, _ := tabs.Destination(activeKey)
+	return tabs.TabBar(
+		activeKey,
+		func(key string) widget.HTMXAttrs {
+			return widget.HTMXAttrs{
 				HxPost:   qq.Endpoint(),
 				HxVals:   util.JSON(qq.Data(key)),
 				HxTarget: "#" + qq.id(),
 				HxSwap:   "outerHTML",
-			},
-		})
-	}
-
-	return &widget.TabBar{
-		Tabs:      tabs,
-		IsFlowing: true,
-		ActiveTab: webDAVCredentialTabID(labelsByKey[activeKey]),
-		ActiveTabContent: qq.destinationContent(
+			}
+		},
+		qq.destinationContent(
 			ctx,
 			req,
 			credentialsByDestination[activeKey],
-			destinationsByKey[activeKey],
+			destination,
 		),
-	}
+	)
 }
 
 func (qq *WebDAVCredentialListPartial) destinationContent(
@@ -220,6 +201,8 @@ func (qq *WebDAVCredentialListPartial) destinationContent(
 		toolbar = widget.NewToolbar(
 			widget.T("WebDAV URL").String(ctx),
 			&widget.Row{
+				// Same icon-to-text gap as the app bar, so the URL aligns with the page title.
+				GapXSize: widget.Gap4,
 				Children: []widget.IWidget{
 					widget.NewIcon("link"),
 					&widget.Link{

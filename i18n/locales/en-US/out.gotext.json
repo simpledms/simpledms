@@ -2113,13 +2113,6 @@
             "fuzzy": true
         },
         {
-            "id": "MCP credentials",
-            "message": "MCP credentials",
-            "translation": "MCP credentials",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Account",
             "message": "Account",
             "translation": "Account",
@@ -2137,6 +2130,62 @@
             "id": "Form validation failed.",
             "message": "Form validation failed.",
             "translation": "Form validation failed.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP credential created.",
+            "message": "MCP credential created.",
+            "translation": "MCP credential created.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No spaces available yet.",
+            "message": "No spaces available yet.",
+            "translation": "No spaces available yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Client label",
+            "message": "Client label",
+            "translation": "Client label",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Allow writes",
+            "message": "Allow writes",
+            "translation": "Allow writes",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Without writes, the MCP client can only read documents.",
+            "message": "Without writes, the MCP client can only read documents.",
+            "translation": "Without writes, the MCP client can only read documents.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Space",
+            "message": "Space",
+            "translation": "Space",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Create",
+            "message": "Create",
+            "translation": "Create",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Create MCP credential",
+            "message": "Create MCP credential",
+            "translation": "Create MCP credential",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2165,55 +2214,6 @@
             "id": "Token",
             "message": "Token",
             "translation": "Token",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "No spaces available yet.",
-            "message": "No spaces available yet.",
-            "translation": "No spaces available yet.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Create",
-            "message": "Create",
-            "translation": "Create",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Label",
-            "message": "Label",
-            "translation": "Label",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Allow writes",
-            "message": "Allow writes",
-            "translation": "Allow writes",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "This credential can access only the selected Space.",
-            "message": "This credential can access only the selected Space.",
-            "translation": "This credential can access only the selected Space.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Space",
-            "message": "Space",
-            "translation": "Space",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Create MCP credential",
-            "message": "Create MCP credential",
-            "translation": "Create MCP credential",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2364,6 +2364,13 @@
                     "expr": "translatedLabel"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "Unavailable destination",
+            "message": "Unavailable destination",
+            "translation": "Unavailable destination",
+            "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
@@ -2737,6 +2744,62 @@
             "fuzzy": true
         },
         {
+            "id": "Filter MCP credentials",
+            "message": "Filter MCP credentials",
+            "translation": "Filter MCP credentials",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Active",
+            "message": "Active",
+            "translation": "Active",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Revoked",
+            "message": "Revoked",
+            "translation": "Revoked",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "No MCP credentials",
+            "message": "No MCP credentials",
+            "translation": "No MCP credentials",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Create a credential to connect an MCP client to a Space.",
+            "message": "Create a credential to connect an MCP client to a Space.",
+            "translation": "Create a credential to connect an MCP client to a Space.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Copy MCP URL",
+            "message": "Copy MCP URL",
+            "translation": "Copy MCP URL",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP URL copied to clipboard.",
+            "message": "MCP URL copied to clipboard.",
+            "translation": "MCP URL copied to clipboard.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not copy MCP URL.",
+            "message": "Could not copy MCP URL.",
+            "translation": "Could not copy MCP URL.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Read-only",
             "message": "Read-only",
             "translation": "Read-only",
@@ -2751,9 +2814,59 @@
             "fuzzy": true
         },
         {
-            "id": "Revoked",
-            "message": "Revoked",
-            "translation": "Revoked",
+            "id": "{Mode} · Created: {CreatedAt}",
+            "message": "{Mode} · Created: {CreatedAt}",
+            "translation": "{Mode} · Created: {CreatedAt}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Mode",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "mode"
+                },
+                {
+                    "id": "CreatedAt",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "formatCredentialTime(ctx, credentialx.CreatedAt)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "{Mode} · Revoked: {RevokedAt}",
+            "message": "{Mode} · Revoked: {RevokedAt}",
+            "translation": "{Mode} · Revoked: {RevokedAt}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Mode",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "mode"
+                },
+                {
+                    "id": "RevokedAt",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "formatCredentialTime(ctx, *credentialx.RevokedAt)"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Actions",
+            "message": "Actions",
+            "translation": "Actions",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2765,23 +2878,16 @@
             "fuzzy": true
         },
         {
-            "id": "No MCP credentials",
-            "message": "No MCP credentials",
-            "translation": "No MCP credentials",
+            "id": "Revoke this MCP credential?",
+            "message": "Revoke this MCP credential?",
+            "translation": "Revoke this MCP credential?",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Previous",
-            "message": "Previous",
-            "translation": "Previous",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Next",
-            "message": "Next",
-            "translation": "Next",
+            "id": "MCP credentials",
+            "message": "MCP credentials",
+            "translation": "MCP credentials",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2940,13 +3046,6 @@
             "fuzzy": true
         },
         {
-            "id": "Active",
-            "message": "Active",
-            "translation": "Active",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "No WebDAV credentials",
             "message": "No WebDAV credentials",
             "translation": "No WebDAV credentials",
@@ -2957,13 +3056,6 @@
             "id": "Create a device credential to upload files to an Inbox over WebDAV.",
             "message": "Create a device credential to upload files to an Inbox over WebDAV.",
             "translation": "Create a device credential to upload files to an Inbox over WebDAV.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Unavailable destination",
-            "message": "Unavailable destination",
-            "translation": "Unavailable destination",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4671,13 +4763,6 @@
             "fuzzy": true
         },
         {
-            "id": "Actions",
-            "message": "Actions",
-            "translation": "Actions",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Open main menu",
             "message": "Open main menu",
             "translation": "Open main menu",
@@ -5147,6 +5232,13 @@
             "fuzzy": true
         },
         {
+            "id": "Label",
+            "message": "Label",
+            "translation": "Label",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Language",
             "message": "Language",
             "translation": "Language",
@@ -5304,13 +5396,6 @@
             "id": "Number value",
             "message": "Number value",
             "translation": "Number value",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Offset",
-            "message": "Offset",
-            "translation": "Offset",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6032,6 +6117,13 @@
             "id": "Credential not found.",
             "message": "Credential not found.",
             "translation": "Credential not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP credential cannot write.",
+            "message": "MCP credential cannot write.",
+            "translation": "MCP credential cannot write.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7581,6 +7673,13 @@
             "fuzzy": true
         },
         {
+            "id": "Invalid base64 content.",
+            "message": "Invalid base64 content.",
+            "translation": "Invalid base64 content.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Misc",
             "message": "Misc",
             "translation": "Misc",
@@ -7598,6 +7697,13 @@
             "id": "Organizations",
             "message": "Organizations",
             "translation": "Organizations",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP",
+            "message": "MCP",
+            "translation": "MCP",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

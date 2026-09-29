@@ -41,7 +41,7 @@ func (qq *CredentialService) Create(
 	ctx *ctxx.MainContext, tenantID, spaceID, label string, isReadOnly bool,
 ) (string, error) {
 	label = strings.TrimSpace(label)
-	if ctx.IsTemporarySession || label == "" || utf8.RuneCountInString(label) > 100 {
+	if ctx.IsTemporarySession || !isValidLabel(label) {
 		return "", e.NewHTTPErrorf(http.StatusBadRequest, "Form validation failed.")
 	}
 	spaceCtx, tenantTx, err := qq.Scope(ctx, tenantID, spaceID)
@@ -94,6 +94,37 @@ func (qq *CredentialService) Revoke(ctx *ctxx.MainContext, publicID string) (boo
 		log.Println(err)
 	}
 	return err == nil, err
+}
+
+// EditLabel renames an owned credential; scope, mode and secret stay unchanged.
+func (qq *CredentialService) EditLabel(
+	ctx *ctxx.MainContext,
+	publicID string,
+	label string,
+) error {
+	if ctx.IsTemporarySession {
+		return e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+	}
+	label = strings.TrimSpace(label)
+	if !isValidLabel(label) {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Form validation failed.")
+	}
+	credential, err := ctx.MainTx.MCPCredential.Query().Where(
+		mcpcredential.PublicID(entx.NewCIText(publicID)),
+		mcpcredential.AccountID(ctx.Account.ID),
+	).Only(ctx)
+	if err != nil {
+		log.Println(err)
+		if entmain.IsNotFound(err) {
+			return e.NewHTTPErrorf(http.StatusNotFound, "Credential not found.")
+		}
+		return err
+	}
+	if err := credential.Update().SetLabel(label).Exec(ctx); err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }
 
 // Scope shares the browser's context construction without inheriting bootstrap privacy bypasses.
@@ -250,4 +281,8 @@ func rollback(tx interface{ Rollback() error }) {
 	if err := tx.Rollback(); err != nil && !errors.Is(err, sql.ErrTxDone) {
 		log.Println(err)
 	}
+}
+
+func isValidLabel(label string) bool {
+	return label != "" && utf8.RuneCountInString(label) <= 100
 }

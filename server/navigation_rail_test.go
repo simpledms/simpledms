@@ -27,7 +27,7 @@ func TestNavigationRailShowsMainDestinations(t *testing.T) {
 	defer userRollback()
 
 	userRail := partial2.NewNavigationRail(userCtx, harness.infra, "dashboard", nil)
-	userItemsWant := []string{"Account", "WebDAV"}
+	userItemsWant := []string{"Account", "WebDAV", "MCP"}
 	if got := navigationRailLabels(userRail.GetItems()); !reflect.DeepEqual(got, userItemsWant) {
 		t.Fatalf("expected user rail labels %v, got %v", userItemsWant, got)
 	}
@@ -43,7 +43,7 @@ func TestNavigationRailShowsMainDestinations(t *testing.T) {
 	defer adminRollback()
 
 	adminRail := partial2.NewNavigationRail(adminCtx, harness.infra, "system", nil)
-	adminItemsWant := []string{"Account", "WebDAV", "System"}
+	adminItemsWant := []string{"Account", "WebDAV", "MCP", "System"}
 	if got := navigationRailLabels(adminRail.GetItems()); !reflect.DeepEqual(got, adminItemsWant) {
 		t.Fatalf("expected admin rail labels %v, got %v", adminItemsWant, got)
 	}
@@ -189,7 +189,7 @@ func TestNavigationRailShowsSpaceDestinations(t *testing.T) {
 		partial2.SpacesNavigationRailValue(tenantx.PublicID.String()),
 		nil,
 	)
-	tenantRailWant := []string{"Account", "WebDAV"}
+	tenantRailWant := []string{"Account", "WebDAV", "MCP"}
 	if got := navigationRailLabels(tenantRail.GetItems()); !reflect.DeepEqual(got, tenantRailWant) {
 		t.Fatalf("expected tenant rail labels without space %v, got %v", tenantRailWant, got)
 	}
