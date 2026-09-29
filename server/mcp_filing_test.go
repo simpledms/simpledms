@@ -1,8 +1,13 @@
 package server
 
 import (
+	"context"
+	"errors"
 	"net/http/httptest"
+	"sync"
 	"testing"
+
+	"github.com/modelcontextprotocol/go-sdk/mcp"
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
@@ -11,6 +16,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/entx"
 	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
+	filingmodel "github.com/simpledms/simpledms/model/tenant/filing"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 )
@@ -163,6 +169,156 @@ func TestMCPFilingJourney(t *testing.T) {
 	})
 }
 
+func TestMCPFilingRollsBackCreatedChildDirectoryOnCommitFailure(t *testing.T) {
+	h := newActionTestHarness(t)
+	fixture := newMCPFixtureWithWrites(t, h, "filing-rollback")
+	server := httptest.NewServer(h.router)
+	t.Cleanup(server.Close)
+	client := fixture.connect(t, server.URL+"/mcp")
+
+	if err := withTenantContext(t, h, fixture.account, fixture.tenant, fixture.db, func(
+		_ *entmain.Tx, _ *enttenant.Tx, tc *ctxx.TenantContext,
+	) error {
+		if err := tc.TTx.Space.Update().SetIsFolderMode(true).Exec(tc); err != nil {
+			return err
+		}
+		spaceCtx := ctxx.NewSpaceContext(tc, tc.TTx.Space.Query().Where(
+			space.PublicID(entx.NewCIText(fixture.spaceID)),
+		).OnlyX(tc))
+		tc.TTx.OnCommit(func(enttenant.Committer) enttenant.Committer {
+			return enttenant.CommitFunc(func(context.Context, *enttenant.Tx) error {
+				return errors.New("injected filing commit failure")
+			})
+		})
+		_, err := filingmodel.NewFilingService(h.infra.FileSystem()).FileInboxDocument(
+			spaceCtx, fixture.fileID, fixture.rootID, "filed.txt", "created-then-rolled-back",
+		)
+		if err != nil {
+			return err
+		}
+		return tc.TTx.Commit()
+	}); err == nil {
+		t.Fatal("filing unexpectedly succeeded despite commit failure")
+	}
+
+	if containsMCPChild(t, callMCP(t, client, "list_directory", map[string]any{
+		"directory_id": fixture.rootID,
+	})["children"], "", "created-then-rolled-back") {
+		t.Fatal("failed filing left a child directory behind")
+	}
+	if !containsMCPChild(t, callMCP(t, client, "list_inbox", map[string]any{})["files"], fixture.fileID, "") {
+		t.Fatal("failed filing removed the document from Inbox")
+	}
+}
+
+func TestMCPFilingConcurrentCompletionOnlySucceedsOnce(t *testing.T) {
+	h := newActionTestHarness(t)
+	fixture := newMCPFixtureWithWrites(t, h, "filing-concurrent")
+	server := httptest.NewServer(h.router)
+	t.Cleanup(server.Close)
+	first := fixture.connect(t, server.URL+"/mcp")
+	second := fixture.connect(t, server.URL+"/mcp")
+
+	type outcome struct {
+		result *mcp.CallToolResult
+		err    error
+	}
+	outcomes := make(chan outcome, 2)
+	var group sync.WaitGroup
+	for _, client := range []*mcp.ClientSession{first, second} {
+		group.Add(1)
+		go func(client *mcp.ClientSession) {
+			defer group.Done()
+			result, err := client.CallTool(context.Background(), &mcp.CallToolParams{
+				Name: "mark_inbox_file_done", Arguments: map[string]any{"file_id": fixture.fileID},
+			})
+			outcomes <- outcome{result: result, err: err}
+		}(client)
+	}
+	group.Wait()
+	close(outcomes)
+
+	successes := 0
+	failures := 0
+	for result := range outcomes {
+		if result.err == nil && result.result != nil && !result.result.IsError {
+			successes++
+		} else {
+			failures++
+		}
+	}
+	if successes != 1 || failures != 1 {
+		t.Fatalf("concurrent completion outcomes: successes=%d failures=%d", successes, failures)
+	}
+	if containsMCPChild(t, callMCP(t, first, "list_inbox", map[string]any{})["files"], fixture.fileID, "") {
+		t.Fatal("successful concurrent completion left the file in Inbox")
+	}
+}
+
+func TestMCPFilingConflictAndRepeatedFilingPreserveInboxState(t *testing.T) {
+	h := newActionTestHarness(t)
+	fixture := newMCPFixtureWithWrites(t, h, "filing-conflict")
+	server := httptest.NewServer(h.router)
+	t.Cleanup(server.Close)
+	client := fixture.connect(t, server.URL+"/mcp")
+	otherID := fixtureFileID(t, fixture)
+
+	callMCP(t, client, "file_inbox_document", map[string]any{
+		"file_id": fixture.fileID, "destination_directory_id": fixture.rootID, "filename": "same-name.txt",
+	})
+	assertMCPToolError(t, client, "file_inbox_document", map[string]any{
+		"file_id": otherID, "destination_directory_id": fixture.rootID, "filename": "same-name.txt",
+	})
+	if !containsMCPChild(t, callMCP(t, client, "list_inbox", map[string]any{})["files"], otherID, "") {
+		t.Fatal("filename conflict removed the second file from Inbox")
+	}
+	assertMCPToolError(t, client, "file_inbox_document", map[string]any{
+		"file_id": fixture.fileID, "destination_directory_id": fixture.rootID,
+	})
+}
+
+func TestMCPFilingRejectsInvalidDirectoryNamesWithoutCreatingRows(t *testing.T) {
+	h := newActionTestHarness(t)
+	fixture := newMCPFixtureWithWrites(t, h, "filing-invalid-directory")
+	server := httptest.NewServer(h.router)
+	t.Cleanup(server.Close)
+	client := fixture.connect(t, server.URL+"/mcp")
+
+	for _, name := range []string{".", "folder/../name"} {
+		assertMCPToolError(t, client, "create_directory", map[string]any{
+			"parent_directory_id": fixture.rootID,
+			"name":                name,
+		})
+	}
+
+	children := callMCP(t, client, "list_directory", map[string]any{})["children"]
+	if len(children.([]any)) != 0 {
+		t.Fatalf("invalid directory names created rows: %v", children)
+	}
+	for _, name := range []string{".", "folder/../name"} {
+		if containsMCPChild(t, children, "", name) {
+			t.Fatalf("invalid directory %q created a row: %v", name, children)
+		}
+	}
+}
+
+func TestMCPFilingRejectsDotFilenameAndPreservesInbox(t *testing.T) {
+	h := newActionTestHarness(t)
+	fixture := newMCPFixtureWithWrites(t, h, "filing-invalid-filename")
+	server := httptest.NewServer(h.router)
+	t.Cleanup(server.Close)
+	client := fixture.connect(t, server.URL+"/mcp")
+
+	assertMCPToolError(t, client, "file_inbox_document", map[string]any{
+		"file_id":                  fixture.fileID,
+		"destination_directory_id": fixture.rootID,
+		"filename":                 ".",
+	})
+	if !containsMCPChild(t, callMCP(t, client, "list_inbox", map[string]any{})["files"], fixture.fileID, "") {
+		t.Fatal("invalid filename removed the document from Inbox")
+	}
+}
+
 func TestMCPMarkInboxFileDoneInNonFolderSpace(t *testing.T) {
 	h := newActionTestHarness(t)
 	fixture := newMCPFixtureWithWrites(t, h, "done-non-folder")
@@ -195,7 +351,9 @@ func fixtureFileID(t *testing.T, fixture *mcpFixture) string {
 		sc := ctxx.NewSpaceContext(tc, tc.TTx.Space.Query().Where(
 			space.PublicID(entx.NewCIText(fixture.spaceID)),
 		).OnlyX(tc))
-		files, err := sc.TTx.File.Query().Where(file.Name("mcp-filing-1.txt")).All(sc)
+		files, err := sc.TTx.File.Query().Where(
+			file.IsInInbox(true), file.PublicIDNEQ(entx.NewCIText(fixture.fileID)),
+		).All(sc)
 		if err != nil {
 			return err
 		}

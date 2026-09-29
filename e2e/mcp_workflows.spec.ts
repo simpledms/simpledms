@@ -208,10 +208,9 @@ for (const device of [
 			expect(result.structuredContent.filename).toBe(filename);
 			await page.goto(inboxURL);
 			await expect(page.getByRole("heading", { name: filename, exact: true })).toBeVisible();
-			await expect(page.getByText("MCP", { exact: true }).first()).toBeVisible();
-			await page.getByRole("button", { name: "Filter by source", exact: true }).click();
+			await page.getByRole("link", { name: "filter_alt", exact: true }).click();
 			const sourceFilter = page.getByRole("dialog").filter({ hasText: "Source" });
-			await sourceFilter.getByRole("checkbox", { name: "MCP", exact: true }).check();
+			await sourceFilter.getByText("MCP", { exact: true }).click();
 			await expect(page).toHaveURL(/source=MCP/);
 			await expect(page.getByRole("heading", { name: filename, exact: true })).toBeVisible();
 			await expect(page.getByRole("heading", { name: "upload-alpha.txt", exact: true }))
@@ -219,8 +218,14 @@ for (const device of [
 
 			await page.goto(result.structuredContent.url);
 			await expect(page.getByRole("heading", { name: filename, exact: true })).toBeVisible();
+			await page.getByRole("button", { name: "description", exact: true }).click();
+			const details = page.getByRole("dialog").filter({ has: page.getByRole("heading", { name: "Details", exact: true }) });
+			await details.getByRole("tab", { name: "Info", exact: true }).click();
+			await expect(details.getByRole("listitem").filter({ hasText: "Source" })
+				.getByText("MCP", { exact: true })).toBeVisible();
+			await details.getByRole("button", { name: "close", exact: true }).click();
 			const downloadPromise = page.waitForEvent("download");
-			await page.getByRole("link", { name: "Download", exact: true }).first().click();
+			await page.getByRole("link", { name: "download", exact: true }).first().click();
 			const download = await downloadPromise;
 			expect((await readFile((await download.path())!)).toString()).toBe(content);
 		});
@@ -308,23 +313,42 @@ for (const device of [
 
 			await page.goto(uploaded.url);
 			await page.getByRole("button", { name: "description" }).click();
-			await expect(page.getByText("Invoice", { exact: true }).first()).toBeVisible();
-			await expect(page.getByText("Open", { exact: true }).first()).toBeVisible();
+			const details = page.getByRole("dialog").filter({ has: page.getByRole("heading", { name: "Details", exact: true }) });
+			await expect(details.getByRole("checkbox", { name: "Invoice close", exact: true }))
+				.toBeChecked();
+			await expect(details.getByRole("checkbox", { name: "label Open", exact: true }))
+				.toBeChecked();
 			const reference = page.getByRole("textbox", { name: "Invoice number", exact: true });
 			await expect(reference).toHaveValue("MCP-1");
+			const referenceSaved = page.waitForResponse((response) =>
+				response.url().includes("/set-file-property-cmd") &&
+				(response.request().postData() ?? "").includes("TextValue=MCP-2"));
 			await reference.fill("MCP-2");
 			await reference.press("Tab");
+			expect((await referenceSaved).ok()).toBeTruthy();
+			const date = details.getByLabel("Invoice date", { exact: true });
+			const dateSaved = page.waitForResponse((response) =>
+				response.url().includes("/set-file-property-cmd") &&
+				new URLSearchParams(response.request().postData() ?? "").get("DateValue") === "");
+			await date.fill("");
+			await details.getByRole("heading", { name: "Details", exact: true }).click();
+			expect((await dateSaved).ok()).toBeTruthy();
+			await details.getByRole("tab", { name: "Fields", exact: true }).click();
 			const numberField = page.getByRole("spinbutton", { name: numberName, exact: true });
 			await expect(numberField).toHaveValue("0");
+			const numberSaved = page.waitForResponse((response) =>
+				response.url().includes("/set-file-property-cmd") &&
+				(response.request().postData() ?? "").includes("NumberValue=7"));
 			await numberField.fill("7");
 			await numberField.press("Tab");
+			expect((await numberSaved).ok()).toBeTruthy();
 			const checkboxField = page.getByRole("checkbox", { name: checkboxName, exact: true });
 			await expect(checkboxField).not.toBeChecked();
+			const checkboxSaved = page.waitForResponse((response) =>
+				response.url().includes("/set-file-property-cmd") &&
+				(response.request().postData() ?? "").includes("CheckboxValue=1"));
 			await checkboxField.check();
-			const date = page.getByLabel("Invoice date", { exact: true });
-			await date.fill("");
-			await date.press("Tab");
-			await expect(page.getByText(/saved\.|removed\./).last()).toBeVisible();
+			expect((await checkboxSaved).ok()).toBeTruthy();
 
 			const file = (await (await rpc(page.request, token, "tools/call", {
 				name: "get_file", arguments: { file_id: uploaded.file_id },
@@ -400,7 +424,7 @@ for (const device of [
 			);
 			expect(found.name).toBe("filed-by-mcp.txt");
 			await page.goto(found.url);
-			await expect(page.getByRole("heading", { name: "filed-by-mcp.txt", exact: true }))
+			await expect(page.getByRole("heading", { name: "filed-by-mcp.txt", exact: true }).first())
 				.toBeVisible();
 			await page.goto(inboxURL);
 			await expect(page.getByRole("heading", { name: "filed-by-mcp.txt", exact: true }))

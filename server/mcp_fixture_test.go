@@ -50,6 +50,7 @@ func newMCPFixtureWithMode(
 	t.Helper()
 	actor, tenantx := signUpAccount(t, h, "mcp-"+suffix+"@example.com")
 	db := initTenantDB(t, h, tenantx)
+	tenantx = h.mainDB.ReadWriteConn.Tenant.GetX(context.Background(), tenantx.ID)
 	f := &mcpFixture{
 		h:       h,
 		account: actor,

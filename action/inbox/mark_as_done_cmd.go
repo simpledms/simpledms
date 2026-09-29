@@ -31,7 +31,7 @@ func NewMarkAsDoneCmd(infra *common.Infra, actions *Actions) *MarkAsDoneCmd {
 	config := actionx.NewConfig(
 		actions.Route("mark-as-done-cmd"),
 		false,
-	)
+	).EnableCommittedResponse()
 	return &MarkAsDoneCmd{
 		infra:   infra,
 		actions: actions,

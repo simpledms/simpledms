@@ -19,6 +19,7 @@ import (
 	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
+	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
 func TestMCPClassificationUsesDesiredStateAcrossTransports(t *testing.T) {
@@ -166,6 +167,22 @@ func TestMCPClassificationUsesDesiredStateAcrossTransports(t *testing.T) {
 		"file_id": fixture.fileID, "property_id": numberID,
 		"number_value": 1, "text_value": "multiple",
 	})
+	for _, invalid := range []map[string]any{
+		{"file_id": fixture.fileID, "property_id": numberID},
+		{"file_id": fixture.fileID, "property_id": numberID, "number_value": nil},
+		{"file_id": fixture.fileID, "property_id": checkboxID},
+		{"file_id": fixture.fileID, "property_id": checkboxID, "checkbox_value": nil},
+		{
+			"file_id": fixture.fileID, "property_id": numberID,
+			"number_value": int64(9007199254740992),
+		},
+		{
+			"file_id": fixture.fileID, "property_id": dateID,
+			"date_value": "29-09-2026",
+		},
+	} {
+		assertMCPToolError(t, client, "set_file_property", invalid)
+	}
 
 	fileData := callMCP(t, client, "get_file", map[string]any{"file_id": fixture.fileID})
 	if fileData["document_type"].(map[string]any)["document_type_id"] != documentTypeID {
@@ -192,9 +209,11 @@ func TestMCPClassificationUsesDesiredStateAcrossTransports(t *testing.T) {
 		}
 	}
 
-	toggled := fixture.browser(h.actions.Browse.SelectDocumentTypePartial.Endpoint(), url.Values{
-		"FileID": {fixture.fileID}, "DocumentTypeID": {strconv.FormatInt(documentTypeInternalID, 10)},
-	})
+	toggled := fixture.browserAt(
+		route.Inbox(fixture.tenant.PublicID.String(), fixture.spaceID, fixture.fileID),
+		h.actions.Browse.SelectDocumentTypePartial.Endpoint(), url.Values{
+			"FileID": {fixture.fileID}, "DocumentTypeID": {strconv.FormatInt(documentTypeInternalID, 10)},
+		})
 	if toggled.Code != 200 {
 		t.Fatalf("browser document-type toggle: %d %s", toggled.Code, toggled.Body.String())
 	}

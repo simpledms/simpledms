@@ -29,7 +29,7 @@ func NewAssignTagCmd(
 	config := actionx.NewConfig(
 		actions.Route("assign-tag-cmd"),
 		false,
-	)
+	).EnableCommittedResponse()
 	return &AssignTagCmd{
 		infra,
 		actions,

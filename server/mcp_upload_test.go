@@ -70,12 +70,16 @@ func TestMCPUploadPersistsBytesAndSource(t *testing.T) {
 		err := withTenantContext(t, h, f.account, f.tenant, f.db, func(
 			_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext,
 		) error {
-			filex := tenantCtx.TTx.File.Query().Where(
-				file.PublicID(entx.NewCIText(fileID)),
+			spacex := tenantCtx.TTx.Space.Query().Where(
+				space.PublicID(entx.NewCIText(f.spaceID)),
 			).OnlyX(tenantCtx)
-			version := filex.QueryFileVersions().WithStoredFile().OnlyX(tenantCtx)
+			sc := ctxx.NewSpaceContext(tenantCtx, spacex)
+			filex := sc.TTx.File.Query().Where(
+				file.PublicID(entx.NewCIText(fileID)),
+			).OnlyX(sc)
+			version := filex.QueryFileVersions().WithStoredFile().OnlyX(sc)
 			reader, err := h.infra.FileSystem().OpenFile(
-				tenantCtx, storedfilemodel.NewStoredFile(version.Edges.StoredFile),
+				sc, storedfilemodel.NewStoredFile(version.Edges.StoredFile),
 			)
 			if err != nil {
 				return err
@@ -145,7 +149,7 @@ func TestMCPUploadRechecksRevocationBeforeFinalization(t *testing.T) {
 		content := []byte("revoked during upload")
 		expectedBytes := int64(len(content))
 
-		_, err := service.ExecuteWrite(
+		_, err := service.Execute(
 			context.Background(),
 			h.mainDB,
 			h.tenantDBs,
@@ -193,9 +197,13 @@ func TestMCPUploadRechecksRevocationBeforeFinalization(t *testing.T) {
 		err = withTenantContext(t, h, f.account, f.tenant, f.db, func(
 			_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext,
 		) error {
-			if count := tenantCtx.TTx.File.Query().Where(
+			spacex := tenantCtx.TTx.Space.Query().Where(
+				space.PublicID(entx.NewCIText(f.spaceID)),
+			).OnlyX(tenantCtx)
+			sc := ctxx.NewSpaceContext(tenantCtx, spacex)
+			if count := sc.TTx.File.Query().Where(
 				file.Name("revoked-upload.txt"),
-			).CountX(tenantCtx); count != 0 {
+			).CountX(sc); count != 0 {
 				t.Fatalf("revoked upload left %d visible files", count)
 			}
 			return nil

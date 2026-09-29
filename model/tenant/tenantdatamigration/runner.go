@@ -63,7 +63,7 @@ func (qq *Runner) run(
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 	state, leaseToken, claimed, err := qq.claim(ctx, tenantDB, migration.Key())
 	if err != nil || !claimed {
-		return false, claimed, err
+		return state != nil && state.CompletedAt != nil, claimed, err
 	}
 
 	result, err := migration.RunBatch(ctx, tenantDB, state)

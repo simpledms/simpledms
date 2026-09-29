@@ -1,6 +1,6 @@
 # 03 — Classify a document with existing metadata
 
-Status: implementation complete; verification pending
+Status: implemented; automated review passed, remaining verification pending
 Depends on: [01](01-connect_and_inspect.md), [02](02-upload_to_inbox.md)  
 Contract: [classification](../spec.md#classification-contract); rules M1–M4
 
@@ -50,16 +50,16 @@ removes typed fields. Browser Inbox/Browse metadata and `get_file` show the same
 - [ ] Run proposed `go test ./server -run '^TestMCPClassification'`, covering the acceptance cases,
   concurrent repeated assignments, correct resolved-Tag results, and rollback on operation or
   commit error through the real execution boundary.
-- [ ] Verify fresh schemas and a populated pre-feature tenant through generated migrations and
+- [x] Verify fresh schemas and a populated pre-feature tenant through generated migrations and
   resumed/repeated backfill. Include existing grouped/composed Tags, properties, document types,
   attributes, and file assignments; inspect generated SQL for unexpected existing-table rebuilds.
 - [ ] Run affected metadata model/action regressions and confirm query/schema handling never
   serializes Ent internal IDs. Include schema validation and tool business errors separately.
-- [ ] Run `npm run test:e2e -- e2e/mcp_workflows.spec.ts --grep @classify` in both contexts:
+- [x] Run `npm run test:e2e -- e2e/mcp_workflows.spec.ts --grep @classify` in both contexts:
   upload through the earlier tool, classify through MCP, refresh browser metadata, change values
   through actual browser controls, then read them back through MCP. Include a false Checkbox,
   zero, a cleared date, unchanged type selection, and a repeated Tag assignment.
-- [ ] Exercise affected `e2e/browse_upload_filters.spec.ts` behaviour; extend the new suite's
+- [x] Exercise affected `e2e/browse_upload_filters.spec.ts` behaviour; extend the new suite's
   mobile coverage for its metadata consumers rather than changing every global browser project.
 - [ ] Manually classify one Inbox document using known definitions, inspect it in desktop/mobile
   UI, and correct metadata there. Confirm subsequent MCP reads reflect the correction.

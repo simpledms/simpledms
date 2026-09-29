@@ -68,7 +68,7 @@ func (qq *FilingService) FileInboxDocument(
 	if filename == "" {
 		filename = filex.Name
 	}
-	if filepath.Clean(filename) != filename || !filenamex.IsAllowed(filename) {
+	if filename == "." || filepath.Clean(filename) != filename || !filenamex.IsAllowed(filename) {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
 	}
 	if newDirectoryName == "" {

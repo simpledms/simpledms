@@ -33,7 +33,7 @@ func NewAssignFileCmd(infra *common.Infra, actions *Actions) *AssignFileCmd {
 	config := actionx.NewConfig(
 		actions.Route("assign-file-cmd"),
 		false,
-	)
+	).EnableCommittedResponse()
 	formHelper := autil.NewFormHelper[AssignFileCmdData](infra, config, widget.T("Assign file"))
 	return &AssignFileCmd{
 		infra:      infra,

@@ -16,6 +16,7 @@ import (
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/txx"
 	"github.com/simpledms/simpledms/util/uploadx"
 )
 
@@ -91,17 +92,20 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	}
 	rw.Header().Set("HX-Retarget", "#innerContent")
 	rw.Header().Set("HX-Reswap", "innerHTML")
-	view, err := qq.actions.InboxPage.WidgetHandler(rw, req, ctx, result.FilePublicID)
-	if err != nil {
-		return err
-	}
-
-	return qq.infra.Renderer().Render(
-		rw,
-		ctx,
-		view,
-		widget.NewSnackbarf("«%s» uploaded.", filename),
-	)
+	_, err = txx.WithTenantReadSpaceTx(ctx.SpaceCtx(), func(readCtx *ctxx.SpaceContext) (bool, error) {
+		view, err := qq.actions.InboxPage.WidgetHandler(rw, req, readCtx, result.FilePublicID)
+		if err != nil {
+			return false, err
+		}
+		err = qq.infra.Renderer().Render(
+			rw,
+			readCtx,
+			view,
+			widget.NewSnackbarf("«%s» uploaded.", filename),
+		)
+		return err == nil, err
+	})
+	return err
 }
 
 func (qq *UploadFileCmd) readUploadedFile(req *httpx.Request) (*uploadx.MultipartFile, error) {

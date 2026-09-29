@@ -1,6 +1,6 @@
 # 02 — Upload a document and open it in Inbox
 
-Status: implementation complete; verification pending
+Status: implemented; automated review passed, remaining verification pending
 Depends on: [01](01-connect_and_inspect.md)  
 Contract: [upload](../spec.md#upload-contract); rules M1–M3 and the linked storage rules
 
@@ -49,9 +49,9 @@ new translatable source string was introduced.
 - [ ] Check original-byte round trips with encryption on/off, storage verification failure,
   cancellation during ingestion, revoke/access-loss before finalize, and uncertain-result
   recovery using the existing S3 test facilities. Include only directly relevant network cases.
-- [ ] Rerun the affected existing upload-size, finalization-authorization, and concurrent upload
+- [x] Rerun the affected existing upload-size, finalization-authorization, and concurrent upload
   tests. If extraction touches browser version upload, include its existing regression too.
-- [ ] Run `npm run test:e2e -- e2e/mcp_workflows.spec.ts --grep '@connect|@upload'`: create a token
+- [x] Run `npm run test:e2e -- e2e/mcp_workflows.spec.ts --grep '@connect|@upload'`: create a token
   in the UI, send fixture bytes through MCP, open/download and compare them through the browser,
   filter source MCP, and exercise one ordinary browser upload on desktop and mobile.
 - [ ] Manually upload a representative document from a bearer-capable MCP client, inspect source

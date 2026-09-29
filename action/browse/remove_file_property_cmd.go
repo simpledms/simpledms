@@ -26,7 +26,7 @@ func NewRemoveFilePropertyCmd(infra *common.Infra, actions *Actions) *RemoveFile
 	config := actionx.NewConfig(
 		actions.Route("remove-file-property-cmd"),
 		false,
-	)
+	).EnableCommittedResponse()
 	return &RemoveFilePropertyCmd{
 		infra:   infra,
 		actions: actions,

@@ -42,7 +42,7 @@ func NewSetFilePropertyCmd(infra *common.Infra, actions *Actions) *SetFileProper
 	config := actionx.NewConfig(
 		actions.Route("set-file-property-cmd"),
 		false,
-	)
+	).EnableCommittedResponse()
 	return &SetFilePropertyCmd{
 		infra:   infra,
 		actions: actions,

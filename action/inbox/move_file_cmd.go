@@ -27,7 +27,7 @@ func NewMoveFileCmd(infra *common.Infra, actions *Actions) *MoveFileCmd {
 	config := actionx.NewConfig(
 		actions.Route("move-file-cmd"),
 		false,
-	)
+	).EnableCommittedResponse()
 	return &MoveFileCmd{
 		MoveFile: acommon.NewMoveFile(infra, actions.Common, config),
 		infra:    infra,

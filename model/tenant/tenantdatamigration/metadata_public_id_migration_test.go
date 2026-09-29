@@ -1,6 +1,7 @@
 package tenantdatamigration
 
 import (
+	"fmt"
 	"testing"
 
 	"entgo.io/ent/dialect/sql"
@@ -15,7 +16,7 @@ func TestMetadataPublicIDMigrationBackfillsInRestartSafeBatches(t *testing.T) {
 	for index := range metadataPublicIDBatchSize + 1 {
 		tenantDB.ReadWriteConn.Tag.Create().
 			SetSpaceID(space.ID).
-			SetName(string(rune('a' + index%26))).
+			SetName(fmt.Sprintf("Tag %d", index)).
 			SetType(tagtype.Simple).
 			SaveX(ctx)
 	}
@@ -23,7 +24,7 @@ func TestMetadataPublicIDMigrationBackfillsInRestartSafeBatches(t *testing.T) {
 	if err := tenantDB.ReadWriteConn.Driver().Exec(
 		ctx,
 		"UPDATE `tags` SET `public_id` = NULL",
-		nil,
+		[]any{},
 		&result,
 	); err != nil {
 		t.Fatal(err)

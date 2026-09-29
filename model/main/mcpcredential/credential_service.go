@@ -159,7 +159,7 @@ func (qq *CredentialService) scope(
 		log.Println(err)
 		return nil, nil, err
 	}
-	resolved, err := execution.NewScopeResolver().Resolve(ctx, tx, tenantx, spaceID, true)
+	resolved, err := execution.NewScopeResolver().Resolve(ctx, tx, tenantx, spaceID, isReadOnly)
 	if err != nil {
 		rollback(tx)
 		return nil, nil, err

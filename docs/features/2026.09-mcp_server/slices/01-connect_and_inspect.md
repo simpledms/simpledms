@@ -1,6 +1,6 @@
 # 01 — Connect a scoped client and inspect its Inbox
 
-Status: implementation complete; verification pending  
+Status: implemented; automated review passed, remaining verification pending
 Depends on: none  
 Contract: [connect and inspect](../spec.md#connect-and-inspect); rules M1–M3, M6
 
@@ -42,11 +42,10 @@ subsequent tools are not yet registered.
 - [x] Add tests with the existing SQLite action harness and an SDK HTTP client, plus the
   desktop/mobile `@connect` journey in `e2e/mcp_workflows.spec.ts`.
 
-Implementation notes and generation commands are in the [single execution record][record].
-The destination picker uses a native `SelectField`: the existing list-radio input is hidden and
-cannot provide keyboard selection. A focused regression test now protects the one-time token
-response against `HX-Reswap: none`. The remaining checks below, including browser visibility
-and actual client connection, remain pending.
+Implementation and all-slice review evidence are in the [single execution record][record].
+The current destination picker uses the credential list-radio composition. Go connection and
+credential tests and desktop/mobile create/copy/connect/revoke journeys passed. Checklist entries
+below include additional cases beyond those journeys and remain open where evidence is incomplete.
 
 ## Verification checklist
 

@@ -570,6 +570,55 @@ Slice 04 implementation, 2026-09-29:
   journey was performed. Slice verification checkboxes and every plan delivery checkbox remain
   pending.
 
+All-slice review and fixes, 2026-09-29:
+
+- Reviewed all four slices after `2d6fd77`, expanding from filing/search into their shared browser,
+  credential, ingestion, metadata, and migration callers. No applied migration SQL was changed.
+- Fixed ordinary browser upload regressions: manual upload wrappers close authorization
+  transactions before handlers run, so parent lookup and post-upload Inbox rendering now use
+  fresh read transactions instead of the closed request transaction.
+- Corrected MCP write context construction to carry the actual transaction mode. Upload retains
+  its read-only outer execution scope and independent prepare/finalize writes; its revocation test
+  now exercises that real lifetime. Refreshed initialized tenant fixtures for encrypted byte reads.
+- Enabled the existing committed-response option for the shared browser filing, property, type,
+  and direct Tag assignment commands. Protecting HTTP tests inject tenant commit failures and
+  verify no success body/event escapes and no mutation persists. Filing coverage now also checks
+  concurrent completion, conflicts/repeats, and rollback of a newly created child directory.
+- Fixed completed data migrations reporting incomplete on subsequent calls. Added fresh and
+  populated production SQL replay/backfill tests preserving grouped/composed Tags, type attributes,
+  money minor units, and file assignments, with stable IDs on repeated runs. Fixed pre-existing
+  feature-test setup errors (duplicate names, stale tenant identity, wrong browser page/context).
+- Rejected dot/noncanonical directory names and dot filenames at the shared filesystem/filing
+  boundary. Added public SDK tests for those failures and missing/null/wrong/out-of-range typed
+  values while asserting prior state remains intact.
+- Updated browser checks to the actual navigation, unnamed Details dialog, Info/Fields tabs,
+  visible source-filter labels, download control, and debounced property saves. The tests await
+  exact persisted-operation responses rather than an unrelated stale snackbar. No new UI was
+  introduced.
+- Final verification passed:
+  - `go test ./server -run '^TestMCP' -count=1 -timeout 120s`, including production main/tenant
+    migrations, encryption-on/off byte round trips, revocation, classification, filing, and browser
+    commit-failure tests.
+  - `go test -count=1 ./model/tenant/tenantdatamigration`; affected main-tenant, Tag, property,
+    document-type, and `util/txx` packages also passed scoped tests during review.
+  - `go test ./server -run '^(TestMarkAsDoneCmd|TestDocumentNotesHTTPInboxRootFilingPreservesHistory|TestDocumentNotesHTTPMissingParentRestoreAndNonFolderFiling|TestBrowseListDirPartial|TestFileVersionFromInboxCmd|TestUploadFileCmd|TestUploadFilesCmd|TestBrowserUploadFinalizationRejectsRemovedTenantAssignment)' -count=1`.
+    Concurrent ordinary upload and failed-version-upload regression checks passed separately.
+  - `E2E_BASE_URL=https://localhost:7202 E2E_LOGIN_EMAIL=dev+admin@simpledms.app E2E_LOGIN_PASSWORD=12345678 npm run test:e2e -- e2e/mcp_workflows.spec.ts e2e/browse_upload_filters.spec.ts`:
+    **11/11 passed** (all four MCP journeys on desktop/mobile plus three Browse regressions).
+    The disposable `.e2e-mcp-meta` instance ran current source; the initial inherited credential
+    mismatch was resolved by explicitly selecting its test account. The user's `.testdata` was
+    not modified by this review.
+  - `go build ./...`; `go vet ./server ./action/browse ./action/inbox ./model/main/mcpcredential
+    ./model/tenant/filesystem ./model/tenant/filing ./model/tenant/tenantdatamigration`.
+  - Touched Go files were formatted; `git diff --check` passed.
+- Remaining checklist evidence: no separate manual external-client journey, no full repository
+  test suite, and no slow network-fault suite was run. Upload-specific cancellation/uncertain-commit
+  injection and full exact-limit/quota coverage, concurrent classification/commit-error cases,
+  legacy-connection restart/cancelled-read cases, and browser filing through both adapters in
+  non-folder/multiple-selection states remain unverified by this review. Automated coverage does
+  not complete those multi-case checklist entries. Completed items are checked in their slices;
+  all four plan delivery boxes remain open.
+
 ## Operating implemented slices
 
 After deploying the generated migration and rebuilt application, open Account → MCP credentials.

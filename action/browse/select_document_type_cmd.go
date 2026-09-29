@@ -25,7 +25,7 @@ func NewSelectDocumentTypeCmd(infra *common.Infra, actions *Actions) *SelectDocu
 	config := actionx.NewConfig(
 		actions.Route("select-document-type-cmd"),
 		false,
-	)
+	).EnableCommittedResponse()
 	return &SelectDocumentTypeCmd{
 		infra:   infra,
 		actions: actions,

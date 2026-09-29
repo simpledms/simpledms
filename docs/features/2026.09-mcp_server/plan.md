@@ -1,11 +1,16 @@
 # MCP implementation plan
 
 Date: 2026-09-18  
-Status: slices 01–04 implementation complete; verification and all delivery checkboxes pending
+Status: slices 01–04 implemented; automated review passed, remaining verification pending
 
 Contract: [specification](spec.md), [durable rules](invariants.md), and the linked
 [architecture](../../specs/20260918_mcp_server.md). The source review and all future execution
 evidence belong in the [single record][record].
+
+The all-slice review passed the MCP Go suites, production migration/backfill checks, shared caller
+regressions, desktop/mobile MCP browser journeys, Browse browser regressions, build, and scoped vet.
+The [record][record] identifies residual manual and fault-injection coverage. Delivery checkboxes
+remain open until each slice's full verification checklist is satisfied.
 
 Slice 01 implementation includes an opt-in commit-buffered browser response and a native
 `SelectField` for keyboard-accessible Space selection. The remaining UI composition reuses the

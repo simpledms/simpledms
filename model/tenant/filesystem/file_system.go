@@ -95,9 +95,8 @@ func (qq *FileSystem) MakeDir(ctx ctxx.Context, parentDirID string, newDirName s
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Folder mode is not enabled.")
 	}
 
-	newDirName = filepath.Clean(newDirName)
-
-	if !filenamex.IsAllowed(newDirName) {
+	if newDirName == "." || filepath.Clean(newDirName) != newDirName ||
+		!filenamex.IsAllowed(newDirName) {
 		log.Println("filename is not allowed", newDirName)
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "The provided filename is not allowed.")
 	}
@@ -157,8 +156,8 @@ func (qq *FileSystem) Move(
 	if !destDir.Data.IsDirectory {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Destination is not a directory.")
 	}
-	if newFilename != "" &&
-		(filepath.Clean(newFilename) != newFilename || !filenamex.IsAllowed(newFilename)) {
+	if newFilename != "" && (newFilename == "." ||
+		filepath.Clean(newFilename) != newFilename || !filenamex.IsAllowed(newFilename)) {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
 	}
 	if filex.Data.ID == destDir.Data.ID {

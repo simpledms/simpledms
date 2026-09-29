@@ -12,11 +12,13 @@ import (
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/common/filesource"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/txx"
 	"github.com/simpledms/simpledms/util/uploadx"
 )
 
@@ -104,12 +106,21 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	if data.Filename != "" {
 		filename = data.Filename
 	}
-	parentDir := qq.infra.FileRepo.GetX(ctx, data.ParentDirID)
+	parentID, err := txx.WithTenantReadSpaceTx(ctx.SpaceCtx(), func(readCtx *ctxx.SpaceContext) (int64, error) {
+		parentDir, err := filemodel.NewFileReader().Get(readCtx, data.ParentDirID)
+		if err != nil {
+			return 0, err
+		}
+		return parentDir.ID, nil
+	})
+	if err != nil {
+		return err
+	}
 	_, err = filesystem.NewFileIngestionService(qq.infra.FileSystem()).Ingest(
 		ctx.SpaceCtx(),
 		uploadedFile.Reader,
 		filename,
-		parentDir.Data.ID,
+		parentID,
 		data.AddToInbox,
 		filesource.WebInterface,
 		uploadedFile.ExpectedBytes,
