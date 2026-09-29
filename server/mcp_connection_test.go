@@ -44,12 +44,15 @@ func TestMCPConnectionScopesReadsAndRevocation(t *testing.T) {
 	var names []string
 	for _, tool := range tools.Tools {
 		names = append(names, tool.Name)
-		if tool.Annotations == nil || !tool.Annotations.ReadOnlyHint {
-			t.Errorf("missing read-only annotation: %s", tool.Name)
+		wantReadOnly := tool.Name != "upload_file"
+		if tool.Annotations == nil || tool.Annotations.ReadOnlyHint != wantReadOnly {
+			t.Errorf("wrong read-only annotation: %s", tool.Name)
 		}
 	}
 	slices.Sort(names)
-	if !slices.Equal(names, []string{"get_file", "get_space", "list_inbox", "read_file_text"}) {
+	if !slices.Equal(names, []string{
+		"get_file", "get_space", "list_inbox", "read_file_text", "upload_file",
+	}) {
 		t.Fatalf("unexpected tools: %v", names)
 	}
 	for _, call := range []struct {
@@ -227,7 +230,7 @@ func TestMCPConnectionSetupSessionAndReadOnlyExecution(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = credentialmodel.NewCredentialService().Read(context.Background(), h.mainDB,
+	_, err = credentialmodel.NewCredentialService().Execute(context.Background(), h.mainDB,
 		h.tenantDBs, h.i18n, false, f.token, func(ctx *ctxx.SpaceContext, _ *entmain.MCPCredential) error {
 			return ctx.TTx.File.Update().SetName("must not write").Exec(ctx)
 		})

@@ -3,10 +3,10 @@
 Date: 2026-09-18  
 Status: proposed
 
-This catalog maps useful MCP operations to current code. Slice 01 now registers `get_space`,
-`list_inbox`, `get_file`, and `read_file_text`; that implementation is awaiting verification.
-Other entries remain proposed. Read operations are included because an agent needs to discover
-files and metadata before issuing commands.
+This catalog maps useful MCP operations to current code. Slices 01–02 now register `get_space`,
+`list_inbox`, `get_file`, `read_file_text`, and `upload_file`; those implementations are awaiting
+verification. Other entries remain proposed. Read operations are included because an agent needs
+to discover files and metadata before issuing commands.
 
 See the [architecture proposal](20260918_mcp_server.md) for shared execution, authentication,
 public IDs, bounded results, error handling, and the single
@@ -82,8 +82,9 @@ common pagination fields where the architecture already defines them. Optional f
 ### `upload_file` — write; extract shared orchestration and bind MCP bytes
 
 - Current commands: [`inbox.UploadFileCmd`][inbox-upload] and [`browse.UploadFileCmd`][upload].
-- Input: `filename`, `content_base64`. Result: a durable file public ID, filename, size, and Inbox
-  state. The [feature upload contract][upload-contract] defines size bounds and failure behaviour.
+- Input: `filename`, `content_base64`. Result: a durable file public ID, canonical browser URL,
+  filename, size, and Inbox state. The [feature upload contract][upload-contract] defines size
+  bounds and failure behaviour.
 - Purpose: deliver new documents directly through MCP. Reuse prepare/upload/finalize, add the
   `MCP` source, and revalidate the credential before finalization.
 - This is a native bounded tool, not a multipart form, temporary upload token, or client-local

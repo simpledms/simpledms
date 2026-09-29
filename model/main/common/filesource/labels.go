@@ -8,6 +8,7 @@ func Values() []FileSource {
 		URLImport,
 		WebDAV,
 		SystemExtraction,
+		MCP,
 		UnknownLegacy,
 	}
 }

@@ -130,8 +130,8 @@ func (qq *CredentialService) Scope(
 	return resolved.SpaceCtx(), tx, nil
 }
 
-// Read authenticates afresh and owns a bounded read transaction for one operation.
-func (qq *CredentialService) Read(
+// Execute authenticates afresh and owns the initial bounded read transactions for one operation.
+func (qq *CredentialService) Execute(
 	ctx context.Context,
 	mainDB *sqlx.MainDB,
 	dbs *tenantdbs.TenantDBs,
@@ -149,9 +149,9 @@ func (qq *CredentialService) Read(
 	defer func() {
 		if recovered := recover(); recovered != nil {
 			// Legacy Ent *X methods may panic; never include the recovered data in a tool result.
-			log.Printf("MCP read panic: %T", recovered)
+			log.Printf("MCP operation panic: %T", recovered)
 			ok = false
-			err = errors.New("MCP read failed")
+			err = errors.New("MCP operation failed")
 		}
 	}()
 	credential, err := qq.authenticate(ctx, mainTx, token)
@@ -180,7 +180,7 @@ func (qq *CredentialService) Read(
 	}
 	defer rollback(tenantTx)
 	if err := fn(sc, credential); err != nil {
-		log.Printf("MCP read failed: %T", err)
+		log.Printf("MCP operation failed: %T", err)
 		return false, err
 	}
 	if err := ctx.Err(); err != nil {
@@ -195,6 +195,30 @@ func (qq *CredentialService) Read(
 		return false, err
 	}
 	return true, nil
+}
+
+// AuthorizeFinalization rechecks that a credential can write under the fresh main write lock.
+func (qq *CredentialService) AuthorizeFinalization(
+	ctx context.Context,
+	tx *entmain.Tx,
+	credential *entmain.MCPCredential,
+) error {
+	active, err := tx.MCPCredential.Query().Where(
+		mcpcredential.ID(credential.ID),
+		mcpcredential.AccountID(credential.AccountID),
+		mcpcredential.TenantID(credential.TenantID),
+		mcpcredential.SpacePublicID(credential.SpacePublicID),
+		mcpcredential.IsReadOnly(false),
+		mcpcredential.RevokedAtIsNil(),
+	).Exist(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if !active {
+		return e.NewHTTPErrorf(http.StatusForbidden, "MCP credential cannot write.")
+	}
+	return nil
 }
 
 func (qq *CredentialService) authenticate(

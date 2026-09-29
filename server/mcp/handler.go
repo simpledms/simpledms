@@ -2,12 +2,15 @@ package mcp
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"io"
 	"log"
 	"net/http"
 	"net/netip"
 	"net/url"
+	"path/filepath"
 	"strings"
 	"unicode/utf8"
 
@@ -19,10 +22,13 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 	credentialmodel "github.com/simpledms/simpledms/model/main/mcpcredential"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
+	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/filenamex"
 )
 
 type requestContextKey int
@@ -31,6 +37,8 @@ type requestContext struct {
 	source context.Context
 	origin string
 }
+
+const maxUploadBytes int64 = 10 * 1024 * 1024
 
 type Handler struct {
 	config      Config
@@ -51,6 +59,7 @@ func NewHandler(config Config) *Handler {
 	registerRead(server, handler, "list_inbox", "List or search Inbox documents.", handler.listInbox)
 	registerRead(server, handler, "get_file", "Read a live file's metadata.", handler.getFile)
 	registerRead(server, handler, "read_file_text", "Read bounded existing OCR text.", handler.readText)
+	registerWrite(server, handler, "upload_file", "Upload one document into Inbox.", handler.uploadFile)
 	handler.transport = sdk.NewStreamableHTTPHandler(func(*http.Request) *sdk.Server {
 		return server
 	}, &sdk.StreamableHTTPOptions{
@@ -83,7 +92,7 @@ func (qq *Handler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	authorize := func(*ctxx.SpaceContext, *entmain.MCPCredential) error {
 		return nil
 	}
-	_, err := qq.read(req.Context(), bearer(req.Header), authorize)
+	_, err := qq.execute(req.Context(), bearer(req.Header), authorize)
 	if err != nil {
 		status := http.StatusInternalServerError
 		var httpErr *e.HTTPError
@@ -123,10 +132,10 @@ func (qq *Handler) trustedHTTPS(req *http.Request) bool {
 	return false
 }
 
-func (qq *Handler) read(
+func (qq *Handler) execute(
 	ctx context.Context, token string, fn func(*ctxx.SpaceContext, *entmain.MCPCredential) error,
 ) (bool, error) {
-	return qq.credentials.Read(
+	return qq.credentials.Execute(
 		ctx, qq.config.MainDB, qq.config.TenantDBs, qq.config.I18n,
 		qq.config.Infra.SystemConfig().CommercialLicenseEnabled(), token, fn,
 	)
@@ -146,12 +155,31 @@ func registerRead[I, O any](
 	name, description string,
 	fn func(context.Context, *ctxx.SpaceContext, *entmain.MCPCredential, I) (O, error),
 ) {
+	registerTool(server, handler, name, description, true, fn)
+}
+
+func registerWrite[I, O any](
+	server *sdk.Server,
+	handler *Handler,
+	name, description string,
+	fn func(context.Context, *ctxx.SpaceContext, *entmain.MCPCredential, I) (O, error),
+) {
+	registerTool(server, handler, name, description, false, fn)
+}
+
+func registerTool[I, O any](
+	server *sdk.Server,
+	handler *Handler,
+	name, description string,
+	isReadOnly bool,
+	fn func(context.Context, *ctxx.SpaceContext, *entmain.MCPCredential, I) (O, error),
+) {
 	closedWorld := false
 	sdk.AddTool(server, &sdk.Tool{
 		Name:        name,
 		Description: description,
 		Annotations: &sdk.ToolAnnotations{
-			ReadOnlyHint:  true,
+			ReadOnlyHint:  isReadOnly,
 			OpenWorldHint: &closedWorld,
 		},
 	}, func(ctx context.Context, req *sdk.CallToolRequest, input I) (*sdk.CallToolResult, O, error) {
@@ -167,11 +195,14 @@ func registerRead[I, O any](
 			defer stop()
 		}
 		execute := func(sc *ctxx.SpaceContext, cred *entmain.MCPCredential) error {
+			if !isReadOnly && cred.IsReadOnly {
+				return e.NewHTTPErrorf(http.StatusForbidden, "MCP credential cannot write.")
+			}
 			var err error
 			output, err = fn(ctx, sc, cred, input)
 			return err
 		}
-		_, err := handler.read(ctx, bearer(req.Extra.Header), execute)
+		_, err := handler.execute(ctx, bearer(req.Extra.Header), execute)
 		if err != nil {
 			var zero O
 			return nil, zero, safeError(err)
@@ -185,7 +216,7 @@ func safeError(err error) error {
 	var httpErr *e.HTTPError
 	if errors.As(err, &httpErr) {
 		switch httpErr.StatusCode() {
-		case http.StatusBadRequest:
+		case http.StatusBadRequest, http.StatusRequestEntityTooLarge:
 			code = "invalid_input"
 		case http.StatusUnauthorized, http.StatusForbidden:
 			code = "forbidden"
@@ -265,18 +296,11 @@ func (qq *Handler) summary(
 	filex *enttenant.File,
 	parent *enttenant.File,
 ) FileSummary {
-	path := route.Browse(ctx.TenantID, ctx.SpaceID, filex.PublicID.String())
-	if !filex.IsDirectory && parent != nil {
-		path = route.BrowseFile(
-			ctx.TenantID, ctx.SpaceID, parent.PublicID.String(), filex.PublicID.String(),
-		)
+	parentID := ""
+	if parent != nil {
+		parentID = parent.PublicID.String()
 	}
-	url := qq.config.Infra.SystemConfig().AbsoluteURL(path)
-	if url == path {
-		if request, ok := requestCtx.Value(requestContextKey(0)).(requestContext); ok {
-			url = request.origin + path
-		}
-	}
+	url := qq.documentURL(requestCtx, ctx, parentID, filex.PublicID.String(), filex.IsDirectory)
 	return FileSummary{
 		FileID:       filex.PublicID.String(),
 		URL:          url,
@@ -286,6 +310,25 @@ func (qq *Handler) summary(
 		Source:       filex.Source.String(),
 		OCRAvailable: filex.OcrSuccessAt != nil && !filex.OcrSuccessAt.IsZero(),
 	}
+}
+
+func (qq *Handler) documentURL(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	parentID, fileID string,
+	isDirectory bool,
+) string {
+	path := route.Browse(ctx.TenantID, ctx.SpaceID, fileID)
+	if !isDirectory && parentID != "" {
+		path = route.BrowseFile(ctx.TenantID, ctx.SpaceID, parentID, fileID)
+	}
+	url := qq.config.Infra.SystemConfig().AbsoluteURL(path)
+	if url == path {
+		if request, ok := requestCtx.Value(requestContextKey(0)).(requestContext); ok {
+			url = request.origin + path
+		}
+	}
+	return url
 }
 
 func (qq *Handler) fileData(
@@ -371,4 +414,75 @@ func (qq *Handler) readText(
 		}
 	}
 	return result, err
+}
+
+func (qq *Handler) uploadFile(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	credential *entmain.MCPCredential,
+	input UploadFileInput,
+) (UploadFileData, error) {
+	var result UploadFileData
+	if input.Filename == "." || filepath.Clean(input.Filename) != input.Filename ||
+		!filenamex.IsAllowed(input.Filename) {
+		return result, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
+	}
+	if input.ContentBase64 == "" {
+		return result, e.NewHTTPErrorf(http.StatusBadRequest, "Upload is empty.")
+	}
+	if strings.ContainsAny(input.ContentBase64, "\r\n") {
+		return result, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid base64 content.")
+	}
+
+	limit := maxUploadBytes
+	configuredLimit, err := qq.config.Infra.FileSystem().NilableEffectiveUploadSizeLimitBytes(ctx)
+	if err != nil {
+		return result, err
+	}
+	if configuredLimit != nil && *configuredLimit < limit {
+		limit = *configuredLimit
+	}
+	if len(input.ContentBase64) > base64.StdEncoding.EncodedLen(int(limit)) {
+		return result, e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Upload is too large.")
+	}
+
+	decoded := base64.NewDecoder(
+		base64.StdEncoding.Strict(), strings.NewReader(input.ContentBase64),
+	)
+	expectedBytes, err := io.Copy(io.Discard, io.LimitReader(decoded, limit+1))
+	if err != nil {
+		return result, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid base64 content.")
+	}
+	if expectedBytes == 0 {
+		return result, e.NewHTTPErrorf(http.StatusBadRequest, "Upload is empty.")
+	}
+	if expectedBytes > limit {
+		return result, e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Upload is too large.")
+	}
+
+	mainCheck := func(checkCtx context.Context, tx *entmain.Tx) error {
+		return qq.credentials.AuthorizeFinalization(checkCtx, tx, credential)
+	}
+	ingested, err := filesystem.NewFileIngestionService(qq.config.Infra.FileSystem()).Ingest(
+		ctx,
+		base64.NewDecoder(base64.StdEncoding.Strict(), strings.NewReader(input.ContentBase64)),
+		input.Filename,
+		ctx.SpaceRootDir().ID,
+		true,
+		filesource.MCP,
+		&expectedBytes,
+		mainCheck,
+	)
+	if err != nil {
+		return result, err
+	}
+	return UploadFileData{
+		FileID: ingested.FilePublicID,
+		URL: qq.documentURL(
+			requestCtx, ctx, ctx.SpaceRootDir().PublicID.String(), ingested.FilePublicID, false,
+		),
+		Filename:  ingested.Filename,
+		Size:      ingested.Size,
+		IsInInbox: ingested.IsInInbox,
+	}, nil
 }

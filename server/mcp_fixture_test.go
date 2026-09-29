@@ -36,6 +36,16 @@ type mcpFixture struct {
 }
 
 func newMCPFixture(t *testing.T, h *actionTestHarness, suffix string) *mcpFixture {
+	return newMCPFixtureWithMode(t, h, suffix, false)
+}
+
+func newMCPFixtureWithWrites(t *testing.T, h *actionTestHarness, suffix string) *mcpFixture {
+	return newMCPFixtureWithMode(t, h, suffix, true)
+}
+
+func newMCPFixtureWithMode(
+	t *testing.T, h *actionTestHarness, suffix string, allowWrites bool,
+) *mcpFixture {
 	t.Helper()
 	actor, tenantx := signUpAccount(t, h, "mcp-"+suffix+"@example.com")
 	db := initTenantDB(t, h, tenantx)
@@ -69,10 +79,14 @@ func newMCPFixture(t *testing.T, h *actionTestHarness, suffix string) *mcpFixtur
 	}); err != nil {
 		t.Fatal(err)
 	}
-	rr := f.browser(h.actions.Dashboard.CreateMCPCredentialCmd.Endpoint(), url.Values{
+	data := url.Values{
 		"Label":       {"MCP " + suffix},
 		"Destination": {tenantx.PublicID.String() + ":" + f.spaceID},
-	})
+	}
+	if allowWrites {
+		data.Set("AllowWrites", "on")
+	}
+	rr := f.browser(h.actions.Dashboard.CreateMCPCredentialCmd.Endpoint(), data)
 	if rr.Code != http.StatusOK {
 		t.Fatalf("create credential: %d %s", rr.Code, rr.Body.String())
 	}

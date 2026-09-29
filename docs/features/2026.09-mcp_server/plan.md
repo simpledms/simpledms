@@ -1,7 +1,7 @@
 # MCP implementation plan
 
 Date: 2026-09-18  
-Status: slice 01 implementation complete; verification and all delivery checkboxes pending
+Status: slices 01–02 implementation complete; verification and all delivery checkboxes pending
 
 Contract: [specification](spec.md), [durable rules](invariants.md), and the linked
 [architecture](../../specs/20260918_mcp_server.md). The source review and all future execution

@@ -1,4 +1,5 @@
 import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 
 import { fixturePath, uniqueSuffix } from "./helpers";
 
@@ -95,7 +96,7 @@ for (const device of [
 			expect(init.ok()).toBeTruthy();
 			const list = await rpc(page.request, token, "tools/list", {});
 			expect((await list.json()).result.tools.map((tool: { name: string }) => tool.name).sort())
-				.toEqual(["get_file", "get_space", "list_inbox", "read_file_text"]);
+				.toEqual(["get_file", "get_space", "list_inbox", "read_file_text", "upload_file"]);
 			const response = await rpc(page.request, token, "tools/call", {
 				name: "list_inbox", arguments: { limit: 10 },
 			});
@@ -113,6 +114,59 @@ for (const device of [
 			await page.goto(inboxURL);
 			await expect(page.getByRole("heading", { name: "upload-alpha.txt", exact: true }))
 				.toBeVisible();
+		});
+
+		test("@upload sends MCP bytes and opens them in Inbox", async ({ page }) => {
+			const spaceName = `MCP upload ${uniqueSuffix()}`;
+			const inboxURL = await prepareInbox(page, spaceName);
+			await page.goto("/dashboard/account/");
+			await page.getByRole("link", { name: /MCP credentials/ }).click();
+			await page.getByRole("button", { name: /Create MCP credential/ }).click();
+			const form = page.getByRole("dialog").filter({ hasText: "Create MCP credential" });
+			await form.getByRole("textbox", { name: "Label", exact: true })
+				.fill(`Uploader ${uniqueSuffix()}`);
+			await form.getByRole("checkbox", { name: "Allow writes" }).check();
+			const destination = form.getByRole("combobox", { name: "Space", exact: true });
+			const option = destination.locator("option").filter({ hasText: spaceName });
+			await destination.selectOption((await option.getAttribute("value"))!);
+			await form.getByRole("button", { name: "Create", exact: true }).click();
+			const secret = page.getByRole("dialog").filter({ hasText: "MCP credential created" });
+			const token = (await secret.getByRole("link", { name: /^sdmcp_/ }).innerText()).trim();
+			const init = await rpc(page.request, token, "initialize", {
+				protocolVersion: "2025-11-25", capabilities: {},
+				clientInfo: { name: "simpledms-e2e", version: "1" },
+			});
+			expect(init.ok()).toBeTruthy();
+
+			const filename = `mcp-${uniqueSuffix()}.txt`;
+			const content = "Uploaded through MCP\n";
+			const response = await rpc(page.request, token, "tools/call", {
+				name: "upload_file",
+				arguments: {
+					filename,
+					content_base64: Buffer.from(content).toString("base64"),
+				},
+			});
+			const result = (await response.json()).result;
+			expect(result.isError).not.toBe(true);
+			expect(result.structuredContent.filename).toBe(filename);
+			await page.goto(inboxURL);
+			await expect(page.getByRole("heading", { name: filename, exact: true })).toBeVisible();
+			await expect(page.getByText("MCP", { exact: true }).first()).toBeVisible();
+			await page.getByRole("button", { name: "Filter by source", exact: true }).click();
+			const sourceFilter = page.getByRole("dialog").filter({ hasText: "Source" });
+			await sourceFilter.getByRole("checkbox", { name: "MCP", exact: true }).check();
+			await expect(page).toHaveURL(/source=MCP/);
+			await expect(page.getByRole("heading", { name: filename, exact: true })).toBeVisible();
+			await expect(page.getByRole("heading", { name: "upload-alpha.txt", exact: true }))
+				.toHaveCount(0);
+
+			await page.goto(result.structuredContent.url);
+			await expect(page.getByRole("heading", { name: filename, exact: true })).toBeVisible();
+			const downloadPromise = page.waitForEvent("download");
+			await page.getByRole("link", { name: "Download", exact: true }).first().click();
+			const download = await downloadPromise;
+			expect((await readFile((await download.path())!)).toString()).toBe(content);
 		});
 	});
 }

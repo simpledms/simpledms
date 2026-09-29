@@ -10,6 +10,7 @@ func TestFileSourceStringsMatchPersistedValues(t *testing.T) {
 		URLImport:        "URLImport",
 		WebDAV:           "WebDAV",
 		SystemExtraction: "SystemExtraction",
+		MCP:              "MCP",
 	}
 
 	for source, want := range tests {

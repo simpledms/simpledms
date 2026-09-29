@@ -468,6 +468,34 @@ Slice 01 document URLs, 2026-09-28:
 - `go test ./server -run '^TestMCPConnectionScopesReadsAndRevocation$' -count=1` passed, including
   URL assertions for both tools. Broader slice verification remains pending.
 
+Slice 02 implementation, 2026-09-29:
+
+- Added the bounded `upload_file` tool with padded base64 input, a 10 MiB decoded ceiling further
+  restricted by configured upload limits, the existing 16 MiB transport ceiling, exact-basename
+  validation, and a committed result containing public file ID, browser URL, filename, size, and
+  Inbox state. Read-only credentials fail before ingestion.
+- Extracted Browse/Inbox prepare plus shared new-file/version expected-byte upload, finalization,
+  MIME follow-up, and failure coordination into `filesystem.FileIngestionService`. The existing
+  prepared-upload, quota, checksum, encryption, and scheduler paths remain authoritative.
+  Finalization errors retain the verified temporary bytes and unfinished row for reconciliation
+  because commit results can be ambiguous.
+- Added an optional fresh-main authorization callback to the established main-before-tenant
+  finalization helper. MCP uses it to recheck the same credential's owner, tenant, Space, writable
+  mode, and revocation state before the tenant commit.
+- Appended and regenerated the integer-backed `filesource.MCP` value without changing prior enum
+  values. Existing source filters discover it through `filesource.Values`; UI labels display the
+  untranslated protocol name.
+- Added `server/mcp_upload_test.go` for bounded input, read-only denial, configured limits,
+  encryption-on/off byte persistence, source/URL projection, and revocation before finalization.
+  Added the desktop/mobile `@upload` Playwright journey while retaining the ordinary browser
+  upload in its setup.
+- Implementation commands: `go generate ./model/main/common/filesource` and `gofmt` over touched
+  Go files. The implementation-blocking
+  `go test ./server -run '^TestMCPUploadRejectsInvalidInputAndReadOnlyCredential$' -count=1`
+  passed after correcting the version-upload caller found by its initial compile failure. No S3
+  checks, browser checks, build, vet, or manual MCP client journey were run. Slice 02 verification
+  items and the plan checkbox remain pending.
+
 ## Operating slice 01
 
 After deploying the generated migration and rebuilt application, open Account → MCP credentials.

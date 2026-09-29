@@ -86,7 +86,10 @@ func (qq *UploadFileVersionCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 	if err != nil {
 		return err
 	}
-	if err := uploadPreparedFile(qq.infra, ctx, uploadedFile, prepared); err != nil {
+	_, err = filesystem.NewFileIngestionService(qq.infra.FileSystem()).IngestPrepared(
+		ctx.SpaceCtx(), uploadedFile.Reader, prepared, uploadedFile.ExpectedBytes, nil,
+	)
+	if err != nil {
 		return err
 	}
 

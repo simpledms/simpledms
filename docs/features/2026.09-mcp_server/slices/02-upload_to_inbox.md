@@ -1,6 +1,6 @@
 # 02 — Upload a document and open it in Inbox
 
-Status: planned  
+Status: implementation complete; verification pending
 Depends on: [01](01-connect_and_inspect.md)  
 Contract: [upload](../spec.md#upload-contract); rules M1–M3 and the linked storage rules
 
@@ -22,20 +22,24 @@ appears in browser Inbox with source MCP and can be opened/downloaded there.
 
 ## Implementation checklist
 
-- [ ] Bind `filename`/`content_base64` with HTTP, encoded-field, and decoded-size bounds from the
+- [x] Bind `filename`/`content_base64` with HTTP, encoded-field, and decoded-size bounds from the
   spec. Keep the decoded content as a reader, validate the basename, and do not log arguments.
-- [ ] Extract the duplicated Browse/Inbox prepare/upload/finalize coordination into the owning
+- [x] Extract the duplicated Browse/Inbox prepare/upload/finalize coordination into the owning
   filesystem model, accepting a reader and trusted source. Make browser handlers and MCP use it
   while preserving multipart binding and current UI responses.
-- [ ] Reuse quota, expected-byte counting, hash/checksum verification, cleanup, and scheduler
+- [x] Reuse quota, expected-byte counting, hash/checksum verification, cleanup, and scheduler
   reconciliation. Implement no new storage format or long request-wide write transaction.
-- [ ] Integrate MCP credential revalidation with the fresh authorization/finalization transaction
+- [x] Integrate MCP credential revalidation with the fresh authorization/finalization transaction
   using the established main-before-tenant locking order. The generic `txx` helper currently
   rechecks membership, not an MCP credential; explicitly cover that added check and its race.
-- [ ] Append/regenerate the `MCP` source enum and update existing source label/filter consumers
+- [x] Append/regenerate the `MCP` source enum and update existing source label/filter consumers
   and translations. Return committed file data even when subsequent MIME enrichment is pending.
-- [ ] Add bounded-tool/S3 tests in `server/mcp_upload_test.go` and the `@upload` desktop/mobile
+- [x] Add bounded-tool/S3 tests in `server/mcp_upload_test.go` and the `@upload` desktop/mobile
   browser journey; use existing encryption-on/off harness support.
+
+Implementation details and the intentionally unperformed verification boundary are recorded in
+the [single execution record][record]. `MCP` is displayed as an untranslated protocol name, so no
+new translatable source string was introduced.
 
 ## Verification checklist
 
@@ -66,3 +70,4 @@ Relevant precedents: [`Inbox upload`][upload], [`Browse upload`][browse-upload],
 [limits]: ../../../../server/upload_size_limit_test.go
 [source]: ../../../../model/main/common/filesource/file_source.go
 [common-checks]: ../plan.md#verification-approach-for-implementation
+[record]: ../../../specs/20260918_mcp_server.md#source-review-and-execution-record

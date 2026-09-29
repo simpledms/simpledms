@@ -1,7 +1,7 @@
 # MCP document intake and filing
 
 Date: 2026-09-18  
-Status: slice 01 implemented, verification pending; remaining slices planned
+Status: slices 01–02 implemented, verification pending; remaining slices planned
 
 ## Outcome
 

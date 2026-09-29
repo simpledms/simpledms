@@ -5,20 +5,18 @@ import (
 	"log"
 	"mime/multipart"
 	"net/http"
-	"path/filepath"
 	"strings"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
-	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/txx"
 	"github.com/simpledms/simpledms/util/uploadx"
 )
 
@@ -106,13 +104,18 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	if data.Filename != "" {
 		filename = data.Filename
 	}
-	filename = filepath.Clean(filename)
-
-	prepared, err := qq.prepareUpload(ctx, data, filename)
+	parentDir := qq.infra.FileRepo.GetX(ctx, data.ParentDirID)
+	_, err = filesystem.NewFileIngestionService(qq.infra.FileSystem()).Ingest(
+		ctx.SpaceCtx(),
+		uploadedFile.Reader,
+		filename,
+		parentDir.Data.ID,
+		data.AddToInbox,
+		filesource.WebInterface,
+		uploadedFile.ExpectedBytes,
+		nil,
+	)
 	if err != nil {
-		return err
-	}
-	if err := uploadPreparedFile(qq.infra, ctx, uploadedFile, prepared); err != nil {
 		return err
 	}
 
@@ -120,73 +123,6 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	// TODO does triggering event have an effect? request comes from uppy and isn't a HTMX request...
 	rw.Header().Add("HX-Trigger", event.FileUploaded.String())
 
-	return nil
-}
-
-func (qq *UploadFileCmd) prepareUpload(
-	ctx ctxx.Context,
-	data *UploadFileCmdData,
-	filename string,
-) (*filesystem.PreparedUpload, error) {
-	return txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*filesystem.PreparedUpload, error) {
-		parentDir := qq.infra.FileRepo.GetX(writeCtx, data.ParentDirID)
-		if err := fileutil.EnsureFileDoesNotExist(
-			writeCtx,
-			filename,
-			parentDir.Data.ID,
-			data.AddToInbox,
-		); err != nil {
-			return nil, err
-		}
-		return qq.infra.FileSystem().PrepareFileUpload(
-			writeCtx,
-			filename,
-			parentDir.Data.ID,
-			data.AddToInbox,
-		)
-	})
-}
-
-func uploadPreparedFile(
-	infra *common.Infra,
-	ctx ctxx.Context,
-	uploadedFile *uploadx.MultipartFile,
-	prepared *filesystem.PreparedUpload,
-) error {
-	var uploadResult *filesystem.PreparedUploadResult
-	var err error
-	if uploadedFile.ExpectedBytes != nil {
-		uploadResult, err = infra.FileSystem().UploadPreparedFileWithExpectedSize(
-			ctx,
-			uploadedFile.Reader,
-			prepared,
-			*uploadedFile.ExpectedBytes,
-		)
-	} else {
-		uploadResult, err = infra.FileSystem().UploadPreparedFile(ctx, uploadedFile.Reader, prepared)
-	}
-	if err != nil {
-		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), infra.FileSystem(), prepared, err, true)
-		return err
-	}
-
-	_, err = txx.WithFreshAuthorizedTenantWriteSpaceTx(
-		ctx.SpaceCtx(),
-		func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-			return nil, infra.FileSystem().FinalizePreparedUploadWithoutMime(writeCtx, prepared, uploadResult)
-		},
-	)
-	if err != nil {
-		uploadx.HandleStoredFileUploadFailure(ctx.SpaceCtx(), infra.FileSystem(), prepared, err, true)
-		return err
-	}
-	if _, err := infra.FileSystem().UpdateMimeTypeAfterFinalization(
-		ctx.SpaceCtx(),
-		true,
-		prepared.StoredFileID,
-	); err != nil {
-		log.Println(err)
-	}
 	return nil
 }
 
