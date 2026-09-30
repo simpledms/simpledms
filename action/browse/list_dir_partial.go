@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"html/template"
 	"log"
-	"math"
 	"slices"
 	"strconv"
 	"strings"
@@ -15,13 +14,13 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	"github.com/simpledms/simpledms/model/main/filelistpreference"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
+	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
@@ -1131,175 +1130,88 @@ func (qq *ListDirPartial) applyPropertyFilter(ctx ctxx.Context, query *enttenant
 	}
 
 	propertiesx := ctx.SpaceCtx().Space.QueryProperties().Where(property.IDIn(propertyIDs...)).AllX(ctx)
+	propertiesByID := make(map[int64]*enttenant.Property, len(propertiesx))
+	for _, propertyx := range propertiesx {
+		propertiesByID[propertyx.ID] = propertyx
+	}
 
 	for _, propertyFilter := range state.PropertyValues {
-		propertyx := propertiesx[slices.IndexFunc(propertiesx, func(prop *enttenant.Property) bool {
-			return prop.ID == propertyFilter.PropertyID
-		})]
-
-		switch propertyx.Type {
-		case fieldtype.Text:
-			switch propertyFilter.Operator {
-			case textOperatorValueContains.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					// TODO space necessary?
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.TextValueContainsFold(propertyFilter.Value), // Fold makes case insensitive
-				))
-			case operatorValueEquals.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.TextValueEqualFold(propertyFilter.Value), // Fold makes case insensitive
-				))
-			case textOperatorValueStartsWith.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.TextValueHasPrefix(propertyFilter.Value), // is case insensitive
-				))
-			}
-		case fieldtype.Number:
-			value, err := strconv.Atoi(propertyFilter.Value)
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-
-			switch propertyFilter.Operator {
-			case operatorValueEquals.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.NumberValue(value),
-				))
-			case operatorValueGreaterThan.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.NumberValueGT(value),
-				))
-			case operatorValueLessThan.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.NumberValueLT(value),
-				))
-			}
-		case fieldtype.Date:
-			switch propertyFilter.Operator {
-			case operatorValueEquals.String():
-				value, err := timex.ParseDate(propertyFilter.Value)
-				if err != nil {
-					log.Println(err)
-					continue
-				}
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.DateValue(value),
-				))
-			case operatorValueGreaterThan.String():
-				value, err := timex.ParseDate(propertyFilter.Value)
-				if err != nil {
-					log.Println(err)
-					continue
-				}
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.DateValueGT(value),
-				))
-			case operatorValueLessThan.String():
-				value, err := timex.ParseDate(propertyFilter.Value)
-				if err != nil {
-					log.Println(err)
-					continue
-				}
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.DateValueLT(value),
-				))
-			case operatorValueBetween.String():
-				startDate := ""
-				endDate := ""
-				if propertyFilter.Value != "" {
-					parts := strings.SplitN(propertyFilter.Value, ",", 2)
-					startDate = parts[0]
-					if len(parts) > 1 {
-						endDate = parts[1]
-					}
-				}
-
-				if startDate != "" {
-					value, err := timex.ParseDate(startDate)
-					if err != nil {
-						log.Println(err)
-						continue
-					}
-					query = query.Where(file.HasPropertyAssignmentWith(
-						filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-						filepropertyassignment.DateValueGTE(value),
-					))
-				}
-
-				if endDate != "" {
-					value, err := timex.ParseDate(endDate)
-					if err != nil {
-						log.Println(err)
-						continue
-					}
-					query = query.Where(file.HasPropertyAssignmentWith(
-						filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-						filepropertyassignment.DateValueLTE(value),
-					))
-				}
-			}
-		case fieldtype.Money:
-			valueFloat, err := strconv.ParseFloat(propertyFilter.Value, 64)
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-			value := int(math.Round(valueFloat * 100)) // convert to minor unit // TODO is this good enough?
-
-			switch propertyFilter.Operator {
-			case operatorValueEquals.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.NumberValue(value),
-				))
-			case operatorValueGreaterThan.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.NumberValueGT(value),
-				))
-			case operatorValueLessThan.String():
-				query = query.Where(file.HasPropertyAssignmentWith(
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.NumberValueLT(value),
-				))
-			}
-		case fieldtype.Checkbox:
-			value, err := strconv.ParseBool(propertyFilter.Value)
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-			if value {
-				query = query.Where(file.HasPropertyAssignmentWith(
-					// TODO space necessary?
-					filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-					filepropertyassignment.BoolValue(true),
-				))
-			} else {
-				// file.Or ensures that also listed if no property assignment
-				// FIXME doesn't return all results without assignment!
-				query = query.Where(
-					file.Or(
-						file.HasPropertyAssignmentWith(
-							filepropertyassignment.PropertyID(propertyFilter.PropertyID),
-							filepropertyassignment.Or(filepropertyassignment.BoolValue(false), filepropertyassignment.BoolValueIsNil()),
-						),
-						file.Not(file.HasPropertyAssignment()),
-					),
-				)
-			}
+		propertyx, ok := propertiesByID[propertyFilter.PropertyID]
+		if !ok {
+			log.Println("ignoring unavailable browser field filter")
+			continue
 		}
+		// An enabled but not yet configured UI filter must not change the query.
+		if propertyFilter.Operator == "" && propertyx.Type != fieldtype.Checkbox {
+			continue
+		}
+		if propertyx.Type == fieldtype.Date && propertyFilter.Operator == "between" {
+			parts := strings.SplitN(propertyFilter.Value, ",", 2)
+			for index, raw := range parts {
+				if raw == "" {
+					continue
+				}
+				operator := "greater_than_or_equal"
+				if index == 1 {
+					operator = "less_than_or_equal"
+				}
+				query = qq.applyTypedPropertyFilter(query, propertyx, operator, raw)
+			}
+			continue
+		}
+		query = qq.applyTypedPropertyFilter(query, propertyx, propertyFilter.Operator, propertyFilter.Value)
 	}
 
 	return query
+}
+
+func (qq *ListDirPartial) applyTypedPropertyFilter(
+	query *enttenant.FileQuery, propertyx *enttenant.Property, operator, raw string,
+) *enttenant.FileQuery {
+	value, err := browserPropertyFilterValue(propertyx.Type, raw)
+	if err != nil {
+		log.Println(err)
+		return query
+	}
+	filter, err := propertymodel.NewFilePropertyFilter(propertyx.ID, operator, value, nil)
+	if err != nil {
+		log.Println(err)
+		return query
+	}
+	return filter.Apply(query)
+}
+
+func browserPropertyFilterValue(
+	propertyType fieldtype.FieldType, raw string,
+) (propertymodel.FilePropertyValue, error) {
+	switch propertyType {
+	case fieldtype.Text:
+		return propertymodel.NewTextFilePropertyValue(raw), nil
+	case fieldtype.Number:
+		value, err := strconv.ParseInt(raw, 10, 64)
+		if err != nil {
+			return propertymodel.FilePropertyValue{}, err
+		}
+		return propertymodel.NewNumberFilePropertyValue(value)
+	case fieldtype.Money:
+		value, err := strconv.ParseFloat(raw, 64)
+		if err != nil {
+			return propertymodel.FilePropertyValue{}, err
+		}
+		return propertymodel.NewDecimalMoneyFilePropertyValue(value)
+	case fieldtype.Date:
+		value, err := timex.ParseDate(raw)
+		if err != nil {
+			return propertymodel.FilePropertyValue{}, err
+		}
+		return propertymodel.NewDateFilePropertyValue(value)
+	case fieldtype.Checkbox:
+		value, err := strconv.ParseBool(raw)
+		if err != nil {
+			return propertymodel.FilePropertyValue{}, err
+		}
+		return propertymodel.NewCheckboxFilePropertyValue(value), nil
+	default:
+		return propertymodel.FilePropertyValue{}, fmt.Errorf("unknown field filter type")
+	}
 }

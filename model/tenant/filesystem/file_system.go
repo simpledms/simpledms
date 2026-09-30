@@ -165,7 +165,7 @@ func (qq *FileSystem) Move(
 	}
 	// Inbox files may already reference the destination folder; filing them still
 	// changes their lifecycle even when no parent change is necessary.
-	if filex.Data.ParentID == destDir.Data.ID && !filex.Data.IsInInbox {
+	if filex.Data.ParentID == destDir.Data.ID && !filex.Data.IsInInbox && dirNameToCreate == "" {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Destination is current location.")
 	}
 
@@ -220,12 +220,20 @@ func (qq *FileSystem) Rename(ctx ctxx.Context, filex *filemodel.File, newFilenam
 	if newFilename == "" {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "New filename is empty.")
 	}
+	if newFilename == "." || filepath.Clean(newFilename) != newFilename ||
+		!filenamex.IsAllowed(newFilename) {
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
+	}
 	if filex.Data.Name == newFilename {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "New filename is the same as old.")
 	}
 
 	// returns new pointer, thus must be returned to caller
-	filexx := filex.Data.Update().SetName(newFilename).SaveX(ctx)
+	filexx, err := filex.Data.Update().SetName(newFilename).Save(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 	filex = filemodel.NewFile(filexx)
 
 	// FIXME is overwrite automatically prevented by unique constraint? impl test

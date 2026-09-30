@@ -80,6 +80,10 @@ func NewHandler(config Config) *Handler {
 	registerRead(
 		server, handler, "read_file_text", "Read bounded existing OCR text.", handler.readText,
 	)
+	registerRead(
+		server, handler, "download_file", "Read original bytes as a bounded base64 chunk.",
+		handler.downloadFile,
+	)
 	registerStorageWrite(
 		server, handler, "upload_file", "Upload one document into Inbox.", handler.uploadFile,
 	)
@@ -186,6 +190,36 @@ func NewHandler(config Config) *Handler {
 	registerMetadataWrite(
 		server, handler, "import_document_types", "Import library templates into an empty Space.",
 		handler.importDocumentTypes,
+	)
+	registerRead(
+		server, handler, "list_document_notes", "List bounded note previews and optional history.",
+		handler.listDocumentNotes,
+	)
+	registerRead(
+		server, handler, "get_document_note", "Read a bounded note body and its metadata.",
+		handler.getDocumentNote,
+	)
+	registerWrite(
+		server, handler, "create_document_note", "Create an authored document note.",
+		handler.createDocumentNote,
+	)
+	registerWrite(
+		server, handler, "edit_document_note", "Edit a current note with existing author permissions.",
+		handler.editDocumentNote,
+	)
+	registerWrite(
+		server, handler, "replace_document_note", "Replace a current note and retain its history.",
+		handler.replaceDocumentNote,
+	)
+	registerWrite(
+		server, handler, "delete_document_note", "Delete a current note into read-only history.",
+		handler.deleteDocumentNote,
+	)
+	registerWrite(
+		server, handler, "rename_file", "Rename a filed document or directory.", handler.renameFile,
+	)
+	registerWrite(
+		server, handler, "move_file", "Move a filed document or directory.", handler.moveFile,
 	)
 	handler.transport = sdk.NewStreamableHTTPHandler(func(*http.Request) *sdk.Server {
 		return server
@@ -392,6 +426,8 @@ func safeError(err error) error {
 			code = "forbidden"
 		case http.StatusNotFound:
 			code = "not_found"
+		case http.StatusConflict:
+			code = "conflict"
 		case http.StatusServiceUnavailable:
 			code = "unavailable"
 		}
@@ -589,6 +625,44 @@ func (qq *Handler) readText(
 	return result, err
 }
 
+func (qq *Handler) downloadFile(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input DownloadFileInput,
+) (DownloadFileData, error) {
+	versionNumber := 0
+	if input.VersionNumber != nil {
+		versionNumber = *input.VersionNumber
+		if versionNumber < 1 {
+			return DownloadFileData{}, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid version number.")
+		}
+	}
+	length := filesystem.MaxDownloadChunkBytes
+	if input.Length != nil {
+		length = *input.Length
+	}
+	result, err := filesystem.NewFileDownloadService(qq.config.Infra.FileSystem()).Read(
+		ctx, input.FileID, versionNumber, input.Offset, length,
+	)
+	if err != nil {
+		return DownloadFileData{}, err
+	}
+	data := DownloadFileData{
+		FileID:        result.FilePublicID,
+		Filename:      result.Filename,
+		VersionNumber: result.VersionNumber,
+		MIMEType:      result.MIMEType,
+		Size:          result.Size,
+		ContentSHA256: result.ContentSHA256,
+		Offset:        result.Offset,
+		ContentBase64: base64.StdEncoding.EncodeToString(result.Content),
+		HasMore:       result.HasMore,
+	}
+	if result.HasMore {
+		next := result.Offset + int64(len(result.Content))
+		data.NextOffset = &next
+	}
+	return data, nil
+}
+
 func (qq *Handler) listDirectory(
 	requestCtx context.Context,
 	ctx *ctxx.SpaceContext,
@@ -727,7 +801,7 @@ func (qq *Handler) searchFiles(
 		return result, err
 	}
 	if utf8.RuneCountInString(input.Query) > 300 || len(input.TagIDs) > 32 ||
-		len(input.DocumentTypeID) > 100 {
+		len(input.DocumentTypeID) > 100 || len(input.PropertyFilters) > 32 {
 		return result, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid search input.")
 	}
 	tagIDs, documentTypeID, err := resolveFiledFilters(ctx, input)
@@ -739,6 +813,13 @@ func (qq *Handler) searchFiles(
 	)
 	if err != nil {
 		return result, err
+	}
+	for _, inputFilter := range input.PropertyFilters {
+		filter, err := filedPropertyFilter(ctx, inputFilter)
+		if err != nil {
+			return result, err
+		}
+		query = filter.Apply(query)
 	}
 	files, err := query.WithParent(func(query *enttenant.FileQuery) {
 		query.Select(file.FieldPublicID)
@@ -764,6 +845,46 @@ func (qq *Handler) searchFiles(
 		result.Files = append(result.Files, qq.summary(requestCtx, ctx, filex, filex.Edges.Parent))
 	}
 	return result, nil
+}
+
+func filedPropertyFilter(
+	ctx *ctxx.SpaceContext, input PropertyFilterInput,
+) (propertymodel.FilePropertyFilter, error) {
+	if err := requireMetadataPublicIDs(ctx); err != nil {
+		return propertymodel.FilePropertyFilter{}, err
+	}
+	propertyx, err := scopedProperty(ctx, input.PropertyID)
+	if err != nil {
+		return propertymodel.FilePropertyFilter{}, err
+	}
+	if input.TextValue != nil && utf8.RuneCountInString(*input.TextValue) > 1000 {
+		return propertymodel.FilePropertyFilter{}, e.NewHTTPErrorf(
+			http.StatusBadRequest, "Field filter text is too long.",
+		)
+	}
+	value, err := propertyValueFromInput(propertyx.Type, SetFilePropertyInput{
+		TextValue:       input.TextValue,
+		NumberValue:     input.NumberValue,
+		MoneyMinorUnits: input.MoneyMinorUnits,
+		DateValue:       input.DateValue,
+		CheckboxValue:   input.CheckboxValue,
+	})
+	if err != nil {
+		return propertymodel.FilePropertyFilter{}, err
+	}
+	var end *propertymodel.FilePropertyValue
+	if input.EndNumberValue != nil || input.EndMoneyMinorUnits != nil || input.EndDateValue != nil {
+		endValue, err := propertyValueFromInput(propertyx.Type, SetFilePropertyInput{
+			NumberValue:     input.EndNumberValue,
+			MoneyMinorUnits: input.EndMoneyMinorUnits,
+			DateValue:       input.EndDateValue,
+		})
+		if err != nil {
+			return propertymodel.FilePropertyFilter{}, err
+		}
+		end = &endValue
+	}
+	return propertymodel.NewFilePropertyFilter(propertyx.ID, input.Operator, value, end)
 }
 
 func pageLimit(offset int, requested *int) (int, error) {
@@ -1639,6 +1760,281 @@ func (qq *Handler) importDocumentTypes(
 	}
 	limit := 100
 	return qq.listDocumentTypes(requestCtx, ctx, cred, MetadataListInput{Limit: &limit})
+}
+
+func (qq *Handler) listDocumentNotes(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	input DocumentNoteListInput,
+) (DocumentNoteListData, error) {
+	result := DocumentNoteListData{FileID: input.FileID, Notes: []DocumentNoteData{}}
+	if err := nilableMetadataReferenceError(input.FileID); err != nil {
+		return result, err
+	}
+	limit, err := pageLimit(input.Offset, input.Limit)
+	if err != nil {
+		return result, err
+	}
+	doc, query, err := filemodel.NewDocumentNotes().Query(ctx, input.FileID, input.ShowHistory)
+	if err != nil {
+		return result, err
+	}
+	notes, err := query.Offset(input.Offset).Limit(limit + 1).All(ctx)
+	if err != nil {
+		return result, err
+	}
+	result.HasMore = len(notes) > limit
+	if result.HasMore {
+		notes = notes[:limit]
+		next := input.Offset + limit
+		result.NextOffset = &next
+	}
+	for _, note := range notes {
+		data, err := documentNoteProjection(ctx, cred, doc, note, 0, 1000)
+		if err != nil {
+			return result, err
+		}
+		result.Notes = append(result.Notes, data)
+	}
+	if input.Offset == 0 && doc.Notes != "" {
+		legacy, err := documentNoteProjection(ctx, cred, doc, nil, 0, 1000)
+		if err != nil {
+			return result, err
+		}
+		result.LegacyNote = &legacy
+	}
+	return result, nil
+}
+
+func (qq *Handler) getDocumentNote(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	input GetDocumentNoteInput,
+) (DocumentNoteData, error) {
+	if err := nilableDocumentNoteReferenceError(input.DocumentNoteInput); err != nil {
+		return DocumentNoteData{}, err
+	}
+	length := 12000
+	if input.Length != nil {
+		length = *input.Length
+	}
+	if input.Offset < 0 || input.Offset > 1000000 || length < 1 || length > 50000 {
+		return DocumentNoteData{}, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid note text range.")
+	}
+	doc, note, err := filemodel.NewDocumentNotes().Get(ctx, input.FileID, input.NoteID)
+	if err != nil {
+		return DocumentNoteData{}, err
+	}
+	return documentNoteProjection(ctx, cred, doc, note, input.Offset, length)
+}
+
+func documentNoteProjection(
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	doc *enttenant.File,
+	note *enttenant.DocumentNote,
+	offset, length int,
+) (DocumentNoteData, error) {
+	data := DocumentNoteData{
+		FileID:     doc.PublicID.String(),
+		NoteID:     "legacy",
+		IsLegacy:   note == nil,
+		BodyOffset: offset,
+	}
+	body, authorID, isCurrent := doc.Notes, int64(0), true
+	if note != nil {
+		data.NoteID = note.PublicID.String()
+		data.Title = note.Title
+		data.Author = nilableNoteActorProjection(note.Edges.Author)
+		data.AuthoredAt = note.AuthoredAt
+		data.Editor = nilableNoteActorProjection(note.Edges.Editor)
+		data.EditedAt = note.EditedAt
+		data.DeletedAt = note.DeletedAt
+		if replacement := note.Edges.Replacement; replacement != nil {
+			data.ReplacedByNoteID = replacement.PublicID.String()
+		}
+		body, authorID = note.Body, note.AuthorID
+		isCurrent = note.DeletedAt == nil && note.ReplacedByID == 0
+	}
+	var err error
+	data.Body, data.HasMoreBody, err = filemodel.NewFileReader().TextWindow(body, offset, length)
+	if err != nil {
+		return DocumentNoteData{}, err
+	}
+	if data.HasMoreBody {
+		next := offset + length
+		data.NextBodyOffset = &next
+	}
+	data.CanChange = !cred.IsReadOnly && isCurrent &&
+		filemodel.NewDocumentNotes().CanChange(ctx, doc, authorID)
+	return data, nil
+}
+
+func nilableNoteActorProjection(actor *enttenant.User) *NoteActorData {
+	if actor == nil {
+		return nil
+	}
+	return &NoteActorData{
+		UserID: actor.PublicID.String(),
+		Name:   strings.TrimSpace(actor.FirstName + " " + actor.LastName),
+	}
+}
+
+func nilableDocumentNoteReferenceError(input DocumentNoteInput) error {
+	if input.FileID == "" || len(input.FileID) > 100 || input.NoteID == "" || len(input.NoteID) > 100 {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Document and note IDs are required.")
+	}
+	return nil
+}
+
+func nilableDocumentNoteTextError(title, body string) error {
+	if utf8.RuneCountInString(title) > 300 || utf8.RuneCountInString(body) > 50000 {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Note title or body is too long.")
+	}
+	return nil
+}
+
+func (qq *Handler) createDocumentNote(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	input CreateDocumentNoteInput,
+) (DocumentNoteData, error) {
+	if err := nilableMetadataReferenceError(input.FileID); err != nil {
+		return DocumentNoteData{}, err
+	}
+	if err := nilableDocumentNoteTextError(input.Title, input.Body); err != nil {
+		return DocumentNoteData{}, err
+	}
+	note, err := filemodel.NewDocumentNotes().Create(ctx, input.FileID, input.Title, input.Body)
+	if err != nil {
+		return DocumentNoteData{}, err
+	}
+	length := 50000
+	return qq.getDocumentNote(requestCtx, ctx, cred, GetDocumentNoteInput{
+		DocumentNoteInput: DocumentNoteInput{
+			FileID: input.FileID,
+			NoteID: note.PublicID.String(),
+		},
+		Length: &length,
+	})
+}
+
+func (qq *Handler) editDocumentNote(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	input EditDocumentNoteInput,
+) (DocumentNoteData, error) {
+	return qq.changeDocumentNote(requestCtx, ctx, cred, input, false)
+}
+
+func (qq *Handler) replaceDocumentNote(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	input EditDocumentNoteInput,
+) (DocumentNoteData, error) {
+	return qq.changeDocumentNote(requestCtx, ctx, cred, input, true)
+}
+
+func (qq *Handler) changeDocumentNote(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	input EditDocumentNoteInput,
+	isReplacement bool,
+) (DocumentNoteData, error) {
+	if err := nilableDocumentNoteReferenceError(input.DocumentNoteInput); err != nil {
+		return DocumentNoteData{}, err
+	}
+	if err := nilableDocumentNoteTextError(input.Title, input.Body); err != nil {
+		return DocumentNoteData{}, err
+	}
+	var note *enttenant.DocumentNote
+	var err error
+	service := filemodel.NewDocumentNotes()
+	if isReplacement {
+		note, err = service.Replace(ctx, input.FileID, input.NoteID, input.Title, input.Body)
+	} else {
+		note, err = service.Edit(ctx, input.FileID, input.NoteID, input.Title, input.Body)
+	}
+	if err != nil {
+		return DocumentNoteData{}, err
+	}
+	length := 50000
+	return qq.getDocumentNote(requestCtx, ctx, cred, GetDocumentNoteInput{
+		DocumentNoteInput: DocumentNoteInput{
+			FileID: input.FileID,
+			NoteID: note.PublicID.String(),
+		},
+		Length: &length,
+	})
+}
+
+func (qq *Handler) deleteDocumentNote(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input DocumentNoteInput,
+) (DocumentNoteDeletionData, error) {
+	if err := nilableDocumentNoteReferenceError(input); err != nil {
+		return DocumentNoteDeletionData{}, err
+	}
+	deleted, err := filemodel.NewDocumentNotes().Delete(ctx, input.FileID, input.NoteID)
+	return DocumentNoteDeletionData{
+		FileID:  input.FileID,
+		NoteID:  input.NoteID,
+		Deleted: deleted,
+	}, err
+}
+
+func (qq *Handler) renameFile(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input RenameFileInput,
+) (FilingData, error) {
+	if err := nilableMetadataReferenceError(input.FileID); err != nil {
+		return FilingData{}, err
+	}
+	filex, err := filesystem.NewFileOrganizationService(qq.config.Infra.FileSystem()).Rename(
+		ctx, input.FileID, input.NewFilename,
+	)
+	if err != nil {
+		return FilingData{}, organizationError(err)
+	}
+	return filingProjection(ctx, filex)
+}
+
+func (qq *Handler) moveFile(
+	_ context.Context,
+	ctx *ctxx.SpaceContext,
+	_ *entmain.MCPCredential,
+	input MoveFileInput,
+) (FilingData, error) {
+	if err := nilableMetadataReferenceError(input.FileID); err != nil {
+		return FilingData{}, err
+	}
+	if err := nilableMetadataReferenceError(input.DestinationDirectoryID); err != nil {
+		return FilingData{}, err
+	}
+	filex, err := filesystem.NewFileOrganizationService(qq.config.Infra.FileSystem()).Move(
+		ctx, input.FileID, input.DestinationDirectoryID, input.Filename, input.NewDirectoryName,
+	)
+	if err != nil {
+		return FilingData{}, organizationError(err)
+	}
+	return filingProjection(ctx, filex)
+}
+
+func organizationError(err error) error {
+	if enttenant.IsConstraintError(err) {
+		return e.NewHTTPErrorf(http.StatusConflict, "A file with this name already exists.")
+	}
+	return err
 }
 
 func (qq *Handler) assignTag(

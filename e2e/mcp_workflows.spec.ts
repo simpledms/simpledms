@@ -132,14 +132,15 @@ for (const device of [
 			expect((await list.json()).result.tools.map((tool: { name: string }) => tool.name).sort())
 				.toEqual([
 					"assign_sub_tag", "assign_tag", "clear_document_type", "create_and_assign_tag",
-					"create_directory", "create_document_type", "create_document_type_property_attribute",
+					"create_directory", "create_document_note", "create_document_type", "create_document_type_property_attribute",
 					"create_document_type_tag_attribute", "create_property", "create_tag",
-					"delete_document_type", "delete_document_type_attribute", "delete_property", "delete_tag",
-					"edit_document_type_property_attribute", "edit_document_type_tag_attribute",
-					"edit_property", "edit_tag", "file_inbox_document", "get_document_type", "get_file",
-					"get_space", "import_document_types", "list_directory", "list_document_type_templates",
+					"delete_document_note", "delete_document_type", "delete_document_type_attribute", "delete_property", "delete_tag",
+					"download_file", "edit_document_note", "edit_document_type_property_attribute", "edit_document_type_tag_attribute",
+					"edit_property", "edit_tag", "file_inbox_document", "get_document_note", "get_document_type", "get_file",
+					"get_space", "import_document_types", "list_directory", "list_document_notes", "list_document_type_templates",
 					"list_document_types", "list_inbox", "list_properties", "list_tags", "mark_inbox_file_done",
-					"move_tag_to_group", "read_file_text", "remove_file_property", "rename_document_type",
+					"move_file", "move_tag_to_group", "read_file_text", "remove_file_property", "rename_document_type",
+					"rename_file", "replace_document_note",
 					"search_files", "set_document_type", "set_file_property", "unassign_sub_tag", "unassign_tag",
 					"upload_file",
 				]);

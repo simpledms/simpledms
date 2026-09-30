@@ -34,6 +34,22 @@ func NewDocumentNotes() *DocumentNotes {
 func (qq *DocumentNotes) List(
 	ctx ctxx.Context, fileID string, showHistory bool,
 ) (*enttenant.File, []*enttenant.DocumentNote, error) {
+	doc, query, err := qq.Query(ctx, fileID, showHistory)
+	if err != nil {
+		return nil, nil, err
+	}
+	notes, err := query.All(ctx)
+	if err != nil {
+		log.Printf("read document notes: %v", err)
+		return nil, nil, err
+	}
+	return doc, notes, nil
+}
+
+// Query retains note access/history rules while allowing callers to bound pagination.
+func (qq *DocumentNotes) Query(
+	ctx ctxx.Context, fileID string, showHistory bool,
+) (*enttenant.File, *enttenant.DocumentNoteQuery, error) {
 	doc, err := qq.document(ctx, fileID)
 	if err != nil {
 		return nil, nil, err
@@ -43,15 +59,11 @@ func (qq *DocumentNotes) List(
 	if !showHistory {
 		query.Where(documentnote.DeletedAtIsNil(), documentnote.ReplacedByIDIsNil())
 	}
-	notes, err := query.Order(
+	query.Order(
 		documentnote.ByAuthoredAt(sql.OrderDesc(), sql.OrderNullsLast()),
 		documentnote.ByID(sql.OrderDesc()),
-	).All(ctx)
-	if err != nil {
-		log.Printf("read document notes: %v", err)
-		return nil, nil, err
-	}
-	return doc, notes, nil
+	)
+	return doc, query, nil
 }
 
 // Get validates the document/note pair, including historical entries.

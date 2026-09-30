@@ -181,30 +181,32 @@ common pagination fields where the architecture already defines them. Optional f
 - Input: parent public ID and directory name. Result: folder public ID, name, and parent.
 - Purpose: create a destination when filing in folder mode.
 
-## Later: notes, standalone organization, and recovery
+## Implemented notes/organization and deferred recovery
 
-### `list_document_notes`, `create_document_note` — read/write; reuse
+### `list_document_notes`, `get_document_note`, `create_document_note` — read/write; reuse
 
 - Current basis: [`DocumentNotes.List/Create`][notes], [`DocumentNotesPartial`][notes-partial],
   and [`DocumentNoteCmd`][note-cmd].
-- Listing takes `file_id`, `show_history?`, and pagination, and returns notes/history plus legacy
-  text without materializing it. Creation takes `file_id`, `title`, and `body`, and returns the
-  authored note. Repeated creation creates another note.
-- Useful later for summaries and review annotations, but not part of initial intake/filing.
+- Listing takes `file_id`, `show_history?`, and pagination, and returns bounded previews plus a
+  separate legacy preview without materializing it. `get_document_note` reads a character window
+  using `file_id`, `note_id`, `offset?`, and `length?`. Creation takes `file_id`, `title`, and `body`,
+  and returns the authored note. Repeated creation creates another note.
+- Implemented in extension 08 with existing authorship, owner, and history behavior.
 
 ### `edit_document_note`, `replace_document_note`, `delete_document_note` — write; reuse
 
 - Current command: [`DocumentNoteCmd`][note-cmd], matching operations on [`DocumentNotes`][notes].
 - Input: `file_id`, `note_id`; title/body for edit or replace. Result: the changed note, successor,
   or deletion state. Retain the current model's attribution, history, and permission rules.
-- The document-scoped `legacy` selector, if exposed, remains a reserved selector, not a public ID.
+- The document-scoped `legacy` selector remains reserved, not a public ID. Read-only token mode
+  and model author/owner permissions both apply; a writable token alone cannot edit another author.
 
 ### `rename_file` — write; reuse
 
 - Current command: [`browse.RenameFileCmd`][rename], using filesystem `Rename`.
 - Input: `file_id`, `new_filename`. Result: file public ID and resulting name.
-- This standalone tool is deferred. The existing optional name in `file_inbox_document` remains
-  available. Rename currently also handles directories and rejects an unchanged name.
+- Implemented in extension 09 for live filed documents and ordinary directories. The optional
+  name in `file_inbox_document` remains the Inbox completion path. Unchanged names are rejected.
 
 ### `move_file` — write; reuse with extraction of handler guards
 
@@ -212,6 +214,7 @@ common pagination fields where the architecture already defines them. Optional f
 - Input: file/destination IDs and optional new name. Result: final public ID, name, and parent.
 - Purpose: organize filed documents in folder mode. Reuse filesystem `Move`/`MakeDir` and their
   folder/cycle checks. Keep Inbox filing as the distinct operation above.
+- Implemented in extension 09, including optional `new_directory_name` in the same transaction.
 
 ### `list_trash` — read; extract
 
@@ -228,7 +231,7 @@ common pagination fields where the architecture already defines them. Optional f
   Restoration currently rejects folders. If the original parent is missing, a file is restored
   to the Space root in Inbox. Extract these decisions together with their actor attribution.
 
-## Later: versions, transfers, and processing
+## Versions, transfers, and processing
 
 ### `list_file_versions` — read; extract
 
@@ -290,13 +293,15 @@ common pagination fields where the architecture already defines them. Optional f
   and a streaming transfer for files above the native tool limit remain separate contracts.
 - New single-file Inbox ingestion is already covered by the first-release `upload_file` tool.
 
-### File download — read; new MCP-accessible delivery contract required
+### `download_file` — read; native version-pinned byte ranges
 
 - Current basis: [`download.Download`][download] and the existing streaming download helpers.
-- Selector: `file_id`, `version_number?`. Result: an authenticated transfer or a bounded resource
-  appropriate for the client, once that delivery contract is implemented.
-- Purpose: obtain original bytes when OCR text is insufficient. Existing browser links and
-  internal encrypted-storage object keys are not an MCP download API.
+- Selector: `file_id`, `version_number?`, byte `offset?`/`length?`. Result: up to 1 MiB decoded
+  content as base64, metadata, selected version, and continuation. Offset zero may select latest;
+  continuations require the returned version. Reading at EOF yields an empty final chunk.
+- Implemented in extension 06 to obtain canonical original bytes with an MCP bearer credential.
+  It uses the same decrypt/decompress reader, emits no storage keys/URLs, and supports read-only
+  tokens. Large-file efficient streaming is still a separate delivery contract.
 
 ## Implemented: metadata configuration tools
 
@@ -348,7 +353,8 @@ empty unit; changing a field's type is unavailable.
 - `ChangeDirCmd`, `SelectDirCmd`, `SelectDirMakeDirCmd`: browser navigation/picker composition.
   Use data queries and `create_directory` instead of publishing picker actions.
 - `ToggleTagFilterCmd`, `ToggleDocumentTypeFilterCmd`, `TogglePropertyFilterCmd`, and
-  `UpdatePropertyFilterCmd`: turn their useful filters into explicit query arguments.
+  `UpdatePropertyFilterCmd`: their useful filters are explicit `search_files` arguments. Typed
+  field conditions arrived in extension 07; UI money/open-date normalization remains in the adapter.
 - `ToggleTagGroupCmd`: expands/collapses groups in browser URL state.
 - `UpdateFileListPreferencesCmd`: changes browser table/list preferences.
 - Forms, dialogs, sheets, and `AddFilePropertyCmd`: expose the underlying operation/data query,

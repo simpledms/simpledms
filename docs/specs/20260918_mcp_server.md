@@ -664,6 +664,43 @@ Slice 05 metadata management implementation, 2026-09-29:
   management-client journeys were not performed for this extension. Slice 05 and its plan box
   remain pending verification; prior review results do not verify newly added behavior.
 
+Extensions 06–09 implementation, 2026-09-30:
+
+- Implemented the requested priority order: original-byte downloads, typed field filters, note
+  history/management, and standalone filed-entry rename/move. The registered tool set is now 49;
+  the catalog and contracts describe inputs and bounds. No schema migration is required.
+- `download_file` reads bounded, version-pinned plaintext ranges through the canonical storage
+  reader and returns base64/metadata, without browser authentication or internal object references.
+  The [byte-range ADR](../adrs/2026.09-mcp_original_byte_ranges.md) records bounds and the extra
+  prefix I/O cost of compressed/encrypted storage. Read-only credentials retain read access.
+- Extracted typed property predicates into `property.FilePropertyFilter` for Browse and MCP.
+  Added numeric/money/date ranges and strict MCP binding; preserved browser normalization and
+  unconfigured/open-range states. Fixed the existing unchecked-Checkbox predicate to include
+  documents missing that property's assignment even when another field is assigned. Stale browser
+  property IDs no longer index a missing definition.
+- Note tools call `DocumentNotes` for current access, author/owner permissions, legacy handling,
+  replacement, deletion, and retained history. The model's shared query now permits pagination;
+  MCP previews/body windows and new text inputs are bounded. Added `conflict` mapping for historical
+  mutation conflicts. No attribution or timestamps are invented for legacy entries.
+- Added `FileOrganizationService` as a scoped filed-entry adapter to existing filesystem methods.
+  Rename validation now rejects invalid canonical names and returns persistence errors; optional
+  new-child movement from the current parent is permitted as an actual move. Collisions/cycles and
+  failed child creation preserve transaction state; classification, source, versions, and history
+  remain intact. Root/Inbox entries use their existing lifecycle rather than standalone organization.
+- Added SDK/HTTP byte, filter, note, and organization coverage. Necessary focused implementation
+  checkpoints passed in order:
+  - `go test ./server -run '^TestMCPDownloadRoundTrip$' -count=1 -timeout 90s`
+  - `go test ./server -run '^TestMCPFieldFilters$' -count=1 -timeout 60s`
+  - `go test ./server -run '^TestMCPNotesHistory$' -count=1 -timeout 90s`
+  - `go test ./server -run '^TestMCPOrganization$' -count=1 -timeout 90s`
+  - `go test ./server -run '^TestMCPDownloadRejectsForeignSpaceFile$|^TestMCPNotesHistory$|^TestMCPOrganizationAuthorization$' -count=1 -timeout 90s`
+  Initial failures came from fixture privacy contexts, a tokenizer-sensitive test word, and
+  error-message/status assumptions. Corrections retain the real API/model semantics.
+- Discovery expectations and source documents were updated; Go files were formatted. Complete
+  model/browser/regression suites, build/vet, fault-injected storage/cancellation cases, and manual
+  client workflows remain pending. Later coverage additions have not been broadly verified; slice
+  delivery boxes remain open. Prior review evidence does not cover these new changes.
+
 ## Operating implemented slices
 
 After deploying the generated migration and rebuilt application, open Account → MCP credentials.
@@ -673,7 +710,8 @@ development; no OAuth discovery flow is provided by this slice.
 
 The registered tools currently cover scoped Space/Inbox inspection, bounded OCR, Inbox upload,
 existing-metadata classification, destination discovery/creation, folder/non-folder filing, and
-filed search, plus metadata definition/attribute management and library import. `get_file` includes
+filed search with typed field conditions, metadata definition/attribute management, library import,
+original-byte download chunks, note/history operations, and filed rename/move. `get_file` includes
 typed classification once the tenant's metadata public-ID backfill
 is complete. Inbox, directory, and filed-search pages default to 50 items, cap at 100, and reject
 offsets above 1,000,000; OCR windows default to 12,000 and cap at 50,000 Unicode characters.

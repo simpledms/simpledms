@@ -1,7 +1,7 @@
 # MCP implementation plan
 
 Date: 2026-09-18  
-Status: slices 01–04 reviewed; metadata management implemented in slice 05, verification pending
+Status: slices 01–04 reviewed; extensions 05–09 implemented, complete verification pending
 
 Contract: [specification](spec.md), [durable rules](invariants.md), and the linked
 [architecture](../../specs/20260918_mcp_server.md). The source review and all future execution
@@ -24,6 +24,10 @@ exclusion and the exact unperformed verification boundary.
 3. [ ] [Classify a document with existing metadata](slices/03-classify_document.md)
 4. [ ] [File a classified document and find it again](slices/04-file_document.md)
 5. [ ] [Manage metadata definitions](slices/05-manage_metadata.md)
+6. [ ] [Download original bytes](slices/06-download_original_bytes.md)
+7. [ ] [Search by typed field values](slices/07-field_filters.md)
+8. [ ] [Manage document notes and history](slices/08-document_notes.md)
+9. [ ] [Organize filed documents and directories](slices/09-organize_filed_documents.md)
 
 ## Initial four slices and the management extension
 
@@ -49,6 +53,10 @@ for the document-intake outcome. There is no later foundation, integration, or t
 Slice 05 was requested after those four journeys were implemented. It depends on slice 03's
 public identifiers and consumes the existing metadata-management services rather than adding
 another editor or migration effort.
+
+Extensions 06–09 were requested in that order after metadata management: original bytes, typed
+filters, notes, and filed organization. Each retains scoped public references and the existing
+storage/model rules; their focused implementation checkpoints do not close delivery verification.
 
 ## Shared implementation guidance
 

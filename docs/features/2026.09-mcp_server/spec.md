@@ -1,7 +1,7 @@
 # MCP document intake and filing
 
 Date: 2026-09-18  
-Status: slices 01–04 reviewed; metadata management implemented in slice 05, verification pending
+Status: slices 01–04 reviewed; extensions 05–09 implemented, complete verification pending
 
 ## Outcome
 
@@ -38,6 +38,7 @@ are in the catalog; the more specific contracts below override its earlier explo
 | --- | --- |
 | Identify and inspect | `get_space`, `list_inbox`, `get_file`, `read_file_text` |
 | Upload | `upload_file` |
+| Original bytes | `download_file` |
 | Tagging | `list_tags`, `assign_tag`, `unassign_tag` |
 | Properties | `list_properties`, `set_file_property`, `remove_file_property` |
 | Document types | `list_document_types`, `get_document_type` |
@@ -50,6 +51,8 @@ are in the catalog; the more specific contracts below override its earlier explo
 | Manage document types | `create_document_type`, `rename_document_type`, `delete_document_type` |
 | Configure attributes | `create_document_type_tag_attribute`, `edit_document_type_tag_attribute`, `create_document_type_property_attribute`, `edit_document_type_property_attribute`, `delete_document_type_attribute` |
 | Library templates | `list_document_type_templates`, `import_document_types` |
+| Notes and history | `list_document_notes`, `get_document_note`, `create_document_note`, `edit_document_note`, `replace_document_note`, `delete_document_note` |
+| Filed organization | `rename_file`, `move_file` |
 
 ### Connect and inspect
 
@@ -171,10 +174,73 @@ optional child-directory name; it handles folder-mode filing. Both use shared li
 The filing rules and preservation requirements are owned by invariant M5.
 
 `create_directory` and `list_directory` supply destinations. `search_files` searches/lists filed
-documents with current FTS/sort behaviour and optional public-ID Tag/document-type filters;
-advanced property-filter UI state is not part of its initial JSON contract. Empty query lists
+documents with current FTS/sort behaviour and optional public-ID Tag/document-type filters.
+Extension 07 adds explicit typed field filters; browser URL/filter state stays in the UI adapter.
+Empty query lists
 filed documents. Inbox remains a distinct query scope. Reuse current query predicates and limit
 results instead of creating an independent index or loading all rows.
+
+### Original-byte download contract
+
+`download_file(file_id, version_number?, offset?, length?)` reads original plaintext bytes through
+the same decrypt/decompress reader as browser downloads. It is available to read-only credentials.
+The result contains `content_base64`, file/name/MIME/size metadata, the selected version number,
+the byte offset, and `has_more`/`next_offset`. The whole-version content hash is included when known.
+
+Each call returns at most 1 MiB decoded bytes, also the default length. Offset zero without a
+version selects the latest version. A continuation requires the returned version number; explicitly
+selected versions must be positive. Offsets use bytes and must be within the recorded file size
+and JSON's safe-integer range. Reading exactly at EOF returns an empty final chunk. Unknown,
+deleted, directory, or foreign-Space files and unknown versions fail without content disclosure.
+Storage paths, presigned URLs, and browser Session cookies are not part of this contract.
+
+### Typed field-search contract
+
+`search_files` additionally accepts up to 32 `property_filters`, ANDed with the existing text,
+Tag/document-type filters and each other before pagination. Each filter takes a property public
+ID, an operator, and exactly one typed value matching its stored type. Money uses integer minor
+units, dates use `YYYY-MM-DD`, and zero/false/empty text remain distinct from missing values.
+
+- Text: `equals`, `contains`, `starts_with`, using the existing case-insensitive predicates.
+- Number/Money/Date: `equals`, `greater_than`, `less_than`, `greater_than_or_equal`,
+  `less_than_or_equal`, `between`. Inclusive `between` needs the matching `end_number_value`,
+  `end_money_minor_units`, or `end_date_value` and ordered bounds.
+- Checkbox: `equals` or `is_checked`; false includes documents without an assignment of that
+  Checkbox, including those with unrelated fields assigned.
+
+Text filter values are limited to 1,000 Unicode characters. Unsupported operators, mismatched or
+omitted values, invalid dates/integers/ranges, and foreign field IDs fail rather than silently
+ignoring a requested condition. Browse and MCP share typed predicates; browser decimal money
+and open date bounds remain adapter-level normalization.
+
+### Notes and history contract
+
+Note reads/mutations call `DocumentNotes`, retaining current authorship, owner, historical-entry,
+and Trash rules. A writable token does not grant permission to edit another author's note. Edits
+preserve attribution, replacement retains the predecessor, and deletion retains read-only history.
+Every note ID is paired with a scoped file public ID. The document-scoped `legacy` selector keeps
+unknown authorship/date; reading it does not materialize a row. Owner-authorized changes use the
+existing materialization behavior. Historical mutation conflicts use the `conflict` error code.
+
+`list_document_notes(file_id, show_history?, offset?, limit?)` pages real note rows (default 50,
+maximum 100), with 1,000-character previews and separate `legacy_note` on page zero. Body
+continuation metadata points to `get_document_note(file_id, note_id, offset?, length?)`, which
+uses character offsets, default length 12,000, and maximum 50,000. New/edited titles are bounded
+to 300 characters and bodies to 50,000. Author/editor projections contain public user IDs and
+display names, with nullable original timestamps preserved. `can_change` also reflects token mode.
+Notes in Trash remain readable through existing access but cannot be mutated.
+
+### Filed organization contract
+
+`rename_file(file_id, new_filename)` and
+`move_file(file_id, destination_directory_id, filename?, new_directory_name?)` organize live,
+already-filed documents and ordinary directories. They do not complete Inbox items or organize
+the Space root. Move requires folder mode; rename retains the filesystem's existing non-folder
+behavior. All endpoints resolve through the bound Space. Existing filename, conflict, current
+location, and cycle rules apply, with one transaction including requested child-directory creation.
+Moving into a newly created child of the current parent is an actual move and is supported.
+Identity, source, versions, classification, values, notes/history, and child-parent links survive.
+Results report public ID, final name/parent, and Inbox state after commit; conflicts disclose no SQL.
 
 ## Acceptance outcomes
 
@@ -193,8 +259,8 @@ results instead of creating an independent index or loading all rows.
 6. A writable client can manage the same Tag/field/document-type configuration as the browser,
    including grouping, composition, attributes, and library import, without accessing another Space.
 
-Later catalog candidates include notes, standalone rename/move, Trash, version merges/uploads,
-archive extraction, URL imports, binary downloads, and multi-Space grants.
+Later catalog candidates include Trash, version merges/uploads, duplicate discovery,
+archive extraction, URL imports, large-file streaming transfers, and multi-Space grants.
 
 [architecture]: ../../specs/20260918_mcp_server.md
 [catalog]: ../../specs/20260918_mcp_tool_catalog.md
