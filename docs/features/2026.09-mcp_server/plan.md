@@ -1,7 +1,7 @@
 # MCP implementation plan
 
 Date: 2026-09-18  
-Status: slices 01–04 implemented; automated review passed, remaining verification pending
+Status: slices 01–04 reviewed; metadata management implemented in slice 05, verification pending
 
 Contract: [specification](spec.md), [durable rules](invariants.md), and the linked
 [architecture](../../specs/20260918_mcp_server.md). The source review and all future execution
@@ -23,8 +23,9 @@ exclusion and the exact unperformed verification boundary.
 2. [ ] [Upload a document and open it in Inbox](slices/02-upload_to_inbox.md)
 3. [ ] [Classify a document with existing metadata](slices/03-classify_document.md)
 4. [ ] [File a classified document and find it again](slices/04-file_document.md)
+5. [ ] [Manage metadata definitions](slices/05-manage_metadata.md)
 
-## Why four slices
+## Initial four slices and the management extension
 
 The complete feature exceeds one implementation session. Connection/credential lifecycle,
 storage ingestion, metadata mutation, and filing are independently usable journeys and have
@@ -43,7 +44,11 @@ IDs; slice 4 uses existing filing and search without a general file-management A
 
 Slice 1 has no feature dependency. Slice 2 depends on 1; slice 3 on 1–2; slice 4 on 1–3. Each
 leaves its delivered journeys working and registers only completed tools. All four are needed
-for the first-release outcome. There is no later foundation, integration, or testing slice.
+for the document-intake outcome. There is no later foundation, integration, or testing slice.
+
+Slice 05 was requested after those four journeys were implemented. It depends on slice 03's
+public identifiers and consumes the existing metadata-management services rather than adding
+another editor or migration effort.
 
 ## Shared implementation guidance
 
@@ -96,6 +101,7 @@ scoped checklist. Use public behaviour and existing runtime seams, without produ
 | 3: apply type, Tags, and values | 03 | Inbox/Browse metadata and upgrade compatibility |
 | 4: finish and rediscover | 04 | Last-Inbox-file UI and root/non-folder filing |
 | 5: cross-transport correctness | Each owning slice | Relevant earlier journeys retained |
+| 6: manage definitions and attributes | 05 | Existing UI model rules and same-tenant Space isolation |
 
 [record]: ../../specs/20260918_mcp_server.md#source-review-and-execution-record
 [credential-ui]: ../../../action/dashboard/create_webdav_credential_cmd.go

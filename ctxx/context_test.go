@@ -18,7 +18,8 @@ var (
 )
 
 func TestDerivedContextsKeepParentContextsUnchanged(t *testing.T) {
-	baseKey := struct{}{}
+	type baseContextKey struct{}
+	baseKey := baseContextKey{}
 	base := context.WithValue(context.Background(), baseKey, "base value")
 	i18nx := i18n.NewI18n()
 	visitorCtx := NewVisitorContext(base, nil, i18nx, "", "", false, false, false)
@@ -84,7 +85,8 @@ func TestDerivedContextsKeepParentContextsUnchanged(t *testing.T) {
 }
 
 func TestWithoutCancelRebuildsSpaceContextHierarchy(t *testing.T) {
-	baseKey := struct{}{}
+	type baseContextKey struct{}
+	baseKey := baseContextKey{}
 	base, cancel := context.WithCancel(
 		context.WithValue(context.Background(), baseKey, "base value"),
 	)

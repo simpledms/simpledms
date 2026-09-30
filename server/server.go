@@ -122,7 +122,11 @@ func newMaintenanceModeHandler(
 	})
 
 	mux.HandleFunc("/-/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
-		defer req.Body.Close()
+		defer func() {
+			if err := req.Body.Close(); err != nil {
+				log.Println(err)
+			}
+		}()
 
 		var reqBody struct {
 			Passphrase string `json:"passphrase"`
@@ -837,7 +841,7 @@ func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *systemconfigmode
 	// storagePath := common.StoragePath(metaPath)
 	fileRepo := common.NewFileRepository()
 	minioClient := qq.initNilableMinioClient(systemConfig.S3())
-	fileSystem := filesystem.NewFileSystem(qq.metaPath)
+	fileSystem := filesystem.NewFileSystem(qq.metaPath) //nolint:staticcheck // S3FileSystem requires the folder adapter.
 
 	/*
 		indexer := internal.NewFileIndexer(client, infra)

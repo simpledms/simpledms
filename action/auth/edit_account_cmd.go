@@ -77,7 +77,7 @@ func (qq *EditAccountCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	} else if accountx.SubscribedToNewsletterAt != nil && !data.SubscribeToNewsletter {
 		query.ClearSubscribedToNewsletterAt()
 	}
-	accountx = query.SaveX(ctx)
+	query.SaveX(ctx)
 
 	rw.AddRenderables(widget.NewSnackbarf("Account updated."))
 	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())

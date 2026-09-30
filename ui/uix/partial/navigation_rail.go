@@ -335,7 +335,7 @@ func spaceCombobox(ctx ctxx.Context, active string) *widget.Combobox {
 	}
 
 	return &widget.Combobox{
-		Input: &widget.Input{
+		Input: &widget.Input{ //nolint:staticcheck // Combobox requires this legacy input type.
 			Placeholder:  placeholder,
 			LeadingIcon:  selectedIcon,
 			TrailingIcon: widget.NewIcon("expand_more"),

@@ -1031,11 +1031,9 @@ func (qq *S3FileSystem) saveFile(
 	}
 
 	fileExtension := filepath.Ext(originalFilename)
-	if fileExtension == "" {
-		// commented because files don't need an extension...
-		// log.Println("invalid filename")
-		// return nil, "", 0, e.NewHTTPErrorf(http.StatusBadRequest, "File has no extension.")
-	}
+	// commented because files don't need an extension...
+	// log.Println("invalid filename")
+	// return nil, "", 0, e.NewHTTPErrorf(http.StatusBadRequest, "File has no extension.")
 
 	// FIXME PublicID or private ID? does anybody see filenames?
 	//		 public could be useful if somebody gets access to storage, but has no list priviledges
@@ -2397,7 +2395,11 @@ func (qq *S3FileSystem) DetectMimeType(ctx ctxx.Context, filex *storedfilemodel.
 		log.Println(err)
 		return "", e.NewHTTPErrorf(http.StatusInternalServerError, "")
 	}
-	defer obj.Close()
+	defer func() {
+		if err := obj.Close(); err != nil {
+			log.Println(err)
+		}
+	}()
 
 	mimeType, err := detectMIME(obj)
 	if err != nil {

@@ -4973,6 +4973,13 @@
             "fuzzy": true
         },
         {
+            "id": "Cleanup pending",
+            "message": "Cleanup pending",
+            "translation": "Cleanup pending",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Confirm new passphrase",
             "message": "Confirm new passphrase",
             "translation": "Confirm new passphrase",
@@ -5102,6 +5109,13 @@
             "id": "Estonia",
             "message": "Estonia",
             "translation": "Estonia",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Failed",
+            "message": "Failed",
+            "translation": "Failed",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5302,6 +5316,13 @@
             "fuzzy": true
         },
         {
+            "id": "Mcp",
+            "message": "Mcp",
+            "translation": "Mcp",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Malta",
             "message": "Malta",
             "translation": "Malta",
@@ -5372,13 +5393,6 @@
             "fuzzy": true
         },
         {
-            "id": "None",
-            "message": "None",
-            "translation": "None",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Norway",
             "message": "Norway",
             "translation": "Norway",
@@ -5435,6 +5449,13 @@
             "fuzzy": true
         },
         {
+            "id": "Pwaos open",
+            "message": "Pwaos open",
+            "translation": "Pwaos open",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Passphrase",
             "message": "Passphrase",
             "translation": "Passphrase",
@@ -5445,6 +5466,13 @@
             "id": "Password",
             "message": "Password",
             "translation": "Password",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Pending",
+            "message": "Pending",
+            "translation": "Pending",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5477,6 +5505,13 @@
             "fuzzy": true
         },
         {
+            "id": "Processing",
+            "message": "Processing",
+            "translation": "Processing",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Push url",
             "message": "Push url",
             "translation": "Push url",
@@ -5484,9 +5519,9 @@
             "fuzzy": true
         },
         {
-            "id": "Reader",
-            "message": "Reader",
-            "translation": "Reader",
+            "id": "Ready",
+            "message": "Ready",
+            "translation": "Ready",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5645,9 +5680,30 @@
             "fuzzy": true
         },
         {
+            "id": "Url import",
+            "message": "Url import",
+            "translation": "Url import",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Unit",
             "message": "Unit",
             "translation": "Unit",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Unknown legacy",
+            "message": "Unknown legacy",
+            "translation": "Unknown legacy",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Uploading",
+            "message": "Uploading",
+            "translation": "Uploading",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5694,9 +5750,16 @@
             "fuzzy": true
         },
         {
-            "id": "Writer",
-            "message": "Writer",
-            "translation": "Writer",
+            "id": "Web dav",
+            "message": "Web dav",
+            "translation": "Web dav",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Web interface",
+            "message": "Web interface",
+            "translation": "Web interface",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6510,9 +6573,23 @@
             "fuzzy": true
         },
         {
+            "id": "File is a directory.",
+            "message": "File is a directory.",
+            "translation": "File is a directory.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Please select at least one document type.",
             "message": "Please select at least one document type.",
             "translation": "Please select at least one document type.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Attribute must reference a Tag group.",
+            "message": "Attribute must reference a Tag group.",
+            "translation": "Attribute must reference a Tag group.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6719,6 +6796,13 @@
             "fuzzy": true
         },
         {
+            "id": "Parent is not a directory.",
+            "message": "Parent is not a directory.",
+            "translation": "Parent is not a directory.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "A folder with this name already exists.",
             "message": "A folder with this name already exists.",
             "translation": "A folder with this name already exists.",
@@ -6729,6 +6813,13 @@
             "id": "Destination is not a directory.",
             "message": "Destination is not a directory.",
             "translation": "Destination is not a directory.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid filename.",
+            "message": "Invalid filename.",
+            "translation": "Invalid filename.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6799,13 +6890,6 @@
             "id": "Could not open file.",
             "message": "Could not open file.",
             "translation": "Could not open file.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Invalid filename.",
-            "message": "Invalid filename.",
-            "translation": "Invalid filename.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7005,6 +7089,27 @@
                     "expr": "fileutil.FormatSize(limitBytes)"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "A file with this name already exists in the destination.",
+            "message": "A file with this name already exists in the destination.",
+            "translation": "A file with this name already exists in the destination.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File is not a directory.",
+            "message": "File is not a directory.",
+            "translation": "File is not a directory.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File must be in Inbox.",
+            "message": "File must be in Inbox.",
+            "translation": "File must be in Inbox.",
+            "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
@@ -7568,9 +7673,72 @@
             "fuzzy": true
         },
         {
+            "id": "Unknown document type template.",
+            "message": "Unknown document type template.",
+            "translation": "Unknown document type template.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Value does not match the field type.",
+            "message": "Value does not match the field type.",
+            "translation": "Value does not match the field type.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Date value is required.",
+            "message": "Date value is required.",
+            "translation": "Date value is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Money value is out of range.",
+            "message": "Money value is out of range.",
+            "translation": "Money value is out of range.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Number value is out of range.",
+            "message": "Number value is out of range.",
+            "translation": "Number value is out of range.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Cannot add a tag group as child.",
             "message": "Cannot add a tag group as child.",
             "translation": "Cannot add a tag group as child.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tag groups cannot be assigned.",
+            "message": "Tag groups cannot be assigned.",
+            "translation": "Tag groups cannot be assigned.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File or Tag not found.",
+            "message": "File or Tag not found.",
+            "translation": "File or Tag not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Destination must be a Tag group.",
+            "message": "Destination must be a Tag group.",
+            "translation": "Destination must be a Tag group.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Composition requires a composed Tag and a simple sub-Tag.",
+            "message": "Composition requires a composed Tag and a simple sub-Tag.",
+            "translation": "Composition requires a composed Tag and a simple sub-Tag.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7652,6 +7820,13 @@
             "fuzzy": true
         },
         {
+            "id": "Metadata already exists or is still in use.",
+            "message": "Metadata already exists or is still in use.",
+            "translation": "Metadata already exists or is still in use.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Invalid page or search range.",
             "message": "Invalid page or search range.",
             "translation": "Invalid page or search range.",
@@ -7666,9 +7841,58 @@
             "fuzzy": true
         },
         {
-            "id": "File is a directory.",
-            "message": "File is a directory.",
-            "translation": "File is a directory.",
+            "id": "Invalid directory ID.",
+            "message": "Invalid directory ID.",
+            "translation": "Invalid directory ID.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Parent directory ID and name are required.",
+            "message": "Parent directory ID and name are required.",
+            "translation": "Parent directory ID and name are required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid filing input.",
+            "message": "Invalid filing input.",
+            "translation": "Invalid filing input.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid search input.",
+            "message": "Invalid search input.",
+            "translation": "Invalid search input.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid page range.",
+            "message": "Invalid page range.",
+            "translation": "Invalid page range.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid Tag filter.",
+            "message": "Invalid Tag filter.",
+            "translation": "Invalid Tag filter.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tag not found.",
+            "message": "Tag not found.",
+            "translation": "Tag not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document type not found.",
+            "message": "Document type not found.",
+            "translation": "Document type not found.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7676,6 +7900,132 @@
             "id": "Invalid base64 content.",
             "message": "Invalid base64 content.",
             "translation": "Invalid base64 content.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Metadata upgrade is still in progress.",
+            "message": "Metadata upgrade is still in progress.",
+            "translation": "Metadata upgrade is still in progress.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Tag group not found.",
+            "message": "Tag group not found.",
+            "translation": "Tag group not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document type ID is required.",
+            "message": "Document type ID is required.",
+            "translation": "Document type ID is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Metadata identifiers are unavailable.",
+            "message": "Metadata identifiers are unavailable.",
+            "translation": "Metadata identifiers are unavailable.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Name must contain 1 to 300 characters.",
+            "message": "Name must contain 1 to 300 characters.",
+            "translation": "Name must contain 1 to 300 characters.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "A public metadata ID is required.",
+            "message": "A public metadata ID is required.",
+            "translation": "A public metadata ID is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Field not found.",
+            "message": "Field not found.",
+            "translation": "Field not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid Tag type.",
+            "message": "Invalid Tag type.",
+            "translation": "Invalid Tag type.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Field unit is too long.",
+            "message": "Field unit is too long.",
+            "translation": "Field unit is too long.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid field type.",
+            "message": "Invalid field type.",
+            "translation": "Invalid field type.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Exactly one Tag ID or field ID is required.",
+            "message": "Exactly one Tag ID or field ID is required.",
+            "translation": "Exactly one Tag ID or field ID is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document type attribute not found.",
+            "message": "Document type attribute not found.",
+            "translation": "Document type attribute not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Select between 1 and 64 document type templates.",
+            "message": "Select between 1 and 64 document type templates.",
+            "translation": "Select between 1 and 64 document type templates.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File ID and Tag ID are required.",
+            "message": "File ID and Tag ID are required.",
+            "translation": "File ID and Tag ID are required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File ID and field ID are required.",
+            "message": "File ID and field ID are required.",
+            "translation": "File ID and field ID are required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Exactly one typed value is required.",
+            "message": "Exactly one typed value is required.",
+            "translation": "Exactly one typed value is required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Date must use YYYY-MM-DD.",
+            "message": "Date must use YYYY-MM-DD.",
+            "translation": "Date must use YYYY-MM-DD.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File ID and document type ID are required.",
+            "message": "File ID and document type ID are required.",
+            "translation": "File ID and document type ID are required.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

@@ -127,7 +127,15 @@ func TestDocumentNoteTitlesProductionMigration(t *testing.T) {
 		_ = source.Close()
 		t.Fatal(err)
 	}
-	defer migration.Close()
+	defer func() {
+		sourceErr, databaseErr := migration.Close()
+		if sourceErr != nil {
+			t.Error(sourceErr)
+		}
+		if databaseErr != nil {
+			t.Error(databaseErr)
+		}
+	}()
 	previous, err := source.Prev(version)
 	if err != nil {
 		t.Fatal(err)
@@ -139,7 +147,11 @@ func TestDocumentNoteTitlesProductionMigration(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer client.Close()
+	defer func() {
+		if err := client.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
 	spacex := client.Space.Create().SetName("Existing notes").SaveX(ctx)
 	file := client.File.Create().SetSpaceID(spacex.ID).SetName("existing.pdf").
@@ -148,7 +160,11 @@ func TestDocumentNoteTitlesProductionMigration(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		if err := db.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
 	// SQL is intentional: the previous schema cannot use the newly generated title column.
 	_, err = db.Exec(`INSERT INTO document_notes
 		(id, public_id, body, space_id, file_id, replaced_by_id) VALUES

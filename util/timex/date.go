@@ -33,11 +33,11 @@ func NewDateToday() Date {
 }
 
 func (qd Date) MarshalJSON() ([]byte, error) {
-	if qd.Time.IsZero() {
+	if qd.IsZero() {
 		return []byte("\"\""), nil
 	}
 
-	year, month, day := qd.Time.Date()
+	year, month, day := qd.Date()
 	return []byte(fmt.Sprintf("\"%04d%02d%02d\"", year, month, day)), nil
 }
 
@@ -47,7 +47,7 @@ func (qd *Date) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	dataStr = strings.Replace(dataStr, "-", "", -1) // remove dashs to get uniform format 20160102
+	dataStr = strings.ReplaceAll(dataStr, "-", "") // remove dashs to get uniform format 20160102
 
 	qt, err := time.Parse(`"`+"20060102"+`"`, dataStr)
 	if err != nil {
@@ -69,7 +69,7 @@ func (qd *Date) Scan(value interface{}) error {
 	// IsZero check because if we set a timezone for zero values, the next IsZero check wouldn't return true
 	// IsZero needs a zero value in UTC to return true and if we set the timezone, but keep the time of day at 0 o'clock, it's not a zero value in UTC anymore
 	// so be careful when working with zero values, AddDate might not work as expected as the timezone would still be UTC
-	if !qd.Time.IsZero() && qd.Time.Location().String() == "" {
+	if !qd.IsZero() && qd.Location().String() == "" {
 		// set local time zone because for example DATE type in db has no timezone and is handled as UTC when the data comes from the db
 		// but we handle everything with Local time in this package
 
@@ -94,7 +94,7 @@ func (qd Date) StructValue() interface{} {
 }
 
 func (qd *Date) String(languageBCP47 string) string {
-	year, month, day := qd.Time.Date()
+	year, month, day := qd.Date()
 	switch languageBCP47 {
 	case "de", "fr", "it":
 		return fmt.Sprintf("%02d.%02d.%d", day, month, year)

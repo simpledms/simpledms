@@ -167,7 +167,7 @@ func (qq *ListFilterPropertiesPartial) Widget(
 }
 
 func (qq *ListFilterPropertiesPartial) filter(state *ListDirPartialState, propertyx *enttenant.Property, currentDirID string) widget.IWidget {
-	valueIndex := slices.IndexFunc(state.PropertiesFilterState.PropertyValues, func(value PropertyFilterValue) bool {
+	valueIndex := slices.IndexFunc(state.PropertyValues, func(value PropertyFilterValue) bool {
 		return value.PropertyID == propertyx.ID
 	})
 	var value PropertyFilterValue
@@ -177,7 +177,7 @@ func (qq *ListFilterPropertiesPartial) filter(state *ListDirPartialState, proper
 			// TODO default operator
 		}
 	} else {
-		value = state.PropertiesFilterState.PropertyValues[valueIndex]
+		value = state.PropertyValues[valueIndex]
 	}
 
 	switch propertyx.Type {
@@ -213,8 +213,7 @@ var (
 	operatorValueLessThan    = operatorValue("less_than")
 	operatorValueBetween     = operatorValue("between")
 
-	checkboxOperatorValueIsChecked    = operatorValue("is_checked")
-	checkboxOperatorValueIsNotChecked = operatorValue("is_not_checked")
+	checkboxOperatorValueIsChecked = operatorValue("is_checked")
 )
 
 func (qq *ListFilterPropertiesPartial) renderTextFilter(propertyx *enttenant.Property, value PropertyFilterValue, currentDirID string) widget.IWidget {

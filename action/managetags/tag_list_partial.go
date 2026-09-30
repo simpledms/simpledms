@@ -154,7 +154,8 @@ func (qq *TagListPartial) listItem(
 	var childItems []widget.IWidget
 	var htmxAttrs widget.HTMXAttrs
 
-	if tagx.Type == tagtype.Group {
+	switch tagx.Type {
+	case tagtype.Group:
 		icon = widget.NewIcon("folder_special")
 		// TODO prefetch or via view?
 		childCount := tagx.QueryChildren().CountX(ctx)
@@ -212,7 +213,7 @@ func (qq *TagListPartial) listItem(
 			}
 			trailing = widget.NewIcon("keyboard_arrow_down")
 		}
-	} else if tagx.Type == tagtype.Super {
+	case tagtype.Super:
 		icon = widget.NewIcon("label_important")
 
 		supportingText = widget.T("Super tag")
@@ -220,7 +221,7 @@ func (qq *TagListPartial) listItem(
 
 		// trailing = wx.NewIcon("keyboard_arrow_right")
 		// radioGroupName = qq.id() + "RadioGroup"
-	} else {
+	default:
 		icon = widget.NewIcon("label")
 	}
 

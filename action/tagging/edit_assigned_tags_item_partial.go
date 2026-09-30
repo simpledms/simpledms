@@ -137,7 +137,8 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 
 	var childItems []widget.IWidget
 
-	if tagx.Type == tagtype.Group {
+	switch tagx.Type {
+	case tagtype.Group:
 		// TODO find something betteer
 		// folder_special
 		// note_stack
@@ -192,7 +193,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 		}
 
 		isCollapsible = true
-	} else if tagx.Type == tagtype.Super {
+	case tagtype.Super:
 		icon = widget.NewIcon("label_important")
 
 		supportingText = "Super tag"
@@ -229,7 +230,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 			},
 			IsChecked: isCheckedFn(tagx.ID),
 		}
-	} else {
+	default:
 		icon = widget.NewIcon("label")
 		trailing = &widget.Checkbox{
 			HTMXAttrs: widget.HTMXAttrs{

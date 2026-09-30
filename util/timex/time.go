@@ -74,7 +74,7 @@ func (qd *Time) Scan(value interface{}) error {
 	// IsZero check because if we set a timezone for zero values, the next IsZero check wouldn't return true
 	// IsZero needs a zero value in UTC to return true and if we set the timezone, but keep the time of day at 0 o'clock, it's not a zero value in UTC anymore
 	// so be careful when working with zero values, AddDate might not work as expected as the timezone would still be UTC
-	if !qd.Time.IsZero() && qd.Time.Location().String() == "" {
+	if !qd.IsZero() && qd.Location().String() == "" {
 		// set local time zone because for example DATE type in db has no timezone and is handled as UTC when the data comes from the db
 		// but we handle everything with Local time in this package
 
@@ -94,5 +94,5 @@ func (qd Time) Value() (driver.Value, error) {
 }
 
 func (qd Time) FormatForDatabaseQuery() string {
-	return qd.Time.Format("15:04:05")
+	return qd.Format("15:04:05")
 }

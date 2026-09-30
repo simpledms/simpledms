@@ -84,10 +84,7 @@ func (qq *ManageDocumentTypesPage) Handler(
 		Content:    qq.actions.DocumentTypePage.WidgetHandler(rw, req, ctx, id64),
 	}
 
-	renderFullPage := false
-	if req.Header.Get("HX-Request") == "" {
-		renderFullPage = true
-	}
+	renderFullPage := req.Header.Get("HX-Request") == ""
 
 	if renderFullPage {
 		viewx = partial2.NewBase(widget.T("Manage document types"), viewx)

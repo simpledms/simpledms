@@ -153,7 +153,7 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 	renderer := ui.NewRenderer(templates)
 	i18nx := i18n.NewI18n()
 
-	fileSystem := filesystem.NewFileSystem(metaPath)
+	fileSystem := filesystem.NewFileSystem(metaPath) //nolint:staticcheck // S3FileSystem requires the folder adapter.
 	s3FileSystem := filesystem.NewS3FileSystem(
 		nil,
 		"",

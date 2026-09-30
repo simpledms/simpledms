@@ -1,10 +1,11 @@
 # MCP durable rules
 
-Status: slices 01–04 implemented; automated review passed, remaining verification pending
+Status: slices 01–04 reviewed; slice 05 metadata-management coverage added, verification pending
 
 Source: [specification](spec.md). Delivery: [plan](plan.md). These are the durable rules newly
 needed at the shared-command/MCP boundary. Slice 01 covers M1/M2/M3/M6, with their write and
-filing extensions implemented in slices 02–04. Existing storage rules remain in their linked owners.
+filing extensions implemented in slices 02–04. Slice 05 applies M1–M4 to metadata management and
+composite attribute references. Existing storage rules remain in their linked owners.
 The slice checklists reference these IDs rather than define another competing contract.
 
 ## M1 — Credential authority is bounded and current

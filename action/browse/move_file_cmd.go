@@ -11,6 +11,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/entx"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -48,7 +49,7 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	// destDir := ctx.TenantCtx().TTx.File.GetX(ctx, data.CurrentDirID)
 	destDir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
 	fileWithParentx := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
-	fileWithParent := qq.infra.FileRepo.GetXX(fileWithParentx)
+	fileWithParent := filemodel.NewFile(fileWithParentx)
 
 	fileWithParent, err = qq.infra.FileSystem().Move(ctx, destDir, fileWithParent, data.Filename, data.NewDirName)
 	if err != nil {

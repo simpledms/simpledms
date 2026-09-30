@@ -156,11 +156,8 @@ func (qq *SpaceCardsPartial) card(
 	}
 
 	var subhead *widget.Text
-	if spacex.IsFolderMode {
-		// subhead = wx.T("Folder mode") // TODO rename to Hybrid mode?
-	} else {
-		// subhead = wx.T("Default mode")
-	}
+	// subhead = wx.T("Folder mode") // TODO rename to Hybrid mode?
+	// subhead = wx.T("Default mode")
 
 	return &widget.Card{
 		Style:    widget.CardStyleFilled,

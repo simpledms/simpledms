@@ -130,7 +130,7 @@ func (qq *NavigationRailItem) GetDOMID() string {
 }
 
 func (qq *NavigationRailItem) HasNavigation() bool {
-	return !qq.IsDisabled && (qq.Href != "" || qq.HTMXAttrs.IsLink())
+	return !qq.IsDisabled && (qq.Href != "" || qq.IsLink())
 }
 
 func (qq *NavigationRailItem) ShouldRenderAnchor() bool {
@@ -148,8 +148,8 @@ func (qq *NavigationRailItem) GetHref() string {
 	if qq.Href != "" {
 		return qq.Href
 	}
-	if qq.HTMXAttrs.IsPageLink() {
-		return qq.HTMXAttrs.GetHxGet()
+	if qq.IsPageLink() {
+		return qq.GetHxGet()
 	}
 	return ""
 }

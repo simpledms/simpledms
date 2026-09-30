@@ -29,7 +29,8 @@ func TestMCPBearerCredentialCannotCrossSpaces(t *testing.T) {
 	aClient := a.connect(t, server.URL+"/mcp")
 
 	var bID, bRootID, bFileID, aFiledID, bFiledID string
-	var aTagID, bTagID, bGroupID, aPropertyID, bPropertyID, aTypeID, bTypeID string
+	var aTagID, aSuperID, bTagID, bGroupID, bSuperID, bSimpleID string
+	var aPropertyID, bPropertyID, aTypeID, bTypeID string
 	if err := withTenantContext(t, h, a.account, a.tenant, a.db, func(
 		_ *entmain.Tx, _ *enttenant.Tx, tc *ctxx.TenantContext,
 	) error {
@@ -60,6 +61,18 @@ func TestMCPBearerCredentialCannotCrossSpaces(t *testing.T) {
 		if err != nil {
 			return err
 		}
+		as, err := taggingmodel.NewTagService().Create(asc, asc.Space.ID, 0, "A super", tagtype.Super)
+		if err != nil {
+			return err
+		}
+		bs, err := taggingmodel.NewTagService().Create(bsc, bsc.Space.ID, 0, "B super", tagtype.Super)
+		if err != nil {
+			return err
+		}
+		bc, err := taggingmodel.NewTagService().Create(bsc, bsc.Space.ID, 0, "B simple", tagtype.Simple)
+		if err != nil {
+			return err
+		}
 		ap, err := propertymodel.NewPropertyService().Create(asc, asc.Space.ID, "A field", fieldtype.Text, "")
 		if err != nil {
 			return err
@@ -76,7 +89,14 @@ func TestMCPBearerCredentialCannotCrossSpaces(t *testing.T) {
 		if err != nil {
 			return err
 		}
-		aTagID, bTagID, bGroupID = at.PublicID.String(), bt.PublicID.String(), bg.PublicID.String()
+		if _, err := by.CreateTagAttribute(bsc, "B department", bg.ID, false); err != nil {
+			return err
+		}
+		if _, err := by.CreatePropertyAttribute(bsc, bp.ID, false); err != nil {
+			return err
+		}
+		aTagID, aSuperID = at.PublicID.String(), as.PublicID.String()
+		bTagID, bGroupID, bSuperID, bSimpleID = bt.PublicID.String(), bg.PublicID.String(), bs.PublicID.String(), bc.PublicID.String()
 		aPropertyID, bPropertyID = ap.PublicID.String(), bp.PublicID.String()
 		aTypeID, bTypeID = ay.Data.PublicID.String(), by.Data.PublicID.String()
 		file := bsc.TTx.File.Create().SetName("b-inbox.txt").SetIsDirectory(false).
@@ -141,6 +161,9 @@ func TestMCPBearerCredentialCannotCrossSpaces(t *testing.T) {
 		t.Fatal("B credential did not see its own document and directory")
 	}
 	aBefore := callMCP(t, aClient, "get_file", map[string]any{"file_id": a.fileID})
+	bTypeBefore := callMCP(t, bClient, "get_document_type", map[string]any{
+		"document_type_id": bTypeID,
+	})
 
 	if got := callMCP(t, aClient, "get_space", map[string]any{}); got["space_id"] != a.spaceID {
 		t.Fatalf("A credential changed space: %v", got)
@@ -190,6 +213,50 @@ func TestMCPBearerCredentialCannotCrossSpaces(t *testing.T) {
 	} {
 		assertMCPToolError(t, aClient, metadata.name, metadata.args)
 	}
+	for _, metadata := range []struct {
+		name string
+		args map[string]any
+	}{
+		{"edit_tag", map[string]any{"tag_id": bTagID, "name": "must-not-edit"}},
+		{"delete_tag", map[string]any{"tag_id": bTagID}},
+		{"create_tag", map[string]any{"name": "must-not-create", "type": "Simple", "group_id": bGroupID}},
+		{"move_tag_to_group", map[string]any{"tag_id": aTagID, "group_id": bGroupID}},
+		{"edit_property", map[string]any{"property_id": bPropertyID, "name": "must-not-edit"}},
+		{"delete_property", map[string]any{"property_id": bPropertyID}},
+		{"rename_document_type", map[string]any{"document_type_id": bTypeID, "name": "must-not-edit"}},
+		{"delete_document_type", map[string]any{"document_type_id": bTypeID}},
+		{"assign_sub_tag", map[string]any{"super_tag_id": aSuperID, "sub_tag_id": bSimpleID}},
+		{"assign_sub_tag", map[string]any{"super_tag_id": bSuperID, "sub_tag_id": aTagID}},
+		{"unassign_sub_tag", map[string]any{"super_tag_id": bSuperID, "sub_tag_id": aTagID}},
+		{"create_and_assign_tag", map[string]any{
+			"name": "must-not-create", "type": "Simple", "file_id": bFileID,
+		}},
+		{"create_document_type_tag_attribute", map[string]any{
+			"document_type_id": bTypeID, "tag_id": bGroupID, "name": "must-not-create",
+		}},
+		{"create_document_type_property_attribute", map[string]any{
+			"document_type_id": bTypeID, "property_id": bPropertyID,
+		}},
+		{"create_document_type_tag_attribute", map[string]any{
+			"document_type_id": aTypeID, "tag_id": bGroupID, "name": "must-not-create",
+		}},
+		{"create_document_type_property_attribute", map[string]any{
+			"document_type_id": aTypeID, "property_id": bPropertyID,
+		}},
+		{"edit_document_type_tag_attribute", map[string]any{
+			"document_type_id": bTypeID, "tag_id": bGroupID, "name": "must-not-edit",
+			"is_name_giving": false,
+		}},
+		{"edit_document_type_property_attribute", map[string]any{
+			"document_type_id": bTypeID, "property_id": bPropertyID,
+			"is_name_giving": true,
+		}},
+		{"delete_document_type_attribute", map[string]any{
+			"document_type_id": bTypeID, "tag_id": bGroupID,
+		}},
+	} {
+		assertMCPToolErrorCode(t, aClient, metadata.name, metadata.args, "not_found", "not found")
+	}
 
 	if files := callMCP(t, bClient, "search_files", map[string]any{})["files"]; !hasMCPID(files, "file_id", bFiledID) {
 		t.Fatal("B credential did not see its filed document")
@@ -235,6 +302,18 @@ func TestMCPBearerCredentialCannotCrossSpaces(t *testing.T) {
 	}
 	if finalB["document_type"].(map[string]any)["document_type_id"] != bTypeID {
 		t.Fatalf("rejected A calls changed B type: %v", finalB)
+	}
+	if !hasMCPID(callMCP(t, bClient, "list_tags", map[string]any{})["tags"], "tag_id", bTagID) ||
+		!hasMCPID(callMCP(t, bClient, "list_tags", map[string]any{})["tags"], "tag_id", bGroupID) {
+		t.Fatal("rejected A metadata calls changed B Tag definitions")
+	}
+	if !hasMCPID(callMCP(t, bClient, "list_properties", map[string]any{})["properties"], "property_id", bPropertyID) ||
+		!hasMCPID(callMCP(t, bClient, "list_document_types", map[string]any{})["document_types"], "document_type_id", bTypeID) {
+		t.Fatal("rejected A metadata calls changed B definitions")
+	}
+	bType := callMCP(t, bClient, "get_document_type", map[string]any{"document_type_id": bTypeID})
+	if !reflect.DeepEqual(bType, bTypeBefore) {
+		t.Fatalf("rejected A attribute calls changed B attributes: %v", bType)
 	}
 	if len(callMCP(t, bClient, "list_directory", map[string]any{})["children"].([]any)) != 2 {
 		t.Fatal("rejected A calls changed B directory state")

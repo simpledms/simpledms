@@ -1,7 +1,7 @@
 # MCP document intake and filing
 
 Date: 2026-09-18  
-Status: slices 01–04 implemented; automated review passed, remaining verification pending
+Status: slices 01–04 reviewed; metadata management implemented in slice 05, verification pending
 
 ## Outcome
 
@@ -20,7 +20,8 @@ These choices allow planning without blocking questions; they are not additional
 - Initial clients can configure a bearer header. Use the proposed account-owned, revocable,
   single-Space MCP credential, with read-only/read-write modes. OAuth onboarding is later work.
 - “Tagging, properties, document types” initially means discovering and applying existing
-  definitions. Users create definitions or import templates through the current browser UI.
+  definitions. Slice 05 extends this with the browser's definition management and library import
+  operations, as requested on 2026-09-29.
 - “Uploads” initially means new documents sent directly through an MCP tool into Inbox.
   Use a bounded base64 argument, with a proposed 10 MiB decoded ceiling. Large-file streaming,
   URL import, batches, and uploading a new version have separate later contracts.
@@ -43,6 +44,12 @@ are in the catalog; the more specific contracts below override its earlier explo
 | Apply document type | `set_document_type`, `clear_document_type` |
 | Filing destinations | `list_directory`, `create_directory` |
 | Finish filing | `file_inbox_document`, `mark_inbox_file_done`, `search_files` |
+| Manage Tags | `create_tag`, `edit_tag`, `delete_tag`, `create_and_assign_tag` |
+| Organize Tags | `move_tag_to_group`, `assign_sub_tag`, `unassign_sub_tag` |
+| Manage fields | `create_property`, `edit_property`, `delete_property` |
+| Manage document types | `create_document_type`, `rename_document_type`, `delete_document_type` |
+| Configure attributes | `create_document_type_tag_attribute`, `edit_document_type_tag_attribute`, `create_document_type_property_attribute`, `edit_document_type_property_attribute`, `delete_document_type_attribute` |
+| Library templates | `list_document_type_templates`, `import_document_types` |
 
 ### Connect and inspect
 
@@ -123,6 +130,39 @@ Each tool is its own transaction. A sequence assigning a type, Tag, and properti
 atomic batch. Report each committed result so a client can inspect and resume an interrupted
 classification sequence. Do not add a generic metadata patch language.
 
+### Metadata management contract
+
+Slice 05 exposes the existing metadata-management model operations. Mutations require a read/write
+credential and current access to its bound Space, with the same model/privacy rules as the UI.
+Creation takes no tenant/Space selector. Every existing definition, document, group, and composition
+reference is resolved inside that Space; broader account membership cannot expand the token.
+
+- Names must be nonblank and at most 300 Unicode characters; field units are bounded to 300.
+  Public references are required where applicable and bounded to 100 bytes.
+- Tag creation supports `Simple`, `Group`, and `Super` (composed) types and an optional group public
+  ID. Editing changes only the name. `move_tag_to_group` accepts an optional group ID; omission or
+  an empty value removes grouping. Groups cannot be nested. Composition connects a composed Tag
+  to simple sub-Tags. `create_and_assign_tag` creates an assignable Tag and assigns it to the
+  document in one transaction, without leaving a definition behind on failure.
+- Field creation supports `Text`, `Number`, `Money`, `Date`, and `Checkbox`. Editing changes name
+  and optionally unit: an omitted unit is preserved and an explicit empty string clears it. Type
+  changes are unavailable, matching the UI's protection of stored values.
+- Document types can be created, renamed, and deleted. Attribute creation/editing/removal uses
+  the document-type public ID together with exactly one Tag-group or field public ID. These pairs
+  are already unique in the schema, so no standalone attribute identifier is exposed. Tag
+  attributes have editable name and name-giving state; field attributes have editable name-giving
+  state. Edit tools require the boolean explicitly, including `false`. Protected/disabled/required
+  flags remain descriptive where the UI provides no editing operation.
+- Deletion retains existing foreign-key restrictions. Tools do not clear classification, field
+  values, or dependent definitions to force a deletion. Duplicate/in-use constraint failures
+  return an ordinary metadata business error, with no raw SQL or partial success.
+- Template discovery returns existing library keys and localized names. Import accepts 1–64
+  advertised keys and requires a Space with no metadata, as the UI does. Unknown keys fail before
+  any import is performed. Imported definitions use the same public-ID defaults as UI creation.
+
+Read discovery remains available to read-only credentials. Results are committed metadata
+projections, and renaming preserves public identity. See the [attribute-reference ADR][attribute-adr].
+
 ### Filing contract
 
 `mark_inbox_file_done(file_id)` handles completion without a move, including non-folder Spaces.
@@ -149,10 +189,13 @@ results instead of creating an independent index or loading all rows.
 4. A client can finish processing in folder and non-folder modes, find the filed document, and
    observe that it disappeared from Inbox. Failed filing leaves the original state intact.
 5. Each journey preserves relevant browser desktop/mobile behaviour, scoped authorization,
-   bounded results, transactional error handling, and the linked durable rules.
+    bounded results, transactional error handling, and the linked durable rules.
+6. A writable client can manage the same Tag/field/document-type configuration as the browser,
+   including grouping, composition, attributes, and library import, without accessing another Space.
 
 Later catalog candidates include notes, standalone rename/move, Trash, version merges/uploads,
-definition management, archive extraction, URL imports, binary downloads, and multi-Space grants.
+archive extraction, URL imports, binary downloads, and multi-Space grants.
 
 [architecture]: ../../specs/20260918_mcp_server.md
 [catalog]: ../../specs/20260918_mcp_tool_catalog.md
+[attribute-adr]: ../../adrs/2026.09-mcp_metadata_attribute_references.md

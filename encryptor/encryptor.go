@@ -20,7 +20,7 @@ func NewEncryptor() *Encryptor {
 
 func Encrypt(data []byte) ([]byte, error) {
 	if NilableX25519MainIdentity == nil {
-		return nil, fmt.Errorf("App not unlocked yet, please try again later.")
+		return nil, fmt.Errorf("app not unlocked yet, please try again later")
 	}
 
 	ciphertext := &bytes.Buffer{}
@@ -50,7 +50,7 @@ func Encrypt(data []byte) ([]byte, error) {
 
 func Decrypt(data []byte) ([]byte, error) {
 	if NilableX25519MainIdentity == nil {
-		return nil, fmt.Errorf("App not unlocked yet, please try again later.")
+		return nil, fmt.Errorf("app not unlocked yet, please try again later")
 	}
 
 	plaintext := &bytes.Buffer{}

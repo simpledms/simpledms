@@ -23,11 +23,7 @@ type Container struct {
 
 func (qq *Container) GetClass() string {
 	classes := []string{}
-	if qq.MaxWidth {
-		// classes = append(classes, "max")
-	}
-	if qq.Scroll {
-		// classes = append(classes, "scroll")
-	}
+	// classes = append(classes, "max")
+	// classes = append(classes, "scroll")
 	return strings.Join(classes, " ")
 }

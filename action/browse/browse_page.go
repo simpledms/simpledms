@@ -78,10 +78,7 @@ func (qq *BrowsePage) render(
 	ctx ctxx.Context,
 	viewx renderable.Renderable,
 ) {
-	renderFullPage := false
-	if req.Header.Get("HX-Request") == "" {
-		renderFullPage = true
-	}
+	renderFullPage := req.Header.Get("HX-Request") == ""
 
 	if renderFullPage {
 		viewx = partial2.NewBase(widget.T("Files"), viewx)

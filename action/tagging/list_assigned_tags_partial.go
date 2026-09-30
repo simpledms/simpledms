@@ -63,12 +63,13 @@ func (qq *ListAssignedTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.R
 	var widget renderable.Renderable
 	tags := qq.tags(ctx, data)
 
-	if data.Layout == "chips" {
+	switch data.Layout {
+	case "chips":
 		widget = qq.Chips(ctx, data, tags)
-	} else if data.Layout == "list" || data.Layout == "" {
+	case "list", "":
 		hxTarget := req.URL.Query().Get("hx-target")
 		widget = qq.List(ctx, data.FileID, tags, hxTarget)
-	} else {
+	default:
 		log.Println("layout not supported, was", data.Layout)
 		return e.NewHTTPErrorf(http.StatusBadRequest, "layout not supported")
 	}
@@ -194,7 +195,7 @@ func (qq *ListAssignedTagsPartial) Chips(
 			ID: id,
 		},
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:    qq.Config.Endpoint(),
+			HxPost:    qq.Endpoint(),
 			HxTrigger: event.HxTrigger(event.TagUpdated),
 			HxVals:    util.JSON(data),
 			HxTarget:  "#" + id,

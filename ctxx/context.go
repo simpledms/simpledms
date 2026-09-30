@@ -17,12 +17,13 @@ type Context interface {
 	IsSpaceCtx() bool
 }
 
-// TODO is struct{} better than string value?
-var (
-	visitorCtxKey = "visitor_ctx"
-	mainCtxKey    = "main_ctx"
-	tenantCtxKey  = "tenant_ctx"
-	spaceCtxKey   = "space_ctx"
+type contextKey string
+
+const (
+	visitorCtxKey contextKey = "visitor_ctx"
+	mainCtxKey    contextKey = "main_ctx"
+	tenantCtxKey  contextKey = "tenant_ctx"
+	spaceCtxKey   contextKey = "space_ctx"
 )
 
 // Necessary in case ctx gets wrapped with value by another library; in this case, SpaceCtx is

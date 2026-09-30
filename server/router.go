@@ -5,7 +5,6 @@ import (
 	"errors"
 	"io"
 	"log"
-	"net"
 	"net/http"
 	"net/netip"
 	"net/url"
@@ -280,12 +279,12 @@ func (qq *Router) wrapCommand(handlerFn handlerFn) handlerFn {
 		// be careful if new middleware, for example for permissions,
 		// get added; this could be a vulnerability depending on the
 		// implementation
-		partialHandlerFn := qq.handlerMap[endpoint].Handler
-		if partialHandlerFn == nil {
+		partialHandler, hasHandler := qq.handlerMap[endpoint]
+		if !hasHandler {
 			log.Println("no handler for", endpoint)
 			return errors.New("no handler for " + endpoint)
 		}
-		err = partialHandlerFn(rw, req, ctx)
+		err = partialHandler.Handler(rw, req, ctx)
 		if err != nil {
 			return err
 		}
@@ -638,57 +637,6 @@ func (qq *Router) logRecoveredPanic(req *http.Request, recovered any) {
 	log.Println("trying to recover and rollback transaction")
 }
 
-func (qq *Router) canonicalRedirectURL(req *http.Request) (string, bool) {
-	if !qq.shouldEnforceCanonicalHost(req.URL.Path) {
-		return "", false
-	}
-
-	publicOrigin := qq.infra.SystemConfig().PublicOrigin()
-	if publicOrigin == "" {
-		return "", false
-	}
-
-	publicOriginURL, err := url.Parse(publicOrigin)
-	if err != nil {
-		log.Println(err)
-		return "", false
-	}
-
-	targetHost := strings.ToLower(publicOriginURL.Hostname())
-	if targetHost == "" {
-		return "", false
-	}
-
-	requestHost := strings.ToLower(req.Host)
-	if host, _, errSplit := net.SplitHostPort(requestHost); errSplit == nil {
-		requestHost = host
-	}
-
-	if requestHost == targetHost {
-		return "", false
-	}
-
-	targetURL := *publicOriginURL
-	targetURL.Path = req.URL.Path
-	targetURL.RawPath = req.URL.RawPath
-	targetURL.RawQuery = req.URL.RawQuery
-	targetURL.Fragment = ""
-
-	return targetURL.String(), true
-}
-
-func (qq *Router) shouldEnforceCanonicalHost(path string) bool {
-	if path == "/" {
-		return true
-	}
-
-	if strings.HasPrefix(path, "/-/auth/") {
-		return true
-	}
-
-	return false
-}
-
 func (qq *Router) handleError(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
@@ -825,8 +773,6 @@ func (qq *Router) handleError(
 			log.Println(err)
 		}
 	}
-
-	return
 }
 
 // bool is isRedirected
@@ -902,17 +848,15 @@ func (qq *Router) context(
 		if len(matchesOrg) > 1 {
 			// TODO is it also possible to get value by group name?
 			tenantID = matchesOrg[1]
-		} else {
-			// not found, can be a valid request
 		}
+		// not found, can be a valid request
 
 		matches := spaceIDRegex.FindStringSubmatch(currentURL.Path)
 		if len(matches) > 1 {
 			// TODO is it also possible to get value by group name?
 			spaceID = matches[1]
-		} else {
-			// not found, can be a valid request
 		}
+		// not found, can be a valid request
 	}
 
 	mainCtx := ctxx.NewMainContext(visitorCtx, accountm.Data, qq.i18n, qq.mainDB, qq.tenantDBs, isReadOnly)

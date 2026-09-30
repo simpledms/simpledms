@@ -90,7 +90,11 @@ func TestDevelopmentSchemaCreateAddsIndexedColumnsWithoutRebuildingTables(t *tes
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer rows.Close()
+	defer func() {
+		if err := rows.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
 	var attributeCount int
 	if !rows.Next() {
 		t.Fatal("attribute count query returned no result")

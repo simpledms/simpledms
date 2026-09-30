@@ -17,9 +17,7 @@ type TabBar struct {
 
 func (qq *TabBar) GetClass() string {
 	var classes []string
-	if !qq.IsSecondary {
-		// classes = append(classes, "min")
-	}
+	// classes = append(classes, "min")
 	return strings.Join(classes, " ")
 }
 

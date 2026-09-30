@@ -290,9 +290,9 @@ func (qq *ListDirPartial) Widget(
 ) *widget.ListDetailLayout {
 	// dir := ctx.TenantCtx().TTx.File.GetX(ctx, fileID)
 	dirWithParentx := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(fileID))).OnlyX(ctx)
-	dirWithParent := qq.infra.FileRepo.GetXX(dirWithParentx)
+	dirWithParent := filemodel.NewFile(dirWithParentx)
 
-	if dirWithParent.Data.IsDirectory == false {
+	if !dirWithParent.Data.IsDirectory {
 		// TODO handle error... return container with error message for user? but should also be 404
 		return &widget.ListDetailLayout{}
 	}
@@ -931,7 +931,7 @@ func (qq *ListDirPartial) filterTagsBtn(
 	currentDirID string,
 ) *widget.Container {
 	chipState := widget.AssistChipStateDefault
-	if len(listDirState.ListFilterTagsPartialState.CheckedTagIDs) > 0 {
+	if len(listDirState.CheckedTagIDs) > 0 {
 		chipState = widget.AssistChipStateHighlighted
 	}
 
@@ -979,7 +979,7 @@ func (qq *ListDirPartial) filterTagsBtn(
 			LeadingIcon: "label",
 			Badge: &widget.Badge{
 				IsInline: true,
-				Value:    len(listDirState.ListFilterTagsPartialState.CheckedTagIDs),
+				Value:    len(listDirState.CheckedTagIDs),
 			},
 			State: chipState,
 			HTMXAttrs: widget.HTMXAttrs{

@@ -126,7 +126,10 @@ func (qq *UploadFilesCmd) processSharedFiles(rw httpx.ResponseWriter, req *httpx
 		}
 
 		if part.FormName() != "file" {
-			part.Close()
+			if err := part.Close(); err != nil {
+				log.Println(err)
+				return "", sharedMultipartReadError(err)
+			}
 			continue
 		}
 

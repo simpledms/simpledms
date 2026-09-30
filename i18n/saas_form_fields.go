@@ -6,6 +6,8 @@ import (
 )
 
 // gotext helper for SaaS-specific form labels.
+//
+//nolint:unused // gotext discovers these translation labels without a runtime call.
 func saasFormFieldsGotextHelper() {
 	pp := message.NewPrinter(language.English)
 	pp.Sprintf("Sign up")

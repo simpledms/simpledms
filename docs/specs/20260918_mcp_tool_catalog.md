@@ -298,14 +298,13 @@ common pagination fields where the architecture already defines them. Optional f
 - Purpose: obtain original bytes when OCR text is insufficient. Existing browser links and
   internal encrypted-storage object keys are not an MCP download API.
 
-## Later: configuration tools
+## Implemented: metadata configuration tools
 
-These can be useful for a dedicated setup workflow, but add many choices to a document assistant.
-Prefer existing Tags, fields, and document types in the first release. All configuration changes
-need their current model permissions and public identifiers, regardless of whether the UI shows
-a management button.
+Added in slice 05 at the user's request. All configuration changes retain the UI's model/privacy
+rules and the credential's read/write mode and single-Space scope. The [management contract][management]
+specifies bounds, constraint behavior, and composite attribute references.
 
-| Proposed tools | Current commands / model |
+| Tools | Current commands / model |
 | --- | --- |
 | `create_tag`, `edit_tag`, `delete_tag` | [Tag commands][tag-actions], `TagService` |
 | `create_and_assign_tag` | [`CreateAndAssignTagCmd`][create-assign-tag] |
@@ -314,10 +313,12 @@ a management button.
 | `create_property`, `edit_property`, `delete_property` | [Property commands][properties] |
 | `create_document_type`, `rename_document_type` | [Type commands][document-types] |
 | `delete_document_type` | [Type commands][document-types] |
-| `import_document_types` | [`ImportFromLibraryCmd`][import-types] |
-| Document-type attribute editing | [Attribute commands][document-types] |
+| `list_document_type_templates`, `import_document_types` | [`ImportFromLibraryCmd`][import-types], library service |
+| `create_document_type_tag_attribute`, `edit_document_type_tag_attribute` | [Tag attribute commands][document-types] |
+| `create_document_type_property_attribute`, `edit_document_type_property_attribute` | [Field attribute commands][document-types] |
+| `delete_document_type_attribute` | [Attribute commands][document-types] |
 
-Suggested contracts:
+Contracts:
 
 - Tag creation takes a name, existing Tag type, and optional group public ID; edit takes an ID and
   name. Group moves and composition take explicit public-ID pairs. Return the resulting Tag data.
@@ -327,10 +328,18 @@ Suggested contracts:
 - Property creation takes name/type/unit; editing takes ID/name/unit. Current property editing
   intentionally cannot change its type. Return the property definition.
 - Document-type creation/rename takes a name; deletion takes an ID. Attribute editing needs a
-  separate typed contract for Tag versus property attributes rather than a generic update map.
+  separate typed contract for Tag versus property attributes. Select an attribute with the
+  document-type public ID and its Tag/field public ID, rather than an internal attribute ID.
 - Library import takes the existing template keys and returns imported definitions. Template
   keys are library identifiers, not numeric database IDs; provide template discovery when exposing
   this operation so the client can choose valid keys.
+
+`delete_document_type_attribute` takes `document_type_id` and exactly one `tag_id` or `property_id`.
+Attribute mutations return the updated document-type projection. Definition deletions return
+`deleted: true` after commit. Field editing preserves an omitted unit and clears an explicit
+empty unit; changing a field's type is unavailable.
+
+[management]: ../features/2026.09-mcp_server/spec.md#metadata-management-contract
 
 ## Existing commands that should stay outside the initial tool set
 

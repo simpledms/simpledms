@@ -675,7 +675,7 @@ func (qq *PasskeyService) nilableString(val string) *string {
 }
 
 func (qq *PasskeyService) passkeyCredentialRequest(req *httpx.Request, credentialJSON json.RawMessage) *http.Request {
-	credentialRequest := req.Request.Clone(req.Context())
+	credentialRequest := req.Clone(req.Context())
 	credentialRequest.Header = req.Header.Clone()
 	credentialRequest.Header.Set("Content-Type", "application/json")
 	credentialRequest.Body = io.NopCloser(bytes.NewReader(credentialJSON))

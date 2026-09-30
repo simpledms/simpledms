@@ -1,7 +1,6 @@
 package managespaceusers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -191,7 +190,7 @@ func (qq *AssignUserToSpaceCmd) userListItems(ctx ctxx.Context) interface{} {
 		userm := usermodel.NewUser(unassignedUser)
 		items = append(items, &widget.ListItem{
 			RadioGroupName: "UserID",
-			RadioValue:     fmt.Sprintf("%s", unassignedUser.PublicID),
+			RadioValue:     unassignedUser.PublicID.String(),
 			Headline:       widget.Tu(userm.Name()),
 			SupportingText: widget.Tu(userm.NameSecondLine()),
 			Leading:        widget.NewIcon("person"),

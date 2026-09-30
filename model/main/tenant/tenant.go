@@ -274,7 +274,11 @@ func sqliteCount(ctx context.Context, tenantDB *sqlx.TenantDB, query string) (in
 	if err != nil {
 		return 0, err
 	}
-	defer rows.Close()
+	defer func() {
+		if err := rows.Close(); err != nil {
+			log.Println(err)
+		}
+	}()
 	if !rows.Next() {
 		return 0, fmt.Errorf("SQLite count query returned no result")
 	}

@@ -22,6 +22,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/attributetype"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	"github.com/simpledms/simpledms/model/main/filelistpreference"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/fileutil"
@@ -226,7 +227,7 @@ func (qq *ListDirPartial) fileTableNameCell(
 
 	name := filex.Name
 	if !filex.IsDirectory {
-		name = qq.infra.FileRepo.GetXX(filex).FilenameInApp(ctx, withDocumentType)
+		name = filemodel.NewFile(filex).FilenameInApp(ctx, withDocumentType)
 	}
 	name = namePrefix + name
 

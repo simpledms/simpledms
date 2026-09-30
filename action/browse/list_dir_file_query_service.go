@@ -97,7 +97,7 @@ func (qq *ListDirFileQueryService) Query(
 		searchResultQuery,
 		state.SearchQuery,
 		state.SortBy,
-		int64IDs(state.ListFilterTagsPartialState.CheckedTagIDs),
+		int64IDs(state.CheckedTagIDs),
 		state.DocumentTypeID,
 	)
 	if err != nil {

@@ -629,6 +629,41 @@ Same-tenant cross-Space regression, 2026-09-29:
 - `go test ./server -run '^TestMCPBearerCredentialCannotCrossSpaces$' -count=1 -timeout 60s`
   passed. No production code changed, and broader checks were not repeated.
 
+Slice 05 metadata management implementation, 2026-09-29:
+
+- Added 20 tools through existing UI model/services: nine definition CRUD tools; Tag grouping,
+  composition, and atomic create-and-assign; five typed attribute operations; and template
+  discovery/import. The catalog has the complete names and the feature specification owns their
+  input contracts. Field type editing stays unavailable, as in the UI.
+- New mutations use the existing credential write executor, require completed metadata-ID
+  readiness, and resolve all public references within the bound Space. Referenced-definition
+  deletions and duplicate constraints fail as business errors without clearing other metadata.
+- Attribute edits/removal use the existing unique document-type/Tag or document-type/field pair;
+  no attribute ID or new schema migration is needed. The decision is recorded in
+  [the attribute-reference ADR](../adrs/2026.09-mcp_metadata_attribute_references.md).
+- Centralized atomic Tag creation/assignment for browser and MCP, with committed browser feedback.
+  Shared model validation now enforces the UI's group/composition/attribute choices instead of
+  relying on hidden picker options. Library imports reject unknown keys before making changes.
+- Added real SDK/HTTP CRUD, relationship, immutable-type, referenced-deletion, read-only, and
+  same-account/same-tenant cross-Space coverage. Updated Go/browser discovery expectations for the
+  40-tool set. No new browser view or bundled asset was introduced.
+- Necessary implementation checkpoints passed:
+  - `go test ./server -run '^TestMCPMetadataManagementCRUD$' -count=1 -timeout 60s`
+  - `go test ./server -run '^TestMCPMetadataManagementRelations$' -count=1 -timeout 60s`
+  - `go test ./server -run '^TestMCPMetadataManagementRejectsReadonlyAndInvalidTypes$|^TestMCPBearerCredentialCannotCrossSpaces$' -count=1 -timeout 90s`
+  Initial test failures were test-adapter assumptions: SDK `GetError` is server-only and empty
+  units/attribute names are omitted by existing projections. Assertions now use client error text
+  and the actual optional-field contract. Cross-Space management checks assert business-level
+  `not_found` errors with valid schemas, rather than passing on a missing edit boolean.
+- Updated source catalogs for four shared-model validation messages in German, French,
+  and Italian, marked fuzzy with the Codex translation comment. `go generate ./i18n` succeeded;
+  existing missing-entry diagnostics remain. Concurrent user cleanup edits appeared during this
+  work and were preserved, including the updated translation extractor. The narrow CRUD and
+  cross-Space checkpoint passed again against those current context/UI APIs after generation.
+- Touched Go files were formatted. Complete Go/model/browser verification, build/vet, and manual
+  management-client journeys were not performed for this extension. Slice 05 and its plan box
+  remain pending verification; prior review results do not verify newly added behavior.
+
 ## Operating implemented slices
 
 After deploying the generated migration and rebuilt application, open Account → MCP credentials.
@@ -638,7 +673,8 @@ development; no OAuth discovery flow is provided by this slice.
 
 The registered tools currently cover scoped Space/Inbox inspection, bounded OCR, Inbox upload,
 existing-metadata classification, destination discovery/creation, folder/non-folder filing, and
-filed search. `get_file` includes typed classification once the tenant's metadata public-ID backfill
+filed search, plus metadata definition/attribute management and library import. `get_file` includes
+typed classification once the tenant's metadata public-ID backfill
 is complete. Inbox, directory, and filed-search pages default to 50 items, cap at 100, and reject
 offsets above 1,000,000; OCR windows default to 12,000 and cap at 50,000 Unicode characters.
 Revocation from Account settings takes effect on subsequent requests, including existing SDK

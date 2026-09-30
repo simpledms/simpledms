@@ -3761,6 +3761,11 @@
             "translation": ""
         },
         {
+            "id": "Cleanup pending",
+            "message": "Cleanup pending",
+            "translation": ""
+        },
+        {
             "id": "Confirm new passphrase",
             "message": "Confirm new passphrase",
             "translation": ""
@@ -3853,6 +3858,11 @@
         {
             "id": "Estonia",
             "message": "Estonia",
+            "translation": ""
+        },
+        {
+            "id": "Failed",
+            "message": "Failed",
             "translation": ""
         },
         {
@@ -3996,6 +4006,11 @@
             "translation": ""
         },
         {
+            "id": "Mcp",
+            "message": "Mcp",
+            "translation": ""
+        },
+        {
             "id": "Malta",
             "message": "Malta",
             "translation": ""
@@ -4046,11 +4061,6 @@
             "translation": ""
         },
         {
-            "id": "None",
-            "message": "None",
-            "translation": ""
-        },
-        {
             "id": "Norway",
             "message": "Norway",
             "translation": ""
@@ -4091,6 +4101,11 @@
             "translation": ""
         },
         {
+            "id": "Pwaos open",
+            "message": "Pwaos open",
+            "translation": ""
+        },
+        {
             "id": "Passphrase",
             "message": "Passphrase",
             "translation": ""
@@ -4098,6 +4113,11 @@
         {
             "id": "Password",
             "message": "Password",
+            "translation": ""
+        },
+        {
+            "id": "Pending",
+            "message": "Pending",
             "translation": ""
         },
         {
@@ -4121,13 +4141,18 @@
             "translation": ""
         },
         {
+            "id": "Processing",
+            "message": "Processing",
+            "translation": ""
+        },
+        {
             "id": "Push url",
             "message": "Push url",
             "translation": ""
         },
         {
-            "id": "Reader",
-            "message": "Reader",
+            "id": "Ready",
+            "message": "Ready",
             "translation": ""
         },
         {
@@ -4241,8 +4266,23 @@
             "translation": ""
         },
         {
+            "id": "Url import",
+            "message": "Url import",
+            "translation": ""
+        },
+        {
             "id": "Unit",
             "message": "Unit",
+            "translation": ""
+        },
+        {
+            "id": "Unknown legacy",
+            "message": "Unknown legacy",
+            "translation": ""
+        },
+        {
+            "id": "Uploading",
+            "message": "Uploading",
             "translation": ""
         },
         {
@@ -4276,8 +4316,13 @@
             "translation": ""
         },
         {
-            "id": "Writer",
-            "message": "Writer",
+            "id": "Web dav",
+            "message": "Web dav",
+            "translation": ""
+        },
+        {
+            "id": "Web interface",
+            "message": "Web interface",
             "translation": ""
         },
         {
@@ -4872,8 +4917,18 @@
             ]
         },
         {
+            "id": "File is a directory.",
+            "message": "File is a directory.",
+            "translation": ""
+        },
+        {
             "id": "Please select at least one document type.",
             "message": "Please select at least one document type.",
+            "translation": ""
+        },
+        {
+            "id": "Attribute must reference a Tag group.",
+            "message": "Attribute must reference a Tag group.",
             "translation": ""
         },
         {
@@ -5027,6 +5082,11 @@
             "translation": ""
         },
         {
+            "id": "Parent is not a directory.",
+            "message": "Parent is not a directory.",
+            "translation": ""
+        },
+        {
             "id": "A folder with this name already exists.",
             "message": "A folder with this name already exists.",
             "translation": ""
@@ -5034,6 +5094,11 @@
         {
             "id": "Destination is not a directory.",
             "message": "Destination is not a directory.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid filename.",
+            "message": "Invalid filename.",
             "translation": ""
         },
         {
@@ -5084,11 +5149,6 @@
         {
             "id": "Could not open file.",
             "message": "Could not open file.",
-            "translation": ""
-        },
-        {
-            "id": "Invalid filename.",
-            "message": "Invalid filename.",
             "translation": ""
         },
         {
@@ -5242,6 +5302,21 @@
                     "expr": "fileutil.FormatSize(limitBytes)"
                 }
             ]
+        },
+        {
+            "id": "A file with this name already exists in the destination.",
+            "message": "A file with this name already exists in the destination.",
+            "translation": ""
+        },
+        {
+            "id": "File is not a directory.",
+            "message": "File is not a directory.",
+            "translation": ""
+        },
+        {
+            "id": "File must be in Inbox.",
+            "message": "File must be in Inbox.",
+            "translation": ""
         },
         {
             "id": "Invoice",
@@ -5644,8 +5719,53 @@
             "translation": ""
         },
         {
+            "id": "Unknown document type template.",
+            "message": "Unknown document type template.",
+            "translation": ""
+        },
+        {
+            "id": "Value does not match the field type.",
+            "message": "Value does not match the field type.",
+            "translation": ""
+        },
+        {
+            "id": "Date value is required.",
+            "message": "Date value is required.",
+            "translation": ""
+        },
+        {
+            "id": "Money value is out of range.",
+            "message": "Money value is out of range.",
+            "translation": ""
+        },
+        {
+            "id": "Number value is out of range.",
+            "message": "Number value is out of range.",
+            "translation": ""
+        },
+        {
             "id": "Cannot add a tag group as child.",
             "message": "Cannot add a tag group as child.",
+            "translation": ""
+        },
+        {
+            "id": "Tag groups cannot be assigned.",
+            "message": "Tag groups cannot be assigned.",
+            "translation": ""
+        },
+        {
+            "id": "File or Tag not found.",
+            "message": "File or Tag not found.",
+            "translation": ""
+        },
+        {
+            "id": "Destination must be a Tag group.",
+            "message": "Destination must be a Tag group.",
+            "translation": ""
+        },
+        {
+            "id": "Composition requires a composed Tag and a simple sub-Tag.",
+            "message": "Composition requires a composed Tag and a simple sub-Tag.",
             "translation": ""
         },
         {
@@ -5704,6 +5824,11 @@
             "translation": "Maintenance mode is enabled. Please wait until the app is ready again."
         },
         {
+            "id": "Metadata already exists or is still in use.",
+            "message": "Metadata already exists or is still in use.",
+            "translation": ""
+        },
+        {
             "id": "Invalid page or search range.",
             "message": "Invalid page or search range.",
             "translation": ""
@@ -5714,13 +5839,138 @@
             "translation": ""
         },
         {
-            "id": "File is a directory.",
-            "message": "File is a directory.",
+            "id": "Invalid directory ID.",
+            "message": "Invalid directory ID.",
+            "translation": ""
+        },
+        {
+            "id": "Parent directory ID and name are required.",
+            "message": "Parent directory ID and name are required.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid filing input.",
+            "message": "Invalid filing input.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid search input.",
+            "message": "Invalid search input.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid page range.",
+            "message": "Invalid page range.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid Tag filter.",
+            "message": "Invalid Tag filter.",
+            "translation": ""
+        },
+        {
+            "id": "Tag not found.",
+            "message": "Tag not found.",
+            "translation": ""
+        },
+        {
+            "id": "Document type not found.",
+            "message": "Document type not found.",
             "translation": ""
         },
         {
             "id": "Invalid base64 content.",
             "message": "Invalid base64 content.",
+            "translation": ""
+        },
+        {
+            "id": "Metadata upgrade is still in progress.",
+            "message": "Metadata upgrade is still in progress.",
+            "translation": ""
+        },
+        {
+            "id": "Tag group not found.",
+            "message": "Tag group not found.",
+            "translation": ""
+        },
+        {
+            "id": "Document type ID is required.",
+            "message": "Document type ID is required.",
+            "translation": ""
+        },
+        {
+            "id": "Metadata identifiers are unavailable.",
+            "message": "Metadata identifiers are unavailable.",
+            "translation": ""
+        },
+        {
+            "id": "Name must contain 1 to 300 characters.",
+            "message": "Name must contain 1 to 300 characters.",
+            "translation": ""
+        },
+        {
+            "id": "A public metadata ID is required.",
+            "message": "A public metadata ID is required.",
+            "translation": ""
+        },
+        {
+            "id": "Field not found.",
+            "message": "Field not found.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid Tag type.",
+            "message": "Invalid Tag type.",
+            "translation": ""
+        },
+        {
+            "id": "Field unit is too long.",
+            "message": "Field unit is too long.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid field type.",
+            "message": "Invalid field type.",
+            "translation": ""
+        },
+        {
+            "id": "Exactly one Tag ID or field ID is required.",
+            "message": "Exactly one Tag ID or field ID is required.",
+            "translation": ""
+        },
+        {
+            "id": "Document type attribute not found.",
+            "message": "Document type attribute not found.",
+            "translation": ""
+        },
+        {
+            "id": "Select between 1 and 64 document type templates.",
+            "message": "Select between 1 and 64 document type templates.",
+            "translation": ""
+        },
+        {
+            "id": "File ID and Tag ID are required.",
+            "message": "File ID and Tag ID are required.",
+            "translation": ""
+        },
+        {
+            "id": "File ID and field ID are required.",
+            "message": "File ID and field ID are required.",
+            "translation": ""
+        },
+        {
+            "id": "Exactly one typed value is required.",
+            "message": "Exactly one typed value is required.",
+            "translation": ""
+        },
+        {
+            "id": "Date must use YYYY-MM-DD.",
+            "message": "Date must use YYYY-MM-DD.",
+            "translation": ""
+        },
+        {
+            "id": "File ID and document type ID are required.",
+            "message": "File ID and document type ID are required.",
             "translation": ""
         },
         {

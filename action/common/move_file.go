@@ -1,7 +1,6 @@
 package common
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -211,7 +210,7 @@ func (qq *MoveFile) Form(
 					HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String(), currentDir.Data.PublicID.String())),
 					HxTarget:  "#" + qq.filesListID(),
 					HxSync:    "this:replace",
-					HxTrigger: fmt.Sprintf("input from:#moveSearch delay:100ms"),
+					HxTrigger: "input from:#moveSearch delay:100ms",
 					HxInclude: "#moveSearch, #" + qq.formID(),
 				},
 				Name:           "SearchQuery",

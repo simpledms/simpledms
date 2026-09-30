@@ -64,7 +64,6 @@ func (qq *responseWriter) WriteData(value interface{}, statusCode int) {
 	if dataWritten > 0 {
 		qq.hasDataWritten = true
 	}
-	return
 }
 
 // TODO only accept snackbars to limit misuse? or would that be to restrictive?

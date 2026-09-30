@@ -33,7 +33,11 @@ func StreamDownload(
 		log.Println(err)
 		return e.NewHTTPErrorf(http.StatusInternalServerError, "")
 	}
-	defer f.Close()
+	defer func() {
+		if err := f.Close(); err != nil {
+			log.Println(err)
+		}
+	}()
 
 	if req.URL.Query().Get("inline") == "1" {
 		rw.Header().Set("Content-Disposition", "inline")

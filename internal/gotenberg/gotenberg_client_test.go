@@ -55,7 +55,11 @@ func TestGotenbergClientBuildsHTMLMultipart(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer pdf.Close()
+	defer func() {
+		if err := pdf.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
 	data, err := io.ReadAll(pdf)
 	if err != nil {
 		t.Fatal(err)
@@ -114,7 +118,11 @@ func TestGotenbergClientBuildsMarkdownMultipart(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer pdf.Close()
+	defer func() {
+		if err := pdf.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
 	if _, err := io.ReadAll(pdf); err != nil {
 		t.Fatal(err)
 	}

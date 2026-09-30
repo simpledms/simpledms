@@ -140,7 +140,7 @@ func (qq *FilesListPartial) Handler(
 	}
 
 	state := autil.StateX[InboxPageState](rw, req)
-	state.FilesListPartialState.normalizeSortBy()
+	state.normalizeSortBy()
 	if _, err := state.sources(); err != nil {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid source filter.")
 	}
@@ -233,7 +233,7 @@ func (qq *FilesListPartial) Widget(
 	state *InboxPageState,
 	selectedFileID string,
 ) *widget.ListDetailLayout {
-	state.FilesListPartialState.normalizeSortBy()
+	state.normalizeSortBy()
 
 	var children []widget.IWidget
 	var appBar *widget.AppBar
@@ -389,7 +389,7 @@ func (qq *FilesListPartial) filesListItemsFromFiles(
 			route.Inbox,
 			child,
 			child.PublicID.String() == data.SelectedFileID,
-			state.FilesListPartialState.isSortedByDate(),
+			state.isSortedByDate(),
 		))
 	}
 
@@ -415,7 +415,7 @@ func (qq *FilesListPartial) filesListItemsFromFiles(
 
 // LIMIT must be applied by caller
 func (qq *FilesListPartial) filesQuery(ctx ctxx.Context, state *InboxPageState) *enttenant.FileQuery {
-	state.FilesListPartialState.normalizeSortBy()
+	state.normalizeSortBy()
 
 	sort := state.SortBy
 	if sort != sortByRank && sort != sortByName && sort != sortByOldestFirst {

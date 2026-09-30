@@ -93,7 +93,7 @@ func (qd *DateTime) Scan(value interface{}) error {
 	// IsZero check because if we set a timezone for zero values, the next IsZero check wouldn't return true
 	// IsZero needs a zero value in UTC to return true and if we set the timezone, but keep the time of day at 0 o'clock, it's not a zero value in UTC anymore
 	// so be careful when working with zero values, AddDate might not work as expected as the timezone would still be UTC
-	if !qd.Time.IsZero() && qd.Time.Location().String() == "" {
+	if !qd.IsZero() && qd.Location().String() == "" {
 		// set local time zone because for example DATE type in db has no timezone and is handled as UTC when the data comes from the db
 		// but we handle everything with Local time in this package
 
@@ -113,7 +113,7 @@ func (qd DateTime) Value() (driver.Value, error) {
 }
 
 func (qd DateTime) FormatForDatabaseQuery(usedInNamedQuery bool) string {
-	str := qd.Time.Format(time.RFC3339)
+	str := qd.Format(time.RFC3339)
 	if usedInNamedQuery {
 		// in named queries, argument names are prefixed with : and there is currently no way
 		// to enable sensitive parsing where : in quotes are handled literally
@@ -130,10 +130,10 @@ func (qd DateTime) FormatForDatabaseQuery(usedInNamedQuery bool) string {
 func (qd DateTime) String(languageBCP47 string) string {
 	switch languageBCP47 {
 	case "de":
-		return qd.Time.Format("02.01.2006, 15:04 Uhr")
+		return qd.Format("02.01.2006, 15:04 Uhr")
 	case "fr", "it":
-		return qd.Time.Format("02.01.2006, 15:04")
+		return qd.Format("02.01.2006, 15:04")
 	}
 
-	return qd.Time.Format("2006-01-02, 15:04 o'clock")
+	return qd.Format("2006-01-02, 15:04 o'clock")
 }

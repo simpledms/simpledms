@@ -7,6 +7,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
@@ -34,7 +35,7 @@ func NewCreateAndAssignTagCmd(
 	config := actionx.NewConfig(
 		actions.Route("create-and-assign-tag-cmd"),
 		false,
-	)
+	).EnableCommittedResponse()
 	return &CreateAndAssignTagCmd{
 		infra:   infra,
 		actions: actions,
@@ -58,30 +59,25 @@ func (qq *CreateAndAssignTagCmd) Data(fileID string, parentTagID int64) *CreateA
 }
 
 func (qq *CreateAndAssignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	data, err := qq.FormHelper.MapFormData(rw, req, ctx)
+	data, err := qq.MapFormData(rw, req, ctx)
 	if err != nil {
-		return err
-	}
-
-	tagx, err := qq.actions.CreateTagCmd.execute(ctx, &data.CreateTagCmdData)
-	if err != nil {
-		log.Println(err)
 		return err
 	}
 
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
-
-	if tagx.Type != tagtype.Group {
-		_, err = taggingmodel.NewTagService().AssignToFile(
-			ctx,
-			filex.Data.ID,
-			tagx.ID,
-			ctx.SpaceCtx().Space.ID,
+	var tagx *enttenant.Tag
+	if data.Type == tagtype.Group {
+		tagx, err = qq.actions.CreateTagCmd.execute(ctx, &data.CreateTagCmdData)
+	} else {
+		tagx, err = taggingmodel.NewTagService().CreateAndAssignToFile(
+			ctx, filex.Data.ID, ctx.SpaceCtx().Space.ID, data.GroupTagID, data.Name, data.Type,
 		)
-		if err != nil {
-			return err
-		}
-
+	}
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if data.Type != tagtype.Group {
 		// must be set before writing to rw
 		rw.Header().Set("HX-Trigger", event.TagUpdated.String())
 	}

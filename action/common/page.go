@@ -32,10 +32,7 @@ func (qq *Page) Render(
 	title string,
 	viewx renderable.Renderable,
 ) error {
-	renderFullPage := false
-	if req.Header.Get("HX-Request") == "" {
-		renderFullPage = true
-	}
+	renderFullPage := req.Header.Get("HX-Request") == ""
 
 	if renderFullPage {
 		titlex := wx.Tuf("%s | SimpleDMS", wx.T(title).String(ctx))

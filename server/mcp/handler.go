@@ -17,6 +17,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	sdk "github.com/modelcontextprotocol/go-sdk/mcp"
 
+	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/enttenant"
@@ -38,6 +39,7 @@ import (
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	filingmodel "github.com/simpledms/simpledms/model/tenant/filing"
+	"github.com/simpledms/simpledms/model/tenant/library"
 	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
@@ -119,6 +121,71 @@ func NewHandler(config Config) *Handler {
 	)
 	registerRead(
 		server, handler, "search_files", "Search or list filed documents.", handler.searchFiles,
+	)
+	registerMetadataWrite(server, handler, "create_tag", "Create a Tag.", handler.createTag)
+	registerMetadataWrite(server, handler, "edit_tag", "Rename a Tag.", handler.editTag)
+	registerMetadataWrite(server, handler, "delete_tag", "Delete an unused Tag.", handler.deleteTag)
+	registerMetadataWrite(
+		server, handler, "create_property", "Create a field definition.", handler.createProperty,
+	)
+	registerMetadataWrite(
+		server, handler, "edit_property", "Edit a field's name and unit.", handler.editProperty,
+	)
+	registerMetadataWrite(
+		server, handler, "delete_property", "Delete an unused field.", handler.deleteProperty,
+	)
+	registerMetadataWrite(
+		server, handler, "create_document_type", "Create a document type.", handler.createDocumentType,
+	)
+	registerMetadataWrite(
+		server, handler, "rename_document_type", "Rename a document type.", handler.renameDocumentType,
+	)
+	registerMetadataWrite(
+		server, handler, "delete_document_type", "Delete an unused document type.",
+		handler.deleteDocumentType,
+	)
+	registerMetadataWrite(
+		server, handler, "create_and_assign_tag", "Create a Tag and assign it to a document.",
+		handler.createAndAssignTag,
+	)
+	registerMetadataWrite(
+		server, handler, "move_tag_to_group", "Move a Tag into or out of a group.",
+		handler.moveTagToGroup,
+	)
+	registerMetadataWrite(
+		server, handler, "assign_sub_tag", "Add a simple Tag to a composed Tag.", handler.assignSubTag,
+	)
+	registerMetadataWrite(
+		server, handler, "unassign_sub_tag", "Remove a simple Tag from a composed Tag.",
+		handler.unassignSubTag,
+	)
+	registerMetadataWrite(
+		server, handler, "create_document_type_tag_attribute", "Add a Tag group attribute.",
+		handler.createDocumentTypeTagAttribute,
+	)
+	registerMetadataWrite(
+		server, handler, "edit_document_type_tag_attribute", "Edit a Tag group attribute.",
+		handler.editDocumentTypeTagAttribute,
+	)
+	registerMetadataWrite(
+		server, handler, "create_document_type_property_attribute", "Add a field attribute.",
+		handler.createDocumentTypePropertyAttribute,
+	)
+	registerMetadataWrite(
+		server, handler, "edit_document_type_property_attribute", "Edit a field attribute.",
+		handler.editDocumentTypePropertyAttribute,
+	)
+	registerMetadataWrite(
+		server, handler, "delete_document_type_attribute", "Remove an attribute from a document type.",
+		handler.deleteDocumentTypeAttribute,
+	)
+	registerRead(
+		server, handler, "list_document_type_templates", "List available library templates.",
+		handler.listDocumentTypeTemplates,
+	)
+	registerMetadataWrite(
+		server, handler, "import_document_types", "Import library templates into an empty Space.",
+		handler.importDocumentTypes,
 	)
 	handler.transport = sdk.NewStreamableHTTPHandler(func(*http.Request) *sdk.Server {
 		return server
@@ -242,6 +309,29 @@ func registerStorageWrite[I, O any](
 	fn func(context.Context, *ctxx.SpaceContext, *entmain.MCPCredential, I) (O, error),
 ) {
 	registerTool(server, handler, name, description, false, true, fn)
+}
+
+func registerMetadataWrite[I, O any](
+	server *sdk.Server,
+	handler *Handler,
+	name, description string,
+	fn func(context.Context, *ctxx.SpaceContext, *entmain.MCPCredential, I) (O, error),
+) {
+	registerWrite(server, handler, name, description, func(
+		requestCtx context.Context, ctx *ctxx.SpaceContext, cred *entmain.MCPCredential, input I,
+	) (O, error) {
+		var zero O
+		if err := requireMetadataPublicIDs(ctx); err != nil {
+			return zero, err
+		}
+		output, err := fn(requestCtx, ctx, cred, input)
+		if enttenant.IsConstraintError(err) {
+			return zero, e.NewHTTPErrorf(
+				http.StatusBadRequest, "Metadata already exists or is still in use.",
+			)
+		}
+		return output, err
+	})
 }
 
 func registerTool[I, O any](
@@ -1058,6 +1148,497 @@ func metadataNotFound(err error, message string) error {
 		return e.NewHTTPErrorf(http.StatusNotFound, message)
 	}
 	return err
+}
+
+func nilableMetadataNameError(name string) error {
+	if strings.TrimSpace(name) == "" || utf8.RuneCountInString(name) > 300 {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Name must contain 1 to 300 characters.")
+	}
+	return nil
+}
+
+func nilableMetadataReferenceError(publicID string) error {
+	if publicID == "" || len(publicID) > 100 {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "A public metadata ID is required.")
+	}
+	return nil
+}
+
+func scopedTag(ctx *ctxx.SpaceContext, publicID string) (*enttenant.Tag, error) {
+	if err := nilableMetadataReferenceError(publicID); err != nil {
+		return nil, err
+	}
+	tagx, err := ctx.Space.QueryTags().Where(tag.PublicID(entx.NewCIText(publicID))).
+		WithGroup().WithSubTags().Only(ctx)
+	return tagx, metadataNotFound(err, "Tag not found.")
+}
+
+func scopedProperty(ctx *ctxx.SpaceContext, publicID string) (*enttenant.Property, error) {
+	if err := nilableMetadataReferenceError(publicID); err != nil {
+		return nil, err
+	}
+	propertyx, err := ctx.Space.QueryProperties().Where(
+		property.PublicID(entx.NewCIText(publicID)),
+	).Only(ctx)
+	return propertyx, metadataNotFound(err, "Field not found.")
+}
+
+func scopedDocumentType(
+	ctx *ctxx.SpaceContext, publicID string,
+) (*documenttypemodel.DocumentType, error) {
+	if err := nilableMetadataReferenceError(publicID); err != nil {
+		return nil, err
+	}
+	documentTypex, err := ctx.Space.QueryDocumentTypes().Where(
+		documenttypequery.PublicID(entx.NewCIText(publicID)),
+	).Only(ctx)
+	if err != nil {
+		return nil, metadataNotFound(err, "Document type not found.")
+	}
+	return documenttypemodel.NewDocumentType(documentTypex), nil
+}
+
+func (qq *Handler) createTag(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input CreateTagInput,
+) (TagData, error) {
+	tagx, err := createScopedTag(ctx, input)
+	if err != nil {
+		return TagData{}, err
+	}
+	tagx, err = scopedTag(ctx, tagx.PublicID.String())
+	if err != nil {
+		return TagData{}, err
+	}
+	return tagProjection(tagx)
+}
+
+func createScopedTag(ctx *ctxx.SpaceContext, input CreateTagInput) (*enttenant.Tag, error) {
+	typex, groupID, err := tagCreationValues(ctx, input)
+	if err != nil {
+		return nil, err
+	}
+	return taggingmodel.NewTagService().Create(ctx, ctx.Space.ID, groupID, input.Name, typex)
+}
+
+func tagCreationValues(
+	ctx *ctxx.SpaceContext, input CreateTagInput,
+) (tagtype.TagType, int64, error) {
+	if err := nilableMetadataNameError(input.Name); err != nil {
+		return 0, 0, err
+	}
+	typex, err := tagtype.TagTypeString(input.Type)
+	if err != nil || (typex != tagtype.Simple && typex != tagtype.Group && typex != tagtype.Super) {
+		return 0, 0, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid Tag type.")
+	}
+	var groupID int64
+	if input.GroupID != "" {
+		group, err := scopedTag(ctx, input.GroupID)
+		if err != nil {
+			return 0, 0, err
+		}
+		groupID = group.ID
+	}
+	return typex, groupID, nil
+}
+
+func (qq *Handler) editTag(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input EditTagInput,
+) (TagData, error) {
+	if err := nilableMetadataNameError(input.Name); err != nil {
+		return TagData{}, err
+	}
+	tagx, err := scopedTag(ctx, input.TagID)
+	if err != nil {
+		return TagData{}, err
+	}
+	if _, err := taggingmodel.NewTagService().Edit(ctx, tagx.ID, input.Name); err != nil {
+		return TagData{}, err
+	}
+	tagx, err = scopedTag(ctx, input.TagID)
+	if err != nil {
+		return TagData{}, err
+	}
+	return tagProjection(tagx)
+}
+
+func (qq *Handler) deleteTag(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input TagInput,
+) (MetadataDeletionData, error) {
+	tagx, err := scopedTag(ctx, input.TagID)
+	if err != nil {
+		return MetadataDeletionData{}, err
+	}
+	_, err = taggingmodel.NewTagService().Delete(ctx, tagx.ID)
+	return MetadataDeletionData{Deleted: err == nil}, err
+}
+
+func (qq *Handler) createProperty(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input CreatePropertyInput,
+) (PropertyData, error) {
+	if err := nilableMetadataNameError(input.Name); err != nil {
+		return PropertyData{}, err
+	}
+	if utf8.RuneCountInString(input.Unit) > 300 {
+		return PropertyData{}, e.NewHTTPErrorf(http.StatusBadRequest, "Field unit is too long.")
+	}
+	typex, err := fieldtype.FieldTypeString(input.Type)
+	if err != nil || (typex != fieldtype.Text && typex != fieldtype.Number &&
+		typex != fieldtype.Money && typex != fieldtype.Date && typex != fieldtype.Checkbox) {
+		return PropertyData{}, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid field type.")
+	}
+	propertyx, err := propertymodel.NewPropertyService().Create(
+		ctx, ctx.Space.ID, input.Name, typex, input.Unit,
+	)
+	if err != nil {
+		return PropertyData{}, err
+	}
+	return propertyProjection(propertyx)
+}
+
+func (qq *Handler) editProperty(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input EditPropertyInput,
+) (PropertyData, error) {
+	if err := nilableMetadataNameError(input.Name); err != nil {
+		return PropertyData{}, err
+	}
+	propertyx, err := scopedProperty(ctx, input.PropertyID)
+	if err != nil {
+		return PropertyData{}, err
+	}
+	unit := propertyx.Unit
+	if input.Unit != nil {
+		unit = *input.Unit
+	}
+	if utf8.RuneCountInString(unit) > 300 {
+		return PropertyData{}, e.NewHTTPErrorf(http.StatusBadRequest, "Field unit is too long.")
+	}
+	propertyx, err = propertymodel.NewPropertyService().Edit(
+		ctx, ctx.Space, propertyx.ID, input.Name, unit,
+	)
+	if err != nil {
+		return PropertyData{}, err
+	}
+	return propertyProjection(propertyx)
+}
+
+func (qq *Handler) deleteProperty(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input PropertyInput,
+) (MetadataDeletionData, error) {
+	propertyx, err := scopedProperty(ctx, input.PropertyID)
+	if err != nil {
+		return MetadataDeletionData{}, err
+	}
+	err = propertymodel.NewPropertyService().Delete(ctx, ctx.Space, propertyx.ID)
+	return MetadataDeletionData{Deleted: err == nil}, err
+}
+
+func (qq *Handler) createDocumentType(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input CreateDocumentTypeInput,
+) (DocumentTypeSummary, error) {
+	if err := nilableMetadataNameError(input.Name); err != nil {
+		return DocumentTypeSummary{}, err
+	}
+	documentTypex, err := documenttypemodel.Create(ctx, ctx.Space.ID, input.Name)
+	if err != nil {
+		return DocumentTypeSummary{}, err
+	}
+	return documentTypeProjection(documentTypex.Data)
+}
+
+func (qq *Handler) renameDocumentType(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input RenameDocumentTypeInput,
+) (DocumentTypeSummary, error) {
+	if err := nilableMetadataNameError(input.Name); err != nil {
+		return DocumentTypeSummary{}, err
+	}
+	documentTypex, err := scopedDocumentType(ctx, input.DocumentTypeID)
+	if err != nil {
+		return DocumentTypeSummary{}, err
+	}
+	if err := documentTypex.Rename(ctx, input.Name); err != nil {
+		return DocumentTypeSummary{}, err
+	}
+	return documentTypeProjection(documentTypex.Data)
+}
+
+func (qq *Handler) deleteDocumentType(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input DocumentTypeInput,
+) (MetadataDeletionData, error) {
+	documentTypex, err := scopedDocumentType(ctx, input.DocumentTypeID)
+	if err != nil {
+		return MetadataDeletionData{}, err
+	}
+	err = documentTypex.Delete(ctx)
+	return MetadataDeletionData{Deleted: err == nil}, err
+}
+
+func (qq *Handler) createAndAssignTag(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input CreateAndAssignTagInput,
+) (TagAssignmentData, error) {
+	if err := nilableMetadataReferenceError(input.FileID); err != nil {
+		return TagAssignmentData{}, err
+	}
+	filex, err := filemodel.NewFileReader().Get(ctx, input.FileID)
+	if err != nil {
+		return TagAssignmentData{}, err
+	}
+	if filex.IsDirectory {
+		return TagAssignmentData{}, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+	}
+	typex, groupID, err := tagCreationValues(ctx, input.CreateTagInput)
+	if err != nil {
+		return TagAssignmentData{}, err
+	}
+	tagx, err := taggingmodel.NewTagService().CreateAndAssignToFile(
+		ctx, filex.ID, ctx.Space.ID, groupID, input.Name, typex,
+	)
+	if err != nil {
+		return TagAssignmentData{}, err
+	}
+	return tagAssignmentProjection(ctx, filex, tagx)
+}
+
+func (qq *Handler) moveTagToGroup(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input MoveTagToGroupInput,
+) (TagData, error) {
+	tagx, err := scopedTag(ctx, input.TagID)
+	if err != nil {
+		return TagData{}, err
+	}
+	var groupID int64
+	if input.GroupID != "" {
+		group, err := scopedTag(ctx, input.GroupID)
+		if err != nil {
+			return TagData{}, err
+		}
+		groupID = group.ID
+	}
+	if _, _, err := taggingmodel.NewTagService().MoveToGroup(ctx, tagx.ID, groupID); err != nil {
+		return TagData{}, err
+	}
+	tagx, err = scopedTag(ctx, input.TagID)
+	if err != nil {
+		return TagData{}, err
+	}
+	return tagProjection(tagx)
+}
+
+func (qq *Handler) assignSubTag(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input TagCompositionInput,
+) (TagData, error) {
+	return qq.setTagComposition(ctx, input, true)
+}
+
+func (qq *Handler) unassignSubTag(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, input TagCompositionInput,
+) (TagData, error) {
+	return qq.setTagComposition(ctx, input, false)
+}
+
+func (qq *Handler) setTagComposition(
+	ctx *ctxx.SpaceContext, input TagCompositionInput, isAssigned bool,
+) (TagData, error) {
+	superTag, err := scopedTag(ctx, input.SuperTagID)
+	if err != nil {
+		return TagData{}, err
+	}
+	subTag, err := scopedTag(ctx, input.SubTagID)
+	if err != nil {
+		return TagData{}, err
+	}
+	service := taggingmodel.NewTagService()
+	if isAssigned {
+		_, _, err = service.AssignSubTag(ctx, superTag.ID, subTag.ID)
+	} else {
+		_, _, err = service.UnassignSubTag(ctx, superTag.ID, subTag.ID)
+	}
+	if err != nil {
+		return TagData{}, err
+	}
+	superTag, err = scopedTag(ctx, input.SuperTagID)
+	if err != nil {
+		return TagData{}, err
+	}
+	return tagProjection(superTag)
+}
+
+func (qq *Handler) createDocumentTypeTagAttribute(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	input CreateDocumentTypeTagAttributeInput,
+) (DocumentTypeData, error) {
+	if err := nilableMetadataNameError(input.Name); err != nil {
+		return DocumentTypeData{}, err
+	}
+	documentTypex, err := scopedDocumentType(ctx, input.DocumentTypeID)
+	if err != nil {
+		return DocumentTypeData{}, err
+	}
+	tagx, err := scopedTag(ctx, input.TagID)
+	if err != nil {
+		return DocumentTypeData{}, err
+	}
+	if _, err := documentTypex.CreateTagAttribute(
+		ctx, input.Name, tagx.ID, input.IsNameGiving,
+	); err != nil {
+		return DocumentTypeData{}, err
+	}
+	return qq.getDocumentType(requestCtx, ctx, cred, DocumentTypeInput{
+		DocumentTypeID: input.DocumentTypeID,
+	})
+}
+
+func (qq *Handler) createDocumentTypePropertyAttribute(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	input CreateDocumentTypePropertyAttributeInput,
+) (DocumentTypeData, error) {
+	documentTypex, err := scopedDocumentType(ctx, input.DocumentTypeID)
+	if err != nil {
+		return DocumentTypeData{}, err
+	}
+	propertyx, err := scopedProperty(ctx, input.PropertyID)
+	if err != nil {
+		return DocumentTypeData{}, err
+	}
+	if _, err := documentTypex.CreatePropertyAttribute(
+		ctx, propertyx.ID, input.IsNameGiving,
+	); err != nil {
+		return DocumentTypeData{}, err
+	}
+	return qq.getDocumentType(requestCtx, ctx, cred, DocumentTypeInput{
+		DocumentTypeID: input.DocumentTypeID,
+	})
+}
+
+func scopedDocumentTypeAttribute(
+	ctx *ctxx.SpaceContext, input DocumentTypeAttributeInput,
+) (*documenttypemodel.Attribute, error) {
+	if (input.TagID == "") == (input.PropertyID == "") {
+		return nil, e.NewHTTPErrorf(
+			http.StatusBadRequest, "Exactly one Tag ID or field ID is required.",
+		)
+	}
+	documentTypex, err := scopedDocumentType(ctx, input.DocumentTypeID)
+	if err != nil {
+		return nil, err
+	}
+	query := documentTypex.Data.QueryAttributes()
+	if input.TagID != "" {
+		tagx, err := scopedTag(ctx, input.TagID)
+		if err != nil {
+			return nil, err
+		}
+		query.Where(attribute.TagID(tagx.ID), attribute.TypeEQ(attributetype.Tag))
+	} else {
+		propertyx, err := scopedProperty(ctx, input.PropertyID)
+		if err != nil {
+			return nil, err
+		}
+		query.Where(attribute.PropertyID(propertyx.ID), attribute.TypeEQ(attributetype.Field))
+	}
+	attributex, err := query.Only(ctx)
+	if err != nil {
+		return nil, metadataNotFound(err, "Document type attribute not found.")
+	}
+	return documenttypemodel.NewAttribute(attributex), nil
+}
+
+func (qq *Handler) editDocumentTypeTagAttribute(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	input EditDocumentTypeTagAttributeInput,
+) (DocumentTypeData, error) {
+	if err := nilableMetadataNameError(input.Name); err != nil {
+		return DocumentTypeData{}, err
+	}
+	attributex, err := scopedDocumentTypeAttribute(ctx, DocumentTypeAttributeInput{
+		DocumentTypeID: input.DocumentTypeID,
+		TagID:          input.TagID,
+	})
+	if err != nil {
+		return DocumentTypeData{}, err
+	}
+	if err := attributex.RenameAndSetIsNameGiving(ctx, input.Name, input.IsNameGiving); err != nil {
+		return DocumentTypeData{}, err
+	}
+	return qq.getDocumentType(requestCtx, ctx, cred, DocumentTypeInput{
+		DocumentTypeID: input.DocumentTypeID,
+	})
+}
+
+func (qq *Handler) editDocumentTypePropertyAttribute(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	input EditDocumentTypePropertyAttributeInput,
+) (DocumentTypeData, error) {
+	attributex, err := scopedDocumentTypeAttribute(ctx, DocumentTypeAttributeInput{
+		DocumentTypeID: input.DocumentTypeID,
+		PropertyID:     input.PropertyID,
+	})
+	if err != nil {
+		return DocumentTypeData{}, err
+	}
+	if err := attributex.SetIsNameGiving(ctx, input.IsNameGiving); err != nil {
+		return DocumentTypeData{}, err
+	}
+	return qq.getDocumentType(requestCtx, ctx, cred, DocumentTypeInput{
+		DocumentTypeID: input.DocumentTypeID,
+	})
+}
+
+func (qq *Handler) deleteDocumentTypeAttribute(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	input DocumentTypeAttributeInput,
+) (DocumentTypeData, error) {
+	attributex, err := scopedDocumentTypeAttribute(ctx, input)
+	if err != nil {
+		return DocumentTypeData{}, err
+	}
+	if err := attributex.Delete(ctx); err != nil {
+		return DocumentTypeData{}, err
+	}
+	return qq.getDocumentType(requestCtx, ctx, cred, DocumentTypeInput{
+		DocumentTypeID: input.DocumentTypeID,
+	})
+}
+
+func (qq *Handler) listDocumentTypeTemplates(
+	_ context.Context, ctx *ctxx.SpaceContext, _ *entmain.MCPCredential, _ struct{},
+) (DocumentTypeTemplateListData, error) {
+	result := DocumentTypeTemplateListData{Templates: []DocumentTypeTemplateData{}}
+	for _, template := range library.BuiltinTemplates() {
+		result.Templates = append(result.Templates, DocumentTypeTemplateData{
+			Key:  template.Key,
+			Name: wx.T(template.Name).String(ctx),
+			Icon: template.Icon,
+		})
+	}
+	return result, nil
+}
+
+func (qq *Handler) importDocumentTypes(
+	requestCtx context.Context,
+	ctx *ctxx.SpaceContext,
+	cred *entmain.MCPCredential,
+	input ImportDocumentTypesInput,
+) (DocumentTypeListData, error) {
+	if len(input.TemplateKeys) == 0 || len(input.TemplateKeys) > 64 {
+		return DocumentTypeListData{}, e.NewHTTPErrorf(
+			http.StatusBadRequest, "Select between 1 and 64 document type templates.",
+		)
+	}
+	if err := documenttypemodel.ImportFromLibrary(ctx, input.TemplateKeys); err != nil {
+		return DocumentTypeListData{}, err
+	}
+	limit := 100
+	return qq.listDocumentTypes(requestCtx, ctx, cred, MetadataListInput{Limit: &limit})
 }
 
 func (qq *Handler) assignTag(

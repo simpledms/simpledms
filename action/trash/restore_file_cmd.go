@@ -91,7 +91,7 @@ func (qq *RestoreFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 			SetParentID(ctx.SpaceCtx().SpaceRootDir().ID)
 	}
 
-	filex = update.SaveX(ctx)
+	update.SaveX(ctx)
 
 	if !parentExists {
 		rw.AddRenderables(widget.NewSnackbarf("The original parent folder is missing. Restored to Inbox."))

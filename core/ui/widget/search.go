@@ -24,14 +24,10 @@ func (qq *Search) GetClass() string {
 	classes := []string{
 		// "field", "round", "border", "fill", "max",
 	}
-	if qq.LeadingIconButton != nil {
-		// check only works if interface has no type
-		// var backButton IWidget = works
-		// var backButton *Link = doesn't work (interface has type set)
-		// classes = append(classes, "prefix")
-	}
-	if qq.TrailingIconButton != nil {
-		// classes = append(classes, "suffix")
-	}
+	// check only works if interface has no type
+	// var backButton IWidget = works
+	// var backButton *Link = doesn't work (interface has type set)
+	// classes = append(classes, "prefix")
+	// classes = append(classes, "suffix")
 	return strings.Join(classes, " ")
 }

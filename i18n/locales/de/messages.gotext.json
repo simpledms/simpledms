@@ -2,6 +2,34 @@
     "language": "de",
     "messages": [
         {
+            "id": "Destination must be a Tag group.",
+            "message": "Destination must be a Tag group.",
+            "translation": "Das Ziel muss eine Tag-Gruppe sein.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Composition requires a composed Tag and a simple sub-Tag.",
+            "message": "Composition requires a composed Tag and a simple sub-Tag.",
+            "translation": "Eine Zusammensetzung benötigt einen zusammengesetzten Tag und einen einfachen Unter-Tag.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Attribute must reference a Tag group.",
+            "message": "Attribute must reference a Tag group.",
+            "translation": "Das Attribut muss auf eine Tag-Gruppe verweisen.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unknown document type template.",
+            "message": "Unknown document type template.",
+            "translation": "Unbekannte Dokumenttyp-Vorlage.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "MCP credentials",
             "message": "MCP credentials",
             "translation": "MCP-Zugangsdaten",

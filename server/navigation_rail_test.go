@@ -530,45 +530,6 @@ func assertNavigationRailItemActiveRecursive(
 	)
 }
 
-func assertNavigationRailItemInactiveRecursive(
-	t testing.TB,
-	items []*widget.NavigationRailItem,
-	label string,
-) {
-	t.Helper()
-	item := nilableNavigationRailItemRecursive(items, label)
-	if item == nil {
-		t.Fatalf(
-			"expected rail labels to contain item %q, got %v",
-			label,
-			navigationRailLabelsRecursive(items),
-		)
-	}
-	if item.IsActive {
-		t.Fatalf("expected rail item %q not to be active", label)
-	}
-}
-
-func assertNavigationRailItemIconRecursive(
-	t testing.TB,
-	items []*widget.NavigationRailItem,
-	label string,
-	wantIcon string,
-) {
-	t.Helper()
-	item := nilableNavigationRailItemRecursive(items, label)
-	if item == nil {
-		t.Fatalf(
-			"expected rail labels to contain item %q, got %v",
-			label,
-			navigationRailLabelsRecursive(items),
-		)
-	}
-	if item.Icon != wantIcon {
-		t.Fatalf("expected rail item %q icon %q, got %q", label, wantIcon, item.Icon)
-	}
-}
-
 func navigationRailItemActiveRecursive(items []*widget.NavigationRailItem, activeLabel string) bool {
 	for _, item := range items {
 		if item == nil {
@@ -582,24 +543,6 @@ func navigationRailItemActiveRecursive(items []*widget.NavigationRailItem, activ
 		}
 	}
 	return false
-}
-
-func nilableNavigationRailItemRecursive(
-	items []*widget.NavigationRailItem,
-	label string,
-) *widget.NavigationRailItem {
-	for _, item := range items {
-		if item == nil {
-			continue
-		}
-		if item.Label == label {
-			return item
-		}
-		if child := nilableNavigationRailItemRecursive(item.Children, label); child != nil {
-			return child
-		}
-	}
-	return nil
 }
 
 func navigationRailLabelsContain(labels []string, want string) bool {

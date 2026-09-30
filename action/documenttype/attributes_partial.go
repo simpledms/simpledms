@@ -85,7 +85,8 @@ func (qq *AttributesPartial) Widget(ctx ctxx.Context, data *AttributesPartialDat
 	})
 
 	for _, attributex := range attributes {
-		if attributex.Type == attributetype.Field {
+		switch attributex.Type {
+		case attributetype.Field:
 			supportingText := widget.T(attributex.Edges.Property.Type.String())
 			if attributex.IsNameGiving {
 				supportingText = widget.Tuf("%s, %s", supportingText.String(ctx), widget.T("name-giving").String(ctx))
@@ -96,7 +97,7 @@ func (qq *AttributesPartial) Widget(ctx ctxx.Context, data *AttributesPartialDat
 				Leading:        widget.NewIcon("list_alt"), // TODO okay?
 				ContextMenu:    NewAttributeContextMenuWidget(qq.actions).Widget(ctx, attributex),
 			})
-		} else if attributex.Type == attributetype.Tag {
+		case attributetype.Tag:
 			supportingText := widget.Tu(attributex.Edges.Tag.Name)
 			if attributex.IsNameGiving {
 				supportingText = widget.Tuf("%s, %s", supportingText.String(ctx), widget.T("name-giving").String(ctx))
@@ -107,7 +108,7 @@ func (qq *AttributesPartial) Widget(ctx ctxx.Context, data *AttributesPartialDat
 				Leading:        widget.NewIcon("list_alt"), // TODO okay?
 				ContextMenu:    NewAttributeContextMenuWidget(qq.actions).Widget(ctx, attributex),
 			})
-		} else {
+		default:
 			// TODO okay?
 			panic("unknown attribute type")
 		}

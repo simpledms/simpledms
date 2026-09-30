@@ -131,11 +131,17 @@ for (const device of [
 			const list = await rpc(page.request, token, "tools/list", {});
 			expect((await list.json()).result.tools.map((tool: { name: string }) => tool.name).sort())
 				.toEqual([
-					"assign_tag", "clear_document_type", "create_directory", "file_inbox_document",
-					"get_document_type", "get_file", "get_space", "list_directory", "list_document_types",
-					"list_inbox", "list_properties", "list_tags", "mark_inbox_file_done",
-					"read_file_text", "remove_file_property", "search_files", "set_document_type",
-					"set_file_property", "unassign_tag", "upload_file",
+					"assign_sub_tag", "assign_tag", "clear_document_type", "create_and_assign_tag",
+					"create_directory", "create_document_type", "create_document_type_property_attribute",
+					"create_document_type_tag_attribute", "create_property", "create_tag",
+					"delete_document_type", "delete_document_type_attribute", "delete_property", "delete_tag",
+					"edit_document_type_property_attribute", "edit_document_type_tag_attribute",
+					"edit_property", "edit_tag", "file_inbox_document", "get_document_type", "get_file",
+					"get_space", "import_document_types", "list_directory", "list_document_type_templates",
+					"list_document_types", "list_inbox", "list_properties", "list_tags", "mark_inbox_file_done",
+					"move_tag_to_group", "read_file_text", "remove_file_property", "rename_document_type",
+					"search_files", "set_document_type", "set_file_property", "unassign_sub_tag", "unassign_tag",
+					"upload_file",
 				]);
 			const response = await rpc(page.request, token, "tools/call", {
 				name: "list_inbox", arguments: { limit: 10 },

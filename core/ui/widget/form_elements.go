@@ -98,7 +98,7 @@ func newElementsFromFields(ctx ctxx.Context, fields []*structs.Field, config *fo
 
 		}
 
-		for tag, _ := range validTagMap {
+		for tag := range validTagMap {
 			validTag = append(validTag, tag)
 		}
 
@@ -206,7 +206,7 @@ func newElementsFromFields(ctx ctxx.Context, fields []*structs.Field, config *fo
 			attrTypeTag = "hidden"
 		}
 
-		if structField.Kind() == reflect.Ptr && formFlatten {
+		if structField.Kind() == reflect.Pointer && formFlatten {
 			embedInFieldset := true
 
 			_, hasValueField := structField.FieldOk("Value")
@@ -425,7 +425,7 @@ func newElementsFromFields(ctx ctxx.Context, fields []*structs.Field, config *fo
 						IsChecked:  value.(bool),
 						IsRequired: isRequired,
 					}
-				case reflect.Struct, reflect.Ptr:
+				case reflect.Struct, reflect.Pointer:
 					typexString := typex.String()
 					if formTypeTag != "" {
 						typexString = formTypeTag
@@ -489,35 +489,6 @@ func newElementsFromFields(ctx ctxx.Context, fields []*structs.Field, config *fo
 
 	return elements
 
-}
-
-func params(element *formElement, kind reflect.Kind, value interface{}, typex reflect.Type) {
-	element.Element = "div"
-	elemx := reflect.New(typex).Elem()
-
-	for qi := 1; qi < 100; qi++ { // TODO while()
-		elemx.SetInt(int64(qi))
-
-		text, ok := elemx.Interface().(fmt.Stringer)
-		if !ok {
-			log.Printf("element of type %s does not implement fmt.Stringer", typex.String())
-			continue
-		}
-
-		typeWithoutPackageName := typex.String()[strings.IndexRune(typex.String(), '.')+1:]
-
-		if text.String() == fmt.Sprintf("%s(%d)", typeWithoutPackageName, qi) {
-			break
-		}
-
-		element.Children = append(element.Children, &formElement{
-			Element: "input",
-			Attributes: formAttributes{
-				"type": "text",
-				"name": fmt.Sprintf("Params[%s]", text.String()),
-			},
-		})
-	}
 }
 
 func enum(ctx ctxx.Context, element *formElement, kind reflect.Kind, value interface{}, typex reflect.Type, isHidden bool, allowedValues []string) {
