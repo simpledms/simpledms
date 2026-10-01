@@ -1,7 +1,7 @@
 # MCP document intake and filing
 
 Date: 2026-09-18  
-Status: extensions 05–09 implemented and verified; residual delivery checks for 01–04 remain open
+Status: all nine slices implemented and verified
 
 ## Outcome
 
@@ -31,7 +31,7 @@ These choices allow planning without blocking questions; they are not additional
 
 ## First-release tools
 
-All names below are proposed public tool names. Source mappings and ordinary query inputs/results
+All names below are implemented public tool names. Source mappings and ordinary query inputs/results
 are in the catalog; the more specific contracts below override its earlier exploratory wording.
 
 | Capability | Tools |

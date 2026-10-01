@@ -1,6 +1,6 @@
 # 01 — Connect a scoped client and inspect its Inbox
 
-Status: implemented; automated review passed, remaining verification pending
+Status: implemented and verified
 Depends on: none  
 Contract: [connect and inspect](../spec.md#connect-and-inspect); rules M1–M3, M6
 
@@ -44,24 +44,24 @@ subsequent tools are not yet registered.
 
 Implementation and all-slice review evidence are in the [single execution record][record].
 The current destination picker uses the credential list-radio composition. Go connection and
-credential tests and desktop/mobile create/copy/connect/revoke journeys passed. Checklist entries
-below include additional cases beyond those journeys and remain open where evidence is incomplete.
+credential tests and desktop/mobile create/copy/connect/revoke journeys passed. The completed
+delivery checks, including legacy protocol/restart behavior, are recorded below.
 
 ## Verification checklist
 
-- [ ] Run proposed `TestMCPConnection*` cases with
+- [x] Run proposed `TestMCPConnection*` cases with
   `go test ./server -run '^TestMCPConnection'`; exercise actual HTTP discovery/calls as well as
   malformed/unknown tools, schema errors, safe internal errors, cancelled reads, and M1/M2/M6.
-- [ ] Exercise fresh schema and upgrade of a populated main DB, revoke across restart, and
+- [x] Exercise fresh schema and upgrade of a populated main DB, revoke across restart, and
   failed credential commit with no token-success response. Reuse existing DB seams.
-- [ ] Run affected existing tenant/Space permission and Inbox query tests, and test any modified
+- [x] Run affected existing tenant/Space permission and Inbox query tests, and test any modified
   router wrapper's error/partial handling. Do not run unrelated slow storage suites.
-- [ ] Run `npm run test:e2e -- e2e/mcp_workflows.spec.ts --grep @connect` on desktop and mobile
+- [x] Run `npm run test:e2e -- e2e/mcp_workflows.spec.ts --grep @connect` on desktop and mobile
   contexts: create through visible controls, call MCP, compare the browser Inbox, revoke, retry.
   Include copy/keyboard navigation, validation, empty state, and narrow-screen dialogs.
-- [ ] Manually connect a bearer-capable MCP client using a newly copied token, inspect a real
+- [x] Manually connect a bearer-capable MCP client using a newly copied token, inspect a real
   document, and revoke it from a desktop and a mobile-sized browser. Record the client/version.
-- [ ] Complete the [plan's build/format/migration checks][common-checks]
+- [x] Complete the [plan's build/format/migration checks][common-checks]
   and update the single execution record with actual commands, results, and limitations.
 
 Relevant precedents: [`router.go`][router], [`WebDAV credential actions`][credentials],

@@ -768,6 +768,59 @@ Extensions 05–09 verification, 2026-10-01:
   files were removed; reproducible fixture/auth state and test credentials remain only in the
   disposable setup. Unrelated running processes were left untouched.
 
+Final intake delivery checks (slices 01–04), 2026-10-01:
+
+- Closed the residual intake checklist items using existing test/runtime seams and the same
+  desktop/mobile browser/client flows. No production code or migration SQL changed in this pass.
+- Added focused tests for negotiated legacy protocol `2024-11-05`, revoked-token denial on an
+  existing client and a recreated router/transport, separate protocol/schema/business/internal
+  errors, and sanitized internal failure results. Space-only access loss leaves tenant membership
+  and another Space's credential usable but denies the affected credential.
+- Added concurrent Tag/type/property desired-state checks and composed/resolved Tag intersection
+  in filed search. Filename and unambiguous OCR-content queries, type/Tag composition, and no-match
+  results passed. A classification commit error leaves all three assignments unchanged.
+- Exact 10 MiB uploads with configured unlimited limits and exact 1 MiB configured uploads passed;
+  the first excess byte fails without a visible file. Tenant storage quota rejection and recovery
+  are tested separately from per-upload limits. Reader cancellation and wrong expected-size
+  integrity checks do not finalize files; fresh upload subsequently succeeds.
+- Space access is removed at the actual fresh finalization check after verified upload I/O,
+  including demotion from implicit tenant-owner access; no file becomes visible. Existing tests
+  independently verify token revocation before finalization. A test-only driver returns an error
+  after the real tenant commit to model an uncertain acknowledgement: the executor does not report
+  success, but the one canonical file remains readable, and retrying cannot overwrite or duplicate
+  it. This is recovery by inspecting committed state, not a claim of exactly-once upload delivery.
+- Final uncached Go verification passed:
+  - `go test ./server -run '^(TestMCP|TestMarkAsDoneCmd|TestDocumentNotesHTTP|TestBrowseListDir|TestBrowserUploadFinalization|TestUploadFileCmd|TestUploadFilesCmd)' -count=1 -timeout 180s -v`:
+    **81 top-level tests passed** with no skips.
+  - **14 focused tenant/Space permission tests passed**: sign-in/assignment expiry, removed
+    tenant users and Spaces, account/membership management ownership, and Space assignment/create/
+    delete rules. These checks covered shared router/scope callers outside the MCP-only tests.
+  - `go test ./model/tenant/tenantdatamigration ./model/main/tenant -count=1` passed, as did
+    `go build ./...` and `go vet ./server/... ./model/main/mcpcredential
+    ./model/tenant/filesystem ./model/tenant/property ./model/tenant/file ./action/browse
+    ./action/inbox`. A mistyped initial `-count1` command was corrected; it was not a product failure.
+  - The last test-only OCR/no-match assertions passed in their focused uncached rerun. Touched
+    Go files were formatted and `git diff --check` passed.
+- Current-source browser regression matrix again passed **15/15** using the three suites and
+  explicit disposable account environment recorded above. The live official SDK **v1.8.0**
+  walkthrough additionally verified UI-issued readonly/writable tokens, discovery and reads,
+  upload source/text inspection, oversized/readonly upload denial, classification correction
+  readback, and token revocation returning Unauthorized in both browser sizes.
+- Filing was also exercised through visible browser controls, rather than only MCP: folder-mode
+  Move → Select destination manually → Save on desktop/mobile; non-folder queues completed through
+  Mark as done with next-item selection and the final empty state. SDK Inbox and filed search
+  confirmed the same committed state. Non-folder fixture initialization touched only the
+  disposable instance because the UI exposes no mode switch.
+- Initial new-test failures were corrected fixture contexts and SDK semantics: schema rejection
+  may be an SDK `isError` result instead of a protocol error, and null public IDs intentionally
+  produce `unavailable`, not an internal failure. The internal-error probe now fails an actual
+  disposable table query. Finalization tests explicitly prove the fresh check was reached.
+- All nine slice verification checklists and plan delivery boxes are now complete. Full
+  repository and unrelated slow bad-network suites were intentionally outside the affected
+  verification scope. The disposable server/browser/SDK artifacts were cleaned up; the user's
+  data was untouched. Missing later catalog capabilities remain intentional future work, not
+  delivery blockers for these nine slices.
+
 ## Operating implemented slices
 
 After deploying the generated migration and rebuilt application, open Account → MCP credentials.

@@ -1,6 +1,6 @@
 # 04 — File a classified document and find it again
 
-Status: implemented; automated review passed, remaining verification pending
+Status: implemented and verified
 Depends on: [01](01-connect_and_inspect.md)–[03](03-classify_document.md)  
 Contract: [filing](../spec.md#filing-contract); rules M1–M5
 
@@ -41,21 +41,21 @@ first-release upload/classify/file journey.
 
 ## Verification checklist
 
-- [ ] Run proposed `go test ./server -run '^TestMCPFiling'`, covering both modes, same-parent root
+- [x] Run proposed `go test ./server -run '^TestMCPFiling'`, covering both modes, same-parent root
   filing, optional new directory/name, empty metadata, bad destinations, conflicts, repeated and
   concurrent completion, rollback including a newly created folder, and public-ID isolation.
 - [x] Run `go test ./server -run '^TestMarkAsDoneCmd'` and the relevant existing
   `TestDocumentNotesHTTPInboxRootFilingPreservesHistory` and
   `TestDocumentNotesHTTPMissingParentRestoreAndNonFolderFiling` regressions for preserved data/UI.
-- [ ] Check extracted search against existing filename/content, resolved-Tag, document-type,
+- [x] Check extracted search against existing filename/content, resolved-Tag, document-type,
   ordering, no-match, and pagination cases, using the existing SQLite/FTS test configuration.
-- [ ] Run `npm run test:e2e -- e2e/mcp_workflows.spec.ts` for the complete desktop/mobile journey.
+- [x] Run `npm run test:e2e -- e2e/mcp_workflows.spec.ts` for the complete desktop/mobile journey.
   File via MCP then refresh the browser; also file via visible browser controls and confirm MCP
   state. Include the final Inbox item, multiple-item selection, folder and non-folder Spaces.
 - [x] Run affected existing Browse/upload/filter consumer checks after the final extraction.
-- [ ] Manually upload, classify, choose/create a folder, file, and rediscover a representative
+- [x] Manually upload, classify, choose/create a folder, file, and rediscover a representative
   document. Repeat completion in a non-folder Space and check browser desktop/mobile views.
-- [ ] Complete the [plan's common checks][common-checks]
+- [x] Complete the [plan's common checks][common-checks]
   and update the single execution record. Mark first release complete only when all four slice
   journeys and their required checks have evidence.
 

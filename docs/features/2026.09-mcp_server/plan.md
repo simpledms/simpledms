@@ -1,28 +1,27 @@
 # MCP implementation plan
 
 Date: 2026-09-18  
-Status: extensions 05–09 implemented and verified; residual delivery checks for 01–04 remain open
+Status: all nine slices implemented and verified
 
 Contract: [specification](spec.md), [durable rules](invariants.md), and the linked
 [architecture](../../specs/20260918_mcp_server.md). The source review and all future execution
 evidence belong in the [single record][record].
 
-The all-slice review passed the MCP Go suites, production migration/backfill checks, shared caller
-regressions, desktop/mobile MCP browser journeys, Browse browser regressions, build, and scoped vet.
-Extensions 05–09 also passed their completed SDK, fault/concurrency, and desktop/mobile checks.
-The [record][record] identifies evidence and residual delivery work for slices 01–04.
+The reviews and delivery checks passed the MCP Go suites, production migration/backfill checks,
+shared caller regressions, desktop/mobile browser journeys, SDK walkthroughs, fault/concurrency
+checks, build, and scoped vet. The [record][record] contains the actual execution evidence and
+the deliberately scoped verification boundary.
 
-Slice 01 implementation includes an opt-in commit-buffered browser response and a native
-`SelectField` for keyboard-accessible Space selection. The remaining UI composition reuses the
-existing credential widgets. See the record for migration generation's unrelated-schema-drift
-exclusion and the exact unperformed verification boundary.
+Slice 01 uses an opt-in commit-buffered browser response and the current credential list-radio
+composition. See the record for migration generation's unrelated-schema-drift exclusion and the
+completed verification evidence.
 
 ## Ordered slices
 
-1. [ ] [Connect a scoped client and inspect its Inbox](slices/01-connect_and_inspect.md)
-2. [ ] [Upload a document and open it in Inbox](slices/02-upload_to_inbox.md)
-3. [ ] [Classify a document with existing metadata](slices/03-classify_document.md)
-4. [ ] [File a classified document and find it again](slices/04-file_document.md)
+1. [x] [Connect a scoped client and inspect its Inbox](slices/01-connect_and_inspect.md)
+2. [x] [Upload a document and open it in Inbox](slices/02-upload_to_inbox.md)
+3. [x] [Classify a document with existing metadata](slices/03-classify_document.md)
+4. [x] [File a classified document and find it again](slices/04-file_document.md)
 5. [x] [Manage metadata definitions](slices/05-manage_metadata.md)
 6. [x] [Download original bytes](slices/06-download_original_bytes.md)
 7. [x] [Search by typed field values](slices/07-field_filters.md)

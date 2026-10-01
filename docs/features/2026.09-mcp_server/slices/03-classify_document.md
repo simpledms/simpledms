@@ -1,6 +1,6 @@
 # 03 — Classify a document with existing metadata
 
-Status: implemented; automated review passed, remaining verification pending
+Status: implemented and verified
 Depends on: [01](01-connect_and_inspect.md), [02](02-upload_to_inbox.md)  
 Contract: [classification](../spec.md#classification-contract); rules M1–M4
 
@@ -47,13 +47,13 @@ removes typed fields. Browser Inbox/Browse metadata and `get_file` show the same
 
 ## Verification checklist
 
-- [ ] Run proposed `go test ./server -run '^TestMCPClassification'`, covering the acceptance cases,
+- [x] Run proposed `go test ./server -run '^TestMCPClassification'`, covering the acceptance cases,
   concurrent repeated assignments, correct resolved-Tag results, and rollback on operation or
   commit error through the real execution boundary.
 - [x] Verify fresh schemas and a populated pre-feature tenant through generated migrations and
   resumed/repeated backfill. Include existing grouped/composed Tags, properties, document types,
   attributes, and file assignments; inspect generated SQL for unexpected existing-table rebuilds.
-- [ ] Run affected metadata model/action regressions and confirm query/schema handling never
+- [x] Run affected metadata model/action regressions and confirm query/schema handling never
   serializes Ent internal IDs. Include schema validation and tool business errors separately.
 - [x] Run `npm run test:e2e -- e2e/mcp_workflows.spec.ts --grep @classify` in both contexts:
   upload through the earlier tool, classify through MCP, refresh browser metadata, change values
@@ -61,9 +61,9 @@ removes typed fields. Browser Inbox/Browse metadata and `get_file` show the same
   zero, a cleared date, unchanged type selection, and a repeated Tag assignment.
 - [x] Exercise affected `e2e/browse_upload_filters.spec.ts` behaviour; extend the new suite's
   mobile coverage for its metadata consumers rather than changing every global browser project.
-- [ ] Manually classify one Inbox document using known definitions, inspect it in desktop/mobile
+- [x] Manually classify one Inbox document using known definitions, inspect it in desktop/mobile
   UI, and correct metadata there. Confirm subsequent MCP reads reflect the correction.
-- [ ] Complete the [plan's common checks][common-checks]
+- [x] Complete the [plan's common checks][common-checks]
   and add actual commands/results to the single record before marking complete.
 
 Relevant code: [`TagService`][tags], [`property value conversion`][values],
