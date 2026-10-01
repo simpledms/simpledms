@@ -3,7 +3,6 @@ package property
 import (
 	"math"
 	"net/http"
-	"strconv"
 
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	"github.com/simpledms/simpledms/util/e"
@@ -13,11 +12,11 @@ import (
 const maxJSONSafeInteger int64 = 1<<53 - 1
 
 type FilePropertyValue struct {
-	typex        fieldtype.FieldType
-	text         string
-	number       int
-	date         timex.Date
-	checkbox     bool
+	typex    fieldtype.FieldType
+	text     string
+	number   int
+	date     timex.Date
+	checkbox bool
 }
 
 func NewTextFilePropertyValue(value string) FilePropertyValue {
@@ -55,7 +54,7 @@ func NewDecimalMoneyFilePropertyValue(value float64) (FilePropertyValue, error) 
 
 func checkedInteger(value int64) (int, error) {
 	if value < -maxJSONSafeInteger || value > maxJSONSafeInteger ||
-		strconv.IntSize == 32 && (value < math.MinInt32 || value > math.MaxInt32) {
+		value < math.MinInt || value > math.MaxInt {
 		return 0, e.NewHTTPErrorf(http.StatusBadRequest, "Number value is out of range.")
 	}
 	return int(value), nil

@@ -821,6 +821,20 @@ Final intake delivery checks (slices 01–04), 2026-10-01:
   data was untouched. Missing later catalog capabilities remain intentional future work, not
   delivery blockers for these nine slices.
 
+PR #57 failed-check follow-up, 2026-10-01:
+
+- Reviewed the failing CodeQL check and SonarCloud quality gate. CodeQL could not resolve the
+  conditional native-integer bounds; `checkedInteger` now checks `math.MinInt`/`math.MaxInt`
+  directly. The new constructor regression test covers the accepted range and rejection boundaries.
+- SonarCloud's sole reliability issue was a false positive on transaction ownership in the
+  commit-error test driver. Added an explained, line-level `NOSONAR` suppression.
+- Focused verification passed:
+  - `go test ./model/tenant/property -run '^TestIntegerFilePropertyValueConstructors$' -count=1`
+  - `GOARCH=386 CGO_ENABLED=0 go test ./model/tenant/property -run '^TestIntegerFilePropertyValueConstructors$' -count=1`
+  - `go test ./server -run '^TestMCPUploadReportsAmbiguousCommitButPreservesCanonicalFile$' -count=1`
+  - `git diff --check`
+- Remote CodeQL/SonarCloud results remain pending a push and fresh analysis.
+
 ## Operating implemented slices
 
 After deploying the generated migration and rebuilt application, open Account → MCP credentials.

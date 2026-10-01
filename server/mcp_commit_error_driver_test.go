@@ -30,7 +30,8 @@ func (d *mcpCommitErrorDriver) BeginTx(ctx context.Context, opts *sql.TxOptions)
 	if !ok {
 		return nil, errors.New("underlying tenant driver does not support BeginTx")
 	}
-	tx, err := beginner.BeginTx(ctx, opts)
+	// The caller owns the returned transaction wrapper; a deferred rollback here would close it.
+	tx, err := beginner.BeginTx(ctx, opts) // NOSONAR
 	if err != nil {
 		return nil, err
 	}
