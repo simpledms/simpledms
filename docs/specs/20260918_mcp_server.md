@@ -701,6 +701,73 @@ Extensions 06–09 implementation, 2026-09-30:
   client workflows remain pending. Later coverage additions have not been broadly verified; slice
   delivery boxes remain open. Prior review evidence does not cover these new changes.
 
+Extensions 05–09 verification, 2026-10-01:
+
+- Completed the extension verification on current source after `a7ffb63`, using a disposable
+  S3-enabled instance at `https://localhost:7202` with workspace-relative `.e2e-mcp-meta`.
+  The user's `.testdata` and applied migrations were not modified. No production fix was needed.
+- Added `server/mcp_extension_verification_test.go` covering download continuation across a
+  newer version, a missing disposable storage object, deterministic cancellation during an S3 GET,
+  Trash note read-only state, concurrent note replacement with one successor, commit-error note
+  rollback without an orphan, rollback of an actually created child on a descendant error,
+  non-folder rename/move rules, and same-parent movement into a new child. A real browser command
+  test also protects shared Tag creation/assignment as observed through MCP.
+- Added `e2e/mcp_extensions.spec.ts` with desktop/mobile metadata CRUD visibility, decimal Money
+  and unchecked/missing Checkbox parity, canonical download byte comparison, note current/history
+  views and browser-created notes, and renamed/moved file navigation. Extracted existing helpers
+  into `e2e/mcp_helpers.ts`; the previous workflows retained their behavior.
+- Go verification passed uncached:
+  - `go test ./server -run '^TestMCP' -count=1 -timeout 180s` before the added fault tests.
+  - `go test ./server -run '^(TestMCP|TestDocumentNotes|TestBrowseListDir|TestFileSystemMove|TestMarkAsDoneCmd|TestFileVersionFromInbox)' -count=1 -timeout 180s -v`:
+    **70 top-level tests passed**, including 43 MCP tests and the existing note/Browse/filesystem
+    callers. No test skips were reported.
+  - The eight initial new fault/organization tests passed together with `-count=1`, and the final
+    `TestMCPMetadataBrowserCreateAndAssignReflectsThroughMCP` passed separately with `-count=1`.
+  - Metadata backfill and scoped file/filesystem helper regressions also passed. Packages without
+    standalone model tests were exercised through the SQLite-backed server integration suites.
+  - `go build ./...` and scoped `go vet` passed, including server packages, affected Browse and
+    metadata actions, credential services, and the affected tenant models. The final scoped
+    build/vet was repeated after adding the fault tests; touched Go was formatted.
+- Browser verification passed:
+  - `E2E_BASE_URL=https://localhost:7202 E2E_LOGIN_EMAIL=dev+admin@simpledms.app E2E_LOGIN_PASSWORD=12345678 npm run test:e2e -- e2e/mcp_workflows.spec.ts e2e/mcp_extensions.spec.ts e2e/browse_upload_filters.spec.ts`:
+    **15/15 passed** (eight original MCP journeys, four new desktop/mobile extension journeys,
+    and three Browse regressions). Credentials were created through visible UI controls.
+  - Initial failures were new test assumptions: a renamed field was checked for deletion before
+    deletion, the rename tool argument was incorrect, continuation omitted its version, hidden
+    chip inputs were used directly, and retained note bodies were expected in a title-only list.
+    Assertions now follow actual controls and response contracts. Independent field comparisons
+    reset URL state to avoid overlapping blur/debounced requests; they await the relevant update
+    and list refresh instead of stale partial responses. Mobile navigation verifies the public
+    parent URL because breadcrumbs are intentionally hidden while a file detail pane is selected.
+- Live bearer-only walkthrough used the official Go SDK **v1.8.0** and discovered all 49 tools:
+  - Metadata CRUD, groups/composition, atomic creation/assignment, attributes, and template
+    discovery succeeded; both desktop/mobile management pages reflected the definitions.
+  - Number, decimal Money, bounded dates, and unchecked Checkbox results matched actual controls
+    in the same directory scope. Documents missing the Checkbox but carrying another field were
+    correctly included. Browser open start/end date bounds matched scalar MCP conditions on both
+    sizes after waiting for the actual `ValueStart`/`ValueEnd` request, rather than the initial
+    Between-radio request. SDK whole-Space search and Browse directory scope were distinguished.
+  - A deleted, unused field's saved filter URL reloaded with HTTP 200 and no JavaScript errors on
+    desktop/mobile; the unavailable field disappeared and the normal files remained visible.
+  - SDK original-byte reconstruction matched browser downloads. A **1,258,291-byte** binary file
+    used chunks of **1,048,576 + 209,715** bytes; both paths had SHA-256
+    `9485b6f74175d6e44dfdfb5cbf3b7b9a1346d71b7f078d2605e3b6dd1f203beb` and were byte-identical.
+    A visible browser version upload also left version 1's bytes unchanged while version 2 was
+    independently downloadable; automated coverage verifies continuation spanning that change.
+  - Note create/edit/replace/delete retained history/attribution and appeared in both browser
+    layouts. Automated tests cover owner/author rejection, concurrency, and commit interruption.
+  - Renamed/moved entries retained their notes, metadata, public identities, and parent URLs.
+    For non-folder mode, an Ent fixture setup modified only a disposable Space because no UI mode
+    switch exists; actual SDK rename and both browser titles passed, while move returned the
+    expected folder-mode error. That setup was not a production API or permission bypass in calls.
+- Extension 05–09 checklists and their plan delivery boxes are complete. Residual delivery items
+  from the earlier 01–04 review remain open and were not silently closed by these checks. No full
+  repository suite or unrelated slow bad-network suite was run. Base64 overhead and plaintext
+  prefix rereading for compressed/encrypted ranges remain the documented download tradeoff.
+- Stopped the owned verification server and confirmed port 7202 was closed. Temporary token
+  files were removed; reproducible fixture/auth state and test credentials remain only in the
+  disposable setup. Unrelated running processes were left untouched.
+
 ## Operating implemented slices
 
 After deploying the generated migration and rebuilt application, open Account → MCP credentials.

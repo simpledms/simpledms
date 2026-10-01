@@ -1,7 +1,7 @@
 # MCP document intake and filing
 
 Date: 2026-09-18  
-Status: slices 01–04 reviewed; extensions 05–09 implemented, complete verification pending
+Status: extensions 05–09 implemented and verified; residual delivery checks for 01–04 remain open
 
 ## Outcome
 

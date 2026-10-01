@@ -1,7 +1,7 @@
 # MCP implementation plan
 
 Date: 2026-09-18  
-Status: slices 01–04 reviewed; extensions 05–09 implemented, complete verification pending
+Status: extensions 05–09 implemented and verified; residual delivery checks for 01–04 remain open
 
 Contract: [specification](spec.md), [durable rules](invariants.md), and the linked
 [architecture](../../specs/20260918_mcp_server.md). The source review and all future execution
@@ -9,8 +9,8 @@ evidence belong in the [single record][record].
 
 The all-slice review passed the MCP Go suites, production migration/backfill checks, shared caller
 regressions, desktop/mobile MCP browser journeys, Browse browser regressions, build, and scoped vet.
-The [record][record] identifies residual manual and fault-injection coverage. Delivery checkboxes
-remain open until each slice's full verification checklist is satisfied.
+Extensions 05–09 also passed their completed SDK, fault/concurrency, and desktop/mobile checks.
+The [record][record] identifies evidence and residual delivery work for slices 01–04.
 
 Slice 01 implementation includes an opt-in commit-buffered browser response and a native
 `SelectField` for keyboard-accessible Space selection. The remaining UI composition reuses the
@@ -23,11 +23,11 @@ exclusion and the exact unperformed verification boundary.
 2. [ ] [Upload a document and open it in Inbox](slices/02-upload_to_inbox.md)
 3. [ ] [Classify a document with existing metadata](slices/03-classify_document.md)
 4. [ ] [File a classified document and find it again](slices/04-file_document.md)
-5. [ ] [Manage metadata definitions](slices/05-manage_metadata.md)
-6. [ ] [Download original bytes](slices/06-download_original_bytes.md)
-7. [ ] [Search by typed field values](slices/07-field_filters.md)
-8. [ ] [Manage document notes and history](slices/08-document_notes.md)
-9. [ ] [Organize filed documents and directories](slices/09-organize_filed_documents.md)
+5. [x] [Manage metadata definitions](slices/05-manage_metadata.md)
+6. [x] [Download original bytes](slices/06-download_original_bytes.md)
+7. [x] [Search by typed field values](slices/07-field_filters.md)
+8. [x] [Manage document notes and history](slices/08-document_notes.md)
+9. [x] [Organize filed documents and directories](slices/09-organize_filed_documents.md)
 
 ## Initial four slices and the management extension
 
@@ -56,7 +56,7 @@ another editor or migration effort.
 
 Extensions 06–09 were requested in that order after metadata management: original bytes, typed
 filters, notes, and filed organization. Each retains scoped public references and the existing
-storage/model rules; their focused implementation checkpoints do not close delivery verification.
+storage/model rules; their completed verification is linked from each slice.
 
 ## Shared implementation guidance
 

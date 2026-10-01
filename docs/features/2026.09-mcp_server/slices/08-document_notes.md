@@ -1,6 +1,6 @@
 # 08 — Manage document notes and history
 
-Status: implemented; focused checkpoint passed, verification pending
+Status: implemented and verified
 Contract: [notes and history](../spec.md#notes-and-history-contract); M1–M3 and existing note rules
 
 ## Observable result
@@ -17,10 +17,10 @@ existing authorship/ownership and retained-history model. Read-only credentials 
 
 ## Verification
 
-- [ ] Run `go test ./server -run '^TestMCPNotes|^TestDocumentNotesModel'`, including readonly,
+- [x] Run `go test ./server -run '^TestMCPNotes|^TestDocumentNotesModel'`, including readonly,
   owner/author, legacy, pagination, history, Trash, pairing, and Space-isolation behavior.
-- [ ] Change notes through both transports and compare browser desktop/mobile current/history
+- [x] Change notes through both transports and compare browser desktop/mobile current/history
   views, including replacement and deletion. Exercise interrupted/concurrent mutations.
-- [ ] Complete scoped build checks and update the [single execution record][record].
+- [x] Complete scoped build checks and update the [single execution record][record].
 
 [record]: ../../../specs/20260918_mcp_server.md#source-review-and-execution-record

@@ -1,6 +1,6 @@
 # 06 — Download original bytes
 
-Status: implemented; focused checkpoint passed, verification pending
+Status: implemented and verified
 Contract: [original-byte download](../spec.md#original-byte-download-contract); M1–M3
 
 ## Observable result
@@ -17,10 +17,10 @@ versions, without requiring a browser Session or receiving internal storage iden
 
 ## Verification
 
-- [ ] Run `go test ./server -run '^TestMCPDownload'`, including invalid versions/ranges, canonical
+- [x] Run `go test ./server -run '^TestMCPDownload'`, including invalid versions/ranges, canonical
   bytes, read-only access, same-tenant Space isolation, and storage/cancellation errors.
-- [ ] Exercise continuation across a concurrent new-version upload and compare the completed
+- [x] Exercise continuation across a concurrent new-version upload and compare the completed
   bytes with a browser download. Check a representative large file and historical version.
-- [ ] Complete scoped build checks and update the [single execution record][record].
+- [x] Complete scoped build checks and update the [single execution record][record].
 
 [record]: ../../../specs/20260918_mcp_server.md#source-review-and-execution-record

@@ -1,7 +1,7 @@
 # 05 — Manage metadata definitions
 
 Date: 2026-09-29
-Status: implementation complete; focused checkpoints passed, verification pending
+Status: implemented and verified
 Depends on: [03](03-classify_document.md)
 Contract: [metadata management](../spec.md#metadata-management-contract); rules M1–M4
 
@@ -24,19 +24,19 @@ advertised library templates, all inside its credential's Space.
 
 ## Verification checklist
 
-- [ ] Run `go test ./server -run '^TestMCPMetadataManagement|^TestMCPBearerCredentialCannotCrossSpaces'`
+- [x] Run `go test ./server -run '^TestMCPMetadataManagement|^TestMCPBearerCredentialCannotCrossSpaces'`
   for the completed tool set, including duplicates/in-use deletion, stable IDs, grouping,
   composition, attributes, atomic operations, template import, and unchanged state on rejection.
-- [ ] Run relevant existing Tag, field, document-type, and library HTTP/model regressions,
+- [x] Run relevant existing Tag, field, document-type, and library HTTP/model regressions,
   including the shared create-and-assign browser operation.
-- [ ] Exercise management with a bearer-capable client and observe create/edit/delete effects
+- [x] Exercise management with a bearer-capable client and observe create/edit/delete effects
   through desktop/mobile browser management screens. Check the existing discovery journey after
   the new registrations.
-- [ ] Complete applicable build/format checks and record actual verification before marking
+- [x] Complete applicable build/format checks and record actual verification before marking
   the plan delivery checkbox complete.
 
-The [single execution record][record] distinguishes the focused implementation checkpoints from
-the unperformed complete verification. No schema migration is required; attribute references use
+The [single execution record][record] contains the completed Go, SDK, and desktop/mobile browser
+verification. No schema migration is required; attribute references use
 the [existing unique pairs][attribute-adr].
 
 [record]: ../../../specs/20260918_mcp_server.md#source-review-and-execution-record

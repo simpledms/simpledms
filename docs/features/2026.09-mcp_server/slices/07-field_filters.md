@@ -1,6 +1,6 @@
 # 07 — Search by typed field values
 
-Status: implemented; focused checkpoint passed, verification pending
+Status: implemented and verified
 Contract: [typed field search](../spec.md#typed-field-search-contract); M1–M4
 
 ## Observable result
@@ -18,10 +18,10 @@ Browse consumes the same predicates with its existing money/date input normaliza
 
 ## Verification
 
-- [ ] Run `go test ./server -run '^TestMCPFieldFilters'` and affected existing Browse property,
+- [x] Run `go test ./server -run '^TestMCPFieldFilters'` and affected existing Browse property,
   FTS, and filter regressions.
-- [ ] Exercise desktop/mobile field filter controls against the MCP result, including decimal
+- [x] Exercise desktop/mobile field filter controls against the MCP result, including decimal
   money, open date bounds, checked/unchecked/missing values, and deleted-definition URL state.
-- [ ] Complete scoped build checks and update the [single execution record][record].
+- [x] Complete scoped build checks and update the [single execution record][record].
 
 [record]: ../../../specs/20260918_mcp_server.md#source-review-and-execution-record

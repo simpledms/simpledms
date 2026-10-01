@@ -1,6 +1,6 @@
 # 09 — Organize filed documents and directories
 
-Status: implemented; focused checkpoint passed, verification pending
+Status: implemented and verified
 Contract: [filed organization](../spec.md#filed-organization-contract); M1–M5
 
 ## Observable result
@@ -17,10 +17,10 @@ versions, notes, or child-parent references. Inbox completion remains the existi
 
 ## Verification
 
-- [ ] Run `go test ./server -run '^TestMCPOrganization'` and affected existing Browse move/rename
+- [x] Run `go test ./server -run '^TestMCPOrganization'` and affected existing Browse move/rename
   and filing regressions, including rollback and directory descendants.
-- [ ] Exercise renamed/moved entries, navigation, breadcrumbs, and preserved notes/metadata in
+- [x] Exercise renamed/moved entries, navigation, breadcrumbs, and preserved notes/metadata in
   browser desktop/mobile views. Check same-parent child creation and non-folder rename.
-- [ ] Complete scoped build checks and update the [single execution record][record].
+- [x] Complete scoped build checks and update the [single execution record][record].
 
 [record]: ../../../specs/20260918_mcp_server.md#source-review-and-execution-record
