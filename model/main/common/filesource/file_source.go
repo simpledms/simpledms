@@ -11,4 +11,5 @@ const (
 	URLImport
 	WebDAV
 	SystemExtraction
+	MCP
 )

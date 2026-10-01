@@ -8,11 +8,10 @@ import (
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entquery"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
-	"github.com/simpledms/simpledms/db/enttenant/resolvedtagassignment"
 	"github.com/simpledms/simpledms/db/entx"
+	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/util/sqlutil"
 )
 
@@ -92,84 +91,18 @@ func (qq *ListDirFileQueryService) Query(
 					ctx.SpaceCtx().Space.ID,
 				))
 			}
-
-			if len(state.ListFilterTagsPartialState.CheckedTagIDs) > 0 {
-				resolvedTagAssignmentTable := sql.Table(resolvedtagassignment.Table)
-				qs.Where(
-					sql.Exists(
-						sql.Select(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldFileID)).
-							From(resolvedTagAssignmentTable).
-							Where(
-								sql.And(
-									// stange behavior if sql.EQ is used instead of sql.ColumnsEQ:
-									// executing the query from debugger manually would work, but not via
-									// ent because column name (files.id) is passed in as argument for the
-									// prepared statement
-									sql.ColumnsEQ(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldFileID), qs.C(file.FieldID)),
-									sql.InInts(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldTagID), state.ListFilterTagsPartialState.CheckedTagIDs...),
-								),
-							).
-							GroupBy(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldFileID)).
-							Having(sql.EQ(sql.Count(resolvedTagAssignmentTable.C(resolvedtagassignment.FieldFileID)), len(state.ListFilterTagsPartialState.CheckedTagIDs))),
-					),
-				)
-			}
 		})
-
-	if state.SearchQuery != "" {
-		searchResultQuery = searchResultQuery.Where(file.IsInInbox(false))
-	} else {
-		searchResultQuery = searchResultQuery.Where(entquery.FileIsInInbox(false))
-	}
-
-	// searchResultQuery = searchResultQuery.Where(file.HasSpaceAssignmentWith(spacefileassignment.SpaceID(ctx.SpaceCtx().Space.ID)))
-	searchResultQuery = searchResultQuery.Where(file.SpaceID(ctx.SpaceCtx().Space.ID))
-
-	if state.DocumentTypeID != 0 {
-		searchResultQuery = searchResultQuery.Where(file.DocumentTypeID(state.DocumentTypeID))
-	}
-
-	if state.SearchQuery != "" {
-		// TODO give filename a higher priority?
-		searchResultQuery.Where(
-			func(qs *sql.Selector) {
-				entquery.ApplyFileSearchCandidateFilter(
-					qs,
-					state.SearchQuery,
-					ctx.SpaceCtx().Space.ID,
-					false,
-				)
-			},
-		)
-	}
-
-	switch state.SortBy {
-	case sortByRank:
-		searchResultQuery = searchResultQuery.Order(
-			entquery.OrderFileSearchRank(
-				state.SearchQuery,
-				ctx.SpaceCtx().Space.ID,
-				false,
-			),
-			file.ByIsDirectory(sql.OrderDesc()),
-			file.ByName(),
-		)
-	case sortByNewestFirst:
-		searchResultQuery = searchResultQuery.Order(
-			file.ByIsDirectory(sql.OrderDesc()),
-			file.ByCreatedAt(sql.OrderDesc()),
-			file.ByName(),
-		)
-	case sortByOldestFirst:
-		searchResultQuery = searchResultQuery.Order(
-			file.ByIsDirectory(sql.OrderDesc()),
-			file.ByCreatedAt(),
-			file.ByName(),
-		)
-	case sortByName:
-		fallthrough
-	default:
-		searchResultQuery = searchResultQuery.Order(file.ByIsDirectory(sql.OrderDesc()), file.ByName())
+	searchResultQuery, err := filemodel.NewFiledQuery().Apply(
+		ctx,
+		searchResultQuery,
+		state.SearchQuery,
+		state.SortBy,
+		int64IDs(state.CheckedTagIDs),
+		state.DocumentTypeID,
+	)
+	if err != nil {
+		log.Println(err)
+		panic(err)
 	}
 
 	if state.HideDirectories && state.HideFiles {
@@ -210,6 +143,14 @@ func (qq *ListDirFileQueryService) Query(
 		ChildCounts:          childCounts,
 		ChildParentFullPaths: childParentFullPaths,
 	}
+}
+
+func int64IDs(ids []int) []int64 {
+	values := make([]int64, 0, len(ids))
+	for _, id := range ids {
+		values = append(values, int64(id))
+	}
+	return values
 }
 
 func (qq *ListDirFileQueryService) childCountsByDirectoryID(

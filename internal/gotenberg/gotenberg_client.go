@@ -219,7 +219,7 @@ func (qq *pdfResponseReader) Read(p []byte) (int, error) {
 			return 0, &ConversionError{
 				Category: FailureCategoryInvalidResponse,
 				TraceID:  qq.traceID,
-				Err:      errors.New("Gotenberg response is not a PDF"),
+				Err:      errors.New("gotenberg response is not a PDF"),
 			}
 		}
 		qq.validated = true
@@ -236,7 +236,7 @@ func (qq *pdfResponseReader) Read(p []byte) (int, error) {
 		return 0, &ConversionError{
 			Category: FailureCategoryInvalidResponse,
 			TraceID:  qq.traceID,
-			Err:      errors.New("Gotenberg response exceeds the configured size limit"),
+			Err:      errors.New("gotenberg response exceeds the configured size limit"),
 		}
 	}
 	remaining := qq.maxBytes - qq.bytesRead
@@ -252,7 +252,7 @@ func (qq *pdfResponseReader) Read(p []byte) (int, error) {
 		return n, &ConversionError{
 			Category: FailureCategoryInvalidResponse,
 			TraceID:  qq.traceID,
-			Err:      errors.New("Gotenberg response is empty"),
+			Err:      errors.New("gotenberg response is empty"),
 		}
 	}
 	if err == io.EOF {

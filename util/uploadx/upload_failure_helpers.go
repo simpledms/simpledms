@@ -7,28 +7,9 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	entmainschema "github.com/simpledms/simpledms/db/entmain/schema"
-	tenantprivacy "github.com/simpledms/simpledms/db/enttenant/privacy"
-	enttenantschema "github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/util/txx"
 )
-
-func MarkStoredFileUploadFailed(ctx *ctxx.SpaceContext, storedFileID int64) {
-	_, err := txx.WithTenantWriteSpaceTx(ctx, func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
-		ctxWithIncomplete := tenantprivacy.DecisionContext(
-			enttenantschema.WithUnfinishedUploads(writeCtx),
-			tenantprivacy.Allow,
-		)
-		err := writeCtx.TTx.StoredFile.
-			UpdateOneID(storedFileID).
-			SetUploadFailedAt(time.Now()).
-			Exec(ctxWithIncomplete)
-		return nil, err
-	})
-	if err != nil {
-		log.Println(err)
-	}
-}
 
 func MarkTemporaryFileUploadFailed(ctx ctxx.Context, temporaryFileID int64) {
 	_, err := txx.WithMainWriteTx(ctx, func(writeTx *entmain.Tx) (*struct{}, error) {
@@ -51,18 +32,7 @@ func HandleStoredFileUploadFailure(
 	cause error,
 	cleanup bool,
 ) {
-	if cause != nil {
-		log.Println(cause)
-	}
-	if prepared == nil {
-		return
-	}
-	if cleanup {
-		if err := fs.RemoveTemporaryObject(ctx, prepared.TemporaryStoragePath, prepared.TemporaryStorageFilename); err != nil {
-			log.Println(err)
-		}
-	}
-	MarkStoredFileUploadFailed(ctx, prepared.StoredFileID)
+	fs.HandlePreparedUploadFailure(ctx, prepared, cause, cleanup)
 }
 
 func HandleTemporaryFileUploadFailure(

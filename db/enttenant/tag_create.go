@@ -13,6 +13,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 )
 
@@ -26,6 +27,20 @@ type TagCreate struct {
 // SetSpaceID sets the "space_id" field.
 func (_c *TagCreate) SetSpaceID(v int64) *TagCreate {
 	_c.mutation.SetSpaceID(v)
+	return _c
+}
+
+// SetPublicID sets the "public_id" field.
+func (_c *TagCreate) SetPublicID(v entx.CIText) *TagCreate {
+	_c.mutation.SetPublicID(v)
+	return _c
+}
+
+// SetNillablePublicID sets the "public_id" field if the given value is not nil.
+func (_c *TagCreate) SetNillablePublicID(v *entx.CIText) *TagCreate {
+	if v != nil {
+		_c.SetPublicID(*v)
+	}
 	return _c
 }
 
@@ -181,6 +196,9 @@ func (_c *TagCreate) Mutation() *TagMutation {
 
 // Save creates the Tag in the database.
 func (_c *TagCreate) Save(ctx context.Context) (*Tag, error) {
+	if err := _c.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -204,6 +222,18 @@ func (_c *TagCreate) ExecX(ctx context.Context) {
 	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (_c *TagCreate) defaults() error {
+	if _, ok := _c.mutation.PublicID(); !ok {
+		if tag.DefaultPublicID == nil {
+			return fmt.Errorf("enttenant: uninitialized tag.DefaultPublicID (forgotten import enttenant/runtime?)")
+		}
+		v := tag.DefaultPublicID()
+		_c.mutation.SetPublicID(v)
+	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -256,6 +286,10 @@ func (_c *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
+	}
+	if value, ok := _c.mutation.PublicID(); ok {
+		_spec.SetField(tag.FieldPublicID, field.TypeString, value)
+		_node.PublicID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(tag.FieldName, field.TypeString, value)
@@ -408,6 +442,7 @@ func (_c *TagCreateBulk) Save(ctx context.Context) ([]*Tag, error) {
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TagMutation)
 				if !ok {

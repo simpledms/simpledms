@@ -44,10 +44,7 @@ func SetSessionCookie(rw httpx.ResponseWriter, req *httpx.Request, isTemporarySe
 		expires = time.Now().Add(time.Hour * 24 * 14) // 2 weeks
 	}
 
-	secure := true
-	if allowInsecureCookies {
-		secure = false
-	}
+	secure := !allowInsecureCookies
 
 	// duplicate in RenewSessionCookie
 	cookie = &http.Cookie{
@@ -75,10 +72,7 @@ func SetSessionCookie(rw httpx.ResponseWriter, req *httpx.Request, isTemporarySe
 // IMPORTANT
 // caller must remove cookie from database
 func InvalidateSessionCookie(rw httpx.ResponseWriter, allowInsecureCookie bool) {
-	secure := true
-	if allowInsecureCookie {
-		secure = false
-	}
+	secure := !allowInsecureCookie
 
 	// IMPORTANT if changed, cookie creation in SignIn has to be changed too
 	http.SetCookie(rw, &http.Cookie{
@@ -118,10 +112,7 @@ func RenewSessionCookie(
 		return nil, false
 	}
 
-	secure := true
-	if allowInsecureCookies {
-		secure = false
-	}
+	secure := !allowInsecureCookies
 
 	// duplicate in SetSessionCookie
 	cookie := &http.Cookie{

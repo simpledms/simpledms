@@ -2,12 +2,12 @@ package browse
 
 import (
 	"fmt"
-	"math"
 	"net/http"
 
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
+	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/timex"
 )
@@ -129,51 +129,24 @@ func filePropertyValuesFromSet(data *SetFilePropertyCmdFormData) filePropertyVal
 	}
 }
 
-func applyPropertyValuesToCreate(
-	query *enttenant.FilePropertyAssignmentCreate,
+func filePropertyValue(
 	propertyType fieldtype.FieldType,
 	values filePropertyValues,
-) error {
+) (propertymodel.FilePropertyValue, error) {
 	switch propertyType {
 	case fieldtype.Text:
-		query.SetTextValue(values.TextValue)
+		return propertymodel.NewTextFilePropertyValue(values.TextValue), nil
 	case fieldtype.Number:
-		query.SetNumberValue(values.NumberValue)
+		return propertymodel.NewNumberFilePropertyValue(int64(values.NumberValue))
 	case fieldtype.Money:
-		// convert to minor unit // TODO is this good enough?
-		val := int(math.Round(values.MoneyValue * 100))
-		query.SetNumberValue(val)
+		return propertymodel.NewDecimalMoneyFilePropertyValue(values.MoneyValue)
 	case fieldtype.Date:
-		query.SetDateValue(values.DateValue)
+		return propertymodel.NewDateFilePropertyValue(values.DateValue)
 	case fieldtype.Checkbox:
-		query.SetBoolValue(values.CheckboxValue)
+		return propertymodel.NewCheckboxFilePropertyValue(values.CheckboxValue), nil
 	default:
-		return e.NewHTTPErrorf(http.StatusBadRequest, "Unsupported field type.")
+		return propertymodel.FilePropertyValue{}, e.NewHTTPErrorf(
+			http.StatusBadRequest, "Unsupported field type.",
+		)
 	}
-
-	return nil
-}
-
-func applyPropertyValuesToUpdate(
-	query *enttenant.FilePropertyAssignmentUpdateOne,
-	propertyType fieldtype.FieldType,
-	values filePropertyValues,
-) error {
-	switch propertyType {
-	case fieldtype.Text:
-		query.SetTextValue(values.TextValue)
-	case fieldtype.Number:
-		query.SetNumberValue(values.NumberValue)
-	case fieldtype.Money:
-		val := int(math.Round(values.MoneyValue * 100))
-		query.SetNumberValue(val)
-	case fieldtype.Date:
-		query.SetDateValue(values.DateValue)
-	case fieldtype.Checkbox:
-		query.SetBoolValue(values.CheckboxValue)
-	default:
-		return e.NewHTTPErrorf(http.StatusBadRequest, "Unsupported field type.")
-	}
-
-	return nil
 }

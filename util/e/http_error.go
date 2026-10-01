@@ -37,7 +37,7 @@ func NewHTTPErrorf(statusCode int, messageStr string, args ...any) *HTTPError {
 	// message to lower, remove dots at end replace . with ,
 	details := strings.ToLower(messageStr)
 	details = strings.Trim(details, ".")
-	details = strings.Replace(details, ".", ",", -1)
+	details = strings.ReplaceAll(details, ".", ",")
 
 	return &HTTPError{
 		err:        errors.New(details),

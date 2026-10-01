@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 )
 
@@ -59,6 +60,11 @@ func SpaceID(v int64) predicate.Tag {
 	return predicate.Tag(sql.FieldEQ(FieldSpaceID, v))
 }
 
+// PublicID applies equality check predicate on the "public_id" field. It's identical to PublicIDEQ.
+func PublicID(v entx.CIText) predicate.Tag {
+	return predicate.Tag(sql.FieldEQ(FieldPublicID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Tag {
 	return predicate.Tag(sql.FieldEQ(FieldName, v))
@@ -97,6 +103,86 @@ func SpaceIDIn(vs ...int64) predicate.Tag {
 // SpaceIDNotIn applies the NotIn predicate on the "space_id" field.
 func SpaceIDNotIn(vs ...int64) predicate.Tag {
 	return predicate.Tag(sql.FieldNotIn(FieldSpaceID, vs...))
+}
+
+// PublicIDEQ applies the EQ predicate on the "public_id" field.
+func PublicIDEQ(v entx.CIText) predicate.Tag {
+	return predicate.Tag(sql.FieldEQ(FieldPublicID, v))
+}
+
+// PublicIDNEQ applies the NEQ predicate on the "public_id" field.
+func PublicIDNEQ(v entx.CIText) predicate.Tag {
+	return predicate.Tag(sql.FieldNEQ(FieldPublicID, v))
+}
+
+// PublicIDIn applies the In predicate on the "public_id" field.
+func PublicIDIn(vs ...entx.CIText) predicate.Tag {
+	return predicate.Tag(sql.FieldIn(FieldPublicID, vs...))
+}
+
+// PublicIDNotIn applies the NotIn predicate on the "public_id" field.
+func PublicIDNotIn(vs ...entx.CIText) predicate.Tag {
+	return predicate.Tag(sql.FieldNotIn(FieldPublicID, vs...))
+}
+
+// PublicIDGT applies the GT predicate on the "public_id" field.
+func PublicIDGT(v entx.CIText) predicate.Tag {
+	return predicate.Tag(sql.FieldGT(FieldPublicID, v))
+}
+
+// PublicIDGTE applies the GTE predicate on the "public_id" field.
+func PublicIDGTE(v entx.CIText) predicate.Tag {
+	return predicate.Tag(sql.FieldGTE(FieldPublicID, v))
+}
+
+// PublicIDLT applies the LT predicate on the "public_id" field.
+func PublicIDLT(v entx.CIText) predicate.Tag {
+	return predicate.Tag(sql.FieldLT(FieldPublicID, v))
+}
+
+// PublicIDLTE applies the LTE predicate on the "public_id" field.
+func PublicIDLTE(v entx.CIText) predicate.Tag {
+	return predicate.Tag(sql.FieldLTE(FieldPublicID, v))
+}
+
+// PublicIDContains applies the Contains predicate on the "public_id" field.
+func PublicIDContains(v entx.CIText) predicate.Tag {
+	vc := string(v)
+	return predicate.Tag(sql.FieldContains(FieldPublicID, vc))
+}
+
+// PublicIDHasPrefix applies the HasPrefix predicate on the "public_id" field.
+func PublicIDHasPrefix(v entx.CIText) predicate.Tag {
+	vc := string(v)
+	return predicate.Tag(sql.FieldHasPrefix(FieldPublicID, vc))
+}
+
+// PublicIDHasSuffix applies the HasSuffix predicate on the "public_id" field.
+func PublicIDHasSuffix(v entx.CIText) predicate.Tag {
+	vc := string(v)
+	return predicate.Tag(sql.FieldHasSuffix(FieldPublicID, vc))
+}
+
+// PublicIDIsNil applies the IsNil predicate on the "public_id" field.
+func PublicIDIsNil() predicate.Tag {
+	return predicate.Tag(sql.FieldIsNull(FieldPublicID))
+}
+
+// PublicIDNotNil applies the NotNil predicate on the "public_id" field.
+func PublicIDNotNil() predicate.Tag {
+	return predicate.Tag(sql.FieldNotNull(FieldPublicID))
+}
+
+// PublicIDEqualFold applies the EqualFold predicate on the "public_id" field.
+func PublicIDEqualFold(v entx.CIText) predicate.Tag {
+	vc := string(v)
+	return predicate.Tag(sql.FieldEqualFold(FieldPublicID, vc))
+}
+
+// PublicIDContainsFold applies the ContainsFold predicate on the "public_id" field.
+func PublicIDContainsFold(v entx.CIText) predicate.Tag {
+	vc := string(v)
+	return predicate.Tag(sql.FieldContainsFold(FieldPublicID, vc))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/mcpcredential"
 	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/predicate"
 	"github.com/simpledms/simpledms/db/entmain/session"
@@ -43,6 +44,7 @@ const (
 
 	// Node types.
 	TypeAccount                 = "Account"
+	TypeMCPCredential           = "MCPCredential"
 	TypeMail                    = "Mail"
 	TypePasskeyCredential       = "PasskeyCredential"
 	TypeSession                 = "Session"
@@ -2569,6 +2571,895 @@ func (m *AccountMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Account edge %s", name)
+}
+
+// MCPCredentialMutation represents an operation that mutates the MCPCredential nodes in the graph.
+type MCPCredentialMutation struct {
+	config
+	op              Op
+	typ             string
+	id              *int64
+	public_id       *entx.CIText
+	space_public_id *entx.CIText
+	label           *string
+	is_read_only    *bool
+	secret_hash     *string
+	created_at      *time.Time
+	revoked_at      *time.Time
+	clearedFields   map[string]struct{}
+	account         *int64
+	clearedaccount  bool
+	tenant          *int64
+	clearedtenant   bool
+	done            bool
+	oldValue        func(context.Context) (*MCPCredential, error)
+	predicates      []predicate.MCPCredential
+}
+
+var _ ent.Mutation = (*MCPCredentialMutation)(nil)
+
+// mcpcredentialOption allows management of the mutation configuration using functional options.
+type mcpcredentialOption func(*MCPCredentialMutation)
+
+// newMCPCredentialMutation creates new mutation for the MCPCredential entity.
+func newMCPCredentialMutation(c config, op Op, opts ...mcpcredentialOption) *MCPCredentialMutation {
+	m := &MCPCredentialMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeMCPCredential,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withMCPCredentialID sets the ID field of the mutation.
+func withMCPCredentialID(id int64) mcpcredentialOption {
+	return func(m *MCPCredentialMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *MCPCredential
+		)
+		m.oldValue = func(ctx context.Context) (*MCPCredential, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().MCPCredential.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withMCPCredential sets the old MCPCredential of the mutation.
+func withMCPCredential(node *MCPCredential) mcpcredentialOption {
+	return func(m *MCPCredentialMutation) {
+		m.oldValue = func(context.Context) (*MCPCredential, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m MCPCredentialMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m MCPCredentialMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("entmain: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of MCPCredential entities.
+func (m *MCPCredentialMutation) SetID(id int64) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *MCPCredentialMutation) ID() (id int64, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *MCPCredentialMutation) IDs(ctx context.Context) ([]int64, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int64{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().MCPCredential.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPublicID sets the "public_id" field.
+func (m *MCPCredentialMutation) SetPublicID(et entx.CIText) {
+	m.public_id = &et
+}
+
+// PublicID returns the value of the "public_id" field in the mutation.
+func (m *MCPCredentialMutation) PublicID() (r entx.CIText, exists bool) {
+	v := m.public_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPublicID returns the old "public_id" field's value of the MCPCredential entity.
+// If the MCPCredential object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MCPCredentialMutation) OldPublicID(ctx context.Context) (v entx.CIText, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPublicID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPublicID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPublicID: %w", err)
+	}
+	return oldValue.PublicID, nil
+}
+
+// ResetPublicID resets all changes to the "public_id" field.
+func (m *MCPCredentialMutation) ResetPublicID() {
+	m.public_id = nil
+}
+
+// SetAccountID sets the "account_id" field.
+func (m *MCPCredentialMutation) SetAccountID(i int64) {
+	m.account = &i
+}
+
+// AccountID returns the value of the "account_id" field in the mutation.
+func (m *MCPCredentialMutation) AccountID() (r int64, exists bool) {
+	v := m.account
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAccountID returns the old "account_id" field's value of the MCPCredential entity.
+// If the MCPCredential object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MCPCredentialMutation) OldAccountID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAccountID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAccountID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAccountID: %w", err)
+	}
+	return oldValue.AccountID, nil
+}
+
+// ResetAccountID resets all changes to the "account_id" field.
+func (m *MCPCredentialMutation) ResetAccountID() {
+	m.account = nil
+}
+
+// SetTenantID sets the "tenant_id" field.
+func (m *MCPCredentialMutation) SetTenantID(i int64) {
+	m.tenant = &i
+}
+
+// TenantID returns the value of the "tenant_id" field in the mutation.
+func (m *MCPCredentialMutation) TenantID() (r int64, exists bool) {
+	v := m.tenant
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTenantID returns the old "tenant_id" field's value of the MCPCredential entity.
+// If the MCPCredential object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MCPCredentialMutation) OldTenantID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTenantID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
+	}
+	return oldValue.TenantID, nil
+}
+
+// ResetTenantID resets all changes to the "tenant_id" field.
+func (m *MCPCredentialMutation) ResetTenantID() {
+	m.tenant = nil
+}
+
+// SetSpacePublicID sets the "space_public_id" field.
+func (m *MCPCredentialMutation) SetSpacePublicID(et entx.CIText) {
+	m.space_public_id = &et
+}
+
+// SpacePublicID returns the value of the "space_public_id" field in the mutation.
+func (m *MCPCredentialMutation) SpacePublicID() (r entx.CIText, exists bool) {
+	v := m.space_public_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSpacePublicID returns the old "space_public_id" field's value of the MCPCredential entity.
+// If the MCPCredential object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MCPCredentialMutation) OldSpacePublicID(ctx context.Context) (v entx.CIText, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSpacePublicID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSpacePublicID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSpacePublicID: %w", err)
+	}
+	return oldValue.SpacePublicID, nil
+}
+
+// ResetSpacePublicID resets all changes to the "space_public_id" field.
+func (m *MCPCredentialMutation) ResetSpacePublicID() {
+	m.space_public_id = nil
+}
+
+// SetLabel sets the "label" field.
+func (m *MCPCredentialMutation) SetLabel(s string) {
+	m.label = &s
+}
+
+// Label returns the value of the "label" field in the mutation.
+func (m *MCPCredentialMutation) Label() (r string, exists bool) {
+	v := m.label
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLabel returns the old "label" field's value of the MCPCredential entity.
+// If the MCPCredential object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MCPCredentialMutation) OldLabel(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLabel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLabel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLabel: %w", err)
+	}
+	return oldValue.Label, nil
+}
+
+// ResetLabel resets all changes to the "label" field.
+func (m *MCPCredentialMutation) ResetLabel() {
+	m.label = nil
+}
+
+// SetIsReadOnly sets the "is_read_only" field.
+func (m *MCPCredentialMutation) SetIsReadOnly(b bool) {
+	m.is_read_only = &b
+}
+
+// IsReadOnly returns the value of the "is_read_only" field in the mutation.
+func (m *MCPCredentialMutation) IsReadOnly() (r bool, exists bool) {
+	v := m.is_read_only
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsReadOnly returns the old "is_read_only" field's value of the MCPCredential entity.
+// If the MCPCredential object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MCPCredentialMutation) OldIsReadOnly(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsReadOnly is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsReadOnly requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsReadOnly: %w", err)
+	}
+	return oldValue.IsReadOnly, nil
+}
+
+// ResetIsReadOnly resets all changes to the "is_read_only" field.
+func (m *MCPCredentialMutation) ResetIsReadOnly() {
+	m.is_read_only = nil
+}
+
+// SetSecretHash sets the "secret_hash" field.
+func (m *MCPCredentialMutation) SetSecretHash(s string) {
+	m.secret_hash = &s
+}
+
+// SecretHash returns the value of the "secret_hash" field in the mutation.
+func (m *MCPCredentialMutation) SecretHash() (r string, exists bool) {
+	v := m.secret_hash
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSecretHash returns the old "secret_hash" field's value of the MCPCredential entity.
+// If the MCPCredential object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MCPCredentialMutation) OldSecretHash(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSecretHash is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSecretHash requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSecretHash: %w", err)
+	}
+	return oldValue.SecretHash, nil
+}
+
+// ResetSecretHash resets all changes to the "secret_hash" field.
+func (m *MCPCredentialMutation) ResetSecretHash() {
+	m.secret_hash = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *MCPCredentialMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *MCPCredentialMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the MCPCredential entity.
+// If the MCPCredential object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MCPCredentialMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *MCPCredentialMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetRevokedAt sets the "revoked_at" field.
+func (m *MCPCredentialMutation) SetRevokedAt(t time.Time) {
+	m.revoked_at = &t
+}
+
+// RevokedAt returns the value of the "revoked_at" field in the mutation.
+func (m *MCPCredentialMutation) RevokedAt() (r time.Time, exists bool) {
+	v := m.revoked_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedAt returns the old "revoked_at" field's value of the MCPCredential entity.
+// If the MCPCredential object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MCPCredentialMutation) OldRevokedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedAt: %w", err)
+	}
+	return oldValue.RevokedAt, nil
+}
+
+// ClearRevokedAt clears the value of the "revoked_at" field.
+func (m *MCPCredentialMutation) ClearRevokedAt() {
+	m.revoked_at = nil
+	m.clearedFields[mcpcredential.FieldRevokedAt] = struct{}{}
+}
+
+// RevokedAtCleared returns if the "revoked_at" field was cleared in this mutation.
+func (m *MCPCredentialMutation) RevokedAtCleared() bool {
+	_, ok := m.clearedFields[mcpcredential.FieldRevokedAt]
+	return ok
+}
+
+// ResetRevokedAt resets all changes to the "revoked_at" field.
+func (m *MCPCredentialMutation) ResetRevokedAt() {
+	m.revoked_at = nil
+	delete(m.clearedFields, mcpcredential.FieldRevokedAt)
+}
+
+// ClearAccount clears the "account" edge to the Account entity.
+func (m *MCPCredentialMutation) ClearAccount() {
+	m.clearedaccount = true
+	m.clearedFields[mcpcredential.FieldAccountID] = struct{}{}
+}
+
+// AccountCleared reports if the "account" edge to the Account entity was cleared.
+func (m *MCPCredentialMutation) AccountCleared() bool {
+	return m.clearedaccount
+}
+
+// AccountIDs returns the "account" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AccountID instead. It exists only for internal usage by the builders.
+func (m *MCPCredentialMutation) AccountIDs() (ids []int64) {
+	if id := m.account; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAccount resets all changes to the "account" edge.
+func (m *MCPCredentialMutation) ResetAccount() {
+	m.account = nil
+	m.clearedaccount = false
+}
+
+// ClearTenant clears the "tenant" edge to the Tenant entity.
+func (m *MCPCredentialMutation) ClearTenant() {
+	m.clearedtenant = true
+	m.clearedFields[mcpcredential.FieldTenantID] = struct{}{}
+}
+
+// TenantCleared reports if the "tenant" edge to the Tenant entity was cleared.
+func (m *MCPCredentialMutation) TenantCleared() bool {
+	return m.clearedtenant
+}
+
+// TenantIDs returns the "tenant" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// TenantID instead. It exists only for internal usage by the builders.
+func (m *MCPCredentialMutation) TenantIDs() (ids []int64) {
+	if id := m.tenant; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetTenant resets all changes to the "tenant" edge.
+func (m *MCPCredentialMutation) ResetTenant() {
+	m.tenant = nil
+	m.clearedtenant = false
+}
+
+// Where appends a list predicates to the MCPCredentialMutation builder.
+func (m *MCPCredentialMutation) Where(ps ...predicate.MCPCredential) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the MCPCredentialMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *MCPCredentialMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.MCPCredential, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *MCPCredentialMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *MCPCredentialMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (MCPCredential).
+func (m *MCPCredentialMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *MCPCredentialMutation) Fields() []string {
+	fields := make([]string, 0, 9)
+	if m.public_id != nil {
+		fields = append(fields, mcpcredential.FieldPublicID)
+	}
+	if m.account != nil {
+		fields = append(fields, mcpcredential.FieldAccountID)
+	}
+	if m.tenant != nil {
+		fields = append(fields, mcpcredential.FieldTenantID)
+	}
+	if m.space_public_id != nil {
+		fields = append(fields, mcpcredential.FieldSpacePublicID)
+	}
+	if m.label != nil {
+		fields = append(fields, mcpcredential.FieldLabel)
+	}
+	if m.is_read_only != nil {
+		fields = append(fields, mcpcredential.FieldIsReadOnly)
+	}
+	if m.secret_hash != nil {
+		fields = append(fields, mcpcredential.FieldSecretHash)
+	}
+	if m.created_at != nil {
+		fields = append(fields, mcpcredential.FieldCreatedAt)
+	}
+	if m.revoked_at != nil {
+		fields = append(fields, mcpcredential.FieldRevokedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *MCPCredentialMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case mcpcredential.FieldPublicID:
+		return m.PublicID()
+	case mcpcredential.FieldAccountID:
+		return m.AccountID()
+	case mcpcredential.FieldTenantID:
+		return m.TenantID()
+	case mcpcredential.FieldSpacePublicID:
+		return m.SpacePublicID()
+	case mcpcredential.FieldLabel:
+		return m.Label()
+	case mcpcredential.FieldIsReadOnly:
+		return m.IsReadOnly()
+	case mcpcredential.FieldSecretHash:
+		return m.SecretHash()
+	case mcpcredential.FieldCreatedAt:
+		return m.CreatedAt()
+	case mcpcredential.FieldRevokedAt:
+		return m.RevokedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *MCPCredentialMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case mcpcredential.FieldPublicID:
+		return m.OldPublicID(ctx)
+	case mcpcredential.FieldAccountID:
+		return m.OldAccountID(ctx)
+	case mcpcredential.FieldTenantID:
+		return m.OldTenantID(ctx)
+	case mcpcredential.FieldSpacePublicID:
+		return m.OldSpacePublicID(ctx)
+	case mcpcredential.FieldLabel:
+		return m.OldLabel(ctx)
+	case mcpcredential.FieldIsReadOnly:
+		return m.OldIsReadOnly(ctx)
+	case mcpcredential.FieldSecretHash:
+		return m.OldSecretHash(ctx)
+	case mcpcredential.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case mcpcredential.FieldRevokedAt:
+		return m.OldRevokedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown MCPCredential field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MCPCredentialMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case mcpcredential.FieldPublicID:
+		v, ok := value.(entx.CIText)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPublicID(v)
+		return nil
+	case mcpcredential.FieldAccountID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAccountID(v)
+		return nil
+	case mcpcredential.FieldTenantID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTenantID(v)
+		return nil
+	case mcpcredential.FieldSpacePublicID:
+		v, ok := value.(entx.CIText)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSpacePublicID(v)
+		return nil
+	case mcpcredential.FieldLabel:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLabel(v)
+		return nil
+	case mcpcredential.FieldIsReadOnly:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsReadOnly(v)
+		return nil
+	case mcpcredential.FieldSecretHash:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSecretHash(v)
+		return nil
+	case mcpcredential.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case mcpcredential.FieldRevokedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown MCPCredential field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *MCPCredentialMutation) AddedFields() []string {
+	var fields []string
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *MCPCredentialMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MCPCredentialMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown MCPCredential numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *MCPCredentialMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(mcpcredential.FieldRevokedAt) {
+		fields = append(fields, mcpcredential.FieldRevokedAt)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *MCPCredentialMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *MCPCredentialMutation) ClearField(name string) error {
+	switch name {
+	case mcpcredential.FieldRevokedAt:
+		m.ClearRevokedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown MCPCredential nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *MCPCredentialMutation) ResetField(name string) error {
+	switch name {
+	case mcpcredential.FieldPublicID:
+		m.ResetPublicID()
+		return nil
+	case mcpcredential.FieldAccountID:
+		m.ResetAccountID()
+		return nil
+	case mcpcredential.FieldTenantID:
+		m.ResetTenantID()
+		return nil
+	case mcpcredential.FieldSpacePublicID:
+		m.ResetSpacePublicID()
+		return nil
+	case mcpcredential.FieldLabel:
+		m.ResetLabel()
+		return nil
+	case mcpcredential.FieldIsReadOnly:
+		m.ResetIsReadOnly()
+		return nil
+	case mcpcredential.FieldSecretHash:
+		m.ResetSecretHash()
+		return nil
+	case mcpcredential.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case mcpcredential.FieldRevokedAt:
+		m.ResetRevokedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown MCPCredential field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *MCPCredentialMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.account != nil {
+		edges = append(edges, mcpcredential.EdgeAccount)
+	}
+	if m.tenant != nil {
+		edges = append(edges, mcpcredential.EdgeTenant)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *MCPCredentialMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case mcpcredential.EdgeAccount:
+		if id := m.account; id != nil {
+			return []ent.Value{*id}
+		}
+	case mcpcredential.EdgeTenant:
+		if id := m.tenant; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *MCPCredentialMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *MCPCredentialMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *MCPCredentialMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedaccount {
+		edges = append(edges, mcpcredential.EdgeAccount)
+	}
+	if m.clearedtenant {
+		edges = append(edges, mcpcredential.EdgeTenant)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *MCPCredentialMutation) EdgeCleared(name string) bool {
+	switch name {
+	case mcpcredential.EdgeAccount:
+		return m.clearedaccount
+	case mcpcredential.EdgeTenant:
+		return m.clearedtenant
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *MCPCredentialMutation) ClearEdge(name string) error {
+	switch name {
+	case mcpcredential.EdgeAccount:
+		m.ClearAccount()
+		return nil
+	case mcpcredential.EdgeTenant:
+		m.ClearTenant()
+		return nil
+	}
+	return fmt.Errorf("unknown MCPCredential unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *MCPCredentialMutation) ResetEdge(name string) error {
+	switch name {
+	case mcpcredential.EdgeAccount:
+		m.ResetAccount()
+		return nil
+	case mcpcredential.EdgeTenant:
+		m.ResetTenant()
+		return nil
+	}
+	return fmt.Errorf("unknown MCPCredential edge %s", name)
 }
 
 // MailMutation represents an operation that mutates the Mail nodes in the graph.

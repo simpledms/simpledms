@@ -1,6 +1,6 @@
 {{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.Row */ -}}
 {{- define "Row" }}
-	<div id="{{ .GetID }}" class="flex flex-row gap-x-2 items-center
+	<div id="{{ .GetID }}" class="flex flex-row {{ .GetGapXClass }} items-center
 			{{ if .OverflowScroll }}overflow-scroll{{ end }}
 			{{ if .Wrap }}flex-wrap gap-y-2{{ end }}
 			{{ if .JustifyEnd }}justify-end{{ end }}

@@ -10,7 +10,7 @@ test.describe("browse, upload, and filters", () => {
 		const dirName = `dir-${uniqueSuffix()}`;
 
 		await createSpaceAndSelect(page, spaceName, ["Invoice", "Receipt"]);
-		await page.getByRole("link", { name: "create_new_folder", exact: true }).click();
+		await page.getByRole("link", { name: "create_new_folder Create directory", exact: true }).first().click();
 		await page.getByRole("textbox", { name: "Dir name" }).fill(dirName);
 		await page.getByRole("button", { name: "Save" }).click();
 

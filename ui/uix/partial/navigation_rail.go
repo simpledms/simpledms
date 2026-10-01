@@ -148,6 +148,10 @@ func mainNavigationRailItems(ctx ctxx.Context) []*widget.NavigationRailItem {
 
 	items = append(items, accountNavigationRailItem(ctx))
 	items = append(items, webDAVCredentialsNavigationRailItem(ctx))
+	// MCP credentials require a full Session, see CreateMCPCredentialCmd.
+	if !ctx.VisitorCtx().IsTemporarySession {
+		items = append(items, mcpCredentialsNavigationRailItem(ctx))
+	}
 	if ctx.MainCtx().Account.Role == mainrole.Admin {
 		items = append(items, systemNavigationRailItem(ctx))
 	}
@@ -331,7 +335,7 @@ func spaceCombobox(ctx ctxx.Context, active string) *widget.Combobox {
 	}
 
 	return &widget.Combobox{
-		Input: &widget.Input{
+		Input: &widget.Input{ //nolint:staticcheck // Combobox requires this legacy input type.
 			Placeholder:  placeholder,
 			LeadingIcon:  selectedIcon,
 			TrailingIcon: widget.NewIcon("expand_more"),
@@ -506,6 +510,15 @@ func webDAVCredentialsNavigationRailItem(ctx ctxx.Context) *widget.NavigationRai
 		widget.T("WebDAV").String(ctx),
 		"vpn_key",
 		route2.WebDAVCredentials(),
+	)
+}
+
+func mcpCredentialsNavigationRailItem(ctx ctxx.Context) *widget.NavigationRailItem {
+	return pageNavigationRailItem(
+		"mcp-credentials",
+		widget.T("MCP").String(ctx),
+		"smart_toy",
+		route2.MCPCredentials(),
 	)
 }
 

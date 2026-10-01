@@ -116,9 +116,17 @@ func newMaintenanceModeHandler(
 
 	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assetsFS))))
+	mux.HandleFunc("/mcp", func(rw http.ResponseWriter, _ *http.Request) {
+		rw.Header().Set("Cache-Control", "no-store")
+		rw.WriteHeader(http.StatusServiceUnavailable)
+	})
 
 	mux.HandleFunc("/-/unlock-cmd", func(rw http.ResponseWriter, req *http.Request) {
-		defer req.Body.Close()
+		defer func() {
+			if err := req.Body.Close(); err != nil {
+				log.Println(err)
+			}
+		}()
 
 		var reqBody struct {
 			Passphrase string `json:"passphrase"`
@@ -833,7 +841,7 @@ func (qq *Server) newInfra(renderer *ui.Renderer, systemConfig *systemconfigmode
 	// storagePath := common.StoragePath(metaPath)
 	fileRepo := common.NewFileRepository()
 	minioClient := qq.initNilableMinioClient(systemConfig.S3())
-	fileSystem := filesystem.NewFileSystem(qq.metaPath)
+	fileSystem := filesystem.NewFileSystem(qq.metaPath) //nolint:staticcheck // S3FileSystem requires the folder adapter.
 
 	/*
 		indexer := internal.NewFileIndexer(client, infra)
@@ -902,6 +910,7 @@ func (qq *Server) registerCoreRoutes(
 	// TODO in TTx or not necessary because read only?
 	router.RegisterPage(route2.DashboardRoute(), actions.Dashboard.DashboardPage.Handler)
 	router.RegisterPage(route2.AccountRoute(), actions.Dashboard.AccountPage.Handler)
+	router.RegisterPage(route2.MCPCredentialsRoute(), actions.Dashboard.MCPCredentialsPage.Handler)
 	router.RegisterPage(
 		route2.WebDAVCredentialsRoute(),
 		actions.Dashboard.WebDAVCredentialsPage.Handler,

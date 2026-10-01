@@ -72,7 +72,7 @@ func (qq *TagsFilterDialog) Widget(
 		Child: qq.actions.ListFilterTagsPartial.Widget(
 			ctx,
 			data.CurrentDirID,
-			listDirState.ListFilterTagsPartialState.CheckedTagIDs,
+			listDirState.CheckedTagIDs,
 		),
 	}
 

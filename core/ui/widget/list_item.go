@@ -105,9 +105,7 @@ func (qq *ListItem) HasSupportingText() bool {
 func (qq *ListItem) GetClass() string {
 	classes := []string{}
 
-	if qq.SupportingText != nil {
-		// classes = append(classes, "h-16")
-	}
+	// classes = append(classes, "h-16")
 
 	return strings.Join(classes, " ")
 }

@@ -1,16 +1,13 @@
 package browse
 
 import (
-	"log"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
+	propertymodel "github.com/simpledms/simpledms/model/tenant/property"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -45,7 +42,7 @@ func NewSetFilePropertyCmd(infra *common.Infra, actions *Actions) *SetFileProper
 	config := actionx.NewConfig(
 		actions.Route("set-file-property-cmd"),
 		false,
-	)
+	).EnableCommittedResponse()
 	return &SetFilePropertyCmd{
 		infra:   infra,
 		actions: actions,
@@ -72,42 +69,20 @@ func (qq *SetFilePropertyCmd) Handler(
 
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 
-	// TODO check if exists and update if so
-	nilableAssignment, err := filex.Data.
-		QueryPropertyAssignment().Where(filepropertyassignment.PropertyID(data.PropertyID)).
-		Only(ctx)
-	if err != nil && !enttenant.IsNotFound(err) {
-		log.Println(err)
-		return err
-	}
-
 	propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
-
-	if enttenant.IsNotFound(err) {
-		query := ctx.SpaceCtx().TTx.FilePropertyAssignment.Create().
-			SetSpaceID(ctx.SpaceCtx().Space.ID).
-			SetFileID(filex.Data.ID).
-			SetPropertyID(data.PropertyID)
-
-		if err := applyPropertyValuesToCreate(query, propertyx.Type, filePropertyValuesFromSet(data)); err != nil {
+	service := propertymodel.NewFilePropertyAssignmentService()
+	if propertyx.Type == fieldtype.Date && data.DateValue.IsZero() {
+		if _, _, err := service.Remove(ctx, filex.Data.ID, data.PropertyID); err != nil {
 			return err
 		}
-
-		query.ExecX(ctx)
-
-	} else if propertyx.Type == fieldtype.Date && data.DateValue.IsZero() {
-		ctx.SpaceCtx().TTx.FilePropertyAssignment.Delete().Where(
-			filepropertyassignment.PropertyID(data.PropertyID),
-			filepropertyassignment.FileID(filex.Data.ID),
-		).ExecX(ctx)
 	} else {
-		query := nilableAssignment.Update()
-
-		if err := applyPropertyValuesToUpdate(query, propertyx.Type, filePropertyValuesFromSet(data)); err != nil {
+		value, err := filePropertyValue(propertyx.Type, filePropertyValuesFromSet(data))
+		if err != nil {
 			return err
 		}
-
-		query.SaveX(ctx)
+		if _, _, err := service.Set(ctx, filex.Data.ID, data.PropertyID, value); err != nil {
+			return err
+		}
 	}
 
 	rw.Header().Set("HX-Reswap", "none")

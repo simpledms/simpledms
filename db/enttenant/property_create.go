@@ -13,6 +13,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 )
 
@@ -26,6 +27,20 @@ type PropertyCreate struct {
 // SetSpaceID sets the "space_id" field.
 func (_c *PropertyCreate) SetSpaceID(v int64) *PropertyCreate {
 	_c.mutation.SetSpaceID(v)
+	return _c
+}
+
+// SetPublicID sets the "public_id" field.
+func (_c *PropertyCreate) SetPublicID(v entx.CIText) *PropertyCreate {
+	_c.mutation.SetPublicID(v)
+	return _c
+}
+
+// SetNillablePublicID sets the "public_id" field if the given value is not nil.
+func (_c *PropertyCreate) SetNillablePublicID(v *entx.CIText) *PropertyCreate {
+	if v != nil {
+		_c.SetPublicID(*v)
+	}
 	return _c
 }
 
@@ -133,6 +148,13 @@ func (_c *PropertyCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *PropertyCreate) defaults() error {
+	if _, ok := _c.mutation.PublicID(); !ok {
+		if property.DefaultPublicID == nil {
+			return fmt.Errorf("enttenant: uninitialized property.DefaultPublicID (forgotten import enttenant/runtime?)")
+		}
+		v := property.DefaultPublicID()
+		_c.mutation.SetPublicID(v)
+	}
 	if _, ok := _c.mutation.Unit(); !ok {
 		v := property.DefaultUnit
 		_c.mutation.SetUnit(v)
@@ -193,6 +215,10 @@ func (_c *PropertyCreate) createSpec() (*Property, *sqlgraph.CreateSpec) {
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
+	}
+	if value, ok := _c.mutation.PublicID(); ok {
+		_spec.SetField(property.FieldPublicID, field.TypeString, value)
+		_node.PublicID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(property.FieldName, field.TypeString, value)

@@ -5,6 +5,8 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 )
 
@@ -42,5 +44,6 @@ func (Property) Indexes() []ent.Index {
 func (Property) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		NewSpaceMixin(),
+		entx.NewBackfillablePublicIDMixin(),
 	}
 }

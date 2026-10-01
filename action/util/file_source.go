@@ -17,6 +17,8 @@ func FileSourceLabel(source filesource.FileSource) *widget.Text {
 		return widget.T("WebDAV")
 	case filesource.SystemExtraction:
 		return widget.T("System extraction")
+	case filesource.MCP:
+		return widget.Tu("MCP")
 	case filesource.UnknownLegacy:
 		fallthrough
 	default:

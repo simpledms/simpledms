@@ -17,6 +17,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/mcpcredential"
 	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/systemconfig"
@@ -36,6 +37,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// Account is the client for interacting with the Account builders.
 	Account *AccountClient
+	// MCPCredential is the client for interacting with the MCPCredential builders.
+	MCPCredential *MCPCredentialClient
 	// Mail is the client for interacting with the Mail builders.
 	Mail *MailClient
 	// PasskeyCredential is the client for interacting with the PasskeyCredential builders.
@@ -66,6 +69,7 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.Account = NewAccountClient(c.config)
+	c.MCPCredential = NewMCPCredentialClient(c.config)
 	c.Mail = NewMailClient(c.config)
 	c.PasskeyCredential = NewPasskeyCredentialClient(c.config)
 	c.Session = NewSessionClient(c.config)
@@ -168,6 +172,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:                     ctx,
 		config:                  cfg,
 		Account:                 NewAccountClient(cfg),
+		MCPCredential:           NewMCPCredentialClient(cfg),
 		Mail:                    NewMailClient(cfg),
 		PasskeyCredential:       NewPasskeyCredentialClient(cfg),
 		Session:                 NewSessionClient(cfg),
@@ -197,6 +202,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ctx:                     ctx,
 		config:                  cfg,
 		Account:                 NewAccountClient(cfg),
+		MCPCredential:           NewMCPCredentialClient(cfg),
 		Mail:                    NewMailClient(cfg),
 		PasskeyCredential:       NewPasskeyCredentialClient(cfg),
 		Session:                 NewSessionClient(cfg),
@@ -235,9 +241,9 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Account, c.Mail, c.PasskeyCredential, c.Session, c.SystemConfig,
-		c.TemporaryFile, c.Tenant, c.TenantAccountAssignment, c.WebAuthnChallenge,
-		c.WebDAVCredential,
+		c.Account, c.MCPCredential, c.Mail, c.PasskeyCredential, c.Session,
+		c.SystemConfig, c.TemporaryFile, c.Tenant, c.TenantAccountAssignment,
+		c.WebAuthnChallenge, c.WebDAVCredential,
 	} {
 		n.Use(hooks...)
 	}
@@ -247,9 +253,9 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Account, c.Mail, c.PasskeyCredential, c.Session, c.SystemConfig,
-		c.TemporaryFile, c.Tenant, c.TenantAccountAssignment, c.WebAuthnChallenge,
-		c.WebDAVCredential,
+		c.Account, c.MCPCredential, c.Mail, c.PasskeyCredential, c.Session,
+		c.SystemConfig, c.TemporaryFile, c.Tenant, c.TenantAccountAssignment,
+		c.WebAuthnChallenge, c.WebDAVCredential,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -260,6 +266,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *AccountMutation:
 		return c.Account.mutate(ctx, m)
+	case *MCPCredentialMutation:
+		return c.MCPCredential.mutate(ctx, m)
 	case *MailMutation:
 		return c.Mail.mutate(ctx, m)
 	case *PasskeyCredentialMutation:
@@ -511,6 +519,172 @@ func (c *AccountClient) mutate(ctx context.Context, m *AccountMutation) (Value, 
 		return (&AccountDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("entmain: unknown Account mutation op: %q", m.Op())
+	}
+}
+
+// MCPCredentialClient is a client for the MCPCredential schema.
+type MCPCredentialClient struct {
+	config
+}
+
+// NewMCPCredentialClient returns a client for the MCPCredential from the given config.
+func NewMCPCredentialClient(c config) *MCPCredentialClient {
+	return &MCPCredentialClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `mcpcredential.Hooks(f(g(h())))`.
+func (c *MCPCredentialClient) Use(hooks ...Hook) {
+	c.hooks.MCPCredential = append(c.hooks.MCPCredential, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `mcpcredential.Intercept(f(g(h())))`.
+func (c *MCPCredentialClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MCPCredential = append(c.inters.MCPCredential, interceptors...)
+}
+
+// Create returns a builder for creating a MCPCredential entity.
+func (c *MCPCredentialClient) Create() *MCPCredentialCreate {
+	mutation := newMCPCredentialMutation(c.config, OpCreate)
+	return &MCPCredentialCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MCPCredential entities.
+func (c *MCPCredentialClient) CreateBulk(builders ...*MCPCredentialCreate) *MCPCredentialCreateBulk {
+	return &MCPCredentialCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MCPCredentialClient) MapCreateBulk(slice any, setFunc func(*MCPCredentialCreate, int)) *MCPCredentialCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MCPCredentialCreateBulk{err: fmt.Errorf("calling to MCPCredentialClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MCPCredentialCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MCPCredentialCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MCPCredential.
+func (c *MCPCredentialClient) Update() *MCPCredentialUpdate {
+	mutation := newMCPCredentialMutation(c.config, OpUpdate)
+	return &MCPCredentialUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MCPCredentialClient) UpdateOne(_m *MCPCredential) *MCPCredentialUpdateOne {
+	mutation := newMCPCredentialMutation(c.config, OpUpdateOne, withMCPCredential(_m))
+	return &MCPCredentialUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MCPCredentialClient) UpdateOneID(id int64) *MCPCredentialUpdateOne {
+	mutation := newMCPCredentialMutation(c.config, OpUpdateOne, withMCPCredentialID(id))
+	return &MCPCredentialUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MCPCredential.
+func (c *MCPCredentialClient) Delete() *MCPCredentialDelete {
+	mutation := newMCPCredentialMutation(c.config, OpDelete)
+	return &MCPCredentialDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MCPCredentialClient) DeleteOne(_m *MCPCredential) *MCPCredentialDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MCPCredentialClient) DeleteOneID(id int64) *MCPCredentialDeleteOne {
+	builder := c.Delete().Where(mcpcredential.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MCPCredentialDeleteOne{builder}
+}
+
+// Query returns a query builder for MCPCredential.
+func (c *MCPCredentialClient) Query() *MCPCredentialQuery {
+	return &MCPCredentialQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMCPCredential},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MCPCredential entity by its id.
+func (c *MCPCredentialClient) Get(ctx context.Context, id int64) (*MCPCredential, error) {
+	return c.Query().Where(mcpcredential.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MCPCredentialClient) GetX(ctx context.Context, id int64) *MCPCredential {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryAccount queries the account edge of a MCPCredential.
+func (c *MCPCredentialClient) QueryAccount(_m *MCPCredential) *AccountQuery {
+	query := (&AccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mcpcredential.Table, mcpcredential.FieldID, id),
+			sqlgraph.To(account.Table, account.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, mcpcredential.AccountTable, mcpcredential.AccountColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTenant queries the tenant edge of a MCPCredential.
+func (c *MCPCredentialClient) QueryTenant(_m *MCPCredential) *TenantQuery {
+	query := (&TenantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mcpcredential.Table, mcpcredential.FieldID, id),
+			sqlgraph.To(tenant.Table, tenant.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, mcpcredential.TenantTable, mcpcredential.TenantColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MCPCredentialClient) Hooks() []Hook {
+	hooks := c.hooks.MCPCredential
+	return append(hooks[:len(hooks):len(hooks)], mcpcredential.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *MCPCredentialClient) Interceptors() []Interceptor {
+	return c.inters.MCPCredential
+}
+
+func (c *MCPCredentialClient) mutate(ctx context.Context, m *MCPCredentialMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MCPCredentialCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MCPCredentialUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MCPCredentialUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MCPCredentialDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("entmain: unknown MCPCredential mutation op: %q", m.Op())
 	}
 }
 
@@ -2167,12 +2341,14 @@ func (c *WebDAVCredentialClient) mutate(ctx context.Context, m *WebDAVCredential
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Account, Mail, PasskeyCredential, Session, SystemConfig, TemporaryFile, Tenant,
-		TenantAccountAssignment, WebAuthnChallenge, WebDAVCredential []ent.Hook
+		Account, MCPCredential, Mail, PasskeyCredential, Session, SystemConfig,
+		TemporaryFile, Tenant, TenantAccountAssignment, WebAuthnChallenge,
+		WebDAVCredential []ent.Hook
 	}
 	inters struct {
-		Account, Mail, PasskeyCredential, Session, SystemConfig, TemporaryFile, Tenant,
-		TenantAccountAssignment, WebAuthnChallenge, WebDAVCredential []ent.Interceptor
+		Account, MCPCredential, Mail, PasskeyCredential, Session, SystemConfig,
+		TemporaryFile, Tenant, TenantAccountAssignment, WebAuthnChallenge,
+		WebDAVCredential []ent.Interceptor
 	}
 )
 

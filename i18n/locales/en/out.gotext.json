@@ -1592,18 +1592,78 @@
             "translation": ""
         },
         {
+            "id": "A full Session is required.",
+            "message": "A full Session is required.",
+            "translation": ""
+        },
+        {
             "id": "Form validation failed.",
             "message": "Form validation failed.",
             "translation": ""
         },
         {
-            "id": "WebDAV credential created.",
-            "message": "WebDAV credential created.",
+            "id": "MCP credential created.",
+            "message": "MCP credential created.",
             "translation": ""
         },
         {
             "id": "No spaces available yet.",
             "message": "No spaces available yet.",
+            "translation": ""
+        },
+        {
+            "id": "Client label",
+            "message": "Client label",
+            "translation": ""
+        },
+        {
+            "id": "Allow writes",
+            "message": "Allow writes",
+            "translation": ""
+        },
+        {
+            "id": "Without writes, the MCP client can only read documents.",
+            "message": "Without writes, the MCP client can only read documents.",
+            "translation": ""
+        },
+        {
+            "id": "Space",
+            "message": "Space",
+            "translation": ""
+        },
+        {
+            "id": "Create",
+            "message": "Create",
+            "translation": ""
+        },
+        {
+            "id": "Create MCP credential",
+            "message": "Create MCP credential",
+            "translation": ""
+        },
+        {
+            "id": "MCP credential created",
+            "message": "MCP credential created",
+            "translation": ""
+        },
+        {
+            "id": "Copy the secret now. It will not be shown again.",
+            "message": "Copy the secret now. It will not be shown again.",
+            "translation": ""
+        },
+        {
+            "id": "MCP URL",
+            "message": "MCP URL",
+            "translation": ""
+        },
+        {
+            "id": "Token",
+            "message": "Token",
+            "translation": ""
+        },
+        {
+            "id": "WebDAV credential created.",
+            "message": "WebDAV credential created.",
             "translation": ""
         },
         {
@@ -1632,16 +1692,6 @@
             "translation": ""
         },
         {
-            "id": "Space",
-            "message": "Space",
-            "translation": ""
-        },
-        {
-            "id": "Create",
-            "message": "Create",
-            "translation": ""
-        },
-        {
             "id": "Create WebDAV credential",
             "message": "Create WebDAV credential",
             "translation": ""
@@ -1649,11 +1699,6 @@
         {
             "id": "WebDAV credential created",
             "message": "WebDAV credential created",
-            "translation": ""
-        },
-        {
-            "id": "Copy the secret now. It will not be shown again.",
-            "message": "Copy the secret now. It will not be shown again.",
             "translation": ""
         },
         {
@@ -1730,6 +1775,11 @@
                     "expr": "translatedLabel"
                 }
             ]
+        },
+        {
+            "id": "Unavailable destination",
+            "message": "Unavailable destination",
+            "translation": ""
         },
         {
             "id": "Open tasks",
@@ -2016,6 +2066,122 @@
             "translation": ""
         },
         {
+            "id": "Filter MCP credentials",
+            "message": "Filter MCP credentials",
+            "translation": ""
+        },
+        {
+            "id": "Active",
+            "message": "Active",
+            "translation": ""
+        },
+        {
+            "id": "Revoked",
+            "message": "Revoked",
+            "translation": ""
+        },
+        {
+            "id": "No MCP credentials",
+            "message": "No MCP credentials",
+            "translation": ""
+        },
+        {
+            "id": "Create a credential to connect an MCP client to a Space.",
+            "message": "Create a credential to connect an MCP client to a Space.",
+            "translation": ""
+        },
+        {
+            "id": "Copy MCP URL",
+            "message": "Copy MCP URL",
+            "translation": ""
+        },
+        {
+            "id": "MCP URL copied to clipboard.",
+            "message": "MCP URL copied to clipboard.",
+            "translation": ""
+        },
+        {
+            "id": "Could not copy MCP URL.",
+            "message": "Could not copy MCP URL.",
+            "translation": ""
+        },
+        {
+            "id": "Read-only",
+            "message": "Read-only",
+            "translation": ""
+        },
+        {
+            "id": "Read/write",
+            "message": "Read/write",
+            "translation": ""
+        },
+        {
+            "id": "{Mode} · Created: {CreatedAt}",
+            "message": "{Mode} · Created: {CreatedAt}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Mode",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "mode"
+                },
+                {
+                    "id": "CreatedAt",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "formatCredentialTime(ctx, credentialx.CreatedAt)"
+                }
+            ]
+        },
+        {
+            "id": "{Mode} · Revoked: {RevokedAt}",
+            "message": "{Mode} · Revoked: {RevokedAt}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Mode",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "mode"
+                },
+                {
+                    "id": "RevokedAt",
+                    "string": "%[2]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 2,
+                    "expr": "formatCredentialTime(ctx, *credentialx.RevokedAt)"
+                }
+            ]
+        },
+        {
+            "id": "Actions",
+            "message": "Actions",
+            "translation": ""
+        },
+        {
+            "id": "Revoke",
+            "message": "Revoke",
+            "translation": ""
+        },
+        {
+            "id": "Revoke this MCP credential?",
+            "message": "Revoke this MCP credential?",
+            "translation": ""
+        },
+        {
+            "id": "MCP credentials",
+            "message": "MCP credentials",
+            "translation": ""
+        },
+        {
             "id": "Settings",
             "message": "Settings",
             "translation": ""
@@ -2058,6 +2224,11 @@
         {
             "id": "Download backup",
             "message": "Download backup",
+            "translation": ""
+        },
+        {
+            "id": "MCP credential revoked.",
+            "message": "MCP credential revoked.",
             "translation": ""
         },
         {
@@ -2121,16 +2292,6 @@
             "translation": ""
         },
         {
-            "id": "Active",
-            "message": "Active",
-            "translation": ""
-        },
-        {
-            "id": "Revoked",
-            "message": "Revoked",
-            "translation": ""
-        },
-        {
             "id": "No WebDAV credentials",
             "message": "No WebDAV credentials",
             "translation": ""
@@ -2138,11 +2299,6 @@
         {
             "id": "Create a device credential to upload files to an Inbox over WebDAV.",
             "message": "Create a device credential to upload files to an Inbox over WebDAV.",
-            "translation": ""
-        },
-        {
-            "id": "Unavailable destination",
-            "message": "Unavailable destination",
             "translation": ""
         },
         {
@@ -2228,11 +2384,6 @@
                     "expr": "formatCredentialTime(ctx, *credentialx.RevokedAt)"
                 }
             ]
-        },
-        {
-            "id": "Revoke",
-            "message": "Revoke",
-            "translation": ""
         },
         {
             "id": "Revoke this WebDAV credential?",
@@ -3369,6 +3520,16 @@
             "translation": ""
         },
         {
+            "id": "You are not allowed to access this tenant.",
+            "message": "You are not allowed to access this tenant.",
+            "translation": "You are not allowed to access this tenant."
+        },
+        {
+            "id": "You are not allowed to access this space.",
+            "message": "You are not allowed to access this space.",
+            "translation": "You are not allowed to access this space."
+        },
+        {
             "id": "No backup codes were returned.",
             "message": "No backup codes were returned.",
             "translation": ""
@@ -3447,11 +3608,6 @@
         {
             "id": "Application unlocked. Starting up.",
             "message": "Application unlocked. Starting up.",
-            "translation": ""
-        },
-        {
-            "id": "Actions",
-            "message": "Actions",
             "translation": ""
         },
         {
@@ -3605,6 +3761,11 @@
             "translation": ""
         },
         {
+            "id": "Cleanup pending",
+            "message": "Cleanup pending",
+            "translation": ""
+        },
+        {
             "id": "Confirm new passphrase",
             "message": "Confirm new passphrase",
             "translation": ""
@@ -3697,6 +3858,11 @@
         {
             "id": "Estonia",
             "message": "Estonia",
+            "translation": ""
+        },
+        {
+            "id": "Failed",
+            "message": "Failed",
             "translation": ""
         },
         {
@@ -3840,6 +4006,11 @@
             "translation": ""
         },
         {
+            "id": "Mcp",
+            "message": "Mcp",
+            "translation": ""
+        },
+        {
             "id": "Malta",
             "message": "Malta",
             "translation": ""
@@ -3890,11 +4061,6 @@
             "translation": ""
         },
         {
-            "id": "None",
-            "message": "None",
-            "translation": ""
-        },
-        {
             "id": "Norway",
             "message": "Norway",
             "translation": ""
@@ -3935,6 +4101,11 @@
             "translation": ""
         },
         {
+            "id": "Pwaos open",
+            "message": "Pwaos open",
+            "translation": ""
+        },
+        {
             "id": "Passphrase",
             "message": "Passphrase",
             "translation": ""
@@ -3942,6 +4113,11 @@
         {
             "id": "Password",
             "message": "Password",
+            "translation": ""
+        },
+        {
+            "id": "Pending",
+            "message": "Pending",
             "translation": ""
         },
         {
@@ -3965,13 +4141,18 @@
             "translation": ""
         },
         {
+            "id": "Processing",
+            "message": "Processing",
+            "translation": ""
+        },
+        {
             "id": "Push url",
             "message": "Push url",
             "translation": ""
         },
         {
-            "id": "Reader",
-            "message": "Reader",
+            "id": "Ready",
+            "message": "Ready",
             "translation": ""
         },
         {
@@ -4075,11 +4256,6 @@
             "translation": ""
         },
         {
-            "id": "Token",
-            "message": "Token",
-            "translation": ""
-        },
-        {
             "id": "Trial",
             "message": "Trial",
             "translation": ""
@@ -4090,8 +4266,23 @@
             "translation": ""
         },
         {
+            "id": "Url import",
+            "message": "Url import",
+            "translation": ""
+        },
+        {
             "id": "Unit",
             "message": "Unit",
+            "translation": ""
+        },
+        {
+            "id": "Unknown legacy",
+            "message": "Unknown legacy",
+            "translation": ""
+        },
+        {
+            "id": "Uploading",
+            "message": "Uploading",
             "translation": ""
         },
         {
@@ -4125,8 +4316,13 @@
             "translation": ""
         },
         {
-            "id": "Writer",
-            "message": "Writer",
+            "id": "Web dav",
+            "message": "Web dav",
+            "translation": ""
+        },
+        {
+            "id": "Web interface",
+            "message": "Web interface",
             "translation": ""
         },
         {
@@ -4433,6 +4629,21 @@
             ]
         },
         {
+            "id": "Credential not found.",
+            "message": "Credential not found.",
+            "translation": ""
+        },
+        {
+            "id": "MCP credential cannot write.",
+            "message": "MCP credential cannot write.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid MCP credential.",
+            "message": "Invalid MCP credential.",
+            "translation": ""
+        },
+        {
             "id": "App is already unlocked.",
             "message": "App is already unlocked.",
             "translation": ""
@@ -4678,11 +4889,6 @@
             "translation": ""
         },
         {
-            "id": "Credential not found.",
-            "message": "Credential not found.",
-            "translation": ""
-        },
-        {
             "id": "A similar entity already exists.",
             "message": "A similar entity already exists.",
             "translation": ""
@@ -4711,8 +4917,18 @@
             ]
         },
         {
+            "id": "File is a directory.",
+            "message": "File is a directory.",
+            "translation": ""
+        },
+        {
             "id": "Please select at least one document type.",
             "message": "Please select at least one document type.",
+            "translation": ""
+        },
+        {
+            "id": "Attribute must reference a Tag group.",
+            "message": "Attribute must reference a Tag group.",
             "translation": ""
         },
         {
@@ -4786,6 +5002,11 @@
             "translation": ""
         },
         {
+            "id": "Invalid text range.",
+            "message": "Invalid text range.",
+            "translation": ""
+        },
+        {
             "id": "File does not belong to current space.",
             "message": "File does not belong to current space.",
             "translation": ""
@@ -4841,6 +5062,11 @@
             "translation": ""
         },
         {
+            "id": "Invalid sort order.",
+            "message": "Invalid sort order.",
+            "translation": ""
+        },
+        {
             "id": "Folder mode is not enabled.",
             "message": "Folder mode is not enabled.",
             "translation": ""
@@ -4856,6 +5082,11 @@
             "translation": ""
         },
         {
+            "id": "Parent is not a directory.",
+            "message": "Parent is not a directory.",
+            "translation": ""
+        },
+        {
             "id": "A folder with this name already exists.",
             "message": "A folder with this name already exists.",
             "translation": ""
@@ -4863,6 +5094,11 @@
         {
             "id": "Destination is not a directory.",
             "message": "Destination is not a directory.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid filename.",
+            "message": "Invalid filename.",
             "translation": ""
         },
         {
@@ -4913,11 +5149,6 @@
         {
             "id": "Could not open file.",
             "message": "Could not open file.",
-            "translation": ""
-        },
-        {
-            "id": "Invalid filename.",
-            "message": "Invalid filename.",
             "translation": ""
         },
         {
@@ -5015,11 +5246,6 @@
             "translation": ""
         },
         {
-            "id": "You are not allowed to access this tenant.",
-            "message": "You are not allowed to access this tenant.",
-            "translation": "You are not allowed to access this tenant."
-        },
-        {
             "id": "Uploaded file processing was taken over.",
             "message": "Uploaded file processing was taken over.",
             "translation": ""
@@ -5076,6 +5302,21 @@
                     "expr": "fileutil.FormatSize(limitBytes)"
                 }
             ]
+        },
+        {
+            "id": "A file with this name already exists in the destination.",
+            "message": "A file with this name already exists in the destination.",
+            "translation": ""
+        },
+        {
+            "id": "File is not a directory.",
+            "message": "File is not a directory.",
+            "translation": ""
+        },
+        {
+            "id": "File must be in Inbox.",
+            "message": "File must be in Inbox.",
+            "translation": ""
         },
         {
             "id": "Invoice",
@@ -5478,8 +5719,53 @@
             "translation": ""
         },
         {
+            "id": "Unknown document type template.",
+            "message": "Unknown document type template.",
+            "translation": ""
+        },
+        {
+            "id": "Value does not match the field type.",
+            "message": "Value does not match the field type.",
+            "translation": ""
+        },
+        {
+            "id": "Date value is required.",
+            "message": "Date value is required.",
+            "translation": ""
+        },
+        {
+            "id": "Money value is out of range.",
+            "message": "Money value is out of range.",
+            "translation": ""
+        },
+        {
+            "id": "Number value is out of range.",
+            "message": "Number value is out of range.",
+            "translation": ""
+        },
+        {
             "id": "Cannot add a tag group as child.",
             "message": "Cannot add a tag group as child.",
+            "translation": ""
+        },
+        {
+            "id": "Tag groups cannot be assigned.",
+            "message": "Tag groups cannot be assigned.",
+            "translation": ""
+        },
+        {
+            "id": "File or Tag not found.",
+            "message": "File or Tag not found.",
+            "translation": ""
+        },
+        {
+            "id": "Destination must be a Tag group.",
+            "message": "Destination must be a Tag group.",
+            "translation": ""
+        },
+        {
+            "id": "Composition requires a composed Tag and a simple sub-Tag.",
+            "message": "Composition requires a composed Tag and a simple sub-Tag.",
             "translation": ""
         },
         {
@@ -5513,11 +5799,6 @@
             "translation": ""
         },
         {
-            "id": "You are not allowed to access this space.",
-            "message": "You are not allowed to access this space.",
-            "translation": "You are not allowed to access this space."
-        },
-        {
             "id": "Could not read cookie.",
             "message": "Could not read cookie.",
             "translation": "Could not read cookie."
@@ -5543,6 +5824,156 @@
             "translation": "Maintenance mode is enabled. Please wait until the app is ready again."
         },
         {
+            "id": "Metadata already exists or is still in use.",
+            "message": "Metadata already exists or is still in use.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid page or search range.",
+            "message": "Invalid page or search range.",
+            "translation": ""
+        },
+        {
+            "id": "File ID is required.",
+            "message": "File ID is required.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid directory ID.",
+            "message": "Invalid directory ID.",
+            "translation": ""
+        },
+        {
+            "id": "Parent directory ID and name are required.",
+            "message": "Parent directory ID and name are required.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid filing input.",
+            "message": "Invalid filing input.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid search input.",
+            "message": "Invalid search input.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid page range.",
+            "message": "Invalid page range.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid Tag filter.",
+            "message": "Invalid Tag filter.",
+            "translation": ""
+        },
+        {
+            "id": "Tag not found.",
+            "message": "Tag not found.",
+            "translation": ""
+        },
+        {
+            "id": "Document type not found.",
+            "message": "Document type not found.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid base64 content.",
+            "message": "Invalid base64 content.",
+            "translation": ""
+        },
+        {
+            "id": "Metadata upgrade is still in progress.",
+            "message": "Metadata upgrade is still in progress.",
+            "translation": ""
+        },
+        {
+            "id": "Tag group not found.",
+            "message": "Tag group not found.",
+            "translation": ""
+        },
+        {
+            "id": "Document type ID is required.",
+            "message": "Document type ID is required.",
+            "translation": ""
+        },
+        {
+            "id": "Metadata identifiers are unavailable.",
+            "message": "Metadata identifiers are unavailable.",
+            "translation": ""
+        },
+        {
+            "id": "Name must contain 1 to 300 characters.",
+            "message": "Name must contain 1 to 300 characters.",
+            "translation": ""
+        },
+        {
+            "id": "A public metadata ID is required.",
+            "message": "A public metadata ID is required.",
+            "translation": ""
+        },
+        {
+            "id": "Field not found.",
+            "message": "Field not found.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid Tag type.",
+            "message": "Invalid Tag type.",
+            "translation": ""
+        },
+        {
+            "id": "Field unit is too long.",
+            "message": "Field unit is too long.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid field type.",
+            "message": "Invalid field type.",
+            "translation": ""
+        },
+        {
+            "id": "Exactly one Tag ID or field ID is required.",
+            "message": "Exactly one Tag ID or field ID is required.",
+            "translation": ""
+        },
+        {
+            "id": "Document type attribute not found.",
+            "message": "Document type attribute not found.",
+            "translation": ""
+        },
+        {
+            "id": "Select between 1 and 64 document type templates.",
+            "message": "Select between 1 and 64 document type templates.",
+            "translation": ""
+        },
+        {
+            "id": "File ID and Tag ID are required.",
+            "message": "File ID and Tag ID are required.",
+            "translation": ""
+        },
+        {
+            "id": "File ID and field ID are required.",
+            "message": "File ID and field ID are required.",
+            "translation": ""
+        },
+        {
+            "id": "Exactly one typed value is required.",
+            "message": "Exactly one typed value is required.",
+            "translation": ""
+        },
+        {
+            "id": "Date must use YYYY-MM-DD.",
+            "message": "Date must use YYYY-MM-DD.",
+            "translation": ""
+        },
+        {
+            "id": "File ID and document type ID are required.",
+            "message": "File ID and document type ID are required.",
+            "translation": ""
+        },
+        {
             "id": "Misc",
             "message": "Misc",
             "translation": ""
@@ -5555,6 +5986,11 @@
         {
             "id": "Organizations",
             "message": "Organizations",
+            "translation": ""
+        },
+        {
+            "id": "MCP",
+            "message": "MCP",
             "translation": ""
         },
         {

@@ -16,6 +16,8 @@ type Tx struct {
 	config
 	// Account is the client for interacting with the Account builders.
 	Account *AccountClient
+	// MCPCredential is the client for interacting with the MCPCredential builders.
+	MCPCredential *MCPCredentialClient
 	// Mail is the client for interacting with the Mail builders.
 	Mail *MailClient
 	// PasskeyCredential is the client for interacting with the PasskeyCredential builders.
@@ -166,6 +168,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Account = NewAccountClient(tx.config)
+	tx.MCPCredential = NewMCPCredentialClient(tx.config)
 	tx.Mail = NewMailClient(tx.config)
 	tx.PasskeyCredential = NewPasskeyCredentialClient(tx.config)
 	tx.Session = NewSessionClient(tx.config)

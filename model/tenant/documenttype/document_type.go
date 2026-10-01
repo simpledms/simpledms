@@ -11,6 +11,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/main/common/attributetype"
 	"github.com/simpledms/simpledms/model/tenant/library"
+	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/util/e"
 )
 
@@ -100,6 +101,13 @@ func (qq *DocumentType) CreateTagAttribute(
 	tagID int64,
 	isNameGiving bool,
 ) (*enttenant.Attribute, error) {
+	tagx, err := ctx.SpaceCtx().Space.QueryTags().Where(tag.ID(tagID)).Only(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if tagx.Type != tagtype.Group {
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Attribute must reference a Tag group.")
+	}
 	exists, err := ctx.SpaceCtx().TTx.Attribute.Query().
 		Where(
 			attribute.DocumentTypeID(qq.Data.ID),
@@ -138,6 +146,9 @@ func (qq *DocumentType) CreatePropertyAttribute(
 	propertyID int64,
 	isNameGiving bool,
 ) (*enttenant.Attribute, error) {
+	if _, err := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(propertyID)).Only(ctx); err != nil {
+		return nil, err
+	}
 	exists, err := ctx.SpaceCtx().TTx.Attribute.Query().
 		Where(
 			attribute.DocumentTypeID(qq.Data.ID),

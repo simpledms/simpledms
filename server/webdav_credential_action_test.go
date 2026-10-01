@@ -263,7 +263,9 @@ func createWebDAVCredential(
 	if !strings.Contains(rr.Body.String(), formURL+"Inbox/") {
 		t.Fatal("expected direct Inbox URL in credential dialog")
 	}
-	if count := strings.Count(rr.Body.String(), "data-copy-value"); count != 4 {
+	// The response also refreshes the credential list out-of-band; only inspect the dialog.
+	secretDialog, _, _ := strings.Cut(rr.Body.String(), `id="webDAVCredentialOverview"`)
+	if count := strings.Count(secretDialog, "data-copy-value"); count != 4 {
 		t.Fatalf("expected all four credential values to be copyable, got %d", count)
 	}
 	if count := strings.Count(rr.Body.String(), "overflow-wrap: anywhere"); count != 4 {
@@ -348,8 +350,16 @@ func createArchiveAndRevokeWebDAVCredential(
 	); err != nil {
 		return err
 	}
-	copyValueMatches := regexp.MustCompile(`data-copy-value="([^"]*)"`).FindAllStringSubmatch(
+	// The response also refreshes the credential list out-of-band; only inspect the dialog.
+	secretDialog, overview, hasOverview := strings.Cut(
 		archiveRR.Body.String(),
+		`id="webDAVCredentialOverview"`,
+	)
+	if !hasOverview || !strings.Contains(activeTabLabel(t, overview), "Archive") {
+		t.Fatal("expected create response to select the new credential's Space tab")
+	}
+	copyValueMatches := regexp.MustCompile(`data-copy-value="([^"]*)"`).FindAllStringSubmatch(
+		secretDialog,
 		-1,
 	)
 	if len(copyValueMatches) != 4 {
@@ -480,9 +490,12 @@ func assertWebDAVPageLayout(t *testing.T, page widget.IWidget) *widget.Container
 		t.Fatalf("expected one WebDAV credential FAB, got %d", len(layout.Navigation.FABs))
 	}
 	listDetail := layout.Content.(*widget.ListDetailLayout)
-	if len(listDetail.AppBar.Actions) != 1 ||
-		listDetail.AppBar.Actions[0].(*widget.IconButton).Icon != "filter_alt" {
+	if len(listDetail.AppBar.Actions) != 1 {
 		t.Fatalf("expected filter icon in main app bar, got %#v", listDetail.AppBar.Actions)
+	}
+	filterButton := listDetail.AppBar.Actions[0].(*widget.Container).Child.(*widget.IconButton)
+	if filterButton.Icon != "filter_alt" || filterButton.IsSelected {
+		t.Fatalf("expected unselected filter icon for default filter, got %#v", filterButton)
 	}
 	return listDetail.List.(*widget.Container)
 }

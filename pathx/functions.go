@@ -22,7 +22,7 @@ func StoragePath(metaPath string, tenantID string) string {
 
 // used for selecting encryption key
 func S3TenantPrefix() string {
-	return filepath.Clean(fmt.Sprintf("tenants"))
+	return filepath.Clean("tenants")
 }
 
 // publicID is more robust against programming mistakes
@@ -40,7 +40,7 @@ func S3SqliteReplicationPrefix(tenantID string) string {
 
 // used for selecting encryption key
 func S3AccountPrefix() string {
-	return filepath.Clean(fmt.Sprintf("accounts"))
+	return filepath.Clean("accounts")
 }
 
 func S3TemporaryAccountStoragePrefix(accountID string) string {

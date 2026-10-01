@@ -340,14 +340,16 @@ func (qq *DashboardCardsPartial) nilableTenantCard(ctx ctxx.Context, tenantx *en
 		headline = widget.H(widget.HeadingTypeTitleLg, widget.Tu(tenantx.Plan.String()))
 		subhead = widget.T("Subscription")
 
-		accountm := account.NewAccount(ctx.MainCtx().Account)
-		if tenantm.IsOwner(accountm) {
-			// TODO
-			/*actions = append(actions, &wx.Button{
-				Label:     wx.T("Change plan"),
-				StyleType: wx.ButtonStyleTypeOutlined,
-			})*/
-		}
+		/*
+			accountm := account.NewAccount(ctx.MainCtx().Account)
+			if tenantm.IsOwner(accountm) {
+				// TODO
+				actions = append(actions, &wx.Button{
+					Label:     wx.T("Change plan"),
+					StyleType: wx.ButtonStyleTypeOutlined,
+				})
+			}
+		*/
 
 		/*actions = append(actions, &wx.Button{
 			Label:     wx.T("Spaces"),
@@ -436,9 +438,8 @@ func (qq *DashboardCardsPartial) tenantStorageUsageLabel(ctx ctxx.Context, tenan
 }
 
 func (qq *DashboardCardsPartial) spaceCard(ctx ctxx.Context, spacex *enttenant.Space, tenant *entmain.Tenant) *widget.Card {
-	var contextMenu *widget.Menu
 	// if ctx.TenantCtx().User.Role == tenantrole.Owner {
-	contextMenu = NewSpaceContextMenuWidget(qq.actions).Widget(ctx, tenant.PublicID.String(), spacex.PublicID.String())
+	contextMenu := NewSpaceContextMenuWidget(qq.actions).Widget(ctx, tenant.PublicID.String(), spacex.PublicID.String())
 	// }
 
 	return &widget.Card{

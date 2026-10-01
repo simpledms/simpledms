@@ -49,16 +49,14 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *w
 		},
 	}
 
-	if tagx.Type == tagtype.Simple {
-		/* TODO
-		menuItems = append(
-			menuItems,
-			&wx.MenuItem{
-				Label: wx.T("Convert to composed tag"),
-			},
-		)
-		*/
-	}
+	/* TODO
+	menuItems = append(
+		menuItems,
+		&wx.MenuItem{
+			Label: wx.T("Convert to composed tag"),
+		},
+	)
+	*/
 	if tagx.Type == tagtype.Super {
 		assignSubTagsLink := &widget.MenuItem{
 			Label:       widget.T("Assign tags"), // TODO or Sub-tags? sounds bad in german

@@ -27,7 +27,8 @@ func (qq *AttributeContextMenuWidget) Widget(ctx ctxx.Context, attributex *entte
 
 	var items []*widget.MenuItem
 
-	if attributex.Type == attributetype.Tag {
+	switch attributex.Type {
+	case attributetype.Tag:
 		// properties have no name...
 		items = append(items, &widget.MenuItem{
 			TrailingIcon: "edit",
@@ -40,7 +41,7 @@ func (qq *AttributeContextMenuWidget) Widget(ctx ctxx.Context, attributex *entte
 		}, &widget.MenuItem{
 			IsDivider: true,
 		})
-	} else if attributex.Type == attributetype.Field {
+	case attributetype.Field:
 		items = append(items, &widget.MenuItem{
 			TrailingIcon: "edit",
 			Label:        widget.T("Edit"),

@@ -76,10 +76,7 @@ func (qq *InboxRootPage) render(
 		Content:    content,
 	}
 
-	renderFullPage := false
-	if req.Header.Get("HX-Request") == "" {
-		renderFullPage = true
-	}
+	renderFullPage := req.Header.Get("HX-Request") == ""
 
 	if renderFullPage {
 		viewx = partial2.NewBase(widget.T("Inbox"), viewx)

@@ -43,9 +43,7 @@ func NewFile(data *enttenant.File) *File {
 }
 
 func (qq *File) Filename(ctx ctxx.Context) string {
-	if ctx.IsSpaceCtx() && ctx.SpaceCtx().Space.IsFolderMode {
-		// return qq.Data.Name
-	}
+	// return qq.Data.Name
 
 	filenameElems, err := qq.IdentifyingElements(ctx)
 	if err != nil {
@@ -63,9 +61,7 @@ func (qq *File) Filename(ctx ctxx.Context) string {
 
 // default is without document type because it is shown as supporting text
 func (qq *File) FilenameInApp(ctx ctxx.Context, withDocumentType bool) string {
-	if ctx.IsSpaceCtx() && ctx.SpaceCtx().Space.IsFolderMode {
-		// return qq.Data.Name
-	}
+	// return qq.Data.Name
 
 	filenameElems, err := qq.IdentifyingElements(ctx)
 	if err != nil {
@@ -112,7 +108,7 @@ func (qq *File) IdentifyingElements(ctx ctxx.Context) ([]string, error) {
 		propertym := mproperty.NewProperty(assignment.Edges.Property)
 		assignmentm := mproperty.NewPropertyAssignment(assignment)
 
-		if propertym.Data.Type == fieldtype.Checkbox && assignment.BoolValue == false {
+		if propertym.Data.Type == fieldtype.Checkbox && !assignment.BoolValue {
 			// don't add unselected checkboxes
 			continue
 		}

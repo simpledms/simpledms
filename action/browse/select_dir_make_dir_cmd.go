@@ -67,7 +67,7 @@ func (qq *SelectDirMakeDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 	}
 
 	// switch dir
-	data.MoveFileData.CurrentDirID = filex.Data.PublicID.String()
+	data.CurrentDirID = filex.Data.PublicID.String()
 
 	// hxTarget := req.URL.Query().Get("hx-target")
 

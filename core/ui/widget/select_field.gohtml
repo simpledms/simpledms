@@ -1,0 +1,16 @@
+{{- define "SelectField" -}}
+	{{- $field := . -}}
+	<label class="flex flex-col gap-2 w-full">
+		<span class="body-sm text-on-surface-variant">{{ render .GetContext .Label }}</span>
+		<select id="{{ .GetID }}" name="{{ .Name }}" {{ if .IsRequired }}required{{ end }}
+			class="rounded-xs px-4 py-3 min-h-14 w-full bg-surface text-on-surface body-lg
+				outline outline-1 outline-outline -outline-offset-1
+				focus:outline-primary focus:outline-2 focus:-outline-offset-2">
+			{{- range .Options }}
+				<option value="{{ .Value }}" {{ if eq .Value $field.DefaultValue }}selected{{ end }}>
+					{{- .Label.String $field.GetContext -}}
+				</option>
+			{{- end }}
+		</select>
+	</label>
+{{- end -}}

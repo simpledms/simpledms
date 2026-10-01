@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/mcpcredential"
 	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/session"
 	"github.com/simpledms/simpledms/db/entmain/systemconfig"
@@ -83,6 +84,7 @@ func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			account.Table:                 account.ValidColumn,
+			mcpcredential.Table:           mcpcredential.ValidColumn,
 			mail.Table:                    mail.ValidColumn,
 			passkeycredential.Table:       passkeycredential.ValidColumn,
 			session.Table:                 session.ValidColumn,

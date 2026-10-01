@@ -780,7 +780,7 @@ func newListingBenchmarkFixtureAcrossSpaces(
 	if targetSpace == nil || targetRootDir == nil {
 		_ = tenantTx.Rollback()
 		_ = mainTx.Rollback()
-		tb.Fatal("target space not initialized")
+		panic("target space not initialized")
 	}
 
 	if err := mainTx.Commit(); err != nil {

@@ -27,7 +27,7 @@ func TestNavigationRailShowsMainDestinations(t *testing.T) {
 	defer userRollback()
 
 	userRail := partial2.NewNavigationRail(userCtx, harness.infra, "dashboard", nil)
-	userItemsWant := []string{"Account", "WebDAV"}
+	userItemsWant := []string{"Account", "WebDAV", "MCP"}
 	if got := navigationRailLabels(userRail.GetItems()); !reflect.DeepEqual(got, userItemsWant) {
 		t.Fatalf("expected user rail labels %v, got %v", userItemsWant, got)
 	}
@@ -43,7 +43,7 @@ func TestNavigationRailShowsMainDestinations(t *testing.T) {
 	defer adminRollback()
 
 	adminRail := partial2.NewNavigationRail(adminCtx, harness.infra, "system", nil)
-	adminItemsWant := []string{"Account", "WebDAV", "System"}
+	adminItemsWant := []string{"Account", "WebDAV", "MCP", "System"}
 	if got := navigationRailLabels(adminRail.GetItems()); !reflect.DeepEqual(got, adminItemsWant) {
 		t.Fatalf("expected admin rail labels %v, got %v", adminItemsWant, got)
 	}
@@ -189,7 +189,7 @@ func TestNavigationRailShowsSpaceDestinations(t *testing.T) {
 		partial2.SpacesNavigationRailValue(tenantx.PublicID.String()),
 		nil,
 	)
-	tenantRailWant := []string{"Account", "WebDAV"}
+	tenantRailWant := []string{"Account", "WebDAV", "MCP"}
 	if got := navigationRailLabels(tenantRail.GetItems()); !reflect.DeepEqual(got, tenantRailWant) {
 		t.Fatalf("expected tenant rail labels without space %v, got %v", tenantRailWant, got)
 	}
@@ -530,45 +530,6 @@ func assertNavigationRailItemActiveRecursive(
 	)
 }
 
-func assertNavigationRailItemInactiveRecursive(
-	t testing.TB,
-	items []*widget.NavigationRailItem,
-	label string,
-) {
-	t.Helper()
-	item := nilableNavigationRailItemRecursive(items, label)
-	if item == nil {
-		t.Fatalf(
-			"expected rail labels to contain item %q, got %v",
-			label,
-			navigationRailLabelsRecursive(items),
-		)
-	}
-	if item.IsActive {
-		t.Fatalf("expected rail item %q not to be active", label)
-	}
-}
-
-func assertNavigationRailItemIconRecursive(
-	t testing.TB,
-	items []*widget.NavigationRailItem,
-	label string,
-	wantIcon string,
-) {
-	t.Helper()
-	item := nilableNavigationRailItemRecursive(items, label)
-	if item == nil {
-		t.Fatalf(
-			"expected rail labels to contain item %q, got %v",
-			label,
-			navigationRailLabelsRecursive(items),
-		)
-	}
-	if item.Icon != wantIcon {
-		t.Fatalf("expected rail item %q icon %q, got %q", label, wantIcon, item.Icon)
-	}
-}
-
 func navigationRailItemActiveRecursive(items []*widget.NavigationRailItem, activeLabel string) bool {
 	for _, item := range items {
 		if item == nil {
@@ -582,24 +543,6 @@ func navigationRailItemActiveRecursive(items []*widget.NavigationRailItem, activ
 		}
 	}
 	return false
-}
-
-func nilableNavigationRailItemRecursive(
-	items []*widget.NavigationRailItem,
-	label string,
-) *widget.NavigationRailItem {
-	for _, item := range items {
-		if item == nil {
-			continue
-		}
-		if item.Label == label {
-			return item
-		}
-		if child := nilableNavigationRailItemRecursive(item.Children, label); child != nil {
-			return child
-		}
-	}
-	return nil
 }
 
 func navigationRailLabelsContain(labels []string, want string) bool {

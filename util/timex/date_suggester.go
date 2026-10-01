@@ -52,7 +52,7 @@ func (qq *DateSuggester) SuggestFromText(content string) []Date {
 	}
 
 	sort.Slice(suggestions, func(i, j int) bool {
-		return suggestions[i].Time.Before(suggestions[j].Time)
+		return suggestions[i].Before(suggestions[j].Time)
 	})
 
 	return suggestions

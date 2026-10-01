@@ -1,6 +1,7 @@
 package txx
 
 import (
+	"context"
 	"log"
 	"net/http"
 
@@ -26,6 +27,16 @@ func WithTenantWriteSpaceTx[T any](ctx *ctxx.SpaceContext, fn func(*ctxx.SpaceCo
 
 func WithFreshAuthorizedTenantWriteSpaceTx[T any](
 	ctx *ctxx.SpaceContext,
+	fn func(*ctxx.SpaceContext) (T, error),
+) (T, error) {
+	return WithFreshAuthorizedTenantWriteSpaceTxAndMainCheck(ctx, nil, fn)
+}
+
+// WithFreshAuthorizedTenantWriteSpaceTxAndMainCheck runs an additional check while the fresh
+// main write lock is held and before tenant finalization starts.
+func WithFreshAuthorizedTenantWriteSpaceTxAndMainCheck[T any](
+	ctx *ctxx.SpaceContext,
+	mainCheck func(context.Context, *entmain.Tx) error,
 	fn func(*ctxx.SpaceContext) (T, error),
 ) (T, error) {
 	var zero T
@@ -76,6 +87,11 @@ func WithFreshAuthorizedTenantWriteSpaceTx[T any](
 	}
 	if !hasAccess {
 		return zero, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+	}
+	if mainCheck != nil {
+		if err := mainCheck(ctx, mainTx); err != nil {
+			return zero, err
+		}
 	}
 
 	var result T

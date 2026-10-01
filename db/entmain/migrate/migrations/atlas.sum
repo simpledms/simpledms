@@ -1,4 +1,4 @@
-h1:inKV9DPFx6pATV1h0nuoJJZi3J68XDYXO01iCKQl/xI=
+h1:Hry+nR7NRa6K/2ZXP2zCwnlAsVFbBcvkFoaSwez2U9I=
 20250506173739_v1.0.0-beta.1.up.sql h1:0jwTs/r/g1CX6rrTUSkTwJF1rfnC08+eSK5Odd764ao=
 20250801110934_v1.1.0-rc.1.up.sql h1:FN9O9ql+I5TD+wc3/u0RWVu81bo09rQK1mtKB0DInf4=
 20260115140029_v1.2.0-rc.2.up.sql h1:XF9vhPOahB/nsVQGqGK22G5Y7id+BPGq8d5OmXUqkns=
@@ -12,3 +12,4 @@ h1:inKV9DPFx6pATV1h0nuoJJZi3J68XDYXO01iCKQl/xI=
 20260607115157_scheduler_write_contention_indexes.up.sql h1:xpAmzEHoc+VhFspw4BDONQckk7LD+yDnUGZpQQqNuG0=
 20260818080833_gotenberg_url.up.sql h1:NfzSm5JSHHbtURJWy7otbgkRtnojNeCaM2E4cLJWAoA=
 20260825082904_webdav_inbox_ingestion.up.sql h1:KWW4VXDx3NY/YDkv8SBaz4mhEBGHAskj4aESJIAndc0=
+20260918225936_mcp_credentials.up.sql h1:lmwhnyVaEeA3ucLgPS1O/1KYZjrYHuDPV35xyomMmKk=

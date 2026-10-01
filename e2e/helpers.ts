@@ -34,7 +34,13 @@ export async function signIn(page: Page) {
 
 export async function goToSpaces(page: Page) {
 	await page.goto("/dashboard/");
-	await page.getByRole("link", { name: "Manage spaces" }).first().click();
+	const menu = page.getByRole("button", { name: "Open main menu", exact: true }).first();
+	if (await menu.getAttribute("aria-expanded") !== "true") await menu.click();
+	const spaces = page.getByRole("link", { name: "Spaces", exact: true }).first();
+	if (!(await spaces.isVisible())) {
+		await page.getByRole("button", { name: /^business / }).first().click();
+	}
+	await spaces.click();
 	await expect(page).toHaveURL(/\/org\/[^/]+\/spaces\/$/);
 }
 
@@ -49,7 +55,7 @@ export async function openCreateSpaceDialog(page: Page) {
 	if (await emptyStateCreate.count()) {
 		await emptyStateCreate.first().click();
 	} else {
-		await page.getByRole("link", { name: "add", exact: true }).click();
+		await page.getByRole("link", { name: /Create space|^add$/ }).first().click();
 	}
 	await expect(page.getByRole("heading", { name: "Create space" })).toBeVisible();
 }
@@ -76,7 +82,9 @@ export function fixturePath(fileName: string) {
 }
 
 export async function uploadFileWithToolbar(page: Page, absoluteFilePath: string) {
-	await page.getByRole("link", { name: "upload_file", exact: true }).click();
+	const menu = page.getByRole("button", { name: "Open main menu", exact: true }).first();
+	if (await menu.getAttribute("aria-expanded") !== "true") await menu.click();
+	await page.getByRole("link", { name: /Upload file/ }).first().click();
 	const dialog = page.getByRole("dialog").filter({ hasText: "File upload" });
 	await expect(dialog).toBeVisible();
 	await dialog.locator("input[type=file]").first().setInputFiles(absoluteFilePath);

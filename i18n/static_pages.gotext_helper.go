@@ -7,6 +7,8 @@ import (
 
 // gotext helper for static page labels;
 // necessary because they are not auto detected by `gotext update`
+//
+//nolint:unused // gotext discovers these translation labels without a runtime call.
 func staticPagesGotextHelper() {
 	pp := message.NewPrinter(language.English)
 	pp.Sprintf("Imprint")

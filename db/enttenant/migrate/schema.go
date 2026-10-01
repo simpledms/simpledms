@@ -148,6 +148,7 @@ var (
 	// DocumentTypesColumns holds the columns for the "document_types" table.
 	DocumentTypesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "public_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "icon", Type: field.TypeString, Nullable: true},
 		{Name: "is_protected", Type: field.TypeBool, Default: false},
@@ -162,7 +163,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "document_types_spaces_space",
-				Columns:    []*schema.Column{DocumentTypesColumns[5]},
+				Columns:    []*schema.Column{DocumentTypesColumns[6]},
 				RefColumns: []*schema.Column{SpacesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -171,7 +172,7 @@ var (
 			{
 				Name:    "documenttype_space_id",
 				Unique:  false,
-				Columns: []*schema.Column{DocumentTypesColumns[5]},
+				Columns: []*schema.Column{DocumentTypesColumns[6]},
 			},
 		},
 	}
@@ -183,7 +184,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
-		{Name: "source", Type: field.TypeEnum, Enums: []string{"UnknownLegacy", "WebInterface", "PWAOSOpen", "URLImport", "WebDAV", "SystemExtraction"}, Default: "UnknownLegacy"},
+		{Name: "source", Type: field.TypeEnum, Enums: []string{"UnknownLegacy", "WebInterface", "PWAOSOpen", "URLImport", "WebDAV", "SystemExtraction", "MCP"}, Default: "UnknownLegacy"},
 		{Name: "is_directory", Type: field.TypeBool},
 		{Name: "notes", Type: field.TypeString, Nullable: true},
 		{Name: "modified_at", Type: field.TypeTime, Nullable: true},
@@ -575,6 +576,7 @@ var (
 	// PropertiesColumns holds the columns for the "properties" table.
 	PropertiesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "public_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "type", Type: field.TypeEnum, Enums: []string{"Unknown", "Text", "Number", "Money", "Date", "Checkbox"}},
 		{Name: "unit", Type: field.TypeString, Default: ""},
@@ -588,7 +590,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "properties_spaces_space",
-				Columns:    []*schema.Column{PropertiesColumns[4]},
+				Columns:    []*schema.Column{PropertiesColumns[5]},
 				RefColumns: []*schema.Column{SpacesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -597,12 +599,12 @@ var (
 			{
 				Name:    "property_space_id",
 				Unique:  false,
-				Columns: []*schema.Column{PropertiesColumns[4]},
+				Columns: []*schema.Column{PropertiesColumns[5]},
 			},
 			{
 				Name:    "property_space_id_name",
 				Unique:  true,
-				Columns: []*schema.Column{PropertiesColumns[4], PropertiesColumns[1]},
+				Columns: []*schema.Column{PropertiesColumns[5], PropertiesColumns[2]},
 			},
 		},
 	}
@@ -796,6 +798,7 @@ var (
 	// TagsColumns holds the columns for the "tags" table.
 	TagsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "public_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "color", Type: field.TypeString, Nullable: true},
 		{Name: "icon", Type: field.TypeString, Nullable: true},
@@ -811,13 +814,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tags_spaces_space",
-				Columns:    []*schema.Column{TagsColumns[5]},
+				Columns:    []*schema.Column{TagsColumns[6]},
 				RefColumns: []*schema.Column{SpacesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "tags_tags_group",
-				Columns:    []*schema.Column{TagsColumns[6]},
+				Columns:    []*schema.Column{TagsColumns[7]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -826,12 +829,12 @@ var (
 			{
 				Name:    "tag_space_id",
 				Unique:  false,
-				Columns: []*schema.Column{TagsColumns[5]},
+				Columns: []*schema.Column{TagsColumns[6]},
 			},
 			{
 				Name:    "tag_space_id_name",
 				Unique:  true,
-				Columns: []*schema.Column{TagsColumns[5], TagsColumns[1]},
+				Columns: []*schema.Column{TagsColumns[6], TagsColumns[2]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "`group_id` is null",
 				},
@@ -839,7 +842,7 @@ var (
 			{
 				Name:    "tag_space_id_name_group_id",
 				Unique:  true,
-				Columns: []*schema.Column{TagsColumns[5], TagsColumns[1], TagsColumns[6]},
+				Columns: []*schema.Column{TagsColumns[6], TagsColumns[2], TagsColumns[7]},
 			},
 		},
 	}

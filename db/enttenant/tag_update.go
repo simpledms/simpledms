@@ -373,6 +373,9 @@ func (_u *TagUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			}
 		}
 	}
+	if _u.mutation.PublicIDCleared() {
+		_spec.ClearField(tag.FieldPublicID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(tag.FieldName, field.TypeString, value)
 	}
@@ -1038,6 +1041,9 @@ func (_u *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if _u.mutation.PublicIDCleared() {
+		_spec.ClearField(tag.FieldPublicID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(tag.FieldName, field.TypeString, value)

@@ -1,4 +1,4 @@
-h1:68chtIYPwIgpPd4rRp+VTgX80zTTEjwShneK2baRir0=
+h1:lDP791X5cXjaCdgG7jYsr9WYywc5sVT2hhUONuwNtv4=
 20250506173739_v1.0.0-beta.1.up.sql h1:c50kBKKvVLlOuG4Yz10TFhx1nCcZIIPQLYTnon6z6/4=
 20250508091725_v1.0.0-beta.2.up.sql h1:K4jPDMysMc7z8lvAlyOKOwD7BrcTSJJmIgWqH3amXns=
 20250509090715_v1.0.0-beta.3.up.sql h1:qCiaeXwdoKza6R4ATof/SA2pClyZm+7aOHkAepWG9wI=
@@ -19,3 +19,5 @@ h1:68chtIYPwIgpPd4rRp+VTgX80zTTEjwShneK2baRir0=
 20260825082937_webdav_source_indexes.up.sql h1:Uj4SBdL62Hdr/Bc5O4EZ2kBl6KXjjadrxx5dA7ejsmo=
 20260907090139_document_notes.up.sql h1:0KP03B3+uQhDG1vXBNIsnsgSXHOqTIUX2wIcuTpKnsA=
 20260907210921_document_note_titles.up.sql h1:G3fJgeSoQk2PSWJ+1RJK+eAWdj+Xd6BDj2A5PSOwmQE=
+20260929123641_metadata_public_ids.up.sql h1:iCtooxElcoO2TQnHHJYTEoNRxJ7YAFT8ZLkLFkEBj/E=
+20260929123746_metadata_public_id_indexes.up.sql h1:gsCIQM6ONlunDvB7lz4NwCxsBA7dlw1Dk7o1Ec72N98=

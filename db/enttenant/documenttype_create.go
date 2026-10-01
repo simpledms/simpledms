@@ -12,6 +12,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/attribute"
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/db/enttenant/space"
+	"github.com/simpledms/simpledms/db/entx"
 )
 
 // DocumentTypeCreate is the builder for creating a DocumentType entity.
@@ -24,6 +25,20 @@ type DocumentTypeCreate struct {
 // SetSpaceID sets the "space_id" field.
 func (_c *DocumentTypeCreate) SetSpaceID(v int64) *DocumentTypeCreate {
 	_c.mutation.SetSpaceID(v)
+	return _c
+}
+
+// SetPublicID sets the "public_id" field.
+func (_c *DocumentTypeCreate) SetPublicID(v entx.CIText) *DocumentTypeCreate {
+	_c.mutation.SetPublicID(v)
+	return _c
+}
+
+// SetNillablePublicID sets the "public_id" field if the given value is not nil.
+func (_c *DocumentTypeCreate) SetNillablePublicID(v *entx.CIText) *DocumentTypeCreate {
+	if v != nil {
+		_c.SetPublicID(*v)
+	}
 	return _c
 }
 
@@ -138,6 +153,13 @@ func (_c *DocumentTypeCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *DocumentTypeCreate) defaults() error {
+	if _, ok := _c.mutation.PublicID(); !ok {
+		if documenttype.DefaultPublicID == nil {
+			return fmt.Errorf("enttenant: uninitialized documenttype.DefaultPublicID (forgotten import enttenant/runtime?)")
+		}
+		v := documenttype.DefaultPublicID()
+		_c.mutation.SetPublicID(v)
+	}
 	if _, ok := _c.mutation.IsProtected(); !ok {
 		v := documenttype.DefaultIsProtected
 		_c.mutation.SetIsProtected(v)
@@ -197,6 +219,10 @@ func (_c *DocumentTypeCreate) createSpec() (*DocumentType, *sqlgraph.CreateSpec)
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
+	}
+	if value, ok := _c.mutation.PublicID(); ok {
+		_spec.SetField(documenttype.FieldPublicID, field.TypeString, value)
+		_node.PublicID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(documenttype.FieldName, field.TypeString, value)

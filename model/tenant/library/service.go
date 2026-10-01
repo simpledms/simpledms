@@ -33,10 +33,7 @@ func (qq *Service) SpaceHasMetadata(ctx ctxx.Context) bool {
 		return true
 	}
 	fieldCount := ctx.SpaceCtx().Space.QueryProperties().CountX(ctx)
-	if fieldCount > 0 {
-		return true
-	}
-	return false
+	return fieldCount > 0
 }
 
 func (qq *Service) ImportBuiltinDocumentTypes(ctx ctxx.Context, templateKeys []string, requireEmpty bool) error {
@@ -56,9 +53,11 @@ func (qq *Service) ImportBuiltinDocumentTypes(ctx ctxx.Context, templateKeys []s
 
 	var selected []BuiltinTemplate
 	for _, key := range keys {
-		if template, ok := byKey[key]; ok {
-			selected = append(selected, template)
+		template, ok := byKey[key]
+		if !ok {
+			return e.NewHTTPErrorf(http.StatusBadRequest, "Unknown document type template.")
 		}
+		selected = append(selected, template)
 	}
 
 	if len(selected) == 0 {

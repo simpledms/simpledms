@@ -196,7 +196,7 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 	fileSystem := filesystem.NewS3FileSystem(
 		nil,
 		"",
-		filesystem.NewFileSystem(metaPath),
+		filesystem.NewFileSystem(metaPath), //nolint:staticcheck // S3FileSystem requires the folder adapter.
 		false,
 		filesystem.NewStorageQuota(false),
 	)

@@ -73,30 +73,32 @@ func (qq *WebDAVCredentialsPage) Widget(
 			fabs,
 		),
 		Content: &widget.ListDetailLayout{
-			AppBar: qq.appBar(),
+			AppBar: qq.appBar(data),
 			List:   overview,
 		},
 	}, nil
 }
 
-func (qq *WebDAVCredentialsPage) appBar() *widget.AppBar {
+func (qq *WebDAVCredentialsPage) appBar(data *WebDAVCredentialListPartialData) *widget.AppBar {
 	return &widget.AppBar{
 		Leading:          widget.NewIcon("vpn_key"),
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title: &widget.AppBarTitle{
 			Text: widget.T("WebDAV credentials"),
 		},
-		Actions: []widget.IWidget{qq.filterButton()},
+		Actions: []widget.IWidget{qq.filterButton(data, false)},
 	}
 }
 
-func (qq *WebDAVCredentialsPage) filterButton() *widget.IconButton {
-	return &widget.IconButton{
-		Icon:    "filter_alt",
-		Tooltip: widget.T("Filter WebDAV credentials"),
-		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:        qq.actions.WebDAVCredentialFilterDialog.Endpoint(),
-			LoadInPopover: true,
-		},
-	}
+func (qq *WebDAVCredentialsPage) filterButton(
+	data *WebDAVCredentialListPartialData,
+	isOOB bool,
+) *widget.Container {
+	return newCredentialFilterButton(
+		"webDAVCredentialFilterButton",
+		widget.T("Filter WebDAV credentials"),
+		qq.actions.WebDAVCredentialFilterDialog.Endpoint(),
+		data.CredentialStatusValues,
+		isOOB,
+	)
 }

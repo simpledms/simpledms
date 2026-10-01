@@ -57,7 +57,7 @@ func (qq *FileListItemPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 		rw,
 		ctx,
 		// TODO is hrefFn correct?
-		qq.Widget(ctx, route.Inbox, filex, false, state.FilesListPartialState.isSortedByDate()),
+		qq.Widget(ctx, route.Inbox, filex, false, state.isSortedByDate()),
 	)
 }
 

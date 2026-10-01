@@ -10,6 +10,7 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/account"
 	"github.com/simpledms/simpledms/db/entmain/mail"
+	"github.com/simpledms/simpledms/db/entmain/mcpcredential"
 	"github.com/simpledms/simpledms/db/entmain/passkeycredential"
 	"github.com/simpledms/simpledms/db/entmain/predicate"
 	"github.com/simpledms/simpledms/db/entmain/session"
@@ -102,6 +103,33 @@ func (f TraverseAccount) Traverse(ctx context.Context, q entmain.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *entmain.AccountQuery", q)
+}
+
+// The MCPCredentialFunc type is an adapter to allow the use of ordinary function as a Querier.
+type MCPCredentialFunc func(context.Context, *entmain.MCPCredentialQuery) (entmain.Value, error)
+
+// Query calls f(ctx, q).
+func (f MCPCredentialFunc) Query(ctx context.Context, q entmain.Query) (entmain.Value, error) {
+	if q, ok := q.(*entmain.MCPCredentialQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *entmain.MCPCredentialQuery", q)
+}
+
+// The TraverseMCPCredential type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseMCPCredential func(context.Context, *entmain.MCPCredentialQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseMCPCredential) Intercept(next entmain.Querier) entmain.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseMCPCredential) Traverse(ctx context.Context, q entmain.Query) error {
+	if q, ok := q.(*entmain.MCPCredentialQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *entmain.MCPCredentialQuery", q)
 }
 
 // The MailFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -352,6 +380,8 @@ func NewQuery(q entmain.Query) (Query, error) {
 	switch q := q.(type) {
 	case *entmain.AccountQuery:
 		return &query[*entmain.AccountQuery, predicate.Account, account.OrderOption]{typ: entmain.TypeAccount, tq: q}, nil
+	case *entmain.MCPCredentialQuery:
+		return &query[*entmain.MCPCredentialQuery, predicate.MCPCredential, mcpcredential.OrderOption]{typ: entmain.TypeMCPCredential, tq: q}, nil
 	case *entmain.MailQuery:
 		return &query[*entmain.MailQuery, predicate.Mail, mail.OrderOption]{typ: entmain.TypeMail, tq: q}, nil
 	case *entmain.PasskeyCredentialQuery:

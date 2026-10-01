@@ -348,8 +348,7 @@ func (qq *S3FileSystem) PrepareFileVersionUpload(
 }
 
 func (qq *S3FileSystem) prepareUploadMetadata(ctx ctxx.Context, originalFilename string) (*uploadMetadata, error) {
-	originalFilename = filepath.Clean(originalFilename)
-	if !filenamex.IsAllowed(originalFilename) {
+	if filepath.Clean(originalFilename) != originalFilename || !filenamex.IsAllowed(originalFilename) {
 		log.Println("invalid filename")
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
 	}
@@ -368,6 +367,42 @@ func (qq *S3FileSystem) prepareUploadMetadata(ctx ctxx.Context, originalFilename
 		storageFilenameWithoutExt: storageFilenameWithoutExt,
 		storageFilename:           storageFilename,
 	}, nil
+}
+
+// HandlePreparedUploadFailure marks an unfinished upload and optionally removes its temporary
+// object.
+func (qq *S3FileSystem) HandlePreparedUploadFailure(
+	ctx *ctxx.SpaceContext,
+	prepared *PreparedUpload,
+	cause error,
+	cleanup bool,
+) {
+	if cause != nil {
+		log.Println(cause)
+	}
+	if prepared == nil {
+		return
+	}
+	if cleanup {
+		if err := qq.RemoveTemporaryObject(
+			ctx, prepared.TemporaryStoragePath, prepared.TemporaryStorageFilename,
+		); err != nil {
+			log.Println(err)
+		}
+	}
+	_, err := txx.WithTenantWriteSpaceTx(
+		ctx,
+		func(writeCtx *ctxx.SpaceContext) (*struct{}, error) {
+			ctxWithIncomplete := tenantprivacy.DecisionContext(
+				enttenantschema.WithUnfinishedUploads(writeCtx), tenantprivacy.Allow,
+			)
+			return nil, writeCtx.TTx.StoredFile.UpdateOneID(prepared.StoredFileID).
+				SetUploadFailedAt(time.Now()).Exec(ctxWithIncomplete)
+		},
+	)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func (qq *S3FileSystem) createStoredFileForPreparedUpload(
@@ -996,11 +1031,9 @@ func (qq *S3FileSystem) saveFile(
 	}
 
 	fileExtension := filepath.Ext(originalFilename)
-	if fileExtension == "" {
-		// commented because files don't need an extension...
-		// log.Println("invalid filename")
-		// return nil, "", 0, e.NewHTTPErrorf(http.StatusBadRequest, "File has no extension.")
-	}
+	// commented because files don't need an extension...
+	// log.Println("invalid filename")
+	// return nil, "", 0, e.NewHTTPErrorf(http.StatusBadRequest, "File has no extension.")
 
 	// FIXME PublicID or private ID? does anybody see filenames?
 	//		 public could be useful if somebody gets access to storage, but has no list priviledges
@@ -2362,7 +2395,11 @@ func (qq *S3FileSystem) DetectMimeType(ctx ctxx.Context, filex *storedfilemodel.
 		log.Println(err)
 		return "", e.NewHTTPErrorf(http.StatusInternalServerError, "")
 	}
-	defer obj.Close()
+	defer func() {
+		if err := obj.Close(); err != nil {
+			log.Println(err)
+		}
+	}()
 
 	mimeType, err := detectMIME(obj)
 	if err != nil {

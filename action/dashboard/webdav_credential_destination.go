@@ -43,6 +43,21 @@ func webDAVCredentialDestinations(ctx ctxx.Context) ([]*webDAVCredentialDestinat
 	return destinations, nil
 }
 
+// webDAVCredentialDestinationKeyByValue maps a form value (tenant and Space public IDs) to
+// the internal tab key; it is empty if the account cannot access the destination.
+func webDAVCredentialDestinationKeyByValue(ctx ctxx.Context, value string) (string, error) {
+	destinations, err := webDAVCredentialDestinations(ctx)
+	if err != nil {
+		return "", err
+	}
+	for _, destination := range destinations {
+		if destination.value() == value {
+			return destination.key(), nil
+		}
+	}
+	return "", nil
+}
+
 func (qq *webDAVCredentialDestination) key() string {
 	return webDAVCredentialDestinationKey(qq.tenantID, qq.spacePublicID)
 }

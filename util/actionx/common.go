@@ -15,6 +15,7 @@ type Config struct {
 	// some actions open their own write transactions and should avoid long-lived
 	// request transactions
 	useManualTxManagement bool
+	commitBeforeResponse  bool
 }
 
 func NewConfig(
@@ -81,6 +82,16 @@ func (qq *Config) EnableSetupSessionAccess() *Config {
 func (qq *Config) EnableManualTxManagement() *Config {
 	qq.useManualTxManagement = true
 	return qq
+}
+
+// EnableCommittedResponse delays a bounded browser response until the router commits.
+func (qq *Config) EnableCommittedResponse() *Config {
+	qq.commitBeforeResponse = true
+	return qq
+}
+
+func (qq *Config) CommitBeforeResponse() bool {
+	return qq.commitBeforeResponse
 }
 
 func (qq *Config) SetUsesSeparatedCmd(val bool) *Config {

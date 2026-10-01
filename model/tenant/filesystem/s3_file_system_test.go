@@ -368,7 +368,11 @@ func TestS3FileSystemEstablishesMissingStoredSHA256(t *testing.T) {
 		t.Fatalf("create S3 client: %v", err)
 	}
 	tenantClient := enttenanttest.Open(t, "sqlite3", "file:missing-stored-sha?mode=memory&cache=shared&_fk=1")
-	defer tenantClient.Close()
+	defer func() {
+		if err := tenantClient.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
 	storedFile := tenantClient.StoredFile.Create().
 		SetFilename("document.pdf").

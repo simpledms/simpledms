@@ -1,8 +1,6 @@
 package dashboard
 
 import (
-	"html/template"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
@@ -58,36 +56,17 @@ func (qq *WebDAVCredentialFilterDialog) Widget(
 				ID: "webDAVCredentialStatusFilter",
 			},
 			Child: []*widget.FilterChip{
-				qq.statusChip(widget.T("Active"), webDAVCredentialStatusActive, showActive),
-				qq.statusChip(widget.T("Revoked"), webDAVCredentialStatusRevoked, showRevoked),
-			},
-		},
-	}
-}
-
-func (qq *WebDAVCredentialFilterDialog) statusChip(
-	label *widget.Text,
-	status string,
-	isChecked bool,
-) *widget.FilterChip {
-	return &widget.FilterChip{
-		Type:      widget.FilterChipTypeCheckbox,
-		Label:     label,
-		Name:      "CredentialStatusValues",
-		Value:     status,
-		IsChecked: isChecked,
-		HTMXAttrs: widget.HTMXAttrs{
-			HxOn: &widget.HxOn{
-				Event: "change",
-				Handler: template.JS(
-					"if (event.target.checked) { " +
-						"if (!new URLSearchParams(window.location.search).has('credential_status')) { " +
-						"_appendQueryParamSliceValue('credential_status', '" +
-						webDAVCredentialStatusActive + "'); } " +
-						"_appendQueryParamSliceValue('credential_status', '" + status + "'); " +
-						"} else { _deleteQueryParamSliceValue('credential_status', '" + status + "'); } " +
-						"this.dispatchEvent(new CustomEvent('" +
-						event.WebDAVCredentialFilterChanged.String() + "', { bubbles: true }))",
+				newCredentialStatusFilterChip(
+					widget.T("Active"),
+					credentialStatusActive,
+					showActive,
+					event.WebDAVCredentialFilterChanged,
+				),
+				newCredentialStatusFilterChip(
+					widget.T("Revoked"),
+					credentialStatusRevoked,
+					showRevoked,
+					event.WebDAVCredentialFilterChanged,
 				),
 			},
 		},

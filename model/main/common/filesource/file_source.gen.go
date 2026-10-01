@@ -8,9 +8,9 @@ import (
 	"fmt"
 )
 
-const _FileSource_name = "UnknownLegacyWebInterfacePWAOSOpenURLImportWebDAVSystemExtraction"
+const _FileSource_name = "UnknownLegacyWebInterfacePWAOSOpenURLImportWebDAVSystemExtractionMCP"
 
-var _FileSource_index = [...]uint8{0, 13, 25, 34, 43, 49, 65}
+var _FileSource_index = [...]uint8{0, 13, 25, 34, 43, 49, 65, 68}
 
 func (i FileSource) String() string {
 	if i < 0 || i >= FileSource(len(_FileSource_index)-1) {
@@ -29,6 +29,7 @@ var _FileSourceNameToValue_map = map[string]FileSource{
 	_FileSource_name[34:43]: 3,
 	_FileSource_name[43:49]: 4,
 	_FileSource_name[49:65]: 5,
+	_FileSource_name[65:68]: 6,
 }
 
 func FileSourceString(s string) (FileSource, error) {
@@ -101,5 +102,6 @@ func (i FileSource) Values() []string {
 		URLImport.String(),
 		WebDAV.String(),
 		SystemExtraction.String(),
+		MCP.String(),
 	}
 }

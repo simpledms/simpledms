@@ -9,6 +9,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
+	filingmodel "github.com/simpledms/simpledms/model/tenant/filing"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -26,7 +27,7 @@ func NewMoveFileCmd(infra *common.Infra, actions *Actions) *MoveFileCmd {
 	config := actionx.NewConfig(
 		actions.Route("move-file-cmd"),
 		false,
-	)
+	).EnableCommittedResponse()
 	return &MoveFileCmd{
 		MoveFile: acommon.NewMoveFile(infra, actions.Common, config),
 		infra:    infra,
@@ -44,22 +45,15 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 		return err
 	}
 
-	destDir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
-	filex := qq.infra.FileRepo.GetWithParentX(ctx, data.FileID)
-
-	if !filex.Data.IsInInbox {
-		log.Println("file not in inbox")
-		return e.NewHTTPErrorf(http.StatusBadRequest, "File must be in inbox.")
-	}
-
-	// TODO is this okay? probably not, but works as long as nilablePArent on File is used in FileWithParent // FIXME
-	filex.File, err = qq.infra.FileSystem().Move(ctx, destDir, filex.File, data.Filename, data.NewDirName)
+	fileData, err := filingmodel.NewFilingService(qq.infra.FileSystem()).FileInboxDocument(
+		ctx, data.FileID, data.CurrentDirID, data.Filename, data.NewDirName,
+	)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
-
-	filex.Data.Update().SetIsInInbox(false).SaveX(ctx)
+	filex := qq.infra.FileRepo.GetWithParentX(ctx, fileData.PublicID.String())
+	destDir := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
 
 	action := &widget.Link{
 		Href: route.BrowseFile(

@@ -56,6 +56,46 @@ var (
 			},
 		},
 	}
+	// McpCredentialsColumns holds the columns for the "mcp_credentials" table.
+	McpCredentialsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt64, Increment: true},
+		{Name: "public_id", Type: field.TypeString, Unique: true},
+		{Name: "space_public_id", Type: field.TypeString},
+		{Name: "label", Type: field.TypeString, Size: 100},
+		{Name: "is_read_only", Type: field.TypeBool, Default: true},
+		{Name: "secret_hash", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "revoked_at", Type: field.TypeTime, Nullable: true},
+		{Name: "account_id", Type: field.TypeInt64},
+		{Name: "tenant_id", Type: field.TypeInt64},
+	}
+	// McpCredentialsTable holds the schema information for the "mcp_credentials" table.
+	McpCredentialsTable = &schema.Table{
+		Name:       "mcp_credentials",
+		Columns:    McpCredentialsColumns,
+		PrimaryKey: []*schema.Column{McpCredentialsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "mcp_credentials_accounts_account",
+				Columns:    []*schema.Column{McpCredentialsColumns[8]},
+				RefColumns: []*schema.Column{AccountsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "mcp_credentials_tenants_tenant",
+				Columns:    []*schema.Column{McpCredentialsColumns[9]},
+				RefColumns: []*schema.Column{TenantsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "mcpcredential_account_id_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{McpCredentialsColumns[8], McpCredentialsColumns[6]},
+			},
+		},
+	}
 	// MailsColumns holds the columns for the "mails" table.
 	MailsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
@@ -243,7 +283,7 @@ var (
 		{Name: "upload_failed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "upload_succeeded_at", Type: field.TypeTime, Nullable: true},
 		{Name: "filename", Type: field.TypeString},
-		{Name: "source", Type: field.TypeEnum, Enums: []string{"UnknownLegacy", "WebInterface", "PWAOSOpen", "URLImport", "WebDAV", "SystemExtraction"}, Default: "UnknownLegacy"},
+		{Name: "source", Type: field.TypeEnum, Enums: []string{"UnknownLegacy", "WebInterface", "PWAOSOpen", "URLImport", "WebDAV", "SystemExtraction", "MCP"}, Default: "UnknownLegacy"},
 		{Name: "size", Type: field.TypeInt64, Nullable: true},
 		{Name: "size_in_storage", Type: field.TypeInt64},
 		{Name: "sha256", Type: field.TypeString, Nullable: true},
@@ -558,6 +598,7 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AccountsTable,
+		McpCredentialsTable,
 		MailsTable,
 		PasskeyCredentialsTable,
 		SessionsTable,
@@ -571,6 +612,8 @@ var (
 )
 
 func init() {
+	McpCredentialsTable.ForeignKeys[0].RefTable = AccountsTable
+	McpCredentialsTable.ForeignKeys[1].RefTable = TenantsTable
 	MailsTable.ForeignKeys[0].RefTable = AccountsTable
 	MailsTable.ForeignKeys[1].RefTable = AccountsTable
 	MailsTable.ForeignKeys[2].RefTable = AccountsTable

@@ -9,6 +9,9 @@ import (
 // Account is the predicate function for account builders.
 type Account func(*sql.Selector)
 
+// MCPCredential is the predicate function for mcpcredential builders.
+type MCPCredential func(*sql.Selector)
+
 // Mail is the predicate function for mail builders.
 type Mail func(*sql.Selector)
 

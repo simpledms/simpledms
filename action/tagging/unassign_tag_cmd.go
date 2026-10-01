@@ -29,7 +29,7 @@ func NewUnassignTagCmd(infra *common.Infra, actions *Actions) *UnassignTagCmd {
 	config := actionx.NewConfig(
 		actions.Route("unassign-tag-cmd"),
 		false,
-	)
+	).EnableCommittedResponse()
 	return &UnassignTagCmd{
 		infra:   infra,
 		actions: actions,

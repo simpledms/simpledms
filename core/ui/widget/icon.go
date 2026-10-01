@@ -101,15 +101,9 @@ func (qq *Icon) GetClass() string {
 	if qq.hasPadding {
 		classes = append(classes, "p-2")
 	}
-	if qq.hasSmallPadding {
-		// classes = append(classes, "small-padding")
-	}
-	if qq.hasVerticalPadding {
-		// classes = append(classes, "vertical-padding")
-	}
-	if qq.hasHorizontalPadding {
-		// classes = append(classes, "horizontal-padding")
-	}
+	// classes = append(classes, "small-padding")
+	// classes = append(classes, "vertical-padding")
+	// classes = append(classes, "horizontal-padding")
 	if qq.hasBorder {
 		classes = append(classes, "border")
 	}

@@ -165,7 +165,6 @@ func (qq *FileListItemPartial) DirectoryListItemWithCounts(
 			supportingText = qq.supportingTextDirectory(
 				ctx,
 				filex,
-				supportingText,
 				showCreationDate,
 				dirCount,
 				fileCount,
@@ -184,7 +183,6 @@ func (qq *FileListItemPartial) DirectoryListItemWithCounts(
 		supportingText = qq.supportingTextDirectory(
 			ctx,
 			filex,
-			supportingText,
 			showCreationDate,
 			dirCount,
 			fileCount,
@@ -231,7 +229,6 @@ func (qq *FileListItemPartial) DirectoryListItemWithCounts(
 func (qq *FileListItemPartial) supportingTextDirectory(
 	ctx ctxx.Context,
 	filex *enttenant.File,
-	supportingText string,
 	showCreationDate bool,
 	dirCount int64,
 	fileCount int64,
@@ -259,8 +256,7 @@ func (qq *FileListItemPartial) supportingTextDirectory(
 		supportingTextArr = append(supportingTextArr, "Empty directory")
 	}
 
-	supportingText = fmt.Sprint(strings.Join(supportingTextArr, ", ")) // TODO add size?
-	return supportingText
+	return strings.Join(supportingTextArr, ", ") // TODO add size?
 }
 
 func (qq *FileListItemPartial) fileListItem(
@@ -286,7 +282,7 @@ func (qq *FileListItemPartial) fileListItem(
 		HxHeaders: autil.PreserveStateHeader(),
 	}
 
-	filexx := qq.infra.FileRepo.GetXX(fileWithChildren)
+	filexx := filemodel.NewFile(fileWithChildren)
 
 	supportingText := ""
 	hasBreadcrumbs := false

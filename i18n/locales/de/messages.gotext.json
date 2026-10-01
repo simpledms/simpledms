@@ -2,6 +2,174 @@
     "language": "de",
     "messages": [
         {
+            "id": "Destination must be a Tag group.",
+            "message": "Destination must be a Tag group.",
+            "translation": "Das Ziel muss eine Tag-Gruppe sein.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Composition requires a composed Tag and a simple sub-Tag.",
+            "message": "Composition requires a composed Tag and a simple sub-Tag.",
+            "translation": "Eine Zusammensetzung benötigt einen zusammengesetzten Tag und einen einfachen Unter-Tag.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Attribute must reference a Tag group.",
+            "message": "Attribute must reference a Tag group.",
+            "translation": "Das Attribut muss auf eine Tag-Gruppe verweisen.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Unknown document type template.",
+            "message": "Unknown document type template.",
+            "translation": "Unbekannte Dokumenttyp-Vorlage.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP credentials",
+            "message": "MCP credentials",
+            "translation": "MCP-Zugangsdaten",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Create MCP credential",
+            "message": "Create MCP credential",
+            "translation": "MCP-Zugang erstellen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP credential created",
+            "message": "MCP credential created",
+            "translation": "MCP-Zugang erstellt",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP credential revoked.",
+            "message": "MCP credential revoked.",
+            "translation": "MCP-Zugang widerrufen.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "MCP URL",
+            "message": "MCP URL",
+            "translation": "MCP-URL",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "A full Session is required.",
+            "message": "A full Session is required.",
+            "translation": "Du benötigst eine vollständige Session.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Allow writes",
+            "message": "Allow writes",
+            "translation": "Schreibzugriff erlauben",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "This credential can access only the selected Space.",
+            "message": "This credential can access only the selected Space.",
+            "translation": "Dieser Zugang kann nur auf den ausgewählten Space zugreifen.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Read-only",
+            "message": "Read-only",
+            "translation": "Nur lesen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Read/write",
+            "message": "Read/write",
+            "translation": "Lesen und schreiben",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No MCP credentials",
+            "message": "No MCP credentials",
+            "translation": "Keine MCP-Zugangsdaten",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Previous",
+            "message": "Previous",
+            "translation": "Zurück",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Next",
+            "message": "Next",
+            "translation": "Weiter",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid MCP credential.",
+            "message": "Invalid MCP credential.",
+            "translation": "Ungültige MCP-Zugangsdaten.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid text range.",
+            "message": "Invalid text range.",
+            "translation": "Ungültiger Textbereich.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid sort order.",
+            "message": "Invalid sort order.",
+            "translation": "Ungültige Sortierreihenfolge.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid page or search range.",
+            "message": "Invalid page or search range.",
+            "translation": "Ungültiger Seiten- oder Suchbereich.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File ID is required.",
+            "message": "File ID is required.",
+            "translation": "Die Datei-ID ist erforderlich.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File is a directory.",
+            "message": "File is a directory.",
+            "translation": "Die Datei ist ein Ordner.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Offset",
+            "message": "Offset",
+            "translation": "Startposition",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "SimpleDMS could not save the imported file. Try again, or ask your administrator for help.",
             "message": "SimpleDMS could not save the imported file. Try again, or ask your administrator for help.",
             "translation": "SimpleDMS konnte die importierte Datei nicht speichern. Versuche es erneut oder bitte deine Administration um Hilfe.",
@@ -8236,6 +8404,90 @@
 			"message": "Application unlocked. Starting up.",
 			"translation": "Anwendung entsperrt. Start wird fortgesetzt.",
 			"translatorComment": "Translated from English by Codex",
+			"fuzzy": true
+		},
+		{
+			"id": "MCP",
+			"message": "MCP",
+			"translation": "MCP",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Client label",
+			"message": "Client label",
+			"translation": "Client-Bezeichnung",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Copy MCP URL",
+			"message": "Copy MCP URL",
+			"translation": "MCP-URL kopieren",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "MCP URL copied to clipboard.",
+			"message": "MCP URL copied to clipboard.",
+			"translation": "MCP-URL wurde in die Zwischenablage kopiert.",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Could not copy MCP URL.",
+			"message": "Could not copy MCP URL.",
+			"translation": "MCP-URL konnte nicht kopiert werden.",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Create a credential to connect an MCP client to a Space.",
+			"message": "Create a credential to connect an MCP client to a Space.",
+			"translation": "Erstelle Zugangsdaten, um einen MCP-Client mit einem Space zu verbinden.",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "MCP credential created.",
+			"message": "MCP credential created.",
+			"translation": "MCP-Zugang erstellt.",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Revoke this MCP credential?",
+			"message": "Revoke this MCP credential?",
+			"translation": "Diesen MCP-Zugang widerrufen?",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Without writes, the MCP client can only read documents.",
+			"message": "Without writes, the MCP client can only read documents.",
+			"translation": "Ohne Schreibzugriff kann der MCP-Client Dokumente nur lesen.",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "{Mode} · Created: {CreatedAt}",
+			"message": "{Mode} · Created: {CreatedAt}",
+			"translation": "{Mode} · Erstellt: {CreatedAt}",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "{Mode} · Revoked: {RevokedAt}",
+			"message": "{Mode} · Revoked: {RevokedAt}",
+			"translation": "{Mode} · Widerrufen: {RevokedAt}",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Filter MCP credentials",
+			"message": "Filter MCP credentials",
+			"translation": "MCP-Zugangsdaten filtern",
+			"translatorComment": "Translated from English by Claude.",
 			"fuzzy": true
 		}
 	]

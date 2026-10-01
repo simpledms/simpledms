@@ -69,7 +69,7 @@ func (qq *UpdatePropertyFilterCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 	state := autil.StateX[ListDirPartialState](rw, req)
 
 	var valuex PropertyFilterValue
-	index := slices.IndexFunc(state.PropertiesFilterState.PropertyValues, func(valuex PropertyFilterValue) bool {
+	index := slices.IndexFunc(state.PropertyValues, func(valuex PropertyFilterValue) bool {
 		return data.PropertyID == valuex.PropertyID
 	})
 	if index == -1 {
@@ -77,10 +77,10 @@ func (qq *UpdatePropertyFilterCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 			PropertyID: data.PropertyID,
 			Operator:   data.Operator, // TODO? is this case even possible or is it always initialized?
 		}
-		state.PropertiesFilterState.PropertyValues = append(state.PropertiesFilterState.PropertyValues, valuex)
-		index = len(state.PropertiesFilterState.PropertyValues) - 1
+		state.PropertyValues = append(state.PropertyValues, valuex)
+		index = len(state.PropertyValues) - 1
 	} else {
-		valuex = state.PropertiesFilterState.PropertyValues[index]
+		valuex = state.PropertyValues[index]
 	}
 
 	valuex.Operator = data.Operator
@@ -90,7 +90,7 @@ func (qq *UpdatePropertyFilterCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 			startDate, err := timex.ParseDate(data.ValueStart)
 			if err == nil {
 				endDate, err := timex.ParseDate(data.ValueEnd)
-				if err == nil && endDate.Time.Before(startDate.Time) {
+				if err == nil && endDate.Before(startDate.Time) {
 					rw.AddRenderables(wx.NewSnackbarf("End date is before the start date.").SetIsError(true))
 					return nil
 				}
@@ -100,7 +100,7 @@ func (qq *UpdatePropertyFilterCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 		valuex.Value = data.Value
 	}
 
-	state.PropertiesFilterState.PropertyValues[index] = valuex
+	state.PropertyValues[index] = valuex
 
 	propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
 	rw.AddRenderables(wx.NewSnackbarf("«%s» filter updated.", propertyx.Name))

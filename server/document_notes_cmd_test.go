@@ -667,9 +667,10 @@ func TestDocumentNotesHTTPAllViewTabsAndFolderModes(t *testing.T) {
 					t.Fatal(err)
 				}
 				endpoint := h.actions.Browse.FileTabsPartial.Endpoint()
-				if view == "Inbox" {
+				switch view {
+				case "Inbox":
 					endpoint = h.actions.Inbox.FileTabsPartial.Endpoint()
-				} else if view == "Trash" {
+				case "Trash":
 					endpoint = h.actions.Trash.FileTabsPartial.Endpoint()
 				}
 				rr := request(endpoint, url.Values{"FileID": {doc.PublicID.String()},

@@ -23,9 +23,7 @@ func (qq *Badge) GetValue() string {
 func (qq *Badge) GetClass() string {
 	classes := []string{}
 	// classes := []string{"badge", "primary"}
-	if qq.IsInline {
-		// classes = append(classes, "none")
-	}
+	// classes = append(classes, "none")
 	return strings.Join(classes, " ")
 
 }

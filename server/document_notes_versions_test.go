@@ -89,8 +89,16 @@ func TestDocumentNotesUploadFileVersionPreservesNotes(t *testing.T) {
 			t.Fatal(err)
 		}
 		func() {
-			defer mainTx.Rollback()
-			defer tenantTx.Rollback()
+			defer func() {
+				if err := mainTx.Rollback(); err != nil {
+					t.Error(err)
+				}
+			}()
+			defer func() {
+				if err := tenantTx.Rollback(); err != nil {
+					t.Error(err)
+				}
+			}()
 			var body bytes.Buffer
 			writer := multipart.NewWriter(&body)
 			if err := writer.WriteField("FileID", doc.PublicID.String()); err != nil {
@@ -108,15 +116,14 @@ func TestDocumentNotesUploadFileVersionPreservesNotes(t *testing.T) {
 			}
 			req := httptest.NewRequest(http.MethodPost, "/-/browse/upload-file-version-cmd", &body)
 			req.Header.Set("Content-Type", writer.FormDataContentType())
-			err = harness.actions.Browse.UploadFileVersionCmd.Handler(
+			if err := harness.actions.Browse.UploadFileVersionCmd.Handler(
 				httpx.NewResponseWriter(httptest.NewRecorder()),
 				httpx.NewRequest(req),
 				ctxx.NewSpaceContext(tenantCtx, spacex),
-			)
+			); err != nil {
+				t.Fatalf("upload ordinary file version: %v", err)
+			}
 		}()
-		if err != nil {
-			t.Fatalf("upload ordinary file version: %v", err)
-		}
 
 		err = withTenantContext(t, harness, account, tenant, tenantDB, func(
 			_ *entmain.Tx, _ *enttenant.Tx, tenantCtx *ctxx.TenantContext,

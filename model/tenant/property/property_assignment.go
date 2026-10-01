@@ -36,10 +36,10 @@ func (qq *PropertyAssignment) String(ctx ctxx.Context, propertym *Property) stri
 		// TODO okay?
 		return fmt.Sprintf("%.2f", float64(qq.Data.NumberValue)/100.0)
 	case fieldtype.Checkbox:
-		return fmt.Sprintf("%s", propertym.Data.Name)
+		return propertym.Data.Name
 	case fieldtype.Date:
 		// TODO format: for displaying we may want user date format, for filenames year first...
-		return fmt.Sprintf("%s", qq.Data.DateValue.String(""))
+		return qq.Data.DateValue.String("")
 	default:
 		// TODO okay?
 		panic("unknown property type")
