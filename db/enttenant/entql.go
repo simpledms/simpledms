@@ -254,13 +254,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Space",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			space.FieldPublicID:     {Type: field.TypeString, Column: space.FieldPublicID},
-			space.FieldDeletedBy:    {Type: field.TypeInt64, Column: space.FieldDeletedBy},
-			space.FieldDeletedAt:    {Type: field.TypeTime, Column: space.FieldDeletedAt},
-			space.FieldName:         {Type: field.TypeString, Column: space.FieldName},
-			space.FieldIcon:         {Type: field.TypeString, Column: space.FieldIcon},
-			space.FieldDescription:  {Type: field.TypeString, Column: space.FieldDescription},
-			space.FieldIsFolderMode: {Type: field.TypeBool, Column: space.FieldIsFolderMode},
+			space.FieldPublicID:              {Type: field.TypeString, Column: space.FieldPublicID},
+			space.FieldDeletedBy:             {Type: field.TypeInt64, Column: space.FieldDeletedBy},
+			space.FieldDeletedAt:             {Type: field.TypeTime, Column: space.FieldDeletedAt},
+			space.FieldName:                  {Type: field.TypeString, Column: space.FieldName},
+			space.FieldIcon:                  {Type: field.TypeString, Column: space.FieldIcon},
+			space.FieldDescription:           {Type: field.TypeString, Column: space.FieldDescription},
+			space.FieldAcceptsInboxTransfers: {Type: field.TypeBool, Column: space.FieldAcceptsInboxTransfers},
+			space.FieldIsFolderMode:          {Type: field.TypeBool, Column: space.FieldIsFolderMode},
 		},
 	}
 	graph.Nodes[11] = &sqlgraph.Node{
@@ -2661,6 +2662,11 @@ func (f *SpaceFilter) WhereIcon(p entql.StringP) {
 // WhereDescription applies the entql string predicate on the description field.
 func (f *SpaceFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(space.FieldDescription))
+}
+
+// WhereAcceptsInboxTransfers applies the entql bool predicate on the accepts_inbox_transfers field.
+func (f *SpaceFilter) WhereAcceptsInboxTransfers(p entql.BoolP) {
+	f.Where(p.Field(space.FieldAcceptsInboxTransfers))
 }
 
 // WhereIsFolderMode applies the entql bool predicate on the is_folder_mode field.

@@ -79,8 +79,8 @@ func TestDocumentNotesProductionMigrationFreshAndPopulated(t *testing.T) {
 				if err := migration.Migrate(previous); err != nil {
 					t.Fatalf("replay pre-notes migrations: %v", err)
 				}
-				spacex := client.Space.Create().SetName("Existing Space").SaveX(ctx)
-				file = client.File.Create().SetSpaceID(spacex.ID).SetName("existing.pdf").
+				spaceID := insertHistoricalNotesSpace(t, path, "Existing Space")
+				file = client.File.Create().SetSpaceID(spaceID).SetName("existing.pdf").
 					SetIsDirectory(false).SetIsInInbox(true).SetIndexedAt(time.Now()).
 					SetNotes("legacy\n  <plain text> & preserved").SetOcrContent("existing OCR").SaveX(ctx)
 				before = client.File.GetX(ctx, file.ID).String()
@@ -153,8 +153,8 @@ func TestDocumentNoteTitlesProductionMigration(t *testing.T) {
 		}
 	}()
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
-	spacex := client.Space.Create().SetName("Existing notes").SaveX(ctx)
-	file := client.File.Create().SetSpaceID(spacex.ID).SetName("existing.pdf").
+	spaceID := insertHistoricalNotesSpace(t, path, "Existing notes")
+	file := client.File.Create().SetSpaceID(spaceID).SetName("existing.pdf").
 		SetIsDirectory(false).SetIndexedAt(time.Now()).SaveX(ctx)
 	db, err := sql.Open("sqlite3", path)
 	if err != nil {
@@ -169,7 +169,7 @@ func TestDocumentNoteTitlesProductionMigration(t *testing.T) {
 	_, err = db.Exec(`INSERT INTO document_notes
 		(id, public_id, body, space_id, file_id, replaced_by_id) VALUES
 		(1, 'old', 'original body', ?, ?, 2), (2, 'new', 'successor body', ?, ?, NULL)`,
-		spacex.ID, file.ID, spacex.ID, file.ID)
+		spaceID, file.ID, spaceID, file.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -183,4 +183,27 @@ func TestDocumentNoteTitlesProductionMigration(t *testing.T) {
 		old.AuthorID != 0 || old.AuthoredAt != nil || client.DocumentNote.Query().CountX(ctx) != 2 {
 		t.Fatalf("title migration changed legacy content/history: %v / %v", old, next)
 	}
+}
+
+func insertHistoricalNotesSpace(t *testing.T, path, name string) int64 {
+	t.Helper()
+	db, err := sql.Open("sqlite3", path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		if err := db.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
+	// Current Ent builders include columns absent at these historical versions.
+	result, err := db.Exec("INSERT INTO spaces (public_id, name) VALUES (?, ?)", name, name)
+	if err != nil {
+		t.Fatal(err)
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		t.Fatal(err)
+	}
+	return id
 }

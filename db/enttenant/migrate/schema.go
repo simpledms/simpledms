@@ -616,6 +616,7 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "icon", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "accepts_inbox_transfers", Type: field.TypeBool, Default: false},
 		{Name: "is_folder_mode", Type: field.TypeBool, Default: false},
 		{Name: "deleted_by", Type: field.TypeInt64, Nullable: true},
 	}
@@ -627,7 +628,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "spaces_users_deleter",
-				Columns:    []*schema.Column{SpacesColumns[7]},
+				Columns:    []*schema.Column{SpacesColumns[8]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

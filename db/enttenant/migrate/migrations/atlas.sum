@@ -1,4 +1,4 @@
-h1:lDP791X5cXjaCdgG7jYsr9WYywc5sVT2hhUONuwNtv4=
+h1:t6IffD46EJIQDzB8x897gYovCb9Vp9nv4ZSshSqPq1U=
 20250506173739_v1.0.0-beta.1.up.sql h1:c50kBKKvVLlOuG4Yz10TFhx1nCcZIIPQLYTnon6z6/4=
 20250508091725_v1.0.0-beta.2.up.sql h1:K4jPDMysMc7z8lvAlyOKOwD7BrcTSJJmIgWqH3amXns=
 20250509090715_v1.0.0-beta.3.up.sql h1:qCiaeXwdoKza6R4ATof/SA2pClyZm+7aOHkAepWG9wI=
@@ -21,3 +21,4 @@ h1:lDP791X5cXjaCdgG7jYsr9WYywc5sVT2hhUONuwNtv4=
 20260907210921_document_note_titles.up.sql h1:G3fJgeSoQk2PSWJ+1RJK+eAWdj+Xd6BDj2A5PSOwmQE=
 20260929123641_metadata_public_ids.up.sql h1:iCtooxElcoO2TQnHHJYTEoNRxJ7YAFT8ZLkLFkEBj/E=
 20260929123746_metadata_public_id_indexes.up.sql h1:gsCIQM6ONlunDvB7lz4NwCxsBA7dlw1Dk7o1Ec72N98=
+20261001111840_inbox_transfers.up.sql h1:8RIohpQF2ZViqBbDwj0NNCIquq7mMnREtdjP0CAEiI8=

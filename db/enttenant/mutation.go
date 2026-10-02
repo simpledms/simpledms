@@ -9589,39 +9589,40 @@ func (m *PropertyMutation) ResetEdge(name string) error {
 // SpaceMutation represents an operation that mutates the Space nodes in the graph.
 type SpaceMutation struct {
 	config
-	op                     Op
-	typ                    string
-	id                     *int64
-	public_id              *entx.CIText
-	deleted_at             *time.Time
-	name                   *string
-	icon                   *string
-	description            *string
-	is_folder_mode         *bool
-	clearedFields          map[string]struct{}
-	deleter                *int64
-	cleareddeleter         bool
-	files                  map[int64]struct{}
-	removedfiles           map[int64]struct{}
-	clearedfiles           bool
-	users                  map[int64]struct{}
-	removedusers           map[int64]struct{}
-	clearedusers           bool
-	tags                   map[int64]struct{}
-	removedtags            map[int64]struct{}
-	clearedtags            bool
-	document_types         map[int64]struct{}
-	removeddocument_types  map[int64]struct{}
-	cleareddocument_types  bool
-	properties             map[int64]struct{}
-	removedproperties      map[int64]struct{}
-	clearedproperties      bool
-	user_assignment        map[int64]struct{}
-	removeduser_assignment map[int64]struct{}
-	cleareduser_assignment bool
-	done                   bool
-	oldValue               func(context.Context) (*Space, error)
-	predicates             []predicate.Space
+	op                      Op
+	typ                     string
+	id                      *int64
+	public_id               *entx.CIText
+	deleted_at              *time.Time
+	name                    *string
+	icon                    *string
+	description             *string
+	accepts_inbox_transfers *bool
+	is_folder_mode          *bool
+	clearedFields           map[string]struct{}
+	deleter                 *int64
+	cleareddeleter          bool
+	files                   map[int64]struct{}
+	removedfiles            map[int64]struct{}
+	clearedfiles            bool
+	users                   map[int64]struct{}
+	removedusers            map[int64]struct{}
+	clearedusers            bool
+	tags                    map[int64]struct{}
+	removedtags             map[int64]struct{}
+	clearedtags             bool
+	document_types          map[int64]struct{}
+	removeddocument_types   map[int64]struct{}
+	cleareddocument_types   bool
+	properties              map[int64]struct{}
+	removedproperties       map[int64]struct{}
+	clearedproperties       bool
+	user_assignment         map[int64]struct{}
+	removeduser_assignment  map[int64]struct{}
+	cleareduser_assignment  bool
+	done                    bool
+	oldValue                func(context.Context) (*Space, error)
+	predicates              []predicate.Space
 }
 
 var _ ent.Mutation = (*SpaceMutation)(nil)
@@ -9994,6 +9995,42 @@ func (m *SpaceMutation) DescriptionCleared() bool {
 func (m *SpaceMutation) ResetDescription() {
 	m.description = nil
 	delete(m.clearedFields, space.FieldDescription)
+}
+
+// SetAcceptsInboxTransfers sets the "accepts_inbox_transfers" field.
+func (m *SpaceMutation) SetAcceptsInboxTransfers(b bool) {
+	m.accepts_inbox_transfers = &b
+}
+
+// AcceptsInboxTransfers returns the value of the "accepts_inbox_transfers" field in the mutation.
+func (m *SpaceMutation) AcceptsInboxTransfers() (r bool, exists bool) {
+	v := m.accepts_inbox_transfers
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAcceptsInboxTransfers returns the old "accepts_inbox_transfers" field's value of the Space entity.
+// If the Space object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SpaceMutation) OldAcceptsInboxTransfers(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAcceptsInboxTransfers is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAcceptsInboxTransfers requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAcceptsInboxTransfers: %w", err)
+	}
+	return oldValue.AcceptsInboxTransfers, nil
+}
+
+// ResetAcceptsInboxTransfers resets all changes to the "accepts_inbox_transfers" field.
+func (m *SpaceMutation) ResetAcceptsInboxTransfers() {
+	m.accepts_inbox_transfers = nil
 }
 
 // SetIsFolderMode sets the "is_folder_mode" field.
@@ -10430,7 +10467,7 @@ func (m *SpaceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SpaceMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.public_id != nil {
 		fields = append(fields, space.FieldPublicID)
 	}
@@ -10448,6 +10485,9 @@ func (m *SpaceMutation) Fields() []string {
 	}
 	if m.description != nil {
 		fields = append(fields, space.FieldDescription)
+	}
+	if m.accepts_inbox_transfers != nil {
+		fields = append(fields, space.FieldAcceptsInboxTransfers)
 	}
 	if m.is_folder_mode != nil {
 		fields = append(fields, space.FieldIsFolderMode)
@@ -10472,6 +10512,8 @@ func (m *SpaceMutation) Field(name string) (ent.Value, bool) {
 		return m.Icon()
 	case space.FieldDescription:
 		return m.Description()
+	case space.FieldAcceptsInboxTransfers:
+		return m.AcceptsInboxTransfers()
 	case space.FieldIsFolderMode:
 		return m.IsFolderMode()
 	}
@@ -10495,6 +10537,8 @@ func (m *SpaceMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldIcon(ctx)
 	case space.FieldDescription:
 		return m.OldDescription(ctx)
+	case space.FieldAcceptsInboxTransfers:
+		return m.OldAcceptsInboxTransfers(ctx)
 	case space.FieldIsFolderMode:
 		return m.OldIsFolderMode(ctx)
 	}
@@ -10547,6 +10591,13 @@ func (m *SpaceMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDescription(v)
+		return nil
+	case space.FieldAcceptsInboxTransfers:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAcceptsInboxTransfers(v)
 		return nil
 	case space.FieldIsFolderMode:
 		v, ok := value.(bool)
@@ -10651,6 +10702,9 @@ func (m *SpaceMutation) ResetField(name string) error {
 		return nil
 	case space.FieldDescription:
 		m.ResetDescription()
+		return nil
+	case space.FieldAcceptsInboxTransfers:
+		m.ResetAcceptsInboxTransfers()
 		return nil
 	case space.FieldIsFolderMode:
 		m.ResetIsFolderMode()

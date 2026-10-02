@@ -3428,6 +3428,13 @@
             "fuzzy": true
         },
         {
+            "id": "Move to another Inbox",
+            "message": "Move to another Inbox",
+            "translation": "Move to another Inbox",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Reloaded metadata",
             "message": "Reloaded metadata",
             "translation": "Reloaded metadata",
@@ -3560,6 +3567,79 @@
             "id": "Source | Filter",
             "message": "Source | Filter",
             "translation": "Source | Filter",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Moved to the Inbox of «{Name}».",
+            "message": "Moved to the Inbox of «{Name}».",
+            "translation": "Moved to the Inbox of «{Name}».",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "destination.Name"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "No other Inbox is available. You need write access to another Space, or its Inbox must accept transfers.",
+            "message": "No other Inbox is available. You need write access to another Space, or its Inbox must accept transfers.",
+            "translation": "No other Inbox is available. You need write access to another Space, or its Inbox must accept transfers.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Choose an Inbox",
+            "message": "Choose an Inbox",
+            "translation": "Choose an Inbox",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Destination Inbox",
+            "message": "Destination Inbox",
+            "translation": "Destination Inbox",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
+            "message": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
+            "translation": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Message (optional)",
+            "message": "Message (optional)",
+            "translation": "Message (optional)",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Your message will be saved as a note with your name.",
+            "message": "Your message will be saved as a note with your name.",
+            "translation": "Your message will be saved as a note with your name.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Moving clears the document type, tags, and custom fields. Versions and notes are kept.",
+            "message": "Moving clears the document type, tags, and custom fields. Versions and notes are kept.",
+            "translation": "Moving clears the document type, tags, and custom fields. Versions and notes are kept.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "If you cannot open the destination Space, you will lose access to this file after moving it.",
+            "message": "If you cannot open the destination Space, you will lose access to this file after moving it.",
+            "translation": "If you cannot open the destination Space, you will lose access to this file after moving it.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4889,6 +4969,13 @@
             "fuzzy": true
         },
         {
+            "id": "Accepts inbox transfers",
+            "message": "Accepts inbox transfers",
+            "translation": "Accepts inbox transfers",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Active tab",
             "message": "Active tab",
             "translation": "Active tab",
@@ -5333,6 +5420,13 @@
             "id": "Max upload size mib",
             "message": "Max upload size mib",
             "translation": "Max upload size mib",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Message",
+            "message": "Message",
+            "translation": "Message",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6775,6 +6869,69 @@
             "fuzzy": true
         },
         {
+            "id": "Destination Inbox is unavailable.",
+            "message": "Destination Inbox is unavailable.",
+            "translation": "Destination Inbox is unavailable.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Inbox transfer",
+            "message": "Inbox transfer",
+            "translation": "Inbox transfer",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File has changed. Please reload.",
+            "message": "File has changed. Please reload.",
+            "translation": "File has changed. Please reload.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Only files in the Inbox can be transferred.",
+            "message": "Only files in the Inbox can be transferred.",
+            "translation": "Only files in the Inbox can be transferred.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid download range.",
+            "message": "Invalid download range.",
+            "translation": "Invalid download range.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "A version number is required for download continuation.",
+            "message": "A version number is required for download continuation.",
+            "translation": "A version number is required for download continuation.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File version not found.",
+            "message": "File version not found.",
+            "translation": "File version not found.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "File must be filed before organization.",
+            "message": "File must be filed before organization.",
+            "translation": "File must be filed before organization.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Cannot organize the Space root directory.",
+            "message": "Cannot organize the Space root directory.",
+            "translation": "Cannot organize the Space root directory.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Folder mode is not enabled.",
             "message": "Folder mode is not enabled.",
             "translation": "Folder mode is not enabled.",
@@ -7687,6 +7844,20 @@
             "fuzzy": true
         },
         {
+            "id": "Invalid field filter.",
+            "message": "Invalid field filter.",
+            "translation": "Invalid field filter.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid field filter range.",
+            "message": "Invalid field filter range.",
+            "translation": "Invalid field filter range.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Date value is required.",
             "message": "Date value is required.",
             "translation": "Date value is required.",
@@ -7841,6 +8012,13 @@
             "fuzzy": true
         },
         {
+            "id": "Invalid version number.",
+            "message": "Invalid version number.",
+            "translation": "Invalid version number.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Invalid directory ID.",
             "message": "Invalid directory ID.",
             "translation": "Invalid directory ID.",
@@ -7865,6 +8043,13 @@
             "id": "Invalid search input.",
             "message": "Invalid search input.",
             "translation": "Invalid search input.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Field filter text is too long.",
+            "message": "Field filter text is too long.",
+            "translation": "Field filter text is too long.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7991,6 +8176,34 @@
             "id": "Select between 1 and 64 document type templates.",
             "message": "Select between 1 and 64 document type templates.",
             "translation": "Select between 1 and 64 document type templates.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Invalid note text range.",
+            "message": "Invalid note text range.",
+            "translation": "Invalid note text range.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Document and note IDs are required.",
+            "message": "Document and note IDs are required.",
+            "translation": "Document and note IDs are required.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Note title or body is too long.",
+            "message": "Note title or body is too long.",
+            "translation": "Note title or body is too long.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "A file with this name already exists.",
+            "message": "A file with this name already exists.",
+            "translation": "A file with this name already exists.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

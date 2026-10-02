@@ -25,11 +25,13 @@ type Actions struct {
 	AssignmentDirectoryListItemPartial    *AssignmentDirectoryListItemPartial
 	AssignFileCmd                         *AssignFileCmd
 
-	FilePartial     *FilePartial
-	FileTabsPartial *FileTabsPartial
-	MoveFileCmd     *MoveFileCmd
-	UploadFileCmd   *UploadFileCmd
-	MarkAsDoneCmd   *MarkAsDoneCmd
+	FilePartial        *FilePartial
+	FileTabsPartial    *FileTabsPartial
+	MoveFileCmd        *MoveFileCmd
+	TransferFileCmd    *TransferFileCmd
+	TransferFileDialog *TransferFileDialog
+	UploadFileCmd      *UploadFileCmd
+	MarkAsDoneCmd      *MarkAsDoneCmd
 }
 
 func NewActions(
@@ -58,10 +60,12 @@ func NewActions(
 		AssignmentDirectoryListItemPartial:    NewAssignmentDirectoryListItemPartial(infra, actions),
 		AssignFileCmd:                         NewAssignFileCmd(infra, actions),
 
-		FilePartial:     NewFilePartial(infra, actions),
-		FileTabsPartial: NewFileTabsPartial(infra, actions),
-		MoveFileCmd:     NewMoveFileCmd(infra, actions),
-		UploadFileCmd:   NewUploadFileCmd(infra, actions),
+		FilePartial:        NewFilePartial(infra, actions),
+		FileTabsPartial:    NewFileTabsPartial(infra, actions),
+		MoveFileCmd:        NewMoveFileCmd(infra, actions),
+		TransferFileCmd:    NewTransferFileCmd(actions),
+		TransferFileDialog: NewTransferFileDialog(infra, actions),
+		UploadFileCmd:      NewUploadFileCmd(infra, actions),
 
 		MarkAsDoneCmd: NewMarkAsDoneCmd(infra, actions),
 	}

@@ -31,6 +31,8 @@ type Space struct {
 	Icon string `json:"icon,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// AcceptsInboxTransfers holds the value of the "accepts_inbox_transfers" field.
+	AcceptsInboxTransfers bool `json:"accepts_inbox_transfers,omitempty"`
 	// IsFolderMode holds the value of the "is_folder_mode" field.
 	IsFolderMode bool `json:"is_folder_mode,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -132,7 +134,7 @@ func (*Space) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case space.FieldPublicID:
 			values[i] = new(entx.CIText)
-		case space.FieldIsFolderMode:
+		case space.FieldAcceptsInboxTransfers, space.FieldIsFolderMode:
 			values[i] = new(sql.NullBool)
 		case space.FieldID, space.FieldDeletedBy:
 			values[i] = new(sql.NullInt64)
@@ -196,6 +198,12 @@ func (_m *Space) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				_m.Description = value.String
+			}
+		case space.FieldAcceptsInboxTransfers:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field accepts_inbox_transfers", values[i])
+			} else if value.Valid {
+				_m.AcceptsInboxTransfers = value.Bool
 			}
 		case space.FieldIsFolderMode:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -291,6 +299,9 @@ func (_m *Space) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
+	builder.WriteString("accepts_inbox_transfers=")
+	builder.WriteString(fmt.Sprintf("%v", _m.AcceptsInboxTransfers))
 	builder.WriteString(", ")
 	builder.WriteString("is_folder_mode=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IsFolderMode))

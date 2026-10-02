@@ -27,6 +27,7 @@ func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, spacem *spacemodel.Sp
 				spacem.Data.PublicID.String(),
 				spacem.Data.Name,
 				spacem.Data.Description,
+				spacem.Data.AcceptsInboxTransfers,
 			),
 			"",
 		),

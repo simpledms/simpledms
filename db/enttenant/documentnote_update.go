@@ -14,6 +14,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/documentnote"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
+	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 )
 
@@ -28,6 +29,20 @@ type DocumentNoteUpdate struct {
 // Where appends a list predicates to the DocumentNoteUpdate builder.
 func (_u *DocumentNoteUpdate) Where(ps ...predicate.DocumentNote) *DocumentNoteUpdate {
 	_u.mutation.Where(ps...)
+	return _u
+}
+
+// SetSpaceID sets the "space_id" field.
+func (_u *DocumentNoteUpdate) SetSpaceID(v int64) *DocumentNoteUpdate {
+	_u.mutation.SetSpaceID(v)
+	return _u
+}
+
+// SetNillableSpaceID sets the "space_id" field if the given value is not nil.
+func (_u *DocumentNoteUpdate) SetNillableSpaceID(v *int64) *DocumentNoteUpdate {
+	if v != nil {
+		_u.SetSpaceID(*v)
+	}
 	return _u
 }
 
@@ -199,6 +214,11 @@ func (_u *DocumentNoteUpdate) ClearReplacedByID() *DocumentNoteUpdate {
 	return _u
 }
 
+// SetSpace sets the "space" edge to the Space entity.
+func (_u *DocumentNoteUpdate) SetSpace(v *Space) *DocumentNoteUpdate {
+	return _u.SetSpaceID(v.ID)
+}
+
 // SetFile sets the "file" edge to the File entity.
 func (_u *DocumentNoteUpdate) SetFile(v *File) *DocumentNoteUpdate {
 	return _u.SetFileID(v.ID)
@@ -255,6 +275,12 @@ func (_u *DocumentNoteUpdate) SetPredecessor(v *DocumentNote) *DocumentNoteUpdat
 // Mutation returns the DocumentNoteMutation object of the builder.
 func (_u *DocumentNoteUpdate) Mutation() *DocumentNoteMutation {
 	return _u.mutation
+}
+
+// ClearSpace clears the "space" edge to the Space entity.
+func (_u *DocumentNoteUpdate) ClearSpace() *DocumentNoteUpdate {
+	_u.mutation.ClearSpace()
+	return _u
 }
 
 // ClearFile clears the "file" edge to the File entity.
@@ -369,6 +395,35 @@ func (_u *DocumentNoteUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(documentnote.FieldDeletedAt, field.TypeTime)
+	}
+	if _u.mutation.SpaceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentnote.SpaceTable,
+			Columns: []string{documentnote.SpaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(space.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SpaceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentnote.SpaceTable,
+			Columns: []string{documentnote.SpaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(space.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.FileCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -535,6 +590,20 @@ type DocumentNoteUpdateOne struct {
 	hooks     []Hook
 	mutation  *DocumentNoteMutation
 	modifiers []func(*sql.UpdateBuilder)
+}
+
+// SetSpaceID sets the "space_id" field.
+func (_u *DocumentNoteUpdateOne) SetSpaceID(v int64) *DocumentNoteUpdateOne {
+	_u.mutation.SetSpaceID(v)
+	return _u
+}
+
+// SetNillableSpaceID sets the "space_id" field if the given value is not nil.
+func (_u *DocumentNoteUpdateOne) SetNillableSpaceID(v *int64) *DocumentNoteUpdateOne {
+	if v != nil {
+		_u.SetSpaceID(*v)
+	}
+	return _u
 }
 
 // SetFileID sets the "file_id" field.
@@ -705,6 +774,11 @@ func (_u *DocumentNoteUpdateOne) ClearReplacedByID() *DocumentNoteUpdateOne {
 	return _u
 }
 
+// SetSpace sets the "space" edge to the Space entity.
+func (_u *DocumentNoteUpdateOne) SetSpace(v *Space) *DocumentNoteUpdateOne {
+	return _u.SetSpaceID(v.ID)
+}
+
 // SetFile sets the "file" edge to the File entity.
 func (_u *DocumentNoteUpdateOne) SetFile(v *File) *DocumentNoteUpdateOne {
 	return _u.SetFileID(v.ID)
@@ -761,6 +835,12 @@ func (_u *DocumentNoteUpdateOne) SetPredecessor(v *DocumentNote) *DocumentNoteUp
 // Mutation returns the DocumentNoteMutation object of the builder.
 func (_u *DocumentNoteUpdateOne) Mutation() *DocumentNoteMutation {
 	return _u.mutation
+}
+
+// ClearSpace clears the "space" edge to the Space entity.
+func (_u *DocumentNoteUpdateOne) ClearSpace() *DocumentNoteUpdateOne {
+	_u.mutation.ClearSpace()
+	return _u
 }
 
 // ClearFile clears the "file" edge to the File entity.
@@ -905,6 +985,35 @@ func (_u *DocumentNoteUpdateOne) sqlSave(ctx context.Context) (_node *DocumentNo
 	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(documentnote.FieldDeletedAt, field.TypeTime)
+	}
+	if _u.mutation.SpaceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentnote.SpaceTable,
+			Columns: []string{documentnote.SpaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(space.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SpaceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentnote.SpaceTable,
+			Columns: []string{documentnote.SpaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(space.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.FileCleared() {
 		edge := &sqlgraph.EdgeSpec{

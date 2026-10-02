@@ -52,6 +52,7 @@ func main() {
 		// Normalize it to a literal so Atlas uses ALTER TABLE ADD COLUMN instead of
 		// rebuilding the entire SQLite table.
 		entx.WithFileSourceDefault(),
+		entx.WithInboxTransferDefault(),
 		// important that disabled when GolangMigrateDir is used:
 		// schema.WithFormatter(atlas.DefaultFormatter),
 	}

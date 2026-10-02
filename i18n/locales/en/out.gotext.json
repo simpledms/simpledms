@@ -2592,6 +2592,11 @@
             "translation": ""
         },
         {
+            "id": "Move to another Inbox",
+            "message": "Move to another Inbox",
+            "translation": ""
+        },
+        {
             "id": "Reloaded metadata",
             "message": "Reloaded metadata",
             "translation": ""
@@ -2689,6 +2694,61 @@
         {
             "id": "Source | Filter",
             "message": "Source | Filter",
+            "translation": ""
+        },
+        {
+            "id": "Moved to the Inbox of «{Name}».",
+            "message": "Moved to the Inbox of «{Name}».",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "destination.Name"
+                }
+            ]
+        },
+        {
+            "id": "No other Inbox is available. You need write access to another Space, or its Inbox must accept transfers.",
+            "message": "No other Inbox is available. You need write access to another Space, or its Inbox must accept transfers.",
+            "translation": ""
+        },
+        {
+            "id": "Choose an Inbox",
+            "message": "Choose an Inbox",
+            "translation": ""
+        },
+        {
+            "id": "Destination Inbox",
+            "message": "Destination Inbox",
+            "translation": ""
+        },
+        {
+            "id": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
+            "message": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
+            "translation": ""
+        },
+        {
+            "id": "Message (optional)",
+            "message": "Message (optional)",
+            "translation": ""
+        },
+        {
+            "id": "Your message will be saved as a note with your name.",
+            "message": "Your message will be saved as a note with your name.",
+            "translation": ""
+        },
+        {
+            "id": "Moving clears the document type, tags, and custom fields. Versions and notes are kept.",
+            "message": "Moving clears the document type, tags, and custom fields. Versions and notes are kept.",
+            "translation": ""
+        },
+        {
+            "id": "If you cannot open the destination Space, you will lose access to this file after moving it.",
+            "message": "If you cannot open the destination Space, you will lose access to this file after moving it.",
             "translation": ""
         },
         {
@@ -3701,6 +3761,11 @@
             "translation": ""
         },
         {
+            "id": "Accepts inbox transfers",
+            "message": "Accepts inbox transfers",
+            "translation": ""
+        },
+        {
             "id": "Active tab",
             "message": "Active tab",
             "translation": ""
@@ -4018,6 +4083,11 @@
         {
             "id": "Max upload size mib",
             "message": "Max upload size mib",
+            "translation": ""
+        },
+        {
+            "id": "Message",
+            "message": "Message",
             "translation": ""
         },
         {
@@ -5067,6 +5137,51 @@
             "translation": ""
         },
         {
+            "id": "Destination Inbox is unavailable.",
+            "message": "Destination Inbox is unavailable.",
+            "translation": ""
+        },
+        {
+            "id": "Inbox transfer",
+            "message": "Inbox transfer",
+            "translation": ""
+        },
+        {
+            "id": "File has changed. Please reload.",
+            "message": "File has changed. Please reload.",
+            "translation": ""
+        },
+        {
+            "id": "Only files in the Inbox can be transferred.",
+            "message": "Only files in the Inbox can be transferred.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid download range.",
+            "message": "Invalid download range.",
+            "translation": ""
+        },
+        {
+            "id": "A version number is required for download continuation.",
+            "message": "A version number is required for download continuation.",
+            "translation": ""
+        },
+        {
+            "id": "File version not found.",
+            "message": "File version not found.",
+            "translation": ""
+        },
+        {
+            "id": "File must be filed before organization.",
+            "message": "File must be filed before organization.",
+            "translation": ""
+        },
+        {
+            "id": "Cannot organize the Space root directory.",
+            "message": "Cannot organize the Space root directory.",
+            "translation": ""
+        },
+        {
             "id": "Folder mode is not enabled.",
             "message": "Folder mode is not enabled.",
             "translation": ""
@@ -5729,6 +5844,16 @@
             "translation": ""
         },
         {
+            "id": "Invalid field filter.",
+            "message": "Invalid field filter.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid field filter range.",
+            "message": "Invalid field filter range.",
+            "translation": ""
+        },
+        {
             "id": "Date value is required.",
             "message": "Date value is required.",
             "translation": ""
@@ -5839,6 +5964,11 @@
             "translation": ""
         },
         {
+            "id": "Invalid version number.",
+            "message": "Invalid version number.",
+            "translation": ""
+        },
+        {
             "id": "Invalid directory ID.",
             "message": "Invalid directory ID.",
             "translation": ""
@@ -5856,6 +5986,11 @@
         {
             "id": "Invalid search input.",
             "message": "Invalid search input.",
+            "translation": ""
+        },
+        {
+            "id": "Field filter text is too long.",
+            "message": "Field filter text is too long.",
             "translation": ""
         },
         {
@@ -5946,6 +6081,26 @@
         {
             "id": "Select between 1 and 64 document type templates.",
             "message": "Select between 1 and 64 document type templates.",
+            "translation": ""
+        },
+        {
+            "id": "Invalid note text range.",
+            "message": "Invalid note text range.",
+            "translation": ""
+        },
+        {
+            "id": "Document and note IDs are required.",
+            "message": "Document and note IDs are required.",
+            "translation": ""
+        },
+        {
+            "id": "Note title or body is too long.",
+            "message": "Note title or body is too long.",
+            "translation": ""
+        },
+        {
+            "id": "A file with this name already exists.",
+            "message": "A file with this name already exists.",
             "translation": ""
         },
         {
