@@ -35,6 +35,15 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 
 	menuItems = append(menuItems,
 		&widget.MenuItem{
+			TrailingIcon: "forward_to_inbox",
+			Label:        widget.T("Move to another Inbox"),
+			HTMXAttrs: widget.HTMXAttrs{
+				HxPost:        qq.actions.TransferFileDialog.Endpoint(),
+				HxVals:        util.JSON(qq.actions.TransferFileDialog.Data(filex.PublicID.String())),
+				LoadInPopover: true,
+			},
+		},
+		&widget.MenuItem{
 			IsDivider: true,
 		},
 		&widget.MenuItem{

@@ -13,6 +13,7 @@ import (
 //nolint:unused // gotext discovers these labels without a runtime call.
 func formFieldsGotextHelper() {
 	pp := message.NewPrinter(language.English)
+	pp.Sprintf("Accepts inbox transfers")
 	pp.Sprintf("Active")
 	pp.Sprintf("Active tab")
 	pp.Sprintf("Add me as space owner")
@@ -83,6 +84,7 @@ func formFieldsGotextHelper() {
 	pp.Sprintf("Mcp")
 	pp.Sprintf("Malta")
 	pp.Sprintf("Max upload size mib")
+	pp.Sprintf("Message")
 	pp.Sprintf("Money")
 	pp.Sprintf("Money value")
 	pp.Sprintf("Name")

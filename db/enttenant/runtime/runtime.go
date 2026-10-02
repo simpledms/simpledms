@@ -276,8 +276,12 @@ func init() {
 	spaceDescPublicID := spaceMixinFields0[0].Descriptor()
 	// space.DefaultPublicID holds the default value on creation for the public_id field.
 	space.DefaultPublicID = spaceDescPublicID.Default.(func() entx.CIText)
+	// spaceDescAcceptsInboxTransfers is the schema descriptor for accepts_inbox_transfers field.
+	spaceDescAcceptsInboxTransfers := spaceFields[4].Descriptor()
+	// space.DefaultAcceptsInboxTransfers holds the default value on creation for the accepts_inbox_transfers field.
+	space.DefaultAcceptsInboxTransfers = spaceDescAcceptsInboxTransfers.Default.(bool)
 	// spaceDescIsFolderMode is the schema descriptor for is_folder_mode field.
-	spaceDescIsFolderMode := spaceFields[4].Descriptor()
+	spaceDescIsFolderMode := spaceFields[5].Descriptor()
 	// space.DefaultIsFolderMode holds the default value on creation for the is_folder_mode field.
 	space.DefaultIsFolderMode = spaceDescIsFolderMode.Default.(bool)
 	spaceuserassignmentMixin := schema.SpaceUserAssignment{}.Mixin()

@@ -103,6 +103,20 @@ func (_c *SpaceCreate) SetNillableDescription(v *string) *SpaceCreate {
 	return _c
 }
 
+// SetAcceptsInboxTransfers sets the "accepts_inbox_transfers" field.
+func (_c *SpaceCreate) SetAcceptsInboxTransfers(v bool) *SpaceCreate {
+	_c.mutation.SetAcceptsInboxTransfers(v)
+	return _c
+}
+
+// SetNillableAcceptsInboxTransfers sets the "accepts_inbox_transfers" field if the given value is not nil.
+func (_c *SpaceCreate) SetNillableAcceptsInboxTransfers(v *bool) *SpaceCreate {
+	if v != nil {
+		_c.SetAcceptsInboxTransfers(*v)
+	}
+	return _c
+}
+
 // SetIsFolderMode sets the "is_folder_mode" field.
 func (_c *SpaceCreate) SetIsFolderMode(v bool) *SpaceCreate {
 	_c.mutation.SetIsFolderMode(v)
@@ -276,6 +290,10 @@ func (_c *SpaceCreate) defaults() error {
 		v := space.DefaultPublicID()
 		_c.mutation.SetPublicID(v)
 	}
+	if _, ok := _c.mutation.AcceptsInboxTransfers(); !ok {
+		v := space.DefaultAcceptsInboxTransfers
+		_c.mutation.SetAcceptsInboxTransfers(v)
+	}
 	if _, ok := _c.mutation.IsFolderMode(); !ok {
 		v := space.DefaultIsFolderMode
 		_c.mutation.SetIsFolderMode(v)
@@ -290,6 +308,9 @@ func (_c *SpaceCreate) check() error {
 	}
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`enttenant: missing required field "Space.name"`)}
+	}
+	if _, ok := _c.mutation.AcceptsInboxTransfers(); !ok {
+		return &ValidationError{Name: "accepts_inbox_transfers", err: errors.New(`enttenant: missing required field "Space.accepts_inbox_transfers"`)}
 	}
 	if _, ok := _c.mutation.IsFolderMode(); !ok {
 		return &ValidationError{Name: "is_folder_mode", err: errors.New(`enttenant: missing required field "Space.is_folder_mode"`)}
@@ -345,6 +366,10 @@ func (_c *SpaceCreate) createSpec() (*Space, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(space.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := _c.mutation.AcceptsInboxTransfers(); ok {
+		_spec.SetField(space.FieldAcceptsInboxTransfers, field.TypeBool, value)
+		_node.AcceptsInboxTransfers = value
 	}
 	if value, ok := _c.mutation.IsFolderMode(); ok {
 		_spec.SetField(space.FieldIsFolderMode, field.TypeBool, value)

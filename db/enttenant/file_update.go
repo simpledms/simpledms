@@ -17,6 +17,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/predicate"
 	"github.com/simpledms/simpledms/db/enttenant/property"
+	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
@@ -100,6 +101,20 @@ func (_u *FileUpdate) SetNillableUpdatedBy(v *int64) *FileUpdate {
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *FileUpdate) ClearUpdatedBy() *FileUpdate {
 	_u.mutation.ClearUpdatedBy()
+	return _u
+}
+
+// SetSpaceID sets the "space_id" field.
+func (_u *FileUpdate) SetSpaceID(v int64) *FileUpdate {
+	_u.mutation.SetSpaceID(v)
+	return _u
+}
+
+// SetNillableSpaceID sets the "space_id" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableSpaceID(v *int64) *FileUpdate {
+	if v != nil {
+		_u.SetSpaceID(*v)
+	}
 	return _u
 }
 
@@ -380,6 +395,11 @@ func (_u *FileUpdate) SetUpdater(v *User) *FileUpdate {
 	return _u.SetUpdaterID(v.ID)
 }
 
+// SetSpace sets the "space" edge to the Space entity.
+func (_u *FileUpdate) SetSpace(v *Space) *FileUpdate {
+	return _u.SetSpaceID(v.ID)
+}
+
 // AddVersionIDs adds the "versions" edge to the StoredFile entity by IDs.
 func (_u *FileUpdate) AddVersionIDs(ids ...int64) *FileUpdate {
 	_u.mutation.AddVersionIDs(ids...)
@@ -509,6 +529,12 @@ func (_u *FileUpdate) ClearDeleter() *FileUpdate {
 // ClearUpdater clears the "updater" edge to the User entity.
 func (_u *FileUpdate) ClearUpdater() *FileUpdate {
 	_u.mutation.ClearUpdater()
+	return _u
+}
+
+// ClearSpace clears the "space" edge to the Space entity.
+func (_u *FileUpdate) ClearSpace() *FileUpdate {
+	_u.mutation.ClearSpace()
 	return _u
 }
 
@@ -850,6 +876,35 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SpaceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.SpaceTable,
+			Columns: []string{file.SpaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(space.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SpaceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.SpaceTable,
+			Columns: []string{file.SpaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(space.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {
@@ -1330,6 +1385,20 @@ func (_u *FileUpdateOne) ClearUpdatedBy() *FileUpdateOne {
 	return _u
 }
 
+// SetSpaceID sets the "space_id" field.
+func (_u *FileUpdateOne) SetSpaceID(v int64) *FileUpdateOne {
+	_u.mutation.SetSpaceID(v)
+	return _u
+}
+
+// SetNillableSpaceID sets the "space_id" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableSpaceID(v *int64) *FileUpdateOne {
+	if v != nil {
+		_u.SetSpaceID(*v)
+	}
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *FileUpdateOne) SetName(v string) *FileUpdateOne {
 	_u.mutation.SetName(v)
@@ -1607,6 +1676,11 @@ func (_u *FileUpdateOne) SetUpdater(v *User) *FileUpdateOne {
 	return _u.SetUpdaterID(v.ID)
 }
 
+// SetSpace sets the "space" edge to the Space entity.
+func (_u *FileUpdateOne) SetSpace(v *Space) *FileUpdateOne {
+	return _u.SetSpaceID(v.ID)
+}
+
 // AddVersionIDs adds the "versions" edge to the StoredFile entity by IDs.
 func (_u *FileUpdateOne) AddVersionIDs(ids ...int64) *FileUpdateOne {
 	_u.mutation.AddVersionIDs(ids...)
@@ -1736,6 +1810,12 @@ func (_u *FileUpdateOne) ClearDeleter() *FileUpdateOne {
 // ClearUpdater clears the "updater" edge to the User entity.
 func (_u *FileUpdateOne) ClearUpdater() *FileUpdateOne {
 	_u.mutation.ClearUpdater()
+	return _u
+}
+
+// ClearSpace clears the "space" edge to the Space entity.
+func (_u *FileUpdateOne) ClearSpace() *FileUpdateOne {
+	_u.mutation.ClearSpace()
 	return _u
 }
 
@@ -2107,6 +2187,35 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt64),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SpaceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.SpaceTable,
+			Columns: []string{file.SpaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(space.FieldID, field.TypeInt64),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SpaceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.SpaceTable,
+			Columns: []string{file.SpaceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(space.FieldID, field.TypeInt64),
 			},
 		}
 		for _, k := range nodes {

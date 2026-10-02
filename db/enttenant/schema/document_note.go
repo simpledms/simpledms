@@ -42,7 +42,7 @@ func (DocumentNote) Edges() []ent.Edge {
 
 func (DocumentNote) Mixin() []ent.Mixin {
 	// Explicit attribution and history fields avoid common author and soft-delete hooks.
-	return []ent.Mixin{entx.NewPublicIDMixin(true), NewSpaceMixin()}
+	return []ent.Mixin{entx.NewPublicIDMixin(true), NewMutableSpaceMixin()}
 }
 
 func (DocumentNote) Indexes() []ent.Index {

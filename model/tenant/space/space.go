@@ -1,6 +1,7 @@
 package space
 
 import (
+	"log"
 	"time"
 
 	"github.com/simpledms/simpledms/ctxx"
@@ -25,12 +26,16 @@ func NewSpaceWithRepository(space *enttenant.Space, repository SpaceRepository) 
 	}
 }
 
-func (qq *Space) Edit(ctx ctxx.Context, name string, description string) error {
+func (qq *Space) Edit(
+	ctx ctxx.Context, name, description string, acceptsInboxTransfers bool,
+) error {
 	spacex, err := qq.Data.Update().
 		SetName(name).
 		SetDescription(description).
+		SetAcceptsInboxTransfers(acceptsInboxTransfers).
 		Save(ctx)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	qq.Data = spacex
@@ -46,6 +51,7 @@ func (qq *Space) Edit(ctx ctxx.Context, name string, description string) error {
 		).
 		Exec(spaceCtx)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 

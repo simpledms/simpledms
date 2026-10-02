@@ -2,6 +2,127 @@
     "language": "de",
     "messages": [
         {
+            "id": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
+            "message": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
+            "translation": "Du kannst andere Spaces in dieser Organisation auswählen, auf die du Schreibzugriff hast oder deren Inboxes Übertragungen akzeptieren.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Move to another Inbox",
+            "message": "Move to another Inbox",
+            "translation": "In eine andere Inbox verschieben",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "No other Inbox is available. You need write access to another Space, or its Inbox must accept transfers.",
+            "message": "No other Inbox is available. You need write access to another Space, or its Inbox must accept transfers.",
+            "translation": "Keine andere Inbox ist verfügbar. Du brauchst Schreibzugriff auf einen anderen Space, oder seine Inbox muss Übertragungen akzeptieren.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Choose an Inbox",
+            "message": "Choose an Inbox",
+            "translation": "Inbox auswählen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Destination Inbox",
+            "message": "Destination Inbox",
+            "translation": "Ziel-Inbox",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Message (optional)",
+            "message": "Message (optional)",
+            "translation": "Nachricht (optional)",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Your message will be saved as a note with your name.",
+            "message": "Your message will be saved as a note with your name.",
+            "translation": "Deine Nachricht wird als Notiz mit deinem Namen gespeichert.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Moving clears the document type, tags, and custom fields. Versions and notes are kept.",
+            "message": "Moving clears the document type, tags, and custom fields. Versions and notes are kept.",
+            "translation": "Beim Verschieben werden Dokumenttyp, Tags und benutzerdefinierte Felder entfernt. Versionen und Notizen bleiben erhalten.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "If you cannot open the destination Space, you will lose access to this file after moving it.",
+            "message": "If you cannot open the destination Space, you will lose access to this file after moving it.",
+            "translation": "Wenn du den Ziel-Space nicht öffnen kannst, verlierst du nach dem Verschieben den Zugriff auf diese Datei.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Accepts inbox transfers",
+            "message": "Accepts inbox transfers",
+            "translation": "Übertragungen in die Inbox zulassen",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Inbox transfer",
+            "message": "Inbox transfer",
+            "translation": "Inbox-Übertragung",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Destination Inbox is unavailable.",
+            "message": "Destination Inbox is unavailable.",
+            "translation": "Die Ziel-Inbox ist nicht verfügbar.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Only files in the Inbox can be transferred.",
+            "message": "Only files in the Inbox can be transferred.",
+            "translation": "Nur Dateien in der Inbox können übertragen werden.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "File has changed. Please reload.",
+            "message": "File has changed. Please reload.",
+            "translation": "Die Datei wurde geändert. Bitte lade die Seite neu.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Moved to the Inbox of «{Name}».",
+            "message": "Moved to the Inbox of «{Name}».",
+            "translation": "In die Inbox von «{Name}» verschoben.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true,
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "",
+                    "underlyingType": "string",
+                    "argNum": 1
+                }
+            ]
+        },
+        {
+            "id": "Message",
+            "message": "Message",
+            "translation": "Nachricht",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Destination must be a Tag group.",
             "message": "Destination must be a Tag group.",
             "translation": "Das Ziel muss eine Tag-Gruppe sein.",

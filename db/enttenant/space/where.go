@@ -86,6 +86,11 @@ func Description(v string) predicate.Space {
 	return predicate.Space(sql.FieldEQ(FieldDescription, v))
 }
 
+// AcceptsInboxTransfers applies equality check predicate on the "accepts_inbox_transfers" field. It's identical to AcceptsInboxTransfersEQ.
+func AcceptsInboxTransfers(v bool) predicate.Space {
+	return predicate.Space(sql.FieldEQ(FieldAcceptsInboxTransfers, v))
+}
+
 // IsFolderMode applies equality check predicate on the "is_folder_mode" field. It's identical to IsFolderModeEQ.
 func IsFolderMode(v bool) predicate.Space {
 	return predicate.Space(sql.FieldEQ(FieldIsFolderMode, v))
@@ -454,6 +459,16 @@ func DescriptionEqualFold(v string) predicate.Space {
 // DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
 func DescriptionContainsFold(v string) predicate.Space {
 	return predicate.Space(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// AcceptsInboxTransfersEQ applies the EQ predicate on the "accepts_inbox_transfers" field.
+func AcceptsInboxTransfersEQ(v bool) predicate.Space {
+	return predicate.Space(sql.FieldEQ(FieldAcceptsInboxTransfers, v))
+}
+
+// AcceptsInboxTransfersNEQ applies the NEQ predicate on the "accepts_inbox_transfers" field.
+func AcceptsInboxTransfersNEQ(v bool) predicate.Space {
+	return predicate.Space(sql.FieldNEQ(FieldAcceptsInboxTransfers, v))
 }
 
 // IsFolderModeEQ applies the EQ predicate on the "is_folder_mode" field.

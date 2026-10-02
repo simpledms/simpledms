@@ -28,6 +28,7 @@ func (Space) Fields() []ent.Field {
 		field.String("name"),
 		field.String("icon").Optional(),
 		field.String("description").Optional(),
+		field.Bool("accepts_inbox_transfers").Default(false),
 		field.Bool("is_folder_mode").Default(false), // TODO or has_folder_mode_enabled
 		// TODO storage_backend? s3, file system, FTP, etc.
 		//		FTP probably just live read, otherwise we have to sync...

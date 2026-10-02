@@ -26,6 +26,8 @@ const (
 	FieldIcon = "icon"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldAcceptsInboxTransfers holds the string denoting the accepts_inbox_transfers field in the database.
+	FieldAcceptsInboxTransfers = "accepts_inbox_transfers"
 	// FieldIsFolderMode holds the string denoting the is_folder_mode field in the database.
 	FieldIsFolderMode = "is_folder_mode"
 	// EdgeDeleter holds the string denoting the deleter edge name in mutations.
@@ -102,6 +104,7 @@ var Columns = []string{
 	FieldName,
 	FieldIcon,
 	FieldDescription,
+	FieldAcceptsInboxTransfers,
 	FieldIsFolderMode,
 }
 
@@ -132,6 +135,8 @@ var (
 	Policy       ent.Policy
 	// DefaultPublicID holds the default value on creation for the "public_id" field.
 	DefaultPublicID func() entx.CIText
+	// DefaultAcceptsInboxTransfers holds the default value on creation for the "accepts_inbox_transfers" field.
+	DefaultAcceptsInboxTransfers bool
 	// DefaultIsFolderMode holds the default value on creation for the "is_folder_mode" field.
 	DefaultIsFolderMode bool
 )
@@ -172,6 +177,11 @@ func ByIcon(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByAcceptsInboxTransfers orders the results by the accepts_inbox_transfers field.
+func ByAcceptsInboxTransfers(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAcceptsInboxTransfers, opts...).ToFunc()
 }
 
 // ByIsFolderMode orders the results by the is_folder_mode field.

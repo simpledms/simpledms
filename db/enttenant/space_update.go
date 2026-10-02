@@ -129,6 +129,20 @@ func (_u *SpaceUpdate) ClearDescription() *SpaceUpdate {
 	return _u
 }
 
+// SetAcceptsInboxTransfers sets the "accepts_inbox_transfers" field.
+func (_u *SpaceUpdate) SetAcceptsInboxTransfers(v bool) *SpaceUpdate {
+	_u.mutation.SetAcceptsInboxTransfers(v)
+	return _u
+}
+
+// SetNillableAcceptsInboxTransfers sets the "accepts_inbox_transfers" field if the given value is not nil.
+func (_u *SpaceUpdate) SetNillableAcceptsInboxTransfers(v *bool) *SpaceUpdate {
+	if v != nil {
+		_u.SetAcceptsInboxTransfers(*v)
+	}
+	return _u
+}
+
 // SetIsFolderMode sets the "is_folder_mode" field.
 func (_u *SpaceUpdate) SetIsFolderMode(v bool) *SpaceUpdate {
 	_u.mutation.SetIsFolderMode(v)
@@ -451,6 +465,9 @@ func (_u *SpaceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(space.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.AcceptsInboxTransfers(); ok {
+		_spec.SetField(space.FieldAcceptsInboxTransfers, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.IsFolderMode(); ok {
 		_spec.SetField(space.FieldIsFolderMode, field.TypeBool, value)
@@ -882,6 +899,20 @@ func (_u *SpaceUpdateOne) ClearDescription() *SpaceUpdateOne {
 	return _u
 }
 
+// SetAcceptsInboxTransfers sets the "accepts_inbox_transfers" field.
+func (_u *SpaceUpdateOne) SetAcceptsInboxTransfers(v bool) *SpaceUpdateOne {
+	_u.mutation.SetAcceptsInboxTransfers(v)
+	return _u
+}
+
+// SetNillableAcceptsInboxTransfers sets the "accepts_inbox_transfers" field if the given value is not nil.
+func (_u *SpaceUpdateOne) SetNillableAcceptsInboxTransfers(v *bool) *SpaceUpdateOne {
+	if v != nil {
+		_u.SetAcceptsInboxTransfers(*v)
+	}
+	return _u
+}
+
 // SetIsFolderMode sets the "is_folder_mode" field.
 func (_u *SpaceUpdateOne) SetIsFolderMode(v bool) *SpaceUpdateOne {
 	_u.mutation.SetIsFolderMode(v)
@@ -1234,6 +1265,9 @@ func (_u *SpaceUpdateOne) sqlSave(ctx context.Context) (_node *Space, err error)
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(space.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.AcceptsInboxTransfers(); ok {
+		_spec.SetField(space.FieldAcceptsInboxTransfers, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.IsFolderMode(); ok {
 		_spec.SetField(space.FieldIsFolderMode, field.TypeBool, value)

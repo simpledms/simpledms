@@ -16,26 +16,37 @@ import (
 
 type SpaceMixin struct {
 	mixin.Schema
+	isMutable bool
 }
 
 func NewSpaceMixin() SpaceMixin {
 	return SpaceMixin{}
 }
 
-func (SpaceMixin) Fields() []ent.Field {
-	return []ent.Field{
-		field.Int64("space_id").Immutable(),
+// NewMutableSpaceMixin permits aggregate transfers while retaining Space privacy filters.
+func NewMutableSpaceMixin() SpaceMixin {
+	return SpaceMixin{
+		isMutable: true,
 	}
 }
 
-func (SpaceMixin) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.To("space", Space.Type).
-			Field("space_id").
-			Immutable().
-			Unique().
-			Required(),
+func (qq SpaceMixin) Fields() []ent.Field {
+	spaceID := field.Int64("space_id")
+	if !qq.isMutable {
+		spaceID.Immutable()
 	}
+	return []ent.Field{spaceID}
+}
+
+func (qq SpaceMixin) Edges() []ent.Edge {
+	spaceEdge := edge.To("space", Space.Type).
+		Field("space_id").
+		Unique().
+		Required()
+	if !qq.isMutable {
+		spaceEdge.Immutable()
+	}
+	return []ent.Edge{spaceEdge}
 }
 
 func (SpaceMixin) Indexes() []ent.Index {

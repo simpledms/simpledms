@@ -224,6 +224,6 @@ func (File) Mixin() []ent.Mixin {
 		NewSoftDeleteMixin(File.Type), // TODO necessary?
 		entx.NewPublicIDMixin(true),
 		NewCommonMixin(File.Type),
-		NewSpaceMixin(),
+		NewMutableSpaceMixin(),
 	}
 }

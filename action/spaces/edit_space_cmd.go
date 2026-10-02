@@ -14,9 +14,10 @@ import (
 )
 
 type EditSpaceCmdData struct {
-	SpaceID     string `validate:"required" form_attr_type:"hidden"`
-	Name        string `validate:"required"`
-	Description string
+	SpaceID               string `validate:"required" form_attr_type:"hidden"`
+	Name                  string `validate:"required"`
+	Description           string
+	AcceptsInboxTransfers bool
 }
 
 type EditSpaceCmd struct {
@@ -36,11 +37,14 @@ func NewRenameSpace(infra *common.Infra, actions *Actions) *EditSpaceCmd {
 	}
 }
 
-func (qq *EditSpaceCmd) Data(spaceID string, name, description string) *EditSpaceCmdData {
+func (qq *EditSpaceCmd) Data(
+	spaceID, name, description string, acceptsInboxTransfers bool,
+) *EditSpaceCmdData {
 	return &EditSpaceCmdData{
-		SpaceID:     spaceID,
-		Name:        name,
-		Description: description,
+		SpaceID:               spaceID,
+		Name:                  name,
+		Description:           description,
+		AcceptsInboxTransfers: acceptsInboxTransfers,
 	}
 }
 
@@ -57,7 +61,9 @@ func (qq *EditSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 		return err
 	}
 
-	err = spacemodel.NewSpace(spacex).Edit(ctx, data.Name, data.Description)
+	err = spacemodel.NewSpace(spacex).Edit(
+		ctx, data.Name, data.Description, data.AcceptsInboxTransfers,
+	)
 	if err != nil {
 		return err
 	}
