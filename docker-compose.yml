@@ -27,6 +27,7 @@ services:
         image: gotenberg/gotenberg:8
         command:
             - "gotenberg"
+            - "--chromium-auto-start=true"
             - "--chromium-deny-private-ips=true"
             - "--libreoffice-deny-private-ips=true"
             - "--api-disable-download-from=true"
