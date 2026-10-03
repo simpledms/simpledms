@@ -13,6 +13,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/documenttype"
 	"github.com/simpledms/simpledms/model/main/common/fieldtype"
 	"github.com/simpledms/simpledms/ui/renderable"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -129,12 +130,7 @@ func (qq *ListFilterPropertiesPartial) Widget(
 				HxPost:    qq.actions.TogglePropertyFilterCmd.Endpoint(),
 				HxVals:    util.JSON(qq.actions.TogglePropertyFilterCmd.Data(data.CurrentDirID, propertyx.ID)),
 				HxTrigger: "click",
-				HxHeaders: autil.QueryHeader(
-					qq.Endpoint(),
-					qq.Data(data.CurrentDirID, data.DocumentTypeID),
-				),
-				HxTarget: "#" + qq.id(),
-				HxSelect: "#" + qq.id(),
+				HxSwap:    "none",
 			},
 		})
 
@@ -157,6 +153,13 @@ func (qq *ListFilterPropertiesPartial) Widget(
 	return &widget.Container{
 		Widget: widget.Widget[widget.Container]{
 			ID: qq.id(),
+		},
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:    qq.Endpoint(),
+			HxVals:    util.JSON(data),
+			HxTarget:  "#" + qq.id(),
+			HxSwap:    "outerHTML",
+			HxTrigger: event.HxTrigger(event.PropertyFilterChanged),
 		},
 		GapY: true,
 		Child: &widget.Column{
@@ -221,7 +224,7 @@ func (qq *ListFilterPropertiesPartial) renderTextFilter(propertyx *enttenant.Pro
 		value.Operator = textOperatorValueContains.String()
 	}
 
-	containerID := autil.GenerateID(propertyx.Name)
+	containerID := fmt.Sprintf("propertyFilter-%d", propertyx.ID)
 
 	attrsFn := func(trigger string) widget.HTMXAttrs {
 		return widget.HTMXAttrs{
@@ -263,6 +266,9 @@ func (qq *ListFilterPropertiesPartial) renderTextFilter(propertyx *enttenant.Pro
 	}
 
 	field := &widget.TextField{
+		Widget: widget.Widget[widget.TextField]{
+			ID: containerID + "-value",
+		},
 		// `change` more reliable in modal, triggers also on modal close, input doesn't trigger
 		// if modal gets closed before delay; input necessary for use as sidebar when change
 		// should get applied directly
@@ -289,7 +295,7 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 		value.Operator = operatorValueEquals.String()
 	}
 
-	containerID := autil.GenerateID(propertyx.Name)
+	containerID := fmt.Sprintf("propertyFilter-%d", propertyx.ID)
 
 	attrsFn := func(trigger string) widget.HTMXAttrs {
 		return widget.HTMXAttrs{
@@ -300,15 +306,8 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 			HxTrigger: trigger,
 		}
 	}
-	attrsFnRefresh := func(trigger string) widget.HTMXAttrs {
-		attrs := attrsFn(trigger)
-		attrs.HxTarget = "#" + qq.id()
-		attrs.HxSwap = "outerHTML"
-		return attrs
-	}
-
 	includeBetween := propertyx.Type == fieldtype.Date
-	operators := qq.operatorRadioGroup(value, attrsFnRefresh, includeBetween)
+	operators := qq.operatorRadioGroup(value, attrsFn, includeBetween)
 
 	fieldType := ""
 	fieldStep := ""
@@ -340,6 +339,9 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 		field = &widget.Row{
 			Children: []widget.IWidget{
 				&widget.TextField{
+					Widget: widget.Widget[widget.TextField]{
+						ID: containerID + "-start",
+					},
 					HTMXAttrs:    attrsFn("change"),
 					Label:        widget.Tu("Start"),
 					Name:         "ValueStart",
@@ -347,6 +349,9 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 					DefaultValue: startValue,
 				},
 				&widget.TextField{
+					Widget: widget.Widget[widget.TextField]{
+						ID: containerID + "-end",
+					},
 					HTMXAttrs:    attrsFn("change"),
 					Label:        widget.Tu("End"),
 					Name:         "ValueEnd",
@@ -357,6 +362,9 @@ func (qq *ListFilterPropertiesPartial) renderNumberMoneyDateFilter(propertyx *en
 		}
 	} else {
 		field = &widget.TextField{
+			Widget: widget.Widget[widget.TextField]{
+				ID: containerID + "-value",
+			},
 			HTMXAttrs:    attrsFn("change, input delay:1000ms"),
 			Label:        widget.Tu(propertyx.Name),
 			Name:         "Value",
@@ -424,7 +432,7 @@ func (qq *ListFilterPropertiesPartial) renderCheckboxFilter(propertyx *enttenant
 		value.Operator = checkboxOperatorValueIsChecked.String()
 	}
 
-	containerID := autil.GenerateID(propertyx.Name)
+	containerID := fmt.Sprintf("propertyFilter-%d", propertyx.ID)
 
 	attrsFn := func(trigger string) widget.HTMXAttrs {
 		return widget.HTMXAttrs{
@@ -606,10 +614,7 @@ func (qq *ListFilterPropertiesPartial) Widget(
 				HxVals: util.JSON(qq.actions.TogglePropertyFilterCmd.Data(currentDirID, prop.ID)),
 				// HxSwap:    "none",
 				HxTrigger: "click",
-				HxHeaders: autil.QueryHeader(
-					qq.Endpoint(),
-					qq.Data(currentDirID),
-				),
+				// Historical prototype; refreshes now belong to the query island.
 				HxTarget: "#" + qq.id(),
 				HxSelect: "#" + qq.id(),
 			},

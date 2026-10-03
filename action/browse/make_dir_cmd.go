@@ -7,6 +7,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -65,18 +66,8 @@ func (qq *MakeDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 		return err
 	}
 
-	// rw.Header().Set("HX-Push-Url", route.Browse(filex.ID))
-
-	// TODO how to handle type of view? (table, list, cards)
-	// TODO return list partial / may depend on context...
-	qq.infra.Renderer().RenderX(rw, ctx,
-		qq.actions.ListDirPartial.WidgetHandler(
-			rw,
-			req,
-			ctx,
-			data.ParentDirID,
-			"",
-		),
+	rw.Header().Set("HX-Trigger", event.DirectoryCreated.String())
+	rw.AddRenderables(
 		widget.NewSnackbarf("«%s» created.", filex.Data.Name).WithAction(&widget.Link{
 			Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
 			Child: widget.T("Open directory"), // TODO Go to, open, show?

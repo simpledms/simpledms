@@ -29,30 +29,6 @@ import (
 	"github.com/simpledms/simpledms/util/timex"
 )
 
-func QueryHeader(endpoint string, data any) template.JS {
-	values := url.Values{}
-
-	if data != nil {
-		// encoder := schema.NewEncoder()
-		encoder := form.NewEncoder()
-		var err error
-		values, err = encoder.Encode(data)
-		if err != nil {
-			log.Println(err)
-			panic(err)
-		}
-	}
-
-	// TODO json?
-	return util.JSON(struct {
-		XQueryEndpoint string `json:"X-Query-Endpoint"` // TODO Partial or Route or Endpoint?
-		XQueryData     any    `json:"X-Query-Data"`     // TODO Data or Form or Vals?
-	}{
-		XQueryEndpoint: endpoint,
-		XQueryData:     values.Encode(),
-	})
-}
-
 /*
 // should only used rarely, for example if loading a partial is not enough or not possible;
 // On the dashboard it is for example used because there is no DashboardCards command
@@ -90,9 +66,11 @@ func PreserveStateHeader() template.JS {
 
 func CloseDetailsHeader() template.JS {
 	return util.JSON(struct {
-		CloseDetails bool `json:"Close-Details"`
+		CloseDetails  bool `json:"Close-Details"`
+		PreserveState bool `json:"Preserve-State"`
 	}{
-		CloseDetails: true, // TODO or ID?
+		CloseDetails:  true, // TODO or ID?
+		PreserveState: true,
 	})
 }
 

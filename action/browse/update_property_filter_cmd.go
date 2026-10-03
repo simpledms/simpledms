@@ -108,17 +108,5 @@ func (qq *UpdatePropertyFilterCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 	rw.Header().Set("HX-Replace-Url", route.BrowseWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, data.CurrentDirID))
 	rw.Header().Set("HX-Trigger-After-Swap", event.PropertyFilterChanged.String())
 
-	if req.Header.Get("HX-Target") != "" {
-		return qq.infra.Renderer().Render(
-			rw,
-			ctx,
-			qq.actions.ListFilterPropertiesPartial.Widget(
-				ctx,
-				qq.actions.ListFilterPropertiesPartial.Data(data.CurrentDirID, state.DocumentTypeID),
-				state,
-			),
-		)
-	}
-
 	return nil
 }

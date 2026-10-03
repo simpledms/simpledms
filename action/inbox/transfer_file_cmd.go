@@ -58,8 +58,5 @@ func (qq *TransferFileCmd) Handler(
 	}
 	rw.AddRenderables(snackbar)
 	rw.Header().Set("HX-Trigger", event.FileMoved.String())
-	rw.Header().Set("HX-Replace-Url", route.InboxRoot(
-		ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID,
-	))
 	return nil
 }

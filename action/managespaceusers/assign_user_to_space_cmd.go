@@ -111,9 +111,8 @@ func (qq *AssignUserToSpaceCmd) Form(
 			ID: qq.formID(),
 		},
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.Endpoint(),
-			HxTarget: hxTarget,
-			HxSwap:   "outerHTML",
+			HxPost: qq.Endpoint(),
+			HxSwap: "none",
 		},
 		Children: []widget.IWidget{
 			&widget.Container{

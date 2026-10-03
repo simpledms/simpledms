@@ -1,6 +1,8 @@
 package tagging
 
 import (
+	"log"
+
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
@@ -85,7 +87,17 @@ func (qq *EntTagRepository) UpdateTagName(ctx ctxx.Context, tagID int64, name st
 }
 
 func (qq *EntTagRepository) DeleteTag(ctx ctxx.Context, tagID int64) error {
-	return ctx.TenantCtx().TTx.Tag.DeleteOneID(tagID).Exec(ctx)
+	// Delete the join rows directly: traversing Files would omit assignments in Trash.
+	if _, err := ctx.TenantCtx().TTx.TagAssignment.Delete().
+		Where(tagassignment.TagID(tagID)).Exec(ctx); err != nil {
+		log.Printf("remove deleted Tag assignments: %v", err)
+		return err
+	}
+	err := ctx.TenantCtx().TTx.Tag.DeleteOneID(tagID).Exec(ctx)
+	if err != nil {
+		log.Printf("delete Tag: %v", err)
+	}
+	return err
 }
 
 func (qq *EntTagRepository) TagByID(ctx ctxx.Context, tagID int64) (*enttenant.Tag, error) {

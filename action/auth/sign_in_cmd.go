@@ -147,6 +147,7 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 		rw.AddRenderables(widget.NewSnackbarf("Logged in successfully."))
 	}
 
+	// Authentication transition: reload with the newly committed Session cookie.
 	rw.Header().Set("HX-Redirect", route.Dashboard())
 
 	return nil

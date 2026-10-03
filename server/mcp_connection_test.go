@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	htmlstd "html"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -507,19 +508,41 @@ func TestMCPCredentialCreateSelectsSpaceTab(t *testing.T) {
 		"Destination": {f.tenant.PublicID.String() + ":" + otherSpaceID},
 	})
 	body := created.Body.String()
-	_, overview, hasOverview := strings.Cut(body, `id="mcpCredentials"`)
-	if created.Code != http.StatusOK || !hasOverview ||
-		!strings.Contains(overview, `hx-swap-oob="outerHTML"`) {
-		t.Fatalf("expected out-of-band credential list: %d %s", created.Code, body)
+	if created.Code != http.StatusOK || !strings.Contains(body, "Copy the secret now") ||
+		strings.Count(body, "<dialog") != 1 {
+		t.Fatalf("expected one-time credential secret dialog, status %d", created.Code)
 	}
-	if label := activeTabLabel(t, overview); !strings.Contains(label, "Zulu archive") {
-		t.Fatalf("expected new credential's Space tab to be selected, got %q", label)
+	if strings.Contains(body, `id="mcpCredentials"`) || strings.Contains(body, `hx-swap-oob=`) {
+		t.Fatal("create command must not return replacement list HTML")
 	}
-	if !strings.Contains(overview, "Archive client") {
-		t.Fatal("expected new credential in the selected tab")
+	secret := regexp.MustCompile(`sdmcp_[a-z0-9]+\.[A-Za-z0-9_-]{43}`).FindString(body)
+	if secret == "" {
+		t.Fatal("expected generated MCP secret in the one-time dialog")
 	}
-	if created.Header().Get("HX-Trigger") != "" {
-		t.Fatal("list refresh via HX-Trigger would race with the out-of-band tab selection")
+	var events map[string]struct {
+		Destination string `json:"destination"`
+	}
+	if err := json.Unmarshal([]byte(created.Header().Get("HX-Trigger")), &events); err != nil {
+		t.Fatalf("decode credential invalidation event: %v", err)
+	}
+	if event, ok := events["mcpCredentialChanged"]; !ok || event.Destination !=
+		f.tenant.PublicID.String()+":"+otherSpaceID {
+		t.Fatalf("unexpected creation invalidation event: %#v", events)
+	}
+	query := f.browserAt(route.MCPCredentials()+"?credential_status=active",
+		h.actions.Dashboard.MCPCredentialListPartial.Endpoint(), url.Values{
+			"CreatedDestination": {f.tenant.PublicID.String() + ":" + otherSpaceID},
+		})
+	queryBody := query.Body.String()
+	if query.Code != http.StatusOK || !strings.Contains(queryBody, `role="tab"`) ||
+		!strings.Contains(activeTabLabel(t, queryBody), "Zulu archive") ||
+		!strings.Contains(queryBody, "Archive client") ||
+		strings.Contains(queryBody, secret) {
+		t.Fatalf("separate list query should select new Space tab without returning secret; status %d", query.Code)
+	}
+	if !strings.Contains(htmlstd.UnescapeString(queryBody), `"CredentialStatusValues":["active"]`) ||
+		strings.Contains(queryBody, "Revoked:") {
+		t.Fatal("list query must retain active filter state")
 	}
 }
 

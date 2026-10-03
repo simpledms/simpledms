@@ -1,7 +1,6 @@
 package browse
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -84,7 +83,8 @@ func (qq *FileVersionFromInboxCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 		wx.NewSnackbarf("Added new version from inbox."),
 	)
 
-	rw.Header().Set("HX-Trigger", fmt.Sprintf("%s, %s, %s, %s", event.FileUploaded.String(), event.FileUpdated.String(), event.FileDeleted.String(), event.CloseDialog.String()))
+	// A merge changes the selection and preview together; one parent query owns the refresh.
+	rw.Header().Set("HX-Trigger", event.FileVersionMerged.String()+", "+event.CloseDialog.String())
 
 	return nil
 }

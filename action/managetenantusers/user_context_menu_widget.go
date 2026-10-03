@@ -42,6 +42,7 @@ func (qq *UserContextMenuWidget) Widget(
 				Label:       widget.T("Delete"),
 				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:    qq.actions.DeleteUserCmd.Endpoint(),
+					HxSwap:    "none",
 					HxVals:    util.JSON(qq.actions.DeleteUserCmd.Data(userx.PublicID.String())),
 					HxConfirm: hxConfirm,
 				},

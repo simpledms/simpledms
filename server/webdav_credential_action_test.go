@@ -263,10 +263,14 @@ func createWebDAVCredential(
 	if !strings.Contains(rr.Body.String(), formURL+"Inbox/") {
 		t.Fatal("expected direct Inbox URL in credential dialog")
 	}
-	// The response also refreshes the credential list out-of-band; only inspect the dialog.
-	secretDialog, _, _ := strings.Cut(rr.Body.String(), `id="webDAVCredentialOverview"`)
-	if count := strings.Count(secretDialog, "data-copy-value"); count != 4 {
-		t.Fatalf("expected all four credential values to be copyable, got %d", count)
+	secretDialog := rr.Body.String()
+	if strings.Contains(secretDialog, `id="webDAVCredentialOverview"`) {
+		t.Fatal("credential creation must not include replacement overview HTML")
+	}
+	for _, label := range []string{"WebDAV URL", "WebDAV Inbox URL", "Username", "Secret"} {
+		if !strings.Contains(secretDialog, label) {
+			t.Fatalf("expected one-time dialog field %q", label)
+		}
 	}
 	if count := strings.Count(rr.Body.String(), "overflow-wrap: anywhere"); count != 4 {
 		t.Fatalf("expected all four credential values to wrap, got %d", count)
@@ -350,13 +354,9 @@ func createArchiveAndRevokeWebDAVCredential(
 	); err != nil {
 		return err
 	}
-	// The response also refreshes the credential list out-of-band; only inspect the dialog.
-	secretDialog, overview, hasOverview := strings.Cut(
-		archiveRR.Body.String(),
-		`id="webDAVCredentialOverview"`,
-	)
-	if !hasOverview || !strings.Contains(activeTabLabel(t, overview), "Archive") {
-		t.Fatal("expected create response to select the new credential's Space tab")
+	secretDialog := archiveRR.Body.String()
+	if strings.Contains(secretDialog, `id="webDAVCredentialOverview"`) {
+		t.Fatal("credential creation must not include replacement overview HTML")
 	}
 	copyValueMatches := regexp.MustCompile(`data-copy-value="([^"]*)"`).FindAllStringSubmatch(
 		secretDialog,

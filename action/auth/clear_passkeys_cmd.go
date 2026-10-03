@@ -8,6 +8,7 @@ import (
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	account2 "github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -56,6 +57,7 @@ func (qq *ClearPasskeysCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 	}
 
 	rw.AddRenderables(wx.NewSnackbarf("All passkeys were removed."))
+	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
 
 	log.Printf("passkeys cleared account_id=%d", mainCtx.Account.ID)
 

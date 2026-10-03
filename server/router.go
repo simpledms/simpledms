@@ -3,7 +3,6 @@ package server
 import (
 	"encoding/json"
 	"errors"
-	"io"
 	"log"
 	"net/http"
 	"net/netip"
@@ -77,7 +76,6 @@ type Router struct {
 	//		should be implementable with go-cache
 	tenantDBs                *tenantdbs.TenantDBs
 	infra                    *common.Infra
-	handlerMap               map[string]Actionable
 	setupSessionAllowedPaths map[string]bool
 	devMode                  bool
 	metaPath                 string
@@ -99,7 +97,6 @@ func NewRouter(
 		mainDB:                   mainDB,
 		tenantDBs:                tenantDBs,
 		infra:                    infra,
-		handlerMap:               map[string]Actionable{},
 		setupSessionAllowedPaths: map[string]bool{},
 		devMode:                  devMode,
 		metaPath:                 metaPath,
@@ -184,17 +181,15 @@ func (qq *Router) RegisterAction(
 	if action.UseManualTxManagement() {
 		qq.HandleFunc(action.Route(), qq.wrapManualTx(qq.wrapCommand(action.Handler)))
 	} else {
-		buffer := false
+		buffer := !action.IsReadOnly()
 		if committed, ok := action.(interface{ CommitBeforeResponse() bool }); ok {
-			buffer = committed.CommitBeforeResponse()
+			buffer = buffer || committed.CommitBeforeResponse()
 		}
 		qq.HandleFunc(action.Route(), qq.wrapTxResponse(
 			qq.wrapCommand(action.Handler), action.IsReadOnly(), buffer,
 		))
 	}
 
-	// TODO route or endpoint? does method (POST OR GET) matter? currently not, maybe later?
-	qq.handlerMap[action.Endpoint()] = action
 	if action.AllowInSetupSession() {
 		qq.allowSetupSessionPath(action.Endpoint())
 		if action.FormRoute() != "" {
@@ -212,90 +207,27 @@ func (qq *Router) RegisterAction(
 
 func (qq *Router) wrapCommand(handlerFn handlerFn) handlerFn {
 	return func(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-		// TODO wrap in separate TTx or Same? same probably safer for the moment;
-		//		user has no inconsistent state in frontend
-
 		err := handlerFn(rw, req, ctx)
 		if err != nil {
 			return err
 		}
-
-		hxCurrentURL := rw.Header().Get("HX-Current-Url")
-		hxReplaceURL := rw.Header().Get("HX-Replace-Url")
-		hxPushURL := rw.Header().Get("HX-Push-Url")
-
-		// update CurrentURL in new request; this is necessary, if command manipulates state
-		// in URL and query depends on it
-		if hxReplaceURL != "" || hxPushURL != "" {
-			hxCurrentURLx, err := url.Parse(hxCurrentURL)
-			if err != nil {
-				log.Println(err)
-				return err
-			}
-			newCurrentURL := hxCurrentURLx
-
-			// TODO which order is better? Can they be set at same time? how would htmx handle it?
-			if hxPushURL != "" {
-				newCurrentURL, err = hxCurrentURLx.Parse(hxPushURL)
-				if err != nil {
-					log.Println(err)
-					return err
-				}
-			} else if hxReplaceURL != "" {
-				newCurrentURL, err = hxCurrentURLx.Parse(hxReplaceURL)
-				if err != nil {
-					log.Println(err)
-					return err
-				}
-			}
-			req.Header.Set("HX-Current-URL", newCurrentURL.String())
-		}
-
-		// TODO path url?
-		endpoint := req.Header.Get("X-Query-Endpoint")
-		if endpoint == "" {
-			// A handler may already have rendered its response. Rendering an empty
-			// list would set HX-Reswap: none, discarding a commit-buffered dialog.
-			if rw.HasDataWritten() {
-				return nil
-			}
-			err = qq.infra.Renderer().Render(rw, ctx) // render Renderables
-			if err != nil {
-				log.Println(err)
-				return err
-			}
+		// Explicit query/one-time-result responses have already consumed their feedback.
+		// Rendering an empty queue would overwrite their swap mode.
+		if rw.HasDataWritten() {
 			return nil
 		}
-		data := req.Header.Get("X-Query-Data") // url.Values encoded
-
-		// TODO reuse request or create new one or clone?
-		req.Body = io.NopCloser(strings.NewReader(data))
-
-		// reset, otherwise req.ParseForm wouldn't do anything
-		req.PostForm = nil
-		req.Form = nil
-
-		// IMPORTANT
-		// be careful if new middleware, for example for permissions,
-		// get added; this could be a vulnerability depending on the
-		// implementation
-		partialHandler, hasHandler := qq.handlerMap[endpoint]
-		if !hasHandler {
-			log.Println("no handler for", endpoint)
-			return errors.New("no handler for " + endpoint)
-		}
-		err = partialHandler.Handler(rw, req, ctx)
+		err = qq.infra.Renderer().Render(rw, ctx)
 		if err != nil {
+			log.Println(err)
 			return err
 		}
-
 		return nil
 	}
 }
 
 // TODO is this the best place?
 func (qq *Router) wrapTx(handlerFn handlerFn, isReadOnly bool) http.HandlerFunc {
-	return qq.wrapTxResponse(handlerFn, isReadOnly, false)
+	return qq.wrapTxResponse(handlerFn, isReadOnly, !isReadOnly)
 }
 
 func (qq *Router) wrapTxResponse(
@@ -467,10 +399,11 @@ func (qq *Router) wrapManualTx(handlerFn handlerFn) http.HandlerFunc {
 			qq.infra.SystemConfig().CommercialLicenseEnabled(),
 		)
 		transactionsOpen := true
+		errorRW := rwx
 
 		defer func() {
 			qq.handleManualTxPanic(
-				rwx,
+				errorRW,
 				reqx,
 				visitorCtx,
 				mainTx,
@@ -495,6 +428,10 @@ func (qq *Router) wrapManualTx(handlerFn handlerFn) http.HandlerFunc {
 			return
 		}
 		transactionsOpen = false
+		// Manual handlers commit their own writes. Buffer their bounded result too:
+		// an error after queuing feedback must discard it, not announce success.
+		buffered := newTransactionResponse()
+		rwx = httpx.NewResponseWriter(buffered)
 
 		if err := handlerFn(rwx, reqx, ctx); err != nil {
 			log.Println(err)
@@ -503,9 +440,10 @@ func (qq *Router) wrapManualTx(handlerFn handlerFn) http.HandlerFunc {
 			if requestErr := req.Context().Err(); requestErr != nil && errors.Is(err, requestErr) {
 				return
 			}
-			qq.handleManualError(rwx, reqx, ctx, err)
+			qq.handleManualError(errorRW, reqx, ctx, err)
 			return
 		}
+		buffered.flush(rw)
 	}
 }
 
@@ -622,13 +560,12 @@ func (qq *Router) logRecoveredPanic(req *http.Request, recovered any) {
 	}
 
 	log.Printf(
-		"recovered panic; method=%s path=%s raw_query=%q upload_token=%q hx_current_url=%q x_query_endpoint=%q panic_type=%T panic=%v stack=%s",
+		"recovered panic; method=%s path=%s raw_query=%q upload_token=%q hx_current_url=%q panic_type=%T panic=%v stack=%s",
 		req.Method,
 		req.URL.Path,
 		req.URL.RawQuery,
 		req.URL.Query().Get("upload_token"),
 		req.Header.Get("HX-Current-URL"),
-		req.Header.Get("X-Query-Endpoint"),
 		recovered,
 		recovered,
 		debug.Stack(),
@@ -845,14 +782,14 @@ func (qq *Router) context(
 		}
 
 		matchesOrg := tenantIDRegex.FindStringSubmatch(currentURL.Path)
-		if len(matchesOrg) > 1 {
+		if tenantID == "" && len(matchesOrg) > 1 {
 			// TODO is it also possible to get value by group name?
 			tenantID = matchesOrg[1]
 		}
 		// not found, can be a valid request
 
 		matches := spaceIDRegex.FindStringSubmatch(currentURL.Path)
-		if len(matches) > 1 {
+		if spaceID == "" && len(matches) > 1 {
 			// TODO is it also possible to get value by group name?
 			spaceID = matches[1]
 		}

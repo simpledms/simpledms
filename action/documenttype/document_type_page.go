@@ -55,6 +55,9 @@ func (qq *DocumentTypePage) Widget(
 	}
 
 	return &widget.ListDetailLayout{
+		Widget: widget.Widget[widget.ListDetailLayout]{
+			ID: "documentTypeLayout",
+		},
 		AppBar: qq.appBar(ctx),
 		List: &widget.Column{
 			Children: []widget.IWidget{

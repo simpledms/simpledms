@@ -62,7 +62,10 @@ func (qq *OrganizationSettingsPage) Widget(ctx ctxx.Context) renderable.Renderab
 				HTMXAttrs: widget.HTMXAttrs{
 					HxGet:     route2.OrganizationSettings(tenantID),
 					HxTrigger: event.HxTrigger(event.AccountUpdated),
-					HxTarget:  "#content",
+					HxTarget:  "#organizationSettings",
+					HxSelect:  "#organizationSettings",
+					HxSwap:    "outerHTML",
+					HxPushURL: "false",
 				},
 				Child: qq.content(ctx),
 			},

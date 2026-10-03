@@ -28,7 +28,7 @@ func (qq *Renderer) RenderX(rw httpx.ResponseWriter, ctx ctxx.Context, widgets .
 }
 
 func (qq *Renderer) Render(rw httpx.ResponseWriter, ctx ctxx.Context, widgets ...renderable.Renderable) error {
-	widgets = append(widgets, rw.Renderables()...)
+	widgets = append(widgets, rw.TakeRenderables()...)
 
 	renderedOOBWidgetsOnly := true
 	for _, widget := range widgets {

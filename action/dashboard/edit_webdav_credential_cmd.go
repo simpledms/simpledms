@@ -64,7 +64,7 @@ func (qq *EditWebDAVCredentialCmd) Handler(
 		return err
 	}
 
-	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
+	rw.Header().Set("HX-Trigger", event.WebDAVCredentialChanged.String())
 	rw.AddRenderables(widget.NewSnackbarf("Changes saved."))
 	return nil
 }

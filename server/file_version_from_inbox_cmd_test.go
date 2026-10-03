@@ -73,10 +73,8 @@ func TestFileVersionFromInboxCmd_MergesVersionAndDeletesSource(t *testing.T) {
 			}
 
 			expectedTrigger := fmt.Sprintf(
-				"%s, %s, %s, %s",
-				event.FileUploaded.String(),
-				event.FileUpdated.String(),
-				event.FileDeleted.String(),
+				"%s, %s",
+				event.FileVersionMerged.String(),
 				event.CloseDialog.String(),
 			)
 			if got := rr.Header().Get("HX-Trigger"); got != expectedTrigger {

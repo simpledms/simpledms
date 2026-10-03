@@ -77,6 +77,14 @@ func (qq *FileAttributesPartial) Widget(
 		Widget: widget.Widget[widget.ScrollableContent]{
 			ID: qq.FileAttributesID(),
 		},
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:   qq.Endpoint(),
+			HxVals:   util.JSON(data),
+			HxTarget: "#" + qq.FileAttributesID(),
+			HxSwap:   "outerHTML",
+			HxTrigger: event.HxTrigger(event.FileDocumentTypeUpdated, event.FilePropertyUpdated,
+				event.TagCreated, event.TagUpdated, event.TagDeleted),
+		},
 		GapY:     true,
 		Children: qq.Content(ctx, data),
 		MarginY:  true,
@@ -180,15 +188,6 @@ func (qq *FileAttributesPartial) Content(
 			GapYSize:         widget.Gap2,
 			NoOverflowHidden: true,
 			AutoHeight:       true,
-			HTMXAttrs: widget.HTMXAttrs{
-				// TODO only reload affected tag group
-				// TODO only update if ID is identical
-				HxTrigger: event.HxTrigger(event.TagUpdated),
-				HxPost:    qq.Endpoint(),
-				HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String())),
-				HxTarget:  "#" + qq.FileAttributesID(),
-				HxSwap:    "outerHTML",
-			},
 			Children: []widget.IWidget{
 				&widget.Label{
 					Text: widget.T("Document type"),
@@ -229,14 +228,9 @@ func (qq *FileAttributesPartial) documentTypeBadge(
 			IsSuggestion: isSuggested,
 			TrailingIcon: trailingIcon,
 			HTMXAttrs: widget.HTMXAttrs{
-				HxPost:   qq.actions.SelectDocumentTypePartial.Endpoint(),
-				HxVals:   util.JSON(qq.actions.SelectDocumentTypePartial.Data(data.FileID, documentType.ID)),
-				HxTarget: "#" + qq.FileAttributesID(),
-				HxSwap:   "outerHTML",
-				HxHeaders: autil.QueryHeader(
-					qq.Endpoint(),
-					qq.Data(data.FileID),
-				),
+				HxPost: qq.actions.SelectDocumentTypePartial.Endpoint(),
+				HxVals: util.JSON(qq.actions.SelectDocumentTypePartial.Data(data.FileID, documentType.ID)),
+				HxSwap: "none",
 			},
 		})
 	}
@@ -274,6 +268,7 @@ func (qq *FileAttributesPartial) propertyAttributeBlock(
 		return widget.HTMXAttrs{
 			HxTrigger: hxTrigger,
 			HxPost:    qq.actions.SetFilePropertyCmd.Endpoint(),
+			HxSwap:    "none",
 			HxVals:    util.JSON(qq.actions.SetFilePropertyCmd.Data(filex.Data.PublicID.String(), attributex.Edges.Property.ID)),
 			HxInclude: "this",
 		}

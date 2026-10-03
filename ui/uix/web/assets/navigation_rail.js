@@ -1,8 +1,28 @@
+import { Idiomorph } from '/assets/vendor/idiomorph/dist/idiomorph-ext.esm.js';
+
 (function () {
 	if (window.__simpleDMSNavigationRailRuntimeLoaded) {
 		return;
 	}
 	window.__simpleDMSNavigationRailRuntimeLoaded = true;
+
+	// Morph server-owned destinations normally, but carry client-owned expansion
+	// into the incoming nodes before layout can observe a collapsed rail.
+	Idiomorph.defaults.callbacks.beforeNodeMorphed = (oldNode, newNode) => {
+		if (!(oldNode instanceof Element) || !(newNode instanceof Element)) return;
+		if (oldNode.matches('.js-navigation-rail')) {
+			newNode.classList.toggle('navigation-rail-expanded',
+				oldNode.classList.contains('navigation-rail-expanded'));
+			newNode.dataset.expanded = oldNode.dataset.expanded;
+			newNode.toggleAttribute('data-modal-open', oldNode.hasAttribute('data-modal-open'));
+		}
+		if (oldNode.matches('.js-navigation-rail-group')) {
+			newNode.dataset.collapsed = oldNode.dataset.collapsed;
+		}
+		if (oldNode.matches('#tagAssignmentList details, #subTagAssignmentList details, dialog.js-side-sheet-dialog')) {
+			newNode.toggleAttribute('open', oldNode.hasAttribute('open'));
+		}
+	};
 
 	const defaultStorageKey = 'simpledms.navigationRail.expanded';
 	const expandedMediaQuery = window.matchMedia('(min-width: 600px)');

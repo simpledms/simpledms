@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"html/template"
 	"log"
 	"net/http"
 
@@ -45,6 +46,13 @@ func (qq *MCPCredentialListPartial) Handler(
 	}
 	state := autil.StateX[MCPCredentialListPartialData](rw, req)
 	data.CredentialStatusValues = state.CredentialStatusValues
+	if data.CreatedDestination != "" {
+		data.Destination, err = webDAVCredentialDestinationKeyByValue(ctx, data.CreatedDestination)
+		if err != nil {
+			return err
+		}
+		data.CreatedDestination = ""
+	}
 	overview, err := qq.Widget(ctx, req, data)
 	if err != nil {
 		log.Println(err)
@@ -58,21 +66,6 @@ func (qq *MCPCredentialListPartial) Handler(
 			qq.actions.MCPCredentialsPage.filterButton(data, true),
 		},
 	})
-}
-
-// WidgetOOB renders the list for an out-of-band swap, for example to select the tab of a
-// newly created credential from a command response.
-func (qq *MCPCredentialListPartial) WidgetOOB(
-	ctx ctxx.Context,
-	req *httpx.Request,
-	data *MCPCredentialListPartialData,
-) (*widget.Container, error) {
-	overview, err := qq.Widget(ctx, req, data)
-	if err != nil {
-		return nil, err
-	}
-	overview.HxSwapOOB = "outerHTML"
-	return overview, nil
 }
 
 func (qq *MCPCredentialListPartial) Widget(
@@ -132,11 +125,14 @@ func (qq *MCPCredentialListPartial) Widget(
 		Child:     content,
 		HTMXAttrs: widget.HTMXAttrs{
 			HxTrigger: event.HxTrigger(
-				event.AccountUpdated,
+				event.MCPCredentialChanged,
 				event.MCPCredentialFilterChanged,
 			),
-			HxPost:   qq.Endpoint(),
-			HxVals:   util.JSON(data),
+			HxPost: qq.Endpoint(),
+			// hx-vals can also be evaluated by nested form submissions; guard the event.
+			HxVals: template.JS("js:{..." + string(util.JSON(data)) +
+				",CreatedDestination:(event && event.type === 'mcpCredentialChanged' && " +
+				"event.detail) ? (event.detail.destination || '') : ''}"),
 			HxTarget: "#" + qq.id(),
 			HxSwap:   "outerHTML",
 		},

@@ -7,11 +7,6 @@ import (
 	"github.com/simpledms/simpledms/ui/uix/route"
 )
 
-type SelectDirActions struct {
-	// SelectDirPartial *SelectDirPartial // not factored out from MoveFileCmd yet
-	MakeDirCmd *SelectDirMakeDirCmd
-}
-
 type Actions struct {
 	Common  *acommon.Actions
 	Tagging *tagging.Actions
@@ -23,8 +18,6 @@ type Actions struct {
 	ListDirPartial   *ListDirPartial
 	MakeDirCmd       *MakeDirCmd
 	DeleteFileCmd    *DeleteFileCmd
-
-	// SelectDirPartial *SelectDirActions `actions:"select-dir"`
 
 	FilePreviewPartial          *FilePreviewPartial
 	FilePreviewStatusPartial    *FilePreviewStatusPartial
@@ -95,10 +88,6 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 		ListDirPartial:   NewListDirPartial(infra, actions),
 		MakeDirCmd:       NewMakeDirCmd(infra, actions),
 		DeleteFileCmd:    NewDeleteFileCmd(infra, actions),
-
-		// SelectDirPartial: &SelectDirActions{
-		// MakeDirCmd: NewSelectDirMakeDirCmd(infra, actions),
-		// },
 
 		FilePreviewPartial:          NewFilePreviewPartial(infra, actions),
 		FilePreviewStatusPartial:    NewFilePreviewStatusPartial(infra, actions),

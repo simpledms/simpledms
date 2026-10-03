@@ -15,7 +15,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
-	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -212,21 +211,12 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 			supportingText = fmt.Sprintf("Composed of %s", strings.Join(tagNames, ", "))
 		}
 
-		htmxAttrs = widget.HTMXAttrs{
-			HxTrigger: event.SuperTagUpdated.Handler(tagx.ID),
-			HxPost:    qq.actions.AssignedTags.EditListItem.Endpoint(),
-			HxVals:    util.JSON(qq.actions.AssignedTags.EditListItem.Data(fileID, tagx.ID)),
-			HxTarget:  "#" + id,
-			HxSwap:    "outerHTML",
-		}
-
 		trailing = &widget.Checkbox{
 			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    hxPost,
 				HxTrigger: "change",
 				HxVals:    hxVals,
-				HxTarget:  "#" + id,
-				HxSwap:    "outerHTML",
+				HxSwap:    "none",
 			},
 			IsChecked: isCheckedFn(tagx.ID),
 		}
@@ -237,8 +227,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 				HxPost:    hxPost,
 				HxTrigger: "change",
 				HxVals:    hxVals,
-				HxTarget:  "#" + id,
-				HxSwap:    "outerHTML",
+				HxSwap:    "none",
 			},
 			IsChecked: isCheckedFn(tagx.ID),
 		}
@@ -250,10 +239,9 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 		//
 		// impl on refactoring on 27.10.24, nur sure if correct, would solve comment above
 		htmxAttrs = widget.HTMXAttrs{
-			HxPost:   hxPost,
-			HxVals:   hxVals,
-			HxTarget: "#" + id,
-			HxSwap:   "outerHTML",
+			HxPost: hxPost,
+			HxVals: hxVals,
+			HxSwap: "none",
 		}
 	}
 

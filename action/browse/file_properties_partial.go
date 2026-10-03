@@ -138,6 +138,7 @@ func (qq *FilePropertiesPartial) propertyAssignmentBlock(
 		return widget.HTMXAttrs{
 			HxTrigger: hxTrigger,
 			HxPost:    qq.actions.SetFilePropertyCmd.Endpoint(),
+			HxSwap:    "none",
 			HxVals:    util.JSON(qq.actions.SetFilePropertyCmd.Data(filex.Data.PublicID.String(), propertyx.ID)),
 			HxInclude: "this",
 		}

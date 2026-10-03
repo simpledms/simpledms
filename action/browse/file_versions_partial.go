@@ -13,7 +13,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	storedfilemodel "github.com/simpledms/simpledms/model/tenant/storedfile"
 	"github.com/simpledms/simpledms/ui/renderable"
-	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -110,13 +109,6 @@ func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartia
 		},
 		GapYSize: widget.Gap4,
 		MarginY:  widget.Margin4,
-		HTMXAttrs: widget.HTMXAttrs{
-			HxTrigger: event.FileUploaded.Handler(),
-			HxPost:    qq.Endpoint(),
-			HxVals:    util.JSON(qq.Data(data.FileID)),
-			HxTarget:  "#" + qq.ID(),
-			HxSwap:    "outerHTML",
-		},
 		Children: []widget.IWidget{
 			&widget.Column{
 				AutoHeight: true,

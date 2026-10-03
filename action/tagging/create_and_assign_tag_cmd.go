@@ -8,7 +8,6 @@ import (
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
-	"github.com/simpledms/simpledms/db/enttenant/tag"
 	taggingmodel "github.com/simpledms/simpledms/model/tenant/tagging"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/uix/event"
@@ -77,47 +76,7 @@ func (qq *CreateAndAssignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 		log.Println(err)
 		return err
 	}
-	if data.Type != tagtype.Group {
-		// must be set before writing to rw
-		rw.Header().Set("HX-Trigger", event.TagUpdated.String())
-	}
-
-	if data.GroupTagID > 0 {
-		parentTag := ctx.TenantCtx().TTx.Tag.
-			Query().
-			Where(tag.ID(data.GroupTagID)).
-			WithChildren().
-			OnlyX(ctx)
-		listItem := qq.actions.AssignedTags.EditListItem.ListItem(
-			ctx,
-			data.FileID,
-			parentTag,
-		)
-
-		// TODO is it possible to get rid of this with new mechanism
-		//		to pass hx-target into form?
-		// TODO deactivated on 24.02.2025 to fix on demand creation onmetadata tab,
-		//  	may break other places
-		// rw.Header().Set("HX-Retarget", "#"+listItem.ID)
-
-		rw.AddRenderables(widget.NewSnackbarf("«%s» created and assigned.", tagx.Name))
-
-		return qq.infra.Renderer().Render(
-			rw,
-			ctx,
-			listItem,
-		)
-	}
-
+	rw.Header().Set("HX-Trigger", event.TagCreated.String())
 	rw.AddRenderables(widget.NewSnackbarf("«%s» created and assigned.", tagx.Name))
-
-	return qq.infra.Renderer().Render(rw, ctx,
-		qq.actions.AssignedTags.Edit.ListView(
-			ctx,
-			&EditAssignedTagsPartialData{
-				FileID:      data.FileID,
-				ParentTagID: data.GroupTagID,
-			},
-		),
-	)
+	return nil
 }

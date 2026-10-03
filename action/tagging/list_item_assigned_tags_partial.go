@@ -11,8 +11,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
-	"github.com/simpledms/simpledms/ui/uix/event"
-	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -75,8 +73,7 @@ func (qq *ListItemAssignedTagsPartial) Widget(ctx ctxx.Context, tagx *enttenant.
 	}
 
 	icon := widget.NewIcon("label")
-	var htmxAttrs widget.HTMXAttrs
-	listItemID := autil.GenerateID(fmt.Sprintf("ListAssignedTagsPartial-%d-", tagx.ID))
+	listItemID := fmt.Sprintf("ListAssignedTagsPartial-%d", tagx.ID)
 
 	if tagx.Type == tagtype.Super {
 		icon = widget.NewIcon("label_important")
@@ -91,20 +88,12 @@ func (qq *ListItemAssignedTagsPartial) Widget(ctx ctxx.Context, tagx *enttenant.
 			supportingText = widget.Tf("Composed of %s", strings.Join(tagNames, ", "))
 		}
 
-		htmxAttrs = widget.HTMXAttrs{
-			HxTrigger: event.SuperTagUpdated.Handler(tagx.ID),
-			HxPost:    qq.actions.AssignedTags.ListItem.Endpoint(),
-			HxVals:    util.JSON(qq.actions.AssignedTags.ListItem.Data(tagx.ID)),
-			HxTarget:  "#" + listItemID,
-			HxSwap:    "outerHTML",
-		}
 	}
 
 	return &widget.ListItem{
 		Widget: widget.Widget[widget.ListItem]{
 			ID: listItemID,
 		},
-		HTMXAttrs:      htmxAttrs,
 		Leading:        icon,
 		Headline:       headline,
 		SupportingText: supportingText,

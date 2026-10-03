@@ -68,9 +68,8 @@ func (qq *ImportFromLibraryDialog) Form(
 
 	form := &widget.Form{
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.actions.ImportFromLibraryCmd.Endpoint(),
-			HxTarget: hxTarget,
-			HxSwap:   "outerHTML",
+			HxPost: qq.actions.ImportFromLibraryCmd.Endpoint(),
+			HxSwap: "none",
 		},
 		Children: []widget.IWidget{
 			&widget.Container{

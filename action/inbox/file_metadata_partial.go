@@ -152,6 +152,7 @@ func (qq *FileMetadataPartial) deleteFromInboxButton(ctx ctxx.Context, fileID st
 			HxPost:    qq.actions.Browse.DeleteFileCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.Browse.DeleteFileCmd.Data(fileID)),
 			HxConfirm: widget.T("Are you sure?").String(ctx),
+			HxSwap:    "none",
 		},
 	}
 }
@@ -163,10 +164,7 @@ func (qq *FileMetadataPartial) markAsDoneButton(fileID string) *widget.Button {
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.actions.MarkAsDoneCmd.Endpoint(),
 			HxVals: util.JSON(qq.actions.MarkAsDoneCmd.Data(fileID)),
-			HxHeaders: autil.QueryHeader(
-				qq.actions.InboxPage.Endpoint(),
-				qq.actions.InboxPage.Data(),
-			),
+			HxSwap: "none",
 		},
 	}
 }

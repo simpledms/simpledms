@@ -67,8 +67,7 @@ func (qq *ListAssignedTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.R
 	case "chips":
 		widget = qq.Chips(ctx, data, tags)
 	case "list", "":
-		hxTarget := req.URL.Query().Get("hx-target")
-		widget = qq.List(ctx, data.FileID, tags, hxTarget)
+		widget = qq.ListView(ctx, data)
 	default:
 		log.Println("layout not supported, was", data.Layout)
 		return e.NewHTTPErrorf(http.StatusBadRequest, "layout not supported")
@@ -145,6 +144,13 @@ func (qq *ListAssignedTagsPartial) List(
 			Children: listItems,
 		},
 		Toolbar: toolbar,
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:    qq.Endpoint(),
+			HxVals:    util.JSON(qq.Data(fileID)),
+			HxTarget:  "#" + qq.actions.AssignedTags.Edit.hxTargetID(),
+			HxSwap:    "outerHTML",
+			HxTrigger: event.HxTrigger(event.TagCreated, event.TagUpdated, event.TagDeleted),
+		},
 	}
 }
 
@@ -165,9 +171,9 @@ func (qq *ListAssignedTagsPartial) Chips(
 			Trailing: (&widget.Button{
 				Icon: widget.NewIcon("close"),
 				HTMXAttrs: widget.HTMXAttrs{
-					HxPost:   qq.actions.AssignedTags.UnassignTagCmd.Endpoint(),
-					HxVals:   util.JSON(qq.actions.AssignedTags.UnassignTagCmd.Data(data.FileID, tagx.ID)),
-					HxTarget: "#" + chipID,
+					HxPost: qq.actions.AssignedTags.UnassignTagCmd.Endpoint(),
+					HxVals: util.JSON(qq.actions.AssignedTags.UnassignTagCmd.Data(data.FileID, tagx.ID)),
+					HxSwap: "none",
 				},
 			}).Small(),
 		})
@@ -189,16 +195,17 @@ func (qq *ListAssignedTagsPartial) Chips(
 
 	*/
 
-	id := autil.GenerateID("assignedTagsList")
+	id := "assignedTagsList-" + data.FileID
 	return &widget.Container{
 		Widget: widget.Widget[widget.Container]{
 			ID: id,
 		},
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.Endpoint(),
-			HxTrigger: event.HxTrigger(event.TagUpdated),
+			HxTrigger: event.HxTrigger(event.TagCreated, event.TagUpdated, event.TagDeleted),
 			HxVals:    util.JSON(data),
 			HxTarget:  "#" + id,
+			HxSwap:    "outerHTML",
 		},
 		// TODO morph / impl as default?
 

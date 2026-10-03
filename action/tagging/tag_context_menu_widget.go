@@ -1,7 +1,6 @@
 package tagging
 
 import (
-	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
@@ -32,6 +31,7 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, fileID string, tagx *en
 		Label:       widget.T("Delete"),
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.actions.DeleteTagCmd.Endpoint(),
+			HxSwap: "none",
 			HxVals: util.JSON(qq.actions.DeleteTagCmd.Data(tagx.ID)),
 			// HxTarget:  "#" + qq.actions.AssignedTags.EditListItem.listItemID(fileID, tagx.ID),
 			HxConfirm: widget.T("Are you sure? This action will delete the tag entirely and not just unassign it from the current file!").String(ctx),
@@ -47,11 +47,6 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, fileID string, tagx *en
 			HTMXAttrs: qq.actions.EditTagCmd.ModalLinkAttrs(
 				qq.actions.EditTagCmd.Data(tagx.ID, tagx.Name),
 				"#"+qq.actions.AssignedTags.EditListItem.listItemID(fileID, tagx.ID),
-			).SetHxHeaders(
-				autil.QueryHeader(
-					qq.actions.AssignedTags.EditListItem.Endpoint(),
-					qq.actions.AssignedTags.EditListItem.Data(fileID, tagx.ID),
-				),
 			),
 		},
 	}
@@ -109,12 +104,6 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, fileID string, tagx *en
 					HTMXAttrs: qq.actions.MoveTagToGroupCmd.ModalLinkAttrs(
 						qq.actions.MoveTagToGroupCmd.Data(tagx.ID, 0),
 						"#"+qq.actions.AssignedTags.Edit.hxTargetID(),
-					).SetHxHeaders(
-						autil.QueryHeader(
-							// always ListView (edit mode) because context menu is just available from there...
-							qq.actions.AssignedTags.Edit.Endpoint(),
-							qq.actions.AssignedTags.Edit.Data(fileID, tagx.ID),
-						),
 					),
 				},
 			)

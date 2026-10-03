@@ -13,6 +13,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/mcpcredential"
 	"github.com/simpledms/simpledms/model/main/systemconfig"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -80,43 +81,14 @@ func (qq *CreateMCPCredentialCmd) Handler(
 		return err
 	}
 
-	overview, err := qq.createdCredentialOverview(rw, req, ctx, data.Destination)
-	if err != nil {
-		return err
-	}
-
+	// One-time secret exception. The credential overview is queried separately after commit.
 	rw.Header().Set("Cache-Control", "no-store")
-	rw.AddRenderables(widget.NewSnackbarf("MCP credential created."))
-	return qq.infra.Renderer().Render(rw, ctx, &widget.View{
-		Children: []widget.IWidget{
-			qq.secretDialog(ctx, req, token),
-			overview,
-		},
-	})
-}
-
-// createdCredentialOverview refreshes the credential list out-of-band with the tab of the new
-// credential's Space selected. AccountUpdated is not triggered instead because HX-Trigger
-// events fire before the swap, so its refresh would race and restore the previous tab.
-func (qq *CreateMCPCredentialCmd) createdCredentialOverview(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
-	ctx ctxx.Context,
-	destinationValue string,
-) (*widget.Container, error) {
-	destinationKey, err := webDAVCredentialDestinationKeyByValue(ctx, destinationValue)
-	if err != nil {
-		return nil, err
-	}
-	state := autil.StateX[MCPCredentialListPartialData](rw, req)
-	return qq.actions.MCPCredentialListPartial.WidgetOOB(
-		ctx,
-		req,
-		qq.actions.MCPCredentialListPartial.Data(
-			destinationKey,
-			state.CredentialStatusValues...,
-		),
-	)
+	rw.Header().Set("HX-Trigger", string(util.JSON(map[string]any{
+		event.MCPCredentialChanged.String(): map[string]string{"destination": data.Destination},
+	})))
+	// The one-time result is the success feedback. An OOB snackbar would be mounted
+	// in the old form dialog before that dialog is replaced by this response.
+	return qq.infra.Renderer().Render(rw, ctx, qq.secretDialog(ctx, req, token))
 }
 
 func (qq *CreateMCPCredentialCmd) FormHandler(
@@ -182,6 +154,9 @@ func (qq *CreateMCPCredentialCmd) FormHandler(
 				Children: &widget.List{Children: destinationItems},
 			},
 		},
+	}
+	if req.URL.Query().Get("wrapper") != actionx.ResponseWrapperDialog.String() {
+		form.HxTarget = "this"
 	}
 
 	submitLabel := widget.T("Create")

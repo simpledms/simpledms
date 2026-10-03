@@ -158,10 +158,11 @@
 	<body style="display: none;"
 		  class="font-sans bg-surface text-on-surface"
 		  hx-boost="true"
+		  hx-swap="morph:innerHTML"
 		  hx-target="#content"
 		  hx-ext="morph"
 		  hx-indicator=".js-progress-indicator"
-		  hx-inherit="hx-boost hx-ext hx-target hx-indicator"
+		  hx-inherit="hx-boost hx-ext hx-target hx-indicator hx-swap"
 	>
 	    	{{ render .GetContext .GetProgressIndicator }}
 
@@ -202,7 +203,7 @@
 		<script defer src="/assets/vendor/idiomorph/dist/idiomorph-ext.esm.js" type="module"></script>
 		<script defer src="/assets/snackbar_runtime.js"></script>
 		<script defer src="/assets/tooltip_runtime.js"></script>
-		<script defer src="/assets/navigation_rail.js"></script>
+		<script defer src="/assets/navigation_rail.js" type="module"></script>
 		<script defer src="/assets/passkey.js"></script>
 
 		<!--
@@ -330,7 +331,9 @@
 				// page nav is usually boosted, but explicit hx-get navigation rail links are not;
 				// must be verified if this has any side effects and if boosted is used for non-page navigation
 				// somewhere
-				if (e.detail.requestConfig.boosted || e.detail.elt.closest('.js-navigation-rail')) {
+				if (e.detail.requestConfig.boosted ||
+					(e.detail.elt.closest('.js-navigation-rail') &&
+					!e.detail.elt.matches('.js-navigation-rail'))) {
 					this.dispatchEvent(new CustomEvent('closeSideSheet', { bubbles: true }))
 				}
 			})

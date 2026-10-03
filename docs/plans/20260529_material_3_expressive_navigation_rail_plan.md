@@ -78,6 +78,9 @@ mobile modal menu replacement.
 
 ## Erdikon Reference
 
+These are layout references. HTTP response responsibilities follow the authoritative
+[Command / Query UI Flow](../../AGENTS.md#command--query-ui-flow) contract.
+
 The Erdikon implementation is a useful implementation template, especially:
 
 - `core/ui/widget/navigation_rail.go`

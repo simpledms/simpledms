@@ -3,6 +3,10 @@ package documenttype
 // package action
 
 import (
+	"net/url"
+	"path"
+	"strconv"
+
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
@@ -46,11 +50,20 @@ func (qq *DocumentTypesListPartial) Handler(rw httpx.ResponseWriter, req *httpx.
 		return err
 	}
 
-	return qq.infra.Renderer().Render(
-		rw,
-		ctx,
-		qq.Widget(ctx, 0),
-	)
+	var selectedID int64
+	if current, err := url.Parse(req.Header.Get("HX-Current-URL")); err == nil {
+		selectedID, _ = strconv.ParseInt(path.Base(current.Path), 10, 64)
+	}
+	if selectedID != 0 && !ctx.SpaceCtx().Space.QueryDocumentTypes().Where(
+		documenttype.ID(selectedID),
+	).ExistX(ctx) {
+		selectedID = 0
+		rw.Header().Set("HX-Replace-Url", route.ManageDocumentTypes(
+			ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID,
+		))
+	}
+	return qq.infra.Renderer().Render(rw, ctx,
+		qq.actions.DocumentTypePage.WidgetHandler(rw, req, ctx, selectedID))
 }
 
 func (qq *DocumentTypesListPartial) Widget(ctx ctxx.Context, selectedTypeID int64) renderable.Renderable {
@@ -98,8 +111,8 @@ func (qq *DocumentTypesListPartial) Widget(ctx ctxx.Context, selectedTypeID int6
 				event.DocumentTypeDeleted,
 			),
 			// HxVals:    util.JSON(qq.Data()),
-			HxTarget: "#" + id,
-			HxSwap:   "outerHTML",
+			HxTarget: "#innerContent",
+			HxSwap:   "innerHTML",
 		},
 		Children: items,
 	}

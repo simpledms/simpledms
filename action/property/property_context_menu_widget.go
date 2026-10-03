@@ -36,6 +36,7 @@ func (qq *PropertyContextMenuWidget) Widget(ctx ctxx.Context, propertyx *enttena
 		Label:        widget.T("Delete"),
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.actions.DeletePropertyCmd.Endpoint(),
+			HxSwap:    "none",
 			HxVals:    util.JSON(qq.actions.DeletePropertyCmd.Data(propertyx.ID)),
 			HxConfirm: widget.T("Are you sure?").String(ctx),
 		},

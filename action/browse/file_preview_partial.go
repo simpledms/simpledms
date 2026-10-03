@@ -170,10 +170,9 @@ func (qq *FilePreviewPartial) PreviewWidget(
 					&widget.Button{
 						Label: widget.T("Retry PDF generation"),
 						HTMXAttrs: widget.HTMXAttrs{
-							HxPost:   qq.actions.RetryPDFPreviewCmd.Endpoint(),
-							HxVals:   util.JSON(qq.actions.RetryPDFPreviewCmd.Data(currentDirID, filex.Data.PublicID.String(), versionNumber)),
-							HxSwap:   "none",
-							HxTarget: "#" + tabsID,
+							HxPost: qq.actions.RetryPDFPreviewCmd.Endpoint(),
+							HxVals: util.JSON(qq.actions.RetryPDFPreviewCmd.Data(currentDirID, filex.Data.PublicID.String(), versionNumber)),
+							HxSwap: "none",
 						},
 					},
 				},
@@ -377,7 +376,6 @@ func (qq *FilePreviewPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 		return err
 	}
 	state := autil.StateX[FilePreviewPartialState](rw, req)
-	rw.Header().Set("HX-Push-Url", route2.BrowseFileWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, data.CurrentDirID, data.FileID))
 
 	// filex := ctx.TenantCtx().TTx.File.GetX(ctx, data.FileID)
 	dirx := qq.infra.FileRepo.GetX(ctx, data.CurrentDirID)
@@ -432,11 +430,14 @@ func (qq *FilePreviewPartial) Widget(
 
 	return &widget.DetailsWithSheet{
 		HTMXAttrs: widget.HTMXAttrs{
-			HxTrigger: event.FileUploaded.Handler(),
-			HxPost:    qq.Endpoint(),
-			HxVals:    util.JSON(qq.Data(dirx.Data.PublicID.String(), filex.Data.PublicID.String())),
-			HxTarget:  "#details",
-			HxSwap:    "outerHTML",
+			// #details is shared across capabilities. During navigation an outgoing
+			// notification can arrive before morph has reprocessed the retained node.
+			HxTrigger: "fileUploaded[window.location.pathname.includes('/browse/')] from:body," +
+				"fileUpdated[window.location.pathname.includes('/browse/')] from:body",
+			HxPost:   qq.Endpoint(),
+			HxVals:   util.JSON(qq.Data(dirx.Data.PublicID.String(), filex.Data.PublicID.String())),
+			HxTarget: "#details",
+			HxSwap:   "outerHTML",
 		},
 		AppBar: qq.appBar(
 			ctx,

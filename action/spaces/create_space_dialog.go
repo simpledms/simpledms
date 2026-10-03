@@ -71,9 +71,8 @@ func (qq *CreateSpaceDialog) Form(
 
 	form := &widget.Form{
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.actions.CreateSpaceCmd.Endpoint(),
-			HxTarget: hxTarget,
-			HxSwap:   "outerHTML",
+			HxPost: qq.actions.CreateSpaceCmd.Endpoint(),
+			HxSwap: "none",
 		},
 		Children: []widget.IWidget{
 			&widget.Container{

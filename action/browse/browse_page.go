@@ -58,8 +58,8 @@ func (qq *BrowsePage) Handler(
 	//		custom header is more meaningful...
 	if req.Header.Get("Close-Details") != "" {
 		rw.Header().Set("HX-Retarget", "#details")
-		rw.Header().Set("HX-Reswap", "innerHTML")
-		return qq.infra.Renderer().Render(rw, ctx, &widget.View{})
+		rw.Header().Set("HX-Reswap", "morph:outerHTML")
+		return qq.infra.Renderer().Render(rw, ctx, &widget.DetailsWithSheet{})
 	}
 
 	browsePage, err := qq.widget(req, ctx, state, dirx)

@@ -58,7 +58,7 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    qq.actions.DeleteFileCmd.Endpoint(),
 				HxVals:    util.JSON(qq.actions.DeleteFileCmd.Data(filex.PublicID.String())),
-				HxTarget:  "#" + qq.actions.ListDirPartial.WrapperID(),
+				HxSwap:    "none",
 				HxConfirm: widget.T("Are you sure?").String(ctx),
 			},
 		},

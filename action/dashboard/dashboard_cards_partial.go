@@ -96,6 +96,9 @@ func (qq *DashboardCardsPartial) Widget(ctx ctxx.Context) (renderable.Renderable
 				event.TemporaryPasswordCleared,
 				event.PasswordChanged,
 				event.AccountUpdated,
+				event.SpaceCreated,
+				event.SpaceUpdated,
+				event.SpaceDeleted,
 			),
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data()),
@@ -592,6 +595,7 @@ func (qq *DashboardCardsPartial) clearTemporaryPasswordCard(ctx ctxx.Context) *w
 				StyleType: widget.ButtonStyleTypeOutlined,
 				HTMXAttrs: widget.HTMXAttrs{
 					HxPost: qq.actions.AuthActions.ClearTemporaryPasswordCmd.Endpoint(),
+					HxSwap: "none",
 					HxVals: util.JSON(qq.actions.AuthActions.ClearTemporaryPasswordCmd.Data()),
 				},
 			},

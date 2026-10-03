@@ -72,8 +72,7 @@ func (qq *MoveTagToGroupCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request
 	// TODO group ID or tag ID?
 	// rw.Header().Set("HX-Trigger", event.TagMovedToGroup.String(data.TagID))
 
-	// not sure why necessary with HX-Reswap=none, but doesn't work without it
-	rw.Header().Set("HX-Trigger-After-Swap", event.TagUpdated.String())
+	rw.Header().Set("HX-Trigger", event.TagUpdated.String()+", "+event.CloseDialog.String())
 	rw.Header().Add("HX-Reswap", "none")
 	rw.AddRenderables(snackbar)
 
@@ -98,8 +97,6 @@ func (qq *MoveTagToGroupCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Req
 		return err
 	}
 
-	hxTarget := req.URL.Query().Get("hx-target")
-
 	var listItems []*widget.ListItem
 
 	if tag.GroupID > 0 {
@@ -107,10 +104,9 @@ func (qq *MoveTagToGroupCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Req
 			Headline: widget.T("Deselect group"),
 			Type:     widget.ListItemTypeHelper,
 			HTMXAttrs: widget.HTMXAttrs{
-				HxPost:   qq.Endpoint(),
-				HxVals:   util.JSON(qq.Data(data.TagID, 0)),
-				HxOn:     event.CloseDialog.HxOn("click"),
-				HxTarget: hxTarget,
+				HxPost: qq.Endpoint(),
+				HxVals: util.JSON(qq.Data(data.TagID, 0)),
+				HxSwap: "none",
 			},
 		})
 	}
@@ -123,10 +119,9 @@ func (qq *MoveTagToGroupCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Req
 			Headline: widget.Tu(groupTag.Name),
 
 			HTMXAttrs: widget.HTMXAttrs{
-				HxPost:   qq.Endpoint(),
-				HxVals:   util.JSON(qq.Data(data.TagID, groupTag.ID)),
-				HxOn:     event.CloseDialog.HxOn("click"),
-				HxTarget: hxTarget,
+				HxPost: qq.Endpoint(),
+				HxVals: util.JSON(qq.Data(data.TagID, groupTag.ID)),
+				HxSwap: "none",
 			},
 		})
 	}

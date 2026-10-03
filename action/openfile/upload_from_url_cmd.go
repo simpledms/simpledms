@@ -69,6 +69,7 @@ func (qq *UploadFromURLCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 	}
 
 	rw.AddRenderables(wx.NewSnackbarf("File uploaded, please select a space."))
+	// Context-selection exception: staging has committed before opening its chooser.
 	if req.Header.Get("HX-Request") != "" {
 		location, err := json.Marshal(map[string]string{
 			"path":   route.SelectSpace(uploadToken),

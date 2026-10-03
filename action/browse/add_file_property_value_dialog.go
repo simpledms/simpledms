@@ -123,6 +123,7 @@ func (qq *AddFilePropertyValueDialog) Form(
 		},
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.actions.AddFilePropertyValueCmd.Endpoint(),
+			HxSwap: "none",
 		},
 		Children: []widget.IWidget{
 			&widget.Container{

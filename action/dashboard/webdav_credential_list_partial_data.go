@@ -1,6 +1,7 @@
 package dashboard
 
 type WebDAVCredentialListPartialData struct {
+	CreatedDestination     string
 	Destination            string
 	CredentialStatusValues []string `url:"credential_status,omitempty"`
 }

@@ -1,6 +1,7 @@
 package openfile
 
 import (
+	"fmt"
 	"log"
 
 	acommon "github.com/simpledms/simpledms/action/common"
@@ -11,7 +12,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -109,16 +110,11 @@ func (qq *SelectSpacePage) Widget(
 					Headline:       widget.Tu(spacex.Name),
 					SupportingText: widget.Tu(tenantx.Name),
 					HTMXAttrs: widget.HTMXAttrs{
-						// redirecting to inbox instead of using a custom action like SelectSpace because
-						// this way we get the security check for space and tenant for free and don't have
-						// to be very careful in the custom action
-						// FIXME make type safe
-						// HxGet: route.InboxRoot(tenantx.PublicID.String(), spacex.PublicID.String()) + "?upload_token=" + uploadToken,
-						HxGet: route.InboxRootWithState(struct {
-							UploadToken string `url:"upload_token"`
-						}{
-							UploadToken: uploadToken,
-						})(tenantx.PublicID.String(), spacex.PublicID.String()),
+						// Explicit route context uses the router's ordinary tenant/Space authorization.
+						HxPost: fmt.Sprintf("/-/org/%s/space/%s/inbox/consume-uploads",
+							tenantx.PublicID, spacex.PublicID),
+						HxVals: util.JSON(map[string]string{"UploadToken": uploadToken}),
+						HxSwap: "none",
 					},
 				})
 			}

@@ -70,7 +70,7 @@ func (qq *EditMCPCredentialCmd) Handler(
 		return err
 	}
 
-	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
+	rw.Header().Set("HX-Trigger", event.MCPCredentialChanged.String())
 	rw.AddRenderables(widget.NewSnackbarf("Changes saved."))
 	return nil
 }

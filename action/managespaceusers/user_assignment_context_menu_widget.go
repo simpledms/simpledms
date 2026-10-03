@@ -27,6 +27,7 @@ func (qq *UserAssignmentContextMenuWidget) Widget(ctx ctxx.Context, userAssignme
 			Label:       widget.T("Unassign"),
 			HTMXAttrs: widget.HTMXAttrs{
 				HxPost: qq.actions.UnassignUserFromSpaceCmd.Endpoint(),
+				HxSwap: "none",
 				HxVals: util.JSON(qq.actions.UnassignUserFromSpaceCmd.Data(userAssignment.ID)),
 			},
 		})

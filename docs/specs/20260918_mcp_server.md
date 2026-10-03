@@ -46,7 +46,8 @@ dialogs, browser-state changes, and mutations. It is not an appropriate automati
 `Actionable.Handler` receives `httpx.ResponseWriter`, `*httpx.Request`, and `ctxx.Context`.
 [`FormData`](../../action/util/functions.go) decodes and validates form submissions. Browser
 tenant/Space selection comes from route parameters or `HX-Current-URL` in `Router.context`.
-`wrapCommand` renders queued widgets or dispatches a client-specified `X-Query-Endpoint` partial.
+`wrapCommand` renders queued feedback. The former client-specified `X-Query-Endpoint`
+dispatcher was removed by the [UI architecture migration](20261002_command_query_ui_audit.md).
 These are browser concerns, not a reusable tool execution interface.
 
 ### Some operations already have the right boundary
@@ -221,13 +222,12 @@ Retain `FormHelper`, existing `*Dialog`/`*Partial` types, snackbar widgets, and 
 Form decoration and `validate` tags are not an MCP schema. Bind each transport's representation
 to the same model inputs, with business validation in the model.
 
-Current handlers are mixed: rename and notes already use snackbar/events, while commands such
-as move, make-directory, and Tag assignment render fragments. Preserve their browser contract
-during extraction. Where converted to separated commands, return snackbar feedback and
-`HX-Trigger` events and let existing partial endpoints render refreshed HTML. Move UI composition
-only with its consumers, rather than changing all command responses as an MCP prerequisite.
+The authoritative browser contract is
+[Command / Query UI Flow](../../AGENTS.md#command--query-ui-flow). Earlier mixed response
+patterns documented here are historical findings, not implementation guidance. Move UI
+composition together with its consumers when extracting shared model operations.
 
-`HX-Current-URL`, `HX-Target`, `X-Query-Endpoint`, selected files, open dialogs, and expanded
+`HX-Current-URL`, `HX-Target`, selected files, open dialogs, and expanded
 groups stay in the browser adapter. An MCP call does not send HTMX headers or trigger an event in
 an unrelated open browser tab; subsequent browser reads see committed changes normally.
 

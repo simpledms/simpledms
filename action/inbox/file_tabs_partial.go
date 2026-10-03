@@ -99,11 +99,8 @@ func (qq *FileTabsPartial) Widget(
 						Type:     widget.ListItemTypeHelper,
 						HTMXAttrs: qq.actions.MoveFileCmd.ModalLinkAttrs(
 							qq.actions.MoveFileCmd.Data(nullableFile.Data.PublicID.String(), ""),
-							"#innerContent",
-						), /*.SetHxHeaders(autil.QueryHeader(
-							qq.actions.InboxPage.Endpoint(),
-							qq.actions.InboxPage.Data(),
-						)),*/
+							"",
+						),
 					},
 					widget.H(widget.HeadingTypeTitleMd, widget.T("Suggestions based on filename")),
 					qq.actions.ListInboxAssignmentSuggestionsPartial.Widget(ctx, nullableFile.Data.ID),

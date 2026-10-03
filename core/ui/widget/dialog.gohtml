@@ -116,6 +116,11 @@
 			// necessary to have local variables
 			(function() {
 				let dialog = document.getElementById('{{ .GetID }}');
+				{{ if .IsSideSheetLayout }}
+				// Morph retains this node and its listeners. Reinitializing it would reopen
+				// a user-closed sheet on wide screens and accumulate submit/close handlers.
+				if (dialog && dialog.openOnLoad) return;
+				{{ end }}
 
 				{{ if .IsSideSheetLayout }}
 					{{/*

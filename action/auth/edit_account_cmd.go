@@ -81,6 +81,10 @@ func (qq *EditAccountCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 
 	rw.AddRenderables(widget.NewSnackbarf("Account updated."))
 	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
+	if accountx.Language != data.Language {
+		// Language transitions refresh all translated chrome after the write commits.
+		rw.Header().Set("HX-Refresh", "true")
+	}
 
 	return nil
 }

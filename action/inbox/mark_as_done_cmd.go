@@ -10,6 +10,7 @@ import (
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	filingmodel "github.com/simpledms/simpledms/model/tenant/filing"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -72,33 +73,7 @@ func (qq *MarkAsDoneCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	rw.AddRenderables(
 		widget.NewSnackbarf("Marked file «%s» as done.", filex.Data.Name).WithAction(action),
 	)
+	rw.Header().Set("HX-Trigger", event.InboxChanged.String())
 
 	return nil
-
-	/*
-		state := autil.StateX[InboxPageState](rw, req)
-		selectedFileID := int64(0)
-
-		// duplicate in AssignFileCmd and MoveFileCmd
-		// select next file in queue
-		//
-		// OnlyX or OnlyID doesn't work with Limit, returns error if multiple before Limit is applied
-		files := qq.actions.ListFilesPartial.filesQuery(tx, state).Limit(1).AllX(ctx)
-		if len(files) == 0 {
-			selectedFileID = 0
-		} else {
-			selectedFileID = files[0].ID
-		}
-
-		rw.Header().Set("HX-Retarget", "#innerContent")
-		rw.Header().Set("HX-Reswap", "innerHTML")
-
-
-		return qq.infra.Renderer().Render(
-			rw,
-			qq.actions.InboxPage.WidgetHandler(rw, req, tx, selectedFileID),
-			wx.NewSnackbarf("Marked file «%s» as done.", oldFilename).WithAction(action),
-		)
-
-	*/
 }

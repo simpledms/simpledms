@@ -12,6 +12,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/entx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -77,26 +78,7 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 		}
 	}
 
-	// important that current dir from URL in case move was used from search results
-	dirIDStr := req.PathValue("dir_id")
-	// dirID64 := int64(0)
-	if dirIDStr == "" {
-		// load root
-		dirIDStr = ctx.SpaceCtx().SpaceRootDir().PublicID.String()
-	}
-
-	// TODO update URL: only if file is moved from file context menu
-
-	return qq.infra.Renderer().Render(
-		rw,
-		ctx,
-		qq.actions.ListDirPartial.WidgetHandler(
-			rw,
-			req,
-			ctx,
-			dirIDStr,
-			"",
-		),
-		widget.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
-	)
+	rw.Header().Set("HX-Trigger", event.FileMoved.String())
+	rw.AddRenderables(widget.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action))
+	return nil
 }

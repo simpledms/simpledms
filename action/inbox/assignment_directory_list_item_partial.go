@@ -79,10 +79,7 @@ func (qq *AssignmentDirectoryListItemPartial) Widget(
 		SupportingText: widget.Tu(supportingText),
 		HTMXAttrs: qq.actions.AssignFileCmd.ModalLinkAttrs(
 			qq.actions.AssignFileCmd.Data(destDir.PublicID.String(), fileToAssign.PublicID.String(), fileToAssign.Name),
-			"#innerContent",
-		).SetHxHeaders(autil.QueryHeader(
-			qq.actions.InboxPage.Endpoint(),
-			qq.actions.InboxPage.Data(),
-		)),
+			"",
+		),
 	}
 }

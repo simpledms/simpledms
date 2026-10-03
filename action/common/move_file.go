@@ -180,9 +180,8 @@ func (qq *MoveFile) Form(
 			ID: qq.formID(),
 		},
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.Endpoint(),
-			HxTarget: hxTargetForm,
-			HxSwap:   "outerHTML",
+			HxPost: qq.Endpoint(),
+			HxSwap: "none",
 		},
 		Children: []widget.IWidget{
 			&widget.Container{

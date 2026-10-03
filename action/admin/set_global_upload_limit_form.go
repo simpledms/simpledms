@@ -65,10 +65,6 @@ func (qq *SetGlobalUploadLimitForm) FormHandler(rw httpx.ResponseWriter, req *ht
 
 	wrapper := actionx.ResponseWrapper(req.URL.Query().Get("wrapper"))
 	hxTarget := req.URL.Query().Get("hx-target")
-	hxSwap := "outerHTML"
-	if hxTarget == "" {
-		hxSwap = "none"
-	}
 
 	var nilableFormSubmitLabel *widget.Text
 	if wrapper == actionx.ResponseWrapperNone {
@@ -90,9 +86,8 @@ func (qq *SetGlobalUploadLimitForm) FormHandler(rw httpx.ResponseWriter, req *ht
 
 	form := &widget.Form{
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.actions.SetGlobalUploadLimitCmd.Endpoint(),
-			HxTarget: hxTarget,
-			HxSwap:   hxSwap,
+			HxPost: qq.actions.SetGlobalUploadLimitCmd.Endpoint(),
+			HxSwap: "none",
 		},
 		SubmitLabel: nilableFormSubmitLabel,
 		Children: []widget.IWidget{

@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"html/template"
 	"log"
 	"strings"
 	"time"
@@ -56,6 +57,13 @@ func (qq *WebDAVCredentialListPartial) Handler(
 	}
 	state := autil.StateX[WebDAVCredentialListPartialData](rw, req)
 	data.CredentialStatusValues = state.CredentialStatusValues
+	if data.CreatedDestination != "" {
+		data.Destination, err = webDAVCredentialDestinationKeyByValue(ctx, data.CreatedDestination)
+		if err != nil {
+			return err
+		}
+		data.CreatedDestination = ""
+	}
 	overview, err := qq.Widget(ctx, req, data)
 	if err != nil {
 		log.Println(err)
@@ -68,21 +76,6 @@ func (qq *WebDAVCredentialListPartial) Handler(
 			qq.actions.WebDAVCredentialsPage.filterButton(data, true),
 		},
 	})
-}
-
-// WidgetOOB renders the list for an out-of-band swap, for example to select the tab of a
-// newly created credential from a command response.
-func (qq *WebDAVCredentialListPartial) WidgetOOB(
-	ctx ctxx.Context,
-	req *httpx.Request,
-	data *WebDAVCredentialListPartialData,
-) (*widget.Container, error) {
-	overview, err := qq.Widget(ctx, req, data)
-	if err != nil {
-		return nil, err
-	}
-	overview.HxSwapOOB = "outerHTML"
-	return overview, nil
 }
 
 func (qq *WebDAVCredentialListPartial) Widget(
@@ -138,11 +131,14 @@ func (qq *WebDAVCredentialListPartial) Widget(
 		Child:     content,
 		HTMXAttrs: widget.HTMXAttrs{
 			HxTrigger: event.HxTrigger(
-				event.AccountUpdated,
+				event.WebDAVCredentialChanged,
 				event.WebDAVCredentialFilterChanged,
 			),
-			HxPost:   qq.Endpoint(),
-			HxVals:   util.JSON(data),
+			HxPost: qq.Endpoint(),
+			// hx-vals can also be evaluated by nested form submissions; guard the event.
+			HxVals: template.JS("js:{..." + string(util.JSON(data)) +
+				",CreatedDestination:(event && event.type === 'webDAVCredentialChanged' && " +
+				"event.detail) ? (event.detail.destination || '') : ''}"),
 			HxTarget: "#" + qq.id(),
 			HxSwap:   "outerHTML",
 		},

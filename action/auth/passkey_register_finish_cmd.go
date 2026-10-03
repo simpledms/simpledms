@@ -78,6 +78,8 @@ func (qq *PasskeyRegisterFinishCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 		recoveryCodesToken = qq.store.Store(recoveryCodes)
 	}
 
+	// WebAuthn transport exception: passkey.js emits AccountUpdated after this
+	// commit-buffered JSON response; recovery codes are a one-time result.
 	return writeJSONResponse(rw, http.StatusOK, struct {
 		RecoveryCodesToken string `json:"recoveryCodesToken,omitempty"`
 	}{

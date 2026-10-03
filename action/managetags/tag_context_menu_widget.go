@@ -31,6 +31,7 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *w
 		Label:       widget.T("Delete"),
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.actions.Tagging.DeleteTagCmd.Endpoint(),
+			HxSwap:    "none",
 			HxVals:    util.JSON(qq.actions.Tagging.DeleteTagCmd.Data(tagx.ID)),
 			HxConfirm: widget.T("Are you sure? This action will delete the tag and unassign it from all files!").String(ctx),
 		},

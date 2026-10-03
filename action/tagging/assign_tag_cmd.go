@@ -68,7 +68,6 @@ func (qq *AssignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		qq.actions.AssignedTags.EditListItem.ListItem(ctx, data.FileID, tag),
 		wx.NewSnackbarf("«%s» assigned.", tag.Name),
 	)
 }

@@ -8,7 +8,6 @@ import (
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/txx"
 )
 
 type InboxRootPage struct {
@@ -35,10 +34,7 @@ func (qq *InboxRootPage) Handler(
 	if err != nil {
 		return err
 	}
-	_, err = txx.WithTenantReadSpaceTx(ctx.SpaceCtx(), func(readCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, qq.render(rw, req, readCtx, state)
-	})
-	return err
+	return qq.render(rw, req, ctx, state)
 }
 
 func (qq *InboxRootPage) render(

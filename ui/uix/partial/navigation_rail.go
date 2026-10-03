@@ -12,6 +12,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	tenantmodel "github.com/simpledms/simpledms/model/main/tenant"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 )
 
@@ -26,6 +27,21 @@ func NewNavigationRail(
 		// must be after main block, otherwise margin is added on top
 		// and z-index: 1 is necessary on fab
 		FABs: fabs,
+		HTMXAttrs: widget.HTMXAttrs{
+			HxGet:     ".",
+			HxPushURL: "false",
+			HxTarget:  "#navigationRailAndBar",
+			HxSelect:  "#navigationRailAndBar",
+			HxSwap:    "outerHTML",
+			HxTrigger: event.HxTrigger(event.SpaceCreated, event.SpaceUpdated, event.SpaceDeleted,
+				event.AccountUpdated, event.UserAssignedToSpace, event.UserUnassignedFromSpace),
+			// Requery the actual page so its context, active destination and FABs survive.
+			HxOn: &widget.HxOn{
+				Event: "htmx:config-request",
+				Handler: "if (event.detail.elt === this) { " +
+					"event.detail.path = window.location.pathname + window.location.search; }",
+			},
+		},
 	}
 
 	if isTenantPasskeyEnrollmentRequired(ctx) {

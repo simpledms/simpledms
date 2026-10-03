@@ -3,20 +3,20 @@ package inbox
 // package action
 
 import (
-	"log"
 	"net/http"
-	"time"
+	"net/url"
+	"strings"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/entmain/temporaryfile"
+	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/txx"
 )
 
 // TODO necessary?
@@ -39,8 +39,8 @@ type InboxPage struct {
 func NewInboxPage(infra *common.Infra, actions *Actions) *InboxPage {
 	config := actionx.NewConfig(
 		actions.Route("inbox-page"),
-		false,
-	).EnableManualTxManagement()
+		true,
+	)
 	return &InboxPage{
 		infra:   infra,
 		actions: actions,
@@ -52,18 +52,14 @@ func (qq *InboxPage) Data() *InboxPageData {
 	return &InboxPageData{}
 }
 
-// used in Query, for example MarkAsDoneCmd
-// TODO refactor, legacy code
+// Lifecycle notifications query the next valid selection in the current filtered Inbox.
 func (qq *InboxPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	state, err := qq.prepareState(rw, req, ctx)
 	if err != nil {
 		return err
 	}
 
-	_, err = txx.WithTenantReadSpaceTx(ctx.SpaceCtx(), func(readCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, qq.render(rw, req, readCtx, state)
-	})
-	return err
+	return qq.render(rw, req, ctx, state)
 }
 
 func (qq *InboxPage) render(
@@ -75,20 +71,31 @@ func (qq *InboxPage) render(
 
 	selectedFileID := ""
 
-	// duplicate in AssignFileCmd and MoveFileCmd
-	// select next file in queue
-	//
-	// OnlyX or OnlyID doesn't work with Limit, returns error if multiple before Limit is applied
-	files := qq.actions.ListFilesPartial.filesQuery(ctx, state).Limit(1).AllX(ctx)
-	if len(files) == 0 {
-		selectedFileID = ""
-	} else {
-		selectedFileID = files[0].PublicID.String()
+	if current, err := url.Parse(req.Header.Get("HX-Current-URL")); err == nil {
+		selectedFileID = strings.TrimPrefix(current.Path,
+			route.InboxRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID))
+		if strings.Contains(selectedFileID, "/") {
+			selectedFileID = ""
+		}
 	}
-
-	// TODO necessary?
+	if selectedFileID != "" && !qq.actions.ListFilesPartial.filesQuery(ctx, state).
+		Where(file.PublicID(entx.NewCIText(selectedFileID))).ExistX(ctx) {
+		selectedFileID = ""
+		// OnlyX does not support Limit; query a slice to select the next result.
+		files := qq.actions.ListFilesPartial.filesQuery(ctx, state).Limit(1).AllX(ctx)
+		if len(files) > 0 {
+			selectedFileID = files[0].PublicID.String()
+		}
+	}
+	currentURL := route.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID)
+	if selectedFileID != "" {
+		currentURL = route.InboxWithState(state)(
+			ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, selectedFileID,
+		)
+	}
+	rw.Header().Set("HX-Replace-Url", currentURL)
 	rw.Header().Set("HX-Retarget", "#innerContent")
-	rw.Header().Set("HX-Reswap", "innerHTML")
+	rw.Header().Set("HX-Reswap", "morph:innerHTML")
 	view, err := qq.Widget(ctx, state, selectedFileID)
 	if err != nil {
 		return err
@@ -118,35 +125,27 @@ func (qq *InboxPage) WidgetHandler(
 	return qq.Widget(ctx, state, selectedFileID)
 }
 
-// prepareState finishes staged-file conversion before any rendering snapshot is opened.
+// Staged uploads are consumed by ConsumeUploadsCmd, never while rendering a query.
 func (qq *InboxPage) prepareState(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	ctx ctxx.Context,
 ) (*InboxPageState, error) {
 	state := autil.StateX[InboxPageState](rw, req)
+	if err := req.ParseForm(); err != nil {
+		return nil, err
+	}
+	if req.PostForm.Has("SearchQuery") {
+		state.SearchQuery = req.PostForm.Get("SearchQuery")
+	}
+	if req.PostForm.Has("SourceValues") {
+		state.SourceValues = req.PostForm["SourceValues"]
+	}
+	state.UploadToken = ""
 	if _, err := state.sources(); err != nil {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid source filter.")
 	}
 
-	// in WidgetHandler because it used legacy InboxPage style where WidgetHandler is called in page.Inbox
-	if state.UploadToken != "" {
-		// must be first before the data gets read
-		err := qq.processTemporaryFiles(rw, ctx, state)
-		if err != nil {
-			return nil, err
-		}
-		if err := ctx.Err(); err != nil {
-			return nil, err
-		}
-
-		state.UploadToken = ""
-		// remove Upload Token from URL to prevent "now files found" message on reload
-		// TODO doesn't work on errors; okay or not?
-		rw.Header().Set("HX-Replace-Url", route.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID))
-
-		// TODO select first file?
-	}
 	// TODO is this the correct place?
 	// TODO why is this necessary?
 	/* commented on 28.01.2026 because it kept side_sheet param in URL alive when switching
@@ -184,46 +183,4 @@ func (qq *InboxPage) Widget(
 	}
 
 	return listDetailLayout, nil
-}
-
-func (qq *InboxPage) processTemporaryFiles(rw httpx.ResponseWriter, ctx ctxx.Context, state *InboxPageState) error {
-	ctx = ctxx.WithoutCancel(ctx.SpaceCtx())
-
-	tmpFiles, err := ctx.MainCtx().UnsafeMainDB().ReadOnlyConn.TemporaryFile.Query().Where(
-		temporaryfile.OwnerID(ctx.MainCtx().Account.ID),
-		temporaryfile.UploadToken(state.UploadToken),
-		temporaryfile.ConvertedToStoredFileAtIsNil(),
-		temporaryfile.ExpiresAtGT(time.Now()),
-	).All(ctx.MainCtx())
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-
-	if len(tmpFiles) == 0 {
-		rw.AddRenderables(widget.NewSnackbarf("No new files found."))
-		return nil
-	}
-
-	for _, tmpFile := range tmpFiles {
-		prep, err := txx.WithTenantWriteSpaceTx(ctx.SpaceCtx(), func(writeCtx *ctxx.SpaceContext) (*struct{ rootID int64 }, error) {
-			return &struct{ rootID int64 }{rootID: writeCtx.SpaceRootDir().ID}, nil
-		})
-		if err != nil {
-			return err
-		}
-		_, err = qq.infra.FileSystem().PreparePersistingTemporaryAccountFile(
-			ctx,
-			tmpFile,
-			prep.rootID,
-			true,
-		)
-		if err != nil {
-			log.Println("error saving tmp file", err)
-			return err
-		}
-	}
-
-	rw.AddRenderables(widget.NewSnackbarf("Files uploaded successfully."))
-	return nil
 }

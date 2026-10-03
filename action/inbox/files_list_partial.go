@@ -1,9 +1,9 @@
 package inbox
 
 import (
-	"html/template"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -139,7 +139,16 @@ func (qq *FilesListPartial) Handler(
 		return err
 	}
 
-	state := autil.StateX[InboxPageState](rw, req)
+	state, err := qq.actions.InboxPage.prepareState(rw, req, ctx)
+	if err != nil {
+		return err
+	}
+	if current, err := url.Parse(req.Header.Get("HX-Current-URL")); err == nil {
+		prefix := route.InboxRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID)
+		if strings.HasPrefix(current.Path, prefix) {
+			data.SelectedFileID = strings.TrimPrefix(current.Path, prefix)
+		}
+	}
 	state.normalizeSortBy()
 	if _, err := state.sources(); err != nil {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid source filter.")
@@ -147,7 +156,13 @@ func (qq *FilesListPartial) Handler(
 
 	hxTarget := req.URL.Query().Get("hx-target")
 	if hxTarget == "#"+qq.FileListID() {
-		rw.Header().Set("HX-Replace-Url", route.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID))
+		currentURL := route.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID)
+		if data.SelectedFileID != "" {
+			currentURL = route.InboxWithState(state)(
+				ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, data.SelectedFileID,
+			)
+		}
+		rw.Header().Set("HX-Replace-Url", currentURL)
 		fileList := qq.filesList(
 			ctx,
 			state,
@@ -236,16 +251,9 @@ func (qq *FilesListPartial) Widget(
 	state.normalizeSortBy()
 
 	var children []widget.IWidget
-	var appBar *widget.AppBar
-
-	if selectedFileID == "" {
-		appBar = qq.appBar(ctx, state)
-	} else {
-		appBar = &widget.AppBar{
-			Title:   widget.T("Inbox"),
-			Leading: widget.NewIcon("inbox"),
-		}
-	}
+	// Keep the same filter controls available while details are selected; refresh
+	// requests include their live values and must also work after a direct detail GET.
+	appBar := qq.appBar(ctx, state)
 
 	children = append(children,
 		qq.filesList(
@@ -261,7 +269,7 @@ func (qq *FilesListPartial) Widget(
 		},
 		GapYSize: widget.Gap2,
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.EndpointWithParams(actionx.ResponseWrapperNone, ""),
+			HxPost:   qq.actions.InboxPage.Endpoint(),
 			HxVals:   util.JSON(qq.Data(selectedFileID)), // overrides form fields, must be added via HxInclude
 			HxTarget: "#innerContent",                    // not just fileList because of sortBy selection
 			HxSwap:   "innerHTML",
@@ -271,8 +279,16 @@ func (qq *FilesListPartial) Widget(
 				event.SourceFilterChanged.HandlerWithModifier(htmxInputDelay),
 				event.FileMoved.Handler(),   // because it also has to close details
 				event.FileDeleted.Handler(), // because it also has to close details
+				event.InboxChanged.Handler(),
+				event.FileVersionMerged.Handler(),
+				event.FileListPreferencesUpdated.Handler(),
 			}, ", "),
 			HxInclude: inboxListInputSelector,
+			HxOn: &widget.HxOn{
+				Event: "htmx:before-request",
+				Handler: "if (event.detail.elt === this && " +
+					"!window.location.pathname.includes('/inbox/')) event.preventDefault()",
+			},
 		},
 		Children: children,
 	}
@@ -342,13 +358,22 @@ func (qq *FilesListPartial) filesList(
 				// updating the app bar while using the search input leads to flickering and
 				// loss of input while typing
 				event.SearchQueryUpdated.HandlerWithModifier(htmxInputDelay),
-				event.SourceFilterChanged.HandlerWithModifier(htmxInputDelay),
 				event.FileUploaded.Handler(),
 				event.ZIPArchiveUnzipped.Handler(), // TODO necessary?
-				event.FileDeleted.Handler(),
 				event.FileUpdated.Handler(),
+				event.FilePropertyUpdated.Handler(),
+				event.FileDocumentTypeUpdated.Handler(),
+				event.TagCreated.Handler(),
+				event.TagUpdated.Handler(),
+				event.TagDeleted.Handler(),
 			}, ", "),
 			HxInclude: inboxListInputSelector,
+			// Cancel an outgoing island's late notification during a capability transition.
+			HxOn: &widget.HxOn{
+				Event: "htmx:before-request",
+				Handler: "if (event.detail.elt === this && " +
+					"!window.location.pathname.includes('/inbox/')) event.preventDefault()",
+			},
 		},
 	}
 }
@@ -515,7 +540,6 @@ func (qq *FilesListPartial) fileListViewButton(ctx ctxx.Context) *widget.IconBut
 		Children: qq.fileListViewMenu(
 			ctx,
 			preferences,
-			autil.QueryHeader(qq.Endpoint(), qq.Data("")),
 		),
 	}
 }
@@ -523,11 +547,10 @@ func (qq *FilesListPartial) fileListViewButton(ctx ctxx.Context) *widget.IconBut
 func (qq *FilesListPartial) fileListViewMenu(
 	ctx ctxx.Context,
 	preferences *filelistpreference.FileListPreferences,
-	hxHeaders template.JS,
 ) *widget.Menu {
 	items := []*widget.MenuItem{
-		qq.fileListViewMenuItem(widget.T("List"), "list", preferences.ViewMode == filelistpreference.FileListViewModeList, hxHeaders),
-		qq.fileListViewMenuItem(widget.T("Table"), "table", preferences.ViewMode == filelistpreference.FileListViewModeTable, hxHeaders),
+		qq.fileListViewMenuItem(widget.T("List"), "list", preferences.ViewMode == filelistpreference.FileListViewModeList),
+		qq.fileListViewMenuItem(widget.T("Table"), "table", preferences.ViewMode == filelistpreference.FileListViewModeTable),
 	}
 	if !preferences.IsTable() {
 		return &widget.Menu{
@@ -557,13 +580,12 @@ func (qq *FilesListPartial) fileListViewMenu(
 			column.label,
 			column.column.String(),
 			preferences.HasBuiltInColumn(column.column),
-			hxHeaders,
 		))
 	}
 
 	spaceColumns := preferences.SpaceColumnsFor(ctx.SpaceCtx().SpaceID)
 	showTags := !spaceColumns.ShowTags
-	items = append(items, qq.fileListTagsMenuItem(widget.T("Tags"), showTags, spaceColumns.ShowTags, hxHeaders))
+	items = append(items, qq.fileListTagsMenuItem(widget.T("Tags"), showTags, spaceColumns.ShowTags))
 
 	tagGroups := ctx.SpaceCtx().Space.QueryTags().
 		Where(tag.TypeEQ(tagtype.Group)).
@@ -577,7 +599,6 @@ func (qq *FilesListPartial) fileListViewMenu(
 			widget.Tu(tagGroup.Name),
 			tagGroup.ID,
 			spaceColumns.HasTagGroupID(tagGroup.ID),
-			hxHeaders,
 		))
 	}
 
@@ -590,7 +611,6 @@ func (qq *FilesListPartial) fileListViewMenu(
 			widget.Tu(propertyx.Name),
 			propertyx.ID,
 			spaceColumns.HasPropertyID(propertyx.ID),
-			hxHeaders,
 		))
 	}
 
@@ -607,7 +627,6 @@ func (qq *FilesListPartial) fileListViewMenuItem(
 	label *widget.Text,
 	viewMode string,
 	isSelected bool,
-	hxHeaders template.JS,
 ) *widget.MenuItem {
 	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
 	data.ViewMode = viewMode
@@ -616,7 +635,7 @@ func (qq *FilesListPartial) fileListViewMenuItem(
 		RadioGroupName: "FileListViewMode",
 		RadioValue:     viewMode,
 		IsSelected:     isSelected,
-		HTMXAttrs:      qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+		HTMXAttrs:      qq.fileListPreferencesMenuItemAttrs(data),
 	}
 }
 
@@ -624,7 +643,6 @@ func (qq *FilesListPartial) fileListColumnMenuItem(
 	label *widget.Text,
 	column string,
 	isChecked bool,
-	hxHeaders template.JS,
 ) *widget.MenuItem {
 	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
 	data.BuiltInColumn = column
@@ -633,7 +651,7 @@ func (qq *FilesListPartial) fileListColumnMenuItem(
 		CheckboxName:  "FileListColumn",
 		CheckboxValue: column,
 		IsChecked:     isChecked,
-		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data),
 	}
 }
 
@@ -641,7 +659,6 @@ func (qq *FilesListPartial) fileListTagsMenuItem(
 	label *widget.Text,
 	showTags bool,
 	isChecked bool,
-	hxHeaders template.JS,
 ) *widget.MenuItem {
 	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
 	data.ShowTags = &showTags
@@ -650,7 +667,7 @@ func (qq *FilesListPartial) fileListTagsMenuItem(
 		CheckboxName:  "FileListTags",
 		CheckboxValue: "tags",
 		IsChecked:     isChecked,
-		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data),
 	}
 }
 
@@ -658,7 +675,6 @@ func (qq *FilesListPartial) fileListPropertyMenuItem(
 	label *widget.Text,
 	propertyID int64,
 	isChecked bool,
-	hxHeaders template.JS,
 ) *widget.MenuItem {
 	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
 	data.PropertyID = propertyID
@@ -667,7 +683,7 @@ func (qq *FilesListPartial) fileListPropertyMenuItem(
 		CheckboxName:  "FileListProperty",
 		CheckboxValue: strconv.FormatInt(propertyID, 10),
 		IsChecked:     isChecked,
-		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data),
 	}
 }
 
@@ -675,7 +691,6 @@ func (qq *FilesListPartial) fileListTagGroupMenuItem(
 	label *widget.Text,
 	tagGroupID int64,
 	isChecked bool,
-	hxHeaders template.JS,
 ) *widget.MenuItem {
 	data := qq.actions.Browse.UpdateFileListPreferencesCmd.Data()
 	data.TagGroupID = tagGroupID
@@ -684,19 +699,16 @@ func (qq *FilesListPartial) fileListTagGroupMenuItem(
 		CheckboxName:  "FileListTagGroup",
 		CheckboxValue: strconv.FormatInt(tagGroupID, 10),
 		IsChecked:     isChecked,
-		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data),
 	}
 }
 
 func (qq *FilesListPartial) fileListPreferencesMenuItemAttrs(
 	data *browse.UpdateFileListPreferencesCmdData,
-	hxHeaders template.JS,
 ) widget.HTMXAttrs {
 	return widget.HTMXAttrs{
-		HxPost:    qq.actions.Browse.UpdateFileListPreferencesCmd.Endpoint(),
-		HxVals:    util.JSON(data),
-		HxHeaders: hxHeaders,
-		HxTarget:  "#innerContent",
-		HxSwap:    "innerHTML",
+		HxPost: qq.actions.Browse.UpdateFileListPreferencesCmd.Endpoint(),
+		HxVals: util.JSON(data),
+		HxSwap: "none",
 	}
 }

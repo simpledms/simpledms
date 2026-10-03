@@ -71,7 +71,7 @@ func (qq *AddPropertyAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 		return err
 	}
 
-	attributex, err := documentTypex.CreatePropertyAttribute(ctx, data.PropertyID, data.IsNameGiving)
+	_, err = documentTypex.CreatePropertyAttribute(ctx, data.PropertyID, data.IsNameGiving)
 	if err != nil {
 		return err
 	}
@@ -79,12 +79,10 @@ func (qq *AddPropertyAttributeCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.DocumentTypeAttributeCreated.String()) // TODO okay?
 
-	propertyx := attributex.QueryProperty().OnlyX(ctx)
-
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		widget.NewSnackbarf("Attribute «%s» added.", propertyx.Name),
+		widget.NewSnackbarf("Attribute updated."),
 	)
 }
 
@@ -124,9 +122,8 @@ func (qq *AddPropertyAttributeCmd) Form(
 			ID: qq.formID(),
 		},
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.Endpoint(),
-			HxTarget: hxTarget,
-			HxSwap:   "outerHTML",
+			HxPost: qq.Endpoint(),
+			HxSwap: "none",
 		},
 		Children: []widget.IWidget{
 			&widget.Container{

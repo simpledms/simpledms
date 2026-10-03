@@ -53,13 +53,11 @@ func (qq *RenameFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request
 	}
 
 	wrapper := req.URL.Query().Get("wrapper")
-	hxTarget := req.URL.Query().Get("hx-target")
 
 	form := &widget.Form{
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.Endpoint(),
-			HxTarget: hxTarget,
-			HxSwap:   "outerHTML",
+			HxPost: qq.Endpoint(),
+			HxSwap: "none",
 		},
 		Children: []widget.IWidget{
 			widget.NewFormFields(ctx, data),
@@ -110,22 +108,3 @@ func (qq *RenameFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 
 	return nil
 }
-
-/*
-func (qq *RenameFileCmd) Widget(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context, filex *filemodel.File) *wx.ListDetailLayout {
-	parent, err := filex.Parent(ctx)
-	if err != nil {
-		log.Println(err)
-		panic(err)
-	}
-	// complete list because order can change
-	// TODO selected file?
-	return qq.actions.ListDirPartial.WidgetHandler(
-		rw,
-		req,
-		ctx,
-		parent.Data.PublicID.String(),
-		"",
-	)
-}
-*/

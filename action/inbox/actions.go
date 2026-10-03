@@ -32,6 +32,7 @@ type Actions struct {
 	TransferFileDialog *TransferFileDialog
 	UploadFileCmd      *UploadFileCmd
 	MarkAsDoneCmd      *MarkAsDoneCmd
+	ConsumeUploadsCmd  *ConsumeUploadsCmd
 }
 
 func NewActions(
@@ -67,7 +68,8 @@ func NewActions(
 		TransferFileDialog: NewTransferFileDialog(infra, actions),
 		UploadFileCmd:      NewUploadFileCmd(infra, actions),
 
-		MarkAsDoneCmd: NewMarkAsDoneCmd(infra, actions),
+		MarkAsDoneCmd:     NewMarkAsDoneCmd(infra, actions),
+		ConsumeUploadsCmd: NewConsumeUploadsCmd(infra),
 	}
 
 	// uses actions in constructor, thus outside

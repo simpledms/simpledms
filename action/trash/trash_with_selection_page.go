@@ -90,6 +90,7 @@ func (qq *TrashWithSelectionPage) widget(
 	}
 
 	listDetailLayout := &widget.ListDetailLayout{
+		Widget: widget.Widget[widget.ListDetailLayout]{ID: "trashLayout"},
 		AppBar: qq.appBar(ctx),
 		List:   qq.actions.TrashListPartial.Widget(ctx, qq.actions.TrashListPartial.Data(filex.Data.PublicID.String())),
 		Detail: filePreview,
@@ -169,6 +170,7 @@ func (qq *TrashWithSelectionPage) previewAppBar(ctx ctxx.Context, title *widget.
 				Tooltip: widget.T("Restore"),
 				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:    qq.actions.RestoreFileCmd.Endpoint(),
+					HxSwap:    "none",
 					HxVals:    util.JSON(qq.actions.RestoreFileCmd.DataWithOptions(filex.Data.PublicID.String())),
 					HxConfirm: widget.T("Are you sure?").String(ctx),
 				},
