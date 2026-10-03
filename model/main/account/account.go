@@ -425,7 +425,15 @@ func (qq *Account) SetTemporaryPassword(ctx context.Context, password string) (t
 
 }
 
-func (qq *Account) ChangePassword(ctx ctxx.Context, currentPassword, newPassword, confirmPassword string) error {
+// ChangePassword keeps the session identified by currentSessionValue and signs out all
+// other sessions, so that a compromised session does not survive the change.
+func (qq *Account) ChangePassword(
+	ctx ctxx.Context,
+	currentPassword string,
+	newPassword string,
+	confirmPassword string,
+	currentSessionValue string,
+) error {
 	isTemporaryPasswordValid, err := qq.isTemporaryPasswordValid(currentPassword)
 	if err != nil {
 		log.Println(err)
@@ -439,12 +447,23 @@ func (qq *Account) ChangePassword(ctx ctxx.Context, currentPassword, newPassword
 		return e.NewHTTPErrorf(http.StatusBadRequest, "New password must be different from current password.")
 	}
 
-	return qq.SetPassword(ctx, newPassword, confirmPassword)
+	return qq.setPasswordAndSignOutOtherSessions(
+		ctx,
+		newPassword,
+		confirmPassword,
+		currentSessionValue,
+	)
 }
 
 // SetInitialPassword lets accounts that signed in with a temporary password choose a
 // password. Replacing an existing password requires ChangePassword and the current password.
-func (qq *Account) SetInitialPassword(ctx ctxx.Context, password, confirmPassword string) error {
+// Other sessions are signed out because the temporary password may have been intercepted.
+func (qq *Account) SetInitialPassword(
+	ctx ctxx.Context,
+	password string,
+	confirmPassword string,
+	currentSessionValue string,
+) error {
 	if qq.HasPassword() {
 		return e.NewHTTPErrorf(
 			http.StatusBadRequest,
@@ -452,7 +471,38 @@ func (qq *Account) SetInitialPassword(ctx ctxx.Context, password, confirmPasswor
 		)
 	}
 
-	return qq.SetPassword(ctx, password, confirmPassword)
+	return qq.setPasswordAndSignOutOtherSessions(
+		ctx,
+		password,
+		confirmPassword,
+		currentSessionValue,
+	)
+}
+
+func (qq *Account) setPasswordAndSignOutOtherSessions(
+	ctx ctxx.Context,
+	password string,
+	confirmPassword string,
+	currentSessionValue string,
+) error {
+	if strings.TrimSpace(currentSessionValue) == "" {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid session cookie.")
+	}
+	if err := qq.SetPassword(ctx, password, confirmPassword); err != nil {
+		return err
+	}
+
+	_, err := ctx.MainCtx().MainTx.Session.Delete().
+		Where(
+			session.AccountID(qq.Data.ID),
+			session.ValueNEQ(currentSessionValue),
+		).
+		Exec(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }
 
 func (qq *Account) SetPassword(ctx ctxx.Context, password, confirmPassword string) error {

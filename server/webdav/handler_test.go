@@ -62,7 +62,7 @@ func TestWebDAVRateLimitRemoteAddrUsesOnlyTrustedForwardedChain(t *testing.T) {
 		{
 			remoteAddr:   "198.51.100.10:1234",
 			forwardedFor: "203.0.113.10",
-			want:         "198.51.100.10:1234",
+			want:         "198.51.100.10",
 		},
 		{
 			remoteAddr:   "192.0.2.10:1234",
@@ -77,7 +77,7 @@ func TestWebDAVRateLimitRemoteAddrUsesOnlyTrustedForwardedChain(t *testing.T) {
 		{
 			remoteAddr:   "192.0.2.10:1234",
 			forwardedFor: "198.51.100.10, invalid",
-			want:         "192.0.2.10:1234",
+			want:         "192.0.2.10",
 		},
 	} {
 		req := httptest.NewRequest(http.MethodOptions, "/", nil)

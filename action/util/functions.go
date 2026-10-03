@@ -377,3 +377,15 @@ func WrapWidgetWithID(
 
 	return form
 }
+
+// RequireTenantOwner guards owner-only organization queries. It checks the tenant user
+// role, the same source as the Space policy and the user management commands.
+func RequireTenantOwner(ctx ctxx.Context) error {
+	if !ctx.IsTenantCtx() || ctx.TenantCtx().User.Role != tenantrole.Owner {
+		return e.NewHTTPErrorf(
+			http.StatusForbidden,
+			"Only organization owners can manage users and settings.",
+		)
+	}
+	return nil
+}

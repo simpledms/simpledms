@@ -20,7 +20,6 @@ import (
 
 	"filippo.io/age"
 	securejoin "github.com/cyphar/filepath-securejoin"
-	"github.com/gorilla/handlers"
 	"github.com/marcobeierer/go-tika"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -402,15 +401,8 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	qq.migrateTenantDatabases(ctx, mainDB, tenantDBs)
 	qq.startScheduler(infra, mainDB, tenantDBs, minioClient, systemConfig, rawSystemConfig)
 
-	handlerChain := handlers.CompressHandler(
-		handlers.RecoveryHandler(
-			handlers.PrintRecoveryStack(true),
-		)(
-			// see https://words.filippo.io/csrf/ for implementation details
-			securityHeadersHandler(http.NewCrossOriginProtection().Handler(router)),
-			// handlers.LoggingHandler(),
-		),
-	)
+	// see https://words.filippo.io/csrf/ for implementation details
+	handlerChain := newPublicHandler(http.NewCrossOriginProtection().Handler(router))
 
 	return &PreparedServer{
 		server:          qq,
@@ -619,12 +611,7 @@ func (qq *Server) startAutocertIfRequired(systemConfigx *entmain.SystemConfig) (
 	go func() {
 		recoverx.Recover("autocert server")
 
-		autocertServer := &http.Server{
-			Addr:              ":http",
-			Handler:           manager.HTTPHandler(nil),
-			ReadHeaderTimeout: readHeaderTimeout,
-		}
-		err := autocertServer.ListenAndServe()
+		err := newHTTPServer(":http", manager.HTTPHandler(nil)).ListenAndServe()
 		if err != nil {
 			log.Println(err)
 		}
@@ -643,14 +630,12 @@ func (qq *Server) ensureMainIdentity(
 	manager *autocert.Manager,
 ) {
 	if systemConfigx.IsIdentityEncryptedWithPassphrase {
-		maintenanceModeServer := http.Server{
-			Addr: fmt.Sprintf(":%d", qq.port(
-				useAutocert,
-				systemConfigx.TLSCertFilepath,
-				systemConfigx.TLSPrivateKeyFilepath,
-			)),
-			ReadHeaderTimeout: readHeaderTimeout,
-		}
+		// The handler is assigned below because the stop callback references this server.
+		maintenanceModeServer := newHTTPServer(fmt.Sprintf(":%d", qq.port(
+			useAutocert,
+			systemConfigx.TLSCertFilepath,
+			systemConfigx.TLSPrivateKeyFilepath,
+		)), nil)
 
 		maintenanceMux := newMaintenanceModeHandler(
 			mainDB,
@@ -662,19 +647,11 @@ func (qq *Server) ensureMainIdentity(
 			trustedProxies,
 			qq.commercialLicenseEnabled,
 			func() {
-				stopMaintenanceModeServer(&maintenanceModeServer)
+				stopMaintenanceModeServer(maintenanceModeServer)
 			},
 		)
 
-		handlerChain := handlers.CompressHandler(
-			handlers.RecoveryHandler(
-				handlers.PrintRecoveryStack(true),
-			)(
-				securityHeadersHandler(maintenanceMux),
-			),
-		)
-
-		maintenanceModeServer.Handler = handlerChain
+		maintenanceModeServer.Handler = newPublicHandler(maintenanceMux)
 		maintenanceListenMode := resolveListenMode(
 			useAutocert,
 			systemConfigx.TLSCertFilepath,

@@ -132,35 +132,11 @@ func (qq *Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		req = req.Clone(req.Context())
 		req.URL.Scheme = "https"
 	}
-	if clientIP, ok := qq.clientIP(req); ok {
+	// Rate limits keyed on a reverse proxy address would be shared by all clients.
+	if clientIP, ok := httpx.ClientIPThroughTrustedProxies(req, qq.trustedProxies); ok {
 		req = httpx.WithClientIP(req, clientIP)
 	}
 	qq.ServeMux.ServeHTTP(rw, req)
-}
-
-// clientIP uses the rightmost untrusted X-Forwarded-For address when the direct peer is
-// a trusted proxy. Rate limits keyed on the proxy address would be shared by all clients.
-func (qq *Router) clientIP(req *http.Request) (netip.Addr, bool) {
-	addrPort, err := netip.ParseAddrPort(req.RemoteAddr)
-	if err != nil {
-		return netip.Addr{}, false
-	}
-	directAddr := addrPort.Addr().Unmap()
-	if !qq.isTrustedProxyAddr(addrPort.Addr()) {
-		return directAddr, true
-	}
-
-	forwardedFor := strings.Split(req.Header.Get("X-Forwarded-For"), ",")
-	for _, forwardedAddr := range slices.Backward(forwardedFor) {
-		addr, err := netip.ParseAddr(strings.TrimSpace(forwardedAddr))
-		if err != nil {
-			return directAddr, true
-		}
-		if !qq.isTrustedProxyAddr(addr) {
-			return addr.Unmap(), true
-		}
-	}
-	return directAddr, true
 }
 
 func (qq *Router) isTrustedProxy(remoteAddr string) bool {
@@ -168,12 +144,8 @@ func (qq *Router) isTrustedProxy(remoteAddr string) bool {
 	if err != nil {
 		return false
 	}
-	return qq.isTrustedProxyAddr(addrPort.Addr())
-}
-
-func (qq *Router) isTrustedProxyAddr(addr netip.Addr) bool {
 	for _, prefix := range qq.trustedProxies {
-		if prefix.Contains(addr) {
+		if prefix.Contains(addrPort.Addr()) {
 			return true
 		}
 	}

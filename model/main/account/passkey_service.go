@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -648,21 +647,7 @@ func (qq *PasskeyService) markPasskeyChallengeUsed(ctx ctxx.Context, challengex 
 }
 
 func (qq *PasskeyService) passkeyClientKey(req *httpx.Request) string {
-	remoteAddr := strings.TrimSpace(req.RemoteAddr)
-	if remoteAddr == "" {
-		return "unknown"
-	}
-
-	host, _, err := net.SplitHostPort(remoteAddr)
-	if err == nil {
-		remoteAddr = host
-	}
-
-	if remoteAddr == "" {
-		return "unknown"
-	}
-
-	return strings.ToLower(remoteAddr)
+	return strings.ToLower(req.ClientIP())
 }
 
 func (qq *PasskeyService) nilableString(val string) *string {

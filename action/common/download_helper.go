@@ -53,7 +53,7 @@ func StreamDownload(
 
 	mimeType := mimetypex.Resolve(currentVersion.Data.MimeType, currentVersion.Data.Filename)
 	rw.Header().Set("Content-Type", mimeType)
-	setDownloadSecurityHeaders(rw.Header(), mimeType, isInline)
+	SetDownloadSecurityHeaders(rw.Header(), mimeType, isInline)
 
 	rw.WriteHeader(http.StatusOK)
 	_, err = io.Copy(rw, f)
@@ -65,9 +65,10 @@ func StreamDownload(
 	return nil
 }
 
-// setDownloadSecurityHeaders prevents uploaded files from running active content, such as
-// HTML or SVG scripts, with the viewer's session on the application origin.
-func setDownloadSecurityHeaders(header http.Header, mimeType string, isInline bool) {
+// SetDownloadSecurityHeaders must be used by every handler that serves uploaded bytes. It
+// prevents active content, such as HTML or SVG scripts, from running with the viewer's
+// session on the application origin.
+func SetDownloadSecurityHeaders(header http.Header, mimeType string, isInline bool) {
 	header.Set("X-Content-Type-Options", "nosniff")
 
 	mediaType := strings.ToLower(strings.TrimSpace(strings.Split(mimeType, ";")[0]))

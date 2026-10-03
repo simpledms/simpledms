@@ -9,30 +9,36 @@ import (
 	"testing"
 	"time"
 
+	"github.com/simpledms/simpledms/db/entmain/session"
 	accountmodel "github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/util/cookiex"
 )
 
+// The temporary password may have been intercepted, so setting the initial password also
+// signs out all other sessions.
 func TestSetInitialPasswordCmdOnlySetsMissingPassword(t *testing.T) {
 	for _, tc := range []struct {
-		name          string
-		hasPassword   bool
-		wantStatus    int
-		wantPassword  string
-		wantNotStored string
+		name                  string
+		hasPassword           bool
+		wantStatus            int
+		wantPassword          string
+		wantNotStored         string
+		wantOtherSessionAlive bool
 	}{
 		{
-			name:          "existing password requires change password flow",
-			hasPassword:   true,
-			wantStatus:    http.StatusBadRequest,
-			wantPassword:  "supersecret",
-			wantNotStored: "new-password-123",
+			name:                  "existing password requires change password flow",
+			hasPassword:           true,
+			wantStatus:            http.StatusBadRequest,
+			wantPassword:          "supersecret",
+			wantNotStored:         "new-password-123",
+			wantOtherSessionAlive: true,
 		},
 		{
-			name:         "temporary password account sets initial password",
-			hasPassword:  false,
-			wantStatus:   http.StatusOK,
-			wantPassword: "new-password-123",
+			name:                  "temporary password account sets initial password",
+			hasPassword:           false,
+			wantStatus:            http.StatusOK,
+			wantPassword:          "new-password-123",
+			wantOtherSessionAlive: false,
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -49,6 +55,7 @@ func TestSetInitialPasswordCmdOnlySetsMissingPassword(t *testing.T) {
 					ExecX(context.Background())
 			}
 			sessionValue := createSessionForAccountForRulesTest(t, harness, accountx.ID)
+			otherSessionValue := createSessionForAccountForRulesTest(t, harness, accountx.ID)
 
 			form := url.Values{}
 			form.Set("NewPassword", "new-password-123")
@@ -75,6 +82,20 @@ func TestSetInitialPasswordCmdOnlySetsMissingPassword(t *testing.T) {
 			}
 			if tc.wantNotStored != "" && accountAfter.IsPasswordValid(nil, tc.wantNotStored) {
 				t.Fatalf("password %q must not replace the existing password", tc.wantNotStored)
+			}
+			sessionExists := func(value string) bool {
+				return harness.mainDB.ReadWriteConn.Session.Query().
+					Where(session.Value(value)).
+					ExistX(context.Background())
+			}
+			if !sessionExists(sessionValue) {
+				t.Fatal("expected current session to stay signed in")
+			}
+			if sessionExists(otherSessionValue) != tc.wantOtherSessionAlive {
+				t.Fatalf("other session alive = %v, want %v",
+					!tc.wantOtherSessionAlive,
+					tc.wantOtherSessionAlive,
+				)
 			}
 		})
 	}

@@ -11,6 +11,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -58,7 +59,13 @@ func (qq *SetInitialPasswordCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 	accountx := ctx.MainCtx().Account
 	accountm := account.NewAccount(accountx)
 
-	err = accountm.SetInitialPassword(ctx, data.NewPassword, data.ConfirmPassword)
+	cookie, err := req.Cookie(cookiex.SessionCookieName())
+	if err != nil {
+		log.Println(err)
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid session cookie.")
+	}
+
+	err = accountm.SetInitialPassword(ctx, data.NewPassword, data.ConfirmPassword, cookie.Value)
 	if err != nil {
 		log.Println(err)
 		return err

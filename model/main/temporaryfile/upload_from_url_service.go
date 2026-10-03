@@ -73,9 +73,16 @@ func NewUploadFromURLService(
 			netip.MustParsePrefix("240.0.0.0/4"),
 			// Unspecified IPv6 address.
 			netip.MustParsePrefix("::/128"),
-			// NAT64 prefixes (RFC 6052, RFC 8215) can translate to internal IPv4 targets.
+			// IETF protocol assignments (RFC 6890).
+			netip.MustParsePrefix("192.0.0.0/24"),
+			// IPv6 transition prefixes embed IPv4 targets and can reach internal IPv4
+			// services through a gateway: IPv4-compatible (RFC 4291), NAT64 (RFC 6052,
+			// RFC 8215), Teredo (RFC 4380), and 6to4 (RFC 3056).
+			netip.MustParsePrefix("::/96"),
 			netip.MustParsePrefix("64:ff9b::/96"),
 			netip.MustParsePrefix("64:ff9b:1::/48"),
+			netip.MustParsePrefix("2001::/32"),
+			netip.MustParsePrefix("2002::/16"),
 			// IPv6 documentation prefix.
 			netip.MustParsePrefix("2001:db8::/32"),
 			// IPv6 multicast.
@@ -580,9 +587,12 @@ func (qq *UploadFromURLService) safeDialContext(
 
 func (qq *UploadFromURLService) isBlockedDownloadAddr(addr netip.Addr) bool {
 	addr = addr.Unmap()
-	// Dev mode only relaxes loopback. Private/link-local ranges remain blocked.
-	if (!qq.allowLocalURLs && addr.IsLoopback()) ||
-		addr.IsPrivate() ||
+	// Dev mode only relaxes loopback. Private/link-local ranges remain blocked. Checked
+	// first because ::1 is also part of the blocked IPv4-compatible prefix.
+	if addr.IsLoopback() {
+		return !qq.allowLocalURLs
+	}
+	if addr.IsPrivate() ||
 		addr.IsLinkLocalUnicast() ||
 		addr.IsLinkLocalMulticast() ||
 		addr.IsMulticast() ||

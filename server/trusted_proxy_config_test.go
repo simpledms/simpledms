@@ -1,9 +1,12 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/netip"
+	"net/url"
+	"strings"
 	"testing"
 
 	"github.com/simpledms/simpledms/util/httpx"
@@ -140,6 +143,81 @@ func TestRouterResolvesClientIPOnlyThroughConfiguredProxies(t *testing.T) {
 
 			if gotClientIP != tc.wantClientIP {
 				t.Fatalf("client IP = %q, want %q", gotClientIP, tc.wantClientIP)
+			}
+		})
+	}
+}
+
+// Behind a reverse proxy, every request arrives from the proxy address. Rate limits must
+// use the forwarded client address, otherwise one client could lock out all sign-ins.
+func TestAuthRateLimitsArePerClientBehindTrustedProxy(t *testing.T) {
+	for _, tc := range []struct {
+		name       string
+		newRequest func(harness *actionTestHarness, attempt int) *http.Request
+	}{
+		{
+			name: "password sign-in",
+			newRequest: func(harness *actionTestHarness, attempt int) *http.Request {
+				form := url.Values{}
+				// Distinct emails keep the per-email limit out of this test.
+				form.Set("Email", fmt.Sprintf("unknown-%d@example.com", attempt))
+				form.Set("Password", "wrong-password")
+				req := httptest.NewRequest(
+					http.MethodPost,
+					harness.actions.Auth.SignInCmd.Endpoint(),
+					strings.NewReader(form.Encode()),
+				)
+				req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+				return req
+			},
+		},
+		{
+			name: "passkey sign-in",
+			newRequest: func(harness *actionTestHarness, _ int) *http.Request {
+				req := httptest.NewRequest(
+					http.MethodPost,
+					"http://localhost"+harness.actions.Auth.PasskeySignInBeginCmd.Endpoint(),
+					nil,
+				)
+				req.Host = "localhost"
+				return req
+			},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Setenv("SIMPLEDMS_PUBLIC_ORIGIN", "http://localhost")
+			t.Setenv("SIMPLEDMS_WEBAUTHN_RP_ID", "localhost")
+			harness := newActionTestHarness(t)
+			router := NewRouter(
+				harness.mainDB,
+				harness.tenantDBs,
+				harness.infra,
+				true,
+				harness.metaPath,
+				harness.i18n,
+				[]netip.Prefix{netip.MustParsePrefix("192.0.2.10/32")},
+			)
+			router.RegisterActions(harness.actions)
+
+			send := func(clientIP string, attempt int) int {
+				req := tc.newRequest(harness, attempt)
+				req.RemoteAddr = "192.0.2.10:1234"
+				req.Header.Set("X-Forwarded-For", clientIP)
+				req.Header.Set("HX-Request", "true")
+				rr := httptest.NewRecorder()
+				router.ServeHTTP(rr, req)
+				return rr.Code
+			}
+
+			limited := false
+			for attempt := 0; attempt < 100 && !limited; attempt++ {
+				limited = send("203.0.113.1", attempt) == http.StatusTooManyRequests
+			}
+			if !limited {
+				t.Fatal("expected the attacking client to be rate limited")
+			}
+			if got := send("203.0.113.2", 0); got == http.StatusTooManyRequests {
+				t.Fatal("another client behind the same proxy must not share the rate limit")
 			}
 		})
 	}

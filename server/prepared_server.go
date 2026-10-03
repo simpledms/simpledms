@@ -69,17 +69,11 @@ func (qq *PreparedServer) Start() error {
 		tlsConfig.TLSPrivateKeyFilepath,
 	)
 
-	server := &http.Server{
-		Addr: fmt.Sprintf(":%d", qq.server.port(
-			useAutocert,
-			tlsConfig.TLSCertFilepath,
-			tlsConfig.TLSPrivateKeyFilepath,
-		)),
-		Handler: qq.handler,
-		// Body timeouts would abort large uploads and downloads; bound only the headers
-		// so that slow clients cannot hold connections open indefinitely.
-		ReadHeaderTimeout: readHeaderTimeout,
-	}
+	server := newHTTPServer(fmt.Sprintf(":%d", qq.server.port(
+		useAutocert,
+		tlsConfig.TLSCertFilepath,
+		tlsConfig.TLSPrivateKeyFilepath,
+	)), qq.handler)
 
 	var err error
 

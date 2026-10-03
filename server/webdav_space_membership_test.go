@@ -20,11 +20,21 @@ func TestWebDAVCredentialStopsWorkingAfterUserIsRemovedFromSpace(t *testing.T) {
 	harness := newActionTestHarnessWithSaaS(t, true)
 	ownerAccount, tenantx := signUpAccount(t, harness, "webdav-space-owner@example.com")
 	memberAccount := createTenantUser(
-		t, harness, tenantx, "webdav-space-member@example.com", tenantrole.User,
+		t,
+		harness,
+		tenantx,
+		"webdav-space-member@example.com",
+		tenantrole.User,
 	)
 	tenantDB := initTenantDB(t, harness, tenantx)
 
-	ownerMainTx, ownerTenantTx, ownerCtx := newTenantContext(t, harness, ownerAccount, tenantx, tenantDB)
+	ownerMainTx, ownerTenantTx, ownerCtx := newTenantContext(
+		t,
+		harness,
+		ownerAccount,
+		tenantx,
+		tenantDB,
+	)
 	createSpaceViaCmd(t, harness.actions, ownerCtx, "Member Space")
 	spacex := ownerTenantTx.Space.Query().Where(space.Name("Member Space")).OnlyX(ownerCtx)
 	ownerSpaceCtx := ctxx.NewSpaceContext(ownerCtx, spacex)
@@ -36,7 +46,13 @@ func TestWebDAVCredentialStopsWorkingAfterUserIsRemovedFromSpace(t *testing.T) {
 		SaveX(ownerSpaceCtx)
 	commitTestTxs(t, ownerMainTx, ownerTenantTx)
 
-	memberMainTx, memberTenantTx, memberCtx := newTenantContext(t, harness, memberAccount, tenantx, tenantDB)
+	memberMainTx, memberTenantTx, memberCtx := newTenantContext(
+		t,
+		harness,
+		memberAccount,
+		tenantx,
+		tenantDB,
+	)
 	memberSpace := memberTenantTx.Space.Query().Where(space.ID(spacex.ID)).OnlyX(memberCtx)
 	result, err := credentialmodel.NewCredentialService().CreateOwnerCredential(
 		ctxx.NewSpaceContext(memberCtx, memberSpace),
@@ -52,8 +68,13 @@ func TestWebDAVCredentialStopsWorkingAfterUserIsRemovedFromSpace(t *testing.T) {
 
 	propfind := func() int {
 		return webDAVRequest(
-			t, harness, result.Username, result.Secret, "PROPFIND",
-			webDAVTestURL(tenantx, spacex, "/"), strings.NewReader(webDAVPropfindBody),
+			t,
+			harness,
+			result.Username,
+			result.Secret,
+			"PROPFIND",
+			webDAVTestURL(tenantx, spacex, "/"),
+			strings.NewReader(webDAVPropfindBody),
 			func(req *http.Request) { req.Header.Set("Depth", "0") },
 		).Code
 	}
@@ -61,7 +82,13 @@ func TestWebDAVCredentialStopsWorkingAfterUserIsRemovedFromSpace(t *testing.T) {
 		t.Fatalf("expected assigned member to use WebDAV, got %d", got)
 	}
 
-	ownerMainTx, ownerTenantTx, ownerCtx = newTenantContext(t, harness, ownerAccount, tenantx, tenantDB)
+	ownerMainTx, ownerTenantTx, ownerCtx = newTenantContext(
+		t,
+		harness,
+		ownerAccount,
+		tenantx,
+		tenantDB,
+	)
 	ownerTenantTx.SpaceUserAssignment.Delete().
 		Where(spaceuserassignment.UserID(memberUser.ID)).
 		ExecX(ctxx.NewSpaceContext(ownerCtx, spacex))

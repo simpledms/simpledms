@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	commonaction "github.com/simpledms/simpledms/action/common"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
@@ -76,8 +77,7 @@ func (qq *Preview) OriginalSourceHandler(
 
 	rw.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	rw.Header().Set("Content-Disposition", "inline")
-	rw.Header().Set("X-Content-Type-Options", "nosniff")
-	rw.Header().Set("Content-Security-Policy", "sandbox")
+	commonaction.SetDownloadSecurityHeaders(rw.Header(), "text/plain; charset=utf-8", true)
 	rw.WriteHeader(http.StatusOK)
 	if _, err := io.Copy(rw, openedFile); err != nil {
 		return e.NewHTTPErrorf(http.StatusInternalServerError, "could not read file")
@@ -138,7 +138,7 @@ func (qq *Preview) streamPDF(
 		filename = "preview.pdf"
 	}
 	rw.Header().Set("Content-Type", "application/pdf")
-	rw.Header().Set("X-Content-Type-Options", "nosniff")
+	commonaction.SetDownloadSecurityHeaders(rw.Header(), "application/pdf", !attachment)
 	if preview.Size > 0 {
 		rw.Header().Set("Content-Length", strconv.FormatInt(preview.Size, 10))
 	}

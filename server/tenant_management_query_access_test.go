@@ -17,7 +17,11 @@ func TestTenantManagementQueriesRequireTenantOwner(t *testing.T) {
 	harness := newActionTestHarness(t)
 	ownerAccount, tenantx := signUpAccount(t, harness, "tenant-query-owner@example.com")
 	memberAccount := createTenantUser(
-		t, harness, tenantx, "tenant-query-member@example.com", tenantrole.User,
+		t,
+		harness,
+		tenantx,
+		"tenant-query-member@example.com",
+		tenantrole.User,
 	)
 	initTenantDB(t, harness, tenantx)
 	harness.router.RegisterPage(

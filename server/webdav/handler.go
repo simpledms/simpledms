@@ -9,7 +9,6 @@ import (
 	"net"
 	"net/http"
 	"net/netip"
-	"slices"
 	"strings"
 	"time"
 
@@ -38,6 +37,7 @@ import (
 	credentialmodel "github.com/simpledms/simpledms/model/main/webdavcredential"
 	webdavresourcemodel "github.com/simpledms/simpledms/model/tenant/webdavresource"
 	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 const (
@@ -283,8 +283,7 @@ func (qq *Handler) webDAVSpaceContext(
 	isReadOnly bool,
 	beforeTenantAuth func(context.Context, *enttenant.Tx) error,
 ) (*ctxx.SpaceContext, *enttenant.Tx, error) {
-	// Ent shares one privacy decision key between the main and tenant clients. Keep the
-	// bypass on bootstrap lookups only; the Space context must enforce Space membership.
+	// Keep the bypass on bootstrap lookups only; see docs/invariants/privacy_bypass_scope.md.
 	bootstrapCtx := mainprivacy.DecisionContext(ctx, mainprivacy.Allow)
 	accountx, err := mainTx.Account.Query().
 		Where(mainaccount.ID(credentialx.AccountID), mainaccount.DeletedAtIsNil()).
@@ -696,20 +695,11 @@ func (qq *Handler) isSecureWebDAVRequest(req *http.Request) bool {
 }
 
 func (qq *Handler) webDAVRateLimitRemoteAddr(req *http.Request) string {
-	if !qq.isTrustedProxy(req.RemoteAddr) {
+	clientIP, ok := httpx.ClientIPThroughTrustedProxies(req, qq.trustedProxies)
+	if !ok {
 		return req.RemoteAddr
 	}
-	forwardedFor := strings.Split(req.Header.Get("X-Forwarded-For"), ",")
-	for _, f := range slices.Backward(forwardedFor) {
-		addr, err := netip.ParseAddr(strings.TrimSpace(f))
-		if err != nil {
-			return req.RemoteAddr
-		}
-		if !qq.isTrustedProxyAddr(addr) {
-			return addr.String()
-		}
-	}
-	return req.RemoteAddr
+	return clientIP.String()
 }
 
 func (qq *Handler) isTrustedProxy(remoteAddr string) bool {
