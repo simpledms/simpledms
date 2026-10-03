@@ -2,7 +2,6 @@ package auth
 
 import (
 	"fmt"
-	"net"
 	"strings"
 	"time"
 
@@ -22,22 +21,7 @@ const (
 )
 
 func clientIPFromRequest(req *httpx.Request) string {
-	remoteAddr := strings.TrimSpace(req.RemoteAddr)
-	if remoteAddr == "" {
-		return "unknown"
-	}
-
-	host, _, err := net.SplitHostPort(remoteAddr)
-	if err == nil {
-		remoteAddr = host
-	}
-
-	remoteAddr = strings.TrimSpace(remoteAddr)
-	if remoteAddr == "" {
-		return "unknown"
-	}
-
-	return strings.ToLower(remoteAddr)
+	return strings.ToLower(req.ClientIP())
 }
 
 func normalizeRateLimitedEmail(email string) string {

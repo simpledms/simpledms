@@ -1,4 +1,4 @@
-import { expect, type Locator, type Page } from "@playwright/test";
+import { expect, type Locator, type Page, type Response } from "@playwright/test";
 import path from "node:path";
 
 export const loginEmail = process.env.E2E_LOGIN_EMAIL ?? "dev+admin@simpledms.app";
@@ -8,28 +8,39 @@ export function uniqueSuffix() {
 	return `${Date.now()}-${Math.floor(Math.random() * 10_000)}`;
 }
 
+// The server accepts one password sign-in per account every 10 seconds.
+const accountSignInIntervalMs = 10_000;
+
+export function isSignInResponse(response: Response) {
+	return response.request().method() === "POST"
+		&& new URL(response.url()).pathname === "/-/auth/sign-in-cmd";
+}
+
 export async function signIn(page: Page) {
-	for (let attempt = 0; attempt < 4; attempt++) {
+	for (let attempt = 0; attempt < 3; attempt++) {
 		await page.goto("/");
 		await page.getByRole("textbox", { name: "Email" }).fill(loginEmail);
 		await page.getByRole("textbox", { name: "Password" }).fill(loginPassword);
-		await page.getByRole("button", { name: "Sign in" }).click();
+		const responsePromise = page.waitForResponse(isSignInResponse);
+		await page.getByRole("button", { name: "Sign in", exact: true }).click();
+		const response = await responsePromise;
 
-		const reachedDashboard = await page
-			.waitForURL(/\/dashboard\/$/, { timeout: 5_000 })
-			.then(() => true)
-			.catch(() => false);
-		if (reachedDashboard) {
+		if (response.headers()["hx-redirect"]) {
+			await expect(page).toHaveURL(/\/dashboard\/$/);
 			return;
 		}
 
-		const rateLimited = await page.getByText(/Too many login attempts/i).isVisible().catch(() => false);
-		if (rateLimited) {
-			await page.waitForTimeout(11_000);
+		const body = await response.text();
+		if (response.status() !== 401 || !body.includes("Too many login attempts")) {
+			throw new Error(
+				`Sign-in failed with status ${response.status()}; check E2E_LOGIN_EMAIL and E2E_LOGIN_PASSWORD`,
+			);
 		}
+		// Another sign-in for the same account happened recently, for example in global setup.
+		await page.waitForTimeout(accountSignInIntervalMs);
 	}
 
-	await expect(page).toHaveURL(/\/dashboard\/$/);
+	throw new Error("Sign-in stayed rate-limited");
 }
 
 export async function goToSpaces(page: Page) {

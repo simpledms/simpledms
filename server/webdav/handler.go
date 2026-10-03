@@ -283,10 +283,12 @@ func (qq *Handler) webDAVSpaceContext(
 	isReadOnly bool,
 	beforeTenantAuth func(context.Context, *enttenant.Tx) error,
 ) (*ctxx.SpaceContext, *enttenant.Tx, error) {
-	ctx = mainprivacy.DecisionContext(ctx, mainprivacy.Allow)
+	// Ent shares one privacy decision key between the main and tenant clients. Keep the
+	// bypass on bootstrap lookups only; the Space context must enforce Space membership.
+	bootstrapCtx := mainprivacy.DecisionContext(ctx, mainprivacy.Allow)
 	accountx, err := mainTx.Account.Query().
 		Where(mainaccount.ID(credentialx.AccountID), mainaccount.DeletedAtIsNil()).
-		Only(ctx)
+		Only(bootstrapCtx)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -296,7 +298,7 @@ func (qq *Handler) webDAVSpaceContext(
 			tenant.PublicID(entx.NewCIText(tenantPublicID)),
 			tenant.DeletedAtIsNil(),
 		).
-		Only(ctx)
+		Only(bootstrapCtx)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -310,7 +312,7 @@ func (qq *Handler) webDAVSpaceContext(
 				tenantaccountassignment.ExpiresAtGT(now),
 			),
 		).
-		Exist(ctx)
+		Exist(bootstrapCtx)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -318,7 +320,7 @@ func (qq *Handler) webDAVSpaceContext(
 		return nil, nil, webDAVStatusError{status: http.StatusForbidden, msg: "tenant assignment not active"}
 	}
 
-	tenantDB, err := qq.webDAVTenantDB(ctx, tenantx)
+	tenantDB, err := qq.webDAVTenantDB(bootstrapCtx, tenantx)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -392,14 +394,13 @@ func (qq *Handler) withFinalizationContexts(
 	committedMain := false
 	defer rollbackMainTx(mainTx, &committedMain)
 
-	ctx = mainprivacy.DecisionContext(ctx, mainprivacy.Allow)
 	touched, err := mainTx.WebDAVCredential.Update().
 		Where(
 			entmainwebdavcredential.ID(credentialx.ID),
 			entmainwebdavcredential.RevokedAtIsNil(),
 		).
 		SetLastUsedAt(time.Now()).
-		Save(ctx)
+		Save(mainprivacy.DecisionContext(ctx, mainprivacy.Allow))
 	if err != nil {
 		return err
 	}

@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/ctxx"
@@ -39,7 +40,8 @@ func StreamDownload(
 		}
 	}()
 
-	if req.URL.Query().Get("inline") == "1" {
+	isInline := req.URL.Query().Get("inline") == "1"
+	if isInline {
 		rw.Header().Set("Content-Disposition", "inline")
 	} else {
 		rw.Header().Set("Content-Disposition", fmt.Sprintf(
@@ -51,6 +53,7 @@ func StreamDownload(
 
 	mimeType := mimetypex.Resolve(currentVersion.Data.MimeType, currentVersion.Data.Filename)
 	rw.Header().Set("Content-Type", mimeType)
+	setDownloadSecurityHeaders(rw.Header(), mimeType, isInline)
 
 	rw.WriteHeader(http.StatusOK)
 	_, err = io.Copy(rw, f)
@@ -60,4 +63,18 @@ func StreamDownload(
 	}
 
 	return nil
+}
+
+// setDownloadSecurityHeaders prevents uploaded files from running active content, such as
+// HTML or SVG scripts, with the viewer's session on the application origin.
+func setDownloadSecurityHeaders(header http.Header, mimeType string, isInline bool) {
+	header.Set("X-Content-Type-Options", "nosniff")
+
+	mediaType := strings.ToLower(strings.TrimSpace(strings.Split(mimeType, ";")[0]))
+	// Chromium refuses to render PDFs in sandboxed documents. The PDF viewer does not
+	// execute document scripts with access to the application origin.
+	if isInline && mediaType == "application/pdf" {
+		return
+	}
+	header.Set("Content-Security-Policy", "sandbox")
 }

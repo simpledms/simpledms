@@ -8,7 +8,7 @@ test("supports keyboard flow on sign in form", async ({ page }) => {
 	await expect(page.getByRole("textbox", { name: "Password" })).toBeFocused();
 	await page.keyboard.type(loginPassword);
 	await expect(page.getByRole("textbox", { name: "Password" })).toHaveValue(loginPassword);
-	await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
+	await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeVisible();
 });
 
 test.describe("authenticated extended", () => {

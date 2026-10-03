@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"net/http"
 	"net/url"
 
 	acommon "github.com/simpledms/simpledms/action/common"
@@ -9,12 +10,14 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/entmain"
 	accountmodel "github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	tenantmodel "github.com/simpledms/simpledms/model/main/tenant"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
+	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -39,6 +42,12 @@ func (qq *OrganizationSettingsPage) Handler(
 	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
+	if !ctx.IsTenantCtx() || ctx.TenantCtx().User.Role != tenantrole.Owner {
+		return e.NewHTTPErrorf(
+			http.StatusForbidden,
+			"Only organization owners can manage users and settings.",
+		)
+	}
 	return qq.Render(rw, req, ctx, qq.infra, "Settings", qq.Widget(ctx))
 }
 

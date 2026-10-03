@@ -9,8 +9,10 @@ import (
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/account"
+	sessionmodel "github.com/simpledms/simpledms/model/main/session"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -70,6 +72,17 @@ func (qq *ChangePasswordCmd) Handler(
 	accountm := account.NewAccount(accountx)
 
 	err = accountm.ChangePassword(ctx, data.CurrentOrTemporaryPassword, data.NewPassword, data.ConfirmPassword)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	cookie, err := req.Cookie(cookiex.SessionCookieName())
+	if err != nil {
+		log.Println(err)
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid session cookie.")
+	}
+	err = sessionmodel.NewSessionService().DeleteOtherSessionsOfAccount(ctx, accountx.ID, cookie.Value)
 	if err != nil {
 		log.Println(err)
 		return err

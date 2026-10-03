@@ -8922,6 +8922,20 @@
 			"translation": "Filtra le credenziali MCP",
 			"translatorComment": "Translated from English by Claude.",
 			"fuzzy": true
+		},
+		{
+			"id": "A password is already set. Please use the change password form instead.",
+			"message": "A password is already set. Please use the change password form instead.",
+			"translation": "Una password è già impostata. Usa invece il modulo «Cambia password».",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Only organization owners can manage users and settings.",
+			"message": "Only organization owners can manage users and settings.",
+			"translation": "Solo i proprietari dell'organizzazione possono gestire utenti e impostazioni.",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
 		}
 	]
 }

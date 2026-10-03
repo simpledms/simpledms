@@ -204,6 +204,13 @@
             "fuzzy": true
         },
         {
+            "id": "Invalid session cookie.",
+            "message": "Invalid session cookie.",
+            "translation": "Cookie de session invalide.",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
             "id": "Password changed successfully.",
             "message": "Password changed successfully.",
             "translation": "Mot de passe modifié avec succès.",
@@ -526,13 +533,6 @@
             "message": "Use backup code",
             "translation": "Utiliser un code Backup",
             "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Invalid session cookie.",
-            "message": "Invalid session cookie.",
-            "translation": "Cookie de session invalide.",
-            "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
         {
@@ -2134,13 +2134,6 @@
             "fuzzy": true
         },
         {
-            "id": "MCP credential created.",
-            "message": "MCP credential created.",
-            "translation": "Identifiant MCP créé.",
-            "translatorComment": "Translated from English by Claude.",
-            "fuzzy": true
-        },
-        {
             "id": "No spaces available yet.",
             "message": "No spaces available yet.",
             "translation": "Aucun Space disponible pour le moment.",
@@ -2214,13 +2207,6 @@
             "id": "Token",
             "message": "Token",
             "translation": "Jeton",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "WebDAV credential created.",
-            "message": "WebDAV credential created.",
-            "translation": "Identifiants WebDAV créés.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2892,6 +2878,13 @@
             "fuzzy": true
         },
         {
+            "id": "Only organization owners can manage users and settings.",
+            "message": "Only organization owners can manage users and settings.",
+            "translation": "Seuls les propriétaires de l'organisation peuvent gérer les utilisateurs et les paramètres.",
+            "translatorComment": "Translated from English by Claude.",
+            "fuzzy": true
+        },
+        {
             "id": "Settings",
             "message": "Settings",
             "translation": "Paramètres",
@@ -3170,20 +3163,10 @@
             "fuzzy": true
         },
         {
-            "id": "Attribute «{Name}» added.",
-            "message": "Attribute «{Name}» added.",
-            "translation": "Attribut «{Name}» ajouté.",
+            "id": "Attribute updated.",
+            "message": "Attribute updated.",
+            "translation": "Attribut mis à jour.",
             "translatorComment": "Translated from English by Codex",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "propertyx.Name"
-                }
-            ],
             "fuzzy": true
         },
         {
@@ -3292,13 +3275,6 @@
             "id": "Edit field attribute",
             "message": "Edit field attribute",
             "translation": "Modifier l'attribut du champ",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Attribute updated.",
-            "message": "Attribute updated.",
-            "translation": "Attribut mis à jour.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -3428,6 +3404,20 @@
             "fuzzy": true
         },
         {
+            "id": "No new files found.",
+            "message": "No new files found.",
+            "translation": "Aucun nouveau fichier trouvé.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "Files uploaded successfully.",
+            "message": "Files uploaded successfully.",
+            "translation": "Fichiers téléversés avec succès.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Move to another Inbox",
             "message": "Move to another Inbox",
             "translation": "Déplacer vers une autre Inbox",
@@ -3515,20 +3505,6 @@
             "id": "Filter by source",
             "message": "Filter by source",
             "translation": "Filtrer par source",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "No new files found.",
-            "message": "No new files found.",
-            "translation": "Aucun nouveau fichier trouvé.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Files uploaded successfully.",
-            "message": "Files uploaded successfully.",
-            "translation": "Fichiers téléversés avec succès.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -5087,6 +5063,11 @@
             "fuzzy": true
         },
         {
+            "id": "Created destination",
+            "message": "Created destination",
+            "translation": ""
+        },
+        {
             "id": "Credential status values",
             "message": "Credential status values",
             "translation": "Valeurs d’état des identifiants",
@@ -5773,6 +5754,11 @@
             "translation": ""
         },
         {
+            "id": "Upload token",
+            "message": "Upload token",
+            "translation": ""
+        },
+        {
             "id": "Uploading",
             "message": "Uploading",
             "translation": ""
@@ -5974,6 +5960,13 @@
             "message": "New password must be different from current password.",
             "translation": "Le nouveau mot de passe doit être différent du mot de passe actuel.",
             "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
+            "id": "A password is already set. Please use the change password form instead.",
+            "message": "A password is already set. Please use the change password form instead.",
+            "translation": "Un mot de passe est déjà défini. Utilise plutôt le formulaire « Changer le mot de passe ».",
+            "translatorComment": "Translated from English by Claude.",
             "fuzzy": true
         },
         {
@@ -6764,6 +6757,13 @@
             "fuzzy": true
         },
         {
+            "id": "Source file is not in inbox.",
+            "message": "Source file is not in inbox.",
+            "translation": "Le fichier source n'est pas dans l'Inbox.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Source file has no versions.",
             "message": "Source file has no versions.",
             "translation": "Le fichier source n'a pas de versions.",
@@ -6795,13 +6795,6 @@
             "id": "Could not update target file.",
             "message": "Could not update target file.",
             "translation": "Impossible de mettre à jour le fichier cible.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file is not in inbox.",
-            "message": "Source file is not in inbox.",
-            "translation": "Le fichier source n'est pas dans l'Inbox.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

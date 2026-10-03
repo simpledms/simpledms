@@ -442,6 +442,19 @@ func (qq *Account) ChangePassword(ctx ctxx.Context, currentPassword, newPassword
 	return qq.SetPassword(ctx, newPassword, confirmPassword)
 }
 
+// SetInitialPassword lets accounts that signed in with a temporary password choose a
+// password. Replacing an existing password requires ChangePassword and the current password.
+func (qq *Account) SetInitialPassword(ctx ctxx.Context, password, confirmPassword string) error {
+	if qq.HasPassword() {
+		return e.NewHTTPErrorf(
+			http.StatusBadRequest,
+			"A password is already set. Please use the change password form instead.",
+		)
+	}
+
+	return qq.SetPassword(ctx, password, confirmPassword)
+}
+
 func (qq *Account) SetPassword(ctx ctxx.Context, password, confirmPassword string) error {
 	// TODO add additional password rules?
 	if len(password) < 12 {

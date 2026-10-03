@@ -14,6 +14,8 @@ export default defineConfig({
 	use: {
 		baseURL: process.env.E2E_BASE_URL ?? "https://localhost:7003",
 		ignoreHTTPSErrors: true,
+		actionTimeout: 10_000,
+		navigationTimeout: 15_000,
 		trace: "on-first-retry",
 	},
 	projects: [

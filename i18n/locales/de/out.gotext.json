@@ -204,6 +204,13 @@
             "fuzzy": true
         },
         {
+            "id": "Invalid session cookie.",
+            "message": "Invalid session cookie.",
+            "translation": "Ungültiges Sitzungs-Cookie.",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
             "id": "Password changed successfully.",
             "message": "Password changed successfully.",
             "translation": "Passwort erfolgreich geändert.",
@@ -526,13 +533,6 @@
             "message": "Use backup code",
             "translation": "Backup-Code verwenden",
             "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Invalid session cookie.",
-            "message": "Invalid session cookie.",
-            "translation": "Ungültiges Sitzungs-Cookie.",
-            "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
         {
@@ -2110,13 +2110,6 @@
             "fuzzy": true
         },
         {
-            "id": "MCP credential created.",
-            "message": "MCP credential created.",
-            "translation": "MCP-Zugang erstellt.",
-            "translatorComment": "Translated from English by Claude.",
-            "fuzzy": true
-        },
-        {
             "id": "No spaces available yet.",
             "message": "No spaces available yet.",
             "translation": "Noch keine Spaces verfügbar.",
@@ -2190,13 +2183,6 @@
             "id": "Token",
             "message": "Token",
             "translation": "Token",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "WebDAV credential created.",
-            "message": "WebDAV credential created.",
-            "translation": "WebDAV-Zugangsdaten erstellt.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },
@@ -2868,6 +2854,13 @@
             "fuzzy": true
         },
         {
+            "id": "Only organization owners can manage users and settings.",
+            "message": "Only organization owners can manage users and settings.",
+            "translation": "Nur Eigentümer der Organisation können Benutzer und Einstellungen verwalten.",
+            "translatorComment": "Translated from English by Claude.",
+            "fuzzy": true
+        },
+        {
             "id": "Settings",
             "message": "Settings",
             "translation": "Einstellungen",
@@ -3146,20 +3139,10 @@
             "fuzzy": true
         },
         {
-            "id": "Attribute «{Name}» added.",
-            "message": "Attribute «{Name}» added.",
-            "translation": "Attribut «{Name}» hinzugefügt.",
+            "id": "Attribute updated.",
+            "message": "Attribute updated.",
+            "translation": "Attribut aktualisiert.",
             "translatorComment": "Translated from English by Junie",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "propertyx.Name"
-                }
-            ],
             "fuzzy": true
         },
         {
@@ -3268,13 +3251,6 @@
             "id": "Edit field attribute",
             "message": "Edit field attribute",
             "translation": "Feldattribut bearbeiten",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Attribute updated.",
-            "message": "Attribute updated.",
-            "translation": "Attribut aktualisiert.",
             "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
@@ -3404,6 +3380,20 @@
             "fuzzy": true
         },
         {
+            "id": "No new files found.",
+            "message": "No new files found.",
+            "translation": "Keine neuen Dateien gefunden.",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "Files uploaded successfully.",
+            "message": "Files uploaded successfully.",
+            "translation": "Dateien erfolgreich hochgeladen.",
+            "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
             "id": "Move to another Inbox",
             "message": "Move to another Inbox",
             "translation": "In eine andere Inbox verschieben",
@@ -3491,20 +3481,6 @@
             "message": "Filter by source",
             "translation": "Nach Quelle filtern",
             "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "No new files found.",
-            "message": "No new files found.",
-            "translation": "Keine neuen Dateien gefunden.",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Files uploaded successfully.",
-            "message": "Files uploaded successfully.",
-            "translation": "Dateien erfolgreich hochgeladen.",
-            "translatorComment": "Translated from English by Junie",
             "fuzzy": true
         },
         {
@@ -5059,6 +5035,11 @@
             "fuzzy": true
         },
         {
+            "id": "Created destination",
+            "message": "Created destination",
+            "translation": ""
+        },
+        {
             "id": "Credential status values",
             "message": "Credential status values",
             "translation": "Statuswerte der Zugangsdaten",
@@ -5741,6 +5722,11 @@
             "translation": ""
         },
         {
+            "id": "Upload token",
+            "message": "Upload token",
+            "translation": ""
+        },
+        {
             "id": "Uploading",
             "message": "Uploading",
             "translation": ""
@@ -5942,6 +5928,13 @@
             "message": "New password must be different from current password.",
             "translation": "Neues Passwort muss sich vom aktuellen Passwort unterscheiden.",
             "translatorComment": "Translated from English by Junie",
+            "fuzzy": true
+        },
+        {
+            "id": "A password is already set. Please use the change password form instead.",
+            "message": "A password is already set. Please use the change password form instead.",
+            "translation": "Ein Passwort ist bereits gesetzt. Bitte verwende stattdessen das Formular «Passwort ändern».",
+            "translatorComment": "Translated from English by Claude.",
             "fuzzy": true
         },
         {
@@ -6728,6 +6721,13 @@
             "fuzzy": true
         },
         {
+            "id": "Source file is not in inbox.",
+            "message": "Source file is not in inbox.",
+            "translation": "Quelldatei ist nicht in der Inbox.",
+            "translatorComment": "Translated from English by Codex",
+            "fuzzy": true
+        },
+        {
             "id": "Source file has no versions.",
             "message": "Source file has no versions.",
             "translation": "Quelldatei hat keine Versionen.",
@@ -6759,13 +6759,6 @@
             "id": "Could not update target file.",
             "message": "Could not update target file.",
             "translation": "Zieldatei konnte nicht aktualisiert werden.",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
-        },
-        {
-            "id": "Source file is not in inbox.",
-            "message": "Source file is not in inbox.",
-            "translation": "Quelldatei ist nicht in der Inbox.",
             "translatorComment": "Translated from English by Codex",
             "fuzzy": true
         },

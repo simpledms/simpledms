@@ -61,6 +61,8 @@ func NewUploadFromURLService(
 		openCloudOrigin:       strings.TrimSpace(openCloudOrigin),
 		openCloudLinkPassword: openCloudLinkPassword,
 		blockedDownloadPrefixes: []netip.Prefix{
+			// "This network" (RFC 791); 0.0.0.0 reaches the local host on Linux.
+			netip.MustParsePrefix("0.0.0.0/8"),
 			// Carrier-grade NAT range (RFC 6598).
 			netip.MustParsePrefix("100.64.0.0/10"),
 			// Benchmarking/testing range (RFC 2544).
@@ -71,6 +73,9 @@ func NewUploadFromURLService(
 			netip.MustParsePrefix("240.0.0.0/4"),
 			// Unspecified IPv6 address.
 			netip.MustParsePrefix("::/128"),
+			// NAT64 prefixes (RFC 6052, RFC 8215) can translate to internal IPv4 targets.
+			netip.MustParsePrefix("64:ff9b::/96"),
+			netip.MustParsePrefix("64:ff9b:1::/48"),
 			// IPv6 documentation prefix.
 			netip.MustParsePrefix("2001:db8::/32"),
 			// IPv6 multicast.

@@ -1,6 +1,8 @@
 package managetenantusers
 
 import (
+	"net/http"
+
 	acommon "github.com/simpledms/simpledms/action/common"
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -9,6 +11,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/tenantrole"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
+	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -32,6 +35,12 @@ func NewManageUsersOfTenantPage(infra *common.Infra, actions *Actions) *ManageUs
 }
 
 func (qq *ManageUsersOfTenantPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	if !ctx.IsTenantCtx() || ctx.TenantCtx().User.Role != tenantrole.Owner {
+		return e.NewHTTPErrorf(
+			http.StatusForbidden,
+			"Only organization owners can manage users and settings.",
+		)
+	}
 	state := autil.StateX[ManageUsersOfTenantPageState](rw, req)
 	return qq.Render(rw, req, ctx, qq.infra, "Manage users of tenant", qq.Widget(ctx, state))
 }

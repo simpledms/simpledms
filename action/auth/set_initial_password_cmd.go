@@ -58,8 +58,7 @@ func (qq *SetInitialPasswordCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 	accountx := ctx.MainCtx().Account
 	accountm := account.NewAccount(accountx)
 
-	// Set the new password
-	err = accountm.SetPassword(ctx, data.NewPassword, data.ConfirmPassword)
+	err = accountm.SetInitialPassword(ctx, data.NewPassword, data.ConfirmPassword)
 	if err != nil {
 		log.Println(err)
 		return err

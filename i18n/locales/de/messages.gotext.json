@@ -8610,6 +8610,20 @@
 			"translation": "MCP-Zugangsdaten filtern",
 			"translatorComment": "Translated from English by Claude.",
 			"fuzzy": true
+		},
+		{
+			"id": "A password is already set. Please use the change password form instead.",
+			"message": "A password is already set. Please use the change password form instead.",
+			"translation": "Ein Passwort ist bereits gesetzt. Bitte verwende stattdessen das Formular «Passwort ändern».",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
+		},
+		{
+			"id": "Only organization owners can manage users and settings.",
+			"message": "Only organization owners can manage users and settings.",
+			"translation": "Nur Eigentümer der Organisation können Benutzer und Einstellungen verwalten.",
+			"translatorComment": "Translated from English by Claude.",
+			"fuzzy": true
 		}
 	]
 }

@@ -2,6 +2,7 @@ package managetenantusers
 
 import (
 	"log"
+	"net/http"
 
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
@@ -13,6 +14,7 @@ import (
 	usermodel "github.com/simpledms/simpledms/model/tenant/user"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -33,6 +35,12 @@ func NewUserListPartial(infra *common.Infra, actions *Actions) *UserListPartial 
 }
 
 func (qq *UserListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
+	if !ctx.IsTenantCtx() || ctx.TenantCtx().User.Role != tenantrole.Owner {
+		return e.NewHTTPErrorf(
+			http.StatusForbidden,
+			"Only organization owners can manage users and settings.",
+		)
+	}
 	state := autil.StateX[UserListPartialState](rw, req)
 	return qq.infra.Renderer().Render(rw, ctx, qq.Widget(ctx, state))
 }

@@ -39,7 +39,7 @@ test.describe("password and passphrase", () => {
 		await expect(trigger).toBeFocused();
 	});
 
-	test("set-password success removes no-password task", async ({ page }) => {
+	test("set-password success removes no-password task", { tag: "@state" }, async ({ page }) => {
 		test.skip(!allowStateMutation, "Enable E2E_ALLOW_STATE_MUTATION=1 to run state-mutation tests");
 
 		await page.goto("/dashboard/");
@@ -54,7 +54,7 @@ test.describe("password and passphrase", () => {
 		await expect(page.getByRole("link", { name: "Set password now" })).toHaveCount(0);
 	});
 
-	test("passphrase success persists app status after reload", async ({ page }) => {
+	test("passphrase success persists app status after reload", { tag: "@state" }, async ({ page }) => {
 		test.skip(!allowStateMutation, "Enable E2E_ALLOW_STATE_MUTATION=1 to run state-mutation tests");
 
 		await page.goto("/dashboard/");

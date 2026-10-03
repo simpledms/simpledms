@@ -115,7 +115,7 @@ func newMaintenanceModeHandler(
 	var unlockOnce sync.Once
 
 	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
-	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assetsFS))))
+	mux.Handle("GET /assets/", http.StripPrefix("/assets/", NewAssetHandler(assetsFS)))
 	mux.HandleFunc("/mcp", func(rw http.ResponseWriter, _ *http.Request) {
 		rw.Header().Set("Cache-Control", "no-store")
 		rw.WriteHeader(http.StatusServiceUnavailable)
@@ -396,7 +396,7 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	// slash suffix is necessary to match all paths with the prefix
 	router.Handle(
 		"GET /assets/",
-		http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))),
+		http.StripPrefix("/assets/", NewAssetHandler(qq.assetsFS)),
 	)
 
 	qq.migrateTenantDatabases(ctx, mainDB, tenantDBs)
@@ -407,7 +407,7 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 			handlers.PrintRecoveryStack(true),
 		)(
 			// see https://words.filippo.io/csrf/ for implementation details
-			http.NewCrossOriginProtection().Handler(router),
+			securityHeadersHandler(http.NewCrossOriginProtection().Handler(router)),
 			// handlers.LoggingHandler(),
 		),
 	)
@@ -619,7 +619,12 @@ func (qq *Server) startAutocertIfRequired(systemConfigx *entmain.SystemConfig) (
 	go func() {
 		recoverx.Recover("autocert server")
 
-		err := http.ListenAndServe(":http", manager.HTTPHandler(nil))
+		autocertServer := &http.Server{
+			Addr:              ":http",
+			Handler:           manager.HTTPHandler(nil),
+			ReadHeaderTimeout: readHeaderTimeout,
+		}
+		err := autocertServer.ListenAndServe()
 		if err != nil {
 			log.Println(err)
 		}
@@ -644,6 +649,7 @@ func (qq *Server) ensureMainIdentity(
 				systemConfigx.TLSCertFilepath,
 				systemConfigx.TLSPrivateKeyFilepath,
 			)),
+			ReadHeaderTimeout: readHeaderTimeout,
 		}
 
 		maintenanceMux := newMaintenanceModeHandler(
@@ -664,7 +670,7 @@ func (qq *Server) ensureMainIdentity(
 			handlers.RecoveryHandler(
 				handlers.PrintRecoveryStack(true),
 			)(
-				maintenanceMux,
+				securityHeadersHandler(maintenanceMux),
 			),
 		)
 

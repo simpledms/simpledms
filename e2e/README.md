@@ -10,6 +10,15 @@ Current coverage includes auth flows, user/space management, browse/upload flows
 npm run test:e2e
 ```
 
+Tests run in parallel (25% of CPU cores, 2 on CI); override with `--workers=<n>`. Each test creates
+its own uniquely named spaces and files. Tests tagged `@state` change the shared account or app
+state, so they run in the `chromium-state` project, one at a time, after all other tests passed.
+Running only that project (`--project=chromium-state`) also runs all other tests first; add
+`--no-deps` to skip them.
+
+For faster local runs against a dev-mode server, set `SIMPLEDMS_DEV_DISABLE_SQL_LOG=true` in
+`.env`; otherwise every SQL query is logged.
+
 Run with Playwright UI:
 
 ```bash
@@ -25,7 +34,7 @@ The user used for testing must have the `admin` role and have English as default
 - `E2E_BASE_URL`: Base URL for the app under test. Default: `https://localhost:7003`
 - `E2E_LOGIN_EMAIL`: Login email used by the global setup and auth helpers. Default: `dev+admin@simpledms.app`
 - `E2E_LOGIN_PASSWORD`: Login password used by the global setup and auth helpers. Default: `12345678`
-- `E2E_ALLOW_STATE_MUTATION`: Set to `1` to run state-mutating tests (for example, successful password/passphrase updates). Default: not enabled
+- `E2E_ALLOW_STATE_MUTATION`: Set to `1` to run state-mutating tests (for example, successful password/passphrase updates). These tests can change the login password used by later runs. Default: not enabled
 
 Example:
 

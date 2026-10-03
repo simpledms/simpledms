@@ -152,6 +152,11 @@
             "translation": "You must be logged in to change your password."
         },
         {
+            "id": "Invalid session cookie.",
+            "message": "Invalid session cookie.",
+            "translation": "Invalid session cookie."
+        },
+        {
             "id": "Password changed successfully.",
             "message": "Password changed successfully.",
             "translation": "Password changed successfully."
@@ -385,11 +390,6 @@
             "id": "Use backup code",
             "message": "Use backup code",
             "translation": ""
-        },
-        {
-            "id": "Invalid session cookie.",
-            "message": "Invalid session cookie.",
-            "translation": "Invalid session cookie."
         },
         {
             "id": "Add field",
@@ -1602,11 +1602,6 @@
             "translation": ""
         },
         {
-            "id": "MCP credential created.",
-            "message": "MCP credential created.",
-            "translation": ""
-        },
-        {
             "id": "No spaces available yet.",
             "message": "No spaces available yet.",
             "translation": ""
@@ -1659,11 +1654,6 @@
         {
             "id": "Token",
             "message": "Token",
-            "translation": ""
-        },
-        {
-            "id": "WebDAV credential created.",
-            "message": "WebDAV credential created.",
             "translation": ""
         },
         {
@@ -2182,6 +2172,11 @@
             "translation": ""
         },
         {
+            "id": "Only organization owners can manage users and settings.",
+            "message": "Only organization owners can manage users and settings.",
+            "translation": ""
+        },
+        {
             "id": "Settings",
             "message": "Settings",
             "translation": ""
@@ -2396,19 +2391,9 @@
             "translation": ""
         },
         {
-            "id": "Attribute «{Name}» added.",
-            "message": "Attribute «{Name}» added.",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "propertyx.Name"
-                }
-            ]
+            "id": "Attribute updated.",
+            "message": "Attribute updated.",
+            "translation": ""
         },
         {
             "id": "Add field attribute",
@@ -2489,11 +2474,6 @@
         {
             "id": "Edit field attribute",
             "message": "Edit field attribute",
-            "translation": ""
-        },
-        {
-            "id": "Attribute updated.",
-            "message": "Attribute updated.",
             "translation": ""
         },
         {
@@ -2592,6 +2572,16 @@
             "translation": ""
         },
         {
+            "id": "No new files found.",
+            "message": "No new files found.",
+            "translation": ""
+        },
+        {
+            "id": "Files uploaded successfully.",
+            "message": "Files uploaded successfully.",
+            "translation": ""
+        },
+        {
             "id": "Move to another Inbox",
             "message": "Move to another Inbox",
             "translation": ""
@@ -2654,16 +2644,6 @@
         {
             "id": "Filter by source",
             "message": "Filter by source",
-            "translation": ""
-        },
-        {
-            "id": "No new files found.",
-            "message": "No new files found.",
-            "translation": ""
-        },
-        {
-            "id": "Files uploaded successfully.",
-            "message": "Files uploaded successfully.",
             "translation": ""
         },
         {
@@ -3851,6 +3831,11 @@
             "translation": ""
         },
         {
+            "id": "Created destination",
+            "message": "Created destination",
+            "translation": ""
+        },
+        {
             "id": "Credential status values",
             "message": "Credential status values",
             "translation": ""
@@ -4351,6 +4336,11 @@
             "translation": ""
         },
         {
+            "id": "Upload token",
+            "message": "Upload token",
+            "translation": ""
+        },
+        {
             "id": "Uploading",
             "message": "Uploading",
             "translation": ""
@@ -4498,6 +4488,11 @@
         {
             "id": "New password must be different from current password.",
             "message": "New password must be different from current password.",
+            "translation": ""
+        },
+        {
+            "id": "A password is already set. Please use the change password form instead.",
+            "message": "A password is already set. Please use the change password form instead.",
             "translation": ""
         },
         {
@@ -5092,6 +5087,11 @@
             "translation": ""
         },
         {
+            "id": "Source file is not in inbox.",
+            "message": "Source file is not in inbox.",
+            "translation": ""
+        },
+        {
             "id": "Source file has no versions.",
             "message": "Source file has no versions.",
             "translation": ""
@@ -5114,11 +5114,6 @@
         {
             "id": "Could not update target file.",
             "message": "Could not update target file.",
-            "translation": ""
-        },
-        {
-            "id": "Source file is not in inbox.",
-            "message": "Source file is not in inbox.",
             "translation": ""
         },
         {
