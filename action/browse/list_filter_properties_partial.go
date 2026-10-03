@@ -734,7 +734,7 @@ func (qq *ListFilterPropertiesPartial) Widget(
 	} else {
 		// If no properties selected, show a message
 		children = append(children, &wx.Container{
-			Child: wx.T("Select properties above to show filter options."),
+			Child: wx.T("Select fields above to show filter options."),
 		})
 	}
 

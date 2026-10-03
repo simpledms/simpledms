@@ -31,10 +31,15 @@ type UnlockAppCmd struct {
 func NewUnlockAppCmd(infra *common.Infra, actions *Actions) *UnlockAppCmd {
 	config := actionx.NewConfig(actions.Route("unlock-app-cmd"), false)
 	return &UnlockAppCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[UnlockAppCmdData](infra, config, widget.T("Unlock app")),
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+		FormHelper: autil.NewFormHelperX[UnlockAppCmdData](
+			infra,
+			config,
+			widget.T("Unlock app"),
+			widget.T("Unlock"),
+		),
 	}
 }
 
@@ -45,7 +50,7 @@ func (qq *UnlockAppCmd) Data() *UnlockAppCmdData {
 // TODO DDos protection
 func (qq *UnlockAppCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	if !ctx.IsMainCtx() {
-		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be logged in to unlock the app.")
+		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be signed in to unlock the app.")
 	}
 	if ctx.MainCtx().Account.Role != mainrole.Admin {
 		return e.NewHTTPErrorf(http.StatusForbidden, "You must be an admin to unlock the app.")

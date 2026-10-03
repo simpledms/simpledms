@@ -43,20 +43,6 @@ func (qq *UserListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState) *widget.List {
 	var listItems []*widget.ListItem
 
-	listItems = append(listItems, &widget.ListItem{
-		Headline: widget.T("Add a new user"), // TODO Create or add? system or real world perspective?
-		Leading:  widget.NewIcon("add"),
-		Type:     widget.ListItemTypeHelper,
-		HTMXAttrs: qq.actions.CreateUserCmd.ModalLinkAttrs(
-			qq.actions.CreateUserCmd.Data(
-				tenantrole.User,
-				"",
-				"",
-				"",
-				ctx.MainCtx().Account.Language, // TODO okay?
-			), ""),
-	})
-
 	// TODO filtered by tenant?
 	users := ctx.TenantCtx().TTx.User.Query().Order(user.ByLastName(), user.ByFirstName()).AllX(ctx)
 
@@ -99,7 +85,7 @@ func (qq *UserListPartial) Widget(ctx ctxx.Context, state *UserListPartialState)
 		listItems = append(listItems, &widget.ListItem{
 			Leading:        leading,
 			Headline:       widget.Tu(userm.Name()),
-			SupportingText: widget.Tf("%s - %s", widget.Tu(userm.NameSecondLine()), ownershipText),
+			SupportingText: widget.Tf("%s · %s", widget.Tu(userm.NameSecondLine()), ownershipText),
 			ContextMenu: NewUserContextMenuWidget(qq.actions).Widget(
 				ctx,
 				userx,

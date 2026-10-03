@@ -43,7 +43,7 @@ func (qq *PasskeyRegisterFinishCmd) Data() *PasskeyRegisterFinishCmdData {
 }
 
 func (qq *PasskeyRegisterFinishCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be logged in to register a passkey.")
+	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be signed in to register a passkey.")
 	if err != nil {
 		return err
 	}

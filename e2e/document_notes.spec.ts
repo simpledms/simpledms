@@ -32,14 +32,14 @@ async function createSpaceAndSelect(page: Page, name: string) {
 		await organization.click();
 	}
 	await page.getByRole("link", { name: "Spaces", exact: true }).click();
-	await page.getByRole("link", { name: /Create space|^add$/ }).click();
+	await page.getByRole("link", { name: /Create Space/ }).first().click();
 	await page.getByRole("textbox", { name: "Name", exact: true }).fill(name);
 	const owner = page.getByRole("checkbox", { name: "Add me as space owner" });
 	expect(await owner.evaluate(input =>
 		input.parentElement!.parentElement!.parentElement!.getBoundingClientRect().height,
 	)).toBe(48);
 	await owner.check();
-	await page.getByRole("button", { name: "Save", exact: true }).click();
+	await page.getByRole("button", { name: "Create", exact: true }).click();
 	await page.getByRole("heading", { name, exact: true }).click();
 	await expect(page).toHaveURL(/\/browse\/$/);
 }
@@ -602,7 +602,7 @@ for (const device of [
 			const move = page.getByRole("dialog").filter({
 				has: page.getByRole("heading", { name: /Move file to/ }),
 			});
-			await move.getByRole("button", { name: "Save", exact: true }).click();
+			await move.getByRole("button", { name: "Move", exact: true }).click();
 			await expect(move).not.toBeVisible();
 			await page.goto(browseURL);
 			await openDocument(page);
@@ -635,7 +635,6 @@ for (const device of [
 			const trashRow = page.locator("#trashList").getByRole("listitem")
 				.filter({ hasText: fileName });
 			await trashRow.click({ button: "right" });
-			page.once("dialog", dialog => dialog.accept());
 			await trashRow.getByText("Restore", { exact: true }).click();
 			await expect(trashRow).toHaveCount(0);
 			await page.goto(browseURL);
@@ -661,7 +660,7 @@ for (const device of [
 			const target = await saveNote(page, "Target note stays unchanged");
 			await page.getByRole("tab", { name: "Versions", exact: true }).click();
 			const openMerge = async () => {
-				await page.getByRole("link", { name: /Add new version from inbox/ }).click();
+				await page.getByRole("link", { name: /Add new version from Inbox/ }).click();
 				const dialog = page.locator("#fileVersionFromInboxDialog");
 				await expect(dialog).toBeVisible();
 				const confirmation = dialog.locator('input[name="ConfirmWarning"]');

@@ -31,10 +31,15 @@ type SetInitialPasswordCmd struct {
 func NewSetInitialPasswordCmd(infra *common.Infra, actions *Actions) *SetInitialPasswordCmd {
 	config := actionx.NewConfig(actions.Route("set-initial-password-cmd"), false)
 	return &SetInitialPasswordCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[SetInitialPasswordCmdData](infra, config, widget.T("Set password")),
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+		FormHelper: autil.NewFormHelperX[SetInitialPasswordCmdData](
+			infra,
+			config,
+			widget.T("Set password"),
+			widget.T("Set password"),
+		),
 	}
 }
 
@@ -48,7 +53,7 @@ func (qq *SetInitialPasswordCmd) Data(newPassword, confirmPassword string) *SetI
 func (qq *SetInitialPasswordCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	// Ensure user is logged in
 	if !ctx.IsMainCtx() {
-		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be logged in to change your password.")
+		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be signed in to change your password.")
 	}
 
 	data, err := autil.FormData[SetInitialPasswordCmdData](rw, req, ctx)
@@ -74,6 +79,6 @@ func (qq *SetInitialPasswordCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.InitialPasswordSet.String())
 
-	rw.AddRenderables(widget.NewSnackbarf("Initial password set successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("Password set."))
 	return nil
 }

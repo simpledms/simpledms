@@ -85,7 +85,7 @@ func (qq *PasskeyRecoverySignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 	}
 
 	recoveryCodesCount := len(updatedAccountx.PasskeyRecoveryCodeHashes)
-	rw.AddRenderables(widget.NewSnackbarf("Logged in successfully. %d backup codes left.", recoveryCodesCount))
+	rw.AddRenderables(widget.NewSnackbarf("Signed in. %d backup codes left.", recoveryCodesCount))
 	rw.Header().Set("HX-Redirect", route.Dashboard())
 
 	return nil

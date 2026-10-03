@@ -36,7 +36,7 @@ func (qq *ManageUsersOfTenantPage) Handler(rw httpx.ResponseWriter, req *httpx.R
 		return err
 	}
 	state := autil.StateX[ManageUsersOfTenantPageState](rw, req)
-	return qq.Render(rw, req, ctx, qq.infra, "Manage users of tenant", qq.Widget(ctx, state))
+	return qq.Render(rw, req, ctx, qq.infra, "Users", qq.Widget(ctx, state))
 }
 
 func (qq *ManageUsersOfTenantPage) Widget(ctx ctxx.Context, state *ManageUsersOfTenantPageState) renderable.Renderable {
@@ -75,7 +75,7 @@ func (qq *ManageUsersOfTenantPage) appBar(ctx ctxx.Context) *widget.AppBar {
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title: &widget.AppBarTitle{
-			Text: widget.Tf("Users «%s»", ctx.TenantCtx().Tenant.Name),
+			Text: widget.T("Users"),
 		},
 		Actions: []widget.IWidget{
 			/*&wx.IconButton{

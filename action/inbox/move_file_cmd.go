@@ -46,7 +46,7 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	}
 
 	fileData, err := filingmodel.NewFilingService(qq.infra.FileSystem()).FileInboxDocument(
-		ctx, data.FileID, data.CurrentDirID, data.Filename, data.NewDirName,
+		ctx, data.FileID, data.CurrentDirID, data.Filename, data.NewFolderName,
 	)
 	if err != nil {
 		log.Println(err)

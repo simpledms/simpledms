@@ -15,7 +15,7 @@ type MaintenanceUnlockForm struct {
 func NewMaintenanceUnlockForm() *MaintenanceUnlockForm {
 	return &MaintenanceUnlockForm{
 		PassphraseLabel:  T("Application passphrase"),
-		SubmitLabel:      T("Unlock application"),
+		SubmitLabel:      T("Unlock app"),
 		RequiredMessage:  T("Passphrase is required."),
 		InvalidMessage:   T("Invalid passphrase."),
 		FailureMessage:   T("Something went wrong. Please try again."),

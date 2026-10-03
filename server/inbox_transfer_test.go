@@ -204,7 +204,7 @@ func TestInboxTransferDialogListsOnlyOptedInActiveOtherInboxesForNonmember(t *te
 		allowed.PublicID.String(), "&lt;script&gt;Receiving&lt;/script&gt;",
 		`name="DestinationSpaceID"`, `name="Message"`, "Message (optional)",
 		"Moving clears the document type, tags, and custom fields.",
-		"You can choose other Spaces in this tenant where you have write access, " +
+		"You can choose other Spaces in this organization where you have write access, " +
 			"or whose Inboxes accept transfers.",
 		"Versions and notes are kept.", "you will lose access to this file", `hx-swap="none"`,
 	} {

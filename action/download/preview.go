@@ -57,14 +57,14 @@ func (qq *Preview) OriginalSourceHandler(
 		return err
 	}
 	if filex.Data.IsDirectory {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "cannot preview directories")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Folders cannot be previewed.")
 	}
 
 	extension := strings.ToLower(filepath.Ext(source.Filename))
 	mimeType := strings.ToLower(strings.TrimSpace(strings.Split(source.MimeType, ";")[0]))
 	if extension != ".html" && extension != ".htm" && extension != ".xhtml" &&
 		mimeType != "text/html" && mimeType != "application/xhtml+xml" {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "original source preview is only available for HTML files")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Original source preview is only available for HTML files.")
 	}
 
 	openedFile, err := qq.infra.FileSystem().OpenFile(ctx, storedfilemodel.NewStoredFile(source))
@@ -80,7 +80,7 @@ func (qq *Preview) OriginalSourceHandler(
 	commonaction.SetDownloadSecurityHeaders(rw.Header(), "text/plain; charset=utf-8", true)
 	rw.WriteHeader(http.StatusOK)
 	if _, err := io.Copy(rw, openedFile); err != nil {
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "could not read file")
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not read file.")
 	}
 	return nil
 }
@@ -96,7 +96,7 @@ func (qq *Preview) streamPDF(
 		return err
 	}
 	if filex.Data.IsDirectory {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "cannot download directories")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Folders cannot be downloaded.")
 	}
 
 	conversion, err := ctx.TenantCtx().TTx.PreviewConversion.Query().
@@ -108,7 +108,7 @@ func (qq *Preview) streamPDF(
 		Only(ctx)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
-			return e.NewHTTPErrorf(http.StatusNotFound, "PDF preview is not available")
+			return e.NewHTTPErrorf(http.StatusNotFound, "PDF preview is not available.")
 		}
 		return err
 	}
@@ -117,12 +117,12 @@ func (qq *Preview) streamPDF(
 	preview, err := ctx.TenantCtx().TTx.StoredFile.Get(previewContext, *conversion.PreviewStoredFileID)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
-			return e.NewHTTPErrorf(http.StatusNotFound, "PDF preview is not available")
+			return e.NewHTTPErrorf(http.StatusNotFound, "PDF preview is not available.")
 		}
 		return err
 	}
 	if preview.CopiedToFinalDestinationAt == nil {
-		return e.NewHTTPErrorf(http.StatusNotFound, "PDF preview is not available")
+		return e.NewHTTPErrorf(http.StatusNotFound, "PDF preview is not available.")
 	}
 
 	openedFile, err := qq.infra.FileSystem().OpenFile(ctx, storedfilemodel.NewStoredFile(preview))
@@ -153,7 +153,7 @@ func (qq *Preview) streamPDF(
 	}
 	rw.WriteHeader(http.StatusOK)
 	if _, err := io.Copy(rw, openedFile); err != nil {
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "could not read file")
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not read file.")
 	}
 	return nil
 }
@@ -165,7 +165,7 @@ func (qq *Preview) source(
 ) (*filemodel.File, *enttenant.StoredFile, error) {
 	filex := qq.infra.FileRepo.GetX(ctx, fileID)
 	if filex.Data.IsDirectory {
-		return filex, nil, e.NewHTTPErrorf(http.StatusBadRequest, "cannot preview directories")
+		return filex, nil, e.NewHTTPErrorf(http.StatusBadRequest, "Folders cannot be previewed.")
 	}
 	if versionNumber == "" {
 		return filex, filex.CurrentVersion(ctx).Data, nil
@@ -173,7 +173,7 @@ func (qq *Preview) source(
 
 	versionInt, err := strconv.Atoi(versionNumber)
 	if err != nil {
-		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "invalid version number")
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid version number.")
 	}
 	version, err := filex.Data.QueryFileVersions().
 		Where(fileversion.VersionNumber(versionInt)).
@@ -181,7 +181,7 @@ func (qq *Preview) source(
 		Only(ctx)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
-			return nil, nil, e.NewHTTPErrorf(http.StatusNotFound, "version not found")
+			return nil, nil, e.NewHTTPErrorf(http.StatusNotFound, "Version not found.")
 		}
 		return nil, nil, err
 	}

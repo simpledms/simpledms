@@ -38,18 +38,18 @@ func (qq *FileVersionFromInboxService) MergeFromInbox(
 	}
 
 	if sourceFile.SpaceID != ctx.SpaceCtx().Space.ID || targetFile.SpaceID != ctx.SpaceCtx().Space.ID {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File does not belong to current space.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File does not belong to the current Space.")
 	}
 
 	if sourceFile.IsDirectory || targetFile.IsDirectory {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot merge directories.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot merge folders.")
 	}
 
 	if !sourceFile.DeletedAt.IsZero() {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Source file is deleted.")
 	}
 	if !sourceFile.IsInInbox {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Source file is not in inbox.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Source file is not in the Inbox.")
 	}
 	if !targetFile.DeletedAt.IsZero() {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File not found.")

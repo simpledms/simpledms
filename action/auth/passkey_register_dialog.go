@@ -37,7 +37,7 @@ func (qq *PasskeyRegisterDialog) Handler(
 	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
-	_, err := qq.actions.RequireMainCtx(ctx, "You must be logged in to register a passkey.")
+	_, err := qq.actions.RequireMainCtx(ctx, "You must be signed in to register a passkey.")
 	if err != nil {
 		return err
 	}

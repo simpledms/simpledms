@@ -9,9 +9,9 @@
             "fuzzy": true
         },
         {
-            "id": "You must be logged in to unlock the app.",
-            "message": "You must be logged in to unlock the app.",
-            "translation": "You must be logged in to unlock the app.",
+            "id": "You must be signed in to unlock the app.",
+            "message": "You must be signed in to unlock the app.",
+            "translation": "You must be signed in to unlock the app.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -30,9 +30,16 @@
             "fuzzy": true
         },
         {
-            "id": "Init app",
-            "message": "Init app",
-            "translation": "Init app",
+            "id": "Initialize app",
+            "message": "Initialize app",
+            "translation": "Initialize app",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Initialize",
+            "message": "Initialize",
+            "translation": "Initialize",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -54,6 +61,13 @@
             "id": "Remove passphrase",
             "message": "Remove passphrase",
             "translation": "Remove passphrase",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Remove",
+            "message": "Remove",
+            "translation": "Remove",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -124,9 +138,9 @@
             "fuzzy": true
         },
         {
-            "id": "Tenant upload limit updated to {UploadLimitLabel}.",
-            "message": "Tenant upload limit updated to {UploadLimitLabel}.",
-            "translation": "Tenant upload limit updated to {UploadLimitLabel}.",
+            "id": "Organization upload limit updated to {UploadLimitLabel}.",
+            "message": "Organization upload limit updated to {UploadLimitLabel}.",
+            "translation": "Organization upload limit updated to {UploadLimitLabel}.",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -148,9 +162,9 @@
             "fuzzy": true
         },
         {
-            "id": "Set tenant upload limit",
-            "message": "Set tenant upload limit",
-            "translation": "Set tenant upload limit",
+            "id": "Set organization upload limit",
+            "message": "Set organization upload limit",
+            "translation": "Set organization upload limit",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -162,6 +176,13 @@
             "fuzzy": true
         },
         {
+            "id": "Unlock",
+            "message": "Unlock",
+            "translation": "Unlock",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "App unlocked.",
             "message": "App unlocked.",
             "translation": "App unlocked.",
@@ -169,9 +190,9 @@
             "fuzzy": true
         },
         {
-            "id": "You must be logged in to perform this action.",
-            "message": "You must be logged in to perform this action.",
-            "translation": "You must be logged in to perform this action.",
+            "id": "You must be signed in to perform this action.",
+            "message": "You must be signed in to perform this action.",
+            "translation": "You must be signed in to perform this action.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -197,9 +218,9 @@
             "fuzzy": true
         },
         {
-            "id": "You must be logged in to change your password.",
-            "message": "You must be logged in to change your password.",
-            "translation": "You must be logged in to change your password.",
+            "id": "You must be signed in to change your password.",
+            "message": "You must be signed in to change your password.",
+            "translation": "You must be signed in to change your password.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -211,23 +232,23 @@
             "fuzzy": true
         },
         {
-            "id": "Password changed successfully.",
-            "message": "Password changed successfully.",
-            "translation": "Password changed successfully.",
+            "id": "Password changed.",
+            "message": "Password changed.",
+            "translation": "Password changed.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "You must be logged in to manage passkeys.",
-            "message": "You must be logged in to manage passkeys.",
-            "translation": "You must be logged in to manage passkeys.",
+            "id": "You must be signed in to manage passkeys.",
+            "message": "You must be signed in to manage passkeys.",
+            "translation": "You must be signed in to manage passkeys.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Passkeys cannot be removed because a tenant requires passkey login.",
-            "message": "Passkeys cannot be removed because a tenant requires passkey login.",
-            "translation": "Passkeys cannot be removed because a tenant requires passkey login.",
+            "id": "Passkeys cannot be removed because an organization requires passkey sign-in.",
+            "message": "Passkeys cannot be removed because an organization requires passkey sign-in.",
+            "translation": "Passkeys cannot be removed because an organization requires passkey sign-in.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -246,23 +267,30 @@
             "fuzzy": true
         },
         {
-            "id": "Temporary password cleared successfully.",
-            "message": "Temporary password cleared successfully.",
-            "translation": "Temporary password cleared successfully.",
+            "id": "Clear",
+            "message": "Clear",
+            "translation": "Clear",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "A tenant requires passkey login, so at least one passkey must remain.",
-            "message": "A tenant requires passkey login, so at least one passkey must remain.",
-            "translation": "A tenant requires passkey login, so at least one passkey must remain.",
+            "id": "Temporary password cleared.",
+            "message": "Temporary password cleared.",
+            "translation": "Temporary password cleared.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Passkey removed.",
-            "message": "Passkey removed.",
-            "translation": "Passkey removed.",
+            "id": "An organization requires passkey sign-in, so at least one passkey must remain.",
+            "message": "An organization requires passkey sign-in, so at least one passkey must remain.",
+            "translation": "An organization requires passkey sign-in, so at least one passkey must remain.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Passkey deleted.",
+            "message": "Passkey deleted.",
+            "translation": "Passkey deleted.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -295,9 +323,9 @@
             "fuzzy": true
         },
         {
-            "id": "You must be logged in to view backup codes.",
-            "message": "You must be logged in to view backup codes.",
-            "translation": "You must be logged in to view backup codes.",
+            "id": "You must be signed in to view backup codes.",
+            "message": "You must be signed in to view backup codes.",
+            "translation": "You must be signed in to view backup codes.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -330,9 +358,9 @@
             "fuzzy": true
         },
         {
-            "id": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
-            "message": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
-            "translation": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
+            "id": "Signed in. {RecoveryCodesCount} backup codes left.",
+            "message": "Signed in. {RecoveryCodesCount} backup codes left.",
+            "translation": "Signed in. {RecoveryCodesCount} backup codes left.",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -347,9 +375,9 @@
             "fuzzy": true
         },
         {
-            "id": "You must be logged in to register a passkey.",
-            "message": "You must be logged in to register a passkey.",
-            "translation": "You must be logged in to register a passkey.",
+            "id": "You must be signed in to register a passkey.",
+            "message": "You must be signed in to register a passkey.",
+            "translation": "You must be signed in to register a passkey.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -382,9 +410,9 @@
             "fuzzy": true
         },
         {
-            "id": "You must be logged in to manage backup codes.",
-            "message": "You must be logged in to manage backup codes.",
-            "translation": "You must be logged in to manage backup codes.",
+            "id": "You must be signed in to manage backup codes.",
+            "message": "You must be signed in to manage backup codes.",
+            "translation": "You must be signed in to manage backup codes.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -452,9 +480,9 @@
             "fuzzy": true
         },
         {
-            "id": "Initial password set successfully.",
-            "message": "Initial password set successfully.",
-            "translation": "Initial password set successfully.",
+            "id": "Password set.",
+            "message": "Password set.",
+            "translation": "Password set.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -494,9 +522,9 @@
             "fuzzy": true
         },
         {
-            "id": "Logged in successfully.",
-            "message": "Logged in successfully.",
-            "translation": "Logged in successfully.",
+            "id": "Signed in.",
+            "message": "Signed in.",
+            "translation": "Signed in.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -588,16 +616,23 @@
             "fuzzy": true
         },
         {
-            "id": "file is not a directory",
-            "message": "file is not a directory",
-            "translation": "file is not a directory",
+            "id": "Add",
+            "message": "Add",
+            "translation": "Add",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "could not render widget",
-            "message": "could not render widget",
-            "translation": "could not render widget",
+            "id": "File is not a folder.",
+            "message": "File is not a folder.",
+            "translation": "File is not a folder.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Could not render widget.",
+            "message": "Could not render widget.",
+            "translation": "Could not render widget.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -616,23 +651,23 @@
             "fuzzy": true
         },
         {
-            "id": "Create directory",
-            "message": "Create directory",
-            "translation": "Create directory",
+            "id": "Create folder",
+            "message": "Create folder",
+            "translation": "Create folder",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "No dir id provided.",
-            "message": "No dir id provided.",
-            "translation": "No dir id provided.",
+            "id": "No folder ID provided.",
+            "message": "No folder ID provided.",
+            "translation": "No folder ID provided.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "No file id provided.",
-            "message": "No file id provided.",
-            "translation": "No file id provided.",
+            "id": "No file ID provided.",
+            "message": "No file ID provided.",
+            "translation": "No file ID provided.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1109,16 +1144,23 @@
             "fuzzy": true
         },
         {
-            "id": "Are you sure?",
-            "message": "Are you sure?",
-            "translation": "Are you sure?",
+            "id": "Unzip archive",
+            "message": "Unzip archive",
+            "translation": "Unzip archive",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Unzip archive",
-            "message": "Unzip archive",
-            "translation": "Unzip archive",
+            "id": "Delete this file? You can restore it from the Trash.",
+            "message": "Delete this file? You can restore it from the Trash.",
+            "translation": "Delete this file? You can restore it from the Trash.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete this folder? Its files can be restored from the Trash.",
+            "message": "Delete this folder? Its files can be restored from the Trash.",
+            "translation": "Delete this folder? Its files can be restored from the Trash.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1273,9 +1315,9 @@
             "fuzzy": true
         },
         {
-            "id": "rendering failed",
-            "message": "rendering failed",
-            "translation": "rendering failed",
+            "id": "Rendering failed.",
+            "message": "Rendering failed.",
+            "translation": "Rendering failed.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1294,9 +1336,9 @@
             "fuzzy": true
         },
         {
-            "id": "version not found",
-            "message": "version not found",
-            "translation": "version not found",
+            "id": "Version not found.",
+            "message": "Version not found.",
+            "translation": "Version not found.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1308,13 +1350,6 @@
             "fuzzy": true
         },
         {
-            "id": "Remove",
-            "message": "Remove",
-            "translation": "Remove",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Remove this field value?",
             "message": "Remove this field value?",
             "translation": "Remove this field value?",
@@ -1322,9 +1357,9 @@
             "fuzzy": true
         },
         {
-            "id": "Loading more...",
-            "message": "Loading more...",
-            "translation": "Loading more...",
+            "id": "Loading more…",
+            "message": "Loading more…",
+            "translation": "Loading more…",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1441,37 +1476,30 @@
             "fuzzy": true
         },
         {
-            "id": "Added new version from inbox.",
-            "message": "Added new version from inbox.",
-            "translation": "Added new version from inbox.",
+            "id": "Added new version from Inbox.",
+            "message": "Added new version from Inbox.",
+            "translation": "Added new version from Inbox.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
-            "message": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
-            "translation": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
+            "id": "I understand that the Inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
+            "message": "I understand that the Inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
+            "translation": "I understand that the Inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Search inbox files",
-            "message": "Search inbox files",
-            "translation": "Search inbox files",
+            "id": "Search Inbox files",
+            "message": "Search Inbox files",
+            "translation": "Search Inbox files",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Add new version from inbox",
-            "message": "Add new version from inbox",
-            "translation": "Add new version from inbox",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Add",
-            "message": "Add",
-            "translation": "Add",
+            "id": "Add new version from Inbox",
+            "message": "Add new version from Inbox",
+            "translation": "Add new version from Inbox",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1490,9 +1518,9 @@
             "fuzzy": true
         },
         {
-            "id": "File must be in inbox.",
-            "message": "File must be in inbox.",
-            "translation": "File must be in inbox.",
+            "id": "File must be in the Inbox.",
+            "message": "File must be in the Inbox.",
+            "translation": "File must be in the Inbox.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1504,16 +1532,16 @@
             "fuzzy": true
         },
         {
-            "id": "missing version number",
-            "message": "missing version number",
-            "translation": "missing version number",
+            "id": "Missing version number.",
+            "message": "Missing version number.",
+            "translation": "Missing version number.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "invalid version number",
-            "message": "invalid version number",
-            "translation": "invalid version number",
+            "id": "Invalid version number.",
+            "message": "Invalid version number.",
+            "translation": "Invalid version number.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1560,9 +1588,9 @@
             "fuzzy": true
         },
         {
-            "id": "No files or directories available yet.",
-            "message": "No files or directories available yet.",
-            "translation": "No files or directories available yet.",
+            "id": "No files or folders available yet.",
+            "message": "No files or folders available yet.",
+            "translation": "No files or folders available yet.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1737,6 +1765,13 @@
             "fuzzy": true
         },
         {
+            "id": "Create",
+            "message": "Create",
+            "translation": "Create",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "«{Name}» created.",
             "message": "«{Name}» created.",
             "translation": "«{Name}» created.",
@@ -1754,9 +1789,9 @@
             "fuzzy": true
         },
         {
-            "id": "Open directory",
-            "message": "Open directory",
-            "translation": "Open directory",
+            "id": "Open folder",
+            "message": "Open folder",
+            "translation": "Open folder",
             "comment": "TODO Go to, open, show?",
             "translatorComment": "Copied from source.",
             "fuzzy": true
@@ -1825,9 +1860,9 @@
             "fuzzy": true
         },
         {
-            "id": "Renamed to «{Name}»",
-            "message": "Renamed to «{Name}»",
-            "translation": "Renamed to «{Name}»",
+            "id": "Renamed to «{Name}».",
+            "message": "Renamed to «{Name}».",
+            "translation": "Renamed to «{Name}».",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -1842,23 +1877,16 @@
             "fuzzy": true
         },
         {
-            "id": "PDF preview conversion is not configured",
-            "message": "PDF preview conversion is not configured",
-            "translation": "PDF preview conversion is not configured",
+            "id": "PDF preview conversion is not configured.",
+            "message": "PDF preview conversion is not configured.",
+            "translation": "PDF preview conversion is not configured.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "PDF preview is not available",
-            "message": "PDF preview is not available",
-            "translation": "PDF preview is not available",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "PDF preview is not ready to retry",
-            "message": "PDF preview is not ready to retry",
-            "translation": "PDF preview is not ready to retry",
+            "id": "PDF preview is not ready to retry.",
+            "message": "PDF preview is not ready to retry.",
+            "translation": "PDF preview is not ready to retry.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1912,6 +1940,13 @@
             "fuzzy": true
         },
         {
+            "id": "Unzip",
+            "message": "Unzip",
+            "translation": "Unzip",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Not a ZIP archive.",
             "message": "Not a ZIP archive.",
             "translation": "Not a ZIP archive.",
@@ -1940,9 +1975,9 @@
             "fuzzy": true
         },
         {
-            "id": "Could not create directory structure.",
-            "message": "Could not create directory structure.",
-            "translation": "Could not create directory structure.",
+            "id": "Could not create folder structure.",
+            "message": "Could not create folder structure.",
+            "translation": "Could not create folder structure.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -1982,26 +2017,16 @@
             "fuzzy": true
         },
         {
-            "id": "«{Name}» filter updated.",
-            "message": "«{Name}» filter updated.",
-            "translation": "«{Name}» filter updated.",
+            "id": "Upload",
+            "message": "Upload",
+            "translation": "Upload",
             "translatorComment": "Copied from source.",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "propertyx.Name"
-                }
-            ],
             "fuzzy": true
         },
         {
-            "id": "No parent dir provided.",
-            "message": "No parent dir provided.",
-            "translation": "No parent dir provided.",
+            "id": "No parent folder provided.",
+            "message": "No parent folder provided.",
+            "translation": "No parent folder provided.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2061,16 +2086,16 @@
             "fuzzy": true
         },
         {
-            "id": "Cannot upload versions for directories.",
-            "message": "Cannot upload versions for directories.",
-            "translation": "Cannot upload versions for directories.",
+            "id": "Cannot upload versions for folders.",
+            "message": "Cannot upload versions for folders.",
+            "translation": "Cannot upload versions for folders.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "cannot download directories",
-            "message": "cannot download directories",
-            "translation": "cannot download directories",
+            "id": "Folders cannot be downloaded.",
+            "message": "Folders cannot be downloaded.",
+            "translation": "Folders cannot be downloaded.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2099,9 +2124,9 @@
             "fuzzy": true
         },
         {
-            "id": "Directory up",
-            "message": "Directory up",
-            "translation": "Directory up",
+            "id": "Parent folder",
+            "message": "Parent folder",
+            "translation": "Parent folder",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2134,9 +2159,9 @@
             "fuzzy": true
         },
         {
-            "id": "No spaces available yet.",
-            "message": "No spaces available yet.",
-            "translation": "No spaces available yet.",
+            "id": "No Spaces available yet.",
+            "message": "No Spaces available yet.",
+            "translation": "No Spaces available yet.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2165,13 +2190,6 @@
             "id": "Space",
             "message": "Space",
             "translation": "Space",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Create",
-            "message": "Create",
-            "translation": "Create",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2577,9 +2595,9 @@
             "fuzzy": true
         },
         {
-            "id": "You've logged in with a temporary password. Please set a password to secure your account and use the app.",
-            "message": "You've logged in with a temporary password. Please set a password to secure your account and use the app.",
-            "translation": "You've logged in with a temporary password. Please set a password to secure your account and use the app.",
+            "id": "You've signed in with a temporary password. Please set a password to secure your account and use the app.",
+            "message": "You've signed in with a temporary password. Please set a password to secure your account and use the app.",
+            "translation": "You've signed in with a temporary password. Please set a password to secure your account and use the app.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2605,16 +2623,16 @@
             "fuzzy": true
         },
         {
-            "id": "No space available yet",
-            "message": "No space available yet",
-            "translation": "No space available yet",
+            "id": "No Space available yet",
+            "message": "No Space available yet",
+            "translation": "No Space available yet",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "You have no permission to access any space of this organization.",
-            "message": "You have no permission to access any space of this organization.",
-            "translation": "You have no permission to access any space of this organization.",
+            "id": "You have no permission to access any Space of this organization.",
+            "message": "You have no permission to access any Space of this organization.",
+            "translation": "You have no permission to access any Space of this organization.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2626,9 +2644,9 @@
             "fuzzy": true
         },
         {
-            "id": "Manage spaces",
-            "message": "Manage spaces",
-            "translation": "Manage spaces",
+            "id": "Manage Spaces",
+            "message": "Manage Spaces",
+            "translation": "Manage Spaces",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2668,35 +2686,18 @@
             "fuzzy": true
         },
         {
-            "id": "Created on {Format2006_01_02_1504}",
-            "message": "Created on {Format2006_01_02_1504}",
-            "translation": "Created on {Format2006_01_02_1504}",
+            "id": "Last used: {LanguageBCP47}",
+            "message": "Last used: {LanguageBCP47}",
+            "translation": "Last used: {LanguageBCP47}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
-                    "id": "Format2006_01_02_1504",
+                    "id": "LanguageBCP47",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "credentialx.CreatedAt.Format(\"2006-01-02 15:04\")"
-                }
-            ],
-            "fuzzy": true
-        },
-        {
-            "id": "Last used on {Format2006_01_02_1504}",
-            "message": "Last used on {Format2006_01_02_1504}",
-            "translation": "Last used on {Format2006_01_02_1504}",
-            "translatorComment": "Copied from source.",
-            "placeholders": [
-                {
-                    "id": "Format2006_01_02_1504",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "credentialx.LastUsedAt.Format(\"2006-01-02 15:04\")"
+                    "expr": "timex.NewDateTime(*credentialx.LastUsedAt).String(ctx.MainCtx().LanguageBCP47)"
                 }
             ],
             "fuzzy": true
@@ -2723,9 +2724,23 @@
             "fuzzy": true
         },
         {
+            "id": "Edit MCP credential",
+            "message": "Edit MCP credential",
+            "translation": "Edit MCP credential",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Changes saved.",
             "message": "Changes saved.",
             "translation": "Changes saved.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Edit WebDAV credential",
+            "message": "Edit WebDAV credential",
+            "translation": "Edit WebDAV credential",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2751,9 +2766,9 @@
             "fuzzy": true
         },
         {
-            "id": "No MCP credentials",
-            "message": "No MCP credentials",
-            "translation": "No MCP credentials",
+            "id": "No MCP credentials yet.",
+            "message": "No MCP credentials yet.",
+            "translation": "No MCP credentials yet.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2850,13 +2865,6 @@
             "fuzzy": true
         },
         {
-            "id": "Actions",
-            "message": "Actions",
-            "translation": "Actions",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Revoke",
             "message": "Revoke",
             "translation": "Revoke",
@@ -2874,13 +2882,6 @@
             "id": "MCP credentials",
             "message": "MCP credentials",
             "translation": "MCP credentials",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Only organization owners can manage users and settings.",
-            "message": "Only organization owners can manage users and settings.",
-            "translation": "Only organization owners can manage users and settings.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2934,9 +2935,9 @@
             "fuzzy": true
         },
         {
-            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
-            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
-            "translation": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "id": "Delete this organization? All accounts owned by it will be deleted globally.",
+            "message": "Delete this organization? All accounts owned by it will be deleted globally.",
+            "translation": "Delete this organization? All accounts owned by it will be deleted globally.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2944,6 +2945,13 @@
             "id": "Download backup",
             "message": "Download backup",
             "translation": "Download backup",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete this passkey?",
+            "message": "Delete this passkey?",
+            "translation": "Delete this passkey?",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -2997,9 +3005,9 @@
             "fuzzy": true
         },
         {
-            "id": "You must be logged in to manage organizations.",
-            "message": "You must be logged in to manage organizations.",
-            "translation": "You must be logged in to manage organizations.",
+            "id": "You must be signed in to manage organizations.",
+            "message": "You must be signed in to manage organizations.",
+            "translation": "You must be signed in to manage organizations.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3039,9 +3047,9 @@
             "fuzzy": true
         },
         {
-            "id": "No WebDAV credentials",
-            "message": "No WebDAV credentials",
-            "translation": "No WebDAV credentials",
+            "id": "No WebDAV credentials yet.",
+            "message": "No WebDAV credentials yet.",
+            "translation": "No WebDAV credentials yet.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3163,16 +3171,16 @@
             "fuzzy": true
         },
         {
-            "id": "Attribute updated.",
-            "message": "Attribute updated.",
-            "translation": "Attribute updated.",
+            "id": "Add field attribute",
+            "message": "Add field attribute",
+            "translation": "Add field attribute",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Add field attribute",
-            "message": "Add field attribute",
-            "translation": "Add field attribute",
+            "id": "Attribute updated.",
+            "message": "Attribute updated.",
+            "translation": "Attribute updated.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3181,6 +3189,13 @@
             "message": "Please create a field first.",
             "translation": "Please create a field first.",
             "comment": "TODO link",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete this attribute?",
+            "message": "Delete this attribute?",
+            "translation": "Delete this attribute?",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3195,6 +3210,13 @@
             "id": "name-giving",
             "message": "name-giving",
             "translation": "name-giving",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete this document type?",
+            "message": "Delete this document type?",
+            "translation": "Delete this document type?",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3237,9 +3259,9 @@
             "fuzzy": true
         },
         {
-            "id": "Add document type",
-            "message": "Add document type",
-            "translation": "Add document type",
+            "id": "Create document type",
+            "message": "Create document type",
+            "translation": "Create document type",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3324,9 +3346,9 @@
             "fuzzy": true
         },
         {
-            "id": "Import is only available for empty spaces.",
-            "message": "Import is only available for empty spaces.",
-            "translation": "Import is only available for empty spaces.",
+            "id": "Import is only available for empty Spaces.",
+            "message": "Import is only available for empty Spaces.",
+            "translation": "Import is only available for empty Spaces.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3352,9 +3374,9 @@
             "fuzzy": true
         },
         {
-            "id": "RenameCmd document type",
-            "message": "RenameCmd document type",
-            "translation": "RenameCmd document type",
+            "id": "Rename document type",
+            "message": "Rename document type",
+            "translation": "Rename document type",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3376,23 +3398,23 @@
             "fuzzy": true
         },
         {
-            "id": "cannot preview directories",
-            "message": "cannot preview directories",
-            "translation": "cannot preview directories",
+            "id": "Folders cannot be previewed.",
+            "message": "Folders cannot be previewed.",
+            "translation": "Folders cannot be previewed.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "original source preview is only available for HTML files",
-            "message": "original source preview is only available for HTML files",
-            "translation": "original source preview is only available for HTML files",
+            "id": "Original source preview is only available for HTML files.",
+            "message": "Original source preview is only available for HTML files.",
+            "translation": "Original source preview is only available for HTML files.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "could not read file",
-            "message": "could not read file",
-            "translation": "could not read file",
+            "id": "Could not read file.",
+            "message": "Could not read file.",
+            "translation": "Could not read file.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3404,6 +3426,13 @@
             "fuzzy": true
         },
         {
+            "id": "Assign",
+            "message": "Assign",
+            "translation": "Assign",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "No new files found.",
             "message": "No new files found.",
             "translation": "No new files found.",
@@ -3411,9 +3440,9 @@
             "fuzzy": true
         },
         {
-            "id": "Files uploaded successfully.",
-            "message": "Files uploaded successfully.",
-            "translation": "Files uploaded successfully.",
+            "id": "Files uploaded.",
+            "message": "Files uploaded.",
+            "translation": "Files uploaded.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3425,13 +3454,6 @@
             "fuzzy": true
         },
         {
-            "id": "Reloaded metadata",
-            "message": "Reloaded metadata",
-            "translation": "Reloaded metadata",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Reload metadata",
             "message": "Reload metadata",
             "translation": "Reload metadata",
@@ -3439,9 +3461,9 @@
             "fuzzy": true
         },
         {
-            "id": "Delete from inbox",
-            "message": "Delete from inbox",
-            "translation": "Delete from inbox",
+            "id": "Delete from Inbox",
+            "message": "Delete from Inbox",
+            "translation": "Delete from Inbox",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3516,9 +3538,9 @@
             "fuzzy": true
         },
         {
-            "id": "File is not in inbox.",
-            "message": "File is not in inbox.",
-            "translation": "File is not in inbox.",
+            "id": "File is not in the Inbox.",
+            "message": "File is not in the Inbox.",
+            "translation": "File is not in the Inbox.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3585,9 +3607,9 @@
             "fuzzy": true
         },
         {
-            "id": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
-            "message": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
-            "translation": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
+            "id": "You can choose other Spaces in this organization where you have write access, or whose Inboxes accept transfers.",
+            "message": "You can choose other Spaces in this organization where you have write access, or whose Inboxes accept transfers.",
+            "translation": "You can choose other Spaces in this organization where you have write access, or whose Inboxes accept transfers.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3620,30 +3642,30 @@
             "fuzzy": true
         },
         {
-            "id": "Assign user to space",
-            "message": "Assign user to space",
-            "translation": "Assign user to space",
+            "id": "Assign user to Space",
+            "message": "Assign user to Space",
+            "translation": "Assign user to Space",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "No space selected. Please select a space first.",
-            "message": "No space selected. Please select a space first.",
-            "translation": "No space selected. Please select a space first.",
+            "id": "No Space selected. Please select a Space first.",
+            "message": "No Space selected. Please select a Space first.",
+            "translation": "No Space selected. Please select a Space first.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "You are not allowed to assign users to spaces because you aren't the owner.",
-            "message": "You are not allowed to assign users to spaces because you aren't the owner.",
-            "translation": "You are not allowed to assign users to spaces because you aren't the owner.",
+            "id": "You are not allowed to assign users to Spaces because you aren't the owner.",
+            "message": "You are not allowed to assign users to Spaces because you aren't the owner.",
+            "translation": "You are not allowed to assign users to Spaces because you aren't the owner.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "User assigned to space successfully.",
-            "message": "User assigned to space successfully.",
-            "translation": "User assigned to space successfully.",
+            "id": "User assigned to Space.",
+            "message": "User assigned to Space.",
+            "translation": "User assigned to Space.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3677,54 +3699,30 @@
             "fuzzy": true
         },
         {
-            "id": "Manage users",
-            "message": "Manage users",
-            "translation": "Manage users",
+            "id": "Assign user",
+            "message": "Assign user",
+            "translation": "Assign user",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Users «{Name}»",
-            "message": "Users «{Name}»",
-            "translation": "Users «{Name}»",
-            "translatorComment": "Copied from source.",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "ctx.SpaceCtx().Space.Name"
-                }
-            ],
-            "fuzzy": true
-        },
-        {
-            "id": "User is already assigned to this space.",
-            "message": "User is already assigned to this space.",
-            "translation": "User is already assigned to this space.",
+            "id": "User is already assigned to this Space.",
+            "message": "User is already assigned to this Space.",
+            "translation": "User is already assigned to this Space.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "You cannot unassign yourself from a space.",
-            "message": "You cannot unassign yourself from a space.",
-            "translation": "You cannot unassign yourself from a space.",
+            "id": "You cannot unassign yourself from a Space.",
+            "message": "You cannot unassign yourself from a Space.",
+            "translation": "You cannot unassign yourself from a Space.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Unassign user from space",
-            "message": "Unassign user from space",
-            "translation": "Unassign user from space",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "User unassigned from space successfully.",
-            "message": "User unassigned from space successfully.",
-            "translation": "User unassigned from space successfully.",
+            "id": "Unassign user from Space",
+            "message": "Unassign user from Space",
+            "translation": "Unassign user from Space",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3736,24 +3734,37 @@
             "fuzzy": true
         },
         {
-            "id": "Assign a user",
-            "message": "Assign a user",
-            "translation": "Assign a user",
-            "comment": "TODO Create or add? system or real world perspective?",
+            "id": "User unassigned from Space.",
+            "message": "User unassigned from Space.",
+            "translation": "User unassigned from Space.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Create new tag or group",
-            "message": "Create new tag or group",
-            "translation": "Create new tag or group",
+            "id": "Unassign this user from the Space?",
+            "message": "Unassign this user from the Space?",
+            "translation": "Unassign this user from the Space?",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Are you sure? This action will delete the tag and unassign it from all files!",
-            "message": "Are you sure? This action will delete the tag and unassign it from all files!",
-            "translation": "Are you sure? This action will delete the tag and unassign it from all files!",
+            "id": "No users assigned yet.",
+            "message": "No users assigned yet.",
+            "translation": "No users assigned yet.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Create tag or group",
+            "message": "Create tag or group",
+            "translation": "Create tag or group",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete this tag? It will be unassigned from all files.",
+            "message": "Delete this tag? It will be unassigned from all files.",
+            "translation": "Delete this tag? It will be unassigned from all files.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3807,9 +3818,9 @@
             "fuzzy": true
         },
         {
-            "id": "Create new tag",
-            "message": "Create new tag",
-            "translation": "Create new tag",
+            "id": "Create tag",
+            "message": "Create tag",
+            "translation": "Create tag",
             "comment": "group not possible",
             "translatorComment": "Copied from source.",
             "fuzzy": true
@@ -3843,9 +3854,9 @@
             "fuzzy": true
         },
         {
-            "id": "You are not allowed to create users. No tenant selected.",
-            "message": "You are not allowed to create users. No tenant selected.",
-            "translation": "You are not allowed to create users. No tenant selected.",
+            "id": "You are not allowed to create users. No organization selected.",
+            "message": "You are not allowed to create users. No organization selected.",
+            "translation": "You are not allowed to create users. No organization selected.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3857,16 +3868,16 @@
             "fuzzy": true
         },
         {
-            "id": "Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.",
-            "message": "Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.",
-            "translation": "Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.",
+            "id": "User created. The password was sent by email. Owners can access all Spaces without further setup.",
+            "message": "User created. The password was sent by email. Owners can access all Spaces without further setup.",
+            "translation": "User created. The password was sent by email. Owners can access all Spaces without further setup.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space.",
-            "message": "Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space.",
-            "translation": "Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space.",
+            "id": "User created. The password was sent by email. Next, assign the user to a Space.",
+            "message": "User created. The password was sent by email. Next, assign the user to a Space.",
+            "translation": "User created. The password was sent by email. Next, assign the user to a Space.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3899,31 +3910,16 @@
             "fuzzy": true
         },
         {
-            "id": "Manage users of tenant",
-            "message": "Manage users of tenant",
-            "translation": "Manage users of tenant",
+            "id": "Remove this user from the organization?",
+            "message": "Remove this user from the organization?",
+            "translation": "Remove this user from the organization?",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Are you sure? This user will be removed from this organization only.",
-            "message": "Are you sure? This user will be removed from this organization only.",
-            "translation": "Are you sure? This user will be removed from this organization only.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
-            "message": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
-            "translation": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Add a new user",
-            "message": "Add a new user",
-            "translation": "Add a new user",
-            "comment": "TODO Create or add? system or real world perspective?",
+            "id": "Remove this user from the organization and delete their account globally?",
+            "message": "Remove this user from the organization and delete their account globally?",
+            "translation": "Remove this user from the organization and delete their account globally?",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -3942,9 +3938,9 @@
             "fuzzy": true
         },
         {
-            "id": "{NameSecondLine} - {OwnershipText}",
-            "message": "{NameSecondLine} - {OwnershipText}",
-            "translation": "{NameSecondLine} - {OwnershipText}",
+            "id": "{NameSecondLine} · {OwnershipText}",
+            "message": "{NameSecondLine} · {OwnershipText}",
+            "translation": "{NameSecondLine} · {OwnershipText}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
@@ -3967,13 +3963,6 @@
             "fuzzy": true
         },
         {
-            "id": "Upload",
-            "message": "Upload",
-            "translation": "Upload",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Uploading files, please wait a moment.",
             "message": "Uploading files, please wait a moment.",
             "translation": "Uploading files, please wait a moment.",
@@ -3988,23 +3977,16 @@
             "fuzzy": true
         },
         {
-            "id": "No spaces yet.",
-            "message": "No spaces yet.",
-            "translation": "No spaces yet.",
+            "id": "Please try again once you created a Space or were invited to join one.",
+            "message": "Please try again once you created a Space or were invited to join one.",
+            "translation": "Please try again once you created a Space or were invited to join one.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Please try again once you created a space or were invited to join one.",
-            "message": "Please try again once you created a space or were invited to join one.",
-            "translation": "Please try again once you created a space or were invited to join one.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Select space",
-            "message": "Select space",
-            "translation": "Select space",
+            "id": "Select Space",
+            "message": "Select Space",
+            "translation": "Select Space",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4016,9 +3998,9 @@
             "fuzzy": true
         },
         {
-            "id": "Files uploaded, please select a space.",
-            "message": "Files uploaded, please select a space.",
-            "translation": "Files uploaded, please select a space.",
+            "id": "Files uploaded, please select a Space.",
+            "message": "Files uploaded, please select a Space.",
+            "translation": "Files uploaded, please select a Space.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4037,9 +4019,9 @@
             "fuzzy": true
         },
         {
-            "id": "File uploaded, please select a space.",
-            "message": "File uploaded, please select a space.",
-            "translation": "File uploaded, please select a space.",
+            "id": "File uploaded, please select a Space.",
+            "message": "File uploaded, please select a Space.",
+            "translation": "File uploaded, please select a Space.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4089,6 +4071,13 @@
             "fuzzy": true
         },
         {
+            "id": "Create field",
+            "message": "Create field",
+            "translation": "Create field",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Field «{Name}» created.",
             "message": "Field «{Name}» created.",
             "translation": "Field «{Name}» created.",
@@ -4127,6 +4116,13 @@
             "fuzzy": true
         },
         {
+            "id": "Delete this field?",
+            "message": "Delete this field?",
+            "translation": "Delete this field?",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Space «{Name}» created.",
             "message": "Space «{Name}» created.",
             "translation": "Space «{Name}» created.",
@@ -4144,16 +4140,16 @@
             "fuzzy": true
         },
         {
-            "id": "Create space",
-            "message": "Create space",
-            "translation": "Create space",
+            "id": "Create Space",
+            "message": "Create Space",
+            "translation": "Create Space",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Select document types to add to this space:",
-            "message": "Select document types to add to this space:",
-            "translation": "Select document types to add to this space:",
+            "id": "Select document types to add to this Space:",
+            "message": "Select document types to add to this Space:",
+            "translation": "Select document types to add to this Space:",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4165,9 +4161,9 @@
             "fuzzy": true
         },
         {
-            "id": "Edit space",
-            "message": "Edit space",
-            "translation": "Edit space",
+            "id": "Edit Space",
+            "message": "Edit Space",
+            "translation": "Edit Space",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4200,6 +4196,13 @@
             "id": "active",
             "message": "active",
             "translation": "active",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Delete this Space?",
+            "message": "Delete this Space?",
+            "translation": "Delete this Space?",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4245,7 +4248,6 @@
             "id": "Create and assign tag",
             "message": "Create and assign tag",
             "translation": "Create and assign tag",
-            "comment": "\"#tagAssignmentList\",",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4264,14 +4266,6 @@
                     "expr": "tagx.Name"
                 }
             ],
-            "fuzzy": true
-        },
-        {
-            "id": "Create tag",
-            "message": "Create tag",
-            "translation": "Create tag",
-            "comment": "\"TODO\", // TODO",
-            "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
@@ -4309,6 +4303,73 @@
             "fuzzy": true
         },
         {
+            "id": "Group, {ChildCount} tags, {SelectedCount} selected",
+            "message": "Group, {ChildCount} tags, {SelectedCount} selected",
+            "translation": "Group, {ChildCount} tags, {SelectedCount} selected",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ChildCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "childCount"
+                },
+                {
+                    "id": "SelectedCount",
+                    "string": "%[2]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 2,
+                    "expr": "selectedCount"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Group, {ChildCount} tag, {SelectedCount} selected",
+            "message": "Group, {ChildCount} tag, {SelectedCount} selected",
+            "translation": "Group, {ChildCount} tag, {SelectedCount} selected",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "ChildCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "childCount"
+                },
+                {
+                    "id": "SelectedCount",
+                    "string": "%[2]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 2,
+                    "expr": "selectedCount"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
+            "id": "Composed of {JointagNames__}",
+            "message": "Composed of {JointagNames__}",
+            "translation": "Composed of {JointagNames__}",
+            "translatorComment": "Copied from source.",
+            "placeholders": [
+                {
+                    "id": "JointagNames__",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "strings.Join(tagNames, \", \")"
+                }
+            ],
+            "fuzzy": true
+        },
+        {
             "id": "Show assigned tags",
             "message": "Show assigned tags",
             "translation": "Show assigned tags",
@@ -4316,9 +4377,9 @@
             "fuzzy": true
         },
         {
-            "id": "Create new group",
-            "message": "Create new group",
-            "translation": "Create new group",
+            "id": "Create group",
+            "message": "Create group",
+            "translation": "Create group",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4366,9 +4427,9 @@
             "fuzzy": true
         },
         {
-            "id": "layout not supported",
-            "message": "layout not supported",
-            "translation": "layout not supported",
+            "id": "Layout not supported.",
+            "message": "Layout not supported.",
+            "translation": "Layout not supported.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4397,23 +4458,6 @@
             "fuzzy": true
         },
         {
-            "id": "Composed of {JointagNames__}",
-            "message": "Composed of {JointagNames__}",
-            "translation": "Composed of {JointagNames__}",
-            "translatorComment": "Copied from source.",
-            "placeholders": [
-                {
-                    "id": "JointagNames__",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "strings.Join(tagNames, \", \")"
-                }
-            ],
-            "fuzzy": true
-        },
-        {
             "id": "Move tag to group",
             "message": "Move tag to group",
             "translation": "Move tag to group",
@@ -4421,9 +4465,9 @@
             "fuzzy": true
         },
         {
-            "id": "Deselected group.",
-            "message": "Deselected group.",
-            "translation": "Deselected group.",
+            "id": "Removed from group.",
+            "message": "Removed from group.",
+            "translation": "Removed from group.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4452,9 +4496,9 @@
             "fuzzy": true
         },
         {
-            "id": "Are you sure? This action will delete the tag entirely and not just unassign it from the current file!",
-            "message": "Are you sure? This action will delete the tag entirely and not just unassign it from the current file!",
-            "translation": "Are you sure? This action will delete the tag entirely and not just unassign it from the current file!",
+            "id": "Delete this tag entirely? It will be unassigned from all files, not only from this one.",
+            "message": "Delete this tag entirely? It will be unassigned from all files, not only from this one.",
+            "translation": "Delete this tag entirely? It will be unassigned from all files, not only from this one.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4473,13 +4517,6 @@
                     "expr": "tagx.Name"
                 }
             ],
-            "fuzzy": true
-        },
-        {
-            "id": "Parent folder",
-            "message": "Parent folder",
-            "translation": "Parent folder",
-            "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
@@ -4553,35 +4590,35 @@
             "fuzzy": true
         },
         {
-            "id": "Folder deleted on {Format02_Jan_2006}",
-            "message": "Folder deleted on {Format02_Jan_2006}",
-            "translation": "Folder deleted on {Format02_Jan_2006}",
+            "id": "Folder deleted: {LanguageBCP47}",
+            "message": "Folder deleted: {LanguageBCP47}",
+            "translation": "Folder deleted: {LanguageBCP47}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
-                    "id": "Format02_Jan_2006",
+                    "id": "LanguageBCP47",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "filex.DeletedAt.Format(\"02 Jan 2006\")"
+                    "expr": "deletedAtDate.String(ctx.MainCtx().LanguageBCP47)"
                 }
             ],
             "fuzzy": true
         },
         {
-            "id": "Deleted on {Format02_Jan_2006}",
-            "message": "Deleted on {Format02_Jan_2006}",
-            "translation": "Deleted on {Format02_Jan_2006}",
+            "id": "Deleted: {LanguageBCP47}",
+            "message": "Deleted: {LanguageBCP47}",
+            "translation": "Deleted: {LanguageBCP47}",
             "translatorComment": "Copied from source.",
             "placeholders": [
                 {
-                    "id": "Format02_Jan_2006",
+                    "id": "LanguageBCP47",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "filex.DeletedAt.Format(\"02 Jan 2006\")"
+                    "expr": "deletedAtDate.String(ctx.MainCtx().LanguageBCP47)"
                 }
             ],
             "fuzzy": true
@@ -4636,23 +4673,23 @@
             "fuzzy": true
         },
         {
-            "id": "cannot parse file",
-            "message": "cannot parse file",
-            "translation": "cannot parse file",
+            "id": "Cannot parse file.",
+            "message": "Cannot parse file.",
+            "translation": "Cannot parse file.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "cannot parse form",
-            "message": "cannot parse form",
-            "translation": "cannot parse form",
+            "id": "Cannot parse form.",
+            "message": "Cannot parse form.",
+            "translation": "Cannot parse form.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "cannot decode form",
-            "message": "cannot decode form",
-            "translation": "cannot decode form",
+            "id": "Cannot decode form.",
+            "message": "Cannot decode form.",
+            "translation": "Cannot decode form.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4664,16 +4701,16 @@
             "fuzzy": true
         },
         {
-            "id": "Filters successfully reset.",
-            "message": "Filters successfully reset.",
-            "translation": "Filters successfully reset.",
+            "id": "Filters reset.",
+            "message": "Filters reset.",
+            "translation": "Filters reset.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "cannot parse current url",
-            "message": "cannot parse current url",
-            "translation": "cannot parse current url",
+            "id": "Cannot parse current URL.",
+            "message": "Cannot parse current URL.",
+            "translation": "Cannot parse current URL.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4685,6 +4722,13 @@
             "fuzzy": true
         },
         {
+            "id": "Only organization owners can manage users and settings.",
+            "message": "Only organization owners can manage users and settings.",
+            "translation": "Only organization owners can manage users and settings.",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "OCR succeeded at",
             "message": "OCR succeeded at",
             "translation": "OCR succeeded at",
@@ -4692,16 +4736,16 @@
             "fuzzy": true
         },
         {
-            "id": "You are not allowed to access this tenant.",
-            "message": "You are not allowed to access this tenant.",
-            "translation": "You are not allowed to access this tenant.",
+            "id": "You are not allowed to access this organization.",
+            "message": "You are not allowed to access this organization.",
+            "translation": "You are not allowed to access this organization.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "You are not allowed to access this space.",
-            "message": "You are not allowed to access this space.",
-            "translation": "You are not allowed to access this space.",
+            "id": "You are not allowed to access this Space.",
+            "message": "You are not allowed to access this Space.",
+            "translation": "You are not allowed to access this Space.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -4777,13 +4821,6 @@
             "fuzzy": true
         },
         {
-            "id": "Unlock application",
-            "message": "Unlock application",
-            "translation": "Unlock application",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Passphrase is required.",
             "message": "Passphrase is required.",
             "translation": "Passphrase is required.",
@@ -4819,6 +4856,13 @@
             "fuzzy": true
         },
         {
+            "id": "Actions",
+            "message": "Actions",
+            "translation": "Actions",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "Open main menu",
             "message": "Open main menu",
             "translation": "Open main menu",
@@ -4850,6 +4894,13 @@
             "id": "Passkey name (optional)",
             "message": "Passkey name (optional)",
             "translation": "Passkey name (optional)",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Loading…",
+            "message": "Loading…",
+            "translation": "Loading…",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5155,13 +5206,6 @@
             "fuzzy": true
         },
         {
-            "id": "Dir name",
-            "message": "Dir name",
-            "translation": "Dir name",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "Email",
             "message": "Email",
             "translation": "Email",
@@ -5221,6 +5265,13 @@
             "id": "First name",
             "message": "First name",
             "translation": "First name",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "Folder name",
+            "message": "Folder name",
+            "translation": "Folder name",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5435,16 +5486,16 @@
             "fuzzy": true
         },
         {
-            "id": "New dir name",
-            "message": "New dir name",
-            "translation": "New dir name",
+            "id": "New filename",
+            "message": "New filename",
+            "translation": "New filename",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "New filename",
-            "message": "New filename",
-            "translation": "New filename",
+            "id": "New folder name",
+            "message": "New folder name",
+            "translation": "New folder name",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5946,9 +5997,9 @@
             "fuzzy": true
         },
         {
-            "id": "Too many login attempts. Please try again in 10 seconds.",
-            "message": "Too many login attempts. Please try again in 10 seconds.",
-            "translation": "Too many login attempts. Please try again in 10 seconds.",
+            "id": "Too many sign-in attempts. Please try again in 10 seconds.",
+            "message": "Too many sign-in attempts. Please try again in 10 seconds.",
+            "translation": "Too many sign-in attempts. Please try again in 10 seconds.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -5967,16 +6018,16 @@
             "fuzzy": true
         },
         {
-            "id": "could not generate temporary password",
-            "message": "could not generate temporary password",
-            "translation": "could not generate temporary password",
+            "id": "Could not generate temporary password.",
+            "message": "Could not generate temporary password.",
+            "translation": "Could not generate temporary password.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "could not generate salt",
-            "message": "could not generate salt",
-            "translation": "could not generate salt",
+            "id": "Could not generate salt.",
+            "message": "Could not generate salt.",
+            "translation": "Could not generate salt.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6030,9 +6081,9 @@
             "fuzzy": true
         },
         {
-            "id": "Passkey login is not enabled for this account.",
-            "message": "Passkey login is not enabled for this account.",
-            "translation": "Passkey login is not enabled for this account.",
+            "id": "Passkey sign-in is not enabled for this account.",
+            "message": "Passkey sign-in is not enabled for this account.",
+            "translation": "Passkey sign-in is not enabled for this account.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6149,9 +6200,9 @@
             "fuzzy": true
         },
         {
-            "id": "New tenant registration",
-            "message": "New tenant registration",
-            "translation": "New tenant registration",
+            "id": "New organization registration",
+            "message": "New organization registration",
+            "translation": "New organization registration",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6191,9 +6242,9 @@
             "fuzzy": true
         },
         {
-            "id": "Please log in and change your password as soon as possible.",
-            "message": "Please log in and change your password as soon as possible.",
-            "translation": "Please log in and change your password as soon as possible.",
+            "id": "Please sign in and change your password as soon as possible.",
+            "message": "Please sign in and change your password as soon as possible.",
+            "translation": "Please sign in and change your password as soon as possible.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6201,13 +6252,6 @@
             "id": "Open sign in page",
             "message": "Open sign in page",
             "translation": "Open sign in page",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "SimpleDMS Password Reset",
-            "message": "SimpleDMS Password Reset",
-            "translation": "SimpleDMS Password Reset",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6541,16 +6585,16 @@
             "fuzzy": true
         },
         {
-            "id": "Tenant not initialized yet. Please try again later.",
-            "message": "Tenant not initialized yet. Please try again later.",
-            "translation": "Tenant not initialized yet. Please try again later.",
+            "id": "Organization not initialized yet. Please try again later.",
+            "message": "Organization not initialized yet. Please try again later.",
+            "translation": "Organization not initialized yet. Please try again later.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Error opening tenant database. Please try again later.",
-            "message": "Error opening tenant database. Please try again later.",
-            "translation": "Error opening tenant database. Please try again later.",
+            "id": "Error opening organization database. Please try again later.",
+            "message": "Error opening organization database. Please try again later.",
+            "translation": "Error opening organization database. Please try again later.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6590,23 +6634,16 @@
             "fuzzy": true
         },
         {
-            "id": "Tenant is required.",
-            "message": "Tenant is required.",
-            "translation": "Tenant is required.",
+            "id": "Organization is required.",
+            "message": "Organization is required.",
+            "translation": "Organization is required.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Tenant not found.",
-            "message": "Tenant not found.",
-            "translation": "Tenant not found.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "You must be logged in to manage upload limits.",
-            "message": "You must be logged in to manage upload limits.",
-            "translation": "You must be logged in to manage upload limits.",
+            "id": "You must be signed in to manage upload limits.",
+            "message": "You must be signed in to manage upload limits.",
+            "translation": "You must be signed in to manage upload limits.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6664,9 +6701,9 @@
             "fuzzy": true
         },
         {
-            "id": "File is a directory.",
-            "message": "File is a directory.",
-            "translation": "File is a directory.",
+            "id": "File is a folder.",
+            "message": "File is a folder.",
+            "translation": "File is a folder.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6768,9 +6805,9 @@
             "fuzzy": true
         },
         {
-            "id": "file has no parent",
-            "message": "file has no parent",
-            "translation": "file has no parent",
+            "id": "File has no parent.",
+            "message": "File has no parent.",
+            "translation": "File has no parent.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6782,16 +6819,16 @@
             "fuzzy": true
         },
         {
-            "id": "File does not belong to current space.",
-            "message": "File does not belong to current space.",
-            "translation": "File does not belong to current space.",
+            "id": "File does not belong to the current Space.",
+            "message": "File does not belong to the current Space.",
+            "translation": "File does not belong to the current Space.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
-            "id": "Cannot merge directories.",
-            "message": "Cannot merge directories.",
-            "translation": "Cannot merge directories.",
+            "id": "Cannot merge folders.",
+            "message": "Cannot merge folders.",
+            "translation": "Cannot merge folders.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6803,9 +6840,9 @@
             "fuzzy": true
         },
         {
-            "id": "Source file is not in inbox.",
-            "message": "Source file is not in inbox.",
-            "translation": "Source file is not in inbox.",
+            "id": "Source file is not in the Inbox.",
+            "message": "Source file is not in the Inbox.",
+            "translation": "Source file is not in the Inbox.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6922,9 +6959,9 @@
             "fuzzy": true
         },
         {
-            "id": "Cannot organize the Space root directory.",
-            "message": "Cannot organize the Space root directory.",
-            "translation": "Cannot organize the Space root directory.",
+            "id": "Cannot organize the Space root folder.",
+            "message": "Cannot organize the Space root folder.",
+            "translation": "Cannot organize the Space root folder.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6936,9 +6973,9 @@
             "fuzzy": true
         },
         {
-            "id": "Path element is file, not a directory.",
-            "message": "Path element is file, not a directory.",
-            "translation": "Path element is file, not a directory.",
+            "id": "Path element is a file, not a folder.",
+            "message": "Path element is a file, not a folder.",
+            "translation": "Path element is a file, not a folder.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6950,9 +6987,9 @@
             "fuzzy": true
         },
         {
-            "id": "Parent is not a directory.",
-            "message": "Parent is not a directory.",
-            "translation": "Parent is not a directory.",
+            "id": "Parent is not a folder.",
+            "message": "Parent is not a folder.",
+            "translation": "Parent is not a folder.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6964,9 +7001,9 @@
             "fuzzy": true
         },
         {
-            "id": "Destination is not a directory.",
-            "message": "Destination is not a directory.",
-            "translation": "Destination is not a directory.",
+            "id": "Destination is not a folder.",
+            "message": "Destination is not a folder.",
+            "translation": "Destination is not a folder.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6978,9 +7015,9 @@
             "fuzzy": true
         },
         {
-            "id": "Cannot move directory to itself.",
-            "message": "Cannot move directory to itself.",
-            "translation": "Cannot move directory to itself.",
+            "id": "Cannot move a folder into itself.",
+            "message": "Cannot move a folder into itself.",
+            "translation": "Cannot move a folder into itself.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -6992,16 +7029,9 @@
             "fuzzy": true
         },
         {
-            "id": "destination is not a directory",
-            "message": "destination is not a directory",
-            "translation": "destination is not a directory",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "cannot move file into child directory",
-            "message": "cannot move file into child directory",
-            "translation": "cannot move file into child directory",
+            "id": "Cannot move a folder into one of its subfolders.",
+            "message": "Cannot move a folder into one of its subfolders.",
+            "translation": "Cannot move a folder into one of its subfolders.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7020,9 +7050,9 @@
             "fuzzy": true
         },
         {
-            "id": "Detected cycle in directory tree.",
-            "message": "Detected cycle in directory tree.",
-            "translation": "Detected cycle in directory tree.",
+            "id": "Detected cycle in folder tree.",
+            "message": "Detected cycle in folder tree.",
+            "translation": "Detected cycle in folder tree.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7168,10 +7198,10 @@
         {
             "id": [
                 "tenantDatabaseNotFoundMessage",
-                "Tenant database not found."
+                "Organization database not found."
             ],
-            "message": "Tenant database not found.",
-            "translation": "Tenant database not found.",
+            "message": "Organization database not found.",
+            "translation": "Organization database not found.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7249,20 +7279,6 @@
             "id": "A file with this name already exists in the destination.",
             "message": "A file with this name already exists in the destination.",
             "translation": "A file with this name already exists in the destination.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "File is not a directory.",
-            "message": "File is not a directory.",
-            "translation": "File is not a directory.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "File must be in Inbox.",
-            "message": "File must be in Inbox.",
-            "translation": "File must be in Inbox.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7491,9 +7507,9 @@
             "fuzzy": true
         },
         {
-            "id": "Purchase Order",
-            "message": "Purchase Order",
-            "translation": "Purchase Order",
+            "id": "Purchase order",
+            "message": "Purchase order",
+            "translation": "Purchase order",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7624,9 +7640,9 @@
             "fuzzy": true
         },
         {
-            "id": "Project Document",
-            "message": "Project Document",
-            "translation": "Project Document",
+            "id": "Project document",
+            "message": "Project document",
+            "translation": "Project document",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7701,9 +7717,9 @@
             "fuzzy": true
         },
         {
-            "id": "Meeting Notes",
-            "message": "Meeting Notes",
-            "translation": "Meeting Notes",
+            "id": "Meeting notes",
+            "message": "Meeting notes",
+            "translation": "Meeting notes",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -7764,9 +7780,9 @@
             "fuzzy": true
         },
         {
-            "id": "Expense Report",
-            "message": "Expense Report",
-            "translation": "Expense Report",
+            "id": "Expense report",
+            "message": "Expense report",
+            "translation": "Expense report",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -8009,16 +8025,9 @@
             "fuzzy": true
         },
         {
-            "id": "Invalid version number.",
-            "message": "Invalid version number.",
-            "translation": "Invalid version number.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Invalid directory ID.",
-            "message": "Invalid directory ID.",
-            "translation": "Invalid directory ID.",
+            "id": "Invalid folder ID.",
+            "message": "Invalid folder ID.",
+            "translation": "Invalid folder ID.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -8247,9 +8256,9 @@
             "fuzzy": true
         },
         {
-            "id": "Manage space",
-            "message": "Manage space",
-            "translation": "Manage space",
+            "id": "Manage Space",
+            "message": "Manage Space",
+            "translation": "Manage Space",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

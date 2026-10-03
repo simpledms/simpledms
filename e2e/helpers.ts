@@ -62,13 +62,13 @@ export async function goToUsers(page: Page) {
 }
 
 export async function openCreateSpaceDialog(page: Page) {
-	const emptyStateCreate = page.getByRole("button", { name: "add Create space" });
+	const emptyStateCreate = page.getByRole("button", { name: "add Create Space" });
 	if (await emptyStateCreate.count()) {
 		await emptyStateCreate.first().click();
 	} else {
-		await page.getByRole("link", { name: /Create space|^add$/ }).first().click();
+		await page.getByRole("link", { name: /Create Space/ }).first().click();
 	}
-	await expect(page.getByRole("heading", { name: "Create space" })).toBeVisible();
+	await expect(page.getByRole("heading", { name: "Create Space" })).toBeVisible();
 }
 
 export async function createSpaceAndSelect(page: Page, spaceName: string, documentTypes: string[] = []) {
@@ -79,7 +79,7 @@ export async function createSpaceAndSelect(page: Page, spaceName: string, docume
 	for (const documentType of documentTypes) {
 		await page.getByRole("checkbox", { name: documentType }).check();
 	}
-	await page.getByRole("button", { name: "Save" }).click();
+	await page.getByRole("button", { name: "Create", exact: true }).click();
 	await expect(page.getByRole("heading", { name: spaceName })).toBeVisible();
 	await page
 		.getByRole("link")
@@ -108,7 +108,7 @@ export async function openSpaceMenu(page: Page) {
 }
 
 export async function openCreateUserDialog(page: Page) {
-	await page.getByRole("link", { name: "add Add a new user" }).click();
+	await page.getByRole("link", { name: /Create user/ }).first().click();
 	await expect(page.getByRole("heading", { name: "Create user" })).toBeVisible();
 }
 

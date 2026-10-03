@@ -181,7 +181,7 @@ func TestMaintenanceUnlockFormTranslations(t *testing.T) {
 			language: "en",
 			texts: []string{
 				"Application passphrase",
-				"Unlock application",
+				"Unlock app",
 				"Passphrase is required.",
 				"Invalid passphrase.",
 				"Something went wrong. Please try again.",

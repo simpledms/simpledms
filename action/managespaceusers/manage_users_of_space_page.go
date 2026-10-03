@@ -6,6 +6,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/model/main/common/spacerole"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -30,32 +31,30 @@ func NewManageUsersOfSpace(infra *common.Infra, actions *Actions) *ManageUsersOf
 
 func (qq *ManageUsersOfSpacePage) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	state := autil.StateX[ManageUsersOfSpacePageState](rw, req)
-	return qq.Render(rw, req, ctx, qq.infra, "Manage users", qq.Widget(ctx, state))
+	return qq.Render(rw, req, ctx, qq.infra, "Users", qq.Widget(ctx, state))
 }
 
 func (qq *ManageUsersOfSpacePage) Widget(
 	ctx ctxx.Context,
 	state *ManageUsersOfSpacePageState,
 ) renderable.Renderable {
-	/*
-		fabs := []*wx.FloatingActionButton{
-			{
-				Icon: "add",
-				Child: []wx.IWidget{
-					wx.NewIcon("add"),
-					wx.T("Create property"),
-				},
-				HTMXAttrs: qq.actions.CreateProperty.ModalLinkAttrs(
-					qq.actions.CreateProperty.Data(""),
-					"",
-				),
+	var fabs []*widget.FloatingActionButton
+	if ctx.SpaceCtx().UserRoleInSpace() == spacerole.Owner {
+		fabs = append(fabs, &widget.FloatingActionButton{
+			Icon: "person_add",
+			Child: []widget.IWidget{
+				widget.NewIcon("person_add"),
+				widget.T("Assign user"),
 			},
-		}
-
-	*/
+			HTMXAttrs: qq.actions.AssignUserToSpaceCmd.ModalLinkAttrs(
+				qq.actions.AssignUserToSpaceCmd.Data(),
+				"",
+			),
+		})
+	}
 
 	return &widget.MainLayout{
-		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "manage-users", nil),
+		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "manage-users", fabs),
 		Content: &widget.DefaultLayout{
 			AppBar:  qq.appBar(ctx),
 			Content: qq.actions.UsersOfSpaceListPartial.Widget(ctx, &state.UsersOfSpaceListPartialState),
@@ -70,7 +69,7 @@ func (qq *ManageUsersOfSpacePage) appBar(ctx ctxx.Context) *widget.AppBar {
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title: &widget.AppBarTitle{
-			Text: widget.Tf("Users «%s»", ctx.SpaceCtx().Space.Name),
+			Text: widget.T("Users"),
 		},
 		Actions: []widget.IWidget{
 			/*&wx.IconButton{

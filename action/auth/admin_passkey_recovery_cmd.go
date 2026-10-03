@@ -45,7 +45,7 @@ func (qq *AdminPasskeyRecoveryCmd) Data(email string) *AdminPasskeyRecoveryCmdDa
 }
 
 func (qq *AdminPasskeyRecoveryCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be logged in to perform this action.")
+	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be signed in to perform this action.")
 	if err != nil {
 		return err
 	}

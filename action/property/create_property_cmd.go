@@ -34,10 +34,11 @@ func NewCreatePropertyCmd(infra *common.Infra, actions *Actions) *CreateProperty
 		actions.Route("create-property-cmd"),
 		false,
 	)
-	formHelper := autil.NewFormHelper[CreatePropertyCmdData](
+	formHelper := autil.NewFormHelperX[CreatePropertyCmdData](
 		infra,
 		config,
-		widget.T("Add field"),
+		widget.T("Create field"),
+		widget.T("Create"),
 	)
 	return &CreatePropertyCmd{
 		infra:      infra,

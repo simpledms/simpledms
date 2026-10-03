@@ -198,7 +198,7 @@ func spaceNavigationRailItems(ctx ctxx.Context) []*widget.NavigationRailItem {
 			"delete",
 			route2.TrashRoot(tenantID, spaceID),
 		),
-		navigationRailSubheader("manage", widget.T("Manage space").String(ctx)),
+		navigationRailSubheader("manage", widget.T("Manage Space").String(ctx)),
 		pageNavigationRailItem(
 			"document-types",
 			widget.T("Document types").String(ctx),
@@ -340,7 +340,7 @@ func spaceCombobox(ctx ctxx.Context, active string) *widget.Combobox {
 		}
 	}
 
-	placeholder := widget.T("Dashboard").String(ctx) + " / " + widget.T("Select space").String(ctx)
+	placeholder := widget.T("Dashboard").String(ctx) + " / " + widget.T("Select Space").String(ctx)
 	selectedIcon := widget.NewIcon("dashboard")
 	if active == "dashboard" {
 		placeholder = widget.T("Dashboard").String(ctx)

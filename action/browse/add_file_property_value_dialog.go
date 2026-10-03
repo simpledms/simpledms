@@ -147,7 +147,7 @@ func (qq *AddFilePropertyValueDialog) Form(
 
 	return autil.WrapWidgetWithID(
 		widget.T("Add field"),
-		widget.T("Save"),
+		widget.T("Add"),
 		form,
 		wrapper,
 		widget.DialogLayoutStable,

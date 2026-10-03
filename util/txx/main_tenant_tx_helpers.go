@@ -86,7 +86,7 @@ func WithFreshAuthorizedTenantWriteSpaceTxAndMainCheck[T any](
 		return zero, authErr
 	}
 	if !hasAccess {
-		return zero, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+		return zero, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this organization.")
 	}
 	if mainCheck != nil {
 		if err := mainCheck(ctx, mainTx); err != nil {
@@ -123,7 +123,7 @@ func withNewTenantWriteSpaceTx[T any](
 	tenantDB, ok := ctx.UnsafeTenantDB()
 	if !ok {
 		log.Println("tenant db not found", ctx.TenantCtx().Tenant.ID)
-		return zero, e.NewHTTPErrorf(http.StatusInternalServerError, "Tenant database not found.")
+		return zero, e.NewHTTPErrorf(http.StatusInternalServerError, "Organization database not found.")
 	}
 
 	writeTx, err := tenantDB.Tx(ctx, false)
@@ -147,7 +147,7 @@ func withNewTenantWriteSpaceTx[T any](
 	).Only(ctx)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
-			return zero, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+			return zero, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this organization.")
 		}
 		log.Println(err)
 		return zero, err
@@ -162,7 +162,7 @@ func withNewTenantWriteSpaceTx[T any](
 	writeSpace, err := writeTx.Space.Get(writeTenantCtx, ctx.SpaceCtx().Space.ID)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
-			return zero, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this space.")
+			return zero, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this Space.")
 		}
 		log.Println(err)
 		return zero, err
@@ -192,7 +192,7 @@ func WithTenantReadSpaceTx[T any](ctx *ctxx.SpaceContext, fn func(*ctxx.SpaceCon
 	tenantDB, ok := ctx.UnsafeTenantDB()
 	if !ok {
 		log.Println("tenant db not found", ctx.TenantCtx().Tenant.ID)
-		return zero, e.NewHTTPErrorf(http.StatusInternalServerError, "Tenant database not found.")
+		return zero, e.NewHTTPErrorf(http.StatusInternalServerError, "Organization database not found.")
 	}
 
 	readTx, err := tenantDB.Tx(ctx, true)

@@ -384,7 +384,7 @@ func (qq *FilePreviewPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 	viewx, err := qq.Widget(ctx, state, dirx, filex)
 	if err != nil {
 		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "rendering failed")
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Rendering failed.")
 	}
 
 	qq.infra.Renderer().RenderX(rw, ctx, viewx)

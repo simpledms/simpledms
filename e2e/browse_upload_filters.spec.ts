@@ -10,14 +10,14 @@ test.describe("browse, upload, and filters", () => {
 		const dirName = `dir-${uniqueSuffix()}`;
 
 		await createSpaceAndSelect(page, spaceName, ["Invoice", "Receipt"]);
-		await page.getByRole("link", { name: "create_new_folder Create directory", exact: true }).first().click();
-		await page.getByRole("textbox", { name: "Dir name" }).fill(dirName);
-		await page.getByRole("button", { name: "Save" }).click();
+		await page.getByRole("link", { name: "create_new_folder Create folder", exact: true }).first().click();
+		await page.getByRole("textbox", { name: "Folder name" }).fill(dirName);
+		await page.getByRole("button", { name: "Create", exact: true }).click();
 
 		await expect(page.getByRole("heading", { name: dirName })).toBeVisible();
 		await page.getByRole("link", { name: new RegExp(`folder ${dirName}`) }).click();
 		await expect(page).toHaveURL(/\/browse\/[^/]+$/);
-		await expect(page.getByRole("heading", { name: "No files or directories available yet." })).toBeVisible();
+		await expect(page.getByRole("heading", { name: "No files or folders available yet." })).toBeVisible();
 	});
 
 	test("uploads a file and supports filename search", async ({ page }) => {
@@ -33,7 +33,7 @@ test.describe("browse, upload, and filters", () => {
 		await expect(page.getByRole("heading", { name: fileName })).toBeVisible();
 
 		await search.fill("no-match-search-token");
-		await expect(page.getByRole("heading", { name: "No files or directories available yet." })).toBeVisible();
+		await expect(page.getByRole("heading", { name: "No files or folders available yet." })).toBeVisible();
 	});
 
 	test("filters files by selected document type", async ({ page }) => {
@@ -52,7 +52,7 @@ test.describe("browse, upload, and filters", () => {
 		await page.getByRole("link", { name: "category Document type" }).click();
 		await page.getByRole("link", { name: "Receipt" }).click();
 		await expect(page).toHaveURL(/document_type_id=/);
-		await expect(page.getByRole("heading", { name: "No files or directories available yet." })).toBeVisible();
+		await expect(page.getByRole("heading", { name: "No files or folders available yet." })).toBeVisible();
 
 		await page.getByRole("link", { name: /Receipt close/ }).click();
 		await page.getByRole("link", { name: "Invoice" }).click();

@@ -21,12 +21,12 @@ func (qq *Mailer) TenantRegistered(
 	adminx *entmain.Account,
 	tenantName, accountEmail string,
 ) {
-	subject := wx.T("New tenant registration").String(ctx)
+	subject := wx.T("New organization registration").String(ctx)
 	template := EmailTemplate{
 		Title:   subject,
 		Heading: subject,
 		Content: []ContentBlock{
-			TextBlock{Text: wx.Tuf("The tenant «%s» was registered by %s.", tenantName, accountEmail).String(ctx)},
+			TextBlock{Text: wx.Tuf("The organization «%s» was registered by %s.", tenantName, accountEmail).String(ctx)},
 		},
 		Footer: wx.T("This is an automated message, please do not reply.").String(ctx),
 	}

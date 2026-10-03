@@ -26,10 +26,15 @@ type ClearTemporaryPasswordCmd struct {
 func NewClearTemporaryPasswordCmd(infra *common.Infra, actions *Actions) *ClearTemporaryPasswordCmd {
 	config := actionx.NewConfig(actions.Route("clear-temporary-password-cmd"), false)
 	return &ClearTemporaryPasswordCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[ClearTemporaryPasswordCmdData](infra, config, widget.T("Clear temporary password")),
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+		FormHelper: autil.NewFormHelperX[ClearTemporaryPasswordCmdData](
+			infra,
+			config,
+			widget.T("Clear temporary password"),
+			widget.T("Clear"),
+		),
 	}
 }
 
@@ -39,7 +44,7 @@ func (qq *ClearTemporaryPasswordCmd) Data() *ClearTemporaryPasswordCmdData {
 
 func (qq *ClearTemporaryPasswordCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	if !ctx.IsMainCtx() {
-		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be logged in to change your password.")
+		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be signed in to change your password.")
 	}
 
 	accountx := ctx.MainCtx().Account
@@ -49,6 +54,6 @@ func (qq *ClearTemporaryPasswordCmd) Handler(rw httpx.ResponseWriter, req *httpx
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.TemporaryPasswordCleared.String())
 
-	rw.AddRenderables(widget.NewSnackbarf("Temporary password cleared successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("Temporary password cleared."))
 	return nil
 }

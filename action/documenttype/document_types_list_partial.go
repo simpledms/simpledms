@@ -72,49 +72,51 @@ func (qq *DocumentTypesListPartial) Widget(ctx ctxx.Context, selectedTypeID int6
 
 	id := "documentTypesList"
 
-	/*
-		if len(types) == 0 {
-			return &wx.EmptyState{
-				Widget: wx.Widget[wx.EmptyState]{
-					ID: id,
-				},
-				Icon:     wx.NewIcon("description"),
-				Headline: wx.T("No document types available yet."),
-				// TODO actions
-			}
-		}
-	*/
-
-	items = append(items, &widget.ListItem{
-		Headline: widget.T("Add document type"),
-		Type:     widget.ListItemTypeHelper,
-		Leading:  widget.NewIcon("add"),
-		HTMXAttrs: qq.actions.CreateCmd.ModalLinkAttrs(
-			qq.actions.CreateCmd.Data(""),
-			"",
-		),
-	})
-
 	for _, typex := range types {
 		items = append(items, qq.ListItem(ctx, typex, typex.ID == selectedTypeID))
+	}
+
+	htmxAttrs := widget.HTMXAttrs{
+		HxPost: qq.Endpoint(),
+		HxTrigger: event.HxTrigger(
+			event.DocumentTypeCreated,
+			event.DocumentTypeUpdated,
+			event.DocumentTypeDeleted,
+		),
+		// HxVals:    util.JSON(qq.Data()),
+		HxTarget: "#innerContent",
+		HxSwap:   "innerHTML",
+	}
+
+	if len(items) == 0 {
+		return &widget.Container{
+			Widget: widget.Widget[widget.Container]{
+				ID: id,
+			},
+			Child: &widget.EmptyState{
+				Icon:     widget.NewIcon("category"),
+				Headline: widget.T("No document types available yet."),
+				Actions: []widget.IWidget{
+					&widget.Button{
+						Icon:  widget.NewIcon("add"),
+						Label: widget.T("Create document type"),
+						HTMXAttrs: qq.actions.CreateCmd.ModalLinkAttrs(
+							qq.actions.CreateCmd.Data(""),
+							"",
+						),
+					},
+				},
+			},
+			HTMXAttrs: htmxAttrs,
+		}
 	}
 
 	return &widget.List{
 		Widget: widget.Widget[widget.List]{
 			ID: id,
 		},
-		HTMXAttrs: widget.HTMXAttrs{
-			HxPost: qq.Endpoint(),
-			HxTrigger: event.HxTrigger(
-				event.DocumentTypeCreated,
-				event.DocumentTypeUpdated,
-				event.DocumentTypeDeleted,
-			),
-			// HxVals:    util.JSON(qq.Data()),
-			HxTarget: "#innerContent",
-			HxSwap:   "innerHTML",
-		},
-		Children: items,
+		HTMXAttrs: htmxAttrs,
+		Children:  items,
 	}
 }
 

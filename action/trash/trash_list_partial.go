@@ -20,6 +20,7 @@ import (
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/timex"
 )
 
 type TrashListPartialData struct {
@@ -156,10 +157,13 @@ func (qq *TrashListPartial) listItem(ctx ctxx.Context, filex *enttenant.File, is
 			deletedAt = widget.T("Deleted")
 		}
 	} else {
+		deletedAtDate := timex.NewDate(filex.DeletedAt)
 		if filex.IsDirectory {
-			deletedAt = widget.Tf("Folder deleted on %s", filex.DeletedAt.Format("02 Jan 2006"))
+			deletedAt = widget.Tf("Folder deleted: %s",
+				deletedAtDate.String(ctx.MainCtx().LanguageBCP47))
 		} else {
-			deletedAt = widget.Tf("Deleted on %s", filex.DeletedAt.Format("02 Jan 2006"))
+			deletedAt = widget.Tf("Deleted: %s",
+				deletedAtDate.String(ctx.MainCtx().LanguageBCP47))
 		}
 	}
 

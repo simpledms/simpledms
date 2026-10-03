@@ -121,7 +121,7 @@ func (qq *CreateMCPCredentialCmd) FormHandler(
 	}
 	if len(destinationItems) == 0 {
 		destinationItems = append(destinationItems, &widget.ListItem{
-			Headline: widget.T("No spaces available yet."),
+			Headline: widget.T("No Spaces available yet."),
 			Type:     widget.ListItemTypeHelper,
 		})
 	}

@@ -34,7 +34,12 @@ func NewAssignFileCmd(infra *common.Infra, actions *Actions) *AssignFileCmd {
 		actions.Route("assign-file-cmd"),
 		false,
 	).EnableCommittedResponse()
-	formHelper := autil.NewFormHelper[AssignFileCmdData](infra, config, widget.T("Assign file"))
+	formHelper := autil.NewFormHelperX[AssignFileCmdData](
+		infra,
+		config,
+		widget.T("Assign file"),
+		widget.T("Assign"),
+	)
 	return &AssignFileCmd{
 		infra:      infra,
 		actions:    actions,
@@ -87,7 +92,7 @@ func (qq *AssignFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request
 	qq.infra.Renderer().RenderX(rw, ctx,
 		autil.WrapWidgetWithID(
 			widget.T("Assign file"),
-			widget.T("Save"),
+			widget.T("Assign"),
 			container,
 			actionx.ResponseWrapper(wrapper),
 			widget.DialogLayoutDefault,

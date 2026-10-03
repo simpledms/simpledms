@@ -132,3 +132,7 @@ func (qq *ProgressIndicator) GetColorClass() string {
 	}
 	return "bg-primary"
 }
+
+func (qq *ProgressIndicator) GetLoadingLabel() *Text {
+	return T("Loading…")
+}

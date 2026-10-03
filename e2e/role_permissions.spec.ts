@@ -30,7 +30,7 @@ test.describe("role permissions (owner)", () => {
 
 		await page.goto(`${base}/manage-users/`);
 		await expect(page).toHaveURL(/\/space\/[^/]+\/manage-users\/$/);
-		await expect(page.getByRole("heading", { name: /Users «/ })).toBeVisible();
+		await expect(page.getByRole("heading", { name: "Users", exact: true })).toBeVisible();
 
 		await page.goto(`${base}/trash/`);
 		await expect(page).toHaveURL(/\/space\/[^/]+\/trash\/$/);

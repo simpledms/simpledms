@@ -120,7 +120,7 @@ func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartia
 					&widget.Button{
 						Icon:      widget.NewIcon("upload_file"),
 						Label:     widget.T("Add new version"),
-						StyleType: widget.ButtonStyleTypeElevated,
+						StyleType: widget.ButtonStyleTypeOutlined,
 						HTMXAttrs: widget.HTMXAttrs{
 							HxPost:        qq.actions.FileVersionUploadDialogPartial.Endpoint(),
 							HxVals:        util.JSON(qq.actions.FileVersionUploadDialogPartial.Data(data.FileID)),
@@ -129,8 +129,8 @@ func (qq *FileVersionsPartial) Widget(ctx ctxx.Context, data *FileVersionsPartia
 					},
 					&widget.Button{
 						Icon:      widget.NewIcon("merge"),
-						Label:     widget.T("Add new version from inbox"),
-						StyleType: widget.ButtonStyleTypeElevated,
+						Label:     widget.T("Add new version from Inbox"),
+						StyleType: widget.ButtonStyleTypeOutlined,
 						HTMXAttrs: widget.HTMXAttrs{
 							HxPost:        qq.actions.FileVersionFromInboxDialog.Endpoint(),
 							HxVals:        util.JSON(qq.actions.FileVersionFromInboxDialog.Data(data.FileID, "", "")),

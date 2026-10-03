@@ -35,14 +35,14 @@ func (qq *Download) Handler(
 
 	if filex.Data.IsDirectory {
 		// TODO impl support for this? download as zip archive?
-		return e.NewHTTPErrorf(http.StatusBadRequest, "cannot download directories")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Folders cannot be downloaded.")
 	}
 
 	versionNumber := req.URL.Query().Get("version")
 	if versionNumber != "" {
 		versionInt, err := strconv.Atoi(versionNumber)
 		if err != nil {
-			return e.NewHTTPErrorf(http.StatusBadRequest, "invalid version number")
+			return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid version number.")
 		}
 		version, err := filex.Data.QueryFileVersions().
 			Where(fileversion.VersionNumber(versionInt)).
@@ -50,7 +50,7 @@ func (qq *Download) Handler(
 			Only(ctx)
 		if err != nil {
 			if enttenant.IsNotFound(err) {
-				return e.NewHTTPErrorf(http.StatusNotFound, "version not found")
+				return e.NewHTTPErrorf(http.StatusNotFound, "Version not found.")
 			}
 			return err
 		}

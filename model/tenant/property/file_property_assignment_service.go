@@ -84,7 +84,7 @@ func (qq *FilePropertyAssignmentService) resolve(
 		return nil, nil, err
 	}
 	if filex.IsDirectory {
-		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a folder.")
 	}
 	propertyx, err := ctx.SpaceCtx().Space.QueryProperties().Where(
 		propertyquery.ID(propertyID),

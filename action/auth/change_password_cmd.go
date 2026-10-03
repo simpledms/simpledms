@@ -59,7 +59,7 @@ func (qq *ChangePasswordCmd) Handler(
 ) error {
 	// Ensure user is logged in
 	if !ctx.IsMainCtx() {
-		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be logged in to change your password.")
+		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be signed in to change your password.")
 	}
 
 	data, err := autil.FormData[ChangePasswordCmdData](rw, req, ctx)
@@ -91,6 +91,6 @@ func (qq *ChangePasswordCmd) Handler(
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.PasswordChanged.String())
 
-	rw.AddRenderables(widget.NewSnackbarf("Password changed successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("Password changed."))
 	return nil
 }

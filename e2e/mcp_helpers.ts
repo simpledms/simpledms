@@ -13,13 +13,13 @@ export async function prepareInbox(page: Page, spaceName: string, documentTypes:
 	const spaces = page.getByRole("link", { name: "Spaces", exact: true }).first();
 	if (!(await spaces.isVisible())) await page.getByRole("button", { name: /^business / }).first().click();
 	await spaces.click();
-	await page.getByRole("link", { name: /Create space|^add$/ }).first().click();
+	await page.getByRole("link", { name: /Create Space/ }).first().click();
 	await page.getByRole("textbox", { name: "Name", exact: true }).fill(spaceName);
 	await page.getByRole("checkbox", { name: "Add me as space owner" }).check();
 	for (const documentType of documentTypes) {
 		await page.getByRole("checkbox", { name: documentType, exact: true }).check();
 	}
-	await page.getByRole("button", { name: "Save", exact: true }).click();
+	await page.getByRole("button", { name: "Create", exact: true }).click();
 	await page.getByRole("heading", { name: spaceName, exact: true }).click();
 	await expect(page).toHaveURL(/\/browse\/$/);
 	const inboxURL = page.url().replace(/\/browse\/$/, "/inbox/");
@@ -40,11 +40,11 @@ export async function prepareInbox(page: Page, spaceName: string, documentTypes:
 
 export async function createField(page: Page, inboxURL: string, name: string, type: string) {
 	await page.goto(inboxURL.replace(/\/inbox\/$/, "/fields/"));
-	await page.getByRole("link", { name: /Add field|^add$/ }).first().click();
-	const dialog = page.getByRole("dialog").filter({ hasText: "Add field" });
+	await page.getByRole("link", { name: /Create field/ }).first().click();
+	const dialog = page.getByRole("dialog").filter({ hasText: "Create field" });
 	await dialog.getByRole("textbox", { name: "Name", exact: true }).fill(name);
 	await dialog.getByRole("combobox", { name: "Type", exact: true }).selectOption({ label: type });
-	await dialog.getByRole("button", { name: "Save", exact: true }).click();
+	await dialog.getByRole("button", { name: "Create", exact: true }).click();
 	await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
 }
 

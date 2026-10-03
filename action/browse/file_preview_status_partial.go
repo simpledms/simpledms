@@ -93,7 +93,7 @@ func (qq *FilePreviewStatusPartial) Handler(
 	source, err := qq.actions.FilePreviewPartial.versionSource(ctx, filex, data.VersionNumber)
 	if err != nil {
 		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusNotFound, "version not found")
+		return e.NewHTTPErrorf(http.StatusNotFound, "Version not found.")
 	}
 	view, _, err := qq.actions.FilePreviewPartial.PreviewWidget(
 		ctx,

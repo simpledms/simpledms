@@ -38,10 +38,11 @@ func NewUploadFileCmd(infra *common.Infra, actions *Actions) *UploadFileCmd {
 		actions.Route("upload-file-cmd"),
 		false,
 	).EnableManualTxManagement()
-	formHelper := autil.NewFormHelper[UploadFileCmdData](
+	formHelper := autil.NewFormHelperX[UploadFileCmdData](
 		infra,
 		config,
 		widget.T("Upload file"),
+		widget.T("Upload"),
 	)
 	formHelper.SetIsMultipartFormData(true)
 	return &UploadFileCmd{

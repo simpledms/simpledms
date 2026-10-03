@@ -69,7 +69,7 @@ const temporaryAccountFileExpiry = 15 * time.Minute
 const (
 	emptyUploadMessage            = "Upload is empty."
 	couldNotSaveFileMessage       = "Could not save file."
-	tenantDatabaseNotFoundMessage = "Tenant database not found."
+	tenantDatabaseNotFoundMessage = "Organization database not found."
 )
 
 var errUploadTooLarge = errors.New("upload is too large")
@@ -329,7 +329,7 @@ func (qq *S3FileSystem) PrepareFileVersionUpload(
 		return nil, err
 	}
 	if filex.IsDirectory {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for folders.")
 	}
 	if err := qq.ensureFileDoesNotExistInFolderMode(ctx, meta.originalFilename, filex.ParentID, filex.IsInInbox); err != nil {
 		return nil, err
@@ -666,7 +666,7 @@ func (qq *S3FileSystem) finalizePreparedUploadAs(
 			return err
 		}
 		if filex.IsDirectory {
-			return e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
+			return e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for folders.")
 		}
 		if filex.Name != filename {
 			filex, err = filex.Update().SetName(filename).Save(ctx)
@@ -1852,7 +1852,7 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversion(
 		return nil, err
 	}
 	if !hasAccess {
-		return nil, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+		return nil, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this organization.")
 	}
 
 	claimedTmpFile, err := mainTx.TemporaryFile.Query().
@@ -1938,7 +1938,7 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
 	).Only(ctx)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
-			return nil, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+			return nil, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this organization.")
 		}
 		return nil, err
 	}

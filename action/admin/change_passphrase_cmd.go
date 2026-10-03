@@ -46,7 +46,7 @@ func (qq *ChangePassphraseCmd) Data() *ChangePassphraseCmdData {
 
 func (qq *ChangePassphraseCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	if !ctx.IsMainCtx() {
-		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be logged in to unlock the app.")
+		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be signed in to unlock the app.")
 	}
 	if ctx.MainCtx().Account.Role != mainrole.Admin {
 		return e.NewHTTPErrorf(http.StatusForbidden, "You must be an admin to unlock the app.")

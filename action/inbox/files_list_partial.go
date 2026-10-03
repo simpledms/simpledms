@@ -423,7 +423,7 @@ func (qq *FilesListPartial) filesListItemsFromFiles(
 			Widget: widget.Widget[widget.ListItem]{
 				ID: "inboxLoadMore",
 			},
-			Headline: widget.T("Loading more..."),
+			Headline: widget.T("Loading more…"),
 			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    qq.Endpoint() + "?offset=" + strconv.Itoa(offset+qq.pageSize()),
 				HxVals:    util.JSON(data),

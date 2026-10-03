@@ -8,7 +8,6 @@ import (
 	"github.com/simpledms/simpledms/common"
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
-	"github.com/simpledms/simpledms/db/enttenant/property"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -101,9 +100,6 @@ func (qq *UpdatePropertyFilterCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 	}
 
 	state.PropertyValues[index] = valuex
-
-	propertyx := ctx.SpaceCtx().Space.QueryProperties().Where(property.ID(data.PropertyID)).OnlyX(ctx)
-	rw.AddRenderables(wx.NewSnackbarf("«%s» filter updated.", propertyx.Name))
 
 	rw.Header().Set("HX-Replace-Url", route.BrowseWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, data.CurrentDirID))
 	rw.Header().Set("HX-Trigger-After-Swap", event.PropertyFilterChanged.String())

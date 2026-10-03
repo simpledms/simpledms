@@ -46,7 +46,7 @@ func (qq *BrowsePage) Handler(
 	}
 
 	if !dirx.IsDirectory {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "file is not a directory")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "File is not a folder.")
 	}
 
 	state := autil.StateX[ListDirPartialState](rw, req)
@@ -65,7 +65,7 @@ func (qq *BrowsePage) Handler(
 	browsePage, err := qq.widget(req, ctx, state, dirx)
 	if err != nil {
 		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "could not render widget")
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not render widget.")
 	}
 
 	qq.render(rw, req, ctx, browsePage)
@@ -132,7 +132,7 @@ func (qq *BrowsePage) widget(
 			),
 			Child: []widget.IWidget{
 				widget.NewIcon("create_new_folder"),
-				widget.T("Create directory"),
+				widget.T("Create folder"),
 			},
 		})
 	}

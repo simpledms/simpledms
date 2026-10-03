@@ -607,7 +607,7 @@ func (qq *Handler) readText(
 		return result, err
 	}
 	if filex.IsDirectory {
-		return result, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return result, e.NewHTTPErrorf(http.StatusBadRequest, "File is a folder.")
 	}
 	data, err := qq.fileData(requestCtx, ctx, filex)
 	if err != nil {
@@ -675,7 +675,7 @@ func (qq *Handler) listDirectory(
 		return result, err
 	}
 	if len(input.DirectoryID) > 100 {
-		return result, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid directory ID.")
+		return result, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid folder ID.")
 	}
 	directory, children, hasMore, err := filingmodel.NewFilingService(
 		qq.config.Infra.FileSystem(),
@@ -1504,7 +1504,7 @@ func (qq *Handler) createAndAssignTag(
 		return TagAssignmentData{}, err
 	}
 	if filex.IsDirectory {
-		return TagAssignmentData{}, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return TagAssignmentData{}, e.NewHTTPErrorf(http.StatusBadRequest, "File is a folder.")
 	}
 	typex, groupID, err := tagCreationValues(ctx, input.CreateTagInput)
 	if err != nil {
@@ -2086,7 +2086,7 @@ func resolveFileAndTag(
 		return nil, nil, err
 	}
 	if filex.IsDirectory {
-		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a folder.")
 	}
 	tagx, err := ctx.Space.QueryTags().Where(tag.PublicID(entx.NewCIText(input.TagID))).Only(ctx)
 	if err != nil {
@@ -2201,7 +2201,7 @@ func resolveFileAndProperty(
 		return nil, nil, err
 	}
 	if filex.IsDirectory {
-		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a folder.")
 	}
 	propertyx, err := ctx.Space.QueryProperties().Where(
 		property.PublicID(entx.NewCIText(propertyID)),
@@ -2317,7 +2317,7 @@ func (qq *Handler) clearDocumentType(
 	}
 	if filex.IsDirectory {
 		return DocumentTypeAssignmentData{}, e.NewHTTPErrorf(
-			http.StatusBadRequest, "File is a directory.",
+			http.StatusBadRequest, "File is a folder.",
 		)
 	}
 	if _, err := documenttypemodel.NewAssignmentService().Clear(ctx, filex.ID); err != nil {
@@ -2344,7 +2344,7 @@ func resolveFileAndDocumentType(
 		return nil, nil, err
 	}
 	if filex.IsDirectory {
-		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a folder.")
 	}
 	documentTypex, err := ctx.Space.QueryDocumentTypes().Where(
 		documenttypequery.PublicID(entx.NewCIText(documentTypeID)),

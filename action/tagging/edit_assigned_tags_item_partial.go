@@ -129,7 +129,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 	id := qq.listItemID(fileID, tagx.ID)
 
 	var icon *widget.Icon
-	var supportingText string
+	var supportingText *widget.Text
 	var trailing widget.IWidget
 	var isCollapsible bool
 	var htmxAttrs widget.HTMXAttrs
@@ -148,11 +148,6 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 			tagx.Edges.Children = tagx.QueryChildren().AllX(ctx)
 		}
 
-		childTagsStr := fmt.Sprintf("%d child tag", len(tagx.Edges.Children))
-		if len(tagx.Edges.Children) > 1 || len(tagx.Edges.Children) == 0 {
-			childTagsStr += "s"
-		}
-
 		selectedCount := 0
 		for _, childTag := range tagx.Edges.Children {
 			if isCheckedFn(childTag.ID) {
@@ -161,20 +156,18 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 		}
 		// TODO doesn't get updated on change; impl a web component?
 		// TODO selected can be better indicated by color of icon or a badge?
-		selectedStr := fmt.Sprintf("%d selected", selectedCount)
-
 		// TODO indicate if children are checked with checkbox? via bg color?
-		supportingText = fmt.Sprintf(
-			"%s, %s",
-			childTagsStr,
-			selectedStr,
-		)
+		childCount := len(tagx.Edges.Children)
+		supportingText = widget.Tf("Group, %d tags, %d selected", childCount, selectedCount)
+		if childCount == 1 {
+			supportingText = widget.Tf("Group, %d tag, %d selected", childCount, selectedCount)
+		}
 		trailing = widget.NewIcon("keyboard_arrow_down")
 
 		childItems = append(childItems, &widget.ListItem{
 			Type:     widget.ListItemTypeHelper,
 			Leading:  widget.NewIcon("new_label"),
-			Headline: widget.T("Create new tag"), // group not possible
+			Headline: widget.T("Create tag"), // group not possible
 			HTMXAttrs: qq.actions.AssignedTags.CreateAndAssignTagCmd.ModalLinkAttrs(
 				qq.actions.AssignedTags.CreateAndAssignTagCmd.Data(fileID, tagx.ID),
 				"#"+qq.listItemID(fileID, tagx.ID),
@@ -195,7 +188,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 	case tagtype.Super:
 		icon = widget.NewIcon("label_important")
 
-		supportingText = "Super tag"
+		supportingText = widget.T("Super tag")
 
 		subTags, err := tagx.Edges.SubTagsOrErr()
 		if err != nil {
@@ -208,7 +201,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 				tagNames = append(tagNames, subTag.Name)
 			}
 			// TODO add group to tags if it makes sense
-			supportingText = fmt.Sprintf("Composed of %s", strings.Join(tagNames, ", "))
+			supportingText = widget.Tf("Composed of %s", strings.Join(tagNames, ", "))
 		}
 
 		trailing = &widget.Checkbox{
@@ -252,7 +245,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 		HTMXAttrs:      htmxAttrs,
 		Leading:        icon,
 		Headline:       widget.T(tagx.Name),
-		SupportingText: widget.Tu(supportingText),
+		SupportingText: supportingText,
 		Trailing:       trailing,
 		IsCollapsible:  isCollapsible,
 		ContextMenu:    NewTagContextMenuWidget(qq.actions).Widget(ctx, fileID, tagx),

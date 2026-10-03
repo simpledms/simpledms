@@ -35,10 +35,11 @@ func NewMoveTagToGroupCmd(infra *common.Infra, actions *Actions) *MoveTagToGroup
 		infra:   infra,
 		actions: actions,
 		Config:  config,
-		FormHelper: autil.NewFormHelper[MoveTagToGroupCmdData](
+		FormHelper: autil.NewFormHelperX[MoveTagToGroupCmdData](
 			infra,
 			config,
 			widget.T("Move tag to group"),
+			widget.T("Move"),
 		),
 	}
 }
@@ -64,7 +65,7 @@ func (qq *MoveTagToGroupCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request
 	}
 
 	if isDeselected {
-		snackbar = widget.NewSnackbarf("Deselected group.")
+		snackbar = widget.NewSnackbarf("Removed from group.")
 	} else {
 		snackbar = widget.NewSnackbarf("Moved to group «%s».", groupTag.Name)
 	}

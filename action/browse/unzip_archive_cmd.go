@@ -51,10 +51,15 @@ type UnzipArchiveCmd struct {
 func NewUnzipArchiveCmd(infra *common.Infra, actions *Actions) *UnzipArchiveCmd {
 	config := actionx.NewConfig(actions.Route("unzip-archive-cmd"), false).EnableManualTxManagement()
 	return &UnzipArchiveCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[UnzipArchiveCmdData](infra, config, widget.T("Unzip archive")),
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+		FormHelper: autil.NewFormHelperX[UnzipArchiveCmdData](
+			infra,
+			config,
+			widget.T("Unzip archive"),
+			widget.T("Unzip"),
+		),
 	}
 }
 
@@ -178,7 +183,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 				_, err := qq.infra.FileSystem().MakeDirAllIfNotExists(writeCtx, parentDir, zippedFile.Name)
 				if err != nil {
 					log.Println(err)
-					return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not create directory structure.")
+					return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not create folder structure.")
 				}
 				continue
 			}
@@ -190,7 +195,7 @@ func (qq *UnzipArchiveCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 					newParentDir, err := qq.infra.FileSystem().MakeDirAllIfNotExists(writeCtx, parentDir, pathWithoutFilename)
 					if err != nil {
 						log.Println(err)
-						return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not create directory structure.")
+						return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not create folder structure.")
 					}
 					fileParentID = newParentDir.ID
 				}

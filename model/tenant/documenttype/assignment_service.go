@@ -70,7 +70,7 @@ func (qq *AssignmentService) file(ctx ctxx.Context, fileID int64) (*enttenant.Fi
 		return nil, err
 	}
 	if filex.IsDirectory {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a folder.")
 	}
 	return filex, nil
 }

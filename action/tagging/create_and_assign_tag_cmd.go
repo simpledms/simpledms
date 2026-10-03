@@ -39,11 +39,11 @@ func NewCreateAndAssignTagCmd(
 		infra:   infra,
 		actions: actions,
 		Config:  config,
-		FormHelper: autil.NewFormHelper[CreateAndAssignTagCmdData](
+		FormHelper: autil.NewFormHelperX[CreateAndAssignTagCmdData](
 			infra,
 			config,
 			widget.T("Create and assign tag"),
-			// "#tagAssignmentList",
+			widget.T("Create"),
 		),
 	}
 }

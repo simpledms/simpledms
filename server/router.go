@@ -832,7 +832,7 @@ func (qq *Router) context(
 		if entmain.IsNotFound(err) {
 			return mainCtx, nil, false, e.NewHTTPErrorf(
 				http.StatusForbidden,
-				"You are not allowed to access this tenant.",
+				"You are not allowed to access this organization.",
 			)
 		}
 		return mainCtx, nil, false, err

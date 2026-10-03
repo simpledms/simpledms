@@ -52,7 +52,7 @@ func (qq *PasskeyRecoveryCodesDialog) Handler(
 	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
-	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be logged in to view backup codes.")
+	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be signed in to view backup codes.")
 	if err != nil {
 		return err
 	}

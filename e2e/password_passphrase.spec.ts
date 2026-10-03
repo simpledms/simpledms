@@ -13,7 +13,7 @@ test.describe("password and passphrase", () => {
 		await setPasswordLink.click();
 		await page.getByRole("textbox", { name: "New password" }).fill("abc12345");
 		await page.getByRole("textbox", { name: "Confirm password" }).fill("abc12346");
-		await page.getByRole("button", { name: "Save" }).click();
+		await page.getByRole("button", { name: "Set password", exact: true }).click();
 
 		await expect(page.getByText("Passwords do not match.")).toBeVisible();
 		await expect(page.getByRole("heading", { name: "Set password" })).toBeVisible();
@@ -49,7 +49,7 @@ test.describe("password and passphrase", () => {
 		await setPasswordLink.click();
 		await page.getByRole("textbox", { name: "New password" }).fill("ChangeMe1234");
 		await page.getByRole("textbox", { name: "Confirm password" }).fill("ChangeMe1234");
-		await page.getByRole("button", { name: "Save" }).click();
+		await page.getByRole("button", { name: "Set password", exact: true }).click();
 
 		await expect(page.getByRole("link", { name: "Set password now" })).toHaveCount(0);
 	});

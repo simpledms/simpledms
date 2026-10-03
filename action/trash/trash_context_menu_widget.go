@@ -21,13 +21,12 @@ func (qq *TrashContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File
 	var items []*widget.MenuItem
 
 	items = append(items, &widget.MenuItem{
-		TrailingIcon: "restore_from_trash",
-		Label:        widget.T("Restore"),
+		LeadingIcon: "restore_from_trash",
+		Label:       widget.T("Restore"),
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:    qq.actions.RestoreFileCmd.Endpoint(),
-			HxSwap:    "none",
-			HxVals:    util.JSON(qq.actions.RestoreFileCmd.DataWithOptions(filex.PublicID.String())),
-			HxConfirm: widget.T("Are you sure?").String(ctx),
+			HxPost: qq.actions.RestoreFileCmd.Endpoint(),
+			HxSwap: "none",
+			HxVals: util.JSON(qq.actions.RestoreFileCmd.DataWithOptions(filex.PublicID.String())),
 		},
 	})
 

@@ -80,7 +80,7 @@ func (qq *FileVersionFromInboxCmd) Handler(rw httpx.ResponseWriter, req *httpx.R
 	}
 
 	rw.AddRenderables(
-		wx.NewSnackbarf("Added new version from inbox."),
+		wx.NewSnackbarf("Added new version from Inbox."),
 	)
 
 	// A merge changes the selection and preview together; one parent query owns the refresh.

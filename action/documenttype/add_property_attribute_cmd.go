@@ -37,10 +37,11 @@ func NewAddPropertyAttributeCmd(infra *common.Infra, actions *Actions) *AddPrope
 		actions.Route("add-property-cmd"),
 		false,
 	)
-	formHelper := autil.NewFormHelper[AddPropertyAttributeCmdData](
+	formHelper := autil.NewFormHelperX[AddPropertyAttributeCmdData](
 		infra,
 		config,
-		widget.T("Add field"),
+		widget.T("Add field attribute"),
+		widget.T("Add"),
 	)
 	return &AddPropertyAttributeCmd{
 		infra:      infra,
@@ -138,7 +139,7 @@ func (qq *AddPropertyAttributeCmd) Form(
 
 	return autil.WrapWidgetWithID(
 		widget.T("Add field attribute"),
-		widget.T("Save"),
+		widget.T("Add"),
 		form,
 		wrapper,
 		widget.DialogLayoutStable,

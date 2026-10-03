@@ -15,7 +15,7 @@ import (
 
 type MakeDirCmdData struct {
 	ParentDirID string `validate:"required" form_attr_type:"hidden"`
-	DirName     string `validate:"required" form_attrs:"autofocus"`
+	FolderName  string `validate:"required" form_attrs:"autofocus"`
 }
 
 // TODO or CreateDir?
@@ -38,11 +38,11 @@ func NewMakeDirCmd(
 		infra,
 		actions,
 		config,
-		autil.NewFormHelper[MakeDirCmdData](
+		autil.NewFormHelperX[MakeDirCmdData](
 			infra,
 			config,
-			widget.T("Create directory"),
-			// "#fileList",
+			widget.T("Create folder"),
+			widget.T("Create"),
 		),
 	}
 }
@@ -50,7 +50,7 @@ func NewMakeDirCmd(
 func (qq *MakeDirCmd) Data(parentDirID, dirName string) *MakeDirCmdData {
 	return &MakeDirCmdData{
 		ParentDirID: parentDirID,
-		DirName:     dirName,
+		FolderName:  dirName,
 	}
 }
 
@@ -60,7 +60,7 @@ func (qq *MakeDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 		return err
 	}
 
-	filex, err := qq.infra.FileSystem().MakeDir(ctx, data.ParentDirID, data.DirName)
+	filex, err := qq.infra.FileSystem().MakeDir(ctx, data.ParentDirID, data.FolderName)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -70,7 +70,7 @@ func (qq *MakeDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 	rw.AddRenderables(
 		widget.NewSnackbarf("«%s» created.", filex.Data.Name).WithAction(&widget.Link{
 			Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
-			Child: widget.T("Open directory"), // TODO Go to, open, show?
+			Child: widget.T("Open folder"), // TODO Go to, open, show?
 		}),
 	)
 	return nil

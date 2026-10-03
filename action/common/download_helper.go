@@ -26,7 +26,7 @@ func StreamDownload(
 	currentVersion *storedfilemodel.StoredFile,
 ) error {
 	if filex.Data.IsDirectory {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "cannot download directories")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Folders cannot be downloaded.")
 	}
 
 	f, err := infra.FileSystem().OpenFile(ctx, currentVersion)

@@ -63,7 +63,7 @@ func (qq *FilingService) FileInboxDocument(
 		return nil, err
 	}
 	if !destination.IsDirectory {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Destination is not a directory.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Destination is not a folder.")
 	}
 	if filename == "" {
 		filename = filex.Name
@@ -121,7 +121,7 @@ func (qq *FilingService) CreateDirectory(
 		return nil, err
 	}
 	if !parent.IsDirectory {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Parent is not a directory.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Parent is not a folder.")
 	}
 	directory, err := qq.fileSystem.MakeDir(ctx, parent.PublicID.String(), name)
 	if err != nil {
@@ -156,7 +156,7 @@ func (qq *FilingService) ListDirectory(
 	if !directory.IsDirectory {
 		return nil, nil, false, e.NewHTTPErrorf(
 			http.StatusBadRequest,
-			"File is not a directory.",
+			"File is not a folder.",
 		)
 	}
 	children, err := ctx.TenantCtx().TTx.File.Query().Where(
@@ -188,10 +188,10 @@ func (qq *FilingService) inboxDocument(
 		return nil, err
 	}
 	if filex.IsDirectory {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a folder.")
 	}
 	if !filex.IsInInbox {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File must be in Inbox.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File must be in the Inbox.")
 	}
 	return filex, nil
 }

@@ -545,21 +545,19 @@ func assertWebDAVCredentialItems(
 	if !strings.Contains(string(items[0].HxVals), archiveSpacePublicID) {
 		t.Fatalf("expected add row to preselect its Space, got %s", items[0].HxVals)
 	}
-	menuButton, ok := items[1].Trailing.(*widget.IconButton)
-	if !ok || menuButton.Icon != "more_vert" {
-		t.Fatalf("expected credential overflow menu, got %#v", items[1].Trailing)
+	if items[1].ContextMenu == nil {
+		t.Fatalf("expected credential context menu, got %#v", items[1])
 	}
-	assertWebDAVCredentialMenu(t, mainCtx, items[1], menuButton)
+	assertWebDAVCredentialMenu(t, mainCtx, items[1], items[1].ContextMenu)
 }
 
 func assertWebDAVCredentialMenu(
 	t *testing.T,
 	mainCtx *ctxx.MainContext,
 	item *widget.ListItem,
-	menuButton *widget.IconButton,
+	menu *widget.Menu,
 ) {
 	t.Helper()
-	menu := menuButton.Children.(*widget.Menu)
 	if len(menu.Items) != 3 || menu.Items[0].Label.String(mainCtx) != "Edit" ||
 		!menu.Items[1].IsDivider || menu.Items[2].Label.String(mainCtx) != "Revoke" {
 		t.Fatalf("expected edit and revoke submenu, got %#v", menu.Items)
@@ -639,7 +637,7 @@ func assertFilteredWebDAVCredentialOverviews(
 	revokedContent := revokedTabs.ActiveTabContent.(*widget.ScrollableContent)
 	revokedList := revokedContent.Children.(*widget.Column).Children.(*widget.List)
 	revokedItems := revokedList.Children.([]*widget.ListItem)
-	if len(revokedItems) != 2 || revokedItems[1].Trailing != nil {
+	if len(revokedItems) != 2 || revokedItems[1].ContextMenu != nil {
 		t.Fatalf("expected one revoked credential without revoke menu, got %#v", revokedItems)
 	}
 

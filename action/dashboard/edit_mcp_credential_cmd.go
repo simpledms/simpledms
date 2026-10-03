@@ -32,10 +32,11 @@ func NewEditMCPCredentialCmd(
 		actions:     actions,
 		credentialx: mcpcredential.NewCredentialService(),
 		Config:      config,
-		FormHelper: autil.NewFormHelper[EditMCPCredentialCmdData](
+		FormHelper: autil.NewFormHelperX[EditMCPCredentialCmdData](
 			infra,
 			config,
-			widget.T("Edit"),
+			widget.T("Edit MCP credential"),
+			widget.T("Save"),
 		),
 	}
 }

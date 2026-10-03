@@ -55,12 +55,12 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 	}
 
 	if data.VersionNumber == "" {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "missing version number")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Missing version number.")
 	}
 
 	versionInt, err := strconv.Atoi(data.VersionNumber)
 	if err != nil {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "invalid version number")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid version number.")
 	}
 
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
@@ -70,7 +70,7 @@ func (qq *FileVersionPreviewDialog) Handler(rw httpx.ResponseWriter, req *httpx.
 		Only(ctx)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
-			return e.NewHTTPErrorf(http.StatusNotFound, "version not found")
+			return e.NewHTTPErrorf(http.StatusNotFound, "Version not found.")
 		}
 		return err
 	}

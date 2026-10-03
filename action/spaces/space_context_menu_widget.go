@@ -40,7 +40,7 @@ func (qq *SpaceContextMenuWidget) Widget(ctx ctxx.Context, spacem *spacemodel.Sp
 			HxPost:    qq.actions.DeleteSpaceCmd.Endpoint(),
 			HxSwap:    "none",
 			HxVals:    util.JSON(qq.actions.DeleteSpaceCmd.Data(spacem.Data.PublicID.String())),
-			HxConfirm: widget.T("Are you sure?").String(ctx),
+			HxConfirm: widget.T("Delete this Space?").String(ctx),
 		},
 	}
 

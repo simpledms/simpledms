@@ -167,7 +167,7 @@ func (qq *PasskeyService) FinishDiscoverableSignIn(
 		return nil, err
 	}
 	if !isRequired {
-		return nil, e.NewHTTPErrorf(http.StatusUnauthorized, "Passkey login is not enabled for this account.")
+		return nil, e.NewHTTPErrorf(http.StatusUnauthorized, "Passkey sign-in is not enabled for this account.")
 	}
 
 	encodedCredential, err := qq.encodePasskeyCredential(credential)

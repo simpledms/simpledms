@@ -84,7 +84,7 @@ func (qq *OrganizationSettingsPage) appBar(ctx ctxx.Context) *widget.AppBar {
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title: &widget.AppBarTitle{
-			Text: widget.Tuf("%s «%s»", widget.T("Settings").String(ctx), ctx.TenantCtx().Tenant.Name),
+			Text: widget.T("Settings"),
 		},
 	}
 }
@@ -146,7 +146,7 @@ func (qq *OrganizationSettingsPage) passkeyEnforcementBtn(
 
 	return &widget.Button{
 		Label:     buttonLabel,
-		StyleType: widget.ButtonStyleTypeElevated,
+		StyleType: widget.ButtonStyleTypeOutlined,
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.actions.ToggleTenantPasskeyEnforcementCmd.Endpoint(),
 			HxVals: util.JSON(
@@ -182,11 +182,13 @@ func (qq *OrganizationSettingsPage) deleteTenantBtn(
 
 	return &widget.Button{
 		Label:     widget.T("Delete organization"),
-		StyleType: widget.ButtonStyleTypeElevated,
+		StyleType: widget.ButtonStyleTypeOutlined,
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:    endpoint,
-			HxVals:    util.JSON(map[string]any{"TenantID": tenantx.PublicID.String()}),
-			HxConfirm: widget.T("Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.").String(ctx),
+			HxPost: endpoint,
+			HxVals: util.JSON(map[string]any{"TenantID": tenantx.PublicID.String()}),
+			HxConfirm: widget.T(
+				"Delete this organization? All accounts owned by it will be deleted globally.",
+			).String(ctx),
 		},
 	}, true
 }
@@ -215,7 +217,7 @@ func (qq *OrganizationSettingsPage) downloadTenantBackupLink(
 		Filename: "tenant-backup-" + tenantx.PublicID.String() + ".zip",
 		Child: &widget.Button{
 			Label:     widget.T("Download backup"),
-			StyleType: widget.ButtonStyleTypeElevated,
+			StyleType: widget.ButtonStyleTypeOutlined,
 		},
 	}, true
 }

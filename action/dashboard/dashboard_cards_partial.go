@@ -25,6 +25,7 @@ import (
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/fileutil"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/timex"
 )
 
 type DashboardCardsPartialData struct {
@@ -207,7 +208,10 @@ func (qq *DashboardCardsPartial) AccountGrids(ctx ctxx.Context) ([]*widget.Grid,
 			})
 		}
 
-		accountCardsBtns = append(accountCardsBtns, qq.registerPasskeyBtn(ctx, widget.ButtonStyleTypeElevated))
+		accountCardsBtns = append(
+			accountCardsBtns,
+			qq.registerPasskeyBtn(ctx, widget.ButtonStyleTypeOutlined),
+		)
 	}
 
 	if len(passkeyCredentials) > 0 {
@@ -215,7 +219,7 @@ func (qq *DashboardCardsPartial) AccountGrids(ctx ctxx.Context) ([]*widget.Grid,
 			accountCardsBtns,
 			&widget.Button{
 				Label:     widget.T("Regenerate backup codes"),
-				StyleType: widget.ButtonStyleTypeElevated,
+				StyleType: widget.ButtonStyleTypeOutlined,
 				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:    qq.actions.AuthActions.RegeneratePasskeyCodesCmd.Endpoint(),
 					HxVals:    util.JSON(qq.actions.AuthActions.RegeneratePasskeyCodesCmd.Data()),
@@ -473,7 +477,7 @@ func (qq *DashboardCardsPartial) spaceCard(ctx ctxx.Context, spacex *enttenant.S
 func (qq *DashboardCardsPartial) changePasswordBtn(ctx ctxx.Context) *widget.Button {
 	return &widget.Button{
 		Label:     widget.T("Change password"),
-		StyleType: widget.ButtonStyleTypeElevated,
+		StyleType: widget.ButtonStyleTypeOutlined,
 		HTMXAttrs: qq.actions.AuthActions.ChangePasswordCmd.ModalLinkAttrs(
 			qq.actions.AuthActions.ChangePasswordCmd.Data("", "", ""),
 			"",
@@ -534,7 +538,7 @@ func (qq *DashboardCardsPartial) setPasswordCard(ctx ctxx.Context) *widget.Card 
 		Style:          widget.CardStyleFilled,
 		Headline:       widget.H(widget.HeadingTypeTitleLg, widget.T("No password set")),
 		Subhead:        widget.T("Account"),
-		SupportingText: widget.T("You've logged in with a temporary password. Please set a password to secure your account and use the app."),
+		SupportingText: widget.T("You've signed in with a temporary password. Please set a password to secure your account and use the app."),
 		Actions: []*widget.Button{
 			{
 				Label:     widget.T("Set password now"),
@@ -563,7 +567,7 @@ func (qq *DashboardCardsPartial) editAccountCard(ctx ctxx.Context) *wx.Card {
 func (qq *DashboardCardsPartial) editAccountBtn(ctx ctxx.Context) (*widget.Button, bool) {
 	return &widget.Button{
 		Label:     widget.T("Edit account"),
-		StyleType: widget.ButtonStyleTypeElevated,
+		StyleType: widget.ButtonStyleTypeOutlined,
 		HTMXAttrs: qq.actions.AuthActions.EditAccountCmd.ModalLinkAttrs(
 			qq.actions.AuthActions.EditAccountCmd.Data(
 				ctx.MainCtx().Account.PublicID.String(),
@@ -617,19 +621,19 @@ func (qq *DashboardCardsPartial) manageSpacesCard(ctx ctxx.Context, tenantx *ent
 	if !tenantm.IsOwner(accountm) {
 		return &widget.Card{
 			Style:          widget.CardStyleFilled,
-			Headline:       widget.H(widget.HeadingTypeTitleLg, widget.T("No space available yet")),
+			Headline:       widget.H(widget.HeadingTypeTitleLg, widget.T("No Space available yet")),
 			Subhead:        widget.T("Space"),
-			SupportingText: widget.Tf("You have no permission to access any space of this organization."),
+			SupportingText: widget.Tf("You have no permission to access any Space of this organization."),
 		}, true
 	}
 
 	return &widget.Card{
 		Style:          widget.CardStyleFilled,
-		Headline:       widget.H(widget.HeadingTypeTitleLg, widget.T("No space available yet")),
+		Headline:       widget.H(widget.HeadingTypeTitleLg, widget.T("No Space available yet")),
 		Subhead:        widget.T("Space"),
 		SupportingText: widget.Tf("Please create one to get started."),
 		Actions: []*widget.Button{{
-			Label:     widget.T("Manage spaces"),
+			Label:     widget.T("Manage Spaces"),
 			StyleType: widget.ButtonStyleTypeTonal,
 			HTMXAttrs: widget.HTMXAttrs{
 				HxGet: route2.SpacesRoot(tenantx.PublicID.String()),
@@ -691,9 +695,11 @@ func (qq *DashboardCardsPartial) passkeyCredentialCard(
 	ctx ctxx.Context,
 	credentialx *entmain.PasskeyCredential,
 ) *widget.Card {
-	supportingText := widget.Tf("Created on %s", credentialx.CreatedAt.Format("2006-01-02 15:04"))
+	supportingText := widget.Tf("Created: %s",
+		timex.NewDateTime(credentialx.CreatedAt).String(ctx.MainCtx().LanguageBCP47))
 	if credentialx.LastUsedAt != nil {
-		supportingText = widget.Tf("Last used on %s", credentialx.LastUsedAt.Format("2006-01-02 15:04"))
+		supportingText = widget.Tf("Last used: %s",
+			timex.NewDateTime(*credentialx.LastUsedAt).String(ctx.MainCtx().LanguageBCP47))
 	}
 
 	credentialName := strings.TrimSpace(credentialx.Name)
@@ -713,7 +719,7 @@ func (qq *DashboardCardsPartial) passkeyCredentialCard(
 func (qq *DashboardCardsPartial) manageUploadLimitBtn(ctx ctxx.Context) *widget.Button {
 	return &widget.Button{
 		Label:     widget.T("Manage upload limit"),
-		StyleType: widget.ButtonStyleTypeElevated,
+		StyleType: widget.ButtonStyleTypeOutlined,
 		HTMXAttrs: qq.actions.AdminActions.SetGlobalUploadLimitForm.ModalLinkAttrs(
 			qq.actions.AdminActions.SetGlobalUploadLimitForm.Data(),
 			"",

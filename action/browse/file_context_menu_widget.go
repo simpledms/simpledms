@@ -26,8 +26,8 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 
 	menuItems = append(menuItems,
 		&widget.MenuItem{
-			TrailingIcon: "edit", // TODO
-			Label:        widget.T("Rename"),
+			LeadingIcon: "edit",
+			Label:       widget.T("Rename"),
 			HTMXAttrs: qq.actions.RenameFileCmd.ModalLinkAttrs(
 				qq.actions.RenameFileCmd.Data(filex.PublicID.String(), filex.Name),
 				"#"+qq.actions.ListDirPartial.WrapperID(),
@@ -38,8 +38,8 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 	if ctx.SpaceCtx().Space.IsFolderMode {
 		menuItems = append(menuItems,
 			&widget.MenuItem{
-				TrailingIcon: "drive_file_move",
-				Label:        widget.T("Move"),
+				LeadingIcon: "drive_file_move",
+				Label:       widget.T("Move"),
 				HTMXAttrs: qq.actions.MoveFileCmd.ModalLinkAttrs(
 					qq.actions.MoveFileCmd.Data(filex.PublicID.String(), ""),
 					"#"+qq.actions.ListDirPartial.WrapperID(),
@@ -48,32 +48,37 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 		)
 	}
 
-	menuItems = append(menuItems,
-		&widget.MenuItem{
-			IsDivider: true,
-		},
-		&widget.MenuItem{
-			TrailingIcon: "delete",
-			Label:        widget.T("Delete"),
-			HTMXAttrs: widget.HTMXAttrs{
-				HxPost:    qq.actions.DeleteFileCmd.Endpoint(),
-				HxVals:    util.JSON(qq.actions.DeleteFileCmd.Data(filex.PublicID.String())),
-				HxSwap:    "none",
-				HxConfirm: widget.T("Are you sure?").String(ctx),
-			},
-		},
-	)
-
 	if filem.IsZIPArchive(ctx) {
 		menuItems = append(menuItems, &widget.MenuItem{
-			TrailingIcon: "Unarchive",
-			Label:        widget.T("Unzip archive"),
+			LeadingIcon: "unarchive",
+			Label:       widget.T("Unzip archive"),
 			HTMXAttrs: qq.actions.UnzipArchiveCmd.ModalLinkAttrs(
 				qq.actions.UnzipArchiveCmd.Data(filem.Data.PublicID.String(), false),
 				"",
 			),
 		})
 	}
+
+	deleteConfirm := widget.T("Delete this file? You can restore it from the Trash.")
+	if filex.IsDirectory {
+		deleteConfirm = widget.T("Delete this folder? Its files can be restored from the Trash.")
+	}
+
+	menuItems = append(menuItems,
+		&widget.MenuItem{
+			IsDivider: true,
+		},
+		&widget.MenuItem{
+			LeadingIcon: "delete",
+			Label:       widget.T("Delete"),
+			HTMXAttrs: widget.HTMXAttrs{
+				HxPost:    qq.actions.DeleteFileCmd.Endpoint(),
+				HxVals:    util.JSON(qq.actions.DeleteFileCmd.Data(filex.PublicID.String())),
+				HxSwap:    "none",
+				HxConfirm: deleteConfirm.String(ctx),
+			},
+		},
+	)
 
 	return &widget.Menu{
 		Items: menuItems,

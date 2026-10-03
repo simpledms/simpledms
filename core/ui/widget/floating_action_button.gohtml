@@ -3,7 +3,7 @@
 	{{- $tooltip := .GetTooltip -}}
 	<button
 			type="button"
-			{{ if $tooltip }}data-tooltip="{{ $tooltip }}"{{ end }}
+			{{ if $tooltip }}data-tooltip="{{ $tooltip }}" aria-label="{{ $tooltip }}"{{ end }}
 			class="
 			{{ if .IsPrimary }}bg-primary-container text-on-primary-container {{ end }}
 			{{ if .IsSecondary }}bg-secondary-container text-on-secondary-container{{ end }}

@@ -36,7 +36,7 @@ func (qq *PropertiesPage) Widget(
 			Icon: "add",
 			Child: []widget.IWidget{
 				widget.NewIcon("add"),
-				widget.T("Add field"),
+				widget.T("Create field"),
 			},
 			HTMXAttrs: qq.actions.CreatePropertyCmd.ModalLinkAttrs(
 				qq.actions.CreatePropertyCmd.Data(""),

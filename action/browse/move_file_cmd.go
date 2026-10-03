@@ -52,7 +52,7 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	fileWithParentx := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
 	fileWithParent := filemodel.NewFile(fileWithParentx)
 
-	fileWithParent, err = qq.infra.FileSystem().Move(ctx, destDir, fileWithParent, data.Filename, data.NewDirName)
+	fileWithParent, err = qq.infra.FileSystem().Move(ctx, destDir, fileWithParent, data.Filename, data.NewFolderName)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -63,7 +63,7 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	if fileWithParent.Data.IsDirectory {
 		action = &widget.Link{
 			Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithParent.Data.PublicID.String()),
-			Child: widget.T("Open directory"), // TODO Go to, or Open?
+			Child: widget.T("Open folder"), // TODO Go to, or Open?
 		}
 	} else {
 		parent, err := fileWithParent.Parent(ctx)

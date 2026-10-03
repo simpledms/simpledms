@@ -73,7 +73,7 @@ func (qq *CredentialService) Create(
 
 func (qq *CredentialService) Revoke(ctx *ctxx.MainContext, publicID string) (bool, error) {
 	if ctx.IsTemporarySession {
-		return false, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+		return false, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this organization.")
 	}
 	credential, err := ctx.MainTx.MCPCredential.Query().Where(
 		mcpcredential.PublicID(entx.NewCIText(publicID)),
@@ -103,7 +103,7 @@ func (qq *CredentialService) EditLabel(
 	label string,
 ) error {
 	if ctx.IsTemporarySession {
-		return e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+		return e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this organization.")
 	}
 	label = strings.TrimSpace(label)
 	if !isValidLabel(label) {

@@ -35,10 +35,15 @@ type CreateUserCmd struct {
 func NewCreateUserCmd(infra *common.Infra, actions *Actions) *CreateUserCmd {
 	config := actionx.NewConfig(actions.Route("create-user-cmd"), false)
 	return &CreateUserCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[CreateUserCmdData](infra, config, widget.T("Create user")),
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+		FormHelper: autil.NewFormHelperX[CreateUserCmdData](
+			infra,
+			config,
+			widget.T("Create user"),
+			widget.T("Create"),
+		),
 	}
 }
 
@@ -63,7 +68,7 @@ func (qq *CreateUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	}
 
 	if !ctx.IsTenantCtx() {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "You are not allowed to create users. No tenant selected.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "You are not allowed to create users. No organization selected.")
 	}
 	if ctx.TenantCtx().User.Role != tenantrole.Owner {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "You are not allowed to create users because you are not the owner.")
@@ -83,9 +88,13 @@ func (qq *CreateUserCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	}
 
 	if data.Role == tenantrole.Owner {
-		rw.AddRenderables(widget.NewSnackbarf("Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration."))
+		rw.AddRenderables(widget.NewSnackbarf(
+			"User created. The password was sent by email. Owners can access all Spaces without further setup.",
+		))
 	} else {
-		rw.AddRenderables(widget.NewSnackbarf("Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space."))
+		rw.AddRenderables(widget.NewSnackbarf(
+			"User created. The password was sent by email. Next, assign the user to a Space.",
+		))
 	}
 
 	rw.Header().Set("HX-Trigger", event.UserCreated.String())

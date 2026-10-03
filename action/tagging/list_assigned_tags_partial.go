@@ -70,7 +70,7 @@ func (qq *ListAssignedTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.R
 		widget = qq.ListView(ctx, data)
 	default:
 		log.Println("layout not supported, was", data.Layout)
-		return e.NewHTTPErrorf(http.StatusBadRequest, "layout not supported")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Layout not supported.")
 	}
 
 	return qq.infra.Renderer().Render(

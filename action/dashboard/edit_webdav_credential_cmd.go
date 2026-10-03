@@ -29,10 +29,11 @@ func NewEditWebDAVCredentialCmd(
 		actions:     actions,
 		credentialx: webdavcredential.NewCredentialService(),
 		Config:      config,
-		FormHelper: autil.NewFormHelper[EditWebDAVCredentialCmdData](
+		FormHelper: autil.NewFormHelperX[EditWebDAVCredentialCmdData](
 			infra,
 			config,
-			widget.T("Edit"),
+			widget.T("Edit WebDAV credential"),
+			widget.T("Save"),
 		),
 	}
 }

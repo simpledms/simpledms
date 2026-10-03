@@ -58,7 +58,7 @@ func (qq *ImportFromLibraryDialog) Form(
 		return autil.WrapWidget(
 			widget.T("Import from library"),
 			widget.T("Import"),
-			widget.T("Import is only available for empty spaces."),
+			widget.T("Import is only available for empty Spaces."),
 			wrapper,
 			widget.DialogLayoutDefault,
 		)

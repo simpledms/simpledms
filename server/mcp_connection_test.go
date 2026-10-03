@@ -352,7 +352,7 @@ func TestMCPConnectionCredentialFormAndValidation(t *testing.T) {
 	}
 	response := empty.browser(h.actions.Dashboard.CreateMCPCredentialCmd.FormEndpoint(), nil)
 	if response.Code != http.StatusOK ||
-		!strings.Contains(response.Body.String(), "No spaces available yet.") ||
+		!strings.Contains(response.Body.String(), "No Spaces available yet.") ||
 		strings.Contains(response.Body.String(), `name="Destination"`) {
 		t.Fatalf("no-Space form: %d %s", response.Code, response.Body.String())
 	}
@@ -370,7 +370,7 @@ func TestMCPCredentialStatusFilter(t *testing.T) {
 	}
 	revokedBefore := f.browserAt(revokedURL, listEndpoint, nil)
 	if revokedBefore.Code != http.StatusOK ||
-		!strings.Contains(revokedBefore.Body.String(), "No MCP credentials") {
+		!strings.Contains(revokedBefore.Body.String(), "No MCP credentials yet.") {
 		t.Fatalf("revoked filter must not list active credential: %d", revokedBefore.Code)
 	}
 
@@ -380,7 +380,7 @@ func TestMCPCredentialStatusFilter(t *testing.T) {
 		t.Fatalf("revoke: %d %s", revoke.Code, revoke.Body.String())
 	}
 	activeAfter := f.browser(listEndpoint, nil)
-	if !strings.Contains(activeAfter.Body.String(), "No MCP credentials") {
+	if !strings.Contains(activeAfter.Body.String(), "No MCP credentials yet.") {
 		t.Fatal("default filter must hide revoked credential")
 	}
 	revokedAfter := f.browserAt(revokedURL, listEndpoint, nil)

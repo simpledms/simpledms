@@ -7,8 +7,8 @@ test.describe("users and spaces management", () => {
 
 	test("renders manage-users page with add action and current user", async ({ page }) => {
 		await goToUsers(page);
-		await expect(page.getByRole("heading", { name: /Users «/ })).toBeVisible();
-		await expect(page.getByRole("link", { name: "add Add a new user" })).toBeVisible();
+		await expect(page.getByRole("heading", { name: "Users", exact: true })).toBeVisible();
+		await expect(page.getByRole("link", { name: /Create user/ }).first()).toBeVisible();
 		await expect(page.getByText(loginEmail)).toBeVisible();
 	});
 
@@ -18,7 +18,7 @@ test.describe("users and spaces management", () => {
 
 		const emailInput = page.getByRole("textbox", { name: "Email" });
 		await emailInput.fill("not-an-email");
-		await page.getByRole("button", { name: "Save" }).click();
+		await page.getByRole("button", { name: "Create", exact: true }).click();
 
 		await expect(page.getByRole("heading", { name: "Create user" })).toBeVisible();
 		await expect(emailInput).toHaveValue("not-an-email");
@@ -36,7 +36,7 @@ test.describe("users and spaces management", () => {
 		await page.getByRole("textbox", { name: "First name" }).fill("Playwright");
 		await page.getByRole("textbox", { name: "Last name" }).fill("Owner");
 		await selectOptionByLabel(page.getByRole("combobox", { name: "Language" }), "English");
-		await page.getByRole("button", { name: "Save" }).click();
+		await page.getByRole("button", { name: "Create", exact: true }).click();
 
 		await expect(page.getByText(userEmail)).toBeVisible();
 	});
@@ -45,7 +45,7 @@ test.describe("users and spaces management", () => {
 		await goToUsers(page);
 		await openCreateUserDialog(page);
 		await page.getByRole("textbox", { name: "Email" }).fill(loginEmail);
-		await page.getByRole("button", { name: "Save" }).click();
+		await page.getByRole("button", { name: "Create", exact: true }).click();
 
 		await expect(page.getByRole("heading", { name: "Create user" })).toBeVisible();
 		await expect(page.getByText(loginEmail)).toHaveCount(1);
@@ -54,9 +54,9 @@ test.describe("users and spaces management", () => {
 	test("requires name in create-space form", async ({ page }) => {
 		await goToSpaces(page);
 		await openCreateSpaceDialog(page);
-		await page.getByRole("button", { name: "Save" }).click();
+		await page.getByRole("button", { name: "Create", exact: true }).click();
 
-		await expect(page.getByRole("heading", { name: "Create space" })).toBeVisible();
+		await expect(page.getByRole("heading", { name: "Create Space" })).toBeVisible();
 		await expect(page.getByRole("textbox", { name: "Name" })).toBeFocused();
 	});
 
@@ -69,10 +69,10 @@ test.describe("users and spaces management", () => {
 		await page.getByRole("checkbox", { name: "Add me as space owner" }).check();
 		await page.getByRole("checkbox", { name: "Invoice" }).check();
 		await page.getByRole("checkbox", { name: "Receipt" }).check();
-		await page.getByRole("button", { name: "Save" }).click();
+		await page.getByRole("button", { name: "Create", exact: true }).click();
 
 		await expect(page.getByRole("heading", { name: spaceName })).toBeVisible();
-		await expect(page.getByRole("heading", { name: "No spaces available yet." })).toHaveCount(0);
+		await expect(page.getByRole("heading", { name: "No Spaces available yet." })).toHaveCount(0);
 		await page
 			.getByRole("link")
 			.filter({ has: page.getByRole("heading", { name: spaceName, exact: true }) })
@@ -95,7 +95,7 @@ test.describe("users and spaces management", () => {
 		const ownerToggle = page.getByRole("checkbox", { name: "Add me as space owner" });
 		await ownerToggle.uncheck();
 		await expect(ownerToggle).not.toBeChecked();
-		await page.getByRole("button", { name: "Save" }).click();
+		await page.getByRole("button", { name: "Create", exact: true }).click();
 
 		await expect(
 			page

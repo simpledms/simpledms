@@ -34,7 +34,9 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, fileID string, tagx *en
 			HxSwap: "none",
 			HxVals: util.JSON(qq.actions.DeleteTagCmd.Data(tagx.ID)),
 			// HxTarget:  "#" + qq.actions.AssignedTags.EditListItem.listItemID(fileID, tagx.ID),
-			HxConfirm: widget.T("Are you sure? This action will delete the tag entirely and not just unassign it from the current file!").String(ctx),
+			HxConfirm: widget.T(
+				"Delete this tag entirely? It will be unassigned from all files, not only from this one.",
+			).String(ctx),
 		},
 	}
 
@@ -55,7 +57,7 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, fileID string, tagx *en
 	menuItems = append(
 		menuItems,
 		&wx.MenuItem{
-			Label: wx.T("Convert to composed tag"),
+			Label: wx.T("Convert to super tag"),
 		},
 	)
 
@@ -85,7 +87,7 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, fileID string, tagx *en
 		menuItems = append(
 			menuItems,
 			&wx.MenuItem{
-				Label: wx.T("Convert to base tag"),
+				Label: wx.T("Convert to simple tag"),
 				// SupportingText: supportingText, // TODO as tooltip
 				IsDisabled: isDisabled,
 			},

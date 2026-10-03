@@ -31,9 +31,9 @@ type MoveFileData struct {
 }
 
 type MoveFileFormData struct {
-	MoveFileData `structs:",flatten"`
-	NewDirName   string `form_leading_icon:"create_new_folder"`        // TODO jumps around on selection with autofocus... `form_attrs:"autofocus"`
-	Filename     string `validate:"required" form_leading_icon:"edit"` // TODO or `save` or `edit`?
+	MoveFileData  `structs:",flatten"`
+	NewFolderName string `form_leading_icon:"create_new_folder"`        // TODO jumps around on selection with autofocus... `form_attrs:"autofocus"`
+	Filename      string `validate:"required" form_leading_icon:"edit"` // TODO or `save` or `edit`?
 }
 
 // necessary to render page
@@ -54,10 +54,11 @@ func NewMoveFile(infra *common.Infra, actions *Actions, config *actionx.Config) 
 		infra:   infra,
 		actions: actions,
 		Config:  config,
-		FormHelper: autil.NewFormHelper[MoveFileData](
+		FormHelper: autil.NewFormHelperX[MoveFileData](
 			infra,
 			config,
 			widget.T("Move file"),
+			widget.T("Move"),
 		),
 	}
 }
@@ -227,7 +228,7 @@ func (qq *MoveFile) Form(
 	return autil.WrapWidgetWithID(
 		// fmt.Sprintf("Move «%s» from «%s» to «%s»", filex.Name, fileParentName, currentDir.Name),
 		widget.Tf("Move file to «%s»", currentDir.Data.Name),
-		widget.T("Save"),
+		widget.T("Move"),
 		container,
 		wrapper,
 		widget.DialogLayoutStable,
@@ -311,7 +312,7 @@ func (qq *MoveFile) formFilesListItems(
 		fileListItems = append(fileListItems,
 			&widget.ListItem{
 				Leading:  widget.NewIcon("arrow_upward"),
-				Headline: widget.T("Directory up"),
+				Headline: widget.T("Parent folder"),
 				Type:     widget.ListItemTypeHelper,
 				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:    qq.FormEndpointWithParams(actionx.ResponseWrapperDialog, hxTargetForm),
@@ -379,7 +380,7 @@ func (qq *MoveFile) formFilesListItems(
 			Widget: widget.Widget[widget.ListItem]{
 				ID: "moveFileLoadMore",
 			},
-			Headline: widget.T("Loading more..."),
+			Headline: widget.T("Loading more…"),
 			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    qq.FormEndpoint() + "?offset=" + strconv.Itoa(offset+qq.pageSize()), // FIXME
 				HxVals:    util.JSON(qq.Data(filex.Data.PublicID.String(), currentDir.Data.PublicID.String())),

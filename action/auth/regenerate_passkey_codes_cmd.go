@@ -44,7 +44,7 @@ func (qq *RegeneratePasskeyCodesCmd) Data() *RegeneratePasskeyCodesCmdData {
 }
 
 func (qq *RegeneratePasskeyCodesCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be logged in to manage backup codes.")
+	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be signed in to manage backup codes.")
 	if err != nil {
 		return err
 	}

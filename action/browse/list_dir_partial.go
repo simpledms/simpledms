@@ -462,7 +462,7 @@ func (qq *ListDirPartial) filesList(
 		headline := widget.T("No files available yet.")
 
 		if ctx.SpaceCtx().Space.IsFolderMode {
-			headline = widget.T("No files or directories available yet.")
+			headline = widget.T("No files or folders available yet.")
 			widgets = append(
 				widgets,
 				qq.actions.MakeDirCmd.ModalLink(
@@ -470,7 +470,7 @@ func (qq *ListDirPartial) filesList(
 					[]widget.IWidget{
 						&widget.Button{
 							Icon:  widget.NewIcon("create_new_folder"),
-							Label: widget.T("Create directory"),
+							Label: widget.T("Create folder"),
 						},
 					},
 					"#"+qq.actions.ListDirPartial.WrapperID(),
@@ -623,7 +623,7 @@ func (qq *ListDirPartial) filesListItemsFromQueryResult(
 			Widget: widget.Widget[widget.ListItem]{
 				ID: "listDirLoadMore",
 			},
-			Headline: widget.T("Loading more..."),
+			Headline: widget.T("Loading more…"),
 			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    qq.Endpoint() + "?offset=" + strconv.Itoa(offset+qq.pageSize()), // FIXME
 				HxTrigger: "intersect once",

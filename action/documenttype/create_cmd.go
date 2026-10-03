@@ -29,10 +29,11 @@ func NewCreateCmd(infra *common.Infra, actions *Actions) *CreateCmd {
 		actions.Route("add-document-type-cmd"),
 		false,
 	)
-	formHelper := autil.NewFormHelper[CreateCmdData](
+	formHelper := autil.NewFormHelperX[CreateCmdData](
 		infra,
 		config,
-		widget.T("Add document type"),
+		widget.T("Create document type"),
+		widget.T("Create"),
 	)
 	return &CreateCmd{
 		infra:      infra,

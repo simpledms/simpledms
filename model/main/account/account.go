@@ -116,7 +116,7 @@ func (qq *Account) authenticatePasswordSignIn(
 		ctx,
 		10*time.Second,
 		http.StatusUnauthorized,
-		"Too many login attempts. Please try again in 10 seconds.",
+		"Too many sign-in attempts. Please try again in 10 seconds.",
 	)
 	if err != nil {
 		return false, err
@@ -392,7 +392,7 @@ func (qq *Account) GenerateTemporaryPassword(ctx context.Context) (string, time.
 	password, err := gonanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_", 16)
 	if err != nil {
 		log.Println(err)
-		return "", time.Time{}, e.NewHTTPErrorf(http.StatusInternalServerError, "could not generate temporary password")
+		return "", time.Time{}, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not generate temporary password.")
 	}
 
 	expiresAt, err := qq.SetTemporaryPassword(ctx, password)
@@ -408,7 +408,7 @@ func (qq *Account) GenerateTemporaryPassword(ctx context.Context) (string, time.
 func (qq *Account) SetTemporaryPassword(ctx context.Context, password string) (time.Time, error) {
 	salt, ok := accountutil.RandomSalt()
 	if !ok {
-		return time.Time{}, e.NewHTTPErrorf(http.StatusInternalServerError, "could not generate salt")
+		return time.Time{}, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not generate salt.")
 	}
 
 	passwordHash := accountutil.PasswordHash(password, salt)
@@ -517,7 +517,7 @@ func (qq *Account) SetPassword(ctx ctxx.Context, password, confirmPassword strin
 
 	salt, ok := accountutil.RandomSalt()
 	if !ok {
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "could not generate salt")
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not generate salt.")
 	}
 
 	passwordHash := accountutil.PasswordHash(password, salt)

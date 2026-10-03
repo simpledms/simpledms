@@ -141,13 +141,13 @@ func FormDataX[T any](
 				return data, e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Upload is too large.")
 			}
 
-			return data, e.NewHTTPErrorf(http.StatusBadRequest, "cannot parse file")
+			return data, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot parse file.")
 		}
 	} else {
 		err := req.ParseForm()
 		if err != nil {
 			log.Println(err)
-			return data, e.NewHTTPErrorf(http.StatusBadRequest, "cannot parse form")
+			return data, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot parse form.")
 		}
 	}
 
@@ -168,7 +168,7 @@ func FormDataX[T any](
 	err := decoder.Decode(data, req.PostForm)
 	if err != nil {
 		log.Println(err)
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "cannot decode form")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot decode form.")
 	}
 
 	if !skipValidation {
@@ -263,7 +263,7 @@ func State[T any](rw httpx.ResponseWriter, req *httpx.Request) (*T, error) {
 		// reset button; without this check, the message is also shown when the state is reset indirectly,
 		// for example by switching folders; not 100 percent sure if this works in all use cases...
 		if req.Header.Get("Hx-Trigger") != "" {
-			rw.AddRenderables(widget.NewSnackbarf("Filters successfully reset."))
+			rw.AddRenderables(widget.NewSnackbarf("Filters reset."))
 		}
 		return data, nil
 	}
@@ -280,7 +280,7 @@ func State[T any](rw httpx.ResponseWriter, req *httpx.Request) (*T, error) {
 		currentURL, err := url.Parse(currentURLStr)
 		if err != nil {
 			log.Println(err)
-			return data, e.NewHTTPErrorf(http.StatusBadRequest, "cannot parse current url")
+			return data, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot parse current URL.")
 		}
 
 		preserveStateStr := req.Header.Get("Preserve-State")

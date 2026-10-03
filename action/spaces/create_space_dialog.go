@@ -24,10 +24,15 @@ func NewCreateSpaceDialog(infra *common.Infra, actions *Actions) *CreateSpaceDia
 		true,
 	).SetUsesSeparatedCmd(true)
 	return &CreateSpaceDialog{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[CreateSpaceCmdData](infra, config, widget.T("Create space")),
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+		FormHelper: autil.NewFormHelperX[CreateSpaceCmdData](
+			infra,
+			config,
+			widget.T("Create Space"),
+			widget.T("Create"),
+		),
 	}
 }
 
@@ -85,7 +90,13 @@ func (qq *CreateSpaceDialog) Form(
 		},
 	}
 
-	return autil.WrapWidget(widget.T("Create space"), widget.T("Save"), form, wrapper, widget.DialogLayoutDefault)
+	return autil.WrapWidget(
+		widget.T("Create Space"),
+		widget.T("Create"),
+		form,
+		wrapper,
+		widget.DialogLayoutDefault,
+	)
 }
 
 func libraryTemplateSection(ctx ctxx.Context, templates []library.BuiltinTemplate) widget.IWidget {
@@ -96,7 +107,7 @@ func libraryTemplateSection(ctx ctxx.Context, templates []library.BuiltinTemplat
 	}
 
 	var items []widget.IWidget
-	items = append(items, widget.P("Select document types to add to this space:"))
+	items = append(items, widget.P("Select document types to add to this Space:"))
 
 	for _, template := range templates {
 		label := widget.T(template.Name).String(ctx)

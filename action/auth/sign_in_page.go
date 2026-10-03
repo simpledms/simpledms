@@ -63,7 +63,7 @@ func (qq *SignInPage) Widget(ctx ctxx.Context) *widget.NarrowLayout {
 		),
 		&widget.Button{
 			Label:     widget.T("Sign in with passkey"),
-			StyleType: widget.ButtonStyleTypeElevated,
+			StyleType: widget.ButtonStyleTypeOutlined,
 			HTMXAttrs: widget.HTMXAttrs{
 				HxOn: &widget.HxOn{
 					Event:   "click",

@@ -57,7 +57,7 @@ func (qq *ToggleTenantPasskeyEnforcementCmd) Handler(
 	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
-	mainCtx, err := qq.actions.AuthActions.RequireMainCtx(ctx, "You must be logged in to manage organizations.")
+	mainCtx, err := qq.actions.AuthActions.RequireMainCtx(ctx, "You must be signed in to manage organizations.")
 	if err != nil {
 		return err
 	}

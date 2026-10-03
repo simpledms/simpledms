@@ -57,7 +57,7 @@ func (qq *UploadLimitService) SetTenantUploadLimitOverride(
 		return nil, err
 	}
 	if tenantPublicID == "" {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Tenant is required.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Organization is required.")
 	}
 
 	tenantx, err := ctx.MainCtx().MainTx.Tenant.Query().
@@ -66,7 +66,7 @@ func (qq *UploadLimitService) SetTenantUploadLimitOverride(
 	if err != nil {
 		log.Println(err)
 		if entmain.IsNotFound(err) {
-			return nil, e.NewHTTPErrorf(http.StatusNotFound, "Tenant not found.")
+			return nil, e.NewHTTPErrorf(http.StatusNotFound, "Organization not found.")
 		}
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func (qq *UploadLimitService) SetTenantUploadLimitOverride(
 
 func (qq *UploadLimitService) ensureAdminCtx(ctx ctxx.Context) error {
 	if !ctx.IsMainCtx() {
-		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be logged in to manage upload limits.")
+		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be signed in to manage upload limits.")
 	}
 	if ctx.MainCtx().Account.Role != mainrole.Admin {
 		return e.NewHTTPErrorf(http.StatusForbidden, "You must be an admin to manage upload limits.")

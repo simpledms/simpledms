@@ -37,14 +37,14 @@ func (qq *ManageDocumentTypesPage) Handler(
 	fabs := []*widget.FloatingActionButton{
 		{
 			Icon:    "add",
-			Tooltip: widget.T("Add document type"),
+			Tooltip: widget.T("Create document type"),
 			HTMXAttrs: qq.actions.CreateCmd.ModalLinkAttrs(
 				qq.actions.CreateCmd.Data(""),
 				"",
 			),
 			Child: []widget.IWidget{
 				widget.NewIcon("add"),
-				widget.T("Add document type"),
+				widget.T("Create document type"),
 			},
 		},
 	}

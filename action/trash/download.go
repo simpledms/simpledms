@@ -31,7 +31,7 @@ func (qq *Download) Handler(
 	filex := qq.infra.FileRepo.GetWithDeletedX(ctx, fileIDStr)
 
 	if filex.Data.IsDirectory {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "cannot download directories")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Folders cannot be downloaded.")
 	}
 
 	currentVersion := filex.CurrentVersion(ctxWithDeleted)

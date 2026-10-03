@@ -48,7 +48,7 @@ func (qq *DeletePasskeyCmd) Data(passkeyID string) *DeletePasskeyCmdData {
 }
 
 func (qq *DeletePasskeyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be logged in to manage passkeys.")
+	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be signed in to manage passkeys.")
 	if err != nil {
 		return err
 	}
@@ -76,7 +76,7 @@ func (qq *DeletePasskeyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 	if isTenantPasskeyRequired && passkeyCount <= 1 {
 		return e.NewHTTPErrorf(
 			http.StatusBadRequest,
-			"A tenant requires passkey login, so at least one passkey must remain.",
+			"An organization requires passkey sign-in, so at least one passkey must remain.",
 		)
 	}
 
@@ -89,7 +89,7 @@ func (qq *DeletePasskeyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 
 	log.Printf("passkey deleted account_id=%d passkey_id=%s", mainCtx.Account.ID, data.PasskeyID)
 
-	rw.AddRenderables(wx.NewSnackbarf("Passkey removed."))
+	rw.AddRenderables(wx.NewSnackbarf("Passkey deleted."))
 	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
 
 	return nil

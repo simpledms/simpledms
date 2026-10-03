@@ -151,7 +151,7 @@ func (qq *SetTenantUploadLimitOverrideForm) FormHandler(rw httpx.ResponseWriter,
 
 	qq.infra.Renderer().RenderX(rw, ctx,
 		autil.WrapWidget(
-			widget.T("Set tenant upload limit"),
+			widget.T("Set organization upload limit"),
 			widget.T("Save"),
 			form,
 			wrapper,

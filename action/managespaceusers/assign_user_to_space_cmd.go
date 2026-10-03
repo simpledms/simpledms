@@ -43,7 +43,12 @@ func NewAssignUserToSpaceCmd(infra *common.Infra, actions *Actions) *AssignUserT
 		actions:         actions,
 		spaceRepository: spacemodel.NewEntSpaceRepository(),
 		Config:          config,
-		FormHelper:      autil.NewFormHelper[AssignUserToSpaceCmdData](infra, config, widget.T("Assign user to space")),
+		FormHelper: autil.NewFormHelperX[AssignUserToSpaceCmdData](
+			infra,
+			config,
+			widget.T("Assign user to Space"),
+			widget.T("Assign"),
+		),
 	}
 }
 
@@ -58,10 +63,10 @@ func (qq *AssignUserToSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 	}
 
 	if !ctx.IsSpaceCtx() {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "No space selected. Please select a space first.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "No Space selected. Please select a Space first.")
 	}
 	if ctx.SpaceCtx().UserRoleInSpace() != spacerole.Owner {
-		return e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to assign users to spaces because you aren't the owner.")
+		return e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to assign users to Spaces because you aren't the owner.")
 	}
 
 	err = spacemodel.NewSpaceWithRepository(ctx.SpaceCtx().Space, qq.spaceRepository).
@@ -71,7 +76,7 @@ func (qq *AssignUserToSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.Requ
 	}
 
 	// TODO send message to user via Chat?
-	rw.AddRenderables(widget.NewSnackbarf("User assigned to space successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("User assigned to Space."))
 	rw.Header().Set("HX-Trigger", event.UserAssignedToSpace.String())
 
 	return nil
@@ -126,8 +131,8 @@ func (qq *AssignUserToSpaceCmd) Form(
 	}
 
 	return autil.WrapWidgetWithID(
-		widget.T("Assign user to space"),
-		widget.T("Save"),
+		widget.T("Assign user to Space"),
+		widget.T("Assign"),
 		form,
 		wrapper,
 		widget.DialogLayoutStable,

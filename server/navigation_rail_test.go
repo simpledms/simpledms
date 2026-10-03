@@ -205,7 +205,7 @@ func TestNavigationRailShowsSpaceDestinations(t *testing.T) {
 		"Files",
 		"Inbox",
 		"Trash",
-		"Manage space",
+		"Manage Space",
 		"Document types",
 		"Tags",
 		"Fields",

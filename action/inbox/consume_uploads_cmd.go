@@ -77,7 +77,7 @@ func (qq *ConsumeUploadsCmd) Handler(
 	if len(tmpFiles) == 0 {
 		rw.AddRenderables(widget.NewSnackbarf("No new files found."))
 	} else {
-		rw.AddRenderables(widget.NewSnackbarf("Files uploaded successfully."))
+		rw.AddRenderables(widget.NewSnackbarf("Files uploaded."))
 	}
 	return nil
 }

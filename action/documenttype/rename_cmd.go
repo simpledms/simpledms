@@ -29,10 +29,15 @@ func NewRenameCmd(infra *common.Infra, actions *Actions) *RenameCmd {
 		false,
 	)
 	return &RenameCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[RenameCmdData](infra, config, widget.T("RenameCmd document type")),
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+		FormHelper: autil.NewFormHelperX[RenameCmdData](
+			infra,
+			config,
+			widget.T("Rename document type"),
+			widget.T("Rename"),
+		),
 	}
 }
 

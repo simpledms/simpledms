@@ -80,7 +80,7 @@ func (qq *ListDirPartial) fileTableLoadMoreRow(offset int, columnCount int) *wid
 	for qi := 0; qi < columnCount; qi++ {
 		child := widget.Tu("")
 		if qi == 0 {
-			child = widget.T("Loading more...")
+			child = widget.T("Loading more…")
 		}
 		cells = append(cells, &widget.TableCell{Child: child})
 	}

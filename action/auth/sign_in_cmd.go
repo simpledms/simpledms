@@ -49,7 +49,12 @@ func NewSignInCmd(
 		actions:            actions,
 		requestRateLimiter: requestRateLimiter,
 		Config:             config,
-		FormHelper:         autil.NewFormHelper[SignInCmdData](infra, config, widget.T("Sign in")),
+		FormHelper: autil.NewFormHelperX[SignInCmdData](
+			infra,
+			config,
+			widget.T("Sign in"),
+			widget.T("Sign in"),
+		),
 	}
 }
 
@@ -144,7 +149,7 @@ func (qq *SignInCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ct
 	if isTenantPasskeyEnrollmentRequired {
 		rw.AddRenderables(widget.NewSnackbarf("Passkey setup is required by your organization. Register a passkey now."))
 	} else {
-		rw.AddRenderables(widget.NewSnackbarf("Logged in successfully."))
+		rw.AddRenderables(widget.NewSnackbarf("Signed in."))
 	}
 
 	// Authentication transition: reload with the newly committed Session cookie.

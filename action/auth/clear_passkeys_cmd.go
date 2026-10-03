@@ -36,7 +36,7 @@ func (qq *ClearPasskeysCmd) Data() *ClearPasskeysCmdData {
 }
 
 func (qq *ClearPasskeysCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be logged in to manage passkeys.")
+	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be signed in to manage passkeys.")
 	if err != nil {
 		return err
 	}
@@ -48,7 +48,7 @@ func (qq *ClearPasskeysCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 		return err
 	}
 	if isTenantPolicyEnforced {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "Passkeys cannot be removed because a tenant requires passkey login.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Passkeys cannot be removed because an organization requires passkey sign-in.")
 	}
 
 	err = accountm.ClearPasskeys(mainCtx)

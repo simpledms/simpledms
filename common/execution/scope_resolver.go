@@ -36,7 +36,7 @@ func (qq *ScopeResolver) Resolve(
 		return mainCtx, err
 	}
 	if !hasAccess {
-		return mainCtx, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+		return mainCtx, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this organization.")
 	}
 	userx, err := tenantTx.User.Query().Where(
 		user.AccountID(mainCtx.Account.ID), user.DeletedAtIsNil(),
@@ -44,7 +44,7 @@ func (qq *ScopeResolver) Resolve(
 	if err != nil {
 		log.Println(err)
 		if enttenant.IsNotFound(err) {
-			return mainCtx, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+			return mainCtx, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this organization.")
 		}
 		return mainCtx, err
 	}
@@ -57,7 +57,7 @@ func (qq *ScopeResolver) Resolve(
 	if err != nil {
 		log.Println(err)
 		if enttenant.IsNotFound(err) {
-			return tenantCtx, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this space.")
+			return tenantCtx, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this Space.")
 		}
 		return tenantCtx, err
 	}

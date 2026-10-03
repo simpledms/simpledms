@@ -136,7 +136,7 @@ test.describe("maintenance screen unlock", () => {
 
 		const input = page.getByLabel("Application passphrase");
 		const form = page.locator('form[action="/-/unlock-cmd"]');
-		const submit = page.getByRole("button", { name: "Unlock application" });
+		const submit = page.getByRole("button", { name: "Unlock app" });
 		const status = page.getByRole("status");
 		const alert = page.getByRole("alert");
 		await expect(input).toHaveAttribute("type", "password");

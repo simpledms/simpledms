@@ -32,11 +32,11 @@ func (qq *PasskeyContextMenuWidget) Widget(ctx ctxx.Context, passkeyID string, p
 			},
 			{
 				LeadingIcon: "delete",
-				Label:       widget.T("Remove"),
+				Label:       widget.T("Delete"),
 				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:    qq.actions.AuthActions.DeletePasskeyCmd.Endpoint(),
 					HxVals:    util.JSON(qq.actions.AuthActions.DeletePasskeyCmd.Data(passkeyID)),
-					HxConfirm: widget.T("Are you sure?").String(ctx),
+					HxConfirm: widget.T("Delete this passkey?").String(ctx),
 					HxSwap:    "none",
 				},
 			},

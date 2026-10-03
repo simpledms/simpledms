@@ -42,10 +42,11 @@ func NewCreateAttributeCmd(infra *common.Infra, actions *Actions) *CreateAttribu
 		actions.Route("create-attribute-cmd"),
 		false,
 	)
-	formHelper := autil.NewFormHelper[CreateAttributeCmdData](
+	formHelper := autil.NewFormHelperX[CreateAttributeCmdData](
 		infra,
 		config,
 		widget.T("Add attribute"),
+		widget.T("Add"),
 	)
 	return &CreateAttributeCmd{
 		infra:      infra,
@@ -147,7 +148,7 @@ func (qq *CreateAttributeCmd) Form(
 
 	return autil.WrapWidgetWithID(
 		widget.T("Add attribute"),
-		widget.T("Save"),
+		widget.T("Add"),
 		form,
 		wrapper,
 		widget.DialogLayoutStable,

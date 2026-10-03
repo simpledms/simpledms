@@ -101,8 +101,8 @@ func (qq *SelectSpacePage) Widget(
 		if len(spaces) == 0 {
 			spaceItems = append(spaceItems, &widget.ListItem{
 				Type:           widget.ListItemTypeHelper,
-				Headline:       widget.T("No spaces yet."),
-				SupportingText: widget.T("Please try again once you created a space or were invited to join one."),
+				Headline:       widget.T("No Spaces available yet."),
+				SupportingText: widget.T("Please try again once you created a Space or were invited to join one."),
 			})
 		} else {
 			for _, spacex := range spaces {
@@ -143,7 +143,7 @@ func (qq *SelectSpacePage) appBar(ctx ctxx.Context) *widget.AppBar {
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title: &widget.AppBarTitle{
-			Text: widget.T("Select space"),
+			Text: widget.T("Select Space"),
 		},
 		Actions: []widget.IWidget{},
 	}

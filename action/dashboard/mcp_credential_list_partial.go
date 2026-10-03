@@ -97,7 +97,7 @@ func (qq *MCPCredentialListPartial) Widget(
 
 	var content widget.IWidget = &widget.EmptyState{
 		Icon:        widget.NewIcon("smart_toy"),
-		Headline:    widget.T("No MCP credentials"),
+		Headline:    widget.T("No MCP credentials yet."),
 		Description: widget.T("Create a credential to connect an MCP client to a Space."),
 		Actions: []widget.IWidget{
 			&widget.Button{
@@ -251,7 +251,7 @@ func (qq *MCPCredentialListPartial) credentialListItem(
 		mode,
 		formatCredentialTime(ctx, credentialx.CreatedAt),
 	)
-	var trailing widget.IWidget
+	var contextMenu *widget.Menu
 	if credentialx.RevokedAt != nil {
 		supportingText = widget.Tf(
 			"%s · Revoked: %s",
@@ -259,35 +259,30 @@ func (qq *MCPCredentialListPartial) credentialListItem(
 			formatCredentialTime(ctx, *credentialx.RevokedAt),
 		)
 	} else {
-		trailing = &widget.IconButton{
-			Icon:    "more_vert",
-			Tooltip: widget.T("Actions"),
-			Label:   widget.T("Actions"),
-			Children: &widget.Menu{
-				Items: []*widget.MenuItem{
-					{
-						LeadingIcon: "edit",
-						Label:       widget.T("Edit"),
-						HTMXAttrs: qq.actions.EditMCPCredentialCmd.ModalLinkAttrs(
-							qq.actions.EditMCPCredentialCmd.Data(
-								credentialx.PublicID.String(),
-								credentialx.Label,
-							),
-							"",
+		contextMenu = &widget.Menu{
+			Items: []*widget.MenuItem{
+				{
+					LeadingIcon: "edit",
+					Label:       widget.T("Edit"),
+					HTMXAttrs: qq.actions.EditMCPCredentialCmd.ModalLinkAttrs(
+						qq.actions.EditMCPCredentialCmd.Data(
+							credentialx.PublicID.String(),
+							credentialx.Label,
 						),
-					},
-					{IsDivider: true},
-					{
-						LeadingIcon: "block",
-						Label:       widget.T("Revoke"),
-						HTMXAttrs: widget.HTMXAttrs{
-							HxPost: qq.actions.RevokeMCPCredentialCmd.Endpoint(),
-							HxVals: util.JSON(qq.actions.RevokeMCPCredentialCmd.Data(
-								credentialx.PublicID.String(),
-							)),
-							HxConfirm: widget.T("Revoke this MCP credential?").String(ctx),
-							HxSwap:    "none",
-						},
+						"",
+					),
+				},
+				{IsDivider: true},
+				{
+					LeadingIcon: "block",
+					Label:       widget.T("Revoke"),
+					HTMXAttrs: widget.HTMXAttrs{
+						HxPost: qq.actions.RevokeMCPCredentialCmd.Endpoint(),
+						HxVals: util.JSON(qq.actions.RevokeMCPCredentialCmd.Data(
+							credentialx.PublicID.String(),
+						)),
+						HxConfirm: widget.T("Revoke this MCP credential?").String(ctx),
+						HxSwap:    "none",
 					},
 				},
 			},
@@ -298,7 +293,7 @@ func (qq *MCPCredentialListPartial) credentialListItem(
 		Leading:        widget.NewIcon("vpn_key"),
 		Headline:       widget.Tu(credentialx.Label),
 		SupportingText: supportingText,
-		Trailing:       trailing,
+		ContextMenu:    contextMenu,
 	}
 }
 

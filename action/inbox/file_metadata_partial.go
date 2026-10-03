@@ -53,10 +53,6 @@ func (qq *FileMetadataPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reque
 		return err
 	}
 
-	// TODO is there a way to implement this conditional, only when reload
-	//  	button is used? May not be relevant in all cases
-	rw.AddRenderables(widget.NewSnackbarf("Reloaded metadata"))
-
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
@@ -146,12 +142,12 @@ func (qq *FileMetadataPartial) MetadataTabContentID() string {
 
 func (qq *FileMetadataPartial) deleteFromInboxButton(ctx ctxx.Context, fileID string) *widget.Button {
 	return &widget.Button{
-		Label:     widget.T("Delete from inbox"),
-		StyleType: widget.ButtonStyleTypeElevated,
+		Label:     widget.T("Delete from Inbox"),
+		StyleType: widget.ButtonStyleTypeOutlined,
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.actions.Browse.DeleteFileCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.Browse.DeleteFileCmd.Data(fileID)),
-			HxConfirm: widget.T("Are you sure?").String(ctx),
+			HxConfirm: widget.T("Delete this file? You can restore it from the Trash.").String(ctx),
 			HxSwap:    "none",
 		},
 	}
@@ -160,7 +156,7 @@ func (qq *FileMetadataPartial) deleteFromInboxButton(ctx ctxx.Context, fileID st
 func (qq *FileMetadataPartial) markAsDoneButton(fileID string) *widget.Button {
 	return &widget.Button{
 		Label:     widget.T("Mark as done"),
-		StyleType: widget.ButtonStyleTypeElevated,
+		StyleType: widget.ButtonStyleTypeTonal,
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.actions.MarkAsDoneCmd.Endpoint(),
 			HxVals: util.JSON(qq.actions.MarkAsDoneCmd.Data(fileID)),

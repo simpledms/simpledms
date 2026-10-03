@@ -54,7 +54,7 @@ func (qq *InboxWithSelectionPage) render(
 
 	fileIDStr := req.PathValue("file_id")
 	if fileIDStr == "" {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "No file id provided.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "No file ID provided.")
 	}
 	filex, err := ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicID(entx.NewCIText(fileIDStr))).Only(ctx)
 	if err != nil {
@@ -69,7 +69,7 @@ func (qq *InboxWithSelectionPage) render(
 	// assignment := ctx.SpaceCtx().Space.QueryFileAssignment().Where(spacefileassignment.FileID(fileID64)).OnlyX(ctx)
 
 	if !filex.IsInInbox {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "File is not in inbox.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "File is not in the Inbox.")
 	}
 
 	/* disabled on 26.06.2025 because done in WidgetHandler
