@@ -133,7 +133,7 @@ func (qq *DashboardCardsPartial) DashboardGrids(ctx ctxx.Context) ([]*widget.Gri
 		})
 	}
 
-	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant(ctx)
 	if err != nil {
 		log.Println(err)
 		return nil, err

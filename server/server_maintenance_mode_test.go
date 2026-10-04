@@ -193,7 +193,7 @@ func TestMaintenanceUnlockFormTranslations(t *testing.T) {
 			language: "de",
 			texts: []string{
 				"Anwendungspassphrase",
-				"Anwendung entsperren",
+				"App entsperren",
 				"Passphrase ist erforderlich.",
 				"Ungültige Passphrase.",
 				"Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
@@ -205,7 +205,7 @@ func TestMaintenanceUnlockFormTranslations(t *testing.T) {
 			language: "fr",
 			texts: []string{
 				"Phrase secrète de l’application",
-				"Déverrouiller l’application",
+				"Déverrouiller l'application",
 				"La phrase secrète est requise.",
 				"Phrase secrète invalide.",
 				"Une erreur s'est produite. Veuillez réessayer.",
@@ -217,7 +217,7 @@ func TestMaintenanceUnlockFormTranslations(t *testing.T) {
 			language: "it",
 			texts: []string{
 				"Passphrase dell’applicazione",
-				"Sblocca applicazione",
+				"Sblocca app",
 				"La passphrase è obbligatoria.",
 				"Passphrase non valida.",
 				"Qualcosa è andato storto. Riprova per favore.",

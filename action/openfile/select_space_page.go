@@ -91,7 +91,7 @@ func (qq *SelectSpacePage) Widget(
 
 	var spaceItems []*widget.ListItem
 
-	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant(ctx)
 	if err != nil {
 		return nil, err
 	}

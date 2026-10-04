@@ -245,7 +245,7 @@ func (qq *CreateWebDAVCredentialCmd) spaceContext(
 	spacePublicID string,
 ) (*ctxx.SpaceContext, error) {
 	mainCtx := ctx.MainCtx()
-	spacesByTenant, err := mainCtx.ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := mainCtx.ReadOnlyAccountSpacesByTenant(mainCtx)
 	if err != nil {
 		return nil, err
 	}

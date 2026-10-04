@@ -60,8 +60,14 @@ func (qq *MainContext) UnsafeTenantDBs() *tenantdbs.TenantDBs {
 	return qq.unsafeTenantDBs
 }
 
+// ReadOnlyAccountSpacesByTenant reuses the transaction of the tenant requestCtx belongs to, if
+// any. Opening a second read transaction on a tenant DB the request already holds one on can
+// exhaust the bounded read pool, so concurrent page requests would wait on each other forever.
+//
 // TODO cache?
-func (qq *MainContext) ReadOnlyAccountSpacesByTenant() (map[*entmain.Tenant][]*enttenant.Space, error) {
+func (qq *MainContext) ReadOnlyAccountSpacesByTenant(
+	requestCtx context.Context,
+) (map[*entmain.Tenant][]*enttenant.Space, error) {
 	var spacesByTenant = make(map[*entmain.Tenant][]*enttenant.Space)
 
 	// similar code in DashboardCards
@@ -71,7 +77,18 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() (map[*entmain.Tenant][]*e
 		return nil, fmt.Errorf("failed to query tenants for account %d: %w", qq.Account.ID, err)
 	}
 
+	currentTenantCtx, hasCurrentTenant := TenantCtx(requestCtx)
 	for _, tenantx := range tenants {
+		if hasCurrentTenant && currentTenantCtx.Tenant.ID == tenantx.ID {
+			spaces, err := currentTenantCtx.TTx.Space.Query().All(currentTenantCtx)
+			if err != nil && !enttenant.IsNotFound(err) {
+				log.Println("failed to query spaces for tenant", tenantx.ID, err)
+				continue
+			}
+			spacesByTenant[tenantx] = spaces
+			continue
+		}
+
 		var spaces []*enttenant.Space
 
 		tenantDB, ok := qq.unsafeTenantDBs.Load(tenantx.ID)

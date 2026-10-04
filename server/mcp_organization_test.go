@@ -141,7 +141,7 @@ func TestMCPOrganization(t *testing.T) {
 
 	assertMCPToolErrorCode(t, client, "move_file", map[string]any{
 		"file_id": dirA, "destination_directory_id": child,
-	}, "invalid_input", "child directory")
+	}, "invalid_input", "into one of its subfolders")
 	renamedDirectory := callMCP(t, client, "rename_file", map[string]any{
 		"file_id": dirA, "new_filename": "A-renamed",
 	})

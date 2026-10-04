@@ -19,7 +19,7 @@ type webDAVCredentialDestination struct {
 }
 
 func webDAVCredentialDestinations(ctx ctxx.Context) ([]*webDAVCredentialDestination, error) {
-	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant(ctx)
 	if err != nil {
 		return nil, err
 	}

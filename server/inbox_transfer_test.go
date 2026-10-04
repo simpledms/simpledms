@@ -35,7 +35,7 @@ func TestInboxTransferHTTPPreservesDocumentAndHistoryClearsClassification(t *tes
 	var destination *enttenant.Space
 	var before *enttenant.File
 	var history []*enttenant.DocumentNote
-	var versions, sourceURL string
+	var versions string
 	if err := run(func(ctx *ctxx.SpaceContext) error {
 		createSpaceViaCmd(t, h.actions, ctx.TenantContext, "Receiving Inbox")
 		destination = ctx.TTx.Space.Query().Where(space.Name("Receiving Inbox")).OnlyX(ctx)
@@ -82,7 +82,6 @@ func TestInboxTransferHTTPPreservesDocumentAndHistoryClearsClassification(t *tes
 		}
 		history = ctx.TTx.DocumentNote.Query().Where(documentnote.FileID(doc.ID)).AllX(ctx)
 		versions = fmt.Sprint(ctx.TTx.FileVersion.Query().Where(fileversion.FileID(doc.ID)).AllX(ctx))
-		sourceURL = route.InboxRoot(ctx.TenantID, ctx.SpaceID)
 		return nil
 	}); err != nil {
 		t.Fatal(err)
@@ -95,9 +94,11 @@ func TestInboxTransferHTTPPreservesDocumentAndHistoryClearsClassification(t *tes
 		"AuthorID":           {"999999"},
 	}
 	rr := request(h.actions.Inbox.TransferFileCmd.Endpoint(), form)
+	// The command only emits FileMoved; the Inbox query it invalidates selects the next file and
+	// replaces the URL.
 	if rr.Code != http.StatusOK ||
 		!strings.Contains(rr.Header().Get("HX-Trigger"), event.FileMoved.String()) ||
-		rr.Header().Get("HX-Replace-Url") != sourceURL || rr.Header().Get("HX-Redirect") != "" {
+		rr.Header().Get("HX-Replace-Url") != "" || rr.Header().Get("HX-Redirect") != "" {
 		t.Fatalf("transfer response: %d %v %s", rr.Code, rr.Header(), rr.Body.String())
 	}
 	if err := run(func(ctx *ctxx.SpaceContext) error {

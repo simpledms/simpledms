@@ -1389,7 +1389,8 @@ func (qq *Handler) deleteTag(
 	if err != nil {
 		return MetadataDeletionData{}, err
 	}
-	_, err = taggingmodel.NewTagService().Delete(ctx, tagx.ID)
+	// The MCP spec forbids clearing assignments to force a deletion; the UI's Delete does that.
+	_, err = taggingmodel.NewTagService().DeleteUnused(ctx, tagx.ID)
 	return MetadataDeletionData{Deleted: err == nil}, err
 }
 

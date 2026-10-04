@@ -108,6 +108,13 @@ func (qq *EntTagRepository) FileByID(ctx ctxx.Context, fileID int64) (*enttenant
 	return ctx.TenantCtx().TTx.File.Get(ctx, fileID)
 }
 
+// TagHasAssignments includes assignments of files in Trash, like DeleteTag.
+func (qq *EntTagRepository) TagHasAssignments(ctx ctxx.Context, tagID int64) (bool, error) {
+	return ctx.TenantCtx().TTx.TagAssignment.Query().
+		Where(tagassignment.TagID(tagID)).
+		Exist(ctx)
+}
+
 func (qq *EntTagRepository) FileHasTagAssignment(ctx ctxx.Context, fileID int64, tagID int64) (bool, error) {
 	return ctx.TenantCtx().TTx.TagAssignment.Query().
 		Where(

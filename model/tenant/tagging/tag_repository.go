@@ -17,6 +17,7 @@ type TagRepository interface {
 	TagByID(ctx ctxx.Context, tagID int64) (*enttenant.Tag, error)
 	FileByID(ctx ctxx.Context, fileID int64) (*enttenant.File, error)
 	FileHasTagAssignment(ctx ctxx.Context, fileID int64, tagID int64) (bool, error)
+	TagHasAssignments(ctx ctxx.Context, tagID int64) (bool, error)
 	ClearTagGroup(ctx ctxx.Context, tagID int64) error
 	SetTagGroup(ctx ctxx.Context, tagID int64, groupTagID int64) error
 	AddSubTag(ctx ctxx.Context, superTagID int64, subTagID int64) (*enttenant.Tag, error)

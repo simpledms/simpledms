@@ -290,7 +290,7 @@ func tenantPasskeyEnrollmentNavigationRailItems(ctx ctxx.Context) []*widget.Navi
 }
 
 func spaceCombobox(ctx ctxx.Context, active string) *widget.Combobox {
-	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant(ctx)
 	if err != nil {
 		log.Println(err)
 		return nil
