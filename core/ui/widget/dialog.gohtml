@@ -254,10 +254,11 @@
 				}
 
 				let openOnLoadFn = () => {
-                    {{- if (or .IsOpenOnLoad .IsOpenOnLoadOnExtraLargeScreens) }}
+                    {{- if (or .IsOpenOnLoad .IsOpenOnLoadOnLargeScreens) }}
 						if (dialog) {
-							{{ if .IsOpenOnLoadOnExtraLargeScreens | and (not .IsOpenOnLoad) }}
-								if (window.matchMedia('(min-width: 1600px)').matches) {
+							{{ if .IsOpenOnLoadOnLargeScreens | and (not .IsOpenOnLoad) }}
+								{{/* from lg, side sheets fit beside the content (see js-main-content) */}}
+								if (window.matchMedia('(min-width: 1200px)').matches) {
 									openDialogFn();
 								}
 							{{ else }}

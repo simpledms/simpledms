@@ -1111,7 +1111,7 @@
   }
   @media (min-width: 1200px) {
     body:has(dialog[open].js-side-sheet-dialog) .js-main-content {
-      padding-right: calc(35rem + 1rem);
+      padding-right: 35rem;
     }
   }
   .pr-1 {

@@ -48,8 +48,9 @@
   /* Side sheets are non-modal and fixed to the right edge from lg (1200px, see dialog.gohtml). */
   @media (min-width: 1200px) {
     body:has(dialog[open].js-side-sheet-dialog) & {
-      /* Reserve the side sheet's 35rem width plus a 1rem content gutter. */
-      padding-right: calc(35rem + 1rem);
+      /* Reserve the side sheet's 35rem width; no extra gutter because the side sheet border is
+         the divider and content keeps its own inset (app bar px-8) like the other panes. */
+      padding-right: 35rem;
     }
   }
 }

@@ -1,8 +1,10 @@
 {{/* gotype:github.com/simpledms/simpledms/core/ui/widget.ListDetailLayout */}}
 {{- define "ListDetailLayout" }}
+	{{/* no gap between the panes: the list pane border is the divider, so the details app bar
+		keeps the same inset from it as the other panes (px-8) */}}
 	<div id="{{ .GetID }}" class="group/list-detail flex flex-row h-full
 		md:mx-0 md:my-3 md:h-[calc(100%-1.5rem)]
-		exp:gap-x-4 exp:h-[calc(100dvh-1.5rem)]"
+		exp:h-[calc(100dvh-1.5rem)]"
 	>
 		<div class="@container/list w-full
 			group-has-[.js-detail-content>div]/list-detail:hidden
