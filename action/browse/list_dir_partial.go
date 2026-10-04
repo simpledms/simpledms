@@ -62,6 +62,7 @@ type ListDirPartialState struct {
 	// used in JS, thus don't change URL and as param name below
 	// TODO multiple?
 	ActiveSideSheet string `url:"side_sheet,omitempty"`
+	FilterTab       string `url:"filter_tab,omitempty"`
 	SortBy          string `url:"sort_by,omitempty"` // TODO enum
 
 	// TODO does offset belong to state? in url, but not really state...
@@ -82,6 +83,17 @@ func (qq *ListDirPartialState) isSortedByDate() bool {
 
 func (qq *ListDirPartialState) hasActiveSearch() bool {
 	return qq.SearchQuery != ""
+}
+
+// search is not part of the filters because it has its own field in the app bar
+func (qq *ListDirPartialState) hasActiveFilter() bool {
+	return qq.DocumentTypeID != 0 || len(qq.CheckedTagIDs) > 0 || len(qq.PropertyValues) > 0
+}
+
+func (qq *ListDirPartialState) resetFilters() {
+	qq.DocumentTypeID = 0
+	qq.CheckedTagIDs = nil
+	qq.PropertyValues = nil
 }
 
 func (qq *ListDirPartialState) normalizeSortBy() {
@@ -176,25 +188,11 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 	}
 
 	// TODO or HxTrigger? seems to have same value
-	if req.Header.Get("Hx-Target") == "filterTagsBtn" {
+	if req.Header.Get("Hx-Target") == qq.filtersButtonID() {
 		return qq.infra.Renderer().Render(
 			rw,
 			ctx,
-			qq.filterTagsBtn(ctx, state, data.CurrentDirID),
-		)
-	}
-	if req.Header.Get("Hx-Target") == "filterPropertiesBtn" {
-		return qq.infra.Renderer().Render(
-			rw,
-			ctx,
-			qq.filterPropertiesBtn(ctx, state, data.CurrentDirID),
-		)
-	}
-	if req.Header.Get("Hx-Target") == "filterDocumentTypeBtn" {
-		return qq.infra.Renderer().Render(
-			rw,
-			ctx,
-			qq.filterDocumentTypeBtn(ctx, state, data.CurrentDirID),
+			qq.filtersButton(ctx, state, data.CurrentDirID),
 		)
 	}
 
@@ -322,10 +320,6 @@ func (qq *ListDirPartial) Widget(
 	var children []widget.IWidget
 
 	children = append(children,
-		qq.tagsAndOptions(ctx, state, dirWithParent),
-	)
-
-	children = append(children,
 		qq.filesList(
 			ctx,
 			state,
@@ -380,11 +374,30 @@ func (qq *ListDirPartial) Widget(
 		},
 		AppBar: qq.appBar(ctx, state, dirWithParent, selectedFileID),
 		// the empty refresh trigger is kept outside of the gapped column; otherwise it takes a
-		// gap slot and shifts the filter chips down
+		// gap slot and shifts the content down
 		List: []widget.IWidget{
 			qq.sortUpdateTrigger(dirWithParent.Data.PublicID.String(), selectedFileID),
+			qq.filtersSideSheetTrigger(dirWithParent.Data.PublicID.String()),
 			list,
 		},
+	}
+}
+
+// filtersSideSheetTrigger reopens the filters side sheet where side sheets are open by default
+// (see DefaultSideSheetTrigger) because the file details side sheet replaced it
+func (qq *ListDirPartial) filtersSideSheetTrigger(currentDirID string) *widget.Container {
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
+			ID: "browseFiltersSideSheetTrigger",
+		},
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:        qq.actions.FiltersDialog.Endpoint(),
+			HxVals:        util.JSON(qq.actions.FiltersDialog.Data(currentDirID)),
+			LoadInPopover: true,
+			HxTrigger: event.DetailsClosed.String() +
+				"[window.matchMedia('(min-width: 1200px)').matches] from:body",
+		},
+		Child: &widget.View{},
 	}
 }
 
@@ -409,23 +422,6 @@ func (qq *ListDirPartial) sortUpdateTrigger(currentDirID, selectedFileID string)
 		},
 		Child: &widget.View{},
 	}
-}
-
-func (qq *ListDirPartial) tagsAndOptions(ctx ctxx.Context, state *ListDirPartialState, dir *filemodel.File) *widget.ChipBar {
-	// TODO most used tags within folder, order alphabetically or by use?
-
-	// childDirCount := dir.Data.QueryChildren().Where(file.IsDirectory(true)).CountX(ctx)
-	currentDirID := dir.Data.PublicID
-
-	children := qq.filters(ctx, state, currentDirID.String())
-
-	return &widget.ChipBar{
-		Widget: widget.Widget[widget.ChipBar]{
-			ID: "filters", // TODO was `tags` before
-		},
-		Children: children,
-	}
-	// T("Sort by: Name"),
 }
 
 func (qq *ListDirPartial) pageSize() int {
@@ -689,6 +685,7 @@ func (qq *ListDirPartial) appBar(
 		Actions: []widget.IWidget{
 			qq.fileListViewButton(ctx),
 			qq.sortMenuButton(ctx, state, false),
+			qq.filtersButton(ctx, state, dir.Data.PublicID.String()),
 		},
 		Search: &widget.Search{
 			Widget: widget.Widget[widget.Search]{
@@ -921,122 +918,20 @@ func (qq *ListDirPartial) fileListPreferencesMenuItemAttrs(
 	}
 }
 
-func (qq *ListDirPartial) filters(
-	ctx ctxx.Context,
-	listDirState *ListDirPartialState,
-	currentDirID string,
-) []widget.IWidget {
-	// TODO show only if there are dirs or files in result? would require to check complete query,
-	//		not just first 25 results...
-	chips := []widget.IWidget{
-		qq.filterDocumentTypeBtn(ctx, listDirState, currentDirID),
-		qq.filterPropertiesBtn(ctx, listDirState, currentDirID),
-		// TODO open on hover
-		qq.filterTagsBtn(ctx, listDirState, currentDirID),
-	}
-
-	// TODO show only if filter is active
-	chips = append(chips,
-		&widget.AssistChip{
-			// TODO choose another styling, that it is not as prominent as the others
-			Label: widget.Tf("Reset"), // just Reset because it also resets search
-			HTMXAttrs: widget.HTMXAttrs{
-				HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, currentDirID), // TODO or pass in href?
-				HxHeaders: autil.ResetStateHeader(),
-				HxOn:      event.CloseSideSheet.HxOn("click"),
-			},
-			LeadingIcon: "restart_alt", // TODO
-		},
-	)
-
-	return chips
+func (qq *ListDirPartial) filtersButtonID() string {
+	return "filtersBtn"
 }
 
-func (qq *ListDirPartial) filterTagsBtn(
+// filtersButton toggles the filters side sheet and is selected while a filter is active
+func (qq *ListDirPartial) filtersButton(
 	ctx ctxx.Context,
 	listDirState *ListDirPartialState,
 	currentDirID string,
 ) *widget.Container {
-	chipState := widget.AssistChipStateDefault
-	if len(listDirState.CheckedTagIDs) > 0 {
-		chipState = widget.AssistChipStateHighlighted
-	}
-
 	hxTrigger := ""
-	hxPost := qq.actions.TagsFilterDialogPartial.Endpoint()
+	hxPost := qq.actions.FiltersDialog.Endpoint()
 	var hxOn *widget.HxOn
-	if listDirState.ActiveSideSheet == qq.actions.TagsFilterDialogPartial.ID() { // is open
-		if !ctx.VisitorCtx().IsHTMXRequest {
-			hxTrigger = "load" // leads to strange issues if done on htmx requests
-		} else {
-			hxPost = ""
-		}
-		/*hxOn = &wx.HxOn{
-			Event:   "click",
-			Handler: "document.querySelectorAll('.js-side-sheet-dialog').forEach(elem => elem.closeSideSheet())",
-		}*/
-		// hxOn = event.CloseSideSheet.UnsafeHxOnWithQueryParamAndValue("click", "side_sheet", "")
-		hxOn = event.CloseSideSheet.HxOn("click")
-	} else { // closed
-		/*hxOn = &wx.HxOn{
-			Event:   "click",
-			Handler: "document.querySelectorAll('.js-side-sheet-dialog').forEach(elem => elem.toggleCustom())",
-		}*/
-		// hxOn = event.SideSheetToggled.UnsafeHxOnWithQueryParamAndValue("click", "side_sheet", qq.actions.TagsFilterDialogPartial.ID())
-		hxOn = event.SideSheetToggled.HxOn("click")
-	}
-
-	return &widget.Container{
-		Widget: widget.Widget[widget.Container]{
-			ID: "filterTagsBtn",
-		},
-		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.Endpoint(),
-			HxVals:   util.JSON(qq.Data(currentDirID, "")),
-			HxTarget: "#filterTagsBtn",
-			HxSwap:   "outerHTML",
-			HxTrigger: strings.Join([]string{
-				event.FilterTagsChanged.Handler(),
-				event.SideSheetToggled.Handler(),
-			}, ", "),
-		},
-		Child: &widget.AssistChip{
-			IsActive:    listDirState.ActiveSideSheet == qq.actions.TagsFilterDialogPartial.ID(),
-			Label:       widget.Tf("Tags"),
-			LeadingIcon: "label",
-			Badge: &widget.Badge{
-				IsInline: true,
-				Value:    len(listDirState.CheckedTagIDs),
-			},
-			State: chipState,
-			HTMXAttrs: widget.HTMXAttrs{
-				HxTrigger:     hxTrigger,
-				HxPost:        hxPost,
-				HxVals:        util.JSON(qq.actions.TagsFilterDialogPartial.Data(currentDirID)),
-				LoadInPopover: true,
-				HxOn:          hxOn,
-			},
-		},
-	}
-}
-
-func (qq *ListDirPartial) filterPropertiesBtn(
-	ctx ctxx.Context,
-	listDirState *ListDirPartialState,
-	currentDirID string,
-) *widget.Container {
-	// Count the number of active property filters
-	activeFilterCount := len(listDirState.PropertyValues)
-
-	chipState := widget.AssistChipStateDefault
-	if activeFilterCount > 0 {
-		chipState = widget.AssistChipStateHighlighted
-	}
-
-	hxTrigger := ""
-	hxPost := qq.actions.PropertiesFilterDialogPartial.Endpoint()
-	var hxOn *widget.HxOn
-	if listDirState.ActiveSideSheet == qq.actions.PropertiesFilterDialogPartial.ID() { // is open
+	if listDirState.ActiveSideSheet == qq.actions.FiltersDialog.ID() { // is open
 		if !ctx.VisitorCtx().IsHTMXRequest {
 			hxTrigger = "load" // leads to strange issues if done on htmx requests
 		} else {
@@ -1049,95 +944,30 @@ func (qq *ListDirPartial) filterPropertiesBtn(
 
 	return &widget.Container{
 		Widget: widget.Widget[widget.Container]{
-			ID: "filterPropertiesBtn",
+			ID: qq.filtersButtonID(),
 		},
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data(currentDirID, "")),
-			HxTarget: "#filterPropertiesBtn",
+			HxTarget: "#" + qq.filtersButtonID(),
 			HxSwap:   "outerHTML",
-			HxTrigger: strings.Join([]string{
-				event.PropertyFilterChanged.Handler(),
-				event.SideSheetToggled.Handler(),
-			}, ", "),
+			HxTrigger: event.HxTrigger(
+				event.FilterTagsChanged,
+				event.DocumentTypeFilterChanged,
+				event.PropertyFilterChanged,
+				event.SideSheetToggled,
+			),
 		},
-		Child: &widget.AssistChip{
-			IsActive:    listDirState.ActiveSideSheet == qq.actions.PropertiesFilterDialogPartial.ID(),
-			Label:       widget.Tf("Fields"),
-			LeadingIcon: "tune", // tune or assignment
-			Badge: &widget.Badge{
-				IsInline: true,
-				Value:    activeFilterCount,
-			},
-			State: chipState,
+		Child: &widget.IconButton{
+			Icon:       "filter_list",
+			Tooltip:    widget.T("Filters"),
+			Label:      widget.T("Filters"),
+			IsSelected: listDirState.hasActiveFilter(),
 			HTMXAttrs: widget.HTMXAttrs{
+				Role:          "button",
 				HxTrigger:     hxTrigger,
 				HxPost:        hxPost,
-				HxVals:        util.JSON(qq.actions.PropertiesFilterDialogPartial.Data(currentDirID)),
-				LoadInPopover: true,
-				HxOn:          hxOn,
-			},
-		},
-	}
-}
-
-func (qq *ListDirPartial) filterDocumentTypeBtn(
-	ctx ctxx.Context,
-	listDirState *ListDirPartialState,
-	currentDirID string,
-) *widget.Container {
-	// TODO open on hover
-
-	chipState := widget.AssistChipStateDefault
-	if listDirState.DocumentTypeID != 0 {
-		chipState = widget.AssistChipStateHighlighted
-	}
-
-	hxTrigger := ""
-	hxPost := qq.actions.DocumentTypeFilterDialogPartial.Endpoint()
-	var hxOn *widget.HxOn
-	if listDirState.ActiveSideSheet == qq.actions.DocumentTypeFilterDialogPartial.ID() { // is open
-		if !ctx.VisitorCtx().IsHTMXRequest {
-			hxTrigger = "load" // leads to strange issues if done on htmx requests
-		} else {
-			hxPost = ""
-		}
-		hxOn = event.CloseSideSheet.HxOn("click")
-	} else { // closed
-		hxOn = event.SideSheetToggled.HxOn("click")
-	}
-
-	return &widget.Container{
-		Widget: widget.Widget[widget.Container]{
-			ID: "filterDocumentTypeBtn",
-		},
-		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.Endpoint(),
-			HxVals:   util.JSON(qq.Data(currentDirID, "")),
-			HxTarget: "#filterDocumentTypeBtn",
-			HxSwap:   "outerHTML",
-			HxTrigger: strings.Join([]string{
-				// TODO is this necessary (for all buttons) or are handlers on list enough?
-				event.FilterTagsChanged.Handler(),
-				event.DocumentTypeFilterChanged.Handler(),
-				event.PropertyFilterChanged.Handler(),
-				event.SideSheetToggled.Handler(),
-			}, ", "),
-		},
-		Child: &widget.AssistChip{
-			IsActive:    listDirState.ActiveSideSheet == qq.actions.DocumentTypeFilterDialogPartial.ID(),
-			Label:       widget.Tf("Document type"),
-			LeadingIcon: "category",
-			State:       chipState,
-			/*TODO add back
-			Badge: &wx.Badge{
-				IsInline: true,
-				// Value:    len(listDirState.CheckedTagIDs),
-			},*/
-			HTMXAttrs: widget.HTMXAttrs{
-				HxTrigger:     hxTrigger,
-				HxPost:        hxPost,
-				HxVals:        util.JSON(qq.actions.DocumentTypeFilterDialogPartial.Data(currentDirID)),
+				HxVals:        util.JSON(qq.actions.FiltersDialog.Data(currentDirID)),
 				LoadInPopover: true,
 				HxOn:          hxOn,
 			},

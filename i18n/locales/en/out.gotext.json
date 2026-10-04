@@ -1175,6 +1175,11 @@
             "translation": ""
         },
         {
+            "id": "Filters",
+            "message": "Filters",
+            "translation": ""
+        },
+        {
             "id": "No files available yet.",
             "message": "No files available yet.",
             "translation": ""
@@ -1367,11 +1372,6 @@
             ]
         },
         {
-            "id": "Fields | Filter",
-            "message": "Fields | Filter",
-            "translation": ""
-        },
-        {
             "id": "«{Name}» removed.",
             "message": "«{Name}» removed.",
             "translation": "",
@@ -1405,6 +1405,11 @@
                     "expr": "filex.Data.Name"
                 }
             ]
+        },
+        {
+            "id": "Filters reset.",
+            "message": "Filters reset.",
+            "translation": ""
         },
         {
             "id": "PDF preview conversion is not configured.",
@@ -3564,11 +3569,6 @@
         {
             "id": "Cannot validate form.",
             "message": "Cannot validate form.",
-            "translation": ""
-        },
-        {
-            "id": "Filters reset.",
-            "message": "Filters reset.",
             "translation": ""
         },
         {
@@ -6128,11 +6128,6 @@
         {
             "id": "File ID and document type ID are required.",
             "message": "File ID and document type ID are required.",
-            "translation": ""
-        },
-        {
-            "id": "Misc",
-            "message": "Misc",
             "translation": ""
         },
         {

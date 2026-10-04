@@ -2,6 +2,7 @@ package partial
 
 import (
 	"github.com/simpledms/simpledms/core/ui/widget"
+	"github.com/simpledms/simpledms/ui/uix/event"
 )
 
 // TODO widget or block?
@@ -35,6 +36,7 @@ func NewFullscreenDialogAppBar(title *widget.Text, closeButtonHref string, actio
 			Tooltip: widget.T("Close"),
 			HTMXAttrs: widget.HTMXAttrs{
 				HxGet: closeButtonHref,
+				HxOn:  event.DetailsClosed.HxOn("click"),
 			},
 		},
 		Title: &widget.AppBarTitle{

@@ -480,7 +480,7 @@ func (qq *FilesListPartial) appBar(ctx ctxx.Context, state *InboxPageState) *wid
 		Actions: []widget.IWidget{
 			qq.fileListViewButton(ctx),
 			qq.sortMenuButton(ctx, &state.FilesListPartialState, false),
-			qq.sourceFilterButton(),
+			qq.sourceFilterButton(&state.FilesListPartialState),
 		},
 		Search: &widget.Search{
 			Widget: widget.Widget[widget.Search]{
@@ -521,11 +521,16 @@ func (qq *FilesListPartial) sortMenuButton(
 	}
 }
 
-func (qq *FilesListPartial) sourceFilterButton() *widget.IconButton {
+// sourceFilterButton is selected while a source filter is active; the app bar is refreshed
+// together with the list on SourceFilterChanged
+func (qq *FilesListPartial) sourceFilterButton(state *FilesListPartialState) *widget.IconButton {
 	return &widget.IconButton{
-		Icon:    "filter_alt",
-		Tooltip: widget.T("Filter by source"),
+		Icon:       "filter_alt",
+		Tooltip:    widget.T("Filter by source"),
+		Label:      widget.T("Filter by source"),
+		IsSelected: len(state.SourceValues) > 0,
 		HTMXAttrs: widget.HTMXAttrs{
+			Role:          "button",
 			HxPost:        qq.actions.SourceFilterDialog.Endpoint(),
 			LoadInPopover: true,
 		},

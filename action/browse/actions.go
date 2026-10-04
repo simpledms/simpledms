@@ -53,16 +53,16 @@ type Actions struct {
 
 	// SearchList *SearchList
 
-	ListFilterTagsPartial           *ListFilterTagsPartial
-	ListFilterPropertiesPartial     *ListFilterPropertiesPartial
-	DocumentTypeFilterPartial       *DocumentTypeFilterPartial
-	ToggleTagFilterCmd              *ToggleTagFilterCmd
-	ToggleDocumentTypeFilterCmd     *ToggleDocumentTypeFilterCmd
-	TogglePropertyFilterCmd         *TogglePropertyFilterCmd
-	DocumentTypeFilterDialogPartial *DocumentTypeFilterDialog
-	TagsFilterDialogPartial         *TagsFilterDialog
-	PropertiesFilterDialogPartial   *PropertiesFilterDialog
-	UpdatePropertyFilterCmd         *UpdatePropertyFilterCmd
+	ListFilterTagsPartial       *ListFilterTagsPartial
+	ListFilterPropertiesPartial *ListFilterPropertiesPartial
+	DocumentTypeFilterPartial   *DocumentTypeFilterPartial
+	ToggleTagFilterCmd          *ToggleTagFilterCmd
+	ToggleDocumentTypeFilterCmd *ToggleDocumentTypeFilterCmd
+	TogglePropertyFilterCmd     *TogglePropertyFilterCmd
+	FiltersDialog               *FiltersDialog
+	FilterTabsPartial           *FilterTabsPartial
+	ResetFiltersCmd             *ResetFiltersCmd
+	UpdatePropertyFilterCmd     *UpdatePropertyFilterCmd
 	// ToggleFolderMode         *ToggleFolderMode
 
 	FileUploadDialogPartial         *FileUploadDialog
@@ -122,16 +122,16 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 
 		// SearchList: NewSearchList(infra, actions),
 
-		ListFilterTagsPartial:           NewListFilterTagsPartial(infra, actions),
-		ListFilterPropertiesPartial:     NewListFilterPropertiesPartial(infra, actions),
-		DocumentTypeFilterPartial:       NewDocumentTypeFilterPartial(infra, actions),
-		ToggleTagFilterCmd:              NewToggleTagFilterCmd(infra, actions),
-		ToggleDocumentTypeFilterCmd:     NewToggleDocumentTypeFilterCmd(infra, actions),
-		TogglePropertyFilterCmd:         NewTogglePropertyFilterCmd(infra, actions),
-		DocumentTypeFilterDialogPartial: NewDocumentTypeFilterDialog(infra, actions),
-		TagsFilterDialogPartial:         NewTagsFilterDialog(infra, actions),
-		PropertiesFilterDialogPartial:   NewPropertiesFilterDialog(infra, actions),
-		UpdatePropertyFilterCmd:         NewUpdatePropertyFilterCmd(infra, actions),
+		ListFilterTagsPartial:       NewListFilterTagsPartial(infra, actions),
+		ListFilterPropertiesPartial: NewListFilterPropertiesPartial(infra, actions),
+		DocumentTypeFilterPartial:   NewDocumentTypeFilterPartial(infra, actions),
+		ToggleTagFilterCmd:          NewToggleTagFilterCmd(infra, actions),
+		ToggleDocumentTypeFilterCmd: NewToggleDocumentTypeFilterCmd(infra, actions),
+		TogglePropertyFilterCmd:     NewTogglePropertyFilterCmd(infra, actions),
+		FiltersDialog:               NewFiltersDialog(infra, actions),
+		FilterTabsPartial:           NewFilterTabsPartial(infra, actions),
+		ResetFiltersCmd:             NewResetFiltersCmd(infra, actions),
+		UpdatePropertyFilterCmd:     NewUpdatePropertyFilterCmd(infra, actions),
 		// ToggleFolderMode:         NewToggleFolderMode(infra, actions),
 
 		FileUploadDialogPartial:         NewFileUploadDialog(infra, actions),

@@ -8235,6 +8235,13 @@
             "fuzzy": true
         },
         {
+            "id": "Filters",
+            "message": "Filters",
+            "translation": "Filter",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
             "id": "Filters reset.",
             "message": "Filters reset.",
             "translation": "Filter zurückgesetzt.",

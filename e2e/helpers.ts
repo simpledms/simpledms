@@ -85,7 +85,8 @@ export async function createSpaceAndSelect(page: Page, spaceName: string, docume
 		.getByRole("link")
 		.filter({ has: page.getByRole("heading", { name: spaceName, exact: true }) })
 		.click();
-	await expect(page).toHaveURL(/\/space\/[^/]+\/browse\/$/);
+	// wide screens open the Filters side sheet by default, which adds side_sheet to the query
+	await expect(page).toHaveURL(/\/space\/[^/]+\/browse\/(\?.*)?$/);
 }
 
 export function fixturePath(fileName: string) {
@@ -121,4 +122,34 @@ export async function expectVisibleMenuEntries(page: Page, entries: string[]) {
 
 export async function selectOptionByLabel(select: Locator, label: string) {
 	await select.selectOption({ label });
+}
+
+// Side sheets open by default from the lg breakpoint (1200px), where they fit beside the
+// content; on smaller screens they must be opened explicitly.
+export function isLargeScreen(page: Page) {
+	return (page.viewportSize()?.width ?? 0) >= 1200;
+}
+
+export async function openFiltersTab(page: Page, tab: "Document type" | "Fields" | "Tags") {
+	const dialog = page.locator("#filtersDialog");
+	if (!isLargeScreen(page)) {
+		await page.getByRole("button", { name: "Filters", exact: true }).click();
+	}
+	await expect(dialog).toBeVisible();
+	// the tab name includes the count badge while filters of the tab are active
+	const tabLink = dialog.getByRole("tab", { name: new RegExp(`^${tab}( \\d+)?$`) });
+	await tabLink.click();
+	await expect(tabLink).toHaveAttribute("aria-selected", "true");
+	return dialog;
+}
+
+export async function openFileDetails(page: Page) {
+	const details = page.getByRole("dialog").filter({
+		has: page.getByRole("heading", { name: "Details", exact: true }),
+	});
+	if (!isLargeScreen(page)) {
+		await page.getByRole("button", { name: "description", exact: true }).click();
+	}
+	await expect(details).toBeVisible();
+	return details;
 }

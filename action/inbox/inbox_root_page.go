@@ -6,6 +6,7 @@ import (
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -67,15 +68,25 @@ func (qq *InboxRootPage) render(
 		return err
 	}
 
+	defaultSideSheetTrigger := autil.DefaultSideSheetTrigger(
+		"inboxDefaultSideSheetTrigger",
+		widget.HTMXAttrs{
+			HxPost: qq.actions.SourceFilterDialog.Endpoint(),
+		},
+	)
+	// Opening a file from the list swaps only #details, so this trigger stays in the DOM and
+	// morph keeps it when the details close; htmx doesn't fire load again for it. If the page
+	// was loaded with a file selected, the trigger is new after closing and only load fires.
+	defaultSideSheetTrigger.HxTrigger += ", " + event.DetailsClosed.String() +
+		"[window.matchMedia('(min-width: 1200px)').matches] from:body"
+
 	var viewx renderable.Renderable
 	viewx = &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
 		Content: &widget.View{
 			Children: []widget.IWidget{
 				content,
-				autil.DefaultSideSheetTrigger("inboxDefaultSideSheetTrigger", widget.HTMXAttrs{
-					HxPost: qq.actions.SourceFilterDialog.Endpoint(),
-				}),
+				defaultSideSheetTrigger,
 			},
 		},
 	}

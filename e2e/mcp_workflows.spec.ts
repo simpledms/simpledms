@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
-import { uniqueSuffix } from "./helpers";
+import { openFileDetails, uniqueSuffix } from "./helpers";
 import {
 	prepareInbox, createField, openMCPCredentials,
 	openCreateMCPCredential, selectSpace, openCredentialAction, rpc,
@@ -139,8 +139,7 @@ for (const device of [
 
 			await page.goto(result.structuredContent.url);
 			await expect(page.getByRole("heading", { name: filename, exact: true })).toBeVisible();
-			await page.getByRole("button", { name: "description", exact: true }).click();
-			const details = page.getByRole("dialog").filter({ has: page.getByRole("heading", { name: "Details", exact: true }) });
+			const details = await openFileDetails(page);
 			await details.getByRole("tab", { name: "Info", exact: true }).click();
 			await expect(details.getByRole("listitem").filter({ hasText: "Source" })
 				.getByText("MCP", { exact: true })).toBeVisible();
@@ -233,8 +232,7 @@ for (const device of [
 			});
 
 			await page.goto(uploaded.url);
-			await page.getByRole("button", { name: "description" }).click();
-			const details = page.getByRole("dialog").filter({ has: page.getByRole("heading", { name: "Details", exact: true }) });
+			const details = await openFileDetails(page);
 			await expect(details.getByRole("checkbox", { name: "Invoice close", exact: true }))
 				.toBeChecked();
 			await expect(details.getByRole("checkbox", { name: "label Open", exact: true }))

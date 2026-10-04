@@ -1581,6 +1581,13 @@
             "fuzzy": true
         },
         {
+            "id": "Filters",
+            "message": "Filters",
+            "translation": "Filters",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "No files available yet.",
             "message": "No files available yet.",
             "translation": "No files available yet.",
@@ -1829,13 +1836,6 @@
             "fuzzy": true
         },
         {
-            "id": "Fields | Filter",
-            "message": "Fields | Filter",
-            "translation": "Fields | Filter",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
             "id": "«{Name}» removed.",
             "message": "«{Name}» removed.",
             "translation": "«{Name}» removed.",
@@ -1874,6 +1874,13 @@
                     "expr": "filex.Data.Name"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "Filters reset.",
+            "message": "Filters reset.",
+            "translation": "Filters reset.",
+            "translatorComment": "Copied from source.",
             "fuzzy": true
         },
         {
@@ -4697,13 +4704,6 @@
             "id": "Cannot validate form.",
             "message": "Cannot validate form.",
             "translation": "Cannot validate form.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Filters reset.",
-            "message": "Filters reset.",
-            "translation": "Filters reset.",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -8245,13 +8245,6 @@
             "id": "File ID and document type ID are required.",
             "message": "File ID and document type ID are required.",
             "translation": "File ID and document type ID are required.",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "Misc",
-            "message": "Misc",
-            "translation": "Misc",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

@@ -8512,6 +8512,13 @@
             "fuzzy": true
         },
         {
+            "id": "Filters",
+            "message": "Filters",
+            "translation": "Filtres",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
             "id": "Filters reset.",
             "message": "Filters reset.",
             "translation": "Filtres réinitialisés.",

@@ -1567,6 +1567,13 @@
             "fuzzy": true
         },
         {
+            "id": "Filters",
+            "message": "Filters",
+            "translation": "Filter",
+            "translatorComment": "Translated from English by Claude",
+            "fuzzy": true
+        },
+        {
             "id": "No files available yet.",
             "message": "No files available yet.",
             "translation": "Noch keine Dateien verfügbar.",
@@ -1815,13 +1822,6 @@
             "fuzzy": true
         },
         {
-            "id": "Fields | Filter",
-            "message": "Fields | Filter",
-            "translation": "Felder | Filter",
-            "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
             "id": "«{Name}» removed.",
             "message": "«{Name}» removed.",
             "translation": "«{Name}» entfernt.",
@@ -1860,6 +1860,13 @@
                     "expr": "filex.Data.Name"
                 }
             ],
+            "fuzzy": true
+        },
+        {
+            "id": "Filters reset.",
+            "message": "Filters reset.",
+            "translation": "Filter zurückgesetzt.",
+            "translatorComment": "Translated from English by Claude",
             "fuzzy": true
         },
         {
@@ -4669,13 +4676,6 @@
             "message": "Cannot validate form.",
             "translation": "Formular kann nicht validiert werden.",
             "translatorComment": "Translated from English by Junie",
-            "fuzzy": true
-        },
-        {
-            "id": "Filters reset.",
-            "message": "Filters reset.",
-            "translation": "Filter zurückgesetzt.",
-            "translatorComment": "Translated from English by Claude",
             "fuzzy": true
         },
         {
@@ -8075,13 +8075,6 @@
             "id": "File ID and document type ID are required.",
             "message": "File ID and document type ID are required.",
             "translation": ""
-        },
-        {
-            "id": "Misc",
-            "message": "Misc",
-            "translation": "Sonstiges",
-            "translatorComment": "Translated from English by Codex",
-            "fuzzy": true
         },
         {
             "id": "Manage Space",

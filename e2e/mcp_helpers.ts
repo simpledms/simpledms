@@ -21,8 +21,9 @@ export async function prepareInbox(page: Page, spaceName: string, documentTypes:
 	}
 	await page.getByRole("button", { name: "Create", exact: true }).click();
 	await page.getByRole("heading", { name: spaceName, exact: true }).click();
-	await expect(page).toHaveURL(/\/browse\/$/);
-	const inboxURL = page.url().replace(/\/browse\/$/, "/inbox/");
+	// wide screens open the Filters side sheet by default, which adds side_sheet to the query
+	await expect(page).toHaveURL(/\/browse\/(\?.*)?$/);
+	const inboxURL = page.url().replace(/\/browse\/(\?.*)?$/, "/inbox/");
 	await page.goto(inboxURL);
 	if ((page.viewportSize()?.width ?? 0) >= 768) await openNavigation(page);
 	else {
@@ -52,7 +53,7 @@ export async function openMCPCredentials(page: Page) {
 	await page.goto("/dashboard/");
 	await openNavigation(page);
 	await page.getByRole("link", { name: "MCP", exact: true }).first().click();
-	await expect(page).toHaveURL(/\/mcp-credentials\/$/);
+	await expect(page).toHaveURL(/\/mcp-credentials\/(\?.*)?$/);
 }
 
 export async function openCreateMCPCredential(page: Page) {

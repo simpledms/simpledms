@@ -138,15 +138,15 @@ func (qq *BrowsePage) widget(
 	}
 
 	var content widget.IWidget = listDetailLayout
-	// other active side sheets are restored by their filter chips
+	// an active filters side sheet is restored by the filters button in the app bar
 	if state.ActiveSideSheet == "" {
 		content = &widget.View{
 			Children: []widget.IWidget{
 				listDetailLayout,
 				autil.DefaultSideSheetTrigger("browseDefaultSideSheetTrigger", widget.HTMXAttrs{
-					HxPost: qq.actions.DocumentTypeFilterDialogPartial.Endpoint(),
+					HxPost: qq.actions.FiltersDialog.Endpoint(),
 					HxVals: util.JSON(
-						qq.actions.DocumentTypeFilterDialogPartial.Data(dir.PublicID.String()),
+						qq.actions.FiltersDialog.Data(dir.PublicID.String()),
 					),
 				}),
 			},
