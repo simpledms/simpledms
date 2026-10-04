@@ -34,7 +34,9 @@
 					>
                         {{ render .GetContext .Headline }}
 					</h6>
-					<div class="body-sm text-left
+					{{/* Two-line items (both variants) have a fixed height, so supporting text
+						must stay on one line; it would otherwise scroll inside the state layer. */}}
+					<div class="body-sm text-left whitespace-nowrap overflow-hidden text-ellipsis max-w-full
 						{{/*group-has-[.js-detail-content>div]/list-detail:hidden*/}}
 						group-has-[:checked]/list-item:text-on-secondary-container text-on-surface-variant">
                         {{ render .GetContext .SupportingText }}
@@ -85,7 +87,7 @@
                         {{ if .HTMXAttrs.IsPageLink }}
 					</a>
                     {{ end }}
-					<div class="body-sm text-left
+					<div class="body-sm text-left whitespace-nowrap overflow-hidden text-ellipsis max-w-full
 						{{ if .IsSelected }}text-on-surface{{ else }}text-on-surface-variant{{ end }}">
                         {{ render .GetContext .SupportingText }}
 					</div>

@@ -32,21 +32,12 @@
 			 md:bg-surface-container-lowest
 			 {{/* IMPORTANT if lg: is changed, media query in JS of this widget must be changed too */}}
 			 {{ if .IsSideSheetLayout }}
-					lg:my-0 lg:mr-0 lg:border-0 lg:border-l lg:rounded-none lg:drop-shadow-none lg:fixed
-					lg:top-0 lg:right-0 lg:max-h-full
+					{{/* fine border instead of a contrasting surface; my-3 insets the border like
+						the list pane border in ListDetailLayout */}}
+					lg:bg-surface lg:my-3 lg:mr-0 lg:border-0 lg:border-l lg:rounded-none
+					lg:drop-shadow-none lg:fixed
+					lg:top-0 lg:right-0 lg:h-[calc(100svh-1.5rem)] lg:max-h-[calc(100svh-1.5rem)]
 					lg:max-w-[min(35rem,calc(100vw_-_var(--simpledms-navigation-rail-width,0px)))]
-					min-[1950px]:[body:not(:has(.js-navigation-rail.navigation-rail-expanded))_&]:right-auto
-					min-[1950px]:[body:not(:has(.js-navigation-rail.navigation-rail-expanded))_&]:left-[min(calc(var(--simpledms-navigation-rail-width,80px)_+_1310px),calc(100vw_-_35rem))]
-					min-[1950px]:[body:not(:has(.js-navigation-rail.navigation-rail-expanded))_&]:border-l-0
-					min-[1950px]:[body:not(:has(.js-navigation-rail.navigation-rail-expanded))_&]:bg-surface
-					min-[1950px]:[body:not(:has(.js-navigation-rail.navigation-rail-expanded))_&]:transition-none
-					min-[2230px]:[body:has(.js-navigation-rail.navigation-rail-expanded)_&]:right-auto
-					min-[2230px]:[body:has(.js-navigation-rail.navigation-rail-expanded)_&]:left-[min(calc(var(--simpledms-navigation-rail-width,80px)_+_1310px),calc(100vw_-_35rem))]
-					min-[2230px]:[body:has(.js-navigation-rail.navigation-rail-expanded)_&]:border-l-0
-					min-[2230px]:[body:has(.js-navigation-rail.navigation-rail-expanded)_&]:bg-surface
-					min-[2230px]:[body:has(.js-navigation-rail.navigation-rail-expanded)_&]:transition-none
-				{{/* 2xl:mt-1 is necessary for progress indicator to not be hidden behind */}}
-				2xl:mt-1
 			{{ end }}
 			 md:max-h-[calc(100dvh-3rem)] md:rounded-xl
 			 md:min-w-[17.5rem]
@@ -72,9 +63,9 @@
 			{{/* max-h-[inherit] is necessary for inner scrolling, for example in sign up form */}}
 			<div class="js-dialog-content w-full py-0 md:px-0
 					{{ if .IsDefaultLayout }}md:py-8{{ else }}md:py-4{{ end }}
-					{{ if .IsSideSheetLayout }}lg:py-3{{ end }}
+					{{ if .IsSideSheetLayout }}lg:pt-0 lg:pb-3{{ end }}
 					h-full flex flex-col max-h-[inherit]
-					2xl:-mt-1
+					{{ if not .IsSideSheetLayout }}2xl:-mt-1{{ end }}
 					"
 			>
 				<div class="flex items-center mb-4 md:h-fit gap-x-4 px-6 md:px-8 min-h-14 {{ if .IsDefaultLayout }}md:min-h-0{{ end }}">

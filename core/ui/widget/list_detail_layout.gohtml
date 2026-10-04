@@ -1,15 +1,16 @@
 {{/* gotype:github.com/simpledms/simpledms/core/ui/widget.ListDetailLayout */}}
 {{- define "ListDetailLayout" }}
 	<div id="{{ .GetID }}" class="group/list-detail flex flex-row h-full
-		md:mx-0 md:mb-2 md:mt-3
-		exp:gap-x-4 exp:h-[calc(100dvh-0.75rem)]"
+		md:mx-0 md:my-3 md:h-[calc(100%-1.5rem)]
+		exp:gap-x-4 exp:h-[calc(100dvh-1.5rem)]"
 	>
 		<div class="@container/list w-full
 			group-has-[.js-detail-content>div]/list-detail:hidden
 			group-has-[.js-detail-content>div]/list-detail:lg:block
-			max-w-screen-lg
+			group-has-[.js-detail-content>div]/list-detail:lg:border-r border-outline-variant
 			group-has-[.js-detail-content>div]/list-detail:lg:max-w-xs
 			group-has-[.js-detail-content>div]/list-detail:xl:max-w-md
+			shrink-0
 			flex flex-col
 			overflow-y-hidden"
 		>

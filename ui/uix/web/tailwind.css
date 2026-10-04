@@ -44,6 +44,16 @@
   display: block;
 }
 
+@utility js-main-content {
+  /* Side sheets are non-modal and fixed to the right edge from lg (1200px, see dialog.gohtml). */
+  @media (min-width: 1200px) {
+    body:has(dialog[open].js-side-sheet-dialog) & {
+      /* Reserve the side sheet's 35rem width plus a 1rem content gutter. */
+      padding-right: calc(35rem + 1rem);
+    }
+  }
+}
+
 @utility js-tooltip-popover {
   position: fixed;
   inset: auto;
