@@ -23,7 +23,10 @@
 		</div>
         {{ render .GetContext .GetDetail }}
 	</div>
-		<script defer>
+		{{/* The ID prevents morph from reusing another layout's script, for example when
+			navigating from Inbox to Files, because a morphed script is not executed again and the
+			new layout would have no detailsClosed listener. */}}
+		<script id="{{ .GetID }}-script" defer>
 			(function() {
 				// best place without using global event listener;
 				let listDetail = document.getElementById('{{ .GetID }}');
