@@ -142,12 +142,6 @@ func footerNavigationRailItems(
 	if !ctx.VisitorCtx().CommercialLicenseEnabled {
 		items = append(items, aboutNavigationRailItem(ctx))
 	}
-	if ctx.IsMainCtx() && len(items) > 0 {
-		items = append(
-			[]*widget.NavigationRailItem{navigationRailSubheader("misc", widget.T("Misc").String(ctx))},
-			items...,
-		)
-	}
 
 	return infra.PluginRegistry().ExtendNavigationRailFooterItems(
 		ctx,

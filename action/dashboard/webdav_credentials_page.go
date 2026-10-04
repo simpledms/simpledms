@@ -72,9 +72,16 @@ func (qq *WebDAVCredentialsPage) Widget(
 			"webdav-credentials",
 			fabs,
 		),
-		Content: &widget.ListDetailLayout{
-			AppBar: qq.appBar(data),
-			List:   overview,
+		Content: &widget.View{
+			Children: []widget.IWidget{
+				&widget.ListDetailLayout{
+					AppBar: qq.appBar(data),
+					List:   overview,
+				},
+				autil.DefaultSideSheetTrigger("webDAVCredentialsDefaultSideSheetTrigger", widget.HTMXAttrs{
+					HxPost: qq.actions.WebDAVCredentialFilterDialog.Endpoint(),
+				}),
+			},
 		},
 	}, nil
 }

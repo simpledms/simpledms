@@ -1,6 +1,7 @@
 package inbox
 
 import (
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
@@ -69,7 +70,14 @@ func (qq *InboxRootPage) render(
 	var viewx renderable.Renderable
 	viewx = &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
-		Content:    content,
+		Content: &widget.View{
+			Children: []widget.IWidget{
+				content,
+				autil.DefaultSideSheetTrigger("inboxDefaultSideSheetTrigger", widget.HTMXAttrs{
+					HxPost: qq.actions.SourceFilterDialog.Endpoint(),
+				}),
+			},
+		},
 	}
 
 	renderFullPage := req.Header.Get("HX-Request") == ""

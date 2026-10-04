@@ -138,11 +138,17 @@ func (qq *BrowsePage) widget(
 	}
 
 	var content widget.IWidget = listDetailLayout
+	// other active side sheets are restored by their filter chips
 	if state.ActiveSideSheet == "" {
 		content = &widget.View{
 			Children: []widget.IWidget{
 				listDetailLayout,
-				qq.defaultSideSheetTrigger(dir.PublicID.String()),
+				autil.DefaultSideSheetTrigger("browseDefaultSideSheetTrigger", widget.HTMXAttrs{
+					HxPost: qq.actions.DocumentTypeFilterDialogPartial.Endpoint(),
+					HxVals: util.JSON(
+						qq.actions.DocumentTypeFilterDialogPartial.Data(dir.PublicID.String()),
+					),
+				}),
 			},
 		}
 	}
@@ -152,22 +158,4 @@ func (qq *BrowsePage) widget(
 		Content:    content,
 	}
 	return mainLayout, nil
-}
-
-// defaultSideSheetTrigger opens the document type filter by default where side sheets fit
-// beside the content (lg, 1200px, see Dialog). It is rendered only by the page, not by
-// ListDirPartial, so list and chip refreshes don't reopen a sheet the user closed. The stable
-// ID lets morph retain it on folder navigation, so load doesn't fire again there either.
-func (qq *BrowsePage) defaultSideSheetTrigger(currentDirID string) *widget.Container {
-	return &widget.Container{
-		Widget: widget.Widget[widget.Container]{
-			ID: "browseDefaultSideSheetTrigger",
-		},
-		HTMXAttrs: widget.HTMXAttrs{
-			HxTrigger:     "load[window.matchMedia('(min-width: 1200px)').matches]",
-			HxPost:        qq.actions.DocumentTypeFilterDialogPartial.Endpoint(),
-			HxVals:        util.JSON(qq.actions.DocumentTypeFilterDialogPartial.Data(currentDirID)),
-			LoadInPopover: true,
-		},
-	}
 }

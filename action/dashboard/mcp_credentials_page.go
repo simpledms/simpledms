@@ -72,9 +72,16 @@ func (qq *MCPCredentialsPage) Widget(
 			"mcp-credentials",
 			fabs,
 		),
-		Content: &widget.ListDetailLayout{
-			AppBar: qq.appBar(data),
-			List:   overview,
+		Content: &widget.View{
+			Children: []widget.IWidget{
+				&widget.ListDetailLayout{
+					AppBar: qq.appBar(data),
+					List:   overview,
+				},
+				autil.DefaultSideSheetTrigger("mcpCredentialsDefaultSideSheetTrigger", widget.HTMXAttrs{
+					HxPost: qq.actions.MCPCredentialFilterDialog.Endpoint(),
+				}),
+			},
 		},
 	}, nil
 }

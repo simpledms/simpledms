@@ -54,6 +54,22 @@ func ResetStateHeader() template.JS {
 	})
 }
 
+// DefaultSideSheetTrigger loads a side sheet dialog by default where side sheets fit beside the
+// content (lg, 1200px, see widget.Dialog). dialogAttrs must load the dialog like the control that
+// normally opens it (HxPost and optional HxVals). Render the trigger only as part of a page, never
+// in a refreshed partial, so refreshes don't reopen a sheet the user closed. The stable ID lets
+// morph retain it on navigation within the same screen, so load fires only when entering it.
+func DefaultSideSheetTrigger(id string, dialogAttrs widget.HTMXAttrs) *widget.Container {
+	dialogAttrs.HxTrigger = "load[window.matchMedia('(min-width: 1200px)').matches]"
+	dialogAttrs.LoadInPopover = true
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
+			ID: id,
+		},
+		HTMXAttrs: dialogAttrs,
+	}
+}
+
 // can be used to preserve state and GET requests, for example when
 // switching between list items
 func PreserveStateHeader() template.JS {

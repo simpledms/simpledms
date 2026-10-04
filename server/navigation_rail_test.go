@@ -36,7 +36,7 @@ func TestNavigationRailShowsMainDestinations(t *testing.T) {
 		t.Fatal("expected dashboard space selector")
 	}
 	assertNavigationRailLabelsExclude(t, userRail.GetItems(), "System", "Users")
-	assertNavigationRailLabelsContain(t, userRail.FooterItems, "Misc", "Sign out", "About SimpleDMS")
+	assertNavigationRailLabelsContain(t, userRail.FooterItems, "Sign out", "About SimpleDMS")
 
 	createAccountWithRole(t, harness.mainDB, "rail-admin@example.com", "supersecret", mainrole.Admin)
 	_, adminCtx, adminRollback := newNavigationRailMainContext(t, harness, "rail-admin@example.com")
@@ -70,7 +70,7 @@ func TestNavigationRailShowsTenantUserDestinationAndSections(t *testing.T) {
 	assertNavigationRailLabelsContainRecursive(t, ownerRail.TopItems, "Spaces", "Users", "Settings")
 	assertNavigationRailLabelsExclude(t, ownerRail.TopItems, "Spaces")
 
-	wantFooter := []string{"Misc", "Sign out", "About SimpleDMS"}
+	wantFooter := []string{"Sign out", "About SimpleDMS"}
 	if got := navigationRailLabels(ownerRail.FooterItems); !reflect.DeepEqual(got, wantFooter) {
 		t.Fatalf("expected footer labels %v, got %v", wantFooter, got)
 	}

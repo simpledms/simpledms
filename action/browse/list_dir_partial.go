@@ -322,10 +322,6 @@ func (qq *ListDirPartial) Widget(
 	var children []widget.IWidget
 
 	children = append(children,
-		qq.sortUpdateTrigger(dirWithParent.Data.PublicID.String(), selectedFileID),
-	)
-
-	children = append(children,
 		qq.tagsAndOptions(ctx, state, dirWithParent),
 	)
 
@@ -383,7 +379,12 @@ func (qq *ListDirPartial) Widget(
 			ID: qq.WrapperID(),
 		},
 		AppBar: qq.appBar(ctx, state, dirWithParent, selectedFileID),
-		List:   list,
+		// the empty refresh trigger is kept outside of the gapped column; otherwise it takes a
+		// gap slot and shifts the filter chips down
+		List: []widget.IWidget{
+			qq.sortUpdateTrigger(dirWithParent.Data.PublicID.String(), selectedFileID),
+			list,
+		},
 	}
 }
 
