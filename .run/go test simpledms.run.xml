@@ -2,7 +2,7 @@
   <configuration default="false" name="go test simpledms" type="GoTestRunConfiguration" factoryName="Go Test" nameIsGenerated="true">
     <module name="simpledms" />
     <working_directory value="$PROJECT_DIR$" />
-    <go_parameters value="-tags &quot;sqlite_fts5 sqlite_json sqlite_foreign_keys sqlite_ico&quot;" />
+    <go_parameters value="-tags &quot;sqlite_fts5 sqlite_json sqlite_foreign_keys sqlite_icu&quot;" />
     <envs>
       <env name="CGO_ENABLED" value="1" />
     </envs>

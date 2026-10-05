@@ -2,7 +2,7 @@
   <configuration default="false" name="simpledms" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="simpledms" />
     <working_directory value="$PROJECT_DIR$" />
-    <go_parameters value="-tags &quot;sqlite_fts5 sqlite_json sqlite_foreign_keys sqlite_ico&quot;" />
+    <go_parameters value="-tags &quot;sqlite_fts5 sqlite_json sqlite_foreign_keys sqlite_icu&quot;" />
     <parameters value="-dev -port 8888 -meta=.testdata/simpledms" />
     <envs>
       <env name="CGO_ENABLED" value="1" />
