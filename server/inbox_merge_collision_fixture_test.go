@@ -113,7 +113,7 @@ func (fixture *inboxMergeCollisionFixture) assertTargetRetained(
 	sc *ctxx.SpaceContext,
 ) {
 	t.Helper()
-	target := sc.TenantContext.TTx.File.GetX(sc, fixture.targetID)
+	target := sc.TTx.File.GetX(sc, fixture.targetID)
 	if target.Name != "target.txt" || target.ParentID != sc.SpaceRootDir().ID ||
 		target.DocumentTypeID != fixture.documentTypeID {
 		t.Fatalf("target identity/location changed: name=%q parent=%d", target.Name, target.ParentID)
@@ -122,19 +122,19 @@ func (fixture *inboxMergeCollisionFixture) assertTargetRetained(
 	if latest.StoredFileID != fixture.sourceStoredFileID {
 		t.Fatalf("expected source stored file %d, got %d", fixture.sourceStoredFileID, latest.StoredFileID)
 	}
-	if sc.TenantContext.TTx.TagAssignment.Query().Where(
+	if sc.TTx.TagAssignment.Query().Where(
 		tagassignment.FileID(fixture.targetID), tagassignment.TagID(fixture.tagID),
 	).CountX(sc) != 1 {
 		t.Fatal("target tag assignment was removed")
 	}
-	targetProperty := sc.TenantContext.TTx.FilePropertyAssignment.Query().Where(
+	targetProperty := sc.TTx.FilePropertyAssignment.Query().Where(
 		filepropertyassignment.FileID(fixture.targetID),
 		filepropertyassignment.PropertyID(fixture.propertyID),
 	).OnlyX(sc)
 	if targetProperty.TextValue != "target value" {
 		t.Fatalf("target field value changed to %q", targetProperty.TextValue)
 	}
-	if !sc.TenantContext.TTx.DocumentNote.Query().Where(
+	if !sc.TTx.DocumentNote.Query().Where(
 		documentnote.FileID(fixture.targetID), documentnote.Title(inboxMergeSourceNoteTitle),
 	).ExistX(sc) {
 		t.Fatal("source note history was not transferred")
@@ -149,20 +149,20 @@ func (fixture *inboxMergeCollisionFixture) assertSourceCleanedUp(
 	if sc.TTx.File.Query().Where(file.ID(fixture.sourceID)).ExistX(schema.SkipSoftDelete(sc)) {
 		t.Fatal("merged inbox source still exists")
 	}
-	if sc.TenantContext.TTx.File.Query().Where(file.ID(fixture.thirdID)).OnlyX(sc).Name != "incoming.txt" {
+	if sc.TTx.File.Query().Where(file.ID(fixture.thirdID)).OnlyX(sc).Name != "incoming.txt" {
 		t.Fatal("third filed document was changed")
 	}
-	if sc.TenantContext.TTx.FileVersion.Query().Where(
+	if sc.TTx.FileVersion.Query().Where(
 		fileversion.FileID(fixture.sourceID),
 	).CountX(sc) != 0 {
 		t.Fatal("source versions were not removed")
 	}
-	if sc.TenantContext.TTx.TagAssignment.Query().Where(
+	if sc.TTx.TagAssignment.Query().Where(
 		tagassignment.FileID(fixture.sourceID), tagassignment.TagID(fixture.tagID),
 	).CountX(sc) != 0 {
 		t.Fatal("source tag assignment was not removed")
 	}
-	if sc.TenantContext.TTx.FilePropertyAssignment.Query().Where(
+	if sc.TTx.FilePropertyAssignment.Query().Where(
 		filepropertyassignment.FileID(fixture.sourceID),
 		filepropertyassignment.PropertyID(fixture.propertyID),
 	).CountX(sc) != 0 {
