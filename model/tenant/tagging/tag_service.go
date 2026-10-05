@@ -1,6 +1,7 @@
 package tagging
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/simpledms/simpledms/ctxx"
@@ -84,6 +85,20 @@ func (qq *TagService) Delete(ctx ctxx.Context, tagID int64) (string, error) {
 	}
 
 	return tagx.Name, nil
+}
+
+// DeleteUnused deletes a Tag only if no file has it assigned. Unlike Delete, it never removes
+// assignments to force the deletion.
+func (qq *TagService) DeleteUnused(ctx ctxx.Context, tagID int64) (string, error) {
+	isAssigned, err := qq.repository.TagHasAssignments(ctx, tagID)
+	if err != nil {
+		log.Println(err)
+		return "", err
+	}
+	if isAssigned {
+		return "", e.NewHTTPErrorf(http.StatusBadRequest, "Tag is still assigned to files.")
+	}
+	return qq.Delete(ctx, tagID)
 }
 
 func (qq *TagService) AssignToFile(

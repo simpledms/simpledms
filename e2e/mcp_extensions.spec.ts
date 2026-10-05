@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
-import { uniqueSuffix } from "./helpers";
+import { openFileDetails, openFiltersTab, uniqueSuffix } from "./helpers";
 import {
 	openMCPCredentials, openCreateMCPCredential, prepareInbox, rpc, selectSpace,
 } from "./mcp_helpers";
@@ -138,9 +138,7 @@ for (const device of devices) {
 
 			const rootURL = inboxURL.replace(/inbox\/$/, "browse/");
 			await page.goto(rootURL);
-			await page.getByRole("link", { name: /tune Fields/ }).click();
-			const filteredDialog = page.locator("#filterPropertiesDialog");
-			await expect(filteredDialog).toBeVisible();
+			const filteredDialog = await openFiltersTab(page, "Fields");
 			await filteredDialog.getByText(renamed, { exact: true }).click();
 			const moneyInput = filteredDialog.getByRole("spinbutton", { name: renamed, exact: true });
 			await expect(moneyInput).toBeVisible();
@@ -158,8 +156,7 @@ for (const device of devices) {
 			// Start the Checkbox comparison from clean URL state. Numeric fields can emit a
 			// second change request on blur after their debounced input save.
 			await page.goto(rootURL);
-			await page.getByRole("link", { name: /tune Fields/ }).click();
-			await expect(filteredDialog).toBeVisible();
+			await openFiltersTab(page, "Fields");
 			await filteredDialog.getByText(checkbox.name, { exact: true }).click();
 			const uncheckedResponses = Promise.all([
 				page.waitForResponse(response => response.url().includes("update-property-filter") &&
@@ -240,10 +237,7 @@ for (const device of devices) {
 			expect(filed).toBeTruthy();
 			await page.goto(filed.url);
 			await expect(page.getByRole("heading", { name: "renamed-by-mcp.bin", exact: true }).first()).toBeVisible();
-			await page.getByRole("button", { name: "description", exact: true }).click();
-			const details = page.getByRole("dialog").filter({
-				has: page.getByRole("heading", { name: "Details", exact: true }),
-			});
+			const details = await openFileDetails(page);
 			await details.getByRole("tab", { name: "Notes", exact: true }).click();
 			await expect(details.getByRole("button", { name: "Show deleted and replaced notes", exact: true }))
 				.toBeVisible();
@@ -271,7 +265,10 @@ for (const device of devices) {
 			await expect(page.getByRole("heading", { name: "renamed-by-mcp.bin", exact: true })).toHaveCount(0);
 			await page.goto(filed.url);
 			await expect(page.getByRole("heading", { name: "renamed-by-mcp.bin", exact: true }).first()).toBeVisible();
-			await expect(page).toHaveURL(new RegExp(`/browse/${directory.directory_id}/file/${uploaded.file_id}$`));
+			// large screens open the details side sheet by default, which adds side_sheet to the query
+			await expect(page).toHaveURL(
+				new RegExp(`/browse/${directory.directory_id}/file/${uploaded.file_id}(\\?.*)?$`),
+			);
 			if (!device.isMobile) {
 				await expect(page.getByText(directoryName, { exact: true }).last()).toBeVisible();
 			}

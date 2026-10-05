@@ -69,7 +69,7 @@ const temporaryAccountFileExpiry = 15 * time.Minute
 const (
 	emptyUploadMessage            = "Upload is empty."
 	couldNotSaveFileMessage       = "Could not save file."
-	tenantDatabaseNotFoundMessage = "Tenant database not found."
+	tenantDatabaseNotFoundMessage = "Organization database not found."
 )
 
 var errUploadTooLarge = errors.New("upload is too large")
@@ -329,7 +329,7 @@ func (qq *S3FileSystem) PrepareFileVersionUpload(
 		return nil, err
 	}
 	if filex.IsDirectory {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for folders.")
 	}
 	if err := qq.ensureFileDoesNotExistInFolderMode(ctx, meta.originalFilename, filex.ParentID, filex.IsInInbox); err != nil {
 		return nil, err
@@ -666,7 +666,7 @@ func (qq *S3FileSystem) finalizePreparedUploadAs(
 			return err
 		}
 		if filex.IsDirectory {
-			return e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for directories.")
+			return e.NewHTTPErrorf(http.StatusBadRequest, "Cannot upload versions for folders.")
 		}
 		if filex.Name != filename {
 			filex, err = filex.Update().SetName(filename).Save(ctx)
@@ -1852,7 +1852,7 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversion(
 		return nil, err
 	}
 	if !hasAccess {
-		return nil, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
+		return nil, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this organization.")
 	}
 
 	claimedTmpFile, err := mainTx.TemporaryFile.Query().
@@ -1932,28 +1932,10 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
 		}
 	}()
 
-	userx, err := tenantTx.User.Query().Where(
-		user.AccountID(ctx.MainCtx().Account.ID),
-		user.DeletedAtIsNil(),
-	).Only(ctx)
-	if err != nil {
-		if enttenant.IsNotFound(err) {
-			return nil, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this tenant.")
-		}
-		return nil, err
-	}
-	writeTenantCtx := ctxx.NewTenantContextWithUser(
-		ctx.MainCtx(),
-		tenantTx,
-		ctx.TenantCtx().Tenant,
-		userx,
-		false,
-	)
-	writeSpace, err := tenantTx.Space.Get(writeTenantCtx, ctx.SpaceCtx().Space.ID)
+	writeSpaceCtx, err := qq.accountConversionSpaceContext(ctx, tenantTx)
 	if err != nil {
 		return nil, err
 	}
-	writeSpaceCtx := ctxx.NewSpaceContext(writeTenantCtx, writeSpace)
 	ctxWithIncomplete := tenantprivacy.DecisionContext(
 		enttenantschema.WithUnfinishedUploads(writeSpaceCtx),
 		tenantprivacy.Allow,
@@ -1999,7 +1981,7 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
 		SetIsDirectory(false).
 		SetIndexedAt(time.Now()).
 		SetParentID(parentDirFileID).
-		SetSpaceID(writeSpace.ID).
+		SetSpaceID(writeSpaceCtx.Space.ID).
 		SetIsInInbox(isInInbox).
 		Save(writeSpaceCtx)
 	if err != nil {
@@ -2018,6 +2000,35 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
 	committed = true
 
 	return filex, nil
+}
+
+func (qq *S3FileSystem) accountConversionSpaceContext(
+	ctx ctxx.Context, tenantTx *enttenant.Tx,
+) (*ctxx.SpaceContext, error) {
+	userx, err := tenantTx.User.Query().Where(
+		user.AccountID(ctx.MainCtx().Account.ID),
+		user.DeletedAtIsNil(),
+	).Only(ctx)
+	if err != nil {
+		if enttenant.IsNotFound(err) {
+			return nil, e.NewHTTPErrorf(
+				http.StatusForbidden, "You are not allowed to access this organization.",
+			)
+		}
+		return nil, err
+	}
+	writeTenantCtx := ctxx.NewTenantContextWithUser(
+		ctx.MainCtx(),
+		tenantTx,
+		ctx.TenantCtx().Tenant,
+		userx,
+		false,
+	)
+	writeSpace, err := tenantTx.Space.Get(writeTenantCtx, ctx.SpaceCtx().Space.ID)
+	if err != nil {
+		return nil, err
+	}
+	return ctxx.NewSpaceContext(writeTenantCtx, writeSpace), nil
 }
 
 func (qq *S3FileSystem) markTemporaryAccountConversionDone(ctx ctxx.Context, temporaryFileID int64) error {

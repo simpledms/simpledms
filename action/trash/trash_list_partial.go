@@ -1,6 +1,9 @@
 package trash
 
 import (
+	"net/url"
+	"strings"
+
 	"entgo.io/ent/dialect/sql"
 
 	autil "github.com/simpledms/simpledms/action/util"
@@ -10,12 +13,14 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
+	"github.com/simpledms/simpledms/db/entx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
+	"github.com/simpledms/simpledms/util/timex"
 )
 
 type TrashListPartialData struct {
@@ -53,11 +58,38 @@ func (qq *TrashListPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 		return err
 	}
 
-	return qq.infra.Renderer().Render(
-		rw,
-		ctx,
-		qq.Widget(ctx, data),
-	)
+	if current, err := url.Parse(req.Header.Get("HX-Current-URL")); err == nil {
+		prefix := route.TrashRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID)
+		if strings.HasPrefix(current.Path, prefix) {
+			data.SelectedFileID = strings.TrimPrefix(current.Path, prefix)
+		}
+	}
+	var detail *widget.DetailsWithSheet
+	if data.SelectedFileID != "" {
+		filex, err := ctx.SpaceCtx().Space.QueryFiles().Where(
+			file.PublicID(entx.NewCIText(data.SelectedFileID)), file.DeletedAtNotNil(),
+		).Only(schema.SkipSoftDelete(ctx))
+		if enttenant.IsNotFound(err) {
+			data.SelectedFileID = ""
+			rw.Header().Set("HX-Replace-Url", route.TrashRoot(
+				ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID,
+			))
+		} else if err != nil {
+			return err
+		} else {
+			detail, err = qq.actions.TrashWithSelectionPage.filePreview(ctx,
+				autil.StateX[FileTabsPartialState](rw, req), filemodel.NewFile(filex))
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return qq.infra.Renderer().Render(rw, ctx, &widget.ListDetailLayout{
+		Widget: widget.Widget[widget.ListDetailLayout]{ID: "trashLayout"},
+		AppBar: qq.actions.TrashRootPage.appBar(ctx),
+		List:   qq.Widget(ctx, data),
+		Detail: detail,
+	})
 }
 
 func (qq *TrashListPartial) Widget(ctx ctxx.Context, data *TrashListPartialData) renderable.Renderable {
@@ -100,8 +132,8 @@ func (qq *TrashListPartial) Widget(ctx ctxx.Context, data *TrashListPartialData)
 			HxTrigger: event.HxTrigger(
 				event.FileRestored,
 			),
-			HxTarget: "#" + qq.ListID(),
-			HxSwap:   "outerHTML",
+			HxTarget: "#innerContent",
+			HxSwap:   "innerHTML",
 		},
 	}
 }
@@ -125,10 +157,13 @@ func (qq *TrashListPartial) listItem(ctx ctxx.Context, filex *enttenant.File, is
 			deletedAt = widget.T("Deleted")
 		}
 	} else {
+		deletedAtDate := timex.NewDate(filex.DeletedAt)
 		if filex.IsDirectory {
-			deletedAt = widget.Tf("Folder deleted on %s", filex.DeletedAt.Format("02 Jan 2006"))
+			deletedAt = widget.Tf("Folder deleted: %s",
+				deletedAtDate.String(ctx.MainCtx().LanguageBCP47))
 		} else {
-			deletedAt = widget.Tf("Deleted on %s", filex.DeletedAt.Format("02 Jan 2006"))
+			deletedAt = widget.Tf("Deleted: %s",
+				deletedAtDate.String(ctx.MainCtx().LanguageBCP47))
 		}
 	}
 

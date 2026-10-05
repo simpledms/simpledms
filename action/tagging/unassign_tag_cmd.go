@@ -1,9 +1,6 @@
 package tagging
 
 import (
-	"log"
-	"strings"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	wx "github.com/simpledms/simpledms/core/ui/widget"
@@ -50,8 +47,6 @@ func (qq *UnassignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		return err
 	}
 
-	hxTarget := req.Header.Get("HX-Target") // id without leading #
-
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 
 	tag, err := taggingmodel.NewTagService().UnassignFromFile(ctx, filex.Data.ID, data.TagID)
@@ -59,22 +54,7 @@ func (qq *UnassignTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		return err
 	}
 
-	if hxTarget == qq.actions.AssignedTags.EditListItem.listItemID(data.FileID, data.TagID) {
-		// must be set before writing to rw
-		rw.Header().Set("HX-Trigger", event.TagUpdated.String())
-
-		qq.infra.Renderer().RenderX(
-			rw,
-			ctx,
-			qq.actions.AssignedTags.EditListItem.ListItem(ctx, data.FileID, tag),
-		)
-	} else if strings.HasPrefix(hxTarget, "assignedTagsList-") {
-		// rw.WriteHeader(http.StatusOK)
-	} else {
-		log.Println("target not found, was", hxTarget)
-		// rw.WriteHeader(http.StatusNoContent)
-	}
-
-	qq.infra.Renderer().RenderX(rw, ctx, wx.NewSnackbarf("«%s» unassigned.", tag.Name))
+	rw.Header().Set("HX-Trigger", event.TagUpdated.String())
+	rw.AddRenderables(wx.NewSnackbarf("«%s» unassigned.", tag.Name))
 	return nil
 }

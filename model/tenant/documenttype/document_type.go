@@ -85,7 +85,7 @@ func (qq *DocumentType) Delete(ctx ctxx.Context) error {
 func ImportFromLibrary(ctx ctxx.Context, templateKeys []string) error {
 	service := library.NewService()
 	if service.SpaceHasMetadata(ctx) {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "Import is only available for empty spaces.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Import is only available for empty Spaces.")
 	}
 
 	if len(templateKeys) == 0 {

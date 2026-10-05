@@ -73,7 +73,7 @@ func (qq *FilePropertiesPartial) Widget(ctx ctxx.Context, data *FilePropertiesPa
 	addFieldButton := &widget.Button{
 		Label:     widget.T("Add field"),
 		Icon:      widget.NewIcon("add"),
-		StyleType: widget.ButtonStyleTypeElevated,
+		StyleType: widget.ButtonStyleTypeOutlined,
 		HTMXAttrs: qq.actions.AddFilePropertyCmd.ModalLinkAttrs(
 			qq.actions.AddFilePropertyCmd.Data(filex.Data.PublicID.String()),
 			"",
@@ -138,6 +138,7 @@ func (qq *FilePropertiesPartial) propertyAssignmentBlock(
 		return widget.HTMXAttrs{
 			HxTrigger: hxTrigger,
 			HxPost:    qq.actions.SetFilePropertyCmd.Endpoint(),
+			HxSwap:    "none",
 			HxVals:    util.JSON(qq.actions.SetFilePropertyCmd.Data(filex.Data.PublicID.String(), propertyx.ID)),
 			HxInclude: "this",
 		}

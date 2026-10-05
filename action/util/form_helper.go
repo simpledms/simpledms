@@ -93,8 +93,7 @@ func (qq *FormHelper[T]) ModalLink(data *T, child widget.IWidget, hxTargetForm s
 	}
 }
 
-// hxTargetForm is deprecated and X-Query should be used instead to load a response/view to render
-// TODO not sure about comment above, X-Query target must be set and it maybe via hxTargetForm?
+// The target parameter is retained for form-link compatibility; commands notify islands.
 func (qq *FormHelper[T]) ModalLinkAttrs(data *T, hxTargetForm string) widget.HTMXAttrs {
 	return widget.HTMXAttrs{
 		HxPost: qq.FormEndpointWithParams(actionx.ResponseWrapperDialog, hxTargetForm),
@@ -112,11 +111,6 @@ func (qq *FormHelper[T]) Form(
 	submitButtonLabel *widget.Text,
 	hxTarget string,
 ) renderable.Renderable {
-	hxSwap := "outerHTML"
-	if hxTarget == "" {
-		hxSwap = "none"
-	}
-
 	var formSubmitBtn *widget.Text
 	if wrapper == actionx.ResponseWrapperNone {
 		formSubmitBtn = submitButtonLabel
@@ -124,9 +118,8 @@ func (qq *FormHelper[T]) Form(
 
 	form := &widget.Form{
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.Endpoint(),
-			HxTarget: hxTarget,
-			HxSwap:   hxSwap,
+			HxPost: qq.Endpoint(),
+			HxSwap: "none",
 		},
 		SubmitLabel:         formSubmitBtn,
 		IsMultipartFormData: qq.isMultipartFormData,

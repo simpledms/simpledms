@@ -36,10 +36,15 @@ type InitAppCmd struct {
 func NewInitAppCmd(infra *common.Infra, actions *Actions) *InitAppCmd {
 	config := actionx.NewConfig(actions.Route("init-app-cmd"), false)
 	return &InitAppCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[InitAppCmdData](infra, config, widget.T("Init app")),
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+		FormHelper: autil.NewFormHelperX[InitAppCmdData](
+			infra,
+			config,
+			widget.T("Initialize app"),
+			widget.T("Initialize"),
+		),
 	}
 }
 

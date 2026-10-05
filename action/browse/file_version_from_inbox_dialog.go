@@ -75,7 +75,7 @@ func (qq *FileVersionFromInboxDialog) Widget(
 	formChildren = append(formChildren,
 		&widget.Checkbox{
 			Name: "ConfirmWarning",
-			Label: widget.T("I understand that the inbox file's metadata (document type, tags, fields) " +
+			Label: widget.T("I understand that the Inbox file's metadata (document type, tags, fields) " +
 				"will be lost when merged. Notes and their history will be preserved."),
 			IsRequired: true,
 		},
@@ -100,7 +100,7 @@ func (qq *FileVersionFromInboxDialog) Widget(
 			},
 			Name:           "SearchQuery",
 			Value:          data.SearchQuery,
-			SupportingText: widget.T("Search inbox files"),
+			SupportingText: widget.T("Search Inbox files"),
 			Autofocus:      true,
 		},
 		qq.actions.FileVersionFromInboxListPartial.listWrapper(ctx, data, files),
@@ -121,7 +121,7 @@ func (qq *FileVersionFromInboxDialog) Widget(
 	}
 
 	return autil.WrapWidgetWithID(
-		widget.T("Add new version from inbox"),
+		widget.T("Add new version from Inbox"),
 		widget.T("Add"),
 		content,
 		actionx.ResponseWrapperDialog,

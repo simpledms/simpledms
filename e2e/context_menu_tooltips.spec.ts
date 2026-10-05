@@ -12,11 +12,11 @@ async function createSpace(page: Page) {
 	await expandNavigation(page);
 	await page.getByRole("button", { name: /^business / }).click();
 	await page.getByRole("link", { name: "Spaces", exact: true }).click();
-	await page.getByRole("link", { name: /Create space|^add$/ }).first().click();
+	await page.getByRole("link", { name: /Create Space/ }).first().click();
 	const name = `E2E Overflow ${uniqueSuffix()}`;
 	await page.getByRole("textbox", { name: "Name", exact: true }).fill(name);
 	await page.getByRole("checkbox", { name: "Add me as space owner" }).check();
-	await page.getByRole("button", { name: "Save", exact: true }).click();
+	await page.getByRole("button", { name: "Create", exact: true }).click();
 	await expect(page.getByRole("dialog")).toHaveCount(0);
 	const heading = page.getByRole("heading", { name, exact: true });
 	return page.locator("[hx-get]").filter({ has: heading }).last();
@@ -69,20 +69,20 @@ for (const touch of [false, true]) {
 			await card.getByRole("button", { name: "Actions", exact: true }).click();
 			await card.getByRole("link", { name: "label Tags", exact: true }).click();
 
-			await page.getByRole("heading", { name: "Create new tag or group", exact: true }).click();
+			await page.getByRole("link", { name: /Create tag or group/ }).first().click();
 			await page.getByRole("textbox", { name: "Name", exact: true }).fill("Parent group");
 			await page.getByRole("combobox", { name: "Type", exact: true }).selectOption({ label: "Group" });
-			await page.getByRole("button", { name: "Save", exact: true }).click();
+			await page.getByRole("button", { name: "Create", exact: true }).click();
 			const group = page.getByRole("listitem").filter({
 				has: page.getByRole("heading", { name: "Parent group", exact: true }),
 			});
 			await checkMenu(page, group, touch);
 			await expect(group.locator("details")).not.toHaveAttribute("open");
 			await group.getByRole("heading", { name: "Parent group", exact: true }).click();
-			await group.getByRole("heading", { name: "Create new tag", exact: true }).click();
+			await group.getByRole("heading", { name: "Create tag", exact: true }).click();
 			await page.getByRole("textbox", { name: "Name", exact: true }).fill("Child tag");
 			await page.getByRole("combobox", { name: "Type", exact: true }).selectOption({ label: "Simple" });
-			await page.getByRole("button", { name: "Save", exact: true }).click();
+			await page.getByRole("button", { name: "Create", exact: true }).click();
 			const child = group.getByRole("listitem").filter({
 				has: page.getByRole("heading", { name: "Child tag", exact: true }),
 			});

@@ -54,14 +54,14 @@ func (qq *RetryPDFPreviewCmd) Handler(
 		return err
 	}
 	if !gotenberg.IsValidGotenbergURL(qq.infra.SystemConfig().GotenbergURL()) {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "PDF preview conversion is not configured")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "PDF preview conversion is not configured.")
 	}
 
 	filex := qq.infra.FileRepo.GetX(ctx, data.FileID)
 	source, err := qq.actions.FilePreviewPartial.versionSource(ctx, filex, data.VersionNumber)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
-			return e.NewHTTPErrorf(http.StatusNotFound, "version not found")
+			return e.NewHTTPErrorf(http.StatusNotFound, "Version not found.")
 		}
 		return err
 	}
@@ -70,12 +70,12 @@ func (qq *RetryPDFPreviewCmd) Handler(
 		Only(ctx)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
-			return e.NewHTTPErrorf(http.StatusNotFound, "PDF preview is not available")
+			return e.NewHTTPErrorf(http.StatusNotFound, "PDF preview is not available.")
 		}
 		return err
 	}
 	if conversion.Status != previewmodel.Failed {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "PDF preview is not ready to retry")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "PDF preview is not ready to retry.")
 	}
 
 	err = ctx.TenantCtx().TTx.PreviewConversion.UpdateOneID(conversion.ID).

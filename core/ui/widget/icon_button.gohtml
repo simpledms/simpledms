@@ -2,7 +2,8 @@
 {{- define "IconButton" }}
 	{{/* wrapper is necessary to make script execution relyable on morph, without
 	 the script isn't executed on some morphed IconButton (no clear pattern on first loop) */}}
-	<div id="{{ .GetID }}" class="-m-3">
+	{{/* stopping clicks is necessary for stacked links, like in search or on list items */}}
+	<div id="{{ .GetID }}" class="-m-3" hx-on:click="event.stopPropagation()">
 		{{ if .HTMXAttrs.IsPageLink }}<a{{ else }}<button{{ end }}
 				class="flex center-aligned size-12 rounded-full cursor-pointer"
 				data-tooltip="{{ render .GetContext .Tooltip }}"
@@ -21,6 +22,7 @@
 					style="anchor-name: --{{ .GetPopoverTarget }}"
 					popovertarget="{{ .GetPopoverTarget }}"
 					aria-details="{{ .GetPopoverTarget }}" {{/* accessibility for anchor popover relationship */}}
+					{{ if .HasPopupMenu }}aria-haspopup="menu" aria-expanded="false"{{ end }}
 				{{ end }}
 				{{ if ne .PopoverTargetAction "" }}popovertargetaction="{{ .PopoverTargetAction }}"{{ end }}
 		>
@@ -31,13 +33,11 @@
 
 			{{ render .GetContext .Children }}
 		{{ if .HTMXAttrs.IsPageLink }}</a>{{ else }}</button>{{ end }}
+		{{/* only emitted when needed: one script per list row is costly to send and execute */}}
+		{{ if or (ne .ReplaceURL "") .HasMenu }}
 		<script defer>
 			(function () {
 				let elem = document.getElementById('{{ .GetID }}')
-				elem.addEventListener('click', function(e) {
-					{{/* necessary for stacked links, like in search or on list items */}}
-					e.stopPropagation();
-				})
 				{{ if ne .ReplaceURL "" }}
 					history.replaceState({}, '', '{{ .ReplaceURL }}');
 				{{ end }}
@@ -67,5 +67,6 @@
 				{{ end }}
 			})()
 		</script>
+		{{ end }}
 	</div>
 {{ end }}

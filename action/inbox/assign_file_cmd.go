@@ -34,7 +34,12 @@ func NewAssignFileCmd(infra *common.Infra, actions *Actions) *AssignFileCmd {
 		actions.Route("assign-file-cmd"),
 		false,
 	).EnableCommittedResponse()
-	formHelper := autil.NewFormHelper[AssignFileCmdData](infra, config, widget.T("Assign file"))
+	formHelper := autil.NewFormHelperX[AssignFileCmdData](
+		infra,
+		config,
+		widget.T("Assign file"),
+		widget.T("Assign"),
+	)
 	return &AssignFileCmd{
 		infra:      infra,
 		actions:    actions,
@@ -58,7 +63,6 @@ func (qq *AssignFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request
 	}
 
 	wrapper := req.URL.Query().Get("wrapper")
-	hxTarget := req.URL.Query().Get("hx-target")
 
 	formID := "assignFileForm"
 	container := &widget.Container{
@@ -75,9 +79,8 @@ func (qq *AssignFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request
 					ID: formID,
 				},
 				HTMXAttrs: widget.HTMXAttrs{
-					HxPost:   qq.Endpoint(),
-					HxTarget: hxTarget,
-					HxSwap:   "outerHTML",
+					HxPost: qq.Endpoint(),
+					HxSwap: "none",
 				},
 				Children: []widget.IWidget{
 					widget.NewFormFields(ctx, data),
@@ -89,7 +92,7 @@ func (qq *AssignFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request
 	qq.infra.Renderer().RenderX(rw, ctx,
 		autil.WrapWidgetWithID(
 			widget.T("Assign file"),
-			widget.T("Save"),
+			widget.T("Assign"),
 			container,
 			actionx.ResponseWrapper(wrapper),
 			widget.DialogLayoutDefault,
@@ -135,7 +138,6 @@ func (qq *AssignFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	rw.Header().Set("HX-Trigger", event.FileMoved.String())
 	// TODO not nice because logic to reload list and close details is implemented by handling FileMoved event
 	// TODO select next file to process instead
-	rw.Header().Set("HX-Replace-Url", route.InboxRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID))
 
 	return nil
 }

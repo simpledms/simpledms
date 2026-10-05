@@ -93,7 +93,7 @@ func (qq *TransferFileDialog) Handler(
 				IsRequired: true,
 			},
 			widget.NewBody(widget.BodyTypeSm,
-				widget.T("You can choose other Spaces in this tenant where you have write access, "+
+				widget.T("You can choose other Spaces in this organization where you have write access, "+
 					"or whose Inboxes accept transfers.")),
 			&widget.TextArea{
 				Widget: widget.Widget[widget.TextArea]{

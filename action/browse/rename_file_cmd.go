@@ -32,10 +32,15 @@ func NewRenameFileCmd(infra *common.Infra, actions *Actions) *RenameFileCmd {
 		false,
 	)
 	return &RenameFileCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[RenameFileCmdData](infra, config, widget.T("Rename file")),
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+		FormHelper: autil.NewFormHelperX[RenameFileCmdData](
+			infra,
+			config,
+			widget.T("Rename file"),
+			widget.T("Rename"),
+		),
 	}
 }
 
@@ -53,13 +58,11 @@ func (qq *RenameFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request
 	}
 
 	wrapper := req.URL.Query().Get("wrapper")
-	hxTarget := req.URL.Query().Get("hx-target")
 
 	form := &widget.Form{
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.Endpoint(),
-			HxTarget: hxTarget,
-			HxSwap:   "outerHTML",
+			HxPost: qq.Endpoint(),
+			HxSwap: "none",
 		},
 		Children: []widget.IWidget{
 			widget.NewFormFields(ctx, data),
@@ -81,7 +84,7 @@ func (qq *RenameFileCmd) FormHandler(rw httpx.ResponseWriter, req *httpx.Request
 	qq.infra.Renderer().RenderX(rw, ctx,
 		autil.WrapWidgetWithID(
 			widget.T("Rename file"),
-			widget.T("Save"),
+			widget.T("Rename"),
 			container,
 			actionx.ResponseWrapper(wrapper),
 			widget.DialogLayoutDefault,
@@ -105,27 +108,8 @@ func (qq *RenameFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 		return err
 	}
 
-	rw.AddRenderables(widget.NewSnackbarf("Renamed to «%s»", filex.Data.Name))
+	rw.AddRenderables(widget.NewSnackbarf("Renamed to «%s».", filex.Data.Name))
 	rw.Header().Add("HX-Trigger", event.FileUpdated.String())
 
 	return nil
 }
-
-/*
-func (qq *RenameFileCmd) Widget(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context, filex *filemodel.File) *wx.ListDetailLayout {
-	parent, err := filex.Parent(ctx)
-	if err != nil {
-		log.Println(err)
-		panic(err)
-	}
-	// complete list because order can change
-	// TODO selected file?
-	return qq.actions.ListDirPartial.WidgetHandler(
-		rw,
-		req,
-		ctx,
-		parent.Data.PublicID.String(),
-		"",
-	)
-}
-*/

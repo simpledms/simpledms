@@ -12,6 +12,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/file"
 	"github.com/simpledms/simpledms/db/entx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -51,7 +52,7 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	fileWithParentx := ctx.TenantCtx().TTx.File.Query().WithParent().Where(file.PublicID(entx.NewCIText(data.FileID))).OnlyX(ctx)
 	fileWithParent := filemodel.NewFile(fileWithParentx)
 
-	fileWithParent, err = qq.infra.FileSystem().Move(ctx, destDir, fileWithParent, data.Filename, data.NewDirName)
+	fileWithParent, err = qq.infra.FileSystem().Move(ctx, destDir, fileWithParent, data.Filename, data.NewFolderName)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -62,7 +63,7 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	if fileWithParent.Data.IsDirectory {
 		action = &widget.Link{
 			Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithParent.Data.PublicID.String()),
-			Child: widget.T("Open directory"), // TODO Go to, or Open?
+			Child: widget.T("Open folder"),
 		}
 	} else {
 		parent, err := fileWithParent.Parent(ctx)
@@ -73,30 +74,11 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 
 		action = &widget.Link{
 			Href:  route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, parent.Data.PublicID.String(), fileWithParent.Data.PublicID.String()),
-			Child: widget.T("Open file"), // TODO Go to, or Open?
+			Child: widget.T("Open file"),
 		}
 	}
 
-	// important that current dir from URL in case move was used from search results
-	dirIDStr := req.PathValue("dir_id")
-	// dirID64 := int64(0)
-	if dirIDStr == "" {
-		// load root
-		dirIDStr = ctx.SpaceCtx().SpaceRootDir().PublicID.String()
-	}
-
-	// TODO update URL: only if file is moved from file context menu
-
-	return qq.infra.Renderer().Render(
-		rw,
-		ctx,
-		qq.actions.ListDirPartial.WidgetHandler(
-			rw,
-			req,
-			ctx,
-			dirIDStr,
-			"",
-		),
-		widget.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action),
-	)
+	rw.Header().Set("HX-Trigger", event.FileMoved.String())
+	rw.AddRenderables(widget.NewSnackbarf("Moved to «%s».", destDir.Data.Name).WithAction(action))
+	return nil
 }

@@ -38,7 +38,7 @@ func (qq *TrashWithSelectionPage) Handler(
 ) error {
 	fileIDStr := req.PathValue("file_id")
 	if fileIDStr == "" {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "No file id provided.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "No file ID provided.")
 	}
 
 	filex := qq.infra.FileRepo.GetWithDeletedX(ctx, fileIDStr)
@@ -53,7 +53,7 @@ func (qq *TrashWithSelectionPage) Handler(
 	viewx, err := qq.widget(rw, req, ctx, state, filex)
 	if err != nil {
 		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "could not render widget")
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not render widget.")
 	}
 
 	qq.render(rw, req, ctx, viewx)
@@ -90,6 +90,7 @@ func (qq *TrashWithSelectionPage) widget(
 	}
 
 	listDetailLayout := &widget.ListDetailLayout{
+		Widget: widget.Widget[widget.ListDetailLayout]{ID: "trashLayout"},
 		AppBar: qq.appBar(ctx),
 		List:   qq.actions.TrashListPartial.Widget(ctx, qq.actions.TrashListPartial.Data(filex.Data.PublicID.String())),
 		Detail: filePreview,
@@ -168,9 +169,9 @@ func (qq *TrashWithSelectionPage) previewAppBar(ctx ctxx.Context, title *widget.
 				Icon:    "restore_from_trash",
 				Tooltip: widget.T("Restore"),
 				HTMXAttrs: widget.HTMXAttrs{
-					HxPost:    qq.actions.RestoreFileCmd.Endpoint(),
-					HxVals:    util.JSON(qq.actions.RestoreFileCmd.DataWithOptions(filex.Data.PublicID.String())),
-					HxConfirm: widget.T("Are you sure?").String(ctx),
+					HxPost: qq.actions.RestoreFileCmd.Endpoint(),
+					HxSwap: "none",
+					HxVals: util.JSON(qq.actions.RestoreFileCmd.DataWithOptions(filex.Data.PublicID.String())),
 				},
 			},
 			&widget.Link{

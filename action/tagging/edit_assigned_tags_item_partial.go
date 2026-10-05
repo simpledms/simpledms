@@ -15,7 +15,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
-	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -130,7 +129,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 	id := qq.listItemID(fileID, tagx.ID)
 
 	var icon *widget.Icon
-	var supportingText string
+	var supportingText *widget.Text
 	var trailing widget.IWidget
 	var isCollapsible bool
 	var htmxAttrs widget.HTMXAttrs
@@ -149,11 +148,6 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 			tagx.Edges.Children = tagx.QueryChildren().AllX(ctx)
 		}
 
-		childTagsStr := fmt.Sprintf("%d child tag", len(tagx.Edges.Children))
-		if len(tagx.Edges.Children) > 1 || len(tagx.Edges.Children) == 0 {
-			childTagsStr += "s"
-		}
-
 		selectedCount := 0
 		for _, childTag := range tagx.Edges.Children {
 			if isCheckedFn(childTag.ID) {
@@ -162,20 +156,18 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 		}
 		// TODO doesn't get updated on change; impl a web component?
 		// TODO selected can be better indicated by color of icon or a badge?
-		selectedStr := fmt.Sprintf("%d selected", selectedCount)
-
 		// TODO indicate if children are checked with checkbox? via bg color?
-		supportingText = fmt.Sprintf(
-			"%s, %s",
-			childTagsStr,
-			selectedStr,
-		)
+		childCount := len(tagx.Edges.Children)
+		supportingText = widget.Tf("Group, %d tags, %d selected", childCount, selectedCount)
+		if childCount == 1 {
+			supportingText = widget.Tf("Group, %d tag, %d selected", childCount, selectedCount)
+		}
 		trailing = widget.NewIcon("keyboard_arrow_down")
 
 		childItems = append(childItems, &widget.ListItem{
 			Type:     widget.ListItemTypeHelper,
 			Leading:  widget.NewIcon("new_label"),
-			Headline: widget.T("Create new tag"), // group not possible
+			Headline: widget.T("Create tag"), // group not possible
 			HTMXAttrs: qq.actions.AssignedTags.CreateAndAssignTagCmd.ModalLinkAttrs(
 				qq.actions.AssignedTags.CreateAndAssignTagCmd.Data(fileID, tagx.ID),
 				"#"+qq.listItemID(fileID, tagx.ID),
@@ -196,7 +188,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 	case tagtype.Super:
 		icon = widget.NewIcon("label_important")
 
-		supportingText = "Super tag"
+		supportingText = widget.T("Super tag")
 
 		subTags, err := tagx.Edges.SubTagsOrErr()
 		if err != nil {
@@ -209,15 +201,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 				tagNames = append(tagNames, subTag.Name)
 			}
 			// TODO add group to tags if it makes sense
-			supportingText = fmt.Sprintf("Composed of %s", strings.Join(tagNames, ", "))
-		}
-
-		htmxAttrs = widget.HTMXAttrs{
-			HxTrigger: event.SuperTagUpdated.Handler(tagx.ID),
-			HxPost:    qq.actions.AssignedTags.EditListItem.Endpoint(),
-			HxVals:    util.JSON(qq.actions.AssignedTags.EditListItem.Data(fileID, tagx.ID)),
-			HxTarget:  "#" + id,
-			HxSwap:    "outerHTML",
+			supportingText = widget.Tf("Composed of %s", strings.Join(tagNames, ", "))
 		}
 
 		trailing = &widget.Checkbox{
@@ -225,8 +209,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 				HxPost:    hxPost,
 				HxTrigger: "change",
 				HxVals:    hxVals,
-				HxTarget:  "#" + id,
-				HxSwap:    "outerHTML",
+				HxSwap:    "none",
 			},
 			IsChecked: isCheckedFn(tagx.ID),
 		}
@@ -237,8 +220,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 				HxPost:    hxPost,
 				HxTrigger: "change",
 				HxVals:    hxVals,
-				HxTarget:  "#" + id,
-				HxSwap:    "outerHTML",
+				HxSwap:    "none",
 			},
 			IsChecked: isCheckedFn(tagx.ID),
 		}
@@ -250,10 +232,9 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 		//
 		// impl on refactoring on 27.10.24, nur sure if correct, would solve comment above
 		htmxAttrs = widget.HTMXAttrs{
-			HxPost:   hxPost,
-			HxVals:   hxVals,
-			HxTarget: "#" + id,
-			HxSwap:   "outerHTML",
+			HxPost: hxPost,
+			HxVals: hxVals,
+			HxSwap: "none",
 		}
 	}
 
@@ -264,7 +245,7 @@ func (qq *EditAssignedTagsItemPartial) listItem(
 		HTMXAttrs:      htmxAttrs,
 		Leading:        icon,
 		Headline:       widget.T(tagx.Name),
-		SupportingText: widget.Tu(supportingText),
+		SupportingText: supportingText,
 		Trailing:       trailing,
 		IsCollapsible:  isCollapsible,
 		ContextMenu:    NewTagContextMenuWidget(qq.actions).Widget(ctx, fileID, tagx),

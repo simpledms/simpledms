@@ -19,8 +19,8 @@ func NewPropertyContextMenuWidget(actions *Actions) *PropertyContextMenuWidget {
 
 func (qq *PropertyContextMenuWidget) Widget(ctx ctxx.Context, propertyx *enttenant.Property) *widget.Menu {
 	renameItem := &widget.MenuItem{
-		TrailingIcon: "edit",
-		Label:        widget.T("Edit"),
+		LeadingIcon: "edit",
+		Label:       widget.T("Edit"),
 		HTMXAttrs: qq.actions.EditPropertyCmd.ModalLinkAttrs(
 			qq.actions.EditPropertyCmd.Data(
 				propertyx.ID,
@@ -32,12 +32,13 @@ func (qq *PropertyContextMenuWidget) Widget(ctx ctxx.Context, propertyx *enttena
 	}
 
 	deleteItem := &widget.MenuItem{
-		TrailingIcon: "delete",
-		Label:        widget.T("Delete"),
+		LeadingIcon: "delete",
+		Label:       widget.T("Delete"),
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.actions.DeletePropertyCmd.Endpoint(),
+			HxSwap:    "none",
 			HxVals:    util.JSON(qq.actions.DeletePropertyCmd.Data(propertyx.ID)),
-			HxConfirm: widget.T("Are you sure?").String(ctx),
+			HxConfirm: widget.T("Delete this field?").String(ctx),
 		},
 	}
 

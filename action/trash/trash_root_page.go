@@ -39,6 +39,7 @@ func (qq *TrashRootPage) widget(ctx ctxx.Context) renderable.Renderable {
 	mainLayout := &widget.MainLayout{
 		Navigation: partial.NewNavigationRail(ctx, qq.infra, "trash", nil),
 		Content: &widget.ListDetailLayout{
+			Widget: widget.Widget[widget.ListDetailLayout]{ID: "trashLayout"},
 			AppBar: qq.appBar(ctx),
 			List:   qq.actions.TrashListPartial.Widget(ctx, qq.actions.TrashListPartial.Data("")),
 		},

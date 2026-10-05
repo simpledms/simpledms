@@ -80,7 +80,7 @@ func (qq *FilesListPartial) fileTableLoadMoreRow(
 	for qi := 0; qi < columnCount; qi++ {
 		child := widget.Tu("")
 		if qi == 0 {
-			child = widget.T("Loading more...")
+			child = widget.T("Loading more…")
 		}
 		cells = append(cells, &widget.TableCell{Child: child})
 	}
@@ -200,7 +200,7 @@ func (qq *FilesListPartial) fileTableRow(
 	return &widget.TableRow{
 		HTMXAttrs:    qq.fileTableRowHTMXAttrs(ctx, filex),
 		Cells:        cells,
-		ContextMenu:  NewFileContextMenuWidget(qq.actions).Widget(ctx, filex),
+		ContextMenu:  qq.actions.FileContextMenuPartial.LazyMenu(filex),
 		IsSelected:   filex.PublicID.String() == data.SelectedFileID,
 		IsSelectable: true,
 	}

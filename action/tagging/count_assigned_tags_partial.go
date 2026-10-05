@@ -57,7 +57,7 @@ func (qq *CountAssignedTagsPartial) Badge(ctx ctxx.Context, fileID string) *widg
 	filex := qq.infra.FileRepo.GetX(ctx, fileID)
 	tagsCount := filex.Data.QueryTags().CountX(ctx)
 
-	id := autil.GenerateID(fmt.Sprintf("tagsCount-%s", fileID))
+	id := fmt.Sprintf("tagsCount-%s", fileID)
 	return &widget.Badge{
 		Widget: widget.Widget[widget.Badge]{
 			ID: id,
@@ -66,7 +66,7 @@ func (qq *CountAssignedTagsPartial) Badge(ctx ctxx.Context, fileID string) *widg
 		IsInline: true,
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.Endpoint(),
-			HxTrigger: event.HxTrigger(event.TagUpdated),
+			HxTrigger: event.HxTrigger(event.TagCreated, event.TagUpdated, event.TagDeleted),
 			HxVals:    util.JSON(qq.Data(fileID)),
 			HxTarget:  "#" + id,
 			HxSwap:    "outerHTML",

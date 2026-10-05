@@ -60,7 +60,7 @@ func (qq *SetTenantUploadLimitOverrideCmd) Handler(rw httpx.ResponseWriter, req 
 	}
 
 	rw.Header().Set("HX-Trigger", event.UploadLimitUpdated.String())
-	rw.AddRenderables(widget.NewSnackbarf("Tenant upload limit updated to %s.", uploadLimitLabel))
+	rw.AddRenderables(widget.NewSnackbarf("Organization upload limit updated to %s.", uploadLimitLabel))
 
 	return nil
 }

@@ -38,9 +38,11 @@ func (qq *transactionResponse) flush(rw http.ResponseWriter) {
 	for key, values := range qq.header {
 		rw.Header()[key] = values
 	}
-	if qq.status != 0 {
-		rw.WriteHeader(qq.status)
+	status := qq.status
+	if status == 0 {
+		status = http.StatusOK
 	}
+	rw.WriteHeader(status)
 	if _, err := qq.body.WriteTo(rw); err != nil {
 		log.Println(err)
 	}

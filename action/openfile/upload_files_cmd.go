@@ -91,7 +91,7 @@ func (qq *UploadFilesCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		return e.NewHTTPErrorf(http.StatusInternalServerError, "Processing of shared files failed.")
 	}
 
-	rw.AddRenderables(wx.NewSnackbarf("Files uploaded, please select a space.")) // not sure if shown
+	rw.AddRenderables(wx.NewSnackbarf("Files uploaded, please select a Space.")) // not sure if shown
 	// not via HX-Redirect because this command is called directly from external (phone) and is thus not a htmx request
 	http.Redirect(rw, req.Request, route.SelectSpace(uploadToken), http.StatusFound)
 

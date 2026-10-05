@@ -1,14 +1,15 @@
 package inbox
 
 import (
+	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/txx"
 )
 
 type InboxRootPage struct {
@@ -35,10 +36,7 @@ func (qq *InboxRootPage) Handler(
 	if err != nil {
 		return err
 	}
-	_, err = txx.WithTenantReadSpaceTx(ctx.SpaceCtx(), func(readCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, qq.render(rw, req, readCtx, state)
-	})
-	return err
+	return qq.render(rw, req, ctx, state)
 }
 
 func (qq *InboxRootPage) render(
@@ -70,10 +68,27 @@ func (qq *InboxRootPage) render(
 		return err
 	}
 
+	defaultSideSheetTrigger := autil.DefaultSideSheetTrigger(
+		"inboxDefaultSideSheetTrigger",
+		widget.HTMXAttrs{
+			HxPost: qq.actions.SourceFilterDialog.Endpoint(),
+		},
+	)
+	// Opening a file from the list swaps only #details, so this trigger stays in the DOM and
+	// morph keeps it when the details close; htmx doesn't fire load again for it. If the page
+	// was loaded with a file selected, the trigger is new after closing and only load fires.
+	defaultSideSheetTrigger.HxTrigger += ", " + event.DetailsClosed.String() +
+		"[window.matchMedia('(min-width: 1200px)').matches] from:body"
+
 	var viewx renderable.Renderable
 	viewx = &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "inbox", fabs),
-		Content:    content,
+		Content: &widget.View{
+			Children: []widget.IWidget{
+				content,
+				defaultSideSheetTrigger,
+			},
+		},
 	}
 
 	renderFullPage := req.Header.Get("HX-Request") == ""

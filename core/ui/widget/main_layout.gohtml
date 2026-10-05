@@ -11,7 +11,7 @@
 		*/}}
 	<div class="flex flex-col-reverse md:flex-row h-svh">
         {{ render .GetContext .Navigation }}
-		<div id="innerContent" class="grow overflow-hidden">
+		<div id="innerContent" class="js-main-content min-w-0 grow overflow-hidden">
 			{{ if .IsTenantInMaintenanceMode }}
 				{{ render $ctx .TenantMaintenanceWarning }}
 			{{ end }}

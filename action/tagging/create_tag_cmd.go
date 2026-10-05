@@ -47,11 +47,11 @@ func NewCreateTagCmd(
 		infra:   infra,
 		actions: actions,
 		Config:  config,
-		FormHelper: autil.NewFormHelper[CreateTagCmdData](
+		FormHelper: autil.NewFormHelperX[CreateTagCmdData](
 			infra,
 			config,
 			widget.T("Create tag"),
-			// "TODO", // TODO
+			widget.T("Create"),
 		),
 	}
 }

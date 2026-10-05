@@ -1,4 +1,4 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { test as base, expect, type Locator, type Page } from "@playwright/test";
 
 import {
 	fixturePath,
@@ -32,14 +32,14 @@ async function createSpaceAndSelect(page: Page, name: string) {
 		await organization.click();
 	}
 	await page.getByRole("link", { name: "Spaces", exact: true }).click();
-	await page.getByRole("link", { name: /Create space|^add$/ }).click();
+	await page.getByRole("link", { name: /Create Space/ }).first().click();
 	await page.getByRole("textbox", { name: "Name", exact: true }).fill(name);
 	const owner = page.getByRole("checkbox", { name: "Add me as space owner" });
 	expect(await owner.evaluate(input =>
 		input.parentElement!.parentElement!.parentElement!.getBoundingClientRect().height,
 	)).toBe(48);
 	await owner.check();
-	await page.getByRole("button", { name: "Save", exact: true }).click();
+	await page.getByRole("button", { name: "Create", exact: true }).click();
 	await page.getByRole("heading", { name, exact: true }).click();
 	await expect(page).toHaveURL(/\/browse\/$/);
 }
@@ -74,18 +74,32 @@ async function openDocument(page: Page, name = fileName) {
 	await selectNotes(page);
 }
 
+// The author name is read-only account data, so each worker reads it once instead of each test.
+const test = base.extend<{}, { author: string }>({
+	author: [async ({ browser }, use, workerInfo) => {
+		const context = await browser.newContext({
+			baseURL: workerInfo.project.use.baseURL,
+			ignoreHTTPSErrors: true,
+			storageState: "e2e/.auth/admin.json",
+		});
+		const page = await context.newPage();
+		// Read the authenticated user's actual tenant display name through the existing UI.
+		await page.goto("/dashboard/");
+		await expandNavigation(page);
+		if (!(await page.getByRole("link", { name: "Users", exact: true }).isVisible())) {
+			await page.getByRole("button", { name: /^business / }).click();
+		}
+		await page.getByRole("link", { name: /Users/ }).click();
+		const user = page.locator("#userListPartial").getByRole("listitem")
+			.filter({ hasText: loginEmail });
+		const author = (await user.getByRole("heading").innerText()).trim();
+		expect(author).not.toBe("");
+		await context.close();
+		await use(author);
+	}, { scope: "worker" }],
+});
+
 async function setupDocument(page: Page, inbox = false) {
-	// Read the authenticated user's actual tenant display name through the existing UI.
-	await page.goto("/dashboard/");
-	await expandNavigation(page);
-	if (!(await page.getByRole("link", { name: "Users", exact: true }).isVisible())) {
-		await page.getByRole("button", { name: /^business / }).click();
-	}
-	await page.getByRole("link", { name: /Users/ }).click();
-	const user = page.locator("#userListPartial").getByRole("listitem")
-		.filter({ hasText: loginEmail });
-	const author = (await user.getByRole("heading").innerText()).trim();
-	expect(author).not.toBe("");
 	await createSpaceAndSelect(page, `E2E Notes ${uniqueSuffix()}`);
 	const browseURL = page.url();
 	if (inbox) await navigateSection(page, "Inbox");
@@ -97,7 +111,7 @@ async function setupDocument(page: Page, inbox = false) {
 	await expect(history(page)).toHaveText("history");
 	await expect(page.getByRole("button", { name: "Add note", exact: true })).toHaveText("add");
 	await expect(page.locator("#documentNotes").getByRole("switch")).toHaveCount(0);
-	return { author, browseURL, listURL };
+	return { browseURL, listURL };
 }
 
 async function navigateSection(page: Page, section: "Inbox" | "Trash") {
@@ -234,8 +248,8 @@ for (const device of [
 		});
 		test.setTimeout(90_000);
 
-		test("creates a note from the Fields-style empty state", async ({ page }) => {
-			const { author } = await setupDocument(page);
+		test("creates a note from the Fields-style empty state", async ({ page, author }) => {
+			await setupDocument(page);
 			const emptyHeading = page.getByRole("heading", { name: "No notes available.", exact: true });
 			await expect(emptyHeading).toBeVisible();
 			await expectNoOverflow(page);
@@ -370,8 +384,8 @@ for (const device of [
 			});
 		}
 
-		test("creates plain-text notes, edits in place, and persists after reopening", async ({ page }) => {
-			const { author, browseURL } = await setupDocument(page);
+		test("creates plain-text notes, edits in place, and persists after reopening", async ({ page, author }) => {
+			const { browseURL } = await setupDocument(page);
 			const firstText = 'First line\n<strong>Literal HTML, not markup</strong>\n' + "long".repeat(80);
 			const first = await saveNote(page, firstText, "Add note", undefined, "<strong>Review</strong>");
 			const firstID = await first.getAttribute("id");
@@ -505,8 +519,8 @@ for (const device of [
 			await expect(entry.getByRole("menu")).not.toBeVisible();
 		});
 
-		test("keeps mixed replacement history and keyboard toggle state through commands", async ({ page }) => {
-			const { author } = await setupDocument(page);
+		test("keeps mixed replacement history and keyboard toggle state through commands", async ({ page, author }) => {
+			await setupDocument(page);
 			const original = await saveNote(page, "Original predecessor", "Add note", undefined, "Draft");
 			const successor = await saveNote(page, "First successor", "Replace", original, "Revised draft");
 			await expect(original).toHaveCount(0);
@@ -575,8 +589,8 @@ for (const device of [
 			await expect(current).toContainText(/deleted/i);
 		});
 
-		test("Inbox notes survive filing and Trash/restore without reactivating history", async ({ page }) => {
-			const { author, browseURL } = await setupDocument(page, true);
+		test("Inbox notes survive filing and Trash/restore without reactivating history", async ({ page, author }) => {
+			const { browseURL } = await setupDocument(page, true);
 			const original = await saveNote(page, "Inbox predecessor");
 			const current = await saveNote(page, "Inbox current", "Replace", original);
 			await saveNote(page, "Inbox corrected", "Edit", current);
@@ -588,7 +602,7 @@ for (const device of [
 			const move = page.getByRole("dialog").filter({
 				has: page.getByRole("heading", { name: /Move file to/ }),
 			});
-			await move.getByRole("button", { name: "Save", exact: true }).click();
+			await move.getByRole("button", { name: "Move", exact: true }).click();
 			await expect(move).not.toBeVisible();
 			await page.goto(browseURL);
 			await openDocument(page);
@@ -621,7 +635,6 @@ for (const device of [
 			const trashRow = page.locator("#trashList").getByRole("listitem")
 				.filter({ hasText: fileName });
 			await trashRow.click({ button: "right" });
-			page.once("dialog", dialog => dialog.accept());
 			await trashRow.getByText("Restore", { exact: true }).click();
 			await expect(trashRow).toHaveCount(0);
 			await page.goto(browseURL);
@@ -634,8 +647,8 @@ for (const device of [
 			await expect(deleted).toContainText(/deleted/i);
 		});
 
-		test("merges an Inbox replacement chain and deleted notes into an existing target", async ({ page }) => {
-			const { author, browseURL, listURL } = await setupDocument(page, true);
+		test("merges an Inbox replacement chain and deleted notes into an existing target", async ({ page, author }) => {
+			const { browseURL, listURL } = await setupDocument(page, true);
 			const original = await saveNote(page, "Transferred predecessor");
 			const successor = await saveNote(page, "Transferred successor", "Replace", original);
 			const current = await saveNote(page, "Transferred current", "Replace", successor);
@@ -647,7 +660,7 @@ for (const device of [
 			const target = await saveNote(page, "Target note stays unchanged");
 			await page.getByRole("tab", { name: "Versions", exact: true }).click();
 			const openMerge = async () => {
-				await page.getByRole("link", { name: /Add new version from inbox/ }).click();
+				await page.getByRole("link", { name: /Add new version from Inbox/ }).click();
 				const dialog = page.locator("#fileVersionFromInboxDialog");
 				await expect(dialog).toBeVisible();
 				const confirmation = dialog.locator('input[name="ConfirmWarning"]');

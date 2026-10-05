@@ -24,8 +24,8 @@ func NewContextMenuWidget(actions *Actions) *ContextMenuWidget {
 
 func (qq *ContextMenuWidget) Widget(ctx ctxx.Context, documentType *enttenant.DocumentType) *widget.Menu {
 	renameItem := &widget.MenuItem{
-		TrailingIcon: "edit", // TODO
-		Label:        widget.T("Rename"),
+		LeadingIcon: "edit",
+		Label:       widget.T("Rename"),
 		HTMXAttrs: qq.actions.RenameCmd.ModalLinkAttrs(
 			qq.actions.RenameCmd.Data(documentType.ID, documentType.Name),
 			"",
@@ -34,12 +34,12 @@ func (qq *ContextMenuWidget) Widget(ctx ctxx.Context, documentType *enttenant.Do
 	}
 
 	deleteItem := &widget.MenuItem{
-		TrailingIcon: "delete",
-		Label:        widget.T("Delete"),
+		LeadingIcon: "delete",
+		Label:       widget.T("Delete"),
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.actions.DeleteCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.DeleteCmd.Data(documentType.ID)),
-			HxConfirm: widget.T("Are you sure?").String(ctx),
+			HxConfirm: widget.T("Delete this document type?").String(ctx),
 			HxSwap:    "none",
 			// HxTarget:  "#" + qq.actions.ListDir.WrapperID(),
 		},

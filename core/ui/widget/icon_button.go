@@ -9,7 +9,10 @@ type IconButton struct {
 	Icon                string
 	PopoverTarget       string
 	PopoverTargetAction string
-	ReplaceURL          string
+	// HasPopupMenu marks PopoverTarget as a menu; the context menu runtime keeps aria-expanded
+	// in sync.
+	HasPopupMenu bool
+	ReplaceURL   string
 
 	Tooltip *Text
 	// Label is an accessible name, not visible button text.

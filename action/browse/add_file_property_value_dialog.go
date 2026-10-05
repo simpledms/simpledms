@@ -123,6 +123,7 @@ func (qq *AddFilePropertyValueDialog) Form(
 		},
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost: qq.actions.AddFilePropertyValueCmd.Endpoint(),
+			HxSwap: "none",
 		},
 		Children: []widget.IWidget{
 			&widget.Container{
@@ -146,7 +147,7 @@ func (qq *AddFilePropertyValueDialog) Form(
 
 	return autil.WrapWidgetWithID(
 		widget.T("Add field"),
-		widget.T("Save"),
+		widget.T("Add"),
 		form,
 		wrapper,
 		widget.DialogLayoutStable,

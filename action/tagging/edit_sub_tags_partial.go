@@ -6,8 +6,6 @@ import (
 	"html/template"
 	"slices"
 
-	"github.com/google/uuid"
-
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
@@ -15,6 +13,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -72,6 +71,16 @@ func (qq *EditSubTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Reques
 	// assignedSubTagsListView := qq.actions.SubTags.List.Widget(subTags)
 
 	list := &widget.List{
+		Widget: widget.Widget[widget.List]{
+			ID: "subTagAssignmentList",
+		},
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:    qq.Endpoint(),
+			HxVals:    util.JSON(data),
+			HxTarget:  "#subTagAssignmentList",
+			HxSwap:    "outerHTML",
+			HxTrigger: event.HxTrigger(event.TagUpdated),
+		},
 		Children: assignableListItems,
 	}
 
@@ -261,8 +270,7 @@ func (qq *EditSubTagsPartial) listItem(
 				HxPost:    hxPost,
 				HxTrigger: "change",
 				HxVals:    hxVals,
-				HxTarget:  "#" + id,
-				HxSwap:    "outerHTML",
+				HxSwap:    "none",
 			},
 			IsChecked: isCheckedFn(subTagWithChildren.ID),
 		}
@@ -276,10 +284,9 @@ func (qq *EditSubTagsPartial) listItem(
 		//
 		// impl on refactoring on 27.10.24, nur sure if correct, would solve comment above
 		htmxAttrs = widget.HTMXAttrs{
-			HxPost:   hxPost,
-			HxVals:   hxVals,
-			HxTarget: "#" + id,
-			HxSwap:   "outerHTML",
+			HxPost: hxPost,
+			HxVals: hxVals,
+			HxSwap: "none",
 		}
 	}
 
@@ -299,9 +306,8 @@ func (qq *EditSubTagsPartial) listItem(
 
 func (qq *EditSubTagsPartial) listItemID(superTagID, subTag int64) string {
 	return fmt.Sprintf(
-		"listItemSubTag-%d-%d-%s",
+		"listItemSubTag-%d-%d",
 		superTagID,
 		subTag,
-		uuid.NewString(),
 	)
 }

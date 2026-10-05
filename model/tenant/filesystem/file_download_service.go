@@ -54,7 +54,7 @@ func (qq *FileDownloadService) Read(
 		return nil, err
 	}
 	if filex.IsDirectory {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a folder.")
 	}
 	query := filex.QueryFileVersions().WithStoredFile()
 	if versionNumber > 0 {

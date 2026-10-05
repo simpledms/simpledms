@@ -50,7 +50,7 @@ func (qq *SpacesPage) Widget(ctx ctxx.Context, state *SpacesPageState) renderabl
 				Icon: "add",
 				Child: []widget.IWidget{
 					widget.NewIcon("add"),
-					widget.T("Create space"),
+					widget.T("Create Space"),
 				},
 				HTMXAttrs: qq.actions.CreateSpaceDialog.ModalLinkAttrs(
 					qq.actions.CreateSpaceDialog.Data("", ""),
@@ -83,7 +83,7 @@ func (qq *SpacesPage) appBar(ctx ctxx.Context) *widget.AppBar {
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title: &widget.AppBarTitle{
-			Text: widget.Tuf("%s «%s»", widget.T("Spaces").String(ctx), ctx.TenantCtx().Tenant.Name),
+			Text: widget.T("Spaces"),
 		},
 		Actions: []widget.IWidget{
 			/*&wx.IconButton{

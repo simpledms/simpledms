@@ -1,6 +1,8 @@
 package tagging
 
 import (
+	"log"
+
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
@@ -85,7 +87,17 @@ func (qq *EntTagRepository) UpdateTagName(ctx ctxx.Context, tagID int64, name st
 }
 
 func (qq *EntTagRepository) DeleteTag(ctx ctxx.Context, tagID int64) error {
-	return ctx.TenantCtx().TTx.Tag.DeleteOneID(tagID).Exec(ctx)
+	// Delete the join rows directly: traversing Files would omit assignments in Trash.
+	if _, err := ctx.TenantCtx().TTx.TagAssignment.Delete().
+		Where(tagassignment.TagID(tagID)).Exec(ctx); err != nil {
+		log.Printf("remove deleted Tag assignments: %v", err)
+		return err
+	}
+	err := ctx.TenantCtx().TTx.Tag.DeleteOneID(tagID).Exec(ctx)
+	if err != nil {
+		log.Printf("delete Tag: %v", err)
+	}
+	return err
 }
 
 func (qq *EntTagRepository) TagByID(ctx ctxx.Context, tagID int64) (*enttenant.Tag, error) {
@@ -94,6 +106,13 @@ func (qq *EntTagRepository) TagByID(ctx ctxx.Context, tagID int64) (*enttenant.T
 
 func (qq *EntTagRepository) FileByID(ctx ctxx.Context, fileID int64) (*enttenant.File, error) {
 	return ctx.TenantCtx().TTx.File.Get(ctx, fileID)
+}
+
+// TagHasAssignments includes assignments of files in Trash, like DeleteTag.
+func (qq *EntTagRepository) TagHasAssignments(ctx ctxx.Context, tagID int64) (bool, error) {
+	return ctx.TenantCtx().TTx.TagAssignment.Query().
+		Where(tagassignment.TagID(tagID)).
+		Exist(ctx)
 }
 
 func (qq *EntTagRepository) FileHasTagAssignment(ctx ctxx.Context, fileID int64, tagID int64) (bool, error) {

@@ -11,6 +11,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant"
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
+	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -57,7 +58,11 @@ func (qq *TagListPartial) Data(parentTagID int64) *TagListPartialData {
 	}
 }
 
-func (qq *TagListPartial) Widget(ctx ctxx.Context, data *TagListPartialData, state *TagListPartialState) *widget.List {
+func (qq *TagListPartial) Widget(
+	ctx ctxx.Context,
+	data *TagListPartialData,
+	state *TagListPartialState,
+) renderable.Renderable {
 	// duplicate in EditAssignedTags.ListView
 	// TODO is this necessary? children are eagerly loaded... maybe just necessary in EditAssignedTags
 	//		because of checkboxes?
@@ -84,21 +89,6 @@ func (qq *TagListPartial) Widget(ctx ctxx.Context, data *TagListPartialData, sta
 	var tagListItems []*widget.ListItem
 	var groupListItems []*widget.ListItem
 
-	if !isLoadingPartial {
-		// TODO or as FAB? would be more consistent with rest of application
-		//		but less consistent with adding tags to group
-		allListItems = append(allListItems,
-			// TODO segment into two list items?
-			&widget.ListItem{
-				Headline: widget.T("Create new tag or group"),
-				Leading:  widget.NewIcon("new_label"),
-				Type:     widget.ListItemTypeHelper,
-				HTMXAttrs: qq.actions.Tagging.CreateTagCmd.ModalLinkAttrs(
-					qq.actions.Tagging.CreateTagCmd.Data(0), ""),
-			},
-		)
-	}
-
 	for _, tagx := range tags {
 		listItem := qq.listItem(ctx, state, tagx)
 		if tagx.Type == tagtype.Group {
@@ -117,26 +107,49 @@ func (qq *TagListPartial) Widget(ctx ctxx.Context, data *TagListPartialData, sta
 		}
 	}
 
-	// TODO empty state? or just add a list item?
+	htmxAttrs := widget.HTMXAttrs{
+		HxPost:   qq.Endpoint(),
+		HxTarget: "#tagList",
+		HxSwap:   "outerHTML",
+		// TODO currently loads all tags always, but could be limited to a tag group
+		//		if a child tag is created
+		HxTrigger: event.HxTrigger(
+			event.TagCreated,
+			event.TagUpdated,
+			event.TagDeleted,
+			// event.TagMovedToGroup.
+		),
+	}
+
+	if len(allListItems) == 0 {
+		return &widget.Container{
+			Widget: widget.Widget[widget.Container]{
+				ID: qq.id(),
+			},
+			Child: &widget.EmptyState{
+				Icon:     widget.NewIcon("label"),
+				Headline: widget.T("No tags available yet."),
+				Actions: []widget.IWidget{
+					&widget.Button{
+						Icon:  widget.NewIcon("new_label"),
+						Label: widget.T("Create tag or group"),
+						HTMXAttrs: qq.actions.Tagging.CreateTagCmd.ModalLinkAttrs(
+							qq.actions.Tagging.CreateTagCmd.Data(0),
+							"",
+						),
+					},
+				},
+			},
+			HTMXAttrs: htmxAttrs,
+		}
+	}
 
 	return &widget.List{
 		Widget: widget.Widget[widget.List]{
 			ID: qq.id(),
 		},
-		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.Endpoint(),
-			HxTarget: "#tagList",
-			HxSwap:   "outerHTML",
-			// TODO currently loads all tags always, but could be limited to a tag group
-			//		if a child tag is created
-			HxTrigger: event.HxTrigger(
-				event.TagCreated,
-				event.TagUpdated,
-				event.TagDeleted,
-				// event.TagMovedToGroup.
-			),
-		},
-		Children: allListItems,
+		HTMXAttrs: htmxAttrs,
+		Children:  allListItems,
 	}
 }
 
@@ -169,7 +182,7 @@ func (qq *TagListPartial) listItem(
 		childItems = append(childItems, &widget.ListItem{
 			Type:     widget.ListItemTypeHelper,
 			Leading:  widget.NewIcon("new_label"),
-			Headline: widget.T("Create new tag"), // group not possible
+			Headline: widget.T("Create tag"), // group not possible
 			HTMXAttrs: qq.actions.Tagging.CreateTagCmd.ModalLinkAttrs(
 				qq.actions.Tagging.CreateTagCmd.Data(tagx.ID),
 				"",

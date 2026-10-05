@@ -7,6 +7,8 @@ import (
 	"github.com/simpledms/simpledms/model/main/tenant"
 )
 
+const changePasswordReminder = "Please sign in and change your password as soon as possible."
+
 // CreateSignUpTemplate creates a template for the signup email
 func CreateSignUpTemplate(ctx ctxx.Context, tmpPassword string, expiresAt, signInURL string) EmailTemplate {
 	title := wx.T("Welcome to SimpleDMS").String(ctx)
@@ -17,7 +19,7 @@ func CreateSignUpTemplate(ctx ctxx.Context, tmpPassword string, expiresAt, signI
 		TextBlock{Text: wx.T("Your account has been created successfully.").String(ctx)},
 		NewPasswordBlock(tmpPassword),
 		NewExpiryBlock(expiresAt),
-		TextBlock{Text: wx.T("Please log in and change your password as soon as possible.").String(ctx)},
+		TextBlock{Text: wx.T(changePasswordReminder).String(ctx)},
 	}
 	if signInURL != "" {
 		content = append(content, ActionLinkBlock{
@@ -36,7 +38,7 @@ func CreateSignUpTemplate(ctx ctxx.Context, tmpPassword string, expiresAt, signI
 
 // CreateResetPasswordTemplate creates a template for the password reset email
 func CreateResetPasswordTemplate(ctx ctxx.Context, tmpPassword string, expiresAt, signInURL string) EmailTemplate {
-	title := wx.T("SimpleDMS Password Reset").String(ctx)
+	title := wx.T("SimpleDMS password reset").String(ctx)
 	heading := title
 	footer := wx.T("This is an automated message, please do not reply.").String(ctx)
 
@@ -45,7 +47,7 @@ func CreateResetPasswordTemplate(ctx ctxx.Context, tmpPassword string, expiresAt
 		PasswordBlock{Password: tmpPassword},
 		ExpiryBlock{ExpiresAt: expiresAt},
 		NoteBlock{Text: wx.T("Your old password will still work until you change it.").String(ctx)},
-		TextBlock{Text: wx.T("Please log in and change your password as soon as possible.").String(ctx)},
+		TextBlock{Text: wx.T(changePasswordReminder).String(ctx)},
 	}
 	if signInURL != "" {
 		content = append(content, ActionLinkBlock{
@@ -97,7 +99,7 @@ func CreateUserTemplate(ctx ctxx.Context, tmpPassword string, expiresAt, signInU
 	content = append(content,
 		NewPasswordBlock(tmpPassword),
 		NewExpiryBlock(expiresAt),
-		TextBlock{Text: wx.T("Please log in and change your password as soon as possible.").String(ctx)},
+		TextBlock{Text: wx.T(changePasswordReminder).String(ctx)},
 		// TODO hint if not signed up yourself, report as abuse...
 	)
 

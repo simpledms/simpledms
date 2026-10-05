@@ -68,7 +68,7 @@ func (qq *FileOrganizationService) filedEntry(
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File must be filed before organization.")
 	}
 	if filex.IsRootDir {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot organize the Space root directory.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot organize the Space root folder.")
 	}
 	return filex, nil
 }

@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"html/template"
 	"log"
 	"strings"
 	"time"
@@ -56,6 +57,13 @@ func (qq *WebDAVCredentialListPartial) Handler(
 	}
 	state := autil.StateX[WebDAVCredentialListPartialData](rw, req)
 	data.CredentialStatusValues = state.CredentialStatusValues
+	if data.CreatedDestination != "" {
+		data.Destination, err = webDAVCredentialDestinationKeyByValue(ctx, data.CreatedDestination)
+		if err != nil {
+			return err
+		}
+		data.CreatedDestination = ""
+	}
 	overview, err := qq.Widget(ctx, req, data)
 	if err != nil {
 		log.Println(err)
@@ -68,21 +76,6 @@ func (qq *WebDAVCredentialListPartial) Handler(
 			qq.actions.WebDAVCredentialsPage.filterButton(data, true),
 		},
 	})
-}
-
-// WidgetOOB renders the list for an out-of-band swap, for example to select the tab of a
-// newly created credential from a command response.
-func (qq *WebDAVCredentialListPartial) WidgetOOB(
-	ctx ctxx.Context,
-	req *httpx.Request,
-	data *WebDAVCredentialListPartialData,
-) (*widget.Container, error) {
-	overview, err := qq.Widget(ctx, req, data)
-	if err != nil {
-		return nil, err
-	}
-	overview.HxSwapOOB = "outerHTML"
-	return overview, nil
 }
 
 func (qq *WebDAVCredentialListPartial) Widget(
@@ -114,7 +107,7 @@ func (qq *WebDAVCredentialListPartial) Widget(
 
 	var content widget.IWidget = &widget.EmptyState{
 		Icon:        widget.NewIcon("vpn_key"),
-		Headline:    widget.T("No WebDAV credentials"),
+		Headline:    widget.T("No WebDAV credentials yet."),
 		Description: widget.T("Create a device credential to upload files to an Inbox over WebDAV."),
 		Actions: []widget.IWidget{
 			&widget.Button{
@@ -138,11 +131,14 @@ func (qq *WebDAVCredentialListPartial) Widget(
 		Child:     content,
 		HTMXAttrs: widget.HTMXAttrs{
 			HxTrigger: event.HxTrigger(
-				event.AccountUpdated,
+				event.WebDAVCredentialChanged,
 				event.WebDAVCredentialFilterChanged,
 			),
-			HxPost:   qq.Endpoint(),
-			HxVals:   util.JSON(data),
+			HxPost: qq.Endpoint(),
+			// hx-vals can also be evaluated by nested form submissions; guard the event.
+			HxVals: template.JS("js:{..." + string(util.JSON(data)) +
+				",CreatedDestination:(event && event.type === 'webDAVCredentialChanged' && " +
+				"event.detail) ? (event.detail.destination || '') : ''}"),
 			HxTarget: "#" + qq.id(),
 			HxSwap:   "outerHTML",
 		},
@@ -267,37 +263,33 @@ func (qq *WebDAVCredentialListPartial) credentialListItem(
 		)
 	}
 
-	var trailing widget.IWidget
+	var contextMenu *widget.Menu
 	if credentialx.RevokedAt == nil {
-		trailing = &widget.IconButton{
-			Icon:    "more_vert",
-			Tooltip: widget.T("Edit"),
-			Children: &widget.Menu{
-				Items: []*widget.MenuItem{
-					{
-						LeadingIcon: "edit",
-						Label:       widget.T("Edit"),
-						HTMXAttrs: qq.actions.EditWebDAVCredentialCmd.ModalLinkAttrs(
-							qq.actions.EditWebDAVCredentialCmd.Data(
-								credentialx.PublicID.String(),
-								credentialx.Label,
-							),
-							"",
+		contextMenu = &widget.Menu{
+			Items: []*widget.MenuItem{
+				{
+					LeadingIcon: "edit",
+					Label:       widget.T("Edit"),
+					HTMXAttrs: qq.actions.EditWebDAVCredentialCmd.ModalLinkAttrs(
+						qq.actions.EditWebDAVCredentialCmd.Data(
+							credentialx.PublicID.String(),
+							credentialx.Label,
 						),
-					},
-					{IsDivider: true},
-					{
-						LeadingIcon: "block",
-						Label:       widget.T("Revoke"),
-						HTMXAttrs: widget.HTMXAttrs{
-							HxPost: qq.actions.RevokeWebDAVCredentialCmd.Endpoint(),
-							HxVals: util.JSON(qq.actions.RevokeWebDAVCredentialCmd.Data(
-								credentialx.PublicID.String(),
-								0,
-							)),
-							HxConfirm: widget.T("Revoke this WebDAV credential?").String(ctx),
-							HxSwap:    "none",
-						},
+						"",
+					),
+				},
+				{IsDivider: true},
+				{
+					LeadingIcon: "block",
+					Label:       widget.T("Revoke"),
+					HTMXAttrs: widget.HTMXAttrs{
+						HxPost: qq.actions.RevokeWebDAVCredentialCmd.Endpoint(),
+						HxVals: util.JSON(qq.actions.RevokeWebDAVCredentialCmd.Data(
+							credentialx.PublicID.String(),
+							0,
+						)),
+						HxConfirm: widget.T("Revoke this WebDAV credential?").String(ctx),
+						HxSwap:    "none",
 					},
 				},
 			},
@@ -308,7 +300,7 @@ func (qq *WebDAVCredentialListPartial) credentialListItem(
 		Leading:        widget.NewIcon("vpn_key"),
 		Headline:       widget.Tu(credentialx.Label),
 		SupportingText: supportingText,
-		Trailing:       trailing,
+		ContextMenu:    contextMenu,
 	}
 }
 

@@ -60,8 +60,14 @@ func (qq *MainContext) UnsafeTenantDBs() *tenantdbs.TenantDBs {
 	return qq.unsafeTenantDBs
 }
 
+// ReadOnlyAccountSpacesByTenant reuses the transaction of the tenant requestCtx belongs to, if
+// any. Opening a second read transaction on a tenant DB the request already holds one on can
+// exhaust the bounded read pool, so concurrent page requests would wait on each other forever.
+//
 // TODO cache?
-func (qq *MainContext) ReadOnlyAccountSpacesByTenant() (map[*entmain.Tenant][]*enttenant.Space, error) {
+func (qq *MainContext) ReadOnlyAccountSpacesByTenant(
+	requestCtx context.Context,
+) (map[*entmain.Tenant][]*enttenant.Space, error) {
 	var spacesByTenant = make(map[*entmain.Tenant][]*enttenant.Space)
 
 	// similar code in DashboardCards
@@ -71,38 +77,21 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() (map[*entmain.Tenant][]*e
 		return nil, fmt.Errorf("failed to query tenants for account %d: %w", qq.Account.ID, err)
 	}
 
+	currentTenantCtx, hasCurrentTenant := TenantCtx(requestCtx)
 	for _, tenantx := range tenants {
-		var spaces []*enttenant.Space
-
-		tenantDB, ok := qq.unsafeTenantDBs.Load(tenantx.ID)
-		if !ok {
-			log.Println("tenant db not found, tenant id was", tenantx.ID)
+		if hasCurrentTenant && currentTenantCtx.Tenant.ID == tenantx.ID {
+			spaces, err := currentTenantCtx.TTx.Space.Query().All(currentTenantCtx)
+			if err != nil && !enttenant.IsNotFound(err) {
+				log.Println("failed to query spaces for tenant", tenantx.ID, err)
+				continue
+			}
+			spacesByTenant[tenantx] = spaces
 			continue
 		}
 
-		tenantTx, err := tenantDB.ReadOnlyConn.Tx(qq)
+		spaces, err := qq.readOnlySpacesForTenant(tenantx)
 		if err != nil {
-			log.Println("failed to start transaction for tenant", tenantx.ID, err)
-			continue
-		}
-
-		// necessary for permissions
-		tenantCtx := NewTenantContext(qq, tenantTx, tenantx, true)
-
-		// spaces = append(spaces, tenantDB.Space.Query().AllX(ctx)...)
-		spacesx, err := tenantTx.Space.Query().All(tenantCtx)
-		if err != nil && !enttenant.IsNotFound(err) {
-			log.Println("failed to query spaces for tenant", tenantx.ID, err)
-			qq.rollbackTenantTx(tenantTx, tenantx.ID)
-			continue
-		}
-		spaces = append(spaces, spacesx...)
-
-		// TODO not sure if necessary... may could also just use db directly or rollback if faster?
-		// TODO is it a problem that spaces get used in calling function after the tx is committed?
-		if err := tenantTx.Commit(); err != nil {
-			log.Println("failed to commit transaction for tenant", tenantx.ID, err)
-			qq.rollbackTenantTx(tenantTx, tenantx.ID)
+			log.Println(err)
 			continue
 		}
 
@@ -110,6 +99,35 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant() (map[*entmain.Tenant][]*e
 	}
 
 	return spacesByTenant, nil
+}
+
+func (qq *MainContext) readOnlySpacesForTenant(tenantx *entmain.Tenant) ([]*enttenant.Space, error) {
+	tenantDB, ok := qq.unsafeTenantDBs.Load(tenantx.ID)
+	if !ok {
+		return nil, fmt.Errorf("tenant db not found, tenant id was %d", tenantx.ID)
+	}
+	tenantTx, err := tenantDB.ReadOnlyConn.Tx(qq)
+	if err != nil {
+		return nil, fmt.Errorf("failed to start transaction for tenant %d: %w", tenantx.ID, err)
+	}
+
+	// necessary for permissions
+	tenantCtx := NewTenantContext(qq, tenantTx, tenantx, true)
+
+	// spaces = append(spaces, tenantDB.Space.Query().AllX(ctx)...)
+	spaces, err := tenantTx.Space.Query().All(tenantCtx)
+	if err != nil && !enttenant.IsNotFound(err) {
+		qq.rollbackTenantTx(tenantTx, tenantx.ID)
+		return nil, fmt.Errorf("failed to query spaces for tenant %d: %w", tenantx.ID, err)
+	}
+
+	// TODO not sure if necessary... may could also just use db directly or rollback if faster?
+	// TODO is it a problem that spaces get used in calling function after the tx is committed?
+	if err := tenantTx.Commit(); err != nil {
+		qq.rollbackTenantTx(tenantTx, tenantx.ID)
+		return nil, fmt.Errorf("failed to commit transaction for tenant %d: %w", tenantx.ID, err)
+	}
+	return spaces, nil
 }
 
 func (qq *MainContext) rollbackTenantTx(tenantTx *enttenant.Tx, tenantID int64) {

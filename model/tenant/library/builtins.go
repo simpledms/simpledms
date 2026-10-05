@@ -134,7 +134,7 @@ var builtinTemplates = []BuiltinTemplate{
 	},
 	{
 		Key:  "purchase_order",
-		Name: "Purchase Order",
+		Name: "Purchase order",
 		Icon: "shopping_cart",
 		Fields: []BuiltinField{
 			{Key: "po_number", Name: "PO number", Type: fieldtype.Text},
@@ -192,7 +192,7 @@ var builtinTemplates = []BuiltinTemplate{
 	},
 	{
 		Key:  "project_document",
-		Name: "Project Document",
+		Name: "Project document",
 		Icon: "assignment",
 		Fields: []BuiltinField{
 			{Key: "project_name", Name: "Project name", Type: fieldtype.Text},
@@ -223,7 +223,7 @@ var builtinTemplates = []BuiltinTemplate{
 	},
 	{
 		Key:  "meeting_notes",
-		Name: "Meeting Notes",
+		Name: "Meeting notes",
 		Icon: "event_note",
 		Fields: []BuiltinField{
 			{Key: "meeting_date", Name: "Meeting date", Type: fieldtype.Date},
@@ -250,7 +250,7 @@ var builtinTemplates = []BuiltinTemplate{
 	},
 	{
 		Key:  "expense_report",
-		Name: "Expense Report",
+		Name: "Expense report",
 		Icon: "account_balance_wallet",
 		Fields: []BuiltinField{
 			{Key: "report_period", Name: "Report period", Type: fieldtype.Text},
@@ -334,7 +334,7 @@ func registerBuiltinStrings() {
 	wx.T("Service")
 	wx.T("Sales")
 	wx.T("NDA")
-	wx.T("Purchase Order")
+	wx.T("Purchase order")
 	wx.T("PO number")
 	wx.T("Order date")
 	wx.T("Requested by")
@@ -355,7 +355,7 @@ func registerBuiltinStrings() {
 	wx.T("IT")
 	wx.T("Finance")
 	wx.T("Operations")
-	wx.T("Project Document")
+	wx.T("Project document")
 	wx.T("Project name")
 	wx.T("Target date")
 	wx.T("In progress")
@@ -366,7 +366,7 @@ func registerBuiltinStrings() {
 	wx.T("Plan")
 	wx.T("Report")
 	wx.T("Spec")
-	wx.T("Meeting Notes")
+	wx.T("Meeting notes")
 	wx.T("Meeting date")
 	wx.T("Title")
 	wx.T("Organizer")
@@ -376,7 +376,7 @@ func registerBuiltinStrings() {
 	wx.T("Final")
 	wx.T("Meeting type")
 	wx.T("Meeting status")
-	wx.T("Expense Report")
+	wx.T("Expense report")
 	wx.T("Report period")
 	wx.T("Employee")
 	wx.T("Submission date")

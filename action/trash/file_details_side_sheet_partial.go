@@ -57,12 +57,12 @@ func (qq *FileDetailsSideSheetPartial) Widget(
 		Widget: widget.Widget[widget.Dialog]{
 			ID: qq.ID(),
 		},
-		Headline:                        widget.T("Details"),
-		IsOpenOnLoadOnExtraLargeScreens: true,
-		KeepInDOMOnClose:                true,
-		IsOpenOnLoad:                    state.ActiveSideSheet == qq.ID(),
-		Layout:                          widget.DialogLayoutSideSheet,
-		Child:                           qq.actions.FileTabsPartial.Widget(ctx, state, data.FileID),
+		Headline:                   widget.T("Details"),
+		IsOpenOnLoadOnLargeScreens: true,
+		KeepInDOMOnClose:           true,
+		IsOpenOnLoad:               state.ActiveSideSheet == qq.ID(),
+		Layout:                     widget.DialogLayoutSideSheet,
+		Child:                      qq.actions.FileTabsPartial.Widget(ctx, state, data.FileID),
 	}
 }
 

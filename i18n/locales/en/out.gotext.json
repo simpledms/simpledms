@@ -7,9 +7,9 @@
             "translation": "Change passphrase"
         },
         {
-            "id": "You must be logged in to unlock the app.",
-            "message": "You must be logged in to unlock the app.",
-            "translation": "You must be logged in to unlock the app."
+            "id": "You must be signed in to unlock the app.",
+            "message": "You must be signed in to unlock the app.",
+            "translation": ""
         },
         {
             "id": "You must be an admin to unlock the app.",
@@ -22,9 +22,14 @@
             "translation": "Passphrase changed."
         },
         {
-            "id": "Init app",
-            "message": "Init app",
-            "translation": "Init app"
+            "id": "Initialize app",
+            "message": "Initialize app",
+            "translation": ""
+        },
+        {
+            "id": "Initialize",
+            "message": "Initialize",
+            "translation": ""
         },
         {
             "id": "Passphrases do not match.",
@@ -40,6 +45,11 @@
             "id": "Remove passphrase",
             "message": "Remove passphrase",
             "translation": "Remove passphrase"
+        },
+        {
+            "id": "Remove",
+            "message": "Remove",
+            "translation": ""
         },
         {
             "id": "Passphrase removed.",
@@ -92,8 +102,8 @@
             "translation": ""
         },
         {
-            "id": "Tenant upload limit updated to {UploadLimitLabel}.",
-            "message": "Tenant upload limit updated to {UploadLimitLabel}.",
+            "id": "Organization upload limit updated to {UploadLimitLabel}.",
+            "message": "Organization upload limit updated to {UploadLimitLabel}.",
             "translation": "",
             "placeholders": [
                 {
@@ -112,8 +122,8 @@
             "translation": ""
         },
         {
-            "id": "Set tenant upload limit",
-            "message": "Set tenant upload limit",
+            "id": "Set organization upload limit",
+            "message": "Set organization upload limit",
             "translation": ""
         },
         {
@@ -122,13 +132,18 @@
             "translation": "Unlock app"
         },
         {
+            "id": "Unlock",
+            "message": "Unlock",
+            "translation": ""
+        },
+        {
             "id": "App unlocked.",
             "message": "App unlocked.",
             "translation": "App unlocked."
         },
         {
-            "id": "You must be logged in to perform this action.",
-            "message": "You must be logged in to perform this action.",
+            "id": "You must be signed in to perform this action.",
+            "message": "You must be signed in to perform this action.",
             "translation": ""
         },
         {
@@ -147,23 +162,28 @@
             "translation": "Change"
         },
         {
-            "id": "You must be logged in to change your password.",
-            "message": "You must be logged in to change your password.",
-            "translation": "You must be logged in to change your password."
-        },
-        {
-            "id": "Password changed successfully.",
-            "message": "Password changed successfully.",
-            "translation": "Password changed successfully."
-        },
-        {
-            "id": "You must be logged in to manage passkeys.",
-            "message": "You must be logged in to manage passkeys.",
+            "id": "You must be signed in to change your password.",
+            "message": "You must be signed in to change your password.",
             "translation": ""
         },
         {
-            "id": "Passkeys cannot be removed because a tenant requires passkey login.",
-            "message": "Passkeys cannot be removed because a tenant requires passkey login.",
+            "id": "Invalid session cookie.",
+            "message": "Invalid session cookie.",
+            "translation": "Invalid session cookie."
+        },
+        {
+            "id": "Password changed.",
+            "message": "Password changed.",
+            "translation": ""
+        },
+        {
+            "id": "You must be signed in to manage passkeys.",
+            "message": "You must be signed in to manage passkeys.",
+            "translation": ""
+        },
+        {
+            "id": "Passkeys cannot be removed because an organization requires passkey sign-in.",
+            "message": "Passkeys cannot be removed because an organization requires passkey sign-in.",
             "translation": ""
         },
         {
@@ -177,18 +197,23 @@
             "translation": "Clear temporary password"
         },
         {
-            "id": "Temporary password cleared successfully.",
-            "message": "Temporary password cleared successfully.",
-            "translation": "Temporary password cleared successfully."
-        },
-        {
-            "id": "A tenant requires passkey login, so at least one passkey must remain.",
-            "message": "A tenant requires passkey login, so at least one passkey must remain.",
+            "id": "Clear",
+            "message": "Clear",
             "translation": ""
         },
         {
-            "id": "Passkey removed.",
-            "message": "Passkey removed.",
+            "id": "Temporary password cleared.",
+            "message": "Temporary password cleared.",
+            "translation": ""
+        },
+        {
+            "id": "An organization requires passkey sign-in, so at least one passkey must remain.",
+            "message": "An organization requires passkey sign-in, so at least one passkey must remain.",
+            "translation": ""
+        },
+        {
+            "id": "Passkey deleted.",
+            "message": "Passkey deleted.",
             "translation": ""
         },
         {
@@ -212,8 +237,8 @@
             "translation": ""
         },
         {
-            "id": "You must be logged in to view backup codes.",
-            "message": "You must be logged in to view backup codes.",
+            "id": "You must be signed in to view backup codes.",
+            "message": "You must be signed in to view backup codes.",
             "translation": ""
         },
         {
@@ -237,8 +262,8 @@
             "translation": "Sign in"
         },
         {
-            "id": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
-            "message": "Logged in successfully. {RecoveryCodesCount} backup codes left.",
+            "id": "Signed in. {RecoveryCodesCount} backup codes left.",
+            "message": "Signed in. {RecoveryCodesCount} backup codes left.",
             "translation": "",
             "placeholders": [
                 {
@@ -252,8 +277,8 @@
             ]
         },
         {
-            "id": "You must be logged in to register a passkey.",
-            "message": "You must be logged in to register a passkey.",
+            "id": "You must be signed in to register a passkey.",
+            "message": "You must be signed in to register a passkey.",
             "translation": ""
         },
         {
@@ -277,8 +302,8 @@
             "translation": ""
         },
         {
-            "id": "You must be logged in to manage backup codes.",
-            "message": "You must be logged in to manage backup codes.",
+            "id": "You must be signed in to manage backup codes.",
+            "message": "You must be signed in to manage backup codes.",
             "translation": ""
         },
         {
@@ -327,9 +352,9 @@
             "translation": "Set password"
         },
         {
-            "id": "Initial password set successfully.",
-            "message": "Initial password set successfully.",
-            "translation": "Initial password set successfully."
+            "id": "Password set.",
+            "message": "Password set.",
+            "translation": ""
         },
         {
             "id": "Too many sign-in attempts. Please try again shortly.",
@@ -357,9 +382,9 @@
             "translation": ""
         },
         {
-            "id": "Logged in successfully.",
-            "message": "Logged in successfully.",
-            "translation": "Logged in successfully."
+            "id": "Signed in.",
+            "message": "Signed in.",
+            "translation": ""
         },
         {
             "id": "Sign in only works over HTTPS or on localhost.",
@@ -385,11 +410,6 @@
             "id": "Use backup code",
             "message": "Use backup code",
             "translation": ""
-        },
-        {
-            "id": "Invalid session cookie.",
-            "message": "Invalid session cookie.",
-            "translation": "Invalid session cookie."
         },
         {
             "id": "Add field",
@@ -432,13 +452,18 @@
             "translation": ""
         },
         {
-            "id": "file is not a directory",
-            "message": "file is not a directory",
+            "id": "Add",
+            "message": "Add",
             "translation": ""
         },
         {
-            "id": "could not render widget",
-            "message": "could not render widget",
+            "id": "File is not a folder.",
+            "message": "File is not a folder.",
+            "translation": ""
+        },
+        {
+            "id": "Could not render widget.",
+            "message": "Could not render widget.",
             "translation": ""
         },
         {
@@ -452,18 +477,18 @@
             "translation": ""
         },
         {
-            "id": "Create directory",
-            "message": "Create directory",
+            "id": "Create folder",
+            "message": "Create folder",
             "translation": ""
         },
         {
-            "id": "No dir id provided.",
-            "message": "No dir id provided.",
+            "id": "No folder ID provided.",
+            "message": "No folder ID provided.",
             "translation": ""
         },
         {
-            "id": "No file id provided.",
-            "message": "No file id provided.",
+            "id": "No file ID provided.",
+            "message": "No file ID provided.",
             "translation": ""
         },
         {
@@ -835,13 +860,18 @@
             "translation": ""
         },
         {
-            "id": "Are you sure?",
-            "message": "Are you sure?",
+            "id": "Unzip archive",
+            "message": "Unzip archive",
             "translation": ""
         },
         {
-            "id": "Unzip archive",
-            "message": "Unzip archive",
+            "id": "Delete this file? You can restore it from the Trash.",
+            "message": "Delete this file? You can restore it from the Trash.",
+            "translation": ""
+        },
+        {
+            "id": "Delete this folder? Its files can be restored from the Trash.",
+            "message": "Delete this folder? Its files can be restored from the Trash.",
             "translation": ""
         },
         {
@@ -955,8 +985,8 @@
             "translation": "PDF preview is not available."
         },
         {
-            "id": "rendering failed",
-            "message": "rendering failed",
+            "id": "Rendering failed.",
+            "message": "Rendering failed.",
             "translation": ""
         },
         {
@@ -970,8 +1000,8 @@
             "translation": ""
         },
         {
-            "id": "version not found",
-            "message": "version not found",
+            "id": "Version not found.",
+            "message": "Version not found.",
             "translation": ""
         },
         {
@@ -980,18 +1010,13 @@
             "translation": ""
         },
         {
-            "id": "Remove",
-            "message": "Remove",
-            "translation": ""
-        },
-        {
             "id": "Remove this field value?",
             "message": "Remove this field value?",
             "translation": ""
         },
         {
-            "id": "Loading more...",
-            "message": "Loading more...",
+            "id": "Loading more…",
+            "message": "Loading more…",
             "translation": ""
         },
         {
@@ -1075,28 +1100,23 @@
             "translation": ""
         },
         {
-            "id": "Added new version from inbox.",
-            "message": "Added new version from inbox.",
+            "id": "Added new version from Inbox.",
+            "message": "Added new version from Inbox.",
             "translation": ""
         },
         {
-            "id": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
-            "message": "I understand that the inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
+            "id": "I understand that the Inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
+            "message": "I understand that the Inbox file's metadata (document type, tags, fields) will be lost when merged. Notes and their history will be preserved.",
             "translation": ""
         },
         {
-            "id": "Search inbox files",
-            "message": "Search inbox files",
+            "id": "Search Inbox files",
+            "message": "Search Inbox files",
             "translation": ""
         },
         {
-            "id": "Add new version from inbox",
-            "message": "Add new version from inbox",
-            "translation": ""
-        },
-        {
-            "id": "Add",
-            "message": "Add",
+            "id": "Add new version from Inbox",
+            "message": "Add new version from Inbox",
             "translation": ""
         },
         {
@@ -1110,8 +1130,8 @@
             "translation": ""
         },
         {
-            "id": "File must be in inbox.",
-            "message": "File must be in inbox.",
+            "id": "File must be in the Inbox.",
+            "message": "File must be in the Inbox.",
             "translation": ""
         },
         {
@@ -1120,13 +1140,13 @@
             "translation": ""
         },
         {
-            "id": "missing version number",
-            "message": "missing version number",
+            "id": "Missing version number.",
+            "message": "Missing version number.",
             "translation": ""
         },
         {
-            "id": "invalid version number",
-            "message": "invalid version number",
+            "id": "Invalid version number.",
+            "message": "Invalid version number.",
             "translation": ""
         },
         {
@@ -1155,13 +1175,18 @@
             "translation": ""
         },
         {
+            "id": "Filters",
+            "message": "Filters",
+            "translation": ""
+        },
+        {
             "id": "No files available yet.",
             "message": "No files available yet.",
             "translation": ""
         },
         {
-            "id": "No files or directories available yet.",
-            "message": "No files or directories available yet.",
+            "id": "No files or folders available yet.",
+            "message": "No files or folders available yet.",
             "translation": ""
         },
         {
@@ -1295,6 +1320,11 @@
             "translation": ""
         },
         {
+            "id": "Create",
+            "message": "Create",
+            "translation": ""
+        },
+        {
             "id": "«{Name}» created.",
             "message": "«{Name}» created.",
             "translation": "",
@@ -1310,8 +1340,8 @@
             ]
         },
         {
-            "id": "Open directory",
-            "message": "Open directory",
+            "id": "Open folder",
+            "message": "Open folder",
             "translation": "",
             "comment": "TODO Go to, open, show?"
         },
@@ -1342,11 +1372,6 @@
             ]
         },
         {
-            "id": "Fields | Filter",
-            "message": "Fields | Filter",
-            "translation": ""
-        },
-        {
             "id": "«{Name}» removed.",
             "message": "«{Name}» removed.",
             "translation": "",
@@ -1367,8 +1392,8 @@
             "translation": ""
         },
         {
-            "id": "Renamed to «{Name}»",
-            "message": "Renamed to «{Name}»",
+            "id": "Renamed to «{Name}».",
+            "message": "Renamed to «{Name}».",
             "translation": "",
             "placeholders": [
                 {
@@ -1382,19 +1407,19 @@
             ]
         },
         {
-            "id": "PDF preview conversion is not configured",
-            "message": "PDF preview conversion is not configured",
-            "translation": "PDF preview conversion is not configured"
+            "id": "Filters reset.",
+            "message": "Filters reset.",
+            "translation": ""
         },
         {
-            "id": "PDF preview is not available",
-            "message": "PDF preview is not available",
-            "translation": "PDF preview is not available"
+            "id": "PDF preview conversion is not configured.",
+            "message": "PDF preview conversion is not configured.",
+            "translation": ""
         },
         {
-            "id": "PDF preview is not ready to retry",
-            "message": "PDF preview is not ready to retry",
-            "translation": "PDF preview is not ready to retry"
+            "id": "PDF preview is not ready to retry.",
+            "message": "PDF preview is not ready to retry.",
+            "translation": ""
         },
         {
             "id": "PDF preview generation queued.",
@@ -1432,6 +1457,11 @@
             "translation": ""
         },
         {
+            "id": "Unzip",
+            "message": "Unzip",
+            "translation": ""
+        },
+        {
             "id": "Not a ZIP archive.",
             "message": "Not a ZIP archive.",
             "translation": ""
@@ -1452,8 +1482,8 @@
             "translation": ""
         },
         {
-            "id": "Could not create directory structure.",
-            "message": "Could not create directory structure.",
+            "id": "Could not create folder structure.",
+            "message": "Could not create folder structure.",
             "translation": ""
         },
         {
@@ -1482,23 +1512,13 @@
             "translation": ""
         },
         {
-            "id": "«{Name}» filter updated.",
-            "message": "«{Name}» filter updated.",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "propertyx.Name"
-                }
-            ]
+            "id": "Upload",
+            "message": "Upload",
+            "translation": ""
         },
         {
-            "id": "No parent dir provided.",
-            "message": "No parent dir provided.",
+            "id": "No parent folder provided.",
+            "message": "No parent folder provided.",
             "translation": ""
         },
         {
@@ -1547,13 +1567,13 @@
             ]
         },
         {
-            "id": "Cannot upload versions for directories.",
-            "message": "Cannot upload versions for directories.",
+            "id": "Cannot upload versions for folders.",
+            "message": "Cannot upload versions for folders.",
             "translation": ""
         },
         {
-            "id": "cannot download directories",
-            "message": "cannot download directories",
+            "id": "Folders cannot be downloaded.",
+            "message": "Folders cannot be downloaded.",
             "translation": ""
         },
         {
@@ -1577,8 +1597,8 @@
             ]
         },
         {
-            "id": "Directory up",
-            "message": "Directory up",
+            "id": "Parent folder",
+            "message": "Parent folder",
             "translation": ""
         },
         {
@@ -1602,13 +1622,8 @@
             "translation": ""
         },
         {
-            "id": "MCP credential created.",
-            "message": "MCP credential created.",
-            "translation": ""
-        },
-        {
-            "id": "No spaces available yet.",
-            "message": "No spaces available yet.",
+            "id": "No Spaces available yet.",
+            "message": "No Spaces available yet.",
             "translation": ""
         },
         {
@@ -1629,11 +1644,6 @@
         {
             "id": "Space",
             "message": "Space",
-            "translation": ""
-        },
-        {
-            "id": "Create",
-            "message": "Create",
             "translation": ""
         },
         {
@@ -1659,11 +1669,6 @@
         {
             "id": "Token",
             "message": "Token",
-            "translation": ""
-        },
-        {
-            "id": "WebDAV credential created.",
-            "message": "WebDAV credential created.",
             "translation": ""
         },
         {
@@ -1951,8 +1956,8 @@
             "translation": ""
         },
         {
-            "id": "You've logged in with a temporary password. Please set a password to secure your account and use the app.",
-            "message": "You've logged in with a temporary password. Please set a password to secure your account and use the app.",
+            "id": "You've signed in with a temporary password. Please set a password to secure your account and use the app.",
+            "message": "You've signed in with a temporary password. Please set a password to secure your account and use the app.",
             "translation": ""
         },
         {
@@ -1971,13 +1976,13 @@
             "translation": ""
         },
         {
-            "id": "No space available yet",
-            "message": "No space available yet",
+            "id": "No Space available yet",
+            "message": "No Space available yet",
             "translation": ""
         },
         {
-            "id": "You have no permission to access any space of this organization.",
-            "message": "You have no permission to access any space of this organization.",
+            "id": "You have no permission to access any Space of this organization.",
+            "message": "You have no permission to access any Space of this organization.",
             "translation": ""
         },
         {
@@ -1986,8 +1991,8 @@
             "translation": ""
         },
         {
-            "id": "Manage spaces",
-            "message": "Manage spaces",
+            "id": "Manage Spaces",
+            "message": "Manage Spaces",
             "translation": ""
         },
         {
@@ -2016,32 +2021,17 @@
             "translation": ""
         },
         {
-            "id": "Created on {Format2006_01_02_1504}",
-            "message": "Created on {Format2006_01_02_1504}",
+            "id": "Last used: {LanguageBCP47}",
+            "message": "Last used: {LanguageBCP47}",
             "translation": "",
             "placeholders": [
                 {
-                    "id": "Format2006_01_02_1504",
+                    "id": "LanguageBCP47",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "credentialx.CreatedAt.Format(\"2006-01-02 15:04\")"
-                }
-            ]
-        },
-        {
-            "id": "Last used on {Format2006_01_02_1504}",
-            "message": "Last used on {Format2006_01_02_1504}",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Format2006_01_02_1504",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "credentialx.LastUsedAt.Format(\"2006-01-02 15:04\")"
+                    "expr": "timex.NewDateTime(*credentialx.LastUsedAt).String(ctx.MainCtx().LanguageBCP47)"
                 }
             ]
         },
@@ -2061,8 +2051,18 @@
             "translation": ""
         },
         {
+            "id": "Edit MCP credential",
+            "message": "Edit MCP credential",
+            "translation": ""
+        },
+        {
             "id": "Changes saved.",
             "message": "Changes saved.",
+            "translation": ""
+        },
+        {
+            "id": "Edit WebDAV credential",
+            "message": "Edit WebDAV credential",
             "translation": ""
         },
         {
@@ -2081,8 +2081,8 @@
             "translation": ""
         },
         {
-            "id": "No MCP credentials",
-            "message": "No MCP credentials",
+            "id": "No MCP credentials yet.",
+            "message": "No MCP credentials yet.",
             "translation": ""
         },
         {
@@ -2162,11 +2162,6 @@
             ]
         },
         {
-            "id": "Actions",
-            "message": "Actions",
-            "translation": ""
-        },
-        {
             "id": "Revoke",
             "message": "Revoke",
             "translation": ""
@@ -2217,13 +2212,18 @@
             "translation": ""
         },
         {
-            "id": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
-            "message": "Are you sure? This organization will be deleted. All accounts owned by this organization will be deleted globally.",
+            "id": "Delete this organization? All accounts owned by it will be deleted globally.",
+            "message": "Delete this organization? All accounts owned by it will be deleted globally.",
             "translation": ""
         },
         {
             "id": "Download backup",
             "message": "Download backup",
+            "translation": ""
+        },
+        {
+            "id": "Delete this passkey?",
+            "message": "Delete this passkey?",
             "translation": ""
         },
         {
@@ -2262,8 +2262,8 @@
             "translation": ""
         },
         {
-            "id": "You must be logged in to manage organizations.",
-            "message": "You must be logged in to manage organizations.",
+            "id": "You must be signed in to manage organizations.",
+            "message": "You must be signed in to manage organizations.",
             "translation": ""
         },
         {
@@ -2292,8 +2292,8 @@
             "translation": ""
         },
         {
-            "id": "No WebDAV credentials",
-            "message": "No WebDAV credentials",
+            "id": "No WebDAV credentials yet.",
+            "message": "No WebDAV credentials yet.",
             "translation": ""
         },
         {
@@ -2396,23 +2396,13 @@
             "translation": ""
         },
         {
-            "id": "Attribute «{Name}» added.",
-            "message": "Attribute «{Name}» added.",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "propertyx.Name"
-                }
-            ]
-        },
-        {
             "id": "Add field attribute",
             "message": "Add field attribute",
+            "translation": ""
+        },
+        {
+            "id": "Attribute updated.",
+            "message": "Attribute updated.",
             "translation": ""
         },
         {
@@ -2422,6 +2412,11 @@
             "comment": "TODO link"
         },
         {
+            "id": "Delete this attribute?",
+            "message": "Delete this attribute?",
+            "translation": ""
+        },
+        {
             "id": "Add list attribute (tag group)",
             "message": "Add list attribute (tag group)",
             "translation": ""
@@ -2429,6 +2424,11 @@
         {
             "id": "name-giving",
             "message": "name-giving",
+            "translation": ""
+        },
+        {
+            "id": "Delete this document type?",
+            "message": "Delete this document type?",
             "translation": ""
         },
         {
@@ -2462,8 +2462,8 @@
             "translation": ""
         },
         {
-            "id": "Add document type",
-            "message": "Add document type",
+            "id": "Create document type",
+            "message": "Create document type",
             "translation": ""
         },
         {
@@ -2489,11 +2489,6 @@
         {
             "id": "Edit field attribute",
             "message": "Edit field attribute",
-            "translation": ""
-        },
-        {
-            "id": "Attribute updated.",
-            "message": "Attribute updated.",
             "translation": ""
         },
         {
@@ -2532,8 +2527,8 @@
             "translation": ""
         },
         {
-            "id": "Import is only available for empty spaces.",
-            "message": "Import is only available for empty spaces.",
+            "id": "Import is only available for empty Spaces.",
+            "message": "Import is only available for empty Spaces.",
             "translation": ""
         },
         {
@@ -2552,8 +2547,8 @@
             "translation": ""
         },
         {
-            "id": "RenameCmd document type",
-            "message": "RenameCmd document type",
+            "id": "Rename document type",
+            "message": "Rename document type",
             "translation": ""
         },
         {
@@ -2572,18 +2567,18 @@
             ]
         },
         {
-            "id": "cannot preview directories",
-            "message": "cannot preview directories",
-            "translation": "cannot preview directories"
+            "id": "Folders cannot be previewed.",
+            "message": "Folders cannot be previewed.",
+            "translation": ""
         },
         {
-            "id": "original source preview is only available for HTML files",
-            "message": "original source preview is only available for HTML files",
-            "translation": "original source preview is only available for HTML files"
+            "id": "Original source preview is only available for HTML files.",
+            "message": "Original source preview is only available for HTML files.",
+            "translation": ""
         },
         {
-            "id": "could not read file",
-            "message": "could not read file",
+            "id": "Could not read file.",
+            "message": "Could not read file.",
             "translation": ""
         },
         {
@@ -2592,13 +2587,23 @@
             "translation": ""
         },
         {
-            "id": "Move to another Inbox",
-            "message": "Move to another Inbox",
+            "id": "Assign",
+            "message": "Assign",
             "translation": ""
         },
         {
-            "id": "Reloaded metadata",
-            "message": "Reloaded metadata",
+            "id": "No new files found.",
+            "message": "No new files found.",
+            "translation": ""
+        },
+        {
+            "id": "Files uploaded.",
+            "message": "Files uploaded.",
+            "translation": ""
+        },
+        {
+            "id": "Move to another Inbox",
+            "message": "Move to another Inbox",
             "translation": ""
         },
         {
@@ -2607,8 +2612,8 @@
             "translation": ""
         },
         {
-            "id": "Delete from inbox",
-            "message": "Delete from inbox",
+            "id": "Delete from Inbox",
+            "message": "Delete from Inbox",
             "translation": ""
         },
         {
@@ -2657,23 +2662,13 @@
             "translation": ""
         },
         {
-            "id": "No new files found.",
-            "message": "No new files found.",
-            "translation": ""
-        },
-        {
-            "id": "Files uploaded successfully.",
-            "message": "Files uploaded successfully.",
-            "translation": ""
-        },
-        {
             "id": "File not found.",
             "message": "File not found.",
             "translation": ""
         },
         {
-            "id": "File is not in inbox.",
-            "message": "File is not in inbox.",
+            "id": "File is not in the Inbox.",
+            "message": "File is not in the Inbox.",
             "translation": ""
         },
         {
@@ -2727,8 +2722,8 @@
             "translation": ""
         },
         {
-            "id": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
-            "message": "You can choose other Spaces in this tenant where you have write access, or whose Inboxes accept transfers.",
+            "id": "You can choose other Spaces in this organization where you have write access, or whose Inboxes accept transfers.",
+            "message": "You can choose other Spaces in this organization where you have write access, or whose Inboxes accept transfers.",
             "translation": ""
         },
         {
@@ -2752,23 +2747,23 @@
             "translation": ""
         },
         {
-            "id": "Assign user to space",
-            "message": "Assign user to space",
+            "id": "Assign user to Space",
+            "message": "Assign user to Space",
             "translation": ""
         },
         {
-            "id": "No space selected. Please select a space first.",
-            "message": "No space selected. Please select a space first.",
+            "id": "No Space selected. Please select a Space first.",
+            "message": "No Space selected. Please select a Space first.",
             "translation": ""
         },
         {
-            "id": "You are not allowed to assign users to spaces because you aren't the owner.",
-            "message": "You are not allowed to assign users to spaces because you aren't the owner.",
+            "id": "You are not allowed to assign users to Spaces because you aren't the owner.",
+            "message": "You are not allowed to assign users to Spaces because you aren't the owner.",
             "translation": ""
         },
         {
-            "id": "User assigned to space successfully.",
-            "message": "User assigned to space successfully.",
+            "id": "User assigned to Space.",
+            "message": "User assigned to Space.",
             "translation": ""
         },
         {
@@ -2793,43 +2788,23 @@
             "comment": "TODO link"
         },
         {
-            "id": "Manage users",
-            "message": "Manage users",
+            "id": "Assign user",
+            "message": "Assign user",
             "translation": ""
         },
         {
-            "id": "Users «{Name}»",
-            "message": "Users «{Name}»",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "Name",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "ctx.SpaceCtx().Space.Name"
-                }
-            ]
-        },
-        {
-            "id": "User is already assigned to this space.",
-            "message": "User is already assigned to this space.",
+            "id": "User is already assigned to this Space.",
+            "message": "User is already assigned to this Space.",
             "translation": ""
         },
         {
-            "id": "You cannot unassign yourself from a space.",
-            "message": "You cannot unassign yourself from a space.",
+            "id": "You cannot unassign yourself from a Space.",
+            "message": "You cannot unassign yourself from a Space.",
             "translation": ""
         },
         {
-            "id": "Unassign user from space",
-            "message": "Unassign user from space",
-            "translation": ""
-        },
-        {
-            "id": "User unassigned from space successfully.",
-            "message": "User unassigned from space successfully.",
+            "id": "Unassign user from Space",
+            "message": "Unassign user from Space",
             "translation": ""
         },
         {
@@ -2838,19 +2813,28 @@
             "translation": ""
         },
         {
-            "id": "Assign a user",
-            "message": "Assign a user",
-            "translation": "",
-            "comment": "TODO Create or add? system or real world perspective?"
-        },
-        {
-            "id": "Create new tag or group",
-            "message": "Create new tag or group",
+            "id": "User unassigned from Space.",
+            "message": "User unassigned from Space.",
             "translation": ""
         },
         {
-            "id": "Are you sure? This action will delete the tag and unassign it from all files!",
-            "message": "Are you sure? This action will delete the tag and unassign it from all files!",
+            "id": "Unassign this user from the Space?",
+            "message": "Unassign this user from the Space?",
+            "translation": ""
+        },
+        {
+            "id": "No users assigned yet.",
+            "message": "No users assigned yet.",
+            "translation": ""
+        },
+        {
+            "id": "Create tag or group",
+            "message": "Create tag or group",
+            "translation": ""
+        },
+        {
+            "id": "Delete this tag? It will be unassigned from all files.",
+            "message": "Delete this tag? It will be unassigned from all files.",
             "translation": ""
         },
         {
@@ -2895,8 +2879,8 @@
             ]
         },
         {
-            "id": "Create new tag",
-            "message": "Create new tag",
+            "id": "Create tag",
+            "message": "Create tag",
             "translation": "",
             "comment": "group not possible"
         },
@@ -2921,8 +2905,8 @@
             "translation": ""
         },
         {
-            "id": "You are not allowed to create users. No tenant selected.",
-            "message": "You are not allowed to create users. No tenant selected.",
+            "id": "You are not allowed to create users. No organization selected.",
+            "message": "You are not allowed to create users. No organization selected.",
             "translation": ""
         },
         {
@@ -2931,13 +2915,13 @@
             "translation": ""
         },
         {
-            "id": "Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.",
-            "message": "Successfully created the new user. The passwort was sent to the user by mail. An owner can access all spaces without further configuration.",
+            "id": "User created. The password was sent by email. Owners can access all Spaces without further setup.",
+            "message": "User created. The password was sent by email. Owners can access all Spaces without further setup.",
             "translation": ""
         },
         {
-            "id": "Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space.",
-            "message": "Successfully created the new user. The passwort was sent to the user by mail. The next step is to permit the user to access a space.",
+            "id": "User created. The password was sent by email. Next, assign the user to a Space.",
+            "message": "User created. The password was sent by email. Next, assign the user to a Space.",
             "translation": ""
         },
         {
@@ -2961,25 +2945,14 @@
             "translation": ""
         },
         {
-            "id": "Manage users of tenant",
-            "message": "Manage users of tenant",
+            "id": "Remove this user from the organization?",
+            "message": "Remove this user from the organization?",
             "translation": ""
         },
         {
-            "id": "Are you sure? This user will be removed from this organization only.",
-            "message": "Are you sure? This user will be removed from this organization only.",
+            "id": "Remove this user from the organization and delete their account globally?",
+            "message": "Remove this user from the organization and delete their account globally?",
             "translation": ""
-        },
-        {
-            "id": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
-            "message": "Are you sure? This user will be removed from this organization and the account will be deleted globally.",
-            "translation": ""
-        },
-        {
-            "id": "Add a new user",
-            "message": "Add a new user",
-            "translation": "",
-            "comment": "TODO Create or add? system or real world perspective?"
         },
         {
             "id": "Member account",
@@ -2992,8 +2965,8 @@
             "translation": ""
         },
         {
-            "id": "{NameSecondLine} - {OwnershipText}",
-            "message": "{NameSecondLine} - {OwnershipText}",
+            "id": "{NameSecondLine} · {OwnershipText}",
+            "message": "{NameSecondLine} · {OwnershipText}",
             "translation": "",
             "placeholders": [
                 {
@@ -3015,11 +2988,6 @@
             ]
         },
         {
-            "id": "Upload",
-            "message": "Upload",
-            "translation": ""
-        },
-        {
             "id": "Uploading files, please wait a moment.",
             "message": "Uploading files, please wait a moment.",
             "translation": ""
@@ -3030,18 +2998,13 @@
             "translation": ""
         },
         {
-            "id": "No spaces yet.",
-            "message": "No spaces yet.",
+            "id": "Please try again once you created a Space or were invited to join one.",
+            "message": "Please try again once you created a Space or were invited to join one.",
             "translation": ""
         },
         {
-            "id": "Please try again once you created a space or were invited to join one.",
-            "message": "Please try again once you created a space or were invited to join one.",
-            "translation": ""
-        },
-        {
-            "id": "Select space",
-            "message": "Select space",
+            "id": "Select Space",
+            "message": "Select Space",
             "translation": ""
         },
         {
@@ -3050,8 +3013,8 @@
             "translation": ""
         },
         {
-            "id": "Files uploaded, please select a space.",
-            "message": "Files uploaded, please select a space.",
+            "id": "Files uploaded, please select a Space.",
+            "message": "Files uploaded, please select a Space.",
             "translation": ""
         },
         {
@@ -3065,8 +3028,8 @@
             "translation": ""
         },
         {
-            "id": "File uploaded, please select a space.",
-            "message": "File uploaded, please select a space.",
+            "id": "File uploaded, please select a Space.",
+            "message": "File uploaded, please select a Space.",
             "translation": ""
         },
         {
@@ -3103,6 +3066,11 @@
             "translation": ""
         },
         {
+            "id": "Create field",
+            "message": "Create field",
+            "translation": ""
+        },
+        {
             "id": "Field «{Name}» created.",
             "message": "Field «{Name}» created.",
             "translation": "",
@@ -3133,6 +3101,11 @@
             "translation": ""
         },
         {
+            "id": "Delete this field?",
+            "message": "Delete this field?",
+            "translation": ""
+        },
+        {
             "id": "Space «{Name}» created.",
             "message": "Space «{Name}» created.",
             "translation": "",
@@ -3148,13 +3121,13 @@
             ]
         },
         {
-            "id": "Create space",
-            "message": "Create space",
+            "id": "Create Space",
+            "message": "Create Space",
             "translation": ""
         },
         {
-            "id": "Select document types to add to this space:",
-            "message": "Select document types to add to this space:",
+            "id": "Select document types to add to this Space:",
+            "message": "Select document types to add to this Space:",
             "translation": ""
         },
         {
@@ -3163,8 +3136,8 @@
             "translation": ""
         },
         {
-            "id": "Edit space",
-            "message": "Edit space",
+            "id": "Edit Space",
+            "message": "Edit Space",
             "translation": ""
         },
         {
@@ -3193,6 +3166,11 @@
         {
             "id": "active",
             "message": "active",
+            "translation": ""
+        },
+        {
+            "id": "Delete this Space?",
+            "message": "Delete this Space?",
             "translation": ""
         },
         {
@@ -3228,8 +3206,7 @@
         {
             "id": "Create and assign tag",
             "message": "Create and assign tag",
-            "translation": "",
-            "comment": "\"#tagAssignmentList\","
+            "translation": ""
         },
         {
             "id": "«{Name}» created and assigned.",
@@ -3245,12 +3222,6 @@
                     "expr": "tagx.Name"
                 }
             ]
-        },
-        {
-            "id": "Create tag",
-            "message": "Create tag",
-            "translation": "",
-            "comment": "\"TODO\", // TODO"
         },
         {
             "id": "Tag «{Name}» created.",
@@ -3283,13 +3254,74 @@
             ]
         },
         {
+            "id": "Group, {ChildCount} tags, {SelectedCount} selected",
+            "message": "Group, {ChildCount} tags, {SelectedCount} selected",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "ChildCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "childCount"
+                },
+                {
+                    "id": "SelectedCount",
+                    "string": "%[2]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 2,
+                    "expr": "selectedCount"
+                }
+            ]
+        },
+        {
+            "id": "Group, {ChildCount} tag, {SelectedCount} selected",
+            "message": "Group, {ChildCount} tag, {SelectedCount} selected",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "ChildCount",
+                    "string": "%[1]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 1,
+                    "expr": "childCount"
+                },
+                {
+                    "id": "SelectedCount",
+                    "string": "%[2]d",
+                    "type": "int",
+                    "underlyingType": "int",
+                    "argNum": 2,
+                    "expr": "selectedCount"
+                }
+            ]
+        },
+        {
+            "id": "Composed of {JointagNames__}",
+            "message": "Composed of {JointagNames__}",
+            "translation": "",
+            "placeholders": [
+                {
+                    "id": "JointagNames__",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "strings.Join(tagNames, \", \")"
+                }
+            ]
+        },
+        {
             "id": "Show assigned tags",
             "message": "Show assigned tags",
             "translation": ""
         },
         {
-            "id": "Create new group",
-            "message": "Create new group",
+            "id": "Create group",
+            "message": "Create group",
             "translation": ""
         },
         {
@@ -3330,8 +3362,8 @@
             ]
         },
         {
-            "id": "layout not supported",
-            "message": "layout not supported",
+            "id": "Layout not supported.",
+            "message": "Layout not supported.",
             "translation": ""
         },
         {
@@ -3355,28 +3387,13 @@
             ]
         },
         {
-            "id": "Composed of {JointagNames__}",
-            "message": "Composed of {JointagNames__}",
-            "translation": "",
-            "placeholders": [
-                {
-                    "id": "JointagNames__",
-                    "string": "%[1]s",
-                    "type": "string",
-                    "underlyingType": "string",
-                    "argNum": 1,
-                    "expr": "strings.Join(tagNames, \", \")"
-                }
-            ]
-        },
-        {
             "id": "Move tag to group",
             "message": "Move tag to group",
             "translation": ""
         },
         {
-            "id": "Deselected group.",
-            "message": "Deselected group.",
+            "id": "Removed from group.",
+            "message": "Removed from group.",
             "translation": ""
         },
         {
@@ -3400,8 +3417,8 @@
             "translation": ""
         },
         {
-            "id": "Are you sure? This action will delete the tag entirely and not just unassign it from the current file!",
-            "message": "Are you sure? This action will delete the tag entirely and not just unassign it from the current file!",
+            "id": "Delete this tag entirely? It will be unassigned from all files, not only from this one.",
+            "message": "Delete this tag entirely? It will be unassigned from all files, not only from this one.",
             "translation": ""
         },
         {
@@ -3418,11 +3435,6 @@
                     "expr": "tagx.Name"
                 }
             ]
-        },
-        {
-            "id": "Parent folder",
-            "message": "Parent folder",
-            "translation": ""
         },
         {
             "id": "Created at",
@@ -3475,32 +3487,32 @@
             "translation": ""
         },
         {
-            "id": "Folder deleted on {Format02_Jan_2006}",
-            "message": "Folder deleted on {Format02_Jan_2006}",
+            "id": "Folder deleted: {LanguageBCP47}",
+            "message": "Folder deleted: {LanguageBCP47}",
             "translation": "",
             "placeholders": [
                 {
-                    "id": "Format02_Jan_2006",
+                    "id": "LanguageBCP47",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "filex.DeletedAt.Format(\"02 Jan 2006\")"
+                    "expr": "deletedAtDate.String(ctx.MainCtx().LanguageBCP47)"
                 }
             ]
         },
         {
-            "id": "Deleted on {Format02_Jan_2006}",
-            "message": "Deleted on {Format02_Jan_2006}",
+            "id": "Deleted: {LanguageBCP47}",
+            "message": "Deleted: {LanguageBCP47}",
             "translation": "",
             "placeholders": [
                 {
-                    "id": "Format02_Jan_2006",
+                    "id": "LanguageBCP47",
                     "string": "%[1]s",
                     "type": "string",
                     "underlyingType": "string",
                     "argNum": 1,
-                    "expr": "filex.DeletedAt.Format(\"02 Jan 2006\")"
+                    "expr": "deletedAtDate.String(ctx.MainCtx().LanguageBCP47)"
                 }
             ]
         },
@@ -3540,18 +3552,18 @@
             "translation": ""
         },
         {
-            "id": "cannot parse file",
-            "message": "cannot parse file",
+            "id": "Cannot parse file.",
+            "message": "Cannot parse file.",
             "translation": ""
         },
         {
-            "id": "cannot parse form",
-            "message": "cannot parse form",
+            "id": "Cannot parse form.",
+            "message": "Cannot parse form.",
             "translation": ""
         },
         {
-            "id": "cannot decode form",
-            "message": "cannot decode form",
+            "id": "Cannot decode form.",
+            "message": "Cannot decode form.",
             "translation": ""
         },
         {
@@ -3560,13 +3572,8 @@
             "translation": ""
         },
         {
-            "id": "Filters successfully reset.",
-            "message": "Filters successfully reset.",
-            "translation": ""
-        },
-        {
-            "id": "cannot parse current url",
-            "message": "cannot parse current url",
+            "id": "Cannot parse current URL.",
+            "message": "Cannot parse current URL.",
             "translation": ""
         },
         {
@@ -3575,19 +3582,24 @@
             "translation": ""
         },
         {
+            "id": "Only organization owners can manage users and settings.",
+            "message": "Only organization owners can manage users and settings.",
+            "translation": ""
+        },
+        {
             "id": "OCR succeeded at",
             "message": "OCR succeeded at",
             "translation": ""
         },
         {
-            "id": "You are not allowed to access this tenant.",
-            "message": "You are not allowed to access this tenant.",
-            "translation": "You are not allowed to access this tenant."
+            "id": "You are not allowed to access this organization.",
+            "message": "You are not allowed to access this organization.",
+            "translation": ""
         },
         {
-            "id": "You are not allowed to access this space.",
-            "message": "You are not allowed to access this space.",
-            "translation": "You are not allowed to access this space."
+            "id": "You are not allowed to access this Space.",
+            "message": "You are not allowed to access this Space.",
+            "translation": ""
         },
         {
             "id": "No backup codes were returned.",
@@ -3641,11 +3653,6 @@
             "translation": ""
         },
         {
-            "id": "Unlock application",
-            "message": "Unlock application",
-            "translation": ""
-        },
-        {
             "id": "Passphrase is required.",
             "message": "Passphrase is required.",
             "translation": ""
@@ -3671,6 +3678,11 @@
             "translation": ""
         },
         {
+            "id": "Actions",
+            "message": "Actions",
+            "translation": ""
+        },
+        {
             "id": "Open main menu",
             "message": "Open main menu",
             "translation": ""
@@ -3693,6 +3705,11 @@
         {
             "id": "Passkey name (optional)",
             "message": "Passkey name (optional)",
+            "translation": ""
+        },
+        {
+            "id": "Loading…",
+            "message": "Loading…",
             "translation": ""
         },
         {
@@ -3851,6 +3868,11 @@
             "translation": ""
         },
         {
+            "id": "Created destination",
+            "message": "Created destination",
+            "translation": ""
+        },
+        {
             "id": "Credential status values",
             "message": "Credential status values",
             "translation": ""
@@ -3906,11 +3928,6 @@
             "translation": ""
         },
         {
-            "id": "Dir name",
-            "message": "Dir name",
-            "translation": ""
-        },
-        {
             "id": "Email",
             "message": "Email",
             "translation": ""
@@ -3953,6 +3970,11 @@
         {
             "id": "First name",
             "message": "First name",
+            "translation": ""
+        },
+        {
+            "id": "Folder name",
+            "message": "Folder name",
             "translation": ""
         },
         {
@@ -4106,13 +4128,13 @@
             "translation": ""
         },
         {
-            "id": "New dir name",
-            "message": "New dir name",
+            "id": "New filename",
+            "message": "New filename",
             "translation": ""
         },
         {
-            "id": "New filename",
-            "message": "New filename",
+            "id": "New folder name",
+            "message": "New folder name",
             "translation": ""
         },
         {
@@ -4351,6 +4373,11 @@
             "translation": ""
         },
         {
+            "id": "Upload token",
+            "message": "Upload token",
+            "translation": ""
+        },
+        {
             "id": "Uploading",
             "message": "Uploading",
             "translation": ""
@@ -4466,8 +4493,8 @@
             "translation": ""
         },
         {
-            "id": "Too many login attempts. Please try again in 10 seconds.",
-            "message": "Too many login attempts. Please try again in 10 seconds.",
+            "id": "Too many sign-in attempts. Please try again in 10 seconds.",
+            "message": "Too many sign-in attempts. Please try again in 10 seconds.",
             "translation": ""
         },
         {
@@ -4481,13 +4508,13 @@
             "translation": ""
         },
         {
-            "id": "could not generate temporary password",
-            "message": "could not generate temporary password",
+            "id": "Could not generate temporary password.",
+            "message": "Could not generate temporary password.",
             "translation": ""
         },
         {
-            "id": "could not generate salt",
-            "message": "could not generate salt",
+            "id": "Could not generate salt.",
+            "message": "Could not generate salt.",
             "translation": ""
         },
         {
@@ -4498,6 +4525,11 @@
         {
             "id": "New password must be different from current password.",
             "message": "New password must be different from current password.",
+            "translation": ""
+        },
+        {
+            "id": "A password is already set. Please use the change password form instead.",
+            "message": "A password is already set. Please use the change password form instead.",
             "translation": ""
         },
         {
@@ -4521,8 +4553,8 @@
             "translation": ""
         },
         {
-            "id": "Passkey login is not enabled for this account.",
-            "message": "Passkey login is not enabled for this account.",
+            "id": "Passkey sign-in is not enabled for this account.",
+            "message": "Passkey sign-in is not enabled for this account.",
             "translation": ""
         },
         {
@@ -4606,8 +4638,8 @@
             "translation": ""
         },
         {
-            "id": "New tenant registration",
-            "message": "New tenant registration",
+            "id": "New organization registration",
+            "message": "New organization registration",
             "translation": ""
         },
         {
@@ -4636,18 +4668,13 @@
             "translation": ""
         },
         {
-            "id": "Please log in and change your password as soon as possible.",
-            "message": "Please log in and change your password as soon as possible.",
+            "id": "Please sign in and change your password as soon as possible.",
+            "message": "Please sign in and change your password as soon as possible.",
             "translation": ""
         },
         {
             "id": "Open sign in page",
             "message": "Open sign in page",
-            "translation": ""
-        },
-        {
-            "id": "SimpleDMS Password Reset",
-            "message": "SimpleDMS Password Reset",
             "translation": ""
         },
         {
@@ -4894,13 +4921,13 @@
             "translation": ""
         },
         {
-            "id": "Tenant not initialized yet. Please try again later.",
-            "message": "Tenant not initialized yet. Please try again later.",
+            "id": "Organization not initialized yet. Please try again later.",
+            "message": "Organization not initialized yet. Please try again later.",
             "translation": ""
         },
         {
-            "id": "Error opening tenant database. Please try again later.",
-            "message": "Error opening tenant database. Please try again later.",
+            "id": "Error opening organization database. Please try again later.",
+            "message": "Error opening organization database. Please try again later.",
             "translation": ""
         },
         {
@@ -4929,18 +4956,13 @@
             "translation": ""
         },
         {
-            "id": "Tenant is required.",
-            "message": "Tenant is required.",
+            "id": "Organization is required.",
+            "message": "Organization is required.",
             "translation": ""
         },
         {
-            "id": "Tenant not found.",
-            "message": "Tenant not found.",
-            "translation": ""
-        },
-        {
-            "id": "You must be logged in to manage upload limits.",
-            "message": "You must be logged in to manage upload limits.",
+            "id": "You must be signed in to manage upload limits.",
+            "message": "You must be signed in to manage upload limits.",
             "translation": ""
         },
         {
@@ -4987,8 +5009,8 @@
             ]
         },
         {
-            "id": "File is a directory.",
-            "message": "File is a directory.",
+            "id": "File is a folder.",
+            "message": "File is a folder.",
             "translation": ""
         },
         {
@@ -5067,8 +5089,8 @@
             "translation": ""
         },
         {
-            "id": "file has no parent",
-            "message": "file has no parent",
+            "id": "File has no parent.",
+            "message": "File has no parent.",
             "translation": ""
         },
         {
@@ -5077,18 +5099,23 @@
             "translation": ""
         },
         {
-            "id": "File does not belong to current space.",
-            "message": "File does not belong to current space.",
+            "id": "File does not belong to the current Space.",
+            "message": "File does not belong to the current Space.",
             "translation": ""
         },
         {
-            "id": "Cannot merge directories.",
-            "message": "Cannot merge directories.",
+            "id": "Cannot merge folders.",
+            "message": "Cannot merge folders.",
             "translation": ""
         },
         {
             "id": "Source file is deleted.",
             "message": "Source file is deleted.",
+            "translation": ""
+        },
+        {
+            "id": "Source file is not in the Inbox.",
+            "message": "Source file is not in the Inbox.",
             "translation": ""
         },
         {
@@ -5114,11 +5141,6 @@
         {
             "id": "Could not update target file.",
             "message": "Could not update target file.",
-            "translation": ""
-        },
-        {
-            "id": "Source file is not in inbox.",
-            "message": "Source file is not in inbox.",
             "translation": ""
         },
         {
@@ -5177,8 +5199,8 @@
             "translation": ""
         },
         {
-            "id": "Cannot organize the Space root directory.",
-            "message": "Cannot organize the Space root directory.",
+            "id": "Cannot organize the Space root folder.",
+            "message": "Cannot organize the Space root folder.",
             "translation": ""
         },
         {
@@ -5187,8 +5209,8 @@
             "translation": ""
         },
         {
-            "id": "Path element is file, not a directory.",
-            "message": "Path element is file, not a directory.",
+            "id": "Path element is a file, not a folder.",
+            "message": "Path element is a file, not a folder.",
             "translation": ""
         },
         {
@@ -5197,8 +5219,8 @@
             "translation": ""
         },
         {
-            "id": "Parent is not a directory.",
-            "message": "Parent is not a directory.",
+            "id": "Parent is not a folder.",
+            "message": "Parent is not a folder.",
             "translation": ""
         },
         {
@@ -5207,8 +5229,8 @@
             "translation": ""
         },
         {
-            "id": "Destination is not a directory.",
-            "message": "Destination is not a directory.",
+            "id": "Destination is not a folder.",
+            "message": "Destination is not a folder.",
             "translation": ""
         },
         {
@@ -5217,8 +5239,8 @@
             "translation": ""
         },
         {
-            "id": "Cannot move directory to itself.",
-            "message": "Cannot move directory to itself.",
+            "id": "Cannot move a folder into itself.",
+            "message": "Cannot move a folder into itself.",
             "translation": ""
         },
         {
@@ -5227,13 +5249,8 @@
             "translation": ""
         },
         {
-            "id": "destination is not a directory",
-            "message": "destination is not a directory",
-            "translation": ""
-        },
-        {
-            "id": "cannot move file into child directory",
-            "message": "cannot move file into child directory",
+            "id": "Cannot move a folder into one of its subfolders.",
+            "message": "Cannot move a folder into one of its subfolders.",
             "translation": ""
         },
         {
@@ -5247,8 +5264,8 @@
             "translation": ""
         },
         {
-            "id": "Detected cycle in directory tree.",
-            "message": "Detected cycle in directory tree.",
+            "id": "Detected cycle in folder tree.",
+            "message": "Detected cycle in folder tree.",
             "translation": ""
         },
         {
@@ -5355,9 +5372,9 @@
         {
             "id": [
                 "tenantDatabaseNotFoundMessage",
-                "Tenant database not found."
+                "Organization database not found."
             ],
-            "message": "Tenant database not found.",
+            "message": "Organization database not found.",
             "translation": ""
         },
         {
@@ -5421,16 +5438,6 @@
         {
             "id": "A file with this name already exists in the destination.",
             "message": "A file with this name already exists in the destination.",
-            "translation": ""
-        },
-        {
-            "id": "File is not a directory.",
-            "message": "File is not a directory.",
-            "translation": ""
-        },
-        {
-            "id": "File must be in Inbox.",
-            "message": "File must be in Inbox.",
             "translation": ""
         },
         {
@@ -5594,8 +5601,8 @@
             "translation": ""
         },
         {
-            "id": "Purchase Order",
-            "message": "Purchase Order",
+            "id": "Purchase order",
+            "message": "Purchase order",
             "translation": ""
         },
         {
@@ -5689,8 +5696,8 @@
             "translation": ""
         },
         {
-            "id": "Project Document",
-            "message": "Project Document",
+            "id": "Project document",
+            "message": "Project document",
             "translation": ""
         },
         {
@@ -5744,8 +5751,8 @@
             "translation": ""
         },
         {
-            "id": "Meeting Notes",
-            "message": "Meeting Notes",
+            "id": "Meeting notes",
+            "message": "Meeting notes",
             "translation": ""
         },
         {
@@ -5789,8 +5796,8 @@
             "translation": ""
         },
         {
-            "id": "Expense Report",
-            "message": "Expense Report",
+            "id": "Expense report",
+            "message": "Expense report",
             "translation": ""
         },
         {
@@ -5964,13 +5971,8 @@
             "translation": ""
         },
         {
-            "id": "Invalid version number.",
-            "message": "Invalid version number.",
-            "translation": ""
-        },
-        {
-            "id": "Invalid directory ID.",
-            "message": "Invalid directory ID.",
+            "id": "Invalid folder ID.",
+            "message": "Invalid folder ID.",
             "translation": ""
         },
         {
@@ -6129,13 +6131,8 @@
             "translation": ""
         },
         {
-            "id": "Misc",
-            "message": "Misc",
-            "translation": ""
-        },
-        {
-            "id": "Manage space",
-            "message": "Manage space",
+            "id": "Manage Space",
+            "message": "Manage Space",
             "translation": ""
         },
         {

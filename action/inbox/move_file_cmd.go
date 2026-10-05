@@ -46,7 +46,7 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	}
 
 	fileData, err := filingmodel.NewFilingService(qq.infra.FileSystem()).FileInboxDocument(
-		ctx, data.FileID, data.CurrentDirID, data.Filename, data.NewDirName,
+		ctx, data.FileID, data.CurrentDirID, data.Filename, data.NewFolderName,
 	)
 	if err != nil {
 		log.Println(err)
@@ -72,7 +72,6 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	rw.Header().Set("HX-Trigger", event.FileMoved.String())
 	// TODO not nice because logic to reload list and close details is implemented by handling FileMoved event
 	// TODO select next file to process instead
-	rw.Header().Set("HX-Replace-Url", route.InboxRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID))
 
 	return nil
 }

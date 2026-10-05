@@ -30,9 +30,12 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *w
 		LeadingIcon: "delete",
 		Label:       widget.T("Delete"),
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:    qq.actions.Tagging.DeleteTagCmd.Endpoint(),
-			HxVals:    util.JSON(qq.actions.Tagging.DeleteTagCmd.Data(tagx.ID)),
-			HxConfirm: widget.T("Are you sure? This action will delete the tag and unassign it from all files!").String(ctx),
+			HxPost: qq.actions.Tagging.DeleteTagCmd.Endpoint(),
+			HxSwap: "none",
+			HxVals: util.JSON(qq.actions.Tagging.DeleteTagCmd.Data(tagx.ID)),
+			HxConfirm: widget.T(
+				"Delete this tag? It will be unassigned from all files.",
+			).String(ctx),
 		},
 	}
 
@@ -53,7 +56,7 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *w
 	menuItems = append(
 		menuItems,
 		&wx.MenuItem{
-			Label: wx.T("Convert to composed tag"),
+			Label: wx.T("Convert to super tag"),
 		},
 	)
 	*/
@@ -82,7 +85,7 @@ func (qq *TagContextMenuWidget) Widget(ctx ctxx.Context, tagx *enttenant.Tag) *w
 		menuItems = append(
 			menuItems,
 			&wx.MenuItem{
-				Label: wx.T("Convert to base tag"),
+				Label: wx.T("Convert to simple tag"),
 				// SupportingText: supportingText, // TODO as tooltip
 				IsDisabled: isDisabled,
 			},

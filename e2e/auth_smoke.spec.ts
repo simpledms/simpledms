@@ -13,7 +13,7 @@ test.describe("authenticated smoke", () => {
 		await page.goto("/dashboard/");
 		await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
 		// await expect(page.getByRole("heading", { name: "Open tasks" })).toBeVisible(); // only shown for new accounts
-		await expect(page.getByRole("link", { name: "Manage spaces" }).first()).toBeVisible();
+		await expect(page.getByRole("link", { name: "Manage Spaces" }).first()).toBeVisible();
 		await expect(page.getByRole("link", { name: "Manage users" })).toBeVisible();
 		await expect(page.getByRole("link", { name: "Set passphrase" })).toBeVisible();
 	});

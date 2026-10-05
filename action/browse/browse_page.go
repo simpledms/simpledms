@@ -46,7 +46,7 @@ func (qq *BrowsePage) Handler(
 	}
 
 	if !dirx.IsDirectory {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "file is not a directory")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "File is not a folder.")
 	}
 
 	state := autil.StateX[ListDirPartialState](rw, req)
@@ -58,14 +58,14 @@ func (qq *BrowsePage) Handler(
 	//		custom header is more meaningful...
 	if req.Header.Get("Close-Details") != "" {
 		rw.Header().Set("HX-Retarget", "#details")
-		rw.Header().Set("HX-Reswap", "innerHTML")
-		return qq.infra.Renderer().Render(rw, ctx, &widget.View{})
+		rw.Header().Set("HX-Reswap", "morph:outerHTML")
+		return qq.infra.Renderer().Render(rw, ctx, &widget.DetailsWithSheet{})
 	}
 
 	browsePage, err := qq.widget(req, ctx, state, dirx)
 	if err != nil {
 		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "could not render widget")
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not render widget.")
 	}
 
 	qq.render(rw, req, ctx, browsePage)
@@ -132,14 +132,30 @@ func (qq *BrowsePage) widget(
 			),
 			Child: []widget.IWidget{
 				widget.NewIcon("create_new_folder"),
-				widget.T("Create directory"),
+				widget.T("Create folder"),
 			},
 		})
 	}
 
+	var content widget.IWidget = listDetailLayout
+	// an active filters side sheet is restored by the filters button in the app bar
+	if state.ActiveSideSheet == "" {
+		content = &widget.View{
+			Children: []widget.IWidget{
+				listDetailLayout,
+				autil.DefaultSideSheetTrigger("browseDefaultSideSheetTrigger", widget.HTMXAttrs{
+					HxPost: qq.actions.FiltersDialog.Endpoint(),
+					HxVals: util.JSON(
+						qq.actions.FiltersDialog.Data(dir.PublicID.String()),
+					),
+				}),
+			},
+		}
+	}
+
 	mainLayout := &widget.MainLayout{
 		Navigation: partial2.NewNavigationRail(ctx, qq.infra, "browse", fabs),
-		Content:    listDetailLayout,
+		Content:    content,
 	}
 	return mainLayout, nil
 }

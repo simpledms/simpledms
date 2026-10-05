@@ -16,6 +16,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/space"
 	"github.com/simpledms/simpledms/db/enttenant/user"
 	"github.com/simpledms/simpledms/model/main/webdavcredential"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
@@ -110,43 +111,14 @@ func (qq *CreateWebDAVCredentialCmd) Handler(
 		return err
 	}
 
-	overview, err := qq.createdCredentialOverview(rw, req, ctx, data.Destination)
-	if err != nil {
-		return err
-	}
-
+	// One-time secret exception. The credential overview is queried separately after commit.
 	rw.Header().Set("Cache-Control", "no-store")
-	rw.AddRenderables(widget.NewSnackbarf("WebDAV credential created."))
-	return qq.infra.Renderer().Render(rw, ctx, &widget.View{
-		Children: []widget.IWidget{
-			qq.secretDialog(ctx, result),
-			overview,
-		},
-	})
-}
-
-// createdCredentialOverview refreshes the credential list out-of-band with the tab of the new
-// credential's Space selected. AccountUpdated is not triggered instead because HX-Trigger
-// events fire before the swap, so its refresh would race and restore the previous tab.
-func (qq *CreateWebDAVCredentialCmd) createdCredentialOverview(
-	rw httpx.ResponseWriter,
-	req *httpx.Request,
-	ctx ctxx.Context,
-	destinationValue string,
-) (*widget.Container, error) {
-	destinationKey, err := webDAVCredentialDestinationKeyByValue(ctx, destinationValue)
-	if err != nil {
-		return nil, err
-	}
-	state := autil.StateX[WebDAVCredentialListPartialData](rw, req)
-	return qq.actions.WebDAVCredentialListPartial.WidgetOOB(
-		ctx,
-		req,
-		qq.actions.WebDAVCredentialListPartial.Data(
-			destinationKey,
-			state.CredentialStatusValues...,
-		),
-	)
+	rw.Header().Set("HX-Trigger", string(util.JSON(map[string]any{
+		event.WebDAVCredentialChanged.String(): map[string]string{"destination": data.Destination},
+	})))
+	// The one-time result is the success feedback. An OOB snackbar would be mounted
+	// in the old form dialog before that dialog is replaced by this response.
+	return qq.infra.Renderer().Render(rw, ctx, qq.secretDialog(ctx, result))
 }
 
 func (qq *CreateWebDAVCredentialCmd) FormHandler(
@@ -177,7 +149,7 @@ func (qq *CreateWebDAVCredentialCmd) FormHandler(
 	}
 	if len(destinationItems) == 0 {
 		destinationItems = append(destinationItems, &widget.ListItem{
-			Headline: widget.T("No spaces available yet."),
+			Headline: widget.T("No Spaces available yet."),
 			Type:     widget.ListItemTypeHelper,
 		})
 	}
@@ -226,6 +198,9 @@ func (qq *CreateWebDAVCredentialCmd) FormHandler(
 			},
 		},
 	}
+	if req.URL.Query().Get("wrapper") != actionx.ResponseWrapperDialog.String() {
+		form.HxTarget = "this"
+	}
 
 	submitLabel := widget.T("Create")
 	if len(destinations) == 0 {
@@ -270,7 +245,7 @@ func (qq *CreateWebDAVCredentialCmd) spaceContext(
 	spacePublicID string,
 ) (*ctxx.SpaceContext, error) {
 	mainCtx := ctx.MainCtx()
-	spacesByTenant, err := mainCtx.ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := mainCtx.ReadOnlyAccountSpacesByTenant(mainCtx)
 	if err != nil {
 		return nil, err
 	}

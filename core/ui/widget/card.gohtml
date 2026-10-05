@@ -3,6 +3,7 @@
 	{{ $ctx := .GetContext }}
 	<div
 			id="{{ .GetID }}"
+			{{ if .ContextMenu }}data-context-menu{{ end }}
             {{ template "HTMXAttrs" .HTMXAttrs }}
 			class="h-full rounded-md text-on-surface
 				{{- /* outline or border? */}}
@@ -42,10 +43,6 @@
 		</div>
 
         {{ render .GetContext .ContextMenu }}
-
-        {{ if .ContextMenu }}
-            {{ template "contextMenuScript" . }}
-        {{ end }}
 	</div>
 
 {{ end }}

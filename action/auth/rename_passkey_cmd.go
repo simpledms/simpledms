@@ -56,7 +56,7 @@ func (qq *RenamePasskeyCmd) Data(passkeyID, name string) *RenamePasskeyCmdData {
 }
 
 func (qq *RenamePasskeyCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be logged in to manage passkeys.")
+	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be signed in to manage passkeys.")
 	if err != nil {
 		return err
 	}

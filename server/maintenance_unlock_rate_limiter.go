@@ -1,13 +1,12 @@
 package server
 
 import (
-	"net"
 	"net/http"
 	"net/netip"
-	"slices"
-	"strings"
 	"sync"
 	"time"
+
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 const (
@@ -71,45 +70,11 @@ func (qq *maintenanceUnlockRateLimiter) pruneExpiredLocked(now time.Time) {
 }
 
 func (qq *maintenanceUnlockRateLimiter) clientKey(req *http.Request) string {
-	directAddr, isValid := parseRemoteAddr(req.RemoteAddr)
-	if !isValid {
+	clientIP, ok := httpx.ClientIPThroughTrustedProxies(req, qq.trustedProxies)
+	if !ok {
 		return "unknown"
 	}
-	if !qq.isTrustedProxy(directAddr) {
-		return directAddr.Unmap().String()
-	}
-
-	forwardedFor := strings.Split(req.Header.Get("X-Forwarded-For"), ",")
-	for _, f := range slices.Backward(forwardedFor) {
-		addr, err := netip.ParseAddr(strings.TrimSpace(f))
-		if err != nil {
-			return directAddr.Unmap().String()
-		}
-		if !qq.isTrustedProxy(addr) {
-			return addr.Unmap().String()
-		}
-	}
-	return directAddr.Unmap().String()
-}
-
-func (qq *maintenanceUnlockRateLimiter) isTrustedProxy(addr netip.Addr) bool {
-	for _, prefix := range qq.trustedProxies {
-		if prefix.Contains(addr) || prefix.Contains(addr.Unmap()) {
-			return true
-		}
-	}
-	return false
-}
-
-func parseRemoteAddr(remoteAddr string) (netip.Addr, bool) {
-	host, _, err := net.SplitHostPort(remoteAddr)
-	if err == nil {
-		addr, parseErr := netip.ParseAddr(host)
-		return addr, parseErr == nil
-	}
-
-	addr, parseErr := netip.ParseAddr(remoteAddr)
-	return addr, parseErr == nil
+	return clientIP.String()
 }
 
 func retryAfterSeconds(retryAfter time.Duration) int {

@@ -12,6 +12,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/model/main/common/mainrole"
 	tenantmodel "github.com/simpledms/simpledms/model/main/tenant"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
 )
 
@@ -26,6 +27,21 @@ func NewNavigationRail(
 		// must be after main block, otherwise margin is added on top
 		// and z-index: 1 is necessary on fab
 		FABs: fabs,
+		HTMXAttrs: widget.HTMXAttrs{
+			HxGet:     ".",
+			HxPushURL: "false",
+			HxTarget:  "#navigationRailAndBar",
+			HxSelect:  "#navigationRailAndBar",
+			HxSwap:    "outerHTML",
+			HxTrigger: event.HxTrigger(event.SpaceCreated, event.SpaceUpdated, event.SpaceDeleted,
+				event.AccountUpdated, event.UserAssignedToSpace, event.UserUnassignedFromSpace),
+			// Requery the actual page so its context, active destination and FABs survive.
+			HxOn: &widget.HxOn{
+				Event: "htmx:config-request",
+				Handler: "if (event.detail.elt === this) { " +
+					"event.detail.path = window.location.pathname + window.location.search; }",
+			},
+		},
 	}
 
 	if isTenantPasskeyEnrollmentRequired(ctx) {
@@ -126,12 +142,6 @@ func footerNavigationRailItems(
 	if !ctx.VisitorCtx().CommercialLicenseEnabled {
 		items = append(items, aboutNavigationRailItem(ctx))
 	}
-	if ctx.IsMainCtx() && len(items) > 0 {
-		items = append(
-			[]*widget.NavigationRailItem{navigationRailSubheader("misc", widget.T("Misc").String(ctx))},
-			items...,
-		)
-	}
 
 	return infra.PluginRegistry().ExtendNavigationRailFooterItems(
 		ctx,
@@ -182,7 +192,7 @@ func spaceNavigationRailItems(ctx ctxx.Context) []*widget.NavigationRailItem {
 			"delete",
 			route2.TrashRoot(tenantID, spaceID),
 		),
-		navigationRailSubheader("manage", widget.T("Manage space").String(ctx)),
+		navigationRailSubheader("manage", widget.T("Manage Space").String(ctx)),
 		pageNavigationRailItem(
 			"document-types",
 			widget.T("Document types").String(ctx),
@@ -280,7 +290,7 @@ func tenantPasskeyEnrollmentNavigationRailItems(ctx ctxx.Context) []*widget.Navi
 }
 
 func spaceCombobox(ctx ctxx.Context, active string) *widget.Combobox {
-	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant(ctx)
 	if err != nil {
 		log.Println(err)
 		return nil
@@ -324,7 +334,7 @@ func spaceCombobox(ctx ctxx.Context, active string) *widget.Combobox {
 		}
 	}
 
-	placeholder := widget.T("Dashboard").String(ctx) + " / " + widget.T("Select space").String(ctx)
+	placeholder := widget.T("Dashboard").String(ctx) + " / " + widget.T("Select Space").String(ctx)
 	selectedIcon := widget.NewIcon("dashboard")
 	if active == "dashboard" {
 		placeholder = widget.T("Dashboard").String(ctx)

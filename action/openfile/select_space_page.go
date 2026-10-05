@@ -1,6 +1,7 @@
 package openfile
 
 import (
+	"fmt"
 	"log"
 
 	acommon "github.com/simpledms/simpledms/action/common"
@@ -11,7 +12,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/ui/renderable"
 	partial2 "github.com/simpledms/simpledms/ui/uix/partial"
-	"github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
@@ -90,7 +91,7 @@ func (qq *SelectSpacePage) Widget(
 
 	var spaceItems []*widget.ListItem
 
-	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant()
+	spacesByTenant, err := ctx.MainCtx().ReadOnlyAccountSpacesByTenant(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -100,8 +101,8 @@ func (qq *SelectSpacePage) Widget(
 		if len(spaces) == 0 {
 			spaceItems = append(spaceItems, &widget.ListItem{
 				Type:           widget.ListItemTypeHelper,
-				Headline:       widget.T("No spaces yet."),
-				SupportingText: widget.T("Please try again once you created a space or were invited to join one."),
+				Headline:       widget.T("No Spaces available yet."),
+				SupportingText: widget.T("Please try again once you created a Space or were invited to join one."),
 			})
 		} else {
 			for _, spacex := range spaces {
@@ -109,16 +110,11 @@ func (qq *SelectSpacePage) Widget(
 					Headline:       widget.Tu(spacex.Name),
 					SupportingText: widget.Tu(tenantx.Name),
 					HTMXAttrs: widget.HTMXAttrs{
-						// redirecting to inbox instead of using a custom action like SelectSpace because
-						// this way we get the security check for space and tenant for free and don't have
-						// to be very careful in the custom action
-						// FIXME make type safe
-						// HxGet: route.InboxRoot(tenantx.PublicID.String(), spacex.PublicID.String()) + "?upload_token=" + uploadToken,
-						HxGet: route.InboxRootWithState(struct {
-							UploadToken string `url:"upload_token"`
-						}{
-							UploadToken: uploadToken,
-						})(tenantx.PublicID.String(), spacex.PublicID.String()),
+						// Explicit route context uses the router's ordinary tenant/Space authorization.
+						HxPost: fmt.Sprintf("/-/org/%s/space/%s/inbox/consume-uploads",
+							tenantx.PublicID, spacex.PublicID),
+						HxVals: util.JSON(map[string]string{"UploadToken": uploadToken}),
+						HxSwap: "none",
 					},
 				})
 			}
@@ -147,7 +143,7 @@ func (qq *SelectSpacePage) appBar(ctx ctxx.Context) *widget.AppBar {
 		},
 		LeadingAltMobile: partial2.NewNavigationRailToggle(),
 		Title: &widget.AppBarTitle{
-			Text: widget.T("Select space"),
+			Text: widget.T("Select Space"),
 		},
 		Actions: []widget.IWidget{},
 	}

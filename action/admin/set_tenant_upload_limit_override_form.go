@@ -85,10 +85,6 @@ func (qq *SetTenantUploadLimitOverrideForm) FormHandler(rw httpx.ResponseWriter,
 
 	wrapper := actionx.ResponseWrapper(req.URL.Query().Get("wrapper"))
 	hxTarget := req.URL.Query().Get("hx-target")
-	hxSwap := "outerHTML"
-	if hxTarget == "" {
-		hxSwap = "none"
-	}
 
 	var nilableFormSubmitLabel *widget.Text
 	if wrapper == actionx.ResponseWrapperNone {
@@ -110,9 +106,8 @@ func (qq *SetTenantUploadLimitOverrideForm) FormHandler(rw httpx.ResponseWriter,
 
 	form := &widget.Form{
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.actions.SetTenantUploadLimitOverrideCmd.Endpoint(),
-			HxTarget: hxTarget,
-			HxSwap:   hxSwap,
+			HxPost: qq.actions.SetTenantUploadLimitOverrideCmd.Endpoint(),
+			HxSwap: "none",
 		},
 		SubmitLabel: nilableFormSubmitLabel,
 		Children: []widget.IWidget{
@@ -156,7 +151,7 @@ func (qq *SetTenantUploadLimitOverrideForm) FormHandler(rw httpx.ResponseWriter,
 
 	qq.infra.Renderer().RenderX(rw, ctx,
 		autil.WrapWidget(
-			widget.T("Set tenant upload limit"),
+			widget.T("Set organization upload limit"),
 			widget.T("Save"),
 			form,
 			wrapper,

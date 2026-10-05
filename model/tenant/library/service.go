@@ -42,7 +42,7 @@ func (qq *Service) ImportBuiltinDocumentTypes(ctx ctxx.Context, templateKeys []s
 	}
 
 	if requireEmpty && qq.SpaceHasMetadata(ctx) {
-		return e.NewHTTPErrorf(http.StatusBadRequest, wx.T("Import is only available for empty spaces.").String(ctx))
+		return e.NewHTTPErrorf(http.StatusBadRequest, wx.T("Import is only available for empty Spaces.").String(ctx))
 	}
 
 	keys := qq.SortTemplateKeys(templateKeys)

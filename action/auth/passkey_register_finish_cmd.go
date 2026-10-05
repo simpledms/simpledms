@@ -43,7 +43,7 @@ func (qq *PasskeyRegisterFinishCmd) Data() *PasskeyRegisterFinishCmdData {
 }
 
 func (qq *PasskeyRegisterFinishCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be logged in to register a passkey.")
+	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be signed in to register a passkey.")
 	if err != nil {
 		return err
 	}
@@ -78,6 +78,8 @@ func (qq *PasskeyRegisterFinishCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 		recoveryCodesToken = qq.store.Store(recoveryCodes)
 	}
 
+	// WebAuthn transport exception: passkey.js emits AccountUpdated after this
+	// commit-buffered JSON response; recovery codes are a one-time result.
 	return writeJSONResponse(rw, http.StatusOK, struct {
 		RecoveryCodesToken string `json:"recoveryCodesToken,omitempty"`
 	}{

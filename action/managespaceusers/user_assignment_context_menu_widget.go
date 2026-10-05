@@ -23,11 +23,13 @@ func (qq *UserAssignmentContextMenuWidget) Widget(ctx ctxx.Context, userAssignme
 
 	if ctx.SpaceCtx().UserRoleInSpace() == spacerole.Owner {
 		items = append(items, &widget.MenuItem{
-			LeadingIcon: "delete",
+			LeadingIcon: "person_remove",
 			Label:       widget.T("Unassign"),
 			HTMXAttrs: widget.HTMXAttrs{
-				HxPost: qq.actions.UnassignUserFromSpaceCmd.Endpoint(),
-				HxVals: util.JSON(qq.actions.UnassignUserFromSpaceCmd.Data(userAssignment.ID)),
+				HxPost:    qq.actions.UnassignUserFromSpaceCmd.Endpoint(),
+				HxSwap:    "none",
+				HxVals:    util.JSON(qq.actions.UnassignUserFromSpaceCmd.Data(userAssignment.ID)),
+				HxConfirm: widget.T("Unassign this user from the Space?").String(ctx),
 			},
 		})
 	}

@@ -1,26 +1,23 @@
-import { expect, test } from "@playwright/test";
-import { loginEmail } from "./helpers";
+import { expect, test, type Page } from "@playwright/test";
+import { isSignInResponse, loginEmail, uniqueSuffix } from "./helpers";
+
+async function submitSignIn(page: Page, email: string, password: string) {
+	await page.getByRole("textbox", { name: "Email" }).fill(email);
+	await page.getByRole("textbox", { name: "Password" }).fill(password);
+	const responsePromise = page.waitForResponse(isSignInResponse);
+	await page.getByRole("button", { name: "Sign in", exact: true }).click();
+	return responsePromise;
+}
 
 test("rejects invalid credentials with safe error message", async ({ page }) => {
+	// An unknown account keeps the shared admin account outside the sign-in rate limit, so
+	// parallel tests can still sign in.
 	await page.goto("/");
-
-	for (let attempt = 0; attempt < 3; attempt++) {
-		await page.getByRole("textbox", { name: "Email" }).fill(loginEmail);
-		await page.getByRole("textbox", { name: "Password" }).fill(`wrong-password-${attempt}`);
-		await page.getByRole("button", { name: "Sign in" }).click();
-
-		const hasFeedback = await page
-			.getByText(/Invalid credentials\. Please try again\.|Too many login attempts\./)
-			.isVisible()
-			.catch(() => false);
-		if (hasFeedback) {
-			break;
-		}
-	}
+	await submitSignIn(page, `e2e-unknown-${uniqueSuffix()}@example.com`, "wrong-password");
 
 	await expect(page).toHaveURL(/\/$/);
 	await expect(page.getByRole("heading", { name: "Sign in | SimpleDMS" })).toBeVisible();
-	await expect(page.getByText(/Invalid credentials\. Please try again\.|Too many login attempts\./)).toBeVisible();
+	await expect(page.getByText("Invalid credentials. Please try again.")).toBeVisible();
 });
 
 test("supports temporary session checkbox toggle", async ({ page }) => {
@@ -34,19 +31,13 @@ test("supports temporary session checkbox toggle", async ({ page }) => {
 	await expect(temporarySession).not.toBeChecked();
 });
 
-test("rate-limits repeated failed logins", async ({ page }) => {
+// Tagged @state because it locks the shared admin account for sign-ins for 10 seconds.
+test("rate-limits repeated failed logins", { tag: "@state" }, async ({ page }) => {
 	await page.goto("/");
 
-	for (let attempt = 0; attempt < 8; attempt++) {
-		await page.getByRole("textbox", { name: "Email" }).fill(loginEmail);
-		await page.getByRole("textbox", { name: "Password" }).fill(`wrong-password-${attempt}`);
-		await page.getByRole("button", { name: "Sign in" }).click();
+	await submitSignIn(page, loginEmail, "wrong-password-0");
+	const response = await submitSignIn(page, loginEmail, "wrong-password-1");
 
-		const rateLimited = await page.getByText(/Too many login attempts\./).isVisible().catch(() => false);
-		if (rateLimited) {
-			break;
-		}
-	}
-
+	expect(response.status()).toBe(401);
 	await expect(page.getByText(/Too many login attempts\. Please try again in \d+ seconds\./)).toBeVisible();
 });

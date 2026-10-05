@@ -73,10 +73,8 @@ func TestFileVersionFromInboxCmd_MergesVersionAndDeletesSource(t *testing.T) {
 			}
 
 			expectedTrigger := fmt.Sprintf(
-				"%s, %s, %s, %s",
-				event.FileUploaded.String(),
-				event.FileUpdated.String(),
-				event.FileDeleted.String(),
+				"%s, %s",
+				event.FileVersionMerged.String(),
 				event.CloseDialog.String(),
 			)
 			if got := rr.Header().Get("HX-Trigger"); got != expectedTrigger {
@@ -235,7 +233,7 @@ func TestFileVersionFromInboxCmd_RejectsSourceOutsideInbox(t *testing.T) {
 		if httpErr.StatusCode() != http.StatusBadRequest {
 			t.Fatalf("expected status %d, got %d", http.StatusBadRequest, httpErr.StatusCode())
 		}
-		if !strings.Contains(httpErr.Error(), "file must be in inbox") {
+		if !strings.Contains(httpErr.Error(), "file must be in the inbox") {
 			t.Fatalf("expected inbox validation error, got %q", httpErr.Error())
 		}
 	})

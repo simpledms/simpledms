@@ -69,39 +69,24 @@ func (qq *PreparedServer) Start() error {
 		tlsConfig.TLSPrivateKeyFilepath,
 	)
 
+	server := newHTTPServer(fmt.Sprintf(":%d", qq.server.port(
+		useAutocert,
+		tlsConfig.TLSCertFilepath,
+		tlsConfig.TLSPrivateKeyFilepath,
+	)), qq.handler)
+
 	var err error
 
 	switch mainListenMode {
 	case listenModeTLSAutocert:
-		server := &http.Server{
-			Addr: fmt.Sprintf(":%d", qq.server.port(
-				useAutocert,
-				tlsConfig.TLSCertFilepath,
-				tlsConfig.TLSPrivateKeyFilepath,
-			)),
-			TLSConfig: &tls.Config{GetCertificate: qq.autocertManager.GetCertificate},
-			Handler:   qq.handler,
-		}
+		server.TLSConfig = &tls.Config{GetCertificate: qq.autocertManager.GetCertificate}
 		err = server.ListenAndServeTLS("", "")
 	case listenModeHTTP:
-		err = http.ListenAndServe(
-			fmt.Sprintf(":%d", qq.server.port(
-				useAutocert,
-				tlsConfig.TLSCertFilepath,
-				tlsConfig.TLSPrivateKeyFilepath,
-			)),
-			qq.handler,
-		)
+		err = server.ListenAndServe()
 	case listenModeTLSFiles:
-		err = http.ListenAndServeTLS(
-			fmt.Sprintf(":%d", qq.server.port(
-				useAutocert,
-				tlsConfig.TLSCertFilepath,
-				tlsConfig.TLSPrivateKeyFilepath,
-			)),
+		err = server.ListenAndServeTLS(
 			tlsConfig.TLSCertFilepath,
 			tlsConfig.TLSPrivateKeyFilepath,
-			qq.handler,
 		)
 	default:
 		log.Fatalln("unknown main listen mode")

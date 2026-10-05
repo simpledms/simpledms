@@ -253,9 +253,19 @@ func TestBrowseListDirPartialWidgetBuildsFolderBreadcrumbs(t *testing.T) {
 		"",
 	)
 
-	listColumn, ok := layout.List.(*widget.Column)
+	listWidgets, ok := layout.List.([]widget.IWidget)
 	if !ok {
-		t.Fatalf("expected list to be *wx.Column, got %T", layout.List)
+		t.Fatalf("expected list to be []wx.IWidget, got %T", layout.List)
+	}
+	var listColumn *widget.Column
+	for _, listWidget := range listWidgets {
+		if column, isColumn := listWidget.(*widget.Column); isColumn {
+			listColumn = column
+			break
+		}
+	}
+	if listColumn == nil {
+		t.Fatal("expected list to contain a *wx.Column")
 	}
 
 	listChildren, ok := listColumn.Children.([]widget.IWidget)

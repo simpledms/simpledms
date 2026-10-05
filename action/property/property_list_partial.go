@@ -5,6 +5,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ui/renderable"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -52,20 +53,13 @@ func (qq *PropertyListPartial) Handler(
 	)
 }
 
-func (qq *PropertyListPartial) Widget(ctx ctxx.Context, data *PropertyListPartialData) *widget.List {
+func (qq *PropertyListPartial) Widget(
+	ctx ctxx.Context,
+	data *PropertyListPartialData,
+) renderable.Renderable {
 	properties := ctx.TenantCtx().TTx.Property.Query().AllX(ctx)
 
 	var items []*widget.ListItem
-
-	items = append(items, &widget.ListItem{
-		Headline: widget.T("Add field"),
-		Type:     widget.ListItemTypeHelper,
-		Leading:  widget.NewIcon("add"),
-		HTMXAttrs: qq.actions.CreatePropertyCmd.ModalLinkAttrs(
-			qq.actions.CreatePropertyCmd.Data(""),
-			"",
-		),
-	})
 
 	for _, propertyx := range properties {
 		items = append(items, &widget.ListItem{
@@ -80,22 +74,47 @@ func (qq *PropertyListPartial) Widget(ctx ctxx.Context, data *PropertyListPartia
 		})
 	}
 
+	htmxAttrs := widget.HTMXAttrs{
+		HxTrigger: event.HxTrigger(
+			event.PropertyCreated,
+			event.PropertyUpdated,
+			event.PropertyDeleted,
+		),
+		HxPost:   qq.Endpoint(),
+		HxVals:   util.JSON(data),
+		HxTarget: "#" + qq.id(),
+		HxSwap:   "outerHTML",
+	}
+
+	if len(items) == 0 {
+		return &widget.Container{
+			Widget: widget.Widget[widget.Container]{
+				ID: qq.id(),
+			},
+			Child: &widget.EmptyState{
+				Icon:     widget.NewIcon("tune"),
+				Headline: widget.T("No fields available yet."),
+				Actions: []widget.IWidget{
+					&widget.Button{
+						Icon:  widget.NewIcon("add"),
+						Label: widget.T("Create field"),
+						HTMXAttrs: qq.actions.CreatePropertyCmd.ModalLinkAttrs(
+							qq.actions.CreatePropertyCmd.Data(""),
+							"",
+						),
+					},
+				},
+			},
+			HTMXAttrs: htmxAttrs,
+		}
+	}
+
 	return &widget.List{
 		Widget: widget.Widget[widget.List]{
 			ID: qq.id(),
 		},
-		Children: items,
-		HTMXAttrs: widget.HTMXAttrs{
-			HxTrigger: event.HxTrigger(
-				event.PropertyCreated,
-				event.PropertyUpdated,
-				event.PropertyDeleted,
-			),
-			HxPost:   qq.Endpoint(),
-			HxVals:   util.JSON(data),
-			HxTarget: "#" + qq.id(),
-			HxSwap:   "outerHTML",
-		},
+		Children:  items,
+		HTMXAttrs: htmxAttrs,
 	}
 }
 

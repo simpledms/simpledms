@@ -7,6 +7,7 @@ import (
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -14,7 +15,7 @@ import (
 
 type MakeDirCmdData struct {
 	ParentDirID string `validate:"required" form_attr_type:"hidden"`
-	DirName     string `validate:"required" form_attrs:"autofocus"`
+	FolderName  string `validate:"required" form_attrs:"autofocus"`
 }
 
 // TODO or CreateDir?
@@ -37,11 +38,11 @@ func NewMakeDirCmd(
 		infra,
 		actions,
 		config,
-		autil.NewFormHelper[MakeDirCmdData](
+		autil.NewFormHelperX[MakeDirCmdData](
 			infra,
 			config,
-			widget.T("Create directory"),
-			// "#fileList",
+			widget.T("Create folder"),
+			widget.T("Create"),
 		),
 	}
 }
@@ -49,7 +50,7 @@ func NewMakeDirCmd(
 func (qq *MakeDirCmd) Data(parentDirID, dirName string) *MakeDirCmdData {
 	return &MakeDirCmdData{
 		ParentDirID: parentDirID,
-		DirName:     dirName,
+		FolderName:  dirName,
 	}
 }
 
@@ -59,27 +60,17 @@ func (qq *MakeDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 		return err
 	}
 
-	filex, err := qq.infra.FileSystem().MakeDir(ctx, data.ParentDirID, data.DirName)
+	filex, err := qq.infra.FileSystem().MakeDir(ctx, data.ParentDirID, data.FolderName)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
-	// rw.Header().Set("HX-Push-Url", route.Browse(filex.ID))
-
-	// TODO how to handle type of view? (table, list, cards)
-	// TODO return list partial / may depend on context...
-	qq.infra.Renderer().RenderX(rw, ctx,
-		qq.actions.ListDirPartial.WidgetHandler(
-			rw,
-			req,
-			ctx,
-			data.ParentDirID,
-			"",
-		),
+	rw.Header().Set("HX-Trigger", event.DirectoryCreated.String())
+	rw.AddRenderables(
 		widget.NewSnackbarf("«%s» created.", filex.Data.Name).WithAction(&widget.Link{
 			Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
-			Child: widget.T("Open directory"), // TODO Go to, open, show?
+			Child: widget.T("Open folder"),
 		}),
 	)
 	return nil

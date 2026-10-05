@@ -79,7 +79,7 @@ func (qq *FileSystem) MakeDirAllIfNotExists(ctx ctxx.Context, currentParentDir *
 		} else {
 			// TODO good? correct location
 			if !newCurrentDirx.IsDirectory {
-				return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Path element is file, not a directory.")
+				return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Path element is a file, not a folder.")
 			}
 		}
 
@@ -110,7 +110,7 @@ func (qq *FileSystem) MakeDir(ctx ctxx.Context, parentDirID string, newDirName s
 		return nil, err
 	}
 	if !parentDir.IsDirectory {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Parent is not a directory.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Parent is not a folder.")
 	}
 
 	// FIXME case sensitivy
@@ -154,14 +154,14 @@ func (qq *FileSystem) Move(
 	}
 
 	if !destDir.Data.IsDirectory {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Destination is not a directory.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Destination is not a folder.")
 	}
 	if newFilename != "" && (newFilename == "." ||
 		filepath.Clean(newFilename) != newFilename || !filenamex.IsAllowed(newFilename)) {
 		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
 	}
 	if filex.Data.ID == destDir.Data.ID {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot move directory to itself.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot move a folder into itself.")
 	}
 	// Inbox files may already reference the destination folder; filing them still
 	// changes their lifecycle even when no parent change is necessary.
@@ -180,7 +180,7 @@ func (qq *FileSystem) Move(
 
 	if !destDir.Data.IsDirectory {
 		log.Println("not a directory")
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "destination is not a directory")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Destination is not a folder.")
 	}
 
 	isDescendant, err := qq.FileTree().IsDescendantOf(ctx, destDir.Data.ID, filex.Data.ID)
@@ -190,7 +190,7 @@ func (qq *FileSystem) Move(
 	}
 	if isDescendant {
 		log.Println("cannot move file into child directory")
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "cannot move file into child directory")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot move a folder into one of its subfolders.")
 	}
 
 	fileUpdate := filex.Data.Update()
@@ -254,13 +254,13 @@ func (qq *FileSystem) AddFile(
 
 	if !filenamex.IsAllowed(filename) {
 		log.Println("invalid filename")
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "invalid filename")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid filename.")
 	}
 
 	fileExtension := filepath.Ext(filename)
 	if fileExtension == "" {
 		log.Println("invalid filename")
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "file has no extension")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File has no extension.")
 	}
 
 	// TODO use nanoid? or would folders get to large (1296 vs 256 sub dirs)
@@ -275,7 +275,7 @@ func (qq *FileSystem) AddFile(
 
 	if ctx.TenantCtx().StoragePath == "" {
 		log.Println("storage path is empty")
-		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "storage path is empty")
+		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Storage path is empty.")
 	}
 
 	// 3 indirections with 2 hex chars each allow for 256 x 256 x 256 directories, with 256 files in each dir
@@ -299,7 +299,7 @@ func (qq *FileSystem) AddFile(
 	err = os.MkdirAll(storageLocation, 0777)
 	if err != nil {
 		log.Println(err)
-		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "could not create storage directory")
+		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not create storage directory.")
 	}
 
 	// FIXME handle transaction or let indexer handle such situations?
@@ -323,30 +323,30 @@ func (qq *FileSystem) AddFile(
 	destPath, err := securejoin.SecureJoin(storageLocation, destFilename)
 	if err != nil {
 		log.Println(err)
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "could not join paths")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Could not join paths.")
 	}
 
 	if _, err = os.Stat(destPath); !errors.Is(err, os.ErrNotExist) {
 		log.Println("file already exists")
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "file already exists")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File already exists.")
 	}
 
 	destFile, err := os.OpenFile(destPath, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Println(err)
-		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "could not open file")
+		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not open file.")
 	}
 
 	_, err = io.Copy(destFile, fileToSave)
 	if err != nil {
 		log.Println(err)
-		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "could not copy file")
+		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not copy file.")
 	}
 
 	fileInfo, err := destFile.Stat()
 	if err != nil {
 		log.Println(err)
-		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "could not stat file")
+		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not stat file.")
 	}
 
 	storageLocationRel, err := filepath.Rel(ctx.TenantCtx().StoragePath, destPath) // destPath including filename

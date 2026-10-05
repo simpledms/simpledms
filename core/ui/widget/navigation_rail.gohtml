@@ -8,6 +8,7 @@
 		 flex md:bg-surface-container md:transition-[width,min-width] md:duration-[160ms] md:ease-in
 		 mt-4 md:mt-0
 		 w-full h-20 md:w-20 md:min-w-20 md:h-full
+		 md:border-r border-outline-variant
 		 pt-3 pb-4
 		 {{/* gap-y was gap-y-12 before added menu icon on top */}}
 			 md:justify-normal md:items-center md:flex-col md:gap-y-3
@@ -79,9 +80,9 @@
 		</div>
 		<div class="
 			js-navigation-rail-expanded hidden group-data-[expanded=true]/navigation-rail:flex group-data-[expanded=true]/navigation-rail:flex-col
-			grow min-h-0 md:gap-y-3
+			grow min-h-0 gap-y-3
 			mt-3 md:px-3 md:mt-3">
-			<div class="flex min-h-0 flex-col gap-y-1 overflow-y-auto">
+			<div class="flex min-h-0 grow flex-col gap-y-1 overflow-y-auto">
 				{{ if .ExpandedSelector }}
 					{{ render .GetContext .ExpandedSelector }}
 				{{ end }}
@@ -91,14 +92,15 @@
 				{{ range .TopItems }}
 					{{ template "NavigationRailItemExpanded" . }}
 				{{ end }}
-				{{ if .FooterItems }}
-					<div class="flex flex-col gap-y-1 pt-3">
-						{{ range .FooterItems }}
-							{{ template "NavigationRailItemExpanded" . }}
-						{{ end }}
-					</div>
-				{{ end }}
 			</div>
+			{{/* Footer stays pinned below the scrollable destinations. */}}
+			{{ if .FooterItems }}
+				<div class="js-navigation-rail-footer flex shrink-0 flex-col gap-y-1 border-t border-outline-variant pt-3">
+					{{ range .FooterItems }}
+						{{ template "NavigationRailItemExpanded" . }}
+					{{ end }}
+				</div>
+			{{ end }}
 		</div>
 		</div>
 	</nav>

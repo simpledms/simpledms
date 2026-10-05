@@ -32,10 +32,11 @@ func NewEditMCPCredentialCmd(
 		actions:     actions,
 		credentialx: mcpcredential.NewCredentialService(),
 		Config:      config,
-		FormHelper: autil.NewFormHelper[EditMCPCredentialCmdData](
+		FormHelper: autil.NewFormHelperX[EditMCPCredentialCmdData](
 			infra,
 			config,
-			widget.T("Edit"),
+			widget.T("Edit MCP credential"),
+			widget.T("Save"),
 		),
 	}
 }
@@ -70,7 +71,7 @@ func (qq *EditMCPCredentialCmd) Handler(
 		return err
 	}
 
-	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
+	rw.Header().Set("HX-Trigger", event.MCPCredentialChanged.String())
 	rw.AddRenderables(widget.NewSnackbarf("Changes saved."))
 	return nil
 }

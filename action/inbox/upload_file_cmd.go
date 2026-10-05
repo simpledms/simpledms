@@ -13,6 +13,7 @@ import (
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/model/main/common/filesource"
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -37,10 +38,11 @@ func NewUploadFileCmd(infra *common.Infra, actions *Actions) *UploadFileCmd {
 		actions.Route("upload-file-cmd"),
 		false,
 	).EnableManualTxManagement()
-	formHelper := autil.NewFormHelper[UploadFileCmdData](
+	formHelper := autil.NewFormHelperX[UploadFileCmdData](
 		infra,
 		config,
 		widget.T("Upload file"),
+		widget.T("Upload"),
 	)
 	formHelper.SetIsMultipartFormData(true)
 	return &UploadFileCmd{
@@ -77,11 +79,18 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	}()
 
 	filename := uploadedFile.Filename
-	result, err := filesystem.NewFileIngestionService(qq.infra.FileSystem()).Ingest(
+	rootID, err := txx.WithTenantReadSpaceTx(ctx.SpaceCtx(),
+		func(readCtx *ctxx.SpaceContext) (int64, error) {
+			return readCtx.SpaceRootDir().ID, nil
+		})
+	if err != nil {
+		return err
+	}
+	_, err = filesystem.NewFileIngestionService(qq.infra.FileSystem()).Ingest(
 		ctx.SpaceCtx(),
 		uploadedFile.Reader,
 		filename,
-		ctx.SpaceCtx().SpaceRootDir().ID,
+		rootID,
 		true,
 		filesource.WebInterface,
 		uploadedFile.ExpectedBytes,
@@ -90,22 +99,10 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	if err != nil {
 		return err
 	}
-	rw.Header().Set("HX-Retarget", "#innerContent")
-	rw.Header().Set("HX-Reswap", "innerHTML")
-	_, err = txx.WithTenantReadSpaceTx(ctx.SpaceCtx(), func(readCtx *ctxx.SpaceContext) (bool, error) {
-		view, err := qq.actions.InboxPage.WidgetHandler(rw, req, readCtx, result.FilePublicID)
-		if err != nil {
-			return false, err
-		}
-		err = qq.infra.Renderer().Render(
-			rw,
-			readCtx,
-			view,
-			widget.NewSnackbarf("«%s» uploaded.", filename),
-		)
-		return err == nil, err
-	})
-	return err
+	// The ingestion service commits its manually managed writes before notifying the browser.
+	rw.Header().Set("HX-Trigger", event.FileUploaded.String())
+	rw.AddRenderables(widget.NewSnackbarf("«%s» uploaded.", filename))
+	return nil
 }
 
 func (qq *UploadFileCmd) readUploadedFile(req *httpx.Request) (*uploadx.MultipartFile, error) {

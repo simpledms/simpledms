@@ -38,10 +38,10 @@ func (qq *BrowseWithSelectionPage) Handler(
 	fileIDStr := req.PathValue("file_id")
 
 	if dirIDStr == "" {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "No dir id provided.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "No folder ID provided.")
 	}
 	if fileIDStr == "" {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "No file id provided.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "No file ID provided.")
 	}
 
 	filex := qq.infra.FileRepo.GetX(ctx, fileIDStr)
@@ -52,7 +52,7 @@ func (qq *BrowseWithSelectionPage) Handler(
 	browsePage, err := qq.widget(rw, req, ctx, state, dirx, filex)
 	if err != nil {
 		log.Println(err)
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "could not render widget")
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not render widget.")
 	}
 
 	qq.render(rw, req, ctx, browsePage)
@@ -132,7 +132,7 @@ func (qq *BrowseWithSelectionPage) widget(
 			),
 			Child: []widget.IWidget{
 				widget.NewIcon("create_new_folder"),
-				widget.T("Create directory"),
+				widget.T("Create folder"),
 			},
 		})
 	}

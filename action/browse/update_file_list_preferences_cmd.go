@@ -10,6 +10,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/main/filelistpreference"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -84,6 +85,7 @@ func (qq *UpdateFileListPreferencesCmd) Handler(
 		return err
 	}
 	ctx.MainCtx().Account = accountx
+	rw.Header().Set("HX-Trigger", event.FileListPreferencesUpdated.String())
 
 	return nil
 }

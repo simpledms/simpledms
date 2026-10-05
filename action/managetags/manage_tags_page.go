@@ -45,7 +45,7 @@ func (qq *ManageTagsPage) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 
 	*/
 
-	return qq.Render(rw, req, ctx, qq.infra, "Manage tags", qq.Widget(ctx, state))
+	return qq.Render(rw, req, ctx, qq.infra, "Tags", qq.Widget(ctx, state))
 }
 
 func (qq *ManageTagsPage) Widget(
@@ -55,7 +55,7 @@ func (qq *ManageTagsPage) Widget(
 	fabs := []*widget.FloatingActionButton{
 		{
 			Icon:    "add",
-			Tooltip: widget.T("Create new tag or group"),
+			Tooltip: widget.T("Create tag or group"),
 			HTMXAttrs: qq.actions.Tagging.CreateTagCmd.ModalLinkAttrs(
 				qq.actions.Tagging.CreateTagCmd.Data(0), ""),
 		},

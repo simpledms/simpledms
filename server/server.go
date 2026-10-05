@@ -20,7 +20,6 @@ import (
 
 	"filippo.io/age"
 	securejoin "github.com/cyphar/filepath-securejoin"
-	"github.com/gorilla/handlers"
 	"github.com/marcobeierer/go-tika"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -69,6 +68,7 @@ type Server struct {
 	devMode                  bool
 	unsafePort               int // unsafe because it can be 0, use qq.port()
 	assetsFS                 fs.FS
+	assetVersions            *ui.AssetVersions
 	migrationsMainFS         fs.FS
 	migrationsTenantFS       fs.FS
 	isSaaSModeEnabled        bool
@@ -115,7 +115,10 @@ func newMaintenanceModeHandler(
 	var unlockOnce sync.Once
 
 	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
-	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assetsFS))))
+	mux.Handle(
+		"GET /assets/",
+		http.StripPrefix("/assets/", NewAssetHandler(assetsFS, ui.NewAssetVersions(assetsFS))),
+	)
 	mux.HandleFunc("/mcp", func(rw http.ResponseWriter, _ *http.Request) {
 		rw.Header().Set("Cache-Control", "no-store")
 		rw.WriteHeader(http.StatusServiceUnavailable)
@@ -174,9 +177,28 @@ func newMaintenanceModeHandler(
 		}
 	})
 
+	mux.HandleFunc("/", newMaintenancePageHandler(
+		mainDB, i18nx, renderer, commercialLicenseEnabled,
+	))
+	protectedHandler := http.NewCrossOriginProtection().Handler(mux)
+	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/-/unlock-cmd" {
+			rw.Header().Set("Cache-Control", "no-store")
+			rw.Header().Set("Pragma", "no-cache")
+		}
+		protectedHandler.ServeHTTP(rw, req)
+	})
+}
+
+func newMaintenancePageHandler(
+	mainDB *sqlx.MainDB,
+	i18nx *i18n.I18n,
+	renderer *ui.Renderer,
+	commercialLicenseEnabled bool,
+) http.HandlerFunc {
 	// TODO recovery handler
 	// TODO status code?
-	mux.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+	return func(rw http.ResponseWriter, req *http.Request) {
 		isUnlockFormVisible := req.URL.Query().Has("unlock")
 		rw.Header().Set("X-SimpleDMS-Maintenance", "true")
 		if isUnlockFormVisible {
@@ -244,16 +266,7 @@ func newMaintenanceModeHandler(
 			log.Println(err)
 			return
 		}
-	})
-
-	protectedHandler := http.NewCrossOriginProtection().Handler(mux)
-	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		if req.URL.Path == "/-/unlock-cmd" {
-			rw.Header().Set("Cache-Control", "no-store")
-			rw.Header().Set("Pragma", "no-cache")
-		}
-		protectedHandler.ServeHTTP(rw, req)
-	})
+	}
 }
 
 func stopMaintenanceModeServer(server *http.Server) {
@@ -309,6 +322,7 @@ func NewServer(
 		devMode:                  devMode,
 		unsafePort:               unsafePort,
 		assetsFS:                 assetsFS,
+		assetVersions:            ui.NewAssetVersions(assetsFS),
 		migrationsMainFS:         migrationsMainFS,
 		migrationsTenantFS:       migrationsTenantFS,
 		isSaaSModeEnabled:        isSaaSModeEnabled,
@@ -396,21 +410,14 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	// slash suffix is necessary to match all paths with the prefix
 	router.Handle(
 		"GET /assets/",
-		http.StripPrefix("/assets/", http.FileServer(http.FS(qq.assetsFS))),
+		http.StripPrefix("/assets/", NewAssetHandler(qq.assetsFS, qq.assetVersions)),
 	)
 
 	qq.migrateTenantDatabases(ctx, mainDB, tenantDBs)
 	qq.startScheduler(infra, mainDB, tenantDBs, minioClient, systemConfig, rawSystemConfig)
 
-	handlerChain := handlers.CompressHandler(
-		handlers.RecoveryHandler(
-			handlers.PrintRecoveryStack(true),
-		)(
-			// see https://words.filippo.io/csrf/ for implementation details
-			http.NewCrossOriginProtection().Handler(router),
-			// handlers.LoggingHandler(),
-		),
-	)
+	// see https://words.filippo.io/csrf/ for implementation details
+	handlerChain := newPublicHandler(http.NewCrossOriginProtection().Handler(router))
 
 	return &PreparedServer{
 		server:          qq,
@@ -502,40 +509,42 @@ func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB,
 			log.Fatalln(err)
 		}
 	} else if overrideDBConfig {
-		// IMPORTANT
-		// only TLS is overridden here because all encrypted fields can just
-		// be overridden when encryptor.NilableX25519MainIdentity is set;
-		// TLS config is read before that is the case
-		//
-		// it is necessary to read just FirstID() and not First() because
-		// the latter would read the complete row and try to decrypt all
-		// decrypted values. this would fail/panic.
-		// END IMPORTANT
-
-		systemConfigID := mainDB.ReadWriteConn.SystemConfig.Query().FirstIDX(ctx)
-		updateQuery := mainDB.ReadWriteConn.SystemConfig.Update().
-			Where(systemconfig.ID(systemConfigID))
-
-		if val, set := os.LookupEnv("SIMPLEDMS_TLS_ENABLE_AUTOCERT"); set {
-			updateQuery.SetTLSEnableAutocert(val == "true")
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_TLS_CERT_FILEPATH"); set {
-			updateQuery.SetTLSCertFilepath(val)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_TLS_PRIVATE_KEY_FILEPATH"); set {
-			updateQuery.SetTLSPrivateKeyFilepath(val)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_EMAIL"); set {
-			updateQuery.SetTLSAutocertEmail(val)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_HOSTS"); set {
-			updateQuery.SetTLSAutocertHosts(strings.Split(val, ","))
-		}
-
-		updateQuery.SaveX(ctx)
+		qq.overrideTLSConfig(ctx, mainDB)
 	}
 
 	qq.initializeInitialUserIfRequired(ctx, mainDB)
+}
+
+func (qq *Server) overrideTLSConfig(ctx context.Context, mainDB *sqlx.MainDB) {
+	// IMPORTANT
+	// only TLS is overridden here because all encrypted fields can just
+	// be overridden when encryptor.NilableX25519MainIdentity is set;
+	// TLS config is read before that is the case
+	//
+	// it is necessary to read just FirstID() and not First() because
+	// the latter would read the complete row and try to decrypt all
+	// decrypted values. this would fail/panic.
+	// END IMPORTANT
+	systemConfigID := mainDB.ReadWriteConn.SystemConfig.Query().FirstIDX(ctx)
+	updateQuery := mainDB.ReadWriteConn.SystemConfig.Update().
+		Where(systemconfig.ID(systemConfigID))
+
+	if val, set := os.LookupEnv("SIMPLEDMS_TLS_ENABLE_AUTOCERT"); set {
+		updateQuery.SetTLSEnableAutocert(val == "true")
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_TLS_CERT_FILEPATH"); set {
+		updateQuery.SetTLSCertFilepath(val)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_TLS_PRIVATE_KEY_FILEPATH"); set {
+		updateQuery.SetTLSPrivateKeyFilepath(val)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_EMAIL"); set {
+		updateQuery.SetTLSAutocertEmail(val)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_HOSTS"); set {
+		updateQuery.SetTLSAutocertHosts(strings.Split(val, ","))
+	}
+	updateQuery.SaveX(ctx)
 }
 
 func (qq *Server) initializeInitialUserIfRequired(ctx context.Context, mainDB *sqlx.MainDB) {
@@ -566,7 +575,7 @@ func (qq *Server) initializeInitialUserIfRequired(ctx context.Context, mainDB *s
 func (qq *Server) newRendererAndI18n() (*ui.Renderer, *i18n.I18n) {
 	// TODO are there any naming conflicts?
 	templates := template.New("app")
-	templates.Funcs(ui.TemplateFuncMap(templates))
+	templates.Funcs(ui.TemplateFuncMap(templates, qq.assetVersions))
 
 	templatesx, err := templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {
@@ -619,7 +628,7 @@ func (qq *Server) startAutocertIfRequired(systemConfigx *entmain.SystemConfig) (
 	go func() {
 		recoverx.Recover("autocert server")
 
-		err := http.ListenAndServe(":http", manager.HTTPHandler(nil))
+		err := newHTTPServer(":http", manager.HTTPHandler(nil)).ListenAndServe()
 		if err != nil {
 			log.Println(err)
 		}
@@ -638,13 +647,12 @@ func (qq *Server) ensureMainIdentity(
 	manager *autocert.Manager,
 ) {
 	if systemConfigx.IsIdentityEncryptedWithPassphrase {
-		maintenanceModeServer := http.Server{
-			Addr: fmt.Sprintf(":%d", qq.port(
-				useAutocert,
-				systemConfigx.TLSCertFilepath,
-				systemConfigx.TLSPrivateKeyFilepath,
-			)),
-		}
+		// The handler is assigned below because the stop callback references this server.
+		maintenanceModeServer := newHTTPServer(fmt.Sprintf(":%d", qq.port(
+			useAutocert,
+			systemConfigx.TLSCertFilepath,
+			systemConfigx.TLSPrivateKeyFilepath,
+		)), nil)
 
 		maintenanceMux := newMaintenanceModeHandler(
 			mainDB,
@@ -656,19 +664,11 @@ func (qq *Server) ensureMainIdentity(
 			trustedProxies,
 			qq.commercialLicenseEnabled,
 			func() {
-				stopMaintenanceModeServer(&maintenanceModeServer)
+				stopMaintenanceModeServer(maintenanceModeServer)
 			},
 		)
 
-		handlerChain := handlers.CompressHandler(
-			handlers.RecoveryHandler(
-				handlers.PrintRecoveryStack(true),
-			)(
-				maintenanceMux,
-			),
-		)
-
-		maintenanceModeServer.Handler = handlerChain
+		maintenanceModeServer.Handler = newPublicHandler(maintenanceMux)
 		maintenanceListenMode := resolveListenMode(
 			useAutocert,
 			systemConfigx.TLSCertFilepath,
@@ -924,8 +924,8 @@ func (qq *Server) registerCoreRoutes(
 	router.RegisterPage(route2.BrowseRouteWithSelection(), actions.Browse.BrowseWithSelectionPage.Handler)
 	// router.RegisterPage(route.BrowseRouteWithSelection(false), pages.BrowseWithSelection.Handler)
 
-	router.RegisterManualTxPage(route2.InboxRoute(false, false), actions.Inbox.InboxRootPage.Handler)
-	router.RegisterManualTxPage(route2.InboxRoute(true, false), actions.Inbox.InboxWithSelectionPage.Handler)
+	router.RegisterPage(route2.InboxRoute(false, false), actions.Inbox.InboxRootPage.Handler)
+	router.RegisterPage(route2.InboxRoute(true, false), actions.Inbox.InboxWithSelectionPage.Handler)
 	// for use with PWA share target
 	// router.RegisterPage(route.InboxRoute(false, true), pages.Inbox.Handler)
 

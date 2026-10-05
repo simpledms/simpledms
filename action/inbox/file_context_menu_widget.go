@@ -23,8 +23,8 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 
 	menuItems = append(menuItems,
 		&widget.MenuItem{
-			TrailingIcon: "edit", // TODO
-			Label:        widget.T("Rename"),
+			LeadingIcon: "edit",
+			Label:       widget.T("Rename"),
 			HTMXAttrs: qq.actions.Browse.RenameFileCmd.ModalLinkAttrs(
 				qq.actions.Browse.RenameFileCmd.Data(filex.PublicID.String(), filex.Name),
 				"",
@@ -35,8 +35,8 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 
 	menuItems = append(menuItems,
 		&widget.MenuItem{
-			TrailingIcon: "forward_to_inbox",
-			Label:        widget.T("Move to another Inbox"),
+			LeadingIcon: "forward_to_inbox",
+			Label:       widget.T("Move to another Inbox"),
 			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:        qq.actions.TransferFileDialog.Endpoint(),
 				HxVals:        util.JSON(qq.actions.TransferFileDialog.Data(filex.PublicID.String())),
@@ -47,13 +47,16 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 			IsDivider: true,
 		},
 		&widget.MenuItem{
-			TrailingIcon: "delete",
-			Label:        widget.T("Delete"),
+			LeadingIcon: "delete",
+			Label:       widget.T("Delete"),
 			HTMXAttrs: widget.HTMXAttrs{
 				HxPost: qq.actions.Browse.DeleteFileCmd.Endpoint(),
+				HxSwap: "none",
 				HxVals: util.JSON(qq.actions.Browse.DeleteFileCmd.Data(filex.PublicID.String())),
 				// HxTarget:  "#" + qq.actions.ListDir.WrapperID(),
-				HxConfirm: widget.T("Are you sure?").String(ctx),
+				HxConfirm: widget.T(
+					"Delete this file? You can restore it from the Trash.",
+				).String(ctx),
 			},
 		},
 	)
@@ -61,7 +64,7 @@ func (qq *FileContextMenuWidget) Widget(ctx ctxx.Context, filex *enttenant.File)
 	/* TODO support for inbox must be implemented in ArchiveCmd
 	if filem.IsZIPArchive(ctx) {
 		menuItems = append(menuItems, &wx.MenuItem{
-			TrailingIcon: "Unarchive",
+			LeadingIcon: "unarchive",
 			Label:        wx.T("Unzip archive"),
 			HTMXAttrs: qq.actions.UnzipArchiveCmd.ModalLinkAttrs(
 				qq.actions.UnzipArchiveCmd.Data(filem.Data.PublicID.String(), false),

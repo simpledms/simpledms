@@ -3,6 +3,10 @@ package documenttype
 // package action
 
 import (
+	"net/url"
+	"path"
+	"strconv"
+
 	autil "github.com/simpledms/simpledms/action/util"
 	"github.com/simpledms/simpledms/common"
 	"github.com/simpledms/simpledms/core/ui/widget"
@@ -46,11 +50,20 @@ func (qq *DocumentTypesListPartial) Handler(rw httpx.ResponseWriter, req *httpx.
 		return err
 	}
 
-	return qq.infra.Renderer().Render(
-		rw,
-		ctx,
-		qq.Widget(ctx, 0),
-	)
+	var selectedID int64
+	if current, err := url.Parse(req.Header.Get("HX-Current-URL")); err == nil {
+		selectedID, _ = strconv.ParseInt(path.Base(current.Path), 10, 64)
+	}
+	if selectedID != 0 && !ctx.SpaceCtx().Space.QueryDocumentTypes().Where(
+		documenttype.ID(selectedID),
+	).ExistX(ctx) {
+		selectedID = 0
+		rw.Header().Set("HX-Replace-Url", route.ManageDocumentTypes(
+			ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID,
+		))
+	}
+	return qq.infra.Renderer().Render(rw, ctx,
+		qq.actions.DocumentTypePage.WidgetHandler(rw, req, ctx, selectedID))
 }
 
 func (qq *DocumentTypesListPartial) Widget(ctx ctxx.Context, selectedTypeID int64) renderable.Renderable {
@@ -59,49 +72,51 @@ func (qq *DocumentTypesListPartial) Widget(ctx ctxx.Context, selectedTypeID int6
 
 	id := "documentTypesList"
 
-	/*
-		if len(types) == 0 {
-			return &wx.EmptyState{
-				Widget: wx.Widget[wx.EmptyState]{
-					ID: id,
-				},
-				Icon:     wx.NewIcon("description"),
-				Headline: wx.T("No document types available yet."),
-				// TODO actions
-			}
-		}
-	*/
-
-	items = append(items, &widget.ListItem{
-		Headline: widget.T("Add document type"),
-		Type:     widget.ListItemTypeHelper,
-		Leading:  widget.NewIcon("add"),
-		HTMXAttrs: qq.actions.CreateCmd.ModalLinkAttrs(
-			qq.actions.CreateCmd.Data(""),
-			"",
-		),
-	})
-
 	for _, typex := range types {
 		items = append(items, qq.ListItem(ctx, typex, typex.ID == selectedTypeID))
+	}
+
+	htmxAttrs := widget.HTMXAttrs{
+		HxPost: qq.Endpoint(),
+		HxTrigger: event.HxTrigger(
+			event.DocumentTypeCreated,
+			event.DocumentTypeUpdated,
+			event.DocumentTypeDeleted,
+		),
+		// HxVals:    util.JSON(qq.Data()),
+		HxTarget: "#innerContent",
+		HxSwap:   "innerHTML",
+	}
+
+	if len(items) == 0 {
+		return &widget.Container{
+			Widget: widget.Widget[widget.Container]{
+				ID: id,
+			},
+			Child: &widget.EmptyState{
+				Icon:     widget.NewIcon("category"),
+				Headline: widget.T("No document types available yet."),
+				Actions: []widget.IWidget{
+					&widget.Button{
+						Icon:  widget.NewIcon("add"),
+						Label: widget.T("Create document type"),
+						HTMXAttrs: qq.actions.CreateCmd.ModalLinkAttrs(
+							qq.actions.CreateCmd.Data(""),
+							"",
+						),
+					},
+				},
+			},
+			HTMXAttrs: htmxAttrs,
+		}
 	}
 
 	return &widget.List{
 		Widget: widget.Widget[widget.List]{
 			ID: id,
 		},
-		HTMXAttrs: widget.HTMXAttrs{
-			HxPost: qq.Endpoint(),
-			HxTrigger: event.HxTrigger(
-				event.DocumentTypeCreated,
-				event.DocumentTypeUpdated,
-				event.DocumentTypeDeleted,
-			),
-			// HxVals:    util.JSON(qq.Data()),
-			HxTarget: "#" + id,
-			HxSwap:   "outerHTML",
-		},
-		Children: items,
+		HTMXAttrs: htmxAttrs,
+		Children:  items,
 	}
 }
 

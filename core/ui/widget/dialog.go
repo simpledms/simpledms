@@ -36,8 +36,10 @@ type Dialog struct {
 	FooterActions []IWidget
 	// CloseLabel  string
 
-	IsOpenOnLoad                    bool
-	IsOpenOnLoadOnExtraLargeScreens bool
+	IsOpenOnLoad bool
+	// IsOpenOnLoadOnLargeScreens opens the dialog on load only from the lg breakpoint (1200px),
+	// where side sheets are non-modal and fit beside the content.
+	IsOpenOnLoadOnLargeScreens bool
 	// Deprecated: should no longer be necessary with URL state
 	KeepInDOMOnClose bool
 

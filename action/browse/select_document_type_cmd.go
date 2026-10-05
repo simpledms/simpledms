@@ -6,6 +6,7 @@ import (
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	documenttypemodel "github.com/simpledms/simpledms/model/tenant/documenttype"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -59,5 +60,6 @@ func (qq *SelectDocumentTypeCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 		rw.AddRenderables(wx.NewSnackbarf("Document type selected."))
 	}
 
+	rw.Header().Set("HX-Trigger", event.FileDocumentTypeUpdated.String())
 	return nil
 }

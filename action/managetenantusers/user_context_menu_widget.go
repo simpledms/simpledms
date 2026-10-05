@@ -30,18 +30,26 @@ func (qq *UserContextMenuWidget) Widget(
 		return nil
 	}
 
-	hxConfirm := widget.T("Are you sure? This user will be removed from this organization only.").String(ctx)
+	// Member accounts are only removed from this organization; accounts owned by it are deleted.
+	icon := "person_remove"
+	label := widget.T("Remove")
+	hxConfirm := widget.T("Remove this user from the organization?").String(ctx)
 	if isOwningTenantAssignment {
-		hxConfirm = widget.T("Are you sure? This user will be removed from this organization and the account will be deleted globally.").String(ctx)
+		icon = "delete"
+		label = widget.T("Delete")
+		hxConfirm = widget.T(
+			"Remove this user from the organization and delete their account globally?",
+		).String(ctx)
 	}
 
 	return &widget.Menu{
 		Items: []*widget.MenuItem{
 			{
-				LeadingIcon: "delete",
-				Label:       widget.T("Delete"),
+				LeadingIcon: icon,
+				Label:       label,
 				HTMXAttrs: widget.HTMXAttrs{
 					HxPost:    qq.actions.DeleteUserCmd.Endpoint(),
+					HxSwap:    "none",
 					HxVals:    util.JSON(qq.actions.DeleteUserCmd.Data(userx.PublicID.String())),
 					HxConfirm: hxConfirm,
 				},

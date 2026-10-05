@@ -263,10 +263,14 @@ func createWebDAVCredential(
 	if !strings.Contains(rr.Body.String(), formURL+"Inbox/") {
 		t.Fatal("expected direct Inbox URL in credential dialog")
 	}
-	// The response also refreshes the credential list out-of-band; only inspect the dialog.
-	secretDialog, _, _ := strings.Cut(rr.Body.String(), `id="webDAVCredentialOverview"`)
-	if count := strings.Count(secretDialog, "data-copy-value"); count != 4 {
-		t.Fatalf("expected all four credential values to be copyable, got %d", count)
+	secretDialog := rr.Body.String()
+	if strings.Contains(secretDialog, `id="webDAVCredentialOverview"`) {
+		t.Fatal("credential creation must not include replacement overview HTML")
+	}
+	for _, label := range []string{"WebDAV URL", "WebDAV Inbox URL", "Username", "Secret"} {
+		if !strings.Contains(secretDialog, label) {
+			t.Fatalf("expected one-time dialog field %q", label)
+		}
 	}
 	if count := strings.Count(rr.Body.String(), "overflow-wrap: anywhere"); count != 4 {
 		t.Fatalf("expected all four credential values to wrap, got %d", count)
@@ -350,13 +354,9 @@ func createArchiveAndRevokeWebDAVCredential(
 	); err != nil {
 		return err
 	}
-	// The response also refreshes the credential list out-of-band; only inspect the dialog.
-	secretDialog, overview, hasOverview := strings.Cut(
-		archiveRR.Body.String(),
-		`id="webDAVCredentialOverview"`,
-	)
-	if !hasOverview || !strings.Contains(activeTabLabel(t, overview), "Archive") {
-		t.Fatal("expected create response to select the new credential's Space tab")
+	secretDialog := archiveRR.Body.String()
+	if strings.Contains(secretDialog, `id="webDAVCredentialOverview"`) {
+		t.Fatal("credential creation must not include replacement overview HTML")
 	}
 	copyValueMatches := regexp.MustCompile(`data-copy-value="([^"]*)"`).FindAllStringSubmatch(
 		secretDialog,
@@ -489,7 +489,18 @@ func assertWebDAVPageLayout(t *testing.T, page widget.IWidget) *widget.Container
 	if len(layout.Navigation.FABs) != 1 {
 		t.Fatalf("expected one WebDAV credential FAB, got %d", len(layout.Navigation.FABs))
 	}
-	listDetail := layout.Content.(*widget.ListDetailLayout)
+	view, ok := layout.Content.(*widget.View)
+	if !ok {
+		t.Fatalf("expected view with list-detail layout, got %#v", layout.Content)
+	}
+	viewChildren, ok := view.Children.([]widget.IWidget)
+	if !ok || len(viewChildren) == 0 {
+		t.Fatalf("expected view children, got %#v", view.Children)
+	}
+	listDetail, ok := viewChildren[0].(*widget.ListDetailLayout)
+	if !ok {
+		t.Fatalf("expected list-detail layout as first view child, got %#v", viewChildren[0])
+	}
 	if len(listDetail.AppBar.Actions) != 1 {
 		t.Fatalf("expected filter icon in main app bar, got %#v", listDetail.AppBar.Actions)
 	}
@@ -545,21 +556,19 @@ func assertWebDAVCredentialItems(
 	if !strings.Contains(string(items[0].HxVals), archiveSpacePublicID) {
 		t.Fatalf("expected add row to preselect its Space, got %s", items[0].HxVals)
 	}
-	menuButton, ok := items[1].Trailing.(*widget.IconButton)
-	if !ok || menuButton.Icon != "more_vert" {
-		t.Fatalf("expected credential overflow menu, got %#v", items[1].Trailing)
+	if items[1].ContextMenu == nil {
+		t.Fatalf("expected credential context menu, got %#v", items[1])
 	}
-	assertWebDAVCredentialMenu(t, mainCtx, items[1], menuButton)
+	assertWebDAVCredentialMenu(t, mainCtx, items[1], items[1].ContextMenu)
 }
 
 func assertWebDAVCredentialMenu(
 	t *testing.T,
 	mainCtx *ctxx.MainContext,
 	item *widget.ListItem,
-	menuButton *widget.IconButton,
+	menu *widget.Menu,
 ) {
 	t.Helper()
-	menu := menuButton.Children.(*widget.Menu)
 	if len(menu.Items) != 3 || menu.Items[0].Label.String(mainCtx) != "Edit" ||
 		!menu.Items[1].IsDivider || menu.Items[2].Label.String(mainCtx) != "Revoke" {
 		t.Fatalf("expected edit and revoke submenu, got %#v", menu.Items)
@@ -639,7 +648,7 @@ func assertFilteredWebDAVCredentialOverviews(
 	revokedContent := revokedTabs.ActiveTabContent.(*widget.ScrollableContent)
 	revokedList := revokedContent.Children.(*widget.Column).Children.(*widget.List)
 	revokedItems := revokedList.Children.([]*widget.ListItem)
-	if len(revokedItems) != 2 || revokedItems[1].Trailing != nil {
+	if len(revokedItems) != 2 || revokedItems[1].ContextMenu != nil {
 		t.Fatalf("expected one revoked credential without revoke menu, got %#v", revokedItems)
 	}
 

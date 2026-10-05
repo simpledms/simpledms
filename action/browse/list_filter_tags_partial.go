@@ -11,6 +11,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/renderable"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
@@ -56,6 +57,9 @@ func (qq *ListFilterTagsPartial) Handler(rw httpx.ResponseWriter, req *httpx.Req
 		return err
 	}
 	state := autil.StateX[ListFilterTagsPartialState](rw, req)
+	if req.Header.Get("HX-Target") == qq.id() {
+		return qq.infra.Renderer().Render(rw, ctx, qq.Widget(ctx, data.CurrentDirID, state.CheckedTagIDs))
+	}
 
 	return qq.infra.Renderer().Render(
 		rw,
@@ -184,12 +188,21 @@ func (qq *ListFilterTagsPartial) Widget(
 
 	return &widget.Container{
 		Widget: widget.Widget[widget.Container]{
-			ID: "filterTags",
+			ID: qq.id(),
 		},
-		// HTMXAttrs: wx.HTMXAttrs{
-		// HxOn: event.FilterTagsChanged.HxOn("change"),
-		// },
+		// refresh is necessary when the filters are reset
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:    qq.Endpoint(),
+			HxVals:    util.JSON(qq.Data(currentDirID)),
+			HxTarget:  "#" + qq.id(),
+			HxSwap:    "outerHTML",
+			HxTrigger: event.HxTrigger(event.FilterTagsChanged),
+		},
 		GapY:  true,
 		Child: children,
 	}
+}
+
+func (qq *ListFilterTagsPartial) id() string {
+	return "filterTags"
 }

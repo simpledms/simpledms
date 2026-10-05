@@ -10,10 +10,9 @@ import (
 type ResponseWriter interface {
 	http.ResponseWriter
 	WriteData(value any, statusCode int)
-	// necessary for command/query in one request handling
-	// because headers cannot set after writing body
+	// Queue feedback until headers are ready; rendering consumes the queue once.
 	AddRenderables(widgets ...renderable.Renderable)
-	Renderables() []renderable.Renderable
+	TakeRenderables() []renderable.Renderable
 	HasRenderables() bool
 	HasDataWritten() bool
 }
@@ -71,15 +70,16 @@ func (qq *responseWriter) AddRenderables(widgets ...renderable.Renderable) {
 	qq.renderables = append(qq.renderables, widgets...)
 }
 
-func (qq *responseWriter) Renderables() []renderable.Renderable {
-	return qq.renderables
+func (qq *responseWriter) TakeRenderables() []renderable.Renderable {
+	widgets := qq.renderables
+	qq.renderables = nil
+	return widgets
 }
 
 func (qq *responseWriter) HasRenderables() bool {
 	return len(qq.renderables) > 0
 }
 
-// not in use as of 28 April 2025
 func (qq *responseWriter) HasDataWritten() bool {
 	return qq.hasDataWritten
 }

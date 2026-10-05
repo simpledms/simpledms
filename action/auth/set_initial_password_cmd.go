@@ -11,6 +11,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -30,10 +31,15 @@ type SetInitialPasswordCmd struct {
 func NewSetInitialPasswordCmd(infra *common.Infra, actions *Actions) *SetInitialPasswordCmd {
 	config := actionx.NewConfig(actions.Route("set-initial-password-cmd"), false)
 	return &SetInitialPasswordCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[SetInitialPasswordCmdData](infra, config, widget.T("Set password")),
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+		FormHelper: autil.NewFormHelperX[SetInitialPasswordCmdData](
+			infra,
+			config,
+			widget.T("Set password"),
+			widget.T("Set password"),
+		),
 	}
 }
 
@@ -47,7 +53,7 @@ func (qq *SetInitialPasswordCmd) Data(newPassword, confirmPassword string) *SetI
 func (qq *SetInitialPasswordCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	// Ensure user is logged in
 	if !ctx.IsMainCtx() {
-		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be logged in to change your password.")
+		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be signed in to change your password.")
 	}
 
 	data, err := autil.FormData[SetInitialPasswordCmdData](rw, req, ctx)
@@ -58,8 +64,13 @@ func (qq *SetInitialPasswordCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 	accountx := ctx.MainCtx().Account
 	accountm := account.NewAccount(accountx)
 
-	// Set the new password
-	err = accountm.SetPassword(ctx, data.NewPassword, data.ConfirmPassword)
+	cookie, err := req.Cookie(cookiex.SessionCookieName())
+	if err != nil {
+		log.Println(err)
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid session cookie.")
+	}
+
+	err = accountm.SetInitialPassword(ctx, data.NewPassword, data.ConfirmPassword, cookie.Value)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -68,6 +79,6 @@ func (qq *SetInitialPasswordCmd) Handler(rw httpx.ResponseWriter, req *httpx.Req
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.InitialPasswordSet.String())
 
-	rw.AddRenderables(widget.NewSnackbarf("Initial password set successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("Password set."))
 	return nil
 }

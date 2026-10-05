@@ -11,6 +11,7 @@ import (
 	"github.com/simpledms/simpledms/model/main/account"
 	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
+	"github.com/simpledms/simpledms/util/cookiex"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -58,7 +59,7 @@ func (qq *ChangePasswordCmd) Handler(
 ) error {
 	// Ensure user is logged in
 	if !ctx.IsMainCtx() {
-		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be logged in to change your password.")
+		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be signed in to change your password.")
 	}
 
 	data, err := autil.FormData[ChangePasswordCmdData](rw, req, ctx)
@@ -69,7 +70,19 @@ func (qq *ChangePasswordCmd) Handler(
 	accountx := ctx.MainCtx().Account
 	accountm := account.NewAccount(accountx)
 
-	err = accountm.ChangePassword(ctx, data.CurrentOrTemporaryPassword, data.NewPassword, data.ConfirmPassword)
+	cookie, err := req.Cookie(cookiex.SessionCookieName())
+	if err != nil {
+		log.Println(err)
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid session cookie.")
+	}
+
+	err = accountm.ChangePassword(
+		ctx,
+		data.CurrentOrTemporaryPassword,
+		data.NewPassword,
+		data.ConfirmPassword,
+		cookie.Value,
+	)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -78,6 +91,6 @@ func (qq *ChangePasswordCmd) Handler(
 	rw.Header().Set("HX-Reswap", "none")
 	rw.Header().Set("HX-Trigger", event.PasswordChanged.String())
 
-	rw.AddRenderables(widget.NewSnackbarf("Password changed successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("Password changed."))
 	return nil
 }

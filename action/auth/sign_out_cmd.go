@@ -50,6 +50,7 @@ func (qq *SignOutCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 		return err
 	}
 
+	// Authentication transition: leave authenticated content after revoking the Session.
 	rw.Header().Set("HX-Redirect", "/")
 	return nil
 }

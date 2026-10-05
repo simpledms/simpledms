@@ -58,7 +58,7 @@ func (qq *ImportFromLibraryDialog) Form(
 		return autil.WrapWidget(
 			widget.T("Import from library"),
 			widget.T("Import"),
-			widget.T("Import is only available for empty spaces."),
+			widget.T("Import is only available for empty Spaces."),
 			wrapper,
 			widget.DialogLayoutDefault,
 		)
@@ -68,9 +68,8 @@ func (qq *ImportFromLibraryDialog) Form(
 
 	form := &widget.Form{
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.actions.ImportFromLibraryCmd.Endpoint(),
-			HxTarget: hxTarget,
-			HxSwap:   "outerHTML",
+			HxPost: qq.actions.ImportFromLibraryCmd.Endpoint(),
+			HxSwap: "none",
 		},
 		Children: []widget.IWidget{
 			&widget.Container{

@@ -80,6 +80,7 @@ func TestDevelopmentSchemaCreateAddsIndexedColumnsWithoutRebuildingTables(t *tes
 		migratetenant.WithDropIndex(true),
 		migratetenant.WithDropColumn(true),
 		entx.WithFileSourceDefault(),
+		entx.WithInboxTransferDefault(),
 	); err != nil {
 		t.Fatalf("add development schema indexes: %v", err)
 	}

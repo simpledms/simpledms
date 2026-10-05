@@ -64,8 +64,8 @@ func (qq *FileDetailsSideSheetPartial) Widget(
 		Widget: widget.Widget[widget.Dialog]{
 			ID: qq.ID(),
 		},
-		Headline:                        widget.T("Details"),
-		IsOpenOnLoadOnExtraLargeScreens: true,
+		Headline:                   widget.T("Details"),
+		IsOpenOnLoadOnLargeScreens: true,
 		// allows for quick back and forth on mobile devices
 		KeepInDOMOnClose: true,
 		IsOpenOnLoad:     state.ActiveSideSheet == qq.ID(),

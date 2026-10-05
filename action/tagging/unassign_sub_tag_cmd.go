@@ -46,7 +46,7 @@ func (qq *UnassignSubTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request
 		return err
 	}
 
-	superTag, subTag, err := taggingmodel.NewTagService().UnassignSubTag(
+	_, subTag, err := taggingmodel.NewTagService().UnassignSubTag(
 		ctx,
 		data.SuperTagID,
 		data.SubTagID,
@@ -55,12 +55,11 @@ func (qq *UnassignSubTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request
 		return err
 	}
 
-	rw.Header().Set("HX-Trigger", event.SuperTagUpdated.String(superTag.ID))
+	rw.Header().Set("HX-Trigger", event.TagUpdated.String())
 
 	qq.infra.Renderer().RenderX(
 		rw,
 		ctx,
-		qq.actions.SubTags.Edit.ListItem(ctx, superTag, subTag),
 		wx.NewSnackbarf("«%s» unassigned.", subTag.Name),
 	)
 	return nil

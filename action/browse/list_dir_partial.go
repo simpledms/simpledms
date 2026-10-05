@@ -2,8 +2,8 @@ package browse
 
 import (
 	"fmt"
-	"html/template"
 	"log"
+	"net/url"
 	"slices"
 	"strconv"
 	"strings"
@@ -62,6 +62,7 @@ type ListDirPartialState struct {
 	// used in JS, thus don't change URL and as param name below
 	// TODO multiple?
 	ActiveSideSheet string `url:"side_sheet,omitempty"`
+	FilterTab       string `url:"filter_tab,omitempty"`
 	SortBy          string `url:"sort_by,omitempty"` // TODO enum
 
 	// TODO does offset belong to state? in url, but not really state...
@@ -82,6 +83,17 @@ func (qq *ListDirPartialState) isSortedByDate() bool {
 
 func (qq *ListDirPartialState) hasActiveSearch() bool {
 	return qq.SearchQuery != ""
+}
+
+// search is not part of the filters because it has its own field in the app bar
+func (qq *ListDirPartialState) hasActiveFilter() bool {
+	return qq.DocumentTypeID != 0 || len(qq.CheckedTagIDs) > 0 || len(qq.PropertyValues) > 0
+}
+
+func (qq *ListDirPartialState) resetFilters() {
+	qq.DocumentTypeID = 0
+	qq.CheckedTagIDs = nil
+	qq.PropertyValues = nil
 }
 
 func (qq *ListDirPartialState) normalizeSortBy() {
@@ -141,6 +153,13 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		}
 	*/
 	state := autil.StateX[ListDirPartialState](rw, req)
+	if req.PostForm.Has("SearchQuery") {
+		state.SearchQuery = req.PostForm.Get("SearchQuery")
+	}
+	// Detail navigation replaces only #details, so the list's original payload may be stale.
+	if current, err := url.Parse(req.Header.Get("HX-Current-URL")); err == nil {
+		_, data.SelectedFileID, _ = strings.Cut(current.Path, "/file/")
+	}
 
 	hxTarget := req.URL.Query().Get("hx-target")
 	if hxTarget == "#"+qq.FileListID() {
@@ -168,30 +187,16 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		)
 	}
 
-	// TODO or HxTrigger? seems to have same value
-	if req.Header.Get("Hx-Target") == "filterTagsBtn" {
+	targetID := req.Header.Get("Hx-Target")
+	if targetID == qq.filtersButtonID() {
 		return qq.infra.Renderer().Render(
 			rw,
 			ctx,
-			qq.filterTagsBtn(ctx, state, data.CurrentDirID),
-		)
-	}
-	if req.Header.Get("Hx-Target") == "filterPropertiesBtn" {
-		return qq.infra.Renderer().Render(
-			rw,
-			ctx,
-			qq.filterPropertiesBtn(ctx, state, data.CurrentDirID),
-		)
-	}
-	if req.Header.Get("Hx-Target") == "filterDocumentTypeBtn" {
-		return qq.infra.Renderer().Render(
-			rw,
-			ctx,
-			qq.filterDocumentTypeBtn(ctx, state, data.CurrentDirID),
+			qq.filtersButton(ctx, state, data.CurrentDirID),
 		)
 	}
 
-	if req.Header.Get("Hx-Target") == "listDirLoadMore" {
+	if targetID == "listDirLoadMore" {
 		// TODO not a good solution, should be more consistent...
 		//		both is not good, additional state loading and separate offset
 		state = autil.StateX[ListDirPartialState](rw, req)
@@ -219,7 +224,7 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 			},
 		)
 	}
-	if req.Header.Get("Hx-Target") == "listDirLoadMoreTable" {
+	if targetID == "listDirLoadMoreTable" {
 		state = autil.StateX[ListDirPartialState](rw, req)
 		offset := 0
 		offsetStr := req.URL.Query().Get("offset")
@@ -249,16 +254,32 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		)
 	}
 
-	return qq.infra.Renderer().Render(
-		rw,
-		ctx,
-		qq.Widget(
-			ctx,
-			state,
-			data.CurrentDirID,
-			data.SelectedFileID,
-		),
-	)
+	var selected *enttenant.File
+	if data.SelectedFileID != "" {
+		selected, err = ctx.SpaceCtx().Space.QueryFiles().Where(
+			file.PublicID(entx.NewCIText(data.SelectedFileID)),
+		).Only(ctx)
+		if enttenant.IsNotFound(err) {
+			data.SelectedFileID = ""
+			rw.Header().Set("HX-Replace-Url", route.BrowseWithState(state)(
+				ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, data.CurrentDirID,
+			))
+		} else if err != nil {
+			log.Println(err)
+			return err
+		}
+	}
+	view := qq.Widget(ctx, state, data.CurrentDirID, data.SelectedFileID)
+	if selected != nil {
+		view.Detail, err = qq.actions.FilePreviewPartial.Widget(
+			ctx, autil.StateX[FilePreviewPartialState](rw, req),
+			qq.infra.FileRepo.GetX(ctx, data.CurrentDirID), filemodel.NewFile(selected),
+		)
+		if err != nil {
+			return err
+		}
+	}
+	return qq.infra.Renderer().Render(rw, ctx, view)
 }
 
 func (qq *ListDirPartial) WidgetHandler(
@@ -297,14 +318,6 @@ func (qq *ListDirPartial) Widget(
 	}
 
 	var children []widget.IWidget
-
-	children = append(children,
-		qq.sortUpdateTrigger(dirWithParent.Data.PublicID.String(), selectedFileID),
-	)
-
-	children = append(children,
-		qq.tagsAndOptions(ctx, state, dirWithParent),
-	)
 
 	children = append(children,
 		qq.filesList(
@@ -360,40 +373,55 @@ func (qq *ListDirPartial) Widget(
 			ID: qq.WrapperID(),
 		},
 		AppBar: qq.appBar(ctx, state, dirWithParent, selectedFileID),
-		List:   list,
+		// the empty refresh trigger is kept outside of the gapped column; otherwise it takes a
+		// gap slot and shifts the content down
+		List: []widget.IWidget{
+			qq.sortUpdateTrigger(dirWithParent.Data.PublicID.String(), selectedFileID),
+			qq.filtersSideSheetTrigger(dirWithParent.Data.PublicID.String()),
+			list,
+		},
 	}
 }
 
-func (qq *ListDirPartial) sortUpdateTrigger(currentDirID, selectedFileID string) *widget.Container {
+// filtersSideSheetTrigger reopens the filters side sheet where side sheets are open by default
+// (see DefaultSideSheetTrigger) because the file details side sheet replaced it
+func (qq *ListDirPartial) filtersSideSheetTrigger(currentDirID string) *widget.Container {
 	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
+			ID: "browseFiltersSideSheetTrigger",
+		},
 		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.EndpointWithParams(actionx.ResponseWrapperNone, ""),
-			HxVals:   util.JSON(qq.Data(currentDirID, selectedFileID)),
-			HxTarget: "#innerContent",
-			HxSwap:   "innerHTML",
-			HxTrigger: event.SortByUpdated.HandlerWithModifier(
-				"delay:100ms",
-			),
+			HxPost:        qq.actions.FiltersDialog.Endpoint(),
+			HxVals:        util.JSON(qq.actions.FiltersDialog.Data(currentDirID)),
+			LoadInPopover: true,
+			HxTrigger: event.DetailsClosed.String() +
+				"[window.matchMedia('(min-width: 1200px)').matches] from:body",
 		},
 		Child: &widget.View{},
 	}
 }
 
-func (qq *ListDirPartial) tagsAndOptions(ctx ctxx.Context, state *ListDirPartialState, dir *filemodel.File) *widget.ChipBar {
-	// TODO most used tags within folder, order alphabetically or by use?
-
-	// childDirCount := dir.Data.QueryChildren().Where(file.IsDirectory(true)).CountX(ctx)
-	currentDirID := dir.Data.PublicID
-
-	children := qq.filters(ctx, state, currentDirID.String())
-
-	return &widget.ChipBar{
-		Widget: widget.Widget[widget.ChipBar]{
-			ID: "filters", // TODO was `tags` before
+func (qq *ListDirPartial) sortUpdateTrigger(currentDirID, selectedFileID string) *widget.Container {
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
+			ID: "browseLifecycleRefresh",
 		},
-		Children: children,
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:   qq.EndpointWithParams(actionx.ResponseWrapperNone, ""),
+			HxVals:   util.JSON(qq.Data(currentDirID, selectedFileID)),
+			HxTarget: "#innerContent",
+			HxSwap:   "innerHTML",
+			HxTrigger: event.HxTrigger(event.SortByUpdated, event.FileListPreferencesUpdated,
+				event.FileDeleted, event.FileMoved, event.FileVersionMerged),
+			HxInclude: "#search",
+			HxOn: &widget.HxOn{
+				Event: "htmx:before-request",
+				Handler: "if (event.detail.elt === this && " +
+					"!window.location.pathname.includes('/browse/')) event.preventDefault()",
+			},
+		},
+		Child: &widget.View{},
 	}
-	// T("Sort by: Name"),
 }
 
 func (qq *ListDirPartial) pageSize() int {
@@ -415,23 +443,24 @@ func (qq *ListDirPartial) filesList(
 		qq.pageSize(),
 		qq.applyPropertyFilter,
 	)
-	fileListItems := qq.filesListItemsFromQueryResult(ctx, state, data, offset, queryResult)
 	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
 
+	// Build only the rows of the active view; table rows replace list items.
 	var content widget.IWidget
-	content = &widget.List{
-		Children: fileListItems,
-	}
-	if preferences.IsTable() && len(fileListItems) > 0 {
+	if preferences.IsTable() && len(queryResult.Children) > 0 {
 		content = qq.fileTable(ctx, state, data, offset, queryResult, preferences)
+	} else {
+		content = &widget.List{
+			Children: qq.filesListItemsFromQueryResult(ctx, state, data, offset, queryResult),
+		}
 	}
 
-	if len(fileListItems) == 0 {
+	if len(queryResult.Children) == 0 {
 		var widgets []widget.IWidget
 		headline := widget.T("No files available yet.")
 
 		if ctx.SpaceCtx().Space.IsFolderMode {
-			headline = widget.T("No files or directories available yet.")
+			headline = widget.T("No files or folders available yet.")
 			widgets = append(
 				widgets,
 				qq.actions.MakeDirCmd.ModalLink(
@@ -439,7 +468,7 @@ func (qq *ListDirPartial) filesList(
 					[]widget.IWidget{
 						&widget.Button{
 							Icon:  widget.NewIcon("create_new_folder"),
-							Label: widget.T("Create directory"),
+							Label: widget.T("Create folder"),
 						},
 					},
 					"#"+qq.actions.ListDirPartial.WrapperID(),
@@ -491,9 +520,22 @@ func (qq *ListDirPartial) filesList(
 				event.SearchQueryUpdated.HandlerWithModifier("delay:100ms"),
 				event.FileUploaded.Handler(),
 				event.ZIPArchiveUnzipped.Handler(),
+				event.DirectoryCreated.Handler(),
 				event.FileUpdated.Handler(),
-				event.FileDeleted.Handler(),
+				event.FilePropertyUpdated.Handler(),
+				event.FileDocumentTypeUpdated.Handler(),
+				event.TagCreated.Handler(),
+				event.TagUpdated.Handler(),
+				event.TagDeleted.Handler(),
 			}, ", "),
+			HxInclude: "#search",
+			// Navigation updates the URL before morph settles. Ignore late notifications
+			// for an outgoing island instead of rendering it in the new capability.
+			HxOn: &widget.HxOn{
+				Event: "htmx:before-request",
+				Handler: "if (event.detail.elt === this && " +
+					"!window.location.pathname.includes('/browse/')) event.preventDefault()",
+			},
 		},
 	}
 
@@ -579,7 +621,7 @@ func (qq *ListDirPartial) filesListItemsFromQueryResult(
 			Widget: widget.Widget[widget.ListItem]{
 				ID: "listDirLoadMore",
 			},
-			Headline: widget.T("Loading more..."),
+			Headline: widget.T("Loading more…"),
 			HTMXAttrs: widget.HTMXAttrs{
 				HxPost:    qq.Endpoint() + "?offset=" + strconv.Itoa(offset+qq.pageSize()), // FIXME
 				HxTrigger: "intersect once",
@@ -642,8 +684,9 @@ func (qq *ListDirPartial) appBar(
 		LeadingAltMobile: partial.NewNavigationRailToggle(),
 		Title:            widget.Tu(dir.Data.Name),
 		Actions: []widget.IWidget{
-			qq.fileListViewButton(ctx, dir.Data.PublicID.String(), selectedFileID),
+			qq.fileListViewButton(ctx),
 			qq.sortMenuButton(ctx, state, false),
+			qq.filtersButton(ctx, state, dir.Data.PublicID.String()),
 		},
 		Search: &widget.Search{
 			Widget: widget.Widget[widget.Search]{
@@ -687,8 +730,6 @@ func (qq *ListDirPartial) sortMenuButton(
 
 func (qq *ListDirPartial) fileListViewButton(
 	ctx ctxx.Context,
-	currentDirID string,
-	selectedFileID string,
 ) *widget.IconButton {
 	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
 	return &widget.IconButton{
@@ -697,7 +738,6 @@ func (qq *ListDirPartial) fileListViewButton(
 		Children: qq.fileListViewMenu(
 			ctx,
 			preferences,
-			autil.QueryHeader(qq.Endpoint(), qq.Data(currentDirID, selectedFileID)),
 		),
 	}
 }
@@ -705,20 +745,17 @@ func (qq *ListDirPartial) fileListViewButton(
 func (qq *ListDirPartial) fileListViewMenu(
 	ctx ctxx.Context,
 	preferences *filelistpreference.FileListPreferences,
-	hxHeaders template.JS,
 ) *widget.Menu {
 	items := []*widget.MenuItem{
 		qq.fileListViewMenuItem(
 			widget.T("List"),
 			"list",
 			preferences.ViewMode == filelistpreference.FileListViewModeList,
-			hxHeaders,
 		),
 		qq.fileListViewMenuItem(
 			widget.T("Table"),
 			"table",
 			preferences.ViewMode == filelistpreference.FileListViewModeTable,
-			hxHeaders,
 		),
 	}
 	if !preferences.IsTable() {
@@ -749,13 +786,12 @@ func (qq *ListDirPartial) fileListViewMenu(
 			column.label,
 			column.column.String(),
 			preferences.HasBuiltInColumn(column.column),
-			hxHeaders,
 		))
 	}
 
 	spaceColumns := preferences.SpaceColumnsFor(ctx.SpaceCtx().SpaceID)
 	showTags := !spaceColumns.ShowTags
-	items = append(items, qq.fileListTagsMenuItem(widget.T("Tags"), showTags, spaceColumns.ShowTags, hxHeaders))
+	items = append(items, qq.fileListTagsMenuItem(widget.T("Tags"), showTags, spaceColumns.ShowTags))
 
 	tagGroups := ctx.SpaceCtx().Space.QueryTags().
 		Where(tag.TypeEQ(tagtype.Group)).
@@ -769,7 +805,6 @@ func (qq *ListDirPartial) fileListViewMenu(
 			widget.Tu(tagGroup.Name),
 			tagGroup.ID,
 			spaceColumns.HasTagGroupID(tagGroup.ID),
-			hxHeaders,
 		))
 	}
 
@@ -782,7 +817,6 @@ func (qq *ListDirPartial) fileListViewMenu(
 			widget.Tu(propertyx.Name),
 			propertyx.ID,
 			spaceColumns.HasPropertyID(propertyx.ID),
-			hxHeaders,
 		))
 	}
 
@@ -799,7 +833,6 @@ func (qq *ListDirPartial) fileListViewMenuItem(
 	label *widget.Text,
 	viewMode string,
 	isSelected bool,
-	hxHeaders template.JS,
 ) *widget.MenuItem {
 	data := qq.actions.UpdateFileListPreferencesCmd.Data()
 	data.ViewMode = viewMode
@@ -808,7 +841,7 @@ func (qq *ListDirPartial) fileListViewMenuItem(
 		RadioGroupName: "FileListViewMode",
 		RadioValue:     viewMode,
 		IsSelected:     isSelected,
-		HTMXAttrs:      qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+		HTMXAttrs:      qq.fileListPreferencesMenuItemAttrs(data),
 	}
 }
 
@@ -816,7 +849,6 @@ func (qq *ListDirPartial) fileListColumnMenuItem(
 	label *widget.Text,
 	column string,
 	isChecked bool,
-	hxHeaders template.JS,
 ) *widget.MenuItem {
 	data := qq.actions.UpdateFileListPreferencesCmd.Data()
 	data.BuiltInColumn = column
@@ -825,7 +857,7 @@ func (qq *ListDirPartial) fileListColumnMenuItem(
 		CheckboxName:  "FileListColumn",
 		CheckboxValue: column,
 		IsChecked:     isChecked,
-		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data),
 	}
 }
 
@@ -833,7 +865,6 @@ func (qq *ListDirPartial) fileListTagsMenuItem(
 	label *widget.Text,
 	showTags bool,
 	isChecked bool,
-	hxHeaders template.JS,
 ) *widget.MenuItem {
 	data := qq.actions.UpdateFileListPreferencesCmd.Data()
 	data.ShowTags = &showTags
@@ -842,7 +873,7 @@ func (qq *ListDirPartial) fileListTagsMenuItem(
 		CheckboxName:  "FileListTags",
 		CheckboxValue: "tags",
 		IsChecked:     isChecked,
-		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data),
 	}
 }
 
@@ -850,7 +881,6 @@ func (qq *ListDirPartial) fileListPropertyMenuItem(
 	label *widget.Text,
 	propertyID int64,
 	isChecked bool,
-	hxHeaders template.JS,
 ) *widget.MenuItem {
 	data := qq.actions.UpdateFileListPreferencesCmd.Data()
 	data.PropertyID = propertyID
@@ -859,7 +889,7 @@ func (qq *ListDirPartial) fileListPropertyMenuItem(
 		CheckboxName:  "FileListProperty",
 		CheckboxValue: strconv.FormatInt(propertyID, 10),
 		IsChecked:     isChecked,
-		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data),
 	}
 }
 
@@ -867,7 +897,6 @@ func (qq *ListDirPartial) fileListTagGroupMenuItem(
 	label *widget.Text,
 	tagGroupID int64,
 	isChecked bool,
-	hxHeaders template.JS,
 ) *widget.MenuItem {
 	data := qq.actions.UpdateFileListPreferencesCmd.Data()
 	data.TagGroupID = tagGroupID
@@ -876,139 +905,34 @@ func (qq *ListDirPartial) fileListTagGroupMenuItem(
 		CheckboxName:  "FileListTagGroup",
 		CheckboxValue: strconv.FormatInt(tagGroupID, 10),
 		IsChecked:     isChecked,
-		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data, hxHeaders),
+		HTMXAttrs:     qq.fileListPreferencesMenuItemAttrs(data),
 	}
 }
 
 func (qq *ListDirPartial) fileListPreferencesMenuItemAttrs(
 	data *UpdateFileListPreferencesCmdData,
-	hxHeaders template.JS,
 ) widget.HTMXAttrs {
 	return widget.HTMXAttrs{
-		HxPost:    qq.actions.UpdateFileListPreferencesCmd.Endpoint(),
-		HxVals:    util.JSON(data),
-		HxHeaders: hxHeaders,
-		HxTarget:  "#innerContent",
-		HxSwap:    "innerHTML",
+		HxPost: qq.actions.UpdateFileListPreferencesCmd.Endpoint(),
+		HxVals: util.JSON(data),
+		HxSwap: "none",
 	}
 }
 
-func (qq *ListDirPartial) filters(
-	ctx ctxx.Context,
-	listDirState *ListDirPartialState,
-	currentDirID string,
-) []widget.IWidget {
-	// TODO show only if there are dirs or files in result? would require to check complete query,
-	//		not just first 25 results...
-	chips := []widget.IWidget{
-		qq.filterDocumentTypeBtn(ctx, listDirState, currentDirID),
-		qq.filterPropertiesBtn(ctx, listDirState, currentDirID),
-		// TODO open on hover
-		qq.filterTagsBtn(ctx, listDirState, currentDirID),
-	}
-
-	// TODO show only if filter is active
-	chips = append(chips,
-		&widget.AssistChip{
-			// TODO choose another styling, that it is not as prominent as the others
-			Label: widget.Tf("Reset"), // just Reset because it also resets search
-			HTMXAttrs: widget.HTMXAttrs{
-				HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, currentDirID), // TODO or pass in href?
-				HxHeaders: autil.ResetStateHeader(),
-				HxOn:      event.CloseSideSheet.HxOn("click"),
-			},
-			LeadingIcon: "restart_alt", // TODO
-		},
-	)
-
-	return chips
+func (qq *ListDirPartial) filtersButtonID() string {
+	return "filtersBtn"
 }
 
-func (qq *ListDirPartial) filterTagsBtn(
+// filtersButton toggles the filters side sheet and is selected while a filter is active
+func (qq *ListDirPartial) filtersButton(
 	ctx ctxx.Context,
 	listDirState *ListDirPartialState,
 	currentDirID string,
 ) *widget.Container {
-	chipState := widget.AssistChipStateDefault
-	if len(listDirState.CheckedTagIDs) > 0 {
-		chipState = widget.AssistChipStateHighlighted
-	}
-
 	hxTrigger := ""
-	hxPost := qq.actions.TagsFilterDialogPartial.Endpoint()
+	hxPost := qq.actions.FiltersDialog.Endpoint()
 	var hxOn *widget.HxOn
-	if listDirState.ActiveSideSheet == qq.actions.TagsFilterDialogPartial.ID() { // is open
-		if !ctx.VisitorCtx().IsHTMXRequest {
-			hxTrigger = "load" // leads to strange issues if done on htmx requests
-		} else {
-			hxPost = ""
-		}
-		/*hxOn = &wx.HxOn{
-			Event:   "click",
-			Handler: "document.querySelectorAll('.js-side-sheet-dialog').forEach(elem => elem.closeSideSheet())",
-		}*/
-		// hxOn = event.CloseSideSheet.UnsafeHxOnWithQueryParamAndValue("click", "side_sheet", "")
-		hxOn = event.CloseSideSheet.HxOn("click")
-	} else { // closed
-		/*hxOn = &wx.HxOn{
-			Event:   "click",
-			Handler: "document.querySelectorAll('.js-side-sheet-dialog').forEach(elem => elem.toggleCustom())",
-		}*/
-		// hxOn = event.SideSheetToggled.UnsafeHxOnWithQueryParamAndValue("click", "side_sheet", qq.actions.TagsFilterDialogPartial.ID())
-		hxOn = event.SideSheetToggled.HxOn("click")
-	}
-
-	return &widget.Container{
-		Widget: widget.Widget[widget.Container]{
-			ID: "filterTagsBtn",
-		},
-		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.Endpoint(),
-			HxVals:   util.JSON(qq.Data(currentDirID, "")),
-			HxTarget: "#filterTagsBtn",
-			HxSwap:   "outerHTML",
-			HxTrigger: strings.Join([]string{
-				event.FilterTagsChanged.Handler(),
-				event.SideSheetToggled.Handler(),
-			}, ", "),
-		},
-		Child: &widget.AssistChip{
-			IsActive:    listDirState.ActiveSideSheet == qq.actions.TagsFilterDialogPartial.ID(),
-			Label:       widget.Tf("Tags"),
-			LeadingIcon: "label",
-			Badge: &widget.Badge{
-				IsInline: true,
-				Value:    len(listDirState.CheckedTagIDs),
-			},
-			State: chipState,
-			HTMXAttrs: widget.HTMXAttrs{
-				HxTrigger:     hxTrigger,
-				HxPost:        hxPost,
-				HxVals:        util.JSON(qq.actions.TagsFilterDialogPartial.Data(currentDirID)),
-				LoadInPopover: true,
-				HxOn:          hxOn,
-			},
-		},
-	}
-}
-
-func (qq *ListDirPartial) filterPropertiesBtn(
-	ctx ctxx.Context,
-	listDirState *ListDirPartialState,
-	currentDirID string,
-) *widget.Container {
-	// Count the number of active property filters
-	activeFilterCount := len(listDirState.PropertyValues)
-
-	chipState := widget.AssistChipStateDefault
-	if activeFilterCount > 0 {
-		chipState = widget.AssistChipStateHighlighted
-	}
-
-	hxTrigger := ""
-	hxPost := qq.actions.PropertiesFilterDialogPartial.Endpoint()
-	var hxOn *widget.HxOn
-	if listDirState.ActiveSideSheet == qq.actions.PropertiesFilterDialogPartial.ID() { // is open
+	if listDirState.ActiveSideSheet == qq.actions.FiltersDialog.ID() { // is open
 		if !ctx.VisitorCtx().IsHTMXRequest {
 			hxTrigger = "load" // leads to strange issues if done on htmx requests
 		} else {
@@ -1021,95 +945,30 @@ func (qq *ListDirPartial) filterPropertiesBtn(
 
 	return &widget.Container{
 		Widget: widget.Widget[widget.Container]{
-			ID: "filterPropertiesBtn",
+			ID: qq.filtersButtonID(),
 		},
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:   qq.Endpoint(),
 			HxVals:   util.JSON(qq.Data(currentDirID, "")),
-			HxTarget: "#filterPropertiesBtn",
+			HxTarget: "#" + qq.filtersButtonID(),
 			HxSwap:   "outerHTML",
-			HxTrigger: strings.Join([]string{
-				event.PropertyFilterChanged.Handler(),
-				event.SideSheetToggled.Handler(),
-			}, ", "),
+			HxTrigger: event.HxTrigger(
+				event.FilterTagsChanged,
+				event.DocumentTypeFilterChanged,
+				event.PropertyFilterChanged,
+				event.SideSheetToggled,
+			),
 		},
-		Child: &widget.AssistChip{
-			IsActive:    listDirState.ActiveSideSheet == qq.actions.PropertiesFilterDialogPartial.ID(),
-			Label:       widget.Tf("Fields"),
-			LeadingIcon: "tune", // tune or assignment
-			Badge: &widget.Badge{
-				IsInline: true,
-				Value:    activeFilterCount,
-			},
-			State: chipState,
+		Child: &widget.IconButton{
+			Icon:       "filter_list",
+			Tooltip:    widget.T("Filters"),
+			Label:      widget.T("Filters"),
+			IsSelected: listDirState.hasActiveFilter(),
 			HTMXAttrs: widget.HTMXAttrs{
+				Role:          "button",
 				HxTrigger:     hxTrigger,
 				HxPost:        hxPost,
-				HxVals:        util.JSON(qq.actions.PropertiesFilterDialogPartial.Data(currentDirID)),
-				LoadInPopover: true,
-				HxOn:          hxOn,
-			},
-		},
-	}
-}
-
-func (qq *ListDirPartial) filterDocumentTypeBtn(
-	ctx ctxx.Context,
-	listDirState *ListDirPartialState,
-	currentDirID string,
-) *widget.Container {
-	// TODO open on hover
-
-	chipState := widget.AssistChipStateDefault
-	if listDirState.DocumentTypeID != 0 {
-		chipState = widget.AssistChipStateHighlighted
-	}
-
-	hxTrigger := ""
-	hxPost := qq.actions.DocumentTypeFilterDialogPartial.Endpoint()
-	var hxOn *widget.HxOn
-	if listDirState.ActiveSideSheet == qq.actions.DocumentTypeFilterDialogPartial.ID() { // is open
-		if !ctx.VisitorCtx().IsHTMXRequest {
-			hxTrigger = "load" // leads to strange issues if done on htmx requests
-		} else {
-			hxPost = ""
-		}
-		hxOn = event.CloseSideSheet.HxOn("click")
-	} else { // closed
-		hxOn = event.SideSheetToggled.HxOn("click")
-	}
-
-	return &widget.Container{
-		Widget: widget.Widget[widget.Container]{
-			ID: "filterDocumentTypeBtn",
-		},
-		HTMXAttrs: widget.HTMXAttrs{
-			HxPost:   qq.Endpoint(),
-			HxVals:   util.JSON(qq.Data(currentDirID, "")),
-			HxTarget: "#filterDocumentTypeBtn",
-			HxSwap:   "outerHTML",
-			HxTrigger: strings.Join([]string{
-				// TODO is this necessary (for all buttons) or are handlers on list enough?
-				event.FilterTagsChanged.Handler(),
-				event.DocumentTypeFilterChanged.Handler(),
-				event.PropertyFilterChanged.Handler(),
-				event.SideSheetToggled.Handler(),
-			}, ", "),
-		},
-		Child: &widget.AssistChip{
-			IsActive:    listDirState.ActiveSideSheet == qq.actions.DocumentTypeFilterDialogPartial.ID(),
-			Label:       widget.Tf("Document type"),
-			LeadingIcon: "category",
-			State:       chipState,
-			/*TODO add back
-			Badge: &wx.Badge{
-				IsInline: true,
-				// Value:    len(listDirState.CheckedTagIDs),
-			},*/
-			HTMXAttrs: widget.HTMXAttrs{
-				HxTrigger:     hxTrigger,
-				HxPost:        hxPost,
-				HxVals:        util.JSON(qq.actions.DocumentTypeFilterDialogPartial.Data(currentDirID)),
+				HxVals:        util.JSON(qq.actions.FiltersDialog.Data(currentDirID)),
 				LoadInPopover: true,
 				HxOn:          hxOn,
 			},

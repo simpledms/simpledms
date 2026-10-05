@@ -48,11 +48,11 @@ func NewUploadFileCmd(
 		false,
 	).EnableManualTxManagement()
 
-	formHelper := autil.NewFormHelper[UploadFileCmdData](
+	formHelper := autil.NewFormHelperX[UploadFileCmdData](
 		infra,
 		config,
 		widget.T("Upload file"),
-		// "#fileList",
+		widget.T("Upload"),
 	)
 	formHelper.SetIsMultipartFormData(true)
 
@@ -87,7 +87,7 @@ func (qq *UploadFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ct
 	}
 
 	if data.ParentDirID == "" {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "No parent dir provided.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "No parent folder provided.")
 	}
 	if !ctx.SpaceCtx().TenantCtx().IsReadOnlyTx() {
 		return e.NewHTTPErrorf(http.StatusInternalServerError, "Read-only request context required.")

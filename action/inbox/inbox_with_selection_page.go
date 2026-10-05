@@ -15,7 +15,6 @@ import (
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
-	"github.com/simpledms/simpledms/util/txx"
 )
 
 type InboxWithSelectionPage struct {
@@ -42,10 +41,7 @@ func (qq *InboxWithSelectionPage) Handler(
 	if err != nil {
 		return err
 	}
-	_, err = txx.WithTenantReadSpaceTx(ctx.SpaceCtx(), func(readCtx *ctxx.SpaceContext) (*struct{}, error) {
-		return nil, qq.render(rw, req, readCtx, state)
-	})
-	return err
+	return qq.render(rw, req, ctx, state)
 }
 
 func (qq *InboxWithSelectionPage) render(
@@ -58,7 +54,7 @@ func (qq *InboxWithSelectionPage) render(
 
 	fileIDStr := req.PathValue("file_id")
 	if fileIDStr == "" {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "No file id provided.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "No file ID provided.")
 	}
 	filex, err := ctx.SpaceCtx().Space.QueryFiles().Where(file.PublicID(entx.NewCIText(fileIDStr))).Only(ctx)
 	if err != nil {
@@ -73,7 +69,7 @@ func (qq *InboxWithSelectionPage) render(
 	// assignment := ctx.SpaceCtx().Space.QueryFileAssignment().Where(spacefileassignment.FileID(fileID64)).OnlyX(ctx)
 
 	if !filex.IsInInbox {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "File is not in inbox.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "File is not in the Inbox.")
 	}
 
 	/* disabled on 26.06.2025 because done in WidgetHandler

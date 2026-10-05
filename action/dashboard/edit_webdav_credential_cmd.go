@@ -29,10 +29,11 @@ func NewEditWebDAVCredentialCmd(
 		actions:     actions,
 		credentialx: webdavcredential.NewCredentialService(),
 		Config:      config,
-		FormHelper: autil.NewFormHelper[EditWebDAVCredentialCmdData](
+		FormHelper: autil.NewFormHelperX[EditWebDAVCredentialCmdData](
 			infra,
 			config,
-			widget.T("Edit"),
+			widget.T("Edit WebDAV credential"),
+			widget.T("Save"),
 		),
 	}
 }
@@ -64,7 +65,7 @@ func (qq *EditWebDAVCredentialCmd) Handler(
 		return err
 	}
 
-	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
+	rw.Header().Set("HX-Trigger", event.WebDAVCredentialChanged.String())
 	rw.AddRenderables(widget.NewSnackbarf("Changes saved."))
 	return nil
 }

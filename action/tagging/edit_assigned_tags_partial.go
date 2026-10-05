@@ -9,6 +9,7 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/tag"
 	"github.com/simpledms/simpledms/model/tenant/tagging/tagtype"
 	"github.com/simpledms/simpledms/ui/renderable"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -101,6 +102,13 @@ func (qq *EditAssignedTagsPartial) ListView(
 ) *widget.ScrollableContent {
 	// duplicate in qq.Form
 	isLoadingPartial := data.ParentTagID > 0
+	refresh := widget.HTMXAttrs{
+		HxPost:    qq.Endpoint(),
+		HxVals:    util.JSON(qq.Data(data.FileID, 0)),
+		HxTarget:  "#" + qq.hxTargetID(),
+		HxSwap:    "outerHTML",
+		HxTrigger: event.HxTrigger(event.TagCreated, event.TagUpdated, event.TagDeleted),
+	}
 
 	allTagsQuery := ctx.SpaceCtx().Space.QueryTags().
 		Order(tag.ByName()).
@@ -135,7 +143,7 @@ func (qq *EditAssignedTagsPartial) ListView(
 					"#"+qq.hxTargetID(),
 				),
 				Leading:  widget.NewIcon("new_label"),
-				Headline: widget.T("Create new tag or group"),
+				Headline: widget.T("Create tag or group"),
 				Type:     widget.ListItemTypeHelper,
 			},
 		)
@@ -166,7 +174,8 @@ func (qq *EditAssignedTagsPartial) ListView(
 			Widget: widget.Widget[widget.ScrollableContent]{
 				ID: qq.hxTargetID(), // important because used as target
 			},
-			MarginY: true,
+			MarginY:   true,
+			HTMXAttrs: refresh,
 			Children: &widget.EmptyState{
 				// Icon:     wx.NewIcon("label"),
 				Headline: widget.T("No tags available yet."),
@@ -177,7 +186,7 @@ func (qq *EditAssignedTagsPartial) ListView(
 						[]widget.IWidget{
 							&widget.Button{
 								Icon:  widget.NewIcon("folder_special"),
-								Label: widget.T("Create new group"),
+								Label: widget.T("Create group"),
 							},
 						},
 						"#"+qq.hxTargetID(),
@@ -187,7 +196,7 @@ func (qq *EditAssignedTagsPartial) ListView(
 						[]widget.IWidget{
 							&widget.Button{
 								Icon:  widget.NewIcon("new_label"),
-								Label: widget.T("Create new tag"),
+								Label: widget.T("Create tag"),
 							},
 						},
 						"#"+qq.hxTargetID(),
@@ -204,7 +213,8 @@ func (qq *EditAssignedTagsPartial) ListView(
 		Children: &widget.List{
 			Children: allListItems,
 		},
-		Toolbar: qq.toolbar(ctx, data),
+		Toolbar:   qq.toolbar(ctx, data),
+		HTMXAttrs: refresh,
 	}
 }
 

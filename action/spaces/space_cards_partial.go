@@ -100,7 +100,7 @@ func (qq *SpaceCardsPartial) Widget(
 					[]widget.IWidget{
 						&widget.Button{
 							Icon:  widget.NewIcon("add"),
-							Label: widget.T("Create space"),
+							Label: widget.T("Create Space"),
 						},
 					},
 					"",
@@ -114,7 +114,7 @@ func (qq *SpaceCardsPartial) Widget(
 			},
 			Child: &widget.EmptyState{
 				Icon:     widget.NewIcon("hub"),
-				Headline: widget.T("No spaces available yet."),
+				Headline: widget.T("No Spaces available yet."),
 				Actions:  actions,
 			},
 			HTMXAttrs: htmxAttrs,

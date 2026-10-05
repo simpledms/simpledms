@@ -13,7 +13,7 @@
                      aria-valuemin="0"
                      aria-valuemax="100"
                      aria-valuenow="0"
-                     aria-label="Loading...">
+                     aria-label="{{ render .GetContext .GetLoadingLabel }}">
                 </div>
             {{ else }}
                 {{/* Determinate Linear Progress Indicator */}}
@@ -32,7 +32,7 @@
             {{ if .IsSmall }}w-16 h-16{{ else if .IsLarge }}w-24 h-24{{ else }}w-20 h-20{{ end }}">
             {{ if .IsIndeterminate }}
                 {{/* Indeterminate Circular Progress Indicator */}}
-                <svg class="animate-spin" viewBox="0 0 24 24" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Loading...">
+                <svg class="animate-spin" viewBox="0 0 24 24" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="{{ render .GetContext .GetLoadingLabel }}">
                     <circle class="opacity-25 stroke-surface-container-highest" cx="12" cy="12" r="10" stroke-width="4" fill="none"></circle>
                     <path class="opacity-75 {{ if eq .Color "" }}stroke-primary{{ else }}stroke-{{ .Color }}{{ end }}"
                           stroke-linecap="round"

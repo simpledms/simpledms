@@ -140,7 +140,7 @@ func newActionTestHarnessWithSaaSAndS3Config(t testing.TB, isSaaSModeEnabled boo
 	systemConfig := initSystemConfig(t, mainDB, isSaaSModeEnabled, publicOrigin, webauthnRPID, webauthnRPName)
 
 	templates := template.New("app")
-	templates.Funcs(ui.TemplateFuncMap(templates))
+	templates.Funcs(ui.TemplateFuncMap(templates, newEmbeddedAssetVersionsForTest(t)))
 	templates, err = templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		t.Fatal(err)

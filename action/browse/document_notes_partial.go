@@ -145,7 +145,7 @@ func (qq *DocumentNotesPartial) content(
 			empty.Actions = []widget.IWidget{&widget.Button{
 				Label:     widget.T("Add note"),
 				Icon:      widget.NewIcon("add"),
-				StyleType: widget.ButtonStyleTypeElevated,
+				StyleType: widget.ButtonStyleTypeOutlined,
 				HTMXAttrs: widget.HTMXAttrs{
 					Role:          "button",
 					HxPost:        qq.actions.DocumentNoteDialog.Endpoint(),

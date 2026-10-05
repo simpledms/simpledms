@@ -93,7 +93,7 @@ func (qq *FileVersionFromInboxListPartial) findInboxFile(ctx ctxx.Context, sourc
 
 	filex := qq.infra.FileRepo.GetX(ctx, sourceFileID)
 	if !filex.Data.IsInInbox {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File must be in inbox.")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File must be in the Inbox.")
 	}
 
 	return filex.Data, nil

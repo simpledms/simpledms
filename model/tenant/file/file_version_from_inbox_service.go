@@ -9,8 +9,12 @@ import (
 
 	"github.com/simpledms/simpledms/ctxx"
 	"github.com/simpledms/simpledms/db/enttenant"
+	dbfile "github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/filepropertyassignment"
 	"github.com/simpledms/simpledms/db/enttenant/fileversion"
 	"github.com/simpledms/simpledms/db/enttenant/schema"
+	"github.com/simpledms/simpledms/db/enttenant/tagassignment"
+	"github.com/simpledms/simpledms/db/enttenant/webdavresource"
 	"github.com/simpledms/simpledms/util/e"
 )
 
@@ -25,24 +29,13 @@ func (qq *FileVersionFromInboxService) MergeFromInbox(
 	sourceFile *enttenant.File,
 	targetFile *enttenant.File,
 ) (*enttenant.File, error) {
-	if sourceFile == nil || targetFile == nil {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Source and target files are required.")
+	if err := qq.nilableValidateMergeFiles(ctx, sourceFile, targetFile); err != nil {
+		return nil, err
 	}
 
-	if sourceFile.ID == targetFile.ID {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Source and target must be different files.")
-	}
-
-	if sourceFile.SpaceID != ctx.SpaceCtx().Space.ID || targetFile.SpaceID != ctx.SpaceCtx().Space.ID {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File does not belong to current space.")
-	}
-
-	if sourceFile.IsDirectory || targetFile.IsDirectory {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot merge directories.")
-	}
-
-	if !sourceFile.DeletedAt.IsZero() {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Source file is deleted.")
+	filename, err := qq.mergedFilename(ctx, sourceFile, targetFile)
+	if err != nil {
+		return nil, err
 	}
 
 	sourceVersion, err := sourceFile.QueryFileVersions().
@@ -74,14 +67,18 @@ func (qq *FileVersionFromInboxService) MergeFromInbox(
 		versionNumber = latestVersion.VersionNumber + 1
 	}
 
-	ctx.TenantCtx().TTx.FileVersion.Create().
+	_, err = ctx.TenantCtx().TTx.FileVersion.Create().
 		SetFileID(targetFile.ID).
 		SetStoredFileID(sourceVersion.Edges.StoredFile.ID).
 		SetVersionNumber(versionNumber).
-		SaveX(ctx)
+		Save(ctx)
+	if err != nil {
+		log.Printf("add merged file version: %v", err)
+		return nil, err
+	}
 
 	update := targetFile.Update().
-		SetName(sourceFile.Name).
+		SetName(filename).
 		SetOcrRetryCount(0).
 		SetOcrLastTriedAt(time.Time{})
 	if sourceFile.OcrSuccessAt != nil {
@@ -97,10 +94,22 @@ func (qq *FileVersionFromInboxService) MergeFromInbox(
 		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not update target file.")
 	}
 
-	if !sourceFile.IsInInbox {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Source file is not in inbox.")
-	}
 	if _, err := NewDocumentNotes().Transfer(ctx, sourceFile, targetFile); err != nil {
+		return nil, err
+	}
+	if _, err := ctx.TenantCtx().TTx.TagAssignment.Delete().
+		Where(tagassignment.FileID(sourceFile.ID)).Exec(ctx); err != nil {
+		log.Printf("remove merged source tags: %v", err)
+		return nil, err
+	}
+	if _, err := ctx.TenantCtx().TTx.FilePropertyAssignment.Delete().
+		Where(filepropertyassignment.FileID(sourceFile.ID)).Exec(ctx); err != nil {
+		log.Printf("remove merged source fields: %v", err)
+		return nil, err
+	}
+	if _, err := ctx.TenantCtx().TTx.WebDAVResource.Delete().
+		Where(enttenantwebdavresource.FileID(sourceFile.ID)).Exec(ctx); err != nil {
+		log.Printf("remove merged source upload aliases: %v", err)
 		return nil, err
 	}
 	_, err = ctx.TenantCtx().TTx.FileVersion.Delete().Where(fileversion.FileID(sourceFile.ID)).Exec(ctx)
@@ -117,4 +126,53 @@ func (qq *FileVersionFromInboxService) MergeFromInbox(
 	}
 
 	return targetFile, nil
+}
+
+func (qq *FileVersionFromInboxService) nilableValidateMergeFiles(
+	ctx ctxx.Context, sourceFile, targetFile *enttenant.File,
+) error {
+	if sourceFile == nil || targetFile == nil {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Source and target files are required.")
+	}
+	if sourceFile.ID == targetFile.ID {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Source and target must be different files.")
+	}
+	if sourceFile.SpaceID != ctx.SpaceCtx().Space.ID || targetFile.SpaceID != ctx.SpaceCtx().Space.ID {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "File does not belong to the current Space.")
+	}
+	if sourceFile.IsDirectory || targetFile.IsDirectory {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Cannot merge folders.")
+	}
+	if !sourceFile.DeletedAt.IsZero() {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Source file is deleted.")
+	}
+	if !sourceFile.IsInInbox {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Source file is not in the Inbox.")
+	}
+	if !targetFile.DeletedAt.IsZero() {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "File not found.")
+	}
+	return nil
+}
+
+func (qq *FileVersionFromInboxService) mergedFilename(
+	ctx ctxx.Context, source, target *enttenant.File,
+) (string, error) {
+	if target.IsInInbox || target.Name == source.Name {
+		return source.Name, nil
+	}
+	conflict, err := ctx.SpaceCtx().Space.QueryFiles().Where(
+		dbfile.ParentID(target.ParentID),
+		dbfile.Name(source.Name),
+		dbfile.IsInInbox(false),
+		dbfile.IDNEQ(target.ID),
+	).Exist(ctx)
+	if err != nil {
+		log.Printf("check merged filename: %v", err)
+		return "", err
+	}
+	if conflict {
+		return target.Name, nil
+	}
+	return source.Name, nil
 }

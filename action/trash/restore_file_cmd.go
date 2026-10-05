@@ -11,7 +11,6 @@ import (
 	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/entx"
 	"github.com/simpledms/simpledms/ui/uix/event"
-	"github.com/simpledms/simpledms/ui/uix/route"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -99,11 +98,6 @@ func (qq *RestoreFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		rw.AddRenderables(widget.NewSnackbarf("File restored."))
 	}
 
-	rw.Header().Set("HX-Retarget", "#details")
-	rw.Header().Set("HX-Reswap", "innerHTML")
-	// TODO not nice because logic to reload list and close details is implemented by handling FileRestored event
-	rw.Header().Set("HX-Replace-Url", route.TrashRoot(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID))
 	rw.Header().Set("HX-Trigger", event.FileRestored.String())
-
-	return qq.infra.Renderer().Render(rw, ctx, &widget.View{})
+	return nil
 }

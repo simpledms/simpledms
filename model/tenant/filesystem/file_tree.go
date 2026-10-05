@@ -16,6 +16,8 @@ import (
 	"github.com/simpledms/simpledms/util/e"
 )
 
+const folderTreeCycleMessage = "Detected cycle in folder tree."
+
 type FileTree struct{}
 
 func NewFileTree() *FileTree {
@@ -33,7 +35,7 @@ func (qq *FileTree) PathFilesByFileID(ctx ctxx.Context, fileID int64) ([]*entten
 
 	for currentFileID != 0 {
 		if _, found := seenFileIDs[currentFileID]; found {
-			return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Detected cycle in directory tree.")
+			return nil, e.NewHTTPErrorf(http.StatusBadRequest, folderTreeCycleMessage)
 		}
 		seenFileIDs[currentFileID] = struct{}{}
 
@@ -193,7 +195,7 @@ func (qq *FileTree) FullPathsByFileID(ctx ctxx.Context, fileIDs []int64) (map[in
 
 		for currentFileID != 0 {
 			if _, found := seenFileIDs[currentFileID]; found {
-				return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Detected cycle in directory tree.")
+				return nil, e.NewHTTPErrorf(http.StatusBadRequest, folderTreeCycleMessage)
 			}
 			seenFileIDs[currentFileID] = struct{}{}
 
@@ -235,7 +237,7 @@ func (qq *FileTree) IsDescendantOf(ctx ctxx.Context, fileID, ancestorFileID int6
 		}
 
 		if _, found := seenFileIDs[currentFileID]; found {
-			return false, e.NewHTTPErrorf(http.StatusBadRequest, "Detected cycle in directory tree.")
+			return false, e.NewHTTPErrorf(http.StatusBadRequest, folderTreeCycleMessage)
 		}
 		seenFileIDs[currentFileID] = struct{}{}
 

@@ -60,6 +60,9 @@ func (qq *DocumentTypeFilterPartial) Handler(rw httpx.ResponseWriter, req *httpx
 		return err
 	}
 	state := autil.StateX[ListDirPartialState](rw, req)
+	if req.Header.Get("HX-Target") == qq.ID() {
+		return qq.infra.Renderer().Render(rw, ctx, qq.Widget(ctx, data, state))
+	}
 
 	return qq.infra.Renderer().Render(
 		rw,
@@ -119,14 +122,7 @@ func (qq *DocumentTypeFilterPartial) Widget(
 				HTMXAttrs: widget.HTMXAttrs{
 					HxPost: qq.actions.ToggleDocumentTypeFilterCmd.Endpoint(),
 					HxVals: util.JSON(qq.actions.ToggleDocumentTypeFilterCmd.Data(data.CurrentDirID, documentType.ID)),
-					// HxSwap: "none",
-					HxHeaders: autil.QueryHeader(
-						qq.Endpoint(),
-						qq.Data(data.CurrentDirID),
-					),
-					HxTarget: "#" + qq.ID(),
-					HxSelect: "#" + qq.ID(),
-					HxSwap:   "outerHTML",
+					HxSwap: "none",
 				},
 			})
 		}
@@ -192,7 +188,12 @@ func (qq *DocumentTypeFilterPartial) Widget(
 			attributeBlocks,
 		},
 		HTMXAttrs: widget.HTMXAttrs{
-			HxOn: event.DocumentTypeFilterChanged.HxOn("change"),
+			HxPost:    qq.Endpoint(),
+			HxVals:    util.JSON(data),
+			HxTarget:  "#" + qq.ID(),
+			HxSelect:  "#" + qq.ID(),
+			HxSwap:    "outerHTML",
+			HxTrigger: event.HxTrigger(event.DocumentTypeFilterChanged),
 		},
 	}
 }

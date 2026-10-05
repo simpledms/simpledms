@@ -91,13 +91,13 @@ func (qq *Tenant) Init(
 func (qq *Tenant) OpenDB(devMode bool, metaPath string) (*sqlx.TenantDB, error) {
 	if !qq.IsInitialized() {
 		// TODO StatusAccepted or StatusServiceUnavailable? the latter may not process nackbar...
-		return nil, e.NewHTTPErrorf(http.StatusAccepted, "Tenant not initialized yet. Please try again later.")
+		return nil, e.NewHTTPErrorf(http.StatusAccepted, "Organization not initialized yet. Please try again later.")
 	}
 
 	client, err := qq.openDB(devMode, metaPath, false)
 	if err != nil {
 		log.Println(err)
-		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Error opening tenant database. Please try again later.")
+		return nil, e.NewHTTPErrorf(http.StatusInternalServerError, "Error opening organization database. Please try again later.")
 	}
 
 	return client, err
@@ -207,6 +207,7 @@ func (qq *Tenant) ExecuteDBMigrations(
 			migrate.WithDropIndex(true),
 			migrate.WithDropColumn(true),
 			entx.WithFileSourceDefault(),
+			entx.WithInboxTransferDefault(),
 		); err != nil {
 			// fatal only in dev mode
 			log.Fatalf("failed creating schema resources: %v", err)

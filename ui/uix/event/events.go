@@ -8,16 +8,12 @@ import (
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 )
 
-type EventWithID string
 type Event string
 
 const (
-	SuperTagUpdated EventWithID = "superTagUpdated"
-	TagCreated      Event       = "tagCreated"
-	TagUpdated      Event       = "tagUpdated"
-	TagDeleted      Event       = "tagDeleted"
-	// use TagUpdated for the moment
-	// TagMovedToGroup    EventWithID = "tagMovedToGroup"
+	TagCreated Event = "tagCreated"
+	TagUpdated Event = "tagUpdated"
+	TagDeleted Event = "tagDeleted"
 
 	AccountUpdated                Event = "accountUpdated"
 	AccountDeleted                Event = "accountDeleted"
@@ -42,7 +38,14 @@ const (
 	PropertyUpdated       Event = "propertyUpdated"
 	PropertyDeleted       Event = "propertyDeleted"
 
-	FilePropertyUpdated Event = "filePropertyUpdated"
+	FilePropertyUpdated        Event = "filePropertyUpdated"
+	FileDocumentTypeUpdated    Event = "fileDocumentTypeUpdated"
+	FileVersionMerged          Event = "fileVersionMerged"
+	FileListPreferencesUpdated Event = "fileListPreferencesUpdated"
+	InboxChanged               Event = "inboxChanged"
+	DirectoryCreated           Event = "directoryCreated"
+	MCPCredentialChanged       Event = "mcpCredentialChanged"
+	WebDAVCredentialChanged    Event = "webDAVCredentialChanged"
 
 	FileUpdated        Event = "fileUpdated"
 	FileDeleted        Event = "fileDeleted"
@@ -192,15 +195,6 @@ func UnsafeHxOnQueryParamDeleteFromSlice(event string, paramName string, paramVa
 			),
 		),
 	}
-}
-
-func (qq EventWithID) String(id int64) string {
-	return fmt.Sprintf("%s-%d", qq, id)
-	// return fmt.Sprintf("{'%s', %d}", qq, id)
-}
-
-func (qq EventWithID) Handler(id int64) string {
-	return qq.String(id)
 }
 
 /*

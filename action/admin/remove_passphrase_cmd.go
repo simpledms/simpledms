@@ -29,10 +29,15 @@ type RemovePassphraseCmd struct {
 func NewRemovePassphraseCmd(infra *common.Infra, actions *Actions) *RemovePassphraseCmd {
 	config := actionx.NewConfig(actions.Route("remove-passphrase-cmd"), false)
 	return &RemovePassphraseCmd{
-		infra:      infra,
-		actions:    actions,
-		Config:     config,
-		FormHelper: autil.NewFormHelper[RemovePassphraseCmdData](infra, config, widget.T("Remove passphrase")),
+		infra:   infra,
+		actions: actions,
+		Config:  config,
+		FormHelper: autil.NewFormHelperX[RemovePassphraseCmdData](
+			infra,
+			config,
+			widget.T("Remove passphrase"),
+			widget.T("Remove"),
+		),
 	}
 }
 
@@ -42,7 +47,7 @@ func (qq *RemovePassphraseCmd) Data() *RemovePassphraseCmdData {
 
 func (qq *RemovePassphraseCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
 	if !ctx.IsMainCtx() {
-		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be logged in to unlock the app.")
+		return e.NewHTTPErrorf(http.StatusUnauthorized, "You must be signed in to unlock the app.")
 	}
 	if ctx.MainCtx().Account.Role != mainrole.Admin {
 		return e.NewHTTPErrorf(http.StatusForbidden, "You must be an admin to unlock the app.")

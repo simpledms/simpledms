@@ -8,6 +8,7 @@ import (
 	wx "github.com/simpledms/simpledms/core/ui/widget"
 	"github.com/simpledms/simpledms/ctxx"
 	account2 "github.com/simpledms/simpledms/model/main/account"
+	"github.com/simpledms/simpledms/ui/uix/event"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/e"
 	"github.com/simpledms/simpledms/util/httpx"
@@ -35,7 +36,7 @@ func (qq *ClearPasskeysCmd) Data() *ClearPasskeysCmdData {
 }
 
 func (qq *ClearPasskeysCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx ctxx.Context) error {
-	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be logged in to manage passkeys.")
+	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be signed in to manage passkeys.")
 	if err != nil {
 		return err
 	}
@@ -47,7 +48,7 @@ func (qq *ClearPasskeysCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 		return err
 	}
 	if isTenantPolicyEnforced {
-		return e.NewHTTPErrorf(http.StatusBadRequest, "Passkeys cannot be removed because a tenant requires passkey login.")
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Passkeys cannot be removed because an organization requires passkey sign-in.")
 	}
 
 	err = accountm.ClearPasskeys(mainCtx)
@@ -56,6 +57,7 @@ func (qq *ClearPasskeysCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request,
 	}
 
 	rw.AddRenderables(wx.NewSnackbarf("All passkeys were removed."))
+	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
 
 	log.Printf("passkeys cleared account_id=%d", mainCtx.Account.ID)
 

@@ -40,16 +40,6 @@ func (qq *UsersOfSpaceListPartial) Handler(rw httpx.ResponseWriter, req *httpx.R
 func (qq *UsersOfSpaceListPartial) Widget(ctx ctxx.Context, state *UsersOfSpaceListPartialState) renderable.Renderable {
 	var listItems []*widget.ListItem
 
-	if ctx.SpaceCtx().UserRoleInSpace() == spacerole.Owner {
-		listItems = append(listItems, &widget.ListItem{
-			Headline: widget.T("Assign a user"), // TODO Create or add? system or real world perspective?
-			Leading:  widget.NewIcon("add"),
-			Type:     widget.ListItemTypeHelper,
-			HTMXAttrs: qq.actions.AssignUserToSpaceCmd.ModalLinkAttrs(
-				qq.actions.AssignUserToSpaceCmd.Data(), ""),
-		})
-	}
-
 	spaceAssignments := ctx.SpaceCtx().TTx.SpaceUserAssignment.Query().
 		WithUser().
 		Order(
@@ -74,20 +64,48 @@ func (qq *UsersOfSpaceListPartial) Widget(ctx ctxx.Context, state *UsersOfSpaceL
 		})
 	}
 
+	htmxAttrs := widget.HTMXAttrs{
+		HxTrigger: event.HxTrigger(
+			event.UserAssignedToSpace,
+			event.UserUnassignedFromSpace,
+		),
+		HxPost:   qq.Endpoint(),
+		HxTarget: "#" + qq.id(),
+		HxSwap:   "outerHTML",
+	}
+
+	if len(listItems) == 0 {
+		var actions []widget.IWidget
+		if ctx.SpaceCtx().UserRoleInSpace() == spacerole.Owner {
+			actions = append(actions, &widget.Button{
+				Icon:  widget.NewIcon("person_add"),
+				Label: widget.T("Assign user"),
+				HTMXAttrs: qq.actions.AssignUserToSpaceCmd.ModalLinkAttrs(
+					qq.actions.AssignUserToSpaceCmd.Data(),
+					"",
+				),
+			})
+		}
+
+		return &widget.Container{
+			Widget: widget.Widget[widget.Container]{
+				ID: qq.id(),
+			},
+			Child: &widget.EmptyState{
+				Icon:     widget.NewIcon("person"),
+				Headline: widget.T("No users assigned yet."),
+				Actions:  actions,
+			},
+			HTMXAttrs: htmxAttrs,
+		}
+	}
+
 	return &widget.List{
 		Widget: widget.Widget[widget.List]{
 			ID: qq.id(),
 		},
-		HTMXAttrs: widget.HTMXAttrs{
-			HxTrigger: event.HxTrigger(
-				event.UserAssignedToSpace,
-				event.UserUnassignedFromSpace,
-			),
-			HxPost:   qq.Endpoint(),
-			HxTarget: "#" + qq.id(),
-			HxSwap:   "outerHTML",
-		},
-		Children: listItems,
+		HTMXAttrs: htmxAttrs,
+		Children:  listItems,
 	}
 }
 

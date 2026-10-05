@@ -116,7 +116,7 @@ func (qq *Account) authenticatePasswordSignIn(
 		ctx,
 		10*time.Second,
 		http.StatusUnauthorized,
-		"Too many login attempts. Please try again in 10 seconds.",
+		"Too many sign-in attempts. Please try again in 10 seconds.",
 	)
 	if err != nil {
 		return false, err
@@ -392,7 +392,7 @@ func (qq *Account) GenerateTemporaryPassword(ctx context.Context) (string, time.
 	password, err := gonanoid.Generate("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_", 16)
 	if err != nil {
 		log.Println(err)
-		return "", time.Time{}, e.NewHTTPErrorf(http.StatusInternalServerError, "could not generate temporary password")
+		return "", time.Time{}, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not generate temporary password.")
 	}
 
 	expiresAt, err := qq.SetTemporaryPassword(ctx, password)
@@ -408,7 +408,7 @@ func (qq *Account) GenerateTemporaryPassword(ctx context.Context) (string, time.
 func (qq *Account) SetTemporaryPassword(ctx context.Context, password string) (time.Time, error) {
 	salt, ok := accountutil.RandomSalt()
 	if !ok {
-		return time.Time{}, e.NewHTTPErrorf(http.StatusInternalServerError, "could not generate salt")
+		return time.Time{}, e.NewHTTPErrorf(http.StatusInternalServerError, "Could not generate salt.")
 	}
 
 	passwordHash := accountutil.PasswordHash(password, salt)
@@ -425,7 +425,15 @@ func (qq *Account) SetTemporaryPassword(ctx context.Context, password string) (t
 
 }
 
-func (qq *Account) ChangePassword(ctx ctxx.Context, currentPassword, newPassword, confirmPassword string) error {
+// ChangePassword keeps the session identified by currentSessionValue and signs out all
+// other sessions, so that a compromised session does not survive the change.
+func (qq *Account) ChangePassword(
+	ctx ctxx.Context,
+	currentPassword string,
+	newPassword string,
+	confirmPassword string,
+	currentSessionValue string,
+) error {
 	isTemporaryPasswordValid, err := qq.isTemporaryPasswordValid(currentPassword)
 	if err != nil {
 		log.Println(err)
@@ -439,7 +447,62 @@ func (qq *Account) ChangePassword(ctx ctxx.Context, currentPassword, newPassword
 		return e.NewHTTPErrorf(http.StatusBadRequest, "New password must be different from current password.")
 	}
 
-	return qq.SetPassword(ctx, newPassword, confirmPassword)
+	return qq.setPasswordAndSignOutOtherSessions(
+		ctx,
+		newPassword,
+		confirmPassword,
+		currentSessionValue,
+	)
+}
+
+// SetInitialPassword lets accounts that signed in with a temporary password choose a
+// password. Replacing an existing password requires ChangePassword and the current password.
+// Other sessions are signed out because the temporary password may have been intercepted.
+func (qq *Account) SetInitialPassword(
+	ctx ctxx.Context,
+	password string,
+	confirmPassword string,
+	currentSessionValue string,
+) error {
+	if qq.HasPassword() {
+		return e.NewHTTPErrorf(
+			http.StatusBadRequest,
+			"A password is already set. Please use the change password form instead.",
+		)
+	}
+
+	return qq.setPasswordAndSignOutOtherSessions(
+		ctx,
+		password,
+		confirmPassword,
+		currentSessionValue,
+	)
+}
+
+func (qq *Account) setPasswordAndSignOutOtherSessions(
+	ctx ctxx.Context,
+	password string,
+	confirmPassword string,
+	currentSessionValue string,
+) error {
+	if strings.TrimSpace(currentSessionValue) == "" {
+		return e.NewHTTPErrorf(http.StatusBadRequest, "Invalid session cookie.")
+	}
+	if err := qq.SetPassword(ctx, password, confirmPassword); err != nil {
+		return err
+	}
+
+	_, err := ctx.MainCtx().MainTx.Session.Delete().
+		Where(
+			session.AccountID(qq.Data.ID),
+			session.ValueNEQ(currentSessionValue),
+		).
+		Exec(ctx)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }
 
 func (qq *Account) SetPassword(ctx ctxx.Context, password, confirmPassword string) error {
@@ -454,7 +517,7 @@ func (qq *Account) SetPassword(ctx ctxx.Context, password, confirmPassword strin
 
 	salt, ok := accountutil.RandomSalt()
 	if !ok {
-		return e.NewHTTPErrorf(http.StatusInternalServerError, "could not generate salt")
+		return e.NewHTTPErrorf(http.StatusInternalServerError, "Could not generate salt.")
 	}
 
 	passwordHash := accountutil.PasswordHash(password, salt)

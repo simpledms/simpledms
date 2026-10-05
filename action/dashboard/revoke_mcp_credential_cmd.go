@@ -55,7 +55,7 @@ func (qq *RevokeMCPCredentialCmd) Handler(
 	}
 
 	rw.Header().Set("Cache-Control", "no-store")
-	rw.Header().Set("HX-Trigger", event.AccountUpdated.String())
+	rw.Header().Set("HX-Trigger", event.MCPCredentialChanged.String())
 	rw.AddRenderables(widget.NewSnackbarf("MCP credential revoked."))
 	return nil
 }

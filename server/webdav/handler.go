@@ -9,7 +9,6 @@ import (
 	"net"
 	"net/http"
 	"net/netip"
-	"slices"
 	"strings"
 	"time"
 
@@ -38,6 +37,7 @@ import (
 	credentialmodel "github.com/simpledms/simpledms/model/main/webdavcredential"
 	webdavresourcemodel "github.com/simpledms/simpledms/model/tenant/webdavresource"
 	"github.com/simpledms/simpledms/util/e"
+	"github.com/simpledms/simpledms/util/httpx"
 )
 
 const (
@@ -283,10 +283,11 @@ func (qq *Handler) webDAVSpaceContext(
 	isReadOnly bool,
 	beforeTenantAuth func(context.Context, *enttenant.Tx) error,
 ) (*ctxx.SpaceContext, *enttenant.Tx, error) {
-	ctx = mainprivacy.DecisionContext(ctx, mainprivacy.Allow)
+	// Keep the bypass on bootstrap lookups only; see docs/invariants/privacy_bypass_scope.md.
+	bootstrapCtx := mainprivacy.DecisionContext(ctx, mainprivacy.Allow)
 	accountx, err := mainTx.Account.Query().
 		Where(mainaccount.ID(credentialx.AccountID), mainaccount.DeletedAtIsNil()).
-		Only(ctx)
+		Only(bootstrapCtx)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -296,7 +297,7 @@ func (qq *Handler) webDAVSpaceContext(
 			tenant.PublicID(entx.NewCIText(tenantPublicID)),
 			tenant.DeletedAtIsNil(),
 		).
-		Only(ctx)
+		Only(bootstrapCtx)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -310,7 +311,7 @@ func (qq *Handler) webDAVSpaceContext(
 				tenantaccountassignment.ExpiresAtGT(now),
 			),
 		).
-		Exist(ctx)
+		Exist(bootstrapCtx)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -318,7 +319,7 @@ func (qq *Handler) webDAVSpaceContext(
 		return nil, nil, webDAVStatusError{status: http.StatusForbidden, msg: "tenant assignment not active"}
 	}
 
-	tenantDB, err := qq.webDAVTenantDB(ctx, tenantx)
+	tenantDB, err := qq.webDAVTenantDB(bootstrapCtx, tenantx)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -392,14 +393,13 @@ func (qq *Handler) withFinalizationContexts(
 	committedMain := false
 	defer rollbackMainTx(mainTx, &committedMain)
 
-	ctx = mainprivacy.DecisionContext(ctx, mainprivacy.Allow)
 	touched, err := mainTx.WebDAVCredential.Update().
 		Where(
 			entmainwebdavcredential.ID(credentialx.ID),
 			entmainwebdavcredential.RevokedAtIsNil(),
 		).
 		SetLastUsedAt(time.Now()).
-		Save(ctx)
+		Save(mainprivacy.DecisionContext(ctx, mainprivacy.Allow))
 	if err != nil {
 		return err
 	}
@@ -695,20 +695,11 @@ func (qq *Handler) isSecureWebDAVRequest(req *http.Request) bool {
 }
 
 func (qq *Handler) webDAVRateLimitRemoteAddr(req *http.Request) string {
-	if !qq.isTrustedProxy(req.RemoteAddr) {
+	clientIP, ok := httpx.ClientIPThroughTrustedProxies(req, qq.trustedProxies)
+	if !ok {
 		return req.RemoteAddr
 	}
-	forwardedFor := strings.Split(req.Header.Get("X-Forwarded-For"), ",")
-	for _, f := range slices.Backward(forwardedFor) {
-		addr, err := netip.ParseAddr(strings.TrimSpace(f))
-		if err != nil {
-			return req.RemoteAddr
-		}
-		if !qq.isTrustedProxyAddr(addr) {
-			return addr.String()
-		}
-	}
-	return req.RemoteAddr
+	return clientIP.String()
 }
 
 func (qq *Handler) isTrustedProxy(remoteAddr string) bool {

@@ -29,30 +29,6 @@ import (
 	"github.com/simpledms/simpledms/util/timex"
 )
 
-func QueryHeader(endpoint string, data any) template.JS {
-	values := url.Values{}
-
-	if data != nil {
-		// encoder := schema.NewEncoder()
-		encoder := form.NewEncoder()
-		var err error
-		values, err = encoder.Encode(data)
-		if err != nil {
-			log.Println(err)
-			panic(err)
-		}
-	}
-
-	// TODO json?
-	return util.JSON(struct {
-		XQueryEndpoint string `json:"X-Query-Endpoint"` // TODO Partial or Route or Endpoint?
-		XQueryData     any    `json:"X-Query-Data"`     // TODO Data or Form or Vals?
-	}{
-		XQueryEndpoint: endpoint,
-		XQueryData:     values.Encode(),
-	})
-}
-
 /*
 // should only used rarely, for example if loading a partial is not enough or not possible;
 // On the dashboard it is for example used because there is no DashboardCards command
@@ -78,6 +54,22 @@ func ResetStateHeader() template.JS {
 	})
 }
 
+// DefaultSideSheetTrigger loads a side sheet dialog by default where side sheets fit beside the
+// content (lg, 1200px, see widget.Dialog). dialogAttrs must load the dialog like the control that
+// normally opens it (HxPost and optional HxVals). Render the trigger only as part of a page, never
+// in a refreshed partial, so refreshes don't reopen a sheet the user closed. The stable ID lets
+// morph retain it on navigation within the same screen, so load fires only when entering it.
+func DefaultSideSheetTrigger(id string, dialogAttrs widget.HTMXAttrs) *widget.Container {
+	dialogAttrs.HxTrigger = "load[window.matchMedia('(min-width: 1200px)').matches]"
+	dialogAttrs.LoadInPopover = true
+	return &widget.Container{
+		Widget: widget.Widget[widget.Container]{
+			ID: id,
+		},
+		HTMXAttrs: dialogAttrs,
+	}
+}
+
 // can be used to preserve state and GET requests, for example when
 // switching between list items
 func PreserveStateHeader() template.JS {
@@ -90,9 +82,11 @@ func PreserveStateHeader() template.JS {
 
 func CloseDetailsHeader() template.JS {
 	return util.JSON(struct {
-		CloseDetails bool `json:"Close-Details"`
+		CloseDetails  bool `json:"Close-Details"`
+		PreserveState bool `json:"Preserve-State"`
 	}{
-		CloseDetails: true, // TODO or ID?
+		CloseDetails:  true, // TODO or ID?
+		PreserveState: true,
 	})
 }
 
@@ -163,13 +157,13 @@ func FormDataX[T any](
 				return data, e.NewHTTPErrorf(http.StatusRequestEntityTooLarge, "Upload is too large.")
 			}
 
-			return data, e.NewHTTPErrorf(http.StatusBadRequest, "cannot parse file")
+			return data, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot parse file.")
 		}
 	} else {
 		err := req.ParseForm()
 		if err != nil {
 			log.Println(err)
-			return data, e.NewHTTPErrorf(http.StatusBadRequest, "cannot parse form")
+			return data, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot parse form.")
 		}
 	}
 
@@ -190,7 +184,7 @@ func FormDataX[T any](
 	err := decoder.Decode(data, req.PostForm)
 	if err != nil {
 		log.Println(err)
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "cannot decode form")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot decode form.")
 	}
 
 	if !skipValidation {
@@ -285,7 +279,7 @@ func State[T any](rw httpx.ResponseWriter, req *httpx.Request) (*T, error) {
 		// reset button; without this check, the message is also shown when the state is reset indirectly,
 		// for example by switching folders; not 100 percent sure if this works in all use cases...
 		if req.Header.Get("Hx-Trigger") != "" {
-			rw.AddRenderables(widget.NewSnackbarf("Filters successfully reset."))
+			rw.AddRenderables(widget.NewSnackbarf("Filters reset."))
 		}
 		return data, nil
 	}
@@ -302,7 +296,7 @@ func State[T any](rw httpx.ResponseWriter, req *httpx.Request) (*T, error) {
 		currentURL, err := url.Parse(currentURLStr)
 		if err != nil {
 			log.Println(err)
-			return data, e.NewHTTPErrorf(http.StatusBadRequest, "cannot parse current url")
+			return data, e.NewHTTPErrorf(http.StatusBadRequest, "Cannot parse current URL.")
 		}
 
 		preserveStateStr := req.Header.Get("Preserve-State")
@@ -398,4 +392,26 @@ func WrapWidgetWithID(
 	}
 
 	return form
+}
+
+// RequireTenantOwner guards owner-only organization queries. It checks the tenant user
+// role, the same source as the Space policy and the user management commands.
+func RequireTenantOwner(ctx ctxx.Context) error {
+	if !ctx.IsTenantCtx() || ctx.TenantCtx().User.Role != tenantrole.Owner {
+		return e.NewHTTPErrorf(
+			http.StatusForbidden,
+			"Only organization owners can manage users and settings.",
+		)
+	}
+	return nil
+}
+
+// MenuItemRenderables renders a menu's items without the menu itself, as loaded into a
+// widget.Menu with LazyItems.
+func MenuItemRenderables(menu *widget.Menu) []renderable.Renderable {
+	items := make([]renderable.Renderable, 0, len(menu.Items))
+	for _, item := range menu.Items {
+		items = append(items, item)
+	}
+	return items
 }

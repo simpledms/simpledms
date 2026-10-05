@@ -59,6 +59,8 @@ type requestContext struct {
 
 const maxUploadBytes int64 = 10 * 1024 * 1024
 
+const fileIsFolderMessage = "File is a folder."
+
 type Handler struct {
 	config      Config
 	credentials *credentialmodel.CredentialService
@@ -607,7 +609,7 @@ func (qq *Handler) readText(
 		return result, err
 	}
 	if filex.IsDirectory {
-		return result, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return result, e.NewHTTPErrorf(http.StatusBadRequest, fileIsFolderMessage)
 	}
 	data, err := qq.fileData(requestCtx, ctx, filex)
 	if err != nil {
@@ -675,7 +677,7 @@ func (qq *Handler) listDirectory(
 		return result, err
 	}
 	if len(input.DirectoryID) > 100 {
-		return result, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid directory ID.")
+		return result, e.NewHTTPErrorf(http.StatusBadRequest, "Invalid folder ID.")
 	}
 	directory, children, hasMore, err := filingmodel.NewFilingService(
 		qq.config.Infra.FileSystem(),
@@ -1176,29 +1178,40 @@ func (qq *Handler) getDocumentType(
 		Attributes:          []DocumentTypeAttributeData{},
 	}
 	for _, attributex := range documentTypex.Edges.Attributes {
-		data := DocumentTypeAttributeData{
-			Type:         attributex.Type.String(),
-			Name:         attributex.Name,
-			IsNameGiving: attributex.IsNameGiving,
-			IsProtected:  attributex.IsProtected,
-			IsDisabled:   attributex.IsDisabled,
-			IsRequired:   attributex.IsRequired,
-		}
-		if attributex.Type == attributetype.Tag && attributex.Edges.Tag != nil {
-			data.TagID, err = metadataPublicID(attributex.Edges.Tag.PublicID)
-			if err != nil {
-				return DocumentTypeData{}, err
-			}
-		}
-		if attributex.Type == attributetype.Field && attributex.Edges.Property != nil {
-			data.PropertyID, err = metadataPublicID(attributex.Edges.Property.PublicID)
-			if err != nil {
-				return DocumentTypeData{}, err
-			}
+		data, err := documentTypeAttributeProjection(attributex)
+		if err != nil {
+			return DocumentTypeData{}, err
 		}
 		result.Attributes = append(result.Attributes, data)
 	}
 	return result, nil
+}
+
+func documentTypeAttributeProjection(
+	attributex *enttenant.Attribute,
+) (DocumentTypeAttributeData, error) {
+	data := DocumentTypeAttributeData{
+		Type:         attributex.Type.String(),
+		Name:         attributex.Name,
+		IsNameGiving: attributex.IsNameGiving,
+		IsProtected:  attributex.IsProtected,
+		IsDisabled:   attributex.IsDisabled,
+		IsRequired:   attributex.IsRequired,
+	}
+	var err error
+	if attributex.Type == attributetype.Tag && attributex.Edges.Tag != nil {
+		data.TagID, err = metadataPublicID(attributex.Edges.Tag.PublicID)
+		if err != nil {
+			return DocumentTypeAttributeData{}, err
+		}
+	}
+	if attributex.Type == attributetype.Field && attributex.Edges.Property != nil {
+		data.PropertyID, err = metadataPublicID(attributex.Edges.Property.PublicID)
+		if err != nil {
+			return DocumentTypeAttributeData{}, err
+		}
+	}
+	return data, nil
 }
 
 func tagProjection(tagx *enttenant.Tag) (TagData, error) {
@@ -1389,7 +1402,8 @@ func (qq *Handler) deleteTag(
 	if err != nil {
 		return MetadataDeletionData{}, err
 	}
-	_, err = taggingmodel.NewTagService().Delete(ctx, tagx.ID)
+	// The MCP spec forbids clearing assignments to force a deletion; the UI's Delete does that.
+	_, err = taggingmodel.NewTagService().DeleteUnused(ctx, tagx.ID)
 	return MetadataDeletionData{Deleted: err == nil}, err
 }
 
@@ -1504,7 +1518,7 @@ func (qq *Handler) createAndAssignTag(
 		return TagAssignmentData{}, err
 	}
 	if filex.IsDirectory {
-		return TagAssignmentData{}, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return TagAssignmentData{}, e.NewHTTPErrorf(http.StatusBadRequest, fileIsFolderMessage)
 	}
 	typex, groupID, err := tagCreationValues(ctx, input.CreateTagInput)
 	if err != nil {
@@ -2086,7 +2100,7 @@ func resolveFileAndTag(
 		return nil, nil, err
 	}
 	if filex.IsDirectory {
-		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, fileIsFolderMessage)
 	}
 	tagx, err := ctx.Space.QueryTags().Where(tag.PublicID(entx.NewCIText(input.TagID))).Only(ctx)
 	if err != nil {
@@ -2201,7 +2215,7 @@ func resolveFileAndProperty(
 		return nil, nil, err
 	}
 	if filex.IsDirectory {
-		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, fileIsFolderMessage)
 	}
 	propertyx, err := ctx.Space.QueryProperties().Where(
 		property.PublicID(entx.NewCIText(propertyID)),
@@ -2317,7 +2331,7 @@ func (qq *Handler) clearDocumentType(
 	}
 	if filex.IsDirectory {
 		return DocumentTypeAssignmentData{}, e.NewHTTPErrorf(
-			http.StatusBadRequest, "File is a directory.",
+			http.StatusBadRequest, fileIsFolderMessage,
 		)
 	}
 	if _, err := documenttypemodel.NewAssignmentService().Clear(ctx, filex.ID); err != nil {
@@ -2344,7 +2358,7 @@ func resolveFileAndDocumentType(
 		return nil, nil, err
 	}
 	if filex.IsDirectory {
-		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, "File is a directory.")
+		return nil, nil, e.NewHTTPErrorf(http.StatusBadRequest, fileIsFolderMessage)
 	}
 	documentTypex, err := ctx.Space.QueryDocumentTypes().Where(
 		documenttypequery.PublicID(entx.NewCIText(documentTypeID)),

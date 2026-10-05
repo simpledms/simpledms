@@ -46,7 +46,7 @@ func (qq *AssignSubTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		return err
 	}
 
-	superTag, subTag, err := taggingmodel.NewTagService().AssignSubTag(
+	_, subTag, err := taggingmodel.NewTagService().AssignSubTag(
 		ctx,
 		data.SuperTagID,
 		data.SubTagID,
@@ -55,12 +55,11 @@ func (qq *AssignSubTagCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, 
 		return err
 	}
 
-	rw.Header().Set("HX-Trigger", event.SuperTagUpdated.String(superTag.ID))
+	rw.Header().Set("HX-Trigger", event.TagUpdated.String())
 
 	return qq.infra.Renderer().Render(
 		rw,
 		ctx,
-		qq.actions.SubTags.Edit.ListItem(ctx, superTag, subTag),
 		wx.NewSnackbarf("«%s» assigned.", subTag.Name),
 	)
 }

@@ -33,7 +33,7 @@ func NewRenameSpace(infra *common.Infra, actions *Actions) *EditSpaceCmd {
 		infra:      infra,
 		actions:    actions,
 		Config:     config,
-		FormHelper: autil.NewFormHelper[EditSpaceCmdData](infra, config, widget.T("Edit space")),
+		FormHelper: autil.NewFormHelper[EditSpaceCmdData](infra, config, widget.T("Edit Space")),
 	}
 }
 

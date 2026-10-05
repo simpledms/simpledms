@@ -1,4 +1,4 @@
-import { expect, type Locator, type Page } from "@playwright/test";
+import { expect, type Locator, type Page, type Response } from "@playwright/test";
 import path from "node:path";
 
 export const loginEmail = process.env.E2E_LOGIN_EMAIL ?? "dev+admin@simpledms.app";
@@ -8,28 +8,44 @@ export function uniqueSuffix() {
 	return `${Date.now()}-${Math.floor(Math.random() * 10_000)}`;
 }
 
-export async function signIn(page: Page) {
-	for (let attempt = 0; attempt < 4; attempt++) {
-		await page.goto("/");
-		await page.getByRole("textbox", { name: "Email" }).fill(loginEmail);
-		await page.getByRole("textbox", { name: "Password" }).fill(loginPassword);
-		await page.getByRole("button", { name: "Sign in" }).click();
+// The server accepts one password sign-in per account every 10 seconds.
+const accountSignInIntervalMs = 10_000;
 
-		const reachedDashboard = await page
-			.waitForURL(/\/dashboard\/$/, { timeout: 5_000 })
-			.then(() => true)
-			.catch(() => false);
-		if (reachedDashboard) {
-			return;
-		}
+export function isSignInResponse(response: Response) {
+	return response.request().method() === "POST"
+		&& new URL(response.url()).pathname === "/-/auth/sign-in-cmd";
+}
 
-		const rateLimited = await page.getByText(/Too many login attempts/i).isVisible().catch(() => false);
-		if (rateLimited) {
-			await page.waitForTimeout(11_000);
-		}
+export function signIn(page: Page) {
+	return signInAttempt(page, 0);
+}
+
+async function signInAttempt(page: Page, attempt: number): Promise<void> {
+	if (attempt === 3) {
+		throw new Error("Sign-in stayed rate-limited");
 	}
 
-	await expect(page).toHaveURL(/\/dashboard\/$/);
+	await page.goto("/");
+	await page.getByRole("textbox", { name: "Email" }).fill(loginEmail);
+	await page.getByRole("textbox", { name: "Password" }).fill(loginPassword);
+	const responsePromise = page.waitForResponse(isSignInResponse);
+	await page.getByRole("button", { name: "Sign in", exact: true }).click();
+	const response = await responsePromise;
+
+	if (response.headers()["hx-redirect"]) {
+		await expect(page).toHaveURL(/\/dashboard\/$/);
+		return;
+	}
+
+	const body = await response.text();
+	if (response.status() !== 401 || !body.includes("Too many login attempts")) {
+		throw new Error(
+			`Sign-in failed with status ${response.status()}; check E2E_LOGIN_EMAIL and E2E_LOGIN_PASSWORD`,
+		);
+	}
+	// Another sign-in for the same account happened recently, for example in global setup.
+	await page.waitForTimeout(accountSignInIntervalMs);
+	return signInAttempt(page, attempt + 1);
 }
 
 export async function goToSpaces(page: Page) {
@@ -51,13 +67,13 @@ export async function goToUsers(page: Page) {
 }
 
 export async function openCreateSpaceDialog(page: Page) {
-	const emptyStateCreate = page.getByRole("button", { name: "add Create space" });
+	const emptyStateCreate = page.getByRole("button", { name: "add Create Space" });
 	if (await emptyStateCreate.count()) {
 		await emptyStateCreate.first().click();
 	} else {
-		await page.getByRole("link", { name: /Create space|^add$/ }).first().click();
+		await page.getByRole("link", { name: /Create Space/ }).first().click();
 	}
-	await expect(page.getByRole("heading", { name: "Create space" })).toBeVisible();
+	await expect(page.getByRole("heading", { name: "Create Space" })).toBeVisible();
 }
 
 export async function createSpaceAndSelect(page: Page, spaceName: string, documentTypes: string[] = []) {
@@ -68,13 +84,14 @@ export async function createSpaceAndSelect(page: Page, spaceName: string, docume
 	for (const documentType of documentTypes) {
 		await page.getByRole("checkbox", { name: documentType }).check();
 	}
-	await page.getByRole("button", { name: "Save" }).click();
+	await page.getByRole("button", { name: "Create", exact: true }).click();
 	await expect(page.getByRole("heading", { name: spaceName })).toBeVisible();
 	await page
 		.getByRole("link")
 		.filter({ has: page.getByRole("heading", { name: spaceName, exact: true }) })
 		.click();
-	await expect(page).toHaveURL(/\/space\/[^/]+\/browse\/$/);
+	// wide screens open the Filters side sheet by default, which adds side_sheet to the query
+	await expect(page).toHaveURL(/\/space\/[^/]+\/browse\/(\?.*)?$/);
 }
 
 export function fixturePath(fileName: string) {
@@ -97,7 +114,7 @@ export async function openSpaceMenu(page: Page) {
 }
 
 export async function openCreateUserDialog(page: Page) {
-	await page.getByRole("link", { name: "add Add a new user" }).click();
+	await page.getByRole("link", { name: /Create user/ }).first().click();
 	await expect(page.getByRole("heading", { name: "Create user" })).toBeVisible();
 }
 
@@ -110,4 +127,34 @@ export async function expectVisibleMenuEntries(page: Page, entries: string[]) {
 
 export async function selectOptionByLabel(select: Locator, label: string) {
 	await select.selectOption({ label });
+}
+
+// Side sheets open by default from the lg breakpoint (1200px), where they fit beside the
+// content; on smaller screens they must be opened explicitly.
+export function isLargeScreen(page: Page) {
+	return (page.viewportSize()?.width ?? 0) >= 1200;
+}
+
+export async function openFiltersTab(page: Page, tab: "Document type" | "Fields" | "Tags") {
+	const dialog = page.locator("#filtersDialog");
+	if (!isLargeScreen(page)) {
+		await page.getByRole("button", { name: "Filters", exact: true }).click();
+	}
+	await expect(dialog).toBeVisible();
+	// the tab name includes the count badge while filters of the tab are active
+	const tabLink = dialog.getByRole("tab", { name: new RegExp(String.raw`^${tab}( \d+)?$`) });
+	await tabLink.click();
+	await expect(tabLink).toHaveAttribute("aria-selected", "true");
+	return dialog;
+}
+
+export async function openFileDetails(page: Page) {
+	const details = page.getByRole("dialog").filter({
+		has: page.getByRole("heading", { name: "Details", exact: true }),
+	});
+	if (!isLargeScreen(page)) {
+		await page.getByRole("button", { name: "description", exact: true }).click();
+	}
+	await expect(details).toBeVisible();
+	return details;
 }

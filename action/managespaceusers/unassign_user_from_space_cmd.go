@@ -35,7 +35,12 @@ func NewUnassignUserFromSpaceCmd(infra *common.Infra, actions *Actions) *Unassig
 		actions:         actions,
 		spaceRepository: spacemodel.NewEntSpaceRepository(),
 		Config:          config,
-		FormHelper:      autil.NewFormHelper[UnassignUserFromSpaceCmdData](infra, config, widget.T("Unassign user from space")),
+		FormHelper: autil.NewFormHelperX[UnassignUserFromSpaceCmdData](
+			infra,
+			config,
+			widget.T("Unassign user from Space"),
+			widget.T("Unassign"),
+		),
 	}
 }
 
@@ -54,13 +59,13 @@ func (qq *UnassignUserFromSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 	if !ctx.IsSpaceCtx() {
 		return e.NewHTTPErrorf(
 			http.StatusBadRequest,
-			"No space selected. Please select a space first.",
+			"No Space selected. Please select a Space first.",
 		)
 	}
 	if ctx.SpaceCtx().UserRoleInSpace() != spacerole.Owner {
 		return e.NewHTTPErrorf(
 			http.StatusForbidden,
-			"You are not allowed to assign users to spaces because you aren't the owner.",
+			"You are not allowed to assign users to Spaces because you aren't the owner.",
 		)
 	}
 
@@ -73,7 +78,7 @@ func (qq *UnassignUserFromSpaceCmd) Handler(rw httpx.ResponseWriter, req *httpx.
 		return mapSpaceError(err)
 	}
 
-	rw.AddRenderables(widget.NewSnackbarf("User unassigned from space successfully."))
+	rw.AddRenderables(widget.NewSnackbarf("User unassigned from Space."))
 	rw.Header().Set("HX-Trigger", event.UserUnassignedFromSpace.String())
 
 	return nil

@@ -47,6 +47,7 @@
 {{- define "TableRow" }}
     {{- /* gotype: github.com/simpledms/simpledms/core/ui/widget.TableRow */ -}}
 	<tr id="{{ .GetID }}"
+		{{ if .ContextMenu }}data-context-menu{{ end }}
 		class="js-table-row group/table-row h-11 {{ if .IsSelected }}js-table-row-selected bg-secondary-container text-on-secondary-container{{ else }}state-layer-on-surface text-on-surface{{ end }} {{ if .HTMXAttrs.IsLink }}cursor-pointer{{ else if .ContextMenu }}cursor-context-menu{{ end }}"
 		{{ if .IsSelectable }}onclick="window.simpledmsSelectTableRow(this)"{{ end }}
 		{{ template "HTMXAttrs" .HTMXAttrs }}>
@@ -58,7 +59,4 @@
 			</td>
 		{{ end }}
 	</tr>
-	{{ if .ContextMenu }}
-		{{ template "contextMenuScript" . }}
-	{{ end }}
 {{ end }}

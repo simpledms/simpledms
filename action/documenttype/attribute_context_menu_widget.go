@@ -31,8 +31,8 @@ func (qq *AttributeContextMenuWidget) Widget(ctx ctxx.Context, attributex *entte
 	case attributetype.Tag:
 		// properties have no name...
 		items = append(items, &widget.MenuItem{
-			TrailingIcon: "edit",
-			Label:        widget.T("Edit"),
+			LeadingIcon: "edit",
+			Label:       widget.T("Edit"),
 			HTMXAttrs: qq.actions.EditTagAttributeCmd.ModalLinkAttrs(
 				qq.actions.EditTagAttributeCmd.Data(attributex.ID, attributex.Name, attributex.IsNameGiving),
 				"",
@@ -43,8 +43,8 @@ func (qq *AttributeContextMenuWidget) Widget(ctx ctxx.Context, attributex *entte
 		})
 	case attributetype.Field:
 		items = append(items, &widget.MenuItem{
-			TrailingIcon: "edit",
-			Label:        widget.T("Edit"),
+			LeadingIcon: "edit",
+			Label:       widget.T("Edit"),
 			HTMXAttrs: qq.actions.EditPropertyAttributeCmd.ModalLinkAttrs(
 				qq.actions.EditPropertyAttributeCmd.Data(attributex.ID, attributex.IsNameGiving),
 				"",
@@ -57,12 +57,12 @@ func (qq *AttributeContextMenuWidget) Widget(ctx ctxx.Context, attributex *entte
 	}
 
 	items = append(items, &widget.MenuItem{
-		TrailingIcon: "delete",
-		Label:        widget.T("Delete"),
+		LeadingIcon: "delete",
+		Label:       widget.T("Delete"),
 		HTMXAttrs: widget.HTMXAttrs{
 			HxPost:    qq.actions.DeleteAttributeCmd.Endpoint(),
 			HxVals:    util.JSON(qq.actions.DeleteAttributeCmd.Data(attributex.ID)),
-			HxConfirm: widget.T("Are you sure?").String(ctx),
+			HxConfirm: widget.T("Delete this attribute?").String(ctx),
 			HxSwap:    "none",
 			// HxTarget:  "#" + qq.actions.ListDir.WrapperID(),
 		},

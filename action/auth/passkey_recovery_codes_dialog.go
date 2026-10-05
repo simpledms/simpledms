@@ -52,7 +52,7 @@ func (qq *PasskeyRecoveryCodesDialog) Handler(
 	req *httpx.Request,
 	ctx ctxx.Context,
 ) error {
-	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be logged in to view backup codes.")
+	mainCtx, err := qq.actions.RequireMainCtx(ctx, "You must be signed in to view backup codes.")
 	if err != nil {
 		return err
 	}
@@ -65,6 +65,8 @@ func (qq *PasskeyRecoveryCodesDialog) Handler(
 	rw.Header().Set("Cache-Control", "no-store")
 	rw.Header().Set("Pragma", "no-cache")
 
+	// One-time-result transport exception: this consumes an in-memory result token
+	// from a committed WebAuthn command, not business records or pending uploads.
 	recoveryCodesText, ok := qq.store.Consume(data.Token)
 	if !ok {
 		return e.NewHTTPErrorf(http.StatusBadRequest, "The backup codes are no longer available. Please generate a new set.")

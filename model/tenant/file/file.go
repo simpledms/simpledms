@@ -174,7 +174,7 @@ func (qq *File) CurrentVersion(ctx context.Context) *storedfilemodel.StoredFile 
 
 func (qq *File) Parent(ctx ctxx.Context) (*File, error) {
 	if qq.Data.ParentID == 0 {
-		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "file has no parent")
+		return nil, e.NewHTTPErrorf(http.StatusBadRequest, "File has no parent.")
 	}
 
 	// TODO is this okay or use a cache in ctx?

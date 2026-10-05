@@ -1,6 +1,7 @@
 package dashboard
 
 import (
+	"html/template"
 	"log"
 	"net/http"
 
@@ -45,6 +46,13 @@ func (qq *MCPCredentialListPartial) Handler(
 	}
 	state := autil.StateX[MCPCredentialListPartialData](rw, req)
 	data.CredentialStatusValues = state.CredentialStatusValues
+	if data.CreatedDestination != "" {
+		data.Destination, err = webDAVCredentialDestinationKeyByValue(ctx, data.CreatedDestination)
+		if err != nil {
+			return err
+		}
+		data.CreatedDestination = ""
+	}
 	overview, err := qq.Widget(ctx, req, data)
 	if err != nil {
 		log.Println(err)
@@ -58,21 +66,6 @@ func (qq *MCPCredentialListPartial) Handler(
 			qq.actions.MCPCredentialsPage.filterButton(data, true),
 		},
 	})
-}
-
-// WidgetOOB renders the list for an out-of-band swap, for example to select the tab of a
-// newly created credential from a command response.
-func (qq *MCPCredentialListPartial) WidgetOOB(
-	ctx ctxx.Context,
-	req *httpx.Request,
-	data *MCPCredentialListPartialData,
-) (*widget.Container, error) {
-	overview, err := qq.Widget(ctx, req, data)
-	if err != nil {
-		return nil, err
-	}
-	overview.HxSwapOOB = "outerHTML"
-	return overview, nil
 }
 
 func (qq *MCPCredentialListPartial) Widget(
@@ -104,7 +97,7 @@ func (qq *MCPCredentialListPartial) Widget(
 
 	var content widget.IWidget = &widget.EmptyState{
 		Icon:        widget.NewIcon("smart_toy"),
-		Headline:    widget.T("No MCP credentials"),
+		Headline:    widget.T("No MCP credentials yet."),
 		Description: widget.T("Create a credential to connect an MCP client to a Space."),
 		Actions: []widget.IWidget{
 			&widget.Button{
@@ -132,11 +125,14 @@ func (qq *MCPCredentialListPartial) Widget(
 		Child:     content,
 		HTMXAttrs: widget.HTMXAttrs{
 			HxTrigger: event.HxTrigger(
-				event.AccountUpdated,
+				event.MCPCredentialChanged,
 				event.MCPCredentialFilterChanged,
 			),
-			HxPost:   qq.Endpoint(),
-			HxVals:   util.JSON(data),
+			HxPost: qq.Endpoint(),
+			// hx-vals can also be evaluated by nested form submissions; guard the event.
+			HxVals: template.JS("js:{..." + string(util.JSON(data)) +
+				",CreatedDestination:(event && event.type === 'mcpCredentialChanged' && " +
+				"event.detail) ? (event.detail.destination || '') : ''}"),
 			HxTarget: "#" + qq.id(),
 			HxSwap:   "outerHTML",
 		},
@@ -255,7 +251,7 @@ func (qq *MCPCredentialListPartial) credentialListItem(
 		mode,
 		formatCredentialTime(ctx, credentialx.CreatedAt),
 	)
-	var trailing widget.IWidget
+	var contextMenu *widget.Menu
 	if credentialx.RevokedAt != nil {
 		supportingText = widget.Tf(
 			"%s · Revoked: %s",
@@ -263,35 +259,30 @@ func (qq *MCPCredentialListPartial) credentialListItem(
 			formatCredentialTime(ctx, *credentialx.RevokedAt),
 		)
 	} else {
-		trailing = &widget.IconButton{
-			Icon:    "more_vert",
-			Tooltip: widget.T("Actions"),
-			Label:   widget.T("Actions"),
-			Children: &widget.Menu{
-				Items: []*widget.MenuItem{
-					{
-						LeadingIcon: "edit",
-						Label:       widget.T("Edit"),
-						HTMXAttrs: qq.actions.EditMCPCredentialCmd.ModalLinkAttrs(
-							qq.actions.EditMCPCredentialCmd.Data(
-								credentialx.PublicID.String(),
-								credentialx.Label,
-							),
-							"",
+		contextMenu = &widget.Menu{
+			Items: []*widget.MenuItem{
+				{
+					LeadingIcon: "edit",
+					Label:       widget.T("Edit"),
+					HTMXAttrs: qq.actions.EditMCPCredentialCmd.ModalLinkAttrs(
+						qq.actions.EditMCPCredentialCmd.Data(
+							credentialx.PublicID.String(),
+							credentialx.Label,
 						),
-					},
-					{IsDivider: true},
-					{
-						LeadingIcon: "block",
-						Label:       widget.T("Revoke"),
-						HTMXAttrs: widget.HTMXAttrs{
-							HxPost: qq.actions.RevokeMCPCredentialCmd.Endpoint(),
-							HxVals: util.JSON(qq.actions.RevokeMCPCredentialCmd.Data(
-								credentialx.PublicID.String(),
-							)),
-							HxConfirm: widget.T("Revoke this MCP credential?").String(ctx),
-							HxSwap:    "none",
-						},
+						"",
+					),
+				},
+				{IsDivider: true},
+				{
+					LeadingIcon: "block",
+					Label:       widget.T("Revoke"),
+					HTMXAttrs: widget.HTMXAttrs{
+						HxPost: qq.actions.RevokeMCPCredentialCmd.Endpoint(),
+						HxVals: util.JSON(qq.actions.RevokeMCPCredentialCmd.Data(
+							credentialx.PublicID.String(),
+						)),
+						HxConfirm: widget.T("Revoke this MCP credential?").String(ctx),
+						HxSwap:    "none",
 					},
 				},
 			},
@@ -302,7 +293,7 @@ func (qq *MCPCredentialListPartial) credentialListItem(
 		Leading:        widget.NewIcon("vpn_key"),
 		Headline:       widget.Tu(credentialx.Label),
 		SupportingText: supportingText,
-		Trailing:       trailing,
+		ContextMenu:    contextMenu,
 	}
 }
 

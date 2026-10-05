@@ -8,6 +8,7 @@ import (
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
 	"github.com/simpledms/simpledms/ui/uix/partial"
 	route2 "github.com/simpledms/simpledms/ui/uix/route"
+	"github.com/simpledms/simpledms/ui/util"
 	"github.com/simpledms/simpledms/util/actionx"
 	"github.com/simpledms/simpledms/util/httpx"
 )
@@ -51,7 +52,7 @@ func (qq *FilePartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 		return err
 	}
 
-	state, err := autil.FormData[InboxPageState](rw, req, ctx)
+	state, err := qq.actions.InboxPage.prepareState(rw, req, ctx)
 	if err != nil {
 		return err
 	}
@@ -132,6 +133,16 @@ func (qq *FilePartial) Widget(
 		Children: NewFileContextMenuWidget(qq.actions).Widget(ctx, filex.Data),
 	})
 	return &widget.DetailsWithSheet{
+		HTMXAttrs: widget.HTMXAttrs{
+			HxPost:   qq.Endpoint(),
+			HxVals:   util.JSON(qq.Data(filex.Data.PublicID.String())),
+			HxTarget: "#details",
+			HxSwap:   "outerHTML",
+			// Ignore an outgoing notification while the shared #details node is being
+			// morphed into another capability's empty or selected detail region.
+			HxTrigger: "fileUploaded[window.location.pathname.includes('/inbox/')] from:body," +
+				"fileUpdated[window.location.pathname.includes('/inbox/')] from:body",
+		},
 		AppBar: partial.NewFullscreenDialogAppBar(
 			widget.Tuf("%s", filex.Data.Name),
 			route2.InboxRootWithState(state)(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID),
@@ -144,8 +155,8 @@ func (qq *FilePartial) Widget(
 			Widget: widget.Widget[widget.Dialog]{
 				ID: qq.SideSheetID(),
 			},
-			Headline:                        widget.T("Details"),
-			IsOpenOnLoadOnExtraLargeScreens: true,
+			Headline:                   widget.T("Details"),
+			IsOpenOnLoadOnLargeScreens: true,
 			// allows for quick back and forth on mobile devices
 			KeepInDOMOnClose: true,
 			Layout:           widget.DialogLayoutSideSheet,
