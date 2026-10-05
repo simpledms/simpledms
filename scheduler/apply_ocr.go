@@ -16,6 +16,8 @@ import (
 	"github.com/simpledms/simpledms/db/entmain"
 	"github.com/simpledms/simpledms/db/entmain/tenant"
 	"github.com/simpledms/simpledms/db/enttenant/file"
+	"github.com/simpledms/simpledms/db/enttenant/fileversion"
+	"github.com/simpledms/simpledms/db/enttenant/schema"
 	"github.com/simpledms/simpledms/db/enttenant/storedfile"
 	"github.com/simpledms/simpledms/db/sqlx"
 	filemodel "github.com/simpledms/simpledms/model/tenant/file"
@@ -75,18 +77,20 @@ func (qq *Scheduler) applyOCRx(ctx context.Context) {
 		// TODO transaction? if so, make sure OCRRetryCount gets increased
 		// TODO ensure that only files at final destination get processed;
 		//		are inbox files at final destination?
+		// Runs every few seconds for each tenant, mostly finding nothing. The pending condition
+		// is written verbatim so the partial index stays usable, and EXISTS lets SQLite start
+		// from the files instead of reading all file versions; generated predicates prevented
+		// both.
 		filesToProcess := tenantDB.ReadOnlyConn.File.
 			Query().
 			Where(
-				file.OcrSuccessAtIsNil(),
-				file.OcrRetryCountLT(3),
+				func(selector *entsql.Selector) {
+					selector.Where(entsql.ExprP(schema.FileOCRPendingCondition))
+				},
 				file.OcrLastTriedAtLT(dateThreshold), // TODO is this correct? what is value?
-				file.HasVersionsWith(
-					// has to be rechecked later because current version has to be
-					// at final destination. This query checks only for any version
-					storedfile.CopiedToFinalDestinationAtNotNil(),
-				),
-				file.IsDirectory(false),
+				// has to be rechecked later because current version has to be
+				// at final destination. This query checks only for any version
+				hasVersionAtFinalDestination,
 			).
 			Order(file.ByID(entsql.OrderAsc())).
 			Limit(defaultSchedulerBatchSize).
@@ -208,4 +212,21 @@ func removeAllWhitespace(text string) string {
 	}
 
 	return strings.Join(contentSlice, " ")
+}
+
+// hasVersionAtFinalDestination is file.HasVersionsWith(
+// storedfile.CopiedToFinalDestinationAtNotNil()) as a correlated EXISTS, see applyOCRx.
+func hasVersionAtFinalDestination(selector *entsql.Selector) {
+	versions := entsql.Table(fileversion.Table)
+	storedFiles := entsql.Table(storedfile.Table)
+	selector.Where(entsql.Exists(
+		entsql.Select(versions.C(fileversion.FieldFileID)).
+			From(versions).
+			Join(storedFiles).
+			On(versions.C(fileversion.FieldStoredFileID), storedFiles.C(storedfile.FieldID)).
+			Where(entsql.And(
+				entsql.ColumnsEQ(versions.C(fileversion.FieldFileID), selector.C(file.FieldID)),
+				entsql.NotNull(storedFiles.C(storedfile.FieldCopiedToFinalDestinationAt)),
+			)),
+	))
 }

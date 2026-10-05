@@ -7,6 +7,7 @@
   "scripts": {
     "build:css": "tailwindcss -i ui/uix/web/tailwind.css -o ui/uix/web/assets/tailwind.css",
     "install-modules": "node ./install.deps.mjs",
+    "subset-icons": "node ./subset.icons.mjs",
     "test:e2e": "playwright test",
     "test:e2e:maintenance": "playwright test --config=playwright.maintenance.config.ts",
     "test:e2e:ui": "playwright test --ui"
@@ -18,6 +19,8 @@
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "esbuild": "^0.28.1",
+    "fontverter": "^2.0.0",
+    "harfbuzzjs": "^1.6.2",
     "tailwindcss": "^4.3.3"
   },
   "dependencies": {

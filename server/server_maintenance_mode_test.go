@@ -1124,7 +1124,7 @@ func newMaintenanceTestDependencies(t *testing.T) *maintenanceTestDependencies {
 	_ = initSystemConfig(t, mainDB, true, "", "", "")
 
 	tpl := template.New("app")
-	tpl.Funcs(ui.TemplateFuncMap(tpl))
+	tpl.Funcs(ui.TemplateFuncMap(tpl, newEmbeddedAssetVersionsForTest(t)))
 	tpl, err = tpl.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {
 		t.Fatalf("parse templates: %v", err)

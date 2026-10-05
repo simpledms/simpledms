@@ -16,6 +16,22 @@ type Menu struct {
 	EmptyLabel         *Text
 	MatchesAnchorWidth bool
 	IsAutoPopover      bool
+	// LazyItems loads the items with a query each time the menu opens, instead of rendering
+	// Items with the owning view; only HxPost and HxVals are used. Long lists stay small, and
+	// the items reflect the current state, also after the owning list was morphed.
+	LazyItems *HTMXAttrs
+}
+
+func (qq *Menu) GetLazyItemsHTMXAttrs() HTMXAttrs {
+	return HTMXAttrs{
+		HxPost: qq.LazyItems.HxPost,
+		HxVals: qq.LazyItems.HxVals,
+		// toggle doesn't bubble, so listen on the popover itself
+		HxTrigger: "toggle[newState=='open'] from:closest menu",
+		HxTarget:  "this",
+		HxSwap:    "innerHTML",
+		HxSync:    "this:replace",
+	}
 }
 
 // ContextMenuButton opens the same menu as the owning row or card's right-click gesture.
@@ -28,6 +44,7 @@ func (qq *Menu) ContextMenuButton() *IconButton {
 		Label:         T("Actions"),
 		Tooltip:       T("Actions"),
 		PopoverTarget: qq.GetID(),
+		HasPopupMenu:  true,
 	}
 }
 

@@ -405,3 +405,13 @@ func RequireTenantOwner(ctx ctxx.Context) error {
 	}
 	return nil
 }
+
+// MenuItemRenderables renders a menu's items without the menu itself, as loaded into a
+// widget.Menu with LazyItems.
+func MenuItemRenderables(menu *widget.Menu) []renderable.Renderable {
+	items := make([]renderable.Renderable, 0, len(menu.Items))
+	for _, item := range menu.Items {
+		items = append(items, item)
+	}
+	return items
+}

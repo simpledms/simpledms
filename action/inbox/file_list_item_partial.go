@@ -102,6 +102,6 @@ func (qq *FileListItemPartial) Widget(
 		HTMXAttrs:      htmxAttrs,
 		// Trailing:   trailing,
 		IsSelected:  isSelected,
-		ContextMenu: NewFileContextMenuWidget(qq.actions).Widget(ctx, fileWithChildren),
+		ContextMenu: qq.actions.FileContextMenuPartial.LazyMenu(fileWithChildren),
 	}
 }

@@ -209,7 +209,7 @@ func (qq *FileListItemPartial) DirectoryListItemWithCounts(
 		Leading:        icon.SmallPadding(),
 		Headline:       headline,
 		SupportingText: widget.Tu(supportingText),
-		ContextMenu:    NewFileContextMenuWidget(qq.actions).Widget(ctx, filex),
+		ContextMenu:    qq.actions.FileContextMenuPartial.LazyMenu(filex),
 		HTMXAttrs: widget.HTMXAttrs{
 			HxGet:     route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.PublicID.String()),
 			HxHeaders: autil.ResetStateHeader(), // necessary to close side sheet
@@ -322,7 +322,7 @@ func (qq *FileListItemPartial) fileListItem(
 		RadioGroupName: "fileListRadioGroup",
 		// BackgroundColor: "aliceblue",
 		Leading:        widget.NewIcon("description").SmallPadding(),
-		ContextMenu:    NewFileContextMenuWidget(qq.actions).Widget(ctx, fileWithChildren),
+		ContextMenu:    qq.actions.FileContextMenuPartial.LazyMenu(fileWithChildren),
 		Headline:       headline,
 		SupportingText: widget.Tu(supportingText),
 		HTMXAttrs:      htmxAttrs,

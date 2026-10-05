@@ -59,7 +59,7 @@
 		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1" /></noscript>
 		*/}}
 
-		<link rel="preload" href="/assets/tailwind.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+		<link rel="preload" href="{{ asset "/assets/tailwind.css" }}" as="style" onload="this.onload=null;this.rel='stylesheet'" />
 
 
 		<title>{{ render .GetContext .Title }}</title>
@@ -199,12 +199,15 @@
 		<!--
 		<script defer src="/assets/htmx.min.js"></script>
 		-->
-		<script defer src="/assets/vendor/htmx.js" type="module"></script>
+		<script defer src="{{ asset "/assets/vendor/htmx.js" }}" type="module"></script>
+		{{/* unversioned: navigation_rail.js imports it by this path, a second URL would load
+		the module twice */}}
 		<script defer src="/assets/vendor/idiomorph/dist/idiomorph-ext.esm.js" type="module"></script>
-		<script defer src="/assets/snackbar_runtime.js"></script>
-		<script defer src="/assets/tooltip_runtime.js"></script>
-		<script defer src="/assets/navigation_rail.js" type="module"></script>
-		<script defer src="/assets/passkey.js"></script>
+		<script defer src="{{ asset "/assets/snackbar_runtime.js" }}"></script>
+		<script defer src="{{ asset "/assets/tooltip_runtime.js" }}"></script>
+		<script defer src="{{ asset "/assets/context_menu_runtime.js" }}"></script>
+		<script defer src="{{ asset "/assets/navigation_rail.js" }}" type="module"></script>
+		<script defer src="{{ asset "/assets/passkey.js" }}"></script>
 
 		<!--
 		script defer src="/assets/vendor/pdfjs-dist.js" type="module"></script>
@@ -248,7 +251,7 @@
 		</script>
 
 		<script type="module" defer>
-			import htmx from '/assets/vendor/htmx.js';
+			import htmx from '{{ asset "/assets/vendor/htmx.js" }}';
 			window.htmx = htmx;
 			//import {} from '/assets/vendor/htmx.org/dist/ext/debug.js'; // not working
 			// htmx.logAll();
@@ -469,7 +472,7 @@
 			hx-trigger="none"
 	></div>
 	<script type="module" defer>
-		import htmx from '/assets/vendor/htmx.js';
+		import htmx from '{{ asset "/assets/vendor/htmx.js" }}';
 
 		// must be in main thread, not service worker
 		// https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/file_handlers#handling_the_files

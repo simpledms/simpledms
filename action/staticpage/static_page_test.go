@@ -25,6 +25,7 @@ import (
 	"github.com/simpledms/simpledms/model/tenant/filesystem"
 	"github.com/simpledms/simpledms/pluginx"
 	"github.com/simpledms/simpledms/ui"
+	"github.com/simpledms/simpledms/ui/uix"
 	"github.com/simpledms/simpledms/ui/uix/partial"
 	"github.com/simpledms/simpledms/util/accountutil"
 	"github.com/simpledms/simpledms/util/e"
@@ -180,8 +181,12 @@ func newStaticPageTestSetup(t *testing.T) (*StaticPage, *ctxx.MainContext) {
 	systemConfigx := client.SystemConfig.Query().FirstX(ctx)
 	systemConfig := systemconfigmodel.NewSystemConfig(systemConfigx, false, false, true, "", "", "")
 
+	assetsFS, err := uix.NewAssetsFS()
+	if err != nil {
+		t.Fatalf("open assets: %v", err)
+	}
 	templates := template.New("app")
-	templates.Funcs(ui.TemplateFuncMap(templates))
+	templates.Funcs(ui.TemplateFuncMap(templates, ui.NewAssetVersions(assetsFS)))
 
 	parsedTemplates, err := templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {

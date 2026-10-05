@@ -305,14 +305,15 @@ func (qq *FilesListPartial) filesList(
 ) renderable.Renderable {
 	children, hasMore := qq.filesPage(ctx, state, 0)
 	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
-	fileListItems := qq.filesListItemsFromFiles(ctx, state, data, 0, children, hasMore)
 
+	// Build only the rows of the active view; table rows replace list items.
 	var content widget.IWidget
-	content = &widget.List{
-		Children: fileListItems,
-	}
 	if preferences.IsTable() && len(children) > 0 {
 		content = qq.fileTable(ctx, data, 0, children, hasMore, preferences)
+	} else {
+		content = &widget.List{
+			Children: qq.filesListItemsFromFiles(ctx, state, data, 0, children, hasMore),
+		}
 	}
 
 	if len(children) == 0 {

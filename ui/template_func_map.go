@@ -7,6 +7,7 @@ import (
 	"log"
 	"reflect"
 	"strings"
+	"sync"
 
 	sprig "github.com/go-task/slim-sprig/v3"
 
@@ -15,13 +16,20 @@ import (
 	"github.com/simpledms/simpledms/ui/renderable"
 )
 
-func TemplateFuncMap(templates *template.Template) template.FuncMap {
+const maxPooledRenderBufferSize = 1 << 20
+
+func TemplateFuncMap(
+	templates *template.Template,
+	assetVersions *AssetVersions,
+) template.FuncMap {
 	// return map[string]interface{}{}
 	fnMap := sprig.GenericFuncMap()
 
 	fnMap["tr"] = func(ctx ctxx.Context, s string) string {
 		return wx.T(s).String(ctx)
 	}
+
+	fnMap["asset"] = assetVersions.URL
 
 	fnMap["unsafeAttr"] = func(s string) template.HTMLAttr {
 		return template.HTMLAttr(s)
@@ -32,6 +40,14 @@ func TemplateFuncMap(templates *template.Template) template.FuncMap {
 	// inspired by:
 	// https://stackoverflow.com/a/23705598
 	//
+	// Nested widgets are rendered into a buffer each and copied into their parent, so buffers are
+	// reused across renders; growing a fresh buffer per widget dominated allocations of long lists.
+	renderBuffers := &sync.Pool{
+		New: func() any {
+			return new(bytes.Buffer)
+		},
+	}
+
 	// slots instead of slot to make it optional
 	fnMap["render"] = func(ctx ctxx.Context, widget any, slots ...string) (template.HTML, error) {
 		// need reflection because it is not possible to match any slice in signature
@@ -60,7 +76,14 @@ func TemplateFuncMap(templates *template.Template) template.FuncMap {
 			return "", nil
 		}
 
-		buf := bytes.NewBuffer([]byte{})
+		buf := renderBuffers.Get().(*bytes.Buffer)
+		buf.Reset()
+		defer func() {
+			// don't keep exceptionally large buffers alive
+			if buf.Cap() <= maxPooledRenderBufferSize {
+				renderBuffers.Put(buf)
+			}
+		}()
 
 		executeTemplate := func(buf *bytes.Buffer, widget any) error {
 			// TODO is this correct?
@@ -156,6 +179,7 @@ func TemplateFuncMap(templates *template.Template) template.FuncMap {
 			}
 		}
 
+		// copies, the buffer is reused
 		htmlStr := buf.String()
 
 		if len(slots) > 0 {

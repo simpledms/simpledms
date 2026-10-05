@@ -21,8 +21,7 @@ func NewMainDB(dbPath string) *MainDB {
 	if err != nil {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}
-	readOnlyDrv.DB().SetMaxIdleConns(0)
-	readOnlyDrv.DB().SetMaxOpenConns(readOnlyMaxOpenConns()) // TODO enough?
+	configureReadOnlyPool(readOnlyDrv.DB())
 	readOnlyConn := entmain.NewClient(entmain.Driver(newTimingDriver(readOnlyDrv)))
 
 	// read write
@@ -31,8 +30,7 @@ func NewMainDB(dbPath string) *MainDB {
 	if err != nil {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}
-	readWriteDrv.DB().SetMaxIdleConns(0)
-	readWriteDrv.DB().SetMaxOpenConns(1)
+	configureReadWritePool(readWriteDrv.DB())
 	readWriteConn := entmain.NewClient(entmain.Driver(newTimingDriver(readWriteDrv)))
 
 	return &MainDB{

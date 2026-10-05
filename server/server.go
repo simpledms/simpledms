@@ -68,6 +68,7 @@ type Server struct {
 	devMode                  bool
 	unsafePort               int // unsafe because it can be 0, use qq.port()
 	assetsFS                 fs.FS
+	assetVersions            *ui.AssetVersions
 	migrationsMainFS         fs.FS
 	migrationsTenantFS       fs.FS
 	isSaaSModeEnabled        bool
@@ -114,7 +115,10 @@ func newMaintenanceModeHandler(
 	var unlockOnce sync.Once
 
 	mux.HandleFunc("GET /assets/manifest.json", pwaManifestHandler.Handler)
-	mux.Handle("GET /assets/", http.StripPrefix("/assets/", NewAssetHandler(assetsFS)))
+	mux.Handle(
+		"GET /assets/",
+		http.StripPrefix("/assets/", NewAssetHandler(assetsFS, ui.NewAssetVersions(assetsFS))),
+	)
 	mux.HandleFunc("/mcp", func(rw http.ResponseWriter, _ *http.Request) {
 		rw.Header().Set("Cache-Control", "no-store")
 		rw.WriteHeader(http.StatusServiceUnavailable)
@@ -308,6 +312,7 @@ func NewServer(
 		devMode:                  devMode,
 		unsafePort:               unsafePort,
 		assetsFS:                 assetsFS,
+		assetVersions:            ui.NewAssetVersions(assetsFS),
 		migrationsMainFS:         migrationsMainFS,
 		migrationsTenantFS:       migrationsTenantFS,
 		isSaaSModeEnabled:        isSaaSModeEnabled,
@@ -395,7 +400,7 @@ func (qq *Server) Prepare() (*PreparedServer, error) {
 	// slash suffix is necessary to match all paths with the prefix
 	router.Handle(
 		"GET /assets/",
-		http.StripPrefix("/assets/", NewAssetHandler(qq.assetsFS)),
+		http.StripPrefix("/assets/", NewAssetHandler(qq.assetsFS, qq.assetVersions)),
 	)
 
 	qq.migrateTenantDatabases(ctx, mainDB, tenantDBs)
@@ -558,7 +563,7 @@ func (qq *Server) initializeInitialUserIfRequired(ctx context.Context, mainDB *s
 func (qq *Server) newRendererAndI18n() (*ui.Renderer, *i18n.I18n) {
 	// TODO are there any naming conflicts?
 	templates := template.New("app")
-	templates.Funcs(ui.TemplateFuncMap(templates))
+	templates.Funcs(ui.TemplateFuncMap(templates, qq.assetVersions))
 
 	templatesx, err := templates.ParseFS(ui2.WidgetFS, "widget/*.gohtml")
 	if err != nil {

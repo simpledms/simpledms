@@ -200,7 +200,7 @@ func (qq *ListDirPartial) fileTableRow(
 	return &widget.TableRow{
 		HTMXAttrs:    qq.fileTableRowHTMXAttrs(ctx, data.CurrentDirID, filex),
 		Cells:        cells,
-		ContextMenu:  NewFileContextMenuWidget(qq.actions).Widget(ctx, filex),
+		ContextMenu:  qq.actions.FileContextMenuPartial.LazyMenu(filex),
 		IsSelected:   filex.PublicID.String() == data.SelectedFileID,
 		IsSelectable: !filex.IsDirectory,
 	}

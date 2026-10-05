@@ -15,6 +15,12 @@ import (
 	"github.com/simpledms/simpledms/model/main/common/filesource"
 )
 
+// FileOCRPendingCondition is the condition of the file_ocr_pending partial index. Queries must
+// contain it verbatim: SQLite only uses a partial index if it can prove that the query implies
+// the index condition, which fails for bound parameters like `ocr_retry_count` < ?.
+const FileOCRPendingCondition = "`ocr_success_at` is null and `ocr_retry_count` < 3 and " +
+	"`is_directory` = false"
+
 // File holds the schema definition for the File entity.
 type File struct {
 	ent.Schema
@@ -213,9 +219,7 @@ func (File) Indexes() []ent.Index {
 		index.
 			Fields("ocr_last_tried_at", "id").
 			StorageKey("file_ocr_pending").
-			Annotations(entsql.IndexWhere(
-				"`ocr_success_at` is null and `ocr_retry_count` < 3 and `is_directory` = false",
-			)),
+			Annotations(entsql.IndexWhere(FileOCRPendingCondition)),
 	}
 }
 

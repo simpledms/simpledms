@@ -112,6 +112,7 @@
 	{{- if .IsCollapsible }}
 		<div id="{{ .GetID }}" role="listitem"
 			 class="js-list-item"
+			 {{ if .ContextMenu }}data-context-menu{{ end }}
 			 {{ if .IsSelected }}data-selected="true"{{ end }}
 		>
 			<details class="rounded-[inherit]" {{ if .IsOpen }}open{{ end }}>
@@ -122,10 +123,6 @@
                     {{ render .GetContext .Child }}
 				</div>
 			</details>
-
-            {{ if .ContextMenu }}
-                {{ template "contextMenuScript" . }}
-            {{ end }}
 		</div>
     {{- else }}
 		<div id="{{ .GetID }}"
@@ -134,12 +131,9 @@
 				{{ .GetClass }}"
 			 role="listitem"
 			 {{ if .IsSelected }}data-selected="true"{{ end }}
+			 {{ if .ContextMenu }}data-context-menu{{ end }}
 		>
             {{ template "listItem" . }}
-
-			{{ if .ContextMenu }}
-            	{{ template "contextMenuScript" . }}
-			{{ end }}
 		</div>
     {{ end }}
 {{ end }}

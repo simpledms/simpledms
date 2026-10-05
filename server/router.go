@@ -725,7 +725,7 @@ func (qq *Router) context(
 	visitorCtx *ctxx.VisitorContext,
 	isReadOnly bool,
 ) (ctxx.Context, *enttenant.Tx, bool, error) {
-	accountm, isAuthenticated, isTemporarySession, err := qq.authenticateAccount(rw, req, mainTx)
+	accountm, isAuthenticated, isTemporarySession, err := qq.authenticateAccount(rw, req, mainTx, isReadOnly)
 	visitorCtx.IsTemporarySession = isTemporarySession
 	if err != nil {
 		log.Println(err)
@@ -896,6 +896,7 @@ func (qq *Router) authenticateAccount(
 	rw httpx.ResponseWriter,
 	req *httpx.Request,
 	mainTx *entmain.Tx,
+	isReadOnly bool,
 ) (*account.Account, bool, bool, error) {
 	// reads only the value, all other fields have zero value
 	// this is the correct behavior, as only the name and value are send via HTTP
@@ -979,8 +980,13 @@ func (qq *Router) authenticateAccount(
 		qq.infra.SystemConfig().AllowInsecureCookies(),
 	)
 	if isRenewed {
-		// mainTx could be read only
-		qq.mainDB.ReadWriteConn.Session.Update().
+		// A write request's mainTx holds the only read-write connection, so renew within it;
+		// ReadWriteConn would wait for that connection forever. A read-only mainTx cannot write.
+		sessionClient := qq.mainDB.ReadWriteConn.Session
+		if !isReadOnly {
+			sessionClient = mainTx.Session
+		}
+		sessionClient.Update().
 			SetDeletableAt(cookiex.DeletableAt(cookie)).
 			SetExpiresAt(cookie.Expires).
 			Where(session.Value(cookie.Value)).

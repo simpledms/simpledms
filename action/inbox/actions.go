@@ -30,9 +30,11 @@ type Actions struct {
 	MoveFileCmd        *MoveFileCmd
 	TransferFileCmd    *TransferFileCmd
 	TransferFileDialog *TransferFileDialog
-	UploadFileCmd      *UploadFileCmd
-	MarkAsDoneCmd      *MarkAsDoneCmd
-	ConsumeUploadsCmd  *ConsumeUploadsCmd
+	// FileContextMenuPartial is separate from Browse's because Inbox files have other actions.
+	FileContextMenuPartial *FileContextMenuPartial
+	UploadFileCmd          *UploadFileCmd
+	MarkAsDoneCmd          *MarkAsDoneCmd
+	ConsumeUploadsCmd      *ConsumeUploadsCmd
 }
 
 func NewActions(
@@ -66,7 +68,9 @@ func NewActions(
 		MoveFileCmd:        NewMoveFileCmd(infra, actions),
 		TransferFileCmd:    NewTransferFileCmd(actions),
 		TransferFileDialog: NewTransferFileDialog(infra, actions),
-		UploadFileCmd:      NewUploadFileCmd(infra, actions),
+
+		FileContextMenuPartial: NewFileContextMenuPartial(infra, actions),
+		UploadFileCmd:          NewUploadFileCmd(infra, actions),
 
 		MarkAsDoneCmd:     NewMarkAsDoneCmd(infra, actions),
 		ConsumeUploadsCmd: NewConsumeUploadsCmd(infra),

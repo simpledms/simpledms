@@ -32,26 +32,7 @@
 		</a>
         {{ end }}
 	</div>
-	<script defer>
-		(function () {
-			let elem = document.getElementById('{{ .GetID }}')
-			{{ if $isAction }}
-			// Menus can be nested inside an IconButton; a second button would break
-			// that markup. Keep the action focusable and provide keyboard activation.
-			elem.addEventListener('keydown', function (e) {
-				if (e.target === elem && (e.key === 'Enter' || e.key === ' ')) {
-					e.preventDefault();
-					elem.click();
-				}
-			});
-			{{ end }}
-			elem.addEventListener('click', function (e) {
-                {{/* necessary for stacked links, like in search or on list items, to prevent
-                     that parent list item is triggered/clicked */}}
-				e.stopPropagation();
-			})
-		})()
-	</script>
+	{{/* click propagation and keyboard activation are handled on the owning Menu */}}
 {{ end }}
 
 {{- define "MenuItem" }}

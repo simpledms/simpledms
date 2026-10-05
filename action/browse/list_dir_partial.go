@@ -443,18 +443,19 @@ func (qq *ListDirPartial) filesList(
 		qq.pageSize(),
 		qq.applyPropertyFilter,
 	)
-	fileListItems := qq.filesListItemsFromQueryResult(ctx, state, data, offset, queryResult)
 	preferences := filelistpreference.NewFileListPreferencesFromValue(ctx.MainCtx().Account.FileListPreferences)
 
+	// Build only the rows of the active view; table rows replace list items.
 	var content widget.IWidget
-	content = &widget.List{
-		Children: fileListItems,
-	}
-	if preferences.IsTable() && len(fileListItems) > 0 {
+	if preferences.IsTable() && len(queryResult.Children) > 0 {
 		content = qq.fileTable(ctx, state, data, offset, queryResult, preferences)
+	} else {
+		content = &widget.List{
+			Children: qq.filesListItemsFromQueryResult(ctx, state, data, offset, queryResult),
+		}
 	}
 
-	if len(fileListItems) == 0 {
+	if len(queryResult.Children) == 0 {
 		var widgets []widget.IWidget
 		headline := widget.T("No files available yet.")
 

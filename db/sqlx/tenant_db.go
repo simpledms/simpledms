@@ -19,8 +19,7 @@ func NewTenantDB(readOnlyDataSourceURL, readWriteDataSourceURL string) *TenantDB
 	if err != nil {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}
-	readOnlyDrv.DB().SetMaxIdleConns(0)
-	readOnlyDrv.DB().SetMaxOpenConns(readOnlyMaxOpenConns()) // TODO enough?
+	configureReadOnlyPool(readOnlyDrv.DB())
 	readOnlyConn := enttenant.NewClient(enttenant.Driver(newTimingDriver(readOnlyDrv)))
 
 	// read write
@@ -28,8 +27,7 @@ func NewTenantDB(readOnlyDataSourceURL, readWriteDataSourceURL string) *TenantDB
 	if err != nil {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}
-	readWriteDrv.DB().SetMaxIdleConns(0)
-	readWriteDrv.DB().SetMaxOpenConns(1)
+	configureReadWritePool(readWriteDrv.DB())
 	readWriteConn := enttenant.NewClient(enttenant.Driver(newTimingDriver(readWriteDrv)))
 
 	return &TenantDB{

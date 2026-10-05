@@ -42,10 +42,22 @@
 					{{ end }}
 					"
 			popover="{{ if .IsAutoPopover }}auto{{ else }}manual{{ end }}"
+			{{/* Stopping clicks at the menu keeps stacked links, like a list item owning the menu,
+			from being triggered. Actions are focusable divs (a button would break menus nested in
+			an IconButton), so they also get keyboard activation. Listeners on the menu replace
+			a script per item. */}}
+			hx-on:click="event.stopPropagation()"
+			hx-on:keydown="if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('[data-menu-option][tabindex]')) { event.preventDefault(); event.target.click(); }"
 			hx-ext="morph">
 		{{/* if flex is set on <menu> it is rendered always independent of popover open or not */}}
-		<div class="flex flex-col">
-            {{ render .GetContext .Items }}
+		<div class="flex flex-col"{{ if .LazyItems }} {{ template "HTMXAttrs" .GetLazyItemsHTMXAttrs }}{{ end }}>
+			{{ if .LazyItems }}
+				<div class="h-12 label-lg text-on-surface-variant" role="status">
+					<div class="flex h-full items-center px-3">{{ tr .GetContext "Loading…" }}</div>
+				</div>
+			{{ else }}
+				{{ render .GetContext .Items }}
+			{{ end }}
 			{{ if .EmptyLabel }}
 				<div data-menu-empty hidden class="h-12 label-lg text-on-surface-variant" role="status">
 					<div class="flex h-full items-center px-3">

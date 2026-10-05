@@ -21,6 +21,7 @@ type Actions struct {
 
 	FilePreviewPartial          *FilePreviewPartial
 	FilePreviewStatusPartial    *FilePreviewStatusPartial
+	FileContextMenuPartial      *FileContextMenuPartial
 	RetryPDFPreviewCmd          *RetryPDFPreviewCmd
 	FileDetailsSideSheetPartial *FileDetailsSideSheetPartial
 	FileTabsPartial             *FileTabsPartial
@@ -91,6 +92,7 @@ func NewActions(infra *common.Infra, commonActions *acommon.Actions, taggingActi
 
 		FilePreviewPartial:          NewFilePreviewPartial(infra, actions),
 		FilePreviewStatusPartial:    NewFilePreviewStatusPartial(infra, actions),
+		FileContextMenuPartial:      NewFileContextMenuPartial(infra, actions),
 		RetryPDFPreviewCmd:          NewRetryPDFPreviewCmd(infra, actions),
 		FileDetailsSideSheetPartial: NewFileDetailsSideSheetPartial(infra, actions),
 		FileTabsPartial:             NewFileTabsPartial(infra, actions),
