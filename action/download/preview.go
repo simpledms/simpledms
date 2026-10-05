@@ -23,6 +23,8 @@ import (
 	"github.com/simpledms/simpledms/util/httpx"
 )
 
+const pdfPreviewUnavailableMessage = "PDF preview is not available."
+
 type Preview struct {
 	infra *common.Infra
 }
@@ -108,7 +110,7 @@ func (qq *Preview) streamPDF(
 		Only(ctx)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
-			return e.NewHTTPErrorf(http.StatusNotFound, "PDF preview is not available.")
+			return e.NewHTTPErrorf(http.StatusNotFound, pdfPreviewUnavailableMessage)
 		}
 		return err
 	}
@@ -117,12 +119,12 @@ func (qq *Preview) streamPDF(
 	preview, err := ctx.TenantCtx().TTx.StoredFile.Get(previewContext, *conversion.PreviewStoredFileID)
 	if err != nil {
 		if enttenant.IsNotFound(err) {
-			return e.NewHTTPErrorf(http.StatusNotFound, "PDF preview is not available.")
+			return e.NewHTTPErrorf(http.StatusNotFound, pdfPreviewUnavailableMessage)
 		}
 		return err
 	}
 	if preview.CopiedToFinalDestinationAt == nil {
-		return e.NewHTTPErrorf(http.StatusNotFound, "PDF preview is not available.")
+		return e.NewHTTPErrorf(http.StatusNotFound, pdfPreviewUnavailableMessage)
 	}
 
 	openedFile, err := qq.infra.FileSystem().OpenFile(ctx, storedfilemodel.NewStoredFile(preview))

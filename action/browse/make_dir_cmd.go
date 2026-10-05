@@ -70,7 +70,7 @@ func (qq *MakeDirCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx c
 	rw.AddRenderables(
 		widget.NewSnackbarf("«%s» created.", filex.Data.Name).WithAction(&widget.Link{
 			Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, filex.Data.PublicID.String()),
-			Child: widget.T("Open folder"), // TODO Go to, open, show?
+			Child: widget.T("Open folder"),
 		}),
 	)
 	return nil

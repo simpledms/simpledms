@@ -30,106 +30,101 @@ import (
 
 func TestUploadFromURLStagedFilePersistsAfterRequestCancellation(t *testing.T) {
 	runWithFileEncryptionModes(t, func(t *testing.T, disableEncryption bool) {
-		harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
-		accountx, tenantx := signUpAccount(t, harness, "from-url-canceled@example.com")
-		tenantDB := initTenantDB(t, harness, tenantx)
-		tenantx = harness.mainDB.ReadOnlyConn.Tenant.GetX(
-			context.Background(),
-			tenantx.ID,
-		)
-
-		uploadToken := stageURLUploadForTest(t, harness, accountx, "from-url.txt")
-		spaceID, spacePublicID := createSpaceForURLUploadTest(
-			t,
-			harness,
-			accountx,
-			tenantx,
-			tenantDB,
-			"Canceled Upload Space",
-		)
-
-		requestCtx, cancelRequest := context.WithCancel(context.Background())
-		mainTx, err := harness.mainDB.ReadOnlyConn.Tx(requestCtx)
-		if err != nil {
-			t.Fatalf("start main read transaction: %v", err)
-		}
-		visitorCtx := ctxx.NewVisitorContext(
-			requestCtx,
-			mainTx,
-			harness.i18n,
-			"",
-			"",
-			false,
-			false,
-			harness.infra.SystemConfig().CommercialLicenseEnabled(),
-		)
-		mainCtx := ctxx.NewMainContext(
-			visitorCtx,
-			accountx,
-			harness.i18n,
-			harness.mainDB,
-			harness.tenantDBs,
-			true,
-		)
-		tenantTx, err := tenantDB.ReadOnlyConn.Tx(requestCtx)
-		if err != nil {
-			t.Fatalf("start tenant read transaction: %v", err)
-		}
-		ctx, err := execution.NewScopeResolver().Resolve(
-			mainCtx,
-			tenantTx,
-			tenantx,
-			spacePublicID,
-			true,
-		)
-		if err != nil {
-			t.Fatalf("resolve space scope: %v", err)
-		}
-		// Like Router.wrapManualTx: authorization transactions close before the command runs.
-		if err := mainTx.Commit(); err != nil {
-			t.Fatalf("commit main read transaction: %v", err)
-		}
-		if err := tenantTx.Commit(); err != nil {
-			t.Fatalf("commit tenant read transaction: %v", err)
-		}
-		cancelRequest()
-
-		form := url.Values{"UploadToken": {uploadToken}}
-		req := httptest.NewRequest(
-			http.MethodPost,
-			consumeUploadsEndpointForTest(tenantx, spacePublicID),
-			strings.NewReader(form.Encode()),
-		)
-		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		err = harness.actions.Inbox.ConsumeUploadsCmd.Handler(
-			httpx.NewResponseWriter(httptest.NewRecorder()),
-			httpx.NewRequest(req),
-			ctx,
-		)
-		if err != nil {
-			t.Fatalf("consume uploads after request cancellation: %v", err)
-		}
-
-		temporaryFiles := harness.mainDB.ReadOnlyConn.TemporaryFile.Query().Where(
-			temporaryfile.OwnerID(accountx.ID),
-			temporaryfile.UploadToken(uploadToken),
-			temporaryfile.ConvertedToStoredFileAtNotNil(),
-		).AllX(context.Background())
-		if len(temporaryFiles) != 1 {
-			t.Fatalf("expected staged temporary file to be converted, got %d", len(temporaryFiles))
-		}
-
-		inboxFiles := tenantDB.ReadOnlyConn.File.Query().Where(
-			file.SpaceID(spaceID),
-			file.IsInInbox(true),
-		).AllX(privacy.DecisionContext(
-			context.Background(),
-			privacy.Allow,
-		))
-		if len(inboxFiles) != 1 {
-			t.Fatalf("expected exactly one inbox file, got %d", len(inboxFiles))
-		}
+		testCanceledURLUploadPersists(t, disableEncryption)
 	})
+}
+
+func testCanceledURLUploadPersists(t *testing.T, disableEncryption bool) {
+	t.Helper()
+	harness := newActionTestHarnessWithS3AndEncryption(t, disableEncryption)
+	accountx, tenantx := signUpAccount(t, harness, "from-url-canceled@example.com")
+	tenantDB := initTenantDB(t, harness, tenantx)
+	tenantx = harness.mainDB.ReadOnlyConn.Tenant.GetX(context.Background(), tenantx.ID)
+	uploadToken := stageURLUploadForTest(t, harness, accountx, "from-url.txt")
+	spaceID, spacePublicID := createSpaceForURLUploadTest(
+		t, harness, accountx, tenantx, tenantDB, "Canceled Upload Space",
+	)
+	ctx := canceledRequestScopeForURLUpload(
+		t, harness, accountx, tenantx, tenantDB, spacePublicID,
+	)
+	form := url.Values{"UploadToken": {uploadToken}}
+	req := httptest.NewRequest(
+		http.MethodPost,
+		consumeUploadsEndpointForTest(tenantx, spacePublicID),
+		strings.NewReader(form.Encode()),
+	)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	err := harness.actions.Inbox.ConsumeUploadsCmd.Handler(
+		httpx.NewResponseWriter(httptest.NewRecorder()), httpx.NewRequest(req), ctx,
+	)
+	if err != nil {
+		t.Fatalf("consume uploads after request cancellation: %v", err)
+	}
+	assertCanceledURLUploadPersisted(t, harness, tenantDB, accountx.ID, uploadToken, spaceID)
+}
+
+func canceledRequestScopeForURLUpload(
+	t *testing.T,
+	harness *actionTestHarness,
+	accountx *entmain.Account,
+	tenantx *entmain.Tenant,
+	tenantDB *sqlx.TenantDB,
+	spacePublicID string,
+) ctxx.Context {
+	t.Helper()
+	requestCtx, cancelRequest := context.WithCancel(context.Background())
+	mainTx, err := harness.mainDB.ReadOnlyConn.Tx(requestCtx)
+	if err != nil {
+		t.Fatalf("start main read transaction: %v", err)
+	}
+	visitorCtx := ctxx.NewVisitorContext(
+		requestCtx, mainTx, harness.i18n, "", "", false, false,
+		harness.infra.SystemConfig().CommercialLicenseEnabled(),
+	)
+	mainCtx := ctxx.NewMainContext(
+		visitorCtx, accountx, harness.i18n, harness.mainDB, harness.tenantDBs, true,
+	)
+	tenantTx, err := tenantDB.ReadOnlyConn.Tx(requestCtx)
+	if err != nil {
+		t.Fatalf("start tenant read transaction: %v", err)
+	}
+	ctx, err := execution.NewScopeResolver().Resolve(mainCtx, tenantTx, tenantx, spacePublicID, true)
+	if err != nil {
+		t.Fatalf("resolve space scope: %v", err)
+	}
+	// Like Router.wrapManualTx: authorization transactions close before the command runs.
+	if err := mainTx.Commit(); err != nil {
+		t.Fatalf("commit main read transaction: %v", err)
+	}
+	if err := tenantTx.Commit(); err != nil {
+		t.Fatalf("commit tenant read transaction: %v", err)
+	}
+	cancelRequest()
+	return ctx
+}
+
+func assertCanceledURLUploadPersisted(
+	t *testing.T,
+	harness *actionTestHarness,
+	tenantDB *sqlx.TenantDB,
+	accountID int64,
+	uploadToken string,
+	spaceID int64,
+) {
+	t.Helper()
+	temporaryFiles := harness.mainDB.ReadOnlyConn.TemporaryFile.Query().Where(
+		temporaryfile.OwnerID(accountID), temporaryfile.UploadToken(uploadToken),
+		temporaryfile.ConvertedToStoredFileAtNotNil(),
+	).AllX(context.Background())
+	if len(temporaryFiles) != 1 {
+		t.Fatalf("expected staged temporary file to be converted, got %d", len(temporaryFiles))
+	}
+	inboxFiles := tenantDB.ReadOnlyConn.File.Query().Where(
+		file.SpaceID(spaceID), file.IsInInbox(true),
+	).AllX(privacy.DecisionContext(context.Background(), privacy.Allow))
+	if len(inboxFiles) != 1 {
+		t.Fatalf("expected exactly one inbox file, got %d", len(inboxFiles))
+	}
 }
 
 func TestUploadFromURLFirstInboxResponseContainsImportedFile(t *testing.T) {

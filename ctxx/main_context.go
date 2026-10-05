@@ -89,37 +89,9 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant(
 			continue
 		}
 
-		var spaces []*enttenant.Space
-
-		tenantDB, ok := qq.unsafeTenantDBs.Load(tenantx.ID)
-		if !ok {
-			log.Println("tenant db not found, tenant id was", tenantx.ID)
-			continue
-		}
-
-		tenantTx, err := tenantDB.ReadOnlyConn.Tx(qq)
+		spaces, err := qq.readOnlySpacesForTenant(tenantx)
 		if err != nil {
-			log.Println("failed to start transaction for tenant", tenantx.ID, err)
-			continue
-		}
-
-		// necessary for permissions
-		tenantCtx := NewTenantContext(qq, tenantTx, tenantx, true)
-
-		// spaces = append(spaces, tenantDB.Space.Query().AllX(ctx)...)
-		spacesx, err := tenantTx.Space.Query().All(tenantCtx)
-		if err != nil && !enttenant.IsNotFound(err) {
-			log.Println("failed to query spaces for tenant", tenantx.ID, err)
-			qq.rollbackTenantTx(tenantTx, tenantx.ID)
-			continue
-		}
-		spaces = append(spaces, spacesx...)
-
-		// TODO not sure if necessary... may could also just use db directly or rollback if faster?
-		// TODO is it a problem that spaces get used in calling function after the tx is committed?
-		if err := tenantTx.Commit(); err != nil {
-			log.Println("failed to commit transaction for tenant", tenantx.ID, err)
-			qq.rollbackTenantTx(tenantTx, tenantx.ID)
+			log.Println(err)
 			continue
 		}
 
@@ -127,6 +99,35 @@ func (qq *MainContext) ReadOnlyAccountSpacesByTenant(
 	}
 
 	return spacesByTenant, nil
+}
+
+func (qq *MainContext) readOnlySpacesForTenant(tenantx *entmain.Tenant) ([]*enttenant.Space, error) {
+	tenantDB, ok := qq.unsafeTenantDBs.Load(tenantx.ID)
+	if !ok {
+		return nil, fmt.Errorf("tenant db not found, tenant id was %d", tenantx.ID)
+	}
+	tenantTx, err := tenantDB.ReadOnlyConn.Tx(qq)
+	if err != nil {
+		return nil, fmt.Errorf("failed to start transaction for tenant %d: %w", tenantx.ID, err)
+	}
+
+	// necessary for permissions
+	tenantCtx := NewTenantContext(qq, tenantTx, tenantx, true)
+
+	// spaces = append(spaces, tenantDB.Space.Query().AllX(ctx)...)
+	spaces, err := tenantTx.Space.Query().All(tenantCtx)
+	if err != nil && !enttenant.IsNotFound(err) {
+		qq.rollbackTenantTx(tenantTx, tenantx.ID)
+		return nil, fmt.Errorf("failed to query spaces for tenant %d: %w", tenantx.ID, err)
+	}
+
+	// TODO not sure if necessary... may could also just use db directly or rollback if faster?
+	// TODO is it a problem that spaces get used in calling function after the tx is committed?
+	if err := tenantTx.Commit(); err != nil {
+		qq.rollbackTenantTx(tenantTx, tenantx.ID)
+		return nil, fmt.Errorf("failed to commit transaction for tenant %d: %w", tenantx.ID, err)
+	}
+	return spaces, nil
 }
 
 func (qq *MainContext) rollbackTenantTx(tenantTx *enttenant.Tx, tenantID int64) {

@@ -1,4 +1,4 @@
-import { Idiomorph } from '/assets/vendor/idiomorph/dist/idiomorph-ext.esm.js';
+import { Idiomorph } from './vendor/idiomorph/dist/idiomorph-ext.esm.js';
 
 (function () {
 	if (window.__simpleDMSNavigationRailRuntimeLoaded) {
@@ -14,7 +14,7 @@ import { Idiomorph } from '/assets/vendor/idiomorph/dist/idiomorph-ext.esm.js';
 			newNode.classList.toggle('navigation-rail-expanded',
 				oldNode.classList.contains('navigation-rail-expanded'));
 			newNode.dataset.expanded = oldNode.dataset.expanded;
-			newNode.toggleAttribute('data-modal-open', oldNode.hasAttribute('data-modal-open'));
+			newNode.toggleAttribute('data-modal-open', oldNode.dataset.modalOpen !== undefined);
 		}
 		if (oldNode.matches('.js-navigation-rail-group')) {
 			newNode.dataset.collapsed = oldNode.dataset.collapsed;

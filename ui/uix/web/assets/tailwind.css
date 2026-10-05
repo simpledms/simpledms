@@ -1113,11 +1113,6 @@
   .pt-6 {
     padding-top: calc(var(--spacing) * 6);
   }
-  @media (min-width: 1200px) {
-    body:has(dialog[open].js-side-sheet-dialog) .js-main-content {
-      padding-right: 35rem;
-    }
-  }
   .pr-1 {
     padding-right: var(--spacing);
   }
@@ -2503,6 +2498,11 @@
   }
 }
 @layer utilities {
+  @media (min-width: 1200px) {
+    body:has(dialog[open].js-side-sheet-dialog) .js-main-content {
+      padding-right: 35rem;
+    }
+  }
   .js-tooltip-popover:not(:popover-open) {
     display: none;
   }

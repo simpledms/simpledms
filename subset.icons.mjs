@@ -37,6 +37,21 @@ function sourceFiles(dir) {
 	});
 }
 
+function delimitTemplateActions(content) {
+	const parts = [];
+	let offset = 0;
+	while (offset < content.length) {
+		const start = content.indexOf('{{', offset);
+		if (start === -1) break;
+		const end = content.indexOf('}}', start + 2);
+		if (end === -1) break;
+		parts.push(content.slice(offset, start), '<>');
+		offset = end + 2;
+	}
+	parts.push(content.slice(offset));
+	return parts.join('');
+}
+
 function iconNameCandidates() {
 	const candidates = new Set();
 	const add = value => {
@@ -50,7 +65,7 @@ function iconNameCandidates() {
 		}
 		if (file.endsWith('.gohtml')) {
 			// template actions delimit text too, as in {{ if .IsOpen }}expand_less{{ end }}
-			const text = content.replace(/\{\{[\s\S]*?\}\}/g, '<>');
+			const text = delimitTemplateActions(content);
 			for (const match of text.matchAll(/>([^<>]*)</g)) {
 				add(match[1]);
 			}

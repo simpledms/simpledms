@@ -71,32 +71,56 @@ func TestSetInitialPasswordCmdOnlySetsMissingPassword(t *testing.T) {
 			rr := httptest.NewRecorder()
 			harness.router.ServeHTTP(rr, req)
 
-			if rr.Code != tc.wantStatus {
-				t.Fatalf("status = %d, want %d: %s", rr.Code, tc.wantStatus, rr.Body.String())
-			}
-			accountAfter := accountmodel.NewAccount(
-				harness.mainDB.ReadWriteConn.Account.GetX(context.Background(), accountx.ID),
+			assertInitialPasswordCommandOutcome(
+				t,
+				harness,
+				accountx.ID,
+				rr,
+				tc.wantStatus,
+				tc.wantPassword,
+				tc.wantNotStored,
+				sessionValue,
+				otherSessionValue,
+				tc.wantOtherSessionAlive,
 			)
-			if !accountAfter.IsPasswordValid(nil, tc.wantPassword) {
-				t.Fatalf("expected password %q to be valid", tc.wantPassword)
-			}
-			if tc.wantNotStored != "" && accountAfter.IsPasswordValid(nil, tc.wantNotStored) {
-				t.Fatalf("password %q must not replace the existing password", tc.wantNotStored)
-			}
-			sessionExists := func(value string) bool {
-				return harness.mainDB.ReadWriteConn.Session.Query().
-					Where(session.Value(value)).
-					ExistX(context.Background())
-			}
-			if !sessionExists(sessionValue) {
-				t.Fatal("expected current session to stay signed in")
-			}
-			if sessionExists(otherSessionValue) != tc.wantOtherSessionAlive {
-				t.Fatalf("other session alive = %v, want %v",
-					!tc.wantOtherSessionAlive,
-					tc.wantOtherSessionAlive,
-				)
-			}
 		})
 	}
+}
+
+func assertInitialPasswordCommandOutcome(
+	t *testing.T,
+	harness *actionTestHarness,
+	accountID int64,
+	rr *httptest.ResponseRecorder,
+	wantStatus int,
+	wantPassword string,
+	wantNotStored string,
+	sessionValue string,
+	otherSessionValue string,
+	wantOtherSessionAlive bool,
+) {
+	t.Helper()
+	if rr.Code != wantStatus {
+		t.Fatalf("status = %d, want %d: %s", rr.Code, wantStatus, rr.Body.String())
+	}
+	accountAfter := accountmodel.NewAccount(
+		harness.mainDB.ReadWriteConn.Account.GetX(context.Background(), accountID),
+	)
+	if !accountAfter.IsPasswordValid(nil, wantPassword) {
+		t.Fatalf("expected password %q to be valid", wantPassword)
+	}
+	if wantNotStored != "" && accountAfter.IsPasswordValid(nil, wantNotStored) {
+		t.Fatalf("password %q must not replace the existing password", wantNotStored)
+	}
+	if !initialPasswordSessionExists(harness, sessionValue) {
+		t.Fatal("expected current session to stay signed in")
+	}
+	if initialPasswordSessionExists(harness, otherSessionValue) != wantOtherSessionAlive {
+		t.Fatalf("other session alive = %v, want %v", !wantOtherSessionAlive, wantOtherSessionAlive)
+	}
+}
+
+func initialPasswordSessionExists(harness *actionTestHarness, value string) bool {
+	return harness.mainDB.ReadWriteConn.Session.Query().
+		Where(session.Value(value)).ExistX(context.Background())
 }

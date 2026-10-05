@@ -16,31 +16,36 @@ export function isSignInResponse(response: Response) {
 		&& new URL(response.url()).pathname === "/-/auth/sign-in-cmd";
 }
 
-export async function signIn(page: Page) {
-	for (let attempt = 0; attempt < 3; attempt++) {
-		await page.goto("/");
-		await page.getByRole("textbox", { name: "Email" }).fill(loginEmail);
-		await page.getByRole("textbox", { name: "Password" }).fill(loginPassword);
-		const responsePromise = page.waitForResponse(isSignInResponse);
-		await page.getByRole("button", { name: "Sign in", exact: true }).click();
-		const response = await responsePromise;
+export function signIn(page: Page) {
+	return signInAttempt(page, 0);
+}
 
-		if (response.headers()["hx-redirect"]) {
-			await expect(page).toHaveURL(/\/dashboard\/$/);
-			return;
-		}
-
-		const body = await response.text();
-		if (response.status() !== 401 || !body.includes("Too many login attempts")) {
-			throw new Error(
-				`Sign-in failed with status ${response.status()}; check E2E_LOGIN_EMAIL and E2E_LOGIN_PASSWORD`,
-			);
-		}
-		// Another sign-in for the same account happened recently, for example in global setup.
-		await page.waitForTimeout(accountSignInIntervalMs);
+async function signInAttempt(page: Page, attempt: number): Promise<void> {
+	if (attempt === 3) {
+		throw new Error("Sign-in stayed rate-limited");
 	}
 
-	throw new Error("Sign-in stayed rate-limited");
+	await page.goto("/");
+	await page.getByRole("textbox", { name: "Email" }).fill(loginEmail);
+	await page.getByRole("textbox", { name: "Password" }).fill(loginPassword);
+	const responsePromise = page.waitForResponse(isSignInResponse);
+	await page.getByRole("button", { name: "Sign in", exact: true }).click();
+	const response = await responsePromise;
+
+	if (response.headers()["hx-redirect"]) {
+		await expect(page).toHaveURL(/\/dashboard\/$/);
+		return;
+	}
+
+	const body = await response.text();
+	if (response.status() !== 401 || !body.includes("Too many login attempts")) {
+		throw new Error(
+			`Sign-in failed with status ${response.status()}; check E2E_LOGIN_EMAIL and E2E_LOGIN_PASSWORD`,
+		);
+	}
+	// Another sign-in for the same account happened recently, for example in global setup.
+	await page.waitForTimeout(accountSignInIntervalMs);
+	return signInAttempt(page, attempt + 1);
 }
 
 export async function goToSpaces(page: Page) {
@@ -137,7 +142,7 @@ export async function openFiltersTab(page: Page, tab: "Document type" | "Fields"
 	}
 	await expect(dialog).toBeVisible();
 	// the tab name includes the count badge while filters of the tab are active
-	const tabLink = dialog.getByRole("tab", { name: new RegExp(`^${tab}( \\d+)?$`) });
+	const tabLink = dialog.getByRole("tab", { name: new RegExp(String.raw`^${tab}( \d+)?$`) });
 	await tabLink.click();
 	await expect(tabLink).toHaveAttribute("aria-selected", "true");
 	return dialog;

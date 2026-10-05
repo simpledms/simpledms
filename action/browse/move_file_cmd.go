@@ -63,7 +63,7 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 	if fileWithParent.Data.IsDirectory {
 		action = &widget.Link{
 			Href:  route.Browse(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, fileWithParent.Data.PublicID.String()),
-			Child: widget.T("Open folder"), // TODO Go to, or Open?
+			Child: widget.T("Open folder"),
 		}
 	} else {
 		parent, err := fileWithParent.Parent(ctx)
@@ -74,7 +74,7 @@ func (qq *MoveFileCmd) Handler(rw httpx.ResponseWriter, req *httpx.Request, ctx 
 
 		action = &widget.Link{
 			Href:  route.BrowseFile(ctx.TenantCtx().TenantID, ctx.SpaceCtx().SpaceID, parent.Data.PublicID.String(), fileWithParent.Data.PublicID.String()),
-			Child: widget.T("Open file"), // TODO Go to, or Open?
+			Child: widget.T("Open file"),
 		}
 	}
 

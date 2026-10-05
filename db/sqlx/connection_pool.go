@@ -13,7 +13,7 @@ const connMaxIdleTime = 5 * time.Minute
 
 func configureReadOnlyPool(db *sql.DB) {
 	maxOpenConns := readOnlyMaxOpenConns()
-	db.SetMaxOpenConns(maxOpenConns) // TODO enough?
+	db.SetMaxOpenConns(maxOpenConns)
 	db.SetMaxIdleConns(maxOpenConns)
 	db.SetConnMaxIdleTime(connMaxIdleTime)
 }

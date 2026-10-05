@@ -187,8 +187,8 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		)
 	}
 
-	// TODO or HxTrigger? seems to have same value
-	if req.Header.Get("Hx-Target") == qq.filtersButtonID() {
+	targetID := req.Header.Get("Hx-Target")
+	if targetID == qq.filtersButtonID() {
 		return qq.infra.Renderer().Render(
 			rw,
 			ctx,
@@ -196,7 +196,7 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 		)
 	}
 
-	if req.Header.Get("Hx-Target") == "listDirLoadMore" {
+	if targetID == "listDirLoadMore" {
 		// TODO not a good solution, should be more consistent...
 		//		both is not good, additional state loading and separate offset
 		state = autil.StateX[ListDirPartialState](rw, req)
@@ -224,7 +224,7 @@ func (qq *ListDirPartial) Handler(rw httpx.ResponseWriter, req *httpx.Request, c
 			},
 		)
 	}
-	if req.Header.Get("Hx-Target") == "listDirLoadMoreTable" {
+	if targetID == "listDirLoadMoreTable" {
 		state = autil.StateX[ListDirPartialState](rw, req)
 		offset := 0
 		offsetStr := req.URL.Query().Get("offset")

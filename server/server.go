@@ -177,9 +177,28 @@ func newMaintenanceModeHandler(
 		}
 	})
 
+	mux.HandleFunc("/", newMaintenancePageHandler(
+		mainDB, i18nx, renderer, commercialLicenseEnabled,
+	))
+	protectedHandler := http.NewCrossOriginProtection().Handler(mux)
+	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/-/unlock-cmd" {
+			rw.Header().Set("Cache-Control", "no-store")
+			rw.Header().Set("Pragma", "no-cache")
+		}
+		protectedHandler.ServeHTTP(rw, req)
+	})
+}
+
+func newMaintenancePageHandler(
+	mainDB *sqlx.MainDB,
+	i18nx *i18n.I18n,
+	renderer *ui.Renderer,
+	commercialLicenseEnabled bool,
+) http.HandlerFunc {
 	// TODO recovery handler
 	// TODO status code?
-	mux.HandleFunc("/", func(rw http.ResponseWriter, req *http.Request) {
+	return func(rw http.ResponseWriter, req *http.Request) {
 		isUnlockFormVisible := req.URL.Query().Has("unlock")
 		rw.Header().Set("X-SimpleDMS-Maintenance", "true")
 		if isUnlockFormVisible {
@@ -247,16 +266,7 @@ func newMaintenanceModeHandler(
 			log.Println(err)
 			return
 		}
-	})
-
-	protectedHandler := http.NewCrossOriginProtection().Handler(mux)
-	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		if req.URL.Path == "/-/unlock-cmd" {
-			rw.Header().Set("Cache-Control", "no-store")
-			rw.Header().Set("Pragma", "no-cache")
-		}
-		protectedHandler.ServeHTTP(rw, req)
-	})
+	}
 }
 
 func stopMaintenanceModeServer(server *http.Server) {
@@ -499,40 +509,42 @@ func (qq *Server) initializeMainConfig(ctx context.Context, mainDB *sqlx.MainDB,
 			log.Fatalln(err)
 		}
 	} else if overrideDBConfig {
-		// IMPORTANT
-		// only TLS is overridden here because all encrypted fields can just
-		// be overridden when encryptor.NilableX25519MainIdentity is set;
-		// TLS config is read before that is the case
-		//
-		// it is necessary to read just FirstID() and not First() because
-		// the latter would read the complete row and try to decrypt all
-		// decrypted values. this would fail/panic.
-		// END IMPORTANT
-
-		systemConfigID := mainDB.ReadWriteConn.SystemConfig.Query().FirstIDX(ctx)
-		updateQuery := mainDB.ReadWriteConn.SystemConfig.Update().
-			Where(systemconfig.ID(systemConfigID))
-
-		if val, set := os.LookupEnv("SIMPLEDMS_TLS_ENABLE_AUTOCERT"); set {
-			updateQuery.SetTLSEnableAutocert(val == "true")
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_TLS_CERT_FILEPATH"); set {
-			updateQuery.SetTLSCertFilepath(val)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_TLS_PRIVATE_KEY_FILEPATH"); set {
-			updateQuery.SetTLSPrivateKeyFilepath(val)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_EMAIL"); set {
-			updateQuery.SetTLSAutocertEmail(val)
-		}
-		if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_HOSTS"); set {
-			updateQuery.SetTLSAutocertHosts(strings.Split(val, ","))
-		}
-
-		updateQuery.SaveX(ctx)
+		qq.overrideTLSConfig(ctx, mainDB)
 	}
 
 	qq.initializeInitialUserIfRequired(ctx, mainDB)
+}
+
+func (qq *Server) overrideTLSConfig(ctx context.Context, mainDB *sqlx.MainDB) {
+	// IMPORTANT
+	// only TLS is overridden here because all encrypted fields can just
+	// be overridden when encryptor.NilableX25519MainIdentity is set;
+	// TLS config is read before that is the case
+	//
+	// it is necessary to read just FirstID() and not First() because
+	// the latter would read the complete row and try to decrypt all
+	// decrypted values. this would fail/panic.
+	// END IMPORTANT
+	systemConfigID := mainDB.ReadWriteConn.SystemConfig.Query().FirstIDX(ctx)
+	updateQuery := mainDB.ReadWriteConn.SystemConfig.Update().
+		Where(systemconfig.ID(systemConfigID))
+
+	if val, set := os.LookupEnv("SIMPLEDMS_TLS_ENABLE_AUTOCERT"); set {
+		updateQuery.SetTLSEnableAutocert(val == "true")
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_TLS_CERT_FILEPATH"); set {
+		updateQuery.SetTLSCertFilepath(val)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_TLS_PRIVATE_KEY_FILEPATH"); set {
+		updateQuery.SetTLSPrivateKeyFilepath(val)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_EMAIL"); set {
+		updateQuery.SetTLSAutocertEmail(val)
+	}
+	if val, set := os.LookupEnv("SIMPLEDMS_TLS_AUTOCERT_HOSTS"); set {
+		updateQuery.SetTLSAutocertHosts(strings.Split(val, ","))
+	}
+	updateQuery.SaveX(ctx)
 }
 
 func (qq *Server) initializeInitialUserIfRequired(ctx context.Context, mainDB *sqlx.MainDB) {

@@ -1932,28 +1932,10 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
 		}
 	}()
 
-	userx, err := tenantTx.User.Query().Where(
-		user.AccountID(ctx.MainCtx().Account.ID),
-		user.DeletedAtIsNil(),
-	).Only(ctx)
-	if err != nil {
-		if enttenant.IsNotFound(err) {
-			return nil, e.NewHTTPErrorf(http.StatusForbidden, "You are not allowed to access this organization.")
-		}
-		return nil, err
-	}
-	writeTenantCtx := ctxx.NewTenantContextWithUser(
-		ctx.MainCtx(),
-		tenantTx,
-		ctx.TenantCtx().Tenant,
-		userx,
-		false,
-	)
-	writeSpace, err := tenantTx.Space.Get(writeTenantCtx, ctx.SpaceCtx().Space.ID)
+	writeSpaceCtx, err := qq.accountConversionSpaceContext(ctx, tenantTx)
 	if err != nil {
 		return nil, err
 	}
-	writeSpaceCtx := ctxx.NewSpaceContext(writeTenantCtx, writeSpace)
 	ctxWithIncomplete := tenantprivacy.DecisionContext(
 		enttenantschema.WithUnfinishedUploads(writeSpaceCtx),
 		tenantprivacy.Allow,
@@ -1999,7 +1981,7 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
 		SetIsDirectory(false).
 		SetIndexedAt(time.Now()).
 		SetParentID(parentDirFileID).
-		SetSpaceID(writeSpace.ID).
+		SetSpaceID(writeSpaceCtx.Space.ID).
 		SetIsInInbox(isInInbox).
 		Save(writeSpaceCtx)
 	if err != nil {
@@ -2018,6 +2000,35 @@ func (qq *S3FileSystem) finalizeClaimedAccountConversionInTenant(
 	committed = true
 
 	return filex, nil
+}
+
+func (qq *S3FileSystem) accountConversionSpaceContext(
+	ctx ctxx.Context, tenantTx *enttenant.Tx,
+) (*ctxx.SpaceContext, error) {
+	userx, err := tenantTx.User.Query().Where(
+		user.AccountID(ctx.MainCtx().Account.ID),
+		user.DeletedAtIsNil(),
+	).Only(ctx)
+	if err != nil {
+		if enttenant.IsNotFound(err) {
+			return nil, e.NewHTTPErrorf(
+				http.StatusForbidden, "You are not allowed to access this organization.",
+			)
+		}
+		return nil, err
+	}
+	writeTenantCtx := ctxx.NewTenantContextWithUser(
+		ctx.MainCtx(),
+		tenantTx,
+		ctx.TenantCtx().Tenant,
+		userx,
+		false,
+	)
+	writeSpace, err := tenantTx.Space.Get(writeTenantCtx, ctx.SpaceCtx().Space.ID)
+	if err != nil {
+		return nil, err
+	}
+	return ctxx.NewSpaceContext(writeTenantCtx, writeSpace), nil
 }
 
 func (qq *S3FileSystem) markTemporaryAccountConversionDone(ctx ctxx.Context, temporaryFileID int64) error {

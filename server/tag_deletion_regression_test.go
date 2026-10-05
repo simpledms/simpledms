@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"strconv"
 	"strings"
@@ -29,48 +30,7 @@ func TestTagDeletionRegressionRemovesAssignmentsAndRefreshesTagList(t *testing.T
 	f := newMCPFixtureWithWrites(t, h, "tag-delete-regression")
 	var childID, keepID, foreignID int64
 	var activeID, trashedID int64
-	if err := withTenantContext(t, h, f.account, f.tenant, f.db, func(
-		_ *entmain.Tx, _ *enttenant.Tx, tc *ctxx.TenantContext,
-	) error {
-		sp := tc.TTx.Space.Query().Where(space.PublicID(entx.NewCIText(f.spaceID))).OnlyX(tc)
-		sc := ctxx.NewSpaceContext(tc, sp)
-		activeID = createRegularFileForTest(sc, sc.SpaceRootDir().ID, "active.txt").Data.ID
-		trashedID = createRegularFileForTest(sc, sc.SpaceRootDir().ID, "trashed.txt").Data.ID
-		svc := taggingmodel.NewTagService()
-		group, err := svc.Create(sc, sp.ID, 0, "Group", tagtype.Group)
-		if err != nil {
-			return err
-		}
-		child, err := svc.Create(sc, sp.ID, group.ID, "Child", tagtype.Simple)
-		if err != nil {
-			return err
-		}
-		keep, err := svc.Create(sc, sp.ID, 0, "Keep", tagtype.Simple)
-		if err != nil {
-			return err
-		}
-		if _, err := svc.AssignToFile(sc, activeID, child.ID, sp.ID); err != nil {
-			return err
-		}
-		if _, err := svc.AssignToFile(sc, trashedID, child.ID, sp.ID); err != nil {
-			return err
-		}
-		if _, err := svc.AssignToFile(sc, activeID, keep.ID, sp.ID); err != nil {
-			return err
-		}
-		tc.TTx.File.UpdateOneID(trashedID).SetDeletedAt(time.Now()).SaveX(sc)
-		createSpaceViaCmd(t, h.actions, tc, "Tag Foreign Space")
-		foreignSpace := tc.TTx.Space.Query().Where(space.Name("Tag Foreign Space")).OnlyX(tc)
-		foreignCtx := ctxx.NewSpaceContext(tc, foreignSpace)
-		foreign, err := svc.Create(foreignCtx, foreignSpace.ID, 0, "Foreign", tagtype.Simple)
-		if err != nil {
-			return err
-		}
-		childID, keepID, foreignID = child.ID, keep.ID, foreign.ID
-		return nil
-	}); err != nil {
-		t.Fatal(err)
-	}
+	setupTagDeletionRegression(t, h, f, &childID, &keepID, &foreignID, &activeID, &trashedID)
 
 	foreignDelete := f.browserAt(route.ManageTags(f.tenant.PublicID.String(), f.spaceID),
 		h.actions.Tagging.DeleteTagCmd.Endpoint(), url.Values{
@@ -84,6 +44,69 @@ func TestTagDeletionRegressionRemovesAssignmentsAndRefreshesTagList(t *testing.T
 		h.actions.Tagging.DeleteTagCmd.Endpoint(), url.Values{
 			"TagID": {strconv.FormatInt(childID, 10)},
 		})
+	assertTagDeletionCommandResponse(t, deleted)
+	assertTagDeletionAssignments(t, h, f, childID, keepID, foreignID, activeID, trashedID)
+	assertTagListRefreshAfterDeletion(t, h, f)
+}
+
+func setupTagDeletionRegression(
+	t *testing.T,
+	h *actionTestHarness,
+	f *mcpFixture,
+	childID *int64,
+	keepID *int64,
+	foreignID *int64,
+	activeID *int64,
+	trashedID *int64,
+) {
+	t.Helper()
+	err := withTenantContext(t, h, f.account, f.tenant, f.db, func(
+		_ *entmain.Tx, _ *enttenant.Tx, tc *ctxx.TenantContext,
+	) error {
+		sp := tc.TTx.Space.Query().Where(space.PublicID(entx.NewCIText(f.spaceID))).OnlyX(tc)
+		sc := ctxx.NewSpaceContext(tc, sp)
+		*activeID = createRegularFileForTest(sc, sc.SpaceRootDir().ID, "active.txt").Data.ID
+		*trashedID = createRegularFileForTest(sc, sc.SpaceRootDir().ID, "trashed.txt").Data.ID
+		svc := taggingmodel.NewTagService()
+		group, err := svc.Create(sc, sp.ID, 0, "Group", tagtype.Group)
+		if err != nil {
+			return err
+		}
+		child, err := svc.Create(sc, sp.ID, group.ID, "Child", tagtype.Simple)
+		if err != nil {
+			return err
+		}
+		keep, err := svc.Create(sc, sp.ID, 0, "Keep", tagtype.Simple)
+		if err != nil {
+			return err
+		}
+		if _, err := svc.AssignToFile(sc, *activeID, child.ID, sp.ID); err != nil {
+			return err
+		}
+		if _, err := svc.AssignToFile(sc, *trashedID, child.ID, sp.ID); err != nil {
+			return err
+		}
+		if _, err := svc.AssignToFile(sc, *activeID, keep.ID, sp.ID); err != nil {
+			return err
+		}
+		tc.TTx.File.UpdateOneID(*trashedID).SetDeletedAt(time.Now()).SaveX(sc)
+		createSpaceViaCmd(t, h.actions, tc, "Tag Foreign Space")
+		foreignSpace := tc.TTx.Space.Query().Where(space.Name("Tag Foreign Space")).OnlyX(tc)
+		foreignCtx := ctxx.NewSpaceContext(tc, foreignSpace)
+		foreign, err := svc.Create(foreignCtx, foreignSpace.ID, 0, "Foreign", tagtype.Simple)
+		if err != nil {
+			return err
+		}
+		*childID, *keepID, *foreignID = child.ID, keep.ID, foreign.ID
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func assertTagDeletionCommandResponse(t *testing.T, deleted *httptest.ResponseRecorder) {
+	t.Helper()
 	if deleted.Code != http.StatusOK {
 		t.Fatalf("delete status %d", deleted.Code)
 	}
@@ -95,8 +118,20 @@ func TestTagDeletionRegressionRemovesAssignmentsAndRefreshesTagList(t *testing.T
 	if strings.Contains(deleted.Body.String(), "tagList") {
 		t.Fatal("delete command returned replacement tag list")
 	}
+}
 
-	if err := withTenantContext(t, h, f.account, f.tenant, f.db, func(
+func assertTagDeletionAssignments(
+	t *testing.T,
+	h *actionTestHarness,
+	f *mcpFixture,
+	childID int64,
+	keepID int64,
+	foreignID int64,
+	activeID int64,
+	trashedID int64,
+) {
+	t.Helper()
+	err := withTenantContext(t, h, f.account, f.tenant, f.db, func(
 		_ *entmain.Tx, _ *enttenant.Tx, tc *ctxx.TenantContext,
 	) error {
 		sp := tc.TTx.Space.Query().Where(space.PublicID(entx.NewCIText(f.spaceID))).OnlyX(tc)
@@ -118,10 +153,14 @@ func TestTagDeletionRegressionRemovesAssignmentsAndRefreshesTagList(t *testing.T
 			t.Fatal("cross-space tag was deleted")
 		}
 		return nil
-	}); err != nil {
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
+}
 
+func assertTagListRefreshAfterDeletion(t *testing.T, h *actionTestHarness, f *mcpFixture) {
+	t.Helper()
 	list := f.browserAt(route.ManageTags(f.tenant.PublicID.String(), f.spaceID),
 		h.actions.ManageTags.TagListPartial.Endpoint(), url.Values{"ParentTagID": {"0"}})
 	if list.Code != http.StatusOK {

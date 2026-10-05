@@ -216,7 +216,7 @@ func TestAuthRateLimitsArePerClientBehindTrustedProxy(t *testing.T) {
 			if !limited {
 				t.Fatal("expected the attacking client to be rate limited")
 			}
-			if got := send("203.0.113.2", 0); got == http.StatusTooManyRequests {
+			if send("203.0.113.2", 0) == http.StatusTooManyRequests {
 				t.Fatal("another client behind the same proxy must not share the rate limit")
 			}
 		})

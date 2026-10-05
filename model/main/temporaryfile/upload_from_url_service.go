@@ -74,7 +74,7 @@ func NewUploadFromURLService(
 			// Unspecified IPv6 address.
 			netip.MustParsePrefix("::/128"),
 			// IETF protocol assignments (RFC 6890).
-			netip.MustParsePrefix("192.0.0.0/24"),
+			netip.MustParsePrefix("192.0.0.0/24"), // NOSONAR: SSRF denylist, not a destination.
 			// IPv6 transition prefixes embed IPv4 targets and can reach internal IPv4
 			// services through a gateway: IPv4-compatible (RFC 4291), NAT64 (RFC 6052,
 			// RFC 8215), Teredo (RFC 4380), and 6to4 (RFC 3056).

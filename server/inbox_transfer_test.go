@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"strings"
 	"testing"
@@ -159,19 +160,42 @@ func TestInboxTransferHTTPPreservesDocumentAndHistoryClearsClassification(t *tes
 func TestInboxTransferDialogListsOnlyOptedInActiveOtherInboxesForNonmember(t *testing.T) {
 	h, run, request, doc := newDocumentNotesRequestTest(t)
 	var allowed, disabled, deleted *enttenant.Space
+	prepareInboxTransferDialogEmptyState(t, run, doc.ID)
+	form := url.Values{"FileID": {doc.PublicID.String()}}
+	rr := request(h.actions.Inbox.TransferFileDialog.Endpoint(), form)
+	assertNoAlternativeTransferDestinations(t, rr)
+	allowed, disabled, deleted = prepareNonmemberTransferDestinations(t, h, run)
+	rr = request(h.actions.Inbox.TransferFileDialog.Endpoint(), form)
+	assertNonmemberTransferDialog(t, rr, allowed, disabled, deleted)
+}
+
+func prepareInboxTransferDialogEmptyState(
+	t *testing.T, run func(func(*ctxx.SpaceContext) error) error, fileID int64,
+) {
+	t.Helper()
 	if err := run(func(ctx *ctxx.SpaceContext) error {
-		ctx.TTx.File.UpdateOneID(doc.ID).SetIsInInbox(true).SaveX(ctx)
+		ctx.TTx.File.UpdateOneID(fileID).SetIsInInbox(true).SaveX(ctx)
 		ctx.TTx.Space.UpdateOneID(ctx.Space.ID).SetAcceptsInboxTransfers(true).SaveX(ctx)
 		return nil
 	}); err != nil {
 		t.Fatal(err)
 	}
-	form := url.Values{"FileID": {doc.PublicID.String()}}
-	rr := request(h.actions.Inbox.TransferFileDialog.Endpoint(), form)
+}
+
+func assertNoAlternativeTransferDestinations(t *testing.T, rr *httptest.ResponseRecorder) {
+	t.Helper()
 	if rr.Code != http.StatusOK || !strings.Contains(rr.Body.String(), "No other Inbox is available.") ||
 		strings.Contains(rr.Body.String(), `name="DestinationSpaceID"`) {
 		t.Fatalf("empty destination dialog: %d %s", rr.Code, rr.Body.String())
 	}
+}
+
+func prepareNonmemberTransferDestinations(
+	t *testing.T,
+	h *actionTestHarness,
+	run func(func(*ctxx.SpaceContext) error) error,
+) (allowed, disabled, deleted *enttenant.Space) {
+	t.Helper()
 	if err := run(func(ctx *ctxx.SpaceContext) error {
 		for _, name := range []string{"<script>Receiving</script>", "Disabled", "Deleted"} {
 			createSpaceViaCmd(t, h.actions, ctx.TenantContext, name)
@@ -196,7 +220,17 @@ func TestInboxTransferDialogListsOnlyOptedInActiveOtherInboxesForNonmember(t *te
 	}); err != nil {
 		t.Fatal(err)
 	}
-	rr = request(h.actions.Inbox.TransferFileDialog.Endpoint(), form)
+	return allowed, disabled, deleted
+}
+
+func assertNonmemberTransferDialog(
+	t *testing.T,
+	rr *httptest.ResponseRecorder,
+	allowed *enttenant.Space,
+	disabled *enttenant.Space,
+	deleted *enttenant.Space,
+) {
+	t.Helper()
 	body := rr.Body.String()
 	if rr.Code != http.StatusOK {
 		t.Fatalf("destination dialog: %d %s", rr.Code, body)
@@ -228,71 +262,116 @@ func TestInboxTransferRejectsUnavailableDestinationAndInvalidSource(t *testing.T
 		"filed source", "deleted source", "directory source", "foreign Space source",
 	} {
 		t.Run(scenario, func(t *testing.T) {
-			h, run, request, doc := newDocumentNotesRequestTest(t)
-			var destination *enttenant.Space
-			var sourceCtxSpace *enttenant.Space
-			var sourceID, destinationID, before string
-			if err := run(func(ctx *ctxx.SpaceContext) error {
-				createSpaceViaCmd(t, h.actions, ctx.TenantContext, "Receiver")
-				destination = ctx.TTx.Space.Query().Where(space.Name("Receiver")).OnlyX(ctx)
-				destination = ctx.TTx.Space.UpdateOne(destination).
-					SetAcceptsInboxTransfers(true).SaveX(ctx)
-				ctx.TTx.File.UpdateOneID(doc.ID).SetIsInInbox(true).SaveX(ctx)
-				sourceCtxSpace = ctx.Space
-				sourceID, destinationID = doc.PublicID.String(), destination.PublicID.String()
-				switch scenario {
-				case "disabled destination":
-					ctx.TTx.Space.UpdateOne(destination).SetAcceptsInboxTransfers(false).SaveX(ctx)
-					ctx.TTx.SpaceUserAssignment.Delete().Where(
-						spaceuserassignment.SpaceID(destination.ID),
-						spaceuserassignment.UserID(ctx.User.ID),
-					).ExecX(ctxx.NewSpaceContext(ctx.TenantContext, destination))
-					ctx.TTx.User.UpdateOneID(ctx.User.ID).SetRole(tenantrole.User).SaveX(ctx)
-				case "deleted destination":
-					ctx.TTx.Space.UpdateOne(destination).SetDeletedAt(time.Now()).SaveX(ctx)
-				case "same Space":
-					ctx.TTx.Space.UpdateOneID(ctx.Space.ID).SetAcceptsInboxTransfers(true).SaveX(ctx)
-					destinationID = ctx.SpaceID
-				case "unknown destination":
-					destinationID = "unknown-inbox"
-				case "filed source":
-					ctx.TTx.File.UpdateOneID(doc.ID).SetIsInInbox(false).SaveX(ctx)
-				case "deleted source":
-					ctx.TTx.File.UpdateOneID(doc.ID).SetDeletedAt(time.Now()).SaveX(ctx)
-				case "directory source":
-					sourceID = ctx.SpaceRootDir().PublicID.String()
-				case "foreign Space source":
-					foreignCtx := ctxx.NewSpaceContext(ctx.TenantContext, destination)
-					foreign := createDocumentForNotesTest(foreignCtx, "foreign.pdf", "private")
-					doc = ctx.TTx.File.UpdateOne(foreign).SetIsInInbox(true).SaveX(foreignCtx)
-					sourceID, sourceCtxSpace = doc.PublicID.String(), destination
-				}
-				readCtx := ctxx.NewSpaceContext(ctx.TenantContext, sourceCtxSpace)
-				before = ctx.TTx.File.GetX(schema.SkipSoftDelete(readCtx), doc.ID).String()
-				return nil
-			}); err != nil {
-				t.Fatal(err)
-			}
-			rr := request(h.actions.Inbox.TransferFileCmd.Endpoint(), url.Values{
-				"FileID": {sourceID}, "DestinationSpaceID": {destinationID},
-				"Message": {"Must not be persisted"},
-			})
-			if rr.Code < 400 || rr.Header().Get("HX-Replace-Url") != "" ||
-				strings.Contains(rr.Header().Get("HX-Trigger"), event.FileMoved.String()) {
-				t.Fatalf("rejected transfer response: %d %v %s", rr.Code, rr.Header(), rr.Body.String())
-			}
-			if err := run(func(ctx *ctxx.SpaceContext) error {
-				readCtx := ctxx.NewSpaceContext(ctx.TenantContext, sourceCtxSpace)
-				got := ctx.TTx.File.GetX(schema.SkipSoftDelete(readCtx), doc.ID)
-				if got.String() != before || ctx.TTx.DocumentNote.Query().
-					Where(documentnote.FileID(doc.ID)).CountX(readCtx) != 0 {
-					t.Fatalf("rejected transfer modified document or notes: %v", got)
-				}
-				return nil
-			}); err != nil {
-				t.Fatal(err)
-			}
+			testRejectedInboxTransferScenario(t, scenario)
 		})
+	}
+}
+
+func testRejectedInboxTransferScenario(t *testing.T, scenario string) {
+	t.Helper()
+	h, run, request, doc := newDocumentNotesRequestTest(t)
+	var destination *enttenant.Space
+	var sourceCtxSpace *enttenant.Space
+	var sourceID, destinationID, before string
+	if err := run(func(ctx *ctxx.SpaceContext) error {
+		createSpaceViaCmd(t, h.actions, ctx.TenantContext, "Receiver")
+		destination = ctx.TTx.Space.Query().Where(space.Name("Receiver")).OnlyX(ctx)
+		destination = ctx.TTx.Space.UpdateOne(destination).
+			SetAcceptsInboxTransfers(true).SaveX(ctx)
+		ctx.TTx.File.UpdateOneID(doc.ID).SetIsInInbox(true).SaveX(ctx)
+		sourceCtxSpace = ctx.Space
+		sourceID, destinationID = doc.PublicID.String(), destination.PublicID.String()
+		sourceID, destinationID, sourceCtxSpace, doc = configureRejectedTransferScenario(
+			t,
+			ctx,
+			scenario,
+			doc,
+			destination,
+			sourceID,
+			destinationID,
+			sourceCtxSpace,
+		)
+		readCtx := ctxx.NewSpaceContext(ctx.TenantContext, sourceCtxSpace)
+		before = ctx.TTx.File.GetX(schema.SkipSoftDelete(readCtx), doc.ID).String()
+		return nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+	rr := request(h.actions.Inbox.TransferFileCmd.Endpoint(), url.Values{
+		"FileID": {sourceID}, "DestinationSpaceID": {destinationID},
+		"Message": {"Must not be persisted"},
+	})
+	assertRejectedInboxTransferResponse(t, rr)
+	assertRejectedInboxTransferUnchanged(t, run, sourceCtxSpace, doc.ID, before)
+}
+
+func configureRejectedTransferScenario(
+	t *testing.T,
+	ctx *ctxx.SpaceContext,
+	scenario string,
+	doc *enttenant.File,
+	destination *enttenant.Space,
+	sourceID string,
+	destinationID string,
+	sourceCtxSpace *enttenant.Space,
+) (string, string, *enttenant.Space, *enttenant.File) {
+	t.Helper()
+	switch scenario {
+	case "disabled destination":
+		ctx.TTx.Space.UpdateOne(destination).SetAcceptsInboxTransfers(false).SaveX(ctx)
+		ctx.TTx.SpaceUserAssignment.Delete().Where(
+			spaceuserassignment.SpaceID(destination.ID),
+			spaceuserassignment.UserID(ctx.User.ID),
+		).ExecX(ctxx.NewSpaceContext(ctx.TenantContext, destination))
+		ctx.TTx.User.UpdateOneID(ctx.User.ID).SetRole(tenantrole.User).SaveX(ctx)
+	case "deleted destination":
+		ctx.TTx.Space.UpdateOne(destination).SetDeletedAt(time.Now()).SaveX(ctx)
+	case "same Space":
+		ctx.TTx.Space.UpdateOneID(ctx.Space.ID).SetAcceptsInboxTransfers(true).SaveX(ctx)
+		destinationID = ctx.SpaceID
+	case "unknown destination":
+		destinationID = "unknown-inbox"
+	case "filed source":
+		ctx.TTx.File.UpdateOneID(doc.ID).SetIsInInbox(false).SaveX(ctx)
+	case "deleted source":
+		ctx.TTx.File.UpdateOneID(doc.ID).SetDeletedAt(time.Now()).SaveX(ctx)
+	case "directory source":
+		sourceID = ctx.SpaceRootDir().PublicID.String()
+	case "foreign Space source":
+		foreignCtx := ctxx.NewSpaceContext(ctx.TenantContext, destination)
+		foreign := createDocumentForNotesTest(foreignCtx, "foreign.pdf", "private")
+		doc = ctx.TTx.File.UpdateOne(foreign).SetIsInInbox(true).SaveX(foreignCtx)
+		sourceID, sourceCtxSpace = doc.PublicID.String(), destination
+	}
+	return sourceID, destinationID, sourceCtxSpace, doc
+}
+
+func assertRejectedInboxTransferResponse(t *testing.T, rr *httptest.ResponseRecorder) {
+	t.Helper()
+	if rr.Code < 400 || rr.Header().Get("HX-Replace-Url") != "" ||
+		strings.Contains(rr.Header().Get("HX-Trigger"), event.FileMoved.String()) {
+		t.Fatalf("rejected transfer response: %d %v %s", rr.Code, rr.Header(), rr.Body.String())
+	}
+}
+
+func assertRejectedInboxTransferUnchanged(
+	t *testing.T,
+	run func(func(*ctxx.SpaceContext) error) error,
+	sourceSpace *enttenant.Space,
+	fileID int64,
+	before string,
+) {
+	t.Helper()
+	if err := run(func(ctx *ctxx.SpaceContext) error {
+		readCtx := ctxx.NewSpaceContext(ctx.TenantContext, sourceSpace)
+		got := ctx.TTx.File.GetX(schema.SkipSoftDelete(readCtx), fileID)
+		if got.String() != before || ctx.TTx.DocumentNote.Query().
+			Where(documentnote.FileID(fileID)).CountX(readCtx) != 0 {
+			t.Fatalf("rejected transfer modified document or notes: %v", got)
+		}
+		return nil
+	}); err != nil {
+		t.Fatal(err)
 	}
 }
 
@@ -320,14 +399,38 @@ func TestInboxTransferOptInDoesNotGrantDestinationReadAccess(t *testing.T) {
 		"Message": {" \n\t"},
 	}
 	rr := request(h.actions.Inbox.TransferFileDialog.Endpoint(), form)
-	if rr.Code != http.StatusOK || !strings.Contains(rr.Body.String(), destination.PublicID.String()) {
-		t.Fatalf("opt-in destination hidden from sender: %d %s", rr.Code, rr.Body.String())
-	}
+	assertOptInDestinationVisibleInDialog(t, rr, destination.PublicID.String())
 	rr = request(h.actions.Inbox.TransferFileCmd.Endpoint(), form)
 	if rr.Code != http.StatusOK {
 		t.Fatalf("transfer without destination membership: %d %s", rr.Code, rr.Body.String())
 	}
-	if err := run(func(ctx *ctxx.SpaceContext) error {
+	assertOptInTransferDoesNotGrantReadAccess(t, run, rr, destination, doc)
+	rr = request(h.actions.Browse.DocumentNotesPartial.Endpoint(), form)
+	if rr.Code < 400 || strings.Contains(rr.Body.String(), "legacy note") {
+		t.Fatalf("sender retained source document access: %d %s", rr.Code, rr.Body.String())
+	}
+}
+
+func assertOptInDestinationVisibleInDialog(
+	t *testing.T,
+	rr *httptest.ResponseRecorder,
+	destinationID string,
+) {
+	t.Helper()
+	if rr.Code != http.StatusOK || !strings.Contains(rr.Body.String(), destinationID) {
+		t.Fatalf("opt-in destination hidden from sender: %d %s", rr.Code, rr.Body.String())
+	}
+}
+
+func assertOptInTransferDoesNotGrantReadAccess(
+	t *testing.T,
+	run func(func(*ctxx.SpaceContext) error) error,
+	rr *httptest.ResponseRecorder,
+	destination *enttenant.Space,
+	doc *enttenant.File,
+) {
+	t.Helper()
+	err := run(func(ctx *ctxx.SpaceContext) error {
 		destinationURL := route.Inbox(ctx.TenantID, destination.PublicID.String(), doc.PublicID.String())
 		if strings.Contains(rr.Body.String(), destinationURL) ||
 			strings.Contains(rr.Body.String(), "Open file") {
@@ -352,12 +455,9 @@ func TestInboxTransferOptInDoesNotGrantDestinationReadAccess(t *testing.T) {
 			t.Fatal("whitespace-only message created a note")
 		}
 		return nil
-	}); err != nil {
+	})
+	if err != nil {
 		t.Fatal(err)
-	}
-	rr = request(h.actions.Browse.DocumentNotesPartial.Endpoint(), form)
-	if rr.Code < 400 || strings.Contains(rr.Body.String(), "legacy note") {
-		t.Fatalf("sender retained source document access: %d %s", rr.Code, rr.Body.String())
 	}
 }
 
@@ -420,25 +520,55 @@ func TestInboxTransferOptInSettingRequiresTenantOwner(t *testing.T) {
 	}); err != nil {
 		t.Fatal(err)
 	}
-	form := url.Values{
+	form := inboxTransferSpaceEditForm(source)
+	assertTenantOwnerCanConfigureInboxTransfers(t, h, run, request, form)
+	demoteInboxTransferSettingOwner(t, run)
+	assertNonOwnerCannotConfigureInboxTransfers(t, h, run, request, form)
+}
+
+func inboxTransferSpaceEditForm(source *enttenant.Space) url.Values {
+	return url.Values{
 		"SpaceID": {source.PublicID.String()}, "Name": {source.Name},
 		"Description": {source.Description},
 	}
+}
+
+func assertTenantOwnerCanConfigureInboxTransfers(
+	t *testing.T,
+	h *actionTestHarness,
+	run func(func(*ctxx.SpaceContext) error) error,
+	request func(string, url.Values) *httptest.ResponseRecorder,
+	form url.Values,
+) {
+	t.Helper()
 	for _, enabled := range []bool{true, false} {
 		form.Set("AcceptsInboxTransfers", fmt.Sprint(enabled))
 		rr := request(h.actions.Spaces.EditSpaceCmd.Endpoint(), form)
 		if rr.Code != http.StatusOK {
 			t.Fatalf("owner setting update: %d %s", rr.Code, rr.Body.String())
 		}
-		if err := run(func(ctx *ctxx.SpaceContext) error {
-			if ctx.Space.AcceptsInboxTransfers != enabled {
-				t.Fatalf("accepts transfers = %v, want %v", ctx.Space.AcceptsInboxTransfers, enabled)
-			}
-			return nil
-		}); err != nil {
-			t.Fatal(err)
-		}
+		assertInboxTransferSetting(t, run, enabled)
 	}
+}
+
+func assertInboxTransferSetting(
+	t *testing.T, run func(func(*ctxx.SpaceContext) error) error, enabled bool,
+) {
+	t.Helper()
+	if err := run(func(ctx *ctxx.SpaceContext) error {
+		if ctx.Space.AcceptsInboxTransfers != enabled {
+			t.Fatalf("accepts transfers = %v, want %v", ctx.Space.AcceptsInboxTransfers, enabled)
+		}
+		return nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func demoteInboxTransferSettingOwner(
+	t *testing.T, run func(func(*ctxx.SpaceContext) error) error,
+) {
+	t.Helper()
 	if err := run(func(ctx *ctxx.SpaceContext) error {
 		// Retain ownership of the Space: only tenant ownership authorizes this setting.
 		ctx.TTx.User.UpdateOneID(ctx.User.ID).SetRole(tenantrole.User).SaveX(ctx)
@@ -446,6 +576,16 @@ func TestInboxTransferOptInSettingRequiresTenantOwner(t *testing.T) {
 	}); err != nil {
 		t.Fatal(err)
 	}
+}
+
+func assertNonOwnerCannotConfigureInboxTransfers(
+	t *testing.T,
+	h *actionTestHarness,
+	run func(func(*ctxx.SpaceContext) error) error,
+	request func(string, url.Values) *httptest.ResponseRecorder,
+	form url.Values,
+) {
+	t.Helper()
 	form.Set("AcceptsInboxTransfers", "true")
 	rr := request(h.actions.Spaces.EditSpaceCmd.Endpoint(), form)
 	if rr.Code < 400 || strings.Contains(rr.Header().Get("HX-Trigger"), event.SpaceUpdated.String()) {
